@@ -1,0 +1,18 @@
+project_name: 'Django Vanilla Views'
+index:
+- ['index.md', 'Home']
+- ['api/base-views.md', 'API Guide / Base Views']
+- ['api/model-views.md', 'API Guide / Model Views']
+- ['migration/base-views.md', 'Migration / Base Views']
+- ['migration/model-views.md', 'Migration / Model Views']
+- ['topics/frequently-asked-questions.md', 'Topics / Frequently Asked Questions']
+- ['topics/django-braces-compatibility.md', 'Topics / Django Braces Compatilibity']
+- ['topics/django-extra-views-compatibility.md', 'Topics / Django Extra Views Compatilibity']
+- ['topics/release-notes.md', 'Topics / Release Notes']
+
+theme_dir: 'theme'
+source_dir: 'docs'
+output_dir: 'build'
+
+url_strip_index_files: False
+url_strip_html_suffix: False
