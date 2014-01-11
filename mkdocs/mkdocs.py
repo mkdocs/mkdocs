@@ -10,7 +10,7 @@ import shutil
 import yaml
 
 
-config = yaml.load(open('mkdoc.yaml', 'r'))
+config = yaml.load(open('mkdocs.yaml', 'r'))
 
 # For preview builds only...
 base_url = 'file://%s' % os.path.normpath(os.path.join(os.getcwd(), config['output_dir']))

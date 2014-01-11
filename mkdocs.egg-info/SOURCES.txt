@@ -1,0 +1,7 @@
+setup.py
+mkdocs/__init__.py
+mkdocs/mkdocs.py
+mkdocs.egg-info/PKG-INFO
+mkdocs.egg-info/SOURCES.txt
+mkdocs.egg-info/dependency_links.txt
+mkdocs.egg-info/top_level.txt
