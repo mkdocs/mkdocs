@@ -28,7 +28,6 @@
   </head>
 
   <body onload="prettyPrint()">
-
     <!-- Fixed navbar -->
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
@@ -138,5 +137,26 @@
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="{{ base_url }}/js/bootstrap-3.0.3.min.js"></script>
     <script src="{{ base_url }}/js/prettify-1.0.min.js"></script>
+    <script>
+      window.disableShift = false;
+      var shiftWindow = function() {
+        if (window.disableShift) {
+          window.disableShift = false;
+        } else {
+          scrollBy(0, -60);
+        };
+      };
+      if (location.hash) {shiftWindow();}
+      window.addEventListener("hashchange", shiftWindow);
+      $("ul.nav a" ).click(function() {
+        var href = this.href;
+        var suffix = location.hash;
+        var matchesCurrentHash = (href.indexOf(suffix, href.length - suffix.length) !== -1);
+        if (location.hash && matchesCurrentHash) {
+          window.disableShift = true;
+          location.hash='';
+        };
+      });
+    </script>
   </body>
 </html>
