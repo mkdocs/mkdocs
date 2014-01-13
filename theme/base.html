@@ -43,18 +43,18 @@
         <div class="navbar-collapse collapse">
           <!-- Navbar -->
           <ul class="nav navbar-nav">
-          {% for name, item in nav.items() %}
-            {% if item is mapping %}
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ name }} <b class="caret"></b></a>
+          {% for nav_item in nav %}
+            {% if nav_item.children %}
+              <li class="dropdown{% if nav_item.active %} active{% endif %}">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ nav_item.title }} <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                {% for name, url in item.items() %}
-                  <li><a href="{{ url }}">{{ name }}</a></li>
+                {% for nav_item in nav_item.children %}
+                  <li {% if nav_item.active %}class="active"{% endif %}><a href="{{ nav_item.url }}">{{ nav_item.title }}</a></li>
                 {% endfor %}
                 </ul>
               </li>
             {% else %}
-            <li class="active"><a href="{{ item }}">{{ name }}</a></li>
+            <li {% if nav_item.active %}class="active"{% endif %}><a href="{{ nav_item.url }}">{{ nav_item.title }}</a></li>
             {% endif %}
           {% endfor %}
           </ul>
@@ -150,11 +150,12 @@
       };
       if (location.hash) {shiftWindow();}
       window.addEventListener("hashchange", shiftWindow);
-      /*
-      This deals with clicks on nav links that do not change the current
-      anchor link, by forcing a 'hashchange' event to occur after the click.
-      */
+
       $("ul.nav a" ).click(function() {
+        /*
+        This deals with clicks on nav links that do not change the current
+        anchor link, by forcing a 'hashchange' event to occur after the click.
+        */
         var href = this.href;
         var suffix = location.hash;
         var matchesCurrentHash = (href.indexOf(suffix, href.length - suffix.length) !== -1);
@@ -163,6 +164,11 @@
           window.disableShift = true;
           location.hash='';
         };
+      });
+
+      /* Prevent disabled links from causing a page reload */
+      $("li.disabled a").click(function() {
+        event.preventDefault();
       });
     </script>
   </body>

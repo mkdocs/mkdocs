@@ -18,6 +18,12 @@ suffix = '.html'
 index = 'index.html'
 
 
+class NavItem(object):
+    def __init__(self, title, url, children):
+        self.title, self.url, self.children = title, url, children
+        self.active = False
+
+
 def build_theme(config):
     for (source_dir, dirnames, filenames) in os.walk(config['theme_dir']):
         relative_path = os.path.relpath(source_dir, config['theme_dir'])
@@ -55,6 +61,7 @@ def build_html(config):
     template = jinja2.Template(open(template_path, 'r').read())
 
     for path, title in config['index']:
+        set_nav_active(path, config, nav)
         homepage_url = path_to_url('index.md', config)
         url = path_to_url(path, config)
         previous_url, next_url = path_to_previous_and_next_urls(path, config)
@@ -99,19 +106,39 @@ def build_html(config):
 
 
 def build_nav(config):
-    ret = collections.OrderedDict()
+    # TODO: Allow more than two levels of nav.
+    ret = []
     for path, title in config['index']:
         url = path_to_url(path, config)
-        title, sep, child = title.partition('/')
+        title, sep, child_title = title.partition('/')
         title = title.strip()
-        child = child.strip()
-        if not child:
-            ret[title] = url
-        elif title not in ret:
-            ret[title] = collections.OrderedDict({child: url})
+        child_title = child_title.strip()
+        if not child_title:
+            # New top level nav item
+            nav = NavItem(title=title, url=url, children=[])
+            ret.append(nav)
+        elif not ret or (ret[-1].title != title):
+            # New second level nav item
+            child = NavItem(title=child_title, url=url, children=[])
+            nav = NavItem(title=title, url=None, children=[child])
+            ret.append(nav)
         else:
-            ret[title][child] = url
+            # Additional second level nav item
+            child = NavItem(title=child_title, url=url, children=[])
+            ret[-1].children.append(child)
     return ret
+
+
+def set_nav_active(path, config, nav):
+    url = path_to_url(path, config)
+    for nav_item in nav:
+        nav_item.active = (nav_item.url == url)
+        for child in nav_item.children:
+            if child.url == url:
+                child.active = True
+                nav_item.active = True
+            else:
+                child.active = False
 
 
 def path_to_url(path, config):
