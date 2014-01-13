@@ -79,8 +79,8 @@
           -->
           <!-- End navbar -->
           <ul class="nav navbar-nav navbar-right">
-            <li {% if not previous_url %}class="disabled"{% endif %}><a href="{% if previous_url %}{{ previous_url }}{% else %}{{ url }}{% endif %}">Previous</a></li>
-            <li {% if not next_url %}class="disabled"{% endif %}><a href="{% if next_url %}{{ next_url }}{% else %}{{ url }}{% endif %}">Next</a></li>
+            <li {% if not previous_url %}class="disabled"{% endif %}><a rel="next" href="{% if previous_url %}{{ previous_url }}{% else %}{{ url }}{% endif %}">Previous</a></li>
+            <li {% if not next_url %}class="disabled"{% endif %}><a rel="prev" href="{% if next_url %}{{ next_url }}{% else %}{{ url }}{% endif %}">Next</a></li>
             <!--<li class="active"><a href="./">Fixed top</a></li>-->
           </ul>
         </div><!--/.nav-collapse -->
@@ -145,7 +145,13 @@
         if (window.disableShift) {
           window.disableShift = false;
         } else {
-          scrollBy(0, -60);
+          /* If we're at the bottom of the page, don't erronously scroll up */
+          var scrolledToBottomOfPage = (
+            (window.innerHeight + window.scrollY) >= document.body.offsetHeight
+          );
+          if (!scrolledToBottomOfPage) {
+            scrollBy(0, -60);
+          };
         };
       };
       if (location.hash) {shiftWindow();}
