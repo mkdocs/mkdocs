@@ -79,8 +79,8 @@
           -->
           <!-- End navbar -->
           <ul class="nav navbar-nav navbar-right">
-            <li {% if not previous_url %}class="disabled"{% endif %}><a rel="next" href="{% if previous_url %}{{ previous_url }}{% else %}{{ url }}{% endif %}">Previous</a></li>
-            <li {% if not next_url %}class="disabled"{% endif %}><a rel="prev" href="{% if next_url %}{{ next_url }}{% else %}{{ url }}{% endif %}">Next</a></li>
+            <li {% if not previous_url %}class="disabled"{% endif %}><a rel="next" {% if previous_url %}href="{{ previous_url }}"{% endif %}>Previous</a></li>
+            <li {% if not next_url %}class="disabled"{% endif %}><a rel="prev" {% if next_url %}href="{{ next_url }}"{% endif %}>Next</a></li>
             <!--<li class="active"><a href="./">Fixed top</a></li>-->
           </ul>
         </div><!--/.nav-collapse -->
