@@ -28,6 +28,9 @@ TOC_LINK_REGEX = re.compile('<a href=["]([^"]*)["]>([^<]*)</a>')
 
 
 def build_theme(config):
+    """
+    Copies the theme files into the build directory.
+    """
     for (source_dir, dirnames, filenames) in os.walk(config['theme_dir']):
         relative_path = os.path.relpath(source_dir, config['theme_dir'])
         output_dir = os.path.normpath(os.path.join(config['output_dir'], relative_path))
@@ -43,6 +46,9 @@ def build_theme(config):
 
 
 def build_statics(config):
+    """
+    Copies any documentation static files into the build directory.
+    """
     for (source_dir, dirnames, filenames) in os.walk(config['source_dir']):
         relative_path = os.path.relpath(source_dir, config['source_dir'])
         output_dir = os.path.normpath(os.path.join(config['output_dir'], relative_path))
@@ -58,6 +64,9 @@ def build_statics(config):
 
 
 def build_html(config):
+    """
+    Builds all the pages and writes them into the build directory.
+    """
     nav = build_nav(config)
     template = env.get_template('base.html')
 
@@ -135,7 +144,9 @@ def parse_toc(toc):
 
 
 def build_nav(config):
-    # TODO: Allow more than two levels of nav.
+    """
+    Given the config file, returns a tree of NavItem instances.
+    """
     ret = []
     for path, title in config['pages']:
         url = path_to_url(path, config)
@@ -159,6 +170,10 @@ def build_nav(config):
 
 
 def set_nav_active(path, config, nav):
+    """
+    Given the current page, set a boolean active field on each of the nav
+    items in the NavItem tree.
+    """
     url = path_to_url(path, config)
     for nav_item in nav:
         nav_item.active = (nav_item.url == url)
@@ -171,6 +186,9 @@ def set_nav_active(path, config, nav):
 
 
 def path_to_url(path, config):
+    """
+    Given a relative path, determine its corresponding absolute URL.
+    """
     path = os.path.splitext(path)[0]
     url = path.replace(os.path.pathsep, '/')
     url = base_url + '/' + url
@@ -182,6 +200,9 @@ def path_to_url(path, config):
 
 
 def path_to_previous_and_next_urls(path, config):
+    """
+    Given a relative path, determine its previous and next URLs.
+    """
     paths = [path_item for path_item, title in config['pages']]
     idx = paths.index(path)
 
