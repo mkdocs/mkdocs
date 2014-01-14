@@ -62,7 +62,7 @@ def build_html(config):
     template_path = os.path.join(config['theme_dir'], 'base.html')
     template = jinja2.Template(open(template_path, 'r').read())
 
-    for path, title in config['index']:
+    for path, title in config['pages']:
         set_nav_active(path, config, nav)
         homepage_url = path_to_url('index.md', config)
         url = path_to_url(path, config)
@@ -139,7 +139,7 @@ def parse_toc(toc):
 def build_nav(config):
     # TODO: Allow more than two levels of nav.
     ret = []
-    for path, title in config['index']:
+    for path, title in config['pages']:
         url = path_to_url(path, config)
         title, sep, child_title = title.partition('/')
         title = title.strip()
@@ -184,7 +184,7 @@ def path_to_url(path, config):
 
 
 def path_to_previous_and_next_urls(path, config):
-    paths = [path_item for path_item, title in config['index']]
+    paths = [path_item for path_item, title in config['pages']]
     idx = paths.index(path)
 
     if idx == 0:

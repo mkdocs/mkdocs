@@ -1,5 +1,5 @@
 project_name: 'Django Vanilla Views'
-index:
+pages:
 - ['index.md', 'Home']
 - ['api/base-views.md', 'API Guide / Base Views']
 - ['api/model-views.md', 'API Guide / Model Views']
