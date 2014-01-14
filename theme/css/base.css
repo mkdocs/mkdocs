@@ -3,7 +3,11 @@ body {
 }
 
 ul.nav li.main {
-  font-weight: bold
+  font-weight: bold;
+}
+
+div.col-md-3 {
+  padding-left: 0;
 }
 
 /*

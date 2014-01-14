@@ -10,6 +10,7 @@ import shutil
 import yaml
 
 config = yaml.load(open('mkdocs.yaml', 'r'))
+env = jinja2.Environment(loader=jinja2.FileSystemLoader(config['theme_dir']))
 
 # For preview builds only...
 base_url = 'file://%s' % os.path.normpath(os.path.join(os.getcwd(), config['output_dir']))
@@ -59,8 +60,7 @@ def build_statics(config):
 
 def build_html(config):
     nav = build_nav(config)
-    template_path = os.path.join(config['theme_dir'], 'base.html')
-    template = jinja2.Template(open(template_path, 'r').read())
+    template = env.get_template('base.html')
 
     for path, title in config['pages']:
         set_nav_active(path, config, nav)
