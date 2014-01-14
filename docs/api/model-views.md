@@ -1,4 +1,4 @@
-<a class="github" href="model_views.py"></a>
+source: model_views.py
 
 # Model Views
 

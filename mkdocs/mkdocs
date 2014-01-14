@@ -84,13 +84,15 @@ def build_html(config):
         source_content = open(source_path, 'r').read().decode('utf-8')
 
         # Prepend a table of contents marker for the TOC extension
-        source_content = '[TOC]\n\n<!-- ENDTOC -->' + source_content
+        source_content = source_content + '<!-- STARTTOC -->\n\n[TOC]'
 
         # Generate the HTML from the markdown source
-        content = markdown.markdown(source_content, extensions=['toc', 'meta'])
+        md = markdown.Markdown(extensions=['meta', 'toc'])
+        content = md.convert(source_content)
+        meta = md.Meta
 
         # Strip out the generated table of contents
-        (toc, content) = content.split('<!-- ENDTOC -->', 1)
+        (content, toc) = content.split('<!-- STARTTOC -->', 1)
 
         # Post process the generated table of contents into a data structure
         toc = parse_toc(toc)
@@ -108,7 +110,8 @@ def build_html(config):
             'homepage_url': homepage_url,
             'previous_url': previous_url,
             'next_url': next_url,
-            'nav': nav
+            'nav': nav,
+            'meta': meta
         }
         output_content = template.render(context)
 
