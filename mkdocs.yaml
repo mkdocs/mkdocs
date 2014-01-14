@@ -10,7 +10,7 @@ pages:
 - ['topics/django-extra-views-compatibility.md', 'Topics / Django Extra Views Compatilibity']
 - ['topics/release-notes.md', 'Topics / Release Notes']
 
-theme_dir: 'united'
+theme_dir: 'theme'
 source_dir: 'docs'
 output_dir: 'build'
 

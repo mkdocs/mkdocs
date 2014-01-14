@@ -91,6 +91,10 @@ def build_html(config):
         content = md.convert(source_content)
         meta = md.Meta
 
+        # Allow 'template:' override in md source files.
+        if 'template' in meta:
+            template = env.get_template(meta['template'][0])
+
         # Strip out the generated table of contents
         (content, toc) = content.split('<!-- STARTTOC -->', 1)
 

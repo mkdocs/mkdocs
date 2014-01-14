@@ -1,3 +1,16 @@
+/* Prettyify */
+$( document ).ready(function() {
+    prettyPrint();
+});
+
+/* Scrollspy */
+var navHeight = $('.navbar').outerHeight(true) + 10
+
+$('body').scrollspy({
+  target: '.bs-sidebar',
+  offset: navHeight
+})
+
 /* We need to adjust the scroll height of anchor links to adjust for the
 fixed height navbar */
 window.disableShift = false;
