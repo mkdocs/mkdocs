@@ -55,7 +55,6 @@ def build_statics(config):
                 source_path = os.path.join(source_dir, filename)
                 output_path = os.path.join(output_dir, filename)
                 shutil.copy(source_path, output_path)
-                #print 'Static:', source_path, '->', output_path
 
 
 def build_html(config):
@@ -79,13 +78,13 @@ def build_html(config):
         source_content = '[TOC]\n\n<!-- ENDTOC -->' + source_content
 
         # Generate the HTML from the markdown source
-        content = markdown.markdown(source_content, extensions=['toc'])
+        content = markdown.markdown(source_content, extensions=['toc', 'meta'])
 
         # Strip out the generated table of contents
         (toc, content) = content.split('<!-- ENDTOC -->', 1)
+
+        # Post process the generated table of contents into a data structure
         toc = parse_toc(toc)
-        # toc = '\n'.join(toc.splitlines()[2:-1])
-        # toc = '<ul class="nav bs-sidenav">\n' + toc
 
         # Replace links ending in .md with links to the generated HTML instead
         content = re.sub(r'a href="([^"]*)\.md"', r'a href="\1%s"' % suffix, content)
@@ -105,7 +104,6 @@ def build_html(config):
         output_content = template.render(context)
 
         open(output_path, 'w').write(output_content.encode('utf-8'))
-        #print 'HTML:', source_path, '->', output_path
 
 
 def parse_toc(toc):
