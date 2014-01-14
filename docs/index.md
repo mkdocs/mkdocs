@@ -1,10 +1,3 @@
-<p class="badges">
-<iframe src="http://ghbtns.com/github-btn.html?user=tomchristie&amp;repo=django-vanilla-views&amp;type=watch&amp;count=true" class="github-star-button" allowtransparency="true" frameborder="0" scrolling="0" width="110px" height="20px"></iframe>
-
-<a href="https://twitter.com/share" class="twitter-share-button" data-url="django-vanilla-views.org" data-text="Django Vanilla Views... http://django-vanilla-views.org" data-count="none"></a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="http://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-</p>
-
 # Django Vanilla Views
 
 **Beautifully simple class-based views.**
