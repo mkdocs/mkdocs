@@ -1,18 +1,26 @@
+
 /* Prettyify */
 $( document ).ready(function() {
     prettyPrint();
 });
 
+
 /* Scrollspy */
 var navHeight = $('.navbar').outerHeight(true) + 10
 
 $('body').scrollspy({
-  target: '.bs-sidebar',
-  offset: navHeight
+    target: '.bs-sidebar',
+    offset: navHeight
 })
 
-/* We need to adjust the scroll height of anchor links to adjust for the
-fixed height navbar */
+
+/* Prevent disabled links from causing a page reload */
+$("li.disabled a").click(function() {
+    event.preventDefault();
+});
+
+
+/* Adjust the scroll height of anchors to compensate for the fixed navbar */
 window.disableShift = false;
 var shiftWindow = function() {
     if (window.disableShift) {
@@ -30,11 +38,9 @@ var shiftWindow = function() {
 if (location.hash) {shiftWindow();}
 window.addEventListener("hashchange", shiftWindow);
 
+
+/* Deal with clicks on nav links that do not change the current anchor link. */
 $("ul.nav a" ).click(function() {
-    /*
-    This deals with clicks on nav links that do not change the current
-    anchor link, by forcing a 'hashchange' event to occur after the click.
-    */
     var href = this.href;
     var suffix = location.hash;
     var matchesCurrentHash = (href.indexOf(suffix, href.length - suffix.length) !== -1);
@@ -43,9 +49,4 @@ $("ul.nav a" ).click(function() {
         window.disableShift = true;
         location.hash='';
     };
-});
-
-/* Prevent disabled links from causing a page reload */
-$("li.disabled a").click(function() {
-    event.preventDefault();
 });
