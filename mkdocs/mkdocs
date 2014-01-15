@@ -147,6 +147,11 @@ def parse_toc(toc):
                 parents.append(nav)
         elif line.startswith('</ul>'):
             parents.pop()
+
+    # For the table of contents, always mark the first element as active
+    if ret:
+        ret[0].active = True
+
     return ret
 
 
