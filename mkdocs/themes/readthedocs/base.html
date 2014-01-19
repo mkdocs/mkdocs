@@ -58,12 +58,16 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-        {% if toctree %}
-            {{ toctree }}
-        {% else %}
-            <!-- Local TOC -->
-            <div class="local-toc">{{ toc }}</div>
-        {% endif %}
+
+    <ul class="nav bs-sidenav">
+    {% for toc_item in toc %}
+        <li class="main {% if toc_item.active %}active{% endif %}"><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
+        {% for toc_item in toc_item.children %}
+            <li><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
+        {% endfor %}
+    {% endfor %}
+    </ul>
+
       </div>
       &nbsp;
     </nav>
