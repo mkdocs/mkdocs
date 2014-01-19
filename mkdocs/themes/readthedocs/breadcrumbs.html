@@ -1,0 +1,17 @@
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="{{ homepage_url }}">Docs</a> &raquo;</li>
+      {% for doc in parents %}
+          <li><a href="{{ doc.link|e }}">{{ doc.title }}</a> &raquo;</li>
+      {% endfor %}
+    <li>{{ title }}</li>
+      <li class="wy-breadcrumbs-aside">
+        {% if display_github %}
+          <a href="https://github.com/{{ github_user }}/{{ github_repo }}/blob/{{ github_version }}{{ conf_py_path }}{{ pagename }}.rst" class="icon icon-github"> Edit on GitHub</a>
+        {% elif display_bitbucket %}
+          <a href="https://bitbucket.org/{{ bitbucket_user }}/{{ bitbucket_repo }}/src/{{ bitbucket_version}}{{ conf_py_path }}{{ pagename }}.rst" class="icon icon-bitbucket"> Edit on Bitbucket</a>
+        {% endif %}
+      </li>
+  </ul>
+  <hr/>
+</div>
