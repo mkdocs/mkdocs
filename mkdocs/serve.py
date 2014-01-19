@@ -1,9 +1,7 @@
 #coding: utf-8
 
-from mkdocs.build import build
-from mkdocs.config import load_config
-from watchdog import events
-from watchdog.observers import Observer
+from watchdog import events, observers
+import mkdocs
 import os
 import posixpath
 import SimpleHTTPServer
@@ -15,11 +13,15 @@ class BuildEventHandler(events.FileSystemEventHandler):
     """
     Perform a rebuild when anything in the theme or docs directory changes.
     """
+    def __init__(self, options):
+        super(BuildEventHandler, self).__init__()
+        self.options = options
+
     def on_any_event(self, event):
         if not isinstance(event, events.DirModifiedEvent):
             print 'Rebuilding documentation...',
-            config = load_config()
-            build(config)
+            config = mkdocs.load_config(options=self.options)
+            mkdocs.build(config)
             print ' done'
 
 
@@ -55,25 +57,30 @@ class FixedDirectoryHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         return path
 
 
-def serve(config):
-    config_event_handler = ConfigEventHandler()
-    event_handler = BuildEventHandler()
-    observer = Observer()
-    observer.schedule(config_event_handler, '.')
-    observer.schedule(event_handler, config['source_dir'], recursive=True)
+def serve(config, options=None):
+    """
+    Start the devserver, and rebuild the docs whenever any changes take effect.
+    """
+    # Note: We pass any command-line options through so that we
+    #       can re-apply them if the config file is reloaded.
+    event_handler = BuildEventHandler(options)
+    config_event_handler = ConfigEventHandler(options)
+    observer = observers.Observer()
+    observer.schedule(event_handler, config['docs_dir'], recursive=True)
     observer.schedule(event_handler, config['theme_dir'], recursive=True)
+    observer.schedule(config_event_handler, '.')
     observer.start()
 
     class TCPServer(SocketServer.TCPServer):
         allow_reuse_address = True
 
     class DocsDirectoryHandler(FixedDirectoryHandler):
-        base_dir = config['output_dir']
+        base_dir = config['build_dir']
 
-    host, port = config['local_host'], config['local_port']
-    server = TCPServer((host, port), DocsDirectoryHandler)
+    host, port = config['dev_addr'].split(':', 1)
+    server = TCPServer((host, int(port)), DocsDirectoryHandler)
 
     print "Running at: http://%s:%s/" % (host, port)
     server.serve_forever()
-    config_observer.stop()
-    config_observer.join()
+    observer.stop()
+    observer.join()

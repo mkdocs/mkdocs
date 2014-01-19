@@ -10,9 +10,4 @@ pages:
 - ['topics/django-extra-views-compatibility.md', 'Topics / Django Extra Views Compatilibity']
 - ['topics/release-notes.md', 'Topics / Release Notes']
 
-theme: 'simplex'
-source_dir: 'docs'
-output_dir: 'build'
-
-url_strip_index_files: False
-url_strip_html_suffix: False
+theme: 'spacelab'

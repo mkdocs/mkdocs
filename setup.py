@@ -74,6 +74,7 @@ setup(
     packages=get_packages(package),
     package_data=get_package_data(package),
     install_requires=install_requires,
+    scripts=['mkdocs/mkdocs']
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',

@@ -1,3 +1,4 @@
 build/
 env/
 mkdocs.egg-info/
+*.pyc

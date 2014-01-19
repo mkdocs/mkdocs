@@ -1,12 +1,14 @@
-#!/usr/bin/env python
 #coding: utf-8
 
-from mkdocs.utils import copy_file, write_file
+from mkdocs.utils import copy_file, write_file, get_html_path
 import collections
 import jinja2
 import markdown
 import os
 import re
+
+
+TOC_LINK_REGEX = re.compile('<a href=["]([^"]*)["]>([^<]*)</a>')
 
 
 class NavItem(object):
@@ -16,13 +18,24 @@ class NavItem(object):
         self.active = False
 
 
+class PathToURL(object):
+    def __init__(self, config):
+        self.config = config
+
+    def __call__(self, match):
+        # TODO: This isn't quite right - we shouldn't blat relative paths with
+        # absolute ones.
+        path = match.groups()[0]
+        return 'a href="%s"' % path_to_url(path, self.config)
+
+
 def build_theme(config):
     """
     Copies the theme files into the build directory.
     """
     for (source_dir, dirnames, filenames) in os.walk(config['theme_dir']):
         relative_path = os.path.relpath(source_dir, config['theme_dir'])
-        output_dir = os.path.normpath(os.path.join(config['output_dir'], relative_path))
+        output_dir = os.path.normpath(os.path.join(config['build_dir'], relative_path))
 
         for filename in filenames:
             if not filename.endswith('.html'):
@@ -35,9 +48,9 @@ def build_statics(config):
     """
     Copies any documentation static files into the build directory.
     """
-    for (source_dir, dirnames, filenames) in os.walk(config['source_dir']):
-        relative_path = os.path.relpath(source_dir, config['source_dir'])
-        output_dir = os.path.normpath(os.path.join(config['output_dir'], relative_path))
+    for (source_dir, dirnames, filenames) in os.walk(config['docs_dir']):
+        relative_path = os.path.relpath(source_dir, config['docs_dir'])
+        output_dir = os.path.normpath(os.path.join(config['build_dir'], relative_path))
 
         for filename in filenames:
             if not filename.endswith('.md'):
@@ -50,19 +63,17 @@ def build_pages(config):
     """
     Builds all the pages and writes them into the build directory.
     """
-    nav = build_nav(config)
+    nav = generate_nav(config)
     loader = jinja2.FileSystemLoader(config['theme_dir'])
     env = jinja2.Environment(loader=loader)
 
     for path, title in config['pages']:
         active_nav = set_nav_active(path, config, nav)
-        homepage_url = path_to_url('index.md', config)
         url = path_to_url(path, config)
         previous_url, next_url = path_to_previous_and_next_urls(path, config)
 
-        html_path = os.path.splitext(path)[0] + '.html'
-        source_path = os.path.join(config['source_dir'], path)
-        output_path = os.path.join(config['output_dir'], html_path)
+        source_path = os.path.join(config['docs_dir'], path)
+        output_path = os.path.join(config['build_dir'], get_html_path(path))
 
         # Get the markdown text
         source_content = open(source_path, 'r').read().decode('utf-8')
@@ -75,49 +86,50 @@ def build_pages(config):
         content = md.convert(source_content)
         meta = md.Meta
 
+        # Strip out the generated table of contents
+        (content, toc_html) = content.split('<!-- STARTTOC -->', 1)
+
+        # Post process the generated table of contents into a data structure
+        toc = generate_toc(toc_html)
+
         # Allow 'template:' override in md source files.
         if 'template' in meta:
             template = env.get_template(meta['template'][0])
         else:
             template = env.get_template('base.html')
 
-        # Strip out the generated table of contents
-        (content, toc) = content.split('<!-- STARTTOC -->', 1)
-
-        # Post process the generated table of contents into a data structure
-        toc = parse_toc(toc)
-
         # Replace links ending in .md with links to the generated HTML instead
-        content = re.sub(r'a href="([^"]*)\.md"', r'a href="\1%s"' % config['suffix'], content)
-        content = re.sub('<pre>', '<pre class="prettyprint">', content)
+        content = re.sub(r'a href="([^"]*\.md)"', PathToURL(config), content)
+        content = re.sub('<pre>', '<pre class="prettyprint well">', content)
 
         context = {
             'project_name': config['project_name'],
+            'page_title': active_nav.title,
             'content': content,
+
             'toc': toc,
-            'url': url,
-            'base_url': config['base_url'],
-            'homepage_url': homepage_url,
-            'previous_url': previous_url,
-            'next_url': next_url,
             'nav': nav,
             'meta': meta,
-            'page_title': active_nav.title
+            'config': config,
+
+            'url': url,
+            'base_url': config['base_url'],
+            'homepage_url': path_to_url('index.md', config),
+            'previous_url': previous_url,
+            'next_url': next_url,
         }
         output_content = template.render(context)
 
         write_file(output_content.encode('utf-8'), output_path)
 
 
-def parse_toc(toc):
+def generate_toc(toc_html):
     """
     Given a table of contents string that has been automatically generated by
     the markdown library, parse it into a tree of NavItem instances.
     """
-    TOC_LINK_REGEX = re.compile('<a href=["]([^"]*)["]>([^<]*)</a>')
-
     depth = 0
-    lines = toc.splitlines()[2:-2]
+    lines = toc_html.splitlines()[2:-2]
     parents = []
     ret = []
     for line in lines:
@@ -144,7 +156,7 @@ def parse_toc(toc):
     return ret
 
 
-def build_nav(config):
+def generate_nav(config):
     """
     Given the config file, returns a tree of NavItem instances.
     """
@@ -160,13 +172,13 @@ def build_nav(config):
             ret.append(nav)
         elif not ret or (ret[-1].title != title):
             # New second level nav item
-            child = NavItem(title=child_title, url=url, children=[])
-            nav = NavItem(title=title, url=None, children=[child])
-            ret.append(nav)
+            nav = NavItem(title=child_title, url=url, children=[])
+            parent = NavItem(title=title, url=None, children=[nav])
+            ret.append(parent)
         else:
             # Additional second level nav item
-            child = NavItem(title=child_title, url=url, children=[])
-            ret[-1].children.append(child)
+            nav = NavItem(title=child_title, url=url, children=[])
+            ret[-1].children.append(nav)
     return ret
 
 
@@ -201,14 +213,17 @@ def path_to_url(path, config):
     """
     Given a relative path, determine its corresponding absolute URL.
     """
+    if config['local_files']:
+        path = get_html_path(path)
+        url = path.replace(os.path.pathsep, '/')
+        return config['base_url'] + '/' + url
+
     path = os.path.splitext(path)[0]
     url = path.replace(os.path.pathsep, '/')
     url = config['base_url'] + '/' + url
-    if config['url_strip_index_files'] and (url == 'index' or url.endswith('/index')):
+    if url == 'index' or url.endswith('/index'):
         return url.rstrip('index')
-    elif not config['url_strip_html_suffix']:
-        return url + '.html'
-    return url
+    return url + '/'
 
 
 def path_to_previous_and_next_urls(path, config):
@@ -232,6 +247,9 @@ def path_to_previous_and_next_urls(path, config):
 
 
 def build(config):
+    """
+    Perform a full site build.
+    """
     build_theme(config)
     build_statics(config)
     build_pages(config)
