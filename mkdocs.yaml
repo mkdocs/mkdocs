@@ -10,4 +10,4 @@ pages:
 - ['topics/django-extra-views-compatibility.md', 'Topics / Django Extra Views Compatilibity']
 - ['topics/release-notes.md', 'Topics / Release Notes']
 
-theme: 'spacelab'
+theme: 'bootstrap'

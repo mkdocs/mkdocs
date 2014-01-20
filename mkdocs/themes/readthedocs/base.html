@@ -11,36 +11,8 @@
   {# CSS #}
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
-  {# JS #}
-  {% if not embedded %}
-
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:'{{ url_root }}',
-        VERSION:'{{ release|e }}',
-        COLLAPSE_INDEX:false,
-        FILE_SUFFIX:'{{ '' if no_search_suffix else file_suffix }}',
-        HAS_SOURCE:  {{ has_source|lower }}
-      };
-    </script>
-
-    {% if use_opensearch %}
-      <link rel="search" type="application/opensearchdescription+xml" title="Search within {{ docstitle }}" href=""/>
-    {% endif %}
-
-  {% endif %}
-
   <link rel="stylesheet" href="{{ base_url }}/css/theme.css" type="text/css" />
   <script type="text/javascript" src="{{ base_url }}/js/theme.js"></script>
-
-  {# STICKY NAVIGATION #}
-  {% if theme_sticky_navigation %}
-    <script type="text/javascript">
-        jQuery(function () {
-            SphinxRtdTheme.StickyNav.enable();
-        });
-    </script>
-  {% endif %}
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
 
@@ -58,16 +30,7 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-
-    <ul class="nav bs-sidenav">
-    {% for toc_item in toc %}
-        <li class="main {% if toc_item.active %}active{% endif %}"><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
-        {% for toc_item in toc_item.children %}
-            <li><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
-        {% endfor %}
-    {% endfor %}
-    </ul>
-
+      {% include "toc.html" %}
       </div>
       &nbsp;
     </nav>
@@ -80,13 +43,12 @@
         <a href="{{ homepage_url }}">{{ project }}</a>
       </nav>
 
-
       {# PAGE CONTENT #}
       <div class="wy-nav-content">
         <div class="rst-content">
           {% include "breadcrumbs.html" %}
           <div role="main">
-            {% block body %}{{ content }}{% endblock %}
+            {{ content }}
           </div>
           {% include "footer.html" %}
         </div>
@@ -95,6 +57,5 @@
     </section>
 
   </div>
-  {% include "versions.html" %}
 </body>
 </html>

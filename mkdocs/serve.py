@@ -6,6 +6,8 @@ import os
 import posixpath
 import SimpleHTTPServer
 import SocketServer
+import sys
+import tempfile
 import urllib
 
 
@@ -56,11 +58,25 @@ class FixedDirectoryHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             path = os.path.join(path, word)
         return path
 
+    def log_message(self, format, *args):
+        sys.stderr.write("[%s] %s\n" %
+                          (self.log_date_time_string(),
+                          format%args))
+
 
 def serve(config, options=None):
     """
     Start the devserver, and rebuild the docs whenever any changes take effect.
     """
+    # Create a temporary build directory, and set some options to serve it
+    tempdir = tempfile.mkdtemp()
+    options['build_dir'] = tempdir
+    options['base_url'] = 'http://%s' % config['dev_addr']
+
+    # Perform the initial build
+    config = mkdocs.load_config(options=options)
+    mkdocs.build(config)
+
     # Note: We pass any command-line options through so that we
     #       can re-apply them if the config file is reloaded.
     event_handler = BuildEventHandler(options)
@@ -82,5 +98,8 @@ def serve(config, options=None):
 
     print "Running at: http://%s:%s/" % (host, port)
     server.serve_forever()
+
+    # Clean up
     observer.stop()
     observer.join()
+    shutil.rmtree(tempdir)

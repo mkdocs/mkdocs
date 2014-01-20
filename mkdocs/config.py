@@ -41,9 +41,4 @@ def load_config(filename='mkdocs.yaml', options=None):
         build_path = build_dir.replace(os.path.pathsep, '/')
         config['base_url'] = 'file://%s' % build_path
 
-    # Note that --serve may only be specified as a command line option,
-    # and not as a config file setting.
-    if options.get('serve'):
-        config['base_url'] = 'http://%s' % config['dev_addr']
-
     return config

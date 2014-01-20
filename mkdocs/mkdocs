@@ -4,7 +4,6 @@
 import mkdocs
 import shutil
 import sys
-import tempfile
 
 
 def arg_to_option(arg):
@@ -17,22 +16,21 @@ def arg_to_option(arg):
     return (arg, True)
 
 
-def main(options=None):
+def main(cmd, options=None):
     """
     Build the documentation, and optionally start the devserver.
     """
-    if 'serve' in options:
-        tempdir = tempfile.mkdtemp()
-        options['build_dir'] = tempdir
-
-    config = mkdocs.load_config(options=options)
-    mkdocs.build(config)
-
-    if 'serve' in options:
+    if cmd == 'serve':
+        config = mkdocs.load_config(options=options)
         mkdocs.serve(config, options=options)
-        shutil.rmtree(tempdir)
+    elif cmd == 'build':
+        config = mkdocs.load_config(options=options)
+        mkdocs.build(config)
+    else:
+        print 'mkdocs [build|serve] {options}'
 
 
 if __name__ == '__main__':
-    args = [arg_to_option(arg) for arg in sys.argv[1:] if arg.startswith('--')]
-    main(options=dict(args))
+    cmd = sys.argv[1] if len(sys.argv) >= 2 else None
+    args = [arg_to_option(arg) for arg in sys.argv[2:] if arg.startswith('--')]
+    main(cmd, options=dict(args))
