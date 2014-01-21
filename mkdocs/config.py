@@ -9,7 +9,7 @@ DEFAULT_CONFIG = {
     'pages': None,
     'base_url': '',
 
-    'theme': 'plain',
+    'theme': 'bootstrap',
 
     'docs_dir': 'docs',
     'build_dir': 'build',
