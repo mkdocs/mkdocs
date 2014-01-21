@@ -1,6 +1,7 @@
 build/
 env/
-mkdocs.egg-info/
+dist/
+*.egg-info/
 *.pyc
 
 # The 'React' theme that we use for the docs is purchased from the
