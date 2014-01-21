@@ -4,19 +4,11 @@ Guide to all available configuration settings.
 
 ---
 
-## Basic project settings
+## Required settings
 
 #### project_title
 
 Mea dicta aliquid ornatus cu, duis sanctus disputationi his in. Rebum adolescens definiebas vis te. Ornatus noluisse mel te, modo utinam ea sit, putent omittantur quo ad. Ius ad dicta iusto, vel ne nonumy quaestio.
-
-#### project_description
-
-Eam no quis bonorum legendos. Eos prodesset cotidieque in, atqui saperet eos te. Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent. Mei putent impetus no, iuvaret labores duo an.
-
-#### project_url
-
-Quo ex ceteros theophrastus, mel eius repudiandae an, has autem legendos ut. Eu quo moderatius interpretaris, pro ad homero tractatos cotidieque. His errem dictas instructior ad, tation causae ceteros ex eum. Nam falli dicunt te, mea et unum contentiones, ius noluisse rationibus cotidieque ei.
 
 #### pages
 
@@ -38,6 +30,24 @@ Mea dicta aliquid ornatus cu, duis sanctus disputationi his in. Rebum adolescens
     - ['user-guide/markdown.md', 'User Guide / Writing your documentation']
     - ['user-guide/themes.md', 'User Guide / Theming your documentation']
     - ['user-guide/configuration.md', 'User Guide / Configuration options']
+
+## Project metadata
+
+#### project_description
+
+Eam no quis bonorum legendos. Eos prodesset cotidieque in, atqui saperet eos te. Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent. Mei putent impetus no, iuvaret labores duo an.
+
+#### project_url
+
+Quo ex ceteros theophrastus, mel eius repudiandae an, has autem legendos ut. Eu quo moderatius interpretaris, pro ad homero tractatos cotidieque. His errem dictas instructior ad, tation causae ceteros ex eum. Nam falli dicunt te, mea et unum contentiones, ius noluisse rationibus cotidieque ei.
+
+#### project_favicon
+
+Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent.
+
+#### project_author
+
+Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent.
 
 ## Build directories
 
