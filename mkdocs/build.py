@@ -1,6 +1,7 @@
 #coding: utf-8
 
 from mkdocs.utils import copy_file, write_file, get_html_path
+from mkdocs.utils import is_html_file, is_markdown_file
 import collections
 import jinja2
 import markdown
@@ -38,7 +39,7 @@ def build_theme(config):
         output_dir = os.path.normpath(os.path.join(config['build_dir'], relative_path))
 
         for filename in filenames:
-            if not filename.endswith('.html'):
+            if not is_markdown_file(filename) and not is_html_file(filename):
                 source_path = os.path.join(source_dir, filename)
                 output_path = os.path.join(output_dir, filename)
                 copy_file(source_path, output_path)
@@ -53,7 +54,7 @@ def build_statics(config):
         output_dir = os.path.normpath(os.path.join(config['build_dir'], relative_path))
 
         for filename in filenames:
-            if not filename.endswith('.md'):
+            if not is_markdown_file(filename) and not is_html_file(filename):
                 source_path = os.path.join(source_dir, filename)
                 output_path = os.path.join(output_dir, filename)
                 copy_file(source_path, output_path)

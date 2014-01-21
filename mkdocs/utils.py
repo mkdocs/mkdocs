@@ -36,3 +36,34 @@ def get_html_path(path):
     if os.path.basename(path) == 'index':
         return path + '.html'
     return os.path.join(path, 'index.html')
+
+
+def is_markdown_file(path):
+    """
+    Return True if the given file path is a Markdown file.
+
+    http://superuser.com/questions/249436/file-extension-for-markdown-files
+    """
+    ext = os.path.splitext(path)[1].lower()
+    return ext in [
+        '.markdown',
+        '.mdown',
+        '.mkdn',
+        '.md',
+        '.mkd',
+        '.mdwn',
+        '.mdtxt',
+        '.mdtext',
+        '.text'
+    ]
+
+
+def is_html_file(path):
+    """
+    Return True if the given file path is an HTML file.
+    """
+    ext = os.path.splitext(path)[1].lower()
+    return ext in [
+        '.html',
+        '.htm',
+    ]
