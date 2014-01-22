@@ -6,6 +6,7 @@ import os
 import posixpath
 import SimpleHTTPServer
 import SocketServer
+import shutil
 import sys
 import tempfile
 import urllib
@@ -45,8 +46,8 @@ class FixedDirectoryHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
     def translate_path(self, path):
         # abandon query parameters
-        path = path.split('?',1)[0]
-        path = path.split('#',1)[0]
+        path = path.split('?', 1)[0]
+        path = path.split('#', 1)[0]
         path = posixpath.normpath(urllib.unquote(path))
         words = path.split('/')
         words = filter(None, words)
@@ -54,14 +55,14 @@ class FixedDirectoryHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         for word in words:
             drive, word = os.path.splitdrive(word)
             head, word = os.path.split(word)
-            if word in (os.curdir, os.pardir): continue
+            if word in (os.curdir, os.pardir):
+                continue
             path = os.path.join(path, word)
         return path
 
     def log_message(self, format, *args):
-        sys.stderr.write("[%s] %s\n" %
-                          (self.log_date_time_string(),
-                          format%args))
+        date_str = self.log_date_time_string()
+        sys.stderr.write('[%s] %s\n' % (date_str, format % args))
 
 
 def serve(config, options=None):
@@ -96,7 +97,7 @@ def serve(config, options=None):
     host, port = config['dev_addr'].split(':', 1)
     server = TCPServer((host, int(port)), DocsDirectoryHandler)
 
-    print "Running at: http://%s:%s/" % (host, port)
+    print 'Running at: http://%s:%s/' % (host, port)
     server.serve_forever()
 
     # Clean up

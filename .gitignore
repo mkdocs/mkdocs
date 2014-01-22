@@ -3,6 +3,7 @@ env/
 dist/
 *.egg-info/
 *.pyc
+.coverage
 
 # The 'React' theme that we use for the docs is purchased from the
 # wrapbootstrap.com site, and is not licensed for re-use.

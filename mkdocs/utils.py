@@ -1,5 +1,12 @@
 #coding: utf-8
 
+"""
+Standalone file utils.
+
+Nothing in this module should have an knowledge of config or the layout
+and structure of the site and pages in the site.
+"""
+
 import os
 import shutil
 
@@ -51,6 +58,21 @@ def get_html_path(path):
     if os.path.basename(path) == 'index':
         return path + '.html'
     return os.path.join(path, 'index.html')
+
+
+def get_url_path(path, local_file_urls=False):
+    """
+    Map a source file path to an output html path.
+
+    Paths like 'index.md' will be converted to ''
+    Paths like 'about.md' will be converted to 'about/'
+    Paths like 'api-guide/core.md' will be converted to 'api-guide/core/'
+    """
+    path = get_html_path(path)
+    url = path.replace(os.path.pathsep, '/')
+    if not local_file_urls:
+        return url[:-len('index.html')]
+    return url
 
 
 def is_markdown_file(path):
