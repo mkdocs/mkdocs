@@ -1,7 +1,6 @@
 #coding: utf-8
 
-from mkdocs.utils import copy_file, write_file, get_html_path
-from mkdocs.utils import is_html_file, is_markdown_file
+from mkdocs.utils import copy_media_files, write_file, get_html_path
 import collections
 import jinja2
 import markdown
@@ -28,36 +27,6 @@ class PathToURL(object):
         # absolute ones.
         path = match.groups()[0]
         return 'a href="%s"' % path_to_url(path, self.config)
-
-
-def build_theme(config):
-    """
-    Copies the theme files into the build directory.
-    """
-    for (source_dir, dirnames, filenames) in os.walk(config['theme_dir']):
-        relative_path = os.path.relpath(source_dir, config['theme_dir'])
-        output_dir = os.path.normpath(os.path.join(config['build_dir'], relative_path))
-
-        for filename in filenames:
-            if not is_markdown_file(filename) and not is_html_file(filename):
-                source_path = os.path.join(source_dir, filename)
-                output_path = os.path.join(output_dir, filename)
-                copy_file(source_path, output_path)
-
-
-def build_statics(config):
-    """
-    Copies any documentation static files into the build directory.
-    """
-    for (source_dir, dirnames, filenames) in os.walk(config['docs_dir']):
-        relative_path = os.path.relpath(source_dir, config['docs_dir'])
-        output_dir = os.path.normpath(os.path.join(config['build_dir'], relative_path))
-
-        for filename in filenames:
-            if not is_markdown_file(filename) and not is_html_file(filename):
-                source_path = os.path.join(source_dir, filename)
-                output_path = os.path.join(output_dir, filename)
-                copy_file(source_path, output_path)
 
 
 def build_pages(config):
@@ -251,6 +220,6 @@ def build(config):
     """
     Perform a full site build.
     """
-    build_theme(config)
-    build_statics(config)
+    copy_media_files(config['theme_dir'], config['build_dir'])
+    copy_media_files(config['docs_dir'], config['build_dir'])
     build_pages(config)

@@ -24,6 +24,21 @@ def write_file(content, output_path):
     open(output_path, 'w').write(content)
 
 
+def copy_media_files(from_dir, to_dir):
+    """
+    Recursively copy all files except markdown and HTML into another directory.
+    """
+    for (source_dir, dirnames, filenames) in os.walk(from_dir):
+        relative_path = os.path.relpath(source_dir, from_dir)
+        output_dir = os.path.normpath(os.path.join(to_dir, relative_path))
+
+        for filename in filenames:
+            if not is_markdown_file(filename) and not is_html_file(filename):
+                source_path = os.path.join(source_dir, filename)
+                output_path = os.path.join(output_dir, filename)
+                copy_file(source_path, output_path)
+
+
 def get_html_path(path):
     """
     Map a source file path to an output html path.
