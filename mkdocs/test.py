@@ -25,10 +25,10 @@ class UtilsTests(unittest.TestCase):
 
     def test_url_path(self):
         expected_results = {
-            'index.md': '',
-            'api-guide.md': 'api-guide/',
-            'api-guide/index.md': 'api-guide/',
-            'api-guide/testing.md': 'api-guide/testing/',
+            'index.md': '/',
+            'api-guide.md': '/api-guide/',
+            'api-guide/index.md': '/api-guide/',
+            'api-guide/testing.md': '/api-guide/testing/',
         }
         for file_path, expected_html_path in expected_results.items():
             html_path = utils.get_url_path(file_path)
@@ -136,7 +136,7 @@ class SiteNavigationTests(unittest.TestCase):
         Home - /
         About - /about/
         """)
-        site_navigation = nav.SiteNavigation(pages, base_url='/')
+        site_navigation = nav.SiteNavigation(pages)
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.nav_items), 2)
         self.assertEqual(len(site_navigation.pages), 2)
@@ -160,7 +160,7 @@ class SiteNavigationTests(unittest.TestCase):
             Release notes - /about/release-notes/
             License - /about/license/
         """)
-        site_navigation = nav.SiteNavigation(pages, base_url='/')
+        site_navigation = nav.SiteNavigation(pages)
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.nav_items), 3)
         self.assertEqual(len(site_navigation.pages), 6)
@@ -180,7 +180,7 @@ class SiteNavigationTests(unittest.TestCase):
                 About - /about/ [*]
             """)
         ]
-        site_navigation = nav.SiteNavigation(pages, base_url='/')
+        site_navigation = nav.SiteNavigation(pages)
         for index, page in enumerate(site_navigation.walk_pages()):
             self.assertEqual(str(site_navigation).strip(), expected[index])
 
@@ -255,7 +255,7 @@ class SiteNavigationTests(unittest.TestCase):
                     License - /about/license/ [*]
             """)
         ]
-        site_navigation = nav.SiteNavigation(pages, base_url='/')
+        site_navigation = nav.SiteNavigation(pages)
         for index, page in enumerate(site_navigation.walk_pages()):
             self.assertEqual(str(site_navigation).strip(), expected[index])
 

@@ -44,7 +44,7 @@ def build_pages(config):
     """
     Builds all the pages and writes them into the build directory.
     """
-    site_navigation = nav.SiteNavigation(config['pages'], config['base_url'] + '/')
+    site_navigation = nav.SiteNavigation(config['pages'])
     loader = jinja2.FileSystemLoader(config['theme_dir'])
     env = jinja2.Environment(loader=loader)
 
@@ -71,7 +71,7 @@ def build_pages(config):
             'config': config,
 
             'url': page.url,
-            'base_url': config['base_url'],
+            'base_url': site_navigation.url_context.make_relative('/'),
             'homepage_url': site_navigation.homepage.url,
             'previous_url': page.previous_page and page.previous_page.url,
             'next_url': page.next_page and page.next_page.url,

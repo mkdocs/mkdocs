@@ -7,12 +7,14 @@ This consists of building a set of interlinked page and header objects.
 """
 
 from mkdocs import utils
+import posixpath
 
 
 class SiteNavigation(object):
-    def __init__(self, pages_config, base_url='', local_file_urls=False):
+    def __init__(self, pages_config, local_file_urls=False):
+        self.url_context = URLContext()
         self.nav_items, self.pages = \
-            _generate_site_navigation(pages_config, base_url, local_file_urls)
+            _generate_site_navigation(pages_config, self.url_context, local_file_urls)
         self.homepage = self.pages[0] if self.pages else None
 
     def __str__(self):
@@ -31,20 +33,34 @@ class SiteNavigation(object):
         """
         page = self.homepage
         page.set_active()
+        self.url_context.set_current_url(page.abs_url)
         yield page
         while page.next_page:
             page.set_active(False)
             page = page.next_page
             page.set_active()
+            self.url_context.set_current_url(page.abs_url)
             yield page
         page.set_active(False)
 
 
+class URLContext(object):
+    def __init__(self):
+        self.base_path = '/'
+
+    def set_current_url(self, current_url):
+        self.base_path = posixpath.dirname(current_url)
+
+    def make_relative(self, url):
+        return posixpath.relpath(url, start=self.base_path)
+
+
 class Page(object):
-    def __init__(self, title, url, path):
+    def __init__(self, title, url, path, url_context):
         self.title = title
-        self.url = url
+        self.abs_url = url
         self.active = False
+        self.url_context = url_context
 
         # Relative paths to the input markdown file and output html file.
         self.input_path = path
@@ -55,13 +71,17 @@ class Page(object):
         self.next_page = None
         self.ancestors = []
 
+    @property
+    def url(self):
+        return self.url_context.make_relative(self.abs_url)
+
     def __str__(self):
         return self._indent_print()
 
     def _indent_print(self, depth=0):
         indent = '    ' * depth
         active_marker = ' [*]' if self.active else ''
-        return '%s%s - %s%s\n' % (indent, self.title, self.url, active_marker)
+        return '%s%s - %s%s\n' % (indent, self.title, self.abs_url, active_marker)
 
     def set_active(self, active=True):
         self.active = active
@@ -86,7 +106,7 @@ class Header(object):
         return ret
 
 
-def _generate_site_navigation(pages_config, base_url='', local_file_urls=False):
+def _generate_site_navigation(pages_config, url_context, local_file_urls=False):
     """
     Returns a list of Page and Header instances that represent the
     top level site navigation.
@@ -96,23 +116,23 @@ def _generate_site_navigation(pages_config, base_url='', local_file_urls=False):
     previous = None
 
     for path, title in pages_config:
-        url = utils.get_url_path(path, base_url, local_file_urls)
+        url = utils.get_url_path(path, local_file_urls)
         title, sep, child_title = title.partition('/')
         title = title.strip()
         child_title = child_title.strip()
         if not child_title:
             # New top level page.
-            page = Page(title=title, url=url, path=path)
+            page = Page(title=title, url=url, path=path, url_context=url_context)
             nav_items.append(page)
         elif not nav_items or (nav_items[-1].title != title):
             # New second level page.
-            page = Page(title=child_title, url=url, path=path)
+            page = Page(title=child_title, url=url, path=path, url_context=url_context)
             header = Header(title=title, children=[page])
             nav_items.append(header)
             page.ancestors = [header]
         else:
             # Additional second level page.
-            page = Page(title=child_title, url=url, path=path)
+            page = Page(title=child_title, url=url, path=path, url_context=url_context)
             header = nav_items[-1]
             header.children.append(page)
             page.ancestors = [header]

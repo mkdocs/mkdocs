@@ -73,7 +73,6 @@ def serve(config, options=None):
     # Create a temporary build directory, and set some options to serve it
     tempdir = tempfile.mkdtemp()
     options['build_dir'] = tempdir
-    options['base_url'] = 'http://%s' % config['dev_addr']
 
     # Perform the initial build
     config = load_config(options=options)

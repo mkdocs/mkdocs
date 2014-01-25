@@ -7,7 +7,6 @@ import yaml
 DEFAULT_CONFIG = {
     'project_name': None,
     'pages': None,
-    'base_url': '',
 
     'theme': 'bootstrap',
 
@@ -35,10 +34,5 @@ def load_config(filename='mkdocs.yaml', options=None):
     if not config['theme_dir']:
         package_dir = os.path.dirname(__file__)
         config['theme_dir'] = os.path.join(package_dir, 'themes', config['theme'])
-
-    if config['local_files']:
-        build_dir = os.path.join(os.getcwd(), config['build_dir'])
-        build_path = build_dir.replace(os.path.pathsep, '/')
-        config['base_url'] = 'file://%s' % build_path
 
     return config
