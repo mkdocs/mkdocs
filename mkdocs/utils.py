@@ -60,16 +60,21 @@ def get_html_path(path):
     return os.path.join(path, 'index.html')
 
 
-def get_url_path(path, local_file_urls=False):
+def get_url_path(path, base_url='', local_file_urls=False):
     """
     Map a source file path to an output html path.
 
     Paths like 'index.md' will be converted to ''
     Paths like 'about.md' will be converted to 'about/'
     Paths like 'api-guide/core.md' will be converted to 'api-guide/core/'
+
+    If `base_url` is set, it will be prepended to the return result.
+
+    If `local_file_urls` is `True`, returned URLs will include the a trailing
+    `index.html` rather than just returning the directory path.
     """
     path = get_html_path(path)
-    url = path.replace(os.path.pathsep, '/')
+    url = base_url + path.replace(os.path.pathsep, '/')
     if not local_file_urls:
         return url[:-len('index.html')]
     return url

@@ -1,7 +1,8 @@
 #coding: utf-8
 
 from watchdog import events, observers
-import mkdocs
+from mkdocs.build import build
+from mkdocs.config import load_config
 import os
 import posixpath
 import SimpleHTTPServer
@@ -23,8 +24,8 @@ class BuildEventHandler(events.FileSystemEventHandler):
     def on_any_event(self, event):
         if not isinstance(event, events.DirModifiedEvent):
             print 'Rebuilding documentation...',
-            config = mkdocs.load_config(options=self.options)
-            mkdocs.build(config)
+            config = load_config(options=self.options)
+            build(config)
             print ' done'
 
 
@@ -75,8 +76,8 @@ def serve(config, options=None):
     options['base_url'] = 'http://%s' % config['dev_addr']
 
     # Perform the initial build
-    config = mkdocs.load_config(options=options)
-    mkdocs.build(config)
+    config = load_config(options=options)
+    build(config)
 
     # Note: We pass any command-line options through so that we
     #       can re-apply them if the config file is reloaded.

@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 #coding: utf-8
 
-import mkdocs
+from mkdocs.build import build
+from mkdocs.config import load_config
+from mkdocs.serve import serve
 import shutil
 import sys
 
@@ -21,11 +23,11 @@ def main(cmd, options=None):
     Build the documentation, and optionally start the devserver.
     """
     if cmd == 'serve':
-        config = mkdocs.load_config(options=options)
-        mkdocs.serve(config, options=options)
+        config = load_config(options=options)
+        serve(config, options=options)
     elif cmd == 'build':
-        config = mkdocs.load_config(options=options)
-        mkdocs.build(config)
+        config = load_config(options=options)
+        build(config)
     else:
         print 'mkdocs [build|serve] {options}'
 

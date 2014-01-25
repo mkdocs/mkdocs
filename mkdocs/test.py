@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-from mkdocs import toc, utils
+from mkdocs import build, nav, toc, utils
 import markdown
 import textwrap
 import unittest
@@ -73,8 +73,8 @@ class TableOfContentsTests(unittest.TestCase):
         """)
         expected = dedent("""
         Heading 1 - #heading-1
-          Heading 2 - #heading-2
-            Heading 3 - #heading-3
+            Heading 2 - #heading-2
+                Heading 3 - #heading-3
         """)
         toc = self.markdown_to_toc(md)
         self.assertEqual(str(toc).strip(), expected)
@@ -117,14 +117,180 @@ class TableOfContentsTests(unittest.TestCase):
         """)
         expected = dedent("""
         Heading 1 - #heading-1
-          Heading 2 - #heading-2
+            Heading 2 - #heading-2
         Heading 3 - #heading-3
-          Heading 4 - #heading-4
-          Heading 5 - #heading-5
+            Heading 4 - #heading-4
+            Heading 5 - #heading-5
         """)
         toc = self.markdown_to_toc(md)
         self.assertEqual(str(toc).strip(), expected)
 
+
+class SiteNavigationTests(unittest.TestCase):
+    def test_simple_toc(self):
+        pages = [
+            ('index.md', 'Home'),
+            ('about.md', 'About')
+        ]
+        expected = dedent("""
+        Home - /
+        About - /about/
+        """)
+        site_navigation = nav.SiteNavigation(pages, base_url='/')
+        self.assertEqual(str(site_navigation).strip(), expected)
+        self.assertEqual(len(site_navigation.nav_items), 2)
+        self.assertEqual(len(site_navigation.pages), 2)
+
+    def test_indented_toc(self):
+        pages = [
+            ('index.md', 'Home'),
+            ('api-guide/running.md', 'API Guide / Running'),
+            ('api-guide/testing.md', 'API Guide / Testing'),
+            ('api-guide/debugging.md', 'API Guide / Debugging'),
+            ('about/release-notes.md', 'About / Release notes'),
+            ('about/license.md', 'About / License')
+        ]
+        expected = dedent("""
+        Home - /
+        API Guide
+            Running - /api-guide/running/
+            Testing - /api-guide/testing/
+            Debugging - /api-guide/debugging/
+        About
+            Release notes - /about/release-notes/
+            License - /about/license/
+        """)
+        site_navigation = nav.SiteNavigation(pages, base_url='/')
+        self.assertEqual(str(site_navigation).strip(), expected)
+        self.assertEqual(len(site_navigation.nav_items), 3)
+        self.assertEqual(len(site_navigation.pages), 6)
+
+    def test_walk_simple_toc(self):
+        pages = [
+            ('index.md', 'Home'),
+            ('about.md', 'About')
+        ]
+        expected = [
+            dedent("""
+                Home - / [*]
+                About - /about/
+            """),
+            dedent("""
+                Home - /
+                About - /about/ [*]
+            """)
+        ]
+        site_navigation = nav.SiteNavigation(pages, base_url='/')
+        for index, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(str(site_navigation).strip(), expected[index])
+
+    def test_walk_indented_toc(self):
+        pages = [
+            ('index.md', 'Home'),
+            ('api-guide/running.md', 'API Guide / Running'),
+            ('api-guide/testing.md', 'API Guide / Testing'),
+            ('api-guide/debugging.md', 'API Guide / Debugging'),
+            ('about/release-notes.md', 'About / Release notes'),
+            ('about/license.md', 'About / License')
+        ]
+        expected = [
+            dedent("""
+                Home - / [*]
+                API Guide
+                    Running - /api-guide/running/
+                    Testing - /api-guide/testing/
+                    Debugging - /api-guide/debugging/
+                About
+                    Release notes - /about/release-notes/
+                    License - /about/license/
+            """),
+            dedent("""
+                Home - /
+                API Guide [*]
+                    Running - /api-guide/running/ [*]
+                    Testing - /api-guide/testing/
+                    Debugging - /api-guide/debugging/
+                About
+                    Release notes - /about/release-notes/
+                    License - /about/license/
+            """),
+            dedent("""
+                Home - /
+                API Guide [*]
+                    Running - /api-guide/running/
+                    Testing - /api-guide/testing/ [*]
+                    Debugging - /api-guide/debugging/
+                About
+                    Release notes - /about/release-notes/
+                    License - /about/license/
+            """),
+            dedent("""
+                Home - /
+                API Guide [*]
+                    Running - /api-guide/running/
+                    Testing - /api-guide/testing/
+                    Debugging - /api-guide/debugging/ [*]
+                About
+                    Release notes - /about/release-notes/
+                    License - /about/license/
+            """),
+            dedent("""
+                Home - /
+                API Guide
+                    Running - /api-guide/running/
+                    Testing - /api-guide/testing/
+                    Debugging - /api-guide/debugging/
+                About [*]
+                    Release notes - /about/release-notes/ [*]
+                    License - /about/license/
+            """),
+            dedent("""
+                Home - /
+                API Guide
+                    Running - /api-guide/running/
+                    Testing - /api-guide/testing/
+                    Debugging - /api-guide/debugging/
+                About [*]
+                    Release notes - /about/release-notes/
+                    License - /about/license/ [*]
+            """)
+        ]
+        site_navigation = nav.SiteNavigation(pages, base_url='/')
+        for index, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(str(site_navigation).strip(), expected[index])
+
+
+class BuildTests(unittest.TestCase):
+    def test_convert_markdown(self):
+        html, toc, meta = build.convert_markdown(dedent("""
+            page_title: custom title
+
+            # Heading 1
+
+            This is some text.
+
+            # Heading 2
+
+            And some more text.
+        """))
+
+        expected_html = dedent("""
+            <h1 id="heading-1">Heading 1</h1>
+            <p>This is some text.</p>
+            <h1 id="heading-2">Heading 2</h1>
+            <p>And some more text.</p>
+        """)
+
+        expected_toc = dedent("""
+            Heading 1 - #heading-1
+            Heading 2 - #heading-2
+        """)
+
+        expected_meta = {'page_title': ['custom title']}
+
+        self.assertEqual(html.strip(), expected_html)
+        self.assertEqual(str(toc).strip(), expected_toc)
+        self.assertEqual(meta, expected_meta)
 
 if __name__ == '__main__':
     unittest.main()
