@@ -19,7 +19,7 @@ DEFAULT_CONFIG = {
 }
 
 
-def load_config(filename='mkdocs.yaml', options=None):
+def load_config(filename='mkdocs.yml', options=None):
     options = options or {}
     assert os.path.exists(filename), "Config file '%s' does not exist." % filename
 
