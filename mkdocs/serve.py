@@ -72,7 +72,7 @@ def serve(config, options=None):
     """
     # Create a temporary build directory, and set some options to serve it
     tempdir = tempfile.mkdtemp()
-    options['build_dir'] = tempdir
+    options['site_dir'] = tempdir
 
     # Perform the initial build
     config = load_config(options=options)
@@ -92,7 +92,7 @@ def serve(config, options=None):
         allow_reuse_address = True
 
     class DocsDirectoryHandler(FixedDirectoryHandler):
-        base_dir = config['build_dir']
+        base_dir = config['site_dir']
 
     host, port = config['dev_addr'].split(':', 1)
     server = TCPServer((host, int(port)), DocsDirectoryHandler)

@@ -87,7 +87,7 @@ def build_pages(config):
         output_content = template.render(context)
 
         # Write the output file.
-        output_path = os.path.join(config['build_dir'], page.output_path)
+        output_path = os.path.join(config['site_dir'], page.output_path)
         utils.write_file(output_content.encode('utf-8'), output_path)
 
 
@@ -95,6 +95,6 @@ def build(config):
     """
     Perform a full site build.
     """
-    utils.copy_media_files(config['theme_dir'], config['build_dir'])
-    utils.copy_media_files(config['docs_dir'], config['build_dir'])
+    utils.copy_media_files(config['theme_dir'], config['site_dir'])
+    utils.copy_media_files(config['docs_dir'], config['site_dir'])
     build_pages(config)

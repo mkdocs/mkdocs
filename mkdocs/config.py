@@ -11,7 +11,7 @@ DEFAULT_CONFIG = {
     'theme': 'bootstrap',
 
     'docs_dir': 'docs',
-    'build_dir': 'build',
+    'site_dir': 'site',
     'theme_dir': None,
 
     'dev_addr': '127.0.0.1:8000',
