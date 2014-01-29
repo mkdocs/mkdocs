@@ -15,7 +15,7 @@ DEFAULT_CONFIG = {
     'theme_dir': None,
 
     'dev_addr': '127.0.0.1:8000',
-    'local_files': False
+    'use_direcory_urls': True
 }
 
 

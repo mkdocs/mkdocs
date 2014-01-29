@@ -5,4 +5,5 @@ pages:
 - ['user-guide/styling-your-docs.md', 'User Guide / Styling your docs']
 - ['user-guide/configuration.md', 'User Guide / Configuration']
 - ['about/license.md', 'About / License']
-theme_dir: 'theme'
+#theme_dir: 'theme'
+theme: 'cerulean'

@@ -11,10 +11,10 @@ import posixpath
 
 
 class SiteNavigation(object):
-    def __init__(self, pages_config, local_file_urls=False):
+    def __init__(self, pages_config, use_directory_urls=True):
         self.url_context = URLContext()
         self.nav_items, self.pages = \
-            _generate_site_navigation(pages_config, self.url_context, local_file_urls)
+            _generate_site_navigation(pages_config, self.url_context, use_directory_urls)
         self.homepage = self.pages[0] if self.pages else None
 
     def __str__(self):
@@ -106,7 +106,7 @@ class Header(object):
         return ret
 
 
-def _generate_site_navigation(pages_config, url_context, local_file_urls=False):
+def _generate_site_navigation(pages_config, url_context, use_directory_urls=True):
     """
     Returns a list of Page and Header instances that represent the
     top level site navigation.
@@ -116,7 +116,7 @@ def _generate_site_navigation(pages_config, url_context, local_file_urls=False):
     previous = None
 
     for path, title in pages_config:
-        url = utils.get_url_path(path, local_file_urls)
+        url = utils.get_url_path(path, use_directory_urls)
         title, sep, child_title = title.partition('/')
         title = title.strip()
         child_title = child_title.strip()
