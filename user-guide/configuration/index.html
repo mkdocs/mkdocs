@@ -7,14 +7,13 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <link rel="shortcut icon" href="">
-        <link rel="canonical" href="/user-guide/configuration/">
+        <link rel="canonical" href=".">
 
         <title>Configuration</title>
 
-        <!--<link href="/css/bootstrap.min.css" rel="stylesheet">-->
-        <link href="/css/compiled/theme.css" rel="stylesheet">
-        <link href="/css/prettify-1.0.css" rel="stylesheet">
-        <link href="/css/base.css" rel="stylesheet">
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/prettify-1.0.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -25,7 +24,7 @@
 
     <body>
 
-        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
 
         <div class="navbar-header">
@@ -38,7 +37,7 @@
             </button>
 
             <!-- Main title -->
-            <a class="navbar-brand" href="/">MkDocs</a>
+            <a class="navbar-brand" href="../..">MkDocs</a>
         </div>
 
         <div class="navbar-collapse collapse">
@@ -47,7 +46,7 @@
             
             
                 <li >
-                    <a href="/">Introduction</a>
+                    <a href="../..">Introduction</a>
                 </li>
             
             
@@ -57,15 +56,15 @@
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="/user-guide/writing-your-docs/">Writing your docs</a>
+                            <a href="../writing-your-docs">Writing your docs</a>
                         </li>
                     
                         <li >
-                            <a href="/user-guide/styling-your-docs/">Styling your docs</a>
+                            <a href="../styling-your-docs">Styling your docs</a>
                         </li>
                     
                         <li class="active">
-                            <a href="/user-guide/configuration/">Configuration</a>
+                            <a href=".">Configuration</a>
                         </li>
                     
                     </ul>
@@ -78,7 +77,7 @@
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="/about/license/">License</a>
+                            <a href="../../about/license">License</a>
                         </li>
                     
                     </ul>
@@ -90,10 +89,10 @@
             <!-- Additional navigation items -->
             <ul class="nav navbar-nav navbar-right">
                 <li >
-                    <a rel="next" href="/user-guide/styling-your-docs/">Previous</a>
+                    <a rel="next" href="../styling-your-docs">Previous</a>
                 </li>
                 <li >
-                    <a rel="prev" href="/about/license/">Next</a>
+                    <a rel="prev" href="../../about/license">Next</a>
                 </li>
             </ul>
         </div>
@@ -105,7 +104,11 @@
     
         <li class="main active"><a href="#configuration">Configuration</a></li>
         
-            <li><a href="#basic-project-settings">Basic project settings</a></li>
+            <li><a href="#introduction">Introduction</a></li>
+        
+            <li><a href="#required-settings">Required settings</a></li>
+        
+            <li><a href="#project-metadata">Project metadata</a></li>
         
             <li><a href="#build-directories">Build directories</a></li>
         
@@ -118,44 +121,64 @@
     
     </ul>
 </div></div>
-            <div class="col-md-9 content" role="main">
+            <div class="col-md-9" role="main">
 
 <h1 id="configuration">Configuration</h1>
 <p>Guide to all available configuration settings.</p>
 <hr />
-<h2 id="basic-project-settings">Basic project settings</h2>
-<h4 id="project_title">project_title</h4>
-<p>Mea dicta aliquid ornatus cu, duis sanctus disputationi his in. Rebum adolescens definiebas vis te. Ornatus noluisse mel te, modo utinam ea sit, putent omittantur quo ad. Ius ad dicta iusto, vel ne nonumy quaestio.</p>
-<h4 id="project_description">project_description</h4>
-<p>Eam no quis bonorum legendos. Eos prodesset cotidieque in, atqui saperet eos te. Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent. Mei putent impetus no, iuvaret labores duo an.</p>
-<h4 id="project_url">project_url</h4>
-<p>Quo ex ceteros theophrastus, mel eius repudiandae an, has autem legendos ut. Eu quo moderatius interpretaris, pro ad homero tractatos cotidieque. His errem dictas instructior ad, tation causae ceteros ex eum. Nam falli dicunt te, mea et unum contentiones, ius noluisse rationibus cotidieque ei.</p>
-<h4 id="pages">pages</h4>
-<p>Eam no quis bonorum legendos. Eos prodesset cotidieque in, atqui saperet eos te. Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent. Mei putent impetus no, iuvaret labores duo an.</p>
-<pre class="prettyprint well"><code>pages:
-- 'index.md'
+<h2 id="introduction">Introduction</h2>
+<p>Project settings are always configured by using a YAML configuration file in the project directory named <code>mkdocs.yml</code>.</p>
+<p>As a miniumum this configuration file must contain the <code>site_name</code> and <code>pages</code> settings.  All other settings are optional.</p>
+<h2 id="required-settings">Required settings</h2>
+<h4 id="site_name">site_name</h4>
+<p>This is a <strong>required setting</strong>, and should be a string that is used as the main title for the project documentation.  For example:</p>
+<pre class="prettyprint well"><code>site_name: Mashmallow Generator
 </code></pre>
-<p>Quo ex ceteros theophrastus, mel eius repudiandae an, has autem legendos ut. Eu quo moderatius interpretaris, pro ad homero tractatos cotidieque.</p>
+<p>When rendering the theme this setting will be passed as the <code>site_name</code> context variable.</p>
+<h4 id="pages">pages</h4>
+<p>This is a <strong>required setting</strong>, and is used to determine the set of pages that should be built for the documentation.</p>
+<p>The setting should be a list.  Each row in the list represents information about a single page as a list of strings.  The first string represents the path of the documentation source file, and should be relative to the <code>docs_dir</code> setting.  Remaining strings represent the title of the page in the site navigation.</p>
+<p>Here's a simple example that would cause the build stage to create three pages:</p>
 <pre class="prettyprint well"><code>pages:
 - ['index.md', 'Introduction']
+- ['user-guide.md', 'User Guide']
 - ['about.md', 'About']
 </code></pre>
-<p>Mea dicta aliquid ornatus cu, duis sanctus disputationi his in. Rebum adolescens definiebas vis te. Ornatus noluisse mel te, modo utinam ea sit, putent omittantur quo ad. Ius ad dicta iusto, vel ne nonumy quaestio.</p>
+<p>Assuming the <code>docs_dir</code> setting was left with the default value of <code>docs</code>, the source files for this site's build process would be <code>docs/index.md</code>, <code>docs/user-guide.md</code> and <code>docs/about.md</code>.</p>
+<p>If you have a lot of project documentation you might choose to use headings to break up your site navigation by category.  You can do so by including an extra string in the page configuration for any pages that require a navigation heading, like so: </p>
 <pre class="prettyprint well"><code>pages:
 - ['index.md', 'Introduction']
-- ['user-guide/markdown.md', 'User Guide / Writing your documentation']
-- ['user-guide/themes.md', 'User Guide / Theming your documentation']
-- ['user-guide/configuration.md', 'User Guide / Configuration options']
+- ['user-guide/creating.md', 'User Guide', 'Creating a new Mashmallow project']
+- ['user-guide/api.md', 'User Guide', 'Mashmallow API guide']
+- ['user-guide/configuration.md', 'User Guide', 'Configuration Mashmallow']
+- ['about/license.md', 'About', 'License']
 </code></pre>
+<h2 id="project-metadata">Project metadata</h2>
+<h4 id="site_description">site_description</h4>
+<p>Eam no quis bonorum legendos. Eos prodesset cotidieque in, atqui saperet eos te. Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent. Mei putent impetus no, iuvaret labores duo an.</p>
+<p><strong>default</strong>: <code>null</code></p>
+<h4 id="site_url">site_url</h4>
+<p>Quo ex ceteros theophrastus, mel eius repudiandae an, has autem legendos ut. Eu quo moderatius interpretaris, pro ad homero tractatos cotidieque. His errem dictas instructior ad, tation causae ceteros ex eum. Nam falli dicunt te, mea et unum contentiones, ius noluisse rationibus cotidieque ei.</p>
+<p><strong>default</strong>: <code>null</code></p>
+<h4 id="site_favicon">site_favicon</h4>
+<p>Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent.</p>
+<p><strong>default</strong>: <code>null</code></p>
+<h4 id="site_author">site_author</h4>
+<p>Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent.</p>
+<p><strong>default</strong>: <code>null</code></p>
 <h2 id="build-directories">Build directories</h2>
 <h4 id="theme">theme</h4>
 <p>Mea dicta aliquid ornatus cu, duis sanctus disputationi his in. Rebum adolescens definiebas vis te. Ornatus noluisse mel te, modo utinam ea sit, putent omittantur quo ad. Ius ad dicta iusto, vel ne nonumy quaestio.</p>
+<p><strong>default</strong>: <code>'bootstrap'</code></p>
 <h4 id="theme_dir">theme_dir</h4>
 <p>Eam no quis bonorum legendos. Eos prodesset cotidieque in, atqui saperet eos te. Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent. Mei putent impetus no, iuvaret labores duo an.</p>
+<p><strong>default</strong>: <code>null</code></p>
 <h4 id="docs_dir">docs_dir</h4>
 <p>Quo ex ceteros theophrastus, mel eius repudiandae an, has autem legendos ut. Eu quo moderatius interpretaris, pro ad homero tractatos cotidieque. His errem dictas instructior ad, tation causae ceteros ex eum. Nam falli dicunt te, mea et unum contentiones, ius noluisse rationibus cotidieque ei.</p>
-<h4 id="build_dir">build_dir</h4>
-<p>Lorem ipsum dolor sit amet, eam facer liberavisse ad. Vis te cetero blandit temporibus, id meliore definiebas qui. At mei vidit etiam adipisci, mea ad malis nobis. An sed aeque munere facilisi, modus tractatos quo ei. Eu veniam tincidunt cum.</p>
+<p><strong>default</strong>: <code>'docs'</code></p>
+<h4 id="site_dir">site_dir</h4>
+<p>Consul percipitur usu an, no dico facer inermis cum. Eum ea mentitum accommodare. An sea periculis euripidis, dicant minimum patrioque at vis. Justo atomorum abhorreant vel in. Eos agam intellegam disputando at, zril consul nostrud ut eum.</p>
+<p><strong>default</strong>: <code>'site'</code></p>
 <h2 id="extra-build-steps">Extra build steps</h2>
 <h4 id="include_search">include_search</h4>
 <p>Mea et graeci persecuti, sit possit neglegentur ex. Nam modus maluisset id. Praesent laboramus expetendis an vis. Mea scripta eleifend et. Ex zril quidam facilis nec, eu inani errem expetendis eum. Falli electram periculis te ius, sed nihil saperet cu. Possit quodsi cu sea, usu ei saperet lobortis adolescens.</p>
@@ -164,20 +187,21 @@
 <h4 id="include_sitemap">include_sitemap</h4>
 <p>Consul percipitur usu an, no dico facer inermis cum. Eum ea mentitum accommodare. An sea periculis euripidis, dicant minimum patrioque at vis. Justo atomorum abhorreant vel in. Eos agam intellegam disputando at, zril consul nostrud ut eum.</p>
 <h2 id="preview-controls">Preview controls</h2>
-<h4 id="local_build">local_build</h4>
+<h4 id="use_directory_urls">use_directory_urls</h4>
 <p>Sit discere dolorem cu. Has an alienum repudiare delicatissimi. Cu salutatus efficiendi mea, in homero possim maiorum sed. Dicam delenit laboramus ad eum, altera laboramus instructior nec in. Vix et diam libris, eu sit justo soluta fuisset. Periculis maluisset eum ut, ut eos illud scaevola.</p>
-<h4 id="devserver_addr">devserver_addr</h4>
+<p><strong>default</strong>: <code>true</code></p>
+<h4 id="dev_addr">dev_addr</h4>
 <p>Brute invidunt et qui. Ei mea epicuri placerat sententiae, at mea delicata hendrerit, suas legimus his id. Mel viderer commune molestiae at, quo ex similique argumentum. Sea ut doming graecis hendrerit, iriure praesent usu at. Eam purto petentium ne. Case ubique usu eu, no vidit quidam possit pri.</p>
+<p><strong>default</strong>: <code>'127.0.0.1:8000'</code></p>
 <h2 id="other-configuration">Other configuration</h2>
 <p>Vel at magna falli fierent. Clita putant nam no, cu per eros possit omnium, dicit pertinacia consetetur at has. Nam quis delenit cu, at vix consul expetendis, mucius mediocrem reprimique te mel. Ex vim quem oratio cotidieque, periculis iracundia at his, his omnium consulatu ei.</p>
-<p>No sale minim definiebas vis. An quem utinam eam, est et consul patrioque maiestatis. Vel id decore periculis eloquentiam. Eu vim graeco causae, nec ut dicta graecis delicatissimi. Ne quod etiam salutandi vix, est stet veritus ne. Modus corrumpit usu ea, pri et dicam dignissim, quo ea sumo essent interesset.
+<p>No sale minim definiebas vis. An quem utinam eam, est et consul patrioque maiestatis. Vel id decore periculis eloquentiam. Eu vim graeco causae, nec ut dicta graecis delicatissimi. Ne quod etiam salutandi vix, est stet veritus ne. Modus corrumpit usu ea, pri et dicam dignissim, quo ea sumo essent interesset.</p>
 </div>
         </div>
 
-        <div id="footer"></div>
         <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-        <script src="/js/bootstrap-3.0.3.min.js"></script>
-        <script src="/js/prettify-1.0.min.js"></script>
-        <script src="/js/base.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/prettify-1.0.min.js"></script>
+        <script src="../../js/base.js"></script>
     </body>
 </html>

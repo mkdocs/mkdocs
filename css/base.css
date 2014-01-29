@@ -14,44 +14,37 @@ div.source-links {
     float: right;
 }
 
-div.content {
-    color: #666;
+div.col-md-9 h1:first-of-type {
+    text-align: center;
+    font-size: 60px;
 }
 
-div.content h1  {
-    font-family: Myriad Pro, Lato, Helvetica Neue, Arial;
-    font-weight: 600;
-    font-size: 55px;
-    color: #333;
+div.col-md-9 p:first-of-type {
+    text-align: center;
 }
 
-div.content h2 {
-    font-family: Myriad Pro, Lato, Helvetica Neue, Arial;
+h1, h2, h3 {
     color: #444;
-    font-size: 26px;
-    font-weight: 500;
-    margin-top: 20px;
 }
 
-div.content h4 {
-    color: #3B88B6;
-    font-weight: 200;
-    font-size: 17px;
-    line-height: 25px;
-    margin-top: 25px;
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 300;
 }
 
-div.content h1 {
-    text-align: center;
+hr {
+    border-top: 1px solid #aaa;
 }
 
-div.content p:first-of-type {
-    text-align: center;
+body {
+    background: url(/img/grid.png) repeat-x;
+    background-attachment: fixed;
+    background-color: #f8f8f8;
 }
 
-div.content img {
-    max-width: 100%;
+div.well, pre.well {
+    background-color: #eee;
 }
+
 /*
  * Side navigation
  *
