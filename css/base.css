@@ -23,6 +23,10 @@ div.col-md-9 p:first-of-type {
     text-align: center;
 }
 
+div.col-md-9 img {
+    max-width: 100%;
+}
+
 h1, h2, h3 {
     color: #444;
 }
