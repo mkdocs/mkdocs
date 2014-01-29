@@ -8,6 +8,7 @@ This consists of building a set of interlinked page and header objects.
 
 from mkdocs import utils
 import posixpath
+import os
 
 
 class SiteNavigation(object):
@@ -74,6 +75,10 @@ class Page(object):
     @property
     def url(self):
         return self.url_context.make_relative(self.abs_url)
+
+    @property
+    def is_homepage(self):
+        return os.path.splitext(self.input_path)[0] == 'index'
 
     def __str__(self):
         return self._indent_print()

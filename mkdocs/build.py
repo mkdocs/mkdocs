@@ -62,7 +62,7 @@ def build_pages(config):
 
         context = {
             'project_name': config['project_name'],
-            'page_title': page.title,
+            'page_title': config['project_name'] if page.is_homepage else page.title,
             'content': html_content,
 
             'toc': table_of_contents,
