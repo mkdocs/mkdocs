@@ -40,7 +40,7 @@ hr {
 }
 
 body {
-    background: url(/img/grid.png) repeat-x;
+    background: url(../img/grid.png) repeat-x;
     background-attachment: fixed;
     background-color: #f8f8f8;
 }

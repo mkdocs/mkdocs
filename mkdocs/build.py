@@ -1,6 +1,7 @@
 #coding: utf-8
 
 from mkdocs import nav, toc, utils
+from urlparse import urljoin
 import jinja2
 import markdown
 import os
@@ -40,6 +41,55 @@ def convert_markdown(markdown_source):
     return (html_content, table_of_contents, meta)
 
 
+def get_context(page, content, nav, toc, meta, config):
+    site_name = config['site_name']
+
+    if page.is_homepage:
+        page_title = site_name
+    else:
+        page_title = page.title + ' - ' + site_name 
+
+    if page.is_homepage:
+        page_description = config['site_description']
+    else:
+        page_description = None
+
+    if config['site_url']:
+        base = config['site_url']
+        if not base.endswith('/'):
+            base += '/'
+        canonical_url = urljoin(base, page.abs_url.lstrip('/'))
+    else:
+        canonical_url = None
+
+    if config['site_favicon']:
+        favicon = nav.url_context.make_relative('/' + config['site_favicon'])
+    else:
+        favicon = None
+
+    return {
+        'site_name': site_name,
+        'site_author': config['site_author'],
+        'page_title': page_title,
+        'page_description': page_description,
+        'favicon': favicon,
+
+        'content': content,
+        'toc': toc,
+        'nav': nav,
+        'meta': meta,
+        'config': config,
+
+        'base_url': nav.url_context.make_relative('/'),
+        'homepage_url': nav.homepage.url,
+        'canonical_url': canonical_url,
+
+        'current_page': page,
+        'previous_page': page.previous_page,
+        'next_page': page.next_page,
+    }
+
+
 def build_pages(config):
     """
     Builds all the pages and writes them into the build directory.
@@ -60,22 +110,10 @@ def build_pages(config):
         html_content = re.sub(r'a href="([^"]*\.md)"', PathToURL(config), html_content)
         html_content = re.sub('<pre>', '<pre class="prettyprint well">', html_content)
 
-        context = {
-            'project_name': config['project_name'],
-            'page_title': config['project_name'] if page.is_homepage else page.title,
-            'content': html_content,
-
-            'toc': table_of_contents,
-            'nav': site_navigation,
-            'meta': meta,
-            'config': config,
-
-            'url': page.url,
-            'base_url': site_navigation.url_context.make_relative('/'),
-            'homepage_url': site_navigation.homepage.url,
-            'previous_url': page.previous_page and page.previous_page.url,
-            'next_url': page.next_page and page.next_page.url,
-        }
+        context = get_context(
+            page, html_content, site_navigation,
+            table_of_contents, meta, config
+        )
 
         # Allow 'template:' override in md source files.
         if 'template' in meta:

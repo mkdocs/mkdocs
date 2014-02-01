@@ -49,7 +49,7 @@ In order to run, mkdocs requires a single configuration file named `mkdocs.yaml`
 
 An sed aeque munere facilisi, modus tractatos quo ei. Eu veniam tincidunt cum.
 
-    project_name: 'Cat indexer'
+    site_name: 'Cat indexer'
     pages:
     - ['index.md', 'Home']
     - ['about.md', 'About']

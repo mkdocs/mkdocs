@@ -11,7 +11,7 @@
             </button>
 
             <!-- Main title -->
-            <a class="navbar-brand" href="{{ homepage_url }}">{{ project_name }}</a>
+            <a class="navbar-brand" href="{{ homepage_url }}">{{ site_name }}</a>
         </div>
 
         <div class="navbar-collapse collapse">
@@ -39,11 +39,11 @@
 
             <!-- Additional navigation items -->
             <ul class="nav navbar-nav navbar-right">
-                <li {% if not previous_url %}class="disabled"{% endif %}>
-                    <a rel="next" {% if previous_url %}href="{{ previous_url }}"{% endif %}>Previous</a>
+                <li {% if not previous_page %}class="disabled"{% endif %}>
+                    <a rel="next" {% if previous_page %}href="{{ previous_page.url }}"{% endif %}>Previous</a>
                 </li>
-                <li {% if not next_url %}class="disabled"{% endif %}>
-                    <a rel="prev" {% if next_url %}href="{{ next_url }}"{% endif %}>Next</a>
+                <li {% if not next_page %}class="disabled"{% endif %}>
+                    <a rel="prev" {% if next_page %}href="{{ next_page.url }}"{% endif %}>Next</a>
                 </li>
             </ul>
         </div>

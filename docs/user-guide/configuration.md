@@ -46,25 +46,25 @@ If you have a lot of project documentation you might choose to use headings to b
 
 ## Project metadata
 
-#### site_description
-
-Eam no quis bonorum legendos. Eos prodesset cotidieque in, atqui saperet eos te. Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent. Mei putent impetus no, iuvaret labores duo an.
-
-**default**: `null`
-
 #### site_url
 
 Quo ex ceteros theophrastus, mel eius repudiandae an, has autem legendos ut. Eu quo moderatius interpretaris, pro ad homero tractatos cotidieque. His errem dictas instructior ad, tation causae ceteros ex eum. Nam falli dicunt te, mea et unum contentiones, ius noluisse rationibus cotidieque ei.
 
 **default**: `null`
 
-#### site_favicon
+#### site_description
+
+Eam no quis bonorum legendos. Eos prodesset cotidieque in, atqui saperet eos te. Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent. Mei putent impetus no, iuvaret labores duo an.
+
+**default**: `null`
+
+#### site_author
 
 Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent.
 
 **default**: `null`
 
-#### site_author
+#### site_favicon
 
 Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent.
 

@@ -5,11 +5,15 @@ import yaml
 
 
 DEFAULT_CONFIG = {
-    'project_name': None,
+    'site_name': None,
     'pages': None,
 
-    'theme': 'bootstrap',
+    'site_url': None,
+    'site_description': None,
+    'site_author': None,
+    'site_favicon': None,
 
+    'theme': 'bootstrap',
     'docs_dir': 'docs',
     'site_dir': 'site',
     'theme_dir': None,
@@ -28,7 +32,7 @@ def load_config(filename='mkdocs.yml', options=None):
     config.update(user_config)
     config.update(options)
 
-    assert config['project_name'], "Config must contain 'project_name' setting."
+    assert config['site_name'], "Config must contain 'site_name' setting."
     assert config['pages'], "Config must contain 'pages' setting."
 
     if not config['theme_dir']:
