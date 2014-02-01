@@ -1,39 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        {% if page_description %}<meta name="description" content="{{ page_description }}">{% endif %}
-        {% if site_author %}<meta name="author" content="{{ site_author }}">{% endif %}
-        {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}">{% endif %}
-        {% if favicon %}<link rel="shortcut icon" href="{{ favicon }}">
-        {% else %}<link rel="shortcut icon" href="{{ base_url }}/img/favicon.ico">{% endif %}
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% block htmltitle %}
+  <title>{{ title|striptags|e }}{{ titlesuffix }}</title>
+  {% endblock %}
 
-        <title>{{ page_title }}</title>
+  {# CSS #}
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
-        <link href="{{ base_url }}/css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="{{ base_url }}/css/prettify-1.0.css" rel="stylesheet">
-        <link href="{{ base_url }}/css/base.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ base_url }}/css/theme.css" type="text/css" />
+  <script type="text/javascript" src="{{ base_url }}/js/theme.js"></script>
 
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-        <![endif]-->
-    </head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
 
-    <body>
+</head>
 
-        {% include "nav.html" %}
-        <div class="container">
-            <div class="col-md-3">{% include "toc.html" %}</div>
-            <div class="col-md-9" role="main">{% include "content.html" %}</div>
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    {# SIDE NAV, TOGGLES ON MOBILE #}
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="{{ homepage_url }}" class="icon icon-home"> {{ project }}</a>
+        {% include "searchbox.html" %}
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+      {% include "toc.html" %}
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      {# MOBILE NAV, TRIGGLES SIDE NAV ON TOGGLE #}
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="icon icon-reorder"></i>
+        <a href="{{ homepage_url }}">{{ project }}</a>
+      </nav>
+
+      {# PAGE CONTENT #}
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          {% include "breadcrumbs.html" %}
+          <div role="main">
+            {{ content }}
+          </div>
+          {% include "footer.html" %}
         </div>
+      </div>
 
-        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-        <script src="{{ base_url }}/js/bootstrap-3.0.3.min.js"></script>
-        <script src="{{ base_url }}/js/prettify-1.0.min.js"></script>
-        <script src="{{ base_url }}/js/base.js"></script>
-    </body>
+    </section>
+
+  </div>
+</body>
 </html>
