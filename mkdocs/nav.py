@@ -120,11 +120,21 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
     pages = []
     previous = None
 
-    for path, title in pages_config:
+    for config_line in pages_config:
+        if len(config_line) == 2:
+            path, title = config_line
+            child_title = None
+        elif len(config_line) == 3:
+            path, title, child_title = config_line
+        else:
+            msg = (
+                "Line in 'page' config contained %d items.  "
+                "Expected 2 or 3." % len(config_line)
+            )
+            assert False, msg
+
         url = utils.get_url_path(path, use_directory_urls)
-        title, sep, child_title = title.partition('/')
-        title = title.strip()
-        child_title = child_title.strip()
+
         if not child_title:
             # New top level page.
             page = Page(title=title, url=url, path=path, url_context=url_context)
