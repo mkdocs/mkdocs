@@ -2,11 +2,14 @@ site_name: MkDocs
 site_url: http://www.mkdocs.org/
 site_description: Project documentation with Markdown.
 
+repo_url: https://github.com/tomchristie/mkdocs/
+
 pages:
-- ['index.md', 'Introduction']
+- ['index.md', 'Home']
 - ['user-guide/writing-your-docs.md', 'User Guide', 'Writing your docs']
 - ['user-guide/styling-your-docs.md', 'User Guide', 'Styling your docs']
 - ['user-guide/configuration.md', 'User Guide', 'Configuration']
 - ['about/license.md', 'About', 'License']
 
 theme_dir: 'theme'
+theme_center_lead: true

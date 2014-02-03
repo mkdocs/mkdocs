@@ -2,6 +2,7 @@
 
 import os
 import yaml
+import urlparse
 
 
 DEFAULT_CONFIG = {
@@ -19,7 +20,15 @@ DEFAULT_CONFIG = {
     'theme_dir': None,
 
     'dev_addr': '127.0.0.1:8000',
-    'use_direcory_urls': True
+    'use_direcory_urls': True,
+
+    'repo_url': None,
+    'repo_name': None,
+
+    # These are not yet supported...
+    'include_search': False,
+    'include_404': False,
+    'include_sitemap': False
 }
 
 
@@ -38,5 +47,14 @@ def load_config(filename='mkdocs.yml', options=None):
     if not config['theme_dir']:
         package_dir = os.path.dirname(__file__)
         config['theme_dir'] = os.path.join(package_dir, 'themes', config['theme'])
+
+    if config['repo_url'] and not config['repo_name']:
+        repo_host = urlparse.urlparse(config['repo_url']).netloc.lower()
+        if repo_host == 'github.com':
+            config['repo_name'] = 'GitHub'
+        elif repo_host == 'bitbucket.com':
+            config['repo_name'] = 'Bitbucket'
+        else:
+            config['repo_name'] = repo_host.split('.')[0].title()
 
     return config

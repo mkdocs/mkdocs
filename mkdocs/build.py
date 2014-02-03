@@ -63,16 +63,17 @@ def get_context(page, content, nav, toc, meta, config):
         canonical_url = None
 
     if config['site_favicon']:
-        favicon = nav.url_context.make_relative('/' + config['site_favicon'])
+        site_favicon = nav.url_context.make_relative('/' + config['site_favicon'])
     else:
-        favicon = None
+        site_favicon = None
 
     return {
         'site_name': site_name,
         'site_author': config['site_author'],
+        'site_favicon': site_favicon,
+
         'page_title': page_title,
         'page_description': page_description,
-        'favicon': favicon,
 
         'content': content,
         'toc': toc,
@@ -87,6 +88,11 @@ def get_context(page, content, nav, toc, meta, config):
         'current_page': page,
         'previous_page': page.previous_page,
         'next_page': page.next_page,
+
+        'repo_url': config['repo_url'],
+        'repo_name': config['repo_name'],
+
+        'include_search': config['include_search'],
     }
 
 

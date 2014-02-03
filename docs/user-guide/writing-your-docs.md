@@ -42,7 +42,7 @@ Ex vim diceret vocibus salutandi, qui liber nostrud ad. An eius postea nam, cu l
 
     At mel verear persius torquatos, his dolores.
     
-    [!Sensibus](../images/sensibus.png)
+    [!Sensibus](../img/sensibus.png)
     
     Alia urbanitas in usu.
 
@@ -51,7 +51,7 @@ Fuisset nostrum eos ut.
     docs/index.md
     docs/api-guide/sensibus.md
     docs/api-guide/dicant.md
-    docs/images/sensibus.png
+    docs/img/sensibus.png
 
 ## Markdown extensions
 

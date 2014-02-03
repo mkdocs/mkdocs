@@ -8,7 +8,7 @@ The legal stuff.
 
 Themes used under license from the Bootstrap, ReadTheDocs, GhostWriter and Bootswatch projects.
 
-* Bootstrap theme - [View license]()
+* Bootstrap theme - [View license]().
 * ReadTheDocs theme - [View license]().
 * GhostWriter theme - [View license]().
 * Bootswatch theme - [View license]().

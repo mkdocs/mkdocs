@@ -4,9 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  {% block htmltitle %}
-  <title>{{ title|striptags|e }}{{ titlesuffix }}</title>
-  {% endblock %}
+  <title>{{ page_title }}</title>
 
   {# CSS #}
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
@@ -15,7 +13,22 @@
   <script type="text/javascript" src="{{ base_url }}/js/theme.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
-
+  <style>
+    body {font-size: 90%;}
+    pre, code {font-size: 100%;}
+    h3, h4, h5, h6 {color: #2980b9; font-weight: 300}
+    {% if config.theme_center_lead %}
+    h1:first-of-type {
+      text-align: center;
+      font-weight: 300;
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+    p:first-of-type {
+      text-align: center;
+    }
+    {% endif %}
+  </style>
 </head>
 
 <body class="wy-body-for-nav" role="document">
@@ -25,7 +38,7 @@
     {# SIDE NAV, TOGGLES ON MOBILE #}
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-nav-search">
-        <a href="{{ homepage_url }}" class="icon icon-home"> {{ project }}</a>
+        <a href="{{ homepage_url }}" class="icon icon-home"> {{ site_name }}</a>
         {% include "searchbox.html" %}
       </div>
 
@@ -57,5 +70,13 @@
     </section>
 
   </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      <span><a href="" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      <span style="margin-left: 15px"><a href="" style="color: #fcfcfc">Next &raquo;</a></span>
+    </span>
+</div>
 </body>
 </html>
