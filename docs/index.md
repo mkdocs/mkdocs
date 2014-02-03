@@ -1,6 +1,6 @@
 # MkDocs
 
-Project documentation with Markdown.
+Project documentation with&nbsp;Markdown.
 
 ---
 
@@ -12,11 +12,11 @@ MkDocs is a **fast**, **simple** and **downright gorgeous** static site generato
 
 Builds completely static HTML sites that you can host on GitHub pages, Amazon S3, or anywhere else you choose.
 
-#### Great built-in themes.
+#### Great themes available.
 
 There's a stack of good looking themes included by default.  Choose from bootstrap, readthedocs, ghostwriter, or any of the 12 bootswatch themes.
 
-#### Preview your documentation as you work on it.
+#### Preview your site as you work.
 
 The built-in devserver allows you to preview your documentation as your writing it.  It will even auto-reload whenever you save any changes, so all you need to do to see your latest edits is refresh your browser.
 
@@ -45,7 +45,7 @@ You should now have the `mkdocs` command installed on your system.  Run `mkdocs 
 
 ## Getting started
 
-In order to run, mkdocs requires a single configuration file named `mkdocs.yaml` to exist in the current directory.
+In order to run, mkdocs requires a single configuration file named `mkdocs.yml` to exist in the current directory.
 
 An sed aeque munere facilisi, modus tractatos quo ei. Eu veniam tincidunt cum.
 
