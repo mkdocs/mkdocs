@@ -14,7 +14,7 @@ class PathToURL(object):
 
     def __call__(self, match):
         path = match.groups()[0]
-        return 'a href="%s"' % utils.path_to_url(path)
+        return 'a href="%s"' % utils.get_url_path(path)
 
 
 def convert_markdown(markdown_source):
