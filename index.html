@@ -12,6 +12,7 @@
         <title>MkDocs</title>
 
         <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="./css/font-awesome-4.0.3.css" rel="stylesheet">
         <link href="./css/prettify-1.0.css" rel="stylesheet">
         <link href="./css/base.css" rel="stylesheet">
 
@@ -20,6 +21,20 @@
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
+
+        
+        <style>
+            div.col-md-9 h1:first-of-type {
+                text-align: center;
+                font-size: 60px;
+                font-weight: 300;
+            }
+
+            div.col-md-9 p:first-of-type {
+                text-align: center;
+            }
+        </style>
+        
     </head>
 
     <body>
@@ -27,8 +42,9 @@
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
 
+        <!-- Collapsed navigation -->
         <div class="navbar-header">
-            <!-- Collapsed navigation button -->
+            <!-- Expander button -->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
@@ -40,13 +56,14 @@
             <a class="navbar-brand" href=".">MkDocs</a>
         </div>
 
+        <!-- Expanded navigation -->
         <div class="navbar-collapse collapse">
             <!-- Main navigation -->
             <ul class="nav navbar-nav">
             
             
                 <li class="active">
-                    <a href=".">Introduction</a>
+                    <a href=".">Home</a>
                 </li>
             
             
@@ -86,18 +103,34 @@
             
             </ul>
 
-            <!-- Additional navigation items -->
+            <!-- Search, Navigation and Repo links -->
             <ul class="nav navbar-nav navbar-right">
+                
                 <li class="disabled">
-                    <a rel="next" >Previous</a>
+                    <a rel="next" >
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
                 </li>
                 <li >
-                    <a rel="prev" href="user-guide/writing-your-docs">Next</a>
+                    <a rel="prev" href="user-guide/writing-your-docs">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
                 </li>
+                
+                <li>
+                    <a href="https://github.com/tomchristie/mkdocs/">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
             </ul>
         </div>
     </div>
 </div>
+
         <div class="container">
             <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
@@ -116,15 +149,15 @@
             <div class="col-md-9" role="main">
 
 <h1 id="mkdocs">MkDocs</h1>
-<p>Project documentation with Markdown.</p>
+<p>Project documentation with&nbsp;Markdown.</p>
 <hr />
 <h2 id="overview">Overview</h2>
 <p>MkDocs is a <strong>fast</strong>, <strong>simple</strong> and <strong>downright gorgeous</strong> static site generator that's geared towards building project documentation.  Documentation source files are written in Markdown, and configured with a single yaml configuration file.</p>
 <h4 id="host-anywhere">Host anywhere.</h4>
 <p>Builds completely static HTML sites that you can host on GitHub pages, Amazon S3, or anywhere else you choose.</p>
-<h4 id="great-built-in-themes">Great built-in themes.</h4>
+<h4 id="great-themes-available">Great themes available.</h4>
 <p>There's a stack of good looking themes included by default.  Choose from bootstrap, readthedocs, ghostwriter, or any of the 12 bootswatch themes.</p>
-<h4 id="preview-your-documentation-as-you-work-on-it">Preview your documentation as you work on it.</h4>
+<h4 id="preview-your-site-as-you-work">Preview your site as you work.</h4>
 <p>The built-in devserver allows you to preview your documentation as your writing it.  It will even auto-reload whenever you save any changes, so all you need to do to see your latest edits is refresh your browser.</p>
 <h4 id="easy-to-customize">Easy to customize.</h4>
 <p>Get your project documentation looking just the way you want it by customizing the theme.</p>
@@ -141,7 +174,7 @@ mkdocs [build|serve] {options}
 </code></pre>
 <hr />
 <h2 id="getting-started">Getting started</h2>
-<p>In order to run, mkdocs requires a single configuration file named <code>mkdocs.yaml</code> to exist in the current directory.</p>
+<p>In order to run, mkdocs requires a single configuration file named <code>mkdocs.yml</code> to exist in the current directory.</p>
 <p>An sed aeque munere facilisi, modus tractatos quo ei. Eu veniam tincidunt cum.</p>
 <pre class="prettyprint well"><code>site_name: 'Cat indexer'
 pages:
@@ -162,6 +195,8 @@ about.md index.md
 <p>Quo ad delectus praesent quaerendum. Ridens deleniti iracundia est eu. Ex vis labitur adipisci laboramus, eu corrumpit maiestatis mea, in usu graeci apeirian moderatius. Id adhuc decore facilis pro, ad meliore dolorem sea. Iudico partiendo ex eum. Illud illum molestiae ea ius, mei iusto audire te.</p>
 </div>
         </div>
+
+        
 
         <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
         <script src="./js/bootstrap-3.0.3.min.js"></script>

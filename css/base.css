@@ -14,15 +14,6 @@ div.source-links {
     float: right;
 }
 
-div.col-md-9 h1:first-of-type {
-    text-align: center;
-    font-size: 60px;
-}
-
-div.col-md-9 p:first-of-type {
-    text-align: center;
-}
-
 div.col-md-9 img {
     max-width: 100%;
 }
@@ -31,7 +22,12 @@ h1, h2, h3 {
     color: #444;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1 {
+    font-weight: 400;
+    font-size: 42px;
+}
+
+h2, h3, h4, h5, h6 {
     font-weight: 300;
 }
 
@@ -47,6 +43,10 @@ body {
 
 div.well, pre.well {
     background-color: #eee;
+}
+
+.modal-dialog {
+    margin-top: 60px;
 }
 
 /*
@@ -67,8 +67,6 @@ div.well, pre.well {
 
 /* First level of nav */
 .bs-sidenav {
-    margin-top: 30px;
-    margin-bottom: 30px;
     padding-top:    10px;
     padding-bottom: 10px;
     border-radius: 5px;
