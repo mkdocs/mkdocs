@@ -11,5 +11,5 @@ pages:
 - ['user-guide/configuration.md', 'User Guide', 'Configuration']
 - ['about/license.md', 'About', 'License']
 
-theme_dir: 'theme'
+theme: 'mkdocs'
 theme_center_lead: true

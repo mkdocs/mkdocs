@@ -6,7 +6,7 @@ Project documentation with&nbsp;Markdown.
 
 ## Overview
 
-MkDocs is a **fast**, **simple** and **downright gorgeous** static site generator that's geared towards building project documentation.  Documentation source files are written in Markdown, and configured with a single yaml configuration file.
+MkDocs is a **fast**, **simple** and **downright gorgeous** static site generator that's geared towards building project documentation. Documentation source files are written in Markdown, and configured with a single yaml configuration file.
 
 #### Host anywhere.
 
@@ -14,11 +14,11 @@ Builds completely static HTML sites that you can host on GitHub pages, Amazon S3
 
 #### Great themes available.
 
-There's a stack of good looking themes included by default.  Choose from bootstrap, readthedocs, ghostwriter, or any of the 12 bootswatch themes.
+There's a stack of good looking themes included by default. Choose from bootstrap, readthedocs, ghostwriter, or any of the 12 bootswatch themes.
 
 #### Preview your site as you work.
 
-The built-in devserver allows you to preview your documentation as your writing it.  It will even auto-reload whenever you save any changes, so all you need to do to see your latest edits is refresh your browser.
+The built-in devserver allows you to preview your documentation as your writing it. It will even auto-reload whenever you save any changes, so all you need to do to see your latest edits is refresh your browser.
 
 #### Easy to customize.
 
@@ -47,23 +47,35 @@ You should now have the `mkdocs` command installed on your system.  Run `mkdocs 
 
 In order to run, mkdocs requires a single configuration file named `mkdocs.yml` to exist in the current directory.
 
-An sed aeque munere facilisi, modus tractatos quo ei. Eu veniam tincidunt cum.
+There are two required settings in the configuration file, `site_name`, and `pages`.  Let's create a simple configuration file for our new project `MkLorum`:
 
-    site_name: 'Cat indexer'
+    site_name: 'MkLorum'
     pages:
     - ['index.md', 'Home']
     - ['about.md', 'About']
 
-You documentation source files should all exist in a single directory.  By default this directory should be named `docs`.
+Your documentation source files should all exist in a single directory. By default this directory should be named `docs`.
 
-Quo ex ceteros theophrastus, mel eius repudiandae an, has autem legendos ut. Eu quo moderatius interpretaris, pro ad homero tractatos cotidieque. His errem dictas instructior ad, tation causae ceteros ex eum. Nam falli dicunt te, mea et unum contentiones, ius noluisse rationibus cotidieque ei.
+    $ mkdir docs
+
+Now we need some documentation. The markdown files in our `docs` directory should correspond with the entries in the configuration file, so we need to create `index.md` and `about.md` files, and populate them with some markdown.
+
+As a shortcut, we can use the [`lorum-markdownum` API](https://github.com/jaspervdj/lorem-markdownum) to generate some markdown text automatically:
+
+    $ curl 'jaspervdj.be/lorem-markdownum/markdown.txt' > docs/index.md
+    $ curl 'jaspervdj.be/lorem-markdownum/markdown.txt' > docs/about.md
+
+When you're done the `docs` directory should look like this:
 
     $ ls docs
     about.md index.md
 
-Quo ex ceteros theophrastus, mel eius repudiandae an, has autem legendos ut. Eu quo moderatius interpretaris, pro ad homero tractatos cotidieque. His errem dictas instructior ad, tation causae ceteros ex eum. Nam falli dicunt te, mea et unum contentiones, ius noluisse rationibus cotidieque ei.
+Okay, we're ready to build  our documentation now. MkDocs comes with a built-in webserver, that lets you preview your documentation as you work on it. We start the webserver by making sure we're in the same directory as the `mkdocs.yml` config file, and then running the `mkdocs serve` command:
 
     $ mkdocs serve
+	Running at: http://127.0.0.1:8000/
+
+Open up [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser, and you'll see the index page being displayed.
 
 Mea dicta aliquid ornatus cu, duis sanctus disputationi his in. Rebum adolescens definiebas vis te. Ornatus noluisse mel te, modo utinam ea sit, putent omittantur quo ad. Ius ad dicta iusto, vel ne nonumy quaestio.
 

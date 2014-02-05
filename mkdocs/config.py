@@ -14,7 +14,7 @@ DEFAULT_CONFIG = {
     'site_author': None,
     'site_favicon': None,
 
-    'theme': 'bootstrap',
+    'theme': 'mkdocs',
     'docs_dir': 'docs',
     'site_dir': 'site',
     'theme_dir': None,
