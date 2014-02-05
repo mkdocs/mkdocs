@@ -8,6 +8,14 @@ Project documentation with&nbsp;Markdown.
 
 MkDocs is a **fast**, **simple** and **downright gorgeous** static site generator that's geared towards building project documentation. Documentation source files are written in Markdown, and configured with a single yaml configuration file.
 
+---
+
+**MkDocs is currently still in development.**
+
+We're progressing quickly, but the documentation still needs filling in, and theres a few rough edges.  The 1.0 release is planned to arrive in the next few weeks.
+
+---
+
 #### Host anywhere.
 
 Builds completely static HTML sites that you can host on GitHub pages, Amazon S3, or anywhere else you choose.
@@ -75,7 +83,9 @@ Okay, we're ready to build  our documentation now. MkDocs comes with a built-in 
     $ mkdocs serve
 	Running at: http://127.0.0.1:8000/
 
-Open up [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser, and you'll see the index page being displayed.
+Open up [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser, and you'll see the index page being displayed:
+
+![Screenshot](img/screenshot.png)
 
 Mea dicta aliquid ornatus cu, duis sanctus disputationi his in. Rebum adolescens definiebas vis te. Ornatus noluisse mel te, modo utinam ea sit, putent omittantur quo ad. Ius ad dicta iusto, vel ne nonumy quaestio.
 
