@@ -68,7 +68,7 @@ Your documentation source files should all exist in a single directory. By defau
 
 Now we need some documentation. The markdown files in our `docs` directory should correspond with the entries in the configuration file, so we need to create `index.md` and `about.md` files, and populate them with some markdown.
 
-As a shortcut, we can use the [`lorum-markdownum` API](https://github.com/jaspervdj/lorem-markdownum) to generate some markdown text automatically:
+As a shortcut, we can use Jasper Van der Jeugt's ['lorum-markdownum' website](https://github.com/jaspervdj/lorem-markdownum) site to generate pages of random Markdown text automatically:
 
     $ curl 'jaspervdj.be/lorem-markdownum/markdown.txt' > docs/index.md
     $ curl 'jaspervdj.be/lorem-markdownum/markdown.txt' > docs/about.md
@@ -87,9 +87,41 @@ Open up [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser, and yo
 
 ![Screenshot](img/screenshot.png)
 
-Mea dicta aliquid ornatus cu, duis sanctus disputationi his in. Rebum adolescens definiebas vis te. Ornatus noluisse mel te, modo utinam ea sit, putent omittantur quo ad. Ius ad dicta iusto, vel ne nonumy quaestio.
+The webserver also supports auto-reloading, and will rebuild your documentation whenever anything in the configuration file, documentation directory or theme directory changes.
+
+Go ahead and edit the `doc/index.md` document, and change the initial heading to `MkDocs`, then reload the site in your browser, and you should see the change take effect immediately.
+
+We can also change the configuration file to alter how the documentation is displayed.  Let's go ahead and change the theme.  Edit the `mkdocs.yaml` file to the following:
+
+    site_name: 'MkLorum'
+    pages:
+    - ['index.md', 'Home']
+    - ['about.md', 'About']
+    theme: readthedocs
+
+Refresh the browser again, and you'll now see the ReadTheDocs theme being used.
+
+![Screenshot](img/readthedocs.png)
+
+---
+
+## Building & deploying
+
+That's looking good.  We're ready to deploy the first pass of our `MkLorum` documentation now.  Let's build the documentation.
 
     $ mkdocs build
 
-Quo ad delectus praesent quaerendum. Ridens deleniti iracundia est eu. Ex vis labitur adipisci laboramus, eu corrumpit maiestatis mea, in usu graeci apeirian moderatius. Id adhuc decore facilis pro, ad meliore dolorem sea. Iudico partiendo ex eum. Illud illum molestiae ea ius, mei iusto audire te.
+This will create a new directory, named `site`.  Let's take a look inside the directory:
 
+    $ ls site
+    about css fonts img index.html js
+
+Notice that our source documentation has been output as two HTML files named `index.html` and `about/index.html`.  We also have various other media that's been copied into the `site` directory as part of the documentation theme.
+
+If you're using source code control such as `git` you probably don't want to check your documentation builds into the repository.  Add the following to your `.gitignore` file:
+
+    site/
+
+If you don't have a `.gitignore` file in the current directory you should probably create one now.  If you're using another source code control you'll want to check it's documentation on how to ignore specific directories.
+
+The documentation site that we've just built only uses static files so you'll be able to host it from pretty much anywhere. [GitHub project pages](https://help.github.com/articles/creating-project-pages-manually) and [Amazon S3](http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html) are good hosting options. Upload the contents of the entire `site` directory to wherever you're hosting your website from and you're done.

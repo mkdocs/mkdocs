@@ -16,6 +16,13 @@ div.source-links {
 
 div.col-md-9 img {
     max-width: 100%;
+    display: block;
+    padding: 4px;
+    line-height: 1.428571429;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 20px auto 30px auto;
 }
 
 h1, h2, h3 {
