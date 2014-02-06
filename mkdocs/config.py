@@ -34,6 +34,8 @@ DEFAULT_CONFIG = {
 
 def load_config(filename='mkdocs.yml', options=None):
     options = options or {}
+    if 'config' in options:
+        filename = options['config']
     assert os.path.exists(filename), "Config file '%s' does not exist." % filename
 
     user_config = yaml.load(open(filename, 'r'))

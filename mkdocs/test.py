@@ -1,14 +1,57 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-from mkdocs import build, nav, toc, utils
+from mkdocs import build, nav, toc, utils, config
 import markdown
 import textwrap
+import tempfile
+import os
 import unittest
 
 
 def dedent(text):
     return textwrap.dedent(text).strip()
+
+class ConfigTests(unittest.TestCase):
+    def test_config_option(self):
+        expected_results = {
+             'site_name': 'UnitTest',
+             'site_description': 'unittest for mkdocs.',
+             'site_dir': 'site',
+             'docs_dir': 'docs',
+             'site_url': 'http://www.unittest.org/',
+             'dev_addr': '127.0.0.1:8000',
+             'theme': 'bootstrap',
+             'site_author': None,
+             'use_direcory_urls': True,
+             'site_favicon': None,
+             'config': None,
+             'pages': [['windex.md', 'Introduction'],
+                       ['user-guide/writing-your-tests.md', 'User Guide', 'Writing your tests'],
+                       ['about/splicense.md', 'About', 'Splicense']],
+             'theme_dir': 'theme'
+        }
+        file_contents = ["site_name: UnitTest\n",
+                         "site_url: http://www.unittest.org/\n",
+                         "site_description: unittest for mkdocs.\n",
+                         "\n",
+                         "pages:\n",
+                         "- ['windex.md', 'Introduction']\n",
+                         "- ['user-guide/writing-your-tests.md', 'User Guide', 'Writing your tests']\n",
+                         "- ['about/splicense.md', 'About', 'Splicense']\n",
+                         "\n",
+                         "theme_dir: 'theme'\n"]
+        fd, file_path = tempfile.mkstemp(text=True)
+        expected_results['config'] = file_path
+        file = open(file_path, 'a')
+        for i in file_contents:
+            file.write(i)
+        file.close()
+        os.close(fd)
+        options = {'config': file_path}
+        results = config.load_config(options=options)
+        self.assertEqual(results, expected_results)
+        os.remove(file_path)
 
 
 class UtilsTests(unittest.TestCase):
