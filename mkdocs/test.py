@@ -144,11 +144,11 @@ class SiteNavigationTests(unittest.TestCase):
     def test_indented_toc(self):
         pages = [
             ('index.md', 'Home'),
-            ('api-guide/running.md', 'API Guide / Running'),
-            ('api-guide/testing.md', 'API Guide / Testing'),
-            ('api-guide/debugging.md', 'API Guide / Debugging'),
-            ('about/release-notes.md', 'About / Release notes'),
-            ('about/license.md', 'About / License')
+            ('api-guide/running.md', 'API Guide', 'Running'),
+            ('api-guide/testing.md', 'API Guide', 'Testing'),
+            ('api-guide/debugging.md', 'API Guide', 'Debugging'),
+            ('about/release-notes.md', 'About', 'Release notes'),
+            ('about/license.md', 'About', 'License')
         ]
         expected = dedent("""
         Home - /
@@ -187,11 +187,11 @@ class SiteNavigationTests(unittest.TestCase):
     def test_walk_indented_toc(self):
         pages = [
             ('index.md', 'Home'),
-            ('api-guide/running.md', 'API Guide / Running'),
-            ('api-guide/testing.md', 'API Guide / Testing'),
-            ('api-guide/debugging.md', 'API Guide / Debugging'),
-            ('about/release-notes.md', 'About / Release notes'),
-            ('about/license.md', 'About / License')
+            ('api-guide/running.md', 'API Guide', 'Running'),
+            ('api-guide/testing.md', 'API Guide', 'Testing'),
+            ('api-guide/debugging.md', 'API Guide', 'Debugging'),
+            ('about/release-notes.md', 'About', 'Release notes'),
+            ('about/license.md', 'About', 'License')
         ]
         expected = [
             dedent("""

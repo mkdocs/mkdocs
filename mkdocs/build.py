@@ -47,7 +47,7 @@ def get_context(page, content, nav, toc, meta, config):
     if page.is_homepage:
         page_title = site_name
     else:
-        page_title = page.title + ' - ' + site_name 
+        page_title = page.title + ' - ' + site_name
 
     if page.is_homepage:
         page_description = config['site_description']
