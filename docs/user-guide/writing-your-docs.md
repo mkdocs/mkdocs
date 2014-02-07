@@ -6,11 +6,46 @@ How to write and layout your markdown source files.
 
 ## File layout
 
-Lorem ipsum dolor sit amet, meliore deserunt referrentur per ad, mei eros elaboraret no. Soluta sadipscing eum ex. Duo ne nominati definitiones, animal sententiae nam no. Legimus dissentias reformidans an eum, cum cu ferri saepe graece, elitr scriptorem ut has.
+Your documentation source should be written as regular Markdown files, and placed in a directory somewhere in your project.  Normally this directory will be named `docs` and will exist at the top level of your project, alongside the `mkdocs.yml` configuration file.
 
-Duis audiam vix eu. Vidit dissentiunt nec ea, an dolor incorrupte vix. Has modus gloriatur assueverit ne. Elitr inciderint ea pro. Ad dictas nostrum nec, mei ad alterum fabellas.
+The simplest project you can create will look something like this:
 
-    
+    mkdocs.yml
+    docs/
+        index.md
+
+By convention your project homepage should always be named `index`.  Any of the following extensions may be used for your Markdown source files: `markdown`, `mdown`, `mkdn`, `mkd`, `md`.
+
+You can also create multi-page documentation, by creating several markdown files:
+
+    mkdocs.yml
+    docs/
+        index.md
+        about.md
+        license.md
+
+The file layout you use determines the URLs that are used for the generated pages.
+Given the above layout, pages would be generated for the following URLs:
+
+    /
+    /about/
+    /license/
+
+You can also include your Markdown files in nested directories if that better suits your documenation layout.
+
+    docs/
+        index.md
+        user-guide/getting-started.md
+        user-guide/configuration-options.md
+        license.md
+
+Source files inside nested directories will cause pages to be generated with nested URLs, like so:
+
+    /
+    /user-guide/getting-started/
+    /user-guide/configuration-options/
+    /license/
+
 
 ## Linking documents
 
@@ -38,20 +73,28 @@ Eam ad euismod accusata vituperata. Oratio vocent nominavi ei eum.
 
 ## Images and media
 
-Ex vim diceret vocibus salutandi, qui liber nostrud ad. An eius postea nam, cu labore argumentum cum.
+As well as the Markdown source files, you can also include other file types in your documentation, which will be copied across when generating your documentation site.  These might include images and other media.
 
-    At mel verear persius torquatos, his dolores.
+For example, if you project documentation needed to include a [GitHub pages CNAME file](https://help.github.com/articles/setting-up-a-custom-domain-with-pages#setting-the-domain-in-your-repo) and a PNG formatted screenshot image then your file layout might look as follows:
+
+    mkdocs.yml
+    docs/
+        CNAME
+        index.md
+        about.md
+        license.md
+        img/
+            screenshot.png
+
+To include images in your documentation source files, simply use any of the regular Markdown image syntaxes:
+
+    Cupcake indexer is a snazzy new project for indexing small cakes.
     
-    [!Sensibus](../img/sensibus.png)
+    ![Screenshot](img/screenshot.png)
     
-    Alia urbanitas in usu.
+    *Above: Cupcake indexer in progress*
 
-Fuisset nostrum eos ut.
-
-    docs/index.md
-    docs/api-guide/sensibus.md
-    docs/api-guide/dicant.md
-    docs/img/sensibus.png
+You image will now be embedded when you build the documentation, and should also be previewed if you're working on the documentation with a Markdown editor.
 
 ## Markdown extensions
 

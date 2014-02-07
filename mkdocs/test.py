@@ -3,6 +3,8 @@
 
 from mkdocs import build, nav, toc, utils, config
 import markdown
+import os
+import shutil
 import textwrap
 import tempfile
 import unittest
@@ -36,6 +38,19 @@ class ConfigTests(unittest.TestCase):
         results = config.load_config(options=options)
         self.assertEqual(results['site_name'], expected_results['site_name'])
         self.assertEqual(results['pages'], expected_results['pages'])
+
+    def test_default_pages(self):
+        tmp_dir = tempfile.mkdtemp()
+        try:
+            open(os.path.join(tmp_dir, 'index.md'), 'w').close()
+            open(os.path.join(tmp_dir, 'about.md'), 'w').close()
+            conf = config.validate_config({
+                'site_name': 'Example',
+                'docs_dir': tmp_dir
+            })
+            self.assertEqual(conf['pages'], ['index.md', 'about.md'])
+        finally:
+            shutil.rmtree(tmp_dir)
 
 
 class UtilsTests(unittest.TestCase):
@@ -168,6 +183,19 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual(len(site_navigation.nav_items), 2)
         self.assertEqual(len(site_navigation.pages), 2)
 
+    def test_empty_toc_item(self):
+        pages = [
+            ('index.md',),
+            ('about.md', 'About')
+        ]
+        expected = dedent("""
+        About - /about/
+        """)
+        site_navigation = nav.SiteNavigation(pages)
+        self.assertEqual(str(site_navigation).strip(), expected)
+        self.assertEqual(len(site_navigation.nav_items), 1)
+        self.assertEqual(len(site_navigation.pages), 2)
+
     def test_indented_toc(self):
         pages = [
             ('index.md', 'Home'),
@@ -204,6 +232,23 @@ class SiteNavigationTests(unittest.TestCase):
             """),
             dedent("""
                 Home - /
+                About - /about/ [*]
+            """)
+        ]
+        site_navigation = nav.SiteNavigation(pages)
+        for index, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(str(site_navigation).strip(), expected[index])
+
+    def test_walk_empty_toc(self):
+        pages = [
+            ('index.md',),
+            ('about.md', 'About')
+        ]
+        expected = [
+            dedent("""
+                About - /about/
+            """),
+            dedent("""
                 About - /about/ [*]
             """)
         ]

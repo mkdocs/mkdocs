@@ -10,7 +10,7 @@ Project settings are always configured by using a YAML configuration file in the
 
 As a miniumum this configuration file must contain the `site_name` and `pages` settings.  All other settings are optional.
 
-## Required settings
+## Project information
 
 #### site_name
 
@@ -19,32 +19,6 @@ This is a **required setting**, and should be a string that is used as the main 
     site_name: Mashmallow Generator
 
 When rendering the theme this setting will be passed as the `site_name` context variable.
-
-#### pages
-
-This is a **required setting**, and is used to determine the set of pages that should be built for the documentation.
-
-The setting should be a list.  Each row in the list represents information about a single page as a list of strings.  The first string represents the path of the documentation source file, and should be relative to the `docs_dir` setting.  Remaining strings represent the title of the page in the site navigation.
-
-Here's a simple example that would cause the build stage to create three pages:
-
-    pages:
-    - ['index.md', 'Introduction']
-    - ['user-guide.md', 'User Guide']
-    - ['about.md', 'About']
-
-Assuming the `docs_dir` setting was left with the default value of `docs`, the source files for this site's build process would be `docs/index.md`, `docs/user-guide.md` and `docs/about.md`.
-
-If you have a lot of project documentation you might choose to use headings to break up your site navigation by category.  You can do so by including an extra string in the page configuration for any pages that require a navigation heading, like so: 
-
-    pages:
-    - ['index.md', 'Introduction']
-    - ['user-guide/creating.md', 'User Guide', 'Creating a new Mashmallow project']
-    - ['user-guide/api.md', 'User Guide', 'Mashmallow API guide']
-    - ['user-guide/configuration.md', 'User Guide', 'Configuration Mashmallow']
-    - ['about/license.md', 'About', 'License']
-
-## Project metadata
 
 #### site_url
 
@@ -69,6 +43,32 @@ Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accums
 Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent.
 
 **default**: `null`
+
+## Documentation layout
+
+#### pages
+
+This is setting is used to determine the set of pages that should be built for the documentation.
+
+The setting should be a list.  Each row in the list represents information about a single page as a list of strings.  The first string represents the path of the documentation source file, and should be relative to the `docs_dir` setting.  Remaining strings represent the title of the page in the site navigation.
+
+Here's a simple example that would cause the build stage to create three pages:
+
+    pages:
+    - ['index.md', 'Introduction']
+    - ['user-guide.md', 'User Guide']
+    - ['about.md', 'About']
+
+Assuming the `docs_dir` setting was left with the default value of `docs`, the source files for this site's build process would be `docs/index.md`, `docs/user-guide.md` and `docs/about.md`.
+
+If you have a lot of project documentation you might choose to use headings to break up your site navigation by category.  You can do so by including an extra string in the page configuration for any pages that require a navigation heading, like so: 
+
+    pages:
+    - ['index.md', 'Introduction']
+    - ['user-guide/creating.md', 'User Guide', 'Creating a new Mashmallow project']
+    - ['user-guide/api.md', 'User Guide', 'Mashmallow API guide']
+    - ['user-guide/configuration.md', 'User Guide', 'Configuration Mashmallow']
+    - ['about/license.md', 'About', 'License']
 
 ## Build directories
 

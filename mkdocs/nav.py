@@ -86,7 +86,8 @@ class Page(object):
     def _indent_print(self, depth=0):
         indent = '    ' * depth
         active_marker = ' [*]' if self.active else ''
-        return '%s%s - %s%s\n' % (indent, self.title, self.abs_url, active_marker)
+        title = self.title if (self.title is not None) else '[blank]'
+        return '%s%s - %s%s\n' % (indent, title, self.abs_url, active_marker)
 
     def set_active(self, active=True):
         self.active = active
@@ -121,15 +122,17 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
     previous = None
 
     for config_line in pages_config:
-        if len(config_line) == 2:
-            path, title = config_line
-            child_title = None
-        elif len(config_line) == 3:
-            path, title, child_title = config_line
+        if isinstance(config_line, str):
+            path = config_line
+            title, child_title = None, None
+        elif len(config_line) in (1, 2, 3):
+            # Pad any items that don't exist with 'None'
+            padded_config = (list(config_line) + [None, None])[:3]
+            path, title, child_title = padded_config
         else:
             msg = (
                 "Line in 'page' config contained %d items.  "
-                "Expected 2 or 3." % len(config_line)
+                "Expected 1, 2 or 3 strings." % len(config_line)
             )
             assert False, msg
 
@@ -138,7 +141,13 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
         if not child_title:
             # New top level page.
             page = Page(title=title, url=url, path=path, url_context=url_context)
-            nav_items.append(page)
+            if page.title is not None:
+                # Page config lines that do not include a title, such as:
+                #    - ['index.md']
+                # Will not be added to the nav items heiarchy, although they
+                # are included in the full list of pages, and have the
+                # appropriate 'next'/'prev' links generated.
+                nav_items.append(page)
         elif not nav_items or (nav_items[-1].title != title):
             # New second level page.
             page = Page(title=child_title, url=url, path=path, url_context=url_context)

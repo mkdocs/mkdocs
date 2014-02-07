@@ -44,7 +44,7 @@ def convert_markdown(markdown_source):
 def get_context(page, content, nav, toc, meta, config):
     site_name = config['site_name']
 
-    if page.is_homepage:
+    if page.is_homepage or page.title is None:
         page_title = site_name
     else:
         page_title = page.title + ' - ' + site_name
