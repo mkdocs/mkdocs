@@ -118,10 +118,10 @@ This will create a new directory, named `site`.  Let's take a look inside the di
 
 Notice that our source documentation has been output as two HTML files named `index.html` and `about/index.html`.  We also have various other media that's been copied into the `site` directory as part of the documentation theme.
 
-If you're using source code control such as `git` you probably don't want to check your documentation builds into the repository.  Add the following to your `.gitignore` file:
+If you're using source code control such as `git` you probably don't want to check your documentation builds into the repository.  Add a line containing `site/` to your `.gitignore` file.
 
-    site/
+    echo "site/" >> .gitignore
 
-If you don't have a `.gitignore` file in the current directory you should probably create one now.  If you're using another source code control you'll want to check it's documentation on how to ignore specific directories.
+If you're using another source code control you'll want to check it's documentation on how to ignore specific directories.
 
 The documentation site that we've just built only uses static files so you'll be able to host it from pretty much anywhere. [GitHub project pages](https://help.github.com/articles/creating-project-pages-manually) and [Amazon S3](http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html) are good hosting options. Upload the contents of the entire `site` directory to wherever you're hosting your website from and you're done.
