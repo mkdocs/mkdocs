@@ -396,5 +396,12 @@ class BuildTests(unittest.TestCase):
         html = build.post_process_html(html)
         self.assertEqual(html.strip(), expected.strip())
 
+    def test_ignore_external_link(self):
+        md_text = 'An [external link](http://example.com/external.md).'
+        expected = '<p>An <a href="http://example.com/external.md">external link</a>.</p>'
+        html, toc, meta = build.convert_markdown(md_text)
+        html = build.post_process_html(html)
+        self.assertEqual(html.strip(), expected.strip())
+
 if __name__ == '__main__':
     unittest.main()

@@ -16,7 +16,7 @@ class PathToURL(object):
 
         if (scheme or netloc or not utils.is_markdown_file(path)):
             # Ignore URLs unless they are a relative link to a markdown file.
-            return match.groups[0]
+            return 'a href="%s"' % url
 
         path = utils.get_url_path(path, relative=True)
         url = urlparse.urlunparse((scheme, netloc, path, query, query, fragment))
