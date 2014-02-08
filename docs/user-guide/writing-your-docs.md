@@ -53,7 +53,7 @@ Solum nonumy alienum mel ea. Ea brute intellegam vis, antiopam argumentum te eos
 
 #### Internal hyperlinks
 
-When linking between pages in the documentation, you can simply use the regular Markdown hyperlinking syntax, with the relative path to the Markdown document you wish to link to.
+When linking between pages in the documentation you can simply use the regular Markdown hyperlinking syntax, including the relative path to the Markdown document you wish to link to.
 
     Please see the [project license](license.md) for further details.
 
