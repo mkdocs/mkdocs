@@ -6,7 +6,7 @@ Project documentation with&nbsp;Markdown.
 
 ## Overview
 
-MkDocs is a **fast**, **simple** and **downright gorgeous** static site generator that's geared towards building project documentation. Documentation source files are written in Markdown, and configured with a single yaml configuration file.
+MkDocs is a **fast**, **simple** and **downright gorgeous** static site generator that's geared towards building project documentation. Documentation source files are written in Markdown, and configured with a single YAML configuration file.
 
 ---
 
@@ -55,12 +55,9 @@ You should now have the `mkdocs` command installed on your system.  Run `mkdocs 
 
 In order to run, mkdocs requires a single configuration file named `mkdocs.yml` to exist in the current directory.
 
-There are two required settings in the configuration file, `site_name`, and `pages`.  Let's create a simple configuration file for our new project `MkLorum`:
+There is one required settings in the configuration file, `site_name`.  Let's create a simple configuration file for our new project `MkLorum`:
 
-    site_name: 'MkLorum'
-    pages:
-    - ['index.md', 'Home']
-    - ['about.md', 'About']
+    $ echo 'site_name: MkLorum' > mkdocs.yml
 
 Your documentation source files should all exist in a single directory. By default this directory should be named `docs`.
 
@@ -71,14 +68,14 @@ Now we need some documentation. The markdown files in our `docs` directory shoul
 As a shortcut, we can use Jasper Van der Jeugt's ['lorum-markdownum' website](https://github.com/jaspervdj/lorem-markdownum) site to generate pages of random Markdown text automatically:
 
     $ curl 'jaspervdj.be/lorem-markdownum/markdown.txt' > docs/index.md
-    $ curl 'jaspervdj.be/lorem-markdownum/markdown.txt' > docs/about.md
 
-When you're done the `docs` directory should look like this:
+When you're done the directory layout should look like this:
 
-    $ ls docs
-    about.md index.md
+    mkdocs.yml
+    docs/
+        index.md
 
-Okay, we're ready to build  our documentation now. MkDocs comes with a built-in webserver, that lets you preview your documentation as you work on it. We start the webserver by making sure we're in the same directory as the `mkdocs.yml` config file, and then running the `mkdocs serve` command:
+Okay, we're ready to build  our documentation now. MkDocs comes with a built-in webserver that lets you preview your documentation as you work on it. We start the webserver by making sure we're in the same directory as the `mkdocs.yml` config file, and then running the `mkdocs serve` command:
 
     $ mkdocs serve
 	Running at: http://127.0.0.1:8000/
@@ -89,14 +86,27 @@ Open up [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser, and yo
 
 The webserver also supports auto-reloading, and will rebuild your documentation whenever anything in the configuration file, documentation directory or theme directory changes.
 
-Go ahead and edit the `doc/index.md` document, and change the initial heading to `MkDocs`, then reload the site in your browser, and you should see the change take effect immediately.
+Go ahead and edit the `doc/index.md` document, and change the initial heading to `MkLorum`, then reload the site in your browser, and you should see the change take effect immediately.
 
-We can also change the configuration file to alter how the documentation is displayed.  Let's go ahead and change the theme.  Edit the `mkdocs.yaml` file to the following:
+Let's also add a second page to our documentation:
 
-    site_name: 'MkLorum'
+    $ curl 'jaspervdj.be/lorem-markdownum/markdown.txt' > docs/about.md
+
+We'd like our documentation site to include some navigation headers, so we'll edit the configuration file and add some information about the order and title to use for out headers:
+
+    site_name: MkLorum
     pages:
-    - ['index.md', 'Home']
-    - ['about.md', 'About']
+    - [index.md, Home]
+    - [about.md, About]
+
+Refresh the browser and you'll now see a navigation bar with `Home` and `About` headers.
+
+While we're here can also change the configuration file to alter how the documentation is displayed.  Let's go ahead and change the theme.  Edit the `mkdocs.yaml` file to the following:
+
+    site_name: MkLorum
+    pages:
+    - [index.md, Home]
+    - [about.md, About]
     theme: readthedocs
 
 Refresh the browser again, and you'll now see the ReadTheDocs theme being used.
@@ -120,7 +130,7 @@ Notice that our source documentation has been output as two HTML files named `in
 
 If you're using source code control such as `git` you probably don't want to check your documentation builds into the repository.  Add a line containing `site/` to your `.gitignore` file.
 
-    echo "site/" >> .gitignore
+    echo 'site/' >> .gitignore
 
 If you're using another source code control you'll want to check it's documentation on how to ignore specific directories.
 
