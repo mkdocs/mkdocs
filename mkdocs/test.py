@@ -334,6 +334,10 @@ class SiteNavigationTests(unittest.TestCase):
 
 class BuildTests(unittest.TestCase):
     def test_convert_markdown(self):
+        """
+        Ensure that basic Markdown -> HTML and TOC works.
+        """
+
         html, toc, meta = build.convert_markdown(dedent("""
             page_title: custom title
 
@@ -363,6 +367,20 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(html.strip(), expected_html)
         self.assertEqual(str(toc).strip(), expected_toc)
         self.assertEqual(meta, expected_meta)
+
+    def test_convert_internal_links(self):
+        md_text = 'An [internal link](internal.md) to another document.'
+        expected = '<p>An <a href="internal/">internal link</a> to another document.</p>'
+        html, toc, meta = build.convert_markdown(md_text)
+        html = build.post_process_html(html)
+        self.assertEqual(html.strip(), expected.strip())
+
+    def test_convert_internal_links_differing_directory(self):
+        md_text = 'An [internal link](../internal.md) to another document.'
+        expected = '<p>An <a href="../internal/">internal link</a> to another document.</p>'
+        html, toc, meta = build.convert_markdown(md_text)
+        html = build.post_process_html(html)
+        self.assertEqual(html.strip(), expected.strip())
 
 if __name__ == '__main__':
     unittest.main()

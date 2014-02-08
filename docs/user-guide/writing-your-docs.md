@@ -55,7 +55,7 @@ Solum nonumy alienum mel ea. Ea brute intellegam vis, antiopam argumentum te eos
 
 In cum esse utroque, pri equidem molestie epicurei an, at ludus euismod pertinax mea. Ex nam adipisci repudiare comprehensam. Ex propriae detracto intellegat vel, vel et lorem dicta tincidunt. Mei ne affert mollis voluptatibus. Mel et sonet graecis, ius deserunt eloquentiam no.
 
-    Ex vim diceret [vocibus salutandi](../example.md), qui liber nostrud ad.
+    Please see the [project license](license.md) for further details.
 
 Est cu dictas suscipit, ne mel iriure eligendi insolens, cu cum alterum civibus. Vidisse vivendum ne has, pertinax neglegentur no vis. Vel ei referrentur efficiantur, sed facer indoctum similique et. Ad temporibus liberavisse his, nec cu primis electram moderatius. Ex meliore denique has. Eam ea offendit expetenda. Ei error facilis suavitate pri, ex utroque vulputate efficiendi eos.
 

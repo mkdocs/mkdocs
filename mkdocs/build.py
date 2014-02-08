@@ -9,12 +9,9 @@ import re
 
 
 class PathToURL(object):
-    def __init__(self, config):
-        self.config = config
-
     def __call__(self, match):
-        path = match.groups()[0]
-        return 'a href="%s"' % utils.get_url_path(path)
+        path = match.groups()[0] + match.groups()[1]
+        return 'a href="%s"' % utils.get_url_path(path, relative=True)
 
 
 def convert_markdown(markdown_source):
@@ -39,6 +36,12 @@ def convert_markdown(markdown_source):
     table_of_contents = toc.TableOfContents(toc_html)
 
     return (html_content, table_of_contents, meta)
+
+
+def post_process_html(html_content):
+    html_content = re.sub(r'a href="([^"]*\.)(md|mkdn?|mdown|markdown)"', PathToURL(), html_content)
+    html_content = re.sub('<pre>', '<pre class="prettyprint well">', html_content)
+    return html_content
 
 
 def get_context(page, content, nav, toc, meta, config):
@@ -111,10 +114,7 @@ def build_pages(config):
 
         # Process the markdown text
         html_content, table_of_contents, meta = convert_markdown(input_content)
-
-        # Replace links ending in .md with links to the generated HTML instead
-        html_content = re.sub(r'a href="([^"]*\.md)"', PathToURL(config), html_content)
-        html_content = re.sub('<pre>', '<pre class="prettyprint well">', html_content)
+        html_content = post_process_html(html_content)
 
         context = get_context(
             page, html_content, site_navigation,
