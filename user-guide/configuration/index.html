@@ -139,9 +139,9 @@
         
             <li><a href="#introduction">Introduction</a></li>
         
-            <li><a href="#required-settings">Required settings</a></li>
+            <li><a href="#project-information">Project information</a></li>
         
-            <li><a href="#project-metadata">Project metadata</a></li>
+            <li><a href="#documentation-layout">Documentation layout</a></li>
         
             <li><a href="#build-directories">Build directories</a></li>
         
@@ -162,14 +162,27 @@
 <h2 id="introduction">Introduction</h2>
 <p>Project settings are always configured by using a YAML configuration file in the project directory named <code>mkdocs.yml</code>.</p>
 <p>As a miniumum this configuration file must contain the <code>site_name</code> and <code>pages</code> settings.  All other settings are optional.</p>
-<h2 id="required-settings">Required settings</h2>
+<h2 id="project-information">Project information</h2>
 <h4 id="site_name">site_name</h4>
 <p>This is a <strong>required setting</strong>, and should be a string that is used as the main title for the project documentation.  For example:</p>
 <pre class="prettyprint well"><code>site_name: Mashmallow Generator
 </code></pre>
 <p>When rendering the theme this setting will be passed as the <code>site_name</code> context variable.</p>
+<h4 id="site_url">site_url</h4>
+<p>Quo ex ceteros theophrastus, mel eius repudiandae an, has autem legendos ut. Eu quo moderatius interpretaris, pro ad homero tractatos cotidieque. His errem dictas instructior ad, tation causae ceteros ex eum. Nam falli dicunt te, mea et unum contentiones, ius noluisse rationibus cotidieque ei.</p>
+<p><strong>default</strong>: <code>null</code></p>
+<h4 id="site_description">site_description</h4>
+<p>Eam no quis bonorum legendos. Eos prodesset cotidieque in, atqui saperet eos te. Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent. Mei putent impetus no, iuvaret labores duo an.</p>
+<p><strong>default</strong>: <code>null</code></p>
+<h4 id="site_author">site_author</h4>
+<p>Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent.</p>
+<p><strong>default</strong>: <code>null</code></p>
+<h4 id="site_favicon">site_favicon</h4>
+<p>Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent.</p>
+<p><strong>default</strong>: <code>null</code></p>
+<h2 id="documentation-layout">Documentation layout</h2>
 <h4 id="pages">pages</h4>
-<p>This is a <strong>required setting</strong>, and is used to determine the set of pages that should be built for the documentation.</p>
+<p>This is setting is used to determine the set of pages that should be built for the documentation.</p>
 <p>The setting should be a list.  Each row in the list represents information about a single page as a list of strings.  The first string represents the path of the documentation source file, and should be relative to the <code>docs_dir</code> setting.  Remaining strings represent the title of the page in the site navigation.</p>
 <p>Here's a simple example that would cause the build stage to create three pages:</p>
 <pre class="prettyprint well"><code>pages:
@@ -186,19 +199,6 @@
 - ['user-guide/configuration.md', 'User Guide', 'Configuration Mashmallow']
 - ['about/license.md', 'About', 'License']
 </code></pre>
-<h2 id="project-metadata">Project metadata</h2>
-<h4 id="site_url">site_url</h4>
-<p>Quo ex ceteros theophrastus, mel eius repudiandae an, has autem legendos ut. Eu quo moderatius interpretaris, pro ad homero tractatos cotidieque. His errem dictas instructior ad, tation causae ceteros ex eum. Nam falli dicunt te, mea et unum contentiones, ius noluisse rationibus cotidieque ei.</p>
-<p><strong>default</strong>: <code>null</code></p>
-<h4 id="site_description">site_description</h4>
-<p>Eam no quis bonorum legendos. Eos prodesset cotidieque in, atqui saperet eos te. Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent. Mei putent impetus no, iuvaret labores duo an.</p>
-<p><strong>default</strong>: <code>null</code></p>
-<h4 id="site_author">site_author</h4>
-<p>Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent.</p>
-<p><strong>default</strong>: <code>null</code></p>
-<h4 id="site_favicon">site_favicon</h4>
-<p>Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent.</p>
-<p><strong>default</strong>: <code>null</code></p>
 <h2 id="build-directories">Build directories</h2>
 <h4 id="theme">theme</h4>
 <p>Mea dicta aliquid ornatus cu, duis sanctus disputationi his in. Rebum adolescens definiebas vis te. Ornatus noluisse mel te, modo utinam ea sit, putent omittantur quo ad. Ius ad dicta iusto, vel ne nonumy quaestio.</p>

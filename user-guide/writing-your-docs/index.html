@@ -154,13 +154,44 @@
 <p>How to write and layout your markdown source files.</p>
 <hr />
 <h2 id="file-layout">File layout</h2>
-<p>Lorem ipsum dolor sit amet, meliore deserunt referrentur per ad, mei eros elaboraret no. Soluta sadipscing eum ex. Duo ne nominati definitiones, animal sententiae nam no. Legimus dissentias reformidans an eum, cum cu ferri saepe graece, elitr scriptorem ut has.</p>
-<p>Duis audiam vix eu. Vidit dissentiunt nec ea, an dolor incorrupte vix. Has modus gloriatur assueverit ne. Elitr inciderint ea pro. Ad dictas nostrum nec, mei ad alterum fabellas.</p>
+<p>Your documentation source should be written as regular Markdown files, and placed in a directory somewhere in your project.  Normally this directory will be named <code>docs</code> and will exist at the top level of your project, alongside the <code>mkdocs.yml</code> configuration file.</p>
+<p>The simplest project you can create will look something like this:</p>
+<pre class="prettyprint well"><code>mkdocs.yml
+docs/
+    index.md
+</code></pre>
+<p>By convention your project homepage should always be named <code>index</code>.  Any of the following extensions may be used for your Markdown source files: <code>markdown</code>, <code>mdown</code>, <code>mkdn</code>, <code>mkd</code>, <code>md</code>.</p>
+<p>You can also create multi-page documentation, by creating several markdown files:</p>
+<pre class="prettyprint well"><code>mkdocs.yml
+docs/
+    index.md
+    about.md
+    license.md
+</code></pre>
+<p>The file layout you use determines the URLs that are used for the generated pages.
+Given the above layout, pages would be generated for the following URLs:</p>
+<pre class="prettyprint well"><code>/
+/about/
+/license/
+</code></pre>
+<p>You can also include your Markdown files in nested directories if that better suits your documenation layout.</p>
+<pre class="prettyprint well"><code>docs/
+    index.md
+    user-guide/getting-started.md
+    user-guide/configuration-options.md
+    license.md
+</code></pre>
+<p>Source files inside nested directories will cause pages to be generated with nested URLs, like so:</p>
+<pre class="prettyprint well"><code>/
+/user-guide/getting-started/
+/user-guide/configuration-options/
+/license/
+</code></pre>
 <h2 id="linking-documents">Linking documents</h2>
 <p>Solum nonumy alienum mel ea. Ea brute intellegam vis, antiopam argumentum te eos. Pro ut sumo altera salutatus, modus periculis te his, an vix aeque paulo maiorum. Mea cu dolorum praesent hendrerit.</p>
 <h4 id="internal-hyperlinks">Internal hyperlinks</h4>
 <p>In cum esse utroque, pri equidem molestie epicurei an, at ludus euismod pertinax mea. Ex nam adipisci repudiare comprehensam. Ex propriae detracto intellegat vel, vel et lorem dicta tincidunt. Mei ne affert mollis voluptatibus. Mel et sonet graecis, ius deserunt eloquentiam no.</p>
-<pre class="prettyprint well"><code>Ex vim diceret [vocibus salutandi](../example.md), qui liber nostrud ad.
+<pre class="prettyprint well"><code>Please see the [project license](license.md) for further details.
 </code></pre>
 <p>Est cu dictas suscipit, ne mel iriure eligendi insolens, cu cum alterum civibus. Vidisse vivendum ne has, pertinax neglegentur no vis. Vel ei referrentur efficiantur, sed facer indoctum similique et. Ad temporibus liberavisse his, nec cu primis electram moderatius. Ex meliore denique has. Eam ea offendit expetenda. Ei error facilis suavitate pri, ex utroque vulputate efficiendi eos.</p>
 <pre class="prettyprint well"><code>Ex vim diceret [vocibus salutandi](../example.md#lorum-ipsum), qui liber nostrud ad.
@@ -173,19 +204,25 @@
 <pre class="prettyprint well"><code>Ne his mucius oporteat, [mea ut eros delicatissimi](ref:delicatissimi), iudico nonumes moderatius an mel.
 </code></pre>
 <h2 id="images-and-media">Images and media</h2>
-<p>Ex vim diceret vocibus salutandi, qui liber nostrud ad. An eius postea nam, cu labore argumentum cum.</p>
-<pre class="prettyprint well"><code>At mel verear persius torquatos, his dolores.
-
-[!Sensibus](../img/sensibus.png)
-
-Alia urbanitas in usu.
+<p>As well as the Markdown source files, you can also include other file types in your documentation, which will be copied across when generating your documentation site.  These might include images and other media.</p>
+<p>For example, if you project documentation needed to include a <a href="https://help.github.com/articles/setting-up-a-custom-domain-with-pages#setting-the-domain-in-your-repo">GitHub pages CNAME file</a> and a PNG formatted screenshot image then your file layout might look as follows:</p>
+<pre class="prettyprint well"><code>mkdocs.yml
+docs/
+    CNAME
+    index.md
+    about.md
+    license.md
+    img/
+        screenshot.png
 </code></pre>
-<p>Fuisset nostrum eos ut.</p>
-<pre class="prettyprint well"><code>docs/index.md
-docs/api-guide/sensibus.md
-docs/api-guide/dicant.md
-docs/img/sensibus.png
+<p>To include images in your documentation source files, simply use any of the regular Markdown image syntaxes:</p>
+<pre class="prettyprint well"><code>Cupcake indexer is a snazzy new project for indexing small cakes.
+
+![Screenshot](img/screenshot.png)
+
+*Above: Cupcake indexer in progress*
 </code></pre>
+<p>You image will now be embedded when you build the documentation, and should also be previewed if you're working on the documentation with a Markdown editor.</p>
 <h2 id="markdown-extensions">Markdown extensions</h2>
 <p>Quas malorum vituperatoribus mei et, ei augue dicant pri. Etiam denique temporibus ei vis, sea an dicant malorum petentium.</p>
 <h4 id="page-metadata">Page metadata</h4>
