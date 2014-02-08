@@ -6,12 +6,21 @@ import jinja2
 import markdown
 import os
 import re
+import urlparse
 
 
 class PathToURL(object):
     def __call__(self, match):
-        path = match.groups()[0] + match.groups()[1]
-        return 'a href="%s"' % utils.get_url_path(path, relative=True)
+        url = match.groups()[0]
+        scheme, netloc, path, query, query, fragment = urlparse.urlparse(url)
+
+        if (scheme or netloc or not utils.is_markdown_file(path)):
+            # Ignore URLs unless they are a relative link to a markdown file.
+            return match.groups[0]
+
+        path = utils.get_url_path(path, relative=True)
+        url = urlparse.urlunparse((scheme, netloc, path, query, query, fragment))
+        return 'a href="%s"' % url
 
 
 def convert_markdown(markdown_source):
@@ -39,7 +48,7 @@ def convert_markdown(markdown_source):
 
 
 def post_process_html(html_content):
-    html_content = re.sub(r'a href="([^"]*\.)(md|mkdn?|mdown|markdown)"', PathToURL(), html_content)
+    html_content = re.sub(r'a href="([^"]*)"', PathToURL(), html_content)
     html_content = re.sub('<pre>', '<pre class="prettyprint well">', html_content)
     return html_content
 

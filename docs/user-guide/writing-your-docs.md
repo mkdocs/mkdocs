@@ -53,13 +53,21 @@ Solum nonumy alienum mel ea. Ea brute intellegam vis, antiopam argumentum te eos
 
 #### Internal hyperlinks
 
-In cum esse utroque, pri equidem molestie epicurei an, at ludus euismod pertinax mea. Ex nam adipisci repudiare comprehensam. Ex propriae detracto intellegat vel, vel et lorem dicta tincidunt. Mei ne affert mollis voluptatibus. Mel et sonet graecis, ius deserunt eloquentiam no.
+When linking between pages in the documentation, you can simply use the regular Markdown hyperlinking syntax, with the relative path to the Markdown document you wish to link to.
 
     Please see the [project license](license.md) for further details.
 
-Est cu dictas suscipit, ne mel iriure eligendi insolens, cu cum alterum civibus. Vidisse vivendum ne has, pertinax neglegentur no vis. Vel ei referrentur efficiantur, sed facer indoctum similique et. Ad temporibus liberavisse his, nec cu primis electram moderatius. Ex meliore denique has. Eam ea offendit expetenda. Ei error facilis suavitate pri, ex utroque vulputate efficiendi eos.
+When the MkDocs build runs, these hyperlinks will automatically be transformed into a hyperlink to the appropriate HTML page.
 
-    Ex vim diceret [vocibus salutandi](../example.md#lorum-ipsum), qui liber nostrud ad.
+When working on your documentation you should be able to open the linked Markdown document in a new editor window simply by clicking on the link. 
+
+If the target documentation file is in another directory you'll need to make sure to include any relative directory path in the hyperlink.
+
+    Please see the [project license](../about/license.md) for further details.
+
+You can also link to a section within a target documentation page by using an anchor link.  The generated HTML will correctly transform the path portion of the hyperlink, and leave the anchor portion intact.
+
+    Please see the [project license](about.md#license) for further details.
 
 #### Cross-referencing your documentation
 

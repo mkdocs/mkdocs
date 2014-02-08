@@ -90,12 +90,8 @@ def is_markdown_file(path):
         '.markdown',
         '.mdown',
         '.mkdn',
-        '.md',
         '.mkd',
-        '.mdwn',
-        '.mdtxt',
-        '.mdtext',
-        '.text'
+        '.md',
     ]
 
 

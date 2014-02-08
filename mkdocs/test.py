@@ -368,16 +368,30 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(str(toc).strip(), expected_toc)
         self.assertEqual(meta, expected_meta)
 
-    def test_convert_internal_links(self):
+    def test_convert_internal_link(self):
         md_text = 'An [internal link](internal.md) to another document.'
         expected = '<p>An <a href="internal/">internal link</a> to another document.</p>'
         html, toc, meta = build.convert_markdown(md_text)
         html = build.post_process_html(html)
         self.assertEqual(html.strip(), expected.strip())
 
-    def test_convert_internal_links_differing_directory(self):
+    def test_convert_multiple_internal_links(self):
+        md_text = '[First link](first.md) [second link](second.md).'
+        expected = '<p><a href="first/">First link</a> <a href="second/">second link</a>.</p>'
+        html, toc, meta = build.convert_markdown(md_text)
+        html = build.post_process_html(html)
+        self.assertEqual(html.strip(), expected.strip())
+
+    def test_convert_internal_link_differing_directory(self):
         md_text = 'An [internal link](../internal.md) to another document.'
         expected = '<p>An <a href="../internal/">internal link</a> to another document.</p>'
+        html, toc, meta = build.convert_markdown(md_text)
+        html = build.post_process_html(html)
+        self.assertEqual(html.strip(), expected.strip())
+
+    def test_convert_internal_link_with_anchor(self):
+        md_text = 'An [internal link](internal.md#section1.1) to another document.'
+        expected = '<p>An <a href="internal/#section1.1">internal link</a> to another document.</p>'
         html, toc, meta = build.convert_markdown(md_text)
         html = build.post_process_html(html)
         self.assertEqual(html.strip(), expected.strip())
