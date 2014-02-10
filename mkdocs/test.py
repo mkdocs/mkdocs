@@ -403,5 +403,24 @@ class BuildTests(unittest.TestCase):
         html = build.post_process_html(html)
         self.assertEqual(html.strip(), expected.strip())
 
+
+# class IntegrationTests(unittest.TestCase):
+#     def test_mkdocs_site(self):
+#         """
+#         Build the MkDocs site itself, as an integration test.
+#         Check that all the resulting HTML pages actually exist.
+#         """
+#         tmp_dir = tempfile.mkdtemp()
+#         try:
+#             conf = config.load_config(options={'site_dir': tmp_dir})
+#             build.build(conf)
+#             for page in conf['pages']:
+#                 html_path = utils.get_html_path(page[0])
+#                 filename = os.path.join(tmp_dir, html_path)
+#                 self.assertTrue(os.path.exists(filename))
+#         finally:
+#             shutil.rmtree(tmp_dir)
+
+
 if __name__ == '__main__':
     unittest.main()
