@@ -1,6 +1,8 @@
 site/
 env/
 dist/
-*.egg-info/
+htmlcov/
+.tox/
+mkdocs.egg-info/
 *.pyc
 .coverage
