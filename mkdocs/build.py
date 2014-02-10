@@ -10,6 +10,9 @@ import urlparse
 
 
 class PathToURL(object):
+    def __init__(self, nav=None):
+        self.nav = nav
+
     def __call__(self, match):
         url = match.groups()[0]
         scheme, netloc, path, query, query, fragment = urlparse.urlparse(url)
@@ -18,6 +21,19 @@ class PathToURL(object):
             # Ignore URLs unless they are a relative link to a markdown file.
             return 'a href="%s"' % url
 
+        if self.nav:
+            # If the site navigation has been provided, then validate
+            # the internal hyperlink, making sure the target actually exists.
+            target_file = self.nav.file_context.make_absolute(path)
+            if not target_file in self.nav.source_files:
+                source_file = self.nav.file_context.current_file
+                msg = (
+                    'The page "%s" contained a hyperlink to "%s" which '
+                    'is not listed in the "pages" configuration.'
+                )
+                assert False, msg % (source_file, target_file)
+
+        # Convert the .md hyperlink to a relative hyperlink to the HTML page.
         path = utils.get_url_path(path, relative=True)
         url = urlparse.urlunparse((scheme, netloc, path, query, query, fragment))
         return 'a href="%s"' % url
@@ -47,8 +63,8 @@ def convert_markdown(markdown_source):
     return (html_content, table_of_contents, meta)
 
 
-def post_process_html(html_content):
-    html_content = re.sub(r'a href="([^"]*)"', PathToURL(), html_content)
+def post_process_html(html_content, nav=None):
+    html_content = re.sub(r'a href="([^"]*)"', PathToURL(nav), html_content)
     html_content = re.sub('<pre>', '<pre class="prettyprint well">', html_content)
     return html_content
 
@@ -123,7 +139,7 @@ def build_pages(config):
 
         # Process the markdown text
         html_content, table_of_contents, meta = convert_markdown(input_content)
-        html_content = post_process_html(html_content)
+        html_content = post_process_html(html_content, site_navigation)
 
         context = get_context(
             page, html_content, site_navigation,

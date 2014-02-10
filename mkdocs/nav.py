@@ -14,6 +14,7 @@ import os
 class SiteNavigation(object):
     def __init__(self, pages_config, use_directory_urls=True):
         self.url_context = URLContext()
+        self.file_context = FileContext()
         self.nav_items, self.pages = \
             _generate_site_navigation(pages_config, self.url_context, use_directory_urls)
         self.homepage = self.pages[0] if self.pages else None
@@ -35,14 +36,22 @@ class SiteNavigation(object):
         page = self.homepage
         page.set_active()
         self.url_context.set_current_url(page.abs_url)
+        self.file_context.set_current_path(page.input_path)
         yield page
         while page.next_page:
             page.set_active(False)
             page = page.next_page
             page.set_active()
             self.url_context.set_current_url(page.abs_url)
+            self.file_context.set_current_path(page.input_path)
             yield page
         page.set_active(False)
+
+    @property
+    def source_files(self):
+        if not hasattr(self, '_source_files'):
+            self._source_files = set([page.input_path for page in self.pages])
+        return self._source_files
 
 
 class URLContext(object):
@@ -53,7 +62,28 @@ class URLContext(object):
         self.base_path = posixpath.dirname(current_url)
 
     def make_relative(self, url):
+        """
+        Given a URL path return it as a relative URL,
+        given the context of the current page.
+        """
         return posixpath.relpath(url, start=self.base_path)
+
+
+class FileContext(object):
+    def __init__(self):
+        self.current_file = None
+        self.base_path = ''
+
+    def set_current_path(self, current_path):
+        self.current_file = current_path
+        self.base_path = os.path.dirname(current_path)
+
+    def make_absolute(self, path):
+        """
+        Given a relative file path return it as a absolute filepath,
+        given the context of the current page.
+        """
+        return os.path.normpath(os.path.join(self.base_path, path))
 
 
 class Page(object):
