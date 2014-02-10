@@ -49,7 +49,7 @@ Source files inside nested directories will cause pages to be generated with nes
 
 ## Linking documents
 
-Solum nonumy alienum mel ea. Ea brute intellegam vis, antiopam argumentum te eos. Pro ut sumo altera salutatus, modus periculis te his, an vix aeque paulo maiorum. Mea cu dolorum praesent hendrerit.
+MkDocs allows you to interlink your documentation by using regular Markdown hyperlinks.
 
 #### Internal hyperlinks
 
@@ -117,7 +117,7 @@ At mel verear persius torquatos, his dolores sensibus id, alia urbanitas in usu.
     page_title: Lorum
 	page_description: "lorum ipsum dolor"
 	source_files: example.js, lorum.js
-	
+
 	# Lorum Ipsum
 	
 	Unum errem propriae vis cu, et deseruisse interpretaris eam. Illum graecis per an, ludus laoreet repudiare nec an, molestie recteque et eam.
