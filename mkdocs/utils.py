@@ -60,7 +60,7 @@ def get_html_path(path):
     return os.path.join(path, 'index.html')
 
 
-def get_url_path(path, use_directory_urls=True, relative=False):
+def get_url_path(path, use_directory_urls=True):
     """
     Map a source file path to an output html path.
 
@@ -72,8 +72,7 @@ def get_url_path(path, use_directory_urls=True, relative=False):
     `index.html` rather than just returning the directory path.
     """
     path = get_html_path(path)
-    url = '' if relative else '/'
-    url += path.replace(os.path.pathsep, '/')
+    url = '/' + path.replace(os.path.pathsep, '/')
     if use_directory_urls:
         return url[:-len('index.html')]
     return url
