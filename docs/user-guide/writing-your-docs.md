@@ -124,14 +124,26 @@ At mel verear persius torquatos, his dolores sensibus id, alia urbanitas in usu.
 
 #### Tables
 
-Unum errem propriae vis cu, et deseruisse interpretaris eam. Illum graecis per an, ludus laoreet repudiare nec an, molestie recteque et eam. Purto duis rationibus id eum, pro et amet appetere referrentur, minim impedit ad ius. Et nostrud perfecto sapientem vix, et dicit impedit consequat vim. Vis liber blandit no.
+A simple table looks like this:
 
-    First Header  | Second Header
-    ------------- | -------------
-    Content Cell  | Content Cell
-    Content Cell  | Content Cell
+    First Header | Second Header | Third Header
+    ------------ | ------------- | ------------
+    Content Cell | Content Cell  | Content Cell
+    Content Cell | Content Cell  | Content Cell
 
-Ut qualisque suscipiantur nam, probo solum incorrupte sed no.
+If you wish, you can add a leading and tailing pipe to each line of the table:
+
+    | First Header | Second Header | Third Header |
+    | ------------ | ------------- | ------------ |
+    | Content Cell | Content Cell  | Content Cell |
+    | Content Cell | Content Cell  | Content Cell |
+
+Specify alignement for each column by adding colons to separator lines:
+
+    First Header | Second Header | Third Header
+    :----------- | :-----------: | -----------:
+    Left         | Center        | Right
+    Left         | Center        | Right
 
 #### Fenced code blocks
 
