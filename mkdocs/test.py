@@ -403,6 +403,41 @@ class BuildTests(unittest.TestCase):
         html = build.post_process_html(html)
         self.assertEqual(html.strip(), expected.strip())
 
+    def test_markdown_table_extension(self):
+        """
+        Ensure that the table extension is supported.
+        """
+
+        html, toc, meta = build.convert_markdown(dedent("""
+        First Header   | Second Header
+        -------------- | --------------
+        Content Cell 1 | Content Cell 2
+        Content Cell 3 | Content Cell 4
+        """))
+
+        expected_html = dedent("""
+        <table>
+        <thead>
+        <tr>
+        <th>First Header</th>
+        <th>Second Header</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>Content Cell 1</td>
+        <td>Content Cell 2</td>
+        </tr>
+        <tr>
+        <td>Content Cell 3</td>
+        <td>Content Cell 4</td>
+        </tr>
+        </tbody>
+        </table>
+        """)
+
+        self.assertEqual(html.strip(), expected_html)
+
 
 # class IntegrationTests(unittest.TestCase):
 #     def test_mkdocs_site(self):

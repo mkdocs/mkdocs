@@ -50,7 +50,7 @@ def convert_markdown(markdown_source):
     markdown_source = toc.pre_process(markdown_source)
 
     # Generate the HTML from the markdown source
-    md = markdown.Markdown(extensions=['meta', 'toc'])
+    md = markdown.Markdown(extensions=['meta', 'toc', 'tables'])
     html_content = md.convert(markdown_source)
     meta = md.Meta
 
