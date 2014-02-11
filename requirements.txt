@@ -3,3 +3,4 @@ Markdown==2.3.1
 PyYAML==3.10
 watchdog==0.7.0
 coverage==3.7.1
+flake8==2.1.0
