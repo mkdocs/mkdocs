@@ -438,6 +438,22 @@ class BuildTests(unittest.TestCase):
 
         self.assertEqual(html.strip(), expected_html)
 
+    def test_markdown_fenced_code_extension(self):
+        """
+        Ensure that the fenced code extension is supported.
+        """
+
+        html, toc, meta = build.convert_markdown(dedent("""
+        ```
+        print 'foo'
+        ```
+        """))
+
+        expected_html = dedent("""
+        <pre><code>print 'foo'\n</code></pre>
+        """)
+
+        self.assertEqual(html.strip(), expected_html)
 
 # class IntegrationTests(unittest.TestCase):
 #     def test_mkdocs_site(self):
