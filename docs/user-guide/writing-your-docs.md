@@ -138,7 +138,7 @@ If you wish, you can add a leading and tailing pipe to each line of the table:
     | Content Cell | Content Cell  | Content Cell |
     | Content Cell | Content Cell  | Content Cell |
 
-Specify alignement for each column by adding colons to separator lines:
+Specify alignment for each column by adding colons to separator lines:
 
     First Header | Second Header | Third Header
     :----------- | :-----------: | -----------:
@@ -147,12 +147,14 @@ Specify alignement for each column by adding colons to separator lines:
 
 #### Fenced code blocks
 
-Unum errem propriae vis cu, et deseruisse interpretaris eam. Illum graecis per an, ludus laoreet repudiare nec an, molestie recteque et eam. Purto duis rationibus id eum, pro et amet appetere referrentur, minim impedit ad ius. Et nostrud perfecto sapientem vix, et dicit impedit consequat vim. Vis liber blandit no.
+Start with a line containing 3 or more backtick \` characters, and ends with the first line with the same number of backticks \`:
 
-    ```python
-    # moar python code
-    def init():
-        yield init
+    ```
+    Fenced code blocks are like Stardard
+    Markdown’s regular code blocks, except that
+    they’re not indented and instead rely on a
+    start and end fence lines to delimit the code
+    block.
     ```
 
 #### Admonitions
