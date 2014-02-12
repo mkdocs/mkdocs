@@ -32,9 +32,12 @@ class PathToURL(object):
                     'is not listed in the "pages" configuration.'
                 )
                 assert False, msg % (source_file, target_file)
+            path = utils.get_url_path(target_file)
+            path = self.nav.url_context.make_relative(path)
+        else:
+            path = utils.get_url_path(path).lstrip('/')
 
         # Convert the .md hyperlink to a relative hyperlink to the HTML page.
-        path = utils.get_url_path(path, relative=True)
         url = urlparse.urlunparse((scheme, netloc, path, query, query, fragment))
         return 'a href="%s"' % url
 

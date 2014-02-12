@@ -66,7 +66,8 @@ class URLContext(object):
         Given a URL path return it as a relative URL,
         given the context of the current page.
         """
-        return posixpath.relpath(url, start=self.base_path)
+        suffix = '/' if (url.endswith('/') and len(url) > 1) else ''
+        return posixpath.relpath(url, start=self.base_path) + suffix
 
 
 class FileContext(object):
