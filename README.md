@@ -13,5 +13,5 @@ Project roadmap: [https://github.com/tomchristie/mkdocs/wiki](https://github.com
 
 [travis-image]: https://travis-ci.org/tomchristie/mkdocs.png?branch=master
 [travis-link]: https://travis-ci.org/tomchristie/mkdocs
-[coveralls-image]: https://coveralls.io/repos/tomchristie/mkdocs/badge.png
-[coveralls-link]: https://coveralls.io/r/tomchristie/mkdocs
+[coveralls-image]: https://coveralls.io/repos/tomchristie/mkdocs/badge.png?branch=master
+[coveralls-link]: https://coveralls.io/r/tomchristie/mkdocs?branch=master
