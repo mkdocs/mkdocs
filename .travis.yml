@@ -6,6 +6,12 @@ python:
 
 install:
     - pip install -r requirements.txt
+    - pip install coverage==3.6
+    - pip install python-coveralls==2.4.0
     - export PYTHONPATH=.
 
+before_script: coverage erase
+
 script: ./runtests
+
+after_success: coverage report; coveralls
