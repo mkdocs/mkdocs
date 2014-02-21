@@ -74,13 +74,19 @@ If you have a lot of project documentation you might choose to use headings to b
 
 #### theme
 
-Mea dicta aliquid ornatus cu, duis sanctus disputationi his in. Rebum adolescens definiebas vis te. Ornatus noluisse mel te, modo utinam ea sit, putent omittantur quo ad. Ius ad dicta iusto, vel ne nonumy quaestio.
+Sets the theme of your documentation site, for a list of available themes visit
+[styling your docs](styling-your-docs.md).
 
 **default**: `'bootstrap'`
 
 #### theme_dir
 
-Eam no quis bonorum legendos. Eos prodesset cotidieque in, atqui saperet eos te. Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent. Mei putent impetus no, iuvaret labores duo an.
+Lets you set a custom directory where your theme is placed, this overrides the
+`theme` setting and expects you to set the full path directly to the folder where
+the theme is placed.
+
+    theme_dir: '/Users/myself/Projects/mkdocs/themes/myawesometheme/'
+
 
 **default**: `null`
 
