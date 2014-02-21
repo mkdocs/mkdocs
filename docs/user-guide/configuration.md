@@ -83,7 +83,7 @@ Sets the theme of your documentation site, for a list of available themes visit
 
 Lets you set a custom directory where your theme is placed, this overrides the
 `theme` setting and expects you to set the full path directly to the folder where
-the theme is placed.
+the theme lives.
 
     theme_dir: '/Users/myself/Projects/mkdocs/themes/myawesometheme/'
 
