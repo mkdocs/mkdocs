@@ -82,10 +82,10 @@ Sets the theme of your documentation site, for a list of available themes visit
 #### theme_dir
 
 Lets you set a custom directory where your theme is placed, this overrides the
-`theme` setting and expects you to set the full path directly to the folder where
+`theme` setting and expects you to set the path directly to the folder where
 the theme lives.
 
-    theme_dir: '/Users/myself/Projects/mkdocs/themes/myawesometheme/'
+    theme_dir: './mkdocs/themes/myawesometheme/'
 
 
 **default**: `null`
