@@ -1,8 +1,9 @@
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
 
+        <!-- Collapsed navigation -->
         <div class="navbar-header">
-            <!-- Collapsed navigation button -->
+            <!-- Expander button -->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
@@ -14,6 +15,7 @@
             <a class="navbar-brand" href="{{ homepage_url }}">{{ site_name }}</a>
         </div>
 
+        <!-- Expanded navigation -->
         <div class="navbar-collapse collapse">
             <!-- Main navigation -->
             <ul class="nav navbar-nav">
@@ -37,14 +39,35 @@
             {% endfor %}
             </ul>
 
-            <!-- Additional navigation items -->
+            <!-- Search, Navigation and Repo links -->
             <ul class="nav navbar-nav navbar-right">
+                {% if include_search %}
+                <li>
+                    <a href="#searchModal" data-toggle="modal"><i class="fa fa-search"></i> Search</a>
+                </li>
+                {% endif %}
                 <li {% if not previous_page %}class="disabled"{% endif %}>
-                    <a rel="next" {% if previous_page %}href="{{ previous_page.url }}"{% endif %}>Previous</a>
+                    <a rel="next" {% if previous_page %}href="{{ previous_page.url }}"{% endif %}>
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
                 </li>
                 <li {% if not next_page %}class="disabled"{% endif %}>
-                    <a rel="prev" {% if next_page %}href="{{ next_page.url }}"{% endif %}>Next</a>
+                    <a rel="prev" {% if next_page %}href="{{ next_page.url }}"{% endif %}>
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
                 </li>
+                {% if repo_url %}
+                <li>
+                    <a href="{{ repo_url }}">
+                        {% if repo_name == 'GitHub' %}
+                            <i class="fa fa-github"></i>
+                        {% elif repo_name == 'Bitbucket' %}
+                            <i class="fa fa-bitbucket"></i>
+                        {% endif %}
+                        {{ repo_name }}
+                    </a>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </div>
