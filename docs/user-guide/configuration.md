@@ -26,6 +26,14 @@ Quo ex ceteros theophrastus, mel eius repudiandae an, has autem legendos ut. Eu 
 
 **default**: `null`
 
+#### repo_url
+
+When set, provides a link to your github or bitbucket repository on the page.
+
+    repo_url: https://github.com/example/repository/
+
+**default**: `null`
+
 #### site_description
 
 Eam no quis bonorum legendos. Eos prodesset cotidieque in, atqui saperet eos te. Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent. Mei putent impetus no, iuvaret labores duo an.
