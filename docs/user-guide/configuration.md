@@ -85,7 +85,7 @@ Lets you set a custom directory where your theme is placed, this overrides the
 `theme` setting and expects you to set the path directly to the folder where
 the theme lives.
 
-    theme_dir: './mkdocs/themes/myawesometheme/'
+    theme_dir: './mkdocs/themes/theme/'
 
 
 **default**: `null`
