@@ -1,5 +1,12 @@
 body {
     padding-top: 70px;
+    background: url(../img/grid.png) repeat-x;
+    background-attachment: fixed;
+    background-color: #f8f8f8;
+}
+
+body > div.container {
+    min-height: 400px;
 }
 
 ul.nav li.main {
@@ -42,14 +49,24 @@ hr {
     border-top: 1px solid #aaa;
 }
 
-body {
-    background: url(../img/grid.png) repeat-x;
-    background-attachment: fixed;
-    background-color: #f8f8f8;
+pre {
+    overflow: auto;
+}
+
+pre code {
+    word-wrap: normal;
+    white-space: pre;
 }
 
 div.well, pre.well {
     background-color: #eee;
+}
+
+footer {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: 200;
 }
 
 .modal-dialog {

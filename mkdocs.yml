@@ -13,3 +13,6 @@ pages:
 
 theme: 'mkdocs'
 theme_center_lead: true
+
+copyright: Copyright &copy; 2014, <a href="https://twitter.com/_tomchristie">Tom Christie</a>.
+google_analytics: ['example', 'foo']
