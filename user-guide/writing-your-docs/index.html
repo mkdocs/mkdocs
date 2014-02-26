@@ -23,13 +23,24 @@
         <![endif]-->
 
         
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-27795084-5', 'mkdocs.org');
+            ga('send', 'pageview');
+        </script>
+        
+
+        
         <style>
             div.col-md-9 h1:first-of-type {
                 text-align: center;
                 font-size: 60px;
                 font-weight: 300;
             }
-
             div.col-md-9 p:first-of-type {
                 text-align: center;
             }
@@ -73,15 +84,15 @@
                     <ul class="dropdown-menu">
                     
                         <li class="active">
-                            <a href=".">Writing your docs</a>
+                            <a href="./">Writing your docs</a>
                         </li>
                     
                         <li >
-                            <a href="../styling-your-docs">Styling your docs</a>
+                            <a href="../styling-your-docs/">Styling your docs</a>
                         </li>
                     
                         <li >
-                            <a href="../configuration">Configuration</a>
+                            <a href="../configuration/">Configuration</a>
                         </li>
                     
                     </ul>
@@ -94,7 +105,7 @@
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="../../about/license">License</a>
+                            <a href="../../about/license/">License</a>
                         </li>
                     
                     </ul>
@@ -112,7 +123,7 @@
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../styling-your-docs">
+                    <a rel="prev" href="../styling-your-docs/">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -188,9 +199,9 @@ Given the above layout, pages would be generated for the following URLs:</p>
 /license/
 </code></pre>
 <h2 id="linking-documents">Linking documents</h2>
-<p>Solum nonumy alienum mel ea. Ea brute intellegam vis, antiopam argumentum te eos. Pro ut sumo altera salutatus, modus periculis te his, an vix aeque paulo maiorum. Mea cu dolorum praesent hendrerit.</p>
+<p>MkDocs allows you to interlink your documentation by using regular Markdown hyperlinks.</p>
 <h4 id="internal-hyperlinks">Internal hyperlinks</h4>
-<p>When linking between pages in the documentation, you can simply use the regular Markdown hyperlinking syntax, with the relative path to the Markdown document you wish to link to.</p>
+<p>When linking between pages in the documentation you can simply use the regular Markdown hyperlinking syntax, including the relative path to the Markdown document you wish to link to.</p>
 <pre class="prettyprint well"><code>Please see the [project license](license.md) for further details.
 </code></pre>
 <p>When the MkDocs build runs, these hyperlinks will automatically be transformed into a hyperlink to the appropriate HTML page.</p>
@@ -242,19 +253,32 @@ source_files: example.js, lorum.js
 Unum errem propriae vis cu, et deseruisse interpretaris eam. Illum graecis per an, ludus laoreet repudiare nec an, molestie recteque et eam.
 </code></pre>
 <h4 id="tables">Tables</h4>
-<p>Unum errem propriae vis cu, et deseruisse interpretaris eam. Illum graecis per an, ludus laoreet repudiare nec an, molestie recteque et eam. Purto duis rationibus id eum, pro et amet appetere referrentur, minim impedit ad ius. Et nostrud perfecto sapientem vix, et dicit impedit consequat vim. Vis liber blandit no.</p>
-<pre class="prettyprint well"><code>First Header  | Second Header
-------------- | -------------
-Content Cell  | Content Cell
-Content Cell  | Content Cell
+<p>A simple table looks like this:</p>
+<pre class="prettyprint well"><code>First Header | Second Header | Third Header
+------------ | ------------- | ------------
+Content Cell | Content Cell  | Content Cell
+Content Cell | Content Cell  | Content Cell
 </code></pre>
-<p>Ut qualisque suscipiantur nam, probo solum incorrupte sed no.</p>
-<h4 id="code-blocks">Code blocks</h4>
-<p>Unum errem propriae vis cu, et deseruisse interpretaris eam. Illum graecis per an, ludus laoreet repudiare nec an, molestie recteque et eam. Purto duis rationibus id eum, pro et amet appetere referrentur, minim impedit ad ius. Et nostrud perfecto sapientem vix, et dicit impedit consequat vim. Vis liber blandit no.</p>
-<pre class="prettyprint well"><code>```python
-# moar python code
-def init():
-    yield init
+<p>If you wish, you can add a leading and tailing pipe to each line of the table:</p>
+<pre class="prettyprint well"><code>| First Header | Second Header | Third Header |
+| ------------ | ------------- | ------------ |
+| Content Cell | Content Cell  | Content Cell |
+| Content Cell | Content Cell  | Content Cell |
+</code></pre>
+<p>Specify alignment for each column by adding colons to separator lines:</p>
+<pre class="prettyprint well"><code>First Header | Second Header | Third Header
+:----------- | :-----------: | -----------:
+Left         | Center        | Right
+Left         | Center        | Right
+</code></pre>
+<h4 id="fenced-code-blocks">Fenced code blocks</h4>
+<p>Start with a line containing 3 or more backtick ` characters, and ends with the first line with the same number of backticks `:</p>
+<pre class="prettyprint well"><code>```
+Fenced code blocks are like Stardard
+Markdown’s regular code blocks, except that
+they’re not indented and instead rely on a
+start and end fence lines to delimit the code
+block.
 ```
 </code></pre>
 <h4 id="admonitions">Admonitions</h4>
@@ -264,6 +288,14 @@ def init():
 </code></pre>
 </div>
         </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Copyright &copy; 2014, <a href="https://twitter.com/_tomchristie">Tom Christie</a>.</p>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
 
         
 

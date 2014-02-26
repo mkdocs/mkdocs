@@ -23,13 +23,24 @@
         <![endif]-->
 
         
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-27795084-5', 'mkdocs.org');
+            ga('send', 'pageview');
+        </script>
+        
+
+        
         <style>
             div.col-md-9 h1:first-of-type {
                 text-align: center;
                 font-size: 60px;
                 font-weight: 300;
             }
-
             div.col-md-9 p:first-of-type {
                 text-align: center;
             }
@@ -73,15 +84,15 @@
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="../writing-your-docs">Writing your docs</a>
+                            <a href="../writing-your-docs/">Writing your docs</a>
                         </li>
                     
                         <li >
-                            <a href="../styling-your-docs">Styling your docs</a>
+                            <a href="../styling-your-docs/">Styling your docs</a>
                         </li>
                     
                         <li class="active">
-                            <a href=".">Configuration</a>
+                            <a href="./">Configuration</a>
                         </li>
                     
                     </ul>
@@ -94,7 +105,7 @@
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="../../about/license">License</a>
+                            <a href="../../about/license/">License</a>
                         </li>
                     
                     </ul>
@@ -107,12 +118,12 @@
             <ul class="nav navbar-nav navbar-right">
                 
                 <li >
-                    <a rel="next" href="../styling-your-docs">
+                    <a rel="next" href="../styling-your-docs/">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../../about/license">
+                    <a rel="prev" href="../../about/license/">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -170,6 +181,11 @@
 <p>When rendering the theme this setting will be passed as the <code>site_name</code> context variable.</p>
 <h4 id="site_url">site_url</h4>
 <p>Quo ex ceteros theophrastus, mel eius repudiandae an, has autem legendos ut. Eu quo moderatius interpretaris, pro ad homero tractatos cotidieque. His errem dictas instructior ad, tation causae ceteros ex eum. Nam falli dicunt te, mea et unum contentiones, ius noluisse rationibus cotidieque ei.</p>
+<p><strong>default</strong>: <code>null</code></p>
+<h4 id="repo_url">repo_url</h4>
+<p>When set, provides a link to your github or bitbucket repository on the page.</p>
+<pre class="prettyprint well"><code>repo_url: https://github.com/example/repository/
+</code></pre>
 <p><strong>default</strong>: <code>null</code></p>
 <h4 id="site_description">site_description</h4>
 <p>Eam no quis bonorum legendos. Eos prodesset cotidieque in, atqui saperet eos te. Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent. Mei putent impetus no, iuvaret labores duo an.</p>
@@ -231,6 +247,14 @@
 <p>No sale minim definiebas vis. An quem utinam eam, est et consul patrioque maiestatis. Vel id decore periculis eloquentiam. Eu vim graeco causae, nec ut dicta graecis delicatissimi. Ne quod etiam salutandi vix, est stet veritus ne. Modus corrumpit usu ea, pri et dicam dignissim, quo ea sumo essent interesset.</p>
 </div>
         </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Copyright &copy; 2014, <a href="https://twitter.com/_tomchristie">Tom Christie</a>.</p>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
 
         
 
