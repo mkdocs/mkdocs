@@ -85,30 +85,51 @@ If you have a lot of project documentation you might choose to use headings to b
 Sets the theme of your documentation site, for a list of available themes visit
 [styling your docs](styling-your-docs.md).
 
-**default**: `'bootstrap'`
+**default**: `'mkdocs'`
 
 #### theme_dir
 
-Lets you set a custom directory where your theme is placed, this overrides the
-`theme` setting and expects you to set the path directly to the folder where
-the theme lives.
+Lets you set a directory to a custom theme.  This can either be a relative directory, in which case it is resolved relative to the directory containing you configuration file, or it can be an absolute directory path.
 
-    theme_dir: './mkdocs/themes/theme/'
+For example, given this example project layout:
 
+    mkdocs.yml
+    docs/
+        index.md
+        about.md
+    custom_theme/
+        base.html
+        ...
+
+You would include the following setting to use the custom theme directory:
+
+    theme_dir: 'custom_theme'
+
+If used, then this setting overrides any `theme` configuration value.
 
 **default**: `null`
 
 #### docs_dir
 
-Quo ex ceteros theophrastus, mel eius repudiandae an, has autem legendos ut. Eu quo moderatius interpretaris, pro ad homero tractatos cotidieque. His errem dictas instructior ad, tation causae ceteros ex eum. Nam falli dicunt te, mea et unum contentiones, ius noluisse rationibus cotidieque ei.
+Lets you set the directory containing the documentation source markdown files.  This can either be a relative directory, in which case it is resolved relative to the directory containing you configuration file, or it can be an absolute directory path.
 
 **default**: `'docs'`
 
 #### site_dir
 
-Consul percipitur usu an, no dico facer inermis cum. Eum ea mentitum accommodare. An sea periculis euripidis, dicant minimum patrioque at vis. Justo atomorum abhorreant vel in. Eos agam intellegam disputando at, zril consul nostrud ut eum.
+Lets you set the directory where the output HTML and other files are created.  This can either be a relative directory, in which case it is resolved relative to the directory containing you configuration file, or it can be an absolute directory path.
 
 **default**: `'site'`
+
+---
+
+**Note**: If you are using source code control you will normally want to ensure that your *build output* files are not commited into the repository, and only keep the *source* files under version control.  For example, if using `git` you might add the following line to your `.gitignore` file:
+
+    site/
+
+If you're using another source code control you'll want to check its documentation on how to ignore specific directories.
+
+---
 
 <!--
 ## Extra build steps
@@ -156,8 +177,10 @@ As with all settings, you can set this from the command line, which can be usful
 
 **default**: `'127.0.0.1:8000'`
 
+<!--
 ## Other configuration
 
 Vel at magna falli fierent. Clita putant nam no, cu per eros possit omnium, dicit pertinacia consetetur at has. Nam quis delenit cu, at vix consul expetendis, mucius mediocrem reprimique te mel. Ex vim quem oratio cotidieque, periculis iracundia at his, his omnium consulatu ei.
 
 No sale minim definiebas vis. An quem utinam eam, est et consul patrioque maiestatis. Vel id decore periculis eloquentiam. Eu vim graeco causae, nec ut dicta graecis delicatissimi. Ne quod etiam salutandi vix, est stet veritus ne. Modus corrumpit usu ea, pri et dicam dignissim, quo ea sumo essent interesset.
+-->

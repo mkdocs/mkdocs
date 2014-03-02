@@ -14,9 +14,10 @@ How to style and theme your documentation.
 
 ![ReadTheDocs](https://docs.readthedocs.org/en/latest/_images/screen_mobile.png)
 
+<!--
 #### Ghostwriter
 
-![GhostWriter](https://github.com/roryg/ghostwriter/blob/master/screenshot.png?raw=true)
+![GhostWriter](https://github.com/roryg/ghostwriter/blob/master/screenshot.png?raw=true)-->
 
 #### The bootswatch themes
 
