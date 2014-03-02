@@ -156,11 +156,7 @@
         
             <li><a href="#build-directories">Build directories</a></li>
         
-            <li><a href="#extra-build-steps">Extra build steps</a></li>
-        
             <li><a href="#preview-controls">Preview controls</a></li>
-        
-            <li><a href="#other-configuration">Other configuration</a></li>
         
     
     </ul>
@@ -217,34 +213,104 @@
 </code></pre>
 <h2 id="build-directories">Build directories</h2>
 <h4 id="theme">theme</h4>
-<p>Mea dicta aliquid ornatus cu, duis sanctus disputationi his in. Rebum adolescens definiebas vis te. Ornatus noluisse mel te, modo utinam ea sit, putent omittantur quo ad. Ius ad dicta iusto, vel ne nonumy quaestio.</p>
-<p><strong>default</strong>: <code>'bootstrap'</code></p>
+<p>Sets the theme of your documentation site, for a list of available themes visit
+<a href="../styling-your-docs/">styling your docs</a>.</p>
+<p><strong>default</strong>: <code>'mkdocs'</code></p>
 <h4 id="theme_dir">theme_dir</h4>
-<p>Eam no quis bonorum legendos. Eos prodesset cotidieque in, atqui saperet eos te. Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent. Mei putent impetus no, iuvaret labores duo an.</p>
+<p>Lets you set a directory to a custom theme.  This can either be a relative directory, in which case it is resolved relative to the directory containing you configuration file, or it can be an absolute directory path.</p>
+<p>For example, given this example project layout:</p>
+<pre class="prettyprint well"><code>mkdocs.yml
+docs/
+    index.md
+    about.md
+custom_theme/
+    base.html
+    ...
+</code></pre>
+<p>You would include the following setting to use the custom theme directory:</p>
+<pre class="prettyprint well"><code>theme_dir: 'custom_theme'
+</code></pre>
+<p>If used, then this setting overrides any <code>theme</code> configuration value.</p>
 <p><strong>default</strong>: <code>null</code></p>
 <h4 id="docs_dir">docs_dir</h4>
-<p>Quo ex ceteros theophrastus, mel eius repudiandae an, has autem legendos ut. Eu quo moderatius interpretaris, pro ad homero tractatos cotidieque. His errem dictas instructior ad, tation causae ceteros ex eum. Nam falli dicunt te, mea et unum contentiones, ius noluisse rationibus cotidieque ei.</p>
+<p>Lets you set the directory containing the documentation source markdown files.  This can either be a relative directory, in which case it is resolved relative to the directory containing you configuration file, or it can be an absolute directory path.</p>
 <p><strong>default</strong>: <code>'docs'</code></p>
 <h4 id="site_dir">site_dir</h4>
-<p>Consul percipitur usu an, no dico facer inermis cum. Eum ea mentitum accommodare. An sea periculis euripidis, dicant minimum patrioque at vis. Justo atomorum abhorreant vel in. Eos agam intellegam disputando at, zril consul nostrud ut eum.</p>
+<p>Lets you set the directory where the output HTML and other files are created.  This can either be a relative directory, in which case it is resolved relative to the directory containing you configuration file, or it can be an absolute directory path.</p>
 <p><strong>default</strong>: <code>'site'</code></p>
-<h2 id="extra-build-steps">Extra build steps</h2>
-<h4 id="include_search">include_search</h4>
-<p>Mea et graeci persecuti, sit possit neglegentur ex. Nam modus maluisset id. Praesent laboramus expetendis an vis. Mea scripta eleifend et. Ex zril quidam facilis nec, eu inani errem expetendis eum. Falli electram periculis te ius, sed nihil saperet cu. Possit quodsi cu sea, usu ei saperet lobortis adolescens.</p>
-<h4 id="include_404">include_404</h4>
-<p>Lorem ipsum dolor sit amet, ex usu velit harum dignissim. Graeco saperet tibique ea mea. Mel vocent veritus assentior ne, ponderum dissentiunt nec eu. No civibus commune duo, nec in mollis regione eruditi, nec feugiat accumsan interesset te. Natum accusam legendos sea no, te eam libris tamquam, ius fabulas vocibus rationibus ad. Eum ex sonet nostrum argumentum, mel persius cotidieque repudiandae in, cum legendos patrioque in.</p>
-<h4 id="include_sitemap">include_sitemap</h4>
-<p>Consul percipitur usu an, no dico facer inermis cum. Eum ea mentitum accommodare. An sea periculis euripidis, dicant minimum patrioque at vis. Justo atomorum abhorreant vel in. Eos agam intellegam disputando at, zril consul nostrud ut eum.</p>
+<hr />
+<p><strong>Note</strong>: If you are using source code control you will normally want to ensure that your <em>build output</em> files are not commited into the repository, and only keep the <em>source</em> files under version control.  For example, if using <code>git</code> you might add the following line to your <code>.gitignore</code> file:</p>
+<pre class="prettyprint well"><code>site/
+</code></pre>
+<p>If you're using another source code control you'll want to check its documentation on how to ignore specific directories.</p>
+<hr />
+<!--
+## Extra build steps
+
+#### include_search
+
+Mea et graeci persecuti, sit possit neglegentur ex. Nam modus maluisset id. Praesent laboramus expetendis an vis. Mea scripta eleifend et. Ex zril quidam facilis nec, eu inani errem expetendis eum. Falli electram periculis te ius, sed nihil saperet cu. Possit quodsi cu sea, usu ei saperet lobortis adolescens.
+
+#### include_404
+
+Lorem ipsum dolor sit amet, ex usu velit harum dignissim. Graeco saperet tibique ea mea. Mel vocent veritus assentior ne, ponderum dissentiunt nec eu. No civibus commune duo, nec in mollis regione eruditi, nec feugiat accumsan interesset te. Natum accusam legendos sea no, te eam libris tamquam, ius fabulas vocibus rationibus ad. Eum ex sonet nostrum argumentum, mel persius cotidieque repudiandae in, cum legendos patrioque in.
+
+#### include_sitemap
+
+Consul percipitur usu an, no dico facer inermis cum. Eum ea mentitum accommodare. An sea periculis euripidis, dicant minimum patrioque at vis. Justo atomorum abhorreant vel in. Eos agam intellegam disputando at, zril consul nostrud ut eum.
+-->
+
 <h2 id="preview-controls">Preview controls</h2>
 <h4 id="use_directory_urls">use_directory_urls</h4>
-<p>Sit discere dolorem cu. Has an alienum repudiare delicatissimi. Cu salutatus efficiendi mea, in homero possim maiorum sed. Dicam delenit laboramus ad eum, altera laboramus instructior nec in. Vix et diam libris, eu sit justo soluta fuisset. Periculis maluisset eum ut, ut eos illud scaevola.</p>
+<p>This setting controls the style used for linking to pages within the documentation.</p>
+<p>The following table demonstrates how the URLs used on the site differ when setting <code>use_directory_urls</code> to <code>true</code> or <code>false</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Source file</th>
+<th>Generated HTML</th>
+<th>use_directory_urls=true</th>
+<th>use_directory_urls=false</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>index.md</td>
+<td>index.html</td>
+<td>/</td>
+<td>/index.html</td>
+</tr>
+<tr>
+<td>api-guide.md</td>
+<td>api-guide/index.html</td>
+<td>/api-guide/</td>
+<td>/api-guide/index.html</td>
+</tr>
+<tr>
+<td>about.md</td>
+<td>about/index.html</td>
+<td>/about/</td>
+<td>/about/index.html</td>
+</tr>
+</tbody>
+</table>
+<p>The default style of <code>use_directory_urls=true</code> creates more user friendly URLs, and is usually what you'll want to use.</p>
+<p>The alternate style can occasionally be useful if you want your documentation to remain properly linked when opening pages directly from the file system, because it create links that point directly to the target <em>file</em> rather than the target <em>directory</em>.</p>
 <p><strong>default</strong>: <code>true</code></p>
 <h4 id="dev_addr">dev_addr</h4>
-<p>Brute invidunt et qui. Ei mea epicuri placerat sententiae, at mea delicata hendrerit, suas legimus his id. Mel viderer commune molestiae at, quo ex similique argumentum. Sea ut doming graecis hendrerit, iriure praesent usu at. Eam purto petentium ne. Case ubique usu eu, no vidit quidam possit pri.</p>
+<p>Determines the address used when running <code>mkdocs serve</code>.  Setting this allows you to use another port, or allows you to make the service accessible over your local network by using the <code>0.0.0.0</code> address.</p>
+<p>As with all settings, you can set this from the command line, which can be usful, for example:</p>
+<pre class="prettyprint well"><code>mkdocs serve --dev-addr=0.0.0.0:80  # Run on port 80, accessible over the local network.
+</code></pre>
 <p><strong>default</strong>: <code>'127.0.0.1:8000'</code></p>
-<h2 id="other-configuration">Other configuration</h2>
-<p>Vel at magna falli fierent. Clita putant nam no, cu per eros possit omnium, dicit pertinacia consetetur at has. Nam quis delenit cu, at vix consul expetendis, mucius mediocrem reprimique te mel. Ex vim quem oratio cotidieque, periculis iracundia at his, his omnium consulatu ei.</p>
-<p>No sale minim definiebas vis. An quem utinam eam, est et consul patrioque maiestatis. Vel id decore periculis eloquentiam. Eu vim graeco causae, nec ut dicta graecis delicatissimi. Ne quod etiam salutandi vix, est stet veritus ne. Modus corrumpit usu ea, pri et dicam dignissim, quo ea sumo essent interesset.</p>
+<!--
+## Other configuration
+
+Vel at magna falli fierent. Clita putant nam no, cu per eros possit omnium, dicit pertinacia consetetur at has. Nam quis delenit cu, at vix consul expetendis, mucius mediocrem reprimique te mel. Ex vim quem oratio cotidieque, periculis iracundia at his, his omnium consulatu ei.
+
+No sale minim definiebas vis. An quem utinam eam, est et consul patrioque maiestatis. Vel id decore periculis eloquentiam. Eu vim graeco causae, nec ut dicta graecis delicatissimi. Ne quod etiam salutandi vix, est stet veritus ne. Modus corrumpit usu ea, pri et dicam dignissim, quo ea sumo essent interesset.
+-->
+
 </div>
         </div>
 
