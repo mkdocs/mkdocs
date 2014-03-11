@@ -25,7 +25,10 @@ class PathToURL(object):
             # If the site navigation has been provided, then validate
             # the internal hyperlink, making sure the target actually exists.
             target_file = self.nav.file_context.make_absolute(path)
-            if not target_file in self.nav.source_files:
+            # target_file is formated as a native path. Apply os.path.normpath
+            # to all paths in self.nav.source_files to ensure they also are 
+            # forated native paths.
+            if not target_file in map(os.path.normpath, self.nav.source_files):
                 source_file = self.nav.file_context.current_file
                 msg = (
                     'The page "%s" contained a hyperlink to "%s" which '
