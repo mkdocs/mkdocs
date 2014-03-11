@@ -8,6 +8,8 @@ import shutil
 import textwrap
 import tempfile
 import unittest
+import itertools
+import re
 
 
 def dedent(text):
@@ -454,6 +456,43 @@ class BuildTests(unittest.TestCase):
         """)
 
         self.assertEqual(html.strip(), expected_html)
+
+    def test_PathToURL(self):
+            pages = [
+                ('index.md', 'Home'),
+                ('license.md', 'License'),
+                ('about.md', 'About'),
+                ('api/index.md', 'API'),
+                ('api/testing.md', 'Testing'),
+                ('api/cross-platform.md', 'Cross platform'),
+                ('api/rest/index.md', 'REST overview'),
+                ('api/rest/mocking.md', 'Mocking')
+            ]
+            links = [
+                'a href="index.md"',
+                'a href="license.md"',
+                'a href="about.md"',
+                'a href="api/index.md"',
+                'a href="api/testing.md"',
+                'a href="api/cross-platform.md"',
+                'a href="api/rest/index.md"',
+                'a href="api/rest/mocking.md"',
+            ]
+            expected_results = [ 
+                'a href="."',
+                'a href="license/"',
+                'a href="about/"',
+                'a href="api/"',
+                'a href="api/testing/"',
+                'a href="api/cross-platform/"',
+                'a href="api/rest/"',
+                'a href="api/rest/mocking/"'
+            ]
+            site_nav = nav.SiteNavigation(pages)
+            for link, expected_result in itertools.izip(links, expected_results):
+                actual = re.sub(r'a href="([^"]*)"', build.PathToURL(site_nav), link)
+                self.assertEqual(actual, expected_result)
+
 
 # class IntegrationTests(unittest.TestCase):
 #     def test_mkdocs_site(self):
