@@ -23,6 +23,10 @@
   <script src="{{ path }}"></script>
   {%- endfor %}
 
+  <link rel="stylesheet" href="{{ base_url }}/vendor/highlightJS/styles/GitHub.css">
+  <script type="text/javascript" src="{{ base_url }}/vendor/highlightJS/highlight.pack.js"></script>
+  <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+
   <style>
     body {font-size: 90%;}
     pre, code {font-size: 100%;}
@@ -65,7 +69,7 @@
               {{ content }}
             </div>
           </div>
-	  {%- block footer %} 
+	  {%- block footer %}
           {% include "footer.html" %}
 	  {% endblock %}
         </div>
