@@ -133,6 +133,36 @@ dd {
     margin: 0;
 }
 
+div.rst-content ul,
+div.rst-content ol {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+div.rst-content ul ul,
+div.rst-content ol ul,
+div.rst-content ul ol,
+div.rst-content ol ol {
+  margin-bottom: 0;
+}
+div.rst-content dl {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+div.rst-content dt,
+div.rst-content dd {
+  line-height: 1.42857143;
+}
+div.rst-content dt {
+  font-weight: bold;
+}
+div.rst-content dd {
+  margin-left: 0;
+}
+div.rst-content li{
+	list-style: circle;
+	margin-left: 20px;
+}
+
 img {
     border: 0;
     -ms-interpolation-mode: bicubic;
@@ -220,13 +250,62 @@ textarea {
 }
 
 table {
-    border-collapse: collapse;
-    border-spacing: 0;
+  max-width: 100%;
+  background-color: transparent;
+  width: 100%;
+  margin-bottom: 20px;
+  border-collapse: collapse;
+  border-spacing: 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  font-size: 12px;
+}
+th {
+  text-align: left;
 }
 
-td {
-    vertical-align: top;
+table > thead > tr > th,
+table > tbody > tr > th,
+table > tfoot > tr > th,
+table > thead > tr > td,
+table > tbody > tr > td,
+table > tfoot > tr > td {
+  padding: 5px;
+  line-height: 1.42857143;
+  vertical-align: top;
+  border: 1px solid #ddd;
+
 }
+table > thead > tr > th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #ddd;
+}
+table > caption + thead > tr:first-child > th,
+table > colgroup + thead > tr:first-child > th,
+table > thead:first-child > tr:first-child > th,
+table > caption + thead > tr:first-child > td,
+table > colgroup + thead > tr:first-child > td,
+table > thead:first-child > tr:first-child > td {
+  border-top: 0;
+}
+table > tbody + tbody {
+  border-top: 2px solid #ddd;
+}
+
+table > thead > tr > th,
+table > thead > tr > td {
+  border-bottom-width: 2px;
+}
+
+table > tbody > tr:nth-child(odd) > td,
+table > tbody > tr:nth-child(odd) > th {
+  background-color: #f9f9f9;
+}
+table > tbody > tr:hover > td,
+table > tbody > tr:hover > th {
+  background-color: #f5f5f5;
+}
+
 
 .chromeframe {
     margin: 0.2em 0;
@@ -431,6 +510,8 @@ ul.icons {
     ul.icons li .icon-large:before, ul.icons li .icon-large:before {
         vertical-align: baseline;
     }
+
+
 
 .icon-glass:before {
     content: "\f000";
