@@ -86,8 +86,8 @@
         {% elif repo_name == 'Bitbucket' %}
             <a class="icon icon-bitbucket" style="float: left; color: #fcfcfc"> BitBucket</a>
         {% endif %}
-      <span><a href="" style="color: #fcfcfc;">&laquo; Previous</a></span>
-      <span style="margin-left: 15px"><a href="" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="{{ previous_page.url }}" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      <span style="margin-left: 15px"><a href="{{ next_page.url }}" style="color: #fcfcfc">Next &raquo;</a></span>
     </span>
 </div>
 </body>
