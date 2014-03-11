@@ -72,7 +72,7 @@ def get_url_path(path, use_directory_urls=True):
     `index.html` rather than just returning the directory path.
     """
     path = get_html_path(path)
-    url = '/' + path.replace(os.path.pathsep, '/')
+    url = '/' + path.replace(os.path.sep, '/')
     if use_directory_urls:
         return url[:-len('index.html')]
     return url
