@@ -9,6 +9,7 @@ This consists of building a set of interlinked page and header objects.
 from mkdocs import utils
 import posixpath
 import os
+import time
 
 
 class SiteNavigation(object):
@@ -93,6 +94,7 @@ class Page(object):
         self.abs_url = url
         self.active = False
         self.url_context = url_context
+        self.update_date = time.strftime('%Y-%m-%d', time.gmtime())
 
         # Relative paths to the input markdown file and output html file.
         self.input_path = path

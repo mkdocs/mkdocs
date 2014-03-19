@@ -132,13 +132,31 @@ def get_context(page, content, nav, toc, meta, config):
     }
 
 
+def build_sitemap(config, site_navigation, env):
+    """
+    render a sitemap
+    """
+    template = env.get_template('sitemap.xml')
+    context = get_context(
+        site_navigation.homepage, '', site_navigation,
+        '', '', config
+    )
+    output_content = template.render(context)
+    return output_content
+
+
 def build_pages(config):
     """
     Builds all the pages and writes them into the build directory.
     """
     site_navigation = nav.SiteNavigation(config['pages'])
-    loader = jinja2.FileSystemLoader(config['theme_dir'])
+    loader = jinja2.FileSystemLoader([config['theme_dir'], config['statics_dir']])
     env = jinja2.Environment(loader=loader)
+
+    if config['include_sitemap']:
+        output_content = build_sitemap(config, site_navigation, env)
+        output_path = os.path.join(config['site_dir'], 'sitemap.xml')
+        utils.write_file(output_content.encode('utf-8'), output_path)
 
     for page in site_navigation.walk_pages():
         # Read the input file

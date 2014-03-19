@@ -9,9 +9,9 @@ def gh_deploy(config):
 
     print "Copying '%s' to `gh-pages` branch and pushing to GitHub." % config['site_dir']
     try:
-       subprocess.check_call(['ghp-import', '-p', config['site_dir']])
+        subprocess.check_call(['ghp-import', '-p', config['site_dir']])
     except:
-       return
+        return
 
     # TODO: Also check for CNAME file
     url = subprocess.check_output(["git", "config", "--get", "remote.origin.url"])

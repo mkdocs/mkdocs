@@ -141,11 +141,13 @@ Mea et graeci persecuti, sit possit neglegentur ex. Nam modus maluisset id. Prae
 #### include_404
 
 Lorem ipsum dolor sit amet, ex usu velit harum dignissim. Graeco saperet tibique ea mea. Mel vocent veritus assentior ne, ponderum dissentiunt nec eu. No civibus commune duo, nec in mollis regione eruditi, nec feugiat accumsan interesset te. Natum accusam legendos sea no, te eam libris tamquam, ius fabulas vocibus rationibus ad. Eum ex sonet nostrum argumentum, mel persius cotidieque repudiandae in, cum legendos patrioque in.
+-->
 
 #### include_sitemap
 
-Consul percipitur usu an, no dico facer inermis cum. Eum ea mentitum accommodare. An sea periculis euripidis, dicant minimum patrioque at vis. Justo atomorum abhorreant vel in. Eos agam intellegam disputando at, zril consul nostrud ut eum.
--->
+By default, we build a 'sitemap.xml' in the root of your site using the list of configured pages.
+
+**default**: `True`
 
 ## Preview controls
 
