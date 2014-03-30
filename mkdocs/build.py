@@ -167,10 +167,13 @@ def build_pages(config):
 
 
 def build(config):
+def build(config, live_server=False):
     """
     Perform a full site build.
     """
     print "Building documentation to directory: %s" % config['site_dir']
+    if not live_server:
+        print "Building documentation to directory: %s" % config['site_dir']
     utils.copy_media_files(config['theme_dir'], config['site_dir'])
     utils.copy_media_files(config['docs_dir'], config['site_dir'])
     build_pages(config)

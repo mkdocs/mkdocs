@@ -25,7 +25,7 @@ class BuildEventHandler(events.FileSystemEventHandler):
         if not isinstance(event, events.DirModifiedEvent):
             print 'Rebuilding documentation...',
             config = load_config(options=self.options)
-            build(config)
+            build(config, live_server=True)
             print ' done'
 
 
@@ -76,7 +76,7 @@ def serve(config, options=None):
 
     # Perform the initial build
     config = load_config(options=options)
-    build(config)
+    build(config, live_server=True)
 
     # Note: We pass any command-line options through so that we
     #       can re-apply them if the config file is reloaded.
