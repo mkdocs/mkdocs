@@ -8,7 +8,7 @@ Guide to all available configuration settings.
 
 Project settings are always configured by using a YAML configuration file in the project directory named `mkdocs.yml`.
 
-As a miniumum this configuration file must contain the `site_name` and `pages` settings.  All other settings are optional.
+As a miniumum this configuration file must contain the `site_name` setting.  All other settings are optional.
 
 ## Project information
 
@@ -28,7 +28,7 @@ Quo ex ceteros theophrastus, mel eius repudiandae an, has autem legendos ut. Eu 
 
 #### repo_url
 
-When set, provides a link to your github or bitbucket repository on the page.
+When set, provides a link to your GitHub or Bitbucket repository on each page.
 
     repo_url: https://github.com/example/repository/
 
@@ -75,7 +75,7 @@ If you have a lot of project documentation you might choose to use headings to b
     - ['index.md', 'Introduction']
     - ['user-guide/creating.md', 'User Guide', 'Creating a new Mashmallow project']
     - ['user-guide/api.md', 'User Guide', 'Mashmallow API guide']
-    - ['user-guide/configuration.md', 'User Guide', 'Configuration Mashmallow']
+    - ['user-guide/configuration.md', 'User Guide', 'Configuring Mashmallow']
     - ['about/license.md', 'About', 'License']
 
 ## Build directories
