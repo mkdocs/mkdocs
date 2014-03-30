@@ -167,6 +167,7 @@ def build(config):
     """
     Perform a full site build.
     """
+    print "Building documentation to directory: %s" % config['site_dir']
     utils.copy_media_files(config['theme_dir'], config['site_dir'])
     utils.copy_media_files(config['docs_dir'], config['site_dir'])
     build_pages(config)
