@@ -1,4 +1,4 @@
-#coding: utf-8
+# coding: utf-8
 
 """
 Deals with generating the per-page table of contents.

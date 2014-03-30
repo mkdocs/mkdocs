@@ -1,4 +1,4 @@
-#coding: utf-8
+# coding: utf-8
 
 from watchdog import events, observers
 from mkdocs.build import build

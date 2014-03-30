@@ -1,4 +1,5 @@
-#coding: utf-8
+# coding: utf-8
+
 import os
 
 config_text = 'site_name: My Docs'
@@ -20,6 +21,7 @@ For full documentation visit [mkdocs.org](http://mkdocs.org).
         index.md  # The documentation homepage.
         ...       # Other markdown pages, images and other files.
 """
+
 
 def new(args, options):
     if len(args) != 1:

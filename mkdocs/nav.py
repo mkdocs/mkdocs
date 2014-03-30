@@ -1,4 +1,4 @@
-#coding: utf-8
+# coding: utf-8
 
 """
 Deals with generating the site-wide navigation.
@@ -98,7 +98,7 @@ class Page(object):
         self.input_path = path
         self.output_path = utils.get_html_path(path)
 
-        # Links to related pages
+        # Links to related pages
         self.previous_page = None
         self.next_page = None
         self.ancestors = []
