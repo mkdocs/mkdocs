@@ -94,6 +94,27 @@ def is_markdown_file(path):
     ]
 
 
+def is_css_file(path):
+    """
+    Return True if the given file path is a CSS file.
+    """
+    ext = os.path.splitext(path)[1].lower()
+    return ext in [
+        '.css',
+    ]
+
+
+def is_javascript_file(path):
+    """
+    Return True if the given file path is a Javascript file.
+    """
+    ext = os.path.splitext(path)[1].lower()
+    return ext in [
+        '.js',
+        '.javascript'
+    ]
+
+
 def is_html_file(path):
     """
     Return True if the given file path is an HTML file.

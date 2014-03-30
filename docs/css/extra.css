@@ -1,0 +1,8 @@
+div.col-md-9 h1:first-of-type {
+    text-align: center;
+    font-size: 60px;
+    font-weight: 300;
+}
+div.col-md-9 p:first-of-type {
+    text-align: center;
+}

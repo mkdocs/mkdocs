@@ -123,6 +123,9 @@ def get_context(page, content, nav, toc, meta, config):
         'repo_url': config['repo_url'],
         'repo_name': config['repo_name'],
 
+        'extra_css': config['extra_css'],
+        'extra_javascript': config['extra_javascript'],
+
         'include_search': config['include_search'],
     }
 

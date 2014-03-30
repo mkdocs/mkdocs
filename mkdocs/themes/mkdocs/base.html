@@ -16,6 +16,7 @@
         <link href="{{ base_url }}/css/font-awesome-4.0.3.css" rel="stylesheet">
         <link href="{{ base_url }}/css/prettify-1.0.css" rel="stylesheet">
         <link href="{{ base_url }}/css/base.css" rel="stylesheet">
+        {% for path in extra_css %}<link href="{{ base_url }}/{{ path }}" rel="stylesheet">{% endfor %}
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -34,23 +35,9 @@
             ga('send', 'pageview');
         </script>
         {% endif %}
-
-        {% if config.theme_center_lead
-            or current_page.is_homepage and config.theme_center_homepage_lead %}
-        <style>
-            div.col-md-9 h1:first-of-type {
-                text-align: center;
-                font-size: 60px;
-                font-weight: 300;
-            }
-            div.col-md-9 p:first-of-type {
-                text-align: center;
-            }
-        </style>
-        {% endif %}
     </head>
 
-    <body>
+    <body{% if current_page.is_homepage %} class="homepage"{% endif %}>
 
         {% include "nav.html" %}
 
@@ -73,5 +60,6 @@
         <script src="{{ base_url }}/js/bootstrap-3.0.3.min.js"></script>
         <script src="{{ base_url }}/js/prettify-1.0.min.js"></script>
         <script src="{{ base_url }}/js/base.js"></script>
+        {% for path in extra_javascript %}<script src="{{ base_url }}/{{ path }}"></script>{% endfor %}
     </body>
 </html>
