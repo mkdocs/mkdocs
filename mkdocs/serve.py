@@ -98,6 +98,8 @@ def serve(config, options=None):
     server = TCPServer((host, int(port)), DocsDirectoryHandler)
 
     print 'Running at: http://%s:%s/' % (host, port)
+    print 'Live reload enabled.'
+    print 'Hold ctrl+c to quit.'
     server.serve_forever()
 
     # Clean up
