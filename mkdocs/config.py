@@ -20,16 +20,35 @@ DEFAULT_CONFIG = {
     'site_dir': 'site',
     'theme_dir': None,
 
+    # The address on which to serve the livereloading docs servers.
     'dev_addr': '127.0.0.1:8000',
+
+    # If `True`, use `<page_name>/index.hmtl` style files with hyperlinks to the directory.
+    # If `False`, use `<page_name>.html style file with hyperlinks to the file.
+    # True generates nicer URLs, but False is useful if browsing the output on a filesystem.
     'use_direcory_urls': True,
 
+    # Specify a link to the project source repo to be included
+    # in the documentation pages.
     'repo_url': None,
+
+    # A name to use for the link to the project source repo.
+    # Default: If repo_url is unset then None, otherwise
+    # "GitHub" or "Bitbucket" for known url or Hostname for unknown urls.
     'repo_name': None,
 
+    # Specify which css or javascript files from the docs
+    # directionary should be additionally included in the site.
+    # Default: List of all .css and .js files in the docs dir.
     'extra_css': None,
     'extra_javascript': None,
 
-    # These are not yet supported...
+    # Determine if the site should include the nav and next/prev elements.
+    # Default: True if the site has more than one page, False otherwise.
+    'include_nav': None,
+    'include_next_prev': None,
+
+    # To Do
     'include_search': False,
     'include_404': False,
     'include_sitemap': False
@@ -96,5 +115,22 @@ def validate_config(user_config):
             config['repo_name'] = 'Bitbucket'
         else:
             config['repo_name'] = repo_host.split('.')[0].title()
+
+    if config['include_next_prev'] is None:
+        config['include_next_prev'] = len(config['pages']) > 1
+
+    if config['include_nav'] is None:
+        config['include_nav'] = len(config['pages']) > 1
+
+    # To Do:
+
+    # The docs dir must exist.
+    # The theme dir must exist.
+    # Ensure 'theme' is one of 'mkdocs', 'readthedocs', 'custom'
+    # A homepage 'index' must exist.
+    # The theme 'base.html' file must exist.
+    # Cannot set repo_name without setting repo_url.
+    # Cannot set 'include_next_prev: true' when only one page exists.
+    # Cannot set 'include_nav: true' when only one page exists.
 
     return config

@@ -126,6 +126,8 @@ def get_context(page, content, nav, toc, meta, config):
         'extra_css': config['extra_css'],
         'extra_javascript': config['extra_javascript'],
 
+        'include_nav': config['include_nav'],
+        'include_next_prev': config['include_next_prev'],
         'include_search': config['include_search'],
     }
 
@@ -166,12 +168,10 @@ def build_pages(config):
         utils.write_file(output_content.encode('utf-8'), output_path)
 
 
-def build(config):
 def build(config, live_server=False):
     """
     Perform a full site build.
     """
-    print "Building documentation to directory: %s" % config['site_dir']
     if not live_server:
         print "Building documentation to directory: %s" % config['site_dir']
     utils.copy_media_files(config['theme_dir'], config['site_dir'])
