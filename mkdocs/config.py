@@ -68,7 +68,6 @@ def validate_config(user_config):
                     pages.insert(0, relpath)
                 else:
                     pages.append(relpath)
-
         config['pages'] = pages
 
     if not config['theme_dir']:

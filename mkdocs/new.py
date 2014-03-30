@@ -1,7 +1,25 @@
+#coding: utf-8
 import os
 
 config_text = 'site_name: My Docs'
-index_text = '# Welcome to MkDocs\n\nNow get writing those docs!'
+index_text = """# Welcome to MkDocs
+
+For full documentation visit [mkdocs.org](http://mkdocs.org).
+
+## Commands
+
+* `mkdocs new [dir-name]` - Create a new project.
+* `mkdocs serve` - Start the live-reloading docs server.
+* `mkdocs build` - Build the documentation site.
+* `mkdocs help`
+
+## Project layout
+
+    mkdocs.yml    # The configuration file.
+    docs/
+        index.md  # The documentation homepage.
+        ...       # Other markdown pages, images and other files.
+"""
 
 def new(args, options):
     if len(args) != 1:
@@ -9,18 +27,23 @@ def new(args, options):
         return
 
     output_dir = args[0]
+
     docs_dir = os.path.join(output_dir, 'docs')
+    config_path = os.path.join(output_dir, 'mkdocs.yml')
+    index_path = os.path.join(docs_dir, 'index.md')
+
+    if os.path.exists(config_path):
+        print 'Project already exists.'
+        return
 
     if not os.path.exists(output_dir):
         print 'Creating project directory: %s' % output_dir
         os.mkdir(output_dir)
 
-    if not os.path.exists(docs_dir):
-        os.mkdir(docs_dir)
-
-    config_path = os.path.join(output_dir, 'mkdocs.yml')
-    index_path = os.path.join(docs_dir, 'index.html')
     print 'Writing config file: %s' % config_path
     open(config_path, 'w').write(config_text)
+
     print 'Writing initial docs: %s' % index_path
+    if not os.path.exists(docs_dir):
+        os.mkdir(docs_dir)
     open(index_path, 'w').write(index_text)
