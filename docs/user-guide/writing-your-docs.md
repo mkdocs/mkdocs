@@ -69,6 +69,7 @@ You can also link to a section within a target documentation page by using an an
 
     Please see the [project license](about.md#license) for further details.
 
+<!--
 #### Cross-referencing your documentation
 
 Ex eam quem facilisi deserunt. Veri audiam audire id his, quo at aperiri moderatius. In admodum partiendo est, ei rebum minimum eam, singulis accusata delicatissimi eos ut. Imperdiet vulputate assueverit eos an, elit recusabo et usu. Eam ad euismod accusata vituperata. Oratio vocent nominavi ei eum.
@@ -78,6 +79,7 @@ Ex eam quem facilisi deserunt. Veri audiam audire id his, quo at aperiri moderat
 Eam ad euismod accusata vituperata. Oratio vocent nominavi ei eum.
 
     Ne his mucius oporteat, [mea ut eros delicatissimi](ref:delicatissimi), iudico nonumes moderatius an mel.
+-->
 
 ## Images and media
 
@@ -106,8 +108,9 @@ You image will now be embedded when you build the documentation, and should also
 
 ## Markdown extensions
 
-Quas malorum vituperatoribus mei et, ei augue dicant pri. Etiam denique temporibus ei vis, sea an dicant malorum petentium.
+MkDocs supports the following Markdown extensions.
 
+<!--
 #### Page metadata
 
 Unum errem propriae vis cu, et deseruisse interpretaris eam. Illum graecis per an, ludus laoreet repudiare nec an, molestie recteque et eam. Purto duis rationibus id eum, pro et amet appetere referrentur, minim impedit ad ius. Et nostrud perfecto sapientem vix, et dicit impedit consequat vim. Vis liber blandit no.
@@ -121,6 +124,7 @@ At mel verear persius torquatos, his dolores sensibus id, alia urbanitas in usu.
 	# Lorum Ipsum
 	
 	Unum errem propriae vis cu, et deseruisse interpretaris eam. Illum graecis per an, ludus laoreet repudiare nec an, molestie recteque et eam.
+-->
 
 #### Tables
 
@@ -157,9 +161,11 @@ Start with a line containing 3 or more backtick \` characters, and ends with the
     block.
     ```
 
+<!--
 #### Admonitions
 
 Ad est nibh suscipiantur. Quaeque deleniti delectus an has, tempor accusamus eu vix. Et democritum expetendis nam, putent fuisset duo ea, elaboraret efficiendi no vis.
 
     !!! danger "Don't try this at home"
         May cause grevious bodily harm 
+-->
