@@ -3,8 +3,9 @@
 
 from mkdocs.build import build
 from mkdocs.config import load_config
-from mkdocs.serve import serve
+from mkdocs.gh_deploy import gh_deploy
 from mkdocs.new import new
+from mkdocs.serve import serve
 import shutil
 import sys
 
@@ -29,6 +30,10 @@ def main(cmd, args, options=None):
     elif cmd == 'build':
         config = load_config(options=options)
         build(config)
+    elif cmd == 'gh-deploy':
+        config = load_config(options=options)
+        build(config)
+        gh_deploy(config)
     elif cmd == 'new':
         new(args, options)
     else:
