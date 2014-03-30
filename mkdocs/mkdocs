@@ -4,6 +4,7 @@
 from mkdocs.build import build
 from mkdocs.config import load_config
 from mkdocs.serve import serve
+from mkdocs.new import new
 import shutil
 import sys
 
@@ -18,7 +19,7 @@ def arg_to_option(arg):
     return (arg, True)
 
 
-def main(cmd, options=None):
+def main(cmd, args, options=None):
     """
     Build the documentation, and optionally start the devserver.
     """
@@ -28,11 +29,13 @@ def main(cmd, options=None):
     elif cmd == 'build':
         config = load_config(options=options)
         build(config)
+    elif cmd == 'new':
+        new(args, options)
     else:
-        print 'mkdocs [build|serve] {options}'
+        print 'mkdocs [help|new|build|serve] {options}'
 
 
 if __name__ == '__main__':
     cmd = sys.argv[1] if len(sys.argv) >= 2 else None
-    args = [arg_to_option(arg) for arg in sys.argv[2:] if arg.startswith('--')]
-    main(cmd, options=dict(args))
+    opts = [arg_to_option(arg) for arg in sys.argv[2:] if arg.startswith('--')]
+    main(cmd, args=sys.argv[2:], options=dict(opts))
