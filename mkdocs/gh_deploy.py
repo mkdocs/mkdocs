@@ -9,13 +9,13 @@ def gh_deploy(config):
 
     print "Copying '%s' to `gh-pages` branch and pushing to GitHub." % config['site_dir']
     try:
-        subprocess.check_call(['ghp-import', '-p', config['site_dir']])
+       subprocess.check_call(['ghp-import', '-p', config['site_dir']])
     except:
-        return
+       return
 
     url = subprocess.check_output(["git", "config", "--get", "remote.origin.url"])
     url = url.decode('utf-8').strip()
-    host, path = url.split(':', 1)
+    host, path = url.split('github.com/', 1)
     username, repo = path.split('/', 1)
     if repo.endswith('.git'):
         repo = repo[:-len('.git')]
