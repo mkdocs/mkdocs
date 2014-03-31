@@ -10,6 +10,7 @@ import SocketServer
 import shutil
 import sys
 import tempfile
+import time
 import urllib
 
 
@@ -23,6 +24,7 @@ class BuildEventHandler(events.FileSystemEventHandler):
 
     def on_any_event(self, event):
         if not isinstance(event, events.DirModifiedEvent):
+            time.sleep(0.05)
             print 'Rebuilding documentation...',
             config = load_config(options=self.options)
             build(config, live_server=True)
