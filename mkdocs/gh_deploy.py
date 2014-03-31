@@ -13,10 +13,15 @@ def gh_deploy(config):
     except:
        return
 
+    # TODO: Also check for CNAME file
     url = subprocess.check_output(["git", "config", "--get", "remote.origin.url"])
     url = url.decode('utf-8').strip()
-    host, path = url.split('github.com/', 1)
+    if 'github.com/' in url:
+        host, path = url.split('github.com/', 1)
+    else:
+        host, path = url.split('github.com:', 1)
     username, repo = path.split('/', 1)
     if repo.endswith('.git'):
         repo = repo[:-len('.git')]
-    print 'Your documentation should shortly be available at: http://%s.github.io/%s' % (username, repo)
+    url = 'http://%s.github.io/%s' % (username, repo)
+    print 'Your documentation should shortly be available at: ' + url
