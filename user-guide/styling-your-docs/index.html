@@ -15,6 +15,7 @@
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
         <link href="../../css/prettify-1.0.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
+        <link href="../../css/extra.css" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -33,19 +34,6 @@
             ga('send', 'pageview');
         </script>
         
-
-        
-        <style>
-            div.col-md-9 h1:first-of-type {
-                text-align: center;
-                font-size: 60px;
-                font-weight: 300;
-            }
-            div.col-md-9 p:first-of-type {
-                text-align: center;
-            }
-        </style>
-        
     </head>
 
     <body>
@@ -55,6 +43,7 @@
 
         <!-- Collapsed navigation -->
         <div class="navbar-header">
+            
             <!-- Expander button -->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -62,6 +51,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+            
 
             <!-- Main title -->
             <a class="navbar-brand" href="../..">MkDocs</a>
@@ -69,53 +59,57 @@
 
         <!-- Expanded navigation -->
         <div class="navbar-collapse collapse">
-            <!-- Main navigation -->
-            <ul class="nav navbar-nav">
             
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="../..">Home</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../writing-your-docs/">Writing your docs</a>
+                            </li>
+                        
+                            <li class="active">
+                                <a href="./">Styling your docs</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../configuration/">Configuration</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../../about/license/">License</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
             
-                <li >
-                    <a href="../..">Home</a>
-                </li>
-            
-            
-            
-                <li class="dropdown active">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                    
-                        <li >
-                            <a href="../writing-your-docs/">Writing your docs</a>
-                        </li>
-                    
-                        <li class="active">
-                            <a href="./">Styling your docs</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../configuration/">Configuration</a>
-                        </li>
-                    
-                    </ul>
-                </li>
-            
-            
-            
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                    
-                        <li >
-                            <a href="../../about/license/">License</a>
-                        </li>
-                    
-                    </ul>
-                </li>
-            
-            
-            </ul>
 
+            
             <!-- Search, Navigation and Repo links -->
             <ul class="nav navbar-nav navbar-right">
+                
                 
                 <li >
                     <a rel="next" href="../writing-your-docs/">
@@ -128,6 +122,7 @@
                     </a>
                 </li>
                 
+                
                 <li>
                     <a href="https://github.com/tomchristie/mkdocs/">
                         
@@ -138,6 +133,7 @@
                 </li>
                 
             </ul>
+            
         </div>
     </div>
 </div>
@@ -201,5 +197,6 @@
         <script src="../../js/bootstrap-3.0.3.min.js"></script>
         <script src="../../js/prettify-1.0.min.js"></script>
         <script src="../../js/base.js"></script>
+        
     </body>
 </html>

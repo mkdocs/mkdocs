@@ -15,6 +15,7 @@
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
         <link href="../../css/prettify-1.0.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
+        <link href="../../css/extra.css" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -33,19 +34,6 @@
             ga('send', 'pageview');
         </script>
         
-
-        
-        <style>
-            div.col-md-9 h1:first-of-type {
-                text-align: center;
-                font-size: 60px;
-                font-weight: 300;
-            }
-            div.col-md-9 p:first-of-type {
-                text-align: center;
-            }
-        </style>
-        
     </head>
 
     <body>
@@ -55,6 +43,7 @@
 
         <!-- Collapsed navigation -->
         <div class="navbar-header">
+            
             <!-- Expander button -->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -62,6 +51,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+            
 
             <!-- Main title -->
             <a class="navbar-brand" href="../..">MkDocs</a>
@@ -69,53 +59,57 @@
 
         <!-- Expanded navigation -->
         <div class="navbar-collapse collapse">
-            <!-- Main navigation -->
-            <ul class="nav navbar-nav">
             
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="../..">Home</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li class="active">
+                                <a href="./">Writing your docs</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../styling-your-docs/">Styling your docs</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../configuration/">Configuration</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../../about/license/">License</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
             
-                <li >
-                    <a href="../..">Home</a>
-                </li>
-            
-            
-            
-                <li class="dropdown active">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                    
-                        <li class="active">
-                            <a href="./">Writing your docs</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../styling-your-docs/">Styling your docs</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../configuration/">Configuration</a>
-                        </li>
-                    
-                    </ul>
-                </li>
-            
-            
-            
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                    
-                        <li >
-                            <a href="../../about/license/">License</a>
-                        </li>
-                    
-                    </ul>
-                </li>
-            
-            
-            </ul>
 
+            
             <!-- Search, Navigation and Repo links -->
             <ul class="nav navbar-nav navbar-right">
+                
                 
                 <li >
                     <a rel="next" href="../..">
@@ -128,6 +122,7 @@
                     </a>
                 </li>
                 
+                
                 <li>
                     <a href="https://github.com/tomchristie/mkdocs/">
                         
@@ -138,6 +133,7 @@
                 </li>
                 
             </ul>
+            
         </div>
     </div>
 </div>
@@ -212,13 +208,18 @@ Given the above layout, pages would be generated for the following URLs:</p>
 <p>You can also link to a section within a target documentation page by using an anchor link.  The generated HTML will correctly transform the path portion of the hyperlink, and leave the anchor portion intact.</p>
 <pre class="prettyprint well"><code>Please see the [project license](about.md#license) for further details.
 </code></pre>
-<h4 id="cross-referencing-your-documentation">Cross-referencing your documentation</h4>
-<p>Ex eam quem facilisi deserunt. Veri audiam audire id his, quo at aperiri moderatius. In admodum partiendo est, ei rebum minimum eam, singulis accusata delicatissimi eos ut. Imperdiet vulputate assueverit eos an, elit recusabo et usu. Eam ad euismod accusata vituperata. Oratio vocent nominavi ei eum.</p>
-<pre class="prettyprint well"><code>At mel verear persius torquatos, his dolores [Sensibus](ref:) id, alia urbanitas in usu.
-</code></pre>
-<p>Eam ad euismod accusata vituperata. Oratio vocent nominavi ei eum.</p>
-<pre class="prettyprint well"><code>Ne his mucius oporteat, [mea ut eros delicatissimi](ref:delicatissimi), iudico nonumes moderatius an mel.
-</code></pre>
+<!--
+#### Cross-referencing your documentation
+
+Ex eam quem facilisi deserunt. Veri audiam audire id his, quo at aperiri moderatius. In admodum partiendo est, ei rebum minimum eam, singulis accusata delicatissimi eos ut. Imperdiet vulputate assueverit eos an, elit recusabo et usu. Eam ad euismod accusata vituperata. Oratio vocent nominavi ei eum.
+
+    At mel verear persius torquatos, his dolores [Sensibus](ref:) id, alia urbanitas in usu.
+
+Eam ad euismod accusata vituperata. Oratio vocent nominavi ei eum.
+
+    Ne his mucius oporteat, [mea ut eros delicatissimi](ref:delicatissimi), iudico nonumes moderatius an mel.
+-->
+
 <h2 id="images-and-media">Images and media</h2>
 <p>As well as the Markdown source files, you can also include other file types in your documentation, which will be copied across when generating your documentation site.  These might include images and other media.</p>
 <p>For example, if you project documentation needed to include a <a href="https://help.github.com/articles/setting-up-a-custom-domain-with-pages#setting-the-domain-in-your-repo">GitHub pages CNAME file</a> and a PNG formatted screenshot image then your file layout might look as follows:</p>
@@ -240,18 +241,23 @@ docs/
 </code></pre>
 <p>You image will now be embedded when you build the documentation, and should also be previewed if you're working on the documentation with a Markdown editor.</p>
 <h2 id="markdown-extensions">Markdown extensions</h2>
-<p>Quas malorum vituperatoribus mei et, ei augue dicant pri. Etiam denique temporibus ei vis, sea an dicant malorum petentium.</p>
-<h4 id="page-metadata">Page metadata</h4>
-<p>Unum errem propriae vis cu, et deseruisse interpretaris eam. Illum graecis per an, ludus laoreet repudiare nec an, molestie recteque et eam. Purto duis rationibus id eum, pro et amet appetere referrentur, minim impedit ad ius. Et nostrud perfecto sapientem vix, et dicit impedit consequat vim. Vis liber blandit no.</p>
-<p>At mel verear persius torquatos, his dolores sensibus id, alia urbanitas in usu. Te pri cibo blandit. Debet dolore periculis ei pro, eu vis vidit ignota, vim natum dicta cu. Et appareat delicata vix, mei at solum lorem quodsi, verterem electram sit eu. Eius malis cum an, pro malorum euripidis ad, oblique appetere est cu. Eos ei fugit deterruisset. Vix ei aliquip dolorem, usu te euripidis reformidans, volumus pertinacia ea eam.</p>
-<pre class="prettyprint well"><code>page_title: Lorum
-page_description: "lorum ipsum dolor"
-source_files: example.js, lorum.js
+<p>MkDocs supports the following Markdown extensions.</p>
+<!--
+#### Page metadata
 
-# Lorum Ipsum
+Unum errem propriae vis cu, et deseruisse interpretaris eam. Illum graecis per an, ludus laoreet repudiare nec an, molestie recteque et eam. Purto duis rationibus id eum, pro et amet appetere referrentur, minim impedit ad ius. Et nostrud perfecto sapientem vix, et dicit impedit consequat vim. Vis liber blandit no.
 
-Unum errem propriae vis cu, et deseruisse interpretaris eam. Illum graecis per an, ludus laoreet repudiare nec an, molestie recteque et eam.
-</code></pre>
+At mel verear persius torquatos, his dolores sensibus id, alia urbanitas in usu. Te pri cibo blandit. Debet dolore periculis ei pro, eu vis vidit ignota, vim natum dicta cu. Et appareat delicata vix, mei at solum lorem quodsi, verterem electram sit eu. Eius malis cum an, pro malorum euripidis ad, oblique appetere est cu. Eos ei fugit deterruisset. Vix ei aliquip dolorem, usu te euripidis reformidans, volumus pertinacia ea eam.
+
+    page_title: Lorum
+    page_description: "lorum ipsum dolor"
+    source_files: example.js, lorum.js
+
+    # Lorum Ipsum
+
+    Unum errem propriae vis cu, et deseruisse interpretaris eam. Illum graecis per an, ludus laoreet repudiare nec an, molestie recteque et eam.
+-->
+
 <h4 id="tables">Tables</h4>
 <p>A simple table looks like this:</p>
 <pre class="prettyprint well"><code>First Header | Second Header | Third Header
@@ -281,11 +287,15 @@ start and end fence lines to delimit the code
 block.
 ```
 </code></pre>
-<h4 id="admonitions">Admonitions</h4>
-<p>Ad est nibh suscipiantur. Quaeque deleniti delectus an has, tempor accusamus eu vix. Et democritum expetendis nam, putent fuisset duo ea, elaboraret efficiendi no vis.</p>
-<pre class="prettyprint well"><code>!!! danger "Don't try this at home"
-    May cause grevious bodily harm
-</code></pre>
+<!--
+#### Admonitions
+
+Ad est nibh suscipiantur. Quaeque deleniti delectus an has, tempor accusamus eu vix. Et democritum expetendis nam, putent fuisset duo ea, elaboraret efficiendi no vis.
+
+    !!! danger "Don't try this at home"
+        May cause grevious bodily harm 
+-->
+
 </div>
         </div>
 
@@ -303,5 +313,6 @@ block.
         <script src="../../js/bootstrap-3.0.3.min.js"></script>
         <script src="../../js/prettify-1.0.min.js"></script>
         <script src="../../js/base.js"></script>
+        
     </body>
 </html>
