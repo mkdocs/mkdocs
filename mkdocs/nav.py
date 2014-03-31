@@ -167,6 +167,17 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
             )
             assert False, msg
 
+        if title is None and os.path.splitext(path)[0] != 'index':
+            title = path.split('/')[0]
+            title = os.path.splitext(title)[0]
+            title = title.replace('-', ' ').replace('_', ' ')
+            title = title.capitalize()
+        if child_title is None and '/' in path:
+            child_title = path.split('/')[1]
+            child_title = os.path.splitext(child_title)[0]
+            child_title = child_title.replace('-', ' ').replace('_', ' ')
+            child_title = child_title.capitalize()
+
         url = utils.get_url_path(path, use_directory_urls)
 
         if not child_title:
