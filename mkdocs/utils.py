@@ -78,6 +78,10 @@ def get_url_path(path, use_directory_urls=True):
     return url
 
 
+def is_homepage(path):
+    return os.path.splitext(path)[0] == 'index'
+
+
 def is_markdown_file(path):
     """
     Return True if the given file path is a Markdown file.

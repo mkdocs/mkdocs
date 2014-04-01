@@ -11,6 +11,21 @@ import posixpath
 import os
 
 
+def filename_to_title(filename):
+    """
+    Automatically generate a default title, given a filename.
+    """
+    if utils.is_homepage(filename):
+        return 'Home'
+
+    title = os.path.splitext(filename)[0]
+    title = title.replace('-', ' ').replace('_', ' ')
+    # Captialize if the filename was all lowercase, otherwise leave it as-is.
+    if title.lower() == title:
+        title = title.capitalize()
+    return title
+
+
 class SiteNavigation(object):
     def __init__(self, pages_config, use_directory_urls=True):
         self.url_context = URLContext()
@@ -109,7 +124,7 @@ class Page(object):
 
     @property
     def is_homepage(self):
-        return os.path.splitext(self.input_path)[0] == 'index'
+        return utils.is_homepage(self.input_path)
 
     def __str__(self):
         return self._indent_print()
@@ -167,16 +182,12 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
             )
             assert False, msg
 
-        if title is None and os.path.splitext(path)[0] != 'index':
-            title = path.split('/')[0]
-            title = os.path.splitext(title)[0]
-            title = title.replace('-', ' ').replace('_', ' ')
-            title = title.capitalize()
+        if title is None:
+            filename = path.split('/')[0]
+            title = filename_to_title(filename)
         if child_title is None and '/' in path:
-            child_title = path.split('/')[1]
-            child_title = os.path.splitext(child_title)[0]
-            child_title = child_title.replace('-', ' ').replace('_', ' ')
-            child_title = child_title.capitalize()
+            filename = path.split('/')[1]
+            child_title = filename_to_title(filename)
 
         url = utils.get_url_path(path, use_directory_urls)
 
