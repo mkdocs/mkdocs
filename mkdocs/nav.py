@@ -70,6 +70,15 @@ class SiteNavigation(object):
 
 
 class URLContext(object):
+    """
+    The URLContext is used to ensure that we can generate the appropriate
+    relative URLs to other pages from any given page in the site.
+
+    We use relative URLs so that static sites can be deployed to any location
+    without having to specify what the path component on the host will be
+    if the documentation is not hosted at the root path.
+    """
+
     def __init__(self):
         self.base_path = '/'
 
@@ -86,6 +95,14 @@ class URLContext(object):
 
 
 class FileContext(object):
+    """
+    The FileContext is used to ensure that we can generate the appropriate
+    full path for other pages given their relative path from a particular page.
+
+    This is used when we have relative hyperlinks in the documentation, so that
+    we can ensure that they point to markdown documents that actually exist
+    in the `pages` config.
+    """
     def __init__(self):
         self.current_file = None
         self.base_path = ''
@@ -194,12 +211,7 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
         if not child_title:
             # New top level page.
             page = Page(title=title, url=url, path=path, url_context=url_context)
-            if page.title is not None:
-                # Page config lines that do not include a title, such as:
-                #    - ['index.md']
-                # Will not be added to the nav items heiarchy, although they
-                # are included in the full list of pages, and have the
-                # appropriate 'next'/'prev' links generated.
+            if not utils.is_homepage(path):
                 nav_items.append(page)
         elif not nav_items or (nav_items[-1].title != title):
             # New second level page.
