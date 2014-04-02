@@ -32,7 +32,7 @@ class PathToURL(object):
                     'is not listed in the "pages" configuration.'
                 )
                 assert False, msg % (source_file, target_file)
-            path = utils.get_url_path(target_file)
+            path = utils.get_url_path(target_file, self.nav.use_directory_urls)
             path = self.nav.url_context.make_relative(path)
         else:
             path = utils.get_url_path(path).lstrip('/')
@@ -136,7 +136,7 @@ def build_pages(config):
     """
     Builds all the pages and writes them into the build directory.
     """
-    site_navigation = nav.SiteNavigation(config['pages'])
+    site_navigation = nav.SiteNavigation(config['pages'], config['use_directory_urls'])
     loader = jinja2.FileSystemLoader(config['theme_dir'])
     env = jinja2.Environment(loader=loader)
 

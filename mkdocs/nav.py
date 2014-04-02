@@ -18,6 +18,7 @@ class SiteNavigation(object):
         self.nav_items, self.pages = \
             _generate_site_navigation(pages_config, self.url_context, use_directory_urls)
         self.homepage = self.pages[0] if self.pages else None
+        self.use_directory_urls = use_directory_urls
 
     def __str__(self):
         return ''.join([str(item) for item in self])

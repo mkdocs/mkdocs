@@ -76,6 +76,9 @@ def serve(config, options=None):
     tempdir = tempfile.mkdtemp()
     options['site_dir'] = tempdir
 
+    # Only use user-friendly URLs when running the live server
+    options['use_directory_urls'] = True
+
     # Perform the initial build
     config = load_config(options=options)
     build(config, live_server=True)

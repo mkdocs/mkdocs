@@ -403,6 +403,17 @@ class BuildTests(unittest.TestCase):
         html = build.post_process_html(html)
         self.assertEqual(html.strip(), expected.strip())
 
+    def test_not_use_directory_urls(self):
+        md_text = 'An [internal link](internal.md) to another document.'
+        expected = '<p>An <a href="internal/index.html">internal link</a> to another document.</p>'
+        pages = [
+            ('internal.md',)
+        ]
+        site_navigation = nav.SiteNavigation(pages, use_directory_urls=False)
+        html, toc, meta = build.convert_markdown(md_text)
+        html = build.post_process_html(html, site_navigation)
+        self.assertEqual(html.strip(), expected.strip())
+
     def test_markdown_table_extension(self):
         """
         Ensure that the table extension is supported.
