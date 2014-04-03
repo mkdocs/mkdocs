@@ -10,8 +10,9 @@ import urlparse
 
 
 class PathToURL(object):
-    def __init__(self, nav=None):
+    def __init__(self, nav, url_format):
         self.nav = nav
+        self.url_format = url_format
 
     def __call__(self, match):
         url = match.groups()[0]
@@ -32,10 +33,10 @@ class PathToURL(object):
                     'is not listed in the "pages" configuration.'
                 )
                 assert False, msg % (source_file, target_file)
-            path = utils.get_url_path(target_file)
+            path = utils.get_url_path(target_file, self.url_format)
             path = self.nav.url_context.make_relative(path)
         else:
-            path = utils.get_url_path(path).lstrip('/')
+            path = utils.get_url_path(path, self.url_format).lstrip('/')
 
         # Convert the .md hyperlink to a relative hyperlink to the HTML page.
         url = urlparse.urlunparse((scheme, netloc, path, query, query, fragment))
@@ -66,8 +67,8 @@ def convert_markdown(markdown_source):
     return (html_content, table_of_contents, meta)
 
 
-def post_process_html(html_content, nav=None):
-    html_content = re.sub(r'a href="([^"]*)"', PathToURL(nav), html_content)
+def post_process_html(html_content, nav, url_format):
+    html_content = re.sub(r'a href="([^"]*)"', PathToURL(nav, url_format), html_content)
     html_content = re.sub('<pre>', '<pre class="prettyprint well">', html_content)
     return html_content
 
@@ -136,7 +137,7 @@ def build_pages(config):
     """
     Builds all the pages and writes them into the build directory.
     """
-    site_navigation = nav.SiteNavigation(config['pages'])
+    site_navigation = nav.SiteNavigation(config['pages'], config['url_format'])
     loader = jinja2.FileSystemLoader(config['theme_dir'])
     env = jinja2.Environment(loader=loader)
 
@@ -147,7 +148,7 @@ def build_pages(config):
 
         # Process the markdown text
         html_content, table_of_contents, meta = convert_markdown(input_content)
-        html_content = post_process_html(html_content, site_navigation)
+        html_content = post_process_html(html_content, site_navigation, config['url_format'])
 
         context = get_context(
             page, html_content, site_navigation,
@@ -172,6 +173,7 @@ def build(config, live_server=False):
     """
     Perform a full site build.
     """
+    print "URL: " + config['url_format']
     if not live_server:
         print "Building documentation to directory: %s" % config['site_dir']
     utils.copy_media_files(config['theme_dir'], config['site_dir'])

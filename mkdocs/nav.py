@@ -12,11 +12,11 @@ import os
 
 
 class SiteNavigation(object):
-    def __init__(self, pages_config, use_directory_urls=True):
+    def __init__(self, pages_config, url_format):
         self.url_context = URLContext()
         self.file_context = FileContext()
         self.nav_items, self.pages = \
-            _generate_site_navigation(pages_config, self.url_context, use_directory_urls)
+            _generate_site_navigation(pages_config, self.url_context, url_format)
         self.homepage = self.pages[0] if self.pages else None
 
     def __str__(self):
@@ -88,7 +88,7 @@ class FileContext(object):
 
 
 class Page(object):
-    def __init__(self, title, url, path, url_context):
+    def __init__(self, title, url, path, url_context, url_format):
         self.title = title
         self.abs_url = url
         self.active = False
@@ -96,7 +96,7 @@ class Page(object):
 
         # Relative paths to the input markdown file and output html file.
         self.input_path = path
-        self.output_path = utils.get_html_path(path)
+        self.output_path = utils.get_html_path(path, url_format)
 
         # Links to related pages
         self.previous_page = None
@@ -143,7 +143,7 @@ class Header(object):
         return ret
 
 
-def _generate_site_navigation(pages_config, url_context, use_directory_urls=True):
+def _generate_site_navigation(pages_config, url_context, url_format):
     """
     Returns a list of Page and Header instances that represent the
     top level site navigation.
@@ -178,11 +178,11 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
             child_title = child_title.replace('-', ' ').replace('_', ' ')
             child_title = child_title.capitalize()
 
-        url = utils.get_url_path(path, use_directory_urls)
+        url = utils.get_url_path(path, url_format)
 
         if not child_title:
             # New top level page.
-            page = Page(title=title, url=url, path=path, url_context=url_context)
+            page = Page(title=title, url=url, path=path, url_context=url_context, url_format=url_format)
             if page.title is not None:
                 # Page config lines that do not include a title, such as:
                 #    - ['index.md']
@@ -192,13 +192,13 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
                 nav_items.append(page)
         elif not nav_items or (nav_items[-1].title != title):
             # New second level page.
-            page = Page(title=child_title, url=url, path=path, url_context=url_context)
+            page = Page(title=child_title, url=url, path=path, url_context=url_context, url_format=url_format)
             header = Header(title=title, children=[page])
             nav_items.append(header)
             page.ancestors = [header]
         else:
             # Additional second level page.
-            page = Page(title=child_title, url=url, path=path, url_context=url_context)
+            page = Page(title=child_title, url=url, path=path, url_context=url_context, url_format=url_format)
             header = nav_items[-1]
             header.children.append(page)
             page.ancestors = [header]
