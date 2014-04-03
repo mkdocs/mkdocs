@@ -58,7 +58,7 @@ def get_html_path(path, url_format):
     For url_format == 'file'
         Paths like 'index.md' will be converted to '/index.html'
         Paths like 'about.md' will be converted to '/about.html'
-        Paths like 'api-guide/core.md' will be converted to '/api-guide/core.html'        
+        Paths like 'api-guide/core.md' will be converted to '/api-guide/core.html'
     """
     path = os.path.splitext(path)[0]
     if (url_format == 'file'):
