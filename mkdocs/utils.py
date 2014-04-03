@@ -46,34 +46,51 @@ def copy_media_files(from_dir, to_dir):
                 copy_file(source_path, output_path)
 
 
-def get_html_path(path):
+def get_html_path(path, url_format):
     """
     Map a source file path to an output html path.
 
-    Paths like 'index.md' will be converted to 'index.html'
-    Paths like 'about.md' will be converted to 'about/index.html'
-    Paths like 'api-guide/core.md' will be converted to 'api-guide/core/index.html'
+    For url_format == 'directory'/'index'
+        Paths like 'index.md' will be converted to 'index.html'
+        Paths like 'about.md' will be converted to 'about/index.html'
+        Paths like 'api-guide/core.md' will be converted to 'api-guide/core/index.html'
+
+    For url_format == 'file'
+        Paths like 'index.md' will be converted to '/index.html'
+        Paths like 'about.md' will be converted to '/about.html'
+        Paths like 'api-guide/core.md' will be converted to '/api-guide/core.html'        
     """
     path = os.path.splitext(path)[0]
-    if os.path.basename(path) == 'index':
+    if (url_format == 'file'):
         return path + '.html'
-    return os.path.join(path, 'index.html')
+    else:
+        if (os.path.basename(path) == 'index'):
+            return path + '.html'
+        return os.path.join(path, 'index.html')
 
 
-def get_url_path(path, use_directory_urls=True):
+def get_url_path(path, url_format):
     """
     Map a source file path to an output html path.
 
-    Paths like 'index.md' will be converted to '/'
-    Paths like 'about.md' will be converted to '/about/'
-    Paths like 'api-guide/core.md' will be converted to '/api-guide/core/'
+    For url_format == 'directory'
+        Paths like 'index.md' will be converted to '/'
+        Paths like 'about.md' will be converted to '/about/'
+        Paths like 'api-guide/core.md' will be converted to '/api-guide/core/'
 
-    If `use_directory_urls` is `False`, returned URLs will include the a trailing
-    `index.html` rather than just returning the directory path.
+    For url_format == 'index'
+        Paths like 'index.md' will be converted to '/index.html'
+        Paths like 'about.md' will be converted to '/about/index.html'
+        Paths like 'api-guide/core.md' will be converted to '/api-guide/core/index.html'
+
+    For url_format == 'file'
+        Paths like 'index.md' will be converted to '/index.html'
+        Paths like 'about.md' will be converted to '/about.html'
+        Paths like 'api-guide/core.md' will be converted to '/api-guide/core.html'
     """
-    path = get_html_path(path)
+    path = get_html_path(path, url_format)
     url = '/' + path.replace(os.path.sep, '/')
-    if use_directory_urls:
+    if url_format == 'directory':
         return url[:-len('index.html')]
     return url
 

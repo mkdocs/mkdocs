@@ -23,10 +23,10 @@ DEFAULT_CONFIG = {
     # The address on which to serve the livereloading docs servers.
     'dev_addr': '127.0.0.1:8000',
 
-    # If `True`, use `<page_name>/index.hmtl` style files with hyperlinks to the directory.
-    # If `False`, use `<page_name>.html style file with hyperlinks to the file.
-    # True generates nicer URLs, but False is useful if browsing the output on a filesystem.
-    'use_directory_urls': True,
+    # If `directory`, use `<page_name>/index.html` style files with hyperlinks to the directory.
+    # If `index`, use `<page_name>/index.html` style file with hyperlinks to the file.
+    # If `file`, use `<page_name>.html` style file with hyperlinks to the file.
+    'url_format': 'directory',
 
     # Specify a link to the project source repo to be included
     # in the documentation pages.

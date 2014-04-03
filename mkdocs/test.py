@@ -62,7 +62,19 @@ class UtilsTests(unittest.TestCase):
             'api-guide/testing.md': 'api-guide/testing/index.html',
         }
         for file_path, expected_html_path in expected_results.items():
-            html_path = utils.get_html_path(file_path)
+            html_path = utils.get_html_path(file_path, 'directory')
+            self.assertEqual(html_path, expected_html_path)
+            html_path = utils.get_html_path(file_path, 'index')
+            self.assertEqual(html_path, expected_html_path)
+
+        expected_results = {
+            'index.md': 'index.html',
+            'api-guide.md': 'api-guide.html',
+            'api-guide/index.md': 'api-guide/index.html',
+            'api-guide/testing.md': 'api-guide/testing.html',
+        }
+        for file_path, expected_html_path in expected_results.items():
+            html_path = utils.get_html_path(file_path, 'file')
             self.assertEqual(html_path, expected_html_path)
 
     def test_url_path(self):
@@ -72,20 +84,29 @@ class UtilsTests(unittest.TestCase):
             'api-guide/index.md': '/api-guide/',
             'api-guide/testing.md': '/api-guide/testing/',
         }
-        for file_path, expected_html_path in expected_results.items():
-            html_path = utils.get_url_path(file_path)
-            self.assertEqual(html_path, expected_html_path)
+        for file_path, expected_url_path in expected_results.items():
+            url_path = utils.get_url_path(file_path, 'directory')
+            self.assertEqual(url_path, expected_url_path)
 
-    def test_url_path_nodir(self):
         expected_results = {
             'index.md': '/index.html',
             'api-guide.md': '/api-guide/index.html',
             'api-guide/index.md': '/api-guide/index.html',
             'api-guide/testing.md': '/api-guide/testing/index.html',
         }
-        for file_path, expected_html_path in expected_results.items():
-            html_path = utils.get_url_path(file_path, False)
-            self.assertEqual(html_path, expected_html_path)
+        for file_path, expected_url_path in expected_results.items():
+            url_path = utils.get_url_path(file_path, 'index')
+            self.assertEqual(url_path, expected_url_path)
+
+        expected_results = {
+            'index.md': '/index.html',
+            'api-guide.md': '/api-guide.html',
+            'api-guide/index.md': '/api-guide/index.html',
+            'api-guide/testing.md': '/api-guide/testing.html',
+        }
+        for file_path, expected_url_path in expected_results.items():
+            url_path = utils.get_url_path(file_path, 'file')
+            self.assertEqual(url_path, expected_url_path)
 
     def test_is_markdown_file(self):
         expected_results = {
@@ -189,7 +210,7 @@ class SiteNavigationTests(unittest.TestCase):
         Home - /
         About - /about/
         """)
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(pages, 'directory')
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.nav_items), 2)
         self.assertEqual(len(site_navigation.pages), 2)
@@ -202,7 +223,7 @@ class SiteNavigationTests(unittest.TestCase):
         expected = dedent("""
         About - /about/
         """)
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(pages, 'directory')
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.nav_items), 1)
         self.assertEqual(len(site_navigation.pages), 2)
@@ -217,16 +238,16 @@ class SiteNavigationTests(unittest.TestCase):
             ('about/license.md', 'About', 'License')
         ]
         expected = dedent("""
-        Home - /
+        Home - /index.html
         API Guide
-            Running - /api-guide/running/
-            Testing - /api-guide/testing/
-            Debugging - /api-guide/debugging/
+            Running - /api-guide/running/index.html
+            Testing - /api-guide/testing/index.html
+            Debugging - /api-guide/debugging/index.html
         About
-            Release notes - /about/release-notes/
-            License - /about/license/
+            Release notes - /about/release-notes/index.html
+            License - /about/license/index.html
         """)
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(pages, 'index')
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.nav_items), 3)
         self.assertEqual(len(site_navigation.pages), 6)
@@ -238,15 +259,15 @@ class SiteNavigationTests(unittest.TestCase):
         ]
         expected = [
             dedent("""
-                Home - / [*]
-                About - /about/
+                Home - /index.html [*]
+                About - /about.html
             """),
             dedent("""
-                Home - /
-                About - /about/ [*]
+                Home - /index.html
+                About - /about.html [*]
             """)
         ]
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(pages, 'file')
         for index, page in enumerate(site_navigation.walk_pages()):
             self.assertEqual(str(site_navigation).strip(), expected[index])
 
@@ -263,7 +284,7 @@ class SiteNavigationTests(unittest.TestCase):
                 About - /about/ [*]
             """)
         ]
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(pages, 'directory')
         for index, page in enumerate(site_navigation.walk_pages()):
             self.assertEqual(str(site_navigation).strip(), expected[index])
 
@@ -338,7 +359,7 @@ class SiteNavigationTests(unittest.TestCase):
                     License - /about/license/ [*]
             """)
         ]
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(pages, 'directory')
         for index, page in enumerate(site_navigation.walk_pages()):
             self.assertEqual(str(site_navigation).strip(), expected[index])
 
@@ -383,35 +404,35 @@ class BuildTests(unittest.TestCase):
         md_text = 'An [internal link](internal.md) to another document.'
         expected = '<p>An <a href="internal/">internal link</a> to another document.</p>'
         html, toc, meta = build.convert_markdown(md_text)
-        html = build.post_process_html(html)
+        html = build.post_process_html(html, None, 'directory')
         self.assertEqual(html.strip(), expected.strip())
 
     def test_convert_multiple_internal_links(self):
         md_text = '[First link](first.md) [second link](second.md).'
         expected = '<p><a href="first/">First link</a> <a href="second/">second link</a>.</p>'
         html, toc, meta = build.convert_markdown(md_text)
-        html = build.post_process_html(html)
+        html = build.post_process_html(html, None, 'directory')
         self.assertEqual(html.strip(), expected.strip())
 
     def test_convert_internal_link_differing_directory(self):
         md_text = 'An [internal link](../internal.md) to another document.'
         expected = '<p>An <a href="../internal/">internal link</a> to another document.</p>'
         html, toc, meta = build.convert_markdown(md_text)
-        html = build.post_process_html(html)
+        html = build.post_process_html(html, None, 'directory')
         self.assertEqual(html.strip(), expected.strip())
 
     def test_convert_internal_link_with_anchor(self):
         md_text = 'An [internal link](internal.md#section1.1) to another document.'
         expected = '<p>An <a href="internal/#section1.1">internal link</a> to another document.</p>'
         html, toc, meta = build.convert_markdown(md_text)
-        html = build.post_process_html(html)
+        html = build.post_process_html(html, None, 'directory')
         self.assertEqual(html.strip(), expected.strip())
 
     def test_ignore_external_link(self):
         md_text = 'An [external link](http://example.com/external.md).'
         expected = '<p>An <a href="http://example.com/external.md">external link</a>.</p>'
         html, toc, meta = build.convert_markdown(md_text)
-        html = build.post_process_html(html)
+        html = build.post_process_html(html, None, 'directory')
         self.assertEqual(html.strip(), expected.strip())
 
     def test_markdown_table_extension(self):
