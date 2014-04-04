@@ -173,7 +173,6 @@ def build(config, live_server=False):
     """
     Perform a full site build.
     """
-    print "URL: " + config['url_format']
     if not live_server:
         print "Building documentation to directory: %s" % config['site_dir']
     utils.copy_media_files(config['theme_dir'], config['site_dir'])
