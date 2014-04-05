@@ -331,6 +331,14 @@ class SiteNavigationTests(unittest.TestCase):
         for index, page in enumerate(site_navigation.walk_pages()):
             self.assertEqual(str(site_navigation).strip(), expected[index])
 
+    def test_base_url(self):
+        pages = [
+            ('index.md',)
+        ]
+        site_navigation = nav.SiteNavigation(pages, use_directory_urls=False)
+        base_url = site_navigation.url_context.make_relative('/')
+        self.assertEqual(base_url, '.')
+
 
 class BuildTests(unittest.TestCase):
     def test_convert_markdown(self):

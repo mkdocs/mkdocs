@@ -70,7 +70,10 @@ class URLContext(object):
         suffix = '/' if (url.endswith('/') and len(url) > 1) else ''
         # Workaround for bug on `posixpath.relpath()` in Python 2.6
         if self.base_path == '/':
-            return url.lstrip('/') + suffix
+            if url == '/':
+                # Workaround for static assets
+                return '.'
+            return url.lstrip('/')
         return posixpath.relpath(url, start=self.base_path) + suffix
 
 
