@@ -3,6 +3,7 @@
 
 from __future__ import print_function
 from setuptools import setup
+from setuptools.command.install_scripts import install_scripts
 import re
 import os
 import sys
@@ -58,6 +59,24 @@ def get_package_data(package):
                           for filename in filenames])
     return {package: filepaths}
 
+class mkdocs_install_scripts(install_scripts):
+    """ Customized install_scripts. Create mkdocs.bat for win32. """
+    def run(self):
+        install_scripts.run(self)
+
+        if sys.platform == 'win32':
+            try:
+                script_dir = os.path.join(sys.prefix, 'Scripts')
+                script_path = os.path.join(script_dir, name)
+                bat_str = '@"%s" "%s" %%*' % (sys.executable, script_path)
+                bat_path = os.path.join(self.install_dir, '%s.bat' %name)
+                f = open(bat_path, 'w')
+                f.write(bat_str)
+                f.close()
+                self.get_outputs().append(bat_path)
+            except Exception:
+                _, err, _ = sys.exc_info() # for both 2.x & 3.x compatibility
+                print ('ERROR: Unable to create %s: %s' % (bat_path, err))
 
 if sys.argv[-1] == 'publish':
     os.system("python setup.py sdist upload")
@@ -81,6 +100,7 @@ setup(
     package_data=get_package_data(package),
     install_requires=install_requires,
     scripts=['mkdocs/mkdocs'],
+    cmdclass = {'install_scripts': mkdocs_install_scripts},
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
