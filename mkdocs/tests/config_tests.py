@@ -138,8 +138,8 @@ class ConfigTests(unittest.TestCase):
         mock_urlopen.return_value = zip_file
 
         config.install_theme('https://fake-url.com', tmp_dir)
-        self.assertTrue(os.path.exists, os.path.join(tmp_dir, 'yeti'))
-        c = filecmp.dircmp(os.path.join(tmp_dir, 'yeti'), theme_path)
+        self.assertTrue(os.path.exists(os.path.join(tmp_dir, 'js')))
+        c = filecmp.dircmp(tmp_dir, theme_path)
         self.assertEqual(c.left_only, [])
         self.assertEqual(c.right_only, [])
 
