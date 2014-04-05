@@ -8,6 +8,9 @@
   <title>{% if page_title %}{{ page_title }} - {% endif %}{{ site_name }}</title>
   {% endblock %}
 
+  {% if favicon %}<link rel="shortcut icon" href="{{ favicon }}">
+  {% else %}<link rel="shortcut icon" href="{{ base_url }}/img/favicon.ico">{% endif %}
+
   {# CSS #}
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
