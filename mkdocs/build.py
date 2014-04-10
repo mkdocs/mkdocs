@@ -57,7 +57,7 @@ def convert_markdown(markdown_source, extensions=()):
 
     # Generate the HTML from the markdown source
     md = markdown.Markdown(
-        extensions=['meta', 'toc', 'tables', 'fenced_code'] + extensions
+        extensions=['meta', 'toc', 'tables', 'fenced_code'] + list(extensions)
     )
     html_content = md.convert(markdown_source)
     meta = md.Meta
