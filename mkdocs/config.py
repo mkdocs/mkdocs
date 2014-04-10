@@ -51,6 +51,9 @@ DEFAULT_CONFIG = {
     'include_nav': None,
     'include_next_prev': None,
 
+    # PyMarkdown extension names.
+    'markdown_extensions': (),
+
     # Determine if the site should generate a json search index and include
     # search elements in the theme. - TODO
     'include_search': False,

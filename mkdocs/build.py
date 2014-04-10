@@ -42,18 +42,23 @@ class PathToURL(object):
         return 'a href="%s"' % url
 
 
-def convert_markdown(markdown_source):
+def convert_markdown(markdown_source, extensions=()):
     """
     Convert the Markdown source file to HTML content, and additionally
     return the parsed table of contents, and a dictionary of any metadata
     that was specified in the Markdown file.
+
+    `extensions` is an optional sequence of Python Markdown extensions to add
+    to the default set.
     """
 
     # Prepend a table of contents marker for the TOC extension
     markdown_source = toc.pre_process(markdown_source)
 
     # Generate the HTML from the markdown source
-    md = markdown.Markdown(extensions=['meta', 'toc', 'tables', 'fenced_code'])
+    md = markdown.Markdown(
+        extensions=['meta', 'toc', 'tables', 'fenced_code'] + extensions
+    )
     html_content = md.convert(markdown_source)
     meta = md.Meta
 
@@ -153,7 +158,9 @@ def build_pages(config):
         input_content = open(input_path, 'r').read().decode('utf-8')
 
         # Process the markdown text
-        html_content, table_of_contents, meta = convert_markdown(input_content)
+        html_content, table_of_contents, meta = convert_markdown(
+            input_content, extensions=config['markdown_extensions']
+        )
         html_content = post_process_html(html_content, site_navigation)
 
         context = get_context(
