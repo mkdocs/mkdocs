@@ -33,19 +33,16 @@ class SiteNavigation(object):
         in the site navigation, so that the rendered navbar can correctly
         highlight the currently active page and/or header item.
         """
-        page = self.homepage
-        page.set_active()
-        self.url_context.set_current_url(page.abs_url)
-        self.file_context.set_current_path(page.input_path)
-        yield page
-        while page.next_page:
-            page.set_active(False)
-            page = page.next_page
+        prev_page = None
+        for page in self.pages:
+            if prev_page != None:
+                prev_page.set_active(False)
             page.set_active()
+            prev_page = page
             self.url_context.set_current_url(page.abs_url)
             self.file_context.set_current_path(page.input_path)
             yield page
-        page.set_active(False)
+        prev_page.set_active(False)
 
     @property
     def source_files(self):
@@ -151,6 +148,7 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
     nav_items = []
     pages = []
     previous = None
+    hidden_previous = None
 
     for config_line in pages_config:
         if isinstance(config_line, str):
@@ -180,10 +178,10 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
 
         url = utils.get_url_path(path, use_directory_urls)
 
-        if not child_title:
+        if not child_title or title == '**HIDDEN**':
             # New top level page.
             page = Page(title=title, url=url, path=path, url_context=url_context)
-            if page.title is not None:
+            if page.title is not None and title != '**HIDDEN**':
                 # Page config lines that do not include a title, such as:
                 #    - ['index.md']
                 # Will not be added to the nav items heiarchy, although they
@@ -207,7 +205,15 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
         if previous:
             page.previous_page = previous
             previous.next_page = page
-        previous = page
+
+        if hidden_previous != None:
+            hidden_previous.next_page = page
+
+        if title == '**HIDDEN**':
+            hidden_previous = page
+        else:
+            hidden_previous = None
+            previous = page
 
         pages.append(page)
 
