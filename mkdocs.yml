@@ -9,6 +9,7 @@ dev_addr: 0.0.0.0:8000
 pages:
 - ['index.md', 'Home']
 - ['user-guide/index.md', '**HIDDEN**']
+- ['user-guide/index2.md', '**HIDDEN**']
 - ['user-guide/writing-your-docs.md', 'User Guide', 'Writing your docs']
 - ['user-guide/styling-your-docs.md', 'User Guide', 'Styling your docs']
 - ['user-guide/configuration.md', 'User Guide', 'Configuration']

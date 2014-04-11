@@ -143,7 +143,21 @@ def build_pages(config):
     for page in site_navigation.walk_pages():
         # Read the input file
         input_path = os.path.join(config['docs_dir'], page.input_path)
-        input_content = open(input_path, 'r').read().decode('utf-8')
+        try:
+            input_content = open(input_path, 'r').read().decode('utf-8')
+        except:
+            # Allow 'template:' override in md source files.
+            if 'template' in meta:
+                template = env.get_template(meta['template'][0])
+            else:
+                template = env.get_template('autoindex.html')
+
+            context = get_context(
+                page, 'test input', site_navigation,
+                table_of_contents, meta, config
+            )
+            # Render the template.
+            input_content = template.render(context)
 
         # Process the markdown text
         html_content, table_of_contents, meta = convert_markdown(input_content)
