@@ -26,7 +26,12 @@ DEFAULT_CONFIG = {
     # If `True`, use `<page_name>/index.hmtl` style files with hyperlinks to the directory.
     # If `False`, use `<page_name>.html style file with hyperlinks to the file.
     # True generates nicer URLs, but False is useful if browsing the output on a filesystem.
-    'use_direcory_urls': True,
+    'use_directory_urls': True,
+
+    # `True` if you use server side rewriting, the user may receive some content at a different url from which it was originally rendered.
+    # `False` allows you to to relocate your documentation to different url subdirectories without rebuilding.
+    'use_absolute_urls': False,
+
 
     # Specify a link to the project source repo to be included
     # in the documentation pages.

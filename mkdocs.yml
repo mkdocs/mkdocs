@@ -4,6 +4,9 @@ site_description: Project documentation with Markdown.
 
 repo_url: https://github.com/tomchristie/mkdocs/
 
+dev_addr: 0.0.0.0:8000
+use_absolute_urls: True
+
 pages:
 - ['index.md', 'Home']
 - ['user-guide/writing-your-docs.md', 'User Guide', 'Writing your docs']

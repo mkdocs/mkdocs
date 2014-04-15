@@ -12,12 +12,13 @@ import os
 
 
 class SiteNavigation(object):
-    def __init__(self, pages_config, use_directory_urls=True):
-        self.url_context = URLContext()
+    def __init__(self, pages_config, use_directory_urls=True, use_absolute_urls=False):
+        self.url_context = URLContext(use_absolute_urls)
         self.file_context = FileContext()
         self.nav_items, self.pages = \
             _generate_site_navigation(pages_config, self.url_context, use_directory_urls)
         self.homepage = self.pages[0] if self.pages else None
+        self.use_absolute_urls = use_absolute_urls
 
     def __str__(self):
         return ''.join([str(item) for item in self])
@@ -55,8 +56,9 @@ class SiteNavigation(object):
 
 
 class URLContext(object):
-    def __init__(self):
+    def __init__(self, use_absolute_urls=False):
         self.base_path = '/'
+        self.use_absolute_urls = use_absolute_urls
 
     def set_current_url(self, current_url):
         self.base_path = posixpath.dirname(current_url)
@@ -66,8 +68,11 @@ class URLContext(object):
         Given a URL path return it as a relative URL,
         given the context of the current page.
         """
-        suffix = '/' if (url.endswith('/') and len(url) > 1) else ''
-        return posixpath.relpath(url, start=self.base_path) + suffix
+        if self.use_absolute_urls:
+            return url
+        else:
+            suffix = '/' if (url.endswith('/') and len(url) > 1) else ''
+            return posixpath.relpath(url, start=self.base_path) + suffix
 
 
 class FileContext(object):
