@@ -31,7 +31,7 @@ Given the above layout, pages would be generated for the following URLs:
     /about/
     /license/
 
-You can also include your Markdown files in nested directories if that better suits your documenation layout.
+You can also include your Markdown files in nested directories if that better suits your documentation layout.
 
     docs/
         index.md
