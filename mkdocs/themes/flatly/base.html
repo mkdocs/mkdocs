@@ -16,6 +16,9 @@
         <link href="{{ base_url }}/css/font-awesome-4.0.3.css" rel="stylesheet">
         <link href="{{ base_url }}/css/prettify-1.0.css" rel="stylesheet">
         <link href="{{ base_url }}/css/base.css" rel="stylesheet">
+        {%- for path in extra_css %}
+        <link href="{{ path }}" rel="stylesheet">
+        {%- endfor %}
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -53,5 +56,8 @@
         <script src="{{ base_url }}/js/bootstrap-3.0.3.min.js"></script>
         <script src="{{ base_url }}/js/prettify-1.0.min.js"></script>
         <script src="{{ base_url }}/js/base.js"></script>
+        {%- for path in extra_javascript %}
+        <script src="{{ path }}"></script>
+        {%- endfor %}
     </body>
 </html>
