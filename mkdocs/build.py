@@ -103,6 +103,12 @@ def get_context(page, content, nav, toc, meta, config):
     else:
         site_favicon = None
 
+    if config['extra_javascript']:
+        config['extra_javascript'] = utils.create_media_urls(nav=nav, url_list=config['extra_javascript'])
+
+    if config['extra_css']:
+        config['extra_css'] = utils.create_media_urls(nav=nav, url_list=config['extra_css'])
+
     return {
         'site_name': site_name,
         'site_author': config['site_author'],

@@ -105,6 +105,23 @@ class UtilsTests(unittest.TestCase):
             is_html = utils.is_html_file(path)
             self.assertEqual(is_html, expected_result)
 
+    def test_create_media_urls(self):
+        pages = [
+            ('index.md', 'Home'),
+            ('about.md', 'About')
+        ]
+        expected_results = {
+            'https://media.cdn.org/jquery.js': 'https://media.cdn.org/jquery.js',
+            'http://media.cdn.org/jquery.js': 'http://media.cdn.org/jquery.js',
+            '//media.cdn.org/jquery.js': '//media.cdn.org/jquery.js',
+            'media.cdn.org/jquery.js': './media.cdn.org/jquery.js',
+            'local/file/jquery.js': './local/file/jquery.js',
+        }
+        site_navigation = nav.SiteNavigation(pages)
+        for path, expected_result in expected_results.items():
+            urls = utils.create_media_urls(site_navigation, [path])
+            self.assertEqual(urls[0], expected_result)
+
 
 class TableOfContentsTests(unittest.TestCase):
     def markdown_to_toc(self, markdown_source):

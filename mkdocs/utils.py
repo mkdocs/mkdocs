@@ -7,6 +7,7 @@ Nothing in this module should have an knowledge of config or the layout
 and structure of the site and pages in the site.
 """
 
+
 import os
 import shutil
 
@@ -128,3 +129,17 @@ def is_html_file(path):
         '.html',
         '.htm',
     ]
+
+def create_media_urls(nav, url_list):
+    """
+    Return a list of URLs that have been processed correctly for inclusion in a page.
+    """
+    final_urls = []
+    for url in url_list:
+        # Allow links to fully qualified URL's
+        if '//' in url:
+            final_urls.append(url)
+        else:
+            relative_url = '%s/%s' % (nav.url_context.make_relative('/'), url)
+            final_urls.append(relative_url)
+    return final_urls
