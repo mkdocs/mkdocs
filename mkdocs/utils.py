@@ -7,7 +7,6 @@ Nothing in this module should have an knowledge of config or the layout
 and structure of the site and pages in the site.
 """
 
-
 import os
 import shutil
 
