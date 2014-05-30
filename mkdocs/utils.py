@@ -129,6 +129,7 @@ def is_html_file(path):
         '.htm',
     ]
 
+
 def create_media_urls(nav, url_list):
     """
     Return a list of URLs that have been processed correctly for inclusion in a page.
@@ -142,3 +143,4 @@ def create_media_urls(nav, url_list):
             relative_url = '%s/%s' % (nav.url_context.make_relative('/'), url)
             final_urls.append(relative_url)
     return final_urls
+
