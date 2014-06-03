@@ -26,7 +26,7 @@ DEFAULT_CONFIG = {
     # If `True`, use `<page_name>/index.hmtl` style files with hyperlinks to the directory.
     # If `False`, use `<page_name>.html style file with hyperlinks to the file.
     # True generates nicer URLs, but False is useful if browsing the output on a filesystem.
-    'use_direcory_urls': True,
+    'use_directory_urls': True,
 
     # Specify a link to the project source repo to be included
     # in the documentation pages.
@@ -121,6 +121,12 @@ def validate_config(user_config):
 
     if config['include_nav'] is None:
         config['include_nav'] = len(config['pages']) > 1
+
+    if not isinstance(config['use_directory_urls'], bool):
+        use_directory_urls = config['use_directory_urls']
+        assert isinstance(use_directory_urls, str)
+        config['use_directory_urls'] = { "true"  : True,
+                                         "false" : False}[use_directory_urls.lower()]
 
     # To Do:
 
