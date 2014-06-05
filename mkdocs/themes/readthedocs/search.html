@@ -7,32 +7,37 @@
     :copyright: Copyright 2007-2013 by the Sphinx team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 #}
-{%- extends "layout.html" %}
-{% set title = _('Search') %}
-{% set script_files = script_files + ['_static/searchtools.js'] %}
-{% block extrahead %}
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:'./',
+        VERSION:'0.7.3',
+        COLLAPSE_INDEX:false,
+        FILE_SUFFIX:'.html',
+        HAS_SOURCE:  true
+      };
+    </script>
   <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("{{ pathto('searchindex.js', 1) }}"); });
+    jQuery(function() { Search.loadIndex("searchindex.js"); });
   </script>
   {# this is used when loading the search index using $.ajax fails,
      such as on Chrome for documents on localhost #}
   <script type="text/javascript" id="searchindexloader"></script>
-  {{ super() }}
-{% endblock %}
-{% block body %}
   <noscript>
   <div id="fallback" class="admonition warning">
     <p class="last">
-      {% trans %}Please activate JavaScript to enable the search
-      functionality.{% endtrans %}
+      Please activate JavaScript to enable the search
+      functionality.
     </p>
   </div>
   </noscript>
+    <script type="text/javascript" src="js/underscore.js"></script>
+    <script type="text/javascript" src="js/doctools.js"></script>
+    <script type="text/javascript" src="js/theme.js"></script>
 
   {% if search_performed %}
-    <h2>{{ _('Search Results') }}</h2>
+    <h2>Search Results</h2>
     {% if not search_results %}
-      <p>{{ _('Your search did not match any documents. Please make sure that all words are spelled correctly and that you\'ve selected enough categories.') }}</p>
+      <p>Your search did not match any documents. Please make sure that all words are spelled correctly and that you\'ve selected enough categories.</p>
     {% endif %}
   {% endif %}
   <div id="search-results">
@@ -47,4 +52,3 @@
     </ul>
   {% endif %}
   </div>
-{% endblock %}

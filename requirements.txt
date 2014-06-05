@@ -5,3 +5,4 @@ watchdog==0.7.0
 coverage==3.7.1
 flake8==2.1.0
 ghp-import==0.4.1
+nltk==2.0.4
