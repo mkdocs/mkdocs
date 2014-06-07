@@ -1,8 +1,8 @@
 # coding: utf-8
 
 from watchdog import events, observers
-from mkdocs.build import build
-from mkdocs.config import load_config
+from .build import build
+from .config import load_config
 import os
 import posixpath
 import SimpleHTTPServer

@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 #coding: utf-8
 
-from mkdocs.build import build
-from mkdocs.config import load_config
-from mkdocs.gh_deploy import gh_deploy
-from mkdocs.new import new
-from mkdocs.serve import serve
+from .build import build
+from .config import load_config
+from .gh_deploy import gh_deploy
+from .new import new
+from .serve import serve
 import shutil
 import sys
 

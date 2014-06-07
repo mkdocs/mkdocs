@@ -3,7 +3,7 @@
 import os
 import yaml
 import urlparse
-from mkdocs import utils
+from . import utils
 
 
 DEFAULT_CONFIG = {
