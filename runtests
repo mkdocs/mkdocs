@@ -2,7 +2,7 @@
 
 set -e
 
-coverage run --source=mkdocs mkdocs/test.py $@
+coverage run --source=mkdocs test.py $@
 flake8 mkdocs --ignore=E128,E501 --exclude=__init__.py
 echo
 coverage report

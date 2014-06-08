@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-from . import build, nav, toc, utils, config
+from mkdocs import build, nav, toc, utils, config
 import markdown
 import os
 import shutil
