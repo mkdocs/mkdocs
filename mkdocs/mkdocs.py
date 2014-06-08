@@ -1,12 +1,11 @@
 #!/usr/bin/env python
-#coding: utf-8
+# coding: utf-8
 
 from .build import build
 from .config import load_config
 from .gh_deploy import gh_deploy
 from .new import new
 from .serve import serve
-import shutil
 import sys
 
 
@@ -53,4 +52,3 @@ def main_entry_point():
 
 if __name__ == '__main__':
     main_entry_point()
-
