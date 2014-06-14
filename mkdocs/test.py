@@ -475,6 +475,14 @@ class BuildTests(unittest.TestCase):
         html_ext, _, _ = build.convert_markdown(md_input, ['smart_strong'])
         self.assertEqual(html_ext.strip(), expected_with_smartstrong)
 
+    def test_markdown_duplicate_custom_extension(self):
+        """
+        Duplicated extension names should not cause problems.
+        """
+        md_input = "foo"
+        html_ext, _, _ = build.convert_markdown(md_input, ['toc'])
+        self.assertEqual(html_ext.strip(), '<p>foo</p>')
+
 # class IntegrationTests(unittest.TestCase):
 #     def test_mkdocs_site(self):
 #         """
