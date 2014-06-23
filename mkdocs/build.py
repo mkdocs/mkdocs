@@ -98,7 +98,7 @@ def get_context(page, content, nav, toc, meta, config):
     else:
         site_favicon = None
 
-    base_url = config['site_url']
+    base_url = '/'
     if not config['use_absolute_urls']:
         base_url = nav.url_context.make_relative('/')
 

@@ -46,12 +46,15 @@ class FixedDirectoryHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     directory, instead of being hardwired to the current working directory.
     """
     base_dir = os.getcwd()
+    site_url = '/'
 
     def translate_path(self, path):
         # abandon query parameters
         path = path.split('?', 1)[0]
         path = path.split('#', 1)[0]
         path = posixpath.normpath(urllib.unquote(path))
+        if path.startswith(self.site_url):
+            path = path[len(self.site_url):]
         words = path.split('/')
         words = filter(None, words)
         path = self.base_dir
@@ -95,6 +98,7 @@ def serve(config, options=None):
 
     class DocsDirectoryHandler(FixedDirectoryHandler):
         base_dir = config['site_dir']
+        site_url = config['site_url']
 
     host, port = config['dev_addr'].split(':', 1)
     server = TCPServer((host, int(port)), DocsDirectoryHandler)
