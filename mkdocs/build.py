@@ -98,7 +98,7 @@ def get_context(page, content, nav, toc, meta, config):
     else:
         site_favicon = None
 
-    base_url = ''
+    base_url = config['site_url']
     if not config['use_absolute_urls']:
         base_url = nav.url_context.make_relative('/')
 
@@ -140,7 +140,7 @@ def build_pages(config):
     """
     Builds all the pages and writes them into the build directory.
     """
-    site_navigation = nav.SiteNavigation(config['pages'], config['use_directory_urls'], config['use_absolute_urls'])
+    site_navigation = nav.SiteNavigation(config['pages'], config['site_url'], config['use_directory_urls'], config['use_absolute_urls'])
     loader = jinja2.FileSystemLoader(config['theme_dir'])
     env = jinja2.Environment(loader=loader)
 

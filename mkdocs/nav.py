@@ -12,11 +12,11 @@ import os
 
 
 class SiteNavigation(object):
-    def __init__(self, pages_config, use_directory_urls=True, use_absolute_urls=False):
+    def __init__(self, pages_config, base_url, use_directory_urls=True, use_absolute_urls=False):
         self.url_context = URLContext(use_absolute_urls)
         self.file_context = FileContext()
         self.nav_items, self.pages = \
-            _generate_site_navigation(pages_config, self.url_context, use_directory_urls)
+            _generate_site_navigation(pages_config, base_url, self.url_context, use_directory_urls)
         self.homepage = self.pages[0] if self.pages else None
         self.use_absolute_urls = use_absolute_urls
 
@@ -148,7 +148,7 @@ class Header(object):
         return ret
 
 
-def _generate_site_navigation(pages_config, url_context, use_directory_urls=True):
+def _generate_site_navigation(pages_config, base_url, url_context, use_directory_urls=True):
     """
     Returns a list of Page and Header instances that represent the
     top level site navigation.
@@ -183,7 +183,7 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
             child_title = child_title.replace('-', ' ').replace('_', ' ')
             child_title = child_title.capitalize()
 
-        url = utils.get_url_path(path, use_directory_urls)
+        url = base_url + utils.get_url_path(path, use_directory_urls).lstrip('/')
 
         if not child_title:
             # New top level page.

@@ -1,5 +1,5 @@
 site_name: MkDocs
-site_url: http://www.mkdocs.org/
+site_url: http://www.mkdocs.org/v1.0/
 site_description: Project documentation with Markdown.
 
 repo_url: https://github.com/tomchristie/mkdocs/
