@@ -89,17 +89,24 @@ def get_context(page, content, nav, toc, meta, config):
         base = config['site_url']
         if not base.endswith('/'):
             base += '/'
+        site_url = base
         canonical_url = urljoin(base, page.abs_url.lstrip('/'))
     else:
         canonical_url = None
+        site_url = '/'
 
     if config['site_favicon']:
         site_favicon = nav.url_context.make_relative('/' + config['site_favicon'])
     else:
         site_favicon = None
 
+    base_url = '/'
+    if not config['use_absolute_urls']:
+        base_url = nav.url_context.make_relative('/')
+
     return {
         'site_name': site_name,
+        'site_url': site_url,
         'site_author': config['site_author'],
         'favicon': site_favicon,
 
@@ -112,7 +119,7 @@ def get_context(page, content, nav, toc, meta, config):
         'meta': meta,
         'config': config,
 
-        'base_url': nav.url_context.make_relative('/'),
+        'base_url': base_url,
         'homepage_url': nav.homepage.url,
         'canonical_url': canonical_url,
 
@@ -136,7 +143,7 @@ def build_pages(config):
     """
     Builds all the pages and writes them into the build directory.
     """
-    site_navigation = nav.SiteNavigation(config['pages'])
+    site_navigation = nav.SiteNavigation(config['pages'], config['site_url'], config['use_directory_urls'], config['use_absolute_urls'])
     loader = jinja2.FileSystemLoader(config['theme_dir'])
     env = jinja2.Environment(loader=loader)
 

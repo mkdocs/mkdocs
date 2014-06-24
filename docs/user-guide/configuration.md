@@ -170,6 +170,15 @@ The alternate style can occasionally be useful if you want your documentation to
 
 **default**: `true`
 
+#### use_absolute_urls
+
+If you use server side rewriting, the user may receive some content at a different url from which it was originally rendered.
+In that case, you need to set `use_absolute_urls` to `true`.
+
+The default allows you to to relocate your documentation to different url subdirectories without rebuilding.
+
+**default**: `false`
+
 #### dev_addr
 
 Determines the address used when running `mkdocs serve`.  Setting this allows you to use another port, or allows you to make the service accessible over your local network by using the `0.0.0.0` address.
