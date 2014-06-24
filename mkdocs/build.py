@@ -89,9 +89,11 @@ def get_context(page, content, nav, toc, meta, config):
         base = config['site_url']
         if not base.endswith('/'):
             base += '/'
+        site_url = base
         canonical_url = urljoin(base, page.abs_url.lstrip('/'))
     else:
         canonical_url = None
+        site_url = '/'
 
     if config['site_favicon']:
         site_favicon = nav.url_context.make_relative('/' + config['site_favicon'])
@@ -104,6 +106,7 @@ def get_context(page, content, nav, toc, meta, config):
 
     return {
         'site_name': site_name,
+        'site_url': site_url,
         'site_author': config['site_author'],
         'site_favicon': site_favicon,
 
