@@ -9,15 +9,10 @@
   {# CSS #}
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
+  <link href="{{ base_url }}/css/prettify-1.0.css" rel="stylesheet">
   <link rel="stylesheet" href="{{ base_url }}/css/theme.css" type="text/css" />
   {% for path in extra_css %}
     <link href="{{ base_url }}/{{ path }}" rel="stylesheet">
-  {% endfor %}
-
-  <script type="text/javascript" src="{{ base_url }}/js/theme.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
-  {% for path in extra_javascript %}
-    <script src="{{ base_url }}/{{ path }}"></script>
   {% endfor %}
 
   <style>
@@ -74,5 +69,13 @@
       <span style="margin-left: 15px"><a href="" style="color: #fcfcfc">Next &raquo;</a></span>
     </span>
 </div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="{{ base_url }}/js/prettify-1.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+<script type="text/javascript" src="{{ base_url }}/js/theme.js"></script>
+{% for path in extra_javascript %}
+  <script src="{{ base_url }}/{{ path }}"></script>
+{% endfor %}
+
 </body>
 </html>
