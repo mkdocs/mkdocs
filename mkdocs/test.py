@@ -2,12 +2,14 @@
 # coding: utf-8
 
 from mkdocs import build, nav, toc, utils, config
+import jinja2
 import markdown
 import os
 import shutil
 import textwrap
 import tempfile
 import unittest
+import re
 
 
 def dedent(text):
@@ -454,6 +456,25 @@ class BuildTests(unittest.TestCase):
         """)
 
         self.assertEqual(html.strip(), expected_html)
+
+    def test_sitemap(self):
+        pages = [
+            ('index.md', 'Home'),
+            ('about.md', 'About')
+        ]
+        site_navigation = nav.SiteNavigation(pages)
+
+        package_dir = os.path.dirname(__file__)
+        loader = jinja2.FileSystemLoader(os.path.join(package_dir, 'statics'))
+        env = jinja2.Environment(loader=loader)
+        conf = config.load_config(options={'site_name': 'iggle'})
+        sitemap = build.build_sitemap(conf, site_navigation, env)
+        expected = dedent("""
+        <?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n\n\n<url>\n <loc>http://www.mkdocs.org//</loc>\n <lastmod>2014-03-20</lastmod>\n <changefreq>daily</changefreq>\n</url>\n\n\n\n<url>\n <loc>http://www.mkdocs.org//about/</loc>\n <lastmod>2014-03-20</lastmod>\n <changefreq>daily</changefreq>\n</url>\n\n\n</urlset>
+        """)
+        DATE_RE = re.compile('(\d\d\d\d-\d\d-\d\d)')
+        self.assertEqual(DATE_RE.sub('{DATE}', sitemap), DATE_RE.sub('{DATE}', expected))
+
 
 # class IntegrationTests(unittest.TestCase):
 #     def test_mkdocs_site(self):

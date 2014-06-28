@@ -48,10 +48,13 @@ DEFAULT_CONFIG = {
     'include_nav': None,
     'include_next_prev': None,
 
-    # To Do
+    # Add Sitemap.xml.
+    # Defulat: True.
+    'include_sitemap': True,
+
+    # These are not yet supported...
     'include_search': False,
     'include_404': False,
-    'include_sitemap': False
 }
 
 
@@ -106,6 +109,12 @@ def validate_config(user_config):
     if config['theme_dir'] is None:
         package_dir = os.path.dirname(__file__)
         config['theme_dir'] = os.path.join(package_dir, 'themes', config['theme'])
+
+    package_dir = os.path.dirname(__file__)
+    if not config['theme_dir']:
+        config['theme_dir'] = os.path.join(package_dir, 'themes', config['theme'])
+
+    config['statics_dir'] = os.path.join(package_dir, 'statics')
 
     if config['repo_url'] is not None and config['repo_name'] is None:
         repo_host = urlparse.urlparse(config['repo_url']).netloc.lower()
