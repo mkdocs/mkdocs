@@ -1,17 +1,24 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-from mkdocs import build, nav, toc, utils, config
-import markdown
 import os
 import shutil
 import textwrap
 import tempfile
 import unittest
 
+import markdown
+
+from mkdocs import build, nav, toc, utils, config
+from mkdocs._compat import PY2
+
 
 def dedent(text):
     return textwrap.dedent(text).strip()
+
+
+def ensure_utf(string):
+    return string.encode('utf-8') if PY2 else string
 
 
 class ConfigTests(unittest.TestCase):
@@ -31,13 +38,14 @@ class ConfigTests(unittest.TestCase):
         pages:
         - ['index.md', 'Introduction']
         """)
-        config_file = tempfile.NamedTemporaryFile()
-        config_file.write(file_contents)
+        config_file = tempfile.NamedTemporaryFile('w')
+        config_file.write(ensure_utf(file_contents))
         config_file.flush()
         options = {'config': config_file.name}
         results = config.load_config(options=options)
         self.assertEqual(results['site_name'], expected_results['site_name'])
         self.assertEqual(results['pages'], expected_results['pages'])
+        config_file.close()
 
     def test_default_pages(self):
         tmp_dir = tempfile.mkdtemp()
