@@ -2,8 +2,9 @@
 
 import os
 import yaml
-import urlparse
+
 from mkdocs import utils
+from mkdocs._compat import urlparse
 
 
 DEFAULT_CONFIG = {
@@ -120,7 +121,7 @@ def validate_config(user_config):
         config['theme_dir'] = os.path.join(package_dir, 'themes', config['theme'])
 
     if config['repo_url'] is not None and config['repo_name'] is None:
-        repo_host = urlparse.urlparse(config['repo_url']).netloc.lower()
+        repo_host = urlparse(config['repo_url']).netloc.lower()
         if repo_host == 'github.com':
             config['repo_name'] = 'GitHub'
         elif repo_host == 'bitbucket.com':

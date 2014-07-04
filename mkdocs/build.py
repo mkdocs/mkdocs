@@ -1,12 +1,12 @@
 # coding: utf-8
 
 from mkdocs import nav, toc, utils
-from urlparse import urljoin
 import jinja2
 import markdown
 import os
 import re
-import urlparse
+
+from mkdocs._compat import urljoin, urlparse, urlunparse
 
 
 class PathToURL(object):
@@ -15,7 +15,7 @@ class PathToURL(object):
 
     def __call__(self, match):
         url = match.groups()[0]
-        scheme, netloc, path, query, query, fragment = urlparse.urlparse(url)
+        scheme, netloc, path, query, query, fragment = urlparse(url)
 
         if (scheme or netloc or not utils.is_markdown_file(path)):
             # Ignore URLs unless they are a relative link to a markdown file.
@@ -38,7 +38,7 @@ class PathToURL(object):
             path = utils.get_url_path(path).lstrip('/')
 
         # Convert the .md hyperlink to a relative hyperlink to the HTML page.
-        url = urlparse.urlunparse((scheme, netloc, path, query, query, fragment))
+        url = urlunparse((scheme, netloc, path, query, query, fragment))
         return 'a href="%s"' % url
 
 
@@ -180,7 +180,7 @@ def build(config, live_server=False):
     Perform a full site build.
     """
     if not live_server:
-        print "Building documentation to directory: %s" % config['site_dir']
+        print("Building documentation to directory: %s" % config['site_dir'])
     utils.copy_media_files(config['theme_dir'], config['site_dir'])
     utils.copy_media_files(config['docs_dir'], config['site_dir'])
     build_pages(config)
