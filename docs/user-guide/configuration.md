@@ -152,23 +152,53 @@ Consul percipitur usu an, no dico facer inermis cum. Eum ea mentitum accommodare
 
 ## Preview controls
 
-#### use_directory_urls
+#### url_format
 
-This setting controls the style used for linking to pages within the documentation.
+This setting controls the format of the URLs (and filenames for a static "build").  The options for `url_format` 
+are `directory` (default), `index` or `file`.  This parameter replaces the old `use_directory_urls` flag.
 
-The following table demonstrates how the URLs used on the site differ when setting `use_directory_urls` to `true` or `false`.
+The behavior for `url_format` = `directory` is the default and matches the old `use_directory_urls` = True.
+This generates clean URLS, although it has the problem that a static build does not generate links that work 
+when browsing off a file.
 
-Source file  | Generated HTML       | use_directory_urls=true  | use_directory_urls=false
------------- | -------------------- | ------------------------ | ------------------------
-index.md     | index.html           | /                        | /index.html
-api-guide.md | api-guide/index.html | /api-guide/              | /api-guide/index.html
-about.md     | about/index.html     | /about/                  | /about/index.html
+Also, this format breaks relative links to images and other media files which are stored within the `.md` document 
+tree.  E.g. if `system.md` contains an image `<img src="a.jpg">` where `a.jpg` is in the same directory as `system.md`, 
+then this image will not display with `url_format` = `directory` either in static `build` or dynamic `serve` modes,
+inside the `system.md` you must now refer to the image as `<img src="../a.jpg">`, due to the trailing `/` which is
+added to the navigation link.
 
-The default style of `use_directory_urls=true` creates more user friendly URLs, and is usually what you'll want to use.
+If you wish to preserve relative image links after processing, you may want to consider `url_format` = `file`.
 
-The alternate style can occasionally be useful if you want your documentation to remain properly linked when opening pages directly from the file system, because it create links that point directly to the target *file* rather than the target *directory*.
+Source file  | Generated HTML       | Navigation Links
+------------ | -------------------- | ------------------------
+index.md     | index.html           | /
+api-guide.md | api-guide/index.html | /api-guide/
+about.md     | about/index.html     | /about/
+dir/file.md  | dir/file/index.html  | /dir/file/
 
-**default**: `true`
+The behavior for `url_format` = `index` matches what the old `use_directory_urls` = False claimed to do.
+This generates a static build which does work when browsing from a file system.  However it still breaks 
+relative links to images and other media files which are stored within the `.md` document tree.
+
+Source file  | Generated HTML       | Navigation Links
+------------ | -------------------- | ------------------------
+index.md     | index.html           | /index.html
+api-guide.md | api-guide/index.html | /api-guide/index.html
+about.md     | about/index.html     | /about/index.html
+dir/file.md  | dir/file/index.html  | /dir/file/index.html
+
+The behavior for `url_format` = `file` simply translates the `.md` suffix into `.html`. 
+This generates a static build which does work when browsing from a file system, and preserves
+relative links to images and other media files which are stored within the `.md` document tree.
+
+Source file  | Generated HTML       | Navigation Links
+------------ | -------------------- | ------------------------
+index.md     | index.html           | /index.html
+api-guide.md | api-guide.html       | /api-guide.html
+about.md     | about.html           | /about.html
+dir/file.md  | dir/file.html        | /dir/file.html
+
+**default**: `directory`
 
 #### dev_addr
 
