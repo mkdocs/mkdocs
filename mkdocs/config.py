@@ -4,7 +4,7 @@ import os
 import yaml
 
 from mkdocs import utils
-from mkdocs._compat import urlparse
+from mkdocs.compat import urlparse
 
 
 DEFAULT_CONFIG = {

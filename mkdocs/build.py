@@ -6,7 +6,7 @@ import markdown
 import os
 import re
 
-from mkdocs._compat import urljoin, urlparse, urlunparse
+from mkdocs.compat import urljoin, urlparse, urlunparse
 
 
 class PathToURL(object):

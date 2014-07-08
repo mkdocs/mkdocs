@@ -1,16 +1,15 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import os
-import shutil
-import textwrap
-import tempfile
-import unittest
-
-import markdown
 
 from mkdocs import build, nav, toc, utils, config
-from mkdocs._compat import PY2
+from mkdocs.compat import PY2
+import markdown
+import os
+import shutil
+import tempfile
+import textwrap
+import unittest
 
 
 def dedent(text):
