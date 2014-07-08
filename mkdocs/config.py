@@ -1,11 +1,9 @@
 # coding: utf-8
 
-import os
-import yaml
-
 from mkdocs import utils
 from mkdocs.compat import urlparse
-
+import os
+import yaml
 
 DEFAULT_CONFIG = {
     'site_name': None,
