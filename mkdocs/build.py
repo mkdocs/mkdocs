@@ -1,12 +1,11 @@
 # coding: utf-8
 
 from mkdocs import nav, toc, utils
+from mkdocs.compat import urljoin, urlparse, urlunparse, PY2
 import jinja2
 import markdown
 import os
 import re
-
-from mkdocs.compat import urljoin, urlparse, urlunparse
 
 
 class PathToURL(object):
@@ -150,7 +149,9 @@ def build_pages(config):
     for page in site_navigation.walk_pages():
         # Read the input file
         input_path = os.path.join(config['docs_dir'], page.input_path)
-        input_content = open(input_path, 'r').read().decode('utf-8')
+        input_content = open(input_path, 'r').read()
+        if PY2:
+            input_content = input_content.decode('utf-8')
 
         # Process the markdown text
         html_content, table_of_contents, meta = convert_markdown(input_content)
