@@ -6,9 +6,11 @@ PY2 = int(sys.version[0]) == 2
 
 if PY2:
     from urlparse import urljoin, urlparse, urlunparse
+    import urllib
     urljoin = urljoin
     urlparse = urlparse
     urlunparse = urlunparse
+    urlunquote = urllib.unquote
 
     import SimpleHTTPServer as httpserver
     httpserver = httpserver
@@ -21,10 +23,11 @@ if PY2:
     unicode = unicode
     basestring = basestring
 else:  # PY3
-    from urllib.parse import urljoin, urlparse, urlunparse
+    from urllib.parse import urljoin, urlparse, urlunparse, unquote
     urljoin = urljoin
     urlparse = urlparse
     urlunparse = urlunparse
+    urlunquote = unquote
 
     import http.server as httpserver
     httpserver = httpserver
