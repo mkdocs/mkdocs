@@ -10,6 +10,11 @@ if PY2:
     urlparse = urlparse
     urlunparse = urlunparse
 
+    import SimpleHTTPServer as httpserver
+    httpserver = httpserver
+    import SocketServer
+    socketserver = SocketServer
+
     text_type = unicode
     binary_type = str
     string_types = (str, unicode)
@@ -20,6 +25,11 @@ else:  # PY3
     urljoin = urljoin
     urlparse = urlparse
     urlunparse = urlunparse
+
+    import http.server as httpserver
+    httpserver = httpserver
+    import socketserver
+    socketserver = socketserver
 
     text_type = str
     binary_type = bytes

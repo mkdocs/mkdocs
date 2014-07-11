@@ -3,11 +3,10 @@ from __future__ import print_function
 
 from watchdog import events, observers
 from mkdocs.build import build
+from mkdocs.compat import httpserver, socketserver
 from mkdocs.config import load_config
 import os
 import posixpath
-import SimpleHTTPServer
-import SocketServer
 import shutil
 import sys
 import tempfile
@@ -39,7 +38,7 @@ class ConfigEventHandler(BuildEventHandler):
             super(ConfigEventHandler, self).on_any_event(event)
 
 
-class FixedDirectoryHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+class FixedDirectoryHandler(httpserver.SimpleHTTPRequestHandler):
     """
     Override the default implementation to allow us to specify the served
     directory, instead of being hardwired to the current working directory.
@@ -89,7 +88,7 @@ def serve(config, options=None):
     observer.schedule(config_event_handler, '.')
     observer.start()
 
-    class TCPServer(SocketServer.TCPServer):
+    class TCPServer(socketserver.TCPServer):
         allow_reuse_address = True
 
     class DocsDirectoryHandler(FixedDirectoryHandler):
