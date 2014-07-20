@@ -22,7 +22,7 @@ When rendering the theme this setting will be passed as the `site_name` context 
 
 #### site_url
 
-Quo ex ceteros theophrastus, mel eius repudiandae an, has autem legendos ut. Eu quo moderatius interpretaris, pro ad homero tractatos cotidieque. His errem dictas instructior ad, tation causae ceteros ex eum. Nam falli dicunt te, mea et unum contentiones, ius noluisse rationibus cotidieque ei.
+Set the canonical URL of the site. This will add a link tag with the canonical URL to the generated HTML header.
 
 **default**: `null`
 
@@ -36,19 +36,22 @@ When set, provides a link to your GitHub or Bitbucket repository on each page.
 
 #### site_description
 
-Eam no quis bonorum legendos. Eos prodesset cotidieque in, atqui saperet eos te. Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent. Mei putent impetus no, iuvaret labores duo an.
-
+Set the site description. This will add a meta tag to the generated HTML header.
 **default**: `null`
 
-#### site_author
+#### site_author 
 
-Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent.
+Set the name of the author. This will add a meta tag to the generated HTML header.
 
 **default**: `null`
 
 #### site_favicon
 
-Sit eruditi fastidii detraxit cu, sed elit voluptatum in. Vel esse possim accumsan et, eam et amet nihil putent.
+Set the favicon to use. Putting a `favicon.ico` into the `docs/` directory, the config would look as follows:
+
+```yaml
+site_favicon: favicon.ico
+```
 
 **default**: `null`
 

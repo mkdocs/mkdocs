@@ -101,7 +101,7 @@ def get_context(page, content, nav, toc, meta, config):
     return {
         'site_name': site_name,
         'site_author': config['site_author'],
-        'site_favicon': site_favicon,
+        'favicon': site_favicon,
 
         'page_title': page_title,
         'page_description': page_description,
