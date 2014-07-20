@@ -40,51 +40,59 @@ Create richly cross-referenced documents, using the MkDocs interlinking syntax.
 
 ## Installation
 
-Install using pip:
+In order to install MkDocs you'll need [Python][python] installed on your system, as well as the Python package manager, [pip][pip].  You can check if you have these already installed like so:
 
-    pip install mkdocs
+    $ python --version
+    Python 2.7.2
+    $ pip --version
+    pip 1.5.2
+
+Install the `mkdocs` package using pip:
+
+    $ pip install mkdocs
 
 You should now have the `mkdocs` command installed on your system.  Run `mkdocs help` to check that everything worked okay.
 
     $ mkdocs help
-    mkdocs [build|serve] {options}
+    mkdocs [help|new|build|serve] {options}
 
 ---
 
 ## Getting started
 
-In order to run, mkdocs requires a single configuration file named `mkdocs.yml` to exist in the current directory.
+Getting started is super easy.
 
-There is one required settings in the configuration file, `site_name`.  Let's create a simple configuration file for our new project `MkLorum`:
+    $ mkdocs new my-project
+    $ cd my-project
 
-    $ echo 'site_name: MkLorum' > mkdocs.yml
+Let's take a moment to review the initial project that's been created for us.
 
-Your documentation source files should all exist in a single directory. By default this directory should be named `docs`.
+![The initial MkDocs layout](img/initial-layout.png)
 
-    $ mkdir docs
+There's a single configuration file named `mkdocs.yaml`, and a folder named `docs` that will contain our documentation source files.  Right now the `docs` folder just contains a single documentation page, named `index.md`.
 
-Now we need some documentation. The markdown files in our `docs` directory should correspond with the entries in the configuration file, so we need to create `index.md` and `about.md` files, and populate them with some markdown.
-
-As a shortcut, we can use Jasper Van der Jeugt's ['lorum-markdownum' website](https://github.com/jaspervdj/lorem-markdownum) site to generate pages of random Markdown text automatically:
-
-    $ curl 'jaspervdj.be/lorem-markdownum/markdown.txt' > docs/index.md
-
-When you're done the directory layout should look like this:
-
-    mkdocs.yml
-    docs/
-        index.md
-
-Okay, we're ready to build  our documentation now. MkDocs comes with a built-in webserver that lets you preview your documentation as you work on it. We start the webserver by making sure we're in the same directory as the `mkdocs.yml` config file, and then running the `mkdocs serve` command:
+MkDocs comes with a built-in webserver that lets you preview your documentation as you work on it. We start the webserver by making sure we're in the same directory as the `mkdocs.yml` config file, and then running the `mkdocs serve` command:
 
     $ mkdocs serve
 	Running at: http://127.0.0.1:8000/
 
 Open up [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser, and you'll see the index page being displayed:
 
-![Screenshot](img/screenshot.png)
+![The MkDocs live server](img/screenshot.png)
 
 The webserver also supports auto-reloading, and will rebuild your documentation whenever anything in the configuration file, documentation directory or theme directory changes.
+
+Go ahead and edit the `docs/index.md` file now and save the file. Then simply hit reload in the browser and you'll see your updated documentation.
+
+Now's also a good time to edit the configuration file, `mkdocs.yml`.  Change the `site_name` setting to something else and save the file.
+
+![Editing the config file](img/initial-config.png)
+
+Once you hit reload in the browser you'll see your new site name take effect.
+
+![The site_name setting](img/site-name.png)
+
+## Adding pages
 
 Go ahead and edit the `doc/index.md` document, and change the initial heading to `MkLorum`, then reload the site in your browser, and you should see the change take effect immediately.
 
@@ -101,6 +109,8 @@ We'd like our documentation site to include some navigation headers, so we'll ed
 
 Refresh the browser and you'll now see a navigation bar with `Home` and `About` headers.
 
+## Theming our documentation
+
 While we're here can also change the configuration file to alter how the documentation is displayed.  Let's go ahead and change the theme.  Edit the `mkdocs.yaml` file to the following:
 
     site_name: MkLorum
@@ -113,9 +123,7 @@ Refresh the browser again, and you'll now see the ReadTheDocs theme being used.
 
 ![Screenshot](img/readthedocs.png)
 
----
-
-## Building & deploying
+## Building the site
 
 That's looking good.  We're ready to deploy the first pass of our `MkLorum` documentation now.  Let's build the documentation.
 
@@ -130,8 +138,13 @@ Notice that our source documentation has been output as two HTML files named `in
 
 If you're using source code control such as `git` you probably don't want to check your documentation builds into the repository.  Add a line containing `site/` to your `.gitignore` file.
 
-    echo 'site/' >> .gitignore
+    $ echo "site/" >> .gitignore
 
 If you're using another source code control you'll want to check it's documentation on how to ignore specific directories.
 
+## Deploying
+
 The documentation site that we've just built only uses static files so you'll be able to host it from pretty much anywhere. [GitHub project pages](https://help.github.com/articles/creating-project-pages-manually) and [Amazon S3](http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html) are good hosting options. Upload the contents of the entire `site` directory to wherever you're hosting your website from and you're done.
+
+[python]: todo
+[pip]: todo

@@ -110,7 +110,6 @@ def get_context(page, content, nav, toc, meta, config):
         'toc': toc,
         'nav': nav,
         'meta': meta,
-        'config': config,
 
         'base_url': nav.url_context.make_relative('/'),
         'homepage_url': nav.homepage.url,
@@ -120,6 +119,11 @@ def get_context(page, content, nav, toc, meta, config):
         'previous_page': page.previous_page,
         'next_page': page.next_page,
 
+        # Note that there's intentionally repetition here. Rather than simply
+        # provide the config dictionary we instead pass everything explicitly.
+        #
+        # This helps ensure that we can throughly document the context that
+        # gets passed to themes.
         'repo_url': config['repo_url'],
         'repo_name': config['repo_name'],
 
@@ -129,6 +133,9 @@ def get_context(page, content, nav, toc, meta, config):
         'include_nav': config['include_nav'],
         'include_next_prev': config['include_next_prev'],
         'include_search': config['include_search'],
+
+        'copyright': config['copyright'],
+        'google-analytics': config['google-analytics']
     }
 
 

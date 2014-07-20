@@ -20,7 +20,10 @@ DEFAULT_CONFIG = {
     'site_dir': 'site',
     'theme_dir': None,
 
-    # The address on which to serve the livereloading docs servers.
+    'copyright': None,
+    'google-analytics': None,
+
+    # The address on which to serve the livereloading docs server.
     'dev_addr': '127.0.0.1:8000',
 
     # If `True`, use `<page_name>/index.hmtl` style files with hyperlinks to the directory.
@@ -48,10 +51,19 @@ DEFAULT_CONFIG = {
     'include_nav': None,
     'include_next_prev': None,
 
-    # To Do
+    # Determine if the site should generate a json search index and include
+    # search elements in the theme. - TODO
     'include_search': False,
+
+    # Determine if the site should include a 404.html page.
+    # TODO: Implment this. Make this None, have it True if a 404.html
+    # template exists in the theme or docs dir.
     'include_404': False,
-    'include_sitemap': False
+
+    # Determine if the site should include a sitemap.xml page.
+    # TODO: Implement this. Make this None, have it True if a sitemap.xml
+    # template exists in the theme or docs dir.
+    'include_sitemap': False,
 }
 
 
@@ -132,5 +144,6 @@ def validate_config(user_config):
     # Cannot set repo_name without setting repo_url.
     # Cannot set 'include_next_prev: true' when only one page exists.
     # Cannot set 'include_nav: true' when only one page exists.
+    # Error if any config keys provided that are not in the DEFAULT_CONFIG.
 
     return config
