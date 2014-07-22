@@ -80,7 +80,11 @@ setup(
     packages=get_packages(package),
     package_data=get_package_data(package),
     install_requires=install_requires,
-    scripts=['mkdocs/mkdocs'],
+    entry_points={
+        'console_scripts': [
+            'mkdocs = mkdocs.mkdocs:main_entry_point',
+            ],
+        },
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',

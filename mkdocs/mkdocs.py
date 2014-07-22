@@ -1,12 +1,11 @@
 #!/usr/bin/env python
-#coding: utf-8
+# coding: utf-8
 
-from mkdocs.build import build
-from mkdocs.config import load_config
-from mkdocs.gh_deploy import gh_deploy
-from mkdocs.new import new
-from mkdocs.serve import serve
-import shutil
+from .build import build
+from .config import load_config
+from .gh_deploy import gh_deploy
+from .new import new
+from .serve import serve
 import sys
 
 
@@ -40,7 +39,16 @@ def main(cmd, args, options=None):
         print 'mkdocs [help|new|build|serve] {options}'
 
 
-if __name__ == '__main__':
+def main_entry_point():
+    """
+    Invokes main() with the contents of sys.argv
+
+    This is a separate function so it can be invoked
+    by a setuptools console_script.
+    """
     cmd = sys.argv[1] if len(sys.argv) >= 2 else None
     opts = [arg_to_option(arg) for arg in sys.argv[2:] if arg.startswith('--')]
     main(cmd, args=sys.argv[2:], options=dict(opts))
+
+if __name__ == '__main__':
+    main_entry_point()

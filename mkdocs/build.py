@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from mkdocs import nav, toc, utils
+from . import nav, toc, utils
 from urlparse import urljoin
 import jinja2
 import markdown
