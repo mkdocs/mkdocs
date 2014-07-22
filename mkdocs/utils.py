@@ -57,7 +57,7 @@ def get_html_path(path):
     path = os.path.splitext(path)[0]
     if os.path.basename(path) == 'index':
         return path + '.html'
-    return os.path.join(path, 'index.html')
+    return "/".join((path, 'index.html'))
 
 
 def get_url_path(path, use_directory_urls=True):

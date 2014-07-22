@@ -31,13 +31,17 @@ class ConfigTests(unittest.TestCase):
         pages:
         - ['index.md', 'Introduction']
         """)
-        config_file = tempfile.NamedTemporaryFile()
-        config_file.write(file_contents)
-        config_file.flush()
-        options = {'config': config_file.name}
-        results = config.load_config(options=options)
-        self.assertEqual(results['site_name'], expected_results['site_name'])
-        self.assertEqual(results['pages'], expected_results['pages'])
+        tmp_dir = tempfile.mkdtemp()
+        try:
+            config_file_path = os.path.join(tmp_dir, 'test_config.yml')
+            with open(config_file_path, 'w') as config_file:
+                config_file.write(file_contents)
+            options = {'config': config_file_path}
+            results = config.load_config(options=options)
+            self.assertEqual(results['site_name'], expected_results['site_name'])
+            self.assertEqual(results['pages'], expected_results['pages'])
+        finally:
+            shutil.rmtree(tmp_dir)
 
     def test_default_pages(self):
         tmp_dir = tempfile.mkdtemp()
