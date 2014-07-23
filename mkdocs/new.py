@@ -1,5 +1,5 @@
 # coding: utf-8
-
+from __future__ import print_function
 import os
 
 config_text = 'site_name: My Docs\n'
