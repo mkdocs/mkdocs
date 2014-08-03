@@ -9,6 +9,7 @@ and structure of the site and pages in the site.
 
 import os
 import shutil
+from urlparse import urlparse
 
 
 def copy_file(source_path, output_path):
@@ -137,10 +138,10 @@ def create_media_urls(nav, url_list):
     final_urls = []
     for url in url_list:
         # Allow links to fully qualified URL's
-        if '//' in url:
+        parsed = urlparse(url)
+        if parsed.netloc:
             final_urls.append(url)
         else:
             relative_url = '%s/%s' % (nav.url_context.make_relative('/'), url)
             final_urls.append(relative_url)
     return final_urls
-
