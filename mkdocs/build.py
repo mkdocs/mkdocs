@@ -53,7 +53,7 @@ def convert_markdown(markdown_source):
     markdown_source = toc.pre_process(markdown_source)
 
     # Generate the HTML from the markdown source
-    md = markdown.Markdown(extensions=['meta', 'toc', 'tables', 'fenced_code'])
+    md = markdown.Markdown(extensions=['meta', 'toc', 'tables', 'fenced_code', 'codehilite'])
     html_content = md.convert(markdown_source)
     meta = md.Meta
 
