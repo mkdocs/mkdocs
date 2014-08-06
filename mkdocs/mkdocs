@@ -36,7 +36,7 @@ def main(cmd, args, options=None):
     elif cmd == 'new':
         new(args, options)
     else:
-        print 'mkdocs [help|new|build|serve] {options}'
+        print 'mkdocs [help|new|build|serve|gh-deploy] {options}'
 
 
 if __name__ == '__main__':
