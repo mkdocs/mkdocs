@@ -20,7 +20,7 @@ def filename_to_title(filename):
 
     title = os.path.splitext(filename)[0]
     title = title.replace('-', ' ').replace('_', ' ')
-    # Captialize if the filename was all lowercase, otherwise leave it as-is.
+    # Captialize if the filename was all lowercase, otherwise leave it as-is.
     if title.lower() == title:
         title = title.capitalize()
     return title
@@ -35,7 +35,7 @@ class SiteNavigation(object):
         self.homepage = self.pages[0] if self.pages else None
 
     def __str__(self):
-        return ''.join([str(item) for item in self])
+        return str(self.homepage) + ''.join([str(item) for item in self])
 
     def __iter__(self):
         return iter(self.nav_items)
