@@ -6,7 +6,6 @@ from mkdocs.config import load_config
 from mkdocs.gh_deploy import gh_deploy
 from mkdocs.new import new
 from mkdocs.serve import serve
-import shutil
 import sys
 
 
