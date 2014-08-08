@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from mkdocs import nav, toc, utils
+from mkdocs import nav, toc, utils, search
 from urlparse import urljoin
 import jinja2
 import markdown
@@ -146,6 +146,7 @@ def build_pages(config):
     site_navigation = nav.SiteNavigation(config['pages'])
     loader = jinja2.FileSystemLoader(config['theme_dir'])
     env = jinja2.Environment(loader=loader)
+    search_index = search.SearchIndex()
 
     for page in site_navigation.walk_pages():
         # Read the input file
@@ -174,6 +175,16 @@ def build_pages(config):
         output_path = os.path.join(config['site_dir'], page.output_path)
         utils.write_file(output_content.encode('utf-8'), output_path)
 
+        #add search entry
+        search_index.addEntryFromContext(
+            page, html_content, site_navigation,
+            table_of_contents, meta, config
+        )
+
+    #save search index to disk
+    output_content = search_index.generate_search_index()
+    output_path = os.path.join(config['site_dir'], 'search_content.json')
+    utils.write_file(output_content.encode('utf-8'), output_path)
 
 def build(config, live_server=False):
     """
