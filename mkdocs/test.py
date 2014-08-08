@@ -470,7 +470,7 @@ class BuildTests(unittest.TestCase):
         html_base, _, _ = build.convert_markdown(md_input)
         self.assertEqual(html_base.strip(), expected_without_smartstrong)
 
-        # Check that the plugin is not active when not requested.
+        # Check that the plugin is active when requested.
         expected_with_smartstrong = "<p>foo__bar__baz</p>"
         html_ext, _, _ = build.convert_markdown(md_input, ['smart_strong'])
         self.assertEqual(html_ext.strip(), expected_with_smartstrong)
