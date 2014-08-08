@@ -14,7 +14,7 @@
     <link href="{{ base_url }}/{{ path }}" rel="stylesheet">
   {% endfor %}
 
-  <script type="text/javascript" src="{{ base_url }}/js/theme.js"></script>
+  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
   {% for path in extra_javascript %}
     <script src="{{ base_url }}/{{ path }}"></script>
@@ -25,6 +25,7 @@
     pre, code {font-size: 100%;}
     h3, h4, h5, h6 {color: #2980b9; font-weight: 300}
   </style>
+
 </head>
 
 <body class="wy-body-for-nav" role="document">
