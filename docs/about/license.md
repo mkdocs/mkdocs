@@ -8,10 +8,10 @@ The legal stuff.
 
 Themes used under license from the Bootstrap, ReadTheDocs, GhostWriter and Bootswatch projects.
 
-* Bootstrap theme - [View license]().
-* ReadTheDocs theme - [View license]().
-* GhostWriter theme - [View license]().
-* Bootswatch theme - [View license]().
+* Bootstrap theme - [View license](//github.com/twbs/bootstrap/blob/master/LICENSE).
+* ReadTheDocs theme - [View license](//github.com/snide/sphinx_rtd_theme/blob/master/LICENSE).
+* GhostWriter theme - [View license](//github.com/roryg/ghostwriter/blob/master/LICENSE.txt).
+* Bootswatch theme - [View license](//github.com/thomaspark/bootswatch/blob/gh-pages/LICENSE).
 
 Many thanks to the authors and contributors of those wonderful projects.
 
