@@ -1,4 +1,5 @@
 # coding: utf-8
+from __future__ import print_function
 
 from mkdocs import nav, toc, utils
 from mkdocs.compat import urljoin, urlparse, urlunparse, PY2
