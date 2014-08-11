@@ -1,10 +1,9 @@
 # coding: utf-8
 
+from mkdocs import utils
+from mkdocs.compat import urlparse
 import os
 import yaml
-import urlparse
-from mkdocs import utils
-
 
 DEFAULT_CONFIG = {
     'site_name': None,
@@ -72,8 +71,8 @@ def load_config(filename='mkdocs.yml', options=None):
     if 'config' in options:
         filename = options['config']
     assert os.path.exists(filename), "Config file '%s' does not exist." % filename
-
-    user_config = yaml.load(open(filename, 'r'))
+    with open(filename, 'r') as fp:
+        user_config = yaml.load(fp)
     user_config.update(options)
     return validate_config(user_config)
 
@@ -120,7 +119,7 @@ def validate_config(user_config):
         config['theme_dir'] = os.path.join(package_dir, 'themes', config['theme'])
 
     if config['repo_url'] is not None and config['repo_name'] is None:
-        repo_host = urlparse.urlparse(config['repo_url']).netloc.lower()
+        repo_host = urlparse(config['repo_url']).netloc.lower()
         if repo_host == 'github.com':
             config['repo_name'] = 'GitHub'
         elif repo_host == 'bitbucket.com':

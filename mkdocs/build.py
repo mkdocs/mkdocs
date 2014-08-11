@@ -1,12 +1,12 @@
 # coding: utf-8
+from __future__ import print_function
 
 from mkdocs import nav, toc, utils
-from urlparse import urljoin
+from mkdocs.compat import urljoin, urlparse, urlunparse, PY2
 import jinja2
 import markdown
 import os
 import re
-import urlparse
 
 
 class PathToURL(object):
@@ -15,7 +15,7 @@ class PathToURL(object):
 
     def __call__(self, match):
         url = match.groups()[0]
-        scheme, netloc, path, query, query, fragment = urlparse.urlparse(url)
+        scheme, netloc, path, query, query, fragment = urlparse(url)
 
         if (scheme or netloc or not utils.is_markdown_file(path)):
             # Ignore URLs unless they are a relative link to a markdown file.
@@ -38,7 +38,7 @@ class PathToURL(object):
             path = utils.get_url_path(path).lstrip('/')
 
         # Convert the .md hyperlink to a relative hyperlink to the HTML page.
-        url = urlparse.urlunparse((scheme, netloc, path, query, query, fragment))
+        url = urlunparse((scheme, netloc, path, query, query, fragment))
         return 'a href="%s"' % url
 
 
@@ -150,7 +150,9 @@ def build_pages(config):
     for page in site_navigation.walk_pages():
         # Read the input file
         input_path = os.path.join(config['docs_dir'], page.input_path)
-        input_content = open(input_path, 'r').read().decode('utf-8')
+        input_content = open(input_path, 'r').read()
+        if PY2:
+            input_content = input_content.decode('utf-8')
 
         # Process the markdown text
         html_content, table_of_contents, meta = convert_markdown(input_content)
@@ -180,7 +182,7 @@ def build(config, live_server=False):
     Perform a full site build.
     """
     if not live_server:
-        print "Building documentation to directory: %s" % config['site_dir']
+        print("Building documentation to directory: %s" % config['site_dir'])
     utils.copy_media_files(config['theme_dir'], config['site_dir'])
     utils.copy_media_files(config['docs_dir'], config['site_dir'])
     build_pages(config)

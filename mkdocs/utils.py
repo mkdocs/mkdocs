@@ -28,7 +28,7 @@ def write_file(content, output_path):
     output_dir = os.path.dirname(output_path)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    open(output_path, 'w').write(content)
+    open(output_path, 'wb').write(content)
 
 
 def copy_media_files(from_dir, to_dir):

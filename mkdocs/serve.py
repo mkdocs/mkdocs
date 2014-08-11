@@ -1,16 +1,15 @@
 # coding: utf-8
+from __future__ import print_function
 
 from watchdog import events, observers
 from mkdocs.build import build
+from mkdocs.compat import httpserver, socketserver, urlunquote
 from mkdocs.config import load_config
 import os
 import posixpath
-import SimpleHTTPServer
-import SocketServer
 import shutil
 import sys
 import tempfile
-import urllib
 
 
 class BuildEventHandler(events.FileSystemEventHandler):
@@ -23,10 +22,10 @@ class BuildEventHandler(events.FileSystemEventHandler):
 
     def on_any_event(self, event):
         if not isinstance(event, events.DirModifiedEvent):
-            print 'Rebuilding documentation...',
+            print('Rebuilding documentation...', end='')
             config = load_config(options=self.options)
             build(config, live_server=True)
-            print ' done'
+            print(' done')
 
 
 class ConfigEventHandler(BuildEventHandler):
@@ -38,7 +37,7 @@ class ConfigEventHandler(BuildEventHandler):
             super(ConfigEventHandler, self).on_any_event(event)
 
 
-class FixedDirectoryHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+class FixedDirectoryHandler(httpserver.SimpleHTTPRequestHandler):
     """
     Override the default implementation to allow us to specify the served
     directory, instead of being hardwired to the current working directory.
@@ -49,7 +48,7 @@ class FixedDirectoryHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         # abandon query parameters
         path = path.split('?', 1)[0]
         path = path.split('#', 1)[0]
-        path = posixpath.normpath(urllib.unquote(path))
+        path = posixpath.normpath(urlunquote(path))
         words = path.split('/')
         words = filter(None, words)
         path = self.base_dir
@@ -88,7 +87,7 @@ def serve(config, options=None):
     observer.schedule(config_event_handler, '.')
     observer.start()
 
-    class TCPServer(SocketServer.TCPServer):
+    class TCPServer(socketserver.TCPServer):
         allow_reuse_address = True
 
     class DocsDirectoryHandler(FixedDirectoryHandler):
@@ -97,9 +96,9 @@ def serve(config, options=None):
     host, port = config['dev_addr'].split(':', 1)
     server = TCPServer((host, int(port)), DocsDirectoryHandler)
 
-    print 'Running at: http://%s:%s/' % (host, port)
-    print 'Live reload enabled.'
-    print 'Hold ctrl+c to quit.'
+    print('Running at: http://%s:%s/' % (host, port))
+    print('Live reload enabled.')
+    print('Hold ctrl+c to quit.')
     server.serve_forever()
 
     # Clean up

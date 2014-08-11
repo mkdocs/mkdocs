@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 #coding: utf-8
+from __future__ import print_function
 
 from mkdocs.build import build
 from mkdocs.config import load_config
@@ -36,8 +37,7 @@ def main(cmd, args, options=None):
     elif cmd == 'new':
         new(args, options)
     else:
-        print 'mkdocs [help|new|build|serve|gh-deploy] {options}'
-
+        print('mkdocs [help|new|build|serve|gh-deploy] {options}')
 
 if __name__ == '__main__':
     cmd = sys.argv[1] if len(sys.argv) >= 2 else None
