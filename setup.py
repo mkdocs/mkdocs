@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
+from distutils.command.install_scripts import install_scripts
 from setuptools import setup
 import re
 import os
@@ -67,6 +68,27 @@ if sys.argv[-1] == 'publish':
     print("  git push --tags")
     sys.exit()
 
+SCRIPT_NAME = 'mkdocs'
+
+class mkdocs_install_scripts(install_scripts):
+    """ Customized install_scripts. Create mkdocs.bat for win32. """
+    def run(self):
+        install_scripts.run(self)
+
+        if sys.platform == 'win32':
+            try:
+                script_dir = os.path.join(sys.prefix, 'Scripts')
+                script_path = os.path.join(script_dir, SCRIPT_NAME)
+                bat_str = '@"%s" "%s" %%*' % (sys.executable, script_path)
+                bat_path = os.path.join(self.install_dir, '%s.bat' %SCRIPT_NAME)
+
+                with open(bat_path, 'w') as f:
+                    f.write(bat_str)
+
+                print('Created: %s' % bat_path)
+            except Exception:
+                _, err, _ = sys.exc_info() # for both 2.x & 3.x compatability
+                print('ERROR: Unable to create %s: %s' % (bat_path, err))
 
 setup(
     name=name,
@@ -81,6 +103,9 @@ setup(
     package_data=get_package_data(package),
     install_requires=install_requires,
     scripts=['mkdocs/mkdocs'],
+    cmdclass={
+        'install_scripts': mkdocs_install_scripts
+    },
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
