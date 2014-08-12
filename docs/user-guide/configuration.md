@@ -187,3 +187,19 @@ Vel at magna falli fierent. Clita putant nam no, cu per eros possit omnium, dici
 
 No sale minim definiebas vis. An quem utinam eam, est et consul patrioque maiestatis. Vel id decore periculis eloquentiam. Eu vim graeco causae, nec ut dicta graecis delicatissimi. Ne quod etiam salutandi vix, est stet veritus ne. Modus corrumpit usu ea, pri et dicam dignissim, quo ea sumo essent interesset.
 -->
+
+## Formatting options
+
+#### markdown_extensions
+
+MkDocs uses the [Python Markdown][pymkd] library to translate Markdown files into HTML. Python Markdown supports a variety of [extensions][pymdk-extensions] that customize how pages are formatted. This setting lets you enable a list of extensions beyond the ones that MkDocs uses by default (`meta`, `toc`, `tables`, and `fenced_code`).
+
+For example, to enable the [SmartyPants typography extension][smarty], use:
+
+    markdown_extensions: [smartypants]
+
+**default**: `[]`
+
+[pymdk-extensions]: http://pythonhosted.org/Markdown/extensions/index.html
+[pymkd]: http://pythonhosted.org/Markdown/
+[smarty]: https://pypi.python.org/pypi/mdx_smartypants

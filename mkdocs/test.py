@@ -465,6 +465,31 @@ class BuildTests(unittest.TestCase):
 
         self.assertEqual(html.strip(), expected_html)
 
+    def test_markdown_custom_extension(self):
+        """
+        Check that an extension applies when requested in the arguments to
+        `convert_markdown`.
+        """
+        md_input = "foo__bar__baz"
+
+        # Check that the plugin is not active when not requested.
+        expected_without_smartstrong = "<p>foo<strong>bar</strong>baz</p>"
+        html_base, _, _ = build.convert_markdown(md_input)
+        self.assertEqual(html_base.strip(), expected_without_smartstrong)
+
+        # Check that the plugin is active when requested.
+        expected_with_smartstrong = "<p>foo__bar__baz</p>"
+        html_ext, _, _ = build.convert_markdown(md_input, ['smart_strong'])
+        self.assertEqual(html_ext.strip(), expected_with_smartstrong)
+
+    def test_markdown_duplicate_custom_extension(self):
+        """
+        Duplicated extension names should not cause problems.
+        """
+        md_input = "foo"
+        html_ext, _, _ = build.convert_markdown(md_input, ['toc'])
+        self.assertEqual(html_ext.strip(), '<p>foo</p>')
+
 # class IntegrationTests(unittest.TestCase):
 #     def test_mkdocs_site(self):
 #         """
