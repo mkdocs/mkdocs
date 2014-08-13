@@ -14,6 +14,7 @@ $( document ).ready(function() {
     });  
     // Make tables responsive
     $("table.docutils:not(.field-list)").wrap("<div class='wy-table-responsive'></div>");
+    prettyPrint();
 });
 
 window.SphinxRtdTheme = (function (jquery) {
