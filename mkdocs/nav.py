@@ -114,10 +114,10 @@ class FileContext(object):
 
     def make_absolute(self, path):
         """
-        Given a relative file path return it as a absolute filepath,
-        given the context of the current page.
+        Given a relative file path return it as a POSIX-style
+        absolute filepath, given the context of the current page.
         """
-        return os.path.normpath(os.path.join(self.base_path, path))
+        return posixpath.normpath(posixpath.join(self.base_path, path))
 
 
 class Page(object):
