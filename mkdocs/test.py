@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
-
+from __future__ import absolute_import
 
 from mkdocs import build, nav, toc, utils, config
 from mkdocs.compat import PY2

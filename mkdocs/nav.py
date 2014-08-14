@@ -5,6 +5,7 @@ Deals with generating the site-wide navigation.
 
 This consists of building a set of interlinked page and header objects.
 """
+from __future__ import absolute_import
 
 from mkdocs import utils
 import posixpath
