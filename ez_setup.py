@@ -36,7 +36,7 @@ try:
 except ImportError:
     USER_SITE = None
 
-DEFAULT_VERSION = "4.0.1"
+DEFAULT_VERSION = "5.5.1"
 DEFAULT_URL = "https://pypi.python.org/packages/source/s/setuptools/"
 
 def _python_cmd(*args):
@@ -268,7 +268,7 @@ def download_setuptools(version=DEFAULT_VERSION, download_base=DEFAULT_URL,
     Download setuptools from a specified location and return its filename
 
     `version` should be a valid setuptools version number that is available
-    as an egg for download under the `download_base` URL (which should end
+    as an sdist for download under the `download_base` URL (which should end
     with a '/'). `to_dir` is the directory where the egg will be downloaded.
     `delay` is the number of seconds to pause before an actual download
     attempt.
