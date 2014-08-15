@@ -104,9 +104,9 @@ def validate_config(user_config):
                 else:
                     pages.append(relpath)
             elif utils.is_css_file(filename):
-                extra_css.append(relpath)
+                extra_css.append(relpath.replace("\\", "/")) # css & js paths are consumed by templates, so they need to be posix paths regardless of os
             elif utils.is_javascript_file(filename):
-                extra_javascript.append(relpath)
+                extra_javascript.append(relpath.replace("\\", "/"))
 
     if config['pages'] is None:
         config['pages'] = pages
