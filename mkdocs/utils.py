@@ -9,11 +9,8 @@ and structure of the site and pages in the site.
 
 import os
 import shutil
-try:
-    from urlparse import urlparse
-except ImportError:
-    from urllib.parse import urlparse
 
+from mkdocs.compat import urlparse
 
 def copy_file(source_path, output_path):
     """
