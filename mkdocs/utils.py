@@ -12,6 +12,7 @@ import shutil
 
 from mkdocs.compat import urlparse
 
+
 def copy_file(source_path, output_path):
     """
     Copy source_path to output_path, making sure any parent directories exist.
