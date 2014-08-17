@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#coding: utf-8
+# coding: utf-8
 from __future__ import print_function
 
 from mkdocs.build import build
@@ -38,6 +38,7 @@ def main(cmd, args, options=None):
         new(args, options)
     else:
         print('mkdocs [help|new|build|serve|gh-deploy] {options}')
+
 
 def run_main():
     """
