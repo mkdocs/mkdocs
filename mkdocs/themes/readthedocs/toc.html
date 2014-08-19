@@ -1,21 +1,18 @@
- <ul class="current">
-{% for nav_item in nav %}
-    <li class="toctree-l1 {% if nav_item == current_page%}current{%endif%}">
-        <a class="{% if nav_item == current_page%}current{%endif%}" href="{{ nav_item.url }}">{{ nav_item.title }}</a>
-        {% if nav_item == current_page %}
-            <ul>
-            {% for toc_item in toc %}
-                <li class="toctree-l2"><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
-                {% for toc_item in toc_item.children %}
-                    <li><a class="toctree-l3" href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
+<ul class="current">
+    {% for nav_item in nav %}
+    {% for nav_item in nav_item.children %}
+        <li class="toctree-l1 {% if nav_item.active%}current{%endif%}">
+            <a class="{% if nav_item.active%}current{%endif%}" href="{{ nav_item.url }}">{{ nav_item.title }}</a>
+            {% if nav_item == current_page %}
+                <ul>
+                {% for toc_item in toc %}
+                    <li class="toctree-l2"><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
+                    {% for toc_item in toc_item.children %}
+                        <li><a class="toctree-l3" href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
+                    {% endfor %}
                 {% endfor %}
-            {% endfor %}
-            </ul>
-        {% endif %}
-    </li>
-{% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    {% endfor %}{% endfor %}
 </ul>
-
-
-
-
