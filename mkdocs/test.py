@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+from coverage import coverage
+
+# Start coverage first to include "def" lines as covered
+# http://nedbatchelder.com/code/coverage/faq.html#faq
+cov = coverage(source=["mkdocs"])
+cov.start()
 
 from mkdocs import build, nav, toc, utils, config
 from mkdocs.compat import PY2
@@ -524,6 +530,11 @@ class BuildTests(unittest.TestCase):
 #         finally:
 #             shutil.rmtree(tmp_dir)
 
+
+def tearDownModule():
+    cov.save()
+    cov.report()
+    cov.html_report()
 
 if __name__ == '__main__':
     unittest.main()

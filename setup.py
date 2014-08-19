@@ -20,7 +20,11 @@ install_requires = [
     'Markdown==2.3.1',
     'PyYAML==3.10',
     'watchdog==0.7.0',
-    'ghp-import==0.4.1'
+    'ghp-import==0.4.1',
+]
+tests_require = [
+    'coverage==3.7.1',
+    'flake8==2.1.0',
 ]
 
 long_description = """Work in progress."""
@@ -81,6 +85,8 @@ setup(
     package_data=get_package_data(package),
     install_requires=install_requires,
     scripts=['mkdocs/mkdocs'],
+    tests_require=tests_require,
+    test_suite="mkdocs.test",
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
@@ -91,5 +97,5 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
         'Topic :: Internet :: WWW/HTTP',
-    ]
+    ],
 )
