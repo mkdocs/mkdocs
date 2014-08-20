@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-set -e
-
-coverage run --source=mkdocs mkdocs/test.py $@
-flake8 mkdocs --ignore=E128,E501 --exclude=__init__.py,compat.py
-echo
-coverage report
