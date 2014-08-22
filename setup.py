@@ -16,11 +16,11 @@ author = 'Tom Christie'
 author_email = 'tom@tomchristie.com'
 license = 'BSD'
 install_requires = [
-    'Jinja2==2.7.1',
-    'Markdown==2.3.1',
-    'PyYAML==3.10',
-    'watchdog==0.7.0',
-    'ghp-import==0.4.1'
+    'Jinja2>=2.7.1',
+    'Markdown>=2.3.1,<2.5',
+    'PyYAML>=3.10',
+    'watchdog>=0.7.0',
+    'ghp-import>=0.4.1'
 ]
 
 long_description = """Work in progress."""
