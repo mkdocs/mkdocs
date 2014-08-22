@@ -30,6 +30,9 @@ def main(cmd, args, options=None):
     elif cmd == 'build':
         config = load_config(options=options)
         build(config)
+    elif cmd == 'json':
+        config = load_config(options=options)
+        build(config, dump_json=True)
     elif cmd == 'gh-deploy':
         config = load_config(options=options)
         build(config)

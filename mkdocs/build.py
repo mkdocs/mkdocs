@@ -7,6 +7,7 @@ import jinja2
 import markdown
 import os
 import re
+import json
 
 
 class PathToURL(object):
@@ -148,7 +149,7 @@ def get_context(page, content, nav, toc, meta, config):
     }
 
 
-def build_pages(config):
+def build_pages(config, dump_json=True):
     """
     Builds all the pages and writes them into the build directory.
     """
@@ -185,15 +186,27 @@ def build_pages(config):
 
         # Write the output file.
         output_path = os.path.join(config['site_dir'], page.output_path)
-        utils.write_file(output_content.encode('utf-8'), output_path)
+        if dump_json:
+            json_context = {
+                'content': context['content'],
+                'title': context['current_page'].title,
+                'url': context['current_page'].abs_url,
+                'language': 'en',
+            }
+            utils.write_file(json.dumps(json_context, indent=4).encode('utf-8'), output_path.replace('.html', '.json'))
+        else:
+            utils.write_file(output_content.encode('utf-8'), output_path)
 
 
-def build(config, live_server=False):
+def build(config, live_server=False, dump_json=False):
     """
     Perform a full site build.
     """
     if not live_server:
         print("Building documentation to directory: %s" % config['site_dir'])
-    utils.copy_media_files(config['theme_dir'], config['site_dir'])
-    utils.copy_media_files(config['docs_dir'], config['site_dir'])
-    build_pages(config)
+    if dump_json:
+        build_pages(config, dump_json=True)
+    else:
+        utils.copy_media_files(config['theme_dir'], config['site_dir'])
+        utils.copy_media_files(config['docs_dir'], config['site_dir'])
+        build_pages(config)
