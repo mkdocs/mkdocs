@@ -1,6 +1,7 @@
 site/
 env/
 dist/
+build/
 htmlcov/
 .tox/
 mkdocs.egg-info/

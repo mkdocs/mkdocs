@@ -4,6 +4,7 @@ body {
 
 ul.nav li.main {
     font-weight: bold;
+    font-size: 120%;
 }
 
 div.col-md-3 {
@@ -54,7 +55,7 @@ div.source-links {
 .bs-sidebar .nav > .active:focus > a {
     font-weight: bold;
     background-color: transparent;
-    border-right: 1px solid;
+    border-right: 6px solid;
 }
 
 /* Nav: second level (shown on .active) */
