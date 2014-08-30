@@ -25,16 +25,20 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ nav_item.title }} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                     {% for nav_item in nav_item.children %}
+                        {% if not nav_item.is_hidden %}
                         <li {% if nav_item.active %}class="active"{% endif %}>
                             <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
                         </li>
+                        {% endif %}
                     {% endfor %}
                     </ul>
                 </li>
             {% else %}
+                {% if not nav_item.is_hidden %}
                 <li {% if nav_item.active %}class="active"{% endif %}>
                     <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
                 </li>
+                {% endif %}
             {% endif %}
             {% endfor %}
             </ul>

@@ -120,11 +120,12 @@ class FileContext(object):
 
 
 class Page(object):
-    def __init__(self, title, url, path, url_context):
+    def __init__(self, title, url, path, url_context, is_hidden):
         self.title = title
         self.abs_url = url
         self.active = False
         self.url_context = url_context
+        self.is_hidden = is_hidden
 
         # Relative paths to the input markdown file and output html file.
         self.input_path = path
@@ -188,10 +189,10 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
         if isinstance(config_line, str):
             path = config_line
             title, child_title = None, None
-        elif len(config_line) in (1, 2, 3):
+        elif len(config_line) in (1, 2, 3, 4):
             # Pad any items that don't exist with 'None'
-            padded_config = (list(config_line) + [None, None])[:3]
-            path, title, child_title = padded_config
+            padded_config = (list(config_line) + [None, None])[:4]
+            path, title, child_title, is_hidden = padded_config
         else:
             msg = (
                 "Line in 'page' config contained %d items.  "
@@ -210,18 +211,18 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
 
         if not child_title:
             # New top level page.
-            page = Page(title=title, url=url, path=path, url_context=url_context)
+            page = Page(title=title, url=url, path=path, url_context=url_context, is_hidden=is_hidden)
             if not utils.is_homepage(path):
                 nav_items.append(page)
         elif not nav_items or (nav_items[-1].title != title):
             # New second level page.
-            page = Page(title=child_title, url=url, path=path, url_context=url_context)
+            page = Page(title=child_title, url=url, path=path, url_context=url_context, is_hidden=is_hidden)
             header = Header(title=title, children=[page])
             nav_items.append(header)
             page.ancestors = [header]
         else:
             # Additional second level page.
-            page = Page(title=child_title, url=url, path=path, url_context=url_context)
+            page = Page(title=child_title, url=url, path=path, url_context=url_context, is_hidden=is_hidden)
             header = nav_items[-1]
             header.children.append(page)
             page.ancestors = [header]
