@@ -23,29 +23,38 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
 
-        {% if config.theme_center_lead %}
         <style>
-            div.col-md-9 h1:first-of-type {
+            .homepage h1:first-of-type, .homepage h2:first-of-type {
                 text-align: center;
-                font-size: 60px;
-                font-weight: 300;
             }
 
-            div.col-md-9 p:first-of-type {
+            .homepage pp:first-of-type, .footer {
                 text-align: center;
             }
         </style>
-        {% endif %}
     </head>
 
-    <body>
+    <body{% if current_page.is_homepage %} class="homepage"{% endif %}>
 
         {% include "nav.html" %}
 
         <div class="container">
-            <div class="col-md-3">{% include "toc.html" %}</div>
-            <div class="col-md-9" role="main">{% include "content.html" %}</div>
+          {% if current_page.is_homepage %}
+          {% include "content.html" %}
+          {% else %}
+          <div class="col-md-3">{% include "toc.html" %}</div>
+          <div class="col-md-9" role="main">{% include "content.html" %}</div>
+          {% endif %}
         </div>
+
+        <footer class="footer">
+            <hr>
+            <p>
+              Copyright 2011-2014, jpush.cn, All Rights Reserved. <br />
+              粤ICP备12056275号-2
+            </p>
+        </footer>
+
 
         {% if include_search %}{% include "search.html" %}{% endif %}
 
