@@ -103,11 +103,9 @@ def get_context(page, content, nav, toc, meta, config):
     else:
         site_favicon = None
 
-    if config['extra_javascript']:
-        config['extra_javascript'] = utils.create_media_urls(nav=nav, url_list=config['extra_javascript'])
+    extra_javascript = utils.create_media_urls(nav=nav, url_list=config['extra_javascript'])
 
-    if config['extra_css']:
-        config['extra_css'] = utils.create_media_urls(nav=nav, url_list=config['extra_css'])
+    extra_css = utils.create_media_urls(nav=nav, url_list=config['extra_css'])
 
     return {
         'site_name': site_name,
@@ -138,8 +136,8 @@ def get_context(page, content, nav, toc, meta, config):
         'repo_url': config['repo_url'],
         'repo_name': config['repo_name'],
 
-        'extra_css': config['extra_css'],
-        'extra_javascript': config['extra_javascript'],
+        'extra_css': extra_css,
+        'extra_javascript': extra_javascript,
 
         'include_nav': config['include_nav'],
         'include_next_prev': config['include_next_prev'],
