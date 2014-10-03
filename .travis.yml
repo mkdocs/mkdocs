@@ -1,19 +1,16 @@
 language: python
-
-python:
-    - "2.6"
-    - "2.7"
-    - "3.3"
-    - "3.4"
-
+python: "2.7"
+env:
+- TOX_ENV=py26
+- TOX_ENV=py27
+- TOX_ENV=py33
+- TOX_ENV=py34
+- TOX_ENV=flake8
+- TOX_ENV=docs
+- TOX_ENV=coverage
 install:
-    - pip install -r requirements.txt
-    - pip install coverage==3.6
-    - pip install python-coveralls==2.4.0
-    - export PYTHONPATH=.
-
-before_script: coverage erase
-
-script: ./runtests
-
-after_success: coverage report; coveralls
+- pip install tox
+script: "./.travis.sh"
+matrix:
+  allow_failures:
+    - env: TOXENV=coverage
