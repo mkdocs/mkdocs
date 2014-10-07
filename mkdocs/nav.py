@@ -33,6 +33,7 @@ class SiteNavigation(object):
         self.nav_items, self.pages = \
             _generate_site_navigation(pages_config, self.url_context, use_directory_urls)
         self.homepage = self.pages[0] if self.pages else None
+        self.use_directory_urls = use_directory_urls
 
     def __str__(self):
         return str(self.homepage) + ''.join([str(item) for item in self])
@@ -91,6 +92,12 @@ class URLContext(object):
         given the context of the current page.
         """
         suffix = '/' if (url.endswith('/') and len(url) > 1) else ''
+        # Workaround for bug on `posixpath.relpath()` in Python 2.6
+        if self.base_path == '/':
+            if url == '/':
+                # Workaround for static assets
+                return '.'
+            return url.lstrip('/')
         return posixpath.relpath(url, start=self.base_path) + suffix
 
 
