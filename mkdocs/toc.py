@@ -95,7 +95,8 @@ def _parse_html_table_of_contents(html):
             if line.endswith('<ul>'):
                 parents.append(nav)
         elif line.startswith('</ul>'):
-            parents.pop()
+            if parents:
+                parents.pop()
 
     # For the table of contents, always mark the first element as active
     if ret:
