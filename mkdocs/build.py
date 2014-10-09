@@ -149,7 +149,7 @@ def get_context(page, content, nav, toc, meta, config):
     }
 
 
-def build_pages(config, dump_json=True):
+def build_pages(config, dump_json=False):
     """
     Builds all the pages and writes them into the build directory.
     """
