@@ -40,7 +40,7 @@ def main(cmd, args, options=None):
     elif cmd == 'new':
         new(args, options)
     else:
-        print('mkdocs [help|new|build|serve|gh-deploy] {options}')
+        print('mkdocs [help|new|build|serve|gh-deploy|json] {options}')
 
 
 def run_main():
