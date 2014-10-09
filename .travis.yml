@@ -7,6 +7,7 @@ env:
 - TOX_ENV=py34
 - TOX_ENV=flake8
 - TOX_ENV=docs
+- TOX_ENV=json
 - TOX_ENV=coverage
 install:
 - pip install tox
