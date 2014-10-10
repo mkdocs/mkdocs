@@ -11,18 +11,21 @@ import json
 
 
 class PathToURL(object):
-    def __init__(self, nav=None):
+    def __init__(self, template, nav=None):
+        self.template = template
         self.nav = nav
 
     def __call__(self, match):
         url = match.groups()[0]
         scheme, netloc, path, query, query, fragment = urlparse(url)
 
-        if (scheme or netloc or not utils.is_markdown_file(path)):
+        if scheme or netloc:
             # Ignore URLs unless they are a relative link to a markdown file.
-            return 'a href="%s"' % url
+            return self.template % url
 
-        if self.nav:
+        if self.nav and not utils.is_markdown_file(path):
+            path = utils.create_media_urls(self.nav, [path])[0]
+        elif self.nav:
             # If the site navigation has been provided, then validate
             # the internal hyperlink, making sure the target actually exists.
             target_file = self.nav.file_context.make_absolute(path)
@@ -40,7 +43,7 @@ class PathToURL(object):
 
         # Convert the .md hyperlink to a relative hyperlink to the HTML page.
         url = urlunparse((scheme, netloc, path, query, query, fragment))
-        return 'a href="%s"' % url
+        return self.template % url
 
 
 def convert_markdown(markdown_source, extensions=()):
@@ -73,8 +76,15 @@ def convert_markdown(markdown_source, extensions=()):
 
 
 def post_process_html(html_content, nav=None):
-    html_content = re.sub(r'a href="([^"]*)"', PathToURL(nav), html_content)
-    html_content = re.sub('<pre>', '<pre class="prettyprint well">', html_content)
+
+    anchor_sub = PathToURL('a href="%s"', nav)
+    html_content = re.sub(r'a href="([^"]*)"', anchor_sub, html_content)
+
+    img_sub = PathToURL('src="%s"', nav)
+    html_content = re.sub(r'src="([^"]*)"', img_sub, html_content)
+
+    html_content = html_content.replace('<pre>', '<pre class="prettyprint well">')
+
     return html_content
 
 

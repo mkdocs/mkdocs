@@ -14,6 +14,9 @@ if PY2:
     import SocketServer
     socketserver = SocketServer
 
+    import itertools
+    zip = itertools.izip
+
     text_type = unicode
     binary_type = str
     string_types = (str, unicode)
@@ -27,6 +30,8 @@ else:  # PY3
     httpserver = httpserver
     import socketserver
     socketserver = socketserver
+
+    zip = zip
 
     text_type = str
     binary_type = bytes

@@ -3,7 +3,7 @@
 
 
 from mkdocs import build, nav, toc, utils, config
-from mkdocs.compat import PY2
+from mkdocs.compat import PY2, zip
 import markdown
 import os
 import shutil
@@ -430,6 +430,26 @@ class BuildTests(unittest.TestCase):
         html, toc, meta = build.convert_markdown(md_text)
         html = build.post_process_html(html)
         self.assertEqual(html.strip(), expected.strip())
+
+    def test_convert_internal_media(self):
+        pages = [
+            ('index.md',),
+            ('internal.md',),
+            ('sub/internal.md')
+        ]
+
+        site_navigation = nav.SiteNavigation(pages)
+
+        expected_results = (
+            '<p><img alt="The initial MkDocs layout" src="./img/initial-layout.png" /></p>',
+            '<p><img alt="The initial MkDocs layout" src="../img/initial-layout.png" /></p>',
+            '<p><img alt="The initial MkDocs layout" src="../../img/initial-layout.png" /></p>',
+        )
+
+        for (page, expected) in zip(site_navigation.walk_pages(), expected_results):
+            html = '<p><img alt="The initial MkDocs layout" src="img/initial-layout.png" /></p>'
+            html = build.post_process_html(html, site_navigation)
+            self.assertEqual(html, expected)
 
     def test_ignore_external_link(self):
         md_text = 'An [external link](http://example.com/external.md).'
