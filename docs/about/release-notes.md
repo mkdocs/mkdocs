@@ -20,6 +20,10 @@ You can determine your currently installed version using `pip freeze`:
   `mardown_extensions`. (#74)
 * Added `mkdocs json` command to output your rendered
   documentation as json files. (#128)
+* Support multiple theme directories to allow replacement of
+  individual templates rather than copying the full theme. (#129)
+* Bugfix: Fix issue rendering the table of contents with some
+  configs. (#146)
 * Bugfix: Fix path for embeded images in sub pages. (#138)
 * Bugfix: Fix `use_directory_urls` config behaviour. (#63)
 * Bugfix: Add support for `extra_javascript` and `extra_css` in
