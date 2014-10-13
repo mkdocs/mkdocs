@@ -52,6 +52,10 @@ DEFAULT_CONFIG = {
 
     # PyMarkdown extension names.
     'markdown_extensions': (),
+    
+    # Remove the content of site_dir to remove old files which dropped out 
+    # of the documentation
+    'clear_site_dir': False, 
 
     # Determine if the site should generate a json search index and include
     # search elements in the theme. - TODO
