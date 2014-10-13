@@ -4,7 +4,7 @@
 
 ## Upgrading
 
-To upgrade Django REST framework to the latest version, use pip:
+To upgrade MkDocs to the latest version, use pip:
 
     pip install -U mkdocs
 
