@@ -39,7 +39,7 @@ When set, provides a link to your GitHub or Bitbucket repository on each page.
 Set the site description. This will add a meta tag to the generated HTML header.
 **default**: `null`
 
-#### site_author 
+#### site_author
 
 Set the name of the author. This will add a meta tag to the generated HTML header.
 
@@ -72,7 +72,7 @@ Here's a simple example that would cause the build stage to create three pages:
 
 Assuming the `docs_dir` setting was left with the default value of `docs`, the source files for this site's build process would be `docs/index.md`, `docs/user-guide.md` and `docs/about.md`.
 
-If you have a lot of project documentation you might choose to use headings to break up your site navigation by category.  You can do so by including an extra string in the page configuration for any pages that require a navigation heading, like so: 
+If you have a lot of project documentation you might choose to use headings to break up your site navigation by category.  You can do so by including an extra string in the page configuration for any pages that require a navigation heading, like so:
 
     pages:
     - ['index.md', 'Introduction']
@@ -108,7 +108,7 @@ You would include the following setting to use the custom theme directory:
 
     theme_dir: 'custom_theme'
 
-If used, then this setting overrides any `theme` configuration value.
+If used in combination with the `theme` configuration value a custom theme can be used to replace only specific parts of a themes templates. For example, with the above layout and if you set your `theme: mkdocs` then the base.html file would replace that in the theme but otherwise it would remain the same. This is useful if you want to make small adjustments to an existing theme.
 
 **default**: `null`
 
