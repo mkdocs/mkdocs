@@ -45,7 +45,7 @@ def clear_directory(directory):
             else:
                 os.unlink(path)
         except Exception as e:
-            print e
+            print(e)
 
 
 def copy_media_files(from_dir, to_dir):
