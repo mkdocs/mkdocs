@@ -44,7 +44,7 @@ def clear_directory(directory):
                 shutil.rmtree(path, True)
             else:
                 os.unlink(path)
-        except Exception, e:
+        except Exception as e:
             print e
 
 
