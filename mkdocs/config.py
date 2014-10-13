@@ -121,9 +121,13 @@ def validate_config(user_config):
     if config['extra_javascript'] is None:
         config['extra_javascript'] = extra_javascript
 
-    if config['theme_dir'] is None:
-        package_dir = os.path.dirname(__file__)
-        config['theme_dir'] = os.path.join(package_dir, 'themes', config['theme'])
+    package_dir = os.path.dirname(__file__)
+    theme_dir = [os.path.join(package_dir, 'themes', config['theme'])]
+
+    if config['theme_dir'] is not None:
+        theme_dir.insert(0, config['theme_dir'])
+
+    config['theme_dir'] = theme_dir
 
     if config['repo_url'] is not None and config['repo_name'] is None:
         repo_host = urlparse(config['repo_url']).netloc.lower()
