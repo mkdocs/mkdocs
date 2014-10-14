@@ -212,14 +212,14 @@ def build(config, live_server=False, dump_json=False):
     """
     Perform a full site build.
     """
+    # Clear site_dir to remove old files which dropped out of the documentation
+    utils.clear_directory(config['site_dir'])
+
     if not live_server:
         print("Building documentation to directory: %s" % config['site_dir'])
     if dump_json:
         build_pages(config, dump_json=True)
     else:
-        # Clear site_dir to remove old files which dropped out of the documentation
-        utils.clear_directory(config['site_dir'])
-
         for theme_dir in config['theme_dir']:
             utils.copy_media_files(theme_dir, config['site_dir'])
         utils.copy_media_files(config['docs_dir'], config['site_dir'])
