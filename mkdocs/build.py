@@ -217,8 +217,9 @@ def build(config, live_server=False, dump_json=False):
     if dump_json:
         build_pages(config, dump_json=True)
     else:
-        if config['clear_site_dir']:
-            utils.clear_directory(config['site_dir'])
+        # Clear site_dir to remove old files which dropped out of the documentation
+        utils.clear_directory(config['site_dir'])
+
         for theme_dir in config['theme_dir']:
             utils.copy_media_files(theme_dir, config['site_dir'])
         utils.copy_media_files(config['docs_dir'], config['site_dir'])
