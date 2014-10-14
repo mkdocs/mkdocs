@@ -37,15 +37,16 @@ def clear_directory(directory):
     """
     Remove the content of a directory recursively but not the directory itself.
     """
-    for entry in os.listdir(directory):
-        path = os.path.join(directory, entry)
-        try:
-            if os.path.isdir(path):
-                shutil.rmtree(path, True)
-            else:
-                os.unlink(path)
-        except Exception as e:
-            print(e)
+    if os.path.exists(directory):
+        for entry in os.listdir(directory):
+            path = os.path.join(directory, entry)
+            try:
+                if os.path.isdir(path):
+                    shutil.rmtree(path, True)
+                else:
+                    os.unlink(path)
+            except Exception as e:
+                print(e)
 
 
 def copy_media_files(from_dir, to_dir):
