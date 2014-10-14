@@ -26,7 +26,7 @@ There's a stack of good looking themes included by default. Choose from bootstra
 
 #### Preview your site as you work.
 
-The built-in devserver allows you to preview your documentation as your writing it. It will even auto-reload whenever you save any changes, so all you need to do to see your latest edits is refresh your browser.
+The built-in devserver allows you to preview your documentation as you're writing it. It will even auto-reload whenever you save any changes, so all you need to do to see your latest edits is refresh your browser.
 
 #### Easy to customize.
 
