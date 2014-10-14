@@ -40,13 +40,10 @@ def clear_directory(directory):
     if os.path.exists(directory):
         for entry in os.listdir(directory):
             path = os.path.join(directory, entry)
-            try:
-                if os.path.isdir(path):
-                    shutil.rmtree(path, True)
-                else:
-                    os.unlink(path)
-            except Exception as e:
-                print(e)
+            if os.path.isdir(path):
+                shutil.rmtree(path, True)
+            else:
+                os.unlink(path)
 
 
 def copy_media_files(from_dir, to_dir):
