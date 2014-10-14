@@ -39,7 +39,7 @@ When set, provides a link to your GitHub or Bitbucket repository on each page.
 Set the site description. This will add a meta tag to the generated HTML header.
 **default**: `null`
 
-#### site_author 
+#### site_author
 
 Set the name of the author. This will add a meta tag to the generated HTML header.
 
@@ -72,7 +72,7 @@ Here's a simple example that would cause the build stage to create three pages:
 
 Assuming the `docs_dir` setting was left with the default value of `docs`, the source files for this site's build process would be `docs/index.md`, `docs/user-guide.md` and `docs/about.md`.
 
-If you have a lot of project documentation you might choose to use headings to break up your site navigation by category.  You can do so by including an extra string in the page configuration for any pages that require a navigation heading, like so: 
+If you have a lot of project documentation you might choose to use headings to break up your site navigation by category.  You can do so by including an extra string in the page configuration for any pages that require a navigation heading, like so:
 
     pages:
     - ['index.md', 'Introduction']
@@ -108,7 +108,7 @@ You would include the following setting to use the custom theme directory:
 
     theme_dir: 'custom_theme'
 
-If used, then this setting overrides any `theme` configuration value.
+If used in combination with the `theme` configuration value a custom theme can be used to replace only specific parts of a themes templates. For example, with the above layout and if you set your `theme: mkdocs` then the base.html file would replace that in the theme but otherwise it would remain the same. This is useful if you want to make small adjustments to an existing theme.
 
 **default**: `null`
 
@@ -139,15 +139,15 @@ If you're using another source code control you'll want to check its documentati
 
 #### include_search
 
-Mea et graeci persecuti, sit possit neglegentur ex. Nam modus maluisset id. Praesent laboramus expetendis an vis. Mea scripta eleifend et. Ex zril quidam facilis nec, eu inani errem expetendis eum. Falli electram periculis te ius, sed nihil saperet cu. Possit quodsi cu sea, usu ei saperet lobortis adolescens.
+TODO
 
 #### include_404
 
-Lorem ipsum dolor sit amet, ex usu velit harum dignissim. Graeco saperet tibique ea mea. Mel vocent veritus assentior ne, ponderum dissentiunt nec eu. No civibus commune duo, nec in mollis regione eruditi, nec feugiat accumsan interesset te. Natum accusam legendos sea no, te eam libris tamquam, ius fabulas vocibus rationibus ad. Eum ex sonet nostrum argumentum, mel persius cotidieque repudiandae in, cum legendos patrioque in.
+TODO
 
 #### include_sitemap
 
-Consul percipitur usu an, no dico facer inermis cum. Eum ea mentitum accommodare. An sea periculis euripidis, dicant minimum patrioque at vis. Justo atomorum abhorreant vel in. Eos agam intellegam disputando at, zril consul nostrud ut eum.
+TODO
 -->
 
 ## Preview controls
@@ -179,14 +179,6 @@ As with all settings, you can set this from the command line, which can be usful
     mkdocs serve --dev-addr=0.0.0.0:80  # Run on port 80, accessible over the local network.
 
 **default**: `'127.0.0.1:8000'`
-
-<!--
-## Other configuration
-
-Vel at magna falli fierent. Clita putant nam no, cu per eros possit omnium, dicit pertinacia consetetur at has. Nam quis delenit cu, at vix consul expetendis, mucius mediocrem reprimique te mel. Ex vim quem oratio cotidieque, periculis iracundia at his, his omnium consulatu ei.
-
-No sale minim definiebas vis. An quem utinam eam, est et consul patrioque maiestatis. Vel id decore periculis eloquentiam. Eu vim graeco causae, nec ut dicta graecis delicatissimi. Ne quod etiam salutandi vix, est stet veritus ne. Modus corrumpit usu ea, pri et dicam dignissim, quo ea sumo essent interesset.
--->
 
 ## Formatting options
 

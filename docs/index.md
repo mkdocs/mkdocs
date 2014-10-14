@@ -47,6 +47,8 @@ In order to install MkDocs you'll need [Python][python] installed on your system
     $ pip --version
     pip 1.5.2
 
+MkDocs supports Python 2.6, 2.7, 3.3 and 3.4.
+
 Install the `mkdocs` package using pip:
 
     $ pip install mkdocs
