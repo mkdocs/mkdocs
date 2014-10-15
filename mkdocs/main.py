@@ -29,7 +29,10 @@ def main(cmd, args, options=None):
         serve(config, options=options)
     elif cmd == 'build':
         config = load_config(options=options)
-        build(config)
+        if 'clean' in options:
+            build(config, clean_site_dir=True)
+        else:
+            build(config)
     elif cmd == 'json':
         config = load_config(options=options)
         build(config, dump_json=True)
