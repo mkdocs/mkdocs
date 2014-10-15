@@ -33,7 +33,7 @@ def write_file(content, output_path):
     open(output_path, 'wb').write(content)
 
 
-def clear_directory(directory):
+def clean_directory(directory):
     """
     Remove the content of a directory recursively but not the directory itself.
     """
