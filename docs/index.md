@@ -26,7 +26,7 @@ There's a stack of good looking themes included by default. Choose from bootstra
 
 #### Preview your site as you work.
 
-The built-in devserver allows you to preview your documentation as your writing it. It will even auto-reload whenever you save any changes, so all you need to do to see your latest edits is refresh your browser.
+The built-in devserver allows you to preview your documentation as you're writing it. It will even auto-reload whenever you save any changes, so all you need to do to see your latest edits is refresh your browser.
 
 #### Easy to customize.
 
@@ -46,6 +46,8 @@ In order to install MkDocs you'll need [Python][python] installed on your system
     Python 2.7.2
     $ pip --version
     pip 1.5.2
+
+MkDocs supports Python 2.6, 2.7, 3.3 and 3.4.
 
 Install the `mkdocs` package using pip:
 
