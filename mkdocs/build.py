@@ -213,6 +213,7 @@ def build(config, live_server=False, dump_json=False, clean_site_dir=False):
     Perform a full site build.
     """
     if clean_site_dir:
+        print("Cleaning site directory")
         utils.clean_directory(config['site_dir'])
     if not live_server:
         print("Building documentation to directory: %s" % config['site_dir'])
