@@ -144,6 +144,10 @@ If you're using source code control such as `git` you probably don't want to che
 
 If you're using another source code control you'll want to check it's documentation on how to ignore specific directories.
 
+After some time, files may be removed from the documentation but they will still reside in the `site` directory. To remove those stale files, just run mkdocs with the `--clean` switch.
+
+    $ mkdocs build --clean
+
 ## Deploying
 
 The documentation site that we've just built only uses static files so you'll be able to host it from pretty much anywhere. [GitHub project pages](https://help.github.com/articles/creating-project-pages-manually) and [Amazon S3](http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html) are good hosting options. Upload the contents of the entire `site` directory to wherever you're hosting your website from and you're done.

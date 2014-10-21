@@ -33,6 +33,19 @@ def write_file(content, output_path):
     open(output_path, 'wb').write(content)
 
 
+def clean_directory(directory):
+    """
+    Remove the content of a directory recursively but not the directory itself.
+    """
+    if os.path.exists(directory):
+        for entry in os.listdir(directory):
+            path = os.path.join(directory, entry)
+            if os.path.isdir(path):
+                shutil.rmtree(path, True)
+            else:
+                os.unlink(path)
+
+
 def copy_media_files(from_dir, to_dir):
     """
     Recursively copy all files except markdown and HTML into another directory.
