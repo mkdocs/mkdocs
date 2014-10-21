@@ -14,6 +14,11 @@
   <link href="{{ path }}" rel="stylesheet">
   {%- endfor %}
 
+  <link rel="stylesheet" href="{{ base_url }}/css/github.css">
+  <script type="text/javascript" src="{{ base_url }}/js/highlight.pack.js"></script>
+  <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
   {%- for path in extra_javascript %}
   <script src="{{ path }}"></script>
@@ -68,9 +73,9 @@
 
 <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
-      <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
-      <span><a href="" style="color: #fcfcfc;">&laquo; Previous</a></span>
-      <span style="margin-left: 15px"><a href="" style="color: #fcfcfc">Next &raquo;</a></span>
+      <a href="{{ repo_url }}" target="about:blank" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      <span><a href="{{ previous_page.url }}" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      <span style="margin-left: 15px"><a href="{{ next_page.url }}" style="color: #fcfcfc">Next &raquo;</a></span>
     </span>
 </div>
 </body>
