@@ -24,21 +24,19 @@ def main(cmd, args, options=None):
     """
     Build the documentation, and optionally start the devserver.
     """
+    clean_site_dir = 'clean' in options
     if cmd == 'serve':
         config = load_config(options=options)
         serve(config, options=options)
     elif cmd == 'build':
         config = load_config(options=options)
-        if 'clean' in options:
-            build(config, clean_site_dir=True)
-        else:
-            build(config)
+        build(config, clean_site_dir=clean_site_dir)
     elif cmd == 'json':
         config = load_config(options=options)
-        build(config, dump_json=True)
+        build(config, dump_json=True, clean_site_dir=clean_site_dir)
     elif cmd == 'gh-deploy':
         config = load_config(options=options)
-        build(config)
+        build(config, clean_site_dir=clean_site_dir)
         gh_deploy(config)
     elif cmd == 'new':
         new(args, options)
