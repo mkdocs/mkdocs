@@ -20,6 +20,8 @@ You can determine your currently installed version using `pip freeze`:
   `mardown_extensions`. (#74)
 * Added `mkdocs json` command to output your rendered
   documentation as json files. (#128)
+* Added `--clean` switch to `build`, `json` and `gh-deploy` commands to
+  remove stale files from the output directory (#157)
 * Support multiple theme directories to allow replacement of
   individual templates rather than copying the full theme. (#129)
 * Bugfix: Fix issue rendering the table of contents with some
