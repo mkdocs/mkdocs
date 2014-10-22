@@ -223,7 +223,7 @@ def build(config, live_server=False, dump_json=False, clean_site_dir=False):
     if dump_json:
         build_pages(config, dump_json=True)
     else:
-        for theme_dir in config['theme_dir']:
+        for theme_dir in reversed(config['theme_dir']):
             utils.copy_media_files(theme_dir, config['site_dir'])
         utils.copy_media_files(config['docs_dir'], config['site_dir'])
         build_pages(config)
