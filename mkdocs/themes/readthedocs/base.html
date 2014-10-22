@@ -14,7 +14,9 @@
   <link href="{{ path }}" rel="stylesheet">
   {%- endfor %}
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+  <script src="{{ base_url }}/js/theme.js"></script>
   {%- for path in extra_javascript %}
   <script src="{{ path }}"></script>
   {%- endfor %}
@@ -68,7 +70,11 @@
 
 <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
-      <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+        {% if repo_name == 'GitHub' %}
+            <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+        {% elif repo_name == 'Bitbucket' %}
+            <a class="icon icon-bitbucket" style="float: left; color: #fcfcfc"> BitBucket</a>
+        {% endif %}
       <span><a href="" style="color: #fcfcfc;">&laquo; Previous</a></span>
       <span style="margin-left: 15px"><a href="" style="color: #fcfcfc">Next &raquo;</a></span>
     </span>
