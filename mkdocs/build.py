@@ -223,6 +223,9 @@ def build(config, live_server=False, dump_json=False, clean_site_dir=False):
     if dump_json:
         build_pages(config, dump_json=True)
     else:
+        # Reversed as we want to take the media files from the builtin theme
+        # and then from the custom theme_dir so the custom versions take take
+        # precedence.
         for theme_dir in reversed(config['theme_dir']):
             utils.copy_media_files(theme_dir, config['site_dir'])
         utils.copy_media_files(config['docs_dir'], config['site_dir'])
