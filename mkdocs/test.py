@@ -21,6 +21,18 @@ def ensure_utf(string):
 
 
 class ConfigTests(unittest.TestCase):
+    def test_missing_config_file(self):
+
+        def load_missing_config():
+            options = {'config': 'bad_filename.yaml'}
+            config.load_config(options=options)
+        self.assertRaises(SystemExit, load_missing_config)
+
+    def test_missing_site_name(self):
+        def load_missing_site_name():
+            config.validate_config({})
+        self.assertRaises(SystemExit, load_missing_site_name)
+
     def test_config_option(self):
         """
         Users can explicitly set the config file using the '--config' option.
