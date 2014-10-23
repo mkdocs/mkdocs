@@ -10,7 +10,7 @@ import sys
 
 name = 'mkdocs'
 package = 'mkdocs'
-description = 'In progress.'
+description = 'Project documentation with Markdown.'
 url = 'http://www.mkdocs.org'
 author = 'Tom Christie'
 author_email = 'tom@tomchristie.com'
@@ -23,7 +23,12 @@ install_requires = [
     'ghp-import>=0.4.1'
 ]
 
-long_description = """Work in progress."""
+long_description = (
+    "MkDocs is a fast, simple and downright gorgeous static site generator "
+    "that's geared towards building project documentation. Documentation "
+    "source files are written in Markdown, and configured with a single YAML "
+    "configuration file."
+)
 
 
 def get_version(package):
