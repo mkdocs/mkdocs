@@ -4,7 +4,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% block htmltitle %}
   <title>{{ page_title }}</title>
+  {% endblock %}
 
   {# CSS #}
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
@@ -26,6 +28,7 @@
     pre, code {font-size: 100%;}
     h3, h4, h5, h6 {color: #2980b9; font-weight: 300}
   </style>
+  {%- block extrahead %} {% endblock %}
 </head>
 
 <body class="wy-body-for-nav" role="document">
@@ -62,7 +65,9 @@
               {{ content }}
             </div>
           </div>
+	  {%- block footer %} 
           {% include "footer.html" %}
+	  {% endblock %}
         </div>
       </div>
 
