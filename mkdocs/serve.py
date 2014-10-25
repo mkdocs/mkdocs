@@ -103,9 +103,13 @@ def serve(config, options=None):
     print('Running at: http://%s:%s/' % (host, port))
     print('Live reload enabled.')
     print('Hold ctrl+c to quit.')
-    server.serve_forever()
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print('Stopping server...')
 
     # Clean up
     observer.stop()
     observer.join()
     shutil.rmtree(tempdir)
+    print('Quit complete')
