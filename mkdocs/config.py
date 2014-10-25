@@ -4,9 +4,7 @@ from mkdocs import utils
 from mkdocs.compat import urlparse
 from mkdocs.exceptions import ConfigurationError
 
-import errno
 import os
-import sys
 import yaml
 
 DEFAULT_CONFIG = {
