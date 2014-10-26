@@ -9,6 +9,9 @@ import jinja2
 import json
 import markdown
 import os
+import logging
+
+log = logging.getLogger('mkdocs')
 
 
 def convert_markdown(markdown_source, site_navigation=None, extensions=(), strict=False):
@@ -159,7 +162,10 @@ def build_pages(config, dump_json=False):
     for page in site_navigation.walk_pages():
         # Read the input file
         input_path = os.path.join(config['docs_dir'], page.input_path)
-        input_content = open(input_path, 'r').read()
+        try:
+            input_content = open(input_path, 'r').read()
+        except IOError:
+            log.error('file not found: %s' % input_path)
         if PY2:
             input_content = input_content.decode('utf-8')
 
