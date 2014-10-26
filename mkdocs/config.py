@@ -4,8 +4,11 @@ from mkdocs import utils
 from mkdocs.compat import urlparse
 from mkdocs.exceptions import ConfigurationError
 
+import logging
 import os
 import yaml
+
+log = logging.getLogger(__name__)
 
 DEFAULT_CONFIG = {
     'site_name': None,
