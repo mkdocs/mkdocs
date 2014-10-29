@@ -83,6 +83,10 @@
                                 <a href="about/license/">License</a>
                             </li>
                         
+                            <li >
+                                <a href="about/release-notes/">Release Notes</a>
+                            </li>
+                        
                         </ul>
                     </li>
                 
@@ -161,25 +165,26 @@
 <h4 id="great-themes-available">Great themes available.</h4>
 <p>There's a stack of good looking themes included by default. Choose from bootstrap, readthedocs, ghostwriter, or any of the 12 bootswatch themes.</p>
 <h4 id="preview-your-site-as-you-work">Preview your site as you work.</h4>
-<p>The built-in devserver allows you to preview your documentation as your writing it. It will even auto-reload whenever you save any changes, so all you need to do to see your latest edits is refresh your browser.</p>
+<p>The built-in devserver allows you to preview your documentation as you're writing it. It will even auto-reload whenever you save any changes, so all you need to do to see your latest edits is refresh your browser.</p>
 <h4 id="easy-to-customize">Easy to customize.</h4>
 <p>Get your project documentation looking just the way you want it by customizing the theme.</p>
 <h4 id="cross-reference-your-documentation">Cross-reference your documentation.</h4>
 <p>Create richly cross-referenced documents, using the MkDocs interlinking syntax.</p>
 <hr />
 <h2 id="installation">Installation</h2>
-<p>In order to install MkDocs you'll need <a href="todo">Python</a> installed on your system, as well as the Python package manager, <a href="todo">pip</a>.  You can check if you have these already installed like so:</p>
+<p>In order to install MkDocs you'll need <a href="https://www.python.org/">Python</a> installed on your system, as well as the Python package manager, <a href="http://pip.readthedocs.org/en/latest/installing.html">pip</a>.  You can check if you have these already installed like so:</p>
 <pre class="prettyprint well"><code>$ python --version
 Python 2.7.2
 $ pip --version
 pip 1.5.2
 </code></pre>
+<p>MkDocs supports Python 2.6, 2.7, 3.3 and 3.4.</p>
 <p>Install the <code>mkdocs</code> package using pip:</p>
 <pre class="prettyprint well"><code>$ pip install mkdocs
 </code></pre>
 <p>You should now have the <code>mkdocs</code> command installed on your system.  Run <code>mkdocs help</code> to check that everything worked okay.</p>
 <pre class="prettyprint well"><code>$ mkdocs help
-mkdocs [help|new|build|serve] {options}
+mkdocs [help|new|build|serve|gh-deploy] {options}
 </code></pre>
 <hr />
 <h2 id="getting-started">Getting started</h2>
@@ -188,20 +193,20 @@ mkdocs [help|new|build|serve] {options}
 $ cd my-project
 </code></pre>
 <p>Let's take a moment to review the initial project that's been created for us.</p>
-<p><img alt="The initial MkDocs layout" src="img/initial-layout.png" /></p>
+<p><img alt="The initial MkDocs layout" src="./img/initial-layout.png" /></p>
 <p>There's a single configuration file named <code>mkdocs.yaml</code>, and a folder named <code>docs</code> that will contain our documentation source files.  Right now the <code>docs</code> folder just contains a single documentation page, named <code>index.md</code>.</p>
 <p>MkDocs comes with a built-in webserver that lets you preview your documentation as you work on it. We start the webserver by making sure we're in the same directory as the <code>mkdocs.yml</code> config file, and then running the <code>mkdocs serve</code> command:</p>
 <pre class="prettyprint well"><code>$ mkdocs serve
 Running at: http://127.0.0.1:8000/
 </code></pre>
 <p>Open up <a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a> in your browser, and you'll see the index page being displayed:</p>
-<p><img alt="The MkDocs live server" src="img/screenshot.png" /></p>
+<p><img alt="The MkDocs live server" src="./img/screenshot.png" /></p>
 <p>The webserver also supports auto-reloading, and will rebuild your documentation whenever anything in the configuration file, documentation directory or theme directory changes.</p>
 <p>Go ahead and edit the <code>docs/index.md</code> file now and save the file. Then simply hit reload in the browser and you'll see your updated documentation.</p>
 <p>Now's also a good time to edit the configuration file, <code>mkdocs.yml</code>.  Change the <code>site_name</code> setting to something else and save the file.</p>
-<p><img alt="Editing the config file" src="img/initial-config.png" /></p>
+<p><img alt="Editing the config file" src="./img/initial-config.png" /></p>
 <p>Once you hit reload in the browser you'll see your new site name take effect.</p>
-<p><img alt="The site_name setting" src="img/site-name.png" /></p>
+<p><img alt="The site_name setting" src="./img/site-name.png" /></p>
 <h2 id="adding-pages">Adding pages</h2>
 <p>Go ahead and edit the <code>doc/index.md</code> document, and change the initial heading to <code>MkLorum</code>, then reload the site in your browser, and you should see the change take effect immediately.</p>
 <p>Let's also add a second page to our documentation:</p>
@@ -223,7 +228,7 @@ pages:
 theme: readthedocs
 </code></pre>
 <p>Refresh the browser again, and you'll now see the ReadTheDocs theme being used.</p>
-<p><img alt="Screenshot" src="img/readthedocs.png" /></p>
+<p><img alt="Screenshot" src="./img/readthedocs.png" /></p>
 <h2 id="building-the-site">Building the site</h2>
 <p>That's looking good.  We're ready to deploy the first pass of our <code>MkLorum</code> documentation now.  Let's build the documentation.</p>
 <pre class="prettyprint well"><code>$ mkdocs build
@@ -237,6 +242,9 @@ about css fonts img index.html js
 <pre class="prettyprint well"><code>$ echo "site/" &gt;&gt; .gitignore
 </code></pre>
 <p>If you're using another source code control you'll want to check it's documentation on how to ignore specific directories.</p>
+<p>After some time, files may be removed from the documentation but they will still reside in the <code>site</code> directory. To remove those stale files, just run mkdocs with the <code>--clean</code> switch.</p>
+<pre class="prettyprint well"><code>$ mkdocs build --clean
+</code></pre>
 <h2 id="deploying">Deploying</h2>
 <p>The documentation site that we've just built only uses static files so you'll be able to host it from pretty much anywhere. <a href="https://help.github.com/articles/creating-project-pages-manually">GitHub project pages</a> and <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">Amazon S3</a> are good hosting options. Upload the contents of the entire <code>site</code> directory to wherever you're hosting your website from and you're done.</p>
 </div>
@@ -256,6 +264,5 @@ about css fonts img index.html js
         <script src="./js/bootstrap-3.0.3.min.js"></script>
         <script src="./js/prettify-1.0.min.js"></script>
         <script src="./js/base.js"></script>
-        
     </body>
 </html>

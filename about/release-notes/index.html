@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="http://www.mkdocs.org/about/license/">
+        <link rel="canonical" href="http://www.mkdocs.org/about/release-notes/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
-        <title>License - MkDocs</title>
+        <title>Release Notes - MkDocs</title>
 
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -79,12 +79,12 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
-                            <li class="active">
-                                <a href=".">License</a>
+                            <li >
+                                <a href="../license">License</a>
                             </li>
                         
-                            <li >
-                                <a href="../release-notes">Release Notes</a>
+                            <li class="active">
+                                <a href=".">Release Notes</a>
                             </li>
                         
                         </ul>
@@ -100,12 +100,12 @@
                 
                 
                 <li >
-                    <a rel="next" href="../../user-guide/configuration">
+                    <a rel="next" href="../license">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
-                <li >
-                    <a rel="prev" href="../release-notes">
+                <li class="disabled">
+                    <a rel="prev" >
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -130,34 +130,50 @@
             <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#license">License</a></li>
+        <li class="main active"><a href="#release-notes">Release Notes</a></li>
         
-            <li><a href="#included-projects">Included projects</a></li>
+            <li><a href="#upgrading">Upgrading</a></li>
         
-            <li><a href="#mkdocs-license">MkDocs License</a></li>
+            <li><a href="#010x-series">0.10.X series</a></li>
         
     
     </ul>
 </div></div>
             <div class="col-md-9" role="main">
 
-<h1 id="license">License</h1>
-<p>The legal stuff.</p>
+<h1 id="release-notes">Release Notes</h1>
 <hr />
-<h4 id="included-projects">Included projects</h4>
-<p>Themes used under license from the Bootstrap, ReadTheDocs, GhostWriter and Bootswatch projects.</p>
+<h2 id="upgrading">Upgrading</h2>
+<p>To upgrade MkDocs to the latest version, use pip:</p>
+<pre class="prettyprint well"><code>pip install -U mkdocs
+</code></pre>
+<p>You can determine your currently installed version using <code>pip freeze</code>:</p>
+<pre class="prettyprint well"><code>pip freeze | grep mkdocs
+</code></pre>
+<h2 id="010x-series">0.10.X series</h2>
 <ul>
-<li>Bootstrap theme - <a href="//github.com/twbs/bootstrap/blob/master/LICENSE">View license</a>.</li>
-<li>ReadTheDocs theme - <a href="//github.com/snide/sphinx_rtd_theme/blob/master/LICENSE">View license</a>.</li>
-<li>GhostWriter theme - <a href="//github.com/roryg/ghostwriter/blob/master/LICENSE.txt">View license</a>.</li>
-<li>Bootswatch theme - <a href="//github.com/thomaspark/bootswatch/blob/gh-pages/LICENSE">View license</a>.</li>
+<li>Added support for Python 3.3 and 3.4. (#103)</li>
+<li>Configurable Python-Markdown extensions with the config setting
+  <code>markdown_extensions</code>. (#74)</li>
+<li>Added <code>mkdocs json</code> command to output your rendered
+  documentation as json files. (#128)</li>
+<li>Added <code>--clean</code> switch to <code>build</code>, <code>json</code> and <code>gh-deploy</code> commands to
+  remove stale files from the output directory (#157)</li>
+<li>Support multiple theme directories to allow replacement of
+  individual templates rather than copying the full theme. (#129)</li>
+<li>Bugfix: Fix <ul> rendering in readthedocs theme. (#171)</li>
+<li>Bugfix: Improve the readthedocs theme on smaller displays. (#168)</li>
+<li>Bugfix: Relaxed required python package versions to avoid clashes. (#104)</li>
+<li>Bugfix: Fix issue rendering the table of contents with some configs. (#146)</li>
+<li>Bugfix: Fix path for embedded images in sub pages. (#138)</li>
+<li>Bugfix: Fix <code>use_directory_urls</code> config behaviour. (#63)</li>
+<li>Bugfix: Support <code>extra_javascript</code> and <code>extra_css</code> in all themes (#90)</li>
+<li>Bugfix: Fix path-handling under Windows. (#121)</li>
+<li>Bugfix: Fix the menu generation in the readthedocs theme. (#110)</li>
+<li>Bugfix: Fix the mkdocs command creation under Windows. (#122)</li>
+<li>Bugfix: Correctly handle external <code>extra_javascript</code> and <code>extra_css</code>. (#92)</li>
+<li>Bugfix: Fixed favicon support. (#87)</li>
 </ul>
-<p>Many thanks to the authors and contributors of those wonderful projects.</p>
-<h4 id="mkdocs-license">MkDocs License</h4>
-<p>Copyright © 2014, Tom Christie. All rights reserved.</p>
-<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
-<p>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</p>
-<p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
 </div>
         </div>
 
