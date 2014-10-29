@@ -194,7 +194,7 @@ $ cd my-project
 </code></pre>
 <p>Let's take a moment to review the initial project that's been created for us.</p>
 <p><img alt="The initial MkDocs layout" src="./img/initial-layout.png" /></p>
-<p>There's a single configuration file named <code>mkdocs.yaml</code>, and a folder named <code>docs</code> that will contain our documentation source files.  Right now the <code>docs</code> folder just contains a single documentation page, named <code>index.md</code>.</p>
+<p>There's a single configuration file named <code>mkdocs.yml</code>, and a folder named <code>docs</code> that will contain our documentation source files.  Right now the <code>docs</code> folder just contains a single documentation page, named <code>index.md</code>.</p>
 <p>MkDocs comes with a built-in webserver that lets you preview your documentation as you work on it. We start the webserver by making sure we're in the same directory as the <code>mkdocs.yml</code> config file, and then running the <code>mkdocs serve</code> command:</p>
 <pre class="prettyprint well"><code>$ mkdocs serve
 Running at: http://127.0.0.1:8000/
@@ -220,7 +220,7 @@ pages:
 </code></pre>
 <p>Refresh the browser and you'll now see a navigation bar with <code>Home</code> and <code>About</code> headers.</p>
 <h2 id="theming-our-documentation">Theming our documentation</h2>
-<p>While we're here can also change the configuration file to alter how the documentation is displayed.  Let's go ahead and change the theme.  Edit the <code>mkdocs.yaml</code> file to the following:</p>
+<p>While we're here can also change the configuration file to alter how the documentation is displayed.  Let's go ahead and change the theme.  Edit the <code>mkdocs.yml</code> file to the following:</p>
 <pre class="prettyprint well"><code>site_name: MkLorum
 pages:
 - [index.md, Home]
