@@ -24,7 +24,7 @@ You can determine your currently installed version using `pip freeze`:
   remove stale files from the output directory (#157)
 * Support multiple theme directories to allow replacement of
   individual templates rather than copying the full theme. (#129)
-* Bugfix: Fix <ul> rendering in readthedocs theme. (#171)
+* Bugfix: Fix `<ul>` rendering in readthedocs theme. (#171)
 * Bugfix: Improve the readthedocs theme on smaller displays. (#168)
 * Bugfix: Relaxed required python package versions to avoid clashes. (#104)
 * Bugfix: Fix issue rendering the table of contents with some configs. (#146)
