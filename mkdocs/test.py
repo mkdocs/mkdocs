@@ -71,6 +71,49 @@ class ConfigTests(unittest.TestCase):
         finally:
             shutil.rmtree(tmp_dir)
 
+    def test_include_404_html_not_found(self):
+        """
+        404.html not found in docs_dir or theme_dir
+        """
+        tmp_docs_dir = tempfile.mkdtemp()
+        conf = config.validate_config({
+            'site_name': 'Example',
+            'docs_dir': tmp_docs_dir,
+            'include_404': None
+        })
+        self.assertFalse(conf['include_404'])
+        self.assertNotIn('404_location', conf)
+
+    def test_include_404_html_found_in_docs_dir(self):
+        """
+        404.html found in docs_dir
+        """
+        tmp_docs_dir = tempfile.mkdtemp()
+        tmp_404 = open(os.path.join(tmp_docs_dir, '404.html'), 'w')
+        conf = config.validate_config({
+            'site_name': 'Example',
+            'docs_dir': tmp_docs_dir
+        })
+        self.assertTrue(conf['include_404'])
+        self.assertEqual(tmp_404.name, conf['404_location'])
+        os.remove(tmp_404.name)
+
+    def test_include_404_html_found_in_theme_dir(self):
+        """
+        404.html found in theme_dir
+        """
+        tmp_docs_dir = tempfile.mkdtemp()
+        tmp_theme_dir = tempfile.mkdtemp()
+        tmp_404 = open(os.path.join(tmp_theme_dir, '404.html'), 'w')
+        conf = config.validate_config({
+            'site_name': 'Example',
+            'docs_dir': tmp_docs_dir,
+            'theme_dir': tmp_theme_dir
+        })
+        self.assertTrue(conf['include_404'])
+        self.assertEqual(tmp_404.name, conf['404_location'])
+        os.remove(tmp_404.name)
+
 
 class UtilsTests(unittest.TestCase):
     def test_html_path(self):
