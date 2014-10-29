@@ -71,7 +71,7 @@ Let's take a moment to review the initial project that's been created for us.
 
 ![The initial MkDocs layout](img/initial-layout.png)
 
-There's a single configuration file named `mkdocs.yaml`, and a folder named `docs` that will contain our documentation source files.  Right now the `docs` folder just contains a single documentation page, named `index.md`.
+There's a single configuration file named `mkdocs.yml`, and a folder named `docs` that will contain our documentation source files.  Right now the `docs` folder just contains a single documentation page, named `index.md`.
 
 MkDocs comes with a built-in webserver that lets you preview your documentation as you work on it. We start the webserver by making sure we're in the same directory as the `mkdocs.yml` config file, and then running the `mkdocs serve` command:
 
@@ -113,7 +113,7 @@ Refresh the browser and you'll now see a navigation bar with `Home` and `About` 
 
 ## Theming our documentation
 
-While we're here can also change the configuration file to alter how the documentation is displayed.  Let's go ahead and change the theme.  Edit the `mkdocs.yaml` file to the following:
+While we're here can also change the configuration file to alter how the documentation is displayed.  Let's go ahead and change the theme.  Edit the `mkdocs.yml` file to the following:
 
     site_name: MkLorum
     pages:
