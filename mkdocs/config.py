@@ -144,10 +144,10 @@ def validate_config(user_config):
     if config['include_nav'] is None:
         config['include_nav'] = len(config['pages']) > 1
 
-    # use 404.html if it can be found in either docs_dir or theme_dir
+    # if config is not set, use 404.html if it can be found in theme_dir
     if config['include_404'] is None:
         config['include_404'] = False
-        for d in config['theme_dir'] + [config['docs_dir']]:
+        for d in config['theme_dir']:
             if '404.html' in os.listdir(d):
                 config['include_404'] = True
                 config['404_location'] = os.path.join(d, '404.html')
