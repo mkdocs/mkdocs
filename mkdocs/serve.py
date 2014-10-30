@@ -85,6 +85,7 @@ def serve(config, options=None):
     #       can re-apply them if the config file is reloaded.
     event_handler = BuildEventHandler(options)
     config_event_handler = ConfigEventHandler(options)
+    # Use highly universal `PollingObserver`
     observer = PollingObserver()
     observer.schedule(event_handler, config['docs_dir'], recursive=True)
     for theme_dir in config['theme_dir']:
