@@ -1,7 +1,8 @@
 # coding: utf-8
 from __future__ import print_function
 
-from watchdog import events, observers
+from watchdog import events
+from watchdog.observers.polling import PollingObserver
 from mkdocs.build import build
 from mkdocs.compat import httpserver, socketserver, urlunquote
 from mkdocs.config import load_config
@@ -84,7 +85,10 @@ def serve(config, options=None):
     #       can re-apply them if the config file is reloaded.
     event_handler = BuildEventHandler(options)
     config_event_handler = ConfigEventHandler(options)
-    observer = observers.Observer()
+
+    # We could have used `Observer()`, which can be faster, but
+    # `PollingObserver()` works more universally.
+    observer = PollingObserver()
     observer.schedule(event_handler, config['docs_dir'], recursive=True)
     for theme_dir in config['theme_dir']:
         observer.schedule(event_handler, theme_dir, recursive=True)
