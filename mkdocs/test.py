@@ -82,7 +82,7 @@ class ConfigTests(unittest.TestCase):
             'include_404': None
         })
         self.assertFalse(conf['include_404'])
-        self.assertNotIn('404_location', conf)
+        self.assertFalse('404_location' in conf)
 
     def test_include_404_html_found_in_docs_dir(self):
         """
