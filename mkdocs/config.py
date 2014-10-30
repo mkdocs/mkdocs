@@ -2,9 +2,9 @@
 
 from mkdocs import utils
 from mkdocs.compat import urlparse
-import errno
+from mkdocs.exceptions import ConfigurationError
+
 import os
-import sys
 import yaml
 
 DEFAULT_CONFIG = {
@@ -76,8 +76,7 @@ def load_config(filename='mkdocs.yml', options=None):
     if 'config' in options:
         filename = options['config']
     if not os.path.exists(filename):
-        sys.stderr.write("Config file '%s' does not exist." % filename)
-        sys.exit(errno.ENOENT)
+        raise ConfigurationError("Config file '%s' does not exist." % filename)
     with open(filename, 'r') as fp:
         user_config = yaml.load(fp)
     user_config.update(options)
@@ -89,8 +88,7 @@ def validate_config(user_config):
     config.update(user_config)
 
     if not config['site_name']:
-        sys.stderr.write("Config must contain 'site_name' setting.")
-        sys.exit(errno.EINVAL)
+        raise ConfigurationError("Config must contain 'site_name' setting.")
 
     # If not specified, then the 'pages' config simply includes all
     # markdown files in the docs dir, without generating any header items

@@ -4,6 +4,7 @@
 
 from mkdocs import build, nav, toc, utils, config
 from mkdocs.compat import PY2, zip
+from mkdocs.exceptions import ConfigurationError
 import markdown
 import os
 import shutil
@@ -26,12 +27,12 @@ class ConfigTests(unittest.TestCase):
         def load_missing_config():
             options = {'config': 'bad_filename.yaml'}
             config.load_config(options=options)
-        self.assertRaises(SystemExit, load_missing_config)
+        self.assertRaises(ConfigurationError, load_missing_config)
 
     def test_missing_site_name(self):
         def load_missing_site_name():
             config.validate_config({})
-        self.assertRaises(SystemExit, load_missing_site_name)
+        self.assertRaises(ConfigurationError, load_missing_site_name)
 
     def test_config_option(self):
         """

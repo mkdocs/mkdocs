@@ -2,12 +2,14 @@
 # coding: utf-8
 from __future__ import print_function
 
+import sys
+
 from mkdocs.build import build
 from mkdocs.config import load_config
+from mkdocs.exceptions import ConfigurationError
 from mkdocs.gh_deploy import gh_deploy
 from mkdocs.new import new
 from mkdocs.serve import serve
-import sys
 
 
 def arg_to_option(arg):
@@ -53,7 +55,11 @@ def run_main():
     """
     cmd = sys.argv[1] if len(sys.argv) >= 2 else None
     opts = [arg_to_option(arg) for arg in sys.argv[2:] if arg.startswith('--')]
-    main(cmd, args=sys.argv[2:], options=dict(opts))
+    try:
+        main(cmd, args=sys.argv[2:], options=dict(opts))
+    except ConfigurationError as e:
+        print(e.args[0], file=sys.stderr)
+
 
 if __name__ == '__main__':
     run_main()
