@@ -14,10 +14,11 @@ def arg_to_option(arg):
     """
     Convert command line arguments into two-tuples of config key/value pairs.
     """
-    arg = arg.lstrip('--').replace('-', '_')
+    arg = arg.lstrip('--')
+    option = True
     if '=' in arg:
-        return arg.split('=', 1)
-    return (arg, True)
+        arg, option = arg.split('=', 1)
+    return (arg.replace('-', '_'), option)
 
 
 def main(cmd, args, options=None):
