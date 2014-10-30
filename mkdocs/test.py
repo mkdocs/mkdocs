@@ -2,7 +2,7 @@
 # coding: utf-8
 
 
-from mkdocs import build, nav, toc, utils, config
+from mkdocs import build, main, nav, toc, utils, config
 from mkdocs.compat import PY2, zip
 from mkdocs.exceptions import ConfigurationError
 import markdown
@@ -19,6 +19,25 @@ def dedent(text):
 
 def ensure_utf(string):
     return string.encode('utf-8') if PY2 else string
+
+
+class MainTests(unittest.TestCase):
+    def test_arg_to_option(self):
+        """
+        Check that we parse parameters passed to mkdocs properly
+        """
+        arg, option = main.arg_to_option('--site-dir=dir')
+        self.assertEqual('site_dir', arg)
+        self.assertEqual('dir', option)
+        arg, option = main.arg_to_option('--site-dir=dir-name')
+        self.assertEqual('site_dir', arg)
+        self.assertEqual('dir-name', option)
+        arg, option = main.arg_to_option('--site-dir=dir=name')
+        self.assertEqual('site_dir', arg)
+        self.assertEqual('dir=name', option)
+        arg, option = main.arg_to_option('--use_directory_urls')
+        self.assertEqual('use_directory_urls', arg)
+        self.assertEqual(True, option)
 
 
 class ConfigTests(unittest.TestCase):
