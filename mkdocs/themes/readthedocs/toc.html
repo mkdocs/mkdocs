@@ -1,6 +1,7 @@
 <ul class="current">
     {% for nav_item in nav %}
         {% if nav_item.children %}
+        <span class="toctree-l0">{{ nav_item.title }}</span>
             {% for nav_item in nav_item.children %}
                 <li class="toctree-l1 {% if nav_item.active%}current{%endif%}">
                     <a class="{% if nav_item.active%}current{%endif%}" href="{{ nav_item.url }}">{{ nav_item.title }}</a>
