@@ -15,7 +15,7 @@ Themes used under license from the Bootstrap, ReadTheDocs, GhostWriter and Boots
 
 Many thanks to the authors and contributors of those wonderful projects.
 
-#### MkDocs License
+#### MkDocs License (BSD)
 
 Copyright © 2014, Tom Christie. All rights reserved.
 
