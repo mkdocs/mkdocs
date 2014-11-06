@@ -83,8 +83,6 @@ def post_process_html(html_content, nav=None):
     img_sub = PathToURL('src="%s"', nav)
     html_content = re.sub(r'src="([^"]*)"', img_sub, html_content)
 
-    html_content = html_content.replace('<pre>', '<pre class="prettyprint well">')
-
     return html_content
 
 
