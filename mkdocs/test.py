@@ -94,6 +94,31 @@ class ConfigTests(unittest.TestCase):
         finally:
             shutil.rmtree(tmp_dir)
 
+    def test_include_404_html_not_found(self):
+        """
+        404.html not found in theme_dir
+        """
+        conf = config.validate_config({
+            'site_name': 'Example',
+            'include_404': None
+        })
+        self.assertFalse(conf['include_404'])
+        self.assertFalse('404_location' in conf)
+
+    def test_include_404_html_found_in_theme_dir(self):
+        """
+        404.html found in theme_dir
+        """
+        tmp_theme_dir = tempfile.mkdtemp()
+        tmp_404 = open(os.path.join(tmp_theme_dir, '404.html'), 'w')
+        conf = config.validate_config({
+            'site_name': 'Example',
+            'theme_dir': tmp_theme_dir
+        })
+        self.assertTrue(conf['include_404'])
+        self.assertEqual(tmp_404.name, conf['404_location'])
+        os.remove(tmp_404.name)
+
 
 class UtilsTests(unittest.TestCase):
     def test_html_path(self):

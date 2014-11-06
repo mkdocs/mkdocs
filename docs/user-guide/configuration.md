@@ -124,6 +124,12 @@ Lets you set the directory where the output HTML and other files are created.  T
 
 **default**: `'site'`
 
+#### include_404
+
+Determines if the site should include a `404.html` page. The default behavior is to look in `theme_dir` for a `404.html`, and if it finds it, that page will be used to render `404` pages.
+
+**default**: `null`
+
 ---
 
 **Note**: If you are using source code control you will normally want to ensure that your *build output* files are not commited into the repository, and only keep the *source* files under version control.  For example, if using `git` you might add the following line to your `.gitignore` file:
@@ -138,10 +144,6 @@ If you're using another source code control you'll want to check its documentati
 ## Extra build steps
 
 #### include_search
-
-TODO
-
-#### include_404
 
 TODO
 
