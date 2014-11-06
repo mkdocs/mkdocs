@@ -1,13 +1,14 @@
 # coding: utf-8
 from __future__ import print_function
 
+from jinja2.exceptions import TemplateNotFound
 from mkdocs import nav, toc, utils
 from mkdocs.compat import urljoin, urlparse, urlunparse, PY2
 import jinja2
+import json
 import markdown
 import os
 import re
-import json
 
 
 class PathToURL(object):
@@ -157,6 +158,17 @@ def get_context(page, content, nav, toc, meta, config):
     }
 
 
+def build_404(config, env):
+    try:
+        t404 = env.get_template('404.html')
+    except TemplateNotFound:
+        return
+
+    output_content = t404.render()
+    output_path = os.path.join(config['site_dir'], '404.html')
+    utils.write_file(output_content.encode('utf-8'), output_path)
+
+
 def build_pages(config, dump_json=False):
     """
     Builds all the pages and writes them into the build directory.
@@ -164,6 +176,8 @@ def build_pages(config, dump_json=False):
     site_navigation = nav.SiteNavigation(config['pages'], config['use_directory_urls'])
     loader = jinja2.FileSystemLoader(config['theme_dir'])
     env = jinja2.Environment(loader=loader)
+
+    build_404(config, env)
 
     for page in site_navigation.walk_pages():
         # Read the input file
