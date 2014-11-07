@@ -486,7 +486,7 @@ class BuildTests(unittest.TestCase):
             html = build.post_process_html(html, site_navigation)
             self.assertEqual(html, expected)
 
-    def test_anchor(self):
+    def test_anchor_only_link(self):
 
         pages = [
             ('index.md',),
