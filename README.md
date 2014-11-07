@@ -11,6 +11,8 @@ Background: https://groups.google.com/forum/#!topic/django-rest-framework/YJ6J3j
 
 Project roadmap: [https://github.com/tomchristie/mkdocs/wiki](https://github.com/tomchristie/mkdocs/wiki)
 
+IRC channel: #mkdocs on freenode.
+
 [travis-image]: https://travis-ci.org/tomchristie/mkdocs.png?branch=master
 [travis-link]: https://travis-ci.org/tomchristie/mkdocs
 [coveralls-image]: https://coveralls.io/repos/tomchristie/mkdocs/badge.png?branch=master
