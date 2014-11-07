@@ -486,6 +486,21 @@ class BuildTests(unittest.TestCase):
             html = build.post_process_html(html, site_navigation)
             self.assertEqual(html, expected)
 
+    def test_anchor(self):
+
+        pages = [
+            ('index.md',),
+            ('internal.md',),
+            ('sub/internal.md')
+        ]
+
+        site_navigation = nav.SiteNavigation(pages)
+
+        for page in site_navigation.walk_pages():
+            html = '<p><a href="#test"> </a></p>'
+            result = build.post_process_html(html, site_navigation)
+            self.assertEqual(result, html)
+
     def test_ignore_external_link(self):
         md_text = 'An [external link](http://example.com/external.md).'
         expected = '<p>An <a href="http://example.com/external.md">external link</a>.</p>'
