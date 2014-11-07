@@ -19,7 +19,7 @@ class PathToURL(object):
         url = match.groups()[0]
         scheme, netloc, path, query, query, fragment = urlparse(url)
 
-        if scheme or netloc:
+        if scheme or netloc or not path:
             # Ignore URLs unless they are a relative link to a markdown file.
             return self.template % url
 
