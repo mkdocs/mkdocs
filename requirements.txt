@@ -3,3 +3,4 @@ Markdown>=2.3.1,<2.5
 PyYAML>=3.10
 watchdog>=0.7.0
 ghp-import>=0.4.1
+livereload>=2.0.0
