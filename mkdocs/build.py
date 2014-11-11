@@ -204,16 +204,22 @@ def build_pages(config, dump_json=False):
         else:
             utils.write_file(output_content.encode('utf-8'), output_path)
 
-        #add search entry
-        search_index.addEntryFromContext(
+        # add search entry
+        search_index.add_entry_from_context(
             page, html_content, site_navigation,
             table_of_contents, meta, config
         )
 
-    #save search index to disk
+    # save search index to disk
     output_content = search_index.generate_search_index()
     output_path = os.path.join(config['site_dir'], 'search_content.json')
     utils.write_file(output_content.encode('utf-8'), output_path)
+
+    # save search index to disk
+    output_content = search_index.generate_search_index()
+    output_path = os.path.join(config['site_dir'], 'search_content.json')
+    utils.write_file(output_content.encode('utf-8'), output_path)
+
 
 def build(config, live_server=False, dump_json=False, clean_site_dir=False):
     """

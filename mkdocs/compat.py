@@ -5,6 +5,7 @@ import sys
 PY2 = int(sys.version[0]) == 2
 
 if PY2:
+    from HTMLParser import HTMLParser
     from urlparse import urljoin, urlparse, urlunparse
     import urllib
     urlunquote = urllib.unquote
@@ -26,6 +27,7 @@ else:  # PY3
     from urllib.parse import urljoin, urlparse, urlunparse, unquote
     urlunquote = unquote
 
+    from html.parser import HTMLParser
     import http.server as httpserver
     httpserver = httpserver
     import socketserver
