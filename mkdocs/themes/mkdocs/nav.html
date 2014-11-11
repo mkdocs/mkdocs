@@ -46,11 +46,9 @@
             {% if include_search or include_next_prev or repo_url %}
             <!-- Search, Navigation and Repo links -->
             <ul class="nav navbar-nav navbar-right">
-                {% if include_search %}
                 <li>
-                    <a href="#searchModal" data-toggle="modal"><i class="fa fa-search"></i> Search</a>
+                    <a href="/search.html"><i class="fa fa-search"></i> Search</a>
                 </li>
-                {% endif %}
                 {% if include_next_prev %}
                 <li {% if not previous_page %}class="disabled"{% endif %}>
                     <a rel="next" {% if previous_page %}href="{{ previous_page.url }}"{% endif %}>

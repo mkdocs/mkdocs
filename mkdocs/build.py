@@ -132,21 +132,24 @@ def get_page_context(page, content, nav, toc, meta, config):
         'current_page': page,
         'previous_page': page.previous_page,
         'next_page': page.next_page,
+        'include_nav': config['include_nav'],
+        'include_next_prev': config['include_next_prev'],
     }
 
 
-def build_404(config, env, site_navigation):
+def build_template(template_name, config, env, site_navigation):
 
     try:
-        template = env.get_template('404.html')
+        template = env.get_template(template_name)
     except TemplateNotFound:
-        return
+        return False
 
     global_context = get_global_context(site_navigation, config)
 
     output_content = template.render(global_context)
-    output_path = os.path.join(config['site_dir'], '404.html')
+    output_path = os.path.join(config['site_dir'], template_name)
     utils.write_file(output_content.encode('utf-8'), output_path)
+    return True
 
 
 def build_pages(config, dump_json=False):
@@ -158,7 +161,7 @@ def build_pages(config, dump_json=False):
     env = jinja2.Environment(loader=loader)
     search_index = search.SearchIndex()
 
-    build_404(config, env, site_navigation)
+    build_template('404.html', config, env, site_navigation)
 
     for page in site_navigation.walk_pages():
         # Read the input file
@@ -210,15 +213,16 @@ def build_pages(config, dump_json=False):
             table_of_contents, meta, config
         )
 
-    # save search index to disk
-    output_content = search_index.generate_search_index()
-    output_path = os.path.join(config['site_dir'], 'search_content.json')
-    utils.write_file(output_content.encode('utf-8'), output_path)
-
-    # save search index to disk
-    output_content = search_index.generate_search_index()
-    output_path = os.path.join(config['site_dir'], 'search_content.json')
-    utils.write_file(output_content.encode('utf-8'), output_path)
+    if config['include_search']:
+        # save search index to disk
+        template_built = build_template('search.html', config, env, site_navigation)
+        if not template_built:
+            print("include_search is enabled but the current theme doesn't "
+                  "support searching. Themes require a search.html template.")
+        else:
+            output_content = search_index.generate_search_index()
+            output_path = os.path.join(config['site_dir'], 'search_content.json')
+            utils.write_file(output_content.encode('utf-8'), output_path)
 
 
 def build(config, live_server=False, dump_json=False, clean_site_dir=False):

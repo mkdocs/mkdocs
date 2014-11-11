@@ -58,10 +58,6 @@ DEFAULT_CONFIG = {
     # PyMarkdown extension names.
     'markdown_extensions': (),
 
-    # Determine if the site should generate a json search index and include
-    # search elements in the theme. - TODO
-    'include_search': False,
-
     # Determine if the site should include a 404.html page.
     # TODO: Implment this. Make this None, have it True if a 404.html
     # template exists in the theme or docs dir.
@@ -70,6 +66,10 @@ DEFAULT_CONFIG = {
     # enabling strict mode causes MkDocs to stop the build when a problem is
     # encountered rather than display an error.
     'strict': False,
+
+    # Enabling search will cause MkDocs to add Tipuesearch to the build
+    # directory.
+    'include_search': True,
 }
 
 

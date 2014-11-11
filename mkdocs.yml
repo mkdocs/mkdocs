@@ -12,5 +12,6 @@ pages:
 - ['about/license.md', 'About', 'License']
 - ['about/release-notes.md', 'About', 'Release Notes']
 
+include_search: true
 copyright: Copyright &copy; 2014, <a href="https://twitter.com/_tomchristie">Tom Christie</a>.
 google_analytics: ['UA-27795084-5', 'mkdocs.org']
