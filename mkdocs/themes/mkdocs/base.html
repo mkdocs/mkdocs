@@ -39,13 +39,15 @@
         {% endif %}
     </head>
 
-    <body{% if current_page.is_homepage %} class="homepage"{% endif %}>
+    <body{% if current_page and current_page.is_homepage %} class="homepage"{% endif %}>
 
         {% include "nav.html" %}
 
         <div class="container">
-            <div class="col-md-3">{% include "toc.html" %}</div>
-            <div class="col-md-9" role="main">{% include "content.html" %}</div>
+            {% block content %}
+                <div class="col-md-3">{% include "toc.html" %}</div>
+                <div class="col-md-9" role="main">{% include "content.html" %}</div>
+            {% endblock %}
         </div>
 
         <footer class="col-md-12">
