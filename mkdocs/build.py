@@ -1,13 +1,14 @@
 # coding: utf-8
 from __future__ import print_function
 
+from jinja2.exceptions import TemplateNotFound
 from mkdocs import nav, toc, utils
 from mkdocs.compat import urljoin, urlparse, urlunparse, PY2
 import jinja2
+import json
 import markdown
 import os
 import re
-import json
 
 
 class PathToURL(object):
@@ -86,13 +87,64 @@ def post_process_html(html_content, nav=None):
     return html_content
 
 
-def get_context(page, content, nav, toc, meta, config):
+def get_global_context(nav, config):
+    """
+    Given the SiteNavigation and config, generate the context which is relevant
+    to app pages.
+    """
+
     site_name = config['site_name']
 
-    if page.is_homepage or page.title is None:
-        page_title = site_name
+    if config['site_favicon']:
+        site_favicon = nav.url_context.make_relative('/' + config['site_favicon'])
     else:
-        page_title = page.title + ' - ' + site_name
+        site_favicon = None
+
+    page_description = config['site_description']
+
+    extra_javascript = utils.create_media_urls(nav=nav, url_list=config['extra_javascript'])
+
+    extra_css = utils.create_media_urls(nav=nav, url_list=config['extra_css'])
+
+    return {
+        'site_name': site_name,
+        'site_author': config['site_author'],
+        'favicon': site_favicon,
+        'page_description': page_description,
+
+        # Note that there's intentionally repetition here. Rather than simply
+        # provide the config dictionary we instead pass everything explicitly.
+        #
+        # This helps ensure that we can throughly document the context that
+        # gets passed to themes.
+        'repo_url': config['repo_url'],
+        'repo_name': config['repo_name'],
+        'nav': nav,
+        'base_url': nav.url_context.make_relative('/'),
+        'homepage_url': nav.homepage.url,
+
+        'extra_css': extra_css,
+        'extra_javascript': extra_javascript,
+
+        'include_nav': config['include_nav'],
+        'include_next_prev': config['include_next_prev'],
+        'include_search': config['include_search'],
+
+        'copyright': config['copyright'],
+        'google-analytics': config['google-analytics']
+    }
+
+
+def get_page_context(page, content, nav, toc, meta, config):
+    """
+    Generate the page context by extending the global context and adding page
+    specific variables.
+    """
+
+    if page.is_homepage or page.title is None:
+        page_title = config['site_name']
+    else:
+        page_title = page.title + ' - ' + config['site_name']
 
     if page.is_homepage:
         page_description = config['site_description']
@@ -107,54 +159,35 @@ def get_context(page, content, nav, toc, meta, config):
     else:
         canonical_url = None
 
-    if config['site_favicon']:
-        site_favicon = nav.url_context.make_relative('/' + config['site_favicon'])
-    else:
-        site_favicon = None
-
-    extra_javascript = utils.create_media_urls(nav=nav, url_list=config['extra_javascript'])
-
-    extra_css = utils.create_media_urls(nav=nav, url_list=config['extra_css'])
-
     return {
-        'site_name': site_name,
-        'site_author': config['site_author'],
-        'favicon': site_favicon,
-
         'page_title': page_title,
         'page_description': page_description,
 
         'content': content,
         'toc': toc,
-        'nav': nav,
         'meta': meta,
 
-        'base_url': nav.url_context.make_relative('/'),
-        'homepage_url': nav.homepage.url,
+
         'canonical_url': canonical_url,
 
         'current_page': page,
         'previous_page': page.previous_page,
         'next_page': page.next_page,
-
-        # Note that there's intentionally repetition here. Rather than simply
-        # provide the config dictionary we instead pass everything explicitly.
-        #
-        # This helps ensure that we can throughly document the context that
-        # gets passed to themes.
-        'repo_url': config['repo_url'],
-        'repo_name': config['repo_name'],
-
-        'extra_css': extra_css,
-        'extra_javascript': extra_javascript,
-
-        'include_nav': config['include_nav'],
-        'include_next_prev': config['include_next_prev'],
-        'include_search': config['include_search'],
-
-        'copyright': config['copyright'],
-        'google-analytics': config['google-analytics']
     }
+
+
+def build_404(config, env, site_navigation):
+
+    try:
+        template = env.get_template('404.html')
+    except TemplateNotFound:
+        return
+
+    global_context = get_global_context(site_navigation, config)
+
+    output_content = template.render(global_context)
+    output_path = os.path.join(config['site_dir'], '404.html')
+    utils.write_file(output_content.encode('utf-8'), output_path)
 
 
 def build_pages(config, dump_json=False):
@@ -164,6 +197,8 @@ def build_pages(config, dump_json=False):
     site_navigation = nav.SiteNavigation(config['pages'], config['use_directory_urls'])
     loader = jinja2.FileSystemLoader(config['theme_dir'])
     env = jinja2.Environment(loader=loader)
+
+    build_404(config, env, site_navigation)
 
     for page in site_navigation.walk_pages():
         # Read the input file
@@ -178,10 +213,11 @@ def build_pages(config, dump_json=False):
         )
         html_content = post_process_html(html_content, site_navigation)
 
-        context = get_context(
+        context = get_global_context(site_navigation, config)
+        context.update(get_page_context(
             page, html_content, site_navigation,
             table_of_contents, meta, config
-        )
+        ))
 
         # Allow 'template:' override in md source files.
         if 'template' in meta:
