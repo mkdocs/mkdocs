@@ -1,6 +1,7 @@
 # MkDocs
 
 **Project documentation with Markdown.**
+test
 
 [![Build Status][travis-image]][travis-link]
 [![Coverage Status][coveralls-image]][coveralls-link]
