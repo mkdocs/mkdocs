@@ -159,10 +159,7 @@ def get_page_context(page, content, nav, toc, meta, config):
     else:
         canonical_url = None
 
-    global_context = get_global_context(nav, config)
-    local_context = global_context.copy()
-
-    local_context.update({
+    return {
         'page_title': page_title,
         'page_description': page_description,
 
@@ -176,21 +173,19 @@ def get_page_context(page, content, nav, toc, meta, config):
         'current_page': page,
         'previous_page': page.previous_page,
         'next_page': page.next_page,
-    })
-
-    return local_context
+    }
 
 
 def build_404(config, env, site_navigation):
 
     try:
-        t404 = env.get_template('404.html')
+        template = env.get_template('404.html')
     except TemplateNotFound:
         return
 
     global_context = get_global_context(site_navigation, config)
 
-    output_content = t404.render(global_context)
+    output_content = template.render(global_context)
     output_path = os.path.join(config['site_dir'], '404.html')
     utils.write_file(output_content.encode('utf-8'), output_path)
 
@@ -218,10 +213,11 @@ def build_pages(config, dump_json=False):
         )
         html_content = post_process_html(html_content, site_navigation)
 
-        context = get_page_context(
+        context = get_global_context(site_navigation, config)
+        context.update(get_page_context(
             page, html_content, site_navigation,
             table_of_contents, meta, config
-        )
+        ))
 
         # Allow 'template:' override in md source files.
         if 'template' in meta:
