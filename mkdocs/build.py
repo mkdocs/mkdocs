@@ -131,7 +131,7 @@ def get_global_context(nav, config):
         'include_search': config['include_search'],
 
         'copyright': config['copyright'],
-        'google-analytics': config['google-analytics']
+        'google_analytics': config['google_analytics']
     }
 
 
