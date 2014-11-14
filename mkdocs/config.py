@@ -22,7 +22,7 @@ DEFAULT_CONFIG = {
     'theme_dir': None,
 
     'copyright': None,
-    'google-analytics': None,
+    'google_analytics': None,
 
     # The address on which to serve the livereloading docs server.
     'dev_addr': '127.0.0.1:8000',
