@@ -207,7 +207,7 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
             titles.append(filename_to_title(sub_path))
 
         url = utils.get_url_path(path, use_directory_urls)
-        
+
         page = Page(title=titles[-1], url=url, path=path, url_context=url_context)
         if previous:
             level = min(len(previous.ancestors), len(titles))
@@ -219,7 +219,7 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
         else:
             level = 0
             page.ancestors = []
-        
+
         while level < len(titles) - 1:
             title = titles[level]
             header = Header(title=title, children=[])
@@ -233,7 +233,8 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
         if (len(page.ancestors) > 0):
             page.ancestors[-1].children.append(page)
         else:
-            nav_items.append(page)
+            if not utils.is_homepage(path):
+                nav_items.append(page)
 
         # Add in previous and next information.
         if previous:
