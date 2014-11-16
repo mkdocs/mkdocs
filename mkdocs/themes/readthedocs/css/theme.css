@@ -4010,7 +4010,7 @@ pre.literal-block {
     font-weight: normal;
 }
 
-.wy-menu-vertical a {
+.wy-menu-vertical a{
     display: inline-block;
     line-height: 18px;
     padding: 0.4045em 1.618em;
@@ -4018,6 +4018,16 @@ pre.literal-block {
     position: relative;
     font-size: 90%;
     color: #b3b3b3;
+}
+
+.wy-menu-vertical span {
+    display: inline-block;
+    line-height: 18px;
+    padding: 0.4045em 1em;
+    display: block;
+    position: relative;
+    font-size: 90%;
+    color: #737373;
 }
 
     .wy-menu-vertical a:hover {
