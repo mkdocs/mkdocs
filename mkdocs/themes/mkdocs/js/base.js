@@ -2,6 +2,7 @@
 /* Highlight */
 $( document ).ready(function() {
     hljs.initHighlightingOnLoad();
+    $('table').addClass('table');
 });
 
 
