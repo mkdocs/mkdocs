@@ -6,4 +6,3 @@ htmlcov/
 mkdocs.egg-info/
 *.pyc
 .coverage
-.idea
