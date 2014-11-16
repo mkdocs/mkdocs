@@ -1,8 +1,7 @@
 
-/* Prettyify */
+/* Highlight */
 $( document ).ready(function() {
-    $('pre code').parent().addClass('prettyprint well')
-    prettyPrint();
+    hljs.initHighlightingOnLoad();
 });
 
 
