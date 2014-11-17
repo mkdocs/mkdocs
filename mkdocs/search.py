@@ -38,7 +38,7 @@ class SearchIndex(object):
                         title=toc_item.title,
                         text=" ".join(section.text),
                         tags="",
-                        loc=page.abs_url[:-1] + toc_item.url
+                        loc=page.abs_url + toc_item.url
                     )
                 # not found, check h2
                 else:
@@ -50,7 +50,7 @@ class SearchIndex(object):
                                 title=toc_sub_item.title,
                                 text=" ".join(section.text),
                                 tags="",
-                                loc=page.abs_url[:-1] + toc_sub_item.url
+                                loc=page.abs_url + toc_sub_item.url
                             )
 
     def create_entry(self, title, text, tags, loc):
