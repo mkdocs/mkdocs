@@ -1,0 +1,8 @@
+.wy-menu-vertical span {
+    line-height: 18px;
+    padding: 0.4045em 0.809em;
+    display: block;
+    position: relative;
+    font-size: 90%;
+    color: #838383;
+}
