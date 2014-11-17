@@ -49,17 +49,28 @@ hr {
     border-top: 1px solid #aaa;
 }
 
-pre {
-    overflow: auto;
+pre, .rst-content tt {
+    max-width: 100%;
+    background: #fff;
+    border: solid 1px #e1e4e5;
+    color: #e74c3c;
+    overflow-x: auto;
 }
 
-pre code {
-    word-wrap: normal;
-    white-space: pre;
+code.code-large, .rst-content tt.code-large {
+    font-size: 90%;
 }
 
-div.well, pre.well {
-    background-color: #eee;
+code {
+    padding: 2px 5px;
+    color: #c7254e;
+    background-color: #f9f2f4;
+    font-size: 75%;
+}
+
+code, kbd, pre, samp  {
+    font-family: monospace,serif;
+    font-size: 12px !important;
 }
 
 footer {

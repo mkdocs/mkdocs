@@ -12,6 +12,7 @@ Themes used under license from the Bootstrap, ReadTheDocs, GhostWriter and Boots
 * ReadTheDocs theme - [View license](//github.com/snide/sphinx_rtd_theme/blob/master/LICENSE).
 * GhostWriter theme - [View license](//github.com/roryg/ghostwriter/blob/master/LICENSE.txt).
 * Bootswatch theme - [View license](//github.com/thomaspark/bootswatch/blob/gh-pages/LICENSE).
+* Highlight.js GitHub theme - [View license](//github.com/isagalaev/highlight.js/blob/master/LICENSE).
 
 Many thanks to the authors and contributors of those wonderful projects.
 
