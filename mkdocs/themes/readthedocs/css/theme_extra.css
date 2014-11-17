@@ -6,3 +6,8 @@
     font-size: 90%;
     color: #838383;
 }
+
+.wy-nav-side {
+    height: 100%;
+    overflow-y: auto;
+}
