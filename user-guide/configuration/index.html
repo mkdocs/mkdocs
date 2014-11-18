@@ -13,8 +13,8 @@
 
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
-        <link href="../../css/prettify-1.0.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
         <link href="../../css/extra.css" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -23,6 +23,16 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
 
+        
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-27795084-5', 'mkdocs.org');
+            ga('send', 'pageview');
+        </script>
         
     </head>
 
@@ -127,7 +137,8 @@
 </div>
 
         <div class="container">
-            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
         <li class="main active"><a href="#configuration">Configuration</a></li>
@@ -147,7 +158,7 @@
     
     </ul>
 </div></div>
-            <div class="col-md-9" role="main">
+                <div class="col-md-9" role="main">
 
 <h1 id="configuration">Configuration</h1>
 <p>Guide to all available configuration settings.</p>
@@ -158,7 +169,7 @@
 <h2 id="project-information">Project information</h2>
 <h4 id="site_name">site_name</h4>
 <p>This is a <strong>required setting</strong>, and should be a string that is used as the main title for the project documentation.  For example:</p>
-<pre class="prettyprint well"><code>site_name: Mashmallow Generator
+<pre><code>site_name: Mashmallow Generator
 </code></pre>
 <p>When rendering the theme this setting will be passed as the <code>site_name</code> context variable.</p>
 <h4 id="site_url">site_url</h4>
@@ -166,7 +177,7 @@
 <p><strong>default</strong>: <code>null</code></p>
 <h4 id="repo_url">repo_url</h4>
 <p>When set, provides a link to your GitHub or Bitbucket repository on each page.</p>
-<pre class="prettyprint well"><code>repo_url: https://github.com/example/repository/
+<pre><code>repo_url: https://github.com/example/repository/
 </code></pre>
 <p><strong>default</strong>: <code>null</code></p>
 <h4 id="site_description">site_description</h4>
@@ -177,7 +188,7 @@
 <p><strong>default</strong>: <code>null</code></p>
 <h4 id="site_favicon">site_favicon</h4>
 <p>Set the favicon to use. Putting a <code>favicon.ico</code> into the <code>docs/</code> directory, the config would look as follows:</p>
-<pre class="prettyprint well"><code class="yaml">site_favicon: favicon.ico
+<pre><code class="yaml">site_favicon: favicon.ico
 </code></pre>
 
 <p><strong>default</strong>: <code>null</code></p>
@@ -186,14 +197,14 @@
 <p>This is setting is used to determine the set of pages that should be built for the documentation.</p>
 <p>The setting should be a list.  Each row in the list represents information about a single page as a list of strings.  The first string represents the path of the documentation source file, and should be relative to the <code>docs_dir</code> setting.  Remaining strings represent the title of the page in the site navigation.</p>
 <p>Here's a simple example that would cause the build stage to create three pages:</p>
-<pre class="prettyprint well"><code>pages:
+<pre><code>pages:
 - ['index.md', 'Introduction']
 - ['user-guide.md', 'User Guide']
 - ['about.md', 'About']
 </code></pre>
 <p>Assuming the <code>docs_dir</code> setting was left with the default value of <code>docs</code>, the source files for this site's build process would be <code>docs/index.md</code>, <code>docs/user-guide.md</code> and <code>docs/about.md</code>.</p>
 <p>If you have a lot of project documentation you might choose to use headings to break up your site navigation by category.  You can do so by including an extra string in the page configuration for any pages that require a navigation heading, like so:</p>
-<pre class="prettyprint well"><code>pages:
+<pre><code>pages:
 - ['index.md', 'Introduction']
 - ['user-guide/creating.md', 'User Guide', 'Creating a new Mashmallow project']
 - ['user-guide/api.md', 'User Guide', 'Mashmallow API guide']
@@ -208,7 +219,7 @@
 <h4 id="theme_dir">theme_dir</h4>
 <p>Lets you set a directory to a custom theme.  This can either be a relative directory, in which case it is resolved relative to the directory containing you configuration file, or it can be an absolute directory path.</p>
 <p>For example, given this example project layout:</p>
-<pre class="prettyprint well"><code>mkdocs.yml
+<pre><code>mkdocs.yml
 docs/
     index.md
     about.md
@@ -217,7 +228,7 @@ custom_theme/
     ...
 </code></pre>
 <p>You would include the following setting to use the custom theme directory:</p>
-<pre class="prettyprint well"><code>theme_dir: 'custom_theme'
+<pre><code>theme_dir: 'custom_theme'
 </code></pre>
 <p>If used in combination with the <code>theme</code> configuration value a custom theme can be used to replace only specific parts of a themes templates. For example, with the above layout and if you set your <code>theme: mkdocs</code> then the base.html file would replace that in the theme but otherwise it would remain the same. This is useful if you want to make small adjustments to an existing theme.</p>
 <p><strong>default</strong>: <code>null</code></p>
@@ -229,7 +240,7 @@ custom_theme/
 <p><strong>default</strong>: <code>'site'</code></p>
 <hr />
 <p><strong>Note</strong>: If you are using source code control you will normally want to ensure that your <em>build output</em> files are not commited into the repository, and only keep the <em>source</em> files under version control.  For example, if using <code>git</code> you might add the following line to your <code>.gitignore</code> file:</p>
-<pre class="prettyprint well"><code>site/
+<pre><code>site/
 </code></pre>
 <p>If you're using another source code control you'll want to check its documentation on how to ignore specific directories.</p>
 <hr />
@@ -289,17 +300,18 @@ TODO
 <h4 id="dev_addr">dev_addr</h4>
 <p>Determines the address used when running <code>mkdocs serve</code>.  Setting this allows you to use another port, or allows you to make the service accessible over your local network by using the <code>0.0.0.0</code> address.</p>
 <p>As with all settings, you can set this from the command line, which can be usful, for example:</p>
-<pre class="prettyprint well"><code>mkdocs serve --dev-addr=0.0.0.0:80  # Run on port 80, accessible over the local network.
+<pre><code>mkdocs serve --dev-addr=0.0.0.0:80  # Run on port 80, accessible over the local network.
 </code></pre>
 <p><strong>default</strong>: <code>'127.0.0.1:8000'</code></p>
 <h2 id="formatting-options">Formatting options</h2>
 <h4 id="markdown_extensions">markdown_extensions</h4>
 <p>MkDocs uses the <a href="http://pythonhosted.org/Markdown/">Python Markdown</a> library to translate Markdown files into HTML. Python Markdown supports a variety of <a href="http://pythonhosted.org/Markdown/extensions/index.html">extensions</a> that customize how pages are formatted. This setting lets you enable a list of extensions beyond the ones that MkDocs uses by default (<code>meta</code>, <code>toc</code>, <code>tables</code>, and <code>fenced_code</code>).</p>
 <p>For example, to enable the <a href="https://pypi.python.org/pypi/mdx_smartypants">SmartyPants typography extension</a>, use:</p>
-<pre class="prettyprint well"><code>markdown_extensions: [smartypants]
+<pre><code>markdown_extensions: [smartypants]
 </code></pre>
 <p><strong>default</strong>: <code>[]</code></p>
 </div>
+            
         </div>
 
         <footer class="col-md-12">
@@ -315,6 +327,7 @@ TODO
         <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
         <script src="../../js/bootstrap-3.0.3.min.js"></script>
         <script src="../../js/prettify-1.0.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
         <script src="../../js/base.js"></script>
     </body>
 </html>

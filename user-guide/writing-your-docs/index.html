@@ -13,8 +13,8 @@
 
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
-        <link href="../../css/prettify-1.0.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
         <link href="../../css/extra.css" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -23,6 +23,16 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
 
+        
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-27795084-5', 'mkdocs.org');
+            ga('send', 'pageview');
+        </script>
         
     </head>
 
@@ -127,7 +137,8 @@
 </div>
 
         <div class="container">
-            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
         <li class="main active"><a href="#writing-your-docs">Writing your docs</a></li>
@@ -143,7 +154,7 @@
     
     </ul>
 </div></div>
-            <div class="col-md-9" role="main">
+                <div class="col-md-9" role="main">
 
 <h1 id="writing-your-docs">Writing your docs</h1>
 <p>How to write and layout your markdown source files.</p>
@@ -151,13 +162,13 @@
 <h2 id="file-layout">File layout</h2>
 <p>Your documentation source should be written as regular Markdown files, and placed in a directory somewhere in your project.  Normally this directory will be named <code>docs</code> and will exist at the top level of your project, alongside the <code>mkdocs.yml</code> configuration file.</p>
 <p>The simplest project you can create will look something like this:</p>
-<pre class="prettyprint well"><code>mkdocs.yml
+<pre><code>mkdocs.yml
 docs/
     index.md
 </code></pre>
 <p>By convention your project homepage should always be named <code>index</code>.  Any of the following extensions may be used for your Markdown source files: <code>markdown</code>, <code>mdown</code>, <code>mkdn</code>, <code>mkd</code>, <code>md</code>.</p>
 <p>You can also create multi-page documentation, by creating several markdown files:</p>
-<pre class="prettyprint well"><code>mkdocs.yml
+<pre><code>mkdocs.yml
 docs/
     index.md
     about.md
@@ -165,19 +176,19 @@ docs/
 </code></pre>
 <p>The file layout you use determines the URLs that are used for the generated pages.
 Given the above layout, pages would be generated for the following URLs:</p>
-<pre class="prettyprint well"><code>/
+<pre><code>/
 /about/
 /license/
 </code></pre>
 <p>You can also include your Markdown files in nested directories if that better suits your documentation layout.</p>
-<pre class="prettyprint well"><code>docs/
+<pre><code>docs/
     index.md
     user-guide/getting-started.md
     user-guide/configuration-options.md
     license.md
 </code></pre>
 <p>Source files inside nested directories will cause pages to be generated with nested URLs, like so:</p>
-<pre class="prettyprint well"><code>/
+<pre><code>/
 /user-guide/getting-started/
 /user-guide/configuration-options/
 /license/
@@ -186,15 +197,15 @@ Given the above layout, pages would be generated for the following URLs:</p>
 <p>MkDocs allows you to interlink your documentation by using regular Markdown hyperlinks.</p>
 <h4 id="internal-hyperlinks">Internal hyperlinks</h4>
 <p>When linking between pages in the documentation you can simply use the regular Markdown hyperlinking syntax, including the relative path to the Markdown document you wish to link to.</p>
-<pre class="prettyprint well"><code>Please see the [project license](license.md) for further details.
+<pre><code>Please see the [project license](license.md) for further details.
 </code></pre>
 <p>When the MkDocs build runs, these hyperlinks will automatically be transformed into a hyperlink to the appropriate HTML page.</p>
-<p>When working on your documentation you should be able to open the linked Markdown document in a new editor window simply by clicking on the link. </p>
+<p>When working on your documentation you should be able to open the linked Markdown document in a new editor window simply by clicking on the link.</p>
 <p>If the target documentation file is in another directory you'll need to make sure to include any relative directory path in the hyperlink.</p>
-<pre class="prettyprint well"><code>Please see the [project license](../about/license.md) for further details.
+<pre><code>Please see the [project license](../about/license.md) for further details.
 </code></pre>
 <p>You can also link to a section within a target documentation page by using an anchor link.  The generated HTML will correctly transform the path portion of the hyperlink, and leave the anchor portion intact.</p>
-<pre class="prettyprint well"><code>Please see the [project license](about.md#license) for further details.
+<pre><code>Please see the [project license](about.md#license) for further details.
 </code></pre>
 <!--
 #### Cross-referencing your documentation
@@ -211,7 +222,7 @@ Eam ad euismod accusata vituperata. Oratio vocent nominavi ei eum.
 <h2 id="images-and-media">Images and media</h2>
 <p>As well as the Markdown source files, you can also include other file types in your documentation, which will be copied across when generating your documentation site.  These might include images and other media.</p>
 <p>For example, if you project documentation needed to include a <a href="https://help.github.com/articles/setting-up-a-custom-domain-with-pages#setting-the-domain-in-your-repo">GitHub pages CNAME file</a> and a PNG formatted screenshot image then your file layout might look as follows:</p>
-<pre class="prettyprint well"><code>mkdocs.yml
+<pre><code>mkdocs.yml
 docs/
     CNAME
     index.md
@@ -221,7 +232,7 @@ docs/
         screenshot.png
 </code></pre>
 <p>To include images in your documentation source files, simply use any of the regular Markdown image syntaxes:</p>
-<pre class="prettyprint well"><code>Cupcake indexer is a snazzy new project for indexing small cakes.
+<pre><code>Cupcake indexer is a snazzy new project for indexing small cakes.
 
 ![Screenshot](img/screenshot.png)
 
@@ -248,26 +259,26 @@ At mel verear persius torquatos, his dolores sensibus id, alia urbanitas in usu.
 
 <h4 id="tables">Tables</h4>
 <p>A simple table looks like this:</p>
-<pre class="prettyprint well"><code>First Header | Second Header | Third Header
+<pre><code>First Header | Second Header | Third Header
 ------------ | ------------- | ------------
 Content Cell | Content Cell  | Content Cell
 Content Cell | Content Cell  | Content Cell
 </code></pre>
 <p>If you wish, you can add a leading and tailing pipe to each line of the table:</p>
-<pre class="prettyprint well"><code>| First Header | Second Header | Third Header |
+<pre><code>| First Header | Second Header | Third Header |
 | ------------ | ------------- | ------------ |
 | Content Cell | Content Cell  | Content Cell |
 | Content Cell | Content Cell  | Content Cell |
 </code></pre>
 <p>Specify alignment for each column by adding colons to separator lines:</p>
-<pre class="prettyprint well"><code>First Header | Second Header | Third Header
+<pre><code>First Header | Second Header | Third Header
 :----------- | :-----------: | -----------:
 Left         | Center        | Right
 Left         | Center        | Right
 </code></pre>
 <h4 id="fenced-code-blocks">Fenced code blocks</h4>
 <p>Start with a line containing 3 or more backtick ` characters, and ends with the first line with the same number of backticks `:</p>
-<pre class="prettyprint well"><code>```
+<pre><code>```
 Fenced code blocks are like Stardard
 Markdown’s regular code blocks, except that
 they’re not indented and instead rely on a
@@ -281,10 +292,11 @@ block.
 Ad est nibh suscipiantur. Quaeque deleniti delectus an has, tempor accusamus eu vix. Et democritum expetendis nam, putent fuisset duo ea, elaboraret efficiendi no vis.
 
     !!! danger "Don't try this at home"
-        May cause grevious bodily harm 
+        May cause grevious bodily harm
 -->
 
 </div>
+            
         </div>
 
         <footer class="col-md-12">
@@ -300,6 +312,7 @@ Ad est nibh suscipiantur. Quaeque deleniti delectus an has, tempor accusamus eu 
         <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
         <script src="../../js/bootstrap-3.0.3.min.js"></script>
         <script src="../../js/prettify-1.0.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
         <script src="../../js/base.js"></script>
     </body>
 </html>
