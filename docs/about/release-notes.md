@@ -12,8 +12,23 @@ You can determine your currently installed version using `pip freeze`:
 
     pip freeze | grep mkdocs
 
+## 0.11.0 (2014-11-18)
 
-## 0.10.X series
+* Render 404.html files if they exist for the current theme (#194)
+* Bugfix: Fix long nav bars, table rendering and code highlighting in MkDocs
+  and ReadTheDocs themes (#225)
+* Bugfix: Fix an issue with the google_analytics code. (#219)
+* Bugfix: Remove `__pycache__` from the package tar. (#196)
+* Bugfix: Fix markdown links that go to an anchor on the current page (#197)
+* Bugfix: Don't add `prettyprint well` CSS classes to all HTML, only add it in
+  the MkDocs theme (#183)
+* Bugfix: Display section titles in the ReadTheDocs theme (#175)
+* Bugfix: Use the polling observer in watchdog so rebuilding works on
+  filesystems without inotify. (#184)
+* Bugfix: Improve error output for common configuration related errors. (#176)
+
+
+## 0.10.0 (2014-10-29)
 
 * Added support for Python 3.3 and 3.4. (#103)
 * Configurable Python-Markdown extensions with the config setting
