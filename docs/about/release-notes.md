@@ -15,7 +15,7 @@ You can determine your currently installed version using `pip freeze`:
 ## 0.11.0 (2014-11-18)
 
 * Render 404.html files if they exist for the current theme (#194)
-* Bugfix: Fix long nav bars, table tendering and code highlighting in MkDocs
+* Bugfix: Fix long nav bars, table rendering and code highlighting in MkDocs
   and ReadTheDocs themes (#225)
 * Bugfix: Fix an issue with the google_analytics code. (#219)
 * Bugfix: Remove `__pycache__` from the package tar. (#196)
