@@ -12,6 +12,12 @@ You can determine your currently installed version using `pip freeze`:
 
     pip freeze | grep mkdocs
 
+## 0.11.1 (2014-11-20)
+
+* Bugfix: Fix a CSS wrapping issue with code highlighting in the ReadTheDocs
+  theme. (#233)
+
+
 ## 0.11.0 (2014-11-18)
 
 * Render 404.html files if they exist for the current theme (#194)
