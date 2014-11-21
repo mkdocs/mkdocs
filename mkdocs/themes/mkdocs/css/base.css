@@ -171,3 +171,45 @@ footer {
         width: 263px;
     }
 }
+
+/*
+ * Additions specific to the HTML Tipue generates.
+ */
+.tipue_search_content_title {
+    font-size: 120%;
+    margin-bottom: 12px;
+    display: inline-block;
+    padding-top: 1em;
+    border-top: 1px solid #E1E4E5;
+    margin-top: 1em;
+    width: 100%;
+}
+
+.tipue_search_content_text {
+    font-size: 90%;
+}
+
+.tipue_search_content_url {
+    display: none;
+}
+
+#tipue_search_input {
+    display: block;
+    width: 100%;
+    height: 38px;
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 1.42857;
+    color: #555;
+    vertical-align: middle;
+    background-color: #FFF;
+    background-image: none;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+}
+
+.tipue_search_content_title a {
+    color: #2fa4e7;
+}

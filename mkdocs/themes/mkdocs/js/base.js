@@ -1,10 +1,30 @@
+function getSearchTerm()
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++)
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == 'q')
+        {
+            return sParameterName[1];
+        }
+    }
+}
+
 $(document).ready(function() {
 
     // Tipue Search activation
     $('#tipue_search_input').tipuesearch({
         'mode': 'json',
-        'contentLocation': '/search_content.json'
+        'contentLocation': '/search_content.json',
+        'show': 5
     });
+
+    var search_term = getSearchTerm();
+    if(search_term){
+        $('#search_modal').modal();
+    }
 
     // Highlight.js
     hljs.initHighlightingOnLoad();
