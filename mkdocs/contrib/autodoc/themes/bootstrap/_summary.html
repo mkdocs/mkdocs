@@ -1,0 +1,22 @@
+<div class="summary">
+{% for section, members in sections %}
+    {% if section != 'Private Variable' %}
+    <h3>{{ section }}</h3>
+    <ul class="summary-contents">
+    {% for member, typ in members %}
+        {% if member.kind == 'Enum' %}
+        <li><a href="#{{ member.name }}">{{ member.name }}</a></li>
+        {% elif member.kind == 'Class' %}
+        <li><a href="{{ member.url }}" class="{{ member.url_class }}">{{ member.name }}</a></li>
+        {% elif member.kind == 'Module' %}
+        <li><a href="{{ member.url }}" class="{{ member.url_class }}">{{ member.name }}</a></li>
+        {% elif 'Function' in member.kind or 'Method' in member.kind or 'Builtin' in member.kind %}
+        <li>def <a href="#{{ member.name }}">{{ member.name }}</a>{{ member.args }}</li>
+        {% else %}
+        <li>{{ member.name }} : <a href="">{{ typ }}</a></li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+    {% endif %}
+{% endfor %}
+</div>

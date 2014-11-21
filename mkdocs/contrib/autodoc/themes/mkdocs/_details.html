@@ -1,0 +1,23 @@
+<dl>
+    {% for member in members %}
+    {% if member.kind not in ('Module', 'Class', 'Member', 'Variable') %}
+    <dt>
+    <a name="{{ member.name }}"></a>
+    {% if 'Static' in member.kind or 'Class' in member.kind %}
+    def <a name="{{ member.name }}">{{ member.name }}</a>{{ member.args }} <strong>[{{ member.kind.lower() }}]</strong>
+    {% else %}
+    def <a name="{{ member.name }}">{{ member.name }}</a>{{ member.args }}
+    {% endif %}
+    </dt>
+    <dd>
+        {% if member.reimpliments %}
+        <div class="help-block"><p class="text-left">{{ member.reimpliments }}</p></div>
+        {% endif %}
+        {% if member.reimplimented %}
+        <div class="help-block"><p class="text-left">{{ member.reimplimented }}</p></div>
+        {% endif %}
+        <div class="help-block"><p class="text-left">{{ member.html_docs }}</p></div>
+    </dd>
+    {% endif %}
+    {% endfor %}
+</dl>

@@ -4,11 +4,16 @@ site_description: Project documentation with Markdown.
 
 repo_url: https://github.com/tomchristie/mkdocs/
 
+mkdocs_extensions:
+  - mkdocs.contrib.autodoc
+  - mkdocs.contrib.tree
+
 pages:
 - ['index.md', 'Home']
 - ['user-guide/writing-your-docs.md', 'User Guide', 'Writing your docs']
 - ['user-guide/styling-your-docs.md', 'User Guide', 'Styling your docs']
 - ['user-guide/configuration.md', 'User Guide', 'Configuration']
+- ['tree:api/mkdocs', 'API', 'mkdocs']
 - ['about/license.md', 'About', 'License']
 - ['about/release-notes.md', 'About', 'Release Notes']
 

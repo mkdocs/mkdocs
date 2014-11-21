@@ -6,7 +6,7 @@ Deals with generating the site-wide navigation.
 This consists of building a set of interlinked page and header objects.
 """
 
-from mkdocs import utils
+from mkdocs import utils, events
 import posixpath
 import os
 
@@ -216,32 +216,47 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
             filename = path.split('/')[1]
             child_title = filename_to_title(filename)
 
+        page_title = title if not child_title else child_title
         url = utils.get_url_path(path, use_directory_urls)
 
-        if not child_title:
-            # New top level page.
-            page = Page(title=title, url=url, path=path, url_context=url_context)
-            if not utils.is_homepage(path):
-                nav_items.append(page)
-        elif not nav_items or (nav_items[-1].title != title):
-            # New second level page.
-            page = Page(title=child_title, url=url, path=path, url_context=url_context)
-            header = Header(title=title, children=[page])
-            nav_items.append(header)
-            page.ancestors = [header]
+        event = events.BuildPage(page_title, path, url, url_context)
+        if event.broadcast():
+            event_pages = event.pages
+            pages += event_pages
+            first_page = event_pages[0]
+            last_page = event_pages[-1]
+            if previous:
+                previous.next_page = first_page
+                first_page.previous_page = previous
+            previous = last_page
+            page = first_page
         else:
+            page = Page(title=page_title, url=url, path=path, url_context=url_context)
+
+            # Add in previous and next information.
+            if previous:
+                page.previous_page = previous
+                previous.next_page = page
+            previous = page
+
+        if page:
+            # New top level page.
+            if not child_title:
+                if not utils.is_homepage(path):
+                    nav_items.append(page)
+
+            # New second level page.
+            elif not nav_items or (nav_items[-1].title != title):
+                header = Header(title=title, children=[page])
+                nav_items.append(header)
+                page.ancestors = [header]
+
             # Additional second level page.
-            page = Page(title=child_title, url=url, path=path, url_context=url_context)
-            header = nav_items[-1]
-            header.children.append(page)
-            page.ancestors = [header]
+            else:
+                header = nav_items[-1]
+                header.children.append(page)
+                page.ancestors = [header]
 
-        # Add in previous and next information.
-        if previous:
-            page.previous_page = previous
-            previous.next_page = page
-        previous = page
-
-        pages.append(page)
+            pages.append(page)
 
     return (nav_items, pages)

@@ -1,0 +1,24 @@
+<ul class="member-documentation">
+    {% for member in members %}
+    {% if member.kind not in ('Module', 'Class', 'Member', 'Variable') %}
+    <li>
+        <div class="member-detail">
+            <a name="{{ member.name }}"></a>
+            {% if 'Function' in member.kind or 'Method' in member.kind or 'Builtin' in member.kind %}
+            {% if 'Static' in member.kind or 'Class' in member.kind %}
+            <p class="header">def <a name="{{ member.name }}">{{ member.name }}</a>{{ member.args }} <strong>[{{ member.kind.lower() }}]</strong></p>
+            {% else %}
+            <p class="header">def <a name="{{ member.name }}">{{ member.name }}</a>{{ member.args }}</p>
+            {% endif %}
+            <p class="reimpliments">{{ member.reimpliments }}</p>
+            <p class="reimplimented">{{ member.reimplimented }}</p>
+            <p class="docs">{{ member.html_docs }}</p>
+            {% else %}
+            <p class="header">{{ member.name }}</p>
+            <p class="docs">{{ member.html_docs }}</p>
+            {% endif %}
+        </div>
+    </li>
+    {% endif %}
+    {% endfor %}
+</ul>
