@@ -13,6 +13,7 @@
 
   <link rel="stylesheet" href="{{ base_url }}/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="{{ base_url }}/css/theme_extra.css" type="text/css" />
+  <link href="{{ base_url }}/js/tipuesearch/tipuesearch.css" rel="stylesheet">
   <link rel="stylesheet" href="{{ base_url }}/css/highlight.css">
   {%- for path in extra_css %}
   <link href="{{ path }}" rel="stylesheet">
@@ -21,6 +22,8 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
   <script type="text/javascript" src="{{ base_url }}/js/highlight.pack.js"></script>
+  <script src="{{ base_url }}/js/tipuesearch/tipuesearch.js"></script>
+  <script src="{{ base_url }}/js/tipuesearch/tipuesearch_set.js"></script>
   <script src="{{ base_url }}/js/theme.js"></script>
   {%- for path in extra_javascript %}
   <script src="{{ path }}"></script>
@@ -65,7 +68,9 @@
           {% include "breadcrumbs.html" %}
           <div role="main">
             <div class="section">
-              {{ content }}
+              {% block content %}
+                {{ content }}
+              {% endblock %}
             </div>
           </div>
 	  {%- block footer %}
@@ -80,13 +85,17 @@
 
 <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
-        {% if repo_name == 'GitHub' %}
-            <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
-        {% elif repo_name == 'Bitbucket' %}
-            <a class="icon icon-bitbucket" style="float: left; color: #fcfcfc"> BitBucket</a>
-        {% endif %}
-      <span><a href="{{ previous_page.url }}" style="color: #fcfcfc;">&laquo; Previous</a></span>
-      <span style="margin-left: 15px"><a href="{{ next_page.url }}" style="color: #fcfcfc">Next &raquo;</a></span>
+      {% if repo_name == 'GitHub' %}
+          <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      {% elif repo_name == 'Bitbucket' %}
+          <a class="icon icon-bitbucket" style="float: left; color: #fcfcfc"> BitBucket</a>
+      {% endif %}
+      {% if previous_page %}
+        <span><a href="{{ previous_page.url }}" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      {% endif %}
+      {% if next_page %}
+        <span style="margin-left: 15px"><a href="{{ next_page.url }}" style="color: #fcfcfc">Next &raquo;</a></span>
+      {% endif %}
     </span>
 </div>
 </body>

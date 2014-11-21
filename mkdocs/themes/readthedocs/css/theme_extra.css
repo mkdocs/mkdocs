@@ -36,3 +36,25 @@
 code {
     white-space: pre;
 }
+
+/*
+ * Additions specific to the HTML Tipue generates.
+ */
+.tipue_search_content_title {
+    font-size: 120%;
+    margin-bottom: 12px;
+    display: inline-block;
+    padding-top: 1em;
+    border-top: 1px solid #E1E4E5;
+    margin-top: 1em;
+    width: 100%;
+}
+
+.tipue_search_content_text {
+    color: #808080;
+    font-size: 90%;
+}
+
+.tipue_search_content_url {
+    display: none;
+}
