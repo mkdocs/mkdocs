@@ -1,0 +1,38 @@
+<h1 id="{{ object_name }}">{{ title.split('.')[-1] }} <small>(module reference)</h1>
+{% if breadcrumbs %}
+<small>from {{ '.'.join(breadcrumbs) }}</small>
+{% endif %}
+
+{% if brief %}
+<p>{{ brief }} <a href="#details">More...</a></p>
+{% else %}
+<p>{{ details }}</p>
+{% endif %}
+
+{% include '_summary.html' %}
+
+{% if brief %}
+<h2 id="details">Details</h2>
+<p>{{ details }}</p>
+{% endif %}
+
+<h2 id="functions">Functions</h2>
+{% include '_details.html' %}
+
+<!-- STARTTOC -->
+<div class="toc">
+    <ul>
+        <li><a href="#{{ object_name }}">{{ title }}</a></li>
+        <ul>
+            {% for section in sections %}
+            <li><a href="#{{ section[0] }}">{{ section[0] }}</a></li>
+            {% endfor %}
+            {% if brief %}
+            <li><a href="#details">Details</a></li>
+            {% endif %}
+        </ul>
+        <li><a href="#functions">Function Documentation</a></li>
+    </ul>
+</div>
+
+

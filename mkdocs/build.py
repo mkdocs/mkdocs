@@ -2,7 +2,7 @@
 from __future__ import print_function
 
 from jinja2.exceptions import TemplateNotFound
-from mkdocs import nav, toc, utils
+from mkdocs import nav, toc, utils, events
 from mkdocs.compat import urljoin, urlparse, urlunparse, PY2
 import jinja2
 import json
@@ -194,6 +194,13 @@ def build_pages(config, dump_json=False):
     """
     Builds all the pages and writes them into the build directory.
     """
+    # run the pre-build event
+    event = events.PreBuild(config)
+
+    # broadcast the event, and check to see if it has been fully consumed (should not process further)
+    if event.broadcast():
+        return
+
     site_navigation = nav.SiteNavigation(config['pages'], config['use_directory_urls'])
     loader = jinja2.FileSystemLoader(config['theme_dir'])
     env = jinja2.Environment(loader=loader)
@@ -201,17 +208,22 @@ def build_pages(config, dump_json=False):
     build_404(config, env, site_navigation)
 
     for page in site_navigation.walk_pages():
-        # Read the input file
-        input_path = os.path.join(config['docs_dir'], page.input_path)
-        input_content = open(input_path, 'r').read()
-        if PY2:
-            input_content = input_content.decode('utf-8')
+        event = events.GenerateContent(config, page)
+        if event.broadcast():
+            html_content = event.html_content
+            table_of_contents = event.table_of_contents
+            meta = event.meta
+        else:
+            # Read the input file
+            input_path = os.path.join(config['docs_dir'], page.input_path)
+            input_content = open(input_path, 'r').read()
+            if PY2:
+                input_content = input_content.decode('utf-8')
 
-        # Process the markdown text
-        html_content, table_of_contents, meta = convert_markdown(
-            input_content, extensions=config['markdown_extensions']
-        )
-        html_content = post_process_html(html_content, site_navigation)
+            # Process the markdown text
+            html_content, table_of_contents, meta = convert_markdown(
+                input_content, extensions=config['markdown_extensions']
+            )
 
         context = get_global_context(site_navigation, config)
         context.update(get_page_context(
