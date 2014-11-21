@@ -6,7 +6,8 @@ env:
 - TOX_ENV=py33
 - TOX_ENV=py34
 - TOX_ENV=flake8
-- TOX_ENV=docs
+- TOX_ENV=docs-theme-mkdocs
+- TOX_ENV=docs-theme-readthedocs
 - TOX_ENV=json
 - TOX_ENV=coverage
 install:
