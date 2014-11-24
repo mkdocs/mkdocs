@@ -220,7 +220,9 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
         url = utils.get_url_path(path, use_directory_urls)
 
         event = events.BuildPage(page_title, path, url, url_context)
-        if event.broadcast():
+        event.broadcast()
+
+        if event.consumed:
             event_pages = event.pages
             pages += event_pages
             first_page = event_pages[0]

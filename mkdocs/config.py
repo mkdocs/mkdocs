@@ -164,6 +164,6 @@ def validate_config(user_config):
     for extension in config['mkdocs_extensions']:
         __import__(extension)
         module = sys.modules[extension]
-        module.includeme(config)
+        module.init_extension(config)
 
     return config

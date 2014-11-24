@@ -196,9 +196,10 @@ def build_pages(config, dump_json=False):
     """
     # run the pre-build event
     event = events.PreBuild(config)
+    event.broadcast()
 
     # broadcast the event, and check to see if it has been fully consumed (should not process further)
-    if event.broadcast():
+    if event.consumed:
         return
 
     site_navigation = nav.SiteNavigation(config['pages'], config['use_directory_urls'])
@@ -209,7 +210,9 @@ def build_pages(config, dump_json=False):
 
     for page in site_navigation.walk_pages():
         event = events.GenerateContent(config, page)
-        if event.broadcast():
+        event.broadcast()
+
+        if event.consumed:
             html_content = event.html_content
             table_of_contents = event.table_of_contents
             meta = event.meta

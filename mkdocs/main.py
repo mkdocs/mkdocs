@@ -46,10 +46,11 @@ def main(cmd, args, options=None):
         new(args, options)
     else:
         config = load_config(options=options)
-        event = events.Execute(config, cmd, args, options)
-        if not event.broadcast():
+        event = events.CLI(config, cmd, args, options)
+        event.broadcast()
+        if not event.consumed:
             std = ['help', 'new', 'build', 'serve', 'gh-deply', 'json']
-            cmds = '|'.join(std + list(events.Execute.commands))
+            cmds = '|'.join(std + list(events.CLI.commands))
             print('mkdocs [%s] {options}' % cmds)
 
 

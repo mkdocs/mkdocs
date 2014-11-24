@@ -3,29 +3,21 @@ from collections import defaultdict
 callbacks = defaultdict(list)
 
 def register_callback(event_type, callback):
-    """
-    Registers a callback method to the given event type.
-
-    :param      event_type | subclass of <Event>
-                callback   | <callable>
-    """
     callbacks[event_type].append(callback)
 
 #--------------------------------------------------------
 
 class Event(object):
+    def __init__(self):
+        self.consumed = False
+
     """ Abstract event extension class for mkdocs """
     def broadcast(self):
-        """
-        Broadcasts this event to all the listening callbacks.  If any callback consumes this event, then
-        it will stop processing for all other events and return that it has already been processed.
-
-        :return     <bool> | consumed
-        """
         for callback in callbacks[type(self)]:
-            if callback(self):
-                return True
-        return False
+            callback(self)
+            if self.consumed:
+                return
+
 
 # B
 #--------------------------------------------------------
@@ -44,15 +36,15 @@ class BuildPage(Event):
         # output arguments
         self.pages = []
 
-# E
+# C
 #--------------------------------------------------------
 
-class Execute(Event):
+class CLI(Event):
     # define additional plugin commands
     commands = set()
 
     def __init__(self, config, cmd, args, options=None):
-        super(Execute, self).__init__()
+        super(CLI, self).__init__()
 
         # define the execution event
         self.config = config
