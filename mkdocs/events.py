@@ -8,16 +8,16 @@ def register_callback(event_type, callback):
 #--------------------------------------------------------
 
 class Event(object):
+    """ Abstract event extension class for mkdocs """
+
     def __init__(self):
         self.consumed = False
 
-    """ Abstract event extension class for mkdocs """
     def broadcast(self):
         for callback in callbacks[type(self)]:
             callback(self)
             if self.consumed:
                 return
-
 
 # B
 #--------------------------------------------------------
