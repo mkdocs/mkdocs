@@ -5,10 +5,20 @@ env:
 - TOX_ENV=py27
 - TOX_ENV=py33
 - TOX_ENV=py34
-- TOX_ENV=flake8
-- TOX_ENV=docs-theme-mkdocs
-- TOX_ENV=docs-theme-readthedocs
-- TOX_ENV=json
+- TOX_ENV=py26-build-theme-mkdocs
+- TOX_ENV=py27-build-theme-mkdocs
+- TOX_ENV=py33-build-theme-mkdocs
+- TOX_ENV=py34-build-theme-mkdocs
+- TOX_ENV=py26-build-theme-readthedocs
+- TOX_ENV=py27-build-theme-readthedocs
+- TOX_ENV=py33-build-theme-readthedocs
+- TOX_ENV=py34-build-theme-readthedocs
+- TOX_ENV=py26-json
+- TOX_ENV=py27-json
+- TOX_ENV=py33-json
+- TOX_ENV=py34-json
+- TOX_ENV=py27-flake8
+- TOX_ENV=py34-flake8
 - TOX_ENV=coverage
 install:
 - pip install tox
