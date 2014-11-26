@@ -91,6 +91,8 @@ class MLStripper(HTMLParser):
     def __init__(self):
         self.reset()
         self.fed = []
+        self.strict = False
+        self.convert_charrefs = True
 
     def handle_data(self, d):
         self.fed.append(d)
