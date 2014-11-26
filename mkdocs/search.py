@@ -1,4 +1,6 @@
-from mkdocs.compat import HTMLParser
+from __future__ import unicode_literals
+
+from mkdocs.compat import HTMLParser, unicode
 import json
 
 
@@ -36,7 +38,7 @@ class SearchIndex(object):
                     # create entry
                     self.create_entry(
                         title=toc_item.title,
-                        text=" ".join(section.text),
+                        text=u" ".join(section.text),
                         tags="",
                         loc=page.abs_url + toc_item.url
                     )
@@ -48,7 +50,7 @@ class SearchIndex(object):
                             # create entry
                             self.create_entry(
                                 title=toc_sub_item.title,
-                                text=" ".join(section.text),
+                                text=u" ".join(section.text),
                                 tags="",
                                 loc=page.abs_url + toc_sub_item.url
                             )
@@ -57,7 +59,7 @@ class SearchIndex(object):
         """create an index entry"""
         entry = SearchEntry(
             title=title,
-            text=text.strip().encode('utf-8'),
+            text=unicode(text.strip().encode('utf-8'), encoding='utf-8'),
             tags=tags,
             loc=loc
         )

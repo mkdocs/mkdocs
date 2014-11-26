@@ -16,6 +16,7 @@ if PY2:
     urlunquote = urllib.unquote
 
     from itertools import izip as zip
+    unicode = unicode
 
 else:  # PY3
     from html.parser import HTMLParser
@@ -25,3 +26,5 @@ else:  # PY3
     import socketserver
 
     zip = zip
+
+    unicode = str
