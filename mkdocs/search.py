@@ -65,8 +65,8 @@ class SearchIndex(object):
 
     def generate_search_index(self):
         """python to json conversion"""
-        return json.dumps(self, default=lambda o: o.__dict__,
-                          sort_keys=True, indent=4)
+        page_dicts = [p.to_dict() for p in self.pages]
+        return json.dumps(page_dicts, sort_keys=True, indent=4)
 
     def strip_tags(self, html):
         """strip html tags from data"""
@@ -83,6 +83,14 @@ class SearchEntry(object):
         self.text = text
         self.tags = tags
         self.loc = loc
+
+    def to_dict(self):
+        return {
+            'title': self.title,
+            'text': self.text,
+            'tags': self.tags,
+            'loc': self.loc,
+        }
 
 
 class MLStripper(HTMLParser):
