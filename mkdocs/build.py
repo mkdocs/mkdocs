@@ -3,51 +3,15 @@ from __future__ import print_function
 
 from jinja2.exceptions import TemplateNotFound
 from mkdocs import nav, toc, utils
-from mkdocs.compat import urljoin, urlparse, urlunparse, PY2
+from mkdocs.compat import urljoin, PY2
+from mkdocs.mdextensions.relative_path import RelativePathExtension
 import jinja2
 import json
 import markdown
 import os
-import re
 
 
-class PathToURL(object):
-    def __init__(self, template, nav=None):
-        self.template = template
-        self.nav = nav
-
-    def __call__(self, match):
-        url = match.groups()[0]
-        scheme, netloc, path, query, query, fragment = urlparse(url)
-
-        if scheme or netloc or not path:
-            # Ignore URLs unless they are a relative link to a markdown file.
-            return self.template % url
-
-        if self.nav and not utils.is_markdown_file(path):
-            path = utils.create_media_urls(self.nav, [path])[0]
-        elif self.nav:
-            # If the site navigation has been provided, then validate
-            # the internal hyperlink, making sure the target actually exists.
-            target_file = self.nav.file_context.make_absolute(path)
-            if target_file not in self.nav.source_files:
-                source_file = self.nav.file_context.current_file
-                msg = (
-                    'The page "%s" contained a hyperlink to "%s" which '
-                    'is not listed in the "pages" configuration.'
-                )
-                assert False, msg % (source_file, target_file)
-            path = utils.get_url_path(target_file, self.nav.use_directory_urls)
-            path = self.nav.url_context.make_relative(path)
-        else:
-            path = utils.get_url_path(path).lstrip('/')
-
-        # Convert the .md hyperlink to a relative hyperlink to the HTML page.
-        url = urlunparse((scheme, netloc, path, query, query, fragment))
-        return self.template % url
-
-
-def convert_markdown(markdown_source, extensions=()):
+def convert_markdown(markdown_source, site_navigation=None, extensions=()):
     """
     Convert the Markdown source file to HTML content, and additionally
     return the parsed table of contents, and a dictionary of any metadata
@@ -61,8 +25,11 @@ def convert_markdown(markdown_source, extensions=()):
     markdown_source = toc.pre_process(markdown_source)
 
     # Generate the HTML from the markdown source
+    builtin_extensions = ['meta', 'toc', 'tables', 'fenced_code']
+    mkdocs_extensions = [RelativePathExtension(site_navigation), ]
+    extensions = builtin_extensions + mkdocs_extensions + list(extensions)
     md = markdown.Markdown(
-        extensions=['meta', 'toc', 'tables', 'fenced_code'] + list(extensions)
+        extensions=extensions
     )
     html_content = md.convert(markdown_source)
     meta = md.Meta
@@ -74,17 +41,6 @@ def convert_markdown(markdown_source, extensions=()):
     table_of_contents = toc.TableOfContents(toc_html)
 
     return (html_content, table_of_contents, meta)
-
-
-def post_process_html(html_content, nav=None):
-
-    anchor_sub = PathToURL('a href="%s"', nav)
-    html_content = re.sub(r'a href="([^"]*)"', anchor_sub, html_content)
-
-    img_sub = PathToURL('src="%s"', nav)
-    html_content = re.sub(r'src="([^"]*)"', img_sub, html_content)
-
-    return html_content
 
 
 def get_global_context(nav, config):
@@ -209,9 +165,9 @@ def build_pages(config, dump_json=False):
 
         # Process the markdown text
         html_content, table_of_contents, meta = convert_markdown(
-            input_content, extensions=config['markdown_extensions']
+            input_content, site_navigation,
+            extensions=config['markdown_extensions']
         )
-        html_content = post_process_html(html_content, site_navigation)
 
         context = get_global_context(site_navigation, config)
         context.update(get_page_context(

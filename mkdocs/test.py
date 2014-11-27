@@ -442,28 +442,24 @@ class BuildTests(unittest.TestCase):
         md_text = 'An [internal link](internal.md) to another document.'
         expected = '<p>An <a href="internal/">internal link</a> to another document.</p>'
         html, toc, meta = build.convert_markdown(md_text)
-        html = build.post_process_html(html)
         self.assertEqual(html.strip(), expected.strip())
 
     def test_convert_multiple_internal_links(self):
         md_text = '[First link](first.md) [second link](second.md).'
         expected = '<p><a href="first/">First link</a> <a href="second/">second link</a>.</p>'
         html, toc, meta = build.convert_markdown(md_text)
-        html = build.post_process_html(html)
         self.assertEqual(html.strip(), expected.strip())
 
     def test_convert_internal_link_differing_directory(self):
         md_text = 'An [internal link](../internal.md) to another document.'
         expected = '<p>An <a href="../internal/">internal link</a> to another document.</p>'
         html, toc, meta = build.convert_markdown(md_text)
-        html = build.post_process_html(html)
         self.assertEqual(html.strip(), expected.strip())
 
     def test_convert_internal_link_with_anchor(self):
         md_text = 'An [internal link](internal.md#section1.1) to another document.'
         expected = '<p>An <a href="internal/#section1.1">internal link</a> to another document.</p>'
         html, toc, meta = build.convert_markdown(md_text)
-        html = build.post_process_html(html)
         self.assertEqual(html.strip(), expected.strip())
 
     def test_convert_internal_media(self):
@@ -476,14 +472,14 @@ class BuildTests(unittest.TestCase):
         site_navigation = nav.SiteNavigation(pages)
 
         expected_results = (
-            '<p><img alt="The initial MkDocs layout" src="./img/initial-layout.png" /></p>',
-            '<p><img alt="The initial MkDocs layout" src="../img/initial-layout.png" /></p>',
-            '<p><img alt="The initial MkDocs layout" src="../../img/initial-layout.png" /></p>',
+            '<p><img alt="The initial MkDocs layout" src="./img/initial-layout.png" /></p>\n',
+            '<p><img alt="The initial MkDocs layout" src="../img/initial-layout.png" /></p>\n',
+            '<p><img alt="The initial MkDocs layout" src="../../img/initial-layout.png" /></p>\n',
         )
 
         for (page, expected) in zip(site_navigation.walk_pages(), expected_results):
-            html = '<p><img alt="The initial MkDocs layout" src="img/initial-layout.png" /></p>'
-            html = build.post_process_html(html, site_navigation)
+            html = '![The initial MkDocs layout](img/initial-layout.png)'
+            html, _, _ = build.convert_markdown(html, site_navigation=site_navigation)
             self.assertEqual(html, expected)
 
     def test_anchor_only_link(self):
@@ -497,15 +493,14 @@ class BuildTests(unittest.TestCase):
         site_navigation = nav.SiteNavigation(pages)
 
         for page in site_navigation.walk_pages():
-            html = '<p><a href="#test"> </a></p>'
-            result = build.post_process_html(html, site_navigation)
-            self.assertEqual(result, html)
+            markdown = '[test](#test)'
+            html, _, _ = build.convert_markdown(markdown, site_navigation=site_navigation)
+            self.assertEqual(html, '<p><a href="#test">test</a></p>\n')
 
     def test_ignore_external_link(self):
         md_text = 'An [external link](http://example.com/external.md).'
         expected = '<p>An <a href="http://example.com/external.md">external link</a>.</p>'
         html, toc, meta = build.convert_markdown(md_text)
-        html = build.post_process_html(html)
         self.assertEqual(html.strip(), expected.strip())
 
     def test_not_use_directory_urls(self):
@@ -515,8 +510,7 @@ class BuildTests(unittest.TestCase):
             ('internal.md',)
         ]
         site_navigation = nav.SiteNavigation(pages, use_directory_urls=False)
-        html, toc, meta = build.convert_markdown(md_text)
-        html = build.post_process_html(html, site_navigation)
+        html, toc, meta = build.convert_markdown(md_text, site_navigation=site_navigation)
         self.assertEqual(html.strip(), expected.strip())
 
     def test_markdown_table_extension(self):
@@ -585,7 +579,7 @@ class BuildTests(unittest.TestCase):
 
         # Check that the plugin is active when requested.
         expected_with_smartstrong = "<p>foo__bar__baz</p>"
-        html_ext, _, _ = build.convert_markdown(md_input, ['smart_strong'])
+        html_ext, _, _ = build.convert_markdown(md_input, extensions=['smart_strong'])
         self.assertEqual(html_ext.strip(), expected_with_smartstrong)
 
     def test_markdown_duplicate_custom_extension(self):
