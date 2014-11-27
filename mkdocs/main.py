@@ -10,6 +10,7 @@ from mkdocs.exceptions import ConfigurationError
 from mkdocs.gh_deploy import gh_deploy
 from mkdocs.new import new
 from mkdocs.serve import serve
+from mkdocs import events
 
 
 def arg_to_option(arg):
@@ -44,7 +45,13 @@ def main(cmd, args, options=None):
     elif cmd == 'new':
         new(args, options)
     else:
-        print('mkdocs [help|new|build|serve|gh-deploy|json] {options}')
+        config = load_config(options=options)
+        event = events.CLI(config, cmd, args, options)
+        event.broadcast()
+        if not event.consumed:
+            std = ['help', 'new', 'build', 'serve', 'gh-deply', 'json']
+            cmds = '|'.join(std + list(events.CLI.commands))
+            print('mkdocs [%s] {options}' % cmds)
 
 
 def run_main():

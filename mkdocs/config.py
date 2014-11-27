@@ -5,6 +5,7 @@ from mkdocs.compat import urlparse
 from mkdocs.exceptions import ConfigurationError
 
 import os
+import sys
 import yaml
 
 DEFAULT_CONFIG = {
@@ -54,6 +55,9 @@ DEFAULT_CONFIG = {
 
     # PyMarkdown extension names.
     'markdown_extensions': (),
+
+    # MkDoc extension plugins.
+    'mkdocs_extensions': (),
 
     # Determine if the site should generate a json search index and include
     # search elements in the theme. - TODO
@@ -155,5 +159,11 @@ def validate_config(user_config):
     # Cannot set 'include_next_prev: true' when only one page exists.
     # Cannot set 'include_nav: true' when only one page exists.
     # Error if any config keys provided that are not in the DEFAULT_CONFIG.
+
+    # load any provided extensions
+    for extension in config['mkdocs_extensions']:
+        __import__(extension)
+        module = sys.modules[extension]
+        module.init_extension(config)
 
     return config
