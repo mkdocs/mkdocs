@@ -85,6 +85,9 @@ def load_config(filename='mkdocs.yml', options=None):
 
 def validate_config(user_config):
     config = DEFAULT_CONFIG.copy()
+
+    theme_in_config = 'theme' in user_config
+
     config.update(user_config)
 
     if not config['site_name']:
@@ -125,6 +128,10 @@ def validate_config(user_config):
     theme_dir = [os.path.join(package_dir, 'themes', config['theme'])]
 
     if config['theme_dir'] is not None:
+        # If the user has given us a custom theme but not a
+        # builtin theme name then we don't want to merge them.
+        if not theme_in_config:
+            theme_dir = []
         theme_dir.insert(0, config['theme_dir'])
 
     config['theme_dir'] = theme_dir
