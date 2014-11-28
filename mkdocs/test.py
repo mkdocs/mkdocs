@@ -478,8 +478,8 @@ class BuildTests(unittest.TestCase):
         )
 
         for (page, expected) in zip(site_navigation.walk_pages(), expected_results):
-            html = '![The initial MkDocs layout](img/initial-layout.png)'
-            html, _, _ = build.convert_markdown(html, site_navigation=site_navigation)
+            md_text = '![The initial MkDocs layout](img/initial-layout.png)'
+            html, _, _ = build.convert_markdown(md_text, site_navigation=site_navigation)
             self.assertEqual(html, expected)
 
     def test_dont_convert_code_block_urls(self):
