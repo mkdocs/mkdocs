@@ -2,10 +2,7 @@ $( document ).ready(function() {
 
     // Tipue Search activation
     $('#tipue_search_input').tipuesearch({
-        'mode': 'json',
-        'contentLocation': '/search_content.json',
-        'live': true,
-        'show': 5
+        'mode': 'static',
     });
 
     // Shift nav in mobile when clicking the menu.
