@@ -1,10 +1,11 @@
 # coding: utf-8
 from __future__ import print_function
 
+from livereload import Server
 from watchdog import events
 from watchdog.observers.polling import PollingObserver
 from mkdocs.build import build
-from mkdocs.compat import httpserver, socketserver, urlunquote
+from mkdocs.compat import httpserver, urlunquote
 from mkdocs.config import load_config
 import os
 import posixpath
@@ -95,22 +96,14 @@ def serve(config, options=None):
     observer.schedule(config_event_handler, '.')
     observer.start()
 
-    class TCPServer(socketserver.TCPServer):
-        allow_reuse_address = True
-
-    class DocsDirectoryHandler(FixedDirectoryHandler):
-        base_dir = config['site_dir']
-
     host, port = config['dev_addr'].split(':', 1)
-    server = TCPServer((host, int(port)), DocsDirectoryHandler)
+    server = Server()
+    server.watch(config['site_dir'])
+    server.serve(port=port, root=config['site_dir'])
 
     print('Running at: http://%s:%s/' % (host, port))
     print('Live reload enabled.')
     print('Hold ctrl+c to quit.')
-    try:
-        server.serve_forever()
-    except KeyboardInterrupt:
-        print('Stopping server...')
 
     # Clean up
     observer.stop()
