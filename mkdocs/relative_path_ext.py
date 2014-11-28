@@ -1,8 +1,45 @@
-from markdown.treeprocessors import Treeprocessor
-from markdown.extensions import Extension
+"""
+# Relative Path Markdown Extension
 
-from mkdocs.compat import urlparse, urlunparse
+During the MkDocs build we rewrite URLs that link to local
+Markdown or media files. Using the following pages configuration
+we can look at how the output is changed.
+
+    pages:
+    - ['index.md']
+    - ['tutorial/install.md']
+    - ['tutorial/intro.md']
+
+## Markdown URLs
+
+When linking from `install.md` to `intro.md` the link would
+simply be `[intro](intro.md)`. However, when we build
+`install.md` we place it in a directory to create nicer URLs.
+This means that the path to `intro.md` becomes `../intro/`
+
+## Media URLs
+
+To make it easier to work with media files and store them all
+under one directory we re-write those to all be based on the
+root. So, with the following markdown to add an image.
+
+    ![The initial MkDocs layout](img/initial-layout.png)
+
+The output would depend on the location of the Markdown file it
+was added too.
+
+Source file         | Generated Path    | Image Path                   |
+------------------- | ----------------- | ---------------------------- |
+index.md            | /                 | ./img/initial-layout.png     |
+tutorial/install.md | tutorial/install/ | ../img/initial-layout.png    |
+tutorial/intro.md   | tutorial/intro/   | ../../img/initial-layout.png |
+
+"""
+from markdown.extensions import Extension
+from markdown.treeprocessors import Treeprocessor
+
 from mkdocs import utils
+from mkdocs.compat import urlparse, urlunparse
 
 
 def _iter(node):
