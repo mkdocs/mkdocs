@@ -482,6 +482,26 @@ class BuildTests(unittest.TestCase):
             html, _, _ = build.convert_markdown(html, site_navigation=site_navigation)
             self.assertEqual(html, expected)
 
+    def test_dont_convert_code_block_urls(self):
+        pages = [
+            ('index.md',),
+            ('internal.md',),
+            ('sub/internal.md')
+        ]
+
+        site_navigation = nav.SiteNavigation(pages)
+
+        expected = dedent("""
+        <p>An HTML Anchor::</p>
+        <pre><code>&lt;a href="index.md"&gt;My example link&lt;/a&gt;
+        </code></pre>
+        """)
+
+        for page in site_navigation.walk_pages():
+            markdown = 'An HTML Anchor::\n\n    <a href="index.md">My example link</a>\n'
+            html, _, _ = build.convert_markdown(markdown, site_navigation=site_navigation)
+            self.assertEqual(dedent(html), expected)
+
     def test_anchor_only_link(self):
 
         pages = [
