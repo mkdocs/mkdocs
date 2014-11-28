@@ -2,7 +2,7 @@
 from __future__ import print_function
 
 from jinja2.exceptions import TemplateNotFound
-from mkdocs import nav, toc, utils
+from mkdocs import nav, search, toc, utils
 from mkdocs.compat import urljoin, PY2
 from mkdocs.relative_path_ext import RelativePathExtension
 import jinja2
