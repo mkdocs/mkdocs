@@ -4,7 +4,7 @@ from __future__ import print_function
 from jinja2.exceptions import TemplateNotFound
 from mkdocs import nav, toc, utils
 from mkdocs.compat import urljoin, PY2
-from mkdocs.mdextensions.relative_path import RelativePathExtension
+from mkdocs.relative_path_ext import RelativePathExtension
 import jinja2
 import json
 import markdown
