@@ -67,7 +67,9 @@ class SearchIndex(object):
 
     def generate_search_index(self):
         """python to json conversion"""
-        page_dicts = [p.to_dict() for p in self.pages]
+        page_dicts = {
+            'pages': [p.to_dict() for p in self.pages],
+        }
         return json.dumps(page_dicts, sort_keys=True, indent=4)
 
     def strip_tags(self, html):
