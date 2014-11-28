@@ -4,7 +4,7 @@ from __future__ import print_function
 from watchdog import events
 from watchdog.observers.polling import PollingObserver
 from mkdocs.build import build
-from mkdocs.compat import httpserver, socketserver, urlunquote
+from mkdocs.compat import httpserver, socketserver, urlunquote, urlparse, urlunparse
 from mkdocs.config import load_config
 import os
 import posixpath
@@ -47,6 +47,17 @@ class FixedDirectoryHandler(httpserver.SimpleHTTPRequestHandler):
     directory, instead of being hardwired to the current working directory.
     """
     base_dir = os.getcwd()
+
+    def do_GET(self):
+        """
+        The SimpleHTTPRequestHandler isn't designed to work with query strings.
+        Everything we do with the query string is handle on the client-side, so
+        throw it away here.
+        """
+        scheme, netloc, path, query, query, fragment = urlparse(self.path)
+        if query is not '':
+            self.path = urlunparse((scheme, netloc, path, '', '', fragment))
+        return httpserver.SimpleHTTPRequestHandler.do_GET(self)
 
     def translate_path(self, path):
         # abandon query parameters
