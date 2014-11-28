@@ -54,10 +54,14 @@ def copy_media_files(from_dir, to_dir):
         relative_path = os.path.relpath(source_dir, from_dir)
         output_dir = os.path.normpath(os.path.join(to_dir, relative_path))
 
-        for filename in filenames:
+        # Filter filenames starting with a '.'
+        filenames = [f for f in filenames if not f.startswith('.')]
 
-            if filename.startswith('.'):
-                continue
+        # Filter the dirnames that start with a '.' and update the list in
+        # place to prevent us walking these.
+        dirnames[:] = [d for d in dirnames if not d.startswith('.')]
+
+        for filename in filenames:
 
             if not is_markdown_file(filename) and not is_html_file(filename):
                 source_path = os.path.join(source_dir, filename)
