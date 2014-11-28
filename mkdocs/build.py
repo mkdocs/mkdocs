@@ -216,8 +216,9 @@ def build_pages(config, dump_json=False):
     if config['include_search']:
         # save search index to disk
         build_template('search.html', config, env, site_navigation)
-        output_content = search_index.generate_search_index()
-        output_path = os.path.join(config['site_dir'], 'search_content.json')
+        output_js = "var tipuesearch = %s;"
+        output_content = output_js % search_index.generate_search_index()
+        output_path = os.path.join(config['site_dir'], 'tipuesearch_content.js')
         utils.write_file(output_content.encode('utf-8'), output_path)
 
 

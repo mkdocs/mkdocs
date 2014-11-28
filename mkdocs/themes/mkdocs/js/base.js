@@ -16,8 +16,7 @@ $(document).ready(function() {
 
     // Tipue Search activation
     $('#tipue_search_input').tipuesearch({
-        'mode': 'json',
-        'contentLocation': '/search_content.json',
+        'mode': 'static',
         'show': 5
     });
 
