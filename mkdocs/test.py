@@ -596,11 +596,12 @@ class BuildTests(unittest.TestCase):
         html_ext, _, _ = build.convert_markdown(md_input, ['toc'])
         self.assertEqual(html_ext.strip(), '<p>foo</p>')
 
-    def test_default_pages(self):
+    def test_copying_media(self):
 
         docs_dir = tempfile.mkdtemp()
         site_dir = tempfile.mkdtemp()
         try:
+            # Create a markdown file, image, dot file and dot directory.
             open(os.path.join(docs_dir, 'index.md'), 'w').close()
             open(os.path.join(docs_dir, 'img.jpg'), 'w').close()
             open(os.path.join(docs_dir, '.hidden'), 'w').close()
@@ -614,6 +615,7 @@ class BuildTests(unittest.TestCase):
             })
             build.build(conf)
 
+            # Verify only the markdown (coverted to html) and the image are copied.
             self.assertTrue(os.path.isfile(os.path.join(site_dir, 'index.html')))
             self.assertTrue(os.path.isfile(os.path.join(site_dir, 'img.jpg')))
             self.assertFalse(os.path.isfile(os.path.join(site_dir, '.hidden')))
