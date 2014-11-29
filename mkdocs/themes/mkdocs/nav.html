@@ -20,6 +20,21 @@
         <!-- Expanded navigation -->
         <div class="navbar-collapse collapse">
             {% if include_nav %}
+                {% macro render_nav(nav_item) -%}
+                    {% for nav_item in nav_item.children -%}
+                        {% if nav_item.children -%}
+                            <li class="dropdown-submenu {% if nav_item.active %}active{% endif %}">
+                                <a href="#" tabindex="-1">{{ nav_item.title }}</a>
+                                <ul class="dropdown-menu">
+                                    {{ render_nav(nav_item) }}
+                                </ul>
+                        {%- else -%}
+                            <li {% if nav_item.active %}class="active"{% endif %}>
+                                <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
+                            </li>
+                        {%- endif %}
+                    {%- endfor %}
+                {%- endmacro %}
                 <!-- Main navigation -->
                 <ul class="nav navbar-nav">
                 {% for nav_item in nav %}
@@ -27,11 +42,7 @@
                     <li class="dropdown{% if nav_item.active %} active{% endif %}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ nav_item.title }} <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                        {% for nav_item in nav_item.children %}
-                            <li {% if nav_item.active %}class="active"{% endif %}>
-                                <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
-                            </li>
-                        {% endfor %}
+                            {{ render_nav(nav_item) }}
                         </ul>
                     </li>
                 {% else %}

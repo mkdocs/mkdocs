@@ -99,3 +99,10 @@ div.source-links {
         width: 263px;
     }
 }
+
+footer {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: 200;
+}

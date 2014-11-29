@@ -197,44 +197,44 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
     for config_line in pages_config:
         if isinstance(config_line, str):
             path = config_line
-            title, child_title = None, None
-        elif len(config_line) in (1, 2, 3):
-            # Pad any items that don't exist with 'None'
-            padded_config = (list(config_line) + [None, None])[:3]
-            path, title, child_title = padded_config
+            titles = []
         else:
-            msg = (
-                "Line in 'page' config contained %d items.  "
-                "Expected 1, 2 or 3 strings." % len(config_line)
-            )
-            assert False, msg
+            padded_config = list(config_line)
+            path = padded_config[0]
+            titles = padded_config[1:]
 
-        if title is None:
-            filename = path.split('/')[0]
-            title = filename_to_title(filename)
-        if child_title is None and '/' in path:
-            filename = path.split('/')[1]
-            child_title = filename_to_title(filename)
+        for sub_path in path.split('/')[len(titles):]:
+            titles.append(filename_to_title(sub_path))
 
         url = utils.get_url_path(path, use_directory_urls)
 
-        if not child_title:
-            # New top level page.
-            page = Page(title=title, url=url, path=path, url_context=url_context)
+        page = Page(title=titles[-1], url=url, path=path, url_context=url_context)
+        if previous:
+            level = min(len(previous.ancestors), len(titles))
+            for idx in range(0, level):
+                if previous.ancestors[idx].title != titles[idx]:
+                    level = idx
+                    break
+            page.ancestors = previous.ancestors[:level]
+        else:
+            level = 0
+            page.ancestors = []
+
+        while level < len(titles) - 1:
+            title = titles[level]
+            header = Header(title=title, children=[])
+            if len(page.ancestors) > 0:
+                page.ancestors[-1].children.append(header)
+            else:
+                nav_items.append(header)
+            page.ancestors.append(header)
+            level += 1
+
+        if (len(page.ancestors) > 0):
+            page.ancestors[-1].children.append(page)
+        else:
             if not utils.is_homepage(path):
                 nav_items.append(page)
-        elif not nav_items or (nav_items[-1].title != title):
-            # New second level page.
-            page = Page(title=child_title, url=url, path=path, url_context=url_context)
-            header = Header(title=title, children=[page])
-            nav_items.append(header)
-            page.ancestors = [header]
-        else:
-            # Additional second level page.
-            page = Page(title=child_title, url=url, path=path, url_context=url_context)
-            header = nav_items[-1]
-            header.children.append(page)
-            page.ancestors = [header]
 
         # Add in previous and next information.
         if previous:
