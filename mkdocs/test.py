@@ -610,6 +610,34 @@ class BuildTests(unittest.TestCase):
         html_ext, _, _ = build.convert_markdown(md_input, ['toc'])
         self.assertEqual(html_ext.strip(), '<p>foo</p>')
 
+    def test_copying_media(self):
+
+        docs_dir = tempfile.mkdtemp()
+        site_dir = tempfile.mkdtemp()
+        try:
+            # Create a markdown file, image, dot file and dot directory.
+            open(os.path.join(docs_dir, 'index.md'), 'w').close()
+            open(os.path.join(docs_dir, 'img.jpg'), 'w').close()
+            open(os.path.join(docs_dir, '.hidden'), 'w').close()
+            os.mkdir(os.path.join(docs_dir, '.git'))
+            open(os.path.join(docs_dir, '.git/hidden'), 'w').close()
+
+            conf = config.validate_config({
+                'site_name': 'Example',
+                'docs_dir': docs_dir,
+                'site_dir': site_dir
+            })
+            build.build(conf)
+
+            # Verify only the markdown (coverted to html) and the image are copied.
+            self.assertTrue(os.path.isfile(os.path.join(site_dir, 'index.html')))
+            self.assertTrue(os.path.isfile(os.path.join(site_dir, 'img.jpg')))
+            self.assertFalse(os.path.isfile(os.path.join(site_dir, '.hidden')))
+            self.assertFalse(os.path.isfile(os.path.join(site_dir, '.git/hidden')))
+        finally:
+            shutil.rmtree(docs_dir)
+            shutil.rmtree(site_dir)
+
 # class IntegrationTests(unittest.TestCase):
 #     def test_mkdocs_site(self):
 #         """
