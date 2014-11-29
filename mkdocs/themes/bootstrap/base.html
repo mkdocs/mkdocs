@@ -52,10 +52,10 @@
 
         <footer class="footer">
             <hr>
-            <p>
-              Copyright 2011-2014, jpush.cn, All Rights Reserved. <br />
-              粤ICP备12056275号-2
-            </p>
+            {% if copyright %}
+            <p>{{ copyright }}</p>
+            {% endif %}
+            <p> </p>
         </footer>
 
 
