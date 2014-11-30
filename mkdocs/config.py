@@ -1,12 +1,10 @@
 # coding: utf-8
 
 from mkdocs import utils
-from mkdocs.compat import urlparse
+from mkdocs.compat import StringIO, urlparse, urlopen, URLError
 from mkdocs.exceptions import ConfigurationError
 
-from StringIO import StringIO
 import os
-from urllib2 import Request, urlopen, URLError
 import yaml
 from zipfile import ZipFile
 
