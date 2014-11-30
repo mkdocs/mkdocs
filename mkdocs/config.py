@@ -176,6 +176,8 @@ def install_theme(url, package_dir):
     except URLError:
         return
     zipfile = response.read()
-    with ZipFile(file=StringIO(zipfile)) as theme_zip:
-        for zipinfo in theme_zip.infolist():
-            theme_zip.extractall(path=package_dir)
+    # We can't use ZipFile as a ContextManager due to PY26 compatibility
+    theme_zip = ZipFile(file=StringIO(zipfile))
+    for zipinfo in theme_zip.infolist():
+        theme_zip.extractall(path=package_dir)
+    theme_zip.close()
