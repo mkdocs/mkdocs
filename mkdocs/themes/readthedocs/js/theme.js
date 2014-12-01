@@ -16,6 +16,8 @@ $( document ).ready(function() {
     $("table.docutils:not(.field-list)").wrap("<div class='wy-table-responsive'></div>");
 
     hljs.initHighlightingOnLoad();
+
+    $('table').addClass('docutils');
 });
 
 window.SphinxRtdTheme = (function (jquery) {
