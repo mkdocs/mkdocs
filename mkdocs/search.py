@@ -119,7 +119,7 @@ class ContentParser(HTMLParser):
         HTMLParser.__init__(self)
 
         self.data = []
-        self.section = ""
+        self.section = None
         self.is_header_tag = False
 
     def handle_starttag(self, tag, attrs):
@@ -139,6 +139,10 @@ class ContentParser(HTMLParser):
 
     def handle_data(self, data):
         """hook - data"""
+
+        if self.section is None:
+            return
+
         if self.is_header_tag:
             self.section.title = data
         else:
