@@ -17,6 +17,10 @@ div.col-md-3 {
     padding-left: 0;
 }
 
+div.col-md-9 {
+    padding-bottom: 100px;
+}
+
 div.source-links {
     float: right;
 }
