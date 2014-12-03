@@ -21,12 +21,14 @@ class SearchIndex(object):
         parser = ContentParser()
         parser.feed(content)
 
+        abs_url = nav.url_context.make_relative(page.abs_url)
+
         # create entry for page
         self.create_entry(
             title=page.title,
             text=self.strip_tags(content).rstrip('\n'),
             tags="",
-            loc=page.abs_url
+            loc=abs_url
         )
 
         # check all found sections against toc, match on id
@@ -40,7 +42,7 @@ class SearchIndex(object):
                         title=toc_item.title,
                         text=u" ".join(section.text),
                         tags="",
-                        loc=page.abs_url + toc_item.url
+                        loc=abs_url + toc_item.url
                     )
                 # not found, check h2
                 else:
@@ -52,23 +54,22 @@ class SearchIndex(object):
                                 title=toc_sub_item.title,
                                 text=u" ".join(section.text),
                                 tags="",
-                                loc=page.abs_url + toc_sub_item.url
+                                loc=abs_url + toc_sub_item.url
                             )
 
     def create_entry(self, title, text, tags, loc):
         """create an index entry"""
-        entry = SearchEntry(
+        self.pages.append(dict(
             title=title,
             text=unicode(text.strip().encode('utf-8'), encoding='utf-8'),
             tags=tags,
             loc=loc
-        )
-        self.pages.append(entry)
+        ))
 
     def generate_search_index(self):
         """python to json conversion"""
         page_dicts = {
-            'pages': [p.to_dict() for p in self.pages],
+            'pages': self.pages,
         }
         return json.dumps(page_dicts, sort_keys=True, indent=4)
 
@@ -77,24 +78,6 @@ class SearchIndex(object):
         s = MLStripper()
         s.feed(html)
         return s.get_data()
-
-
-class SearchEntry(object):
-    """data container for a index entry"""
-
-    def __init__(self, title, text, tags, loc):
-        self.title = title
-        self.text = text
-        self.tags = tags
-        self.loc = loc
-
-    def to_dict(self):
-        return {
-            'title': self.title,
-            'text': self.text,
-            'tags': self.tags,
-            'loc': self.loc,
-        }
 
 
 class MLStripper(HTMLParser):
