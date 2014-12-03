@@ -5,8 +5,6 @@ callbacks = defaultdict(list)
 def register_callback(event_type, callback):
     callbacks[event_type].append(callback)
 
-#--------------------------------------------------------
-
 class Event(object):
     """ Abstract event extension class for mkdocs """
 
@@ -18,9 +16,6 @@ class Event(object):
             callback(self)
             if self.consumed:
                 return
-
-# B
-#--------------------------------------------------------
 
 class BuildPage(Event):
     """ Called before a page is generated within the navigation system """
@@ -36,9 +31,6 @@ class BuildPage(Event):
         # output arguments
         self.pages = []
 
-# C
-#--------------------------------------------------------
-
 class CLI(Event):
     # define additional plugin commands
     commands = set()
@@ -52,9 +44,6 @@ class CLI(Event):
         self.args = args
         self.options = options
 
-# G
-#--------------------------------------------------------
-
 class GenerateContent(Event):
     def __init__(self, config, page):
         super(GenerateContent, self).__init__()
@@ -67,9 +56,6 @@ class GenerateContent(Event):
         self.table_of_contents = ''
         self.meta = {}
         self.html_content = ''
-
-# P
-#--------------------------------------------------------
 
 class PreBuild(Event):
     """ Called before a build event occurs """
