@@ -210,7 +210,7 @@ def build_pages(config, dump_json=False):
         # add search entry
         search_index.add_entry_from_context(
             page, html_content, site_navigation,
-            table_of_contents, meta, config
+            table_of_contents
         )
 
     if config['include_search']:

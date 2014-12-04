@@ -12,7 +12,7 @@ class SearchIndex(object):
     def __init__(self):
         self.pages = []
 
-    def add_entry_from_context(self, page, content, nav, toc, meta, config):
+    def add_entry_from_context(self, page, content, nav, toc):
         """add entry based on predetermined properties"""
 
         # create parser for analysing content
