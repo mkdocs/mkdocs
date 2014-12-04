@@ -1,7 +1,9 @@
-<div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="{{ base_url }}/search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
+{% if include_search %}
+    <div role="search">
+      <form id ="rtd-search-form" class="wy-form" action="{{ base_url }}/search.html" method="get">
+        <input type="text" name="q" placeholder="Search docs" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+{% endif %}
