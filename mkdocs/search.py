@@ -75,25 +75,33 @@ class SearchIndex(object):
 
     def strip_tags(self, html):
         """strip html tags from data"""
-        s = MLStripper()
+        s = HTMLStripper()
         s.feed(html)
         return s.get_data()
 
 
-class MLStripper(HTMLParser):
-    """class for stripping html tags"""
+class HTMLStripper(HTMLParser):
+    """
+    A simple HTML parser that stores all of the data within tags
+    but ignores the tags themselves and thus strips them from the
+    content.
+    """
 
-    def __init__(self):
-        self.reset()
-        self.fed = []
-        self.strict = False
-        self.convert_charrefs = True
+    def __init__(self, *args, **kwargs):
+        # HTMLParser is a old-style class in Python 2, so
+        # super() wont work here.
+        HTMLParser.__init__(self, *args, **kwargs)
+
+        self.data = []
 
     def handle_data(self, d):
-        self.fed.append(d)
+        """
+        Called for the text contents of each tag.
+        """
+        self.data.append(d)
 
     def get_data(self):
-        return ''.join(self.fed)
+        return '\n'.join(self.data)
 
 
 class ContentSection():
