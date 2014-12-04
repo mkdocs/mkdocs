@@ -96,46 +96,77 @@ class MLStripper(HTMLParser):
         return ''.join(self.fed)
 
 
-class ContentParser(HTMLParser):
-    """class for parsing html-sections"""
+class ContentSection():
+    """
+    Used by the ContentParser class to capture the information we
+    need when it is parsing the HMTL.
+    """
+
     def __init__(self):
-        HTMLParser.__init__(self)
+        self.text = []
+        self.id = None
+        self.title = None
+
+
+class ContentParser(HTMLParser):
+    """
+    Given a block of HTML, group the content under the preceding
+    H1 or H2 tags which can then be used for creating an index
+    for that section.
+    """
+
+    def __init__(self, *args, **kwargs):
+
+        # HTMLParser is a old-style class in Python 2, so
+        # super() wont work here.
+        HTMLParser.__init__(self, *args, **kwargs)
 
         self.data = []
         self.section = None
         self.is_header_tag = False
 
     def handle_starttag(self, tag, attrs):
-        """hook - tag start"""
-        if tag in ("h1", "h2"):
-            self.is_header_tag = True
-            self.section = ContentSection()
-            for attr in attrs:
-                if attr[0] == "id":
-                    self.section.id = attr[1]
+        """Called at the start of every HTML tag."""
 
-    def handle_endtag(self, tag):
-        """hook - tag end"""
-        if tag in ("h1", "h2"):
-            self.is_header_tag = False
-            self.data.append(self.section)
-
-    def handle_data(self, data):
-        """hook - data"""
-
-        if self.section is None:
+        # We only care about the opening tag for H1 and H2.
+        if tag not in ("h1", "h2"):
             return
 
+        # We are dealing with a new header, create a new section
+        # for it and assign the ID if it has one.
+        self.is_header_tag = True
+        self.section = ContentSection()
+        self.data.append(self.section)
+
+        for attr in attrs:
+            if attr[0] == "id":
+                self.section.id = attr[1]
+
+    def handle_endtag(self, tag):
+        """Called at the end of every HTML tag."""
+
+        # We only care about the opening tag for H1 and H2.
+        if tag not in ("h1", "h2"):
+            return
+
+        self.is_header_tag = False
+
+    def handle_data(self, data):
+        """
+        Called for the text contents of each tag.
+        """
+
+        if self.section is None:
+            # This means we have some content at the start of the
+            # HTML before we reach a H1 or H2. We don't actually
+            # care about that content as it will be added to the
+            # overall page entry in the search. So just skip it.
+            return
+
+        # If this is a header, then the data is the title.
+        # Otherwise it is content of something under that header
+        # section.
         if self.is_header_tag:
             self.section.title = data
         else:
             self.section.text.append(data.rstrip('\n'))
-
-
-class ContentSection():
-    """content-holder for html-sections"""
-
-    def __init__(self):
-        self.text = []
-        self.id = ""
-        self.title = ""
