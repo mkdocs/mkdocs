@@ -71,32 +71,34 @@
         <script src="{{ path }}"></script>
         {%- endfor %}
 
-        <div class="modal" id="search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>
-                            From here you can search these documents. Enter
-                            your search words into the box below and click
-                            "search".
-                        </p>
-                        <form role="form">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="q" id="tipue_search_input">
-                                <button type="submit" class="btn">Search</button>
-                            </div>
-                        </form>
-                        <div id="tipue_search_content"></div>
-                    </div>
-                    <div class="modal-footer">
+        {% if include_search %}
+            <div class="modal" id="search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>
+                                From here you can search these documents. Enter
+                                your search words into the box below and click
+                                "search".
+                            </p>
+                            <form role="form">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="q" id="tipue_search_input">
+                                    <button type="submit" class="btn">Search</button>
+                                </div>
+                            </form>
+                            <div id="tipue_search_content"></div>
+                        </div>
+                        <div class="modal-footer">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
 
     </body>
 </html>

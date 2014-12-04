@@ -46,32 +46,34 @@
             {% if include_search or include_next_prev or repo_url %}
             <!-- Search, Navigation and Repo links -->
             <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="#" data-toggle="modal" data-target="#search_modal"><i class="fa fa-search"></i> Search</a>
-                </li>
+                {% if include_search %}
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#search_modal"><i class="fa fa-search"></i> Search</a>
+                    </li>
+                {% endif %}
                 {% if include_next_prev %}
-                <li {% if not previous_page %}class="disabled"{% endif %}>
-                    <a rel="next" {% if previous_page %}href="{{ previous_page.url }}"{% endif %}>
-                        <i class="fa fa-arrow-left"></i> Previous
-                    </a>
-                </li>
-                <li {% if not next_page %}class="disabled"{% endif %}>
-                    <a rel="prev" {% if next_page %}href="{{ next_page.url }}"{% endif %}>
-                        Next <i class="fa fa-arrow-right"></i>
-                    </a>
-                </li>
+                    <li {% if not previous_page %}class="disabled"{% endif %}>
+                        <a rel="next" {% if previous_page %}href="{{ previous_page.url }}"{% endif %}>
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li {% if not next_page %}class="disabled"{% endif %}>
+                        <a rel="prev" {% if next_page %}href="{{ next_page.url }}"{% endif %}>
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
                 {% endif %}
                 {% if repo_url %}
-                <li>
-                    <a href="{{ repo_url }}">
-                        {% if repo_name == 'GitHub' %}
-                            <i class="fa fa-github"></i>
-                        {% elif repo_name == 'Bitbucket' %}
-                            <i class="fa fa-bitbucket"></i>
-                        {% endif %}
-                        {{ repo_name }}
-                    </a>
-                </li>
+                    <li>
+                        <a href="{{ repo_url }}">
+                            {% if repo_name == 'GitHub' %}
+                                <i class="fa fa-github"></i>
+                            {% elif repo_name == 'Bitbucket' %}
+                                <i class="fa fa-bitbucket"></i>
+                            {% endif %}
+                            {{ repo_name }}
+                        </a>
+                    </li>
                 {% endif %}
             </ul>
             {% endif %}
