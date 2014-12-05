@@ -6,70 +6,86 @@ import json
 
 class SearchIndex(object):
     """
-    Data holder for the search index.
+    Search index is a collection of pages and sections (H1 and H2
+    tags and their following content are sections).
     """
 
     def __init__(self):
-        self.pages = []
+        self._entries = []
+
+    def _find_toc_by_id(self, toc, id_):
+        """
+        Given a table of contents and HTML ID, iterate through
+        and return the matched item in the TOC.
+        """
+        for toc_item in toc:
+            if toc_item.url[1:] == id_:
+                return toc_item
+            for toc_sub_item in toc_item.children:
+                if toc_sub_item.url[1:] == id_:
+                    return toc_sub_item
+
+    def _add_entry(self, title, text, tags, loc):
+        """
+        A simple wrapper to add an entry and ensure the contents
+        is UTF8 encoded.
+        """
+        self._entries.append({
+            'title': title,
+            'text': unicode(text.strip().encode('utf-8'), encoding='utf-8'),
+            'tags': tags,
+            'loc': loc
+        })
 
     def add_entry_from_context(self, page, content, nav, toc):
-        """add entry based on predetermined properties"""
+        """
+        Create a set of entries in the index for a page. One for
+        the page itself and then one for each of it's H1 and H2
+        tags.
+        """
 
-        # create parser for analysing content
-        # we parse the content since the toc dont have the data
-        # and we need to use toc urls
+        # Create the content parser and feed in the HTML for the
+        # full page. This handles all the parsing and prepares
+        # us to iterate through it.
         parser = ContentParser()
         parser.feed(content)
 
+        # Get the absolute URL for the page, this is then
+        # prepended to the urls of the sections
         abs_url = nav.url_context.make_relative(page.abs_url)
 
-        # create entry for page
-        self.create_entry(
+        # Create an entry for the full page.
+        self._add_entry(
             title=page.title,
             text=self.strip_tags(content).rstrip('\n'),
             tags="",
             loc=abs_url
         )
 
-        # check all found sections against toc, match on id
         for section in parser.data:
-            # toc h1
-            for toc_item in toc:
-                # dont check sub sections if found
-                if toc_item.url[1:] == section.id and len(section.text) > 0:
-                    # create entry
-                    self.create_entry(
-                        title=toc_item.title,
-                        text=u" ".join(section.text),
-                        tags="",
-                        loc=abs_url + toc_item.url
-                    )
-                # not found, check h2
-                else:
-                    # toc h2
-                    for toc_sub_item in toc_item.children:
-                        if toc_sub_item.url[1:] == section.id and len(section.text) > 0:
-                            # create entry
-                            self.create_entry(
-                                title=toc_sub_item.title,
-                                text=u" ".join(section.text),
-                                tags="",
-                                loc=abs_url + toc_sub_item.url
-                            )
+            self.create_entry_for_section(section, toc, abs_url)
 
-    def create_entry(self, title, text, tags, loc):
-        """create an index entry"""
-        self.pages.append(dict(
-            title=title,
-            text=unicode(text.strip().encode('utf-8'), encoding='utf-8'),
-            tags=tags,
-            loc=loc
-        ))
+    def create_entry_for_section(self, section, toc, abs_url):
+        """
+        Given a section on the page, the table of contents and
+        the absolute url for the page create an entry in the
+        index
+        """
+
+        toc_item = self._find_toc_by_id(toc, section.id)
+
+        if toc_item is not None:
+            self._add_entry(
+                title=toc_item.title,
+                text=u" ".join(section.text),
+                tags="",
+                loc=abs_url + toc_item.url
+            )
 
     def generate_search_index(self):
         """python to json conversion"""
         page_dicts = {
-            'pages': self.pages,
+            'pages': self._entries,
         }
         return json.dumps(page_dicts, sort_keys=True, indent=4)
 
