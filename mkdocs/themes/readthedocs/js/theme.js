@@ -3,6 +3,7 @@ $( document ).ready(function() {
     // Tipue Search activation
     $('#tipue_search_input').tipuesearch({
         'mode': 'static',
+        'show': 10
     });
 
     // Shift nav in mobile when clicking the menu.
