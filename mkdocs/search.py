@@ -126,10 +126,20 @@ class ContentSection():
     need when it is parsing the HMTL.
     """
 
-    def __init__(self):
-        self.text = []
-        self.id = None
-        self.title = None
+    def __init__(self, text=None, id_=None, title=None):
+        self.text = text or []
+        self.id = id_
+        self.title = title
+
+    def __eq__(self, other):
+        return all([
+            self.text == other.text,
+            self.id == other.id,
+            self.title == other.title
+        ])
+
+    def __repr__(self):
+        return "<ContentSection id:{0}, title:{1}>".format(self.id, self.title)
 
 
 class ContentParser(HTMLParser):
