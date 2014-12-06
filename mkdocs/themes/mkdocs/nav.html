@@ -3,7 +3,7 @@
 
         <!-- Collapsed navigation -->
         <div class="navbar-header">
-            {% if include_nav or include_search or include_next_prev or repo_url %}
+            {% if include_nav or include_next_prev or repo_url %}
             <!-- Expander button -->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -43,14 +43,10 @@
                 </ul>
             {% endif %}
 
-            {% if include_search or include_next_prev or repo_url %}
-            <!-- Search, Navigation and Repo links -->
             <ul class="nav navbar-nav navbar-right">
-                {% if include_search %}
-                    <li>
-                        <a href="#" data-toggle="modal" data-target="#search_modal"><i class="fa fa-search"></i> Search</a>
-                    </li>
-                {% endif %}
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#search_modal"><i class="fa fa-search"></i> Search</a>
+                </li>
                 {% if include_next_prev %}
                     <li {% if not previous_page %}class="disabled"{% endif %}>
                         <a rel="next" {% if previous_page %}href="{{ previous_page.url }}"{% endif %}>
@@ -76,7 +72,6 @@
                     </li>
                 {% endif %}
             </ul>
-            {% endif %}
         </div>
     </div>
 </div>
