@@ -37,7 +37,7 @@ class SearchIndex(object):
             'loc': loc
         })
 
-    def add_entry_from_context(self, page, content, nav, toc):
+    def add_entry_from_context(self, page, content, toc):
         """
         Create a set of entries in the index for a page. One for
         the page itself and then one for each of it's H1 and H2
@@ -52,7 +52,7 @@ class SearchIndex(object):
 
         # Get the absolute URL for the page, this is then
         # prepended to the urls of the sections
-        abs_url = nav.url_context.make_relative(page.abs_url)
+        abs_url = page.abs_url
 
         # Create an entry for the full page.
         self._add_entry(

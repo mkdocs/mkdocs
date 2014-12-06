@@ -86,19 +86,23 @@ class URLContext(object):
     def set_current_url(self, current_url):
         self.base_path = posixpath.dirname(current_url)
 
-    def make_relative(self, url):
+    def make_relative(self, url, base_path=None):
         """
         Given a URL path return it as a relative URL,
         given the context of the current page.
         """
+
+        if base_path is None:
+            base_path = self.base_path
+
         suffix = '/' if (url.endswith('/') and len(url) > 1) else ''
         # Workaround for bug on `posixpath.relpath()` in Python 2.6
-        if self.base_path == '/':
+        if base_path == '/':
             if url == '/':
                 # Workaround for static assets
                 return '.'
             return url.lstrip('/')
-        relative_path = posixpath.relpath(url, start=self.base_path) + suffix
+        relative_path = posixpath.relpath(url, start=base_path) + suffix
 
         # Under Python 2.6, relative_path adds an extra '/' at the end.
         return relative_path.rstrip('/')

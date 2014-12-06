@@ -212,9 +212,7 @@ def build_pages(config, dump_json=False):
         else:
             utils.write_file(output_content.encode('utf-8'), output_path)
 
-        search_index.add_entry_from_context(
-            page, html_content, site_navigation, table_of_contents
-        )
+        search_index.add_entry_from_context(page, html_content, table_of_contents)
 
     build_template('search.html', env, config, site_navigation)
     build_template('js/tipuesearch/tipuesearch_content.js', env, config, extra_context={
