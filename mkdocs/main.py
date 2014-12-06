@@ -4,6 +4,7 @@ from __future__ import print_function
 
 import sys
 
+from mkdocs import __version__
 from mkdocs.build import build
 from mkdocs.config import load_config
 from mkdocs.exceptions import ConfigurationError
@@ -44,6 +45,7 @@ def main(cmd, args, options=None):
     elif cmd == 'new':
         new(args, options)
     else:
+        print('MkDocs (version {0})'.format(__version__))
         print('mkdocs [help|new|build|serve|gh-deploy|json] {options}')
 
 
