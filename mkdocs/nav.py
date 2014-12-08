@@ -210,10 +210,11 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
             assert False, msg
 
         if title is None:
-            filename = path.split('/')[0]
+            filename = path.split(os.path.sep)[0]
             title = filename_to_title(filename)
+
         if child_title is None and '/' in path:
-            filename = path.split('/')[1]
+            filename = path.split(os.path.sep)[1]
             child_title = filename_to_title(filename)
 
         url = utils.get_url_path(path, use_directory_urls)
