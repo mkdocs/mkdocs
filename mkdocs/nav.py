@@ -214,7 +214,7 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
             title = filename_to_title(filename)
 
         if child_title is None and os.path.sep in path:
-            filename = path.split(os.path.sep)[1]
+            filename = path.split(os.path.sep)[-1]
             child_title = filename_to_title(filename)
 
         url = utils.get_url_path(path, use_directory_urls)

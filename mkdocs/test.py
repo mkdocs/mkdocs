@@ -6,6 +6,7 @@ from mkdocs import build, main, nav, toc, utils, config
 from mkdocs.compat import PY2, zip
 from mkdocs.exceptions import ConfigurationError
 import markdown
+import mock
 import os
 import shutil
 import tempfile
@@ -400,6 +401,44 @@ class SiteNavigationTests(unittest.TestCase):
         site_navigation = nav.SiteNavigation(pages, use_directory_urls=False)
         base_url = site_navigation.url_context.make_relative('/')
         self.assertEqual(base_url, '.')
+
+    def test_generate_site_navigation(self):
+        """
+        Verify inferring page titles based on the filename
+        """
+
+        pages = [
+            ('index.md', ),
+            ('api-guide/running.md', ),
+            ('about/notes.md', ),
+            ('about/sub/license.md', ),
+        ]
+
+        url_context = nav.URLContext()
+        nav_items, pages = nav._generate_site_navigation(pages, url_context)
+
+        self.assertEqual([n.title for n in nav_items], ['Api guide', 'About'])
+        self.assertEqual([p.title for p in pages],
+                         ['Home', 'Running', 'Notes', 'License'])
+
+    @mock.patch.object(os.path, 'sep', '\\')
+    def test_generate_site_navigation_windows(self):
+        """
+        Verify inferring page titles based on the filename with a windows path
+        """
+        pages = [
+            ('index.md', ),
+            ('api-guide\\running.md', ),
+            ('about\\notes.md', ),
+            ('about\\sub\\license.md', ),
+        ]
+
+        url_context = nav.URLContext()
+        nav_items, pages = nav._generate_site_navigation(pages, url_context)
+
+        self.assertEqual([n.title for n in nav_items], ['Api guide', 'About'])
+        self.assertEqual([p.title for p in pages],
+                         ['Home', 'Running', 'Notes', 'License'])
 
 
 class BuildTests(unittest.TestCase):
