@@ -68,6 +68,10 @@ DEFAULT_CONFIG = {
     # TODO: Implement this. Make this None, have it True if a sitemap.xml
     # template exists in the theme or docs dir.
     'include_sitemap': False,
+
+    # enabling strict mode causes MkDocs to stop the build when a problem is
+    # encountered rather than display an error.
+    'strict': False,
 }
 
 

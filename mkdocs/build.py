@@ -11,7 +11,7 @@ import markdown
 import os
 
 
-def convert_markdown(markdown_source, site_navigation=None, extensions=()):
+def convert_markdown(markdown_source, site_navigation=None, extensions=(), strict=False):
     """
     Convert the Markdown source file to HTML content, and additionally
     return the parsed table of contents, and a dictionary of any metadata
@@ -26,7 +26,7 @@ def convert_markdown(markdown_source, site_navigation=None, extensions=()):
 
     # Generate the HTML from the markdown source
     builtin_extensions = ['meta', 'toc', 'tables', 'fenced_code']
-    mkdocs_extensions = [RelativePathExtension(site_navigation), ]
+    mkdocs_extensions = [RelativePathExtension(site_navigation, strict), ]
     extensions = builtin_extensions + mkdocs_extensions + list(extensions)
     md = markdown.Markdown(
         extensions=extensions
@@ -166,7 +166,7 @@ def build_pages(config, dump_json=False):
         # Process the markdown text
         html_content, table_of_contents, meta = convert_markdown(
             input_content, site_navigation,
-            extensions=config['markdown_extensions']
+            extensions=config['markdown_extensions'], strict=config['strict']
         )
 
         context = get_global_context(site_navigation, config)
