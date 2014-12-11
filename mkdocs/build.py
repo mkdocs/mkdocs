@@ -167,6 +167,7 @@ def build_pages(config, dump_json=False):
     search_index = search.SearchIndex()
 
     build_template('404.html', env, config, site_navigation)
+    build_template('search.html', env, config, site_navigation)
 
     for page in site_navigation.walk_pages():
         # Read the input file
@@ -214,7 +215,6 @@ def build_pages(config, dump_json=False):
 
         search_index.add_entry_from_context(page, html_content, table_of_contents)
 
-    build_template('search.html', env, config, site_navigation)
     build_template('js/tipuesearch/tipuesearch_content.js', env, config, extra_context={
         'search_index': search_index.generate_search_index()
     })
