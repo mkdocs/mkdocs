@@ -6,7 +6,7 @@ Deals with generating the site-wide navigation.
 This consists of building a set of interlinked page and header objects.
 """
 
-from mkdocs import utils
+from mkdocs import utils, exceptions
 import posixpath
 import os
 
@@ -207,7 +207,7 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
                 "Line in 'page' config contained %d items.  "
                 "Expected 1, 2 or 3 strings." % len(config_line)
             )
-            assert False, msg
+            raise exceptions.ConfigurationError(msg)
 
         if title is None:
             filename = path.split(os.path.sep)[0]

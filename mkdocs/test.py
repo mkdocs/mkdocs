@@ -440,6 +440,20 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual([p.title for p in pages],
                          ['Home', 'Running', 'Notes', 'License'])
 
+    def test_invalid_pages_config(self):
+
+        bad_pages = [
+            (),  # too short
+            ('this', 'is', 'too', 'long'),
+        ]
+
+        for bad_page in bad_pages:
+
+            def _test():
+                return nav._generate_site_navigation((bad_page, ), None)
+
+            self.assertRaises(ConfigurationError, _test)
+
 
 class BuildTests(unittest.TestCase):
     def test_convert_markdown(self):
