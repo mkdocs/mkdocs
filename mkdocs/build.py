@@ -1,6 +1,7 @@
 # coding: utf-8
 from __future__ import print_function
 
+import datetime
 from jinja2.exceptions import TemplateNotFound
 from mkdocs import nav, toc, utils
 from mkdocs.compat import urljoin, PY2
@@ -87,6 +88,7 @@ def get_global_context(nav, config):
         'include_search': config['include_search'],
 
         'copyright': config['copyright'],
+        'build_date': datetime.datetime.now(),
         'google_analytics': config['google_analytics']
     }
 
