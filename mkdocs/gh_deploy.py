@@ -17,12 +17,20 @@ def gh_deploy(config):
     # TODO: Also check for CNAME file
     url = subprocess.check_output(["git", "config", "--get", "remote.origin.url"])
     url = url.decode('utf-8').strip()
+
+    host = None
+    path = None
     if 'github.com/' in url:
         host, path = url.split('github.com/', 1)
-    else:
+    elif 'github.com:' in url:
         host, path = url.split('github.com:', 1)
-    username, repo = path.split('/', 1)
-    if repo.endswith('.git'):
-        repo = repo[:-len('.git')]
-    url = 'http://%s.github.io/%s' % (username, repo)
-    print('Your documentation should shortly be available at: ' + url)
+
+    if host is None:
+        # This could be a GitHub Enterprise deployment.
+        print('Your documentation should be available shortly.')
+    else:
+        username, repo = path.split('/', 1)
+        if repo.endswith('.git'):
+            repo = repo[:-len('.git')]
+        url = 'http://%s.github.io/%s' % (username, repo)
+        print('Your documentation should shortly be available at: ' + url)
