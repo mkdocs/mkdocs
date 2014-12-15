@@ -14,7 +14,17 @@ def gh_deploy(config):
     except:
         return
 
-    # TODO: Also check for CNAME file
+    # Does this repository have a CNAME set for GitHub pages?
+    if os.path.isfile('CNAME'):
+        # This GitHub pages repository has a CNAME configured.
+        with(open('CNAME', 'r')) as f:
+            cname_host = f.read().strip()
+        print('Based on your CNAME file, your documentation should be available shortly at: http://%s' % cname_host)
+        print('NOTE: Your DNS records must be configured appropriately for your CNAME URL to work.')
+        return
+
+    # No CNAME found.  We will use the origin URL to determine the GitHub
+    # pages location.
     url = subprocess.check_output(["git", "config", "--get", "remote.origin.url"])
     url = url.decode('utf-8').strip()
 
