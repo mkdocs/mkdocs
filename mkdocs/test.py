@@ -240,7 +240,7 @@ class SiteNavigationTests(unittest.TestCase):
         """)
         site_navigation = nav.SiteNavigation(pages)
         self.assertEqual(str(site_navigation).strip(), expected)
-        self.assertEqual(len(site_navigation.nav_items), 1)
+        self.assertEqual(len(site_navigation.nav_items), 2)
         self.assertEqual(len(site_navigation.pages), 2)
 
     def test_empty_toc_item(self):
@@ -254,7 +254,7 @@ class SiteNavigationTests(unittest.TestCase):
         """)
         site_navigation = nav.SiteNavigation(pages)
         self.assertEqual(str(site_navigation).strip(), expected)
-        self.assertEqual(len(site_navigation.nav_items), 1)
+        self.assertEqual(len(site_navigation.nav_items), 2)
         self.assertEqual(len(site_navigation.pages), 2)
 
     def test_indented_toc(self):
@@ -278,7 +278,7 @@ class SiteNavigationTests(unittest.TestCase):
         """)
         site_navigation = nav.SiteNavigation(pages)
         self.assertEqual(str(site_navigation).strip(), expected)
-        self.assertEqual(len(site_navigation.nav_items), 2)
+        self.assertEqual(len(site_navigation.nav_items), 3)
         self.assertEqual(len(site_navigation.pages), 6)
 
     def test_walk_simple_toc(self):

@@ -36,7 +36,7 @@ class SiteNavigation(object):
         self.use_directory_urls = use_directory_urls
 
     def __str__(self):
-        return str(self.homepage) + ''.join([str(item) for item in self])
+        return ''.join([str(item) for item in self])
 
     def __iter__(self):
         return iter(self.nav_items)
@@ -222,8 +222,7 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
         if not child_title:
             # New top level page.
             page = Page(title=title, url=url, path=path, url_context=url_context)
-            if not utils.is_homepage(path):
-                nav_items.append(page)
+            nav_items.append(page)
         elif not nav_items or (nav_items[-1].title != title):
             # New second level page.
             page = Page(title=child_title, url=url, path=path, url_context=url_context)
