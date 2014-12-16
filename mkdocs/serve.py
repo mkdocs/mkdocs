@@ -34,8 +34,11 @@ class ConfigEventHandler(BuildEventHandler):
     Perform a rebuild when the config file changes.
     """
     def on_any_event(self, event):
-        if os.path.basename(event.src_path) == 'mkdocs.yml':
-            super(ConfigEventHandler, self).on_any_event(event)
+        try:
+            if os.path.basename(event.src_path) == 'mkdocs.yml':
+                super(ConfigEventHandler, self).on_any_event(event)
+        except Exception as e:
+            print(e)
 
 
 class FixedDirectoryHandler(httpserver.SimpleHTTPRequestHandler):
