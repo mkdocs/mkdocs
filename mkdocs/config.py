@@ -79,8 +79,9 @@ def load_config(filename='mkdocs.yml', options=None):
         raise ConfigurationError("Config file '%s' does not exist." % filename)
     with open(filename, 'r') as fp:
         local_config = yaml.load(fp)
-    if local_config:
-        user_config.update(local_config)
+        if not isinstance(local_config, dict):
+            raise ConfigurationError("The mkdocs.yml file is invalid. See http://www.mkdocs.org/user-guide/configuration/ for more information.")
+    user_config.update(local_config)
     return validate_config(user_config)
 
 
