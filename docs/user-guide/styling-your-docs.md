@@ -46,3 +46,19 @@ How to style and theme your documentation.
 ![Yeti](http://bootswatch.com/yeti/thumbnail.png)
 
 ## Custom themes
+
+### Context variables
+
+The following context variables are available to your custom templates:
+
+- ``build_date`` - a datetime object. You can render the build date of your documentation in a template using jinja 2 syntax. e.g. ``{{ build_date.strftime('%Y-%m-%d') }}``
+- ``site_name`` - string
+- ``site_author`` - string
+- ``favicon`` - string
+- ``page_description`` - string
+- ``nav`` - string
+- ``homepage_url``- string
+- ``extra_css`` - string
+- ``extra_javascript`` - string
+- ``base_url`` - string
+- ``copyright`` - string
