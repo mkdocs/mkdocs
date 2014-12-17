@@ -54,6 +54,11 @@ class ConfigTests(unittest.TestCase):
             config.validate_config({})
         self.assertRaises(ConfigurationError, load_missing_site_name)
 
+    def test_empty_config(self):
+        def load_empty_config():
+            config.load_config(filename='/dev/null')
+        self.assertRaises(ConfigurationError, load_empty_config)
+
     def test_config_option(self):
         """
         Users can explicitly set the config file using the '--config' option.
