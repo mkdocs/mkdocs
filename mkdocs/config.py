@@ -72,16 +72,16 @@ DEFAULT_CONFIG = {
 
 
 def load_config(filename='mkdocs.yml', options=None):
-    user_config = options or {}
-    if 'config' in user_config:
-        filename = user_config.pop('config')
+    options = options or {}
+    if 'config' in options:
+        filename = options.pop('config')
     if not os.path.exists(filename):
         raise ConfigurationError("Config file '%s' does not exist." % filename)
     with open(filename, 'r') as fp:
-        yaml_config = yaml.load(fp)
-        if not isinstance(yaml_config, dict):
+        user_config = yaml.load(fp)
+        if not isinstance(user_config, dict):
             raise ConfigurationError("The mkdocs.yml file is invalid. See http://www.mkdocs.org/user-guide/configuration/ for more information.")
-    user_config.update(yaml_config)
+    user_config.update(options)
     return validate_config(user_config)
 
 
