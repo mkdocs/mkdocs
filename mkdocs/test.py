@@ -422,7 +422,8 @@ class SiteNavigationTests(unittest.TestCase):
         url_context = nav.URLContext()
         nav_items, pages = nav._generate_site_navigation(pages, url_context)
 
-        self.assertEqual([n.title for n in nav_items], ['Api guide', 'About'])
+        self.assertEqual([n.title for n in nav_items],
+                         ['Home', 'Api guide', 'About'])
         self.assertEqual([p.title for p in pages],
                          ['Home', 'Running', 'Notes', 'License'])
 
@@ -441,7 +442,8 @@ class SiteNavigationTests(unittest.TestCase):
         url_context = nav.URLContext()
         nav_items, pages = nav._generate_site_navigation(pages, url_context)
 
-        self.assertEqual([n.title for n in nav_items], ['Api guide', 'About'])
+        self.assertEqual([n.title for n in nav_items],
+                         ['Home', 'Api guide', 'About'])
         self.assertEqual([p.title for p in pages],
                          ['Home', 'Running', 'Notes', 'License'])
 
