@@ -42,6 +42,7 @@ from markdown.treeprocessors import Treeprocessor
 
 from mkdocs import utils
 from mkdocs.compat import urlparse, urlunparse
+from mkdocs.exceptions import MarkdownNotFound
 
 
 def _iter(node):
@@ -72,7 +73,7 @@ def path_to_url(url, nav, strict):
 
             # In strict mode raise an error at this point.
             if strict:
-                assert False, msg
+                raise MarkdownNotFound(msg)
             # Otherwise, when strict mode isn't enabled, print out a warning
             # to the user and leave the URL as it is.
             print(msg)

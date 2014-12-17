@@ -4,7 +4,7 @@
 
 from mkdocs import build, main, nav, toc, utils, config
 from mkdocs.compat import PY2, zip
-from mkdocs.exceptions import ConfigurationError
+from mkdocs.exceptions import ConfigurationError, MarkdownNotFound
 import markdown
 import mock
 import os
@@ -692,6 +692,33 @@ class BuildTests(unittest.TestCase):
         finally:
             shutil.rmtree(docs_dir)
             shutil.rmtree(site_dir)
+
+    def test_strict_mode_valid(self):
+        pages = [
+            ('index.md',),
+            ('internal.md',),
+            ('sub/internal.md')
+        ]
+        site_nav = nav.SiteNavigation(pages)
+
+        valid = "[test](internal.md)"
+        build.convert_markdown(valid, site_nav, strict=False)
+        build.convert_markdown(valid, site_nav, strict=True)
+
+    def test_strict_mode_invalid(self):
+        pages = [
+            ('index.md',),
+            ('internal.md',),
+            ('sub/internal.md')
+        ]
+        site_nav = nav.SiteNavigation(pages)
+
+        invalid = "[test](bad_link.md)"
+        build.convert_markdown(invalid, site_nav, strict=False)
+
+        self.assertRaises(
+            MarkdownNotFound,
+            build.convert_markdown, invalid, site_nav, strict=True)
 
 # class IntegrationTests(unittest.TestCase):
 #     def test_mkdocs_site(self):
