@@ -22,7 +22,7 @@ Builds completely static HTML sites that you can host on GitHub pages, Amazon S3
 
 #### Great themes available.
 
-There's a stack of good looking themes included by default. Choose from bootstrap, readthedocs, ghostwriter, or any of the 12 bootswatch themes.
+There's a stack of good looking themes included by default. Choose from bootstrap, readthedocs, or any of the 12 bootswatch themes.
 
 #### Preview your site as you work.
 
