@@ -56,7 +56,7 @@ def path_to_url(url, nav):
         return url
 
     if nav and not utils.is_markdown_file(path):
-        path = utils.create_media_urls(nav, [path])[0]
+        path = utils.create_relative_media_url(nav, path)
     elif nav:
         # If the site navigation has been provided, then validate
         # the internal hyperlink, making sure the target actually exists.

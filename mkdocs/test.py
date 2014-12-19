@@ -518,6 +518,7 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(html.strip(), expected.strip())
 
     def test_convert_internal_media(self):
+        """Test relative image URL's are the same for different base_urls"""
         pages = [
             ('index.md',),
             ('internal.md',),
@@ -527,15 +528,40 @@ class BuildTests(unittest.TestCase):
         site_navigation = nav.SiteNavigation(pages)
 
         expected_results = (
-            '<p><img alt="The initial MkDocs layout" src="./img/initial-layout.png" /></p>\n',
-            '<p><img alt="The initial MkDocs layout" src="../img/initial-layout.png" /></p>\n',
-            '<p><img alt="The initial MkDocs layout" src="../../img/initial-layout.png" /></p>\n',
+            './img/initial-layout.png',
+            '../img/initial-layout.png',
+            '../img/initial-layout.png',
         )
+
+        template = '<p><img alt="The initial MkDocs layout" src="%s" /></p>\n'
 
         for (page, expected) in zip(site_navigation.walk_pages(), expected_results):
             md_text = '![The initial MkDocs layout](img/initial-layout.png)'
             html, _, _ = build.convert_markdown(md_text, site_navigation=site_navigation)
-            self.assertEqual(html, expected)
+            self.assertEqual(html, template % expected)
+
+    def test_convert_internal_asbolute_media(self):
+        """Test absolute image URL's are correct for different base_urls"""
+        pages = [
+            ('index.md',),
+            ('internal.md',),
+            ('sub/internal.md')
+        ]
+
+        site_navigation = nav.SiteNavigation(pages)
+
+        expected_results = (
+            './img/initial-layout.png',
+            '../img/initial-layout.png',
+            '../../img/initial-layout.png',
+        )
+
+        template = '<p><img alt="The initial MkDocs layout" src="%s" /></p>\n'
+
+        for (page, expected) in zip(site_navigation.walk_pages(), expected_results):
+            md_text = '![The initial MkDocs layout](/img/initial-layout.png)'
+            html, _, _ = build.convert_markdown(md_text, site_navigation=site_navigation)
+            self.assertEqual(html, template % expected)
 
     def test_dont_convert_code_block_urls(self):
         pages = [
