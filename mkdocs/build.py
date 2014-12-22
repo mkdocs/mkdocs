@@ -10,6 +10,21 @@ import json
 import markdown
 import os
 
+try:
+    from slugify import Slugify
+
+    def _slugify(value, separator):
+        """
+        The Python-Markdown slugify function requires that parameters, one for
+        the subject to be sluggified and the other for the separator to use.
+        This just translates that to awesome-slugify.
+        """
+        slugger = Slugify(separator=separator)
+        return slugger(value)
+
+except ImportError:
+    Slugify = _slugify = None
+
 
 def convert_markdown(markdown_source, site_navigation=None, extensions=()):
     """
@@ -28,8 +43,16 @@ def convert_markdown(markdown_source, site_navigation=None, extensions=()):
     builtin_extensions = ['meta', 'toc', 'tables', 'fenced_code']
     mkdocs_extensions = [RelativePathExtension(site_navigation), ]
     extensions = builtin_extensions + mkdocs_extensions + list(extensions)
+
+    extension_configs = {}
+    if _slugify is not None:
+        extension_configs['toc'] = {
+            'slugify': _slugify
+        }
+
     md = markdown.Markdown(
-        extensions=extensions
+        extensions=extensions,
+        extension_configs=extension_configs
     )
     html_content = md.convert(markdown_source)
     meta = md.Meta
