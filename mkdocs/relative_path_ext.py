@@ -35,11 +35,14 @@ tutorial/install.md | tutorial/install/ | ../img/initial-layout.png    |
 tutorial/intro.md   | tutorial/intro/   | ../../img/initial-layout.png |
 
 """
+from __future__ import print_function
+
 from markdown.extensions import Extension
 from markdown.treeprocessors import Treeprocessor
 
 from mkdocs import utils
 from mkdocs.compat import urlparse, urlunparse
+from mkdocs.exceptions import MarkdownNotFound
 
 
 def _iter(node):
@@ -48,7 +51,7 @@ def _iter(node):
     return [node] + node.findall('.//*')
 
 
-def path_to_url(url, nav):
+def path_to_url(url, nav, strict):
     scheme, netloc, path, query, query, fragment = urlparse(url)
 
     if scheme or netloc or not path:
@@ -66,8 +69,15 @@ def path_to_url(url, nav):
             msg = (
                 'The page "%s" contained a hyperlink to "%s" which '
                 'is not listed in the "pages" configuration.'
-            )
-            assert False, msg % (source_file, target_file)
+            ) % (source_file, target_file)
+
+            # In strict mode raise an error at this point.
+            if strict:
+                raise MarkdownNotFound(msg)
+            # Otherwise, when strict mode isn't enabled, print out a warning
+            # to the user and leave the URL as it is.
+            print(msg)
+            return url
         path = utils.get_url_path(target_file, nav.use_directory_urls)
         path = nav.url_context.make_relative(path)
     else:
@@ -80,8 +90,9 @@ def path_to_url(url, nav):
 
 class RelativePathTreeprocessor(Treeprocessor):
 
-    def __init__(self, site_navigation):
+    def __init__(self, site_navigation, strict):
         self.site_navigation = site_navigation
+        self.strict = strict
 
     def run(self, root):
         """Update urls on anchors and images to make them relative
@@ -100,7 +111,7 @@ class RelativePathTreeprocessor(Treeprocessor):
                 continue
 
             url = element.get(key)
-            new_url = path_to_url(url, self.site_navigation)
+            new_url = path_to_url(url, self.site_navigation, self.strict)
             element.set(key, new_url)
 
         return root
@@ -112,9 +123,10 @@ class RelativePathExtension(Extension):
     registers the Treeprocessor.
     """
 
-    def __init__(self, site_navigation):
+    def __init__(self, site_navigation, strict):
         self.site_navigation = site_navigation
+        self.strict = strict
 
     def extendMarkdown(self, md, md_globals):
-        relpath = RelativePathTreeprocessor(self.site_navigation)
+        relpath = RelativePathTreeprocessor(self.site_navigation, self.strict)
         md.treeprocessors.add("relpath", relpath, "_end")

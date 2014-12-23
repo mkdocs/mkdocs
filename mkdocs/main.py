@@ -7,7 +7,7 @@ import sys
 from mkdocs import __version__
 from mkdocs.build import build
 from mkdocs.config import load_config
-from mkdocs.exceptions import ConfigurationError
+from mkdocs.exceptions import MkDocsException
 from mkdocs.gh_deploy import gh_deploy
 from mkdocs.new import new
 from mkdocs.serve import serve
@@ -60,7 +60,7 @@ def run_main():
     opts = [arg_to_option(arg) for arg in sys.argv[2:] if arg.startswith('--')]
     try:
         main(cmd, args=sys.argv[2:], options=dict(opts))
-    except ConfigurationError as e:
+    except MkDocsException as e:
         print(e.args[0], file=sys.stderr)
 
 
