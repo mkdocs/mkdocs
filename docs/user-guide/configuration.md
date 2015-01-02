@@ -34,6 +34,12 @@ When set, provides a link to your GitHub or Bitbucket repository on each page.
 
 **default**: `null`
 
+### repo_name
+
+When set, provides a link to your GitHub or Bitbucket repository on each page.
+
+**default**: `'GitHub'` or `'Bitbucket'` if the `repo_url` matches those domains, otherwise `null`
+
 ### site_description
 
 Set the site description. This will add a meta tag to the generated HTML header.
