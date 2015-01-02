@@ -61,6 +61,12 @@ site_favicon: favicon.ico
 
 **default**: `null`
 
+
+### copyright
+
+Set the copyright information to be included in the documentation by the theme.
+
+**default**: `null`
 ## Documentation layout
 
 ### pages
