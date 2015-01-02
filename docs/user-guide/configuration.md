@@ -160,12 +160,18 @@ Lets you set the directory where the output HTML and other files are created.  T
 If you're using another source code control you'll want to check its documentation on how to ignore specific directories.
 
 
+### extra_css
+
+Set a list of css files to be included by the theme.
+
+**default**: By default `extra_css` will contain a list of all the CSS files found within the `docs_dir`, if none are found it will be `[]` (an empty list).
 
 
+### extra_javascript
 
+Set a list of JavaScript files to be included by the theme.
 
-
-
+**default**: By default `extra_javascript` will contain a list of all the JavaScript files found within the `docs_dir`, if none are found it will be `[]` (an empty list).
 
 ## Preview controls
 
