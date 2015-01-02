@@ -67,6 +67,19 @@ site_favicon: favicon.ico
 Set the copyright information to be included in the documentation by the theme.
 
 **default**: `null`
+
+
+### google_analytics
+
+Set the Google analytics tracking configuration.
+
+```yaml
+google_analytics: ['UA-36723568-3', 'mkdocs.org']
+```
+
+**default**: `null`
+
+
 ## Documentation layout
 
 ### pages
