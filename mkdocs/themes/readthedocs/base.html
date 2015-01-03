@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   {% block htmltitle %}
-  <title>{{ page_title }}</title>
+  <title>{% if page_title %}{{ page_title }} - {% endif %}{{ site_name }}</title>
   {% endblock %}
 
   {# CSS #}

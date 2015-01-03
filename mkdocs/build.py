@@ -98,9 +98,9 @@ def get_page_context(page, content, nav, toc, meta, config):
     """
 
     if page.is_homepage or page.title is None:
-        page_title = config['site_name']
+        page_title = None
     else:
-        page_title = page.title + ' - ' + config['site_name']
+        page_title = page.title
 
     if page.is_homepage:
         page_description = config['site_description']
