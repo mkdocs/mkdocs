@@ -128,6 +128,9 @@ def validate_config(user_config):
     package_dir = os.path.dirname(__file__)
     theme_dir = [os.path.join(package_dir, 'themes', config['theme']), ]
 
+    # If search is enabled, add the search assets to the theme_dir, this means
+    # that they will then we copied into the output directory but can be
+    # overwritten by themes if needed.
     if config['include_search']:
         theme_dir.append(os.path.join(package_dir, 'assets', 'search'))
 
