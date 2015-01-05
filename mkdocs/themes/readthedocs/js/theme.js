@@ -1,10 +1,13 @@
 $( document ).ready(function() {
 
-    // Tipue Search activation
-    $('#tipue_search_input').tipuesearch({
-        'mode': 'static',
-        'show': 10
-    });
+    // Check to see if Tipue search is enabled and loaded.
+    if(typeof($('#tipue_search_input').tipuesearch) == "function"){
+        // Tipue Search activation
+        $('#tipue_search_input').tipuesearch({
+            'mode': 'static',
+            'show': 10
+        });
+    }
 
     // Shift nav in mobile when clicking the menu.
     $(document).on('click', "[data-toggle='wy-nav-top']", function() {

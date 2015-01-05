@@ -44,9 +44,13 @@
             {% endif %}
 
             <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="#" data-toggle="modal" data-target="#search_modal"><i class="fa fa-search"></i> Search</a>
-                </li>
+                {% if include_search %}
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#search_modal">
+                            <i class="fa fa-search"></i> Search
+                        </a>
+                    </li>
+                {% endif %}
                 {% if include_next_prev %}
                     <li {% if not previous_page %}class="disabled"{% endif %}>
                         <a rel="next" {% if previous_page %}href="{{ previous_page.url }}"{% endif %}>

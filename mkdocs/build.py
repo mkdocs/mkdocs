@@ -87,6 +87,7 @@ def get_global_context(nav, config):
 
         'include_nav': config['include_nav'],
         'include_next_prev': config['include_next_prev'],
+        'include_search': config['include_search'],
 
         'copyright': config['copyright'],
         'google_analytics': config['google_analytics']
