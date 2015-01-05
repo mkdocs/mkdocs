@@ -69,7 +69,7 @@ DEFAULT_CONFIG = {
 
     # Enabling search will cause MkDocs to add Tipuesearch to the build
     # directory.
-    'include_search': True,
+    'include_search': False,
 }
 
 
