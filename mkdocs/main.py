@@ -2,6 +2,7 @@
 # coding: utf-8
 from __future__ import print_function
 
+import logging
 import sys
 
 from mkdocs import __version__
@@ -11,6 +12,16 @@ from mkdocs.exceptions import MkDocsException
 from mkdocs.gh_deploy import gh_deploy
 from mkdocs.new import new
 from mkdocs.serve import serve
+
+
+def configure_logging(options):
+    '''When a --verbose flag is passed, increase the verbosity of mkdocs'''
+    logger = logging.getLogger('mkdocs')
+    logger.addHandler(logging.StreamHandler())
+    if 'verbose' in options:
+        logger.setLevel(logging.DEBUG)
+    else:
+        logger.setLevel(logging.WARNING)
 
 
 def arg_to_option(arg):
@@ -28,6 +39,7 @@ def main(cmd, args, options=None):
     """
     Build the documentation, and optionally start the devserver.
     """
+    configure_logging(options)
     clean_site_dir = 'clean' in options
     if cmd == 'serve':
         config = load_config(options=options)
