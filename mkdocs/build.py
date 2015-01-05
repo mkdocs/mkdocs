@@ -131,9 +131,7 @@ def get_page_context(page, content, nav, toc, meta, config):
 
         'current_page': page,
         'previous_page': page.previous_page,
-        'next_page': page.next_page,
-        'include_nav': config['include_nav'],
-        'include_next_prev': config['include_next_prev'],
+        'next_page': page.next_page
     }
 
 
