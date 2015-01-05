@@ -126,7 +126,10 @@ def validate_config(user_config):
         config['extra_javascript'] = extra_javascript
 
     package_dir = os.path.dirname(__file__)
-    theme_dir = [os.path.join(package_dir, 'themes', config['theme'])]
+    theme_dir = [os.path.join(package_dir, 'themes', config['theme']), ]
+
+    if config['include_search']:
+        theme_dir.append(os.path.join(package_dir, 'assets', 'search'))
 
     if config['theme_dir'] is not None:
         theme_dir.insert(0, config['theme_dir'])

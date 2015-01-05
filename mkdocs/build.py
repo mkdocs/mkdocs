@@ -167,7 +167,12 @@ def build_pages(config, dump_json=False):
     search_index = search.SearchIndex()
 
     build_template('404.html', env, config, site_navigation)
-    build_template('search.html', env, config, site_navigation)
+
+    if config['include_search']:
+        if not build_template('search.html', env, config, site_navigation):
+            log.debug("Search is enabled but the theme doesn't contain a "
+                      "search.html file. Assuming the theme implements search "
+                      "within a modal.")
 
     for page in site_navigation.walk_pages():
         # Read the input file
@@ -215,9 +220,14 @@ def build_pages(config, dump_json=False):
 
         search_index.add_entry_from_context(page, html_content, table_of_contents)
 
-    build_template('js/tipuesearch/tipuesearch_content.js', env, config, extra_context={
-        'search_index': search_index.generate_search_index()
-    })
+    if config['include_search']:
+        search_index = search_index.generate_search_index()
+        json_output_path = os.path.join(config['site_dir'], 'js', 'tipuesearch_content.json')
+        utils.write_file(search_index.encode('utf-8'), json_output_path)
+
+        build_template('js/tipuesearch_content.js', env, config, extra_context={
+            'search_index': search_index
+        })
 
 
 def build(config, live_server=False, dump_json=False, clean_site_dir=False):
