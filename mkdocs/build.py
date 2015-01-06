@@ -221,10 +221,10 @@ def build_pages(config, dump_json=False):
 
     if config['include_search']:
         search_index = search_index.generate_search_index()
-        json_output_path = os.path.join(config['site_dir'], 'js', 'tipuesearch_content.json')
+        json_output_path = os.path.join(config['site_dir'], 'mkdocs', 'js', 'tipuesearch_content.json')
         utils.write_file(search_index.encode('utf-8'), json_output_path)
 
-        build_template('js/tipuesearch_content.js', env, config, extra_context={
+        build_template('mkdocs/js/tipuesearch_content.js', env, config, extra_context={
             'search_index': search_index
         })
 
