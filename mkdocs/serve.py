@@ -50,9 +50,9 @@ class FixedDirectoryHandler(httpserver.SimpleHTTPRequestHandler):
 
     def do_GET(self):
         """
-        The SimpleHTTPRequestHandler isn't designed to work with query strings.
-        Everything we do with the query string is handle on the client-side, so
-        throw it away here.
+        The SimpleHTTPRequestHandler isn't designed to work with
+        query strings. Everything we do with the query string is
+        handled on the client-side, so throw it away here.
         """
         scheme, netloc, path, query, query, fragment = urlparse(self.path)
         if query is not '':
