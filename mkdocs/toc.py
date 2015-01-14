@@ -22,10 +22,10 @@ TOC_LINK_REGEX = re.compile('<a href=["]([^"]*)["]>([^<]*)</a>')
 
 def pre_process(markdown_content):
     """
-    Append a `[TOC]` marker to the markdown.
+    Prepend a `[TOC]` marker to the markdown.
     The `toc` extension injects the HTML table of contents here.
     """
-    return markdown_content + '\n\n' + TOC_DELIMITER + '\n[TOC]'
+    return '\n[TOC]' + '\n\n' + TOC_DELIMITER + markdown_content
 
 
 def post_process(html_content):
