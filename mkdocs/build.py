@@ -38,7 +38,7 @@ def convert_markdown(markdown_source, site_navigation=None, extensions=(), stric
     meta = md.Meta
 
     # Strip out the generated table of contents
-    (html_content, toc_html) = toc.post_process(html_content)
+    (toc_html, html_content) = toc.post_process(html_content)
 
     # Post process the generated table of contents into a data structure
     table_of_contents = toc.TableOfContents(toc_html)
