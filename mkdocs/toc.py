@@ -25,12 +25,13 @@ def pre_process(markdown_content):
     Prepend a `[TOC]` marker to the markdown.
     The `toc` extension injects the HTML table of contents here.
     """
-    # We first need to split off possibly existing metadata at the top
-    # and only insert the TOC tag after the first empty line
-    meta, markdown_content = markdown_content.split('\n', 1)
-
-    return meta + '\n\n[TOC]' + '\n\n' + TOC_DELIMITER + markdown_content
-
+    # if metadata present, split it off and insert TOC in between
+    # the metadata and the remaining markdown_content
+    if markdown_content.splitlines()[0].find(':') >= 0:
+        meta, markdown_content = markdown_content.split('\n',1)
+        return meta + '\n\n[TOC]' + '\n\n' + TOC_DELIMITER + markdown_content
+    else:
+        return '\n\n[TOC]' + '\n\n' + TOC_DELIMITER + '\n' + markdown_content
 
 def post_process(html_content):
     """
