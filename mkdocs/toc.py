@@ -27,7 +27,7 @@ def pre_process(markdown_content):
     """
     # We first need to split off possibly existing metadata at the top
     # and only insert the TOC tag after the first empty line
-    meta, markdown_content = markdown_content.split('\n',1)
+    meta, markdown_content = markdown_content.split('\n', 1)
 
     return meta + '\n\n[TOC]' + '\n\n' + TOC_DELIMITER + markdown_content
 
