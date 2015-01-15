@@ -18,6 +18,7 @@ import re
 
 TOC_DELIMITER = '<!-- STARTTOC -->'
 TOC_LINK_REGEX = re.compile('<a href=["]([^"]*)["]>([^<]*)</a>')
+META_RE = re.compile('^[ ]{0,3}[ A-Za-z0-9_-]+:\s*.*')
 
 
 def pre_process(markdown_content):
@@ -27,7 +28,9 @@ def pre_process(markdown_content):
     """
     # if metadata present, split it off and insert TOC in between
     # the metadata and the remaining markdown_content
-    if markdown_content.splitlines()[0].find(':') >= 0:
+    if META_RE.match(markdown_content.splitlines()[0]) is not None:
+        # this means that the first line of markdown content is a line
+        # containing metadata, so split at next newline
         meta, markdown_content = markdown_content.split('\n', 1)
         return meta + '\n\n[TOC]' + '\n\n' + TOC_DELIMITER + markdown_content
     else:
