@@ -180,7 +180,7 @@ class TableOfContentsTests(unittest.TestCase):
         markdown_source = toc.pre_process(markdown_source)
         md = markdown.Markdown(extensions=['toc'])
         html_output = md.convert(markdown_source)
-        html_output, toc_output = toc.post_process(html_output)
+        toc_output, html_output = toc.post_process(html_output)
         return toc.TableOfContents(toc_output)
 
     def test_indented_toc(self):

@@ -18,14 +18,23 @@ import re
 
 TOC_DELIMITER = '<!-- STARTTOC -->'
 TOC_LINK_REGEX = re.compile('<a href=["]([^"]*)["]>([^<]*)</a>')
+META_RE = re.compile('^[ ]{0,3}[ A-Za-z0-9_-]+:\s*.*')
 
 
 def pre_process(markdown_content):
     """
-    Append a `[TOC]` marker to the markdown.
+    Prepend a `[TOC]` marker to the markdown.
     The `toc` extension injects the HTML table of contents here.
     """
-    return markdown_content + '\n\n' + TOC_DELIMITER + '\n[TOC]'
+    # if metadata present, split it off and insert TOC in between
+    # the metadata and the remaining markdown_content
+    if META_RE.match(markdown_content.splitlines()[0]) is not None:
+        # this means that the first line of markdown content is a line
+        # containing metadata, so split at next newline
+        meta, markdown_content = markdown_content.split('\n', 1)
+        return meta + '\n\n[TOC]' + '\n\n' + TOC_DELIMITER + markdown_content
+    else:
+        return '\n\n[TOC]' + '\n\n' + TOC_DELIMITER + '\n' + markdown_content
 
 
 def post_process(html_content):
