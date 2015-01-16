@@ -178,7 +178,6 @@ class UtilsTests(unittest.TestCase):
 class TableOfContentsTests(unittest.TestCase):
     def markdown_to_toc(self, markdown_source):
         md = markdown.Markdown(extensions=['toc'])
-        html_output = md.convert(markdown_source)
         toc_output = md.toc
         return toc.TableOfContents(toc_output)
 
