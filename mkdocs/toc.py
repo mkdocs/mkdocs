@@ -16,25 +16,7 @@ The steps we take to generate a table of contents are:
 
 import re
 
-TOC_DELIMITER = '<!-- STARTTOC -->'
 TOC_LINK_REGEX = re.compile('<a href=["]([^"]*)["]>([^<]*)</a>')
-
-
-def pre_process(markdown_content):
-    """
-    Append a `[TOC]` marker to the markdown.
-    The `toc` extension injects the HTML table of contents here.
-    """
-    return markdown_content + '\n\n' + TOC_DELIMITER + '\n[TOC]'
-
-
-def post_process(html_content):
-    """
-    Strip the generated HTML table of contents from the HTML output.
-
-    Returns a two-tuple of `(content, table_of_contents)`
-    """
-    return html_content.rsplit(TOC_DELIMITER, 1)
 
 
 class TableOfContents(object):

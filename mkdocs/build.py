@@ -24,9 +24,6 @@ def convert_markdown(markdown_source, site_navigation=None, extensions=(), stric
     to the default set.
     """
 
-    # Prepend a table of contents marker for the TOC extension
-    markdown_source = toc.pre_process(markdown_source)
-
     # Generate the HTML from the markdown source
     builtin_extensions = ['meta', 'toc', 'tables', 'fenced_code']
     mkdocs_extensions = [RelativePathExtension(site_navigation, strict), ]
@@ -36,9 +33,7 @@ def convert_markdown(markdown_source, site_navigation=None, extensions=(), stric
     )
     html_content = md.convert(markdown_source)
     meta = md.Meta
-
-    # Strip out the generated table of contents
-    (html_content, toc_html) = toc.post_process(html_content)
+    toc_html = md.toc
 
     # Post process the generated table of contents into a data structure
     table_of_contents = toc.TableOfContents(toc_html)
