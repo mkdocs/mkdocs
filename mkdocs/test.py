@@ -711,8 +711,20 @@ class BuildTests(unittest.TestCase):
         docs_dir = tempfile.mkdtemp()
         site_dir = tempfile.mkdtemp()
         try:
-            # Create a markdown file, image, dot file and dot directory.
-            open(os.path.join(docs_dir, 'index.md'), 'w').close()
+            # Create a non-empty markdown file, image, dot file and dot directory.
+            f = open(os.path.join(docs_dir, 'index.md'), 'w')
+            f.write(dedent("""
+                page_title: custom title
+
+                # Heading 1
+
+                This is some text.
+
+                # Heading 2
+
+                And some more text.
+            """))
+            f.close()
             open(os.path.join(docs_dir, 'img.jpg'), 'w').close()
             open(os.path.join(docs_dir, '.hidden'), 'w').close()
             os.mkdir(os.path.join(docs_dir, '.git'))
