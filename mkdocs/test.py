@@ -177,10 +177,9 @@ class UtilsTests(unittest.TestCase):
 
 class TableOfContentsTests(unittest.TestCase):
     def markdown_to_toc(self, markdown_source):
-        markdown_source = toc.pre_process(markdown_source)
         md = markdown.Markdown(extensions=['toc'])
-        html_output = md.convert(markdown_source)
-        html_output, toc_output = toc.post_process(html_output)
+        md.convert(markdown_source)
+        toc_output = md.toc
         return toc.TableOfContents(toc_output)
 
     def test_indented_toc(self):
@@ -549,7 +548,7 @@ class BuildTests(unittest.TestCase):
             '../img/initial-layout.png',
         )
 
-        template = '<p><img alt="The initial MkDocs layout" src="%s" /></p>\n'
+        template = '<p><img alt="The initial MkDocs layout" src="%s" /></p>'
 
         for (page, expected) in zip(site_navigation.walk_pages(), expected_results):
             md_text = '![The initial MkDocs layout](img/initial-layout.png)'
@@ -572,7 +571,7 @@ class BuildTests(unittest.TestCase):
             '../../img/initial-layout.png',
         )
 
-        template = '<p><img alt="The initial MkDocs layout" src="%s" /></p>\n'
+        template = '<p><img alt="The initial MkDocs layout" src="%s" /></p>'
 
         for (page, expected) in zip(site_navigation.walk_pages(), expected_results):
             md_text = '![The initial MkDocs layout](/img/initial-layout.png)'
@@ -612,7 +611,7 @@ class BuildTests(unittest.TestCase):
         for page in site_navigation.walk_pages():
             markdown = '[test](#test)'
             html, _, _ = build.convert_markdown(markdown, site_navigation=site_navigation)
-            self.assertEqual(html, '<p><a href="#test">test</a></p>\n')
+            self.assertEqual(html, '<p><a href="#test">test</a></p>')
 
     def test_ignore_external_link(self):
         md_text = 'An [external link](http://example.com/external.md).'
@@ -712,8 +711,20 @@ class BuildTests(unittest.TestCase):
         docs_dir = tempfile.mkdtemp()
         site_dir = tempfile.mkdtemp()
         try:
-            # Create a markdown file, image, dot file and dot directory.
-            open(os.path.join(docs_dir, 'index.md'), 'w').close()
+            # Create a non-empty markdown file, image, dot file and dot directory.
+            f = open(os.path.join(docs_dir, 'index.md'), 'w')
+            f.write(dedent("""
+                page_title: custom title
+
+                # Heading 1
+
+                This is some text.
+
+                # Heading 2
+
+                And some more text.
+            """))
+            f.close()
             open(os.path.join(docs_dir, 'img.jpg'), 'w').close()
             open(os.path.join(docs_dir, '.hidden'), 'w').close()
             os.mkdir(os.path.join(docs_dir, '.git'))
