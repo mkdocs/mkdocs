@@ -121,21 +121,7 @@ Sets the theme of your documentation site, for a list of available themes visit
 
 Lets you set a directory to a custom theme.  This can either be a relative directory, in which case it is resolved relative to the directory containing you configuration file, or it can be an absolute directory path.
 
-For example, given this example project layout:
-
-    mkdocs.yml
-    docs/
-        index.md
-        about.md
-    custom_theme/
-        base.html
-        ...
-
-You would include the following setting to use the custom theme directory:
-
-    theme_dir: 'custom_theme'
-
-If used in combination with the `theme` configuration value a custom theme can be used to replace only specific parts of a themes templates. For example, with the above layout and if you set your `theme: mkdocs` then the base.html file would replace that in the theme but otherwise it would remain the same. This is useful if you want to make small adjustments to an existing theme.
+See [styling your docs](styling-your-docs.md#custom-themes) for an explanation of custom themes.
 
 **default**: `null`
 
