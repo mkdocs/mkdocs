@@ -135,12 +135,10 @@ def validate_config(user_config):
 
     if config['repo_url'] is not None and config['repo_name'] is None:
         repo_host = urlparse(config['repo_url']).netloc.lower()
-        if repo_host == 'github.com':
-            config['repo_name'] = 'GitHub'
-        elif repo_host == 'bitbucket.com':
-            config['repo_name'] = 'Bitbucket'
-        else:
-            config['repo_name'] = repo_host.split('.')[0].title()
+        repo_name = repo_host.split('.')[0].title()
+        if repo_name == 'Github':
+            repo_name = 'GitHub'    
+        config['repo_name'] = repo_name
 
     if config['include_next_prev'] is None:
         config['include_next_prev'] = len(config['pages']) > 1
