@@ -137,7 +137,7 @@ def validate_config(user_config):
         repo_host = urlparse(config['repo_url']).netloc.lower()
         if repo_host == 'github.com':
             config['repo_name'] = 'GitHub'
-        elif repo_host == 'bitbucket.com':
+        elif repo_host == 'bitbucket.org':
             config['repo_name'] = 'Bitbucket'
         else:
             config['repo_name'] = repo_host.split('.')[0].title()
