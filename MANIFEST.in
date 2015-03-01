@@ -1,3 +1,5 @@
 recursive-include mkdocs/themes *.ico *.js *.css *.png *.html *.eot *.svg *.ttf *.woff
+include mkdocs.yml
+recursive-include docs *
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
