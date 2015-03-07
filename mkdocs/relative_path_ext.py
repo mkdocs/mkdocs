@@ -52,7 +52,7 @@ def _iter(node):
 
 
 def path_to_url(url, nav, strict):
-    scheme, netloc, path, query, query, fragment = urlparse(url)
+    scheme, netloc, path, params, query, fragment = urlparse(url)
 
     if scheme or netloc or not path:
         # Ignore URLs unless they are a relative link to a markdown file.
@@ -84,7 +84,7 @@ def path_to_url(url, nav, strict):
         path = utils.get_url_path(path).lstrip('/')
 
     # Convert the .md hyperlink to a relative hyperlink to the HTML page.
-    url = urlunparse((scheme, netloc, path, query, query, fragment))
+    url = urlunparse((scheme, netloc, path, params, query, fragment))
     return url
 
 
