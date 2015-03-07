@@ -417,6 +417,16 @@ class SiteNavigationTests(unittest.TestCase):
         base_url = site_navigation.url_context.make_relative('/')
         self.assertEqual(base_url, '.')
 
+    def test_relative_md_links_have_slash(self):
+        pages = [
+            ('index.md',),
+            ('user-guide/styling-your-docs.md',)
+        ]
+        site_navigation = nav.SiteNavigation(pages, use_directory_urls=False)
+        site_navigation.url_context.base_path = "/user-guide/configuration"
+        url = site_navigation.url_context.make_relative('/user-guide/styling-your-docs/')
+        self.assertEqual(url, '../styling-your-docs/')
+
     def test_generate_site_navigation(self):
         """
         Verify inferring page titles based on the filename
