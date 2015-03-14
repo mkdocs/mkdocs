@@ -199,6 +199,10 @@ For example, to enable the [SmartyPants typography extension][smarty], use:
 
     markdown_extensions: [smartypants]
 
+To configure an extension you can also pass configuration parameters. Here's an example of setting the `permalink` setting for all headers for the `toc` extension.
+
+    markdown_extensions: [smartypants, toc(permalink=True)]
+ 
 **default**: `[]`
 
 [pymdk-extensions]: http://pythonhosted.org/Markdown/extensions/index.html
