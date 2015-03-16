@@ -1,12 +1,14 @@
 # coding: utf-8
 
 from mkdocs import utils
-from mkdocs.compat import urlparse
+from mkdocs.compat import StringIO, urlparse, urlopen, URLError
 from mkdocs.exceptions import ConfigurationError
 
 import logging
 import os
 import yaml
+from zipfile import ZipFile
+
 
 log = logging.getLogger(__name__)
 
@@ -23,6 +25,9 @@ DEFAULT_CONFIG = {
     'docs_dir': 'docs',
     'site_dir': 'site',
     'theme_dir': None,
+
+    # A url that returns a zip file with a single theme folder
+    'theme_url': None,
 
     'copyright': None,
     'google_analytics': None,
@@ -126,6 +131,11 @@ def validate_config(user_config):
         config['extra_javascript'] = extra_javascript
 
     package_dir = os.path.dirname(__file__)
+
+    if config['theme_url']:
+        install_theme(config['theme_url'],
+                      os.path.join(package_dir, 'themes'))
+
     theme_dir = [os.path.join(package_dir, 'themes', config['theme'])]
 
     if config['theme_dir'] is not None:
@@ -161,3 +171,17 @@ def validate_config(user_config):
     # Error if any config keys provided that are not in the DEFAULT_CONFIG.
 
     return config
+
+
+def install_theme(url, package_dir):
+    """Installs a theme from a hosted zip file"""
+    try:
+        response = urlopen(url)
+    except URLError:
+        return
+    zipfile = response.read()
+    # We can't use ZipFile as a ContextManager due to PY26 compatibility
+    theme_zip = ZipFile(file=StringIO(zipfile))
+    for zipinfo in theme_zip.infolist():
+        theme_zip.extractall(path=package_dir)
+    theme_zip.close()
