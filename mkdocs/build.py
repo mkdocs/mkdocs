@@ -25,7 +25,7 @@ def convert_markdown(markdown_source, site_navigation=None, extensions=(), stric
     """
 
     # Generate the HTML from the markdown source
-    builtin_extensions = ['meta', 'toc', 'tables', 'fenced_code']
+    builtin_extensions = ['meta', 'toc', 'tables', 'fenced_code', 'footnotes']
     mkdocs_extensions = [RelativePathExtension(site_navigation, strict), ]
     extensions = builtin_extensions + mkdocs_extensions + list(extensions)
     md = markdown.Markdown(
