@@ -10,13 +10,15 @@
         {% if favicon %}<link rel="shortcut icon" href="{{ base_url }}/{{ favicon }}">
         {% else %}<link rel="shortcut icon" href="{{ base_url }}/img/favicon.ico">{% endif %}
 
-        <title>{{ page_title }}</title>
+	<title>{% if page_title %}{{ page_title }} - {% endif %}{{ site_name }}</title>
 
         <link href="{{ base_url }}/css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="{{ base_url }}/css/font-awesome-4.0.3.css" rel="stylesheet">
-        <link href="{{ base_url }}/css/prettify-1.0.css" rel="stylesheet">
         <link href="{{ base_url }}/css/base.css" rel="stylesheet">
-        {% for path in extra_css %}<link href="{{ path }}" rel="stylesheet">{% endfor %}
+        <link rel="stylesheet" href="{{ base_url }}/css/highlight.css">
+        {%- for path in extra_css %}
+        <link href="{{ path }}" rel="stylesheet">
+        {%- endfor %}
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -25,7 +27,7 @@
         <![endif]-->
     </head>
 
-    <body{% if current_page.is_homepage %} class="homepage"{% endif %}>
+    <body{% if current_page and current_page.is_homepage %} class="homepage"{% endif %}>
 
         {% include "nav.html" %}
 
@@ -33,8 +35,10 @@
             {% if current_page.is_homepage %}
             {% include "content.html" %}
             {% else %}
+            {% block content %}
             <div class="col-md-3">{% include "toc.html" %}</div>
             <div class="col-md-9" role="main">{% include "content.html" %}</div>
+            {% endblock %}
             {% endif %}
         </div>
 
@@ -50,7 +54,10 @@
         <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
         <script src="{{ base_url }}/js/bootstrap-3.0.3.min.js"></script>
         <script src="{{ base_url }}/js/prettify-1.0.min.js"></script>
+        <script src="{{ base_url }}/js/highlight.pack.js"></script>
         <script src="{{ base_url }}/js/base.js"></script>
-        {% for path in extra_javascript %}<script src="{{ path }}"></script>{% endfor %}
+        {%- for path in extra_javascript %}
+        <script src="{{ path }}"></script>
+        {%- endfor %}
     </body>
 </html>

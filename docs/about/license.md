@@ -10,12 +10,12 @@ Themes used under license from the Bootstrap, ReadTheDocs, GhostWriter and Boots
 
 * Bootstrap theme - [View license](//github.com/twbs/bootstrap/blob/master/LICENSE).
 * ReadTheDocs theme - [View license](//github.com/snide/sphinx_rtd_theme/blob/master/LICENSE).
-* GhostWriter theme - [View license](//github.com/roryg/ghostwriter/blob/master/LICENSE.txt).
 * Bootswatch theme - [View license](//github.com/thomaspark/bootswatch/blob/gh-pages/LICENSE).
+* Highlight.js GitHub theme - [View license](//github.com/isagalaev/highlight.js/blob/master/LICENSE).
 
 Many thanks to the authors and contributors of those wonderful projects.
 
-#### MkDocs License
+#### MkDocs License (BSD)
 
 Copyright © 2014, Tom Christie. All rights reserved.
 

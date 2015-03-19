@@ -10,20 +10,25 @@ import sys
 
 name = 'mkdocs'
 package = 'mkdocs'
-description = 'In progress.'
+description = 'Project documentation with Markdown.'
 url = 'http://www.mkdocs.org'
 author = 'Tom Christie'
 author_email = 'tom@tomchristie.com'
 license = 'BSD'
 install_requires = [
-    'Jinja2==2.7.1',
-    'Markdown==2.3.1',
-    'PyYAML==3.10',
-    'watchdog==0.7.0',
-    'ghp-import==0.4.1'
+    'Jinja2>=2.7.1',
+    'Markdown>=2.3.1,<2.5',
+    'PyYAML>=3.10',
+    'watchdog>=0.7.0',
+    'ghp-import>=0.4.1'
 ]
 
-long_description = """Work in progress."""
+long_description = (
+    "MkDocs is a fast, simple and downright gorgeous static site generator "
+    "that's geared towards building project documentation. Documentation "
+    "source files are written in Markdown, and configured with a single YAML "
+    "configuration file."
+)
 
 
 def get_version(package):
@@ -87,13 +92,19 @@ setup(
         },
     classifiers=[
         'Development Status :: 5 - Production/Stable',
+        'Environment :: Console',
         'Environment :: Web Environment',
-        'Framework :: Django',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Topic :: Internet :: WWW/HTTP',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Topic :: Documentation',
+        'Topic :: Text Processing',
     ]
 )

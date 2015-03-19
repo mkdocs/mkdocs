@@ -22,11 +22,11 @@ Builds completely static HTML sites that you can host on GitHub pages, Amazon S3
 
 #### Great themes available.
 
-There's a stack of good looking themes included by default. Choose from bootstrap, readthedocs, ghostwriter, or any of the 12 bootswatch themes.
+There's a stack of good looking themes included by default. Choose from bootstrap, readthedocs, or any of the 12 bootswatch themes.
 
 #### Preview your site as you work.
 
-The built-in devserver allows you to preview your documentation as your writing it. It will even auto-reload whenever you save any changes, so all you need to do to see your latest edits is refresh your browser.
+The built-in devserver allows you to preview your documentation as you're writing it. It will even auto-reload whenever you save any changes, so all you need to do to see your latest edits is refresh your browser.
 
 #### Easy to customize.
 
@@ -47,6 +47,8 @@ In order to install MkDocs you'll need [Python][python] installed on your system
     $ pip --version
     pip 1.5.2
 
+MkDocs supports Python 2.6, 2.7, 3.3 and 3.4.
+
 Install the `mkdocs` package using pip:
 
     $ pip install mkdocs
@@ -54,7 +56,7 @@ Install the `mkdocs` package using pip:
 You should now have the `mkdocs` command installed on your system.  Run `mkdocs help` to check that everything worked okay.
 
     $ mkdocs help
-    mkdocs [help|new|build|serve] {options}
+    mkdocs [help|new|build|serve|gh-deploy] {options}
 
 ---
 
@@ -69,7 +71,7 @@ Let's take a moment to review the initial project that's been created for us.
 
 ![The initial MkDocs layout](img/initial-layout.png)
 
-There's a single configuration file named `mkdocs.yaml`, and a folder named `docs` that will contain our documentation source files.  Right now the `docs` folder just contains a single documentation page, named `index.md`.
+There's a single configuration file named `mkdocs.yml`, and a folder named `docs` that will contain our documentation source files.  Right now the `docs` folder just contains a single documentation page, named `index.md`.
 
 MkDocs comes with a built-in webserver that lets you preview your documentation as you work on it. We start the webserver by making sure we're in the same directory as the `mkdocs.yml` config file, and then running the `mkdocs serve` command:
 
@@ -111,7 +113,7 @@ Refresh the browser and you'll now see a navigation bar with `Home` and `About` 
 
 ## Theming our documentation
 
-While we're here can also change the configuration file to alter how the documentation is displayed.  Let's go ahead and change the theme.  Edit the `mkdocs.yaml` file to the following:
+While we're here can also change the configuration file to alter how the documentation is displayed.  Let's go ahead and change the theme.  Edit the `mkdocs.yml` file to the following:
 
     site_name: MkLorum
     pages:
@@ -142,9 +144,13 @@ If you're using source code control such as `git` you probably don't want to che
 
 If you're using another source code control you'll want to check it's documentation on how to ignore specific directories.
 
+After some time, files may be removed from the documentation but they will still reside in the `site` directory. To remove those stale files, just run mkdocs with the `--clean` switch.
+
+    $ mkdocs build --clean
+
 ## Deploying
 
 The documentation site that we've just built only uses static files so you'll be able to host it from pretty much anywhere. [GitHub project pages](https://help.github.com/articles/creating-project-pages-manually) and [Amazon S3](http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html) are good hosting options. Upload the contents of the entire `site` directory to wherever you're hosting your website from and you're done.
 
-[python]: todo
-[pip]: todo
+[python]: https://www.python.org/
+[pip]: http://pip.readthedocs.org/en/latest/installing.html

@@ -33,6 +33,19 @@ def write_file(content, output_path):
     open(output_path, 'wb').write(content)
 
 
+def clean_directory(directory):
+    """
+    Remove the content of a directory recursively but not the directory itself.
+    """
+    if os.path.exists(directory):
+        for entry in os.listdir(directory):
+            path = os.path.join(directory, entry)
+            if os.path.isdir(path):
+                shutil.rmtree(path, True)
+            else:
+                os.unlink(path)
+
+
 def copy_media_files(from_dir, to_dir):
     """
     Recursively copy all files except markdown and HTML into another directory.
@@ -40,6 +53,13 @@ def copy_media_files(from_dir, to_dir):
     for (source_dir, dirnames, filenames) in os.walk(from_dir):
         relative_path = os.path.relpath(source_dir, from_dir)
         output_dir = os.path.normpath(os.path.join(to_dir, relative_path))
+
+        # Filter filenames starting with a '.'
+        filenames = [f for f in filenames if not f.startswith('.')]
+
+        # Filter the dirnames that start with a '.' and update the list in
+        # place to prevent us walking these.
+        dirnames[:] = [d for d in dirnames if not d.startswith('.')]
 
         for filename in filenames:
             if not is_markdown_file(filename) and not is_html_file(filename):
@@ -146,3 +166,41 @@ def create_media_urls(nav, url_list):
             relative_url = '%s/%s' % (nav.url_context.make_relative('/'), url)
             final_urls.append(relative_url)
     return final_urls
+
+
+def create_relative_media_url(nav, url):
+    """
+    For a current page, create a relative url based on the given URL.
+
+    On index.md (which becomes /index.html):
+        image.png -> ./image.png
+        /image.png -> ./image.png
+
+    on sub/page.md (which becomes /sub/page/index.html):
+        image.png -> ../image.png
+        /image.png -> ../../image.png
+
+    """
+
+    # Allow links to fully qualified URL's
+    parsed = urlparse(url)
+    if parsed.netloc:
+        return url
+
+    # If the URL we are looking at starts with a /, then it should be
+    # considered as absolute and will be 'relative' to the root.
+    if url.startswith('/'):
+        base = '/'
+        url = url[1:]
+    else:
+        base = nav.url_context.base_path
+
+    relative_url = '%s/%s' % (nav.url_context.make_relative(base), url)
+
+    # TODO: Fix this, this is a hack. Relative urls are not being calculated
+    # correctly for images in the same directory as the markdown. I think this
+    # is due to us moving it into a directory with index.html, but I'm not sure
+    if nav.url_context.base_path is not '/' and relative_url.startswith("./"):
+        relative_url = ".%s" % relative_url
+
+    return relative_url

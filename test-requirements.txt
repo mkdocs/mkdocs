@@ -1,0 +1,4 @@
+coverage
+flake8
+nose
+mock

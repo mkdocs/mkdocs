@@ -6,7 +6,7 @@ Deals with generating the site-wide navigation.
 This consists of building a set of interlinked page and header objects.
 """
 
-from mkdocs import utils
+from mkdocs import utils, exceptions
 import posixpath
 import os
 
@@ -33,9 +33,10 @@ class SiteNavigation(object):
         self.nav_items, self.pages = \
             _generate_site_navigation(pages_config, self.url_context, use_directory_urls)
         self.homepage = self.pages[0] if self.pages else None
+        self.use_directory_urls = use_directory_urls
 
     def __str__(self):
-        return str(self.homepage) + ''.join([str(item) for item in self])
+        return ''.join([str(item) for item in self])
 
     def __iter__(self):
         return iter(self.nav_items)
@@ -91,7 +92,16 @@ class URLContext(object):
         given the context of the current page.
         """
         suffix = '/' if (url.endswith('/') and len(url) > 1) else ''
-        return posixpath.relpath(url, start=self.base_path) + suffix
+        # Workaround for bug on `posixpath.relpath()` in Python 2.6
+        if self.base_path == '/':
+            if url == '/':
+                # Workaround for static assets
+                return '.'
+            return url.lstrip('/')
+        # Under Python 2.6, relative_path adds an extra '/' at the end.
+        relative_path = posixpath.relpath(url, start=self.base_path).rstrip('/') + suffix
+
+        return relative_path
 
 
 class FileContext(object):
@@ -198,13 +208,14 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
                 "Line in 'page' config contained %d items.  "
                 "Expected 1, 2 or 3 strings." % len(config_line)
             )
-            assert False, msg
+            raise exceptions.ConfigurationError(msg)
 
         if title is None:
-            filename = path.split('/')[0]
+            filename = path.split(os.path.sep)[0]
             title = filename_to_title(filename)
-        if child_title is None and '/' in path:
-            filename = path.split('/')[1]
+
+        if child_title is None and os.path.sep in path:
+            filename = path.split(os.path.sep)[-1]
             child_title = filename_to_title(filename)
 
         url = utils.get_url_path(path, use_directory_urls)

@@ -14,15 +14,33 @@ def gh_deploy(config):
     except:
         return
 
-    # TODO: Also check for CNAME file
+    # Does this repository have a CNAME set for GitHub pages?
+    if os.path.isfile('CNAME'):
+        # This GitHub pages repository has a CNAME configured.
+        with(open('CNAME', 'r')) as f:
+            cname_host = f.read().strip()
+        print('Based on your CNAME file, your documentation should be available shortly at: http://%s' % cname_host)
+        print('NOTE: Your DNS records must be configured appropriately for your CNAME URL to work.')
+        return
+
+    # No CNAME found.  We will use the origin URL to determine the GitHub
+    # pages location.
     url = subprocess.check_output(["git", "config", "--get", "remote.origin.url"])
     url = url.decode('utf-8').strip()
+
+    host = None
+    path = None
     if 'github.com/' in url:
         host, path = url.split('github.com/', 1)
-    else:
+    elif 'github.com:' in url:
         host, path = url.split('github.com:', 1)
-    username, repo = path.split('/', 1)
-    if repo.endswith('.git'):
-        repo = repo[:-len('.git')]
-    url = 'http://%s.github.io/%s' % (username, repo)
-    print('Your documentation should shortly be available at: ' + url)
+
+    if host is None:
+        # This could be a GitHub Enterprise deployment.
+        print('Your documentation should be available shortly.')
+    else:
+        username, repo = path.split('/', 1)
+        if repo.endswith('.git'):
+            repo = repo[:-len('.git')]
+        url = 'http://%s.github.io/%s' % (username, repo)
+        print('Your documentation should shortly be available at: ' + url)

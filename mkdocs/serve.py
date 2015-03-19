@@ -1,7 +1,8 @@
 # coding: utf-8
 from __future__ import print_function
 
-from watchdog import events, observers
+from watchdog import events
+from watchdog.observers.polling import PollingObserver
 from mkdocs.build import build
 from mkdocs.compat import httpserver, socketserver, urlunquote
 from mkdocs.config import load_config
@@ -33,8 +34,11 @@ class ConfigEventHandler(BuildEventHandler):
     Perform a rebuild when the config file changes.
     """
     def on_any_event(self, event):
-        if os.path.basename(event.src_path) == 'mkdocs.yml':
-            super(ConfigEventHandler, self).on_any_event(event)
+        try:
+            if os.path.basename(event.src_path) == 'mkdocs.yml':
+                super(ConfigEventHandler, self).on_any_event(event)
+        except Exception as e:
+            print(e)
 
 
 class FixedDirectoryHandler(httpserver.SimpleHTTPRequestHandler):
@@ -73,6 +77,9 @@ def serve(config, options=None):
     tempdir = tempfile.mkdtemp()
     options['site_dir'] = tempdir
 
+    # Only use user-friendly URLs when running the live server
+    options['use_directory_urls'] = True
+
     # Perform the initial build
     config = load_config(options=options)
     build(config, live_server=True)
@@ -81,9 +88,13 @@ def serve(config, options=None):
     #       can re-apply them if the config file is reloaded.
     event_handler = BuildEventHandler(options)
     config_event_handler = ConfigEventHandler(options)
-    observer = observers.Observer()
+
+    # We could have used `Observer()`, which can be faster, but
+    # `PollingObserver()` works more universally.
+    observer = PollingObserver()
     observer.schedule(event_handler, config['docs_dir'], recursive=True)
-    observer.schedule(event_handler, config['theme_dir'], recursive=True)
+    for theme_dir in config['theme_dir']:
+        observer.schedule(event_handler, theme_dir, recursive=True)
     observer.schedule(config_event_handler, '.')
     observer.start()
 
@@ -99,9 +110,13 @@ def serve(config, options=None):
     print('Running at: http://%s:%s/' % (host, port))
     print('Live reload enabled.')
     print('Hold ctrl+c to quit.')
-    server.serve_forever()
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print('Stopping server...')
 
     # Clean up
     observer.stop()
     observer.join()
     shutil.rmtree(tempdir)
+    print('Quit complete')

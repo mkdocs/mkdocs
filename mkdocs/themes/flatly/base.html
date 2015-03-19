@@ -10,12 +10,15 @@
         {% if favicon %}<link rel="shortcut icon" href="{{ favicon }}">
         {% else %}<link rel="shortcut icon" href="{{ base_url }}/img/favicon.ico">{% endif %}
 
-        <title>{{ page_title }}</title>
+	<title>{% if page_title %}{{ page_title }} - {% endif %}{{ site_name }}</title>
 
         <link href="{{ base_url }}/css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="{{ base_url }}/css/font-awesome-4.0.3.css" rel="stylesheet">
         <link href="{{ base_url }}/css/prettify-1.0.css" rel="stylesheet">
         <link href="{{ base_url }}/css/base.css" rel="stylesheet">
+        {%- for path in extra_css %}
+        <link href="{{ path }}" rel="stylesheet">
+        {%- endfor %}
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -23,18 +26,16 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
 
-        {% if config.theme_center_lead %}
-        <style>
-            div.col-md-9 h1:first-of-type {
-                text-align: center;
-                font-size: 60px;
-                font-weight: 300;
-            }
+        {% if google_analytics %}
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-            div.col-md-9 p:first-of-type {
-                text-align: center;
-            }
-        </style>
+            ga('create', '{{ google_analytics[0] }}', '{{ google_analytics[1] }}');
+            ga('send', 'pageview');
+        </script>
         {% endif %}
     </head>
 
@@ -53,5 +54,8 @@
         <script src="{{ base_url }}/js/bootstrap-3.0.3.min.js"></script>
         <script src="{{ base_url }}/js/prettify-1.0.min.js"></script>
         <script src="{{ base_url }}/js/base.js"></script>
+        {%- for path in extra_javascript %}
+        <script src="{{ path }}"></script>
+        {%- endfor %}
     </body>
 </html>

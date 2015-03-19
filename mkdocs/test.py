@@ -2,9 +2,12 @@
 # coding: utf-8
 
 
-from mkdocs import build, nav, toc, utils, config
-from mkdocs.compat import PY2
+from mkdocs import build, main, nav, toc, utils, config
+from mkdocs.compat import PY2, zip
+from mkdocs.exceptions import ConfigurationError, MarkdownNotFound
+import logging
 import markdown
+import mock
 import os
 import shutil
 import tempfile
@@ -20,13 +23,59 @@ def ensure_utf(string):
     return string.encode('utf-8') if PY2 else string
 
 
+class MainTests(unittest.TestCase):
+    def test_arg_to_option(self):
+        """
+        Check that we parse parameters passed to mkdocs properly
+        """
+        arg, option = main.arg_to_option('--site-dir=dir')
+        self.assertEqual('site_dir', arg)
+        self.assertEqual('dir', option)
+        arg, option = main.arg_to_option('--site-dir=dir-name')
+        self.assertEqual('site_dir', arg)
+        self.assertEqual('dir-name', option)
+        arg, option = main.arg_to_option('--site-dir=dir=name')
+        self.assertEqual('site_dir', arg)
+        self.assertEqual('dir=name', option)
+        arg, option = main.arg_to_option('--use_directory_urls')
+        self.assertEqual('use_directory_urls', arg)
+        self.assertEqual(True, option)
+
+    def test_configure_logging(self):
+        """
+        Check that logging is configured correctly
+        """
+        logger = logging.getLogger('mkdocs')
+        main.configure_logging({})
+        self.assertEqual(logging.WARNING, logger.level)
+        main.configure_logging({'verbose': True})
+        self.assertEqual(logging.DEBUG, logger.level)
+
+
 class ConfigTests(unittest.TestCase):
+    def test_missing_config_file(self):
+
+        def load_missing_config():
+            options = {'config': 'bad_filename.yaml'}
+            config.load_config(options=options)
+        self.assertRaises(ConfigurationError, load_missing_config)
+
+    def test_missing_site_name(self):
+        def load_missing_site_name():
+            config.validate_config({})
+        self.assertRaises(ConfigurationError, load_missing_site_name)
+
+    def test_empty_config(self):
+        def load_empty_config():
+            config.load_config(filename='/dev/null')
+        self.assertRaises(ConfigurationError, load_empty_config)
+
     def test_config_option(self):
         """
         Users can explicitly set the config file using the '--config' option.
         Allows users to specify a config other than the default `mkdocs.yml`.
         """
-        expected_results = {
+        expected_result = {
             'site_name': 'Example',
             'pages': [
                 ['index.md', 'Introduction']
@@ -37,14 +86,17 @@ class ConfigTests(unittest.TestCase):
         pages:
         - ['index.md', 'Introduction']
         """)
-        config_file = tempfile.NamedTemporaryFile('w')
-        config_file.write(ensure_utf(file_contents))
-        config_file.flush()
-        options = {'config': config_file.name}
-        results = config.load_config(options=options)
-        self.assertEqual(results['site_name'], expected_results['site_name'])
-        self.assertEqual(results['pages'], expected_results['pages'])
-        config_file.close()
+        config_file = tempfile.NamedTemporaryFile('w', delete=False)
+        try:
+            config_file.write(ensure_utf(file_contents))
+            config_file.flush()
+            options = {'config': config_file.name}
+            result = config.load_config(options=options)
+            self.assertEqual(result['site_name'], expected_result['site_name'])
+            self.assertEqual(result['pages'], expected_result['pages'])
+            config_file.close()
+        finally:
+            os.remove(config_file.name)
 
     def test_default_pages(self):
         tmp_dir = tempfile.mkdtemp()
@@ -125,10 +177,9 @@ class UtilsTests(unittest.TestCase):
 
 class TableOfContentsTests(unittest.TestCase):
     def markdown_to_toc(self, markdown_source):
-        markdown_source = toc.pre_process(markdown_source)
         md = markdown.Markdown(extensions=['toc'])
-        html_output = md.convert(markdown_source)
-        html_output, toc_output = toc.post_process(html_output)
+        md.convert(markdown_source)
+        toc_output = md.toc
         return toc.TableOfContents(toc_output)
 
     def test_indented_toc(self):
@@ -204,7 +255,7 @@ class SiteNavigationTests(unittest.TestCase):
         """)
         site_navigation = nav.SiteNavigation(pages)
         self.assertEqual(str(site_navigation).strip(), expected)
-        self.assertEqual(len(site_navigation.nav_items), 1)
+        self.assertEqual(len(site_navigation.nav_items), 2)
         self.assertEqual(len(site_navigation.pages), 2)
 
     def test_empty_toc_item(self):
@@ -218,7 +269,7 @@ class SiteNavigationTests(unittest.TestCase):
         """)
         site_navigation = nav.SiteNavigation(pages)
         self.assertEqual(str(site_navigation).strip(), expected)
-        self.assertEqual(len(site_navigation.nav_items), 1)
+        self.assertEqual(len(site_navigation.nav_items), 2)
         self.assertEqual(len(site_navigation.pages), 2)
 
     def test_indented_toc(self):
@@ -242,7 +293,7 @@ class SiteNavigationTests(unittest.TestCase):
         """)
         site_navigation = nav.SiteNavigation(pages)
         self.assertEqual(str(site_navigation).strip(), expected)
-        self.assertEqual(len(site_navigation.nav_items), 2)
+        self.assertEqual(len(site_navigation.nav_items), 3)
         self.assertEqual(len(site_navigation.pages), 6)
 
     def test_walk_simple_toc(self):
@@ -358,6 +409,78 @@ class SiteNavigationTests(unittest.TestCase):
         for index, page in enumerate(site_navigation.walk_pages()):
             self.assertEqual(str(site_navigation).strip(), expected[index])
 
+    def test_base_url(self):
+        pages = [
+            ('index.md',)
+        ]
+        site_navigation = nav.SiteNavigation(pages, use_directory_urls=False)
+        base_url = site_navigation.url_context.make_relative('/')
+        self.assertEqual(base_url, '.')
+
+    def test_relative_md_links_have_slash(self):
+        pages = [
+            ('index.md',),
+            ('user-guide/styling-your-docs.md',)
+        ]
+        site_navigation = nav.SiteNavigation(pages, use_directory_urls=False)
+        site_navigation.url_context.base_path = "/user-guide/configuration"
+        url = site_navigation.url_context.make_relative('/user-guide/styling-your-docs/')
+        self.assertEqual(url, '../styling-your-docs/')
+
+    def test_generate_site_navigation(self):
+        """
+        Verify inferring page titles based on the filename
+        """
+
+        pages = [
+            ('index.md', ),
+            ('api-guide/running.md', ),
+            ('about/notes.md', ),
+            ('about/sub/license.md', ),
+        ]
+
+        url_context = nav.URLContext()
+        nav_items, pages = nav._generate_site_navigation(pages, url_context)
+
+        self.assertEqual([n.title for n in nav_items],
+                         ['Home', 'Api guide', 'About'])
+        self.assertEqual([p.title for p in pages],
+                         ['Home', 'Running', 'Notes', 'License'])
+
+    @mock.patch.object(os.path, 'sep', '\\')
+    def test_generate_site_navigation_windows(self):
+        """
+        Verify inferring page titles based on the filename with a windows path
+        """
+        pages = [
+            ('index.md', ),
+            ('api-guide\\running.md', ),
+            ('about\\notes.md', ),
+            ('about\\sub\\license.md', ),
+        ]
+
+        url_context = nav.URLContext()
+        nav_items, pages = nav._generate_site_navigation(pages, url_context)
+
+        self.assertEqual([n.title for n in nav_items],
+                         ['Home', 'Api guide', 'About'])
+        self.assertEqual([p.title for p in pages],
+                         ['Home', 'Running', 'Notes', 'License'])
+
+    def test_invalid_pages_config(self):
+
+        bad_pages = [
+            (),  # too short
+            ('this', 'is', 'too', 'long'),
+        ]
+
+        for bad_page in bad_pages:
+
+            def _test():
+                return nav._generate_site_navigation((bad_page, ), None)
+
+            self.assertRaises(ConfigurationError, _test)
+
 
 class BuildTests(unittest.TestCase):
     def test_convert_markdown(self):
@@ -399,35 +522,121 @@ class BuildTests(unittest.TestCase):
         md_text = 'An [internal link](internal.md) to another document.'
         expected = '<p>An <a href="internal/">internal link</a> to another document.</p>'
         html, toc, meta = build.convert_markdown(md_text)
-        html = build.post_process_html(html)
         self.assertEqual(html.strip(), expected.strip())
 
     def test_convert_multiple_internal_links(self):
         md_text = '[First link](first.md) [second link](second.md).'
         expected = '<p><a href="first/">First link</a> <a href="second/">second link</a>.</p>'
         html, toc, meta = build.convert_markdown(md_text)
-        html = build.post_process_html(html)
         self.assertEqual(html.strip(), expected.strip())
 
     def test_convert_internal_link_differing_directory(self):
         md_text = 'An [internal link](../internal.md) to another document.'
         expected = '<p>An <a href="../internal/">internal link</a> to another document.</p>'
         html, toc, meta = build.convert_markdown(md_text)
-        html = build.post_process_html(html)
         self.assertEqual(html.strip(), expected.strip())
 
     def test_convert_internal_link_with_anchor(self):
         md_text = 'An [internal link](internal.md#section1.1) to another document.'
         expected = '<p>An <a href="internal/#section1.1">internal link</a> to another document.</p>'
         html, toc, meta = build.convert_markdown(md_text)
-        html = build.post_process_html(html)
         self.assertEqual(html.strip(), expected.strip())
+
+    def test_convert_internal_media(self):
+        """Test relative image URL's are the same for different base_urls"""
+        pages = [
+            ('index.md',),
+            ('internal.md',),
+            ('sub/internal.md')
+        ]
+
+        site_navigation = nav.SiteNavigation(pages)
+
+        expected_results = (
+            './img/initial-layout.png',
+            '../img/initial-layout.png',
+            '../img/initial-layout.png',
+        )
+
+        template = '<p><img alt="The initial MkDocs layout" src="%s" /></p>'
+
+        for (page, expected) in zip(site_navigation.walk_pages(), expected_results):
+            md_text = '![The initial MkDocs layout](img/initial-layout.png)'
+            html, _, _ = build.convert_markdown(md_text, site_navigation=site_navigation)
+            self.assertEqual(html, template % expected)
+
+    def test_convert_internal_asbolute_media(self):
+        """Test absolute image URL's are correct for different base_urls"""
+        pages = [
+            ('index.md',),
+            ('internal.md',),
+            ('sub/internal.md')
+        ]
+
+        site_navigation = nav.SiteNavigation(pages)
+
+        expected_results = (
+            './img/initial-layout.png',
+            '../img/initial-layout.png',
+            '../../img/initial-layout.png',
+        )
+
+        template = '<p><img alt="The initial MkDocs layout" src="%s" /></p>'
+
+        for (page, expected) in zip(site_navigation.walk_pages(), expected_results):
+            md_text = '![The initial MkDocs layout](/img/initial-layout.png)'
+            html, _, _ = build.convert_markdown(md_text, site_navigation=site_navigation)
+            self.assertEqual(html, template % expected)
+
+    def test_dont_convert_code_block_urls(self):
+        pages = [
+            ('index.md',),
+            ('internal.md',),
+            ('sub/internal.md')
+        ]
+
+        site_navigation = nav.SiteNavigation(pages)
+
+        expected = dedent("""
+        <p>An HTML Anchor::</p>
+        <pre><code>&lt;a href="index.md"&gt;My example link&lt;/a&gt;
+        </code></pre>
+        """)
+
+        for page in site_navigation.walk_pages():
+            markdown = 'An HTML Anchor::\n\n    <a href="index.md">My example link</a>\n'
+            html, _, _ = build.convert_markdown(markdown, site_navigation=site_navigation)
+            self.assertEqual(dedent(html), expected)
+
+    def test_anchor_only_link(self):
+
+        pages = [
+            ('index.md',),
+            ('internal.md',),
+            ('sub/internal.md')
+        ]
+
+        site_navigation = nav.SiteNavigation(pages)
+
+        for page in site_navigation.walk_pages():
+            markdown = '[test](#test)'
+            html, _, _ = build.convert_markdown(markdown, site_navigation=site_navigation)
+            self.assertEqual(html, '<p><a href="#test">test</a></p>')
 
     def test_ignore_external_link(self):
         md_text = 'An [external link](http://example.com/external.md).'
         expected = '<p>An <a href="http://example.com/external.md">external link</a>.</p>'
         html, toc, meta = build.convert_markdown(md_text)
-        html = build.post_process_html(html)
+        self.assertEqual(html.strip(), expected.strip())
+
+    def test_not_use_directory_urls(self):
+        md_text = 'An [internal link](internal.md) to another document.'
+        expected = '<p>An <a href="internal/index.html">internal link</a> to another document.</p>'
+        pages = [
+            ('internal.md',)
+        ]
+        site_navigation = nav.SiteNavigation(pages, use_directory_urls=False)
+        html, toc, meta = build.convert_markdown(md_text, site_navigation=site_navigation)
         self.assertEqual(html.strip(), expected.strip())
 
     def test_markdown_table_extension(self):
@@ -496,7 +705,7 @@ class BuildTests(unittest.TestCase):
 
         # Check that the plugin is active when requested.
         expected_with_smartstrong = "<p>foo__bar__baz</p>"
-        html_ext, _, _ = build.convert_markdown(md_input, ['smart_strong'])
+        html_ext, _, _ = build.convert_markdown(md_input, extensions=['smart_strong'])
         self.assertEqual(html_ext.strip(), expected_with_smartstrong)
 
     def test_markdown_duplicate_custom_extension(self):
@@ -506,6 +715,73 @@ class BuildTests(unittest.TestCase):
         md_input = "foo"
         html_ext, _, _ = build.convert_markdown(md_input, ['toc'])
         self.assertEqual(html_ext.strip(), '<p>foo</p>')
+
+    def test_copying_media(self):
+
+        docs_dir = tempfile.mkdtemp()
+        site_dir = tempfile.mkdtemp()
+        try:
+            # Create a non-empty markdown file, image, dot file and dot directory.
+            f = open(os.path.join(docs_dir, 'index.md'), 'w')
+            f.write(dedent("""
+                page_title: custom title
+
+                # Heading 1
+
+                This is some text.
+
+                # Heading 2
+
+                And some more text.
+            """))
+            f.close()
+            open(os.path.join(docs_dir, 'img.jpg'), 'w').close()
+            open(os.path.join(docs_dir, '.hidden'), 'w').close()
+            os.mkdir(os.path.join(docs_dir, '.git'))
+            open(os.path.join(docs_dir, '.git/hidden'), 'w').close()
+
+            conf = config.validate_config({
+                'site_name': 'Example',
+                'docs_dir': docs_dir,
+                'site_dir': site_dir
+            })
+            build.build(conf)
+
+            # Verify only the markdown (coverted to html) and the image are copied.
+            self.assertTrue(os.path.isfile(os.path.join(site_dir, 'index.html')))
+            self.assertTrue(os.path.isfile(os.path.join(site_dir, 'img.jpg')))
+            self.assertFalse(os.path.isfile(os.path.join(site_dir, '.hidden')))
+            self.assertFalse(os.path.isfile(os.path.join(site_dir, '.git/hidden')))
+        finally:
+            shutil.rmtree(docs_dir)
+            shutil.rmtree(site_dir)
+
+    def test_strict_mode_valid(self):
+        pages = [
+            ('index.md',),
+            ('internal.md',),
+            ('sub/internal.md')
+        ]
+        site_nav = nav.SiteNavigation(pages)
+
+        valid = "[test](internal.md)"
+        build.convert_markdown(valid, site_nav, strict=False)
+        build.convert_markdown(valid, site_nav, strict=True)
+
+    def test_strict_mode_invalid(self):
+        pages = [
+            ('index.md',),
+            ('internal.md',),
+            ('sub/internal.md')
+        ]
+        site_nav = nav.SiteNavigation(pages)
+
+        invalid = "[test](bad_link.md)"
+        build.convert_markdown(invalid, site_nav, strict=False)
+
+        self.assertRaises(
+            MarkdownNotFound,
+            build.convert_markdown, invalid, site_nav, strict=True)
 
 # class IntegrationTests(unittest.TestCase):
 #     def test_mkdocs_site(self):

@@ -2,8 +2,13 @@
 
 from mkdocs import utils
 from mkdocs.compat import urlparse
+from mkdocs.exceptions import ConfigurationError
+
+import logging
 import os
 import yaml
+
+log = logging.getLogger(__name__)
 
 DEFAULT_CONFIG = {
     'site_name': None,
@@ -20,7 +25,7 @@ DEFAULT_CONFIG = {
     'theme_dir': None,
 
     'copyright': None,
-    'google-analytics': None,
+    'google_analytics': None,
 
     # The address on which to serve the livereloading docs server.
     'dev_addr': 'localhost:8000',
@@ -28,7 +33,7 @@ DEFAULT_CONFIG = {
     # If `True`, use `<page_name>/index.hmtl` style files with hyperlinks to the directory.
     # If `False`, use `<page_name>.html style file with hyperlinks to the file.
     # True generates nicer URLs, but False is useful if browsing the output on a filesystem.
-    'use_direcory_urls': True,
+    'use_directory_urls': True,
 
     # Specify a link to the project source repo to be included
     # in the documentation pages.
@@ -62,20 +67,22 @@ DEFAULT_CONFIG = {
     # template exists in the theme or docs dir.
     'include_404': False,
 
-    # Determine if the site should include a sitemap.xml page.
-    # TODO: Implement this. Make this None, have it True if a sitemap.xml
-    # template exists in the theme or docs dir.
-    'include_sitemap': False,
+    # enabling strict mode causes MkDocs to stop the build when a problem is
+    # encountered rather than display an error.
+    'strict': False,
 }
 
 
 def load_config(filename='mkdocs.yml', options=None):
     options = options or {}
     if 'config' in options:
-        filename = options['config']
-    assert os.path.exists(filename), "Config file '%s' does not exist." % filename
+        filename = options.pop('config')
+    if not os.path.exists(filename):
+        raise ConfigurationError("Config file '%s' does not exist." % filename)
     with open(filename, 'r') as fp:
         user_config = yaml.load(fp)
+        if not isinstance(user_config, dict):
+            raise ConfigurationError("The mkdocs.yml file is invalid. See http://www.mkdocs.org/user-guide/configuration/ for more information.")
     user_config.update(options)
     return validate_config(user_config)
 
@@ -84,7 +91,8 @@ def validate_config(user_config):
     config = DEFAULT_CONFIG.copy()
     config.update(user_config)
 
-    assert config['site_name'], "Config must contain 'site_name' setting."
+    if not config['site_name']:
+        raise ConfigurationError("Config must contain 'site_name' setting.")
 
     # If not specified, then the 'pages' config simply includes all
     # markdown files in the docs dir, without generating any header items
@@ -117,15 +125,19 @@ def validate_config(user_config):
     if config['extra_javascript'] is None:
         config['extra_javascript'] = extra_javascript
 
-    if config['theme_dir'] is None:
-        package_dir = os.path.dirname(__file__)
-        config['theme_dir'] = os.path.join(package_dir, 'themes', config['theme'])
+    package_dir = os.path.dirname(__file__)
+    theme_dir = [os.path.join(package_dir, 'themes', config['theme'])]
+
+    if config['theme_dir'] is not None:
+        theme_dir.insert(0, config['theme_dir'])
+
+    config['theme_dir'] = theme_dir
 
     if config['repo_url'] is not None and config['repo_name'] is None:
         repo_host = urlparse(config['repo_url']).netloc.lower()
         if repo_host == 'github.com':
             config['repo_name'] = 'GitHub'
-        elif repo_host == 'bitbucket.com':
+        elif repo_host == 'bitbucket.org':
             config['repo_name'] = 'Bitbucket'
         else:
             config['repo_name'] = repo_host.split('.')[0].title()

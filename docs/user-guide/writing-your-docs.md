@@ -59,7 +59,7 @@ When linking between pages in the documentation you can simply use the regular M
 
 When the MkDocs build runs, these hyperlinks will automatically be transformed into a hyperlink to the appropriate HTML page.
 
-When working on your documentation you should be able to open the linked Markdown document in a new editor window simply by clicking on the link. 
+When working on your documentation you should be able to open the linked Markdown document in a new editor window simply by clicking on the link.
 
 If the target documentation file is in another directory you'll need to make sure to include any relative directory path in the hyperlink.
 
@@ -85,7 +85,7 @@ Eam ad euismod accusata vituperata. Oratio vocent nominavi ei eum.
 
 As well as the Markdown source files, you can also include other file types in your documentation, which will be copied across when generating your documentation site.  These might include images and other media.
 
-For example, if you project documentation needed to include a [GitHub pages CNAME file](https://help.github.com/articles/setting-up-a-custom-domain-with-pages#setting-the-domain-in-your-repo) and a PNG formatted screenshot image then your file layout might look as follows:
+For example, if your project documentation needed to include a [GitHub pages CNAME file](https://help.github.com/articles/setting-up-a-custom-domain-with-pages#setting-the-domain-in-your-repo) and a PNG formatted screenshot image then your file layout might look as follows:
 
     mkdocs.yml
     docs/
@@ -99,9 +99,9 @@ For example, if you project documentation needed to include a [GitHub pages CNAM
 To include images in your documentation source files, simply use any of the regular Markdown image syntaxes:
 
     Cupcake indexer is a snazzy new project for indexing small cakes.
-    
+
     ![Screenshot](img/screenshot.png)
-    
+
     *Above: Cupcake indexer in progress*
 
 You image will now be embedded when you build the documentation, and should also be previewed if you're working on the documentation with a Markdown editor.
@@ -122,7 +122,7 @@ At mel verear persius torquatos, his dolores sensibus id, alia urbanitas in usu.
 	source_files: example.js, lorum.js
 
 	# Lorum Ipsum
-	
+
 	Unum errem propriae vis cu, et deseruisse interpretaris eam. Illum graecis per an, ludus laoreet repudiare nec an, molestie recteque et eam.
 -->
 
@@ -167,5 +167,5 @@ Start with a line containing 3 or more backtick \` characters, and ends with the
 Ad est nibh suscipiantur. Quaeque deleniti delectus an has, tempor accusamus eu vix. Et democritum expetendis nam, putent fuisset duo ea, elaboraret efficiendi no vis.
 
     !!! danger "Don't try this at home"
-        May cause grevious bodily harm 
+        May cause grevious bodily harm
 -->
