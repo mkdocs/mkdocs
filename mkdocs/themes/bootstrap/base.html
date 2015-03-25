@@ -48,6 +48,14 @@
             <div class="col-md-9" role="main">{% include "content.html" %}</div>
         </div>
 
+	<footer class="col-md-12">
+		<hr>
+		{% if copyright %}
+		<p>{{ copyright }}</p>
+		{% endif %}
+		<p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+	</footer>
+
         {% if include_search %}{% include "search.html" %}{% endif %}
 
         <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
