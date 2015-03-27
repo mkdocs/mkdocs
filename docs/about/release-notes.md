@@ -12,6 +12,27 @@ You can determine your currently installed version using `pip freeze`:
 
     pip freeze | grep mkdocs
 
+## 0.12.0 (2015-03-28)
+* Add a strict mode to optionally enable local link checking (#279)
+* Check the CNAME file when using gh-deploy (#285)
+* Make gh-deply work with GitHub enterprise (#284)
+* Display a configuration error for bad `pages` configs in mkdocs.yml (#280)
+* Add Google analytics to all themes (#338)
+* Bugfix: Skip dotfiles when copying media to the output directory (#254)
+* Bugfix: Fix issues with table rendering in the ReadTheDocs theme (#257)
+* Bugfix: Improvements to the ReadTheDocs theme (#270)
+* Bugfix: Improved path handling in windows (#276)
+* Bugfix: Add the home page back into the navigation by default (#271)
+* Bugfix: Don't error on a completely empty config file (#288)
+* Bugfix: Refactor URL rewriting for non-markdown linked files (#293)
+* Bugfix: Fix a unicode error in some platforms when using `mkdocs new` (#302)
+* Bugfix: Improve page title in all themes (#299)
+* Bugfix: No longer crash when pages are missing (#317)
+* Bugfix: Correct BitBucket domain (#347)
+* Bugfix: Ensure that the / is at the end of all links (#344)
+* Bugfix: Solved an issue with local urls and query parameters (#343)
+* Bugfix: Fix GitHub and BitBucket links in the ReadTheDocs theme (#365)
+
 ## 0.11.1 (2014-11-20)
 
 * Bugfix: Fix a CSS wrapping issue with code highlighting in the ReadTheDocs
