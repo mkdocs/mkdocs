@@ -98,6 +98,43 @@ class ConfigTests(unittest.TestCase):
         finally:
             os.remove(config_file.name)
 
+    def test_theme(self):
+
+        base_config = dedent("""
+        site_name: Example
+        pages:
+        - ['index.md', 'Introduction']
+        %s
+        """)
+
+        configs = [
+            "site_name: Example",  # default theme
+            "theme: readthedocs",  # builtin theme
+            "theme_dir: mytheme",  # custom only
+            "theme: cosmo\ntheme_dir: custom"  # builtin and custom
+        ]
+
+        abs_path = os.path.abspath(os.path.dirname(__file__))
+        theme_dir = os.path.join(abs_path, 'themes')
+
+        results = (
+            ['%s/mkdocs' % theme_dir, ],
+            ['%s/readthedocs' % theme_dir, ],
+            ['mytheme', ],
+            ['custom', '%s/cosmo' % theme_dir, ],
+        )
+
+        for config_contents, expected_result in zip(configs, results):
+            try:
+                config_file = tempfile.NamedTemporaryFile('w', delete=False)
+                config_file.write(ensure_utf(base_config % config_contents))
+                config_file.flush()
+                options = {'config': config_file.name}
+                result = config.load_config(options=options)
+                self.assertEqual(result['theme_dir'], expected_result)
+            finally:
+                os.remove(config_file.name)
+
     def test_default_pages(self):
         tmp_dir = tempfile.mkdtemp()
         try:
