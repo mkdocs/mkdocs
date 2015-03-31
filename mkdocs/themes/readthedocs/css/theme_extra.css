@@ -29,6 +29,16 @@
 }
 
 /*
+* readthedocs theme hides nav items when the window height is 
+* too small to contain them.
+*
+* https://github.com/tomchristie/mkdocs/issues/#348
+*/
+.wy-menu-vertical ul {
+  margin-bottom: 2em;
+}
+
+/*
  * Fix wrapping in the code highlighting
  *
  * https://github.com/tomchristie/mkdocs/issues/233
