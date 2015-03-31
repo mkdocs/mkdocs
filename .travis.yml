@@ -5,10 +5,10 @@ env:
 - TOX_ENV=py27-unittests
 - TOX_ENV=py33-unittests
 - TOX_ENV=py34-unittests
-- TOX_ENV=flake8
-- TOX_ENV=coverage
 - TOX_ENV=py27-integration
 - TOX_ENV=py34-integration
+- TOX_ENV=flake8
+- TOX_ENV=coverage
 install:
 - pip install tox
 script: "./.travis.sh"
