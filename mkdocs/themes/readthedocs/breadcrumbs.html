@@ -1,7 +1,7 @@
 <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="{{ homepage_url }}">Docs</a> &raquo;</li>
-    <li>{{ current_page.title }}</li>
+    {% if current_page %}<li>{{ current_page.title }}</li>{% endif %}
       <li class="wy-breadcrumbs-aside">
         {% if repo_url %}
           {% if repo_name == 'GitHub' %}

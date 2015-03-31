@@ -1,7 +1,8 @@
 
-/* Prettyify */
+/* Highlight */
 $( document ).ready(function() {
-    prettyPrint();
+    hljs.initHighlightingOnLoad();
+    $('table').addClass('table');
 });
 
 
