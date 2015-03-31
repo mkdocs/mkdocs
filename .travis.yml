@@ -6,9 +6,8 @@ env:
 - TOX_ENV=py33
 - TOX_ENV=py34
 - TOX_ENV=flake8
-- TOX_ENV=docs
-- TOX_ENV=json
 - TOX_ENV=coverage
+- TOX_ENV=integration
 install:
 - pip install tox
 script: "./.travis.sh"
