@@ -163,10 +163,13 @@ def build_pages(config, dump_json=False):
     for page in site_navigation.walk_pages():
         # Read the input file
         input_path = os.path.join(config['docs_dir'], page.input_path)
+
         try:
             input_content = open(input_path, 'r').read()
         except IOError:
             log.error('file not found: %s' % input_path)
+            continue
+
         if PY2:
             input_content = input_content.decode('utf-8')
 
