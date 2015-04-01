@@ -12,7 +12,7 @@ MkDocs is a **fast**, **simple** and **downright gorgeous** static site generato
 
 **MkDocs is currently still in development.**
 
-We're progressing quickly, but the documentation still needs filling in, and theres a few rough edges.  The 1.0 release is planned to arrive in the next few weeks.
+We're progressing quickly, but the documentation still needs filling in, and theres a few rough edges.  The 1.0 release is planned to arrive in the next few months.
 
 ---
 
@@ -31,10 +31,6 @@ The built-in devserver allows you to preview your documentation as you're writin
 #### Easy to customize.
 
 Get your project documentation looking just the way you want it by customizing the theme.
-
-#### Cross-reference your documentation.
-
-Create richly cross-referenced documents, using the MkDocs interlinking syntax.
 
 ---
 
