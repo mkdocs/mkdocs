@@ -6,7 +6,7 @@ documentation against all of the builtin themes.
 
 From the root of the MkDocs git repo, use:
 
-    python tests/integration.py --help
+    python -m mkdocs.tests.integration --help
 
 
 TODOs
@@ -27,8 +27,8 @@ except ImportError:
 
 from mkdocs import main as mkdocs_main
 
-MKDOCS = os.path.join(os.path.dirname(__file__), '../mkdocs')
-MKDOCS_THEMES = os.listdir(os.path.join(MKDOCS, 'themes'))
+MKDOCS_CONFIG = os.path.join(os.path.dirname(__file__), '../../mkdocs.yml')
+MKDOCS_THEMES = os.listdir(os.path.join(os.path.dirname(__file__), '../themes'))
 
 
 @contextlib.contextmanager
@@ -61,7 +61,7 @@ def build(theme_name, output=None, config=None, quiet=False):
         options['site_dir'] = os.path.join(output, theme_name)
 
     if config is None:
-        config = os.path.join(os.path.dirname(__file__), '../mkdocs.yml')
+        config = MKDOCS_CONFIG
 
     if not quiet:
         print("Using config: {0}".format(config))
