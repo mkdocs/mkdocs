@@ -15,3 +15,7 @@ script: "./.travis.sh"
 matrix:
   allow_failures:
     - env: TOXENV=coverage
+    - os: osx
+os:
+  - linux
+  - osx
