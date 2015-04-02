@@ -59,3 +59,13 @@ code {
     white-space: pre;
 }
 
+/*
+ * Wrap inline code samples otherwise they shoot of the side and can't be
+ * read at all.
+ *
+ * https://github.com/mkdocs/mkdocs/issues/313
+ */
+p code {
+    word-wrap: break-word;
+}
+
