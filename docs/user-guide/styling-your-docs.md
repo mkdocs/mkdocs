@@ -16,7 +16,7 @@ How to style and theme your documentation.
 
 #### The bootswatch themes
 
-![Amelia](http://bootswatch.com/amelia/thumbnail.png)
+![Amelia](http://bootswatch.com/2/amelia/thumbnail.png)
 
 ![Cerulean](http://bootswatch.com/cerulean/thumbnail.png)
 
