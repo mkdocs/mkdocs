@@ -111,3 +111,27 @@ class ConfigTests(unittest.TestCase):
             self.assertEqual(conf['pages'], ['index.md', 'about.md'])
         finally:
             shutil.rmtree(tmp_dir)
+
+    def test_doc_dir_in_site_dir(self):
+
+        test_configs = (
+            {'docs_dir': 'docs', 'site_dir': 'docs/site'},
+            {'docs_dir': 'site/docs', 'site_dir': 'site'},
+            {'docs_dir': 'docs', 'site_dir': '.'},
+            {'docs_dir': '.', 'site_dir': 'site'},
+            {'docs_dir': '.', 'site_dir': '.'},
+            {'docs_dir': 'docs', 'site_dir': ''},
+            {'docs_dir': '', 'site_dir': 'site'},
+            {'docs_dir': '', 'site_dir': ''},
+            {'docs_dir': '../mkdocs/docs', 'site_dir': 'docs'},
+        )
+
+        conf = {
+            'site_name': 'Example',
+        }
+
+        for test_config in test_configs:
+
+            c = conf.copy()
+            c.update(test_config)
+            self.assertRaises(ConfigurationError, config.validate_config, c)
