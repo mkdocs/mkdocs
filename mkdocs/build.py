@@ -138,6 +138,8 @@ def get_page_context(page, content, nav, toc, meta, config):
 
 def build_404(config, env, site_navigation):
 
+    log.debug("Building 404.html page")
+
     try:
         template = env.get_template('404.html')
     except TemplateNotFound:
@@ -148,6 +150,56 @@ def build_404(config, env, site_navigation):
     output_content = template.render(global_context)
     output_path = os.path.join(config['site_dir'], '404.html')
     utils.write_file(output_content.encode('utf-8'), output_path)
+
+
+def _build_page(page, config, site_navigation, env, dump_json):
+
+    # Read the input file
+    input_path = os.path.join(config['docs_dir'], page.input_path)
+
+    try:
+        input_content = open(input_path, 'r').read()
+    except IOError:
+        log.error('file not found: %s' % input_path)
+        return
+
+    if PY2:
+        input_content = input_content.decode('utf-8')
+
+    # Process the markdown text
+    html_content, table_of_contents, meta = convert_markdown(
+        input_content, site_navigation,
+        extensions=config['markdown_extensions'], strict=config['strict']
+    )
+
+    context = get_global_context(site_navigation, config)
+    context.update(get_page_context(
+        page, html_content, site_navigation,
+        table_of_contents, meta, config
+    ))
+
+    # Allow 'template:' override in md source files.
+    if 'template' in meta:
+        template = env.get_template(meta['template'][0])
+    else:
+        template = env.get_template('base.html')
+
+    # Render the template.
+    output_content = template.render(context)
+
+    # Write the output file.
+    output_path = os.path.join(config['site_dir'], page.output_path)
+    if dump_json:
+        json_context = {
+            'content': context['content'],
+            'title': context['current_page'].title,
+            'url': context['current_page'].abs_url,
+            'language': 'en',
+        }
+        json_output = json.dumps(json_context, indent=4).encode('utf-8')
+        utils.write_file(json_output, output_path.replace('.html', '.json'))
+    else:
+        utils.write_file(output_content.encode('utf-8'), output_path)
 
 
 def build_pages(config, dump_json=False):
@@ -161,51 +213,13 @@ def build_pages(config, dump_json=False):
     build_404(config, env, site_navigation)
 
     for page in site_navigation.walk_pages():
-        # Read the input file
-        input_path = os.path.join(config['docs_dir'], page.input_path)
 
         try:
-            input_content = open(input_path, 'r').read()
-        except IOError:
-            log.error('file not found: %s' % input_path)
-            continue
-
-        if PY2:
-            input_content = input_content.decode('utf-8')
-
-        # Process the markdown text
-        html_content, table_of_contents, meta = convert_markdown(
-            input_content, site_navigation,
-            extensions=config['markdown_extensions'], strict=config['strict']
-        )
-
-        context = get_global_context(site_navigation, config)
-        context.update(get_page_context(
-            page, html_content, site_navigation,
-            table_of_contents, meta, config
-        ))
-
-        # Allow 'template:' override in md source files.
-        if 'template' in meta:
-            template = env.get_template(meta['template'][0])
-        else:
-            template = env.get_template('base.html')
-
-        # Render the template.
-        output_content = template.render(context)
-
-        # Write the output file.
-        output_path = os.path.join(config['site_dir'], page.output_path)
-        if dump_json:
-            json_context = {
-                'content': context['content'],
-                'title': context['current_page'].title,
-                'url': context['current_page'].abs_url,
-                'language': 'en',
-            }
-            utils.write_file(json.dumps(json_context, indent=4).encode('utf-8'), output_path.replace('.html', '.json'))
-        else:
-            utils.write_file(output_content.encode('utf-8'), output_path)
+            log.debug("Building page {0}".format(page.input_path))
+            _build_page(page, config, site_navigation, env, dump_json)
+        except:
+            log.error("Error building page {0}".format(page.input_path))
+            raise
 
 
 def build(config, live_server=False, dump_json=False, clean_site_dir=False):
@@ -222,14 +236,22 @@ def build(config, live_server=False, dump_json=False, clean_site_dir=False):
 
     if dump_json:
         build_pages(config, dump_json=True)
-    else:
-        # Reversed as we want to take the media files from the builtin theme
-        # and then from the custom theme_dir so the custom versions take take
-        # precedence.
-        for theme_dir in reversed(config['theme_dir']):
-            utils.copy_media_files(theme_dir, config['site_dir'])
-        utils.copy_media_files(config['docs_dir'], config['site_dir'])
-        build_pages(config)
+        return
+
+    log.debug("Copying static assets from themes directories:")
+
+    # Reversed as we want to take the media files from the builtin theme
+    # and then from the custom theme_dir so the custom versions take take
+    # precedence.
+    for theme_dir in reversed(config['theme_dir']):
+        log.debug("\t{0}".format(theme_dir))
+        utils.copy_media_files(theme_dir, config['site_dir'])
+
+    log.debug("Copying static assets from the docs dir.")
+    utils.copy_media_files(config['docs_dir'], config['site_dir'])
+
+    log.debug("Building markdown pages.")
+    build_pages(config)
 
 
 def site_directory_contains_stale_files(site_directory):
