@@ -1,4 +1,16 @@
 /*
+ * Tweak the overal size to better match RTD.
+ */
+body {
+    font-size: 90%;
+}
+
+h3, h4, h5, h6 {
+    color: #2980b9;
+    font-weight: 300
+}
+
+/*
  * Sphinx doesn't have support for section dividers like we do in
  * MkDocs, this styles the section titles in the nav
  *
@@ -29,7 +41,7 @@
 }
 
 /*
-* readthedocs theme hides nav items when the window height is 
+* readthedocs theme hides nav items when the window height is
 * too small to contain them.
 *
 * https://github.com/tomchristie/mkdocs/issues/#348
@@ -46,3 +58,4 @@
 code {
     white-space: pre;
 }
+
