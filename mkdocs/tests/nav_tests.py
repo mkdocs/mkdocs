@@ -63,6 +63,39 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual(len(site_navigation.nav_items), 3)
         self.assertEqual(len(site_navigation.pages), 6)
 
+    def test_nested_ungrouped(self):
+        pages = [
+            ('index.md', 'Home'),
+            ('about/contact.md', 'Contact'),
+            ('about/sub/license.md', 'License Title')
+        ]
+        expected = dedent("""
+        Home - /
+        Contact - /about/contact/
+        License Title - /about/sub/license/
+        """)
+        site_navigation = nav.SiteNavigation(pages)
+        self.assertEqual(str(site_navigation).strip(), expected)
+        self.assertEqual(len(site_navigation.nav_items), 3)
+        self.assertEqual(len(site_navigation.pages), 3)
+
+    def test_nested_ungrouped_no_titles(self):
+        pages = [
+            ('index.md',),
+            ('about/contact.md'),
+            ('about/sub/license.md')
+        ]
+        expected = dedent("""
+        Home - /
+        About
+            Contact - /about/contact/
+            License - /about/sub/license/
+        """)
+        site_navigation = nav.SiteNavigation(pages)
+        self.assertEqual(str(site_navigation).strip(), expected)
+        self.assertEqual(len(site_navigation.nav_items), 2)
+        self.assertEqual(len(site_navigation.pages), 3)
+
     def test_walk_simple_toc(self):
         pages = [
             ('index.md', 'Home'),
