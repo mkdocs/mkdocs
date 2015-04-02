@@ -171,3 +171,27 @@ footer {
         width: 263px;
     }
 }
+
+/* Homepage badges */
+.badges {
+  padding-bottom: 1px;
+  margin-top: 10px;
+}
+
+/* GitHub 'Star' badge */
+.badges iframe.github-star-button {
+    float: right;
+    margin-top: -12px;
+    margin-right: -15px;
+}
+
+/* Travis CI badge */
+.badges img.travis-badge-image,
+.badges img.coveralls-badge-image {
+    float: right;
+    margin-right: 8px;
+    margin-top: -11px;
+    margin-bottom: 0px;
+    padding: 0;
+    border: 0;
+}

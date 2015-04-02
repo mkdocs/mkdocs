@@ -1,3 +1,21 @@
+{% if current_page.is_homepage %}
+<div class="badges">
+    {% if config.github_buttons %}
+    <iframe src="http://ghbtns.com/github-btn.html?user={{ config.github_buttons[0] }}&amp;repo={{ config.github_buttons[1] }}&amp;type={{ config.github_buttons[2] }}&amp;count={{ config.github_buttons[3] }}" class="github-star-button" allowtransparency="true" frameborder="0" scrolling="0" width="110px" height="20px"></iframe>
+    {% endif %}
+
+    {% if config.travis_ci %}
+    <a href="https://travis-ci.org/{{ config.travis_ci[0] }}/{{ config.travis_ci[1] }}">
+        <img src="https://travis-ci.org/{{ config.travis_ci[0] }}/{{ config.travis_ci[1] }}.png?branch={{ config.travis_ci[2] }}" class="travis-badge-image">
+    </a>
+    {% endif %}
+
+    {% if config.coveralls %}
+    <a href='https://coveralls.io/r/{{ config.coveralls[0] }}/{{ config.coveralls[1] }}?branch={{ config.coveralls[2] }}'><img src="https://coveralls.io/repos/{{ config.coveralls[0] }}/{{ config.coveralls[1] }}/badge.png?branch={{ config.coveralls[2] }}" alt="Coverage Status" class="coveralls-badge-image" /></a>
+    {% endif %}
+</div>
+{% endif %}
+
 {% if meta.source %}
 <div class="source-links">
 {% for filename in meta.source %}
