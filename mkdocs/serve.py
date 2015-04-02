@@ -94,6 +94,8 @@ def serve(config, options=None):
     observer = PollingObserver()
     observer.schedule(event_handler, config['docs_dir'], recursive=True)
     for theme_dir in config['theme_dir']:
+        if not os.path.exists(theme_dir):
+            continue
         observer.schedule(event_handler, theme_dir, recursive=True)
     observer.schedule(config_event_handler, '.')
     observer.start()
