@@ -13,6 +13,14 @@ from mkdocs.tests.base import dedent
 
 
 class BuildTests(unittest.TestCase):
+
+    def test_empty_document(self):
+        html, toc, meta = build.convert_markdown("")
+
+        self.assertEqual(html, '')
+        self.assertEqual(len(list(toc)), 0)
+        self.assertEqual(meta, {})
+
     def test_convert_markdown(self):
         """
         Ensure that basic Markdown -> HTML and TOC works.
