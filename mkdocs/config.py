@@ -97,6 +97,18 @@ def validate_config(user_config):
     if not config['site_name']:
         raise ConfigurationError("Config must contain 'site_name' setting.")
 
+    # Validate that the docs_dir and site_dir don't contain the
+    # other as this will lead to copying back and forth on each
+    # and eventually make a deep nested mess.
+    abs_site_dir = os.path.abspath(config['site_dir'])
+    abs_docs_dir = os.path.abspath(config['docs_dir'])
+    if abs_docs_dir.startswith(abs_site_dir):
+        raise ConfigurationError(
+            "The 'docs_dir' can't be within the 'site_dir'.")
+    elif abs_site_dir.startswith(abs_docs_dir):
+        raise ConfigurationError(
+            "The 'site_dir' can't be within the 'docs_dir'.")
+
     # If not specified, then the 'pages' config simply includes all
     # markdown files in the docs dir, without generating any header items
     # for them.
