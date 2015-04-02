@@ -280,3 +280,27 @@ class SiteNavigationTests(unittest.TestCase):
                 return nav._generate_site_navigation((bad_page, ), None)
 
             self.assertRaises(ConfigurationError, _test)
+
+    def test_ancestors(self):
+
+        pages = [
+            ('index.md', 'Home'),
+            ('api-guide/running.md', 'API Guide', 'Running'),
+            ('api-guide/testing.md', 'API Guide', 'Testing'),
+            ('api-guide/debugging.md', 'API Guide', 'Debugging'),
+            ('about/release-notes.md', 'About', 'Release notes'),
+            ('about/license.md', 'About', 'License')
+        ]
+        site_navigation = nav.SiteNavigation(pages)
+
+        ancestors = (
+            [],
+            [site_navigation.nav_items[1]],
+            [site_navigation.nav_items[1]],
+            [site_navigation.nav_items[1]],
+            [site_navigation.nav_items[2]],
+            [site_navigation.nav_items[2]],
+        )
+
+        for page, expected_ancestor in zip(site_navigation.pages, ancestors):
+            self.assertEqual(page.ancestors, expected_ancestor)
