@@ -98,7 +98,7 @@ def get_global_context(nav, config):
     }
 
 
-def get_page_context(page, content, nav, toc, meta, config):
+def get_page_context(page, content, toc, meta, config):
     """
     Generate the page context by extending the global context and adding page
     specific variables.
@@ -163,7 +163,7 @@ def _build_page(page, config, site_navigation, env, dump_json):
     try:
         input_content = open(input_path, 'r').read()
     except IOError:
-        log.error('file not found: %s' % input_path)
+        log.error('file not found: %s', input_path)
         return
 
     if PY2:
@@ -177,8 +177,7 @@ def _build_page(page, config, site_navigation, env, dump_json):
 
     context = get_global_context(site_navigation, config)
     context.update(get_page_context(
-        page, html_content, site_navigation,
-        table_of_contents, meta, config
+        page, html_content, table_of_contents, meta, config
     ))
 
     # Allow 'template:' override in md source files.
@@ -218,10 +217,10 @@ def build_pages(config, dump_json=False):
     for page in site_navigation.walk_pages():
 
         try:
-            log.debug("Building page {0}".format(page.input_path))
+            log.debug("Building page %s", page.input_path)
             _build_page(page, config, site_navigation, env, dump_json)
         except:
-            log.error("Error building page {0}".format(page.input_path))
+            log.error("Error building page %s", page.input_path)
             raise
 
 
@@ -241,13 +240,11 @@ def build(config, live_server=False, dump_json=False, clean_site_dir=False):
         build_pages(config, dump_json=True)
         return
 
-    log.debug("Copying static assets from themes directories:")
-
     # Reversed as we want to take the media files from the builtin theme
     # and then from the custom theme_dir so the custom versions take take
     # precedence.
     for theme_dir in reversed(config['theme_dir']):
-        log.debug("\t{0}".format(theme_dir))
+        log.debug("Copying static assets from theme: %s", theme_dir)
         utils.copy_media_files(theme_dir, config['site_dir'])
 
     log.debug("Copying static assets from the docs dir.")
