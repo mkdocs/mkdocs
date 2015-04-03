@@ -99,6 +99,13 @@ class ConfigTests(unittest.TestCase):
             finally:
                 os.remove(config_file.name)
 
+    def test_install_theme(self):
+        tmp_dir = tempfile.mkdtemp()
+        config.install_theme(
+            'https://github.com/ngzhian/mkdocs/raw/theme-url/mkdocs/themes/yeti.zip',
+            tmp_dir)
+        self.assertTrue(os.path.exists, os.path.join(tmp_dir, 'yeti'))
+
     def test_default_pages(self):
         tmp_dir = tempfile.mkdtemp()
         try:
