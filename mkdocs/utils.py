@@ -12,7 +12,7 @@ import os
 import posixpath
 import shutil
 
-from mkdocs.compat import urlparse
+from mkdocs.compat import urlparse, urlopen as urlopen_compat
 
 
 def copy_file(source_path, output_path):
@@ -225,3 +225,12 @@ def normalise_path(path, force_posix=False):
         path = path.replace(ntpath.sep, posixpath.sep)
 
     return path
+
+
+def urlopen(path):
+    """
+    Due to the nature of the compat module, we can't easily mock the urlopen
+    function as it is imported and defined dynamically depending if the user
+    is using Python 2 or 3. This utility exists simply to make mocking easier.
+    """
+    return urlopen_compat(path)
