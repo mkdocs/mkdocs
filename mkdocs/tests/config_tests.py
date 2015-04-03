@@ -102,7 +102,7 @@ class ConfigTests(unittest.TestCase):
     def test_install_theme(self):
         tmp_dir = tempfile.mkdtemp()
         config.install_theme(
-            'https://github.com/ngzhian/mkdocs/raw/theme-url/mkdocs/themes/yeti.zip',
+            'https://github.com/ngzhian/mkdocs/raw/theme-url/mkdocs/tests/yeti.zip',
             tmp_dir)
         self.assertTrue(os.path.exists, os.path.join(tmp_dir, 'yeti'))
 
