@@ -2,17 +2,17 @@
 /* Highlight */
 $( document ).ready(function() {
     hljs.initHighlightingOnLoad();
-    $('table').addClass('table');
+    $('table').addClass('table table-striped table-hover');
 });
 
 
 /* Scrollspy */
-var navHeight = $('.navbar').outerHeight(true) + 10
+var navHeight = $('.navbar').outerHeight(true) + 10;
 
 $('body').scrollspy({
     target: '.bs-sidebar',
     offset: navHeight
-})
+});
 
 
 /* Prevent disabled links from causing a page reload */
