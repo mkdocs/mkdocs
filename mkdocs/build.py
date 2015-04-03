@@ -98,7 +98,7 @@ def get_global_context(nav, config):
     }
 
 
-def get_page_context(page, content, nav, toc, meta, config):
+def get_page_context(page, content, toc, meta, config):
     """
     Generate the page context by extending the global context and adding page
     specific variables.
@@ -177,8 +177,7 @@ def _build_page(page, config, site_navigation, env, dump_json):
 
     context = get_global_context(site_navigation, config)
     context.update(get_page_context(
-        page, html_content, site_navigation,
-        table_of_contents, meta, config
+        page, html_content, table_of_contents, meta, config
     ))
 
     # Allow 'template:' override in md source files.
