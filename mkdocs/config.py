@@ -3,7 +3,6 @@
 from mkdocs import utils
 from mkdocs.compat import urlparse, URLError
 from mkdocs.exceptions import ConfigurationError
-import mkdocs
 
 import logging
 from io import BytesIO
@@ -159,8 +158,7 @@ def validate_config(user_config):
 
     if config['theme_url']:
         config_dir = os.path.dirname(config['config'])
-        dl_theme_dir = os.path.join(
-            config_dir, '.mkdocs/%s/theme' % mkdocs.__version__)
+        dl_theme_dir = os.path.join(config_dir, '.mkdocs/theme')
         install_theme(config['theme_url'], dl_theme_dir)
         theme_dir.insert(0, dl_theme_dir)
 
