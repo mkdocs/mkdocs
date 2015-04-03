@@ -29,6 +29,20 @@ class TableOfContentsTests(unittest.TestCase):
         toc = self.markdown_to_toc(md)
         self.assertEqual(str(toc).strip(), expected)
 
+    def test_indented_toc_html(self):
+        md = dedent("""
+        # Heading 1
+        ## <code>Heading</code> 2
+        ## Heading 3
+        """)
+        expected = dedent("""
+        Heading 1 - #heading-1
+            Heading 2 - #heading-2
+            Heading 3 - #heading-3
+        """)
+        toc = self.markdown_to_toc(md)
+        self.assertEqual(str(toc).strip(), expected)
+
     def test_flat_toc(self):
         md = dedent("""
         # Heading 1
