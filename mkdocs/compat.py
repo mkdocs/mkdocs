@@ -13,6 +13,7 @@ if PY2:
     httpserver = httpserver
     import SocketServer
     socketserver = SocketServer
+    from HTMLParser import HTMLParser
 
     import itertools
     zip = itertools.izip
@@ -30,6 +31,7 @@ else:  # PY3
     httpserver = httpserver
     import socketserver
     socketserver = socketserver
+    from html.parser import HTMLParser
 
     zip = zip
 
