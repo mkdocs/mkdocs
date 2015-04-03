@@ -1,10 +1,11 @@
 # coding: utf-8
 
 from mkdocs import utils
-from mkdocs.compat import StringIO, urlparse, urlopen, URLError
+from mkdocs.compat import urlparse, urlopen, URLError
 from mkdocs.exceptions import ConfigurationError
 
 import logging
+from io import BytesIO
 import os
 import yaml
 from zipfile import ZipFile
@@ -200,7 +201,7 @@ def install_theme(url, package_dir):
         return
     zipfile = response.read()
     # We can't use ZipFile as a ContextManager due to PY26 compatibility
-    theme_zip = ZipFile(file=StringIO(zipfile))
+    theme_zip = ZipFile(file=BytesIO(zipfile))
     for zipinfo in theme_zip.infolist():
         theme_zip.extractall(path=package_dir)
     theme_zip.close()
