@@ -19,8 +19,6 @@ if PY2:
     import itertools
     zip = itertools.izip
 
-    from StringIO import StringIO
-
     text_type = unicode
     binary_type = str
     string_types = (str, unicode)
@@ -38,8 +36,6 @@ else:  # PY3
     from html.parser import HTMLParser
 
     zip = zip
-
-    from io import StringIO
 
     text_type = str
     binary_type = bytes
