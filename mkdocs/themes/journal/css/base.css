@@ -2,6 +2,13 @@ body {
     padding-top: 70px;
 }
 
+h1[id]:before, h2[id]:before {
+    content: "";
+    display: block;
+    margin-top: -75px;
+    height: 75px;
+}
+
 ul.nav li.main {
     font-weight: bold;
 }
