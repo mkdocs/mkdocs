@@ -90,6 +90,7 @@ The setting should be a list.  Each row in the list represents information about
 
 Here's a simple example that would cause the build stage to create three pages:
 
+
     pages:
     - ['index.md', 'Introduction']
     - ['user-guide.md', 'User Guide']
