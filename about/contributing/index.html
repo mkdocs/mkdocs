@@ -4,18 +4,18 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="Project documentation with Markdown.">
         
         
-        <link rel="shortcut icon" href="./img/favicon.ico">
+        <link rel="canonical" href="http://www.mkdocs.org/about/contributing/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
 
-	<title>MkDocs</title>
+	<title>Contributing - MkDocs</title>
 
-        <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="./css/font-awesome-4.0.3.css" rel="stylesheet">
-        <link href="./css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="./css/highlight.css">
-        <link href="./css/extra.css" rel="stylesheet">
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+        <link href="../../css/extra.css" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -54,7 +54,7 @@
             
 
             <!-- Main title -->
-            <a class="navbar-brand" href=".">MkDocs</a>
+            <a class="navbar-brand" href="../..">MkDocs</a>
         </div>
 
         <!-- Expanded navigation -->
@@ -65,7 +65,7 @@
                 
                 
                     <li >
-                        <a href=".">Home</a>
+                        <a href="../..">Home</a>
                     </li>
                 
                 
@@ -75,15 +75,15 @@
                         <ul class="dropdown-menu">
                         
                             <li >
-                                <a href="user-guide/writing-your-docs/">Writing your docs</a>
+                                <a href="../../user-guide/writing-your-docs/">Writing your docs</a>
                             </li>
                         
                             <li >
-                                <a href="user-guide/styling-your-docs/">Styling your docs</a>
+                                <a href="../../user-guide/styling-your-docs/">Styling your docs</a>
                             </li>
                         
                             <li >
-                                <a href="user-guide/configuration/">Configuration</a>
+                                <a href="../../user-guide/configuration/">Configuration</a>
                             </li>
                         
                         </ul>
@@ -91,20 +91,20 @@
                 
                 
                 
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             <li >
-                                <a href="about/license/">License</a>
+                                <a href="../license/">License</a>
                             </li>
                         
                             <li >
-                                <a href="about/release-notes/">Release Notes</a>
+                                <a href="../release-notes/">Release Notes</a>
                             </li>
                         
-                            <li >
-                                <a href="about/contributing/">Contributing</a>
+                            <li class="active">
+                                <a href="./">Contributing</a>
                             </li>
                         
                         </ul>
@@ -119,8 +119,8 @@
             <ul class="nav navbar-nav navbar-right">
                 
                 
-                <li class="disabled">
-                    <a rel="next" >
+                <li >
+                    <a rel="next" href="../release-notes/">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
@@ -148,15 +148,56 @@
 
         <div class="container">
             
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#contributing-to-mkdocs">Contributing to MkDocs</a></li>
+        
+            <li><a href="#installing-for-development">Installing for development</a></li>
+        
+            <li><a href="#running-the-tests">Running the tests</a></li>
+        
+            <li><a href="#submitting-pull-requests">Submitting Pull Requests</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
 
-    <div class="row-fluid">
-      <div id="main-content" class="span12">
-        <h1 id="404-page-not-found" style="text-align: center">404</h1>
-        <p style="text-align: center"><strong>Page not found</strong></p>
-      </div>
-    </div>
+<h1 id="contributing-to-mkdocs">Contributing to MkDocs</h1>
+<p>An introduction to contributing to the MkDocs project.</p>
+<p>The MkDocs project welcomes, and depends, on contributions from
+developers and users in the open source community. Contributions
+can be made in a number of ways, a few examples are:</p>
+<ul>
+<li>Code patches via pull requests</li>
+<li>Documentation improvements</li>
+<li>Bug reports and patch reviews</li>
+</ul>
+<h2 id="installing-for-development">Installing for development</h2>
+<p>First you'll need to fork and clone the repository. Once you have
+a local copy, run the following command. It is recommended that
+you do this within a <a href="../virtualenv">virtualenv</a>.</p>
+<pre><code class="no-highlight">pip install --editable .
+</code></pre>
 
-
+<p>This will install MkDocs in development mode which binds the
+<code>mkdocs</code> command to the git repository.</p>
+<h2 id="running-the-tests">Running the tests</h2>
+<p>To run the tests, it is recommended that you use <a href="../tox">Tox</a>. This
+just needs to be pip installed and then the test suite can be ran
+for MkDocs but running the command <code>tox</code> in the root of your
+MkDocs repository.</p>
+<p>It will attempt to run the tests against all of the Python
+versions we support. So don't be concerned if you are missing
+some and they fail. The rest will be verified by <a href="../travis">Travis</a>
+when you submit a pull request.</p>
+<h2 id="submitting-pull-requests">Submitting Pull Requests</h2>
+<p>Once you are happy with your changes or you are ready for some
+feedback, push it to your fork and send a pull request. For a
+change to be accepted it will most likely need to have tests and
+documentation if it is a new feature.</p></div>
+            
         </div>
 
         <footer class="col-md-12">
@@ -169,14 +210,14 @@
 
         
 
-        <script src="./js/jquery-1.10.2.min.js"></script>
-        <script src="./js/bootstrap-3.0.3.min.js"></script>
-        <script src="./js/highlight.pack.js"></script>
-        <script src="./js/base.js"></script>
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/base.js"></script>
 
         <!--
         MkDocs version  : 0.11.1
-        Docs Build Date : 2015-04-03 14:17:32.712052
+        Docs Build Date : 2015-04-03 14:17:32.815041
         -->
     </body>
 </html>

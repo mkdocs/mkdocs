@@ -9,7 +9,7 @@
         <link rel="canonical" href="http://www.mkdocs.org/user-guide/configuration/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
-        <title>Configuration - MkDocs</title>
+	<title>Configuration - MkDocs</title>
 
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -64,20 +64,26 @@
                 <ul class="nav navbar-nav">
                 
                 
+                    <li >
+                        <a href="../..">Home</a>
+                    </li>
+                
+                
+                
                     <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             <li >
-                                <a href="../writing-your-docs">Writing your docs</a>
+                                <a href="../writing-your-docs/">Writing your docs</a>
                             </li>
                         
                             <li >
-                                <a href="../styling-your-docs">Styling your docs</a>
+                                <a href="../styling-your-docs/">Styling your docs</a>
                             </li>
                         
                             <li class="active">
-                                <a href=".">Configuration</a>
+                                <a href="./">Configuration</a>
                             </li>
                         
                         </ul>
@@ -90,11 +96,15 @@
                         <ul class="dropdown-menu">
                         
                             <li >
-                                <a href="../../about/license">License</a>
+                                <a href="../../about/license/">License</a>
                             </li>
                         
                             <li >
-                                <a href="../../about/release-notes">Release Notes</a>
+                                <a href="../../about/release-notes/">Release Notes</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../about/contributing/">Contributing</a>
                             </li>
                         
                         </ul>
@@ -110,12 +120,12 @@
                 
                 
                 <li >
-                    <a rel="next" href="../styling-your-docs">
+                    <a rel="next" href="../styling-your-docs/">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../../about/license">
+                    <a rel="prev" href="../../about/license/">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -167,33 +177,45 @@
 <p>Project settings are always configured by using a YAML configuration file in the project directory named <code>mkdocs.yml</code>.</p>
 <p>As a miniumum this configuration file must contain the <code>site_name</code> setting.  All other settings are optional.</p>
 <h2 id="project-information">Project information</h2>
-<h4 id="site_name">site_name</h4>
+<h3 id="site_name">site_name</h3>
 <p>This is a <strong>required setting</strong>, and should be a string that is used as the main title for the project documentation.  For example:</p>
 <pre><code>site_name: Mashmallow Generator
 </code></pre>
 <p>When rendering the theme this setting will be passed as the <code>site_name</code> context variable.</p>
-<h4 id="site_url">site_url</h4>
+<h3 id="site_url">site_url</h3>
 <p>Set the canonical URL of the site. This will add a link tag with the canonical URL to the generated HTML header.</p>
 <p><strong>default</strong>: <code>null</code></p>
-<h4 id="repo_url">repo_url</h4>
+<h3 id="repo_url">repo_url</h3>
 <p>When set, provides a link to your GitHub or Bitbucket repository on each page.</p>
 <pre><code>repo_url: https://github.com/example/repository/
 </code></pre>
 <p><strong>default</strong>: <code>null</code></p>
-<h4 id="site_description">site_description</h4>
+<h3 id="repo_name">repo_name</h3>
+<p>When set, provides a link to your GitHub or Bitbucket repository on each page.</p>
+<p><strong>default</strong>: <code>'GitHub'</code> or <code>'Bitbucket'</code> if the <code>repo_url</code> matches those domains, otherwise <code>null</code></p>
+<h3 id="site_description">site_description</h3>
 <p>Set the site description. This will add a meta tag to the generated HTML header.
 <strong>default</strong>: <code>null</code></p>
-<h4 id="site_author">site_author</h4>
+<h3 id="site_author">site_author</h3>
 <p>Set the name of the author. This will add a meta tag to the generated HTML header.</p>
 <p><strong>default</strong>: <code>null</code></p>
-<h4 id="site_favicon">site_favicon</h4>
+<h3 id="site_favicon">site_favicon</h3>
 <p>Set the favicon to use. Putting a <code>favicon.ico</code> into the <code>docs/</code> directory, the config would look as follows:</p>
 <pre><code class="yaml">site_favicon: favicon.ico
 </code></pre>
 
 <p><strong>default</strong>: <code>null</code></p>
+<h3 id="copyright">copyright</h3>
+<p>Set the copyright information to be included in the documentation by the theme.</p>
+<p><strong>default</strong>: <code>null</code></p>
+<h3 id="google_analytics">google_analytics</h3>
+<p>Set the Google analytics tracking configuration.</p>
+<pre><code class="yaml">google_analytics: ['UA-36723568-3', 'mkdocs.org']
+</code></pre>
+
+<p><strong>default</strong>: <code>null</code></p>
 <h2 id="documentation-layout">Documentation layout</h2>
-<h4 id="pages">pages</h4>
+<h3 id="pages">pages</h3>
 <p>This is setting is used to determine the set of pages that should be built for the documentation.</p>
 <p>The setting should be a list.  Each row in the list represents information about a single page as a list of strings.  The first string represents the path of the documentation source file, and should be relative to the <code>docs_dir</code> setting.  Remaining strings represent the title of the page in the site navigation.</p>
 <p>Here's a simple example that would cause the build stage to create three pages:</p>
@@ -212,56 +234,32 @@
 - ['about/license.md', 'About', 'License']
 </code></pre>
 <h2 id="build-directories">Build directories</h2>
-<h4 id="theme">theme</h4>
+<h3 id="theme">theme</h3>
 <p>Sets the theme of your documentation site, for a list of available themes visit
-<a href="../styling-your-docs">styling your docs</a>.</p>
+<a href="../styling-your-docs/">styling your docs</a>.</p>
 <p><strong>default</strong>: <code>'mkdocs'</code></p>
-<h4 id="theme_dir">theme_dir</h4>
+<h3 id="theme_dir">theme_dir</h3>
 <p>Lets you set a directory to a custom theme.  This can either be a relative directory, in which case it is resolved relative to the directory containing you configuration file, or it can be an absolute directory path.</p>
-<p>For example, given this example project layout:</p>
-<pre><code>mkdocs.yml
-docs/
-    index.md
-    about.md
-custom_theme/
-    base.html
-    ...
-</code></pre>
-<p>You would include the following setting to use the custom theme directory:</p>
-<pre><code>theme_dir: 'custom_theme'
-</code></pre>
-<p>If used in combination with the <code>theme</code> configuration value a custom theme can be used to replace only specific parts of a themes templates. For example, with the above layout and if you set your <code>theme: mkdocs</code> then the base.html file would replace that in the theme but otherwise it would remain the same. This is useful if you want to make small adjustments to an existing theme.</p>
+<p>See <a href="../styling-your-docs/#custom-themes">styling your docs</a> for an explanation of custom themes.</p>
 <p><strong>default</strong>: <code>null</code></p>
-<h4 id="docs_dir">docs_dir</h4>
+<h3 id="docs_dir">docs_dir</h3>
 <p>Lets you set the directory containing the documentation source markdown files.  This can either be a relative directory, in which case it is resolved relative to the directory containing you configuration file, or it can be an absolute directory path.</p>
 <p><strong>default</strong>: <code>'docs'</code></p>
-<h4 id="site_dir">site_dir</h4>
+<h3 id="site_dir">site_dir</h3>
 <p>Lets you set the directory where the output HTML and other files are created.  This can either be a relative directory, in which case it is resolved relative to the directory containing you configuration file, or it can be an absolute directory path.</p>
 <p><strong>default</strong>: <code>'site'</code></p>
-<hr />
 <p><strong>Note</strong>: If you are using source code control you will normally want to ensure that your <em>build output</em> files are not commited into the repository, and only keep the <em>source</em> files under version control.  For example, if using <code>git</code> you might add the following line to your <code>.gitignore</code> file:</p>
 <pre><code>site/
 </code></pre>
 <p>If you're using another source code control you'll want to check its documentation on how to ignore specific directories.</p>
-<hr />
-<!--
-## Extra build steps
-
-#### include_search
-
-TODO
-
-#### include_404
-
-TODO
-
-#### include_sitemap
-
-TODO
--->
-
+<h3 id="extra_css">extra_css</h3>
+<p>Set a list of css files to be included by the theme.</p>
+<p><strong>default</strong>: By default <code>extra_css</code> will contain a list of all the CSS files found within the <code>docs_dir</code>, if none are found it will be <code>[]</code> (an empty list).</p>
+<h3 id="extra_javascript">extra_javascript</h3>
+<p>Set a list of JavaScript files to be included by the theme.</p>
+<p><strong>default</strong>: By default <code>extra_javascript</code> will contain a list of all the JavaScript files found within the <code>docs_dir</code>, if none are found it will be <code>[]</code> (an empty list).</p>
 <h2 id="preview-controls">Preview controls</h2>
-<h4 id="use_directory_urls">use_directory_urls</h4>
+<h3 id="use_directory_urls">use_directory_urls</h3>
 <p>This setting controls the style used for linking to pages within the documentation.</p>
 <p>The following table demonstrates how the URLs used on the site differ when setting <code>use_directory_urls</code> to <code>true</code> or <code>false</code>.</p>
 <table>
@@ -297,20 +295,19 @@ TODO
 <p>The default style of <code>use_directory_urls=true</code> creates more user friendly URLs, and is usually what you'll want to use.</p>
 <p>The alternate style can occasionally be useful if you want your documentation to remain properly linked when opening pages directly from the file system, because it create links that point directly to the target <em>file</em> rather than the target <em>directory</em>.</p>
 <p><strong>default</strong>: <code>true</code></p>
-<h4 id="dev_addr">dev_addr</h4>
+<h3 id="dev_addr">dev_addr</h3>
 <p>Determines the address used when running <code>mkdocs serve</code>.  Setting this allows you to use another port, or allows you to make the service accessible over your local network by using the <code>0.0.0.0</code> address.</p>
 <p>As with all settings, you can set this from the command line, which can be usful, for example:</p>
 <pre><code>mkdocs serve --dev-addr=0.0.0.0:80  # Run on port 80, accessible over the local network.
 </code></pre>
 <p><strong>default</strong>: <code>'127.0.0.1:8000'</code></p>
 <h2 id="formatting-options">Formatting options</h2>
-<h4 id="markdown_extensions">markdown_extensions</h4>
+<h3 id="markdown_extensions">markdown_extensions</h3>
 <p>MkDocs uses the <a href="http://pythonhosted.org/Markdown/">Python Markdown</a> library to translate Markdown files into HTML. Python Markdown supports a variety of <a href="http://pythonhosted.org/Markdown/extensions/index.html">extensions</a> that customize how pages are formatted. This setting lets you enable a list of extensions beyond the ones that MkDocs uses by default (<code>meta</code>, <code>toc</code>, <code>tables</code>, and <code>fenced_code</code>).</p>
 <p>For example, to enable the <a href="https://pypi.python.org/pypi/mdx_smartypants">SmartyPants typography extension</a>, use:</p>
 <pre><code>markdown_extensions: [smartypants]
 </code></pre>
-<p><strong>default</strong>: <code>[]</code></p>
-</div>
+<p><strong>default</strong>: <code>[]</code></p></div>
             
         </div>
 
@@ -324,10 +321,14 @@ TODO
 
         
 
-        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="../../js/jquery-1.10.2.min.js"></script>
         <script src="../../js/bootstrap-3.0.3.min.js"></script>
-        <script src="../../js/prettify-1.0.min.js"></script>
         <script src="../../js/highlight.pack.js"></script>
         <script src="../../js/base.js"></script>
+
+        <!--
+        MkDocs version  : 0.11.1
+        Docs Build Date : 2015-04-03 14:17:32.801384
+        -->
     </body>
 </html>

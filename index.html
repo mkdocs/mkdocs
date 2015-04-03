@@ -9,7 +9,7 @@
         <link rel="canonical" href="http://www.mkdocs.org/">
         <link rel="shortcut icon" href="./img/favicon.ico">
 
-        <title>MkDocs</title>
+	<title>MkDocs</title>
 
         <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="./css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -64,6 +64,12 @@
                 <ul class="nav navbar-nav">
                 
                 
+                    <li class="active">
+                        <a href=".">Home</a>
+                    </li>
+                
+                
+                
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
@@ -95,6 +101,10 @@
                         
                             <li >
                                 <a href="about/release-notes/">Release Notes</a>
+                            </li>
+                        
+                            <li >
+                                <a href="about/contributing/">Contributing</a>
                             </li>
                         
                         </ul>
@@ -169,18 +179,16 @@
 <p>MkDocs is a <strong>fast</strong>, <strong>simple</strong> and <strong>downright gorgeous</strong> static site generator that's geared towards building project documentation. Documentation source files are written in Markdown, and configured with a single YAML configuration file.</p>
 <hr />
 <p><strong>MkDocs is currently still in development.</strong></p>
-<p>We're progressing quickly, but the documentation still needs filling in, and theres a few rough edges.  The 1.0 release is planned to arrive in the next few weeks.</p>
+<p>We're progressing quickly, but the documentation still needs filling in, and theres a few rough edges.  The 1.0 release is planned to arrive in the next few months.</p>
 <hr />
 <h4 id="host-anywhere">Host anywhere.</h4>
 <p>Builds completely static HTML sites that you can host on GitHub pages, Amazon S3, or anywhere else you choose.</p>
 <h4 id="great-themes-available">Great themes available.</h4>
-<p>There's a stack of good looking themes included by default. Choose from bootstrap, readthedocs, ghostwriter, or any of the 12 bootswatch themes.</p>
+<p>There's a stack of good looking themes included by default. Choose from bootstrap, readthedocs, or any of the 12 bootswatch themes.</p>
 <h4 id="preview-your-site-as-you-work">Preview your site as you work.</h4>
 <p>The built-in devserver allows you to preview your documentation as you're writing it. It will even auto-reload whenever you save any changes, so all you need to do to see your latest edits is refresh your browser.</p>
 <h4 id="easy-to-customize">Easy to customize.</h4>
 <p>Get your project documentation looking just the way you want it by customizing the theme.</p>
-<h4 id="cross-reference-your-documentation">Cross-reference your documentation.</h4>
-<p>Create richly cross-referenced documents, using the MkDocs interlinking syntax.</p>
 <hr />
 <h2 id="installation">Installation</h2>
 <p>In order to install MkDocs you'll need <a href="https://www.python.org/">Python</a> installed on your system, as well as the Python package manager, <a href="http://pip.readthedocs.org/en/latest/installing.html">pip</a>.  You can check if you have these already installed like so:</p>
@@ -257,8 +265,7 @@ about css fonts img index.html js
 <pre><code>$ mkdocs build --clean
 </code></pre>
 <h2 id="deploying">Deploying</h2>
-<p>The documentation site that we've just built only uses static files so you'll be able to host it from pretty much anywhere. <a href="https://help.github.com/articles/creating-project-pages-manually">GitHub project pages</a> and <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">Amazon S3</a> are good hosting options. Upload the contents of the entire <code>site</code> directory to wherever you're hosting your website from and you're done.</p>
-</div>
+<p>The documentation site that we've just built only uses static files so you'll be able to host it from pretty much anywhere. <a href="https://help.github.com/articles/creating-project-pages-manually">GitHub project pages</a> and <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">Amazon S3</a> are good hosting options. Upload the contents of the entire <code>site</code> directory to wherever you're hosting your website from and you're done.</p></div>
             
         </div>
 
@@ -272,10 +279,14 @@ about css fonts img index.html js
 
         
 
-        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="./js/jquery-1.10.2.min.js"></script>
         <script src="./js/bootstrap-3.0.3.min.js"></script>
-        <script src="./js/prettify-1.0.min.js"></script>
         <script src="./js/highlight.pack.js"></script>
         <script src="./js/base.js"></script>
+
+        <!--
+        MkDocs version  : 0.11.1
+        Docs Build Date : 2015-04-03 14:17:32.764759
+        -->
     </body>
 </html>

@@ -9,7 +9,7 @@
         <link rel="canonical" href="http://www.mkdocs.org/about/release-notes/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
-        <title>Release Notes - MkDocs</title>
+	<title>Release Notes - MkDocs</title>
 
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -64,20 +64,26 @@
                 <ul class="nav navbar-nav">
                 
                 
+                    <li >
+                        <a href="../..">Home</a>
+                    </li>
+                
+                
+                
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             <li >
-                                <a href="../../user-guide/writing-your-docs">Writing your docs</a>
+                                <a href="../../user-guide/writing-your-docs/">Writing your docs</a>
                             </li>
                         
                             <li >
-                                <a href="../../user-guide/styling-your-docs">Styling your docs</a>
+                                <a href="../../user-guide/styling-your-docs/">Styling your docs</a>
                             </li>
                         
                             <li >
-                                <a href="../../user-guide/configuration">Configuration</a>
+                                <a href="../../user-guide/configuration/">Configuration</a>
                             </li>
                         
                         </ul>
@@ -90,11 +96,15 @@
                         <ul class="dropdown-menu">
                         
                             <li >
-                                <a href="../license">License</a>
+                                <a href="../license/">License</a>
                             </li>
                         
                             <li class="active">
-                                <a href=".">Release Notes</a>
+                                <a href="./">Release Notes</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../contributing/">Contributing</a>
                             </li>
                         
                         </ul>
@@ -110,12 +120,12 @@
                 
                 
                 <li >
-                    <a rel="next" href="../license">
+                    <a rel="next" href="../license/">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
-                <li class="disabled">
-                    <a rel="prev" >
+                <li >
+                    <a rel="prev" href="../contributing/">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -145,6 +155,8 @@
         
             <li><a href="#upgrading">Upgrading</a></li>
         
+            <li><a href="#0111-2014-11-20">0.11.1 (2014-11-20)</a></li>
+        
             <li><a href="#0110-2014-11-18">0.11.0 (2014-11-18)</a></li>
         
             <li><a href="#0100-2014-10-29">0.10.0 (2014-10-29)</a></li>
@@ -163,6 +175,11 @@
 <p>You can determine your currently installed version using <code>pip freeze</code>:</p>
 <pre><code>pip freeze | grep mkdocs
 </code></pre>
+<h2 id="0111-2014-11-20">0.11.1 (2014-11-20)</h2>
+<ul>
+<li>Bugfix: Fix a CSS wrapping issue with code highlighting in the ReadTheDocs
+  theme. (#233)</li>
+</ul>
 <h2 id="0110-2014-11-18">0.11.0 (2014-11-18)</h2>
 <ul>
 <li>Render 404.html files if they exist for the current theme (#194)</li>
@@ -201,8 +218,7 @@
 <li>Bugfix: Fix the mkdocs command creation under Windows. (#122)</li>
 <li>Bugfix: Correctly handle external <code>extra_javascript</code> and <code>extra_css</code>. (#92)</li>
 <li>Bugfix: Fixed favicon support. (#87)</li>
-</ul>
-</div>
+</ul></div>
             
         </div>
 
@@ -216,10 +232,14 @@
 
         
 
-        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="../../js/jquery-1.10.2.min.js"></script>
         <script src="../../js/bootstrap-3.0.3.min.js"></script>
-        <script src="../../js/prettify-1.0.min.js"></script>
         <script src="../../js/highlight.pack.js"></script>
         <script src="../../js/base.js"></script>
+
+        <!--
+        MkDocs version  : 0.11.1
+        Docs Build Date : 2015-04-03 14:17:32.811362
+        -->
     </body>
 </html>
