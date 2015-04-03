@@ -10,7 +10,7 @@ and structure of the site and pages in the site.
 import os
 import shutil
 
-from mkdocs.compat import urlparse
+from mkdocs.compat import urlparse, urlopen as urlopen_compat
 
 
 def copy_file(source_path, output_path):
@@ -204,3 +204,12 @@ def create_relative_media_url(nav, url):
         relative_url = ".%s" % relative_url
 
     return relative_url
+
+
+def urlopen(path):
+    """
+    Due to the nature of the compat module, we can't easily mock the urlopen
+    function as it is imported and defined dynamically depending if the user
+    is using Python 2 or 3. This utility exists simply to make mocking easier.
+    """
+    return urlopen_compat(path)
