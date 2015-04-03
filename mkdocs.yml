@@ -11,6 +11,7 @@ pages:
 - ['user-guide/configuration.md', 'User Guide', 'Configuration']
 - ['about/license.md', 'About', 'License']
 - ['about/release-notes.md', 'About', 'Release Notes']
+- ['about/contributing.md', 'About', 'Contributing']
 
 copyright: Copyright &copy; 2014, <a href="https://twitter.com/_tomchristie">Tom Christie</a>.
 google_analytics: ['UA-27795084-5', 'mkdocs.org']
