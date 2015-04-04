@@ -69,3 +69,12 @@ p code {
     word-wrap: break-word;
 }
 
+/*
+ * The CSS classes from highlight.js seem to clash with the
+ * ReadTheDocs theme causing some code to be incorrectly made
+ * bold and italic.
+ */
+code.cs, code.c {
+    font-weight: inherit;
+    font-style: inherit;
+}
