@@ -6,12 +6,8 @@ $( document ).ready(function() {
 });
 
 
-/* Scrollspy */
-var navHeight = $('.navbar').outerHeight(true) + 10;
-
 $('body').scrollspy({
     target: '.bs-sidebar',
-    offset: navHeight
 });
 
 /* Prevent disabled links from causing a page reload */
