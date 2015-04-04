@@ -44,7 +44,8 @@ def capture():
         out[1] = out[1].getvalue()
 
 
-def build(theme_name, output=None, config=None, quiet=False):
+def build(theme_name, output=None, config=None, quiet=False,
+          extra_options=None):
     """
     Given a theme name and output directory use the configuration
     for the MkDocs documentation and overwrite the site_dir and
@@ -55,7 +56,7 @@ def build(theme_name, output=None, config=None, quiet=False):
     serve = output is None
     options = {}
 
-    if not serve:
+    if theme_name is not None and not serve:
         if not os.path.exists(output):
             os.makedirs(output)
         options['site_dir'] = os.path.join(output, theme_name)
@@ -68,6 +69,10 @@ def build(theme_name, output=None, config=None, quiet=False):
 
     options['config'] = config
     options['theme'] = theme_name
+    options['verbose'] = True
+
+    if extra_options is not None:
+        options.update(extra_options)
 
     if serve:
         if not quiet:
@@ -101,6 +106,11 @@ def main(output=None, config=None, quiet=False):
     for theme in sorted(MKDOCS_THEMES):
 
         build(theme, output, config, quiet)
+
+    build('theme_url', output, config, quiet, extra_options={
+        'theme': None,
+        'theme_url': "https://github.com/mkdocs/mkdocs/raw/master/mkdocs/tests/yeti.zip",
+    })
 
     print("The theme builds are available in {0}".format(output))
 
