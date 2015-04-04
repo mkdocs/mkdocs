@@ -45,6 +45,9 @@ def new(args, options):
     print('Writing config file: %s' % config_path)
     open(config_path, 'w').write(config_text)
 
+    if os.path.exists(index_path):
+        return
+
     print('Writing initial docs: %s' % index_path)
     if not os.path.exists(docs_dir):
         os.mkdir(docs_dir)
