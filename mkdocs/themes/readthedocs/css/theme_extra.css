@@ -60,8 +60,8 @@ code {
 }
 
 /*
- * Wrap inline code samples otherwise they shoot of the side and can't be
- * read at all.
+ * Wrap inline code samples otherwise they shoot of the side and
+ * can't be read at all.
  *
  * https://github.com/mkdocs/mkdocs/issues/313
  */
@@ -79,4 +79,17 @@ p code {
 code.cs, code.c {
     font-weight: inherit;
     font-style: inherit;
+}
+
+/*
+ * Fix some issues with the theme and non-highlighted code
+ * samples. Without and highlighting styles attached the
+ * formatting is broken.
+ *
+ * https://github.com/mkdocs/mkdocs/issues/319
+ */
+.no-highlight {
+  display: block;
+  padding: 0.5em;
+  color: #333;
 }
