@@ -37,13 +37,21 @@ def clean_directory(directory):
     """
     Remove the content of a directory recursively but not the directory itself.
     """
-    if os.path.exists(directory):
-        for entry in os.listdir(directory):
-            path = os.path.join(directory, entry)
-            if os.path.isdir(path):
-                shutil.rmtree(path, True)
-            else:
-                os.unlink(path)
+    if not os.path.exists(directory):
+        return
+
+    for entry in os.listdir(directory):
+
+        # Don't remove hidden files from the directory. We never copy files
+        # that are hidden, so we shouldn't delete them either.
+        if entry.startswith('.'):
+            continue
+
+        path = os.path.join(directory, entry)
+        if os.path.isdir(path):
+            shutil.rmtree(path, True)
+        else:
+            os.unlink(path)
 
 
 def copy_media_files(from_dir, to_dir):
