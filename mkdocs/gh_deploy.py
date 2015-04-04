@@ -4,13 +4,17 @@ import os
 
 
 def gh_deploy(config):
+
     if not os.path.exists('.git'):
         print('Cannot deploy - this directory does not appear to be a git repository')
         return
 
     print("Copying '%s' to `gh-pages` branch and pushing to GitHub." % config['site_dir'])
     try:
-        subprocess.check_call(['ghp-import', '-p', config['site_dir']])
+        command = ['ghp-import', '-p', config['site_dir']]
+        if 'remote_branch' in config:
+            command.extend(['-b', config['remote_branch']])
+        subprocess.check_call(command)
     except:
         return
 
