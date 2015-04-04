@@ -27,7 +27,7 @@ div.source-links {
 
 div.col-md-9 img {
     max-width: 100%;
-    display: block;
+    display: inline;
     padding: 4px;
     line-height: 1.428571429;
     background-color: #fff;
