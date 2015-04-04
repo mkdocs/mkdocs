@@ -69,4 +69,4 @@ The simplest `base.html` file is the following:
       </body>
     </html>
 
-Article content from each page specified in `mkdocs.yml` is inserted using the `{{ content }}` tag. Stylesheets and scripts can be brought into this theme as with a normal HTML file. Navbars and tables of contents can also be generated and included automatically, through the `nav` and `toc` objects, respectively. If you wish to write your own theme, it is recommended to start with one of the [built-in themes](https://github.com/tomchristie/mkdocs/tree/master/mkdocs/themes) and modify it accordingly.
+Article content from each page specified in `mkdocs.yml` is inserted using the `{{ content }}` tag. Stylesheets and scripts can be brought into this theme as with a normal HTML file. Navbars and tables of contents can also be generated and included automatically, through the `nav` and `toc` objects, respectively. If you wish to write your own theme, it is recommended to start with one of the [built-in themes](https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes) and modify it accordingly.

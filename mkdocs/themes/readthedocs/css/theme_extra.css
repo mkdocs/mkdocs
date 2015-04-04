@@ -14,7 +14,7 @@ h3, h4, h5, h6 {
  * Sphinx doesn't have support for section dividers like we do in
  * MkDocs, this styles the section titles in the nav
  *
- * https://github.com/tomchristie/mkdocs/issues/175
+ * https://github.com/mkdocs/mkdocs/issues/175
  */
 .wy-menu-vertical span {
     line-height: 18px;
@@ -33,7 +33,7 @@ h3, h4, h5, h6 {
  * Long navigations run off the bottom of the screen as the nav
  * area doesn't scroll.
  *
- * https://github.com/tomchristie/mkdocs/pull/202
+ * https://github.com/mkdocs/mkdocs/pull/202
  */
 .wy-nav-side {
     height: 100%;
@@ -41,11 +41,11 @@ h3, h4, h5, h6 {
 }
 
 /*
-* readthedocs theme hides nav items when the window height is
-* too small to contain them.
-*
-* https://github.com/tomchristie/mkdocs/issues/#348
-*/
+ * readthedocs theme hides nav items when the window height is
+ * too small to contain them.
+ *
+ * https://github.com/mkdocs/mkdocs/issues/#348
+ */
 .wy-menu-vertical ul {
   margin-bottom: 2em;
 }
@@ -53,7 +53,7 @@ h3, h4, h5, h6 {
 /*
  * Fix wrapping in the code highlighting
  *
- * https://github.com/tomchristie/mkdocs/issues/233
+ * https://github.com/mkdocs/mkdocs/issues/233
  */
 code {
     white-space: pre;

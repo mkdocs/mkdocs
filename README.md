@@ -9,7 +9,7 @@
 
 Release notes: http://www.mkdocs.org/about/release-notes/
 
-Project roadmap: [https://github.com/tomchristie/mkdocs/wiki](https://github.com/tomchristie/mkdocs/wiki)
+Project roadmap: [https://github.com/mkdocs/mkdocs/wiki](https://github.com/mkdocs/mkdocs/wiki)
 
 IRC channel: `#mkdocs` on freenode.
 
