@@ -4,8 +4,8 @@
 
 [![PyPI Downloads][pypi-dl-image]][pypi-dl-link]
 [![PyPI Version][pypi-v-image]][pypi-v-link]
-[![Build Status][appveyor-image]][appveyor-link]
-[![Windows Build Status][travis-image]][travis-link]
+[![Build Status][travis-image]][travis-link]
+[![Windows Build Status][appveyor-image]][appveyor-link]
 [![Coverage Status][coveralls-image]][coveralls-link]
 [![Landscale Code Health][landscape-image]][landscape-link]
 
@@ -27,7 +27,7 @@ Discussions and support: https://groups.google.com/forum/#!forum/mkdocs
 [pypi-dl-link]: https://pypi.python.org/pypi/mkdocs
 [pypi-v-image]: https://img.shields.io/pypi/v/mkdocs.png
 [pypi-v-link]: https://pypi.python.org/pypi/mkdocs
-[travis-image]: https://img.shields.io/travis/mkdocs/mkdocs.png
+[travis-image]: https://img.shields.io/travis/mkdocs/mkdocs/master.png
 [travis-link]: https://travis-ci.org/mkdocs/mkdocs
 [appveyor-image]: https://img.shields.io/appveyor/ci/d0ugal/mkdocs/master.png
 [appveyor-link]: https://ci.appveyor.com/project/d0ugal/mkdocs
