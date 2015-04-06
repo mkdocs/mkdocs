@@ -7,7 +7,9 @@ Nothing in this module should have an knowledge of config or the layout
 and structure of the site and pages in the site.
 """
 
+import ntpath
 import os
+import posixpath
 import shutil
 
 from mkdocs.compat import urlparse
@@ -212,3 +214,14 @@ def create_relative_media_url(nav, url):
         relative_url = ".%s" % relative_url
 
     return relative_url
+
+
+def normalise_path(path, force_posix=False):
+    """
+    Normalise POSIX and NT paths to be consistently POSIX style.
+    """
+
+    if ntpath.sep in path:
+        path = path.replace(ntpath.sep, posixpath.sep)
+
+    return path

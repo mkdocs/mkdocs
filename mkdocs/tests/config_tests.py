@@ -79,13 +79,13 @@ class ConfigTests(unittest.TestCase):
         ]
 
         abs_path = os.path.abspath(os.path.dirname(__file__))
-        theme_dir = os.path.abspath(os.path.join(abs_path, '../themes'))
+        theme_dir = os.path.abspath(os.path.join(abs_path, '..', 'themes'))
 
         results = (
-            ['%s/mkdocs' % theme_dir, ],
-            ['%s/readthedocs' % theme_dir, ],
+            [os.path.join(theme_dir, 'mkdocs'), ],
+            [os.path.join(theme_dir, 'readthedocs'), ],
             ['mytheme', ],
-            ['custom', '%s/cosmo' % theme_dir, ],
+            ['custom', os.path.join(theme_dir, 'cosmo'), ],
         )
 
         for config_contents, expected_result in zip(configs, results):
@@ -97,7 +97,12 @@ class ConfigTests(unittest.TestCase):
                 result = config.load_config(options=options)
                 self.assertEqual(result['theme_dir'], expected_result)
             finally:
-                os.remove(config_file.name)
+                try:
+                    config_file.close()
+                    os.remove(config_file.name)
+                except:
+                    # This failed on Windows for some reason?
+                    pass
 
     def test_default_pages(self):
         tmp_dir = tempfile.mkdtemp()
@@ -114,16 +119,18 @@ class ConfigTests(unittest.TestCase):
 
     def test_doc_dir_in_site_dir(self):
 
+        j = os.path.join
+
         test_configs = (
-            {'docs_dir': 'docs', 'site_dir': 'docs/site'},
-            {'docs_dir': 'site/docs', 'site_dir': 'site'},
+            {'docs_dir': 'docs', 'site_dir': j('docs', 'site')},
+            {'docs_dir': j('site', 'docs'), 'site_dir': 'site'},
             {'docs_dir': 'docs', 'site_dir': '.'},
             {'docs_dir': '.', 'site_dir': 'site'},
             {'docs_dir': '.', 'site_dir': '.'},
             {'docs_dir': 'docs', 'site_dir': ''},
             {'docs_dir': '', 'site_dir': 'site'},
             {'docs_dir': '', 'site_dir': ''},
-            {'docs_dir': '../mkdocs/docs', 'site_dir': 'docs'},
+            {'docs_dir': j('..', 'mkdocs', 'docs'), 'site_dir': 'docs'},
         )
 
         conf = {
