@@ -8,6 +8,7 @@ and structure of the site and pages in the site.
 """
 
 import os
+import posixpath
 import shutil
 
 from mkdocs.compat import urlparse
@@ -212,3 +213,23 @@ def create_relative_media_url(nav, url):
         relative_url = ".%s" % relative_url
 
     return relative_url
+
+
+def normalise_path(path):
+    """
+    Normalise POSIX and NT paths to be consistently POSIX style.
+    """
+
+    if ntpath.sep in path:
+        path = path.replace(ntpath.sep, posixpath.sep)
+
+    return path
+
+
+def split_path(path):
+    """
+    Consistently split paths, regardless if they are nt style
+    paths, or posix style paths.
+    """
+
+    return normalise_path(path).split(posixpath.sep)
