@@ -97,7 +97,12 @@ class ConfigTests(unittest.TestCase):
                 result = config.load_config(options=options)
                 self.assertEqual(result['theme_dir'], expected_result)
             finally:
-                os.remove(config_file.name)
+                try:
+                    config_file.close()
+                    os.remove(config_file.name)
+                except:
+                    # This failed on Windows for some reason?
+                    pass
 
     def test_default_pages(self):
         tmp_dir = tempfile.mkdtemp()
