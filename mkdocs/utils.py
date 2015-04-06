@@ -7,6 +7,7 @@ Nothing in this module should have an knowledge of config or the layout
 and structure of the site and pages in the site.
 """
 
+import ntpath
 import os
 import posixpath
 import shutil
@@ -215,7 +216,7 @@ def create_relative_media_url(nav, url):
     return relative_url
 
 
-def normalise_path(path):
+def normalise_path(path, force_posix=False):
     """
     Normalise POSIX and NT paths to be consistently POSIX style.
     """
@@ -224,12 +225,3 @@ def normalise_path(path):
         path = path.replace(ntpath.sep, posixpath.sep)
 
     return path
-
-
-def split_path(path):
-    """
-    Consistently split paths, regardless if they are nt style
-    paths, or posix style paths.
-    """
-
-    return normalise_path(path).split(posixpath.sep)
