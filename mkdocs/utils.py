@@ -216,7 +216,7 @@ def create_relative_media_url(nav, url):
     return relative_url
 
 
-def normalise_path(path, force_posix=False):
+def normalise_path(path):
     """
     Normalise POSIX and NT paths to be consistently POSIX style.
     """
