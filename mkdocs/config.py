@@ -7,6 +7,7 @@ from mkdocs.exceptions import ConfigurationError
 import logging
 import os
 import yaml
+from io import open
 
 log = logging.getLogger(__name__)
 
@@ -81,7 +82,7 @@ def load_config(filename='mkdocs.yml', options=None):
         options['config'] = filename
     if not os.path.exists(filename):
         raise ConfigurationError("Config file '%s' does not exist." % filename)
-    with open(filename, 'r') as fp:
+    with open(filename, 'r', encoding='utf-8') as fp:
         user_config = yaml.load(fp)
         if not isinstance(user_config, dict):
             raise ConfigurationError("The mkdocs.yml file is invalid. See http://www.mkdocs.org/user-guide/configuration/ for more information.")
