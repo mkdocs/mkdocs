@@ -196,13 +196,13 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
 
     for config_line in pages_config:
         if isinstance(config_line, str):
-            path = utils.normalise_path(config_line, force_posix=True)
+            path = utils.normalise_path(config_line)
             title, child_title = None, None
         elif len(config_line) in (1, 2, 3):
             # Pad any items that don't exist with 'None'
             padded_config = (list(config_line) + [None, None])[:3]
             path, title, child_title = padded_config
-            path = utils.normalise_path(path, force_posix=True)
+            path = utils.normalise_path(path)
         else:
             msg = (
                 "Line in 'page' config contained %d items.  "
