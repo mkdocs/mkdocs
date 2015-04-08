@@ -28,11 +28,18 @@ def convert_markdown(markdown_source, site_navigation=None, extensions=(), stric
     """
 
     # Generate the HTML from the markdown source
+    if isinstance(extensions, dict):
+        user_extensions = extensions.keys()
+        extension_configs = dict([(k, v) for k, v in extensions.items() if isinstance(v, dict)])
+    else:
+        user_extensions = list(extensions)
+        extension_configs = {}
     builtin_extensions = ['meta', 'toc', 'tables', 'fenced_code']
     mkdocs_extensions = [RelativePathExtension(site_navigation, strict), ]
-    extensions = builtin_extensions + mkdocs_extensions + list(extensions)
+    extensions = set(builtin_extensions + mkdocs_extensions + user_extensions)
     md = markdown.Markdown(
-        extensions=extensions
+        extensions=extensions,
+        extension_configs=extension_configs
     )
     html_content = md.convert(markdown_source)
 
