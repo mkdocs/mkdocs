@@ -1,12 +1,15 @@
 # coding: utf-8
 
 from mkdocs import utils
-from mkdocs.compat import urlparse
+from mkdocs.compat import urlparse, URLError
 from mkdocs.exceptions import ConfigurationError
 
 import logging
+from io import BytesIO
 import os
 import yaml
+from zipfile import ZipFile
+
 
 log = logging.getLogger(__name__)
 
@@ -23,6 +26,9 @@ DEFAULT_CONFIG = {
     'docs_dir': 'docs',
     'site_dir': 'site',
     'theme_dir': None,
+
+    # A url that returns a zip file with a single theme folder
+    'theme_url': None,
 
     'copyright': None,
     'google_analytics': None,
@@ -91,9 +97,7 @@ def load_config(filename='mkdocs.yml', options=None):
 
 def validate_config(user_config):
     config = DEFAULT_CONFIG.copy()
-
     theme_in_config = 'theme' in user_config
-
     config.update(user_config)
 
     if not config['site_name']:
@@ -143,7 +147,22 @@ def validate_config(user_config):
         config['extra_javascript'] = extra_javascript
 
     package_dir = os.path.dirname(__file__)
-    theme_dir = [os.path.join(package_dir, 'themes', config['theme'])]
+
+    theme_dir = []
+
+    if config['theme'] is not None:
+        internal_theme = os.path.join(package_dir, 'themes', config['theme'])
+        if os.path.exists(internal_theme):
+            theme_dir = [internal_theme, ]
+        else:
+            log.warning(("No theme can be found with the name %s "
+                         "in the builtin MkDocs themes"), config['theme'])
+
+    if config['theme_url']:
+        config_dir = os.path.dirname(config['config'])
+        dl_theme_dir = os.path.join(config_dir, '.mkdocs/theme')
+        install_theme(config['theme_url'], dl_theme_dir)
+        theme_dir.insert(0, dl_theme_dir)
 
     if config['theme_dir'] is not None:
         # If the user has given us a custom theme but not a
@@ -182,3 +201,20 @@ def validate_config(user_config):
     # Error if any config keys provided that are not in the DEFAULT_CONFIG.
 
     return config
+
+
+def install_theme(url, package_dir):
+    """Installs a theme from a hosted zip file"""
+
+    log.debug("Downloading theme from: %s", url)
+    try:
+        response = utils.urlopen(url)
+    except URLError:
+        log.error("Error downloading theme from: %s", url)
+        return
+    zipfile = response.read()
+    # We can't use ZipFile as a ContextManager due to PY26 compatibility
+    theme_zip = ZipFile(file=BytesIO(zipfile))
+    for zipinfo in theme_zip.infolist():
+        theme_zip.extractall(path=package_dir)
+    theme_zip.close()
