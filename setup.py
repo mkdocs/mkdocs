@@ -7,6 +7,8 @@ import re
 import os
 import sys
 
+PY26 = sys.version_info[:2] == (2, 6)
+
 
 name = 'mkdocs'
 package = 'mkdocs'
@@ -16,11 +18,11 @@ author = 'Tom Christie'
 author_email = 'tom@tomchristie.com'
 license = 'BSD'
 install_requires = [
+    'ghp-import>=0.4.1',
     'Jinja2>=2.7.1',
-    'Markdown>=2.3.1,<2.5',
+    'Markdown>=2.3.1,<2.5' if PY26 else 'Markdown>=2.3.1',
     'PyYAML>=3.10',
     'watchdog>=0.7.0',
-    'ghp-import>=0.4.1'
 ]
 
 long_description = (
