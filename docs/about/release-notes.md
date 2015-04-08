@@ -12,6 +12,61 @@ You can determine your currently installed version using `pip freeze`:
 
     pip freeze | grep mkdocs
 
+## Version 0.12.0 (2015-04-08)
+
+* Display the current MkDocs version in the CLI output. (#258)
+* Check for CNAME file when using gh-deploy. (#285)
+* Add the homepage back to the navigation on all themes. (#271)
+* Add a strict more for local link checking. (#279)
+* Add Google analytics support to all themes. (#333)
+* Add build date and MkDocs version to the ReadTheDocs and MkDocs theme
+  outputs. (#382)
+* Standardise highlighting across all themes and add missing languages. (#387)
+* Add a verbose flag. (-v) to show more details about what the build. (#147)
+* Add the option to specify a remote branch when deploying to GitHub. This
+  enables deploying to GitHub pages on personal and repo sites. (#354)
+* Add favicon support to the ReadTheDocs theme HTML. (#422)
+* Bugfix: Never re-write URL's in code blocks. (#240)
+* Bugfix: Don't copy ditfiles when copying media from the `docs_dir`. (#254)
+* Bugfix: Fix the rendering of tables in the ReadTheDocs theme. (#106)
+* Bugfix: Add padding to the bottom of all bootstrap themes. (#255)
+* Bugfix: Fix issues with nested Markdown pages and the automatic pages
+  configuration. (#276)
+* Bugfix: Fix a URL parsing error with GitHub enterprise. (#284)
+* Bugfix: Don't error if the mkdocs.yml is completely empty. (#288)
+* Bugfix: Fix a number of problems with relative urls and Markdown files. (#292)
+* Bugfix: Don't stop the build if a page can't be found, continue with other
+  pages. (#150)
+* Bugfix: Remove the site_name from the page title, this needs to be added
+  manually. (#299)
+* Bugfix: Fix an issue with table of contents cutting off Markdown. (#294)
+* Bugfix: Fix hostname for BitBucket. (#339)
+* Bugfix: Ensure all links end with a slash. (#344)
+* Bugfix: Fix repo links in the readthedocs theme. (#365)
+* Bugfix: Include jQuery locally to avoid problems using MkDocs offline. (#143)
+* Bugfix: Don't allow the docs_dir to be in the site_dir or vice versa. (#384)
+* Bugfix: Remove inline CSS in the ReadTheDocs theme. (#393)
+* Bugfix: Fix problems with the child titles due to the order the pages config
+  was processed. (#395)
+* Bugfix: Don't error during live reload when the theme doesn't exist. (#373)
+* Bugfix: Fix problems with the Meta extension when it may not exist. (#398)
+* Bugfix: Wrap long inline code otherwise they will run off the screen. (#313)
+* Bugfix: Remove HTML parsing regular expressions and parse with HTMLParser to
+  fix problems with titles containing code. (#367)
+* Bugfix: Fix an issue with the scroll to anchor causing the title to be hidden
+  under the navigation. (#7)
+* Bugfix: Add nicer CSS classes to the HTML tables in bootswatch themes. (#295)
+* Bugfix: Fix an error when passing in a specific config file with
+  `mkdocs serve`. (#341)
+* Bugfix: Don't overwrite index.md diles with the `mkdocs new` command. (#412)
+* Bugfix: Remove bold and italic from code in the ReadTheDocs theme. (#411)
+* Bugfix: Display images inline in the MkDocs theme. (#415)
+* Bugfix: Fix problems with no-highlight in the ReadTheDocs theme. (#319)
+* Bugfix: Don't delete hidden files when using `mkdocs build --clean`. (#346)
+* Bugfix: Don't block newer verions of Python-markdown on Python >= 2.7. (#376)
+* Bugfix: Fix encoding issues when opening files across platforms. (#428)
+
+
 ## Version 0.11.1 (2014-11-20)
 
 * Bugfix: Fix a CSS wrapping issue with code highlighting in the ReadTheDocs
