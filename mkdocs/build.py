@@ -6,13 +6,14 @@ from datetime import datetime
 from jinja2.exceptions import TemplateNotFound
 import mkdocs
 from mkdocs import nav, toc, utils
-from mkdocs.compat import urljoin, PY2
+from mkdocs.compat import urljoin
 from mkdocs.relative_path_ext import RelativePathExtension
 import jinja2
 import json
 import markdown
 import os
 import logging
+from io import open
 
 log = logging.getLogger('mkdocs')
 
@@ -161,13 +162,10 @@ def _build_page(page, config, site_navigation, env, dump_json):
     input_path = os.path.join(config['docs_dir'], page.input_path)
 
     try:
-        input_content = open(input_path, 'r').read()
+        input_content = open(input_path, 'r', encoding='utf-8').read()
     except IOError:
         log.error('file not found: %s', input_path)
         return
-
-    if PY2:
-        input_content = input_content.decode('utf-8')
 
     # Process the markdown text
     html_content, table_of_contents, meta = convert_markdown(

@@ -1,6 +1,7 @@
 # coding: utf-8
 from __future__ import print_function
 import os
+from io import open
 
 config_text = 'site_name: My Docs\n'
 index_text = """# Welcome to MkDocs
@@ -43,7 +44,7 @@ def new(args, options):
         os.mkdir(output_dir)
 
     print('Writing config file: %s' % config_path)
-    open(config_path, 'w').write(config_text)
+    open(config_path, 'w', encoding='utf-8').write(config_text)
 
     if os.path.exists(index_path):
         return
@@ -51,4 +52,4 @@ def new(args, options):
     print('Writing initial docs: %s' % index_path)
     if not os.path.exists(docs_dir):
         os.mkdir(docs_dir)
-    open(index_path, 'w').write(index_text)
+    open(index_path, 'w', encoding='utf-8').write(index_text)
