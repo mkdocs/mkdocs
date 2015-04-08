@@ -333,7 +333,7 @@ class BuildTests(unittest.TestCase):
         html, toc, meta = build.convert_markdown(dedent("""
         # A Header
         """), extensions=markdown_extensions)
-        
+
         expected_html = dedent("""
         <h1 id="a-header">A Header<a class="headerlink" href="#a-header" title="Permanent link">&para;</a></h1>
         """)

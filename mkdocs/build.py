@@ -29,7 +29,7 @@ def convert_markdown(markdown_source, site_navigation=None, extensions=(), stric
 
     # Generate the HTML from the markdown source
     if isinstance(extensions, dict):
-        user_extensions = extensions.keys()
+        user_extensions = list(extensions.keys())
         extension_configs = dict([(k, v) for k, v in extensions.items() if isinstance(v, dict)])
     else:
         user_extensions = list(extensions)
