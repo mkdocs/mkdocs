@@ -51,6 +51,7 @@ DEFAULT_CONFIG = {
     # Default: List of all .css and .js files in the docs dir.
     'extra_css': None,
     'extra_javascript': None,
+    'extra_templates': None,
 
     # Determine if the site should include the nav and next/prev elements.
     # Default: True if the site has more than one page, False otherwise.
@@ -115,6 +116,7 @@ def validate_config(user_config):
     pages = []
     extra_css = []
     extra_javascript = []
+    extra_templates = []
     for (dirpath, _, filenames) in os.walk(config['docs_dir']):
         for filename in sorted(filenames):
             fullpath = os.path.join(dirpath, filename)
@@ -130,6 +132,8 @@ def validate_config(user_config):
                 extra_css.append(relpath)
             elif utils.is_javascript_file(filename):
                 extra_javascript.append(relpath)
+            elif utils.is_template_file(filename):
+                extra_templates.append(filename)
 
     if config['pages'] is None:
         config['pages'] = pages
@@ -157,8 +161,12 @@ def validate_config(user_config):
     if config['extra_javascript'] is None:
         config['extra_javascript'] = extra_javascript
 
+    if config['extra_templates'] is None:
+        config['extra_templates'] = extra_templates
+
     package_dir = os.path.dirname(__file__)
     theme_dir = [os.path.join(package_dir, 'themes', config['theme']), ]
+    config['mkdocs_templates'] = os.path.join(package_dir, 'templates')
 
     if config['theme_dir'] is not None:
         # If the user has given us a custom theme but not a

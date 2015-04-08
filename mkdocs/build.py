@@ -91,6 +91,7 @@ def get_global_context(nav, config):
         'nav': nav,
         'base_url': nav.url_context.make_relative('/'),
         'homepage_url': nav.homepage.url,
+        'site_url': config['site_url'],
 
         'extra_css': extra_css,
         'extra_javascript': extra_javascript,
@@ -145,6 +146,17 @@ def get_page_context(page, content, toc, meta, config):
         'previous_page': page.previous_page,
         'next_page': page.next_page
     }
+
+
+def build_sitemap(config, env, site_navigation):
+
+    log.debug("Building sitemap.xml")
+
+    template = env.get_template('sitemap.xml')
+    context = get_global_context(site_navigation, config)
+    output_content = template.render(context)
+    output_path = os.path.join(config['site_dir'], 'sitemap.xml')
+    utils.write_file(output_content.encode('utf-8'), output_path)
 
 
 def build_template(template_name, env, config, site_navigation=None):
@@ -215,12 +227,33 @@ def _build_page(page, config, site_navigation, env, dump_json):
     return html_content, table_of_contents, meta
 
 
+def build_extra_templates(extra_templates, config, site_navigation=None):
+
+    log.debug("Building extra_templates page")
+
+    for extra_template in extra_templates:
+
+        input_path = os.path.join(config['docs_dir'], extra_template)
+
+        with open(input_path, 'r', encoding='utf-8') as template_file:
+            template = jinja2.Template(template_file.read())
+
+        if site_navigation is not None:
+            context = get_global_context(site_navigation, config)
+        else:
+            context = {}
+
+        output_content = template.render(context)
+        output_path = os.path.join(config['site_dir'], extra_template)
+        utils.write_file(output_content.encode('utf-8'), output_path)
+
+
 def build_pages(config, dump_json=False):
     """
     Builds all the pages and writes them into the build directory.
     """
     site_navigation = nav.SiteNavigation(config['pages'], config['use_directory_urls'])
-    loader = jinja2.FileSystemLoader(config['theme_dir'])
+    loader = jinja2.FileSystemLoader(config['theme_dir'] + [config['mkdocs_templates'], ])
     env = jinja2.Environment(loader=loader)
     search_index = search.SearchIndex()
 
@@ -230,6 +263,9 @@ def build_pages(config, dump_json=False):
         log.debug("Search is enabled but the theme doesn't contain a "
                   "search.html file. Assuming the theme implements search "
                   "within a modal.")
+    build_sitemap(config, env, site_navigation)
+
+    build_extra_templates(config['extra_templates'], config, site_navigation)
 
     for page in site_navigation.walk_pages():
 
