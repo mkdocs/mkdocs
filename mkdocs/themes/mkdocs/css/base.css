@@ -40,11 +40,13 @@ h1, h2, h3 {
     color: #444;
 }
 
-h1[id]:before, h2[id]:before {
-    content: "";
-    display: block;
-    margin-top: -75px;
-    height: 75px;
+@media (min-width: 992px) {
+    h1[id]:before, h2[id]:before {
+        content: "";
+        display: block;
+        margin-top: -75px;
+        height: 75px;
+    }
 }
 
 h1 {
