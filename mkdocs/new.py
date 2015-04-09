@@ -1,13 +1,11 @@
 # coding: utf-8
-from __future__ import print_function
+from __future__ import print_function, unicode_literals
 
 import os
 from io import open
 
-from mkdocs import compat
-
-config_text = compat.unicode('site_name: My Docs\n')
-index_text = compat.unicode("""# Welcome to MkDocs
+config_text = 'site_name: My Docs\n'
+index_text = """# Welcome to MkDocs
 
 For full documentation visit [mkdocs.org](http://mkdocs.org).
 
@@ -24,7 +22,7 @@ For full documentation visit [mkdocs.org](http://mkdocs.org).
     docs/
         index.md  # The documentation homepage.
         ...       # Other markdown pages, images and other files.
-""")
+"""
 
 
 def new(args):
