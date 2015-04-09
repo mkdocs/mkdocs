@@ -3,7 +3,7 @@ body {
 }
 
 @media (min-width: 992px) {
-    h1[id]:before, h2[id]:before {
+    .headerfix, h1[id]:before, h2[id]:before, h3[id]:before, h4[id]:before, h5[id]:before, h6[id]:before {
         content: "";
         display: block;
         margin-top: -75px;
