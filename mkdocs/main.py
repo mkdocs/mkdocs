@@ -55,7 +55,7 @@ def main(cmd, args, options=None):
         build(config, clean_site_dir=clean_site_dir)
         gh_deploy(config)
     elif cmd == 'new':
-        new(args, options)
+        new(args)
     else:
         print('MkDocs (version {0})'.format(__version__))
         print('mkdocs [help|new|build|serve|gh-deploy|json] {options}')
