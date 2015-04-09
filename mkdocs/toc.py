@@ -56,15 +56,16 @@ class TOCParser(HTMLParser):
         HTMLParser.__init__(self)
         self.links = []
 
-        self.in_anchor = True
+        self.in_anchor = False
         self.attrs = None
         self.title = ''
 
     def handle_starttag(self, tag, attrs):
 
-        if tag == 'a':
-            self.in_anchor = True
-            self.attrs = dict(attrs)
+        if not self.in_anchor:
+            if tag == 'a':
+                self.in_anchor = True
+                self.attrs = dict(attrs)
 
     def handle_endtag(self, tag):
         if tag == 'a':
@@ -90,7 +91,10 @@ def _parse_html_table_of_contents(html):
         parser = TOCParser()
         parser.feed(line)
         if parser.title:
-            href = parser.attrs['href']
+            try:
+                href = parser.attrs['href']
+            except KeyError:
+                continue
             title = parser.title
             nav = AnchorLink(title, href)
             # Add the item to its parent if required.  If it is a topmost
