@@ -35,7 +35,7 @@ tutorial/install.md | tutorial/install/ | ../img/initial-layout.png    |
 tutorial/intro.md   | tutorial/intro/   | ../../img/initial-layout.png |
 
 """
-from __future__ import print_function
+import logging
 
 from markdown.extensions import Extension
 from markdown.treeprocessors import Treeprocessor
@@ -43,6 +43,8 @@ from markdown.treeprocessors import Treeprocessor
 from mkdocs import utils
 from mkdocs.compat import urlparse, urlunparse
 from mkdocs.exceptions import MarkdownNotFound
+
+log = logging.getLogger(__name__)
 
 
 def _iter(node):
@@ -74,9 +76,9 @@ def path_to_url(url, nav, strict):
             # In strict mode raise an error at this point.
             if strict:
                 raise MarkdownNotFound(msg)
-            # Otherwise, when strict mode isn't enabled, print out a warning
+            # Otherwise, when strict mode isn't enabled, log a warning
             # to the user and leave the URL as it is.
-            print(msg)
+            log.warning(msg)
             return url
         path = utils.get_url_path(target_file, nav.use_directory_urls)
         path = nav.url_context.make_relative(path)

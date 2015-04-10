@@ -7,12 +7,10 @@ Nothing in this module should have an knowledge of config or the layout
 and structure of the site and pages in the site.
 """
 
-import ntpath
 import os
-import posixpath
 import shutil
 
-from mkdocs.compat import urlparse
+from mkdocs.compat import urlparse, pathname2url
 
 
 def copy_file(source_path, output_path):
@@ -216,12 +214,10 @@ def create_relative_media_url(nav, url):
     return relative_url
 
 
-def normalise_path(path):
-    """
-    Normalise POSIX and NT paths to be consistently POSIX style.
-    """
+def path_to_url(path):
+    """Convert a system path to a URL."""
 
-    if ntpath.sep in path:
-        path = path.replace(ntpath.sep, posixpath.sep)
+    if os.path.sep == '/':
+        return path
 
-    return path
+    return pathname2url(path)

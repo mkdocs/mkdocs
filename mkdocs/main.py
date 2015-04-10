@@ -17,7 +17,10 @@ from mkdocs.serve import serve
 def configure_logging(options):
     '''When a --verbose flag is passed, increase the verbosity of mkdocs'''
     logger = logging.getLogger('mkdocs')
-    logger.addHandler(logging.StreamHandler())
+    sh = logging.StreamHandler()
+    formatter = logging.Formatter('%(levelname)s - %(message)s')
+    sh.setFormatter(formatter)
+    logger.addHandler(sh)
     if 'verbose' in options:
         logger.setLevel(logging.DEBUG)
     else:

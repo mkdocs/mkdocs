@@ -1,13 +1,15 @@
 # coding: utf-8
 
+from io import open
+import logging
+import ntpath
+import os
+
+import yaml
+
 from mkdocs import utils
 from mkdocs.compat import urlparse
 from mkdocs.exceptions import ConfigurationError
-
-import logging
-import os
-import yaml
-from io import open
 
 log = logging.getLogger(__name__)
 
@@ -118,10 +120,10 @@ def validate_config(user_config):
     pages = []
     extra_css = []
     extra_javascript = []
-    for (dirpath, dirnames, filenames) in os.walk(config['docs_dir']):
+    for (dirpath, _, filenames) in os.walk(config['docs_dir']):
         for filename in sorted(filenames):
             fullpath = os.path.join(dirpath, filename)
-            relpath = os.path.relpath(fullpath, config['docs_dir'])
+            relpath = os.path.normpath(os.path.relpath(fullpath, config['docs_dir']))
 
             if utils.is_markdown_file(filename):
                 # index pages should always be the first listed page.
@@ -136,6 +138,23 @@ def validate_config(user_config):
 
     if config['pages'] is None:
         config['pages'] = pages
+    else:
+        """
+        If the user has provided the pages config, then iterate through and
+        check for Windows style paths. If they are found, output a warning
+        and continue.
+        """
+        for page_config in config['pages']:
+            if isinstance(page_config, str):
+                path = page_config
+            elif len(page_config) in (1, 2, 3):
+                path = page_config[0]
+
+            if ntpath.sep in path:
+                log.warning("The config path contains Windows style paths (\\ "
+                            " backward slash) and will have comparability "
+                            "issues if it is used on another platform.")
+                break
 
     if config['extra_css'] is None:
         config['extra_css'] = extra_css
