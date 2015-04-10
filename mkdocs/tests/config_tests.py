@@ -22,8 +22,7 @@ class ConfigTests(unittest.TestCase):
     def test_missing_config_file(self):
 
         def load_missing_config():
-            options = {'config': 'bad_filename.yaml'}
-            config.load_config(options=options)
+            config.load_config(config_file='bad_filename.yaml')
         self.assertRaises(ConfigurationError, load_missing_config)
 
     def test_missing_site_name(self):
@@ -33,7 +32,7 @@ class ConfigTests(unittest.TestCase):
 
     def test_empty_config(self):
         def load_empty_config():
-            config.load_config(filename='/dev/null')
+            config.load_config(config_file='/dev/null')
         self.assertRaises(ConfigurationError, load_empty_config)
 
     def test_config_option(self):
@@ -56,8 +55,8 @@ class ConfigTests(unittest.TestCase):
         try:
             config_file.write(ensure_utf(file_contents))
             config_file.flush()
-            options = {'config': config_file.name}
-            result = config.load_config(options=options)
+            result = config.load_config(
+                config_file=open(config_file.name, 'rb'))
             self.assertEqual(result['site_name'], expected_result['site_name'])
             self.assertEqual(result['pages'], expected_result['pages'])
             config_file.close()
@@ -97,8 +96,8 @@ class ConfigTests(unittest.TestCase):
                 config_file = tempfile.NamedTemporaryFile('w', delete=False)
                 config_file.write(ensure_utf(base_config % config_contents))
                 config_file.flush()
-                options = {'config': config_file.name}
-                result = config.load_config(options=options)
+                result = config.load_config(
+                    config_file=open(config_file.name, 'rb'))
                 self.assertEqual(result['theme_dir'], expected_result)
             finally:
                 try:

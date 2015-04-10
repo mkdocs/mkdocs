@@ -258,3 +258,9 @@ def path_to_url(path):
         return path
 
     return pathname2url(path)
+
+
+def get_theme_names():
+    """Return a list containing all the names of all the builtin themes."""
+
+    return os.listdir(os.path.join(os.path.dirname(__file__), 'themes'))

@@ -9,6 +9,7 @@ import sys
 
 PY26 = sys.version_info[:2] == (2, 6)
 
+
 long_description = (
     "MkDocs is a fast, simple and downright gorgeous static site generator "
     "that's geared towards building project documentation. Documentation "
@@ -73,6 +74,7 @@ setup(
     packages=get_packages("mkdocs"),
     package_data=get_package_data("mkdocs"),
     install_requires=[
+        'click>=4.0',
         'ghp-import>=0.4.1',
         'Jinja2>=2.7.1',
         'livereload>=2.3.2',
@@ -82,7 +84,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'mkdocs = mkdocs.main:run_main',
+            'mkdocs = mkdocs.cli:cli',
         ],
     },
     classifiers=[
