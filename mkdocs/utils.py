@@ -160,13 +160,15 @@ def is_html_file(path):
     ]
 
 
-def create_media_urls(nav, url_list):
+def create_media_urls(nav, path_list):
     """
-    Return a list of URLs that have been processed correctly for inclusion in a page.
+    Return a list of URLs that have been processed correctly for inclusion in
+    a page.
     """
     final_urls = []
-    for url in url_list:
+    for path in path_list:
         # Allow links to fully qualified URL's
+        url = path_to_url(path)
         parsed = urlparse(url)
         if parsed.netloc:
             final_urls.append(url)
