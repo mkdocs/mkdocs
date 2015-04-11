@@ -166,15 +166,18 @@ def create_media_urls(nav, path_list):
     a page.
     """
     final_urls = []
+
     for path in path_list:
         # Allow links to fully qualified URL's
-        url = path_to_url(path)
-        parsed = urlparse(url)
+        parsed = urlparse(path)
         if parsed.netloc:
-            final_urls.append(url)
-        else:
-            relative_url = '%s/%s' % (nav.url_context.make_relative('/'), url)
-            final_urls.append(relative_url)
+            final_urls.append(path)
+            continue
+        # We must be looking at a local path.
+        url = path_to_url(path)
+        relative_url = '%s/%s' % (nav.url_context.make_relative('/'), url)
+        final_urls.append(relative_url)
+
     return final_urls
 
 

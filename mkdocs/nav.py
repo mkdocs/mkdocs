@@ -104,7 +104,7 @@ class URLContext(object):
         # Under Python 2.6, relative_path adds an extra '/' at the end.
         relative_path = os.path.relpath(url, start=self.base_path).rstrip('/') + suffix
 
-        return relative_path
+        return utils.path_to_url(relative_path)
 
 
 class FileContext(object):
