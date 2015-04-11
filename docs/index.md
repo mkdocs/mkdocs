@@ -45,6 +45,8 @@ In order to install MkDocs you'll need [Python][python] installed on your system
 
 MkDocs supports Python 2.6, 2.7, 3.3 and 3.4.
 
+On Windows we recommend that you install Python and pip with [Chocolatey](https://chocolatey.org/).
+
 Install the `mkdocs` package using pip:
 
     $ pip install mkdocs
