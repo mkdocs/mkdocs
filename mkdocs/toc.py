@@ -15,7 +15,6 @@ The steps we take to generate a table of contents are:
 """
 
 from mkdocs.compat import HTMLParser
-from mkdocs.utils import path_to_url
 
 
 class TableOfContents(object):
@@ -37,7 +36,7 @@ class AnchorLink(object):
     A single entry in the table of contents.
     """
     def __init__(self, title, url):
-        self.title, self.url = title, path_to_url(url)
+        self.title, self.url = title, url
         self.children = []
 
     def __str__(self):
