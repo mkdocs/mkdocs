@@ -7,12 +7,10 @@ Nothing in this module should have an knowledge of config or the layout
 and structure of the site and pages in the site.
 """
 
-import ntpath
 import os
-import posixpath
 import shutil
 
-from mkdocs.compat import urlparse
+from mkdocs.compat import urlparse, pathname2url
 
 
 def copy_file(source_path, output_path):
@@ -162,19 +160,24 @@ def is_html_file(path):
     ]
 
 
-def create_media_urls(nav, url_list):
+def create_media_urls(nav, path_list):
     """
-    Return a list of URLs that have been processed correctly for inclusion in a page.
+    Return a list of URLs that have been processed correctly for inclusion in
+    a page.
     """
     final_urls = []
-    for url in url_list:
+
+    for path in path_list:
         # Allow links to fully qualified URL's
-        parsed = urlparse(url)
+        parsed = urlparse(path)
         if parsed.netloc:
-            final_urls.append(url)
-        else:
-            relative_url = '%s/%s' % (nav.url_context.make_relative('/'), url)
-            final_urls.append(relative_url)
+            final_urls.append(path)
+            continue
+        # We must be looking at a local path.
+        url = path_to_url(path)
+        relative_url = '%s/%s' % (nav.url_context.make_relative('/'), url)
+        final_urls.append(relative_url)
+
     return final_urls
 
 
@@ -216,12 +219,10 @@ def create_relative_media_url(nav, url):
     return relative_url
 
 
-def normalise_path(path):
-    """
-    Normalise POSIX and NT paths to be consistently POSIX style.
-    """
+def path_to_url(path):
+    """Convert a system path to a URL."""
 
-    if ntpath.sep in path:
-        path = path.replace(ntpath.sep, posixpath.sep)
+    if os.path.sep == '/':
+        return path
 
-    return path
+    return pathname2url(path)

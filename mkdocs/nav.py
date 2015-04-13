@@ -6,9 +6,12 @@ Deals with generating the site-wide navigation.
 This consists of building a set of interlinked page and header objects.
 """
 
-from mkdocs import utils, exceptions
-import posixpath
+import logging
 import os
+
+from mkdocs import utils, exceptions
+
+log = logging.getLogger(__name__)
 
 
 def filename_to_title(filename):
@@ -84,7 +87,7 @@ class URLContext(object):
         self.base_path = '/'
 
     def set_current_url(self, current_url):
-        self.base_path = posixpath.dirname(current_url)
+        self.base_path = os.path.dirname(current_url)
 
     def make_relative(self, url):
         """
@@ -92,16 +95,16 @@ class URLContext(object):
         given the context of the current page.
         """
         suffix = '/' if (url.endswith('/') and len(url) > 1) else ''
-        # Workaround for bug on `posixpath.relpath()` in Python 2.6
+        # Workaround for bug on `os.path.relpath()` in Python 2.6
         if self.base_path == '/':
             if url == '/':
                 # Workaround for static assets
                 return '.'
             return url.lstrip('/')
         # Under Python 2.6, relative_path adds an extra '/' at the end.
-        relative_path = posixpath.relpath(url, start=self.base_path).rstrip('/') + suffix
+        relative_path = os.path.relpath(url, start=self.base_path).rstrip('/') + suffix
 
-        return relative_path
+        return utils.path_to_url(relative_path)
 
 
 class FileContext(object):
@@ -126,7 +129,7 @@ class FileContext(object):
         Given a relative file path return it as a POSIX-style
         absolute filepath, given the context of the current page.
         """
-        return posixpath.normpath(posixpath.join(self.base_path, path))
+        return os.path.normpath(os.path.join(self.base_path, path))
 
 
 class Page(object):
@@ -196,13 +199,13 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
 
     for config_line in pages_config:
         if isinstance(config_line, str):
-            path = utils.normalise_path(config_line)
+            path = os.path.normpath(config_line)
             title, child_title = None, None
         elif len(config_line) in (1, 2, 3):
             # Pad any items that don't exist with 'None'
             padded_config = (list(config_line) + [None, None])[:3]
             path, title, child_title = padded_config
-            path = utils.normalise_path(path)
+            path = os.path.normpath(path)
         else:
             msg = (
                 "Line in 'page' config contained %d items.  "
@@ -213,12 +216,12 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
         # If both the title and child_title are None, then we
         # have just been given a path. If that path contains a /
         # then lets automatically nest it.
-        if title is None and child_title is None and posixpath.sep in path:
-            filename = path.split(posixpath.sep)[-1]
+        if title is None and child_title is None and os.path.sep in path:
+            filename = path.split(os.path.sep)[-1]
             child_title = filename_to_title(filename)
 
         if title is None:
-            filename = path.split(posixpath.sep)[0]
+            filename = path.split(os.path.sep)[0]
             title = filename_to_title(filename)
 
         url = utils.get_url_path(path, use_directory_urls)

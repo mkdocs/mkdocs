@@ -97,6 +97,7 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual(len(site_navigation.nav_items), 2)
         self.assertEqual(len(site_navigation.pages), 3)
 
+    @mock.patch.object(os.path, 'sep', '\\')
     def test_nested_ungrouped_no_titles_windows(self):
         pages = [
             ('index.md',),

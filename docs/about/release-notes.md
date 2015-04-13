@@ -12,7 +12,7 @@ You can determine your currently installed version using `pip freeze`:
 
     pip freeze | grep mkdocs
 
-## Version 0.12.0 (2015-04-08)
+## Version 0.12.0 (2015-04-14)
 
 * Display the current MkDocs version in the CLI output. (#258)
 * Check for CNAME file when using gh-deploy. (#285)
@@ -26,6 +26,7 @@ You can determine your currently installed version using `pip freeze`:
 * Add the option to specify a remote branch when deploying to GitHub. This
   enables deploying to GitHub pages on personal and repo sites. (#354)
 * Add favicon support to the ReadTheDocs theme HTML. (#422)
+* Automatically refresh the browser when files are edited. (#163)
 * Bugfix: Never re-write URL's in code blocks. (#240)
 * Bugfix: Don't copy ditfiles when copying media from the `docs_dir`. (#254)
 * Bugfix: Fix the rendering of tables in the ReadTheDocs theme. (#106)

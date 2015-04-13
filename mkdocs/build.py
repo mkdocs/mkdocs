@@ -63,9 +63,9 @@ def get_global_context(nav, config):
 
     page_description = config['site_description']
 
-    extra_javascript = utils.create_media_urls(nav=nav, url_list=config['extra_javascript'])
+    extra_javascript = utils.create_media_urls(nav, config['extra_javascript'])
 
-    extra_css = utils.create_media_urls(nav=nav, url_list=config['extra_css'])
+    extra_css = utils.create_media_urls(nav, config['extra_css'])
 
     return {
         'site_name': site_name,

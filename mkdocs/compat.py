@@ -8,6 +8,7 @@ if PY2:
     from urlparse import urljoin, urlparse, urlunparse
     import urllib
     urlunquote = urllib.unquote
+    from urllib import pathname2url
 
     import SimpleHTTPServer as httpserver
     httpserver = httpserver
@@ -25,6 +26,7 @@ if PY2:
     basestring = basestring
 else:  # PY3
     from urllib.parse import urljoin, urlparse, urlunparse, unquote
+    from urllib.request import pathname2url
     urlunquote = unquote
 
     import http.server as httpserver
