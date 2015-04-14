@@ -40,13 +40,12 @@ h1, h2, h3 {
     color: #444;
 }
 
-@media (min-width: 992px) {
-    h1[id]:before, h2[id]:before, h3[id]:before, h4[id]:before, h5[id]:before, h6[id]:before {
-        content: "";
-        display: block;
-        margin-top: -75px;
-        height: 75px;
-    }
+h1[id]:before, h2[id]:before, h3[id]:before, h4[id]:before, h5[id]:before, h6[id]:before {
+    content: "";
+    display: block;
+    margin-top: -75px;
+    height: 75px;
+    pointer-events: none;
 }
 
 h1 {
@@ -178,5 +177,11 @@ footer {
     .bs-sidebar.affix-bottom,
     .bs-sidebar.affix {
         width: 263px;
+    }
+}
+
+@media (max-width: 992px) {
+    div[role=main]{
+        pointer-events: none;
     }
 }
