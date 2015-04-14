@@ -8,9 +8,18 @@ To upgrade MkDocs to the latest version, use pip:
 
     pip install -U mkdocs
 
-You can determine your currently installed version using `pip freeze`:
+You can determine your currently installed version using `mkdocs` with no arguements and the version is included in the output:
 
-    pip freeze | grep mkdocs
+    $ mkdocs
+    MkDocs (version 0.12.0)
+    mkdocs [help|new|build|serve|gh-deploy|json] {options}
+
+
+## Version 0.12.1 (2015-04-14)
+
+* Bugfix: Fixed a CSS bug in the table of contents on some browsers where the
+  bottom item was not clickable.
+
 
 ## Version 0.12.0 (2015-04-14)
 
