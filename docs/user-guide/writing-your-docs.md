@@ -130,24 +130,30 @@ At mel verear persius torquatos, his dolores sensibus id, alia urbanitas in usu.
 
 A simple table looks like this:
 
-    First Header | Second Header | Third Header
-    ------------ | ------------- | ------------
-    Content Cell | Content Cell  | Content Cell
-    Content Cell | Content Cell  | Content Cell
+```text
+First Header | Second Header | Third Header
+------------ | ------------- | ------------
+Content Cell | Content Cell  | Content Cell
+Content Cell | Content Cell  | Content Cell
+```
 
 If you wish, you can add a leading and tailing pipe to each line of the table:
 
-    | First Header | Second Header | Third Header |
-    | ------------ | ------------- | ------------ |
-    | Content Cell | Content Cell  | Content Cell |
-    | Content Cell | Content Cell  | Content Cell |
+```text
+| First Header | Second Header | Third Header |
+| ------------ | ------------- | ------------ |
+| Content Cell | Content Cell  | Content Cell |
+| Content Cell | Content Cell  | Content Cell |
+```
 
 Specify alignment for each column by adding colons to separator lines:
 
-    First Header | Second Header | Third Header
-    :----------- | :-----------: | -----------:
-    Left         | Center        | Right
-    Left         | Center        | Right
+```text
+First Header | Second Header | Third Header
+:----------- | :-----------: | -----------:
+Left         | Center        | Right
+Left         | Center        | Right
+```
 
 #### Fenced code blocks
 
@@ -161,11 +167,9 @@ Start with a line containing 3 or more backtick \` characters, and ends with the
     block.
     ```
 
-<!--
-#### Admonitions
+With the approach, the language can be specified on the first line after the backticks:
 
-Ad est nibh suscipiantur. Quaeque deleniti delectus an has, tempor accusamus eu vix. Et democritum expetendis nam, putent fuisset duo ea, elaboraret efficiendi no vis.
-
-    !!! danger "Don't try this at home"
-        May cause grevious bodily harm
--->
+    ```python
+    def fn():
+     pass
+    ```
