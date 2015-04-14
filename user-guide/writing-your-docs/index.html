@@ -132,7 +132,7 @@
                 
                 
                 <li>
-                    <a href="https://github.com/tomchristie/mkdocs/">
+                    <a href="https://github.com/mkdocs/mkdocs/">
                         
                             <i class="fa fa-github"></i>
                         
@@ -269,23 +269,26 @@ At mel verear persius torquatos, his dolores sensibus id, alia urbanitas in usu.
 
 <h4 id="tables">Tables</h4>
 <p>A simple table looks like this:</p>
-<pre><code>First Header | Second Header | Third Header
+<pre><code class="text">First Header | Second Header | Third Header
 ------------ | ------------- | ------------
 Content Cell | Content Cell  | Content Cell
 Content Cell | Content Cell  | Content Cell
 </code></pre>
+
 <p>If you wish, you can add a leading and tailing pipe to each line of the table:</p>
-<pre><code>| First Header | Second Header | Third Header |
+<pre><code class="text">| First Header | Second Header | Third Header |
 | ------------ | ------------- | ------------ |
 | Content Cell | Content Cell  | Content Cell |
 | Content Cell | Content Cell  | Content Cell |
 </code></pre>
+
 <p>Specify alignment for each column by adding colons to separator lines:</p>
-<pre><code>First Header | Second Header | Third Header
+<pre><code class="text">First Header | Second Header | Third Header
 :----------- | :-----------: | -----------:
 Left         | Center        | Right
 Left         | Center        | Right
 </code></pre>
+
 <h4 id="fenced-code-blocks">Fenced code blocks</h4>
 <p>Start with a line containing 3 or more backtick ` characters, and ends with the first line with the same number of backticks `:</p>
 <pre><code>```
@@ -296,14 +299,12 @@ start and end fence lines to delimit the code
 block.
 ```
 </code></pre>
-<!--
-#### Admonitions
-
-Ad est nibh suscipiantur. Quaeque deleniti delectus an has, tempor accusamus eu vix. Et democritum expetendis nam, putent fuisset duo ea, elaboraret efficiendi no vis.
-
-    !!! danger "Don't try this at home"
-        May cause grevious bodily harm
---></div>
+<p>With the approach, the language can be specified on the first line after the backticks:</p>
+<pre><code>```python
+def fn():
+ pass
+```
+</code></pre></div>
             
         </div>
 
@@ -323,8 +324,8 @@ Ad est nibh suscipiantur. Quaeque deleniti delectus an has, tempor accusamus eu 
         <script src="../../js/base.js"></script>
 
         <!--
-        MkDocs version  : 0.11.1
-        Docs Build Date : 2015-04-03 14:17:32.777364
+        MkDocs version  : 0.12.0
+        Docs Build Date : 2015-04-14 07:38:59.845855
         -->
     </body>
 </html>
