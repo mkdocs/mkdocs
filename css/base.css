@@ -123,6 +123,7 @@ footer {
 .bs-sidebar .nav > li > a {
     display: block;
     padding: 5px 20px;
+    z-index: 1;
 }
 .bs-sidebar .nav > li > a:hover,
 .bs-sidebar .nav > li > a:focus {
@@ -177,11 +178,5 @@ footer {
     .bs-sidebar.affix-bottom,
     .bs-sidebar.affix {
         width: 263px;
-    }
-}
-
-@media (max-width: 992px) {
-    div[role=main]{
-        pointer-events: none;
     }
 }

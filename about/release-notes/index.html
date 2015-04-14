@@ -155,6 +155,8 @@
         
             <li><a href="#upgrading">Upgrading</a></li>
         
+            <li><a href="#version-0121-2015-04-14">Version 0.12.1 (2015-04-14)</a></li>
+        
             <li><a href="#version-0120-2015-04-14">Version 0.12.0 (2015-04-14)</a></li>
         
             <li><a href="#version-0111-2014-11-20">Version 0.11.1 (2014-11-20)</a></li>
@@ -174,9 +176,16 @@
 <p>To upgrade MkDocs to the latest version, use pip:</p>
 <pre><code>pip install -U mkdocs
 </code></pre>
-<p>You can determine your currently installed version using <code>pip freeze</code>:</p>
-<pre><code>pip freeze | grep mkdocs
+<p>You can determine your currently installed version using <code>mkdocs</code> with no arguements and the version is included in the output:</p>
+<pre><code>$ mkdocs
+MkDocs (version 0.12.0)
+mkdocs [help|new|build|serve|gh-deploy|json] {options}
 </code></pre>
+<h2 id="version-0121-2015-04-14">Version 0.12.1 (2015-04-14)</h2>
+<ul>
+<li>Bugfix: Fixed a CSS bug in the table of contents on some browsers where the
+  bottom item was not clickable.</li>
+</ul>
 <h2 id="version-0120-2015-04-14">Version 0.12.0 (2015-04-14)</h2>
 <ul>
 <li>Display the current MkDocs version in the CLI output. (#258)</li>
@@ -295,8 +304,8 @@
         <script src="../../js/base.js"></script>
 
         <!--
-        MkDocs version  : 0.12.0
-        Docs Build Date : 2015-04-14 07:38:59.885891
+        MkDocs version  : 0.12.1
+        Docs Build Date : 2015-04-14 08:32:42.029649
         -->
     </body>
 </html>
