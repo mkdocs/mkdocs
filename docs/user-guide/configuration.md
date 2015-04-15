@@ -200,6 +200,22 @@ For example, to enable the [SmartyPants typography extension][smarty], use:
 
     markdown_extensions: [smartypants]
 
+Some extensions provide configuration options of their own. If you would like to set any configuration options, then you can define `markdown_extensions` as a key/value mapping rather than a list. The key must be the name of the extension and the value must be a key/value pair (option name/option value) for the configuration option.
+
+For example, to enable permalinks in the (included) `toc` extension, use:
+
+    markdown_extensions:
+        toc:
+            permalink: True
+
+Add additonal items for each extension. If you have no configuration options to set for a specific extension, then you may leave that extensions options blank:
+
+    markdown_extensions:
+        smartypants:
+        toc:
+            permalink: True
+
+
 **default**: `[]`
 
 [pymdk-extensions]: http://pythonhosted.org/Markdown/extensions/index.html

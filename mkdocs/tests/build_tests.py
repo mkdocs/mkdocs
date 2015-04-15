@@ -320,3 +320,22 @@ class BuildTests(unittest.TestCase):
         self.assertRaises(
             MarkdownNotFound,
             build.convert_markdown, invalid, site_nav, strict=True)
+
+    def test_extension_config(self):
+        """
+        Test that a dictionary of 'markdown_extensions' is recognized as
+        both a list of extensions and a dictionary of extnesion configs.
+        """
+        markdown_extensions = {
+            'toc': {'permalink': True},
+            'meta': None  # This gets ignored as it is an invalid config
+        }
+        html, toc, meta = build.convert_markdown(dedent("""
+        # A Header
+        """), extensions=markdown_extensions)
+
+        expected_html = dedent("""
+        <h1 id="a-header">A Header<a class="headerlink" href="#a-header" title="Permanent link">&para;</a></h1>
+        """)
+
+        self.assertEqual(html.strip(), expected_html)
