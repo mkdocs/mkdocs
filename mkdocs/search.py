@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
-from mkdocs.compat import unicode as text_type
-from mkdocs import compat as html_parser
+from six import text_type
+from six.moves import html_parser
 import json
 
 

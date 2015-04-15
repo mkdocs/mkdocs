@@ -6,9 +6,9 @@ import ntpath
 import os
 
 import yaml
+from six.moves.urllib.parse import urlparse
 
 from mkdocs import utils
-from mkdocs.compat import urlparse
 from mkdocs.exceptions import ConfigurationError
 
 log = logging.getLogger(__name__)

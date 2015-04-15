@@ -7,7 +7,7 @@ import logging
 import os
 
 from jinja2.exceptions import TemplateNotFound
-from mkdocs.compat import urljoin
+from six.moves.urllib.parse import urljoin
 import jinja2
 import json
 import markdown

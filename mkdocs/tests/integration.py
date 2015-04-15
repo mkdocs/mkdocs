@@ -80,9 +80,13 @@ def build(theme_name, output=None, config=None, quiet=False):
         if not quiet:
             print("Building {0}".format(theme_name))
 
-        with capture() as out:
-            mkdocs_main.main('build', None, options)
-            mkdocs_main.main('json', None, options)
+        try:
+            with capture() as out:
+                mkdocs_main.main('build', None, options)
+                mkdocs_main.main('json', None, options)
+        except Exception:
+            print("Failed when building {0}".format(theme_name), file=sys.stderr)
+            raise
 
         if not quiet:
             print(''.join(out))

@@ -6,8 +6,10 @@ import shutil
 import tempfile
 import unittest
 
+from six import PY2
+from six.moves import zip
+
 from mkdocs import config
-from mkdocs.compat import PY2, zip
 from mkdocs.exceptions import ConfigurationError
 from mkdocs.tests.base import dedent
 

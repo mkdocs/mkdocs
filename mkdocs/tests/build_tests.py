@@ -6,8 +6,9 @@ import shutil
 import tempfile
 import unittest
 
+from six.moves import zip
+
 from mkdocs import build, nav, config
-from mkdocs.compat import zip
 from mkdocs.exceptions import MarkdownNotFound
 from mkdocs.tests.base import dedent
 
