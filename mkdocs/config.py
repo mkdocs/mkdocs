@@ -159,7 +159,7 @@ def validate_config(user_config):
         config['extra_javascript'] = extra_javascript
 
     package_dir = os.path.dirname(__file__)
-    theme_dir = [os.path.join(package_dir, 'themes', config['theme'])]
+    theme_dir = [os.path.join(package_dir, 'themes', config['theme']), ]
 
     if config['theme_dir'] is not None:
         # If the user has given us a custom theme but not a
@@ -169,6 +169,11 @@ def validate_config(user_config):
         theme_dir.insert(0, config['theme_dir'])
 
     config['theme_dir'] = theme_dir
+
+    # Add the search assets to the theme_dir, this means that
+    # they will then we copied into the output directory but can
+    # be overwritten by themes if needed.
+    config['theme_dir'].append(os.path.join(package_dir, 'assets', 'search'))
 
     if config['repo_url'] is not None and config['repo_name'] is None:
         repo_host = urlparse(config['repo_url']).netloc.lower()

@@ -82,12 +82,14 @@ class ConfigTests(unittest.TestCase):
 
         abs_path = os.path.abspath(os.path.dirname(__file__))
         theme_dir = os.path.abspath(os.path.join(abs_path, '..', 'themes'))
+        search_asset_dir = os.path.abspath(
+            os.path.join(abs_path, '..', 'assets', 'search'))
 
         results = (
-            [os.path.join(theme_dir, 'mkdocs'), ],
-            [os.path.join(theme_dir, 'readthedocs'), ],
-            ['mytheme', ],
-            ['custom', os.path.join(theme_dir, 'cosmo'), ],
+            [os.path.join(theme_dir, 'mkdocs'), search_asset_dir],
+            [os.path.join(theme_dir, 'readthedocs'), search_asset_dir],
+            ['mytheme', search_asset_dir],
+            ['custom', os.path.join(theme_dir, 'cosmo'), search_asset_dir],
         )
 
         for config_contents, expected_result in zip(configs, results):
