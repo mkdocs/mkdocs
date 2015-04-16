@@ -180,6 +180,12 @@ The alternate style can occasionally be useful if you want your documentation to
 
 **default**: `true`
 
+### strict
+
+Determines if a broken link to a page within the documentation is considered a warning or an error (link to a page not listed in the pages setting).  Set to true to halt processing when a broken link is found, false prints a warning.
+
+**default**: `false`
+
 ### dev_addr
 
 Determines the address used when running `mkdocs serve`.  Setting this allows you to use another port, or allows you to make the service accessible over your local network by using the `0.0.0.0` address.
