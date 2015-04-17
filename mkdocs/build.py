@@ -147,7 +147,7 @@ def get_page_context(page, content, toc, meta, config):
     }
 
 
-def build_template(template_name, env, config, site_navigation=None, extra_context=None):
+def build_template(template_name, env, config, site_navigation=None):
 
     log.debug("Building 404.html page")
 
@@ -160,9 +160,6 @@ def build_template(template_name, env, config, site_navigation=None, extra_conte
         context = get_global_context(site_navigation, config)
     else:
         context = {}
-
-    if extra_context is not None:
-        context.update(extra_context)
 
     output_content = template.render(context)
     output_path = os.path.join(config['site_dir'], template_name)
