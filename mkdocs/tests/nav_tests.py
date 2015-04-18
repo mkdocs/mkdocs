@@ -63,6 +63,30 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual(len(site_navigation.nav_items), 3)
         self.assertEqual(len(site_navigation.pages), 6)
 
+    def test_indented_toc_missing_child_title(self):
+        pages = [
+            ('index.md', 'Home'),
+            ('api-guide/running.md', 'API Guide', 'Running'),
+            ('api-guide/testing.md', 'API Guide'),
+            ('api-guide/debugging.md', 'API Guide', 'Debugging'),
+            ('about/release-notes.md', 'About', 'Release notes'),
+            ('about/license.md', 'About', 'License')
+        ]
+        expected = dedent("""
+        Home - /
+        API Guide
+            Running - /api-guide/running/
+            Testing - /api-guide/testing/
+            Debugging - /api-guide/debugging/
+        About
+            Release notes - /about/release-notes/
+            License - /about/license/
+        """)
+        site_navigation = nav.SiteNavigation(pages)
+        self.assertEqual(str(site_navigation).strip(), expected)
+        self.assertEqual(len(site_navigation.nav_items), 3)
+        self.assertEqual(len(site_navigation.pages), 6)
+
     def test_nested_ungrouped(self):
         pages = [
             ('index.md', 'Home'),
