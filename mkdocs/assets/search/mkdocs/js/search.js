@@ -4,6 +4,7 @@ require([
     'text!search-results-template.mustache',
     'text!../search_index.json',
 ], function (Mustache, lunr, results_template, data) {
+   "use strict";
 
     function getSearchTerm()
     {
@@ -28,17 +29,20 @@ require([
     data = JSON.parse(data);
     var documents = {};
 
-    $.each(data.docs, function(i, doc){
+    for (var i=0; i < data.docs.length; i++){
+        var doc = data.docs[i];
         doc.location = base_url + doc.location;
         index.add(doc);
         documents[doc.location] = doc;
-    });
+    }
 
     var search = function(){
 
-        var query = $('#mkdocs-search-query').val();
-        var search_results = $('#mkdocs-search-results');
-        search_results.empty();
+        var query = document.getElementById('mkdocs-search-query').value;
+        var search_results = document.getElementById("mkdocs-search-results");
+        while (search_results.firstChild) {
+            search_results.removeChild(search_results.firstChild);
+        }
 
         if(query === ''){
             return;
@@ -47,28 +51,38 @@ require([
         var results = index.search(query);
 
         if (results.length > 0){
-            $.each(results, function(i, result){
+            for (var i=0; i < results.length; i++){
+                var result = results[i];
                 doc = documents[result.ref];
                 doc.base_url = base_url;
                 doc.summary = doc.text.substring(0, 200);
-                search_results.append(Mustache.to_html(results_template, doc));
-            });
+                var html = Mustache.to_html(results_template, doc);
+                search_results.insertAdjacentHTML('beforeend', html);
+            }
         } else {
-            search_results.append("<p>No results found</p>");
+            search_results.insertAdjacentHTML('beforeend', "<p>No results found</p>");
         }
 
-        $('#search_modal a').click(function(){
-            $('#search_modal').modal('hide');
-        })
+        if(jQuery){
+            /*
+             * We currently only automatically hide bootstrap models. This
+             * requires jQuery to work.
+             */
+            jQuery('#mkdocs_search_modal a').click(function(){
+                jQuery('#mkdocs_search_modal').modal('hide');
+            })
+        }
 
     };
 
+    var search_input = document.getElementById('mkdocs-search-query');
+
     var term = getSearchTerm();
     if (term){
-        $('#mkdocs-search-query').val(term);
+        search_input.value = term;
         search();
     }
 
-    $('#mkdocs-search-query').keyup(search);
+    search_input.addEventListener("keyup", search);
 
 });
