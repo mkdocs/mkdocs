@@ -16,7 +16,7 @@ $(document).ready(function() {
 
     var search_term = getSearchTerm();
     if(search_term){
-        $('#search_modal').modal();
+        $('#mkdocs_search_modal').modal();
     }
 
     // Highlight.js
