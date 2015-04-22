@@ -295,6 +295,9 @@
 <p>The default style of <code>use_directory_urls=true</code> creates more user friendly URLs, and is usually what you'll want to use.</p>
 <p>The alternate style can occasionally be useful if you want your documentation to remain properly linked when opening pages directly from the file system, because it create links that point directly to the target <em>file</em> rather than the target <em>directory</em>.</p>
 <p><strong>default</strong>: <code>true</code></p>
+<h3 id="strict">strict</h3>
+<p>Determines if a broken link to a page within the documentation is considered a warning or an error (link to a page not listed in the pages setting).  Set to true to halt processing when a broken link is found, false prints a warning.</p>
+<p><strong>default</strong>: <code>false</code></p>
 <h3 id="dev_addr">dev_addr</h3>
 <p>Determines the address used when running <code>mkdocs serve</code>.  Setting this allows you to use another port, or allows you to make the service accessible over your local network by using the <code>0.0.0.0</code> address.</p>
 <p>As with all settings, you can set this from the command line, which can be usful, for example:</p>
@@ -306,6 +309,18 @@
 <p>MkDocs uses the <a href="http://pythonhosted.org/Markdown/">Python Markdown</a> library to translate Markdown files into HTML. Python Markdown supports a variety of <a href="http://pythonhosted.org/Markdown/extensions/index.html">extensions</a> that customize how pages are formatted. This setting lets you enable a list of extensions beyond the ones that MkDocs uses by default (<code>meta</code>, <code>toc</code>, <code>tables</code>, and <code>fenced_code</code>).</p>
 <p>For example, to enable the <a href="https://pypi.python.org/pypi/mdx_smartypants">SmartyPants typography extension</a>, use:</p>
 <pre><code>markdown_extensions: [smartypants]
+</code></pre>
+<p>Some extensions provide configuration options of their own. If you would like to set any configuration options, then you can define <code>markdown_extensions</code> as a key/value mapping rather than a list. The key must be the name of the extension and the value must be a key/value pair (option name/option value) for the configuration option.</p>
+<p>For example, to enable permalinks in the (included) <code>toc</code> extension, use:</p>
+<pre><code>markdown_extensions:
+    toc:
+        permalink: True
+</code></pre>
+<p>Add additonal items for each extension. If you have no configuration options to set for a specific extension, then you may leave that extensions options blank:</p>
+<pre><code>markdown_extensions:
+    smartypants:
+    toc:
+        permalink: True
 </code></pre>
 <p><strong>default</strong>: <code>[]</code></p></div>
             
@@ -327,8 +342,8 @@
         <script src="../../js/base.js"></script>
 
         <!--
-        MkDocs version  : 0.12.1
-        Docs Build Date : 2015-04-14 08:32:42.013560
+        MkDocs version  : 0.12.2
+        Docs Build Date : 2015-04-22 07:24:21.923157
         -->
     </body>
 </html>
