@@ -9,22 +9,6 @@ import sys
 
 PY26 = sys.version_info[:2] == (2, 6)
 
-
-name = 'mkdocs'
-package = 'mkdocs'
-description = 'Project documentation with Markdown.'
-url = 'http://www.mkdocs.org'
-author = 'Tom Christie'
-author_email = 'tom@tomchristie.com'
-license = 'BSD'
-install_requires = [
-    'ghp-import>=0.4.1',
-    'Jinja2>=2.7.1',
-    'livereload>=2.3.2',
-    'Markdown>=2.3.1,<2.5' if PY26 else 'Markdown>=2.3.1',
-    'PyYAML>=3.10',
-]
-
 long_description = (
     "MkDocs is a fast, simple and downright gorgeous static site generator "
     "that's geared towards building project documentation. Documentation "
@@ -34,17 +18,13 @@ long_description = (
 
 
 def get_version(package):
-    """
-    Return package version as listed in `__version__` in `init.py`.
-    """
+    """Return package version as listed in `__version__` in `init.py`."""
     init_py = open(os.path.join(package, '__init__.py')).read()
-    return re.search("^__version__ = ['\"]([^'\"]+)['\"]", init_py, re.MULTILINE).group(1)
+    return re.search("__version__ = ['\"]([^'\"]+)['\"]", init_py).group(1)
 
 
 def get_packages(package):
-    """
-    Return root package and all sub-packages.
-    """
+    """Return root package and all sub-packages."""
     return [dirpath
             for dirpath, dirnames, filenames in os.walk(package)
             if os.path.exists(os.path.join(dirpath, '__init__.py'))]
@@ -67,31 +47,43 @@ def get_package_data(package):
 
 
 if sys.argv[-1] == 'publish':
-    os.system("python setup.py sdist upload")
-    args = {'version': get_version(package)}
+    if os.system("pip freeze | grep wheel"):
+        print("wheel not installed.\nUse `pip install wheel`.\nExiting.")
+        sys.exit()
+    if os.system("pip freeze | grep twine"):
+        print("twine not installed.\nUse `pip install twine`.\nExiting.")
+        sys.exit()
+    os.system("python setup.py sdist bdist_wheel")
+    os.system("twine upload dist/*")
     print("You probably want to also tag the version now:")
-    print("  git tag -a %(version)s -m 'version %(version)s'" % args)
+    print("  git tag -a {0} -m 'version {0}'".format(get_version("mkdocs")))
     print("  git push --tags")
     sys.exit()
 
 
 setup(
-    name=name,
-    version=get_version(package),
-    url=url,
-    license=license,
-    description=description,
+    name="mkdocs",
+    version=get_version("mkdocs"),
+    url='http://www.mkdocs.org',
+    license='BSD',
+    description='Project documentation with Markdown.',
     long_description=long_description,
-    author=author,
-    author_email=author_email,
-    packages=get_packages(package),
-    package_data=get_package_data(package),
-    install_requires=install_requires,
+    author='Tom Christie',
+    author_email='tom@tomchristie.com',  # SEE NOTE BELOW (*)
+    packages=get_packages("mkdocs"),
+    package_data=get_package_data("mkdocs"),
+    install_requires=[
+        'ghp-import>=0.4.1',
+        'Jinja2>=2.7.1',
+        'livereload>=2.3.2',
+        'Markdown>=2.3.1,<2.5' if PY26 else 'Markdown>=2.3.1',
+        'PyYAML>=3.10',
+    ],
     entry_points={
         'console_scripts': [
             'mkdocs = mkdocs.main:run_main',
-            ],
-        },
+        ],
+    },
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Console',
@@ -106,7 +98,11 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        "Programming Language :: Python :: Implementation :: CPython",
         'Topic :: Documentation',
         'Topic :: Text Processing',
     ]
 )
+
+# (*) Please direct queries to the discussion group:
+#     https://groups.google.com/forum/#!forum/mkdocs
