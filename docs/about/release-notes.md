@@ -15,6 +15,12 @@ You can determine your currently installed version using `mkdocs` with no arguem
     mkdocs [help|new|build|serve|gh-deploy|json] {options}
 
 
+## version 0.12.2 (2015-04-22)
+
+* Bugfix: Fix a regression where there would be an error if some child titles
+  were missing but others were provided in the pages config. (#464)
+
+
 ## Version 0.12.1 (2015-04-14)
 
 * Bugfix: Fixed a CSS bug in the table of contents on some browsers where the
