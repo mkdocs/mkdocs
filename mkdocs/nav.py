@@ -7,10 +7,9 @@ This consists of building a set of interlinked page and header objects.
 """
 
 import logging
-import markdown
 import os
 
-from mkdocs import utils, exceptions, toc
+from mkdocs import utils, exceptions
 
 log = logging.getLogger(__name__)
 
