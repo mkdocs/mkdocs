@@ -352,7 +352,7 @@ class SiteNavigationTests(unittest.TestCase):
 
     def test_file_to_tile(self):
         title = nav.file_to_title("mkdocs/tests/resources/empty.md")
-        self.assertEqual(title, "empty")
+        self.assertEqual(title, "Mkdocs/tests/resources/empty")
 
         title = nav.file_to_title("mkdocs/tests/resources/with_title.md")
         self.assertEqual(title, "Title")

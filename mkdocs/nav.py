@@ -21,11 +21,18 @@ def file_to_title(filename):
     if utils.is_homepage(filename):
         return 'Home'
 
-    with open(filename, 'r') as f:
-        lines = f.readlines()
-        html_content, table_of_contents, meta = utils.convert_markdown('\n'.join(lines), ['toc'])
+    table_of_contents = None
+    try:
+        with open(filename, 'r') as f:
+            lines = f.readlines()
+            html_content, table_of_contents, meta = utils.convert_markdown('\n'.join(lines), ['toc'])
+    except IOError:
+        # File couldn't be found - use filename as the title
+        # this is used in tests. We use the filename as the title
+        # in that case
+        pass
 
-    if len(table_of_contents.items) > 0:
+    if table_of_contents is not None and len(table_of_contents.items) > 0:
         # Using the documents title
         title = table_of_contents.items[0].title
     else:
