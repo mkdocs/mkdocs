@@ -24,24 +24,22 @@ def file_to_title(filename):
     table_of_contents = None
     try:
         with open(filename, 'r') as f:
-            lines = f.readlines()
-            html_content, table_of_contents, meta = utils.convert_markdown('\n'.join(lines), ['toc'])
+            lines = f.read()
+            html_content, table_of_contents, meta = utils.convert_markdown(lines, ['toc'])
+            if len(table_of_contents.items) > 0:
+                return table_of_contents.items[0].title
     except IOError:
         # File couldn't be found - use filename as the title
         # this is used in tests. We use the filename as the title
         # in that case
         pass
 
-    if table_of_contents is not None and len(table_of_contents.items) > 0:
-        # Using the documents title
-        title = table_of_contents.items[0].title
-    else:
-        # No title found in the document, using the filename
-        title = os.path.splitext(filename)[0]
-        title = title.replace('-', ' ').replace('_', ' ')
-        # Capitalize if the filename was all lowercase, otherwise leave it as-is.
-        if title.lower() == title:
-            title = title.capitalize()
+    # No title found in the document, using the filename
+    title = os.path.splitext(filename)[0]
+    title = title.replace('-', ' ').replace('_', ' ')
+    # Capitalize if the filename was all lowercase, otherwise leave it as-is.
+    if title.lower() == title:
+        title = title.capitalize()
 
     return title
 

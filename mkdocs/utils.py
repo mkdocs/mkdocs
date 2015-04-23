@@ -230,7 +230,7 @@ def path_to_url(path):
     return pathname2url(path)
 
 
-def convert_markdown(markdown_source, extensions=[], extension_configs={}):
+def convert_markdown(markdown_source, extensions=None, extension_configs=None):
     """
     Convert the Markdown source file to HTML content, and additionally
     return the parsed table of contents, and a dictionary of any metadata
@@ -239,6 +239,11 @@ def convert_markdown(markdown_source, extensions=[], extension_configs={}):
     `extensions` is an optional sequence of Python Markdown extensions to add
     to the default set.
     """
+    if extensions is None:
+        extensions = []
+    if extension_configs is None:
+        extension_configs = {}
+
     md = markdown.Markdown(
         extensions=extensions,
         extension_configs=extension_configs
