@@ -239,10 +239,8 @@ def convert_markdown(markdown_source, extensions=None, extension_configs=None):
     `extensions` is an optional sequence of Python Markdown extensions to add
     to the default set.
     """
-    if extensions is None:
-        extensions = []
-    if extension_configs is None:
-        extension_configs = {}
+    extensions = extensions or []
+    extension_configs = extension_configs or {}
 
     md = markdown.Markdown(
         extensions=extensions,
