@@ -349,7 +349,6 @@ class SiteNavigationTests(unittest.TestCase):
         for page, expected_ancestor in zip(site_navigation.pages, ancestors):
             self.assertEqual(page.ancestors, expected_ancestor)
 
-
     def test_file_to_tile(self):
         title = nav.file_to_title("mkdocs/tests/resources/empty.md")
         self.assertEqual(title, "Mkdocs/tests/resources/empty")

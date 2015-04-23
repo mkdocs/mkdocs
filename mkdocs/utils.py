@@ -15,7 +15,6 @@ from mkdocs.compat import urlparse, pathname2url
 from mkdocs import toc
 
 
-
 def copy_file(source_path, output_path):
     """
     Copy source_path to output_path, making sure any parent directories exist.
