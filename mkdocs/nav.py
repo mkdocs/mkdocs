@@ -21,9 +21,11 @@ def file_to_tile(filename):
     if utils.is_homepage(filename):
         return 'Home'
 
+    #todo check if there's a header in the doc first
+
     title = os.path.splitext(filename)[0]
     title = title.replace('-', ' ').replace('_', ' ')
-    # Captialize if the filename was all lowercase, otherwise leave it as-is.
+    # Capitalize if the filename was all lowercase, otherwise leave it as-is.
     if title.lower() == title:
         title = title.capitalize()
     return title
