@@ -7,9 +7,10 @@ This consists of building a set of interlinked page and header objects.
 """
 
 import logging
+import markdown
 import os
 
-from mkdocs import utils, exceptions
+from mkdocs import utils, exceptions, toc
 
 log = logging.getLogger(__name__)
 
@@ -21,11 +22,30 @@ def file_to_tile(filename):
     if utils.is_homepage(filename):
         return 'Home'
 
-    title = os.path.splitext(filename)[0]
-    title = title.replace('-', ' ').replace('_', ' ')
-    # Captialize if the filename was all lowercase, otherwise leave it as-is.
-    if title.lower() == title:
-        title = title.capitalize()
+    extensions = ['toc']
+    md = markdown.Markdown(
+        extensions=extensions
+    )
+
+    html_content = md.convertFile(filename)
+
+    # On completely blank markdown files, no Meta or tox properties are added
+    # to the generated document.
+    toc_html = getattr(md, 'toc', '')
+
+    # Post process the generated table of contents into a data structure
+    table_of_content = toc.TableOfContents(toc_html)
+    if len(table_of_content.items) > 0:
+        # Using the documents title
+        title = table_of_content.items[0].title
+    else:
+        # No title found in the document, using the filename
+        title = os.path.splitext(filename)[0]
+        title = title.replace('-', ' ').replace('_', ' ')
+        # Capitalize if the filename was all lowercase, otherwise leave it as-is.
+        if title.lower() == title:
+            title = title.capitalize()
+
     return title
 
 
