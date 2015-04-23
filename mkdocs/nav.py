@@ -22,22 +22,13 @@ def file_to_tile(filename):
     if utils.is_homepage(filename):
         return 'Home'
 
-    extensions = ['toc']
-    md = markdown.Markdown(
-        extensions=extensions
-    )
+    with open(filename, 'r') as f:
+        lines = f.readlines()
+        html_content, table_of_contents, meta = utils.convert_markdown('\n'.join(lines), ['toc'])
 
-    html_content = md.convertFile(filename)
-
-    # On completely blank markdown files, no Meta or tox properties are added
-    # to the generated document.
-    toc_html = getattr(md, 'toc', '')
-
-    # Post process the generated table of contents into a data structure
-    table_of_content = toc.TableOfContents(toc_html)
-    if len(table_of_content.items) > 0:
+    if len(table_of_contents.items) > 0:
         # Using the documents title
-        title = table_of_content.items[0].title
+        title = table_of_contents.items[0].title
     else:
         # No title found in the document, using the filename
         title = os.path.splitext(filename)[0]

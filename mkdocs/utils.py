@@ -7,10 +7,13 @@ Nothing in this module should have an knowledge of config or the layout
 and structure of the site and pages in the site.
 """
 
+import markdown
 import os
 import shutil
 
 from mkdocs.compat import urlparse, pathname2url
+from mkdocs import toc
+
 
 
 def copy_file(source_path, output_path):
@@ -226,3 +229,29 @@ def path_to_url(path):
         return path
 
     return pathname2url(path)
+
+
+def convert_markdown(markdown_source, extensions=[], extension_configs={}):
+    """
+    Convert the Markdown source file to HTML content, and additionally
+    return the parsed table of contents, and a dictionary of any metadata
+    that was specified in the Markdown file.
+
+    `extensions` is an optional sequence of Python Markdown extensions to add
+    to the default set.
+    """
+    md = markdown.Markdown(
+        extensions=extensions,
+        extension_configs=extension_configs
+    )
+    html_content = md.convert(markdown_source)
+
+    # On completely blank markdown files, no Meta or tox properties are added
+    # to the generated document.
+    meta = getattr(md, 'Meta', {})
+    toc_html = getattr(md, 'toc', '')
+
+    # Post process the generated table of contents into a data structure
+    table_of_contents = toc.TableOfContents(toc_html)
+
+    return (html_content, table_of_contents, meta)
