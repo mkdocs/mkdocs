@@ -17,11 +17,12 @@ log = logging.getLogger(__name__)
 def file_to_tile(filename):
     """
     Automatically generate a default title, given a filename.
+
+    The method parses the file to check for a title, uses the filename
+     as a title otherwise.
     """
     if utils.is_homepage(filename):
         return 'Home'
-
-    #todo check if there's a header in the doc first
 
     title = os.path.splitext(filename)[0]
     title = title.replace('-', ' ').replace('_', ' ')

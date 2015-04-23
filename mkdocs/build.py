@@ -2,57 +2,20 @@
 from __future__ import print_function
 
 from datetime import datetime
-
-from jinja2.exceptions import TemplateNotFound
-import mkdocs
-from mkdocs import nav, toc, utils
-from mkdocs.compat import urljoin
-from mkdocs.relative_path_ext import RelativePathExtension
-import jinja2
 import json
-import markdown
 import os
 import logging
 from io import open
 
+from jinja2.exceptions import TemplateNotFound
+import jinja2
+
+import mkdocs
+from mkdocs import nav, utils
+from mkdocs.compat import urljoin
+from mkdocs.utils import convert_markdown
+
 log = logging.getLogger('mkdocs')
-
-
-def convert_markdown(markdown_source, site_navigation=None, extensions=(), strict=False):
-    """
-    Convert the Markdown source file to HTML content, and additionally
-    return the parsed table of contents, and a dictionary of any metadata
-    that was specified in the Markdown file.
-
-    `extensions` is an optional sequence of Python Markdown extensions to add
-    to the default set.
-    """
-
-    # Generate the HTML from the markdown source
-    if isinstance(extensions, dict):
-        user_extensions = list(extensions.keys())
-        extension_configs = dict([(k, v) for k, v in extensions.items() if isinstance(v, dict)])
-    else:
-        user_extensions = list(extensions)
-        extension_configs = {}
-    builtin_extensions = ['meta', 'toc', 'tables', 'fenced_code']
-    mkdocs_extensions = [RelativePathExtension(site_navigation, strict), ]
-    extensions = set(builtin_extensions + mkdocs_extensions + user_extensions)
-    md = markdown.Markdown(
-        extensions=extensions,
-        extension_configs=extension_configs
-    )
-    html_content = md.convert(markdown_source)
-
-    # On completely blank markdown files, no Meta or tox properties are added
-    # to the generated document.
-    meta = getattr(md, 'Meta', {})
-    toc_html = getattr(md, 'toc', '')
-
-    # Post process the generated table of contents into a data structure
-    table_of_contents = toc.TableOfContents(toc_html)
-
-    return (html_content, table_of_contents, meta)
 
 
 def get_global_context(nav, config):
