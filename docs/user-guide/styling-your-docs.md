@@ -4,39 +4,83 @@ How to style and theme your documentation.
 
 ---
 
+MkDocs includes a number of [different themes](#built-in-themes) which can easily be customised with extra CSS or JavaScript or you can create a [custom theme](#custom-themes) for your documentation.
+
+To use a theme that is included in MkDocs, simply add this to your `mkdocs.yml` config file.
+
+    theme: amelia
+
+Replace [`amelia`](#amelia) with any of the [builtin themes](#built-in-themes) listed below.
+
+To customise a theme, simply place additional CSS and JavaScript files in the documentation directory next to the Markdown files and these will be automatically detected and added. Additionally, the [`extra_css`](/user-guide/configuration/#extra_css) and [`extra_javascript`](/user-guide/configuration/#extra_javascript) configuration options can be used to specifically include certain CSS or JavaScript files.
+
+See the [configuration documentation](/user-guide/configuration/#theme) for more specific details about these options.
+
+To create a new custom theme or more heavily customise an existing theme, see the [custom themes](#custom-themes) section below.
+
+
 ## Built-in themes
 
-#### Bootstrap
+### MkDocs
 
-![Bootstrap](http://bootstrapdocs.com/v2.3.1/docs/assets/img/examples/bootstrap-example-fluid.png)
+![mkdocs](/img/mkdocs.png)
 
-#### Read the Docs
+### Read the Docs
 
 ![ReadTheDocs](https://docs.readthedocs.org/en/latest/_images/screen_mobile.png)
 
-#### The bootswatch themes
+### Bootstrap
+
+![Bootstrap](http://bootstrapdocs.com/v2.3.1/docs/assets/img/examples/bootstrap-example-fluid.png)
+
+
+### The bootswatch themes
+
+#### Amelia
 
 ![Amelia](http://bootswatch.com/2/amelia/thumbnail.png)
 
+#### Cerulean
+
 ![Cerulean](http://bootswatch.com/cerulean/thumbnail.png)
+
+#### Cosmo
 
 ![Cosmo](http://bootswatch.com/cosmo/thumbnail.png)
 
+#### Cyborg
+
 ![Cyborg](http://bootswatch.com/cyborg/thumbnail.png)
+
+#### Flatly
 
 ![Flatly](http://bootswatch.com/flatly/thumbnail.png)
 
+#### Journal
+
 ![Journal](http://bootswatch.com/journal/thumbnail.png)
+
+#### Readable
 
 ![Readable](http://bootswatch.com/readable/thumbnail.png)
 
+#### Simplex
+
 ![Simplex](http://bootswatch.com/simplex/thumbnail.png)
+
+#### Slate
 
 ![Slate](http://bootswatch.com/slate/thumbnail.png)
 
+#### Spacelab
+
 ![Spacelab](http://bootswatch.com/spacelab/thumbnail.png)
 
+#### United
+
 ![United](http://bootswatch.com/united/thumbnail.png)
+
+#### Yeti
 
 ![Yeti](http://bootswatch.com/yeti/thumbnail.png)
 
