@@ -86,7 +86,7 @@ To create a new custom theme or more heavily customise an existing theme, see th
 
 ## Custom themes
 
-The bare minimum required for a custom theme is a `base.html` template file. This should be placed in a directory at the same level as the `mkdocs.yml` configuration file. Within `mkdocs.yml`, specify the `theme_dir` option and set it to the name of the directory containing `base.html`. For example, given this example project layout:
+The bare minimum required for a custom theme is a `base.html` [Jinja2 template] file. This should be placed in a directory at the same level as the `mkdocs.yml` configuration file. Within `mkdocs.yml`, specify the `theme_dir` option and set it to the name of the directory containing `base.html`. For example, given this example project layout:
 
     mkdocs.yml
     docs/
@@ -102,6 +102,8 @@ You would include the following setting to use the custom theme directory:
 
 If used in combination with the `theme` configuration value a custom theme can be used to replace only specific parts of a built-in theme. For example, with the above layout and if you set `theme: mkdocs` then the `base.html` file would replace that in the theme but otherwise it would remain the same. This is useful if you want to make small adjustments to an existing theme.
 
+### Basic theme
+
 The simplest `base.html` file is the following:
 
     <!DOCTYPE html>
@@ -113,4 +115,41 @@ The simplest `base.html` file is the following:
       </body>
     </html>
 
-Article content from each page specified in `mkdocs.yml` is inserted using the `{{ content }}` tag. Stylesheets and scripts can be brought into this theme as with a normal HTML file. Navbars and tables of contents can also be generated and included automatically, through the `nav` and `toc` objects, respectively. If you wish to write your own theme, it is recommended to start with one of the [built-in themes](https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes) and modify it accordingly.
+Article content from each page specified in `mkdocs.yml` is inserted using the `{{ content }}` tag. Stylesheets and scripts can be brought into this theme as with a normal HTML file. Navbars and tables of contents can also be generated and included automatically, through the `nav` and `toc` objects, respectively. If you wish to write your own theme, it is recommended to start with one of the [built-in themes] and modify it accordingly.
+
+
+
+
+### Search and themes
+
+As of MkDocs `0.13` client side search support has been added to MkDocs with [Lunr.js].
+
+Search can either be added to every page in the theme or to a dedicated template which must be named `search.html`. The search template will be build with the same name and can be viewable with `mkdocs serve` at `http://localhost:8000/search.html`. An example of the two different approaches can be seen by comparing the `mkdocs` and `readthedocs` themes.
+
+The following HTML needs to be added to the theme so the JavaScript is loaded for Lunr.js.
+
+    <script>var base_url = '{{ base_url }}';</script>
+    <script data-main="{{ base_url }}/mkdocs/js/search.js" src="{{ base_url }}/mkdocs/js/require.js"></script>
+
+!!! note
+
+    The above JavaScript will download the search index, for larger documentations this can be a heavy operation. In those cases, it is suggested that you either use the `search.html` approach to only include search on one page or load the JavaScript on an event like a form submit.
+
+This loads the JavaScript and sets a global variable `base_url` which allows the JavaScript to make the links relative to the current page. The above JavaScript, with the following HTML in a `search.html` template will add a full search implementation to your theme.
+
+    <h1 id="search">Search Results</h1>
+
+    <form action="search.html">
+      <input name="q" id="mkdocs-search-query" type="text" class="search_input search-query ui-autocomplete-input" placeholder="Search the Docs" autocomplete="off">
+    </form>
+
+    <div id="mkdocs-search-results">
+      Sorry, page not found.
+    </div>
+
+This works by looking for the specific ID's used in the above HTML. The input for the user to type the search query must have the ID `mkdocs-search-query` and `mkdocs-search-results` is the directory where the results will be placed.
+
+
+[Jinja2 template]: http://jinja.pocoo.org/docs/dev/
+[built-in themes]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes
+[lunr.js]: http://lunrjs.com/
