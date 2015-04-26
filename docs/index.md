@@ -103,12 +103,10 @@ Let's also add a second page to our documentation:
 
 We'd like our documentation site to include some navigation headers, so we'll edit the configuration file and add some information about the order and title to use for out headers:
 
-```yaml
     site_name: MkLorum
     pages:
     - [index.md, Home]
     - [about.md, About]
-```
 
 Refresh the browser and you'll now see a navigation bar with `Home` and `About` headers.
 
@@ -116,12 +114,10 @@ Refresh the browser and you'll now see a navigation bar with `Home` and `About` 
 
 While we're here can also change the configuration file to alter how the documentation is displayed.  Let's go ahead and change the theme.  Edit the `mkdocs.yml` file to the following:
 
-```yaml
     site_name: MkLorum
     pages:
     - [index.md, Home]
     - [about.md, About]
-    theme: readthedocs
 ```
 
 Refresh the browser again, and you'll now see the ReadTheDocs theme being used.
