@@ -54,8 +54,8 @@ class UtilsTests(unittest.TestCase):
 
     def test_create_media_urls(self):
         pages = [
-            ('index.md', 'Home'),
-            ('about.md', 'About')
+            {'Home': 'index.md'},
+            {'About': 'about.md'}
         ]
         expected_results = {
             'https://media.cdn.org/jq.js': 'https://media.cdn.org/jq.js',

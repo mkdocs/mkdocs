@@ -72,7 +72,7 @@ class ConfigTests(unittest.TestCase):
         expected_result = {
             'site_name': 'Example',
             'pages': [
-                ['index.md', 'Introduction']
+                {'Introduction': 'index.md'}
             ],
         }
         file_contents = dedent("""

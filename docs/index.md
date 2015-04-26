@@ -105,8 +105,8 @@ We'd like our documentation site to include some navigation headers, so we'll ed
 
     site_name: MkLorum
     pages:
-    - [index.md, Home]
-    - [about.md, About]
+    - Home: index.md
+    - About: about.md
 
 Refresh the browser and you'll now see a navigation bar with `Home` and `About` headers.
 
@@ -116,9 +116,10 @@ While we're here can also change the configuration file to alter how the documen
 
     site_name: MkLorum
     pages:
-    - [index.md, Home]
-    - [about.md, About]
-```
+    - Home: index.md
+    - About: about.md
+    theme: readthedocs
+
 
 Refresh the browser again, and you'll now see the ReadTheDocs theme being used.
 

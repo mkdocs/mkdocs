@@ -90,22 +90,23 @@ The setting should be a list.  Each row in the list represents information about
 
 Here's a simple example that would cause the build stage to create three pages:
 
-
     pages:
-    - ['index.md', 'Introduction']
-    - ['user-guide.md', 'User Guide']
-    - ['about.md', 'About']
+    - 'Introduction': 'index.md'
+    - 'User Guide': 'user-guide.md'
+    - 'Abut': 'about.md'
 
 Assuming the `docs_dir` setting was left with the default value of `docs`, the source files for this site's build process would be `docs/index.md`, `docs/user-guide.md` and `docs/about.md`.
 
 If you have a lot of project documentation you might choose to use headings to break up your site navigation by category.  You can do so by including an extra string in the page configuration for any pages that require a navigation heading, like so:
 
     pages:
-    - ['index.md', 'Introduction']
-    - ['user-guide/creating.md', 'User Guide', 'Creating a new Mashmallow project']
-    - ['user-guide/api.md', 'User Guide', 'Mashmallow API guide']
-    - ['user-guide/configuration.md', 'User Guide', 'Configuring Mashmallow']
-    - ['about/license.md', 'About', 'License']
+    - Introduction: 'index.md'
+    - User Guide:
+        - 'Creating a new Mashmallow project': 'user-guide/creating.md'
+        - 'Mashmallow API guide': 'user-guide/api.md'
+        - 'Configuring Mashmallow': 'user-guide/configuration.md'
+    - About:
+        - License: 'about/license.md'
 
 See also the section on [configuring pages and navigation](/user-guide/writing-your-docs/#configure-pages-and-navigation) for a more detailed breakdown.
 

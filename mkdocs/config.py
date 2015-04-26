@@ -7,7 +7,7 @@ import os
 
 from six.moves.urllib.parse import urlparse
 
-from mkdocs import utils
+from mkdocs import utils, legacy
 from mkdocs.exceptions import ConfigurationError
 
 log = logging.getLogger(__name__)
@@ -68,7 +68,7 @@ DEFAULT_CONFIG = {
 
     # enabling strict mode causes MkDocs to stop the build when a problem is
     # encountered rather than display an error.
-    'strict': False
+    'strict': False,
 }
 
 
@@ -153,11 +153,27 @@ def validate_config(user_config):
         check for Windows style paths. If they are found, output a warning
         and continue.
         """
+
+        # TODO: Remove in 1.0
+        config_types = set(type(l) for l in config['pages'])
+        if list in config_types and dict not in config_types:
+            config['pages'] = legacy.pages_compat_shim(config['pages'])
+        elif list in config_types:
+            raise ConfigurationError("")
+
         for page_config in config['pages']:
+
             if isinstance(page_config, str):
                 path = page_config
+            elif isinstance(page_config, dict):
+                if len(page_config) > 1:
+                    raise ConfigurationError(
+                        "Invalid page config. Should have one key value only")
+                _, path = next(iter(page_config.items()))
             elif len(page_config) in (1, 2, 3):
                 path = page_config[0]
+            else:
+                raise ConfigurationError("Unrecognised page config")
 
             if ntpath.sep in path:
                 log.warning("The config path contains Windows style paths (\\ "

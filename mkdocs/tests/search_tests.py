@@ -103,8 +103,8 @@ class SearchTests(unittest.TestCase):
         """
 
         pages = [
-            ('index.md', 'Home'),
-            ('about.md', 'About')
+            {'Home': 'index.md'},
+            {'About': 'about.md'},
         ]
         site_navigation = nav.SiteNavigation(pages)
 
