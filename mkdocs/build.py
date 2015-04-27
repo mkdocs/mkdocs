@@ -16,7 +16,7 @@ from mkdocs import nav, search, toc, utils
 from mkdocs.relative_path_ext import RelativePathExtension
 import mkdocs
 
-log = logging.getLogger('mkdocs')
+log = logging.getLogger(__name__)
 
 
 def convert_markdown(markdown_source, site_navigation=None, extensions=(), strict=False):
