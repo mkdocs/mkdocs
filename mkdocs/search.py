@@ -118,7 +118,7 @@ class HTMLStripper(html_parser.HTMLParser):
         return '\n'.join(self.data)
 
 
-class ContentSection():
+class ContentSection(object):
     """
     Used by the ContentParser class to capture the information we
     need when it is parsing the HMTL.
