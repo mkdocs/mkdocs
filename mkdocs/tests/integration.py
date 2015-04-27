@@ -20,10 +20,8 @@ import os
 import click
 import contextlib
 import sys
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import StringIO
+
+from six.moves import cStringIO
 
 from mkdocs import main as mkdocs_main
 
@@ -35,7 +33,7 @@ MKDOCS_THEMES = os.listdir(os.path.join(os.path.dirname(__file__), '../themes'))
 def capture():
     oldout, olderr = sys.stdout, sys.stderr
     try:
-        out = [StringIO(), StringIO()]
+        out = [cStringIO(), cStringIO()]
         sys.stdout, sys.stderr = out
         yield out
     finally:
@@ -80,9 +78,13 @@ def build(theme_name, output=None, config=None, quiet=False):
         if not quiet:
             print("Building {0}".format(theme_name))
 
-        with capture() as out:
-            mkdocs_main.main('build', None, options)
-            mkdocs_main.main('json', None, options)
+        try:
+            with capture() as out:
+                mkdocs_main.main('build', None, options)
+                mkdocs_main.main('json', None, options)
+        except Exception:
+            print("Failed when building {0}".format(theme_name), file=sys.stderr)
+            raise
 
         if not quiet:
             print(''.join(out))

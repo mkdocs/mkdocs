@@ -6,9 +6,9 @@ import ntpath
 import os
 
 import yaml
+from six.moves.urllib.parse import urlparse
 
 from mkdocs import utils
-from mkdocs.compat import urlparse
 from mkdocs.exceptions import ConfigurationError
 
 log = logging.getLogger(__name__)
@@ -61,10 +61,6 @@ DEFAULT_CONFIG = {
     # PyMarkdown extension names.
     'markdown_extensions': (),
 
-    # Determine if the site should generate a json search index and include
-    # search elements in the theme. - TODO
-    'include_search': False,
-
     # Determine if the site should include a 404.html page.
     # TODO: Implment this. Make this None, have it True if a 404.html
     # template exists in the theme or docs dir.
@@ -72,7 +68,7 @@ DEFAULT_CONFIG = {
 
     # enabling strict mode causes MkDocs to stop the build when a problem is
     # encountered rather than display an error.
-    'strict': False,
+    'strict': False
 }
 
 
@@ -163,7 +159,7 @@ def validate_config(user_config):
         config['extra_javascript'] = extra_javascript
 
     package_dir = os.path.dirname(__file__)
-    theme_dir = [os.path.join(package_dir, 'themes', config['theme'])]
+    theme_dir = [os.path.join(package_dir, 'themes', config['theme']), ]
 
     if config['theme_dir'] is not None:
         # If the user has given us a custom theme but not a
@@ -173,6 +169,11 @@ def validate_config(user_config):
         theme_dir.insert(0, config['theme_dir'])
 
     config['theme_dir'] = theme_dir
+
+    # Add the search assets to the theme_dir, this means that
+    # they will then we copied into the output directory but can
+    # be overwritten by themes if needed.
+    config['theme_dir'].append(os.path.join(package_dir, 'assets', 'search'))
 
     if config['repo_url'] is not None and config['repo_name'] is None:
         repo_host = urlparse(config['repo_url']).netloc.lower()

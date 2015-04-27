@@ -13,5 +13,10 @@ pages:
 - ['about/release-notes.md', 'About', 'Release Notes']
 - ['about/contributing.md', 'About', 'Contributing']
 
+markdown_extensions:
+    toc:
+        permalink: ""
+    admonition:
+
 copyright: Copyright &copy; 2014, <a href="https://twitter.com/_tomchristie">Tom Christie</a>.
 google_analytics: ['UA-27795084-5', 'mkdocs.org']

@@ -1,50 +1,21 @@
-{#
-    basic/search.html
-    ~~~~~~~~~~~~~~~~~
+{% extends "base.html" %}
 
-    Template for the search page.
-
-    :copyright: Copyright 2007-2013 by the Sphinx team, see AUTHORS.
-    :license: BSD, see LICENSE for details.
-#}
-{%- extends "layout.html" %}
-{% set title = _('Search') %}
-{% set script_files = script_files + ['_static/searchtools.js'] %}
 {% block extrahead %}
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("{{ pathto('searchindex.js', 1) }}"); });
-  </script>
-  {# this is used when loading the search index using $.ajax fails,
-     such as on Chrome for documents on localhost #}
-  <script type="text/javascript" id="searchindexloader"></script>
-  {{ super() }}
+  <script>var base_url = '{{ base_url }}';</script>
+  <script data-main="{{ base_url }}/mkdocs/js/search.js" src="{{ base_url }}/mkdocs/js/require.js"></script>
 {% endblock %}
-{% block body %}
-  <noscript>
-  <div id="fallback" class="admonition warning">
-    <p class="last">
-      {% trans %}Please activate JavaScript to enable the search
-      functionality.{% endtrans %}
-    </p>
-  </div>
-  </noscript>
 
-  {% if search_performed %}
-    <h2>{{ _('Search Results') }}</h2>
-    {% if not search_results %}
-      <p>{{ _('Your search did not match any documents. Please make sure that all words are spelled correctly and that you\'ve selected enough categories.') }}</p>
-    {% endif %}
-  {% endif %}
-  <div id="search-results">
-  {% if search_results %}
-    <ul>
-    {% for href, caption, context in search_results %}
-      <li>
-        <a href="{{ pathto(item.href) }}">{{ caption }}</a>
-        <p class="context">{{ context|e }}</p>
-      </li>
-    {% endfor %}
-    </ul>
-  {% endif %}
+{% block content %}
+
+  <h1 id="search">Search Results</h1>
+
+  <form id="content_search" action="search.html">
+    <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+    <input name="q" id="mkdocs-search-query" type="text" class="search_input search-query ui-autocomplete-input" placeholder="Search the Docs" autocomplete="off">
+  </form>
+
+  <div id="mkdocs-search-results">
+    Sorry, page not found.
   </div>
+
 {% endblock %}

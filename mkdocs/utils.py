@@ -10,7 +10,8 @@ and structure of the site and pages in the site.
 import os
 import shutil
 
-from mkdocs.compat import urlparse, pathname2url
+from six.moves.urllib.parse import urlparse
+from six.moves.urllib.request import pathname2url
 
 
 def copy_file(source_path, output_path):

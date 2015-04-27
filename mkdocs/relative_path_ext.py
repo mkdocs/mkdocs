@@ -39,9 +39,9 @@ import logging
 
 from markdown.extensions import Extension
 from markdown.treeprocessors import Treeprocessor
+from six.moves.urllib.parse import urlparse, urlunparse
 
 from mkdocs import utils
-from mkdocs.compat import urlparse, urlunparse
 from mkdocs.exceptions import MarkdownNotFound
 
 log = logging.getLogger(__name__)
