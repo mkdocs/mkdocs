@@ -1,3 +1,4 @@
+click>=4.0
 ghp-import>=0.4.1
 Jinja2>=2.7.1
 livereload>=2.3.2

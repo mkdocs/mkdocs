@@ -58,7 +58,7 @@ class UtilsTests(unittest.TestCase):
             ('about.md', 'About')
         ]
         expected_results = {
-            'https://media.cdn.org/jquery.js': 'https://media.cdn.org/jquery.js',
+            'https://media.cdn.org/jq.js': 'https://media.cdn.org/jq.js',
             'http://media.cdn.org/jquery.js': 'http://media.cdn.org/jquery.js',
             '//media.cdn.org/jquery.js': '//media.cdn.org/jquery.js',
             'media.cdn.org/jquery.js': './media.cdn.org/jquery.js',
@@ -90,8 +90,9 @@ class UtilsTests(unittest.TestCase):
 
         self.assertEqual(
             utils.yaml_load(yaml_text),
-            OrderedDict([('test', OrderedDict([('key1', 1), ('key2', 2), ('key3', 7),
-                                               ('key4', 4), ('key5', 6)]))])
+            OrderedDict([('test', OrderedDict([('key1', 1), ('key2', 2),
+                                               ('key3', 7), ('key4', 4),
+                                               ('key5', 6)]))])
         )
 
     def test_reduce_list(self):
@@ -99,3 +100,11 @@ class UtilsTests(unittest.TestCase):
             utils.reduce_list([1, 2, 3, 4, 5, 5, 2, 4, 6, 7, 8]),
             [1, 2, 3, 4, 5, 6, 7, 8]
         )
+
+    def test_get_themes(self):
+
+        self.assertEqual(
+            sorted(utils.get_theme_names()),
+            sorted(['flatly', 'cerulean', 'slate', 'bootstrap', 'yeti',
+                    'spacelab', 'united', 'readable', 'simplex', 'mkdocs',
+                    'cosmo', 'journal', 'cyborg', 'readthedocs', 'amelia']))
