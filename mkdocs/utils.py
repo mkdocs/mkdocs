@@ -12,6 +12,37 @@ import shutil
 
 from six.moves.urllib.parse import urlparse
 from six.moves.urllib.request import pathname2url
+try:
+    from collections import OrderedDict
+    import yaml
+
+    def yaml_load(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
+        """
+        Make all YAML dictionaries load as ordered Dicts.
+        http://stackoverflow.com/a/21912744/3609487
+        """
+        class OrderedLoader(Loader):
+            pass
+
+        def construct_mapping(loader, node):
+            loader.flatten_mapping(node)
+            return object_pairs_hook(loader.construct_pairs(node))
+
+        OrderedLoader.add_constructor(
+            yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
+            construct_mapping
+        )
+
+        return yaml.load(stream, OrderedLoader)
+except ImportError:
+    # Can be removed when Py26 support is removed
+    from yaml import load as yaml_load  # noqa
+
+
+def reduce_list(data_set):
+    """ Reduce duplicate items in a list and preserve order """
+    seen = set()
+    return [item for item in data_set if item not in seen and not seen.add(item)]
 
 
 def copy_file(source_path, output_path):
