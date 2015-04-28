@@ -4,6 +4,7 @@
 import unittest
 
 from mkdocs import nav, utils
+from mkdocs.tests.base import dedent
 
 
 class UtilsTests(unittest.TestCase):
@@ -76,16 +77,17 @@ class UtilsTests(unittest.TestCase):
             # Exception can be removed when Py26 support is removed
             return
 
-        yaml_text = '''
-test:
-    key1: 1
-    key2: 2
-    key3: 3
-    key4: 4
-    key5: 5
-    key5: 6
-    key3: 7
-'''
+        yaml_text = dedent('''
+            test:
+                key1: 1
+                key2: 2
+                key3: 3
+                key4: 4
+                key5: 5
+                key5: 6
+                key3: 7
+        ''')
+
         self.assertEqual(
             utils.yaml_load(yaml_text),
             OrderedDict([('test', OrderedDict([('key1', 1), ('key2', 2), ('key3', 7),
