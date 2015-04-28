@@ -5,8 +5,6 @@ import logging
 import ntpath
 import os
 
-import yaml
-
 from mkdocs import utils
 from mkdocs.compat import urlparse
 from mkdocs.exceptions import ConfigurationError
@@ -85,7 +83,7 @@ def load_config(filename='mkdocs.yml', options=None):
     if not os.path.exists(filename):
         raise ConfigurationError("Config file '%s' does not exist." % filename)
     with open(filename, 'r', encoding='utf-8') as fp:
-        user_config = yaml.load(fp)
+        user_config = utils.yaml_load(fp)
         if not isinstance(user_config, dict):
             raise ConfigurationError("The mkdocs.yml file is invalid. See http://www.mkdocs.org/user-guide/configuration/ for more information.")
     user_config.update(options)
