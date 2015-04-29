@@ -27,7 +27,7 @@ def configure_logging(is_verbose=False):
 
 clean_help = "Remove old files from the site_dir before building"
 config_file_help = "Provide a specific MkDocs config"
-dev_addr_help = ("IP address and port to set documentation locall (default: "
+dev_addr_help = ("IP address and port to serve documentation locally (default: "
                  "localhost:8000)")
 strict_help = ("Enable strict mode. This will cause MkDocs to abort the build "
                "on any warnings.")
