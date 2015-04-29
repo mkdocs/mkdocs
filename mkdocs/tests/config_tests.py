@@ -35,6 +35,35 @@ class ConfigTests(unittest.TestCase):
             config.load_config(config_file='/dev/null')
         self.assertRaises(ConfigurationError, load_empty_config)
 
+    def test_nonexistant_config(self):
+        def load_empty_config():
+            config.load_config(config_file='/path/that/is/not/real')
+        self.assertRaises(ConfigurationError, load_empty_config)
+
+    def test_invalid_config(self):
+        file_contents = dedent("""
+        - ['index.md', 'Introduction']
+        - ['index.md', 'Introduction']
+        - ['index.md', 'Introduction']
+        """)
+        config_file = tempfile.NamedTemporaryFile('w', delete=False)
+        try:
+            config_file.write(ensure_utf(file_contents))
+            config_file.flush()
+
+            self.assertRaises(
+                ConfigurationError,
+                config.load_config, config_file=open(config_file.name, 'rb')
+            )
+
+            config_file.close()
+        finally:
+            try:
+                os.remove(config_file.name)
+            except Exception:
+                # This fails on Windows for some reason
+                pass
+
     def test_config_option(self):
         """
         Users can explicitly set the config file using the '--config' option.
@@ -61,7 +90,11 @@ class ConfigTests(unittest.TestCase):
             self.assertEqual(result['pages'], expected_result['pages'])
             config_file.close()
         finally:
-            os.remove(config_file.name)
+            try:
+                os.remove(config_file.name)
+            except Exception:
+                # This fails on Windows for some reason
+                pass
 
     def test_theme(self):
 

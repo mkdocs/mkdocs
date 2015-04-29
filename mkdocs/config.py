@@ -81,7 +81,7 @@ def load_config(config_file=None, **kwargs):
             config_file = open(config_file, 'rb')
         else:
             raise ConfigurationError(
-                "Config file '{0}' does not exist.".fomrat(config_file))
+                "Config file '{0}' does not exist.".format(config_file))
 
     options['config'] = config_file
 
