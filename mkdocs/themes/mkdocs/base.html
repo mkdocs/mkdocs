@@ -93,10 +93,11 @@
             </div>
         </div>
 
-        <!--
-        MkDocs version      : {{ mkdocs_version }}
-        Docs Build Date UTC : {{ build_date_utc }}
-        -->
-
     </body>
 </html>
+{% if current_page and current_page.is_homepage %}
+<!--
+MkDocs version : {{ mkdocs_version }}
+Build Date UTC : {{ build_date_utc }}
+-->
+{% endif %}
