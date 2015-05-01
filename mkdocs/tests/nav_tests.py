@@ -357,6 +357,59 @@ class SiteNavigationTests(unittest.TestCase):
         title = nav.file_to_title("mkdocs/tests/resources/no_title_metadata.md")
         self.assertEqual(title, "Title")
 
+    def test_nesting(self):
+
+        pages_config = [
+            {'Home': 'index.md'},
+            {'Install': [
+                {'Pre-install': 'install/install-pre.md'},
+                {'The install': 'install/install-actual.md'},
+                {'Post install': 'install/install-post.md'},
+            ]},
+            {'Guide': [
+                {'Tutorial': [
+                    {'Getting Started': 'guide/tutorial/running.md'},
+                    {'Advanced Features': 'guide/tutorial/testing.md'},
+                    {'Further Reading': 'guide/tutorial/debugging.md'},
+                ]},
+                {'API Reference': [
+                    {'Feature 1': 'guide/api-ref/running.md'},
+                    {'Feature 2': 'guide/api-ref/testing.md'},
+                    {'Feature 3': 'guide/api-ref/debugging.md'},
+                ]},
+                {'Testing': 'guide/testing.md'},
+                {'Deploying': 'guide/deploying.md'},
+            ]}
+        ]
+
+        site_navigation = nav.SiteNavigation(pages_config)
+
+        self.assertEqual([n.title for n in site_navigation.nav_items],
+                         ['Home', 'Install', 'Guide'])
+        self.assertEqual(len(site_navigation.pages), 12)
+
+        expected = dedent("""
+        Home - /
+        Install
+            Pre-install - /install/install-pre/
+            The install - /install/install-actual/
+            Post install - /install/install-post/
+        Guide
+            Tutorial
+                Getting Started - /guide/tutorial/running/
+                Advanced Features - /guide/tutorial/testing/
+                Further Reading - /guide/tutorial/debugging/
+            API Reference
+                Feature 1 - /guide/api-ref/running/
+                Feature 2 - /guide/api-ref/testing/
+                Feature 3 - /guide/api-ref/debugging/
+            Testing - /guide/testing/
+            Deploying - /guide/deploying/
+        """)
+
+        self.maxDiff = None
+        self.assertEqual(str(site_navigation).strip(), expected)
+
 
 class TestLegacyPagesConfig(unittest.TestCase):
 
@@ -384,8 +437,6 @@ class TestLegacyPagesConfig(unittest.TestCase):
             ('index.md',),
             ('about.md', 'About')
         ])
-
-        print(pages)
 
         expected = [
             dedent("""

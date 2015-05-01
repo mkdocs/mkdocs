@@ -180,6 +180,10 @@ class Page(object):
     def is_homepage(self):
         return utils.is_homepage(self.input_path)
 
+    @property
+    def is_top_level(self):
+        return len(self.ancestors) == 0
+
     def __str__(self):
         return self._indent_print()
 
@@ -199,9 +203,14 @@ class Header(object):
     def __init__(self, title, children):
         self.title, self.children = title, children
         self.active = False
+        self.ancestors = []
 
     def __str__(self):
         return self._indent_print()
+
+    @property
+    def is_top_level(self):
+        return len(self.ancestors) == 0
 
     def _indent_print(self, depth=0):
         indent = '    ' * depth
@@ -220,6 +229,59 @@ def _path_to_page(path, title, url_context, use_directory_urls):
                 url_context=url_context)
 
 
+def _follow(config_line, url_context, use_dir_urls, header=None, title=None):
+
+    if isinstance(config_line, str):
+        path = os.path.normpath(config_line)
+        page = _path_to_page(path, title, url_context, use_dir_urls)
+
+        if header:
+            page.ancestors = [header]
+            header.children.append(page)
+
+        yield page
+        raise StopIteration
+
+    elif not isinstance(config_line, dict):
+        msg = ("Line in 'page' config is of type {0}, dict or string "
+               "expected. Config: {1}").format(type(config_line), config_line)
+        raise exceptions.ConfigurationError(msg)
+
+    if len(config_line) > 1:
+        raise exceptions.ConfigurationError(
+            "Page configs should be in the format 'name: markdown.md'. The "
+            "config contains an invalid entry: {0}".format(config_line))
+    elif len(config_line) == 0:
+        log.warning("Ignoring empty line in the pages config.")
+        raise StopIteration
+
+    next_cat_or_title, subpages_or_path = next(iter(config_line.items()))
+
+    if isinstance(subpages_or_path, str):
+        path = subpages_or_path
+        for sub in _follow(path, url_context, use_dir_urls, header=header, title=next_cat_or_title):
+            yield sub
+        raise StopIteration
+
+    elif not isinstance(subpages_or_path, list):
+        msg = ("Line in 'page' config is of type {0}, list or string "
+               "expected for sub pages. Config: {1}"
+               ).format(type(config_line), config_line)
+        raise exceptions.ConfigurationError(msg)
+
+    next_header = Header(title=next_cat_or_title, children=[])
+    if header:
+        next_header.ancestors = [header]
+        header.children.append(next_header)
+    yield next_header
+
+    subpages = subpages_or_path
+
+    for subpage in subpages:
+        for sub in _follow(subpage, url_context, use_dir_urls, next_header):
+            yield sub
+
+
 def _generate_site_navigation(pages_config, url_context, use_dir_urls=True):
     """
     Returns a list of Page and Header instances that represent the
@@ -232,76 +294,25 @@ def _generate_site_navigation(pages_config, url_context, use_dir_urls=True):
 
     for config_line in pages_config:
 
-        if isinstance(config_line, str):
-            path = os.path.normpath(config_line)
+        for page_or_header in _follow(
+                config_line, url_context, use_dir_urls):
 
-            page = _path_to_page(path, None, url_context, use_dir_urls)
-            nav_items.append(page)
+            if isinstance(page_or_header, Header):
 
-            if previous:
-                page.previous_page = previous
-                previous.next_page = page
-            previous = page
+                if page_or_header.is_top_level:
+                    nav_items.append(page_or_header)
 
-            pages.append(page)
-            continue
+            elif isinstance(page_or_header, Page):
 
-        elif not isinstance(config_line, dict):
-            msg = ("Line in 'page' config is of type {0}, dict or string "
-                   "expected. Line: {1}").format(type(config_line), config_line)
-            raise exceptions.ConfigurationError(msg)
+                if page_or_header.is_top_level:
+                    nav_items.append(page_or_header)
 
-        if len(config_line) > 1:
-            raise exceptions.ConfigurationError(
-                "Page configs should be in the format 'name: markdown.md'. The "
-                "config contains an invalid entry: {0}".format(config_line))
+                pages.append(page_or_header)
 
-        try:
-            category, subpages_or_path = next(iter(config_line.items()))
-        except StopIteration:
-            log.warning("Ignoring empty line in the pages config.")
-            continue
-
-        if isinstance(subpages_or_path, str):
-            path = subpages_or_path
-            page = _path_to_page(path, category, url_context, use_dir_urls)
-            nav_items.append(page)
-
-            if previous:
-                page.previous_page = previous
-                previous.next_page = page
-            previous = page
-
-            pages.append(page)
-            continue
-
-        header = Header(title=category, children=[])
-        nav_items.append(header)
-
-        for subpage in subpages_or_path:
-
-            if isinstance(subpage, str):
-                path = subpage
-                page = _path_to_page(path, None, url_context, use_dir_urls)
-
-            elif isinstance(subpage, dict):
-                title, path = next(iter(subpage.items()))
-                page = _path_to_page(path, title, url_context, use_dir_urls)
-            else:
-                msg = ("Line in 'page' config is of type {0}, dict  or string "
-                       "expected. Line: {1}"
-                       ).format(type(config_line), config_line)
-                raise exceptions.ConfigurationError(msg)
-
-            page.ancestors = [header]
-            header.children.append(page)
-
-            if previous:
-                page.previous_page = previous
-                previous.next_page = page
-            previous = page
-
-            pages.append(page)
+                if previous:
+                    page_or_header.previous_page = previous
+                    previous.next_page = page_or_header
+                previous = page_or_header
 
     if len(pages) == 0:
         raise exceptions.ConfigurationError(
