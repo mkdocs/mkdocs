@@ -57,7 +57,11 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-      {% include "toc.html" %}
+        <ul class="current">
+          {% for nav_item in nav %}
+            <li>{% include "toc.html" %}<li>
+          {% endfor %}
+        </ul>
       </div>
       &nbsp;
     </nav>
