@@ -12,6 +12,8 @@ from mkdocs import serve
 from mkdocs import utils
 from mkdocs.config import load_config
 
+log = logging.getLogger(__name__)
+
 
 def configure_logging(is_verbose=False):
     '''When a --verbose flag is passed, increase the verbosity of mkdocs'''
@@ -86,6 +88,11 @@ def json_command(clean, config_file, strict):
     useful if you want to index your documentation in an external
     search engine.
     """
+
+    log.warning("The json command is deprcated and will be removed in a future "
+                "MkDocs release. For details on updating: "
+                "http://www.mkdocs.org/about/release-notes/")
+
     build.build(load_config(
         config_file=config_file,
         strict=strict
