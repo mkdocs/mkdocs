@@ -28,9 +28,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ nav_item.title }} <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         {% for nav_item in nav_item.children %}
-                            <li {% if nav_item.active %}class="active"{% endif %}>
-                                <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
-                            </li>
+                            {% include "nav-sub.html" %}
                         {% endfor %}
                         </ul>
                     </li>
