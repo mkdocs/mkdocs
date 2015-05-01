@@ -235,11 +235,13 @@ def build_pages(config, dump_json=False):
 
         try:
             log.debug("Building page %s", page.input_path)
-            html_content, table_of_contents, meta = _build_page(
-                page, config, site_navigation, env, dump_json)
+            build_result = _build_page(page, config, site_navigation, env, dump_json)
+            if build_result is None:
+                continue
+            html_content, table_of_contents, meta = build_result
             search_index.add_entry_from_context(
                 page, html_content, table_of_contents)
-        except:
+        except Exception:
             log.error("Error building page %s", page.input_path)
             raise
 
