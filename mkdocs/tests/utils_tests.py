@@ -55,7 +55,9 @@ class UtilsTests(unittest.TestCase):
     def test_create_media_urls(self):
         pages = [
             ('index.md', 'Home'),
-            ('about.md', 'About')
+            ('about.md', 'About'),
+            ('subpage/index.md', 'sub index'),
+            ('subpage/about.md', 'sub about')
         ]
         expected_results = {
             'https://media.cdn.org/jq.js': 'https://media.cdn.org/jq.js',
@@ -63,11 +65,30 @@ class UtilsTests(unittest.TestCase):
             '//media.cdn.org/jquery.js': '//media.cdn.org/jquery.js',
             'media.cdn.org/jquery.js': './media.cdn.org/jquery.js',
             'local/file/jquery.js': './local/file/jquery.js',
+            'image.png': './image.png',
         }
         site_navigation = nav.SiteNavigation(pages)
         for path, expected_result in expected_results.items():
             urls = utils.create_media_urls(site_navigation, [path])
             self.assertEqual(urls[0], expected_result)
+
+    def test_create_relative_media_url_sub_index(self):
+        '''
+        test special case where there's a sub/index.md page
+        '''
+        
+        site_navigation = nav.SiteNavigation([('index.md', 'Home'),('subpage/index.md', 'sub index')])
+        site_navigation.url_context.set_current_url('/subpage/')
+        site_navigation.file_context.current_file = "subpage/index.md"
+        
+        def assertPathGenerated(declared,expected):
+            url = utils.create_relative_media_url(site_navigation, declared)
+            self.assertEqual(url, expected)
+            
+        assertPathGenerated("img.png", "./img.png")
+        assertPathGenerated("./img.png", "./img.png")
+        assertPathGenerated("/img.png", "/img.png")
+            
 
     def test_yaml_load(self):
         try:

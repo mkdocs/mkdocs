@@ -6,3 +6,7 @@ htmlcov/
 mkdocs.egg-info/
 *.pyc
 .coverage
+venv
+.pydevproject
+.project
+.settings
