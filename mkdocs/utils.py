@@ -192,6 +192,18 @@ def is_html_file(path):
     ]
 
 
+def is_template_file(path):
+    """
+    Return True if the given file path is an HTML file.
+    """
+    ext = os.path.splitext(path)[1].lower()
+    return ext in [
+        '.html',
+        '.htm',
+        '.xml',
+    ]
+
+
 def create_media_urls(nav, path_list):
     """
     Return a list of URLs that have been processed correctly for inclusion in
