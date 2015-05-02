@@ -87,7 +87,7 @@ class UtilsTests(unittest.TestCase):
             
         assertPathGenerated("img.png", "./img.png")
         assertPathGenerated("./img.png", "./img.png")
-        assertPathGenerated("/img.png", "/img.png")
+        assertPathGenerated("/img.png", "../img.png")
             
 
     def test_yaml_load(self):
