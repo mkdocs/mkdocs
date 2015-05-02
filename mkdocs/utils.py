@@ -9,37 +9,33 @@ and structure of the site and pages in the site.
 
 import os
 import shutil
+
 import markdown
+import six
+import yaml
+
 from mkdocs import toc
+from mkdocs.legacy import OrderedDict
 
-from six.moves.urllib.parse import urlparse
-from six.moves.urllib.request import pathname2url
 
-try:
-    from collections import OrderedDict
-    import yaml
+def yaml_load(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
+    """
+    Make all YAML dictionaries load as ordered Dicts.
+    http://stackoverflow.com/a/21912744/3609487
+    """
+    class OrderedLoader(Loader):
+        pass
 
-    def yaml_load(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
-        """
-        Make all YAML dictionaries load as ordered Dicts.
-        http://stackoverflow.com/a/21912744/3609487
-        """
-        class OrderedLoader(Loader):
-            pass
+    def construct_mapping(loader, node):
+        loader.flatten_mapping(node)
+        return object_pairs_hook(loader.construct_pairs(node))
 
-        def construct_mapping(loader, node):
-            loader.flatten_mapping(node)
-            return object_pairs_hook(loader.construct_pairs(node))
+    OrderedLoader.add_constructor(
+        yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
+        construct_mapping
+    )
 
-        OrderedLoader.add_constructor(
-            yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
-            construct_mapping
-        )
-
-        return yaml.load(stream, OrderedLoader)
-except ImportError:
-    # Can be removed when Py26 support is removed
-    from yaml import load as yaml_load  # noqa
+    return yaml.load(stream, OrderedLoader)
 
 
 def reduce_list(data_set):
@@ -216,7 +212,7 @@ def create_media_urls(nav, path_list):
 
     for path in path_list:
         # Allow links to fully qualified URL's
-        parsed = urlparse(path)
+        parsed = six.moves.urllib.parse.urlparse(path)
         if parsed.netloc:
             final_urls.append(path)
             continue
@@ -243,7 +239,7 @@ def create_relative_media_url(nav, url):
     """
 
     # Allow links to fully qualified URL's
-    parsed = urlparse(url)
+    parsed = six.moves.urllib.parse.urlparse(url)
     if parsed.netloc:
         return url
 
@@ -272,7 +268,7 @@ def path_to_url(path):
     if os.path.sep == '/':
         return path
 
-    return pathname2url(path)
+    return six.moves.urllib.request.pathname2url(path)
 
 
 def convert_markdown(markdown_source, extensions=None, extension_configs=None):

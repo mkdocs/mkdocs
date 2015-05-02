@@ -8,7 +8,8 @@ import unittest
 
 from six.moves import zip
 
-from mkdocs import build, nav, config
+from mkdocs import build, nav
+from mkdocs.config import base as config_base, defaults as config_defaults
 from mkdocs.exceptions import MarkdownNotFound
 from mkdocs.tests.base import dedent
 
@@ -279,11 +280,13 @@ class BuildTests(unittest.TestCase):
             os.mkdir(os.path.join(docs_dir, '.git'))
             open(os.path.join(docs_dir, '.git/hidden'), 'w').close()
 
-            conf = config.validate_config({
+            conf = config_base.Config(schema=config_defaults.DEFAULT_CONFIG)
+            conf.load_dict({
                 'site_name': 'Example',
                 'docs_dir': docs_dir,
                 'site_dir': site_dir
             })
+            conf.validate()
             build.build(conf)
 
             # Verify only the markdown (coverted to html) and the image are copied.
