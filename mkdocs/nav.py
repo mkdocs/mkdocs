@@ -41,7 +41,7 @@ class SiteNavigation(object):
 
     def __str__(self):
         return ''.join([str(item) for item in self])
-    
+
     def __repr__(self):
         return repr(self.__dict__)
 
@@ -136,10 +136,9 @@ class FileContext(object):
         absolute filepath, given the context of the current page.
         """
         return os.path.normpath(os.path.join(self.base_path, path))
-    
+
     def __repr__(self):
         return repr(self.__dict__)
-    
 
 
 class Page(object):

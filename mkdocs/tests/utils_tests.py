@@ -76,19 +76,18 @@ class UtilsTests(unittest.TestCase):
         '''
         test special case where there's a sub/index.md page
         '''
-        
-        site_navigation = nav.SiteNavigation([('index.md', 'Home'),('subpage/index.md', 'sub index')])
+
+        site_navigation = nav.SiteNavigation([('index.md', 'Home'), ('subpage/index.md', 'sub index')])
         site_navigation.url_context.set_current_url('/subpage/')
         site_navigation.file_context.current_file = "subpage/index.md"
-        
-        def assertPathGenerated(declared,expected):
+
+        def assertPathGenerated(declared, expected):
             url = utils.create_relative_media_url(site_navigation, declared)
             self.assertEqual(url, expected)
-            
+
         assertPathGenerated("img.png", "./img.png")
         assertPathGenerated("./img.png", "./img.png")
         assertPathGenerated("/img.png", "../img.png")
-            
 
     def test_yaml_load(self):
         try:

@@ -255,7 +255,7 @@ def create_relative_media_url(nav, url):
         url = url[1:]
     else:
         base = nav.url_context.base_path
-        
+
     relative_base = nav.url_context.make_relative(base)
     if relative_base == "." and url.startswith("./"):
         relative_url = url
