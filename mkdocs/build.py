@@ -14,7 +14,7 @@ import os
 import logging
 from io import open
 
-log = logging.getLogger('mkdocs')
+log = logging.getLogger(__name__)
 
 
 def convert_markdown(markdown_source, site_navigation=None, extensions=(), strict=False):
