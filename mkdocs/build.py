@@ -5,7 +5,7 @@ from datetime import datetime
 
 from jinja2.exceptions import TemplateNotFound
 import mkdocs
-from mkdocs import nav, utils
+from mkdocs import nav, utils, search
 from mkdocs.utils import RelativePathExtension
 from six.moves.urllib.parse import urljoin
 import jinja2
@@ -94,7 +94,6 @@ def get_global_context(nav, config):
     }
 
 
-
 def get_page_context(page, content, toc, meta, config):
     """
     Generate the page context by extending the global context and adding page
@@ -132,24 +131,39 @@ def get_page_context(page, content, toc, meta, config):
 
         'current_page': page,
         'previous_page': page.previous_page,
-        'next_page': page.next_page,
+        'next_page': page.next_page
     }
 
 
-def build_404(config, env, site_navigation):
+def build_sitemap(config, env, site_navigation):
 
-    log.debug("Building 404.html page")
+    log.debug("Building sitemap.xml")
+
+    template = env.get_template('sitemap.xml')
+    context = get_global_context(site_navigation, config)
+    output_content = template.render(context)
+    output_path = os.path.join(config['site_dir'], 'sitemap.xml')
+    utils.write_file(output_content.encode('utf-8'), output_path)
+
+
+def build_template(template_name, env, config, site_navigation=None):
+
+    log.debug("Building {0} page".format(template_name))
 
     try:
-        template = env.get_template('404.html')
+        template = env.get_template(template_name)
     except TemplateNotFound:
-        return
+        return False
 
-    global_context = get_global_context(site_navigation, config)
+    if site_navigation is not None:
+        context = get_global_context(site_navigation, config)
+    else:
+        context = {}
 
-    output_content = template.render(global_context)
-    output_path = os.path.join(config['site_dir'], '404.html')
+    output_content = template.render(context)
+    output_path = os.path.join(config['site_dir'], template_name)
     utils.write_file(output_content.encode('utf-8'), output_path)
+    return True
 
 
 def _build_page(page, config, site_navigation, env, dump_json):
@@ -197,25 +211,66 @@ def _build_page(page, config, site_navigation, env, dump_json):
     else:
         utils.write_file(output_content.encode('utf-8'), output_path)
 
+    return html_content, table_of_contents, meta
+
+
+def build_extra_templates(extra_templates, config, site_navigation=None):
+
+    log.debug("Building extra_templates page")
+
+    for extra_template in extra_templates:
+
+        input_path = os.path.join(config['docs_dir'], extra_template)
+
+        with open(input_path, 'r', encoding='utf-8') as template_file:
+            template = jinja2.Template(template_file.read())
+
+        if site_navigation is not None:
+            context = get_global_context(site_navigation, config)
+        else:
+            context = {}
+
+        output_content = template.render(context)
+        output_path = os.path.join(config['site_dir'], extra_template)
+        utils.write_file(output_content.encode('utf-8'), output_path)
+
 
 def build_pages(config, dump_json=False):
     """
     Builds all the pages and writes them into the build directory.
     """
     site_navigation = nav.SiteNavigation(config['pages'], config['use_directory_urls'])
-    loader = jinja2.FileSystemLoader(config['theme_dir'])
+    loader = jinja2.FileSystemLoader(config['theme_dir'] + [config['mkdocs_templates'], ])
     env = jinja2.Environment(loader=loader)
+    search_index = search.SearchIndex()
 
-    build_404(config, env, site_navigation)
+    build_template('404.html', env, config, site_navigation)
+
+    if not build_template('search.html', env, config, site_navigation):
+        log.debug("Search is enabled but the theme doesn't contain a "
+                  "search.html file. Assuming the theme implements search "
+                  "within a modal.")
+    build_sitemap(config, env, site_navigation)
+
+    build_extra_templates(config['extra_templates'], config, site_navigation)
 
     for page in site_navigation.walk_pages():
 
         try:
             log.debug("Building page %s", page.input_path)
-            _build_page(page, config, site_navigation, env, dump_json)
-        except:
+            build_result = _build_page(page, config, site_navigation, env, dump_json)
+            if build_result is None:
+                continue
+            html_content, table_of_contents, meta = build_result
+            search_index.add_entry_from_context(
+                page, html_content, table_of_contents)
+        except Exception:
             log.error("Error building page %s", page.input_path)
             raise
+
+    search_index = search_index.generate_search_index()
+    json_output_path = os.path.join(config['site_dir'], 'mkdocs', 'search_index.json')
+    utils.write_file(search_index.encode('utf-8'), json_output_path)
 
 
 def build(config, live_server=False, dump_json=False, clean_site_dir=False):
