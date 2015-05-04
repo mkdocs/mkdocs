@@ -161,7 +161,7 @@ def build_sitemap(config, env, site_navigation):
 
 def build_template(template_name, env, config, site_navigation=None):
 
-    log.debug("Building 404.html page")
+    log.debug("Building {0} page".format(template_name))
 
     try:
         template = env.get_template(template_name)
