@@ -78,13 +78,13 @@ def get_global_context(nav, config):
         'nav': nav,
         'base_url': nav.url_context.make_relative('/'),
         'homepage_url': nav.homepage.url,
+        'site_url': config['site_url'],
 
         'extra_css': extra_css,
         'extra_javascript': extra_javascript,
 
         'include_nav': config['include_nav'],
         'include_next_prev': config['include_next_prev'],
-        'include_search': config['include_search'],
 
         'copyright': config['copyright'],
         'google_analytics': config['google_analytics'],
@@ -92,6 +92,7 @@ def get_global_context(nav, config):
         'mkdocs_version': mkdocs.__version__,
         'build_date_utc': datetime.utcnow()
     }
+
 
 
 def get_page_context(page, content, toc, meta, config):
