@@ -6,8 +6,8 @@ from datetime import datetime
 from jinja2.exceptions import TemplateNotFound
 import mkdocs
 from mkdocs import nav, utils
-from mkdocs.compat import urljoin
 from mkdocs.utils import RelativePathExtension
+from six.moves.urllib.parse import urljoin
 import jinja2
 import json
 import os
