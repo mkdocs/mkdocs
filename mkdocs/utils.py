@@ -6,17 +6,14 @@ Standalone file utils.
 Nothing in this module should have an knowledge of config or the layout
 and structure of the site and pages in the site.
 """
-from markdown import Extension
-from markdown.treeprocessors import Treeprocessor
 
 import os
 import shutil
 import markdown
 import logging
 from mkdocs import toc
-from mkdocs.exceptions import MarkdownNotFound
 
-from six.moves.urllib.parse import urlparse, urlunparse
+from six.moves.urllib.parse import urlparse
 from six.moves.urllib.request import pathname2url
 
 log = logging.getLogger(__name__)

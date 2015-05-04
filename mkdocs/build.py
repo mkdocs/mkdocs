@@ -11,7 +11,7 @@ from six.moves.urllib.parse import urljoin
 import jinja2
 import json
 
-from mkdocs import nav, search, toc, utils
+from mkdocs import nav, search, utils
 from mkdocs.relative_path_ext import RelativePathExtension
 import mkdocs
 
