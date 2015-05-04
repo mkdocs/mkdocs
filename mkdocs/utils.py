@@ -12,12 +12,14 @@ from markdown.treeprocessors import Treeprocessor
 import os
 import shutil
 import markdown
+import logging
 from mkdocs import toc
 from mkdocs.exceptions import MarkdownNotFound
-from mkdocs.relative_path_ext import log
 
 from six.moves.urllib.parse import urlparse, urlunparse
 from six.moves.urllib.request import pathname2url
+
+log = logging.getLogger(__name__)
 
 try:
     from collections import OrderedDict
