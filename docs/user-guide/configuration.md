@@ -107,6 +107,8 @@ If you have a lot of project documentation you might choose to use headings to b
     - ['user-guide/configuration.md', 'User Guide', 'Configuring Mashmallow']
     - ['about/license.md', 'About', 'License']
 
+See also the section on [configuring pages and navigation](/user-guide/writing-your-docs/#configure-pages-and-navigation) for a more detailed breakdown.
+
 ## Build directories
 
 

@@ -1,5 +1,5 @@
 site_name: MkDocs
-site_url: http://www.mkdocs.org/
+site_url: http://www.mkdocs.org
 site_description: Project documentation with Markdown.
 
 repo_url: https://github.com/mkdocs/mkdocs/
@@ -12,6 +12,11 @@ pages:
 - ['about/license.md', 'About', 'License']
 - ['about/release-notes.md', 'About', 'Release Notes']
 - ['about/contributing.md', 'About', 'Contributing']
+
+markdown_extensions:
+    toc:
+        permalink: ""
+    admonition:
 
 copyright: Copyright &copy; 2014, <a href="https://twitter.com/_tomchristie">Tom Christie</a>.
 google_analytics: ['UA-27795084-5', 'mkdocs.org']

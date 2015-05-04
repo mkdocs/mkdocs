@@ -4,6 +4,7 @@
 import unittest
 
 from mkdocs import nav, utils
+from mkdocs.tests.base import dedent
 
 
 class UtilsTests(unittest.TestCase):
@@ -57,7 +58,7 @@ class UtilsTests(unittest.TestCase):
             ('about.md', 'About')
         ]
         expected_results = {
-            'https://media.cdn.org/jquery.js': 'https://media.cdn.org/jquery.js',
+            'https://media.cdn.org/jq.js': 'https://media.cdn.org/jq.js',
             'http://media.cdn.org/jquery.js': 'http://media.cdn.org/jquery.js',
             '//media.cdn.org/jquery.js': '//media.cdn.org/jquery.js',
             'media.cdn.org/jquery.js': './media.cdn.org/jquery.js',
@@ -67,3 +68,43 @@ class UtilsTests(unittest.TestCase):
         for path, expected_result in expected_results.items():
             urls = utils.create_media_urls(site_navigation, [path])
             self.assertEqual(urls[0], expected_result)
+
+    def test_yaml_load(self):
+        try:
+            from collections import OrderedDict
+        except ImportError:
+            # Don't test if can't import OrderdDict
+            # Exception can be removed when Py26 support is removed
+            return
+
+        yaml_text = dedent('''
+            test:
+                key1: 1
+                key2: 2
+                key3: 3
+                key4: 4
+                key5: 5
+                key5: 6
+                key3: 7
+        ''')
+
+        self.assertEqual(
+            utils.yaml_load(yaml_text),
+            OrderedDict([('test', OrderedDict([('key1', 1), ('key2', 2),
+                                               ('key3', 7), ('key4', 4),
+                                               ('key5', 6)]))])
+        )
+
+    def test_reduce_list(self):
+        self.assertEqual(
+            utils.reduce_list([1, 2, 3, 4, 5, 5, 2, 4, 6, 7, 8]),
+            [1, 2, 3, 4, 5, 6, 7, 8]
+        )
+
+    def test_get_themes(self):
+
+        self.assertEqual(
+            sorted(utils.get_theme_names()),
+            sorted(['flatly', 'cerulean', 'slate', 'bootstrap', 'yeti',
+                    'spacelab', 'united', 'readable', 'simplex', 'mkdocs',
+                    'cosmo', 'journal', 'cyborg', 'readthedocs', 'amelia']))

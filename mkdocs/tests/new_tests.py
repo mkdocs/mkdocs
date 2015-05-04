@@ -15,7 +15,7 @@ class NewTests(unittest.TestCase):
         tempdir = tempfile.mkdtemp()
         os.chdir(tempdir)
 
-        new.new(["myproject", ])
+        new.new("myproject")
 
         expected_paths = [
             os.path.join(tempdir, "myproject"),

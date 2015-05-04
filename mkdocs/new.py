@@ -25,13 +25,7 @@ For full documentation visit [mkdocs.org](http://mkdocs.org).
 """
 
 
-def new(args):
-
-    if len(args) != 1:
-        print("Usage 'mkdocs new [directory-name]'")
-        return
-
-    output_dir = args[0]
+def new(output_dir):
 
     docs_dir = os.path.join(output_dir, 'docs')
     config_path = os.path.join(output_dir, 'mkdocs.yml')

@@ -10,9 +10,8 @@ To upgrade MkDocs to the latest version, use pip:
 
 You can determine your currently installed version using `mkdocs` with no arguements and the version is included in the output:
 
-    $ mkdocs
-    MkDocs (version 0.12.0)
-    mkdocs [help|new|build|serve|gh-deploy|json] {options}
+    $ mkdocs --version
+    mkdocs, version 0.13.0
 
 
 ## version 0.12.2 (2015-04-22)

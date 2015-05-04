@@ -6,6 +6,7 @@ Deals with generating the site-wide navigation.
 This consists of building a set of interlinked page and header objects.
 """
 
+import datetime
 import logging
 import os
 
@@ -141,6 +142,7 @@ class Page(object):
         self.abs_url = url
         self.active = False
         self.url_context = url_context
+        self.update_date = datetime.datetime.now().strftime("%Y-%m-%d")
 
         # Relative paths to the input markdown file and output html file.
         self.input_path = path
