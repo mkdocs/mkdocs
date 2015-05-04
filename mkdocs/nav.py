@@ -17,6 +17,9 @@ log = logging.getLogger(__name__)
 def file_to_title(filename):
     """
     Automatically generate a default title, given a filename.
+
+    It will first try to get the title from the metadata, then from the
+     first header and finally will generate one from the file name.
     """
     if utils.is_homepage(filename):
         return 'Home'
@@ -25,7 +28,9 @@ def file_to_title(filename):
     try:
         with open(filename, 'r') as f:
             lines = f.read()
-            html_content, table_of_contents, meta = utils.convert_markdown(lines, ['toc'])
+            html_content, table_of_contents, meta = utils.convert_markdown(lines, ['meta','toc'])
+            if "title" in meta:
+                return meta["title"][0]
             if len(table_of_contents.items) > 0:
                 return table_of_contents.items[0].title
     except IOError:

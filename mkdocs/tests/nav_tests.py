@@ -355,3 +355,9 @@ class SiteNavigationTests(unittest.TestCase):
 
         title = nav.file_to_title("mkdocs/tests/resources/with_title.md")
         self.assertEqual(title, "Title")
+
+        title = nav.file_to_title("mkdocs/tests/resources/title_metadata.md")
+        self.assertEqual(title, "Metadata Title")
+
+        title = nav.file_to_title("mkdocs/tests/resources/no_title_metadata.md")
+        self.assertEqual(title, "Title")
