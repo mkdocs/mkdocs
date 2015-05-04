@@ -7,7 +7,7 @@ from jinja2.exceptions import TemplateNotFound
 import mkdocs
 from mkdocs import nav, utils
 from mkdocs.compat import urljoin
-from mkdocs.relative_path_ext import RelativePathExtension
+from mkdocs.utils import RelativePathExtension
 import jinja2
 import json
 import os
