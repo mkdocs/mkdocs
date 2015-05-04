@@ -10,9 +10,8 @@ from jinja2.exceptions import TemplateNotFound
 from six.moves.urllib.parse import urljoin
 import jinja2
 import json
-import markdown
 
-from mkdocs import nav, search, toc, utils
+from mkdocs import nav, search, utils
 from mkdocs.relative_path_ext import RelativePathExtension
 import mkdocs
 
@@ -39,19 +38,8 @@ def convert_markdown(markdown_source, site_navigation=None, extensions=(), stric
     builtin_extensions = ['meta', 'toc', 'tables', 'fenced_code']
     mkdocs_extensions = [RelativePathExtension(site_navigation, strict), ]
     extensions = utils.reduce_list(builtin_extensions + mkdocs_extensions + user_extensions)
-    md = markdown.Markdown(
-        extensions=extensions,
-        extension_configs=extension_configs
-    )
-    html_content = md.convert(markdown_source)
 
-    # On completely blank markdown files, no Meta or tox properties are added
-    # to the generated document.
-    meta = getattr(md, 'Meta', {})
-    toc_html = getattr(md, 'toc', '')
-
-    # Post process the generated table of contents into a data structure
-    table_of_contents = toc.TableOfContents(toc_html)
+    html_content, table_of_contents, meta = utils.convert_markdown(markdown_source, extensions, extension_configs)
 
     return (html_content, table_of_contents, meta)
 

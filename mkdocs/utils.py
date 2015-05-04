@@ -9,9 +9,15 @@ and structure of the site and pages in the site.
 
 import os
 import shutil
+import markdown
+import logging
+from mkdocs import toc
 
 from six.moves.urllib.parse import urlparse
 from six.moves.urllib.request import pathname2url
+
+log = logging.getLogger(__name__)
+
 try:
     from collections import OrderedDict
     import yaml
@@ -270,6 +276,34 @@ def path_to_url(path):
         return path
 
     return pathname2url(path)
+
+
+def convert_markdown(markdown_source, extensions=None, extension_configs=None):
+    """
+    Convert the Markdown source file to HTML content, and additionally
+    return the parsed table of contents, and a dictionary of any metadata
+    that was specified in the Markdown file.
+    `extensions` is an optional sequence of Python Markdown extensions to add
+    to the default set.
+    """
+    extensions = extensions or []
+    extension_configs = extension_configs or {}
+
+    md = markdown.Markdown(
+        extensions=extensions,
+        extension_configs=extension_configs
+    )
+    html_content = md.convert(markdown_source)
+
+    # On completely blank markdown files, no Meta or tox properties are added
+    # to the generated document.
+    meta = getattr(md, 'Meta', {})
+    toc_html = getattr(md, 'toc', '')
+
+    # Post process the generated table of contents into a data structure
+    table_of_contents = toc.TableOfContents(toc_html)
+
+    return (html_content, table_of_contents, meta)
 
 
 def get_theme_names():
