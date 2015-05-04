@@ -2,17 +2,18 @@
 from __future__ import print_function
 
 from datetime import datetime
+from io import open
+import logging
+import os
 
 from jinja2.exceptions import TemplateNotFound
-import mkdocs
-from mkdocs import nav, utils, search
-from mkdocs.utils import RelativePathExtension
 from six.moves.urllib.parse import urljoin
 import jinja2
 import json
-import os
-import logging
-from io import open
+
+from mkdocs import nav, search, toc, utils
+from mkdocs.relative_path_ext import RelativePathExtension
+import mkdocs
 
 log = logging.getLogger(__name__)
 
