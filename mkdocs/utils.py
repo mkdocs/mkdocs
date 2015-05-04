@@ -280,26 +280,16 @@ def path_to_url(path):
 
     return pathname2url(path)
 
-
-def convert_markdown(markdown_source, site_navigation=None, extensions=(), strict=False):
+def convert_markdown(markdown_source, extensions=None, extension_configs=None):
     """
     Convert the Markdown source file to HTML content, and additionally
     return the parsed table of contents, and a dictionary of any metadata
     that was specified in the Markdown file.
-
     `extensions` is an optional sequence of Python Markdown extensions to add
     to the default set.
     """
-    # Generate the HTML from the markdown source
-    if isinstance(extensions, dict):
-        user_extensions = list(extensions.keys())
-        extension_configs = dict([(k, v) for k, v in extensions.items() if isinstance(v, dict)])
-    else:
-        user_extensions = list(extensions)
-        extension_configs = {}
-    builtin_extensions = ['meta', 'toc', 'tables', 'fenced_code']
-    mkdocs_extensions = [RelativePathExtension(site_navigation, strict), ]
-    extensions = set(builtin_extensions + mkdocs_extensions + user_extensions)
+    extensions = extensions or []
+    extension_configs = extension_configs or {}
 
     md = markdown.Markdown(
         extensions=extensions,
@@ -315,8 +305,7 @@ def convert_markdown(markdown_source, site_navigation=None, extensions=(), stric
     # Post process the generated table of contents into a data structure
     table_of_contents = toc.TableOfContents(toc_html)
 
-    return html_content, table_of_contents, meta
-
+    return (html_content, table_of_contents, meta)
 
 def get_theme_names():
     """Return a list containing all the names of all the builtin themes."""

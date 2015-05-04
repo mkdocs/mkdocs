@@ -11,7 +11,7 @@ from six.moves import zip
 from mkdocs import build, nav, config
 from mkdocs.exceptions import MarkdownNotFound
 from mkdocs.tests.base import dedent
-from mkdocs.utils import convert_markdown
+from mkdocs.build import convert_markdown
 
 
 class BuildTests(unittest.TestCase):

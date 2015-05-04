@@ -36,7 +36,7 @@ def convert_markdown(markdown_source, site_navigation=None, extensions=(), stric
         extension_configs = {}
     builtin_extensions = ['meta', 'toc', 'tables', 'fenced_code']
     mkdocs_extensions = [RelativePathExtension(site_navigation, strict), ]
-    extensions = set(builtin_extensions + mkdocs_extensions + user_extensions)
+    extensions = utils.reduce_list(builtin_extensions + mkdocs_extensions + user_extensions)
 
     html_content, table_of_contents, meta = utils.convert_markdown(markdown_source, extensions, extension_configs)
 
