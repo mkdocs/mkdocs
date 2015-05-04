@@ -280,6 +280,7 @@ def path_to_url(path):
 
     return pathname2url(path)
 
+
 def convert_markdown(markdown_source, extensions=None, extension_configs=None):
     """
     Convert the Markdown source file to HTML content, and additionally
@@ -306,6 +307,7 @@ def convert_markdown(markdown_source, extensions=None, extension_configs=None):
     table_of_contents = toc.TableOfContents(toc_html)
 
     return (html_content, table_of_contents, meta)
+
 
 def get_theme_names():
     """Return a list containing all the names of all the builtin themes."""
