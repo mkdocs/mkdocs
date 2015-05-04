@@ -6,6 +6,7 @@ Deals with generating the site-wide navigation.
 This consists of building a set of interlinked page and header objects.
 """
 
+import datetime
 import logging
 import os
 
@@ -18,13 +19,12 @@ def file_to_title(filename):
     """
     Automatically generate a default title, given a filename.
 
-    It will first try to get the title from the metadata, then from the
-     first header and finally will generate one from the file name.
+    The method parses the file to check for a title, uses the filename
+     as a title otherwise.
     """
     if utils.is_homepage(filename):
         return 'Home'
 
-    table_of_contents = None
     try:
         with open(filename, 'r') as f:
             lines = f.read()
@@ -158,6 +158,7 @@ class Page(object):
         self.abs_url = url
         self.active = False
         self.url_context = url_context
+        self.update_date = datetime.datetime.now().strftime("%Y-%m-%d")
 
         # Relative paths to the input markdown file and output html file.
         self.input_path = path

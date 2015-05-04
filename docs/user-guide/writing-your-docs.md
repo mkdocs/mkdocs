@@ -4,6 +4,38 @@ How to write and layout your markdown source files.
 
 ---
 
+## Configure Pages and Navigation
+
+The [pages configuration](/user-guide/configuration/#pages) in your `mkdocs.yml` defines which pages are built by MkDocs and how they appear in the documentation navigation. If not provided, the pages configuration will be automatically created by discovering all the Markdown files in the [documentation directory](/user-guide/configuration/#docs_dir).
+
+A simple pages configuration looks like this:
+
+    pages:
+    - 'index.md'
+    - 'about.md'
+
+With this example we will build two pages at the top level and they will automatically have their titles inferred from the filename. To provide a custom name for these pages, they can be added after the filename.
+
+    pages:
+    - ['index.md', 'Home']
+    - ['about.md', 'About MkDocs']
+
+### Multilevel documentation
+
+To create a second level in the navigation and group topics, the category can be provided before the page title. This is best demonstrated in a documentation project with more pages and is slighlt more complicated.
+
+    pages:
+    - ['index.md', 'Home']
+    - ['user-guide/writing-your-docs.md', 'User Guide', 'Writing your docs']
+    - ['user-guide/styling-your-docs.md', 'User Guide', 'Styling your docs']
+    - ['about/license.md', 'About', 'License']
+    - ['about/release-notes.md', 'About', 'Release Notes']
+
+With the above configuration we have three top level sections Home, User Guide and About. Then under User Guide we have two pages, Writing your docs and Styling your docs. Under the About section we also have two pages, License and Release Notes
+
+*Note:* At present MkDocs only supports a second level of navigation.
+
+
 ## File layout
 
 Your documentation source should be written as regular Markdown files, and placed in a directory somewhere in your project.  Normally this directory will be named `docs` and will exist at the top level of your project, alongside the `mkdocs.yml` configuration file.

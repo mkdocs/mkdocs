@@ -7,12 +7,46 @@ Nothing in this module should have an knowledge of config or the layout
 and structure of the site and pages in the site.
 """
 
-import markdown
 import os
 import shutil
-
-from mkdocs.compat import urlparse, pathname2url
+import markdown
 from mkdocs import toc
+from mkdocs.relative_path_ext import RelativePathExtension
+
+from six.moves.urllib.parse import urlparse
+from six.moves.urllib.request import pathname2url
+
+try:
+    from collections import OrderedDict
+    import yaml
+
+    def yaml_load(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
+        """
+        Make all YAML dictionaries load as ordered Dicts.
+        http://stackoverflow.com/a/21912744/3609487
+        """
+        class OrderedLoader(Loader):
+            pass
+
+        def construct_mapping(loader, node):
+            loader.flatten_mapping(node)
+            return object_pairs_hook(loader.construct_pairs(node))
+
+        OrderedLoader.add_constructor(
+            yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
+            construct_mapping
+        )
+
+        return yaml.load(stream, OrderedLoader)
+except ImportError:
+    # Can be removed when Py26 support is removed
+    from yaml import load as yaml_load  # noqa
+
+
+def reduce_list(data_set):
+    """ Reduce duplicate items in a list and preserve order """
+    seen = set()
+    return [item for item in data_set if item not in seen and not seen.add(item)]
 
 
 def copy_file(source_path, output_path):
@@ -162,6 +196,18 @@ def is_html_file(path):
     ]
 
 
+def is_template_file(path):
+    """
+    Return True if the given file path is an HTML file.
+    """
+    ext = os.path.splitext(path)[1].lower()
+    return ext in [
+        '.html',
+        '.htm',
+        '.xml',
+    ]
+
+
 def create_media_urls(nav, path_list):
     """
     Return a list of URLs that have been processed correctly for inclusion in
@@ -230,7 +276,7 @@ def path_to_url(path):
     return pathname2url(path)
 
 
-def convert_markdown(markdown_source, extensions=None, extension_configs=None):
+def convert_markdown(markdown_source, site_navigation=None, extensions=(), strict=False):
     """
     Convert the Markdown source file to HTML content, and additionally
     return the parsed table of contents, and a dictionary of any metadata
@@ -239,8 +285,16 @@ def convert_markdown(markdown_source, extensions=None, extension_configs=None):
     `extensions` is an optional sequence of Python Markdown extensions to add
     to the default set.
     """
-    extensions = extensions or []
-    extension_configs = extension_configs or {}
+    # Generate the HTML from the markdown source
+    if isinstance(extensions, dict):
+        user_extensions = list(extensions.keys())
+        extension_configs = dict([(k, v) for k, v in extensions.items() if isinstance(v, dict)])
+    else:
+        user_extensions = list(extensions)
+        extension_configs = {}
+    builtin_extensions = ['meta', 'toc', 'tables', 'fenced_code']
+    mkdocs_extensions = [RelativePathExtension(site_navigation, strict), ]
+    extensions = set(builtin_extensions + mkdocs_extensions + user_extensions)
 
     md = markdown.Markdown(
         extensions=extensions,
@@ -256,4 +310,11 @@ def convert_markdown(markdown_source, extensions=None, extension_configs=None):
     # Post process the generated table of contents into a data structure
     table_of_contents = toc.TableOfContents(toc_html)
 
-    return (html_content, table_of_contents, meta)
+    return html_content, table_of_contents, meta
+
+
+def get_theme_names():
+    """Return a list containing all the names of all the builtin themes."""
+
+    return os.listdir(os.path.join(os.path.dirname(__file__), 'themes'))
+

@@ -20,22 +20,20 @@ import os
 import click
 import contextlib
 import sys
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import StringIO
 
-from mkdocs import main as mkdocs_main
+from six.moves import cStringIO
+
+from mkdocs import cli, config, serve, build, utils
 
 MKDOCS_CONFIG = os.path.join(os.path.dirname(__file__), '../../mkdocs.yml')
-MKDOCS_THEMES = os.listdir(os.path.join(os.path.dirname(__file__), '../themes'))
+MKDOCS_THEMES = utils.get_theme_names()
 
 
 @contextlib.contextmanager
-def capture():
+def capture_stdout():
     oldout, olderr = sys.stdout, sys.stderr
     try:
-        out = [StringIO(), StringIO()]
+        out = [cStringIO(), cStringIO()]
         sys.stdout, sys.stderr = out
         yield out
     finally:
@@ -44,7 +42,7 @@ def capture():
         out[1] = out[1].getvalue()
 
 
-def build(theme_name, output=None, config=None, quiet=False):
+def run_build(theme_name, output=None, config_file=None, quiet=False):
     """
     Given a theme name and output directory use the configuration
     for the MkDocs documentation and overwrite the site_dir and
@@ -52,7 +50,7 @@ def build(theme_name, output=None, config=None, quiet=False):
     each theme, one at a time.
     """
 
-    serve = output is None
+    should_serve = output is None
     options = {}
 
     if not serve:
@@ -60,29 +58,33 @@ def build(theme_name, output=None, config=None, quiet=False):
             os.makedirs(output)
         options['site_dir'] = os.path.join(output, theme_name)
 
-    if config is None:
-        config = MKDOCS_CONFIG
+    if config_file is None:
+        config_file = open(MKDOCS_CONFIG, 'rb')
 
     if not quiet:
-        print("Using config: {0}".format(config))
+        print("Using config: {0}".format(config_file))
 
-    options['config'] = config
-    options['theme'] = theme_name
+    cli.configure_logging()
+    conf = config.load_config(config_file=config_file, theme=theme_name)
 
-    if serve:
+    if should_serve:
         if not quiet:
             print("Serving {0}".format(theme_name))
         try:
-            mkdocs_main.main('serve', None, options)
+            serve.serve(conf)
         except KeyboardInterrupt:
             return
     else:
         if not quiet:
             print("Building {0}".format(theme_name))
 
-        with capture() as out:
-            mkdocs_main.main('build', None, options)
-            mkdocs_main.main('json', None, options)
+        try:
+            with capture_stdout() as out:
+                build.build(conf)
+                build.build(conf, dump_json=True)
+        except Exception:
+            print("Failed building {0}".format(theme_name), file=sys.stderr)
+            raise
 
         if not quiet:
             print(''.join(out))
@@ -94,13 +96,13 @@ def build(theme_name, output=None, config=None, quiet=False):
               type=click.Path(file_okay=False, writable=True))
 @click.option('--config',
               help="The MkDocs project config to use.",
-              type=click.Path(dir_okay=False))
+              type=click.File('rb'))
 @click.option('--quiet', is_flag=True)
 def main(output=None, config=None, quiet=False):
 
     for theme in sorted(MKDOCS_THEMES):
 
-        build(theme, output, config, quiet)
+        run_build(theme, output, config, quiet)
 
     print("The theme builds are available in {0}".format(output))
 

@@ -1,4 +1,7 @@
-class MkDocsException(Exception):
+from click import ClickException
+
+
+class MkDocsException(ClickException):
     """Base exceptions for all MkDocs Exceptions"""
 
 
