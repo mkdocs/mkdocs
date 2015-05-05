@@ -84,9 +84,9 @@ class BuildTests(unittest.TestCase):
     def test_convert_internal_media(self):
         """Test relative image URL's are the same for different base_urls"""
         pages = [
-            ('index.md',),
-            ('internal.md',),
-            ('sub/internal.md')
+            'index.md',
+            'internal.md',
+            'sub/internal.md',
         ]
 
         site_navigation = nav.SiteNavigation(pages)
@@ -107,9 +107,9 @@ class BuildTests(unittest.TestCase):
     def test_convert_internal_asbolute_media(self):
         """Test absolute image URL's are correct for different base_urls"""
         pages = [
-            ('index.md',),
-            ('internal.md',),
-            ('sub/internal.md')
+            'index.md',
+            'internal.md',
+            'sub/internal.md',
         ]
 
         site_navigation = nav.SiteNavigation(pages)
@@ -129,9 +129,9 @@ class BuildTests(unittest.TestCase):
 
     def test_dont_convert_code_block_urls(self):
         pages = [
-            ('index.md',),
-            ('internal.md',),
-            ('sub/internal.md')
+            'index.md',
+            'internal.md',
+            'sub/internal.md',
         ]
 
         site_navigation = nav.SiteNavigation(pages)
@@ -150,9 +150,9 @@ class BuildTests(unittest.TestCase):
     def test_anchor_only_link(self):
 
         pages = [
-            ('index.md',),
-            ('internal.md',),
-            ('sub/internal.md')
+            'index.md',
+            'internal.md',
+            'sub/internal.md',
         ]
 
         site_navigation = nav.SiteNavigation(pages)
@@ -172,7 +172,7 @@ class BuildTests(unittest.TestCase):
         md_text = 'An [internal link](internal.md) to another document.'
         expected = '<p>An <a href="internal/index.html">internal link</a> to another document.</p>'
         pages = [
-            ('internal.md',)
+            'internal.md',
         ]
         site_navigation = nav.SiteNavigation(pages, use_directory_urls=False)
         html, toc, meta = build.convert_markdown(md_text, site_navigation=site_navigation)
@@ -297,9 +297,9 @@ class BuildTests(unittest.TestCase):
 
     def test_strict_mode_valid(self):
         pages = [
-            ('index.md',),
-            ('internal.md',),
-            ('sub/internal.md')
+            'index.md',
+            'internal.md',
+            'sub/internal.md',
         ]
         site_nav = nav.SiteNavigation(pages)
 
@@ -309,9 +309,9 @@ class BuildTests(unittest.TestCase):
 
     def test_strict_mode_invalid(self):
         pages = [
-            ('index.md',),
-            ('internal.md',),
-            ('sub/internal.md')
+            'index.md',
+            'internal.md',
+            'sub/internal.md',
         ]
         site_nav = nav.SiteNavigation(pages)
 

@@ -25,7 +25,7 @@ h3, h4, h5, h6 {
     color: #838383;
 }
 
-.wy-menu-vertical .toctree-l2 a {
+.wy-menu-vertical .subnav a {
     padding: 0.4045em 2.427em;
 }
 
@@ -115,4 +115,12 @@ code.cs, code.c {
     border-radius: 50px;
     padding: 6px 12px;
     border-color: #D1D4D5;
+}
+
+.wy-menu-vertical li ul {
+    display: inherit;
+}
+
+.wy-menu-vertical li ul.subnav ul.subnav{
+    padding-left: 1em;
 }

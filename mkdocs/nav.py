@@ -28,7 +28,8 @@ def file_to_title(filename):
     try:
         with open(filename, 'r') as f:
             lines = f.read()
-            _, table_of_contents, meta = utils.convert_markdown(lines, ['meta', 'toc'])
+            _, table_of_contents, meta = utils.convert_markdown(
+                lines, ['meta', 'toc'])
             if "title" in meta:
                 return meta["title"][0]
             if len(table_of_contents.items) > 0:
@@ -53,8 +54,8 @@ class SiteNavigation(object):
     def __init__(self, pages_config, use_directory_urls=True):
         self.url_context = URLContext()
         self.file_context = FileContext()
-        self.nav_items, self.pages = \
-            _generate_site_navigation(pages_config, self.url_context, use_directory_urls)
+        self.nav_items, self.pages = _generate_site_navigation(
+            pages_config, self.url_context, use_directory_urls)
         self.homepage = self.pages[0] if self.pages else None
         self.use_directory_urls = use_directory_urls
 
@@ -122,7 +123,8 @@ class URLContext(object):
                 return '.'
             return url.lstrip('/')
         # Under Python 2.6, relative_path adds an extra '/' at the end.
-        relative_path = os.path.relpath(url, start=self.base_path).rstrip('/') + suffix
+        relative_path = os.path.relpath(url, start=self.base_path)
+        relative_path = relative_path.rstrip('/') + suffix
 
         return utils.path_to_url(relative_path)
 
@@ -154,6 +156,7 @@ class FileContext(object):
 
 class Page(object):
     def __init__(self, title, url, path, url_context):
+
         self.title = title
         self.abs_url = url
         self.active = False
@@ -177,6 +180,10 @@ class Page(object):
     def is_homepage(self):
         return utils.is_homepage(self.input_path)
 
+    @property
+    def is_top_level(self):
+        return len(self.ancestors) == 0
+
     def __str__(self):
         return self._indent_print()
 
@@ -196,9 +203,14 @@ class Header(object):
     def __init__(self, title, children):
         self.title, self.children = title, children
         self.active = False
+        self.ancestors = []
 
     def __str__(self):
         return self._indent_print()
+
+    @property
+    def is_top_level(self):
+        return len(self.ancestors) == 0
 
     def _indent_print(self, depth=0):
         indent = '    ' * depth
@@ -209,74 +221,102 @@ class Header(object):
         return ret
 
 
-def _generate_site_navigation(pages_config, url_context, use_directory_urls=True):
+def _path_to_page(path, title, url_context, use_directory_urls):
+    if title is None:
+        title = file_to_title(path.split(os.path.sep)[-1])
+    url = utils.get_url_path(path, use_directory_urls)
+    return Page(title=title, url=url, path=path,
+                url_context=url_context)
+
+
+def _follow(config_line, url_context, use_dir_urls, header=None, title=None):
+
+    if isinstance(config_line, str):
+        path = os.path.normpath(config_line)
+        page = _path_to_page(path, title, url_context, use_dir_urls)
+
+        if header:
+            page.ancestors = [header]
+            header.children.append(page)
+
+        yield page
+        raise StopIteration
+
+    elif not isinstance(config_line, dict):
+        msg = ("Line in 'page' config is of type {0}, dict or string "
+               "expected. Config: {1}").format(type(config_line), config_line)
+        raise exceptions.ConfigurationError(msg)
+
+    if len(config_line) > 1:
+        raise exceptions.ConfigurationError(
+            "Page configs should be in the format 'name: markdown.md'. The "
+            "config contains an invalid entry: {0}".format(config_line))
+    elif len(config_line) == 0:
+        log.warning("Ignoring empty line in the pages config.")
+        raise StopIteration
+
+    next_cat_or_title, subpages_or_path = next(iter(config_line.items()))
+
+    if isinstance(subpages_or_path, str):
+        path = subpages_or_path
+        for sub in _follow(path, url_context, use_dir_urls, header=header, title=next_cat_or_title):
+            yield sub
+        raise StopIteration
+
+    elif not isinstance(subpages_or_path, list):
+        msg = ("Line in 'page' config is of type {0}, list or string "
+               "expected for sub pages. Config: {1}"
+               ).format(type(config_line), config_line)
+        raise exceptions.ConfigurationError(msg)
+
+    next_header = Header(title=next_cat_or_title, children=[])
+    if header:
+        next_header.ancestors = [header]
+        header.children.append(next_header)
+    yield next_header
+
+    subpages = subpages_or_path
+
+    for subpage in subpages:
+        for sub in _follow(subpage, url_context, use_dir_urls, next_header):
+            yield sub
+
+
+def _generate_site_navigation(pages_config, url_context, use_dir_urls=True):
     """
     Returns a list of Page and Header instances that represent the
     top level site navigation.
     """
     nav_items = []
     pages = []
+
     previous = None
 
     for config_line in pages_config:
-        if isinstance(config_line, str):
-            path = os.path.normpath(config_line)
-            title, child_title = None, None
-        elif len(config_line) in (1, 2, 3):
-            # Pad any items that don't exist with 'None'
-            padded_config = (list(config_line) + [None, None])[:3]
-            path, title, child_title = padded_config
-            path = os.path.normpath(path)
-        else:
-            msg = (
-                "Line in 'page' config contained %d items.  "
-                "Expected 1, 2 or 3 strings." % len(config_line)
-            )
-            raise exceptions.ConfigurationError(msg)
 
-        # If both the title and child_title are None, then we
-        # have just been given a path. If that path contains a /
-        # then lets automatically nest it.
-        if title is None and child_title is None and os.path.sep in path:
-            filename = path.split(os.path.sep)[-1]
-            child_title = file_to_title(filename)
+        for page_or_header in _follow(
+                config_line, url_context, use_dir_urls):
 
-        if title is None:
-            filename = path.split(os.path.sep)[0]
-            title = file_to_title(filename)
+            if isinstance(page_or_header, Header):
 
-        # If we don't have a child title but the other title is the same, we
-        # should be within a section and the child title needs to be inferred
-        # from the filename.
-        if len(nav_items) and title == nav_items[-1].title == title and child_title is None:
-            filename = path.split(os.path.sep)[-1]
-            child_title = file_to_title(filename)
+                if page_or_header.is_top_level:
+                    nav_items.append(page_or_header)
 
-        url = utils.get_url_path(path, use_directory_urls)
+            elif isinstance(page_or_header, Page):
 
-        if not child_title:
-            # New top level page.
-            page = Page(title=title, url=url, path=path, url_context=url_context)
-            nav_items.append(page)
-        elif not nav_items or (nav_items[-1].title != title):
-            # New second level page.
-            page = Page(title=child_title, url=url, path=path, url_context=url_context)
-            header = Header(title=title, children=[page])
-            nav_items.append(header)
-            page.ancestors = [header]
-        else:
-            # Additional second level page.
-            page = Page(title=child_title, url=url, path=path, url_context=url_context)
-            header = nav_items[-1]
-            header.children.append(page)
-            page.ancestors = [header]
+                if page_or_header.is_top_level:
+                    nav_items.append(page_or_header)
 
-        # Add in previous and next information.
-        if previous:
-            page.previous_page = previous
-            previous.next_page = page
-        previous = page
+                pages.append(page_or_header)
 
-        pages.append(page)
+                if previous:
+                    page_or_header.previous_page = previous
+                    previous.next_page = page_or_header
+                previous = page_or_header
+
+    if len(pages) == 0:
+        raise exceptions.ConfigurationError(
+            "No pages found in the pages config. "
+            "Remove it entirely to enable automatic page discovery.")
 
     return (nav_items, pages)
