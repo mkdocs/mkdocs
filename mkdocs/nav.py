@@ -28,7 +28,7 @@ def file_to_title(filename):
     try:
         with open(filename, 'r') as f:
             lines = f.read()
-            html_content, table_of_contents, meta = utils.convert_markdown(lines, ['meta', 'toc'])
+            _, table_of_contents, meta = utils.convert_markdown(lines, ['meta', 'toc'])
             if "title" in meta:
                 return meta["title"][0]
             if len(table_of_contents.items) > 0:
