@@ -10,11 +10,14 @@ and structure of the site and pages in the site.
 import os
 import shutil
 import markdown
+import logging
 from mkdocs import toc
 
-from mkdocs.relative_path_ext import RelativePathExtension
 from six.moves.urllib.parse import urlparse
 from six.moves.urllib.request import pathname2url
+
+log = logging.getLogger(__name__)
+
 try:
     from collections import OrderedDict
     import yaml
@@ -275,26 +278,17 @@ def path_to_url(path):
     return pathname2url(path)
 
 
-def convert_markdown(markdown_source, site_navigation=None, extensions=(), strict=False):
+def convert_markdown(markdown_source, extensions=None, extension_configs=None):
     """
     Convert the Markdown source file to HTML content, and additionally
     return the parsed table of contents, and a dictionary of any metadata
     that was specified in the Markdown file.
-
     `extensions` is an optional sequence of Python Markdown extensions to add
     to the default set.
     """
+    extensions = extensions or []
+    extension_configs = extension_configs or {}
 
-    # Generate the HTML from the markdown source
-    if isinstance(extensions, dict):
-        user_extensions = list(extensions.keys())
-        extension_configs = dict([(k, v) for k, v in extensions.items() if isinstance(v, dict)])
-    else:
-        user_extensions = list(extensions)
-        extension_configs = {}
-    builtin_extensions = ['meta', 'toc', 'tables', 'fenced_code']
-    mkdocs_extensions = [RelativePathExtension(site_navigation, strict), ]
-    extensions = set(builtin_extensions + mkdocs_extensions + user_extensions)
     md = markdown.Markdown(
         extensions=extensions,
         extension_configs=extension_configs

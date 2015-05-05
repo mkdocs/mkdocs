@@ -15,7 +15,7 @@ from mkdocs import utils, exceptions
 log = logging.getLogger(__name__)
 
 
-def file_to_tile(filename):
+def file_to_title(filename):
     """
     Automatically generate a default title, given a filename.
 
@@ -25,11 +25,27 @@ def file_to_tile(filename):
     if utils.is_homepage(filename):
         return 'Home'
 
+    try:
+        with open(filename, 'r') as f:
+            lines = f.read()
+            html_content, table_of_contents, meta = utils.convert_markdown(lines, ['meta', 'toc'])
+            if "title" in meta:
+                return meta["title"][0]
+            if len(table_of_contents.items) > 0:
+                return table_of_contents.items[0].title
+    except IOError:
+        # File couldn't be found - use filename as the title
+        # this is used in tests. We use the filename as the title
+        # in that case
+        pass
+
+    # No title found in the document, using the filename
     title = os.path.splitext(filename)[0]
     title = title.replace('-', ' ').replace('_', ' ')
     # Capitalize if the filename was all lowercase, otherwise leave it as-is.
     if title.lower() == title:
         title = title.capitalize()
+
     return title
 
 
@@ -223,18 +239,18 @@ def _generate_site_navigation(pages_config, url_context, use_directory_urls=True
         # then lets automatically nest it.
         if title is None and child_title is None and os.path.sep in path:
             filename = path.split(os.path.sep)[-1]
-            child_title = file_to_tile(filename)
+            child_title = file_to_title(filename)
 
         if title is None:
             filename = path.split(os.path.sep)[0]
-            title = file_to_tile(filename)
+            title = file_to_title(filename)
 
         # If we don't have a child title but the other title is the same, we
         # should be within a section and the child title needs to be inferred
         # from the filename.
         if len(nav_items) and title == nav_items[-1].title == title and child_title is None:
             filename = path.split(os.path.sep)[-1]
-            child_title = file_to_tile(filename)
+            child_title = file_to_title(filename)
 
         url = utils.get_url_path(path, use_directory_urls)
 
