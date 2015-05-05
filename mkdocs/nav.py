@@ -61,6 +61,9 @@ class SiteNavigation(object):
     def __str__(self):
         return ''.join([str(item) for item in self])
 
+    def __repr__(self):
+        return repr(self.__dict__)
+
     def __iter__(self):
         return iter(self.nav_items)
 
@@ -123,8 +126,10 @@ class URLContext(object):
             return url.lstrip('/')
         # Under Python 2.6, relative_path adds an extra '/' at the end.
         relative_path = os.path.relpath(url, start=self.base_path).rstrip('/') + suffix
-
         return utils.path_to_url(relative_path)
+
+    def __repr__(self):
+        return repr(self.__dict__)
 
 
 class FileContext(object):
@@ -150,6 +155,9 @@ class FileContext(object):
         absolute filepath, given the context of the current page.
         """
         return os.path.normpath(os.path.join(self.base_path, path))
+
+    def __repr__(self):
+        return repr(self.__dict__)
 
 
 class Page(object):
@@ -190,6 +198,9 @@ class Page(object):
         self.active = active
         for ancestor in self.ancestors:
             ancestor.active = active
+
+    def __repr__(self):
+        return repr(self.__dict__)
 
 
 class Header(object):
