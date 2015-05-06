@@ -104,7 +104,8 @@ setup(
         "Programming Language :: Python :: Implementation :: CPython",
         'Topic :: Documentation',
         'Topic :: Text Processing',
-    ]
+    ],
+    zip_safe=False
 )
 
 # (*) Please direct queries to the discussion group:
