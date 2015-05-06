@@ -307,3 +307,60 @@ def get_theme_names():
     """Return a list containing all the names of all the builtin themes."""
 
     return os.listdir(os.path.join(os.path.dirname(__file__), 'themes'))
+
+
+def filename_to_title(filename):
+
+    title = os.path.splitext(filename)[0]
+    title = title.replace('-', ' ').replace('_', ' ')
+    # Capitalize if the filename was all lowercase, otherwise leave it as-is.
+    if title.lower() == title:
+        title = title.capitalize()
+
+    return title
+
+
+def find_or_create_node(branch, key):
+    """
+    Given a list, look for dictionary with a key matching key and return it's
+    value. If it doesn't exist, create it with the value of an empty list and
+    return that.
+    """
+
+    for node in branch:
+        if not isinstance(node, dict):
+            continue
+
+        if key in node:
+            return node[key]
+
+    new_branch = []
+    node = {key: new_branch}
+    branch.append(node)
+    return new_branch
+
+
+def nest_paths(paths):
+    """
+    Given a list of paths, convert them into a nested structure that will match
+    the pages config.
+    """
+    nested = []
+
+    for path in paths:
+
+        if os.path.sep not in path:
+            nested.append(path)
+            continue
+
+        directory, _ = os.path.split(path)
+        parts = directory.split(os.path.sep)
+
+        branch = nested
+        for part in parts:
+            part = filename_to_title(part)
+            branch = find_or_create_node(branch, part)
+
+        branch.append(path)
+
+    return nested
