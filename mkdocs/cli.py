@@ -34,6 +34,8 @@ strict_help = ("Enable strict mode. This will cause MkDocs to abort the build "
                "on any warnings.")
 theme_help = "The theme to use when building your documentation."
 theme_choices = utils.get_theme_names()
+site_dir_help = ("The directory where the output HTML and other files are created."
+                 " Overrides the value from the config file.")
 
 
 @click.group()
@@ -66,12 +68,14 @@ def serve_command(dev_addr, config_file, strict, theme):
 @click.option('--config-file', type=click.File('rb'), help=config_file_help)
 @click.option('--strict', is_flag=True, help=strict_help)
 @click.option('--theme', type=click.Choice(theme_choices), help=theme_help)
-def build_command(clean, config_file, strict, theme):
+@click.option('--site-dir', type=click.Path(), help=site_dir_help)
+def build_command(clean, config_file, strict, theme, site_dir):
     """Build the MkDocs documentation"""
     build.build(load_config(
         config_file=config_file,
         strict=strict,
-        theme=theme
+        theme=theme,
+        site_dir=site_dir
     ), clean_site_dir=clean)
 
 
