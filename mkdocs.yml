@@ -4,19 +4,6 @@ site_description: Project documentation with Markdown.
 
 repo_url: https://github.com/mkdocs/mkdocs/
 
-pages:
-- Home: index.md
-- User Guide:
-    - Writing Your Docs: user-guide/writing-your-docs.md
-    - Styling Your Docs: user-guide/styling-your-docs.md
-    - Configuration: user-guide/configuration.md
-- About:
-    - License: about/license.md
-    - Release Notes: about/release-notes.md
-    - Contributing: about/contributing.md
-
-use_new_pages_structure: true
-
 markdown_extensions:
     toc:
         permalink: ""

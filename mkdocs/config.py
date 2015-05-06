@@ -145,6 +145,8 @@ def validate_config(user_config):
             elif utils.is_template_file(filename):
                 extra_templates.append(filename)
 
+    pages = utils.nest_paths(pages)
+
     if config['pages'] is None:
         config['pages'] = pages
     else:

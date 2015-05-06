@@ -22,13 +22,7 @@ def filename_to_title(filename):
     if utils.is_homepage(filename):
         return 'Home'
 
-    title = os.path.splitext(filename)[0]
-    title = title.replace('-', ' ').replace('_', ' ')
-    # Capitalize if the filename was all lowercase, otherwise leave it as-is.
-    if title.lower() == title:
-        title = title.capitalize()
-
-    return title
+    return utils.filename_to_title(filename)
 
 
 class SiteNavigation(object):

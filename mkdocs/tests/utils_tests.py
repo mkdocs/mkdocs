@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+import os
 import unittest
 
 from mkdocs import nav, utils
@@ -108,3 +109,32 @@ class UtilsTests(unittest.TestCase):
             sorted(['flatly', 'cerulean', 'slate', 'bootstrap', 'yeti',
                     'spacelab', 'united', 'readable', 'simplex', 'mkdocs',
                     'cosmo', 'journal', 'cyborg', 'readthedocs', 'amelia']))
+
+    def test_nest_paths(self):
+
+        j = os.path.join
+
+        result = utils.nest_paths([
+            'index.md',
+            j('user-guide', 'configuration.md'),
+            j('user-guide', 'styling-your-docs.md'),
+            j('user-guide', 'writing-your-docs.md'),
+            j('about', 'contributing.md'),
+            j('about', 'license.md'),
+            j('about', 'release-notes.md'),
+        ])
+
+        self.assertEqual(
+            result,
+            [
+                'index.md',
+                {'User guide': [
+                    j('user-guide', 'configuration.md'),
+                    j('user-guide', 'styling-your-docs.md'),
+                    j('user-guide', 'writing-your-docs.md')]},
+                {'About': [
+                    j('about', 'contributing.md'),
+                    j('about', 'license.md'),
+                    j('about', 'release-notes.md')]}
+            ]
+        )
