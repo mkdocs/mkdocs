@@ -1,4 +1,0 @@
-title: Metadata Title
-
-# Title
-
