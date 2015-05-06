@@ -344,19 +344,6 @@ class SiteNavigationTests(unittest.TestCase):
         for page, expected_ancestor in zip(site_navigation.pages, ancestors):
             self.assertEqual(page.ancestors, expected_ancestor)
 
-    def test_file_to_tile(self):
-        title = nav.file_to_title("mkdocs/tests/resources/empty.md")
-        self.assertEqual(title, "Mkdocs/tests/resources/empty")
-
-        title = nav.file_to_title("mkdocs/tests/resources/with_title.md")
-        self.assertEqual(title, "Title")
-
-        title = nav.file_to_title("mkdocs/tests/resources/title_metadata.md")
-        self.assertEqual(title, "Metadata Title")
-
-        title = nav.file_to_title("mkdocs/tests/resources/no_title_metadata.md")
-        self.assertEqual(title, "Title")
-
     def test_nesting(self):
 
         pages_config = [

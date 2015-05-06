@@ -15,32 +15,13 @@ from mkdocs import utils, exceptions
 log = logging.getLogger(__name__)
 
 
-def file_to_title(filename):
+def filename_to_title(filename):
     """
     Automatically generate a default title, given a filename.
-
-    The method parses the file to check for a title, uses the filename
-     as a title otherwise.
     """
     if utils.is_homepage(filename):
         return 'Home'
 
-    try:
-        with open(filename, 'r') as f:
-            lines = f.read()
-            _, table_of_contents, meta = utils.convert_markdown(
-                lines, ['meta', 'toc'])
-            if "title" in meta:
-                return meta["title"][0]
-            if len(table_of_contents.items) > 0:
-                return table_of_contents.items[0].title
-    except IOError:
-        # File couldn't be found - use filename as the title
-        # this is used in tests. We use the filename as the title
-        # in that case
-        pass
-
-    # No title found in the document, using the filename
     title = os.path.splitext(filename)[0]
     title = title.replace('-', ' ').replace('_', ' ')
     # Capitalize if the filename was all lowercase, otherwise leave it as-is.
@@ -223,7 +204,7 @@ class Header(object):
 
 def _path_to_page(path, title, url_context, use_directory_urls):
     if title is None:
-        title = file_to_title(path.split(os.path.sep)[-1])
+        title = filename_to_title(path.split(os.path.sep)[-1])
     url = utils.get_url_path(path, use_directory_urls)
     return Page(title=title, url=url, path=path,
                 url_context=url_context)

@@ -10,13 +10,10 @@ and structure of the site and pages in the site.
 import os
 import shutil
 import markdown
-import logging
 from mkdocs import toc
 
 from six.moves.urllib.parse import urlparse
 from six.moves.urllib.request import pathname2url
-
-log = logging.getLogger(__name__)
 
 try:
     from collections import OrderedDict
