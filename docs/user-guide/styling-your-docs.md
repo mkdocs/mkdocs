@@ -117,7 +117,125 @@ The simplest `base.html` file is the following:
 
 Article content from each page specified in `mkdocs.yml` is inserted using the `{{ content }}` tag. Stylesheets and scripts can be brought into this theme as with a normal HTML file. Navbars and tables of contents can also be generated and included automatically, through the `nav` and `toc` objects, respectively. If you wish to write your own theme, it is recommended to start with one of the [built-in themes] and modify it accordingly.
 
+### Template Variables
 
+Each template in a theme is built with a template context. These are the variables that are available to theme. The context varies depending on the template that is being built. At the moment templates are either built with
+the global context or with a page specific context. The global context is used
+for HTML pages that don't represent an individual Markdown document, for
+example a 404.html page or search.html.
+
+
+#### Global Context
+
+The following variables in the context map directly the the configuration file.
+
+Variable Name     | Configuration name
+----------------- | ------------------- |
+site_name         | site_name           |
+site_author       | site_author         |
+favicon           | site_favicon        |
+page_description  | site_description    |
+repo_url          | repo_url            |
+repo_name         | repo_name           |
+site_url          | site_url            |
+extra_css         | extra_css           |
+extra_javascript  | extra_javascript    |
+include_nav       | include_nav         |
+include_next_prev | include_next_prev   |
+copyright         | copyright           |
+google_analytics  | google_analytics    |
+
+The following variables provide information about the navigation and location.
+
+##### nav
+The `nav` variable is used to create the navigation for for the documentation. Following is a basic usage example which outputs the first and second level navigation as a nested list.
+
+```
+<ul>
+  {% for nav_item in nav %}
+      {% if nav_item.children %}
+          <li>{{ nav_item.title }}
+              <ul>
+              {% for nav_item in nav_item.children %}
+                  <li class="{% if nav_item.active%}current{%endif%}">
+                      <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
+                  </li>
+              {% endfor %}
+              </ul>
+          </li>
+      {% else %}
+          <li class="{% if nav_item.active%}current{%endif%}">
+              <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
+          </li>
+      {% endif %}
+
+  {% endfor %}
+</ul>
+```
+
+##### base_url
+The `base_url` provides a relative path to the root of the MkDocs project. This makes it easy to include links to static assets in your theme. For example, if your theme includes a `js` folder, to include `theme.js` from that folder on all pages you would do this:
+
+```
+<script src="{{ base_url }}/js/theme.js"></script>
+```
+
+##### homepage_url
+Provides a relative path to the documentation homepage.
+
+##### mkdocs_version
+Contains the current MkDocs version.
+
+##### build_date_utc
+A Python datetime object that includes represents the time the documentation was built in UTC. This is useful for showing how recently the documentation was updated.
+
+
+#### Page Context
+The page context includes all of the above Global context and the following additional variables.
+
+##### page_title
+Contains the Title for the current page.
+
+##### page_description
+Contains the description for the current page on the homepage, it is blank on other pages.
+
+##### content
+The rendered Markdown as HTML, this is the contents of the documentation.
+
+##### toc
+An object representing the Table of contents for a page. Displaying the table of contents as a simple list can be achieved like this.
+
+```
+  <ul>
+  {% for toc_item in toc %}
+      <li><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
+      {% for toc_item in toc_item.children %}
+          <li><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
+      {% endfor %}
+  {% endfor %}
+  </ul>
+```
+
+##### meta
+A mapping of the metadata included at the top of the markdown page.
+
+##### canonical_url
+The full, canonical URL to the current page. This includes the site_url from the configuration.
+
+##### current_page
+The page object for the current page. The page path and url properties can be displayed like this.
+
+```
+<h1>{{ current_page.title }}</h1>
+<p> This page is at {{ current_page.url }}</p>
+```
+
+##### previous_page
+The page object for the previous  page. The isage is the same as for
+`current_page`.
+
+##### next_page
+The page object for the next page.The isage is the same as for `current_page`.
 
 
 ### Search and themes
@@ -133,7 +251,7 @@ The following HTML needs to be added to the theme so the JavaScript is loaded fo
 
 !!! note
 
-    The above JavaScript will download the search index, for larger documentations this can be a heavy operation. In those cases, it is suggested that you either use the `search.html` approach to only include search on one page or load the JavaScript on an event like a form submit.
+    The above JavaScript will download the search index, for larger documentation projects this can be a heavy operation. In those cases, it is suggested that you either use the `search.html` approach to only include search on one page or load the JavaScript on an event like a form submit.
 
 This loads the JavaScript and sets a global variable `base_url` which allows the JavaScript to make the links relative to the current page. The above JavaScript, with the following HTML in a `search.html` template will add a full search implementation to your theme.
 
@@ -153,3 +271,4 @@ This works by looking for the specific ID's used in the above HTML. The input fo
 [Jinja2 template]: http://jinja.pocoo.org/docs/dev/
 [built-in themes]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes
 [lunr.js]: http://lunrjs.com/
+
