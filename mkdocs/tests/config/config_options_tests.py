@@ -87,6 +87,12 @@ class URLTest(unittest.TestCase):
         self.assertRaises(config_options.ValidationError,
                           option.validate, "www.mkdocs.org")
 
+    def test_invalid(self):
+
+        option = config_options.URL()
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, 1)
+
 
 class RepoURLTest(unittest.TestCase):
 

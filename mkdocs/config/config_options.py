@@ -98,12 +98,16 @@ class URL(BaseConfigOption):
 
     def run_validatuon(self, value):
 
-        parsed_url = six.moves.urllib.parse.urlparse(value)
+        try:
+            parsed_url = six.moves.urllib.parse.urlparse(value)
+        except (AttributeError, TypeError):
+            raise ValidationError("Unable to parse the URL.")
 
         if parsed_url.scheme:
             return value
 
-        raise ValidationError("Invalid URL.")
+        raise ValidationError(
+            "The URL isn't valid, it should include the http:// (scheme)")
 
 
 class RepoURL(URL):
