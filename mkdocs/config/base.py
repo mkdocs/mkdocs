@@ -60,11 +60,6 @@ class Config(six.moves.UserDict):
 
         failed, warnings = self.validate_update(self)
 
-        for key in set(self._schema.keys()) - set(self.keys()):
-            config_option = self._schema[key]
-            if config_option.is_required():
-                failed.append((key, "Required configuration not provided."))
-
         for key in self._schema.keys():
             config_option = self._schema[key]
             config_option.post_process(self, key_name=key)
