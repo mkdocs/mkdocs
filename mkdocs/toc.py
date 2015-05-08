@@ -14,7 +14,7 @@ The steps we take to generate a table of contents are:
 * Parse table of contents HTML into the underlying data structure.
 """
 
-from six.moves.html_parser import HTMLParser
+import six
 
 
 class TableOfContents(object):
@@ -40,20 +40,20 @@ class AnchorLink(object):
         self.children = []
 
     def __str__(self):
-        return self._indent_print()
+        return self.indent_print()
 
-    def _indent_print(self, depth=0):
+    def indent_print(self, depth=0):
         indent = '    ' * depth
         ret = '%s%s - %s\n' % (indent, self.title, self.url)
         for item in self.children:
-            ret += item._indent_print(depth + 1)
+            ret += item.indent_print(depth + 1)
         return ret
 
 
-class TOCParser(HTMLParser):
+class TOCParser(six.moves.html_parser.HTMLParser):
 
     def __init__(self):
-        HTMLParser.__init__(self)
+        six.moves.html_parser.HTMLParser.__init__(self)
         self.links = []
 
         self.in_anchor = False
