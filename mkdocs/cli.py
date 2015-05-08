@@ -34,8 +34,7 @@ strict_help = ("Enable strict mode. This will cause MkDocs to abort the build "
                "on any warnings.")
 theme_help = "The theme to use when building your documentation."
 theme_choices = utils.get_theme_names()
-site_dir_help = ("The directory where the output HTML and other files are created."
-                 " Overrides the value from the config file.")
+site_dir_help = "The directory to output the result of the documentation build."
 
 
 @click.group()
@@ -83,7 +82,8 @@ def build_command(clean, config_file, strict, theme, site_dir):
 @click.option('--clean', is_flag=True, help=clean_help)
 @click.option('--config-file', type=click.File('rb'), help=config_file_help)
 @click.option('--strict', is_flag=True, help=strict_help)
-def json_command(clean, config_file, strict):
+@click.option('--site-dir', type=click.Path(), help=site_dir_help)
+def json_command(clean, config_file, strict, site_dir):
     """Build the MkDocs documentation to JSON files
 
     Rather than building your documentation to HTML pages, this
@@ -98,7 +98,8 @@ def json_command(clean, config_file, strict):
 
     build.build(load_config(
         config_file=config_file,
-        strict=strict
+        strict=strict,
+        site_dir=site_dir
     ), dump_json=True, clean_site_dir=clean)
 
 
