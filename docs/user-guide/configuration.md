@@ -123,7 +123,7 @@ Sets the theme of your documentation site, for a list of available themes visit
 
 ### theme_dir
 
-Lets you set a directory to a custom theme.  This can either be a relative directory, in which case it is resolved relative to the directory containing you configuration file, or it can be an absolute directory path.
+Lets you set a directory to a custom theme.  This can either be a relative directory, in which case it is resolved relative to the directory containing your configuration file, or it can be an absolute directory path.
 
 See [styling your docs](styling-your-docs.md#custom-themes) for an explanation of custom themes.
 
