@@ -217,7 +217,10 @@ class ConfigTests(unittest.TestCase):
             patch = conf.copy()
             patch.update(test_config)
 
-            c = base.Config(schema=defaults.DEFAULT_CONFIG)
+            schema = defaults.DEFAULT_CONFIG.copy()
+            schema['docs_dir'] = config_options.Dir()
+
+            c = base.Config(schema=schema)
             c.load_dict(patch)
 
             self.assertRaises(config_options.ValidationError, c.validate)

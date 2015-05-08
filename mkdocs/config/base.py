@@ -33,36 +33,36 @@ class Config(six.moves.UserDict):
         for key, config_option in self._schema.items():
             self[key] = config_option.default
 
-    def validate_update(self, update):
+    def _validate(self):
 
         failed, warnings = [], []
 
-        for key, value in update.items():
-
-            if key not in self._schema:
-                warning = (
-                    key, "Unrecognised configuration name: {0}".format(key)
-                )
-                warnings.append(warning)
-                continue
-
-            config_option = self._schema[key]
-
+        for key, config_option in self._schema.items():
             try:
-                update[key] = config_option.validate(value)
+                value = self.get(key)
+                self[key] = config_option.validate(value)
                 warnings.extend(config_option.warnings)
             except config_options.ValidationError as e:
                 failed.append((key, str(e)))
 
+        for key in (set(self.keys()) - set(self._schema.keys())):
+            warnings.append((
+                key, "Unrecognised configuration name: {0}".format(key)
+            ))
+
         return failed, warnings
 
-    def validate(self):
-
-        failed, warnings = self.validate_update(self)
+    def _post_validate(self):
 
         for key in self._schema.keys():
             config_option = self._schema[key]
-            config_option.post_process(self, key_name=key)
+            config_option.post_validation(self, key_name=key)
+
+    def validate(self):
+
+        failed, warnings = self._validate()
+
+        self._post_validate()
 
         return failed, warnings
 

@@ -14,8 +14,8 @@ class BaseConfigOption(object):
     """
     The BaseConfigOption adds support for default values and required values
 
-    It then delegates the validation and (optional) post processing to
-    subclasses.
+    It then delegates the validation and (optional) post validation processing
+    to subclasses.
     """
 
     def __init__(self, default=None, required=False):
@@ -32,7 +32,7 @@ class BaseConfigOption(object):
 
         If the option is empty (None) and isn't required, leave it as such. If
         it is empty but has a default, use that. Finally, call the
-        run_validatuon method on the subclass unless.
+        run_validation method on the subclass unless.
         """
 
         if value is None:
@@ -43,22 +43,22 @@ class BaseConfigOption(object):
             elif self.required:
                 raise ValidationError("Required configuration not provided.")
 
-        return self.run_validatuon(value)
+        return self.run_validation(value)
 
-    def run_validatuon(self, value):
+    def run_validation(self, value):
         """
         Perform validation for a value.
 
-        The run_validatuon method should be implemented by subclasses.
+        The run_validation method should be implemented by subclasses.
         """
         return value
 
-    def post_process(self, config, key_name):
+    def post_validation(self, config, key_name):
         """
-        After all options have passed validation, perform a post process to
-        do any additional changes dependant on other config values.
+        After all options have passed validation, perform a post validation
+        process to do any additional changes dependant on other config values.
 
-        The post process method should be implemented by subclasses.
+        The post validation process method should be implemented by subclasses.
         """
 
 
@@ -74,7 +74,7 @@ class Type(BaseConfigOption):
         self._type = type_
         self.length = length
 
-    def run_validatuon(self, value):
+    def run_validation(self, value):
 
         if not isinstance(value, self._type):
             msg = ("Expected type: {0} but recieved: {1}"
@@ -96,7 +96,7 @@ class URL(BaseConfigOption):
     Validate a URL by requiring a scheme is present.
     """
 
-    def run_validatuon(self, value):
+    def run_validation(self, value):
 
         try:
             parsed_url = six.moves.urllib.parse.urlparse(value)
@@ -118,7 +118,7 @@ class RepoURL(URL):
     url if it hasn't already been provided.
     """
 
-    def post_process(self, config, key_name):
+    def post_validation(self, config, key_name):
 
         if config['repo_url'] is not None and config.get('repo_name') is None:
             repo_host = six.moves.urllib.parse.urlparse(
@@ -142,14 +142,14 @@ class Dir(Type):
         super(Dir, self).__init__(type_=six.string_types, **kwargs)
         self.exists = exists
 
-    def run_validatuon(self, value):
+    def run_validation(self, value):
 
-        value = super(Dir, self).run_validatuon(value)
+        value = super(Dir, self).run_validation(value)
 
         if self.exists and not os.path.isdir(value):
             raise ValidationError("The path {0} doesn't exist".format(value))
 
-        return value
+        return os.path.abspath(value)
 
 
 class SiteDir(Dir):
@@ -159,17 +159,15 @@ class SiteDir(Dir):
     Validates the site_dir and docs_dir directories do not contain each other.
     """
 
-    def post_process(self, config, key_name):
+    def post_validation(self, config, key_name):
 
         # Validate that the docs_dir and site_dir don't contain the
         # other as this will lead to copying back and forth on each
         # and eventually make a deep nested mess.
-        abs_site_dir = os.path.abspath(config['site_dir'])
-        abs_docs_dir = os.path.abspath(config['docs_dir'])
-        if abs_docs_dir.startswith(abs_site_dir):
+        if config['docs_dir'].startswith(config['site_dir']):
             raise ValidationError(
                 "The 'docs_dir' can't be within the 'site_dir'.")
-        elif abs_site_dir.startswith(abs_docs_dir):
+        elif config['site_dir'].startswith(config['docs_dir']):
             raise ValidationError(
                 "The 'site_dir' can't be within the 'docs_dir'.")
 
@@ -178,13 +176,13 @@ class ThemeDir(Dir):
     """
     ThemeDir Config Option
 
-    Post process the theme_dir to do some path munging.
+    Post validation, verify the theme_dir and do some path munging.
 
     TODO: This could probably be improved and/or moved from here. It's a tad
     gross really.
     """
 
-    def post_process(self, config, key_name):
+    def post_validation(self, config, key_name):
 
         theme_in_config = any(['theme' in c for c in config.user_configs])
 
@@ -216,7 +214,7 @@ class Theme(BaseConfigOption):
     Validate that the theme is one of the builtin Mkdocs theme names.
     """
 
-    def run_validatuon(self, value):
+    def run_validation(self, value):
 
         themes = utils.get_theme_names()
 
@@ -238,7 +236,7 @@ class Extras(BaseConfigOption):
         super(Extras, self).__init__(**kwargs)
         self.file_match = file_match
 
-    def run_validatuon(self, value):
+    def run_validation(self, value):
 
         if isinstance(value, list):
             return value
@@ -254,7 +252,7 @@ class Extras(BaseConfigOption):
                 if self.file_match(relpath):
                     yield relpath
 
-    def post_process(self, config, key_name):
+    def post_validation(self, config, key_name):
 
         if config[key_name] is not None:
             return
@@ -279,7 +277,7 @@ class Pages(Extras):
     def __init__(self, **kwargs):
         super(Pages, self).__init__(utils.is_markdown_file, **kwargs)
 
-    def run_validatuon(self, value):
+    def run_validation(self, value):
 
         if not isinstance(value, list):
             raise ValidationError(
@@ -299,7 +297,7 @@ class Pages(Extras):
 
         raise ValidationError("Invalid pages config.")
 
-    def post_process(self, config, key_name):
+    def post_validation(self, config, key_name):
 
         if config[key_name] is not None:
             return
@@ -328,7 +326,7 @@ class NumPages(BaseConfigOption):
         super(NumPages, self).__init__(**kwargs)
         self.at_lest = at_lest
 
-    def post_process(self, config, key_name):
+    def post_validation(self, config, key_name):
 
         if config[key_name] is not None:
             return

@@ -100,7 +100,7 @@ class RepoURLTest(unittest.TestCase):
 
         option = config_options.RepoURL()
         config = {'repo_url': "https://github.com/mkdocs/mkdocs"}
-        option.post_process(config, 'repo_url')
+        option.post_validation(config, 'repo_url')
         self.assertEqual(config['repo_url'], config['repo_url'])
         self.assertEqual(config['repo_name'], "GitHub")
 
@@ -108,7 +108,7 @@ class RepoURLTest(unittest.TestCase):
 
         option = config_options.RepoURL()
         config = {'repo_url': "https://bitbucket.org/gutworth/six/"}
-        option.post_process(config, 'repo_url')
+        option.post_validation(config, 'repo_url')
         self.assertEqual(config['repo_url'], config['repo_url'])
         self.assertEqual(config['repo_name'], "Bitbucket")
 
@@ -116,7 +116,7 @@ class RepoURLTest(unittest.TestCase):
 
         option = config_options.RepoURL()
         config = {'repo_url': "https://launchpad.net/python-tuskarclient"}
-        option.post_process(config, 'repo_url')
+        option.post_validation(config, 'repo_url')
         self.assertEqual(config['repo_url'], config['repo_url'])
         self.assertEqual(config['repo_name'], "Launchpad")
 
@@ -167,6 +167,7 @@ class SiteDirTest(unittest.TestCase):
 
         j = os.path.join
         option = config_options.SiteDir()
+        docs_dir = config_options.Dir()
 
         test_configs = (
             {'docs_dir': 'docs', 'site_dir': j('docs', 'site')},
@@ -182,8 +183,11 @@ class SiteDirTest(unittest.TestCase):
 
         for test_config in test_configs:
 
+            test_config['docs_dir'] = docs_dir.validate(test_config['docs_dir'])
+            test_config['site_dir'] = option.validate(test_config['site_dir'])
+
             self.assertRaises(config_options.ValidationError,
-                              option.post_process, test_config, 'key')
+                              option.post_validation, test_config, 'key')
 
 
 class ThemeTest(unittest.TestCase):
@@ -209,7 +213,7 @@ class ExtrasTest(unittest.TestCase):
         value = option.validate([])
         self.assertEqual([], value)
 
-        option.post_process({'extra_stuff': []}, 'extra_stuff')
+        option.post_validation({'extra_stuff': []}, 'extra_stuff')
 
     def test_empty(self):
 
@@ -232,7 +236,7 @@ class PagesTest(unittest.TestCase):
         value = option.validate([['index.md', ], ])
         self.assertEqual(['index.md', ], value)
 
-        option.post_process({'extra_stuff': []}, 'extra_stuff')
+        option.post_validation({'extra_stuff': []}, 'extra_stuff')
 
     def test_provided_dict(self):
 
@@ -245,7 +249,7 @@ class PagesTest(unittest.TestCase):
         ])
         self.assertEqual(['index.md', {'Page': 'page.md'}], value)
 
-        option.post_process({'extra_stuff': []}, 'extra_stuff')
+        option.post_validation({'extra_stuff': []}, 'extra_stuff')
 
     def test_provided_empty(self):
 
@@ -253,7 +257,7 @@ class PagesTest(unittest.TestCase):
         value = option.validate([])
         self.assertEqual(None, value)
 
-        option.post_process({'extra_stuff': []}, 'extra_stuff')
+        option.post_validation({'extra_stuff': []}, 'extra_stuff')
 
     def test_invalid_type(self):
 
@@ -277,7 +281,7 @@ class NumPagesTest(unittest.TestCase):
             'key': None,
             'pages': [1, ]
         }
-        option.post_process(config, 'key')
+        option.post_validation(config, 'key')
         self.assertEqual({
             'key': False,
             'pages': [1, ]
@@ -290,7 +294,7 @@ class NumPagesTest(unittest.TestCase):
             'key': None,
             'pages': [1, 2, 3]
         }
-        option.post_process(config, 'key')
+        option.post_validation(config, 'key')
         self.assertEqual({
             'key': True,
             'pages': [1, 2, 3]
@@ -303,7 +307,7 @@ class NumPagesTest(unittest.TestCase):
             'key': None,
             'pages': None
         }
-        option.post_process(config, 'key')
+        option.post_validation(config, 'key')
         self.assertEqual({
             'key': False,
             'pages': None
@@ -316,7 +320,7 @@ class NumPagesTest(unittest.TestCase):
             'key': True,
             'pages': None
         }
-        option.post_process(config, 'key')
+        option.post_validation(config, 'key')
         self.assertEqual({
             'key': True,
             'pages': None
