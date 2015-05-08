@@ -31,8 +31,8 @@ class BaseConfigOption(object):
         Perform some initial validation.
 
         If the option is empty (None) and isn't required, leave it as such. If
-        it is empty but has a default, use that. Finally, call the _validate
-        method on the subclass unless.
+        it is empty but has a default, use that. Finally, call the
+        run_validatuon method on the subclass unless.
         """
 
         if value is None:
@@ -43,13 +43,13 @@ class BaseConfigOption(object):
             elif self.required:
                 raise ValidationError("Required configuration not provided.")
 
-        return self._validate(value)
+        return self.run_validatuon(value)
 
-    def _validate(self, value):
+    def run_validatuon(self, value):
         """
         Perform validation for a value.
 
-        The _validate method should be implemented by subclasses.
+        The run_validatuon method should be implemented by subclasses.
         """
         return value
 
@@ -74,7 +74,7 @@ class Type(BaseConfigOption):
         self._type = type_
         self.length = length
 
-    def _validate(self, value):
+    def run_validatuon(self, value):
 
         if not isinstance(value, self._type):
             msg = ("Expected type: {0} but recieved: {1}"
@@ -96,7 +96,7 @@ class URL(BaseConfigOption):
     Validate a URL by requiring a scheme is present.
     """
 
-    def _validate(self, value):
+    def run_validatuon(self, value):
 
         parsed_url = six.moves.urllib.parse.urlparse(value)
 
@@ -138,7 +138,7 @@ class Dir(BaseConfigOption):
         super(Dir, self).__init__(**kwargs)
         self.exists = exists
 
-    def _validate(self, value):
+    def run_validatuon(self, value):
 
         if self.exists and not os.path.isdir(value):
             raise ValidationError("The path {0} doesn't exist".format(value))
@@ -210,7 +210,7 @@ class Theme(BaseConfigOption):
     Validate that the theme is one of the builtin Mkdocs theme names.
     """
 
-    def _validate(self, value):
+    def run_validatuon(self, value):
 
         themes = utils.get_theme_names()
 
@@ -232,7 +232,7 @@ class Extras(BaseConfigOption):
         super(Extras, self).__init__(**kwargs)
         self.file_match = file_match
 
-    def _validate(self, value):
+    def run_validatuon(self, value):
 
         if isinstance(value, list):
             return value
@@ -273,7 +273,7 @@ class Pages(Extras):
     def __init__(self, **kwargs):
         super(Pages, self).__init__(utils.is_markdown_file, **kwargs)
 
-    def _validate(self, value):
+    def run_validatuon(self, value):
 
         if not isinstance(value, list):
             raise ValidationError(
