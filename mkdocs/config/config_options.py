@@ -131,7 +131,7 @@ class RepoURL(URL):
                 config['repo_name'] = repo_host.split('.')[0].title()
 
 
-class Dir(BaseConfigOption):
+class Dir(Type):
     """
     Dir Config Option
 
@@ -139,10 +139,12 @@ class Dir(BaseConfigOption):
     """
 
     def __init__(self, exists=False, **kwargs):
-        super(Dir, self).__init__(**kwargs)
+        super(Dir, self).__init__(type_=six.string_types, **kwargs)
         self.exists = exists
 
     def run_validatuon(self, value):
+
+        value = super(Dir, self).run_validatuon(value)
 
         if self.exists and not os.path.isdir(value):
             raise ValidationError("The path {0} doesn't exist".format(value))

@@ -150,6 +150,16 @@ class DirTest(unittest.TestCase):
         self.assertRaises(config_options.ValidationError,
                           option.validate, d)
 
+    def test_incorrect_type_attribute_error(self):
+        option = config_options.Dir()
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, 1)
+
+    def test_incorrect_type_type_error(self):
+        option = config_options.Dir()
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, [])
+
 
 class SiteDirTest(unittest.TestCase):
 
