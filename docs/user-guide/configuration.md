@@ -163,6 +163,13 @@ Set a list of JavaScript files to be included by the theme.
 
 **default**: By default `extra_javascript` will contain a list of all the JavaScript files found within the `docs_dir`, if none are found it will be `[]` (an empty list).
 
+
+### extra
+
+A set of key value pairs, where the values can be any valid YAML construct, that will be passed to the template. This allows for great flexibility when creating custom themes.
+
+**default**: By default `extra` will be an empty key value mapping.
+
 ## Preview controls
 
 ### use_directory_urls

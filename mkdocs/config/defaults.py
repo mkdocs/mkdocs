@@ -96,4 +96,11 @@ DEFAULT_SCHEMA = (
     # enabling strict mode causes MkDocs to stop the build when a problem is
     # encountered rather than display an error.
     ('strict', config_options.Type(bool, default=False)),
+
+    # extra is a mapping/dictionary of data that is passed to the template.
+    # This allows template authors to require extra configuration that not
+    # relevant to all themes and doesn't need to be explicitly supported by
+    # MkDocs itself. A good example here would be including the current
+    # project version.
+    ('extra', config_options.Type(dict, default={})),
 )

@@ -119,15 +119,11 @@ Article content from each page specified in `mkdocs.yml` is inserted using the `
 
 ### Template Variables
 
-Each template in a theme is built with a template context. These are the variables that are available to theme. The context varies depending on the template that is being built. At the moment templates are either built with
-the global context or with a page specific context. The global context is used
-for HTML pages that don't represent an individual Markdown document, for
-example a 404.html page or search.html.
-
+Each template in a theme is built with a template context. These are the variables that are available to themes. The context varies depending on the template that is being built. At the moment templates are either built with the global context or with a page specific context. The global context is used for HTML pages that don't represent an individual Markdown document, for example a 404.html page or search.html.
 
 #### Global Context
 
-The following variables in the context map directly the the configuration file.
+The following variables in the context map directly the the [configuration options](/user-guide/configuration/).
 
 Variable Name     | Configuration name
 ----------------- | ------------------- |
@@ -140,6 +136,7 @@ repo_name         | repo_name           |
 site_url          | site_url            |
 extra_css         | extra_css           |
 extra_javascript  | extra_javascript    |
+extra             | extra               |
 include_nav       | include_nav         |
 include_next_prev | include_next_prev   |
 copyright         | copyright           |
@@ -237,6 +234,34 @@ The page object for the previous  page. The isage is the same as for
 ##### next_page
 The page object for the next page.The isage is the same as for `current_page`.
 
+#### Extra Context
+
+Additional variables can be passed to the template with the [`extra`](/user-guide/configuration/#extra) configuration option. This is a set of key value pairs that can make custom templates far more flexible.
+
+For example, this could be used to include the project version of all pages and a list of links related to the project. This can be achieved with the following `extra` configuration:
+
+```yaml
+extra:
+    version: 0.13.0
+    links:
+        - https://github.com/mkdocs
+        - https://docs.readthedocs.org/en/latest/builds.html#mkdocs
+        - http://www.mkdocs.org/
+```
+
+And then displayed with this HTML in the custom theme.
+
+```html
+{{ extra.version }}
+
+{% if extra.links %}
+  <ul>
+  {% for link in extra.links %}
+      <li>{{ link }}</li>
+  {% endfor %}
+  </ul>
+{% endif %}
+```
 
 ### Search and themes
 

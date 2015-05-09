@@ -90,7 +90,9 @@ def get_global_context(nav, config):
         'google_analytics': config['google_analytics'],
 
         'mkdocs_version': mkdocs.__version__,
-        'build_date_utc': datetime.utcnow()
+        'build_date_utc': datetime.utcnow(),
+
+        'extra': config['extra']
     }
 
 

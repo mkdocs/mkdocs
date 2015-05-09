@@ -7,6 +7,7 @@ import tempfile
 import unittest
 
 from six.moves import zip
+import mock
 
 from mkdocs import build, nav
 from mkdocs.config import base as config_base, defaults as config_defaults
@@ -343,3 +344,22 @@ class BuildTests(unittest.TestCase):
         """)
 
         self.assertEqual(html.strip(), expected_html)
+
+    def test_extra_context(self):
+
+        # Same as the default schema, but don't verify the docs_dir exists.
+        config = config_base.Config(schema=config_defaults.DEFAULT_SCHEMA)
+        config.load_dict({
+            'site_name': "Site",
+            'extra': {
+                'a': 1
+            }
+        })
+
+        self.assertEqual(config.validate(), ([], []))
+
+        context = build.get_global_context(mock.Mock(), config)
+
+        self.assertEqual(context['extra'], {
+            'a': 1
+        })
