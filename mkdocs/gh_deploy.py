@@ -19,7 +19,7 @@ def gh_deploy(config):
         if 'remote_branch' in config:
             command.extend(['-b', config['remote_branch']])
         subprocess.check_call(command)
-    except:
+    except Exception:
         return
 
     # Does this repository have a CNAME set for GitHub pages?
