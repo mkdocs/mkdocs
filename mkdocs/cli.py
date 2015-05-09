@@ -15,7 +15,7 @@ from mkdocs.config import load_config
 log = logging.getLogger(__name__)
 
 
-def configure_logging(is_verbose=False):
+def configure_logging(verbose=False):
     '''When a --verbose flag is passed, increase the verbosity of mkdocs'''
 
     logger = logging.getLogger('mkdocs')
@@ -25,7 +25,7 @@ def configure_logging(is_verbose=False):
     stream.setFormatter(formatter)
     logger.addHandler(stream)
 
-    if is_verbose:
+    if verbose:
         logger.setLevel(logging.DEBUG)
     else:
         logger.setLevel(logging.INFO)
