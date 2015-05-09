@@ -15,10 +15,10 @@ from mkdocs.config import load_config
 log = logging.getLogger(__name__)
 
 
-def configure_logging(verbose=False):
+def configure_logging(log_name='mkdocs', verbose=False):
     '''When a --verbose flag is passed, increase the verbosity of mkdocs'''
 
-    logger = logging.getLogger('mkdocs')
+    logger = logging.getLogger(log_name)
     logger.propagate = False
     stream = logging.StreamHandler()
     formatter = logging.Formatter("%(levelname)-7s -  %(message)s ")
@@ -40,6 +40,7 @@ strict_help = ("Enable strict mode. This will cause MkDocs to abort the build "
 theme_help = "The theme to use when building your documentation."
 theme_choices = utils.get_theme_names()
 site_dir_help = "The directory to output the result of the documentation build."
+reload_help = "Enable and disable the live reloading in the development server."
 
 
 @click.group()
@@ -49,7 +50,7 @@ def cli(verbose):
     """
     MkDocs - Project documentation with Markdown.
     """
-    configure_logging(verbose)
+    configure_logging(verbose=verbose)
 
 
 @cli.command(name="serve")
@@ -57,13 +58,16 @@ def cli(verbose):
 @click.option('--dev-addr', help=dev_addr_help, metavar='<IP:PORT>')
 @click.option('--strict', is_flag=True, help=strict_help)
 @click.option('--theme', type=click.Choice(theme_choices), help=theme_help)
-def serve_command(dev_addr, config_file, strict, theme):
+@click.option('--livereload/--no-livereload', default=True, help=reload_help)
+def serve_command(dev_addr, config_file, strict, theme, livereload):
     """Run the builtin development server"""
+    configure_logging('tornado')
     serve.serve(
         config_file=config_file,
         dev_addr=dev_addr,
         strict=strict,
         theme=theme,
+        livereload=livereload,
     )
 
 
