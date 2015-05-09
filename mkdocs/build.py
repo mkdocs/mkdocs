@@ -7,9 +7,9 @@ import logging
 import os
 
 from jinja2.exceptions import TemplateNotFound
-from six.moves.urllib.parse import urljoin
 import jinja2
 import json
+import six
 
 from mkdocs import nav, search, utils
 from mkdocs.relative_path_ext import RelativePathExtension
@@ -115,7 +115,8 @@ def get_page_context(page, content, toc, meta, config):
         base = config['site_url']
         if not base.endswith('/'):
             base += '/'
-        canonical_url = urljoin(base, page.abs_url.lstrip('/'))
+        canonical_url = six.moves.urllib.parse.urljoin(
+            base, page.abs_url.lstrip('/'))
     else:
         canonical_url = None
 
@@ -149,7 +150,7 @@ def build_sitemap(config, env, site_navigation):
 
 def build_template(template_name, env, config, site_navigation=None):
 
-    log.debug("Building {0} page".format(template_name))
+    log.debug("Building %s page", template_name)
 
     try:
         template = env.get_template(template_name)
@@ -262,7 +263,7 @@ def build_pages(config, dump_json=False):
             build_result = _build_page(page, config, site_navigation, env, dump_json)
             if build_result is None:
                 continue
-            html_content, table_of_contents, meta = build_result
+            html_content, table_of_contents, _ = build_result
             search_index.add_entry_from_context(
                 page, html_content, table_of_contents)
         except Exception:

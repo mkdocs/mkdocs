@@ -10,6 +10,7 @@ from six import PY2
 from six.moves import zip
 
 from mkdocs import config
+from mkdocs.config import base, defaults, config_options
 from mkdocs.exceptions import ConfigurationError
 from mkdocs.tests.base import dedent
 
@@ -26,9 +27,13 @@ class ConfigTests(unittest.TestCase):
         self.assertRaises(ConfigurationError, load_missing_config)
 
     def test_missing_site_name(self):
-        def load_missing_site_name():
-            config.validate_config({})
-        self.assertRaises(ConfigurationError, load_missing_site_name)
+        c = base.Config(schema=defaults.DEFAULT_CONFIG)
+        c.load_dict({})
+        errors, warings = c.validate()
+        self.assertEqual([
+            ('site_name', 'Required configuration not provided.')
+        ], errors)
+        self.assertEqual([], warings)
 
     def test_empty_config(self):
         def load_empty_config():
@@ -98,6 +103,9 @@ class ConfigTests(unittest.TestCase):
 
     def test_theme(self):
 
+        mytheme = tempfile.mkdtemp()
+        custom = tempfile.mkdtemp()
+
         base_config = dedent("""
         site_name: Example
         pages:
@@ -108,20 +116,21 @@ class ConfigTests(unittest.TestCase):
         configs = [
             "site_name: Example",  # default theme
             "theme: readthedocs",  # builtin theme
-            "theme_dir: mytheme",  # custom only
-            "theme: cosmo\ntheme_dir: custom"  # builtin and custom
+            "theme_dir: {0}".format(mytheme),  # custom only
+            "theme: cosmo\ntheme_dir: {0}".format(custom)  # builtin and custom
         ]
 
         abs_path = os.path.abspath(os.path.dirname(__file__))
-        theme_dir = os.path.abspath(os.path.join(abs_path, '..', 'themes'))
-        search_asset_dir = os.path.abspath(
-            os.path.join(abs_path, '..', 'assets', 'search'))
+        mkdocs_dir = os.path.abspath(os.path.join(abs_path, '..', '..'))
+        theme_dir = os.path.abspath(os.path.join(mkdocs_dir, 'themes'))
+        search_asset_dir = os.path.abspath(os.path.join(
+            mkdocs_dir, 'assets', 'search'))
 
         results = (
             [os.path.join(theme_dir, 'mkdocs'), search_asset_dir],
             [os.path.join(theme_dir, 'readthedocs'), search_asset_dir],
-            ['mytheme', search_asset_dir],
-            ['custom', os.path.join(theme_dir, 'cosmo'), search_asset_dir],
+            [mytheme, search_asset_dir],
+            [custom, os.path.join(theme_dir, 'cosmo'), search_asset_dir],
         )
 
         for config_contents, expected_result in zip(configs, results):
@@ -145,11 +154,41 @@ class ConfigTests(unittest.TestCase):
         try:
             open(os.path.join(tmp_dir, 'index.md'), 'w').close()
             open(os.path.join(tmp_dir, 'about.md'), 'w').close()
-            conf = config.validate_config({
+            conf = base.Config(schema=defaults.DEFAULT_CONFIG)
+            conf.load_dict({
                 'site_name': 'Example',
                 'docs_dir': tmp_dir
             })
-            self.assertEqual(conf['pages'], ['index.md', 'about.md'])
+            conf.validate()
+            self.assertEqual(['index.md', 'about.md'], conf['pages'])
+        finally:
+            shutil.rmtree(tmp_dir)
+
+    def test_default_pages_nested(self):
+        tmp_dir = tempfile.mkdtemp()
+        try:
+            open(os.path.join(tmp_dir, 'index.md'), 'w').close()
+            open(os.path.join(tmp_dir, 'about.md'), 'w').close()
+            os.makedirs(os.path.join(tmp_dir, 'sub'))
+            open(os.path.join(tmp_dir, 'sub', 'sub.md'), 'w').close()
+            os.makedirs(os.path.join(tmp_dir, 'sub', 'sub2'))
+            open(os.path.join(tmp_dir, 'sub', 'sub2', 'sub2.md'), 'w').close()
+            conf = base.Config(schema=defaults.DEFAULT_CONFIG)
+            conf.load_dict({
+                'site_name': 'Example',
+                'docs_dir': tmp_dir
+            })
+            conf.validate()
+            self.assertEqual([
+                'index.md',
+                'about.md',
+                {'Sub': [
+                    os.path.join('sub', 'sub.md'),
+                    {'Sub2': [
+                        os.path.join('sub', 'sub2', 'sub2.md'),
+                    ]}
+                ]}
+            ], conf['pages'])
         finally:
             shutil.rmtree(tmp_dir)
 
@@ -175,6 +214,13 @@ class ConfigTests(unittest.TestCase):
 
         for test_config in test_configs:
 
-            c = conf.copy()
-            c.update(test_config)
-            self.assertRaises(ConfigurationError, config.validate_config, c)
+            patch = conf.copy()
+            patch.update(test_config)
+
+            schema = defaults.DEFAULT_CONFIG.copy()
+            schema['docs_dir'] = config_options.Dir()
+
+            c = base.Config(schema=schema)
+            c.load_dict(patch)
+
+            self.assertRaises(config_options.ValidationError, c.validate)

@@ -1,8 +1,15 @@
 import logging
 
+import six
+
 from mkdocs.exceptions import ConfigurationError
 
 log = logging.getLogger(__name__)
+
+try:
+    from collections import OrderedDict
+except ImportError:
+    OrderedDict = dict
 
 
 def pages_compat_shim(original_pages):
@@ -50,6 +57,9 @@ def pages_compat_shim(original_pages):
     new_pages = []
 
     for config_line in original_pages:
+
+        if isinstance(config_line, six.string_types):
+            config_line = [config_line, ]
 
         if len(config_line) not in (1, 2, 3):
             msg = (

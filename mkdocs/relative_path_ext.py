@@ -39,7 +39,7 @@ import logging
 
 from markdown.extensions import Extension
 from markdown.treeprocessors import Treeprocessor
-from six.moves.urllib.parse import urlparse, urlunparse
+import six
 
 from mkdocs import utils
 from mkdocs.exceptions import MarkdownNotFound
@@ -54,7 +54,9 @@ def _iter(node):
 
 
 def path_to_url(url, nav, strict):
-    scheme, netloc, path, params, query, fragment = urlparse(url)
+
+    scheme, netloc, path, params, query, fragment = (
+        six.moves.urllib.parse.urlparse(url))
 
     if scheme or netloc or not path:
         # Ignore URLs unless they are a relative link to a markdown file.
@@ -86,7 +88,8 @@ def path_to_url(url, nav, strict):
         path = utils.get_url_path(path).lstrip('/')
 
     # Convert the .md hyperlink to a relative hyperlink to the HTML page.
-    url = urlunparse((scheme, netloc, path, params, query, fragment))
+    fragments = (scheme, netloc, path, params, query, fragment)
+    url = six.moves.urllib.parse.urlunparse(fragments)
     return url
 
 

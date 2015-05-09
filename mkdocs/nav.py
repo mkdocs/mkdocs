@@ -160,9 +160,9 @@ class Page(object):
         return len(self.ancestors) == 0
 
     def __str__(self):
-        return self._indent_print()
+        return self.indent_print()
 
-    def _indent_print(self, depth=0):
+    def indent_print(self, depth=0):
         indent = '    ' * depth
         active_marker = ' [*]' if self.active else ''
         title = self.title if (self.title is not None) else '[blank]'
@@ -181,18 +181,18 @@ class Header(object):
         self.ancestors = []
 
     def __str__(self):
-        return self._indent_print()
+        return self.indent_print()
 
     @property
     def is_top_level(self):
         return len(self.ancestors) == 0
 
-    def _indent_print(self, depth=0):
+    def indent_print(self, depth=0):
         indent = '    ' * depth
         active_marker = ' [*]' if self.active else ''
         ret = '%s%s%s\n' % (indent, self.title, active_marker)
         for item in self.children:
-            ret += item._indent_print(depth + 1)
+            ret += item.indent_print(depth + 1)
         return ret
 
 
