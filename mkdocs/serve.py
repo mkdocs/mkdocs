@@ -3,21 +3,29 @@ import tempfile
 from livereload import Server
 
 from mkdocs.build import build
+from mkdocs.config import load_config
 
 
-def serve(config):
+def serve(config_file=None, dev_addr=None, strict=None, theme=None):
     """
     Start the devserver, and rebuild the docs whenever any changes take effect.
     """
     # Create a temporary build directory, and set some options to serve it
     tempdir = tempfile.mkdtemp()
-    config['site_dir'] = tempdir
 
     def builder():
+        config = load_config(
+            config_file=config_file,
+            dev_addr=dev_addr,
+            strict=strict,
+            theme=theme,
+        )
+        config['site_dir'] = tempdir
         build(config, live_server=True)
+        return config
 
     # Perform the initial build
-    builder()
+    config = builder()
 
     server = Server()
 
