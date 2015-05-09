@@ -19,11 +19,16 @@ def configure_logging(is_verbose=False):
     '''When a --verbose flag is passed, increase the verbosity of mkdocs'''
 
     logger = logging.getLogger('mkdocs')
+    logger.propagate = False
+    stream = logging.StreamHandler()
+    formatter = logging.Formatter("%(levelname)-7s -  %(message)s ")
+    stream.setFormatter(formatter)
+    logger.addHandler(stream)
 
     if is_verbose:
         logger.setLevel(logging.DEBUG)
     else:
-        logger.setLevel(logging.WARNING)
+        logger.setLevel(logging.INFO)
 
 
 clean_help = "Remove old files from the site_dir before building"

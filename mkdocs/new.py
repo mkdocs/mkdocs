@@ -1,7 +1,8 @@
 # coding: utf-8
-from __future__ import print_function, unicode_literals
+from __future__ import unicode_literals
 
 import os
+import logging
 from io import open
 
 config_text = 'site_name: My Docs\n'
@@ -24,6 +25,8 @@ For full documentation visit [mkdocs.org](http://mkdocs.org).
         ...       # Other markdown pages, images and other files.
 """
 
+log = logging.getLogger(__name__)
+
 
 def new(output_dir):
 
@@ -32,20 +35,20 @@ def new(output_dir):
     index_path = os.path.join(docs_dir, 'index.md')
 
     if os.path.exists(config_path):
-        print('Project already exists.')
+        log.info('Project already exists.')
         return
 
     if not os.path.exists(output_dir):
-        print('Creating project directory: %s' % output_dir)
+        log.info('Creating project directory: %s', output_dir)
         os.mkdir(output_dir)
 
-    print('Writing config file: %s' % config_path)
+    log.info('Writing config file: %s', config_path)
     open(config_path, 'w', encoding='utf-8').write(config_text)
 
     if os.path.exists(index_path):
         return
 
-    print('Writing initial docs: %s' % index_path)
+    log.info('Writing initial docs: %s', index_path)
     if not os.path.exists(docs_dir):
         os.mkdir(docs_dir)
     open(index_path, 'w', encoding='utf-8').write(index_text)
