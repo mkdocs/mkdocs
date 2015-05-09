@@ -280,7 +280,7 @@ class BuildTests(unittest.TestCase):
             os.mkdir(os.path.join(docs_dir, '.git'))
             open(os.path.join(docs_dir, '.git/hidden'), 'w').close()
 
-            conf = config_base.Config(schema=config_defaults.DEFAULT_CONFIG)
+            conf = config_base.Config(schema=config_defaults.DEFAULT_SCHEMA)
             conf.load_dict({
                 'site_name': 'Example',
                 'docs_dir': docs_dir,

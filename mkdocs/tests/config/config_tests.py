@@ -27,7 +27,7 @@ class ConfigTests(unittest.TestCase):
         self.assertRaises(ConfigurationError, load_missing_config)
 
     def test_missing_site_name(self):
-        c = base.Config(schema=defaults.DEFAULT_CONFIG)
+        c = base.Config(schema=defaults.DEFAULT_SCHEMA)
         c.load_dict({})
         errors, warings = c.validate()
         self.assertEqual([
@@ -138,9 +138,8 @@ class ConfigTests(unittest.TestCase):
                 config_file = tempfile.NamedTemporaryFile('w', delete=False)
                 config_file.write(ensure_utf(base_config % config_contents))
                 config_file.flush()
-                result = config.load_config(
-                    config_file=open(config_file.name, 'rb'))
-                self.assertEqual(result['theme_dir'], expected_result)
+                result = config.load_config(config_file=config_file.name)
+                self.assertEqual(expected_result, result['theme_dir'])
             finally:
                 try:
                     config_file.close()
@@ -154,7 +153,7 @@ class ConfigTests(unittest.TestCase):
         try:
             open(os.path.join(tmp_dir, 'index.md'), 'w').close()
             open(os.path.join(tmp_dir, 'about.md'), 'w').close()
-            conf = base.Config(schema=defaults.DEFAULT_CONFIG)
+            conf = base.Config(schema=defaults.DEFAULT_SCHEMA)
             conf.load_dict({
                 'site_name': 'Example',
                 'docs_dir': tmp_dir
@@ -173,7 +172,7 @@ class ConfigTests(unittest.TestCase):
             open(os.path.join(tmp_dir, 'sub', 'sub.md'), 'w').close()
             os.makedirs(os.path.join(tmp_dir, 'sub', 'sub2'))
             open(os.path.join(tmp_dir, 'sub', 'sub2', 'sub2.md'), 'w').close()
-            conf = base.Config(schema=defaults.DEFAULT_CONFIG)
+            conf = base.Config(schema=defaults.DEFAULT_SCHEMA)
             conf.load_dict({
                 'site_name': 'Example',
                 'docs_dir': tmp_dir
@@ -217,10 +216,11 @@ class ConfigTests(unittest.TestCase):
             patch = conf.copy()
             patch.update(test_config)
 
-            schema = defaults.DEFAULT_CONFIG.copy()
-            schema['docs_dir'] = config_options.Dir()
-
-            c = base.Config(schema=schema)
+            # Same as the default schema, but don't verify the docs_dir exists.
+            c = base.Config(schema=(
+                ('docs_dir', config_options.Dir(default='docs')),
+                ('site_dir', config_options.SiteDir(default='site')),
+            ))
             c.load_dict(patch)
 
             self.assertRaises(config_options.ValidationError, c.validate)
