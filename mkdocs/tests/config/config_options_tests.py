@@ -132,14 +132,14 @@ class DirTest(unittest.TestCase):
 
     def test_missing_dir(self):
 
-        d = "/not/a/real/path/I/hope"
+        d = os.path.join("not", "a", "real", "path", "I", "hope")
         option = config_options.Dir()
         value = option.validate(d)
-        self.assertEqual(d, value)
+        self.assertEqual(os.path.abspath(d), value)
 
     def test_missing_dir_but_required(self):
 
-        d = "/not/a/real/path/I/hope"
+        d = os.path.join("not", "a", "real", "path", "I", "hope")
         option = config_options.Dir(exists=True)
         self.assertRaises(config_options.ValidationError,
                           option.validate, d)
