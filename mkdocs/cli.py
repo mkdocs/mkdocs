@@ -54,12 +54,12 @@ def cli(verbose):
 @click.option('--theme', type=click.Choice(theme_choices), help=theme_help)
 def serve_command(dev_addr, config_file, strict, theme):
     """Run the builtin development server"""
-    serve.serve(load_config(
+    serve.serve(
         config_file=config_file,
         dev_addr=dev_addr,
         strict=strict,
         theme=theme,
-    ))
+    )
 
 
 @cli.command(name="build")
