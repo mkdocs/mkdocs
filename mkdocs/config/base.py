@@ -72,16 +72,16 @@ class Config(six.moves.UserDict):
 
         return failed, warnings
 
-    def update(self, patch):
+    def update(self, dict=None, **kwargs):
 
-        if not isinstance(patch, dict):
+        if not isinstance(dict, type({})):
             raise exceptions.ConfigurationError(
                 "The configuration is invalid. The expected type was a key "
                 "value mapping (a python dict) but we got an object of type: "
-                "{0}".format(type(patch)))
+                "{0}".format(type(dict)))
 
-        self.user_configs.append(patch)
-        self.data.update(patch)
+        self.user_configs.append(dict)
+        self.data.update(dict=dict, **kwargs)
 
     def load_file(self, config_file):
         self.config_file_path = config_file.name
