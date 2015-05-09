@@ -23,10 +23,13 @@ class Config(six.moves.UserDict):
         """
 
         self._schema = schema
+        self._schema_keys = set(dict(schema).keys())
         self.data = {}
 
         self.set_defaults()
         self.user_configs = []
+
+        self.config_file_path = None
 
     def set_defaults(self):
         """
@@ -34,14 +37,14 @@ class Config(six.moves.UserDict):
         default if it has one.
         """
 
-        for key, config_option in self._schema.items():
+        for key, config_option in self._schema:
             self[key] = config_option.default
 
     def _validate(self):
 
         failed, warnings = [], []
 
-        for key, config_option in self._schema.items():
+        for key, config_option in self._schema:
             try:
                 value = self.get(key)
                 self[key] = config_option.validate(value)
@@ -49,7 +52,7 @@ class Config(six.moves.UserDict):
             except config_options.ValidationError as e:
                 failed.append((key, str(e)))
 
-        for key in (set(self.keys()) - set(self._schema.keys())):
+        for key in (set(self.keys()) - self._schema_keys):
             warnings.append((
                 key, "Unrecognised configuration name: {0}".format(key)
             ))
@@ -58,8 +61,7 @@ class Config(six.moves.UserDict):
 
     def _post_validate(self):
 
-        for key in self._schema.keys():
-            config_option = self._schema[key]
+        for key, config_option in self._schema:
             config_option.post_validation(self, key_name=key)
 
     def validate(self):
@@ -82,6 +84,7 @@ class Config(six.moves.UserDict):
         self.data.update(patch)
 
     def load_file(self, config_file):
+        self.config_file_path = config_file.name
         return self.update(utils.yaml_load(config_file))
 
     def load_dict(self, data):
@@ -92,7 +95,9 @@ def _open_config_file(config_file):
 
     # Default to the standard config filename.
     if config_file is None:
-        config_file = 'mkdocs.yml'
+        config_file = os.path.abspath('mkdocs.yml')
+
+    log.debug("Loading configuration file: %s", config_file)
 
     # If it is a string, we can assume it is a path and attempt to open it.
     if isinstance(config_file, six.string_types):
@@ -124,10 +129,11 @@ def load_config(config_file=None, **kwargs):
         if value is None:
             options.pop(key)
 
-    options['config'] = config_file = _open_config_file(config_file)
+    config_file = _open_config_file(config_file)
+    options['config_file_path'] = config_file.name
 
     # Initialise the config with the default schema .
-    config = Config(schema=defaults.DEFAULT_CONFIG)
+    config = Config(schema=defaults.DEFAULT_SCHEMA)
     # First load the config file
     config.load_file(config_file)
     # Then load the options to overwrite anything in the config.
@@ -142,5 +148,9 @@ def load_config(config_file=None, **kwargs):
         for config_name, error in errors:
             log.error("%s - %s", config_name, error)
         raise exceptions.ConfigurationError("Errors found in the config file.")
+
+    for key, value in config.items():
+
+        log.debug("Config value: %s = %r", key, value)
 
     return config

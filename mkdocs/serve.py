@@ -23,7 +23,7 @@ def serve(config):
 
     # Watch the documentation files, the config file and the theme files.
     server.watch(config['docs_dir'], builder)
-    server.watch(config['config'].name)
+    server.watch(config['config_file_path'], builder)
 
     for d in config['theme_dir']:
         server.watch(d, builder)
