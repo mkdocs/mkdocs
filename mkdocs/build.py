@@ -1,5 +1,4 @@
 # coding: utf-8
-from __future__ import print_function
 
 from datetime import datetime
 from io import open
@@ -150,7 +149,7 @@ def build_sitemap(config, env, site_navigation):
 
 def build_template(template_name, env, config, site_navigation=None):
 
-    log.debug("Building %s page", template_name)
+    log.debug("Building template: %s", template_name)
 
     try:
         template = env.get_template(template_name)
@@ -280,12 +279,12 @@ def build(config, live_server=False, dump_json=False, clean_site_dir=False):
     Perform a full site build.
     """
     if clean_site_dir:
-        print("Cleaning site directory")
+        log.info("Cleaning site directory")
         utils.clean_directory(config['site_dir'])
     if not live_server:
-        print("Building documentation to directory: %s" % config['site_dir'])
+        log.info("Building documentation to directory: %s", config['site_dir'])
         if not clean_site_dir and site_directory_contains_stale_files(config['site_dir']):
-            print("Directory %s contains stale files. Use --clean to remove them." % config['site_dir'])
+            log.info("The directory contains stale files. Use --clean to remove them.")
 
     if dump_json:
         build_pages(config, dump_json=True)
