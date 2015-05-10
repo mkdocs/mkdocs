@@ -28,7 +28,7 @@ class ConfigTests(unittest.TestCase):
 
     def test_missing_site_name(self):
         c = base.Config(schema=defaults.DEFAULT_SCHEMA)
-        c.load_dict({})
+        c.update({})
         errors, warings = c.validate()
         self.assertEqual([
             ('site_name', 'Required configuration not provided.')
@@ -154,7 +154,7 @@ class ConfigTests(unittest.TestCase):
             open(os.path.join(tmp_dir, 'index.md'), 'w').close()
             open(os.path.join(tmp_dir, 'about.md'), 'w').close()
             conf = base.Config(schema=defaults.DEFAULT_SCHEMA)
-            conf.load_dict({
+            conf.update({
                 'site_name': 'Example',
                 'docs_dir': tmp_dir
             })
@@ -173,7 +173,7 @@ class ConfigTests(unittest.TestCase):
             os.makedirs(os.path.join(tmp_dir, 'sub', 'sub2'))
             open(os.path.join(tmp_dir, 'sub', 'sub2', 'sub2.md'), 'w').close()
             conf = base.Config(schema=defaults.DEFAULT_SCHEMA)
-            conf.load_dict({
+            conf.update({
                 'site_name': 'Example',
                 'docs_dir': tmp_dir
             })
@@ -221,6 +221,6 @@ class ConfigTests(unittest.TestCase):
                 ('docs_dir', config_options.Dir(default='docs')),
                 ('site_dir', config_options.SiteDir(default='site')),
             ))
-            c.load_dict(patch)
+            c.update(patch)
 
             self.assertRaises(config_options.ValidationError, c.validate)

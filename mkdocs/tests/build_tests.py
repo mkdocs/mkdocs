@@ -282,7 +282,7 @@ class BuildTests(unittest.TestCase):
             open(os.path.join(docs_dir, '.git/hidden'), 'w').close()
 
             conf = config_base.Config(schema=config_defaults.DEFAULT_SCHEMA)
-            conf.load_dict({
+            conf.update({
                 'site_name': 'Example',
                 'docs_dir': docs_dir,
                 'site_dir': site_dir
@@ -349,7 +349,7 @@ class BuildTests(unittest.TestCase):
 
         # Same as the default schema, but don't verify the docs_dir exists.
         config = config_base.Config(schema=config_defaults.DEFAULT_SCHEMA)
-        config.load_dict({
+        config.update({
             'site_name': "Site",
             'extra': {
                 'a': 1
