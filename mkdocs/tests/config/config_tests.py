@@ -6,8 +6,7 @@ import shutil
 import tempfile
 import unittest
 
-from six import PY2
-from six.moves import zip
+import six
 
 from mkdocs import config
 from mkdocs.config import base, defaults, config_options
@@ -16,7 +15,7 @@ from mkdocs.tests.base import dedent
 
 
 def ensure_utf(string):
-    return string.encode('utf-8') if PY2 else string
+    return string.encode('utf-8') if six.PY2 else string
 
 
 class ConfigTests(unittest.TestCase):
@@ -28,7 +27,7 @@ class ConfigTests(unittest.TestCase):
 
     def test_missing_site_name(self):
         c = base.Config(schema=defaults.DEFAULT_SCHEMA)
-        c.update({})
+        c.load_dict({})
         errors, warings = c.validate()
         self.assertEqual([
             ('site_name', 'Required configuration not provided.')
@@ -55,19 +54,14 @@ class ConfigTests(unittest.TestCase):
         try:
             config_file.write(ensure_utf(file_contents))
             config_file.flush()
+            config_file.close()
 
             self.assertRaises(
                 ConfigurationError,
                 config.load_config, config_file=open(config_file.name, 'rb')
             )
-
-            config_file.close()
         finally:
-            try:
-                os.remove(config_file.name)
-            except Exception:
-                # This fails on Windows for some reason
-                pass
+            os.remove(config_file.name)
 
     def test_config_option(self):
         """
@@ -89,35 +83,24 @@ class ConfigTests(unittest.TestCase):
         try:
             config_file.write(ensure_utf(file_contents))
             config_file.flush()
-            result = config.load_config(
-                config_file=open(config_file.name, 'rb'))
+            config_file.close()
+
+            result = config.load_config(config_file=config_file.name)
             self.assertEqual(result['site_name'], expected_result['site_name'])
             self.assertEqual(result['pages'], expected_result['pages'])
-            config_file.close()
         finally:
-            try:
-                os.remove(config_file.name)
-            except Exception:
-                # This fails on Windows for some reason
-                pass
+            os.remove(config_file.name)
 
     def test_theme(self):
 
         mytheme = tempfile.mkdtemp()
         custom = tempfile.mkdtemp()
 
-        base_config = dedent("""
-        site_name: Example
-        pages:
-        - ['index.md', 'Introduction']
-        %s
-        """)
-
         configs = [
-            "site_name: Example",  # default theme
-            "theme: readthedocs",  # builtin theme
-            "theme_dir: {0}".format(mytheme),  # custom only
-            "theme: cosmo\ntheme_dir: {0}".format(custom)  # builtin and custom
+            dict(),  # default theme
+            {"theme": "readthedocs"},  # builtin theme
+            {"theme_dir": mytheme},  # custom only
+            {"theme": "cosmo", "theme_dir": custom},  # builtin and custom
         ]
 
         abs_path = os.path.abspath(os.path.dirname(__file__))
@@ -133,20 +116,15 @@ class ConfigTests(unittest.TestCase):
             [custom, os.path.join(theme_dir, 'cosmo'), search_asset_dir],
         )
 
-        for config_contents, expected_result in zip(configs, results):
-            try:
-                config_file = tempfile.NamedTemporaryFile('w', delete=False)
-                config_file.write(ensure_utf(base_config % config_contents))
-                config_file.flush()
-                result = config.load_config(config_file=config_file.name)
-                self.assertEqual(expected_result, result['theme_dir'])
-            finally:
-                try:
-                    config_file.close()
-                    os.remove(config_file.name)
-                except:
-                    # This failed on Windows for some reason?
-                    pass
+        for config_contents, result in six.moves.zip(configs, results):
+
+            c = base.Config(schema=(
+                ('theme', config_options.Theme(default='mkdocs')),
+                ('theme_dir', config_options.ThemeDir(exists=True)),
+            ))
+            c.load_dict(config_contents)
+            c.validate()
+            self.assertEqual(c['theme_dir'], result)
 
     def test_default_pages(self):
         tmp_dir = tempfile.mkdtemp()
@@ -154,7 +132,7 @@ class ConfigTests(unittest.TestCase):
             open(os.path.join(tmp_dir, 'index.md'), 'w').close()
             open(os.path.join(tmp_dir, 'about.md'), 'w').close()
             conf = base.Config(schema=defaults.DEFAULT_SCHEMA)
-            conf.update({
+            conf.load_dict({
                 'site_name': 'Example',
                 'docs_dir': tmp_dir
             })
@@ -173,7 +151,7 @@ class ConfigTests(unittest.TestCase):
             os.makedirs(os.path.join(tmp_dir, 'sub', 'sub2'))
             open(os.path.join(tmp_dir, 'sub', 'sub2', 'sub2.md'), 'w').close()
             conf = base.Config(schema=defaults.DEFAULT_SCHEMA)
-            conf.update({
+            conf.load_dict({
                 'site_name': 'Example',
                 'docs_dir': tmp_dir
             })
@@ -221,6 +199,6 @@ class ConfigTests(unittest.TestCase):
                 ('docs_dir', config_options.Dir(default='docs')),
                 ('site_dir', config_options.SiteDir(default='site')),
             ))
-            c.update(patch)
+            c.load_dict(patch)
 
             self.assertRaises(config_options.ValidationError, c.validate)

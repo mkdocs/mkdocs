@@ -215,10 +215,18 @@ class Theme(BaseConfigOption):
     """
 
     def run_validation(self, value):
-
         themes = utils.get_theme_names()
 
         if value in themes:
+            if value in ['mkdocs', 'readthedocs']:
+                return value
+
+            self.warnings.append((
+                'theme',
+                ("The theme '{0}' will be removed in an upcoming MkDocs "
+                 "release. See http://www.mkdocs.org/about/release-notes/ "
+                 "for more details").format(value)
+            ))
             return value
 
         raise ValidationError("Unrecognised theme.")

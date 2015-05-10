@@ -11,7 +11,7 @@ class ConfigBaseTests(unittest.TestCase):
     def test_unrecognised_keys(self):
 
         c = base.Config(schema=defaults.DEFAULT_SCHEMA)
-        c.update({
+        c.load_dict({
             'not_a_valid_config_option': "test"
         })
 
@@ -45,14 +45,9 @@ class ConfigBaseTests(unittest.TestCase):
             config_file.write(
                 "site_dir: output\nsite_uri: http://www.mkdocs.org\n")
             config_file.flush()
-
-            with open(config_file.name, 'rb') as config:
-                self.assertRaises(exceptions.ConfigurationError,
-                                  base.load_config, config_file=config)
             config_file.close()
+
+            self.assertRaises(exceptions.ConfigurationError,
+                              base.load_config, config_file=config_file.name)
         finally:
-            try:
-                os.remove(config_file.name)
-            except Exception:
-                # This fails on Windows for some reason
-                pass
+            os.remove(config_file.name)

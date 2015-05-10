@@ -29,8 +29,6 @@ class Config(six.moves.UserDict):
         self.set_defaults()
         self.user_configs = []
 
-        self.config_file_path = None
-
     def set_defaults(self):
         """
         Set the base config by going through each validator and getting the
@@ -72,7 +70,7 @@ class Config(six.moves.UserDict):
 
         return failed, warnings
 
-    def update(self, patch):
+    def load_dict(self, patch):
 
         if not isinstance(patch, dict):
             raise exceptions.ConfigurationError(
@@ -84,8 +82,7 @@ class Config(six.moves.UserDict):
         self.data.update(patch)
 
     def load_file(self, config_file):
-        self.config_file_path = config_file.name
-        return self.update(utils.yaml_load(config_file))
+        return self.load_dict(utils.yaml_load(config_file))
 
 
 def _open_config_file(config_file):
@@ -127,14 +124,14 @@ def load_config(config_file=None, **kwargs):
             options.pop(key)
 
     config_file = _open_config_file(config_file)
-    options['config_file_path'] = config_file.name
+    options['config_file_path'] = getattr(config_file, 'name', '')
 
     # Initialise the config with the default schema .
     config = Config(schema=defaults.DEFAULT_SCHEMA)
     # First load the config file
     config.load_file(config_file)
     # Then load the options to overwrite anything in the config.
-    config.update(options)
+    config.load_dict(options)
 
     errors, warnings = config.validate()
 
