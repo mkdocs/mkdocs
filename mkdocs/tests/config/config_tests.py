@@ -54,19 +54,14 @@ class ConfigTests(unittest.TestCase):
         try:
             config_file.write(ensure_utf(file_contents))
             config_file.flush()
+            config_file.close()
 
             self.assertRaises(
                 ConfigurationError,
                 config.load_config, config_file=open(config_file.name, 'rb')
             )
-
-            config_file.close()
         finally:
-            try:
-                os.remove(config_file.name)
-            except Exception:
-                # This fails on Windows for some reason
-                pass
+            os.remove(config_file.name)
 
     def test_config_option(self):
         """
@@ -88,17 +83,13 @@ class ConfigTests(unittest.TestCase):
         try:
             config_file.write(ensure_utf(file_contents))
             config_file.flush()
-            result = config.load_config(
-                config_file=open(config_file.name, 'rb'))
+            config_file.close()
+
+            result = config.load_config(config_file=config_file.name)
             self.assertEqual(result['site_name'], expected_result['site_name'])
             self.assertEqual(result['pages'], expected_result['pages'])
-            config_file.close()
         finally:
-            try:
-                os.remove(config_file.name)
-            except Exception:
-                # This fails on Windows for some reason
-                pass
+            os.remove(config_file.name)
 
     def test_theme(self):
 
