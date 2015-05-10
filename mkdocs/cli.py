@@ -15,7 +15,7 @@ from mkdocs.config import load_config
 log = logging.getLogger(__name__)
 
 
-def configure_logging(log_name='mkdocs', verbose=False):
+def configure_logging(log_name='mkdocs', level=logging.INFO):
     '''When a --verbose flag is passed, increase the verbosity of mkdocs'''
 
     logger = logging.getLogger(log_name)
@@ -25,10 +25,7 @@ def configure_logging(log_name='mkdocs', verbose=False):
     stream.setFormatter(formatter)
     logger.addHandler(stream)
 
-    if verbose:
-        logger.setLevel(logging.DEBUG)
-    else:
-        logger.setLevel(logging.INFO)
+    logger.setLevel(level)
 
 
 clean_help = "Remove old files from the site_dir before building"
@@ -50,7 +47,13 @@ def cli(verbose):
     """
     MkDocs - Project documentation with Markdown.
     """
-    configure_logging(verbose=verbose)
+
+    if verbose:
+        level = logging.DEBUG
+    else:
+        level = logging.INFO
+
+    configure_logging(level=level)
 
 
 @cli.command(name="serve")
@@ -61,7 +64,9 @@ def cli(verbose):
 @click.option('--livereload/--no-livereload', default=True, help=reload_help)
 def serve_command(dev_addr, config_file, strict, theme, livereload):
     """Run the builtin development server"""
-    configure_logging('tornado')
+
+    logging.getLogger('tornado').setLevel(logging.WARNING)
+
     serve.serve(
         config_file=config_file,
         dev_addr=dev_addr,

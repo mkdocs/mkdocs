@@ -62,7 +62,7 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
     tempdir = tempfile.mkdtemp()
 
     def builder():
-        log.info("Rebuilding documentation...")
+        log.info("Building documentation...")
         config = load_config(
             config_file=config_file,
             dev_addr=dev_addr,
