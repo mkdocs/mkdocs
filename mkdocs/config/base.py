@@ -138,12 +138,16 @@ def load_config(config_file=None, **kwargs):
 
     errors, warnings = config.validate()
 
-    for config_name, warning in warnings:
-        log.warning("%s - %s", config_name, warning)
+    if len(warnings) > 0:
+        for config_name, warning in warnings:
+            log.warning("Config value: %s. Warning: %s", config_name, warning)
+        if config['strict']:
+            raise exceptions.ConfigurationError(
+                "Warnings found in the config file")
 
     if len(errors) > 0:
         for config_name, error in errors:
-            log.error("%s - %s", config_name, error)
+            log.error("Config value: %s. Error: %s", config_name, error)
         raise exceptions.ConfigurationError("Errors found in the config file.")
 
     for key, value in config.items():
