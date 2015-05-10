@@ -6,7 +6,7 @@ from mkdocs import exceptions
 from mkdocs import utils
 from mkdocs.config import config_options, defaults
 
-log = logging.getLogger(__name__)
+log = logging.getLogger('mkdocs.config')
 
 
 class Config(six.moves.UserDict):
@@ -87,9 +87,6 @@ class Config(six.moves.UserDict):
         self.config_file_path = config_file.name
         return self.update(utils.yaml_load(config_file))
 
-    def load_dict(self, data):
-        return self.update(data)
-
 
 def _open_config_file(config_file):
 
@@ -137,7 +134,7 @@ def load_config(config_file=None, **kwargs):
     # First load the config file
     config.load_file(config_file)
     # Then load the options to overwrite anything in the config.
-    config.load_dict(options)
+    config.update(options)
 
     errors, warnings = config.validate()
 
