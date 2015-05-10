@@ -11,7 +11,7 @@ class ConfigBaseTests(unittest.TestCase):
     def test_unrecognised_keys(self):
 
         c = base.Config(schema=defaults.DEFAULT_SCHEMA)
-        c.update({
+        c.load_dict({
             'not_a_valid_config_option': "test"
         })
 
