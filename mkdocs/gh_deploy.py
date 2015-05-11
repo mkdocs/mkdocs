@@ -16,8 +16,11 @@ def gh_deploy(config):
              config['site_dir'])
     try:
         command = ['ghp-import', '-p', config['site_dir']]
-        if 'remote_branch' in config:
-            command.extend(['-b', config['remote_branch']])
+        extra_options = [('-b', 'remote_branch'), ('-b', 'ghp_message')]
+        for cmd_arg, config_option in extra_options:
+            if config_option in config:
+                command.extend([cmd_arg, config[config_option]])
+
         subprocess.check_call(command)
     except Exception:
         return
