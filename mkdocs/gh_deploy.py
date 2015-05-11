@@ -16,7 +16,7 @@ def gh_deploy(config):
              config['site_dir'])
     try:
         command = ['ghp-import', '-p', config['site_dir']]
-        extra_options = [('-b', 'remote_branch'), ('-b', 'ghp_message')]
+        extra_options = [('-b', 'remote_branch'), ('-m', 'ghp_message')]
         for cmd_arg, config_option in extra_options:
             if config_option in config:
                 command.extend([cmd_arg, config[config_option]])
