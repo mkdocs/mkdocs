@@ -5,22 +5,25 @@ import os
 log = logging.getLogger(__name__)
 
 
-def gh_deploy(config):
+def gh_deploy(config, commit_message=None):
 
     if not os.path.exists('.git'):
         log.info('Cannot deploy - this directory does not appear to be a git '
                  'repository')
         return
 
-    log.info("Copying '%s' to `gh-pages` branch and pushing to GitHub.",
-             config['site_dir'])
-    try:
-        command = ['ghp-import', '-p', config['site_dir']]
-        extra_options = [('-b', 'remote_branch'), ('-m', 'ghp_message')]
-        for cmd_arg, config_option in extra_options:
-            if config_option in config:
-                command.extend([cmd_arg, config[config_option]])
+    command = ['ghp-import', '-p', config['site_dir']]
 
+    remote_branch = config.get('remote_branch', 'gh-pages')
+    command.extend(['-b', config['remote_branch']])
+
+    if commit_message is not None:
+        command.extend(['-m', commit_message])
+
+    log.info("Copying '%s' to `%s` branch and pushing to GitHub.",
+             config['site_dir'], remote_branch)
+
+    try:
         subprocess.check_call(command)
     except Exception:
         return
