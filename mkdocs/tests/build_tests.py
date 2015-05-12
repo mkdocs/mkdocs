@@ -19,9 +19,11 @@ def load_config(cfg=None):
     cfg = cfg or {}
     if 'site_name' not in cfg:
         cfg['site_name'] = 'Example'
-    conf = config.base.Config(schema=config.defaults.DEFAULT_SCHEMA)
+    conf = config.Config(schema=config.DEFAULT_SCHEMA)
     conf.load_dict(cfg)
-    assert(conf.validate() == ([], []))
+
+    errors_warnings = conf.validate()
+    assert(errors_warnings == ([], [])), errors_warnings
     return conf
 
 
@@ -365,6 +367,4 @@ class BuildTests(unittest.TestCase):
 
         context = build.get_global_context(mock.Mock(), cfg)
 
-        self.assertEqual(context['config']['extra'], {
-            'a': 1
-        })
+        self.assertEqual(context['config']['extra']['a'], 1)

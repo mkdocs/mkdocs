@@ -3,13 +3,62 @@ import os
 import six
 
 from mkdocs import utils, legacy
-
-
-class ValidationError(Exception):
-    """Raised during the validation process of the config on errors."""
+from mkdocs.config.base import Config, ValidationError
 
 
 class BaseConfigOption(object):
+
+    def __init__(self):
+        self.warnings = []
+        self.default = None
+
+    def is_required(self):
+        return False
+
+    def validate(self, value):
+        return self.run_validation(value)
+
+    def pre_validation(self, config, key_name):
+        """
+        After all options have passed validation, perform a post validation
+        process to do any additional changes dependant on other config values.
+
+        The post validation process method should be implemented by subclasses.
+        """
+
+    def run_validation(self, value):
+        """
+        Perform validation for a value.
+
+        The run_validation method should be implemented by subclasses.
+        """
+        return value
+
+    def post_validation(self, config, key_name):
+        """
+        After all options have passed validation, perform a post validation
+        process to do any additional changes dependant on other config values.
+
+        The post validation process method should be implemented by subclasses.
+        """
+
+
+class SubConfig(BaseConfigOption, Config):
+    def __init__(self, *config_options):
+        BaseConfigOption.__init__(self)
+        Config.__init__(self, config_options)
+        self.default = {}
+
+    def validate(self, value):
+        self.load_dict(value)
+        return self.run_validation(value)
+
+    def run_validation(self, value):
+        Config.validate(self)
+        return self
+
+
+class OptionallyRequired(BaseConfigOption):
     """
     The BaseConfigOption adds support for default values and required values
 
@@ -18,9 +67,9 @@ class BaseConfigOption(object):
     """
 
     def __init__(self, default=None, required=False):
+        super(OptionallyRequired, self).__init__()
         self.default = default
         self.required = required
-        self.warnings = []
 
     def is_required(self):
         return self.required
@@ -44,24 +93,8 @@ class BaseConfigOption(object):
 
         return self.run_validation(value)
 
-    def run_validation(self, value):
-        """
-        Perform validation for a value.
 
-        The run_validation method should be implemented by subclasses.
-        """
-        return value
-
-    def post_validation(self, config, key_name):
-        """
-        After all options have passed validation, perform a post validation
-        process to do any additional changes dependant on other config values.
-
-        The post validation process method should be implemented by subclasses.
-        """
-
-
-class Type(BaseConfigOption):
+class Type(OptionallyRequired):
     """
     Type Config Option
 
@@ -88,7 +121,40 @@ class Type(BaseConfigOption):
         raise ValidationError(msg)
 
 
-class URL(BaseConfigOption):
+class Deprecated(BaseConfigOption):
+
+    def __init__(self, moved_to=None):
+        super(Deprecated, self).__init__()
+        self.default = None
+        self.moved_to = moved_to
+
+    def pre_validation(self, config, key_name):
+
+        if config.get(key_name) is None or self.moved_to is None:
+            return
+
+        warning = ('The configuration option {0} has been deprecated and will '
+                   'be removed in a future release of MkDocs.')
+        self.warnings.append(warning)
+
+        if '.' not in self.moved_to:
+            target = config
+            target_key = self.moved_to
+        else:
+            move_to, target_key = self.moved_to.rsplit('.', 1)
+
+            target = config
+            for key in move_to.split('.'):
+                target = target.setdefault(key, {})
+
+                if not isinstance(target, dict):
+                    # We can't move it for the user
+                    return
+
+        target[target_key] = config.pop(key_name)
+
+
+class URL(OptionallyRequired):
     """
     URL Config Option
 
@@ -206,7 +272,7 @@ class ThemeDir(Dir):
         config['theme_dir'].append(search_assets)
 
 
-class Theme(BaseConfigOption):
+class Theme(OptionallyRequired):
     """
     Theme Config Option
 
@@ -220,18 +286,17 @@ class Theme(BaseConfigOption):
             if value in ['mkdocs', 'readthedocs']:
                 return value
 
-            self.warnings.append((
-                'theme',
+            self.warnings.append(
                 ("The theme '{0}' will be removed in an upcoming MkDocs "
                  "release. See http://www.mkdocs.org/about/release-notes/ "
                  "for more details").format(value)
-            ))
+            )
             return value
 
         raise ValidationError("Unrecognised theme.")
 
 
-class Extras(BaseConfigOption):
+class Extras(OptionallyRequired):
     """
     Extras Config Option
 
@@ -324,7 +389,7 @@ class Pages(Extras):
         config[key_name] = utils.nest_paths(pages)
 
 
-class NumPages(BaseConfigOption):
+class NumPages(OptionallyRequired):
     """
     NumPages Config Option
 
@@ -347,7 +412,7 @@ class NumPages(BaseConfigOption):
             config[key_name] = False
 
 
-class Private(BaseConfigOption):
+class Private(OptionallyRequired):
     """
     Private Config Option
 
@@ -358,7 +423,7 @@ class Private(BaseConfigOption):
         raise ValidationError('For internal use only.')
 
 
-class MarkdownExtensions(BaseConfigOption):
+class MarkdownExtensions(OptionallyRequired):
     """
     Markdown Extensions Config Option
 

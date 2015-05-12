@@ -9,7 +9,7 @@ import unittest
 import six
 
 from mkdocs import config
-from mkdocs.config import base, defaults, config_options
+from mkdocs.config import config_options
 from mkdocs.exceptions import ConfigurationError
 from mkdocs.tests.base import dedent
 
@@ -26,7 +26,7 @@ class ConfigTests(unittest.TestCase):
         self.assertRaises(ConfigurationError, load_missing_config)
 
     def test_missing_site_name(self):
-        c = base.Config(schema=defaults.DEFAULT_SCHEMA)
+        c = config.Config(schema=config.DEFAULT_SCHEMA)
         c.load_dict({})
         errors, warings = c.validate()
         self.assertEqual([
@@ -118,7 +118,7 @@ class ConfigTests(unittest.TestCase):
 
         for config_contents, result in six.moves.zip(configs, results):
 
-            c = base.Config(schema=(
+            c = config.Config(schema=(
                 ('theme', config_options.Theme(default='mkdocs')),
                 ('theme_dir', config_options.ThemeDir(exists=True)),
             ))
@@ -131,7 +131,7 @@ class ConfigTests(unittest.TestCase):
         try:
             open(os.path.join(tmp_dir, 'index.md'), 'w').close()
             open(os.path.join(tmp_dir, 'about.md'), 'w').close()
-            conf = base.Config(schema=defaults.DEFAULT_SCHEMA)
+            conf = config.Config(schema=config.DEFAULT_SCHEMA)
             conf.load_dict({
                 'site_name': 'Example',
                 'docs_dir': tmp_dir
@@ -150,7 +150,7 @@ class ConfigTests(unittest.TestCase):
             open(os.path.join(tmp_dir, 'sub', 'sub.md'), 'w').close()
             os.makedirs(os.path.join(tmp_dir, 'sub', 'sub2'))
             open(os.path.join(tmp_dir, 'sub', 'sub2', 'sub2.md'), 'w').close()
-            conf = base.Config(schema=defaults.DEFAULT_SCHEMA)
+            conf = config.Config(schema=config.DEFAULT_SCHEMA)
             conf.load_dict({
                 'site_name': 'Example',
                 'docs_dir': tmp_dir
@@ -195,7 +195,7 @@ class ConfigTests(unittest.TestCase):
             patch.update(test_config)
 
             # Same as the default schema, but don't verify the docs_dir exists.
-            c = base.Config(schema=(
+            c = config.Config(schema=(
                 ('docs_dir', config_options.Dir(default='docs')),
                 ('site_dir', config_options.SiteDir(default='site')),
             ))
