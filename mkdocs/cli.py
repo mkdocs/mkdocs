@@ -122,14 +122,14 @@ def json_command(clean, config_file, strict, site_dir):
 @cli.command(name="gh-deploy")
 @click.option('--clean', is_flag=True, help=clean_help)
 @click.option('--config-file', type=click.File('rb'), help=config_file_help)
-@click.option('--commit-message', is_flag=False, help=commit_message_help)
-def gh_deploy_command(config_file, clean, commit_message):
+@click.option('--message', '-m', help=commit_message_help)
+def gh_deploy_command(config_file, clean, message):
     """Deply your documentation to GitHub Pages"""
     config = load_config(
         config_file=config_file
     )
     build.build(config, clean_site_dir=clean)
-    gh_deploy.gh_deploy(config, commit_message=commit_message)
+    gh_deploy.gh_deploy(config, message=message)
 
 
 @cli.command(name="new")

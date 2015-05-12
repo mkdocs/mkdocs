@@ -5,7 +5,7 @@ import os
 log = logging.getLogger(__name__)
 
 
-def gh_deploy(config, commit_message=None):
+def gh_deploy(config, message=None):
 
     if not os.path.exists('.git'):
         log.info('Cannot deploy - this directory does not appear to be a git '
@@ -14,13 +14,13 @@ def gh_deploy(config, commit_message=None):
 
     command = ['ghp-import', '-p', config['site_dir']]
 
-    remote_branch = config.get('remote_branch', 'gh-pages')
-    command.extend(['-b', config['remote_branch']])
+    remote_branch = config['remote_branch']
+    command.extend(['-b', remote_branch])
 
-    if commit_message is not None:
-        command.extend(['-m', commit_message])
+    if message is not None:
+        command.extend(['-m', message])
 
-    log.info("Copying '%s' to `%s` branch and pushing to GitHub.",
+    log.info("Copying '%s' to '%s' branch and pushing to GitHub.",
              config['site_dir'], remote_branch)
 
     try:
