@@ -360,6 +360,6 @@ class BuildTests(unittest.TestCase):
 
         context = build.get_global_context(mock.Mock(), config)
 
-        self.assertEqual(context['extra'], {
+        self.assertEqual(context['config']['extra'], {
             'a': 1
         })

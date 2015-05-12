@@ -252,11 +252,11 @@ extra:
 And then displayed with this HTML in the custom theme.
 
 ```html
-{{ extra.version }}
+{{ config.extra.version }}
 
-{% if extra.links %}
+{% if config.extra.links %}
   <ul>
-  {% for link in extra.links %}
+  {% for link in config.extra.links %}
       <li>{{ link }}</li>
   {% endfor %}
   </ul>

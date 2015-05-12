@@ -92,7 +92,7 @@ def get_global_context(nav, config):
         'mkdocs_version': mkdocs.__version__,
         'build_date_utc': datetime.utcnow(),
 
-        'extra': config['extra']
+        'config': config
     }
 
 

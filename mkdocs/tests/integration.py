@@ -32,7 +32,7 @@ def silence_logging(is_verbose=False):
     '''When a --verbose flag is passed, increase the verbosity of mkdocs'''
 
     logger = logging.getLogger('mkdocs')
-    logger.setLevel(logging.WARNING)
+    logger.setLevel(logging.ERROR)
 
 
 def run_build(theme_name, output, config_file, quiet):
