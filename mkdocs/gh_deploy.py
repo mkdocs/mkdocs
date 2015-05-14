@@ -5,7 +5,7 @@ import os
 log = logging.getLogger(__name__)
 
 
-def gh_deploy(config, message=None):
+def gh_deploy(config, message=None, branch=None):
 
     if not os.path.exists('.git'):
         log.info('Cannot deploy - this directory does not appear to be a git '
@@ -14,7 +14,7 @@ def gh_deploy(config, message=None):
 
     command = ['ghp-import', '-p', config['site_dir']]
 
-    remote_branch = config['remote_branch']
+    remote_branch = config['remote_branch'] if branch is None else branch
     command.extend(['-b', remote_branch])
 
     if message is not None:
