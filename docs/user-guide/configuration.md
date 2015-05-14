@@ -80,6 +80,13 @@ google_analytics: ['UA-36723568-3', 'mkdocs.org']
 **default**: `null`
 
 
+### remote_branch
+
+Set the remote branch to commit to when using `gh-deploy` to update Github Pages.
+
+**default**: `gh-pages`
+
+
 ## Documentation layout
 
 ### pages
