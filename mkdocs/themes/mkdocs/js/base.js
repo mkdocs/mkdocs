@@ -14,10 +14,17 @@ function getSearchTerm()
 
 $(document).ready(function() {
 
-    var search_term = getSearchTerm();
+    var search_term = getSearchTerm(),
+        $search_modal = $('#mkdocs_search_modal');
+
     if(search_term){
-        $('#mkdocs_search_modal').modal();
+        $search_modal.modal();
     }
+
+    // make sure search input gets autofocus everytime modal opens.
+    $search_modal.on('shown.bs.modal', function () {
+        $search_modal.find('#mkdocs-search-query').focus();
+    });
 
     // Highlight.js
     hljs.initHighlightingOnLoad();
