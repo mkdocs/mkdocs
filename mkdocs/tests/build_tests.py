@@ -9,16 +9,26 @@ import unittest
 from six.moves import zip
 import mock
 
-from mkdocs import build, nav
-from mkdocs.config import base as config_base, defaults as config_defaults
+from mkdocs import build, nav, config
 from mkdocs.exceptions import MarkdownNotFound
 from mkdocs.tests.base import dedent
+
+
+def load_config(cfg=None):
+    """ Helper to build a simple config for testing. """
+    cfg = cfg or {}
+    if 'site_name' not in cfg:
+        cfg['site_name'] = 'Example'
+    conf = config.base.Config(schema=config.defaults.DEFAULT_SCHEMA)
+    conf.load_dict(cfg)
+    assert(conf.validate() == ([], []))
+    return conf
 
 
 class BuildTests(unittest.TestCase):
 
     def test_empty_document(self):
-        html, toc, meta = build.convert_markdown("")
+        html, toc, meta = build.convert_markdown("", load_config())
 
         self.assertEqual(html, '')
         self.assertEqual(len(list(toc)), 0)
@@ -28,7 +38,6 @@ class BuildTests(unittest.TestCase):
         """
         Ensure that basic Markdown -> HTML and TOC works.
         """
-
         html, toc, meta = build.convert_markdown(dedent("""
             page_title: custom title
 
@@ -39,7 +48,7 @@ class BuildTests(unittest.TestCase):
             # Heading 2
 
             And some more text.
-        """))
+        """), load_config())
 
         expected_html = dedent("""
             <h1 id="heading-1">Heading 1</h1>
@@ -62,25 +71,25 @@ class BuildTests(unittest.TestCase):
     def test_convert_internal_link(self):
         md_text = 'An [internal link](internal.md) to another document.'
         expected = '<p>An <a href="internal/">internal link</a> to another document.</p>'
-        html, toc, meta = build.convert_markdown(md_text)
+        html, toc, meta = build.convert_markdown(md_text, load_config())
         self.assertEqual(html.strip(), expected.strip())
 
     def test_convert_multiple_internal_links(self):
         md_text = '[First link](first.md) [second link](second.md).'
         expected = '<p><a href="first/">First link</a> <a href="second/">second link</a>.</p>'
-        html, toc, meta = build.convert_markdown(md_text)
+        html, toc, meta = build.convert_markdown(md_text, load_config())
         self.assertEqual(html.strip(), expected.strip())
 
     def test_convert_internal_link_differing_directory(self):
         md_text = 'An [internal link](../internal.md) to another document.'
         expected = '<p>An <a href="../internal/">internal link</a> to another document.</p>'
-        html, toc, meta = build.convert_markdown(md_text)
+        html, toc, meta = build.convert_markdown(md_text, load_config())
         self.assertEqual(html.strip(), expected.strip())
 
     def test_convert_internal_link_with_anchor(self):
         md_text = 'An [internal link](internal.md#section1.1) to another document.'
         expected = '<p>An <a href="internal/#section1.1">internal link</a> to another document.</p>'
-        html, toc, meta = build.convert_markdown(md_text)
+        html, toc, meta = build.convert_markdown(md_text, load_config())
         self.assertEqual(html.strip(), expected.strip())
 
     def test_convert_internal_media(self):
@@ -103,7 +112,7 @@ class BuildTests(unittest.TestCase):
 
         for (page, expected) in zip(site_navigation.walk_pages(), expected_results):
             md_text = '![The initial MkDocs layout](img/initial-layout.png)'
-            html, _, _ = build.convert_markdown(md_text, site_navigation=site_navigation)
+            html, _, _ = build.convert_markdown(md_text, load_config(), site_navigation=site_navigation)
             self.assertEqual(html, template % expected)
 
     def test_convert_internal_asbolute_media(self):
@@ -126,7 +135,7 @@ class BuildTests(unittest.TestCase):
 
         for (page, expected) in zip(site_navigation.walk_pages(), expected_results):
             md_text = '![The initial MkDocs layout](/img/initial-layout.png)'
-            html, _, _ = build.convert_markdown(md_text, site_navigation=site_navigation)
+            html, _, _ = build.convert_markdown(md_text, load_config(), site_navigation=site_navigation)
             self.assertEqual(html, template % expected)
 
     def test_dont_convert_code_block_urls(self):
@@ -146,11 +155,10 @@ class BuildTests(unittest.TestCase):
 
         for page in site_navigation.walk_pages():
             markdown = 'An HTML Anchor::\n\n    <a href="index.md">My example link</a>\n'
-            html, _, _ = build.convert_markdown(markdown, site_navigation=site_navigation)
+            html, _, _ = build.convert_markdown(markdown, load_config(), site_navigation=site_navigation)
             self.assertEqual(dedent(html), expected)
 
     def test_anchor_only_link(self):
-
         pages = [
             'index.md',
             'internal.md',
@@ -161,13 +169,13 @@ class BuildTests(unittest.TestCase):
 
         for page in site_navigation.walk_pages():
             markdown = '[test](#test)'
-            html, _, _ = build.convert_markdown(markdown, site_navigation=site_navigation)
+            html, _, _ = build.convert_markdown(markdown, load_config(), site_navigation=site_navigation)
             self.assertEqual(html, '<p><a href="#test">test</a></p>')
 
     def test_ignore_external_link(self):
         md_text = 'An [external link](http://example.com/external.md).'
         expected = '<p>An <a href="http://example.com/external.md">external link</a>.</p>'
-        html, toc, meta = build.convert_markdown(md_text)
+        html, toc, meta = build.convert_markdown(md_text, load_config())
         self.assertEqual(html.strip(), expected.strip())
 
     def test_not_use_directory_urls(self):
@@ -177,20 +185,19 @@ class BuildTests(unittest.TestCase):
             'internal.md',
         ]
         site_navigation = nav.SiteNavigation(pages, use_directory_urls=False)
-        html, toc, meta = build.convert_markdown(md_text, site_navigation=site_navigation)
+        html, toc, meta = build.convert_markdown(md_text, load_config(), site_navigation=site_navigation)
         self.assertEqual(html.strip(), expected.strip())
 
     def test_markdown_table_extension(self):
         """
         Ensure that the table extension is supported.
         """
-
         html, toc, meta = build.convert_markdown(dedent("""
         First Header   | Second Header
         -------------- | --------------
         Content Cell 1 | Content Cell 2
         Content Cell 3 | Content Cell 4
-        """))
+        """), load_config())
 
         expected_html = dedent("""
         <table>
@@ -219,12 +226,11 @@ class BuildTests(unittest.TestCase):
         """
         Ensure that the fenced code extension is supported.
         """
-
         html, toc, meta = build.convert_markdown(dedent("""
         ```
         print 'foo'
         ```
-        """))
+        """), load_config())
 
         expected_html = dedent("""
         <pre><code>print 'foo'\n</code></pre>
@@ -241,24 +247,29 @@ class BuildTests(unittest.TestCase):
 
         # Check that the plugin is not active when not requested.
         expected_without_smartstrong = "<p>foo<strong>bar</strong>baz</p>"
-        html_base, _, _ = build.convert_markdown(md_input)
+        html_base, _, _ = build.convert_markdown(md_input, load_config())
         self.assertEqual(html_base.strip(), expected_without_smartstrong)
 
         # Check that the plugin is active when requested.
+        cfg = load_config({
+            'markdown_extensions': ['smart_strong']
+        })
         expected_with_smartstrong = "<p>foo__bar__baz</p>"
-        html_ext, _, _ = build.convert_markdown(md_input, extensions=['smart_strong'])
+        html_ext, _, _ = build.convert_markdown(md_input, cfg)
         self.assertEqual(html_ext.strip(), expected_with_smartstrong)
 
     def test_markdown_duplicate_custom_extension(self):
         """
         Duplicated extension names should not cause problems.
         """
+        cfg = load_config({
+            'markdown_extensions': ['toc']
+        })
         md_input = "foo"
-        html_ext, _, _ = build.convert_markdown(md_input, ['toc'])
+        html_ext, _, _ = build.convert_markdown(md_input, cfg)
         self.assertEqual(html_ext.strip(), '<p>foo</p>')
 
     def test_copying_media(self):
-
         docs_dir = tempfile.mkdtemp()
         site_dir = tempfile.mkdtemp()
         try:
@@ -281,14 +292,11 @@ class BuildTests(unittest.TestCase):
             os.mkdir(os.path.join(docs_dir, '.git'))
             open(os.path.join(docs_dir, '.git/hidden'), 'w').close()
 
-            conf = config_base.Config(schema=config_defaults.DEFAULT_SCHEMA)
-            conf.load_dict({
-                'site_name': 'Example',
+            cfg = load_config({
                 'docs_dir': docs_dir,
                 'site_dir': site_dir
             })
-            conf.validate()
-            build.build(conf)
+            build.build(cfg)
 
             # Verify only the markdown (coverted to html) and the image are copied.
             self.assertTrue(os.path.isfile(os.path.join(site_dir, 'index.html')))
@@ -308,8 +316,8 @@ class BuildTests(unittest.TestCase):
         site_nav = nav.SiteNavigation(pages)
 
         valid = "[test](internal.md)"
-        build.convert_markdown(valid, site_nav, strict=False)
-        build.convert_markdown(valid, site_nav, strict=True)
+        build.convert_markdown(valid, load_config({'strict': False}), site_nav)
+        build.convert_markdown(valid, load_config({'strict': True}), site_nav)
 
     def test_strict_mode_invalid(self):
         pages = [
@@ -320,24 +328,24 @@ class BuildTests(unittest.TestCase):
         site_nav = nav.SiteNavigation(pages)
 
         invalid = "[test](bad_link.md)"
-        build.convert_markdown(invalid, site_nav, strict=False)
+        build.convert_markdown(invalid, load_config({'strict': False}), site_nav)
 
         self.assertRaises(
             MarkdownNotFound,
-            build.convert_markdown, invalid, site_nav, strict=True)
+            build.convert_markdown, invalid, load_config({'strict': True}), site_nav)
 
     def test_extension_config(self):
         """
         Test that a dictionary of 'markdown_extensions' is recognized as
         both a list of extensions and a dictionary of extnesion configs.
         """
-        markdown_extensions = {
-            'toc': {'permalink': True},
-            'meta': None  # This gets ignored as it is an invalid config
-        }
+        cfg = load_config({
+            'markdown_extensions': [{'toc': {'permalink': True}}]
+        })
+
         html, toc, meta = build.convert_markdown(dedent("""
         # A Header
-        """), extensions=markdown_extensions)
+        """), cfg)
 
         expected_html = dedent("""
         <h1 id="a-header">A Header<a class="headerlink" href="#a-header" title="Permanent link">&para;</a></h1>
@@ -348,17 +356,14 @@ class BuildTests(unittest.TestCase):
     def test_extra_context(self):
 
         # Same as the default schema, but don't verify the docs_dir exists.
-        config = config_base.Config(schema=config_defaults.DEFAULT_SCHEMA)
-        config.load_dict({
+        cfg = load_config({
             'site_name': "Site",
             'extra': {
                 'a': 1
             }
         })
 
-        self.assertEqual(config.validate(), ([], []))
-
-        context = build.get_global_context(mock.Mock(), config)
+        context = build.get_global_context(mock.Mock(), cfg)
 
         self.assertEqual(context['config']['extra'], {
             'a': 1
