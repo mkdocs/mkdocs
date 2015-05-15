@@ -343,3 +343,57 @@ class NumPages(BaseConfigOption):
             config[key_name] = len(config['pages']) > self.at_lest
         except TypeError:
             config[key_name] = False
+
+
+class Private(BaseConfigOption):
+    """
+    Private Config Option
+
+    A config option only for internal use. Raises an error if set by the user.
+    """
+
+    def run_validation(self, value):
+        raise ValidationError('For internal use only.')
+
+
+class MarkdownExtensions(BaseConfigOption):
+    """
+    Markdown Extensions Config Option
+
+    A list of extensions. If a list item contains extension configs,
+    those are set on the private  setting passed to `configkey`. The
+    `builtins` keyword accepts a list of extensions which cannot be
+    overriden by the user. However, builtins can be duplicated to define
+    config options for them if desired.
+    """
+    def __init__(self, builtins=None, configkey='mdx_configs', **kwargs):
+        super(MarkdownExtensions, self).__init__(**kwargs)
+        self.builtins = builtins or []
+        self.configkey = configkey
+
+    def run_validation(self, value):
+        if not isinstance(value, (list, tuple)):
+            raise ValidationError('Invalid Markdown Extensions configuration')
+        return value
+
+    def post_validation(self, config, key_name):
+        user_extensions = config[key_name] or []
+        extensions, ext_configs = [], {}
+        for item in user_extensions:
+            if isinstance(item, dict):
+                if len(item) > 1:
+                    raise ValidationError('Invalid Markdown Extensions configuration')
+                ext, cfg = item.popitem()
+                extensions.append(ext)
+                if cfg is None:
+                    continue
+                if not isinstance(cfg, dict):
+                    raise ValidationError('Invalid config options for Markdown '
+                                          "Extension '{0}'.".format(ext))
+                ext_configs[ext] = cfg
+            elif isinstance(item, six.string_types):
+                extensions.append(item)
+            else:
+                raise ValidationError('Invalid Markdown Extensions configuration')
+        config[key_name] = utils.reduce_list(self.builtins + extensions)
+        config[self.configkey] = ext_configs

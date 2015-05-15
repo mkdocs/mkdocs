@@ -279,12 +279,9 @@ def convert_markdown(markdown_source, extensions=None, extension_configs=None):
     `extensions` is an optional sequence of Python Markdown extensions to add
     to the default set.
     """
-    extensions = extensions or []
-    extension_configs = extension_configs or {}
-
     md = markdown.Markdown(
-        extensions=extensions,
-        extension_configs=extension_configs
+        extensions=extensions or [],
+        extension_configs=extension_configs or {}
     )
     html_content = md.convert(markdown_source)
 

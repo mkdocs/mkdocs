@@ -17,30 +17,17 @@ import mkdocs
 log = logging.getLogger(__name__)
 
 
-def convert_markdown(markdown_source, site_navigation=None, extensions=(), strict=False):
+def convert_markdown(markdown_source, config, site_navigation=None):
     """
-    Convert the Markdown source file to HTML content, and additionally
-    return the parsed table of contents, and a dictionary of any metadata
-    that was specified in the Markdown file.
-
-    `extensions` is an optional sequence of Python Markdown extensions to add
-    to the default set.
+    Convert the Markdown source file to HTML as per the config and site_navigation.
+    Return a tuple of the HTML as a string, the parsed table of contents,
+    and a dictionary of any metadata that was specified in the Markdown file.
     """
-
-    # Generate the HTML from the markdown source
-    if isinstance(extensions, dict):
-        user_extensions = list(extensions.keys())
-        extension_configs = dict([(k, v) for k, v in extensions.items() if isinstance(v, dict)])
-    else:
-        user_extensions = list(extensions)
-        extension_configs = {}
-    builtin_extensions = ['meta', 'toc', 'tables', 'fenced_code']
-    mkdocs_extensions = [RelativePathExtension(site_navigation, strict), ]
-    extensions = utils.reduce_list(builtin_extensions + mkdocs_extensions + user_extensions)
-
-    html_content, table_of_contents, meta = utils.convert_markdown(markdown_source, extensions, extension_configs)
-
-    return (html_content, table_of_contents, meta)
+    return utils.convert_markdown(
+        markdown_source=markdown_source,
+        extensions=[RelativePathExtension(site_navigation, config['strict'])] + config['markdown_extensions'],
+        extension_configs=config['mdx_configs']
+    )
 
 
 def get_global_context(nav, config):
@@ -182,8 +169,9 @@ def _build_page(page, config, site_navigation, env, dump_json):
 
     # Process the markdown text
     html_content, table_of_contents, meta = convert_markdown(
-        input_content, site_navigation,
-        extensions=config['markdown_extensions'], strict=config['strict']
+        markdown_source=input_content,
+        config=config,
+        site_navigation=site_navigation
     )
 
     context = get_global_context(site_navigation, config)

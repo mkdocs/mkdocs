@@ -90,8 +90,12 @@ DEFAULT_SCHEMA = (
     ('include_next_prev', config_options.NumPages()),
 
     # PyMarkdown extension names.
-    ('markdown_extensions', config_options.Type(
-        (list, dict, tuple), default=())),
+    ('markdown_extensions', config_options.MarkdownExtensions(
+        builtins=['meta', 'toc', 'tables', 'fenced_code'],
+        configkey='mdx_configs', default=[])),
+
+    # PyMarkdown Extension Configs. For internal use only.
+    ('mdx_configs', config_options.Private()),
 
     # enabling strict mode causes MkDocs to stop the build when a problem is
     # encountered rather than display an error.

@@ -5,9 +5,9 @@ site_description: Project documentation with Markdown.
 repo_url: https://github.com/mkdocs/mkdocs/
 
 markdown_extensions:
-    toc:
+    - toc:
         permalink: ""
-    admonition:
+    - admonition:
 
 copyright: Copyright &copy; 2014, <a href="https://twitter.com/_tomchristie">Tom Christie</a>.
 google_analytics: ['UA-27795084-5', 'mkdocs.org']

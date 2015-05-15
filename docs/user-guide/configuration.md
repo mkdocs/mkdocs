@@ -8,7 +8,7 @@ Guide to all available configuration settings.
 
 Project settings are always configured by using a YAML configuration file in the project directory named `mkdocs.yml`.
 
-As a miniumum this configuration file must contain the `site_name` setting.  All other settings are optional.
+As a minimum this configuration file must contain the `site_name` setting.  All other settings are optional.
 
 ## Project information
 
@@ -16,7 +16,7 @@ As a miniumum this configuration file must contain the `site_name` setting.  All
 
 This is a **required setting**, and should be a string that is used as the main title for the project documentation.  For example:
 
-    site_name: Mashmallow Generator
+    site_name: Marshmallow Generator
 
 When rendering the theme this setting will be passed as the `site_name` context variable.
 
@@ -102,9 +102,9 @@ If you have a lot of project documentation you might choose to use headings to b
     pages:
     - Introduction: 'index.md'
     - User Guide:
-        - 'Creating a new Mashmallow project': 'user-guide/creating.md'
-        - 'Mashmallow API guide': 'user-guide/api.md'
-        - 'Configuring Mashmallow': 'user-guide/configuration.md'
+        - 'Creating a new Marshmallow project': 'user-guide/creating.md'
+        - 'Marshmallow API guide': 'user-guide/api.md'
+        - 'Configuring Marshmallow': 'user-guide/configuration.md'
     - About:
         - License: 'about/license.md'
 
@@ -143,16 +143,21 @@ Lets you set the directory where the output HTML and other files are created.  T
 
 **default**: `'site'`
 
-**Note**: If you are using source code control you will normally want to ensure that your *build output* files are not commited into the repository, and only keep the *source* files under version control.  For example, if using `git` you might add the following line to your `.gitignore` file:
+!!! note "Note:"
+    If you are using source code control you will normally want to ensure
+    that your *build output* files are not committed into the repository, and only
+    keep the *source* files under version control. For example, if using `git` you
+    might add the following line to your `.gitignore` file:
 
-    site/
+        site/
 
-If you're using another source code control you'll want to check its documentation on how to ignore specific directories.
+    If you're using another source code control you'll want to check its
+    documentation on how to ignore specific directories.
 
 
 ### extra_css
 
-Set a list of css files to be included by the theme.
+Set a list of CSS files to be included by the theme.
 
 **default**: By default `extra_css` will contain a list of all the CSS files found within the `docs_dir`, if none are found it will be `[]` (an empty list).
 
@@ -200,7 +205,7 @@ Determines if a broken link to a page within the documentation is considered a w
 
 Determines the address used when running `mkdocs serve`.  Setting this allows you to use another port, or allows you to make the service accessible over your local network by using the `0.0.0.0` address.
 
-As with all settings, you can set this from the command line, which can be usful, for example:
+As with all settings, you can set this from the command line, which can be useful, for example:
 
     mkdocs serve --dev-addr=0.0.0.0:80  # Run on port 80, accessible over the local network.
 
@@ -210,30 +215,62 @@ As with all settings, you can set this from the command line, which can be usful
 
 ### markdown_extensions
 
-MkDocs uses the [Python Markdown][pymkd] library to translate Markdown files into HTML. Python Markdown supports a variety of [extensions][pymdk-extensions] that customize how pages are formatted. This setting lets you enable a list of extensions beyond the ones that MkDocs uses by default (`meta`, `toc`, `tables`, and `fenced_code`).
+MkDocs uses the [Python Markdown][pymkd] library to translate Markdown files
+into HTML. Python Markdown supports a variety of [extensions][pymdk-extensions]
+that customize how pages are formatted. This setting lets you enable a list of
+extensions beyond the ones that MkDocs uses by default (`meta`, `toc`, `tables`,
+and `fenced_code`).
 
 For example, to enable the [SmartyPants typography extension][smarty], use:
 
-    markdown_extensions: [smartypants]
+    markdown_extensions:
+        - smarty
 
-Some extensions provide configuration options of their own. If you would like to set any configuration options, then you can define `markdown_extensions` as a key/value mapping rather than a list. The key must be the name of the extension and the value must be a key/value pair (option name/option value) for the configuration option.
+Some extensions provide configuration options of their own. If you would like to
+set any configuration options, then you can nest a key/value mapping
+(`option_name: option value`) of any options that a given extension supports.
+See the documentation for the extension you are using to determine what options
+they support.
 
 For example, to enable permalinks in the (included) `toc` extension, use:
 
     markdown_extensions:
-        toc:
+        - toc:
             permalink: True
 
-Add additonal items for each extension. If you have no configuration options to set for a specific extension, then you may leave that extensions options blank:
+Note that a colon (`:`) must follow the extension name (`toc`) and then on a new line
+the option name and value must be indented and seperated by a colon. If you would like
+to define multipe options for a single extension, each option must be defined on
+a seperate line:
 
     markdown_extensions:
-        smartypants:
-        toc:
+        - toc:
             permalink: True
+            separator: "_"
 
+Add an additional item to the list for each extension. If you have no
+configuration options to set for a specific extension, then simply omit options
+for that extension:
+
+    markdown_extensions:
+        - smarty
+        - toc:
+            permalink: True
+        - sane_lists
+
+!!! note "See Also:"
+    The Python-Markdown documentation provides a [list of extensions][exts]
+    which are available out-of-the-box. For a list of configuration options
+    available for a given extension, see the documentation for that extension.
+    
+    You may also install and use various [third party extensions][3rd]. Consult the
+    documentation provided by those extensions for installation instructions and
+    available configuration options.
 
 **default**: `[]`
 
 [pymdk-extensions]: http://pythonhosted.org/Markdown/extensions/index.html
 [pymkd]: http://pythonhosted.org/Markdown/
-[smarty]: https://pypi.python.org/pypi/mdx_smartypants
+[smarty]: https://pythonhosted.org/Markdown/extensions/smarty.html
+[exts]:https://pythonhosted.org/Markdown/extensions/index.html
+[3rd]: https://github.com/waylan/Python-Markdown/wiki/Third-Party-Extensions

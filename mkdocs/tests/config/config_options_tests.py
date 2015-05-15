@@ -325,3 +325,173 @@ class NumPagesTest(unittest.TestCase):
             'key': True,
             'pages': None
         }, config)
+
+
+class PrivateTest(unittest.TestCase):
+
+    def test_defined(self):
+
+        option = config_options.Private()
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, 'somevalue')
+
+
+class MarkdownExtensionsTest(unittest.TestCase):
+
+    def test_simple_list(self):
+        option = config_options.MarkdownExtensions()
+        config = {
+            'markdown_extensions': ['foo', 'bar']
+        }
+        option.validate(config['markdown_extensions'])
+        option.post_validation(config, 'markdown_extensions')
+        self.assertEqual({
+            'markdown_extensions': ['foo', 'bar'],
+            'mdx_configs': {}
+        }, config)
+
+    def test_list_dicts(self):
+        option = config_options.MarkdownExtensions()
+        config = {
+            'markdown_extensions': [
+                {'foo': {'foo_option': 'foo value'}},
+                {'bar': {'bar_option': 'bar value'}},
+                {'baz': None}
+            ]
+        }
+        option.validate(config['markdown_extensions'])
+        option.post_validation(config, 'markdown_extensions')
+        self.assertEqual({
+            'markdown_extensions': ['foo', 'bar', 'baz'],
+            'mdx_configs': {
+                'foo': {'foo_option': 'foo value'},
+                'bar': {'bar_option': 'bar value'}
+            }
+        }, config)
+
+    def test_mixed_list(self):
+        option = config_options.MarkdownExtensions()
+        config = {
+            'markdown_extensions': [
+                'foo',
+                {'bar': {'bar_option': 'bar value'}}
+            ]
+        }
+        option.validate(config['markdown_extensions'])
+        option.post_validation(config, 'markdown_extensions')
+        self.assertEqual({
+            'markdown_extensions': ['foo', 'bar'],
+            'mdx_configs': {
+                'bar': {'bar_option': 'bar value'}
+            }
+        }, config)
+
+    def test_builtins(self):
+        option = config_options.MarkdownExtensions(builtins=['meta', 'toc'])
+        config = {
+            'markdown_extensions': ['foo', 'bar']
+        }
+        option.validate(config['markdown_extensions'])
+        option.post_validation(config, 'markdown_extensions')
+        self.assertEqual({
+            'markdown_extensions': ['meta', 'toc', 'foo', 'bar'],
+            'mdx_configs': {}
+        }, config)
+
+    def test_duplicates(self):
+        option = config_options.MarkdownExtensions(builtins=['meta', 'toc'])
+        config = {
+            'markdown_extensions': ['meta', 'toc']
+        }
+        option.validate(config['markdown_extensions'])
+        option.post_validation(config, 'markdown_extensions')
+        self.assertEqual({
+            'markdown_extensions': ['meta', 'toc'],
+            'mdx_configs': {}
+        }, config)
+
+    def test_builtins_config(self):
+        option = config_options.MarkdownExtensions(builtins=['meta', 'toc'])
+        config = {
+            'markdown_extensions': [
+                {'toc': {'permalink': True}}
+            ]
+        }
+        option.validate(config['markdown_extensions'])
+        option.post_validation(config, 'markdown_extensions')
+        self.assertEqual({
+            'markdown_extensions': ['meta', 'toc'],
+            'mdx_configs': {'toc': {'permalink': True}}
+        }, config)
+
+    def test_configkey(self):
+        option = config_options.MarkdownExtensions(configkey='bar')
+        config = {
+            'markdown_extensions': [
+                {'foo': {'foo_option': 'foo value'}}
+            ]
+        }
+        option.validate(config['markdown_extensions'])
+        option.post_validation(config, 'markdown_extensions')
+        self.assertEqual({
+            'markdown_extensions': ['foo'],
+            'bar': {
+                'foo': {'foo_option': 'foo value'}
+            }
+        }, config)
+
+    def test_none(self):
+        option = config_options.MarkdownExtensions()
+        config = {
+            'markdown_extensions': None
+        }
+        option.validate(config['markdown_extensions'])
+        option.post_validation(config, 'markdown_extensions')
+        self.assertEqual({
+            'markdown_extensions': [],
+            'mdx_configs': {}
+        }, config)
+
+    def test_not_list(self):
+        option = config_options.MarkdownExtensions()
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, 'not a list')
+
+    def test_invalid_config_option(self):
+        option = config_options.MarkdownExtensions()
+        config = {
+            'markdown_extensions': [
+                {'foo': 'not a dict'}
+            ]
+        }
+        option.validate(config['markdown_extensions'])
+        self.assertRaises(
+            config_options.ValidationError,
+            option.post_validation, config, 'markdown_extensions'
+        )
+
+    def test_invalid_config_item(self):
+        option = config_options.MarkdownExtensions()
+        config = {
+            'markdown_extensions': [
+                ['not a dict']
+            ]
+        }
+        option.validate(config['markdown_extensions'])
+        self.assertRaises(
+            config_options.ValidationError,
+            option.post_validation, config, 'markdown_extensions'
+        )
+
+    def test_invalid_dict_item(self):
+        option = config_options.MarkdownExtensions()
+        config = {
+            'markdown_extensions': [
+                {'key1': 'value', 'key2': 'too many keys'}
+            ]
+        }
+        option.validate(config['markdown_extensions'])
+        self.assertRaises(
+            config_options.ValidationError,
+            option.post_validation, config, 'markdown_extensions'
+        )
