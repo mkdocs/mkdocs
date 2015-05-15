@@ -103,4 +103,7 @@ DEFAULT_SCHEMA = (
     # MkDocs itself. A good example here would be including the current
     # project version.
     ('extra', config_options.Type(dict, default={})),
+
+    # the remote branch to commit to when using gh-deploy
+    ('remote_branch', config_options.Type(str, default='gh-pages')),
 )

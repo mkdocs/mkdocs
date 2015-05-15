@@ -38,6 +38,10 @@ theme_help = "The theme to use when building your documentation."
 theme_choices = utils.get_theme_names()
 site_dir_help = "The directory to output the result of the documentation build."
 reload_help = "Enable and disable the live reloading in the development server."
+commit_message_help = ("A commit message to use when commiting to the "
+                       "Github Pages remote branch")
+remote_branch_help = ("The remote branch to commit to for Github Pages. This "
+                      "overrides the value specified in config")
 
 
 @click.group()
@@ -120,13 +124,16 @@ def json_command(clean, config_file, strict, site_dir):
 @cli.command(name="gh-deploy")
 @click.option('--clean', is_flag=True, help=clean_help)
 @click.option('--config-file', type=click.File('rb'), help=config_file_help)
-def gh_deploy_command(config_file, clean):
+@click.option('--message', '-m', help=commit_message_help)
+@click.option('--remote-branch', '-b', help=remote_branch_help)
+def gh_deploy_command(config_file, clean, message, remote_branch):
     """Deply your documentation to GitHub Pages"""
     config = load_config(
-        config_file=config_file
+        config_file=config_file,
+        remote_branch=remote_branch
     )
     build.build(config, clean_site_dir=clean)
-    gh_deploy.gh_deploy(config)
+    gh_deploy.gh_deploy(config, message=message)
 
 
 @cli.command(name="new")
