@@ -1,9 +1,9 @@
 import six
 import logging
 import os
+import yaml
 
 from mkdocs import exceptions
-from mkdocs import utils
 from mkdocs.config import config_options, defaults
 
 log = logging.getLogger('mkdocs.config')
@@ -82,7 +82,7 @@ class Config(six.moves.UserDict):
         self.data.update(patch)
 
     def load_file(self, config_file):
-        return self.load_dict(utils.yaml_load(config_file))
+        return self.load_dict(yaml.load(config_file))
 
 
 def _open_config_file(config_file):
