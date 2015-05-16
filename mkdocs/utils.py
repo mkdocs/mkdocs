@@ -12,30 +12,8 @@ import shutil
 
 import markdown
 import six
-import yaml
 
 from mkdocs import toc
-from mkdocs.legacy import OrderedDict
-
-
-def yaml_load(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
-    """
-    Make all YAML dictionaries load as ordered Dicts.
-    http://stackoverflow.com/a/21912744/3609487
-    """
-    class OrderedLoader(Loader):
-        pass
-
-    def construct_mapping(loader, node):
-        loader.flatten_mapping(node)
-        return object_pairs_hook(loader.construct_pairs(node))
-
-    OrderedLoader.add_constructor(
-        yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
-        construct_mapping
-    )
-
-    return yaml.load(stream, OrderedLoader)
 
 
 def reduce_list(data_set):
