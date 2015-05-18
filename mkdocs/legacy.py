@@ -6,11 +6,6 @@ from mkdocs.exceptions import ConfigurationError
 
 log = logging.getLogger(__name__)
 
-try:
-    from collections import OrderedDict
-except ImportError:
-    OrderedDict = dict
-
 
 def pages_compat_shim(original_pages):
     """

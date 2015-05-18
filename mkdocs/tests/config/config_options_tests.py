@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from mkdocs import utils, legacy
+from mkdocs import utils
 from mkdocs.config import config_options
 
 
@@ -243,9 +243,7 @@ class PagesTest(unittest.TestCase):
         option = config_options.Pages()
         value = option.validate([
             'index.md',
-            legacy.OrderedDict((
-                ('Page', 'page.md', ),
-            ))
+            {"Page": "page.md"}
         ])
         self.assertEqual(['index.md', {'Page': 'page.md'}], value)
 
