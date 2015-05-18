@@ -210,9 +210,13 @@ def create_relative_media_url(nav, url):
         image.png -> ./image.png
         /image.png -> ./image.png
 
-    on sub/page.md (which becomes /sub/page/index.html):
+    On sub/page.md (which becomes /sub/page/index.html):
         image.png -> ../image.png
         /image.png -> ../../image.png
+
+    On sub/index.md (which becomes /sub/index.html):
+        image.png -> ./image.png
+        /image.png -> ./image.png
 
     """
 
@@ -229,12 +233,18 @@ def create_relative_media_url(nav, url):
     else:
         base = nav.url_context.base_path
 
-    relative_url = '%s/%s' % (nav.url_context.make_relative(base), url)
+    relative_base = nav.url_context.make_relative(base)
+    if relative_base == "." and url.startswith("./"):
+        relative_url = url
+    else:
+        relative_url = '%s/%s' % (relative_base, url)
 
     # TODO: Fix this, this is a hack. Relative urls are not being calculated
     # correctly for images in the same directory as the markdown. I think this
     # is due to us moving it into a directory with index.html, but I'm not sure
-    if nav.url_context.base_path is not '/' and relative_url.startswith("./"):
+    if (nav.file_context.current_file.endswith("/index.md") is False
+            and nav.url_context.base_path is not '/'
+            and relative_url.startswith("./")):
         relative_url = ".%s" % relative_url
 
     return relative_url
