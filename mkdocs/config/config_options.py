@@ -3,7 +3,6 @@ import os
 import six
 
 from mkdocs import utils, legacy
-from mkdocs.legacy import OrderedDict
 
 
 class ValidationError(Exception):
@@ -297,7 +296,7 @@ class Pages(Extras):
         # TODO: Remove in 1.0
         config_types = set(type(l) for l in value)
 
-        if config_types.issubset(set([str, OrderedDict, ])):
+        if config_types.issubset(set([str, dict, ])):
             return value
 
         if config_types.issubset(set([str, list, ])):
