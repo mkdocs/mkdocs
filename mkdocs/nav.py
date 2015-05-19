@@ -171,7 +171,7 @@ class Page(object):
     def set_active(self, active=True):
         self.active = active
         for ancestor in self.ancestors:
-            ancestor.active = active
+            ancestor.set_active(active)
 
 
 class Header(object):
@@ -195,6 +195,10 @@ class Header(object):
             ret += item.indent_print(depth + 1)
         return ret
 
+    def set_active(self, active=True):
+        self.active = active
+        for ancestor in self.ancestors:
+            ancestor.set_active(active)
 
 def _path_to_page(path, title, url_context, use_directory_urls):
     if title is None:
