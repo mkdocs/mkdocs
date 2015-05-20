@@ -200,6 +200,7 @@ class Header(object):
         for ancestor in self.ancestors:
             ancestor.set_active(active)
 
+
 def _path_to_page(path, title, url_context, use_directory_urls):
     if title is None:
         title = filename_to_title(path.split(os.path.sep)[-1])
