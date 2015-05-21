@@ -296,13 +296,16 @@ class Pages(Extras):
         # TODO: Remove in 1.0
         config_types = set(type(l) for l in value)
 
-        if config_types.issubset(set([str, dict, ])):
+        if config_types.issubset(set([six.text_type, dict, ])):
             return value
 
-        if config_types.issubset(set([str, list, ])):
+        if config_types.issubset(set([six.text_type, list, ])):
             return legacy.pages_compat_shim(value)
 
-        raise ValidationError("Invalid pages config.")
+        raise ValidationError("Invalid pages config. {0} {1}".format(
+            config_types,
+            set([six.text_type, dict, ])
+        ))
 
     def post_validation(self, config, key_name):
 

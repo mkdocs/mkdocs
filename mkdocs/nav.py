@@ -10,6 +10,8 @@ import datetime
 import logging
 import os
 
+import six
+
 from mkdocs import utils, exceptions
 
 log = logging.getLogger(__name__)
@@ -211,7 +213,7 @@ def _path_to_page(path, title, url_context, use_directory_urls):
 
 def _follow(config_line, url_context, use_dir_urls, header=None, title=None):
 
-    if isinstance(config_line, str):
+    if isinstance(config_line, six.string_types):
         path = os.path.normpath(config_line)
         page = _path_to_page(path, title, url_context, use_dir_urls)
 
@@ -237,7 +239,7 @@ def _follow(config_line, url_context, use_dir_urls, header=None, title=None):
 
     next_cat_or_title, subpages_or_path = next(iter(config_line.items()))
 
-    if isinstance(subpages_or_path, str):
+    if isinstance(subpages_or_path, six.string_types):
         path = subpages_or_path
         for sub in _follow(path, url_context, use_dir_urls, header=header, title=next_cat_or_title):
             yield sub
