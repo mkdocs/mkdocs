@@ -14,7 +14,7 @@ class CLITests(unittest.TestCase):
     def setUp(self):
         self.runner = CliRunner()
 
-    @mock.patch('mkdocs.serve.serve')
+    @mock.patch('mkdocs.serve.serve', autospec=True)
     def test_serve(self, mock_serve):
 
         result = self.runner.invoke(
@@ -23,7 +23,7 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(mock_serve.call_count, 1)
 
-    @mock.patch('mkdocs.build.build')
+    @mock.patch('mkdocs.build.build', autospec=True)
     def test_build(self, mock_build):
 
         result = self.runner.invoke(
@@ -32,7 +32,7 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(mock_build.call_count, 1)
 
-    @mock.patch('mkdocs.build.build')
+    @mock.patch('mkdocs.build.build', autospec=True)
     def test_build_verbose(self, mock_build):
 
         result = self.runner.invoke(
@@ -41,7 +41,7 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(mock_build.call_count, 1)
 
-    @mock.patch('mkdocs.build.build')
+    @mock.patch('mkdocs.build.build', autospec=True)
     def test_json(self, mock_build):
 
         result = self.runner.invoke(
@@ -50,7 +50,7 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(mock_build.call_count, 1)
 
-    @mock.patch('mkdocs.new.new')
+    @mock.patch('mkdocs.new.new', autospec=True)
     def test_new(self, mock_new):
 
         result = self.runner.invoke(
@@ -59,7 +59,7 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(mock_new.call_count, 1)
 
-    @mock.patch('mkdocs.gh_deploy.gh_deploy')
+    @mock.patch('mkdocs.gh_deploy.gh_deploy', autospec=True)
     def test_gh_deploy(self, mock_gh_deploy):
 
         result = self.runner.invoke(
