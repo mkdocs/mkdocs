@@ -5,7 +5,9 @@ env:
 - TOX_ENV=py27-unittests
 - TOX_ENV=py33-unittests
 - TOX_ENV=py34-unittests
+- TOX_ENV=py26-integration
 - TOX_ENV=py27-integration
+- TOX_ENV=py33-integration
 - TOX_ENV=py34-integration
 - TOX_ENV=flake8
 - TOX_ENV=coverage
@@ -13,5 +15,4 @@ install:
 - pip install tox
 script: "./.travis.sh"
 matrix:
-  allow_failures:
-    - env: TOXENV=coverage
+  fast_finish: true
