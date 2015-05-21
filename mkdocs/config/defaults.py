@@ -1,3 +1,7 @@
+from __future__ import unicode_literals
+
+import six
+
 from mkdocs import utils
 from mkdocs.config import config_options
 
@@ -12,10 +16,10 @@ from mkdocs.config import config_options
 DEFAULT_SCHEMA = (
 
     # Reserved for internal use, stores the mkdocs.yml config file.
-    ('config_file_path', config_options.Type(str)),
+    ('config_file_path', config_options.Type(six.string_types)),
 
     # The title to use for the documentation
-    ('site_name', config_options.Type(str, required=True)),
+    ('site_name', config_options.Type(six.string_types, required=True)),
 
     # Defines the structure of the navigation and which markdown files are
     # included in the build.
@@ -26,12 +30,12 @@ DEFAULT_SCHEMA = (
 
     # A description for the documentation project that will be added to the
     # HTML meta tags.
-    ('site_description', config_options.Type(str)),
+    ('site_description', config_options.Type(six.string_types)),
     # The name of the author to add to the HTML meta tags
-    ('site_author', config_options.Type(str)),
+    ('site_author', config_options.Type(six.string_types)),
 
     # The path to the favicon for a site
-    ('site_favicon', config_options.Type(str)),
+    ('site_favicon', config_options.Type(six.string_types)),
 
     # The MkDocs theme for the documentation.
     ('theme', config_options.Theme(default='mkdocs')),
@@ -47,14 +51,15 @@ DEFAULT_SCHEMA = (
     ('theme_dir', config_options.ThemeDir(exists=True)),
 
     # A copyright notice to add to the footer of documentation.
-    ('copyright', config_options.Type(str)),
+    ('copyright', config_options.Type(six.string_types)),
 
     # set of values for Google analytics containing the account IO and domain,
     # this should look like, ['UA-27795084-5', 'mkdocs.org']
     ('google_analytics', config_options.Type(list, length=2)),
 
     # The address on which to serve the live reloading docs server.
-    ('dev_addr', config_options.Type(str, default='127.0.0.1:8000')),
+    ('dev_addr', config_options.Type(
+        six.string_types, default='127.0.0.1:8000')),
 
     # If `True`, use `<page_name>/index.hmtl` style files with hyperlinks to
     # the directory.If `False`, use `<page_name>.html style file with
@@ -70,7 +75,7 @@ DEFAULT_SCHEMA = (
     # A name to use for the link to the project source repo.
     # Default, If repo_url is unset then None, otherwise
     # "GitHub" or "Bitbucket" for known url or Hostname for unknown urls.
-    ('repo_name', config_options.Type(str)),
+    ('repo_name', config_options.Type(six.string_types)),
 
     # Specify which css or javascript files from the docs directory should be
     # additionally included in the site. Default, List of all .css and .js
@@ -109,5 +114,6 @@ DEFAULT_SCHEMA = (
     ('extra', config_options.Type(dict, default={})),
 
     # the remote branch to commit to when using gh-deploy
-    ('remote_branch', config_options.Type(str, default='gh-pages')),
+    ('remote_branch', config_options.Type(
+        six.string_types, default='gh-pages')),
 )
