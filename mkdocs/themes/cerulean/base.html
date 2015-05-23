@@ -48,6 +48,14 @@
             <div class="col-md-9" role="main">{% include "content.html" %}</div>
         </div>
 
+        <footer class="col-md-12">
+            <hr>
+            {% if copyright %}
+                <center>{{ copyright }}</center>
+            {% endif %}
+            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+        </footer>
+
         <script src="{{ base_url }}/js/jquery-1.10.2.min.js"></script>
         <script src="{{ base_url }}/js/bootstrap-3.0.3.min.js"></script>
         <script src="{{ base_url }}/js/highlight.pack.js"></script>
