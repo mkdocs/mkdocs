@@ -10,7 +10,6 @@ env:
 - TOXENV=py33-integration
 - TOXENV=py34-integration
 - TOXENV=flake8
-- TOXENV=coverage
 install:
 - pip install tox
 script: tox
