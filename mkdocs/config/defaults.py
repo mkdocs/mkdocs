@@ -106,14 +106,14 @@ DEFAULT_SCHEMA = (
     # encountered rather than display an error.
     ('strict', config_options.Type(bool, default=False)),
 
+    # the remote branch to commit to when using gh-deploy
+    ('remote_branch', config_options.Type(
+        six.string_types, default='gh-pages')),
+
     # extra is a mapping/dictionary of data that is passed to the template.
     # This allows template authors to require extra configuration that not
     # relevant to all themes and doesn't need to be explicitly supported by
     # MkDocs itself. A good example here would be including the current
     # project version.
-    ('extra', config_options.Type(dict, default={})),
-
-    # the remote branch to commit to when using gh-deploy
-    ('remote_branch', config_options.Type(
-        six.string_types, default='gh-pages')),
+    ('extra', config_options.SubConfig()),
 )

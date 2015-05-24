@@ -9,11 +9,11 @@ from mkdocs import utils
 from mkdocs.config import config_options
 
 
-class BaseConfigOptionTest(unittest.TestCase):
+class OptionallyRequiredTest(unittest.TestCase):
 
     def test_empty(self):
 
-        option = config_options.BaseConfigOption()
+        option = config_options.OptionallyRequired()
         value = option.validate(None)
         self.assertEqual(value, None)
 
@@ -21,26 +21,27 @@ class BaseConfigOptionTest(unittest.TestCase):
 
     def test_required(self):
 
-        option = config_options.BaseConfigOption(required=True)
-        self.assertRaises(config_options.ValidationError, option.validate, None)
+        option = config_options.OptionallyRequired(required=True)
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, None)
 
         self.assertEqual(option.is_required(), True)
 
     def test_required_no_default(self):
 
-        option = config_options.BaseConfigOption(required=True)
+        option = config_options.OptionallyRequired(required=True)
         value = option.validate(2)
         self.assertEqual(2, value)
 
     def test_default(self):
 
-        option = config_options.BaseConfigOption(default=1)
+        option = config_options.OptionallyRequired(default=1)
         value = option.validate(None)
         self.assertEqual(1, value)
 
     def test_replace_default(self):
 
-        option = config_options.BaseConfigOption(default=1)
+        option = config_options.OptionallyRequired(default=1)
         value = option.validate(2)
         self.assertEqual(2, value)
 

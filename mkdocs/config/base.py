@@ -1,12 +1,17 @@
-import six
 import logging
 import os
+
+import six
 import yaml
 
 from mkdocs import exceptions
-from mkdocs.config import config_options, defaults
+
 
 log = logging.getLogger('mkdocs.config')
+
+
+class ValidationError(Exception):
+    """Raised during the validation process of the config on errors."""
 
 
 class Config(six.moves.UserDict):
@@ -26,8 +31,8 @@ class Config(six.moves.UserDict):
         self._schema_keys = set(dict(schema).keys())
         self.data = {}
 
-        self.set_defaults()
         self.user_configs = []
+        self.set_defaults()
 
     def set_defaults(self):
         """
@@ -46,8 +51,8 @@ class Config(six.moves.UserDict):
             try:
                 value = self.get(key)
                 self[key] = config_option.validate(value)
-                warnings.extend(config_option.warnings)
-            except config_options.ValidationError as e:
+                warnings.extend([(key, w) for w in config_option.warnings])
+            except ValidationError as e:
                 failed.append((key, str(e)))
 
         for key in (set(self.keys()) - self._schema_keys):
@@ -57,12 +62,19 @@ class Config(six.moves.UserDict):
 
         return failed, warnings
 
+    def _pre_validate(self):
+
+        for key, config_option in self._schema:
+            config_option.pre_validation(self, key_name=key)
+
     def _post_validate(self):
 
         for key, config_option in self._schema:
             config_option.post_validation(self, key_name=key)
 
     def validate(self):
+
+        self._pre_validate()
 
         failed, warnings = self._validate()
 
@@ -114,7 +126,6 @@ def load_config(config_file=None, **kwargs):
     Extra kwargs are passed to the configuration to replace any default values
     unless they themselves are None.
     """
-
     options = kwargs.copy()
 
     # Filter None values from the options. This usually happens with optional
@@ -127,18 +138,19 @@ def load_config(config_file=None, **kwargs):
     options['config_file_path'] = getattr(config_file, 'name', '')
 
     # Initialise the config with the default schema .
-    config = Config(schema=defaults.DEFAULT_SCHEMA)
+    from mkdocs import config
+    cfg = Config(schema=config.DEFAULT_SCHEMA)
     # First load the config file
-    config.load_file(config_file)
+    cfg.load_file(config_file)
     # Then load the options to overwrite anything in the config.
-    config.load_dict(options)
+    cfg.load_dict(options)
 
-    errors, warnings = config.validate()
+    errors, warnings = cfg.validate()
 
     if len(warnings) > 0:
         for config_name, warning in warnings:
             log.warning("Config value: %s. Warning: %s", config_name, warning)
-        if config['strict']:
+        if cfg['strict']:
             raise exceptions.ConfigurationError(
                 "Warnings found in the config file")
 
@@ -147,8 +159,8 @@ def load_config(config_file=None, **kwargs):
             log.error("Config value: %s. Error: %s", config_name, error)
         raise exceptions.ConfigurationError("Errors found in the config file.")
 
-    for key, value in config.items():
+    for key, value in cfg.items():
 
         log.debug("Config value: %s = %r", key, value)
 
-    return config
+    return cfg
