@@ -19,13 +19,19 @@ log = logging.getLogger(__name__)
 
 def convert_markdown(markdown_source, config, site_navigation=None):
     """
-    Convert the Markdown source file to HTML as per the config and site_navigation.
-    Return a tuple of the HTML as a string, the parsed table of contents,
-    and a dictionary of any metadata that was specified in the Markdown file.
+    Convert the Markdown source file to HTML as per the config and
+    site_navigation. Return a tuple of the HTML as a string, the parsed table
+    of contents, and a dictionary of any metadata that was specified in the
+    Markdown file.
     """
+
+    extensions = [
+        RelativePathExtension(site_navigation, config['strict'])
+    ] + config['markdown_extensions']
+
     return utils.convert_markdown(
         markdown_source=markdown_source,
-        extensions=[RelativePathExtension(site_navigation, config['strict'])] + config['markdown_extensions'],
+        extensions=extensions,
         extension_configs=config['mdx_configs']
     )
 
@@ -165,7 +171,7 @@ def _build_page(page, config, site_navigation, env, dump_json):
         input_content = open(input_path, 'r', encoding='utf-8').read()
     except IOError:
         log.error('file not found: %s', input_path)
-        return
+        raise
 
     # Process the markdown text
     html_content, table_of_contents, meta = convert_markdown(
@@ -249,9 +255,8 @@ def build_pages(config, dump_json=False):
 
         try:
             log.debug("Building page %s", page.input_path)
-            build_result = _build_page(page, config, site_navigation, env, dump_json)
-            if build_result is None:
-                continue
+            build_result = _build_page(page, config, site_navigation, env,
+                                       dump_json)
             html_content, table_of_contents, _ = build_result
             search_index.add_entry_from_context(
                 page, html_content, table_of_contents)
