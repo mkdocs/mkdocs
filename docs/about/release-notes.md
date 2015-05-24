@@ -86,8 +86,6 @@ documentation.
 * MkDocs now ships Python [wheels]. (#486)
 * Only include the build date and MkDocs version on the homepage. (#490)
 * Generate sitemaps for documentation builds. (#436)
-* Automatically take titles from the first H1 on a Makrdown document if they
-  are not provided in the config. (#497)
 
 [Markdown extension configuration options]: /user-guide/configuration/#markdown_extensions
 [wheels]: http://pythonwheels.com/
