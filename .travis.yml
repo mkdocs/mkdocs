@@ -1,18 +1,22 @@
 language: python
 python: "2.7"
 env:
-- TOX_ENV=py26-unittests
-- TOX_ENV=py27-unittests
-- TOX_ENV=py33-unittests
-- TOX_ENV=py34-unittests
-- TOX_ENV=py26-integration
-- TOX_ENV=py27-integration
-- TOX_ENV=py33-integration
-- TOX_ENV=py34-integration
-- TOX_ENV=flake8
-- TOX_ENV=coverage
+- TOXENV=py26-unittests
+- TOXENV=py27-unittests
+- TOXENV=py33-unittests
+- TOXENV=py34-unittests
+- TOXENV=py26-integration
+- TOXENV=py27-integration
+- TOXENV=py33-integration
+- TOXENV=py34-integration
+- TOXENV=flake8
+- TOXENV=coverage
 install:
 - pip install tox
-script: "./.travis.sh"
+script: tox
 matrix:
   fast_finish: true
+before_install:
+  pip install codecov
+after_success:
+  codecov
