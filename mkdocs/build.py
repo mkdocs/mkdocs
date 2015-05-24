@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from datetime import datetimeS
+from datetime import datetime
 import io
 import logging
 import os
