@@ -1,7 +1,7 @@
 # coding: utf-8
 
-from datetime import datetime
-from io import open
+from datetime import datetimeS
+import io
 import logging
 import os
 
@@ -162,7 +162,7 @@ def _build_page(page, config, site_navigation, env, dump_json):
     input_path = os.path.join(config['docs_dir'], page.input_path)
 
     try:
-        input_content = open(input_path, 'r', encoding='utf-8').read()
+        input_content = io.open(input_path, 'r', encoding='utf-8').read()
     except IOError:
         log.error('file not found: %s', input_path)
         return
@@ -213,7 +213,7 @@ def build_extra_templates(extra_templates, config, site_navigation=None):
 
         input_path = os.path.join(config['docs_dir'], extra_template)
 
-        with open(input_path, 'r', encoding='utf-8') as template_file:
+        with io.open(input_path, 'r', encoding='utf-8') as template_file:
             template = jinja2.Template(template_file.read())
 
         if site_navigation is not None:
