@@ -39,11 +39,12 @@ no configuration is needed to enable it.
 
 #### Change the pages configuration
 
-Provide a [new way]
-to define pages in the mkdocs.yml file and deprecate the existing approach,
-support will be removed with MkDocs 1.0.
+Provide a [new way] to define pages, and specifically [nested pages], in the
+mkdocs.yml file and deprecate the existing approach, support will be removed
+with MkDocs 1.0.
 
-[new way]: /user-guide/writing-your-docs.md#configure-pages-and-navigation
+[new way]: /user-guide/writing-your-docs/#configure-pages-and-navigation
+[nested pages]: /user-guide/writing-your-docs/#multilevel-documentation
 
 #### Warn users about the removal of builtin themes
 
