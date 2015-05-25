@@ -37,6 +37,21 @@ no configuration is needed to enable it.
 [future release]: https://github.com/mkdocs/mkdocs/pull/481
 [site_dir]: /user-guide/configuration/#site_dir
 
+#### Change the pages configuration
+
+Provide a [new way]
+to define pages in the mkdocs.yml file and deprecate the existing approach,
+support will be removed with MkDocs 1.0.
+
+[new way]: /user-guide/writing-your-docs.md#configure-pages-and-navigation
+
+#### Warn users about the removal of builtin themes
+
+All themes other than mkdocs and readthedocs will be moved into external
+packages in a future release of MkDocs. This will enable them to be more easily
+supported and updates outside MkDocs releases.
+
+
 ### Major Additions
 
 #### Search
@@ -86,7 +101,15 @@ documentation.
 * MkDocs now ships Python [wheels]. (#486)
 * Only include the build date and MkDocs version on the homepage. (#490)
 * Generate sitemaps for documentation builds. (#436)
+* Add a clearer way to define nested pages in the configuration. (#482)
+* Add an [extra config] option for passing arbitrary variables to the template. (#510)
+* Add `--no-livereload` to `mkdocs serve` for a simpler development server. (#511)
+* Add copyright display support to all themes (#549)
+* Add support for custom commit messages in a `mkdocs gh-deploy` (#516)
+* Bugfix: Fix linking to media within the same directory as a markdown file called index.md (#535)
+* Bugfix: Fix errors with unicode filenames (#542).
 
+[extra config]: /user-guide/configuration/#extra
 [Markdown extension configuration options]: /user-guide/configuration/#markdown_extensions
 [wheels]: http://pythonwheels.com/
 
