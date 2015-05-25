@@ -14,7 +14,7 @@ You can determine your currently installed version using `mkdocs --version`:
     mkdocs, version 0.13.0
 
 
-## Version 0.13.0 (2015-05-??)
+## Version 0.13.0 (2015-05-26)
 
 ### Deprecations
 
