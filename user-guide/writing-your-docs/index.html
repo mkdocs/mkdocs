@@ -71,20 +71,26 @@
                 
                 
                     <li class="dropdown active">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
-                            <li class="active">
-                                <a href="./">Writing your docs</a>
-                            </li>
+                            
+<li >
+    <a href="../configuration/">Configuration</a>
+</li>
+
                         
-                            <li >
-                                <a href="../styling-your-docs/">Styling your docs</a>
-                            </li>
+                            
+<li >
+    <a href="../styling-your-docs/">Styling your docs</a>
+</li>
+
                         
-                            <li >
-                                <a href="../configuration/">Configuration</a>
-                            </li>
+                            
+<li class="active">
+    <a href="./">Writing your docs</a>
+</li>
+
                         
                         </ul>
                     </li>
@@ -95,17 +101,23 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
-                            <li >
-                                <a href="../../about/license/">License</a>
-                            </li>
+                            
+<li >
+    <a href="../../about/contributing/">Contributing</a>
+</li>
+
                         
-                            <li >
-                                <a href="../../about/release-notes/">Release Notes</a>
-                            </li>
+                            
+<li >
+    <a href="../../about/license/">License</a>
+</li>
+
                         
-                            <li >
-                                <a href="../../about/contributing/">Contributing</a>
-                            </li>
+                            
+<li >
+    <a href="../../about/release-notes/">Release notes</a>
+</li>
+
                         
                         </ul>
                     </li>
@@ -114,34 +126,35 @@
                 </ul>
             
 
-            
-            <!-- Search, Navigation and Repo links -->
             <ul class="nav navbar-nav navbar-right">
-                
-                
-                <li >
-                    <a rel="next" href="../..">
-                        <i class="fa fa-arrow-left"></i> Previous
-                    </a>
-                </li>
-                <li >
-                    <a rel="prev" href="../styling-your-docs/">
-                        Next <i class="fa fa-arrow-right"></i>
-                    </a>
-                </li>
-                
-                
                 <li>
-                    <a href="https://github.com/mkdocs/mkdocs/">
-                        
-                            <i class="fa fa-github"></i>
-                        
-                        GitHub
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
                     </a>
                 </li>
+                
+                    <li >
+                        <a rel="next" href="../styling-your-docs/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../../about/contributing/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a href="https://github.com/mkdocs/mkdocs/">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            GitHub
+                        </a>
+                    </li>
                 
             </ul>
-            
         </div>
     </div>
 </div>
@@ -152,6 +165,8 @@
     <ul class="nav bs-sidenav">
     
         <li class="main active"><a href="#writing-your-docs">Writing your docs</a></li>
+        
+            <li><a href="#configure-pages-and-navigation">Configure Pages and Navigation</a></li>
         
             <li><a href="#file-layout">File layout</a></li>
         
@@ -166,10 +181,35 @@
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="writing-your-docs">Writing your docs</h1>
+<h1 id="writing-your-docs">Writing your docs<a class="headerlink" href="#writing-your-docs" title="Permanent link"></a></h1>
 <p>How to write and layout your markdown source files.</p>
 <hr />
-<h2 id="file-layout">File layout</h2>
+<h2 id="configure-pages-and-navigation">Configure Pages and Navigation<a class="headerlink" href="#configure-pages-and-navigation" title="Permanent link"></a></h2>
+<p>The <a href="../../user-guide/configuration/#pages">pages configuration</a> in your <code>mkdocs.yml</code> defines which pages are built by MkDocs and how they appear in the documentation navigation. If not provided, the pages configuration will be automatically created by discovering all the Markdown files in the <a href="../../user-guide/configuration/#docs_dir">documentation directory</a>.</p>
+<p>A simple pages configuration looks like this:</p>
+<pre><code>pages:
+- 'index.md'
+- 'about.md'
+</code></pre>
+<p>With this example we will build two pages at the top level and they will automatically have their titles inferred from the filename. To provide a custom name for these pages, they can be added after the filename.</p>
+<pre><code>pages:
+- Home: 'index.md'
+- About: 'about.md'
+</code></pre>
+<h3 id="multilevel-documentation">Multilevel documentation<a class="headerlink" href="#multilevel-documentation" title="Permanent link"></a></h3>
+<p>To create a second level in the navigation and group topics, the category can be provided before the page title. This is best demonstrated in a documentation project with more pages and is slighlt more complicated.</p>
+<pre><code>pages:
+- Home: 'index.md'
+- User Guide:
+    - 'Writing your docs': 'user-guide/writing-your-docs.md'
+    - 'Styling your docs': 'user-guide/styling-your-docs.md'
+- About:
+    - 'License': 'about/license.md'
+    - 'Release Notes': 'about/release-notes.md'
+</code></pre>
+<p>With the above configuration we have three top level sections Home, User Guide and About. Then under User Guide we have two pages, Writing your docs and Styling your docs. Under the About section we also have two pages, License and Release Notes</p>
+<p><em>Note:</em> At present MkDocs only supports a second level of navigation.</p>
+<h2 id="file-layout">File layout<a class="headerlink" href="#file-layout" title="Permanent link"></a></h2>
 <p>Your documentation source should be written as regular Markdown files, and placed in a directory somewhere in your project.  Normally this directory will be named <code>docs</code> and will exist at the top level of your project, alongside the <code>mkdocs.yml</code> configuration file.</p>
 <p>The simplest project you can create will look something like this:</p>
 <pre><code>mkdocs.yml
@@ -203,9 +243,9 @@ Given the above layout, pages would be generated for the following URLs:</p>
 /user-guide/configuration-options/
 /license/
 </code></pre>
-<h2 id="linking-documents">Linking documents</h2>
+<h2 id="linking-documents">Linking documents<a class="headerlink" href="#linking-documents" title="Permanent link"></a></h2>
 <p>MkDocs allows you to interlink your documentation by using regular Markdown hyperlinks.</p>
-<h4 id="internal-hyperlinks">Internal hyperlinks</h4>
+<h4 id="internal-hyperlinks">Internal hyperlinks<a class="headerlink" href="#internal-hyperlinks" title="Permanent link"></a></h4>
 <p>When linking between pages in the documentation you can simply use the regular Markdown hyperlinking syntax, including the relative path to the Markdown document you wish to link to.</p>
 <pre><code>Please see the [project license](license.md) for further details.
 </code></pre>
@@ -229,7 +269,7 @@ Eam ad euismod accusata vituperata. Oratio vocent nominavi ei eum.
     Ne his mucius oporteat, [mea ut eros delicatissimi](ref:delicatissimi), iudico nonumes moderatius an mel.
 -->
 
-<h2 id="images-and-media">Images and media</h2>
+<h2 id="images-and-media">Images and media<a class="headerlink" href="#images-and-media" title="Permanent link"></a></h2>
 <p>As well as the Markdown source files, you can also include other file types in your documentation, which will be copied across when generating your documentation site.  These might include images and other media.</p>
 <p>For example, if your project documentation needed to include a <a href="https://help.github.com/articles/setting-up-a-custom-domain-with-pages#setting-the-domain-in-your-repo">GitHub pages CNAME file</a> and a PNG formatted screenshot image then your file layout might look as follows:</p>
 <pre><code>mkdocs.yml
@@ -249,7 +289,7 @@ docs/
 *Above: Cupcake indexer in progress*
 </code></pre>
 <p>You image will now be embedded when you build the documentation, and should also be previewed if you're working on the documentation with a Markdown editor.</p>
-<h2 id="markdown-extensions">Markdown extensions</h2>
+<h2 id="markdown-extensions">Markdown extensions<a class="headerlink" href="#markdown-extensions" title="Permanent link"></a></h2>
 <p>MkDocs supports the following Markdown extensions.</p>
 <!--
 #### Page metadata
@@ -267,7 +307,7 @@ At mel verear persius torquatos, his dolores sensibus id, alia urbanitas in usu.
     Unum errem propriae vis cu, et deseruisse interpretaris eam. Illum graecis per an, ludus laoreet repudiare nec an, molestie recteque et eam.
 -->
 
-<h4 id="tables">Tables</h4>
+<h4 id="tables">Tables<a class="headerlink" href="#tables" title="Permanent link"></a></h4>
 <p>A simple table looks like this:</p>
 <pre><code class="text">First Header | Second Header | Third Header
 ------------ | ------------- | ------------
@@ -289,7 +329,7 @@ Left         | Center        | Right
 Left         | Center        | Right
 </code></pre>
 
-<h4 id="fenced-code-blocks">Fenced code blocks</h4>
+<h4 id="fenced-code-blocks">Fenced code blocks<a class="headerlink" href="#fenced-code-blocks" title="Permanent link"></a></h4>
 <p>Start with a line containing 3 or more backtick ` characters, and ends with the first line with the same number of backticks `:</p>
 <pre><code>```
 Fenced code blocks are like Stardard
@@ -311,21 +351,42 @@ def fn():
         <footer class="col-md-12">
             <hr>
             
-            <p>Copyright &copy; 2014, <a href="https://twitter.com/_tomchristie">Tom Christie</a>.</p>
+                <p>Copyright &copy; 2014, <a href="https://twitter.com/_tomchristie">Tom Christie</a>. Maintenance and development by <a href="http://www.dougalmatthews.com/">Dougal Matthews</a></p>
             
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
 
-        
-
         <script src="../../js/jquery-1.10.2.min.js"></script>
         <script src="../../js/bootstrap-3.0.3.min.js"></script>
         <script src="../../js/highlight.pack.js"></script>
+        <script>var base_url = '../..';</script>
+        <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
         <script src="../../js/base.js"></script>
 
-        <!--
-        MkDocs version  : 0.12.2
-        Docs Build Date : 2015-04-22 07:24:21.898711
-        -->
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </body>
 </html>
