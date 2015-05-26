@@ -1,5 +1,5 @@
 language: python
-python: "2.7"
+python: '2.7'
 env:
 - TOXENV=py26-unittests
 - TOXENV=py27-unittests
@@ -15,7 +15,13 @@ install:
 script: tox
 matrix:
   fast_finish: true
-before_install:
-  pip install codecov
-after_success:
-  codecov
+before_install: pip install codecov
+after_success: codecov
+deploy:
+  provider: pypi
+  user: mkdocsdeploy
+  on:
+    tags: true
+  distributions: sdist bdist_wheel
+  password:
+    secure: NajIoVN5cPFKq5EB1viIujcnwywFbOlU/KM5/Qp+WxdX5/ZTnFmaD1iwXc/6kgM07y3XVi6R/nDJr0eAC7kaCRnHE+uT7pRwJtXqtt2mkpIlHD8Y6ppPhxm9AnUhE638t22DuX89cD1JkkvQ97EGD6OJymWAVCRwwkzVzP1Cn/M=

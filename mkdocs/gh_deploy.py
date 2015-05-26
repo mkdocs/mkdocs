@@ -25,6 +25,7 @@ def gh_deploy(config, message=None):
     try:
         subprocess.check_call(command)
     except Exception:
+        log.exception("Failed to deploy to GitHub.")
         return
 
     # Does this repository have a CNAME set for GitHub pages?
