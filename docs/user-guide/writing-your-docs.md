@@ -14,7 +14,7 @@ A simple pages configuration looks like this:
     - 'index.md'
     - 'about.md'
 
-With this example we will build two pages at the top level and they will automatically have their titles inferred from the filename. To provide a custom name for these pages, they can be added after the filename.
+With this example we will build two pages at the top level and they will automatically have their titles inferred from the filename. To provide a custom name for these pages, they can be added before the filename.
 
     pages:
     - Home: 'index.md'
@@ -22,7 +22,7 @@ With this example we will build two pages at the top level and they will automat
 
 ### Multilevel documentation
 
-To create a second level in the navigation and group topics, the category can be provided before the page title. This is best demonstrated in a documentation project with more pages and is slighlt more complicated.
+To create a second level in the navigation and group topics, the category can be provided before the page title. This is best demonstrated in a documentation project with more pages and is slightly more complicated.
 
     pages:
     - Home: 'index.md'
