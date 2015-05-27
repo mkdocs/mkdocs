@@ -25,6 +25,7 @@ from mkdocs import utils
 DIR = os.path.dirname(__file__)
 MKDOCS_CONFIG = os.path.abspath(os.path.join(DIR, '../../mkdocs.yml'))
 MKDOCS_THEMES = utils.get_theme_names()
+TEST_PROJECTS = os.path.abspath(os.path.join(DIR, 'integration'))
 
 
 @click.command()
@@ -40,7 +41,14 @@ def main(output=None):
         command = ['mkdocs', 'build', '--site-dir', out, '--theme', theme]
         subprocess.check_call(command, cwd=project_dir)
 
-    print("The theme builds are available in {0}".format(output))
+    for project in os.listdir(TEST_PROJECTS):
+
+        project_dir = os.path.join(TEST_PROJECTS, project)
+        out = os.path.join(output, project)
+        command = ['mkdocs', 'build', '--site-dir', out]
+        subprocess.check_call(command, cwd=project_dir)
+
+    print("Theme and integration builds are available in {0}".format(output))
 
 if __name__ == '__main__':
     main()

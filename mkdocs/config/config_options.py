@@ -361,10 +361,10 @@ class Pages(Extras):
         # TODO: Remove in 1.0
         config_types = set(type(l) for l in value)
 
-        if config_types.issubset(set([six.text_type, dict, ])):
+        if config_types.issubset(set([six.text_type, dict, str])):
             return value
 
-        if config_types.issubset(set([six.text_type, list, ])):
+        if config_types.issubset(set([six.text_type, list, str])):
             return legacy.pages_compat_shim(value)
 
         raise ValidationError("Invalid pages config. {0} {1}".format(
