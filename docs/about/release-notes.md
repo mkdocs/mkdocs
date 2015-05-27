@@ -14,6 +14,12 @@ You can determine your currently installed version using `mkdocs --version`:
     mkdocs, version 0.13.0
 
 
+## Version 0.13.1 (2015-05-27)
+
+* Bugfix: Fix a problem with minimal configurations which only contain a list
+  of paths in the pages config (#562)
+
+
 ## Version 0.13.0 (2015-05-26)
 
 ### Deprecations
