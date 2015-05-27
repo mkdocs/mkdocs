@@ -151,7 +151,11 @@ After some time, files may be removed from the documentation but they will still
 
 ## Deploying
 
-The documentation site that we've just built only uses static files so you'll be able to host it from pretty much anywhere. [GitHub project pages] and [Amazon S3] are good hosting options. Upload the contents of the entire `site` directory to wherever you're hosting your website from and you're done.
+The documentation site that we've just built only uses static files so you'll be
+able to host it from pretty much anywhere. [GitHub project pages] and [Amazon
+S3] are good hosting options. Upload the contents of the entire `site` directory
+to wherever you're hosting your website from and you're done. For specific instructions
+for a number of common hosts, see the [Deploying your Docs] page.
 
 
 ## Getting help
@@ -165,3 +169,4 @@ To get help with MkDocs, please use the [discussion group], [GitHub issues] or t
 [GitHub project pages]: https://help.github.com/articles/creating-project-pages-manually
 [pip]: http://pip.readthedocs.org/en/latest/installing.html
 [Python]: https://www.python.org/
+[Deploying your Docs]: user-guide/deploying-your-docs/
