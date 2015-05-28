@@ -18,12 +18,6 @@
     </url>
         
     <url>
-     <loc>http://www.mkdocs.org/user-guide/deploying-your-docs/</loc>
-     <lastmod>2015-05-28</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    <url>
      <loc>http://www.mkdocs.org/user-guide/styling-your-docs/</loc>
      <lastmod>2015-05-28</lastmod>
      <changefreq>daily</changefreq>
