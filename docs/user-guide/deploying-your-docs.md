@@ -128,14 +128,5 @@ your hosts' file system.
 [scp]: https://en.wikipedia.org/wiki/Secure_copy
 
 See your host's documentation for specifics. You will likely want to search
-their documentation for "ftp" or "uploading site". A list of instructions for a
-few popular hosts can be found below. MkDocs does not recommend or endorse any
-hosting providers.
-
-* [Amazon S3](http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html)
-* [Dreamhost](http://wiki.dreamhost.com/Uploading_your_site)
-* [Blue Host](https://my.bluehost.com/cgi/help/upload-site)
-* [1&1](http://help.1and1.com/hosting-c37630/webspace-and-access-c85098/ftp-c37631/transfer-files-using-ftp-a792530.html)
-* [A Small Orange](https://kb.asmallorange.com/customer/portal/articles/1603088-upload-files-to-your-server-or-website)
-* [Host Gator](http://support.hostgator.com/articles/video-tutorial-system#ftp)
+their documentation for "ftp" or "uploading site".
 
