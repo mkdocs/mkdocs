@@ -26,13 +26,13 @@ class ConfigBaseTests(unittest.TestCase):
 
         c = base.Config(schema=defaults.DEFAULT_SCHEMA)
 
-        failed, warnings = c.validate()
+        errors, warnings = c.validate()
 
-        self.assertEqual(failed, [
-            ('site_name', 'Required configuration not provided.')
-        ])
+        self.assertEqual(len(errors), 1)
+        self.assertEqual(errors[0][0], 'site_name')
+        self.assertEqual(str(errors[0][1]), 'Required configuration not provided.')
 
-        self.assertEqual(warnings, [])
+        self.assertEqual(len(warnings), 0)
 
     def test_load_missing_required(self):
         """

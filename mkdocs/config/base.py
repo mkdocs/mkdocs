@@ -1,5 +1,5 @@
 import logging
-import os, sys
+import os
 
 import six
 import yaml
@@ -148,19 +148,21 @@ def load_config(config_file=None, **kwargs):
     errors, warnings = cfg.validate()
 
     for config_name, warning in warnings:
-        log.warning("Config value: %s. Warning: %s", config_name, warning)
+        log.warning("Config value: '%s'. Warning: %s", config_name, warning)
 
     for config_name, error in errors:
-        log.error("Config value: %s. Error: %s", config_name, error)
+        log.error("Config value: '%s'. Error: %s", config_name, error)
 
     for key, value in cfg.items():
-        log.debug("Config value: %s = %r", key, value)
-    
+        log.debug("Config value: '%s' = %r", key, value)
+
     if len(errors) > 0:
-        # Raise SystemExit to avoid an unhelpful traceback
-        raise SystemExit("Aborting with Errors...")
+        raise exceptions.ConfigurationError(
+            "Aborted with {0} Configuration Errors!".format(len(errors))
+        )
     elif cfg['strict'] and len(warnings) > 0:
-        # Raise SystemExit to avoid an unhelpful traceback
-        raise SystemExit("Aborting with Warnings in `strict` mode...")
+        raise exceptions.ConfigurationError(
+            "Aborted with {0} Configuration Warnings in 'strict' mode!".format(len(warnings))
+        )
 
     return cfg
