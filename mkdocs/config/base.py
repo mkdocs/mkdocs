@@ -53,7 +53,7 @@ class Config(six.moves.UserDict):
                 self[key] = config_option.validate(value)
                 warnings.extend([(key, w) for w in config_option.warnings])
             except ValidationError as e:
-                failed.append((key, str(e)))
+                failed.append((key, e))
 
         for key in (set(self.keys()) - self._schema_keys):
             warnings.append((
@@ -147,20 +147,22 @@ def load_config(config_file=None, **kwargs):
 
     errors, warnings = cfg.validate()
 
-    if len(warnings) > 0:
-        for config_name, warning in warnings:
-            log.warning("Config value: %s. Warning: %s", config_name, warning)
-        if cfg['strict']:
-            raise exceptions.ConfigurationError(
-                "Warnings found in the config file")
+    for config_name, warning in warnings:
+        log.warning("Config value: '%s'. Warning: %s", config_name, warning)
 
-    if len(errors) > 0:
-        for config_name, error in errors:
-            log.error("Config value: %s. Error: %s", config_name, error)
-        raise exceptions.ConfigurationError("Errors found in the config file.")
+    for config_name, error in errors:
+        log.error("Config value: '%s'. Error: %s", config_name, error)
 
     for key, value in cfg.items():
+        log.debug("Config value: '%s' = %r", key, value)
 
-        log.debug("Config value: %s = %r", key, value)
+    if len(errors) > 0:
+        raise exceptions.ConfigurationError(
+            "Aborted with {0} Configuration Errors!".format(len(errors))
+        )
+    elif cfg['strict'] and len(warnings) > 0:
+        raise exceptions.ConfigurationError(
+            "Aborted with {0} Configuration Warnings in 'strict' mode!".format(len(warnings))
+        )
 
     return cfg

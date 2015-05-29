@@ -10,6 +10,7 @@ from mkdocs import gh_deploy
 from mkdocs import new
 from mkdocs import serve
 from mkdocs import utils
+from mkdocs import exceptions
 from mkdocs.config import load_config
 
 log = logging.getLogger(__name__)
@@ -71,13 +72,17 @@ def serve_command(dev_addr, config_file, strict, theme, livereload):
 
     logging.getLogger('tornado').setLevel(logging.WARNING)
 
-    serve.serve(
-        config_file=config_file,
-        dev_addr=dev_addr,
-        strict=strict,
-        theme=theme,
-        livereload=livereload,
-    )
+    try:
+        serve.serve(
+            config_file=config_file,
+            dev_addr=dev_addr,
+            strict=strict,
+            theme=theme,
+            livereload=livereload,
+        )
+    except exceptions.ConfigurationError as e:
+        # Avoid ugly, unhelpful traceback
+        raise SystemExit('\n' + str(e))
 
 
 @cli.command(name="build")
@@ -88,12 +93,16 @@ def serve_command(dev_addr, config_file, strict, theme, livereload):
 @click.option('--site-dir', type=click.Path(), help=site_dir_help)
 def build_command(clean, config_file, strict, theme, site_dir):
     """Build the MkDocs documentation"""
-    build.build(load_config(
-        config_file=config_file,
-        strict=strict,
-        theme=theme,
-        site_dir=site_dir
-    ), clean_site_dir=clean)
+    try:
+        build.build(load_config(
+            config_file=config_file,
+            strict=strict,
+            theme=theme,
+            site_dir=site_dir
+        ), clean_site_dir=clean)
+    except exceptions.ConfigurationError as e:
+        # Avoid ugly, unhelpful traceback
+        raise SystemExit('\n' + str(e))
 
 
 @cli.command(name="json")
@@ -114,11 +123,15 @@ def json_command(clean, config_file, strict, site_dir):
                 "MkDocs release. For details on updating: "
                 "http://www.mkdocs.org/about/release-notes/")
 
-    build.build(load_config(
-        config_file=config_file,
-        strict=strict,
-        site_dir=site_dir
-    ), dump_json=True, clean_site_dir=clean)
+    try:
+        build.build(load_config(
+            config_file=config_file,
+            strict=strict,
+            site_dir=site_dir
+        ), dump_json=True, clean_site_dir=clean)
+    except exceptions.ConfigurationError as e:
+        # Avoid ugly, unhelpful traceback
+        raise SystemExit('\n' + str(e))
 
 
 @cli.command(name="gh-deploy")
@@ -128,12 +141,16 @@ def json_command(clean, config_file, strict, site_dir):
 @click.option('--remote-branch', '-b', help=remote_branch_help)
 def gh_deploy_command(config_file, clean, message, remote_branch):
     """Deply your documentation to GitHub Pages"""
-    config = load_config(
-        config_file=config_file,
-        remote_branch=remote_branch
-    )
-    build.build(config, clean_site_dir=clean)
-    gh_deploy.gh_deploy(config, message=message)
+    try:
+        config = load_config(
+            config_file=config_file,
+            remote_branch=remote_branch
+        )
+        build.build(config, clean_site_dir=clean)
+        gh_deploy.gh_deploy(config, message=message)
+    except exceptions.ConfigurationError as e:
+        # Avoid ugly, unhelpful traceback
+        raise SystemExit('\n' + str(e))
 
 
 @cli.command(name="new")

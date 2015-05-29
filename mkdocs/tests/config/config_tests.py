@@ -28,11 +28,12 @@ class ConfigTests(unittest.TestCase):
     def test_missing_site_name(self):
         c = config.Config(schema=config.DEFAULT_SCHEMA)
         c.load_dict({})
-        errors, warings = c.validate()
-        self.assertEqual([
-            ('site_name', 'Required configuration not provided.')
-        ], errors)
-        self.assertEqual([], warings)
+        errors, warnings = c.validate()
+        self.assertEqual(len(errors), 1)
+        self.assertEqual(errors[0][0], 'site_name')
+        self.assertEqual(str(errors[0][1]), 'Required configuration not provided.')
+
+        self.assertEqual(len(warnings), 0)
 
     def test_empty_config(self):
         def load_empty_config():
