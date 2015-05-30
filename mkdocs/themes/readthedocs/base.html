@@ -21,6 +21,12 @@
   <link href="{{ path }}" rel="stylesheet">
   {%- endfor %}
 
+  {% if current_page %}
+  <script>
+    // Current page data
+    var mkdocs_page_name = "{{ current_page.input_path.replace('.md', '') }}"
+  </script>
+  {% endif %}
   <script src="{{ base_url }}/js/jquery-2.1.1.min.js"></script>
   <script src="{{ base_url }}/js/modernizr-2.8.3.min.js"></script>
   <script type="text/javascript" src="{{ base_url }}/js/highlight.pack.js"></script>
@@ -95,6 +101,7 @@
 
   </div>
 
+{% block versions %}
 <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       {% if repo_name == 'GitHub' %}
@@ -110,6 +117,7 @@
       {% endif %}
     </span>
 </div>
+{% endblock %}
 
 </body>
 </html>
