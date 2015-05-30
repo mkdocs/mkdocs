@@ -13,6 +13,10 @@ You can determine your currently installed version using `mkdocs --version`:
     $ mkdocs --version
     mkdocs, version 0.13.0
 
+## Version 0.13.2 (2015-05-30)
+
+* Bugfix: Ensure all errors and warnings are logged before exiting. (#536)
+* Bugfix: Fix compatibility issues with ReadTheDocs. (#554)
 
 ## Version 0.13.1 (2015-05-27)
 
