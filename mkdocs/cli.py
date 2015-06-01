@@ -45,9 +45,9 @@ remote_branch_help = ("The remote branch to commit to for Github Pages. This "
                       "overrides the value specified in config")
 
 
-@click.group()
-@click.option('--verbose', is_flag=True, help="Enable verbose output")
-@click.version_option(__version__)
+@click.group(context_settings={'help_option_names': ['-h', '--help']})
+@click.option('-v', '--verbose', is_flag=True, help="Enable verbose output")
+@click.version_option(__version__, '-V', '--version')
 def cli(verbose):
     """
     MkDocs - Project documentation with Markdown.
@@ -62,10 +62,10 @@ def cli(verbose):
 
 
 @cli.command(name="serve")
-@click.option('--config-file', type=click.File('rb'), help=config_file_help)
-@click.option('--dev-addr', help=dev_addr_help, metavar='<IP:PORT>')
-@click.option('--strict', is_flag=True, help=strict_help)
-@click.option('--theme', type=click.Choice(theme_choices), help=theme_help)
+@click.option('-f', '--config-file', type=click.File('rb'), help=config_file_help)
+@click.option('-a', '--dev-addr', help=dev_addr_help, metavar='<IP:PORT>')
+@click.option('-s', '--strict', is_flag=True, help=strict_help)
+@click.option('-t', '--theme', type=click.Choice(theme_choices), help=theme_help)
 @click.option('--livereload/--no-livereload', default=True, help=reload_help)
 def serve_command(dev_addr, config_file, strict, theme, livereload):
     """Run the builtin development server"""
@@ -86,11 +86,11 @@ def serve_command(dev_addr, config_file, strict, theme, livereload):
 
 
 @cli.command(name="build")
-@click.option('--clean', is_flag=True, help=clean_help)
-@click.option('--config-file', type=click.File('rb'), help=config_file_help)
-@click.option('--strict', is_flag=True, help=strict_help)
-@click.option('--theme', type=click.Choice(theme_choices), help=theme_help)
-@click.option('--site-dir', type=click.Path(), help=site_dir_help)
+@click.option('-c', '--clean', is_flag=True, help=clean_help)
+@click.option('-f', '--config-file', type=click.File('rb'), help=config_file_help)
+@click.option('-s', '--strict', is_flag=True, help=strict_help)
+@click.option('-t', '--theme', type=click.Choice(theme_choices), help=theme_help)
+@click.option('-d', '--site-dir', type=click.Path(), help=site_dir_help)
 def build_command(clean, config_file, strict, theme, site_dir):
     """Build the MkDocs documentation"""
     try:
@@ -106,10 +106,10 @@ def build_command(clean, config_file, strict, theme, site_dir):
 
 
 @cli.command(name="json")
-@click.option('--clean', is_flag=True, help=clean_help)
-@click.option('--config-file', type=click.File('rb'), help=config_file_help)
-@click.option('--strict', is_flag=True, help=strict_help)
-@click.option('--site-dir', type=click.Path(), help=site_dir_help)
+@click.option('-c', '--clean', is_flag=True, help=clean_help)
+@click.option('-f', '--config-file', type=click.File('rb'), help=config_file_help)
+@click.option('-s', '--strict', is_flag=True, help=strict_help)
+@click.option('-d', '--site-dir', type=click.Path(), help=site_dir_help)
 def json_command(clean, config_file, strict, site_dir):
     """Build the MkDocs documentation to JSON files
 
@@ -135,10 +135,10 @@ def json_command(clean, config_file, strict, site_dir):
 
 
 @cli.command(name="gh-deploy")
-@click.option('--clean', is_flag=True, help=clean_help)
-@click.option('--config-file', type=click.File('rb'), help=config_file_help)
-@click.option('--message', '-m', help=commit_message_help)
-@click.option('--remote-branch', '-b', help=remote_branch_help)
+@click.option('-c', '--clean', is_flag=True, help=clean_help)
+@click.option('-f', '--config-file', type=click.File('rb'), help=config_file_help)
+@click.option('-m', '--message', help=commit_message_help)
+@click.option('-b', '--remote-branch', help=remote_branch_help)
 def gh_deploy_command(config_file, clean, message, remote_branch):
     """Deply your documentation to GitHub Pages"""
     try:

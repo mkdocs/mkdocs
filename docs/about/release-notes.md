@@ -15,6 +15,8 @@ You can determine your currently installed version using `mkdocs --version`:
 
 ## Version 0.14.0 (2015-??-??)
 
+* Add short options (`-a`) to most command line options.
+
 ## Version 0.13.3 (2015-06-02)
 
 * Bugfix: Reduce validation error to a warning if the site_dir is within
