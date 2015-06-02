@@ -16,17 +16,51 @@ from mkdocs.config import load_config
 log = logging.getLogger(__name__)
 
 
-def configure_logging(log_name='mkdocs', level=logging.INFO):
-    '''When a --verbose flag is passed, increase the verbosity of mkdocs'''
+class State(object):
+    ''' Maintain logging level.'''
 
-    logger = logging.getLogger(log_name)
-    logger.propagate = False
-    stream = logging.StreamHandler()
-    formatter = logging.Formatter("%(levelname)-7s -  %(message)s ")
-    stream.setFormatter(formatter)
-    logger.addHandler(stream)
+    def __init__(self, log_name='mkdocs', level=logging.INFO):
+        self.logger = logging.getLogger(log_name)
+        self.logger.propagate = False
+        stream = logging.StreamHandler()
+        formatter = logging.Formatter("%(levelname)-7s -  %(message)s ")
+        stream.setFormatter(formatter)
+        self.logger.addHandler(stream)
 
-    logger.setLevel(level)
+        self.logger.setLevel(level)
+
+
+pass_state = click.make_pass_decorator(State, ensure=True)
+
+
+def verbose_option(f):
+    def callback(ctx, param, value):
+        state = ctx.ensure_object(State)
+        if value:
+            state.logger.setLevel(logging.DEBUG)
+    return click.option('-v', '--verbose',
+                        is_flag=True,
+                        expose_value=False,
+                        help='Enable verbose output',
+                        callback=callback)(f)
+
+
+def quiet_option(f):
+    def callback(ctx, param, value):
+        state = ctx.ensure_object(State)
+        if value:
+            state.logger.setLevel(logging.ERROR)
+    return click.option('-q', '--quiet',
+                        is_flag=True,
+                        expose_value=False,
+                        help='Silence warnings',
+                        callback=callback)(f)
+
+
+def common_options(f):
+    f = verbose_option(f)
+    f = quiet_option(f)
+    return f
 
 
 clean_help = "Remove old files from the site_dir before building"
@@ -46,19 +80,13 @@ remote_branch_help = ("The remote branch to commit to for Github Pages. This "
 
 
 @click.group(context_settings={'help_option_names': ['-h', '--help']})
-@click.option('-v', '--verbose', is_flag=True, help="Enable verbose output")
 @click.version_option(__version__, '-V', '--version')
-def cli(verbose):
+@common_options
+def cli():
     """
     MkDocs - Project documentation with Markdown.
     """
-
-    if verbose:
-        level = logging.DEBUG
-    else:
-        level = logging.INFO
-
-    configure_logging(level=level)
+    pass
 
 
 @cli.command(name="serve")
@@ -67,6 +95,7 @@ def cli(verbose):
 @click.option('-s', '--strict', is_flag=True, help=strict_help)
 @click.option('-t', '--theme', type=click.Choice(theme_choices), help=theme_help)
 @click.option('--livereload/--no-livereload', default=True, help=reload_help)
+@common_options
 def serve_command(dev_addr, config_file, strict, theme, livereload):
     """Run the builtin development server"""
 
@@ -91,6 +120,7 @@ def serve_command(dev_addr, config_file, strict, theme, livereload):
 @click.option('-s', '--strict', is_flag=True, help=strict_help)
 @click.option('-t', '--theme', type=click.Choice(theme_choices), help=theme_help)
 @click.option('-d', '--site-dir', type=click.Path(), help=site_dir_help)
+@common_options
 def build_command(clean, config_file, strict, theme, site_dir):
     """Build the MkDocs documentation"""
     try:
@@ -110,6 +140,7 @@ def build_command(clean, config_file, strict, theme, site_dir):
 @click.option('-f', '--config-file', type=click.File('rb'), help=config_file_help)
 @click.option('-s', '--strict', is_flag=True, help=strict_help)
 @click.option('-d', '--site-dir', type=click.Path(), help=site_dir_help)
+@common_options
 def json_command(clean, config_file, strict, site_dir):
     """Build the MkDocs documentation to JSON files
 
@@ -139,6 +170,7 @@ def json_command(clean, config_file, strict, site_dir):
 @click.option('-f', '--config-file', type=click.File('rb'), help=config_file_help)
 @click.option('-m', '--message', help=commit_message_help)
 @click.option('-b', '--remote-branch', help=remote_branch_help)
+@common_options
 def gh_deploy_command(config_file, clean, message, remote_branch):
     """Deply your documentation to GitHub Pages"""
     try:
@@ -155,6 +187,7 @@ def gh_deploy_command(config_file, clean, message, remote_branch):
 
 @cli.command(name="new")
 @click.argument("project_directory")
+@common_options
 def new_command(project_directory):
     """Create a new MkDocs project"""
     new.new(project_directory)

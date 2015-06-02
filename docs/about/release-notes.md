@@ -15,6 +15,7 @@ You can determine your currently installed version using `mkdocs --version`:
 
 ## Version 0.14.0 (2015-??-??)
 
+* Add `--quiet` and `--verbose` options to all subcommands.
 * Add short options (`-a`) to most command line options.
 
 ## Version 0.13.3 (2015-06-02)
