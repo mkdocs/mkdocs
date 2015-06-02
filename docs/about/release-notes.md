@@ -17,7 +17,7 @@ You can determine your currently installed version using `mkdocs --version`:
 
 ## Version 0.13.3 (2015-06-02)
 
-* Bugfix: Reduce validation error from to a warning if the site_dir is within
+* Bugfix: Reduce validation error to a warning if the site_dir is within
   the docs_dir as this shouldn't cause any problems with building but will
   inconvenience users building multiple times. (#580)
 
