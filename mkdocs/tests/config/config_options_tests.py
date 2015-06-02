@@ -175,13 +175,10 @@ class SiteDirTest(unittest.TestCase):
         docs_dir = config_options.Dir()
 
         test_configs = (
-            {'docs_dir': 'docs', 'site_dir': j('docs', 'site')},
             {'docs_dir': j('site', 'docs'), 'site_dir': 'site'},
             {'docs_dir': 'docs', 'site_dir': '.'},
-            {'docs_dir': '.', 'site_dir': 'site'},
             {'docs_dir': '.', 'site_dir': '.'},
             {'docs_dir': 'docs', 'site_dir': ''},
-            {'docs_dir': '', 'site_dir': 'site'},
             {'docs_dir': '', 'site_dir': ''},
             {'docs_dir': j('..', 'mkdocs', 'docs'), 'site_dir': 'docs'},
         )
@@ -193,6 +190,30 @@ class SiteDirTest(unittest.TestCase):
 
             self.assertRaises(config_options.ValidationError,
                               option.post_validation, test_config, 'key')
+
+    def test_site_dir_in_docs_dir(self):
+
+        j = os.path.join
+
+        test_configs = (
+            {'docs_dir': 'docs', 'site_dir': j('docs', 'site')},
+            {'docs_dir': '.', 'site_dir': 'site'},
+            {'docs_dir': '', 'site_dir': 'site'},
+        )
+
+        for test_config in test_configs:
+
+            docs_dir = config_options.Dir()
+            option = config_options.SiteDir()
+
+            test_config['docs_dir'] = docs_dir.validate(test_config['docs_dir'])
+            test_config['site_dir'] = option.validate(test_config['site_dir'])
+
+            option.post_validation(test_config, 'key')
+            self.assertEqual(len(option.warnings), 1)
+            self.assertEqual(
+                option.warnings[0][:50],
+                "The 'site_dir' should not be within the 'docs_dir'")
 
 
 class ThemeTest(unittest.TestCase):

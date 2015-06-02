@@ -13,6 +13,12 @@ You can determine your currently installed version using `mkdocs --version`:
     $ mkdocs --version
     mkdocs, version 0.13.0
 
+## Version 0.13.3 (2015-06-02)
+
+* Bugfix: Reduce validation error from to a warning if the site_dir is within
+  the docs_dir as this shouldn't cause any problems with building but will
+  inconvenience users building multiple times. (#580)
+
 ## Version 0.13.2 (2015-05-30)
 
 * Bugfix: Ensure all errors and warnings are logged before exiting. (#536)
@@ -21,7 +27,7 @@ You can determine your currently installed version using `mkdocs --version`:
 ## Version 0.13.1 (2015-05-27)
 
 * Bugfix: Fix a problem with minimal configurations which only contain a list
-  of paths in the pages config (#562)
+  of paths in the pages config. (#562)
 
 
 ## Version 0.13.0 (2015-05-26)

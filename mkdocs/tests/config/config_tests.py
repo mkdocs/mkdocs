@@ -175,13 +175,10 @@ class ConfigTests(unittest.TestCase):
         j = os.path.join
 
         test_configs = (
-            {'docs_dir': 'docs', 'site_dir': j('docs', 'site')},
             {'docs_dir': j('site', 'docs'), 'site_dir': 'site'},
             {'docs_dir': 'docs', 'site_dir': '.'},
-            {'docs_dir': '.', 'site_dir': 'site'},
             {'docs_dir': '.', 'site_dir': '.'},
             {'docs_dir': 'docs', 'site_dir': ''},
-            {'docs_dir': '', 'site_dir': 'site'},
             {'docs_dir': '', 'site_dir': ''},
             {'docs_dir': j('..', 'mkdocs', 'docs'), 'site_dir': 'docs'},
         )
