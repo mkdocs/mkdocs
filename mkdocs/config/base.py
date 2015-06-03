@@ -1,10 +1,10 @@
+from __future__ import unicode_literals
 import logging
 import os
-
-import six
 import yaml
 
 from mkdocs import exceptions
+from mkdocs import utils
 
 
 log = logging.getLogger('mkdocs.config')
@@ -14,7 +14,7 @@ class ValidationError(Exception):
     """Raised during the validation process of the config on errors."""
 
 
-class Config(six.moves.UserDict):
+class Config(utils.UserDict):
     """
     MkDocs Configuration dict
 
@@ -106,7 +106,7 @@ def _open_config_file(config_file):
     log.debug("Loading configuration file: %s", config_file)
 
     # If it is a string, we can assume it is a path and attempt to open it.
-    if isinstance(config_file, six.string_types):
+    if isinstance(config_file, utils.string_types):
         if os.path.exists(config_file):
             config_file = open(config_file, 'rb')
         else:

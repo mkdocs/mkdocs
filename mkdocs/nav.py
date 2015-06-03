@@ -6,11 +6,10 @@ Deals with generating the site-wide navigation.
 This consists of building a set of interlinked page and header objects.
 """
 
+from __future__ import unicode_literals
 import datetime
 import logging
 import os
-
-import six
 
 from mkdocs import utils, exceptions
 
@@ -213,7 +212,7 @@ def _path_to_page(path, title, url_context, use_directory_urls):
 
 def _follow(config_line, url_context, use_dir_urls, header=None, title=None):
 
-    if isinstance(config_line, six.string_types):
+    if isinstance(config_line, utils.string_types):
         path = os.path.normpath(config_line)
         page = _path_to_page(path, title, url_context, use_dir_urls)
 
@@ -239,7 +238,7 @@ def _follow(config_line, url_context, use_dir_urls, header=None, title=None):
 
     next_cat_or_title, subpages_or_path = next(iter(config_line.items()))
 
-    if isinstance(subpages_or_path, six.string_types):
+    if isinstance(subpages_or_path, utils.string_types):
         path = subpages_or_path
         for sub in _follow(path, url_context, use_dir_urls, header=header, title=next_cat_or_title):
             yield sub

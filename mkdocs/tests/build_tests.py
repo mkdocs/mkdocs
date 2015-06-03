@@ -1,13 +1,19 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+from __future__ import unicode_literals
 import os
 import shutil
 import tempfile
 import unittest
-
-from six.moves import zip
 import mock
+
+try:
+    from itertools import izip as zip
+except ImportError:
+    # In Py3 use builtin zip function
+    pass
+
 
 from mkdocs import build, nav, config
 from mkdocs.exceptions import MarkdownNotFound

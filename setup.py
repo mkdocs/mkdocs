@@ -64,7 +64,6 @@ setup(
         'livereload>=2.3.2',
         'Markdown>=2.3.1,<2.5' if PY26 else 'Markdown>=2.3.1',
         'PyYAML>=3.10',
-        'six>=1.9.0',
         'tornado>=4.1',
     ],
     entry_points={

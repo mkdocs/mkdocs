@@ -1,6 +1,5 @@
+from __future__ import unicode_literals
 import os
-
-import six
 
 from mkdocs import utils, legacy
 from mkdocs.config.base import Config, ValidationError
@@ -164,7 +163,7 @@ class URL(OptionallyRequired):
     def run_validation(self, value):
 
         try:
-            parsed_url = six.moves.urllib.parse.urlparse(value)
+            parsed_url = utils.urlparse(value)
         except (AttributeError, TypeError):
             raise ValidationError("Unable to parse the URL.")
 
@@ -186,7 +185,7 @@ class RepoURL(URL):
     def post_validation(self, config, key_name):
 
         if config['repo_url'] is not None and config.get('repo_name') is None:
-            repo_host = six.moves.urllib.parse.urlparse(
+            repo_host = utils.urlparse(
                 config['repo_url']).netloc.lower()
             if repo_host == 'github.com':
                 config['repo_name'] = 'GitHub'
@@ -204,7 +203,7 @@ class Dir(Type):
     """
 
     def __init__(self, exists=False, **kwargs):
-        super(Dir, self).__init__(type_=six.string_types, **kwargs)
+        super(Dir, self).__init__(type_=utils.string_types, **kwargs)
         self.exists = exists
 
     def run_validation(self, value):
@@ -369,15 +368,15 @@ class Pages(Extras):
         # TODO: Remove in 1.0
         config_types = set(type(l) for l in value)
 
-        if config_types.issubset(set([six.text_type, dict, str])):
+        if config_types.issubset(set([utils.text_type, dict, str])):
             return value
 
-        if config_types.issubset(set([six.text_type, list, str])):
+        if config_types.issubset(set([utils.text_type, list, str])):
             return legacy.pages_compat_shim(value)
 
         raise ValidationError("Invalid pages config. {0} {1}".format(
             config_types,
-            set([six.text_type, dict, ])
+            set([utils.text_type, dict, ])
         ))
 
     def post_validation(self, config, key_name):
@@ -463,7 +462,7 @@ class MarkdownExtensions(OptionallyRequired):
                     raise ValidationError('Invalid config options for Markdown '
                                           "Extension '{0}'.".format(ext))
                 self.configdata[ext] = cfg
-            elif isinstance(item, six.string_types):
+            elif isinstance(item, utils.string_types):
                 extensions.append(item)
             else:
                 raise ValidationError('Invalid Markdown Extensions configuration')

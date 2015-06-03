@@ -1,7 +1,7 @@
+from __future__ import unicode_literals
 import logging
 
-import six
-
+from mkdocs import utils
 from mkdocs.exceptions import ConfigurationError
 
 log = logging.getLogger(__name__)
@@ -53,7 +53,7 @@ def pages_compat_shim(original_pages):
 
     for config_line in original_pages:
 
-        if isinstance(config_line, six.string_types):
+        if isinstance(config_line, utils.string_types):
             config_line = [config_line, ]
 
         if len(config_line) not in (1, 2, 3):

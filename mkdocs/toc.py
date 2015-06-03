@@ -14,7 +14,12 @@ The steps we take to generate a table of contents are:
 * Parse table of contents HTML into the underlying data structure.
 """
 
-import six
+from __future__ import unicode_literals
+
+try:                                    # pragma: no cover
+    from html.parser import HTMLParser  # noqa
+except ImportError:                     # pragma: no cover
+    from HTMLParser import HTMLParser   # noqa
 
 
 class TableOfContents(object):
@@ -50,10 +55,10 @@ class AnchorLink(object):
         return ret
 
 
-class TOCParser(six.moves.html_parser.HTMLParser):
+class TOCParser(HTMLParser):
 
     def __init__(self):
-        six.moves.html_parser.HTMLParser.__init__(self)
+        HTMLParser.__init__(self)
         self.links = []
 
         self.in_anchor = False
