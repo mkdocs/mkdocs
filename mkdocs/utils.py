@@ -12,6 +12,7 @@ import os
 import sys
 import shutil
 import markdown
+import yaml
 
 from mkdocs import toc
 
@@ -33,6 +34,39 @@ if PY3:                         # pragma: no cover
 else:                           # pragma: no cover
     string_types = basestring,  # noqa
     text_type = unicode         # noqa
+
+
+def yaml_load(source, loader=yaml.Loader):
+    """
+    Custom yaml loader.
+
+    Load all strings as unicode.
+    http://stackoverflow.com/a/2967461/3609487
+    """
+
+    class Loader(loader):
+
+        """Custom Loader."""
+
+        pass
+
+    def construct_yaml_str(self, node):
+        """Override the default string handling function to always return unicode objects."""
+
+        return self.construct_scalar(node)
+
+    Loader.add_constructor('tag:yaml.org,2002:str', construct_yaml_str)
+
+    try:
+        return yaml.load(source, Loader)
+    finally:
+        # Some mkdocs internal calls, sometimes in test lib, will load configs
+        # with a file object but never close it.  On some systems, if a delete
+        # action is performed on that file without Python closing that object,
+        # there will be an access error. This will process the file and close it
+        # as there should be no more use for the file once we process the yaml content.
+        if hasattr(source, 'close'):
+            source.close()
 
 
 def reduce_list(data_set):
