@@ -58,7 +58,7 @@ public repository.
 [rtd]: https://readthedocs.org/
 [instructions]: https://read-the-docs.readthedocs.org/en/latest/getting_started.html#in-markdown
 [features]: http://read-the-docs.readthedocs.org/en/latest/features.html
-[theme]: http://127.0.0.1:8000/user-guide/styling-your-docs/#read-the-docs
+[theme]: user-guide/styling-your-docs/#read-the-docs
 
 ## PyPI
 
