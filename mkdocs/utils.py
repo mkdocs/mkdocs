@@ -7,13 +7,32 @@ Nothing in this module should have an knowledge of config or the layout
 and structure of the site and pages in the site.
 """
 
+from __future__ import unicode_literals
 import os
+import sys
 import shutil
-
 import markdown
-import six
 
 from mkdocs import toc
+
+try:                                                        # pragma: no cover
+    from urllib.parse import urlparse, urlunparse, urljoin  # noqa
+    from urllib.request import pathname2url                 # noqa
+    from collections import UserDict                        # noqa
+except ImportError:                                         # pragma: no cover
+    from urlparse import urlparse, urlunparse, urljoin      # noqa
+    from urllib import pathname2url                         # noqa
+    from UserDict import UserDict                           # noqa
+
+
+PY3 = sys.version_info[0] == 3
+
+if PY3:                         # pragma: no cover
+    string_types = str,         # noqa
+    text_type = str             # noqa
+else:                           # pragma: no cover
+    string_types = basestring,  # noqa
+    text_type = unicode         # noqa
 
 
 def reduce_list(data_set):
@@ -190,7 +209,7 @@ def create_media_urls(nav, path_list):
 
     for path in path_list:
         # Allow links to fully qualified URL's
-        parsed = six.moves.urllib.parse.urlparse(path)
+        parsed = urlparse(path)
         if parsed.netloc:
             final_urls.append(path)
             continue
@@ -221,7 +240,7 @@ def create_relative_media_url(nav, url):
     """
 
     # Allow links to fully qualified URL's
-    parsed = six.moves.urllib.parse.urlparse(url)
+    parsed = urlparse(url)
     if parsed.netloc:
         return url
 
@@ -243,7 +262,7 @@ def create_relative_media_url(nav, url):
     # correctly for images in the same directory as the markdown. I think this
     # is due to us moving it into a directory with index.html, but I'm not sure
     if (nav.file_context.current_file.endswith("/index.md") is False and
-            nav.url_context.base_path is not '/' and
+            nav.url_context.base_path != '/' and
             relative_url.startswith("./")):
         relative_url = ".%s" % relative_url
 
@@ -256,7 +275,7 @@ def path_to_url(path):
     if os.path.sep == '/':
         return path
 
-    return six.moves.urllib.request.pathname2url(path)
+    return pathname2url(path)
 
 
 def convert_markdown(markdown_source, extensions=None, extension_configs=None):

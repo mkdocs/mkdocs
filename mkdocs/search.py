@@ -1,7 +1,12 @@
 from __future__ import unicode_literals
 
 import json
-import six
+from mkdocs import utils
+
+try:                                    # pragma: no cover
+    from html.parser import HTMLParser  # noqa
+except ImportError:                     # pragma: no cover
+    from HTMLParser import HTMLParser   # noqa
 
 
 class SearchIndex(object):
@@ -32,7 +37,7 @@ class SearchIndex(object):
         """
         self._entries.append({
             'title': title,
-            'text': six.text_type(text.strip().encode('utf-8'), encoding='utf-8'),
+            'text': utils.text_type(text.strip().encode('utf-8'), encoding='utf-8'),
             'location': loc
         })
 
@@ -93,7 +98,7 @@ class SearchIndex(object):
         return s.get_data()
 
 
-class HTMLStripper(six.moves.html_parser.HTMLParser):
+class HTMLStripper(HTMLParser):
     """
     A simple HTML parser that stores all of the data within tags
     but ignores the tags themselves and thus strips them from the
@@ -103,7 +108,7 @@ class HTMLStripper(six.moves.html_parser.HTMLParser):
     def __init__(self, *args, **kwargs):
         # HTMLParser is a old-style class in Python 2, so
         # super() wont work here.
-        six.moves.html_parser.HTMLParser.__init__(self, *args, **kwargs)
+        HTMLParser.__init__(self, *args, **kwargs)
 
         self.data = []
 
@@ -136,7 +141,7 @@ class ContentSection(object):
         ])
 
 
-class ContentParser(six.moves.html_parser.HTMLParser):
+class ContentParser(HTMLParser):
     """
     Given a block of HTML, group the content under the preceding
     H1 or H2 tags which can then be used for creating an index
@@ -147,7 +152,7 @@ class ContentParser(six.moves.html_parser.HTMLParser):
 
         # HTMLParser is a old-style class in Python 2, so
         # super() wont work here.
-        six.moves.html_parser.HTMLParser.__init__(self, *args, **kwargs)
+        HTMLParser.__init__(self, *args, **kwargs)
 
         self.data = []
         self.section = None

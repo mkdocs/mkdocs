@@ -35,11 +35,11 @@ tutorial/install.md | tutorial/install/ | ../img/initial-layout.png    |
 tutorial/intro.md   | tutorial/intro/   | ../../img/initial-layout.png |
 
 """
+from __future__ import unicode_literals
 import logging
 
 from markdown.extensions import Extension
 from markdown.treeprocessors import Treeprocessor
-import six
 
 from mkdocs import utils
 from mkdocs.exceptions import MarkdownNotFound
@@ -56,7 +56,7 @@ def _iter(node):
 def path_to_url(url, nav, strict):
 
     scheme, netloc, path, params, query, fragment = (
-        six.moves.urllib.parse.urlparse(url))
+        utils.urlparse(url))
 
     if scheme or netloc or not path:
         # Ignore URLs unless they are a relative link to a markdown file.
@@ -89,7 +89,7 @@ def path_to_url(url, nav, strict):
 
     # Convert the .md hyperlink to a relative hyperlink to the HTML page.
     fragments = (scheme, netloc, path, params, query, fragment)
-    url = six.moves.urllib.parse.urlunparse(fragments)
+    url = utils.urlunparse(fragments)
     return url
 
 
