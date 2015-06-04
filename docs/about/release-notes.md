@@ -19,6 +19,7 @@ You can determine your currently installed version using `mkdocs --version`:
 * Add `--quiet` and `--verbose` options to all subcommands.
 * Add short options (`-a`) to most command line options.
 * Add copyright footer for readthedocs theme.
+* Bugfix: Fix a JavaScript encoding problem when searching with spaces. (#586)
 
 ## Version 0.13.3 (2015-06-02)
 
