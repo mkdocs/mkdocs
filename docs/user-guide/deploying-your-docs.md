@@ -58,7 +58,7 @@ public repository.
 [rtd]: https://readthedocs.org/
 [instructions]: https://read-the-docs.readthedocs.org/en/latest/getting_started.html#in-markdown
 [features]: http://read-the-docs.readthedocs.org/en/latest/features.html
-[theme]: user-guide/styling-your-docs/#read-the-docs
+[theme]: /user-guide/styling-your-docs/
 
 ## PyPI
 
@@ -69,7 +69,7 @@ project's root directory to upload your documentation:
 
 ```sh
 mkdocs build --clean
-python setup.py upload_docs --upload-dir=site  
+python setup.py upload_docs --upload-dir=site
 ```
 
 You documentation will be hosted at `http://pythonhosted.org/<projectname>/`
@@ -121,7 +121,7 @@ scp -r ./site usr@host:/path/to/server/root
 Of course, you will need to replace `user` with the username you have with your
 hosting provider and `host` with the appropriate domain name. Additionally, you
 will need to adjust the `/path/to/server/root` to match the configuration of
-your hosts' file system. 
+your hosts' file system.
 
 [ftp]: https://en.wikipedia.org/wiki/File_Transfer_Protocol
 [ssh]: https://en.wikipedia.org/wiki/Secure_Shell
