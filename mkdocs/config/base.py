@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 import logging
 import os
-import yaml
 
 from mkdocs import exceptions
 from mkdocs import utils
@@ -94,7 +93,7 @@ class Config(utils.UserDict):
         self.data.update(patch)
 
     def load_file(self, config_file):
-        return self.load_dict(yaml.load(config_file))
+        return self.load_dict(utils.yaml_load(config_file))
 
 
 def _open_config_file(config_file):

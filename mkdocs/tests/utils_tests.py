@@ -6,6 +6,7 @@ import os
 import unittest
 
 from mkdocs import nav, utils
+from mkdocs.tests.base import dedent
 
 
 class UtilsTests(unittest.TestCase):
@@ -141,3 +142,17 @@ class UtilsTests(unittest.TestCase):
                     j('about', 'release-notes.md')]}
             ]
         )
+
+    def test_unicode_yaml(self):
+
+        yaml_src = dedent(
+            '''
+            key: value
+            key2:
+              - value
+            '''
+        )
+
+        config = utils.yaml_load(yaml_src)
+        self.assertTrue(isinstance(config['key'], utils.text_type))
+        self.assertTrue(isinstance(config['key2'][0], utils.text_type))

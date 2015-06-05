@@ -15,6 +15,7 @@ You can determine your currently installed version using `mkdocs --version`:
 
 ## Version 0.14.0 (2015-??-??)
 
+* Improve Unicode handling by ensuring that all YAML strings are loaded as Unicode.
 * Remove dependancy on the six library. (#583)
 * Add `--quiet` and `--verbose` options to all subcommands.
 * Add short options (`-a`) to most command line options.
@@ -252,4 +253,3 @@ documentation.
 * Bugfix: Fix the mkdocs command creation under Windows. (#122)
 * Bugfix: Correctly handle external `extra_javascript` and `extra_css`. (#92)
 * Bugfix: Fixed favicon support. (#87)
-

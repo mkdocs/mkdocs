@@ -1,9 +1,7 @@
 from __future__ import unicode_literals
 import unittest
 
-import yaml
-
-from mkdocs import legacy
+from mkdocs import legacy, utils
 
 
 class TestCompatabilityShim(unittest.TestCase):
@@ -43,8 +41,8 @@ class TestCompatabilityShim(unittest.TestCase):
         - CLI Guide: cli.md
         """
         self.assertEqual(
-            legacy.pages_compat_shim(yaml.load(pages_yaml_old)['pages']),
-            yaml.load(pages_yaml_new)['pages'])
+            legacy.pages_compat_shim(utils.yaml_load(pages_yaml_old)['pages']),
+            utils.yaml_load(pages_yaml_new)['pages'])
 
     def test_convert_no_home(self):
 
@@ -62,5 +60,5 @@ class TestCompatabilityShim(unittest.TestCase):
         - About: about.md
         """
         self.assertEqual(
-            legacy.pages_compat_shim(yaml.load(pages_yaml_old)['pages']),
-            yaml.load(pages_yaml_new)['pages'])
+            legacy.pages_compat_shim(utils.yaml_load(pages_yaml_old)['pages']),
+            utils.yaml_load(pages_yaml_new)['pages'])
