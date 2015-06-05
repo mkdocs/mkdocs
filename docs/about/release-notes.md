@@ -17,11 +17,13 @@ You can determine your currently installed version using `mkdocs --version`:
 
 * Improve Unicode handling by ensuring that all YAML strings are loaded as Unicode.
 * Remove dependancy on the six library. (#583)
+* Remove dependancy on the ghp-import library. (#547)
 * Add `--quiet` and `--verbose` options to all subcommands.
 * Add short options (`-a`) to most command line options.
 * Add copyright footer for readthedocs theme.
 * Bugfix: Fix a JavaScript encoding problem when searching with spaces. (#586)
 * Stack traces are no longer displayed on socket errors, just an error message.
+* Bugfix: gh-deploy now works if the mkdocs.yml is not in the git repo root (#578)
 
 ## Version 0.13.3 (2015-06-02)
 
