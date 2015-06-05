@@ -214,7 +214,26 @@ An object representing the Table of contents for a page. Displaying the table of
 ```
 
 ##### meta
-A mapping of the metadata included at the top of the markdown page.
+A mapping of the metadata included at the top of the markdown page. In this example we define a `source` property above the page title.
+
+```no-highlight
+source: generics.py
+        mixins.py
+
+# Page title
+
+Content...
+```
+
+A template can access this metadata for the page with the `meta.source` variable. This could then be used to link to source files related to the documentation page.
+
+```
+{% for filename in meta.source %}
+  <a class="github" href="https://github.com/.../{{ filename }}">
+    <span class="label label-info">{{ filename }}</span>
+  </a>
+{% endfor %}
+```
 
 ##### canonical_url
 The full, canonical URL to the current page. This includes the site_url from the configuration.
