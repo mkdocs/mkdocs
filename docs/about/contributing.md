@@ -24,7 +24,7 @@ If you want to just install and try out the latest development version of
 MkDocs you can do so with the following command. This can be useful if you
 want to provide feedback for a new feature or want to confirm if a bug you
 have encountered is fixed in the git master. It is **strongly** recommended
-that you do this within a [virtualenv](virtualenv).
+that you do this within a [virtualenv].
 
 ```bash
 pip install https://github.com/mkdocs/mkdocs/archive/master.tar.gz
@@ -34,7 +34,7 @@ pip install https://github.com/mkdocs/mkdocs/archive/master.tar.gz
 
 First you'll need to fork and clone the repository. Once you have a local
 copy, run the following command. It is **strongly** recommended that you do
-this within a [virtualenv](virtualenv).
+this within a [virtualenv].
 
 ```bash
 pip install --editable .
@@ -46,13 +46,13 @@ to the git repository.
 
 ## Running the tests
 
-To run the tests, it is recommended that you use [Tox](tox). This just needs
+To run the tests, it is recommended that you use [Tox]. This just needs
 to be pip installed and then the test suite can be ran for MkDocs but running
 the command `tox` in the root of your MkDocs repository.
 
 It will attempt to run the tests against all of the Python versions we
 support. So don't be concerned if you are missing some and they fail. The rest
-will be verified by [Travis](travis) when you submit a pull request.
+will be verified by [Travis] when you submit a pull request.
 
 ## Submitting Pull Requests
 
