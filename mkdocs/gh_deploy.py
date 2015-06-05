@@ -8,10 +8,12 @@ log = logging.getLogger(__name__)
 
 def gh_deploy(config, message=None):
 
-    if not os.path.exists('.git'):
-        log.info('Cannot deploy - this directory does not appear to be a git '
-                 'repository')
-        return
+    proc = subprocess.Popen(['git', 'rev-parse', '--is-inside-work-tree'],
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc.communicate()
+    if proc.wait() != 0:
+        log.error('Cannot deploy - this directory does not appear to be a git '
+                  'repository')
 
     command = ['ghp-import', '-p', config['site_dir']]
 
