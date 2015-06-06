@@ -91,31 +91,14 @@ Set the remote branch to commit to when using `gh-deploy` to update Github Pages
 
 ### pages
 
-This is setting is used to determine the set of pages that should be built for the documentation.
-
-The setting should be a list.  Each row in the list represents information about a single page as a list of strings.  The first string represents the path of the documentation source file, and should be relative to the `docs_dir` setting.  Remaining strings represent the title of the page in the site navigation.
-
-Here's a simple example that would cause the build stage to create three pages:
+This setting is used to determine the set of pages that should be built for the documentation. For example, the following would create Introduction, User Guide and About pages, given the three source files `index.md`, `user-guide.md` and `about.md`, respectively.
 
     pages:
     - 'Introduction': 'index.md'
     - 'User Guide': 'user-guide.md'
-    - 'Abut': 'about.md'
+    - 'About': 'about.md'
 
-Assuming the `docs_dir` setting was left with the default value of `docs`, the source files for this site's build process would be `docs/index.md`, `docs/user-guide.md` and `docs/about.md`.
-
-If you have a lot of project documentation you might choose to use headings to break up your site navigation by category.  You can do so by including an extra string in the page configuration for any pages that require a navigation heading, like so:
-
-    pages:
-    - Introduction: 'index.md'
-    - User Guide:
-        - 'Creating a new Marshmallow project': 'user-guide/creating.md'
-        - 'Marshmallow API guide': 'user-guide/api.md'
-        - 'Configuring Marshmallow': 'user-guide/configuration.md'
-    - About:
-        - License: 'about/license.md'
-
-See also the section on [configuring pages and navigation](/user-guide/writing-your-docs/#configure-pages-and-navigation) for a more detailed breakdown.
+See the section on [configuring pages and navigation](/user-guide/writing-your-docs/#configure-pages-and-navigation) for a more detailed breakdown, including how to create sub-sections.
 
 ## Build directories
 

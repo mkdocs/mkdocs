@@ -14,7 +14,7 @@ A simple pages configuration looks like this:
     - 'index.md'
     - 'about.md'
 
-With this example we will build two pages at the top level and they will automatically have their titles inferred from the filename. To provide a custom name for these pages, they can be added before the filename.
+With this example we will build two pages at the top level and they will automatically have their titles inferred from the filename. Assuming `docs_dir` has the default value, `docs`, the source files for this documentation would be `docs/index.md` and `docs/about.md`. To provide a custom name for these pages, they can be added before the filename.
 
     pages:
     - Home: 'index.md'
@@ -22,7 +22,7 @@ With this example we will build two pages at the top level and they will automat
 
 ### Multilevel documentation
 
-To create a second level in the navigation and group topics, the category can be provided before the page title. This is best demonstrated in a documentation project with more pages and is slightly more complicated.
+Subsections can be created by listing related pages together under a section title. For example:
 
     pages:
     - Home: 'index.md'
@@ -33,7 +33,7 @@ To create a second level in the navigation and group topics, the category can be
         - 'License': 'about/license.md'
         - 'Release Notes': 'about/release-notes.md'
 
-With the above configuration we have three top level sections Home, User Guide and About. Then under User Guide we have two pages, Writing your docs and Styling your docs. Under the About section we also have two pages, License and Release Notes
+With the above configuration we have three top level sections: Home, User Guide and About. Then under User Guide we have two pages, Writing your docs and Styling your docs. Under the About section we also have two pages, License and Release Notes.
 
 *Note:* At present MkDocs only supports a second level of navigation.
 
