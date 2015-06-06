@@ -71,7 +71,7 @@ def normalize_path(path):
 def try_rebase(remote, branch):
     cmd = ['git', 'rev-list', '--max-count=1', '%s/%s' % (remote, branch)]
     p = sp.Popen(cmd, stdin=sp.PIPE, stdout=sp.PIPE, stderr=sp.PIPE)
-    (rev, ignore) = p.communicate()
+    (rev, _) = p.communicate()
     if p.wait() != 0:
         return True
     cmd = ['git', 'update-ref', 'refs/heads/%s' % branch, rev.strip()]
@@ -82,14 +82,14 @@ def try_rebase(remote, branch):
 
 def get_config(key):
     p = sp.Popen(['git', 'config', key], stdin=sp.PIPE, stdout=sp.PIPE)
-    (value, stderr) = p.communicate()
+    (value, _) = p.communicate()
     return value.strip()
 
 
 def get_prev_commit(branch):
     cmd = ['git', 'rev-list', '--max-count=1', branch, '--']
     p = sp.Popen(cmd, stdin=sp.PIPE, stdout=sp.PIPE, stderr=sp.PIPE)
-    (rev, ignore) = p.communicate()
+    (rev, _) = p.communicate()
     if p.wait() != 0:
         return None
     return rev.decode('utf-8').strip()
@@ -144,7 +144,7 @@ def run_import(srcdir, branch, message, nojekyll):
         kwargs["universal_newlines"] = False
     pipe = sp.Popen(cmd, **kwargs)
     start_commit(pipe, branch, message)
-    for path, dnames, fnames in os.walk(srcdir):
+    for path, _, fnames in os.walk(srcdir):
         for fn in fnames:
             fpath = os.path.join(path, fn)
             fpath = normalize_path(fpath)
@@ -161,7 +161,7 @@ def run_import(srcdir, branch, message, nojekyll):
 def ghp_import(directory, message, remote='origin', branch='gh-pages'):
 
     if not try_rebase(remote, branch):
-        log.error("Failed to rebase %s branch." % branch)
+        log.error("Failed to rebase %s branch.", branch)
 
     nojekyll = True
 
