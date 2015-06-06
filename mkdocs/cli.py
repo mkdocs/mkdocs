@@ -4,6 +4,7 @@
 from __future__ import unicode_literals
 import logging
 import click
+import socket
 
 from mkdocs import __version__
 from mkdocs import build
@@ -110,7 +111,7 @@ def serve_command(dev_addr, config_file, strict, theme, livereload):
             theme=theme,
             livereload=livereload,
         )
-    except exceptions.ConfigurationError as e:
+    except (exceptions.ConfigurationError, socket.error) as e:
         # Avoid ugly, unhelpful traceback
         raise SystemExit('\n' + str(e))
 
