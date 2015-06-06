@@ -108,6 +108,9 @@ DEFAULT_SCHEMA = (
     ('remote_branch', config_options.Type(
         utils.string_types, default='gh-pages')),
 
+    # the remote name to push to when using gh-deploy
+    ('remote_name', config_options.Type(utils.string_types, default='origin')),
+
     # extra is a mapping/dictionary of data that is passed to the template.
     # This allows template authors to require extra configuration that not
     # relevant to all themes and doesn't need to be explicitly supported by

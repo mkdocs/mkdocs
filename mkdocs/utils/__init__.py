@@ -338,7 +338,7 @@ def convert_markdown(markdown_source, extensions=None, extension_configs=None):
 def get_theme_names():
     """Return a list containing all the names of all the builtin themes."""
 
-    return os.listdir(os.path.join(os.path.dirname(__file__), 'themes'))
+    return os.listdir(os.path.join(os.path.dirname(__file__), '..', 'themes'))
 
 
 def filename_to_title(filename):

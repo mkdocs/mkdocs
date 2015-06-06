@@ -15,15 +15,17 @@
 
 #   0. opan saurce LOL
 
+from __future__ import unicode_literals
+
 import errno
-import optparse as op
+import logging
 import os
 import subprocess as sp
 import sys
 import time
 import unicodedata
 
-__usage__ = "%prog [OPTIONS] DIRECTORY"
+log = logging.getLogger(__name__)
 
 
 if sys.version_info[0] == 3:
@@ -66,21 +68,8 @@ def normalize_path(path):
     return path
 
 
-def check_repo(parser):
-    cmd = ['git', 'rev-parse']
-    p = sp.Popen(cmd, stdin=sp.PIPE, stdout=sp.PIPE, stderr=sp.PIPE)
-    (ignore, error) = p.communicate()
-    if p.wait() != 0:
-        if not error:
-            error = "Unknown Git error"
-        error = error.decode("utf-8")
-        if error.startswith("fatal: "):
-            error = error[len("fatal: "):]
-        parser.error(error)
-
-
 def try_rebase(remote, branch):
-    cmd = ['git', 'rev-list', '--max-count=1', 'origin/%s' % branch]
+    cmd = ['git', 'rev-list', '--max-count=1', '%s/%s' % (remote, branch)]
     p = sp.Popen(cmd, stdin=sp.PIPE, stdout=sp.PIPE, stderr=sp.PIPE)
     (rev, ignore) = p.communicate()
     if p.wait() != 0:
@@ -109,7 +98,7 @@ def get_prev_commit(branch):
 def mk_when(timestamp=None):
     if timestamp is None:
         timestamp = int(time.time())
-    currtz = "%+05d" % (-1 * time.timezone / 36) # / 3600 * 100
+    currtz = "%+05d" % (-1 * time.timezone / 36)  # / 3600 * 100
     return "%s %s" % (timestamp, currtz)
 
 
@@ -169,45 +158,16 @@ def run_import(srcdir, branch, message, nojekyll):
         sys.stdout.write(enc("Failed to process commit.\n"))
 
 
-def options():
-    return [
-        op.make_option('-n', dest='nojekyll', default=False,
-            action="store_true",
-            help='Include a .nojekyll file in the branch.'),
-        op.make_option('-m', dest='mesg', default='Update documentation',
-            help='The commit message to use on the target branch.'),
-        op.make_option('-p', dest='push', default=False, action='store_true',
-            help='Push the branch to origin/{branch} after committing.'),
-        op.make_option('-r', dest='remote', default='origin',
-            help='The name of the remote to push to. [%default]'),
-        op.make_option('-b', dest='branch', default='gh-pages',
-            help='Name of the branch to write to. [%default]'),
-    ]
+def ghp_import(directory, message, remote='origin', branch='gh-pages'):
 
+    if not try_rebase(remote, branch):
+        log.error("Failed to rebase %s branch." % branch)
 
-def main():
-    parser = op.OptionParser(usage=__usage__, option_list=options())
-    opts, args = parser.parse_args()
+    nojekyll = True
 
-    if len(args) == 0:
-        parser.error("No import directory specified.")
+    run_import(directory, branch, message, nojekyll)
 
-    if len(args) > 1:
-        parser.error("Unknown arguments specified: %s" % ', '.join(args[1:]))
-
-    if not os.path.isdir(args[0]):
-        parser.error("Not a directory: %s" % args[0])
-
-    check_repo(parser)
-
-    if not try_rebase(opts.remote, opts.branch):
-        parser.error("Failed to rebase %s branch." % opts.branch)
-
-    run_import(args[0], opts.branch, opts.mesg, opts.nojekyll)
-
-    if opts.push:
-        sp.check_call(['git', 'push', opts.remote, opts.branch])
-
-
-if __name__ == '__main__':
-    main()
+    proc = sp.Popen(['git', 'push', remote, branch],
+                    stdout=sp.PIPE, stderr=sp.PIPE)
+    proc.communicate()
+    return proc.wait() == 0
