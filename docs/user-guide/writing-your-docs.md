@@ -144,22 +144,6 @@ You image will now be embedded when you build the documentation, and should also
 
 MkDocs supports the following Markdown extensions.
 
-<!--
-#### Page metadata
-
-Unum errem propriae vis cu, et deseruisse interpretaris eam. Illum graecis per an, ludus laoreet repudiare nec an, molestie recteque et eam. Purto duis rationibus id eum, pro et amet appetere referrentur, minim impedit ad ius. Et nostrud perfecto sapientem vix, et dicit impedit consequat vim. Vis liber blandit no.
-
-At mel verear persius torquatos, his dolores sensibus id, alia urbanitas in usu. Te pri cibo blandit. Debet dolore periculis ei pro, eu vis vidit ignota, vim natum dicta cu. Et appareat delicata vix, mei at solum lorem quodsi, verterem electram sit eu. Eius malis cum an, pro malorum euripidis ad, oblique appetere est cu. Eos ei fugit deterruisset. Vix ei aliquip dolorem, usu te euripidis reformidans, volumus pertinacia ea eam.
-
-    page_title: Lorum
-	page_description: "lorum ipsum dolor"
-	source_files: example.js, lorum.js
-
-	# Lorum Ipsum
-
-	Unum errem propriae vis cu, et deseruisse interpretaris eam. Illum graecis per an, ludus laoreet repudiare nec an, molestie recteque et eam.
--->
-
 #### Tables
 
 A simple table looks like this:
