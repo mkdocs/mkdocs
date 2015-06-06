@@ -103,18 +103,6 @@ You can also link to a section within a target documentation page by using an an
 
     Please see the [project license](about.md#license) for further details.
 
-<!--
-#### Cross-referencing your documentation
-
-Ex eam quem facilisi deserunt. Veri audiam audire id his, quo at aperiri moderatius. In admodum partiendo est, ei rebum minimum eam, singulis accusata delicatissimi eos ut. Imperdiet vulputate assueverit eos an, elit recusabo et usu. Eam ad euismod accusata vituperata. Oratio vocent nominavi ei eum.
-
-    At mel verear persius torquatos, his dolores [Sensibus](ref:) id, alia urbanitas in usu.
-
-Eam ad euismod accusata vituperata. Oratio vocent nominavi ei eum.
-
-    Ne his mucius oporteat, [mea ut eros delicatissimi](ref:delicatissimi), iudico nonumes moderatius an mel.
--->
-
 ## Images and media
 
 As well as the Markdown source files, you can also include other file types in your documentation, which will be copied across when generating your documentation site.  These might include images and other media.
