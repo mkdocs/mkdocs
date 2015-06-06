@@ -59,7 +59,6 @@ setup(
     package_data=get_package_data("mkdocs"),
     install_requires=[
         'click>=4.0',
-        'ghp-import>=0.4.1',
         'Jinja2>=2.7.1',
         'livereload>=2.3.2',
         'Markdown>=2.3.1,<2.5' if PY26 else 'Markdown>=2.3.1',

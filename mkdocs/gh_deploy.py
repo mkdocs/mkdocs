@@ -3,31 +3,70 @@ import logging
 import subprocess
 import os
 
+import mkdocs
+from mkdocs.utils import ghp_import
+
 log = logging.getLogger(__name__)
+
+default_message = """Deployed {sha} with MkDocs version: {version}"""
+
+
+def _is_cwd_git_repo():
+    proc = subprocess.Popen(['git', 'rev-parse', '--is-inside-work-tree'],
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc.communicate()
+    return proc.wait() == 0
+
+
+def _get_current_sha():
+
+    proc = subprocess.Popen(['git', 'rev-parse', '--short', 'HEAD'],
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    stdout, _ = proc.communicate()
+    sha = stdout.decode('utf-8').strip()
+    return sha
+
+
+def _get_remote_url(remote_name):
+
+    # No CNAME found.  We will use the origin URL to determine the GitHub
+    # pages location.
+    remote = "remote.%s.url" % remote_name
+    proc = subprocess.Popen(["git", "config", "--get", remote],
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    stdout, _ = proc.communicate()
+    url = stdout.decode('utf-8').strip()
+
+    host = None
+    path = None
+    if 'github.com/' in url:
+        host, path = url.split('github.com/', 1)
+    elif 'github.com:' in url:
+        host, path = url.split('github.com:', 1)
+
+    return host, path
 
 
 def gh_deploy(config, message=None):
 
-    if not os.path.exists('.git'):
-        log.info('Cannot deploy - this directory does not appear to be a git '
-                 'repository')
-        return
+    if not _is_cwd_git_repo():
+        log.error('Cannot deploy - this directory does not appear to be a git '
+                  'repository')
 
-    command = ['ghp-import', '-p', config['site_dir']]
+    if message is None:
+        sha = _get_current_sha()
+        message = default_message.format(version=mkdocs.__version__, sha=sha)
 
-    command.extend(['-b', config['remote_branch']])
-
-    if message is not None:
-        command.extend(['-m', message])
+    remote_branch = config['remote_branch']
+    remote_name = config['remote_name']
 
     log.info("Copying '%s' to '%s' branch and pushing to GitHub.",
              config['site_dir'], config['remote_branch'])
 
-    try:
-        subprocess.check_call(command)
-    except Exception:
-        log.exception("Failed to deploy to GitHub.")
-        return
+    ghp_import.ghp_import(config['site_dir'], message, remote_name,
+                          remote_branch)
 
     # Does this repository have a CNAME set for GitHub pages?
     if os.path.isfile('CNAME'):
@@ -40,18 +79,7 @@ def gh_deploy(config, message=None):
                  'your CNAME URL to work.')
         return
 
-    # No CNAME found.  We will use the origin URL to determine the GitHub
-    # pages location.
-    url = subprocess.check_output(["git", "config", "--get",
-                                   "remote.origin.url"])
-    url = url.decode('utf-8').strip()
-
-    host = None
-    path = None
-    if 'github.com/' in url:
-        host, path = url.split('github.com/', 1)
-    elif 'github.com:' in url:
-        host, path = url.split('github.com:', 1)
+    host, path = _get_remote_url(remote_name)
 
     if host is None:
         # This could be a GitHub Enterprise deployment.
