@@ -68,10 +68,11 @@ def gh_deploy(config, message=None):
     ghp_import.ghp_import(config['site_dir'], message, remote_name,
                           remote_branch)
 
+    cname_file = os.path.join(config['site_dir'], 'CNAME')
     # Does this repository have a CNAME set for GitHub pages?
-    if os.path.isfile('CNAME'):
+    if os.path.isfile(cname_file):
         # This GitHub pages repository has a CNAME configured.
-        with(open('CNAME', 'r')) as f:
+        with(open(cname_file, 'r')) as f:
             cname_host = f.read().strip()
         log.info('Based on your CNAME file, your documentation should be '
                  'available shortly at: http://%s', cname_host)
