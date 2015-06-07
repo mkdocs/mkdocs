@@ -82,7 +82,14 @@ google_analytics: ['UA-36723568-3', 'mkdocs.org']
 
 ### remote_branch
 
-Set the remote branch to commit to when using `gh-deploy` to update Github Pages. This option can be overriden by a commandline option in `gh-deploy`.
+Set the remote branch to commit to when using `gh-deploy` to deploy to Github Pages. This option can be overridden by a command line option in `gh-deploy`.
+
+**default**: `gh-pages`
+
+
+### remote_name
+
+Set the remote name to push to when using `gh-deploy` to deploy to Github Pages. This option can be overridden by a command line option in `gh-deploy`.
 
 **default**: `gh-pages`
 
@@ -252,7 +259,7 @@ for that extension:
     The Python-Markdown documentation provides a [list of extensions][exts]
     which are available out-of-the-box. For a list of configuration options
     available for a given extension, see the documentation for that extension.
-    
+
     You may also install and use various [third party extensions][3rd]. Consult the
     documentation provided by those extensions for installation instructions and
     available configuration options.

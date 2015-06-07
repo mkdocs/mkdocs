@@ -2,9 +2,12 @@ build: false
 environment:
   matrix:
     - TOXENV: py27-unittests
+    - TOXENV: py33-unittests
     - TOXENV: py34-unittests
     - TOXENV: py27-integration
+    - TOXENV: py33-integration
     - TOXENV: py34-integration
+    - TOXENV: flake8
 init:
   - "ECHO %TOXENV%"
   - ps: "ls C:\\Python*"
