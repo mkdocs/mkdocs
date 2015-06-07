@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 import unittest
 
-from mkdocs import legacy, utils
+from .. import legacy, utils
 
 
 class TestCompatabilityShim(unittest.TestCase):

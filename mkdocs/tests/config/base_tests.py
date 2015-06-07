@@ -3,8 +3,8 @@ import os
 import tempfile
 import unittest
 
-from mkdocs import exceptions
-from mkdocs.config import base, defaults
+from ... import exceptions
+from ...config import base, defaults
 
 
 class ConfigBaseTests(unittest.TestCase):

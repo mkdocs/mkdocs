@@ -20,7 +20,7 @@ import click
 import os
 import subprocess
 
-from mkdocs import utils
+from .. import utils
 
 DIR = os.path.dirname(__file__)
 MKDOCS_CONFIG = os.path.abspath(os.path.join(DIR, '../../mkdocs.yml'))

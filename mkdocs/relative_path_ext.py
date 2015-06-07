@@ -41,8 +41,8 @@ import logging
 from markdown.extensions import Extension
 from markdown.treeprocessors import Treeprocessor
 
-from mkdocs import utils
-from mkdocs.exceptions import MarkdownNotFound
+from . import utils
+from .exceptions import MarkdownNotFound
 
 log = logging.getLogger(__name__)
 

@@ -4,9 +4,9 @@
 from __future__ import unicode_literals
 import unittest
 
-from mkdocs import nav
-from mkdocs import search
-from mkdocs.tests.base import dedent, markdown_to_toc
+from .. import nav
+from .. import search
+from .base import dedent, markdown_to_toc
 
 
 def strip_whitespace(string):

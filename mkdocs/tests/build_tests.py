@@ -15,9 +15,9 @@ except ImportError:
     pass
 
 
-from mkdocs import build, nav, config
-from mkdocs.exceptions import MarkdownNotFound
-from mkdocs.tests.base import dedent
+from .. import build, nav, config
+from ..exceptions import MarkdownNotFound
+from .base import dedent
 
 
 def load_config(cfg=None):

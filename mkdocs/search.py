@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 import json
-from mkdocs import utils
+from . import utils
 
 try:                                    # pragma: no cover
     from html.parser import HTMLParser  # noqa

@@ -3,8 +3,8 @@ import logging
 import shutil
 import tempfile
 
-from mkdocs.build import build
-from mkdocs.config import load_config
+from .build import build
+from .config import load_config
 
 log = logging.getLogger(__name__)
 

@@ -14,7 +14,7 @@ import shutil
 import markdown
 import yaml
 
-from mkdocs import toc
+from . import toc
 
 try:                                                        # pragma: no cover
     from urllib.parse import urlparse, urlunparse, urljoin  # noqa

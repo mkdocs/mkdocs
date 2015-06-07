@@ -6,7 +6,7 @@ import tempfile
 import unittest
 import os
 
-from mkdocs import new
+from .. import new
 
 
 class NewTests(unittest.TestCase):
