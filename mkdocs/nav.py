@@ -11,7 +11,7 @@ import datetime
 import logging
 import os
 
-from mkdocs import utils, exceptions
+from . import utils, exceptions
 
 log = logging.getLogger(__name__)
 

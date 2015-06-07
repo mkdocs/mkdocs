@@ -15,6 +15,7 @@ You can determine your currently installed version using `mkdocs --version`:
 
 ## Version 0.14.0 (2015-??-??)
 
+* Made all internal imports relative imports.
 * Improve Unicode handling by ensuring that all YAML strings are loaded as Unicode.
 * Remove dependancy on the six library. (#583)
 * Add `--quiet` and `--verbose` options to all subcommands.

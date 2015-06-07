@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
 import logging
 
-from mkdocs import utils
-from mkdocs.exceptions import ConfigurationError
+from . import utils
+from .exceptions import ConfigurationError
 
 log = logging.getLogger(__name__)
 

@@ -5,8 +5,8 @@ import unittest
 
 import six
 
-from mkdocs import utils
-from mkdocs.config import config_options
+from ... import utils
+from ...config import config_options
 
 
 class OptionallyRequiredTest(unittest.TestCase):

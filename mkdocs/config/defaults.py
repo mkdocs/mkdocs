@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
-from mkdocs import utils
-from mkdocs.config import config_options
+from .. import utils
+from . import config_options
 
 # NOTE: The order here is important. During validation some config options
 # depend on others. So, if config option A depends on B, then A should be

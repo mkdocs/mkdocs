@@ -5,8 +5,8 @@ from __future__ import unicode_literals
 import os
 import unittest
 
-from mkdocs import nav, utils
-from mkdocs.tests.base import dedent
+from .. import nav, utils
+from .base import dedent
 
 
 class UtilsTests(unittest.TestCase):

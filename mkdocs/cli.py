@@ -6,14 +6,14 @@ import logging
 import click
 import socket
 
-from mkdocs import __version__
-from mkdocs import build
-from mkdocs import gh_deploy
-from mkdocs import new
-from mkdocs import serve
-from mkdocs import utils
-from mkdocs import exceptions
-from mkdocs.config import load_config
+from . import __version__
+from . import build
+from . import gh_deploy
+from . import new
+from . import serve
+from . import utils
+from . import exceptions
+from .config import load_config
 
 log = logging.getLogger(__name__)
 

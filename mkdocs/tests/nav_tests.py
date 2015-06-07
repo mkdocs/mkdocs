@@ -6,9 +6,9 @@ import mock
 import os
 import unittest
 
-from mkdocs import nav, legacy
-from mkdocs.exceptions import ConfigurationError
-from mkdocs.tests.base import dedent
+from .. import nav, legacy
+from ..exceptions import ConfigurationError
+from .base import dedent
 
 
 class SiteNavigationTests(unittest.TestCase):

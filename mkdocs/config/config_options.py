@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
 import os
 
-from mkdocs import utils, legacy
-from mkdocs.config.base import Config, ValidationError
+from .. import utils, legacy
+from .base import Config, ValidationError
 
 
 class BaseConfigOption(object):

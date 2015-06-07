@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 import textwrap
 import markdown
 
-from mkdocs import toc
+from .. import toc
 
 
 def dedent(text):

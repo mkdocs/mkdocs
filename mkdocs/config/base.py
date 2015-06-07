@@ -2,8 +2,8 @@ from __future__ import unicode_literals
 import logging
 import os
 
-from mkdocs import exceptions
-from mkdocs import utils
+from .. import exceptions
+from .. import utils
 
 
 log = logging.getLogger('mkdocs.config')

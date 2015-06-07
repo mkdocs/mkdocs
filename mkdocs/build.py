@@ -10,9 +10,9 @@ from jinja2.exceptions import TemplateNotFound
 import jinja2
 import json
 
-from mkdocs import nav, search, utils
-from mkdocs.relative_path_ext import RelativePathExtension
-import mkdocs
+from . import nav, search, utils
+from .relative_path_ext import RelativePathExtension
+from . import __version__
 
 log = logging.getLogger(__name__)
 
@@ -82,7 +82,7 @@ def get_global_context(nav, config):
         'copyright': config['copyright'],
         'google_analytics': config['google_analytics'],
 
-        'mkdocs_version': mkdocs.__version__,
+        'mkdocs_version': __version__,
         'build_date_utc': datetime.utcnow(),
 
         'config': config

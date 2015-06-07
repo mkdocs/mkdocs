@@ -9,10 +9,10 @@ import unittest
 
 import six
 
-from mkdocs import config
-from mkdocs.config import config_options
-from mkdocs.exceptions import ConfigurationError
-from mkdocs.tests.base import dedent
+from ... import config
+from ...config import config_options
+from ...exceptions import ConfigurationError
+from ...tests.base import dedent
 
 
 def ensure_utf(string):
