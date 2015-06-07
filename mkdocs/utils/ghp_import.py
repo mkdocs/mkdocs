@@ -83,7 +83,7 @@ def try_rebase(remote, branch):
 def get_config(key):
     p = sp.Popen(['git', 'config', key], stdin=sp.PIPE, stdout=sp.PIPE)
     (value, _) = p.communicate()
-    return value.strip()
+    return value.decode('utf-8').strip()
 
 
 def get_prev_commit(branch):
