@@ -81,6 +81,12 @@ class TOCParser(HTMLParser):
         if self.in_anchor:
             self.title += data
 
+    def handle_charref(self, ref):
+        self.handle_entityref("#" + ref)
+
+    def handle_entityref(self, ref):
+        self.handle_data("&%s;" % ref)
+
 
 def _parse_html_table_of_contents(html):
     """
