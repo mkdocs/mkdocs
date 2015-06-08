@@ -84,8 +84,7 @@ DEFAULT_SCHEMA = (
 
     # Similar to the above, but each template (HTML or XML) will be build with
     # Jinja2 and the global context.
-    ('extra_templates', config_options.Extras(
-        file_match=utils.is_template_file)),
+    ('extra_templates', config_options.Extras()),
 
     # Determine if the site should include the nav and next/prev elements.
     # Default, True if the site has more than one page, False otherwise.

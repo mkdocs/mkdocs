@@ -311,7 +311,7 @@ class Extras(OptionallyRequired):
     if not provided.
     """
 
-    def __init__(self, file_match, **kwargs):
+    def __init__(self, file_match=None, **kwargs):
         super(Extras, self).__init__(**kwargs)
         self.file_match = file_match
 
@@ -324,6 +324,10 @@ class Extras(OptionallyRequired):
                 "Expected a list, got {0}".format(type(value)))
 
     def walk_docs_dir(self, docs_dir):
+
+        if self.file_match is None:
+            raise StopIteration
+
         for (dirpath, _, filenames) in os.walk(docs_dir):
             for filename in sorted(filenames):
                 fullpath = os.path.join(dirpath, filename)
