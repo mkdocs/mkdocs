@@ -24,6 +24,7 @@ You can determine your currently installed version using `mkdocs --version`:
 * Stack traces are no longer displayed on socket errors, just an error message.
 * Bugfix: Fix a JavaScript encoding problem when searching with spaces. (#586)
 * Bugfix: gh-deploy now works if the mkdocs.yml is not in the git repo root (#578)
+* Bugfix: Handle (pass-through instead of dropping) HTML entities while parsing TOC.
 
 ## Version 0.13.3 (2015-06-02)
 
