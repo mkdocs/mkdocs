@@ -118,3 +118,17 @@ class TableOfContentsTests(unittest.TestCase):
         """)
         toc = markdown_to_toc(md)
         self.assertEqual(str(toc).strip(), expected)
+
+    def test_entityref(self):
+        md = dedent("""
+        # Heading & 1
+        ## Heading > 2
+        ### Heading < 3
+        """)
+        expected = dedent("""
+        Heading &amp; 1 - #heading-1
+            Heading &gt; 2 - #heading-2
+                Heading &lt; 3 - #heading-3
+        """)
+        toc = markdown_to_toc(md)
+        self.assertEqual(str(toc).strip(), expected)
