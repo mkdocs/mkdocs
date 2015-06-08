@@ -46,6 +46,22 @@ def get_package_data(package):
                           for filename in filenames])
     return {package: filepaths}
 
+
+if sys.argv[-1] == 'publish':
+    if os.system("pip freeze | grep wheel"):
+        print("wheel not installed.\nUse `pip install wheel`.\nExiting.")
+        sys.exit()
+    if os.system("pip freeze | grep twine"):
+        print("twine not installed.\nUse `pip install twine`.\nExiting.")
+        sys.exit()
+    os.system("python setup.py sdist bdist_wheel")
+    os.system("twine upload dist/*")
+    print("You probably want to also tag the version now:")
+    print("  git tag -a {0} -m 'version {0}'".format(get_version("mkdocs")))
+    print("  git push --tags")
+    sys.exit()
+
+
 setup(
     name="mkdocs",
     version=get_version("mkdocs"),
