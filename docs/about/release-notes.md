@@ -25,6 +25,8 @@ You can determine your currently installed version using `mkdocs --version`:
 * Bugfix: Fix a JavaScript encoding problem when searching with spaces. (#586)
 * Bugfix: gh-deploy now works if the mkdocs.yml is not in the git repo root (#578)
 * Bugfix: Handle (pass-through instead of dropping) HTML entities while parsing TOC.
+* Bugfix: Default extra_templates to an empty list, don't automatically discover
+  them. (#616)
 
 ## Version 0.13.3 (2015-06-02)
 
