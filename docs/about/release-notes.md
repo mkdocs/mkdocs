@@ -15,18 +15,22 @@ You can determine your currently installed version using `mkdocs --version`:
 
 ## Version 0.14.0 (2015-??-??)
 
-* Improve Unicode handling by ensuring that all YAML strings are loaded as Unicode.
+* Improve Unicode handling by ensuring that all config strings are loaded as
+  Unicode. (#592)
 * Remove dependancy on the six library. (#583)
 * Remove dependancy on the ghp-import library. (#547)
-* Add `--quiet` and `--verbose` options to all subcommands.
-* Add short options (`-a`) to most command line options.
-* Add copyright footer for readthedocs theme.
-* Stack traces are no longer displayed on socket errors, just an error message.
+* Add `--quiet` and `--verbose` options to all subcommands. (#579)
+* Add short options (`-a`) to most command line options. (#579)
+* Add copyright footer for readthedocs theme. (#568)
+* If the requested port in `mkdocs serve` is already in use, don't show the
+  user a full stack trace. (#596)
 * Bugfix: Fix a JavaScript encoding problem when searching with spaces. (#586)
-* Bugfix: gh-deploy now works if the mkdocs.yml is not in the git repo root (#578)
-* Bugfix: Handle (pass-through instead of dropping) HTML entities while parsing TOC.
-* Bugfix: Default extra_templates to an empty list, don't automatically discover
-  them. (#616)
+* Bugfix: gh-deploy now works if the mkdocs.yml is not in the git repo root.
+  (#578)
+* Bugfix: Handle (pass-through instead of dropping) HTML entities while
+  parsing TOC. (#612)
+* Bugfix: Default extra_templates to an empty list, don't automatically
+  discover them. (#616)
 
 ## Version 0.13.3 (2015-06-02)
 
