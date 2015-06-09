@@ -174,6 +174,10 @@
         
             <li><a href="#upgrading">Upgrading</a></li>
         
+            <li><a href="#version-0140-2015-06-09">Version 0.14.0 (2015-06-09)</a></li>
+        
+            <li><a href="#version-0133-2015-06-02">Version 0.13.3 (2015-06-02)</a></li>
+        
             <li><a href="#version-0132-2015-05-30">Version 0.13.2 (2015-05-30)</a></li>
         
             <li><a href="#version-0131-2015-05-27">Version 0.13.1 (2015-05-27)</a></li>
@@ -205,8 +209,33 @@
 </code></pre>
 <p>You can determine your currently installed version using <code>mkdocs --version</code>:</p>
 <pre><code>$ mkdocs --version
-mkdocs, version 0.13.0
+mkdocs, version 0.14.0
 </code></pre>
+<h2 id="version-0140-2015-06-09">Version 0.14.0 (2015-06-09)<a class="headerlink" href="#version-0140-2015-06-09" title="Permanent link"></a></h2>
+<ul>
+<li>Improve Unicode handling by ensuring that all config strings are loaded as
+  Unicode. (#592)</li>
+<li>Remove dependancy on the six library. (#583)</li>
+<li>Remove dependancy on the ghp-import library. (#547)</li>
+<li>Add <code>--quiet</code> and <code>--verbose</code> options to all subcommands. (#579)</li>
+<li>Add short options (<code>-a</code>) to most command line options. (#579)</li>
+<li>Add copyright footer for readthedocs theme. (#568)</li>
+<li>If the requested port in <code>mkdocs serve</code> is already in use, don't show the
+  user a full stack trace. (#596)</li>
+<li>Bugfix: Fix a JavaScript encoding problem when searching with spaces. (#586)</li>
+<li>Bugfix: gh-deploy now works if the mkdocs.yml is not in the git repo root.
+  (#578)</li>
+<li>Bugfix: Handle (pass-through instead of dropping) HTML entities while
+  parsing TOC. (#612)</li>
+<li>Bugfix: Default extra_templates to an empty list, don't automatically
+  discover them. (#616)</li>
+</ul>
+<h2 id="version-0133-2015-06-02">Version 0.13.3 (2015-06-02)<a class="headerlink" href="#version-0133-2015-06-02" title="Permanent link"></a></h2>
+<ul>
+<li>Bugfix: Reduce validation error to a warning if the site_dir is within
+  the docs_dir as this shouldn't cause any problems with building but will
+  inconvenience users building multiple times. (#580)</li>
+</ul>
 <h2 id="version-0132-2015-05-30">Version 0.13.2 (2015-05-30)<a class="headerlink" href="#version-0132-2015-05-30" title="Permanent link"></a></h2>
 <ul>
 <li>Bugfix: Ensure all errors and warnings are logged before exiting. (#536)</li>
@@ -215,7 +244,7 @@ mkdocs, version 0.13.0
 <h2 id="version-0131-2015-05-27">Version 0.13.1 (2015-05-27)<a class="headerlink" href="#version-0131-2015-05-27" title="Permanent link"></a></h2>
 <ul>
 <li>Bugfix: Fix a problem with minimal configurations which only contain a list
-  of paths in the pages config (#562)</li>
+  of paths in the pages config. (#562)</li>
 </ul>
 <h2 id="version-0130-2015-05-26">Version 0.13.0 (2015-05-26)<a class="headerlink" href="#version-0130-2015-05-26" title="Permanent link"></a></h2>
 <h3 id="deprecations">Deprecations<a class="headerlink" href="#deprecations" title="Permanent link"></a></h3>

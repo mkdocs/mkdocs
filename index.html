@@ -234,20 +234,20 @@ mkdocs [help|new|build|serve|gh-deploy] {options}
 $ cd my-project
 </code></pre>
 <p>Let's take a moment to review the initial project that's been created for us.</p>
-<p><img alt="The initial MkDocs layout" src="../img/initial-layout.png" /></p>
+<p><img alt="The initial MkDocs layout" src="./img/initial-layout.png" /></p>
 <p>There's a single configuration file named <code>mkdocs.yml</code>, and a folder named <code>docs</code> that will contain our documentation source files.  Right now the <code>docs</code> folder just contains a single documentation page, named <code>index.md</code>.</p>
 <p>MkDocs comes with a built-in webserver that lets you preview your documentation as you work on it. We start the webserver by making sure we're in the same directory as the <code>mkdocs.yml</code> config file, and then running the <code>mkdocs serve</code> command:</p>
 <pre><code>$ mkdocs serve
 Running at: http://127.0.0.1:8000/
 </code></pre>
 <p>Open up <a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a> in your browser, and you'll see the index page being displayed:</p>
-<p><img alt="The MkDocs live server" src="../img/screenshot.png" /></p>
+<p><img alt="The MkDocs live server" src="./img/screenshot.png" /></p>
 <p>The webserver also supports auto-reloading, and will rebuild your documentation whenever anything in the configuration file, documentation directory or theme directory changes.</p>
 <p>Go ahead and edit the <code>docs/index.md</code> file now and save the file. Then simply hit reload in the browser and you'll see your updated documentation.</p>
 <p>Now's also a good time to edit the configuration file, <code>mkdocs.yml</code>.  Change the <code>site_name</code> setting to something else and save the file.</p>
-<p><img alt="Editing the config file" src="../img/initial-config.png" /></p>
+<p><img alt="Editing the config file" src="./img/initial-config.png" /></p>
 <p>Once you hit reload in the browser you'll see your new site name take effect.</p>
-<p><img alt="The site_name setting" src="../img/site-name.png" /></p>
+<p><img alt="The site_name setting" src="./img/site-name.png" /></p>
 <h2 id="adding-pages">Adding pages<a class="headerlink" href="#adding-pages" title="Permanent link"></a></h2>
 <p>Go ahead and edit the <code>doc/index.md</code> document, and change the initial heading to <code>MkLorum</code>, then reload the site in your browser, and you should see the change take effect immediately.</p>
 <p>Let's also add a second page to our documentation:</p>
@@ -269,7 +269,7 @@ pages:
 theme: readthedocs
 </code></pre>
 <p>Refresh the browser again, and you'll now see the ReadTheDocs theme being used.</p>
-<p><img alt="Screenshot" src="../img/readthedocs.png" /></p>
+<p><img alt="Screenshot" src="./img/readthedocs.png" /></p>
 <h2 id="building-the-site">Building the site<a class="headerlink" href="#building-the-site" title="Permanent link"></a></h2>
 <p>That's looking good.  We're ready to deploy the first pass of our <code>MkLorum</code> documentation now.  Let's build the documentation.</p>
 <pre><code>$ mkdocs build
@@ -291,7 +291,7 @@ about css fonts img index.html js
 able to host it from pretty much anywhere. <a href="https://help.github.com/articles/creating-project-pages-manually">GitHub project pages</a> and <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">Amazon
 S3</a> are good hosting options. Upload the contents of the entire <code>site</code> directory
 to wherever you're hosting your website from and you're done. For specific instructions
-for a number of common hosts, see the <a href="../user-guide/deploying-your-docs/">Deploying your Docs</a> page.</p>
+for a number of common hosts, see the <a href="./user-guide/deploying-your-docs/">Deploying your Docs</a> page.</p>
 <h2 id="getting-help">Getting help<a class="headerlink" href="#getting-help" title="Permanent link"></a></h2>
 <p>To get help with MkDocs, please use the <a href="https://groups.google.com/forum/#!forum/mkdocs">discussion group</a>, <a href="https://github.com/mkdocs/mkdocs/issues">GitHub issues</a> or the MkDocs IRC channel <code>#mkdocs</code> on freenode.</p></div>
             
@@ -341,6 +341,6 @@ for a number of common hosts, see the <a href="../user-guide/deploying-your-docs
 </html>
 
 <!--
-MkDocs version : 0.13.2
-Build Date UTC : 2015-05-31 18:01:31.832751
+MkDocs version : 0.14.0
+Build Date UTC : 2015-06-09 09:51:15.894252
 -->

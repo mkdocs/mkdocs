@@ -234,30 +234,20 @@
 
 <p><strong>default</strong>: <code>null</code></p>
 <h3 id="remote_branch">remote_branch<a class="headerlink" href="#remote_branch" title="Permanent link"></a></h3>
-<p>Set the remote branch to commit to when using <code>gh-deploy</code> to update Github Pages. This option can be overriden by a commandline option in <code>gh-deploy</code>.</p>
+<p>Set the remote branch to commit to when using <code>gh-deploy</code> to deploy to Github Pages. This option can be overridden by a command line option in <code>gh-deploy</code>.</p>
+<p><strong>default</strong>: <code>gh-pages</code></p>
+<h3 id="remote_name">remote_name<a class="headerlink" href="#remote_name" title="Permanent link"></a></h3>
+<p>Set the remote name to push to when using <code>gh-deploy</code> to deploy to Github Pages. This option can be overridden by a command line option in <code>gh-deploy</code>.</p>
 <p><strong>default</strong>: <code>gh-pages</code></p>
 <h2 id="documentation-layout">Documentation layout<a class="headerlink" href="#documentation-layout" title="Permanent link"></a></h2>
 <h3 id="pages">pages<a class="headerlink" href="#pages" title="Permanent link"></a></h3>
-<p>This is setting is used to determine the set of pages that should be built for the documentation.</p>
-<p>The setting should be a list.  Each row in the list represents information about a single page as a list of strings.  The first string represents the path of the documentation source file, and should be relative to the <code>docs_dir</code> setting.  Remaining strings represent the title of the page in the site navigation.</p>
-<p>Here's a simple example that would cause the build stage to create three pages:</p>
+<p>This setting is used to determine the set of pages that should be built for the documentation. For example, the following would create Introduction, User Guide and About pages, given the three source files <code>index.md</code>, <code>user-guide.md</code> and <code>about.md</code>, respectively.</p>
 <pre><code>pages:
 - 'Introduction': 'index.md'
 - 'User Guide': 'user-guide.md'
-- 'Abut': 'about.md'
+- 'About': 'about.md'
 </code></pre>
-<p>Assuming the <code>docs_dir</code> setting was left with the default value of <code>docs</code>, the source files for this site's build process would be <code>docs/index.md</code>, <code>docs/user-guide.md</code> and <code>docs/about.md</code>.</p>
-<p>If you have a lot of project documentation you might choose to use headings to break up your site navigation by category.  You can do so by including an extra string in the page configuration for any pages that require a navigation heading, like so:</p>
-<pre><code>pages:
-- Introduction: 'index.md'
-- User Guide:
-    - 'Creating a new Marshmallow project': 'user-guide/creating.md'
-    - 'Marshmallow API guide': 'user-guide/api.md'
-    - 'Configuring Marshmallow': 'user-guide/configuration.md'
-- About:
-    - License: 'about/license.md'
-</code></pre>
-<p>See also the section on <a href="../../user-guide/writing-your-docs/#configure-pages-and-navigation">configuring pages and navigation</a> for a more detailed breakdown.</p>
+<p>See the section on <a href="../../user-guide/writing-your-docs/#configure-pages-and-navigation">configuring pages and navigation</a> for a more detailed breakdown, including how to create sub-sections.</p>
 <h2 id="build-directories">Build directories<a class="headerlink" href="#build-directories" title="Permanent link"></a></h2>
 <h3 id="theme">theme<a class="headerlink" href="#theme" title="Permanent link"></a></h3>
 <p>Sets the theme of your documentation site, for a list of available themes visit
@@ -290,6 +280,9 @@ documentation on how to ignore specific directories.</p>
 <h3 id="extra_javascript">extra_javascript<a class="headerlink" href="#extra_javascript" title="Permanent link"></a></h3>
 <p>Set a list of JavaScript files to be included by the theme.</p>
 <p><strong>default</strong>: By default <code>extra_javascript</code> will contain a list of all the JavaScript files found within the <code>docs_dir</code>, if none are found it will be <code>[]</code> (an empty list).</p>
+<h3 id="extra_templates">extra_templates<a class="headerlink" href="#extra_templates" title="Permanent link"></a></h3>
+<p>Set a list of templates to be built by MkDocs. To see more about writing templates for MkDocs read the documentation about <a href="../../user-guide/styling-your-docs/#custom-themes">custom themes</a> and specifically the section about the <a href="../../user-guide/styling-your-docs/#global-context">variables that are available</a> to templates.</p>
+<p><strong>default</strong>: Unlike extra_css and extra_javascript, by default <code>extra_templates</code> will  be <code>[]</code> (an empty list).</p>
 <h3 id="extra">extra<a class="headerlink" href="#extra" title="Permanent link"></a></h3>
 <p>A set of key value pairs, where the values can be any valid YAML construct, that will be passed to the template. This allows for great flexibility when creating custom themes.</p>
 <p><strong>default</strong>: By default <code>extra</code> will be an empty key value mapping.</p>

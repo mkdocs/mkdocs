@@ -392,7 +392,23 @@ custom_theme/
 </code></pre>
 
 <h5 id="meta">meta<a class="headerlink" href="#meta" title="Permanent link"></a></h5>
-<p>A mapping of the metadata included at the top of the markdown page.</p>
+<p>A mapping of the metadata included at the top of the markdown page. In this example we define a <code>source</code> property above the page title.</p>
+<pre><code class="no-highlight">source: generics.py
+        mixins.py
+
+# Page title
+
+Content...
+</code></pre>
+
+<p>A template can access this metadata for the page with the <code>meta.source</code> variable. This could then be used to link to source files related to the documentation page.</p>
+<pre><code>{% for filename in meta.source %}
+  &lt;a class=&quot;github&quot; href=&quot;https://github.com/.../{{ filename }}&quot;&gt;
+    &lt;span class=&quot;label label-info&quot;&gt;{{ filename }}&lt;/span&gt;
+  &lt;/a&gt;
+{% endfor %}
+</code></pre>
+
 <h5 id="canonical_url">canonical_url<a class="headerlink" href="#canonical_url" title="Permanent link"></a></h5>
 <p>The full, canonical URL to the current page. This includes the site_url from the configuration.</p>
 <h5 id="current_page">current_page<a class="headerlink" href="#current_page" title="Permanent link"></a></h5>
