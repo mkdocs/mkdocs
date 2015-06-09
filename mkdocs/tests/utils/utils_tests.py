@@ -4,11 +4,17 @@
 import mock
 from __future__ import unicode_literals, with_statement
 import os
+import sys
 import unittest
 
 from mkdocs import nav, utils, exceptions
 from mkdocs.tests.base import dedent
-from mock import patch
+from mock import mock_open, patch
+
+if sys.version_info.major == 2:
+    import __builtin__ as builtins
+else:
+    import builtins
 
 
 class UtilsTests(unittest.TestCase):
@@ -209,7 +215,7 @@ class UtilsTests(unittest.TestCase):
                 self.assertIsNone(utils.clean_directory('/etc'))
                 self.assertEqual(deleted, [])
 
-    def test_clean_directory_noop(self):
+    def test_clean_directory(self):
         deleted = []
         directory = '/BOGUSPATH'
         directory_contents = ['README.md', '.sekret_password_file', 'old_crappy_file']
@@ -220,3 +226,11 @@ class UtilsTests(unittest.TestCase):
                 with patch('mkdocs.utils.os.listdir', lambda x: directory_contents):
                     utils.clean_directory(directory)
                     self.assertEqual(sorted(deleted), sorted(expected))
+
+    def test_write_file(self):
+        new_dirs = []
+        filename = '/WATWATWAT/bogus.txt'
+        with patch('mkdocs.utils.os.makedirs', lambda x: new_dirs.append(x)):
+            with patch.object(builtins, 'open', mock_open(read_data='WAT\n')):
+                utils.write_file('WAT\n', filename)
+                self.assertEqual(new_dirs, [os.path.dirname(filename)])
