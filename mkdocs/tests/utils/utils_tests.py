@@ -8,6 +8,7 @@ import unittest
 
 from mkdocs import nav, utils, exceptions
 from mkdocs.tests.base import dedent
+from mock import patch
 
 
 class UtilsTests(unittest.TestCase):
@@ -195,3 +196,26 @@ class UtilsTests(unittest.TestCase):
         config = utils.yaml_load(yaml_src)
         self.assertTrue(isinstance(config['key'], utils.text_type))
         self.assertTrue(isinstance(config['key2'][0], utils.text_type))
+
+    def test_clean_directory_noop(self):
+        deleted = []
+        with patch('mkdocs.utils.os.unlink', lambda x: deleted.append(x)):
+            # Test the noop
+            with patch('mkdocs.utils.os.path.exists', lambda x: False):
+                # /etc should always exist on every 'nix system and should
+                # be owned by root. Tests should run as non-root and this
+                # ensures OSError if the mock isn't working properly
+                self.assertIsNone(utils.clean_directory('/etc'))
+                self.assertEqual(deleted, [])
+
+    def test_clean_directory_noop(self):
+        deleted = []
+        directory = '/BOGUSPATH'
+        directory_contents = ['README.md', '.sekret_password_file', 'old_crappy_file']
+        expected = [os.path.join(directory, i) for i in directory_contents if not i.startswith('.')]
+
+        with patch('mkdocs.utils.os.unlink', lambda x: deleted.append(x)):
+            with patch('mkdocs.utils.os.path.exists', lambda x: True):
+                with patch('mkdocs.utils.os.listdir', lambda x: directory_contents):
+                    utils.clean_directory(directory)
+                    self.assertEqual(sorted(deleted), sorted(expected))
