@@ -345,12 +345,12 @@ class BuildTests(unittest.TestCase):
     def test_absolute_link(self):
         pages = [
             'index.md',
+            'sub/index.md',
         ]
         site_nav = nav.SiteNavigation(pages)
 
-        markdown = "[test](/index.md)"
+        markdown = "[test 1](/index.md) [test 2](/sub/index.md)"
         cfg = load_config({'strict': True})
-
         build.convert_markdown(markdown, cfg, site_nav)
 
     def test_extension_config(self):

@@ -35,8 +35,11 @@ tutorial/install.md | tutorial/install/ | ../img/initial-layout.png    |
 tutorial/intro.md   | tutorial/intro/   | ../../img/initial-layout.png |
 
 """
+
 from __future__ import unicode_literals
+
 import logging
+import os
 
 from markdown.extensions import Extension
 from markdown.treeprocessors import Treeprocessor
@@ -69,7 +72,7 @@ def path_to_url(url, nav, strict):
         # the internal hyperlink, making sure the target actually exists.
         target_file = nav.file_context.make_absolute(path)
 
-        if target_file.startswith('/'):
+        if target_file.startswith(os.path.sep):
             target_file = target_file[1:]
 
         if target_file not in nav.source_files:
