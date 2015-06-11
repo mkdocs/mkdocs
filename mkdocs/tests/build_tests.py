@@ -342,6 +342,17 @@ class BuildTests(unittest.TestCase):
             MarkdownNotFound,
             build.convert_markdown, invalid, load_config({'strict': True}), site_nav)
 
+    def test_absolute_link(self):
+        pages = [
+            'index.md',
+        ]
+        site_nav = nav.SiteNavigation(pages)
+
+        markdown = "[test](/index.md)"
+        cfg = load_config({'strict': True})
+
+        build.convert_markdown(markdown, cfg, site_nav)
+
     def test_extension_config(self):
         """
         Test that a dictionary of 'markdown_extensions' is recognized as

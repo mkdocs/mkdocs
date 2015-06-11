@@ -68,6 +68,10 @@ def path_to_url(url, nav, strict):
         # If the site navigation has been provided, then validate
         # the internal hyperlink, making sure the target actually exists.
         target_file = nav.file_context.make_absolute(path)
+
+        if target_file.startswith('/'):
+            target_file = target_file[1:]
+
         if target_file not in nav.source_files:
             source_file = nav.file_context.current_file
             msg = (
