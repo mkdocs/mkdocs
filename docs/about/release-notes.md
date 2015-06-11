@@ -70,7 +70,7 @@ This new file is created on every MkDocs build (with `mkdocs build`) and
 no configuration is needed to enable it.
 
 [future release]: https://github.com/mkdocs/mkdocs/pull/481
-[site_dir]: /user-guide/configuration/#site_dir
+[site_dir]: /user-guide/configuration.md#site_dir
 
 #### Change the pages configuration
 
@@ -78,8 +78,8 @@ Provide a [new way] to define pages, and specifically [nested pages], in the
 mkdocs.yml file and deprecate the existing approach, support will be removed
 with MkDocs 1.0.
 
-[new way]: /user-guide/writing-your-docs/#configure-pages-and-navigation
-[nested pages]: /user-guide/writing-your-docs/#multilevel-documentation
+[new way]: /user-guide/writing-your-docs.md#configure-pages-and-navigation
+[nested pages]: /user-guide/writing-your-docs.md#multilevel-documentation
 
 #### Warn users about the removal of builtin themes
 
@@ -98,7 +98,7 @@ JavaScript library [lunr.js]. It has been added to both the `mkdocs` and
 for adding it to your own themes.
 
 [lunr.js]: http://lunrjs.com/
-[supporting search]: /user-guide/styling-your-docs/#search-and-themes
+[supporting search]: /user-guide/styling-your-docs.md#search-and-themes
 
 #### New Command Line Interface
 
@@ -126,10 +126,10 @@ can also use Jinja2 syntax and take advantage of the [global variables].
 By default MkDocs will use this approach to create a sitemap for the
 documentation.
 
-[extra_javascript]: /user-guide/configuration/#extra_javascript
-[extra_css]: /user-guide/configuration/#extra_css
-[extra_templates]: /user-guide/configuration/#extra_templates
-[global variables]: /user-guide/styling-your-docs/#global-context
+[extra_javascript]: /user-guide/configuration.md#extra_javascript
+[extra_css]: /user-guide/configuration.md#extra_css
+[extra_templates]: /user-guide/configuration.md#extra_templates
+[global variables]: /user-guide/styling-your-docs.md#global-context
 
 ### Other Changes and Additions
 
@@ -145,8 +145,8 @@ documentation.
 * Bugfix: Fix linking to media within the same directory as a markdown file called index.md (#535)
 * Bugfix: Fix errors with unicode filenames (#542).
 
-[extra config]: /user-guide/configuration/#extra
-[Markdown extension configuration options]: /user-guide/configuration/#markdown_extensions
+[extra config]: /user-guide/configuration.md#extra
+[Markdown extension configuration options]: /user-guide/configuration.md#markdown_extensions
 [wheels]: http://pythonwheels.com/
 
 

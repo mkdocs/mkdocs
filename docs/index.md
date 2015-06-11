@@ -169,4 +169,4 @@ To get help with MkDocs, please use the [discussion group], [GitHub issues] or t
 [GitHub project pages]: https://help.github.com/articles/creating-project-pages-manually
 [pip]: http://pip.readthedocs.org/en/latest/installing.html
 [Python]: https://www.python.org/
-[Deploying your Docs]: user-guide/deploying-your-docs/
+[Deploying your Docs]: user-guide/deploying-your-docs.md

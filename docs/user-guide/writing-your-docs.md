@@ -6,7 +6,7 @@ How to write and layout your markdown source files.
 
 ## Configure Pages and Navigation
 
-The [pages configuration](/user-guide/configuration/#pages) in your `mkdocs.yml` defines which pages are built by MkDocs and how they appear in the documentation navigation. If not provided, the pages configuration will be automatically created by discovering all the Markdown files in the [documentation directory](/user-guide/configuration/#docs_dir).
+The [pages configuration](/user-guide/configuration.md#pages) in your `mkdocs.yml` defines which pages are built by MkDocs and how they appear in the documentation navigation. If not provided, the pages configuration will be automatically created by discovering all the Markdown files in the [documentation directory](/user-guide/configuration.md#docs_dir).
 
 A simple pages configuration looks like this:
 
