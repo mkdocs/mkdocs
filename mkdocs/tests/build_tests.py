@@ -15,22 +15,9 @@ except ImportError:
     pass
 
 
-from mkdocs import build, nav, config
+from mkdocs import build, nav
 from mkdocs.exceptions import MarkdownNotFound
-from mkdocs.tests.base import dedent
-
-
-def load_config(cfg=None):
-    """ Helper to build a simple config for testing. """
-    cfg = cfg or {}
-    if 'site_name' not in cfg:
-        cfg['site_name'] = 'Example'
-    conf = config.Config(schema=config.DEFAULT_SCHEMA)
-    conf.load_dict(cfg)
-
-    errors_warnings = conf.validate()
-    assert(errors_warnings == ([], [])), errors_warnings
-    return conf
+from mkdocs.tests.base import dedent, load_config
 
 
 class BuildTests(unittest.TestCase):

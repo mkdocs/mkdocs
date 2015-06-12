@@ -3,6 +3,7 @@ import os
 
 from mkdocs import utils, legacy
 from mkdocs.config.base import Config, ValidationError
+from mkdocs import nav
 
 
 class BaseConfigOption(object):
@@ -393,19 +394,18 @@ class Pages(Extras):
 
     def post_validation(self, config, key_name):
 
-        if config[key_name] is not None:
-            return
+        if config[key_name] is None:
+            pages = []
+            for filename in self.walk_docs_dir(config['docs_dir']):
+                if os.path.splitext(filename)[0] == 'index':
+                    pages.insert(0, filename)
+                else:
+                    pages.append(filename)
+            config[key_name] = utils.nest_pages(pages)
 
-        pages = []
-
-        for filename in self.walk_docs_dir(config['docs_dir']):
-
-            if os.path.splitext(filename)[0] == 'index':
-                pages.insert(0, filename)
-            else:
-                pages.append(filename)
-
-        config[key_name] = utils.nest_paths(pages)
+        config[key_name] = nav.paths_to_pages(config[key_name],
+                                              config['use_directory_urls'],
+                                              config['docs_dir'])
 
 
 class NumPages(OptionallyRequired):
