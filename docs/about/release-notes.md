@@ -13,6 +13,11 @@ You can determine your currently installed version using `mkdocs --version`:
     $ mkdocs --version
     mkdocs, version 0.14.0
 
+
+## Version 0.15.0 (2015-??-??)
+
+* Fix issues when using absolute links to Markdown files. (#628)
+
 ## Version 0.14.0 (2015-06-09)
 
 * Improve Unicode handling by ensuring that all config strings are loaded as
