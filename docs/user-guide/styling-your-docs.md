@@ -12,9 +12,9 @@ To use a theme that is included in MkDocs, simply add this to your `mkdocs.yml` 
 
 Replace [`amelia`](#amelia) with any of the [builtin themes](#built-in-themes) listed below.
 
-To customise a theme, simply place additional CSS and JavaScript files in the documentation directory next to the Markdown files and these will be automatically detected and added. Additionally, the [`extra_css`](/user-guide/configuration/#extra_css) and [`extra_javascript`](/user-guide/configuration/#extra_javascript) configuration options can be used to specifically include certain CSS or JavaScript files.
+To customise a theme, simply place additional CSS and JavaScript files in the documentation directory next to the Markdown files and these will be automatically detected and added. Additionally, the [`extra_css`](/user-guide/configuration.md#extra_css) and [`extra_javascript`](/user-guide/configuration.md#extra_javascript) configuration options can be used to specifically include certain CSS or JavaScript files.
 
-See the [configuration documentation](/user-guide/configuration/#theme) for more specific details about these options.
+See the [configuration documentation](/user-guide/configuration.md#theme) for more specific details about these options.
 
 To create a new custom theme or more heavily customise an existing theme, see the [custom themes](#custom-themes) section below.
 
@@ -123,7 +123,7 @@ Each template in a theme is built with a template context. These are the variabl
 
 #### Global Context
 
-The following variables in the context map directly the the [configuration options](/user-guide/configuration/).
+The following variables in the context map directly the the [configuration options](/user-guide/configuration.md).
 
 Variable Name     | Configuration name
 ----------------- | ------------------- |
@@ -255,7 +255,7 @@ The page object for the next page.The isage is the same as for `current_page`.
 
 #### Extra Context
 
-Additional variables can be passed to the template with the [`extra`](/user-guide/configuration/#extra) configuration option. This is a set of key value pairs that can make custom templates far more flexible.
+Additional variables can be passed to the template with the [`extra`](/user-guide/configuration.md#extra) configuration option. This is a set of key value pairs that can make custom templates far more flexible.
 
 For example, this could be used to include the project version of all pages and a list of links related to the project. This can be achieved with the following `extra` configuration:
 

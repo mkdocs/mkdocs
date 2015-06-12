@@ -105,7 +105,7 @@ This setting is used to determine the set of pages that should be built for the 
     - 'User Guide': 'user-guide.md'
     - 'About': 'about.md'
 
-See the section on [configuring pages and navigation](/user-guide/writing-your-docs/#configure-pages-and-navigation) for a more detailed breakdown, including how to create sub-sections.
+See the section on [configuring pages and navigation](/user-guide/writing-your-docs.md#configure-pages-and-navigation) for a more detailed breakdown, including how to create sub-sections.
 
 ## Build directories
 
@@ -273,8 +273,8 @@ for that extension:
 
 **default**: `[]`
 
-[custom themes]: /user-guide/styling-your-docs/#custom-themes
-[variables that are available]: /user-guide/styling-your-docs/#global-context
+[custom themes]: /user-guide/styling-your-docs.md#custom-themes
+[variables that are available]: /user-guide/styling-your-docs.md#global-context
 [pymdk-extensions]: http://pythonhosted.org/Markdown/extensions/index.html
 [pymkd]: http://pythonhosted.org/Markdown/
 [smarty]: https://pythonhosted.org/Markdown/extensions/smarty.html
