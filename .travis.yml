@@ -1,14 +1,18 @@
 language: python
 python: '2.7'
 env:
-- TOXENV=py26-unittests
-- TOXENV=py27-unittests
-- TOXENV=py33-unittests
-- TOXENV=py34-unittests
 - TOXENV=py26-integration
+- TOXENV=py26-min-req
+- TOXENV=py26-unittests
 - TOXENV=py27-integration
+- TOXENV=py27-min-req
+- TOXENV=py27-unittests
 - TOXENV=py33-integration
+- TOXENV=py33-min-req
+- TOXENV=py33-unittests
 - TOXENV=py34-integration
+- TOXENV=py34-min-req
+- TOXENV=py34-unittests
 - TOXENV=flake8
 install:
 - pip install tox
