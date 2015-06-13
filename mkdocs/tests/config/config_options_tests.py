@@ -3,8 +3,6 @@ from __future__ import unicode_literals
 import os
 import unittest
 
-import six
-
 from mkdocs import utils
 from mkdocs.config import config_options
 
@@ -50,7 +48,7 @@ class TypeTest(unittest.TestCase):
 
     def test_single_type(self):
 
-        option = config_options.Type(six.string_types)
+        option = config_options.Type(utils.string_types)
         value = option.validate("Testing")
         self.assertEqual(value, "Testing")
 
@@ -67,7 +65,7 @@ class TypeTest(unittest.TestCase):
                           option.validate, {'a': 1})
 
     def test_length(self):
-        option = config_options.Type(six.string_types, length=7)
+        option = config_options.Type(utils.string_types, length=7)
 
         value = option.validate("Testing")
         self.assertEqual(value, "Testing")

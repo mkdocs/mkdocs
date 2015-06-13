@@ -7,16 +7,15 @@ import shutil
 import tempfile
 import unittest
 
-import six
-
 from mkdocs import config
+from mkdocs import utils
 from mkdocs.config import config_options
 from mkdocs.exceptions import ConfigurationError
 from mkdocs.tests.base import dedent
 
 
 def ensure_utf(string):
-    return string.encode('utf-8') if six.PY2 else string
+    return string.encode('utf-8') if not utils.PY3 else string
 
 
 class ConfigTests(unittest.TestCase):
@@ -118,7 +117,7 @@ class ConfigTests(unittest.TestCase):
             [custom, os.path.join(theme_dir, 'cosmo'), search_asset_dir],
         )
 
-        for config_contents, result in six.moves.zip(configs, results):
+        for config_contents, result in zip(configs, results):
 
             c = config.Config(schema=(
                 ('theme', config_options.Theme(default='mkdocs')),
