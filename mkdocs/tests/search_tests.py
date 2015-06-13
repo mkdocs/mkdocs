@@ -2,6 +2,7 @@
 # coding: utf-8
 
 from __future__ import unicode_literals
+
 import unittest
 
 from mkdocs import nav
@@ -106,9 +107,11 @@ class SearchTests(unittest.TestCase):
 
         pages = [
             {'Home': 'index.md'},
-            {'About': 'about.md'},
+            {'About': 'about/license.md'},
         ]
-        site_navigation = nav.SiteNavigation(pages, load_config())
+        site_navigation = nav.SiteNavigation(pages, load_config(
+            pages=pages
+        ))
 
         md = dedent("""
         # Heading 1

@@ -42,7 +42,9 @@ def paths_to_pages(pages_config, use_directory_urls, docs_dir):
             pages_config[i] = _path_to_page(entry, use_directory_urls, docs_dir)
             continue
         elif not isinstance(entry, dict):
-            raise Exception("Broken 1")
+            msg = ("Line in 'page' config is of type {0}, dict or string "
+                   "expected. Config: {1}").format(type(entry), entry)
+            raise exceptions.ConfigurationError(msg)
 
         next_cat_or_title, subpages_or_path = next(iter(entry.items()))
 
@@ -184,7 +186,26 @@ class Page(object):
         self.next_page = None
         self.ancestors = []
 
-        self.load_markdown()
+        self.markdown, self.meta = self.load_markdown()
+
+    def __eq__(self, other):
+
+        def sub_dict(d):
+            return dict((key, value) for key, value in d.items()
+                        if key in ['title', 'input_path', 'abs_url'])
+
+        return (isinstance(other, self.__class__)
+                and sub_dict(self.__dict__) == sub_dict(other.__dict__))
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __str__(self):
+        return self.indent_print()
+
+    def __repr__(self):
+        return "nav.Page(title='{0}', input_path='{1}', url='{2}')".format(
+            self.title, self.input_path, self.abs_url)
 
     def load_markdown(self):
 
@@ -196,7 +217,7 @@ class Page(object):
             log.error('file not found: %s', input_path)
             raise
 
-        self.markdown, self.meta = meta.get_data(input_content)
+        return meta.get_data(input_content)
 
     @property
     def title(self):
@@ -233,13 +254,6 @@ class Page(object):
     @property
     def is_top_level(self):
         return len(self.ancestors) == 0
-
-    def __str__(self):
-        return self.indent_print()
-
-    def __repr__(self):
-        return "nav.Page(title='{0}', input_path='{1}')".format(self.title,
-                                                                self.input_path)
 
     def indent_print(self, depth=0):
         indent = '    ' * depth

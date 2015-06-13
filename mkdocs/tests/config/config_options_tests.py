@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# coding: utf-8
+
 from __future__ import unicode_literals
 
 import os
@@ -274,13 +277,21 @@ class ExtrasTest(unittest.TestCase):
 
 class PagesTest(unittest.TestCase):
 
+    def setUp(self):
+
+        self.config = {
+            'extra_stuff': [],
+            'use_directory_urls': False,
+            'docs_dir': 'docs',
+        }
+
     def test_provided(self):
 
         option = config_options.Pages()
         value = option.validate([['index.md', ], ])
         self.assertEqual(['index.md', ], value)
 
-        option.post_validation({'extra_stuff': []}, 'extra_stuff')
+        option.post_validation(self.config, 'extra_stuff')
 
     def test_provided_dict(self):
 
@@ -291,7 +302,7 @@ class PagesTest(unittest.TestCase):
         ])
         self.assertEqual(['index.md', {'Page': 'page.md'}], value)
 
-        option.post_validation({'extra_stuff': []}, 'extra_stuff')
+        option.post_validation(self.config, 'extra_stuff')
 
     def test_provided_empty(self):
 
@@ -299,7 +310,7 @@ class PagesTest(unittest.TestCase):
         value = option.validate([])
         self.assertEqual(None, value)
 
-        option.post_validation({'extra_stuff': []}, 'extra_stuff')
+        option.post_validation(self.config, 'extra_stuff')
 
     def test_invalid_type(self):
 

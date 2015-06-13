@@ -2,6 +2,7 @@
 # coding: utf-8
 
 from __future__ import unicode_literals
+
 import unittest
 
 from mkdocs.tests.base import dedent, markdown_to_toc
