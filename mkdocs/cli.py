@@ -175,7 +175,7 @@ def json_command(clean, config_file, strict, site_dir):
 @click.option('-r', '--remote-name', help=remote_branch_help)
 @common_options
 def gh_deploy_command(config_file, clean, message, remote_branch, remote_name):
-    """Deply your documentation to GitHub Pages"""
+    """Deploy your documentation to GitHub Pages"""
     try:
         config = load_config(
             config_file=config_file,
