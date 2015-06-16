@@ -88,7 +88,6 @@ def cli():
     """
     MkDocs - Project documentation with Markdown.
     """
-    pass
 
 
 @cli.command(name="serve")
