@@ -17,6 +17,12 @@ You can determine your currently installed version using `mkdocs --version`:
 ## Version 0.15.0 (2015-??-??)
 
 * Fix issues when using absolute links to Markdown files. (#628)
+* Add support for [site_description] and [site_author] to the [ReadTheDocs]
+  theme. (#631)
+
+[site_description]: /user-guide/configuration.md#site_description
+[site_author]: /user-guide/configuration.md#site_author
+[ReadTheDocs]: /user-guide/styling-your-docs.md#read-the-docs
 
 ## Version 0.14.0 (2015-06-09)
 

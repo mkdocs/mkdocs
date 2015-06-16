@@ -4,6 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% if page_description %}<meta name="description" content="{{ page_description }}">{% endif %}
+  {% if site_author %}<meta name="author" content="{{ site_author }}">{% endif %}
   {% block htmltitle %}
   <title>{% if page_title %}{{ page_title }} - {% endif %}{{ site_name }}</title>
   {% endblock %}
