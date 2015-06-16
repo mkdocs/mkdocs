@@ -151,7 +151,7 @@ def json_command(clean, config_file, strict, site_dir):
     search engine.
     """
 
-    log.warning("The json command is deprcated and will be removed in a future "
+    log.warning("The json command is deprecated and will be removed in a future "
                 "MkDocs release. For details on updating: "
                 "http://www.mkdocs.org/about/release-notes/")
 
