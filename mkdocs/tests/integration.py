@@ -38,7 +38,7 @@ def main(output=None):
     for theme in sorted(MKDOCS_THEMES):
         project_dir = os.path.dirname(MKDOCS_CONFIG)
         out = os.path.join(output, theme)
-        command = ['mkdocs', 'build', '--site-dir', out, '--theme', theme]
+        command = ['mkdocs', 'build', '-v', '--site-dir', out, '--theme', theme]
         subprocess.check_call(command, cwd=project_dir)
 
     for project in os.listdir(TEST_PROJECTS):
