@@ -85,6 +85,10 @@ setup(
         'console_scripts': [
             'mkdocs = mkdocs.cli:cli',
         ],
+        'mkdocs.themes': [
+            'mkdocs = mkdocs.themes.mkdocs',
+            'readthedocs = mkdocs.themes.readthedocs',
+        ]
     },
     classifiers=[
         'Development Status :: 5 - Production/Stable',

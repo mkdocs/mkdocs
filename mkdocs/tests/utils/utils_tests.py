@@ -2,10 +2,12 @@
 # coding: utf-8
 
 from __future__ import unicode_literals
+
+import mock
 import os
 import unittest
 
-from mkdocs import nav, utils
+from mkdocs import nav, utils, exceptions
 from mkdocs.tests.base import dedent
 
 
@@ -111,6 +113,44 @@ class UtilsTests(unittest.TestCase):
         self.assertEqual(
             sorted(utils.get_theme_names()),
             sorted(['mkdocs', 'readthedocs', ]))
+
+    @mock.patch('pkg_resources.iter_entry_points', autospec=True)
+    def test_get_themes_warning(self, mock_iter):
+
+        theme1 = mock.Mock()
+        theme1.name = 'mkdocs2'
+        theme1.dist.key = 'mkdocs2'
+        theme1.load().__file__ = "some/path1"
+
+        theme2 = mock.Mock()
+        theme2.name = 'mkdocs2'
+        theme2.dist.key = 'mkdocs3'
+        theme2.load().__file__ = "some/path2"
+
+        mock_iter.return_value = iter([theme1, theme2])
+
+        self.assertEqual(
+            sorted(utils.get_theme_names()),
+            sorted(['mkdocs2', ]))
+
+    @mock.patch('pkg_resources.iter_entry_points', autospec=True)
+    @mock.patch('pkg_resources.get_entry_map', autospec=True)
+    def test_get_themes_error(self, mock_get, mock_iter):
+
+        theme1 = mock.Mock()
+        theme1.name = 'mkdocs'
+        theme1.dist.key = 'mkdocs'
+        theme1.load().__file__ = "some/path1"
+
+        theme2 = mock.Mock()
+        theme2.name = 'mkdocs'
+        theme2.dist.key = 'mkdocs2'
+        theme2.load().__file__ = "some/path2"
+
+        mock_iter.return_value = iter([theme1, theme2])
+        mock_get.return_value = {'mkdocs': theme1, }
+
+        self.assertRaises(exceptions.ConfigurationError, utils.get_theme_names)
 
     def test_nest_paths(self):
 
