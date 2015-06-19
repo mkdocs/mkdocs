@@ -110,9 +110,7 @@ class UtilsTests(unittest.TestCase):
 
         self.assertEqual(
             sorted(utils.get_theme_names()),
-            sorted(['flatly', 'cerulean', 'slate', 'bootstrap', 'yeti',
-                    'spacelab', 'united', 'readable', 'simplex', 'mkdocs',
-                    'cosmo', 'journal', 'cyborg', 'readthedocs', 'amelia']))
+            sorted(['mkdocs', 'readthedocs', ]))
 
     def test_nest_paths(self):
 
