@@ -11,7 +11,7 @@ except ImportError:                     # pragma: no cover
 
 class SearchIndex(object):
     """
-    Search index is a collection of pages and sections (H1 and H2
+    Search index is a collection of pages and sections (heading
     tags and their following content are sections).
     """
 
@@ -26,9 +26,9 @@ class SearchIndex(object):
         for toc_item in toc:
             if toc_item.url[1:] == id_:
                 return toc_item
-            for toc_sub_item in toc_item.children:
-                if toc_sub_item.url[1:] == id_:
-                    return toc_sub_item
+            toc_item_r = self._find_toc_by_id(toc_item.children, id_)
+            if toc_item_r is not None:
+                return toc_item_r
 
     def _add_entry(self, title, text, loc):
         """
@@ -44,7 +44,7 @@ class SearchIndex(object):
     def add_entry_from_context(self, page, content, toc):
         """
         Create a set of entries in the index for a page. One for
-        the page itself and then one for each of it's H1 and H2
+        the page itself and then one for each of its' heading
         tags.
         """
 
@@ -144,7 +144,7 @@ class ContentSection(object):
 class ContentParser(HTMLParser):
     """
     Given a block of HTML, group the content under the preceding
-    H1 or H2 tags which can then be used for creating an index
+    heading tags which can then be used for creating an index
     for that section.
     """
 
@@ -161,8 +161,8 @@ class ContentParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
         """Called at the start of every HTML tag."""
 
-        # We only care about the opening tag for H1 and H2.
-        if tag not in ("h1", "h2"):
+        # We only care about the opening tag for headings.
+        if tag not in (["h%d" % x for x in range(1,7)]):
             return
 
         # We are dealing with a new header, create a new section
@@ -178,8 +178,8 @@ class ContentParser(HTMLParser):
     def handle_endtag(self, tag):
         """Called at the end of every HTML tag."""
 
-        # We only care about the opening tag for H1 and H2.
-        if tag not in ("h1", "h2"):
+        # We only care about the opening tag for headings.
+        if tag not in (["h%d" % x for x in range(1,7)]):
             return
 
         self.is_header_tag = False
@@ -191,7 +191,7 @@ class ContentParser(HTMLParser):
 
         if self.section is None:
             # This means we have some content at the start of the
-            # HTML before we reach a H1 or H2. We don't actually
+            # HTML before we reach a heading tag. We don't actually
             # care about that content as it will be added to the
             # overall page entry in the search. So just skip it.
             return
