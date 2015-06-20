@@ -112,7 +112,7 @@ class UtilsTests(unittest.TestCase):
             sorted(utils.get_theme_names()),
             sorted(['flatly', 'cerulean', 'slate', 'bootstrap', 'yeti',
                     'spacelab', 'united', 'readable', 'simplex', 'mkdocs',
-                    'cosmo', 'journal', 'cyborg', 'readthedocs', 'amelia']))
+                    'cosmo', 'journal', 'cyborg', 'readthedocs', ]))
 
     def test_nest_paths(self):
 
