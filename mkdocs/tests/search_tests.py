@@ -90,7 +90,8 @@ class SearchTests(unittest.TestCase):
         self.assertEqual(toc_item2.title, "Heading 2")
 
         toc_item3 = index._find_toc_by_id(toc, "heading-3")
-        self.assertEqual(toc_item3, None)
+        self.assertEqual(toc_item3.url, "#heading-3")
+        self.assertEqual(toc_item3.title, "Heading 3")
 
     def test_create_search_index(self):
 
@@ -123,7 +124,7 @@ class SearchTests(unittest.TestCase):
             index = search.SearchIndex()
             index.add_entry_from_context(page, html_content, toc)
 
-            self.assertEqual(len(index._entries), 3)
+            self.assertEqual(len(index._entries), 4)
 
             loc = page.abs_url
 
@@ -136,5 +137,9 @@ class SearchTests(unittest.TestCase):
             self.assertEqual(index._entries[1]['location'], "{0}#heading-1".format(loc))
 
             self.assertEqual(index._entries[2]['title'], "Heading 2")
-            self.assertEqual(strip_whitespace(index._entries[2]['text']), "Content2Heading3Content3")
+            self.assertEqual(strip_whitespace(index._entries[2]['text']), "Content2")
             self.assertEqual(index._entries[2]['location'], "{0}#heading-2".format(loc))
+
+            self.assertEqual(index._entries[3]['title'], "Heading 3")
+            self.assertEqual(strip_whitespace(index._entries[3]['text']), "Content3")
+            self.assertEqual(index._entries[3]['location'], "{0}#heading-3".format(loc))
