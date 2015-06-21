@@ -61,7 +61,11 @@ def path_to_url(url, nav, strict):
     scheme, netloc, path, params, query, fragment = (
         utils.urlparse(url))
 
-    if scheme or netloc or not path:
+    # Markdown encodes mailto links such that urlparse fails to identify the scheme
+    mailto = '\x02amp\x03#109;\x02amp\x03#97;\x02amp\x03#105;\x02amp\x03#108;' + \
+             '\x02amp\x03#116;\x02amp\x03#111;\x02amp\x03#58;'
+
+    if scheme or netloc or not path or url.startswith(mailto):
         # Ignore URLs unless they are a relative link to a markdown file.
         return url
 

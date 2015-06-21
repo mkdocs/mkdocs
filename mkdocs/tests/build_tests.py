@@ -196,6 +196,18 @@ class BuildTests(unittest.TestCase):
         html, toc, meta = build.convert_markdown(md_text, load_config(), site_navigation=site_navigation)
         self.assertEqual(html.strip(), expected.strip())
 
+    def test_ignore_email_links(self):
+        md_text = 'A <autolink@example.com> and an [link](mailto:example@example.com).'
+        expected = ''.join([
+            '<p>A <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#97;&#117;&#116;',
+            '&#111;&#108;&#105;&#110;&#107;&#64;&#101;&#120;&#97;&#109;&#112;&#108;',
+            '&#101;&#46;&#99;&#111;&#109;">&#97;&#117;&#116;&#111;&#108;&#105;&#110;',
+            '&#107;&#64;&#101;&#120;&#97;&#109;&#112;&#108;&#101;&#46;&#99;&#111;&#109;',
+            '</a> and an <a href="mailto:example@example.com">link</a>.</p>'
+        ])
+        html, toc, meta = build.convert_markdown(md_text, load_config())
+        self.assertEqual(html.strip(), expected.strip())
+
     def test_markdown_table_extension(self):
         """
         Ensure that the table extension is supported.
