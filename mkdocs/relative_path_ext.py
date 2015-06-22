@@ -43,6 +43,7 @@ import os
 
 from markdown.extensions import Extension
 from markdown.treeprocessors import Treeprocessor
+from markdown.util import AMP_SUBSTITUTE
 
 from mkdocs import utils
 from mkdocs.exceptions import MarkdownNotFound
@@ -61,8 +62,10 @@ def path_to_url(url, nav, strict):
     scheme, netloc, path, params, query, fragment = (
         utils.urlparse(url))
 
-    if scheme or netloc or not path:
+    if scheme or netloc or not path or AMP_SUBSTITUTE in url:
         # Ignore URLs unless they are a relative link to a markdown file.
+        # AMP_SUBSTITUTE is used internally by Markdown only for email,which is
+        # not a relative link. As urlparse errors on them, skip explicitly
         return url
 
     if nav and not utils.is_markdown_file(path):
