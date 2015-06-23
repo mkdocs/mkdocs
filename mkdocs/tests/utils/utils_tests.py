@@ -112,7 +112,9 @@ class UtilsTests(unittest.TestCase):
 
         self.assertEqual(
             sorted(utils.get_theme_names()),
-            sorted(['mkdocs', 'readthedocs', ]))
+            sorted(['flatly', 'cerulean', 'slate', 'bootstrap', 'yeti',
+                    'spacelab', 'united', 'readable', 'simplex', 'mkdocs',
+                    'cosmo', 'journal', 'cyborg', 'readthedocs', 'amelia']))
 
     @mock.patch('pkg_resources.iter_entry_points', autospec=True)
     def test_get_themes_warning(self, mock_iter):

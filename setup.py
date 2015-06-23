@@ -62,6 +62,8 @@ setup(
         'Jinja2>=2.7.1',
         'livereload>=2.3.2',
         'Markdown>=2.3.1,<2.5' if PY26 else 'Markdown>=2.3.1',
+        'mkdocs-bootstrap>=0.1.1',
+        'mkdocs-bootswatch>=0.1.0',
         'PyYAML>=3.10',
         'tornado>=4.1',
     ],
