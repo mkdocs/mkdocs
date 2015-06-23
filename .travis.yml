@@ -16,7 +16,9 @@ env:
 - TOXENV=flake8
 install:
 - pip install tox
-script: tox
+script:
+- git clean -f -d -x
+- tox
 matrix:
   fast_finish: true
 before_install: pip install codecov

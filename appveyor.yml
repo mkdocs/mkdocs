@@ -18,6 +18,7 @@ install:
   - "c:\\python27\\python c:\\get-pip.py"
   - "c:\\python27\\Scripts\\pip install tox"
 test_script:
+  - "git clean -f -d -x"
   - "c:\\python27\\Scripts\\tox --version"
   - "c:\\python27\\Scripts\\pip --version"
   - "c:\\python27\\Scripts\\tox"
