@@ -51,10 +51,10 @@ Install the `mkdocs` package using pip:
 
     $ pip install mkdocs
 
-You should now have the `mkdocs` command installed on your system.  Run `mkdocs help` to check that everything worked okay.
+You should now have the `mkdocs` command installed on your system.  Run `mkdocs --version` to check that everything worked okay.
 
-    $ mkdocs help
-    mkdocs [help|new|build|serve|gh-deploy] {options}
+    $ mkdocs --version
+    mkdocs, version 0.14.0
 
 ---
 
