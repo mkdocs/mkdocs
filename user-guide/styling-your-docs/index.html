@@ -5,11 +5,11 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        
+        <meta name="author" content="Tom Christie & Dougal Matthews">
         <link rel="canonical" href="http://www.mkdocs.org/user-guide/styling-your-docs/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
-	<title>Styling your docs - MkDocs</title>
+	<title>Styling Your Docs - MkDocs</title>
 
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -71,8 +71,20 @@
                 
                 
                     <li class="dropdown active">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User guide <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../writing-your-docs/">Writing Your Docs</a>
+</li>
+
+                        
+                            
+<li class="active">
+    <a href="./">Styling Your Docs</a>
+</li>
+
                         
                             
 <li >
@@ -83,18 +95,6 @@
                             
 <li >
     <a href="../deploying-your-docs/">Deploying your docs</a>
-</li>
-
-                        
-                            
-<li class="active">
-    <a href="./">Styling your docs</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../writing-your-docs/">Writing your docs</a>
 </li>
 
                         
@@ -109,6 +109,12 @@
                         
                             
 <li >
+    <a href="../../about/release-notes/">Release Notes</a>
+</li>
+
+                        
+                            
+<li >
     <a href="../../about/contributing/">Contributing</a>
 </li>
 
@@ -116,12 +122,6 @@
                             
 <li >
     <a href="../../about/license/">License</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../about/release-notes/">Release notes</a>
 </li>
 
                         
@@ -140,12 +140,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../deploying-your-docs/">
+                        <a rel="next" href="../writing-your-docs/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../writing-your-docs/">
+                        <a rel="prev" href="../configuration/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -189,8 +189,8 @@
 <pre><code>theme: amelia
 </code></pre>
 <p>Replace <a href="#amelia"><code>amelia</code></a> with any of the <a href="#built-in-themes">builtin themes</a> listed below.</p>
-<p>To customise a theme, simply place additional CSS and JavaScript files in the documentation directory next to the Markdown files and these will be automatically detected and added. Additionally, the <a href="../../user-guide/configuration/#extra_css"><code>extra_css</code></a> and <a href="../../user-guide/configuration/#extra_javascript"><code>extra_javascript</code></a> configuration options can be used to specifically include certain CSS or JavaScript files.</p>
-<p>See the <a href="../../user-guide/configuration/#theme">configuration documentation</a> for more specific details about these options.</p>
+<p>To customise a theme, simply place additional CSS and JavaScript files in the documentation directory next to the Markdown files and these will be automatically detected and added. Additionally, the <a href="/user-guide/configuration.md#extra_css"><code>extra_css</code></a> and <a href="/user-guide/configuration.md#extra_javascript"><code>extra_javascript</code></a> configuration options can be used to specifically include certain CSS or JavaScript files.</p>
+<p>See the <a href="/user-guide/configuration.md#theme">configuration documentation</a> for more specific details about these options.</p>
 <p>To create a new custom theme or more heavily customise an existing theme, see the <a href="#custom-themes">custom themes</a> section below.</p>
 <h2 id="built-in-themes">Built-in themes<a class="headerlink" href="#built-in-themes" title="Permanent link"></a></h2>
 <h3 id="mkdocs">MkDocs<a class="headerlink" href="#mkdocs" title="Permanent link"></a></h3>
@@ -253,7 +253,7 @@ custom_theme/
 <h3 id="template-variables">Template Variables<a class="headerlink" href="#template-variables" title="Permanent link"></a></h3>
 <p>Each template in a theme is built with a template context. These are the variables that are available to themes. The context varies depending on the template that is being built. At the moment templates are either built with the global context or with a page specific context. The global context is used for HTML pages that don't represent an individual Markdown document, for example a 404.html page or search.html.</p>
 <h4 id="global-context">Global Context<a class="headerlink" href="#global-context" title="Permanent link"></a></h4>
-<p>The following variables in the context map directly the the <a href="../../user-guide/configuration/">configuration options</a>.</p>
+<p>The following variables in the context map directly the the <a href="/user-guide/configuration.md">configuration options</a>.</p>
 <table>
 <thead>
 <tr>
@@ -423,7 +423,7 @@ Content...
 <h5 id="next_page">next_page<a class="headerlink" href="#next_page" title="Permanent link"></a></h5>
 <p>The page object for the next page.The isage is the same as for <code>current_page</code>.</p>
 <h4 id="extra-context">Extra Context<a class="headerlink" href="#extra-context" title="Permanent link"></a></h4>
-<p>Additional variables can be passed to the template with the <a href="../../user-guide/configuration/#extra"><code>extra</code></a> configuration option. This is a set of key value pairs that can make custom templates far more flexible.</p>
+<p>Additional variables can be passed to the template with the <a href="/user-guide/configuration.md#extra"><code>extra</code></a> configuration option. This is a set of key value pairs that can make custom templates far more flexible.</p>
 <p>For example, this could be used to include the project version of all pages and a list of links related to the project. This can be achieved with the following <code>extra</code> configuration:</p>
 <pre><code class="yaml">extra:
     version: 0.13.0
@@ -474,7 +474,7 @@ Content...
         <footer class="col-md-12">
             <hr>
             
-                <p>Copyright &copy; 2014, <a href="https://twitter.com/_tomchristie">Tom Christie</a>. Maintenance and development by <a href="http://www.dougalmatthews.com/">Dougal Matthews</a></p>
+                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, <a href="http://www.dougalmatthews.com/">Dougal Matthews</a>.</p>
             
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
