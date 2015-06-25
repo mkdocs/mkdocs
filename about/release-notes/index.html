@@ -5,11 +5,11 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        <meta name="author" content="Tom Christie & Dougal Matthews">
+        
         <link rel="canonical" href="http://www.mkdocs.org/about/release-notes/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
-	<title>Release Notes - MkDocs</title>
+	<title>Release notes - MkDocs</title>
 
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -71,20 +71,8 @@
                 
                 
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                        
-                            
-<li >
-    <a href="../../user-guide/writing-your-docs/">Writing Your Docs</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../user-guide/styling-your-docs/">Styling Your Docs</a>
-</li>
-
                         
                             
 <li >
@@ -98,6 +86,18 @@
 </li>
 
                         
+                            
+<li >
+    <a href="../../user-guide/styling-your-docs/">Styling your docs</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../user-guide/writing-your-docs/">Writing your docs</a>
+</li>
+
+                        
                         </ul>
                     </li>
                 
@@ -108,12 +108,6 @@
                         <ul class="dropdown-menu">
                         
                             
-<li class="active">
-    <a href="./">Release Notes</a>
-</li>
-
-                        
-                            
 <li >
     <a href="../contributing/">Contributing</a>
 </li>
@@ -122,6 +116,12 @@
                             
 <li >
     <a href="../license/">License</a>
+</li>
+
+                        
+                            
+<li class="active">
+    <a href="./">Release notes</a>
 </li>
 
                         
@@ -140,12 +140,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../../user-guide/deploying-your-docs/">
+                        <a rel="next" href="../license/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
-                    <li >
-                        <a rel="prev" href="../contributing/">
+                    <li class="disabled">
+                        <a rel="prev" >
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -173,8 +173,6 @@
         <li class="main active"><a href="#release-notes">Release Notes</a></li>
         
             <li><a href="#upgrading">Upgrading</a></li>
-        
-            <li><a href="#version-0150-2015-">Version 0.15.0 (2015-??-??)</a></li>
         
             <li><a href="#version-0140-2015-06-09">Version 0.14.0 (2015-06-09)</a></li>
         
@@ -213,12 +211,6 @@
 <pre><code>$ mkdocs --version
 mkdocs, version 0.14.0
 </code></pre>
-<h2 id="version-0150-2015-">Version 0.15.0 (2015-??-??)<a class="headerlink" href="#version-0150-2015-" title="Permanent link"></a></h2>
-<ul>
-<li>Fix issues when using absolute links to Markdown files. (#628)</li>
-<li>Add support for <a href="/user-guide/configuration.md#site_description">site_description</a> and <a href="/user-guide/configuration.md#site_author">site_author</a> to the <a href="/user-guide/styling-your-docs.md#read-the-docs">ReadTheDocs</a>
-  theme. (#631)</li>
-</ul>
 <h2 id="version-0140-2015-06-09">Version 0.14.0 (2015-06-09)<a class="headerlink" href="#version-0140-2015-06-09" title="Permanent link"></a></h2>
 <ul>
 <li>Improve Unicode handling by ensuring that all config strings are loaded as
@@ -264,12 +256,12 @@ provided  a convenient way for users to output the documentation contents as
 JSON files but with the additions of search to MkDocs this functionality is
 duplicated.</p>
 <p>A new index with all the contents from a MkDocs build is created in the
-<a href="/user-guide/configuration.md#site_dir">site_dir</a>, so with the default value for the <code>site_dir</code> It can be found in
+<a href="../../user-guide/configuration/#site_dir">site_dir</a>, so with the default value for the <code>site_dir</code> It can be found in
 <code>site/mkdocs/search_index.json</code>.</p>
 <p>This new file is created on every MkDocs build (with <code>mkdocs build</code>) and
 no configuration is needed to enable it.</p>
 <h4 id="change-the-pages-configuration">Change the pages configuration<a class="headerlink" href="#change-the-pages-configuration" title="Permanent link"></a></h4>
-<p>Provide a <a href="/user-guide/writing-your-docs.md#configure-pages-and-navigation">new way</a> to define pages, and specifically <a href="/user-guide/writing-your-docs.md#multilevel-documentation">nested pages</a>, in the
+<p>Provide a <a href="../../user-guide/writing-your-docs/#configure-pages-and-navigation">new way</a> to define pages, and specifically <a href="../../user-guide/writing-your-docs/#multilevel-documentation">nested pages</a>, in the
 mkdocs.yml file and deprecate the existing approach, support will be removed
 with MkDocs 1.0.</p>
 <h4 id="warn-users-about-the-removal-of-builtin-themes">Warn users about the removal of builtin themes<a class="headerlink" href="#warn-users-about-the-removal-of-builtin-themes" title="Permanent link"></a></h4>
@@ -280,7 +272,7 @@ supported and updates outside MkDocs releases.</p>
 <h4 id="search">Search<a class="headerlink" href="#search" title="Permanent link"></a></h4>
 <p>Support for search has now been added to MkDocs. This is based on the
 JavaScript library <a href="http://lunrjs.com/">lunr.js</a>. It has been added to both the <code>mkdocs</code> and
-<code>readthedocs</code> themes. See the custom theme documentation on <a href="/user-guide/styling-your-docs.md#search-and-themes">supporting search</a>
+<code>readthedocs</code> themes. See the custom theme documentation on <a href="../../user-guide/styling-your-docs/#search-and-themes">supporting search</a>
 for adding it to your own themes.</p>
 <h4 id="new-command-line-interface">New Command Line Interface<a class="headerlink" href="#new-command-line-interface" title="Permanent link"></a></h4>
 <p>The command line interface for MkDocs has been re-written with the Python
@@ -292,21 +284,21 @@ a small subset of the configuration options can be passed to the commands. To
 see in full commands and available arguments use <code>mkdocs --help</code> and
 <code>mkdocs build --help</code> to have them displayed.</p>
 <h4 id="support-extra-html-and-xml-files">Support Extra HTML and XML files<a class="headerlink" href="#support-extra-html-and-xml-files" title="Permanent link"></a></h4>
-<p>Like the <a href="/user-guide/configuration.md#extra_javascript">extra_javascript</a> and <a href="/user-guide/configuration.md#extra_css">extra_css</a> configuration options, a new
-option named <a href="/user-guide/configuration.md#extra_templates">extra_templates</a> has been added. This will automatically be
+<p>Like the <a href="../../user-guide/configuration/#extra_javascript">extra_javascript</a> and <a href="../../user-guide/configuration/#extra_css">extra_css</a> configuration options, a new
+option named <a href="../../user-guide/configuration/#extra_templates">extra_templates</a> has been added. This will automatically be
 populated with any <code>.html</code> or <code>.xml</code> files in the project docs directory.</p>
 <p>Users can place static HTML and XML files and they will be copied over, or they
-can also use Jinja2 syntax and take advantage of the <a href="/user-guide/styling-your-docs.md#global-context">global variables</a>.</p>
+can also use Jinja2 syntax and take advantage of the <a href="../../user-guide/styling-your-docs/#global-context">global variables</a>.</p>
 <p>By default MkDocs will use this approach to create a sitemap for the
 documentation.</p>
 <h3 id="other-changes-and-additions">Other Changes and Additions<a class="headerlink" href="#other-changes-and-additions" title="Permanent link"></a></h3>
 <ul>
-<li>Add support for <a href="/user-guide/configuration.md#markdown_extensions">Markdown extension configuration options</a>. (#435)</li>
+<li>Add support for <a href="../../user-guide/configuration/#markdown_extensions">Markdown extension configuration options</a>. (#435)</li>
 <li>MkDocs now ships Python <a href="http://pythonwheels.com/">wheels</a>. (#486)</li>
 <li>Only include the build date and MkDocs version on the homepage. (#490)</li>
 <li>Generate sitemaps for documentation builds. (#436)</li>
 <li>Add a clearer way to define nested pages in the configuration. (#482)</li>
-<li>Add an <a href="/user-guide/configuration.md#extra">extra config</a> option for passing arbitrary variables to the template. (#510)</li>
+<li>Add an <a href="../../user-guide/configuration/#extra">extra config</a> option for passing arbitrary variables to the template. (#510)</li>
 <li>Add <code>--no-livereload</code> to <code>mkdocs serve</code> for a simpler development server. (#511)</li>
 <li>Add copyright display support to all themes (#549)</li>
 <li>Add support for custom commit messages in a <code>mkdocs gh-deploy</code> (#516)</li>
@@ -428,7 +420,7 @@ documentation.</p>
         <footer class="col-md-12">
             <hr>
             
-                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, <a href="http://www.dougalmatthews.com/">Dougal Matthews</a>.</p>
+                <p>Copyright &copy; 2014, <a href="https://twitter.com/_tomchristie">Tom Christie</a>. Maintenance and development by <a href="http://www.dougalmatthews.com/">Dougal Matthews</a></p>
             
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>

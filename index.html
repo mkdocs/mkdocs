@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="Project documentation with Markdown.">
-        <meta name="author" content="Tom Christie & Dougal Matthews">
+        
         <link rel="canonical" href="http://www.mkdocs.org/">
         <link rel="shortcut icon" href="./img/favicon.ico">
 
@@ -71,20 +71,8 @@
                 
                 
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                        
-                            
-<li >
-    <a href="user-guide/writing-your-docs/">Writing Your Docs</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="user-guide/styling-your-docs/">Styling Your Docs</a>
-</li>
-
                         
                             
 <li >
@@ -95,6 +83,18 @@
                             
 <li >
     <a href="user-guide/deploying-your-docs/">Deploying your docs</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="user-guide/styling-your-docs/">Styling your docs</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="user-guide/writing-your-docs/">Writing your docs</a>
 </li>
 
                         
@@ -109,12 +109,6 @@
                         
                             
 <li >
-    <a href="about/release-notes/">Release Notes</a>
-</li>
-
-                        
-                            
-<li >
     <a href="about/contributing/">Contributing</a>
 </li>
 
@@ -122,6 +116,12 @@
                             
 <li >
     <a href="about/license/">License</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="about/release-notes/">Release notes</a>
 </li>
 
                         
@@ -145,7 +145,7 @@
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="user-guide/writing-your-docs/">
+                        <a rel="prev" href="user-guide/configuration/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -223,9 +223,9 @@ pip 1.5.2
 <p>Install the <code>mkdocs</code> package using pip:</p>
 <pre><code>$ pip install mkdocs
 </code></pre>
-<p>You should now have the <code>mkdocs</code> command installed on your system.  Run <code>mkdocs --version</code> to check that everything worked okay.</p>
-<pre><code>$ mkdocs --version
-mkdocs, version 0.14.0
+<p>You should now have the <code>mkdocs</code> command installed on your system.  Run <code>mkdocs help</code> to check that everything worked okay.</p>
+<pre><code>$ mkdocs help
+mkdocs [help|new|build|serve|gh-deploy] {options}
 </code></pre>
 <hr />
 <h2 id="getting-started">Getting started<a class="headerlink" href="#getting-started" title="Permanent link"></a></h2>
@@ -291,7 +291,7 @@ about css fonts img index.html js
 able to host it from pretty much anywhere. <a href="https://help.github.com/articles/creating-project-pages-manually">GitHub project pages</a> and <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">Amazon
 S3</a> are good hosting options. Upload the contents of the entire <code>site</code> directory
 to wherever you're hosting your website from and you're done. For specific instructions
-for a number of common hosts, see the <a href="user-guide/deploying-your-docs/">Deploying your Docs</a> page.</p>
+for a number of common hosts, see the <a href="./user-guide/deploying-your-docs/">Deploying your Docs</a> page.</p>
 <h2 id="getting-help">Getting help<a class="headerlink" href="#getting-help" title="Permanent link"></a></h2>
 <p>To get help with MkDocs, please use the <a href="https://groups.google.com/forum/#!forum/mkdocs">discussion group</a>, <a href="https://github.com/mkdocs/mkdocs/issues">GitHub issues</a> or the MkDocs IRC channel <code>#mkdocs</code> on freenode.</p></div>
             
@@ -300,7 +300,7 @@ for a number of common hosts, see the <a href="user-guide/deploying-your-docs/">
         <footer class="col-md-12">
             <hr>
             
-                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, <a href="http://www.dougalmatthews.com/">Dougal Matthews</a>.</p>
+                <p>Copyright &copy; 2014, <a href="https://twitter.com/_tomchristie">Tom Christie</a>. Maintenance and development by <a href="http://www.dougalmatthews.com/">Dougal Matthews</a></p>
             
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
@@ -342,5 +342,5 @@ for a number of common hosts, see the <a href="user-guide/deploying-your-docs/">
 
 <!--
 MkDocs version : 0.14.0
-Build Date UTC : 2015-06-25 06:44:34.202590
+Build Date UTC : 2015-06-25 06:44:56.906000
 -->

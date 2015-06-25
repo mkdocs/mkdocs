@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        <meta name="author" content="Tom Christie & Dougal Matthews">
+        
         <link rel="canonical" href="http://www.mkdocs.org/user-guide/configuration/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
@@ -71,20 +71,8 @@
                 
                 
                     <li class="dropdown active">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                        
-                            
-<li >
-    <a href="../writing-your-docs/">Writing Your Docs</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../styling-your-docs/">Styling Your Docs</a>
-</li>
-
                         
                             
 <li class="active">
@@ -95,6 +83,18 @@
                             
 <li >
     <a href="../deploying-your-docs/">Deploying your docs</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../styling-your-docs/">Styling your docs</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../writing-your-docs/">Writing your docs</a>
 </li>
 
                         
@@ -109,12 +109,6 @@
                         
                             
 <li >
-    <a href="../../about/release-notes/">Release Notes</a>
-</li>
-
-                        
-                            
-<li >
     <a href="../../about/contributing/">Contributing</a>
 </li>
 
@@ -122,6 +116,12 @@
                             
 <li >
     <a href="../../about/license/">License</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../about/release-notes/">Release notes</a>
 </li>
 
                         
@@ -140,7 +140,7 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../styling-your-docs/">
+                        <a rel="next" href="../..">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
@@ -247,7 +247,7 @@
 - 'User Guide': 'user-guide.md'
 - 'About': 'about.md'
 </code></pre>
-<p>See the section on <a href="/user-guide/writing-your-docs.md#configure-pages-and-navigation">configuring pages and navigation</a> for a more detailed breakdown, including how to create sub-sections.</p>
+<p>See the section on <a href="../../user-guide/writing-your-docs/#configure-pages-and-navigation">configuring pages and navigation</a> for a more detailed breakdown, including how to create sub-sections.</p>
 <h2 id="build-directories">Build directories<a class="headerlink" href="#build-directories" title="Permanent link"></a></h2>
 <h3 id="theme">theme<a class="headerlink" href="#theme" title="Permanent link"></a></h3>
 <p>Sets the theme of your documentation site, for a list of available themes visit
@@ -281,7 +281,7 @@ documentation on how to ignore specific directories.</p>
 <p>Set a list of JavaScript files to be included by the theme.</p>
 <p><strong>default</strong>: By default <code>extra_javascript</code> will contain a list of all the JavaScript files found within the <code>docs_dir</code>, if none are found it will be <code>[]</code> (an empty list).</p>
 <h3 id="extra_templates">extra_templates<a class="headerlink" href="#extra_templates" title="Permanent link"></a></h3>
-<p>Set a list of templates to be built by MkDocs. To see more about writing templates for MkDocs read the documentation about <a href="/user-guide/styling-your-docs.md#custom-themes">custom themes</a> and specifically the section about the <a href="/user-guide/styling-your-docs.md#global-context">variables that are available</a> to templates.</p>
+<p>Set a list of templates to be built by MkDocs. To see more about writing templates for MkDocs read the documentation about <a href="../../user-guide/styling-your-docs/#custom-themes">custom themes</a> and specifically the section about the <a href="../../user-guide/styling-your-docs/#global-context">variables that are available</a> to templates.</p>
 <p><strong>default</strong>: Unlike extra_css and extra_javascript, by default <code>extra_templates</code> will  be <code>[]</code> (an empty list).</p>
 <h3 id="extra">extra<a class="headerlink" href="#extra" title="Permanent link"></a></h3>
 <p>A set of key value pairs, where the values can be any valid YAML construct, that will be passed to the template. This allows for great flexibility when creating custom themes.</p>
@@ -387,7 +387,7 @@ available configuration options.</p>
         <footer class="col-md-12">
             <hr>
             
-                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, <a href="http://www.dougalmatthews.com/">Dougal Matthews</a>.</p>
+                <p>Copyright &copy; 2014, <a href="https://twitter.com/_tomchristie">Tom Christie</a>. Maintenance and development by <a href="http://www.dougalmatthews.com/">Dougal Matthews</a></p>
             
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>

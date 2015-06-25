@@ -12,18 +12,6 @@
     
         
     <url>
-     <loc>http://www.mkdocs.org/user-guide/writing-your-docs/</loc>
-     <lastmod>2015-06-25</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    <url>
-     <loc>http://www.mkdocs.org/user-guide/styling-your-docs/</loc>
-     <lastmod>2015-06-25</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    <url>
      <loc>http://www.mkdocs.org/user-guide/configuration/</loc>
      <lastmod>2015-06-25</lastmod>
      <changefreq>daily</changefreq>
@@ -35,15 +23,21 @@
      <changefreq>daily</changefreq>
     </url>
         
-    
-
-    
-        
     <url>
-     <loc>http://www.mkdocs.org/about/release-notes/</loc>
+     <loc>http://www.mkdocs.org/user-guide/styling-your-docs/</loc>
      <lastmod>2015-06-25</lastmod>
      <changefreq>daily</changefreq>
     </url>
+        
+    <url>
+     <loc>http://www.mkdocs.org/user-guide/writing-your-docs/</loc>
+     <lastmod>2015-06-25</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    
+
+    
         
     <url>
      <loc>http://www.mkdocs.org/about/contributing/</loc>
@@ -53,6 +47,12 @@
         
     <url>
      <loc>http://www.mkdocs.org/about/license/</loc>
+     <lastmod>2015-06-25</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>http://www.mkdocs.org/about/release-notes/</loc>
      <lastmod>2015-06-25</lastmod>
      <changefreq>daily</changefreq>
     </url>
