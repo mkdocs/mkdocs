@@ -19,6 +19,7 @@ You can determine your currently installed version using `mkdocs --version`:
 * Fix issues when using absolute links to Markdown files. (#628)
 * Add support for [site_description] and [site_author] to the [ReadTheDocs]
   theme. (#631)
+* Bugfix: Ensure consistent ordering of auto-populated pages. (#638)
 
 [site_description]: /user-guide/configuration.md#site_description
 [site_author]: /user-guide/configuration.md#site_author
