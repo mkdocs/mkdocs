@@ -38,10 +38,12 @@ Get your project documentation looking just the way you want it by customizing t
 
 In order to install MkDocs you'll need [Python] installed on your system, as well as the Python package manager, [pip].  You can check if you have these already installed like so:
 
-    $ python --version
-    Python 2.7.2
-    $ pip --version
-    pip 1.5.2
+```bash
+$ python --version
+Python 2.7.2
+$ pip --version
+pip 1.5.2
+```
 
 MkDocs supports Python 2.6, 2.7, 3.3 and 3.4.
 
@@ -49,12 +51,16 @@ On Windows we recommend that you install Python and pip with [Chocolatey].
 
 Install the `mkdocs` package using pip:
 
-    $ pip install mkdocs
+```bash
+$ pip install mkdocs
+```
 
 You should now have the `mkdocs` command installed on your system.  Run `mkdocs --version` to check that everything worked okay.
 
-    $ mkdocs --version
-    mkdocs, version 0.14.0
+```bash
+$ mkdocs --version
+mkdocs, version 0.14.0
+```
 
 ---
 
@@ -63,8 +69,10 @@ You should now have the `mkdocs` command installed on your system.  Run `mkdocs 
 
 Getting started is super easy.
 
-    $ mkdocs new my-project
-    $ cd my-project
+```bash
+$ mkdocs new my-project
+$ cd my-project
+```
 
 Let's take a moment to review the initial project that's been created for us.
 
@@ -74,8 +82,10 @@ There's a single configuration file named `mkdocs.yml`, and a folder named `docs
 
 MkDocs comes with a built-in webserver that lets you preview your documentation as you work on it. We start the webserver by making sure we're in the same directory as the `mkdocs.yml` config file, and then running the `mkdocs serve` command:
 
-    $ mkdocs serve
-	Running at: http://127.0.0.1:8000/
+```bash
+$ mkdocs serve
+Running at: http://127.0.0.1:8000/
+```
 
 Open up [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser, and you'll see the index page being displayed:
 
@@ -99,14 +109,18 @@ Go ahead and edit the `doc/index.md` document, and change the initial heading to
 
 Let's also add a second page to our documentation:
 
-    $ curl 'jaspervdj.be/lorem-markdownum/markdown.txt' > docs/about.md
+```bash
+$ curl 'jaspervdj.be/lorem-markdownum/markdown.txt' > docs/about.md
+```
 
 We'd like our documentation site to include some navigation headers, so we'll edit the configuration file and add some information about the order and title to use for out headers:
 
-    site_name: MkLorum
-    pages:
-    - Home: index.md
-    - About: about.md
+```no-highlight
+site_name: MkLorum
+pages:
+- Home: index.md
+- About: about.md
+```
 
 Refresh the browser and you'll now see a navigation bar with `Home` and `About` headers.
 
@@ -114,12 +128,13 @@ Refresh the browser and you'll now see a navigation bar with `Home` and `About` 
 
 While we're here can also change the configuration file to alter how the documentation is displayed.  Let's go ahead and change the theme.  Edit the `mkdocs.yml` file to the following:
 
-    site_name: MkLorum
-    pages:
-    - Home: index.md
-    - About: about.md
-    theme: readthedocs
-
+```no-highlight
+site_name: MkLorum
+pages:
+- Home: index.md
+- About: about.md
+theme: readthedocs
+```
 
 Refresh the browser again, and you'll now see the ReadTheDocs theme being used.
 
@@ -129,24 +144,32 @@ Refresh the browser again, and you'll now see the ReadTheDocs theme being used.
 
 That's looking good.  We're ready to deploy the first pass of our `MkLorum` documentation now.  Let's build the documentation.
 
-    $ mkdocs build
+```bash
+$ mkdocs build
+```
 
 This will create a new directory, named `site`.  Let's take a look inside the directory:
 
-    $ ls site
-    about css fonts img index.html js
+```bash
+$ ls site
+about css fonts img index.html js
+```
 
 Notice that our source documentation has been output as two HTML files named `index.html` and `about/index.html`.  We also have various other media that's been copied into the `site` directory as part of the documentation theme.
 
 If you're using source code control such as `git` you probably don't want to check your documentation builds into the repository.  Add a line containing `site/` to your `.gitignore` file.
 
-    $ echo "site/" >> .gitignore
+```bash
+$ echo "site/" >> .gitignore
+```
 
 If you're using another source code control you'll want to check it's documentation on how to ignore specific directories.
 
 After some time, files may be removed from the documentation but they will still reside in the `site` directory. To remove those stale files, just run mkdocs with the `--clean` switch.
 
-    $ mkdocs build --clean
+```bash
+$ mkdocs build --clean
+```
 
 
 ## Deploying

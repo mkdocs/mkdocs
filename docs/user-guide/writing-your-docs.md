@@ -10,28 +10,34 @@ The [pages configuration](/user-guide/configuration.md#pages) in your `mkdocs.ym
 
 A simple pages configuration looks like this:
 
-    pages:
-    - 'index.md'
-    - 'about.md'
+```no-highlight
+pages:
+- 'index.md'
+- 'about.md'
+```
 
 With this example we will build two pages at the top level and they will automatically have their titles inferred from the filename. Assuming `docs_dir` has the default value, `docs`, the source files for this documentation would be `docs/index.md` and `docs/about.md`. To provide a custom name for these pages, they can be added before the filename.
 
-    pages:
-    - Home: 'index.md'
-    - About: 'about.md'
+```no-highlight
+pages:
+- Home: 'index.md'
+- About: 'about.md'
+```
 
 ### Multilevel documentation
 
 Subsections can be created by listing related pages together under a section title. For example:
 
-    pages:
-    - Home: 'index.md'
-    - User Guide:
-        - 'Writing your docs': 'user-guide/writing-your-docs.md'
-        - 'Styling your docs': 'user-guide/styling-your-docs.md'
-    - About:
-        - 'License': 'about/license.md'
-        - 'Release Notes': 'about/release-notes.md'
+```no-highlight
+pages:
+- Home: 'index.md'
+- User Guide:
+    - 'Writing your docs': 'user-guide/writing-your-docs.md'
+    - 'Styling your docs': 'user-guide/styling-your-docs.md'
+- About:
+    - 'License': 'about/license.md'
+    - 'Release Notes': 'about/release-notes.md'
+```
 
 With the above configuration we have three top level sections: Home, User Guide and About. Then under User Guide we have two pages, Writing your docs and Styling your docs. Under the About section we also have two pages, License and Release Notes.
 
@@ -44,41 +50,51 @@ Your documentation source should be written as regular Markdown files, and place
 
 The simplest project you can create will look something like this:
 
-    mkdocs.yml
-    docs/
-        index.md
+```no-highlight
+mkdocs.yml
+docs/
+    index.md
+```
 
 By convention your project homepage should always be named `index`.  Any of the following extensions may be used for your Markdown source files: `markdown`, `mdown`, `mkdn`, `mkd`, `md`.
 
 You can also create multi-page documentation, by creating several markdown files:
 
-    mkdocs.yml
-    docs/
-        index.md
-        about.md
-        license.md
+```no-highlight
+mkdocs.yml
+docs/
+    index.md
+    about.md
+    license.md
+```
 
 The file layout you use determines the URLs that are used for the generated pages.
 Given the above layout, pages would be generated for the following URLs:
 
-    /
-    /about/
-    /license/
+```no-highlight
+/
+/about/
+/license/
+```
 
 You can also include your Markdown files in nested directories if that better suits your documentation layout.
 
-    docs/
-        index.md
-        user-guide/getting-started.md
-        user-guide/configuration-options.md
-        license.md
+```no-highlight
+docs/
+    index.md
+    user-guide/getting-started.md
+    user-guide/configuration-options.md
+    license.md
+```
 
 Source files inside nested directories will cause pages to be generated with nested URLs, like so:
 
-    /
-    /user-guide/getting-started/
-    /user-guide/configuration-options/
-    /license/
+```no-highlight
+/
+/user-guide/getting-started/
+/user-guide/configuration-options/
+/license/
+```
 
 
 ## Linking documents
@@ -109,22 +125,26 @@ As well as the Markdown source files, you can also include other file types in y
 
 For example, if your project documentation needed to include a [GitHub pages CNAME file](https://help.github.com/articles/setting-up-a-custom-domain-with-pages#setting-the-domain-in-your-repo) and a PNG formatted screenshot image then your file layout might look as follows:
 
-    mkdocs.yml
-    docs/
-        CNAME
-        index.md
-        about.md
-        license.md
-        img/
-            screenshot.png
+```no-highlight
+mkdocs.yml
+docs/
+    CNAME
+    index.md
+    about.md
+    license.md
+    img/
+        screenshot.png
+```
 
 To include images in your documentation source files, simply use any of the regular Markdown image syntaxes:
 
-    Cupcake indexer is a snazzy new project for indexing small cakes.
+```Markdown
+Cupcake indexer is a snazzy new project for indexing small cakes.
 
-    ![Screenshot](img/screenshot.png)
+![Screenshot](img/screenshot.png)
 
-    *Above: Cupcake indexer in progress*
+*Above: Cupcake indexer in progress*
+```
 
 You image will now be embedded when you build the documentation, and should also be previewed if you're working on the documentation with a Markdown editor.
 
@@ -136,7 +156,7 @@ MkDocs supports the following Markdown extensions.
 
 A simple table looks like this:
 
-```text
+```no-highlight
 First Header | Second Header | Third Header
 ------------ | ------------- | ------------
 Content Cell | Content Cell  | Content Cell
@@ -145,7 +165,7 @@ Content Cell | Content Cell  | Content Cell
 
 If you wish, you can add a leading and tailing pipe to each line of the table:
 
-```text
+```no-highlight
 | First Header | Second Header | Third Header |
 | ------------ | ------------- | ------------ |
 | Content Cell | Content Cell  | Content Cell |
@@ -154,7 +174,7 @@ If you wish, you can add a leading and tailing pipe to each line of the table:
 
 Specify alignment for each column by adding colons to separator lines:
 
-```text
+```no-highlight
 First Header | Second Header | Third Header
 :----------- | :-----------: | -----------:
 Left         | Center        | Right
@@ -165,17 +185,21 @@ Left         | Center        | Right
 
 Start with a line containing 3 or more backtick \` characters, and ends with the first line with the same number of backticks \`:
 
-    ```
-    Fenced code blocks are like Stardard
-    Markdown’s regular code blocks, except that
-    they’re not indented and instead rely on a
-    start and end fence lines to delimit the code
-    block.
-    ```
+```no-highlight
+ ```
+ Fenced code blocks are like Stardard
+ Markdown’s regular code blocks, except that
+ they’re not indented and instead rely on a
+ start and end fence lines to delimit the code
+ block.
+ ```
+```
 
 With the approach, the language can be specified on the first line after the backticks:
 
-    ```python
-    def fn():
+```no-highlight
+ ```python
+ def fn():
      pass
-    ```
+ ```
+```
