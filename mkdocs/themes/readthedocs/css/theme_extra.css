@@ -124,3 +124,15 @@ code.cs, code.c {
 .wy-menu-vertical li ul.subnav ul.subnav{
     padding-left: 1em;
 }
+
+
+/*
+ * Improve inline code blocks within admonitions.
+ *
+ * https://github.com/mkdocs/mkdocs/issues/656
+ */
+ div.admonition code {
+  color: #404040;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.7);
+}
