@@ -8,13 +8,16 @@ and structure of the site and pages in the site.
 """
 
 from __future__ import unicode_literals
-import os
-import sys
-import shutil
+
+import logging
 import markdown
+import os
+import pkg_resources
+import shutil
+import sys
 import yaml
 
-from mkdocs import toc
+from mkdocs import toc, exceptions
 
 try:                                                        # pragma: no cover
     from urllib.parse import urlparse, urlunparse, urljoin  # noqa
@@ -35,6 +38,8 @@ else:                           # pragma: no cover
     string_types = basestring,  # noqa
     text_type = unicode         # noqa
 
+log = logging.getLogger(__name__)
+
 
 def yaml_load(source, loader=yaml.Loader):
     """
@@ -45,24 +50,32 @@ def yaml_load(source, loader=yaml.Loader):
     """
 
     def construct_yaml_str(self, node):
-        """Override the default string handling function to always return unicode objects."""
+        """
+        Override the default string handling function to always return
+        unicode objects.
+        """
         return self.construct_scalar(node)
 
     class Loader(loader):
-        """Define a custom loader derived from the global loader to leave the global loader unaltered."""
+        """
+        Define a custom loader derived from the global loader to leave the
+        global loader unaltered.
+        """
 
-    # Attach our unicode constructor to our custom loader ensuring all strings will be unicode on translation.
+    # Attach our unicode constructor to our custom loader ensuring all strings
+    # will be unicode on translation.
     Loader.add_constructor('tag:yaml.org,2002:str', construct_yaml_str)
 
     try:
         return yaml.load(source, Loader)
     finally:
-        # TODO: Remove this when external calls are properly cleaning up file objects.
-        # Some mkdocs internal calls, sometimes in test lib, will load configs
-        # with a file object but never close it.  On some systems, if a delete
-        # action is performed on that file without Python closing that object,
-        # there will be an access error. This will process the file and close it
-        # as there should be no more use for the file once we process the yaml content.
+        # TODO: Remove this when external calls are properly cleaning up file
+        # objects. Some mkdocs internal calls, sometimes in test lib, will
+        # load configs with a file object but never close it.  On some
+        # systems, if a delete action is performed on that file without Python
+        # closing that object, there will be an access error. This will
+        # process the file and close it as there should be no more use for the
+        # file once we process the yaml content.
         if hasattr(source, 'close'):
             source.close()
 
@@ -70,7 +83,8 @@ def yaml_load(source, loader=yaml.Loader):
 def reduce_list(data_set):
     """ Reduce duplicate items in a list and preserve order """
     seen = set()
-    return [item for item in data_set if item not in seen and not seen.add(item)]
+    return [item for item in data_set if
+            item not in seen and not seen.add(item)]
 
 
 def copy_file(source_path, output_path):
@@ -335,10 +349,37 @@ def convert_markdown(markdown_source, extensions=None, extension_configs=None):
     return (html_content, table_of_contents, meta)
 
 
+def get_themes():
+    """Return a dict of theme names and their locations"""
+
+    themes = {}
+    builtins = pkg_resources.get_entry_map(dist='mkdocs', group='mkdocs.themes')
+
+    for theme in pkg_resources.iter_entry_points(group='mkdocs.themes'):
+
+        if theme.name in builtins and theme.dist.key != 'mkdocs':
+            raise exceptions.ConfigurationError(
+                "The theme {0} is a builtin theme but {1} provides a theme "
+                "with the same name".format(theme.name, theme.dist.key))
+
+        elif theme.name in themes:
+            multiple_packages = [themes[theme.name].dist.key, theme.dist.key]
+            log.warning("The theme %s is provided by the Python packages "
+                        "'%s'. The one in %s will be used.",
+                        theme.name, ','.join(multiple_packages), theme.dist.key)
+
+        themes[theme.name] = theme
+
+    themes = dict((name, os.path.dirname(os.path.abspath(theme.load().__file__)))
+                  for name, theme in themes.items())
+
+    return themes
+
+
 def get_theme_names():
     """Return a list containing all the names of all the builtin themes."""
 
-    return os.listdir(os.path.join(os.path.dirname(__file__), '..', 'themes'))
+    return get_themes().keys()
 
 
 def filename_to_title(filename):

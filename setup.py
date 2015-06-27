@@ -31,22 +31,6 @@ def get_packages(package):
             if os.path.exists(os.path.join(dirpath, '__init__.py'))]
 
 
-def get_package_data(package):
-    """
-    Return all files under the root package, that are not in a
-    package themselves.
-    """
-    walk = [(dirpath.replace(package + os.sep, '', 1), filenames)
-            for dirpath, dirnames, filenames in os.walk(package)
-            if not os.path.exists(os.path.join(dirpath, '__init__.py'))]
-
-    filepaths = []
-    for base, filenames in walk:
-        filepaths.extend([os.path.join(base, filename)
-                          for filename in filenames])
-    return {package: filepaths}
-
-
 if sys.argv[-1] == 'publish':
     if os.system("pip freeze | grep wheel"):
         print("wheel not installed.\nUse `pip install wheel`.\nExiting.")
@@ -72,12 +56,14 @@ setup(
     author='Tom Christie',
     author_email='tom@tomchristie.com',  # SEE NOTE BELOW (*)
     packages=get_packages("mkdocs"),
-    package_data=get_package_data("mkdocs"),
+    include_package_data=True,
     install_requires=[
         'click>=4.0',
         'Jinja2>=2.7.1',
         'livereload>=2.3.2',
         'Markdown>=2.3.1,<2.5' if PY26 else 'Markdown>=2.3.1',
+        'mkdocs-bootstrap>=0.1.1',
+        'mkdocs-bootswatch>=0.1.0',
         'PyYAML>=3.10',
         'tornado>=4.1',
     ],
@@ -85,6 +71,10 @@ setup(
         'console_scripts': [
             'mkdocs = mkdocs.cli:cli',
         ],
+        'mkdocs.themes': [
+            'mkdocs = mkdocs.themes.mkdocs',
+            'readthedocs = mkdocs.themes.readthedocs',
+        ]
     },
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -104,7 +94,7 @@ setup(
         'Topic :: Documentation',
         'Topic :: Text Processing',
     ],
-    zip_safe=False
+    zip_safe=False,
 )
 
 # (*) Please direct queries to the discussion group:

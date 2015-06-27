@@ -101,7 +101,7 @@ class ConfigTests(unittest.TestCase):
             dict(),  # default theme
             {"theme": "readthedocs"},  # builtin theme
             {"theme_dir": mytheme},  # custom only
-            {"theme": "cosmo", "theme_dir": custom},  # builtin and custom
+            {"theme": "readthedocs", "theme_dir": custom},  # builtin and custom
         ]
 
         abs_path = os.path.abspath(os.path.dirname(__file__))
@@ -114,7 +114,7 @@ class ConfigTests(unittest.TestCase):
             [os.path.join(theme_dir, 'mkdocs'), search_asset_dir],
             [os.path.join(theme_dir, 'readthedocs'), search_asset_dir],
             [mytheme, search_asset_dir],
-            [custom, os.path.join(theme_dir, 'cosmo'), search_asset_dir],
+            [custom, os.path.join(theme_dir, 'readthedocs'), search_asset_dir],
         )
 
         for config_contents, result in zip(configs, results):
