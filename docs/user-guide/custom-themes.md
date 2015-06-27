@@ -4,6 +4,15 @@ A guide to creating and distributing custom themes.
 
 ---
 
+When creating a new theme, you can either follow the steps in this guide to
+create one from scratch or you can download the `mkdocs-basic-theme` as a
+basic, yet complete, theme with all the boilerplate required. **You can find
+this base theme on [GitHub](https://github.com/mkdocs/mkdocs-basic-theme)**.
+It contains detailed comments in the code to describe the different features
+and their usage.
+
+## Creating a custom theme
+
 The bare minimum required for a custom theme is a `base.html` [Jinja2
 template] file. This should be placed in a directory which will be the
 `theme_dir` and it should be created next to the `mkdocs.yml` configuration
