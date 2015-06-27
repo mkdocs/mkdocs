@@ -41,8 +41,6 @@ pages:
 
 With the above configuration we have three top level sections: Home, User Guide and About. Then under User Guide we have two pages, Writing your docs and Styling your docs. Under the About section we also have two pages, License and Release Notes.
 
-*Note:* At present MkDocs only supports a second level of navigation.
-
 
 ## File layout
 
