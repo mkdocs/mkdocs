@@ -332,6 +332,13 @@ class Extras(OptionallyRequired):
             dirs.sort()
             for filename in sorted(filenames):
                 fullpath = os.path.join(dirpath, filename)
+
+                # Some editors (namely Emacs) will create temporary symlinks
+                # for internal magic. We can just ignore these files.
+                if os.path.islink(fullpath):
+                    if not os.path.exists(os.readlink(fullpath)):
+                        continue
+
                 relpath = os.path.normpath(os.path.relpath(fullpath, docs_dir))
                 if self.file_match(relpath):
                     yield relpath
