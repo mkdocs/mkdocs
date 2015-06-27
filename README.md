@@ -1,4 +1,8 @@
-# MkDocs - Project documentation with Markdown
+# MkDocs
+
+## Project documentation with Markdown
+
+---
 
 [![PyPI Downloads][pypi-dl-image]][pypi-dl-link]
 [![PyPI Version][pypi-v-image]][pypi-v-link]
