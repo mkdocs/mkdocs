@@ -16,6 +16,34 @@ You can determine your currently installed version using `mkdocs --version`:
 
 ## Version 0.15.0 (2015-??-??)
 
+### Major Additions
+
+#### Add support for installable themes
+
+MkDocs now supports themes that are distributed via Python packages. With this
+addition, the Bootstrap and Bootswatch themes have been moved to external git
+repositories and python packages. See their individual documentation for more
+details about these specific themes.
+
+- [MkDocs Bootstrap]
+- [MkDocs Bootswatch]
+
+[MkDocs Bootstrap]: http://mkdocs.github.io/mkdocs-bootstrap/
+[MkDocs Bootswatch]: http://mkdocs.github.io/mkdocs-bootswatch/
+
+They will be included with MkDocs by default until the 1.0 release. After that
+they will be installable with pip: `pip install mkdocs-bootstrap` and `pip
+install mkdocs-bootswatch`
+
+See the documentation for [Styling your docs] for more information about using
+and customising themes and [Custom themes] for creating and distributing new
+themes
+
+[Styling your docs]: /user-guide/styling-your-docs.md
+[Custom themes]: /user-guide/custom-themes.md
+
+### Other Changes and Additions
+
 * Fix issues when using absolute links to Markdown files. (#628)
 * Add support for [site_description] and [site_author] to the [ReadTheDocs]
   theme. (#631)
@@ -23,7 +51,7 @@ You can determine your currently installed version using `mkdocs --version`:
 
 [site_description]: /user-guide/configuration.md#site_description
 [site_author]: /user-guide/configuration.md#site_author
-[ReadTheDocs]: /user-guide/styling-your-docs.md#read-the-docs
+[ReadTheDocs]: /user-guide/styling-your-docs.md#readthedocs
 
 ## Version 0.14.0 (2015-06-09)
 
