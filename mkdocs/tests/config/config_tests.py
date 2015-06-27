@@ -146,11 +146,16 @@ class ConfigTests(unittest.TestCase):
         tmp_dir = tempfile.mkdtemp()
         try:
             open(os.path.join(tmp_dir, 'index.md'), 'w').close()
+            open(os.path.join(tmp_dir, 'getting-started.md'), 'w').close()
             open(os.path.join(tmp_dir, 'about.md'), 'w').close()
-            os.makedirs(os.path.join(tmp_dir, 'sub'))
-            open(os.path.join(tmp_dir, 'sub', 'sub.md'), 'w').close()
-            os.makedirs(os.path.join(tmp_dir, 'sub', 'sub2'))
-            open(os.path.join(tmp_dir, 'sub', 'sub2', 'sub2.md'), 'w').close()
+            os.makedirs(os.path.join(tmp_dir, 'subA'))
+            open(os.path.join(tmp_dir, 'subA', 'index.md'), 'w').close()
+            os.makedirs(os.path.join(tmp_dir, 'subA', 'subA1'))
+            open(os.path.join(tmp_dir, 'subA', 'subA1', 'index.md'), 'w').close()
+            os.makedirs(os.path.join(tmp_dir, 'subC'))
+            open(os.path.join(tmp_dir, 'subC', 'index.md'), 'w').close()
+            os.makedirs(os.path.join(tmp_dir, 'subB'))
+            open(os.path.join(tmp_dir, 'subB', 'index.md'), 'w').close()
             conf = config.Config(schema=config.DEFAULT_SCHEMA)
             conf.load_dict({
                 'site_name': 'Example',
@@ -160,11 +165,18 @@ class ConfigTests(unittest.TestCase):
             self.assertEqual([
                 'index.md',
                 'about.md',
-                {'Sub': [
-                    os.path.join('sub', 'sub.md'),
-                    {'Sub2': [
-                        os.path.join('sub', 'sub2', 'sub2.md'),
+                'getting-started.md',
+                {'subA': [
+                    os.path.join('subA', 'index.md'),
+                    {'subA1': [
+                        os.path.join('subA', 'subA1', 'index.md')
                     ]}
+                ]},
+                {'subB': [
+                    os.path.join('subB', 'index.md')
+                ]},
+                {'subC': [
+                    os.path.join('subC', 'index.md')
                 ]}
             ], conf['pages'])
         finally:
