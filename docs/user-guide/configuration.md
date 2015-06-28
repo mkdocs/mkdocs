@@ -154,21 +154,28 @@ Lets you set the directory where the output HTML and other files are created.  T
 
 ### extra_css
 
-Set a list of CSS files to be included by the theme.
+Set a list of CSS files to be included by the theme. For example, the
+following example will include the the extra.css file within the css
+subdirectory in your [docs_dir](#docs_dir).
+
+    extra_css:
+    - css/extra.css
+    - css/second_extra.css
 
 **default**: By default `extra_css` will contain a list of all the CSS files found within the `docs_dir`, if none are found it will be `[]` (an empty list).
 
 
 ### extra_javascript
 
-Set a list of JavaScript files to be included by the theme.
+Set a list of JavaScript files to be included by the theme. See the example
+in [extra_css](#extra_css) for usage.
 
 **default**: By default `extra_javascript` will contain a list of all the JavaScript files found within the `docs_dir`, if none are found it will be `[]` (an empty list).
 
 
 ### extra_templates
 
-Set a list of templates to be built by MkDocs. To see more about writing templates for MkDocs read the documentation about [custom themes] and specifically the section about the [variables that are available] to templates.
+Set a list of templates to be built by MkDocs. To see more about writing templates for MkDocs read the documentation about [custom themes] and specifically the section about the [variables that are available] to templates. See the example in [extra_css](#extra_css) for usage.
 
 **default**: Unlike extra_css and extra_javascript, by default `extra_templates` will  be `[]` (an empty list).
 
@@ -176,6 +183,11 @@ Set a list of templates to be built by MkDocs. To see more about writing templat
 ### extra
 
 A set of key value pairs, where the values can be any valid YAML construct, that will be passed to the template. This allows for great flexibility when creating custom themes.
+
+For example, if you are using a theme that supports displaying the project version, you can pass it to the theme like this:
+
+    extra:
+        version: 1.0
 
 **default**: By default `extra` will be an empty key value mapping.
 
