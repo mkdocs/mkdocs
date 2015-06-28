@@ -71,7 +71,7 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
             theme=theme,
         )
         config['site_dir'] = tempdir
-        build(config, live_server=True)
+        build(config, live_server=True, clean_site_dir=True)
         return config
 
     # Perform the initial build
