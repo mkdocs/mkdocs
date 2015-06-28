@@ -2,11 +2,12 @@
 # coding: utf-8
 
 from __future__ import unicode_literals
+
 import unittest
 
 from mkdocs import nav
 from mkdocs import search
-from mkdocs.tests.base import dedent, markdown_to_toc
+from mkdocs.tests.base import dedent, markdown_to_toc, load_config
 
 
 def strip_whitespace(string):
@@ -106,9 +107,11 @@ class SearchTests(unittest.TestCase):
 
         pages = [
             {'Home': 'index.md'},
-            {'About': 'about.md'},
+            {'About': 'about/license.md'},
         ]
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(pages, load_config(
+            pages=pages
+        ))
 
         md = dedent("""
         # Heading 1

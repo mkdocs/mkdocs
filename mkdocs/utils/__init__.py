@@ -7,7 +7,7 @@ Nothing in this module should have an knowledge of config or the layout
 and structure of the site and pages in the site.
 """
 
-from __future__ import unicode_literals
+from __future__ import unicode_literals, absolute_import
 
 import logging
 import markdown
@@ -15,6 +15,7 @@ import os
 import pkg_resources
 import shutil
 import sys
+
 import yaml
 
 from mkdocs import toc, exceptions
@@ -338,15 +339,14 @@ def convert_markdown(markdown_source, extensions=None, extension_configs=None):
     )
     html_content = md.convert(markdown_source)
 
-    # On completely blank markdown files, no Meta or tox properties are added
+    # On completely blank markdown files, no toc property is added
     # to the generated document.
-    meta = getattr(md, 'Meta', {})
     toc_html = getattr(md, 'toc', '')
 
     # Post process the generated table of contents into a data structure
     table_of_contents = toc.TableOfContents(toc_html)
 
-    return (html_content, table_of_contents, meta)
+    return (html_content, table_of_contents)
 
 
 def get_themes():
@@ -413,20 +413,20 @@ def find_or_create_node(branch, key):
     return new_branch
 
 
-def nest_paths(paths):
+def nest_pages(pages):
     """
-    Given a list of paths, convert them into a nested structure that will match
+    Given a list of pages, convert them into a nested structure that will match
     the pages config.
     """
     nested = []
 
-    for path in paths:
+    for page in pages:
 
-        if os.path.sep not in path:
-            nested.append(path)
+        if os.path.sep not in page.input_path:
+            nested.append(page)
             continue
 
-        directory, _ = os.path.split(path)
+        directory, _ = os.path.split(page.input_path)
         parts = directory.split(os.path.sep)
 
         branch = nested
@@ -434,6 +434,6 @@ def nest_paths(paths):
             part = filename_to_title(part)
             branch = find_or_create_node(branch, part)
 
-        branch.append(path)
+        branch.append(page)
 
     return nested

@@ -1,8 +1,13 @@
+#!/usr/bin/env python
+# coding: utf-8
+
 from __future__ import unicode_literals
+
 import os
 
 from mkdocs import utils, legacy
 from mkdocs.config.base import Config, ValidationError
+from mkdocs import nav
 
 
 class BaseConfigOption(object):
@@ -208,10 +213,10 @@ class Dir(Type):
 
     def run_validation(self, value):
 
-        value = super(Dir, self).run_validation(value)
+        value = os.path.abspath(super(Dir, self).run_validation(value))
 
         if self.exists and not os.path.isdir(value):
-            raise ValidationError("The path {0} doesn't exist".format(value))
+            raise ValidationError("The path '{0}' doesn't exist".format(value))
 
         return os.path.abspath(value)
 
@@ -380,10 +385,10 @@ class Pages(Extras):
         # TODO: Remove in 1.0
         config_types = set(type(l) for l in value)
 
-        if config_types.issubset(set([utils.text_type, dict, str])):
+        if config_types.issubset(set([utils.text_type, dict])):
             return value
 
-        if config_types.issubset(set([utils.text_type, list, str])):
+        if config_types.issubset(set([utils.text_type, list])):
             return legacy.pages_compat_shim(value)
 
         raise ValidationError("Invalid pages config. {0} {1}".format(
@@ -394,18 +399,22 @@ class Pages(Extras):
     def post_validation(self, config, key_name):
 
         if config[key_name] is not None:
+            config[key_name] = nav.paths_to_pages(config[key_name],
+                                                  config['use_directory_urls'],
+                                                  config['docs_dir'])
             return
 
-        pages = []
-
+        paths = []
         for filename in self.walk_docs_dir(config['docs_dir']):
-
+            filename = utils.text_type(filename)
             if os.path.splitext(filename)[0] == 'index':
-                pages.insert(0, filename)
+                paths.insert(0, filename)
             else:
-                pages.append(filename)
+                paths.append(filename)
 
-        config[key_name] = utils.nest_paths(pages)
+        pages = nav.paths_to_pages(paths, config['use_directory_urls'],
+                                   config['docs_dir'])
+        config[key_name] = utils.nest_pages(pages)
 
 
 class NumPages(OptionallyRequired):

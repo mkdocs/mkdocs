@@ -5,13 +5,12 @@ from __future__ import unicode_literals
 
 import mock
 import os
-import unittest
 
 from mkdocs import nav, utils, exceptions
-from mkdocs.tests.base import dedent
+from mkdocs.tests.base import dedent, load_config, MockedMarkdownLoadingTestCase
 
 
-class UtilsTests(unittest.TestCase):
+class UtilsTests(MockedMarkdownLoadingTestCase):
     def test_html_path(self):
         expected_results = {
             'index.md': 'index.html',
@@ -57,7 +56,7 @@ class UtilsTests(unittest.TestCase):
             self.assertEqual(is_html, expected_result)
 
     def test_create_media_urls(self):
-        pages = [
+        config = load_config(pages=[
             {'Home': 'index.md'},
             {'About': 'about.md'},
             {'Sub': [
@@ -65,7 +64,7 @@ class UtilsTests(unittest.TestCase):
                 {'Sub About': 'about.md'},
 
             ]}
-        ]
+        ])
         expected_results = {
             'https://media.cdn.org/jq.js': 'https://media.cdn.org/jq.js',
             'http://media.cdn.org/jquery.js': 'http://media.cdn.org/jquery.js',
@@ -74,7 +73,7 @@ class UtilsTests(unittest.TestCase):
             'local/file/jquery.js': './local/file/jquery.js',
             'image.png': './image.png',
         }
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(config['pages'])
         for path, expected_result in expected_results.items():
             urls = utils.create_media_urls(site_navigation, [path])
             self.assertEqual(urls[0], expected_result)
@@ -83,14 +82,15 @@ class UtilsTests(unittest.TestCase):
         '''
         test special case where there's a sub/index.md page
         '''
-
-        site_navigation = nav.SiteNavigation([
+        config = load_config(pages=[
             {'Home': 'index.md'},
             {'Sub': [
                 {'Sub Home': '/subpage/index.md'},
 
             ]}
         ])
+
+        site_navigation = nav.SiteNavigation(config['pages'])
         site_navigation.url_context.set_current_url('/subpage/')
         site_navigation.file_context.current_file = "subpage/index.md"
 
@@ -158,7 +158,7 @@ class UtilsTests(unittest.TestCase):
 
         j = os.path.join
 
-        result = utils.nest_paths([
+        result = utils.nest_pages(nav.paths_to_pages([
             'index.md',
             j('user-guide', 'configuration.md'),
             j('user-guide', 'styling-your-docs.md'),
@@ -166,20 +166,28 @@ class UtilsTests(unittest.TestCase):
             j('about', 'contributing.md'),
             j('about', 'license.md'),
             j('about', 'release-notes.md'),
-        ])
+        ], False, 'docs'))
 
         self.assertEqual(
             result,
             [
-                'index.md',
+                nav.Page(None, '/index.html', 'index.md', 'docs'),
                 {'User guide': [
-                    j('user-guide', 'configuration.md'),
-                    j('user-guide', 'styling-your-docs.md'),
-                    j('user-guide', 'writing-your-docs.md')]},
+                    nav.Page(None, '/user-guide/configuration/index.html',
+                             j('user-guide', 'configuration.md'), 'docs'),
+                    nav.Page(None, '/user-guide/styling-your-docs/index.html',
+                             j('user-guide', 'styling-your-docs.md'), 'docs'),
+                    nav.Page(None, '/user-guide/writing-your-docs/index.html',
+                             j('user-guide', 'writing-your-docs.md'), 'docs')
+                ]},
                 {'About': [
-                    j('about', 'contributing.md'),
-                    j('about', 'license.md'),
-                    j('about', 'release-notes.md')]}
+                    nav.Page(None, '/about/contributing/index.html',
+                             j('about', 'contributing.md'), 'docs'),
+                    nav.Page(None, '/about/license/index.html',
+                             j('about', 'license.md'), 'docs'),
+                    nav.Page(None, '/about/release-notes/index.html',
+                             j('about', 'release-notes.md'), 'docs')
+                ]}
             ]
         )
 

@@ -2,27 +2,36 @@
 # coding: utf-8
 
 from __future__ import unicode_literals
+
+import os
+import shutil
 import tempfile
 import unittest
-import os
 
 from mkdocs import new
 
 
 class NewTests(unittest.TestCase):
 
-    def test_new(self):
+    def setUp(self):
 
-        tempdir = tempfile.mkdtemp()
-        os.chdir(tempdir)
+        self.old_cwd = os.getcwd()
+        self.tempdir = tempfile.mkdtemp()
+        os.chdir(self.tempdir)
+
+    def tearDown(self):
+        os.chdir(self.old_cwd)
+        shutil.rmtree(self.tempdir)
+
+    def test_new(self):
 
         new.new("myproject")
 
         expected_paths = [
-            os.path.join(tempdir, "myproject"),
-            os.path.join(tempdir, "myproject", "mkdocs.yml"),
-            os.path.join(tempdir, "myproject", "docs"),
-            os.path.join(tempdir, "myproject", "docs", "index.md"),
+            os.path.join(self.tempdir, "myproject"),
+            os.path.join(self.tempdir, "myproject", "mkdocs.yml"),
+            os.path.join(self.tempdir, "myproject", "docs"),
+            os.path.join(self.tempdir, "myproject", "docs", "index.md"),
         ]
 
         for expected_path in expected_paths:

@@ -10,7 +10,9 @@ from jinja2.exceptions import TemplateNotFound
 import jinja2
 import json
 
-from mkdocs import nav, search, utils
+from mkdocs import nav
+from mkdocs import search
+from mkdocs import utils
 from mkdocs.relative_path_ext import RelativePathExtension
 import mkdocs
 
@@ -164,30 +166,16 @@ def build_template(template_name, env, config, site_navigation=None):
 
 def _build_page(page, config, site_navigation, env, dump_json):
 
-    # Read the input file
-    input_path = os.path.join(config['docs_dir'], page.input_path)
-
-    try:
-        input_content = io.open(input_path, 'r', encoding='utf-8').read()
-    except IOError:
-        log.error('file not found: %s', input_path)
-        raise
-
-    # Process the markdown text
-    html_content, table_of_contents, meta = convert_markdown(
-        markdown_source=input_content,
-        config=config,
-        site_navigation=site_navigation
-    )
+    html_content, toc = convert_markdown(page.markdown, config, site_navigation)
 
     context = get_global_context(site_navigation, config)
     context.update(get_page_context(
-        page, html_content, table_of_contents, meta, config
+        page, html_content, toc, page.meta, config
     ))
 
     # Allow 'template:' override in md source files.
-    if 'template' in meta:
-        template = env.get_template(meta['template'][0])
+    if 'template' in page.meta:
+        template = env.get_template(page.meta['template'][0])
     else:
         template = env.get_template('base.html')
 
@@ -208,7 +196,7 @@ def _build_page(page, config, site_navigation, env, dump_json):
     else:
         utils.write_file(output_content.encode('utf-8'), output_path)
 
-    return html_content, table_of_contents, meta
+    return html_content, toc, page.meta
 
 
 def build_extra_templates(extra_templates, config, site_navigation=None):
