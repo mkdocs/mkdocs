@@ -13,6 +13,12 @@ env:
 - TOXENV=py34-integration
 - TOXENV=py34-min-req
 - TOXENV=py34-unittests
+- TOXENV=pypy-integration
+- TOXENV=pypy-min-req
+- TOXENV=pypy-unittests
+- TOXENV=pypy3-integration
+- TOXENV=pypy3-min-req
+- TOXENV=pypy3-unittests
 - TOXENV=flake8
 install:
 - pip install tox
