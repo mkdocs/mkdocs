@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import os
+import tempfile
 import unittest
 
 from mkdocs import utils
@@ -250,6 +251,25 @@ class ExtrasTest(unittest.TestCase):
         option = config_options.Extras(utils.is_html_file)
         self.assertRaises(config_options.ValidationError,
                           option.validate, {})
+
+    def test_talk(self):
+
+        option = config_options.Extras(utils.is_markdown_file)
+
+        tmp_dir = tempfile.mkdtemp()
+
+        f1 = os.path.join(tmp_dir, 'file1.md')
+        f2 = os.path.join(tmp_dir, 'file2.md')
+
+        open(f1, 'a').close()
+
+        # symlink isn't available on Python 2 on Windows.
+        if hasattr(os, 'symlink'):
+            os.symlink('/path/that/doesnt/exist', f2)
+
+        files = list(option.walk_docs_dir(tmp_dir))
+
+        self.assertEqual(['file1.md', ], files)
 
 
 class PagesTest(unittest.TestCase):
