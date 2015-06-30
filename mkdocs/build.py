@@ -237,7 +237,7 @@ def build_pages(config, dump_json=False):
                   "search.html file. Assuming the theme implements search "
                   "within a modal.")
 
-    build_template('index.xml', env, config, site_navigation)
+    build_template('sitemap.xml', env, config, site_navigation)
 
     build_extra_templates(config['extra_templates'], config, site_navigation)
 
