@@ -131,17 +131,6 @@ def get_page_context(page, content, toc, meta, config):
     }
 
 
-def build_sitemap(config, env, site_navigation):
-
-    log.debug("Building sitemap.xml")
-
-    template = env.get_template('sitemap.xml')
-    context = get_global_context(site_navigation, config)
-    output_content = template.render(context)
-    output_path = os.path.join(config['site_dir'], 'sitemap.xml')
-    utils.write_file(output_content.encode('utf-8'), output_path)
-
-
 def build_template(template_name, env, config, site_navigation=None):
 
     log.debug("Building template: %s", template_name)
@@ -247,7 +236,8 @@ def build_pages(config, dump_json=False):
         log.debug("Search is enabled but the theme doesn't contain a "
                   "search.html file. Assuming the theme implements search "
                   "within a modal.")
-    build_sitemap(config, env, site_navigation)
+
+    build_template('sitemap.xml', env, config, site_navigation)
 
     build_extra_templates(config['extra_templates'], config, site_navigation)
 
