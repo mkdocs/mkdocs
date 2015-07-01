@@ -45,7 +45,7 @@ themes
 ### Other Changes and Additions
 
 * Fix issues when using absolute links to Markdown files. (#628)
-* Deprecate support of Python 2.6, pending removal in 0.16.0. (#165)
+* Deprecate support of Python 2.6, pending removal in 1.0.0. (#165)
 * Add support for [site_description] and [site_author] to the [ReadTheDocs]
   theme. (#631)
 * Bugfix: Ensure consistent ordering of auto-populated pages. (#638)
