@@ -7,13 +7,10 @@ import click
 import socket
 
 from mkdocs import __version__
-from mkdocs import build
-from mkdocs import gh_deploy
-from mkdocs import new
-from mkdocs import serve
 from mkdocs import utils
 from mkdocs import exceptions
 from mkdocs.config import load_config
+from mkdocs.commands import build, gh_deploy, new, serve
 
 log = logging.getLogger(__name__)
 

@@ -3,8 +3,8 @@ from __future__ import unicode_literals
 import unittest
 import mock
 
-from mkdocs import gh_deploy
 from mkdocs.config import load_config
+from mkdocs.commands import gh_deploy
 
 
 class TestGitHubDeploy(unittest.TestCase):
@@ -63,10 +63,10 @@ class TestGitHubDeploy(unittest.TestCase):
         expected = (None, None)
         self.assertEqual(expected, gh_deploy._get_remote_url('origin'))
 
-    @mock.patch('mkdocs.gh_deploy._is_cwd_git_repo', return_value=True)
-    @mock.patch('mkdocs.gh_deploy._get_current_sha', return_value='shashas')
-    @mock.patch('mkdocs.gh_deploy._get_remote_url', return_value=(None, None))
-    @mock.patch('mkdocs.gh_deploy.ghp_import.ghp_import')
+    @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
+    @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
+    @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(None, None))
+    @mock.patch('mkdocs.commands.gh_deploy.ghp_import.ghp_import')
     def test_deploy(self, mock_import, get_remote, get_sha, is_repo):
 
         config = load_config(
@@ -74,10 +74,10 @@ class TestGitHubDeploy(unittest.TestCase):
         )
         gh_deploy.gh_deploy(config)
 
-    @mock.patch('mkdocs.gh_deploy._is_cwd_git_repo', return_value=True)
-    @mock.patch('mkdocs.gh_deploy._get_current_sha', return_value='shashas')
-    @mock.patch('mkdocs.gh_deploy._get_remote_url', return_value=(None, None))
-    @mock.patch('mkdocs.gh_deploy.ghp_import.ghp_import')
+    @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
+    @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
+    @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(None, None))
+    @mock.patch('mkdocs.commands.gh_deploy.ghp_import.ghp_import')
     @mock.patch('os.path.isfile', return_value=False)
     def test_deploy_no_cname(self, mock_isfile, mock_import, get_remote,
                              get_sha, is_repo):
@@ -87,11 +87,11 @@ class TestGitHubDeploy(unittest.TestCase):
         )
         gh_deploy.gh_deploy(config)
 
-    @mock.patch('mkdocs.gh_deploy._is_cwd_git_repo', return_value=True)
-    @mock.patch('mkdocs.gh_deploy._get_current_sha', return_value='shashas')
-    @mock.patch('mkdocs.gh_deploy._get_remote_url', return_value=(
+    @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
+    @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
+    @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(
         u'git@', u'mkdocs/mkdocs.git'))
-    @mock.patch('mkdocs.gh_deploy.ghp_import.ghp_import')
+    @mock.patch('mkdocs.commands.gh_deploy.ghp_import.ghp_import')
     def test_deploy_hostname(self, mock_import, get_remote, get_sha, is_repo):
 
         config = load_config(
