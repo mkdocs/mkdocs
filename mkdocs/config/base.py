@@ -51,6 +51,7 @@ class Config(utils.UserDict):
                 value = self.get(key)
                 self[key] = config_option.validate(value)
                 warnings.extend([(key, w) for w in config_option.warnings])
+                config_option.reset_warnings()
             except ValidationError as e:
                 failed.append((key, e))
 
