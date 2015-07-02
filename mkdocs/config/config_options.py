@@ -17,6 +17,9 @@ class BaseConfigOption(object):
     def validate(self, value):
         return self.run_validation(value)
 
+    def reset_warnings(self):
+        self.warnings = []
+
     def pre_validation(self, config, key_name):
         """
         After all options have passed validation, perform a post validation
