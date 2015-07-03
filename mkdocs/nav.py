@@ -41,6 +41,9 @@ class SiteNavigation(object):
     def __iter__(self):
         return iter(self.nav_items)
 
+    def __len__(self):
+        return len(self.nav_items)
+
     def walk_pages(self):
         """
         Returns each page in the site in turn.
