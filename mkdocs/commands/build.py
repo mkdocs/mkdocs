@@ -269,25 +269,28 @@ def build_pages(config, dump_json=False, dirty=False):
 
     # TODO: remove DeprecationContext in v1.0 when all deprecated vars have been removed
     from jinja2.runtime import Context
-    deprecated_vars = [
-        'page_title',
-        'content',
-        'toc',
-        'meta',
-        'current_page',
-        'canonical_url',
-        'previous_page',
-        'next_page'
-    ]
+    deprecated_vars = {
+        'page_title': 'page.title',
+        'content': 'page.content',
+        'toc': 'page.toc',
+        'meta': 'page.meta',
+        'current_page': 'page.current_page',
+        'canonical_url': 'page.canonical_url',
+        'previous_page': 'page.previous_page',
+        'next_page': 'page.next_page',
+        'current_page': 'page',
+        'include_nav': 'nav|length>1',
+        'include_next_prev': "(page.next_page or page.previous_page)"
+    }
 
     class DeprecationContext(Context):
         def resolve(self, key):
-            """ Log a warning when acessing any deprecated variable name. """
+            """ Log a warning when accessing any deprecated variable name. """
             if key in deprecated_vars:
-                replacement = "page" if key == 'current_page' else "page.{0}".format(key)
                 log.warn(
-                    "Template variable warning: '{0}' is being deprecated and will not be "
-                    "available in a future version. Use '{1}' instead.".format(key, replacement)
+                    "Template variable warning: '{0}' is being deprecated "
+                    "and will not be available in a future version. Use "
+                    "'{1}' instead.".format(key, deprecated_vars[key])
                 )
             return super(DeprecationContext, self).resolve(key)
 

@@ -27,19 +27,15 @@ The current and past members of the MkDocs team.
 
 #### Template variables refactored. (#874)
 
+##### Page Context
+
 Page specific variable names in the template context have been refactored as
 defined in [Custom Themes](../user-guide/custom-themes/#page). The
 old variable names will issue a warning but continue to work for version 0.16,
 but may be removed in a future version.
 
-No global variables were altered except `page_description`. Previously
-its value was altered programicaly based on whether the current
-page was the homepage. Now it simply maps to `config['site_description']`.
-Use `page.is_homepage` in the template to conditionally change the
-description.
-
-Any of the following old variables should be updated to the new ones in user
-created and third-party templates:
+Any of the following old page variables should be updated to the new ones in
+user created and third-party templates:
 
 | Old Variable Name | New Variable Name   |
 | ----------------- | ------------------- |
@@ -60,6 +56,26 @@ created and third-party templates:
 [page.canonical_url]: ../user-guide/custom-themes/#pagecanonical_url
 [page.previous_page]: ../user-guide/custom-themes/#pageprevious_page
 [page.next_page]: ../user-guide/custom-themes/#pagenext_page
+
+##### Global Context
+
+Additionaly, a number of global variables have been altered and/or deprecated
+and user created and third-party templates should be updated as outlined below:
+
+Previously, the global variable `include_nav` was altered programicaly based on
+the number of pages in the nav. The variable will issue a warning but continue
+to work for version 0.16, but may be removed in a future version. Use
+`{% if nav|length>1 %}` instead.
+
+Previously, the global variable `include_next_prev` was altered programicaly
+based on the number of pages in the nav. The variable will issue a warning but
+continue to work for version 0.16, but may be removed in a future version. Use
+`{% if page.next_page or page.previous_page %}` instead.
+
+Previously the global variable `page_description` was altered programicaly
+based on whether the current page was the homepage. Now it simply maps to
+`config['site_description']`. Use `{% if page.is_homepage %}` in the template to
+conditionally change the description.
 
 #### Increased Template Customization. (#607)
 

@@ -31,8 +31,6 @@ extra_javascript: ["tweak.js", ]
 
 extra_templates: ["custom.html", ]
 
-include_nav: true
-include_next_prev: false
 
 markdown_extensions:
     - toc:

@@ -122,8 +122,6 @@ site_url          | [site_url]            |
 extra_css         | [extra_css]           |
 extra_javascript  | [extra_javascript]    |
 extra             | [extra]               |
-include_nav       | [include_nav]         |
-include_next_prev | [include_next_prev]   |
 copyright         | [copyright]           |
 google_analytics  | [google_analytics]    |
 
@@ -137,8 +135,6 @@ google_analytics  | [google_analytics]    |
 [extra_css]: ./configuration.md#extra_css
 [extra_javascript]: ./configuration.md#extra_javascript
 [extra]: ./configuration.md#extra
-[include_nav]: ./configuration.md#include_nav
-[include_next_prev]: ./configuration.md#include_next_prev
 [copyright]: ./configuration.md#copyright
 [google_analytics]: ./configuration.md#google_analytics
 

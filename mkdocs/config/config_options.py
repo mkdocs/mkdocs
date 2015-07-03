@@ -468,6 +468,16 @@ class NumPages(OptionallyRequired):
         super(NumPages, self).__init__(**kwargs)
         self.at_lest = at_lest
 
+    def pre_validation(self, config, key_name):
+        # TODO: delete deprecated `NumPages` class in version 1.0
+        # Numpages is only used by `include_nav` and `include_next_prev`,
+        # which are both deprecated, so we can delete the entire Option type.
+        if config.get(key_name) is not None:
+            # Only issue warning if option is defined by user.
+            warning = ('The configuration option {0} has been deprecated and will '
+                       'be removed in a future release of MkDocs.').format(key_name)
+            self.warnings.append(warning)
+
     def post_validation(self, config, key_name):
 
         if config[key_name] is not None:
