@@ -76,9 +76,6 @@ def get_global_context(nav, config):
         'extra_css': extra_css,
         'extra_javascript': extra_javascript,
 
-        'include_nav': config['include_nav'],
-        'include_next_prev': config['include_next_prev'],
-
         'copyright': config['copyright'],
         'google_analytics': config['google_analytics'],
 

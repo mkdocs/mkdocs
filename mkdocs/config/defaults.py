@@ -86,11 +86,6 @@ DEFAULT_SCHEMA = (
     # Jinja2 and the global context.
     ('extra_templates', config_options.Extras()),
 
-    # Determine if the site should include the nav and next/prev elements.
-    # Default, True if the site has more than one page, False otherwise.
-    ('include_nav', config_options.NumPages()),
-    ('include_next_prev', config_options.NumPages()),
-
     # PyMarkdown extension names.
     ('markdown_extensions', config_options.MarkdownExtensions(
         builtins=['meta', 'toc', 'tables', 'fenced_code'],
