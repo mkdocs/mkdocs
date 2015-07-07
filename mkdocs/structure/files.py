@@ -30,15 +30,19 @@ class Files(object):
 
 
 class File(object):
-    def __init__(self, from_dir, path, filename):
+    def __init__(self, from_dir, path, filename=None):
+        # The filename may already been parsed out of the path,
+        # but if not then determine it now.
+        if filename is None:
+            filename = os.path.basename(path)
+
         root, extension = os.path.splitext(filename)
-        self.root = root
+        self.root = root  # The filename, without any extension.
         self.extension = extension.lower()
 
         self.input_path = path
         self.full_input_path = os.path.normpath(os.path.join(from_dir, self.input_path))
         self.output_path = self.get_output_path()
-        #self.full_output_path = os.path.normpath(os.path.join(to_dir, self.output_path))
 
     def get_output_path(self):
         """
