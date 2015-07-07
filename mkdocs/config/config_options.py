@@ -124,20 +124,32 @@ class Type(OptionallyRequired):
 
 
 class Deprecated(BaseConfigOption):
+    """
+    Deprecated Config Option
 
-    def __init__(self, moved_to=None):
+    Handle deprecated config options. It supports
+    """
+
+    def __init__(self, moved_to=None, warning=None):
         super(Deprecated, self).__init__()
         self.default = None
         self.moved_to = moved_to
+        self.warning = warning
 
     def pre_validation(self, config, key_name):
 
-        if config.get(key_name) is None or self.moved_to is None:
+        if config.get(key_name) is None:
             return
 
-        warning = ('The configuration option {0} has been deprecated and will '
-                   'be removed in a future release of MkDocs.')
-        self.warnings.append(warning)
+        warning = ("The configuration option '{0} has been deprecated and will "
+                   "be removed in a future release of MkDocs.").format(key_name)
+        if self.moved_to is None and self.warning is None:
+            self.warnings.append(warning)
+        elif self.warning:
+            self.warnings.append(self.warning)
+
+        if self.moved_to is None:
+            return
 
         if '.' not in self.moved_to:
             target = config
