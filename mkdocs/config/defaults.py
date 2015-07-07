@@ -85,7 +85,6 @@ DEFAULT_SCHEMA = (
     # Similar to the above, but each template (HTML or XML) will be build with
     # Jinja2 and the global context.
     ('extra_templates', config_options.Extras()),
-
     # PyMarkdown extension names.
     ('markdown_extensions', config_options.MarkdownExtensions(
         builtins=['meta', 'toc', 'tables', 'fenced_code'],
@@ -111,4 +110,11 @@ DEFAULT_SCHEMA = (
     # MkDocs itself. A good example here would be including the current
     # project version.
     ('extra', config_options.SubConfig()),
+
+    ('include_nav', config_options.Deprecated(warning=(
+        "The 'include_nav' configuration have been deprecated. Templates "
+        "should use `{% if nav|length>1 %}` instead."))),
+    ('include_next_prev', config_options.Deprecated(warning=(
+        "The 'include_next_prev' configuration have been deprecated. Templates "
+        "should use `{% if next_page or previous_page %}` instead."))),
 )
