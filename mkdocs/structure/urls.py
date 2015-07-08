@@ -28,8 +28,7 @@ def get_output_url(path, use_directory_urls=True):
     """
     Given a filepath determine the URL it should be mapped to.
     """
-    output_path = get_output_path(path)
-    url = '/' + output_path.replace(os.path.sep, '/')
+    url = '/' + path.replace(os.path.sep, '/')
     if use_directory_urls and url.endswith('/index.html'):
         return url[:-len('index.html')]
     return url
@@ -40,6 +39,6 @@ def get_relative_url(to_path, from_path, use_directory_urls=True):
     Given two input files determine the relative URL path linking from
     one to the other.
     """
-    to_url = get_output_url(to_path, use_directory_urls)
-    from_url = get_output_url(from_path, use_directory_urls)
+    to_url = get_output_url(get_output_path(to_path), use_directory_urls)
+    from_url = get_output_url(get_output_path(from_path), use_directory_urls)
     return posixpath.relpath(to_url, from_url)
