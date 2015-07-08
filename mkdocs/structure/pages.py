@@ -1,5 +1,6 @@
 from mkdocs.compat import urlparse, urlunparse
 from mkdocs.structure.toc import get_toc
+from mkdocs.structure.urls import get_relative_url
 
 from markdown.extensions import Extension
 from markdown.treeprocessors import Treeprocessor
@@ -76,6 +77,7 @@ def _path_to_url(url, file, files, strict):
         # AMP_SUBSTITUTE is used internally by Markdown only for email.
         return url
 
+    # Determine the filepath of the target.
     target_path = os.path.join(os.path.dirname(file.input_path), path)
     target_path = os.path.normpath(target_path).lstrip('/')
 
@@ -92,11 +94,9 @@ def _path_to_url(url, file, files, strict):
             % (file.input_path, target_path)
         )
 
-    # TODO rewrite the URL.
-
-    fragments = (scheme, netloc, path, params, query, fragment)
-    url = urlunparse(fragments)
-    return url
+    path = get_relative_url(to_path=target_path, from_path=file.input_path)
+    components = (scheme, netloc, path, params, query, fragment)
+    return urlunparse(components)
 
 
 class _RelativePathTreeprocessor(Treeprocessor):
