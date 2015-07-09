@@ -1,12 +1,12 @@
-{% if not nav_item.children %}
-<li {% if nav_item.active %}class="active"{% endif %}>
-    <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
+{% if item.is_page %}
+<li {% if is_active(item) %}class="active"{% endif %}>
+    <a href="{{ url(item) }}">{{ item.title }}</a>
 </li>
 {% else %}
   <li class="dropdown-submenu">
-    <a tabindex="-1" href="">{{ nav_item.title }}</a>
+    <a tabindex="-1" href="">{{ item.title }}</a>
     <ul class="dropdown-menu">
-        {% for nav_item in nav_item.children %}
+        {% for item in item.children %}
             {% include "nav-sub.html" %}
         {% endfor %}
     </ul>

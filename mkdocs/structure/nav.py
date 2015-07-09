@@ -1,4 +1,5 @@
 from mkdocs.structure.pages import Page
+from mkdocs.compat import string_types
 
 
 class Navigation(object):
@@ -87,7 +88,7 @@ def _data_to_navigation(data):
     if isinstance(data, dict):
         return [
             Page(title=key, filepath=value)
-            if isinstance(value, str) else
+            if isinstance(value, string_types) else
             Section(title=key, children=_data_to_navigation(value))
             for key, value in data.items()
         ]
@@ -98,7 +99,7 @@ def _data_to_navigation(data):
             _data_to_navigation(item)
             for item in data
         ]
-    return Page(title=None, filepath=str(data))
+    return Page(title=None, filepath=data)
 
 
 def _get_pages(nav):

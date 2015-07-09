@@ -1,9 +1,9 @@
 <div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-    {% for toc_item in toc %}
-        <li class="main {% if toc_item.active %}active{% endif %}"><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
-        {% for toc_item in toc_item.children %}
-            <li><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
+    {% for item in page.toc %}
+        <li class="main {% if item.active %}active{% endif %}"><a href="{{ item.url }}">{{ item.title }}</a></li>
+        {% for item in item.children %}
+            <li><a href="{{ item.url }}">{{ item.title }}</a></li>
         {% endfor %}
     {% endfor %}
     </ul>
