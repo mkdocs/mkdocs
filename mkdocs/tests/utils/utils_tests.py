@@ -11,7 +11,7 @@ from mkdocs import nav, utils, exceptions
 from mkdocs.tests.base import dedent
 from mock import mock_open, patch
 
-if sys.version_info.major == 2:
+if not utils.PY3:
     import __builtin__ as builtins
 else:
     import builtins
