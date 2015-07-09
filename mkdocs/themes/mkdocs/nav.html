@@ -62,12 +62,13 @@
                 {% if extra.repo_url %}
                     <li>
                         <a href="{{ extra.repo_url }}">
-                            {% if extra.repo_name == 'GitHub' %}
-                                <i class="fa fa-github"></i>
-                            {% elif extra.repo_name == 'Bitbucket' %}
-                                <i class="fa fa-bitbucket"></i>
+                            {% if "://github.com" in extra.repo_url %}
+                                <i class="fa fa-github"></i> GitHub
+                            {% elif "://bitbucket.org" in extra.repo_url %}
+                                <i class="fa fa-bitbucket"></i> Bitbucket
+                            {% else %}
+                                {{ extra.repo_name|default('Repo') }}
                             {% endif %}
-                            {{ extra.repo_name }}
                         </a>
                     </li>
                 {% endif %}
