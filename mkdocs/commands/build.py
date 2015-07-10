@@ -20,7 +20,16 @@ log = logging.getLogger(__name__)
 
 def get_context(page, nav, docs_files, config):
     url = functools.partial(get_relative_url, from_path=page.file.input_path)
-    #is_active = functools.partial(is_active, current_page=page)
+    nav_is_active = functools.partial(is_active, current_page=page)
+
+    # Setting these attributes here is a bit quirky, but it ensures that
+    # we can provide a backwards compatible context to the themes.
+    if page.previous:
+        page.previous.url = url(page.previous)
+    if page.next:
+        page.next.url = url(page.next)
+    for item in nav:
+        item.active = nav_is_active(item)
 
     return {
         'site_name': config['site_name'],
