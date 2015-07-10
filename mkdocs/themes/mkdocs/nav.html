@@ -14,27 +14,27 @@
             {% endif %}
 
             <!-- Main title -->
-            <a class="navbar-brand" href="{{ url(nav.homepage) }}">{{ site_name }}</a>
+            <a class="navbar-brand" href="{{ homepage_url }}">{{ site_name }}</a>
         </div>
 
         <!-- Expanded navigation -->
         <div class="navbar-collapse collapse">
-            {% if nav|length > 1 %}
+            {% if include_nav %}
                 <!-- Main navigation -->
                 <ul class="nav navbar-nav">
-                {% for item in nav %}
-                {% if item.is_page %}
-                    <li {% if is_active(item) %}class="active"{% endif %}>
-                        <a href="{{ url(item) }}">{{ item.title }}</a>
-                    </li>
-                {% else %}
-                    <li class="dropdown {% if is_active(item) %}active{% endif %}">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ item.title }} <b class="caret"></b></a>
+                {% for nav_item in nav %}
+                {% if nav_item.children %}
+                    <li class="dropdown{% if nav_item.active %} active{% endif %}">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ nav_item.title }} <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                        {% for item in item.children %}
+                        {% for nav_item in nav_item.children %}
                             {% include "nav-sub.html" %}
                         {% endfor %}
                         </ul>
+                    </li>
+                {% else %}
+                    <li {% if nav_item.active %}class="active"{% endif %}>
+                        <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
                     </li>
                 {% endif %}
                 {% endfor %}
@@ -47,28 +47,27 @@
                         <i class="fa fa-search"></i> Search
                     </a>
                 </li>
-                {% if page.next or page.previous %}
-                    <li {% if not page.previous %}class="disabled"{% endif %}>
-                        <a rel="next" {% if page.previous %}href="{{ url(page.previous) }}"{% endif %}>
+                {% if include_next_prev %}
+                    <li {% if not previous_page %}class="disabled"{% endif %}>
+                        <a rel="next" {% if previous_page %}href="{{ previous_page.url }}"{% endif %}>
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
-                    <li {% if not page.next %}class="disabled"{% endif %}>
-                        <a rel="prev" {% if page.next %}href="{{ url(page.next) }}"{% endif %}>
+                    <li {% if not next_page %}class="disabled"{% endif %}>
+                        <a rel="prev" {% if next_page %}href="{{ next_page.url }}"{% endif %}>
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
                 {% endif %}
-                {% if extra.repo_url %}
+                {% if repo_url %}
                     <li>
-                        <a href="{{ extra.repo_url }}">
-                            {% if "://github.com" in extra.repo_url %}
-                                <i class="fa fa-github"></i> GitHub
-                            {% elif "://bitbucket.org" in extra.repo_url %}
-                                <i class="fa fa-bitbucket"></i> Bitbucket
-                            {% else %}
-                                {{ extra.repo_name|default('Repo') }}
+                        <a href="{{ repo_url }}">
+                            {% if repo_name == 'GitHub' %}
+                                <i class="fa fa-github"></i>
+                            {% elif repo_name == 'Bitbucket' %}
+                                <i class="fa fa-bitbucket"></i>
                             {% endif %}
+                            {{ repo_name }}
                         </a>
                     </li>
                 {% endif %}
