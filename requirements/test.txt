@@ -1,4 +1,4 @@
 coverage
 flake8
 nose
-mock
+mock<=1.0.99
