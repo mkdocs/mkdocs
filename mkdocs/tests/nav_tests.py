@@ -325,6 +325,9 @@ class SiteNavigationTests(unittest.TestCase):
                 {'Running': 'api-guide/running.md'},
                 {'Testing': 'api-guide/testing.md'},
                 {'Debugging': 'api-guide/debugging.md'},
+                {'Advanced': [
+                    {'Part 1': 'api-guide/advanced/part-1.md'},
+                ]},
             ]},
             {'About': [
                 {'Release notes': 'about/release-notes.md'},
@@ -338,12 +341,18 @@ class SiteNavigationTests(unittest.TestCase):
             [site_navigation.nav_items[1]],
             [site_navigation.nav_items[1]],
             [site_navigation.nav_items[1]],
+            [site_navigation.nav_items[1],
+                site_navigation.pages[4].ancestors[-1]],
             [site_navigation.nav_items[2]],
             [site_navigation.nav_items[2]],
         )
 
-        for page, expected_ancestor in zip(site_navigation.pages, ancestors):
-            self.assertEqual(page.ancestors, expected_ancestor)
+        self.assertEqual(len(site_navigation.pages), len(ancestors))
+
+        for i, (page, expected_ancestor) in enumerate(
+                zip(site_navigation.pages, ancestors)):
+            self.assertEqual(page.ancestors, expected_ancestor,
+                             "Failed on ancestor test {0}".format(i))
 
     def test_nesting(self):
 
