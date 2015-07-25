@@ -1,36 +1,32 @@
 # coding: utf-8
-
 """
 Deals with generating the per-page table of contents.
 
 For the sake of simplicity we use an existing markdown extension to generate
 an HTML table of contents, and then parse that into the underlying data.
-
-The steps we take to generate a table of contents are:
-
-* Pre-process the markdown, injecting a [TOC] marker.
-* Generate HTML from markdown.
-* Post-process the HTML, spliting the content and the table of contents.
-* Parse table of contents HTML into the underlying data structure.
 """
-
 from __future__ import unicode_literals
 
-try:                                    # pragma: no cover
-    from html.parser import HTMLParser  # noqa
-except ImportError:                     # pragma: no cover
-    from HTMLParser import HTMLParser   # noqa
+from mkdocs.compat import HTMLParser
+
+
+def get_toc(toc_html):
+    items = _parse_html_table_of_contents(toc_html)
+    return TableOfContents(items)
 
 
 class TableOfContents(object):
     """
     Represents the table of contents for a given page.
     """
-    def __init__(self, html):
-        self.items = _parse_html_table_of_contents(html)
+    def __init__(self, items):
+        self.items = items
 
     def __iter__(self):
         return iter(self.items)
+
+    def __len__(self):
+        return len(self.items)
 
     def __str__(self):
         return ''.join([str(item) for item in self])
@@ -55,8 +51,7 @@ class AnchorLink(object):
         return ret
 
 
-class TOCParser(HTMLParser):
-
+class _TOCParser(HTMLParser):
     def __init__(self):
         HTMLParser.__init__(self)
         self.links = []
@@ -66,7 +61,6 @@ class TOCParser(HTMLParser):
         self.title = ''
 
     def handle_starttag(self, tag, attrs):
-
         if not self.in_anchor:
             if tag == 'a':
                 self.in_anchor = True
@@ -77,7 +71,6 @@ class TOCParser(HTMLParser):
             self.in_anchor = False
 
     def handle_data(self, data):
-
         if self.in_anchor:
             self.title += data
 
@@ -99,7 +92,7 @@ def _parse_html_table_of_contents(html):
     parents = []
     ret = []
     for line in lines:
-        parser = TOCParser()
+        parser = _TOCParser()
         parser.feed(line)
         if parser.title:
             try:
