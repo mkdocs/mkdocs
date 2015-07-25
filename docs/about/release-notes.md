@@ -50,6 +50,8 @@ themes
   theme. (#631)
 * Bugfix: Ensure consistent ordering of auto-populated pages. (#638)
 * Bugfix: Scroll the TOC on the MkDocs theme if it is too long for the page.
+* Bugfix: Add all ancestors to the page attribute `ancestors` rather than just
+  the initial one.
 
 [site_description]: /user-guide/configuration.md#site_description
 [site_author]: /user-guide/configuration.md#site_author
