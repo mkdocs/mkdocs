@@ -49,6 +49,7 @@ themes
 * Add support for [site_description] and [site_author] to the [ReadTheDocs]
   theme. (#631)
 * Bugfix: Ensure consistent ordering of auto-populated pages. (#638)
+* Bugfix: Scroll the TOC on the MkDocs theme if it is too long for the page.
 
 [site_description]: /user-guide/configuration.md#site_description
 [site_author]: /user-guide/configuration.md#site_author
