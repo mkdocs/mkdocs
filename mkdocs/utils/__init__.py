@@ -144,7 +144,7 @@ def copy_media_files(from_dir, to_dir):
         dirnames[:] = [d for d in dirnames if not d.startswith('.')]
 
         for filename in filenames:
-            if not is_markdown_file(filename) and not is_html_file(filename):
+            if not is_markdown_file(filename):
                 source_path = os.path.join(source_dir, filename)
                 output_path = os.path.join(output_dir, filename)
                 copy_file(source_path, output_path)
