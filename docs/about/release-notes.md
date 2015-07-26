@@ -13,10 +13,9 @@ You can determine your currently installed version using `mkdocs --version`:
     $ mkdocs --version
     mkdocs, version 0.14.0
 
-
 ## Version 0.15.0 (2015-??-??)
 
-### Major Additions
+### Major Additions to Version 0.15.0
 
 #### Add support for installable themes
 
@@ -25,8 +24,8 @@ addition, the Bootstrap and Bootswatch themes have been moved to external git
 repositories and python packages. See their individual documentation for more
 details about these specific themes.
 
-- [MkDocs Bootstrap]
-- [MkDocs Bootswatch]
+* [MkDocs Bootstrap]
+* [MkDocs Bootswatch]
 
 [MkDocs Bootstrap]: http://mkdocs.github.io/mkdocs-bootstrap/
 [MkDocs Bootswatch]: http://mkdocs.github.io/mkdocs-bootswatch/
@@ -42,7 +41,7 @@ themes
 [Styling your docs]: /user-guide/styling-your-docs.md
 [Custom themes]: /user-guide/custom-themes.md
 
-### Other Changes and Additions
+### Other Changes and Additions to Version 0.15.0
 
 * Fix issues when using absolute links to Markdown files. (#628)
 * Deprecate support of Python 2.6, pending removal in 1.0.0. (#165)
@@ -94,10 +93,9 @@ themes
 * Bugfix: Fix a problem with minimal configurations which only contain a list
   of paths in the pages config. (#562)
 
-
 ## Version 0.13.0 (2015-05-26)
 
-### Deprecations
+### Deprecations to Version 0.13.0
 
 #### Deprecate the JSON command
 
@@ -133,8 +131,7 @@ All themes other than mkdocs and readthedocs will be moved into external
 packages in a future release of MkDocs. This will enable them to be more easily
 supported and updates outside MkDocs releases.
 
-
-### Major Additions
+### Major Additions to Version 0.13.0
 
 #### Search
 
@@ -177,7 +174,7 @@ documentation.
 [extra_templates]: /user-guide/configuration.md#extra_templates
 [global variables]: /user-guide/styling-your-docs.md#global-context
 
-### Other Changes and Additions
+### Other Changes and Additions to Version 0.13.0
 
 * Add support for [Markdown extension configuration options]. (#435)
 * MkDocs now ships Python [wheels]. (#486)
@@ -188,25 +185,23 @@ documentation.
 * Add `--no-livereload` to `mkdocs serve` for a simpler development server. (#511)
 * Add copyright display support to all themes (#549)
 * Add support for custom commit messages in a `mkdocs gh-deploy` (#516)
-* Bugfix: Fix linking to media within the same directory as a markdown file called index.md (#535)
+* Bugfix: Fix linking to media within the same directory as a markdown file
+  called index.md (#535)
 * Bugfix: Fix errors with unicode filenames (#542).
 
 [extra config]: /user-guide/configuration.md#extra
 [Markdown extension configuration options]: /user-guide/configuration.md#markdown_extensions
 [wheels]: http://pythonwheels.com/
 
-
 ## Version 0.12.2 (2015-04-22)
 
 * Bugfix: Fix a regression where there would be an error if some child titles
   were missing but others were provided in the pages config. (#464)
 
-
 ## Version 0.12.1 (2015-04-14)
 
 * Bugfix: Fixed a CSS bug in the table of contents on some browsers where the
   bottom item was not clickable.
-
 
 ## Version 0.12.0 (2015-04-14)
 
@@ -263,12 +258,10 @@ documentation.
 * Bugfix: Don't block newer verions of Python-markdown on Python >= 2.7. (#376)
 * Bugfix: Fix encoding issues when opening files across platforms. (#428)
 
-
 ## Version 0.11.1 (2014-11-20)
 
 * Bugfix: Fix a CSS wrapping issue with code highlighting in the ReadTheDocs
   theme. (#233)
-
 
 ## Version 0.11.0 (2014-11-18)
 
@@ -284,7 +277,6 @@ documentation.
 * Bugfix: Use the polling observer in watchdog so rebuilding works on
   filesystems without inotify. (#184)
 * Bugfix: Improve error output for common configuration related errors. (#176)
-
 
 ## Version 0.10.0 (2014-10-29)
 
