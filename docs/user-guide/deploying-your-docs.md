@@ -43,7 +43,7 @@ files locally.
 [Read the Docs][rtd] offers free documentation hosting. You can import your docs
 using any major version control system, including Mercurial, Git, Subversion,
 and Bazaar. Read the Docs supports MkDocs out-of-the-box. Follow the
-[instructions] on their site to arrange the filies in your repository properly,
+[instructions] on their site to arrange the files in your repository properly,
 create an account and point it at your publicly hosted repository. If properly
 configured, your documentation will update each time you push commits to your
 public repository.
