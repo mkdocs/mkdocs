@@ -316,13 +316,7 @@ full search implementation to your theme.
 <h1 id="search">Search Results</h1>
 
 <form action="search.html">
-  <input
-      name="q"
-      id="mkdocs-search-query"
-      type="text"
-      class="search_input search-query ui-autocomplete-input"
-      placeholder="Search the Docs"
-      autocomplete="off">
+  <input name="q" id="mkdocs-search-query" type="text" >
 </form>
 
 <div id="mkdocs-search-results">
