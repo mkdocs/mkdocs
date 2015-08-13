@@ -63,7 +63,7 @@ def common_options(f):
 
 
 clean_help = "Remove old files from the site_dir before building"
-config_file_help = "Provide a specific MkDocs config"
+config_help = "Provide a specific MkDocs config"
 dev_addr_help = ("IP address and port to serve documentation locally (default: "
                  "localhost:8000)")
 strict_help = ("Enable strict mode. This will cause MkDocs to abort the build "
@@ -88,7 +88,7 @@ def cli():
 
 
 @cli.command(name="serve")
-@click.option('-f', '--config-file', type=click.File('rb'), help=config_file_help)
+@click.option('-f', '--config-file', type=click.File('rb'), help=config_help)
 @click.option('-a', '--dev-addr', help=dev_addr_help, metavar='<IP:PORT>')
 @click.option('-s', '--strict', is_flag=True, help=strict_help)
 @click.option('-t', '--theme', type=click.Choice(theme_choices), help=theme_help)
@@ -114,7 +114,7 @@ def serve_command(dev_addr, config_file, strict, theme, livereload):
 
 @cli.command(name="build")
 @click.option('-c', '--clean', is_flag=True, help=clean_help)
-@click.option('-f', '--config-file', type=click.File('rb'), help=config_file_help)
+@click.option('-f', '--config-file', type=click.File('rb'), help=config_help)
 @click.option('-s', '--strict', is_flag=True, help=strict_help)
 @click.option('-t', '--theme', type=click.Choice(theme_choices), help=theme_help)
 @click.option('-d', '--site-dir', type=click.Path(), help=site_dir_help)
@@ -135,7 +135,7 @@ def build_command(clean, config_file, strict, theme, site_dir):
 
 @cli.command(name="json")
 @click.option('-c', '--clean', is_flag=True, help=clean_help)
-@click.option('-f', '--config-file', type=click.File('rb'), help=config_file_help)
+@click.option('-f', '--config-file', type=click.File('rb'), help=config_help)
 @click.option('-s', '--strict', is_flag=True, help=strict_help)
 @click.option('-d', '--site-dir', type=click.Path(), help=site_dir_help)
 @common_options
@@ -148,8 +148,8 @@ def json_command(clean, config_file, strict, site_dir):
     search engine.
     """
 
-    log.warning("The json command is deprecated and will be removed in a future "
-                "MkDocs release. For details on updating: "
+    log.warning("The json command is deprecated and will be removed in a "
+                "future MkDocs release. For details on updating: "
                 "http://www.mkdocs.org/about/release-notes/")
 
     try:
@@ -165,7 +165,7 @@ def json_command(clean, config_file, strict, site_dir):
 
 @cli.command(name="gh-deploy")
 @click.option('-c', '--clean', is_flag=True, help=clean_help)
-@click.option('-f', '--config-file', type=click.File('rb'), help=config_file_help)
+@click.option('-f', '--config-file', type=click.File('rb'), help=config_help)
 @click.option('-m', '--message', help=commit_message_help)
 @click.option('-b', '--remote-branch', help=remote_branch_help)
 @click.option('-r', '--remote-name', help=remote_branch_help)
@@ -191,3 +191,6 @@ def gh_deploy_command(config_file, clean, message, remote_branch, remote_name):
 def new_command(project_directory):
     """Create a new MkDocs project"""
     new.new(project_directory)
+
+if __name__ == '__main__':
+    cli()

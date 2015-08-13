@@ -69,7 +69,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'mkdocs = mkdocs.cli:cli',
+            'mkdocs = mkdocs.__main__:cli',
         ],
         'mkdocs.themes': [
             'mkdocs = mkdocs.themes.mkdocs',

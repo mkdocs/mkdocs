@@ -7,7 +7,7 @@ import mock
 
 from click.testing import CliRunner
 
-from mkdocs import cli
+from mkdocs import __main__ as cli
 
 
 class CLITests(unittest.TestCase):
