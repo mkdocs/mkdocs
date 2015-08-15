@@ -10,13 +10,16 @@ from __future__ import unicode_literals
 import datetime
 import logging
 import os
+import io
 
 from mkdocs import utils, exceptions
+from mkdocs.utils import mdutils
+from mkdocs.utils import meta
 
 log = logging.getLogger(__name__)
 
 
-def filename_to_title(filename):
+def _filename_to_title(filename):
     """
     Automatically generate a default title, given a filename.
     """
@@ -24,6 +27,44 @@ def filename_to_title(filename):
         return 'Home'
 
     return utils.filename_to_title(filename)
+
+
+def _path_to_page(path, use_directory_urls, docs_dir, title=None):
+    url = utils.get_url_path(path, use_directory_urls)
+    return Page(title=title, url=url, path=path, docs_dir=docs_dir)
+
+
+def paths_to_pages(pages_config, use_directory_urls, docs_dir):
+    """
+    Iterate through the pages config. If the entry is a string, then it must
+    be the path to a Markdown file. If it is a dictionary, it is either a title
+    and path pair, or it is a category and thus the category name and list of
+    subpages.
+    """
+
+    for i, entry in enumerate(pages_config):
+
+        if isinstance(entry, utils.text_type):
+            pages_config[i] = _path_to_page(entry, use_directory_urls, docs_dir)
+            continue
+        elif not isinstance(entry, dict):
+            msg = ("Line in 'page' config is of type {0}, dict or string "
+                   "expected: {1!r}").format(type(entry), entry)
+            raise exceptions.ConfigurationError(msg)
+
+        next_cat_or_title, subpages_or_path = next(iter(entry.items()))
+
+        if isinstance(subpages_or_path, list):
+            paths_to_pages(subpages_or_path, use_directory_urls, docs_dir)
+        elif isinstance(subpages_or_path, utils.text_type):
+            pages_config[i] = _path_to_page(subpages_or_path,
+                                            use_directory_urls, docs_dir,
+                                            title=next_cat_or_title)
+        else:
+            msg = "Invalid pages configuration: {0!r}".format(subpages_or_path)
+            raise exceptions.ConfigurationError(msg)
+
+    return pages_config
 
 
 class SiteNavigation(object):
@@ -34,6 +75,9 @@ class SiteNavigation(object):
             pages_config, self.url_context, use_directory_urls)
         self.homepage = self.pages[0] if self.pages else None
         self.use_directory_urls = use_directory_urls
+
+        for page in self.pages:
+            page.url_context = self.url_context
 
     def __str__(self):
         return ''.join([str(item) for item in self])
@@ -131,12 +175,13 @@ class FileContext(object):
 
 
 class Page(object):
-    def __init__(self, title, url, path, url_context):
+    def __init__(self, title, url, path, docs_dir):
 
-        self.title = title
+        self._title = title
         self.abs_url = url
         self.active = False
-        self.url_context = url_context
+        self.url_context = None
+        self.docs_dir = docs_dir
         self.update_date = datetime.datetime.now().strftime("%Y-%m-%d")
 
         # Relative paths to the input markdown file and output html file.
@@ -147,6 +192,63 @@ class Page(object):
         self.previous_page = None
         self.next_page = None
         self.ancestors = []
+
+        self.markdown, self.meta = self.load_markdown()
+
+    def __eq__(self, other):
+
+        def sub_dict(d):
+            return dict((key, value) for key, value in d.items()
+                        if key in ['title', 'input_path', 'abs_url'])
+
+        return (isinstance(other, self.__class__)
+                and sub_dict(self.__dict__) == sub_dict(other.__dict__))
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __str__(self):
+        return self.indent_print()
+
+    def __repr__(self):
+        return "nav.Page(title='{0}', input_path='{1}', url='{2}')".format(
+            self.title, self.input_path, self.abs_url)
+
+    def load_markdown(self):
+
+        input_path = os.path.join(self.docs_dir, self.input_path)
+
+        try:
+            input_content = io.open(input_path, 'r', encoding='utf-8').read()
+        except IOError:
+            log.error('file not found: %s', input_path)
+            raise
+
+        return meta.get_data(input_content)
+
+    @property
+    def title(self):
+        """
+        Get the title for a Markdown document
+
+        Check these in order and return the first that has a valid title:
+
+        - self._title which is populated from the mkdocs.yml
+        - self.meta['title'] which comes from the page metadata
+        - self.markdown - look for the first H1
+        - self.input_path - create a title based on the filename
+        """
+        if self._title is not None:
+            return self._title
+        elif 'title' in self.meta:
+            return self.meta['title'][0]
+
+        title = mdutils.get_markdown_title(self.markdown)
+
+        if title is not None:
+            return title
+
+        return _filename_to_title(self.input_path.split(os.path.sep)[-1])
 
     @property
     def url(self):
@@ -159,9 +261,6 @@ class Page(object):
     @property
     def is_top_level(self):
         return len(self.ancestors) == 0
-
-    def __str__(self):
-        return self.indent_print()
 
     def indent_print(self, depth=0):
         indent = '    ' * depth
@@ -202,24 +301,14 @@ class Header(object):
             ancestor.set_active(active)
 
 
-def _path_to_page(path, title, url_context, use_directory_urls):
-    if title is None:
-        title = filename_to_title(path.split(os.path.sep)[-1])
-    url = utils.get_url_path(path, use_directory_urls)
-    return Page(title=title, url=url, path=path,
-                url_context=url_context)
-
-
 def _follow(config_line, url_context, use_dir_urls, header=None, title=None):
 
-    if isinstance(config_line, utils.string_types):
-        path = os.path.normpath(config_line)
-        page = _path_to_page(path, title, url_context, use_dir_urls)
+    if isinstance(config_line, Page):
 
+        page = config_line
         if header:
             page.ancestors = header.ancestors + [header, ]
             header.children.append(page)
-
         yield page
         raise StopIteration
 
