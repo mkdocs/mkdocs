@@ -2,23 +2,24 @@
 # coding: utf-8
 
 from __future__ import unicode_literals
+
 import os
 import shutil
 import tempfile
-import unittest
 
 from mkdocs import config
+from mkdocs import nav
 from mkdocs import utils
 from mkdocs.config import config_options
 from mkdocs.exceptions import ConfigurationError
-from mkdocs.tests.base import dedent
+from mkdocs.tests.base import dedent, MockedMarkdownLoadingTestCase
 
 
 def ensure_utf(string):
     return string.encode('utf-8') if not utils.PY3 else string
 
 
-class ConfigTests(unittest.TestCase):
+class ConfigTests(MockedMarkdownLoadingTestCase):
     def test_missing_config_file(self):
 
         def load_missing_config():
@@ -69,12 +70,6 @@ class ConfigTests(unittest.TestCase):
         Users can explicitly set the config file using the '--config' option.
         Allows users to specify a config other than the default `mkdocs.yml`.
         """
-        expected_result = {
-            'site_name': 'Example',
-            'pages': [
-                {'Introduction': 'index.md'}
-            ],
-        }
         file_contents = dedent("""
         site_name: Example
         pages:
@@ -87,8 +82,9 @@ class ConfigTests(unittest.TestCase):
             config_file.close()
 
             result = config.load_config(config_file=config_file.name)
-            self.assertEqual(result['site_name'], expected_result['site_name'])
-            self.assertEqual(result['pages'], expected_result['pages'])
+            self.assertEqual(result['site_name'], 'Example')
+            self.assertEqual(len(result['pages']), 1)
+            self.assertEqual(result['pages'][0].title, "Introduction")
         finally:
             os.remove(config_file.name)
 
@@ -138,11 +134,14 @@ class ConfigTests(unittest.TestCase):
                 'docs_dir': tmp_dir
             })
             conf.validate()
-            self.assertEqual(['index.md', 'about.md'], conf['pages'])
+            self.assertEqual(['index.md', 'about.md'],
+                             [p.input_path for p in conf['pages']])
         finally:
             shutil.rmtree(tmp_dir)
 
     def test_default_pages_nested(self):
+
+        self.maxDiff = None
         tmp_dir = tempfile.mkdtemp()
         try:
             open(os.path.join(tmp_dir, 'index.md'), 'w').close()
@@ -151,32 +150,33 @@ class ConfigTests(unittest.TestCase):
             os.makedirs(os.path.join(tmp_dir, 'subA'))
             open(os.path.join(tmp_dir, 'subA', 'index.md'), 'w').close()
             os.makedirs(os.path.join(tmp_dir, 'subA', 'subA1'))
-            open(os.path.join(tmp_dir, 'subA', 'subA1', 'index.md'), 'w').close()
+            open(os.path.join(tmp_dir, 'subA', 'subA1', 'page.md'), 'w').close()
             os.makedirs(os.path.join(tmp_dir, 'subC'))
             open(os.path.join(tmp_dir, 'subC', 'index.md'), 'w').close()
             os.makedirs(os.path.join(tmp_dir, 'subB'))
-            open(os.path.join(tmp_dir, 'subB', 'index.md'), 'w').close()
+            open(os.path.join(tmp_dir, 'subB', 'page2.md'), 'w').close()
             conf = config.Config(schema=config.DEFAULT_SCHEMA)
             conf.load_dict({
                 'site_name': 'Example',
                 'docs_dir': tmp_dir
             })
             conf.validate()
+
             self.assertEqual([
-                'index.md',
-                'about.md',
-                'getting-started.md',
+                nav.Page(None, '/', 'index.md', tmp_dir),
+                nav.Page(None, '/about/', 'about.md', tmp_dir),
+                nav.Page(None, '/getting-started/', 'getting-started.md', tmp_dir),
                 {'subA': [
-                    os.path.join('subA', 'index.md'),
+                    nav.Page(None, '/subA/', os.path.join('subA', 'index.md'), tmp_dir),
                     {'subA1': [
-                        os.path.join('subA', 'subA1', 'index.md')
+                        nav.Page(None, '/subA/subA1/page/', os.path.join('subA', 'subA1', 'page.md'), tmp_dir)
                     ]}
                 ]},
                 {'subB': [
-                    os.path.join('subB', 'index.md')
+                    nav.Page(None, '/subB/page2/', os.path.join('subB', 'page2.md'), tmp_dir)
                 ]},
                 {'subC': [
-                    os.path.join('subC', 'index.md')
+                    nav.Page(None, '/subC/', os.path.join('subC', 'index.md'), tmp_dir)
                 ]}
             ], conf['pages'])
         finally:
