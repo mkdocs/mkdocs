@@ -8,7 +8,7 @@ import unittest
 
 from mkdocs import nav
 from mkdocs.exceptions import ConfigurationError
-from mkdocs.tests.base import dedent
+from mkdocs.tests.base import dedent, load_config
 
 
 class SiteNavigationTests(unittest.TestCase):
@@ -21,7 +21,7 @@ class SiteNavigationTests(unittest.TestCase):
         Home - /
         About - /about/
         """)
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.nav_items), 2)
         self.assertEqual(len(site_navigation.pages), 2)
@@ -35,7 +35,7 @@ class SiteNavigationTests(unittest.TestCase):
         Home - /
         About - /about/
         """)
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.nav_items), 2)
         self.assertEqual(len(site_navigation.pages), 2)
@@ -63,7 +63,7 @@ class SiteNavigationTests(unittest.TestCase):
             Release notes - /about/release-notes/
             License - /about/license/
         """)
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.nav_items), 3)
         self.assertEqual(len(site_navigation.pages), 6)
@@ -79,7 +79,7 @@ class SiteNavigationTests(unittest.TestCase):
         Contact - /about/contact/
         License Title - /about/sub/license/
         """)
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.nav_items), 3)
         self.assertEqual(len(site_navigation.pages), 3)
@@ -96,7 +96,7 @@ class SiteNavigationTests(unittest.TestCase):
         License - /about/sub/license/
         """)
 
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.nav_items), 3)
         self.assertEqual(len(site_navigation.pages), 3)
@@ -114,7 +114,7 @@ class SiteNavigationTests(unittest.TestCase):
         License - /about/sub/license/
         """)
 
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.nav_items), 3)
         self.assertEqual(len(site_navigation.pages), 3)
@@ -134,7 +134,7 @@ class SiteNavigationTests(unittest.TestCase):
                 About - /about/ [*]
             """)
         ]
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         for index, page in enumerate(site_navigation.walk_pages()):
             self.assertEqual(str(site_navigation).strip(), expected[index])
 
@@ -153,7 +153,7 @@ class SiteNavigationTests(unittest.TestCase):
                 About - /about/ [*]
             """)
         ]
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         for index, page in enumerate(site_navigation.walk_pages()):
             self.assertEqual(str(site_navigation).strip(), expected[index])
 
@@ -232,7 +232,7 @@ class SiteNavigationTests(unittest.TestCase):
                     License - /about/license/ [*]
             """)
         ]
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         for index, page in enumerate(site_navigation.walk_pages()):
             self.assertEqual(str(site_navigation).strip(), expected[index])
 
@@ -240,7 +240,7 @@ class SiteNavigationTests(unittest.TestCase):
         pages = [
             'index.md'
         ]
-        site_navigation = nav.SiteNavigation(pages, use_directory_urls=False)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages, use_directory_urls=False))
         base_url = site_navigation.url_context.make_relative('/')
         self.assertEqual(base_url, '.')
 
@@ -249,7 +249,7 @@ class SiteNavigationTests(unittest.TestCase):
             'index.md',
             'user-guide/styling-your-docs.md'
         ]
-        site_navigation = nav.SiteNavigation(pages, use_directory_urls=False)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages, use_directory_urls=False))
         site_navigation.url_context.base_path = "/user-guide/configuration"
         url = site_navigation.url_context.make_relative('/user-guide/styling-your-docs/')
         self.assertEqual(url, '../styling-your-docs/')
@@ -267,7 +267,7 @@ class SiteNavigationTests(unittest.TestCase):
         ]
 
         url_context = nav.URLContext()
-        nav_items, pages = nav._generate_site_navigation(pages, url_context)
+        nav_items, pages = nav._generate_site_navigation(load_config(pages=pages), url_context)
 
         self.assertEqual([n.title for n in nav_items],
                          ['Home', 'Running', 'Notes', 'License'])
@@ -293,7 +293,7 @@ class SiteNavigationTests(unittest.TestCase):
         ]
 
         url_context = nav.URLContext()
-        nav_items, pages = nav._generate_site_navigation(pages, url_context)
+        nav_items, pages = nav._generate_site_navigation(load_config(pages=pages), url_context)
 
         self.assertEqual([n.title for n in nav_items],
                          ['Home', 'Running', 'Notes', 'License'])
@@ -320,7 +320,7 @@ class SiteNavigationTests(unittest.TestCase):
 
         url_context = nav.URLContext()
         url_context.force_abs_urls = True
-        nav_items, pages = nav._generate_site_navigation(pages, url_context)
+        nav_items, pages = nav._generate_site_navigation(load_config(pages=pages), url_context)
 
         self.assertEqual([n.title for n in nav_items],
                          ['Home', 'Running', 'Notes', 'License'])
@@ -346,7 +346,7 @@ class SiteNavigationTests(unittest.TestCase):
         url_context = nav.URLContext()
         url_context.force_abs_urls = True
         url_context.base_path = '/foo/'
-        nav_items, pages = nav._generate_site_navigation(pages, url_context)
+        nav_items, pages = nav._generate_site_navigation(load_config(pages=pages), url_context)
 
         self.assertEqual([n.title for n in nav_items],
                          ['Home', 'Running', 'Notes', 'License'])
@@ -367,7 +367,7 @@ class SiteNavigationTests(unittest.TestCase):
         for bad_page in bad_pages:
 
             def _test():
-                return nav._generate_site_navigation((bad_page, ), None)
+                return nav._generate_site_navigation({'pages': (bad_page, )}, None)
 
             self.assertRaises(ConfigurationError, _test)
 
@@ -376,7 +376,7 @@ class SiteNavigationTests(unittest.TestCase):
         bad_page = {}  # empty
 
         def _test():
-            return nav._generate_site_navigation((bad_page, ), None)
+            return nav._generate_site_navigation({'pages': (bad_page, )}, None)
 
         self.assertRaises(ConfigurationError, _test)
 
@@ -397,7 +397,7 @@ class SiteNavigationTests(unittest.TestCase):
                 {'License': 'about/license.md'}
             ]}
         ]
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
 
         ancestors = (
             [],
@@ -419,7 +419,7 @@ class SiteNavigationTests(unittest.TestCase):
 
     def test_nesting(self):
 
-        pages_config = [
+        pages = [
             {'Home': 'index.md'},
             {'Install': [
                 {'Pre-install': 'install/install-pre.md'},
@@ -442,7 +442,7 @@ class SiteNavigationTests(unittest.TestCase):
             ]}
         ]
 
-        site_navigation = nav.SiteNavigation(pages_config)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
 
         self.assertEqual([n.title for n in site_navigation.nav_items],
                          ['Home', 'Install', 'Guide'])
