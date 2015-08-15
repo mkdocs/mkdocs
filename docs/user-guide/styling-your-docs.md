@@ -20,7 +20,6 @@ in-themes) listed below.
 To create a new custom theme or more heavily customise an existing theme, see
 the [custom themes](#custom-themes) section below.
 
-
 ## Built-in themes
 
 ### mkdocs
@@ -49,58 +48,57 @@ the [Bootswatch] project.
 [MkDocs Bootstrap]: http://mkdocs.github.io/mkdocs-bootstrap/
 [MkDocs Bootswatch]: http://mkdocs.github.io/mkdocs-bootswatch/
 
-#### Bootstrap
+### Bootstrap
 
 ![Bootstrap](http://bootstrapdocs.com/v2.3.1/docs/assets/img/examples/bootstrap-example-fluid.png)
 
-#### Amelia
+### Amelia
 
 ![Amelia](http://bootswatch.com/2/amelia/thumbnail.png)
 
-#### Cerulean
+### Cerulean
 
 ![Cerulean](http://bootswatch.com/cerulean/thumbnail.png)
 
-#### Cosmo
+### Cosmo
 
 ![Cosmo](http://bootswatch.com/cosmo/thumbnail.png)
 
-#### Cyborg
+### Cyborg
 
 ![Cyborg](http://bootswatch.com/cyborg/thumbnail.png)
 
-#### Flatly
+### Flatly
 
 ![Flatly](http://bootswatch.com/flatly/thumbnail.png)
 
-#### Journal
+### Journal
 
 ![Journal](http://bootswatch.com/journal/thumbnail.png)
 
-#### Readable
+### Readable
 
 ![Readable](http://bootswatch.com/readable/thumbnail.png)
 
-#### Simplex
+### Simplex
 
 ![Simplex](http://bootswatch.com/simplex/thumbnail.png)
 
-#### Slate
+### Slate
 
 ![Slate](http://bootswatch.com/slate/thumbnail.png)
 
-#### Spacelab
+### Spacelab
 
 ![Spacelab](http://bootswatch.com/spacelab/thumbnail.png)
 
-#### United
+### United
 
 ![United](http://bootswatch.com/united/thumbnail.png)
 
-#### Yeti
+### Yeti
 
 ![Yeti](http://bootswatch.com/yeti/thumbnail.png)
-
 
 ## Customising a Theme
 
@@ -119,17 +117,17 @@ h1 {
 }
 ```
 
-!!! Warning
+!!! note
 
     If you are deploying your documentation with [ReadTheDocs]. You will need
-    to explicitly list the CSS and JavaScript files you want to include inf
+    to explicitly list the CSS and JavaScript files you want to include in
     your config. To do this, add the following to your mkdocs.yml.
 
         extra_css: [extra.css]
 
-After making these changes, they should be visible when you run `mkdocs serve`
-- if you already had this running, you should see that the CSS changes were
-automatically picked up and the documentation will be updated.
+After making these changes, they should be visible when you run
+`mkdocs serve` - if you already had this running, you should see that the CSS
+changes were automatically picked up and the documentation will be updated.
 
 [ReadTheDocs]: ./deploying-your-docs.md#readthedocs
 [documentation directory]: /user-guide/configuration/#docs_dir
