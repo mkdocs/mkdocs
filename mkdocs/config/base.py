@@ -99,9 +99,17 @@ class Config(utils.UserDict):
 
 def _open_config_file(config_file):
 
-    # Default to the standard config filename.
+    filenames = [
+        'mkdocs.yml',
+        'mkdocs.yaml'
+    ]
+
+    # Default to the standard config filenames.
     if config_file is None:
-        config_file = os.path.abspath('mkdocs.yml')
+        for name in filenames:
+            config_file = os.path.abspath(name)
+            if os.path.exists(config_file):
+                break
 
     log.debug("Loading configuration file: %s", config_file)
 
