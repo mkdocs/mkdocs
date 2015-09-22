@@ -393,6 +393,17 @@ def filename_to_title(filename):
     return title
 
 
+def dirname_to_title(dirname):
+
+    title = dirname
+    title = title.replace('-', ' ').replace('_', ' ')
+    # Capitalize if the dirname was all lowercase, otherwise leave it as-is.
+    if title.lower() == title:
+        title = title.capitalize()
+
+    return title
+
+
 def find_or_create_node(branch, key):
     """
     Given a list, look for dictionary with a key matching key and return it's
@@ -431,7 +442,7 @@ def nest_paths(paths):
 
         branch = nested
         for part in parts:
-            part = filename_to_title(part)
+            part = dirname_to_title(part)
             branch = find_or_create_node(branch, part)
 
         branch.append(path)
