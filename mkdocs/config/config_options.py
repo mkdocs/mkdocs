@@ -163,7 +163,12 @@ class URL(OptionallyRequired):
     Validate a URL by requiring a scheme is present.
     """
 
+    def __init__(self, default='', required=False):
+        super(URL, self).__init__(default, required)
+
     def run_validation(self, value):
+        if value == '':
+            return value
 
         try:
             parsed_url = utils.urlparse(value)
