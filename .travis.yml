@@ -1,17 +1,35 @@
 language: python
-python: "2.7"
+python: '2.7'
 env:
-- TOX_ENV=py26
-- TOX_ENV=py27
-- TOX_ENV=py33
-- TOX_ENV=py34
-- TOX_ENV=flake8
-- TOX_ENV=docs
-- TOX_ENV=json
-- TOX_ENV=coverage
+- TOXENV=py26-integration
+- TOXENV=py26-min-req
+- TOXENV=py26-unittests
+- TOXENV=py27-integration
+- TOXENV=py27-min-req
+- TOXENV=py27-unittests
+- TOXENV=py33-integration
+- TOXENV=py33-min-req
+- TOXENV=py33-unittests
+- TOXENV=py34-integration
+- TOXENV=py34-min-req
+- TOXENV=py34-unittests
+- TOXENV=pypy-integration
+- TOXENV=pypy-min-req
+- TOXENV=pypy-unittests
+- TOXENV=pypy3-integration
+- TOXENV=pypy3-min-req
+- TOXENV=pypy3-unittests
+- TOXENV=flake8
+- TOXENV=markdown-lint
 install:
 - pip install tox
-script: "./.travis.sh"
+- gem install mdl
+script:
+- git clean -f -d -x
+- tox
 matrix:
+  fast_finish: true
   allow_failures:
-    - env: TOXENV=coverage
+    - env: TOXENV=markdown-lint
+before_install: pip install codecov
+after_success: codecov

@@ -1,0 +1,15 @@
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      {% if repo_name == 'GitHub' %}
+          <a href="{{ repo_url }}" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      {% elif repo_name == 'Bitbucket' %}
+          <a href="{{ repo_url }}" class="icon icon-bitbucket" style="float: left; color: #fcfcfc"> BitBucket</a>
+      {% endif %}
+      {% if previous_page %}
+        <span><a href="{{ previous_page.url }}" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      {% endif %}
+      {% if next_page %}
+        <span style="margin-left: 15px"><a href="{{ next_page.url }}" style="color: #fcfcfc">Next &raquo;</a></span>
+      {% endif %}
+    </span>
+</div>

@@ -3,7 +3,7 @@
 
         <!-- Collapsed navigation -->
         <div class="navbar-header">
-            {% if include_nav or include_search or include_next_prev or repo_url %}
+            {% if include_nav or include_next_prev or repo_url %}
             <!-- Expander button -->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -28,9 +28,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ nav_item.title }} <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         {% for nav_item in nav_item.children %}
-                            <li {% if nav_item.active %}class="active"{% endif %}>
-                                <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
-                            </li>
+                            {% include "nav-sub.html" %}
                         {% endfor %}
                         </ul>
                     </li>
@@ -43,40 +41,37 @@
                 </ul>
             {% endif %}
 
-            {% if include_search or include_next_prev or repo_url %}
-            <!-- Search, Navigation and Repo links -->
             <ul class="nav navbar-nav navbar-right">
-                {% if include_search %}
                 <li>
-                    <a href="#searchModal" data-toggle="modal"><i class="fa fa-search"></i> Search</a>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
                 </li>
-                {% endif %}
                 {% if include_next_prev %}
-                <li {% if not previous_page %}class="disabled"{% endif %}>
-                    <a rel="next" {% if previous_page %}href="{{ previous_page.url }}"{% endif %}>
-                        <i class="fa fa-arrow-left"></i> Previous
-                    </a>
-                </li>
-                <li {% if not next_page %}class="disabled"{% endif %}>
-                    <a rel="prev" {% if next_page %}href="{{ next_page.url }}"{% endif %}>
-                        Next <i class="fa fa-arrow-right"></i>
-                    </a>
-                </li>
+                    <li {% if not previous_page %}class="disabled"{% endif %}>
+                        <a rel="next" {% if previous_page %}href="{{ previous_page.url }}"{% endif %}>
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li {% if not next_page %}class="disabled"{% endif %}>
+                        <a rel="prev" {% if next_page %}href="{{ next_page.url }}"{% endif %}>
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
                 {% endif %}
                 {% if repo_url %}
-                <li>
-                    <a href="{{ repo_url }}">
-                        {% if repo_name == 'GitHub' %}
-                            <i class="fa fa-github"></i>
-                        {% elif repo_name == 'Bitbucket' %}
-                            <i class="fa fa-bitbucket"></i>
-                        {% endif %}
-                        {{ repo_name }}
-                    </a>
-                </li>
+                    <li>
+                        <a href="{{ repo_url }}">
+                            {% if repo_name == 'GitHub' %}
+                                <i class="fa fa-github"></i>
+                            {% elif repo_name == 'Bitbucket' %}
+                                <i class="fa fa-bitbucket"></i>
+                            {% endif %}
+                            {{ repo_name }}
+                        </a>
+                    </li>
                 {% endif %}
             </ul>
-            {% endif %}
         </div>
     </div>
 </div>
