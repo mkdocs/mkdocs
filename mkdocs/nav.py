@@ -132,13 +132,12 @@ class FileContext(object):
 
 class Page(object):
 
-    def __init__(self, title, url, path, url_context, is_hidden):
+    def __init__(self, title, url, path, url_context):
 
         self.title = title
         self.abs_url = url
         self.active = False
         self.url_context = url_context
-        self.is_hidden = is_hidden
 
         self.update_date = datetime.datetime.now().strftime("%Y-%m-%d")
 
@@ -277,47 +276,47 @@ def _generate_site_navigation(pages_config, url_context, use_dir_urls=True):
     previous = None
 
     for config_line in pages_config:
-        if isinstance(config_line, str):
-            path = config_line
-            title, child_title = None, None
-        elif len(config_line) in (1, 2, 3, 4):
-            # Pad any items that don't exist with 'None'
-            padded_config = (list(config_line) + [None, None])[:4]
-            path, title, child_title, is_hidden = padded_config
-        else:
-            msg = (
-                "Line in 'page' config contained %d items.  "
-                "Expected 1, 2 or 3 strings." % len(config_line)
-            )
-            raise exceptions.ConfigurationError(msg)
+        # if isinstance(config_line, str):
+        #     path = config_line
+        #     title, child_title = None, None
+        # elif len(config_line) in (1, 2, 3, 4):
+        #     # Pad any items that don't exist with 'None'
+        #     padded_config = (list(config_line) + [None, None])[:4]
+        #     path, title, child_title, is_hidden = padded_config
+        # else:
+        #     msg = (
+        #         "Line in 'page' config contained %d items.  "
+        #         "Expected 1, 2 or 3 strings." % len(config_line)
+        #     )
+        #     raise exceptions.ConfigurationError(msg)
 
-        if title is None:
-            filename = path.split(os.path.sep)[0]
-            title = filename_to_title(filename)
+        # if title is None:
+        #     filename = path.split(os.path.sep)[0]
+        #     title = filename_to_title(filename)
 
-        if child_title is None and os.path.sep in path:
-            filename = path.split(os.path.sep)[-1]
-            child_title = filename_to_title(filename)
+        # if child_title is None and os.path.sep in path:
+        #     filename = path.split(os.path.sep)[-1]
+        #     child_title = filename_to_title(filename)
 
-        url = utils.get_url_path(path, use_directory_urls)
+        # url = utils.get_url_path(path, use_directory_urls)
 
-        if not child_title:
-            # New top level page.
-            page = Page(title=title, url=url, path=path, url_context=url_context, is_hidden=is_hidden)
-            if not utils.is_homepage(path):
-                nav_items.append(page)
-        elif not nav_items or (nav_items[-1].title != title):
-            # New second level page.
-            page = Page(title=child_title, url=url, path=path, url_context=url_context, is_hidden=is_hidden)
-            header = Header(title=title, children=[page])
-            nav_items.append(header)
-            page.ancestors = [header]
-        else:
-            # Additional second level page.
-            page = Page(title=child_title, url=url, path=path, url_context=url_context, is_hidden=is_hidden)
-            header = nav_items[-1]
-            header.children.append(page)
-            page.ancestors = [header]
+        # if not child_title:
+        #     # New top level page.
+        #     page = Page(title=title, url=url, path=path, url_context=url_context, is_hidden=is_hidden)
+        #     if not utils.is_homepage(path):
+        #         nav_items.append(page)
+        # elif not nav_items or (nav_items[-1].title != title):
+        #     # New second level page.
+        #     page = Page(title=child_title, url=url, path=path, url_context=url_context, is_hidden=is_hidden)
+        #     header = Header(title=title, children=[page])
+        #     nav_items.append(header)
+        #     page.ancestors = [header]
+        # else:
+        #     # Additional second level page.
+        #     page = Page(title=child_title, url=url, path=path, url_context=url_context, is_hidden=is_hidden)
+        #     header = nav_items[-1]
+        #     header.children.append(page)
+        #     page.ancestors = [header]
 
         for page_or_header in _follow(
                 config_line, url_context, use_dir_urls):

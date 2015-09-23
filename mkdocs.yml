@@ -4,6 +4,7 @@ site_description: Project documentation with Markdown.
 site_author: Tom Christie & Dougal Matthews
 
 repo_url: https://github.com/mkdocs/mkdocs/
+theme: bootstrap
 
 pages:
 - Home: index.md
