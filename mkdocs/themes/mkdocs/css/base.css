@@ -10,7 +10,8 @@ body > div.container {
 }
 
 ul.nav li.main {
-    font-weight: bold;
+    font-size: 120%;
+    # font-weight: bold;
 }
 
 div.col-md-3 {
@@ -137,7 +138,7 @@ footer {
 .bs-sidebar .nav > .active:focus > a {
     font-weight: bold;
     background-color: transparent;
-    border-right: 1px solid;
+    border-right: 6px solid;
 }
 
 /* Nav: second level (shown on .active) */
@@ -182,7 +183,6 @@ footer {
         width: 263px;
     }
 }
-
 .headerlink {
     font-family: FontAwesome;
     font-size: 14px;
@@ -275,3 +275,4 @@ h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink, h4:hover .head
     -moz-border-radius: 6px 0 6px 6px;
     border-radius: 6px 0 6px 6px;
 }
+
