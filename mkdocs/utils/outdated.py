@@ -11,7 +11,6 @@ from pip._vendor.packaging import version as packaging_version
 
 from pip.compat import total_seconds, WINDOWS
 from pip.locations import USER_CACHE_DIR, running_under_virtualenv
-from pip.utils import ensure_dir
 from pip.utils.filesystem import check_path_owner
 
 try:
@@ -25,6 +24,14 @@ SELFCHECK_DATE_FMT = "%Y-%m-%dT%H:%M:%SZ"
 
 
 logger = logging.getLogger(__name__)
+
+def ensure_dir(path):
+    """os.path.makedirs without EEXIST."""
+    try:
+        os.makedirs(path)
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
 
 
 class VirtualenvSelfCheckState(object):
