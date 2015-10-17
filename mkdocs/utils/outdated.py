@@ -10,7 +10,6 @@ from pip._vendor import lockfile
 from pip._vendor.packaging import version as packaging_version
 
 from pip.compat import total_seconds, WINDOWS
-from pip.index import PyPI
 from pip.locations import USER_CACHE_DIR, running_under_virtualenv
 from pip.utils import ensure_dir
 from pip.utils.filesystem import check_path_owner
@@ -148,9 +147,10 @@ def mkdocs_version_check():
             logger.warning(
                 "You are using mkdocs version %s, however version %s is "
                 "available.\nYou should consider upgrading via the "
-                "'%s install --upgrade mkdocs' command." % (mkdocs.__version__,
-                                                         pypi_version,
-                                                         pip_cmd)
+                "'%s install --upgrade mkdocs' command." % (
+                    mkdocs.__version__,
+                    pypi_version,
+                    pip_cmd)
             )
 
     except Exception:
