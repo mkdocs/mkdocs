@@ -5,6 +5,7 @@ import json
 import logging
 import os.path
 import sys
+import errno
 
 from pip._vendor import lockfile
 from pip._vendor.packaging import version as packaging_version
@@ -24,6 +25,7 @@ SELFCHECK_DATE_FMT = "%Y-%m-%dT%H:%M:%SZ"
 
 
 logger = logging.getLogger(__name__)
+
 
 def ensure_dir(path):
     """os.path.makedirs without EEXIST."""
