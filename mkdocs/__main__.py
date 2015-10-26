@@ -11,7 +11,6 @@ from mkdocs import utils
 from mkdocs import exceptions
 from mkdocs.config import load_config
 from mkdocs.commands import build, gh_deploy, new, serve
-from mkdocs.utils.outdated import mkdocs_version_check
 
 log = logging.getLogger(__name__)
 
@@ -91,7 +90,6 @@ def cli():
     """
     MkDocs - Project documentation with Markdown.
     """
-    mkdocs_version_check()
 
 
 @cli.command(name="serve")
