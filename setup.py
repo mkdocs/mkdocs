@@ -66,7 +66,7 @@ setup(
         'mkdocs-bootswatch>=0.1.0',
         'PyYAML>=3.10',
         'tornado>=4.1',
-        'pycheckupdate>=0.11.1'
+        'pycheckupdate>=0.12.0'
     ],
     entry_points={
         'console_scripts': [
