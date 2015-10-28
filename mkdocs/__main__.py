@@ -93,10 +93,13 @@ def cli():
     """
     MkDocs - Project documentation with Markdown.
     """
-    if pycheckupdate.is_outdated('mkdocs'):
-        cmd = get_pip_install_cmd('mkdocs')
-        click.secho('''You are using an outdated version of mkdocs.
-                Please upgrade using {0}'''.format(cmd), fg='red')
+    try:
+        if pycheckupdate.is_outdated('mkdocs'):
+            cmd = get_pip_install_cmd('mkdocs')
+            click.secho('''You are using an outdated version of mkdocs.
+                    Please upgrade using {0}'''.format(cmd), fg='red')
+    except pycheckupdate.PackageNotInstalled:
+        pass
 
 
 @cli.command(name="serve")
