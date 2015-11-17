@@ -64,6 +64,13 @@ class TOCParser(HTMLParser):
         self.in_anchor = False
         self.attrs = None
         self.title = ''
+        
+        # Prior to Python3.4 no convert_charrefs keyword existed.
+        # However, in Python3.5 the default was changed to True.
+        # We need the False behavior in all versions but can only
+        # set it if it exists.
+        if hasattr(self, 'convert_charrefs'):
+            self.convert_charrefs = False
 
     def handle_starttag(self, tag, attrs):
 
