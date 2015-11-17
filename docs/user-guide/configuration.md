@@ -50,6 +50,43 @@ When set, provides a link to your GitHub or Bitbucket repository on each page.
 **default**: `'GitHub'` or `'Bitbucket'` if the `repo_url` matches those
 domains, otherwise `null`
 
+### repo_branch
+
+When set, points "Edit on GitHub" or "Edit on BitBucket" links to the specified branch
+in the repository. Common defaults are 'master' for GitHub and 'default' for BitBucket.
+
+```yaml
+repo_branch: release
+```
+
+**default**: 'master'
+
+### repo_docs_dir
+
+If your docs_dir does not reside at the root of your GitHub repository,
+and repo_link is desired, set repo_docs_dir to be the path from the repository root
+to docs_dir (inclusive). This option is not used for Bitbucket as providing
+direct view/edit links to individual files on Bitbucket is not supported here.
+
+For example, if your repository is `https://github.com/example/repository` with
+project structure of
+
+```
+stuff
+ \_ src
+ \_ docs
+    \_ concepts
+    \_ examples
+```
+
+For properly formed 'Edit on GitHub' links, set repo_docs_dir to
+
+```yaml
+repo_docs_dir: stuff/docs
+```
+
+**default**: `null` (assumes docs_dir to be at the top of the repository)
+
 ### site_description
 
 Set the site description. This will add a meta tag to the generated HTML header.
