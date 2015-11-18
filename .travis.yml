@@ -13,6 +13,9 @@ env:
 - TOXENV=py34-integration
 - TOXENV=py34-min-req
 - TOXENV=py34-unittests
+- TOXENV=py35-integration
+- TOXENV=py35-min-req
+- TOXENV=py35-unittests
 - TOXENV=pypy-integration
 - TOXENV=pypy-min-req
 - TOXENV=pypy-unittests
