@@ -53,6 +53,7 @@ class SearchIndex(object):
         # us to iterate through it.
         parser = ContentParser()
         parser.feed(content)
+        parser.close()
 
         # Get the absolute URL for the page, this is then
         # prepended to the urls of the sections
