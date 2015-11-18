@@ -1,6 +1,6 @@
 sudo: false
 language: python
-python: '2.7'
+python: '3.5'
 env:
 - TOXENV=py26-integration
 - TOXENV=py26-min-req
