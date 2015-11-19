@@ -81,6 +81,8 @@ commit_message_help = ("A commit message to use when commiting to the "
                        "Github Pages remote branch")
 remote_branch_help = ("The remote branch to commit to for Github Pages. This "
                       "overrides the value specified in config")
+remote_name_help = ("The remote name to commit to for Github Pages. This "
+                    "overrides the value specified in config")
 
 
 @click.group(context_settings={'help_option_names': ['-h', '--help']})
@@ -173,7 +175,7 @@ def json_command(clean, config_file, strict, site_dir):
 @click.option('-f', '--config-file', type=click.File('rb'), help=config_help)
 @click.option('-m', '--message', help=commit_message_help)
 @click.option('-b', '--remote-branch', help=remote_branch_help)
-@click.option('-r', '--remote-name', help=remote_branch_help)
+@click.option('-r', '--remote-name', help=remote_name_help)
 @common_options
 def gh_deploy_command(config_file, clean, message, remote_branch, remote_name):
     """Deploy your documentation to GitHub Pages"""
