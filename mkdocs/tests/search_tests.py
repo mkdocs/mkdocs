@@ -28,6 +28,7 @@ class SearchTests(unittest.TestCase):
         parser = search.ContentParser()
 
         parser.feed('<h1 id="title">Title</h1>TEST')
+        parser.close()
 
         self.assertEquals(parser.data, [search.ContentSection(
             text=["TEST"],
@@ -40,6 +41,7 @@ class SearchTests(unittest.TestCase):
         parser = search.ContentParser()
 
         parser.feed("<h1>Title</h1>TEST")
+        parser.close()
 
         self.assertEquals(parser.data, [search.ContentSection(
             text=["TEST"],
@@ -52,6 +54,7 @@ class SearchTests(unittest.TestCase):
         parser = search.ContentParser()
 
         parser.feed("Content Before H1 <h1>Title</h1>TEST")
+        parser.close()
 
         self.assertEquals(parser.data, [search.ContentSection(
             text=["TEST"],
