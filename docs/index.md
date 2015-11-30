@@ -199,6 +199,23 @@ with the `--clean` switch.
 mkdocs build --clean
 ```
 
+## Other Commands and Options
+
+There are various other commands and options available. For a complete list of
+commands, use the `--help` flag:
+
+```bash
+mkdocs --help
+```
+
+To view a list of options available on a given command, use the `--help` flag
+with that command. For example, to get a list of all options available for the
+`build` command run the following:
+
+```bash
+mkdocs build --help
+```
+
 ## Deploying
 
 The documentation site that we've just built only uses static files so you'll be
