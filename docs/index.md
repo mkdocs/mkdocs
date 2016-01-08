@@ -117,7 +117,7 @@ Once you hit reload in the browser you'll see your new site name take effect.
 
 ## Adding pages
 
-Go ahead and edit the `doc/index.md` document, and change the initial heading to
+Go ahead and edit the `docs/index.md` document, and change the initial heading to
 `MkLorum`, then reload the site in your browser, and you should see the change
 take effect immediately.
 
