@@ -45,14 +45,20 @@ themes
 
 * Fix issues when using absolute links to Markdown files. (#628)
 * Deprecate support of Python 2.6, pending removal in 1.0.0. (#165)
+* Add official support for Python version 3.5.
 * Add support for [site_description] and [site_author] to the [ReadTheDocs]
   theme. (#631)
+* Update FontAwesome to 4.5.0. (#789)
+* Increase IE support with X-UA-Compatible. (#785)
+* Added support for Python's `-m` flag. (#706)
 * Bugfix: Ensure consistent ordering of auto-populated pages. (#638)
 * Bugfix: Scroll the tables of contents on the MkDocs theme if it is too long
   for the page. (#204)
 * Bugfix: Add all ancestors to the page attribute `ancestors` rather than just
   the initial one. (#693)
 * Bugfix: Include HTML in the build output again. (#691)
+* Bugfix: Provide filename to Read the Docs. (#721 and RTD#1480)
+* Bugfix: Silence Click's unicode_literals warning. (#708)
 
 [site_description]: /user-guide/configuration.md#site_description
 [site_author]: /user-guide/configuration.md#site_author
