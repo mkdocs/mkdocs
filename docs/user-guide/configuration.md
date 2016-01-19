@@ -59,33 +59,31 @@ in the repository. Common defaults are 'master' for GitHub and 'default' for Bit
 repo_branch: release
 ```
 
-**default**: 'master'
+**default**: `master`
 
 ### repo_docs_dir
 
-If your docs_dir does not reside at the root of your GitHub repository,
-and repo_link is desired, set repo_docs_dir to be the path from the repository root
-to docs_dir (inclusive). This option is not used for Bitbucket as providing
-direct view/edit links to individual files on Bitbucket is not supported here.
+When set, points to the location of the `docs_dir` within a GitHub or BitBucket repository.
+If the `docs_dir` does not reside at the root of the repository, set `repo_docs_dir` to be
+the path from the repository root to `docs_dir` (inclusive). 
 
-For example, if your repository is `https://github.com/example/repository` with
-project structure of
+For example, given a repository with a project structure of:
 
 ```
 stuff
- \_ src
- \_ docs
-    \_ concepts
-    \_ examples
+    \ src
+    \ docs
+        \ concepts
+        \ examples
 ```
 
-For properly formed 'Edit on GitHub' links, set repo_docs_dir to
+set `repo_docs_dir` to:
 
 ```yaml
 repo_docs_dir: stuff/docs
 ```
 
-**default**: `null` (assumes docs_dir to be at the top of the repository)
+**default**: `docs`
 
 ### site_description
 
