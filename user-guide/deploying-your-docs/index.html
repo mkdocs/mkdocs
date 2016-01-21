@@ -5,14 +5,14 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        
+        <meta name="author" content="Tom Christie & Dougal Matthews">
         <link rel="canonical" href="http://www.mkdocs.org/user-guide/deploying-your-docs/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
-	<title>Deploying your docs - MkDocs</title>
+	<title>Deploying Your Docs - MkDocs</title>
 
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.5.0.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="../../css/highlight.css">
         <link href="../../css/extra.css" rel="stylesheet">
@@ -71,8 +71,20 @@
                 
                 
                     <li class="dropdown active">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User guide <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../writing-your-docs/">Writing Your Docs</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../styling-your-docs/">Styling Your Docs</a>
+</li>
+
                         
                             
 <li >
@@ -82,19 +94,13 @@
                         
                             
 <li class="active">
-    <a href="./">Deploying your docs</a>
+    <a href="./">Deploying Your Docs</a>
 </li>
 
                         
                             
 <li >
-    <a href="../styling-your-docs/">Styling your docs</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../writing-your-docs/">Writing your docs</a>
+    <a href="../custom-themes/">Custom Themes</a>
 </li>
 
                         
@@ -109,6 +115,12 @@
                         
                             
 <li >
+    <a href="../../about/release-notes/">Release Notes</a>
+</li>
+
+                        
+                            
+<li >
     <a href="../../about/contributing/">Contributing</a>
 </li>
 
@@ -116,12 +128,6 @@
                             
 <li >
     <a href="../../about/license/">License</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../about/release-notes/">Release notes</a>
 </li>
 
                         
@@ -145,7 +151,7 @@
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../styling-your-docs/">
+                        <a rel="prev" href="../custom-themes/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -214,14 +220,14 @@ the <code>gh-deploy</code> command because you will lose your work.</p>
 <p><a href="https://readthedocs.org/">Read the Docs</a> offers free documentation hosting. You can import your docs
 using any major version control system, including Mercurial, Git, Subversion,
 and Bazaar. Read the Docs supports MkDocs out-of-the-box. Follow the
-<a href="https://read-the-docs.readthedocs.org/en/latest/getting_started.html#in-markdown">instructions</a> on their site to arrange the filies in your repository properly,
+<a href="https://read-the-docs.readthedocs.org/en/latest/getting_started.html#in-markdown">instructions</a> on their site to arrange the files in your repository properly,
 create an account and point it at your publicly hosted repository. If properly
 configured, your documentation will update each time you push commits to your
 public repository.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>To benefit from all of the <a href="http://read-the-docs.readthedocs.org/en/latest/features.html">features</a> offered by Read the Docs, you will need
-to use the <a href="../../user-guide/styling-your-docs/">Read the Docs theme</a> which ships with MkDocs. The various
+to use the <a href="../styling-your-docs/">Read the Docs theme</a> which ships with MkDocs. The various
 themes which may be referenced in Read the Docs' documentation are Sphinx
 specific themes and will not work with MkDocs.</p>
 </div>
@@ -238,25 +244,26 @@ python setup.py upload_docs --upload-dir=site
 where <code>&lt;projectname&gt;</code> is the name you used to register your project with PyPI.</p>
 <p>There are a few prerequisites for the above to work:</p>
 <ol>
-<li>You must be using <a href="http://pythonhosted.org/setuptools/">Setuptools</a> in your <code>setup.py</code> script (<a href="https://docs.python.org/2/distutils/">Distutils</a> does not
-offer an <code>upload_docs</code> command).</li>
-<li>Your project must already be registered with PyPI (use <code>python setup.py register</code>).</li>
+<li>You must be using <a href="http://pythonhosted.org/setuptools/">Setuptools</a> in your <code>setup.py</code> script (<a href="https://docs.python.org/2/distutils/">Distutils</a> does
+   not offer an <code>upload_docs</code> command).</li>
+<li>Your project must already be registered with PyPI (use <code>python setup.py
+   register</code>).</li>
 <li>Your <code>mkdocs.yml</code> config file and your "docs" directory (value assigned to
-the <a href="../configuration/#docs_dir">docs_dir</a> configuration option) are presumed to be in the root directory of
-your project alongside your <code>setup.py</code> script.</li>
+   the <a href="../configuration/#docs_dir">docs_dir</a> configuration option) are presumed to be in the root directory
+   of your project alongside your <code>setup.py</code> script.</li>
 <li>It is assumed that the default value (<code>"site"</code>) is assigned to the <a href="../configuration/#site_dir">site_dir</a>
-configuration option in your <code>mkdocs.yaml</code> config file. If you have set a
-different value, assign that value to the <code>--upload-dir</code> option.</li>
+   configuration option in your <code>mkdocs.yaml</code> config file. If you have set a
+   different value, assign that value to the <code>--upload-dir</code> option.</li>
 </ol>
 <h2 id="other-providers">Other Providers<a class="headerlink" href="#other-providers" title="Permanent link"></a></h2>
 <p>Any hosting provider which can serve static files can be used to serve
-documentation generated by MkDocs. While is would be imposable to document how
+documentation generated by MkDocs. While it would be impossible to document how
 to upload the docs to every hosting provider out there, the following guidelines
 should provide some general assistance.</p>
 <p>When you build your site (using the <code>mkdocs build</code> command), all of the files
 are written to the directory assigned to the <a href="../configuration/#site_dir">site_dir</a> configuration option
 (defaults to <code>"site"</code>) in your <code>mkdocs.yaml</code> config file. Generally, you will
-simply need to copy the connects of that directory to the root directory of your
+simply need to copy the contents of that directory to the root directory of your
 hosting provider's server. Depending on your hosting provider's setup, you may
 need to use a graphical or command line <a href="https://en.wikipedia.org/wiki/File_Transfer_Protocol">ftp</a>, <a href="https://en.wikipedia.org/wiki/Secure_Shell">ssh</a> or <a href="https://en.wikipedia.org/wiki/Secure_copy">scp</a> client to transfer
 the files.</p>
@@ -278,7 +285,7 @@ their documentation for "ftp" or "uploading site".</p></div>
         <footer class="col-md-12">
             <hr>
             
-                <p>Copyright &copy; 2014, <a href="https://twitter.com/_tomchristie">Tom Christie</a>. Maintenance and development by <a href="http://www.dougalmatthews.com/">Dougal Matthews</a></p>
+                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, <a href="http://www.dougalmatthews.com/">Dougal Matthews</a>.</p>
             
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>

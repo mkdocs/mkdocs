@@ -110,6 +110,8 @@ footer {
 
 .bs-sidebar.well {
     padding: 0;
+    max-height: 90%;
+    overflow-y: auto;
 }
 
 /* First level of nav */

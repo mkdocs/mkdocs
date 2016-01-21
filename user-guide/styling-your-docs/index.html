@@ -5,14 +5,14 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        
+        <meta name="author" content="Tom Christie & Dougal Matthews">
         <link rel="canonical" href="http://www.mkdocs.org/user-guide/styling-your-docs/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
-	<title>Styling your docs - MkDocs</title>
+	<title>Styling Your Docs - MkDocs</title>
 
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.5.0.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="../../css/highlight.css">
         <link href="../../css/extra.css" rel="stylesheet">
@@ -71,8 +71,20 @@
                 
                 
                     <li class="dropdown active">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User guide <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../writing-your-docs/">Writing Your Docs</a>
+</li>
+
+                        
+                            
+<li class="active">
+    <a href="./">Styling Your Docs</a>
+</li>
+
                         
                             
 <li >
@@ -82,19 +94,13 @@
                         
                             
 <li >
-    <a href="../deploying-your-docs/">Deploying your docs</a>
-</li>
-
-                        
-                            
-<li class="active">
-    <a href="./">Styling your docs</a>
+    <a href="../deploying-your-docs/">Deploying Your Docs</a>
 </li>
 
                         
                             
 <li >
-    <a href="../writing-your-docs/">Writing your docs</a>
+    <a href="../custom-themes/">Custom Themes</a>
 </li>
 
                         
@@ -109,6 +115,12 @@
                         
                             
 <li >
+    <a href="../../about/release-notes/">Release Notes</a>
+</li>
+
+                        
+                            
+<li >
     <a href="../../about/contributing/">Contributing</a>
 </li>
 
@@ -116,12 +128,6 @@
                             
 <li >
     <a href="../../about/license/">License</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../about/release-notes/">Release notes</a>
 </li>
 
                         
@@ -140,12 +146,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../deploying-your-docs/">
+                        <a rel="next" href="../writing-your-docs/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../writing-your-docs/">
+                        <a rel="prev" href="../configuration/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -174,7 +180,9 @@
         
             <li><a href="#built-in-themes">Built-in themes</a></li>
         
-            <li><a href="#custom-themes">Custom themes</a></li>
+            <li><a href="#bootstrap-and-bootswatch-themes">Bootstrap and Bootswatch Themes</a></li>
+        
+            <li><a href="#customising-a-theme">Customising a Theme</a></li>
         
     
     </ul>
@@ -184,297 +192,91 @@
 <h1 id="styling-your-docs">Styling your docs<a class="headerlink" href="#styling-your-docs" title="Permanent link"></a></h1>
 <p>How to style and theme your documentation.</p>
 <hr />
-<p>MkDocs includes a number of <a href="#built-in-themes">different themes</a> which can easily be customised with extra CSS or JavaScript or you can create a <a href="#custom-themes">custom theme</a> for your documentation.</p>
-<p>To use a theme that is included in MkDocs, simply add this to your <code>mkdocs.yml</code> config file.</p>
-<pre><code>theme: amelia
+<p>MkDocs includes a number of different <a href="#built-in-themes">builtin themes</a> and
+<a href="#bootstrap-and-bootswatch-themes">external themes</a> which can easily be
+<a href="#customising-a-theme">customised with extra CSS or JavaScript</a> or you can
+create a <a href="../custom-themes/">custom theme</a> for your documentation.</p>
+<p>To use a theme that is included in MkDocs, simply add this to your
+<code>mkdocs.yml</code> config file.</p>
+<pre><code>theme: readthedocs
 </code></pre>
-<p>Replace <a href="#amelia"><code>amelia</code></a> with any of the <a href="#built-in-themes">builtin themes</a> listed below.</p>
-<p>To customise a theme, simply place additional CSS and JavaScript files in the documentation directory next to the Markdown files and these will be automatically detected and added. Additionally, the <a href="../../user-guide/configuration/#extra_css"><code>extra_css</code></a> and <a href="../../user-guide/configuration/#extra_javascript"><code>extra_javascript</code></a> configuration options can be used to specifically include certain CSS or JavaScript files.</p>
-<p>See the <a href="../../user-guide/configuration/#theme">configuration documentation</a> for more specific details about these options.</p>
-<p>To create a new custom theme or more heavily customise an existing theme, see the <a href="#custom-themes">custom themes</a> section below.</p>
+<p>Replace <a href="#readthedocs"><code>readthedocs</code></a> with any of the <a href="#built-
+in-themes">builtin themes</a> listed below.</p>
+<p>To create a new custom theme or more heavily customise an existing theme, see
+the <a href="#custom-themes">custom themes</a> section below.</p>
 <h2 id="built-in-themes">Built-in themes<a class="headerlink" href="#built-in-themes" title="Permanent link"></a></h2>
-<h3 id="mkdocs">MkDocs<a class="headerlink" href="#mkdocs" title="Permanent link"></a></h3>
+<h3 id="mkdocs">mkdocs<a class="headerlink" href="#mkdocs" title="Permanent link"></a></h3>
 <p><img alt="mkdocs" src="../../img/mkdocs.png" /></p>
-<h3 id="read-the-docs">Read the Docs<a class="headerlink" href="#read-the-docs" title="Permanent link"></a></h3>
+<h3 id="readthedocs">readthedocs<a class="headerlink" href="#readthedocs" title="Permanent link"></a></h3>
 <p><img alt="ReadTheDocs" src="https://docs.readthedocs.org/en/latest/_images/screen_mobile.png" /></p>
-<h3 id="bootstrap">Bootstrap<a class="headerlink" href="#bootstrap" title="Permanent link"></a></h3>
-<p><img alt="Bootstrap" src="http://bootstrapdocs.com/v2.3.1/docs/assets/img/examples/bootstrap-example-fluid.png" /></p>
-<h3 id="the-bootswatch-themes">The bootswatch themes<a class="headerlink" href="#the-bootswatch-themes" title="Permanent link"></a></h3>
-<h4 id="amelia">Amelia<a class="headerlink" href="#amelia" title="Permanent link"></a></h4>
-<p><img alt="Amelia" src="http://bootswatch.com/2/amelia/thumbnail.png" /></p>
-<h4 id="cerulean">Cerulean<a class="headerlink" href="#cerulean" title="Permanent link"></a></h4>
-<p><img alt="Cerulean" src="http://bootswatch.com/cerulean/thumbnail.png" /></p>
-<h4 id="cosmo">Cosmo<a class="headerlink" href="#cosmo" title="Permanent link"></a></h4>
-<p><img alt="Cosmo" src="http://bootswatch.com/cosmo/thumbnail.png" /></p>
-<h4 id="cyborg">Cyborg<a class="headerlink" href="#cyborg" title="Permanent link"></a></h4>
-<p><img alt="Cyborg" src="http://bootswatch.com/cyborg/thumbnail.png" /></p>
-<h4 id="flatly">Flatly<a class="headerlink" href="#flatly" title="Permanent link"></a></h4>
-<p><img alt="Flatly" src="http://bootswatch.com/flatly/thumbnail.png" /></p>
-<h4 id="journal">Journal<a class="headerlink" href="#journal" title="Permanent link"></a></h4>
-<p><img alt="Journal" src="http://bootswatch.com/journal/thumbnail.png" /></p>
-<h4 id="readable">Readable<a class="headerlink" href="#readable" title="Permanent link"></a></h4>
-<p><img alt="Readable" src="http://bootswatch.com/readable/thumbnail.png" /></p>
-<h4 id="simplex">Simplex<a class="headerlink" href="#simplex" title="Permanent link"></a></h4>
-<p><img alt="Simplex" src="http://bootswatch.com/simplex/thumbnail.png" /></p>
-<h4 id="slate">Slate<a class="headerlink" href="#slate" title="Permanent link"></a></h4>
-<p><img alt="Slate" src="http://bootswatch.com/slate/thumbnail.png" /></p>
-<h4 id="spacelab">Spacelab<a class="headerlink" href="#spacelab" title="Permanent link"></a></h4>
-<p><img alt="Spacelab" src="http://bootswatch.com/spacelab/thumbnail.png" /></p>
-<h4 id="united">United<a class="headerlink" href="#united" title="Permanent link"></a></h4>
-<p><img alt="United" src="http://bootswatch.com/united/thumbnail.png" /></p>
-<h4 id="yeti">Yeti<a class="headerlink" href="#yeti" title="Permanent link"></a></h4>
-<p><img alt="Yeti" src="http://bootswatch.com/yeti/thumbnail.png" /></p>
-<h2 id="custom-themes">Custom themes<a class="headerlink" href="#custom-themes" title="Permanent link"></a></h2>
-<p>The bare minimum required for a custom theme is a <code>base.html</code> <a href="http://jinja.pocoo.org/docs/dev/">Jinja2 template</a> file. This should be placed in a directory at the same level as the <code>mkdocs.yml</code> configuration file. Within <code>mkdocs.yml</code>, specify the <code>theme_dir</code> option and set it to the name of the directory containing <code>base.html</code>. For example, given this example project layout:</p>
-<pre><code>mkdocs.yml
-docs/
-    index.md
-    about.md
-custom_theme/
-    base.html
-    ...
-</code></pre>
-<p>You would include the following setting to use the custom theme directory:</p>
-<pre><code>theme_dir: 'custom_theme'
-</code></pre>
-<p>If used in combination with the <code>theme</code> configuration value a custom theme can be used to replace only specific parts of a built-in theme. For example, with the above layout and if you set <code>theme: mkdocs</code> then the <code>base.html</code> file would replace that in the theme but otherwise it would remain the same. This is useful if you want to make small adjustments to an existing theme.</p>
-<h3 id="basic-theme">Basic theme<a class="headerlink" href="#basic-theme" title="Permanent link"></a></h3>
-<p>The simplest <code>base.html</code> file is the following:</p>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-  &lt;head&gt;
-  &lt;/head&gt;
-  &lt;body&gt;
-    {{ content }}
-  &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>Article content from each page specified in <code>mkdocs.yml</code> is inserted using the <code>{{ content }}</code> tag. Stylesheets and scripts can be brought into this theme as with a normal HTML file. Navbars and tables of contents can also be generated and included automatically, through the <code>nav</code> and <code>toc</code> objects, respectively. If you wish to write your own theme, it is recommended to start with one of the <a href="https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes">built-in themes</a> and modify it accordingly.</p>
-<h3 id="template-variables">Template Variables<a class="headerlink" href="#template-variables" title="Permanent link"></a></h3>
-<p>Each template in a theme is built with a template context. These are the variables that are available to themes. The context varies depending on the template that is being built. At the moment templates are either built with the global context or with a page specific context. The global context is used for HTML pages that don't represent an individual Markdown document, for example a 404.html page or search.html.</p>
-<h4 id="global-context">Global Context<a class="headerlink" href="#global-context" title="Permanent link"></a></h4>
-<p>The following variables in the context map directly the the <a href="../../user-guide/configuration/">configuration options</a>.</p>
-<table>
-<thead>
-<tr>
-<th>Variable Name</th>
-<th>Configuration name</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>site_name</td>
-<td>site_name</td>
-<td></td>
-</tr>
-<tr>
-<td>site_author</td>
-<td>site_author</td>
-<td></td>
-</tr>
-<tr>
-<td>favicon</td>
-<td>site_favicon</td>
-<td></td>
-</tr>
-<tr>
-<td>page_description</td>
-<td>site_description</td>
-<td></td>
-</tr>
-<tr>
-<td>repo_url</td>
-<td>repo_url</td>
-<td></td>
-</tr>
-<tr>
-<td>repo_name</td>
-<td>repo_name</td>
-<td></td>
-</tr>
-<tr>
-<td>site_url</td>
-<td>site_url</td>
-<td></td>
-</tr>
-<tr>
-<td>extra_css</td>
-<td>extra_css</td>
-<td></td>
-</tr>
-<tr>
-<td>extra_javascript</td>
-<td>extra_javascript</td>
-<td></td>
-</tr>
-<tr>
-<td>extra</td>
-<td>extra</td>
-<td></td>
-</tr>
-<tr>
-<td>include_nav</td>
-<td>include_nav</td>
-<td></td>
-</tr>
-<tr>
-<td>include_next_prev</td>
-<td>include_next_prev</td>
-<td></td>
-</tr>
-<tr>
-<td>copyright</td>
-<td>copyright</td>
-<td></td>
-</tr>
-<tr>
-<td>google_analytics</td>
-<td>google_analytics</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>The following variables provide information about the navigation and location.</p>
-<h5 id="nav">nav<a class="headerlink" href="#nav" title="Permanent link"></a></h5>
-<p>The <code>nav</code> variable is used to create the navigation for for the documentation. Following is a basic usage example which outputs the first and second level navigation as a nested list.</p>
-<pre><code>&lt;ul&gt;
-  {% for nav_item in nav %}
-      {% if nav_item.children %}
-          &lt;li&gt;{{ nav_item.title }}
-              &lt;ul&gt;
-              {% for nav_item in nav_item.children %}
-                  &lt;li class=&quot;{% if nav_item.active%}current{%endif%}&quot;&gt;
-                      &lt;a href=&quot;{{ nav_item.url }}&quot;&gt;{{ nav_item.title }}&lt;/a&gt;
-                  &lt;/li&gt;
-              {% endfor %}
-              &lt;/ul&gt;
-          &lt;/li&gt;
-      {% else %}
-          &lt;li class=&quot;{% if nav_item.active%}current{%endif%}&quot;&gt;
-              &lt;a href=&quot;{{ nav_item.url }}&quot;&gt;{{ nav_item.title }}&lt;/a&gt;
-          &lt;/li&gt;
-      {% endif %}
-
-  {% endfor %}
-&lt;/ul&gt;
-</code></pre>
-
-<h5 id="base_url">base_url<a class="headerlink" href="#base_url" title="Permanent link"></a></h5>
-<p>The <code>base_url</code> provides a relative path to the root of the MkDocs project. This makes it easy to include links to static assets in your theme. For example, if your theme includes a <code>js</code> folder, to include <code>theme.js</code> from that folder on all pages you would do this:</p>
-<pre><code>&lt;script src=&quot;{{ base_url }}/js/theme.js&quot;&gt;&lt;/script&gt;
-</code></pre>
-
-<h5 id="homepage_url">homepage_url<a class="headerlink" href="#homepage_url" title="Permanent link"></a></h5>
-<p>Provides a relative path to the documentation homepage.</p>
-<h5 id="mkdocs_version">mkdocs_version<a class="headerlink" href="#mkdocs_version" title="Permanent link"></a></h5>
-<p>Contains the current MkDocs version.</p>
-<h5 id="build_date_utc">build_date_utc<a class="headerlink" href="#build_date_utc" title="Permanent link"></a></h5>
-<p>A Python datetime object that includes represents the time the documentation was built in UTC. This is useful for showing how recently the documentation was updated.</p>
-<h4 id="page-context">Page Context<a class="headerlink" href="#page-context" title="Permanent link"></a></h4>
-<p>The page context includes all of the above Global context and the following additional variables.</p>
-<h5 id="page_title">page_title<a class="headerlink" href="#page_title" title="Permanent link"></a></h5>
-<p>Contains the Title for the current page.</p>
-<h5 id="page_description">page_description<a class="headerlink" href="#page_description" title="Permanent link"></a></h5>
-<p>Contains the description for the current page on the homepage, it is blank on other pages.</p>
-<h5 id="content">content<a class="headerlink" href="#content" title="Permanent link"></a></h5>
-<p>The rendered Markdown as HTML, this is the contents of the documentation.</p>
-<h5 id="toc">toc<a class="headerlink" href="#toc" title="Permanent link"></a></h5>
-<p>An object representing the Table of contents for a page. Displaying the table of contents as a simple list can be achieved like this.</p>
-<pre><code>  &lt;ul&gt;
-  {% for toc_item in toc %}
-      &lt;li&gt;&lt;a href=&quot;{{ toc_item.url }}&quot;&gt;{{ toc_item.title }}&lt;/a&gt;&lt;/li&gt;
-      {% for toc_item in toc_item.children %}
-          &lt;li&gt;&lt;a href=&quot;{{ toc_item.url }}&quot;&gt;{{ toc_item.title }}&lt;/a&gt;&lt;/li&gt;
-      {% endfor %}
-  {% endfor %}
-  &lt;/ul&gt;
-</code></pre>
-
-<h5 id="meta">meta<a class="headerlink" href="#meta" title="Permanent link"></a></h5>
-<p>A mapping of the metadata included at the top of the markdown page. In this example we define a <code>source</code> property above the page title.</p>
-<pre><code class="no-highlight">source: generics.py
-        mixins.py
-
-# Page title
-
-Content...
-</code></pre>
-
-<p>A template can access this metadata for the page with the <code>meta.source</code> variable. This could then be used to link to source files related to the documentation page.</p>
-<pre><code>{% for filename in meta.source %}
-  &lt;a class=&quot;github&quot; href=&quot;https://github.com/.../{{ filename }}&quot;&gt;
-    &lt;span class=&quot;label label-info&quot;&gt;{{ filename }}&lt;/span&gt;
-  &lt;/a&gt;
-{% endfor %}
-</code></pre>
-
-<h5 id="canonical_url">canonical_url<a class="headerlink" href="#canonical_url" title="Permanent link"></a></h5>
-<p>The full, canonical URL to the current page. This includes the site_url from the configuration.</p>
-<h5 id="current_page">current_page<a class="headerlink" href="#current_page" title="Permanent link"></a></h5>
-<p>The page object for the current page. The page path and url properties can be displayed like this.</p>
-<pre><code>&lt;h1&gt;{{ current_page.title }}&lt;/h1&gt;
-&lt;p&gt; This page is at {{ current_page.url }}&lt;/p&gt;
-</code></pre>
-
-<h5 id="previous_page">previous_page<a class="headerlink" href="#previous_page" title="Permanent link"></a></h5>
-<p>The page object for the previous  page. The isage is the same as for
-<code>current_page</code>.</p>
-<h5 id="next_page">next_page<a class="headerlink" href="#next_page" title="Permanent link"></a></h5>
-<p>The page object for the next page.The isage is the same as for <code>current_page</code>.</p>
-<h4 id="extra-context">Extra Context<a class="headerlink" href="#extra-context" title="Permanent link"></a></h4>
-<p>Additional variables can be passed to the template with the <a href="../../user-guide/configuration/#extra"><code>extra</code></a> configuration option. This is a set of key value pairs that can make custom templates far more flexible.</p>
-<p>For example, this could be used to include the project version of all pages and a list of links related to the project. This can be achieved with the following <code>extra</code> configuration:</p>
-<pre><code class="yaml">extra:
-    version: 0.13.0
-    links:
-        - https://github.com/mkdocs
-        - https://docs.readthedocs.org/en/latest/builds.html#mkdocs
-        - http://www.mkdocs.org/
-</code></pre>
-
-<p>And then displayed with this HTML in the custom theme.</p>
-<pre><code class="html">{{ config.extra.version }}
-
-{% if config.extra.links %}
-  &lt;ul&gt;
-  {% for link in config.extra.links %}
-      &lt;li&gt;{{ link }}&lt;/li&gt;
-  {% endfor %}
-  &lt;/ul&gt;
-{% endif %}
-</code></pre>
-
-<h3 id="search-and-themes">Search and themes<a class="headerlink" href="#search-and-themes" title="Permanent link"></a></h3>
-<p>As of MkDocs <code>0.13</code> client side search support has been added to MkDocs with <a href="http://lunrjs.com/">Lunr.js</a>.</p>
-<p>Search can either be added to every page in the theme or to a dedicated template which must be named <code>search.html</code>. The search template will be build with the same name and can be viewable with <code>mkdocs serve</code> at <code>http://localhost:8000/search.html</code>. An example of the two different approaches can be seen by comparing the <code>mkdocs</code> and <code>readthedocs</code> themes.</p>
-<p>The following HTML needs to be added to the theme so the JavaScript is loaded for Lunr.js.</p>
-<pre><code>&lt;script&gt;var base_url = '{{ base_url }}';&lt;/script&gt;
-&lt;script data-main="{{ base_url }}/mkdocs/js/search.js" src="{{ base_url }}/mkdocs/js/require.js"&gt;&lt;/script&gt;
-</code></pre>
+<h2 id="bootstrap-and-bootswatch-themes">Bootstrap and Bootswatch Themes<a class="headerlink" href="#bootstrap-and-bootswatch-themes" title="Permanent link"></a></h2>
+<p>MkDocs also includes themes provided by two packages. <a href="http://mkdocs.github.io/mkdocs-bootstrap/">MkDocs Bootstrap</a> and
+<a href="http://mkdocs.github.io/mkdocs-bootswatch/">MkDocs Bootswatch</a>. The Bootstrap theme provides a theme based on <a href="http://getbootstrap.com/">Bootstrap</a>
+and the Bootstrap theme provides 12 different themed Bootstrap themes based on
+the <a href="http://bootswatch.com/">Bootswatch</a> project.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The above JavaScript will download the search index, for larger documentation projects this can be a heavy operation. In those cases, it is suggested that you either use the <code>search.html</code> approach to only include search on one page or load the JavaScript on an event like a form submit.</p>
+<p>The Bootstrap and Bootswatch themes will not be included by default from
+MkDocs version 1.0. They will need to be installed manually with <code>pip
+install mkdocs-bootstrap</code> or <code>pip install mkdocs-bootswatch</code>.</p>
 </div>
-<p>This loads the JavaScript and sets a global variable <code>base_url</code> which allows the JavaScript to make the links relative to the current page. The above JavaScript, with the following HTML in a <code>search.html</code> template will add a full search implementation to your theme.</p>
-<pre><code>&lt;h1 id="search"&gt;Search Results&lt;/h1&gt;
-
-&lt;form action="search.html"&gt;
-  &lt;input name="q" id="mkdocs-search-query" type="text" class="search_input search-query ui-autocomplete-input" placeholder="Search the Docs" autocomplete="off"&gt;
-&lt;/form&gt;
-
-&lt;div id="mkdocs-search-results"&gt;
-  Sorry, page not found.
-&lt;/div&gt;
+<h3 id="bootstrap">Bootstrap<a class="headerlink" href="#bootstrap" title="Permanent link"></a></h3>
+<p><img alt="Bootstrap" src="http://bootstrapdocs.com/v2.3.1/docs/assets/img/examples/bootstrap-example-fluid.png" /></p>
+<h3 id="amelia">Amelia<a class="headerlink" href="#amelia" title="Permanent link"></a></h3>
+<p><img alt="Amelia" src="http://bootswatch.com/2/amelia/thumbnail.png" /></p>
+<h3 id="cerulean">Cerulean<a class="headerlink" href="#cerulean" title="Permanent link"></a></h3>
+<p><img alt="Cerulean" src="http://bootswatch.com/cerulean/thumbnail.png" /></p>
+<h3 id="cosmo">Cosmo<a class="headerlink" href="#cosmo" title="Permanent link"></a></h3>
+<p><img alt="Cosmo" src="http://bootswatch.com/cosmo/thumbnail.png" /></p>
+<h3 id="cyborg">Cyborg<a class="headerlink" href="#cyborg" title="Permanent link"></a></h3>
+<p><img alt="Cyborg" src="http://bootswatch.com/cyborg/thumbnail.png" /></p>
+<h3 id="flatly">Flatly<a class="headerlink" href="#flatly" title="Permanent link"></a></h3>
+<p><img alt="Flatly" src="http://bootswatch.com/flatly/thumbnail.png" /></p>
+<h3 id="journal">Journal<a class="headerlink" href="#journal" title="Permanent link"></a></h3>
+<p><img alt="Journal" src="http://bootswatch.com/journal/thumbnail.png" /></p>
+<h3 id="readable">Readable<a class="headerlink" href="#readable" title="Permanent link"></a></h3>
+<p><img alt="Readable" src="http://bootswatch.com/readable/thumbnail.png" /></p>
+<h3 id="simplex">Simplex<a class="headerlink" href="#simplex" title="Permanent link"></a></h3>
+<p><img alt="Simplex" src="http://bootswatch.com/simplex/thumbnail.png" /></p>
+<h3 id="slate">Slate<a class="headerlink" href="#slate" title="Permanent link"></a></h3>
+<p><img alt="Slate" src="http://bootswatch.com/slate/thumbnail.png" /></p>
+<h3 id="spacelab">Spacelab<a class="headerlink" href="#spacelab" title="Permanent link"></a></h3>
+<p><img alt="Spacelab" src="http://bootswatch.com/spacelab/thumbnail.png" /></p>
+<h3 id="united">United<a class="headerlink" href="#united" title="Permanent link"></a></h3>
+<p><img alt="United" src="http://bootswatch.com/united/thumbnail.png" /></p>
+<h3 id="yeti">Yeti<a class="headerlink" href="#yeti" title="Permanent link"></a></h3>
+<p><img alt="Yeti" src="http://bootswatch.com/yeti/thumbnail.png" /></p>
+<h2 id="customising-a-theme">Customising a Theme<a class="headerlink" href="#customising-a-theme" title="Permanent link"></a></h2>
+<p>The <a href="../configuration/#extra_css">extra_css</a> and <a href="../configuration/#extra_javascript">extra_javascript</a> configuration options can be used to
+make tweaks and customisations to existing themes. To use these, you simply
+need to include either CSS or JavaScript files within your <a href="../../user-guide/configuration/#docs_dir">documentation
+directory</a>.</p>
+<p>For example, to change the colour of the headers in your documentation, create
+a file called <code>extra.css</code> and place it next to the documentation Markdown. In
+that file add the following CSS.</p>
+<pre><code class="CSS">h1 {
+  color: red;
+}
 </code></pre>
-<p>This works by looking for the specific ID's used in the above HTML. The input for the user to type the search query must have the ID <code>mkdocs-search-query</code> and <code>mkdocs-search-results</code> is the directory where the results will be placed.</p></div>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you are deploying your documentation with <a href="../deploying-your-docs/#readthedocs">ReadTheDocs</a>. You will need
+to explicitly list the CSS and JavaScript files you want to include in
+your config. To do this, add the following to your mkdocs.yml.</p>
+<pre><code>extra_css: [extra.css]
+</code></pre>
+</div>
+<p>After making these changes, they should be visible when you run
+<code>mkdocs serve</code> - if you already had this running, you should see that the CSS
+changes were automatically picked up and the documentation will be updated.</p></div>
             
         </div>
 
         <footer class="col-md-12">
             <hr>
             
-                <p>Copyright &copy; 2014, <a href="https://twitter.com/_tomchristie">Tom Christie</a>. Maintenance and development by <a href="http://www.dougalmatthews.com/">Dougal Matthews</a></p>
+                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, <a href="http://www.dougalmatthews.com/">Dougal Matthews</a>.</p>
             
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>

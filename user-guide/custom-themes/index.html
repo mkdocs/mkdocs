@@ -12,7 +12,7 @@
 	<title>Custom Themes - MkDocs</title>
 
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.5.0.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="../../css/highlight.css">
         <link href="../../css/extra.css" rel="stylesheet">
@@ -439,8 +439,8 @@ displayed like this.</p>
 <p>The page object for the next page.The usage is the same as for <code>current_page</code>.</p>
 <h3 id="extra-context">Extra Context<a class="headerlink" href="#extra-context" title="Permanent link"></a></h3>
 <p>Additional variables can be passed to the template with the
-<a href="../configuration/#extra"><code>extra</code></a> configuration option. This is a set of key value
-pairs that can make custom templates far more flexible.</p>
+<a href="../configuration/#extra"><code>extra</code></a> configuration option. This is a
+set of key value pairs that can make custom templates far more flexible.</p>
 <p>For example, this could be used to include the project version of all pages
 and a list of links related to the project. This can be achieved with the
 following <code>extra</code> configuration:</p>
@@ -493,7 +493,7 @@ full search implementation to your theme.</p>
 <pre><code class="django">&lt;h1 id=&quot;search&quot;&gt;Search Results&lt;/h1&gt;
 
 &lt;form action=&quot;search.html&quot;&gt;
-  &lt;input name=&quot;q&quot; id=&quot;mkdocs-search-query&quot; type=&quot;text&quot; class=&quot;search_input search-query ui-autocomplete-input&quot; placeholder=&quot;Search the Docs&quot; autocomplete=&quot;off&quot;&gt;
+  &lt;input name=&quot;q&quot; id=&quot;mkdocs-search-query&quot; type=&quot;text&quot; &gt;
 &lt;/form&gt;
 
 &lt;div id=&quot;mkdocs-search-results&quot;&gt;
@@ -580,8 +580,7 @@ you should run the following command.</p>
 
 <p>If you don't have an account setup, you should be prompted to create one.</p>
 <p>For a much more detailed guide, see the official Python packaging
-documentation for <a href="">Packaging and Distributing Projects</a>.</p>
-<p>https://packaging.python.org/en/latest/distributing.html</p></div>
+documentation for <a href="https://packaging.python.org/en/latest/distributing.html">Packaging and Distributing Projects</a>.</p></div>
             
         </div>
 

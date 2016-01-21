@@ -5,14 +5,14 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        
+        <meta name="author" content="Tom Christie & Dougal Matthews">
         <link rel="canonical" href="http://www.mkdocs.org/user-guide/configuration/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
 	<title>Configuration - MkDocs</title>
 
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.5.0.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="../../css/highlight.css">
         <link href="../../css/extra.css" rel="stylesheet">
@@ -71,8 +71,20 @@
                 
                 
                     <li class="dropdown active">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User guide <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../writing-your-docs/">Writing Your Docs</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../styling-your-docs/">Styling Your Docs</a>
+</li>
+
                         
                             
 <li class="active">
@@ -82,19 +94,13 @@
                         
                             
 <li >
-    <a href="../deploying-your-docs/">Deploying your docs</a>
+    <a href="../deploying-your-docs/">Deploying Your Docs</a>
 </li>
 
                         
                             
 <li >
-    <a href="../styling-your-docs/">Styling your docs</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../writing-your-docs/">Writing your docs</a>
+    <a href="../custom-themes/">Custom Themes</a>
 </li>
 
                         
@@ -109,6 +115,12 @@
                         
                             
 <li >
+    <a href="../../about/release-notes/">Release Notes</a>
+</li>
+
+                        
+                            
+<li >
     <a href="../../about/contributing/">Contributing</a>
 </li>
 
@@ -116,12 +128,6 @@
                             
 <li >
     <a href="../../about/license/">License</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../about/release-notes/">Release notes</a>
 </li>
 
                         
@@ -140,7 +146,7 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../..">
+                        <a rel="next" href="../styling-your-docs/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
@@ -193,33 +199,43 @@
 <p>Guide to all available configuration settings.</p>
 <hr />
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link"></a></h2>
-<p>Project settings are always configured by using a YAML configuration file in the project directory named <code>mkdocs.yml</code>.</p>
-<p>As a minimum this configuration file must contain the <code>site_name</code> setting.  All other settings are optional.</p>
+<p>Project settings are always configured by using a YAML configuration file in the
+project directory named <code>mkdocs.yml</code>.</p>
+<p>As a minimum this configuration file must contain the <code>site_name</code> setting. All
+other settings are optional.</p>
 <h2 id="project-information">Project information<a class="headerlink" href="#project-information" title="Permanent link"></a></h2>
 <h3 id="site_name">site_name<a class="headerlink" href="#site_name" title="Permanent link"></a></h3>
-<p>This is a <strong>required setting</strong>, and should be a string that is used as the main title for the project documentation.  For example:</p>
-<pre><code>site_name: Marshmallow Generator
+<p>This is a <strong>required setting</strong>, and should be a string that is used as the main
+title for the project documentation. For example:</p>
+<pre><code class="yaml">site_name: Marshmallow Generator
 </code></pre>
-<p>When rendering the theme this setting will be passed as the <code>site_name</code> context variable.</p>
+
+<p>When rendering the theme this setting will be passed as the <code>site_name</code> context
+variable.</p>
 <h3 id="site_url">site_url<a class="headerlink" href="#site_url" title="Permanent link"></a></h3>
-<p>Set the canonical URL of the site. This will add a link tag with the canonical URL to the generated HTML header.</p>
+<p>Set the canonical URL of the site. This will add a link tag with the canonical
+URL to the generated HTML header.</p>
 <p><strong>default</strong>: <code>null</code></p>
 <h3 id="repo_url">repo_url<a class="headerlink" href="#repo_url" title="Permanent link"></a></h3>
 <p>When set, provides a link to your GitHub or Bitbucket repository on each page.</p>
-<pre><code>repo_url: https://github.com/example/repository/
+<pre><code class="yaml">repo_url: https://github.com/example/repository/
 </code></pre>
+
 <p><strong>default</strong>: <code>null</code></p>
 <h3 id="repo_name">repo_name<a class="headerlink" href="#repo_name" title="Permanent link"></a></h3>
 <p>When set, provides a link to your GitHub or Bitbucket repository on each page.</p>
-<p><strong>default</strong>: <code>'GitHub'</code> or <code>'Bitbucket'</code> if the <code>repo_url</code> matches those domains, otherwise <code>null</code></p>
+<p><strong>default</strong>: <code>'GitHub'</code> or <code>'Bitbucket'</code> if the <code>repo_url</code> matches those
+domains, otherwise <code>null</code></p>
 <h3 id="site_description">site_description<a class="headerlink" href="#site_description" title="Permanent link"></a></h3>
-<p>Set the site description. This will add a meta tag to the generated HTML header.
-<strong>default</strong>: <code>null</code></p>
+<p>Set the site description. This will add a meta tag to the generated HTML header.</p>
+<p><strong>default</strong>: <code>null</code></p>
 <h3 id="site_author">site_author<a class="headerlink" href="#site_author" title="Permanent link"></a></h3>
-<p>Set the name of the author. This will add a meta tag to the generated HTML header.</p>
+<p>Set the name of the author. This will add a meta tag to the generated HTML
+header.</p>
 <p><strong>default</strong>: <code>null</code></p>
 <h3 id="site_favicon">site_favicon<a class="headerlink" href="#site_favicon" title="Permanent link"></a></h3>
-<p>Set the favicon to use. Putting a <code>favicon.ico</code> into the <code>docs/</code> directory, the config would look as follows:</p>
+<p>Set the favicon to use. Putting a <code>favicon.ico</code> into the <code>docs/</code> directory, the
+config would look as follows:</p>
 <pre><code class="yaml">site_favicon: favicon.ico
 </code></pre>
 
@@ -234,62 +250,104 @@
 
 <p><strong>default</strong>: <code>null</code></p>
 <h3 id="remote_branch">remote_branch<a class="headerlink" href="#remote_branch" title="Permanent link"></a></h3>
-<p>Set the remote branch to commit to when using <code>gh-deploy</code> to deploy to Github Pages. This option can be overridden by a command line option in <code>gh-deploy</code>.</p>
+<p>Set the remote branch to commit to when using <code>gh-deploy</code> to deploy to Github
+Pages. This option can be overridden by a command line option in <code>gh-deploy</code>.</p>
 <p><strong>default</strong>: <code>gh-pages</code></p>
 <h3 id="remote_name">remote_name<a class="headerlink" href="#remote_name" title="Permanent link"></a></h3>
-<p>Set the remote name to push to when using <code>gh-deploy</code> to deploy to Github Pages. This option can be overridden by a command line option in <code>gh-deploy</code>.</p>
+<p>Set the remote name to push to when using <code>gh-deploy</code> to deploy to Github Pages.
+This option can be overridden by a command line option in <code>gh-deploy</code>.</p>
 <p><strong>default</strong>: <code>gh-pages</code></p>
 <h2 id="documentation-layout">Documentation layout<a class="headerlink" href="#documentation-layout" title="Permanent link"></a></h2>
 <h3 id="pages">pages<a class="headerlink" href="#pages" title="Permanent link"></a></h3>
-<p>This setting is used to determine the set of pages that should be built for the documentation. For example, the following would create Introduction, User Guide and About pages, given the three source files <code>index.md</code>, <code>user-guide.md</code> and <code>about.md</code>, respectively.</p>
-<pre><code>pages:
-- 'Introduction': 'index.md'
-- 'User Guide': 'user-guide.md'
-- 'About': 'about.md'
+<p>This setting is used to determine the set of pages that should be built for the
+documentation. For example, the following would create Introduction, User Guide
+and About pages, given the three source files <code>index.md</code>, <code>user-guide.md</code> and
+<code>about.md</code>, respectively.</p>
+<pre><code class="yaml">pages:
+    - 'Introduction': 'index.md'
+    - 'User Guide': 'user-guide.md'
+    - 'About': 'about.md'
 </code></pre>
-<p>See the section on <a href="../../user-guide/writing-your-docs/#configure-pages-and-navigation">configuring pages and navigation</a> for a more detailed breakdown, including how to create sub-sections.</p>
+
+<p>See the section on <a href="../writing-your-docs/#configure-pages-and-navigation">configuring pages and
+navigation</a> for
+a more detailed breakdown, including how to create sub-sections.</p>
 <h2 id="build-directories">Build directories<a class="headerlink" href="#build-directories" title="Permanent link"></a></h2>
 <h3 id="theme">theme<a class="headerlink" href="#theme" title="Permanent link"></a></h3>
 <p>Sets the theme of your documentation site, for a list of available themes visit
 <a href="../styling-your-docs/">styling your docs</a>.</p>
 <p><strong>default</strong>: <code>'mkdocs'</code></p>
 <h3 id="theme_dir">theme_dir<a class="headerlink" href="#theme_dir" title="Permanent link"></a></h3>
-<p>Lets you set a directory to a custom theme.  This can either be a relative directory, in which case it is resolved relative to the directory containing your configuration file, or it can be an absolute directory path.</p>
-<p>See <a href="../styling-your-docs/#custom-themes">styling your docs</a> for an explanation of custom themes.</p>
+<p>Lets you set a directory to a custom theme. This can either be a relative
+directory, in which case it is resolved relative to the directory containing
+your configuration file, or it can be an absolute directory path.</p>
+<p>See <a href="../styling-your-docs/#custom-themes">styling your docs</a> for an explanation
+of custom themes.</p>
 <p><strong>default</strong>: <code>null</code></p>
 <h3 id="docs_dir">docs_dir<a class="headerlink" href="#docs_dir" title="Permanent link"></a></h3>
-<p>Lets you set the directory containing the documentation source markdown files.  This can either be a relative directory, in which case it is resolved relative to the directory containing you configuration file, or it can be an absolute directory path.</p>
+<p>Lets you set the directory containing the documentation source markdown files.
+This can either be a relative directory, in which case it is resolved relative
+to the directory containing you configuration file, or it can be an absolute
+directory path.</p>
 <p><strong>default</strong>: <code>'docs'</code></p>
 <h3 id="site_dir">site_dir<a class="headerlink" href="#site_dir" title="Permanent link"></a></h3>
-<p>Lets you set the directory where the output HTML and other files are created.  This can either be a relative directory, in which case it is resolved relative to the directory containing you configuration file, or it can be an absolute directory path.</p>
+<p>Lets you set the directory where the output HTML and other files are created.
+This can either be a relative directory, in which case it is resolved relative
+to the directory containing you configuration file, or it can be an absolute
+directory path.</p>
 <p><strong>default</strong>: <code>'site'</code></p>
 <div class="admonition note">
 <p class="admonition-title">Note:</p>
-<p>If you are using source code control you will normally want to ensure
-that your <em>build output</em> files are not committed into the repository, and only
-keep the <em>source</em> files under version control. For example, if using <code>git</code> you
-might add the following line to your <code>.gitignore</code> file:</p>
+<p>If you are using source code control you will normally want to ensure that
+your <em>build output</em> files are not committed into the repository, and only
+keep the <em>source</em> files under version control. For example, if using <code>git</code>
+you might add the following line to your <code>.gitignore</code> file:</p>
 <pre><code>site/
 </code></pre>
-<p>If you're using another source code control you'll want to check its
+<p>If you're using another source code control tool, you'll want to check its
 documentation on how to ignore specific directories.</p>
 </div>
 <h3 id="extra_css">extra_css<a class="headerlink" href="#extra_css" title="Permanent link"></a></h3>
-<p>Set a list of CSS files to be included by the theme.</p>
-<p><strong>default</strong>: By default <code>extra_css</code> will contain a list of all the CSS files found within the <code>docs_dir</code>, if none are found it will be <code>[]</code> (an empty list).</p>
+<p>Set a list of CSS files to be included by the theme. For example, the
+following example will include the the extra.css file within the css
+subdirectory in your <a href="#docs_dir">docs_dir</a>.</p>
+<pre><code class="yaml">extra_css:
+    - css/extra.css
+    - css/second_extra.css
+</code></pre>
+
+<p><strong>default</strong>: By default <code>extra_css</code> will contain a list of all the CSS files
+found within the <code>docs_dir</code>, if none are found it will be <code>[]</code> (an empty list).</p>
 <h3 id="extra_javascript">extra_javascript<a class="headerlink" href="#extra_javascript" title="Permanent link"></a></h3>
-<p>Set a list of JavaScript files to be included by the theme.</p>
-<p><strong>default</strong>: By default <code>extra_javascript</code> will contain a list of all the JavaScript files found within the <code>docs_dir</code>, if none are found it will be <code>[]</code> (an empty list).</p>
+<p>Set a list of JavaScript files to be included by the theme. See the example
+in <a href="#extra_css">extra_css</a> for usage.</p>
+<p><strong>default</strong>: By default <code>extra_javascript</code> will contain a list of all the
+JavaScript files found within the <code>docs_dir</code>, if none are found it will be <code>[]</code>
+(an empty list).</p>
 <h3 id="extra_templates">extra_templates<a class="headerlink" href="#extra_templates" title="Permanent link"></a></h3>
-<p>Set a list of templates to be built by MkDocs. To see more about writing templates for MkDocs read the documentation about <a href="../../user-guide/styling-your-docs/#custom-themes">custom themes</a> and specifically the section about the <a href="../../user-guide/styling-your-docs/#global-context">variables that are available</a> to templates.</p>
-<p><strong>default</strong>: Unlike extra_css and extra_javascript, by default <code>extra_templates</code> will  be <code>[]</code> (an empty list).</p>
+<p>Set a list of templates to be built by MkDocs. To see more about writing
+templates for MkDocs read the documentation about <a href="../styling-your-docs/#custom-themes">custom themes</a> and
+specifically the section about the <a href="../styling-your-docs/#global-context">variables that are available</a> to templates.
+See the example in <a href="#extra_css">extra_css</a> for usage.</p>
+<p><strong>default</strong>: Unlike extra_css and extra_javascript, by default <code>extra_templates</code>
+will be <code>[]</code> (an empty list).</p>
 <h3 id="extra">extra<a class="headerlink" href="#extra" title="Permanent link"></a></h3>
-<p>A set of key value pairs, where the values can be any valid YAML construct, that will be passed to the template. This allows for great flexibility when creating custom themes.</p>
+<p>A set of key value pairs, where the values can be any valid YAML construct, that
+will be passed to the template. This allows for great flexibility when creating
+custom themes.</p>
+<p>For example, if you are using a theme that supports displaying the project
+version, you can pass it to the theme like this:</p>
+<pre><code class="yaml">extra:
+    version: 1.0
+</code></pre>
+
 <p><strong>default</strong>: By default <code>extra</code> will be an empty key value mapping.</p>
 <h2 id="preview-controls">Preview controls<a class="headerlink" href="#preview-controls" title="Permanent link"></a></h2>
 <h3 id="use_directory_urls">use_directory_urls<a class="headerlink" href="#use_directory_urls" title="Permanent link"></a></h3>
-<p>This setting controls the style used for linking to pages within the documentation.</p>
-<p>The following table demonstrates how the URLs used on the site differ when setting <code>use_directory_urls</code> to <code>true</code> or <code>false</code>.</p>
+<p>This setting controls the style used for linking to pages within the
+documentation.</p>
+<p>The following table demonstrates how the URLs used on the site differ when
+setting <code>use_directory_urls</code> to <code>true</code> or <code>false</code>.</p>
 <table>
 <thead>
 <tr>
@@ -320,17 +378,27 @@ documentation on how to ignore specific directories.</p>
 </tr>
 </tbody>
 </table>
-<p>The default style of <code>use_directory_urls=true</code> creates more user friendly URLs, and is usually what you'll want to use.</p>
-<p>The alternate style can occasionally be useful if you want your documentation to remain properly linked when opening pages directly from the file system, because it create links that point directly to the target <em>file</em> rather than the target <em>directory</em>.</p>
+<p>The default style of <code>use_directory_urls=true</code> creates more user friendly URLs,
+and is usually what you'll want to use.</p>
+<p>The alternate style can occasionally be useful if you want your documentation to
+remain properly linked when opening pages directly from the file system, because
+it create links that point directly to the target <em>file</em> rather than the target
+<em>directory</em>.</p>
 <p><strong>default</strong>: <code>true</code></p>
 <h3 id="strict">strict<a class="headerlink" href="#strict" title="Permanent link"></a></h3>
-<p>Determines if a broken link to a page within the documentation is considered a warning or an error (link to a page not listed in the pages setting).  Set to true to halt processing when a broken link is found, false prints a warning.</p>
+<p>Determines if a broken link to a page within the documentation is considered a
+warning or an error (link to a page not listed in the pages setting). Set to
+true to halt processing when a broken link is found, false prints a warning.</p>
 <p><strong>default</strong>: <code>false</code></p>
 <h3 id="dev_addr">dev_addr<a class="headerlink" href="#dev_addr" title="Permanent link"></a></h3>
-<p>Determines the address used when running <code>mkdocs serve</code>.  Setting this allows you to use another port, or allows you to make the service accessible over your local network by using the <code>0.0.0.0</code> address.</p>
-<p>As with all settings, you can set this from the command line, which can be useful, for example:</p>
-<pre><code>mkdocs serve --dev-addr=0.0.0.0:80  # Run on port 80, accessible over the local network.
+<p>Determines the address used when running <code>mkdocs serve</code>. Setting this allows you
+to use another port, or allows you to make the service accessible over your
+local network by using the <code>0.0.0.0</code> address.</p>
+<p>As with all settings, you can set this from the command line, which can be
+useful, for example:</p>
+<pre><code class="bash">mkdocs serve --dev-addr=0.0.0.0:80  # Run on port 80, on the local network.
 </code></pre>
+
 <p><strong>default</strong>: <code>'127.0.0.1:8000'</code></p>
 <h2 id="formatting-options">Formatting options<a class="headerlink" href="#formatting-options" title="Permanent link"></a></h2>
 <h3 id="markdown_extensions">markdown_extensions<a class="headerlink" href="#markdown_extensions" title="Permanent link"></a></h3>
@@ -340,45 +408,49 @@ that customize how pages are formatted. This setting lets you enable a list of
 extensions beyond the ones that MkDocs uses by default (<code>meta</code>, <code>toc</code>, <code>tables</code>,
 and <code>fenced_code</code>).</p>
 <p>For example, to enable the <a href="https://pythonhosted.org/Markdown/extensions/smarty.html">SmartyPants typography extension</a>, use:</p>
-<pre><code>markdown_extensions:
+<pre><code class="yaml">markdown_extensions:
     - smarty
 </code></pre>
+
 <p>Some extensions provide configuration options of their own. If you would like to
 set any configuration options, then you can nest a key/value mapping
 (<code>option_name: option value</code>) of any options that a given extension supports.
 See the documentation for the extension you are using to determine what options
 they support.</p>
 <p>For example, to enable permalinks in the (included) <code>toc</code> extension, use:</p>
-<pre><code>markdown_extensions:
+<pre><code class="yaml">markdown_extensions:
     - toc:
         permalink: True
 </code></pre>
-<p>Note that a colon (<code>:</code>) must follow the extension name (<code>toc</code>) and then on a new line
-the option name and value must be indented and seperated by a colon. If you would like
-to define multipe options for a single extension, each option must be defined on
-a seperate line:</p>
-<pre><code>markdown_extensions:
+
+<p>Note that a colon (<code>:</code>) must follow the extension name (<code>toc</code>) and then on a new
+line the option name and value must be indented and seperated by a colon. If you
+would like to define multipe options for a single extension, each option must be
+defined on a seperate line:</p>
+<pre><code class="yaml">markdown_extensions:
     - toc:
         permalink: True
-        separator: "_"
+        separator: &quot;_&quot;
 </code></pre>
+
 <p>Add an additional item to the list for each extension. If you have no
 configuration options to set for a specific extension, then simply omit options
 for that extension:</p>
-<pre><code>markdown_extensions:
+<pre><code class="yaml">markdown_extensions:
     - smarty
     - toc:
         permalink: True
     - sane_lists
 </code></pre>
+
 <div class="admonition note">
 <p class="admonition-title">See Also:</p>
 <p>The Python-Markdown documentation provides a <a href="https://pythonhosted.org/Markdown/extensions/index.html">list of extensions</a>
 which are available out-of-the-box. For a list of configuration options
 available for a given extension, see the documentation for that extension.</p>
-<p>You may also install and use various <a href="https://github.com/waylan/Python-Markdown/wiki/Third-Party-Extensions">third party extensions</a>. Consult the
-documentation provided by those extensions for installation instructions and
-available configuration options.</p>
+<p>You may also install and use various <a href="https://github.com/waylan/Python-Markdown/wiki/Third-Party-Extensions">third party extensions</a>. Consult
+the documentation provided by those extensions for installation instructions
+and available configuration options.</p>
 </div>
 <p><strong>default</strong>: <code>[]</code></p></div>
             
@@ -387,7 +459,7 @@ available configuration options.</p>
         <footer class="col-md-12">
             <hr>
             
-                <p>Copyright &copy; 2014, <a href="https://twitter.com/_tomchristie">Tom Christie</a>. Maintenance and development by <a href="http://www.dougalmatthews.com/">Dougal Matthews</a></p>
+                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, <a href="http://www.dougalmatthews.com/">Dougal Matthews</a>.</p>
             
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>

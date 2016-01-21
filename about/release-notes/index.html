@@ -5,14 +5,14 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        
+        <meta name="author" content="Tom Christie & Dougal Matthews">
         <link rel="canonical" href="http://www.mkdocs.org/about/release-notes/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
-	<title>Release notes - MkDocs</title>
+	<title>Release Notes - MkDocs</title>
 
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.5.0.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="../../css/highlight.css">
         <link href="../../css/extra.css" rel="stylesheet">
@@ -71,8 +71,20 @@
                 
                 
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User guide <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../../user-guide/writing-your-docs/">Writing Your Docs</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../user-guide/styling-your-docs/">Styling Your Docs</a>
+</li>
+
                         
                             
 <li >
@@ -82,19 +94,13 @@
                         
                             
 <li >
-    <a href="../../user-guide/deploying-your-docs/">Deploying your docs</a>
+    <a href="../../user-guide/deploying-your-docs/">Deploying Your Docs</a>
 </li>
 
                         
                             
 <li >
-    <a href="../../user-guide/styling-your-docs/">Styling your docs</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../user-guide/writing-your-docs/">Writing your docs</a>
+    <a href="../../user-guide/custom-themes/">Custom Themes</a>
 </li>
 
                         
@@ -108,6 +114,12 @@
                         <ul class="dropdown-menu">
                         
                             
+<li class="active">
+    <a href="./">Release Notes</a>
+</li>
+
+                        
+                            
 <li >
     <a href="../contributing/">Contributing</a>
 </li>
@@ -116,12 +128,6 @@
                             
 <li >
     <a href="../license/">License</a>
-</li>
-
-                        
-                            
-<li class="active">
-    <a href="./">Release notes</a>
 </li>
 
                         
@@ -140,12 +146,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../license/">
+                        <a rel="next" href="../../user-guide/custom-themes/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
-                    <li class="disabled">
-                        <a rel="prev" >
+                    <li >
+                        <a rel="prev" href="../contributing/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -173,6 +179,8 @@
         <li class="main active"><a href="#release-notes">Release Notes</a></li>
         
             <li><a href="#upgrading">Upgrading</a></li>
+        
+            <li><a href="#version-0150-2016-01-21">Version 0.15.0 (2016-01-21)</a></li>
         
             <li><a href="#version-0140-2015-06-09">Version 0.14.0 (2015-06-09)</a></li>
         
@@ -211,6 +219,42 @@
 <pre><code>$ mkdocs --version
 mkdocs, version 0.14.0
 </code></pre>
+<h2 id="version-0150-2016-01-21">Version 0.15.0 (2016-01-21)<a class="headerlink" href="#version-0150-2016-01-21" title="Permanent link"></a></h2>
+<h3 id="major-additions-to-version-0150">Major Additions to Version 0.15.0<a class="headerlink" href="#major-additions-to-version-0150" title="Permanent link"></a></h3>
+<h4 id="add-support-for-installable-themes">Add support for installable themes<a class="headerlink" href="#add-support-for-installable-themes" title="Permanent link"></a></h4>
+<p>MkDocs now supports themes that are distributed via Python packages. With this
+addition, the Bootstrap and Bootswatch themes have been moved to external git
+repositories and python packages. See their individual documentation for more
+details about these specific themes.</p>
+<ul>
+<li><a href="http://mkdocs.github.io/mkdocs-bootstrap/">MkDocs Bootstrap</a></li>
+<li><a href="http://mkdocs.github.io/mkdocs-bootswatch/">MkDocs Bootswatch</a></li>
+</ul>
+<p>They will be included with MkDocs by default until the 1.0 release. After that
+they will be installable with pip: <code>pip install mkdocs-bootstrap</code> and <code>pip
+install mkdocs-bootswatch</code></p>
+<p>See the documentation for <a href="../../user-guide/styling-your-docs/">Styling your docs</a> for more information about using
+and customising themes and <a href="../../user-guide/custom-themes/">Custom themes</a> for creating and distributing new
+themes</p>
+<h3 id="other-changes-and-additions-to-version-0150">Other Changes and Additions to Version 0.15.0<a class="headerlink" href="#other-changes-and-additions-to-version-0150" title="Permanent link"></a></h3>
+<ul>
+<li>Fix issues when using absolute links to Markdown files. (#628)</li>
+<li>Deprecate support of Python 2.6, pending removal in 1.0.0. (#165)</li>
+<li>Add official support for Python version 3.5.</li>
+<li>Add support for <a href="../../user-guide/configuration/#site_description">site_description</a> and <a href="../../user-guide/configuration/#site_author">site_author</a> to the <a href="../../user-guide/styling-your-docs/#readthedocs">ReadTheDocs</a>
+  theme. (#631)</li>
+<li>Update FontAwesome to 4.5.0. (#789)</li>
+<li>Increase IE support with X-UA-Compatible. (#785)</li>
+<li>Added support for Python's <code>-m</code> flag. (#706)</li>
+<li>Bugfix: Ensure consistent ordering of auto-populated pages. (#638)</li>
+<li>Bugfix: Scroll the tables of contents on the MkDocs theme if it is too long
+  for the page. (#204)</li>
+<li>Bugfix: Add all ancestors to the page attribute <code>ancestors</code> rather than just
+  the initial one. (#693)</li>
+<li>Bugfix: Include HTML in the build output again. (#691)</li>
+<li>Bugfix: Provide filename to Read the Docs. (#721 and RTD#1480)</li>
+<li>Bugfix: Silence Click's unicode_literals warning. (#708)</li>
+</ul>
 <h2 id="version-0140-2015-06-09">Version 0.14.0 (2015-06-09)<a class="headerlink" href="#version-0140-2015-06-09" title="Permanent link"></a></h2>
 <ul>
 <li>Improve Unicode handling by ensuring that all config strings are loaded as
@@ -247,7 +291,7 @@ mkdocs, version 0.14.0
   of paths in the pages config. (#562)</li>
 </ul>
 <h2 id="version-0130-2015-05-26">Version 0.13.0 (2015-05-26)<a class="headerlink" href="#version-0130-2015-05-26" title="Permanent link"></a></h2>
-<h3 id="deprecations">Deprecations<a class="headerlink" href="#deprecations" title="Permanent link"></a></h3>
+<h3 id="deprecations-to-version-0130">Deprecations to Version 0.13.0<a class="headerlink" href="#deprecations-to-version-0130" title="Permanent link"></a></h3>
 <h4 id="deprecate-the-json-command">Deprecate the JSON command<a class="headerlink" href="#deprecate-the-json-command" title="Permanent link"></a></h4>
 <p>In this release the  <code>mkdocs json</code> command has been marked as deprecated and
 when used a deprecation warning will be shown. It will be removed in a <a href="https://github.com/mkdocs/mkdocs/pull/481">future
@@ -268,7 +312,7 @@ with MkDocs 1.0.</p>
 <p>All themes other than mkdocs and readthedocs will be moved into external
 packages in a future release of MkDocs. This will enable them to be more easily
 supported and updates outside MkDocs releases.</p>
-<h3 id="major-additions">Major Additions<a class="headerlink" href="#major-additions" title="Permanent link"></a></h3>
+<h3 id="major-additions-to-version-0130">Major Additions to Version 0.13.0<a class="headerlink" href="#major-additions-to-version-0130" title="Permanent link"></a></h3>
 <h4 id="search">Search<a class="headerlink" href="#search" title="Permanent link"></a></h4>
 <p>Support for search has now been added to MkDocs. This is based on the
 JavaScript library <a href="http://lunrjs.com/">lunr.js</a>. It has been added to both the <code>mkdocs</code> and
@@ -291,7 +335,7 @@ populated with any <code>.html</code> or <code>.xml</code> files in the project 
 can also use Jinja2 syntax and take advantage of the <a href="../../user-guide/styling-your-docs/#global-context">global variables</a>.</p>
 <p>By default MkDocs will use this approach to create a sitemap for the
 documentation.</p>
-<h3 id="other-changes-and-additions">Other Changes and Additions<a class="headerlink" href="#other-changes-and-additions" title="Permanent link"></a></h3>
+<h3 id="other-changes-and-additions-to-version-0130">Other Changes and Additions to Version 0.13.0<a class="headerlink" href="#other-changes-and-additions-to-version-0130" title="Permanent link"></a></h3>
 <ul>
 <li>Add support for <a href="../../user-guide/configuration/#markdown_extensions">Markdown extension configuration options</a>. (#435)</li>
 <li>MkDocs now ships Python <a href="http://pythonwheels.com/">wheels</a>. (#486)</li>
@@ -302,7 +346,8 @@ documentation.</p>
 <li>Add <code>--no-livereload</code> to <code>mkdocs serve</code> for a simpler development server. (#511)</li>
 <li>Add copyright display support to all themes (#549)</li>
 <li>Add support for custom commit messages in a <code>mkdocs gh-deploy</code> (#516)</li>
-<li>Bugfix: Fix linking to media within the same directory as a markdown file called index.md (#535)</li>
+<li>Bugfix: Fix linking to media within the same directory as a markdown file
+  called index.md (#535)</li>
 <li>Bugfix: Fix errors with unicode filenames (#542).</li>
 </ul>
 <h2 id="version-0122-2015-04-22">Version 0.12.2 (2015-04-22)<a class="headerlink" href="#version-0122-2015-04-22" title="Permanent link"></a></h2>
@@ -420,7 +465,7 @@ documentation.</p>
         <footer class="col-md-12">
             <hr>
             
-                <p>Copyright &copy; 2014, <a href="https://twitter.com/_tomchristie">Tom Christie</a>. Maintenance and development by <a href="http://www.dougalmatthews.com/">Dougal Matthews</a></p>
+                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, <a href="http://www.dougalmatthews.com/">Dougal Matthews</a>.</p>
             
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
