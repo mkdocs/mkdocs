@@ -1,6 +1,9 @@
+os:
+  - osx
+  - linux
 sudo: false
 language: python
-python: '3.5'
+python: '3.4'
 env:
 - TOXENV=py26-integration
 - TOXENV=py26-min-req
@@ -46,4 +49,4 @@ deploy:
   on:
     tags: true
     repo: mkdocs/mkdocs
-    condition: "$TOXENV = py27-integration"
+    condition: "$TOXENV = py27-unittests"
