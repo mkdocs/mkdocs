@@ -58,7 +58,7 @@ setup(
     packages=get_packages("mkdocs"),
     include_package_data=True,
     install_requires=[
-        'click>=4.0',
+        'click>=3.3',
         'Jinja2>=2.7.1',
         'livereload>=2.3.2',
         'Markdown>=2.3.1,<2.5' if PY26 else 'Markdown>=2.3.1',
@@ -90,6 +90,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         "Programming Language :: Python :: Implementation :: CPython",
         'Topic :: Documentation',
         'Topic :: Text Processing',
