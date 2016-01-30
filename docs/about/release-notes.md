@@ -13,6 +13,11 @@ You can determine your currently installed version using `mkdocs --version`:
     $ mkdocs --version
     mkdocs, version 0.14.0
 
+## Version 0.15.1 (2016-01-30)
+
+* Lower the minimum supported Click version to 3.3 for upstream
+  package maintainers.
+
 ## Version 0.15.0 (2016-01-21)
 
 ### Major Additions to Version 0.15.0
