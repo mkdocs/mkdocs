@@ -14,7 +14,7 @@ ways, a few examples are:
 
 Please include as much detail as you can. Let us know your platform and MkDocs
 version. If the problem is visual (for example a theme or design issue) please
-add a screenshot and if you get an error please include the the full error and
+add a screenshot and if you get an error please include the full error and
 traceback.
 
 ## Testing the Development Version
