@@ -62,7 +62,7 @@ You should now have the `mkdocs` command installed on your system. Run `mkdocs
 
 ```bash
 $ mkdocs --version
-mkdocs, version 0.14.0
+mkdocs, version 0.15.2
 ```
 
 ---
