@@ -14,7 +14,7 @@ You can determine your currently installed version using `mkdocs --version`:
     mkdocs, version 0.14.0
 
 
-## Version 0.15.2 (2016-02-05)
+## Version 0.15.2 (2016-02-08)
 
 * Fix and incorrect warning that states external themes [will be removed from
   MkDocs](#add-support-for-installable-themes).
