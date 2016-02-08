@@ -13,6 +13,12 @@ You can determine your currently installed version using `mkdocs --version`:
     $ mkdocs --version
     mkdocs, version 0.14.0
 
+
+## Version 0.15.2 (2016-02-05)
+
+* Fix and incorrect warning that states external themes [will be removed from
+  MkDocs](#add-support-for-installable-themes).
+
 ## Version 0.15.1 (2016-01-30)
 
 * Lower the minimum supported Click version to 3.3 for upstream
