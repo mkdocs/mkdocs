@@ -313,7 +313,10 @@ class Theme(OptionallyRequired):
             )
             return value
 
-        raise ValidationError("Unrecognised theme.")
+        raise ValidationError(
+            "Unrecognised theme '{0}'. The available installed themes"
+            "are: ".format(value, ', '.join(themes))
+        )
 
 
 class Extras(OptionallyRequired):
