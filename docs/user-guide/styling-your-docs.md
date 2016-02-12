@@ -100,6 +100,30 @@ the [Bootswatch] project.
 
 ![Yeti](http://bootswatch.com/yeti/thumbnail.png)
 
+## Third party themes
+
+There are many themes provides for the community like:
+
+### Material
+
+A material design theme for MkDocs, [preview](http://squidfunk.github.io/mkdocs-material/).
+
+![Material](https://github.com/squidfunk/mkdocs-material/raw/master/docs/images/screen.png)
+
+    pip install mkdocs-material
+    
+### Alabaster
+
+This is a port of Alabaster for the MkDocs static site generator, [preview](https://mkdocs-alabaster.ale.rocks/).
+
+    pip install mkdocs-alabaster
+
+### Cinder
+
+A clean, responsive MkDocs theme, [preview](http://sourcefoundry.org/cinder/).
+
+    pip install mkdocs-cinder
+
 ## Customising a Theme
 
 The [extra_css] and [extra_javascript] configuration options can be used to
