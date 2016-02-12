@@ -293,7 +293,17 @@ class Theme(OptionallyRequired):
         themes = utils.get_theme_names()
 
         if value in themes:
-            if value in ['mkdocs', 'readthedocs']:
+
+            # These themes have been moved to the mkdocs-bootstrap and
+            # mkdocs-bootswatch packages. At some point we wont depend on
+            # these by default.
+            moved_themes = [
+                'bootstrap', 'amelia', 'cerulean', 'cosmo', 'cyborg',
+                'flatly', 'journal', 'readable', 'simplex', 'slate',
+                'spacelab', 'united', 'yeti'
+            ]
+
+            if value not in moved_themes:
                 return value
 
             self.warnings.append(
@@ -303,7 +313,10 @@ class Theme(OptionallyRequired):
             )
             return value
 
-        raise ValidationError("Unrecognised theme.")
+        raise ValidationError(
+            "Unrecognised theme '{0}'. The available installed themes"
+            "are: ".format(value, ', '.join(themes))
+        )
 
 
 class Extras(OptionallyRequired):

@@ -78,7 +78,10 @@ class Config(utils.UserDict):
 
         failed, warnings = self._validate()
 
-        self._post_validate()
+        # Only run the post validation steps if there are no failures, warnings
+        # are okay.
+        if len(failed) == 0:
+            self._post_validate()
 
         return failed, warnings
 

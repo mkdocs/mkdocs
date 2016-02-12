@@ -32,8 +32,6 @@ files locally.
     You should never edit files in your gh-pages branch by hand if you're using
     the `gh-deploy` command because you will lose your work.
 
-
-
 [GitHub]: https://github.com/
 [GitHub Pages]: https://pages.github.com/
 [ghp-import]: https://github.com/davisp/ghp-import
@@ -43,7 +41,7 @@ files locally.
 [Read the Docs][rtd] offers free documentation hosting. You can import your docs
 using any major version control system, including Mercurial, Git, Subversion,
 and Bazaar. Read the Docs supports MkDocs out-of-the-box. Follow the
-[instructions] on their site to arrange the filies in your repository properly,
+[instructions] on their site to arrange the files in your repository properly,
 create an account and point it at your publicly hosted repository. If properly
 configured, your documentation will update each time you push commits to your
 public repository.
@@ -77,15 +75,16 @@ where `<projectname>` is the name you used to register your project with PyPI.
 
 There are a few prerequisites for the above to work:
 
-1. You must be using [Setuptools] in your `setup.py` script ([Distutils] does not
-offer an `upload_docs` command).
-2. Your project must already be registered with PyPI (use `python setup.py register`).
-3. Your `mkdocs.yml` config file and your "docs" directory (value assigned to
-the [docs_dir] configuration option) are presumed to be in the root directory of
-your project alongside your `setup.py` script.
-4. It is assumed that the default value (`"site"`) is assigned to the [site_dir]
-configuration option in your `mkdocs.yaml` config file. If you have set a
-different value, assign that value to the `--upload-dir` option.
+1. You must be using [Setuptools] in your `setup.py` script ([Distutils] does
+   not offer an `upload_docs` command).
+1. Your project must already be registered with PyPI (use `python setup.py
+   register`).
+1. Your `mkdocs.yml` config file and your "docs" directory (value assigned to
+   the [docs_dir] configuration option) are presumed to be in the root directory
+   of your project alongside your `setup.py` script.
+1. It is assumed that the default value (`"site"`) is assigned to the [site_dir]
+   configuration option in your `mkdocs.yaml` config file. If you have set a
+   different value, assign that value to the `--upload-dir` option.
 
 [Python]: http://www.python.org/
 [PyPI]: https://pypi.python.org/pypi

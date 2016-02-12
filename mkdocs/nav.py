@@ -217,7 +217,7 @@ def _follow(config_line, url_context, use_dir_urls, header=None, title=None):
         page = _path_to_page(path, title, url_context, use_dir_urls)
 
         if header:
-            page.ancestors = [header]
+            page.ancestors = header.ancestors + [header, ]
             header.children.append(page)
 
         yield page

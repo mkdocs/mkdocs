@@ -110,6 +110,7 @@ google_analytics  | [google_analytics]    |
 The following variables provide information about the navigation and location.
 
 #### nav
+
 The `nav` variable is used to create the navigation for the documentation.
 Following is a basic usage example which outputs the first and second level
 navigation as a nested list.
@@ -138,6 +139,7 @@ navigation as a nested list.
 ```
 
 #### base_url
+
 The `base_url` provides a relative path to the root of the MkDocs project.
 This makes it easy to include links to static assets in your theme. For
 example, if your theme includes a `js` folder, to include `theme.js` from that
@@ -148,32 +150,39 @@ folder on all pages you would do this:
 ```
 
 #### homepage_url
+
 Provides a relative path to the documentation homepage.
 
 #### mkdocs_version
+
 Contains the current MkDocs version.
 
 #### build_date_utc
+
 A Python datetime object that represents the date and time the documentation
 was built in UTC. This is useful for showing how recently the documentation
 was updated.
 
-
 ### Page Context
+
 The page context includes all of the above Global context and the following
 additional variables.
 
 #### page_title
+
 Contains the Title for the current page.
 
 #### page_description
+
 Contains the description for the current page on the homepage, it is blank on
 other pages.
 
 #### content
+
 The rendered Markdown as HTML, this is the contents of the documentation.
 
 #### toc
+
 An object representing the Table of contents for a page. Displaying the table
 of contents as a simple list can be achieved like this.
 
@@ -189,6 +198,7 @@ of contents as a simple list can be achieved like this.
 ```
 
 #### meta
+
 A mapping of the metadata included at the top of the markdown page. In this
 example we define a `source` property above the page title.
 
@@ -214,10 +224,12 @@ documentation page.
 ```
 
 #### canonical_url
+
 The full, canonical URL to the current page. This includes the site_url from
 the configuration.
 
 #### current_page
+
 The page object for the current page. The page path and url properties can be
 displayed like this.
 
@@ -227,17 +239,19 @@ displayed like this.
 ```
 
 #### previous_page
+
 The page object for the previous  page. The usage is the same as for
 `current_page`.
 
 #### next_page
+
 The page object for the next page.The usage is the same as for `current_page`.
 
 ### Extra Context
 
 Additional variables can be passed to the template with the
-[`extra`](/user-guide/configuration.md#extra) configuration option. This is a set of key value
-pairs that can make custom templates far more flexible.
+[`extra`](/user-guide/configuration.md#extra) configuration option. This is a
+set of key value pairs that can make custom templates far more flexible.
 
 For example, this could be used to include the project version of all pages
 and a list of links related to the project. This can be achieved with the
@@ -302,7 +316,7 @@ full search implementation to your theme.
 <h1 id="search">Search Results</h1>
 
 <form action="search.html">
-  <input name="q" id="mkdocs-search-query" type="text" class="search_input search-query ui-autocomplete-input" placeholder="Search the Docs" autocomplete="off">
+  <input name="q" id="mkdocs-search-query" type="text" >
 </form>
 
 <div id="mkdocs-search-results">
@@ -314,11 +328,9 @@ This works by looking for the specific ID's used in the above HTML. The input
 for the user to type the search query must have the ID `mkdocs-search-query`
 and `mkdocs-search-results` is the directory where the results will be placed.
 
-
 [Jinja2 template]: http://jinja.pocoo.org/docs/dev/
 [built-in themes]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes
 [lunr.js]: http://lunrjs.com/
-
 
 ## Packaging Themes
 
@@ -403,7 +415,6 @@ it includes a `base.html` for the theme. It **must** also include a
 `__init__.py` file which should be empty, this file tells Python that the
 directory is a package.
 
-
 ### Distributing Themes
 
 With the above changes, your theme should now be ready to install. This can be
@@ -422,5 +433,4 @@ If you don't have an account setup, you should be prompted to create one.
 For a much more detailed guide, see the official Python packaging
 documentation for [Packaging and Distributing Projects].
 
-[Packaging and Distributing Projects]:
-https://packaging.python.org/en/latest/distributing.html
+[Packaging and Distributing Projects]: https://packaging.python.org/en/latest/distributing.html

@@ -1,5 +1,6 @@
+sudo: false
 language: python
-python: '2.7'
+python: '3.5'
 env:
 - TOXENV=py26-integration
 - TOXENV=py26-min-req
@@ -13,6 +14,9 @@ env:
 - TOXENV=py34-integration
 - TOXENV=py34-min-req
 - TOXENV=py34-unittests
+- TOXENV=py35-integration
+- TOXENV=py35-min-req
+- TOXENV=py35-unittests
 - TOXENV=pypy-integration
 - TOXENV=pypy-min-req
 - TOXENV=pypy-unittests
@@ -20,12 +24,26 @@ env:
 - TOXENV=pypy3-min-req
 - TOXENV=pypy3-unittests
 - TOXENV=flake8
+- TOXENV=markdown-lint
 install:
 - pip install tox
+- gem install mdl
 script:
 - git clean -f -d -x
 - tox
 matrix:
   fast_finish: true
+  allow_failures:
+    - env: TOXENV=markdown-lint
 before_install: pip install codecov
 after_success: codecov
+deploy:
+  provider: pypi
+  user: mkdocsdeploy
+  distributions: "sdist bdist_wheel"
+  password:
+    secure: b4f6y1xw5B/RXXnOu6JIaNcgOBZ0/CkNaMeEXsoQSewYZNwobLPYALY9WaaOblarwrVa5NRD3e4x6SoL1/1NzQxfhCNMn7L82sssmtevnK+mSuUp4IZQa8WKyz+xLfnk28TlHgQbctAU9NaeQ6GuEflTRD7Bp8+xJ1C7h+yBUnw=
+  on:
+    tags: true
+    repo: mkdocs/mkdocs
+    condition: "$TOXENV = py27-integration"
