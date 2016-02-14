@@ -40,7 +40,7 @@ def _static_server(host, port, site_dir):
             "default_filename": "index.html"
         }),
     ])
-    application.listen(port=port, address=host)
+    application.listen(port=int(port), address=host)
 
     log.info('Running at: http://%s:%s/', host, port)
     log.info('Hold ctrl+c to quit.')
