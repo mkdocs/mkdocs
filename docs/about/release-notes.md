@@ -17,6 +17,7 @@ You can determine your currently installed version using `mkdocs --version`:
 ## Version 0.15.3 (2016-02-??)
 
 * Improve the error message the given theme can't be found.
+* Fix an issue with relative symlinks (#639)
 
 ## Version 0.15.2 (2016-02-08)
 
