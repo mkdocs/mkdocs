@@ -352,7 +352,8 @@ class Extras(OptionallyRequired):
                 # Some editors (namely Emacs) will create temporary symlinks
                 # for internal magic. We can just ignore these files.
                 if os.path.islink(fullpath):
-                    if not os.path.exists(os.readlink(fullpath)):
+                    fp = os.path.join(dirpath, os.readlink(fullpath))
+                    if not os.path.exists(fp):
                         continue
 
                 relpath = os.path.normpath(os.path.relpath(fullpath, docs_dir))
