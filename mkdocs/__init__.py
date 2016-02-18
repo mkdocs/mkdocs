@@ -9,4 +9,4 @@ if sys.version_info < (2, 7):
     sys.stderr.write(("WARNING: Support for Python 2.6 will be dropped in the "
                       "1.0.0 release of MkDocs\n\n"))
 
-__version__ = '0.15.2'
+__version__ = '0.15.3'
