@@ -50,7 +50,7 @@ $ pip --version
 pip 1.5.2
 ```
 
-MkDocs supports Python 2.6, 2.7, 3.3 and 3.4.
+MkDocs supports Python 2.6, 2.7, 3.3, 3.4 and 3.5.
 
 On Windows we recommend that you install Python and pip with [Chocolatey].
 
