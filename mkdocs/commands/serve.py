@@ -51,7 +51,7 @@ def _static_server(host, port, site_dir):
 
 
 def serve(config_file=None, dev_addr=None, strict=None, theme=None,
-          livereload=True):
+          theme_dir=None, livereload=True):
     """
     Start the MkDocs development server
 
@@ -69,6 +69,7 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
             dev_addr=dev_addr,
             strict=strict,
             theme=theme,
+            theme_dir=theme_dir,
         )
         config['site_dir'] = tempdir
         build(config, live_server=True, clean_site_dir=True)
