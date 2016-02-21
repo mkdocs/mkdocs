@@ -68,6 +68,9 @@ def get_global_context(nav, config):
         # gets passed to themes.
         'repo_url': config['repo_url'],
         'repo_name': config['repo_name'],
+        'repo_branch': config['repo_branch'],
+        'repo_docs_dir': config['repo_docs_dir'],
+        'docs_dir': config['docs_dir'],
         'nav': nav,
         'base_url': nav.url_context.make_relative('/'),
         'homepage_url': nav.homepage.url,

@@ -14,9 +14,17 @@
     <li class="wy-breadcrumbs-aside">
       {% if repo_url %}
         {% if repo_name == 'GitHub' %}
-          <a href="{{ repo_url }}" class="icon icon-github"> Edit on GitHub</a>
+          {% if current_page %}
+            <a href="{{ repo_url }}/blob/{{ repo_branch }}/{{ repo_docs_dir }}/{{ current_page.input_path }}" class="icon icon-github"> Edit on GitHub</a>
+          {% else %}
+            <a href="{{ repo_url }}" class="icon icon-github"> Edit on GitHub</a>
+          {% endif %}
         {% elif repo_name == 'Bitbucket' %}
-          <a href="{{ repo_url }}" class="icon icon-bitbucket"> Edit on BitBucket</a>
+          {% if current_page %}
+            <a href="{{ repo_url }}/src/{{ repo_branch }}/{{ repo_docs_dir }}/{{ current_page.input_path }}" class="icon icon-bitbucket"> Edit on BitBucket</a>
+          {% else %}
+            <a href="{{ repo_url }}" class="icon icon-bitbucket"> Edit on BitBucket</a>
+          {% endif %}
         {% endif %}
       {% endif %}
     </li>
