@@ -50,6 +50,41 @@ When set, provides a link to your GitHub or Bitbucket repository on each page.
 **default**: `'GitHub'` or `'Bitbucket'` if the `repo_url` matches those
 domains, otherwise `null`
 
+### repo_branch
+
+When set, points "Edit on GitHub" or "Edit on BitBucket" links to the specified branch
+in the repository. Common defaults are 'master' for GitHub and 'default' for BitBucket.
+
+```yaml
+repo_branch: release
+```
+
+**default**: `master`
+
+### repo_docs_dir
+
+When set, points to the location of the `docs_dir` within a GitHub or BitBucket repository.
+If the `docs_dir` does not reside at the root of the repository, set `repo_docs_dir` to be
+the path from the repository root to `docs_dir` (inclusive). 
+
+For example, given a repository with a project structure of:
+
+```
+stuff
+    \ src
+    \ docs
+        \ concepts
+        \ examples
+```
+
+set `repo_docs_dir` to:
+
+```yaml
+repo_docs_dir: stuff/docs
+```
+
+**default**: `docs`
+
 ### site_description
 
 Set the site description. This will add a meta tag to the generated HTML header.

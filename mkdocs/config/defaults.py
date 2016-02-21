@@ -75,6 +75,14 @@ DEFAULT_SCHEMA = (
     # "GitHub" or "Bitbucket" for known url or Hostname for unknown urls.
     ('repo_name', config_options.Type(utils.string_types)),
 
+    # Path from the repo root to the docs dir (inclusive), for use with repo_url;
+    # defaults to expecting docs_dir to reside at the top of repo.
+    ('repo_docs_dir', config_options.Type(utils.string_types, default='docs')),
+
+    # Repo branch to use in the "Edit on GitHub" links,
+    # for use with repo_url; defaults to master branch.
+    ('repo_branch', config_options.Type(utils.string_types, default='master')),
+
     # Specify which css or javascript files from the docs directory should be
     # additionally included in the site. Default, List of all .css and .js
     # files in the docs dir.
