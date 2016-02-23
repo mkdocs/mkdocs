@@ -73,6 +73,7 @@ dev_addr_help = ("IP address and port to serve documentation locally (default: "
                  "localhost:8000)")
 strict_help = ("Enable strict mode. This will cause MkDocs to abort the build "
                "on any warnings.")
+theme_dir_help = "The theme directory to use when building your documentation."
 theme_help = "The theme to use when building your documentation."
 theme_choices = utils.get_theme_names()
 site_dir_help = "The directory to output the result of the documentation build."
@@ -99,9 +100,10 @@ def cli():
 @click.option('-a', '--dev-addr', help=dev_addr_help, metavar='<IP:PORT>')
 @click.option('-s', '--strict', is_flag=True, help=strict_help)
 @click.option('-t', '--theme', type=click.Choice(theme_choices), help=theme_help)
+@click.option('-e', '--theme-dir', type=click.Path(), help=theme_dir_help)
 @click.option('--livereload/--no-livereload', default=True, help=reload_help)
 @common_options
-def serve_command(dev_addr, config_file, strict, theme, livereload):
+def serve_command(dev_addr, config_file, strict, theme, theme_dir, livereload):
     """Run the builtin development server"""
 
     logging.getLogger('tornado').setLevel(logging.WARNING)
@@ -112,6 +114,7 @@ def serve_command(dev_addr, config_file, strict, theme, livereload):
             dev_addr=dev_addr,
             strict=strict,
             theme=theme,
+            theme_dir=theme_dir,
             livereload=livereload,
         )
     except (exceptions.ConfigurationError, socket.error) as e:
@@ -124,15 +127,17 @@ def serve_command(dev_addr, config_file, strict, theme, livereload):
 @click.option('-f', '--config-file', type=click.File('rb'), help=config_help)
 @click.option('-s', '--strict', is_flag=True, help=strict_help)
 @click.option('-t', '--theme', type=click.Choice(theme_choices), help=theme_help)
+@click.option('-e', '--theme-dir', type=click.Path(), help=theme_dir_help)
 @click.option('-d', '--site-dir', type=click.Path(), help=site_dir_help)
 @common_options
-def build_command(clean, config_file, strict, theme, site_dir):
+def build_command(clean, config_file, strict, theme, theme_dir, site_dir):
     """Build the MkDocs documentation"""
     try:
         build.build(load_config(
             config_file=config_file,
             strict=strict,
             theme=theme,
+            theme_dir=theme_dir,
             site_dir=site_dir
         ), clean_site_dir=clean)
     except exceptions.ConfigurationError as e:
