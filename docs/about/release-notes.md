@@ -13,9 +13,10 @@ You can determine your currently installed version using `mkdocs --version`:
     $ mkdocs --version
     mkdocs, version 0.15.2
 
-## Version 0.16
+## Version 0.16 (2016-02-??)
 
-* Add a flag to specifiy theme directory from command line.
+* Add a flag (-e/--theme-dir) to specifiy theme directory with the commands 
+  `mkdocs build` and `mkdocs serve` (#832)
 
 ## Version 0.15.3 (2016-02-18)
 
