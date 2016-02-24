@@ -3,7 +3,7 @@ os:
   - osx
 sudo: false
 language: python
-python: '3.5'
+python: '3.4'
 env:
 - TOXENV=py26-integration
 - TOXENV=py26-min-req
