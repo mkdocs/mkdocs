@@ -15,8 +15,9 @@ You can determine your currently installed version using `mkdocs --version`:
 
 ## Version 0.16 (2016-02-??)
 
-* Add a flag (-e/--theme-dir) to specifiy theme directory with the commands 
+* Add a flag (-e/--theme-dir) to specifiy theme directory with the commands
   `mkdocs build` and `mkdocs serve` (#832)
+* Fixed issues with Unicode filenames under Windows and Python 2. (#833)
 
 ## Version 0.15.3 (2016-02-18)
 

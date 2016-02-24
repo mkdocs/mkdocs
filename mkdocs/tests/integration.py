@@ -35,17 +35,20 @@ TEST_PROJECTS = os.path.abspath(os.path.join(DIR, 'integration'))
               required=True)
 def main(output=None):
 
+    print("Building themes.")
     for theme in sorted(MKDOCS_THEMES):
+        print("Building theme: {0}".format(theme))
         project_dir = os.path.dirname(MKDOCS_CONFIG)
         out = os.path.join(output, theme)
         command = ['mkdocs', 'build', '-v', '--site-dir', out, '--theme', theme]
         subprocess.check_call(command, cwd=project_dir)
 
+    print("Building test projects.")
     for project in os.listdir(TEST_PROJECTS):
-
+        print("Building test project: {0}".format(project))
         project_dir = os.path.join(TEST_PROJECTS, project)
         out = os.path.join(output, project)
-        command = ['mkdocs', 'build', '--site-dir', out]
+        command = ['mkdocs', 'build', '-v', '--site-dir', out]
         subprocess.check_call(command, cwd=project_dir)
 
     print("Theme and integration builds are available in {0}".format(output))
