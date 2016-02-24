@@ -14,13 +14,16 @@ TODOs
     - Build documentation other than just MkDocs as it is relatively simple.
 """
 
-from __future__ import print_function, unicode_literals
+from __future__ import unicode_literals
 
 import click
+import logging
 import os
 import subprocess
 
 from mkdocs import utils
+
+log = logging.getLogger('mkdocs')
 
 DIR = os.path.dirname(__file__)
 MKDOCS_CONFIG = os.path.abspath(os.path.join(DIR, '../../mkdocs.yml'))
@@ -35,23 +38,33 @@ TEST_PROJECTS = os.path.abspath(os.path.join(DIR, 'integration'))
               required=True)
 def main(output=None):
 
-    print("Building themes.")
+    log.propagate = False
+    stream = logging.StreamHandler()
+    formatter = logging.Formatter(
+        "\033[1m\033[1;32m *** %(message)s *** \033[0m")
+    stream.setFormatter(formatter)
+    log.addHandler(stream)
+    log.setLevel(logging.DEBUG)
+
+    base_cmd = ['mkdocs', 'build', '-v', '--site-dir', ]
+
+    log.debug("Building installed themes.")
     for theme in sorted(MKDOCS_THEMES):
-        print("Building theme: {0}".format(theme))
+        log.debug("Building theme: {0}".format(theme))
         project_dir = os.path.dirname(MKDOCS_CONFIG)
         out = os.path.join(output, theme)
-        command = ['mkdocs', 'build', '-v', '--site-dir', out, '--theme', theme]
+        command = base_cmd + [out, '--theme', theme]
         subprocess.check_call(command, cwd=project_dir)
 
-    print("Building test projects.")
+    log.debug("Building test projects.")
     for project in os.listdir(TEST_PROJECTS):
-        print("Building test project: {0}".format(project))
+        log.debug("Building test project: {0}".format(project))
         project_dir = os.path.join(TEST_PROJECTS, project)
         out = os.path.join(output, project)
-        command = ['mkdocs', 'build', '-v', '--site-dir', out]
+        command = base_cmd + [out, ]
         subprocess.check_call(command, cwd=project_dir)
 
-    print("Theme and integration builds are available in {0}".format(output))
+    log.debug("Theme and integration builds are in {0}".format(output))
 
 if __name__ == '__main__':
     main()
