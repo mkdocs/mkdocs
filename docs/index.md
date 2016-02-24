@@ -18,11 +18,11 @@ S3, or anywhere else you choose.
 
 ### Great themes available
 
-There's a stack of good looking themes included by default. Choose from
-bootstrap, readthedocs, or any of the 12 bootswatch themes.
-You can also check out a list of 3rd party themes in the
-[MkDocs wiki](https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes),
-or better yet, add your own.
+There's a stack of good looking themes available for MkDocs. Choose between
+the built in themes [mkdocs](/user-guide/styling-your-docs/#mkdocs) and
+[readthedocs](/user-guide/styling-your-docs/#readthedocs) or check out a list
+of 3rd party themes in the [MkDocs wiki](https://github.com/mkdocs/mkdocs/wiki
+/MkDocs-Themes) (or better yet, add your own).
 
 ### Preview your site as you work
 

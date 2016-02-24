@@ -30,74 +30,10 @@ the [custom themes](#custom-themes) section below.
 
 ![ReadTheDocs](https://docs.readthedocs.org/en/latest/_images/screen_mobile.png)
 
-## Bootstrap and Bootswatch themes
+### Third Party Themes
 
-MkDocs version 0.x also includes themes provided by two packages, [MkDocs Bootstrap] and
-[MkDocs Bootswatch]. The Bootstrap package provides a theme based on [Bootstrap]
-and the Bootswatch package provides 12 themes based on the [Bootswatch] project.
-
-!!! note
-
-    The Bootstrap and Bootswatch themes will not be included by default from
-    MkDocs version 1.0. They will need to be installed manually with `pip
-    install mkdocs-bootstrap` or `pip install mkdocs-bootswatch`.
-
-[Bootstrap]: http://getbootstrap.com/
-[Bootswatch]: http://bootswatch.com/
-[MkDocs Bootstrap]: http://mkdocs.github.io/mkdocs-bootstrap/
-[MkDocs Bootswatch]: http://mkdocs.github.io/mkdocs-bootswatch/
-
-### Bootstrap
-
-![Bootstrap](http://bootstrapdocs.com/v2.3.1/docs/assets/img/examples/bootstrap-example-fluid.png)
-
-### Amelia
-
-![Amelia](http://bootswatch.com/2/amelia/thumbnail.png)
-
-### Cerulean
-
-![Cerulean](http://bootswatch.com/cerulean/thumbnail.png)
-
-### Cosmo
-
-![Cosmo](http://bootswatch.com/cosmo/thumbnail.png)
-
-### Cyborg
-
-![Cyborg](http://bootswatch.com/cyborg/thumbnail.png)
-
-### Flatly
-
-![Flatly](http://bootswatch.com/flatly/thumbnail.png)
-
-### Journal
-
-![Journal](http://bootswatch.com/journal/thumbnail.png)
-
-### Readable
-
-![Readable](http://bootswatch.com/readable/thumbnail.png)
-
-### Simplex
-
-![Simplex](http://bootswatch.com/simplex/thumbnail.png)
-
-### Slate
-
-![Slate](http://bootswatch.com/slate/thumbnail.png)
-
-### Spacelab
-
-![Spacelab](http://bootswatch.com/spacelab/thumbnail.png)
-
-### United
-
-![United](http://bootswatch.com/united/thumbnail.png)
-
-### Yeti
-
-![Yeti](http://bootswatch.com/yeti/thumbnail.png)
+Third party themes can be found in the MkDocs [community wiki](
+https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes).
 
 ## Customising a Theme
 
