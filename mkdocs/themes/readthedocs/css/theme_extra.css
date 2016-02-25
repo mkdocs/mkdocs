@@ -70,6 +70,21 @@ p code {
 }
 
 /*
+ * Fix link colors when the link text is inline code.
+ *
+ * https://github.com/mkdocs/mkdocs/issues/718
+ */
+a code {
+    color: #2980B9;
+}
+a:hover code {
+    color: #3091d1;
+}
+a:visited code {
+    color: #9B59B6;
+}
+
+/*
  * The CSS classes from highlight.js seem to clash with the
  * ReadTheDocs theme causing some code to be incorrectly made
  * bold and italic.

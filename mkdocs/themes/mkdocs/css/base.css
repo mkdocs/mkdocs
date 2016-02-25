@@ -65,7 +65,7 @@ pre, .rst-content tt {
     max-width: 100%;
     background: #fff;
     border: solid 1px #e1e4e5;
-    color: #e74c3c;
+    color: #333;
     overflow-x: auto;
 }
 
@@ -75,9 +75,22 @@ code.code-large, .rst-content tt.code-large {
 
 code {
     padding: 2px 5px;
-    color: #c7254e;
-    background-color: #f9f2f4;
-    font-size: 75%;
+    background: #fff;
+    border: solid 1px #e1e4e5;
+    color: #333;
+}
+
+pre code {
+    background: transparent;
+    border: none;
+}
+
+a code {
+    color: #2FA4E7;
+}
+
+a:hover code, a:focus code {
+    color: #157AB5;
 }
 
 code, kbd, pre, samp  {
