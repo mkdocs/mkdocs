@@ -34,7 +34,7 @@ the [custom themes](#custom-themes) section below.
 
 MkDocs also includes themes provided by two packages. [MkDocs Bootstrap] and
 [MkDocs Bootswatch]. The Bootstrap theme provides a theme based on [Bootstrap]
-and the Bootstrap theme provides 12 different themed Bootstrap themes based on
+and the Bootswatch theme provides 12 different themed Bootstrap themes based on
 the [Bootswatch] project.
 
 !!! note
