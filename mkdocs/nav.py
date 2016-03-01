@@ -206,6 +206,9 @@ def _path_to_page(path, title, url_context, use_directory_urls):
     if title is None:
         title = filename_to_title(path.split(os.path.sep)[-1])
     url = utils.get_url_path(path, use_directory_urls)
+    if '#' in path:
+        path, anchor = path.split('#')
+        url = url + '#' + anchor
     return Page(title=title, url=url, path=path,
                 url_context=url_context)
 
