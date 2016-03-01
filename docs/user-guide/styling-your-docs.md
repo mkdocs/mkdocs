@@ -4,7 +4,7 @@ How to style and theme your documentation.
 
 ---
 
-MkDocs includes a number of different [builtin themes](#built-in-themes) and
+MkDocs includes a number of different [built-in themes](#built-in-themes) and
 [external themes](#bootstrap-and-bootswatch-themes) which can easily be
 [customised with extra CSS or JavaScript](#customising-a-theme) or you can
 create a [custom theme](/user-guide/custom-themes.md) for your documentation.
@@ -14,7 +14,7 @@ To use a theme that is included in MkDocs, simply add this to your
 
     theme: readthedocs
 
-Replace [`readthedocs`](#readthedocs) with any of the [builtin themes](#built-
+Replace [`readthedocs`](#readthedocs) with any of the [built-in themes](#built-
 in-themes) listed below.
 
 To create a new custom theme or more heavily customise an existing theme, see
@@ -30,12 +30,11 @@ the [custom themes](#custom-themes) section below.
 
 ![ReadTheDocs](https://docs.readthedocs.org/en/latest/_images/screen_mobile.png)
 
-## Bootstrap and Bootswatch Themes
+## Bootstrap and Bootswatch themes
 
-MkDocs also includes themes provided by two packages. [MkDocs Bootstrap] and
-[MkDocs Bootswatch]. The Bootstrap theme provides a theme based on [Bootstrap]
-and the Bootstrap theme provides 12 different themed Bootstrap themes based on
-the [Bootswatch] project.
+MkDocs version 0.x also includes themes provided by two packages, [MkDocs Bootstrap] and
+[MkDocs Bootswatch]. The Bootstrap package provides a theme based on [Bootstrap]
+and the Bootswatch package provides 12 themes based on the [Bootswatch] project.
 
 !!! note
 
