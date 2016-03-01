@@ -11,6 +11,7 @@ import jinja2
 import json
 
 from mkdocs import nav, search, utils
+from mkdocs.utils import filters
 from mkdocs.relative_path_ext import RelativePathExtension
 import mkdocs
 
@@ -228,6 +229,7 @@ def build_pages(config, dump_json=False):
     site_navigation = nav.SiteNavigation(config['pages'], config['use_directory_urls'])
     loader = jinja2.FileSystemLoader(config['theme_dir'] + [config['mkdocs_templates'], ])
     env = jinja2.Environment(loader=loader)
+    env.filters['tojson'] = filters.tojson
     search_index = search.SearchIndex()
 
     build_template('404.html', env, config, site_navigation)

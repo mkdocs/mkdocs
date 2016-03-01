@@ -19,6 +19,7 @@ You can determine your currently installed version using `mkdocs --version`:
   `mkdocs build` and `mkdocs serve` (#832)
 * Fixed issues with Unicode filenames under Windows and Python 2. (#833)
 * Improved the styling of in-line code in the MkDocs theme. (#718)
+* Bugfix: convert variables to JSON when being passed to JavaScript (#850)
 
 ## Version 0.15.3 (2016-02-18)
 
