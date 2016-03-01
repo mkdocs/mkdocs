@@ -52,7 +52,7 @@ details about these specific themes.
 [MkDocs Bootstrap]: http://mkdocs.github.io/mkdocs-bootstrap/
 [MkDocs Bootswatch]: http://mkdocs.github.io/mkdocs-bootswatch/
 
-They will be included with MkDocs by default until the 1.0 release. After that
+They will be included with MkDocs by default until a future release. After that
 they will be installable with pip: `pip install mkdocs-bootstrap` and `pip
 install mkdocs-bootswatch`
 
