@@ -27,9 +27,9 @@
   {% if current_page %}
   <script>
     // Current page data
-    var mkdocs_page_name = "{{ page_title }}";
-    var mkdocs_page_input_path = "{{ current_page.input_path }}";
-    var mkdocs_page_url = "{{ current_page.abs_url }}";
+    var mkdocs_page_name = {{ page_title|tojson|safe }};
+    var mkdocs_page_input_path = {{ current_page.input_path|tojson|safe }};
+    var mkdocs_page_url = {{ current_page.abs_url|tojson|safe }};
   </script>
   {% endif %}
   <script src="{{ base_url }}/js/jquery-2.1.1.min.js"></script>
