@@ -69,6 +69,18 @@ p code {
     word-wrap: break-word;
 }
 
+/**
+ * Make code blocks display as blocks and give them the appropriate
+ * font size and padding.
+ *
+ * https://github.com/mkdocs/mkdocs/issues/855
+ */
+pre code {
+  display: block;
+  padding: 12px;
+  font-size: 12px;
+}
+
 /*
  * Fix link colors when the link text is inline code.
  *
