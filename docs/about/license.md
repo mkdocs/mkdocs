@@ -6,13 +6,9 @@ The legal stuff.
 
 ## Included projects
 
-Themes used under license from the Bootstrap, ReadTheDocs, GhostWriter and
-Bootswatch projects.
+Themes used under license from the ReadTheDocs projects.
 
-* Bootstrap theme - [View license](//github.com/twbs/bootstrap/blob/master/LICENSE).
 * ReadTheDocs theme - [View license](//github.com/snide/sphinx_rtd_theme/blob/master/LICENSE).
-* Bootswatch theme - [View license](//github.com/thomaspark/bootswatch/blob/gh-pages/LICENSE).
-* Highlight.js GitHub theme - [View license](//github.com/isagalaev/highlight.js/blob/master/LICENSE).
 
 Many thanks to the authors and contributors of those wonderful projects.
 

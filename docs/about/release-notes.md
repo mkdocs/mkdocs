@@ -19,6 +19,7 @@ You can determine your currently installed version using `mkdocs --version`:
   `mkdocs build` and `mkdocs serve` (#832)
 * Fixed issues with Unicode filenames under Windows and Python 2. (#833)
 * Improved the styling of in-line code in the MkDocs theme. (#718)
+* Bugfix: convert variables to JSON when being passed to JavaScript (#850)
 
 ## Version 0.15.3 (2016-02-18)
 
@@ -52,7 +53,7 @@ details about these specific themes.
 [MkDocs Bootstrap]: http://mkdocs.github.io/mkdocs-bootstrap/
 [MkDocs Bootswatch]: http://mkdocs.github.io/mkdocs-bootswatch/
 
-They will be included with MkDocs by default until the 1.0 release. After that
+They will be included with MkDocs by default until a future release. After that
 they will be installable with pip: `pip install mkdocs-bootstrap` and `pip
 install mkdocs-bootswatch`
 

@@ -4,7 +4,7 @@ How to style and theme your documentation.
 
 ---
 
-MkDocs includes a number of different [builtin themes](#built-in-themes) and
+MkDocs includes a number of different [built-in themes](#built-in-themes) and
 [external themes](#bootstrap-and-bootswatch-themes) which can easily be
 [customised with extra CSS or JavaScript](#customising-a-theme) or you can
 create a [custom theme](/user-guide/custom-themes.md) for your documentation.
@@ -14,7 +14,7 @@ To use a theme that is included in MkDocs, simply add this to your
 
     theme: readthedocs
 
-Replace [`readthedocs`](#readthedocs) with any of the [builtin themes](#built-
+Replace [`readthedocs`](#readthedocs) with any of the [built-in themes](#built-
 in-themes) listed below.
 
 To create a new custom theme or more heavily customise an existing theme, see
@@ -30,75 +30,10 @@ the [custom themes](#custom-themes) section below.
 
 ![ReadTheDocs](https://docs.readthedocs.org/en/latest/_images/screen_mobile.png)
 
-## Bootstrap and Bootswatch Themes
+### Third Party Themes
 
-MkDocs also includes themes provided by two packages. [MkDocs Bootstrap] and
-[MkDocs Bootswatch]. The Bootstrap theme provides a theme based on [Bootstrap]
-and the Bootstrap theme provides 12 different themed Bootstrap themes based on
-the [Bootswatch] project.
-
-!!! note
-
-    The Bootstrap and Bootswatch themes will not be included by default from
-    MkDocs version 1.0. They will need to be installed manually with `pip
-    install mkdocs-bootstrap` or `pip install mkdocs-bootswatch`.
-
-[Bootstrap]: http://getbootstrap.com/
-[Bootswatch]: http://bootswatch.com/
-[MkDocs Bootstrap]: http://mkdocs.github.io/mkdocs-bootstrap/
-[MkDocs Bootswatch]: http://mkdocs.github.io/mkdocs-bootswatch/
-
-### Bootstrap
-
-![Bootstrap](http://bootstrapdocs.com/v2.3.1/docs/assets/img/examples/bootstrap-example-fluid.png)
-
-### Amelia
-
-![Amelia](http://bootswatch.com/2/amelia/thumbnail.png)
-
-### Cerulean
-
-![Cerulean](http://bootswatch.com/cerulean/thumbnail.png)
-
-### Cosmo
-
-![Cosmo](http://bootswatch.com/cosmo/thumbnail.png)
-
-### Cyborg
-
-![Cyborg](http://bootswatch.com/cyborg/thumbnail.png)
-
-### Flatly
-
-![Flatly](http://bootswatch.com/flatly/thumbnail.png)
-
-### Journal
-
-![Journal](http://bootswatch.com/journal/thumbnail.png)
-
-### Readable
-
-![Readable](http://bootswatch.com/readable/thumbnail.png)
-
-### Simplex
-
-![Simplex](http://bootswatch.com/simplex/thumbnail.png)
-
-### Slate
-
-![Slate](http://bootswatch.com/slate/thumbnail.png)
-
-### Spacelab
-
-![Spacelab](http://bootswatch.com/spacelab/thumbnail.png)
-
-### United
-
-![United](http://bootswatch.com/united/thumbnail.png)
-
-### Yeti
-
-![Yeti](http://bootswatch.com/yeti/thumbnail.png)
+Third party themes can be found in the MkDocs [community wiki](
+https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes).
 
 ## Customising a Theme
 
