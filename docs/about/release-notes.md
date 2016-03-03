@@ -20,6 +20,10 @@ You can determine your currently installed version using `mkdocs --version`:
 * Fixed issues with Unicode filenames under Windows and Python 2. (#833)
 * Improved the styling of in-line code in the MkDocs theme. (#718)
 * Bugfix: convert variables to JSON when being passed to JavaScript (#850)
+* Updated the ReadTheDocs theme to match the upstream font sizes and colours
+  more closely. (#857)
+* Fixes an issue with permalink markers showing when the mouse was far above
+  them (#843)
 
 ## Version 0.15.3 (2016-02-18)
 
