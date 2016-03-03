@@ -24,6 +24,8 @@ You can determine your currently installed version using `mkdocs --version`:
   more closely. (#857)
 * Fixes an issue with permalink markers showing when the mouse was far above
   them (#843)
+* Bugfix: Handle periods in directory name when automatically creating the
+  pages config. (#728)
 
 ## Version 0.15.3 (2016-02-18)
 
