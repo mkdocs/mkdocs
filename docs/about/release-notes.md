@@ -26,6 +26,8 @@ You can determine your currently installed version using `mkdocs --version`:
   them (#843)
 * Bugfix: Handle periods in directory name when automatically creating the
   pages config. (#728)
+* Update searching to Lunr 0.7, which comes with some performance enhancements
+  for larger documents (#859)
 
 ## Version 0.15.3 (2016-02-18)
 
