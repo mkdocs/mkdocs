@@ -4,3 +4,4 @@ livereload==2.3.2
 Markdown==2.5
 PyYAML==3.10
 tornado==4.1
+PyExecJS>=1.4

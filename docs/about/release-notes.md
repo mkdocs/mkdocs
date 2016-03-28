@@ -190,6 +190,22 @@ better conform with the documented [layout].
 
 [layout]: ../user-guide/writing-your-docs/#file-layout
 
+#### Support for Pre-Built Search Index
+
+Previously, on each page load, the search index would need to be rebuilt from a
+JSON file of all the data by the client. While this was okay for small sites, it
+created a real burden on large sites (with hundreds of pages) and has been known
+to cause the entire browser to hang while the index is being built. MkDocs will
+now attempt to pre-build the index as a seperate JSON file, which is loaded by
+the client. Note that this new behavior only works if [Node.js] is installed on
+the build machine. If the build fails for any reason, MkDocs falls back to the
+old behavior. There are no settings to alter the behavior; MkDocs just uses the
+best option available on a given system. It is expected that most users will not
+need to do anything about this. However, users with large sites are encouraged
+to have Node.js installed on there build machines.
+
+[Node.js]: https://nodejs.org/
+
 ### Other Changes and Additions to Version 0.16.0
 
 * Bugfix: Support `gh-deploy` command on Windows with Python 3 (#722)
