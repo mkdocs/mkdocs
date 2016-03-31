@@ -278,11 +278,13 @@ def build(config, live_server=False, dump_json=False, clean_site_dir=False):
         return
 
     # Reversed as we want to take the media files from the builtin theme
-    # and then from the custom theme_dir so the custom versions take take
+    # and then from the custom theme_dir so that the custom versions take
     # precedence.
     for theme_dir in reversed(config['theme_dir']):
         log.debug("Copying static assets from theme: %s", theme_dir)
-        utils.copy_media_files(theme_dir, config['site_dir'])
+        utils.copy_media_files(
+            theme_dir, config['site_dir'], exclude=['*.py', '*.pyc', '*.html']
+        )
 
     log.debug("Copying static assets from the docs dir.")
     utils.copy_media_files(config['docs_dir'], config['site_dir'])
