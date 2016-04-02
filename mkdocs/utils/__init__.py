@@ -16,6 +16,7 @@ import pkg_resources
 import shutil
 import sys
 import yaml
+import fnmatch
 
 from mkdocs import toc, exceptions
 
@@ -128,16 +129,23 @@ def clean_directory(directory):
             os.unlink(path)
 
 
-def copy_media_files(from_dir, to_dir):
+def copy_media_files(from_dir, to_dir, exclude=None):
     """
-    Recursively copy all files except markdown and HTML into another directory.
+    Recursively copy all files except markdown and exclude[ed] files into another directory.
+
+    `exclude` accepts a list of Unix shell-style wildcards (`['*.py', '*.pyc']`).
+    Note that `exclude` only operates on file names, not directories.
     """
     for (source_dir, dirnames, filenames) in os.walk(from_dir):
         relative_path = os.path.relpath(source_dir, from_dir)
         output_dir = os.path.normpath(os.path.join(to_dir, relative_path))
 
-        # Filter filenames starting with a '.'
-        filenames = [f for f in filenames if not f.startswith('.')]
+        # Filter file names using Unix pattern matching
+        # Always filter file names starting with a '.'
+        exclude_patterns = ['.*']
+        exclude_patterns.extend(exclude or [])
+        for pattern in exclude_patterns:
+            filenames = [f for f in filenames if not fnmatch.fnmatch(f, pattern)]
 
         # Filter the dirnames that start with a '.' and update the list in
         # place to prevent us walking these.
