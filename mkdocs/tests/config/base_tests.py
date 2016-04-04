@@ -48,7 +48,7 @@ class ConfigBaseTests(unittest.TestCase):
             config_file.close()
 
             cfg = base.load_config(config_file=config_file.name)
-            self.assertIsInstance(cfg, base.Config)
+            self.assertTrue(isinstance(cfg, base.Config))
             self.assertEqual(cfg['site_name'], 'MkDocs Test')
         finally:
             os.remove(config_file.name)
@@ -62,14 +62,14 @@ class ConfigBaseTests(unittest.TestCase):
         """
         `load_config` can accept an open file descriptor.
         """
-        
+
         config_file = tempfile.NamedTemporaryFile('r+', delete=False)
         try:
             config_file.write("site_name: MkDocs Test\n")
             config_file.flush()
 
             cfg = base.load_config(config_file=config_file)
-            self.assertIsInstance(cfg, base.Config)
+            self.assertTrue(isinstance(cfg, base.Config))
             self.assertEqual(cfg['site_name'], 'MkDocs Test')
             # load_config will always close the file
             self.assertTrue(config_file.closed)
@@ -89,7 +89,7 @@ class ConfigBaseTests(unittest.TestCase):
             config_file.close()
 
             cfg = base.load_config(config_file=config_file)
-            self.assertIsInstance(cfg, base.Config)
+            self.assertTrue(isinstance(cfg, base.Config))
             self.assertEqual(cfg['site_name'], 'MkDocs Test')
         finally:
             os.remove(config_file.name)
