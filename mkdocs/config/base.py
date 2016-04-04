@@ -115,7 +115,11 @@ def _open_config_file(config_file):
         else:
             raise exceptions.ConfigurationError(
                 "Config file '{0}' does not exist.".format(config_file))
-
+    else:
+        # reopen config file descriptor when needed
+        if config_file.closed:
+            config_file = open(config_file.name, config_file.mode)
+        config_file.seek(0)
     return config_file
 
 
