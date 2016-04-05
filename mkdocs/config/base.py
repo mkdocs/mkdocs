@@ -106,7 +106,11 @@ def _open_config_file(config_file):
     if config_file is None:
         config_file = os.path.abspath('mkdocs.yml')
 
-    log.debug("Loading configuration file: %s", config_file)
+    # If closed file descriptor, get file path to reopen later.
+    if hasattr(config_file, 'closed') and config_file.closed:
+        config_file = config_file.name
+
+    log.debug("Loading configuration file: {0}".format(config_file))
 
     # If it is a string, we can assume it is a path and attempt to open it.
     if isinstance(config_file, utils.string_types):
@@ -115,6 +119,9 @@ def _open_config_file(config_file):
         else:
             raise exceptions.ConfigurationError(
                 "Config file '{0}' does not exist.".format(config_file))
+
+    # Ensure file descriptor is at begining
+    config_file.seek(0)
 
     return config_file
 
