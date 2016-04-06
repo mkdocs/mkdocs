@@ -19,7 +19,7 @@ Amazon S3, or [anywhere][deploy] else you choose.
 ### Great themes available
 
 There's a stack of good looking themes available for MkDocs. Choose between
-the built in themes: [mkdocs] and [readthedocs], select one of the 3<sup>rd</sup>
+the built in themes: [mkdocs] and [readthedocs], select one of the 3rd
 party themes in the [MkDocs wiki], or [build your own].
 
 ### Preview your site as you work
@@ -92,8 +92,8 @@ command:
 
 ```bash
 $ mkdocs serve
-INFO    -  Building documentation... 
-INFO    -  Cleaning site directory 
+INFO    -  Building documentation...
+INFO    -  Cleaning site directory
 [I 160402 15:50:43 server:271] Serving on http://127.0.0.1:8000
 [I 160402 15:50:43 handlers:58] Start watching changes
 [I 160402 15:50:43 handlers:60] Start detecting changes
@@ -134,7 +134,8 @@ curl 'https://jaspervdj.be/lorem-markdownum/markdown.txt' > docs/about.md
 
 As our documentation site will include some navigation headers, you may want to
 edit the configuration file and add some information about the order, title, and
-nesting of each page in the navigation header by adding a [`pages`][pages] setting:
+nesting of each page in the navigation header by adding a [`pages`][pages]
+setting:
 
 ```yaml
 site_name: MkLorum
@@ -144,7 +145,8 @@ pages:
 ```
 
 Save your changes and you'll now see a navigation bar with `Home` and `About`
-items on the left as well as `Search`, `Previous`, and `Next` items on the right. 
+items on the left as well as `Search`, `Previous`, and `Next` items on the
+right.
 
 ![Screenshot](img/multipage.png)
 
