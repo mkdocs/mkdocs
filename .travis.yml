@@ -33,8 +33,6 @@ script:
 - tox
 matrix:
   fast_finish: true
-  allow_failures:
-    - env: TOXENV=markdown-lint
 before_install: pip install codecov
 after_success: codecov
 deploy:
