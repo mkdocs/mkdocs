@@ -141,7 +141,7 @@ code.cs, code.c {
     padding-left: 1em;
 }
 
-.wy-menu-vertical li.current {
+.wy-menu-vertical .subnav li.current {
     margin-left: 11px;
 }
 
