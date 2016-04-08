@@ -141,6 +141,9 @@ code.cs, code.c {
     padding-left: 1em;
 }
 
+.wy-menu-vertical li.current {
+    margin-left: 11px;
+}
 
 /*
  * Improve inline code blocks within admonitions.
