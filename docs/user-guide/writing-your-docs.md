@@ -208,7 +208,7 @@ Specify alignment for each column by adding colons to separator lines:
 
 ```no-highlight
 First Header | Second Header | Third Header
-:----------- | :-----------: | -----------:
+:----------- |:-------------:| -----------:
 Left         | Center        | Right
 Left         | Center        | Right
 ```
