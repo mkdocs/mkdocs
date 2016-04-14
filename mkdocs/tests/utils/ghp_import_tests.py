@@ -9,6 +9,7 @@ import subprocess
 import tempfile
 import unittest
 import shutil
+import sys
 
 from mkdocs.utils import ghp_import
 
@@ -27,10 +28,16 @@ class UtilsTests(unittest.TestCase):
 
         ghp_import.try_rebase('origin', 'gh-pages')
 
-        mock_popen.assert_called_once_with(
-            ['git', 'rev-list', '--max-count=1', 'origin/gh-pages'],
-            stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
+        if sys.version_info >= (3, 2, 0):
+            mock_popen.assert_called_once_with(
+                ['git', 'rev-list', '--max-count=1', 'origin/gh-pages'],
+                stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE, universal_newlines=True)
+        else:
+            mock_popen.assert_called_once_with(
+                ['git', 'rev-list', '--max-count=1', 'origin/gh-pages'],
+                stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE)
         mock_call.assert_called_once_with(
             ['git', 'update-ref', 'refs/heads/gh-pages',
              '4c82346e4b1b816be89dd709d35a6b169aa3df61'])
@@ -47,10 +54,16 @@ class UtilsTests(unittest.TestCase):
         result = ghp_import.get_prev_commit('test-branch')
 
         self.assertEqual(result, u'4c82346e4b1b816be89dd709d35a6b169aa3df61')
-        mock_popen.assert_called_once_with(
-            ['git', 'rev-list', '--max-count=1', 'test-branch', '--'],
-            stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
+        if sys.version_info >= (3, 2, 0):
+            mock_popen.assert_called_once_with(
+                ['git', 'rev-list', '--max-count=1', 'test-branch', '--'],
+                stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE, universal_newlines=True)
+        else:
+            mock_popen.assert_called_once_with(
+                ['git', 'rev-list', '--max-count=1', 'test-branch', '--'],
+                stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE)
 
     @mock.patch('subprocess.Popen', auto_spec=True)
     def test_get_config(self, mock_popen):
@@ -63,9 +76,14 @@ class UtilsTests(unittest.TestCase):
         result = ghp_import.get_config('user.name')
 
         self.assertEqual(result, u'Dougal Matthews')
-        mock_popen.assert_called_once_with(
-            ['git', 'config', 'user.name'],
-            stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+        if sys.version_info >= (3, 2, 0):
+            mock_popen.assert_called_once_with(
+                ['git', 'config', 'user.name'],
+                stdout=subprocess.PIPE, stdin=subprocess.PIPE, universal_newlines=True)
+        else:
+            mock_popen.assert_called_once_with(
+                ['git', 'config', 'user.name'],
+                stdout=subprocess.PIPE, stdin=subprocess.PIPE)
 
     @mock.patch('mkdocs.utils.ghp_import.get_prev_commit')
     @mock.patch('mkdocs.utils.ghp_import.get_config')

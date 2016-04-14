@@ -70,7 +70,10 @@ def normalize_path(path):
 
 def try_rebase(remote, branch):
     cmd = ['git', 'rev-list', '--max-count=1', '%s/%s' % (remote, branch)]
-    p = sp.Popen(cmd, stdin=sp.PIPE, stdout=sp.PIPE, stderr=sp.PIPE)
+    kwargs = {'stdin': sp.PIPE, 'stdout': sp.PIPE, 'stderr': sp.PIPE}
+    if sys.version_info >= (3, 2, 0):
+        kwargs['universal_newlines'] = True
+    p = sp.Popen(cmd, **kwargs)
     (rev, _) = p.communicate()
     if p.wait() != 0:
         return True
@@ -81,14 +84,20 @@ def try_rebase(remote, branch):
 
 
 def get_config(key):
-    p = sp.Popen(['git', 'config', key], stdin=sp.PIPE, stdout=sp.PIPE)
+    kwargs = {'stdin': sp.PIPE, 'stdout': sp.PIPE}
+    if sys.version_info >= (3, 2, 0):
+        kwargs['universal_newlines'] = True
+    p = sp.Popen(['git', 'config', key], **kwargs)
     (value, _) = p.communicate()
     return value.decode('utf-8').strip()
 
 
 def get_prev_commit(branch):
     cmd = ['git', 'rev-list', '--max-count=1', branch, '--']
-    p = sp.Popen(cmd, stdin=sp.PIPE, stdout=sp.PIPE, stderr=sp.PIPE)
+    kwargs = {'stdin': sp.PIPE, 'stdout': sp.PIPE, 'stderr': sp.PIPE}
+    if sys.version_info >= (3, 2, 0):
+        kwargs['universal_newlines'] = True
+    p = sp.Popen(cmd, **kwargs)
     (rev, _) = p.communicate()
     if p.wait() != 0:
         return None
@@ -141,7 +150,7 @@ def run_import(srcdir, branch, message, nojekyll):
     cmd = ['git', 'fast-import', '--date-format=raw', '--quiet']
     kwargs = {"stdin": sp.PIPE}
     if sys.version_info >= (3, 2, 0):
-        kwargs["universal_newlines"] = False
+        kwargs["universal_newlines"] = True
     pipe = sp.Popen(cmd, **kwargs)
     start_commit(pipe, branch, message)
     for path, _, fnames in os.walk(srcdir):
@@ -167,7 +176,9 @@ def ghp_import(directory, message, remote='origin', branch='gh-pages'):
 
     run_import(directory, branch, message, nojekyll)
 
-    proc = sp.Popen(['git', 'push', remote, branch],
-                    stdout=sp.PIPE, stderr=sp.PIPE)
+    kwargs = {'stdout': sp.PIPE, 'stderr': sp.PIPE}
+    if sys.version_info >= (3, 2, 0):
+        kwargs['universal_newlines'] = True
+    proc = sp.Popen(['git', 'push', remote, branch], **kwargs)
     proc.communicate()
     return proc.wait() == 0
