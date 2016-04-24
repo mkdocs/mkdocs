@@ -11,15 +11,12 @@ Project documentation with Markdown.
 [![Coverage Status][codecov-image]][codecov-link]
 [![Landscale Code Health][landscape-image]][landscape-link]
 
-## [See the MkDocs documentation: www.mkdocs.org][mkdocs]
-
-Release notes: <http://www.mkdocs.org/about/release-notes/>
-
-Project roadmap: [https://github.com/mkdocs/mkdocs/wiki][roadmap]
-
-IRC channel: `#mkdocs` on freenode.
-
-Discussions and support: <https://groups.google.com/forum/#!forum/mkdocs>
+- View the [MkDocs documentation][mkdocs].
+- Project [release notes][release-notes].
+- Visit the [MkDocs wiki](https://github.com/mkdocs/mkdocs/wiki) for community 
+  resources, including third party themes and a list of MkDocs users.
+- IRC channel: `#mkdocs` on freenode.
+- Discussions and support: <https://groups.google.com/forum/#!forum/mkdocs>
 
 [appveyor-image]: https://img.shields.io/appveyor/ci/d0ugal/mkdocs/master.png
 [appveyor-link]: https://ci.appveyor.com/project/d0ugal/mkdocs
@@ -35,4 +32,4 @@ Discussions and support: <https://groups.google.com/forum/#!forum/mkdocs>
 [travis-link]: https://travis-ci.org/mkdocs/mkdocs
 
 [mkdocs]: http://www.mkdocs.org
-[roadmap]: https://github.com/mkdocs/mkdocs/wiki
+[release-notes]: http://www.mkdocs.org/about/release-notes/
