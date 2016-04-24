@@ -13,7 +13,7 @@ Project documentation with Markdown.
 
 - View the [MkDocs documentation][mkdocs].
 - Project [release notes][release-notes].
-- Visit the [MkDocs wiki](https://github.com/mkdocs/mkdocs/wiki) for community 
+- Visit the [MkDocs wiki](https://github.com/mkdocs/mkdocs/wiki) for community
   resources, including third party themes and a list of MkDocs users.
 - IRC channel: `#mkdocs` on freenode.
 - Discussions and support: <https://groups.google.com/forum/#!forum/mkdocs>
