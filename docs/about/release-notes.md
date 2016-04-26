@@ -15,6 +15,11 @@ You can determine your currently installed version using `mkdocs --version`:
 
 ## Version 0.16 (2016-02-??)
 
+* Bugfix: Support `gh-deploy` command on Windows with Python 3 (#722)
+* Bugfix: Include .woff2 font files in Pyhton package build (#894)
+* Various updates and improvements to Documentation Home Page/Tutorial (#870)
+* Bugfix: Support livereload for config file changes (#735)
+* Bugfix: Non-media template files are no longer copied with media files (#807)
 * Add a flag (-e/--theme-dir) to specifiy theme directory with the commands
   `mkdocs build` and `mkdocs serve` (#832)
 * Fixed issues with Unicode filenames under Windows and Python 2. (#833)
