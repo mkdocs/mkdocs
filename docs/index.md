@@ -99,7 +99,7 @@ INFO    -  Cleaning site directory
 [I 160402 15:50:43 handlers:60] Start detecting changes
 ```
 
-Open up <http://127.0.0.1:8000/> in your browser, and you'll see the default
+Open up `http://127.0.0.1:8000/` in your browser, and you'll see the default
 home page being displayed:
 
 ![The MkDocs live server](img/screenshot.png)
@@ -259,8 +259,8 @@ the MkDocs IRC channel `#mkdocs` on freenode.
 [pages]: user-guide/configuration/#pages
 [discussion group]: https://groups.google.com/forum/#!forum/mkdocs
 [GitHub issues]: https://github.com/mkdocs/mkdocs/issues
-[GitHub project pages]: https://help.github.com/articles/creating-project-pages-manually
-[pip]: http://pip.readthedocs.org/en/latest/installing.html
+[GitHub project pages]: https://help.github.com/articles/creating-project-pages-manually/
+[pip]: http://pip.readthedocs.io/en/stable/installing/
 [Python]: https://www.python.org/
 [site_name]: user-guide/configuration/#site_name
 [theme]: user-guide/configuration/#theme

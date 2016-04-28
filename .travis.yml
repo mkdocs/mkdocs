@@ -2,6 +2,9 @@ sudo: false
 language: python
 python: '3.5'
 env:
+- TOXENV=flake8
+- TOXENV=markdown-lint
+- TOXENV=linkchecker
 - TOXENV=py26-integration
 - TOXENV=py26-min-req
 - TOXENV=py26-unittests
@@ -23,19 +26,12 @@ env:
 - TOXENV=pypy3-integration
 - TOXENV=pypy3-min-req
 - TOXENV=pypy3-unittests
-- TOXENV=flake8
-- TOXENV=markdown-lint
-- TOXENV=linkchecker
 install:
 - pip install tox
 - gem install mdl
 script:
 - git clean -f -d -x
 - tox
-matrix:
-  fast_finish: true
-  allow_failures:
-    - env: TOXENV=linkchecker
 before_install: pip install codecov
 after_success: codecov
 deploy:

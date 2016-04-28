@@ -54,8 +54,8 @@ public repository.
     specific themes and will not work with MkDocs.
 
 [rtd]: https://readthedocs.org/
-[instructions]: https://read-the-docs.readthedocs.org/en/latest/getting_started.html#in-markdown
-[features]: http://read-the-docs.readthedocs.org/en/latest/features.html
+[instructions]: https://read-the-docs.readthedocs.io/en/latest/getting_started.html#in-markdown
+[features]: http://read-the-docs.readthedocs.io/en/latest/features.html
 [theme]: /user-guide/styling-your-docs.md
 
 ## PyPI

@@ -28,7 +28,7 @@ the [custom themes](#custom-themes) section below.
 
 ### readthedocs
 
-![ReadTheDocs](https://docs.readthedocs.org/en/latest/_images/screen_mobile.png)
+![ReadTheDocs](http://docs.readthedocs.io/en/latest/_images/screen_mobile.png)
 
 ### Third Party Themes
 

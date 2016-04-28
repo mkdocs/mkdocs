@@ -151,7 +151,7 @@ documentation site. These might include images and other media.
 
 For example, if your project documentation needed to include a [GitHub pages
 CNAME
-file](https://help.github.com/articles/setting-up-a-custom-domain-with-pages#setting-the-domain-in-your-repo)
+file](https://help.github.com/articles/using-a-custom-domain-with-github-pages/)
 and a PNG formatted screenshot image then your file layout might look as
 follows:
 
