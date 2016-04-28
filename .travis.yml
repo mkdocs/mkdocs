@@ -25,12 +25,7 @@ env:
 - TOXENV=pypy3-unittests
 - TOXENV=flake8
 - TOXENV=markdown-lint
-- TOXENV=mkdocs-themelint
-- TOXENV=rtd-themelint
-addons:
-  apt:
-    packages:
-      linkchecker
+- TOXENV=linkchecker
 install:
 - pip install tox
 - gem install mdl
@@ -39,6 +34,8 @@ script:
 - tox
 matrix:
   fast_finish: true
+  allow_failures:
+    - env: TOXENV=linkchecker
 before_install: pip install codecov
 after_success: codecov
 deploy:
