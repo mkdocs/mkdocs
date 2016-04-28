@@ -28,7 +28,6 @@ env:
 - TOXENV=mkdocs-themelint
 - TOXENV=rtd-themelint
 install:
-- pip install linkchecker
 - pip install tox
 - gem install mdl
 script:
