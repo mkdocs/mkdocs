@@ -25,6 +25,8 @@ env:
 - TOXENV=pypy3-unittests
 - TOXENV=flake8
 - TOXENV=markdown-lint
+- TOXENV=mkdocs-themelint
+- TOXENV=rtd-themelint
 install:
 - pip install tox
 - gem install mdl
