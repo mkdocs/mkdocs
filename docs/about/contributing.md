@@ -59,5 +59,5 @@ it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.
 
 [virtualenv]: https://virtualenv.pypa.io/en/latest/userguide.html
-[tox]: https://tox.readthedocs.org/en/latest/
+[tox]: https://tox.readthedocs.io/en/latest/
 [travis]: https://travis-ci.org/repositories

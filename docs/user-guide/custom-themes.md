@@ -440,4 +440,4 @@ If you don't have an account setup, you should be prompted to create one.
 For a much more detailed guide, see the official Python packaging
 documentation for [Packaging and Distributing Projects].
 
-[Packaging and Distributing Projects]: https://packaging.python.org/en/latest/distributing.html
+[Packaging and Distributing Projects]: https://packaging.python.org/en/latest/distributing/

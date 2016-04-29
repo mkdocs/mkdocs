@@ -11,7 +11,7 @@ pages:
       - Version 2: index.md
       - Version 3: index.md
 
-site_url: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/tests/integration
+site_url: http://www.mkdocs.org/
 docs_dir: documentation
 site_dir: output
 

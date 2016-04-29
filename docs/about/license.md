@@ -8,7 +8,7 @@ The legal stuff.
 
 Themes used under license from the ReadTheDocs projects.
 
-* ReadTheDocs theme - [View license](//github.com/snide/sphinx_rtd_theme/blob/master/LICENSE).
+* ReadTheDocs theme - [View license](https://github.com/snide/sphinx_rtd_theme/blob/master/LICENSE).
 
 Many thanks to the authors and contributors of those wonderful projects.
 
