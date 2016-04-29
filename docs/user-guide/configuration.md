@@ -139,8 +139,11 @@ Lets you set a directory to a custom theme. This can either be a relative
 directory, in which case it is resolved relative to the directory containing
 your configuration file, or it can be an absolute directory path.
 
-See [styling your docs](styling-your-docs.md#custom-themes) for an explanation
-of custom themes.
+See [styling your docs](styling-your-docs.md#using-the-theme_dir) for details if
+you would like to tweak an existing theme.
+
+See [custom themes](./custom-themes) if you would like to build your own theme
+from the ground up.
 
 **default**: `null`
 

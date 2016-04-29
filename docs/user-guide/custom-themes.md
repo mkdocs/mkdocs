@@ -39,11 +39,19 @@ You would include the following setting to use the custom theme directory:
 
     theme_dir: 'custom_theme'
 
-If used in combination with the `theme` configuration value a custom theme can
-be used to replace only specific parts of a built-in theme. For example, with
-the above layout and if you set `theme: mkdocs` then the `base.html` file
-would replace that in the theme but otherwise it would remain the same. This
-is useful if you want to make small adjustments to an existing theme.
+!!! Note
+
+    Generally, when building your own theme, the `theme` configurations setting
+    would be left blank. However, if used in combination with the `theme`
+    configuration value a custom theme can be used to replace only specific
+    parts of a built-in theme. For example, with the above layout and if you set
+    `theme: mkdocs` then the `base.html` file would replace that in the theme
+    but otherwise it would remain the same. This is useful if you want to make
+    small adjustments to an existing theme.
+
+    For more specific information, see [styling your docs].
+
+[styling your docs]: ./styling-your-docs.md#using-the-theme_dir
 
 ## Basic theme
 
