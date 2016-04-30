@@ -45,6 +45,10 @@ if sys.argv[-1] == 'publish':
     print("  git push --tags")
     sys.exit()
 
+try:
+    from mkdocs.setup_command import BuildDoc
+except ImportError:
+    pass
 
 setup(
     name="mkdocs",
@@ -94,6 +98,11 @@ setup(
         'Topic :: Text Processing',
     ],
     zip_safe=False,
+    cmdclass = {
+        'build_mkdocs': BuildDoc
+    }, 
+    command_options={
+        'build_mkdocs': {}}
 )
 
 # (*) Please direct queries to the discussion group:
