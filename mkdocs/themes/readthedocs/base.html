@@ -5,10 +5,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  {% if page_description %}<meta name="description" content="{{ page_description }}">{% endif %}
+  {% if page and page.is_homepage %}<meta name="description" content="{{ page_description }}">{% endif %}
   {% if site_author %}<meta name="author" content="{{ site_author }}">{% endif %}
   {% block htmltitle %}
-  <title>{% if page_title %}{{ page_title }} - {% endif %}{{ site_name }}</title>
+  <title>{% if page and page.title and not page.is_hompage %}{{ page.title }} - {% endif %}{{ site_name }}</title>
   {% endblock %}
 
   {% if favicon %}<link rel="shortcut icon" href="{{ favicon }}">
@@ -24,12 +24,12 @@
   <link href="{{ path }}" rel="stylesheet">
   {%- endfor %}
 
-  {% if current_page %}
+  {% if page %}
   <script>
     // Current page data
-    var mkdocs_page_name = {{ page_title|tojson|safe }};
-    var mkdocs_page_input_path = {{ current_page.input_path|tojson|safe }};
-    var mkdocs_page_url = {{ current_page.abs_url|tojson|safe }};
+    var mkdocs_page_name = {{ page.title|tojson|safe }};
+    var mkdocs_page_input_path = {{ page.input_path|tojson|safe }};
+    var mkdocs_page_url = {{ page.abs_url|tojson|safe }};
   </script>
   {% endif %}
   <script src="{{ base_url }}/js/jquery-2.1.1.min.js"></script>
@@ -92,7 +92,7 @@
           <div role="main">
             <div class="section">
               {% block content %}
-                {{ content }}
+                {{ page.content }}
               {% endblock %}
             </div>
           </div>
@@ -110,7 +110,7 @@
 
 </body>
 </html>
-{% if current_page and current_page.is_homepage %}
+{% if page and page.is_homepage %}
 <!--
 MkDocs version : {{ mkdocs_version }}
 Build Date UTC : {{ build_date_utc }}

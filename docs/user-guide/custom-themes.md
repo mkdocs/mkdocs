@@ -178,32 +178,28 @@ A Python datetime object that represents the date and time the documentation
 was built in UTC. This is useful for showing how recently the documentation
 was updated.
 
-### Page Context
+#### page
 
-The page context includes all of the above Global context and the following
-additional variables.
+In templates which are not rendered from a Markdown source file, the `page`
+variable is `None`. In templates which are rendered from a Markdown source file,
+the `page` variable contains a page object with the following attributes:
 
-#### page_title
+##### page.title
 
 Contains the Title for the current page.
 
-#### page_description
-
-Contains the description for the current page on the homepage, it is blank on
-other pages.
-
-#### content
+##### page.content
 
 The rendered Markdown as HTML, this is the contents of the documentation.
 
-#### toc
+##### page.toc
 
 An object representing the Table of contents for a page. Displaying the table
 of contents as a simple list can be achieved like this.
 
 ```django
 <ul>
-{% for toc_item in toc %}
+{% for toc_item in page.toc %}
     <li><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
     {% for toc_item in toc_item.children %}
         <li><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
@@ -212,7 +208,7 @@ of contents as a simple list can be achieved like this.
 </ul>
 ```
 
-#### meta
+##### page.meta
 
 A mapping of the metadata included at the top of the markdown page. In this
 example we define a `source` property above the page title.
@@ -231,36 +227,41 @@ variable. This could then be used to link to source files related to the
 documentation page.
 
 ```django
-{% for filename in meta.source %}
+{% for filename in page.meta.source %}
   <a class="github" href="https://github.com/.../{{ filename }}">
     <span class="label label-info">{{ filename }}</span>
   </a>
 {% endfor %}
 ```
 
-#### canonical_url
+##### page.canonical_url
 
-The full, canonical URL to the current page. This includes the site_url from
+The full, canonical URL to the current page. This includes the `site_url` from
 the configuration.
 
-#### current_page
+##### page.url
 
-The page object for the current page. The page path and url properties can be
-displayed like this.
+The URL to the current page not including the `site_url` from the configuration.
+
+##### page.is_homepage
+
+Evaluates to `True` for the homepage of the site and `False` for all other
+pages. This can be used in conjuction with other attributes of the `page`
+object to alter the behavior. For example, to display a differant title
+on the homepage:
 
 ```django
-<h1>{{ current_page.title }}</h1>
-<p> This page is at {{ current_page.url }}</p>
+{% if not page.is_homepage %}{{ page.title }} - {% endif %}{{ site_name }}
 ```
 
-#### previous_page
+##### page.previous_page
 
 The page object for the previous  page. The usage is the same as for
-`current_page`.
+`page`.
 
-#### next_page
+##### page.next_page
 
-The page object for the next page.The usage is the same as for `current_page`.
+The page object for the next page.The usage is the same as for `page`.
 
 ### Extra Context
 

@@ -95,6 +95,14 @@ def get_page_context(page, content, toc, meta, config):
     Generate the page context by extending the global context and adding page
     specific variables.
     """
+    if config['site_url']:
+        page.set_canonical_url(config['site_url'])
+
+    page.content = content
+    page.toc = toc
+    page.meta = meta
+
+    # TODO: remove the rest in version 1.0 as they are deprecated
 
     if page.is_homepage or page.title is None:
         page_title = None
@@ -106,16 +114,9 @@ def get_page_context(page, content, toc, meta, config):
     else:
         page_description = None
 
-    if config['site_url']:
-        base = config['site_url']
-        if not base.endswith('/'):
-            base += '/'
-        canonical_url = utils.urljoin(
-            base, page.abs_url.lstrip('/'))
-    else:
-        canonical_url = None
-
     return {
+        'page': page,
+        # TODO: remove the rest in version 1.0 as they are deprecated
         'page_title': page_title,
         'page_description': page_description,
 
@@ -123,8 +124,7 @@ def get_page_context(page, content, toc, meta, config):
         'toc': toc,
         'meta': meta,
 
-
-        'canonical_url': canonical_url,
+        'canonical_url': page.canonical_url,
 
         'current_page': page,
         'previous_page': page.previous_page,
@@ -141,10 +141,9 @@ def build_template(template_name, env, config, site_navigation=None):
     except TemplateNotFound:
         return False
 
+    context = {'page': None}
     if site_navigation is not None:
-        context = get_global_context(site_navigation, config)
-    else:
-        context = {}
+        context.update(get_global_context(site_navigation, config))
 
     output_content = template.render(context)
     output_path = os.path.join(config['site_dir'], template_name)
@@ -212,10 +211,9 @@ def build_extra_templates(extra_templates, config, site_navigation=None):
         with io.open(input_path, 'r', encoding='utf-8') as template_file:
             template = jinja2.Template(template_file.read())
 
+        context = {'page': None}
         if site_navigation is not None:
-            context = get_global_context(site_navigation, config)
-        else:
-            context = {}
+            context.update(get_global_context(site_navigation, config))
 
         output_content = template.render(context)
         output_path = os.path.join(config['site_dir'], extra_template)
@@ -229,6 +227,34 @@ def build_pages(config, dump_json=False):
     site_navigation = nav.SiteNavigation(config['pages'], config['use_directory_urls'])
     loader = jinja2.FileSystemLoader(config['theme_dir'] + [config['mkdocs_templates'], ])
     env = jinja2.Environment(loader=loader)
+
+    # TODO: remove DeprecationContext in v1.0 when all deprecated vars have been removed
+    from jinja2.runtime import Context
+    deprecated_vars = [
+        'page_title',
+        'content',
+        'toc',
+        'meta',
+        'current_page',
+        'canonical_url',
+        'previous_page',
+        'next_page'
+    ]
+
+    class DeprecationContext(Context):
+        def resolve(self, key):
+            """ Log a warning when acessing any deprecated variable name. """
+            if key in deprecated_vars:
+                replacement = "page" if key == 'current_page' else "page.{0}".format(key)
+                log.warn(
+                    "Template variable warning: '{0}' is being deprecated and will not be "
+                    "available in a future version. Use '{1}' instead.".format(key, replacement)
+                )
+            return super(DeprecationContext, self).resolve(key)
+
+    env.context_class = DeprecationContext
+    # TODO: end remove DeprecationContext
+
     env.filters['tojson'] = filters.tojson
     search_index = search.SearchIndex()
 

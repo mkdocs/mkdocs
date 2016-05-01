@@ -148,6 +148,13 @@ class Page(object):
         self.next_page = None
         self.ancestors = []
 
+        # Placeholders to be filled in later in the build
+        # process when we have access to the config.
+        self.canonical_url = None
+        self.content = None
+        self.meta = None
+        self.toc = None
+
     @property
     def url(self):
         return self.url_context.make_relative(self.abs_url)
@@ -173,6 +180,11 @@ class Page(object):
         self.active = active
         for ancestor in self.ancestors:
             ancestor.set_active(active)
+
+    def set_canonical_url(self, base):
+        if not base.endswith('/'):
+            base += '/'
+        self.canonical_url = utils.urljoin(base, self.abs_url.lstrip('/'))
 
 
 class Header(object):
