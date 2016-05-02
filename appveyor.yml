@@ -1,6 +1,9 @@
 build: false
 environment:
   matrix:
+    - TOXENV: flake8
+    - TOXENV: markdown-lint
+    - TOXENV: linkchecker
     - TOXENV: py27-integration
     - TOXENV: py27-min-req
     - TOXENV: py27-unittests
@@ -13,7 +16,6 @@ environment:
     - TOXENV: py35-integration
     - TOXENV: py35-min-req
     - TOXENV: py35-unittests
-    - TOXENV: flake8
 init:
   - "ECHO %TOXENV%"
   - ps: "ls C:\\Python*"
