@@ -4,13 +4,13 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        {% if page_description %}<meta name="description" content="{{ page_description }}">{% endif %}
+        {% if page and page.is_homepage %}<meta name="description" content="{{ config['site_description'] }}">{% endif %}
         {% if site_author %}<meta name="author" content="{{ site_author }}">{% endif %}
-        {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}">{% endif %}
+        {% if page and page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}">{% endif %}
         {% if favicon %}<link rel="shortcut icon" href="{{ base_url }}/{{ favicon }}">
         {% else %}<link rel="shortcut icon" href="{{ base_url }}/img/favicon.ico">{% endif %}
 
-	<title>{% if page_title %}{{ page_title }} - {% endif %}{{ site_name }}</title>
+	<title>{% if page and page.title and not page.is_homepage %}{{ page.title }} - {% endif %}{{ site_name }}</title>
 
         <link href="{{ base_url }}/css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="{{ base_url }}/css/font-awesome-4.5.0.css" rel="stylesheet">
@@ -39,7 +39,7 @@
         {% endif %}
     </head>
 
-    <body{% if current_page and current_page.is_homepage %} class="homepage"{% endif %}>
+    <body{% if page and page.is_homepage %} class="homepage"{% endif %}>
 
         {% include "nav.html" %}
 
@@ -95,7 +95,7 @@
 
     </body>
 </html>
-{% if current_page and current_page.is_homepage %}
+{% if page and page.is_homepage %}
 <!--
 MkDocs version : {{ mkdocs_version }}
 Build Date UTC : {{ build_date_utc }}

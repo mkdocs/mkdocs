@@ -15,6 +15,46 @@ You can determine your currently installed version using `mkdocs --version`:
 
 ## Version 0.16 (2016-02-??)
 
+### Major Additions to Version 0.16.0
+
+#### Template variables refactored. (#874)
+
+Page specific variable names in the template context have been refactored as
+defined in [Custom Themes](../user-guide/custom-themes/#page). The
+old variable names will issue a warning but continue to work for version 0.16,
+but may be removed in a future version.
+
+No global variables were altered except `page_description`. Previously
+its value was altered programicaly based on whether the current
+page was the homepage. Now it simply maps to `config['site_description']`.
+Use `page.is_homepage` in the template to conditionally change the
+description.
+
+Any of the following old variables should be updated to the new ones in user
+created and third-party templates:
+
+| Old Variable Name | New Variable Name   |
+| ----------------- | ------------------- |
+| current_page      | [page]              |
+| page_title        | [page.title]        |
+| content           | [page.content]      |
+| toc               | [page.toc]          |
+| meta              | [page.meta]         |
+| canonical_url     | [page.canonical_url]|
+| previous_page     | [page.previous_page]|
+| next_page         | [page.next_page]    |
+
+[page]: ../user-guide/custom-themes/#page
+[page.title]: ../user-guide/custom-themes/#pagetitle
+[page.content]: ../user-guide/custom-themes/#pagecontent
+[page.toc]: ../user-guide/custom-themes/#pagetoc
+[page.meta]: ../user-guide/custom-themes/#pagemeta
+[page.canonical_url]: ../user-guide/custom-themes/#pagecanonical_url
+[page.previous_page]: ../user-guide/custom-themes/#pageprevious_page
+[page.next_page]: ../user-guide/custom-themes/#pagenext_page
+
+### Other Changes and Additions to Version 0.16.0
+
 * Bugfix: Support `gh-deploy` command on Windows with Python 3 (#722)
 * Bugfix: Include .woff2 font files in Pyhton package build (#894)
 * Various updates and improvements to Documentation Home Page/Tutorial (#870)
