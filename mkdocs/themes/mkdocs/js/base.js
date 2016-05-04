@@ -29,6 +29,20 @@ $(document).ready(function() {
     // Highlight.js
     hljs.initHighlightingOnLoad();
     $('table').addClass('table table-striped table-hover');
+
+    // Improve the scrollspy behaviour when users click on a TOC item.
+    $(".nav a").on("click", function() {
+        var clicked = this;
+        setTimeout(function() {
+            var active = $('.nav li.active a');
+            active = active[active.length - 1];
+            if (clicked !== active) {
+                $(active).parent().removeClass("active");
+                $(clicked).parent().addClass("active");
+            }
+        }, 50);
+    });
+
 });
 
 
