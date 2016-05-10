@@ -94,6 +94,14 @@ There are a few prerequisites for the above to work:
 [docs_dir]: configuration.md#docs_dir
 [site_dir]: configuration.md#site_dir
 
+## PubStorm
+
+[PubStorm](https://www.pubstorm.com) is a free front-end and static-site publishing platform built by [Nitrous](https://www.nitrous.io). PubStorm is distributed as a node package and can be installed by running `npm install -g pubstorm`.
+
+To publish your site, run `storm init`, setting your project path to the [site_dir](https://github.com/mkdocs/mkdocs/blob/master/docs/user-guide/configuration.md#site_dir) you defined during configuration, and then publish using `storm deploy`.
+
+PubStorm offers a pre-configured CDN, free custom domains, SSL certs, rollbacks, collaboration and more. To configure additional features, [follow the instructions on the PubStorm help site](help.pubstorm.com).
+
 ## Other Providers
 
 Any hosting provider which can serve static files can be used to serve
