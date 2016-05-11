@@ -70,7 +70,7 @@ mkdocs build --clean
 python setup.py upload_docs --upload-dir=site
 ```
 
-You documentation will be hosted at `http://pythonhosted.org/<projectname>/`
+Your documentation will be hosted at `https://pythonhosted.org/<projectname>/`
 where `<projectname>` is the name you used to register your project with PyPI.
 
 There are a few prerequisites for the above to work:
@@ -88,8 +88,8 @@ There are a few prerequisites for the above to work:
 
 [Python]: http://www.python.org/
 [PyPI]: https://pypi.python.org/pypi
-[pythonhosted.org]: http://pythonhosted.org/
-[Setuptools]: http://pythonhosted.org/setuptools/
+[pythonhosted.org]: https://pythonhosted.org/
+[Setuptools]: https://pythonhosted.org/setuptools/
 [Distutils]: https://docs.python.org/2/distutils/
 [docs_dir]: configuration.md#docs_dir
 [site_dir]: configuration.md#site_dir
