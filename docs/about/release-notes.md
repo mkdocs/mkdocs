@@ -73,6 +73,8 @@ created and third-party templates:
   pages config. (#728)
 * Update searching to Lunr 0.7, which comes with some performance enhancements
   for larger documents (#859)
+* Bugfix: Support SOURCE_DATE_EPOCH environment variable for "reproducible"
+  builds (#938)
 
 ## Version 0.15.3 (2016-02-18)
 

@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 from datetime import datetime
+from calendar import timegm
 import io
 import logging
 import os
@@ -56,6 +57,10 @@ def get_global_context(nav, config):
 
     extra_css = utils.create_media_urls(nav, config['extra_css'])
 
+    # Support SOURCE_DATE_EPOCH environment variable for "reproducible" builds.
+    # See https://reproducible-builds.org/specs/source-date-epoch/
+    timestamp = int(os.environ.get('SOURCE_DATE_EPOCH', timegm(datetime.utcnow().utctimetuple())))
+
     return {
         'site_name': site_name,
         'site_author': config['site_author'],
@@ -84,7 +89,7 @@ def get_global_context(nav, config):
         'google_analytics': config['google_analytics'],
 
         'mkdocs_version': mkdocs.__version__,
-        'build_date_utc': datetime.utcnow(),
+        'build_date_utc': datetime.utcfromtimestamp(timestamp),
 
         'config': config
     }
