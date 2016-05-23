@@ -116,4 +116,7 @@ DEFAULT_SCHEMA = (
     # MkDocs itself. A good example here would be including the current
     # project version.
     ('extra', config_options.SubConfig()),
+
+    # enable additional directories to be watched for server auto load
+    ('watch_dirs', config_options.WatchDirs(utils.string_types, default=[])),
 )
