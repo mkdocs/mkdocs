@@ -57,15 +57,37 @@ def yaml_load(source, loader=yaml.Loader):
         """
         return self.construct_scalar(node)
 
+    def include(self, node):
+        """
+        Allow for the embedding of yaml files.
+        http://stackoverflow.com/questions/528281/how-can-i-include-an-yaml-file-inside-another
+        """
+        filename = os.path.join(self._root, self.construct_scalar(node))
+        with open(filename, 'r') as f:
+            return yaml.load(f, Loader)
+
     class Loader(loader):
         """
         Define a custom loader derived from the global loader to leave the
         global loader unaltered.
         """
 
+        def __init__(self, stream):
+            """
+            Store the root directory for including other yaml files.
+            """
+            if isinstance(stream, file):
+                self._root = os.path.split(stream.name)[0]
+            else:
+                self._root = os.getcwd()
+            super(Loader, self).__init__(stream)
+
     # Attach our unicode constructor to our custom loader ensuring all strings
     # will be unicode on translation.
     Loader.add_constructor('tag:yaml.org,2002:str', construct_yaml_str)
+
+    ## Attach the include constructor to our custom loader.
+    Loader.add_constructor('!include', include)
 
     try:
         return yaml.load(source, Loader)

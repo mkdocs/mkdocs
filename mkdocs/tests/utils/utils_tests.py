@@ -194,3 +194,23 @@ class UtilsTests(unittest.TestCase):
         config = utils.yaml_load(yaml_src)
         self.assertTrue(isinstance(config['key'], utils.text_type))
         self.assertTrue(isinstance(config['key2'][0], utils.text_type))
+
+    def test_include_yaml(self):
+
+        # The main yaml config "file"
+        yaml_src = dedent(
+            '''
+            a: !include tmp.yml
+            '''
+        )
+
+        # Create the included file
+        fid = open('tmp.yml', 'w')
+        fid.write('b: value\n')
+        fid.close()
+
+        # Read the config and test that the file was included
+        config = utils.yaml_load(yaml_src)
+        self.assertEqual(config['a'], {u'b': u'value'})
+
+        os.remove('tmp.yml')
