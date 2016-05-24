@@ -3,7 +3,7 @@
 
         <!-- Collapsed navigation -->
         <div class="navbar-header">
-            {% if include_nav or include_next_prev or repo_url %}
+            {%- if include_nav or include_next_prev or repo_url %}
             <!-- Expander button -->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -11,43 +11,50 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            {% endif %}
+            {%- endif %}
 
-            <!-- Main title -->
+          {%- block site_name %}
             <a class="navbar-brand" href="{{ homepage_url }}">{{ site_name }}</a>
+          {%- endblock %}
         </div>
 
         <!-- Expanded navigation -->
         <div class="navbar-collapse collapse">
-            {% if include_nav %}
+          {%- block site_nav %}
+            {%- if include_nav %}
                 <!-- Main navigation -->
                 <ul class="nav navbar-nav">
-                {% for nav_item in nav %}
-                {% if nav_item.children %}
+                {%- for nav_item in nav %}
+                {%- if nav_item.children %}
                     <li class="dropdown{% if nav_item.active %} active{% endif %}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ nav_item.title }} <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                        {% for nav_item in nav_item.children %}
+                        {%- for nav_item in nav_item.children %}
                             {% include "nav-sub.html" %}
-                        {% endfor %}
+                        {%- endfor %}
                         </ul>
                     </li>
-                {% else %}
+                {%- else %}
                     <li {% if nav_item.active %}class="active"{% endif %}>
                         <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
                     </li>
-                {% endif %}
-                {% endfor %}
+                {%- endif %}
+                {%- endfor %}
                 </ul>
-            {% endif %}
+            {%- endif %}
+          {%- endblock %}
 
             <ul class="nav navbar-nav navbar-right">
+              {%- block search_button %}
                 <li>
                     <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
                         <i class="fa fa-search"></i> Search
                     </a>
                 </li>
-                {% if include_next_prev and page %}
+              {%- endblock %}
+
+              {%- block next_prev %}
+                {%- if include_next_prev and page %}
                     <li {% if not page.previous_page %}class="disabled"{% endif %}>
                         <a rel="next" {% if page.previous_page %}href="{{ page.previous_page.url }}"{% endif %}>
                             <i class="fa fa-arrow-left"></i> Previous
@@ -58,19 +65,23 @@
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
-                {% endif %}
-                {% if repo_url %}
+                {%- endif %}
+              {%- endblock %}
+
+              {%- block repo %}
+                {%- if repo_url %}
                     <li>
                         <a href="{{ repo_url }}">
-                            {% if repo_name == 'GitHub' %}
+                            {%- if repo_name == 'GitHub' %}
                                 <i class="fa fa-github"></i>
-                            {% elif repo_name == 'Bitbucket' %}
+                            {%- elif repo_name == 'Bitbucket' -%}
                                 <i class="fa fa-bitbucket"></i>
-                            {% endif %}
+                            {%- endif -%}
                             {{ repo_name }}
                         </a>
                     </li>
-                {% endif %}
+                {%- endif %}
+              {%- endblock %}
             </ul>
         </div>
     </div>

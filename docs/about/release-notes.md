@@ -53,6 +53,37 @@ created and third-party templates:
 [page.previous_page]: ../user-guide/custom-themes/#pageprevious_page
 [page.next_page]: ../user-guide/custom-themes/#pagenext_page
 
+#### Increased Template Customization. (#607)
+
+The built-in themes have been updated by having each of their many parts wrapped
+in template blocks which allow each individual block to be easily overriden
+using the `theme_dir` config setting. Without any new settings, you can use a
+differant analytics service, replace the default search function, or alter the
+behavior of the navigation, among other things. See the relevant
+[documentation][blocks] for more details.
+
+To enable this feature, the primary entry point for page templates has been
+changed from `base.html` to `main.html`. This allows `base.html` to continue to
+exist while allowing users to override `main.html` and extend `base.html`. For
+version 1.16, `base.html` will continue to work if no `main.html` template
+exists, but it is deprecated and will raise a warning. In version 1.0, a build
+will fail if no `main.html` template exists. Any custom and third party
+templates should be updated accordingly.
+
+The easiest way for a third party theme to be updated would be to simply add a
+`main.html` file which only contains the following line:
+
+```django
+{% extends "base.html" %}
+```
+
+That way, the theme contains the `main.html` entry point, and also supports
+overriding blocks in the same manner as the built-in themes. Third party themes
+are encouraged to wrap the various pieces of their templates in blocks in order
+to support such customization.
+
+[blocks]: ../user-guide/styling-your-docs/#overriding-template-blocks
+
 ### Other Changes and Additions to Version 0.16.0
 
 * Bugfix: Support `gh-deploy` command on Windows with Python 3 (#722)

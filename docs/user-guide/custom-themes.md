@@ -20,11 +20,11 @@ and their usage.
 
 ## Creating a custom theme
 
-The bare minimum required for a custom theme is a `base.html` [Jinja2
+The bare minimum required for a custom theme is a `main.html` [Jinja2
 template] file. This should be placed in a directory which will be the
 `theme_dir` and it should be created next to the `mkdocs.yml` configuration
 file. Within `mkdocs.yml`, specify the `theme_dir` option and set it to the
-name of the directory containing `base.html`. For example, given this example
+name of the directory containing `main.html`. For example, given this example
 project layout:
 
     mkdocs.yml
@@ -32,7 +32,7 @@ project layout:
         index.md
         about.md
     custom_theme/
-        base.html
+        main.html
         ...
 
 You would include the following setting to use the custom theme directory:
@@ -41,13 +41,13 @@ You would include the following setting to use the custom theme directory:
 
 !!! Note
 
-    Generally, when building your own theme, the `theme` configurations setting
-    would be left blank. However, if used in combination with the `theme`
+    Generally, when building your own theme, the `theme` configuration setting
+    would be left blank. However, if used in combination with the `theme_dir`
     configuration value a custom theme can be used to replace only specific
     parts of a built-in theme. For example, with the above layout and if you set
-    `theme: mkdocs` then the `base.html` file would replace that in the theme
-    but otherwise it would remain the same. This is useful if you want to make
-    small adjustments to an existing theme.
+    `theme: mkdocs` then the `main.html` file would replace that in the theme
+    but otherwise the theme would remain the same. This is useful if you want to
+    make small adjustments to an existing theme.
 
     For more specific information, see [styling your docs].
 
@@ -55,7 +55,7 @@ You would include the following setting to use the custom theme directory:
 
 ## Basic theme
 
-The simplest `base.html` file is the following:
+The simplest `main.html` file is the following:
 
 ```django
 <!DOCTYPE html>
@@ -365,13 +365,13 @@ Bootswatch theme].
 
 The following layout is recommended for themes. Two files at the top level
 directory called `MANIFEST.in` amd `setup.py`. Then a directory with the name
-of your theme and containing a `base.html` file and a `__init__.py`.
+of your theme and containing a `main.html` file and a `__init__.py`.
 
 ```no-highlight
 .
 |-- MANIFEST.in
 |-- theme_name
-|   |-- base.html
+|   |-- main.html
 |   |-- __init__.py
 `-- setup.py
 ```
@@ -425,9 +425,9 @@ including in the package. The name on the left is the one that users will use
 in their mkdocs.yml and the one on the right is the directory containing your
 theme files.
 
-The directory you created at the start of this section with the base.html file
+The directory you created at the start of this section with the main.html file
 should contain all of the other theme files. The minimum requirement is that
-it includes a `base.html` for the theme. It **must** also include a
+it includes a `main.html` for the theme. It **must** also include a
 `__init__.py` file which should be empty, this file tells Python that the
 directory is a package.
 

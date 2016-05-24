@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+      {%- block site_meta %}
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,9 +10,13 @@
         {% if page and page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}">{% endif %}
         {% if favicon %}<link rel="shortcut icon" href="{{ base_url }}/{{ favicon }}">
         {% else %}<link rel="shortcut icon" href="{{ base_url }}/img/favicon.ico">{% endif %}
+      {%- endblock %}
 
-	<title>{% if page and page.title and not page.is_homepage %}{{ page.title }} - {% endif %}{{ site_name }}</title>
+      {%- block htmltitle %}
+        <title>{% if page and page.title and not page.is_homepage %}{{ page.title }} - {% endif %}{{ site_name }}</title>
+      {%- endblock %}
 
+      {%- block styles %}
         <link href="{{ base_url }}/css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="{{ base_url }}/css/font-awesome-4.5.0.css" rel="stylesheet">
         <link href="{{ base_url }}/css/base.css" rel="stylesheet">
@@ -19,6 +24,7 @@
         {%- for path in extra_css %}
         <link href="{{ path }}" rel="stylesheet">
         {%- endfor %}
+      {%- endblock %}
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -26,7 +32,8 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
 
-        {% if google_analytics %}
+      {%- block analytics %}
+        {%- if google_analytics %}
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -36,7 +43,10 @@
             ga('create', '{{ google_analytics[0] }}', '{{ google_analytics[1] }}');
             ga('send', 'pageview');
         </script>
-        {% endif %}
+        {%- endif %}
+      {%- endblock %}
+      
+      {%- block extrahead %} {% endblock %}
     </head>
 
     <body{% if page and page.is_homepage %} class="homepage"{% endif %}>
@@ -44,20 +54,23 @@
         {% include "nav.html" %}
 
         <div class="container">
-            {% block content %}
+            {%- block content %}
                 <div class="col-md-3">{% include "toc.html" %}</div>
                 <div class="col-md-9" role="main">{% include "content.html" %}</div>
-            {% endblock %}
+            {%- endblock %}
         </div>
 
         <footer class="col-md-12">
+          {%- block footer %}
             <hr>
-            {% if copyright %}
+            {%- if copyright %}
                 <p>{{ copyright }}</p>
-            {% endif %}
+            {%- endif %}
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+          {%- endblock %}
         </footer>
 
+      {%- block scripts %}
         <script src="{{ base_url }}/js/jquery-1.10.2.min.js"></script>
         <script src="{{ base_url }}/js/bootstrap-3.0.3.min.js"></script>
         <script src="{{ base_url }}/js/highlight.pack.js"></script>
@@ -67,7 +80,9 @@
         {%- for path in extra_javascript %}
         <script src="{{ path }}"></script>
         {%- endfor %}
+      {%- endblock %}
 
+      {%- block search_modal %}
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -92,7 +107,7 @@
                 </div>
             </div>
         </div>
-
+      {%- endblock %}
     </body>
 </html>
 {% if page and page.is_homepage %}

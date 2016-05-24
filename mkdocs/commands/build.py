@@ -183,7 +183,16 @@ def _build_page(page, config, site_navigation, env, dump_json):
     if 'template' in meta:
         template = env.get_template(meta['template'][0])
     else:
-        template = env.get_template('base.html')
+        try:
+            template = env.get_template('main.html')
+        except jinja2.TemplateNotFound:
+            # TODO: Remove this in version 1.0
+            template = env.get_template('base.html')
+            log.warn(
+                "Your theme does not appear to contain a 'main.html' template. "
+                "The 'base.html' template was used instead, which is deprecated. "
+                "Update your theme so that the primary entry point is 'main.html'."
+            )
 
     # Render the template.
     output_content = template.render(context)
