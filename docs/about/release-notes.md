@@ -75,6 +75,7 @@ created and third-party templates:
   for larger documents (#859)
 * Bugfix: Support SOURCE_DATE_EPOCH environment variable for "reproducible"
   builds (#938)
+* Follow links when copying media files (#869).
 
 ## Version 0.15.3 (2016-02-18)
 

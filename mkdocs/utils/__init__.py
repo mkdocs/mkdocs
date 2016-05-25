@@ -136,7 +136,7 @@ def copy_media_files(from_dir, to_dir, exclude=None):
     `exclude` accepts a list of Unix shell-style wildcards (`['*.py', '*.pyc']`).
     Note that `exclude` only operates on file names, not directories.
     """
-    for (source_dir, dirnames, filenames) in os.walk(from_dir):
+    for (source_dir, dirnames, filenames) in os.walk(from_dir, followlinks=True):
         relative_path = os.path.relpath(source_dir, from_dir)
         output_dir = os.path.normpath(os.path.join(to_dir, relative_path))
 
