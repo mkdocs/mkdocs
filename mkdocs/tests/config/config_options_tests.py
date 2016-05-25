@@ -173,8 +173,8 @@ class SiteDirTest(unittest.TestCase):
         j = os.path.join
         option = config_options.SiteDir()
         docs_dir = config_options.Dir()
-        # Not all systems use the same package directory name, so use the actual dir name
-        mkdocs_pkgdir = os.path.basename(os.path.dirname(mkdocs.__file__))
+        # The parent dir is not the same on every system, so use the actual dir name
+        parent_dir = mkdocs.__file__.split(os.sep)[-3]
 
         test_configs = (
             {'docs_dir': j('site', 'docs'), 'site_dir': 'site'},
@@ -182,7 +182,7 @@ class SiteDirTest(unittest.TestCase):
             {'docs_dir': '.', 'site_dir': '.'},
             {'docs_dir': 'docs', 'site_dir': ''},
             {'docs_dir': '', 'site_dir': ''},
-            {'docs_dir': j('..', mkdocs_pkgdir, 'docs'), 'site_dir': 'docs'},
+            {'docs_dir': j('..', parent_dir, 'docs'), 'site_dir': 'docs'},
         )
 
         for test_config in test_configs:
