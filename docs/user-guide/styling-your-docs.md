@@ -91,6 +91,13 @@ should mirror the directory structure of the `theme`. You may include templates,
 JavaScript files, CSS files, images, fonts, or any other media included in a
 theme.
 
+!!! Note
+
+    For this to work, the `theme` setting must be set to a known installed theme.
+    If the `theme` settign is instead set to `null`, then there is no theme to
+    override and the contents of the `theme_dir` must be a complete, standalone
+    theme. See [Custom Themes][custom theme] for more information.
+
 For example, the [mkdocs] theme ([browse source]), contains the following
 directory structure (in part):
 
@@ -185,10 +192,9 @@ following blocks:
 * `scripts`: Contains the JavaScript libraries included in the page.
 * `analytics`: Contains the analytics script.
 * `extrahead`: An empty block in the `<head>` to insert custom tags/scripts/etc.
-* `search_modal`: Contains the search pop-up modal.
 * `site_name`: Contains the site name in the navigation bar.
 * `site_nav`: Contains the site navigation in the navigation bar.
-* `search_box`: Contains the search button/box in the navigation bar.
+* `search_box`: Contains the search box in the navigation bar.
 * `next_prev`: Contains the next and previous buttons in the navigation bar.
 * `repo`: Contains the repository link in the navigation bar.
 * `content`: Contains the page content and table of contents for the page.

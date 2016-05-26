@@ -65,7 +65,7 @@ behavior of the navigation, among other things. See the relevant
 To enable this feature, the primary entry point for page templates has been
 changed from `base.html` to `main.html`. This allows `base.html` to continue to
 exist while allowing users to override `main.html` and extend `base.html`. For
-version 1.16, `base.html` will continue to work if no `main.html` template
+version 0.16, `base.html` will continue to work if no `main.html` template
 exists, but it is deprecated and will raise a warning. In version 1.0, a build
 will fail if no `main.html` template exists. Any custom and third party
 templates should be updated accordingly.

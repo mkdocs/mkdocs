@@ -35,19 +35,22 @@ project layout:
         main.html
         ...
 
-You would include the following setting to use the custom theme directory:
+You would include the following settings in `mkdocs.yml` to use the custom theme
+directory:
 
+    theme: null
     theme_dir: 'custom_theme'
 
 !!! Note
 
-    Generally, when building your own theme, the `theme` configuration setting
-    would be left blank. However, if used in combination with the `theme_dir`
-    configuration value a custom theme can be used to replace only specific
-    parts of a built-in theme. For example, with the above layout and if you set
-    `theme: mkdocs` then the `main.html` file would replace that in the theme
-    but otherwise the theme would remain the same. This is useful if you want to
-    make small adjustments to an existing theme.
+    Generally, when building your own custom theme, the `theme` configuration
+    setting would be set to `null`. However, if used in combination with the
+    `theme_dir` configuration value a custom theme can be used to replace only
+    specific parts of a built-in theme. For example, with the above layout and
+    if you set `theme: "mkdocs"` then the `main.html` file in the `theme_dir`
+    would replace that in the theme but otherwise the `mkdocs` theme would
+    remain the same. This is useful if you want to make small adjustments to an
+    existing theme.
 
     For more specific information, see [styling your docs].
 
@@ -75,6 +78,23 @@ with a normal HTML file. Navbars and tables of contents can also be generated
 and included automatically, through the `nav` and `toc` objects, respectively.
 If you wish to write your own theme, it is recommended to start with one of
 the [built-in themes] and modify it accordingly.
+
+!!! Note
+
+    As MkDocs uses [Jinja] as its template engine, you have access to all the
+    power of Jinja, including [template inheritance]. You may notice that the
+    themes included with MkDocs make extensive use of template inheritance anf
+    blocks, allowing users to easily override small bits and pieces of the
+    templates from the [theme_dir]. Therefore, the builtin themes are
+    implemented in a `base.html` file, which `main.html` extends. Although not
+    required, third party template authors are encouraged to follow a similar
+    pattern and may want to define the same [blocks] as are used in the built-in
+    themes for consistency.
+
+[Jinja]: http://jinja.pocoo.org/
+[template inheritance]: http://jinja.pocoo.org/docs/dev/templates/#template-inheritance
+[theme_dir]: ./styling-your-docs.md#using-the-theme_dir
+[blocks]: ./styling-your-docs.md#overriding-template-blocks
 
 ## Template Variables
 
@@ -357,6 +377,16 @@ To see an example of a package containing one theme, see the [MkDocs Bootstrap
 theme] and to see a package that contains many themes, see the [MkDocs
 Bootswatch theme].
 
+!!! Note
+
+    It is not strictly nessecary to package a theme, as the entire theme
+    can be contained in the `theme_dir`. If you have created a "one-off theme,"
+    that should be sufficent. However, if you intend to distribute your theme
+    for others to use, packaging the theme has some advantages. By packaging
+    your theme, your users can more easily install it and they can them take
+    advantage of the [theme_dir] to make tweaks to your theme to better suit
+    their needs.
+
 [Python packaging]: https://packaging.python.org/en/latest/
 [MkDocs Bootstrap theme]: http://mkdocs.github.io/mkdocs-bootstrap/
 [MkDocs Bootswatch theme]: http://mkdocs.github.io/mkdocs-bootswatch/
@@ -364,15 +394,16 @@ Bootswatch theme].
 ### Package Layout
 
 The following layout is recommended for themes. Two files at the top level
-directory called `MANIFEST.in` amd `setup.py`. Then a directory with the name
-of your theme and containing a `main.html` file and a `__init__.py`.
+directory called `MANIFEST.in` amd `setup.py` beside the theme directory which
+contains an empty `__init__.py` file and your template and media files.
 
 ```no-highlight
 .
 |-- MANIFEST.in
 |-- theme_name
-|   |-- main.html
 |   |-- __init__.py
+|   |-- main.py
+|   |-- styles.css
 `-- setup.py
 ```
 
