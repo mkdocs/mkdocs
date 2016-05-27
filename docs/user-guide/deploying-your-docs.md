@@ -114,7 +114,7 @@ something like this:
 
 ```sh
 mkdocs build --clean
-scp -r ./site usr@host:/path/to/server/root
+scp -r ./site user@host:/path/to/server/root
 ```
 
 Of course, you will need to replace `user` with the username you have with your
