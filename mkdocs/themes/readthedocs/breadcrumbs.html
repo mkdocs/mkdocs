@@ -12,6 +12,7 @@
     {% endif %}
     {% if page %}<li>{{ page.title }}</li>{% endif %}
     <li class="wy-breadcrumbs-aside">
+      {%- block repo %}
       {% if repo_url %}
         {% if repo_name == 'GitHub' %}
           <a href="{{ repo_url }}" class="icon icon-github"> Edit on GitHub</a>
@@ -19,6 +20,7 @@
           <a href="{{ repo_url }}" class="icon icon-bitbucket"> Edit on BitBucket</a>
         {% endif %}
       {% endif %}
+      {%- endblock %}
     </li>
   </ul>
   <hr/>

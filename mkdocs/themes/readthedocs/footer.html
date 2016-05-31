@@ -1,4 +1,5 @@
 <footer>
+  {%- block next_prev %}
   {% if page and page.next_page or page.previous_page %}
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       {% if page.next_page %}
@@ -9,6 +10,7 @@
       {% endif %}
     </div>
   {% endif %}
+  {%- endblock %}
 
   <hr/>
 
