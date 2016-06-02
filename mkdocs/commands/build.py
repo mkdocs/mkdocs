@@ -16,7 +16,20 @@ from mkdocs.utils import filters
 from mkdocs.relative_path_ext import RelativePathExtension
 import mkdocs
 
+
+class DuplicateFilter(object):
+    ''' Avoid logging duplicate messages. '''
+    def __init__(self):
+        self.msgs = set()
+
+    def filter(self, record):
+        rv = record.msg not in self.msgs
+        self.msgs.add(record.msg)
+        return rv
+
+
 log = logging.getLogger(__name__)
+log.addFilter(DuplicateFilter())
 
 
 def convert_markdown(markdown_source, config, site_navigation=None):
