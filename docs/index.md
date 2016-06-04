@@ -66,6 +66,20 @@ $ mkdocs --version
 mkdocs, version 0.15.3
 ```
 
+### Troubleshooting Installation
+
+If you are on Windows, and the `mkdocs` command is not working, you may need to add the Python Scripts folder to your `PATH` Environment variable.
+
+If using Chocolatey:
+```
+C:\ProgramData\chocolatey\lib\python3\tools\Scripts
+```
+
+If you installed Python from their Windows installer:
+```
+C:\[path-to-python-folder]\Scripts
+```
+
 ---
 
 ## Getting started
