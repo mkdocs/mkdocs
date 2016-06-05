@@ -6,57 +6,65 @@ Project documentation with&nbsp;Markdown.
 
 ## Overview
 
-MkDocs is a **fast**, **simple** and **downright gorgeous** static site generator that's geared towards building project documentation. Documentation source files are written in Markdown, and configured with a single YAML configuration file.
+MkDocs is a **fast**, **simple** and **downright gorgeous** static site
+generator that's geared towards building project documentation. Documentation
+source files are written in Markdown, and configured with a single YAML
+configuration file.
 
----
+### Host anywhere
 
-**MkDocs is currently still in development.**
+MkDocs builds completely static HTML sites that you can host on GitHub pages,
+Amazon S3, or [anywhere][deploy] else you choose.
 
-We're progressing quickly, but the documentation still needs filling in, and theres a few rough edges.  The 1.0 release is planned to arrive in the next few weeks.
+### Great themes available
 
----
+There's a stack of good looking themes available for MkDocs. Choose between
+the built in themes: [mkdocs] and [readthedocs], select one of the 3rd
+party themes in the [MkDocs wiki], or [build your own].
 
-#### Host anywhere.
+### Preview your site as you work
 
-Builds completely static HTML sites that you can host on GitHub pages, Amazon S3, or anywhere else you choose.
+The built-in dev-server allows you to preview your documentation as you're
+writing it. It will even auto-reload and refresh your browser whenever you save
+your changes.
 
-#### Great themes available.
+### Easy to customize
 
-There's a stack of good looking themes included by default. Choose from bootstrap, readthedocs, or any of the 12 bootswatch themes.
-
-#### Preview your site as you work.
-
-The built-in devserver allows you to preview your documentation as you're writing it. It will even auto-reload whenever you save any changes, so all you need to do to see your latest edits is refresh your browser.
-
-#### Easy to customize.
-
-Get your project documentation looking just the way you want it by customizing the theme.
-
-#### Cross-reference your documentation.
-
-Create richly cross-referenced documents, using the MkDocs interlinking syntax.
+Get your project documentation looking just the way you want it by customizing
+the theme.
 
 ---
 
 ## Installation
 
-In order to install MkDocs you'll need [Python][python] installed on your system, as well as the Python package manager, [pip][pip].  You can check if you have these already installed like so:
+In order to install MkDocs you'll need [Python] installed on your system, as
+well as the Python package manager, [pip]. You can check if you have these
+already installed from the command line:
 
-    $ python --version
-    Python 2.7.2
-    $ pip --version
-    pip 1.5.2
+```bash
+$ python --version
+Python 2.7.2
+$ pip --version
+pip 1.5.2
+```
 
-MkDocs supports Python 2.6, 2.7, 3.3 and 3.4.
+MkDocs supports Python versions 2.6, 2.7, 3.3, 3.4 and 3.5.
+
+On Windows it is recommended that you install Python and pip with [Chocolatey].
 
 Install the `mkdocs` package using pip:
 
-    $ pip install mkdocs
+```bash
+pip install mkdocs
+```
 
-You should now have the `mkdocs` command installed on your system.  Run `mkdocs help` to check that everything worked okay.
+You should now have the `mkdocs` command installed on your system. Run `mkdocs
+--version` to check that everything worked okay.
 
-    $ mkdocs help
-    mkdocs [help|new|build|serve|gh-deploy] {options}
+```bash
+$ mkdocs --version
+mkdocs, version 0.15.3
+```
 
 ---
 
@@ -64,93 +72,196 @@ You should now have the `mkdocs` command installed on your system.  Run `mkdocs 
 
 Getting started is super easy.
 
-    $ mkdocs new my-project
-    $ cd my-project
+```bash
+mkdocs new my-project
+cd my-project
+```
 
-Let's take a moment to review the initial project that's been created for us.
+Take a moment to review the initial project that has been created for you.
 
 ![The initial MkDocs layout](img/initial-layout.png)
 
-There's a single configuration file named `mkdocs.yml`, and a folder named `docs` that will contain our documentation source files.  Right now the `docs` folder just contains a single documentation page, named `index.md`.
+There's a single configuration file named `mkdocs.yml`, and a folder named
+`docs` that will contain your documentation source files. Right now the `docs`
+folder just contains a single documentation page, named `index.md`.
 
-MkDocs comes with a built-in webserver that lets you preview your documentation as you work on it. We start the webserver by making sure we're in the same directory as the `mkdocs.yml` config file, and then running the `mkdocs serve` command:
+MkDocs comes with a built-in dev-server that lets you preview your documentation
+as you work on it. Make sure you're in the same directory as the `mkdocs.yml`
+configuration file, and then start the server by running the `mkdocs serve`
+command:
 
-    $ mkdocs serve
-	Running at: http://127.0.0.1:8000/
+```bash
+$ mkdocs serve
+INFO    -  Building documentation...
+INFO    -  Cleaning site directory
+[I 160402 15:50:43 server:271] Serving on http://127.0.0.1:8000
+[I 160402 15:50:43 handlers:58] Start watching changes
+[I 160402 15:50:43 handlers:60] Start detecting changes
+```
 
-Open up [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser, and you'll see the index page being displayed:
+Open up `http://127.0.0.1:8000/` in your browser, and you'll see the default
+home page being displayed:
 
 ![The MkDocs live server](img/screenshot.png)
 
-The webserver also supports auto-reloading, and will rebuild your documentation whenever anything in the configuration file, documentation directory or theme directory changes.
+The dev-server also supports auto-reloading, and will rebuild your documentation
+whenever anything in the configuration file, documentation directory, or theme
+directory changes.
 
-Go ahead and edit the `docs/index.md` file now and save the file. Then simply hit reload in the browser and you'll see your updated documentation.
+Open the `docs/index.md` document in your text editor of choice, change the
+initial heading to `MkLorum`, and save your changes. Your browser will
+auto-reload and you should see your updated documentation immediately.
 
-Now's also a good time to edit the configuration file, `mkdocs.yml`.  Change the `site_name` setting to something else and save the file.
+Now try editing the configuration file: `mkdocs.yml`. Change the
+[`site_name`][site_name] setting to `MkLorum` and save the file.
 
-![Editing the config file](img/initial-config.png)
+```yaml
+site_name: MkLorum
+```
 
-Once you hit reload in the browser you'll see your new site name take effect.
+Your browser should immediately reload, and you'll see your new site name take
+effect.
 
 ![The site_name setting](img/site-name.png)
 
 ## Adding pages
 
-Go ahead and edit the `doc/index.md` document, and change the initial heading to `MkLorum`, then reload the site in your browser, and you should see the change take effect immediately.
+Now add a second page to your documentation:
 
-Let's also add a second page to our documentation:
+```bash
+curl 'https://jaspervdj.be/lorem-markdownum/markdown.txt' > docs/about.md
+```
 
-    $ curl 'jaspervdj.be/lorem-markdownum/markdown.txt' > docs/about.md
+As our documentation site will include some navigation headers, you may want to
+edit the configuration file and add some information about the order, title, and
+nesting of each page in the navigation header by adding a [`pages`][pages]
+setting:
 
-We'd like our documentation site to include some navigation headers, so we'll edit the configuration file and add some information about the order and title to use for out headers:
+```yaml
+site_name: MkLorum
+pages:
+    - Home: index.md
+    - About: about.md
+```
 
-    site_name: MkLorum
-    pages:
-    - [index.md, Home]
-    - [about.md, About]
+Save your changes and you'll now see a navigation bar with `Home` and `About`
+items on the left as well as `Search`, `Previous`, and `Next` items on the
+right.
 
-Refresh the browser and you'll now see a navigation bar with `Home` and `About` headers.
+![Screenshot](img/multipage.png)
+
+Try the menu items and navigate back and forth between pages. Then click on
+`Search`. A search dialog will appear, allowing you to search for any text on
+any page. Notice that the search results include every occurrence of the search
+term on the site and links directly to the section of the page in which the
+search term appears. You get of all that with no effort or configuration on your
+part!
+
+![Screenshot](img/search.png)
 
 ## Theming our documentation
 
-While we're here can also change the configuration file to alter how the documentation is displayed.  Let's go ahead and change the theme.  Edit the `mkdocs.yml` file to the following:
+Now change the configuration file to alter how the documentation is displayed by
+changing the theme. Edit the `mkdocs.yml` file and add a [`theme`][theme] setting:
 
-    site_name: MkLorum
-    pages:
-    - [index.md, Home]
-    - [about.md, About]
-    theme: readthedocs
+```yaml
+site_name: MkLorum
+pages:
+    - Home: index.md
+    - About: about.md
+theme: readthedocs
+```
 
-Refresh the browser again, and you'll now see the ReadTheDocs theme being used.
+Save your changes, and you'll see the ReadTheDocs theme being used.
 
 ![Screenshot](img/readthedocs.png)
 
 ## Building the site
 
-That's looking good.  We're ready to deploy the first pass of our `MkLorum` documentation now.  Let's build the documentation.
+That's looking good. You're ready to deploy the first pass of your `MkLorum`
+documentation. First build the documentation:
 
-    $ mkdocs build
+```bash
+mkdocs build
+```
 
-This will create a new directory, named `site`.  Let's take a look inside the directory:
+This will create a new directory, named `site`. Take a look inside the
+directory:
 
-    $ ls site
-    about css fonts img index.html js
+```bash
+$ ls site
+about  fonts  index.html  license  search.html
+css    img    js          mkdocs   sitemap.xml
+```
 
-Notice that our source documentation has been output as two HTML files named `index.html` and `about/index.html`.  We also have various other media that's been copied into the `site` directory as part of the documentation theme.
+Notice that your source documentation has been output as two HTML files named
+`index.html` and `about/index.html`. You also have various other media that's
+been copied into the `site` directory as part of the documentation theme. You
+even have a `sitemap.xml` file and `mkdocs/search_index.json`.
 
-If you're using source code control such as `git` you probably don't want to check your documentation builds into the repository.  Add a line containing `site/` to your `.gitignore` file.
+If you're using source code control such as `git` you probably don't want to
+check your documentation builds into the repository. Add a line containing
+`site/` to your `.gitignore` file.
 
-    $ echo "site/" >> .gitignore
+```bash
+echo "site/" >> .gitignore
+```
 
-If you're using another source code control you'll want to check it's documentation on how to ignore specific directories.
+If you're using another source code control tool you'll want to check it's
+documentation on how to ignore specific directories.
 
-After some time, files may be removed from the documentation but they will still reside in the `site` directory. To remove those stale files, just run mkdocs with the `--clean` switch.
+After some time, files may be removed from the documentation but they will still
+reside in the `site` directory. To remove those stale files, just run `mkdocs`
+with the `--clean` switch.
 
-    $ mkdocs build --clean
+```bash
+mkdocs build --clean
+```
+
+## Other Commands and Options
+
+There are various other commands and options available. For a complete list of
+commands, use the `--help` flag:
+
+```bash
+mkdocs --help
+```
+
+To view a list of options available on a given command, use the `--help` flag
+with that command. For example, to get a list of all options available for the
+`build` command run the following:
+
+```bash
+mkdocs build --help
+```
 
 ## Deploying
 
-The documentation site that we've just built only uses static files so you'll be able to host it from pretty much anywhere. [GitHub project pages](https://help.github.com/articles/creating-project-pages-manually) and [Amazon S3](http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html) are good hosting options. Upload the contents of the entire `site` directory to wherever you're hosting your website from and you're done.
+The documentation site that you just built only uses static files so you'll be
+able to host it from pretty much anywhere. [GitHub project pages] and [Amazon
+S3] may be good hosting options, depending upon your needs. Upload the contents
+of the entire `site` directory to wherever you're hosting your website from and
+you're done. For specific instructions on a number of common hosts, see the
+[Deploying your Docs] page.
 
-[python]: https://www.python.org/
-[pip]: http://pip.readthedocs.org/en/latest/installing.html
+## Getting help
+
+To get help with MkDocs, please use the [discussion group], [GitHub issues] or
+the MkDocs IRC channel `#mkdocs` on freenode.
+
+[deploy]: user-guide/deploying-your-docs/
+[mkdocs]: user-guide/styling-your-docs/#mkdocs
+[readthedocs]: user-guide/styling-your-docs/#readthedocs
+[MkDocs wiki]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
+[build your own]: user-guide/custom-themes/
+[Amazon S3]: http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html
+[Chocolatey]: https://chocolatey.org/
+[pages]: user-guide/configuration/#pages
+[discussion group]: https://groups.google.com/forum/#!forum/mkdocs
+[GitHub issues]: https://github.com/mkdocs/mkdocs/issues
+[GitHub project pages]: https://help.github.com/articles/creating-project-pages-manually/
+[pip]: http://pip.readthedocs.io/en/stable/installing/
+[Python]: https://www.python.org/
+[site_name]: user-guide/configuration/#site_name
+[theme]: user-guide/configuration/#theme
+[Deploying your Docs]: user-guide/deploying-your-docs.md

@@ -7,21 +7,8 @@ import re
 import os
 import sys
 
+PY26 = sys.version_info[:2] == (2, 6)
 
-name = 'mkdocs'
-package = 'mkdocs'
-description = 'Project documentation with Markdown.'
-url = 'http://www.mkdocs.org'
-author = 'Tom Christie'
-author_email = 'tom@tomchristie.com'
-license = 'BSD'
-install_requires = [
-    'Jinja2>=2.7.1',
-    'Markdown>=2.3.1,<2.5',
-    'PyYAML>=3.10',
-    'watchdog>=0.7.0',
-    'ghp-import>=0.4.1'
-]
 
 long_description = (
     "MkDocs is a fast, simple and downright gorgeous static site generator "
@@ -32,64 +19,61 @@ long_description = (
 
 
 def get_version(package):
-    """
-    Return package version as listed in `__version__` in `init.py`.
-    """
+    """Return package version as listed in `__version__` in `init.py`."""
     init_py = open(os.path.join(package, '__init__.py')).read()
-    return re.search("^__version__ = ['\"]([^'\"]+)['\"]", init_py, re.MULTILINE).group(1)
+    return re.search("__version__ = ['\"]([^'\"]+)['\"]", init_py).group(1)
 
 
 def get_packages(package):
-    """
-    Return root package and all sub-packages.
-    """
+    """Return root package and all sub-packages."""
     return [dirpath
             for dirpath, dirnames, filenames in os.walk(package)
             if os.path.exists(os.path.join(dirpath, '__init__.py'))]
 
 
-def get_package_data(package):
-    """
-    Return all files under the root package, that are not in a
-    package themselves.
-    """
-    walk = [(dirpath.replace(package + os.sep, '', 1), filenames)
-            for dirpath, dirnames, filenames in os.walk(package)
-            if not os.path.exists(os.path.join(dirpath, '__init__.py'))]
-
-    filepaths = []
-    for base, filenames in walk:
-        filepaths.extend([os.path.join(base, filename)
-                          for filename in filenames])
-    return {package: filepaths}
-
-
 if sys.argv[-1] == 'publish':
-    os.system("python setup.py sdist upload")
-    args = {'version': get_version(package)}
+    if os.system("pip freeze | grep wheel"):
+        print("wheel not installed.\nUse `pip install wheel`.\nExiting.")
+        sys.exit()
+    if os.system("pip freeze | grep twine"):
+        print("twine not installed.\nUse `pip install twine`.\nExiting.")
+        sys.exit()
+    os.system("python setup.py sdist bdist_wheel")
+    os.system("twine upload dist/*")
     print("You probably want to also tag the version now:")
-    print("  git tag -a %(version)s -m 'version %(version)s'" % args)
+    print("  git tag -a {0} -m 'version {0}'".format(get_version("mkdocs")))
     print("  git push --tags")
     sys.exit()
 
 
 setup(
-    name=name,
-    version=get_version(package),
-    url=url,
-    license=license,
-    description=description,
+    name="mkdocs",
+    version=get_version("mkdocs"),
+    url='http://www.mkdocs.org',
+    license='BSD',
+    description='Project documentation with Markdown.',
     long_description=long_description,
-    author=author,
-    author_email=author_email,
-    packages=get_packages(package),
-    package_data=get_package_data(package),
-    install_requires=install_requires,
+    author='Tom Christie',
+    author_email='tom@tomchristie.com',  # SEE NOTE BELOW (*)
+    packages=get_packages("mkdocs"),
+    include_package_data=True,
+    install_requires=[
+        'click>=3.3',
+        'Jinja2>=2.7.1',
+        'livereload>=2.3.2',
+        'Markdown>=2.3.1,<2.5' if PY26 else 'Markdown>=2.3.1',
+        'PyYAML>=3.10',
+        'tornado>=4.1',
+    ],
     entry_points={
         'console_scripts': [
-            'mkdocs = mkdocs.main:run_main',
-            ],
-        },
+            'mkdocs = mkdocs.__main__:cli',
+        ],
+        'mkdocs.themes': [
+            'mkdocs = mkdocs.themes.mkdocs',
+            'readthedocs = mkdocs.themes.readthedocs',
+        ]
+    },
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Console',
@@ -104,7 +88,13 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        "Programming Language :: Python :: Implementation :: CPython",
         'Topic :: Documentation',
         'Topic :: Text Processing',
-    ]
+    ],
+    zip_safe=False,
 )
+
+# (*) Please direct queries to the discussion group:
+#     https://groups.google.com/forum/#!forum/mkdocs

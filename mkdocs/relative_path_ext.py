@@ -35,14 +35,20 @@ tutorial/install.md | tutorial/install/ | ../img/initial-layout.png    |
 tutorial/intro.md   | tutorial/intro/   | ../../img/initial-layout.png |
 
 """
-from __future__ import print_function
+
+from __future__ import unicode_literals
+
+import logging
+import os
 
 from markdown.extensions import Extension
 from markdown.treeprocessors import Treeprocessor
+from markdown.util import AMP_SUBSTITUTE
 
 from mkdocs import utils
-from mkdocs.compat import urlparse, urlunparse
 from mkdocs.exceptions import MarkdownNotFound
+
+log = logging.getLogger(__name__)
 
 
 def _iter(node):
@@ -52,10 +58,14 @@ def _iter(node):
 
 
 def path_to_url(url, nav, strict):
-    scheme, netloc, path, params, query, fragment = urlparse(url)
 
-    if scheme or netloc or not path:
+    scheme, netloc, path, params, query, fragment = (
+        utils.urlparse(url))
+
+    if scheme or netloc or not path or AMP_SUBSTITUTE in url:
         # Ignore URLs unless they are a relative link to a markdown file.
+        # AMP_SUBSTITUTE is used internally by Markdown only for email,which is
+        # not a relative link. As urlparse errors on them, skip explicitly
         return url
 
     if nav and not utils.is_markdown_file(path):
@@ -64,6 +74,10 @@ def path_to_url(url, nav, strict):
         # If the site navigation has been provided, then validate
         # the internal hyperlink, making sure the target actually exists.
         target_file = nav.file_context.make_absolute(path)
+
+        if target_file.startswith(os.path.sep):
+            target_file = target_file[1:]
+
         if target_file not in nav.source_files:
             source_file = nav.file_context.current_file
             msg = (
@@ -74,9 +88,9 @@ def path_to_url(url, nav, strict):
             # In strict mode raise an error at this point.
             if strict:
                 raise MarkdownNotFound(msg)
-            # Otherwise, when strict mode isn't enabled, print out a warning
+            # Otherwise, when strict mode isn't enabled, log a warning
             # to the user and leave the URL as it is.
-            print(msg)
+            log.warning(msg)
             return url
         path = utils.get_url_path(target_file, nav.use_directory_urls)
         path = nav.url_context.make_relative(path)
@@ -84,7 +98,8 @@ def path_to_url(url, nav, strict):
         path = utils.get_url_path(path).lstrip('/')
 
     # Convert the .md hyperlink to a relative hyperlink to the HTML page.
-    url = urlunparse((scheme, netloc, path, params, query, fragment))
+    fragments = (scheme, netloc, path, params, query, fragment)
+    url = utils.urlunparse(fragments)
     return url
 
 

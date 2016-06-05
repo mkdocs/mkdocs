@@ -14,9 +14,12 @@ The steps we take to generate a table of contents are:
 * Parse table of contents HTML into the underlying data structure.
 """
 
-import re
+from __future__ import unicode_literals
 
-TOC_LINK_REGEX = re.compile('<a href=["]([^"]*)["]>([^<]*)</a>')
+try:                                    # pragma: no cover
+    from html.parser import HTMLParser  # noqa
+except ImportError:                     # pragma: no cover
+    from HTMLParser import HTMLParser   # noqa
 
 
 class TableOfContents(object):
@@ -42,14 +45,54 @@ class AnchorLink(object):
         self.children = []
 
     def __str__(self):
-        return self._indent_print()
+        return self.indent_print()
 
-    def _indent_print(self, depth=0):
+    def indent_print(self, depth=0):
         indent = '    ' * depth
         ret = '%s%s - %s\n' % (indent, self.title, self.url)
         for item in self.children:
-            ret += item._indent_print(depth + 1)
+            ret += item.indent_print(depth + 1)
         return ret
+
+
+class TOCParser(HTMLParser):
+
+    def __init__(self):
+        HTMLParser.__init__(self)
+        self.links = []
+
+        self.in_anchor = False
+        self.attrs = None
+        self.title = ''
+
+        # Prior to Python3.4 no convert_charrefs keyword existed.
+        # However, in Python3.5 the default was changed to True.
+        # We need the False behavior in all versions but can only
+        # set it if it exists.
+        if hasattr(self, 'convert_charrefs'):
+            self.convert_charrefs = False
+
+    def handle_starttag(self, tag, attrs):
+
+        if not self.in_anchor:
+            if tag == 'a':
+                self.in_anchor = True
+                self.attrs = dict(attrs)
+
+    def handle_endtag(self, tag):
+        if tag == 'a':
+            self.in_anchor = False
+
+    def handle_data(self, data):
+
+        if self.in_anchor:
+            self.title += data
+
+    def handle_charref(self, ref):
+        self.handle_entityref("#" + ref)
+
+    def handle_entityref(self, ref):
+        self.handle_data("&%s;" % ref)
 
 
 def _parse_html_table_of_contents(html):
@@ -63,9 +106,14 @@ def _parse_html_table_of_contents(html):
     parents = []
     ret = []
     for line in lines:
-        match = TOC_LINK_REGEX.search(line)
-        if match:
-            href, title = match.groups()
+        parser = TOCParser()
+        parser.feed(line)
+        if parser.title:
+            try:
+                href = parser.attrs['href']
+            except KeyError:
+                continue
+            title = parser.title
             nav = AnchorLink(title, href)
             # Add the item to its parent if required.  If it is a topmost
             # item then instead append it to our return value.

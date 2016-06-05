@@ -1,16 +1,27 @@
 site_name: MkDocs
-site_url: http://www.mkdocs.org/
+site_url: http://www.mkdocs.org
 site_description: Project documentation with Markdown.
+site_author: Tom Christie & Dougal Matthews
 
-repo_url: https://github.com/tomchristie/mkdocs/
+repo_url: https://github.com/mkdocs/mkdocs/
 
 pages:
-- ['index.md', 'Home']
-- ['user-guide/writing-your-docs.md', 'User Guide', 'Writing your docs']
-- ['user-guide/styling-your-docs.md', 'User Guide', 'Styling your docs']
-- ['user-guide/configuration.md', 'User Guide', 'Configuration']
-- ['about/license.md', 'About', 'License']
-- ['about/release-notes.md', 'About', 'Release Notes']
+- Home: index.md
+- User Guide:
+    - Writing Your Docs: user-guide/writing-your-docs.md
+    - Styling Your Docs: user-guide/styling-your-docs.md
+    - Configuration: user-guide/configuration.md
+    - Deploying Your Docs: user-guide/deploying-your-docs.md
+    - Custom Themes: user-guide/custom-themes.md
+- About:
+    - Release Notes: about/release-notes.md
+    - Contributing: about/contributing.md
+    - License: about/license.md
 
-copyright: Copyright &copy; 2014, <a href="https://twitter.com/_tomchristie">Tom Christie</a>.
+markdown_extensions:
+    - toc:
+        permalink: 
+    - admonition:
+
+copyright: Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, <a href="http://www.dougalmatthews.com/">Dougal Matthews</a>.
 google_analytics: ['UA-27795084-5', 'mkdocs.org']

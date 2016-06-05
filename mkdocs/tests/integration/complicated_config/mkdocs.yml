@@ -1,0 +1,47 @@
+site_name: My Docs
+
+pages:
+- Home: index.md
+- User Guide:
+    - Writing your docs: index.md
+- About:
+    - License: index.md
+    - Release Notes:
+      - Version 1: index.md
+      - Version 2: index.md
+      - Version 3: index.md
+
+site_url: http://www.mkdocs.org/
+docs_dir: documentation
+site_dir: output
+
+theme: mkdocs
+theme_dir: theme_tweaks
+
+copyright: "Dougal Matthews"
+google_analytics: ["1", "2"]
+dev_addr: 0.0.0.0:8000
+use_directory_urls: false
+
+repo_url: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/tests/integration
+repo_name: "GitHub"
+
+extra_css: ["tweak.css", ]
+extra_javascript: ["tweak.js", ]
+
+extra_templates: ["custom.html", ]
+
+include_nav: true
+include_next_prev: false
+
+markdown_extensions:
+    - toc:
+        permalink: 
+    - admonition:
+
+strict: true
+
+remote_branch: none
+remote_name: upstream
+extra:
+  some value: 1

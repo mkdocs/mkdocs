@@ -1,38 +1,23 @@
-<ul class="current">
-    {% for nav_item in nav %}
-        {% if nav_item.children %}
-            <span>{{ nav_item.title }}</span>
-            {% for nav_item in nav_item.children %}
-                <li class="toctree-l2 {% if nav_item.active%}current{%endif%}">
-                    <a class="{% if nav_item.active%}current{%endif%}" href="{{ nav_item.url }}">{{ nav_item.title }}</a>
-                    {% if nav_item == current_page %}
-                        <ul>
-                        {% for toc_item in toc %}
-                            <li class="toctree-l3"><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
-                            {% for toc_item in toc_item.children %}
-                                <li><a class="toctree-l4" href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
-                            {% endfor %}
-                        {% endfor %}
-                        </ul>
-                    {% endif %}
-                </li>
+{% if nav_item.children %}
+    <ul class="subnav">
+    <li><span>{{ nav_item.title }}</span></li>
+
+        {% for nav_item in nav_item.children %}
+            {% include 'toc.html' %}
+        {% endfor %}
+    </ul>
+{% else %}
+    <li class="toctree-l1 {% if nav_item.active%}current{%endif%}">
+        <a class="{% if nav_item.active%}current{%endif%}" href="{{ nav_item.url }}">{{ nav_item.title }}</a>
+        {% if nav_item == page %}
+            <ul>
+            {% for toc_item in page.toc %}
+                <li class="toctree-l3"><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
+                {% for toc_item in toc_item.children %}
+                    <li><a class="toctree-l4" href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
+                {% endfor %}
             {% endfor %}
-        {% else %}
-            <li class="toctree-l1 {% if nav_item.active%}current{%endif%}">
-                <a class="{% if nav_item.active%}current{%endif%}" href="{{ nav_item.url }}">{{ nav_item.title }}</a>
-                {% if nav_item == current_page %}
-                    <ul>
-                    {% for toc_item in toc %}
-                        <li class="toctree-l3"><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
-                        {% for toc_item in toc_item.children %}
-                            <li><a class="toctree-l4" href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
-                        {% endfor %}
-                    {% endfor %}
-                    </ul>
-                {% endif %}
-            </li>
+            </ul>
         {% endif %}
-
-    {% endfor %}
-</ul>
-
+    </li>
+{% endif %}

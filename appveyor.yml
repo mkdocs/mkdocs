@@ -1,0 +1,30 @@
+build: false
+environment:
+  matrix:
+    - TOXENV: py27-integration
+    - TOXENV: py27-min-req
+    - TOXENV: py27-unittests
+    - TOXENV: py33-integration
+    - TOXENV: py33-min-req
+    - TOXENV: py33-unittests
+    - TOXENV: py34-integration
+    - TOXENV: py34-min-req
+    - TOXENV: py34-unittests
+    - TOXENV: py35-integration
+    - TOXENV: py35-min-req
+    - TOXENV: py35-unittests
+    - TOXENV: flake8
+init:
+  - "ECHO %TOXENV%"
+  - ps: "ls C:\\Python*"
+install:
+  - ps: Invoke-WebRequest "https://bootstrap.pypa.io/ez_setup.py" -OutFile "c:\\ez_setup.py"
+  - ps: Invoke-WebRequest "https://bootstrap.pypa.io/get-pip.py" -OutFile "c:\\get-pip.py"
+  - "c:\\python27\\python c:\\ez_setup.py"
+  - "c:\\python27\\python c:\\get-pip.py"
+  - "c:\\python27\\Scripts\\pip install tox"
+test_script:
+  - "git clean -f -d -x"
+  - "c:\\python27\\Scripts\\tox --version"
+  - "c:\\python27\\Scripts\\pip --version"
+  - "c:\\python27\\Scripts\\tox"
