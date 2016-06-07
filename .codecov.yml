@@ -1,0 +1,11 @@
+codecov:
+  ci:
+    - "!ci.appveyor.com"
+coverage:
+  status:
+    patch: false
+    project:
+      default:
+        target: 90
+
+comment: false
