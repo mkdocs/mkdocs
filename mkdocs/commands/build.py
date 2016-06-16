@@ -247,11 +247,15 @@ def build_extra_templates(extra_templates, config, site_navigation=None):
         utils.write_file(output_content.encode('utf-8'), output_path)
 
 
-def build_pages(config, dump_json=False):
+def build_pages(config, dump_json=False, cache=None):
     """
     Builds all the pages and writes them into the build directory.
     """
-    site_navigation = nav.SiteNavigation(config['pages'], config['use_directory_urls'])
+    if cache:
+        site_navigation = cache
+        site_navigation.update (config['pages'], config['use_directory_urls'])
+    else:
+        site_navigation = nav.SiteNavigation(config['pages'], config['use_directory_urls'])
     loader = jinja2.FileSystemLoader(config['theme_dir'] + [config['mkdocs_templates'], ])
     env = jinja2.Environment(loader=loader)
 
@@ -299,6 +303,14 @@ def build_pages(config, dump_json=False):
     for page in site_navigation.walk_pages():
 
         try:
+            # Do nothing if the page hasn't changed
+            if (os.path.getmtime(page.input_path) == page.modified_time):
+                continue
+
+            # Set the modified time if it has not been set
+            if page.modified_time == None:
+                page.modified_time = os.path.getmtime(page.input_path)
+
             log.debug("Building page %s", page.input_path)
             build_result = _build_page(page, config, site_navigation, env,
                                        dump_json)
@@ -312,9 +324,10 @@ def build_pages(config, dump_json=False):
     search_index = search_index.generate_search_index()
     json_output_path = os.path.join(config['site_dir'], 'mkdocs', 'search_index.json')
     utils.write_file(search_index.encode('utf-8'), json_output_path)
+    return site_navigation
 
 
-def build(config, live_server=False, dump_json=False, clean_site_dir=False):
+def build(config, live_server=False, dump_json=False, clean_site_dir=False, cache=None):
     """
     Perform a full site build.
     """
@@ -327,8 +340,7 @@ def build(config, live_server=False, dump_json=False, clean_site_dir=False):
             log.info("The directory contains stale files. Use --clean to remove them.")
 
     if dump_json:
-        build_pages(config, dump_json=True)
-        return
+        return build_pages(config, dump_json=True, cache=cache)
 
     # Reversed as we want to take the media files from the builtin theme
     # and then from the custom theme_dir so that the custom versions take
@@ -343,7 +355,7 @@ def build(config, live_server=False, dump_json=False, clean_site_dir=False):
     utils.copy_media_files(config['docs_dir'], config['site_dir'])
 
     log.debug("Building markdown pages.")
-    build_pages(config)
+    return build_pages(config, cache=cache)
 
 
 def site_directory_contains_stale_files(site_directory):

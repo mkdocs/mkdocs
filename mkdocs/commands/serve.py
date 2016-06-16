@@ -50,11 +50,11 @@ def _static_server(host, port, site_dir):
         log.info('Stopping server...')
 
 
+
 def serve(config_file=None, dev_addr=None, strict=None, theme=None,
           theme_dir=None, livereload=True):
     """
     Start the MkDocs development server
-
     By default it will serve the documentation on http://localhost:8000/ and
     it will rebuild the documentation and refresh the page automatically
     whenever a file is edited.
@@ -62,27 +62,42 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
     # Create a temporary build directory, and set some options to serve it
     tempdir = tempfile.mkdtemp()
 
-    def builder():
-        log.info("Building documentation...")
-        config = load_config(
-            config_file=config_file,
-            dev_addr=dev_addr,
-            strict=strict,
-            theme=theme,
-            theme_dir=theme_dir,
-        )
-        config['site_dir'] = tempdir
-        build(config, live_server=True, clean_site_dir=True)
-        return config
+
+    class Builder():
+        def __init__(self):
+            log.info("Building documentation...")
+
+            # Configuration
+            self.config = load_config(
+                config_file=config_file,
+                dev_addr=dev_addr,
+                strict=strict,
+                theme=theme,
+                theme_dir=theme_dir,
+            )
+            self.config['site_dir'] = tempdir
+
+            # A cache for SiteNavigation object
+            self._site_navigation = None
+
+            # Perform initial build
+            self.__call__()
+
+        def __call__(self):
+
+            if self._site_navigation:
+                self._site_navigation = build(self.config, live_server=True, clean_site_dir=False, cache=self._site_navigation)
+            else:
+                self._site_navigation = build(self.config, live_server=True, clean_site_dir=False)
+
 
     # Perform the initial build
-    config = builder()
-
-    host, port = config['dev_addr'].split(':', 1)
+    builder = Builder()
+    host, port = builder.config['dev_addr'].split(':', 1)
 
     try:
         if livereload:
-            _livereload(host, port, config, builder, tempdir)
+            _livereload(host, port, builder.config, builder, tempdir)
         else:
             _static_server(host, port, tempdir)
     finally:

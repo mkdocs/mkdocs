@@ -41,6 +41,19 @@ class SiteNavigation(object):
     def __iter__(self):
         return iter(self.nav_items)
 
+    def update(self, pages_config, use_directory_urls=True):
+        """
+        Update the navigation with new pages w/o removing old Page objects.
+
+        This is used to cache page entries so live reloading doesn't need to rebuild everything.
+        """
+
+        self.nav_items, pages = _generate_site_navigation(
+            pages_config, self.url_context, use_directory_urls)
+
+        for page in pages:
+            self.pages.append(page)
+
     def walk_pages(self):
         """
         Returns each page in the site in turn.
@@ -142,6 +155,7 @@ class Page(object):
         # Relative paths to the input markdown file and output html file.
         self.input_path = path
         self.output_path = utils.get_html_path(path)
+        self.modified_time = None
 
         # Links to related pages
         self.previous_page = None
