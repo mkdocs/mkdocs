@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 import logging
 import shutil
 import tempfile
+import yaml
 
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
@@ -51,7 +52,7 @@ def _static_server(host, port, site_dir):
 
 
 def serve(config_file=None, dev_addr=None, strict=None, theme=None,
-          theme_dir=None, livereload=True):
+          theme_dir=None, livereload=True, loader=yaml.Loader):
     """
     Start the MkDocs development server
 
@@ -70,6 +71,7 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
             strict=strict,
             theme=theme,
             theme_dir=theme_dir,
+            loader=loader
         )
         config['site_dir'] = tempdir
         build(config, live_server=True, clean_site_dir=True)

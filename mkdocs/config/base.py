@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 import logging
 import os
+import yaml
 
 from mkdocs import exceptions
 from mkdocs import utils
@@ -96,8 +97,8 @@ class Config(utils.UserDict):
         self.user_configs.append(patch)
         self.data.update(patch)
 
-    def load_file(self, config_file):
-        return self.load_dict(utils.yaml_load(config_file))
+    def load_file(self, config_file, loader):
+        return self.load_dict(utils.yaml_load(config_file, loader))
 
 
 def _open_config_file(config_file):
@@ -126,7 +127,7 @@ def _open_config_file(config_file):
     return config_file
 
 
-def load_config(config_file=None, **kwargs):
+def load_config(config_file=None, loader=yaml.Loader, **kwargs):
     """
     Load the configuration for a given file object or name
 
@@ -151,7 +152,7 @@ def load_config(config_file=None, **kwargs):
     from mkdocs import config
     cfg = Config(schema=config.DEFAULT_SCHEMA)
     # First load the config file
-    cfg.load_file(config_file)
+    cfg.load_file(config_file, loader)
     # Then load the options to overwrite anything in the config.
     cfg.load_dict(options)
 
