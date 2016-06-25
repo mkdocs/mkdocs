@@ -66,7 +66,7 @@ class TestGitHubDeploy(unittest.TestCase):
     @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
     @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
     @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(None, None))
-    @mock.patch('mkdocs.commands.gh_deploy.ghp_import.ghp_import')
+    @mock.patch('mkdocs.commands.gh_deploy.ghp_import.ghp_import', return_value=(True, ''))
     def test_deploy(self, mock_import, get_remote, get_sha, is_repo):
 
         config = load_config(
@@ -77,7 +77,7 @@ class TestGitHubDeploy(unittest.TestCase):
     @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
     @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
     @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(None, None))
-    @mock.patch('mkdocs.commands.gh_deploy.ghp_import.ghp_import')
+    @mock.patch('mkdocs.commands.gh_deploy.ghp_import.ghp_import', return_value=(True, ''))
     @mock.patch('os.path.isfile', return_value=False)
     def test_deploy_no_cname(self, mock_isfile, mock_import, get_remote,
                              get_sha, is_repo):
@@ -91,10 +91,24 @@ class TestGitHubDeploy(unittest.TestCase):
     @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
     @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(
         u'git@', u'mkdocs/mkdocs.git'))
-    @mock.patch('mkdocs.commands.gh_deploy.ghp_import.ghp_import')
+    @mock.patch('mkdocs.commands.gh_deploy.ghp_import.ghp_import', return_value=(True, ''))
     def test_deploy_hostname(self, mock_import, get_remote, get_sha, is_repo):
 
         config = load_config(
             remote_branch='test',
         )
         gh_deploy.gh_deploy(config)
+
+    @mock.patch('mkdocs.utils.ghp_import.ghp_import')
+    @mock.patch('mkdocs.commands.gh_deploy.log')
+    def test_deploy_error(self, mock_log, mock_import):
+        error_string = 'TestError123'
+        mock_import.return_value = (False, error_string)
+
+        config = load_config(
+            remote_branch='test',
+        )
+
+        self.assertRaises(SystemExit, gh_deploy.gh_deploy, config)
+        mock_log.error.assert_called_once_with('Failed to deploy to GitHub with error: \n%s',
+                                               error_string)
