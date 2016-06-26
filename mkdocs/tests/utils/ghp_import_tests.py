@@ -105,3 +105,32 @@ class UtilsTests(unittest.TestCase):
             self.assertEqual(mock_call.call_count, 0)
         finally:
             shutil.rmtree(directory)
+
+    @mock.patch('mkdocs.utils.ghp_import.try_rebase', return_value=True)
+    @mock.patch('mkdocs.utils.ghp_import.get_prev_commit', return_value='sha')
+    @mock.patch('mkdocs.utils.ghp_import.get_config', return_value='config')
+    @mock.patch('mkdocs.utils.ghp_import.run_import')
+    @mock.patch('subprocess.call', auto_spec=True)
+    @mock.patch('subprocess.Popen', auto_spec=True)
+    def test_ghp_import_error(self, mock_popen, mock_call, mock_get_config,
+                              mock_run_import, mock_get_prev_commit, mock_try_rebase):
+
+        directory = tempfile.mkdtemp()
+        open(os.path.join(directory, 'file'), 'a').close()
+
+        try:
+            popen = mock.Mock()
+            mock_popen.return_value = popen
+
+            error_string = 'TestError123'
+            popen.communicate.return_value = ('', error_string)
+            popen.wait.return_value = 1
+
+            result, ghp_error = ghp_import.ghp_import(directory, "test message",
+                                                      remote='fake-remote-name',
+                                                      branch='fake-branch-name')
+
+            self.assertEqual(result, False)
+            self.assertEqual(ghp_error, error_string)
+        finally:
+            shutil.rmtree(directory)

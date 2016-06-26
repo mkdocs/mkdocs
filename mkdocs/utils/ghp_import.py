@@ -169,5 +169,8 @@ def ghp_import(directory, message, remote='origin', branch='gh-pages'):
 
     proc = sp.Popen(['git', 'push', remote, branch],
                     stdout=sp.PIPE, stderr=sp.PIPE)
-    proc.communicate()
-    return proc.wait() == 0
+
+    out, err = proc.communicate()
+    result = proc.wait() == 0
+
+    return result, dec(err)

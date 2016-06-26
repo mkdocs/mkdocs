@@ -65,29 +65,32 @@ def gh_deploy(config, message=None):
     log.info("Copying '%s' to '%s' branch and pushing to GitHub.",
              config['site_dir'], config['remote_branch'])
 
-    ghp_import.ghp_import(config['site_dir'], message, remote_name,
-                          remote_branch)
-
-    cname_file = os.path.join(config['site_dir'], 'CNAME')
-    # Does this repository have a CNAME set for GitHub pages?
-    if os.path.isfile(cname_file):
-        # This GitHub pages repository has a CNAME configured.
-        with(open(cname_file, 'r')) as f:
-            cname_host = f.read().strip()
-        log.info('Based on your CNAME file, your documentation should be '
-                 'available shortly at: http://%s', cname_host)
-        log.info('NOTE: Your DNS records must be configured appropriately for '
-                 'your CNAME URL to work.')
-        return
-
-    host, path = _get_remote_url(remote_name)
-
-    if host is None:
-        # This could be a GitHub Enterprise deployment.
-        log.info('Your documentation should be available shortly.')
+    result, error = ghp_import.ghp_import(config['site_dir'], message, remote_name,
+                                          remote_branch)
+    if not result:
+        log.error("Failed to deploy to GitHub with error: \n%s", error)
+        raise SystemExit(1)
     else:
-        username, repo = path.split('/', 1)
-        if repo.endswith('.git'):
-            repo = repo[:-len('.git')]
-        url = 'http://%s.github.io/%s' % (username, repo)
-        log.info('Your documentation should shortly be available at: ' + url)
+        cname_file = os.path.join(config['site_dir'], 'CNAME')
+        # Does this repository have a CNAME set for GitHub pages?
+        if os.path.isfile(cname_file):
+            # This GitHub pages repository has a CNAME configured.
+            with(open(cname_file, 'r')) as f:
+                cname_host = f.read().strip()
+            log.info('Based on your CNAME file, your documentation should be '
+                     'available shortly at: http://%s', cname_host)
+            log.info('NOTE: Your DNS records must be configured appropriately for '
+                     'your CNAME URL to work.')
+            return
+
+        host, path = _get_remote_url(remote_name)
+
+        if host is None:
+            # This could be a GitHub Enterprise deployment.
+            log.info('Your documentation should be available shortly.')
+        else:
+            username, repo = path.split('/', 1)
+            if repo.endswith('.git'):
+                repo = repo[:-len('.git')]
+            url = 'http://%s.github.io/%s' % (username, repo)
+            log.info('Your documentation should shortly be available at: ' + url)
