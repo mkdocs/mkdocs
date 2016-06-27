@@ -75,6 +75,12 @@ DEFAULT_SCHEMA = (
     # "GitHub" or "Bitbucket" for known url or Hostname for unknown urls.
     ('repo_name', config_options.Type(utils.string_types)),
 
+    # Specify a URI to the docs dir in the project source repo, relative to the
+    # repo_url. When set, a link directly to the page in the source repo will
+    # be added to the generated HTML. If repo_url is not set also, this option
+    # is ignored.
+    ('edit_uri', config_options.Type(utils.string_types)),
+
     # Specify which css or javascript files from the docs directory should be
     # additionally included in the site. Default, List of all .css and .js
     # files in the docs dir.
