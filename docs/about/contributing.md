@@ -10,6 +10,11 @@ ways, a few examples are:
 - Documentation improvements
 - Bug reports and patch reviews
 
+## Code of Conduct
+
+Everyone interacting in the MkDocs project's codebases, issue trackers, chat
+rooms, and mailing lists is expected to follow the [PyPA Code of Conduct].
+
 ## Reporting an Issue
 
 Please include as much detail as you can. Let us know your platform and MkDocs
@@ -61,3 +66,4 @@ most likely need to have tests and documentation if it is a new feature.
 [virtualenv]: https://virtualenv.pypa.io/en/latest/userguide.html
 [tox]: https://tox.readthedocs.io/en/latest/
 [travis]: https://travis-ci.org/repositories
+[PyPA Code of Conduct]: https://www.pypa.io/en/latest/code-of-conduct/
