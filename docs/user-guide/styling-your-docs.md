@@ -77,7 +77,7 @@ changes were automatically picked up and the documentation will be updated.
 
     Any extra CSS or JavaScript files will be added to the generated HTML
     document after the page content. If you desire to include a JavaScript
-    library, you may have better sucess including the library by using the
+    library, you may have better success including the library by using the
     [theme_dir].
 
 ### Using the theme_dir
@@ -208,7 +208,6 @@ explaination of blocks, consult the [Jinja documentation].
 [built-in themes]: #built-in-themes
 [third party themes]: #third-party-themes
 [docs_dir]: #using-the-docs_dir
-[theme_dir]: #using-the-theme_dir
 [customize]: #customizing-a-theme
 [custom theme]: ./custom-themes.md
 [ReadTheDocs]: ./deploying-your-docs.md#readthedocs
