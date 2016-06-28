@@ -116,6 +116,9 @@ def get_page_context(page, content, toc, meta, config):
     if config['site_url']:
         page.set_canonical_url(config['site_url'])
 
+    if config['repo_url']:
+        page.set_edit_url(config['repo_url'], config['edit_uri'])
+
     page.content = content
     page.toc = toc
     page.meta = meta

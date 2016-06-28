@@ -125,6 +125,27 @@ class RepoURLTest(unittest.TestCase):
         self.assertEqual(config['repo_url'], config['repo_url'])
         self.assertEqual(config['repo_name'], "Launchpad")
 
+    def test_edit_uri_github(self):
+
+        option = config_options.RepoURL()
+        config = {'repo_url': "https://github.com/mkdocs/mkdocs"}
+        option.post_validation(config, 'repo_url')
+        self.assertEqual(config['edit_uri'], 'blob/master/docs/')
+
+    def test_edit_uri_bitbucket(self):
+
+        option = config_options.RepoURL()
+        config = {'repo_url': "https://bitbucket.org/gutworth/six/"}
+        option.post_validation(config, 'repo_url')
+        self.assertEqual(config['edit_uri'], 'src/default/docs/')
+
+    def test_edit_uri_custom(self):
+
+        option = config_options.RepoURL()
+        config = {'repo_url': "https://launchpad.net/python-tuskarclient"}
+        option.post_validation(config, 'repo_url')
+        self.assertEqual(config.get('edit_uri'), None)
+
 
 class DirTest(unittest.TestCase):
 

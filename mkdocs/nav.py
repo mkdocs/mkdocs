@@ -151,6 +151,7 @@ class Page(object):
         # Placeholders to be filled in later in the build
         # process when we have access to the config.
         self.canonical_url = None
+        self.edit_url = None
         self.content = None
         self.meta = None
         self.toc = None
@@ -185,6 +186,18 @@ class Page(object):
         if not base.endswith('/'):
             base += '/'
         self.canonical_url = utils.urljoin(base, self.abs_url.lstrip('/'))
+
+    def set_edit_url(self, repo_url, edit_uri):
+        if not repo_url.endswith('/'):
+            repo_url += '/'
+        if not edit_uri:
+            self.edit_url = repo_url
+        else:
+            if not edit_uri.endswith('/'):
+                edit_uri += '/'
+            self.edit_url = utils.urljoin(
+                repo_url + edit_uri,
+                self.input_path)
 
 
 class Header(object):

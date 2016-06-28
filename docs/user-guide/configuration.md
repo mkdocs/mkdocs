@@ -50,6 +50,37 @@ When set, provides a link to your GitHub or Bitbucket repository on each page.
 **default**: `'GitHub'` or `'Bitbucket'` if the `repo_url` matches those
 domains, otherwise `null`
 
+### edit_uri
+
+Path from the base `repo_url` to the docs directory when directly viewing a
+page, accounting for specifics of the repository host (e.g. GitHub, Bitbucket,
+etc), the branch, and the docs directory itself. Mkdocs concatenates `repo_url`
+and `edit_uri`, and appends the input path of the page.
+
+When set, provides a link directly to the page in your source repository. This
+makes it easier to find and edit the source for the page. If `repo_url` is not
+set, this option is ignored.
+
+For example, for a GitHub-hosted repository, the `edit_uri` would be as follows.
+(Note the `blob` path and `master` branch...)
+
+```yaml
+edit_uri: blob/master/docs/
+```
+
+For a Bitbucket-hosted repository, the equivalent `edit_uri` would be as
+follows. (Note the `src` path and `default` branch...)
+
+```yaml
+edit_uri: src/default/docs/
+```
+
+For other repository hosts, `edit_uri` works the same way. Simply specify the
+relative path to the docs directory.
+
+**default**: `blob/master/docs/` or `src/default/docs/` for GitHub or Bitbucket
+repos, respectively, if `repo_url` matches those domains, otherwise `null`
+
 ### site_description
 
 Set the site description. This will add a meta tag to the generated HTML header.

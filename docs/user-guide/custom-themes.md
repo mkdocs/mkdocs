@@ -259,6 +259,11 @@ documentation page.
 The full, canonical URL to the current page. This includes the `site_url` from
 the configuration.
 
+##### page.edit_url
+
+The full URL to the input page in the source repository. Typically used to
+provide a link to edit the source page.
+
 ##### page.url
 
 The URL to the current page not including the `site_url` from the configuration.
