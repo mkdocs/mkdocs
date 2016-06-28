@@ -205,19 +205,19 @@ work with the structure of the site. See [Template Variables] for a list of
 variables you can use within your custom blocks. For a more complete
 explaination of blocks, consult the [Jinja documentation].
 
+[browse source]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes/mkdocs
 [built-in themes]: #built-in-themes
-[third party themes]: #third-party-themes
-[docs_dir]: #using-the-docs_dir
-[customize]: #customizing-a-theme
-[custom theme]: ./custom-themes.md
-[ReadTheDocs]: ./deploying-your-docs.md#readthedocs
 [community wiki]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
+[custom theme]: ./custom-themes.md
+[customize]: #customizing-a-theme
+[docs_dir]: #using-the-docs_dir
 [documentation directory]: ./configuration/#docs_dir
 [extra_css]: ./configuration.md#extra_css
 [extra_javascript]: ./configuration.md#extra_javascript
-[theme_dir]: ./configuration/#theme_dir
-[theme]: ./configuration/#theme
-[mkdocs]: #mkdocs
-[browse source]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes/mkdocs
-[Template Variables]: ./custom-themes.md#template-variables
 [Jinja documentation]: http://jinja.pocoo.org/docs/dev/templates/#template-inheritance
+[mkdocs]: #mkdocs
+[ReadTheDocs]: ./deploying-your-docs.md#readthedocs
+[Template Variables]: ./custom-themes.md#template-variables
+[theme]: ./configuration/#theme
+[theme_dir]: ./configuration/#theme_dir
+[third party themes]: #third-party-themes
