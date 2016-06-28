@@ -204,7 +204,7 @@ class RepoURL(URL):
 
         if config['repo_url'] is not None and config.get('edit_uri') is None:
             if config['repo_name'].lower() == 'github':
-                config['edit_uri'] = 'blob/master/docs/'
+                config['edit_uri'] = 'edit/master/docs/'
             elif config['repo_name'].lower() == 'bitbucket':
                 config['edit_uri'] = 'src/default/docs/'
 

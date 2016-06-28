@@ -62,10 +62,10 @@ makes it easier to find and edit the source for the page. If `repo_url` is not
 set, this option is ignored.
 
 For example, for a GitHub-hosted repository, the `edit_uri` would be as follows.
-(Note the `blob` path and `master` branch...)
+(Note the `edit` path and `master` branch...)
 
 ```yaml
-edit_uri: blob/master/docs/
+edit_uri: edit/master/docs/
 ```
 
 For a Bitbucket-hosted repository, the equivalent `edit_uri` would be as
@@ -78,8 +78,15 @@ edit_uri: src/default/docs/
 For other repository hosts, `edit_uri` works the same way. Simply specify the
 relative path to the docs directory.
 
-**default**: `blob/master/docs/` or `src/default/docs/` for GitHub or Bitbucket
+**default**: `edit/master/docs/` or `src/default/docs/` for GitHub or Bitbucket
 repos, respectively, if `repo_url` matches those domains, otherwise `null`
+
+!!! note "Note:"
+    On GitHub, the `edit` path opens the page in the online GitHub editor. This
+    functionality requires that the user have and be logged in to a GitHub
+    account. Otherwise, the user will be redirected to a login/signup page.
+    Alternatively, use the `blob` path to open a read-only view, which supports
+    anonymous access. E.g. `blob/master/docs/`
 
 ### site_description
 
