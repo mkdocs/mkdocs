@@ -18,6 +18,11 @@ Project documentation with Markdown.
 - IRC channel: `#mkdocs` on freenode.
 - Discussions and support: <https://groups.google.com/forum/#!forum/mkdocs>
 
+## Code of Conduct
+
+Everyone interacting in the MkDocs project's codebases, issue trackers, chat
+rooms, and mailing lists is expected to follow the [PyPA Code of Conduct].
+
 [appveyor-image]: https://img.shields.io/appveyor/ci/d0ugal/mkdocs/master.png
 [appveyor-link]: https://ci.appveyor.com/project/d0ugal/mkdocs
 [codecov-image]: http://codecov.io/github/mkdocs/mkdocs/coverage.svg?branch=master
@@ -33,3 +38,5 @@ Project documentation with Markdown.
 
 [mkdocs]: http://www.mkdocs.org
 [release-notes]: http://www.mkdocs.org/about/release-notes/
+
+[PyPA Code of Conduct]: https://www.pypa.io/en/latest/code-of-conduct/
