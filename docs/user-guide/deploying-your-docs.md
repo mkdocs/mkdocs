@@ -129,3 +129,12 @@ your hosts' file system.
 See your host's documentation for specifics. You will likely want to search
 their documentation for "ftp" or "uploading site".
 
+## 404 Pages
+
+When MkDocs builds the documentation it will include a 404.html file in the
+[build directory][site_dir]. This file will be automatically used when
+deploying to [GitHub](#github-pages) but only on a custom domain. Other web
+servers may be configured to use it but the feature won't always be available.
+See the documentation for your server of choice for more information.
+
+[site_dir]: ./configuration/#site_dir
