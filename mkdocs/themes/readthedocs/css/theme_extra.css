@@ -56,6 +56,7 @@ code {
  */
 p code {
     word-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 /**
