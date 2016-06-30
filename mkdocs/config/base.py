@@ -64,13 +64,31 @@ class Config(utils.UserDict):
 
     def _pre_validate(self):
 
+        failed, warnings = [], []
+
         for key, config_option in self._schema:
-            config_option.pre_validation(self, key_name=key)
+            try:
+                config_option.pre_validation(self, key_name=key)
+                warnings.extend([(key, w) for w in config_option.warnings])
+                config_option.reset_warnings()
+            except ValidationError as e:
+                failed.append((key, e))
+
+        return failed, warnings
 
     def _post_validate(self):
 
+        failed, warnings = [], []
+
         for key, config_option in self._schema:
-            config_option.post_validation(self, key_name=key)
+            try:
+                config_option.post_validation(self, key_name=key)
+                warnings.extend([(key, w) for w in config_option.warnings])
+                config_option.reset_warnings()
+            except ValidationError as e:
+                failed.append((key, e))
+
+        return failed, warnings
 
     def validate(self):
 
@@ -81,7 +99,9 @@ class Config(utils.UserDict):
         # Only run the post validation steps if there are no failures, warnings
         # are okay.
         if len(failed) == 0:
-            self._post_validate()
+            post_failed, post_warnings = self._post_validate()
+            failed.extend(post_failed)
+            warnings.extend(post_warnings)
 
         return failed, warnings
 
