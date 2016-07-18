@@ -162,6 +162,10 @@ See the section on [configuring pages and
 navigation](/user-guide/writing-your-docs.md#configure-pages-and-navigation) for
 a more detailed breakdown, including how to create sub-sections.
 
+**default**: By default `pages` will contain an alphanumerically sorted, nested
+list of all the Markdown files found within the `docs_dir` and its
+sub-directories. If none are found it will be `[]` (an empty list).
+
 ## Build directories
 
 ### theme
