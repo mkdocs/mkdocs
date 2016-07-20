@@ -32,6 +32,15 @@ log = logging.getLogger(__name__)
 log.addFilter(DuplicateFilter())
 
 
+def get_complete_paths(config, page):
+    """
+    Return the complete input/output paths for the supplied page.
+    """
+    input_path = os.path.join(config['docs_dir'], page.input_path)
+    output_path = os.path.join(config['site_dir'], page.output_path)
+    return input_path, output_path
+
+
 def convert_markdown(markdown_source, config, site_navigation=None):
     """
     Convert the Markdown source file to HTML as per the config and
@@ -172,11 +181,12 @@ def build_template(template_name, env, config, site_navigation=None):
     return True
 
 
-def _build_page(page, config, site_navigation, env, dump_json):
+def _build_page(page, config, site_navigation, env, dump_json, dirty=False):
+
+    # Get the input/output paths
+    input_path, output_path = get_complete_paths(config, page)
 
     # Read the input file
-    input_path = os.path.join(config['docs_dir'], page.input_path)
-
     try:
         input_content = io.open(input_path, 'r', encoding='utf-8').read()
     except IOError:
@@ -214,7 +224,6 @@ def _build_page(page, config, site_navigation, env, dump_json):
     output_content = template.render(context)
 
     # Write the output file.
-    output_path = os.path.join(config['site_dir'], page.output_path)
     if dump_json:
         json_context = {
             'content': context['content'],
@@ -250,7 +259,7 @@ def build_extra_templates(extra_templates, config, site_navigation=None):
         utils.write_file(output_content.encode('utf-8'), output_path)
 
 
-def build_pages(config, dump_json=False):
+def build_pages(config, dump_json=False, dirty=False):
     """
     Builds all the pages and writes them into the build directory.
     """
@@ -302,6 +311,13 @@ def build_pages(config, dump_json=False):
     for page in site_navigation.walk_pages():
 
         try:
+
+            # When --dirty is used, only build the page if the markdown has been modified since the
+            # previous build of the output.
+            input_path, output_path = get_complete_paths(config, page)
+            if dirty and (utils.modified_time(input_path) < utils.modified_time(output_path)):
+                continue
+
             log.debug("Building page %s", page.input_path)
             build_result = _build_page(page, config, site_navigation, env,
                                        dump_json)
@@ -317,20 +333,25 @@ def build_pages(config, dump_json=False):
     utils.write_file(search_index.encode('utf-8'), json_output_path)
 
 
-def build(config, live_server=False, dump_json=False, clean_site_dir=False):
+def build(config, live_server=False, dump_json=False, dirty=False):
     """
     Perform a full site build.
     """
-    if clean_site_dir:
+    if not dirty:
         log.info("Cleaning site directory")
         utils.clean_directory(config['site_dir'])
+    else:
+        # Warn user about problems that may occur with --dirty option
+        log.warning("A 'dirty' build is being performed, this will likely lead to inaccurate navigation and other"
+                    " links within your site. This option is designed for site development purposes only.")
+
     if not live_server:
         log.info("Building documentation to directory: %s", config['site_dir'])
-        if not clean_site_dir and site_directory_contains_stale_files(config['site_dir']):
+        if dirty and site_directory_contains_stale_files(config['site_dir']):
             log.info("The directory contains stale files. Use --clean to remove them.")
 
     if dump_json:
-        build_pages(config, dump_json=True)
+        build_pages(config, dump_json=True, dirty=dirty)
         return
 
     # Reversed as we want to take the media files from the builtin theme
@@ -339,14 +360,14 @@ def build(config, live_server=False, dump_json=False, clean_site_dir=False):
     for theme_dir in reversed(config['theme_dir']):
         log.debug("Copying static assets from theme: %s", theme_dir)
         utils.copy_media_files(
-            theme_dir, config['site_dir'], exclude=['*.py', '*.pyc', '*.html']
+            theme_dir, config['site_dir'], exclude=['*.py', '*.pyc', '*.html'], dirty=dirty
         )
 
     log.debug("Copying static assets from the docs dir.")
-    utils.copy_media_files(config['docs_dir'], config['site_dir'])
+    utils.copy_media_files(config['docs_dir'], config['site_dir'], dirty=dirty)
 
     log.debug("Building markdown pages.")
-    build_pages(config)
+    build_pages(config, dirty=dirty)
 
 
 def site_directory_contains_stale_files(site_directory):

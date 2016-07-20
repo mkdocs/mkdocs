@@ -51,7 +51,7 @@ def _static_server(host, port, site_dir):
 
 
 def serve(config_file=None, dev_addr=None, strict=None, theme=None,
-          theme_dir=None, livereload=True):
+          theme_dir=None, livereload='livereload'):
     """
     Start the MkDocs development server
 
@@ -59,6 +59,7 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
     it will rebuild the documentation and refresh the page automatically
     whenever a file is edited.
     """
+
     # Create a temporary build directory, and set some options to serve it
     tempdir = tempfile.mkdtemp()
 
@@ -69,10 +70,12 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
             dev_addr=dev_addr,
             strict=strict,
             theme=theme,
-            theme_dir=theme_dir,
+            theme_dir=theme_dir
         )
         config['site_dir'] = tempdir
-        build(config, live_server=True, clean_site_dir=True)
+        live_server = livereload in ['dirty', 'livereload']
+        dirty = livereload == 'dirtyreload'
+        build(config, live_server=live_server, dirty=dirty)
         return config
 
     # Perform the initial build
@@ -81,7 +84,7 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
     host, port = config['dev_addr'].split(':', 1)
 
     try:
-        if livereload:
+        if livereload in ['livereload', 'dirtyreload']:
             _livereload(host, port, config, builder, tempdir)
         else:
             _static_server(host, port, tempdir)

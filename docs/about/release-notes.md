@@ -92,6 +92,26 @@ to support such customization.
 
 [blocks]: ../user-guide/styling-your-docs/#overriding-template-blocks
 
+#### Support for dirty builds. (#990)
+
+For large sites the build time required to create the pages can become problematic,
+thus a "dirty" build mode was created. This mode simply compares the modified time
+of the generated html and source markdown. If the markdown has changed since the
+html then the page is re-constructed. Otherwise, the page remains as is. This mode
+may be invoked in both the `mkdocs serve` and `mkdocs build` commands:
+
+```text
+mkdocs serve --dirtyreload
+```
+
+```text
+mkdocs build --dirty
+```
+
+It is important to note that this method for building the pages is for development
+of content only, since the navigation and other links do not get updated on other
+pages.
+
 ### Other Changes and Additions to Version 0.16.0
 
 * Bugfix: Support `gh-deploy` command on Windows with Python 3 (#722)

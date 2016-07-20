@@ -77,7 +77,9 @@ theme_dir_help = "The theme directory to use when building your documentation."
 theme_help = "The theme to use when building your documentation."
 theme_choices = utils.get_theme_names()
 site_dir_help = "The directory to output the result of the documentation build."
-reload_help = "Enable and disable the live reloading in the development server."
+reload_help = "Enable the live reloading in the development server (this is the default)"
+no_reload_help = "Disable the live reloading in the development server."
+dirty_reload_help = "Enable the live reloading in the development server, but only re-build files that have changed"
 commit_message_help = ("A commit message to use when commiting to the "
                        "Github Pages remote branch")
 remote_branch_help = ("The remote branch to commit to for Github Pages. This "
@@ -101,7 +103,9 @@ def cli():
 @click.option('-s', '--strict', is_flag=True, help=strict_help)
 @click.option('-t', '--theme', type=click.Choice(theme_choices), help=theme_help)
 @click.option('-e', '--theme-dir', type=click.Path(), help=theme_dir_help)
-@click.option('--livereload/--no-livereload', default=True, help=reload_help)
+@click.option('--livereload', 'livereload', flag_value='livereload', help=reload_help)
+@click.option('--no-livereload', 'livereload', flag_value='no-livereload', help=no_reload_help)
+@click.option('-d', '--dirtyreload', 'livereload', flag_value='dirty', help=dirty_reload_help)
 @common_options
 def serve_command(dev_addr, config_file, strict, theme, theme_dir, livereload):
     """Run the builtin development server"""
@@ -115,7 +119,7 @@ def serve_command(dev_addr, config_file, strict, theme, theme_dir, livereload):
             strict=strict,
             theme=theme,
             theme_dir=theme_dir,
-            livereload=livereload,
+            livereload=livereload
         )
     except (exceptions.ConfigurationError, socket.error) as e:
         # Avoid ugly, unhelpful traceback
@@ -123,7 +127,7 @@ def serve_command(dev_addr, config_file, strict, theme, theme_dir, livereload):
 
 
 @cli.command(name="build")
-@click.option('-c', '--clean', is_flag=True, help=clean_help)
+@click.option('-c', '--clean/--dirty', is_flag=True, help=clean_help)
 @click.option('-f', '--config-file', type=click.File('rb'), help=config_help)
 @click.option('-s', '--strict', is_flag=True, help=strict_help)
 @click.option('-t', '--theme', type=click.Choice(theme_choices), help=theme_help)
@@ -139,7 +143,7 @@ def build_command(clean, config_file, strict, theme, theme_dir, site_dir):
             theme=theme,
             theme_dir=theme_dir,
             site_dir=site_dir
-        ), clean_site_dir=clean)
+        ), dirty=not clean)
     except exceptions.ConfigurationError as e:
         # Avoid ugly, unhelpful traceback
         raise SystemExit('\n' + str(e))
@@ -169,7 +173,7 @@ def json_command(clean, config_file, strict, site_dir):
             config_file=config_file,
             strict=strict,
             site_dir=site_dir
-        ), dump_json=True, clean_site_dir=clean)
+        ), dump_json=True, dirty=not clean)
     except exceptions.ConfigurationError as e:
         # Avoid ugly, unhelpful traceback
         raise SystemExit('\n' + str(e))
@@ -190,7 +194,7 @@ def gh_deploy_command(config_file, clean, message, remote_branch, remote_name):
             remote_branch=remote_branch,
             remote_name=remote_name
         )
-        build.build(config, clean_site_dir=clean)
+        build.build(config, dirty=not clean)
         gh_deploy.gh_deploy(config, message=message)
     except exceptions.ConfigurationError as e:
         # Avoid ugly, unhelpful traceback

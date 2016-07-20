@@ -12,7 +12,7 @@ the primary working branch (usually `master`) of the git repository where you
 maintain the source documentation for your project, run the following command:
 
 ```sh
-mkdocs gh-deploy --clean
+mkdocs gh-deploy
 ```
 
 That's it! Behind the scenes, MkDocs will build your docs and use the [ghp-import]
@@ -66,7 +66,7 @@ host documentation for your project. Run the following commands from your
 project's root directory to upload your documentation:
 
 ```sh
-mkdocs build --clean
+mkdocs build
 python setup.py upload_docs --upload-dir=site
 ```
 
@@ -113,7 +113,7 @@ For example, a typical set of commands from the command line might look
 something like this:
 
 ```sh
-mkdocs build --clean
+mkdocs build
 scp -r ./site user@host:/path/to/server/root
 ```
 
