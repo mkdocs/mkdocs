@@ -186,6 +186,20 @@ class DirTest(unittest.TestCase):
         self.assertRaises(config_options.ValidationError,
                           option.validate, [])
 
+    def test_doc_dir_is_config_dir(self):
+
+        test_config = {
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
+            'docs_dir': '.'
+        }
+
+        docs_dir = config_options.Dir()
+
+        test_config['docs_dir'] = docs_dir.validate(test_config['docs_dir'])
+
+        self.assertRaises(config_options.ValidationError,
+                          docs_dir.post_validation, test_config, 'docs_dir')
+
 
 class SiteDirTest(unittest.TestCase):
 
@@ -207,12 +221,13 @@ class SiteDirTest(unittest.TestCase):
         )
 
         for test_config in test_configs:
+            test_config['config_file_path'] = j(os.path.abspath('..'), 'mkdocs.yml')
 
             test_config['docs_dir'] = docs_dir.validate(test_config['docs_dir'])
             test_config['site_dir'] = option.validate(test_config['site_dir'])
 
             self.assertRaises(config_options.ValidationError,
-                              option.post_validation, test_config, 'key')
+                              option.post_validation, test_config, 'site_dir')
 
     def test_site_dir_in_docs_dir(self):
 
@@ -225,6 +240,7 @@ class SiteDirTest(unittest.TestCase):
         )
 
         for test_config in test_configs:
+            test_config['config_file_path'] = j(os.path.abspath('..'), 'mkdocs.yml')
 
             docs_dir = config_options.Dir()
             option = config_options.SiteDir()
@@ -232,11 +248,8 @@ class SiteDirTest(unittest.TestCase):
             test_config['docs_dir'] = docs_dir.validate(test_config['docs_dir'])
             test_config['site_dir'] = option.validate(test_config['site_dir'])
 
-            option.post_validation(test_config, 'key')
-            self.assertEqual(len(option.warnings), 1)
-            self.assertEqual(
-                option.warnings[0][:50],
-                "The 'site_dir' should not be within the 'docs_dir'")
+            self.assertRaises(config_options.ValidationError,
+                              option.post_validation, test_config, 'site_dir')
 
 
 class ThemeTest(unittest.TestCase):

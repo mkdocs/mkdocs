@@ -64,9 +64,9 @@ created and third-party templates:
 #### Increased Template Customization. (#607)
 
 The built-in themes have been updated by having each of their many parts wrapped
-in template blocks which allow each individual block to be easily overriden
+in template blocks which allow each individual block to be easily overridden
 using the `theme_dir` config setting. Without any new settings, you can use a
-differant analytics service, replace the default search function, or alter the
+different analytics service, replace the default search function, or alter the
 behavior of the navigation, among other things. See the relevant
 [documentation][blocks] for more details.
 
@@ -112,16 +112,26 @@ It is important to note that this method for building the pages is for developme
 of content only, since the navigation and other links do not get updated on other
 pages.
 
+#### Stricter Directory Validation
+
+Previously, a warning was issued if the `site_dir` was a child directory of the
+`docs_dir`. This now raises an error. Additionally, an error is now raised if
+the `docs_dir` is set to the directory which contains your config file rather
+than a child directory. You will need to rearrange you directory structure to
+better conform with the documented [layout].
+
+[layout]: ../user-guide/writing-your-docs/#file-layout
+
 ### Other Changes and Additions to Version 0.16.0
 
 * Bugfix: Support `gh-deploy` command on Windows with Python 3 (#722)
-* Bugfix: Include .woff2 font files in Pyhton package build (#894)
+* Bugfix: Include .woff2 font files in Python package build (#894)
 * Various updates and improvements to Documentation Home Page/Tutorial (#870)
 * Bugfix: Support livereload for config file changes (#735)
 * Bugfix: Non-media template files are no longer copied with media files (#807)
-* Add a flag (-e/--theme-dir) to specifiy theme directory with the commands
+* Add a flag (-e/--theme-dir) to specify theme directory with the commands
   `mkdocs build` and `mkdocs serve` (#832)
-* Fixed issues with Unicode filenames under Windows and Python 2. (#833)
+* Fixed issues with Unicode file names under Windows and Python 2. (#833)
 * Improved the styling of in-line code in the MkDocs theme. (#718)
 * Bugfix: convert variables to JSON when being passed to JavaScript (#850)
 * Updated the ReadTheDocs theme to match the upstream font sizes and colours

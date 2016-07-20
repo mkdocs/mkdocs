@@ -229,6 +229,15 @@ class Dir(Type):
 
         return os.path.abspath(value)
 
+    def post_validation(self, config, key_name):
+
+        # Validate that the dir is not the parent dir of the config file.
+        if os.path.dirname(config['config_file_path']) == config[key_name]:
+            raise ValidationError(
+                ("The '{0}' should not be the parent directory of the config "
+                 "file. Use a child directory instead so that the config file "
+                 "is a sibling of the config file.").format(key_name))
+
 
 class SiteDir(Dir):
     """
@@ -238,6 +247,8 @@ class SiteDir(Dir):
     """
 
     def post_validation(self, config, key_name):
+
+        super(SiteDir, self).post_validation(config, key_name)
 
         # Validate that the docs_dir and site_dir don't contain the
         # other as this will lead to copying back and forth on each
@@ -250,7 +261,7 @@ class SiteDir(Dir):
                  "(site_dir: '{0}', docs_dir: '{1}')"
                  ).format(config['site_dir'], config['docs_dir']))
         elif (config['site_dir'] + os.sep).startswith(config['docs_dir'] + os.sep):
-            self.warnings.append(
+            raise ValidationError(
                 ("The 'site_dir' should not be within the 'docs_dir' as this "
                  "leads to the build directory being copied into itself and "
                  "duplicate nested files in the 'site_dir'."

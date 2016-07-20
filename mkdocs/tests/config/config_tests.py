@@ -135,7 +135,8 @@ class ConfigTests(unittest.TestCase):
             conf = config.Config(schema=config.DEFAULT_SCHEMA)
             conf.load_dict({
                 'site_name': 'Example',
-                'docs_dir': tmp_dir
+                'docs_dir': tmp_dir,
+                'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
             })
             conf.validate()
             self.assertEqual(['index.md', 'about.md'], conf['pages'])
@@ -159,7 +160,8 @@ class ConfigTests(unittest.TestCase):
             conf = config.Config(schema=config.DEFAULT_SCHEMA)
             conf.load_dict({
                 'site_name': 'Example',
-                'docs_dir': tmp_dir
+                'docs_dir': tmp_dir,
+                'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
             })
             conf.validate()
             self.assertEqual([
@@ -197,6 +199,7 @@ class ConfigTests(unittest.TestCase):
 
         conf = {
             'site_name': 'Example',
+            'config_file_path': j(os.path.abspath('..'), 'mkdocs.yml')
         }
 
         for test_config in test_configs:
