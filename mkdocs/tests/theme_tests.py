@@ -12,7 +12,6 @@ abs_path = os.path.abspath(os.path.dirname(__file__))
 mkdocs_dir = os.path.abspath(os.path.dirname(mkdocs.__file__))
 mkdocs_templates_dir = os.path.join(mkdocs_dir, 'templates')
 theme_dir = os.path.abspath(os.path.join(mkdocs_dir, 'themes'))
-search_asset_dir = os.path.abspath(os.path.join(mkdocs_dir, 'assets', 'search'))
 
 
 def get_vars(theme):
@@ -26,7 +25,7 @@ class ThemeTests(unittest.TestCase):
         theme = Theme(name='mkdocs')
         self.assertEqual(
             theme.dirs,
-            [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir, search_asset_dir]
+            [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir]
         )
         self.assertEqual(theme.static_templates, set(['404.html', 'sitemap.xml']))
         self.assertEqual(get_vars(theme), {})
@@ -39,8 +38,7 @@ class ThemeTests(unittest.TestCase):
             [
                 custom,
                 os.path.join(theme_dir, 'mkdocs'),
-                mkdocs_templates_dir,
-                search_asset_dir
+                mkdocs_templates_dir
             ]
         )
 
@@ -49,7 +47,7 @@ class ThemeTests(unittest.TestCase):
         theme = Theme(name=None, custom_dir=custom)
         self.assertEqual(
             theme.dirs,
-            [custom, mkdocs_templates_dir, search_asset_dir]
+            [custom, mkdocs_templates_dir]
         )
 
     def static_templates(self):
@@ -88,8 +86,7 @@ class ThemeTests(unittest.TestCase):
                 [
                     os.path.join(theme_dir, 'mkdocs'),
                     os.path.join(theme_dir, 'readthedocs'),
-                    mkdocs_templates_dir,
-                    search_asset_dir
+                    mkdocs_templates_dir
                 ]
             )
             self.assertEqual(

@@ -52,6 +52,9 @@ def _livereload(host, port, config, builder, site_dir):
     for d in config['theme'].dirs:
         server.watch(d, builder)
 
+    # Run `serve` plugin events.
+    server = config['plugins'].run_event('serve', server, config=config)
+
     server.serve(root=site_dir, host=host, port=int(port), restart_delay=0)
 
 

@@ -10,7 +10,7 @@ import os
 from jinja2.exceptions import TemplateNotFound
 import jinja2
 
-from mkdocs import nav, search, utils
+from mkdocs import nav, utils
 import mkdocs
 
 
@@ -70,14 +70,33 @@ def build_template(template_name, env, config, site_navigation=None):
     try:
         template = env.get_template(template_name)
     except TemplateNotFound:
-        return False
+        log.info("Template skipped: '{}'. Not found in template directories.".format(template_name))
+        return
+
+    # Run `pre_template` plugin events.
+    template = config['plugins'].run_event(
+        'pre_template', template, template_name=template_name, config=config
+    )
 
     context = get_context(site_navigation, config)
 
+    # Run `template_context` plugin events.
+    context = config['plugins'].run_event(
+        'template_context', context, template_name=template_name, config=config
+    )
+
     output_content = template.render(context)
-    output_path = os.path.join(config['site_dir'], template_name)
-    utils.write_file(output_content.encode('utf-8'), output_path)
-    return True
+
+    # Run `post_template` plugin events.
+    output_content = config['plugins'].run_event(
+        'post_template', output_content, template_name=template_name, config=config
+    )
+
+    if output_content.strip():
+        output_path = os.path.join(config['site_dir'], template_name)
+        utils.write_file(output_content.encode('utf-8'), output_path)
+    else:
+        log.info("Template skipped: '{}'. Generated empty output.".format(template_name))
 
 
 def build_error_template(template, env, config, site_navigation):
@@ -103,9 +122,24 @@ def build_error_template(template, env, config, site_navigation):
 def _build_page(page, config, site_navigation, env, dirty=False):
     """ Build a Markdown page and pass to theme template. """
 
-    # Process the markdown text
+    # Run the `pre_page` plugin event
+    page = config['plugins'].run_event(
+        'page_markdown', page, config=config, site_navigation=site_navigation
+    )
+
     page.load_markdown()
+
+    # Run `page_markdown` plugin events.
+    page.markdown = config['plugins'].run_event(
+        'page_markdown', page.markdown, page=page, config=config, site_navigation=site_navigation
+    )
+
     page.render(config, site_navigation)
+
+    # Run `page_content` plugin events.
+    page.content = config['plugins'].run_event(
+        'page_content', page.content, page=page, config=config, site_navigation=site_navigation
+    )
 
     context = get_context(site_navigation, config, page)
 
@@ -115,11 +149,24 @@ def _build_page(page, config, site_navigation, env, dirty=False):
     else:
         template = env.get_template('main.html')
 
+    # Run `page_context` plugin events.
+    context = config['plugins'].run_event(
+        'page_context', context, page=page, config=config, site_navigation=site_navigation
+    )
+
     # Render the template.
     output_content = template.render(context)
 
+    # Run `post_page` plugin events.
+    output_content = config['plugins'].run_event(
+        'post_page', output_content, page=page, config=config
+    )
+
     # Write the output file.
-    utils.write_file(output_content.encode('utf-8'), page.abs_output_path)
+    if output_content.strip():
+        utils.write_file(output_content.encode('utf-8'), page.abs_output_path)
+    else:
+        log.info("Page skipped: '{}'. Generated empty output.".format(page.title))
 
 
 def build_extra_templates(extra_templates, config, site_navigation=None):
@@ -134,20 +181,46 @@ def build_extra_templates(extra_templates, config, site_navigation=None):
         with io.open(input_path, 'r', encoding='utf-8') as template_file:
             template = jinja2.Template(template_file.read())
 
+        # Run `pre_template` plugin events.
+        template = config['plugins'].run_event(
+            'pre_template', template, template_name=extra_template, config=config
+        )
+
         context = get_context(site_navigation, config)
 
+        # Run `template_context` plugin events.
+        context = config['plugins'].run_event(
+            'template_context', context, template_name=extra_template, config=config
+        )
+
         output_content = template.render(context)
-        output_path = os.path.join(config['site_dir'], extra_template)
-        utils.write_file(output_content.encode('utf-8'), output_path)
+
+        # Run `post_template` plugin events.
+        output_content = config['plugins'].run_event(
+            'post_template', output_content, template_name=extra_template, config=config
+        )
+
+        if output_content.strip():
+            output_path = os.path.join(config['site_dir'], extra_template)
+            utils.write_file(output_content.encode('utf-8'), output_path)
+        else:
+            log.info("Template skipped: '{}'. Generated empty output.".format(extra_template))
 
 
 def build_pages(config, dirty=False):
     """ Build all pages and write them into the build directory. """
 
     site_navigation = nav.SiteNavigation(config)
+
+    # Run `nav` plugin events.
+    site_navigation = config['plugins'].run_event('nav', site_navigation, config=config)
+
     env = config['theme'].get_env()
 
-    search_index = search.SearchIndex()
+    # Run `env` plugin events.
+    env = config['plugins'].run_event(
+        'env', env, config=config, site_navigation=site_navigation
+    )
 
     for template in config['theme'].static_templates:
         if utils.is_error_template(template):
@@ -167,18 +240,19 @@ def build_pages(config, dirty=False):
 
             log.debug("Building page %s", page.input_path)
             _build_page(page, config, site_navigation, env)
-            search_index.add_entry_from_context(page)
         except Exception:
             log.error("Error building page %s", page.input_path)
             raise
 
-    search_index = search_index.generate_search_index()
-    json_output_path = os.path.join(config['site_dir'], 'mkdocs', 'search_index.json')
-    utils.write_file(search_index.encode('utf-8'), json_output_path)
-
 
 def build(config, live_server=False, dirty=False):
     """ Perform a full site build. """
+
+    # Run `config` plugin events.
+    config = config['plugins'].run_event('config', config)
+
+    # Run `pre_build` plugin events.
+    config['plugins'].run_event('pre_build', config)
 
     if not dirty:
         log.info("Cleaning site directory")
@@ -206,6 +280,9 @@ def build(config, live_server=False, dirty=False):
     utils.copy_media_files(config['docs_dir'], config['site_dir'], dirty=dirty)
 
     build_pages(config, dirty=dirty)
+
+    # Run `post_build` plugin events.
+    config['plugins'].run_event('post_build', config)
 
 
 def site_directory_contains_stale_files(site_directory):

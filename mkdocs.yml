@@ -13,6 +13,7 @@ pages:
     - Configuration: user-guide/configuration.md
     - Deploying Your Docs: user-guide/deploying-your-docs.md
     - Custom Themes: user-guide/custom-themes.md
+    - Plugins: user-guide/plugins.md
 - About:
     - Release Notes: about/release-notes.md
     - Contributing: about/contributing.md
@@ -24,7 +25,11 @@ extra_css:
 markdown_extensions:
     - toc:
         permalink: 
-    - admonition:
+    - admonition
+    - def_list
 
 copyright: Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.
 google_analytics: ['UA-27795084-5', 'mkdocs.org']
+
+plugins:
+    - legacy_search

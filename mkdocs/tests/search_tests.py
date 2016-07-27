@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import unittest
 
 from mkdocs import nav
-from mkdocs import search
+from mkdocs.contrib.legacy_search import search_index as search
 from mkdocs.tests.base import dedent, markdown_to_toc, load_config
 
 

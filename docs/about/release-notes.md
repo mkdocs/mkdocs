@@ -25,6 +25,23 @@ The current and past members of the MkDocs team.
 
 ### Major Additions to Version 1.0.0
 
+#### Plugin API. (#206)
+
+A new [Plugin API] has been added to MkDocs which allows users to define their
+own custom behaviors. See the included documentation for a full explaination of
+the API.
+
+The previously built-in search functionality has been removed and wrapped in a
+plugin (named "legacy_search") with no changes in behavior. As there are no
+'default' plugins, you need to explcitly enable the legacy_search plugin if you
+would like to continue using it. To do so, adding the following to your
+`mkdocs.yml` file:
+
+    plugins:
+        - legacy_search
+
+[Plugin API]: ../user-guide/plugins.md
+
 #### Theme Customization. (#1164)
 
 Support had been added to provide theme specific customizations. Theme authors
