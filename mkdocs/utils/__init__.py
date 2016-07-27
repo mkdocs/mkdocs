@@ -81,6 +81,17 @@ def yaml_load(source, loader=yaml.Loader):
             source.close()
 
 
+def modified_time(file_path):
+    """
+    Return the modified time of the supplied file. If the file does not exists zero is returned.
+    see build_pages for use.
+    """
+    if os.path.exists(file_path):
+        return os.path.getmtime(file_path)
+    else:
+        return 0.0
+
+
 def reduce_list(data_set):
     """ Reduce duplicate items in a list and preserve order """
     seen = set()
@@ -92,6 +103,7 @@ def copy_file(source_path, output_path):
     """
     Copy source_path to output_path, making sure any parent directories exist.
     """
+
     output_dir = os.path.dirname(output_path)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -129,7 +141,7 @@ def clean_directory(directory):
             os.unlink(path)
 
 
-def copy_media_files(from_dir, to_dir, exclude=None):
+def copy_media_files(from_dir, to_dir, exclude=None, dirty=False):
     """
     Recursively copy all files except markdown and exclude[ed] files into another directory.
 
@@ -155,6 +167,11 @@ def copy_media_files(from_dir, to_dir, exclude=None):
             if not is_markdown_file(filename):
                 source_path = os.path.join(source_dir, filename)
                 output_path = os.path.join(output_dir, filename)
+
+                # Do not copy when using --dirty if the file has not been modified
+                if dirty and (modified_time(source_path) < modified_time(output_path)):
+                    continue
+
                 copy_file(source_path, output_path)
 
 
