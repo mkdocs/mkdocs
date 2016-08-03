@@ -9,7 +9,7 @@ import socket
 from mkdocs import __version__
 from mkdocs import utils
 from mkdocs import exceptions
-from mkdocs.config import load_config
+from mkdocs import config
 from mkdocs.commands import build, gh_deploy, new, serve
 
 log = logging.getLogger(__name__)
@@ -112,6 +112,10 @@ def serve_command(dev_addr, config_file, strict, theme, theme_dir, livereload):
 
     logging.getLogger('tornado').setLevel(logging.WARNING)
 
+    # Don't override config value if user did not specify --strict flag
+    # Conveniently, load_config drops None values
+    strict = strict or None
+
     try:
         serve.serve(
             config_file=config_file,
@@ -136,8 +140,13 @@ def serve_command(dev_addr, config_file, strict, theme, theme_dir, livereload):
 @common_options
 def build_command(clean, config_file, strict, theme, theme_dir, site_dir):
     """Build the MkDocs documentation"""
+
+    # Don't override config value if user did not specify --strict flag
+    # Conveniently, load_config drops None values
+    strict = strict or None
+
     try:
-        build.build(load_config(
+        build.build(config.load_config(
             config_file=config_file,
             strict=strict,
             theme=theme,
@@ -168,8 +177,12 @@ def json_command(clean, config_file, strict, site_dir):
                 "future MkDocs release. For details on updating: "
                 "http://www.mkdocs.org/about/release-notes/")
 
+    # Don't override config value if user did not specify --strict flag
+    # Conveniently, load_config drops None values
+    strict = strict or None
+
     try:
-        build.build(load_config(
+        build.build(config.load_config(
             config_file=config_file,
             strict=strict,
             site_dir=site_dir
@@ -189,13 +202,13 @@ def json_command(clean, config_file, strict, site_dir):
 def gh_deploy_command(config_file, clean, message, remote_branch, remote_name):
     """Deploy your documentation to GitHub Pages"""
     try:
-        config = load_config(
+        cfg = config.load_config(
             config_file=config_file,
             remote_branch=remote_branch,
             remote_name=remote_name
         )
-        build.build(config, dirty=not clean)
-        gh_deploy.gh_deploy(config, message=message)
+        build.build(cfg, dirty=not clean)
+        gh_deploy.gh_deploy(cfg, message=message)
     except exceptions.ConfigurationError as e:
         # Avoid ugly, unhelpful traceback
         raise SystemExit('\n' + str(e))
