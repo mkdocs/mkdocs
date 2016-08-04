@@ -138,6 +138,8 @@ pages.
 * Change "Edit on..." links to point directly to the file in the source
   repository, rather than to the root of the repository (#975), configurable
   via the new [`edit_uri`](../user-guide/configuration.md#edit_uri) setting.
+* Bugfix: Don't override config value for strict mode if not specified on CLI
+  (#738).
 
 ## Version 0.15.3 (2016-02-18)
 

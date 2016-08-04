@@ -22,16 +22,31 @@ class CLITests(unittest.TestCase):
             cli.cli, ["serve", ], catch_exceptions=False)
 
         self.assertEqual(result.exit_code, 0)
-        self.assertEqual(mock_serve.call_count, 1)
+        mock_serve.assert_called_once_with(
+            config_file=None,
+            dev_addr=None,
+            strict=None,
+            theme=None,
+            theme_dir=None,
+            livereload=None
+        )
 
+    @mock.patch('mkdocs.config.load_config', autospec=True)
     @mock.patch('mkdocs.commands.build.build', autospec=True)
-    def test_build(self, mock_build):
+    def test_build(self, mock_build, mock_load_config):
 
         result = self.runner.invoke(
             cli.cli, ["build", ], catch_exceptions=False)
 
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(mock_build.call_count, 1)
+        mock_load_config.assert_called_once_with(
+            config_file=None,
+            strict=None,
+            theme=None,
+            theme_dir=None,
+            site_dir=None
+        )
 
     @mock.patch('mkdocs.commands.build.build', autospec=True)
     def test_build_verbose(self, mock_build):
