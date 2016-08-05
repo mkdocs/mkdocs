@@ -137,7 +137,15 @@ class Page(object):
         self.abs_url = url
         self.active = False
         self.url_context = url_context
-        self.update_date = datetime.datetime.now().strftime("%Y-%m-%d")
+
+        # Support SOURCE_DATE_EPOCH environment variable for "reproducible" builds.
+        # See https://reproducible-builds.org/specs/source-date-epoch/
+        if 'SOURCE_DATE_EPOCH' in os.environ:
+            self.update_date = datetime.datetime.utcfromtimestamp(
+                int(os.environ['SOURCE_DATE_EPOCH'])
+            ).strftime("%Y-%m-%d")
+        else:
+            self.update_date = datetime.datetime.now().strftime("%Y-%m-%d")
 
         # Relative paths to the input markdown file and output html file.
         self.input_path = path
