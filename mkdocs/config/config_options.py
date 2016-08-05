@@ -242,14 +242,14 @@ class SiteDir(Dir):
         # Validate that the docs_dir and site_dir don't contain the
         # other as this will lead to copying back and forth on each
         # and eventually make a deep nested mess.
-        if config['docs_dir'].startswith(config['site_dir'] + os.sep):
+        if (config['docs_dir'] + os.sep).startswith(config['site_dir'] + os.sep):
             raise ValidationError(
                 ("The 'docs_dir' should not be within the 'site_dir' as this "
                  "can mean the source files are overwritten by the output or "
                  "it will be deleted if --clean is passed to mkdocs build."
                  "(site_dir: '{0}', docs_dir: '{1}')"
                  ).format(config['site_dir'], config['docs_dir']))
-        elif config['site_dir'].startswith(config['docs_dir'] + os.sep):
+        elif (config['site_dir'] + os.sep).startswith(config['docs_dir'] + os.sep):
             self.warnings.append(
                 ("The 'site_dir' should not be within the 'docs_dir' as this "
                  "leads to the build directory being copied into itself and "
