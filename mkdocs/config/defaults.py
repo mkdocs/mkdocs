@@ -19,9 +19,11 @@ DEFAULT_SCHEMA = (
     # The title to use for the documentation
     ('site_name', config_options.Type(utils.string_types, required=True)),
 
-    # Defines the structure of the navigation and which markdown files are
-    # included in the build.
+    # Defines which markdown files are included in the build.
     ('pages', config_options.Pages()),
+
+    # Defines the structure of the navigation
+    ('nav', config_options.Pages()),
 
     # The full URL to where the documentation will be hosted
     ('site_url', config_options.URL()),
