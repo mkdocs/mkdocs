@@ -252,9 +252,12 @@ def build_extra_templates(extra_templates, config, site_navigation=None):
 
 def build_pages(config, dump_json=False):
     """
+    Determines the navigation.
     Builds all the pages and writes them into the build directory.
     """
-    site_navigation = nav.SiteNavigation(config['pages'], config['use_directory_urls'])
+    nav_items = config['pages'] if not config['nav'] else config['nav']
+    site_navigation = nav.SiteNavigation(nav_items, config['use_directory_urls'])
+    # site_navigation = nav.SiteNavigation(config['pages'], config['use_directory_urls'])
     loader = jinja2.FileSystemLoader(config['theme_dir'] + [config['mkdocs_templates'], ])
     env = jinja2.Environment(loader=loader)
 
