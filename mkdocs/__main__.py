@@ -125,7 +125,7 @@ def serve_command(dev_addr, config_file, strict, theme, theme_dir, livereload):
             theme_dir=theme_dir,
             livereload=livereload
         )
-    except (exceptions.ConfigurationError, socket.error) as e:
+    except (exceptions.ConfigurationError, socket.error) as e:  # pragma: no cover
         # Avoid ugly, unhelpful traceback
         raise SystemExit('\n' + str(e))
 
@@ -153,7 +153,7 @@ def build_command(clean, config_file, strict, theme, theme_dir, site_dir):
             theme_dir=theme_dir,
             site_dir=site_dir
         ), dirty=not clean)
-    except exceptions.ConfigurationError as e:
+    except exceptions.ConfigurationError as e:  # pragma: no cover
         # Avoid ugly, unhelpful traceback
         raise SystemExit('\n' + str(e))
 
@@ -187,7 +187,7 @@ def json_command(clean, config_file, strict, site_dir):
             strict=strict,
             site_dir=site_dir
         ), dump_json=True, dirty=not clean)
-    except exceptions.ConfigurationError as e:
+    except exceptions.ConfigurationError as e:  # pragma: no cover
         # Avoid ugly, unhelpful traceback
         raise SystemExit('\n' + str(e))
 
@@ -209,7 +209,7 @@ def gh_deploy_command(config_file, clean, message, remote_branch, remote_name):
         )
         build.build(cfg, dirty=not clean)
         gh_deploy.gh_deploy(cfg, message=message)
-    except exceptions.ConfigurationError as e:
+    except exceptions.ConfigurationError as e:  # pragma: no cover
         # Avoid ugly, unhelpful traceback
         raise SystemExit('\n' + str(e))
 
@@ -221,5 +221,5 @@ def new_command(project_directory):
     """Create a new MkDocs project"""
     new.new(project_directory)
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     cli()
