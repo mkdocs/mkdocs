@@ -67,7 +67,7 @@ def common_options(f):
     return f
 
 
-clean_help = "Remove old files from the site_dir before building"
+clean_help = "Remove old files from the site_dir before building (the default)."
 config_help = "Provide a specific MkDocs config"
 dev_addr_help = ("IP address and port to serve documentation locally (default: "
                  "localhost:8000)")
@@ -131,7 +131,7 @@ def serve_command(dev_addr, config_file, strict, theme, theme_dir, livereload):
 
 
 @cli.command(name="build")
-@click.option('-c', '--clean/--dirty', is_flag=True, help=clean_help)
+@click.option('-c', '--clean/--dirty', is_flag=True, default=True, help=clean_help)
 @click.option('-f', '--config-file', type=click.File('rb'), help=config_help)
 @click.option('-s', '--strict', is_flag=True, help=strict_help)
 @click.option('-t', '--theme', type=click.Choice(theme_choices), help=theme_help)
@@ -159,7 +159,7 @@ def build_command(clean, config_file, strict, theme, theme_dir, site_dir):
 
 
 @cli.command(name="json")
-@click.option('-c', '--clean', is_flag=True, help=clean_help)
+@click.option('-c', '--clean/--dirty', is_flag=True, default=True, help=clean_help)
 @click.option('-f', '--config-file', type=click.File('rb'), help=config_help)
 @click.option('-s', '--strict', is_flag=True, help=strict_help)
 @click.option('-d', '--site-dir', type=click.Path(), help=site_dir_help)
@@ -193,7 +193,7 @@ def json_command(clean, config_file, strict, site_dir):
 
 
 @cli.command(name="gh-deploy")
-@click.option('-c', '--clean', is_flag=True, help=clean_help)
+@click.option('-c', '--clean/--dirty', is_flag=True, default=True, help=clean_help)
 @click.option('-f', '--config-file', type=click.File('rb'), help=config_help)
 @click.option('-m', '--message', help=commit_message_help)
 @click.option('-b', '--remote-branch', help=remote_branch_help)
