@@ -393,6 +393,16 @@ class Extras(OptionallyRequired):
 
         config[key_name] = extras
 
+        if not extras:
+            return
+
+        self.warnings.append((
+            'The following files have been automatically included in the '
+            'documentation build and will be added to the HTML: {}. In '
+            'MkDocs they will need to be explicitly included with the '
+            'extra_javascript and extra_css config settings.'
+        ).format(','.join(extras)))
+
 
 class Pages(Extras):
     """
