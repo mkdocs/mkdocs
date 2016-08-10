@@ -393,6 +393,16 @@ class Extras(OptionallyRequired):
 
         config[key_name] = extras
 
+        if not extras:
+            return
+
+        self.warnings.append((
+            'The following files have been automatically included in the '
+            'documentation build and will be added to the HTML: {0}. This '
+            'behavior is deprecated. In version 1.0 and later they will '
+            "need to be explicitly listed in the '{1}' config setting."
+        ).format(','.join(extras), key_name))
+
 
 class Pages(Extras):
     """

@@ -28,6 +28,8 @@ def load_config(cfg=None):
         cfg['site_name'] = 'Example'
     if 'config_file_path' not in cfg:
         cfg['config_file_path'] = os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+    if 'extra_css' not in cfg:
+        cfg['extra_css'] = ['css/extra.css']
     conf = config.Config(schema=config.DEFAULT_SCHEMA)
     conf.load_dict(cfg)
 

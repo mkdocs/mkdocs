@@ -289,7 +289,7 @@ class ExtrasTest(unittest.TestCase):
         self.assertRaises(config_options.ValidationError,
                           option.validate, {})
 
-    def test_talk(self):
+    def test_walk(self):
 
         option = config_options.Extras(utils.is_markdown_file)
 
