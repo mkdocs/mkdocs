@@ -92,9 +92,12 @@ class Config(utils.UserDict):
 
     def validate(self):
 
-        self._pre_validate()
+        failed, warnings = self._pre_validate()
 
-        failed, warnings = self._validate()
+        run_failed, run_warnings = self._validate()
+
+        failed.extend(run_failed)
+        warnings.extend(run_warnings)
 
         # Only run the post validation steps if there are no failures, warnings
         # are okay.

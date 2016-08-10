@@ -5,6 +5,7 @@ import unittest
 
 from mkdocs import exceptions
 from mkdocs.config import base, defaults
+from mkdocs.config.config_options import BaseConfigOption
 
 
 class ConfigBaseTests(unittest.TestCase):
@@ -125,3 +126,111 @@ class ConfigBaseTests(unittest.TestCase):
                               base.load_config, config_file=config_file.name)
         finally:
             os.remove(config_file.name)
+
+    def test_pre_validation_error(self):
+        class InvalidConfigOption(BaseConfigOption):
+            def pre_validation(self, config, key_name):
+                raise base.ValidationError('pre_validation error')
+
+        c = base.Config(schema=(('invalid_option', InvalidConfigOption()), ))
+
+        errors, warnings = c.validate()
+
+        self.assertEqual(len(errors), 1)
+        self.assertEqual(errors[0][0], 'invalid_option')
+        self.assertEqual(str(errors[0][1]), 'pre_validation error')
+        self.assertTrue(isinstance(errors[0][1], base.ValidationError))
+        self.assertEqual(len(warnings), 0)
+
+    def test_run_validation_error(self):
+        class InvalidConfigOption(BaseConfigOption):
+            def run_validation(self, value):
+                raise base.ValidationError('run_validation error')
+
+        c = base.Config(schema=(('invalid_option', InvalidConfigOption()), ))
+
+        errors, warnings = c.validate()
+
+        self.assertEqual(len(errors), 1)
+        self.assertEqual(errors[0][0], 'invalid_option')
+        self.assertEqual(str(errors[0][1]), 'run_validation error')
+        self.assertTrue(isinstance(errors[0][1], base.ValidationError))
+        self.assertEqual(len(warnings), 0)
+
+    def test_post_validation_error(self):
+        class InvalidConfigOption(BaseConfigOption):
+            def post_validation(self, config, key_name):
+                raise base.ValidationError('post_validation error')
+
+        c = base.Config(schema=(('invalid_option', InvalidConfigOption()), ))
+
+        errors, warnings = c.validate()
+
+        self.assertEqual(len(errors), 1)
+        self.assertEqual(errors[0][0], 'invalid_option')
+        self.assertEqual(str(errors[0][1]), 'post_validation error')
+        self.assertTrue(isinstance(errors[0][1], base.ValidationError))
+        self.assertEqual(len(warnings), 0)
+
+    def test_pre_and_run_validation_errors(self):
+        """ A pre_validation error does not stop run_validation from running. """
+        class InvalidConfigOption(BaseConfigOption):
+            def pre_validation(self, config, key_name):
+                raise base.ValidationError('pre_validation error')
+
+            def run_validation(self, value):
+                raise base.ValidationError('run_validation error')
+
+        c = base.Config(schema=(('invalid_option', InvalidConfigOption()), ))
+
+        errors, warnings = c.validate()
+
+        self.assertEqual(len(errors), 2)
+        self.assertEqual(errors[0][0], 'invalid_option')
+        self.assertEqual(str(errors[0][1]), 'pre_validation error')
+        self.assertTrue(isinstance(errors[0][1], base.ValidationError))
+        self.assertEqual(errors[1][0], 'invalid_option')
+        self.assertEqual(str(errors[1][1]), 'run_validation error')
+        self.assertTrue(isinstance(errors[1][1], base.ValidationError))
+        self.assertEqual(len(warnings), 0)
+
+    def test_run_and_post_validation_errors(self):
+        """ A run_validation error stops post_validation from running. """
+        class InvalidConfigOption(BaseConfigOption):
+            def run_validation(self, value):
+                raise base.ValidationError('run_validation error')
+
+            def post_validation(self, config, key_name):
+                raise base.ValidationError('post_validation error')
+
+        c = base.Config(schema=(('invalid_option', InvalidConfigOption()), ))
+
+        errors, warnings = c.validate()
+
+        self.assertEqual(len(errors), 1)
+        self.assertEqual(errors[0][0], 'invalid_option')
+        self.assertEqual(str(errors[0][1]), 'run_validation error')
+        self.assertTrue(isinstance(errors[0][1], base.ValidationError))
+        self.assertEqual(len(warnings), 0)
+
+    def test_validation_warnings(self):
+        class InvalidConfigOption(BaseConfigOption):
+            def pre_validation(self, config, key_name):
+                self.warnings.append('pre_validation warning')
+
+            def run_validation(self, value):
+                self.warnings.append('run_validation warning')
+
+            def post_validation(self, config, key_name):
+                self.warnings.append('post_validation warning')
+
+        c = base.Config(schema=(('invalid_option', InvalidConfigOption()), ))
+
+        errors, warnings = c.validate()
+
+        self.assertEqual(len(errors), 0)
+        self.assertEqual(warnings, [
+            ('invalid_option', 'pre_validation warning'),
+            ('invalid_option', 'run_validation warning'),
+            ('invalid_option', 'post_validation warning'),
+        ])
