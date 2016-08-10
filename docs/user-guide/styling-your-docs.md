@@ -189,7 +189,8 @@ following blocks:
 * `site_meta`: Contains meta tags in the document head.
 * `htmltitle`: Contains the page title in the document head.
 * `styles`: Contains the link tags for stylesheets.
-* `scripts`: Contains the JavaScript libraries included in the page.
+* `libs`: Contains the JavaScript libraries (jQuery, etc) included in the page header.
+* `scripts`: Contains JavaScript scripts which should execute after a page loads.
 * `analytics`: Contains the analytics script.
 * `extrahead`: An empty block in the `<head>` to insert custom tags/scripts/etc.
 * `site_name`: Contains the site name in the navigation bar.
