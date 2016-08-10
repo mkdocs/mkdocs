@@ -198,7 +198,6 @@ class ConfigTests(unittest.TestCase):
         )
 
         conf = {
-            'site_name': 'Example',
             'config_file_path': j(os.path.abspath('..'), 'mkdocs.yml')
         }
 
@@ -211,7 +210,11 @@ class ConfigTests(unittest.TestCase):
             c = config.Config(schema=(
                 ('docs_dir', config_options.Dir(default='docs')),
                 ('site_dir', config_options.SiteDir(default='site')),
+                ('config_file_path', config_options.Type(utils.string_types))
             ))
             c.load_dict(patch)
 
-            self.assertRaises(config_options.ValidationError, c.validate)
+            errors, warnings = c.validate()
+
+            self.assertEqual(len(errors), 1)
+            self.assertEqual(warnings, [])

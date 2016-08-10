@@ -398,10 +398,10 @@ class Extras(OptionallyRequired):
 
         self.warnings.append((
             'The following files have been automatically included in the '
-            'documentation build and will be added to the HTML: {}. In '
-            'MkDocs they will need to be explicitly included with the '
-            'extra_javascript and extra_css config settings.'
-        ).format(','.join(extras)))
+            'documentation build and will be added to the HTML: {0}. This '
+            'behavior is deprecated. In version 1.0 and later they will '
+            "need to be explicitly listed in the '{1}' config setting."
+        ).format(','.join(extras), key_name))
 
 
 class Pages(Extras):

@@ -221,9 +221,9 @@ directory path.
 
 ### extra_css
 
-Set a list of CSS files to be included by the theme. For example, the
-following example will include the the extra.css file within the css
-subdirectory in your [docs_dir](#docs_dir).
+Set a list of CSS files in your `docs_dir` to be included by the theme. For
+example, the following example will include the the extra.css file within the
+css subdirectory in your [docs_dir](#docs_dir).
 
 ```yaml
 extra_css:
@@ -231,27 +231,23 @@ extra_css:
     - css/second_extra.css
 ```
 
-**default**: By default `extra_css` will contain a list of all the CSS files
-found within the `docs_dir`, if none are found it will be `[]` (an empty list).
+**default**: `[]` (an empty list).
 
 ### extra_javascript
 
-Set a list of JavaScript files to be included by the theme. See the example
-in [extra_css](#extra_css) for usage.
+Set a list of JavaScript files in your `docs_dir` to be included by the theme.
+See the example in [extra_css](#extra_css) for usage.
 
-**default**: By default `extra_javascript` will contain a list of all the
-JavaScript files found within the `docs_dir`, if none are found it will be `[]`
-(an empty list).
+**default**: `[]` (an empty list).
 
 ### extra_templates
 
-Set a list of templates to be built by MkDocs. To see more about writing
-templates for MkDocs read the documentation about [custom themes] and
-specifically the section about the [variables that are available] to templates.
-See the example in [extra_css](#extra_css) for usage.
+Set a list of templates in your `docs_dir` to be built by MkDocs. To see more
+about writing templates for MkDocs read the documentation about [custom themes]
+and specifically the section about the [variables that are available] to
+templates. See the example in [extra_css](#extra_css) for usage.
 
-**default**: Unlike extra_css and extra_javascript, by default `extra_templates`
-will be `[]` (an empty list).
+**default**: `[]` (an empty list).
 
 ### extra
 
