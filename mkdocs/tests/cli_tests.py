@@ -349,6 +349,8 @@ class CLITests(unittest.TestCase):
         g_args, g_kwargs = mock_gh_deploy.call_args
         self.assertTrue('message' in g_kwargs)
         self.assertEqual(g_kwargs['message'], None)
+        self.assertTrue('force' in g_kwargs)
+        self.assertEqual(g_kwargs['force'], False)
         self.assertEqual(mock_build.call_count, 1)
         b_args, b_kwargs = mock_build.call_args
         self.assertTrue('dirty' in b_kwargs)
@@ -456,3 +458,19 @@ class CLITests(unittest.TestCase):
             remote_branch=None,
             remote_name='foo'
         )
+
+    @mock.patch('mkdocs.config.load_config', autospec=True)
+    @mock.patch('mkdocs.commands.build.build', autospec=True)
+    @mock.patch('mkdocs.commands.gh_deploy.gh_deploy', autospec=True)
+    def test_gh_deploy_force(self, mock_gh_deploy, mock_build, mock_load_config):
+
+        result = self.runner.invoke(
+            cli.cli, ['gh-deploy', '--force'], catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(mock_gh_deploy.call_count, 1)
+        g_args, g_kwargs = mock_gh_deploy.call_args
+        self.assertTrue('force' in g_kwargs)
+        self.assertEqual(g_kwargs['force'], True)
+        self.assertEqual(mock_build.call_count, 1)
+        self.assertEqual(mock_load_config.call_count, 1)

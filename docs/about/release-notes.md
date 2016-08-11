@@ -164,6 +164,8 @@ better conform with the documented [layout].
   via the new [`edit_uri`](../user-guide/configuration.md#edit_uri) setting.
 * Bugfix: Don't override config value for strict mode if not specified on CLI
   (#738).
+* Add a `--force` flag to the `gh-deploy` command to force the push to the
+  repository (#973).
 
 ## Version 0.15.3 (2016-02-18)
 

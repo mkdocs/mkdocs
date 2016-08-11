@@ -49,7 +49,7 @@ def _get_remote_url(remote_name):
     return host, path
 
 
-def gh_deploy(config, message=None):
+def gh_deploy(config, message=None, force=False):
 
     if not _is_cwd_git_repo():
         log.error('Cannot deploy - this directory does not appear to be a git '
@@ -66,7 +66,7 @@ def gh_deploy(config, message=None):
              config['site_dir'], config['remote_branch'])
 
     result, error = ghp_import.ghp_import(config['site_dir'], message, remote_name,
-                                          remote_branch)
+                                          remote_branch, force)
     if not result:
         log.error("Failed to deploy to GitHub with error: \n%s", error)
         raise SystemExit(1)
