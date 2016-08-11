@@ -158,7 +158,7 @@ def run_import(srcdir, branch, message, nojekyll):
         sys.stdout.write(enc("Failed to process commit.\n"))
 
 
-def ghp_import(directory, message, remote='origin', branch='gh-pages'):
+def ghp_import(directory, message, remote='origin', branch='gh-pages', force=False):
 
     if not try_rebase(remote, branch):
         log.error("Failed to rebase %s branch.", branch)
@@ -167,8 +167,12 @@ def ghp_import(directory, message, remote='origin', branch='gh-pages'):
 
     run_import(directory, branch, message, nojekyll)
 
-    proc = sp.Popen(['git', 'push', remote, branch],
-                    stdout=sp.PIPE, stderr=sp.PIPE)
+    cmd = ['git', 'push', remote, branch]
+
+    if force:
+        cmd.insert(2, '--force')
+
+    proc = sp.Popen(cmd, stdout=sp.PIPE, stderr=sp.PIPE)
 
     out, err = proc.communicate()
     result = proc.wait() == 0

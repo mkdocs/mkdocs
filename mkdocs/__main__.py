@@ -86,6 +86,7 @@ remote_branch_help = ("The remote branch to commit to for Github Pages. This "
                       "overrides the value specified in config")
 remote_name_help = ("The remote name to commit to for Github Pages. This "
                     "overrides the value specified in config")
+force_help = "Force the push to the repository."
 
 
 @click.group(context_settings={'help_option_names': ['-h', '--help']})
@@ -198,8 +199,9 @@ def json_command(clean, config_file, strict, site_dir):
 @click.option('-m', '--message', help=commit_message_help)
 @click.option('-b', '--remote-branch', help=remote_branch_help)
 @click.option('-r', '--remote-name', help=remote_name_help)
+@click.option('--force', is_flag=True, help=force_help)
 @common_options
-def gh_deploy_command(config_file, clean, message, remote_branch, remote_name):
+def gh_deploy_command(config_file, clean, message, remote_branch, remote_name, force):
     """Deploy your documentation to GitHub Pages"""
     try:
         cfg = config.load_config(
@@ -208,7 +210,7 @@ def gh_deploy_command(config_file, clean, message, remote_branch, remote_name):
             remote_name=remote_name
         )
         build.build(cfg, dirty=not clean)
-        gh_deploy.gh_deploy(cfg, message=message)
+        gh_deploy.gh_deploy(cfg, message=message, force=force)
     except exceptions.ConfigurationError as e:  # pragma: no cover
         # Avoid ugly, unhelpful traceback
         raise SystemExit('\n' + str(e))
