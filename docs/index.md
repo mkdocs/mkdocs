@@ -50,8 +50,6 @@ pip 1.5.2
 
 MkDocs supports Python versions 2.6, 2.7, 3.3, 3.4 and 3.5.
 
-On Windows it is recommended that you install Python and pip with [Chocolatey].
-
 Install the `mkdocs` package using pip:
 
 ```bash
@@ -64,6 +62,18 @@ You should now have the `mkdocs` command installed on your system. Run `mkdocs
 ```bash
 $ mkdocs --version
 mkdocs, version 0.15.3
+```
+
+#### Need to install Python or Pip?
+
+Install [Python] by downloading the installer from [https://www.python.org/downloads/](https://www.python.org/downloads/).
+
+> [pip] is already installed if you're using Python 2 >=2.7.9 or Python 3 >=3.4 downloaded from python.org, but you'll need to upgrade pip.
+
+If you using an older version of [Python] that you can't update and need to install [pip], recommend using the `get-pip.py` script. 
+
+```bash
+$ python get-pip.py
 ```
 
 ---
