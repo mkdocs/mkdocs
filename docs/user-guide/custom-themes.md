@@ -73,7 +73,7 @@ The simplest `main.html` file is the following:
 ```
 
 Article content from each page specified in `mkdocs.yml` is inserted using the
-`{{ content }}` tag. Stylesheets and scripts can be brought into this theme as
+`{{ content }}` tag. Style-sheets and scripts can be brought into this theme as
 with a normal HTML file. Navbars and tables of contents can also be generated
 and included automatically, through the `nav` and `toc` objects, respectively.
 If you wish to write your own theme, it is recommended to start with one of
@@ -83,9 +83,9 @@ the [built-in themes] and modify it accordingly.
 
     As MkDocs uses [Jinja] as its template engine, you have access to all the
     power of Jinja, including [template inheritance]. You may notice that the
-    themes included with MkDocs make extensive use of template inheritance anf
+    themes included with MkDocs make extensive use of template inheritance and
     blocks, allowing users to easily override small bits and pieces of the
-    templates from the [theme_dir]. Therefore, the builtin themes are
+    templates from the [theme_dir]. Therefore, the built-in themes are
     implemented in a `base.html` file, which `main.html` extends. Although not
     required, third party template authors are encouraged to follow a similar
     pattern and may want to define the same [blocks] as are used in the built-in
@@ -107,38 +107,22 @@ example a 404.html page or search.html.
 
 ### Global Context
 
-The following variables in the context map directly the [configuration options
-](/user-guide/configuration.md).
+The following variables are available globally on any template.
 
-Variable Name     | Configuration name
------------------ | ------------------- |
-site_name         | [site_name]           |
-site_author       | [site_author]         |
-favicon           | [site_favicon]        |
-page_description  | [site_description]    |
-repo_url          | [repo_url]            |
-repo_name         | [repo_name]           |
-site_url          | [site_url]            |
-extra_css         | [extra_css]           |
-extra_javascript  | [extra_javascript]    |
-extra             | [extra]               |
-copyright         | [copyright]           |
-google_analytics  | [google_analytics]    |
+#### config
 
-[site_name]: ./configuration.md#site_name
-[site_author]: ./configuration.md#site_author
-[site_favicon]: ./configuration.md#site_favicon
-[site_description]: ./configuration.md#site_description
-[repo_url]: ./configuration.md#repo_url
-[repo_name]: ./configuration.md#repo_name
-[site_url]: ./configuration.md#site_url
-[extra_css]: ./configuration.md#extra_css
-[extra_javascript]: ./configuration.md#extra_javascript
-[extra]: ./configuration.md#extra
-[copyright]: ./configuration.md#copyright
-[google_analytics]: ./configuration.md#google_analytics
+The `config` variable is an instance of MkDocs' config object generated from the
+`mkdocs.yml` config file. While you can use any config option, some commonly
+used options include:
 
-The following variables provide information about the navigation and location.
+* [config.site_name](./configuration.md#site_name)
+* [config.site_url](./configuration.md#site_url)
+* [config.site_author](./configuration.md#site_author)
+* [config.site_description](./configuration.md#site_description)
+* [config.repo_url](./configuration.md#repo_url)
+* [config.repo_name](./configuration.md#repo_name)
+* [config.copyright](./configuration.md#copyright)
+* [config.google_analytics](./configuration.md#google_analytics)
 
 #### nav
 
@@ -147,27 +131,31 @@ Following is a basic usage example which outputs the first and second level
 navigation as a nested list.
 
 ```django
-<ul>
-  {% for nav_item in nav %}
-      {% if nav_item.children %}
-          <li>{{ nav_item.title }}
-              <ul>
-              {% for nav_item in nav_item.children %}
-                  <li class="{% if nav_item.active%}current{%endif%}">
-                      <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
-                  </li>
-              {% endfor %}
-              </ul>
-          </li>
-      {% else %}
-          <li class="{% if nav_item.active%}current{%endif%}">
-              <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
-          </li>
-      {% endif %}
-
-  {% endfor %}
-</ul>
+{% if nav|length>1 %}
+    <ul>
+    {% for nav_item in nav %}
+        {% if nav_item.children %}
+            <li>{{ nav_item.title }}
+                <ul>
+                {% for nav_item in nav_item.children %}
+                    <li class="{% if nav_item.active%}current{%endif%}">
+                        <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
+                    </li>
+                {% endfor %}
+                </ul>
+            </li>
+        {% else %}
+            <li class="{% if nav_item.active%}current{%endif%}">
+                <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
+            </li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+{% endif %}
 ```
+
+The `nav` object also contains a `hompage` object, which points to the `page`
+object of the homepage. For example, you may want to access `nav.homepage.url`.
 
 #### base_url
 
@@ -180,9 +168,29 @@ folder on all pages you would do this:
 <script src="{{ base_url }}/js/theme.js"></script>
 ```
 
-#### homepage_url
+#### favicon
 
-Provides a relative path to the documentation homepage.
+Contains the URL to the icon defined in the [site_favicon] config settings.
+Unlike the config setting, which contains a local path, this variable contains
+an absolute path from the homepage.
+
+[site_favicon]: configuration.md#site_favicon
+
+#### extra_css
+
+Contains a list of URLs to the style-sheets listed in the [extra_css]
+config setting. Unlike the config setting, which contains local paths, this
+variable contains absolute paths from the homepage.
+
+[extra_css]: configuration.md#extra_css
+
+#### extra_javascript
+
+Contains a list of URLs to the scripts listed in the [extra_javascript] config
+setting. Unlike the config setting, which contains local paths, this variable
+contains absolute paths from the homepage.
+
+[extra_javascript]: configuration.md#extra_javascript
 
 #### mkdocs_version
 
@@ -267,8 +275,8 @@ The URL to the current page not including the `site_url` from the configuration.
 ##### page.is_homepage
 
 Evaluates to `True` for the homepage of the site and `False` for all other
-pages. This can be used in conjuction with other attributes of the `page`
-object to alter the behavior. For example, to display a differant title
+pages. This can be used in conjunction with other attributes of the `page`
+object to alter the behavior. For example, to display a different title
 on the homepage:
 
 ```django
@@ -380,7 +388,7 @@ Bootswatch theme].
 
 !!! Note
 
-    It is not strictly nessecary to package a theme, as the entire theme
+    It is not strictly necessary to package a theme, as the entire theme
     can be contained in the `theme_dir`. If you have created a "one-off theme,"
     that should be sufficent. However, if you intend to distribute your theme
     for others to use, packaging the theme has some advantages. By packaging

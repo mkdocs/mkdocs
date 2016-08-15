@@ -59,23 +59,53 @@ user created and third-party templates:
 
 ##### Global Context
 
-Additionaly, a number of global variables have been altered and/or deprecated
+Additionally, a number of global variables have been altered and/or deprecated
 and user created and third-party templates should be updated as outlined below:
 
-Previously, the global variable `include_nav` was altered programicaly based on
-the number of pages in the nav. The variable will issue a warning but continue
-to work for version 0.16, but may be removed in a future version. Use
+Previously, the global variable `include_nav` was altered programmatically based
+on the number of pages in the nav. The variable will issue a warning but
+continue to work for version 0.16, but may be removed in a future version. Use
 `{% if nav|length>1 %}` instead.
 
-Previously, the global variable `include_next_prev` was altered programicaly
+Previously, the global variable `include_next_prev` was altered programmatically
 based on the number of pages in the nav. The variable will issue a warning but
 continue to work for version 0.16, but may be removed in a future version. Use
 `{% if page.next_page or page.previous_page %}` instead.
 
-Previously the global variable `page_description` was altered programicaly
+Previously the global variable `page_description` was altered programmatically
 based on whether the current page was the homepage. Now it simply maps to
 `config['site_description']`. Use `{% if page.is_homepage %}` in the template to
 conditionally change the description.
+
+The global variable `homepage_url` maps directly to `nav.homepage.url` and is
+being deprecated. The variable will issue a warning but continue to work for
+version 0.16, but may be removed in a future version. Use `nav.homepage.url`
+instead.
+
+A number of variables map directly to similarly named variables in the `config`.
+Those variables are being deprecated and will issue a warning but continue to
+work for version 0.16, but may be removed in a future version. Use
+`config.var_name` instead, where `var_name` is the name of one of the
+[configuration] variables.
+
+[configuration]: /user-guide/configuration.md
+
+Below is a summary of all of the changes made to the global context:
+
+| Old Variable Name | New Variable Name or Expression        |
+| ----------------- | -------------------------------------- |
+| current_page      | page                                   |
+| include_nav       | nav&#124;length&gt;1                   |
+| include_next_prev | (page.next_page or page.previous_page) |
+| site_name         | config.site_name                       |
+| site_author       | config.site_author                     |
+| page_description  | config.site_description                |
+| repo_url          | config.repo_url                        |
+| repo_name         | config.repo_name                       |
+| site_url          | config.site_url                        |
+| copyright         | config.copyright                       |
+| google_analytics  | config.google_analytics                |
+| homepage_url      | nav.homepage.url                       |
 
 #### Increased Template Customization. (#607)
 
@@ -126,8 +156,8 @@ the `extra_css` or `extra_javascript` config settings going forward.
 
 For large sites the build time required to create the pages can become problematic,
 thus a "dirty" build mode was created. This mode simply compares the modified time
-of the generated html and source markdown. If the markdown has changed since the
-html then the page is re-constructed. Otherwise, the page remains as is. This mode
+of the generated HTML and source markdown. If the markdown has changed since the
+HTML then the page is re-constructed. Otherwise, the page remains as is. This mode
 may be invoked in both the `mkdocs serve` and `mkdocs build` commands:
 
 ```text
@@ -164,7 +194,7 @@ better conform with the documented [layout].
 * Fixed issues with Unicode file names under Windows and Python 2. (#833)
 * Improved the styling of in-line code in the MkDocs theme. (#718)
 * Bugfix: convert variables to JSON when being passed to JavaScript (#850)
-* Updated the ReadTheDocs theme to match the upstream font sizes and colours
+* Updated the ReadTheDocs theme to match the upstream font sizes and colors
   more closely. (#857)
 * Fixes an issue with permalink markers showing when the mouse was far above
   them (#843)

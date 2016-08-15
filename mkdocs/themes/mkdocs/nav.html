@@ -3,7 +3,7 @@
 
         <!-- Collapsed navigation -->
         <div class="navbar-header">
-            {%- if nav|length>1 or (page and (page.next_page or page.previous_page)) or repo_url %}
+            {%- if nav|length>1 or (page and (page.next_page or page.previous_page)) or config.repo_url %}
             <!-- Expander button -->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -14,7 +14,7 @@
             {%- endif %}
 
           {%- block site_name %}
-            <a class="navbar-brand" href="{{ homepage_url }}">{{ site_name }}</a>
+            <a class="navbar-brand" href="{{ nav.homepage.url }}">{{ config.site_name }}</a>
           {%- endblock %}
         </div>
 
@@ -69,15 +69,15 @@
               {%- endblock %}
 
               {%- block repo %}
-                {%- if repo_url %}
+                {%- if config.repo_url %}
                     <li>
-                        <a href="{{ repo_url }}">
-                            {%- if repo_name == 'GitHub' %}
+                        <a href="{{ config.repo_url }}">
+                            {%- if config.repo_name == 'GitHub' %}
                                 <i class="fa fa-github"></i>
-                            {%- elif repo_name == 'Bitbucket' -%}
+                            {%- elif config.repo_name == 'Bitbucket' -%}
                                 <i class="fa fa-bitbucket"></i>
                             {%- endif -%}
-                            {{ repo_name }}
+                            {{ config.repo_name }}
                         </a>
                     </li>
                 {%- endif %}

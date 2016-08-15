@@ -66,14 +66,10 @@ def get_global_context(nav, config):
     to app pages.
     """
 
-    site_name = config['site_name']
-
     if config['site_favicon']:
         site_favicon = nav.url_context.make_relative('/' + config['site_favicon'])
     else:
         site_favicon = None
-
-    page_description = config['site_description']
 
     extra_javascript = utils.create_media_urls(nav, config['extra_javascript'])
 
@@ -84,36 +80,33 @@ def get_global_context(nav, config):
     timestamp = int(os.environ.get('SOURCE_DATE_EPOCH', timegm(datetime.utcnow().utctimetuple())))
 
     return {
-        'site_name': site_name,
-        'site_author': config['site_author'],
         'favicon': site_favicon,
-        'page_description': page_description,
-
-        # Note that there's intentionally repetition here. Rather than simply
-        # provide the config dictionary we instead pass everything explicitly.
-        #
-        # This helps ensure that we can throughly document the context that
-        # gets passed to themes.
-        'repo_url': config['repo_url'],
-        'repo_name': config['repo_name'],
         'nav': nav,
         'base_url': nav.url_context.make_relative('/'),
-        'homepage_url': nav.homepage.url,
-        'site_url': config['site_url'],
 
         'extra_css': extra_css,
         'extra_javascript': extra_javascript,
+
+        'mkdocs_version': mkdocs.__version__,
+        'build_date_utc': datetime.utcfromtimestamp(timestamp),
+
+        'config': config,
+
+        # TODO: remove the rest in 1.0 as they are deprecated
+        'site_name': config['site_name'],
+        'site_url': config['site_url'],
+        'site_author': config['site_author'],
+        'homepage_url': nav.homepage.url,
+        'page_description': config['site_description'],
+
+        'repo_url': config['repo_url'],
+        'repo_name': config['repo_name'],
 
         'include_nav': config['include_nav'],
         'include_next_prev': config['include_next_prev'],
 
         'copyright': config['copyright'],
-        'google_analytics': config['google_analytics'],
-
-        'mkdocs_version': mkdocs.__version__,
-        'build_date_utc': datetime.utcfromtimestamp(timestamp),
-
-        'config': config
+        'google_analytics': config['google_analytics']
     }
 
 
@@ -280,7 +273,16 @@ def build_pages(config, dump_json=False, dirty=False):
         'next_page': 'page.next_page',
         'current_page': 'page',
         'include_nav': 'nav|length>1',
-        'include_next_prev': "(page.next_page or page.previous_page)"
+        'include_next_prev': '(page.next_page or page.previous_page)',
+        'site_name': 'config.site_name',
+        'site_author': 'config.site_author',
+        'page_description': 'config.site_description',
+        'repo_url': 'config.repo_url',
+        'repo_name': 'config.repo_name',
+        'site_url': 'config.site_url',
+        'copyright': 'config.copyright',
+        'google_analytics': 'config.google_analytics',
+        'homepage_url': 'nav.homepage.url',
     }
 
     class DeprecationContext(Context):
