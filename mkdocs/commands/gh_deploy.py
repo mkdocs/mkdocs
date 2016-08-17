@@ -92,5 +92,5 @@ def gh_deploy(config, message=None, force=False):
             username, repo = path.split('/', 1)
             if repo.endswith('.git'):
                 repo = repo[:-len('.git')]
-            url = 'http://%s.github.io/%s' % (username, repo)
+            url = 'https://%s.github.io/%s/' % (username, repo)
             log.info('Your documentation should shortly be available at: ' + url)
