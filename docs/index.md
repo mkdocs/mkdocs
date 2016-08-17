@@ -48,9 +48,30 @@ $ pip --version
 pip 1.5.2
 ```
 
-MkDocs supports Python versions 2.6, 2.7, 3.3, 3.4 and 3.5.
+MkDocs supports Python versions 2.6, 2.7, 3.3, 3.4, 3.5 and pypy.
 
-On Windows it is recommended that you install Python and pip with [Chocolatey].
+### Installing Python
+
+Install [Python] by downloading an installer appropriate for your system from
+<https://www.python.org/downloads/> and running it.
+
+### Installing pip
+
+If you're using a recent version of Python, pip is most likely installed
+by default. However, you may need to upgrade pip to the lasted version:
+
+```bash
+pip install --upgrade pip
+```
+
+If you need to install [pip] for the first time, download [get-pip.py].
+Then run the following command to install it:
+
+```bash
+python get-pip.py
+```
+
+### Installing MkDocs
 
 Install the `mkdocs` package using pip:
 
@@ -65,6 +86,22 @@ You should now have the `mkdocs` command installed on your system. Run `mkdocs
 $ mkdocs --version
 mkdocs, version 0.15.3
 ```
+
+!!! Note
+    If you are using Windows, some of the above commands may not work
+    out-of-the-box.
+
+    A quick solution may be to preface every Python command with `python -m`
+    like this:
+
+        python -m pip install mkdocs
+        python -m mkdocs
+
+    For a more permanent solution, you may need to edit your `PATH` environment
+    variable to include the `Scripts` directory of your Python installation. The
+    specifics of how to do that depend on how your system is configured and
+    which method you used to install Python and is beyond the scope of this
+    document.
 
 ---
 
@@ -255,7 +292,7 @@ the MkDocs IRC channel `#mkdocs` on freenode.
 [MkDocs wiki]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
 [build your own]: user-guide/custom-themes/
 [Amazon S3]: http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html
-[Chocolatey]: https://chocolatey.org/
+[get-pip.py]: https://bootstrap.pypa.io/get-pip.py
 [pages]: user-guide/configuration/#pages
 [discussion group]: https://groups.google.com/forum/#!forum/mkdocs
 [GitHub issues]: https://github.com/mkdocs/mkdocs/issues
