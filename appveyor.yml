@@ -21,7 +21,7 @@ environment:
       CYG_ROOT: C:\\cygwin
       CYG_MIRROR: http://cygwin.mirror.constant.com
       CYG_CACHE: C:\\cygwin\\var\\cache\\setup
-      PYTHON_EXE: %CYG_ROOT%/bin/python 
+      PYTHON_EXE: '%CYG_ROOT%\\bin\\python'
 init:
   - "ECHO %TOXENV%"
   - ps: "ls C:\\Python*"
