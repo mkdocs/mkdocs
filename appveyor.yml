@@ -34,8 +34,8 @@ install:
   - 'IF NOT %CYG_ROOT% == "" %CYG_ROOT%/bin/bash -lc "cygcheck -dc cygwin"'
   - ps: Invoke-WebRequest "https://bootstrap.pypa.io/ez_setup.py" -OutFile "c:\ez_setup.py"
   - ps: Invoke-WebRequest "https://bootstrap.pypa.io/get-pip.py" -OutFile "c:\get-pip.py"
-  - "%PYTHON_EXE% c:\ez_setup.py"
-  - "%PYTHON_EXE% c:\get-pip.py"
+  - "%PYTHON_EXE% c:\\ez_setup.py"
+  - "%PYTHON_EXE% c:\\get-pip.py"
   - "%PYTHON_EXE% -m pip install tox"
 test_script:
   - "git clean -f -d -x"
