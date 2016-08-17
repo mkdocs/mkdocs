@@ -3,19 +3,19 @@ environment:
   global:
     PYTHON_EXE: c:\\python27\\python
   matrix:
-    - TOXENV: py27-integration
-    - TOXENV: py27-min-req
-    - TOXENV: py27-unittests
-    - TOXENV: py33-integration
-    - TOXENV: py33-min-req
-    - TOXENV: py33-unittests
-    - TOXENV: py34-integration
-    - TOXENV: py34-min-req
-    - TOXENV: py34-unittests
-    - TOXENV: py35-integration
-    - TOXENV: py35-min-req
-    - TOXENV: py35-unittests
-    - TOXENV: flake8
+    # - TOXENV: py27-integration
+    # - TOXENV: py27-min-req
+    # - TOXENV: py27-unittests
+    # - TOXENV: py33-integration
+    # - TOXENV: py33-min-req
+    # - TOXENV: py33-unittests
+    # - TOXENV: py34-integration
+    # - TOXENV: py34-min-req
+    # - TOXENV: py34-unittests
+    # - TOXENV: py35-integration
+    # - TOXENV: py35-min-req
+    # - TOXENV: py35-unittests
+    # - TOXENV: flake8
 
     - TOXENV: py27-unittests
       CYG_ROOT: C:\\cygwin
