@@ -26,8 +26,8 @@ init:
   - "ECHO %TOXENV%"
   - ps: "ls C:\\Python*"
 install:
-  - 'IF defined %CYGROOT% (echo Setting up Cygwin dependencies)'
-  - 'IF defined %CYGROOT% (%CYG_ROOT%\setup-x86.exe -qnNdO -R "%CYG_ROOT%" -s "%CYG_MIRROR%" -l "%CYG_CACHE%" -P autoconf -P automake -P bison -P gcc-core -P gcc-g++ -P mingw-runtime -P mingw-binutils -P mingw-gcc-core -P mingw-gcc-g++ -P mingw-pthreads -P mingw-w32api -P libtool -P make -P python -P gettext-devel -P gettext -P intltool -P libiconv -P pkg-config -P git -P wget -P curl > NUL)'
+  - '/E:on /c "IF defined %CYGROOT% (echo Setting up Cygwin dependencies)"'
+  - '/E:on /c \'IF defined %CYGROOT% (%CYG_ROOT%\setup-x86.exe -qnNdO -R "%CYG_ROOT%" -s "%CYG_MIRROR%" -l "%CYG_CACHE%" -P autoconf -P automake -P bison -P gcc-core -P gcc-g++ -P mingw-runtime -P mingw-binutils -P mingw-gcc-core -P mingw-gcc-g++ -P mingw-pthreads -P mingw-w32api -P libtool -P make -P python -P gettext-devel -P gettext -P intltool -P libiconv -P pkg-config -P git -P wget -P curl > NUL)\''
   - 'IF defined %CYGROOT% (echo Check Cygwin setup)'
   - 'IF defined %CYGROOT% (%CYG_ROOT%/bin/bash -lc "cygcheck -dc cygwin")'
   - 'IF defined %CYGROOT% (echo Done setting up Cygwin)'
