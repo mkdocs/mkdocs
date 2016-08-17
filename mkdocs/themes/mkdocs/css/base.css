@@ -318,3 +318,20 @@ h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink, h4:hover .head
     -moz-border-radius: 6px 0 6px 6px;
     border-radius: 6px 0 6px 6px;
 }
+
+/*
+ * Account for wide tables which go off the side.
+ * Also account for long inline code in tables
+ * 
+ * https://github.com/mkdocs/mkdocs/issues/834
+ */
+table {
+  width: 100%;
+  overflow: auto;
+  display: block;
+}
+
+table code {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}

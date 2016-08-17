@@ -159,3 +159,20 @@ code.cs, code.c {
   border: 1px solid rgba(0, 0, 0, 0.2);
   background: rgba(255, 255, 255, 0.7);
 }
+
+/*
+ * Account for wide tables which go off the side.
+ * Also account for long inline code in tables
+ * 
+ * https://github.com/mkdocs/mkdocs/issues/834
+ */
+.rst-content table.docutils {
+  width: 100%;
+  overflow: auto;
+  display: block;
+}
+
+table code {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
