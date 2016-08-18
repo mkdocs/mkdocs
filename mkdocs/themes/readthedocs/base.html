@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   {% if page and page.is_homepage %}<meta name="description" content="{{ config.site_description }}">{% endif %}
   {% if config.site_author %}<meta name="author" content="{{ config.site_author }}">{% endif %}
-  {% if favicon %}<link rel="shortcut icon" href="{{ favicon }}">
+  {% if config.site_favicon %}<link rel="shortcut icon" href="{{ base_url }}/{{ config.site_favicon }}">
   {% else %}<link rel="shortcut icon" href="{{ base_url }}/img/favicon.ico">{% endif %}
   {%- endblock %}
 

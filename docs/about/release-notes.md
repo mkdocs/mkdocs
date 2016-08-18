@@ -82,6 +82,13 @@ being deprecated. The variable will issue a warning but continue to work for
 version 0.16, but may be removed in a future version. Use `nav.homepage.url`
 instead.
 
+The global variable `favicon` maps to the configuration setting `site_favicon`.
+Both the template variable and the configuration setting are being deprecated
+and will issue a warning but continue to work for version 0.16, and may be
+removed in a future version. Use `{{ base_url }}/img/favicon.ico` in your
+template instead. Users can simply save a copy of their custom favicon icon to
+`img/favicon.ico` in either their `docs_dir` or `theme_dir`.
+
 A number of variables map directly to similarly named variables in the `config`.
 Those variables are being deprecated and will issue a warning but continue to
 work for version 0.16, but may be removed in a future version. Use
@@ -106,6 +113,7 @@ Below is a summary of all of the changes made to the global context:
 | copyright         | config.copyright                       |
 | google_analytics  | config.google_analytics                |
 | homepage_url      | nav.homepage.url                       |
+| favicon           | {{ base_url }}/img/favicon.ico         |
 
 #### Increased Template Customization. (#607)
 

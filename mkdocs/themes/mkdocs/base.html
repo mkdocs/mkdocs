@@ -8,7 +8,7 @@
         {% if page and page.is_homepage %}<meta name="description" content="{{ config['site_description'] }}">{% endif %}
         {% if config.site_author %}<meta name="author" content="{{ config.site_author }}">{% endif %}
         {% if page and page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}">{% endif %}
-        {% if favicon %}<link rel="shortcut icon" href="{{ base_url }}/{{ favicon }}">
+        {% if config.site_favicon %}<link rel="shortcut icon" href="{{ base_url }}/{{ config.site_favicon }}">
         {% else %}<link rel="shortcut icon" href="{{ base_url }}/img/favicon.ico">{% endif %}
       {%- endblock %}
 

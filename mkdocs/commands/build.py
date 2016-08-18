@@ -66,11 +66,6 @@ def get_global_context(nav, config):
     to app pages.
     """
 
-    if config['site_favicon']:
-        site_favicon = nav.url_context.make_relative('/' + config['site_favicon'])
-    else:
-        site_favicon = None
-
     extra_javascript = utils.create_media_urls(nav, config['extra_javascript'])
 
     extra_css = utils.create_media_urls(nav, config['extra_css'])
@@ -80,7 +75,6 @@ def get_global_context(nav, config):
     timestamp = int(os.environ.get('SOURCE_DATE_EPOCH', timegm(datetime.utcnow().utctimetuple())))
 
     return {
-        'favicon': site_favicon,
         'nav': nav,
         'base_url': nav.url_context.make_relative('/'),
 
@@ -98,6 +92,7 @@ def get_global_context(nav, config):
         'site_author': config['site_author'],
         'homepage_url': nav.homepage.url,
         'page_description': config['site_description'],
+        'favicon': config['site_favicon'],
 
         'repo_url': config['repo_url'],
         'repo_name': config['repo_name'],
@@ -283,6 +278,7 @@ def build_pages(config, dump_json=False, dirty=False):
         'copyright': 'config.copyright',
         'google_analytics': 'config.google_analytics',
         'homepage_url': 'nav.homepage.url',
+        'favicon': '{{ base_url }}/img/favicon.ico',
     }
 
     class DeprecationContext(Context):

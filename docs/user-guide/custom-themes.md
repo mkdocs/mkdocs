@@ -168,14 +168,6 @@ folder on all pages you would do this:
 <script src="{{ base_url }}/js/theme.js"></script>
 ```
 
-#### favicon
-
-Contains the URL to the icon defined in the [site_favicon] config settings.
-Unlike the config setting, which contains a local path, this variable contains
-an absolute path from the homepage.
-
-[site_favicon]: configuration.md#site_favicon
-
 #### extra_css
 
 Contains a list of URLs to the style-sheets listed in the [extra_css]

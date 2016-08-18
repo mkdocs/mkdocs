@@ -33,7 +33,8 @@ DEFAULT_SCHEMA = (
     ('site_author', config_options.Type(utils.string_types)),
 
     # The path to the favicon for a site
-    ('site_favicon', config_options.Type(utils.string_types)),
+    # TODO: remove this in version 1.0
+    ('site_favicon', config_options.Deprecated()),
 
     # The MkDocs theme for the documentation.
     ('theme', config_options.Theme(default='mkdocs')),
