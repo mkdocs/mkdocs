@@ -39,24 +39,17 @@
 }
 
 /*
- * Fix wrapping in the code highlighting
- *
- * https://github.com/mkdocs/mkdocs/issues/233
- */
-code {
-    white-space: pre;
-    padding: 2px 5px;
-}
-
-/*
  * Wrap inline code samples otherwise they shoot of the side and
  * can't be read at all.
  *
  * https://github.com/mkdocs/mkdocs/issues/313
+ * https://github.com/mkdocs/mkdocs/issues/233
+ * https://github.com/mkdocs/mkdocs/issues/834
  */
-p code {
-    word-wrap: break-word;
+code {
     white-space: pre-wrap;
+    word-wrap: break-word;
+    padding: 2px 5px;
 }
 
 /**
@@ -64,8 +57,12 @@ p code {
  * font size and padding.
  *
  * https://github.com/mkdocs/mkdocs/issues/855
+ * https://github.com/mkdocs/mkdocs/issues/834
+ * https://github.com/mkdocs/mkdocs/issues/233
  */
 pre code {
+  white-space: pre;
+  word-wrap: normal;
   display: block;
   padding: 12px;
   font-size: 12px;
