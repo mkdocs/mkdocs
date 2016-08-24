@@ -39,12 +39,13 @@
 }
 
 /*
- * Fix wrapping in the code highlighting
+ * Fix wrapping in the code
  *
  * https://github.com/mkdocs/mkdocs/issues/233
+ * https://github.com/mkdocs/mkdocs/issues/834
  */
 code {
-    white-space: pre;
+    white-space: normal;
     padding: 2px 5px;
 }
 
@@ -64,8 +65,11 @@ p code {
  * font size and padding.
  *
  * https://github.com/mkdocs/mkdocs/issues/855
+ * https://github.com/mkdocs/mkdocs/issues/834
+ * https://github.com/mkdocs/mkdocs/issues/233
  */
 pre code {
+  white-space: pre;
   display: block;
   padding: 12px;
   font-size: 12px;
