@@ -5,6 +5,7 @@ env:
 - TOXENV=flake8
 - TOXENV=markdown-lint
 - TOXENV=linkchecker
+- TOXENV=jshint
 - TOXENV=py26-integration
 - TOXENV=py26-min-req
 - TOXENV=py26-unittests
@@ -29,6 +30,7 @@ env:
 install:
 - pip install tox
 - gem install mdl
+- npm install -g jshint
 script:
 - git clean -f -d -x
 - tox
