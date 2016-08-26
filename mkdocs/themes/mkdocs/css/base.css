@@ -108,11 +108,15 @@ code {
     background: #fff;
     border: solid 1px #e1e4e5;
     color: #333;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
 pre code {
     background: transparent;
     border: none;
+    white-space: pre;
+    word-wrap: normal;
 }
 
 a code {

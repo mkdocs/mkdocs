@@ -166,6 +166,10 @@ better conform with the documented [layout].
   (#738).
 * Add a `--force` flag to the `gh-deploy` command to force the push to the
   repository (#973).
+* Improve alignment for current selected menu item in readthedocs theme (#888).
+* `http://user.github.io/repo` => `https://user.github.io/repo/` (#1029).
+* Improve installation instructions (#1028).
+* Account for wide tables and consistently wrap inline code spans (#834).
 
 ## Version 0.15.3 (2016-02-18)
 

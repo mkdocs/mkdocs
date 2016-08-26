@@ -218,7 +218,6 @@ directory path.
     If you're using another source code control tool, you'll want to check its
     documentation on how to ignore specific directories.
 
-
 ### extra_css
 
 Set a list of CSS files in your `docs_dir` to be included by the theme. For

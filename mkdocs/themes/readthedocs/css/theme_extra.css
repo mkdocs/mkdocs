@@ -39,24 +39,17 @@
 }
 
 /*
- * Fix wrapping in the code highlighting
- *
- * https://github.com/mkdocs/mkdocs/issues/233
- */
-code {
-    white-space: pre;
-    padding: 2px 5px;
-}
-
-/*
  * Wrap inline code samples otherwise they shoot of the side and
  * can't be read at all.
  *
  * https://github.com/mkdocs/mkdocs/issues/313
+ * https://github.com/mkdocs/mkdocs/issues/233
+ * https://github.com/mkdocs/mkdocs/issues/834
  */
-p code {
-    word-wrap: break-word;
+code {
     white-space: pre-wrap;
+    word-wrap: break-word;
+    padding: 2px 5px;
 }
 
 /**
@@ -64,8 +57,12 @@ p code {
  * font size and padding.
  *
  * https://github.com/mkdocs/mkdocs/issues/855
+ * https://github.com/mkdocs/mkdocs/issues/834
+ * https://github.com/mkdocs/mkdocs/issues/233
  */
 pre code {
+  white-space: pre;
+  word-wrap: normal;
   display: block;
   padding: 12px;
   font-size: 12px;
@@ -158,4 +155,23 @@ code.cs, code.c {
   color: #404040;
   border: 1px solid rgba(0, 0, 0, 0.2);
   background: rgba(255, 255, 255, 0.7);
+}
+
+/*
+ * Account for wide tables which go off the side.
+ * Override borders to avoid wierdness on narrow tables.
+ * 
+ * https://github.com/mkdocs/mkdocs/issues/834
+ * https://github.com/mkdocs/mkdocs/pull/1034
+ */
+.rst-content table.docutils {
+    width: 100%;
+    overflow: auto;
+    display: block;
+    border: none;
+}
+
+td, th {
+   border: 1px solid #e1e4e5 !important;
+   border-collapse: collapse;
 }
