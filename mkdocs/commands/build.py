@@ -297,7 +297,16 @@ def build_pages(config, dump_json=False, dirty=False):
     env.filters['tojson'] = filters.tojson
     search_index = search.SearchIndex()
 
+    # Force absolute URLs in the nav of error pages and account for the
+    # possability that the docs root might be different than the server root.
+    # See https://github.com/mkdocs/mkdocs/issues/77
+    site_navigation.url_context.force_abs_urls = True
+    default_base = site_navigation.url_context.base_path
+    site_navigation.url_context.base_path = utils.urlparse(config['site_url']).path
     build_template('404.html', env, config, site_navigation)
+    # Reset nav behavior to the default
+    site_navigation.url_context.force_abs_urls = False
+    site_navigation.url_context.base_path = default_base
 
     if not build_template('search.html', env, config, site_navigation):
         log.debug("Search is enabled but the theme doesn't contain a "
