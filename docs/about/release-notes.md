@@ -170,6 +170,7 @@ better conform with the documented [layout].
 * `http://user.github.io/repo` => `https://user.github.io/repo/` (#1029).
 * Improve installation instructions (#1028).
 * Account for wide tables and consistently wrap inline code spans (#834).
+* Bugfix: Use absolute URLs in nav & media links from error templates (#77).
 
 ## Version 0.15.3 (2016-02-18)
 

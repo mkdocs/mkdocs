@@ -271,6 +271,12 @@ class SiteNavigationTests(unittest.TestCase):
 
         self.assertEqual([n.title for n in nav_items],
                          ['Home', 'Running', 'Notes', 'License'])
+        self.assertEqual([n.url for n in nav_items], [
+            '.',
+            'api-guide/running/',
+            'about/notes/',
+            'about/sub/license/'
+        ])
         self.assertEqual([p.title for p in pages],
                          ['Home', 'Running', 'Notes', 'License'])
 
@@ -291,8 +297,65 @@ class SiteNavigationTests(unittest.TestCase):
 
         self.assertEqual([n.title for n in nav_items],
                          ['Home', 'Running', 'Notes', 'License'])
+        self.assertEqual([n.url for n in nav_items], [
+            '.',
+            'api-guide/running/',
+            'about/notes/',
+            'about/sub/license/'
+        ])
         self.assertEqual([p.title for p in pages],
                          ['Home', 'Running', 'Notes', 'License'])
+
+    def test_force_abs_urls(self):
+        """
+        Verify force absolute URLs
+        """
+
+        pages = [
+            'index.md',
+            'api-guide/running.md',
+            'about/notes.md',
+            'about/sub/license.md',
+        ]
+
+        url_context = nav.URLContext()
+        url_context.force_abs_urls = True
+        nav_items, pages = nav._generate_site_navigation(pages, url_context)
+
+        self.assertEqual([n.title for n in nav_items],
+                         ['Home', 'Running', 'Notes', 'License'])
+        self.assertEqual([n.url for n in nav_items], [
+            '',
+            '/api-guide/running',
+            '/about/notes',
+            '/about/sub/license'
+        ])
+
+    def test_force_abs_urls_with_base(self):
+        """
+        Verify force absolute URLs
+        """
+
+        pages = [
+            'index.md',
+            'api-guide/running.md',
+            'about/notes.md',
+            'about/sub/license.md',
+        ]
+
+        url_context = nav.URLContext()
+        url_context.force_abs_urls = True
+        url_context.base_path = '/foo/'
+        nav_items, pages = nav._generate_site_navigation(pages, url_context)
+
+        self.assertEqual([n.title for n in nav_items],
+                         ['Home', 'Running', 'Notes', 'License'])
+        self.assertEqual([n.url for n in nav_items], [
+            '/foo',
+            '/foo/api-guide/running',
+            '/foo/about/notes',
+            '/foo/about/sub/license'
+        ])
 
     def test_invalid_pages_config(self):
 

@@ -82,6 +82,7 @@ class URLContext(object):
 
     def __init__(self):
         self.base_path = '/'
+        self.force_abs_urls = False
 
     def set_current_url(self, current_url):
         self.base_path = os.path.dirname(current_url)
@@ -91,6 +92,10 @@ class URLContext(object):
         Given a URL path return it as a relative URL,
         given the context of the current page.
         """
+        if self.force_abs_urls:
+            abs_url = '%s/%s' % (self.base_path.rstrip('/'), utils.path_to_url(url.lstrip('/')))
+            return abs_url.rstrip('/')
+
         suffix = '/' if (url.endswith('/') and len(url) > 1) else ''
         # Workaround for bug on `os.path.relpath()` in Python 2.6
         if self.base_path == '/':
