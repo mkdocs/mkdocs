@@ -138,9 +138,10 @@ class FileContext(object):
         return os.path.normpath(os.path.join(self.base_path, path))
 
 
-class Page(object):
-    def __init__(self, title, url, path, url_context):
+class PageBase(object):
+    """ Base class for Page and HeaderPage objects. """
 
+    def __init__(self, title, url, path, url_context):
         self.title = title
         self.abs_url = url
         self.active = False
@@ -188,10 +189,8 @@ class Page(object):
         return self.indent_print()
 
     def indent_print(self, depth=0):
-        indent = '    ' * depth
-        active_marker = ' [*]' if self.active else ''
-        title = self.title if (self.title is not None) else '[blank]'
-        return '%s%s - %s%s\n' % (indent, title, self.abs_url, active_marker)
+        """ Subclasses much implement this method. """
+        raise NotImplementedError()
 
     def set_active(self, active=True):
         self.active = active
@@ -216,7 +215,35 @@ class Page(object):
                 self.input_path)
 
 
+class Page(PageBase):
+    """ A Page object without children pages. """
+
+    def indent_print(self, depth=0):
+        indent = '    ' * depth
+        active_marker = ' [*]' if self.active else ''
+        title = self.title if (self.title is not None) else '[blank]'
+        return '%s%s - %s%s\n' % (indent, title, self.abs_url, active_marker)
+
+
+class HeaderPage(PageBase):
+    """ A Page object with children pages. """
+
+    def __init__(self, title, url, path, url_context, children):
+        self.children = children
+        super(HeaderPage, self).__init__(title, url, path, url_context)
+
+    def indent_print(self, depth=0):
+        indent = '    ' * depth
+        active_marker = ' [*]' if self.active else ''
+        ret = '%s%s - %s%s\n' % (indent, self.title, self.abs_url, active_marker)
+        for item in self.children:
+            ret += item.indent_print(depth + 1)
+        return ret
+
+
 class Header(object):
+    """ A Header object that is not a page. """
+
     def __init__(self, title, children):
         self.title, self.children = title, children
         self.active = False
@@ -291,13 +318,20 @@ def _follow(config_line, url_context, use_dir_urls, header=None, title=None):
                ).format(type(config_line), config_line)
         raise exceptions.ConfigurationError(msg)
 
-    next_header = Header(title=next_cat_or_title, children=[])
+    subpages = subpages_or_path
+
+    if len(subpages) and isinstance(subpages[0], utils.string_types) and subpages[0].endswith('index.md'):
+        # The first child is an index page. Use it as the URL of the header.
+        path = os.path.normpath(subpages.pop(0))
+        url = utils.get_url_path(path, use_dir_urls)
+        next_header = HeaderPage(next_cat_or_title, url, path, url_context, children=[])
+    else:
+        next_header = Header(title=next_cat_or_title, children=[])
+
     if header:
         next_header.ancestors = [header]
         header.children.append(next_header)
     yield next_header
-
-    subpages = subpages_or_path
 
     for subpage in subpages:
         for sub in _follow(subpage, url_context, use_dir_urls, next_header):
@@ -324,7 +358,7 @@ def _generate_site_navigation(pages_config, url_context, use_dir_urls=True):
                 if page_or_header.is_top_level:
                     nav_items.append(page_or_header)
 
-            elif isinstance(page_or_header, Page):
+            elif isinstance(page_or_header, (Page, HeaderPage)):
 
                 if page_or_header.is_top_level:
                     nav_items.append(page_or_header)

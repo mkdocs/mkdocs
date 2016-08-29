@@ -3,8 +3,13 @@
     <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
 </li>
 {%- else %}
-  <li class="dropdown-submenu">
-    <a href="#">{{ nav_item.title }}</a>
+  <li class="dropdown-submenu  btn-group">
+    {%- if nav_item.url %}
+        <a href="{{ nav_item.url }}" class="btn">{{ nav_item.title }}</a>
+        <a href="#" class="btn dropdown-toggle" data-toggle="dropdown" role="button"><b class="caret"></b></a>
+    {%- else %}
+        <a href="#" class="btn dropdown-toggle" data-toggle="dropdown" role="button">{{ nav_item.title }} <b class="caret"></b></a>
+    {%- endif %}
     <ul class="dropdown-menu">
         {%- for nav_item in nav_item.children %}
             {% include "nav-sub.html" %}

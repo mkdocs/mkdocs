@@ -26,8 +26,13 @@
                 <ul class="nav navbar-nav">
                 {%- for nav_item in nav %}
                 {%- if nav_item.children %}
-                    <li class="dropdown{% if nav_item.active %} active{% endif %}">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ nav_item.title }} <b class="caret"></b></a>
+                    <li class="dropdown btn-group{% if nav_item.active %} active{% endif %}">
+                        {%- if nav_item.url %}
+                            <a href="{{ nav_item.url }}" class="btn">{{ nav_item.title }}</a>
+                            <a href="#" class="btn dropdown-toggle" data-toggle="dropdown" role="button"><b class="caret"></b></a>
+                        {%- else %}
+                            <a href="#" class="btn dropdown-toggle" data-toggle="dropdown" role="button">{{ nav_item.title }} <b class="caret"></b></a>
+                        {%- endif %}
                         <ul class="dropdown-menu">
                         {%- for nav_item in nav_item.children %}
                             {% include "nav-sub.html" %}
