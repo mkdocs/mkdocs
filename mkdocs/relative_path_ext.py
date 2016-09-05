@@ -90,8 +90,10 @@ def path_to_url(url, nav, strict):
                 raise MarkdownNotFound(msg)
             # Otherwise, when strict mode isn't enabled, log a warning
             # to the user and leave the URL as it is.
-            log.warning(msg)
-            return url
+            
+            # suppress the Warning
+            # log.warning(msg)
+            # return url
         path = utils.get_url_path(target_file, nav.use_directory_urls)
         path = nav.url_context.make_relative(path)
     else:
