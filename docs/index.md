@@ -245,6 +245,15 @@ Save your changes, and you'll see the ReadTheDocs theme being used.
 
 ![Screenshot](img/readthedocs.png)
 
+## Changing the Favicon Icon
+
+By default, MkDocs uses the [MkDocs favicon] icon. To use a different icon, create
+an `img` subdirectory in your `docs_dir` and copy your custom `favicon.ico` file
+to that directory. MkDocs will automaticaly detect and use that file as your
+favicon icon.
+
+[MkDocs favicon]: /img/favicon.ico
+
 ## Building the site
 
 That's looking good. You're ready to deploy the first pass of your `MkLorum`

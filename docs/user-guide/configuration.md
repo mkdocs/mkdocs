@@ -101,17 +101,6 @@ header.
 
 **default**: `null`
 
-### site_favicon
-
-Set the favicon to use. Putting a `favicon.ico` into the `docs/` directory, the
-config would look as follows:
-
-```yaml
-site_favicon: favicon.ico
-```
-
-**default**: `null`
-
 ### copyright
 
 Set the copyright information to be included in the documentation by the theme.

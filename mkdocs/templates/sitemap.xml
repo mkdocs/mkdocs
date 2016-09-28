@@ -4,14 +4,14 @@
     {% if nav_item.children %}
         {% for nav_item in nav_item.children %}
     <url>
-     <loc>{{ site_url }}{{ nav_item.abs_url }}</loc>
+     <loc>{{ config.site_url }}{{ nav_item.abs_url }}</loc>
      <lastmod>{{nav_item.update_date}}</lastmod>
      <changefreq>daily</changefreq>
     </url>
         {% endfor %}
     {% else %}
     <url>
-     <loc>{{ site_url }}{{ nav_item.abs_url }}</loc>
+     <loc>{{ config.site_url }}{{ nav_item.abs_url }}</loc>
      <lastmod>{{nav_item.update_date}}</lastmod>
      <changefreq>daily</changefreq>
     </url>

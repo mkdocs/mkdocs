@@ -3,7 +3,7 @@
 
         <!-- Collapsed navigation -->
         <div class="navbar-header">
-            {%- if include_nav or include_next_prev or repo_url %}
+            {%- if nav|length>1 or (page and (page.next_page or page.previous_page)) or config.repo_url %}
             <!-- Expander button -->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -14,14 +14,14 @@
             {%- endif %}
 
           {%- block site_name %}
-            <a class="navbar-brand" href="{{ homepage_url }}">{{ site_name }}</a>
+            <a class="navbar-brand" href="{{ nav.homepage.url }}">{{ config.site_name }}</a>
           {%- endblock %}
         </div>
 
         <!-- Expanded navigation -->
         <div class="navbar-collapse collapse">
           {%- block site_nav %}
-            {%- if include_nav %}
+            {%- if nav|length>1 %}
                 <!-- Main navigation -->
                 <ul class="nav navbar-nav">
                 {%- for nav_item in nav %}
@@ -54,7 +54,7 @@
               {%- endblock %}
 
               {%- block next_prev %}
-                {%- if include_next_prev and page %}
+                {%- if page and (page.next_page or page.previous_page) %}
                     <li {% if not page.previous_page %}class="disabled"{% endif %}>
                         <a rel="next" {% if page.previous_page %}href="{{ page.previous_page.url }}"{% endif %}>
                             <i class="fa fa-arrow-left"></i> Previous
@@ -69,15 +69,15 @@
               {%- endblock %}
 
               {%- block repo %}
-                {%- if repo_url %}
+                {%- if config.repo_url %}
                     <li>
-                        <a href="{{ repo_url }}">
-                            {%- if repo_name == 'GitHub' %}
+                        <a href="{{ config.repo_url }}">
+                            {%- if config.repo_name == 'GitHub' %}
                                 <i class="fa fa-github"></i>
-                            {%- elif repo_name == 'Bitbucket' -%}
+                            {%- elif config.repo_name == 'Bitbucket' -%}
                                 <i class="fa fa-bitbucket"></i>
                             {%- endif -%}
-                            {{ repo_name }}
+                            {{ config.repo_name }}
                         </a>
                     </li>
                 {%- endif %}

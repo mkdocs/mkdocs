@@ -66,15 +66,6 @@ def get_global_context(nav, config):
     to app pages.
     """
 
-    site_name = config['site_name']
-
-    if config['site_favicon']:
-        site_favicon = nav.url_context.make_relative('/' + config['site_favicon'])
-    else:
-        site_favicon = None
-
-    page_description = config['site_description']
-
     extra_javascript = utils.create_media_urls(nav, config['extra_javascript'])
 
     extra_css = utils.create_media_urls(nav, config['extra_css'])
@@ -84,36 +75,33 @@ def get_global_context(nav, config):
     timestamp = int(os.environ.get('SOURCE_DATE_EPOCH', timegm(datetime.utcnow().utctimetuple())))
 
     return {
-        'site_name': site_name,
-        'site_author': config['site_author'],
-        'favicon': site_favicon,
-        'page_description': page_description,
-
-        # Note that there's intentionally repetition here. Rather than simply
-        # provide the config dictionary we instead pass everything explicitly.
-        #
-        # This helps ensure that we can throughly document the context that
-        # gets passed to themes.
-        'repo_url': config['repo_url'],
-        'repo_name': config['repo_name'],
         'nav': nav,
         'base_url': nav.url_context.make_relative('/'),
-        'homepage_url': nav.homepage.url,
-        'site_url': config['site_url'],
 
         'extra_css': extra_css,
         'extra_javascript': extra_javascript,
+
+        'mkdocs_version': mkdocs.__version__,
+        'build_date_utc': datetime.utcfromtimestamp(timestamp),
+
+        'config': config,
+
+        # TODO: remove the rest in 1.0 as they are deprecated
+        'site_name': config['site_name'],
+        'site_url': config['site_url'],
+        'site_author': config['site_author'],
+        'homepage_url': nav.homepage.url,
+        'page_description': config['site_description'],
+        'favicon': config['site_favicon'],
+
+        'repo_url': config['repo_url'],
+        'repo_name': config['repo_name'],
 
         'include_nav': config['include_nav'],
         'include_next_prev': config['include_next_prev'],
 
         'copyright': config['copyright'],
-        'google_analytics': config['google_analytics'],
-
-        'mkdocs_version': mkdocs.__version__,
-        'build_date_utc': datetime.utcfromtimestamp(timestamp),
-
-        'config': config
+        'google_analytics': config['google_analytics']
     }
 
 
@@ -269,25 +257,38 @@ def build_pages(config, dump_json=False, dirty=False):
 
     # TODO: remove DeprecationContext in v1.0 when all deprecated vars have been removed
     from jinja2.runtime import Context
-    deprecated_vars = [
-        'page_title',
-        'content',
-        'toc',
-        'meta',
-        'current_page',
-        'canonical_url',
-        'previous_page',
-        'next_page'
-    ]
+    deprecated_vars = {
+        'page_title': 'page.title',
+        'content': 'page.content',
+        'toc': 'page.toc',
+        'meta': 'page.meta',
+        'current_page': 'page.current_page',
+        'canonical_url': 'page.canonical_url',
+        'previous_page': 'page.previous_page',
+        'next_page': 'page.next_page',
+        'current_page': 'page',
+        'include_nav': 'nav|length>1',
+        'include_next_prev': '(page.next_page or page.previous_page)',
+        'site_name': 'config.site_name',
+        'site_author': 'config.site_author',
+        'page_description': 'config.site_description',
+        'repo_url': 'config.repo_url',
+        'repo_name': 'config.repo_name',
+        'site_url': 'config.site_url',
+        'copyright': 'config.copyright',
+        'google_analytics': 'config.google_analytics',
+        'homepage_url': 'nav.homepage.url',
+        'favicon': '{{ base_url }}/img/favicon.ico',
+    }
 
     class DeprecationContext(Context):
         def resolve(self, key):
-            """ Log a warning when acessing any deprecated variable name. """
+            """ Log a warning when accessing any deprecated variable name. """
             if key in deprecated_vars:
-                replacement = "page" if key == 'current_page' else "page.{0}".format(key)
                 log.warn(
-                    "Template variable warning: '{0}' is being deprecated and will not be "
-                    "available in a future version. Use '{1}' instead.".format(key, replacement)
+                    "Template variable warning: '{0}' is being deprecated "
+                    "and will not be available in a future version. Use "
+                    "'{1}' instead.".format(key, deprecated_vars[key])
                 )
             return super(DeprecationContext, self).resolve(key)
 
