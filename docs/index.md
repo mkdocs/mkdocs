@@ -80,6 +80,8 @@ Install [Python] by downloading an installer appropriate for your system from
     Python added to your PATH if the installer offers such an option (it's
     normally off by default).
 
+    ![Add Python to PATH](img/win-py-install.png)
+
 [python.org]: https://www.python.org/downloads/
 
 #### Installing pip
