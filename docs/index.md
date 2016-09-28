@@ -37,9 +37,28 @@ the theme.
 
 ## Installation
 
-In order to install MkDocs you'll need [Python] installed on your system, as
-well as the Python package manager, [pip]. You can check if you have these
-already installed from the command line:
+### Install with a Package Manager
+
+If you have and use a package manager (such as [apt-get], [dnf], [homebrew],
+[yum], etc.) to install packages on your system, then you may want to search for
+a "MkDocs" package and, if a recent version is available, install it with your
+package manager (check your system's documentation for details). That's it,
+you're done! Skip down to [Getting Started](#getting-started).
+
+If your package manager does not have a recent "MkDocs" package, you can still
+use your package manager to install "Python" and "pip". Then you can use pip to
+[install MkDocs](#installing-mkdocs).
+
+[apt-get]: https://help.ubuntu.com/community/AptGet/Howto
+[homebrew]: http://brew.sh/
+[dnf]: http://dnf.readthedocs.io/en/latest/index.html
+[yum]: http://yum.baseurl.org/
+
+### Manual Installation
+
+In order to manually install MkDocs you'll need [Python] installed on your
+system, as well as the Python package manager, [pip]. You can check if you have
+these already installed from the command line:
 
 ```bash
 $ python --version
@@ -50,15 +69,24 @@ pip 1.5.2
 
 MkDocs supports Python versions 2.6, 2.7, 3.3, 3.4, 3.5 and pypy.
 
-### Installing Python
+#### Installing Python
 
 Install [Python] by downloading an installer appropriate for your system from
-<https://www.python.org/downloads/> and running it.
+[python.org] and running it.
 
-### Installing pip
+!!! Note
 
-If you're using a recent version of Python, pip is most likely installed
-by default. However, you may need to upgrade pip to the lasted version:
+    If you are installing Python on Windows, be sure to check the box to have
+    Python added to your PATH if the installer offers such an option (it's
+    normally off by default).
+
+[python.org]: https://www.python.org/downloads/
+
+#### Installing pip
+
+If you're using a recent version of Python, the Python package manager, [pip],
+is most likely installed by default. However, you may need to upgrade pip to the
+lasted version:
 
 ```bash
 pip install --upgrade pip
@@ -71,7 +99,7 @@ Then run the following command to install it:
 python get-pip.py
 ```
 
-### Installing MkDocs
+#### Installing MkDocs
 
 Install the `mkdocs` package using pip:
 
@@ -98,14 +126,18 @@ mkdocs, version 0.15.3
         python -m mkdocs
 
     For a more permanent solution, you may need to edit your `PATH` environment
-    variable to include the `Scripts` directory of your Python installation. The
-    specifics of how to do that depend on how your system is configured and
-    which method you used to install Python and is beyond the scope of this
-    document.
+    variable to include the `Scripts` directory of your Python installation.
+    Recent versions of Python include a script to do this for you. Navigate to
+    your Python installation directory (for example `C:\Python34\`), open the
+    `Tools`, then `Scripts` folder, and run the `win_add2path.py` file by double
+    clicking on it. Alternatively, you can [download][a2p] the script and run it
+    (`python win_add2path.py`).
+
+[a2p]: https://svn.python.org/projects/python/trunk/Tools/scripts/win_add2path.py
 
 ---
 
-## Getting started
+## Getting Started
 
 Getting started is super easy.
 
