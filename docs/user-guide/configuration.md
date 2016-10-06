@@ -147,9 +147,8 @@ pages:
     - 'About': 'about.md'
 ```
 
-See the section on [configuring pages and
-navigation](/user-guide/writing-your-docs.md#configure-pages-and-navigation) for
-a more detailed breakdown, including how to create sub-sections.
+See the section on [configuring pages and navigation] for a more detailed
+breakdown, including how to create sub-sections.
 
 **default**: By default `pages` will contain an alphanumerically sorted, nested
 list of all the Markdown files found within the `docs_dir` and its
@@ -160,7 +159,7 @@ sub-directories. If none are found it will be `[]` (an empty list).
 ### theme
 
 Sets the theme of your documentation site, for a list of available themes visit
-[styling your docs](styling-your-docs.md).
+[styling your docs].
 
 **default**: `'mkdocs'`
 
@@ -170,11 +169,11 @@ Lets you set a directory to a custom theme. This can either be a relative
 directory, in which case it is resolved relative to the directory containing
 your configuration file, or it can be an absolute directory path.
 
-See [styling your docs](styling-your-docs.md#using-the-theme_dir) for details if
-you would like to tweak an existing theme.
+See [styling your docs][theme_dir] for details if you would like to tweak an
+existing theme.
 
-See [custom themes](./custom-themes) if you would like to build your own theme
-from the ground up.
+See [custom themes] if you would like to build your own theme from the ground
+up.
 
 **default**: `null`
 
@@ -224,7 +223,7 @@ extra_css:
 ### extra_javascript
 
 Set a list of JavaScript files in your `docs_dir` to be included by the theme.
-See the example in [extra_css](#extra_css) for usage.
+See the example in [extra_css] for usage.
 
 **default**: `[]` (an empty list).
 
@@ -233,7 +232,7 @@ See the example in [extra_css](#extra_css) for usage.
 Set a list of templates in your `docs_dir` to be built by MkDocs. To see more
 about writing templates for MkDocs read the documentation about [custom themes]
 and specifically the section about the [variables that are available] to
-templates. See the example in [extra_css](#extra_css) for usage.
+templates. See the example in [extra_css] for usage.
 
 **default**: `[]` (an empty list).
 
@@ -368,10 +367,14 @@ markdown_extensions:
 
 **default**: `[]`
 
-[custom themes]: /user-guide/styling-your-docs.md#custom-themes
-[variables that are available]: /user-guide/styling-your-docs.md#global-context
-[pymdk-extensions]: http://pythonhosted.org/Markdown/extensions/index.html
-[pymkd]: http://pythonhosted.org/Markdown/
+[custom themes]: custom-themes.md
+[variables that are available]: custom-themes.md#template-variables
+[pymdk-extensions]: https://pythonhosted.org/Markdown/extensions/index.html
+[pymkd]: https://pythonhosted.org/Markdown/
 [smarty]: https://pythonhosted.org/Markdown/extensions/smarty.html
 [exts]:https://pythonhosted.org/Markdown/extensions/index.html
 [3rd]: https://github.com/waylan/Python-Markdown/wiki/Third-Party-Extensions
+[configuring pages and navigation]: writing-your-docs.md#configure-pages-and-navigation
+[theme_dir]: styling-your-docs.md#using-the-theme_dir
+[styling your docs]: styling-your-docs.md
+[extra_css]: #extra_css
