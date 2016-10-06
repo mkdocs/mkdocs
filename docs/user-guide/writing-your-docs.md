@@ -223,7 +223,7 @@ last line should contain the same number of backtick characters (`` ` ``):
 
 ~~~no-highlight
 ```
-Fenced code blocks are like Stardard
+Fenced code blocks are like Standard
 Markdown’s regular code blocks, except that
 they’re not indented and instead rely on
 start and end fence lines to delimit the
