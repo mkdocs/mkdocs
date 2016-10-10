@@ -70,7 +70,7 @@ require([
              */
             jQuery('#mkdocs_search_modal a').click(function(){
                 jQuery('#mkdocs_search_modal').modal('hide');
-            })
+            });
         }
 
     };

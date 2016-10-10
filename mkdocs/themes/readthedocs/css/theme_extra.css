@@ -90,7 +90,7 @@ a:visited code {
  *
  * https://github.com/mkdocs/mkdocs/issues/411
  */
-code.cs, code.c {
+pre .cs, pre .c {
     font-weight: inherit;
     font-style: inherit;
 }
@@ -113,21 +113,20 @@ code.cs, code.c {
  * Additions specific to the search functionality provided by MkDocs
  */
 
-#mkdocs-search-results article h3
-{
+.search-results article {
     margin-top: 23px;
     border-top: 1px solid #E1E4E5;
     padding-top: 24px;
 }
 
-#mkdocs-search-results article:first-child h3 {
+.search-results article:first-child {
     border-top: none;
 }
 
-#mkdocs-search-query{
+form .search-query {
     width: 100%;
     border-radius: 50px;
-    padding: 6px 12px;
+    padding: 6px 12px;  /* csslint allow: box-model */
     border-color: #D1D4D5;
 }
 
@@ -151,9 +150,11 @@ code.cs, code.c {
  *
  * https://github.com/mkdocs/mkdocs/issues/656
  */
- div.admonition code {
+ .admonition code {
   color: #404040;
+  border: 1px solid #c7c9cb;
   border: 1px solid rgba(0, 0, 0, 0.2);
+  background: #f8fbfd;
   background: rgba(255, 255, 255, 0.7);
 }
 
@@ -164,7 +165,7 @@ code.cs, code.c {
  * https://github.com/mkdocs/mkdocs/issues/834
  * https://github.com/mkdocs/mkdocs/pull/1034
  */
-.rst-content table.docutils {
+.rst-content .section .docutils {
     width: 100%;
     overflow: auto;
     display: block;
@@ -172,6 +173,6 @@ code.cs, code.c {
 }
 
 td, th {
-   border: 1px solid #e1e4e5 !important;
+   border: 1px solid #e1e4e5 !important; /* csslint allow: important */
    border-collapse: collapse;
 }
