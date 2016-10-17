@@ -106,7 +106,7 @@ def cli():
 @click.option('-e', '--theme-dir', type=click.Path(), help=theme_dir_help)
 @click.option('--livereload', 'livereload', flag_value='livereload', help=reload_help, default=True)
 @click.option('--no-livereload', 'livereload', flag_value='no-livereload', help=no_reload_help)
-@click.option('-d', '--dirtyreload', 'livereload', flag_value='dirty', help=dirty_reload_help)
+@click.option('--dirtyreload', 'livereload', flag_value='dirty', help=dirty_reload_help)
 @common_options
 def serve_command(dev_addr, config_file, strict, theme, theme_dir, livereload):
     """Run the builtin development server"""

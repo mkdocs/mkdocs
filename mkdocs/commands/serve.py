@@ -74,7 +74,7 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
         )
         config['site_dir'] = tempdir
         live_server = livereload in ['dirty', 'livereload']
-        dirty = livereload == 'dirtyreload'
+        dirty = livereload == 'dirty'
         build(config, live_server=live_server, dirty=dirty)
         return config
 
@@ -84,7 +84,7 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
     host, port = config['dev_addr'].split(':', 1)
 
     try:
-        if livereload in ['livereload', 'dirtyreload']:
+        if livereload in ['livereload', 'dirty']:
             _livereload(host, port, config, builder, tempdir)
         else:
             _static_server(host, port, tempdir)
