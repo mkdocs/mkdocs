@@ -38,6 +38,7 @@ script:
 - tox
 before_install: pip install codecov
 after_success: codecov
+after_deploy: test $TRAVIS_BRANCH == "master" && bash ./deploy-docs.sh
 deploy:
   provider: pypi
   user: mkdocsdeploy
