@@ -217,6 +217,7 @@ better conform with the documented [layout].
 * Improve installation instructions (#1028).
 * Account for wide tables and consistently wrap inline code spans (#834).
 * Bugfix: Use absolute URLs in nav & media links from error templates (#77).
+* Add support for sections headers to point to index pages in Nav (#73).
 
 ## Version 0.15.3 (2016-02-18)
 
