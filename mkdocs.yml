@@ -14,6 +14,7 @@ pages:
     - Deploying Your Docs: user-guide/deploying-your-docs.md
     - Custom Themes: user-guide/custom-themes.md
 - About:
+    - about/index.md
     - Release Notes: about/release-notes.md
     - Contributing: about/contributing.md
     - License: about/license.md

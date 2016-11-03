@@ -49,6 +49,7 @@ class SiteNavigationTests(unittest.TestCase):
                 {'Debugging': 'api-guide/debugging.md'},
             ]},
             {'About': [
+                'about/index.md',
                 {'Release notes': 'about/release-notes.md'},
                 {'License': 'about/license.md'}
             ]}
@@ -59,14 +60,14 @@ class SiteNavigationTests(unittest.TestCase):
             Running - /api-guide/running/
             Testing - /api-guide/testing/
             Debugging - /api-guide/debugging/
-        About
+        About - /about/
             Release notes - /about/release-notes/
             License - /about/license/
         """)
         site_navigation = nav.SiteNavigation(pages)
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.nav_items), 3)
-        self.assertEqual(len(site_navigation.pages), 6)
+        self.assertEqual(len(site_navigation.pages), 7)
 
     def test_nested_ungrouped(self):
         pages = [
