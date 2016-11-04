@@ -5,25 +5,24 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        <meta name="author" content="Tom Christie & Dougal Matthews">
+        <meta name="author" content="MkDocs Team">
         <link rel="canonical" href="http://www.mkdocs.org/user-guide/configuration/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
-
-	<title>Configuration - MkDocs</title>
-
+        <title>Configuration - MkDocs</title>
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.5.0.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="../../css/highlight.css">
         <link href="../../css/extra.css" rel="stylesheet">
-
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
-
-        
+	
+	<script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -32,8 +31,7 @@
 
             ga('create', 'UA-27795084-5', 'mkdocs.org');
             ga('send', 'pageview');
-        </script>
-        
+        </script> 
     </head>
 
     <body>
@@ -43,7 +41,6 @@
 
         <!-- Collapsed navigation -->
         <div class="navbar-header">
-            
             <!-- Expander button -->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -51,92 +48,59 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            
-
-            <!-- Main title -->
             <a class="navbar-brand" href="../..">MkDocs</a>
         </div>
 
         <!-- Expanded navigation -->
         <div class="navbar-collapse collapse">
-            
                 <!-- Main navigation -->
                 <ul class="nav navbar-nav">
-                
-                
                     <li >
                         <a href="../..">Home</a>
                     </li>
-                
-                
-                
                     <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                        
                             
 <li >
     <a href="../writing-your-docs/">Writing Your Docs</a>
 </li>
-
-                        
                             
 <li >
     <a href="../styling-your-docs/">Styling Your Docs</a>
 </li>
-
-                        
                             
 <li class="active">
     <a href="./">Configuration</a>
 </li>
-
-                        
                             
 <li >
     <a href="../deploying-your-docs/">Deploying Your Docs</a>
 </li>
-
-                        
                             
 <li >
     <a href="../custom-themes/">Custom Themes</a>
 </li>
-
-                        
                         </ul>
                     </li>
-                
-                
-                
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                        
                             
 <li >
     <a href="../../about/release-notes/">Release Notes</a>
 </li>
-
-                        
                             
 <li >
     <a href="../../about/contributing/">Contributing</a>
 </li>
-
-                        
                             
 <li >
     <a href="../../about/license/">License</a>
 </li>
-
-                        
                         </ul>
                     </li>
-                
-                
                 </ul>
-            
 
             <ul class="nav navbar-nav navbar-right">
                 <li>
@@ -144,7 +108,6 @@
                         <i class="fa fa-search"></i> Search
                     </a>
                 </li>
-                
                     <li >
                         <a rel="next" href="../styling-your-docs/">
                             <i class="fa fa-arrow-left"></i> Previous
@@ -155,42 +118,26 @@
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
-                
-                
                     <li>
                         <a href="https://github.com/mkdocs/mkdocs/">
-                            
-                                <i class="fa fa-github"></i>
-                            
-                            GitHub
+                                <i class="fa fa-github"></i>GitHub
                         </a>
                     </li>
-                
             </ul>
         </div>
     </div>
 </div>
 
         <div class="container">
-            
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-    
         <li class="main active"><a href="#configuration">Configuration</a></li>
-        
             <li><a href="#introduction">Introduction</a></li>
-        
             <li><a href="#project-information">Project information</a></li>
-        
             <li><a href="#documentation-layout">Documentation layout</a></li>
-        
             <li><a href="#build-directories">Build directories</a></li>
-        
             <li><a href="#preview-controls">Preview controls</a></li>
-        
             <li><a href="#formatting-options">Formatting options</a></li>
-        
-    
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -226,19 +173,42 @@ URL to the generated HTML header.</p>
 <p>When set, provides a link to your GitHub or Bitbucket repository on each page.</p>
 <p><strong>default</strong>: <code>'GitHub'</code> or <code>'Bitbucket'</code> if the <code>repo_url</code> matches those
 domains, otherwise <code>null</code></p>
+<h3 id="edit_uri">edit_uri<a class="headerlink" href="#edit_uri" title="Permanent link"></a></h3>
+<p>Path from the base <code>repo_url</code> to the docs directory when directly viewing a
+page, accounting for specifics of the repository host (e.g. GitHub, Bitbucket,
+etc), the branch, and the docs directory itself. Mkdocs concatenates <code>repo_url</code>
+and <code>edit_uri</code>, and appends the input path of the page.</p>
+<p>When set, provides a link directly to the page in your source repository. This
+makes it easier to find and edit the source for the page. If <code>repo_url</code> is not
+set, this option is ignored.</p>
+<p>For example, for a GitHub-hosted repository, the <code>edit_uri</code> would be as follows.
+(Note the <code>edit</code> path and <code>master</code> branch...)</p>
+<pre><code class="yaml">edit_uri: edit/master/docs/
+</code></pre>
+
+<p>For a Bitbucket-hosted repository, the equivalent <code>edit_uri</code> would be as
+follows. (Note the <code>src</code> path and <code>default</code> branch...)</p>
+<pre><code class="yaml">edit_uri: src/default/docs/
+</code></pre>
+
+<p>For other repository hosts, <code>edit_uri</code> works the same way. Simply specify the
+relative path to the docs directory.</p>
+<p><strong>default</strong>: <code>edit/master/docs/</code> or <code>src/default/docs/</code> for GitHub or Bitbucket
+repos, respectively, if <code>repo_url</code> matches those domains, otherwise <code>null</code></p>
+<div class="admonition note">
+<p class="admonition-title">Note:</p>
+<p>On GitHub, the <code>edit</code> path opens the page in the online GitHub editor. This
+functionality requires that the user have and be logged in to a GitHub
+account. Otherwise, the user will be redirected to a login/signup page.
+Alternatively, use the <code>blob</code> path to open a read-only view, which supports
+anonymous access. E.g. <code>blob/master/docs/</code></p>
+</div>
 <h3 id="site_description">site_description<a class="headerlink" href="#site_description" title="Permanent link"></a></h3>
 <p>Set the site description. This will add a meta tag to the generated HTML header.</p>
 <p><strong>default</strong>: <code>null</code></p>
 <h3 id="site_author">site_author<a class="headerlink" href="#site_author" title="Permanent link"></a></h3>
 <p>Set the name of the author. This will add a meta tag to the generated HTML
 header.</p>
-<p><strong>default</strong>: <code>null</code></p>
-<h3 id="site_favicon">site_favicon<a class="headerlink" href="#site_favicon" title="Permanent link"></a></h3>
-<p>Set the favicon to use. Putting a <code>favicon.ico</code> into the <code>docs/</code> directory, the
-config would look as follows:</p>
-<pre><code class="yaml">site_favicon: favicon.ico
-</code></pre>
-
 <p><strong>default</strong>: <code>null</code></p>
 <h3 id="copyright">copyright<a class="headerlink" href="#copyright" title="Permanent link"></a></h3>
 <p>Set the copyright information to be included in the documentation by the theme.</p>
@@ -269,9 +239,11 @@ and About pages, given the three source files <code>index.md</code>, <code>user-
     - 'About': 'about.md'
 </code></pre>
 
-<p>See the section on <a href="../writing-your-docs/#configure-pages-and-navigation">configuring pages and
-navigation</a> for
-a more detailed breakdown, including how to create sub-sections.</p>
+<p>See the section on <a href="../writing-your-docs/#configure-pages-and-navigation">configuring pages and navigation</a> for a more detailed
+breakdown, including how to create sub-sections.</p>
+<p><strong>default</strong>: By default <code>pages</code> will contain an alphanumerically sorted, nested
+list of all the Markdown files found within the <code>docs_dir</code> and its
+sub-directories. If none are found it will be <code>[]</code> (an empty list).</p>
 <h2 id="build-directories">Build directories<a class="headerlink" href="#build-directories" title="Permanent link"></a></h2>
 <h3 id="theme">theme<a class="headerlink" href="#theme" title="Permanent link"></a></h3>
 <p>Sets the theme of your documentation site, for a list of available themes visit
@@ -281,8 +253,10 @@ a more detailed breakdown, including how to create sub-sections.</p>
 <p>Lets you set a directory to a custom theme. This can either be a relative
 directory, in which case it is resolved relative to the directory containing
 your configuration file, or it can be an absolute directory path.</p>
-<p>See <a href="../styling-your-docs/#custom-themes">styling your docs</a> for an explanation
-of custom themes.</p>
+<p>See <a href="../styling-your-docs/#using-the-theme_dir">styling your docs</a> for details if you would like to tweak an
+existing theme.</p>
+<p>See <a href="../custom-themes/">custom themes</a> if you would like to build your own theme from the ground
+up.</p>
 <p><strong>default</strong>: <code>null</code></p>
 <h3 id="docs_dir">docs_dir<a class="headerlink" href="#docs_dir" title="Permanent link"></a></h3>
 <p>Lets you set the directory containing the documentation source markdown files.
@@ -308,29 +282,25 @@ you might add the following line to your <code>.gitignore</code> file:</p>
 documentation on how to ignore specific directories.</p>
 </div>
 <h3 id="extra_css">extra_css<a class="headerlink" href="#extra_css" title="Permanent link"></a></h3>
-<p>Set a list of CSS files to be included by the theme. For example, the
-following example will include the the extra.css file within the css
-subdirectory in your <a href="#docs_dir">docs_dir</a>.</p>
+<p>Set a list of CSS files in your <code>docs_dir</code> to be included by the theme. For
+example, the following example will include the the extra.css file within the
+css subdirectory in your <a href="#docs_dir">docs_dir</a>.</p>
 <pre><code class="yaml">extra_css:
     - css/extra.css
     - css/second_extra.css
 </code></pre>
 
-<p><strong>default</strong>: By default <code>extra_css</code> will contain a list of all the CSS files
-found within the <code>docs_dir</code>, if none are found it will be <code>[]</code> (an empty list).</p>
+<p><strong>default</strong>: <code>[]</code> (an empty list).</p>
 <h3 id="extra_javascript">extra_javascript<a class="headerlink" href="#extra_javascript" title="Permanent link"></a></h3>
-<p>Set a list of JavaScript files to be included by the theme. See the example
-in <a href="#extra_css">extra_css</a> for usage.</p>
-<p><strong>default</strong>: By default <code>extra_javascript</code> will contain a list of all the
-JavaScript files found within the <code>docs_dir</code>, if none are found it will be <code>[]</code>
-(an empty list).</p>
-<h3 id="extra_templates">extra_templates<a class="headerlink" href="#extra_templates" title="Permanent link"></a></h3>
-<p>Set a list of templates to be built by MkDocs. To see more about writing
-templates for MkDocs read the documentation about <a href="../styling-your-docs/#custom-themes">custom themes</a> and
-specifically the section about the <a href="../styling-your-docs/#global-context">variables that are available</a> to templates.
+<p>Set a list of JavaScript files in your <code>docs_dir</code> to be included by the theme.
 See the example in <a href="#extra_css">extra_css</a> for usage.</p>
-<p><strong>default</strong>: Unlike extra_css and extra_javascript, by default <code>extra_templates</code>
-will be <code>[]</code> (an empty list).</p>
+<p><strong>default</strong>: <code>[]</code> (an empty list).</p>
+<h3 id="extra_templates">extra_templates<a class="headerlink" href="#extra_templates" title="Permanent link"></a></h3>
+<p>Set a list of templates in your <code>docs_dir</code> to be built by MkDocs. To see more
+about writing templates for MkDocs read the documentation about <a href="../custom-themes/">custom themes</a>
+and specifically the section about the <a href="../custom-themes/#template-variables">variables that are available</a> to
+templates. See the example in <a href="#extra_css">extra_css</a> for usage.</p>
+<p><strong>default</strong>: <code>[]</code> (an empty list).</p>
 <h3 id="extra">extra<a class="headerlink" href="#extra" title="Permanent link"></a></h3>
 <p>A set of key value pairs, where the values can be any valid YAML construct, that
 will be passed to the template. This allows for great flexibility when creating
@@ -402,8 +372,8 @@ useful, for example:</p>
 <p><strong>default</strong>: <code>'127.0.0.1:8000'</code></p>
 <h2 id="formatting-options">Formatting options<a class="headerlink" href="#formatting-options" title="Permanent link"></a></h2>
 <h3 id="markdown_extensions">markdown_extensions<a class="headerlink" href="#markdown_extensions" title="Permanent link"></a></h3>
-<p>MkDocs uses the <a href="http://pythonhosted.org/Markdown/">Python Markdown</a> library to translate Markdown files
-into HTML. Python Markdown supports a variety of <a href="http://pythonhosted.org/Markdown/extensions/index.html">extensions</a>
+<p>MkDocs uses the <a href="https://pythonhosted.org/Markdown/">Python Markdown</a> library to translate Markdown files
+into HTML. Python Markdown supports a variety of <a href="https://pythonhosted.org/Markdown/extensions/index.html">extensions</a>
 that customize how pages are formatted. This setting lets you enable a list of
 extensions beyond the ones that MkDocs uses by default (<code>meta</code>, <code>toc</code>, <code>tables</code>,
 and <code>fenced_code</code>).</p>
@@ -453,48 +423,39 @@ the documentation provided by those extensions for installation instructions
 and available configuration options.</p>
 </div>
 <p><strong>default</strong>: <code>[]</code></p></div>
-            
         </div>
 
         <footer class="col-md-12">
             <hr>
-            
-                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, <a href="http://www.dougalmatthews.com/">Dougal Matthews</a>.</p>
-            
+                <p>Copyright &copy; 2014 <a href="/release-notes/">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-
-        <script src="../../js/jquery-1.10.2.min.js"></script>
-        <script src="../../js/bootstrap-3.0.3.min.js"></script>
-        <script src="../../js/highlight.pack.js"></script>
         <script>var base_url = '../..';</script>
         <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
-        <script src="../../js/base.js"></script>
-
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+        <script src="../../js/base.js"></script><div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
                     </div>
-                    <div class="modal-body">
-                        <p>
-                            From here you can search these documents. Enter
-                            your search terms below.
-                        </p>
-                        <form role="form">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
-                            </div>
-                        </form>
-                        <div id="mkdocs-search-results"></div>
-                    </div>
-                    <div class="modal-footer">
-                    </div>
-                </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
             </div>
         </div>
+    </div>
+</div>
 
     </body>
 </html>

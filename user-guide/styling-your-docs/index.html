@@ -5,25 +5,24 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        <meta name="author" content="Tom Christie & Dougal Matthews">
+        <meta name="author" content="MkDocs Team">
         <link rel="canonical" href="http://www.mkdocs.org/user-guide/styling-your-docs/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
-
-	<title>Styling Your Docs - MkDocs</title>
-
+        <title>Styling Your Docs - MkDocs</title>
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.5.0.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="../../css/highlight.css">
         <link href="../../css/extra.css" rel="stylesheet">
-
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
-
-        
+	
+	<script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -32,8 +31,7 @@
 
             ga('create', 'UA-27795084-5', 'mkdocs.org');
             ga('send', 'pageview');
-        </script>
-        
+        </script> 
     </head>
 
     <body>
@@ -43,7 +41,6 @@
 
         <!-- Collapsed navigation -->
         <div class="navbar-header">
-            
             <!-- Expander button -->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -51,92 +48,59 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            
-
-            <!-- Main title -->
             <a class="navbar-brand" href="../..">MkDocs</a>
         </div>
 
         <!-- Expanded navigation -->
         <div class="navbar-collapse collapse">
-            
                 <!-- Main navigation -->
                 <ul class="nav navbar-nav">
-                
-                
                     <li >
                         <a href="../..">Home</a>
                     </li>
-                
-                
-                
                     <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                        
                             
 <li >
     <a href="../writing-your-docs/">Writing Your Docs</a>
 </li>
-
-                        
                             
 <li class="active">
     <a href="./">Styling Your Docs</a>
 </li>
-
-                        
                             
 <li >
     <a href="../configuration/">Configuration</a>
 </li>
-
-                        
                             
 <li >
     <a href="../deploying-your-docs/">Deploying Your Docs</a>
 </li>
-
-                        
                             
 <li >
     <a href="../custom-themes/">Custom Themes</a>
 </li>
-
-                        
                         </ul>
                     </li>
-                
-                
-                
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                        
                             
 <li >
     <a href="../../about/release-notes/">Release Notes</a>
 </li>
-
-                        
                             
 <li >
     <a href="../../about/contributing/">Contributing</a>
 </li>
-
-                        
                             
 <li >
     <a href="../../about/license/">License</a>
 </li>
-
-                        
                         </ul>
                     </li>
-                
-                
                 </ul>
-            
 
             <ul class="nav navbar-nav navbar-right">
                 <li>
@@ -144,7 +108,6 @@
                         <i class="fa fa-search"></i> Search
                     </a>
                 </li>
-                
                     <li >
                         <a rel="next" href="../writing-your-docs/">
                             <i class="fa fa-arrow-left"></i> Previous
@@ -155,36 +118,22 @@
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
-                
-                
                     <li>
                         <a href="https://github.com/mkdocs/mkdocs/">
-                            
-                                <i class="fa fa-github"></i>
-                            
-                            GitHub
+                                <i class="fa fa-github"></i>GitHub
                         </a>
                     </li>
-                
             </ul>
         </div>
     </div>
 </div>
 
         <div class="container">
-            
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-    
         <li class="main active"><a href="#styling-your-docs">Styling your docs</a></li>
-        
             <li><a href="#built-in-themes">Built-in themes</a></li>
-        
-            <li><a href="#bootstrap-and-bootswatch-themes">Bootstrap and Bootswatch Themes</a></li>
-        
-            <li><a href="#customising-a-theme">Customising a Theme</a></li>
-        
-    
+            <li><a href="#customizing-a-theme">Customizing a Theme</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -192,64 +141,37 @@
 <h1 id="styling-your-docs">Styling your docs<a class="headerlink" href="#styling-your-docs" title="Permanent link"></a></h1>
 <p>How to style and theme your documentation.</p>
 <hr />
-<p>MkDocs includes a number of different <a href="#built-in-themes">builtin themes</a> and
-<a href="#bootstrap-and-bootswatch-themes">external themes</a> which can easily be
-<a href="#customising-a-theme">customised with extra CSS or JavaScript</a> or you can
-create a <a href="../custom-themes/">custom theme</a> for your documentation.</p>
+<p>MkDocs includes a couple <a href="#built-in-themes">built-in themes</a> as well as various <a href="#third-party-themes">third party
+themes</a>, all of which can easily be customized with <a href="#using-the-docs_dir">extra CSS or
+JavaScript</a> or overridden from the <a href="../configuration/#theme_dir">theme directory</a>. You
+can also create your own <a href="../custom-themes/">custom theme</a> from the grown up for your
+documentation.</p>
 <p>To use a theme that is included in MkDocs, simply add this to your
 <code>mkdocs.yml</code> config file.</p>
 <pre><code>theme: readthedocs
 </code></pre>
-<p>Replace <a href="#readthedocs"><code>readthedocs</code></a> with any of the <a href="#built-
-in-themes">builtin themes</a> listed below.</p>
-<p>To create a new custom theme or more heavily customise an existing theme, see
-the <a href="#custom-themes">custom themes</a> section below.</p>
+<p>Replace <a href="#readthedocs"><code>readthedocs</code></a> with any of the <a href="#built-in-themes">built-in themes</a> listed below.</p>
+<p>To create a new custom theme see the <a href="../custom-themes/">Custom Themes</a> page, or to
+more heavily customize an existing theme, see
+the <a href="#customizing-a-theme">Customizing a Theme</a> section below.</p>
 <h2 id="built-in-themes">Built-in themes<a class="headerlink" href="#built-in-themes" title="Permanent link"></a></h2>
 <h3 id="mkdocs">mkdocs<a class="headerlink" href="#mkdocs" title="Permanent link"></a></h3>
 <p><img alt="mkdocs" src="../../img/mkdocs.png" /></p>
 <h3 id="readthedocs">readthedocs<a class="headerlink" href="#readthedocs" title="Permanent link"></a></h3>
-<p><img alt="ReadTheDocs" src="https://docs.readthedocs.org/en/latest/_images/screen_mobile.png" /></p>
-<h2 id="bootstrap-and-bootswatch-themes">Bootstrap and Bootswatch Themes<a class="headerlink" href="#bootstrap-and-bootswatch-themes" title="Permanent link"></a></h2>
-<p>MkDocs also includes themes provided by two packages. <a href="http://mkdocs.github.io/mkdocs-bootstrap/">MkDocs Bootstrap</a> and
-<a href="http://mkdocs.github.io/mkdocs-bootswatch/">MkDocs Bootswatch</a>. The Bootstrap theme provides a theme based on <a href="http://getbootstrap.com/">Bootstrap</a>
-and the Bootstrap theme provides 12 different themed Bootstrap themes based on
-the <a href="http://bootswatch.com/">Bootswatch</a> project.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The Bootstrap and Bootswatch themes will not be included by default from
-MkDocs version 1.0. They will need to be installed manually with <code>pip
-install mkdocs-bootstrap</code> or <code>pip install mkdocs-bootswatch</code>.</p>
-</div>
-<h3 id="bootstrap">Bootstrap<a class="headerlink" href="#bootstrap" title="Permanent link"></a></h3>
-<p><img alt="Bootstrap" src="http://bootstrapdocs.com/v2.3.1/docs/assets/img/examples/bootstrap-example-fluid.png" /></p>
-<h3 id="amelia">Amelia<a class="headerlink" href="#amelia" title="Permanent link"></a></h3>
-<p><img alt="Amelia" src="http://bootswatch.com/2/amelia/thumbnail.png" /></p>
-<h3 id="cerulean">Cerulean<a class="headerlink" href="#cerulean" title="Permanent link"></a></h3>
-<p><img alt="Cerulean" src="http://bootswatch.com/cerulean/thumbnail.png" /></p>
-<h3 id="cosmo">Cosmo<a class="headerlink" href="#cosmo" title="Permanent link"></a></h3>
-<p><img alt="Cosmo" src="http://bootswatch.com/cosmo/thumbnail.png" /></p>
-<h3 id="cyborg">Cyborg<a class="headerlink" href="#cyborg" title="Permanent link"></a></h3>
-<p><img alt="Cyborg" src="http://bootswatch.com/cyborg/thumbnail.png" /></p>
-<h3 id="flatly">Flatly<a class="headerlink" href="#flatly" title="Permanent link"></a></h3>
-<p><img alt="Flatly" src="http://bootswatch.com/flatly/thumbnail.png" /></p>
-<h3 id="journal">Journal<a class="headerlink" href="#journal" title="Permanent link"></a></h3>
-<p><img alt="Journal" src="http://bootswatch.com/journal/thumbnail.png" /></p>
-<h3 id="readable">Readable<a class="headerlink" href="#readable" title="Permanent link"></a></h3>
-<p><img alt="Readable" src="http://bootswatch.com/readable/thumbnail.png" /></p>
-<h3 id="simplex">Simplex<a class="headerlink" href="#simplex" title="Permanent link"></a></h3>
-<p><img alt="Simplex" src="http://bootswatch.com/simplex/thumbnail.png" /></p>
-<h3 id="slate">Slate<a class="headerlink" href="#slate" title="Permanent link"></a></h3>
-<p><img alt="Slate" src="http://bootswatch.com/slate/thumbnail.png" /></p>
-<h3 id="spacelab">Spacelab<a class="headerlink" href="#spacelab" title="Permanent link"></a></h3>
-<p><img alt="Spacelab" src="http://bootswatch.com/spacelab/thumbnail.png" /></p>
-<h3 id="united">United<a class="headerlink" href="#united" title="Permanent link"></a></h3>
-<p><img alt="United" src="http://bootswatch.com/united/thumbnail.png" /></p>
-<h3 id="yeti">Yeti<a class="headerlink" href="#yeti" title="Permanent link"></a></h3>
-<p><img alt="Yeti" src="http://bootswatch.com/yeti/thumbnail.png" /></p>
-<h2 id="customising-a-theme">Customising a Theme<a class="headerlink" href="#customising-a-theme" title="Permanent link"></a></h2>
+<p><img alt="ReadTheDocs" src="http://docs.readthedocs.io/en/latest/_images/screen_mobile.png" /></p>
+<h3 id="third-party-themes">Third Party Themes<a class="headerlink" href="#third-party-themes" title="Permanent link"></a></h3>
+<p>A list of third party themes can be found in the MkDocs <a href="https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes">community wiki</a>. If you
+have created your own, please feel free to add it to the list.</p>
+<h2 id="customizing-a-theme">Customizing a Theme<a class="headerlink" href="#customizing-a-theme" title="Permanent link"></a></h2>
+<p>If you would like to make a few tweaks to an existing theme, there is no need to
+create your own theme from scratch. For minor tweaks which only require some CSS
+and/or JavaScript, you can use the <a href="#using-the-docs_dir">docs_dir</a>. However, for more complex
+customizations, including overriding templates, you will need to use the
+<a href="../configuration/#theme_dir">theme_dir</a>.</p>
+<h3 id="using-the-docs_dir">Using the docs_dir<a class="headerlink" href="#using-the-docs_dir" title="Permanent link"></a></h3>
 <p>The <a href="../configuration/#extra_css">extra_css</a> and <a href="../configuration/#extra_javascript">extra_javascript</a> configuration options can be used to
-make tweaks and customisations to existing themes. To use these, you simply
-need to include either CSS or JavaScript files within your <a href="../../user-guide/configuration/#docs_dir">documentation
+make tweaks and customizations to existing themes. To use these, you simply
+need to include either CSS or JavaScript files within your <a href="../configuration/#docs_dir">documentation
 directory</a>.</p>
 <p>For example, to change the colour of the headers in your documentation, create
 a file called <code>extra.css</code> and place it next to the documentation Markdown. In
@@ -269,49 +191,188 @@ your config. To do this, add the following to your mkdocs.yml.</p>
 </div>
 <p>After making these changes, they should be visible when you run
 <code>mkdocs serve</code> - if you already had this running, you should see that the CSS
-changes were automatically picked up and the documentation will be updated.</p></div>
-            
+changes were automatically picked up and the documentation will be updated.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Any extra CSS or JavaScript files will be added to the generated HTML
+document after the page content. If you desire to include a JavaScript
+library, you may have better success including the library by using the
+<a href="../configuration/#theme_dir">theme_dir</a>.</p>
+</div>
+<h3 id="using-the-theme_dir">Using the theme_dir<a class="headerlink" href="#using-the-theme_dir" title="Permanent link"></a></h3>
+<p>The <a href="../configuration/#theme_dir">theme_dir</a> configuration option can be used to point to a directory of
+files which override the files in the theme set on the <a href="../configuration/#theme">theme</a> configuration
+option. Any file in the <code>theme_dir</code> with the same name as a file in the <code>theme</code>
+will replace the file of the same name in the <code>theme</code>. Any additional files in
+the <code>theme_dir</code> will be added to the <code>theme</code>. The contents of the <code>theme_dir</code>
+should mirror the directory structure of the <code>theme</code>. You may include templates,
+JavaScript files, CSS files, images, fonts, or any other media included in a
+theme.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For this to work, the <code>theme</code> setting must be set to a known installed theme.
+If the <code>theme</code> setting is instead set to <code>null</code> (or not defined), then there
+is no theme to override and the contents of the <code>theme_dir</code> must be a
+complete, standalone theme. See <a href="../custom-themes/">Custom Themes</a> for more
+information.</p>
+</div>
+<p>For example, the <a href="#mkdocs">mkdocs</a> theme (<a href="https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes/mkdocs">browse source</a>), contains the following
+directory structure (in part):</p>
+<pre><code class="nohighlight">- css\
+- fonts\
+- img\
+  - favicon.ico
+  - grid.png
+- js\
+- 404.html
+- base.html
+- content.html
+- nav-sub.html
+- nav.html
+- toc.html
+</code></pre>
+
+<p>To override any of the files contained in that theme, create a new directory
+next to your <code>docs_dir</code>:</p>
+<pre><code class="bash">mkdir custom_theme
+</code></pre>
+
+<p>And then point your <code>mkdocs.yml</code> configuration file at the new directory:</p>
+<pre><code class="yaml">theme_dir: custom_theme
+</code></pre>
+
+<p>To override the 404 error page ("file not found"), add a new template file named
+<code>404.html</code> to the <code>custom_theme</code> directory. For information on what can be
+included in a template, review the documentation for building a <a href="../custom-themes/">custom theme</a>.</p>
+<p>To override the favicon, you can add a new icon file at
+<code>custom_theme/img/favicon.ico</code>.</p>
+<p>To include a JavaScript library, copy the library to the <code>custom_theme/js/</code>
+directory.</p>
+<p>Your directory structure should now look like this:</p>
+<pre><code class="nohighlight">- docs/
+  - index.html
+- custom_theme/
+  - img/
+    - favicon.ico
+  - js/
+    - somelib.js
+  - 404.html
+- config.yml
+</code></pre>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Any files included in the <code>theme</code> but not included in the <code>theme_dir</code> will
+still be utilized. The <code>theme_dir</code> will only override/replace files in the
+<code>theme</code>. If you want to remove files, or build a theme from scratch, then
+you should review the documentation for building a <a href="../custom-themes/">custom theme</a>.</p>
+</div>
+<h4 id="overriding-template-blocks">Overriding Template Blocks<a class="headerlink" href="#overriding-template-blocks" title="Permanent link"></a></h4>
+<p>The built-in themes implement many of their parts inside template blocks which
+can be individually overridden in the <code>main.html</code> template. Simply create a
+<code>main.html</code> template file in your <code>theme_dir</code> and define replacement blocks
+within that file. Just make sure that the <code>main.html</code> extends <code>base.html</code>. For
+example, to alter the title of the MkDocs theme, your replacement <code>main.html</code>
+template would contain the following:</p>
+<pre><code class="django">{% extends &quot;base.html&quot; %}
+
+{% block title %}
+&lt;title&gt;Custom title goes here&lt;/title&gt;
+{% endblock %}
+</code></pre>
+
+<p>In the above example, the title block defined in your custom <code>main.html</code> file
+will be used in place of the default title block defined in the parent theme.
+You may re-define as many blocks as you desire, as long as those blocks are
+defined in the parent. For example, you could replace the Google Analytics
+script with one for a different service or replace the search feature with your
+own. You will need to consult the parent theme you are using to determine what
+blocks are available to override. The MkDocs and ReadTheDocs themes provide the
+following blocks:</p>
+<ul>
+<li><code>site_meta</code>: Contains meta tags in the document head.</li>
+<li><code>htmltitle</code>: Contains the page title in the document head.</li>
+<li><code>styles</code>: Contains the link tags for stylesheets.</li>
+<li><code>libs</code>: Contains the JavaScript libraries (jQuery, etc) included in the page header.</li>
+<li><code>scripts</code>: Contains JavaScript scripts which should execute after a page loads.</li>
+<li><code>analytics</code>: Contains the analytics script.</li>
+<li><code>extrahead</code>: An empty block in the <code>&lt;head&gt;</code> to insert custom tags/scripts/etc.</li>
+<li><code>site_name</code>: Contains the site name in the navigation bar.</li>
+<li><code>site_nav</code>: Contains the site navigation in the navigation bar.</li>
+<li><code>search_box</code>: Contains the search box in the navigation bar.</li>
+<li><code>next_prev</code>: Contains the next and previous buttons in the navigation bar.</li>
+<li><code>repo</code>: Contains the repository link in the navigation bar.</li>
+<li><code>content</code>: Contains the page content and table of contents for the page.</li>
+<li><code>footer</code>: Contains the page footer.</li>
+</ul>
+<p>You may need to view the source template files to ensure your modifications will
+work with the structure of the site. See <a href="../custom-themes/#template-variables">Template Variables</a> for a list of
+variables you can use within your custom blocks. For a more complete
+explaination of blocks, consult the <a href="http://jinja.pocoo.org/docs/dev/templates/#template-inheritance">Jinja documentation</a>.</p>
+<h4 id="combining-the-theme_dir-and-template-blocks">Combining the theme_dir and Template Blocks<a class="headerlink" href="#combining-the-theme_dir-and-template-blocks" title="Permanent link"></a></h4>
+<p>Adding a JavaScript library to the <code>theme_dir</code> will make it available, but
+won't include it in the pages generated by MkDocs. Therefore, a link needs to
+be added to the library from the HTML.</p>
+<p>Starting the with directory structure above (truncated):</p>
+<pre><code class="nohighlight">- docs/
+- custom_theme/
+  - js/
+    - somelib.js
+- config.yml
+</code></pre>
+
+<p>A link to the <code>custom_theme/js/somelib.js</code> file needs to be added to the
+template. As <code>somelib.js</code> is a JavaScript library, it would logically go in the
+<code>libs</code> block. However, a new <code>libs</code> block that only includes the new script will
+replace the block defined in the parent template and any links to libraries in
+the parent template will be removed. To avoid breaking the template, a
+<a href="http://jinja.pocoo.org/docs/dev/templates/#super-blocks">super block</a> can be used with a call to <code>super</code> from within the block:</p>
+<pre><code class="django">{% extends &quot;base.html&quot; %}
+
+{% block libs %}
+    {{ super() }}
+    &lt;script src=&quot;{{ base_url }}/js/somelib.js&quot;&gt;&lt;/script&gt;
+{% endblock %}
+</code></pre>
+
+<p>Note that the <a href="../custom-themes/#base_url">base_url</a> template variable was used to ensure that the link is
+always relative to the current page.</p>
+<p>Now the generated pages will include links to the template provided libraries as
+well as the library included in the <code>theme_dir</code>. The same would be required for
+any additional CSS files included in the <code>theme_dir</code>.</p></div>
         </div>
 
         <footer class="col-md-12">
             <hr>
-            
-                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, <a href="http://www.dougalmatthews.com/">Dougal Matthews</a>.</p>
-            
+                <p>Copyright &copy; 2014 <a href="/release-notes/">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-
-        <script src="../../js/jquery-1.10.2.min.js"></script>
-        <script src="../../js/bootstrap-3.0.3.min.js"></script>
-        <script src="../../js/highlight.pack.js"></script>
         <script>var base_url = '../..';</script>
         <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
-        <script src="../../js/base.js"></script>
-
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+        <script src="../../js/base.js"></script><div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
                     </div>
-                    <div class="modal-body">
-                        <p>
-                            From here you can search these documents. Enter
-                            your search terms below.
-                        </p>
-                        <form role="form">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
-                            </div>
-                        </form>
-                        <div id="mkdocs-search-results"></div>
-                    </div>
-                    <div class="modal-footer">
-                    </div>
-                </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
             </div>
         </div>
+    </div>
+</div>
 
     </body>
 </html>

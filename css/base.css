@@ -5,29 +5,29 @@ body {
     background-color: #f8f8f8;
 }
 
-body > div.container {
+body > .container {
     min-height: 400px;
 }
 
-ul.nav li.main {
+ul.nav .main {
     font-weight: bold;
 }
 
-div.col-md-3 {
+.col-md-3 {
     padding-left: 0;
 }
 
-div.col-md-9 {
+.col-md-9 {
     padding-bottom: 100px;
 }
 
-div.source-links {
+.source-links {
     float: right;
 }
 
-div.col-md-9 img {
+.col-md-9 img {
     max-width: 100%;
-    display: inline;
+    display: inline-block;
     padding: 4px;
     line-height: 1.428571429;
     background-color: #fff;
@@ -36,24 +36,52 @@ div.col-md-9 img {
     margin: 20px auto 30px auto;
 }
 
-h1, h2, h3 {
-    color: #444;
-}
-
-h1[id]:before, h2[id]:before, h3[id]:before, h4[id]:before, h5[id]:before, h6[id]:before {
+/*
+ * The code below adds some padding to the top of the current anchor target so
+ * that, when navigating to it, the header isn't hidden by the navbar at the
+ * top. This is especially complicated because we want to *remove* the padding
+ * after navigation so that hovering over the header shows the permalink icon
+ * correctly. Thus, we create a CSS animation to remove the extra padding after
+ * a second. We have two animations so that navigating to an anchor within the
+ * page always restarts the animation.
+ *
+ * See <https://github.com/mkdocs/mkdocs/issues/843> for more details.
+ */
+:target::before {
     content: "";
     display: block;
     margin-top: -75px;
     height: 75px;
     pointer-events: none;
+    animation: 0s 1s forwards collapse-anchor-padding-1;
+}
+
+.clicky :target::before {
+  animation-name: collapse-anchor-padding-2;
+}
+
+@keyframes collapse-anchor-padding-1 {
+    to {
+        margin-top: 0;
+        height: 0;
+    }
+}
+
+@keyframes collapse-anchor-padding-2 {
+    to {
+        margin-top: 0;
+        height: 0;
+    }
 }
 
 h1 {
+    color: #444;
     font-weight: 400;
     font-size: 42px;
 }
 
 h2, h3, h4, h5, h6 {
+    color: #444;
     font-weight: 300;
 }
 
@@ -65,7 +93,7 @@ pre, .rst-content tt {
     max-width: 100%;
     background: #fff;
     border: solid 1px #e1e4e5;
-    color: #e74c3c;
+    color: #333;
     overflow-x: auto;
 }
 
@@ -75,14 +103,28 @@ code.code-large, .rst-content tt.code-large {
 
 code {
     padding: 2px 5px;
-    color: #c7254e;
-    background-color: #f9f2f4;
-    font-size: 75%;
+    background: #fff;
+    border: solid 1px #e1e4e5;
+    color: #333;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
-code, kbd, pre, samp  {
+pre code {
+    background: transparent;
+    border: none;
+    white-space: pre;
+    word-wrap: normal;
     font-family: monospace,serif;
-    font-size: 12px !important;
+    font-size: 12px;
+}
+
+a code {
+    color: #2FA4E7;
+}
+
+a:hover code, a:focus code {
+    color: #157AB5;
 }
 
 footer {
@@ -104,11 +146,11 @@ footer {
  */
 
 /* By default it's not affixed in mobile views, so undo that */
-.bs-sidebar.affix {
+.bs-sidebar.affix { /* csslint allow: adjoining-classes */
     position: static;
 }
 
-.bs-sidebar.well {
+.bs-sidebar.well { /* csslint allow: adjoining-classes */
     padding: 0;
     max-height: 90%;
     overflow-y: auto;
@@ -158,27 +200,27 @@ footer {
         display: block;
     }
     /* Widen the fixed sidebar */
-    .bs-sidebar.affix,
-    .bs-sidebar.affix-bottom {
+    .bs-sidebar.affix, /* csslint allow: adjoining-classes */
+    .bs-sidebar.affix-bottom { /* csslint allow: adjoining-classes */
         width: 213px;
     }
-    .bs-sidebar.affix {
+    .bs-sidebar.affix { /* csslint allow: adjoining-classes */
         position: fixed; /* Undo the static from mobile first approach */
         top: 80px;
     }
-    .bs-sidebar.affix-bottom {
+    .bs-sidebar.affix-bottom { /* csslint allow: adjoining-classes */
         position: absolute; /* Undo the static from mobile first approach */
     }
-    .bs-sidebar.affix-bottom .bs-sidenav,
-    .bs-sidebar.affix .bs-sidenav {
+    .bs-sidebar.affix-bottom .bs-sidenav, /* csslint allow: adjoining-classes */
+    .bs-sidebar.affix .bs-sidenav { /* csslint allow: adjoining-classes */
         margin-top: 0;
         margin-bottom: 0;
     }
 }
 @media (min-width: 1200px) {
     /* Widen the fixed sidebar again */
-    .bs-sidebar.affix-bottom,
-    .bs-sidebar.affix {
+    .bs-sidebar.affix-bottom, /* csslint allow: adjoining-classes */
+    .bs-sidebar.affix { /* csslint allow: adjoining-classes */
         width: 263px;
     }
 }
@@ -204,19 +246,19 @@ h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink, h4:hover .head
     text-align: left;
 }
 
-.admonition.note {
+.admonition.note { /* csslint allow: adjoining-classes */
     color: #3a87ad;
     background-color: #d9edf7;
     border-color: #bce8f1;
 }
 
-.admonition.warning {
+.admonition.warning { /* csslint allow: adjoining-classes */
     color: #c09853;
     background-color: #fcf8e3;
     border-color: #fbeed5;
 }
 
-.admonition.danger {
+.admonition.danger { /* csslint allow: adjoining-classes */
     color: #b94a48;
     background-color: #f2dede;
     border-color: #eed3d7;
@@ -264,11 +306,11 @@ h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink, h4:hover .head
     border-left-color: #fff;
 }
 
-.dropdown-submenu.pull-left {
+.dropdown-submenu.pull-left { /* csslint allow: adjoining-classes */
     float: none;
 }
 
-.dropdown-submenu.pull-left>.dropdown-menu {
+.dropdown-submenu.pull-left>.dropdown-menu { /* csslint allow: adjoining-classes */
     left: -100%;
     margin-left: 10px;
     -webkit-border-radius: 6px 0 6px 6px;

@@ -5,25 +5,24 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="Project documentation with Markdown.">
-        <meta name="author" content="Tom Christie & Dougal Matthews">
+        <meta name="author" content="MkDocs Team">
         <link rel="canonical" href="http://www.mkdocs.org/">
         <link rel="shortcut icon" href="./img/favicon.ico">
-
-	<title>MkDocs</title>
-
+        <title>MkDocs</title>
         <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="./css/font-awesome-4.5.0.css" rel="stylesheet">
         <link href="./css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="./css/highlight.css">
         <link href="./css/extra.css" rel="stylesheet">
-
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
-
-        
+	
+	<script src="./js/jquery-1.10.2.min.js"></script>
+        <script src="./js/bootstrap-3.0.3.min.js"></script>
+        <script src="./js/highlight.pack.js"></script>
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -32,8 +31,7 @@
 
             ga('create', 'UA-27795084-5', 'mkdocs.org');
             ga('send', 'pageview');
-        </script>
-        
+        </script> 
     </head>
 
     <body class="homepage">
@@ -43,7 +41,6 @@
 
         <!-- Collapsed navigation -->
         <div class="navbar-header">
-            
             <!-- Expander button -->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -51,92 +48,59 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            
-
-            <!-- Main title -->
             <a class="navbar-brand" href=".">MkDocs</a>
         </div>
 
         <!-- Expanded navigation -->
         <div class="navbar-collapse collapse">
-            
                 <!-- Main navigation -->
                 <ul class="nav navbar-nav">
-                
-                
                     <li class="active">
                         <a href=".">Home</a>
                     </li>
-                
-                
-                
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                        
                             
 <li >
     <a href="user-guide/writing-your-docs/">Writing Your Docs</a>
 </li>
-
-                        
                             
 <li >
     <a href="user-guide/styling-your-docs/">Styling Your Docs</a>
 </li>
-
-                        
                             
 <li >
     <a href="user-guide/configuration/">Configuration</a>
 </li>
-
-                        
                             
 <li >
     <a href="user-guide/deploying-your-docs/">Deploying Your Docs</a>
 </li>
-
-                        
                             
 <li >
     <a href="user-guide/custom-themes/">Custom Themes</a>
 </li>
-
-                        
                         </ul>
                     </li>
-                
-                
-                
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                        
                             
 <li >
     <a href="about/release-notes/">Release Notes</a>
 </li>
-
-                        
                             
 <li >
     <a href="about/contributing/">Contributing</a>
 </li>
-
-                        
                             
 <li >
     <a href="about/license/">License</a>
 </li>
-
-                        
                         </ul>
                     </li>
-                
-                
                 </ul>
-            
 
             <ul class="nav navbar-nav navbar-right">
                 <li>
@@ -144,7 +108,6 @@
                         <i class="fa fa-search"></i> Search
                     </a>
                 </li>
-                
                     <li class="disabled">
                         <a rel="next" >
                             <i class="fa fa-arrow-left"></i> Previous
@@ -155,48 +118,30 @@
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
-                
-                
                     <li>
                         <a href="https://github.com/mkdocs/mkdocs/">
-                            
-                                <i class="fa fa-github"></i>
-                            
-                            GitHub
+                                <i class="fa fa-github"></i>GitHub
                         </a>
                     </li>
-                
             </ul>
         </div>
     </div>
 </div>
 
         <div class="container">
-            
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-    
         <li class="main active"><a href="#mkdocs">MkDocs</a></li>
-        
             <li><a href="#overview">Overview</a></li>
-        
             <li><a href="#installation">Installation</a></li>
-        
-            <li><a href="#getting-started">Getting started</a></li>
-        
+            <li><a href="#getting-started">Getting Started</a></li>
             <li><a href="#adding-pages">Adding pages</a></li>
-        
             <li><a href="#theming-our-documentation">Theming our documentation</a></li>
-        
+            <li><a href="#changing-the-favicon-icon">Changing the Favicon Icon</a></li>
             <li><a href="#building-the-site">Building the site</a></li>
-        
             <li><a href="#other-commands-and-options">Other Commands and Options</a></li>
-        
             <li><a href="#deploying">Deploying</a></li>
-        
             <li><a href="#getting-help">Getting help</a></li>
-        
-    
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -210,34 +155,64 @@ generator that's geared towards building project documentation. Documentation
 source files are written in Markdown, and configured with a single YAML
 configuration file.</p>
 <h3 id="host-anywhere">Host anywhere<a class="headerlink" href="#host-anywhere" title="Permanent link"></a></h3>
-<p>Builds completely static HTML sites that you can host on GitHub pages, Amazon
-S3, or anywhere else you choose.</p>
+<p>MkDocs builds completely static HTML sites that you can host on GitHub pages,
+Amazon S3, or <a href="./user-guide/deploying-your-docs/">anywhere</a> else you choose.</p>
 <h3 id="great-themes-available">Great themes available<a class="headerlink" href="#great-themes-available" title="Permanent link"></a></h3>
-<p>There's a stack of good looking themes included by default. Choose from
-bootstrap, readthedocs, or any of the 12 bootswatch themes.
-You can also check out a list of 3rd party themes in the
-<a href="https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes">MkDocs wiki</a>,
-or better yet, add your own.</p>
+<p>There's a stack of good looking themes available for MkDocs. Choose between
+the built in themes: <a href="./user-guide/styling-your-docs/#mkdocs">mkdocs</a> and <a href="./user-guide/styling-your-docs/#readthedocs">readthedocs</a>, select one of the 3rd
+party themes in the <a href="https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes">MkDocs wiki</a>, or <a href="./user-guide/custom-themes/">build your own</a>.</p>
 <h3 id="preview-your-site-as-you-work">Preview your site as you work<a class="headerlink" href="#preview-your-site-as-you-work" title="Permanent link"></a></h3>
-<p>The built-in devserver allows you to preview your documentation as you're
-writing it. It will even auto-reload whenever you save any changes, so all you
-need to do to see your latest edits is refresh your browser.</p>
+<p>The built-in dev-server allows you to preview your documentation as you're
+writing it. It will even auto-reload and refresh your browser whenever you save
+your changes.</p>
 <h3 id="easy-to-customize">Easy to customize<a class="headerlink" href="#easy-to-customize" title="Permanent link"></a></h3>
 <p>Get your project documentation looking just the way you want it by customizing
 the theme.</p>
 <hr />
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link"></a></h2>
-<p>In order to install MkDocs you'll need <a href="https://www.python.org/">Python</a> installed on your system, as
-well as the Python package manager, <a href="http://pip.readthedocs.org/en/latest/installing.html">pip</a>. You can check if you have these
-already installed like so:</p>
+<h3 id="install-with-a-package-manager">Install with a Package Manager<a class="headerlink" href="#install-with-a-package-manager" title="Permanent link"></a></h3>
+<p>If you have and use a package manager (such as <a href="https://help.ubuntu.com/community/AptGet/Howto">apt-get</a>, <a href="http://dnf.readthedocs.io/en/latest/index.html">dnf</a>, <a href="http://brew.sh/">homebrew</a>,
+<a href="http://yum.baseurl.org/">yum</a>, etc.) to install packages on your system, then you may want to search for
+a "MkDocs" package and, if a recent version is available, install it with your
+package manager (check your system's documentation for details). That's it,
+you're done! Skip down to <a href="#getting-started">Getting Started</a>.</p>
+<p>If your package manager does not have a recent "MkDocs" package, you can still
+use your package manager to install "Python" and "pip". Then you can use pip to
+<a href="#installing-mkdocs">install MkDocs</a>.</p>
+<h3 id="manual-installation">Manual Installation<a class="headerlink" href="#manual-installation" title="Permanent link"></a></h3>
+<p>In order to manually install MkDocs you'll need <a href="https://www.python.org/">Python</a> installed on your
+system, as well as the Python package manager, <a href="http://pip.readthedocs.io/en/stable/installing/">pip</a>. You can check if you have
+these already installed from the command line:</p>
 <pre><code class="bash">$ python --version
 Python 2.7.2
 $ pip --version
 pip 1.5.2
 </code></pre>
 
-<p>MkDocs supports Python 2.6, 2.7, 3.3, 3.4 and 3.5.</p>
-<p>On Windows we recommend that you install Python and pip with <a href="https://chocolatey.org/">Chocolatey</a>.</p>
+<p>MkDocs supports Python versions 2.6, 2.7, 3.3, 3.4, 3.5 and pypy.</p>
+<h4 id="installing-python">Installing Python<a class="headerlink" href="#installing-python" title="Permanent link"></a></h4>
+<p>Install <a href="https://www.python.org/">Python</a> by downloading an installer appropriate for your system from
+<a href="https://www.python.org/downloads/">python.org</a> and running it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you are installing Python on Windows, be sure to check the box to have
+Python added to your PATH if the installer offers such an option (it's
+normally off by default).</p>
+<p><img alt="Add Python to PATH" src="./img/win-py-install.png" /></p>
+</div>
+<h4 id="installing-pip">Installing pip<a class="headerlink" href="#installing-pip" title="Permanent link"></a></h4>
+<p>If you're using a recent version of Python, the Python package manager, <a href="http://pip.readthedocs.io/en/stable/installing/">pip</a>,
+is most likely installed by default. However, you may need to upgrade pip to the
+lasted version:</p>
+<pre><code class="bash">pip install --upgrade pip
+</code></pre>
+
+<p>If you need to install <a href="http://pip.readthedocs.io/en/stable/installing/">pip</a> for the first time, download <a href="https://bootstrap.pypa.io/get-pip.py">get-pip.py</a>.
+Then run the following command to install it:</p>
+<pre><code class="bash">python get-pip.py
+</code></pre>
+
+<h4 id="installing-mkdocs">Installing MkDocs<a class="headerlink" href="#installing-mkdocs" title="Permanent link"></a></h4>
 <p>Install the <code>mkdocs</code> package using pip:</p>
 <pre><code class="bash">pip install mkdocs
 </code></pre>
@@ -245,99 +220,137 @@ pip 1.5.2
 <p>You should now have the <code>mkdocs</code> command installed on your system. Run <code>mkdocs
 --version</code> to check that everything worked okay.</p>
 <pre><code class="bash">$ mkdocs --version
-mkdocs, version 0.15.2
+mkdocs, version 0.15.3
 </code></pre>
 
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you are using Windows, some of the above commands may not work
+out-of-the-box.</p>
+<p>A quick solution may be to preface every Python command with <code>python -m</code>
+like this:</p>
+<pre><code>python -m pip install mkdocs
+python -m mkdocs
+</code></pre>
+<p>For a more permanent solution, you may need to edit your <code>PATH</code> environment
+variable to include the <code>Scripts</code> directory of your Python installation.
+Recent versions of Python include a script to do this for you. Navigate to
+your Python installation directory (for example <code>C:\Python34\</code>), open the
+<code>Tools</code>, then <code>Scripts</code> folder, and run the <code>win_add2path.py</code> file by double
+clicking on it. Alternatively, you can <a href="https://svn.python.org/projects/python/trunk/Tools/scripts/win_add2path.py">download</a> the script and run it
+(<code>python win_add2path.py</code>).</p>
+</div>
 <hr />
-<h2 id="getting-started">Getting started<a class="headerlink" href="#getting-started" title="Permanent link"></a></h2>
+<h2 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link"></a></h2>
 <p>Getting started is super easy.</p>
 <pre><code class="bash">mkdocs new my-project
 cd my-project
 </code></pre>
 
-<p>Let's take a moment to review the initial project that's been created for us.</p>
+<p>Take a moment to review the initial project that has been created for you.</p>
 <p><img alt="The initial MkDocs layout" src="./img/initial-layout.png" /></p>
 <p>There's a single configuration file named <code>mkdocs.yml</code>, and a folder named
-<code>docs</code> that will contain our documentation source files. Right now the <code>docs</code>
+<code>docs</code> that will contain your documentation source files. Right now the <code>docs</code>
 folder just contains a single documentation page, named <code>index.md</code>.</p>
-<p>MkDocs comes with a built-in webserver that lets you preview your documentation
-as you work on it. We start the webserver by making sure we're in the same
-directory as the <code>mkdocs.yml</code> config file, and then running the <code>mkdocs serve</code>
+<p>MkDocs comes with a built-in dev-server that lets you preview your documentation
+as you work on it. Make sure you're in the same directory as the <code>mkdocs.yml</code>
+configuration file, and then start the server by running the <code>mkdocs serve</code>
 command:</p>
 <pre><code class="bash">$ mkdocs serve
-Running at: http://127.0.0.1:8000/
+INFO    -  Building documentation...
+INFO    -  Cleaning site directory
+[I 160402 15:50:43 server:271] Serving on http://127.0.0.1:8000
+[I 160402 15:50:43 handlers:58] Start watching changes
+[I 160402 15:50:43 handlers:60] Start detecting changes
 </code></pre>
 
-<p>Open up <a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a> in your browser, and
-you'll see the index page being displayed:</p>
+<p>Open up <code>http://127.0.0.1:8000/</code> in your browser, and you'll see the default
+home page being displayed:</p>
 <p><img alt="The MkDocs live server" src="./img/screenshot.png" /></p>
-<p>The webserver also supports auto-reloading, and will rebuild your documentation
-whenever anything in the configuration file, documentation directory or theme
+<p>The dev-server also supports auto-reloading, and will rebuild your documentation
+whenever anything in the configuration file, documentation directory, or theme
 directory changes.</p>
-<p>Go ahead and edit the <code>docs/index.md</code> file now and save the file. Then simply
-hit reload in the browser and you'll see your updated documentation.</p>
-<p>Now's also a good time to edit the configuration file, <code>mkdocs.yml</code>. Change the
-<code>site_name</code> setting to something else and save the file.</p>
-<p><img alt="Editing the config file" src="./img/initial-config.png" /></p>
-<p>Once you hit reload in the browser you'll see your new site name take effect.</p>
+<p>Open the <code>docs/index.md</code> document in your text editor of choice, change the
+initial heading to <code>MkLorum</code>, and save your changes. Your browser will
+auto-reload and you should see your updated documentation immediately.</p>
+<p>Now try editing the configuration file: <code>mkdocs.yml</code>. Change the
+<a href="./user-guide/configuration/#site_name"><code>site_name</code></a> setting to <code>MkLorum</code> and save the file.</p>
+<pre><code class="yaml">site_name: MkLorum
+</code></pre>
+
+<p>Your browser should immediately reload, and you'll see your new site name take
+effect.</p>
 <p><img alt="The site_name setting" src="./img/site-name.png" /></p>
 <h2 id="adding-pages">Adding pages<a class="headerlink" href="#adding-pages" title="Permanent link"></a></h2>
-<p>Go ahead and edit the <code>docs/index.md</code> document, and change the initial heading to
-<code>MkLorum</code>, then reload the site in your browser, and you should see the change
-take effect immediately.</p>
-<p>Let's also add a second page to our documentation:</p>
-<pre><code class="bash">curl 'jaspervdj.be/lorem-markdownum/markdown.txt' &gt; docs/about.md
+<p>Now add a second page to your documentation:</p>
+<pre><code class="bash">curl 'https://jaspervdj.be/lorem-markdownum/markdown.txt' &gt; docs/about.md
 </code></pre>
 
-<p>We'd like our documentation site to include some navigation headers, so we'll
-edit the configuration file and add some information about the order and title
-to use for out headers:</p>
-<pre><code class="no-highlight">site_name: MkLorum
+<p>As our documentation site will include some navigation headers, you may want to
+edit the configuration file and add some information about the order, title, and
+nesting of each page in the navigation header by adding a <a href="./user-guide/configuration/#pages"><code>pages</code></a>
+setting:</p>
+<pre><code class="yaml">site_name: MkLorum
 pages:
-- Home: index.md
-- About: about.md
+    - Home: index.md
+    - About: about.md
 </code></pre>
 
-<p>Refresh the browser and you'll now see a navigation bar with <code>Home</code> and <code>About</code>
-headers.</p>
+<p>Save your changes and you'll now see a navigation bar with <code>Home</code> and <code>About</code>
+items on the left as well as <code>Search</code>, <code>Previous</code>, and <code>Next</code> items on the
+right.</p>
+<p><img alt="Screenshot" src="./img/multipage.png" /></p>
+<p>Try the menu items and navigate back and forth between pages. Then click on
+<code>Search</code>. A search dialog will appear, allowing you to search for any text on
+any page. Notice that the search results include every occurrence of the search
+term on the site and links directly to the section of the page in which the
+search term appears. You get of all that with no effort or configuration on your
+part!</p>
+<p><img alt="Screenshot" src="./img/search.png" /></p>
 <h2 id="theming-our-documentation">Theming our documentation<a class="headerlink" href="#theming-our-documentation" title="Permanent link"></a></h2>
-<p>While we're here can also change the configuration file to alter how the
-documentation is displayed. Let's go ahead and change the theme. Edit the
-<code>mkdocs.yml</code> file to the following:</p>
-<pre><code class="no-highlight">site_name: MkLorum
+<p>Now change the configuration file to alter how the documentation is displayed by
+changing the theme. Edit the <code>mkdocs.yml</code> file and add a <a href="./user-guide/configuration/#theme"><code>theme</code></a> setting:</p>
+<pre><code class="yaml">site_name: MkLorum
 pages:
-- Home: index.md
-- About: about.md
+    - Home: index.md
+    - About: about.md
 theme: readthedocs
 </code></pre>
 
-<p>Refresh the browser again, and you'll now see the ReadTheDocs theme being used.</p>
+<p>Save your changes, and you'll see the ReadTheDocs theme being used.</p>
 <p><img alt="Screenshot" src="./img/readthedocs.png" /></p>
+<h2 id="changing-the-favicon-icon">Changing the Favicon Icon<a class="headerlink" href="#changing-the-favicon-icon" title="Permanent link"></a></h2>
+<p>By default, MkDocs uses the <a href="./img/favicon.ico">MkDocs favicon</a> icon. To use a different icon, create
+an <code>img</code> subdirectory in your <code>docs_dir</code> and copy your custom <code>favicon.ico</code> file
+to that directory. MkDocs will automaticaly detect and use that file as your
+favicon icon.</p>
 <h2 id="building-the-site">Building the site<a class="headerlink" href="#building-the-site" title="Permanent link"></a></h2>
-<p>That's looking good. We're ready to deploy the first pass of our <code>MkLorum</code>
-documentation now. Let's build the documentation.</p>
+<p>That's looking good. You're ready to deploy the first pass of your <code>MkLorum</code>
+documentation. First build the documentation:</p>
 <pre><code class="bash">mkdocs build
 </code></pre>
 
-<p>This will create a new directory, named <code>site</code>. Let's take a look inside the
+<p>This will create a new directory, named <code>site</code>. Take a look inside the
 directory:</p>
-<pre><code class="bash">ls site
-about css fonts img index.html js
+<pre><code class="bash">$ ls site
+about  fonts  index.html  license  search.html
+css    img    js          mkdocs   sitemap.xml
 </code></pre>
 
-<p>Notice that our source documentation has been output as two HTML files named
-<code>index.html</code> and <code>about/index.html</code>. We also have various other media that's
-been copied into the <code>site</code> directory as part of the documentation theme.</p>
+<p>Notice that your source documentation has been output as two HTML files named
+<code>index.html</code> and <code>about/index.html</code>. You also have various other media that's
+been copied into the <code>site</code> directory as part of the documentation theme. You
+even have a <code>sitemap.xml</code> file and <code>mkdocs/search_index.json</code>.</p>
 <p>If you're using source code control such as <code>git</code> you probably don't want to
 check your documentation builds into the repository. Add a line containing
 <code>site/</code> to your <code>.gitignore</code> file.</p>
 <pre><code class="bash">echo &quot;site/&quot; &gt;&gt; .gitignore
 </code></pre>
 
-<p>If you're using another source code control you'll want to check it's
+<p>If you're using another source code control tool you'll want to check it's
 documentation on how to ignore specific directories.</p>
 <p>After some time, files may be removed from the documentation but they will still
-reside in the <code>site</code> directory. To remove those stale files, just run mkdocs
+reside in the <code>site</code> directory. To remove those stale files, just run <code>mkdocs</code>
 with the <code>--clean</code> switch.</p>
 <pre><code class="bash">mkdocs build --clean
 </code></pre>
@@ -355,61 +368,53 @@ with that command. For example, to get a list of all options available for the
 </code></pre>
 
 <h2 id="deploying">Deploying<a class="headerlink" href="#deploying" title="Permanent link"></a></h2>
-<p>The documentation site that we've just built only uses static files so you'll be
-able to host it from pretty much anywhere. <a href="https://help.github.com/articles/creating-project-pages-manually">GitHub project pages</a> and <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">Amazon
-S3</a> are good hosting options. Upload the contents of the entire <code>site</code> directory
-to wherever you're hosting your website from and you're done. For specific
-instructions for a number of common hosts, see the <a href="user-guide/deploying-your-docs/">Deploying your Docs</a> page.</p>
+<p>The documentation site that you just built only uses static files so you'll be
+able to host it from pretty much anywhere. <a href="https://help.github.com/articles/creating-project-pages-manually/">GitHub project pages</a> and <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">Amazon
+S3</a> may be good hosting options, depending upon your needs. Upload the contents
+of the entire <code>site</code> directory to wherever you're hosting your website from and
+you're done. For specific instructions on a number of common hosts, see the
+<a href="user-guide/deploying-your-docs/">Deploying your Docs</a> page.</p>
 <h2 id="getting-help">Getting help<a class="headerlink" href="#getting-help" title="Permanent link"></a></h2>
 <p>To get help with MkDocs, please use the <a href="https://groups.google.com/forum/#!forum/mkdocs">discussion group</a>, <a href="https://github.com/mkdocs/mkdocs/issues">GitHub issues</a> or
 the MkDocs IRC channel <code>#mkdocs</code> on freenode.</p></div>
-            
         </div>
 
         <footer class="col-md-12">
             <hr>
-            
-                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, <a href="http://www.dougalmatthews.com/">Dougal Matthews</a>.</p>
-            
+                <p>Copyright &copy; 2014 <a href="/release-notes/">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-
-        <script src="./js/jquery-1.10.2.min.js"></script>
-        <script src="./js/bootstrap-3.0.3.min.js"></script>
-        <script src="./js/highlight.pack.js"></script>
         <script>var base_url = '.';</script>
         <script data-main="./mkdocs/js/search.js" src="./mkdocs/js/require.js"></script>
-        <script src="./js/base.js"></script>
-
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+        <script src="./js/base.js"></script><div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
                     </div>
-                    <div class="modal-body">
-                        <p>
-                            From here you can search these documents. Enter
-                            your search terms below.
-                        </p>
-                        <form role="form">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
-                            </div>
-                        </form>
-                        <div id="mkdocs-search-results"></div>
-                    </div>
-                    <div class="modal-footer">
-                    </div>
-                </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
             </div>
         </div>
+    </div>
+</div>
 
     </body>
 </html>
 
 <!--
-MkDocs version : 0.15.3
-Build Date UTC : 2016-02-19 21:14:45.123066
+MkDocs version : 0.16.0
+Build Date UTC : 2016-11-04 14:09:39
 -->

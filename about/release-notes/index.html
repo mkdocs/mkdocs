@@ -5,25 +5,24 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        <meta name="author" content="Tom Christie & Dougal Matthews">
+        <meta name="author" content="MkDocs Team">
         <link rel="canonical" href="http://www.mkdocs.org/about/release-notes/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
-
-	<title>Release Notes - MkDocs</title>
-
+        <title>Release Notes - MkDocs</title>
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.5.0.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="../../css/highlight.css">
         <link href="../../css/extra.css" rel="stylesheet">
-
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
-
-        
+	
+	<script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -32,8 +31,7 @@
 
             ga('create', 'UA-27795084-5', 'mkdocs.org');
             ga('send', 'pageview');
-        </script>
-        
+        </script> 
     </head>
 
     <body>
@@ -43,7 +41,6 @@
 
         <!-- Collapsed navigation -->
         <div class="navbar-header">
-            
             <!-- Expander button -->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -51,92 +48,59 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            
-
-            <!-- Main title -->
             <a class="navbar-brand" href="../..">MkDocs</a>
         </div>
 
         <!-- Expanded navigation -->
         <div class="navbar-collapse collapse">
-            
                 <!-- Main navigation -->
                 <ul class="nav navbar-nav">
-                
-                
                     <li >
                         <a href="../..">Home</a>
                     </li>
-                
-                
-                
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                        
                             
 <li >
     <a href="../../user-guide/writing-your-docs/">Writing Your Docs</a>
 </li>
-
-                        
                             
 <li >
     <a href="../../user-guide/styling-your-docs/">Styling Your Docs</a>
 </li>
-
-                        
                             
 <li >
     <a href="../../user-guide/configuration/">Configuration</a>
 </li>
-
-                        
                             
 <li >
     <a href="../../user-guide/deploying-your-docs/">Deploying Your Docs</a>
 </li>
-
-                        
                             
 <li >
     <a href="../../user-guide/custom-themes/">Custom Themes</a>
 </li>
-
-                        
                         </ul>
                     </li>
-                
-                
-                
                     <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                        
                             
 <li class="active">
     <a href="./">Release Notes</a>
 </li>
-
-                        
                             
 <li >
     <a href="../contributing/">Contributing</a>
 </li>
-
-                        
                             
 <li >
     <a href="../license/">License</a>
 </li>
-
-                        
                         </ul>
                     </li>
-                
-                
                 </ul>
-            
 
             <ul class="nav navbar-nav navbar-right">
                 <li>
@@ -144,7 +108,6 @@
                         <i class="fa fa-search"></i> Search
                     </a>
                 </li>
-                
                     <li >
                         <a rel="next" href="../../user-guide/custom-themes/">
                             <i class="fa fa-arrow-left"></i> Previous
@@ -155,62 +118,38 @@
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
-                
-                
                     <li>
                         <a href="https://github.com/mkdocs/mkdocs/">
-                            
-                                <i class="fa fa-github"></i>
-                            
-                            GitHub
+                                <i class="fa fa-github"></i>GitHub
                         </a>
                     </li>
-                
             </ul>
         </div>
     </div>
 </div>
 
         <div class="container">
-            
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-    
         <li class="main active"><a href="#release-notes">Release Notes</a></li>
-        
             <li><a href="#upgrading">Upgrading</a></li>
-        
+            <li><a href="#maintenance-team">Maintenance team</a></li>
+            <li><a href="#version-016-2016-11-04">Version 0.16 (2016-11-04)</a></li>
             <li><a href="#version-0153-2016-02-18">Version 0.15.3 (2016-02-18)</a></li>
-        
             <li><a href="#version-0152-2016-02-08">Version 0.15.2 (2016-02-08)</a></li>
-        
             <li><a href="#version-0151-2016-01-30">Version 0.15.1 (2016-01-30)</a></li>
-        
             <li><a href="#version-0150-2016-01-21">Version 0.15.0 (2016-01-21)</a></li>
-        
             <li><a href="#version-0140-2015-06-09">Version 0.14.0 (2015-06-09)</a></li>
-        
             <li><a href="#version-0133-2015-06-02">Version 0.13.3 (2015-06-02)</a></li>
-        
             <li><a href="#version-0132-2015-05-30">Version 0.13.2 (2015-05-30)</a></li>
-        
             <li><a href="#version-0131-2015-05-27">Version 0.13.1 (2015-05-27)</a></li>
-        
             <li><a href="#version-0130-2015-05-26">Version 0.13.0 (2015-05-26)</a></li>
-        
             <li><a href="#version-0122-2015-04-22">Version 0.12.2 (2015-04-22)</a></li>
-        
             <li><a href="#version-0121-2015-04-14">Version 0.12.1 (2015-04-14)</a></li>
-        
             <li><a href="#version-0120-2015-04-14">Version 0.12.0 (2015-04-14)</a></li>
-        
             <li><a href="#version-0111-2014-11-20">Version 0.11.1 (2014-11-20)</a></li>
-        
             <li><a href="#version-0110-2014-11-18">Version 0.11.0 (2014-11-18)</a></li>
-        
             <li><a href="#version-0100-2014-10-29">Version 0.10.0 (2014-10-29)</a></li>
-        
-    
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -225,6 +164,249 @@
 <pre><code>$ mkdocs --version
 mkdocs, version 0.15.2
 </code></pre>
+<h2 id="maintenance-team">Maintenance team<a class="headerlink" href="#maintenance-team" title="Permanent link"></a></h2>
+<p>The current and past members of the MkDocs team.</p>
+<ul>
+<li><a href="https://github.com/tomchristie/">@tomchristie</a></li>
+<li><a href="https://github.com/d0ugal/">@d0ugal</a></li>
+<li><a href="https://github.com/waylan/">@waylan</a></li>
+</ul>
+<h2 id="version-016-2016-11-04">Version 0.16 (2016-11-04)<a class="headerlink" href="#version-016-2016-11-04" title="Permanent link"></a></h2>
+<h3 id="major-additions-to-version-0160">Major Additions to Version 0.16.0<a class="headerlink" href="#major-additions-to-version-0160" title="Permanent link"></a></h3>
+<h4 id="template-variables-refactored-874">Template variables refactored. (#874)<a class="headerlink" href="#template-variables-refactored-874" title="Permanent link"></a></h4>
+<h5 id="page-context">Page Context<a class="headerlink" href="#page-context" title="Permanent link"></a></h5>
+<p>Page specific variable names in the template context have been refactored as
+defined in <a href="../../user-guide/custom-themes/#page">Custom Themes</a>. The
+old variable names will issue a warning but continue to work for version 0.16,
+but may be removed in a future version.</p>
+<p>Any of the following old page variables should be updated to the new ones in
+user created and third-party templates:</p>
+<table>
+<thead>
+<tr>
+<th>Old Variable Name</th>
+<th>New Variable Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>current_page</td>
+<td><a href="../../user-guide/custom-themes/#page">page</a></td>
+</tr>
+<tr>
+<td>page_title</td>
+<td><a href="../../user-guide/custom-themes/#pagetitle">page.title</a></td>
+</tr>
+<tr>
+<td>content</td>
+<td><a href="../../user-guide/custom-themes/#pagecontent">page.content</a></td>
+</tr>
+<tr>
+<td>toc</td>
+<td><a href="../../user-guide/custom-themes/#pagetoc">page.toc</a></td>
+</tr>
+<tr>
+<td>meta</td>
+<td><a href="../../user-guide/custom-themes/#pagemeta">page.meta</a></td>
+</tr>
+<tr>
+<td>canonical_url</td>
+<td><a href="../../user-guide/custom-themes/#pagecanonical_url">page.canonical_url</a></td>
+</tr>
+<tr>
+<td>previous_page</td>
+<td><a href="../../user-guide/custom-themes/#pageprevious_page">page.previous_page</a></td>
+</tr>
+<tr>
+<td>next_page</td>
+<td><a href="../../user-guide/custom-themes/#pagenext_page">page.next_page</a></td>
+</tr>
+</tbody>
+</table>
+<h5 id="global-context">Global Context<a class="headerlink" href="#global-context" title="Permanent link"></a></h5>
+<p>Additionally, a number of global variables have been altered and/or deprecated
+and user created and third-party templates should be updated as outlined below:</p>
+<p>Previously, the global variable <code>include_nav</code> was altered programmatically based
+on the number of pages in the nav. The variable will issue a warning but
+continue to work for version 0.16, but may be removed in a future version. Use
+<code>{% if nav|length&gt;1 %}</code> instead.</p>
+<p>Previously, the global variable <code>include_next_prev</code> was altered programmatically
+based on the number of pages in the nav. The variable will issue a warning but
+continue to work for version 0.16, but may be removed in a future version. Use
+<code>{% if page.next_page or page.previous_page %}</code> instead.</p>
+<p>Previously the global variable <code>page_description</code> was altered programmatically
+based on whether the current page was the homepage. Now it simply maps to
+<code>config['site_description']</code>. Use <code>{% if page.is_homepage %}</code> in the template to
+conditionally change the description.</p>
+<p>The global variable <code>homepage_url</code> maps directly to <code>nav.homepage.url</code> and is
+being deprecated. The variable will issue a warning but continue to work for
+version 0.16, but may be removed in a future version. Use <code>nav.homepage.url</code>
+instead.</p>
+<p>The global variable <code>favicon</code> maps to the configuration setting <code>site_favicon</code>.
+Both the template variable and the configuration setting are being deprecated
+and will issue a warning but continue to work for version 0.16, and may be
+removed in a future version. Use <code>{{ base_url }}/img/favicon.ico</code> in your
+template instead. Users can simply save a copy of their custom favicon icon to
+<code>img/favicon.ico</code> in either their <code>docs_dir</code> or <code>theme_dir</code>.</p>
+<p>A number of variables map directly to similarly named variables in the <code>config</code>.
+Those variables are being deprecated and will issue a warning but continue to
+work for version 0.16, but may be removed in a future version. Use
+<code>config.var_name</code> instead, where <code>var_name</code> is the name of one of the
+<a href="../../user-guide/configuration/">configuration</a> variables.</p>
+<p>Below is a summary of all of the changes made to the global context:</p>
+<table>
+<thead>
+<tr>
+<th>Old Variable Name</th>
+<th>New Variable Name or Expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>current_page</td>
+<td>page</td>
+</tr>
+<tr>
+<td>include_nav</td>
+<td>nav&#124;length&gt;1</td>
+</tr>
+<tr>
+<td>include_next_prev</td>
+<td>(page.next_page or page.previous_page)</td>
+</tr>
+<tr>
+<td>site_name</td>
+<td>config.site_name</td>
+</tr>
+<tr>
+<td>site_author</td>
+<td>config.site_author</td>
+</tr>
+<tr>
+<td>page_description</td>
+<td>config.site_description</td>
+</tr>
+<tr>
+<td>repo_url</td>
+<td>config.repo_url</td>
+</tr>
+<tr>
+<td>repo_name</td>
+<td>config.repo_name</td>
+</tr>
+<tr>
+<td>site_url</td>
+<td>config.site_url</td>
+</tr>
+<tr>
+<td>copyright</td>
+<td>config.copyright</td>
+</tr>
+<tr>
+<td>google_analytics</td>
+<td>config.google_analytics</td>
+</tr>
+<tr>
+<td>homepage_url</td>
+<td>nav.homepage.url</td>
+</tr>
+<tr>
+<td>favicon</td>
+<td>{{ base_url }}/img/favicon.ico</td>
+</tr>
+</tbody>
+</table>
+<h4 id="increased-template-customization-607">Increased Template Customization. (#607)<a class="headerlink" href="#increased-template-customization-607" title="Permanent link"></a></h4>
+<p>The built-in themes have been updated by having each of their many parts wrapped
+in template blocks which allow each individual block to be easily overridden
+using the <code>theme_dir</code> config setting. Without any new settings, you can use a
+different analytics service, replace the default search function, or alter the
+behavior of the navigation, among other things. See the relevant
+<a href="../../user-guide/styling-your-docs/#overriding-template-blocks">documentation</a> for more details.</p>
+<p>To enable this feature, the primary entry point for page templates has been
+changed from <code>base.html</code> to <code>main.html</code>. This allows <code>base.html</code> to continue to
+exist while allowing users to override <code>main.html</code> and extend <code>base.html</code>. For
+version 0.16, <code>base.html</code> will continue to work if no <code>main.html</code> template
+exists, but it is deprecated and will raise a warning. In version 1.0, a build
+will fail if no <code>main.html</code> template exists. Any custom and third party
+templates should be updated accordingly.</p>
+<p>The easiest way for a third party theme to be updated would be to simply add a
+<code>main.html</code> file which only contains the following line:</p>
+<pre><code class="django">{% extends &quot;base.html&quot; %}
+</code></pre>
+
+<p>That way, the theme contains the <code>main.html</code> entry point, and also supports
+overriding blocks in the same manner as the built-in themes. Third party themes
+are encouraged to wrap the various pieces of their templates in blocks in order
+to support such customization.</p>
+<h4 id="auto-populated-extra_css-and-extra_javascript-deprecated-986">Auto-Populated <code>extra_css</code> and <code>extra_javascript</code> Deprecated. (#986)<a class="headerlink" href="#auto-populated-extra_css-and-extra_javascript-deprecated-986" title="Permanent link"></a></h4>
+<p>In previous versions of MkDocs, if the <code>extra_css</code> or <code>extra_javascript</code> config
+settings were empty, MkDocs would scan the <code>docs_dir</code> and auto-populate each
+setting with all of the CSS and JavaScript files found. This behavior is
+deprecated and a warning will be issued. In the next release, the auto-populate
+feature will stop working and any unlisted CSS and JavaScript files will not be
+included in the HTML templates. In other words, they will still be copied to the
+<code>site-dir</code>, but they will not have any effect on the theme if they are not
+explicitly listed.</p>
+<p>All CSS and javaScript files in the <code>docs_dir</code> should be explicitly listed in
+the <code>extra_css</code> or <code>extra_javascript</code> config settings going forward.</p>
+<h4 id="support-for-dirty-builds-990">Support for dirty builds. (#990)<a class="headerlink" href="#support-for-dirty-builds-990" title="Permanent link"></a></h4>
+<p>For large sites the build time required to create the pages can become problematic,
+thus a "dirty" build mode was created. This mode simply compares the modified time
+of the generated HTML and source markdown. If the markdown has changed since the
+HTML then the page is re-constructed. Otherwise, the page remains as is. This mode
+may be invoked in both the <code>mkdocs serve</code> and <code>mkdocs build</code> commands:</p>
+<pre><code class="text">mkdocs serve --dirtyreload
+</code></pre>
+
+<pre><code class="text">mkdocs build --dirty
+</code></pre>
+
+<p>It is important to note that this method for building the pages is for development
+of content only, since the navigation and other links do not get updated on other
+pages.</p>
+<h4 id="stricter-directory-validation">Stricter Directory Validation<a class="headerlink" href="#stricter-directory-validation" title="Permanent link"></a></h4>
+<p>Previously, a warning was issued if the <code>site_dir</code> was a child directory of the
+<code>docs_dir</code>. This now raises an error. Additionally, an error is now raised if
+the <code>docs_dir</code> is set to the directory which contains your config file rather
+than a child directory. You will need to rearrange you directory structure to
+better conform with the documented <a href="../../user-guide/writing-your-docs/#file-layout">layout</a>.</p>
+<h3 id="other-changes-and-additions-to-version-0160">Other Changes and Additions to Version 0.16.0<a class="headerlink" href="#other-changes-and-additions-to-version-0160" title="Permanent link"></a></h3>
+<ul>
+<li>Bugfix: Support <code>gh-deploy</code> command on Windows with Python 3 (#722)</li>
+<li>Bugfix: Include .woff2 font files in Python package build (#894)</li>
+<li>Various updates and improvements to Documentation Home Page/Tutorial (#870)</li>
+<li>Bugfix: Support livereload for config file changes (#735)</li>
+<li>Bugfix: Non-media template files are no longer copied with media files (#807)</li>
+<li>Add a flag (-e/--theme-dir) to specify theme directory with the commands
+  <code>mkdocs build</code> and <code>mkdocs serve</code> (#832)</li>
+<li>Fixed issues with Unicode file names under Windows and Python 2. (#833)</li>
+<li>Improved the styling of in-line code in the MkDocs theme. (#718)</li>
+<li>Bugfix: convert variables to JSON when being passed to JavaScript (#850)</li>
+<li>Updated the ReadTheDocs theme to match the upstream font sizes and colors
+  more closely. (#857)</li>
+<li>Fixes an issue with permalink markers showing when the mouse was far above
+  them (#843)</li>
+<li>Bugfix: Handle periods in directory name when automatically creating the
+  pages config. (#728)</li>
+<li>Update searching to Lunr 0.7, which comes with some performance enhancements
+  for larger documents (#859)</li>
+<li>Bugfix: Support SOURCE_DATE_EPOCH environment variable for "reproducible"
+  builds (#938)</li>
+<li>Follow links when copying media files (#869).</li>
+<li>Change "Edit on..." links to point directly to the file in the source
+  repository, rather than to the root of the repository (#975), configurable
+  via the new <a href="../../user-guide/configuration/#edit_uri"><code>edit_uri</code></a> setting.</li>
+<li>Bugfix: Don't override config value for strict mode if not specified on CLI
+  (#738).</li>
+<li>Add a <code>--force</code> flag to the <code>gh-deploy</code> command to force the push to the
+  repository (#973).</li>
+<li>Improve alignment for current selected menu item in readthedocs theme (#888).</li>
+<li><code>http://user.github.io/repo</code> =&gt; <code>https://user.github.io/repo/</code> (#1029).</li>
+<li>Improve installation instructions (#1028).</li>
+<li>Account for wide tables and consistently wrap inline code spans (#834).</li>
+<li>Bugfix: Use absolute URLs in nav &amp; media links from error templates (#77).</li>
+</ul>
 <h2 id="version-0153-2016-02-18">Version 0.15.3 (2016-02-18)<a class="headerlink" href="#version-0153-2016-02-18" title="Permanent link"></a></h2>
 <ul>
 <li>Improve the error message the given theme can't be found.</li>
@@ -251,7 +433,7 @@ details about these specific themes.</p>
 <li><a href="http://mkdocs.github.io/mkdocs-bootstrap/">MkDocs Bootstrap</a></li>
 <li><a href="http://mkdocs.github.io/mkdocs-bootswatch/">MkDocs Bootswatch</a></li>
 </ul>
-<p>They will be included with MkDocs by default until the 1.0 release. After that
+<p>They will be included with MkDocs by default until a future release. After that
 they will be installable with pip: <code>pip install mkdocs-bootstrap</code> and <code>pip
 install mkdocs-bootswatch</code></p>
 <p>See the documentation for <a href="../../user-guide/styling-your-docs/">Styling your docs</a> for more information about using
@@ -480,48 +662,39 @@ documentation.</p>
 <li>Bugfix: Correctly handle external <code>extra_javascript</code> and <code>extra_css</code>. (#92)</li>
 <li>Bugfix: Fixed favicon support. (#87)</li>
 </ul></div>
-            
         </div>
 
         <footer class="col-md-12">
             <hr>
-            
-                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, <a href="http://www.dougalmatthews.com/">Dougal Matthews</a>.</p>
-            
+                <p>Copyright &copy; 2014 <a href="/release-notes/">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-
-        <script src="../../js/jquery-1.10.2.min.js"></script>
-        <script src="../../js/bootstrap-3.0.3.min.js"></script>
-        <script src="../../js/highlight.pack.js"></script>
         <script>var base_url = '../..';</script>
         <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
-        <script src="../../js/base.js"></script>
-
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+        <script src="../../js/base.js"></script><div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
                     </div>
-                    <div class="modal-body">
-                        <p>
-                            From here you can search these documents. Enter
-                            your search terms below.
-                        </p>
-                        <form role="form">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
-                            </div>
-                        </form>
-                        <div id="mkdocs-search-results"></div>
-                    </div>
-                    <div class="modal-footer">
-                    </div>
-                </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
             </div>
         </div>
+    </div>
+</div>
 
     </body>
 </html>
