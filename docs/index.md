@@ -322,7 +322,7 @@ able to host it from pretty much anywhere. [GitHub project pages] and [Amazon
 S3] may be good hosting options, depending upon your needs. Upload the contents
 of the entire `site` directory to wherever you're hosting your website from and
 you're done. For specific instructions on a number of common hosts, see the
-[Deploying your Docs] page.
+[Deploying your Docs][deploy] page.
 
 ## Getting help
 
@@ -344,4 +344,3 @@ the MkDocs IRC channel `#mkdocs` on freenode.
 [Python]: https://www.python.org/
 [site_name]: user-guide/configuration/#site_name
 [theme]: user-guide/configuration/#theme
-[Deploying your Docs]: user-guide/deploying-your-docs.md
