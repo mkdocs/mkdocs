@@ -1,5 +1,5 @@
 include README.md
-include LICENSE.md
+include LICENSE
 recursive-include mkdocs *.ico *.js *.css *.png *.html *.eot *.svg *.ttf *.woff *.woff2 *.xml *.mustache
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
