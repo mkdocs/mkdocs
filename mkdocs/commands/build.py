@@ -262,7 +262,6 @@ def build_pages(config, dump_json=False, dirty=False):
         'content': 'page.content',
         'toc': 'page.toc',
         'meta': 'page.meta',
-        'current_page': 'page.current_page',
         'canonical_url': 'page.canonical_url',
         'previous_page': 'page.previous_page',
         'next_page': 'page.next_page',
