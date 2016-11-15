@@ -40,10 +40,10 @@ the theme.
 ### Install with a Package Manager
 
 If you have and use a package manager (such as [apt-get], [dnf], [homebrew],
-[yum], etc.) to install packages on your system, then you may want to search for
-a "MkDocs" package and, if a recent version is available, install it with your
-package manager (check your system's documentation for details). That's it,
-you're done! Skip down to [Getting Started](#getting-started).
+[yum], [chocolatey], etc.) to install packages on your system, then you may
+want to search for a "MkDocs" package and, if a recent version is available,
+install it with your package manager (check your system's documentation for
+details). That's it, you're done! Skip down to [Getting Started](#getting-started).
 
 If your package manager does not have a recent "MkDocs" package, you can still
 use your package manager to install "Python" and "pip". Then you can use pip to
@@ -53,6 +53,7 @@ use your package manager to install "Python" and "pip". Then you can use pip to
 [homebrew]: http://brew.sh/
 [dnf]: http://dnf.readthedocs.io/en/latest/index.html
 [yum]: http://yum.baseurl.org/
+[chocolatey]: https://chocolatey.org/
 
 ### Manual Installation
 
