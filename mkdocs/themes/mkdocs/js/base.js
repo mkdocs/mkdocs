@@ -31,7 +31,7 @@ $(document).ready(function() {
     $('table').addClass('table table-striped table-hover');
 
     // Improve the scrollspy behaviour when users click on a TOC item.
-    $(".nav a").on("click", function() {
+    $(".bs-sidenav a").on("click", function() {
         var clicked = this;
         setTimeout(function() {
             var active = $('.nav li.active a');
