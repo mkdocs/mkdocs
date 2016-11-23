@@ -36,6 +36,11 @@ install:
 script:
 - git clean -f -d -x
 - tox
+matrix:
+  allow_failures:
+    - env: TOXENV=pypy3-integration
+    - env: TOXENV=pypy3-min-req
+    - env: TOXENV=pypy3-unittests
 before_install: pip install codecov
 after_success: codecov
 deploy:
