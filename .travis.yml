@@ -25,9 +25,6 @@ env:
 - TOXENV=pypy-integration
 - TOXENV=pypy-min-req
 - TOXENV=pypy-unittests
-- TOXENV=pypy3-integration
-- TOXENV=pypy3-min-req
-- TOXENV=pypy3-unittests
 install:
 - pip install tox
 - gem install mdl
