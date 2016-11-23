@@ -129,7 +129,7 @@ Pages. This option can be overridden by a command line option in `gh-deploy`.
 Set the remote name to push to when using `gh-deploy` to deploy to Github Pages.
 This option can be overridden by a command line option in `gh-deploy`.
 
-**default**: `gh-pages`
+**default**: `origin`
 
 ## Documentation layout
 
