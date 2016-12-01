@@ -376,8 +376,15 @@ def convert_markdown(markdown_source, extensions=None, extension_configs=None):
     return (html_content, table_of_contents, meta)
 
 
+def get_theme_dir(name):
+    """ Return the directory of an installed theme by name. """
+
+    theme = get_themes()[name]
+    return os.path.dirname(os.path.abspath(theme.load().__file__))
+
+
 def get_themes():
-    """Return a dict of theme names and their locations"""
+    """ Return a dict of all installed themes as (name, entry point) pairs. """
 
     themes = {}
     builtins = pkg_resources.get_entry_map(dist='mkdocs', group='mkdocs.themes')
@@ -397,14 +404,11 @@ def get_themes():
 
         themes[theme.name] = theme
 
-    themes = dict((name, os.path.dirname(os.path.abspath(theme.load().__file__)))
-                  for name, theme in themes.items())
-
     return themes
 
 
 def get_theme_names():
-    """Return a list containing all the names of all the builtin themes."""
+    """Return a list of all installed themes by name."""
 
     return get_themes().keys()
 
