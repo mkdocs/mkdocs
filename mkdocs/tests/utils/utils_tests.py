@@ -115,6 +115,36 @@ class UtilsTests(unittest.TestCase):
             ['mkdocs', 'readthedocs'])
 
     @mock.patch('pkg_resources.iter_entry_points', autospec=True)
+    def test_get_theme_dir(self, mock_iter):
+
+        path = 'some/path'
+
+        theme = mock.Mock()
+        theme.name = 'mkdocs2'
+        theme.dist.key = 'mkdocs2'
+        theme.load().__file__ = os.path.join(path, '__init__.py')
+
+        mock_iter.return_value = iter([theme])
+
+        self.assertEqual(utils.get_theme_dir(theme.name), os.path.abspath(path))
+
+    def test_get_theme_dir_keyerror(self):
+
+        self.assertRaises(KeyError, utils.get_theme_dir, 'nonexistanttheme')
+
+    @mock.patch('pkg_resources.iter_entry_points', autospec=True)
+    def test_get_theme_dir_importerror(self, mock_iter):
+
+        theme = mock.Mock()
+        theme.name = 'mkdocs2'
+        theme.dist.key = 'mkdocs2'
+        theme.load.side_effect = ImportError()
+
+        mock_iter.return_value = iter([theme])
+
+        self.assertRaises(ImportError, utils.get_theme_dir, theme.name)
+
+    @mock.patch('pkg_resources.iter_entry_points', autospec=True)
     def test_get_themes_warning(self, mock_iter):
 
         theme1 = mock.Mock()

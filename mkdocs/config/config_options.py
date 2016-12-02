@@ -285,7 +285,7 @@ class ThemeDir(Dir):
 
         package_dir = os.path.abspath(
             os.path.join(os.path.dirname(__file__), '..'))
-        theme_dir = [utils.get_themes()[config['theme']], ]
+        theme_dir = [utils.get_theme_dir(config['theme']), ]
         config['mkdocs_templates'] = os.path.join(package_dir, 'templates')
 
         if config['theme_dir'] is not None:
