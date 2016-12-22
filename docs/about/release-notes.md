@@ -21,6 +21,11 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Version 0.16.1 (2016-12-22)
+
+* Ensure scrollspy behavior does not affect nav bar (#1094)
+* Only "load" a theme when it is explicitly requested by the user (#1105)
+
 ## Version 0.16 (2016-11-04)
 
 ### Major Additions to Version 0.16.0
