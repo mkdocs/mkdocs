@@ -36,15 +36,15 @@ class SearchIndex(object):
         is UTF8 encoded.
         """
         # Sanity check to compress JSON
-        text=text.replace(u'\u00a0', ' ')
-        text=text.replace('  ', ' ')
-        text=text.replace('\n\n', ' ')
-        text=text.replace('  ', ' ')
-        text=text.replace('\n ', ' ')
-        text=text.replace('  ', ' ')
-        text=text.replace(' \n', ' ')
-        text=text.replace('  ', ' ')
-        text=text.replace('  ', ' ')
+        text = text.replace(u'\u00a0', ' ')
+        text = text.replace('  ', ' ')
+        text = text.replace('\n\n', ' ')
+        text = text.replace('  ', ' ')
+        text = text.replace('\n ', ' ')
+        text = text.replace('  ', ' ')
+        text = text.replace(' \n', ' ')
+        text = text.replace('  ', ' ')
+        text = text.replace('  ', ' ')
         self._entries.append({
             'title': title,
             'text': utils.text_type(text.strip().encode('utf-8'), encoding='utf-8'),
