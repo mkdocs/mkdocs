@@ -6,6 +6,7 @@ from calendar import timegm
 import io
 import logging
 import os
+import gzip
 
 from jinja2.exceptions import TemplateNotFound
 import jinja2
@@ -95,6 +96,11 @@ def build_template(template_name, env, config, site_navigation=None):
     if output_content.strip():
         output_path = os.path.join(config['site_dir'], template_name)
         utils.write_file(output_content.encode('utf-8'), output_path)
+
+        if template_name == 'sitemap.xml':
+            log.debug("Gzipping template: %s", template_name)
+            with gzip.open('{}.gz'.format(output_path), 'wb') as f:
+                f.write(output_content.encode('utf-8'))
     else:
         log.info("Template skipped: '{}'. Generated empty output.".format(template_name))
 
