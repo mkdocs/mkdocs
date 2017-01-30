@@ -286,7 +286,7 @@ def create_media_urls(nav, path_list):
             continue
         # We must be looking at a local path.
         url = path_to_url(path)
-        relative_url = '%s/%s' % (nav.url_context.make_relative('/'), url)
+        relative_url = '%s/%s' % (nav.url_context.make_relative('/').rstrip('/'), url)
         final_urls.append(relative_url)
 
     return final_urls

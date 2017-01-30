@@ -325,10 +325,10 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual([n.title for n in nav_items],
                          ['Home', 'Running', 'Notes', 'License'])
         self.assertEqual([n.url for n in nav_items], [
-            '',
-            '/api-guide/running',
-            '/about/notes',
-            '/about/sub/license'
+            '/',
+            '/api-guide/running/',
+            '/about/notes/',
+            '/about/sub/license/'
         ])
 
     def test_force_abs_urls_with_base(self):
@@ -351,10 +351,10 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual([n.title for n in nav_items],
                          ['Home', 'Running', 'Notes', 'License'])
         self.assertEqual([n.url for n in nav_items], [
-            '/foo',
-            '/foo/api-guide/running',
-            '/foo/about/notes',
-            '/foo/about/sub/license'
+            '/foo/',
+            '/foo/api-guide/running/',
+            '/foo/about/notes/',
+            '/foo/about/sub/license/'
         ])
 
     def test_invalid_pages_config(self):
