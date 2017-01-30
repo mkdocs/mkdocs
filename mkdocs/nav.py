@@ -97,7 +97,7 @@ class URLContext(object):
         """
         if self.force_abs_urls:
             abs_url = '%s/%s' % (self.base_path.rstrip('/'), utils.path_to_url(url.lstrip('/')))
-            return abs_url.rstrip('/')
+            return abs_url
 
         suffix = '/' if (url.endswith('/') and len(url) > 1) else ''
         # Workaround for bug on `os.path.relpath()` in Python 2.6
