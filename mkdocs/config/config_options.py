@@ -363,12 +363,7 @@ class Extras(OptionallyRequired):
         if self.file_match is None:
             raise StopIteration
 
-        if follow_links:
-            dir_tree = os.walk(docs_dir, followlinks=True)
-        else:
-            dir_tree = os.walk(docs_dir)
-
-        for (dirpath, dirs, filenames) in dir_tree:
+        for (dirpath, dirs, filenames) in os.walk(docs_dir, followlinks=follow_links):
             dirs.sort()
             for filename in sorted(filenames):
                 fullpath = os.path.join(dirpath, filename)
@@ -376,8 +371,8 @@ class Extras(OptionallyRequired):
                 # Some editors (namely Emacs) will create temporary symlinks
                 # for internal magic. We can just ignore these files.
                 if os.path.islink(fullpath):
-                    fp = os.path.join(dirpath, os.readlink(fullpath))
-                    if not os.path.exists(fp):
+                    local_fullpath = os.path.join(dirpath, os.readlink(fullpath))
+                    if not os.path.exists(local_fullpath):
                         continue
 
                 relpath = os.path.normpath(os.path.relpath(fullpath, docs_dir))
