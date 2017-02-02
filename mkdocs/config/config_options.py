@@ -258,14 +258,14 @@ class SiteDir(Dir):
                  "can mean the source files are overwritten by the output or "
                  "it will be deleted if --clean is passed to mkdocs build."
                  "(site_dir: '{0}', docs_dir: '{1}')"
-                ).format(config['site_dir'], config['docs_dir']))
+                 ).format(config['site_dir'], config['docs_dir']))
         elif (config['site_dir'] + os.sep).startswith(config['docs_dir'] + os.sep):
             raise ValidationError(
                 ("The 'site_dir' should not be within the 'docs_dir' as this "
                  "leads to the build directory being copied into itself and "
                  "duplicate nested files in the 'site_dir'."
                  "(site_dir: '{0}', docs_dir: '{1}')"
-                ).format(config['site_dir'], config['docs_dir']))
+                 ).format(config['site_dir'], config['docs_dir']))
 
 class ThemeDir(Dir):
     """
