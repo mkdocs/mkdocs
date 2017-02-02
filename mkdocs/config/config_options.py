@@ -267,6 +267,7 @@ class SiteDir(Dir):
                  "(site_dir: '{0}', docs_dir: '{1}')"
                  ).format(config['site_dir'], config['docs_dir']))
 
+
 class ThemeDir(Dir):
     """
     ThemeDir Config Option
