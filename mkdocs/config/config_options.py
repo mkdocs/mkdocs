@@ -181,7 +181,6 @@ class URL(OptionallyRequired):
         raise ValidationError(
             "The URL isn't valid, it should include the http:// (scheme)")
 
-
 class RepoURL(URL):
     """
     Repo URL Config Option
@@ -259,15 +258,14 @@ class SiteDir(Dir):
                  "can mean the source files are overwritten by the output or "
                  "it will be deleted if --clean is passed to mkdocs build."
                  "(site_dir: '{0}', docs_dir: '{1}')"
-                 ).format(config['site_dir'], config['docs_dir']))
+                ).format(config['site_dir'], config['docs_dir']))
         elif (config['site_dir'] + os.sep).startswith(config['docs_dir'] + os.sep):
             raise ValidationError(
                 ("The 'site_dir' should not be within the 'docs_dir' as this "
                  "leads to the build directory being copied into itself and "
                  "duplicate nested files in the 'site_dir'."
                  "(site_dir: '{0}', docs_dir: '{1}')"
-                 ).format(config['site_dir'], config['docs_dir']))
-
+                ).format(config['site_dir'], config['docs_dir']))
 
 class ThemeDir(Dir):
     """
@@ -360,12 +358,17 @@ class Extras(OptionallyRequired):
             raise ValidationError(
                 "Expected a list, got {0}".format(type(value)))
 
-    def walk_docs_dir(self, docs_dir):
+    def walk_docs_dir(self, docs_dir, follow_links=False):
 
         if self.file_match is None:
             raise StopIteration
 
-        for (dirpath, dirs, filenames) in os.walk(docs_dir):
+        if follow_links:
+            dir_tree = os.walk(docs_dir, followlinks=True)
+        else:
+            dir_tree = os.walk(docs_dir)
+
+        for (dirpath, dirs, filenames) in dir_tree:
             dirs.sort()
             for filename in sorted(filenames):
                 fullpath = os.path.join(dirpath, filename)
@@ -388,7 +391,7 @@ class Extras(OptionallyRequired):
 
         extras = []
 
-        for filename in self.walk_docs_dir(config['docs_dir']):
+        for filename in self.walk_docs_dir(config['docs_dir'], config['follow_links']):
             extras.append(filename)
 
         config[key_name] = extras
@@ -446,7 +449,7 @@ class Pages(Extras):
 
         pages = []
 
-        for filename in self.walk_docs_dir(config['docs_dir']):
+        for filename in self.walk_docs_dir(config['docs_dir'], config['follow_links']):
 
             if os.path.splitext(filename)[0] == 'index':
                 pages.insert(0, filename)
