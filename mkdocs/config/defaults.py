@@ -111,9 +111,6 @@ DEFAULT_SCHEMA = (
     # encountered rather than display an error.
     ('strict', config_options.Type(bool, default=False)),
 
-    # Enabling the directory walker to follow links (aka symlinks in Linux OS).
-    ('follow_links', config_options.Type(bool, default=False)),
-
     # the remote branch to commit to when using gh-deploy
     ('remote_branch', config_options.Type(
         utils.string_types, default='gh-pages')),

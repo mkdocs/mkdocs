@@ -181,6 +181,7 @@ class URL(OptionallyRequired):
         raise ValidationError(
             "The URL isn't valid, it should include the http:// (scheme)")
 
+
 class RepoURL(URL):
     """
     Repo URL Config Option
@@ -359,12 +360,12 @@ class Extras(OptionallyRequired):
             raise ValidationError(
                 "Expected a list, got {0}".format(type(value)))
 
-    def walk_docs_dir(self, docs_dir, follow_links=False):
+    def walk_docs_dir(self, docs_dir):
 
         if self.file_match is None:
             raise StopIteration
 
-        for (dirpath, dirs, filenames) in os.walk(docs_dir, followlinks=follow_links):
+        for (dirpath, dirs, filenames) in os.walk(docs_dir, followlinks=True):
             dirs.sort()
             for filename in sorted(filenames):
                 fullpath = os.path.join(dirpath, filename)
@@ -387,7 +388,7 @@ class Extras(OptionallyRequired):
 
         extras = []
 
-        for filename in self.walk_docs_dir(config['docs_dir'], config['follow_links']):
+        for filename in self.walk_docs_dir(config['docs_dir']):
             extras.append(filename)
 
         config[key_name] = extras
@@ -445,7 +446,7 @@ class Pages(Extras):
 
         pages = []
 
-        for filename in self.walk_docs_dir(config['docs_dir'], config['follow_links']):
+        for filename in self.walk_docs_dir(config['docs_dir']):
 
             if os.path.splitext(filename)[0] == 'index':
                 pages.insert(0, filename)
