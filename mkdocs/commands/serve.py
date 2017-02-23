@@ -1,12 +1,33 @@
 from __future__ import unicode_literals
+
 import logging
 import shutil
 import tempfile
 
+from os.path import isfile, join
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
 
 log = logging.getLogger(__name__)
+
+
+def _get_handler(site_dir):
+
+    from tornado.web import StaticFileHandler
+    from tornado.template import Loader
+
+    class WebHandler(StaticFileHandler):
+
+        def write_error(self, status_code, **kwargs):
+
+            if status_code in (404, 500):
+                error_page = '{}.html'.format(status_code)
+                if isfile(join(site_dir, error_page)):
+                    self.write(Loader(site_dir).load(error_page).generate())
+                else:
+                    super(WebHandler, self).write_error(status_code, **kwargs)
+
+    return WebHandler
 
 
 def _livereload(host, port, config, builder, site_dir):
@@ -15,7 +36,14 @@ def _livereload(host, port, config, builder, site_dir):
     # this fails, the --no-livereload alternative should still work.
     from livereload import Server
 
-    server = Server()
+    class LiveReloadServer(Server):
+
+        def get_web_handlers(self, script):
+            handlers = super(LiveReloadServer, self).get_web_handlers(script)
+            handlers = handlers.pop()
+            return [(handlers[0], _get_handler(site_dir), handlers[2],)]
+
+    server = LiveReloadServer()
 
     # Watch the documentation files, the config file and the theme files.
     server.watch(config['docs_dir'], builder)
@@ -35,7 +63,7 @@ def _static_server(host, port, site_dir):
     from tornado import web
 
     application = web.Application([
-        (r"/(.*)", web.StaticFileHandler, {
+        (r"/(.*)", _get_handler(site_dir), {
             "path": site_dir,
             "default_filename": "index.html"
         }),
