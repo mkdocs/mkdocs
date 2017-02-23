@@ -40,8 +40,8 @@ def _livereload(host, port, config, builder, site_dir):
 
         def get_web_handlers(self, script):
             handlers = super(LiveReloadServer, self).get_web_handlers(script)
-            handlers = handlers.pop()
-            return [(handlers[0], _get_handler(site_dir), handlers[2],)]
+            # replace livereload handler
+            return [(handlers[0][0], _get_handler(site_dir), handlers[0][2],)]
 
     server = LiveReloadServer()
 
