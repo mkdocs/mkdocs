@@ -24,7 +24,7 @@
  * https://github.com/mkdocs/mkdocs/pull/202
  */
 .wy-nav-side {
-    height: 100%;
+    /*height: 100%;*/
     overflow-y: auto;
 }
 
