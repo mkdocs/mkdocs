@@ -176,3 +176,12 @@ td, th {
    border: 1px solid #e1e4e5 !important; /* csslint allow: important */
    border-collapse: collapse;
 }
+
+/*
+ * Fixes the navigation buttons overlapping the scrollbar
+ * in the table of contents.
+ * 
+ */
+.rst-versions {
+    width: 283px;
+}
