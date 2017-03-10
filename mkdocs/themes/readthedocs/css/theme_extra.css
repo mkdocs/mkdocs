@@ -29,7 +29,7 @@
 .wy-nav-side {
     height: calc(100% - 45px);
     overflow-y: auto;
-    min-height: 0%;
+    min-height: 0;
 }
 
 .rst-versions{
