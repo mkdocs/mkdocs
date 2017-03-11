@@ -33,12 +33,12 @@
 }
 
 .rst-versions{
-	 border-top: 0;
-	 height: 45px;
+    border-top: 0;
+    height: 45px;
 }
 
-.wy-nav-side.shift{
-	height: 100%;
+.wy-nav-side .shift{
+    height: 100%;
 }
 
 /*
