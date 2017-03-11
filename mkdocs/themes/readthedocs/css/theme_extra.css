@@ -37,6 +37,10 @@
 	 height: 45px;
 }
 
+.wy-nav-side.shift{
+	height: 100%;
+}
+
 /*
  * readthedocs theme hides nav items when the window height is
  * too small to contain them.
