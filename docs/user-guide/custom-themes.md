@@ -402,7 +402,7 @@ contains an empty `__init__.py` file and your template and media files.
 |-- MANIFEST.in
 |-- theme_name
 |   |-- __init__.py
-|   |-- main.py
+|   |-- main.html
 |   |-- styles.css
 `-- setup.py
 ```
