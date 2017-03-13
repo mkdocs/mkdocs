@@ -13,7 +13,7 @@ automatically created by discovering all the Markdown files in the
 [documentation directory](/user-guide/configuration.md#docs_dir). An
 automatically created pages configuration will always be sorted
 alphanumerically by file name. You will need to manually define your pages
-configuration if you would like your pages sorted differantly.
+configuration if you would like your pages sorted differently.
 
 A simple pages configuration looks like this:
 
