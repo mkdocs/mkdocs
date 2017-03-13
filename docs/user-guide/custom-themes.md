@@ -322,7 +322,7 @@ As of MkDocs `0.13` client side search support has been added to MkDocs with
 [Lunr.js].
 
 Search can either be added to every page in the theme or to a dedicated
-template which must be named `search.html`. The search template will be build
+template which must be named `search.html`. The search template will be built
 with the same name and can be viewable with `mkdocs serve` at
 `http://localhost:8000/search.html`. An example of the two different
 approaches can be seen by comparing the `mkdocs` and `readthedocs` themes.
