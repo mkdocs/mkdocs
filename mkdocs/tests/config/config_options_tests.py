@@ -228,6 +228,7 @@ class SiteDirTest(unittest.TestCase):
             {'docs_dir': 'docs', 'site_dir': ''},
             {'docs_dir': '', 'site_dir': ''},
             {'docs_dir': j('..', parent_dir, 'docs'), 'site_dir': 'docs'},
+            {'docs_dir': 'docs', 'site_dir': '/'}
         )
 
         for test_config in test_configs:
@@ -242,6 +243,7 @@ class SiteDirTest(unittest.TestCase):
             {'docs_dir': 'docs', 'site_dir': j('docs', 'site')},
             {'docs_dir': '.', 'site_dir': 'site'},
             {'docs_dir': '', 'site_dir': 'site'},
+            {'docs_dir': '/', 'site_dir': 'site'},
         )
 
         for test_config in test_configs:

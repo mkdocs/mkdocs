@@ -181,8 +181,8 @@ up.
 
 Lets you set the directory containing the documentation source markdown files.
 This can either be a relative directory, in which case it is resolved relative
-to the directory containing you configuration file, or it can be an absolute
-directory path.
+to the directory containing your configuration file, or it can be an absolute
+directory path from the root of your local file system.
 
 **default**: `'docs'`
 
@@ -190,8 +190,8 @@ directory path.
 
 Lets you set the directory where the output HTML and other files are created.
 This can either be a relative directory, in which case it is resolved relative
-to the directory containing you configuration file, or it can be an absolute
-directory path.
+to the directory containing your configuration file, or it can be an absolute
+directory path from the root of your local file system.
 
 **default**: `'site'`
 
