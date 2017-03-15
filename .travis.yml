@@ -7,9 +7,6 @@ env:
 - TOXENV=linkchecker
 - TOXENV=jshint
 - TOXENV=csslint
-- TOXENV=py26-integration
-- TOXENV=py26-min-req
-- TOXENV=py26-unittests
 - TOXENV=py27-integration
 - TOXENV=py27-min-req
 - TOXENV=py27-unittests
