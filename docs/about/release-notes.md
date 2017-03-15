@@ -29,7 +29,7 @@ TODO...
 
 ### Other Changes and Additions to Version 1.0.0
 
-TODO...
+* Support for Python 2.6 has been dropped (#165)
 
 ## Version 0.16.3 (2017-04-04)
 

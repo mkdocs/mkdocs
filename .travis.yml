@@ -14,12 +14,6 @@ matrix:
     - env: TOXENV=csslint
       before_install: npm install -g csslint
     # Python version specific
-    - python: '2.6'
-      env: TOXENV=py26-integration
-    - python: '2.6'
-      env: TOXENV=py26-min-req
-    - python: '2.6'
-      env: TOXENV=py26-unittests
     - python: '2.7'
       env: TOXENV=py27-integration
     - python: '2.7'
