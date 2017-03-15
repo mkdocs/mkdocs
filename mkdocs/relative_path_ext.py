@@ -51,12 +51,6 @@ from mkdocs.exceptions import MarkdownNotFound
 log = logging.getLogger(__name__)
 
 
-def _iter(node):
-    # TODO: Remove when dropping Python 2.6. Replace this
-    # function call with note.iter()
-    return [node] + node.findall('.//*')
-
-
 def path_to_url(url, nav, strict):
 
     scheme, netloc, path, params, query, fragment = (
@@ -116,7 +110,7 @@ class RelativePathTreeprocessor(Treeprocessor):
         tags and then makes them relative based on the site navigation
         """
 
-        for element in _iter(root):
+        for element in root.iter():
 
             if element.tag == 'a':
                 key = 'href'
