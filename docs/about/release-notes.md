@@ -21,6 +21,16 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Version 1.0.0 (20??-??-??)
+
+### Major Additions to Version 1.0.0
+
+TODO...
+
+### Other Changes and Additions to Version 1.0.0
+
+TODO...
+
 ## Version 0.16.2 (2017-03-13)
 
 * System root (`/`) is not a valid path for site_dir or docs_dir (#1161)
