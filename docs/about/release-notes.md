@@ -21,6 +21,16 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Version 1.0.0 (20??-??-??)
+
+### Major Additions to Version 1.0.0
+
+TODO...
+
+### Other Changes and Additions to Version 1.0.0
+
+TODO...
+
 ## Version 0.16.3 (2017-04-04)
 
 * Fix error raised by autoscrolling in the readthedocs theme (#1177)
