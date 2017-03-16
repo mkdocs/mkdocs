@@ -9,7 +9,6 @@ import os
 
 from jinja2.exceptions import TemplateNotFound
 import jinja2
-import json
 
 from mkdocs import nav, search, utils
 from mkdocs.utils import filters
@@ -170,7 +169,7 @@ def build_template(template_name, env, config, site_navigation=None):
     return True
 
 
-def _build_page(page, config, site_navigation, env, dump_json, dirty=False):
+def _build_page(page, config, site_navigation, env, dirty=False):
 
     # Get the input/output paths
     input_path, output_path = get_complete_paths(config, page)
@@ -213,17 +212,7 @@ def _build_page(page, config, site_navigation, env, dump_json, dirty=False):
     output_content = template.render(context)
 
     # Write the output file.
-    if dump_json:
-        json_context = {
-            'content': context['content'],
-            'title': context['current_page'].title,
-            'url': context['current_page'].abs_url,
-            'language': 'en',
-        }
-        json_output = json.dumps(json_context, indent=4).encode('utf-8')
-        utils.write_file(json_output, output_path.replace('.html', '.json'))
-    else:
-        utils.write_file(output_content.encode('utf-8'), output_path)
+    utils.write_file(output_content.encode('utf-8'), output_path)
 
     return html_content, table_of_contents, meta
 
@@ -248,7 +237,7 @@ def build_extra_templates(extra_templates, config, site_navigation=None):
         utils.write_file(output_content.encode('utf-8'), output_path)
 
 
-def build_pages(config, dump_json=False, dirty=False):
+def build_pages(config, dirty=False):
     """
     Builds all the pages and writes them into the build directory.
     """
@@ -329,8 +318,7 @@ def build_pages(config, dump_json=False, dirty=False):
                 continue
 
             log.debug("Building page %s", page.input_path)
-            build_result = _build_page(page, config, site_navigation, env,
-                                       dump_json)
+            build_result = _build_page(page, config, site_navigation, env)
             html_content, table_of_contents, _ = build_result
             search_index.add_entry_from_context(
                 page, html_content, table_of_contents)
@@ -343,7 +331,7 @@ def build_pages(config, dump_json=False, dirty=False):
     utils.write_file(search_index.encode('utf-8'), json_output_path)
 
 
-def build(config, live_server=False, dump_json=False, dirty=False):
+def build(config, live_server=False, dirty=False):
     """
     Perform a full site build.
     """
@@ -359,10 +347,6 @@ def build(config, live_server=False, dump_json=False, dirty=False):
         log.info("Building documentation to directory: %s", config['site_dir'])
         if dirty and site_directory_contains_stale_files(config['site_dir']):
             log.info("The directory contains stale files. Use --clean to remove them.")
-
-    if dump_json:
-        build_pages(config, dump_json=True, dirty=dirty)
-        return
 
     # Reversed as we want to take the media files from the builtin theme
     # and then from the custom theme_dir so that the custom versions take
