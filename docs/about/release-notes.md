@@ -25,7 +25,16 @@ The current and past members of the MkDocs team.
 
 ### Major Additions to Version 1.0.0
 
-#### Previously deprecated Template variables removed. (#874 & #1168)
+#### Previously deprecated Template variables removed. (#1168)
+
+##### Page Template
+
+The primary entry point for page templates has been changed from `base.html` to
+`main.html`. This allows `base.html` to continue to exist while allowing users
+to override `main.html` and extend `base.html`. For version 0.16, `base.html`
+continued to work if no `main.html` template existed, but it raised a
+deprecation warning. In version 1.0, a build will fail if no `main.html`
+template exists. 
 
 ##### Page Context
 
