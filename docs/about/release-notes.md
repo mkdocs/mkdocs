@@ -34,9 +34,9 @@ The primary entry point for page templates has been changed from `base.html` to
 to override `main.html` and extend `base.html`. For version 0.16, `base.html`
 continued to work if no `main.html` template existed, but it raised a
 deprecation warning. In version 1.0, a build will fail if no `main.html`
-template exists. 
+template exists.
 
-##### Page Context
+##### Context Variables
 
 Page specific variable names in the template context have been refactored as
 defined in [Custom Themes](../user-guide/custom-themes/#page). The
@@ -65,8 +65,6 @@ user created and third-party templates:
 [page.canonical_url]: ../user-guide/custom-themes/#pagecanonical_url
 [page.previous_page]: ../user-guide/custom-themes/#pageprevious_page
 [page.next_page]: ../user-guide/custom-themes/#pagenext_page
-
-##### Global Context
 
 Additionally, a number of global variables have been altered and/or removed
 and user created and third-party templates should be updated as outlined below:
