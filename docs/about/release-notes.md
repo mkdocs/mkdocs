@@ -29,6 +29,7 @@ TODO...
 
 ### Other Changes and Additions to Version 1.0.0
 
+* The legacy pages config is no longer supported (#1168)
 * The deprecated `json` command has been removed (#481)
 * Support for Python 2.6 has been dropped (#165)
 
