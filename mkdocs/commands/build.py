@@ -85,23 +85,6 @@ def get_global_context(nav, config):
         'build_date_utc': datetime.utcfromtimestamp(timestamp),
 
         'config': config,
-
-        # TODO: remove the rest in 1.0 as they are deprecated
-        'site_name': config['site_name'],
-        'site_url': config['site_url'],
-        'site_author': config['site_author'],
-        'homepage_url': nav.homepage.url,
-        'page_description': config['site_description'],
-        'favicon': config['site_favicon'],
-
-        'repo_url': config['repo_url'],
-        'repo_name': config['repo_name'],
-
-        'include_nav': config['include_nav'],
-        'include_next_prev': config['include_next_prev'],
-
-        'copyright': config['copyright'],
-        'google_analytics': config['google_analytics']
     }
 
 
@@ -120,34 +103,7 @@ def get_page_context(page, content, toc, meta, config):
     page.toc = toc
     page.meta = meta
 
-    # TODO: remove the rest in version 1.0 as they are deprecated
-
-    if page.is_homepage or page.title is None:
-        page_title = None
-    else:
-        page_title = page.title
-
-    if page.is_homepage:
-        page_description = config['site_description']
-    else:
-        page_description = None
-
-    return {
-        'page': page,
-        # TODO: remove the rest in version 1.0 as they are deprecated
-        'page_title': page_title,
-        'page_description': page_description,
-
-        'content': content,
-        'toc': toc,
-        'meta': meta,
-
-        'canonical_url': page.canonical_url,
-
-        'current_page': page,
-        'previous_page': page.previous_page,
-        'next_page': page.next_page
-    }
+    return {'page': page}
 
 
 def build_template(template_name, env, config, site_navigation=None):
@@ -244,45 +200,6 @@ def build_pages(config, dirty=False):
     site_navigation = nav.SiteNavigation(config['pages'], config['use_directory_urls'])
     loader = jinja2.FileSystemLoader(config['theme_dir'] + [config['mkdocs_templates'], ])
     env = jinja2.Environment(loader=loader)
-
-    # TODO: remove DeprecationContext in v1.0 when all deprecated vars have been removed
-    from jinja2.runtime import Context
-    deprecated_vars = {
-        'page_title': 'page.title',
-        'content': 'page.content',
-        'toc': 'page.toc',
-        'meta': 'page.meta',
-        'canonical_url': 'page.canonical_url',
-        'previous_page': 'page.previous_page',
-        'next_page': 'page.next_page',
-        'current_page': 'page',
-        'include_nav': 'nav|length>1',
-        'include_next_prev': '(page.next_page or page.previous_page)',
-        'site_name': 'config.site_name',
-        'site_author': 'config.site_author',
-        'page_description': 'config.site_description',
-        'repo_url': 'config.repo_url',
-        'repo_name': 'config.repo_name',
-        'site_url': 'config.site_url',
-        'copyright': 'config.copyright',
-        'google_analytics': 'config.google_analytics',
-        'homepage_url': 'nav.homepage.url',
-        'favicon': '{{ base_url }}/img/favicon.ico',
-    }
-
-    class DeprecationContext(Context):
-        def resolve(self, key):
-            """ Log a warning when accessing any deprecated variable name. """
-            if key in deprecated_vars:
-                log.warn(
-                    "Template variable warning: '{0}' is being deprecated "
-                    "and will not be available in a future version. Use "
-                    "'{1}' instead.".format(key, deprecated_vars[key])
-                )
-            return super(DeprecationContext, self).resolve(key)
-
-    env.context_class = DeprecationContext
-    # TODO: end remove DeprecationContext
 
     env.filters['tojson'] = filters.tojson
     search_index = search.SearchIndex()

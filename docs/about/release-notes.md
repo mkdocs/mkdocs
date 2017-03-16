@@ -25,7 +25,58 @@ The current and past members of the MkDocs team.
 
 ### Major Additions to Version 1.0.0
 
-TODO...
+#### Previously deprecated Template variables removed. (#874 & #1168)
+
+##### Page Context
+
+Page specific variable names in the template context have been refactored as
+defined in [Custom Themes](../user-guide/custom-themes/#page). The
+old variable names issued a warning in version 0.16, but have been removed in
+version 1.0.
+
+Any of the following old page variables should be updated to the new ones in
+user created and third-party templates:
+
+| Old Variable Name | New Variable Name   |
+| ----------------- | ------------------- |
+| current_page      | [page]              |
+| page_title        | [page.title]        |
+| content           | [page.content]      |
+| toc               | [page.toc]          |
+| meta              | [page.meta]         |
+| canonical_url     | [page.canonical_url]|
+| previous_page     | [page.previous_page]|
+| next_page         | [page.next_page]    |
+
+[page]: ../user-guide/custom-themes/#page
+[page.title]: ../user-guide/custom-themes/#pagetitle
+[page.content]: ../user-guide/custom-themes/#pagecontent
+[page.toc]: ../user-guide/custom-themes/#pagetoc
+[page.meta]: ../user-guide/custom-themes/#pagemeta
+[page.canonical_url]: ../user-guide/custom-themes/#pagecanonical_url
+[page.previous_page]: ../user-guide/custom-themes/#pageprevious_page
+[page.next_page]: ../user-guide/custom-themes/#pagenext_page
+
+##### Global Context
+
+Additionally, a number of global variables have been altered and/or removed
+and user created and third-party templates should be updated as outlined below:
+
+| Old Variable Name | New Variable Name or Expression        |
+| ----------------- | -------------------------------------- |
+| current_page      | page                                   |
+| include_nav       | nav&#124;length&gt;1                   |
+| include_next_prev | (page.next_page or page.previous_page) |
+| site_name         | config.site_name                       |
+| site_author       | config.site_author                     |
+| page_description  | config.site_description                |
+| repo_url          | config.repo_url                        |
+| repo_name         | config.repo_name                       |
+| site_url          | config.site_url                        |
+| copyright         | config.copyright                       |
+| google_analytics  | config.google_analytics                |
+| homepage_url      | nav.homepage.url                       |
+| favicon           | {{ base_url }}/img/favicon.ico         |
 
 ### Other Changes and Additions to Version 1.0.0
 
