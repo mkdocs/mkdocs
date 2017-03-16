@@ -87,6 +87,8 @@ and user created and third-party templates should be updated as outlined below:
 
 ### Other Changes and Additions to Version 1.0.0
 
+* Removed special error message for mkdocs-bootstrap and mkdocs-bootswatch
+  themes (#1168)
 * The legacy pages config is no longer supported (#1168)
 * The deprecated `json` command has been removed (#481)
 * Support for Python 2.6 has been dropped (#165)
