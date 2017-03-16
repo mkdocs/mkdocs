@@ -318,15 +318,6 @@ class CLITests(unittest.TestCase):
         logger = logging.getLogger('mkdocs')
         self.assertEqual(logger.level, logging.ERROR)
 
-    @mock.patch('mkdocs.commands.build.build', autospec=True)
-    def test_json(self, mock_build):
-
-        result = self.runner.invoke(
-            cli.cli, ["json", ], catch_exceptions=False)
-
-        self.assertEqual(result.exit_code, 0)
-        self.assertEqual(mock_build.call_count, 1)
-
     @mock.patch('mkdocs.commands.new.new', autospec=True)
     def test_new(self, mock_new):
 
