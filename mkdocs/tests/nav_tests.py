@@ -6,7 +6,7 @@ import mock
 import os
 import unittest
 
-from mkdocs import nav, legacy
+from mkdocs import nav
 from mkdocs.exceptions import ConfigurationError
 from mkdocs.tests.base import dedent
 
@@ -470,147 +470,6 @@ class SiteNavigationTests(unittest.TestCase):
         self.maxDiff = None
         self.assertEqual(str(site_navigation).strip(), expected)
 
-
-class TestLegacyPagesConfig(unittest.TestCase):
-
-    def test_walk_simple_toc(self):
-        pages = legacy.pages_compat_shim([
-            ('index.md', 'Home'),
-            ('about.md', 'About')
-        ])
-        expected = [
-            dedent("""
-                Home - / [*]
-                About - /about/
-            """),
-            dedent("""
-                Home - /
-                About - /about/ [*]
-            """)
-        ]
-        site_navigation = nav.SiteNavigation(pages)
-        for index, page in enumerate(site_navigation.walk_pages()):
-            self.assertEqual(str(site_navigation).strip(), expected[index])
-
-    def test_walk_empty_toc(self):
-        pages = legacy.pages_compat_shim([
-            ('index.md',),
-            ('about.md', 'About')
-        ])
-
-        expected = [
-            dedent("""
-                Home - / [*]
-                About - /about/
-            """),
-            dedent("""
-                Home - /
-                About - /about/ [*]
-            """)
-        ]
-        site_navigation = nav.SiteNavigation(pages)
-        for index, page in enumerate(site_navigation.walk_pages()):
-            self.assertEqual(str(site_navigation).strip(), expected[index])
-
-    def test_walk_indented_toc(self):
-        pages = legacy.pages_compat_shim([
-            ('index.md', 'Home'),
-            ('api-guide/running.md', 'API Guide', 'Running'),
-            ('api-guide/testing.md', 'API Guide', 'Testing'),
-            ('api-guide/debugging.md', 'API Guide', 'Debugging'),
-            ('about/release-notes.md', 'About', 'Release notes'),
-            ('about/license.md', 'About', 'License')
-        ])
-        expected = [
-            dedent("""
-                Home - / [*]
-                API Guide
-                    Running - /api-guide/running/
-                    Testing - /api-guide/testing/
-                    Debugging - /api-guide/debugging/
-                About
-                    Release notes - /about/release-notes/
-                    License - /about/license/
-            """),
-            dedent("""
-                Home - /
-                API Guide [*]
-                    Running - /api-guide/running/ [*]
-                    Testing - /api-guide/testing/
-                    Debugging - /api-guide/debugging/
-                About
-                    Release notes - /about/release-notes/
-                    License - /about/license/
-            """),
-            dedent("""
-                Home - /
-                API Guide [*]
-                    Running - /api-guide/running/
-                    Testing - /api-guide/testing/ [*]
-                    Debugging - /api-guide/debugging/
-                About
-                    Release notes - /about/release-notes/
-                    License - /about/license/
-            """),
-            dedent("""
-                Home - /
-                API Guide [*]
-                    Running - /api-guide/running/
-                    Testing - /api-guide/testing/
-                    Debugging - /api-guide/debugging/ [*]
-                About
-                    Release notes - /about/release-notes/
-                    License - /about/license/
-            """),
-            dedent("""
-                Home - /
-                API Guide
-                    Running - /api-guide/running/
-                    Testing - /api-guide/testing/
-                    Debugging - /api-guide/debugging/
-                About [*]
-                    Release notes - /about/release-notes/ [*]
-                    License - /about/license/
-            """),
-            dedent("""
-                Home - /
-                API Guide
-                    Running - /api-guide/running/
-                    Testing - /api-guide/testing/
-                    Debugging - /api-guide/debugging/
-                About [*]
-                    Release notes - /about/release-notes/
-                    License - /about/license/ [*]
-            """)
-        ]
-        site_navigation = nav.SiteNavigation(pages)
-        for index, page in enumerate(site_navigation.walk_pages()):
-            self.assertEqual(str(site_navigation).strip(), expected[index])
-
-    def test_indented_toc_missing_child_title(self):
-        pages = legacy.pages_compat_shim([
-            ('index.md', 'Home'),
-            ('api-guide/running.md', 'API Guide', 'Running'),
-            ('api-guide/testing.md', 'API Guide'),
-            ('api-guide/debugging.md', 'API Guide', 'Debugging'),
-            ('about/release-notes.md', 'About', 'Release notes'),
-            ('about/license.md', 'About', 'License')
-        ])
-        expected = dedent("""
-        Home - /
-        API Guide
-            Running - /api-guide/running/
-            Testing - /api-guide/testing/
-            Debugging - /api-guide/debugging/
-        About
-            Release notes - /about/release-notes/
-            License - /about/license/
-        """)
-        site_navigation = nav.SiteNavigation(pages)
-        self.assertEqual(str(site_navigation).strip(), expected)
-        self.assertEqual(len(site_navigation.nav_items), 3)
-        self.assertEqual(len(site_navigation.pages), 6)
-
     def test_edit_uri(self):
         """
         Ensure that set_edit_url creates well formed URLs for edit_uri
@@ -627,7 +486,15 @@ class TestLegacyPagesConfig(unittest.TestCase):
         repo_url = 'http://example.com/'
         edit_uri = 'edit/master/docs/'
 
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation({
+            'pages': pages,
+            'repo_url': repo_url,
+            'edit_uri': edit_uri,
+            'docs_dir': 'docs',
+            'site_dir': 'site',
+            'site_url': '',
+            'use_directory_urls': True
+        })
 
         expected_results = (
             repo_url + edit_uri + pages[0],
@@ -637,24 +504,38 @@ class TestLegacyPagesConfig(unittest.TestCase):
         )
 
         for idx, page in enumerate(site_navigation.walk_pages()):
-            page.set_edit_url(repo_url, edit_uri)
             self.assertEqual(page.edit_url, expected_results[idx])
 
         # Ensure the '/' is added to the repo_url and edit_uri
         repo_url = 'http://example.com'
-        edit_uri = 'edit/master/docs/'
+        edit_uri = 'edit/master/docs'
 
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation({
+            'pages': pages,
+            'repo_url': repo_url,
+            'edit_uri': edit_uri,
+            'docs_dir': 'docs',
+            'site_dir': 'site',
+            'site_url': '',
+            'use_directory_urls': True
+        })
 
         for idx, page in enumerate(site_navigation.walk_pages()):
-            page.set_edit_url(repo_url, edit_uri)
             self.assertEqual(page.edit_url, expected_results[idx])
 
         # Ensure query strings are supported
         repo_url = 'http://example.com'
         edit_uri = '?query=edit/master/docs/'
 
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation({
+            'pages': pages,
+            'repo_url': repo_url,
+            'edit_uri': edit_uri,
+            'docs_dir': 'docs',
+            'site_dir': 'site',
+            'site_url': '',
+            'use_directory_urls': True
+        })
 
         expected_results = (
             repo_url + edit_uri + pages[0],
@@ -664,14 +545,21 @@ class TestLegacyPagesConfig(unittest.TestCase):
         )
 
         for idx, page in enumerate(site_navigation.walk_pages()):
-            page.set_edit_url(repo_url, edit_uri)
             self.assertEqual(page.edit_url, expected_results[idx])
 
         # Ensure fragment strings are supported
         repo_url = 'http://example.com'
         edit_uri = '#fragment/edit/master/docs/'
 
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation({
+            'pages': pages,
+            'repo_url': repo_url,
+            'edit_uri': edit_uri,
+            'docs_dir': 'docs',
+            'site_dir': 'site',
+            'site_url': '',
+            'use_directory_urls': True
+        })
 
         expected_results = (
             repo_url + edit_uri + pages[0],
@@ -681,7 +569,6 @@ class TestLegacyPagesConfig(unittest.TestCase):
         )
 
         for idx, page in enumerate(site_navigation.walk_pages()):
-            page.set_edit_url(repo_url, edit_uri)
             self.assertEqual(page.edit_url, expected_results[idx])
 
     def test_edit_uri_windows(self):
@@ -700,7 +587,15 @@ class TestLegacyPagesConfig(unittest.TestCase):
         repo_url = 'http://example.com/'
         edit_uri = 'edit/master/docs/'
 
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation({
+            'pages': pages,
+            'repo_url': repo_url,
+            'edit_uri': edit_uri,
+            'docs_dir': 'docs',
+            'site_dir': 'site',
+            'site_url': '',
+            'use_directory_urls': True
+        })
 
         expected_results = (
             repo_url + edit_uri + pages[0],
@@ -710,24 +605,38 @@ class TestLegacyPagesConfig(unittest.TestCase):
         )
 
         for idx, page in enumerate(site_navigation.walk_pages()):
-            page.set_edit_url(repo_url, edit_uri)
             self.assertEqual(page.edit_url, expected_results[idx])
 
         # Ensure the '/' is added to the repo_url and edit_uri
         repo_url = 'http://example.com'
-        edit_uri = 'edit/master/docs/'
+        edit_uri = 'edit/master/docs'
 
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation({
+            'pages': pages,
+            'repo_url': repo_url,
+            'edit_uri': edit_uri,
+            'docs_dir': 'docs',
+            'site_dir': 'site',
+            'site_url': '',
+            'use_directory_urls': True
+        })
 
         for idx, page in enumerate(site_navigation.walk_pages()):
-            page.set_edit_url(repo_url, edit_uri)
             self.assertEqual(page.edit_url, expected_results[idx])
 
         # Ensure query strings are supported
         repo_url = 'http://example.com'
         edit_uri = '?query=edit/master/docs/'
 
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation({
+            'pages': pages,
+            'repo_url': repo_url,
+            'edit_uri': edit_uri,
+            'docs_dir': 'docs',
+            'site_dir': 'site',
+            'site_url': '',
+            'use_directory_urls': True
+        })
 
         expected_results = (
             repo_url + edit_uri + pages[0],
@@ -737,14 +646,21 @@ class TestLegacyPagesConfig(unittest.TestCase):
         )
 
         for idx, page in enumerate(site_navigation.walk_pages()):
-            page.set_edit_url(repo_url, edit_uri)
             self.assertEqual(page.edit_url, expected_results[idx])
 
         # Ensure fragment strings are supported
         repo_url = 'http://example.com'
         edit_uri = '#fragment/edit/master/docs/'
 
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation({
+            'pages': pages,
+            'repo_url': repo_url,
+            'edit_uri': edit_uri,
+            'docs_dir': 'docs',
+            'site_dir': 'site',
+            'site_url': '',
+            'use_directory_urls': True
+        })
 
         expected_results = (
             repo_url + edit_uri + pages[0],
@@ -754,5 +670,4 @@ class TestLegacyPagesConfig(unittest.TestCase):
         )
 
         for idx, page in enumerate(site_navigation.walk_pages()):
-            page.set_edit_url(repo_url, edit_uri)
             self.assertEqual(page.edit_url, expected_results[idx])

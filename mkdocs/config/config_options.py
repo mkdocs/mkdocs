@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 import os
 from collections import namedtuple
 
-from mkdocs import utils, legacy
+from mkdocs import utils
 from mkdocs.config.base import Config, ValidationError
 
 
@@ -448,9 +448,7 @@ class Pages(Extras):
     """
     Pages Config Option
 
-    Validate the pages config, performing comparability if the config appears
-    to be the old structure. Automatically add all markdown files if none are
-    provided.
+    Validate the pages config. Automatically add all markdown files if empty.
     """
 
     def __init__(self, **kwargs):
@@ -465,14 +463,9 @@ class Pages(Extras):
         if len(value) == 0:
             return
 
-        # TODO: Remove in 1.0
         config_types = set(type(l) for l in value)
-
         if config_types.issubset(set([utils.text_type, dict, str])):
             return value
-
-        if config_types.issubset(set([utils.text_type, list, str])):
-            return legacy.pages_compat_shim(value)
 
         raise ValidationError("Invalid pages config. {0} {1}".format(
             config_types,
