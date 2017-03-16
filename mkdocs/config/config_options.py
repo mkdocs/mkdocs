@@ -354,25 +354,8 @@ class Theme(OptionallyRequired):
     def run_validation(self, value):
         themes = utils.get_theme_names()
 
-        # These themes have been moved to the mkdocs-bootstrap and
-        # mkdocs-bootswatch packages. At some point we wont depend on
-        # these by default.
-        moved_themes = [
-            'bootstrap', 'amelia', 'cerulean', 'cosmo', 'cyborg',
-            'flatly', 'journal', 'readable', 'simplex', 'slate',
-            'spacelab', 'united', 'yeti'
-        ]
-
         if value in themes:
             return value
-
-        elif value in moved_themes:
-            raise ValidationError(
-                ("The theme '{0}' is no longer included in MkDocs by default "
-                 "and must be installed with pip. See http://www.mkdocs.org"
-                 "/about/release-notes/#add-support-for-installable-themes "
-                 "for more details").format(value)
-            )
 
         raise ValidationError(
             "Unrecognised theme '{0}'. The available installed themes "
