@@ -32,10 +32,6 @@ DEFAULT_SCHEMA = (
     # The name of the author to add to the HTML meta tags
     ('site_author', config_options.Type(utils.string_types)),
 
-    # The path to the favicon for a site
-    # TODO: remove this in version 1.0
-    ('site_favicon', config_options.Deprecated()),
-
     # The MkDocs theme for the documentation.
     ('theme', config_options.Theme(default='mkdocs')),
 
@@ -91,12 +87,6 @@ DEFAULT_SCHEMA = (
     # Similar to the above, but each template (HTML or XML) will be build with
     # Jinja2 and the global context.
     ('extra_templates', config_options.Extras()),
-
-    # TODO: delete deprecated `include_nav` and `include_next_previous` in version 1.0
-    # Determine if the site should include the nav and next/prev elements.
-    # Default, True if the site has more than one page, False otherwise.
-    ('include_nav', config_options.NumPages()),
-    ('include_next_prev', config_options.NumPages()),
 
     # PyMarkdown extension names.
     ('markdown_extensions', config_options.MarkdownExtensions(

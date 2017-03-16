@@ -489,39 +489,6 @@ class Pages(Extras):
         config[key_name] = utils.nest_paths(pages)
 
 
-class NumPages(OptionallyRequired):
-    """
-    NumPages Config Option
-
-    Set the value to True if the number of pages is greater than the given
-    number (defaults to 1).
-    """
-
-    def __init__(self, at_lest=1, **kwargs):
-        super(NumPages, self).__init__(**kwargs)
-        self.at_lest = at_lest
-
-    def pre_validation(self, config, key_name):
-        # TODO: delete deprecated `NumPages` class in version 1.0
-        # Numpages is only used by `include_nav` and `include_next_prev`,
-        # which are both deprecated, so we can delete the entire Option type.
-        if config.get(key_name) is not None:
-            # Only issue warning if option is defined by user.
-            warning = ('The configuration option {0} has been deprecated and will '
-                       'be removed in a future release of MkDocs.').format(key_name)
-            self.warnings.append(warning)
-
-    def post_validation(self, config, key_name):
-
-        if config[key_name] is not None:
-            return
-
-        try:
-            config[key_name] = len(config['pages']) > self.at_lest
-        except TypeError:
-            config[key_name] = False
-
-
 class Private(OptionallyRequired):
     """
     Private Config Option
