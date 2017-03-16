@@ -362,61 +362,6 @@ class PagesTest(unittest.TestCase):
                           option.validate, [[], 1])
 
 
-class NumPagesTest(unittest.TestCase):
-
-    def test_one_page(self):
-
-        option = config_options.NumPages()
-        config = {
-            'key': None,
-            'pages': [1, ]
-        }
-        option.post_validation(config, 'key')
-        self.assertEqual({
-            'key': False,
-            'pages': [1, ]
-        }, config)
-
-    def test_many_pages(self):
-
-        option = config_options.NumPages()
-        config = {
-            'key': None,
-            'pages': [1, 2, 3]
-        }
-        option.post_validation(config, 'key')
-        self.assertEqual({
-            'key': True,
-            'pages': [1, 2, 3]
-        }, config)
-
-    def test_invalid_pages(self):
-
-        option = config_options.NumPages()
-        config = {
-            'key': None,
-            'pages': None
-        }
-        option.post_validation(config, 'key')
-        self.assertEqual({
-            'key': False,
-            'pages': None
-        }, config)
-
-    def test_provided(self):
-
-        option = config_options.NumPages()
-        config = {
-            'key': True,
-            'pages': None
-        }
-        option.post_validation(config, 'key')
-        self.assertEqual({
-            'key': True,
-            'pages': None
-        }, config)
-
-
 class PrivateTest(unittest.TestCase):
 
     def test_defined(self):
