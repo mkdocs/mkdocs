@@ -78,7 +78,7 @@ class ConfigTests(unittest.TestCase):
         file_contents = dedent("""
         site_name: Example
         pages:
-        - ['index.md', 'Introduction']
+        - 'Introduction': 'index.md'
         """)
         config_file = tempfile.NamedTemporaryFile('w', delete=False)
         try:
