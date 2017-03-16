@@ -321,13 +321,14 @@ class ExtrasTest(unittest.TestCase):
 
 class PagesTest(unittest.TestCase):
 
-    def test_provided(self):
+    def test_old_format(self):
 
         option = config_options.Pages()
-        value = option.validate([['index.md', ], ])
-        self.assertEqual(['index.md', ], value)
-
-        option.post_validation({'extra_stuff': []}, 'extra_stuff')
+        self.assertRaises(
+            config_options.ValidationError,
+            option.validate,
+            [['index.md', ], ]
+        )
 
     def test_provided_dict(self):
 
