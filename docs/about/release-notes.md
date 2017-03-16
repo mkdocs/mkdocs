@@ -29,6 +29,7 @@ TODO...
 
 ### Other Changes and Additions to Version 1.0.0
 
+* The deprecated `json` command has been removed (#481)
 * Support for Python 2.6 has been dropped (#165)
 
 ## Version 0.16.3 (2017-04-04)
