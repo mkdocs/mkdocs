@@ -182,6 +182,15 @@ class URL(OptionallyRequired):
             "The URL isn't valid, it should include the http:// (scheme)")
 
 
+class BaseURL(URL):
+    """
+    Base URL Config Option
+
+    Extension of URL config that sets the base_url
+    """
+    pass
+
+
 class RepoURL(URL):
     """
     Repo URL Config Option

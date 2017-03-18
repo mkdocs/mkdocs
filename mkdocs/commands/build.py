@@ -77,7 +77,7 @@ def get_global_context(nav, config):
     return {
         'nav': nav,
         # base_url should never end with a slash.
-        'base_url': nav.url_context.make_relative('/').rstrip('/'),
+        'base_url': config['base_url'] or nav.url_context.make_relative('/').rstrip('/'),
 
         'extra_css': extra_css,
         'extra_javascript': extra_javascript,
