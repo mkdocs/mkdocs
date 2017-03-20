@@ -11,9 +11,8 @@ from mkdocs.config import load_config
 log = logging.getLogger(__name__)
 
 
-def _get_handler(site_dir):
+def _get_handler(site_dir, StaticFileHandler):
 
-    from tornado.web import StaticFileHandler
     from tornado.template import Loader
 
     class WebHandler(StaticFileHandler):
@@ -35,13 +34,14 @@ def _livereload(host, port, config, builder, site_dir):
     # We are importing here for anyone that has issues with livereload. Even if
     # this fails, the --no-livereload alternative should still work.
     from livereload import Server
+    import livereload.handlers
 
     class LiveReloadServer(Server):
 
         def get_web_handlers(self, script):
             handlers = super(LiveReloadServer, self).get_web_handlers(script)
             # replace livereload handler
-            return [(handlers[0][0], _get_handler(site_dir), handlers[0][2],)]
+            return [(handlers[0][0], _get_handler(site_dir, livereload.handlers.StaticFileHandler), handlers[0][2],)]
 
     server = LiveReloadServer()
 
@@ -63,7 +63,7 @@ def _static_server(host, port, site_dir):
     from tornado import web
 
     application = web.Application([
-        (r"/(.*)", _get_handler(site_dir), {
+        (r"/(.*)", _get_handler(site_dir, web.StaticFileHandler), {
             "path": site_dir,
             "default_filename": "index.html"
         }),
