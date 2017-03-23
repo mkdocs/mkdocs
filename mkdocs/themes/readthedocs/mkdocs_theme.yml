@@ -2,3 +2,4 @@
 
 static_templates:
     - search.html
+    - 404.html
