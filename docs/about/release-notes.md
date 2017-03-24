@@ -87,6 +87,7 @@ and user created and third-party templates should be updated as outlined below:
 
 ### Other Changes and Additions to Version 1.0.0
 
+* Internal refactor of Markdown processing (#713)
 * Removed special error message for mkdocs-bootstrap and mkdocs-bootswatch
   themes (#1168)
 * The legacy pages config is no longer supported (#1168)

@@ -10,7 +10,6 @@ and structure of the site and pages in the site.
 from __future__ import unicode_literals
 
 import logging
-import markdown
 import os
 import pkg_resources
 import shutil
@@ -19,7 +18,7 @@ import sys
 import yaml
 import fnmatch
 
-from mkdocs import toc, exceptions
+from mkdocs import exceptions
 
 try:                                                        # pragma: no cover
     from urllib.parse import urlparse, urlunparse, urljoin  # noqa
@@ -357,31 +356,6 @@ def path_to_url(path):
     return pathname2url(path)
 
 
-def convert_markdown(markdown_source, extensions=None, extension_configs=None):
-    """
-    Convert the Markdown source file to HTML content, and additionally
-    return the parsed table of contents, and a dictionary of any metadata
-    that was specified in the Markdown file.
-    `extensions` is an optional sequence of Python Markdown extensions to add
-    to the default set.
-    """
-    md = markdown.Markdown(
-        extensions=extensions or [],
-        extension_configs=extension_configs or {}
-    )
-    html_content = md.convert(markdown_source)
-
-    # On completely blank markdown files, no Meta or tox properties are added
-    # to the generated document.
-    meta = getattr(md, 'Meta', {})
-    toc_html = getattr(md, 'toc', '')
-
-    # Post process the generated table of contents into a data structure
-    table_of_contents = toc.TableOfContents(toc_html)
-
-    return (html_content, table_of_contents, meta)
-
-
 def get_theme_dir(name):
     """ Return the directory of an installed theme by name. """
 
@@ -439,6 +413,25 @@ def dirname_to_title(dirname):
         title = title.capitalize()
 
     return title
+
+
+def get_markdown_title(markdown_src):
+        """
+        Get the title of a Markdown document. The title in this case is considered
+        to be a H1 that occurs before any other content in the document.
+        The procedure is then to iterate through the lines, stopping at the first
+        non-whitespace content. If it is a title, return that, otherwise return
+        None.
+        """
+
+        lines = markdown_src.replace('\r\n', '\n').replace('\r', '\n').split('\n')
+        while lines:
+            line = lines.pop(0).strip()
+            if not line.strip():
+                continue
+            if not line.startswith('# '):
+                return
+            return line.lstrip('# ')
 
 
 def find_or_create_node(branch, key):

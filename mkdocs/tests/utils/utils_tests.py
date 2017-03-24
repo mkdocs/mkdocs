@@ -11,7 +11,7 @@ import shutil
 import stat
 
 from mkdocs import nav, utils, exceptions
-from mkdocs.tests.base import dedent
+from mkdocs.tests.base import dedent, load_config
 
 
 class UtilsTests(unittest.TestCase):
@@ -77,7 +77,7 @@ class UtilsTests(unittest.TestCase):
             'local/file/jquery.js': './local/file/jquery.js',
             'image.png': './image.png',
         }
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         for path, expected_result in expected_results.items():
             urls = utils.create_media_urls(site_navigation, [path])
             self.assertEqual(urls[0], expected_result)
@@ -87,13 +87,14 @@ class UtilsTests(unittest.TestCase):
         test special case where there's a sub/index.md page
         '''
 
-        site_navigation = nav.SiteNavigation([
+        pages = [
             {'Home': 'index.md'},
             {'Sub': [
                 {'Sub Home': '/subpage/index.md'},
 
             ]}
-        ])
+        ]
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         site_navigation.url_context.set_current_url('/subpage/')
         site_navigation.file_context.current_file = "subpage/index.md"
 
@@ -111,13 +112,14 @@ class UtilsTests(unittest.TestCase):
         current_file paths uses backslash in Windows
         '''
 
-        site_navigation = nav.SiteNavigation([
+        pages = [
             {'Home': 'index.md'},
             {'Sub': [
                 {'Sub Home': '/level1/level2/index.md'},
 
             ]}
-        ])
+        ]
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         site_navigation.url_context.set_current_url('/level1/level2')
         site_navigation.file_context.current_file = "level1\\level2\\index.md"
 
