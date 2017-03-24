@@ -12,7 +12,6 @@ import jinja2
 
 from mkdocs import nav, search, utils
 from mkdocs.utils import filters
-from mkdocs.relative_path_ext import RelativePathExtension
 import mkdocs
 
 
@@ -31,39 +30,14 @@ log = logging.getLogger(__name__)
 log.addFilter(DuplicateFilter())
 
 
-def get_complete_paths(config, page):
-    """
-    Return the complete input/output paths for the supplied page.
-    """
-    input_path = os.path.join(config['docs_dir'], page.input_path)
-    output_path = os.path.join(config['site_dir'], page.output_path)
-    return input_path, output_path
-
-
-def convert_markdown(markdown_source, config, site_navigation=None):
-    """
-    Convert the Markdown source file to HTML as per the config and
-    site_navigation. Return a tuple of the HTML as a string, the parsed table
-    of contents, and a dictionary of any metadata that was specified in the
-    Markdown file.
-    """
-
-    extensions = [
-        RelativePathExtension(site_navigation, config['strict'])
-    ] + config['markdown_extensions']
-
-    return utils.convert_markdown(
-        markdown_source=markdown_source,
-        extensions=extensions,
-        extension_configs=config['mdx_configs']
-    )
-
-
-def get_global_context(nav, config):
+def get_context(nav, config, page=None):
     """
     Given the SiteNavigation and config, generate the context which is relevant
     to app pages.
     """
+
+    if nav is None:
+        return {'page', page}
 
     extra_javascript = utils.create_media_urls(nav, config['extra_javascript'])
 
@@ -85,25 +59,8 @@ def get_global_context(nav, config):
         'build_date_utc': datetime.utcfromtimestamp(timestamp),
 
         'config': config,
+        'page': page,
     }
-
-
-def get_page_context(page, content, toc, meta, config):
-    """
-    Generate the page context by extending the global context and adding page
-    specific variables.
-    """
-    if config['site_url']:
-        page.set_canonical_url(config['site_url'])
-
-    if config['repo_url']:
-        page.set_edit_url(config['repo_url'], config['edit_uri'])
-
-    page.content = content
-    page.toc = toc
-    page.meta = meta
-
-    return {'page': page}
 
 
 def build_template(template_name, env, config, site_navigation=None):
@@ -115,9 +72,7 @@ def build_template(template_name, env, config, site_navigation=None):
     except TemplateNotFound:
         return False
 
-    context = {'page': None}
-    if site_navigation is not None:
-        context.update(get_global_context(site_navigation, config))
+    context = get_context(site_navigation, config)
 
     output_content = template.render(context)
     output_path = os.path.join(config['site_dir'], template_name)
@@ -127,31 +82,15 @@ def build_template(template_name, env, config, site_navigation=None):
 
 def _build_page(page, config, site_navigation, env, dirty=False):
 
-    # Get the input/output paths
-    input_path, output_path = get_complete_paths(config, page)
-
-    # Read the input file
-    try:
-        input_content = io.open(input_path, 'r', encoding='utf-8').read()
-    except IOError:
-        log.error('file not found: %s', input_path)
-        raise
-
     # Process the markdown text
-    html_content, table_of_contents, meta = convert_markdown(
-        markdown_source=input_content,
-        config=config,
-        site_navigation=site_navigation
-    )
+    page.load_markdown()
+    page.render(config, site_navigation)
 
-    context = get_global_context(site_navigation, config)
-    context.update(get_page_context(
-        page, html_content, table_of_contents, meta, config
-    ))
+    context = get_context(site_navigation, config, page)
 
     # Allow 'template:' override in md source files.
-    if 'template' in meta:
-        template = env.get_template(meta['template'][0])
+    if 'template' in page.meta:
+        template = env.get_template(page.meta['template'])
     else:
         template = env.get_template('main.html')
 
@@ -159,9 +98,7 @@ def _build_page(page, config, site_navigation, env, dirty=False):
     output_content = template.render(context)
 
     # Write the output file.
-    utils.write_file(output_content.encode('utf-8'), output_path)
-
-    return html_content, table_of_contents, meta
+    utils.write_file(output_content.encode('utf-8'), page.abs_output_path)
 
 
 def build_extra_templates(extra_templates, config, site_navigation=None):
@@ -175,9 +112,7 @@ def build_extra_templates(extra_templates, config, site_navigation=None):
         with io.open(input_path, 'r', encoding='utf-8') as template_file:
             template = jinja2.Template(template_file.read())
 
-        context = {'page': None}
-        if site_navigation is not None:
-            context.update(get_global_context(site_navigation, config))
+        context = get_context(site_navigation, config)
 
         output_content = template.render(context)
         output_path = os.path.join(config['site_dir'], extra_template)
@@ -188,7 +123,7 @@ def build_pages(config, dirty=False):
     """
     Builds all the pages and writes them into the build directory.
     """
-    site_navigation = nav.SiteNavigation(config['pages'], config['use_directory_urls'])
+    site_navigation = nav.SiteNavigation(config)
     loader = jinja2.FileSystemLoader(config['theme_dir'] + [config['mkdocs_templates'], ])
     env = jinja2.Environment(loader=loader)
 
@@ -218,18 +153,14 @@ def build_pages(config, dirty=False):
     for page in site_navigation.walk_pages():
 
         try:
-
             # When --dirty is used, only build the page if the markdown has been modified since the
             # previous build of the output.
-            input_path, output_path = get_complete_paths(config, page)
-            if dirty and (utils.modified_time(input_path) < utils.modified_time(output_path)):
+            if dirty and (utils.modified_time(page.abs_input_path) < utils.modified_time(page.abs_output_path)):
                 continue
 
             log.debug("Building page %s", page.input_path)
-            build_result = _build_page(page, config, site_navigation, env)
-            html_content, table_of_contents, _ = build_result
-            search_index.add_entry_from_context(
-                page, html_content, table_of_contents)
+            _build_page(page, config, site_navigation, env)
+            search_index.add_entry_from_context(page)
         except Exception:
             log.error("Error building page %s", page.input_path)
             raise

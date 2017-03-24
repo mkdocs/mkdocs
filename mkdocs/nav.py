@@ -9,14 +9,18 @@ This consists of building a set of interlinked page and header objects.
 from __future__ import unicode_literals
 import datetime
 import logging
+import markdown
 import os
+import io
 
-from mkdocs import utils, exceptions
+from mkdocs import utils, exceptions, toc
+from mkdocs.utils import meta
+from mkdocs.relative_path_ext import RelativePathExtension
 
 log = logging.getLogger(__name__)
 
 
-def filename_to_title(filename):
+def _filename_to_title(filename):
     """
     Automatically generate a default title, given a filename.
     """
@@ -26,14 +30,20 @@ def filename_to_title(filename):
     return utils.filename_to_title(filename)
 
 
+@meta.transformer()
+def default(value):
+    """ By default, return all meta values as strings. """
+    return ' '.join(value)
+
+
 class SiteNavigation(object):
-    def __init__(self, pages_config, use_directory_urls=True):
+    def __init__(self, config):
         self.url_context = URLContext()
         self.file_context = FileContext()
         self.nav_items, self.pages = _generate_site_navigation(
-            pages_config, self.url_context, use_directory_urls)
+            config, self.url_context)
         self.homepage = self.pages[0] if self.pages else None
-        self.use_directory_urls = use_directory_urls
+        self.use_directory_urls = config['use_directory_urls']
 
     def __str__(self):
         return ''.join([str(item) for item in self])
@@ -139,10 +149,10 @@ class FileContext(object):
 
 
 class Page(object):
-    def __init__(self, title, url, path, url_context):
+    def __init__(self, title, path, url_context, config):
 
-        self.title = title
-        self.abs_url = url
+        self._title = title
+        self.abs_url = utils.get_url_path(path, config['use_directory_urls'])
         self.active = False
         self.url_context = url_context
 
@@ -155,22 +165,71 @@ class Page(object):
         else:
             self.update_date = datetime.datetime.now().strftime("%Y-%m-%d")
 
-        # Relative paths to the input markdown file and output html file.
+        # Relative and absolute paths to the input markdown file and output html file.
         self.input_path = path
         self.output_path = utils.get_html_path(path)
+        self.abs_input_path = os.path.join(config['docs_dir'], self.input_path)
+        self.abs_output_path = os.path.join(config['site_dir'], self.output_path)
 
-        # Links to related pages
+        self.canonical_url = None
+        if config['site_url']:
+            self._set_canonical_url(config['site_url'])
+
+        self.edit_url = None
+        if config['repo_url']:
+            self._set_edit_url(config['repo_url'], config['edit_uri'])
+
+        # Placeholders to be filled in later in the build
+        # process when we have access to the config.
+        self.markdown = ''
+        self.meta = {}
+        self.content = None
+        self.toc = None
+
         self.previous_page = None
         self.next_page = None
         self.ancestors = []
 
-        # Placeholders to be filled in later in the build
-        # process when we have access to the config.
-        self.canonical_url = None
-        self.edit_url = None
-        self.content = None
-        self.meta = None
-        self.toc = None
+    def __eq__(self, other):
+
+        def sub_dict(d):
+            return dict((key, value) for key, value in d.items()
+                        if key in ['title', 'input_path', 'abs_url'])
+
+        return (isinstance(other, self.__class__)
+                and sub_dict(self.__dict__) == sub_dict(other.__dict__))
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __str__(self):
+        return self.indent_print()
+
+    def __repr__(self):
+        return "nav.Page(title='{0}', input_path='{1}', url='{2}')".format(
+            self.title, self.input_path, self.abs_url)
+
+    @property
+    def title(self):
+        """
+        Get the title for a Markdown document
+        Check these in order and return the first that has a valid title:
+        - self._title which is populated from the mkdocs.yml
+        - self.meta['title'] which comes from the page metadata
+        - self.markdown - look for the first H1
+        - self.input_path - create a title based on the filename
+        """
+        if self._title is not None:
+            return self._title
+        elif 'title' in self.meta:
+            return self.meta['title']
+
+        title = utils.get_markdown_title(self.markdown)
+
+        if title is not None:
+            return title
+
+        return _filename_to_title(self.input_path.split(os.path.sep)[-1])
 
     @property
     def url(self):
@@ -184,8 +243,29 @@ class Page(object):
     def is_top_level(self):
         return len(self.ancestors) == 0
 
-    def __str__(self):
-        return self.indent_print()
+    def load_markdown(self):
+        try:
+            input_content = io.open(self.abs_input_path, 'r', encoding='utf-8').read()
+        except IOError:
+            log.error('file not found: %s', self.abs_input_path)
+            raise
+
+        self.markdown, self.meta = meta.get_data(input_content)
+
+    def _set_canonical_url(self, base):
+        if not base.endswith('/'):
+            base += '/'
+        self.canonical_url = utils.urljoin(base, self.abs_url.lstrip('/'))
+
+    def _set_edit_url(self, repo_url, edit_uri):
+        if not edit_uri:
+            self.edit_url = repo_url
+        else:
+            # Normalize URL from Windows path '\\' -> '/'
+            input_path_url = self.input_path.replace('\\', '/')
+            self.edit_url = utils.urljoin(
+                repo_url,
+                edit_uri + input_path_url)
 
     def indent_print(self, depth=0):
         indent = '    ' * depth
@@ -198,20 +278,23 @@ class Page(object):
         for ancestor in self.ancestors:
             ancestor.set_active(active)
 
-    def set_canonical_url(self, base):
-        if not base.endswith('/'):
-            base += '/'
-        self.canonical_url = utils.urljoin(base, self.abs_url.lstrip('/'))
+    def render(self, config, site_navigation=None):
+        """
+        Convert the Markdown source file to HTML as per the config and
+        site_navigation.
 
-    def set_edit_url(self, repo_url, edit_uri):
-        if not edit_uri:
-            self.edit_url = repo_url
-        else:
-            # Normalize URL from Windows path '\\' -> '/'
-            input_path_url = self.input_path.replace('\\', '/')
-            self.edit_url = utils.urljoin(
-                repo_url,
-                edit_uri + input_path_url)
+        """
+
+        extensions = [
+            RelativePathExtension(site_navigation, config['strict'])
+        ] + config['markdown_extensions']
+
+        md = markdown.Markdown(
+            extensions=extensions,
+            extension_configs=config['mdx_configs'] or {}
+        )
+        self.content = md.convert(self.markdown)
+        self.toc = toc.TableOfContents(getattr(md, 'toc', ''))
 
 
 class Header(object):
@@ -241,19 +324,11 @@ class Header(object):
             ancestor.set_active(active)
 
 
-def _path_to_page(path, title, url_context, use_directory_urls):
-    if title is None:
-        title = filename_to_title(path.split(os.path.sep)[-1])
-    url = utils.get_url_path(path, use_directory_urls)
-    return Page(title=title, url=url, path=path,
-                url_context=url_context)
-
-
-def _follow(config_line, url_context, use_dir_urls, header=None, title=None):
+def _follow(config_line, url_context, config, header=None, title=None):
 
     if isinstance(config_line, utils.string_types):
         path = os.path.normpath(config_line)
-        page = _path_to_page(path, title, url_context, use_dir_urls)
+        page = Page(title, path, url_context, config)
 
         if header:
             page.ancestors = header.ancestors + [header, ]
@@ -279,7 +354,7 @@ def _follow(config_line, url_context, use_dir_urls, header=None, title=None):
 
     if isinstance(subpages_or_path, utils.string_types):
         path = subpages_or_path
-        for sub in _follow(path, url_context, use_dir_urls, header=header, title=next_cat_or_title):
+        for sub in _follow(path, url_context, config, header=header, title=next_cat_or_title):
             yield sub
         raise StopIteration
 
@@ -298,11 +373,11 @@ def _follow(config_line, url_context, use_dir_urls, header=None, title=None):
     subpages = subpages_or_path
 
     for subpage in subpages:
-        for sub in _follow(subpage, url_context, use_dir_urls, next_header):
+        for sub in _follow(subpage, url_context, config, next_header):
             yield sub
 
 
-def _generate_site_navigation(pages_config, url_context, use_dir_urls=True):
+def _generate_site_navigation(config, url_context):
     """
     Returns a list of Page and Header instances that represent the
     top level site navigation.
@@ -312,10 +387,10 @@ def _generate_site_navigation(pages_config, url_context, use_dir_urls=True):
 
     previous = None
 
-    for config_line in pages_config:
+    for config_line in config['pages']:
 
         for page_or_header in _follow(
-                config_line, url_context, use_dir_urls):
+                config_line, url_context, config):
 
             if isinstance(page_or_header, Header):
 

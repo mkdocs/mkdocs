@@ -90,7 +90,7 @@ DEFAULT_SCHEMA = (
 
     # PyMarkdown extension names.
     ('markdown_extensions', config_options.MarkdownExtensions(
-        builtins=['meta', 'toc', 'tables', 'fenced_code'],
+        builtins=['toc', 'tables', 'fenced_code'],
         configkey='mdx_configs', default=[])),
 
     # PyMarkdown Extension Configs. For internal use only.
