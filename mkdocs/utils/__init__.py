@@ -275,6 +275,16 @@ def is_template_file(path):
     ]
 
 
+_ERROR_TEMPLATE_RE = re.compile(r'^\d{3}\.html?$')
+
+
+def is_error_template(path):
+    """
+    Return True if the given file path is an HTTP error template.
+    """
+    return bool(_ERROR_TEMPLATE_RE.match(path))
+
+
 def create_media_urls(nav, path_list):
     """
     Return a list of URLs that have been processed correctly for inclusion in
