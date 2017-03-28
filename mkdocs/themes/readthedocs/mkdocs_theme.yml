@@ -1,0 +1,4 @@
+# Config options for 'readthedocs' theme
+
+static_templates:
+    - search.html

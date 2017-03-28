@@ -339,17 +339,77 @@ class SiteDirTest(unittest.TestCase):
 
 class ThemeTest(unittest.TestCase):
 
-    def test_theme(self):
+    def test_theme_as_string(self):
 
         option = config_options.Theme()
         value = option.validate("mkdocs")
-        self.assertEqual("mkdocs", value)
+        self.assertEqual({'name': 'mkdocs'}, value)
 
-    def test_theme_invalid(self):
+    def test_uninstalled_theme_as_string(self):
 
         option = config_options.Theme()
         self.assertRaises(config_options.ValidationError,
                           option.validate, "mkdocs2")
+
+    def test_theme_default(self):
+        option = config_options.Theme(default='mkdocs')
+        value = option.validate(None)
+        self.assertEqual({'name': 'mkdocs'}, value)
+
+    def test_theme_as_simple_config(self):
+
+        config = {
+            'name': 'mkdocs'
+        }
+        option = config_options.Theme()
+        value = option.validate(config)
+        self.assertEqual(config, value)
+
+    def test_theme_as_complex_config(self):
+
+        config = {
+            'name': 'mkdocs',
+            'custom_dir': 'custom',
+            'static_templates': ['sitemap.html'],
+            'show_sidebar': False
+        }
+        option = config_options.Theme()
+        value = option.validate(config)
+        self.assertEqual(config, value)
+
+    def test_theme_name_is_none(self):
+
+        config = {
+            'name': None
+        }
+        option = config_options.Theme()
+        value = option.validate(config)
+        self.assertEqual(config, value)
+
+    def test_theme_config_missing_name(self):
+
+        config = {
+            'custom_dir': 'custom',
+        }
+        option = config_options.Theme()
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, config)
+
+    def test_uninstalled_theme_as_config(self):
+
+        config = {
+            'name': 'mkdocs2'
+        }
+        option = config_options.Theme()
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, config)
+
+    def test_theme_invalid_type(self):
+
+        config = ['mkdocs2']
+        option = config_options.Theme()
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, config)
 
 
 class ExtrasTest(unittest.TestCase):

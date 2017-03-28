@@ -15,8 +15,9 @@ site_url: http://www.mkdocs.org/
 docs_dir: documentation
 site_dir: output
 
-theme: mkdocs
-theme_dir: theme_tweaks
+theme:
+    name: mkdocs
+    custom_dir: theme_tweaks
 
 copyright: "Dougal Matthews"
 google_analytics: ["1", "2"]

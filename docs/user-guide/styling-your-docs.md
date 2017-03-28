@@ -41,8 +41,8 @@ have created your own, please feel free to add it to the list.
 If you would like to make a few tweaks to an existing theme, there is no need to
 create your own theme from scratch. For minor tweaks which only require some CSS
 and/or JavaScript, you can use the [docs_dir]. However, for more complex
-customizations, including overriding templates, you will need to use the
-[theme_dir].
+customizations, including overriding templates, you will need to use the theme
+[custom_dir] setting.
 
 ### Using the docs_dir
 
@@ -78,24 +78,25 @@ changes were automatically picked up and the documentation will be updated.
     Any extra CSS or JavaScript files will be added to the generated HTML
     document after the page content. If you desire to include a JavaScript
     library, you may have better success including the library by using the
-    [theme_dir].
+    theme [custom_dir].
 
-### Using the theme_dir
+### Using the theme custom_dir
 
-The [theme_dir] configuration option can be used to point to a directory of
-files which override the files in the theme set on the [theme] configuration
-option. Any file in the `theme_dir` with the same name as a file in the `theme`
-will replace the file of the same name in the `theme`. Any additional files in
-the `theme_dir` will be added to the `theme`. The contents of the `theme_dir`
-should mirror the directory structure of the `theme`. You may include templates,
-JavaScript files, CSS files, images, fonts, or any other media included in a
-theme.
+The theme.[custom_dir] configuration option can be used to point to a directory
+of files which override the files in a parent theme. The parent theme would be
+the theme defined in the theme.[name] configuration option. Any file in the
+`custom_dir` with the same name as a file in the parent theme will replace the
+file of the same name in the parent theme. Any additional files in the
+`custom_dir` will be added to the parent theme. The contents of the `custom_dir`
+should mirror the directory structure of the parent theme. You may include
+templates, JavaScript files, CSS files, images, fonts, or any other media
+included in a theme.
 
 !!! Note
 
-    For this to work, the `theme` setting must be set to a known installed theme.
-    If the `theme` setting is instead set to `null` (or not defined), then there
-    is no theme to override and the contents of the `theme_dir` must be a
+    For this to work, the theme `name` setting must be set to a known installed theme.
+    If the `name` setting is instead set to `null` (or not defined), then there
+    is no theme to override and the contents of the `custom_dir` must be a
     complete, standalone theme. See [Custom Themes][custom theme] for more
     information.
 
@@ -127,7 +128,9 @@ mkdir custom_theme
 And then point your `mkdocs.yml` configuration file at the new directory:
 
 ```yaml
-theme_dir: custom_theme
+theme:
+    name: mkdocs
+    custom_dir: custom_theme
 ```
 
 To override the 404 error page ("file not found"), add a new template file named
@@ -156,16 +159,17 @@ Your directory structure should now look like this:
 
 !!! Note
 
-    Any files included in the `theme` but not included in the `theme_dir` will
-    still be utilized. The `theme_dir` will only override/replace files in the
-    `theme`. If you want to remove files, or build a theme from scratch, then
-    you should review the documentation for building a [custom theme].
+    Any files included in the parent theme (defined in `name`) but not included
+    in the `custom_dir` will still be utilized. The `custom_dir` will only
+    override/replace files in the parent theme. If you want to remove files, or
+    build a theme from scratch, then you should review the documentation for
+    building a [custom theme].
 
 #### Overriding Template Blocks
 
 The built-in themes implement many of their parts inside template blocks which
 can be individually overridden in the `main.html` template. Simply create a
-`main.html` template file in your `theme_dir` and define replacement blocks
+`main.html` template file in your `custom_dir` and define replacement blocks
 within that file. Just make sure that the `main.html` extends `base.html`. For
 example, to alter the title of the MkDocs theme, your replacement `main.html`
 template would contain the following:
@@ -205,11 +209,11 @@ following blocks:
 You may need to view the source template files to ensure your modifications will
 work with the structure of the site. See [Template Variables] for a list of
 variables you can use within your custom blocks. For a more complete
-explaination of blocks, consult the [Jinja documentation].
+explanation of blocks, consult the [Jinja documentation].
 
-#### Combining the theme_dir and Template Blocks
+#### Combining the custom_dir and Template Blocks
 
-Adding a JavaScript library to the `theme_dir` will make it available, but
+Adding a JavaScript library to the `custom_dir` will make it available, but
 won't include it in the pages generated by MkDocs. Therefore, a link needs to
 be added to the library from the HTML.
 
@@ -243,8 +247,8 @@ Note that the [base_url] template variable was used to ensure that the link is
 always relative to the current page.
 
 Now the generated pages will include links to the template provided libraries as
-well as the library included in the `theme_dir`. The same would be required for
-any additional CSS files included in the `theme_dir`.
+well as the library included in the `custom_dir`. The same would be required for
+any additional CSS files included in the `custom_dir`.
 
 [browse source]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes/mkdocs
 [built-in themes]: #built-in-themes
@@ -259,8 +263,8 @@ any additional CSS files included in the `theme_dir`.
 [mkdocs]: #mkdocs
 [ReadTheDocs]: ./deploying-your-docs.md#readthedocs
 [Template Variables]: ./custom-themes.md#template-variables
-[theme]: ./configuration/#theme
-[theme_dir]: ./configuration/#theme_dir
+[custom_dir]: ./configuration/#custom_dir
+[name]: ./configuration/#name
 [third party themes]: #third-party-themes
 [super block]: http://jinja.pocoo.org/docs/dev/templates/#super-blocks
 [base_url]: ./custom-themes.md#base_url
