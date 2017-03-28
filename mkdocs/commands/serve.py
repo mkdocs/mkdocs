@@ -49,7 +49,7 @@ def _livereload(host, port, config, builder, site_dir):
     server.watch(config['docs_dir'], builder)
     server.watch(config['config_file_path'], builder)
 
-    for d in config['theme_dir']:
+    for d in config['theme'].dirs:
         server.watch(d, builder)
 
     server.serve(root=site_dir, host=host, port=int(port), restart_delay=0)

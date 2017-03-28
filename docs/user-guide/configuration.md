@@ -158,24 +158,56 @@ sub-directories. If none are found it will be `[]` (an empty list).
 
 ### theme
 
-Sets the theme of your documentation site, for a list of available themes visit
-[styling your docs].
+Sets the theme and theme specific configuration of your documentation site.
+May be either a string or a set of key/value pairs.
+
+If a string, it must be the string name of a known installed theme. For a list
+of available themes visit [styling your docs].
+
+An example set of key/value pairs might look something like this:
+
+```yaml
+theme:
+    name: mkdocs
+    custom_dir: my_theme_customizations/
+    static_templates:
+        - sitemap.html
+    include_sidebar: false
+```
+
+If a set of key/value pairs, the following nested keys can be defined:
+
+!!! block ""
+
+    #### name:
+
+    The string name of a known installed theme. For a list of available themes
+    visit [styling your docs].
+
+    #### custom_dir:
+
+    A directory to custom a theme. This can either be a relative directory, in
+    which case it is resolved relative to the directory containing your
+    configuration file, or it can be an absolute directory path.
+
+    See [styling your docs][theme_dir] for details if you would like to tweak an
+    existing theme.
+
+    See [custom themes] if you would like to build your own theme from the
+    ground up.
+
+    #### static_templates:
+
+    A list of templates to render as static pages. The templates must be located
+    in either the theme's template directory or in the `custom_dir` defined in
+    the theme configuration.
+
+    #### (theme specific keywords)
+
+    Any additional keywords supported by the theme can also be defined. See the
+    documentation for the theme you are using for details.
 
 **default**: `'mkdocs'`
-
-### theme_dir
-
-Lets you set a directory to a custom theme. This can either be a relative
-directory, in which case it is resolved relative to the directory containing
-your configuration file, or it can be an absolute directory path.
-
-See [styling your docs][theme_dir] for details if you would like to tweak an
-existing theme.
-
-See [custom themes] if you would like to build your own theme from the ground
-up.
-
-**default**: `null`
 
 ### docs_dir
 

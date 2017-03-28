@@ -25,6 +25,40 @@ The current and past members of the MkDocs team.
 
 ### Major Additions to Version 1.0.0
 
+#### Theme Customization. (#1164)
+
+Support had been added to provide theme specific customizations. Theme authors
+can define default options as documented in [Theme Configuration]. A theme can
+now inherit from another theme, define various static templates to be rendered,
+and define arbitrary default variables to control behavior in the templates.
+
+Users can override those defaults under the [theme] configuration option, which
+now accepts nested options. One such nested option is the [custom_dir] option,
+which replaces the now deprecated `theme_dir` option. If users had previously
+set the `theme_dir` option, a warning will be issued, with an error expected in
+a future release.
+
+If a configuration previously defined a `theme_dir` like this:
+
+```yaml
+theme: mkdocs
+theme_dir: custom
+```
+
+Then the configuration should be adjusted as follows:
+
+```yaml
+theme:
+    name: mkdocs
+    custom_dir: custom
+```
+
+See the [theme] configuration option documentation for details.
+
+[Theme Configuration]: ../user-guide/custom-themes.md#theme-configuration
+[theme]: ../user-guide/configuration.md#theme
+[custom_dir]: ../user-guide/configuration.md#custom_dir
+
 #### Previously deprecated Template variables removed. (#1168)
 
 ##### Page Template
