@@ -11,7 +11,6 @@ from jinja2.exceptions import TemplateNotFound
 import jinja2
 
 from mkdocs import nav, search, utils
-from mkdocs.utils import filters
 import mkdocs
 
 
@@ -81,9 +80,9 @@ def build_template(template_name, env, config, site_navigation=None):
     return True
 
 
-def build_error_templates(templates, env, config, site_navigation):
+def build_error_template(template, env, config, site_navigation):
     """
-    Build error templates.
+    Build error template.
 
     Force absolute URLs in the nav of error pages and account for the
     possability that the docs root might be different than the server root.
@@ -94,8 +93,7 @@ def build_error_templates(templates, env, config, site_navigation):
     default_base = site_navigation.url_context.base_path
     site_navigation.url_context.base_path = utils.urlparse(config['site_url']).path
 
-    for template in templates:
-        build_template(template, env, config, site_navigation)
+    build_template(template, env, config, site_navigation)
 
     # Reset nav behavior to the default
     site_navigation.url_context.force_abs_urls = False
@@ -147,23 +145,19 @@ def build_pages(config, dirty=False):
     """ Build all pages and write them into the build directory. """
 
     site_navigation = nav.SiteNavigation(config)
-    loader = jinja2.FileSystemLoader(config['theme_dir'] + [config['mkdocs_templates'], ])
-    env = jinja2.Environment(loader=loader)
+    env = config['theme'].get_env()
 
-    env.filters['tojson'] = filters.tojson
     search_index = search.SearchIndex()
 
-    build_error_templates(['404.html'], env, config, site_navigation)
-
-    if not build_template('search.html', env, config, site_navigation):
-        log.debug("Search is enabled but the theme doesn't contain a "
-                  "search.html file. Assuming the theme implements search "
-                  "within a modal.")
-
-    build_template('sitemap.xml', env, config, site_navigation)
+    for template in config['theme'].static_templates:
+        if utils.is_error_template(template):
+            build_error_template(template, env, config, site_navigation)
+        else:
+            build_template(template, env, config, site_navigation)
 
     build_extra_templates(config['extra_templates'], config, site_navigation)
 
+    log.debug("Building markdown pages.")
     for page in site_navigation.walk_pages():
         try:
             # When --dirty is used, only build the page if the markdown has been modified since the
@@ -202,16 +196,15 @@ def build(config, live_server=False, dirty=False):
     # Reversed as we want to take the media files from the builtin theme
     # and then from the custom theme_dir so that the custom versions take
     # precedence.
-    for theme_dir in reversed(config['theme_dir']):
-        log.debug("Copying static assets from theme: %s", theme_dir)
+    for theme_dir in reversed(config['theme'].dirs):
+        log.debug("Copying static assets from %s", theme_dir)
         utils.copy_media_files(
-            theme_dir, config['site_dir'], exclude=['*.py', '*.pyc', '*.html'], dirty=dirty
+            theme_dir, config['site_dir'], exclude=['*.py', '*.pyc', '*.html', 'mkdocs_theme.yml'], dirty=dirty
         )
 
     log.debug("Copying static assets from the docs dir.")
     utils.copy_media_files(config['docs_dir'], config['site_dir'], dirty=dirty)
 
-    log.debug("Building markdown pages.")
     build_pages(config, dirty=dirty)
 
 

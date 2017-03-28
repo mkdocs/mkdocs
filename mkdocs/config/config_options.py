@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 import os
 
-from mkdocs import utils
+from mkdocs import utils, theme
 from mkdocs.config.base import Config, ValidationError
 
 
@@ -271,56 +271,77 @@ class SiteDir(Dir):
 
 class ThemeDir(Dir):
     """
-    ThemeDir Config Option
-
-    Post validation, verify the theme_dir and do some path munging.
-
-    TODO: This could probably be improved and/or moved from here. It's a tad
-    gross really.
+    ThemeDir Config Option. Deprecated
     """
 
+    def pre_validation(self, config, key_name):
+
+        if config.get(key_name) is None:
+            return
+
+        warning = ('The configuration option {0} has been deprecated and will '
+                   'be removed in a future release of MkDocs.')
+        self.warnings.append(warning)
+
     def post_validation(self, config, key_name):
-
-        theme_in_config = any(['theme' in c for c in config.user_configs])
-
-        package_dir = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), '..'))
-        theme_dir = [utils.get_theme_dir(config['theme']), ]
-        config['mkdocs_templates'] = os.path.join(package_dir, 'templates')
-
-        if config['theme_dir'] is not None:
-            # If the user has given us a custom theme but not a
-            # builtin theme name then we don't want to merge them.
-            if not theme_in_config:
-                theme_dir = []
-            theme_dir.insert(0, config['theme_dir'])
-
-        config['theme_dir'] = theme_dir
-
-        # Add the search assets to the theme_dir, this means that
-        # they will then we copied into the output directory but can
-        # be overwritten by themes if needed.
-        search_assets = os.path.join(package_dir, 'assets', 'search')
-        config['theme_dir'].append(search_assets)
+        # The validation in the parent class this inherits from is not relevant here.
+        pass
 
 
-class Theme(OptionallyRequired):
+class Theme(BaseConfigOption):
     """
     Theme Config Option
 
-    Validate that the theme is one of the builtin Mkdocs theme names.
+    Validate that the theme exists and build Theme instance.
     """
 
-    def run_validation(self, value):
+    def __init__(self, default=None):
+        super(Theme, self).__init__()
+        self.default = default
+
+    def validate(self, value):
+        if value is None and self.default is not None:
+            value = {'name': self.default}
+
+        if isinstance(value, utils.string_types):
+            value = {'name': value}
+
         themes = utils.get_theme_names()
 
-        if value in themes:
-            return value
+        if isinstance(value, dict):
+            if 'name' in value:
+                if value['name'] is None or value['name'] in themes:
+                    return value
 
-        raise ValidationError(
-            "Unrecognised theme '{0}'. The available installed themes "
-            "are: {1}".format(value, ', '.join(themes))
-        )
+                raise ValidationError(
+                    "Unrecognised theme name: '{0}'. The available installed themes "
+                    "are: {1}".format(value['name'], ', '.join(themes))
+                )
+
+            raise ValidationError("No theme name set.")
+
+        raise ValidationError('Invalid type "{0}". Expected a string or key/value pairs.'.format(type(value)))
+
+    def post_validation(self, config, key_name):
+        theme_config = config[key_name]
+
+        # TODO: Remove when theme_dir is fully deprecated.
+        if config['theme_dir'] is not None:
+            if 'custom_dir' not in theme_config:
+                # Only pass in 'theme_dir' if it is set and 'custom_dir' is not set.
+                theme_config['custom_dir'] = config['theme_dir']
+            if not any(['theme' in c for c in config.user_configs]):
+                # If the user did not define a theme, but did define theme_dir, then remove default set in validate.
+                theme_config['name'] = None
+
+        if not theme_config['name'] and 'custom_dir' not in theme_config:
+            raise ValidationError("At least one of 'theme.name' or 'theme.custom_dir' must be defined.")
+
+        # Ensure custom_dir is an absolute path
+        if 'custom_dir' in theme_config and not os.path.isabs(theme_config['custom_dir']):
+            theme_config['custom_dir'] = os.path.abspath(theme_config['custom_dir'])
+
+        config[key_name] = theme.Theme(**theme_config)
 
 
 class Extras(OptionallyRequired):

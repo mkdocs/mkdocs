@@ -16,6 +16,7 @@ import shutil
 import sys
 import yaml
 import fnmatch
+import re
 
 from mkdocs import exceptions
 
@@ -268,6 +269,16 @@ def is_template_file(path):
         '.htm',
         '.xml',
     ]
+
+
+_ERROR_TEMPLATE_RE = re.compile(r'^\d{3}\.html?$')
+
+
+def is_error_template(path):
+    """
+    Return True if the given file path is an HTTP error template.
+    """
+    return bool(_ERROR_TEMPLATE_RE.match(path))
 
 
 def create_media_urls(nav, path_list):
