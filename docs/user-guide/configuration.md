@@ -209,7 +209,7 @@ directory path from the root of your local file system.
 ### extra_css
 
 Set a list of CSS files in your `docs_dir` to be included by the theme. For
-example, the following example will include the the extra.css file within the
+example, the following example will include the extra.css file within the
 css subdirectory in your [docs_dir](#docs_dir).
 
 ```yaml
