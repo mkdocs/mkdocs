@@ -209,7 +209,7 @@ directory path from the root of your local file system.
 ### extra_css
 
 Set a list of CSS files in your `docs_dir` to be included by the theme. For
-example, the following example will include the the extra.css file within the
+example, the following example will include the extra.css file within the
 css subdirectory in your [docs_dir](#docs_dir).
 
 ```yaml
@@ -333,9 +333,9 @@ markdown_extensions:
 ```
 
 Note that a colon (`:`) must follow the extension name (`toc`) and then on a new
-line the option name and value must be indented and seperated by a colon. If you
-would like to define multipe options for a single extension, each option must be
-defined on a seperate line:
+line the option name and value must be indented and separated by a colon. If you
+would like to define multiple options for a single extension, each option must be
+defined on a separate line:
 
 ```yaml
 markdown_extensions:
