@@ -21,8 +21,9 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
-## Version 0.16.3 (2017-??-??)
+## Version 0.16.3 (2017-04-04)
 
+* Fix error raised by autoscrolling in the readthedocs theme (#1177)
 * Fix a few documentation typos (#1181 & #1185)
 * Fix a regression to livereload server introduced in 0.16.2 (#1174)
 
