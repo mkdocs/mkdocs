@@ -71,7 +71,7 @@ $(function() {
         (bounds.bottom >= viewport.bottom)
       ) );
   };
-  if( !$('li.toctree-l1.current').isFullyWithinViewport() ) {
+  if( $('li.toctree-l1.current').length && !$('li.toctree-l1.current').isFullyWithinViewport() ) {
     $('.wy-nav-side')
       .scrollTop(
         $('li.toctree-l1.current').offset().top -
