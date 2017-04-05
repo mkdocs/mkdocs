@@ -94,6 +94,12 @@ and user created and third-party templates should be updated as outlined below:
 * The deprecated `json` command has been removed (#481)
 * Support for Python 2.6 has been dropped (#165)
 
+## Version 0.16.3 (2017-04-04)
+
+* Fix error raised by autoscrolling in the readthedocs theme (#1177)
+* Fix a few documentation typos (#1181 & #1185)
+* Fix a regression to livereload server introduced in 0.16.2 (#1174)
+
 ## Version 0.16.2 (2017-03-13)
 
 * System root (`/`) is not a valid path for site_dir or docs_dir (#1161)
