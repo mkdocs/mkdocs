@@ -330,7 +330,7 @@ class Theme(OptionallyRequired):
             raise ValidationError(
                 ("The theme '{0}' is no longer included in MkDocs by default "
                  "and must be installed with pip. See http://www.mkdocs.org"
-                 "/about/release-notes/#add-support-for-installable-themes"
+                 "/about/release-notes/#add-support-for-installable-themes "
                  "for more details").format(value)
             )
 
