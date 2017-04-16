@@ -1,6 +1,9 @@
+os:
+  - linux
+  - osx
 sudo: false
 language: python
-python: '3.5'
+python: '3.4'
 env:
 - TOXENV=flake8
 - TOXENV=markdown-lint
