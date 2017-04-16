@@ -1,6 +1,6 @@
 # MkDocs
 
-Project documentation with&nbsp;Markdown.
+Project documentation with Markdown.
 
 ---
 
