@@ -1,6 +1,9 @@
+os:
+  - osx
+  - linux
 sudo: false
 language: python
-python: '3.5'
+python: '3.4'
 env:
 - TOXENV=flake8
 - TOXENV=markdown-lint
@@ -52,4 +55,4 @@ deploy:
   on:
     tags: true
     repo: mkdocs/mkdocs
-    condition: "$TOXENV = py27-integration"
+    condition: "$TOXENV = py27-unittests"
