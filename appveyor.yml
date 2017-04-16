@@ -1,30 +1,45 @@
 build: false
 environment:
+  global:
+    PYTHON_EXE: c:\python27\python
+    CYG_ROOT: ''
   matrix:
-    - TOXENV: py27-integration
-    - TOXENV: py27-min-req
+    # - TOXENV: py27-integration
+    # - TOXENV: py27-min-req
+    # - TOXENV: py27-unittests
+    # - TOXENV: py33-integration
+    # - TOXENV: py33-min-req
+    # - TOXENV: py33-unittests
+    # - TOXENV: py34-integration
+    # - TOXENV: py34-min-req
+    # - TOXENV: py34-unittests
+    # - TOXENV: py35-integration
+    # - TOXENV: py35-min-req
+    # - TOXENV: py35-unittests
+    # - TOXENV: flake8
+
     - TOXENV: py27-unittests
-    - TOXENV: py33-integration
-    - TOXENV: py33-min-req
-    - TOXENV: py33-unittests
-    - TOXENV: py34-integration
-    - TOXENV: py34-min-req
-    - TOXENV: py34-unittests
-    - TOXENV: py35-integration
-    - TOXENV: py35-min-req
-    - TOXENV: py35-unittests
-    - TOXENV: flake8
+      CYG_ROOT: C:\cygwin
+      CYG_MIRROR: http://cygwin.mirror.constant.com
+      CYG_CACHE: C:\cygwin\var\cache\setup
+      PYTHON_EXE: C:\cygwin\usr\bin\python
 init:
   - "ECHO %TOXENV%"
+  - "echo Using %PYTHON_EXE%"
   - ps: "ls C:\\Python*"
 install:
-  - ps: Invoke-WebRequest "https://bootstrap.pypa.io/ez_setup.py" -OutFile "c:\\ez_setup.py"
-  - ps: Invoke-WebRequest "https://bootstrap.pypa.io/get-pip.py" -OutFile "c:\\get-pip.py"
-  - "c:\\python27\\python c:\\ez_setup.py"
-  - "c:\\python27\\python c:\\get-pip.py"
-  - "c:\\python27\\Scripts\\pip install tox"
+  # Setting up Cygwin dependencies
+  - cmd: 'IF NOT %CYG_ROOT% == "" %CYG_ROOT%\setup-x86.exe -qnNdO -R "%CYG_ROOT%" -s "%CYG_MIRROR%" -l "%CYG_CACHE%" -P autoconf -P automake -P bison -P gcc-core -P gcc-g++ -P mingw-runtime -P mingw-binutils -P mingw-gcc-core -P mingw-gcc-g++ -P mingw-pthreads -P mingw-w32api -P libtool -P make -P python -P gettext-devel -P gettext -P intltool -P libiconv -P pkg-config -P git -P wget -P curl > NUL'
+  # Check Cygwin setup
+  - cmd: 'IF NOT %CYG_ROOT% == "" %CYG_ROOT%/bin/bash -lc "cygcheck -dc cygwin"'
+  - cmd: 'C:\cygwin\bin\bash "/usr/bin/python --version"'
+  - ps: Invoke-WebRequest "https://bootstrap.pypa.io/ez_setup.py" -OutFile "c:\ez_setup.py"
+  - ps: Invoke-WebRequest "https://bootstrap.pypa.io/get-pip.py" -OutFile "c:\get-pip.py"
+  - cmd: 'C:\cygwin\bin\bash "python c:\\ez_setup.py"'
+  - cmd: 'C:\cygwin\bin\bash "python c:\\get-pip.py"'
+  - cmd: 'C:\cygwin\bin\bash "python -m pip install tox"'
 test_script:
-  - "git clean -f -d -x"
-  - "c:\\python27\\Scripts\\tox --version"
-  - "c:\\python27\\Scripts\\pip --version"
-  - "c:\\python27\\Scripts\\tox"
+  - cmd: "git clean -f -d -x"
+  - cmd: 'C:\cygwin\bin\bash "python -m tox --version"'
+  - cmd: 'C:\cygwin\bin\bash "python -m pip --version"'
+  - cmd: 'C:\cygwin\bin\bash "python -m tox"'
