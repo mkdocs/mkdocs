@@ -365,6 +365,10 @@ markdown_extensions:
     the documentation provided by those extensions for installation instructions
     and available configuration options.
 
+To configure an extension you can also pass configuration parameters. Here's an example of setting the `permalink` setting for all headers for the `toc` extension.
+
+    markdown_extensions: [smartypants, toc(permalink=True)]
+ 
 **default**: `[]`
 
 [custom themes]: custom-themes.md
