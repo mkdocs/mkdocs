@@ -64,6 +64,7 @@ setup(
         'Markdown>=2.3.1,<2.5' if PY26 else 'Markdown>=2.3.1',
         'PyYAML>=3.10',
         'tornado>=4.1',
+        'pycheckupdate>=0.12.0'
     ],
     entry_points={
         'console_scripts': [

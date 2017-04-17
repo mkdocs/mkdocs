@@ -5,12 +5,15 @@ from __future__ import unicode_literals
 import logging
 import click
 import socket
+import pycheckupdate
+from pycheckupdate.utils import get_pip_install_cmd
 
 from mkdocs import __version__
 from mkdocs import utils
 from mkdocs import exceptions
 from mkdocs import config
 from mkdocs.commands import build, gh_deploy, new, serve
+
 
 log = logging.getLogger(__name__)
 
@@ -96,6 +99,13 @@ def cli():
     """
     MkDocs - Project documentation with Markdown.
     """
+    try:
+        if pycheckupdate.is_outdated('mkdocs'):
+            cmd = get_pip_install_cmd('mkdocs')
+            click.secho('''You are using an outdated version of mkdocs.
+                    Please upgrade using {0}'''.format(cmd), fg='red')
+    except pycheckupdate.PackageNotInstalled:
+        pass
 
 
 @cli.command(name="serve")
