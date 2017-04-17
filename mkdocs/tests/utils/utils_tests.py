@@ -1,14 +1,20 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-from __future__ import unicode_literals
-
 import mock
+from __future__ import unicode_literals, with_statement
 import os
+import sys
 import unittest
 
 from mkdocs import nav, utils, exceptions
 from mkdocs.tests.base import dedent
+from mock import mock_open, patch
+
+if not utils.PY3:
+    import __builtin__ as builtins
+else:
+    import builtins
 
 
 class UtilsTests(unittest.TestCase):
@@ -101,6 +107,7 @@ class UtilsTests(unittest.TestCase):
         assertPathGenerated("img.png", "./img.png")
         assertPathGenerated("./img.png", "./img.png")
         assertPathGenerated("/img.png", "../img.png")
+        assertPathGenerated("https://www.example.com/img.png", "https://www.example.com/img.png")
 
     def test_reduce_list(self):
         self.assertEqual(
@@ -224,3 +231,34 @@ class UtilsTests(unittest.TestCase):
         config = utils.yaml_load(yaml_src)
         self.assertTrue(isinstance(config['key'], utils.text_type))
         self.assertTrue(isinstance(config['key2'][0], utils.text_type))
+
+    def test_clean_directory_noop(self):
+        deleted = []
+        with patch('mkdocs.utils.os.unlink', lambda x: deleted.append(x)):
+            # Test the noop
+            with patch('mkdocs.utils.os.path.exists', lambda x: False):
+                # /etc should always exist on every 'nix system and should
+                # be owned by root. Tests should run as non-root and this
+                # ensures OSError if the mock isn't working properly
+                self.assertIsNone(utils.clean_directory('/etc'))
+                self.assertEqual(deleted, [])
+
+    def test_clean_directory(self):
+        deleted = []
+        directory = '/BOGUSPATH'
+        directory_contents = ['README.md', '.sekret_password_file', 'old_crappy_file']
+        expected = [os.path.join(directory, i) for i in directory_contents if not i.startswith('.')]
+
+        with patch('mkdocs.utils.os.unlink', lambda x: deleted.append(x)):
+            with patch('mkdocs.utils.os.path.exists', lambda x: True):
+                with patch('mkdocs.utils.os.listdir', lambda x: directory_contents):
+                    utils.clean_directory(directory)
+                    self.assertEqual(sorted(deleted), sorted(expected))
+
+    def test_write_file(self):
+        new_dirs = []
+        filename = '/WATWATWAT/bogus.txt'
+        with patch('mkdocs.utils.os.makedirs', lambda x: new_dirs.append(x)):
+            with patch.object(builtins, 'open', mock_open(read_data='WAT\n')):
+                utils.write_file('WAT\n', filename)
+                self.assertEqual(new_dirs, [os.path.dirname(filename)])
