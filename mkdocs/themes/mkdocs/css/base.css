@@ -50,6 +50,12 @@ ul.nav .main {
 :target::before {
     content: "";
     display: block;
+    pointer-events: none;
+}
+
+:target::before {
+    content: "";
+    display: block;
     margin-top: -75px;
     height: 75px;
     pointer-events: none;
