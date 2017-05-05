@@ -4,7 +4,6 @@ Project documentation with Markdown.
 
 ---
 
-[![PyPI Downloads][pypi-dl-image]][pypi-dl-link]
 [![PyPI Version][pypi-v-image]][pypi-v-link]
 [![Build Status][travis-image]][travis-link]
 [![Windows Build Status][appveyor-image]][appveyor-link]
@@ -29,8 +28,6 @@ rooms, and mailing lists is expected to follow the [PyPA Code of Conduct].
 [codecov-link]: http://codecov.io/github/mkdocs/mkdocs?branch=master
 [landscape-image]: https://landscape.io/github/mkdocs/mkdocs/master/landscape.svg?style=flat-square
 [landscape-link]: https://landscape.io/github/mkdocs/mkdocs/master
-[pypi-dl-image]: https://img.shields.io/pypi/dm/mkdocs.png
-[pypi-dl-link]: https://pypi.python.org/pypi/mkdocs
 [pypi-v-image]: https://img.shields.io/pypi/v/mkdocs.png
 [pypi-v-link]: https://pypi.python.org/pypi/mkdocs
 [travis-image]: https://img.shields.io/travis/mkdocs/mkdocs/master.png

@@ -154,7 +154,7 @@ navigation as a nested list.
 {% endif %}
 ```
 
-The `nav` object also contains a `hompage` object, which points to the `page`
+The `nav` object also contains a `homepage` object, which points to the `page`
 object of the homepage. For example, you may want to access `nav.homepage.url`.
 
 #### base_url
