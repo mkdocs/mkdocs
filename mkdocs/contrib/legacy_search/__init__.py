@@ -16,10 +16,12 @@ class SearchPlugin(BasePlugin):
     """ Add a search feature to MkDocs. """
 
     def on_config(self, config, **kwargs):
-        "Add plugin templates to env."
+        "Add plugin templates and scripts to config."
         path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
         config['theme'].dirs.append(path)
         config['theme'].static_templates.add('search.html')
+        config['extra_javascript'].append('search/require.js')
+        config['extra_javascript'].append('search/search.js')
         return config
 
     def on_pre_build(self, config, **kwargs):

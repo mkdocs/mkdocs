@@ -69,7 +69,7 @@
         <a href="{{ nav.homepage.url }}" class="icon icon-home"> {{ config.site_name }}</a>
 	{%- endblock %}
 	{%- block search_button %}
-        {% include "searchbox.html" %}
+        {% if 'legacy_search' in config['plugins'] %}{% include "searchbox.html" %}{% endif %}
 	{%- endblock %}
       </div>
 
@@ -120,6 +120,7 @@
   {% include "versions.html" %}
 
   {%- block scripts %}
+    <script>var base_url = '{{ base_url }}';</script>
     <script src="{{ base_url }}/js/theme.js"></script>
     {%- for path in extra_javascript %}
       <script src="{{ path }}"></script>

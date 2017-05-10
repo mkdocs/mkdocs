@@ -127,7 +127,7 @@ class ConfigTests(unittest.TestCase):
                 'vars': {}
             }, {
                 'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
-                'static_templates': ['search.html', '404.html', 'sitemap.xml'],
+                'static_templates': ['404.html', 'sitemap.xml'],
                 'vars': {}
             }, {
                 'dirs': [mytheme, mkdocs_templates_dir],
@@ -135,11 +135,11 @@ class ConfigTests(unittest.TestCase):
                 'vars': {}
             }, {
                 'dirs': [custom, os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
-                'static_templates': ['search.html', '404.html', 'sitemap.xml'],
+                'static_templates': ['404.html', 'sitemap.xml'],
                 'vars': {}
             }, {
                 'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
-                'static_templates': ['search.html', '404.html', 'sitemap.xml'],
+                'static_templates': ['404.html', 'sitemap.xml'],
                 'vars': {}
             }, {
                 'dirs': [mytheme, mkdocs_templates_dir],
@@ -147,7 +147,7 @@ class ConfigTests(unittest.TestCase):
                 'vars': {}
             }, {
                 'dirs': [custom, os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
-                'static_templates': ['search.html', '404.html', 'sitemap.xml'],
+                'static_templates': ['404.html', 'sitemap.xml'],
                 'vars': {}
             }, {
                 'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
