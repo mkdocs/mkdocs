@@ -205,15 +205,19 @@ class Page(object):
 
     def set_edit_url(self, repo_url, edit_uri):
         if not repo_url.endswith('/'):
-            repo_url += '/'
+            # Skip when using query or fragment in edit_uri
+            if not edit_uri.startswith('?') and not edit_uri.startswith('#'):
+                repo_url += '/'
         if not edit_uri:
             self.edit_url = repo_url
         else:
+            # Normalize URL from Windows path '\\' -> '/'
+            input_path_url = self.input_path.replace('\\', '/')
             if not edit_uri.endswith('/'):
                 edit_uri += '/'
             self.edit_url = utils.urljoin(
-                repo_url + edit_uri,
-                self.input_path)
+                repo_url,
+                edit_uri + input_path_url)
 
 
 class Header(object):
