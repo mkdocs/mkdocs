@@ -70,7 +70,10 @@ setup(
         'mkdocs.themes': [
             'mkdocs = mkdocs.themes.mkdocs',
             'readthedocs = mkdocs.themes.readthedocs',
-        ]
+        ],
+        'mkdocs.plugins': [
+            'legacy_search = mkdocs.contrib.legacy_search:SearchPlugin',
+        ],
     },
     classifiers=[
         'Development Status :: 5 - Production/Stable',

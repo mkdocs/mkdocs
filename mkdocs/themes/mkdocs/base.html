@@ -78,14 +78,13 @@
 
       {%- block scripts %}
         <script>var base_url = '{{ base_url }}';</script>
-        <script data-main="{{ base_url }}/mkdocs/js/search.js" src="{{ base_url }}/mkdocs/js/require.js"></script>
         <script src="{{ base_url }}/js/base.js"></script>
         {%- for path in extra_javascript %}
         <script src="{{ path }}"></script>
         {%- endfor %}
       {%- endblock %}
 
-        {%- include "search-modal.html" %}
+        {% if 'legacy_search' in config['plugins'] %}{%- include "search-modal.html" %}{% endif %}
 
     </body>
 </html>

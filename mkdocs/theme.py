@@ -49,10 +49,6 @@ class Theme(object):
         # Include templates provided directly by MkDocs (outside any theme)
         self.dirs.append(mkdocs_templates)
 
-        # Add the search assets to the theme_dir, so that they will be copied
-        # into the output directory but can still be overwritten by themes.
-        self.dirs.append(os.path.join(package_dir, 'assets', 'search'))
-
         # Handle remaining user configs. Override theme configs (if set)
         self.static_templates.update(user_config.pop('static_templates', []))
         self._vars.update(user_config)
