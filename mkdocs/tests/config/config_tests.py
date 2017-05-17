@@ -119,40 +119,38 @@ class ConfigTests(unittest.TestCase):
         mkdocs_dir = os.path.abspath(os.path.dirname(mkdocs.__file__))
         mkdocs_templates_dir = os.path.join(mkdocs_dir, 'templates')
         theme_dir = os.path.abspath(os.path.join(mkdocs_dir, 'themes'))
-        search_asset_dir = os.path.abspath(os.path.join(
-            mkdocs_dir, 'assets', 'search'))
 
         results = (
             {
-                'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir, search_asset_dir],
+                'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
                 'static_templates': ['404.html', 'sitemap.xml'],
                 'vars': {}
             }, {
-                'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir, search_asset_dir],
-                'static_templates': ['search.html', '404.html', 'sitemap.xml'],
+                'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
+                'static_templates': ['404.html', 'sitemap.xml'],
                 'vars': {}
             }, {
-                'dirs': [mytheme, mkdocs_templates_dir, search_asset_dir],
+                'dirs': [mytheme, mkdocs_templates_dir],
                 'static_templates': ['sitemap.xml'],
                 'vars': {}
             }, {
-                'dirs': [custom, os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir, search_asset_dir],
-                'static_templates': ['search.html', '404.html', 'sitemap.xml'],
+                'dirs': [custom, os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
+                'static_templates': ['404.html', 'sitemap.xml'],
                 'vars': {}
             }, {
-                'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir, search_asset_dir],
-                'static_templates': ['search.html', '404.html', 'sitemap.xml'],
+                'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
+                'static_templates': ['404.html', 'sitemap.xml'],
                 'vars': {}
             }, {
-                'dirs': [mytheme, mkdocs_templates_dir, search_asset_dir],
+                'dirs': [mytheme, mkdocs_templates_dir],
                 'static_templates': ['sitemap.xml'],
                 'vars': {}
             }, {
-                'dirs': [custom, os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir, search_asset_dir],
-                'static_templates': ['search.html', '404.html', 'sitemap.xml'],
+                'dirs': [custom, os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
+                'static_templates': ['404.html', 'sitemap.xml'],
                 'vars': {}
             }, {
-                'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir, search_asset_dir],
+                'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
                 'static_templates': ['404.html', 'sitemap.xml', 'foo.html'],
                 'vars': {'show_sidebar': False, 'some_var': 'bar'}
             }
