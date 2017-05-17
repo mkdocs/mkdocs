@@ -359,24 +359,19 @@ class SiteNavigationTests(unittest.TestCase):
 
     def test_invalid_pages_config(self):
 
-        bad_pages = [
-            set(),  # should be dict or string only
-            {"a": "index.md", "b": "index.md"}  # extra key
-        ]
+        bad_page = {"a": "index.md", "b": "index.md"}  # extra key
 
-        for bad_page in bad_pages:
+        def _test():
+            return nav._generate_site_navigation(load_config(pages=[bad_page, ]), None)
 
-            def _test():
-                return nav._generate_site_navigation({'pages': (bad_page, )}, None)
-
-            self.assertRaises(ConfigurationError, _test)
+        self.assertRaises(ConfigurationError, _test)
 
     def test_pages_config(self):
 
         bad_page = {}  # empty
 
         def _test():
-            return nav._generate_site_navigation({'pages': (bad_page, )}, None)
+            return nav._generate_site_navigation(load_config(pages=[bad_page, ]), None)
 
         self.assertRaises(ConfigurationError, _test)
 

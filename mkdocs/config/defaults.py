@@ -114,4 +114,9 @@ DEFAULT_SCHEMA = (
     # MkDocs itself. A good example here would be including the current
     # project version.
     ('extra', config_options.SubConfig()),
+
+    # a list of plugins. Each item may contain a string name or a key value pair.
+    # A key value pair should be the string name (as the key) and a dict of config
+    # options (as the value).
+    ('plugins', config_options.Plugins(default=[])),
 )
