@@ -13,8 +13,12 @@
     color: #838383;
 }
 
-.wy-menu-vertical .subnav a {
+.wy-menu-vertical .subnav a,
+.wy-menu-vertical .subnav li a {
     padding: 0.4045em 2.427em;
+}
+.wy-menu-vertical .subnav li.toctree-l3 a {
+    padding: 0.4045em 3.641em;
 }
 
 /*
