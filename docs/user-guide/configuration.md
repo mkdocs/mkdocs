@@ -75,6 +75,18 @@ follows. (Note the `src` path and `default` branch...)
 edit_uri: src/default/docs/
 ```
 
+The `edit_uri` also supports query ('?') and fragment ('#') characters. For
+reposotiry hosts that use a query or a fragment to access the files, the
+`edit_uri` would be as follows. (Note the `?` and `#` in the uri...)
+
+```yaml
+# Query string example
+edit_uri: '?query=root/path/docs/'
+
+# Hash fragment example
+edit_uri: '#root/path/docs/'
+```
+
 For other repository hosts, `edit_uri` works the same way. Simply specify the
 relative path to the docs directory.
 

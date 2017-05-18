@@ -464,3 +464,205 @@ class SiteNavigationTests(unittest.TestCase):
 
         self.maxDiff = None
         self.assertEqual(str(site_navigation).strip(), expected)
+
+    def test_edit_uri(self):
+        """
+        Ensure that set_edit_url creates well formed URLs for edit_uri
+        """
+
+        pages = [
+            'index.md',
+            'internal.md',
+            'sub/internal.md',
+            'sub1/sub2/internal.md',
+        ]
+
+        # Basic test
+        repo_url = 'http://example.com/'
+        edit_uri = 'edit/master/docs/'
+
+        site_navigation = nav.SiteNavigation({
+            'pages': pages,
+            'repo_url': repo_url,
+            'edit_uri': edit_uri,
+            'docs_dir': 'docs',
+            'site_dir': 'site',
+            'site_url': '',
+            'use_directory_urls': True
+        })
+
+        expected_results = (
+            repo_url + edit_uri + pages[0],
+            repo_url + edit_uri + pages[1],
+            repo_url + edit_uri + pages[2],
+            repo_url + edit_uri + pages[3],
+        )
+
+        for idx, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(page.edit_url, expected_results[idx])
+
+        # Ensure the '/' is added to the repo_url and edit_uri
+        repo_url = 'http://example.com'
+        edit_uri = 'edit/master/docs'
+
+        site_navigation = nav.SiteNavigation({
+            'pages': pages,
+            'repo_url': repo_url,
+            'edit_uri': edit_uri,
+            'docs_dir': 'docs',
+            'site_dir': 'site',
+            'site_url': '',
+            'use_directory_urls': True
+        })
+
+        for idx, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(page.edit_url, expected_results[idx])
+
+        # Ensure query strings are supported
+        repo_url = 'http://example.com'
+        edit_uri = '?query=edit/master/docs/'
+
+        site_navigation = nav.SiteNavigation({
+            'pages': pages,
+            'repo_url': repo_url,
+            'edit_uri': edit_uri,
+            'docs_dir': 'docs',
+            'site_dir': 'site',
+            'site_url': '',
+            'use_directory_urls': True
+        })
+
+        expected_results = (
+            repo_url + edit_uri + pages[0],
+            repo_url + edit_uri + pages[1],
+            repo_url + edit_uri + pages[2],
+            repo_url + edit_uri + pages[3],
+        )
+
+        for idx, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(page.edit_url, expected_results[idx])
+
+        # Ensure fragment strings are supported
+        repo_url = 'http://example.com'
+        edit_uri = '#fragment/edit/master/docs/'
+
+        site_navigation = nav.SiteNavigation({
+            'pages': pages,
+            'repo_url': repo_url,
+            'edit_uri': edit_uri,
+            'docs_dir': 'docs',
+            'site_dir': 'site',
+            'site_url': '',
+            'use_directory_urls': True
+        })
+
+        expected_results = (
+            repo_url + edit_uri + pages[0],
+            repo_url + edit_uri + pages[1],
+            repo_url + edit_uri + pages[2],
+            repo_url + edit_uri + pages[3],
+        )
+
+        for idx, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(page.edit_url, expected_results[idx])
+
+    def test_edit_uri_windows(self):
+        """
+        Ensure that set_edit_url creates well formed URLs for edit_uri with a windows path
+        """
+
+        pages = [
+            'index.md',
+            'internal.md',
+            'sub\\internal.md',
+            'sub1\\sub2\\internal.md',
+        ]
+
+        # Basic test
+        repo_url = 'http://example.com/'
+        edit_uri = 'edit/master/docs/'
+
+        site_navigation = nav.SiteNavigation({
+            'pages': pages,
+            'repo_url': repo_url,
+            'edit_uri': edit_uri,
+            'docs_dir': 'docs',
+            'site_dir': 'site',
+            'site_url': '',
+            'use_directory_urls': True
+        })
+
+        expected_results = (
+            repo_url + edit_uri + pages[0],
+            repo_url + edit_uri + pages[1],
+            repo_url + edit_uri + pages[2].replace('\\', '/'),
+            repo_url + edit_uri + pages[3].replace('\\', '/'),
+        )
+
+        for idx, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(page.edit_url, expected_results[idx])
+
+        # Ensure the '/' is added to the repo_url and edit_uri
+        repo_url = 'http://example.com'
+        edit_uri = 'edit/master/docs'
+
+        site_navigation = nav.SiteNavigation({
+            'pages': pages,
+            'repo_url': repo_url,
+            'edit_uri': edit_uri,
+            'docs_dir': 'docs',
+            'site_dir': 'site',
+            'site_url': '',
+            'use_directory_urls': True
+        })
+
+        for idx, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(page.edit_url, expected_results[idx])
+
+        # Ensure query strings are supported
+        repo_url = 'http://example.com'
+        edit_uri = '?query=edit/master/docs/'
+
+        site_navigation = nav.SiteNavigation({
+            'pages': pages,
+            'repo_url': repo_url,
+            'edit_uri': edit_uri,
+            'docs_dir': 'docs',
+            'site_dir': 'site',
+            'site_url': '',
+            'use_directory_urls': True
+        })
+
+        expected_results = (
+            repo_url + edit_uri + pages[0],
+            repo_url + edit_uri + pages[1],
+            repo_url + edit_uri + pages[2].replace('\\', '/'),
+            repo_url + edit_uri + pages[3].replace('\\', '/'),
+        )
+
+        for idx, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(page.edit_url, expected_results[idx])
+
+        # Ensure fragment strings are supported
+        repo_url = 'http://example.com'
+        edit_uri = '#fragment/edit/master/docs/'
+
+        site_navigation = nav.SiteNavigation({
+            'pages': pages,
+            'repo_url': repo_url,
+            'edit_uri': edit_uri,
+            'docs_dir': 'docs',
+            'site_dir': 'site',
+            'site_url': '',
+            'use_directory_urls': True
+        })
+
+        expected_results = (
+            repo_url + edit_uri + pages[0],
+            repo_url + edit_uri + pages[1],
+            repo_url + edit_uri + pages[2].replace('\\', '/'),
+            repo_url + edit_uri + pages[3].replace('\\', '/'),
+        )
+
+        for idx, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(page.edit_url, expected_results[idx])
