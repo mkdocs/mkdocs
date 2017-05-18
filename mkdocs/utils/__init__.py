@@ -180,12 +180,17 @@ def get_html_path(path):
     Map a source file path to an output html path.
 
     Paths like 'index.md' will be converted to 'index.html'
+    Paths like 'README.md' will be converted to 'index.html' if index.md doesn't also exist
     Paths like 'about.md' will be converted to 'about/index.html'
     Paths like 'api-guide/core.md' will be converted to 'api-guide/core/index.html'
     """
     path = os.path.splitext(path)[0]
     if os.path.basename(path) == 'index':
         return path + '.html'
+    # To match github-esque repositories where the webui renders README.md
+    # as the page index in the repository browser.
+    elif os.path.basename(path).split('.', 1)[0] == 'README':
+        return path.replace('README', 'index') + '.html'
     return "/".join((path, 'index.html'))
 
 

@@ -15,6 +15,7 @@ class UtilsTests(unittest.TestCase):
     def test_html_path(self):
         expected_results = {
             'index.md': 'index.html',
+            'README.md': 'index.html',
             'api-guide.md': 'api-guide/index.html',
             'api-guide/index.md': 'api-guide/index.html',
             'api-guide/testing.md': 'api-guide/testing/index.html',
