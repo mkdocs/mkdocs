@@ -149,7 +149,7 @@ entire site.
 :   The `serve` event is only called when the `serve` command is used during
     development. It is passed the `Server` instance which can be modified before
     it is activated. For example, additional files or directories could be added
-    to the list of "watched" filed for auto-reloading.
+    to the list of "watched" files for auto-reloading.
 
     Parameters:
     : __server:__ `livereload.Server` instance
@@ -178,14 +178,30 @@ entire site.
     Parameters:
     : __config:__ global configuration object
 
+##### on_files
+
+:   The `files` event is called after the files collection is populated from the
+    `docs_dir`. Use this event to add, remove, or alter files in the
+    collection. Note that Page objects have not yet been associated with the
+    file objects in the collection. Use [Page Events] to manipulate page
+    specific data.
+
+    Parameters:
+    : __files:__ global files collection
+    : __config:__ global configuration object
+
+    Returns:
+    : global files collection
+
 ##### on_nav
 
 :   The `nav` event is called after the site navigation is created and can
     be used to alter the site navigation.
 
     Parameters:
-    : __site_navigation:__ global navigation object
+    : __nav:__ global navigation object
     : __config:__ global configuration object
+    : __files:__ global files collection
 
     Returns:
     : global navigation object
@@ -263,8 +279,8 @@ called after the [env] event and before any [page events].
 #### Page Events
 
 Page events are called once for each Markdown page included in the site. All
-page events are called after the [post_template] event and before the [post_build]
-event.
+page events are called after the [post_template] event and before the
+[post_build] event.
 
 ##### on_pre_page
 

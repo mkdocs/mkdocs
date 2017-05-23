@@ -25,6 +25,117 @@ The current and past members of the MkDocs team.
 
 ### Major Additions to Development Version
 
+#### Internal Refactor of Pages, Files, and Navigation
+
+Internal handling of pages, files and navigation has been completely refactored.
+The changes included in the refactor are summarized below.
+
+* Support for hidden pages. All Markdown pages are now included in the build
+  regardless of whether they are included in the navigation configuration
+  (#699).
+* The navigation can now include links to external sites (#989 & #1373).
+* Page data (including titles) is properly determined for all pages before any
+  page is rendered (#1382).
+* Automatically populated navigation now sorts index pages to the top. In other
+  words, The index page will be listed as the first child of a directory, while
+  all other documents are sorted alphanumerically by file name after the index page (#1042).
+* A `README.md` file is now treated as an index file within a directory and
+  will be rendered to `index.html` (#608).
+* An [on_files] plugin event has been added, which could be used to include
+  files not in the `docs_dir`, exclude files, redefine page URLs (i.e.
+  implement extensionless URLs), or to manipulate files in various other ways.
+
+  [on_files]: ../user-guide/plugins.md#on_files
+
+##### Backward Incompatible Changes
+
+As part of the internal refactor, a number of backward incompatible changes have
+been introduced, which are summarized below.
+
+###### URLS have changed when `use_directory_urls` is `False`
+
+Previously, all Markdown pages would be have their filenames altered to be index
+pages regardless of how the [use_directory_urls] setting was configured.
+However, the path munging is only needed when `use_directory_urls` is set to
+`True` (the default). The path mungling no longer happens when
+`use_directory_urls` is set to `False`, which will result in different URLs for
+all pages that were not already index files. As this behavior only effects a
+non-default configuration, and the most common user-case for setting the option
+to `False` is for local file system (`file://`) browsing, its not likely to
+effect most users. However, if you have `use_directory_urls` set to `False`
+for a MkDocs site hosted on a web server, most of your URLs will now be broken.
+As you can see below, the new URLs are much more sensible.
+
+| Markdown file   | Old URL              | New URL        |
+| --------------- | -------------------- | -------------- |
+| `index.md`      | `index.html`         | `index.html`   |
+| `foo.md`        | `foo/index.html`     | `foo.html`     |
+| `foo/bar.md`    | `foo/bar/index.html` | `foo/bar.html` |
+
+Note that there has been no change to URLs or file paths when
+`use_directory_urls` is set to `True` (the default), except that MkDocs more
+consistently includes an ending slash on all internally generated URLs.
+
+[use_directory_urls]: ../user-guide/configuration.md#use_directory_urls
+
+###### The `pages` configuration setting has been renamed to `nav`
+
+The `pages` configuration setting is deprecated and will issue a warning if set
+in the configuration file. The setting has been renamed `nav`. To update your
+configuration, simply rename the setting to `nav`. In other words, if your
+configuration looked like this:
+
+```yaml
+pages:
+    - Home: index.md
+    - User Guide: user-guide.md
+```
+
+Simply edit the configuration as follows:
+
+```yaml
+nav:
+    - Home: index.md
+    - User Guide: user-guide.md
+```
+
+In the current release, any configuration which includes a `pages` setting, but
+no `nav` setting, the `pages` configuration will be copied to `nav` and a
+warning will be issued. However, in a future release, that may no longer happen.
+If both `pages` and `nav` are defined, the `pages` setting will be ignored.
+
+###### Template variables and `base_url`
+
+In previous versions of MkDocs some URLs expected the [base_url] template
+variable to be prepended to the URL and others did not. That inconsistency has
+been removed. All  URLs must now be joined with the `base_url`. As previously, a
+slash must be included between the `base_url` and the URL variable. For example,
+a theme template might have previously included a link to the `site_name` as:
+
+```django
+<a href="{{ nav.homepage.url }}">{{ config.site_name }}</a>
+```
+
+And MkDocs would magically return a URL for the homepage which was relative to
+the current page. That "magic" has been removed and the `base_url` must now be
+explicitly included:
+
+```django
+<a href="{{ base_url }}/{{ nav.homepage.url }}">{{ config.site_name }}</a>
+```
+
+This change applies to any navigation items and pages, as well as the
+`page.next_page` and `page.previous_page` attributes. For the time being, the
+`extra_javascript` and `extra_css` variables continue to work as previously
+(without `base_url`), but they have been deprecated and the corresponding
+configuration values (`config.extra_javascript` and `config.extra_css`
+respectively) should be used with `base_url` instead.
+
+Any URL variables which should not be used with `base_url` are explicitly
+documented as such.
+
+[base_url]: ../user-guide/custom-themes.md#base_url
+
 #### Path Based Settings are Relative to Configuration File (#543)
 
 Previously any relative paths in the various configuration options were

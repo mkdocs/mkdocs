@@ -14,7 +14,7 @@
             {%- endif %}
 
           {%- block site_name %}
-            <a class="navbar-brand" href="{{ nav.homepage.url }}">{{ config.site_name }}</a>
+            <a class="navbar-brand" href="{{ base_url }}/{{ nav.homepage.url }}">{{ config.site_name }}</a>
           {%- endblock %}
         </div>
 
@@ -36,7 +36,7 @@
                     </li>
                 {%- else %}
                     <li {% if nav_item.active %}class="active"{% endif %}>
-                        <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
+                        <a href="{{ base_url }}/{{ nav_item.url }}">{{ nav_item.title }}</a>
                     </li>
                 {%- endif %}
                 {%- endfor %}
@@ -58,12 +58,12 @@
               {%- block next_prev %}
                 {%- if page and (page.next_page or page.previous_page) %}
                     <li {% if not page.previous_page %}class="disabled"{% endif %}>
-                        <a rel="next" {% if page.previous_page %}href="{{ page.previous_page.url }}"{% endif %}>
+                        <a rel="next" {% if page.previous_page %}href="{{ base_url }}/{{ page.previous_page.url }}"{% endif %}>
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li {% if not page.next_page %}class="disabled"{% endif %}>
-                        <a rel="prev" {% if page.next_page %}href="{{ page.next_page.url }}"{% endif %}>
+                        <a rel="prev" {% if page.next_page %}href="{{ base_url }}/{{ page.next_page.url }}"{% endif %}>
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>

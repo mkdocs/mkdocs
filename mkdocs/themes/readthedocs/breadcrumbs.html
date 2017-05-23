@@ -1,6 +1,6 @@
 <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="{{ nav.homepage.url }}">Docs</a> &raquo;</li>
+    <li><a href="{{ base_url }}/{{ nav.homepage.url }}">Docs</a> &raquo;</li>
     {% if page %}
       {% for doc in page.ancestors %}
         {% if doc.link %}

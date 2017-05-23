@@ -6,7 +6,7 @@ site_author: MkDocs Team
 repo_url: https://github.com/mkdocs/mkdocs/
 edit_uri: ""
 
-pages:
+nav:
     - Home: index.md
     - User Guide:
         - Writing Your Docs: user-guide/writing-your-docs.md

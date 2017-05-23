@@ -1,16 +1,24 @@
+import logging
+
 from mkdocs.structure.pages import Page
-from mkdocs.compat import string_types
+from mkdocs.utils import string_types, text_type, nest_paths
+
+log = logging.getLogger(__name__)
 
 
 class Navigation(object):
     def __init__(self, items, pages):
-        self.items = items  # List with full navigation of Sections and Pages.
-        self.pages = pages  # List of only Page instances, in order.
+        self.items = items  # Nested List with full navigation of Sections, Pages, and Links.
+        self.pages = pages  # Flat List of subset of Pages in nav, in order.
 
-        if not pages:
-            self.homepage = None
-        else:
-            self.homepage = pages[0]
+        self.homepage = None
+        for page in pages:
+            if page.is_homepage:
+                self.homepage = page
+                break
+
+    def __repr__(self):
+        return '\n'.join([item._indent_print() for item in self])
 
     def __iter__(self):
         return iter(self.items)
@@ -29,86 +37,114 @@ class Section(object):
         self.is_section = True
         self.is_page = False
 
+    def __repr__(self):
+        return "Section(title='{0}')".format(self.title)
 
-def get_navigation(data, files):
-    items = _data_to_navigation(data)
+    @property
+    def ancestors(self):
+        if self.parent is None:
+            return []
+        return [self.parent] + self.parent.ancestors
+
+    def _indent_print(self, depth=0):
+        ret = ['{}{}'.format('    ' * depth, repr(self))]
+        for item in self.children:
+            ret.append(item._indent_print(depth + 1))
+        return '\n'.join(ret)
+
+
+class Link(object):
+    def __init__(self, title, url):
+        self.title = title
+        self.url = url
+        self.children = None
+
+        self.parent = None
+
+        self.is_section = False
+        self.is_page = False
+
+    def __repr__(self):
+        title = "'{}'".format(self.title) if (self.title is not None) else '[blank]'
+        return "Link(title={}, url='{}')".format(title, self.url)
+
+    @property
+    def ancestors(self):
+        if self.parent is None:
+            return []
+        return [self.parent] + self.parent.ancestors
+
+    def _indent_print(self, depth=0):
+        return '{}{}'.format('    ' * depth, repr(self))
+
+
+def get_navigation(files, config):
+    """ Build site navigation from config and files."""
+    nav_config = config['nav'] or nest_paths(text_type(f.src_path) for f in files.documentation_pages())
+    items = _data_to_navigation(nav_config, files, config)
     if not isinstance(items, list):
         items = [items]
 
-    # Get only the pages from the navigation, ignoring any sections.
-    pages = _get_pages(items)
+    # Get only the pages from the navigation, ignoring any sections and links.
+    pages = _get_by_type(items, Page)
 
     # Include next, previous and parent links.
     _add_previous_and_next_links(pages)
     _add_parent_links(items)
 
-    # Validate that the 'pages' configuration matches with the
-    # available documentation files.
-    linked_filepaths = set([page._filepath for page in pages])
-    existing_filepaths = set([file.input_path for file in files.documentation_pages()])
-
-    missing_from_config = existing_filepaths - linked_filepaths
-    missing_docs_file = linked_filepaths - existing_filepaths
-
+    missing_from_config = [file for file in files.documentation_pages() if file.page is None]
     if missing_from_config:
-        # TODO: This should be a properly logged warning.
-        print (
+        log.info(
             'The following pages exist in the docs directory, but are not '
-            'included in the "pages" configuration:\n  - %s'
-            % '\n  - '.join(sorted(list(missing_from_config)))
+            'included in the "nav" configuration:\n  - {}'.format(
+                '\n  - '.join([text_type(file.src_path) for file in missing_from_config]))
         )
-    if missing_docs_file:
-        # TODO: This should be a properly logged error.
-        print (
-            'The following pages are included in the "pages" configuration, '
-            'but do not exist in the docs directory:\n  - %s'
-            % '\n  - '.join(sorted(list(missing_docs_file)))
+        # Any documentation files not found in the nav should still have an associated page.
+        # However, these page objects are only accessable from File instances as `file.page`.
+        for file in missing_from_config:
+            Page(None, file, config)
+
+    links = _get_by_type(items, Link)
+    if links:
+        # Assume all links are external.
+        # TODO: warn or error on internal links?
+        log.info(
+            'The following paths are included in the "nav" configuration, '
+            'but do not exist in the docs directory:\n  - {}'.format(
+                '\n  - '.join([link.url for link in links]))
         )
-
-    # Create interlinks between associated Page and File objects.
-    for page in pages:
-        file = files.input_paths.get(page._filepath, None)
-        if file is not None:
-            page.file = file
-            file.page = page
-
-    # Any documentation files not found in the nav should still
-    # have an associated page. We can warn about these but still build
-    # them. They won't have 'next' or 'previous' links, and will only
-    # ever have default titles.
-    for path in missing_from_config:
-        page = Page(title=None, filepath=path)
-        page.file = file
-        file.page = page
-
     return Navigation(items, pages)
 
 
-def _data_to_navigation(data):
+def _data_to_navigation(data, files, config):
     if isinstance(data, dict):
         return [
-            Page(title=key, filepath=value)
+            _data_to_navigation((key, value), files, config)
             if isinstance(value, string_types) else
-            Section(title=key, children=_data_to_navigation(value))
+            Section(title=key, children=_data_to_navigation(value, files, config))
             for key, value in data.items()
         ]
     elif isinstance(data, list):
         return [
-            _data_to_navigation(item)[0]
+            _data_to_navigation(item, files, config)[0]
             if isinstance(item, dict) and len(item) == 1 else
-            _data_to_navigation(item)
+            _data_to_navigation(item, files, config)
             for item in data
         ]
-    return Page(title=None, filepath=data)
+    title, path = data if isinstance(data, tuple) else (None, data)
+    file = files.get_file_from_path(path)
+    if file:
+        return Page(title, file, config)
+    return Link(title, path)
 
 
-def _get_pages(nav):
+def _get_by_type(nav, T):
     ret = []
     for item in nav:
-        if isinstance(item, Page):
+        if isinstance(item, T):
             ret.append(item)
-        else:
-            ret.extend(_get_pages(item.children))
+        elif item.children:
+            ret.extend(_get_by_type(item.children, T))
     return ret
 
 
@@ -124,7 +160,4 @@ def _add_previous_and_next_links(pages):
     bookended = [None] + pages + [None]
     zipped = zip(bookended[:-2], bookended[1:-1], bookended[2:])
     for page0, page1, page2 in zipped:
-        page1.previous, page1.next = page0, page2
-
-
-# http://stackoverflow.com/questions/5121931/in-python-how-can-you-load-yaml-mappings-as-ordereddicts
+        page1.previous_page, page1.next_page = page0, page2

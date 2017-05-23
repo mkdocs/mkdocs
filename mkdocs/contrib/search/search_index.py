@@ -69,17 +69,17 @@ class SearchIndex(object):
 
         # Get the absolute URL for the page, this is then
         # prepended to the urls of the sections
-        abs_url = page.abs_url
+        url = page.url
 
         # Create an entry for the full page.
         self._add_entry(
             title=page.title,
             text=self.strip_tags(page.content).rstrip('\n'),
-            loc=abs_url
+            loc=url
         )
 
         for section in parser.data:
-            self.create_entry_for_section(section, page.toc, abs_url)
+            self.create_entry_for_section(section, page.toc, url)
 
     def create_entry_for_section(self, section, toc, abs_url):
         """

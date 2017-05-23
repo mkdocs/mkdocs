@@ -17,6 +17,7 @@ import re
 import sys
 import yaml
 import fnmatch
+import posixpath
 
 from mkdocs import exceptions
 
@@ -285,23 +286,37 @@ def is_error_template(path):
     return bool(_ERROR_TEMPLATE_RE.match(path))
 
 
-def create_media_urls(nav, path_list):
+def get_relative_url(url, other):
     """
-    Return a list of URLs that have been processed correctly for inclusion in
-    a page.
+    Return given url relative to other.
+    """
+    if other != '.':
+        # Remove filename from other url if it has one.
+        parts = posixpath.split(other)
+        other = parts[0] if '.' in parts[1] else other
+    relurl = posixpath.relpath(url, other)
+    return relurl + '/' if url.endswith('/') else relurl
+
+
+def create_media_urls(path_list, page=None, base=''):
+    """
+    Return a list of URLs relative to the given page or using the base.
     """
     final_urls = []
 
     for path in path_list:
-        # Allow links to fully qualified URL's
+        path = path_to_url(path)
+        # Allow links to be fully qualified URL's
         parsed = urlparse(path)
         if parsed.netloc:
             final_urls.append(path)
             continue
         # We must be looking at a local path.
-        url = path_to_url(path)
-        relative_url = '%s/%s' % (nav.url_context.make_relative('/').rstrip('/'), url)
-        final_urls.append(relative_url)
+        if page is not None:
+            url = get_relative_url(path, page.url)
+        else:
+            url = posixpath.join(base, path)
+        final_urls.append(url)
 
     return final_urls
 

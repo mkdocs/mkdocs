@@ -438,11 +438,11 @@ class ThemeTest(unittest.TestCase):
                           option.validate, config)
 
 
-class PagesTest(unittest.TestCase):
+class NavTest(unittest.TestCase):
 
     def test_old_format(self):
 
-        option = config_options.Pages()
+        option = config_options.Nav()
         self.assertRaises(
             config_options.ValidationError,
             option.validate,
@@ -451,7 +451,7 @@ class PagesTest(unittest.TestCase):
 
     def test_provided_dict(self):
 
-        option = config_options.Pages()
+        option = config_options.Nav()
         value = option.validate([
             'index.md',
             {"Page": "page.md"}
@@ -462,7 +462,7 @@ class PagesTest(unittest.TestCase):
 
     def test_provided_empty(self):
 
-        option = config_options.Pages()
+        option = config_options.Nav()
         value = option.validate([])
         self.assertEqual(None, value)
 
@@ -470,13 +470,13 @@ class PagesTest(unittest.TestCase):
 
     def test_invalid_type(self):
 
-        option = config_options.Pages()
+        option = config_options.Nav()
         self.assertRaises(config_options.ValidationError,
                           option.validate, {})
 
     def test_invalid_config(self):
 
-        option = config_options.Pages()
+        option = config_options.Nav()
         self.assertRaises(config_options.ValidationError,
                           option.validate, [[], 1])
 

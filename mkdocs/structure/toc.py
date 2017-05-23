@@ -7,7 +7,10 @@ an HTML table of contents, and then parse that into the underlying data.
 """
 from __future__ import unicode_literals
 
-from mkdocs.compat import HTMLParser
+try:                                    # pragma: no cover
+    from html.parser import HTMLParser  # noqa
+except ImportError:                     # pragma: no cover
+    from HTMLParser import HTMLParser   # noqa
 
 
 def get_toc(toc_html):
@@ -64,7 +67,7 @@ class _TOCParser(HTMLParser):
         # However, in Python3.5 the default was changed to True.
         # We need the False behavior in all versions but can only
         # set it if it exists.
-        if hasattr(self, 'convert_charrefs'):
+        if hasattr(self, 'convert_charrefs'):  # pragma: no cover
             self.convert_charrefs = False
 
     def handle_starttag(self, tag, attrs):

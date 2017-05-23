@@ -178,56 +178,37 @@ class ConfigTests(unittest.TestCase):
                 self.assertEqual(c['theme'].static_templates, set(result['static_templates']))
                 self.assertEqual(dict([(k, c['theme'][k]) for k in iter(c['theme'])]), result['vars'])
 
-    def test_default_pages(self):
-        with TemporaryDirectory() as tmp_dir:
-            open(os.path.join(tmp_dir, 'index.md'), 'w').close()
-            open(os.path.join(tmp_dir, 'about.md'), 'w').close()
-            conf = config.Config(schema=config.DEFAULT_SCHEMA)
-            conf.load_dict({
-                'site_name': 'Example',
-                'docs_dir': tmp_dir,
-                'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
-            })
-            conf.validate()
-            self.assertEqual(['index.md', 'about.md'], conf['pages'])
+    def test_empty_nav(self):
+        conf = config.Config(schema=config.DEFAULT_SCHEMA)
+        conf.load_dict({
+            'site_name': 'Example',
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        conf.validate()
+        self.assertEqual(conf['nav'], None)
 
-    def test_default_pages_nested(self):
-        with TemporaryDirectory() as tmp_dir:
-            open(os.path.join(tmp_dir, 'index.md'), 'w').close()
-            open(os.path.join(tmp_dir, 'getting-started.md'), 'w').close()
-            open(os.path.join(tmp_dir, 'about.md'), 'w').close()
-            os.makedirs(os.path.join(tmp_dir, 'subA'))
-            open(os.path.join(tmp_dir, 'subA', 'index.md'), 'w').close()
-            os.makedirs(os.path.join(tmp_dir, 'subA', 'subA1'))
-            open(os.path.join(tmp_dir, 'subA', 'subA1', 'index.md'), 'w').close()
-            os.makedirs(os.path.join(tmp_dir, 'subC'))
-            open(os.path.join(tmp_dir, 'subC', 'index.md'), 'w').close()
-            os.makedirs(os.path.join(tmp_dir, 'subB'))
-            open(os.path.join(tmp_dir, 'subB', 'index.md'), 'w').close()
-            conf = config.Config(schema=config.DEFAULT_SCHEMA)
-            conf.load_dict({
-                'site_name': 'Example',
-                'docs_dir': tmp_dir,
-                'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
-            })
-            conf.validate()
-            self.assertEqual([
-                'index.md',
-                'about.md',
-                'getting-started.md',
-                {'subA': [
-                    os.path.join('subA', 'index.md'),
-                    {'subA1': [
-                        os.path.join('subA', 'subA1', 'index.md')
-                    ]}
-                ]},
-                {'subB': [
-                    os.path.join('subB', 'index.md')
-                ]},
-                {'subC': [
-                    os.path.join('subC', 'index.md')
-                ]}
-            ], conf['pages'])
+    def test_copy_pages_to_nav(self):
+        # TODO: remove this when pages config setting is fully deprecated.
+        conf = config.Config(schema=config.DEFAULT_SCHEMA)
+        conf.load_dict({
+            'site_name': 'Example',
+            'pages': ['index.md', 'about.md'],
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        conf.validate()
+        self.assertEqual(conf['nav'], ['index.md', 'about.md'])
+
+    def test_dont_overwrite_nav_with_pages(self):
+        # TODO: remove this when pages config setting is fully deprecated.
+        conf = config.Config(schema=config.DEFAULT_SCHEMA)
+        conf.load_dict({
+            'site_name': 'Example',
+            'pages': ['index.md', 'about.md'],
+            'nav': ['foo.md', 'bar.md'],
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        conf.validate()
+        self.assertEqual(conf['nav'], ['foo.md', 'bar.md'])
 
     def test_doc_dir_in_site_dir(self):
 

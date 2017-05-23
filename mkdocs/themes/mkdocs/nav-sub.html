@@ -1,6 +1,6 @@
 {%- if not nav_item.children %}
 <li {% if nav_item.active %}class="active"{% endif %}>
-    <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
+    <a href="{{ base_url }}/{{ nav_item.url }}">{{ nav_item.title }}</a>
 </li>
 {%- else %}
   <li class="dropdown-submenu">

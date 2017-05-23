@@ -22,7 +22,8 @@ docs/
 
 By convention your project homepage should always be named `index`. Any of the
 following extensions may be used for your Markdown source files: `markdown`,
-`mdown`, `mkdn`, `mkd`, `md`.
+`mdown`, `mkdn`, `mkd`, `md`. All Markdown files included in your documentation
+directory will be rendered in the built site regardless of any settings.
 
 You can also create multi-page documentation, by creating several Markdown
 files:
@@ -67,59 +68,74 @@ nested URLs, like so:
 
 ### Configure Pages and Navigation
 
-The [pages configuration](configuration.md#pages) in your `mkdocs.yml` defines
-which pages are built by MkDocs and how they appear in the documentation
-navigation. If not provided, the pages configuration will be automatically
-created by discovering all the Markdown files in the [documentation
-directory](configuration.md#docs_dir). An automatically created pages
-configuration will always be sorted alphanumerically by file name. You will need
-to manually define your pages configuration if you would like your pages sorted
-differently.
+The [nav](configuration.md#nav) configuration setting in your `mkdocs.yml` file
+defines which pages are included in the global site navigation menu as well as
+the structure of that menu. If not provided, the navigation will be
+automatically created by discovering all the Markdown files in the
+[documentation directory](configuration.md#docs_dir). An automatically created
+navigation configuration will always be sorted alphanumerically by file name
+(except that index files will always be listed first within a sub-section). You
+will need to manually define your navigation configuration if you would like
+your navigation menu sorted differently.
 
-A simple pages configuration looks like this:
+A simple navigation configuration looks like this:
 
 ```no-highlight
-pages:
+nav:
 - 'index.md'
 - 'about.md'
 ```
 
-With this example we will build two pages at the top level and they will
-automatically have their titles inferred from the filename. Assuming `docs_dir`
-has the default value, `docs`, the source files for this documentation would be
-`docs/index.md` and `docs/about.md`. To provide a custom name for these pages,
-they can be added before the filename.
+All paths in the navigation configuration must be relative to the `docs_dir`
+configuration option. If that option is set to the default value, `docs`, the
+source files for the above configuration would be located at `docs/index.md` and
+`docs/about.md`.
+
+The above example will result in two navigation items being created at the top
+level and with their titles inferred from the contents of the file (or the
+filename if no title is defined within the file). To define a custom title for
+the pages, the title can be added before the filename.
 
 ```no-highlight
-pages:
+nav:
 - Home: 'index.md'
 - About: 'about.md'
 ```
 
-Subsections can be created by listing related pages together under a section
-title. For example:
+Note that if a title is defined for a page in the navigation, that title will be
+used throughout the site for that page and will override any title defined
+within the page itself.
+
+Navigation sub-sections can be created by listing related pages together under a
+section title. For example:
 
 ```no-highlight
-pages:
+nav:
 - Home: 'index.md'
 - User Guide:
-    - 'Writing your docs': 'user-guide/writing-your-docs.md'
-    - 'Styling your docs': 'user-guide/styling-your-docs.md'
+    - 'Writing your docs': 'writing-your-docs.md'
+    - 'Styling your docs': 'styling-your-docs.md'
 - About:
-    - 'License': 'about/license.md'
-    - 'Release Notes': 'about/release-notes.md'
+    - 'License': 'license.md'
+    - 'Release Notes': 'release-notes.md'
 ```
 
-With the above configuration we have three top level sections: Home, User Guide
-and About. Then under User Guide we have two pages, Writing your docs and
-Styling your docs. Under the About section we also have two pages, License and
-Release Notes.
+With the above configuration we have three top level items: "Home", "User Guide"
+and "About." "Home" is a link to the homepage for the site. Under the "User
+Guide" section two pages are listed: "Writing your docs" and "Styling your
+docs." Under the "About" section two more pages are listed: "License" and
+"Release Notes."
 
 Note that a section cannot have a page assigned to it. Sections are only
 containers for child pages and sub-sections. You may nest sections as deeply as
 you like. However, be careful that you don't make it too difficult for your
 users to navigate through the site navigation by over-complicating the nesting.
 While sections may mirror your directly structure, they do not have to.
+
+Any pages not listed in your navigation configuration will still be rendered and
+included with the built site, however, they will not be linked from the global
+navigation and will not be included in the `previous` and `next` links. Such
+pages will be "hidden" unless linked to directly.
 
 ## Writing with Markdown
 
@@ -341,7 +357,7 @@ specific page. The following keys are supported:
     MkDocs will attempt to determine the title of a document in the following
     ways, in order:
 
-    1. A title defined in the [pages] configuration setting for a document.
+    1. A title defined in the [nav] configuration setting for a document.
     2. A title defined in the `title` meta-data key of a document.
     3. A level 1 Markdown header on the first line of the document body.
     4. The filename of a document.
@@ -350,7 +366,7 @@ specific page. The following keys are supported:
     additional sources in the above list.
 
 [MultiMarkdown]: http://fletcherpenney.net/MultiMarkdown_Syntax_Guide#metadata
-[pages]: configuration.md#pages
+[nav]: configuration.md#nav
 
 ### Tables
 

@@ -1,4 +1,4 @@
-# Test sub pages and referencing images
+## Test sub pages and referencing images
 
 ## Reference an image in: /
 

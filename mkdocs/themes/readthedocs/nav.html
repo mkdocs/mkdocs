@@ -1,5 +1,5 @@
 {%- if nav_item.url %}
-    <a class="{% if nav_item.active%}current{%endif%}" href="{{ nav_item.url }}">{{ nav_item.title }}</a>
+    <a class="{% if nav_item.active%}current{%endif%}" href="{{ base_url }}/{{ nav_item.url }}">{{ nav_item.title }}</a>
 {%- else %}
     <span class="caption-text">{{ nav_item.title }}</span>
 {%- endif %}

@@ -126,6 +126,8 @@ used options include:
 * [config.site_url](./configuration.md#site_url)
 * [config.site_author](./configuration.md#site_author)
 * [config.site_description](./configuration.md#site_description)
+* [config.extra_javascript](./configuration.md#extra_javascript)
+* [config.extra_css](./configuration.md#extra_css)
 * [config.repo_url](./configuration.md#repo_url)
 * [config.repo_name](./configuration.md#repo_name)
 * [config.copyright](./configuration.md#copyright)
@@ -146,14 +148,14 @@ navigation as a nested list.
                 <ul>
                 {% for nav_item in nav_item.children %}
                     <li class="{% if nav_item.active%}current{%endif%}">
-                        <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
+                        <a href="{{ base_url }}/{{ nav_item.url }}">{{ nav_item.title }}</a>
                     </li>
                 {% endfor %}
                 </ul>
             </li>
         {% else %}
             <li class="{% if nav_item.active%}current{%endif%}">
-                <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
+                <a href="{{ base_url }}/{{ nav_item.url }}">{{ nav_item.title }}</a>
             </li>
         {% endif %}
     {% endfor %}
@@ -174,22 +176,6 @@ folder on all pages you would do this:
 ```django
 <script src="{{ base_url }}/js/theme.js"></script>
 ```
-
-#### extra_css
-
-Contains a list of URLs to the style-sheets listed in the [extra_css]
-config setting. Unlike the config setting, which contains local paths, this
-variable contains absolute paths from the homepage.
-
-[extra_css]: configuration.md#extra_css
-
-#### extra_javascript
-
-Contains a list of URLs to the scripts listed in the [extra_javascript] config
-setting. Unlike the config setting, which contains local paths, this variable
-contains absolute paths from the homepage.
-
-[extra_javascript]: configuration.md#extra_javascript
 
 #### mkdocs_version
 
@@ -257,19 +243,43 @@ documentation page.
 {% endfor %}
 ```
 
+##### page.url
+
+The URL of the page relative to the MkDocs `site_dir`. It is expected that this
+be used with [base_url] to ensure the URL is relative to the current page.
+
+```django
+<a href="{{ base_url }}/{{ page.url }}">{{ page.title }}</a>
+```
+
+[base_url]: #base_url
+
+##### page.abs_url
+
+The absolute URL of the page from the server root as determined by the value
+assigned to the [site_url] configuration setting. The value includes any
+subdirectory included in the `site_url`, but not the domain. [base_url] should
+not be used with this variable.
+
+For example, if `site_url: http://example.com/`, then the value of
+`page.abs_url` for the page `foo.md` would be `/foo/`. However, if
+`site_url: http://example.com/bar/`, then the value of `page.abs_url` for the
+page `foo.md` would be `/bar/foo/`.
+
+[site_url]: ./configuration.md#site_url
+
 ##### page.canonical_url
 
-The full, canonical URL to the current page. This includes the `site_url` from
-the configuration.
+The full, canonical URL to the current page as determined by the value assigned
+to the [site_url] configuration setting. The value includes the domain and any
+subdirectory included in the `site_url`. [base_url] should not be used with this
+variable.
 
 ##### page.edit_url
 
-The full URL to the input page in the source repository. Typically used to
-provide a link to edit the source page.
-
-##### page.url
-
-The URL to the current page not including the `site_url` from the configuration.
+The full URL to the source page in the source repository. Typically used to
+provide a link to edit the source page. [base_url] should not be used with this
+variable.
 
 ##### page.is_homepage
 
@@ -284,12 +294,17 @@ on the homepage:
 
 ##### page.previous_page
 
-The page object for the previous  page. The usage is the same as for
-`page`.
+The page object for the previous page or `None`. The value will be `None` if the
+current page is the first item in the site navigation or if the current page is
+not included in the navigation at all. When the value is a page object, the
+usage is the same as for `page`.
 
 ##### page.next_page
 
-The page object for the next page.The usage is the same as for `page`.
+The page object for the next page or `None`. The value will be `None` if the
+current page is the last item in the site navigation or if the current page is
+not included in the navigation at all. When the value is a page object, the
+usage is the same as for `page`.
 
 ### Extra Context
 
