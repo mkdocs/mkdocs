@@ -581,3 +581,25 @@ class MarkdownExtensionsTest(unittest.TestCase):
             config_options.ValidationError,
             option.validate, config['markdown_extensions']
         )
+
+class WatchDirectoriesTest(unittest.TestCase):
+
+    def test_simple_list(self):
+        option = config_options.WatchDirs()
+        config = {
+            'watch_dirs': [os.getcwd(), os.path.join('..', 'config')]
+        }
+
+        config['watch_dirs'] = option.validate(config['watch_dirs'])
+        option.post_validation(config, 'watch_dirs')
+
+        self.assertEqual({'watch_dirs': [os.getcwd(), os.path.join('..', 'config')]}, config)
+
+    def test_invalid_dir(self):
+        option = config_options.WatchDirs()
+        config = {
+            'watch_dirs': [os.path.join('this', 'should', 'not', 'exist')]
+        }
+
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, 'not a directory')

@@ -540,3 +540,29 @@ class MarkdownExtensions(OptionallyRequired):
 
     def post_validation(self, config, key_name):
         config[self.configkey] = self.configdata
+
+class WatchDirs(OptionallyRequired):
+    """
+    Watch Directories Config Options
+
+    A list of directories. These directories will be included in the auto update
+    when the site is being served.
+    """
+    def __init__(self, builtins=None, configkey='watch_dirs', **kwargs):
+        super(WatchDirs, self).__init__(**kwargs)
+        self.builtins = builtins or []
+        self.configkey = configkey
+        self.configdata = []
+
+    def run_validation(self, value):
+        if not isinstance(value, (list, tuple)):
+            raise ValidationError('Invalid Working Directories configuration')
+
+        for item in value:
+            if not os.path.exists(item):
+                raise ValidationError('Invalid Working Directories configuration, the path {} does not exist.'.format(item))
+
+        self.configdata = value
+
+    def post_validation(self, config, key_name):
+        config[self.configkey] = self.configdata

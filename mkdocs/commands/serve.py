@@ -52,12 +52,15 @@ def _livereload(host, port, config, builder, site_dir):
     for d in config['theme_dir']:
         server.watch(d, builder)
 
+    for d in config['watch_dirs']:
+        server.watch(d, builder)
+
     server.serve(root=site_dir, host=host, port=int(port), restart_delay=0)
 
 
 def _static_server(host, port, site_dir):
 
-    # Importing here to seperate the code paths from the --livereload
+    # Importing here to separate the code paths from the --livereload
     # alternative.
     from tornado import ioloop
     from tornado import web
