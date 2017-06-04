@@ -7,7 +7,6 @@ import mock
 import os
 import unittest
 
-from sys import platform
 from mkdocs import nav, utils, exceptions
 from mkdocs.tests.base import dedent
 
@@ -93,10 +92,7 @@ class UtilsTests(unittest.TestCase):
             ]}
         ])
         site_navigation.url_context.set_current_url('/subpage/')
-        if platform == "win32":
-            site_navigation.file_context.current_file = "subpage\\index.md"
-        else: 
-            site_navigation.file_context.current_file = "subpage/index.md"
+        site_navigation.file_context.current_file = "subpage/index.md"
 
         def assertPathGenerated(declared, expected):
             url = utils.create_relative_media_url(site_navigation, declared)
