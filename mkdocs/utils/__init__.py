@@ -19,6 +19,7 @@ import yaml
 import fnmatch
 
 from mkdocs import toc, exceptions
+from sys import platform
 
 try:                                                        # pragma: no cover
     from urllib.parse import urlparse, urlunparse, urljoin  # noqa
@@ -328,6 +329,15 @@ def create_relative_media_url(nav, url):
         relative_url = url
     else:
         relative_url = '%s/%s' % (relative_base, url)
+
+    # TODO: Fix this, this is a hack. Relative urls are not being calculated
+    # correctly for images in the same directory as the markdown. I think this
+    # is due to us moving it into a directory with index.html, but I'm not sure
+    # This hack is breaking win32 relative paths to images, so we prevent it from running in Windows
+    if (platform != "win32" and nav.file_context.current_file.endswith("/index.md") is False and
+            nav.url_context.base_path != '/' and
+            relative_url.startswith("./")):
+        relative_url = ".%s" % relative_url
 
     return relative_url
 
