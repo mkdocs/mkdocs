@@ -333,10 +333,12 @@ def create_relative_media_url(nav, url):
     # TODO: Fix this, this is a hack. Relative urls are not being calculated
     # correctly for images in the same directory as the markdown. I think this
     # is due to us moving it into a directory with index.html, but I'm not sure
-    # win32 platform uses backslash "\". eg. "\level1\level2\index.md"    
-    if (((platform == "win32" and nav.file_context.current_file.endswith("\index.md") is False) or
-         (platform != "win32" and nav.file_context.current_file.endswith("/index.md") is False)) and
-            nav.url_context.base_path != '/' and
+    # win32 platform uses backslash "\". eg. "\level1\level2\index.md"
+
+    winpath = platform == "win32" and nav.file_context.current_file.endswith("\\index.md") is False
+    otherpath = platform != "win32" and nav.file_context.current_file.endswith("/index.md") is False
+
+    if ((winpath or otherpath) and nav.url_context.base_path != '/' and
             relative_url.startswith("./")):
         relative_url = ".%s" % relative_url
 
