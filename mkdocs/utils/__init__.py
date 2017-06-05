@@ -14,6 +14,7 @@ import markdown
 import os
 import pkg_resources
 import shutil
+import re
 import sys
 import yaml
 import fnmatch
@@ -332,9 +333,10 @@ def create_relative_media_url(nav, url):
     # TODO: Fix this, this is a hack. Relative urls are not being calculated
     # correctly for images in the same directory as the markdown. I think this
     # is due to us moving it into a directory with index.html, but I'm not sure
-    if (nav.file_context.current_file.endswith("/index.md") is False and
-            nav.url_context.base_path != '/' and
-            relative_url.startswith("./")):
+    # win32 platform uses backslash "\". eg. "\level1\level2"
+    notindex = re.match(r'.*(?:\\|/)index.md$', nav.file_context.current_file) is None
+
+    if notindex and nav.url_context.base_path != '/' and relative_url.startswith("./"):
         relative_url = ".%s" % relative_url
 
     return relative_url

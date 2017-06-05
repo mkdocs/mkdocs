@@ -102,6 +102,30 @@ class UtilsTests(unittest.TestCase):
         assertPathGenerated("./img.png", "./img.png")
         assertPathGenerated("/img.png", "../img.png")
 
+    def test_create_relative_media_url_sub_index_windows(self):
+        '''
+        test special case where there's a sub/index.md page and we are on Windows.
+        current_file paths uses backslash in Windows
+        '''
+
+        site_navigation = nav.SiteNavigation([
+            {'Home': 'index.md'},
+            {'Sub': [
+                {'Sub Home': '/level1/level2/index.md'},
+
+            ]}
+        ])
+        site_navigation.url_context.set_current_url('/level1/level2')
+        site_navigation.file_context.current_file = "level1\\level2\\index.md"
+
+        def assertPathGenerated(declared, expected):
+            url = utils.create_relative_media_url(site_navigation, declared)
+            self.assertEqual(url, expected)
+
+        assertPathGenerated("img.png", "./img.png")
+        assertPathGenerated("./img.png", "./img.png")
+        assertPathGenerated("/img.png", "../img.png")
+
     def test_reduce_list(self):
         self.assertEqual(
             utils.reduce_list([1, 2, 3, 4, 5, 5, 2, 4, 6, 7, 8]),
