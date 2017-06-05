@@ -248,7 +248,7 @@ class Page(object):
             'page_read_source', None, config=config, page=self)
         if source is None:
             try:
-                with io.open(self.abs_input_path, 'r', encoding='utf-8') as f:
+                with io.open(self.abs_input_path, 'r', encoding='utf-8-sig') as f:
                     source = f.read()
             except IOError:
                 log.error('File not found: %s', self.abs_input_path)
