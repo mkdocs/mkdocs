@@ -124,7 +124,7 @@ class UtilsTests(unittest.TestCase):
 
         assertPathGenerated("img.png", "./img.png")
         assertPathGenerated("./img.png", "./img.png")
-        assertPathGenerated("/img.png", "../img.png")        
+        assertPathGenerated("/img.png", "../img.png")
 
     def test_reduce_list(self):
         self.assertEqual(
