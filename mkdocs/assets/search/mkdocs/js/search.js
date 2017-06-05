@@ -60,7 +60,7 @@ require([
                 search_results.insertAdjacentHTML('beforeend', html);
             }
         } else {
-            search_results.insertAdjacentHTML('beforeend', "<p>No results found</p>");
+            search_results.insertAdjacentHTML('beforeend', "<p>无结果</p>");
         }
 
         if(jQuery){

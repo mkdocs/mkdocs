@@ -1,6 +1,6 @@
 <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="{{ nav.homepage.url }}">Docs</a> &raquo;</li>
+    <li><a href="{{ nav.homepage.url }}">文档</a> &raquo;</li>
     {% if page %}
       {% for doc in page.ancestors %}
         {% if doc.link %}
@@ -19,7 +19,7 @@
           class="icon icon-github"
         {%- elif config.repo_name|lower == 'bitbucket' %}
           class="icon icon-bitbucket"
-        {% endif %}> Edit on {{ config.repo_name }}</a>
+        {% endif %}> {{ config.repo_name }}</a>
       {% endif %}
       {%- endblock %}
     </li>

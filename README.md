@@ -1,39 +1,32 @@
-# MkDocs
+# MkDocs.cn
 
 Project documentation with Markdown.
 
----
+modified to support search in Chinese.
 
-[![PyPI Version][pypi-v-image]][pypi-v-link]
-[![Build Status][travis-image]][travis-link]
-[![Windows Build Status][appveyor-image]][appveyor-link]
-[![Coverage Status][codecov-image]][codecov-link]
-[![Landscale Code Health][landscape-image]][landscape-link]
+Idea from **ZhangXin**'s blog: http://wyqbailey.github.io/2015/08/13/make-mkdocs-support-chinese.html
 
-- View the [MkDocs documentation][mkdocs].
-- Project [release notes][release-notes].
-- Visit the [MkDocs wiki](https://github.com/mkdocs/mkdocs/wiki) for community
-  resources, including third party themes and a list of MkDocs users.
-- IRC channel: `#mkdocs` on freenode.
-- Discussions and support: <https://groups.google.com/forum/#!forum/mkdocs>
+Steps:
 
-## Code of Conduct
+1. Change lunr.js to a modified clone from https://github.com/ming300/lunr.js
 
-Everyone interacting in the MkDocs project's codebases, issue trackers, chat
-rooms, and mailing lists is expected to follow the [PyPA Code of Conduct].
+2. Modify **generate_search_index** in **mkdocs/search.py**, add _ensure_ascii=False_
+```
+return json.dumps(page_dicts, sort_keys=True,ensure_ascii=False, indent=4)
+```
 
-[appveyor-image]: https://img.shields.io/appveyor/ci/d0ugal/mkdocs/master.png
-[appveyor-link]: https://ci.appveyor.com/project/d0ugal/mkdocs
-[codecov-image]: http://codecov.io/github/mkdocs/mkdocs/coverage.svg?branch=master
-[codecov-link]: http://codecov.io/github/mkdocs/mkdocs?branch=master
-[landscape-image]: https://landscape.io/github/mkdocs/mkdocs/master/landscape.svg?style=flat-square
-[landscape-link]: https://landscape.io/github/mkdocs/mkdocs/master
-[pypi-v-image]: https://img.shields.io/pypi/v/mkdocs.png
-[pypi-v-link]: https://pypi.python.org/pypi/mkdocs
-[travis-image]: https://img.shields.io/travis/mkdocs/mkdocs/master.png
-[travis-link]: https://travis-ci.org/mkdocs/mkdocs
+3. some Chinese text changes
 
-[mkdocs]: http://www.mkdocs.org
-[release-notes]: http://www.mkdocs.org/about/release-notes/
+4. Make it a pip module
 
-[PyPA Code of Conduct]: https://www.pypa.io/en/latest/code-of-conduct/
+## Installation
+```
+# uninstall OFFICIAL MkDocs first
+pip uninstall mkdocs
+
+# install from github
+pip install https://github.com/wusixin/mkdocs.cn
+```
+
+## Usage
+see document from http://www.mkdocs.org
