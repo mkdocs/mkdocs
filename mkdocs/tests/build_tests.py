@@ -7,6 +7,7 @@ import shutil
 import tempfile
 import unittest
 import mock
+import io
 
 try:
     from itertools import izip as zip
@@ -464,3 +465,32 @@ class BuildTests(unittest.TestCase):
         context = build.get_context(mock.Mock(), cfg)
 
         self.assertEqual(context['config']['extra']['a'], 1)
+
+    def test_BOM(self):
+        docs_dir = tempfile.mkdtemp()
+        site_dir = tempfile.mkdtemp()
+        try:
+            # Create an UTF-8 Encoded file with BOM (as Micorsoft editors do). See #1186.
+            f = io.open(os.path.join(docs_dir, 'index.md'), 'w', encoding='utf-8-sig')
+            f.write('# An UTF-8 encoded file with a BOM')
+            f.close()
+
+            cfg = load_config(
+                docs_dir=docs_dir,
+                site_dir=site_dir
+            )
+            build.build(cfg)
+
+            # Verify that the file was generated properly.
+            # If the BOM is not removed, Markdown will return:
+            # `<p>\ufeff# An UTF-8 encoded file with a BOM</p>`.
+            f = io.open(os.path.join(site_dir, 'index.html'), 'r', encoding='utf-8')
+            output = f.read()
+            f.close()
+            self.assertTrue(
+                '<h1 id="an-utf-8-encoded-file-with-a-bom">An UTF-8 encoded file with a BOM</h1>' in output
+            )
+
+        finally:
+            shutil.rmtree(docs_dir)
+            shutil.rmtree(site_dir)
