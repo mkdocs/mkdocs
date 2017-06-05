@@ -177,7 +177,7 @@ def _build_page(page, config, site_navigation, env, dump_json, dirty=False):
 
     # Read the input file
     try:
-        input_content = io.open(input_path, 'r', encoding='utf-8').read()
+        input_content = io.open(input_path, 'r', encoding='utf-8-sig').read()
     except IOError:
         log.error('file not found: %s', input_path)
         raise
