@@ -21,7 +21,7 @@ def filename_to_title(filename):
     Automatically generate a default title, given a filename.
     """
     if utils.is_homepage(filename):
-        return 'Home'
+        return '首页'
 
     return utils.filename_to_title(filename)
 

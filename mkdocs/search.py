@@ -90,7 +90,9 @@ class SearchIndex(object):
         page_dicts = {
             'docs': self._entries,
         }
-        return json.dumps(page_dicts, sort_keys=True, indent=4)
+        # add "ensure_ascii=False" to enable search in Chinese
+        # return json.dumps(page_dicts, sort_keys=True, indent=4)
+        return json.dumps(page_dicts, sort_keys=True, ensure_ascii=False, indent=4)
 
     def strip_tags(self, html):
         """strip html tags from data"""
