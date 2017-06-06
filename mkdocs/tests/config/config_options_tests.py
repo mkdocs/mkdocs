@@ -99,6 +99,10 @@ class URLTest(unittest.TestCase):
                           option.validate, 1)
 
 
+class BaseURLTest(URLTest):
+    pass
+
+
 class RepoURLTest(unittest.TestCase):
 
     def test_repo_name_github(self):
