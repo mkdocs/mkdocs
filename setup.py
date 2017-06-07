@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
+
+from io import open
 from setuptools import setup
-import re
 import os
+import re
 import sys
 
 PY26 = sys.version_info[:2] == (2, 6)
@@ -20,7 +22,8 @@ long_description = (
 
 def get_version(package):
     """Return package version as listed in `__version__` in `init.py`."""
-    init_py = open(os.path.join(package, '__init__.py')).read()
+    init_py_path = os.path.join(package, '__init__.py')
+    init_py = open(init_py_path, 'r', encoding='utf-8').read()
     return re.search("__version__ = ['\"]([^'\"]+)['\"]", init_py).group(1)
 
 
