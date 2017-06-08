@@ -57,8 +57,7 @@ DEFAULT_SCHEMA = (
     ('google_analytics', config_options.Type(list, length=2)),
 
     # The address on which to serve the live reloading docs server.
-    ('dev_addr', config_options.Type(
-        utils.string_types, default='127.0.0.1:8000')),
+    ('dev_addr', config_options.IpAddress(default='127.0.0.1:8000')),
 
     # If `True`, use `<page_name>/index.hmtl` style files with hyperlinks to
     # the directory.If `False`, use `<page_name>.html style file with
