@@ -525,6 +525,8 @@ class MarkdownExtensions(OptionallyRequired):
                 if len(item) > 1:
                     raise ValidationError('Invalid Markdown Extensions configuration')
                 ext, cfg = item.popitem()
+                if ext in self.builtins:
+                    self.builtins.remove(ext)
                 extensions.append(ext)
                 if cfg is None:
                     continue
@@ -533,6 +535,8 @@ class MarkdownExtensions(OptionallyRequired):
                                           "Extension '{0}'.".format(ext))
                 self.configdata[ext] = cfg
             elif isinstance(item, utils.string_types):
+                if item in self.builtins:
+                    self.builtins.remove(item)
                 extensions.append(item)
             else:
                 raise ValidationError('Invalid Markdown Extensions configuration')
