@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 import os
+from collections import namedtuple
 
 from mkdocs import utils, legacy
 from mkdocs.config.base import Config, ValidationError
@@ -154,6 +155,31 @@ class Deprecated(BaseConfigOption):
                     return
 
         target[target_key] = config.pop(key_name)
+
+
+class IpAddress(OptionallyRequired):
+    """
+    IpAddress Config Option
+
+    Validate that an IP address is in an apprioriate format
+    """
+
+    def run_validation(self, value):
+        try:
+            host, port = value.rsplit(':', 1)
+        except:
+            raise ValidationError("Must be a string of format 'IP:PORT'")
+
+        try:
+            port = int(port)
+        except:
+            raise ValidationError("'{0}' is not a valid port".format(port))
+
+        class Address(namedtuple('Address', 'host port')):
+            def __str__(self):
+                return '{0}:{1}'.format(self.host, self.port)
+
+        return Address(host, port)
 
 
 class URL(OptionallyRequired):

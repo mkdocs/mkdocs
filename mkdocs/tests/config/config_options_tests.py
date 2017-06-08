@@ -76,6 +76,73 @@ class TypeTest(unittest.TestCase):
                           option.validate, "Testing Long")
 
 
+class IpAddressTest(unittest.TestCase):
+
+    def test_valid_address(self):
+        addr = '127.0.0.1:8000'
+
+        option = config_options.IpAddress()
+        value = option.validate(addr)
+        self.assertEqual(utils.text_type(value), addr)
+        self.assertEqual(value.host, '127.0.0.1')
+        self.assertEqual(value.port, 8000)
+
+    def test_valid_IPv6_address(self):
+        addr = '[::1]:8000'
+
+        option = config_options.IpAddress()
+        value = option.validate(addr)
+        self.assertEqual(utils.text_type(value), addr)
+        self.assertEqual(value.host, '[::1]')
+        self.assertEqual(value.port, 8000)
+
+    def test_named_address(self):
+        addr = 'localhost:8000'
+
+        option = config_options.IpAddress()
+        value = option.validate(addr)
+        self.assertEqual(utils.text_type(value), addr)
+        self.assertEqual(value.host, 'localhost')
+        self.assertEqual(value.port, 8000)
+
+    def test_default_address(self):
+        addr = '127.0.0.1:8000'
+
+        option = config_options.IpAddress(default=addr)
+        value = option.validate(None)
+        self.assertEqual(utils.text_type(value), addr)
+        self.assertEqual(value.host, '127.0.0.1')
+        self.assertEqual(value.port, 8000)
+
+    def test_invalid_address_format(self):
+        option = config_options.IpAddress()
+        self.assertRaises(
+            config_options.ValidationError,
+            option.validate, '127.0.0.18000'
+        )
+
+    def test_invalid_address_type(self):
+        option = config_options.IpAddress()
+        self.assertRaises(
+            config_options.ValidationError,
+            option.validate, 123
+        )
+
+    def test_invalid_address_port(self):
+        option = config_options.IpAddress()
+        self.assertRaises(
+            config_options.ValidationError,
+            option.validate, '127.0.0.1:foo'
+        )
+
+    def test_invalid_address_missing_port(self):
+        option = config_options.IpAddress()
+        self.assertRaises(
+            config_options.ValidationError,
+            option.validate, '127.0.0.1'
+        )
+
+
 class URLTest(unittest.TestCase):
 
     def test_valid_url(self):
