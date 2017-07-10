@@ -10,7 +10,7 @@ from mkdocs import __version__
 from mkdocs import utils
 from mkdocs import exceptions
 from mkdocs import config
-from mkdocs.commands import build, gh_deploy, new, serve
+from mkdocs.commands import build, gh_deploy, new, serve, add
 
 log = logging.getLogger(__name__)
 
@@ -87,6 +87,8 @@ remote_branch_help = ("The remote branch to commit to for Github Pages. This "
 remote_name_help = ("The remote name to commit to for Github Pages. This "
                     "overrides the value specified in config")
 force_help = "Force the push to the repository."
+create_directory_help = "Create directory if not exist before creating file in it"
+template_directory_help = "The directory to read template file. Relative path"
 
 
 @click.group(context_settings={'help_option_names': ['-h', '--help']})
@@ -223,6 +225,18 @@ def new_command(project_directory):
     """Create a new MkDocs project"""
     new.new(project_directory)
 
+
+@cli.command(name="add")
+@click.argument("template")
+@click.argument("output_directory")
+@click.argument("filename")
+@click.option('-c', '--create-directory', is_flag=True, default=True, help=create_directory_help)
+@click.option('-t', '--template-directory', type=click.Path(), help=template_directory_help)
+@common_options
+def add_command(template, output_directory, filename, create_directory, template_directory):
+    """Add new page using template. OUTPUT_DIRECTORY is relative to 'docs'"""
+    add.add(template, output_directory, filename, create_directory, template_directory)
+    log.info('Don\'t forget to add it to your page in the config file \'mkdocs.yml\'')
 
 if __name__ == '__main__':  # pragma: no cover
     cli()
