@@ -24,14 +24,15 @@ def add(template, output_dir, filename, create_directory, template_directory):
         return
 
     # Add some path for checking
-    if not template_directory is None:
+    if template_directory is not None:
         template_path = os.path.join(
-            os.path.join(os.getcwd(), template_directory), template + '.md'
+            os.path.join(os.getcwd(), template_directory), str(template) + '.md'
         )
     else:
-        template_path = os.path.join(scaffold_dir, template + '.md')
-    filename_path = os.path.join(output_dir, filename + '.md')
+        template_path = os.path.join(scaffold_dir, str(template) + '.md')
+
     output_dir = 'docs/' + output_dir
+    filename_path = os.path.join(output_dir, str(filename) + '.md')
 
     # Check if everything exists
     if not __check_existance(template_path, output_dir, filename_path, create_directory):
@@ -42,6 +43,7 @@ def add(template, output_dir, filename, create_directory, template_directory):
 
     log.info('The file was successfully created in ' + filename_path)
     return
+
 
 def __check_existance(template_path, output_dir, filename_path, create_directory):
     """
@@ -63,6 +65,7 @@ def __check_existance(template_path, output_dir, filename_path, create_directory
         return False
 
     return True
+
 
 def __write_file(template_path, filename_path):
     """

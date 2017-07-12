@@ -87,7 +87,7 @@ remote_branch_help = ("The remote branch to commit to for Github Pages. This "
 remote_name_help = ("The remote name to commit to for Github Pages. This "
                     "overrides the value specified in config")
 force_help = "Force the push to the repository."
-create_directory_help = "Create directory if not exist before creating file in it"
+create_directory_help = "Create directory if not exist before creating file in it. Default is True"
 template_directory_help = "The directory to read template file. Relative path"
 
 
@@ -227,9 +227,9 @@ def new_command(project_directory):
 
 
 @cli.command(name="add")
-@click.argument("template")
-@click.argument("output_directory")
-@click.argument("filename")
+@click.argument('template')
+@click.argument('output_directory', type=click.Path())
+@click.argument('filename')
 @click.option('-c', '--create-directory', is_flag=True, default=True, help=create_directory_help)
 @click.option('-t', '--template-directory', type=click.Path(), help=template_directory_help)
 @common_options
@@ -237,6 +237,7 @@ def add_command(template, output_directory, filename, create_directory, template
     """Add new page using template. OUTPUT_DIRECTORY is relative to 'docs'"""
     add.add(template, output_directory, filename, create_directory, template_directory)
     log.info('Don\'t forget to add it to your page in the config file \'mkdocs.yml\'')
+
 
 if __name__ == '__main__':  # pragma: no cover
     cli()
