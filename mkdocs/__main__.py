@@ -10,7 +10,7 @@ from mkdocs import __version__
 from mkdocs import utils
 from mkdocs import exceptions
 from mkdocs import config
-from mkdocs.commands import build, gh_deploy, new, serve
+from mkdocs.commands import build, gh_deploy, new, serve, add
 
 log = logging.getLogger(__name__)
 
@@ -87,6 +87,8 @@ remote_branch_help = ("The remote branch to commit to for Github Pages. This "
 remote_name_help = ("The remote name to commit to for Github Pages. This "
                     "overrides the value specified in config")
 force_help = "Force the push to the repository."
+create_directory_help = "Create directory if not exist before creating file in it. Default is True"
+template_directory_help = "The directory to read template file. Relative path"
 
 
 @click.group(context_settings={'help_option_names': ['-h', '--help']})
@@ -159,6 +161,40 @@ def build_command(clean, config_file, strict, theme, theme_dir, site_dir):
         raise SystemExit('\n' + str(e))
 
 
+@cli.command(name="json")
+@click.option('-c', '--clean/--dirty', is_flag=True, default=True, help=clean_help)
+@click.option('-f', '--config-file', type=click.File('rb'), help=config_help)
+@click.option('-s', '--strict', is_flag=True, help=strict_help)
+@click.option('-d', '--site-dir', type=click.Path(), help=site_dir_help)
+@common_options
+def json_command(clean, config_file, strict, site_dir):
+    """Build the MkDocs documentation to JSON files
+
+    Rather than building your documentation to HTML pages, this
+    outputs each page in a simple JSON format. This command is
+    useful if you want to index your documentation in an external
+    search engine.
+    """
+
+    log.warning("The json command is deprecated and will be removed in a "
+                "future MkDocs release. For details on updating: "
+                "http://www.mkdocs.org/about/release-notes/")
+
+    # Don't override config value if user did not specify --strict flag
+    # Conveniently, load_config drops None values
+    strict = strict or None
+
+    try:
+        build.build(config.load_config(
+            config_file=config_file,
+            strict=strict,
+            site_dir=site_dir
+        ), dump_json=True, dirty=not clean)
+    except exceptions.ConfigurationError as e:  # pragma: no cover
+        # Avoid ugly, unhelpful traceback
+        raise SystemExit('\n' + str(e))
+
+
 @cli.command(name="gh-deploy")
 @click.option('-c', '--clean/--dirty', is_flag=True, default=True, help=clean_help)
 @click.option('-f', '--config-file', type=click.File('rb'), help=config_help)
@@ -188,6 +224,19 @@ def gh_deploy_command(config_file, clean, message, remote_branch, remote_name, f
 def new_command(project_directory):
     """Create a new MkDocs project"""
     new.new(project_directory)
+
+
+@cli.command(name="add")
+@click.argument('template')
+@click.argument('output_directory', type=click.Path())
+@click.argument('filename')
+@click.option('-c', '--create-directory', is_flag=True, default=True, help=create_directory_help)
+@click.option('-t', '--template-directory', type=click.Path(), help=template_directory_help)
+@common_options
+def add_command(template, output_directory, filename, create_directory, template_directory):
+    """Add new page using template. OUTPUT_DIRECTORY is relative to 'docs'"""
+    add.add(template, output_directory, filename, create_directory, template_directory)
+    log.info('Don\'t forget to add it to your page in the config file \'mkdocs.yml\'')
 
 
 if __name__ == '__main__':  # pragma: no cover
