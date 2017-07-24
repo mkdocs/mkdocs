@@ -118,7 +118,8 @@ def write_file(content, output_path):
     output_dir = os.path.dirname(output_path)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    open(output_path, 'wb').write(content)
+    with open(output_path, 'wb') as f:
+        f.write(content)
 
 
 def clean_directory(directory):
