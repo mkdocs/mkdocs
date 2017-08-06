@@ -18,6 +18,10 @@ class UtilsTests(unittest.TestCase):
             'api-guide.md': 'api-guide/index.html',
             'api-guide/index.md': 'api-guide/index.html',
             'api-guide/testing.md': 'api-guide/testing/index.html',
+            '01__cli-guide/testing.md': 'cli-guide/testing/index.html',
+            '01__soap-guide/9__testing.md': 'soap-guide/testing/index.html',
+            'rest-guide/9__testing.md': 'rest-guide/testing/index.html',
+            'grpc-guide/strange_1__page.md': 'grpc-guide/strange_1__page/index.html',
         }
         for file_path, expected_html_path in expected_results.items():
             html_path = utils.get_html_path(file_path)
@@ -155,6 +159,10 @@ class UtilsTests(unittest.TestCase):
     def test_get_theme_dir_keyerror(self):
 
         self.assertRaises(KeyError, utils.get_theme_dir, 'nonexistanttheme')
+
+    def test_filename_to_title(self):
+        self.assertEqual('Ansible', utils.filename_to_title('ansible.md'))
+        self.assertEqual('Ansible', utils.filename_to_title('01__ansible.md'))
 
     @mock.patch('pkg_resources.iter_entry_points', autospec=True)
     def test_get_theme_dir_importerror(self, mock_iter):
