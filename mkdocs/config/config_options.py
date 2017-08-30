@@ -391,7 +391,7 @@ class Extras(OptionallyRequired):
         if self.file_match is None:
             raise StopIteration
 
-        for (dirpath, dirs, filenames) in os.walk(docs_dir):
+        for (dirpath, dirs, filenames) in os.walk(docs_dir, followlinks=True):
             dirs.sort()
             for filename in sorted(filenames):
                 fullpath = os.path.join(dirpath, filename)
