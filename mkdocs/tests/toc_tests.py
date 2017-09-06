@@ -132,3 +132,25 @@ class TableOfContentsTests(unittest.TestCase):
         """)
         toc = markdown_to_toc(md)
         self.assertEqual(str(toc).strip(), expected)
+
+    def test_level(self):
+        md = dedent("""
+        # Heading 1
+        ## Heading 1.1
+        ### Heading 1.1.1
+        ### Heading 1.1.2
+        ## Heading 1.2
+        """)
+        toc = markdown_to_toc(md)
+
+        def get_level_sequence(item):
+            result = (item.level,)
+            for subitem in item.children:
+                result += get_level_sequence(subitem)
+            return result
+
+        level_sequence = ()
+        for item in toc:
+            level_sequence += get_level_sequence(item)
+
+        self.assertEqual(level_sequence, (0, 1, 2, 2, 1))
