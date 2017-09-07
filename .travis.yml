@@ -7,9 +7,12 @@ matrix:
     # Default Python
     - env: TOXENV=flake8
     - env: TOXENV=markdown-lint
+      before_install: gem install mdl
     - env: TOXENV=linkchecker
     - env: TOXENV=jshint
+      before_install: npm install -g jshint
     - env: TOXENV=csslint
+      before_install: npm install -g csslint
     # Python version specific
     - python: '2.6'
       env: TOXENV=py26-integration
@@ -54,12 +57,10 @@ matrix:
     - python: 'pypy3'
       env: TOXENV=pypy3-unittests
 
-before_install: pip install codecov
 install:
+  - pip install codecov
   - pip install tox
-  - gem install mdl
-  - npm install -g jshint
-  - npm install -g csslint
+
 script:
   - git clean -f -d -x
   - tox
