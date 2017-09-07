@@ -5,31 +5,54 @@ dist: trusty
 matrix:
   include:
     # Default Python
-    - env:
-      - TOXENV=flake8
-      - TOXENV=markdown-lint
-      - TOXENV=linkchecker
-      - TOXENV=jshint
-      - TOXENV=csslint
+    - env: TOXENV=flake8
+    - env: TOXENV=markdown-lint
+    - env: TOXENV=linkchecker
+    - env: TOXENV=jshint
+    - env: TOXENV=csslint
     # Python version specific
     - python: '2.6'
-      env: TOXENV=py26-integration, py26-min-req, py26-unittests
+      env: TOXENV=py26-integration
+    - python: '2.6'
+      env: TOXENV=py26-min-req
+    - python: '2.6'
+      env: TOXENV=py26-unittests
     - python: '2.7'
-      env: TOXENV=py27-integration, py27-min-req, py27-unittests
+      env: TOXENV=py27-integration
+    - python: '2.7'
+      env: TOXENV=py27-min-req
+    - python: '2.7'
+      env: TOXENV=py27-unittests
     - python: '3.3'
-      env: TOXENV=py33-integration, py33-min-req, py33-unittests
+      env: TOXENV=py33-integration
+    - python: '3.3'
+      env: TOXENV=py33-min-req
+    - python: '3.3'
+      env: TOXENV=py33-unittests
     - python: '3.4'
-      env: TOXENV=py34-integration, py34-min-req, py34-unittests
+      env: TOXENV=py34-integration
+    - python: '3.4'
+      env: TOXENV=py34-min-req
+    - python: '3.4'
+      env: TOXENV=py34-unittests
     - python: '3.5'
-      env: TOXENV=py35-integration, py35-min-req, py35-unittests
+      env: TOXENV=py35-integration
+    - python: '3.5'
+      env: TOXENV=py35-min-req
+    - python: '3.5'
+      env: TOXENV=py35-unittests
     - python: 'pypy'
-      env: TOXENV=pypy-integration, pypy-min-req, pypy-unittests
+      env: TOXENV=pypy-integration
+    - python: 'pypy'
+      env: TOXENV=pypy-min-req
+    - python: 'pypy'
+      env: TOXENV=pypy-unittests
     - python: 'pypy3'
-      env: TOXENV=pypy3-integration, pypy3-min-req, pypy3-unittests
-  allow_failures:
-    - env: TOXENV=pypy3-integration
-    - env: TOXENV=pypy3-min-req
-    - env: TOXENV=pypy3-unittests
+      env: TOXENV=pypy3-integration
+    - python: 'pypy3'
+      env: TOXENV=pypy3-min-req
+    - python: 'pypy3'
+      env: TOXENV=pypy3-unittests
 
 before_install: pip install codecov
 install:
