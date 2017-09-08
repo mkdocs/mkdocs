@@ -642,7 +642,7 @@ class TestLegacyPagesConfig(unittest.TestCase):
 
         # Ensure the '/' is added to the repo_url and edit_uri
         repo_url = 'http://example.com'
-        edit_uri = 'edit/master/docs'
+        edit_uri = 'edit/master/docs/'
 
         site_navigation = nav.SiteNavigation(pages)
 
@@ -715,7 +715,7 @@ class TestLegacyPagesConfig(unittest.TestCase):
 
         # Ensure the '/' is added to the repo_url and edit_uri
         repo_url = 'http://example.com'
-        edit_uri = 'edit/master/docs'
+        edit_uri = 'edit/master/docs/'
 
         site_navigation = nav.SiteNavigation(pages)
 

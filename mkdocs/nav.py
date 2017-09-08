@@ -204,17 +204,11 @@ class Page(object):
         self.canonical_url = utils.urljoin(base, self.abs_url.lstrip('/'))
 
     def set_edit_url(self, repo_url, edit_uri):
-        if not repo_url.endswith('/'):
-            # Skip when using query or fragment in edit_uri
-            if not edit_uri.startswith('?') and not edit_uri.startswith('#'):
-                repo_url += '/'
         if not edit_uri:
             self.edit_url = repo_url
         else:
             # Normalize URL from Windows path '\\' -> '/'
             input_path_url = self.input_path.replace('\\', '/')
-            if not edit_uri.endswith('/'):
-                edit_uri += '/'
             self.edit_url = utils.urljoin(
                 repo_url,
                 edit_uri + input_path_url)
