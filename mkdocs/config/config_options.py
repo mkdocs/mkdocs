@@ -212,15 +212,16 @@ class RepoURL(URL):
     """
     Repo URL Config Option
 
-    A small extension to the URL config that sets the repo_name, based on the
-    url if it hasn't already been provided.
+    A small extension to the URL config that sets the repo_name and edit_uri,
+    based on the url if they haven't already been provided.
     """
 
     def post_validation(self, config, key_name):
+        repo_host = utils.urlparse(config['repo_url']).netloc.lower()
+        edit_uri = config.get('edit_uri')
 
+        # derive repo_name from repo_url if unset
         if config['repo_url'] is not None and config.get('repo_name') is None:
-            repo_host = utils.urlparse(
-                config['repo_url']).netloc.lower()
             if repo_host == 'github.com':
                 config['repo_name'] = 'GitHub'
             elif repo_host == 'bitbucket.org':
@@ -228,11 +229,24 @@ class RepoURL(URL):
             else:
                 config['repo_name'] = repo_host.split('.')[0].title()
 
-        if config['repo_url'] is not None and config.get('edit_uri') is None:
-            if config['repo_name'].lower() == 'github':
-                config['edit_uri'] = 'edit/master/docs/'
-            elif config['repo_name'].lower() == 'bitbucket':
-                config['edit_uri'] = 'src/default/docs/'
+        # derive edit_uri from repo_name if unset
+        if config['repo_url'] is not None and edit_uri is None:
+            if repo_host == 'github.com':
+                edit_uri = 'edit/master/docs/'
+            elif repo_host == 'bitbucket.org':
+                edit_uri = 'src/default/docs/'
+            else:
+                edit_uri = ''
+
+        # ensure a well-formed edit_uri
+        if edit_uri:
+            if not edit_uri.startswith(('?', '#')) \
+                    and not config['repo_url'].endswith('/'):
+                edit_uri = '/' + edit_uri
+            if not edit_uri.endswith('/'):
+                edit_uri += '/'
+
+        config['edit_uri'] = edit_uri
 
 
 class Dir(Type):
