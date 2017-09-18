@@ -209,25 +209,30 @@ class RepoURL(URL):
                 config['edit_uri'] = 'src/default/docs/'
 
 
-class Dir(Type):
+class FilesystemObject(Type):
+    """
+    Base class for options that point to filesystem objects.
+    """
+    def __init__(self, exists=False, **kwargs):
+        super(FilesystemObject, self).__init__(type_=utils.string_types, **kwargs)
+        self.exists = exists
+
+    def run_validation(self, value):
+        value = super(FilesystemObject, self).run_validation(value)
+        if self.exists and not self.existence_test(value):
+            raise ValidationError("The path {path} isn't an existing {name}.".
+                                  format(path=value, name=self.name))
+        return os.path.abspath(value)
+
+
+class Dir(FilesystemObject):
     """
     Dir Config Option
 
     Validate a path to a directory, optionally verifying that it exists.
     """
-
-    def __init__(self, exists=False, **kwargs):
-        super(Dir, self).__init__(type_=utils.string_types, **kwargs)
-        self.exists = exists
-
-    def run_validation(self, value):
-
-        value = super(Dir, self).run_validation(value)
-
-        if self.exists and not os.path.isdir(value):
-            raise ValidationError("The path {0} doesn't exist".format(value))
-
-        return os.path.abspath(value)
+    existence_test = staticmethod(os.path.isdir)
+    name = 'directory'
 
     def post_validation(self, config, key_name):
 
@@ -237,6 +242,16 @@ class Dir(Type):
                 ("The '{0}' should not be the parent directory of the config "
                  "file. Use a child directory instead so that the config file "
                  "is a sibling of the config file.").format(key_name))
+
+
+class File(FilesystemObject):
+    """
+    File Config Option
+
+    Validate a path to a file, optionally verifying that it exists.
+    """
+    existence_test = staticmethod(os.path.isfile)
+    name = 'file'
 
 
 class SiteDir(Dir):
