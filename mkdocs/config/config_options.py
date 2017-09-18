@@ -1,4 +1,6 @@
 from __future__ import unicode_literals
+
+from collections import Sequence
 import os
 from collections import namedtuple
 
@@ -61,12 +63,41 @@ class SubConfig(BaseConfigOption, Config):
         return self
 
 
+class ConfigItems(BaseConfigOption):
+    """
+    Config Items Option
+
+    Validates a list of mappings that all must match the same set of
+    options.
+    """
+    def __init__(self, *config_options, **kwargs):
+        BaseConfigOption.__init__(self)
+        self.item_config = SubConfig(*config_options)
+        self.required = kwargs.get('required', False)
+
+    def __repr__(self):
+        return '{}: {}'.format(self.__class__.__name__, self.item_config)
+
+    def run_validation(self, value):
+        if value is None:
+            if self.required:
+                raise ValidationError("Required configuration not provided.")
+            else:
+                return ()
+
+        if not isinstance(value, Sequence):
+            raise ValidationError('Expected a sequence of mappings, but a %s '
+                                  'was given.' % type(value))
+        result = []
+        for item in value:
+            result.append(self.item_config.validate(item))
+        return result
+
+
 class OptionallyRequired(BaseConfigOption):
     """
-    The BaseConfigOption adds support for default values and required values
-
-    It then delegates the validation and (optional) post validation processing
-    to subclasses.
+    A subclass of BaseConfigOption that adds support for default values and
+    required values. It is a base class for config options.
     """
 
     def __init__(self, default=None, required=False):
