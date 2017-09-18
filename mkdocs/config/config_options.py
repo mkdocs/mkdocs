@@ -629,21 +629,23 @@ class Plugins(OptionallyRequired):
         return plgins
 
     def load_plugin(self, name, config):
-        if name in self.installed_plugins:
-            Plugin = self.installed_plugins[name].load()
-            if issubclass(Plugin, plugins.BasePlugin):
-                plugin = Plugin()
-                errors, warnings = plugin.load_config(config)
-                self.warnings.extend(warnings)
-                for cfg_name, error in errors:
-                    # TODO: retain all errors if there are more than one
-                    raise ValidationError("Plugin value: '%s'. Error: %s", cfg_name, error)
-                return plugin
-            else:
-                raise ValidationError('{0}.{1} must be a subclass of '
-                                      '{2}.{3}'.format(Plugin.__module__,
-                                                       Plugin.__name__,
-                                                       plugins.BasePlugin.__module__,
-                                                       plugins.BasePlugin.__name__))
-        else:
+        if name not in self.installed_plugins:
             raise ValidationError('The "{0}" plugin is not installed'.format(name))
+
+        Plugin = self.installed_plugins[name].load()
+
+        if not issubclass(Plugin, plugins.BasePlugin):
+            raise ValidationError('{0}.{1} must be a subclass of {2}.{3}'.format(
+                Plugin.__module__, Plugin.__name__, plugins.BasePlugin.__module__,
+                plugins.BasePlugin.__name__))
+
+        plugin = Plugin()
+        errors, warnings = plugin.load_config(config)
+        self.warnings.extend(warnings)
+        errors_message = '\n'.join(
+            "Plugin value: '{}'. Error: {}".format(x, y)
+            for x, y in errors
+        )
+        if errors_message:
+            raise ValidationError(errors_message)
+        return plugin
