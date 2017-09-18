@@ -38,6 +38,12 @@ matrix:
       env: TOXENV=py35-min-req
     - python: '3.5'
       env: TOXENV=py35-unittests
+    - python: '3.6'
+      env: TOXENV=py36-integration
+    - python: '3.6'
+      env: TOXENV=py36-min-req
+    - python: '3.6'
+      env: TOXENV=py36-unittests
     - python: 'pypy'
       env: TOXENV=pypy-integration
     - python: 'pypy'
