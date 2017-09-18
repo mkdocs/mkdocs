@@ -13,6 +13,9 @@ environment:
     - TOXENV: py35-integration
     - TOXENV: py35-min-req
     - TOXENV: py35-unittests
+    - TOXENV: py36-integration
+    - TOXENV: py36-min-req
+    - TOXENV: py36-unittests
     - TOXENV: flake8
 init:
   - "ECHO %TOXENV%"
