@@ -118,7 +118,11 @@ class OptionallyRequired(BaseConfigOption):
 
         if value is None:
             if self.default is not None:
-                value = self.default
+                if hasattr(self.default, 'copy'):
+                    # ensure no mutable values are assigned
+                    value = self.default.copy()
+                else:
+                    value = self.default
             elif not self.required:
                 return
             elif self.required:
