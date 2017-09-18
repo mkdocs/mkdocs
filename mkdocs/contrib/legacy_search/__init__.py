@@ -1,13 +1,13 @@
 # coding: utf-8
 
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 import os
 import logging
 from mkdocs import utils
 from mkdocs.plugins import BasePlugin
+from mkdocs.contrib.legacy_search.search_index import SearchIndex
 
-from .search_index import SearchIndex
 
 log = logging.getLogger(__name__)
 
