@@ -24,10 +24,9 @@ class BaseConfigOption(object):
 
     def pre_validation(self, config, key_name):
         """
-        After all options have passed validation, perform a post validation
-        process to do any additional changes dependant on other config values.
+        Before all options are validated, perform a pre-validation process.
 
-        The post validation process method should be implemented by subclasses.
+        The pre-validation process method should be implemented by subclasses.
         """
 
     def run_validation(self, value):
@@ -40,10 +39,10 @@ class BaseConfigOption(object):
 
     def post_validation(self, config, key_name):
         """
-        After all options have passed validation, perform a post validation
+        After all options have passed validation, perform a post-validation
         process to do any additional changes dependant on other config values.
 
-        The post validation process method should be implemented by subclasses.
+        The post-validation process method should be implemented by subclasses.
         """
 
 
@@ -146,10 +145,10 @@ class Type(OptionallyRequired):
     def run_validation(self, value):
 
         if not isinstance(value, self._type):
-            msg = ("Expected type: {0} but recieved: {1}"
+            msg = ("Expected type: {0} but received: {1}"
                    .format(self._type, type(value)))
         elif self.length is not None and len(value) != self.length:
-            msg = ("Expected type: {0} with lenght {2} but recieved: {1} with "
+            msg = ("Expected type: {0} with length {2} but received: {1} with "
                    "length {3}").format(self._type, value, self.length,
                                         len(value))
         else:
@@ -478,12 +477,11 @@ class Pages(Extras):
             return
 
         config_types = set(type(l) for l in value)
-        if config_types.issubset(set([utils.text_type, dict, str])):
+        if config_types.issubset({utils.text_type, dict, str}):
             return value
 
         raise ValidationError("Invalid pages config. {0} {1}".format(
-            config_types,
-            set([utils.text_type, dict, ])
+            config_types, {utils.text_type, dict}
         ))
 
     def post_validation(self, config, key_name):
