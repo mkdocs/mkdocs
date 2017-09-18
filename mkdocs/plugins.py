@@ -17,6 +17,13 @@ from mkdocs.config.base import Config
 log = logging.getLogger('mkdocs.plugins')
 
 
+EVENTS = (
+    'config', 'pre_build', 'nav', 'env', 'pre_template', 'template_context',
+    'post_template', 'pre_page', 'page_markdown', 'page_content', 'page_context',
+    'post_page', 'post_build', 'serve'
+)
+
+
 def get_plugins():
     """ Return a dict of all installed Plugins by name. """
 
@@ -55,12 +62,7 @@ class PluginCollection(OrderedDict):
 
     def __init__(self, *args, **kwargs):
         super(PluginCollection, self).__init__(*args, **kwargs)
-        events = [
-            'config', 'pre_build', 'nav', 'env', 'pre_template', 'template_context',
-            'post_template', 'pre_page', 'page_markdown', 'page_content', 'page_context',
-            'post_page', 'post_build', 'serve'
-        ]
-        self.events = dict((x, []) for x in events)
+        self.events = {x: [] for x in EVENTS}
 
     def _register_event(self, event_name, method):
         """ Register a method for an event. """
@@ -68,16 +70,16 @@ class PluginCollection(OrderedDict):
 
     def __setitem__(self, key, value, **kwargs):
         if not isinstance(value, BasePlugin):
-            raise TypeError('{0}.{1} only accepts values which are instances'
-                            ' of {3}.{4} sublcasses'.format(self.__module__,
-                                                            self.__name__,
-                                                            BasePlugin.__module__,
-                                                            BasePlugin.__name__))
+            raise TypeError(
+                '{0}.{1} only accepts values which are instances of {3}.{4} '
+                'sublcasses'.format(self.__module__, self.__name__,
+                                    BasePlugin.__module__, BasePlugin.__name__))
         super(PluginCollection, self).__setitem__(key, value, **kwargs)
         # Register all of the event methods defined for this Plugin.
-        for event_name in dir(value):
-            if event_name.startswith('on_'):
-                self._register_event(event_name[3:], getattr(value, event_name))
+        for event_name in (x for x in dir(value) if x.startswith('on_')):
+            method = getattr(value, event_name)
+            if callable(method):
+                self._register_event(event_name[3:], method)
 
     def run_event(self, name, item, **kwargs):
         """
@@ -89,6 +91,8 @@ class PluginCollection(OrderedDict):
         """
 
         for method in self.events[name]:
-            # method may return None.
-            item = method(item, **kwargs) or item
+            result = method(item, **kwargs)
+            # keep item if method returned `None`
+            if result is not None:
+                item = result
         return item
