@@ -11,9 +11,7 @@ using a plugin which comes with MkDocs, then it was installed when you installed
 MkDocs. However, to install third party plugins, you need to determine the
 appropriate package name and install it using `pip`:
 
-```python
-pip install mkdocs-foo-plugin
-```
+    pip install mkdocs-foo-plugin
 
 Once a plugin has been successfully installed, it is ready to use. It just needs
 to be [enabled](#using-plugins) in the configuration file.
@@ -156,7 +154,7 @@ entire site.
     be used to alter the site navigation.
 
     Parameters:
-    : __site_navigation__: global navigation object
+    : __site_navigation:__ global navigation object
     : __config:__ global configuration object
 
     Returns:
@@ -170,7 +168,7 @@ entire site.
     Parameters:
     : __env:__ global Jinja environment
     : __config:__ global configuration object
-    : __site_navigation__: global navigation object
+    : __site_navigation:__ global navigation object
 
     Returns:
     : global Jinja Environment
@@ -274,7 +272,7 @@ event.
     : __markdown:__ Markdown source text of page as string
     : __page:__ `mkdocs.nav.Page` instance
     : __config:__ global configuration object
-    : __site_navigation__: global navigation object
+    : __site_navigation:__ global navigation object
 
     Returns:
     : Markdown source text of page as string
@@ -289,7 +287,7 @@ event.
     : __html:__ HTML rendered from Markdown source as string
     : __page:__ `mkdocs.nav.Page` instance
     : __config:__ global configuration object
-    : __site_navigation__: global navigation object
+    : __site_navigation:__ global navigation object
 
     Returns:
     : HTML rendered from Markdown source as string
@@ -303,7 +301,7 @@ event.
     : __context__: dict of template context variables
     : __page:__ `mkdocs.nav.Page` instance
     : __config:__ global configuration object
-    : __site_navigation__: global navigation object
+    : __site_navigation:__ global navigation object
 
     Returns:
     : dict of template context variables
@@ -319,7 +317,7 @@ event.
     : __output_content:__ output of rendered template as string
     : __page:__ `mkdocs.nav.Page` instance
     : __config:__ global configuration object
-    : __site_navigation__: global navigation object
+    : __site_navigation:__ global navigation object
 
     Returns:
     : output of rendered template as string
@@ -358,14 +356,14 @@ Note that registering a plugin does not activate it. The user still needs to
 tell MkDocs to use if via the config.
 
 [BasePlugin]:#baseplugin
-[entry point]: #entry-point
 [config]: configuration.md#plugins
+[entry point]: #entry-point
+[env]: #on_env
 [events]: #events
+[extra_templates]: configuration.md#extra_templates
 [Global Events]: #global-events
 [Page Events]: #page-events
-[Template Events]: #template-events
-[static_templates]: configuration.md#static_templates
-[extra_templates]: configuration.md#extra_templates
-[env]: #on_env
-[post_template]: #on_post_template
 [post_build]: #on_post_build
+[post_template]: #on_post_template
+[static_templates]: configuration.md#static_templates
+[Template Events]: #template-events
