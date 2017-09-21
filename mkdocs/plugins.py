@@ -19,8 +19,8 @@ log = logging.getLogger('mkdocs.plugins')
 
 EVENTS = (
     'config', 'pre_build', 'nav', 'env', 'pre_template', 'template_context',
-    'post_template', 'pre_page', 'page_markdown', 'page_content', 'page_context',
-    'post_page', 'post_build', 'serve'
+    'post_template', 'pre_page', 'page_read_source', 'page_markdown',
+    'page_content', 'page_context', 'post_page', 'post_build', 'serve'
 )
 
 
