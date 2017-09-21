@@ -246,15 +246,29 @@ event.
     Parameters:
     : __page:__ `mkdocs.nav.Page` instance
     : __config:__ global configuration object
-    : __site_navigation__: global navigation object
+    : __site_navigation:__ global navigation object
 
     Returns:
     : `mkdocs.nav.Page` instance
 
+##### on_page_read_source
+
+:   The `on_page_read_source` event can replace the default mechanism to read
+    the contents of a page's source from the filesystem.
+
+    Parameters:
+    : __page:__ `mkdocs.nav.Page` instance
+    : __config:__ global configuration object
+
+    Returns:
+    : The raw source for a page as unicode string. If `None` is returned, the
+      default loading from a file will be performed.
+
 ##### on_page_markdown
 
-:   The `page_markdown` event is called after the page is loaded from file and
-    can be used to alter the Markdown source text.
+:   The `page_markdown` event is called after the page's markdown is loaded
+    from file and can be used to alter the Markdown source text. The meta-
+    data has been stripped off and is available as `page.meta` at this point.
 
     Parameters:
     : __markdown:__ Markdown source text of page as string
