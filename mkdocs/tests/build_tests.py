@@ -28,7 +28,7 @@ def build_page(title, path, config, md_src=None):
     sitenav = nav.SiteNavigation(config)
     page = nav.Page(title, path, sitenav.url_context, config)
     if md_src:
-        # Fake page.load_markdown()
+        # Fake page.read_source()
         page.markdown, page.meta = meta.get_data(md_src)
     return page, sitenav
 

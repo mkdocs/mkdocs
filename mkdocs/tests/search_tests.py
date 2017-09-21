@@ -124,7 +124,7 @@ class SearchTests(unittest.TestCase):
         full_content = ''.join("""Heading{0}Content{0}""".format(i) for i in range(1, 4))
 
         for page in site_navigation:
-            # Fake page.load_markdown() and page.render()
+            # Fake page.read_source() and page.render()
             page.markdown = md
             page.toc = toc
             page.content = html_content
