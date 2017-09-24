@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# in case something's wrong with this script, mention @funkyfuture
+# in issues and poll requests
+
+IMAGE_NAME=mkdocs-tox
+
+cd "$(dirname ${0})"
+
+docker build -t $IMAGE_NAME --build-arg uid=$(id -u) . && \
+if [ -d ".tox" ]; then
+    docker run --rm --entrypoint="tox" -v "$(pwd)/.tox:/src/.tox" $IMAGE_NAME "${@}"
+else
+    docker run --rm --entrypoint="tox" $IMAGE_NAME "${@}"
+fi
+
+cd -

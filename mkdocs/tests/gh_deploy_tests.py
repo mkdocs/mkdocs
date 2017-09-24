@@ -99,9 +99,10 @@ class TestGitHubDeploy(unittest.TestCase):
         )
         gh_deploy.gh_deploy(config)
 
+    @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
     @mock.patch('mkdocs.utils.ghp_import.ghp_import')
     @mock.patch('mkdocs.commands.gh_deploy.log')
-    def test_deploy_error(self, mock_log, mock_import):
+    def test_deploy_error(self, mock_log, mock_import, is_repo):
         error_string = 'TestError123'
         mock_import.return_value = (False, error_string)
 
@@ -110,5 +111,6 @@ class TestGitHubDeploy(unittest.TestCase):
         )
 
         self.assertRaises(SystemExit, gh_deploy.gh_deploy, config)
+        print(mock_log.mock_calls)
         mock_log.error.assert_called_once_with('Failed to deploy to GitHub with error: \n%s',
                                                error_string)
