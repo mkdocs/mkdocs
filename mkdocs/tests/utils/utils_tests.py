@@ -6,6 +6,9 @@ from __future__ import unicode_literals
 import mock
 import os
 import unittest
+import tempfile
+import shutil
+import stat
 
 from mkdocs import nav, utils, exceptions
 from mkdocs.tests.base import dedent
@@ -248,3 +251,71 @@ class UtilsTests(unittest.TestCase):
         config = utils.yaml_load(yaml_src)
         self.assertTrue(isinstance(config['key'], utils.text_type))
         self.assertTrue(isinstance(config['key2'][0], utils.text_type))
+
+    def test_copy_files(self):
+        src_paths = [
+            'foo.txt',
+            'bar.txt',
+            'baz.txt',
+        ]
+        dst_paths = [
+            'foo.txt',
+            'foo/',             # ensure src filename is appended
+            'foo/bar/baz.txt'   # ensure missing dirs are created
+        ]
+        expected = [
+            'foo.txt',
+            'foo/bar.txt',
+            'foo/bar/baz.txt',
+        ]
+
+        src_dir = tempfile.mkdtemp()
+        dst_dir = tempfile.mkdtemp()
+
+        try:
+            for i, src in enumerate(src_paths):
+                src = os.path.join(src_dir, src)
+                with open(src, 'w') as f:
+                    f.write('content')
+                dst = os.path.join(dst_dir, dst_paths[i])
+                utils.copy_file(src, dst)
+                self.assertTrue(os.path.isfile(os.path.join(dst_dir, expected[i])))
+        finally:
+            shutil.rmtree(src_dir)
+            shutil.rmtree(dst_dir)
+
+    def test_copy_files_without_permissions(self):
+        src_paths = [
+            'foo.txt',
+            'bar.txt',
+            'baz.txt',
+        ]
+        expected = [
+            'foo.txt',
+            'bar.txt',
+            'baz.txt',
+        ]
+
+        src_dir = tempfile.mkdtemp()
+        dst_dir = tempfile.mkdtemp()
+
+        try:
+            for i, src in enumerate(src_paths):
+                src = os.path.join(src_dir, src)
+                with open(src, 'w') as f:
+                    f.write('content')
+                # Set src file to read-only
+                os.chmod(src, stat.S_IRUSR)
+                utils.copy_file(src, dst_dir)
+                self.assertTrue(os.path.isfile(os.path.join(dst_dir, expected[i])))
+                self.assertNotEqual(os.stat(src).st_mode, os.stat(os.path.join(dst_dir, expected[i])).st_mode)
+                # While src was read-only, dst must remain writable
+                self.assertTrue(os.access(os.path.join(dst_dir, expected[i]), os.W_OK))
+        finally:
+            for src in src_paths:
+                # Undo read-only so we can delete temp files
+                src = os.path.join(src_dir, src)
+                if os.path.exists(src):
+                    os.chmod(src, stat.S_IRUSR | stat.S_IWUSR)
+            shutil.rmtree(src_dir)
+            shutil.rmtree(dst_dir)
