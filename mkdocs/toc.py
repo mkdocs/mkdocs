@@ -40,8 +40,8 @@ class AnchorLink(object):
     """
     A single entry in the table of contents.
     """
-    def __init__(self, title, url):
-        self.title, self.url = title, url
+    def __init__(self, title, url, level):
+        self.title, self.url, self.level = title, url, level
         self.children = []
 
     def __str__(self):
@@ -103,8 +103,7 @@ def _parse_html_table_of_contents(html):
     Returns a list of all the parent AnchorLink instances.
     """
     lines = html.splitlines()[2:-2]
-    parents = []
-    ret = []
+    ret, parents, level = [], [], 0
     for line in lines:
         parser = TOCParser()
         parser.feed(line)
@@ -114,7 +113,7 @@ def _parse_html_table_of_contents(html):
             except KeyError:
                 continue
             title = parser.title
-            nav = AnchorLink(title, href)
+            nav = AnchorLink(title, href, level)
             # Add the item to its parent if required.  If it is a topmost
             # item then instead append it to our return value.
             if parents:
@@ -123,8 +122,10 @@ def _parse_html_table_of_contents(html):
                 ret.append(nav)
             # If this item has children, store it as the current parent
             if line.endswith('<ul>'):
+                level += 1
                 parents.append(nav)
         elif line.startswith('</ul>'):
+            level -= 1
             if parents:
                 parents.pop()
 
