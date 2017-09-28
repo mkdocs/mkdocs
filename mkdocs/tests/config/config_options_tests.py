@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
 import os
-import tempfile
 import unittest
 
 import mkdocs
@@ -410,48 +409,6 @@ class ThemeTest(unittest.TestCase):
         option = config_options.Theme()
         self.assertRaises(config_options.ValidationError,
                           option.validate, config)
-
-
-class ExtrasTest(unittest.TestCase):
-
-    def test_provided(self):
-
-        option = config_options.Extras(utils.is_markdown_file)
-        value = option.validate([])
-        self.assertEqual([], value)
-
-        option.post_validation({'extra_stuff': []}, 'extra_stuff')
-
-    def test_empty(self):
-
-        option = config_options.Extras(utils.is_template_file)
-        value = option.validate(None)
-        self.assertEqual(None, value)
-
-    def test_invalid(self):
-
-        option = config_options.Extras(utils.is_html_file)
-        self.assertRaises(config_options.ValidationError,
-                          option.validate, {})
-
-    def test_walk(self):
-
-        option = config_options.Extras(utils.is_markdown_file)
-
-        tmp_dir = tempfile.mkdtemp()
-
-        f1 = os.path.join(tmp_dir, 'file1.md')
-        f2 = os.path.join(tmp_dir, 'file2.md')
-
-        open(f1, 'a').close()
-
-        # symlink isn't available on Python 2 on Windows.
-        if hasattr(os, 'symlink'):
-            os.symlink('/path/that/doesnt/exist', f2)
-
-        files = list(option.walk_docs_dir(tmp_dir))
-
-        self.assertEqual(['file1.md', ], files)
 
 
 class PagesTest(unittest.TestCase):
