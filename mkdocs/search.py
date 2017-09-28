@@ -1,12 +1,18 @@
 from __future__ import unicode_literals
 
+import os
 import json
+import logging
+import execjs
 from mkdocs import utils
 
 try:                                    # pragma: no cover
     from html.parser import HTMLParser  # noqa
 except ImportError:                     # pragma: no cover
     from HTMLParser import HTMLParser   # noqa
+
+
+log = logging.getLogger(__name__)
 
 
 class SearchIndex(object):
@@ -85,12 +91,52 @@ class SearchIndex(object):
                 loc=abs_url + toc_item.url
             )
 
-    def generate_search_index(self):
-        """python to json conversion"""
+    def generate_search_data(self):
+        """python to json data conversion"""
         page_dicts = {
             'docs': self._entries,
         }
         return json.dumps(page_dicts, sort_keys=True, indent=4)
+
+    def generate_search_index(self):
+        """generate pre-built lunr.js search index"""
+        lunr_path = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            'assets/search/mkdocs/js/lunr.min.js'
+        ).replace('\\', '/')
+
+        js = """
+        var lunr = require("%s");
+
+        var build_index = function(data){
+            var index = lunr(function () {
+                this.field('title', {boost: 10});
+                this.field('text');
+                this.ref('location');
+            });
+
+            var data = JSON.parse(data);
+
+            for (var i=0; i < data.docs.length; i++){
+                var doc = data.docs[i];
+                index.add(doc);
+            };
+
+            return JSON.stringify(index);
+        };
+        """ % lunr_path
+
+        try:
+            runtime = execjs.get(execjs.runtime_names.Node)
+            context = runtime.compile(js)
+            return context.call('build_index', self.generate_search_data())
+        except execjs.Error as e:
+            log.debug(
+                'Skipped building search index. Failed with %s: "%s"',
+                e.__class__.__name__, e.message
+            )
+            # Return an empty JSON object.
+            return '{}'
 
     def strip_tags(self, html):
         """strip html tags from data"""

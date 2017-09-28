@@ -338,9 +338,15 @@ def build_pages(config, dump_json=False, dirty=False):
             log.error("Error building page %s", page.input_path)
             raise
 
+    log.debug('Building search_data.json')
+    search_data = search_index.generate_search_data()
+    search_data_path = os.path.join(config['site_dir'], 'mkdocs', 'search_data.json')
+    utils.write_file(search_data.encode('utf-8'), search_data_path)
+
+    log.debug('Building search_index.json')
     search_index = search_index.generate_search_index()
-    json_output_path = os.path.join(config['site_dir'], 'mkdocs', 'search_index.json')
-    utils.write_file(search_index.encode('utf-8'), json_output_path)
+    search_index_path = os.path.join(config['site_dir'], 'mkdocs', 'search_index.json')
+    utils.write_file(search_index.encode('utf-8'), search_index_path)
 
 
 def build(config, live_server=False, dump_json=False, dirty=False):
