@@ -433,25 +433,33 @@ class Theme(BaseConfigOption):
         config[key_name] = theme.Theme(**theme_config)
 
 
-class Extras(OptionallyRequired):
+class Pages(OptionallyRequired):
     """
-    Extras Config Option
+    Pages Config Option
 
-    Validate the extra configs are a list and populate them with a set of files
-    if not provided.
+    Validate the pages config. Automatically add all markdown files if empty.
     """
 
-    def __init__(self, file_match=None, **kwargs):
-        super(Extras, self).__init__(**kwargs)
-        self.file_match = file_match
+    def __init__(self, **kwargs):
+        super(Pages, self).__init__(**kwargs)
+        self.file_match = utils.is_markdown_file
 
     def run_validation(self, value):
 
-        if isinstance(value, list):
-            return value
-        else:
+        if not isinstance(value, list):
             raise ValidationError(
                 "Expected a list, got {0}".format(type(value)))
+
+        if len(value) == 0:
+            return
+
+        config_types = set(type(l) for l in value)
+        if config_types.issubset({utils.text_type, dict, str}):
+            return value
+
+        raise ValidationError("Invalid pages config. {0} {1}".format(
+            config_types, {utils.text_type, dict}
+        ))
 
     def walk_docs_dir(self, docs_dir):
 
@@ -473,56 +481,6 @@ class Extras(OptionallyRequired):
                 relpath = os.path.normpath(os.path.relpath(fullpath, docs_dir))
                 if self.file_match(relpath):
                     yield relpath
-
-    def post_validation(self, config, key_name):
-
-        if config[key_name] is not None:
-            return
-
-        extras = []
-
-        for filename in self.walk_docs_dir(config['docs_dir']):
-            extras.append(filename)
-
-        config[key_name] = extras
-
-        if not extras:
-            return
-
-        self.warnings.append((
-            'The following files have been automatically included in the '
-            'documentation build and will be added to the HTML: {0}. This '
-            'behavior is deprecated. In version 1.0 and later they will '
-            "need to be explicitly listed in the '{1}' config setting."
-        ).format(','.join(extras), key_name))
-
-
-class Pages(Extras):
-    """
-    Pages Config Option
-
-    Validate the pages config. Automatically add all markdown files if empty.
-    """
-
-    def __init__(self, **kwargs):
-        super(Pages, self).__init__(utils.is_markdown_file, **kwargs)
-
-    def run_validation(self, value):
-
-        if not isinstance(value, list):
-            raise ValidationError(
-                "Expected a list, got {0}".format(type(value)))
-
-        if len(value) == 0:
-            return
-
-        config_types = set(type(l) for l in value)
-        if config_types.issubset({utils.text_type, dict, str}):
-            return value
-
-        raise ValidationError("Invalid pages config. {0} {1}".format(
-            config_types, {utils.text_type, dict}
-        ))
 
     def post_validation(self, config, key_name):
 

@@ -78,15 +78,13 @@ DEFAULT_SCHEMA = (
     ('edit_uri', config_options.Type(utils.string_types)),
 
     # Specify which css or javascript files from the docs directory should be
-    # additionally included in the site. Default, List of all .css and .js
-    # files in the docs dir.
-    ('extra_css', config_options.Extras(file_match=utils.is_css_file)),
-    ('extra_javascript', config_options.Extras(
-        file_match=utils.is_javascript_file)),
+    # additionally included in the site.
+    ('extra_css', config_options.Type(list, default=[])),
+    ('extra_javascript', config_options.Type(list, default=[])),
 
     # Similar to the above, but each template (HTML or XML) will be build with
     # Jinja2 and the global context.
-    ('extra_templates', config_options.Extras()),
+    ('extra_templates', config_options.Type(list, default=[])),
 
     # PyMarkdown extension names.
     ('markdown_extensions', config_options.MarkdownExtensions(
