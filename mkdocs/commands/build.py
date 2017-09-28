@@ -248,6 +248,32 @@ def build_extra_templates(extra_templates, config, site_navigation=None):
         utils.write_file(output_content.encode('utf-8'), output_path)
 
 
+# append extra pages not including in pages@mkdocs.yaml
+def append_extra_pages(config, env, dump_json, site_navigation):
+    if site_navigation is None:
+        log.debug("append_extra_pages: site_navigation is None")
+        return
+
+    docs_dir = config["docs_dir"]
+    site_dir = config["site_dir"]
+    log.info("append_extra_pages: docs_dir=%s, site_dir=%s", docs_dir, site_dir)
+    
+    for (dirpath, dirs, filenames) in os.walk(docs_dir):
+        dir = dirpath[len(docs_dir):]
+        for filename in filenames:
+            if dirpath == docs_dir:
+                extra_page = filename
+            else:
+                extra_page = dirpath[len(docs_dir)+1:] + "/" + filename
+            if os.path.splitext(extra_page)[1] == '.md' and extra_page not in site_navigation.source_files:
+                log.info(" - append_extra_pages: append %s", extra_page)
+                
+                # append to tail
+                page = nav.Page("", "/"+extra_page.replace(".md", "/index.html"), extra_page, site_navigation.url_context)
+                site_navigation.pages[len(site_navigation.pages)-1].next_page = page
+                page.previous_page = site_navigation.pages[len(site_navigation.pages)-1]
+                site_navigation.pages.append(page)
+            
 def build_pages(config, dump_json=False, dirty=False):
     """
     Builds all the pages and writes them into the build directory.
@@ -317,6 +343,9 @@ def build_pages(config, dump_json=False, dirty=False):
     build_template('sitemap.xml', env, config, site_navigation)
 
     build_extra_templates(config['extra_templates'], config, site_navigation)
+
+    # append extra pages not including in pages@mkdocs.yaml
+    append_extra_pages(config, env, dump_json, site_navigation)
 
     for page in site_navigation.walk_pages():
 
