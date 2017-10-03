@@ -15,7 +15,7 @@
   {%- block htmltitle %}
   <title>{% if page and page.title and not page.is_hompage %}{{ page.title }} - {% endif %}{{ config.site_name }}</title>
   {%- endblock %}
-  
+
   {%- block styles %}
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
@@ -65,12 +65,12 @@
     {# SIDE NAV, TOGGLES ON MOBILE #}
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
       <div class="wy-side-nav-search">
-	{%- block site_name %}
+    {%- block site_name %}
         <a href="{{ nav.homepage.url }}" class="icon icon-home"> {{ config.site_name }}</a>
-	{%- endblock %}
-	{%- block search_button %}
+	  {%- endblock %}
+	  {%- block search_button %}
         {% if 'legacy_search' in config['plugins'] %}{% include "searchbox.html" %}{% endif %}
-	{%- endblock %}
+	  {%- endblock %}
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
@@ -83,7 +83,7 @@
 	    </li>
           {% endfor %}
         </ul>
-	{%- endblock %}
+    {%- endblock %}
       </div>
       &nbsp;
     </nav>
@@ -107,14 +107,14 @@
               {% endblock %}
             </div>
           </div>
-	  {%- block footer %}
+      {%- block footer %}
           {% include "footer.html" %}
-	  {% endblock %}
+      {% endblock %}
         </div>
       </div>
 
     </section>
-    
+
   </div>
 
   {% include "versions.html" %}
