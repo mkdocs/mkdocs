@@ -67,17 +67,20 @@
       <div class="wy-side-nav-search">
     {%- block site_name %}
         <a href="{{ nav.homepage.url }}" class="icon icon-home"> {{ config.site_name }}</a>
-    {%- endblock %}
-    {%- block search_button %}
-        {% include "searchbox.html" %}
-    {%- endblock %}
+	  {%- endblock %}
+	  {%- block search_button %}
+        {% if 'legacy_search' in config['plugins'] %}{% include "searchbox.html" %}{% endif %}
+	  {%- endblock %}
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
         {%- block site_nav %}
-    <ul class="current">
+	<ul class="current">
+	  {% set navlevel = 1 %}
           {% for nav_item in nav %}
-            <li>{% include "toc.html" %}<li>
+            <li class="toctree-l{{ navlevel }}{% if nav_item.active and not nav_item.children %} current{%endif%}">
+		{% include 'nav.html' %}
+	    </li>
           {% endfor %}
         </ul>
     {%- endblock %}
@@ -117,6 +120,7 @@
   {% include "versions.html" %}
 
   {%- block scripts %}
+    <script>var base_url = '{{ base_url }}';</script>
     <script src="{{ base_url }}/js/theme.js"></script>
     {%- for path in extra_javascript %}
       <script src="{{ path }}"></script>

@@ -10,15 +10,15 @@ and structure of the site and pages in the site.
 from __future__ import unicode_literals
 
 import logging
-import markdown
 import os
 import pkg_resources
 import shutil
+import re
 import sys
 import yaml
 import fnmatch
 
-from mkdocs import toc, exceptions
+from mkdocs import exceptions
 
 try:                                                        # pragma: no cover
     from urllib.parse import urlparse, urlunparse, urljoin  # noqa
@@ -102,12 +102,15 @@ def reduce_list(data_set):
 def copy_file(source_path, output_path):
     """
     Copy source_path to output_path, making sure any parent directories exist.
-    """
 
+    The output_path may be a directory.
+    """
     output_dir = os.path.dirname(output_path)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    shutil.copy(source_path, output_path)
+    if os.path.isdir(output_path):
+        output_path = os.path.join(output_path, os.path.basename(source_path))
+    shutil.copyfile(source_path, output_path)
 
 
 def write_file(content, output_path):
@@ -117,7 +120,8 @@ def write_file(content, output_path):
     output_dir = os.path.dirname(output_path)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    open(output_path, 'wb').write(content)
+    with open(output_path, 'wb') as f:
+        f.write(content)
 
 
 def clean_directory(directory):
@@ -271,6 +275,16 @@ def is_template_file(path):
     ]
 
 
+_ERROR_TEMPLATE_RE = re.compile(r'^\d{3}\.html?$')
+
+
+def is_error_template(path):
+    """
+    Return True if the given file path is an HTTP error template.
+    """
+    return bool(_ERROR_TEMPLATE_RE.match(path))
+
+
 def create_media_urls(nav, path_list):
     """
     Return a list of URLs that have been processed correctly for inclusion in
@@ -286,7 +300,7 @@ def create_media_urls(nav, path_list):
             continue
         # We must be looking at a local path.
         url = path_to_url(path)
-        relative_url = '%s/%s' % (nav.url_context.make_relative('/'), url)
+        relative_url = '%s/%s' % (nav.url_context.make_relative('/').rstrip('/'), url)
         final_urls.append(relative_url)
 
     return final_urls
@@ -332,9 +346,10 @@ def create_relative_media_url(nav, url):
     # TODO: Fix this, this is a hack. Relative urls are not being calculated
     # correctly for images in the same directory as the markdown. I think this
     # is due to us moving it into a directory with index.html, but I'm not sure
-    if (nav.file_context.current_file.endswith("/index.md") is False and
-            nav.url_context.base_path != '/' and
-            relative_url.startswith("./")):
+    # win32 platform uses backslash "\". eg. "\level1\level2"
+    notindex = re.match(r'.*(?:\\|/)index.md$', nav.file_context.current_file) is None
+
+    if notindex and nav.url_context.base_path != '/' and relative_url.startswith("./"):
         relative_url = ".%s" % relative_url
 
     return relative_url
@@ -351,33 +366,15 @@ def path_to_url(path):
     return pathname2url(path)
 
 
-def convert_markdown(markdown_source, extensions=None, extension_configs=None):
-    """
-    Convert the Markdown source file to HTML content, and additionally
-    return the parsed table of contents, and a dictionary of any metadata
-    that was specified in the Markdown file.
-    `extensions` is an optional sequence of Python Markdown extensions to add
-    to the default set.
-    """
-    md = markdown.Markdown(
-        extensions=extensions or [],
-        extension_configs=extension_configs or {}
-    )
-    html_content = md.convert(markdown_source)
+def get_theme_dir(name):
+    """ Return the directory of an installed theme by name. """
 
-    # On completely blank markdown files, no Meta or tox properties are added
-    # to the generated document.
-    meta = getattr(md, 'Meta', {})
-    toc_html = getattr(md, 'toc', '')
-
-    # Post process the generated table of contents into a data structure
-    table_of_contents = toc.TableOfContents(toc_html)
-
-    return (html_content, table_of_contents, meta)
+    theme = get_themes()[name]
+    return os.path.dirname(os.path.abspath(theme.load().__file__))
 
 
 def get_themes():
-    """Return a dict of theme names and their locations"""
+    """ Return a dict of all installed themes as (name, entry point) pairs. """
 
     themes = {}
     builtins = pkg_resources.get_entry_map(dist='mkdocs', group='mkdocs.themes')
@@ -397,14 +394,11 @@ def get_themes():
 
         themes[theme.name] = theme
 
-    themes = dict((name, os.path.dirname(os.path.abspath(theme.load().__file__)))
-                  for name, theme in themes.items())
-
     return themes
 
 
 def get_theme_names():
-    """Return a list containing all the names of all the builtin themes."""
+    """Return a list of all installed themes by name."""
 
     return get_themes().keys()
 
@@ -429,6 +423,25 @@ def dirname_to_title(dirname):
         title = title.capitalize()
 
     return title
+
+
+def get_markdown_title(markdown_src):
+        """
+        Get the title of a Markdown document. The title in this case is considered
+        to be a H1 that occurs before any other content in the document.
+        The procedure is then to iterate through the lines, stopping at the first
+        non-whitespace content. If it is a title, return that, otherwise return
+        None.
+        """
+
+        lines = markdown_src.replace('\r\n', '\n').replace('\r', '\n').split('\n')
+        while lines:
+            line = lines.pop(0).strip()
+            if not line.strip():
+                continue
+            if not line.startswith('# '):
+                return
+            return line.lstrip('# ')
 
 
 def find_or_create_node(branch, key):

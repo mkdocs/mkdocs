@@ -1,7 +1,10 @@
 from __future__ import unicode_literals
-import os
 
-from mkdocs import utils, legacy
+from collections import Sequence
+import os
+from collections import namedtuple
+
+from mkdocs import utils, theme, plugins
 from mkdocs.config.base import Config, ValidationError
 
 
@@ -22,10 +25,9 @@ class BaseConfigOption(object):
 
     def pre_validation(self, config, key_name):
         """
-        After all options have passed validation, perform a post validation
-        process to do any additional changes dependant on other config values.
+        Before all options are validated, perform a pre-validation process.
 
-        The post validation process method should be implemented by subclasses.
+        The pre-validation process method should be implemented by subclasses.
         """
 
     def run_validation(self, value):
@@ -38,10 +40,10 @@ class BaseConfigOption(object):
 
     def post_validation(self, config, key_name):
         """
-        After all options have passed validation, perform a post validation
+        After all options have passed validation, perform a post-validation
         process to do any additional changes dependant on other config values.
 
-        The post validation process method should be implemented by subclasses.
+        The post-validation process method should be implemented by subclasses.
         """
 
 
@@ -60,12 +62,41 @@ class SubConfig(BaseConfigOption, Config):
         return self
 
 
+class ConfigItems(BaseConfigOption):
+    """
+    Config Items Option
+
+    Validates a list of mappings that all must match the same set of
+    options.
+    """
+    def __init__(self, *config_options, **kwargs):
+        BaseConfigOption.__init__(self)
+        self.item_config = SubConfig(*config_options)
+        self.required = kwargs.get('required', False)
+
+    def __repr__(self):
+        return '{}: {}'.format(self.__class__.__name__, self.item_config)
+
+    def run_validation(self, value):
+        if value is None:
+            if self.required:
+                raise ValidationError("Required configuration not provided.")
+            else:
+                return ()
+
+        if not isinstance(value, Sequence):
+            raise ValidationError('Expected a sequence of mappings, but a %s '
+                                  'was given.' % type(value))
+        result = []
+        for item in value:
+            result.append(self.item_config.validate(item))
+        return result
+
+
 class OptionallyRequired(BaseConfigOption):
     """
-    The BaseConfigOption adds support for default values and required values
-
-    It then delegates the validation and (optional) post validation processing
-    to subclasses.
+    A subclass of BaseConfigOption that adds support for default values and
+    required values. It is a base class for config options.
     """
 
     def __init__(self, default=None, required=False):
@@ -87,7 +118,11 @@ class OptionallyRequired(BaseConfigOption):
 
         if value is None:
             if self.default is not None:
-                value = self.default
+                if hasattr(self.default, 'copy'):
+                    # ensure no mutable values are assigned
+                    value = self.default.copy()
+                else:
+                    value = self.default
             elif not self.required:
                 return
             elif self.required:
@@ -111,10 +146,10 @@ class Type(OptionallyRequired):
     def run_validation(self, value):
 
         if not isinstance(value, self._type):
-            msg = ("Expected type: {0} but recieved: {1}"
+            msg = ("Expected type: {0} but received: {1}"
                    .format(self._type, type(value)))
         elif self.length is not None and len(value) != self.length:
-            msg = ("Expected type: {0} with lenght {2} but recieved: {1} with "
+            msg = ("Expected type: {0} with length {2} but received: {1} with "
                    "length {3}").format(self._type, value, self.length,
                                         len(value))
         else:
@@ -156,6 +191,31 @@ class Deprecated(BaseConfigOption):
         target[target_key] = config.pop(key_name)
 
 
+class IpAddress(OptionallyRequired):
+    """
+    IpAddress Config Option
+
+    Validate that an IP address is in an apprioriate format
+    """
+
+    def run_validation(self, value):
+        try:
+            host, port = value.rsplit(':', 1)
+        except:
+            raise ValidationError("Must be a string of format 'IP:PORT'")
+
+        try:
+            port = int(port)
+        except:
+            raise ValidationError("'{0}' is not a valid port".format(port))
+
+        class Address(namedtuple('Address', 'host port')):
+            def __str__(self):
+                return '{0}:{1}'.format(self.host, self.port)
+
+        return Address(host, port)
+
+
 class URL(OptionallyRequired):
     """
     URL Config Option
@@ -186,15 +246,16 @@ class RepoURL(URL):
     """
     Repo URL Config Option
 
-    A small extension to the URL config that sets the repo_name, based on the
-    url if it hasn't already been provided.
+    A small extension to the URL config that sets the repo_name and edit_uri,
+    based on the url if they haven't already been provided.
     """
 
     def post_validation(self, config, key_name):
+        repo_host = utils.urlparse(config['repo_url']).netloc.lower()
+        edit_uri = config.get('edit_uri')
 
+        # derive repo_name from repo_url if unset
         if config['repo_url'] is not None and config.get('repo_name') is None:
-            repo_host = utils.urlparse(
-                config['repo_url']).netloc.lower()
             if repo_host == 'github.com':
                 config['repo_name'] = 'GitHub'
             elif repo_host == 'bitbucket.org':
@@ -202,32 +263,50 @@ class RepoURL(URL):
             else:
                 config['repo_name'] = repo_host.split('.')[0].title()
 
-        if config['repo_url'] is not None and config.get('edit_uri') is None:
-            if config['repo_name'].lower() == 'github':
-                config['edit_uri'] = 'edit/master/docs/'
-            elif config['repo_name'].lower() == 'bitbucket':
-                config['edit_uri'] = 'src/default/docs/'
+        # derive edit_uri from repo_name if unset
+        if config['repo_url'] is not None and edit_uri is None:
+            if repo_host == 'github.com':
+                edit_uri = 'edit/master/docs/'
+            elif repo_host == 'bitbucket.org':
+                edit_uri = 'src/default/docs/'
+            else:
+                edit_uri = ''
+
+        # ensure a well-formed edit_uri
+        if edit_uri:
+            if not edit_uri.startswith(('?', '#')) \
+                    and not config['repo_url'].endswith('/'):
+                edit_uri = '/' + edit_uri
+            if not edit_uri.endswith('/'):
+                edit_uri += '/'
+
+        config['edit_uri'] = edit_uri
 
 
-class Dir(Type):
+class FilesystemObject(Type):
+    """
+    Base class for options that point to filesystem objects.
+    """
+    def __init__(self, exists=False, **kwargs):
+        super(FilesystemObject, self).__init__(type_=utils.string_types, **kwargs)
+        self.exists = exists
+
+    def run_validation(self, value):
+        value = super(FilesystemObject, self).run_validation(value)
+        if self.exists and not self.existence_test(value):
+            raise ValidationError("The path {path} isn't an existing {name}.".
+                                  format(path=value, name=self.name))
+        return os.path.abspath(value)
+
+
+class Dir(FilesystemObject):
     """
     Dir Config Option
 
     Validate a path to a directory, optionally verifying that it exists.
     """
-
-    def __init__(self, exists=False, **kwargs):
-        super(Dir, self).__init__(type_=utils.string_types, **kwargs)
-        self.exists = exists
-
-    def run_validation(self, value):
-
-        value = super(Dir, self).run_validation(value)
-
-        if self.exists and not os.path.isdir(value):
-            raise ValidationError("The path {0} doesn't exist".format(value))
-
-        return os.path.abspath(value)
+    existence_test = staticmethod(os.path.isdir)
+    name = 'directory'
 
     def post_validation(self, config, key_name):
 
@@ -237,6 +316,16 @@ class Dir(Type):
                 ("The '{0}' should not be the parent directory of the config "
                  "file. Use a child directory instead so that the config file "
                  "is a sibling of the config file.").format(key_name))
+
+
+class File(FilesystemObject):
+    """
+    File Config Option
+
+    Validate a path to a file, optionally verifying that it exists.
+    """
+    existence_test = staticmethod(os.path.isfile)
+    name = 'file'
 
 
 class SiteDir(Dir):
@@ -253,14 +342,14 @@ class SiteDir(Dir):
         # Validate that the docs_dir and site_dir don't contain the
         # other as this will lead to copying back and forth on each
         # and eventually make a deep nested mess.
-        if (config['docs_dir'] + os.sep).startswith(config['site_dir'] + os.sep):
+        if (config['docs_dir'] + os.sep).startswith(config['site_dir'].rstrip(os.sep) + os.sep):
             raise ValidationError(
                 ("The 'docs_dir' should not be within the 'site_dir' as this "
                  "can mean the source files are overwritten by the output or "
                  "it will be deleted if --clean is passed to mkdocs build."
                  "(site_dir: '{0}', docs_dir: '{1}')"
                  ).format(config['site_dir'], config['docs_dir']))
-        elif (config['site_dir'] + os.sep).startswith(config['docs_dir'] + os.sep):
+        elif (config['site_dir'] + os.sep).startswith(config['docs_dir'].rstrip(os.sep) + os.sep):
             raise ValidationError(
                 ("The 'site_dir' should not be within the 'docs_dir' as this "
                  "leads to the build directory being copied into itself and "
@@ -271,94 +360,106 @@ class SiteDir(Dir):
 
 class ThemeDir(Dir):
     """
-    ThemeDir Config Option
-
-    Post validation, verify the theme_dir and do some path munging.
-
-    TODO: This could probably be improved and/or moved from here. It's a tad
-    gross really.
+    ThemeDir Config Option. Deprecated
     """
 
+    def pre_validation(self, config, key_name):
+
+        if config.get(key_name) is None:
+            return
+
+        warning = ('The configuration option {0} has been deprecated and will '
+                   'be removed in a future release of MkDocs.')
+        self.warnings.append(warning)
+
     def post_validation(self, config, key_name):
-
-        theme_in_config = any(['theme' in c for c in config.user_configs])
-
-        package_dir = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), '..'))
-        theme_dir = [utils.get_themes()[config['theme']], ]
-        config['mkdocs_templates'] = os.path.join(package_dir, 'templates')
-
-        if config['theme_dir'] is not None:
-            # If the user has given us a custom theme but not a
-            # builtin theme name then we don't want to merge them.
-            if not theme_in_config:
-                theme_dir = []
-            theme_dir.insert(0, config['theme_dir'])
-
-        config['theme_dir'] = theme_dir
-
-        # Add the search assets to the theme_dir, this means that
-        # they will then we copied into the output directory but can
-        # be overwritten by themes if needed.
-        search_assets = os.path.join(package_dir, 'assets', 'search')
-        config['theme_dir'].append(search_assets)
+        # The validation in the parent class this inherits from is not relevant here.
+        pass
 
 
-class Theme(OptionallyRequired):
+class Theme(BaseConfigOption):
     """
     Theme Config Option
 
-    Validate that the theme is one of the builtin Mkdocs theme names.
+    Validate that the theme exists and build Theme instance.
     """
 
-    def run_validation(self, value):
+    def __init__(self, default=None):
+        super(Theme, self).__init__()
+        self.default = default
+
+    def validate(self, value):
+        if value is None and self.default is not None:
+            value = {'name': self.default}
+
+        if isinstance(value, utils.string_types):
+            value = {'name': value}
+
         themes = utils.get_theme_names()
 
-        # These themes have been moved to the mkdocs-bootstrap and
-        # mkdocs-bootswatch packages. At some point we wont depend on
-        # these by default.
-        moved_themes = [
-            'bootstrap', 'amelia', 'cerulean', 'cosmo', 'cyborg',
-            'flatly', 'journal', 'readable', 'simplex', 'slate',
-            'spacelab', 'united', 'yeti'
-        ]
+        if isinstance(value, dict):
+            if 'name' in value:
+                if value['name'] is None or value['name'] in themes:
+                    return value
 
-        if value in themes:
-            return value
+                raise ValidationError(
+                    "Unrecognised theme name: '{0}'. The available installed themes "
+                    "are: {1}".format(value['name'], ', '.join(themes))
+                )
 
-        elif value in moved_themes:
-            raise ValidationError(
-                ("The theme '{0}' is no longer included in MkDocs by default "
-                 "and must be installed with pip. See http://www.mkdocs.org"
-                 "/about/release-notes/#add-support-for-installable-themes"
-                 "for more details").format(value)
-            )
+            raise ValidationError("No theme name set.")
 
-        raise ValidationError(
-            "Unrecognised theme '{0}'. The available installed themes "
-            "are: {1}".format(value, ', '.join(themes))
-        )
+        raise ValidationError('Invalid type "{0}". Expected a string or key/value pairs.'.format(type(value)))
+
+    def post_validation(self, config, key_name):
+        theme_config = config[key_name]
+
+        # TODO: Remove when theme_dir is fully deprecated.
+        if config['theme_dir'] is not None:
+            if 'custom_dir' not in theme_config:
+                # Only pass in 'theme_dir' if it is set and 'custom_dir' is not set.
+                theme_config['custom_dir'] = config['theme_dir']
+            if not any(['theme' in c for c in config.user_configs]):
+                # If the user did not define a theme, but did define theme_dir, then remove default set in validate.
+                theme_config['name'] = None
+
+        if not theme_config['name'] and 'custom_dir' not in theme_config:
+            raise ValidationError("At least one of 'theme.name' or 'theme.custom_dir' must be defined.")
+
+        # Ensure custom_dir is an absolute path
+        if 'custom_dir' in theme_config and not os.path.isabs(theme_config['custom_dir']):
+            theme_config['custom_dir'] = os.path.abspath(theme_config['custom_dir'])
+
+        config[key_name] = theme.Theme(**theme_config)
 
 
-class Extras(OptionallyRequired):
+class Pages(OptionallyRequired):
     """
-    Extras Config Option
+    Pages Config Option
 
-    Validate the extra configs are a list and populate them with a set of files
-    if not provided.
+    Validate the pages config. Automatically add all markdown files if empty.
     """
 
-    def __init__(self, file_match=None, **kwargs):
-        super(Extras, self).__init__(**kwargs)
-        self.file_match = file_match
+    def __init__(self, **kwargs):
+        super(Pages, self).__init__(**kwargs)
+        self.file_match = utils.is_markdown_file
 
     def run_validation(self, value):
 
-        if isinstance(value, list):
-            return value
-        else:
+        if not isinstance(value, list):
             raise ValidationError(
                 "Expected a list, got {0}".format(type(value)))
+
+        if len(value) == 0:
+            return
+
+        config_types = set(type(l) for l in value)
+        if config_types.issubset({utils.text_type, dict, str}):
+            return value
+
+        raise ValidationError("Invalid pages config. {0} {1}".format(
+            config_types, {utils.text_type, dict}
+        ))
 
     def walk_docs_dir(self, docs_dir):
 
@@ -386,64 +487,6 @@ class Extras(OptionallyRequired):
         if config[key_name] is not None:
             return
 
-        extras = []
-
-        for filename in self.walk_docs_dir(config['docs_dir']):
-            extras.append(filename)
-
-        config[key_name] = extras
-
-        if not extras:
-            return
-
-        self.warnings.append((
-            'The following files have been automatically included in the '
-            'documentation build and will be added to the HTML: {0}. This '
-            'behavior is deprecated. In version 1.0 and later they will '
-            "need to be explicitly listed in the '{1}' config setting."
-        ).format(','.join(extras), key_name))
-
-
-class Pages(Extras):
-    """
-    Pages Config Option
-
-    Validate the pages config, performing comparability if the config appears
-    to be the old structure. Automatically add all markdown files if none are
-    provided.
-    """
-
-    def __init__(self, **kwargs):
-        super(Pages, self).__init__(utils.is_markdown_file, **kwargs)
-
-    def run_validation(self, value):
-
-        if not isinstance(value, list):
-            raise ValidationError(
-                "Expected a list, got {0}".format(type(value)))
-
-        if len(value) == 0:
-            return
-
-        # TODO: Remove in 1.0
-        config_types = set(type(l) for l in value)
-
-        if config_types.issubset(set([utils.text_type, dict, str])):
-            return value
-
-        if config_types.issubset(set([utils.text_type, list, str])):
-            return legacy.pages_compat_shim(value)
-
-        raise ValidationError("Invalid pages config. {0} {1}".format(
-            config_types,
-            set([utils.text_type, dict, ])
-        ))
-
-    def post_validation(self, config, key_name):
-
-        if config[key_name] is not None:
-            return
-
         pages = []
 
         for filename in self.walk_docs_dir(config['docs_dir']):
@@ -454,39 +497,6 @@ class Pages(Extras):
                 pages.append(filename)
 
         config[key_name] = utils.nest_paths(pages)
-
-
-class NumPages(OptionallyRequired):
-    """
-    NumPages Config Option
-
-    Set the value to True if the number of pages is greater than the given
-    number (defaults to 1).
-    """
-
-    def __init__(self, at_lest=1, **kwargs):
-        super(NumPages, self).__init__(**kwargs)
-        self.at_lest = at_lest
-
-    def pre_validation(self, config, key_name):
-        # TODO: delete deprecated `NumPages` class in version 1.0
-        # Numpages is only used by `include_nav` and `include_next_prev`,
-        # which are both deprecated, so we can delete the entire Option type.
-        if config.get(key_name) is not None:
-            # Only issue warning if option is defined by user.
-            warning = ('The configuration option {0} has been deprecated and will '
-                       'be removed in a future release of MkDocs.').format(key_name)
-            self.warnings.append(warning)
-
-    def post_validation(self, config, key_name):
-
-        if config[key_name] is not None:
-            return
-
-        try:
-            config[key_name] = len(config['pages']) > self.at_lest
-        except TypeError:
-            config[key_name] = False
 
 
 class Private(OptionallyRequired):
@@ -540,3 +550,58 @@ class MarkdownExtensions(OptionallyRequired):
 
     def post_validation(self, config, key_name):
         config[self.configkey] = self.configdata
+
+
+class Plugins(OptionallyRequired):
+    """
+    Plugins config option.
+
+    A list of plugins. If a plugin defines config options those are used when
+    initializing the plugin class.
+    """
+
+    def __init__(self, **kwargs):
+        super(Plugins, self).__init__(**kwargs)
+        self.installed_plugins = plugins.get_plugins()
+
+    def run_validation(self, value):
+        if not isinstance(value, (list, tuple)):
+            raise ValidationError('Invalid Plugins configuration. Expected a list of plugins')
+        plgins = plugins.PluginCollection()
+        for item in value:
+            if isinstance(item, dict):
+                if len(item) > 1:
+                    raise ValidationError('Invalid Plugins configuration')
+                name, cfg = item.popitem()
+                cfg = cfg or {}  # Users may define a null (None) config
+                if not isinstance(cfg, dict):
+                    raise ValidationError('Invalid config options for '
+                                          'the "{0}" plugin.'.format(name))
+                plgins[name] = self.load_plugin(name, cfg)
+            elif isinstance(item, utils.string_types):
+                plgins[item] = self.load_plugin(item, {})
+            else:
+                raise ValidationError('Invalid Plugins configuration')
+        return plgins
+
+    def load_plugin(self, name, config):
+        if name not in self.installed_plugins:
+            raise ValidationError('The "{0}" plugin is not installed'.format(name))
+
+        Plugin = self.installed_plugins[name].load()
+
+        if not issubclass(Plugin, plugins.BasePlugin):
+            raise ValidationError('{0}.{1} must be a subclass of {2}.{3}'.format(
+                Plugin.__module__, Plugin.__name__, plugins.BasePlugin.__module__,
+                plugins.BasePlugin.__name__))
+
+        plugin = Plugin()
+        errors, warnings = plugin.load_config(config)
+        self.warnings.extend(warnings)
+        errors_message = '\n'.join(
+            "Plugin value: '{}'. Error: {}".format(x, y)
+            for x, y in errors
+        )
+        if errors_message:
+            raise ValidationError(errors_message)
+        return plugin

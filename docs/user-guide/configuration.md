@@ -75,6 +75,18 @@ follows. (Note the `src` path and `default` branch...)
 edit_uri: src/default/docs/
 ```
 
+The `edit_uri` also supports query ('?') and fragment ('#') characters. For
+reposotiry hosts that use a query or a fragment to access the files, the
+`edit_uri` would be as follows. (Note the `?` and `#` in the uri...)
+
+```yaml
+# Query string example
+edit_uri: '?query=root/path/docs/'
+
+# Hash fragment example
+edit_uri: '#root/path/docs/'
+```
+
 For other repository hosts, `edit_uri` works the same way. Simply specify the
 relative path to the docs directory.
 
@@ -158,31 +170,63 @@ sub-directories. If none are found it will be `[]` (an empty list).
 
 ### theme
 
-Sets the theme of your documentation site, for a list of available themes visit
-[styling your docs].
+Sets the theme and theme specific configuration of your documentation site.
+May be either a string or a set of key/value pairs.
+
+If a string, it must be the string name of a known installed theme. For a list
+of available themes visit [styling your docs].
+
+An example set of key/value pairs might look something like this:
+
+```yaml
+theme:
+    name: mkdocs
+    custom_dir: my_theme_customizations/
+    static_templates:
+        - sitemap.html
+    include_sidebar: false
+```
+
+If a set of key/value pairs, the following nested keys can be defined:
+
+!!! block ""
+
+    #### name:
+
+    The string name of a known installed theme. For a list of available themes
+    visit [styling your docs].
+
+    #### custom_dir:
+
+    A directory to custom a theme. This can either be a relative directory, in
+    which case it is resolved relative to the directory containing your
+    configuration file, or it can be an absolute directory path.
+
+    See [styling your docs][theme_dir] for details if you would like to tweak an
+    existing theme.
+
+    See [custom themes] if you would like to build your own theme from the
+    ground up.
+
+    #### static_templates:
+
+    A list of templates to render as static pages. The templates must be located
+    in either the theme's template directory or in the `custom_dir` defined in
+    the theme configuration.
+
+    #### (theme specific keywords)
+
+    Any additional keywords supported by the theme can also be defined. See the
+    documentation for the theme you are using for details.
 
 **default**: `'mkdocs'`
-
-### theme_dir
-
-Lets you set a directory to a custom theme. This can either be a relative
-directory, in which case it is resolved relative to the directory containing
-your configuration file, or it can be an absolute directory path.
-
-See [styling your docs][theme_dir] for details if you would like to tweak an
-existing theme.
-
-See [custom themes] if you would like to build your own theme from the ground
-up.
-
-**default**: `null`
 
 ### docs_dir
 
 Lets you set the directory containing the documentation source markdown files.
 This can either be a relative directory, in which case it is resolved relative
-to the directory containing you configuration file, or it can be an absolute
-directory path.
+to the directory containing your configuration file, or it can be an absolute
+directory path from the root of your local file system.
 
 **default**: `'docs'`
 
@@ -190,8 +234,8 @@ directory path.
 
 Lets you set the directory where the output HTML and other files are created.
 This can either be a relative directory, in which case it is resolved relative
-to the directory containing you configuration file, or it can be an absolute
-directory path.
+to the directory containing your configuration file, or it can be an absolute
+directory path from the root of your local file system.
 
 **default**: `'site'`
 
@@ -209,7 +253,7 @@ directory path.
 ### extra_css
 
 Set a list of CSS files in your `docs_dir` to be included by the theme. For
-example, the following example will include the the extra.css file within the
+example, the following example will include the extra.css file within the
 css subdirectory in your [docs_dir](#docs_dir).
 
 ```yaml
@@ -333,9 +377,9 @@ markdown_extensions:
 ```
 
 Note that a colon (`:`) must follow the extension name (`toc`) and then on a new
-line the option name and value must be indented and seperated by a colon. If you
-would like to define multipe options for a single extension, each option must be
-defined on a seperate line:
+line the option name and value must be indented and separated by a colon. If you
+would like to define multiple options for a single extension, each option must be
+defined on a separate line:
 
 ```yaml
 markdown_extensions:
@@ -365,7 +409,14 @@ markdown_extensions:
     the documentation provided by those extensions for installation instructions
     and available configuration options.
 
-**default**: `[]`
+**default**: `[]` (an empty list).
+
+### plugins
+
+A list of plugins (with optional configuration settings) to use when building
+the site . See the [Plugins] documentation for details.
+
+**default**: `[]` (an empty list).
 
 [custom themes]: custom-themes.md
 [variables that are available]: custom-themes.md#template-variables
@@ -378,3 +429,4 @@ markdown_extensions:
 [theme_dir]: styling-your-docs.md#using-the-theme_dir
 [styling your docs]: styling-your-docs.md
 [extra_css]: #extra_css
+[Plugins]: plugins.md

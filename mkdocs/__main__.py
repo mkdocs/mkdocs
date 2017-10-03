@@ -159,40 +159,6 @@ def build_command(clean, config_file, strict, theme, theme_dir, site_dir):
         raise SystemExit('\n' + str(e))
 
 
-@cli.command(name="json")
-@click.option('-c', '--clean/--dirty', is_flag=True, default=True, help=clean_help)
-@click.option('-f', '--config-file', type=click.File('rb'), help=config_help)
-@click.option('-s', '--strict', is_flag=True, help=strict_help)
-@click.option('-d', '--site-dir', type=click.Path(), help=site_dir_help)
-@common_options
-def json_command(clean, config_file, strict, site_dir):
-    """Build the MkDocs documentation to JSON files
-
-    Rather than building your documentation to HTML pages, this
-    outputs each page in a simple JSON format. This command is
-    useful if you want to index your documentation in an external
-    search engine.
-    """
-
-    log.warning("The json command is deprecated and will be removed in a "
-                "future MkDocs release. For details on updating: "
-                "http://www.mkdocs.org/about/release-notes/")
-
-    # Don't override config value if user did not specify --strict flag
-    # Conveniently, load_config drops None values
-    strict = strict or None
-
-    try:
-        build.build(config.load_config(
-            config_file=config_file,
-            strict=strict,
-            site_dir=site_dir
-        ), dump_json=True, dirty=not clean)
-    except exceptions.ConfigurationError as e:  # pragma: no cover
-        # Avoid ugly, unhelpful traceback
-        raise SystemExit('\n' + str(e))
-
-
 @cli.command(name="gh-deploy")
 @click.option('-c', '--clean/--dirty', is_flag=True, default=True, help=clean_help)
 @click.option('-f', '--config-file', type=click.File('rb'), help=config_help)

@@ -19,12 +19,12 @@ and their usage.
 
 ## Creating a custom theme
 
-The bare minimum required for a custom theme is a `main.html` [Jinja2
-template] file. This should be placed in a directory which will be the
-`theme_dir` and it should be created next to the `mkdocs.yml` configuration
-file. Within `mkdocs.yml`, specify the `theme_dir` option and set it to the
-name of the directory containing `main.html`. For example, given this example
-project layout:
+The bare minimum required for a custom theme is a `main.html` [Jinja2 template]
+file. This should be placed in a directory which will be the `theme_dir` and it
+should be created next to the `mkdocs.yml` configuration file. Within
+`mkdocs.yml`, specify the theme `custom_dir` option and set it to the name of
+the directory containing `main.html`. For example, given this example project
+layout:
 
     mkdocs.yml
     docs/
@@ -37,23 +37,24 @@ project layout:
 You would include the following settings in `mkdocs.yml` to use the custom theme
 directory:
 
-    theme: null
-    theme_dir: 'custom_theme'
+    theme:
+        name: null
+        custom_dir: 'custom_theme'
 
 !!! Note
 
-    Generally, when building your own custom theme, the `theme` configuration
-    setting would be set to `null`. However, if used in combination with the
-    `theme_dir` configuration value a custom theme can be used to replace only
-    specific parts of a built-in theme. For example, with the above layout and
-    if you set `theme: "mkdocs"` then the `main.html` file in the `theme_dir`
-    would replace that in the theme but otherwise the `mkdocs` theme would
-    remain the same. This is useful if you want to make small adjustments to an
-    existing theme.
+    Generally, when building your own custom theme, the theme `name`
+    configuration setting would be set to `null`. However, if used in
+    combination with the `custom_dir` configuration value a custom theme can be
+    used to replace only specific parts of a built-in theme. For example, with
+    the above layout and if you set `name: "mkdocs"` then the `main.html` file
+    in the `custom_dir` would replace that in the theme but otherwise the
+    `mkdocs` theme would remain the same. This is useful if you want to make
+    small adjustments to an existing theme.
 
     For more specific information, see [styling your docs].
 
-[styling your docs]: ./styling-your-docs.md#using-the-theme_dir
+[styling your docs]: ./styling-your-docs.md#using-the-theme-custom_dir
 
 ## Basic theme
 
@@ -84,7 +85,7 @@ the [built-in themes] and modify it accordingly.
     power of Jinja, including [template inheritance]. You may notice that the
     themes included with MkDocs make extensive use of template inheritance and
     blocks, allowing users to easily override small bits and pieces of the
-    templates from the [theme_dir]. Therefore, the built-in themes are
+    templates from the theme [custom_dir]. Therefore, the built-in themes are
     implemented in a `base.html` file, which `main.html` extends. Although not
     required, third party template authors are encouraged to follow a similar
     pattern and may want to define the same [blocks] as are used in the built-in
@@ -153,7 +154,7 @@ navigation as a nested list.
 {% endif %}
 ```
 
-The `nav` object also contains a `hompage` object, which points to the `page`
+The `nav` object also contains a `homepage` object, which points to the `page`
 object of the homepage. For example, you may want to access `nav.homepage.url`.
 
 #### base_url
@@ -322,7 +323,7 @@ As of MkDocs `0.13` client side search support has been added to MkDocs with
 [Lunr.js].
 
 Search can either be added to every page in the theme or to a dedicated
-template which must be named `search.html`. The search template will be build
+template which must be named `search.html`. The search template will be built
 with the same name and can be viewable with `mkdocs serve` at
 `http://localhost:8000/search.html`. An example of the two different
 approaches can be seen by comparing the `mkdocs` and `readthedocs` themes.
@@ -380,11 +381,11 @@ Bootswatch theme].
 !!! Note
 
     It is not strictly necessary to package a theme, as the entire theme
-    can be contained in the `theme_dir`. If you have created a "one-off theme,"
-    that should be sufficent. However, if you intend to distribute your theme
+    can be contained in the `custom_dir`. If you have created a "one-off theme,"
+    that should be sufficient. However, if you intend to distribute your theme
     for others to use, packaging the theme has some advantages. By packaging
-    your theme, your users can more easily install it and they can them take
-    advantage of the [theme_dir] to make tweaks to your theme to better suit
+    your theme, your users can more easily install it and they can then take
+    advantage of the [custom_dir] to make tweaks to your theme to better suit
     their needs.
 
 [Python packaging]: https://packaging.python.org/en/latest/
@@ -394,15 +395,17 @@ Bootswatch theme].
 ### Package Layout
 
 The following layout is recommended for themes. Two files at the top level
-directory called `MANIFEST.in` amd `setup.py` beside the theme directory which
-contains an empty `__init__.py` file and your template and media files.
+directory called `MANIFEST.in` and `setup.py` beside the theme directory which
+contains an empty `__init__.py` file, a theme configuration file
+(`mkdocs-theme.yml`), and your template and media files.
 
 ```no-highlight
 .
 |-- MANIFEST.in
 |-- theme_name
 |   |-- __init__.py
-|   |-- main.py
+|   |-- mkdocs-theme.yml
+|   |-- main.html
 |   |-- styles.css
 `-- setup.py
 ```
@@ -462,6 +465,57 @@ it includes a `main.html` for the theme. It **must** also include a
 `__init__.py` file which should be empty, this file tells Python that the
 directory is a package.
 
+### Theme Configuration
+
+A packaged theme is required to include a configuration file named
+`mkdocs.theme.yml` which is placed in the root of your template files. The file
+should contain default configuration options for the theme. However, if the
+theme offers no configuration options, the file is still required and can be
+left blank.
+
+The theme author is free to define any arbitrary options deemed necessary and
+those options will be made available in the templates to control behavior.
+For example, a theme might want to make a sidebar optional and include the
+following in the `mkdocs-theme.yml` file:
+
+```yaml
+show_sidebar: true
+```
+
+Then in a template, that config option could be referenced:
+
+```django
+{% if config.theme.show_sidebar %}
+<div id="sidebar">...</div>
+{% endif %}
+```
+
+And the user could override the default in their project's `mkdocs.yml` config
+file:
+
+```yaml
+theme:
+    name: themename
+    show_sidebar: false
+```
+
+In addition to arbitrary options defined by the theme, MkDocs defines a few
+special options which alters its behavior:
+
+!!! block ""
+
+    #### static_templates
+
+    This option mirrors the [theme] config option of the same name and allows
+    some defaults to be set by the theme. Note that while the user can add
+    templates to this list, the user cannot remove templates included in the
+    theme's config.
+
+    #### extends
+
+    Defines a parent theme that this theme inherits from. The value should be
+    the string name of the parent theme. Normal Jinja inheritance rules apply.
+
 ### Distributing Themes
 
 With the above changes, your theme should now be ready to install. This can be
@@ -481,3 +535,4 @@ For a much more detailed guide, see the official Python packaging
 documentation for [Packaging and Distributing Projects].
 
 [Packaging and Distributing Projects]: https://packaging.python.org/en/latest/distributing/
+[theme]: ./configuration/#theme

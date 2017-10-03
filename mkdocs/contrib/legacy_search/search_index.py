@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from __future__ import unicode_literals
 
 import json
@@ -41,7 +43,7 @@ class SearchIndex(object):
             'location': loc
         })
 
-    def add_entry_from_context(self, page, content, toc):
+    def add_entry_from_context(self, page):
         """
         Create a set of entries in the index for a page. One for
         the page itself and then one for each of its' heading
@@ -52,7 +54,7 @@ class SearchIndex(object):
         # full page. This handles all the parsing and prepares
         # us to iterate through it.
         parser = ContentParser()
-        parser.feed(content)
+        parser.feed(page.content)
         parser.close()
 
         # Get the absolute URL for the page, this is then
@@ -62,12 +64,12 @@ class SearchIndex(object):
         # Create an entry for the full page.
         self._add_entry(
             title=page.title,
-            text=self.strip_tags(content).rstrip('\n'),
+            text=self.strip_tags(page.content).rstrip('\n'),
             loc=abs_url
         )
 
         for section in parser.data:
-            self.create_entry_for_section(section, toc, abs_url)
+            self.create_entry_for_section(section, page.toc, abs_url)
 
     def create_entry_for_section(self, section, toc, abs_url):
         """

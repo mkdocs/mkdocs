@@ -68,7 +68,7 @@ $ pip --version
 pip 1.5.2
 ```
 
-MkDocs supports Python versions 2.6, 2.7, 3.3, 3.4, 3.5 and pypy.
+MkDocs supports Python versions 2.7, 3.3, 3.4, 3.5 and pypy.
 
 #### Installing Python
 
@@ -252,7 +252,7 @@ Save your changes, and you'll see the ReadTheDocs theme being used.
 
 By default, MkDocs uses the [MkDocs favicon] icon. To use a different icon, create
 an `img` subdirectory in your `docs_dir` and copy your custom `favicon.ico` file
-to that directory. MkDocs will automaticaly detect and use that file as your
+to that directory. MkDocs will automatically detect and use that file as your
 favicon icon.
 
 [MkDocs favicon]: /img/favicon.ico
@@ -288,7 +288,7 @@ check your documentation builds into the repository. Add a line containing
 echo "site/" >> .gitignore
 ```
 
-If you're using another source code control tool you'll want to check it's
+If you're using another source code control tool you'll want to check its
 documentation on how to ignore specific directories.
 
 After some time, files may be removed from the documentation but they will still

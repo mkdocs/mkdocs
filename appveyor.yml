@@ -13,14 +13,15 @@ environment:
     - TOXENV: py35-integration
     - TOXENV: py35-min-req
     - TOXENV: py35-unittests
+    - TOXENV: py36-integration
+    - TOXENV: py36-min-req
+    - TOXENV: py36-unittests
     - TOXENV: flake8
 init:
   - "ECHO %TOXENV%"
   - ps: "ls C:\\Python*"
 install:
-  - ps: Invoke-WebRequest "https://bootstrap.pypa.io/ez_setup.py" -OutFile "c:\\ez_setup.py"
   - ps: Invoke-WebRequest "https://bootstrap.pypa.io/get-pip.py" -OutFile "c:\\get-pip.py"
-  - "c:\\python27\\python c:\\ez_setup.py"
   - "c:\\python27\\python c:\\get-pip.py"
   - "c:\\python27\\Scripts\\pip install tox"
 test_script:

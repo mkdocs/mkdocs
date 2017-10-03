@@ -6,9 +6,12 @@ from __future__ import unicode_literals
 import mock
 import os
 import unittest
+import tempfile
+import shutil
+import stat
 
 from mkdocs import nav, utils, exceptions
-from mkdocs.tests.base import dedent
+from mkdocs.tests.base import dedent, load_config
 
 
 class UtilsTests(unittest.TestCase):
@@ -74,7 +77,7 @@ class UtilsTests(unittest.TestCase):
             'local/file/jquery.js': './local/file/jquery.js',
             'image.png': './image.png',
         }
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         for path, expected_result in expected_results.items():
             urls = utils.create_media_urls(site_navigation, [path])
             self.assertEqual(urls[0], expected_result)
@@ -84,15 +87,41 @@ class UtilsTests(unittest.TestCase):
         test special case where there's a sub/index.md page
         '''
 
-        site_navigation = nav.SiteNavigation([
+        pages = [
             {'Home': 'index.md'},
             {'Sub': [
                 {'Sub Home': '/subpage/index.md'},
 
             ]}
-        ])
+        ]
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         site_navigation.url_context.set_current_url('/subpage/')
         site_navigation.file_context.current_file = "subpage/index.md"
+
+        def assertPathGenerated(declared, expected):
+            url = utils.create_relative_media_url(site_navigation, declared)
+            self.assertEqual(url, expected)
+
+        assertPathGenerated("img.png", "./img.png")
+        assertPathGenerated("./img.png", "./img.png")
+        assertPathGenerated("/img.png", "../img.png")
+
+    def test_create_relative_media_url_sub_index_windows(self):
+        '''
+        test special case where there's a sub/index.md page and we are on Windows.
+        current_file paths uses backslash in Windows
+        '''
+
+        pages = [
+            {'Home': 'index.md'},
+            {'Sub': [
+                {'Sub Home': '/level1/level2/index.md'},
+
+            ]}
+        ]
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
+        site_navigation.url_context.set_current_url('/level1/level2')
+        site_navigation.file_context.current_file = "level1\\level2\\index.md"
 
         def assertPathGenerated(declared, expected):
             url = utils.create_relative_media_url(site_navigation, declared)
@@ -113,6 +142,36 @@ class UtilsTests(unittest.TestCase):
         self.assertEqual(
             sorted(utils.get_theme_names()),
             ['mkdocs', 'readthedocs'])
+
+    @mock.patch('pkg_resources.iter_entry_points', autospec=True)
+    def test_get_theme_dir(self, mock_iter):
+
+        path = 'some/path'
+
+        theme = mock.Mock()
+        theme.name = 'mkdocs2'
+        theme.dist.key = 'mkdocs2'
+        theme.load().__file__ = os.path.join(path, '__init__.py')
+
+        mock_iter.return_value = iter([theme])
+
+        self.assertEqual(utils.get_theme_dir(theme.name), os.path.abspath(path))
+
+    def test_get_theme_dir_keyerror(self):
+
+        self.assertRaises(KeyError, utils.get_theme_dir, 'nonexistanttheme')
+
+    @mock.patch('pkg_resources.iter_entry_points', autospec=True)
+    def test_get_theme_dir_importerror(self, mock_iter):
+
+        theme = mock.Mock()
+        theme.name = 'mkdocs2'
+        theme.dist.key = 'mkdocs2'
+        theme.load.side_effect = ImportError()
+
+        mock_iter.return_value = iter([theme])
+
+        self.assertRaises(ImportError, utils.get_theme_dir, theme.name)
 
     @mock.patch('pkg_resources.iter_entry_points', autospec=True)
     def test_get_themes_warning(self, mock_iter):
@@ -194,3 +253,71 @@ class UtilsTests(unittest.TestCase):
         config = utils.yaml_load(yaml_src)
         self.assertTrue(isinstance(config['key'], utils.text_type))
         self.assertTrue(isinstance(config['key2'][0], utils.text_type))
+
+    def test_copy_files(self):
+        src_paths = [
+            'foo.txt',
+            'bar.txt',
+            'baz.txt',
+        ]
+        dst_paths = [
+            'foo.txt',
+            'foo/',             # ensure src filename is appended
+            'foo/bar/baz.txt'   # ensure missing dirs are created
+        ]
+        expected = [
+            'foo.txt',
+            'foo/bar.txt',
+            'foo/bar/baz.txt',
+        ]
+
+        src_dir = tempfile.mkdtemp()
+        dst_dir = tempfile.mkdtemp()
+
+        try:
+            for i, src in enumerate(src_paths):
+                src = os.path.join(src_dir, src)
+                with open(src, 'w') as f:
+                    f.write('content')
+                dst = os.path.join(dst_dir, dst_paths[i])
+                utils.copy_file(src, dst)
+                self.assertTrue(os.path.isfile(os.path.join(dst_dir, expected[i])))
+        finally:
+            shutil.rmtree(src_dir)
+            shutil.rmtree(dst_dir)
+
+    def test_copy_files_without_permissions(self):
+        src_paths = [
+            'foo.txt',
+            'bar.txt',
+            'baz.txt',
+        ]
+        expected = [
+            'foo.txt',
+            'bar.txt',
+            'baz.txt',
+        ]
+
+        src_dir = tempfile.mkdtemp()
+        dst_dir = tempfile.mkdtemp()
+
+        try:
+            for i, src in enumerate(src_paths):
+                src = os.path.join(src_dir, src)
+                with open(src, 'w') as f:
+                    f.write('content')
+                # Set src file to read-only
+                os.chmod(src, stat.S_IRUSR)
+                utils.copy_file(src, dst_dir)
+                self.assertTrue(os.path.isfile(os.path.join(dst_dir, expected[i])))
+                self.assertNotEqual(os.stat(src).st_mode, os.stat(os.path.join(dst_dir, expected[i])).st_mode)
+                # While src was read-only, dst must remain writable
+                self.assertTrue(os.access(os.path.join(dst_dir, expected[i]), os.W_OK))
+        finally:
+            for src in src_paths:
+                # Undo read-only so we can delete temp files
+                src = os.path.join(src_dir, src)
+                if os.path.exists(src):
+                    os.chmod(src, stat.S_IRUSR | stat.S_IWUSR)
+            shutil.rmtree(src_dir)
+            shutil.rmtree(dst_dir)

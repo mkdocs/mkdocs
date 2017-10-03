@@ -6,9 +6,9 @@ import mock
 import os
 import unittest
 
-from mkdocs import nav, legacy
+from mkdocs import nav
 from mkdocs.exceptions import ConfigurationError
-from mkdocs.tests.base import dedent
+from mkdocs.tests.base import dedent, load_config
 
 
 class SiteNavigationTests(unittest.TestCase):
@@ -21,7 +21,7 @@ class SiteNavigationTests(unittest.TestCase):
         Home - /
         About - /about/
         """)
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.nav_items), 2)
         self.assertEqual(len(site_navigation.pages), 2)
@@ -35,7 +35,7 @@ class SiteNavigationTests(unittest.TestCase):
         Home - /
         About - /about/
         """)
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.nav_items), 2)
         self.assertEqual(len(site_navigation.pages), 2)
@@ -63,7 +63,7 @@ class SiteNavigationTests(unittest.TestCase):
             Release notes - /about/release-notes/
             License - /about/license/
         """)
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.nav_items), 3)
         self.assertEqual(len(site_navigation.pages), 6)
@@ -79,7 +79,7 @@ class SiteNavigationTests(unittest.TestCase):
         Contact - /about/contact/
         License Title - /about/sub/license/
         """)
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.nav_items), 3)
         self.assertEqual(len(site_navigation.pages), 3)
@@ -96,7 +96,7 @@ class SiteNavigationTests(unittest.TestCase):
         License - /about/sub/license/
         """)
 
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.nav_items), 3)
         self.assertEqual(len(site_navigation.pages), 3)
@@ -114,7 +114,7 @@ class SiteNavigationTests(unittest.TestCase):
         License - /about/sub/license/
         """)
 
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.nav_items), 3)
         self.assertEqual(len(site_navigation.pages), 3)
@@ -134,7 +134,7 @@ class SiteNavigationTests(unittest.TestCase):
                 About - /about/ [*]
             """)
         ]
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         for index, page in enumerate(site_navigation.walk_pages()):
             self.assertEqual(str(site_navigation).strip(), expected[index])
 
@@ -153,7 +153,7 @@ class SiteNavigationTests(unittest.TestCase):
                 About - /about/ [*]
             """)
         ]
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         for index, page in enumerate(site_navigation.walk_pages()):
             self.assertEqual(str(site_navigation).strip(), expected[index])
 
@@ -232,7 +232,7 @@ class SiteNavigationTests(unittest.TestCase):
                     License - /about/license/ [*]
             """)
         ]
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
         for index, page in enumerate(site_navigation.walk_pages()):
             self.assertEqual(str(site_navigation).strip(), expected[index])
 
@@ -240,7 +240,7 @@ class SiteNavigationTests(unittest.TestCase):
         pages = [
             'index.md'
         ]
-        site_navigation = nav.SiteNavigation(pages, use_directory_urls=False)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages, use_directory_urls=False))
         base_url = site_navigation.url_context.make_relative('/')
         self.assertEqual(base_url, '.')
 
@@ -249,7 +249,7 @@ class SiteNavigationTests(unittest.TestCase):
             'index.md',
             'user-guide/styling-your-docs.md'
         ]
-        site_navigation = nav.SiteNavigation(pages, use_directory_urls=False)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages, use_directory_urls=False))
         site_navigation.url_context.base_path = "/user-guide/configuration"
         url = site_navigation.url_context.make_relative('/user-guide/styling-your-docs/')
         self.assertEqual(url, '../styling-your-docs/')
@@ -267,7 +267,7 @@ class SiteNavigationTests(unittest.TestCase):
         ]
 
         url_context = nav.URLContext()
-        nav_items, pages = nav._generate_site_navigation(pages, url_context)
+        nav_items, pages = nav._generate_site_navigation(load_config(pages=pages), url_context)
 
         self.assertEqual([n.title for n in nav_items],
                          ['Home', 'Running', 'Notes', 'License'])
@@ -293,7 +293,7 @@ class SiteNavigationTests(unittest.TestCase):
         ]
 
         url_context = nav.URLContext()
-        nav_items, pages = nav._generate_site_navigation(pages, url_context)
+        nav_items, pages = nav._generate_site_navigation(load_config(pages=pages), url_context)
 
         self.assertEqual([n.title for n in nav_items],
                          ['Home', 'Running', 'Notes', 'License'])
@@ -320,15 +320,15 @@ class SiteNavigationTests(unittest.TestCase):
 
         url_context = nav.URLContext()
         url_context.force_abs_urls = True
-        nav_items, pages = nav._generate_site_navigation(pages, url_context)
+        nav_items, pages = nav._generate_site_navigation(load_config(pages=pages), url_context)
 
         self.assertEqual([n.title for n in nav_items],
                          ['Home', 'Running', 'Notes', 'License'])
         self.assertEqual([n.url for n in nav_items], [
-            '',
-            '/api-guide/running',
-            '/about/notes',
-            '/about/sub/license'
+            '/',
+            '/api-guide/running/',
+            '/about/notes/',
+            '/about/sub/license/'
         ])
 
     def test_force_abs_urls_with_base(self):
@@ -346,37 +346,32 @@ class SiteNavigationTests(unittest.TestCase):
         url_context = nav.URLContext()
         url_context.force_abs_urls = True
         url_context.base_path = '/foo/'
-        nav_items, pages = nav._generate_site_navigation(pages, url_context)
+        nav_items, pages = nav._generate_site_navigation(load_config(pages=pages), url_context)
 
         self.assertEqual([n.title for n in nav_items],
                          ['Home', 'Running', 'Notes', 'License'])
         self.assertEqual([n.url for n in nav_items], [
-            '/foo',
-            '/foo/api-guide/running',
-            '/foo/about/notes',
-            '/foo/about/sub/license'
+            '/foo/',
+            '/foo/api-guide/running/',
+            '/foo/about/notes/',
+            '/foo/about/sub/license/'
         ])
 
     def test_invalid_pages_config(self):
 
-        bad_pages = [
-            set(),  # should be dict or string only
-            {"a": "index.md", "b": "index.md"}  # extra key
-        ]
+        bad_page = {"a": "index.md", "b": "index.md"}  # extra key
 
-        for bad_page in bad_pages:
+        def _test():
+            return nav._generate_site_navigation(load_config(pages=[bad_page, ]), None)
 
-            def _test():
-                return nav._generate_site_navigation((bad_page, ), None)
-
-            self.assertRaises(ConfigurationError, _test)
+        self.assertRaises(ConfigurationError, _test)
 
     def test_pages_config(self):
 
         bad_page = {}  # empty
 
         def _test():
-            return nav._generate_site_navigation((bad_page, ), None)
+            return nav._generate_site_navigation(load_config(pages=[bad_page, ]), None)
 
         self.assertRaises(ConfigurationError, _test)
 
@@ -397,7 +392,7 @@ class SiteNavigationTests(unittest.TestCase):
                 {'License': 'about/license.md'}
             ]}
         ]
-        site_navigation = nav.SiteNavigation(pages)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
 
         ancestors = (
             [],
@@ -419,7 +414,7 @@ class SiteNavigationTests(unittest.TestCase):
 
     def test_nesting(self):
 
-        pages_config = [
+        pages = [
             {'Home': 'index.md'},
             {'Install': [
                 {'Pre-install': 'install/install-pre.md'},
@@ -442,7 +437,7 @@ class SiteNavigationTests(unittest.TestCase):
             ]}
         ]
 
-        site_navigation = nav.SiteNavigation(pages_config)
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
 
         self.assertEqual([n.title for n in site_navigation.nav_items],
                          ['Home', 'Install', 'Guide'])
@@ -470,143 +465,204 @@ class SiteNavigationTests(unittest.TestCase):
         self.maxDiff = None
         self.assertEqual(str(site_navigation).strip(), expected)
 
+    def test_edit_uri(self):
+        """
+        Ensure that set_edit_url creates well formed URLs for edit_uri
+        """
 
-class TestLegacyPagesConfig(unittest.TestCase):
-
-    def test_walk_simple_toc(self):
-        pages = legacy.pages_compat_shim([
-            ('index.md', 'Home'),
-            ('about.md', 'About')
-        ])
-        expected = [
-            dedent("""
-                Home - / [*]
-                About - /about/
-            """),
-            dedent("""
-                Home - /
-                About - /about/ [*]
-            """)
+        pages = [
+            'index.md',
+            'internal.md',
+            'sub/internal.md',
+            'sub1/sub2/internal.md',
         ]
-        site_navigation = nav.SiteNavigation(pages)
-        for index, page in enumerate(site_navigation.walk_pages()):
-            self.assertEqual(str(site_navigation).strip(), expected[index])
 
-    def test_walk_empty_toc(self):
-        pages = legacy.pages_compat_shim([
-            ('index.md',),
-            ('about.md', 'About')
-        ])
+        # Basic test
+        repo_url = 'http://example.com/'
+        edit_uri = 'edit/master/docs/'
 
-        expected = [
-            dedent("""
-                Home - / [*]
-                About - /about/
-            """),
-            dedent("""
-                Home - /
-                About - /about/ [*]
-            """)
+        site_navigation = nav.SiteNavigation(load_config(
+            pages=pages,
+            repo_url=repo_url,
+            edit_uri=edit_uri,
+            docs_dir='docs',
+            site_dir='site',
+            site_url='',
+            use_directory_urls=True
+        ))
+
+        expected_results = (
+            repo_url + edit_uri + pages[0],
+            repo_url + edit_uri + pages[1],
+            repo_url + edit_uri + pages[2],
+            repo_url + edit_uri + pages[3],
+        )
+
+        for idx, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(page.edit_url, expected_results[idx])
+
+        # Ensure the '/' is added to the repo_url and edit_uri
+        repo_url = 'http://example.com'
+        edit_uri = 'edit/master/docs'
+
+        site_navigation = nav.SiteNavigation(load_config(
+            pages=pages,
+            repo_url=repo_url,
+            edit_uri=edit_uri,
+            docs_dir='docs',
+            site_dir='site',
+            site_url='',
+            use_directory_urls=True
+        ))
+
+        for idx, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(page.edit_url, expected_results[idx])
+
+        # Ensure query strings are supported
+        repo_url = 'http://example.com'
+        edit_uri = '?query=edit/master/docs/'
+
+        site_navigation = nav.SiteNavigation(load_config(
+            pages=pages,
+            repo_url=repo_url,
+            edit_uri=edit_uri,
+            docs_dir='docs',
+            site_dir='site',
+            site_url='',
+            use_directory_urls=True
+        ))
+
+        expected_results = (
+            repo_url + edit_uri + pages[0],
+            repo_url + edit_uri + pages[1],
+            repo_url + edit_uri + pages[2],
+            repo_url + edit_uri + pages[3],
+        )
+
+        for idx, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(page.edit_url, expected_results[idx])
+
+        # Ensure fragment strings are supported
+        repo_url = 'http://example.com'
+        edit_uri = '#fragment/edit/master/docs/'
+
+        site_navigation = nav.SiteNavigation(load_config(
+            pages=pages,
+            repo_url=repo_url,
+            edit_uri=edit_uri,
+            docs_dir='docs',
+            site_dir='site',
+            site_url='',
+            use_directory_urls=True
+        ))
+
+        expected_results = (
+            repo_url + edit_uri + pages[0],
+            repo_url + edit_uri + pages[1],
+            repo_url + edit_uri + pages[2],
+            repo_url + edit_uri + pages[3],
+        )
+
+        for idx, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(page.edit_url, expected_results[idx])
+
+    def test_edit_uri_windows(self):
+        """
+        Ensure that set_edit_url creates well formed URLs for edit_uri with a windows path
+        """
+
+        pages = [
+            'index.md',
+            'internal.md',
+            'sub\\internal.md',
+            'sub1\\sub2\\internal.md',
         ]
-        site_navigation = nav.SiteNavigation(pages)
-        for index, page in enumerate(site_navigation.walk_pages()):
-            self.assertEqual(str(site_navigation).strip(), expected[index])
 
-    def test_walk_indented_toc(self):
-        pages = legacy.pages_compat_shim([
-            ('index.md', 'Home'),
-            ('api-guide/running.md', 'API Guide', 'Running'),
-            ('api-guide/testing.md', 'API Guide', 'Testing'),
-            ('api-guide/debugging.md', 'API Guide', 'Debugging'),
-            ('about/release-notes.md', 'About', 'Release notes'),
-            ('about/license.md', 'About', 'License')
-        ])
-        expected = [
-            dedent("""
-                Home - / [*]
-                API Guide
-                    Running - /api-guide/running/
-                    Testing - /api-guide/testing/
-                    Debugging - /api-guide/debugging/
-                About
-                    Release notes - /about/release-notes/
-                    License - /about/license/
-            """),
-            dedent("""
-                Home - /
-                API Guide [*]
-                    Running - /api-guide/running/ [*]
-                    Testing - /api-guide/testing/
-                    Debugging - /api-guide/debugging/
-                About
-                    Release notes - /about/release-notes/
-                    License - /about/license/
-            """),
-            dedent("""
-                Home - /
-                API Guide [*]
-                    Running - /api-guide/running/
-                    Testing - /api-guide/testing/ [*]
-                    Debugging - /api-guide/debugging/
-                About
-                    Release notes - /about/release-notes/
-                    License - /about/license/
-            """),
-            dedent("""
-                Home - /
-                API Guide [*]
-                    Running - /api-guide/running/
-                    Testing - /api-guide/testing/
-                    Debugging - /api-guide/debugging/ [*]
-                About
-                    Release notes - /about/release-notes/
-                    License - /about/license/
-            """),
-            dedent("""
-                Home - /
-                API Guide
-                    Running - /api-guide/running/
-                    Testing - /api-guide/testing/
-                    Debugging - /api-guide/debugging/
-                About [*]
-                    Release notes - /about/release-notes/ [*]
-                    License - /about/license/
-            """),
-            dedent("""
-                Home - /
-                API Guide
-                    Running - /api-guide/running/
-                    Testing - /api-guide/testing/
-                    Debugging - /api-guide/debugging/
-                About [*]
-                    Release notes - /about/release-notes/
-                    License - /about/license/ [*]
-            """)
-        ]
-        site_navigation = nav.SiteNavigation(pages)
-        for index, page in enumerate(site_navigation.walk_pages()):
-            self.assertEqual(str(site_navigation).strip(), expected[index])
+        # Basic test
+        repo_url = 'http://example.com/'
+        edit_uri = 'edit/master/docs/'
 
-    def test_indented_toc_missing_child_title(self):
-        pages = legacy.pages_compat_shim([
-            ('index.md', 'Home'),
-            ('api-guide/running.md', 'API Guide', 'Running'),
-            ('api-guide/testing.md', 'API Guide'),
-            ('api-guide/debugging.md', 'API Guide', 'Debugging'),
-            ('about/release-notes.md', 'About', 'Release notes'),
-            ('about/license.md', 'About', 'License')
-        ])
-        expected = dedent("""
-        Home - /
-        API Guide
-            Running - /api-guide/running/
-            Testing - /api-guide/testing/
-            Debugging - /api-guide/debugging/
-        About
-            Release notes - /about/release-notes/
-            License - /about/license/
-        """)
-        site_navigation = nav.SiteNavigation(pages)
-        self.assertEqual(str(site_navigation).strip(), expected)
-        self.assertEqual(len(site_navigation.nav_items), 3)
-        self.assertEqual(len(site_navigation.pages), 6)
+        site_navigation = nav.SiteNavigation(load_config(
+            pages=pages,
+            repo_url=repo_url,
+            edit_uri=edit_uri,
+            docs_dir='docs',
+            site_dir='site',
+            site_url='',
+            use_directory_urls=True
+        ))
+
+        expected_results = (
+            repo_url + edit_uri + pages[0],
+            repo_url + edit_uri + pages[1],
+            repo_url + edit_uri + pages[2].replace('\\', '/'),
+            repo_url + edit_uri + pages[3].replace('\\', '/'),
+        )
+
+        for idx, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(page.edit_url, expected_results[idx])
+
+        # Ensure the '/' is added to the repo_url and edit_uri
+        repo_url = 'http://example.com'
+        edit_uri = 'edit/master/docs'
+
+        site_navigation = nav.SiteNavigation(load_config(
+            pages=pages,
+            repo_url=repo_url,
+            edit_uri=edit_uri,
+            docs_dir='docs',
+            site_dir='site',
+            site_url='',
+            use_directory_urls=True
+        ))
+
+        for idx, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(page.edit_url, expected_results[idx])
+
+        # Ensure query strings are supported
+        repo_url = 'http://example.com'
+        edit_uri = '?query=edit/master/docs/'
+
+        site_navigation = nav.SiteNavigation(load_config(
+            pages=pages,
+            repo_url=repo_url,
+            edit_uri=edit_uri,
+            docs_dir='docs',
+            site_dir='site',
+            site_url='',
+            use_directory_urls=True
+        ))
+
+        expected_results = (
+            repo_url + edit_uri + pages[0],
+            repo_url + edit_uri + pages[1],
+            repo_url + edit_uri + pages[2].replace('\\', '/'),
+            repo_url + edit_uri + pages[3].replace('\\', '/'),
+        )
+
+        for idx, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(page.edit_url, expected_results[idx])
+
+        # Ensure fragment strings are supported
+        repo_url = 'http://example.com'
+        edit_uri = '#fragment/edit/master/docs/'
+
+        site_navigation = nav.SiteNavigation(load_config(
+            pages=pages,
+            repo_url=repo_url,
+            edit_uri=edit_uri,
+            docs_dir='docs',
+            site_dir='site',
+            site_url='',
+            use_directory_urls=True
+        ))
+
+        expected_results = (
+            repo_url + edit_uri + pages[0],
+            repo_url + edit_uri + pages[1],
+            repo_url + edit_uri + pages[2].replace('\\', '/'),
+            repo_url + edit_uri + pages[3].replace('\\', '/'),
+        )
+
+        for idx, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(page.edit_url, expected_results[idx])

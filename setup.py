@@ -7,8 +7,6 @@ import re
 import os
 import sys
 
-PY26 = sys.version_info[:2] == (2, 6)
-
 
 long_description = (
     "MkDocs is a fast, simple and downright gorgeous static site generator "
@@ -60,8 +58,8 @@ setup(
     install_requires=[
         'click>=3.3',
         'Jinja2>=2.7.1',
-        'livereload>=2.3.2',
-        'Markdown>=2.3.1,<2.5' if PY26 else 'Markdown>=2.3.1',
+        'livereload>=2.5.1',
+        'Markdown>=2.3.1',
         'PyYAML>=3.10',
         'tornado>=4.1',
     ],
@@ -72,7 +70,10 @@ setup(
         'mkdocs.themes': [
             'mkdocs = mkdocs.themes.mkdocs',
             'readthedocs = mkdocs.themes.readthedocs',
-        ]
+        ],
+        'mkdocs.plugins': [
+            'legacy_search = mkdocs.contrib.legacy_search:SearchPlugin',
+        ],
     },
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -83,7 +84,6 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',

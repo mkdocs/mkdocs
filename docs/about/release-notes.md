@@ -21,6 +21,149 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Version 1.0.0 (20??-??-??)
+
+### Major Additions to Version 1.0.0
+
+#### Plugin API. (#206)
+
+A new [Plugin API] has been added to MkDocs which allows users to define their
+own custom behaviors. See the included documentation for a full explaination of
+the API.
+
+The previously built-in search functionality has been removed and wrapped in a
+plugin (named "legacy_search") with no changes in behavior. As there are no
+'default' plugins, you need to explcitly enable the legacy_search plugin if you
+would like to continue using it. To do so, adding the following to your
+`mkdocs.yml` file:
+
+    plugins:
+        - legacy_search
+
+[Plugin API]: ../user-guide/plugins.md
+
+#### Theme Customization. (#1164)
+
+Support had been added to provide theme specific customizations. Theme authors
+can define default options as documented in [Theme Configuration]. A theme can
+now inherit from another theme, define various static templates to be rendered,
+and define arbitrary default variables to control behavior in the templates.
+
+Users can override those defaults under the [theme] configuration option, which
+now accepts nested options. One such nested option is the [custom_dir] option,
+which replaces the now deprecated `theme_dir` option. If users had previously
+set the `theme_dir` option, a warning will be issued, with an error expected in
+a future release.
+
+If a configuration previously defined a `theme_dir` like this:
+
+```yaml
+theme: mkdocs
+theme_dir: custom
+```
+
+Then the configuration should be adjusted as follows:
+
+```yaml
+theme:
+    name: mkdocs
+    custom_dir: custom
+```
+
+See the [theme] configuration option documentation for details.
+
+[Theme Configuration]: ../user-guide/custom-themes.md#theme-configuration
+[theme]: ../user-guide/configuration.md#theme
+[custom_dir]: ../user-guide/configuration.md#custom_dir
+
+#### Previously deprecated Template variables removed. (#1168)
+
+##### Page Template
+
+The primary entry point for page templates has been changed from `base.html` to
+`main.html`. This allows `base.html` to continue to exist while allowing users
+to override `main.html` and extend `base.html`. For version 0.16, `base.html`
+continued to work if no `main.html` template existed, but it raised a
+deprecation warning. In version 1.0, a build will fail if no `main.html`
+template exists.
+
+##### Context Variables
+
+Page specific variable names in the template context have been refactored as
+defined in [Custom Themes](../user-guide/custom-themes/#page). The
+old variable names issued a warning in version 0.16, but have been removed in
+version 1.0.
+
+Any of the following old page variables should be updated to the new ones in
+user created and third-party templates:
+
+| Old Variable Name | New Variable Name   |
+| ----------------- | ------------------- |
+| current_page      | [page]              |
+| page_title        | [page.title]        |
+| content           | [page.content]      |
+| toc               | [page.toc]          |
+| meta              | [page.meta]         |
+| canonical_url     | [page.canonical_url]|
+| previous_page     | [page.previous_page]|
+| next_page         | [page.next_page]    |
+
+[page]: ../user-guide/custom-themes/#page
+[page.title]: ../user-guide/custom-themes/#pagetitle
+[page.content]: ../user-guide/custom-themes/#pagecontent
+[page.toc]: ../user-guide/custom-themes/#pagetoc
+[page.meta]: ../user-guide/custom-themes/#pagemeta
+[page.canonical_url]: ../user-guide/custom-themes/#pagecanonical_url
+[page.previous_page]: ../user-guide/custom-themes/#pageprevious_page
+[page.next_page]: ../user-guide/custom-themes/#pagenext_page
+
+Additionally, a number of global variables have been altered and/or removed
+and user created and third-party templates should be updated as outlined below:
+
+| Old Variable Name | New Variable Name or Expression        |
+| ----------------- | -------------------------------------- |
+| current_page      | page                                   |
+| include_nav       | nav&#124;length&gt;1                   |
+| include_next_prev | (page.next_page or page.previous_page) |
+| site_name         | config.site_name                       |
+| site_author       | config.site_author                     |
+| page_description  | config.site_description                |
+| repo_url          | config.repo_url                        |
+| repo_name         | config.repo_name                       |
+| site_url          | config.site_url                        |
+| copyright         | config.copyright                       |
+| google_analytics  | config.google_analytics                |
+| homepage_url      | nav.homepage.url                       |
+| favicon           | {{ base_url }}/img/favicon.ico         |
+
+### Other Changes and Additions to Version 1.0.0
+
+* Internal refactor of Markdown processing (#713)
+* Removed special error message for mkdocs-bootstrap and mkdocs-bootswatch
+  themes (#1168)
+* The legacy pages config is no longer supported (#1168)
+* The deprecated `json` command has been removed (#481)
+* Support for Python 2.6 has been dropped (#165)
+
+## Version 0.16.3 (2017-04-04)
+
+* Fix error raised by autoscrolling in the readthedocs theme (#1177)
+* Fix a few documentation typos (#1181 & #1185)
+* Fix a regression to livereload server introduced in 0.16.2 (#1174)
+
+## Version 0.16.2 (2017-03-13)
+
+* System root (`/`) is not a valid path for site_dir or docs_dir (#1161)
+* Refactor readthedocs theme navigation (#1155 & #1156)
+* Add support to dev server to serve custom error pages (#1040)
+* Ensure nav.homepage.url is not blank on error pages (#1131)
+* Increase livereload dependency to 2.5.1 (#1106)
+
+## Version 0.16.1 (2016-12-22)
+
+* Ensure scrollspy behavior does not affect nav bar (#1094)
+* Only "load" a theme when it is explicitly requested by the user (#1105)
+
 ## Version 0.16 (2016-11-04)
 
 ### Major Additions to Version 0.16.0

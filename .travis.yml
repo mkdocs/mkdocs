@@ -1,48 +1,72 @@
 sudo: false
 language: python
-python: '3.5'
-env:
-- TOXENV=flake8
-- TOXENV=markdown-lint
-- TOXENV=linkchecker
-- TOXENV=jshint
-- TOXENV=csslint
-- TOXENV=py26-integration
-- TOXENV=py26-min-req
-- TOXENV=py26-unittests
-- TOXENV=py27-integration
-- TOXENV=py27-min-req
-- TOXENV=py27-unittests
-- TOXENV=py33-integration
-- TOXENV=py33-min-req
-- TOXENV=py33-unittests
-- TOXENV=py34-integration
-- TOXENV=py34-min-req
-- TOXENV=py34-unittests
-- TOXENV=py35-integration
-- TOXENV=py35-min-req
-- TOXENV=py35-unittests
-- TOXENV=pypy-integration
-- TOXENV=pypy-min-req
-- TOXENV=pypy-unittests
-- TOXENV=pypy3-integration
-- TOXENV=pypy3-min-req
-- TOXENV=pypy3-unittests
-install:
-- pip install tox
-- gem install mdl
-- npm install -g jshint
-- npm install -g csslint
-script:
-- git clean -f -d -x
-- tox
+dist: trusty
+
 matrix:
-  allow_failures:
-    - env: TOXENV=pypy3-integration
-    - env: TOXENV=pypy3-min-req
-    - env: TOXENV=pypy3-unittests
-before_install: pip install codecov
+  include:
+    # Default Python
+    - env: TOXENV=flake8
+    - env: TOXENV=markdown-lint
+      before_install: gem install mdl
+    - env: TOXENV=linkchecker
+    - env: TOXENV=jshint
+      before_install: npm install -g jshint
+    - env: TOXENV=csslint
+      before_install: npm install -g csslint
+    # Python version specific
+    - python: '2.7'
+      env: TOXENV=py27-integration
+    - python: '2.7'
+      env: TOXENV=py27-min-req
+    - python: '2.7'
+      env: TOXENV=py27-unittests
+    - python: '3.3'
+      env: TOXENV=py33-integration
+    - python: '3.3'
+      env: TOXENV=py33-min-req
+    - python: '3.3'
+      env: TOXENV=py33-unittests
+    - python: '3.4'
+      env: TOXENV=py34-integration
+    - python: '3.4'
+      env: TOXENV=py34-min-req
+    - python: '3.4'
+      env: TOXENV=py34-unittests
+    - python: '3.5'
+      env: TOXENV=py35-integration
+    - python: '3.5'
+      env: TOXENV=py35-min-req
+    - python: '3.5'
+      env: TOXENV=py35-unittests
+    - python: '3.6'
+      env: TOXENV=py36-integration
+    - python: '3.6'
+      env: TOXENV=py36-min-req
+    - python: '3.6'
+      env: TOXENV=py36-unittests
+    - python: 'pypy'
+      env: TOXENV=pypy-integration
+    - python: 'pypy'
+      env: TOXENV=pypy-min-req
+    - python: 'pypy'
+      env: TOXENV=pypy-unittests
+    - python: 'pypy3'
+      env: TOXENV=pypy3-integration
+    - python: 'pypy3'
+      env: TOXENV=pypy3-min-req
+    - python: 'pypy3'
+      env: TOXENV=pypy3-unittests
+
+install:
+  - pip install codecov
+  - pip install tox
+
+script:
+  - git clean -f -d -x
+  - tox
+
 after_success: codecov
+
 deploy:
   provider: pypi
   user: mkdocsdeploy

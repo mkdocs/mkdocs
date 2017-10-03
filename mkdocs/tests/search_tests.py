@@ -5,8 +5,8 @@ from __future__ import unicode_literals
 import unittest
 
 from mkdocs import nav
-from mkdocs import search
-from mkdocs.tests.base import dedent, markdown_to_toc
+from mkdocs.contrib.legacy_search import search_index as search
+from mkdocs.tests.base import dedent, markdown_to_toc, load_config
 
 
 def strip_whitespace(string):
@@ -111,7 +111,8 @@ class SearchTests(unittest.TestCase):
             {'Home': 'index.md'},
             {'About': 'about.md'},
         ]
-        site_navigation = nav.SiteNavigation(pages)
+
+        site_navigation = nav.SiteNavigation(load_config(pages=pages))
 
         md = dedent("""
         # Heading 1
@@ -123,9 +124,13 @@ class SearchTests(unittest.TestCase):
         full_content = ''.join("""Heading{0}Content{0}""".format(i) for i in range(1, 4))
 
         for page in site_navigation:
+            # Fake page.read_source() and page.render()
+            page.markdown = md
+            page.toc = toc
+            page.content = html_content
 
             index = search.SearchIndex()
-            index.add_entry_from_context(page, html_content, toc)
+            index.add_entry_from_context(page)
 
             self.assertEqual(len(index._entries), 4)
 

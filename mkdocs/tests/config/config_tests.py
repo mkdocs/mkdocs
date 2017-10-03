@@ -7,6 +7,7 @@ import shutil
 import tempfile
 import unittest
 
+import mkdocs
 from mkdocs import config
 from mkdocs import utils
 from mkdocs.config import config_options
@@ -78,7 +79,7 @@ class ConfigTests(unittest.TestCase):
         file_contents = dedent("""
         site_name: Example
         pages:
-        - ['index.md', 'Introduction']
+        - 'Introduction': 'index.md'
         """)
         config_file = tempfile.NamedTemporaryFile('w', delete=False)
         try:
@@ -102,19 +103,57 @@ class ConfigTests(unittest.TestCase):
             {"theme": "readthedocs"},  # builtin theme
             {"theme_dir": mytheme},  # custom only
             {"theme": "readthedocs", "theme_dir": custom},  # builtin and custom
+            {"theme": {'name': 'readthedocs'}},  # builtin as complex
+            {"theme": {'name': None, 'custom_dir': mytheme}},  # custom only as complex
+            {"theme": {'name': 'readthedocs', 'custom_dir': custom}},  # builtin and custom as complex
+            {  # user defined variables
+                'theme': {
+                    'name': 'mkdocs',
+                    'static_templates': ['foo.html'],
+                    'show_sidebar': False,
+                    'some_var': 'bar'
+                }
+            }
         ]
 
-        abs_path = os.path.abspath(os.path.dirname(__file__))
-        mkdocs_dir = os.path.abspath(os.path.join(abs_path, '..', '..'))
+        mkdocs_dir = os.path.abspath(os.path.dirname(mkdocs.__file__))
+        mkdocs_templates_dir = os.path.join(mkdocs_dir, 'templates')
         theme_dir = os.path.abspath(os.path.join(mkdocs_dir, 'themes'))
-        search_asset_dir = os.path.abspath(os.path.join(
-            mkdocs_dir, 'assets', 'search'))
 
         results = (
-            [os.path.join(theme_dir, 'mkdocs'), search_asset_dir],
-            [os.path.join(theme_dir, 'readthedocs'), search_asset_dir],
-            [mytheme, search_asset_dir],
-            [custom, os.path.join(theme_dir, 'readthedocs'), search_asset_dir],
+            {
+                'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
+                'static_templates': ['404.html', 'sitemap.xml'],
+                'vars': {}
+            }, {
+                'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
+                'static_templates': ['404.html', 'sitemap.xml'],
+                'vars': {}
+            }, {
+                'dirs': [mytheme, mkdocs_templates_dir],
+                'static_templates': ['sitemap.xml'],
+                'vars': {}
+            }, {
+                'dirs': [custom, os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
+                'static_templates': ['404.html', 'sitemap.xml'],
+                'vars': {}
+            }, {
+                'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
+                'static_templates': ['404.html', 'sitemap.xml'],
+                'vars': {}
+            }, {
+                'dirs': [mytheme, mkdocs_templates_dir],
+                'static_templates': ['sitemap.xml'],
+                'vars': {}
+            }, {
+                'dirs': [custom, os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
+                'static_templates': ['404.html', 'sitemap.xml'],
+                'vars': {}
+            }, {
+                'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
+                'static_templates': ['404.html', 'sitemap.xml', 'foo.html'],
+                'vars': {'show_sidebar': False, 'some_var': 'bar'}
+            }
         )
 
         for config_contents, result in zip(configs, results):
@@ -124,8 +163,11 @@ class ConfigTests(unittest.TestCase):
                 ('theme_dir', config_options.ThemeDir(exists=True)),
             ))
             c.load_dict(config_contents)
-            c.validate()
-            self.assertEqual(c['theme_dir'], result)
+            errors, warnings = c.validate()
+            self.assertEqual(len(errors), 0)
+            self.assertEqual(c['theme'].dirs, result['dirs'])
+            self.assertEqual(c['theme'].static_templates, set(result['static_templates']))
+            self.assertEqual(dict([(k, c['theme'][k]) for k in iter(c['theme'])]), result['vars'])
 
     def test_default_pages(self):
         tmp_dir = tempfile.mkdtemp()

@@ -1,0 +1,5 @@
+# Config options for 'readthedocs' theme
+
+static_templates:
+    # - search.html  <= this gets added by the extension. It should be excluded without the extension
+    - 404.html

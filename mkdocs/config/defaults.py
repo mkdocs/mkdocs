@@ -32,10 +32,6 @@ DEFAULT_SCHEMA = (
     # The name of the author to add to the HTML meta tags
     ('site_author', config_options.Type(utils.string_types)),
 
-    # The path to the favicon for a site
-    # TODO: remove this in version 1.0
-    ('site_favicon', config_options.Deprecated()),
-
     # The MkDocs theme for the documentation.
     ('theme', config_options.Theme(default='mkdocs')),
 
@@ -57,8 +53,7 @@ DEFAULT_SCHEMA = (
     ('google_analytics', config_options.Type(list, length=2)),
 
     # The address on which to serve the live reloading docs server.
-    ('dev_addr', config_options.Type(
-        utils.string_types, default='127.0.0.1:8000')),
+    ('dev_addr', config_options.IpAddress(default='127.0.0.1:8000')),
 
     # If `True`, use `<page_name>/index.hmtl` style files with hyperlinks to
     # the directory.If `False`, use `<page_name>.html style file with
@@ -83,25 +78,17 @@ DEFAULT_SCHEMA = (
     ('edit_uri', config_options.Type(utils.string_types)),
 
     # Specify which css or javascript files from the docs directory should be
-    # additionally included in the site. Default, List of all .css and .js
-    # files in the docs dir.
-    ('extra_css', config_options.Extras(file_match=utils.is_css_file)),
-    ('extra_javascript', config_options.Extras(
-        file_match=utils.is_javascript_file)),
+    # additionally included in the site.
+    ('extra_css', config_options.Type(list, default=[])),
+    ('extra_javascript', config_options.Type(list, default=[])),
 
     # Similar to the above, but each template (HTML or XML) will be build with
     # Jinja2 and the global context.
-    ('extra_templates', config_options.Extras()),
-
-    # TODO: delete deprecated `include_nav` and `include_next_previous` in version 1.0
-    # Determine if the site should include the nav and next/prev elements.
-    # Default, True if the site has more than one page, False otherwise.
-    ('include_nav', config_options.NumPages()),
-    ('include_next_prev', config_options.NumPages()),
+    ('extra_templates', config_options.Type(list, default=[])),
 
     # PyMarkdown extension names.
     ('markdown_extensions', config_options.MarkdownExtensions(
-        builtins=['meta', 'toc', 'tables', 'fenced_code'],
+        builtins=['toc', 'tables', 'fenced_code'],
         configkey='mdx_configs', default=[])),
 
     # PyMarkdown Extension Configs. For internal use only.
@@ -124,4 +111,9 @@ DEFAULT_SCHEMA = (
     # MkDocs itself. A good example here would be including the current
     # project version.
     ('extra', config_options.SubConfig()),
+
+    # a list of plugins. Each item may contain a string name or a key value pair.
+    # A key value pair should be the string name (as the key) and a dict of config
+    # options (as the value).
+    ('plugins', config_options.Plugins(default=[])),
 )
