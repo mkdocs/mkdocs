@@ -19,7 +19,6 @@ environment:
     - TOXENV: flake8
 init:
   - "ECHO %TOXENV%"
-  - ps: "ls C:\\Python*"
 install:
   - "c:\\python27\\Scripts\\pip install tox"
 test_script:
