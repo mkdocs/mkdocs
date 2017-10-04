@@ -21,8 +21,6 @@ init:
   - "ECHO %TOXENV%"
   - ps: "ls C:\\Python*"
 install:
-  - ps: Invoke-WebRequest "https://bootstrap.pypa.io/get-pip.py" -OutFile "c:\\get-pip.py"
-  - "c:\\python27\\python c:\\get-pip.py"
   - "c:\\python27\\Scripts\\pip install tox"
 test_script:
   - "git clean -f -d -x"
