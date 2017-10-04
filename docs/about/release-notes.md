@@ -34,7 +34,7 @@ the API.
 The previously built-in search functionality has been removed and wrapped in a
 plugin (named "legacy_search") with no changes in behavior. As there are no
 'default' plugins, you need to explcitly enable the legacy_search plugin if you
-would like to continue using it. To do so, adding the following to your
+would like to continue using it. To do so, add the following to your
 `mkdocs.yml` file:
 
     plugins:
@@ -136,14 +136,34 @@ and user created and third-party templates should be updated as outlined below:
 | homepage_url      | nav.homepage.url                       |
 | favicon           | {{ base_url }}/img/favicon.ico         |
 
+#### Auto-Populated extra_css and extra_javascript Fully Deprecated. (#986)
+
+In previous versions of MkDocs, if the `extra_css` or `extra_javascript` config
+settings were empty, MkDocs would scan the `docs_dir` and auto-populate each
+setting with all of the CSS and JavaScript files found. On version 0.16 this
+behavior was deprecated and a warning was issued. In 1.0 any unlisted CSS and
+JavaScript files will not be included in the HTML templates without warning. In
+other words, they will still be copied to the `site-dir`, but they will not have
+any effect on the theme if they are not explicitly listed.
+
+All CSS and javaScript files in the `docs_dir` should be explicitly listed in
+the `extra_css` or `extra_javascript` config settings going forward.
+
 ### Other Changes and Additions to Version 1.0.0
 
+* Symbolic links are now followed consistently (#1134)
+* Support for keyboard navigation shortcuts added to included themes (#1095)
+* Some refactoring and improvements to config_options (#1296)
+* Officially added support for Python 3.6 (#1296)
+* 404 Error page added to readthedocs theme (#1296))
 * Internal refactor of Markdown processing (#713)
 * Removed special error message for mkdocs-bootstrap and mkdocs-bootswatch
   themes (#1168)
 * The legacy pages config is no longer supported (#1168)
 * The deprecated `json` command has been removed (#481)
 * Support for Python 2.6 has been dropped (#165)
+* File permissions are no longer copied during build (#1292)
+* Support query and fragment strings in `edit_uri` (#1224 & #1273)
 
 ## Version 0.16.3 (2017-04-04)
 
