@@ -466,7 +466,7 @@ class Pages(OptionallyRequired):
         if self.file_match is None:
             raise StopIteration
 
-        for (dirpath, dirs, filenames) in os.walk(docs_dir):
+        for (dirpath, dirs, filenames) in os.walk(docs_dir, followlinks=True):
             dirs.sort()
             for filename in sorted(filenames):
                 fullpath = os.path.join(dirpath, filename)
@@ -474,8 +474,8 @@ class Pages(OptionallyRequired):
                 # Some editors (namely Emacs) will create temporary symlinks
                 # for internal magic. We can just ignore these files.
                 if os.path.islink(fullpath):
-                    fp = os.path.join(dirpath, os.readlink(fullpath))
-                    if not os.path.exists(fp):
+                    local_fullpath = os.path.join(dirpath, os.readlink(fullpath))
+                    if not os.path.exists(local_fullpath):
                         continue
 
                 relpath = os.path.normpath(os.path.relpath(fullpath, docs_dir))
