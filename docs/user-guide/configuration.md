@@ -57,9 +57,11 @@ page, accounting for specifics of the repository host (e.g. GitHub, Bitbucket,
 etc), the branch, and the docs directory itself. Mkdocs concatenates `repo_url`
 and `edit_uri`, and appends the input path of the page.
 
-When set, provides a link directly to the page in your source repository. This
-makes it easier to find and edit the source for the page. If `repo_url` is not
-set, this option is ignored.
+When set, and if your theme supports it, provides a link directly to the page in
+your source repository. This makes it easier to find and edit the source for the
+page. If `repo_url` is not set, this option is ignored. On some themes, setting
+this option may cause an edit link to be used in place of a repository link.
+Other themes may show both links.
 
 For example, for a GitHub-hosted repository, the `edit_uri` would be as follows.
 (Note the `edit` path and `master` branch...)
