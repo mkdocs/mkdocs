@@ -149,6 +149,7 @@ the `extra_css` or `extra_javascript` config settings going forward.
 
 ### Other Changes and Additions to Version 0.17.0
 
+* Add "edit Link" support to MkDocs theme (#1129)
 * Open files with `utf-8-sig` to account for BOM (#1186)
 * Symbolic links are now followed consistently (#1134)
 * Support for keyboard navigation shortcuts added to included themes (#1095)
