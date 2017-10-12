@@ -115,5 +115,5 @@ DEFAULT_SCHEMA = (
     # a list of plugins. Each item may contain a string name or a key value pair.
     # A key value pair should be the string name (as the key) and a dict of config
     # options (as the value).
-    ('plugins', config_options.Plugins(default=[])),
+    ('plugins', config_options.Plugins(default=['search'])),
 )

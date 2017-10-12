@@ -84,7 +84,7 @@
         {%- endfor %}
       {%- endblock %}
 
-        {% if 'legacy_search' in config['plugins'] %}{%- include "search-modal.html" %}{% endif %}
+        {% if 'search' in config['plugins'] %}{%- include "search-modal.html" %}{% endif %}
         {%- include "keyboard-modal.html" %}
 
     </body>

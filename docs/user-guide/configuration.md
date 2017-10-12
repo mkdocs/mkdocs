@@ -414,9 +414,25 @@ markdown_extensions:
 ### plugins
 
 A list of plugins (with optional configuration settings) to use when building
-the site . See the [Plugins] documentation for details.
+the site . See the [Plugins] documentation for full details.
 
-**default**: `[]` (an empty list).
+If the `plugins` config setting is defined in the `mkdocs.yml` config file, then
+any defaults (such as `search`) are ignored and you need to explicitly re-enable
+the defaults if you would like to continue using them:
+
+```yaml
+plugins:
+    - search
+    - your_other_plugin
+```
+
+To completely disable all plugins, including any defaults, set the `plugins`
+setting to an empty list:
+
+```yaml
+plugins: []
+
+**default**: `['search']` (the "search" plugin included with MkDocs).
 
 [custom themes]: custom-themes.md
 [variables that are available]: custom-themes.md#template-variables

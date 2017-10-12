@@ -38,13 +38,16 @@ separate line.
 
 ```yaml
 plugins:
-    -search:
+    - search:
         lang: en
         foo: bar
 ```
 
 For information regarding the configuration options available for a given plugin,
 see that plugin's documentation.
+
+For a list of default plugins and how to override them, see the
+[configuration][config] documentation.
 
 ## Developing Plugins
 
