@@ -158,6 +158,46 @@ class TestPluginConfig(unittest.TestCase):
         }
         self.assertEqual(cfg['plugins']['sample'].config, expected)
 
+    def test_plugin_config_empty_list_with_empty_default(self, mock_class):
+        cfg = {'plugins': []}
+        option = config.config_options.Plugins(default=[])
+        cfg['plugins'] = option.validate(cfg['plugins'])
+
+        self.assertIsInstance(cfg['plugins'], plugins.PluginCollection)
+        self.assertEqual(len(cfg['plugins']), 0)
+
+    def test_plugin_config_empty_list_with_default(self, mock_class):
+        # Default is ignored
+        cfg = {'plugins': []}
+        option = config.config_options.Plugins(default=['sample'])
+        cfg['plugins'] = option.validate(cfg['plugins'])
+
+        self.assertIsInstance(cfg['plugins'], plugins.PluginCollection)
+        self.assertEqual(len(cfg['plugins']), 0)
+
+    def test_plugin_config_none_with_empty_default(self, mock_class):
+        cfg = {'plugins': None}
+        option = config.config_options.Plugins(default=[])
+        cfg['plugins'] = option.validate(cfg['plugins'])
+
+        self.assertIsInstance(cfg['plugins'], plugins.PluginCollection)
+        self.assertEqual(len(cfg['plugins']), 0)
+
+    def test_plugin_config_none_with_default(self, mock_class):
+        # Default is used.
+        cfg = {'plugins': None}
+        option = config.config_options.Plugins(default=['sample'])
+        cfg['plugins'] = option.validate(cfg['plugins'])
+
+        self.assertIsInstance(cfg['plugins'], plugins.PluginCollection)
+        self.assertIn('sample', cfg['plugins'])
+        self.assertIsInstance(cfg['plugins']['sample'], plugins.BasePlugin)
+        expected = {
+            'foo': 'default foo',
+            'bar': 0
+        }
+        self.assertEqual(cfg['plugins']['sample'].config, expected)
+
     def test_plugin_config_uninstalled(self, mock_class):
 
         cfg = {'plugins': ['uninstalled']}

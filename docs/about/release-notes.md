@@ -28,19 +28,17 @@ The current and past members of the MkDocs team.
 #### Plugin API. (#206)
 
 A new [Plugin API] has been added to MkDocs which allows users to define their
-own custom behaviors. See the included documentation for a full explaination of
+own custom behaviors. See the included documentation for a full explanation of
 the API.
 
 The previously built-in search functionality has been removed and wrapped in a
-plugin (named "legacy_search") with no changes in behavior. As there are no
-'default' plugins, you need to explcitly enable the legacy_search plugin if you
-would like to continue using it. To do so, add the following to your
-`mkdocs.yml` file:
-
-    plugins:
-        - legacy_search
+plugin (named "search") with no changes in behavior. If no plugins setting is
+defined in the config, then the `search` plugin will be included by default.
+See the [configuration][plugin_config] documentation for information on
+overriding the default.
 
 [Plugin API]: ../user-guide/plugins.md
+[plugin_config]: ../user-guide/configuration.md#plugins
 
 #### Theme Customization. (#1164)
 
@@ -426,7 +424,7 @@ they will be installable with pip: `pip install mkdocs-bootstrap` and `pip
 install mkdocs-bootswatch`
 
 See the documentation for [Styling your docs] for more information about using
-and customising themes and [Custom themes] for creating and distributing new
+and customizing themes and [Custom themes] for creating and distributing new
 themes
 
 [Styling your docs]: /user-guide/styling-your-docs.md
@@ -459,9 +457,9 @@ themes
 
 * Improve Unicode handling by ensuring that all config strings are loaded as
   Unicode. (#592)
-* Remove dependancy on the six library. (#583)
-* Remove dependancy on the ghp-import library. (#547)
-* Add `--quiet` and `--verbose` options to all subcommands. (#579)
+* Remove dependency on the six library. (#583)
+* Remove dependency on the ghp-import library. (#547)
+* Add `--quiet` and `--verbose` options to all sub-commands. (#579)
 * Add short options (`-a`) to most command line options. (#579)
 * Add copyright footer for readthedocs theme. (#568)
 * If the requested port in `mkdocs serve` is already in use, don't show the
@@ -584,7 +582,7 @@ documentation.
 * Add support for custom commit messages in a `mkdocs gh-deploy` (#516)
 * Bugfix: Fix linking to media within the same directory as a markdown file
   called index.md (#535)
-* Bugfix: Fix errors with unicode filenames (#542).
+* Bugfix: Fix errors with Unicode filenames (#542).
 
 [extra config]: /user-guide/configuration.md#extra
 [Markdown extension configuration options]: /user-guide/configuration.md#markdown_extensions
@@ -609,13 +607,13 @@ documentation.
 * Add Google analytics support to all themes. (#333)
 * Add build date and MkDocs version to the ReadTheDocs and MkDocs theme
   outputs. (#382)
-* Standardise highlighting across all themes and add missing languages. (#387)
+* Standardize highlighting across all themes and add missing languages. (#387)
 * Add a verbose flag. (-v) to show more details about what the build. (#147)
 * Add the option to specify a remote branch when deploying to GitHub. This
   enables deploying to GitHub pages on personal and repo sites. (#354)
 * Add favicon support to the ReadTheDocs theme HTML. (#422)
 * Automatically refresh the browser when files are edited. (#163)
-* Bugfix: Never re-write URL's in code blocks. (#240)
+* Bugfix: Never re-write URLs in code blocks. (#240)
 * Bugfix: Don't copy ditfiles when copying media from the `docs_dir`. (#254)
 * Bugfix: Fix the rendering of tables in the ReadTheDocs theme. (#106)
 * Bugfix: Add padding to the bottom of all bootstrap themes. (#255)
@@ -623,7 +621,7 @@ documentation.
   configuration. (#276)
 * Bugfix: Fix a URL parsing error with GitHub enterprise. (#284)
 * Bugfix: Don't error if the mkdocs.yml is completely empty. (#288)
-* Bugfix: Fix a number of problems with relative urls and Markdown files. (#292)
+* Bugfix: Fix a number of problems with relative URLs and Markdown files. (#292)
 * Bugfix: Don't stop the build if a page can't be found, continue with other
   pages. (#150)
 * Bugfix: Remove the site_name from the page title, this needs to be added
@@ -647,12 +645,12 @@ documentation.
 * Bugfix: Add nicer CSS classes to the HTML tables in bootswatch themes. (#295)
 * Bugfix: Fix an error when passing in a specific config file with
   `mkdocs serve`. (#341)
-* Bugfix: Don't overwrite index.md diles with the `mkdocs new` command. (#412)
+* Bugfix: Don't overwrite index.md files with the `mkdocs new` command. (#412)
 * Bugfix: Remove bold and italic from code in the ReadTheDocs theme. (#411)
 * Bugfix: Display images inline in the MkDocs theme. (#415)
 * Bugfix: Fix problems with no-highlight in the ReadTheDocs theme. (#319)
 * Bugfix: Don't delete hidden files when using `mkdocs build --clean`. (#346)
-* Bugfix: Don't block newer verions of Python-markdown on Python >= 2.7. (#376)
+* Bugfix: Don't block newer versions of Python-markdown on Python >= 2.7. (#376)
 * Bugfix: Fix encoding issues when opening files across platforms. (#428)
 
 ## Version 0.11.1 (2014-11-20)
@@ -691,7 +689,7 @@ documentation.
 * Bugfix: Relaxed required python package versions to avoid clashes. (#104)
 * Bugfix: Fix issue rendering the table of contents with some configs. (#146)
 * Bugfix: Fix path for embedded images in sub pages. (#138)
-* Bugfix: Fix `use_directory_urls` config behaviour. (#63)
+* Bugfix: Fix `use_directory_urls` config behavior. (#63)
 * Bugfix: Support `extra_javascript` and `extra_css` in all themes. (#90)
 * Bugfix: Fix path-handling under Windows. (#121)
 * Bugfix: Fix the menu generation in the readthedocs theme. (#110)
