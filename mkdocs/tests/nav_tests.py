@@ -485,7 +485,6 @@ class SiteNavigationTests(unittest.TestCase):
             pages=pages,
             repo_url=repo_url,
             edit_uri=edit_uri,
-            docs_dir='docs',
             site_dir='site',
             site_url='',
             use_directory_urls=True
@@ -509,7 +508,6 @@ class SiteNavigationTests(unittest.TestCase):
             pages=pages,
             repo_url=repo_url,
             edit_uri=edit_uri,
-            docs_dir='docs',
             site_dir='site',
             site_url='',
             use_directory_urls=True
@@ -526,7 +524,6 @@ class SiteNavigationTests(unittest.TestCase):
             pages=pages,
             repo_url=repo_url,
             edit_uri=edit_uri,
-            docs_dir='docs',
             site_dir='site',
             site_url='',
             use_directory_urls=True
@@ -550,7 +547,6 @@ class SiteNavigationTests(unittest.TestCase):
             pages=pages,
             repo_url=repo_url,
             edit_uri=edit_uri,
-            docs_dir='docs',
             site_dir='site',
             site_url='',
             use_directory_urls=True
@@ -586,7 +582,6 @@ class SiteNavigationTests(unittest.TestCase):
             pages=pages,
             repo_url=repo_url,
             edit_uri=edit_uri,
-            docs_dir='docs',
             site_dir='site',
             site_url='',
             use_directory_urls=True
@@ -610,7 +605,6 @@ class SiteNavigationTests(unittest.TestCase):
             pages=pages,
             repo_url=repo_url,
             edit_uri=edit_uri,
-            docs_dir='docs',
             site_dir='site',
             site_url='',
             use_directory_urls=True
@@ -627,7 +621,6 @@ class SiteNavigationTests(unittest.TestCase):
             pages=pages,
             repo_url=repo_url,
             edit_uri=edit_uri,
-            docs_dir='docs',
             site_dir='site',
             site_url='',
             use_directory_urls=True
@@ -651,7 +644,6 @@ class SiteNavigationTests(unittest.TestCase):
             pages=pages,
             repo_url=repo_url,
             edit_uri=edit_uri,
-            docs_dir='docs',
             site_dir='site',
             site_url='',
             use_directory_urls=True

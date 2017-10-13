@@ -433,6 +433,63 @@ class Theme(BaseConfigOption):
         config[key_name] = theme.Theme(**theme_config)
 
 
+class Extras(OptionallyRequired):
+    """
+    Extras Config Option
+
+    Validate the extra configs are a list and issue a warning for any files
+    found in the docs_dir which are not listed here.
+
+    TODO: Delete this in a future release and use
+    `config_options.Type(list, default=[])` instead.
+    """
+
+    def __init__(self, file_match=None, **kwargs):
+        super(Extras, self).__init__(**kwargs)
+        self.file_match = file_match
+
+    def run_validation(self, value):
+        if isinstance(value, list):
+            return list(os.path.normcase(path) for path in value)
+        else:
+            raise ValidationError(
+                "Expected a list, got {0}".format(type(value)))
+
+    def walk_docs_dir(self, docs_dir):
+        if self.file_match is None:
+            raise StopIteration
+
+        for (dirpath, dirs, filenames) in os.walk(docs_dir, followlinks=True):
+            dirs.sort()
+            for filename in sorted(filenames):
+                fullpath = os.path.join(dirpath, filename)
+
+                # Some editors (namely Emacs) will create temporary symlinks
+                # for internal magic. We can just ignore these files.
+                if os.path.islink(fullpath):
+                    local_fullpath = os.path.join(dirpath, os.readlink(fullpath))
+                    if not os.path.exists(local_fullpath):
+                        continue
+
+                relpath = os.path.normpath(os.path.relpath(fullpath, docs_dir))
+                if self.file_match(relpath):
+                    yield relpath
+
+    def post_validation(self, config, key_name):
+        missing_extras = []
+        for filename in self.walk_docs_dir(config['docs_dir']):
+            if filename not in config[key_name]:
+                missing_extras.append(filename)
+
+        if missing_extras:
+            self.warnings.append((
+                "Some files in your 'docs_dir' are not listed in the '{0}' "
+                "config setting and will be ignored by the theme. Add the "
+                "following files to the '{0}' config setting if you want "
+                "them to have an effect on the theme: ['{1}']"
+            ).format(key_name, "', '".join(missing_extras)))
+
+
 class Pages(OptionallyRequired):
     """
     Pages Config Option

@@ -140,9 +140,9 @@ In previous versions of MkDocs, if the `extra_css` or `extra_javascript` config
 settings were empty, MkDocs would scan the `docs_dir` and auto-populate each
 setting with all of the CSS and JavaScript files found. On version 0.16 this
 behavior was deprecated and a warning was issued. In 1.0 any unlisted CSS and
-JavaScript files will not be included in the HTML templates without warning. In
-other words, they will still be copied to the `site-dir`, but they will not have
-any effect on the theme if they are not explicitly listed.
+JavaScript files will not be included in the HTML templates, however, a warning
+will be issued. In other words, they will still be copied to the `site-dir`, but
+they will not have any effect on the theme if they are not explicitly listed.
 
 All CSS and javaScript files in the `docs_dir` should be explicitly listed in
 the `extra_css` or `extra_javascript` config settings going forward.
