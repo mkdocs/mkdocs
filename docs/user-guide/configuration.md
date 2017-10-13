@@ -61,6 +61,9 @@ When set, provides a link directly to the page in your source repository. This
 makes it easier to find and edit the source for the page. If `repo_url` is not
 set, this option is ignored.
 
+Note that this setting only affects the `readthedocs` theme, and doesn't affect
+the default `mkdocs` theme.
+
 For example, for a GitHub-hosted repository, the `edit_uri` would be as follows.
 (Note the `edit` path and `master` branch...)
 
