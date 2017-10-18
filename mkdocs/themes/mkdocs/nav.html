@@ -71,7 +71,18 @@
               {%- endblock %}
 
               {%- block repo %}
-                {%- if config.repo_url %}
+                {%- if page and page.edit_url %}
+                    <li>
+                        <a href="{{ config.edit_url }}">
+                            {%- if config.repo_name == 'GitHub' %}
+                                <i class="fa fa-github"></i>
+                            {%- elif config.repo_name == 'Bitbucket' -%}
+                                <i class="fa fa-bitbucket"></i>
+                            {%- endif -%}
+                            Edit on {{ config.repo_name }}
+                        </a>
+                    </li>
+                {%- elif config.repo_url %}
                     <li>
                         <a href="{{ config.repo_url }}">
                             {%- if config.repo_name == 'GitHub' %}
