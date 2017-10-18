@@ -21,9 +21,9 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
-## Version 1.0.0 (20??-??-??)
+## Version 0.17.0 (20??-??-??)
 
-### Major Additions to Version 1.0.0
+### Major Additions to Version 0.17.0
 
 #### Plugin API. (#206)
 
@@ -147,8 +147,9 @@ they will not have any effect on the theme if they are not explicitly listed.
 All CSS and javaScript files in the `docs_dir` should be explicitly listed in
 the `extra_css` or `extra_javascript` config settings going forward.
 
-### Other Changes and Additions to Version 1.0.0
+### Other Changes and Additions to Version 0.17.0
 
+* Open files with `utf-8-sig` to account for BOM (#1186)
 * Symbolic links are now followed consistently (#1134)
 * Support for keyboard navigation shortcuts added to included themes (#1095)
 * Some refactoring and improvements to config_options (#1296)
