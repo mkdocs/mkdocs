@@ -21,7 +21,7 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
-## Version 0.17.0 (20??-??-??)
+## Version 0.17.0 (2017-10-19)
 
 ### Major Additions to Version 0.17.0
 
