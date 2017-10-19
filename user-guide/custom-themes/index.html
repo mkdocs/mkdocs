@@ -19,8 +19,8 @@
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
-	
-	<script src="../../js/jquery-1.10.2.min.js"></script>
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
         <script src="../../js/bootstrap-3.0.3.min.js"></script>
         <script src="../../js/highlight.pack.js"></script>
         <script>
@@ -81,6 +81,10 @@
 <li class="active">
     <a href="./">Custom Themes</a>
 </li>
+                            
+<li >
+    <a href="../plugins/">Plugins</a>
+</li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -114,14 +118,12 @@
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../../about/release-notes/">
+                        <a rel="prev" href="../plugins/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
                     <li>
-                        <a href="https://github.com/mkdocs/mkdocs/">
-                                <i class="fa fa-github"></i>GitHub
-                        </a>
+                        <a href="https://github.com/mkdocs/mkdocs/"><i class="fa fa-github"></i> GitHub</a>
                     </li>
             </ul>
         </div>
@@ -157,12 +159,12 @@ this base theme on <a href="https://github.com/mkdocs/mkdocs-basic-theme">GitHub
 It contains detailed comments in the code to describe the different features
 and their usage.</p>
 <h2 id="creating-a-custom-theme">Creating a custom theme<a class="headerlink" href="#creating-a-custom-theme" title="Permanent link"></a></h2>
-<p>The bare minimum required for a custom theme is a <code>main.html</code> <a href="http://jinja.pocoo.org/docs/dev/">Jinja2
-template</a> file. This should be placed in a directory which will be the
-<code>theme_dir</code> and it should be created next to the <code>mkdocs.yml</code> configuration
-file. Within <code>mkdocs.yml</code>, specify the <code>theme_dir</code> option and set it to the
-name of the directory containing <code>main.html</code>. For example, given this example
-project layout:</p>
+<p>The bare minimum required for a custom theme is a <code>main.html</code> <a href="http://jinja.pocoo.org/docs/dev/">Jinja2 template</a>
+file. This should be placed in a directory which will be the <code>theme_dir</code> and it
+should be created next to the <code>mkdocs.yml</code> configuration file. Within
+<code>mkdocs.yml</code>, specify the theme <code>custom_dir</code> option and set it to the name of
+the directory containing <code>main.html</code>. For example, given this example project
+layout:</p>
 <pre><code>mkdocs.yml
 docs/
     index.md
@@ -173,20 +175,21 @@ custom_theme/
 </code></pre>
 <p>You would include the following settings in <code>mkdocs.yml</code> to use the custom theme
 directory:</p>
-<pre><code>theme: null
-theme_dir: 'custom_theme'
+<pre><code>theme:
+    name: null
+    custom_dir: 'custom_theme'
 </code></pre>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Generally, when building your own custom theme, the <code>theme</code> configuration
-setting would be set to <code>null</code>. However, if used in combination with the
-<code>theme_dir</code> configuration value a custom theme can be used to replace only
-specific parts of a built-in theme. For example, with the above layout and
-if you set <code>theme: "mkdocs"</code> then the <code>main.html</code> file in the <code>theme_dir</code>
-would replace that in the theme but otherwise the <code>mkdocs</code> theme would
-remain the same. This is useful if you want to make small adjustments to an
-existing theme.</p>
-<p>For more specific information, see <a href="../styling-your-docs/#using-the-theme_dir">styling your docs</a>.</p>
+<p>Generally, when building your own custom theme, the theme <code>name</code>
+configuration setting would be set to <code>null</code>. However, if used in
+combination with the <code>custom_dir</code> configuration value a custom theme can be
+used to replace only specific parts of a built-in theme. For example, with
+the above layout and if you set <code>name: "mkdocs"</code> then the <code>main.html</code> file
+in the <code>custom_dir</code> would replace that in the theme but otherwise the
+<code>mkdocs</code> theme would remain the same. This is useful if you want to make
+small adjustments to an existing theme.</p>
+<p>For more specific information, see <a href="../styling-your-docs/#using-the-theme-custom_dir">styling your docs</a>.</p>
 </div>
 <h2 id="basic-theme">Basic theme<a class="headerlink" href="#basic-theme" title="Permanent link"></a></h2>
 <p>The simplest <code>main.html</code> file is the following:</p>
@@ -213,7 +216,7 @@ the <a href="https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes">built-i
 power of Jinja, including <a href="http://jinja.pocoo.org/docs/dev/templates/#template-inheritance">template inheritance</a>. You may notice that the
 themes included with MkDocs make extensive use of template inheritance and
 blocks, allowing users to easily override small bits and pieces of the
-templates from the <a href="../styling-your-docs/#using-the-theme_dir">theme_dir</a>. Therefore, the built-in themes are
+templates from the theme [custom_dir]. Therefore, the built-in themes are
 implemented in a <code>base.html</code> file, which <code>main.html</code> extends. Although not
 required, third party template authors are encouraged to follow a similar
 pattern and may want to define the same <a href="../styling-your-docs/#overriding-template-blocks">blocks</a> as are used in the built-in
@@ -269,7 +272,7 @@ navigation as a nested list.</p>
 {% endif %}
 </code></pre>
 
-<p>The <code>nav</code> object also contains a <code>hompage</code> object, which points to the <code>page</code>
+<p>The <code>nav</code> object also contains a <code>homepage</code> object, which points to the <code>page</code>
 object of the homepage. For example, you may want to access <code>nav.homepage.url</code>.</p>
 <h4 id="base_url">base_url<a class="headerlink" href="#base_url" title="Permanent link"></a></h4>
 <p>The <code>base_url</code> provides a relative path to the root of the MkDocs project.
@@ -432,21 +435,23 @@ Bootswatch theme</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>It is not strictly necessary to package a theme, as the entire theme
-can be contained in the <code>theme_dir</code>. If you have created a "one-off theme,"
-that should be sufficent. However, if you intend to distribute your theme
+can be contained in the <code>custom_dir</code>. If you have created a "one-off theme,"
+that should be sufficient. However, if you intend to distribute your theme
 for others to use, packaging the theme has some advantages. By packaging
-your theme, your users can more easily install it and they can them take
-advantage of the <a href="../styling-your-docs/#using-the-theme_dir">theme_dir</a> to make tweaks to your theme to better suit
+your theme, your users can more easily install it and they can then take
+advantage of the [custom_dir] to make tweaks to your theme to better suit
 their needs.</p>
 </div>
 <h3 id="package-layout">Package Layout<a class="headerlink" href="#package-layout" title="Permanent link"></a></h3>
 <p>The following layout is recommended for themes. Two files at the top level
-directory called <code>MANIFEST.in</code> amd <code>setup.py</code> beside the theme directory which
-contains an empty <code>__init__.py</code> file and your template and media files.</p>
+directory called <code>MANIFEST.in</code> and <code>setup.py</code> beside the theme directory which
+contains an empty <code>__init__.py</code> file, a theme configuration file
+(<code>mkdocs-theme.yml</code>), and your template and media files.</p>
 <pre><code class="no-highlight">.
 |-- MANIFEST.in
 |-- theme_name
 |   |-- __init__.py
+|   |-- mkdocs-theme.yml
 |   |-- main.html
 |   |-- styles.css
 `-- setup.py
@@ -499,6 +504,44 @@ should contain all of the other theme files. The minimum requirement is that
 it includes a <code>main.html</code> for the theme. It <strong>must</strong> also include a
 <code>__init__.py</code> file which should be empty, this file tells Python that the
 directory is a package.</p>
+<h3 id="theme-configuration">Theme Configuration<a class="headerlink" href="#theme-configuration" title="Permanent link"></a></h3>
+<p>A packaged theme is required to include a configuration file named
+<code>mkdocs_theme.yml</code> which is placed in the root of your template files. The file
+should contain default configuration options for the theme. However, if the
+theme offers no configuration options, the file is still required and can be
+left blank.</p>
+<p>The theme author is free to define any arbitrary options deemed necessary and
+those options will be made available in the templates to control behavior.
+For example, a theme might want to make a sidebar optional and include the
+following in the <code>mkdocs_theme.yml</code> file:</p>
+<pre><code class="yaml">show_sidebar: true
+</code></pre>
+
+<p>Then in a template, that config option could be referenced:</p>
+<pre><code class="django">{% if config.theme.show_sidebar %}
+&lt;div id=&quot;sidebar&quot;&gt;...&lt;/div&gt;
+{% endif %}
+</code></pre>
+
+<p>And the user could override the default in their project's <code>mkdocs.yml</code> config
+file:</p>
+<pre><code class="yaml">theme:
+    name: themename
+    show_sidebar: false
+</code></pre>
+
+<p>In addition to arbitrary options defined by the theme, MkDocs defines a few
+special options which alters its behavior:</p>
+<div class="admonition block">
+<h4 id="static_templates">static_templates<a class="headerlink" href="#static_templates" title="Permanent link"></a></h4>
+<p>This option mirrors the <a href="../configuration/#theme">theme</a> config option of the same name and allows
+some defaults to be set by the theme. Note that while the user can add
+templates to this list, the user cannot remove templates included in the
+theme's config.</p>
+<h4 id="extends">extends<a class="headerlink" href="#extends" title="Permanent link"></a></h4>
+<p>Defines a parent theme that this theme inherits from. The value should be
+the string name of the parent theme. Normal Jinja inheritance rules apply.</p>
+</div>
 <h3 id="distributing-themes">Distributing Themes<a class="headerlink" href="#distributing-themes" title="Permanent link"></a></h3>
 <p>With the above changes, your theme should now be ready to install. This can be
 done with pip, using <code>pip install .</code> if you are still in the same directory as
@@ -515,12 +558,15 @@ documentation for <a href="https://packaging.python.org/en/latest/distributing/"
 
         <footer class="col-md-12">
             <hr>
-                <p>Copyright &copy; 2014 <a href="/release-notes/">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
+                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>var base_url = '../..';</script>
-        <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
-        <script src="../../js/base.js"></script><div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+        <script src="../../js/base.js"></script>
+        <script src="../../search/require.js"></script>
+        <script src="../../search/search.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -543,7 +589,47 @@ documentation for <a href="https://packaging.python.org/en/latest/distributing/"
             </div>
         </div>
     </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&larr;</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&rarr;</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
 </div>
+
 
     </body>
 </html>

@@ -19,8 +19,8 @@
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
-	
-	<script src="../../js/jquery-1.10.2.min.js"></script>
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
         <script src="../../js/bootstrap-3.0.3.min.js"></script>
         <script src="../../js/highlight.pack.js"></script>
         <script>
@@ -81,6 +81,10 @@
 <li >
     <a href="../../user-guide/custom-themes/">Custom Themes</a>
 </li>
+                            
+<li >
+    <a href="../../user-guide/plugins/">Plugins</a>
+</li>
                         </ul>
                     </li>
                     <li class="dropdown active">
@@ -109,7 +113,7 @@
                     </a>
                 </li>
                     <li >
-                        <a rel="next" href="../../user-guide/custom-themes/">
+                        <a rel="next" href="../../user-guide/plugins/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
@@ -119,9 +123,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="https://github.com/mkdocs/mkdocs/">
-                                <i class="fa fa-github"></i>GitHub
-                        </a>
+                        <a href="https://github.com/mkdocs/mkdocs/"><i class="fa fa-github"></i> GitHub</a>
                     </li>
             </ul>
         </div>
@@ -134,6 +136,7 @@
         <li class="main active"><a href="#release-notes">Release Notes</a></li>
             <li><a href="#upgrading">Upgrading</a></li>
             <li><a href="#maintenance-team">Maintenance team</a></li>
+            <li><a href="#version-0170-2017-10-19">Version 0.17.0 (2017-10-19)</a></li>
             <li><a href="#version-0163-2017-04-04">Version 0.16.3 (2017-04-04)</a></li>
             <li><a href="#version-0162-2017-03-13">Version 0.16.2 (2017-03-13)</a></li>
             <li><a href="#version-0161-2016-12-22">Version 0.16.1 (2016-12-22)</a></li>
@@ -173,6 +176,192 @@ mkdocs, version 0.15.2
 <li><a href="https://github.com/tomchristie/">@tomchristie</a></li>
 <li><a href="https://github.com/d0ugal/">@d0ugal</a></li>
 <li><a href="https://github.com/waylan/">@waylan</a></li>
+</ul>
+<h2 id="version-0170-2017-10-19">Version 0.17.0 (2017-10-19)<a class="headerlink" href="#version-0170-2017-10-19" title="Permanent link"></a></h2>
+<h3 id="major-additions-to-version-0170">Major Additions to Version 0.17.0<a class="headerlink" href="#major-additions-to-version-0170" title="Permanent link"></a></h3>
+<h4 id="plugin-api-206">Plugin API. (#206)<a class="headerlink" href="#plugin-api-206" title="Permanent link"></a></h4>
+<p>A new <a href="../../user-guide/plugins/">Plugin API</a> has been added to MkDocs which allows users to define their
+own custom behaviors. See the included documentation for a full explanation of
+the API.</p>
+<p>The previously built-in search functionality has been removed and wrapped in a
+plugin (named "search") with no changes in behavior. If no plugins setting is
+defined in the config, then the <code>search</code> plugin will be included by default.
+See the <a href="../../user-guide/configuration/#plugins">configuration</a> documentation for information on
+overriding the default.</p>
+<h4 id="theme-customization-1164">Theme Customization. (#1164)<a class="headerlink" href="#theme-customization-1164" title="Permanent link"></a></h4>
+<p>Support had been added to provide theme specific customizations. Theme authors
+can define default options as documented in <a href="../../user-guide/custom-themes/#theme-configuration">Theme Configuration</a>. A theme can
+now inherit from another theme, define various static templates to be rendered,
+and define arbitrary default variables to control behavior in the templates.
+The theme configuration is defined in a configuruation file named
+<code>mkdocs_theme.yml</code> which should be placed at the root of your template files. A
+warning will be raised if no configuration file is found and an error will be
+raised in a future release.</p>
+<p>Users can override those defaults under the <a href="../../user-guide/configuration/#theme">theme</a> configuration option of
+their <code>mkdocs.yml</code> configuration file, which now accepts nested options. One
+such nested option is the <a href="../../user-guide/configuration/#custom_dir">custom_dir</a> option, which replaces the now deprecated
+<code>theme_dir</code> option. If users had previously set the <code>theme_dir</code> option, a
+warning will be issued, with an error expected in a future release.</p>
+<p>If a configuration previously defined a <code>theme_dir</code> like this:</p>
+<pre><code class="yaml">theme: mkdocs
+theme_dir: custom
+</code></pre>
+
+<p>Then the configuration should be adjusted as follows:</p>
+<pre><code class="yaml">theme:
+    name: mkdocs
+    custom_dir: custom
+</code></pre>
+
+<p>See the <a href="../../user-guide/configuration/#theme">theme</a> configuration option documentation for details.</p>
+<h4 id="previously-deprecated-template-variables-removed-1168">Previously deprecated Template variables removed. (#1168)<a class="headerlink" href="#previously-deprecated-template-variables-removed-1168" title="Permanent link"></a></h4>
+<h5 id="page-template">Page Template<a class="headerlink" href="#page-template" title="Permanent link"></a></h5>
+<p>The primary entry point for page templates has been changed from <code>base.html</code> to
+<code>main.html</code>. This allows <code>base.html</code> to continue to exist while allowing users
+to override <code>main.html</code> and extend <code>base.html</code>. For version 0.16, <code>base.html</code>
+continued to work if no <code>main.html</code> template existed, but it raised a
+deprecation warning. In version 1.0, a build will fail if no <code>main.html</code>
+template exists.</p>
+<h5 id="context-variables">Context Variables<a class="headerlink" href="#context-variables" title="Permanent link"></a></h5>
+<p>Page specific variable names in the template context have been refactored as
+defined in <a href="../../user-guide/custom-themes/#page">Custom Themes</a>. The
+old variable names issued a warning in version 0.16, but have been removed in
+version 1.0.</p>
+<p>Any of the following old page variables should be updated to the new ones in
+user created and third-party templates:</p>
+<table>
+<thead>
+<tr>
+<th>Old Variable Name</th>
+<th>New Variable Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>current_page</td>
+<td><a href="../../user-guide/custom-themes/#page">page</a></td>
+</tr>
+<tr>
+<td>page_title</td>
+<td><a href="../../user-guide/custom-themes/#pagetitle">page.title</a></td>
+</tr>
+<tr>
+<td>content</td>
+<td><a href="../../user-guide/custom-themes/#pagecontent">page.content</a></td>
+</tr>
+<tr>
+<td>toc</td>
+<td><a href="../../user-guide/custom-themes/#pagetoc">page.toc</a></td>
+</tr>
+<tr>
+<td>meta</td>
+<td><a href="../../user-guide/custom-themes/#pagemeta">page.meta</a></td>
+</tr>
+<tr>
+<td>canonical_url</td>
+<td><a href="../../user-guide/custom-themes/#pagecanonical_url">page.canonical_url</a></td>
+</tr>
+<tr>
+<td>previous_page</td>
+<td><a href="../../user-guide/custom-themes/#pageprevious_page">page.previous_page</a></td>
+</tr>
+<tr>
+<td>next_page</td>
+<td><a href="../../user-guide/custom-themes/#pagenext_page">page.next_page</a></td>
+</tr>
+</tbody>
+</table>
+<p>Additionally, a number of global variables have been altered and/or removed
+and user created and third-party templates should be updated as outlined below:</p>
+<table>
+<thead>
+<tr>
+<th>Old Variable Name</th>
+<th>New Variable Name or Expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>current_page</td>
+<td>page</td>
+</tr>
+<tr>
+<td>include_nav</td>
+<td>nav&#124;length&gt;1</td>
+</tr>
+<tr>
+<td>include_next_prev</td>
+<td>(page.next_page or page.previous_page)</td>
+</tr>
+<tr>
+<td>site_name</td>
+<td>config.site_name</td>
+</tr>
+<tr>
+<td>site_author</td>
+<td>config.site_author</td>
+</tr>
+<tr>
+<td>page_description</td>
+<td>config.site_description</td>
+</tr>
+<tr>
+<td>repo_url</td>
+<td>config.repo_url</td>
+</tr>
+<tr>
+<td>repo_name</td>
+<td>config.repo_name</td>
+</tr>
+<tr>
+<td>site_url</td>
+<td>config.site_url</td>
+</tr>
+<tr>
+<td>copyright</td>
+<td>config.copyright</td>
+</tr>
+<tr>
+<td>google_analytics</td>
+<td>config.google_analytics</td>
+</tr>
+<tr>
+<td>homepage_url</td>
+<td>nav.homepage.url</td>
+</tr>
+<tr>
+<td>favicon</td>
+<td>{{ base_url }}/img/favicon.ico</td>
+</tr>
+</tbody>
+</table>
+<h4 id="auto-populated-extra_css-and-extra_javascript-fully-deprecated-986">Auto-Populated extra_css and extra_javascript Fully Deprecated. (#986)<a class="headerlink" href="#auto-populated-extra_css-and-extra_javascript-fully-deprecated-986" title="Permanent link"></a></h4>
+<p>In previous versions of MkDocs, if the <code>extra_css</code> or <code>extra_javascript</code> config
+settings were empty, MkDocs would scan the <code>docs_dir</code> and auto-populate each
+setting with all of the CSS and JavaScript files found. On version 0.16 this
+behavior was deprecated and a warning was issued. In 1.0 any unlisted CSS and
+JavaScript files will not be included in the HTML templates, however, a warning
+will be issued. In other words, they will still be copied to the <code>site-dir</code>, but
+they will not have any effect on the theme if they are not explicitly listed.</p>
+<p>All CSS and javaScript files in the <code>docs_dir</code> should be explicitly listed in
+the <code>extra_css</code> or <code>extra_javascript</code> config settings going forward.</p>
+<h3 id="other-changes-and-additions-to-version-0170">Other Changes and Additions to Version 0.17.0<a class="headerlink" href="#other-changes-and-additions-to-version-0170" title="Permanent link"></a></h3>
+<ul>
+<li>Add "edit Link" support to MkDocs theme (#1129)</li>
+<li>Open files with <code>utf-8-sig</code> to account for BOM (#1186)</li>
+<li>Symbolic links are now followed consistently (#1134)</li>
+<li>Support for keyboard navigation shortcuts added to included themes (#1095)</li>
+<li>Some refactoring and improvements to config_options (#1296)</li>
+<li>Officially added support for Python 3.6 (#1296)</li>
+<li>404 Error page added to readthedocs theme (#1296))</li>
+<li>Internal refactor of Markdown processing (#713)</li>
+<li>Removed special error message for mkdocs-bootstrap and mkdocs-bootswatch
+  themes (#1168)</li>
+<li>The legacy pages config is no longer supported (#1168)</li>
+<li>The deprecated <code>json</code> command has been removed (#481)</li>
+<li>Support for Python 2.6 has been dropped (#165)</li>
+<li>File permissions are no longer copied during build (#1292)</li>
+<li>Support query and fragment strings in <code>edit_uri</code> (#1224 &amp; #1273)</li>
 </ul>
 <h2 id="version-0163-2017-04-04">Version 0.16.3 (2017-04-04)<a class="headerlink" href="#version-0163-2017-04-04" title="Permanent link"></a></h2>
 <ul>
@@ -459,7 +648,7 @@ details about these specific themes.</p>
 they will be installable with pip: <code>pip install mkdocs-bootstrap</code> and <code>pip
 install mkdocs-bootswatch</code></p>
 <p>See the documentation for <a href="../../user-guide/styling-your-docs/">Styling your docs</a> for more information about using
-and customising themes and <a href="../../user-guide/custom-themes/">Custom themes</a> for creating and distributing new
+and customizing themes and <a href="../../user-guide/custom-themes/">Custom themes</a> for creating and distributing new
 themes</p>
 <h3 id="other-changes-and-additions-to-version-0150">Other Changes and Additions to Version 0.15.0<a class="headerlink" href="#other-changes-and-additions-to-version-0150" title="Permanent link"></a></h3>
 <ul>
@@ -484,9 +673,9 @@ themes</p>
 <ul>
 <li>Improve Unicode handling by ensuring that all config strings are loaded as
   Unicode. (#592)</li>
-<li>Remove dependancy on the six library. (#583)</li>
-<li>Remove dependancy on the ghp-import library. (#547)</li>
-<li>Add <code>--quiet</code> and <code>--verbose</code> options to all subcommands. (#579)</li>
+<li>Remove dependency on the six library. (#583)</li>
+<li>Remove dependency on the ghp-import library. (#547)</li>
+<li>Add <code>--quiet</code> and <code>--verbose</code> options to all sub-commands. (#579)</li>
 <li>Add short options (<code>-a</code>) to most command line options. (#579)</li>
 <li>Add copyright footer for readthedocs theme. (#568)</li>
 <li>If the requested port in <code>mkdocs serve</code> is already in use, don't show the
@@ -573,7 +762,7 @@ documentation.</p>
 <li>Add support for custom commit messages in a <code>mkdocs gh-deploy</code> (#516)</li>
 <li>Bugfix: Fix linking to media within the same directory as a markdown file
   called index.md (#535)</li>
-<li>Bugfix: Fix errors with unicode filenames (#542).</li>
+<li>Bugfix: Fix errors with Unicode filenames (#542).</li>
 </ul>
 <h2 id="version-0122-2015-04-22">Version 0.12.2 (2015-04-22)<a class="headerlink" href="#version-0122-2015-04-22" title="Permanent link"></a></h2>
 <ul>
@@ -594,13 +783,13 @@ documentation.</p>
 <li>Add Google analytics support to all themes. (#333)</li>
 <li>Add build date and MkDocs version to the ReadTheDocs and MkDocs theme
   outputs. (#382)</li>
-<li>Standardise highlighting across all themes and add missing languages. (#387)</li>
+<li>Standardize highlighting across all themes and add missing languages. (#387)</li>
 <li>Add a verbose flag. (-v) to show more details about what the build. (#147)</li>
 <li>Add the option to specify a remote branch when deploying to GitHub. This
   enables deploying to GitHub pages on personal and repo sites. (#354)</li>
 <li>Add favicon support to the ReadTheDocs theme HTML. (#422)</li>
 <li>Automatically refresh the browser when files are edited. (#163)</li>
-<li>Bugfix: Never re-write URL's in code blocks. (#240)</li>
+<li>Bugfix: Never re-write URLs in code blocks. (#240)</li>
 <li>Bugfix: Don't copy ditfiles when copying media from the <code>docs_dir</code>. (#254)</li>
 <li>Bugfix: Fix the rendering of tables in the ReadTheDocs theme. (#106)</li>
 <li>Bugfix: Add padding to the bottom of all bootstrap themes. (#255)</li>
@@ -608,7 +797,7 @@ documentation.</p>
   configuration. (#276)</li>
 <li>Bugfix: Fix a URL parsing error with GitHub enterprise. (#284)</li>
 <li>Bugfix: Don't error if the mkdocs.yml is completely empty. (#288)</li>
-<li>Bugfix: Fix a number of problems with relative urls and Markdown files. (#292)</li>
+<li>Bugfix: Fix a number of problems with relative URLs and Markdown files. (#292)</li>
 <li>Bugfix: Don't stop the build if a page can't be found, continue with other
   pages. (#150)</li>
 <li>Bugfix: Remove the site_name from the page title, this needs to be added
@@ -632,12 +821,12 @@ documentation.</p>
 <li>Bugfix: Add nicer CSS classes to the HTML tables in bootswatch themes. (#295)</li>
 <li>Bugfix: Fix an error when passing in a specific config file with
   <code>mkdocs serve</code>. (#341)</li>
-<li>Bugfix: Don't overwrite index.md diles with the <code>mkdocs new</code> command. (#412)</li>
+<li>Bugfix: Don't overwrite index.md files with the <code>mkdocs new</code> command. (#412)</li>
 <li>Bugfix: Remove bold and italic from code in the ReadTheDocs theme. (#411)</li>
 <li>Bugfix: Display images inline in the MkDocs theme. (#415)</li>
 <li>Bugfix: Fix problems with no-highlight in the ReadTheDocs theme. (#319)</li>
 <li>Bugfix: Don't delete hidden files when using <code>mkdocs build --clean</code>. (#346)</li>
-<li>Bugfix: Don't block newer verions of Python-markdown on Python &gt;= 2.7. (#376)</li>
+<li>Bugfix: Don't block newer versions of Python-markdown on Python &gt;= 2.7. (#376)</li>
 <li>Bugfix: Fix encoding issues when opening files across platforms. (#428)</li>
 </ul>
 <h2 id="version-0111-2014-11-20">Version 0.11.1 (2014-11-20)<a class="headerlink" href="#version-0111-2014-11-20" title="Permanent link"></a></h2>
@@ -676,7 +865,7 @@ documentation.</p>
 <li>Bugfix: Relaxed required python package versions to avoid clashes. (#104)</li>
 <li>Bugfix: Fix issue rendering the table of contents with some configs. (#146)</li>
 <li>Bugfix: Fix path for embedded images in sub pages. (#138)</li>
-<li>Bugfix: Fix <code>use_directory_urls</code> config behaviour. (#63)</li>
+<li>Bugfix: Fix <code>use_directory_urls</code> config behavior. (#63)</li>
 <li>Bugfix: Support <code>extra_javascript</code> and <code>extra_css</code> in all themes. (#90)</li>
 <li>Bugfix: Fix path-handling under Windows. (#121)</li>
 <li>Bugfix: Fix the menu generation in the readthedocs theme. (#110)</li>
@@ -688,12 +877,15 @@ documentation.</p>
 
         <footer class="col-md-12">
             <hr>
-                <p>Copyright &copy; 2014 <a href="/release-notes/">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
+                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>var base_url = '../..';</script>
-        <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
-        <script src="../../js/base.js"></script><div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+        <script src="../../js/base.js"></script>
+        <script src="../../search/require.js"></script>
+        <script src="../../search/search.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -716,7 +908,47 @@ documentation.</p>
             </div>
         </div>
     </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&larr;</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&rarr;</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
 </div>
+
 
     </body>
 </html>

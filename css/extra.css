@@ -4,7 +4,7 @@ div.col-md-9 h1:first-of-type {
     font-weight: 300;
 }
 
-div.col-md-9 p:first-of-type {
+div.col-md-9>p:first-of-type {
     text-align: center;
 }
 
@@ -18,4 +18,10 @@ div.col-md-9 h1:first-of-type .headerlink {
 
 code.no-highlight {
     color: black;
+}
+
+/* Definition List styles */
+
+dd {
+    padding-left: 20px;
 }

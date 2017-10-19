@@ -15,7 +15,8 @@ function getSearchTerm()
 $(document).ready(function() {
 
     var search_term = getSearchTerm(),
-        $search_modal = $('#mkdocs_search_modal');
+        $search_modal = $('#mkdocs_search_modal'),
+        $keyboard_modal = $('#mkdocs_keyboard_modal');
 
     if(search_term){
         $search_modal.modal();
@@ -24,6 +25,35 @@ $(document).ready(function() {
     // make sure search input gets autofocus everytime modal opens.
     $search_modal.on('shown.bs.modal', function () {
         $search_modal.find('#mkdocs-search-query').focus();
+    });
+
+    // Keyboard navigation
+    document.addEventListener("keydown", function(e) {
+        if ($(e.target).is(':input')) return true;
+        var key = e.which || e.keyCode || window.event && window.event.keyCode;
+        var page;
+        switch (key) {
+            case 39:   // right arrow
+                page = $('[role="navigation"] a:contains(Next):first').prop('href');
+                break;
+            case 37:   // left arrow
+                page = $('[role="navigation"] a:contains(Previous):first').prop('href');
+                break;
+            case 83:   // s
+                e.preventDefault();
+                $keyboard_modal.modal('hide');
+                $search_modal.modal('show');
+                $search_modal.find('#mkdocs-search-query').focus();
+                break;
+            case 191:  // ?
+                $keyboard_modal.modal('show');
+                break;
+            default: break;
+        }
+        if (page) {
+            $keyboard_modal.modal('hide');
+            window.location.href = page;
+        }
     });
 
     // Highlight.js

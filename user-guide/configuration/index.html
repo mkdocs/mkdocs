@@ -19,8 +19,8 @@
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
-	
-	<script src="../../js/jquery-1.10.2.min.js"></script>
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
         <script src="../../js/bootstrap-3.0.3.min.js"></script>
         <script src="../../js/highlight.pack.js"></script>
         <script>
@@ -81,6 +81,10 @@
 <li >
     <a href="../custom-themes/">Custom Themes</a>
 </li>
+                            
+<li >
+    <a href="../plugins/">Plugins</a>
+</li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -119,9 +123,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="https://github.com/mkdocs/mkdocs/">
-                                <i class="fa fa-github"></i>GitHub
-                        </a>
+                        <a href="https://github.com/mkdocs/mkdocs/"><i class="fa fa-github"></i> GitHub</a>
                     </li>
             </ul>
         </div>
@@ -176,33 +178,58 @@ domains, otherwise <code>null</code></p>
 <h3 id="edit_uri">edit_uri<a class="headerlink" href="#edit_uri" title="Permanent link"></a></h3>
 <p>Path from the base <code>repo_url</code> to the docs directory when directly viewing a
 page, accounting for specifics of the repository host (e.g. GitHub, Bitbucket,
-etc), the branch, and the docs directory itself. Mkdocs concatenates <code>repo_url</code>
+etc), the branch, and the docs directory itself. MkDocs concatenates <code>repo_url</code>
 and <code>edit_uri</code>, and appends the input path of the page.</p>
-<p>When set, provides a link directly to the page in your source repository. This
-makes it easier to find and edit the source for the page. If <code>repo_url</code> is not
-set, this option is ignored.</p>
-<p>For example, for a GitHub-hosted repository, the <code>edit_uri</code> would be as follows.
-(Note the <code>edit</code> path and <code>master</code> branch...)</p>
-<pre><code class="yaml">edit_uri: edit/master/docs/
+<p>When set, and if your theme supports it, provides a link directly to the page in
+your source repository. This makes it easier to find and edit the source for the
+page. If <code>repo_url</code> is not set, this option is ignored. On some themes, setting
+this option may cause an edit link to be used in place of a repository link.
+Other themes may show both links.</p>
+<p>The <code>edit_uri</code> supports query ('?') and fragment ('#') characters. For
+repository hosts that use a query or a fragment to access the files, the
+<code>edit_uri</code> might be set as follows. (Note the <code>?</code> and <code>#</code> in the URI...)</p>
+<pre><code class="yaml"># Query string example
+edit_uri: '?query=root/path/docs/'
 </code></pre>
 
-<p>For a Bitbucket-hosted repository, the equivalent <code>edit_uri</code> would be as
-follows. (Note the <code>src</code> path and <code>default</code> branch...)</p>
-<pre><code class="yaml">edit_uri: src/default/docs/
+<pre><code class="yaml"># Hash fragment example
+edit_uri: '#root/path/docs/'
 </code></pre>
 
-<p>For other repository hosts, <code>edit_uri</code> works the same way. Simply specify the
-relative path to the docs directory.</p>
+<p>For other repository hosts, simply specify the relative path to the docs
+directory.</p>
+<pre><code class="yaml"># Query string example
+edit_uri: root/path/docs/
+</code></pre>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>On a few known hosts (specifically GitHub and Bitbucket), the <code>edit_uri</code> is
+derived from the 'repo_url' and does not need to be set manually. Simply
+defining a <code>repo_url</code> will automatically populate the <code>edit_uri</code> config
+setting.</p>
+<p>For example, for a GitHub-hosted repository, the <code>edit_uri</code> would be
+automatically set as <code>edit/master/docs/</code> (Note the <code>edit</code> path and <code>master</code>
+branch).</p>
+<p>For a Bitbucket-hosted repository, the equivalent <code>edit_uri</code> would be
+automatically set as <code>src/default/docs/</code> (note the <code>src</code> path and <code>default</code>
+branch).</p>
+<p>To use a different URI than the default (for example a different branch),
+simply set the <code>edit_uri</code> to your desired string. If you do not want any
+"edit URL link" displayed on your pages, then set <code>edit_uri</code> to an empty
+string to disable the automatic setting.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>On GitHub, the default "edit" path (<code>edit/master/docs/</code>) opens the page in
+the online GitHub editor. This functionality requires that the user have and
+be logged in to a GitHub account. Otherwise, the user will be redirected to
+a login/signup page. Alternatively, use the "blob" path
+(<code>blob/master/docs/</code>) to open a read-only view, which supports anonymous
+access.</p>
+</div>
 <p><strong>default</strong>: <code>edit/master/docs/</code> or <code>src/default/docs/</code> for GitHub or Bitbucket
 repos, respectively, if <code>repo_url</code> matches those domains, otherwise <code>null</code></p>
-<div class="admonition note">
-<p class="admonition-title">Note:</p>
-<p>On GitHub, the <code>edit</code> path opens the page in the online GitHub editor. This
-functionality requires that the user have and be logged in to a GitHub
-account. Otherwise, the user will be redirected to a login/signup page.
-Alternatively, use the <code>blob</code> path to open a read-only view, which supports
-anonymous access. E.g. <code>blob/master/docs/</code></p>
-</div>
 <h3 id="site_description">site_description<a class="headerlink" href="#site_description" title="Permanent link"></a></h3>
 <p>Set the site description. This will add a meta tag to the generated HTML header.</p>
 <p><strong>default</strong>: <code>null</code></p>
@@ -246,18 +273,41 @@ list of all the Markdown files found within the <code>docs_dir</code> and its
 sub-directories. If none are found it will be <code>[]</code> (an empty list).</p>
 <h2 id="build-directories">Build directories<a class="headerlink" href="#build-directories" title="Permanent link"></a></h2>
 <h3 id="theme">theme<a class="headerlink" href="#theme" title="Permanent link"></a></h3>
-<p>Sets the theme of your documentation site, for a list of available themes visit
-<a href="../styling-your-docs/">styling your docs</a>.</p>
-<p><strong>default</strong>: <code>'mkdocs'</code></p>
-<h3 id="theme_dir">theme_dir<a class="headerlink" href="#theme_dir" title="Permanent link"></a></h3>
-<p>Lets you set a directory to a custom theme. This can either be a relative
-directory, in which case it is resolved relative to the directory containing
-your configuration file, or it can be an absolute directory path.</p>
+<p>Sets the theme and theme specific configuration of your documentation site.
+May be either a string or a set of key/value pairs.</p>
+<p>If a string, it must be the string name of a known installed theme. For a list
+of available themes visit <a href="../styling-your-docs/">styling your docs</a>.</p>
+<p>An example set of key/value pairs might look something like this:</p>
+<pre><code class="yaml">theme:
+    name: mkdocs
+    custom_dir: my_theme_customizations/
+    static_templates:
+        - sitemap.html
+    include_sidebar: false
+</code></pre>
+
+<p>If a set of key/value pairs, the following nested keys can be defined:</p>
+<div class="admonition block">
+<h4 id="name">name:<a class="headerlink" href="#name" title="Permanent link"></a></h4>
+<p>The string name of a known installed theme. For a list of available themes
+visit <a href="../styling-your-docs/">styling your docs</a>.</p>
+<h4 id="custom_dir">custom_dir:<a class="headerlink" href="#custom_dir" title="Permanent link"></a></h4>
+<p>A directory to custom a theme. This can either be a relative directory, in
+which case it is resolved relative to the directory containing your
+configuration file, or it can be an absolute directory path.</p>
 <p>See <a href="../styling-your-docs/#using-the-theme_dir">styling your docs</a> for details if you would like to tweak an
 existing theme.</p>
-<p>See <a href="../custom-themes/">custom themes</a> if you would like to build your own theme from the ground
-up.</p>
-<p><strong>default</strong>: <code>null</code></p>
+<p>See <a href="../custom-themes/">custom themes</a> if you would like to build your own theme from the
+ground up.</p>
+<h4 id="static_templates">static_templates:<a class="headerlink" href="#static_templates" title="Permanent link"></a></h4>
+<p>A list of templates to render as static pages. The templates must be located
+in either the theme's template directory or in the <code>custom_dir</code> defined in
+the theme configuration.</p>
+<h4 id="theme-specific-keywords">(theme specific keywords)<a class="headerlink" href="#theme-specific-keywords" title="Permanent link"></a></h4>
+<p>Any additional keywords supported by the theme can also be defined. See the
+documentation for the theme you are using for details.</p>
+</div>
+<p><strong>default</strong>: <code>'mkdocs'</code></p>
 <h3 id="docs_dir">docs_dir<a class="headerlink" href="#docs_dir" title="Permanent link"></a></h3>
 <p>Lets you set the directory containing the documentation source markdown files.
 This can either be a relative directory, in which case it is resolved relative
@@ -422,17 +472,36 @@ available for a given extension, see the documentation for that extension.</p>
 the documentation provided by those extensions for installation instructions
 and available configuration options.</p>
 </div>
-<p><strong>default</strong>: <code>[]</code></p></div>
+<p><strong>default</strong>: <code>[]</code> (an empty list).</p>
+<h3 id="plugins">plugins<a class="headerlink" href="#plugins" title="Permanent link"></a></h3>
+<p>A list of plugins (with optional configuration settings) to use when building
+the site . See the <a href="../plugins/">Plugins</a> documentation for full details.</p>
+<p>If the <code>plugins</code> config setting is defined in the <code>mkdocs.yml</code> config file, then
+any defaults (such as <code>search</code>) are ignored and you need to explicitly re-enable
+the defaults if you would like to continue using them:</p>
+<pre><code class="yaml">plugins:
+    - search
+    - your_other_plugin
+</code></pre>
+
+<p>To completely disable all plugins, including any defaults, set the <code>plugins</code>
+setting to an empty list:</p>
+<p>```yaml
+plugins: []</p>
+<p><strong>default</strong>: <code>['search']</code> (the "search" plugin included with MkDocs).</p></div>
         </div>
 
         <footer class="col-md-12">
             <hr>
-                <p>Copyright &copy; 2014 <a href="/release-notes/">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
+                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>var base_url = '../..';</script>
-        <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
-        <script src="../../js/base.js"></script><div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+        <script src="../../js/base.js"></script>
+        <script src="../../search/require.js"></script>
+        <script src="../../search/search.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -455,7 +524,47 @@ and available configuration options.</p>
             </div>
         </div>
     </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&larr;</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&rarr;</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
 </div>
+
 
     </body>
 </html>
