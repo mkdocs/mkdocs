@@ -468,7 +468,7 @@ directory is a package.
 ### Theme Configuration
 
 A packaged theme is required to include a configuration file named
-`mkdocs.theme.yml` which is placed in the root of your template files. The file
+`mkdocs_theme.yml` which is placed in the root of your template files. The file
 should contain default configuration options for the theme. However, if the
 theme offers no configuration options, the file is still required and can be
 left blank.
@@ -476,7 +476,7 @@ left blank.
 The theme author is free to define any arbitrary options deemed necessary and
 those options will be made available in the templates to control behavior.
 For example, a theme might want to make a sidebar optional and include the
-following in the `mkdocs-theme.yml` file:
+following in the `mkdocs_theme.yml` file:
 
 ```yaml
 show_sidebar: true

@@ -46,12 +46,16 @@ Support had been added to provide theme specific customizations. Theme authors
 can define default options as documented in [Theme Configuration]. A theme can
 now inherit from another theme, define various static templates to be rendered,
 and define arbitrary default variables to control behavior in the templates.
+The theme configuration is defined in a configuruation file named
+`mkdocs_theme.yml` which should be placed at the root of your template files. A
+warning will be raised if no configuration file is found and an error will be
+raised in a future release.
 
-Users can override those defaults under the [theme] configuration option, which
-now accepts nested options. One such nested option is the [custom_dir] option,
-which replaces the now deprecated `theme_dir` option. If users had previously
-set the `theme_dir` option, a warning will be issued, with an error expected in
-a future release.
+Users can override those defaults under the [theme] configuration option of
+their `mkdocs.yml` configuration file, which now accepts nested options. One
+such nested option is the [custom_dir] option, which replaces the now deprecated
+`theme_dir` option. If users had previously set the `theme_dir` option, a
+warning will be issued, with an error expected in a future release.
 
 If a configuration previously defined a `theme_dir` like this:
 

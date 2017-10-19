@@ -25,9 +25,17 @@ the [Customizing a Theme][customize] section below.
 
 ### mkdocs
 
+The default theme, which was built as a custom [Bootstrap] theme, supports most
+every feature of MkDocs. It only supports the default
+[theme configuration options].
+
 ![mkdocs](/img/mkdocs.png)
 
 ### readthedocs
+
+A clone of the default theme used by the [Read the Docs] service. This theme
+only supports features in its parent theme and does not support any MkDocs
+[theme configuration options] in addition to the defaults.
 
 ![ReadTheDocs](http://docs.readthedocs.io/en/latest/_images/screen_mobile.png)
 
@@ -252,6 +260,9 @@ any additional CSS files included in the `custom_dir`.
 
 [browse source]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes/mkdocs
 [built-in themes]: #built-in-themes
+[Bootstrap]: http://getbootstrap.com/
+[theme configuration options]: configuration.md#theme
+[Read the Docs]: https://readthedocs.org/
 [community wiki]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
 [custom theme]: ./custom-themes.md
 [customize]: #customizing-a-theme
