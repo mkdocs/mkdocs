@@ -54,7 +54,7 @@ domains, otherwise `null`
 
 Path from the base `repo_url` to the docs directory when directly viewing a
 page, accounting for specifics of the repository host (e.g. GitHub, Bitbucket,
-etc), the branch, and the docs directory itself. Mkdocs concatenates `repo_url`
+etc), the branch, and the docs directory itself. MkDocs concatenates `repo_url`
 and `edit_uri`, and appends the input path of the page.
 
 When set, and if your theme supports it, provides a link directly to the page in
@@ -63,44 +63,57 @@ page. If `repo_url` is not set, this option is ignored. On some themes, setting
 this option may cause an edit link to be used in place of a repository link.
 Other themes may show both links.
 
-For example, for a GitHub-hosted repository, the `edit_uri` would be as follows.
-(Note the `edit` path and `master` branch...)
-
-```yaml
-edit_uri: edit/master/docs/
-```
-
-For a Bitbucket-hosted repository, the equivalent `edit_uri` would be as
-follows. (Note the `src` path and `default` branch...)
-
-```yaml
-edit_uri: src/default/docs/
-```
-
-The `edit_uri` also supports query ('?') and fragment ('#') characters. For
-reposotiry hosts that use a query or a fragment to access the files, the
-`edit_uri` would be as follows. (Note the `?` and `#` in the uri...)
+The `edit_uri` supports query ('?') and fragment ('#') characters. For
+repository hosts that use a query or a fragment to access the files, the
+`edit_uri` might be set as follows. (Note the `?` and `#` in the URI...)
 
 ```yaml
 # Query string example
 edit_uri: '?query=root/path/docs/'
+```
 
+```yaml
 # Hash fragment example
 edit_uri: '#root/path/docs/'
 ```
 
-For other repository hosts, `edit_uri` works the same way. Simply specify the
-relative path to the docs directory.
+For other repository hosts, simply specify the relative path to the docs
+directory.
+
+```yaml
+# Query string example
+edit_uri: root/path/docs/
+```
+
+!!! note
+    On a few known hosts (specifically GitHub and Bitbucket), the `edit_uri` is
+    derived from the 'repo_url' and does not need to be set manually. Simply
+    defining a `repo_url` will automatically populate the `edit_uri` config
+    setting.
+
+    For example, for a GitHub-hosted repository, the `edit_uri` would be
+    automatically set as `edit/master/docs/` (Note the `edit` path and `master`
+    branch).
+
+    For a Bitbucket-hosted repository, the equivalent `edit_uri` would be
+    automatically set as `src/default/docs/` (note the `src` path and `default`
+    branch).
+
+    To use a different URI than the default (for example a different branch),
+    simply set the `edit_uri` to your desired string. If you do not want any
+    "edit URL link" displayed on your pages, then set `edit_uri` to an empty
+    string to disable the automatic setting.
+
+!!! warning
+    On GitHub, the default "edit" path (`edit/master/docs/`) opens the page in
+    the online GitHub editor. This functionality requires that the user have and
+    be logged in to a GitHub account. Otherwise, the user will be redirected to
+    a login/signup page. Alternatively, use the "blob" path
+    (`blob/master/docs/`) to open a read-only view, which supports anonymous
+    access.
 
 **default**: `edit/master/docs/` or `src/default/docs/` for GitHub or Bitbucket
 repos, respectively, if `repo_url` matches those domains, otherwise `null`
-
-!!! note "Note:"
-    On GitHub, the `edit` path opens the page in the online GitHub editor. This
-    functionality requires that the user have and be logged in to a GitHub
-    account. Otherwise, the user will be redirected to a login/signup page.
-    Alternatively, use the `blob` path to open a read-only view, which supports
-    anonymous access. E.g. `blob/master/docs/`
 
 ### site_description
 

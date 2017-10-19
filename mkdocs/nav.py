@@ -176,7 +176,7 @@ class Page(object):
             self._set_canonical_url(config['site_url'])
 
         self.edit_url = None
-        if config['repo_url']:
+        if config['repo_url'] and config['edit_uri']:
             self._set_edit_url(config['repo_url'], config['edit_uri'])
 
         # Placeholders to be filled in later in the build
@@ -262,14 +262,9 @@ class Page(object):
         self.canonical_url = utils.urljoin(base, self.abs_url.lstrip('/'))
 
     def _set_edit_url(self, repo_url, edit_uri):
-        if not edit_uri:
-            self.edit_url = repo_url
-        else:
-            # Normalize URL from Windows path '\\' -> '/'
-            input_path_url = self.input_path.replace('\\', '/')
-            self.edit_url = utils.urljoin(
-                repo_url,
-                edit_uri + input_path_url)
+        # Normalize URL from Windows path '\\' -> '/'
+        input_path_url = self.input_path.replace('\\', '/')
+        self.edit_url = utils.urljoin(repo_url, edit_uri + input_path_url)
 
     def indent_print(self, depth=0):
         indent = '    ' * depth
