@@ -347,16 +347,11 @@ true to halt processing when a broken link is found, false prints a warning.
 
 ### dev_addr
 
-Determines the address used when running `mkdocs serve`. Setting this allows you
-to use another port, or allows you to make the service accessible over your
-local network by using the `0.0.0.0` address.
+Determines the address used when running `mkdocs serve`. Must be of the format
+`IP:PORT`.
 
-As with all settings, you can set this from the command line, which can be
-useful, for example:
-
-```bash
-mkdocs serve --dev-addr=0.0.0.0:80  # Run on port 80, on the local network.
-```
+Allows a custom default to be set without the need to pass it through the
+`--dev_addr` option every time the `mkdocs serve` command is called.
 
 **default**: `'127.0.0.1:8000'`
 
