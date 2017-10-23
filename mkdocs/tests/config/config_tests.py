@@ -124,11 +124,11 @@ class ConfigTests(unittest.TestCase):
             {
                 'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
                 'static_templates': ['404.html', 'sitemap.xml'],
-                'vars': {}
+                'vars': {'include_search_page': False, 'search_index_only': False}
             }, {
                 'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                 'static_templates': ['404.html', 'sitemap.xml'],
-                'vars': {}
+                'vars': {'include_search_page': True, 'search_index_only': False}
             }, {
                 'dirs': [mytheme, mkdocs_templates_dir],
                 'static_templates': ['sitemap.xml'],
@@ -136,11 +136,11 @@ class ConfigTests(unittest.TestCase):
             }, {
                 'dirs': [custom, os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                 'static_templates': ['404.html', 'sitemap.xml'],
-                'vars': {}
+                'vars': {'include_search_page': True, 'search_index_only': False}
             }, {
                 'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                 'static_templates': ['404.html', 'sitemap.xml'],
-                'vars': {}
+                'vars': {'include_search_page': True, 'search_index_only': False}
             }, {
                 'dirs': [mytheme, mkdocs_templates_dir],
                 'static_templates': ['sitemap.xml'],
@@ -148,11 +148,16 @@ class ConfigTests(unittest.TestCase):
             }, {
                 'dirs': [custom, os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                 'static_templates': ['404.html', 'sitemap.xml'],
-                'vars': {}
+                'vars': {'include_search_page': True, 'search_index_only': False}
             }, {
                 'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
                 'static_templates': ['404.html', 'sitemap.xml', 'foo.html'],
-                'vars': {'show_sidebar': False, 'some_var': 'bar'}
+                'vars': {
+                    'show_sidebar': False,
+                    'some_var': 'bar',
+                    'include_search_page': False,
+                    'search_index_only': False
+                }
             }
         )
 

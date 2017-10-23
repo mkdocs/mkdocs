@@ -28,7 +28,7 @@ class ThemeTests(unittest.TestCase):
             [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir]
         )
         self.assertEqual(theme.static_templates, set(['404.html', 'sitemap.xml']))
-        self.assertEqual(get_vars(theme), {})
+        self.assertEqual(get_vars(theme), {'include_search_page': False, 'search_index_only': False})
 
     def test_custom_dir(self):
         custom = tempfile.mkdtemp()

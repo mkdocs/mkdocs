@@ -17,11 +17,13 @@ class SearchPlugin(BasePlugin):
 
     def on_config(self, config, **kwargs):
         "Add plugin templates and scripts to config."
-        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
-        config['theme'].dirs.append(path)
-        config['theme'].static_templates.add('search.html')
-        config['extra_javascript'].append('search/require.js')
-        config['extra_javascript'].append('search/search.js')
+        if 'include_search_page' in config['theme'] and config['theme']['include_search_page']:
+            config['theme'].static_templates.add('search.html')
+        if not ('search_index_only' in config['theme'] and config['theme']['search_index_only']):
+            path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
+            config['theme'].dirs.append(path)
+            config['extra_javascript'].append('search/require.js')
+            config['extra_javascript'].append('search/search.js')
         return config
 
     def on_pre_build(self, config, **kwargs):
