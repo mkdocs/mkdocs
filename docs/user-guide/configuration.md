@@ -441,6 +441,7 @@ setting to an empty list:
 
 ```yaml
 plugins: []
+```
 
 **default**: `['search']` (the "search" plugin included with MkDocs).
 

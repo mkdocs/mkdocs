@@ -319,35 +319,73 @@ And then displayed with this HTML in the custom theme.
 
 ## Search and themes
 
-As of MkDocs `0.13` client side search support has been added to MkDocs with
-[Lunr.js].
+As of MkDocs `0.17` client side search support has been added to MkDocs via the
+`search` plugin. A theme needs to provide a few things for the plugin to work
+with the theme.
 
-Search can either be added to every page in the theme or to a dedicated
-template which must be named `search.html`. The search template will be built
-with the same name and can be viewable with `mkdocs serve` at
-`http://localhost:8000/search.html`. An example of the two different
-approaches can be seen by comparing the `mkdocs` and `readthedocs` themes.
+While the `search` plugin is activated by default, users can disable the plugin
+and themes should acount for this. It is recomended that theme templates wrap
+search specific markup with a check for the plugin:
 
-The following HTML needs to be added to the theme so the JavaScript is loaded
-for Lunr.js.
+```django
+{% if 'search' in config['plugins'] %}
+    search stuff here...
+{% endif %}
+```
+
+At its most basic functionality, the search plugin will simply provide an index
+file which is no more than a JSON file containing the content of all pages.
+The theme would need to implement its own search functionality client-side.
+However, with a few settings and the necessary templates, the plugin can provide
+a complete functioning client-side search tool based on [lunr.js].
+
+The following options can be set in the [theme's configuration file],
+`mkdocs_theme.yml`:
+
+### include_search_page
+
+Determines whether the search plugin expects the theme to provide a dedicated
+search page via a template located at `search/search.html`.
+
+When `include_search_page` is set to `true`, the search template will be built
+and available at `search/search.html`. This method is used by the `readthedocs`
+theme.
+
+When `include_search_page` is set to `false` or not defined, it is expected that
+the theme provide some other mechanisms for displaying search results. For
+example, the `mkdocs` theme displays results on any page via a modal.
+
+### search_index_only
+
+Determines whether the search plugin should only generate a search index or a
+complete search solution.
+
+When `search_index_only` is set to `true` or not defined, the search plugin
+makes no modifications to the Jinja environment. A complete solution using the
+provided index file is the responsability of the theme.
+
+When `search_index_only` is set to `false`, then the search plugin modifies the
+Jinja environment by adding its own `temaplates` directory (with a lower
+precedence than the theme) and adds its scripts to the `extra_javascript` config
+setting.
+
+The following HTML needs to be added to the theme so that the provided
+JavaScript is able to properly load Lunr.js and make relative links to the
+search results from the current page.
 
 ```django
 <script>var base_url = '{{ base_url }}';</script>
-<script data-main="{{ base_url }}/mkdocs/js/search.js" src="{{ base_url }}/mkdocs/js/require.js"></script>
 ```
 
 !!! note
 
-    The above JavaScript will download the search index, for larger
+    The provided JavaScript will download the search index. For larger
     documentation projects this can be a heavy operation. In those cases, it
-    is suggested that you either use the `search.html` approach to only
-    include search on one page or load the JavaScript on an event like a form
-    submit.
+    is suggested that you either use `search_index_only: true` to only include
+    search on one page or load the JavaScript on an event like a form submit.
 
-This loads the JavaScript and sets a global variable `base_url` which allows
-the JavaScript to make the links relative to the current page. The above
-JavaScript, with the following HTML in a `search.html` template will add a
-full search implementation to your theme.
+The following HTML in a `search/search.html` template will add a full search
+implementation to your theme.
 
 ```django
 <h1 id="search">Search Results</h1>
@@ -361,12 +399,14 @@ full search implementation to your theme.
 </div>
 ```
 
-This works by looking for the specific ID's used in the above HTML. The input
-for the user to type the search query must have the ID `mkdocs-search-query`
-and `mkdocs-search-results` is the directory where the results will be placed.
+The JavaScript in the plugin works by looking for the specific ID's used in the
+above HTML. The input for the user to type the search query must have the ID
+`mkdocs-search-query` and `mkdocs-search-results` is the div where the results
+will be placed.
 
 [Jinja2 template]: http://jinja.pocoo.org/docs/dev/
 [built-in themes]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes
+[theme's configuration file]: #theme-configuration
 [lunr.js]: http://lunrjs.com/
 
 ## Packaging Themes
@@ -515,6 +555,10 @@ special options which alters its behavior:
 
     Defines a parent theme that this theme inherits from. The value should be
     the string name of the parent theme. Normal Jinja inheritance rules apply.
+
+Plugins may also define some options which allow the theme to inform a plugin
+about which set of plugin options it expects. See the documentation for any
+plugins you may wish to support in your theme.
 
 ### Distributing Themes
 

@@ -23,6 +23,8 @@ The current and past members of the MkDocs team.
 
 ## Development Version
 
+* Bugfix: Add some theme specific settings to the search plugin for third party
+  themes (#1316).
 * Bugfix: Override `site_url` with `dev_addr` on local server (#1317).
 
 ## Version 0.17.0 (2017-10-19)
