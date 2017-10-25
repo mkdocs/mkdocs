@@ -1,15 +1,15 @@
 site_name: My Docs
 
 pages:
-- Home: index.md
-- User Guide:
-    - Writing your docs: index.md
-- About:
-    - License: index.md
-    - Release Notes:
-      - Version 1: index.md
-      - Version 2: index.md
-      - Version 3: index.md
+    - Home: index.md
+    - User Guide:
+        - Writing your docs: index.md
+    - About:
+        - License: index.md
+        - Release Notes:
+            - Version 1: index.md
+            - Version 2: index.md
+            - Version 3: index.md
 
 site_url: http://www.mkdocs.org/
 docs_dir: documentation
@@ -27,10 +27,10 @@ use_directory_urls: false
 repo_url: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/tests/integration
 repo_name: "GitHub"
 
-extra_css: ["tweak.css", ]
-extra_javascript: ["tweak.js", ]
+extra_css: ["tweak.css"]
+extra_javascript: ["tweak.js"]
 
-extra_templates: ["custom.html", ]
+extra_templates: ["custom.html"]
 
 
 markdown_extensions:
@@ -43,4 +43,4 @@ strict: true
 remote_branch: none
 remote_name: upstream
 extra:
-  some value: 1
+    some value: 1
