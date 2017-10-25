@@ -201,12 +201,12 @@ class IpAddress(OptionallyRequired):
     def run_validation(self, value):
         try:
             host, port = value.rsplit(':', 1)
-        except:
+        except Exception:
             raise ValidationError("Must be a string of format 'IP:PORT'")
 
         try:
             port = int(port)
-        except:
+        except Exception:
             raise ValidationError("'{0}' is not a valid port".format(port))
 
         class Address(namedtuple('Address', 'host port')):
