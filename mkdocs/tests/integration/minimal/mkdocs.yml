@@ -1,6 +1,6 @@
 site_name: MyTest
 
 pages:
-- 'testing.md'
+    - 'testing.md'
 
 site_author: "Tom Christie & Dougal Matthews"
