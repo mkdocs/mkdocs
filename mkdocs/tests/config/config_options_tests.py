@@ -196,7 +196,7 @@ class RepoURLTest(unittest.TestCase):
         option = config_options.RepoURL()
         config = {'repo_url': "https://github.com/mkdocs/mkdocs"}
         option.post_validation(config, 'repo_url')
-        self.assertEqual(config['edit_uri'], '/edit/master/docs/')
+        self.assertEqual(config['edit_uri'], 'edit/master/docs/')
 
     def test_edit_uri_bitbucket(self):
 
@@ -218,7 +218,7 @@ class RepoURLTest(unittest.TestCase):
         config = {'repo_url': "https://github.com/mkdocs/mkdocs",
                   'repo_name': 'mkdocs'}
         option.post_validation(config, 'repo_url')
-        self.assertEqual(config.get('edit_uri'), '/edit/master/docs/')
+        self.assertEqual(config.get('edit_uri'), 'edit/master/docs/')
 
 
 class DirTest(unittest.TestCase):

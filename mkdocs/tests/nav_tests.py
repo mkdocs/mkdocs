@@ -466,9 +466,6 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual(str(site_navigation).strip(), expected)
 
     def test_edit_uri(self):
-        """
-        Ensure that set_edit_url creates well formed URLs for edit_uri
-        """
 
         pages = [
             'index.md',
@@ -500,6 +497,47 @@ class SiteNavigationTests(unittest.TestCase):
         for idx, page in enumerate(site_navigation.walk_pages()):
             self.assertEqual(page.edit_url, expected_results[idx])
 
+    def test_edit_uri_sub_dir(self):
+
+        pages = [
+            'index.md',
+            'internal.md',
+            'sub/internal.md',
+            'sub1/sub2/internal.md',
+        ]
+
+        # Basic test
+        repo_url = 'http://example.com/foo/'
+        edit_uri = 'edit/master/docs/'
+
+        site_navigation = nav.SiteNavigation(load_config(
+            pages=pages,
+            repo_url=repo_url,
+            edit_uri=edit_uri,
+            site_dir='site',
+            site_url='',
+            use_directory_urls=True
+        ))
+
+        expected_results = (
+            repo_url + edit_uri + pages[0],
+            repo_url + edit_uri + pages[1],
+            repo_url + edit_uri + pages[2],
+            repo_url + edit_uri + pages[3],
+        )
+
+        for idx, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(page.edit_url, expected_results[idx])
+
+    def test_edit_uri_missing_slash(self):
+
+        pages = [
+            'index.md',
+            'internal.md',
+            'sub/internal.md',
+            'sub1/sub2/internal.md',
+        ]
+
         # Ensure the '/' is added to the repo_url and edit_uri
         repo_url = 'http://example.com'
         edit_uri = 'edit/master/docs'
@@ -513,8 +551,56 @@ class SiteNavigationTests(unittest.TestCase):
             use_directory_urls=True
         ))
 
+        expected_results = (
+            repo_url + '/' + edit_uri + '/' + pages[0],
+            repo_url + '/' + edit_uri + '/' + pages[1],
+            repo_url + '/' + edit_uri + '/' + pages[2],
+            repo_url + '/' + edit_uri + '/' + pages[3],
+        )
+
         for idx, page in enumerate(site_navigation.walk_pages()):
             self.assertEqual(page.edit_url, expected_results[idx])
+
+    def test_edit_uri_sub_dir_missing_slash(self):
+
+        pages = [
+            'index.md',
+            'internal.md',
+            'sub/internal.md',
+            'sub1/sub2/internal.md',
+        ]
+
+        # Basic test
+        repo_url = 'http://example.com/foo'
+        edit_uri = 'edit/master/docs'
+
+        site_navigation = nav.SiteNavigation(load_config(
+            pages=pages,
+            repo_url=repo_url,
+            edit_uri=edit_uri,
+            site_dir='site',
+            site_url='',
+            use_directory_urls=True
+        ))
+
+        expected_results = (
+            repo_url + '/' + edit_uri + '/' + pages[0],
+            repo_url + '/' + edit_uri + '/' + pages[1],
+            repo_url + '/' + edit_uri + '/' + pages[2],
+            repo_url + '/' + edit_uri + '/' + pages[3],
+        )
+
+        for idx, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(page.edit_url, expected_results[idx])
+
+    def test_edit_uri_query_string(self):
+
+        pages = [
+            'index.md',
+            'internal.md',
+            'sub/internal.md',
+            'sub1/sub2/internal.md',
+        ]
 
         # Ensure query strings are supported
         repo_url = 'http://example.com'
@@ -538,6 +624,15 @@ class SiteNavigationTests(unittest.TestCase):
 
         for idx, page in enumerate(site_navigation.walk_pages()):
             self.assertEqual(page.edit_url, expected_results[idx])
+
+    def test_edit_uri_fragment(self):
+
+        pages = [
+            'index.md',
+            'internal.md',
+            'sub/internal.md',
+            'sub1/sub2/internal.md',
+        ]
 
         # Ensure fragment strings are supported
         repo_url = 'http://example.com'
@@ -563,9 +658,6 @@ class SiteNavigationTests(unittest.TestCase):
             self.assertEqual(page.edit_url, expected_results[idx])
 
     def test_edit_uri_windows(self):
-        """
-        Ensure that set_edit_url creates well formed URLs for edit_uri with a windows path
-        """
 
         pages = [
             'index.md',
@@ -597,6 +689,47 @@ class SiteNavigationTests(unittest.TestCase):
         for idx, page in enumerate(site_navigation.walk_pages()):
             self.assertEqual(page.edit_url, expected_results[idx])
 
+    def test_edit_uri_sub_dir_windows(self):
+
+        pages = [
+            'index.md',
+            'internal.md',
+            'sub\\internal.md',
+            'sub1\\sub2\\internal.md',
+        ]
+
+        # Basic test
+        repo_url = 'http://example.com/foo/'
+        edit_uri = 'edit/master/docs/'
+
+        site_navigation = nav.SiteNavigation(load_config(
+            pages=pages,
+            repo_url=repo_url,
+            edit_uri=edit_uri,
+            site_dir='site',
+            site_url='',
+            use_directory_urls=True
+        ))
+
+        expected_results = (
+            repo_url + edit_uri + pages[0],
+            repo_url + edit_uri + pages[1],
+            repo_url + edit_uri + pages[2].replace('\\', '/'),
+            repo_url + edit_uri + pages[3].replace('\\', '/'),
+        )
+
+        for idx, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(page.edit_url, expected_results[idx])
+
+    def test_edit_uri_missing_slash_windows(self):
+
+        pages = [
+            'index.md',
+            'internal.md',
+            'sub\\internal.md',
+            'sub1\\sub2\\internal.md',
+        ]
+
         # Ensure the '/' is added to the repo_url and edit_uri
         repo_url = 'http://example.com'
         edit_uri = 'edit/master/docs'
@@ -610,8 +743,56 @@ class SiteNavigationTests(unittest.TestCase):
             use_directory_urls=True
         ))
 
+        expected_results = (
+            repo_url + '/' + edit_uri + '/' + pages[0],
+            repo_url + '/' + edit_uri + '/' + pages[1],
+            repo_url + '/' + edit_uri + '/' + pages[2].replace('\\', '/'),
+            repo_url + '/' + edit_uri + '/' + pages[3].replace('\\', '/'),
+        )
+
         for idx, page in enumerate(site_navigation.walk_pages()):
             self.assertEqual(page.edit_url, expected_results[idx])
+
+    def test_edit_uri_sub_dir_missing_slash_windows(self):
+
+        pages = [
+            'index.md',
+            'internal.md',
+            'sub\\internal.md',
+            'sub1\\sub2\\internal.md',
+        ]
+
+        # Ensure the '/' is added to the repo_url and edit_uri
+        repo_url = 'http://example.com/foo'
+        edit_uri = 'edit/master/docs'
+
+        site_navigation = nav.SiteNavigation(load_config(
+            pages=pages,
+            repo_url=repo_url,
+            edit_uri=edit_uri,
+            site_dir='site',
+            site_url='',
+            use_directory_urls=True
+        ))
+
+        expected_results = (
+            repo_url + '/' + edit_uri + '/' + pages[0],
+            repo_url + '/' + edit_uri + '/' + pages[1],
+            repo_url + '/' + edit_uri + '/' + pages[2].replace('\\', '/'),
+            repo_url + '/' + edit_uri + '/' + pages[3].replace('\\', '/'),
+        )
+
+        for idx, page in enumerate(site_navigation.walk_pages()):
+            self.assertEqual(page.edit_url, expected_results[idx])
+
+    def test_edit_uri_query_string_windows(self):
+
+        pages = [
+            'index.md',
+            'internal.md',
+            'sub\\internal.md',
+            'sub1\\sub2\\internal.md',
+        ]
 
         # Ensure query strings are supported
         repo_url = 'http://example.com'
@@ -635,6 +816,15 @@ class SiteNavigationTests(unittest.TestCase):
 
         for idx, page in enumerate(site_navigation.walk_pages()):
             self.assertEqual(page.edit_url, expected_results[idx])
+
+    def test_edit_uri_fragment_windows(self):
+
+        pages = [
+            'index.md',
+            'internal.md',
+            'sub\\internal.md',
+            'sub1\\sub2\\internal.md',
+        ]
 
         # Ensure fragment strings are supported
         repo_url = 'http://example.com'

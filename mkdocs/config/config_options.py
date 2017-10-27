@@ -276,7 +276,7 @@ class RepoURL(URL):
         if edit_uri:
             if not edit_uri.startswith(('?', '#')) \
                     and not config['repo_url'].endswith('/'):
-                edit_uri = '/' + edit_uri
+                config['repo_url'] += '/'
             if not edit_uri.endswith('/'):
                 edit_uri += '/'
 

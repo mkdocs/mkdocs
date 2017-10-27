@@ -23,6 +23,7 @@ The current and past members of the MkDocs team.
 
 ## Development Version
 
+* Bugfix: Support `repo_url` with missing ending slash. (#1321).
 * Bugfix: Add length support to `mkdocs.toc.TableOfContext` (#1325).
 * Bugfix: Add some theme specific settings to the search plugin for third party
   themes (#1316).
