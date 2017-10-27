@@ -32,6 +32,9 @@ class TableOfContents(object):
     def __iter__(self):
         return iter(self.items)
 
+    def __len__(self):
+        return len(self.items)
+
     def __str__(self):
         return ''.join([str(item) for item in self])
 
