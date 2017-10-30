@@ -387,31 +387,58 @@ following <code>extra</code> configuration:</p>
 </code></pre>
 
 <h2 id="search-and-themes">Search and themes<a class="headerlink" href="#search-and-themes" title="Permanent link"></a></h2>
-<p>As of MkDocs <code>0.13</code> client side search support has been added to MkDocs with
-<a href="http://lunrjs.com/">Lunr.js</a>.</p>
-<p>Search can either be added to every page in the theme or to a dedicated
-template which must be named <code>search.html</code>. The search template will be built
-with the same name and can be viewable with <code>mkdocs serve</code> at
-<code>http://localhost:8000/search.html</code>. An example of the two different
-approaches can be seen by comparing the <code>mkdocs</code> and <code>readthedocs</code> themes.</p>
-<p>The following HTML needs to be added to the theme so the JavaScript is loaded
-for Lunr.js.</p>
+<p>As of MkDocs <code>0.17</code> client side search support has been added to MkDocs via the
+<code>search</code> plugin. A theme needs to provide a few things for the plugin to work
+with the theme.</p>
+<p>While the <code>search</code> plugin is activated by default, users can disable the plugin
+and themes should acount for this. It is recomended that theme templates wrap
+search specific markup with a check for the plugin:</p>
+<pre><code class="django">{% if 'search' in config['plugins'] %}
+    search stuff here...
+{% endif %}
+</code></pre>
+
+<p>At its most basic functionality, the search plugin will simply provide an index
+file which is no more than a JSON file containing the content of all pages.
+The theme would need to implement its own search functionality client-side.
+However, with a few settings and the necessary templates, the plugin can provide
+a complete functioning client-side search tool based on <a href="http://lunrjs.com/">lunr.js</a>.</p>
+<p>The following options can be set in the <a href="#theme-configuration">theme's configuration file</a>,
+<code>mkdocs_theme.yml</code>:</p>
+<h3 id="include_search_page">include_search_page<a class="headerlink" href="#include_search_page" title="Permanent link"></a></h3>
+<p>Determines whether the search plugin expects the theme to provide a dedicated
+search page via a template located at <code>search/search.html</code>.</p>
+<p>When <code>include_search_page</code> is set to <code>true</code>, the search template will be built
+and available at <code>search/search.html</code>. This method is used by the <code>readthedocs</code>
+theme.</p>
+<p>When <code>include_search_page</code> is set to <code>false</code> or not defined, it is expected that
+the theme provide some other mechanisms for displaying search results. For
+example, the <code>mkdocs</code> theme displays results on any page via a modal.</p>
+<h3 id="search_index_only">search_index_only<a class="headerlink" href="#search_index_only" title="Permanent link"></a></h3>
+<p>Determines whether the search plugin should only generate a search index or a
+complete search solution.</p>
+<p>When <code>search_index_only</code> is set to <code>true</code> or not defined, the search plugin
+makes no modifications to the Jinja environment. A complete solution using the
+provided index file is the responsability of the theme.</p>
+<p>When <code>search_index_only</code> is set to <code>false</code>, then the search plugin modifies the
+Jinja environment by adding its own <code>temaplates</code> directory (with a lower
+precedence than the theme) and adds its scripts to the <code>extra_javascript</code> config
+setting.</p>
+<p>The following HTML needs to be added to the theme so that the provided
+JavaScript is able to properly load Lunr.js and make relative links to the
+search results from the current page.</p>
 <pre><code class="django">&lt;script&gt;var base_url = '{{ base_url }}';&lt;/script&gt;
-&lt;script data-main=&quot;{{ base_url }}/mkdocs/js/search.js&quot; src=&quot;{{ base_url }}/mkdocs/js/require.js&quot;&gt;&lt;/script&gt;
 </code></pre>
 
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The above JavaScript will download the search index, for larger
+<p>The provided JavaScript will download the search index. For larger
 documentation projects this can be a heavy operation. In those cases, it
-is suggested that you either use the <code>search.html</code> approach to only
-include search on one page or load the JavaScript on an event like a form
-submit.</p>
+is suggested that you either use <code>search_index_only: true</code> to only include
+search on one page or load the JavaScript on an event like a form submit.</p>
 </div>
-<p>This loads the JavaScript and sets a global variable <code>base_url</code> which allows
-the JavaScript to make the links relative to the current page. The above
-JavaScript, with the following HTML in a <code>search.html</code> template will add a
-full search implementation to your theme.</p>
+<p>The following HTML in a <code>search/search.html</code> template will add a full search
+implementation to your theme.</p>
 <pre><code class="django">&lt;h1 id=&quot;search&quot;&gt;Search Results&lt;/h1&gt;
 
 &lt;form action=&quot;search.html&quot;&gt;
@@ -423,9 +450,10 @@ full search implementation to your theme.</p>
 &lt;/div&gt;
 </code></pre>
 
-<p>This works by looking for the specific ID's used in the above HTML. The input
-for the user to type the search query must have the ID <code>mkdocs-search-query</code>
-and <code>mkdocs-search-results</code> is the directory where the results will be placed.</p>
+<p>The JavaScript in the plugin works by looking for the specific ID's used in the
+above HTML. The input for the user to type the search query must have the ID
+<code>mkdocs-search-query</code> and <code>mkdocs-search-results</code> is the div where the results
+will be placed.</p>
 <h2 id="packaging-themes">Packaging Themes<a class="headerlink" href="#packaging-themes" title="Permanent link"></a></h2>
 <p>MkDocs makes use of <a href="https://packaging.python.org/en/latest/">Python packaging</a> to distribute themes. This comes with a
 few requirements.</p>
@@ -542,6 +570,9 @@ theme's config.</p>
 <p>Defines a parent theme that this theme inherits from. The value should be
 the string name of the parent theme. Normal Jinja inheritance rules apply.</p>
 </div>
+<p>Plugins may also define some options which allow the theme to inform a plugin
+about which set of plugin options it expects. See the documentation for any
+plugins you may wish to support in your theme.</p>
 <h3 id="distributing-themes">Distributing Themes<a class="headerlink" href="#distributing-themes" title="Permanent link"></a></h3>
 <p>With the above changes, your theme should now be ready to install. This can be
 done with pip, using <code>pip install .</code> if you are still in the same directory as

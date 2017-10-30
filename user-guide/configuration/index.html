@@ -411,14 +411,10 @@ warning or an error (link to a page not listed in the pages setting). Set to
 true to halt processing when a broken link is found, false prints a warning.</p>
 <p><strong>default</strong>: <code>false</code></p>
 <h3 id="dev_addr">dev_addr<a class="headerlink" href="#dev_addr" title="Permanent link"></a></h3>
-<p>Determines the address used when running <code>mkdocs serve</code>. Setting this allows you
-to use another port, or allows you to make the service accessible over your
-local network by using the <code>0.0.0.0</code> address.</p>
-<p>As with all settings, you can set this from the command line, which can be
-useful, for example:</p>
-<pre><code class="bash">mkdocs serve --dev-addr=0.0.0.0:80  # Run on port 80, on the local network.
-</code></pre>
-
+<p>Determines the address used when running <code>mkdocs serve</code>. Must be of the format
+<code>IP:PORT</code>.</p>
+<p>Allows a custom default to be set without the need to pass it through the
+<code>--dev_addr</code> option every time the <code>mkdocs serve</code> command is called.</p>
 <p><strong>default</strong>: <code>'127.0.0.1:8000'</code></p>
 <h2 id="formatting-options">Formatting options<a class="headerlink" href="#formatting-options" title="Permanent link"></a></h2>
 <h3 id="markdown_extensions">markdown_extensions<a class="headerlink" href="#markdown_extensions" title="Permanent link"></a></h3>
@@ -486,8 +482,9 @@ the defaults if you would like to continue using them:</p>
 
 <p>To completely disable all plugins, including any defaults, set the <code>plugins</code>
 setting to an empty list:</p>
-<p>```yaml
-plugins: []</p>
+<pre><code class="yaml">plugins: []
+</code></pre>
+
 <p><strong>default</strong>: <code>['search']</code> (the "search" plugin included with MkDocs).</p></div>
         </div>
 
