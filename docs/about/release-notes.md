@@ -21,7 +21,7 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
-## Development Version
+## Version 0.17.1 (2017-10-30)
 
 * Bugfix: Support `repo_url` with missing ending slash. (#1321).
 * Bugfix: Add length support to `mkdocs.toc.TableOfContext` (#1325).
