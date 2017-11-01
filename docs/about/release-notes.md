@@ -21,6 +21,10 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Development Version
+
+* Bugfix: Correct `extra_*` config setting regressions (#1335 & #1336).
+
 ## Version 0.17.1 (2017-10-30)
 
 * Bugfix: Support `repo_url` with missing ending slash. (#1321).
