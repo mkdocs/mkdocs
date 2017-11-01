@@ -450,7 +450,7 @@ class Extras(OptionallyRequired):
 
     def run_validation(self, value):
         if isinstance(value, list):
-            return list(os.path.normcase(path) for path in value)
+            return value
         else:
             raise ValidationError(
                 "Expected a list, got {0}".format(type(value)))
@@ -476,18 +476,17 @@ class Extras(OptionallyRequired):
                     yield relpath
 
     def post_validation(self, config, key_name):
-        missing_extras = []
-        for filename in self.walk_docs_dir(config['docs_dir']):
-            if filename not in config[key_name]:
-                missing_extras.append(filename)
-
-        if missing_extras:
-            self.warnings.append((
-                "Some files in your 'docs_dir' are not listed in the '{0}' "
-                "config setting and will be ignored by the theme. Add the "
-                "following files to the '{0}' config setting if you want "
-                "them to have an effect on the theme: ['{1}']"
-            ).format(key_name, "', '".join(missing_extras)))
+        # Only issue warnings for missing files if the setting is empty
+        # as autopopulating only used to work if the setting was empty.
+        if not config[key_name]:
+            actual_files = list(self.walk_docs_dir(config['docs_dir']))
+            if actual_files:
+                self.warnings.append((
+                    "Some files in your 'docs_dir' are not listed in the '{0}' "
+                    "config setting and will be ignored by the theme. Add the "
+                    "following files to the '{0}' config setting if you want "
+                    "them to have an effect on the theme: ['{1}']"
+                ).format(key_name, "', '".join(actual_files)))
 
 
 class Pages(OptionallyRequired):
