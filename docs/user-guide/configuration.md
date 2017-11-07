@@ -321,13 +321,13 @@ documentation.
 The following table demonstrates how the URLs used on the site differ when
 setting `use_directory_urls` to `true` or `false`.
 
-Source file  | Generated HTML       | use_directory_urls=true  | use_directory_urls=false
+Source file  | Generated HTML       | use_directory_urls: true  | use_directory_urls: false
 ------------ | -------------------- | ------------------------ | ------------------------
 index.md     | index.html           | /                        | /index.html
 api-guide.md | api-guide/index.html | /api-guide/              | /api-guide/index.html
 about.md     | about/index.html     | /about/                  | /about/index.html
 
-The default style of `use_directory_urls=true` creates more user friendly URLs,
+The default style of `use_directory_urls: true` creates more user friendly URLs,
 and is usually what you'll want to use.
 
 The alternate style can occasionally be useful if you want your documentation to
