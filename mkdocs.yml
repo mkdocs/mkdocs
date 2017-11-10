@@ -28,6 +28,9 @@ markdown_extensions:
         permalink: 
     - admonition
     - def_list
+    - mdx_gh_links:
+        user: mkdocs
+        repo: mkdocs
 
 copyright: Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.
 google_analytics: ['UA-27795084-5', 'mkdocs.org']
