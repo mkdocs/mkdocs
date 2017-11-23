@@ -189,7 +189,8 @@ def get_html_path(path, output_directory_structure="default"):
     Paths like 'about.md' will be converted to 'about/index.html'
     Paths like 'api-guide/core.md' will be converted to 'api-guide/core/index.html'
 
-    If 'output_directory_structure' is 'copy' the  file names and folder structure of the source will be copied to the output directory.
+    If 'output_directory_structure' is 'copy' the  file names and
+    folder structure of the source will be copied to the output directory.
 
     Paths like 'index.md' will be converted to 'index.html'
     Paths like 'about.md' will be converted to 'about.html'

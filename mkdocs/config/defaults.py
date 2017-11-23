@@ -118,6 +118,10 @@ DEFAULT_SCHEMA = (
     # options (as the value).
     ('plugins', config_options.Plugins(default=['search'])),
 
-    # the structure of the output directories and files. A value of 'default' uses the default `<page_name>/index.html` directory structure. A value of 'copy' copies the file names and folder structure of the source files and folders and adjusts all internal links to point to the files in these locations. 
+    # the structure of the output directories and files. A value of 'default'
+    # uses the default `<page_name>/index.html` directory structure.
+    # A value of 'copy' copies the file names and folder structure of the source
+    # files and folders and adjusts all internal links to point to
+    # the files in these locations.
     ('output_directory_structure', config_options.Type(utils.string_types, default='default')),
 )
