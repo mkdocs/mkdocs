@@ -26,6 +26,16 @@ class UtilsTests(unittest.TestCase):
             html_path = utils.get_html_path(file_path)
             self.assertEqual(html_path, expected_html_path)
 
+        expected_results_copy = {
+            'index.md': 'index.html',
+            'api-guide.md': 'api-guide.html',
+            'api-guide/index.md': 'api-guide/index.html',
+            'api-guide/testing.md': 'api-guide/testing.html',
+        }
+        for file_path, expected_html_path in expected_results_copy.items():
+            html_path = utils.get_html_path(file_path, "copy")
+            self.assertEqual(html_path, expected_html_path)
+
     def test_url_path(self):
         expected_results = {
             'index.md': '/',
@@ -35,6 +45,16 @@ class UtilsTests(unittest.TestCase):
         }
         for file_path, expected_html_path in expected_results.items():
             html_path = utils.get_url_path(file_path)
+            self.assertEqual(html_path, expected_html_path)
+
+        expected_results_copy = {
+            'index.md': '/index.html',
+            'api-guide.md': '/api-guide.html',
+            'api-guide/index.md': '/api-guide/index.html',
+            'api-guide/testing.md': '/api-guide/testing.html',
+        }
+        for file_path, expected_html_path in expected_results_copy.items():
+            html_path = utils.get_url_path(file_path, True, "copy")
             self.assertEqual(html_path, expected_html_path)
 
     def test_is_markdown_file(self):
