@@ -86,7 +86,7 @@ def path_to_url(url, nav, strict):
             # to the user and leave the URL as it is.
             log.warning(msg)
             return url
-        path = utils.get_url_path(target_file, nav.use_directory_urls)
+        path = utils.get_url_path(target_file, nav.use_directory_urls, nav.output_directory_structure)
         path = nav.url_context.make_relative(path)
     else:
         path = utils.get_url_path(path).lstrip('/')

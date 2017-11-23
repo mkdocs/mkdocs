@@ -44,6 +44,7 @@ class SiteNavigation(object):
             config, self.url_context)
         self.homepage = self.pages[0] if self.pages else None
         self.use_directory_urls = config['use_directory_urls']
+        self.output_directory_structure = config['output_directory_structure']
 
     def __str__(self):
         return ''.join([str(item) for item in self])
@@ -152,7 +153,7 @@ class Page(object):
     def __init__(self, title, path, url_context, config):
 
         self._title = title
-        self.abs_url = utils.get_url_path(path, config['use_directory_urls'])
+        self.abs_url = utils.get_url_path(path, config['use_directory_urls'], config['output_directory_structure'])
         self.active = False
         self.url_context = url_context
 
@@ -167,7 +168,7 @@ class Page(object):
 
         # Relative and absolute paths to the input markdown file and output html file.
         self.input_path = path
-        self.output_path = utils.get_html_path(path)
+        self.output_path = utils.get_html_path(path, config['output_directory_structure'])
         self.abs_input_path = os.path.join(config['docs_dir'], self.input_path)
         self.abs_output_path = os.path.join(config['site_dir'], self.output_path)
 
