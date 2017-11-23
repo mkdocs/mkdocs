@@ -357,7 +357,8 @@ is output as /test/page_name.html`.
 | about.md         | /about         | /about/index.html         | /      | /about.html         |
 
 !!! note
-  When `output_directory_structure` is set to `copy`, the `use_directory_urls` setting has no effect.
+    When `output_directory_structure` is set to `copy`, the `use_directory_urls` setting
+    has no effect.
 
 **default**: `default`
 
