@@ -350,15 +350,15 @@ source directory structure and source file names, but replaces the
 original file name extensions with `.html`. For example: `test/page_name.md
 is output as /test/page_name.html`.
 
-| Source file      | `default`      | Generated HTML            | `copy` | Generated HTML      |
-|------------------|----------------|---------------------------|--------|---------------------|
-| index.md         | /              | /                         | /      | /index.html         |
-| api/api-guide.md | /api/api-guide | /api/api-guide/index.html | /api/  | /api/api-guide.html |
-| about.md         | /about         | /about/index.html         | /      | /about.html         |
+Source file      | `default`      | Generated HTML            | `copy` | Generated HTML
+-----------------|----------------|---------------------------|--------|--------------------
+index.md         | /              | /                         | /      | /index.html
+api/api-guide.md | /api/api-guide | /api/api-guide/index.html | /api/  | /api/api-guide.html
+about.md         | /about         | /about/index.html         | /      | /about.html        
 
 !!! note
-    When `output_directory_structure` is set to `copy`, the `use_directory_urls` setting
-    has no effect.
+    When `output_directory_structure` is set to `copy`, the `use_directory_urls`
+    setting has no effect.
 
 **default**: `default`
 
