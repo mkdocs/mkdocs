@@ -354,7 +354,7 @@ Source file      | `default`      | Generated HTML            | `copy` | Generat
 -----------------|----------------|---------------------------|--------|--------------------
 index.md         | /              | /                         | /      | /index.html
 api/api-guide.md | /api/api-guide | /api/api-guide/index.html | /api/  | /api/api-guide.html
-about.md         | /about         | /about/index.html         | /      | /about.html        
+about.md         | /about         | /about/index.html         | /      | /about.html
 
 !!! note
     When `output_directory_structure` is set to `copy`, the `use_directory_urls`
