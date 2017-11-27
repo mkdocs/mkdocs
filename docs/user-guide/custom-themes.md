@@ -365,7 +365,7 @@ makes no modifications to the Jinja environment. A complete solution using the
 provided index file is the responsability of the theme.
 
 When `search_index_only` is set to `false`, then the search plugin modifies the
-Jinja environment by adding its own `temaplates` directory (with a lower
+Jinja environment by adding its own `templates` directory (with a lower
 precedence than the theme) and adds its scripts to the `extra_javascript` config
 setting.
 
