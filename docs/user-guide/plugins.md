@@ -59,7 +59,7 @@ points to it.
 
 ### BasePlugin
 
-A subclass of `mkdocs.pluhgins.BasePlugin` should define the behavior of the plugin.
+A subclass of `mkdocs.plugins.BasePlugin` should define the behavior of the plugin.
 The class generally consists of actions to perform on specific events in the build
 process as well as a configuration scheme for the plugin.
 
