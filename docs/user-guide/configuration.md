@@ -447,11 +447,11 @@ plugins: []
 
 [custom themes]: custom-themes.md
 [variables that are available]: custom-themes.md#template-variables
-[pymdk-extensions]: https://pythonhosted.org/Markdown/extensions/index.html
-[pymkd]: https://pythonhosted.org/Markdown/
-[smarty]: https://pythonhosted.org/Markdown/extensions/smarty.html
-[exts]:https://pythonhosted.org/Markdown/extensions/index.html
-[3rd]: https://github.com/waylan/Python-Markdown/wiki/Third-Party-Extensions
+[pymdk-extensions]: https://python-markdown.github.io/extensions/
+[pymkd]: https://python-markdown.github.io/
+[smarty]: https://python-markdown.github.io/extensions/smarty/
+[exts]: https://python-markdown.github.io/extensions/
+[3rd]: https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
 [configuring pages and navigation]: writing-your-docs.md#configure-pages-and-navigation
 [theme_dir]: styling-your-docs.md#using-the-theme_dir
 [styling your docs]: styling-your-docs.md
