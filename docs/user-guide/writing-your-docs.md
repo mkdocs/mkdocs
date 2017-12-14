@@ -216,6 +216,29 @@ Left         | Center        | Right
 Left         | Center        | Right
 ```
 
+Do note that there needs to be an empty line above the table.
+This will not render into a table
+
+```no-highlight
+Some text above the table
+| First Header | Second Header | Third Header |
+| ------------ | ------------- | ------------ |
+| Content Cell | Content Cell  | Content Cell |
+| Content Cell | Content Cell  | Content Cell |
+```
+
+This will render into a table:
+
+```no-highlight
+Some text above the table
+
+| First Header | Second Header | Third Header |
+| ------------ | ------------- | ------------ |
+| Content Cell | Content Cell  | Content Cell |
+| Content Cell | Content Cell  | Content Cell |
+```
+
+
 ### Fenced code blocks
 
 The first line should contain 3 or more backtick (`` ` ``) characters, and the
