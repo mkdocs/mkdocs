@@ -45,9 +45,9 @@ the API.
 
 The previously built-in search functionality has been removed and wrapped in a
 plugin (named "search") with no changes in behavior. When MkDocs builds, the
-search index is now written to `search/search_index.json` instead of 
-`mkdocs/search_index.json`. If no plugins setting is defined in the config, 
-then the `search` plugin will be included by default. See the 
+search index is now written to `search/search_index.json` instead of
+`mkdocs/search_index.json`. If no plugins setting is defined in the config,
+then the `search` plugin will be included by default. See the
 [configuration][plugin_config] documentation for information on overriding the
 default.
 
