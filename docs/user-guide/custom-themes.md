@@ -20,7 +20,7 @@ and their usage.
 ## Creating a custom theme
 
 The bare minimum required for a custom theme is a `main.html` [Jinja2 template]
-file. This should be placed in a directory which will be the `theme_dir` and it
+file. This should be placed in a directory which will be the `custom_dir` and it
 should be created next to the `mkdocs.yml` configuration file. Within
 `mkdocs.yml`, specify the theme `custom_dir` option and set it to the name of
 the directory containing `main.html`. For example, given this example project
