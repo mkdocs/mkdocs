@@ -123,7 +123,7 @@ mkdocs, version 0.15.3
     generate and install them for you. Simply run the following two commands:
 
         pip install click-man
-        python setup.py --command-packages=click_man.commands man_pages
+        click-man --target path/to/man/pages mkdocs
 
     See the [click-man documentation] for an explaination of why manpages are
     not automaticaly generated and installed by pip.
