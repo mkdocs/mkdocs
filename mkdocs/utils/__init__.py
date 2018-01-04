@@ -41,12 +41,12 @@ else:                           # pragma: no cover
 
 log = logging.getLogger(__name__)
 
-markdown_patterns = [
-    '*.markdown',
-    '*.mdown',
-    '*.mkdn',
-    '*.mkd',
-    '*.md'
+markdown_extensions = [
+    '.markdown',
+    '.mdown',
+    '.mkdn',
+    '.mkd',
+    '.md'
 ]
 
 
@@ -153,7 +153,8 @@ def clean_directory(directory):
             os.unlink(path)
 
 
-def copy_media_files(from_dir, to_dir, exclude=markdown_patterns, dirty=False):
+def copy_media_files(from_dir, to_dir,
+                     exclude=['*{0}'.format(x) for x in markdown_extensions], dirty=False):
     """
     Recursively copy all files except markdown and exclude[ed] files into another directory.
 
@@ -229,8 +230,7 @@ def is_markdown_file(path):
 
     http://superuser.com/questions/249436/file-extension-for-markdown-files
     """
-    ext = os.path.splitext(path)[1].lower()
-    return any(fnmatch.fnmatch(ext, pattern) for pattern in markdown_patterns)
+    return any(fnmatch.fnmatch(path.lower(), '*{0}'.format(x)) for x in markdown_extensions)
 
 
 def is_css_file(path):
