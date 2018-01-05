@@ -41,6 +41,14 @@ else:                           # pragma: no cover
 
 log = logging.getLogger(__name__)
 
+markdown_extensions = [
+    '.markdown',
+    '.mdown',
+    '.mkdn',
+    '.mkd',
+    '.md'
+]
+
 
 def yaml_load(source, loader=yaml.Loader):
     """
@@ -145,11 +153,13 @@ def clean_directory(directory):
             os.unlink(path)
 
 
-def copy_media_files(from_dir, to_dir, exclude=None, dirty=False):
+def copy_media_files(from_dir, to_dir,
+                     exclude=['*{0}'.format(x) for x in markdown_extensions], dirty=False):
     """
     Recursively copy all files except markdown and exclude[ed] files into another directory.
 
     `exclude` accepts a list of Unix shell-style wildcards (`['*.py', '*.pyc']`).
+
     Note that `exclude` only operates on file names, not directories.
     """
     for (source_dir, dirnames, filenames) in os.walk(from_dir, followlinks=True):
@@ -168,15 +178,14 @@ def copy_media_files(from_dir, to_dir, exclude=None, dirty=False):
         dirnames[:] = [d for d in dirnames if not d.startswith('.')]
 
         for filename in filenames:
-            if not is_markdown_file(filename):
-                source_path = os.path.join(source_dir, filename)
-                output_path = os.path.join(output_dir, filename)
+            source_path = os.path.join(source_dir, filename)
+            output_path = os.path.join(output_dir, filename)
 
-                # Do not copy when using --dirty if the file has not been modified
-                if dirty and (modified_time(source_path) < modified_time(output_path)):
-                    continue
+            # Do not copy when using --dirty if the file has not been modified
+            if dirty and (modified_time(source_path) < modified_time(output_path)):
+                continue
 
-                copy_file(source_path, output_path)
+            copy_file(source_path, output_path)
 
 
 def get_html_path(path):
@@ -221,14 +230,7 @@ def is_markdown_file(path):
 
     http://superuser.com/questions/249436/file-extension-for-markdown-files
     """
-    ext = os.path.splitext(path)[1].lower()
-    return ext in [
-        '.markdown',
-        '.mdown',
-        '.mkdn',
-        '.mkd',
-        '.md',
-    ]
+    return any(fnmatch.fnmatch(path.lower(), '*{0}'.format(x)) for x in markdown_extensions)
 
 
 def is_css_file(path):

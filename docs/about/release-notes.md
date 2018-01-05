@@ -21,6 +21,10 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Development Version
+
+* Refactor `copy_media_files` util function for more flexibility (#1370).
+
 ## Version 0.17.2 (2017-11-15)
 
 * Bugfix: Correct `extra_*` config setting regressions (#1335 & #1336).
