@@ -23,7 +23,7 @@ The current and past members of the MkDocs team.
 
 ## Development Version
 
-* Internal refactor to make util functions more flexible (#1370).
+* Refactor `copy_media_files` util function for more flexibility (#1370).
 
 ## Version 0.17.2 (2017-11-15)
 
