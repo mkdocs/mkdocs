@@ -3,6 +3,12 @@ import os
 import tempfile
 import unittest
 
+try:
+    # py>=3.2
+    from tempfile import TemporaryDirectory
+except ImportError:
+    from backports.tempfile import TemporaryDirectory
+
 from mkdocs import exceptions
 from mkdocs.config import base, defaults
 from mkdocs.config.config_options import BaseConfigOption
@@ -42,7 +48,9 @@ class ConfigBaseTests(unittest.TestCase):
         Allows users to specify a config other than the default `mkdocs.yml`.
         """
 
-        config_file = tempfile.NamedTemporaryFile('w', delete=False)
+        temp_dir = TemporaryDirectory()
+        config_file = open(os.path.join(temp_dir.name, 'mkdocs.yml'), 'w')
+        os.mkdir(os.path.join(temp_dir.name, 'docs'))
         try:
             config_file.write("site_name: MkDocs Test\n")
             config_file.flush()
@@ -64,7 +72,12 @@ class ConfigBaseTests(unittest.TestCase):
         `load_config` can accept an open file descriptor.
         """
 
-        config_file = tempfile.NamedTemporaryFile('r+', delete=False)
+        temp_dir = TemporaryDirectory()
+        temp_path = temp_dir.name
+        config_fname = os.path.join(temp_path, 'mkdocs.yml')
+
+        config_file = open(config_fname, 'w+')
+        os.mkdir(os.path.join(temp_path, 'docs'))
         try:
             config_file.write("site_name: MkDocs Test\n")
             config_file.flush()
@@ -75,7 +88,7 @@ class ConfigBaseTests(unittest.TestCase):
             # load_config will always close the file
             self.assertTrue(config_file.closed)
         finally:
-            os.remove(config_file.name)
+            temp_dir.cleanup()
 
     def test_load_from_closed_file(self):
         """
@@ -83,7 +96,10 @@ class ConfigBaseTests(unittest.TestCase):
         Ensure `load_config` reloads the closed file.
         """
 
-        config_file = tempfile.NamedTemporaryFile('w', delete=False)
+        temp_dir = TemporaryDirectory()
+        config_file = open(os.path.join(temp_dir.name, 'mkdocs.yml'), 'w')
+        os.mkdir(os.path.join(temp_dir.name, 'docs'))
+
         try:
             config_file.write("site_name: MkDocs Test\n")
             config_file.flush()
@@ -93,7 +109,7 @@ class ConfigBaseTests(unittest.TestCase):
             self.assertTrue(isinstance(cfg, base.Config))
             self.assertEqual(cfg['site_name'], 'MkDocs Test')
         finally:
-            os.remove(config_file.name)
+            temp_dir.cleanup()
 
     def test_load_from_deleted_file(self):
         """
@@ -234,3 +250,28 @@ class ConfigBaseTests(unittest.TestCase):
             ('invalid_option', 'run_validation warning'),
             ('invalid_option', 'post_validation warning'),
         ])
+
+    def test_load_from_file_with_relative_paths(self):
+        """
+        When explicitly setting a config file, paths should be relative to the
+        config file, not the working directory.
+        """
+
+        config_dir = TemporaryDirectory()
+        config_fname = os.path.join(config_dir.name, 'mkdocs.yml')
+        docs_dir = os.path.join(config_dir.name, 'src')
+        os.mkdir(docs_dir)
+
+        config_file = open(config_fname, 'w')
+
+        try:
+            config_file.write("docs_dir: src\nsite_name: MkDocs Test\n")
+            config_file.flush()
+            config_file.close()
+
+            cfg = base.load_config(config_file=config_file)
+            self.assertTrue(isinstance(cfg, base.Config))
+            self.assertEqual(cfg['site_name'], 'MkDocs Test')
+            self.assertEqual(cfg['docs_dir'], docs_dir)
+        finally:
+            config_dir.cleanup()

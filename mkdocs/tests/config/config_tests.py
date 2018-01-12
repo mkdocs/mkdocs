@@ -7,6 +7,13 @@ import shutil
 import tempfile
 import unittest
 
+try:
+    # py>=3.2
+    from tempfile import TemporaryDirectory
+except ImportError:
+    from backports.tempfile import TemporaryDirectory
+
+
 import mkdocs
 from mkdocs import config
 from mkdocs import utils
@@ -81,7 +88,11 @@ class ConfigTests(unittest.TestCase):
         pages:
         - 'Introduction': 'index.md'
         """)
-        config_file = tempfile.NamedTemporaryFile('w', delete=False)
+        temp_dir = TemporaryDirectory()
+        temp_path = temp_dir.name
+        os.mkdir(os.path.join(temp_path, 'docs'))
+        config_path = os.path.join(temp_path, 'mkdocs.yml')
+        config_file = open(config_path, 'w')
         try:
             config_file.write(ensure_utf(file_contents))
             config_file.flush()
@@ -91,7 +102,7 @@ class ConfigTests(unittest.TestCase):
             self.assertEqual(result['site_name'], expected_result['site_name'])
             self.assertEqual(result['pages'], expected_result['pages'])
         finally:
-            os.remove(config_file.name)
+            temp_dir.cleanup()
 
     def test_theme(self):
 

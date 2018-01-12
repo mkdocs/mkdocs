@@ -293,6 +293,21 @@ class FilesystemObject(Type):
         super(FilesystemObject, self).__init__(type_=utils.string_types, **kwargs)
         self.exists = exists
 
+    def pre_validation(self, config, key_name):
+        value = config[key_name]
+
+        if os.path.isabs(value):
+            return
+
+        if config.fname is None:
+            # Unable to determine absolute path of the config file; fall back
+            # to trusting the relative path
+            return
+
+        config_dir = os.path.dirname(config.fname)
+        value = os.path.join(config_dir, value)
+        config[key_name] = value
+
     def run_validation(self, value):
         value = super(FilesystemObject, self).run_validation(value)
         if self.exists and not self.existence_test(value):

@@ -28,6 +28,7 @@ class Config(utils.UserDict):
 
         self._schema = schema
         self._schema_keys = set(dict(schema).keys())
+        self.fname = None
         self.data = {}
 
         self.user_configs = []
@@ -120,6 +121,10 @@ class Config(utils.UserDict):
         self.data.update(patch)
 
     def load_file(self, config_file):
+        fname = getattr(config_file, 'name', None)
+        if fname:
+            self.fname = fname
+
         return self.load_dict(utils.yaml_load(config_file))
 
 
