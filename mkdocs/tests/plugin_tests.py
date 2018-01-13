@@ -14,7 +14,8 @@ from mkdocs import config
 class DummyPlugin(plugins.BasePlugin):
     config_scheme = (
         ('foo', config.config_options.Type(utils.string_types, default='default foo')),
-        ('bar', config.config_options.Type(int, default=0))
+        ('bar', config.config_options.Type(int, default=0)),
+        ('dir', config.config_options.Dir(exists=False)),
     )
 
     def on_pre_page(self, content, **kwargs):
@@ -31,16 +32,20 @@ class TestPluginClass(unittest.TestCase):
     def test_valid_plugin_options(self):
 
         options = {
-            'foo': 'some value'
+            'foo': 'some value',
+            'dir': 'test',
         }
 
         expected = {
             'foo': 'some value',
-            'bar': 0
+            'bar': 0,
+            'dir': '/tmp/test',
         }
 
+        cfg_fname = '/tmp/mkdocs.yml'  # fake path
+
         plugin = DummyPlugin()
-        errors, warnings = plugin.load_config(options)
+        errors, warnings = plugin.load_config(options, fname=cfg_fname)
         self.assertEqual(plugin.config, expected)
         self.assertEqual(errors, [])
         self.assertEqual(warnings, [])
@@ -132,7 +137,8 @@ class TestPluginConfig(unittest.TestCase):
         self.assertIsInstance(cfg['plugins']['sample'], plugins.BasePlugin)
         expected = {
             'foo': 'default foo',
-            'bar': 0
+            'bar': 0,
+            'dir': None,
         }
         self.assertEqual(cfg['plugins']['sample'].config, expected)
 
@@ -154,7 +160,8 @@ class TestPluginConfig(unittest.TestCase):
         self.assertIsInstance(cfg['plugins']['sample'], plugins.BasePlugin)
         expected = {
             'foo': 'foo value',
-            'bar': 42
+            'bar': 42,
+            'dir': None,
         }
         self.assertEqual(cfg['plugins']['sample'].config, expected)
 
@@ -194,7 +201,8 @@ class TestPluginConfig(unittest.TestCase):
         self.assertIsInstance(cfg['plugins']['sample'], plugins.BasePlugin)
         expected = {
             'foo': 'default foo',
-            'bar': 0
+            'bar': 0,
+            'dir': None,
         }
         self.assertEqual(cfg['plugins']['sample'].config, expected)
 

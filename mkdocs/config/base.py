@@ -21,14 +21,14 @@ class Config(utils.UserDict):
     for running validation on the structure and contents.
     """
 
-    def __init__(self, schema):
+    def __init__(self, schema, fname=None):
         """
         The schema is a Python dict which maps the config name to a validator.
         """
 
         self._schema = schema
         self._schema_keys = set(dict(schema).keys())
-        self.fname = None
+        self.fname = fname
         self.data = {}
 
         self.user_configs = []
@@ -121,10 +121,6 @@ class Config(utils.UserDict):
         self.data.update(patch)
 
     def load_file(self, config_file):
-        fname = getattr(config_file, 'name', None)
-        if fname:
-            self.fname = fname
-
         return self.load_dict(utils.yaml_load(config_file))
 
 
@@ -173,11 +169,11 @@ def load_config(config_file=None, **kwargs):
             options.pop(key)
 
     config_file = _open_config_file(config_file)
-    options['config_file_path'] = getattr(config_file, 'name', '')
+    fname = options['config_file_path'] = getattr(config_file, 'name', '')
 
     # Initialise the config with the default schema .
     from mkdocs import config
-    cfg = Config(schema=config.DEFAULT_SCHEMA)
+    cfg = Config(schema=config.DEFAULT_SCHEMA, fname=fname)
     # First load the config file
     cfg.load_file(config_file)
     # Then load the options to overwrite anything in the config.

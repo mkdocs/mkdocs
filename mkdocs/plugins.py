@@ -42,10 +42,10 @@ class BasePlugin(object):
     config_scheme = ()
     config = {}
 
-    def load_config(self, options):
+    def load_config(self, options, fname=None):
         """ Load config from a dict of options. Returns a tuple of (errors, warnings)."""
 
-        self.config = Config(schema=self.config_scheme)
+        self.config = Config(schema=self.config_scheme, fname=fname)
         self.config.load_dict(options)
 
         return self.config.validate()
