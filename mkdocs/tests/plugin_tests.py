@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 
 import unittest
 import mock
+import os
 
 from mkdocs import plugins
 from mkdocs import utils
@@ -30,19 +31,24 @@ class DummyPlugin(plugins.BasePlugin):
 class TestPluginClass(unittest.TestCase):
 
     def test_valid_plugin_options(self):
+        test_dir = 'test'
 
         options = {
             'foo': 'some value',
-            'dir': 'test',
+            'dir': test_dir,
         }
+
+        cfg_fname = os.path.join('tmp', 'test', 'fname.yml')
+        cfg_fname = os.path.abspath(cfg_fname)
+
+        cfg_dirname = os.path.dirname(cfg_fname)
+        expected = os.path.join(cfg_dirname, test_dir)
 
         expected = {
             'foo': 'some value',
             'bar': 0,
-            'dir': '/tmp/test',
+            'dir': expected,
         }
-
-        cfg_fname = '/tmp/mkdocs.yml'  # fake path
 
         plugin = DummyPlugin()
         errors, warnings = plugin.load_config(options, fname=cfg_fname)
