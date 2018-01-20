@@ -39,13 +39,7 @@ ul.nav .main {
 /*
  * The code below adds some padding to the top of the current anchor target so
  * that, when navigating to it, the header isn't hidden by the navbar at the
- * top. This is especially complicated because we want to *remove* the padding
- * after navigation so that hovering over the header shows the permalink icon
- * correctly. Thus, we create a CSS animation to remove the extra padding after
- * a second. We have two animations so that navigating to an anchor within the
- * page always restarts the animation.
- *
- * See <https://github.com/mkdocs/mkdocs/issues/843> for more details.
+ * top.
  */
 :target::before {
     content: "";
@@ -53,25 +47,6 @@ ul.nav .main {
     margin-top: -75px;
     height: 75px;
     pointer-events: none;
-    animation: 0s 1s forwards collapse-anchor-padding-1;
-}
-
-.clicky :target::before {
-  animation-name: collapse-anchor-padding-2;
-}
-
-@keyframes collapse-anchor-padding-1 {
-    to {
-        margin-top: 0;
-        height: 0;
-    }
-}
-
-@keyframes collapse-anchor-padding-2 {
-    to {
-        margin-top: 0;
-        height: 0;
-    }
 }
 
 h1 {
