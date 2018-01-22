@@ -1,8 +1,16 @@
 # Writing your docs
 
-How to write and layout your markdown source files.
+How to write and layout your Markdown source files.
 
 ---
+
+## Introduction
+
+As there is no clearly defined Markdown standard backed by a standards body 
+Markdown comes in many different flavors. MkDocs uses the [Python Markdown]
+(https://python-markdown.github.io/) library to translate Markdown into 
+HTML. The configuration page in this manual documents all supported 
+[formatting options](configuration.md#formatting-options).
 
 ## Configure Pages and Navigation
 
