@@ -1,6 +1,9 @@
-importScripts('lunr.min.js');
+if( 'function' === typeof importScripts ){
+  importScripts('lunr.min.js');
 
-var base_url = '.';
+  var base_url = '.';
+}
+
 var index;
 var documents = {};
 
@@ -22,7 +25,11 @@ function onLoad () {
 function init () {
   var oReq = new XMLHttpRequest();
   oReq.addEventListener("load", onLoad);
-  oReq.open("GET", '/search/search_index.json');
+  var index_path = base_url + '/search/search_index.json';
+  if( 'function' === typeof importScripts ){
+      index_path = 'search_index.json';
+  }
+  oReq.open("GET", index_path);
   oReq.send();
 }
 
@@ -39,13 +46,15 @@ function search (query) {
   return resultDocuments;
 }
 
-onmessage = function (e) {
-  if (e.data.baseUrl) {
-    base_url = e.data.baseUrl;
-    init();
-  } else if (e.data.query) {
-    postMessage({ results: search(e.data.query) });
-  } else {
-    console.error("Worker - Unrecognized message: " + e);
-  }
-};
+if( 'function' === typeof importScripts ){
+  onmessage = function (e) {
+    if (e.data.baseUrl) {
+      base_url = e.data.baseUrl;
+      init();
+    } else if (e.data.query) {
+      postMessage({ results: search(e.data.query) });
+    } else {
+      console.error("Worker - Unrecognized message: " + e);
+    }
+  };
+}
