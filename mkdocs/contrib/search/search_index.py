@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 
+import re
 import json
 from mkdocs import utils
 
@@ -37,9 +38,12 @@ class SearchIndex(object):
         A simple wrapper to add an entry and ensure the contents
         is UTF8 encoded.
         """
+        text = text.replace('\u00a0', ' ')
+        text = re.sub(r'[ \t\n\r\f\v]+', ' ', text.strip())
+
         self._entries.append({
             'title': title,
-            'text': utils.text_type(text.strip().encode('utf-8'), encoding='utf-8'),
+            'text': utils.text_type(text.encode('utf-8'), encoding='utf-8'),
             'location': loc
         })
 
@@ -92,7 +96,7 @@ class SearchIndex(object):
         page_dicts = {
             'docs': self._entries,
         }
-        return json.dumps(page_dicts, sort_keys=True, indent=4)
+        return json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
 
     def strip_tags(self, html):
         """strip html tags from data"""
