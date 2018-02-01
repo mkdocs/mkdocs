@@ -1,5 +1,5 @@
 if( 'function' === typeof importScripts ){
-  importScripts('lunr.min.js');
+  importScripts('lunr.js');
 
   var base_url = '.';
 }
@@ -10,16 +10,17 @@ var documents = {};
 function onLoad () {
   var data = JSON.parse(this.responseText);
   index = lunr(function () {
-    this.field('title', {boost: 10});  // TODO: Lunr v2 deprecated this in favour of searches like ^10
+    this.field('title', { boost: 10 });
     this.field('text');
     this.ref('location');
+
+    for (var i=0; i < data.docs.length; i++) {
+      var doc = data.docs[i];
+      doc.location = base_url + doc.location;
+      this.add(doc);
+      documents[doc.location] = doc;
+    }
   });
-  for (var i=0; i < data.docs.length; i++) {
-    var doc = data.docs[i];
-    doc.location = base_url + doc.location;
-    index.add(doc);
-    documents[doc.location] = doc;
-  }
 }
 
 function init () {

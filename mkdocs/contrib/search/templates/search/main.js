@@ -32,7 +32,7 @@ function displayResults (results) {
 if (!window.Worker) {
   console.log('Web Worker API not supported');
   // load index in main thread
-  $.getScript(base_url + "/search/lunr.min.js", function () {
+  $.getScript(base_url + "/search/lunr.js", function () {
     $.getScript(base_url + "/search/worker.js", function () {
       init();
 
