@@ -9,6 +9,9 @@ var documents = {};
 
 function onLoad () {
   var data = JSON.parse(this.responseText);
+  if (data.config.seperator && data.config.seperator.length) {
+      lunr.tokenizer.seperator = new RegExp(data.config.seperator);
+  }
   index = lunr(function () {
     this.field('title', { boost: 10 });
     this.field('text');

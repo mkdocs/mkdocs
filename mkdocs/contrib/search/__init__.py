@@ -6,6 +6,7 @@ import os
 import logging
 from mkdocs import utils
 from mkdocs.plugins import BasePlugin
+from mkdocs.config import config_options
 from mkdocs.contrib.search.search_index import SearchIndex
 
 
@@ -14,6 +15,10 @@ log = logging.getLogger(__name__)
 
 class SearchPlugin(BasePlugin):
     """ Add a search feature to MkDocs. """
+
+    config_scheme = (
+        ('seperator', config_options.Type(utils.string_types, default=r'[\s\-]+')),
+    )
 
     def on_config(self, config, **kwargs):
         "Add plugin templates and scripts to config."
@@ -28,7 +33,7 @@ class SearchPlugin(BasePlugin):
 
     def on_pre_build(self, config, **kwargs):
         "Create search index instance for later use."
-        self.search_index = SearchIndex()
+        self.search_index = SearchIndex(**self.config)
 
     def on_page_context(self, context, **kwargs):
         "Add page to search index."

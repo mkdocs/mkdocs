@@ -18,8 +18,9 @@ class SearchIndex(object):
     tags and their following content are sections).
     """
 
-    def __init__(self):
+    def __init__(self, **config):
         self._entries = []
+        self.config = config
 
     def _find_toc_by_id(self, toc, id_):
         """
@@ -95,6 +96,7 @@ class SearchIndex(object):
         """python to json conversion"""
         page_dicts = {
             'docs': self._entries,
+            'config': self.config
         }
         return json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
 
