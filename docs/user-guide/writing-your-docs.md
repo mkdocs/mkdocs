@@ -216,28 +216,8 @@ Left         | Center        | Right
 Left         | Center        | Right
 ```
 
-Do note that there needs to be an empty line above the table.
-This will not render into a table
-
-```no-highlight
-Some text above the table
-| First Header | Second Header | Third Header |
-| ------------ | ------------- | ------------ |
-| Content Cell | Content Cell  | Content Cell |
-| Content Cell | Content Cell  | Content Cell |
-```
-
-This will render into a table:
-
-```no-highlight
-Some text above the table
-
-| First Header | Second Header | Third Header |
-| ------------ | ------------- | ------------ |
-| Content Cell | Content Cell  | Content Cell |
-| Content Cell | Content Cell  | Content Cell |
-```
-
+Note that a table must be surrounded by blank lines. There must be a blank line 
+before and after the table.
 
 ### Fenced code blocks
 
