@@ -119,6 +119,19 @@ mkdocs, version 0.15.3
 ```
 
 !!! Note
+    If you would like manpages installed for MkDocs, the [click-man] tool can
+    generate and install them for you. Simply run the following two commands:
+
+        pip install click-man
+        click-man --target path/to/man/pages mkdocs
+
+    See the [click-man documentation] for an explaination of why manpages are
+    not automaticaly generated and installed by pip.
+
+[click-man]: https://github.com/click-contrib/click-man
+[click-man documentation]: https://github.com/click-contrib/click-man#automatic-man-page-installation-with-setuptools-and-pip
+
+!!! Note
     If you are using Windows, some of the above commands may not work
     out-of-the-box.
 

@@ -21,6 +21,10 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Development Version
+
+* Refactor `copy_media_files` util function for more flexibility (#1370).
+
 ## Version 0.17.2 (2017-11-15)
 
 * Bugfix: Correct `extra_*` config setting regressions (#1335 & #1336).
@@ -44,10 +48,12 @@ own custom behaviors. See the included documentation for a full explanation of
 the API.
 
 The previously built-in search functionality has been removed and wrapped in a
-plugin (named "search") with no changes in behavior. If no plugins setting is
-defined in the config, then the `search` plugin will be included by default.
-See the [configuration][plugin_config] documentation for information on
-overriding the default.
+plugin (named "search") with no changes in behavior. When MkDocs builds, the
+search index is now written to `search/search_index.json` instead of
+`mkdocs/search_index.json`. If no plugins setting is defined in the config,
+then the `search` plugin will be included by default. See the
+[configuration][plugin_config] documentation for information on overriding the
+default.
 
 [Plugin API]: ../user-guide/plugins.md
 [plugin_config]: ../user-guide/configuration.md#plugins

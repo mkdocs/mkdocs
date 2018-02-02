@@ -2,6 +2,8 @@
 # coding: utf-8
 
 from __future__ import unicode_literals
+import os
+import sys
 import logging
 import click
 import socket
@@ -88,9 +90,13 @@ remote_name_help = ("The remote name to commit to for Github Pages. This "
                     "overrides the value specified in config")
 force_help = "Force the push to the repository."
 
+pgk_dir = os.path.dirname(os.path.abspath(__file__))
+
 
 @click.group(context_settings={'help_option_names': ['-h', '--help']})
-@click.version_option(__version__, '-V', '--version')
+@click.version_option(
+    '{0} from {1} (Python {2})'.format(__version__, pgk_dir, sys.version[:3]),
+    '-V', '--version')
 @common_options
 def cli():
     """
