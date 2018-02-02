@@ -17,6 +17,7 @@ class SearchPlugin(BasePlugin):
     """ Add a search feature to MkDocs. """
 
     config_scheme = (
+        ('lang', config_options.Type(list, default=['en']),
         ('seperator', config_options.Type(utils.string_types, default=r'[\s\-]+')),
     )
 

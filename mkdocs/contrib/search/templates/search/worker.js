@@ -9,10 +9,32 @@ var documents = {};
 
 function onLoad () {
   var data = JSON.parse(this.responseText);
-  if (data.config.seperator && data.config.seperator.length) {
+  var lang = ['en'];
+  if (data.config) {
+    if (data.config.lang && data.config.lang.length) {
+      lang = data.config.lang;
+      if (lang.length > 1 || lang[0] !== "en") {
+        importScripts('lunr.stemmer.support.js');
+        if (lang.length > 1) {
+          importScripts('lunr.multi.js');
+        }
+        for (var i=0; i < lang.length; i++) {
+          if (lang[i] != 'en') {
+            importScripts(['lunr', lang[i], 'js'].join('.'));
+          }
+        }
+      }
+    }
+    if (data.config.seperator && data.config.seperator.length) {
       lunr.tokenizer.seperator = new RegExp(data.config.seperator);
+    }
   }
   index = lunr(function () {
+    if (lang.length === 1 && lang[0] !== "en" && lunr[lang[0]]) {
+      this.use(lunr[lang[0]])
+    } else if (lang.length > 1) {
+      this.use(lunr.multiLanguage(...lang))
+    }
     this.field('title', { boost: 10 });
     this.field('text');
     this.ref('location');
