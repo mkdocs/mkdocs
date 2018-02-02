@@ -32,31 +32,29 @@ function displayResults (results) {
 if (!window.Worker) {
   console.log('Web Worker API not supported');
   // load index in main thread
-  $.getScript(base_url + "/search/lunr.js", function () {
-    $.getScript(base_url + "/search/worker.js", function () {
-      init();
+  $.getScript(base_url + "/search/worker.js", function () {
+    init();
 
-      function doSearch () {
-        var query = document.getElementById('mkdocs-search-query').value;
-        if (query.length > 2) {
-          console.log('Searching with query: ' + query);
-          var results = search(query);
-          displayResults(results);
-        }
+    function doSearch () {
+      var query = document.getElementById('mkdocs-search-query').value;
+      if (query.length > 2) {
+        console.log('Searching with query: ' + query);
+        var results = search(query);
+        displayResults(results);
+      }
+    }
+
+    $(function() {
+      var search_input = document.getElementById('mkdocs-search-query');
+      if (search_input) {
+        search_input.addEventListener("keyup", doSearch);
       }
 
-      $(function() {
-        var search_input = document.getElementById('mkdocs-search-query');
-        if (search_input) {
-          search_input.addEventListener("keyup", doSearch);
-        }
-
-        var term = getSearchTermFromLocation();
-        if (term) {
-          search_input.value = term;
-          doSearch();
-        }
-      });
+      var term = getSearchTermFromLocation();
+      if (term) {
+        search_input.value = term;
+        doSearch();
+      }
     });
   });
 } else {

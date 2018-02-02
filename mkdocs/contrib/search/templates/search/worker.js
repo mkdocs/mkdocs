@@ -1,6 +1,17 @@
-if( 'function' === typeof importScripts ){
-  importScripts('lunr.js');
+function loadScript(url) {
+  if( 'function' === typeof importScripts ){
+    importScripts(url);
+  } else {
+    var head = document.getElementsByTagName('head')[0];
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = base_url + "/search/" + url;
+    head.appendChild(script);
+  }
+}
 
+loadScript('lunr.js');
+if( 'function' === typeof importScripts ){
   var base_url = '.';
 }
 
@@ -14,13 +25,13 @@ function onLoad () {
     if (data.config.lang && data.config.lang.length) {
       lang = data.config.lang;
       if (lang.length > 1 || lang[0] !== "en") {
-        importScripts('lunr.stemmer.support.js');
+        loadScript('lunr.stemmer.support.js');
         if (lang.length > 1) {
-          importScripts('lunr.multi.js');
+          loadScript('lunr.multi.js');
         }
         for (var i=0; i < lang.length; i++) {
           if (lang[i] != 'en') {
-            importScripts(['lunr', lang[i], 'js'].join('.'));
+            loadScript(['lunr', lang[i], 'js'].join('.'));
           }
         }
       }
