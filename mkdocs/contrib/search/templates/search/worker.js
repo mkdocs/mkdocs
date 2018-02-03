@@ -1,19 +1,26 @@
 var base_url = 'function' === typeof importScripts ? '.' : '/search/';
-var allowSearch = false
+var allowSearch = false;
 var index;
 var documents = {};
 var lang = ['en'];
 var data;
 
-function getScripts(scripts, callback) {
-  console.log('Loading scripts: ' + scripts);
-  var progress = 0;
-  scripts.forEach(function(script) {
-    $.getScript(base_url + script).done(function () {
-      if (++progress == scripts.length) callback();
-    }).fail(function (jqxhr, settings, exception) {
-      console.log(exception);
-    });
+function getScript(script, callback) {
+  console.log('Loading script: ' + script);
+  $.getScript(base_url + script).done(function () {
+    callback();
+  }).fail(function (jqxhr, settings, exception) {
+    console.log('Error: ' + exception);
+  });
+}
+
+function getScriptsInOrder(scripts, callback) {
+  if (scripts.length === 0) {
+    callback();
+    return;
+  }
+  getScript(scripts[0], function() {
+    getScriptsInOrder(scripts.slice(1), callback);
   });
 }
 
@@ -22,7 +29,7 @@ function loadScripts(urls, callback) {
     importScripts.apply(null, urls);
     callback();
   } else {
-    getScripts(urls, callback);
+    getScriptsInOrder(urls, callback);
   }
 }
 
@@ -31,7 +38,7 @@ function onJSONLoaded () {
   if (data.config) {
     if (data.config.lang && data.config.lang.length) {
       lang = data.config.lang;
-      var scriptsToLoad = ['lunr.js']
+      var scriptsToLoad = ['lunr.js'];
       if (lang.length > 1 || lang[0] !== "en") {
         scriptsToLoad.push('lunr.stemmer.support.js');
         if (lang.length > 1) {
@@ -49,15 +56,15 @@ function onJSONLoaded () {
 }
 
 function onScriptsLoaded () {
-  console.log('All search scripts loaded, building Lunr index...')
+  console.log('All search scripts loaded, building Lunr index...');
   if (data.config.seperator && data.config.seperator.length) {
     lunr.tokenizer.seperator = new RegExp(data.config.seperator);
   }
   index = lunr(function () {
     if (lang.length === 1 && lang[0] !== "en" && lunr[lang[0]]) {
-      this.use(lunr[lang[0]])
+      this.use(lunr[lang[0]]);
     } else if (lang.length > 1) {
-      this.use(lunr.multiLanguage.apply(null, lang))  // spread operator not supported in all browsers: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator#Browser_compatibility
+      this.use(lunr.multiLanguage.apply(null, lang));  // spread operator not supported in all browsers: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator#Browser_compatibility
     }
     this.field('title', { boost: 10 });
     this.field('text');
@@ -71,7 +78,7 @@ function onScriptsLoaded () {
     }
   });
   allowSearch = true;
-  console.log('Lunr index built, search ready')
+  console.log('Lunr index built, search ready');
 }
 
 function init () {

@@ -33,8 +33,7 @@ function doSearch () {
   var query = document.getElementById('mkdocs-search-query').value;
   if (query.length > 2) {
     console.log('Searching with query: ' + query);
-    !window.Worker
-      ? displayResults(search(query))
+    !window.Worker ? displayResults(search(query))
       : searchWorker.postMessage({query: query});
   }
 }
@@ -59,7 +58,7 @@ if (!window.Worker) {
     console.log('Loaded worker');
     init();
   }).fail(function (jqxhr, settings, exception) {
-    console.error('Could not load worker.js')
+    console.error('Could not load worker.js');
   });
 } else {
   // Wrap search in a web worker
