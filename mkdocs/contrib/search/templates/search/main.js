@@ -29,33 +29,37 @@ function displayResults (results) {
   }
 }
 
+function doSearch () {
+  var query = document.getElementById('mkdocs-search-query').value;
+  if (query.length > 2) {
+    console.log('Searching with query: ' + query);
+    !window.Worker
+      ? displayResults(search(query))
+      : searchWorker.postMessage({query: query});
+  }
+}
+
+function initSearch () {
+  var search_input = document.getElementById('mkdocs-search-query');
+  if (search_input) {
+    search_input.addEventListener("keyup", doSearch);
+  }
+
+  var term = getSearchTermFromLocation();
+  if (term) {
+    search_input.value = term;
+    doSearch();
+  }
+}
+
 if (!window.Worker) {
   console.log('Web Worker API not supported');
   // load index in main thread
-  $.getScript(base_url + "/search/worker.js", function () {
+  $.getScript(base_url + "/search/worker.js").done(function () {
+    console.log('Loaded worker');
     init();
-
-    function doSearch () {
-      var query = document.getElementById('mkdocs-search-query').value;
-      if (query.length > 2) {
-        console.log('Searching with query: ' + query);
-        var results = search(query);
-        displayResults(results);
-      }
-    }
-
-    $(function() {
-      var search_input = document.getElementById('mkdocs-search-query');
-      if (search_input) {
-        search_input.addEventListener("keyup", doSearch);
-      }
-
-      var term = getSearchTermFromLocation();
-      if (term) {
-        search_input.value = term;
-        doSearch();
-      }
-    });
+  }).fail(function (jqxhr, settings, exception) {
+    console.error('Could not load worker.js')
   });
 } else {
   // Wrap search in a web worker
@@ -69,25 +73,17 @@ if (!window.Worker) {
   var searchWorker = new Worker(base_url + "/search/worker.js");
   searchWorker.postMessage({baseUrl: base_url});
   searchWorker.onmessage = onWorkerMessage;
+}
 
-  function doSearch () {
-    var query = document.getElementById('mkdocs-search-query').value;
-    if (query.length > 2) {
-      console.log('Sending search query for: ' + query);
-      searchWorker.postMessage({query: query});
-    }
+$(function() {
+  var search_input = document.getElementById('mkdocs-search-query');
+  if (search_input) {
+    search_input.addEventListener("keyup", doSearch);
   }
 
-  $(function() {
-    var search_input = document.getElementById('mkdocs-search-query');
-    if (search_input) {
-      search_input.addEventListener("keyup", doSearch);
-    }
-
-    var term = getSearchTermFromLocation();
-    if (term) {
-      search_input.value = term;
-      doSearch();
-    }
-  });
-}
+  var term = getSearchTermFromLocation();
+  if (term) {
+    search_input.value = term;
+    doSearch();
+  }
+});

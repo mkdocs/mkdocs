@@ -1,50 +1,63 @@
-function loadScript(url) {
+var base_url = 'function' === typeof importScripts ? '.' : '/search/';
+var allowSearch = false
+var index;
+var documents = {};
+var lang = ['en'];
+var data;
+
+function getScripts(scripts, callback) {
+  console.log('Loading scripts: ' + scripts);
+  var progress = 0;
+  scripts.forEach(function(script) {
+    $.getScript(base_url + script).done(function () {
+      if (++progress == scripts.length) callback();
+    }).fail(function (jqxhr, settings, exception) {
+      console.log(exception);
+    });
+  });
+}
+
+function loadScripts(urls, callback) {
   if( 'function' === typeof importScripts ){
-    importScripts(url);
+    importScripts.apply(null, urls);
+    callback();
   } else {
-    var head = document.getElementsByTagName('head')[0];
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = base_url + "/search/" + url;
-    head.appendChild(script);
+    getScripts(urls, callback);
   }
 }
 
-loadScript('lunr.js');
-if( 'function' === typeof importScripts ){
-  var base_url = '.';
-}
-
-var index;
-var documents = {};
-
-function onLoad () {
-  var data = JSON.parse(this.responseText);
-  var lang = ['en'];
+function onJSONLoaded () {
+  data = JSON.parse(this.responseText);
   if (data.config) {
     if (data.config.lang && data.config.lang.length) {
       lang = data.config.lang;
+      var scriptsToLoad = ['lunr.js']
       if (lang.length > 1 || lang[0] !== "en") {
-        loadScript('lunr.stemmer.support.js');
+        scriptsToLoad.push('lunr.stemmer.support.js');
         if (lang.length > 1) {
-          loadScript('lunr.multi.js');
+          scriptsToLoad.push('lunr.multi.js');
         }
         for (var i=0; i < lang.length; i++) {
           if (lang[i] != 'en') {
-            loadScript(['lunr', lang[i], 'js'].join('.'));
+            scriptsToLoad.push(['lunr', lang[i], 'js'].join('.'));
           }
         }
       }
+      loadScripts(scriptsToLoad, onScriptsLoaded);
     }
-    if (data.config.seperator && data.config.seperator.length) {
-      lunr.tokenizer.seperator = new RegExp(data.config.seperator);
-    }
+  }
+}
+
+function onScriptsLoaded () {
+  console.log('All search scripts loaded, building Lunr index...')
+  if (data.config.seperator && data.config.seperator.length) {
+    lunr.tokenizer.seperator = new RegExp(data.config.seperator);
   }
   index = lunr(function () {
     if (lang.length === 1 && lang[0] !== "en" && lunr[lang[0]]) {
       this.use(lunr[lang[0]])
     } else if (lang.length > 1) {
-      this.use(lunr.multiLanguage(...lang))
+      this.use(lunr.multiLanguage.apply(null, lang))  // spread operator not supported in all browsers: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator#Browser_compatibility
     }
     this.field('title', { boost: 10 });
     this.field('text');
@@ -57,12 +70,14 @@ function onLoad () {
       documents[doc.location] = doc;
     }
   });
+  allowSearch = true;
+  console.log('Lunr index built, search ready')
 }
 
 function init () {
   var oReq = new XMLHttpRequest();
-  oReq.addEventListener("load", onLoad);
-  var index_path = base_url + '/search/search_index.json';
+  oReq.addEventListener("load", onJSONLoaded);
+  var index_path = base_url + '/search_index.json';
   if( 'function' === typeof importScripts ){
       index_path = 'search_index.json';
   }
@@ -71,6 +86,11 @@ function init () {
 }
 
 function search (query) {
+  if (!allowSearch) {
+    console.error('Assets for search still loading');
+    return;
+  }
+
   var resultDocuments = [];
   var results = index.search(query);
   for (var i=0; i < results.length; i++){
