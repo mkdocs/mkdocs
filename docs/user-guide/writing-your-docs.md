@@ -389,6 +389,9 @@ Note that table cells cannot contain any block level elements and cannot contain
 multiple lines of text. They can, however, include inline Markdown as defined in
 Markdown's [syntax] rules.
 
+Additionally, a table must be surrounded by blank lines. There must be a blank
+line before and after the table.
+
 [tables]: https://python-markdown.github.io/extensions/tables/
 
 ### Fenced code blocks
