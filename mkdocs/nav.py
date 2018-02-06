@@ -252,7 +252,10 @@ class Page(object):
                     source = f.read()
             except IOError:
                 log.error('File not found: %s', self.abs_input_path)
-                raise
+                if not config['strict']:
+                    source = '404'
+                else:
+                    raise
 
         self.markdown, self.meta = meta.get_data(source)
 

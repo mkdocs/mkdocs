@@ -23,7 +23,21 @@ The current and past members of the MkDocs team.
 
 ## Development Version
 
+* Compress `sitemap.xml` (#1130).
+* Defer loading JS scripts (#1380).
+* Add a title attribute to the search input (#1379).
+* Update RespondJS to latest version (#1398).
+* Always load Google Analytics over HTTPS (#1397).
+* Improve scrolling frame rate (#1394).
+* Provide more version info. (#1393).
+* Refactor `writing-your-docs.md` (#1392).
+* Workaround Safari bug when zooming to &lt; 100% (#1389).
+* Remove addition of `clicky` class to body and animations. (#1387).
+* Prevent search plugin from reinjecting `extra_javascript` files (#1388).
 * Refactor `copy_media_files` util function for more flexibility (#1370).
+* Remove PyPI Deployment Docs (#1360).
+* Update links to Python-Markdown library (#1360).
+* Document how to generate manpages for MkDocs commands (#686).
 
 ## Version 0.17.2 (2017-11-15)
 
