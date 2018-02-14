@@ -25,7 +25,7 @@ function getScriptsInOrder(scripts, callback) {
 }
 
 function loadScripts(urls, callback) {
-  if( 'function' === typeof importScripts ){
+  if( 'function' === typeof importScripts ) {
     importScripts.apply(null, urls);
     callback();
   } else {
@@ -35,29 +35,27 @@ function loadScripts(urls, callback) {
 
 function onJSONLoaded () {
   data = JSON.parse(this.responseText);
-  if (data.config) {
-    if (data.config.lang && data.config.lang.length) {
-      lang = data.config.lang;
-      var scriptsToLoad = ['lunr.js'];
-      if (lang.length > 1 || lang[0] !== "en") {
-        scriptsToLoad.push('lunr.stemmer.support.js');
-        if (lang.length > 1) {
-          scriptsToLoad.push('lunr.multi.js');
-        }
-        for (var i=0; i < lang.length; i++) {
-          if (lang[i] != 'en') {
-            scriptsToLoad.push(['lunr', lang[i], 'js'].join('.'));
-          }
-        }
+  var scriptsToLoad = ['lunr.js'];
+  if (data.config && data.config.lang && data.config.lang.length) {
+    lang = data.config.lang;
+  }
+  if (lang.length > 1 || lang[0] !== "en") {
+    scriptsToLoad.push('lunr.stemmer.support.js');
+    if (lang.length > 1) {
+      scriptsToLoad.push('lunr.multi.js');
+    }
+    for (var i=0; i < lang.length; i++) {
+      if (lang[i] != 'en') {
+        scriptsToLoad.push(['lunr', lang[i], 'js'].join('.'));
       }
-      loadScripts(scriptsToLoad, onScriptsLoaded);
     }
   }
+  loadScripts(scriptsToLoad, onScriptsLoaded);
 }
 
 function onScriptsLoaded () {
   console.log('All search scripts loaded, building Lunr index...');
-  if (data.config.seperator && data.config.seperator.length) {
+  if (data.config && data.config.seperator && data.config.seperator.length) {
     lunr.tokenizer.seperator = new RegExp(data.config.seperator);
   }
   index = lunr(function () {
@@ -110,7 +108,7 @@ function search (query) {
   return resultDocuments;
 }
 
-if( 'function' === typeof importScripts ){
+if( 'function' === typeof importScripts ) {
   onmessage = function (e) {
     if (e.data.baseUrl) {
       base_url = e.data.baseUrl;
