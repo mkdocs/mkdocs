@@ -35,6 +35,9 @@ function doSearch () {
     console.log('Searching with query: ' + query);
     !window.Worker ? displayResults(search(query))
       : searchWorker.postMessage({query: query});
+  } else {
+    // Clear results for short queries
+    displayResults([]);
   }
 }
 
