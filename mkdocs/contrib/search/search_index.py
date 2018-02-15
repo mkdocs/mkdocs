@@ -2,14 +2,19 @@
 
 from __future__ import unicode_literals
 
+import os
 import re
 import json
+import logging
+import subprocess
 from mkdocs import utils
 
 try:                                    # pragma: no cover
     from html.parser import HTMLParser  # noqa
 except ImportError:                     # pragma: no cover
     from HTMLParser import HTMLParser   # noqa
+
+log = logging.getLogger(__name__)
 
 
 class SearchIndex(object):
@@ -98,7 +103,23 @@ class SearchIndex(object):
             'docs': self._entries,
             'config': self.config
         }
-        return json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
+        data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
+
+        # Attempt to prebuild index.
+        try:
+            script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'prebuild-index.js')
+            p = subprocess.Popen(['node', script_path], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            idx, err = p.communicate(data)
+            if not err:
+                page_dicts['index'] = json.loads(idx)
+                data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
+                log.debug('Pre-built search index created successfully.')
+            else:
+                log.debug('Failed to pre-build search index. Error: {}'.format(err))
+        except (OSError, IOError, ValueError) as e:
+            log.debug('Failed to pre-build search index. Error: {}'.format(e))
+
+        return data
 
     def strip_tags(self, html):
         """strip html tags from data"""
