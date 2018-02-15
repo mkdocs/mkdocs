@@ -848,3 +848,19 @@ class SiteNavigationTests(unittest.TestCase):
 
         for idx, page in enumerate(site_navigation.walk_pages()):
             self.assertEqual(page.edit_url, expected_results[idx])
+
+    def test_missing_source_raises_exception(self):
+
+        def _test():
+            cfg = load_config(strict = True)
+            return nav.Page('missing test page', 'missing.md', 'uri_context', cfg).read_source(cfg)
+
+        self.assertRaises(IOError, _test)
+
+    def test_missing_source_is_allowed(self):
+        cfg = load_config(strict = False)
+        page = nav.Page('missing test page', 'missing.md', 'uri_context', cfg)
+        page.read_source(cfg)
+
+        self.assertEqual(page.markdown, "404")
+        self.assertFalse(page.meta)
