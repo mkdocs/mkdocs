@@ -58,25 +58,33 @@ function onScriptsLoaded () {
   if (data.config && data.config.seperator && data.config.seperator.length) {
     lunr.tokenizer.seperator = new RegExp(data.config.seperator);
   }
-  index = lunr(function () {
-    if (lang.length === 1 && lang[0] !== "en" && lunr[lang[0]]) {
-      this.use(lunr[lang[0]]);
-    } else if (lang.length > 1) {
-      this.use(lunr.multiLanguage.apply(null, lang));  // spread operator not supported in all browsers: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator#Browser_compatibility
-    }
-    this.field('title', { boost: 10 });
-    this.field('text');
-    this.ref('location');
-
-    for (var i=0; i < data.docs.length; i++) {
-      var doc = data.docs[i];
-      doc.location = base_url + doc.location;
-      this.add(doc);
+  if (data.index) {
+    index = lunr.Index.load(data.index);
+    data.docs.forEach(function (doc) {
       documents[doc.location] = doc;
-    }
-  });
+    });
+    console.log('Lunr pre-built index loaded, search ready');
+  } else {
+    index = lunr(function () {
+      if (lang.length === 1 && lang[0] !== "en" && lunr[lang[0]]) {
+        this.use(lunr[lang[0]]);
+      } else if (lang.length > 1) {
+        this.use(lunr.multiLanguage.apply(null, lang));  // spread operator not supported in all browsers: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator#Browser_compatibility
+      }
+      this.field('title', { boost: 10 });
+      this.field('text');
+      this.ref('location');
+
+      for (var i=0; i < data.docs.length; i++) {
+        var doc = data.docs[i];
+        doc.location = base_url + doc.location;
+        this.add(doc);
+        documents[doc.location] = doc;
+      }
+    });
+    console.log('Lunr index built, search ready');
+  }
   allowSearch = true;
-  console.log('Lunr index built, search ready');
 }
 
 function init () {
