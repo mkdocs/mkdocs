@@ -18,13 +18,13 @@ stdin.on('end', function () {
     if (data.config.lang && data.config.lang.length) {
       lang = data.config.lang;
       if (lang.length > 1 || lang[0] !== "en") {
-        require('./templates/search/lunr.stemmer.support')(lunr)
+        require('./lunr-language/lunr.stemmer.support')(lunr)
         if (lang.length > 1) {
-          require('./templates/search/lunr.multi')(lunr)
+          require('./lunr-language/lunr.multi')(lunr)
         }
         for (var i=0; i < lang.length; i++) {
           if (lang[i] != 'en') {
-            require('./templates/search/lunr.' + lang[i])(lunr)
+            require('./lunr-language/lunr.' + lang[i])(lunr)
           }
         }
       }
