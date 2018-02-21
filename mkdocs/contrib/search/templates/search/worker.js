@@ -1,4 +1,4 @@
-var base_url = 'function' === typeof importScripts ? '.' : '/search/';
+var base_path = 'function' === typeof importScripts ? '.' : '/search/';
 var allowSearch = false;
 var index;
 var documents = {};
@@ -7,7 +7,7 @@ var data;
 
 function getScript(script, callback) {
   console.log('Loading script: ' + script);
-  $.getScript(base_url + script).done(function () {
+  $.getScript(base_path + script).done(function () {
     callback();
   }).fail(function (jqxhr, settings, exception) {
     console.log('Error: ' + exception);
@@ -77,7 +77,6 @@ function onScriptsLoaded () {
 
       for (var i=0; i < data.docs.length; i++) {
         var doc = data.docs[i];
-        doc.location = base_url + doc.location;
         this.add(doc);
         documents[doc.location] = doc;
       }
@@ -90,7 +89,7 @@ function onScriptsLoaded () {
 function init () {
   var oReq = new XMLHttpRequest();
   oReq.addEventListener("load", onJSONLoaded);
-  var index_path = base_url + '/search_index.json';
+  var index_path = base_path + '/search_index.json';
   if( 'function' === typeof importScripts ){
       index_path = 'search_index.json';
   }
@@ -109,7 +108,6 @@ function search (query) {
   for (var i=0; i < results.length; i++){
     var result = results[i];
     doc = documents[result.ref];
-    doc.base_url = base_url;
     doc.summary = doc.text.substring(0, 200);
     resultDocuments.push(doc);
   }
@@ -118,8 +116,7 @@ function search (query) {
 
 if( 'function' === typeof importScripts ) {
   onmessage = function (e) {
-    if (e.data.baseUrl) {
-      base_url = e.data.baseUrl;
+    if (e.data.init) {
       init();
     } else if (e.data.query) {
       postMessage({ results: search(e.data.query) });

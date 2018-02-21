@@ -10,7 +10,7 @@ function getSearchTermFromLocation() {
 }
 
 function formatResult (location, title, summary) {
-  return '<article><h3><a href="'+ location + '">'+ title + '</a></h3><p>' + summary +'</p></article>';
+  return '<article><h3><a href="' + base_url + location + '">'+ title + '</a></h3><p>' + summary +'</p></article>';
 }
 
 function displayResults (results) {
@@ -73,7 +73,7 @@ if (!window.Worker) {
   }
 
   var searchWorker = new Worker(base_url + "/search/worker.js");
-  searchWorker.postMessage({baseUrl: base_url});
+  searchWorker.postMessage({init: true});
   searchWorker.onmessage = onWorkerMessage;
 }
 
