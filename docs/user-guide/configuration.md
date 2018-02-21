@@ -445,6 +445,57 @@ plugins: []
 
 **default**: `['search']` (the "search" plugin included with MkDocs).
 
+#### Search
+
+ A search plugin is provided by default with MkDocs which uses [lunr.js] as a
+search engine. The following config options are available to alter the behavior
+of the search plugin:
+
+##### **prebuild_index**
+
+ Generates a pre-built index of all pages, which should load much faster than
+ building the index in the browser on each page load. Note that the pre-built
+ index is only created if the necessary dependencies (node.js) are available
+ when `mkdocs build` is run. Any failures are ignored silently with the
+ expectation that the index can be built in the browser.
+
+ **default**: `True`
+
+##### **seperator**
+
+ A regular expression which matches the characters used as word separators when building the index. By default whitespace and the hyphen (`-`) are used. To add the dot (`.`) as a word separator you might do this:
+
+```yaml
+plugins:
+    - search:
+        seperator: '[\s\-\.]+'
+```
+
+  **default**: `'[\s\-]+'`
+
+##### **lang**
+
+A list if languages to use when building the search index as identified by their [ISO 639-1] language codes. In addition to
+English (`en`), [Lunr Languages] is used to add support for the following
+languages:
+
+* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/DE.png) German
+* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/FR.png) French
+* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/ES.png) Spanish
+* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/IT.png) Italian
+* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/JP.png) Japanese
+* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/NL.png) Dutch
+* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/DK.png) Danish
+* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/PT.png) Portuguese
+* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/FI.png) Finnish
+* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/RO.png) Romanian
+* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/HU.png) Hungarian
+* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/RU.png) Russian
+* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/NO.png) Norwegian
+* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/TH.png) Thai
+
+**default**: `['en']`
+
 [custom themes]: custom-themes.md
 [variables that are available]: custom-themes.md#template-variables
 [pymdk-extensions]: https://python-markdown.github.io/extensions/
@@ -457,3 +508,6 @@ plugins: []
 [styling your docs]: styling-your-docs.md
 [extra_css]: #extra_css
 [Plugins]: plugins.md
+[lunr.js]: http://lunrjs.com/
+[ISO 639-1]: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+[Lunr Languages]: https://github.com/MihaiValentin/lunr-languages#lunr-languages-----
