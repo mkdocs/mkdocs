@@ -56,8 +56,9 @@ def gh_deploy(config, message=None, force=False):
                   'repository')
 
     if message is None:
-        sha = _get_current_sha()
-        message = default_message.format(version=mkdocs.__version__, sha=sha)
+        message = default_message
+    sha = _get_current_sha()
+    message = message.format(version=mkdocs.__version__, sha=sha)
 
     remote_branch = config['remote_branch']
     remote_name = config['remote_name']
