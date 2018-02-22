@@ -19,7 +19,7 @@ class SearchPlugin(BasePlugin):
 
     config_scheme = (
         ('lang', config_options.Type(list, default=['en'])),
-        ('seperator', config_options.Type(utils.string_types, default=r'[\s\-]+')),
+        ('separator', config_options.Type(utils.string_types, default=r'[\s\-]+')),
         ('prebuild_index', config_options.Type(bool, default=True)),
     )
 

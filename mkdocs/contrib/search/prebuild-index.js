@@ -29,8 +29,8 @@ stdin.on('end', function () {
         }
       }
     }
-    if (data.config.seperator && data.config.seperator.length) {
-      lunr.tokenizer.seperator = new RegExp(data.config.seperator)
+    if (data.config.separator && data.config.separator.length) {
+      lunr.tokenizer.separator = new RegExp(data.config.separator)
     }
   }
 

@@ -461,14 +461,16 @@ of the search plugin:
 
  **default**: `True`
 
-##### **seperator**
+##### **separator**
 
- A regular expression which matches the characters used as word separators when building the index. By default whitespace and the hyphen (`-`) are used. To add the dot (`.`) as a word separator you might do this:
+ A regular expression which matches the characters used as word separators when
+building the index. By default whitespace and the hyphen (`-`) are used. To add
+the dot (`.`) as a word separator you might do this:
 
 ```yaml
 plugins:
     - search:
-        seperator: '[\s\-\.]+'
+        separator: '[\s\-\.]+'
 ```
 
   **default**: `'[\s\-]+'`
