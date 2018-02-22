@@ -475,24 +475,42 @@ plugins:
 
 ##### **lang**
 
-A list if languages to use when building the search index as identified by their [ISO 639-1] language codes. In addition to
-English (`en`), [Lunr Languages] is used to add support for the following
-languages:
+A list of languages to use when building the search index as identified by their
+[ISO 639-1] language codes. With [Lunr Languages], the following languages are
+supported:
 
-* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/DE.png) German
-* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/FR.png) French
-* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/ES.png) Spanish
-* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/IT.png) Italian
-* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/JP.png) Japanese
-* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/NL.png) Dutch
-* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/DK.png) Danish
-* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/PT.png) Portuguese
-* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/FI.png) Finnish
-* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/RO.png) Romanian
-* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/HU.png) Hungarian
-* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/RU.png) Russian
-* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/NO.png) Norwegian
-* ![](https://raw.githubusercontent.com/madebybowtie/FlagKit/master/Assets/PNG/TH.png) Thai
+* `da`: Danish
+* `du`: Dutch
+* `en`: English
+* `fi`: Finnish
+* `fr`: French
+* `de`: German
+* `hu`: Hungarian
+* `it`: Italian
+* `jp`: Japanese
+* `no`: Norwegian
+* `pt`: Portuguese
+* `ro`: Romanian
+* `ru`: Russian
+* `es`: Spanish
+* `sv`: Swedish
+* `th`: Thai
+* `tr`: Turkish
+
+You may [contribute additional languages].
+
+!!! Warning
+
+    While search does support using multiple languages together, it is best not
+    to add additional languages unless you really need them. Each additional
+    language added significant bandwidth requirements and uses more browser
+    resources. Generally it is best to keep each instance of MkDocs to a single
+    language.
+
+!!! Note
+
+    Lunr Languages does not currently include support for Chinese or other Asian
+    languages. However, some users have reported decent results using Japanese.
 
 **default**: `['en']`
 
@@ -511,3 +529,4 @@ languages:
 [lunr.js]: http://lunrjs.com/
 [ISO 639-1]: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 [Lunr Languages]: https://github.com/MihaiValentin/lunr-languages#lunr-languages-----
+[contribute additional languages]: https://github.com/MihaiValentin/lunr-languages/blob/master/CONTRIBUTING.md
