@@ -447,7 +447,7 @@ plugins: []
 
 #### Search
 
- A search plugin is provided by default with MkDocs which uses [lunr.js] as a
+A search plugin is provided by default with MkDocs which uses [lunr.js] as a
 search engine. The following config options are available to alter the behavior
 of the search plugin:
 
@@ -463,7 +463,7 @@ of the search plugin:
 
 ##### **separator**
 
- A regular expression which matches the characters used as word separators when
+A regular expression which matches the characters used as word separators when
 building the index. By default whitespace and the hyphen (`-`) are used. To add
 the dot (`.`) as a word separator you might do this:
 
@@ -505,7 +505,7 @@ You may [contribute additional languages].
 
     While search does support using multiple languages together, it is best not
     to add additional languages unless you really need them. Each additional
-    language added significant bandwidth requirements and uses more browser
+    language adds significant bandwidth requirements and uses more browser
     resources. Generally it is best to keep each instance of MkDocs to a single
     language.
 

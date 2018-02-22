@@ -14,11 +14,31 @@ log = logging.getLogger(__name__)
 base_path = os.path.dirname(os.path.abspath(__file__))
 
 
+class LangOption(config_options.OptionallyRequired):
+    """ Validate Language(s) provided in config are known languages. """
+
+    def lang_file_exists(self, lang):
+        path = os.path.join(base_path, 'lunr-language', 'lunr.{}.js'.format(lang))
+        return os.path.isfile(path)
+
+    def run_validation(self, value):
+        if isinstance(value, utils.string_types):
+            value = [value]
+        elif not isinstance(value, (list, tuple)):
+            raise config_options.ValidationError('Expected a list of language codes.')
+        for lang in value:
+            if lang != 'en' and not self.lang_file_exists(lang):
+                raise config_options.ValidationError(
+                    '"{}" is not a suported language code.'.format(lang)
+                )
+        return value
+
+
 class SearchPlugin(BasePlugin):
     """ Add a search feature to MkDocs. """
 
     config_scheme = (
-        ('lang', config_options.Type(list, default=['en'])),
+        ('lang', LangOption(default=['en'])),
         ('separator', config_options.Type(utils.string_types, default=r'[\s\-]+')),
         ('prebuild_index', config_options.Type(bool, default=True)),
     )
