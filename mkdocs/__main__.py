@@ -83,7 +83,7 @@ reload_help = "Enable the live reloading in the development server (this is the 
 no_reload_help = "Disable the live reloading in the development server."
 dirty_reload_help = "Enable the live reloading in the development server, but only re-build files that have changed"
 commit_message_help = ("A commit message to use when commiting to the "
-                       "Github Pages remote branch")
+                       "Github Pages remote branch. Commit {sha} and MkDocs {version} are available as expansions")
 remote_branch_help = ("The remote branch to commit to for Github Pages. This "
                       "overrides the value specified in config")
 remote_name_help = ("The remote name to commit to for Github Pages. This "
