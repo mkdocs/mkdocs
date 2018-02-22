@@ -82,8 +82,8 @@ site_dir_help = "The directory to output the result of the documentation build."
 reload_help = "Enable the live reloading in the development server (this is the default)"
 no_reload_help = "Disable the live reloading in the development server."
 dirty_reload_help = "Enable the live reloading in the development server, but only re-build files that have changed"
-commit_message_help = ("A commit message to use when commiting to the "
-                       "Github Pages remote branch")
+commit_message_help = ("A commit message to use when committing to the "
+                       "Github Pages remote branch. Commit {sha} and MkDocs {version} are available as expansions")
 remote_branch_help = ("The remote branch to commit to for Github Pages. This "
                       "overrides the value specified in config")
 remote_name_help = ("The remote name to commit to for Github Pages. This "

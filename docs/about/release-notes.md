@@ -23,6 +23,7 @@ The current and past members of the MkDocs team.
 
 ## Development Version
 
+* Expand {sha} and {version} in gh-deploy commit message (#1410).
 * Compress `sitemap.xml` (#1130).
 * Defer loading JS scripts (#1380).
 * Add a title attribute to the search input (#1379).
