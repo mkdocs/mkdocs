@@ -22,9 +22,8 @@ class SearchPlugin(BasePlugin):
         if not ('search_index_only' in config['theme'] and config['theme']['search_index_only']):
             path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
             config['theme'].dirs.append(path)
-            for extra_js in ('search/require.js', 'search/search.js'):
-                if extra_js not in config['extra_javascript']:
-                    config['extra_javascript'].append(extra_js)
+            if 'search/main.js' not in config['extra_javascript']:
+                config['extra_javascript'].append('search/main.js')
         return config
 
     def on_pre_build(self, config, **kwargs):
