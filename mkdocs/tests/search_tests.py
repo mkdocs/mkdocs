@@ -3,6 +3,7 @@
 
 from __future__ import unicode_literals
 import unittest
+import mock
 
 from mkdocs import nav
 from mkdocs.contrib import search
@@ -103,7 +104,7 @@ class SearchPluginTests(unittest.TestCase):
     def test_event_on_config_defaults(self):
         plugin = search.SearchPlugin()
         plugin.load_config({})
-        result = plugin.on_config(load_config(theme='mkdocs'))
+        result = plugin.on_config(load_config(theme='mkdocs', extra_javascript=[]))
         self.assertFalse(result['theme']['search_index_only'])
         self.assertFalse(result['theme']['include_search_page'])
         self.assertEqual(result['theme'].static_templates, set(['404.html', 'sitemap.xml']))
@@ -113,7 +114,7 @@ class SearchPluginTests(unittest.TestCase):
     def test_event_on_config_include_search_page(self):
         plugin = search.SearchPlugin()
         plugin.load_config({})
-        result = plugin.on_config(load_config(theme={'name': 'mkdocs', 'include_search_page': True}))
+        result = plugin.on_config(load_config(theme={'name': 'mkdocs', 'include_search_page': True}, extra_javascript=[]))
         self.assertFalse(result['theme']['search_index_only'])
         self.assertTrue(result['theme']['include_search_page'])
         self.assertEqual(result['theme'].static_templates, set(['404.html', 'sitemap.xml', 'search.html']))
@@ -123,15 +124,57 @@ class SearchPluginTests(unittest.TestCase):
     def test_event_on_config_search_index_only(self):
         plugin = search.SearchPlugin()
         plugin.load_config({})
-        config = load_config(theme={'name': 'mkdocs', 'search_index_only': True}, plugins=[])
-        # TODO: figure out why the main.js is being included in extra_javascript
-        # self.assertEqual(config['extra_javascript'], [])
+        config = load_config(theme={'name': 'mkdocs', 'search_index_only': True}, extra_javascript=[])
         result = plugin.on_config(config)
         self.assertTrue(result['theme']['search_index_only'])
         self.assertFalse(result['theme']['include_search_page'])
         self.assertEqual(result['theme'].static_templates, set(['404.html', 'sitemap.xml']))
         self.assertEqual(len(result['theme'].dirs), 2)
-        # self.assertEqual(len(result['extra_javascript']), 0)
+        self.assertEqual(len(result['extra_javascript']), 0)
+
+    @mock.patch('mkdocs.utils.write_file', autospec=True)
+    @mock.patch('mkdocs.utils.copy_file', autospec=True)
+    def test_event_on_post_build_defaults(self, mock_copy_file, mock_write_file):
+        plugin = search.SearchPlugin()
+        plugin.load_config({})
+        config = load_config(theme='mkdocs')
+        plugin.on_pre_build(config)
+        plugin.on_post_build(config)
+        self.assertEqual(mock_copy_file.call_count, 0)
+        self.assertEqual(mock_write_file.call_count, 1)
+
+    @mock.patch('mkdocs.utils.write_file', autospec=True)
+    @mock.patch('mkdocs.utils.copy_file', autospec=True)
+    def test_event_on_post_build_single_lang(self, mock_copy_file, mock_write_file):
+        plugin = search.SearchPlugin()
+        plugin.load_config({'lang': ['es']})
+        config = load_config(theme='mkdocs')
+        plugin.on_pre_build(config)
+        plugin.on_post_build(config)
+        self.assertEqual(mock_copy_file.call_count, 2)
+        self.assertEqual(mock_write_file.call_count, 1)
+
+    @mock.patch('mkdocs.utils.write_file', autospec=True)
+    @mock.patch('mkdocs.utils.copy_file', autospec=True)
+    def test_event_on_post_build_multi_lang(self, mock_copy_file, mock_write_file):
+        plugin = search.SearchPlugin()
+        plugin.load_config({'lang': ['es', 'fr']})
+        config = load_config(theme='mkdocs')
+        plugin.on_pre_build(config)
+        plugin.on_post_build(config)
+        self.assertEqual(mock_copy_file.call_count, 4)
+        self.assertEqual(mock_write_file.call_count, 1)
+
+    @mock.patch('mkdocs.utils.write_file', autospec=True)
+    @mock.patch('mkdocs.utils.copy_file', autospec=True)
+    def test_event_on_post_build_search_index_only(self, mock_copy_file, mock_write_file):
+        plugin = search.SearchPlugin()
+        plugin.load_config({'lang': ['es']})
+        config = load_config(theme={'name': 'mkdocs', 'search_index_only': True})
+        plugin.on_pre_build(config)
+        plugin.on_post_build(config)
+        self.assertEqual(mock_copy_file.call_count, 0)
+        self.assertEqual(mock_write_file.call_count, 1)
 
 
 class SearchIndexTests(unittest.TestCase):
