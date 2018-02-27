@@ -114,7 +114,7 @@ class SearchIndex(object):
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE
                 )
-                idx, err = p.communicate(data)
+                idx, err = p.communicate(data.encode('utf-8'))
                 if not err:
                     page_dicts['index'] = json.loads(idx)
                     data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
