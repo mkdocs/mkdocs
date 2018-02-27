@@ -115,7 +115,8 @@ class SearchPluginTests(unittest.TestCase):
     def test_event_on_config_include_search_page(self):
         plugin = search.SearchPlugin()
         plugin.load_config({})
-        result = plugin.on_config(load_config(theme={'name': 'mkdocs', 'include_search_page': True}, extra_javascript=[]))
+        config = load_config(theme={'name': 'mkdocs', 'include_search_page': True}, extra_javascript=[])
+        result = plugin.on_config(config)
         self.assertFalse(result['theme']['search_index_only'])
         self.assertTrue(result['theme']['include_search_page'])
         self.assertEqual(result['theme'].static_templates, set(['404.html', 'sitemap.xml', 'search.html']))
