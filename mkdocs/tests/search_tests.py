@@ -4,6 +4,7 @@
 from __future__ import unicode_literals
 import unittest
 import mock
+import json
 
 from mkdocs import nav
 from mkdocs.contrib import search
@@ -315,3 +316,94 @@ class SearchIndexTests(unittest.TestCase):
             self.assertEqual(index._entries[3]['title'], "Heading 3")
             self.assertEqual(strip_whitespace(index._entries[3]['text']), "Content3")
             self.assertEqual(index._entries[3]['location'], "{0}#heading-3".format(loc))
+
+    @mock.patch('subprocess.Popen', autospec=True)
+    def test_prebuild_index(self, mock_popen):
+        # See https://stackoverflow.com/a/36501078/866026
+        mock_popen.return_value = mock.Mock()
+        mock_popen_obj = mock_popen.return_value
+        mock_popen_obj.communicate.return_value = ('{"mock": "index"}', None)
+        mock_popen_obj.returncode = 0
+
+        index = search_index.SearchIndex(prebuild_index=True)
+        expected = {
+            'docs': [],
+            'config': {'prebuild_index': True},
+            'index': {'mock': 'index'}
+        }
+        result = json.loads(index.generate_search_index())
+        self.assertEqual(mock_popen.call_count, 1)
+        self.assertEqual(mock_popen_obj.communicate.call_count, 1)
+        self.assertEqual(result, expected)
+
+    @mock.patch('subprocess.Popen', autospec=True)
+    def test_prebuild_index_returns_error(self, mock_popen):
+        # See https://stackoverflow.com/a/36501078/866026
+        mock_popen.return_value = mock.Mock()
+        mock_popen_obj = mock_popen.return_value
+        mock_popen_obj.communicate.return_value = ('', 'Some Error')
+        mock_popen_obj.returncode = 0
+
+        index = search_index.SearchIndex(prebuild_index=True)
+        expected = {
+            'docs': [],
+            'config': {'prebuild_index': True}
+        }
+        result = json.loads(index.generate_search_index())
+        self.assertEqual(mock_popen.call_count, 1)
+        self.assertEqual(mock_popen_obj.communicate.call_count, 1)
+        self.assertEqual(result, expected)
+
+    @mock.patch('subprocess.Popen', autospec=True)
+    def test_prebuild_index_raises_ioerror(self, mock_popen):
+        # See https://stackoverflow.com/a/36501078/866026
+        mock_popen.return_value = mock.Mock()
+        mock_popen_obj = mock_popen.return_value
+        mock_popen_obj.communicate.side_effect = IOError
+        mock_popen_obj.returncode = 1
+
+        index = search_index.SearchIndex(prebuild_index=True)
+        expected = {
+            'docs': [],
+            'config': {'prebuild_index': True}
+        }
+        result = json.loads(index.generate_search_index())
+        self.assertEqual(mock_popen.call_count, 1)
+        self.assertEqual(mock_popen_obj.communicate.call_count, 1)
+        self.assertEqual(result, expected)
+
+    @mock.patch('subprocess.Popen', autospec=True, side_effect=OSError)
+    def test_prebuild_index_raises_oserror(self, mock_popen):
+        # See https://stackoverflow.com/a/36501078/866026
+        mock_popen.return_value = mock.Mock()
+        mock_popen_obj = mock_popen.return_value
+        mock_popen_obj.communicate.return_value = ('', '')
+        mock_popen_obj.returncode = 0
+
+        index = search_index.SearchIndex(prebuild_index=True)
+        expected = {
+            'docs': [],
+            'config': {'prebuild_index': True}
+        }
+        result = json.loads(index.generate_search_index())
+        self.assertEqual(mock_popen.call_count, 1)
+        self.assertEqual(mock_popen_obj.communicate.call_count, 0)
+        self.assertEqual(result, expected)
+
+    @mock.patch('subprocess.Popen', autospec=True)
+    def test_prebuild_index_false(self, mock_popen):
+        # See https://stackoverflow.com/a/36501078/866026
+        mock_popen.return_value = mock.Mock()
+        mock_popen_obj = mock_popen.return_value
+        mock_popen_obj.communicate.return_value = ('', '')
+        mock_popen_obj.returncode = 0
+
+        index = search_index.SearchIndex(prebuild_index=False)
+        expected = {
+            'docs': [],
+            'config': {'prebuild_index': False}
+        }
+        result = json.loads(index.generate_search_index())
+        self.assertEqual(mock_popen.call_count, 0)
+        self.assertEqual(mock_popen_obj.communicate.call_count, 0)
+        self.assertEqual(result, expected)
