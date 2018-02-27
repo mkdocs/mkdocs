@@ -23,6 +23,30 @@ The current and past members of the MkDocs team.
 
 ## Development Version
 
+### Major Additions to Development Version
+
+#### Refactor Search Plugin
+
+The search plugin has been completely refactored to include support for the
+following features:
+
+* Use a web worker in the browser with a fallback (#1396).
+* Pre-build search index locally (#859 & #1061).
+* Upgrade to lunr.js 2.x (#1319).
+* Support search in languages other than English (#826).
+* Allow the user to define the word separators (#867).
+* Only run searches for queries of length > 2 (#1127).
+* Remove dependency on require.js (#1218).
+* Compress the search index (#1128).
+
+Users can review the [configuration options][search config] available and theme
+authors should review how [search and themes] interact.
+
+[search config]: ../user-guide/configuration.md#search
+[search and themes]: ../user-guide/custom-themes.md#search_and_themes
+
+### Other Changes and Additions to Development Version
+
 * Expand {sha} and {version} in gh-deploy commit message (#1410).
 * Compress `sitemap.xml` (#1130).
 * Defer loading JS scripts (#1380).
