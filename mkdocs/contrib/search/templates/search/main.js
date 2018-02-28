@@ -33,8 +33,11 @@ function doSearch () {
   var query = document.getElementById('mkdocs-search-query').value;
   if (query.length > 2) {
     console.log('Searching with query: ' + query);
-    !window.Worker ? displayResults(search(query))
-      : searchWorker.postMessage({query: query});
+    if (!window.Worker) {
+      displayResults(search(query));
+    } else {
+      searchWorker.postMessage({query: query});
+    }
   } else {
     // Clear results for short queries
     displayResults([]);
@@ -54,6 +57,13 @@ function initSearch () {
   }
 }
 
+function onWorkerMessage (e) {
+  if (e.data.results) {
+    var results = e.data.results;
+    displayResults(results);
+  }
+}
+
 if (!window.Worker) {
   console.log('Web Worker API not supported');
   // load index in main thread
@@ -65,13 +75,6 @@ if (!window.Worker) {
   });
 } else {
   // Wrap search in a web worker
-  function onWorkerMessage (e) {
-    if (e.data.results) {
-      var results = e.data.results;
-      displayResults(results);
-    }
-  }
-
   var searchWorker = new Worker(base_url + "/search/worker.js");
   searchWorker.postMessage({init: true});
   searchWorker.onmessage = onWorkerMessage;
