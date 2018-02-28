@@ -116,6 +116,7 @@ class SearchIndex(object):
                 )
                 idx, err = p.communicate(data.encode('utf-8'))
                 if not err:
+                    idx = idx.decode('utf-8') if hasattr(idx, 'decode') else idx
                     page_dicts['index'] = json.loads(idx)
                     data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
                     log.debug('Pre-built search index created successfully.')
