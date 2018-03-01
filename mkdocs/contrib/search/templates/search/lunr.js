@@ -1,6 +1,6 @@
 /**
- * lunr - http://lunrjs.com - A bit like Solr, but much smaller and not as bright - 2.1.5
- * Copyright (C) 2017 Oliver Nightingale
+ * lunr - http://lunrjs.com - A bit like Solr, but much smaller and not as bright - 2.1.6
+ * Copyright (C) 2018 Oliver Nightingale
  * @license MIT
  */
 
@@ -54,10 +54,10 @@ var lunr = function (config) {
   return builder.build()
 }
 
-lunr.version = "2.1.5"
+lunr.version = "2.1.6"
 /*!
  * lunr.utils
- * Copyright (C) 2017 Oliver Nightingale
+ * Copyright (C) 2018 Oliver Nightingale
  */
 
 /**
@@ -208,7 +208,7 @@ lunr.Token.prototype.clone = function (fn) {
 }
 /*!
  * lunr.tokenizer
- * Copyright (C) 2017 Oliver Nightingale
+ * Copyright (C) 2018 Oliver Nightingale
  */
 
 /**
@@ -272,7 +272,7 @@ lunr.tokenizer = function (obj) {
 lunr.tokenizer.separator = /[\s\-]+/
 /*!
  * lunr.Pipeline
- * Copyright (C) 2017 Oliver Nightingale
+ * Copyright (C) 2018 Oliver Nightingale
  */
 
 /**
@@ -475,14 +475,23 @@ lunr.Pipeline.prototype.run = function (tokens) {
 
   for (var i = 0; i < stackLength; i++) {
     var fn = this._stack[i]
+    var memo = []
 
-    tokens = tokens.reduce(function (memo, token, j) {
-      var result = fn(token, j, tokens)
+    for (var j = 0; j < tokens.length; j++) {
+      var result = fn(tokens[j], j, tokens)
 
-      if (result === void 0 || result === '') return memo
+      if (result === void 0 || result === '') continue
 
-      return memo.concat(result)
-    }, [])
+      if (result instanceof Array) {
+        for (var k = 0; k < result.length; k++) {
+          memo.push(result[k])
+        }
+      } else {
+        memo.push(result)
+      }
+    }
+
+    tokens = memo
   }
 
   return tokens
@@ -528,7 +537,7 @@ lunr.Pipeline.prototype.toJSON = function () {
 }
 /*!
  * lunr.Vector
- * Copyright (C) 2017 Oliver Nightingale
+ * Copyright (C) 2018 Oliver Nightingale
  */
 
 /**
@@ -726,7 +735,7 @@ lunr.Vector.prototype.toJSON = function () {
 /* eslint-disable */
 /*!
  * lunr.stemmer
- * Copyright (C) 2017 Oliver Nightingale
+ * Copyright (C) 2018 Oliver Nightingale
  * Includes code from - http://tartarus.org/~martin/PorterStemmer/js.txt
  */
 
@@ -947,7 +956,7 @@ lunr.stemmer = (function(){
 lunr.Pipeline.registerFunction(lunr.stemmer, 'stemmer')
 /*!
  * lunr.stopWordFilter
- * Copyright (C) 2017 Oliver Nightingale
+ * Copyright (C) 2018 Oliver Nightingale
  */
 
 /**
@@ -1110,7 +1119,7 @@ lunr.stopWordFilter = lunr.generateStopWordFilter([
 lunr.Pipeline.registerFunction(lunr.stopWordFilter, 'stopWordFilter')
 /*!
  * lunr.trimmer
- * Copyright (C) 2017 Oliver Nightingale
+ * Copyright (C) 2018 Oliver Nightingale
  */
 
 /**
@@ -1137,7 +1146,7 @@ lunr.trimmer = function (token) {
 lunr.Pipeline.registerFunction(lunr.trimmer, 'trimmer')
 /*!
  * lunr.TokenSet
- * Copyright (C) 2017 Oliver Nightingale
+ * Copyright (C) 2018 Oliver Nightingale
  */
 
 /**
@@ -1632,7 +1641,7 @@ lunr.TokenSet.Builder.prototype.minimize = function (downTo) {
 }
 /*!
  * lunr.Index
- * Copyright (C) 2017 Oliver Nightingale
+ * Copyright (C) 2018 Oliver Nightingale
  */
 
 /**
@@ -2000,7 +2009,7 @@ lunr.Index.load = function (serializedIndex) {
 }
 /*!
  * lunr.Builder
- * Copyright (C) 2017 Oliver Nightingale
+ * Copyright (C) 2018 Oliver Nightingale
  */
 
 /**
