@@ -58,7 +58,7 @@ class SearchPluginTests(unittest.TestCase):
         expected = {
             'lang': ['en'],
             'separator': r'[\s\-]+',
-            'prebuild_index': True
+            'prebuild_index': False
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({})
@@ -70,7 +70,7 @@ class SearchPluginTests(unittest.TestCase):
         expected = {
             'lang': ['es'],
             'separator': r'[\s\-]+',
-            'prebuild_index': True
+            'prebuild_index': False
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({'lang': 'es'})
@@ -82,7 +82,7 @@ class SearchPluginTests(unittest.TestCase):
         expected = {
             'lang': ['en'],
             'separator': r'[\s\-\.]+',
-            'prebuild_index': True
+            'prebuild_index': False
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({'separator': r'[\s\-\.]+'})
@@ -94,10 +94,10 @@ class SearchPluginTests(unittest.TestCase):
         expected = {
             'lang': ['en'],
             'separator': r'[\s\-]+',
-            'prebuild_index': False
+            'prebuild_index': True
         }
         plugin = search.SearchPlugin()
-        errors, warnings = plugin.load_config({'prebuild_index': False})
+        errors, warnings = plugin.load_config({'prebuild_index': True})
         self.assertEqual(plugin.config, expected)
         self.assertEqual(errors, [])
         self.assertEqual(warnings, [])

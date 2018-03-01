@@ -417,18 +417,18 @@ The `data` object contains a list of document objects. Each document object is
 made up of a `location` (URL), a `title`, and `text` which can be used to create
 a search index and/or display search results.
 
-If present, the `index` object contains a pre-built index which should load much
-faster than building the index in the browser on each page load. Note that the
-pre-built index is only created if the necessary dependencies (node.js) are
-available when `mkdocs build` is run. Any failures are ignored silently with the
-expectation that the index can be built in the browser. The `index` object was
-new in MkDocs version *1.0*.
+If present, the `index` object contains a pre-built index which offers
+performance improvements for larger sites. Note that the pre-built index is only
+created if the user explicitly enables the [prebuild_index] config option.
+Themes should expect the index to not be present, but can choose to use the
+index when it is available. The `index` object was new in MkDocs version *1.0*.
 
 [Jinja2 template]: http://jinja.pocoo.org/docs/dev/
 [built-in themes]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes
 [theme's configuration file]: #theme-configuration
 [lunr.js]: http://lunrjs.com/
 [site_dir]: configuration.md#site_dir
+[prebuild_index]: configuration.md#prebuild_index
 
 ## Packaging Themes
 

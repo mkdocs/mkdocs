@@ -31,7 +31,7 @@ The search plugin has been completely refactored to include support for the
 following features:
 
 * Use a web worker in the browser with a fallback (#1396).
-* Pre-build search index locally (#859 & #1061).
+* Optionally pre-build search index locally (#859 & #1061).
 * Upgrade to lunr.js 2.x (#1319).
 * Support search in languages other than English (#826).
 * Allow the user to define the word separators (#867).

@@ -121,9 +121,9 @@ class SearchIndex(object):
                     data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
                     log.debug('Pre-built search index created successfully.')
                 else:
-                    log.debug('Failed to pre-build search index. Error: {}'.format(err))
+                    log.warning('Failed to pre-build search index. Error: {}'.format(err))
             except (OSError, IOError, ValueError) as e:
-                log.debug('Failed to pre-build search index. Error: {}'.format(e))
+                log.warning('Failed to pre-build search index. Error: {}'.format(e))
 
         return data
 

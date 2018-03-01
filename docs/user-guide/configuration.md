@@ -451,16 +451,6 @@ A search plugin is provided by default with MkDocs which uses [lunr.js] as a
 search engine. The following config options are available to alter the behavior
 of the search plugin:
 
-##### **prebuild_index**
-
- Generates a pre-built index of all pages, which should load much faster than
- building the index in the browser on each page load. Note that the pre-built
- index is only created if the necessary dependencies (node.js) are available
- when `mkdocs build` is run. Any failures are ignored silently with the
- expectation that the index can be built in the browser.
-
- **default**: `True`
-
 ##### **separator**
 
 A regular expression which matches the characters used as word separators when
@@ -515,6 +505,26 @@ You may [contribute additional languages].
     languages. However, some users have reported decent results using Japanese.
 
 **default**: `['en']`
+
+##### **prebuild_index**
+
+ Optionally generates a pre-built index of all pages, which provides some
+ performance improvements for larger sites. Before enabling, check that the
+ theme you are using explicitly supports using a prebuilt index (the builtin
+ themes do). The pre-build script requires that [Node.js] be installed and the
+ command `node` be on the system path. If this feature is enabled and fails for
+ any reason, a warning is issued. You may use the `--strict` flag when building
+ to cause such a failure to raise an error instead.
+
+ !!! Note
+
+    On smaller sites, using a pre-built index is not recommended as it creates a
+    significant increase is bandwidth requirements with little to no noticeable
+    improvement to your users. However, for larger sites (hundreds of pages),
+    the bandwidth increase is relatively small and your users will notice a
+    significant improvement in search performance.
+
+ **default**: `False`
 
 [custom themes]: custom-themes.md
 [variables that are available]: custom-themes.md#template-variables
