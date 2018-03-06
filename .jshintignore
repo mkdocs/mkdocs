@@ -2,6 +2,5 @@ mkdocs/themes/**/js/highlight.pack.js
 mkdocs/themes/**/js/jquery-**.min.js
 mkdocs/themes/**/js/bootstrap-**.min.js
 mkdocs/themes/**/js/modernizr-**.min.js
-mkdocs/contrib/legacy_search/templates/search/require.js
-mkdocs/contrib/legacy_search/templates/search/mustache.min.js
-mkdocs/contrib/legacy_search/templates/search/lunr.min.js
+mkdocs/contrib/search/templates/search/lunr.js
+mkdocs/contrib/search/lunr-language/lunr.**.js

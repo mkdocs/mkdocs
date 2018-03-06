@@ -72,7 +72,7 @@ setup(
             'readthedocs = mkdocs.themes.readthedocs',
         ],
         'mkdocs.plugins': [
-            'search = mkdocs.contrib.legacy_search:SearchPlugin',
+            'search = mkdocs.contrib.search:SearchPlugin',
         ],
     },
     classifiers=[
