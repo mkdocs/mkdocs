@@ -143,8 +143,11 @@ def clean_directory(directory):
 
         # Don't remove hidden files from the directory. We never copy files
         # that are hidden, so we shouldn't delete them either.
-        if entry.startswith('.'):
-            continue
+        try:
+            if entry.startswith('.'):
+                continue
+        except UnicodeDecodeError:
+            pass
 
         path = os.path.join(directory, entry)
         if os.path.isdir(path):
