@@ -61,7 +61,7 @@ setup(
         'livereload>=2.5.1',
         'Markdown>=2.3.1',
         'PyYAML>=3.10',
-        'tornado>=4.1',
+        'tornado>=4.1,<5.0',
     ],
     entry_points={
         'console_scripts': [
