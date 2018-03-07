@@ -21,6 +21,10 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Version 0.17.3 (2018-03-07)
+
+* Bugfix: Set dependency `tornado>=4.1,<5.0` due to changes in 5.0 (#1428).
+
 ## Version 0.17.2 (2017-11-15)
 
 * Bugfix: Correct `extra_*` config setting regressions (#1335 & #1336).
