@@ -67,19 +67,46 @@ All `BasePlugin` subclasses contain the following attributes:
 
 #### config_scheme
 
-:   A tuple of configuration validation class instances (to be defined in a subclass).
+:   A tuple of configuration validation instances. Each item must consist of a
+    two item tuple in which the first item is the string name of the
+    configuration option and the second item is an instance of
+    `mkdocs.config.config_options.BaseConfigOption` or any of its subclasses.
+
+    For example, the following `config_scheme` defines three configuration options: `foo`, which accepts a string; `bar`, which accepts an integer; and `baz`, which accepts a boolean value.
+
+        class MyPlugin(mkdocs.plugins.BasePlugin):
+            config_scheme = (
+                ('foo', mkdocs.config.config_options.Type(mkdocs.utils.string_types, default='a default value')),
+                ('bar', mkdocs.config.config_options.Type(int, default=0)),
+                ('baz', mkdocs.config.config_options.Type(bool, default=True))
+            )
+
+    When the user's configuration is loaded, the above scheme will be used to
+    validate the configuration and fill in any defaults for settings not
+    provided by the user. The validation classes may be any of the classes
+    provided in `mkdocs.config.config_options` or a third party subclass defined
+    in the plugin.
+
+    Any settings provided by the user which fail validation or are not defined
+    in the `config_scheme` will raise a `mkdocs.config.base.ValidationError`.
 
 #### config
 
-:   A dictionary of configuration options for the plugin which is populated by the
-    `load_config` method.
+:   A dictionary of configuration options for the plugin, which is populated by
+    the `load_config` method after configuration validation has completed. Use
+    this attribute to access options provided by the user.
+
+        def on_pre_build(self, config):
+            if self.config['bool_option']:
+                # implement "bool_option" functionality here...
 
 All `BasePlugin` subclasses contain the following method(s):
 
 #### load_config(options)
 
-:   Loads configuration from a dictionary of options. Returns a tuple of `(errors,
-    warnings)`.
+:   Loads configuration from a dictionary of options. Returns a tuple of
+    `(errors, warnings)`. This method is called by MkDocs during configuration
+    validation and should not need to be called by the plugin.
 
 #### on_&lt;event_name&gt;()
 
