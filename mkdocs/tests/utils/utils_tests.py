@@ -75,7 +75,9 @@ class UtilsTests(unittest.TestCase):
             '//media.cdn.org/jquery.js': '//media.cdn.org/jquery.js',
             'media.cdn.org/jquery.js': './media.cdn.org/jquery.js',
             'local/file/jquery.js': './local/file/jquery.js',
+            'local\\windows\\file\\jquery.js': './local/windows/file/jquery.js',
             'image.png': './image.png',
+            'style.css?v=20180308c': './style.css?v=20180308c'
         }
         site_navigation = nav.SiteNavigation(load_config(pages=pages))
         for path, expected_result in expected_results.items():

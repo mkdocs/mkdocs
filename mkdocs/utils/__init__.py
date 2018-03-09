@@ -22,11 +22,9 @@ from mkdocs import exceptions
 
 try:                                                        # pragma: no cover
     from urllib.parse import urlparse, urlunparse, urljoin  # noqa
-    from urllib.request import pathname2url                 # noqa
     from collections import UserDict                        # noqa
 except ImportError:                                         # pragma: no cover
     from urlparse import urlparse, urlunparse, urljoin      # noqa
-    from urllib import pathname2url                         # noqa
     from UserDict import UserDict                           # noqa
 
 
@@ -360,12 +358,7 @@ def create_relative_media_url(nav, url):
 def path_to_url(path):
     """Convert a system path to a URL."""
 
-    if os.path.sep == '/':
-        return path
-
-    if sys.version_info < (3, 0):
-        path = path.encode('utf8')
-    return pathname2url(path)
+    return '/'.join(path.split('\\'))
 
 
 def get_theme_dir(name):
