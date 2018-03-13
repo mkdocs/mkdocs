@@ -344,7 +344,9 @@ class UtilsTests(unittest.TestCase):
         try:
             utils.clean_directory(utf8_directory)
             utils.clean_directory(ascii_directory)
-            self.assertTrue(os.path.exists(utf_8_path), False)
-            self.assertTrue(os.path.exists(ascii_path), False)
+            self.assertFalse(os.path.exists(utf_8_path))
+            self.assertFalse(os.path.exists(ascii_path))
+            self.assertFalse(os.path.exists(utf8_utf8_directory))
+            self.assertFalse(os.path.exists(ascii_ascii_directory))
         finally:
             shutil.rmtree(temp_dir)
