@@ -68,7 +68,8 @@ DEFAULT_SCHEMA = (
 
     # A name to use for the link to the project source repo.
     # Default, If repo_url is unset then None, otherwise
-    # "GitHub" or "Bitbucket" for known url or Hostname for unknown urls.
+    # "GitHub", "Bitbucket" or "GitLab" for known url or Hostname
+    # for unknown urls.
     ('repo_name', config_options.Type(utils.string_types)),
 
     # Specify a URI to the docs dir in the project source repo, relative to the

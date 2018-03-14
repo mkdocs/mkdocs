@@ -78,6 +78,8 @@
                                 <i class="fa fa-github"></i> Edit on {{ config.repo_name }}
                             {%- elif config.repo_name == 'Bitbucket' -%}
                                 <i class="fa fa-bitbucket"></i> Edit on {{ config.repo_name }}
+                            {%- elif config.repo_name == 'GitLab' -%}
+                                <i class="fa fa-gitlab"></i> Edit on {{ config.repo_name }}
                             {%- else -%}
                             Edit on {{ config.repo_name }}
                             {%- endif -%}
@@ -90,6 +92,8 @@
                                 <i class="fa fa-github"></i> {{ config.repo_name }}
                             {%- elif config.repo_name == 'Bitbucket' -%}
                                 <i class="fa fa-bitbucket"></i> {{ config.repo_name }}
+                            {%- elif config.repo_name == 'GitLab' -%}
+                                <i class="fa fa-gitlab"></i> {{ config.repo_name }}
                             {%- else -%}
                             {{ config.repo_name }}
                             {%- endif -%}

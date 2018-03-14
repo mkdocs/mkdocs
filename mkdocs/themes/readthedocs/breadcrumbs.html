@@ -19,6 +19,8 @@
           class="icon icon-github"
         {%- elif config.repo_name|lower == 'bitbucket' %}
           class="icon icon-bitbucket"
+        {%- elif config.repo_name|lower == 'gitlab' %}
+          class="icon icon-gitlab"
         {% endif %}> Edit on {{ config.repo_name }}</a>
       {% endif %}
       {%- endblock %}
