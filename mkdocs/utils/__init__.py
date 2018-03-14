@@ -144,7 +144,8 @@ def clean_directory(directory):
 
         # Don't remove hidden files from the directory. We never copy files
         # that are hidden, so we shouldn't delete them either.
-        if dec(entry).startswith('.'):
+        entry = dec(entry)
+        if entry.startswith('.'):
             continue
 
         path = os.path.join(directory, entry)

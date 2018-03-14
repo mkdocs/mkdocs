@@ -12,6 +12,7 @@ import stat
 
 from mkdocs import nav, utils, exceptions
 from mkdocs.tests.base import dedent, load_config
+from mkdocs.utils.ghp_import import dec
 
 
 class UtilsTests(unittest.TestCase):
@@ -324,7 +325,9 @@ class UtilsTests(unittest.TestCase):
 
     def test_unicode_clean_directory(self):
         temp_dir = tempfile.mkdtemp()
-        utf8_directory = os.path.join(temp_dir, '导航')
+        utf8_temp_dir = os.path.join(dec('tmp'), dec('tmp_utf8'))
+
+        utf8_directory = os.path.join(utf8_temp_dir, '导航')
         utf8_utf8_directory = os.path.join(utf8_directory, '导航')
         ascii_directory = os.path.join(temp_dir, 'bar')
         ascii_ascii_directory = os.path.join(ascii_directory, 'bar')
@@ -350,3 +353,4 @@ class UtilsTests(unittest.TestCase):
             self.assertFalse(os.path.exists(ascii_ascii_directory))
         finally:
             shutil.rmtree(temp_dir)
+            shutil.rmtree(utf8_temp_dir)
