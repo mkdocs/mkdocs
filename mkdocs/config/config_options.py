@@ -260,12 +260,14 @@ class RepoURL(URL):
                 config['repo_name'] = 'GitHub'
             elif repo_host == 'bitbucket.org':
                 config['repo_name'] = 'Bitbucket'
+            elif repo_host == 'gitlab.com':
+                config['repo_name'] = 'GitLab'
             else:
                 config['repo_name'] = repo_host.split('.')[0].title()
 
         # derive edit_uri from repo_name if unset
         if config['repo_url'] is not None and edit_uri is None:
-            if repo_host == 'github.com':
+            if repo_host == 'github.com' or repo_host == 'gitlab.com':
                 edit_uri = 'edit/master/docs/'
             elif repo_host == 'bitbucket.org':
                 edit_uri = 'src/default/docs/'

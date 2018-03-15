@@ -35,7 +35,8 @@ URL to the generated HTML header.
 
 ### repo_url
 
-When set, provides a link to your GitHub or Bitbucket repository on each page.
+When set, provides a link to your repository (GitHub, Bitbucket, GitLab, ...)
+on each page.
 
 ```yaml
 repo_url: https://github.com/example/repository/
@@ -45,10 +46,10 @@ repo_url: https://github.com/example/repository/
 
 ### repo_name
 
-When set, provides a link to your GitHub or Bitbucket repository on each page.
+When set, provides the name for the link to your repository on each page.
 
-**default**: `'GitHub'` or `'Bitbucket'` if the `repo_url` matches those
-domains, otherwise `null`
+**default**: `'GitHub'`, `'Bitbucket'` or `'GitLab'` if the `repo_url` matches
+those domains, otherwise the hostname from the `repo_url`.
 
 ### edit_uri
 
@@ -86,14 +87,14 @@ edit_uri: root/path/docs/
 ```
 
 !!! note
-    On a few known hosts (specifically GitHub and Bitbucket), the `edit_uri` is
-    derived from the 'repo_url' and does not need to be set manually. Simply
-    defining a `repo_url` will automatically populate the `edit_uri` config
-    setting.
+    On a few known hosts (specifically GitHub, Bitbucket and GitLab), the
+    `edit_uri` is derived from the 'repo_url' and does not need to be set
+    manually. Simply defining a `repo_url` will automatically populate the
+    `edit_uri` configs setting.
 
-    For example, for a GitHub-hosted repository, the `edit_uri` would be
-    automatically set as `edit/master/docs/` (Note the `edit` path and `master`
-    branch).
+    For example, for a GitHub- or GitLab-hosted repository, the `edit_uri`
+    would be automatically set as `edit/master/docs/` (Note the `edit` path
+    and `master` branch).
 
     For a Bitbucket-hosted repository, the equivalent `edit_uri` would be
     automatically set as `src/default/docs/` (note the `src` path and `default`
@@ -105,15 +106,16 @@ edit_uri: root/path/docs/
     string to disable the automatic setting.
 
 !!! warning
-    On GitHub, the default "edit" path (`edit/master/docs/`) opens the page in
-    the online GitHub editor. This functionality requires that the user have and
-    be logged in to a GitHub account. Otherwise, the user will be redirected to
-    a login/signup page. Alternatively, use the "blob" path
+    On GitHub and GitLab, the default "edit" path (`edit/master/docs/`) opens
+    the page in the online editor. This functionality requires that the user
+    have and be logged in to a GitHub/GitLab account. Otherwise, the user will
+    be redirected to a login/signup page. Alternatively, use the "blob" path
     (`blob/master/docs/`) to open a read-only view, which supports anonymous
     access.
 
-**default**: `edit/master/docs/` or `src/default/docs/` for GitHub or Bitbucket
-repos, respectively, if `repo_url` matches those domains, otherwise `null`
+**default**: `edit/master/docs/` for GitHub and GitLab repos or
+`src/default/docs/` for a Bitbucket repo, if `repo_url` matches those domains,
+otherwise `null`
 
 ### site_description
 
