@@ -113,7 +113,9 @@ edit_uri: root/path/docs/
     (`blob/master/docs/`) to open a read-only view, which supports anonymous
     access.
 
-**default**: `edit/master/docs/` for GitHub and GitLab repos or `src/default/docs/` for a Bitbucket repo, if `repo_url` matches those domains, otherwise `null`
+**default**: `edit/master/docs/` for GitHub and GitLab repos or
+`src/default/docs/` for a Bitbucket repo, if `repo_url` matches those domains,
+otherwise `null`
 
 ### site_description
 
