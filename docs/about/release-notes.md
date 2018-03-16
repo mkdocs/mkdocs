@@ -47,6 +47,7 @@ authors should review how [search and themes] interact.
 
 ### Other Changes and Additions to Development Version
 
+* Add support for GitLab edit links (#1435).
 * Link to GitHub issues from release notes (#644).
 * Expand {sha} and {version} in gh-deploy commit message (#1410).
 * Compress `sitemap.xml` (#1130).
