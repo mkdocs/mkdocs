@@ -11,7 +11,7 @@ To upgrade MkDocs to the latest version, use pip:
 You can determine your currently installed version using `mkdocs --version`:
 
     $ mkdocs --version
-    mkdocs, version 0.15.2
+    mkdocs, version 0.17.3
 
 ## Maintenance team
 
