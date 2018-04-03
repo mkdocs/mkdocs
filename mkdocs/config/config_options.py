@@ -450,7 +450,12 @@ class Theme(BaseConfigOption):
 
         # Ensure custom_dir is an absolute path
         if 'custom_dir' in theme_config and not os.path.isabs(theme_config['custom_dir']):
-            theme_config['custom_dir'] = os.path.abspath(theme_config['custom_dir'])
+            config_dir = os.path.dirname(config.config_file_path)
+            theme_config['custom_dir'] = os.path.join(config_dir, theme_config['custom_dir'])
+
+        if 'custom_dir' in theme_config and not os.path.isdir(theme_config['custom_dir']):
+            raise ValidationError("The path set in {name}.custom_dir ('{path}') does not exist.".
+                                  format(path=theme_config['custom_dir'], name=self.name))
 
         config[key_name] = theme.Theme(**theme_config)
 
