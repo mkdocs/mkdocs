@@ -47,6 +47,7 @@ authors should review how [search and themes] interact.
 
 ### Other Changes and Additions to Development Version
 
+* Drop official support for Python 3.3 and set `tornado>=5.0` (#1427).
 * Add support for GitLab edit links (#1435).
 * Link to GitHub issues from release notes (#644).
 * Expand {sha} and {version} in gh-deploy commit message (#1410).
@@ -65,6 +66,10 @@ authors should review how [search and themes] interact.
 * Remove PyPI Deployment Docs (#1360).
 * Update links to Python-Markdown library (#1360).
 * Document how to generate manpages for MkDocs commands (#686).
+
+## Version 0.17.3 (2018-03-07)
+
+* Bugfix: Set dependency `tornado>=4.1,<5.0` due to changes in 5.0 (#1428).
 
 ## Version 0.17.2 (2017-11-15)
 
