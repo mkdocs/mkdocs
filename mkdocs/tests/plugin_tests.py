@@ -51,7 +51,7 @@ class TestPluginClass(unittest.TestCase):
         }
 
         plugin = DummyPlugin()
-        errors, warnings = plugin.load_config(options, fname=cfg_fname)
+        errors, warnings = plugin.load_config(options, config_file_path=cfg_fname)
         self.assertEqual(plugin.config, expected)
         self.assertEqual(errors, [])
         self.assertEqual(warnings, [])

@@ -302,12 +302,12 @@ class FilesystemObject(Type):
         if os.path.isabs(value):
             return
 
-        if config.fname is None:
+        if config.config_file_path is None:
             # Unable to determine absolute path of the config file; fall back
             # to trusting the relative path
             return
 
-        config_dir = os.path.dirname(config.fname)
+        config_dir = os.path.dirname(config.config_file_path)
         value = os.path.join(config_dir, value)
         config[key_name] = value
 
@@ -329,11 +329,11 @@ class Dir(FilesystemObject):
     name = 'directory'
 
     def post_validation(self, config, key_name):
-        if config.fname is None:
+        if config.config_file_path is None:
             return
 
         # Validate that the dir is not the parent dir of the config file.
-        if os.path.dirname(config.fname) == config[key_name]:
+        if os.path.dirname(config.config_file_path) == config[key_name]:
             raise ValidationError(
                 ("The '{0}' should not be the parent directory of the config "
                  "file. Use a child directory instead so that the config file "
@@ -644,7 +644,7 @@ class Plugins(OptionallyRequired):
         self.config_file_path = None
 
     def pre_validation(self, config, key_name):
-        self.config_file_path = config.fname
+        self.config_file_path = config.config_file_path
 
     def run_validation(self, value):
         if not isinstance(value, (list, tuple)):

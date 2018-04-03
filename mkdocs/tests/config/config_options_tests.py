@@ -275,7 +275,7 @@ class DirTest(unittest.TestCase):
     def test_doc_dir_is_config_dir(self):
         cfg = Config(
             [('docs_dir', config_options.Dir())],
-            fname=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
+            config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
         )
 
         test_config = {
