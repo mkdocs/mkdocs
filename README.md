@@ -22,15 +22,15 @@ Project documentation with Markdown.
 Everyone interacting in the MkDocs project's codebases, issue trackers, chat
 rooms, and mailing lists is expected to follow the [PyPA Code of Conduct].
 
-[appveyor-image]: https://img.shields.io/appveyor/ci/d0ugal/mkdocs/master.png
+[appveyor-image]: https://img.shields.io/appveyor/ci/d0ugal/mkdocs/master.svg
 [appveyor-link]: https://ci.appveyor.com/project/d0ugal/mkdocs
 [codecov-image]: http://codecov.io/github/mkdocs/mkdocs/coverage.svg?branch=master
 [codecov-link]: http://codecov.io/github/mkdocs/mkdocs?branch=master
-[landscape-image]: https://landscape.io/github/mkdocs/mkdocs/master/landscape.svg?style=flat-square
+[landscape-image]: https://landscape.io/github/mkdocs/mkdocs/master/landscape.svg?style=flat
 [landscape-link]: https://landscape.io/github/mkdocs/mkdocs/master
-[pypi-v-image]: https://img.shields.io/pypi/v/mkdocs.png
+[pypi-v-image]: https://img.shields.io/pypi/v/mkdocs.svg
 [pypi-v-link]: https://pypi.python.org/pypi/mkdocs
-[travis-image]: https://img.shields.io/travis/mkdocs/mkdocs/master.png
+[travis-image]: https://img.shields.io/travis/mkdocs/mkdocs/master.svg
 [travis-link]: https://travis-ci.org/mkdocs/mkdocs
 
 [mkdocs]: http://www.mkdocs.org
