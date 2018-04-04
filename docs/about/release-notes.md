@@ -25,7 +25,7 @@ The current and past members of the MkDocs team.
 
 ### Major Additions to Development Version
 
-#### Path Based Settings are Relative to Configuration File (#543).
+#### Path Based Settings are Relative to Configuration File (#543)
 
 Previously any relative paths in the various configuration options were
 resolved relative to the current working directory. They are now resolved
