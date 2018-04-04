@@ -215,9 +215,10 @@ If a set of key/value pairs, the following nested keys can be defined:
 
     #### custom_dir:
 
-    A directory to custom a theme. This can either be a relative directory, in
-    which case it is resolved relative to the directory containing your
-    configuration file, or it can be an absolute directory path.
+    A directory containing a custom theme. This can either be a relative
+    directory, in which case it is resolved relative to the directory containing
+    your configuration file, or it can be an absolute directory path from the
+    root of your local file system.
 
     See [styling your docs][theme_dir] for details if you would like to tweak an
     existing theme.
@@ -240,19 +241,19 @@ If a set of key/value pairs, the following nested keys can be defined:
 
 ### docs_dir
 
-Lets you set the directory containing the documentation source markdown files.
-This can either be a relative directory, in which case it is resolved relative
-to the directory containing your configuration file, or it can be an absolute
-directory path from the root of your local file system.
+The directory containing the documentation source markdown files. This can
+either be a relative directory, in which case it is resolved relative to the
+directory containing your configuration file, or it can be an absolute directory
+path from the root of your local file system.
 
 **default**: `'docs'`
 
 ### site_dir
 
-Lets you set the directory where the output HTML and other files are created.
-This can either be a relative directory, in which case it is resolved relative
-to the directory containing your configuration file, or it can be an absolute
-directory path from the root of your local file system.
+The directory where the output HTML and other files are created. This can either
+be a relative directory, in which case it is resolved relative to the directory
+containing your configuration file, or it can be an absolute directory path from
+the root of your local file system.
 
 **default**: `'site'`
 

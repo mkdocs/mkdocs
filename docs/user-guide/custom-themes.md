@@ -20,41 +20,48 @@ and their usage.
 ## Creating a custom theme
 
 The bare minimum required for a custom theme is a `main.html` [Jinja2 template]
-file. This should be placed in a directory which will be the `custom_dir` and it
-should be created next to the `mkdocs.yml` configuration file. Within
-`mkdocs.yml`, specify the theme `custom_dir` option and set it to the name of
-the directory containing `main.html`. For example, given this example project
-layout:
+file which is placed in a directory that is *not* a child of the [docs_dir].
+Within `mkdocs.yml`, set the theme.[custom_dir] option to the path of the
+directory containing `main.html`. The path should be relative to the
+configuration file. For example, given this example project layout:
 
-    mkdocs.yml
-    docs/
-        index.md
-        about.md
-    custom_theme/
-        main.html
-        ...
+```no-highlight
+mkdocs.yml
+docs/
+    index.md
+    about.md
+custom_theme/
+    main.html
+    ...
+```
 
-You would include the following settings in `mkdocs.yml` to use the custom theme
+... you would include the following settings in `mkdocs.yml` to use the custom theme
 directory:
 
-    theme:
-        name: null
-        custom_dir: 'custom_theme'
+```yaml
+theme:
+    name: null
+    custom_dir: 'custom_theme/'
+```
 
 !!! Note
 
-    Generally, when building your own custom theme, the theme `name`
-    configuration setting would be set to `null`. However, if used in
-    combination with the `custom_dir` configuration value a custom theme can be
-    used to replace only specific parts of a built-in theme. For example, with
-    the above layout and if you set `name: "mkdocs"` then the `main.html` file
-    in the `custom_dir` would replace that in the theme but otherwise the
-    `mkdocs` theme would remain the same. This is useful if you want to make
+    Generally, when building your own custom theme, the theme.[name]
+    configuration setting would be set to `null`. However, if the
+    theme.[custom_dir] configuration value is used in combination with an
+    existing theme, the theme.[custom_dir] can be used to replace only specific
+    parts of a built-in theme. For example, with the above layout and if you set
+    `name: "mkdocs"` then the `main.html` file in the theme.[custom_dir] would
+    replace the file of the same name in the `mkdocs` theme but otherwise the
+    `mkdocs` theme would remain unchanged. This is useful if you want to make
     small adjustments to an existing theme.
 
     For more specific information, see [styling your docs].
 
 [styling your docs]: ./styling-your-docs.md#using-the-theme-custom_dir
+[custom_dir]: ./configuration.md#custom_dir
+[name]: ./configuration.md#name
+[docs_dir]:./configuration.md#docs_dir
 
 ## Basic theme
 

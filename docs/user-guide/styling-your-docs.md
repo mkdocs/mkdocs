@@ -138,7 +138,7 @@ And then point your `mkdocs.yml` configuration file at the new directory:
 ```yaml
 theme:
     name: mkdocs
-    custom_dir: custom_theme
+    custom_dir: custom_theme/
 ```
 
 To override the 404 error page ("file not found"), add a new template file named
