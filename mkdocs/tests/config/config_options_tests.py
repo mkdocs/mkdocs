@@ -6,6 +6,7 @@ import unittest
 import mkdocs
 from mkdocs import utils
 from mkdocs.config import config_options
+from mkdocs.config.base import Config
 
 
 class OptionallyRequiredTest(unittest.TestCase):
@@ -272,18 +273,21 @@ class DirTest(unittest.TestCase):
                           option.validate, [])
 
     def test_doc_dir_is_config_dir(self):
+        cfg = Config(
+            [('docs_dir', config_options.Dir())],
+            config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
+        )
 
         test_config = {
-            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
             'docs_dir': '.'
         }
 
-        docs_dir = config_options.Dir()
+        cfg.load_dict(test_config)
 
-        test_config['docs_dir'] = docs_dir.validate(test_config['docs_dir'])
+        fails, warns = cfg.validate()
 
-        self.assertRaises(config_options.ValidationError,
-                          docs_dir.post_validation, test_config, 'docs_dir')
+        self.assertEqual(len(fails), 1)
+        self.assertEqual(len(warns), 0)
 
 
 class SiteDirTest(unittest.TestCase):
@@ -293,12 +297,23 @@ class SiteDirTest(unittest.TestCase):
         site_dir = config_options.SiteDir()
         docs_dir = config_options.Dir()
 
-        config['config_file_path'] = os.path.join(os.path.abspath('..'), 'mkdocs.yml')
+        fname = os.path.join(os.path.abspath('..'), 'mkdocs.yml')
 
         config['docs_dir'] = docs_dir.validate(config['docs_dir'])
         config['site_dir'] = site_dir.validate(config['site_dir'])
-        site_dir.post_validation(config, 'site_dir')
-        return True  # No errors were raised
+
+        schema = [
+            ('site_dir', site_dir),
+            ('docs_dir', docs_dir),
+        ]
+        cfg = Config(schema, fname)
+        cfg.load_dict(config)
+        failed, warned = cfg.validate()
+
+        if failed:
+            raise config_options.ValidationError(failed)
+
+        return True
 
     def test_doc_dir_in_site_dir(self):
 

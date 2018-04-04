@@ -25,6 +25,25 @@ The current and past members of the MkDocs team.
 
 ### Major Additions to Development Version
 
+#### Path Based Settings are Relative to Configuration File (#543)
+
+Previously any relative paths in the various configuration options were
+resolved relative to the current working directory. They are now resolved
+relative to the configuration file. As the documentation has always encouraged
+running the various MkDocs commands from the directory that contains the
+configuration file (project root), this change will not affect most users.
+However, it will make it much easier to implement automated builds or otherwise
+run commands from a location other than the project root.
+
+Simply use the `-f/--config-file` option and point it at the configuration file:
+
+```sh
+mkdocs build --config-file /path/to/my/config/file.yml
+```
+
+As previously, if no file is specified, MkDocs looks for a file named
+`mkdocs.yml` in the current working directory.
+
 #### Refactor Search Plugin
 
 The search plugin has been completely refactored to include support for the

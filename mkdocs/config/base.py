@@ -21,13 +21,14 @@ class Config(utils.UserDict):
     for running validation on the structure and contents.
     """
 
-    def __init__(self, schema):
+    def __init__(self, schema, config_file_path=None):
         """
         The schema is a Python dict which maps the config name to a validator.
         """
 
         self._schema = schema
         self._schema_keys = set(dict(schema).keys())
+        self.config_file_path = config_file_path
         self.data = {}
 
         self.user_configs = []
@@ -172,7 +173,7 @@ def load_config(config_file=None, **kwargs):
 
     # Initialise the config with the default schema .
     from mkdocs import config
-    cfg = Config(schema=config.DEFAULT_SCHEMA)
+    cfg = Config(schema=config.DEFAULT_SCHEMA, config_file_path=options['config_file_path'])
     # First load the config file
     cfg.load_file(config_file)
     # Then load the options to overwrite anything in the config.

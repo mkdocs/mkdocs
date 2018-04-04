@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 
 import unittest
 import mock
+import os
 
 from mkdocs import plugins
 from mkdocs import utils
@@ -14,7 +15,8 @@ from mkdocs import config
 class DummyPlugin(plugins.BasePlugin):
     config_scheme = (
         ('foo', config.config_options.Type(utils.string_types, default='default foo')),
-        ('bar', config.config_options.Type(int, default=0))
+        ('bar', config.config_options.Type(int, default=0)),
+        ('dir', config.config_options.Dir(exists=False)),
     )
 
     def on_pre_page(self, content, **kwargs):
@@ -29,18 +31,27 @@ class DummyPlugin(plugins.BasePlugin):
 class TestPluginClass(unittest.TestCase):
 
     def test_valid_plugin_options(self):
+        test_dir = 'test'
 
         options = {
-            'foo': 'some value'
+            'foo': 'some value',
+            'dir': test_dir,
         }
+
+        cfg_fname = os.path.join('tmp', 'test', 'fname.yml')
+        cfg_fname = os.path.abspath(cfg_fname)
+
+        cfg_dirname = os.path.dirname(cfg_fname)
+        expected = os.path.join(cfg_dirname, test_dir)
 
         expected = {
             'foo': 'some value',
-            'bar': 0
+            'bar': 0,
+            'dir': expected,
         }
 
         plugin = DummyPlugin()
-        errors, warnings = plugin.load_config(options)
+        errors, warnings = plugin.load_config(options, config_file_path=cfg_fname)
         self.assertEqual(plugin.config, expected)
         self.assertEqual(errors, [])
         self.assertEqual(warnings, [])
@@ -132,7 +143,8 @@ class TestPluginConfig(unittest.TestCase):
         self.assertIsInstance(cfg['plugins']['sample'], plugins.BasePlugin)
         expected = {
             'foo': 'default foo',
-            'bar': 0
+            'bar': 0,
+            'dir': None,
         }
         self.assertEqual(cfg['plugins']['sample'].config, expected)
 
@@ -154,7 +166,8 @@ class TestPluginConfig(unittest.TestCase):
         self.assertIsInstance(cfg['plugins']['sample'], plugins.BasePlugin)
         expected = {
             'foo': 'foo value',
-            'bar': 42
+            'bar': 42,
+            'dir': None,
         }
         self.assertEqual(cfg['plugins']['sample'].config, expected)
 
@@ -194,7 +207,8 @@ class TestPluginConfig(unittest.TestCase):
         self.assertIsInstance(cfg['plugins']['sample'], plugins.BasePlugin)
         expected = {
             'foo': 'default foo',
-            'bar': 0
+            'bar': 0,
+            'dir': None,
         }
         self.assertEqual(cfg['plugins']['sample'].config, expected)
 

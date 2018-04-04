@@ -3,8 +3,6 @@
 
 from __future__ import unicode_literals
 import os
-import shutil
-import tempfile
 import unittest
 import mock
 import io
@@ -15,6 +13,11 @@ except ImportError:
     # In Py3 use builtin zip function
     pass
 
+try:
+    # py>=3.2
+    from tempfile import TemporaryDirectory
+except ImportError:
+    from backports.tempfile import TemporaryDirectory
 
 from mkdocs import nav
 from mkdocs.commands import build
@@ -319,9 +322,7 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(page.content.strip(), '<p>foo</p>')
 
     def test_copying_media(self):
-        docs_dir = tempfile.mkdtemp()
-        site_dir = tempfile.mkdtemp()
-        try:
+        with TemporaryDirectory() as docs_dir, TemporaryDirectory() as site_dir:
             # Create a non-empty markdown file, image, html file, dot file and dot directory.
             f = open(os.path.join(docs_dir, 'index.md'), 'w')
             f.write(dedent("""
@@ -351,14 +352,9 @@ class BuildTests(unittest.TestCase):
             self.assertTrue(os.path.isfile(os.path.join(site_dir, 'example.html')))
             self.assertFalse(os.path.isfile(os.path.join(site_dir, '.hidden')))
             self.assertFalse(os.path.isfile(os.path.join(site_dir, '.git/hidden')))
-        finally:
-            shutil.rmtree(docs_dir)
-            shutil.rmtree(site_dir)
 
     def test_copy_theme_files(self):
-        docs_dir = tempfile.mkdtemp()
-        site_dir = tempfile.mkdtemp()
-        try:
+        with TemporaryDirectory() as docs_dir, TemporaryDirectory() as site_dir:
             # Create a non-empty markdown file.
             f = open(os.path.join(docs_dir, 'index.md'), 'w')
             f.write(dedent("""
@@ -383,9 +379,6 @@ class BuildTests(unittest.TestCase):
             self.assertFalse(os.path.isfile(os.path.join(site_dir, 'base.html')))
             self.assertFalse(os.path.isfile(os.path.join(site_dir, 'content.html')))
             self.assertFalse(os.path.isfile(os.path.join(site_dir, 'nav.html')))
-        finally:
-            shutil.rmtree(docs_dir)
-            shutil.rmtree(site_dir)
 
     def test_strict_mode_valid(self):
         pages = [
@@ -467,9 +460,7 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(context['config']['extra']['a'], 1)
 
     def test_BOM(self):
-        docs_dir = tempfile.mkdtemp()
-        site_dir = tempfile.mkdtemp()
-        try:
+        with TemporaryDirectory() as docs_dir, TemporaryDirectory() as site_dir:
             # Create an UTF-8 Encoded file with BOM (as Micorsoft editors do). See #1186.
             f = io.open(os.path.join(docs_dir, 'index.md'), 'w', encoding='utf-8-sig')
             f.write('# An UTF-8 encoded file with a BOM')
@@ -490,7 +481,3 @@ class BuildTests(unittest.TestCase):
             self.assertTrue(
                 '<h1 id="an-utf-8-encoded-file-with-a-bom">An UTF-8 encoded file with a BOM</h1>' in output
             )
-
-        finally:
-            shutil.rmtree(docs_dir)
-            shutil.rmtree(site_dir)
