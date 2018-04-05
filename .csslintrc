@@ -1,6 +1,6 @@
 --exclude-list = mkdocs/themes/mkdocs/css/bootstrap-custom.min.css,
                  mkdocs/themes/readthedocs/css/bootstrap-custom.min.css,
-                 mkdocs/themes/mkdocs/css/font-awesome-4.5.0.css,
+                 mkdocs/themes/mkdocs/css/font-awesome.min.css,
                  mkdocs/themes/readthedocs/css/font-awesome-4.5.0.css,
                  mkdocs/themes/mkdocs/css/highlight.css,
                  mkdocs/themes/readthedocs/css/highlight.css,
