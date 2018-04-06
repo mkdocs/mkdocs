@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 import os
 import unittest
+from mock import patch
 
 import mkdocs
 from mkdocs import utils
@@ -491,7 +492,8 @@ class PrivateTest(unittest.TestCase):
 
 class MarkdownExtensionsTest(unittest.TestCase):
 
-    def test_simple_list(self):
+    @patch('markdown.Markdown')
+    def test_simple_list(self, mockMd):
         option = config_options.MarkdownExtensions()
         config = {
             'markdown_extensions': ['foo', 'bar']
@@ -503,7 +505,8 @@ class MarkdownExtensionsTest(unittest.TestCase):
             'mdx_configs': {}
         }, config)
 
-    def test_list_dicts(self):
+    @patch('markdown.Markdown')
+    def test_list_dicts(self, mockMd):
         option = config_options.MarkdownExtensions()
         config = {
             'markdown_extensions': [
@@ -522,7 +525,8 @@ class MarkdownExtensionsTest(unittest.TestCase):
             }
         }, config)
 
-    def test_mixed_list(self):
+    @patch('markdown.Markdown')
+    def test_mixed_list(self, mockMd):
         option = config_options.MarkdownExtensions()
         config = {
             'markdown_extensions': [
@@ -539,7 +543,8 @@ class MarkdownExtensionsTest(unittest.TestCase):
             }
         }, config)
 
-    def test_builtins(self):
+    @patch('markdown.Markdown')
+    def test_builtins(self, mockMd):
         option = config_options.MarkdownExtensions(builtins=['meta', 'toc'])
         config = {
             'markdown_extensions': ['foo', 'bar']
@@ -577,7 +582,8 @@ class MarkdownExtensionsTest(unittest.TestCase):
             'mdx_configs': {'toc': {'permalink': True}}
         }, config)
 
-    def test_configkey(self):
+    @patch('markdown.Markdown')
+    def test_configkey(self, mockMd):
         option = config_options.MarkdownExtensions(configkey='bar')
         config = {
             'markdown_extensions': [
@@ -605,12 +611,14 @@ class MarkdownExtensionsTest(unittest.TestCase):
             'mdx_configs': {}
         }, config)
 
-    def test_not_list(self):
+    @patch('markdown.Markdown')
+    def test_not_list(self, mockMd):
         option = config_options.MarkdownExtensions()
         self.assertRaises(config_options.ValidationError,
                           option.validate, 'not a list')
 
-    def test_invalid_config_option(self):
+    @patch('markdown.Markdown')
+    def test_invalid_config_option(self, mockMd):
         option = config_options.MarkdownExtensions()
         config = {
             'markdown_extensions': [
@@ -622,7 +630,8 @@ class MarkdownExtensionsTest(unittest.TestCase):
             option.validate, config['markdown_extensions']
         )
 
-    def test_invalid_config_item(self):
+    @patch('markdown.Markdown')
+    def test_invalid_config_item(self, mockMd):
         option = config_options.MarkdownExtensions()
         config = {
             'markdown_extensions': [
@@ -634,12 +643,23 @@ class MarkdownExtensionsTest(unittest.TestCase):
             option.validate, config['markdown_extensions']
         )
 
-    def test_invalid_dict_item(self):
+    @patch('markdown.Markdown')
+    def test_invalid_dict_item(self, mockMd):
         option = config_options.MarkdownExtensions()
         config = {
             'markdown_extensions': [
                 {'key1': 'value', 'key2': 'too many keys'}
             ]
+        }
+        self.assertRaises(
+            config_options.ValidationError,
+            option.validate, config['markdown_extensions']
+        )
+
+    def test_unknown_extension(self):
+        option = config_options.MarkdownExtensions()
+        config = {
+            'markdown_extensions': ['unknown']
         }
         self.assertRaises(
             config_options.ValidationError,
