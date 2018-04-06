@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from collections import Sequence
 import os
 from collections import namedtuple
+import markdown
 
 from mkdocs import utils, theme, plugins
 from mkdocs.config.base import Config, ValidationError
@@ -629,7 +630,16 @@ class MarkdownExtensions(OptionallyRequired):
                 extensions.append(item)
             else:
                 raise ValidationError('Invalid Markdown Extensions configuration')
-        return utils.reduce_list(self.builtins + extensions)
+
+        extensions = utils.reduce_list(self.builtins + extensions)
+
+        # Confirm that Markdown considers extensions to be valid
+        try:
+            markdown.Markdown(extensions=extensions, extension_configs=self.configdata)
+        except Exception as e:
+            raise ValidationError(e.args[0])
+
+        return extensions
 
     def post_validation(self, config, key_name):
         config[self.configkey] = self.configdata
