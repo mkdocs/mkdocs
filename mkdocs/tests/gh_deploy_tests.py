@@ -28,7 +28,7 @@ class TestGitHubDeploy(unittest.TestCase):
 
         mock_popeno().communicate.return_value = (b'6d98394\n', b'')
 
-        self.assertEqual(gh_deploy._get_current_sha(), u'6d98394')
+        self.assertEqual(gh_deploy._get_current_sha('.'), u'6d98394')
 
     @mock.patch('subprocess.Popen')
     def test_get_remote_url_ssh(self, mock_popeno):

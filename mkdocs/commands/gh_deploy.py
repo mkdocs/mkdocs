@@ -18,9 +18,9 @@ def _is_cwd_git_repo():
     return proc.wait() == 0
 
 
-def _get_current_sha():
+def _get_current_sha(repo_path):
 
-    proc = subprocess.Popen(['git', 'rev-parse', '--short', 'HEAD'],
+    proc = subprocess.Popen(['git', 'rev-parse', '--short', 'HEAD'], cwd=repo_path,
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     stdout, _ = proc.communicate()
@@ -57,7 +57,7 @@ def gh_deploy(config, message=None, force=False):
 
     if message is None:
         message = default_message
-    sha = _get_current_sha()
+    sha = _get_current_sha(os.path.dirname(config.config_file_path))
     message = message.format(version=mkdocs.__version__, sha=sha)
 
     remote_branch = config['remote_branch']
