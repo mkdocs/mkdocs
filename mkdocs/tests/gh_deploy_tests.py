@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 import unittest
 import mock
 
-from mkdocs.config import load_config
+from mkdocs.tests.base import load_config
 from mkdocs.commands import gh_deploy
 
 

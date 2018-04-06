@@ -186,8 +186,9 @@ class CLITests(unittest.TestCase):
         logger = logging.getLogger('mkdocs')
         self.assertEqual(logger.level, logging.INFO)
 
+    @mock.patch('mkdocs.config.load_config', autospec=True)
     @mock.patch('mkdocs.commands.build.build', autospec=True)
-    def test_build_clean(self, mock_build):
+    def test_build_clean(self, mock_build, mock_load_config):
 
         result = self.runner.invoke(
             cli.cli, ['build', '--clean'], catch_exceptions=False)
@@ -198,8 +199,9 @@ class CLITests(unittest.TestCase):
         self.assertTrue('dirty' in kwargs)
         self.assertFalse(kwargs['dirty'])
 
+    @mock.patch('mkdocs.config.load_config', autospec=True)
     @mock.patch('mkdocs.commands.build.build', autospec=True)
-    def test_build_dirty(self, mock_build):
+    def test_build_dirty(self, mock_build, mock_load_config):
 
         result = self.runner.invoke(
             cli.cli, ['build', '--dirty'], catch_exceptions=False)
@@ -296,8 +298,9 @@ class CLITests(unittest.TestCase):
             site_dir='custom'
         )
 
+    @mock.patch('mkdocs.config.load_config', autospec=True)
     @mock.patch('mkdocs.commands.build.build', autospec=True)
-    def test_build_verbose(self, mock_build):
+    def test_build_verbose(self, mock_build, mock_load_config):
 
         result = self.runner.invoke(
             cli.cli, ['build', '--verbose'], catch_exceptions=False)
@@ -307,8 +310,9 @@ class CLITests(unittest.TestCase):
         logger = logging.getLogger('mkdocs')
         self.assertEqual(logger.level, logging.DEBUG)
 
+    @mock.patch('mkdocs.config.load_config', autospec=True)
     @mock.patch('mkdocs.commands.build.build', autospec=True)
-    def test_build_quiet(self, mock_build):
+    def test_build_quiet(self, mock_build, mock_load_config):
 
         result = self.runner.invoke(
             cli.cli, ['build', '--quiet'], catch_exceptions=False)
@@ -352,9 +356,10 @@ class CLITests(unittest.TestCase):
             remote_name=None
         )
 
+    @mock.patch('mkdocs.config.load_config', autospec=True)
     @mock.patch('mkdocs.commands.build.build', autospec=True)
     @mock.patch('mkdocs.commands.gh_deploy.gh_deploy', autospec=True)
-    def test_gh_deploy_clean(self, mock_gh_deploy, mock_build):
+    def test_gh_deploy_clean(self, mock_gh_deploy, mock_build, mock_load_config):
 
         result = self.runner.invoke(
             cli.cli, ['gh-deploy', '--clean'], catch_exceptions=False)
@@ -366,9 +371,10 @@ class CLITests(unittest.TestCase):
         self.assertTrue('dirty' in kwargs)
         self.assertFalse(kwargs['dirty'])
 
+    @mock.patch('mkdocs.config.load_config', autospec=True)
     @mock.patch('mkdocs.commands.build.build', autospec=True)
     @mock.patch('mkdocs.commands.gh_deploy.gh_deploy', autospec=True)
-    def test_gh_deploy_dirty(self, mock_gh_deploy, mock_build):
+    def test_gh_deploy_dirty(self, mock_gh_deploy, mock_build, mock_load_config):
 
         result = self.runner.invoke(
             cli.cli, ['gh-deploy', '--dirty'], catch_exceptions=False)
