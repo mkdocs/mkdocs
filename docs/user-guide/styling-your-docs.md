@@ -39,7 +39,7 @@ A clone of the default theme used by the [Read the Docs] service. This theme
 only supports features in its parent theme and does not support any MkDocs
 [theme configuration options] in addition to the defaults.
 
-The mkdocs theme is located in the mkdocs repository at `mkdocs/themes/readthedocs/`.
+The readthedocs theme is located in the mkdocs repository at `mkdocs/themes/readthedocs/`.
 
 ![ReadTheDocs](http://docs.readthedocs.io/en/latest/_images/screen_mobile.png)
 
