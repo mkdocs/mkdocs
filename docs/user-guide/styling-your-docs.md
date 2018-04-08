@@ -58,7 +58,7 @@ customizations, including overriding templates, you will need to use the theme
 
 ### Using the docs_dir
 
-The [extra_css] and [extra_javascript] configuration options can be added to 
+The [extra_css] and [extra_javascript] configuration options can be added to
 `mkdocs.yml` to add additional CSS and Javascript files to existing themes.
 Include CSS or Javascript files within `docs_dir` (`docs/` by default) and
 itemize them under the `extra_css` heading in `mkdocs.yml`.
@@ -75,7 +75,7 @@ h1 {
 
 Then add the following to your `mkdocs.yml`:
 
-```
+```yaml
 extra_css:
   - custom.css
 ```
@@ -89,9 +89,9 @@ extra_css:
         extra_css: [extra.css]
 
 After addding these files and making the changes to `mkdocs.yml`,
-the changes should be visible when you run `mkdocs serve` - 
-if you already had this running, you should see changes to the 
-YAML file be automatically picked up and the documentation should be 
+the changes should be visible when you run `mkdocs serve` -
+if you already had this running, you should see changes to the
+YAML file be automatically picked up and the documentation should be
 updated.
 
 !!! note

@@ -19,9 +19,10 @@ and their usage.
 
 ## Creating a custom theme
 
-The bare minimum required for a custom theme is a [theme configuration file](#theme-configuration) 
+The bare minimum required for a custom theme is a 
+[theme configuration file](#theme-configuration) 
 and a `main.html` [Jinja2 template]
-file which is placed in a directory that is *not* a child of the [docs_dir].
+file, both placed in a directory that is *not* a child of the [docs_dir].
 Within `mkdocs.yml`, set the theme.[custom_dir] option to the path of the
 directory containing `main.html`. The path should be relative to the
 configuration file. For example, given this example project layout:
