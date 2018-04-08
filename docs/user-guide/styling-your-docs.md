@@ -89,7 +89,7 @@ extra_css:
         extra_css: [extra.css]
 
 After addding these files and making the changes to `mkdocs.yml`,
-the changes hsould be visible when you run `mkdocs serve` - 
+the changes should be visible when you run `mkdocs serve` - 
 if you already had this running, you should see changes to the 
 YAML file be automatically picked up and the documentation should be 
 updated.
