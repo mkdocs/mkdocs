@@ -66,6 +66,7 @@ authors should review how [search and themes] interact.
 
 ### Other Changes and Additions to Development Version
 
+* Add MkDocs version check to gh-deploy script (#640).
 * Improve Markdown extension error messages. (#782).
 * Drop official support for Python 3.3 and set `tornado>=5.0` (#1427).
 * Add support for GitLab edit links (#1435).

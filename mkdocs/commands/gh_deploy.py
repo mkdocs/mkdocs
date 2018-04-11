@@ -2,6 +2,8 @@ from __future__ import unicode_literals
 import logging
 import subprocess
 import os
+import re
+from pkg_resources import parse_version
 
 import mkdocs
 from mkdocs.utils import ghp_import
@@ -49,19 +51,48 @@ def _get_remote_url(remote_name):
     return host, path
 
 
-def gh_deploy(config, message=None, force=False):
+def _check_version(branch):
+
+    proc = subprocess.Popen(['git', 'show', '-s', '--format=%s', 'refs/heads/{}'.format(branch)],
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    stdout, _ = proc.communicate()
+    msg = stdout.decode('utf-8').strip()
+    m = re.search(r'\d+(\.\d+)+', msg, re.X | re.I)
+    previousv = parse_version(m.group()) if m else None
+    currentv = parse_version(mkdocs.__version__)
+    if not previousv:
+        log.warn('Version check skipped: No version specificed in previous deployment.')
+    elif currentv > previousv:
+        log.info(
+            'Previous deployment was done with MkDocs version {}; '
+            'you are deploying with a newer version ({})'.format(previousv, currentv)
+        )
+    elif currentv < previousv:
+        log.error(
+            'Deployment terminated: Previous deployment was made with MkDocs version {}; '
+            'you are attempting to deploy with an older version ({}). Use --ignore-version '
+            'to deploy anyway.'.format(previousv, currentv)
+        )
+        raise SystemExit(1)
+
+
+def gh_deploy(config, message=None, force=False, ignore_version=False):
 
     if not _is_cwd_git_repo():
         log.error('Cannot deploy - this directory does not appear to be a git '
                   'repository')
 
+    remote_branch = config['remote_branch']
+    remote_name = config['remote_name']
+
+    if not ignore_version:
+        _check_version(remote_branch)
+
     if message is None:
         message = default_message
     sha = _get_current_sha(os.path.dirname(config.config_file_path))
     message = message.format(version=mkdocs.__version__, sha=sha)
-
-    remote_branch = config['remote_branch']
-    remote_name = config['remote_name']
 
     log.info("Copying '%s' to '%s' branch and pushing to GitHub.",
              config['site_dir'], config['remote_branch'])
