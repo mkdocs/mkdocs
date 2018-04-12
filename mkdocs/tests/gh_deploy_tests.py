@@ -3,8 +3,9 @@ from __future__ import unicode_literals
 import unittest
 import mock
 
-from mkdocs.tests.base import load_config
+from mkdocs.tests.base import load_config, LogTestCase
 from mkdocs.commands import gh_deploy
+from mkdocs import __version__
 
 
 class TestGitHubDeploy(unittest.TestCase):
@@ -112,3 +113,43 @@ class TestGitHubDeploy(unittest.TestCase):
         self.assertRaises(SystemExit, gh_deploy.gh_deploy, config)
         mock_log.error.assert_called_once_with('Failed to deploy to GitHub with error: \n%s',
                                                error_string)
+
+
+class TestGitHubDeployLogs(LogTestCase):
+
+    @mock.patch('subprocess.Popen')
+    def test_mkdocs_newer(self, mock_popeno):
+
+        mock_popeno().communicate.return_value = (b'Deployed 12345678 with MkDocs version: 0.1.2\n', b'')
+
+        with self.assertLogs('mkdocs', level='INFO') as cm:
+            gh_deploy._check_version('gh-pages')
+        self.assertEqual(
+            cm.output, ['INFO:mkdocs.commands.gh_deploy:Previous deployment was done with MkDocs '
+                        'version 0.1.2; you are deploying with a newer version ({})'.format(__version__)]
+        )
+
+    @mock.patch('subprocess.Popen')
+    def test_mkdocs_older(self, mock_popeno):
+
+        mock_popeno().communicate.return_value = (b'Deployed 12345678 with MkDocs version: 10.1.2\n', b'')
+
+        with self.assertLogs('mkdocs', level='ERROR') as cm:
+            self.assertRaises(SystemExit, gh_deploy._check_version, 'gh-pages')
+        self.assertEqual(
+            cm.output, ['ERROR:mkdocs.commands.gh_deploy:Deployment terminated: Previous deployment was made with '
+                        'MkDocs version 10.1.2; you are attempting to deploy with an older version ({}). Use '
+                        '--ignore-version to deploy anyway.'.format(__version__)]
+        )
+
+    @mock.patch('subprocess.Popen')
+    def test_version_unknown(self, mock_popeno):
+
+        mock_popeno().communicate.return_value = (b'No version specified\n', b'')
+
+        with self.assertLogs('mkdocs', level='WARNING') as cm:
+            gh_deploy._check_version('gh-pages')
+        self.assertEqual(
+            cm.output,
+            ['WARNING:mkdocs.commands.gh_deploy:Version check skipped: No version specificed in previous deployment.']
+        )
