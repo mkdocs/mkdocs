@@ -89,6 +89,7 @@ remote_branch_help = ("The remote branch to commit to for Github Pages. This "
 remote_name_help = ("The remote name to commit to for Github Pages. This "
                     "overrides the value specified in config")
 force_help = "Force the push to the repository."
+ignore_version_help = "Ignore check that build is not being deployed with an older version of MkDocs."
 
 pgk_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -172,8 +173,9 @@ def build_command(clean, config_file, strict, theme, theme_dir, site_dir):
 @click.option('-b', '--remote-branch', help=remote_branch_help)
 @click.option('-r', '--remote-name', help=remote_name_help)
 @click.option('--force', is_flag=True, help=force_help)
+@click.option('--ignore-version', is_flag=True, help=ignore_version_help)
 @common_options
-def gh_deploy_command(config_file, clean, message, remote_branch, remote_name, force):
+def gh_deploy_command(config_file, clean, message, remote_branch, remote_name, force, ignore_version):
     """Deploy your documentation to GitHub Pages"""
     try:
         cfg = config.load_config(
@@ -182,7 +184,7 @@ def gh_deploy_command(config_file, clean, message, remote_branch, remote_name, f
             remote_name=remote_name
         )
         build.build(cfg, dirty=not clean)
-        gh_deploy.gh_deploy(cfg, message=message, force=force)
+        gh_deploy.gh_deploy(cfg, message=message, force=force, ignore_version=ignore_version)
     except exceptions.ConfigurationError as e:  # pragma: no cover
         # Avoid ugly, unhelpful traceback
         raise SystemExit('\n' + str(e))
