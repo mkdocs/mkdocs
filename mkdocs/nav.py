@@ -7,6 +7,7 @@ This consists of building a set of interlinked page and header objects.
 """
 
 from __future__ import unicode_literals
+from jinja2 import Template
 import datetime
 import logging
 import markdown
@@ -292,6 +293,10 @@ class Page(object):
             extensions=extensions,
             extension_configs=config['mdx_configs'] or {}
         )
+
+        rendered_md = Template(self.markdown)
+        self.markdown = rendered_md.render(extra=config.get('extra'))
+
         self.content = md.convert(self.markdown)
         self.toc = toc.TableOfContents(getattr(md, 'toc', ''))
 
