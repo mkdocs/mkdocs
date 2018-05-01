@@ -199,6 +199,7 @@ def build_extra_templates(extra_templates, config, site_navigation=None):
             'template_context', context, template_name=extra_template, config=config
         )
 
+        print(context)
         output_content = template.render(context)
 
         # Run `post_template` plugin events.
