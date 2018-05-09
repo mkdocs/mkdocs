@@ -21,6 +21,10 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Version 0.17.4
+
+* Bugfix: Add multi-level nesting support to sitemap.xml (#1482).
+
 ## Version 0.17.3 (2018-03-07)
 
 * Bugfix: Set dependency `tornado>=4.1,<5.0` due to changes in 5.0 (#1428).
