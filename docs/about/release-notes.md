@@ -88,6 +88,10 @@ authors should review how [search and themes] interact.
 * Update links to Python-Markdown library (#1360).
 * Document how to generate manpages for MkDocs commands (#686).
 
+## Version 0.17.4
+
+* Bugfix: Add multi-level nesting support to sitemap.xml (#1482).
+
 ## Version 0.17.3 (2018-03-07)
 
 * Bugfix: Set dependency `tornado>=4.1,<5.0` due to changes in 5.0 (#1428).
