@@ -19,6 +19,7 @@ import yaml
 import fnmatch
 
 from mkdocs import exceptions
+from .ghp_import import dec
 
 try:                                                        # pragma: no cover
     from urllib.parse import urlparse, urlunparse, urljoin  # noqa
@@ -141,6 +142,7 @@ def clean_directory(directory):
 
         # Don't remove hidden files from the directory. We never copy files
         # that are hidden, so we shouldn't delete them either.
+        entry = dec(entry)
         if entry.startswith('.'):
             continue
 

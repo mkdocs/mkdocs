@@ -12,6 +12,7 @@ import stat
 
 from mkdocs import nav, utils, exceptions
 from mkdocs.tests.base import dedent, load_config
+from mkdocs.utils.ghp_import import dec
 
 
 class UtilsTests(unittest.TestCase):
@@ -323,3 +324,35 @@ class UtilsTests(unittest.TestCase):
                     os.chmod(src, stat.S_IRUSR | stat.S_IWUSR)
             shutil.rmtree(src_dir)
             shutil.rmtree(dst_dir)
+
+    def test_unicode_clean_directory(self):
+        temp_dir = tempfile.mkdtemp()
+        utf8_temp_dir = os.path.join(dec('tmp'), dec('tmp_utf8'))
+
+        utf8_directory = os.path.join(utf8_temp_dir, '导航')
+        utf8_utf8_directory = os.path.join(utf8_directory, '导航')
+        ascii_directory = os.path.join(temp_dir, 'bar')
+        ascii_ascii_directory = os.path.join(ascii_directory, 'bar')
+
+        os.makedirs(utf8_utf8_directory)
+        os.makedirs(ascii_ascii_directory)
+
+        utf_8_path = os.path.join(utf8_utf8_directory, 'foo.txt')
+        ascii_path = os.path.join(ascii_ascii_directory, 'foo.txt')
+
+        with open(utf_8_path, 'w') as f:
+            f.write('content')
+
+        with open(ascii_path, 'w') as f:
+            f.write('content')
+
+        try:
+            utils.clean_directory(utf8_directory)
+            utils.clean_directory(ascii_directory)
+            self.assertFalse(os.path.exists(utf_8_path))
+            self.assertFalse(os.path.exists(ascii_path))
+            self.assertFalse(os.path.exists(utf8_utf8_directory))
+            self.assertFalse(os.path.exists(ascii_ascii_directory))
+        finally:
+            shutil.rmtree(temp_dir)
+            shutil.rmtree(utf8_temp_dir)
