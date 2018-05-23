@@ -239,7 +239,7 @@ class ConfigTests(unittest.TestCase):
             {'docs_dir': '.', 'site_dir': '.'},
             {'docs_dir': 'docs', 'site_dir': ''},
             {'docs_dir': '', 'site_dir': ''},
-            {'docs_dir': j('..', 'mkdocs', 'docs'), 'site_dir': 'docs'},
+            {'docs_dir': 'docs', 'site_dir': 'docs'},
         )
 
         conf = {
