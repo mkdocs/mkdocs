@@ -171,8 +171,9 @@ class Deprecated(BaseConfigOption):
         if config.get(key_name) is None or self.moved_to is None:
             return
 
-        warning = ('The configuration option {0} has been deprecated and will '
-                   'be removed in a future release of MkDocs.')
+        warning = ('The configuration option {0} has been deprecated and '
+                   'will be removed in a future release of MkDocs.'
+                   ''.format(key_name))
         self.warnings.append(warning)
 
         if '.' not in self.moved_to:
