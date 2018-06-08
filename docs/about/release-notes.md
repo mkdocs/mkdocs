@@ -38,7 +38,8 @@ The changes included in the refactor are summarized below.
   page is rendered (#1382).
 * Automatically populated navigation now sorts index pages to the top. In other
   words, The index page will be listed as the first child of a directory, while
-  all other documents are sorted alphanumerically by file name after the index page (#1042).
+  all other documents are sorted alphanumerically by file name after the index
+  page (#1042).
 * A `README.md` file is now treated as an index file within a directory and
   will be rendered to `index.html` (#608).
 * An [on_files] plugin event has been added, which could be used to include
