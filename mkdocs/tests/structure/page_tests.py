@@ -727,7 +727,7 @@ class RelativePathExtensionTests(LogTestCase):
             '<p><img alt="image" src="../image.png" /></p>'
         )
 
-    @mock.patch('io.open', mock.mock_open(read_data='***not** a link*.'))
+    @mock.patch('io.open', mock.mock_open(read_data='*__not__ a link*.'))
     def test_no_links(self):
         self.assertEqual(
             self.get_rendered_result(['index.md'], strict=True),
