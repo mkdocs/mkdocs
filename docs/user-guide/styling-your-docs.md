@@ -68,7 +68,7 @@ theme:
         - rust
 ```
 
-![ReadTheDocs](http://docs.readthedocs.io/en/latest/_images/screen_mobile.png)
+![ReadTheDocs](https://raw.githubusercontent.com/rtfd/sphinx_rtd_theme/master/docs/demo/static/screen_mobile.png)
 
 ### Third Party Themes
 
