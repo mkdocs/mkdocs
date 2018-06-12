@@ -66,6 +66,25 @@ nested URLs, like so:
 /license/
 ```
 
+### Index pages
+
+When a directory is requested, by default, most web servers will return an index
+file (usually named `index.html`) contained within that directory if one exists.
+For that reason, the homepage in all of the examples above has been named
+`index.md`, which MkDocs will render to `index.html` when building the site.
+
+Many repository hosting sites provide special treatment for README files by
+displaying the contents of the README file when browsing the contents of a
+directory. Therefore, MkDocs will allow you to name your index pages as
+`README.md` instead of `index.md`. In that way, when users are browsing your
+source code, the repository host can display the index page of that directory as
+it is a README file. However, when MkDocs renders your site, the file will be
+renamed to `index.html` so that the server will serve it as a proper index file.
+
+You should not include both an `index.md` file and a `README.md` file in the
+same directory. It is suggested that you chose a convention for your project and
+then stick to it.
+
 ### Configure Pages and Navigation
 
 The [nav](configuration.md#nav) configuration setting in your `mkdocs.yml` file
