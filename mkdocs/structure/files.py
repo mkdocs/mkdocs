@@ -1,9 +1,14 @@
 import fnmatch
 import os
+import shutil
+import logging
 import pathlib2 as pathlib
 from functools import cmp_to_key
 
 from mkdocs import utils
+
+
+log = logging.getLogger(__name__)
 
 
 class Files(object):
@@ -11,6 +16,7 @@ class Files(object):
     def __init__(self, files):
         self._files = files
         self.src_paths = {file.src_path: file for file in files}
+        self._dest_paths = {file.dest_path: file for file in files}
 
     def __iter__(self):
         return iter(self._files)
@@ -33,6 +39,13 @@ class Files(object):
         """ Append file to Files collection. """
         self._files.append(file)
         self.src_paths[file.src_path] = file
+        self._dest_paths[file.dest_path] = file
+
+    def copy_static_files(self, dirty=False):
+        """ Copy static files from source to destination. """
+        for file in self:
+            if not file.is_documentation_page():
+                file.copy_file(dirty)
 
     def documentation_pages(self):
         """ Return iterable of all Markdown page file objects. """
@@ -78,7 +91,7 @@ class File(object):
     File.abs_src_path
         The absolute concrete path of the source file.
 
-    File.abs_dest_path
+    File.dest_path
         The pure path of the destination file relative to the destination directory.
 
     File.abs_dest_path
@@ -130,6 +143,15 @@ class File(object):
     def url_relative_to(self, other):
         """ Return url for file relative to other file. """
         return utils.get_relative_url(self.url, other.url if isinstance(other, File) else other)
+
+    def copy_file(self, dirty=False):
+        """ Copy source file to destination, ensuring parent directories exist. """
+        if dirty and self.is_modified():
+            log.debug("Skip copying unmodified file: '{}'".format(self.src_path))
+        else:
+            log.debug("Copying media file: '{}'".format(self.src_path))
+            self.abs_dest_path.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(utils.text_type(self.abs_src_path), utils.text_type(self.abs_dest_path))
 
     def is_modified(self):
         try:

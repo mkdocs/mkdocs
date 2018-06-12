@@ -283,7 +283,7 @@ def build(config, live_server=False, dirty=False):
         _build_theme_template(template, env, files, config, nav)
 
     log.debug("Copying static assets from the docs dir.")
-    utils.copy_media_files(config['docs_dir'], config['site_dir'], dirty=dirty)
+    files.copy_static_files(dirty=dirty)
 
     for template in config['extra_templates']:
         _build_extra_template(template, files, config, nav)
