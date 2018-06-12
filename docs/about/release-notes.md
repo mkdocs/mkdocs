@@ -33,15 +33,19 @@ The changes included in the refactor are summarized below.
 * Support for hidden pages. All Markdown pages are now included in the build
   regardless of whether they are included in the navigation configuration
   (#699).
-* The navigation can now include links to external sites (#989 & #1373).
+* The navigation can now include links to external sites (#989 #1373 & #1406).
 * Page data (including titles) is properly determined for all pages before any
-  page is rendered (#1382).
+  page is rendered (#1347).
 * Automatically populated navigation now sorts index pages to the top. In other
   words, The index page will be listed as the first child of a directory, while
   all other documents are sorted alphanumerically by file name after the index
-  page (#1042).
+  page (#73 & #1042).
 * A `README.md` file is now treated as an index file within a directory and
   will be rendered to `index.html` (#608).
+* The URLs for all files are computed once and stored in a files collection.
+  This ensures all internal links are always computed correctly regardless of
+  the configuration. This also allows all internal links to be validated, not
+  just links to other Markdown pages. (#842 & #872).
 * An [on_files] plugin event has been added, which could be used to include
   files not in the `docs_dir`, exclude files, redefine page URLs (i.e.
   implement extensionless URLs), or to manipulate files in various other ways.
