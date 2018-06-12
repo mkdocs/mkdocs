@@ -184,7 +184,7 @@ MkDocs includes some extensions by default, which are highlighted below.
 
 MkDocs allows you to interlink your documentation by using regular Markdown
 [links]. However, there are a few additional benefits to formatting those links
-specifically for MkDocs as outlines below.
+specifically for MkDocs as outlined below.
 
 [links]: https://daringfireball.net/projects/markdown/syntax#link
 
@@ -314,6 +314,15 @@ Your image will now be embedded when you build the documentation, and should
 also be previewed if you're working on the documentation with a Markdown editor.
 
 [GitHub pages CNAME file]: https://help.github.com/articles/using-a-custom-domain-with-github-pages/
+
+#### Linking from raw HTML
+
+Markdown allows document authors to fall back to raw HTML when the Markdown
+syntax does not meets the author's needs. MkDocs does not limit Markdown in this
+regard. However, as all raw HTML is ignored by the Markdown parser, MkDocs is
+not able to validate or convert links contained in raw HTML. When including
+internal links within raw HTML, you will need to manually format the link
+appropriately for the rendered document.
 
 ### Meta-Data
 
