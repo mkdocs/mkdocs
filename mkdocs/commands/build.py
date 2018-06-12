@@ -249,6 +249,8 @@ def build(config, live_server=False, dirty=False):
     # First gather all data from all files/pages to ensure all data is consistent across all pages.
 
     files = get_files(config)
+    env = config['theme'].get_env()
+    files.add_files_from_theme(env, config)
 
     # Run `files` plugin events.
     files = config['plugins'].run_event('files', files, config=config)
@@ -262,8 +264,6 @@ def build(config, live_server=False, dirty=False):
     for file in files.documentation_pages():
         _populate_page(file.page, config, files, dirty)
 
-    env = config['theme'].get_env()
-
     # Run `env` plugin events.
     env = config['plugins'].run_event(
         'env', env, config=config, files=files
@@ -272,18 +272,11 @@ def build(config, live_server=False, dirty=False):
     # Start writing files to site_dir now that all data is gathered. Note that order matters. Files
     # with lower precedence get written first so that files with higher precedence can overwrite them.
 
-    # Reversed to maintain precedence.
-    for theme_dir in reversed(config['theme'].dirs):
-        log.debug("Copying static assets from theme directory: '{}'.".format(theme_dir))
-        utils.copy_media_files(
-            theme_dir, config['site_dir'], exclude=['*.py', '*.pyc', '*.html', 'mkdocs_theme.yml'], dirty=dirty
-        )
+    log.debug("Copying static assets.")
+    files.copy_static_files(dirty=dirty)
 
     for template in config['theme'].static_templates:
         _build_theme_template(template, env, files, config, nav)
-
-    log.debug("Copying static assets from the docs dir.")
-    files.copy_static_files(dirty=dirty)
 
     for template in config['extra_templates']:
         _build_extra_template(template, files, config, nav)

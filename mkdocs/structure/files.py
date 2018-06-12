@@ -16,7 +16,6 @@ class Files(object):
     def __init__(self, files):
         self._files = files
         self.src_paths = {file.src_path: file for file in files}
-        self._dest_paths = {file.dest_path: file for file in files}
 
     def __iter__(self):
         return iter(self._files)
@@ -39,7 +38,6 @@ class Files(object):
         """ Append file to Files collection. """
         self._files.append(file)
         self.src_paths[file.src_path] = file
-        self._dest_paths[file.dest_path] = file
 
     def copy_static_files(self, dirty=False):
         """ Copy static files from source to destination. """
@@ -66,6 +64,22 @@ class Files(object):
     def css_files(self):
         """ Return iterable of all CSS file objects. """
         return [file for file in self if file.is_css()]
+
+    def add_files_from_theme(self, env, config):
+        """ Retrieve static files from Jinja environment and add to collection. """
+        def filter(name):
+            patterns = ['.*', '*.py', '*.pyc', '*.html', 'mkdocs_theme.yml']
+            patterns.extend(config['theme'].static_templates)
+            for pattern in patterns:
+                if fnmatch.fnmatch(name, pattern):
+                    return False
+            return True
+        for path in env.list_templates(filter_func=filter):
+            for dir in config['theme'].dirs:
+                # Find the first theme dir which contains path
+                if pathlib.Path(dir, path).is_file():
+                    self.append(File(path, dir, config['site_dir'], config['use_directory_urls']))
+                    break
 
 
 class File(object):
