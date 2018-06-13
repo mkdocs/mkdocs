@@ -1,5 +1,9 @@
+# coding: utf-8
+
+from __future__ import unicode_literals
 import fnmatch
 import os
+import sys
 import shutil
 import logging
 import pathlib2 as pathlib
@@ -123,11 +127,11 @@ class File(object):
         self.abs_dest_path = pathlib.Path(dest_dir, self.dest_path)
 
         if use_directory_urls and self.dest_path.name == 'index.html':
-            self.url = self.dest_path.parent.as_posix()
+            self.url = self.dest_path.parent.as_posix().decode(sys.getfilesystemencoding())
             if self.url != '.':
                 self.url += '/'
         else:
-            self.url = self.dest_path.as_posix()
+            self.url = self.dest_path.as_posix().decode(sys.getfilesystemencoding())
 
     def __eq__(self, other):
 
