@@ -3,13 +3,12 @@
 
 from __future__ import unicode_literals
 import mock
-from pathlib2 import Path
 
 from mkdocs.structure.pages import Page
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.nav import get_navigation
 from mkdocs.commands import build
-from mkdocs.tests.base import load_config, LogTestCase, tempdir
+from mkdocs.tests.base import load_config, LogTestCase, tempdir, PathAssertionMixin
 from mkdocs.utils import meta
 
 
@@ -23,7 +22,7 @@ def build_page(title, path, config, md_src=''):
     return page, files
 
 
-class BuildTests(LogTestCase):
+class BuildTests(PathAssertionMixin, LogTestCase):
 
     # Test build.get_context
 
@@ -335,7 +334,7 @@ class BuildTests(LogTestCase):
         page.markdown = 'page content'
         page.content = '<p>page content</p>'
         build._build_page(page, cfg, files, nav, cfg['theme'].get_env())
-        self.assertTrue(Path(site_dir, 'index.html').is_file())
+        self.assertPathIsFile(site_dir, 'index.html')
 
     # TODO: fix this. It seems that jinja2 chokes on the mock object. Not sure how to resolve.
     # @tempdir()
@@ -357,12 +356,12 @@ class BuildTests(LogTestCase):
     #         ["INFO:mkdocs.commands.build:Page skipped: 'index.md'. Generated empty output."]
     #     )
     #     mock_template.render.assert_called_once()
-    #     self.assertFalse(Path(site_dir, 'index.html').is_file())
+    #     self.assertPathNotFile(site_dir, 'index.html')
 
     @tempdir(files={'index.md': 'page content'})
     @tempdir(files={'index.html': '<p>page content</p>'})
-    @mock.patch('io.open')
-    def test_build_page_dirty_modified(self, site_dir, docs_dir, mock_open):
+    @mock.patch('mkdocs.utils.write_file')
+    def test_build_page_dirty_modified(self, site_dir, docs_dir, mock_write_file):
         cfg = load_config(docs_dir=docs_dir, site_dir=site_dir, nav=['index.md'], plugins=[])
         files = Files([File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])])
         nav = get_navigation(files, cfg)
@@ -372,13 +371,13 @@ class BuildTests(LogTestCase):
         page.markdown = 'new page content'
         page.content = '<p>new page content</p>'
         build._build_page(page, cfg, files, nav, cfg['theme'].get_env(), dirty=True)
-        mock_open.assert_not_called()
+        mock_write_file.assert_not_called()
 
-    @tempdir(files={'index.html': '<p>page content</p>'})
-    @mock.patch('io.open')
-    def test_build_page_dirty_not_modified(self, site_dir, mock_open):
+    @tempdir(files={'testing.html': '<p>page content</p>'})
+    @mock.patch('mkdocs.utils.write_file')
+    def test_build_page_dirty_not_modified(self, site_dir, mock_write_file):
         cfg = load_config(site_dir=site_dir, nav=['index.md'], plugins=[])
-        files = Files([File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])])
+        files = Files([File('testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])])
         nav = get_navigation(files, cfg)
         page = files.documentation_pages()[0].page
         # Fake populate page
@@ -386,7 +385,7 @@ class BuildTests(LogTestCase):
         page.markdown = 'page content'
         page.content = '<p>page content</p>'
         build._build_page(page, cfg, files, nav, cfg['theme'].get_env(), dirty=True)
-        mock_open.assert_called_once()
+        mock_write_file.assert_called_once()
 
     @tempdir()
     def test_build_page_custom_template(self, site_dir):
@@ -400,11 +399,11 @@ class BuildTests(LogTestCase):
         page.markdown = 'page content'
         page.content = '<p>page content</p>'
         build._build_page(page, cfg, files, nav, cfg['theme'].get_env())
-        self.assertTrue(Path(site_dir, 'index.html').is_file())
+        self.assertPathIsFile(site_dir, 'index.html')
 
     @tempdir()
-    @mock.patch('io.open', side_effect=IOError('Error message.'))
-    def test_build_page_error(self, site_dir, mock_open):
+    @mock.patch('mkdocs.utils.write_file', side_effect=IOError('Error message.'))
+    def test_build_page_error(self, site_dir, mock_write_file):
         cfg = load_config(site_dir=site_dir, nav=['index.md'], plugins=[])
         files = Files([File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])])
         nav = get_navigation(files, cfg)
@@ -419,7 +418,7 @@ class BuildTests(LogTestCase):
             cm.output,
             ["ERROR:mkdocs.commands.build:Error building page 'index.md': Error message."]
         )
-        mock_open.assert_called_once()
+        mock_write_file.assert_called_once()
 
     # Test build.build
 
@@ -437,12 +436,12 @@ class BuildTests(LogTestCase):
         build.build(cfg)
 
         # Verify that only non-empty md file (coverted to html), static HTML file and image are copied.
-        self.assertTrue(Path(site_dir, 'index.html').is_file())
-        self.assertTrue(Path(site_dir, 'img.jpg').is_file())
-        self.assertTrue(Path(site_dir, 'static.html').is_file())
-        self.assertFalse(Path(site_dir, 'empty.md').exists())
-        self.assertFalse(Path(site_dir, '.hidden').exists())
-        self.assertFalse(Path(site_dir, '.git/hidden').exists())
+        self.assertPathIsFile(site_dir, 'index.html')
+        self.assertPathIsFile(site_dir, 'img.jpg')
+        self.assertPathIsFile(site_dir, 'static.html')
+        self.assertPathNotExists(site_dir, 'empty.md')
+        self.assertPathNotExists(site_dir, '.hidden')
+        self.assertPathNotExists(site_dir, '.git/hidden')
 
     @tempdir(files={'index.md': 'page content'})
     @tempdir()
@@ -451,17 +450,17 @@ class BuildTests(LogTestCase):
         build.build(cfg)
 
         # Verify only theme media are copied, not templates or Python files.
-        self.assertTrue(Path(site_dir, 'index.html').is_file())
-        self.assertTrue(Path(site_dir, '404.html').is_file())
-        self.assertTrue(Path(site_dir, 'js').is_dir())
-        self.assertTrue(Path(site_dir, 'css').is_dir())
-        self.assertTrue(Path(site_dir, 'img').is_dir())
-        self.assertTrue(Path(site_dir, 'fonts').is_dir())
-        self.assertFalse(Path(site_dir, '__init__.py').exists())
-        self.assertFalse(Path(site_dir, '__init__.pyc').exists())
-        self.assertFalse(Path(site_dir, 'base.html').exists())
-        self.assertFalse(Path(site_dir, 'content.html').exists())
-        self.assertFalse(Path(site_dir, 'main.html').exists())
+        self.assertPathIsFile(site_dir, 'index.html')
+        self.assertPathIsFile(site_dir, '404.html')
+        self.assertPathIsDir(site_dir, 'js')
+        self.assertPathIsDir(site_dir, 'css')
+        self.assertPathIsDir(site_dir, 'img')
+        self.assertPathIsDir(site_dir, 'fonts')
+        self.assertPathNotExists(site_dir, '__init__.py')
+        self.assertPathNotExists(site_dir, '__init__.pyc')
+        self.assertPathNotExists(site_dir, 'base.html')
+        self.assertPathNotExists(site_dir, 'content.html')
+        self.assertPathNotExists(site_dir, 'main.html')
 
     # Test build.site_directory_contains_stale_files
 

@@ -4,6 +4,7 @@ import unittest
 import os
 import sys
 import mock
+import io
 
 try:
     # py>=3.2
@@ -361,7 +362,8 @@ class PageTests(unittest.TestCase):
             fl = File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
             pg = Page(None, fl, cfg)
             # Create an UTF-8 Encoded file with BOM (as Micorsoft editors do). See #1186
-            fl.abs_src_path.write_text(md_src, encoding='utf-8-sig')
+            with io.open(fl.abs_src_path, 'w', encoding='utf-8-sig') as f:
+                f.write(md_src)
             # Now read the file.
             pg.read_source(cfg)
             # Ensure the BOM (`\ufeff`) is removed

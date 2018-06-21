@@ -2,18 +2,19 @@
 
 from __future__ import unicode_literals
 
-from mkdocs.structure.toc import get_toc
-from mkdocs.utils import meta, urlparse, urlunparse, urljoin, get_markdown_title, text_type
-from mkdocs.exceptions import MarkdownNotFound
+import os
+import io
+import datetime
+import logging
 
+import markdown
 from markdown.extensions import Extension
 from markdown.treeprocessors import Treeprocessor
 from markdown.util import AMP_SUBSTITUTE
-import markdown
-import datetime
-import logging
-import os
 
+from mkdocs.structure.toc import get_toc
+from mkdocs.utils import meta, urlparse, urlunparse, urljoin, get_markdown_title
+from mkdocs.exceptions import MarkdownNotFound
 
 log = logging.getLogger(__name__)
 
@@ -109,7 +110,7 @@ class Page(object):
 
     def _set_edit_url(self, repo_url, edit_uri):
         if repo_url and edit_uri:
-            src_path = self.file.src_path.as_posix()
+            src_path = self.file.src_path.replace('\\', '/')
             self.edit_url = urljoin(repo_url, edit_uri + src_path)
         else:
             self.edit_url = None
@@ -118,7 +119,8 @@ class Page(object):
         source = config['plugins'].run_event('page_read_source', None, config=config, page=self)
         if source is None:
             try:
-                source = self.file.abs_src_path.read_text(encoding='utf-8-sig', errors='strict')
+                with io.open(self.file.abs_src_path, 'r', encoding='utf-8-sig', errors='strict') as f:
+                    source = f.read()
             except IOError:
                 log.error('File not found: {}'.format(self.file.src_path))
                 raise
@@ -213,12 +215,11 @@ class _RelativePathTreeprocessor(Treeprocessor):
             return url
 
         # Determine the filepath of the target.
-        target_path = self.file.src_path.parent.joinpath(path)
-        target_path = os.path.normpath(text_type(target_path)).lstrip(os.sep)
+        target_path = os.path.join(os.path.dirname(self.file.src_path), path)
+        target_path = os.path.normpath(target_path).lstrip(os.sep)
 
         # Validate that the target exists in files collection.
         if target_path not in self.files:
-            # TODO: What if link is to file in theme?
             msg = (
                 "Documentation file '{}' contains a link to '{}' which does not exist "
                 "in the documentation directory.".format(self.file.src_path, target_path)

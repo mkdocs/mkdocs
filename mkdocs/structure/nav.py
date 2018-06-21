@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import logging
 
 from mkdocs.structure.pages import Page
-from mkdocs.utils import string_types, text_type, nest_paths
+from mkdocs.utils import string_types, nest_paths
 
 log = logging.getLogger(__name__)
 
@@ -83,7 +83,7 @@ class Link(object):
 
 def get_navigation(files, config):
     """ Build site navigation from config and files."""
-    nav_config = config['nav'] or nest_paths(text_type(f.src_path) for f in files.documentation_pages())
+    nav_config = config['nav'] or nest_paths(f.src_path for f in files.documentation_pages())
     items = _data_to_navigation(nav_config, files, config)
     if not isinstance(items, list):
         items = [items]
@@ -100,7 +100,7 @@ def get_navigation(files, config):
         log.info(
             'The following pages exist in the docs directory, but are not '
             'included in the "nav" configuration:\n  - {}'.format(
-                '\n  - '.join([text_type(file.src_path) for file in missing_from_config]))
+                '\n  - '.join([file.src_path for file in missing_from_config]))
         )
         # Any documentation files not found in the nav should still have an associated page.
         # However, these page objects are only accessable from File instances as `file.page`.

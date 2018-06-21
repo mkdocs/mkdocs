@@ -1,6 +1,5 @@
 import unittest
 import os
-import pathlib2 as pathlib
 
 try:
     # py>=3.2
@@ -9,7 +8,6 @@ except ImportError:
     from backports.tempfile import TemporaryDirectory
 
 from mkdocs.structure.files import Files, File, get_files, _sort_files, _filter_paths
-from mkdocs.utils import text_type
 from mkdocs.tests.base import load_config
 
 
@@ -41,12 +39,15 @@ class TestFiles(unittest.TestCase):
             ['a.md', 'a.md', 'b.md']
         )
 
+    def assertPathsEqual(self, a, b, msg=None):
+        self.assertEqual(a.replace('\\', '/'), b.replace('\\', '/'))
+
     def test_md_file(self):
         f = File('foo.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertEqual(f.src_path, pathlib.PurePath('foo.md'))
-        self.assertEqual(f.abs_src_path, pathlib.Path('/path/to/docs/foo.md'))
-        self.assertEqual(f.dest_path, pathlib.PurePath('foo.html'))
-        self.assertEqual(f.abs_dest_path, pathlib.Path('/path/to/site/foo.html'))
+        self.assertPathsEqual(f.src_path, 'foo.md')
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo.md')
+        self.assertPathsEqual(f.dest_path, 'foo.html')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo.html')
         self.assertEqual(f.url, 'foo.html')
         self.assertEqual(f.name, 'foo')
         self.assertTrue(f.is_documentation_page())
@@ -57,10 +58,10 @@ class TestFiles(unittest.TestCase):
 
     def test_md_file_use_directory_urls(self):
         f = File('foo.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertEqual(f.src_path, pathlib.PurePath('foo.md'))
-        self.assertEqual(f.abs_src_path, pathlib.Path('/path/to/docs/foo.md'))
-        self.assertEqual(f.dest_path, pathlib.PurePath('foo/index.html'))
-        self.assertEqual(f.abs_dest_path, pathlib.Path('/path/to/site/foo/index.html'))
+        self.assertPathsEqual(f.src_path, 'foo.md')
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo.md')
+        self.assertPathsEqual(f.dest_path, 'foo/index.html')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/index.html')
         self.assertEqual(f.url, 'foo/')
         self.assertEqual(f.name, 'foo')
         self.assertTrue(f.is_documentation_page())
@@ -71,10 +72,10 @@ class TestFiles(unittest.TestCase):
 
     def test_md_file_nested(self):
         f = File('foo/bar.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertEqual(f.src_path, pathlib.PurePath('foo/bar.md'))
-        self.assertEqual(f.abs_src_path, pathlib.Path('/path/to/docs/foo/bar.md'))
-        self.assertEqual(f.dest_path, pathlib.PurePath('foo/bar.html'))
-        self.assertEqual(f.abs_dest_path, pathlib.Path('/path/to/site/foo/bar.html'))
+        self.assertPathsEqual(f.src_path, 'foo/bar.md')
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.md')
+        self.assertPathsEqual(f.dest_path, 'foo/bar.html')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.html')
         self.assertEqual(f.url, 'foo/bar.html')
         self.assertEqual(f.name, 'bar')
         self.assertTrue(f.is_documentation_page())
@@ -85,10 +86,10 @@ class TestFiles(unittest.TestCase):
 
     def test_md_file_nested_use_directory_urls(self):
         f = File('foo/bar.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertEqual(f.src_path, pathlib.PurePath('foo/bar.md'))
-        self.assertEqual(f.abs_src_path, pathlib.Path('/path/to/docs/foo/bar.md'))
-        self.assertEqual(f.dest_path, pathlib.PurePath('foo/bar/index.html'))
-        self.assertEqual(f.abs_dest_path, pathlib.Path('/path/to/site/foo/bar/index.html'))
+        self.assertPathsEqual(f.src_path, 'foo/bar.md')
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.md')
+        self.assertPathsEqual(f.dest_path, 'foo/bar/index.html')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar/index.html')
         self.assertEqual(f.url, 'foo/bar/')
         self.assertEqual(f.name, 'bar')
         self.assertTrue(f.is_documentation_page())
@@ -99,10 +100,10 @@ class TestFiles(unittest.TestCase):
 
     def test_md_index_file(self):
         f = File('index.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertEqual(f.src_path, pathlib.PurePath('index.md'))
-        self.assertEqual(f.abs_src_path, pathlib.Path('/path/to/docs/index.md'))
-        self.assertEqual(f.dest_path, pathlib.PurePath('index.html'))
-        self.assertEqual(f.abs_dest_path, pathlib.Path('/path/to/site/index.html'))
+        self.assertPathsEqual(f.src_path, 'index.md')
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/index.md')
+        self.assertPathsEqual(f.dest_path, 'index.html')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/index.html')
         self.assertEqual(f.url, 'index.html')
         self.assertEqual(f.name, 'index')
         self.assertTrue(f.is_documentation_page())
@@ -113,10 +114,10 @@ class TestFiles(unittest.TestCase):
 
     def test_md_index_file_use_directory_urls(self):
         f = File('index.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertEqual(f.src_path, pathlib.PurePath('index.md'))
-        self.assertEqual(f.abs_src_path, pathlib.Path('/path/to/docs/index.md'))
-        self.assertEqual(f.dest_path, pathlib.PurePath('index.html'))
-        self.assertEqual(f.abs_dest_path, pathlib.Path('/path/to/site/index.html'))
+        self.assertPathsEqual(f.src_path, 'index.md')
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/index.md')
+        self.assertPathsEqual(f.dest_path, 'index.html')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/index.html')
         self.assertEqual(f.url, '.')
         self.assertEqual(f.name, 'index')
         self.assertTrue(f.is_documentation_page())
@@ -127,10 +128,10 @@ class TestFiles(unittest.TestCase):
 
     def test_md_index_file_nested(self):
         f = File('foo/index.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertEqual(f.src_path, pathlib.PurePath('foo/index.md'))
-        self.assertEqual(f.abs_src_path, pathlib.Path('/path/to/docs/foo/index.md'))
-        self.assertEqual(f.dest_path, pathlib.PurePath('foo/index.html'))
-        self.assertEqual(f.abs_dest_path, pathlib.Path('/path/to/site/foo/index.html'))
+        self.assertPathsEqual(f.src_path, 'foo/index.md')
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/index.md')
+        self.assertPathsEqual(f.dest_path, 'foo/index.html')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/index.html')
         self.assertEqual(f.url, 'foo/index.html')
         self.assertEqual(f.name, 'index')
         self.assertTrue(f.is_documentation_page())
@@ -141,10 +142,10 @@ class TestFiles(unittest.TestCase):
 
     def test_md_index_file_nested_use_directory_urls(self):
         f = File('foo/index.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertEqual(f.src_path, pathlib.PurePath('foo/index.md'))
-        self.assertEqual(f.abs_src_path, pathlib.Path('/path/to/docs/foo/index.md'))
-        self.assertEqual(f.dest_path, pathlib.PurePath('foo/index.html'))
-        self.assertEqual(f.abs_dest_path, pathlib.Path('/path/to/site/foo/index.html'))
+        self.assertPathsEqual(f.src_path, 'foo/index.md')
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/index.md')
+        self.assertPathsEqual(f.dest_path, 'foo/index.html')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/index.html')
         self.assertEqual(f.url, 'foo/')
         self.assertEqual(f.name, 'index')
         self.assertTrue(f.is_documentation_page())
@@ -155,10 +156,10 @@ class TestFiles(unittest.TestCase):
 
     def test_static_file(self):
         f = File('foo/bar.html', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertEqual(f.src_path, pathlib.PurePath('foo/bar.html'))
-        self.assertEqual(f.abs_src_path, pathlib.Path('/path/to/docs/foo/bar.html'))
-        self.assertEqual(f.dest_path, pathlib.PurePath('foo/bar.html'))
-        self.assertEqual(f.abs_dest_path, pathlib.Path('/path/to/site/foo/bar.html'))
+        self.assertPathsEqual(f.src_path, 'foo/bar.html')
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.html')
+        self.assertPathsEqual(f.dest_path, 'foo/bar.html')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.html')
         self.assertEqual(f.url, 'foo/bar.html')
         self.assertEqual(f.name, 'bar')
         self.assertFalse(f.is_documentation_page())
@@ -169,10 +170,10 @@ class TestFiles(unittest.TestCase):
 
     def test_static_file_use_directory_urls(self):
         f = File('foo/bar.html', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertEqual(f.src_path, pathlib.PurePath('foo/bar.html'))
-        self.assertEqual(f.abs_src_path, pathlib.Path('/path/to/docs/foo/bar.html'))
-        self.assertEqual(f.dest_path, pathlib.PurePath('foo/bar.html'))
-        self.assertEqual(f.abs_dest_path, pathlib.Path('/path/to/site/foo/bar.html'))
+        self.assertPathsEqual(f.src_path, 'foo/bar.html')
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.html')
+        self.assertPathsEqual(f.dest_path, 'foo/bar.html')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.html')
         self.assertEqual(f.url, 'foo/bar.html')
         self.assertEqual(f.name, 'bar')
         self.assertFalse(f.is_documentation_page())
@@ -183,10 +184,10 @@ class TestFiles(unittest.TestCase):
 
     def test_media_file(self):
         f = File('foo/bar.jpg', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertEqual(f.src_path, pathlib.PurePath('foo/bar.jpg'))
-        self.assertEqual(f.abs_src_path, pathlib.Path('/path/to/docs/foo/bar.jpg'))
-        self.assertEqual(f.dest_path, pathlib.PurePath('foo/bar.jpg'))
-        self.assertEqual(f.abs_dest_path, pathlib.Path('/path/to/site/foo/bar.jpg'))
+        self.assertPathsEqual(f.src_path, 'foo/bar.jpg')
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.jpg')
+        self.assertPathsEqual(f.dest_path, 'foo/bar.jpg')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.jpg')
         self.assertEqual(f.url, 'foo/bar.jpg')
         self.assertEqual(f.name, 'bar')
         self.assertFalse(f.is_documentation_page())
@@ -197,10 +198,10 @@ class TestFiles(unittest.TestCase):
 
     def test_media_file_use_directory_urls(self):
         f = File('foo/bar.jpg', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertEqual(f.src_path, pathlib.PurePath('foo/bar.jpg'))
-        self.assertEqual(f.abs_src_path, pathlib.Path('/path/to/docs/foo/bar.jpg'))
-        self.assertEqual(f.dest_path, pathlib.PurePath('foo/bar.jpg'))
-        self.assertEqual(f.abs_dest_path, pathlib.Path('/path/to/site/foo/bar.jpg'))
+        self.assertPathsEqual(f.src_path, 'foo/bar.jpg')
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.jpg')
+        self.assertPathsEqual(f.dest_path, 'foo/bar.jpg')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.jpg')
         self.assertEqual(f.url, 'foo/bar.jpg')
         self.assertEqual(f.name, 'bar')
         self.assertFalse(f.is_documentation_page())
@@ -211,10 +212,10 @@ class TestFiles(unittest.TestCase):
 
     def test_javascript_file(self):
         f = File('foo/bar.js', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertEqual(f.src_path, pathlib.PurePath('foo/bar.js'))
-        self.assertEqual(f.abs_src_path, pathlib.Path('/path/to/docs/foo/bar.js'))
-        self.assertEqual(f.dest_path, pathlib.PurePath('foo/bar.js'))
-        self.assertEqual(f.abs_dest_path, pathlib.Path('/path/to/site/foo/bar.js'))
+        self.assertPathsEqual(f.src_path, 'foo/bar.js')
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.js')
+        self.assertPathsEqual(f.dest_path, 'foo/bar.js')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.js')
         self.assertEqual(f.url, 'foo/bar.js')
         self.assertEqual(f.name, 'bar')
         self.assertFalse(f.is_documentation_page())
@@ -225,10 +226,10 @@ class TestFiles(unittest.TestCase):
 
     def test_javascript_file_use_directory_urls(self):
         f = File('foo/bar.js', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertEqual(f.src_path, pathlib.PurePath('foo/bar.js'))
-        self.assertEqual(f.abs_src_path, pathlib.Path('/path/to/docs/foo/bar.js'))
-        self.assertEqual(f.dest_path, pathlib.PurePath('foo/bar.js'))
-        self.assertEqual(f.abs_dest_path, pathlib.Path('/path/to/site/foo/bar.js'))
+        self.assertPathsEqual(f.src_path, 'foo/bar.js')
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.js')
+        self.assertPathsEqual(f.dest_path, 'foo/bar.js')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.js')
         self.assertEqual(f.url, 'foo/bar.js')
         self.assertEqual(f.name, 'bar')
         self.assertFalse(f.is_documentation_page())
@@ -239,10 +240,10 @@ class TestFiles(unittest.TestCase):
 
     def test_css_file(self):
         f = File('foo/bar.css', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertEqual(f.src_path, pathlib.PurePath('foo/bar.css'))
-        self.assertEqual(f.abs_src_path, pathlib.Path('/path/to/docs/foo/bar.css'))
-        self.assertEqual(f.dest_path, pathlib.PurePath('foo/bar.css'))
-        self.assertEqual(f.abs_dest_path, pathlib.Path('/path/to/site/foo/bar.css'))
+        self.assertPathsEqual(f.src_path, 'foo/bar.css')
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.css')
+        self.assertPathsEqual(f.dest_path, 'foo/bar.css')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.css')
         self.assertEqual(f.url, 'foo/bar.css')
         self.assertEqual(f.name, 'bar')
         self.assertFalse(f.is_documentation_page())
@@ -253,10 +254,10 @@ class TestFiles(unittest.TestCase):
 
     def test_css_file_use_directory_urls(self):
         f = File('foo/bar.css', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertEqual(f.src_path, pathlib.PurePath('foo/bar.css'))
-        self.assertEqual(f.abs_src_path, pathlib.Path('/path/to/docs/foo/bar.css'))
-        self.assertEqual(f.dest_path, pathlib.PurePath('foo/bar.css'))
-        self.assertEqual(f.abs_dest_path, pathlib.Path('/path/to/site/foo/bar.css'))
+        self.assertPathsEqual(f.src_path, 'foo/bar.css')
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.css')
+        self.assertPathsEqual(f.dest_path, 'foo/bar.css')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.css')
         self.assertEqual(f.url, 'foo/bar.css')
         self.assertEqual(f.name, 'bar')
         self.assertFalse(f.is_documentation_page())
@@ -282,11 +283,11 @@ class TestFiles(unittest.TestCase):
         self.assertEqual(files.media_files(), [fs[3], fs[4], fs[5]])
         self.assertEqual(files.javascript_files(), [fs[4]])
         self.assertEqual(files.css_files(), [fs[5]])
-        self.assertEqual(files.get_file_from_path(pathlib.PurePath('foo/bar.jpg')), fs[3])
+        self.assertEqual(files.get_file_from_path('foo/bar.jpg'), fs[3])
         self.assertEqual(files.get_file_from_path('foo/bar.jpg'), fs[3])
         self.assertEqual(files.get_file_from_path('missing.jpg'), None)
         self.assertTrue(fs[2].src_path in files)
-        self.assertTrue(text_type(fs[2].src_path) in files)
+        self.assertTrue(fs[2].src_path in files)
         extra_file = File('extra.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
         self.assertFalse(extra_file.src_path in files)
         files.append(extra_file)
@@ -536,7 +537,7 @@ class TestGetFiles(unittest.TestCase):
         files = get_files(self.config)
         self.assertIsInstance(files, Files)
         self.assertEqual(len(files), len(self.filenames))
-        self.assertEqual([f.src_path for f in files], [pathlib.PurePath(f) for f in self.filenames])
+        self.assertEqual([f.src_path for f in files], self.filenames)
 
     def tearDown(self):
         """ Clean up after test. """

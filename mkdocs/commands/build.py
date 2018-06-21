@@ -6,6 +6,7 @@ from calendar import timegm
 import logging
 import os
 import gzip
+import io
 
 from jinja2.exceptions import TemplateNotFound
 import jinja2
@@ -135,7 +136,8 @@ def _build_extra_template(template_name, files, config, nav):
         return
 
     try:
-        template = jinja2.Template(file.abs_src_path.read_text(encoding='utf-8', errors='strict'))
+        with io.open(file.abs_src_path, 'r', encoding='utf-8', errors='strict') as f:
+            template = jinja2.Template(f.read())
     except Exception as e:
         log.warn("Error reading template '{}': {}".format(template_name, e))
         return
@@ -143,8 +145,7 @@ def _build_extra_template(template_name, files, config, nav):
     output = _build_template(template_name, template, files, config, nav)
 
     if output.strip():
-        file.abs_dest_path.parent.mkdir(parents=True, exist_ok=True)
-        file.abs_dest_path.write_text(output, encoding='utf-8')
+        utils.write_file(output.encode('utf-8'), file.abs_dest_path)
     else:
         log.info("Template skipped: '{}' generated empty output.".format(template_name))
 
@@ -215,8 +216,7 @@ def _build_page(page, config, files, nav, env, dirty=False):
 
         # Write the output file.
         if output.strip():
-            page.file.abs_dest_path.parent.mkdir(parents=True, exist_ok=True)
-            page.file.abs_dest_path.write_text(output, encoding='utf-8', errors='xmlcharrefreplace')
+            utils.write_file(output.encode('utf-8', errors='xmlcharrefreplace'), page.file.abs_dest_path)
         else:
             log.info("Page skipped: '{}'. Generated empty output.".format(page.file.src_path))
     except Exception as e:

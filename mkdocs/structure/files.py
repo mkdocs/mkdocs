@@ -3,10 +3,7 @@
 from __future__ import unicode_literals
 import fnmatch
 import os
-import sys
-import shutil
 import logging
-import pathlib2 as pathlib
 from functools import cmp_to_key
 
 from mkdocs import utils
@@ -28,15 +25,11 @@ class Files(object):
         return len(self._files)
 
     def __contains__(self, path):
-        if not isinstance(path, pathlib.PurePath):
-            path = pathlib.PurePath(path)
         return path in self.src_paths
 
     def get_file_from_path(self, path):
         """ Return a File instance with File.src_path equal to path. """
-        if not isinstance(path, pathlib.PurePath):
-            path = pathlib.PurePath(path)
-        return self.src_paths.get(path)
+        return self.src_paths.get(os.path.normpath(path))
 
     def append(self, file):
         """ Append file to Files collection. """
@@ -81,7 +74,7 @@ class Files(object):
         for path in env.list_templates(filter_func=filter):
             for dir in config['theme'].dirs:
                 # Find the first theme dir which contains path
-                if pathlib.Path(dir, path).is_file():
+                if os.path.isfile(os.path.join(dir, path)):
                     self.append(File(path, dir, config['site_dir'], config['use_directory_urls']))
                     break
 
@@ -101,7 +94,7 @@ class File(object):
     mapped to an HTML index file (`index.html`) nested in a directory using the "name" of the file in `path`. The
     `use_directory_urls` argument has no effect on non-Markdown files.
 
-    File objects have the following properties, which are represented as pathlib objects (except for `url`):
+    File objects have the following properties, which are Unicode strings:
 
     File.src_path
         The pure path of the source file relative to the source directory.
@@ -120,18 +113,12 @@ class File(object):
     """
     def __init__(self, path, src_dir, dest_dir, use_directory_urls):
         self.page = None
-        self.src_path = pathlib.PurePath(path)
-        self.abs_src_path = pathlib.Path(src_dir, self.src_path)
-        self.name = 'index' if self.src_path.stem in ('index', 'README') else self.src_path.stem
+        self.src_path = os.path.normpath(path)
+        self.abs_src_path = os.path.normpath(os.path.join(src_dir, self.src_path))
+        self.name = self._get_stem()
         self.dest_path = self._get_dest_path(use_directory_urls)
-        self.abs_dest_path = pathlib.Path(dest_dir, self.dest_path)
-
-        if use_directory_urls and self.dest_path.name == 'index.html':
-            self.url = self.dest_path.parent.as_posix().decode(sys.getfilesystemencoding())
-            if self.url != '.':
-                self.url += '/'
-        else:
-            self.url = self.dest_path.as_posix().decode(sys.getfilesystemencoding())
+        self.abs_dest_path = os.path.normpath(os.path.join(dest_dir, self.dest_path))
+        self.url = self._get_url(use_directory_urls)
 
     def __eq__(self, other):
 
@@ -143,20 +130,39 @@ class File(object):
     def __ne__(self, other):
         return not self.__eq__(other)
 
+    def _get_stem(self):
+        """ Return the name of the file without it's extension. """
+        filename = os.path.basename(self.src_path)
+        stem, ext = os.path.splitext(filename)
+        return 'index' if stem in ('index', 'README') else stem
+
     def _get_dest_path(self, use_directory_urls):
-        """ Map source document path to the destination path. """
+        """ Return destination path based on source path. """
         if self.is_documentation_page():
             if use_directory_urls:
-                if self.src_path.stem in ('index', 'README'):
+                parent, filename = os.path.split(self.src_path)
+                if self.name == 'index':
                     # index.md or README.md => index.html
-                    return self.src_path.with_name('index.html')
+                    return os.path.join(parent, 'index.html')
                 else:
                     # foo.md => foo/index.html
-                    return pathlib.PurePath(self.src_path.parent, self.src_path.stem, 'index.html')
+                    return os.path.join(parent, self.name, 'index.html')
             else:
                 # foo.md => foo.html
-                return self.src_path.with_suffix('.html')
-        return pathlib.PurePath(self.src_path)
+                root, ext = os.path.splitext(self.src_path)
+                return root + '.html'
+        return self.src_path
+
+    def _get_url(self, use_directory_urls):
+        """ Return url based in destination path. """
+        url = self.dest_path.replace(os.path.sep, '/')
+        dirname, filename = os.path.split(url)
+        if use_directory_urls and filename == 'index.html':
+            if dirname == '':
+                url = '.'
+            else:
+                url = dirname + '/'
+        return url
 
     def url_relative_to(self, other):
         """ Return url for file relative to other file. """
@@ -168,23 +174,20 @@ class File(object):
             log.debug("Skip copying unmodified file: '{}'".format(self.src_path))
         else:
             log.debug("Copying media file: '{}'".format(self.src_path))
-            self.abs_dest_path.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(utils.text_type(self.abs_src_path), utils.text_type(self.abs_dest_path))
+            utils.copy_file(self.abs_src_path, self.abs_dest_path)
 
     def is_modified(self):
-        try:
-            return self.abs_dest_path.stat().st_mtime < self.abs_src_path.stat().st_mtime
-        except OSError:
-            # abs_dest_path doesn't exit
-            return True
+        if os.path.isfile(self.abs_dest_path):
+            return os.path.getmtime(self.abs_dest_path) < os.path.getmtime(self.abs_src_path)
+        return True
 
     def is_documentation_page(self):
         """ Return True if file is a Markdown page. """
-        return self.src_path.suffix in utils.markdown_extensions
+        return os.path.splitext(self.src_path)[1] in utils.markdown_extensions
 
     def is_static_page(self):
         """ Return True if file is a static page (html, xml, json). """
-        return self.src_path.suffix in (
+        return os.path.splitext(self.src_path)[1] in (
             '.html',
             '.htm',
             '.xml',
@@ -197,14 +200,14 @@ class File(object):
 
     def is_javascript(self):
         """ Return True if file is a JavaScript file. """
-        return self.src_path.suffix in (
+        return os.path.splitext(self.src_path)[1] in (
             '.js',
             '.javascript',
         )
 
     def is_css(self):
         """ Return True if file is a CSS file. """
-        return self.src_path.suffix in (
+        return os.path.splitext(self.src_path)[1] in (
             '.css',
         )
 

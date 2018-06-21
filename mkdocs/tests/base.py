@@ -90,6 +90,50 @@ def tempdir(files=None, **kw):
     return decorator
 
 
+class PathAssertionMixin(object):
+    """
+    Assertion methods for testing paths.
+
+    Each method accepts one or more strings, which are first joined us os.path.join.
+    """
+
+    def assertPathExists(self, *parts):
+        path = os.path.join(*parts)
+        if not os.path.exists(path):
+            msg = self._formatMessage(None, "The path '{}' does not exist".format(path))
+            raise self.failureException(msg)
+
+    def assertPathNotExists(self, *parts):
+        path = os.path.join(*parts)
+        if os.path.exists(path):
+            msg = self._formatMessage(None, "The path '{}' does exist".format(path))
+            raise self.failureException(msg)
+
+    def assertPathIsFile(self, *parts):
+        path = os.path.join(*parts)
+        if not os.path.isfile(path):
+            msg = self._formatMessage(None, "The path '{}' is not a file that exists".format(path))
+            raise self.failureException(msg)
+
+    def assertPathNotFile(self, *parts):
+        path = os.path.join(*parts)
+        if os.path.isfile(path):
+            msg = self._formatMessage(None, "The path '{}' is a file that exists".format(path))
+            raise self.failureException(msg)
+
+    def assertPathIsDir(self, *parts):
+        path = os.path.join(*parts)
+        if not os.path.isdir(path):
+            msg = self._formatMessage(None, "The path '{}' is not a directory that exists".format(path))
+            raise self.failureException(msg)
+
+    def assertPathNotDir(self, *parts):
+        path = os.path.join(*parts)
+        if os.path.isfile(path):
+            msg = self._formatMessage(None, "The path '{}' is a directory that exists".format(path))
+            raise self.failureException(msg)
+
+
 # Backport unittest.TestCase.assertLogs for Python 2.7
 # see https://github.com/python/cpython/blob/3.6/Lib/unittest/case.py
 
