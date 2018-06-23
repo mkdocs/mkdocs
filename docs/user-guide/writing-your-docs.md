@@ -174,7 +174,7 @@ configuration setting for details on how to enable extensions.
 MkDocs includes some extensions by default, which are highlighted below.
 
 [Python-Markdown]: https://python-markdown.github.io/
-[md]: http://daringfireball.net/projects/markdown/
+[md]: https://daringfireball.net/projects/markdown/
 [differences]: https://python-markdown.github.io/#differences
 [syntax]: https://daringfireball.net/projects/markdown/syntax
 [extensions]: https://python-markdown.github.io/extensions/

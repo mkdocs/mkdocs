@@ -622,4 +622,4 @@ For a much more detailed guide, see the official Python packaging
 documentation for [Packaging and Distributing Projects].
 
 [Packaging and Distributing Projects]: https://packaging.python.org/en/latest/distributing/
-[theme]: ./configuration/#theme
+[theme]: ./configuration.md#theme

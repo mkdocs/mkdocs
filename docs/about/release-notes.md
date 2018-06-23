@@ -297,7 +297,7 @@ template exists.
 ##### Context Variables
 
 Page specific variable names in the template context have been refactored as
-defined in [Custom Themes](../user-guide/custom-themes/#page). The
+defined in [Custom Themes](../user-guide/custom-themes.md#page). The
 old variable names issued a warning in version 0.16, but have been removed in
 version 1.0.
 
@@ -315,14 +315,14 @@ user created and third-party templates:
 | previous_page     | [page.previous_page]|
 | next_page         | [page.next_page]    |
 
-[page]: ../user-guide/custom-themes/#page
-[page.title]: ../user-guide/custom-themes/#pagetitle
-[page.content]: ../user-guide/custom-themes/#pagecontent
-[page.toc]: ../user-guide/custom-themes/#pagetoc
-[page.meta]: ../user-guide/custom-themes/#pagemeta
-[page.canonical_url]: ../user-guide/custom-themes/#pagecanonical_url
-[page.previous_page]: ../user-guide/custom-themes/#pageprevious_page
-[page.next_page]: ../user-guide/custom-themes/#pagenext_page
+[page]: ../user-guide/custom-themes.md#page
+[page.title]: ../user-guide/custom-themes.md#pagetitle
+[page.content]: ../user-guide/custom-themes.md#pagecontent
+[page.toc]: ../user-guide/custom-themes.md#pagetoc
+[page.meta]: ../user-guide/custom-themes.md#pagemeta
+[page.canonical_url]: ../user-guide/custom-themes.md#pagecanonical_url
+[page.previous_page]: ../user-guide/custom-themes.md#pageprevious_page
+[page.next_page]: ../user-guide/custom-themes.md#pagenext_page
 
 Additionally, a number of global variables have been altered and/or removed
 and user created and third-party templates should be updated as outlined below:
@@ -402,7 +402,7 @@ the `extra_css` or `extra_javascript` config settings going forward.
 ##### Page Context
 
 Page specific variable names in the template context have been refactored as
-defined in [Custom Themes](../user-guide/custom-themes/#page). The
+defined in [Custom Themes](../user-guide/custom-themes.md#page). The
 old variable names will issue a warning but continue to work for version 0.16,
 but may be removed in a future version.
 
@@ -420,14 +420,14 @@ user created and third-party templates:
 | previous_page     | [page.previous_page]|
 | next_page         | [page.next_page]    |
 
-[page]: ../user-guide/custom-themes/#page
-[page.title]: ../user-guide/custom-themes/#pagetitle
-[page.content]: ../user-guide/custom-themes/#pagecontent
-[page.toc]: ../user-guide/custom-themes/#pagetoc
-[page.meta]: ../user-guide/custom-themes/#pagemeta
-[page.canonical_url]: ../user-guide/custom-themes/#pagecanonical_url
-[page.previous_page]: ../user-guide/custom-themes/#pageprevious_page
-[page.next_page]: ../user-guide/custom-themes/#pagenext_page
+[page]: ../user-guide/custom-themes.md#page
+[page.title]: ../user-guide/custom-themes.md#pagetitle
+[page.content]: ../user-guide/custom-themes.md#pagecontent
+[page.toc]: ../user-guide/custom-themes.md#pagetoc
+[page.meta]: ../user-guide/custom-themes.md#pagemeta
+[page.canonical_url]: ../user-guide/custom-themes.md#pagecanonical_url
+[page.previous_page]: ../user-guide/custom-themes.md#pageprevious_page
+[page.next_page]: ../user-guide/custom-themes.md#pagenext_page
 
 ##### Global Context
 
@@ -516,7 +516,7 @@ overriding blocks in the same manner as the built-in themes. Third party themes
 are encouraged to wrap the various pieces of their templates in blocks in order
 to support such customization.
 
-[blocks]: ../user-guide/styling-your-docs/#overriding-template-blocks
+[blocks]: ../user-guide/styling-your-docs.md#overriding-template-blocks
 
 #### Auto-Populated `extra_css` and `extra_javascript` Deprecated. (#986)
 
@@ -560,7 +560,7 @@ the `docs_dir` is set to the directory which contains your config file rather
 than a child directory. You will need to rearrange you directory structure to
 better conform with the documented [layout].
 
-[layout]: ../user-guide/writing-your-docs/#file-layout
+[layout]: ../user-guide/writing-your-docs.md#file-layout
 
 ### Other Changes and Additions to Version 0.16.0
 
@@ -638,8 +638,8 @@ See the documentation for [Styling your docs] for more information about using
 and customizing themes and [Custom themes] for creating and distributing new
 themes
 
-[Styling your docs]: /user-guide/styling-your-docs.md
-[Custom themes]: /user-guide/custom-themes.md
+[Styling your docs]: ../user-guide/styling-your-docs.md
+[Custom themes]: ../user-guide/custom-themes.md
 
 ### Other Changes and Additions to Version 0.15.0
 
@@ -660,9 +660,9 @@ themes
 * Bugfix: Provide filename to Read the Docs. (#721 and RTD#1480)
 * Bugfix: Silence Click's unicode_literals warning. (#708)
 
-[site_description]: /user-guide/configuration.md#site_description
-[site_author]: /user-guide/configuration.md#site_author
-[ReadTheDocs]: /user-guide/styling-your-docs.md#readthedocs
+[site_description]: ../user-guide/configuration.md#site_description
+[site_author]: ../user-guide/configuration.md#site_author
+[ReadTheDocs]: ../user-guide/styling-your-docs.md#readthedocs
 
 ## Version 0.14.0 (2015-06-09)
 
@@ -720,7 +720,7 @@ This new file is created on every MkDocs build (with `mkdocs build`) and
 no configuration is needed to enable it.
 
 [future release]: https://github.com/mkdocs/mkdocs/pull/481
-[site_dir]: /user-guide/configuration.md#site_dir
+[site_dir]: ../user-guide/configuration.md#site_dir
 
 #### Change the pages configuration
 
@@ -728,8 +728,8 @@ Provide a [new way] to define pages, and specifically [nested pages], in the
 mkdocs.yml file and deprecate the existing approach, support will be removed
 with MkDocs 1.0.
 
-[new way]: /user-guide/writing-your-docs.md#configure-pages-and-navigation
-[nested pages]: /user-guide/writing-your-docs.md#multilevel-documentation
+[new way]: ../user-guide/writing-your-docs.md#configure-pages-and-navigation
+[nested pages]: ../user-guide/writing-your-docs.md#multilevel-documentation
 
 #### Warn users about the removal of builtin themes
 
@@ -747,7 +747,7 @@ JavaScript library [lunr.js]. It has been added to both the `mkdocs` and
 for adding it to your own themes.
 
 [lunr.js]: http://lunrjs.com/
-[supporting search]: /user-guide/styling-your-docs.md#search-and-themes
+[supporting search]: ../user-guide/styling-your-docs.md#search-and-themes
 
 #### New Command Line Interface
 
@@ -775,10 +775,10 @@ can also use Jinja2 syntax and take advantage of the [global variables].
 By default MkDocs will use this approach to create a sitemap for the
 documentation.
 
-[extra_javascript]: /user-guide/configuration.md#extra_javascript
-[extra_css]: /user-guide/configuration.md#extra_css
-[extra_templates]: /user-guide/configuration.md#extra_templates
-[global variables]: /user-guide/styling-your-docs.md#global-context
+[extra_javascript]: ../user-guide/configuration.md#extra_javascript
+[extra_css]: ../user-guide/configuration.md#extra_css
+[extra_templates]: ../user-guide/configuration.md#extra_templates
+[global variables]: ../user-guide/styling-your-docs.md#global-context
 
 ### Other Changes and Additions to Version 0.13.0
 
@@ -795,8 +795,8 @@ documentation.
   called index.md (#535)
 * Bugfix: Fix errors with Unicode filenames (#542).
 
-[extra config]: /user-guide/configuration.md#extra
-[Markdown extension configuration options]: /user-guide/configuration.md#markdown_extensions
+[extra config]: ../user-guide/configuration.md#extra
+[Markdown extension configuration options]: ../user-guide/configuration.md#markdown_extensions
 [wheels]: http://pythonwheels.com/
 
 ## Version 0.12.2 (2015-04-22)

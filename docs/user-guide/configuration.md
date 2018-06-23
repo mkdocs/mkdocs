@@ -554,7 +554,7 @@ You may [contribute additional languages].
  any reason, a warning is issued. You may use the `--strict` flag when building
  to cause such a failure to raise an error instead.
 
- !!! Note
+!!! Note
 
     On smaller sites, using a pre-built index is not recommended as it creates a
     significant increase is bandwidth requirements with little to no noticeable
@@ -580,3 +580,4 @@ You may [contribute additional languages].
 [ISO 639-1]: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 [Lunr Languages]: https://github.com/MihaiValentin/lunr-languages#lunr-languages-----
 [contribute additional languages]: https://github.com/MihaiValentin/lunr-languages/blob/master/CONTRIBUTING.md
+[Node.js]: https://nodejs.org/

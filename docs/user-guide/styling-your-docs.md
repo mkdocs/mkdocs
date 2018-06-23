@@ -6,9 +6,8 @@ How to style and theme your documentation.
 
 MkDocs includes a couple [built-in themes] as well as various [third party
 themes], all of which can easily be customized with [extra CSS or
-JavaScript][docs_dir] or overridden from the [theme directory][theme_dir]. You
-can also create your own [custom theme] from the ground up for your
-documentation.
+JavaScript][docs_dir] or overridden from the theme's [custom_dir]. You can also
+create your own [custom theme] from the ground up for your documentation.
 
 To use a theme that is included in MkDocs, simply add this to your
 `mkdocs.yml` config file.
@@ -261,21 +260,21 @@ any additional CSS files included in the `custom_dir`.
 [browse source]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes/mkdocs
 [built-in themes]: #built-in-themes
 [Bootstrap]: http://getbootstrap.com/
-[theme configuration options]: configuration.md#theme
+[theme configuration options]: ./configuration.md#theme
 [Read the Docs]: https://readthedocs.org/
 [community wiki]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
 [custom theme]: ./custom-themes.md
 [customize]: #customizing-a-theme
 [docs_dir]: #using-the-docs_dir
-[documentation directory]: ./configuration/#docs_dir
+[documentation directory]: ./configuration.md#docs_dir
 [extra_css]: ./configuration.md#extra_css
 [extra_javascript]: ./configuration.md#extra_javascript
 [Jinja documentation]: http://jinja.pocoo.org/docs/dev/templates/#template-inheritance
 [mkdocs]: #mkdocs
 [ReadTheDocs]: ./deploying-your-docs.md#readthedocs
 [Template Variables]: ./custom-themes.md#template-variables
-[custom_dir]: ./configuration/#custom_dir
-[name]: ./configuration/#name
+[custom_dir]: ./configuration.md#custom_dir
+[name]: ./configuration.md#name
 [third party themes]: #third-party-themes
 [super block]: http://jinja.pocoo.org/docs/dev/templates/#super-blocks
 [base_url]: ./custom-themes.md#base_url
