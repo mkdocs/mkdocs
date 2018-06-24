@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 import logging
 import os
+import sys
 
 from mkdocs import exceptions
 from mkdocs import utils
@@ -28,6 +29,13 @@ class Config(utils.UserDict):
 
         self._schema = schema
         self._schema_keys = set(dict(schema).keys())
+        # Ensure config_file_path is a Unicode string
+        if config_file_path is not None and not isinstance(config_file_path, utils.text_type):
+            try:
+                # Assume config_file_path is encoded with the file system encoding.
+                config_file_path = config_file_path.decode(encoding=sys.getfilesystemencoding())
+            except UnicodeDecodeError:
+                raise ValidationError("config_file_path is not a Unicode string.")
         self.config_file_path = config_file_path
         self.data = {}
 

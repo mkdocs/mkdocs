@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
 
-from collections import Sequence
 import os
-from collections import namedtuple
+import sys
+from collections import Sequence, namedtuple
 import markdown
 
 from mkdocs import utils, theme, plugins
@@ -293,31 +293,29 @@ class FilesystemObject(Type):
     def __init__(self, exists=False, **kwargs):
         super(FilesystemObject, self).__init__(type_=utils.string_types, **kwargs)
         self.exists = exists
+        self.config_dir = None
 
     def pre_validation(self, config, key_name):
-        value = config[key_name]
+        self.config_dir = os.path.dirname(config.config_file_path) if config.config_file_path else None
 
-        if not value:
-            return
-
-        if os.path.isabs(value):
-            return
-
-        if config.config_file_path is None:
-            # Unable to determine absolute path of the config file; fall back
-            # to trusting the relative path
-            return
-
-        config_dir = os.path.dirname(config.config_file_path)
-        value = os.path.join(config_dir, value)
-        config[key_name] = value
 
     def run_validation(self, value):
         value = super(FilesystemObject, self).run_validation(value)
+        # Ensure value is a Unicode string
+        if not isinstance(value, utils.text_type):
+            try:
+                # Assume value is encoded with the file system encoding.
+                value = value.decode(encoding=sys.getfilesystemencoding())
+            except UnicodeDecodeError:
+                raise ValidationError("The path is not a Unicode string.")
+        if self.config_dir and not os.path.isabs(value):
+            value = os.path.join(self.config_dir, value)
         if self.exists and not self.existence_test(value):
             raise ValidationError("The path {path} isn't an existing {name}.".
                                   format(path=value, name=self.name))
-        return os.path.abspath(value)
+        value = os.path.abspath(value)
+        assert isinstance(value, utils.text_type)
+        return value
 
 
 class Dir(FilesystemObject):
@@ -390,6 +388,8 @@ class ThemeDir(Dir):
 
         if config.get(key_name) is None:
             return
+
+        super(ThemeDir, self).pre_validation(config, key_name)
 
         warning = ('The configuration option {0} has been deprecated and will '
                    'be removed in a future release of MkDocs.')

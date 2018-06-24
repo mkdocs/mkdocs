@@ -1,6 +1,9 @@
+# UTF-8
+
 from __future__ import unicode_literals
 
 import os
+import sys
 import unittest
 from mock import patch
 
@@ -273,14 +276,87 @@ class DirTest(unittest.TestCase):
         self.assertRaises(config_options.ValidationError,
                           option.validate, [])
 
-    def test_doc_dir_is_config_dir(self):
+    def test_dir_unicode(self):
         cfg = Config(
-            [('docs_dir', config_options.Dir())],
+            [('dir', config_options.Dir())],
             config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
         )
 
         test_config = {
-            'docs_dir': '.'
+            'dir': '\xccbersicht'
+        }
+
+        cfg.load_dict(test_config)
+
+        fails, warns = cfg.validate()
+
+        self.assertEqual(len(fails), 0)
+        self.assertEqual(len(warns), 0)
+        self.assertIsInstance(cfg['dir'], utils.text_type)
+
+    def test_dir_filesystemencoding(self):
+        cfg = Config(
+            [('dir', config_options.Dir())],
+            config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
+        )
+
+        test_config = {
+            'dir': '\xccbersicht'.encode(encoding=sys.getfilesystemencoding())
+        }
+
+        cfg.load_dict(test_config)
+
+        fails, warns = cfg.validate()
+
+        self.assertEqual(len(fails), 0)
+        self.assertEqual(len(warns), 0)
+        self.assertIsInstance(cfg['dir'], utils.text_type)
+
+    def test_dir_bad_encoding_fails(self):
+        cfg = Config(
+            [('dir', config_options.Dir())],
+            config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
+        )
+
+        test_config = {
+            'dir': '\xccbersicht'.encode(encoding='utf-16')
+        }
+
+        cfg.load_dict(test_config)
+
+        fails, warns = cfg.validate()
+
+        self.assertEqual(len(fails), 1)
+        self.assertEqual(len(warns), 0)
+
+    def test_config_dir_prepended(self):
+        base_path = os.path.abspath('.')
+        cfg = Config(
+            [('dir', config_options.Dir())],
+            config_file_path=os.path.join(base_path, 'mkdocs.yml'),
+        )
+
+        test_config = {
+            'dir': 'foo'
+        }
+
+        cfg.load_dict(test_config)
+
+        fails, warns = cfg.validate()
+
+        self.assertEqual(len(fails), 0)
+        self.assertEqual(len(warns), 0)
+        self.assertIsInstance(cfg['dir'], utils.text_type)
+        self.assertEqual(cfg['dir'], os.path.join(base_path, 'foo'))
+
+    def test_dir_is_config_dir_fails(self):
+        cfg = Config(
+            [('dir', config_options.Dir())],
+            config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
+        )
+
+        test_config = {
+            'dir': '.'
         }
 
         cfg.load_dict(test_config)
