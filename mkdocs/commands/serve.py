@@ -92,7 +92,9 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
     """
 
     # Create a temporary build directory, and set some options to serve it
-    tempdir = tempfile.mkdtemp()
+    # PY2 returns a byte string by default. The Unicode prefix ensures a Unicode
+    # string is returned. And it makes MkDocs temp dirs easier to identify.
+    tempdir = tempfile.mkdtemp(prefix='mkdocs_')
 
     def builder():
         log.info("Building documentation...")
