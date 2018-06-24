@@ -308,9 +308,16 @@ class DirTest(unittest.TestCase):
 
         fails, warns = cfg.validate()
 
-        self.assertEqual(len(fails), 0)
-        self.assertEqual(len(warns), 0)
-        self.assertIsInstance(cfg['dir'], utils.text_type)
+        if utils.PY3:
+            # In PY3 string_types does not include byte strings so validation fails
+            self.assertEqual(len(fails), 1)
+            self.assertEqual(len(warns), 0)
+        else:
+            # In PY2 string_types includes byte strings so validation passes
+            # This test confirms that the byte string is properly decoded
+            self.assertEqual(len(fails), 0)
+            self.assertEqual(len(warns), 0)
+            self.assertIsInstance(cfg['dir'], utils.text_type)
 
     def test_dir_bad_encoding_fails(self):
         cfg = Config(

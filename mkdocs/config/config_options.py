@@ -298,10 +298,10 @@ class FilesystemObject(Type):
     def pre_validation(self, config, key_name):
         self.config_dir = os.path.dirname(config.config_file_path) if config.config_file_path else None
 
-
     def run_validation(self, value):
         value = super(FilesystemObject, self).run_validation(value)
-        # Ensure value is a Unicode string
+        # PY2 only: Ensure value is a Unicode string. On PY3 byte strings fail
+        # the type test (super.run_validation) so we never get this far.
         if not isinstance(value, utils.text_type):
             try:
                 # Assume value is encoded with the file system encoding.
