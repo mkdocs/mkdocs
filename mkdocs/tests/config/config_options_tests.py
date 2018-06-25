@@ -301,7 +301,7 @@ class DirTest(unittest.TestCase):
         )
 
         test_config = {
-            'dir': 'юникод'.encode(encoding=sys.getfilesystemencoding())
+            'dir': 'Übersicht'.encode(encoding=sys.getfilesystemencoding())
         }
 
         cfg.load_dict(test_config)
