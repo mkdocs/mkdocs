@@ -1,4 +1,4 @@
-# UTF-8
+# coding=UTF-8
 
 from __future__ import unicode_literals
 
@@ -283,7 +283,7 @@ class DirTest(unittest.TestCase):
         )
 
         test_config = {
-            'dir': '\xccbersicht'
+            'dir': 'юникод'
         }
 
         cfg.load_dict(test_config)
@@ -301,7 +301,7 @@ class DirTest(unittest.TestCase):
         )
 
         test_config = {
-            'dir': '\xccbersicht'.encode(encoding=sys.getfilesystemencoding())
+            'dir': 'юникод'.encode(encoding=sys.getfilesystemencoding())
         }
 
         cfg.load_dict(test_config)
@@ -326,14 +326,19 @@ class DirTest(unittest.TestCase):
         )
 
         test_config = {
-            'dir': '\xccbersicht'.encode(encoding='utf-16')
+            'dir': 'юникод'.encode(encoding='ISO 8859-5')
         }
 
         cfg.load_dict(test_config)
 
         fails, warns = cfg.validate()
 
-        self.assertEqual(len(fails), 1)
+        if sys.platform.startswith('win') and not utils.PY3:
+            # PY2 on Windows seems to be able to decode anything we give it.
+            # But that just means less possable errors for those users so we allow it.
+            self.assertEqual(len(fails), 0)
+        else:
+            self.assertEqual(len(fails), 1)
         self.assertEqual(len(warns), 0)
 
     def test_config_dir_prepended(self):
