@@ -61,8 +61,7 @@ setup(
         'livereload>=2.5.1',
         'Markdown>=2.3.1',
         'PyYAML>=3.10',
-        'tornado>=5.0',
-        'pathlib2>=2.3.2'
+        'tornado>=5.0'
     ],
     python_requires='>=2.7.9,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*',
     entry_points={

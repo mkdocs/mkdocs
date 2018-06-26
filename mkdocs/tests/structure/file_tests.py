@@ -1,14 +1,7 @@
 import unittest
-import os
-
-try:
-    # py>=3.2
-    from tempfile import TemporaryDirectory
-except ImportError:
-    from backports.tempfile import TemporaryDirectory
 
 from mkdocs.structure.files import Files, File, get_files, _sort_files, _filter_paths
-from mkdocs.tests.base import load_config
+from mkdocs.tests.base import load_config, tempdir
 
 
 class TestFiles(unittest.TestCase):
@@ -509,36 +502,20 @@ class TestFiles(unittest.TestCase):
             self.assertEqual(from_file.url_relative_to(file.url), expected[i])
             self.assertEqual(from_file.url_relative_to(file), expected[i])
 
-
-class TestGetFiles(unittest.TestCase):
-    def setUp(self):
-        """ Create some temp files to fetch. """
-        self.tdir = TemporaryDirectory()
-        self.config = load_config(docs_dir=self.tdir.name)
-        self.filenames = [
-            'index.md',
-            'bar.css',
-            'bar.html',
-            'bar.jpg',
-            'bar.js',
-            'bar.md'
-        ]
-
-        # Create empty files
-        for f in self.filenames:
-            open(os.path.join(self.tdir.name, f), 'w+b').close()
-        # Create ignored file
-        open(os.path.join(self.tdir.name, '.dotfile'), 'w+b').close()
-        # Create ignored dir & file
-        os.mkdir(os.path.join(self.tdir.name, 'templates'))
-        open(os.path.join(self.tdir.name, 'templates/foo.html'), 'w+b').close()
-
-    def test_get_files(self):
-        files = get_files(self.config)
+    @tempdir(files=[
+        'index.md',
+        'bar.css',
+        'bar.html',
+        'bar.jpg',
+        'bar.js',
+        'bar.md',
+        '.dotfile',
+        'templates/foo.html'
+    ])
+    def test_get_files(self, tdir):
+        config = load_config(docs_dir=tdir, extra_css=['bar.css'], extra_javascript=['bar.js'])
+        files = get_files(config)
+        expected = ['index.md', 'bar.css', 'bar.html', 'bar.jpg', 'bar.js', 'bar.md']
         self.assertIsInstance(files, Files)
-        self.assertEqual(len(files), len(self.filenames))
-        self.assertEqual([f.src_path for f in files], self.filenames)
-
-    def tearDown(self):
-        """ Clean up after test. """
-        self.tdir.cleanup()
+        self.assertEqual(len(files), len(expected))
+        self.assertEqual([f.src_path for f in files], expected)

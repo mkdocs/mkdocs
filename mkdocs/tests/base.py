@@ -6,7 +6,6 @@ import logging
 import collections
 import unittest
 from functools import wraps
-from pathlib2 import Path
 
 try:
     # py>=3.2
@@ -69,22 +68,25 @@ def tempdir(files=None, **kw):
             'foo.txt': 'foo content',
             'bar.txt': 'bar content'
         })
-        def example(self, dir):
-            assert Path(dir, 'foo.txt').is_file()
-            p = Path(dir, 'bar.txt')
-            assert p.is_file()
-            assert p.read_text(encoding='utf-8') == 'bar content'
+        def example(self, tdir):
+            assert os.path.isfile(os.path.join(tdir, 'foo.txt'))
+            pth = os.path.join(tdir, 'bar.txt')
+            assert os.path.isfile(pth)
+            with io.open(pth, 'r', encoding='utf-8') as f:
+                assert f.read() == 'bar content'
     """
     files = {f: '' for f in files} if isinstance(files, (list, tuple)) else files or {}
+
+    if 'prefix' not in kw:
+        kw['prefix'] = 'mkdocs_test-'
 
     def decorator(fn):
         @wraps(fn)
         def wrapper(self, *args):
             with TemporaryDirectory(**kw) as td:
                 for path, content in files.items():
-                    p = Path(td, path)
-                    p.parent.mkdir(parents=True, exist_ok=True)
-                    p.write_text(content, encoding='utf-8')
+                    pth = os.path.join(td, path)
+                    utils.write_file(content.encode(encoding='utf-8'), pth)
                 return fn(self, td, *args)
         return wrapper
     return decorator
@@ -94,7 +96,7 @@ class PathAssertionMixin(object):
     """
     Assertion methods for testing paths.
 
-    Each method accepts one or more strings, which are first joined us os.path.join.
+    Each method accepts one or more strings, which are first joined using os.path.join.
     """
 
     def assertPathExists(self, *parts):

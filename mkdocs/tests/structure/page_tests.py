@@ -358,6 +358,7 @@ class PageTests(unittest.TestCase):
     def test_BOM(self):
         md_src = '# An UTF-8 encoded file with a BOM'
         with TemporaryDirectory() as docs_dir:
+            # We don't use mkdocs.tests.base.tempdir decorator here due to uniqueness of this test.
             cfg = load_config(docs_dir=docs_dir)
             fl = File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
             pg = Page(None, fl, cfg)
