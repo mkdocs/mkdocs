@@ -136,7 +136,16 @@ This change applies to any navigation items and pages, as well as the
 configuration values (`config.extra_javascript` and `config.extra_css`
 respectively) should be used with `base_url` instead.
 
-Any URL variables which should not be used with `base_url` are explicitly
+Note that navigation can now include links to external sites. Obviously, the
+`base_url` should not be prepended to these items. Therefore, all navigation
+items contain a `is_link` attribute which can be used to alter the behavior for
+external links.
+
+```django
+<a href="{% if not nav_item.is_link %}{{ base_url }}/{% endif %}{{ nav_item.url }}">{{ nav_item.title }}</a>
+```
+
+Any other URL variables which should not be used with `base_url` are explicitly
 documented as such.
 
 [base_url]: ../user-guide/custom-themes.md#base_url
