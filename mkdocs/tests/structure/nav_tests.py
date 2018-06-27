@@ -290,3 +290,54 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual(len(site_navigation.items), 3)
         self.assertEqual(len(site_navigation.pages), 7)
         self.assertEqual(repr(site_navigation.homepage), "Page(title=[blank], url='/')")
+
+    def test_active(self):
+        nav_cfg = [
+            {'Home': 'index.md'},
+            {'API Guide': [
+                {'Running': 'api-guide/running.md'},
+                {'Testing': 'api-guide/testing.md'},
+                {'Debugging': 'api-guide/debugging.md'},
+                {'Advanced': [
+                    {'Part 1': 'api-guide/advanced/part-1.md'},
+                ]},
+            ]},
+            {'About': [
+                {'Release notes': 'about/release-notes.md'},
+                {'License': 'about/license.md'}
+            ]}
+        ]
+        cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
+        files = Files([
+            File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+            File('api-guide/running.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+            File('api-guide/testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+            File('api-guide/debugging.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+            File('api-guide/advanced/part-1.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+            File('about/release-notes.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+            File('about/license.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+        ])
+        site_navigation = get_navigation(files, cfg)
+        # Confirm nothing is active
+        self.assertTrue(all(page.active is False for page in site_navigation.pages))
+        self.assertTrue(all(item.active is False for item in site_navigation.items))
+        # Activate
+        site_navigation.items[1].children[3].children[0].active = True
+        # Confirm ancestors are activated
+        self.assertTrue(site_navigation.items[1].children[3].children[0].active)
+        self.assertTrue(site_navigation.items[1].children[3].active)
+        self.assertTrue(site_navigation.items[1].active)
+        # Confirm non-ancestors are not activated
+        self.assertFalse(site_navigation.items[0].active)
+        self.assertFalse(site_navigation.items[1].children[0].active)
+        self.assertFalse(site_navigation.items[1].children[1].active)
+        self.assertFalse(site_navigation.items[1].children[2].active)
+        self.assertFalse(site_navigation.items[2].active)
+        self.assertFalse(site_navigation.items[2].children[0].active)
+        self.assertFalse(site_navigation.items[2].children[1].active)
+        # Deactivate
+        site_navigation.items[1].children[3].children[0].active = False
+        # Confirm ancestors are deactivated
+        self.assertFalse(site_navigation.items[1].children[3].children[0].active)
+        self.assertFalse(site_navigation.items[1].children[3].active)
+        self.assertFalse(site_navigation.items[1].active)

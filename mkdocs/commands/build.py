@@ -193,6 +193,9 @@ def _build_page(page, config, files, nav, env, dirty=False):
 
         log.debug("Building page {}".format(page.file.src_path))
 
+        # Activate page. Signals to theme that this is the current page.
+        page.active = True
+
         context = get_context(nav, files, config, page)
 
         # Allow 'template:' override in md source files.
@@ -219,6 +222,9 @@ def _build_page(page, config, files, nav, env, dirty=False):
             utils.write_file(output.encode('utf-8', errors='xmlcharrefreplace'), page.file.abs_dest_path)
         else:
             log.info("Page skipped: '{}'. Generated empty output.".format(page.file.src_path))
+
+        # Deactivate page
+        page.active = False
     except Exception as e:
         log.error("Error building page '{}': {}".format(page.file.src_path, e))
         raise

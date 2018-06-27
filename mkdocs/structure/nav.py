@@ -36,12 +36,26 @@ class Section(object):
         self.children = children
 
         self.parent = None
+        self.active = False
 
         self.is_section = True
         self.is_page = False
+        self.is_link = False
 
     def __repr__(self):
         return "Section(title='{0}')".format(self.title)
+
+    def _get_active(self):
+        """ Return active status of section. """
+        return self.__active
+
+    def _set_active(self, value):
+        """ Set active status of section and ancestors. """
+        self.__active = bool(value)
+        if self.parent is not None:
+            self.parent.active = bool(value)
+
+    active = property(_get_active, _set_active)
 
     @property
     def ancestors(self):
@@ -60,12 +74,14 @@ class Link(object):
     def __init__(self, title, url):
         self.title = title
         self.url = url
-        self.children = None
-
         self.parent = None
 
+        # These should never change but are included for consistency with sections and pages.
+        self.children = None
+        self.active = False
         self.is_section = False
         self.is_page = False
+        self.is_link = True
 
     def __repr__(self):
         title = "'{}'".format(self.title) if (self.title is not None) else '[blank]'
