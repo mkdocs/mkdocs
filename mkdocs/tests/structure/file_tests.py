@@ -1,10 +1,26 @@
 import unittest
+import os
+import io
+import mock
 
 from mkdocs.structure.files import Files, File, get_files, _sort_files, _filter_paths
-from mkdocs.tests.base import load_config, tempdir
+from mkdocs.tests.base import load_config, tempdir, PathAssertionMixin
 
 
-class TestFiles(unittest.TestCase):
+class TestFiles(PathAssertionMixin, unittest.TestCase):
+
+    def test_file_eq(self):
+        file = File('a.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
+        self.assertTrue(file == File('a.md', '/path/to/docs', '/path/to/site', use_directory_urls=False))
+
+    def test_file_ne(self):
+        file = File('a.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
+        # Different filename
+        self.assertTrue(file != File('b.md', '/path/to/docs', '/path/to/site', use_directory_urls=False))
+        # Different src_path
+        self.assertTrue(file != File('a.md', '/path/to/other', '/path/to/site', use_directory_urls=False))
+        # Different URL
+        self.assertTrue(file != File('a.md', '/path/to/docs', '/path/to/site', use_directory_urls=True))
 
     def test_sort_files(self):
         self.assertEqual(
@@ -31,9 +47,6 @@ class TestFiles(unittest.TestCase):
             _sort_files(['a.md', 'b.md', 'a.md']),
             ['a.md', 'a.md', 'b.md']
         )
-
-    def assertPathsEqual(self, a, b, msg=None):
-        self.assertEqual(a.replace('\\', '/'), b.replace('\\', '/'))
 
     def test_md_file(self):
         f = File('foo.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
@@ -519,3 +532,45 @@ class TestFiles(unittest.TestCase):
         self.assertIsInstance(files, Files)
         self.assertEqual(len(files), len(expected))
         self.assertEqual([f.src_path for f in files], expected)
+
+    @tempdir()
+    @tempdir(files={'test.txt': 'source content'})
+    def test_copy_file(self, src_dir, dest_dir):
+        file = File('test.txt', src_dir, dest_dir, use_directory_urls=False)
+        dest_path = os.path.join(dest_dir, 'test.txt')
+        self.assertPathNotExists(dest_path)
+        file.copy_file()
+        self.assertPathIsFile(dest_path)
+
+    @tempdir(files={'test.txt': 'destination content'})
+    @tempdir(files={'test.txt': 'source content'})
+    def test_copy_file_clean_modified(self, src_dir, dest_dir):
+        file = File('test.txt', src_dir, dest_dir, use_directory_urls=False)
+        file.is_modified = mock.Mock(return_value=True)
+        dest_path = os.path.join(dest_dir, 'test.txt')
+        file.copy_file(dirty=False)
+        self.assertPathIsFile(dest_path)
+        with io.open(dest_path, 'r', encoding='utf-8') as f:
+            self.assertEqual(f.read(), 'source content')
+
+    @tempdir(files={'test.txt': 'destination content'})
+    @tempdir(files={'test.txt': 'source content'})
+    def test_copy_file_dirty_modified(self, src_dir, dest_dir):
+        file = File('test.txt', src_dir, dest_dir, use_directory_urls=False)
+        file.is_modified = mock.Mock(return_value=True)
+        dest_path = os.path.join(dest_dir, 'test.txt')
+        file.copy_file(dirty=True)
+        self.assertPathIsFile(dest_path)
+        with io.open(dest_path, 'r', encoding='utf-8') as f:
+            self.assertEqual(f.read(), 'source content')
+
+    @tempdir(files={'test.txt': 'destination content'})
+    @tempdir(files={'test.txt': 'source content'})
+    def test_copy_file_dirty_not_modified(self, src_dir, dest_dir):
+        file = File('test.txt', src_dir, dest_dir, use_directory_urls=False)
+        file.is_modified = mock.Mock(return_value=False)
+        dest_path = os.path.join(dest_dir, 'test.txt')
+        file.copy_file(dirty=True)
+        self.assertPathIsFile(dest_path)
+        with io.open(dest_path, 'r', encoding='utf-8') as f:
+            self.assertEqual(f.read(), 'destination content')

@@ -99,6 +99,9 @@ class PathAssertionMixin(object):
     Each method accepts one or more strings, which are first joined using os.path.join.
     """
 
+    def assertPathsEqual(self, a, b, msg=None):
+        self.assertEqual(a.replace('\\', '/'), b.replace('\\', '/'))
+
     def assertPathExists(self, *parts):
         path = os.path.join(*parts)
         if not os.path.exists(path):

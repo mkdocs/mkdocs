@@ -170,7 +170,7 @@ class File(object):
 
     def copy_file(self, dirty=False):
         """ Copy source file to destination, ensuring parent directories exist. """
-        if dirty and self.is_modified():
+        if dirty and not self.is_modified():
             log.debug("Skip copying unmodified file: '{}'".format(self.src_path))
         else:
             log.debug("Copying media file: '{}'".format(self.src_path))

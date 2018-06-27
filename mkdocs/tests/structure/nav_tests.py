@@ -123,8 +123,9 @@ class SiteNavigationTests(unittest.TestCase):
             ]},
             {'About': [
                 {'Release notes': 'about/release-notes.md'},
-                {'License': 'about/license.md'}
-            ]}
+                {'License': '/license.html'}
+            ]},
+            {'External': 'https://example.com/'}
         ]
         expected = dedent("""
         Page(title='Home', url='/')
@@ -136,7 +137,8 @@ class SiteNavigationTests(unittest.TestCase):
                 Page(title='Part 1', url='/api-guide/advanced/part-1/')
         Section(title='About')
             Page(title='Release notes', url='/about/release-notes/')
-            Page(title='License', url='/about/license/')
+            Link(title='License', url='/license.html')
+        Link(title='External', url='https://example.com/')
         """)
         cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
         files = Files([
@@ -146,12 +148,11 @@ class SiteNavigationTests(unittest.TestCase):
             File('api-guide/debugging.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
             File('api-guide/advanced/part-1.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
             File('about/release-notes.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-            File('about/license.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
         ])
         site_navigation = get_navigation(files, cfg)
         self.assertEqual(str(site_navigation).strip(), expected)
-        self.assertEqual(len(site_navigation.items), 3)
-        self.assertEqual(len(site_navigation.pages), 7)
+        self.assertEqual(len(site_navigation.items), 4)
+        self.assertEqual(len(site_navigation.pages), 6)
         self.assertEqual(repr(site_navigation.homepage), "Page(title='Home', url='/')")
         self.assertIsNone(site_navigation.items[0].parent)
         self.assertEqual(site_navigation.items[0].ancestors, [])
@@ -176,6 +177,9 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual(site_navigation.items[2].children[0].ancestors, [site_navigation.items[2]])
         self.assertEqual(repr(site_navigation.items[2].children[1].parent), "Section(title='About')")
         self.assertEqual(site_navigation.items[2].children[1].ancestors, [site_navigation.items[2]])
+        self.assertIsNone(site_navigation.items[3].parent)
+        self.assertEqual(site_navigation.items[3].ancestors, [])
+        self.assertIsNone(site_navigation.items[3].children)
 
     def test_nested_ungrouped_nav(self):
         nav_cfg = [

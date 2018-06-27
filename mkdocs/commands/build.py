@@ -236,12 +236,12 @@ def build(config, live_server=False, dirty=False):
     if not dirty:
         log.info("Cleaning site directory")
         utils.clean_directory(config['site_dir'])
-    else:
+    else:  # pragma: no cover
         # Warn user about problems that may occur with --dirty option
         log.warning("A 'dirty' build is being performed, this will likely lead to inaccurate navigation and other"
                     " links within your site. This option is designed for site development purposes only.")
 
-    if not live_server:
+    if not live_server:  # pragma: no cover
         log.info("Building documentation to directory: %s", config['site_dir'])
         if dirty and site_directory_contains_stale_files(config['site_dir']):
             log.info("The directory contains stale files. Use --clean to remove them.")
