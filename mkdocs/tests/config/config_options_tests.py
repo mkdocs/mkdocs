@@ -1,6 +1,9 @@
+# coding=UTF-8
+
 from __future__ import unicode_literals
 
 import os
+import sys
 import unittest
 from mock import patch
 
@@ -273,14 +276,99 @@ class DirTest(unittest.TestCase):
         self.assertRaises(config_options.ValidationError,
                           option.validate, [])
 
-    def test_doc_dir_is_config_dir(self):
+    def test_dir_unicode(self):
         cfg = Config(
-            [('docs_dir', config_options.Dir())],
+            [('dir', config_options.Dir())],
             config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
         )
 
         test_config = {
-            'docs_dir': '.'
+            'dir': 'юникод'
+        }
+
+        cfg.load_dict(test_config)
+
+        fails, warns = cfg.validate()
+
+        self.assertEqual(len(fails), 0)
+        self.assertEqual(len(warns), 0)
+        self.assertIsInstance(cfg['dir'], utils.text_type)
+
+    def test_dir_filesystemencoding(self):
+        cfg = Config(
+            [('dir', config_options.Dir())],
+            config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
+        )
+
+        test_config = {
+            'dir': 'Übersicht'.encode(encoding=sys.getfilesystemencoding())
+        }
+
+        cfg.load_dict(test_config)
+
+        fails, warns = cfg.validate()
+
+        if utils.PY3:
+            # In PY3 string_types does not include byte strings so validation fails
+            self.assertEqual(len(fails), 1)
+            self.assertEqual(len(warns), 0)
+        else:
+            # In PY2 string_types includes byte strings so validation passes
+            # This test confirms that the byte string is properly decoded
+            self.assertEqual(len(fails), 0)
+            self.assertEqual(len(warns), 0)
+            self.assertIsInstance(cfg['dir'], utils.text_type)
+
+    def test_dir_bad_encoding_fails(self):
+        cfg = Config(
+            [('dir', config_options.Dir())],
+            config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
+        )
+
+        test_config = {
+            'dir': 'юникод'.encode(encoding='ISO 8859-5')
+        }
+
+        cfg.load_dict(test_config)
+
+        fails, warns = cfg.validate()
+
+        if sys.platform.startswith('win') and not utils.PY3:
+            # PY2 on Windows seems to be able to decode anything we give it.
+            # But that just means less possable errors for those users so we allow it.
+            self.assertEqual(len(fails), 0)
+        else:
+            self.assertEqual(len(fails), 1)
+        self.assertEqual(len(warns), 0)
+
+    def test_config_dir_prepended(self):
+        base_path = os.path.abspath('.')
+        cfg = Config(
+            [('dir', config_options.Dir())],
+            config_file_path=os.path.join(base_path, 'mkdocs.yml'),
+        )
+
+        test_config = {
+            'dir': 'foo'
+        }
+
+        cfg.load_dict(test_config)
+
+        fails, warns = cfg.validate()
+
+        self.assertEqual(len(fails), 0)
+        self.assertEqual(len(warns), 0)
+        self.assertIsInstance(cfg['dir'], utils.text_type)
+        self.assertEqual(cfg['dir'], os.path.join(base_path, 'foo'))
+
+    def test_dir_is_config_dir_fails(self):
+        cfg = Config(
+            [('dir', config_options.Dir())],
+            config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
+        )
+
+        test_config = {
+            'dir': '.'
         }
 
         cfg.load_dict(test_config)
@@ -438,11 +526,11 @@ class ThemeTest(unittest.TestCase):
                           option.validate, config)
 
 
-class PagesTest(unittest.TestCase):
+class NavTest(unittest.TestCase):
 
     def test_old_format(self):
 
-        option = config_options.Pages()
+        option = config_options.Nav()
         self.assertRaises(
             config_options.ValidationError,
             option.validate,
@@ -451,7 +539,7 @@ class PagesTest(unittest.TestCase):
 
     def test_provided_dict(self):
 
-        option = config_options.Pages()
+        option = config_options.Nav()
         value = option.validate([
             'index.md',
             {"Page": "page.md"}
@@ -462,7 +550,7 @@ class PagesTest(unittest.TestCase):
 
     def test_provided_empty(self):
 
-        option = config_options.Pages()
+        option = config_options.Nav()
         value = option.validate([])
         self.assertEqual(None, value)
 
@@ -470,13 +558,13 @@ class PagesTest(unittest.TestCase):
 
     def test_invalid_type(self):
 
-        option = config_options.Pages()
+        option = config_options.Nav()
         self.assertRaises(config_options.ValidationError,
                           option.validate, {})
 
     def test_invalid_config(self):
 
-        option = config_options.Pages()
+        option = config_options.Nav()
         self.assertRaises(config_options.ValidationError,
                           option.validate, [[], 1])
 

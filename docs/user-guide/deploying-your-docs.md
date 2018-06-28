@@ -108,7 +108,7 @@ public repository.
 [rtd]: https://readthedocs.org/
 [instructions]: https://read-the-docs.readthedocs.io/en/latest/getting_started.html#in-markdown
 [features]: http://read-the-docs.readthedocs.io/en/latest/features.html
-[theme]: /user-guide/styling-your-docs.md
+[theme]: ./styling-your-docs.md#readthedocs
 
 ## Other Providers
 
@@ -153,4 +153,4 @@ deploying to [GitHub](#github-pages) but only on a custom domain. Other web
 servers may be configured to use it but the feature won't always be available.
 See the documentation for your server of choice for more information.
 
-[site_dir]: ./configuration/#site_dir
+[site_dir]: ./configuration.md#site_dir

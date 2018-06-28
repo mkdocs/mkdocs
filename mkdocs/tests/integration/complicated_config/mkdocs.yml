@@ -1,6 +1,6 @@
 site_name: My Docs
 
-pages:
+nav:
     - Home: index.md
     - User Guide:
         - Writing your docs: index.md

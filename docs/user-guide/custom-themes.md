@@ -126,6 +126,8 @@ used options include:
 * [config.site_url](./configuration.md#site_url)
 * [config.site_author](./configuration.md#site_author)
 * [config.site_description](./configuration.md#site_description)
+* [config.extra_javascript](./configuration.md#extra_javascript)
+* [config.extra_css](./configuration.md#extra_css)
 * [config.repo_url](./configuration.md#repo_url)
 * [config.repo_name](./configuration.md#repo_name)
 * [config.copyright](./configuration.md#copyright)
@@ -133,7 +135,29 @@ used options include:
 
 #### nav
 
-The `nav` variable is used to create the navigation for the documentation.
+The `nav` variable is used to create the navigation for the documentation. The
+`nav` object is an iterable of [navigation objects](#navigation-objects) as
+defined by the [nav] configuration setting.
+
+[nav]: configuration.md#nav
+
+In addition to the iterable of [navigation objects](#navigation-objects), the
+`nav` object contains the following attributes:
+
+##### nav.homepage
+
+The [page](#page) object for the homepage of the site.
+
+##### nav.pages
+
+A flat list of all [page](#page) objects contained in the navigation. This list
+is not necessarily a complete list of all site pages as it does not contain
+pages which are not included in the navigation. This list does match the list
+and order of pages used for all "next page" and "previous page" links. For a
+list of all pages, use the [pages](#pages) template variable.
+
+##### Nav Example
+
 Following is a basic usage example which outputs the first and second level
 navigation as a nested list.
 
@@ -145,24 +169,21 @@ navigation as a nested list.
             <li>{{ nav_item.title }}
                 <ul>
                 {% for nav_item in nav_item.children %}
-                    <li class="{% if nav_item.active%}current{%endif%}">
-                        <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
+                    <li class="{% if nav_item.active%}current{% endif %}">
+                        <a href="{% if not nav_item.is_link %}{{ base_url }}/{% endif %}{{ nav_item.url }}">{{ nav_item.title }}</a>
                     </li>
                 {% endfor %}
                 </ul>
             </li>
         {% else %}
-            <li class="{% if nav_item.active%}current{%endif%}">
-                <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
+            <li class="{% if nav_item.active%}current{% endif %}">
+                <a href="{% if not nav_item.is_link %}{{ base_url }}/{% endif %}{{ nav_item.url }}">{{ nav_item.title }}</a>
             </li>
         {% endif %}
     {% endfor %}
     </ul>
 {% endif %}
 ```
-
-The `nav` object also contains a `homepage` object, which points to the `page`
-object of the homepage. For example, you may want to access `nav.homepage.url`.
 
 #### base_url
 
@@ -175,22 +196,6 @@ folder on all pages you would do this:
 <script src="{{ base_url }}/js/theme.js"></script>
 ```
 
-#### extra_css
-
-Contains a list of URLs to the style-sheets listed in the [extra_css]
-config setting. Unlike the config setting, which contains local paths, this
-variable contains absolute paths from the homepage.
-
-[extra_css]: configuration.md#extra_css
-
-#### extra_javascript
-
-Contains a list of URLs to the scripts listed in the [extra_javascript] config
-setting. Unlike the config setting, which contains local paths, this variable
-contains absolute paths from the homepage.
-
-[extra_javascript]: configuration.md#extra_javascript
-
 #### mkdocs_version
 
 Contains the current MkDocs version.
@@ -201,11 +206,23 @@ A Python datetime object that represents the date and time the documentation
 was built in UTC. This is useful for showing how recently the documentation
 was updated.
 
+#### pages
+
+A list of [page](#page) objects including *all* pages in the project. The list
+is a flat list with all pages sorted alphanumerically by directory and file
+name. Note that index pages sort to the top within a directory. This list can
+contain pages not included in the global [navigation](#nav) and may not match
+the order of pages within that navigation.
+
 #### page
 
 In templates which are not rendered from a Markdown source file, the `page`
 variable is `None`. In templates which are rendered from a Markdown source file,
-the `page` variable contains a page object with the following attributes:
+the `page` variable contains a `page` object. The same `page` objects are used
+as `page` [navigation objects](#navigation-objects) in the global
+[navigation](#nav) and in the [pages](#pages) template variable.
+
+All `page` objects contain the following attributes:
 
 ##### page.title
 
@@ -257,19 +274,43 @@ documentation page.
 {% endfor %}
 ```
 
+##### page.url
+
+The URL of the page relative to the MkDocs `site_dir`. It is expected that this
+be used with [base_url] to ensure the URL is relative to the current page.
+
+```django
+<a href="{{ base_url }}/{{ page.url }}">{{ page.title }}</a>
+```
+
+[base_url]: #base_url
+
+##### page.abs_url
+
+The absolute URL of the page from the server root as determined by the value
+assigned to the [site_url] configuration setting. The value includes any
+subdirectory included in the `site_url`, but not the domain. [base_url] should
+not be used with this variable.
+
+For example, if `site_url: http://example.com/`, then the value of
+`page.abs_url` for the page `foo.md` would be `/foo/`. However, if
+`site_url: http://example.com/bar/`, then the value of `page.abs_url` for the
+page `foo.md` would be `/bar/foo/`.
+
+[site_url]: ./configuration.md#site_url
+
 ##### page.canonical_url
 
-The full, canonical URL to the current page. This includes the `site_url` from
-the configuration.
+The full, canonical URL to the current page as determined by the value assigned
+to the [site_url] configuration setting. The value includes the domain and any
+subdirectory included in the `site_url`. [base_url] should not be used with this
+variable.
 
 ##### page.edit_url
 
-The full URL to the input page in the source repository. Typically used to
-provide a link to edit the source page.
-
-##### page.url
-
-The URL to the current page not including the `site_url` from the configuration.
+The full URL to the source page in the source repository. Typically used to
+provide a link to edit the source page. [base_url] should not be used with this
+variable.
 
 ##### page.is_homepage
 
@@ -284,12 +325,143 @@ on the homepage:
 
 ##### page.previous_page
 
-The page object for the previous  page. The usage is the same as for
-`page`.
+The page object for the previous page or `None`. The value will be `None` if the
+current page is the first item in the site navigation or if the current page is
+not included in the navigation at all. When the value is a page object, the
+usage is the same as for `page`.
 
 ##### page.next_page
 
-The page object for the next page.The usage is the same as for `page`.
+The page object for the next page or `None`. The value will be `None` if the
+current page is the last item in the site navigation or if the current page is
+not included in the navigation at all. When the value is a page object, the
+usage is the same as for `page`.
+
+##### page.parent
+
+The immediate parent of the page in the [site navigation](#nav). `None` if the
+page is at the top level.
+
+##### page.children
+
+Pages do not contain children and the attribute is always `None`.
+
+##### page.active
+
+When `True`, indicates that this page is the currently viewed page. Defaults
+to `False`.
+
+##### page.is_section
+
+Indicates that the navigation object is a "section" object. Always `False` for
+page objects.
+
+##### page.is_page
+
+Indicates that the navigation object is a "page" object. Always `True` for
+page objects.
+
+##### page.is_link
+
+Indicates that the navigation object is a "link" object. Always `False` for
+page objects.
+
+### Navigation Objects
+
+Navigation objects contained in the [nav](#nav) template variable may be one of
+[section](#section) objects, [page](#page) objects, and [link](#link) objects.
+While section objects may contain nested navigation objects, pages and links do
+not.
+
+Page objects are the full page object as used for the current [page](#page) with
+all of the same attributes available. Section and Link objects contain a subset
+of those attributes as defined below:
+
+#### Section
+
+A `section` navigation object defines a named section in the navigation and
+contains a list of child navigation objects. Note that sections do not contain
+URLs and are not links of any kind. However, by default, MkDocs sorts index
+pages to the top and the first child might be used as the URL for a section if a
+theme choses to do so.
+
+ The following attributes are available on `section` objects:
+
+##### section.title
+
+The title of the section.
+
+##### section.parent
+
+The immediate parent of the section or `None` if the section is at the top
+level.
+
+##### section.children
+
+An iterable of all child navigation objects. Children may include nested
+sections, pages and links.
+
+##### section.active
+
+When `True`, indicates that a child page of this section is the current page and
+can be used to highlight the section as the currently viewed section. Defaults
+to `False`.
+
+##### section.is_section
+
+Indicates that the navigation object is a "section" object. Always `True` for
+section objects.
+
+##### section.is_page
+
+Indicates that the navigation object is a "page" object. Always `False` for
+section objects.
+
+##### section.is_link
+
+Indicates that the navigation object is a "link" object. Always `False` for
+section objects.
+
+#### Link
+
+A `link` navigation object contains a link which does not point to an internal
+MkDocs page. The following attributes are available on `link` objects:
+
+##### link.title
+
+The title of the link. This would generally be used as the label of the link.
+
+##### link.url
+
+The URL that the link points to. The URL should always be an absolute URLs and
+should not need to have `base_url` prepened.
+
+##### link.parent
+
+The immediate parent of the link. `None` if the link is at the top level.
+
+##### link.children
+
+Links do not contain children and the attribute is always `None`.
+
+##### link.active
+
+External links cannot be "active" and the attribute is always `False`.
+
+##### link.is_section
+
+Indicates that the navigation object is a "section" object. Always `False` for
+link objects.
+
+##### link.is_page
+
+Indicates that the navigation object is a "page" object. Always `False` for
+link objects.
+
+##### link.is_link
+
+Indicates that the navigation object is a "link" object. Always `True` for
+link objects.
 
 ### Extra Context
 
@@ -607,4 +779,4 @@ For a much more detailed guide, see the official Python packaging
 documentation for [Packaging and Distributing Projects].
 
 [Packaging and Distributing Projects]: https://packaging.python.org/en/latest/distributing/
-[theme]: ./configuration/#theme
+[theme]: ./configuration.md#theme

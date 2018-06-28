@@ -3,11 +3,28 @@
 
 from __future__ import unicode_literals
 import unittest
-
-from mkdocs.tests.base import dedent, markdown_to_toc
+from mkdocs.structure.toc import get_toc
+from mkdocs.tests.base import dedent, get_markdown_toc
 
 
 class TableOfContentsTests(unittest.TestCase):
+
+    def test_html_toc(self):
+        html = dedent("""
+        <div class="toc">
+        <ul>
+        <li><a href="#foo">Heading 1</a></li>
+        <li><a href="#bar">Heading 2</a></li>
+        </ul>
+        </div>
+        """)
+        expected = dedent("""
+        Heading 1 - #foo
+        Heading 2 - #bar
+        """)
+        toc = get_toc(html)
+        self.assertEqual(str(toc).strip(), expected)
+        self.assertEqual(len(toc), 2)
 
     def test_indented_toc(self):
         md = dedent("""
@@ -20,8 +37,9 @@ class TableOfContentsTests(unittest.TestCase):
             Heading 2 - #heading-2
                 Heading 3 - #heading-3
         """)
-        toc = markdown_to_toc(md)
+        toc = get_toc(get_markdown_toc(md))
         self.assertEqual(str(toc).strip(), expected)
+        self.assertEqual(len(toc), 1)
 
     def test_indented_toc_html(self):
         md = dedent("""
@@ -34,8 +52,9 @@ class TableOfContentsTests(unittest.TestCase):
             Heading 2 - #heading-2
             Heading 3 - #heading-3
         """)
-        toc = markdown_to_toc(md)
+        toc = get_toc(get_markdown_toc(md))
         self.assertEqual(str(toc).strip(), expected)
+        self.assertEqual(len(toc), 1)
 
     def test_flat_toc(self):
         md = dedent("""
@@ -48,8 +67,9 @@ class TableOfContentsTests(unittest.TestCase):
         Heading 2 - #heading-2
         Heading 3 - #heading-3
         """)
-        toc = markdown_to_toc(md)
+        toc = get_toc(get_markdown_toc(md))
         self.assertEqual(str(toc).strip(), expected)
+        self.assertEqual(len(toc), 3)
 
     def test_flat_h2_toc(self):
         md = dedent("""
@@ -62,8 +82,9 @@ class TableOfContentsTests(unittest.TestCase):
         Heading 2 - #heading-2
         Heading 3 - #heading-3
         """)
-        toc = markdown_to_toc(md)
+        toc = get_toc(get_markdown_toc(md))
         self.assertEqual(str(toc).strip(), expected)
+        self.assertEqual(len(toc), 3)
 
     def test_mixed_toc(self):
         md = dedent("""
@@ -80,8 +101,9 @@ class TableOfContentsTests(unittest.TestCase):
             Heading 4 - #heading-4
             Heading 5 - #heading-5
         """)
-        toc = markdown_to_toc(md)
+        toc = get_toc(get_markdown_toc(md))
         self.assertEqual(str(toc).strip(), expected)
+        self.assertEqual(len(toc), 2)
 
     def test_mixed_html(self):
         md = dedent("""
@@ -98,8 +120,9 @@ class TableOfContentsTests(unittest.TestCase):
             Heading 4 - #heading-4
             Heading 5 - #heading-5
         """)
-        toc = markdown_to_toc(md)
+        toc = get_toc(get_markdown_toc(md))
         self.assertEqual(str(toc).strip(), expected)
+        self.assertEqual(len(toc), 2)
 
     def test_nested_anchor(self):
         md = dedent("""
@@ -116,8 +139,9 @@ class TableOfContentsTests(unittest.TestCase):
             Heading 4 - #heading-4
             Heading 5 - #heading-5
         """)
-        toc = markdown_to_toc(md)
+        toc = get_toc(get_markdown_toc(md))
         self.assertEqual(str(toc).strip(), expected)
+        self.assertEqual(len(toc), 2)
 
     def test_entityref(self):
         md = dedent("""
@@ -130,5 +154,27 @@ class TableOfContentsTests(unittest.TestCase):
             Heading &gt; 2 - #heading-2
                 Heading &lt; 3 - #heading-3
         """)
-        toc = markdown_to_toc(md)
+        toc = get_toc(get_markdown_toc(md))
         self.assertEqual(str(toc).strip(), expected)
+        self.assertEqual(len(toc), 1)
+
+    def test_charref(self):
+        md = '# &#64;Header'
+        expected = '&#64;Header - #header'
+        toc = get_toc(get_markdown_toc(md))
+        self.assertEqual(str(toc).strip(), expected)
+        self.assertEqual(len(toc), 1)
+
+    def test_skip_no_href(self):
+        html = dedent("""
+        <div class="toc">
+        <ul>
+        <li><a>Header 1</a></li>
+        <li><a href="#foo">Header 2</a></li>
+        </ul>
+        </div>
+        """)
+        expected = 'Header 2 - #foo'
+        toc = get_toc(html)
+        self.assertEqual(str(toc).strip(), expected)
+        self.assertEqual(len(toc), 1)

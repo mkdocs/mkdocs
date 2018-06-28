@@ -6,11 +6,13 @@ import unittest
 import mock
 import json
 
-from mkdocs import nav
+from mkdocs.structure.files import File
+from mkdocs.structure.pages import Page
+from mkdocs.structure.toc import get_toc
 from mkdocs.contrib import search
 from mkdocs.contrib.search import search_index
 from mkdocs.config.config_options import ValidationError
-from mkdocs.tests.base import dedent, markdown_to_toc, load_config
+from mkdocs.tests.base import dedent, get_markdown_toc, load_config
 
 
 def strip_whitespace(string):
@@ -248,7 +250,7 @@ class SearchIndexTests(unittest.TestCase):
         ## Heading 2
         ### Heading 3
         """)
-        toc = markdown_to_toc(md)
+        toc = get_toc(get_markdown_toc(md))
 
         toc_item = index._find_toc_by_id(toc, "heading-1")
         self.assertEqual(toc_item.url, "#heading-1")
@@ -273,23 +275,22 @@ class SearchIndexTests(unittest.TestCase):
         <p>Content 3</p>
         """
 
+        cfg = load_config()
         pages = [
-            {'Home': 'index.md'},
-            {'About': 'about.md'},
+            Page('Home', File('index.md',  cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']), cfg),
+            Page('About', File('about.md',  cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']), cfg)
         ]
-
-        site_navigation = nav.SiteNavigation(load_config(pages=pages))
 
         md = dedent("""
         # Heading 1
         ## Heading 2
         ### Heading 3
         """)
-        toc = markdown_to_toc(md)
+        toc = get_toc(get_markdown_toc(md))
 
         full_content = ''.join("""Heading{0}Content{0}""".format(i) for i in range(1, 4))
 
-        for page in site_navigation:
+        for page in pages:
             # Fake page.read_source() and page.render()
             page.markdown = md
             page.toc = toc
@@ -300,7 +301,7 @@ class SearchIndexTests(unittest.TestCase):
 
             self.assertEqual(len(index._entries), 4)
 
-            loc = page.abs_url
+            loc = page.url
 
             self.assertEqual(index._entries[0]['title'], page.title)
             self.assertEqual(strip_whitespace(index._entries[0]['text']), full_content)

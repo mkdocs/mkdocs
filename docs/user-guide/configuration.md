@@ -162,24 +162,60 @@ This option can be overridden by a command line option in `gh-deploy`.
 
 ## Documentation layout
 
-### pages
+### nav
 
-This setting is used to determine the set of pages that should be built for the
-documentation. For example, the following would create Introduction, User Guide
-and About pages, given the three source files `index.md`, `user-guide.md` and
-`about.md`, respectively.
+This setting is used to determine the format and layout of the global navigation
+for the site. For example, the following would create "Introduction", "User
+Guide" and "About" navigation items.
 
 ```yaml
-pages:
+nav:
     - 'Introduction': 'index.md'
     - 'User Guide': 'user-guide.md'
     - 'About': 'about.md'
 ```
 
-See the section on [configuring pages and navigation] for a more detailed
-breakdown, including how to create sub-sections.
+All paths must be relative to the `mkdocs.yml` configuration file. See the
+section on [configuring pages and navigation] for a more detailed breakdown,
+including how to create sub-sections.
 
-**default**: By default `pages` will contain an alphanumerically sorted, nested
+Navigation items may also include links to external sites. While titles are
+optional for internal links, they are required for external links. An external
+link may be a full URL or a relative URL. Any path which is not found in the
+files is assumed to be an external link.
+
+```yaml
+nav:
+    - Home: index.md
+    - User Guide: user-guide.md
+    - Bug Tracker: https://example.com/
+```
+
+In the above example, the first two items point to local files while the third
+points to an external site.
+
+However, sometimes the MkDocs site is hosted in a subdirectory of a project's
+site and you may want to link to other parts of the same site without including
+the full domain. In that case, you may use and appropriate relative URL.
+
+```yaml
+site_url: http://example.com/foo/
+
+nav:
+    - Home: ../
+    - User Guide: user-guide.md
+    - Bug Tracker: /bugs/
+```
+
+In the above example, two different styles of external links are used. First
+note that the `site_url` indicates that the MkDocs site is hosted in the `/foo/`
+subdirectory of the domain. Therefore, the `Home` navigation item is a relative
+link which steps up one level to the server root and effectively points to
+`http://example.com/`. The `Bug Tracker` item uses an absolute path from the
+server root and effectively points to `http://example.com/bugs/`. Of course, the
+`User Guide` points to a local MkDocs page.
+
+**default**: By default `nav` will contain an alphanumerically sorted, nested
 list of all the Markdown files found within the `docs_dir` and its
 sub-directories. If none are found it will be `[]` (an empty list).
 
@@ -324,27 +360,26 @@ documentation.
 The following table demonstrates how the URLs used on the site differ when
 setting `use_directory_urls` to `true` or `false`.
 
-Source file  | Generated HTML       | use_directory_urls: true  | use_directory_urls: false
------------- | -------------------- | ------------------------ | ------------------------
-index.md     | index.html           | /                        | /index.html
-api-guide.md | api-guide/index.html | /api-guide/              | /api-guide/index.html
-about.md     | about/index.html     | /about/                  | /about/index.html
+Source file      | use_directory_urls: true  | use_directory_urls: false
+---------------- | ------------------------- | -------------------------
+index.md         | /                         | /index.html
+api-guide.md     | /api-guide/               | /api-guide.html
+about/license.md | /about/license/           | /about/license.html
 
 The default style of `use_directory_urls: true` creates more user friendly URLs,
 and is usually what you'll want to use.
 
 The alternate style can occasionally be useful if you want your documentation to
 remain properly linked when opening pages directly from the file system, because
-it create links that point directly to the target *file* rather than the target
+it creates links that point directly to the target *file* rather than the target
 *directory*.
 
 **default**: `true`
 
 ### strict
 
-Determines if a broken link to a page within the documentation is considered a
-warning or an error (link to a page not listed in the pages setting). Set to
-true to halt processing when a broken link is found, false prints a warning.
+Determines how warnings are handled. Set to `true` to halt processing when a
+warning is raised. Set to `false` to print a warning and continue processing.
 
 **default**: `false`
 
@@ -519,7 +554,7 @@ You may [contribute additional languages].
  any reason, a warning is issued. You may use the `--strict` flag when building
  to cause such a failure to raise an error instead.
 
- !!! Note
+!!! Note
 
     On smaller sites, using a pre-built index is not recommended as it creates a
     significant increase is bandwidth requirements with little to no noticeable
@@ -545,3 +580,4 @@ You may [contribute additional languages].
 [ISO 639-1]: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 [Lunr Languages]: https://github.com/MihaiValentin/lunr-languages#lunr-languages-----
 [contribute additional languages]: https://github.com/MihaiValentin/lunr-languages/blob/master/CONTRIBUTING.md
+[Node.js]: https://nodejs.org/

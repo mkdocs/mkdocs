@@ -32,7 +32,7 @@
   <script>
     // Current page data
     var mkdocs_page_name = {{ page.title|tojson|safe }};
-    var mkdocs_page_input_path = {{ page.input_path|tojson|safe }};
+    var mkdocs_page_input_path = {{ page.file.src_path|string|tojson|safe }};
     var mkdocs_page_url = {{ page.abs_url|tojson|safe }};
   </script>
   {% endif %}
@@ -66,7 +66,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
       <div class="wy-side-nav-search">
     {%- block site_name %}
-        <a href="{{ nav.homepage.url }}" class="icon icon-home"> {{ config.site_name }}</a>
+        <a href="{{ base_url }}/{{ nav.homepage.url }}" class="icon icon-home"> {{ config.site_name }}</a>
 	  {%- endblock %}
 	  {%- block search_button %}
         {% if 'search' in config['plugins'] %}{% include "searchbox.html" %}{% endif %}
@@ -93,7 +93,7 @@
       {# MOBILE NAV, TRIGGLES SIDE NAV ON TOGGLE #}
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="{{ nav.homepage.url }}">{{ config.site_name }}</a>
+        <a href="{{ base_url }}/{{ nav.homepage.url }}">{{ config.site_name }}</a>
       </nav>
 
       {# PAGE CONTENT #}

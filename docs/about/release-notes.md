@@ -25,6 +25,131 @@ The current and past members of the MkDocs team.
 
 ### Major Additions to Development Version
 
+#### Internal Refactor of Pages, Files, and Navigation
+
+Internal handling of pages, files and navigation has been completely refactored.
+The changes included in the refactor are summarized below.
+
+* Support for hidden pages. All Markdown pages are now included in the build
+  regardless of whether they are included in the navigation configuration
+  (#699).
+* The navigation can now include links to external sites (#989 #1373 & #1406).
+* Page data (including titles) is properly determined for all pages before any
+  page is rendered (#1347).
+* Automatically populated navigation now sorts index pages to the top. In other
+  words, The index page will be listed as the first child of a directory, while
+  all other documents are sorted alphanumerically by file name after the index
+  page (#73 & #1042).
+* A `README.md` file is now treated as an index file within a directory and
+  will be rendered to `index.html` (#608).
+* The URLs for all files are computed once and stored in a files collection.
+  This ensures all internal links are always computed correctly regardless of
+  the configuration. This also allows all internal links to be validated, not
+  just links to other Markdown pages. (#842 & #872).
+* An [on_files] plugin event has been added, which could be used to include
+  files not in the `docs_dir`, exclude files, redefine page URLs (i.e.
+  implement extensionless URLs), or to manipulate files in various other ways.
+
+  [on_files]: ../user-guide/plugins.md#on_files
+
+##### Backward Incompatible Changes
+
+As part of the internal refactor, a number of backward incompatible changes have
+been introduced, which are summarized below.
+
+###### URLS have changed when `use_directory_urls` is `False`
+
+Previously, all Markdown pages would be have their filenames altered to be index
+pages regardless of how the [use_directory_urls] setting was configured.
+However, the path munging is only needed when `use_directory_urls` is set to
+`True` (the default). The path mungling no longer happens when
+`use_directory_urls` is set to `False`, which will result in different URLs for
+all pages that were not already index files. As this behavior only effects a
+non-default configuration, and the most common user-case for setting the option
+to `False` is for local file system (`file://`) browsing, its not likely to
+effect most users. However, if you have `use_directory_urls` set to `False`
+for a MkDocs site hosted on a web server, most of your URLs will now be broken.
+As you can see below, the new URLs are much more sensible.
+
+| Markdown file   | Old URL              | New URL        |
+| --------------- | -------------------- | -------------- |
+| `index.md`      | `index.html`         | `index.html`   |
+| `foo.md`        | `foo/index.html`     | `foo.html`     |
+| `foo/bar.md`    | `foo/bar/index.html` | `foo/bar.html` |
+
+Note that there has been no change to URLs or file paths when
+`use_directory_urls` is set to `True` (the default), except that MkDocs more
+consistently includes an ending slash on all internally generated URLs.
+
+[use_directory_urls]: ../user-guide/configuration.md#use_directory_urls
+
+###### The `pages` configuration setting has been renamed to `nav`
+
+The `pages` configuration setting is deprecated and will issue a warning if set
+in the configuration file. The setting has been renamed `nav`. To update your
+configuration, simply rename the setting to `nav`. In other words, if your
+configuration looked like this:
+
+```yaml
+pages:
+    - Home: index.md
+    - User Guide: user-guide.md
+```
+
+Simply edit the configuration as follows:
+
+```yaml
+nav:
+    - Home: index.md
+    - User Guide: user-guide.md
+```
+
+In the current release, any configuration which includes a `pages` setting, but
+no `nav` setting, the `pages` configuration will be copied to `nav` and a
+warning will be issued. However, in a future release, that may no longer happen.
+If both `pages` and `nav` are defined, the `pages` setting will be ignored.
+
+###### Template variables and `base_url`
+
+In previous versions of MkDocs some URLs expected the [base_url] template
+variable to be prepended to the URL and others did not. That inconsistency has
+been removed. All  URLs must now be joined with the `base_url`. As previously, a
+slash must be included between the `base_url` and the URL variable. For example,
+a theme template might have previously included a link to the `site_name` as:
+
+```django
+<a href="{{ nav.homepage.url }}">{{ config.site_name }}</a>
+```
+
+And MkDocs would magically return a URL for the homepage which was relative to
+the current page. That "magic" has been removed and the `base_url` must now be
+explicitly included:
+
+```django
+<a href="{{ base_url }}/{{ nav.homepage.url }}">{{ config.site_name }}</a>
+```
+
+This change applies to any navigation items and pages, as well as the
+`page.next_page` and `page.previous_page` attributes. For the time being, the
+`extra_javascript` and `extra_css` variables continue to work as previously
+(without `base_url`), but they have been deprecated and the corresponding
+configuration values (`config.extra_javascript` and `config.extra_css`
+respectively) should be used with `base_url` instead.
+
+Note that navigation can now include links to external sites. Obviously, the
+`base_url` should not be prepended to these items. Therefore, all navigation
+items contain a `is_link` attribute which can be used to alter the behavior for
+external links.
+
+```django
+<a href="{% if not nav_item.is_link %}{{ base_url }}/{% endif %}{{ nav_item.url }}">{{ nav_item.title }}</a>
+```
+
+Any other URL variables which should not be used with `base_url` are explicitly
+documented as such.
+
+[base_url]: ../user-guide/custom-themes.md#base_url
+
 #### Path Based Settings are Relative to Configuration File (#543)
 
 Previously any relative paths in the various configuration options were
@@ -181,7 +306,7 @@ template exists.
 ##### Context Variables
 
 Page specific variable names in the template context have been refactored as
-defined in [Custom Themes](../user-guide/custom-themes/#page). The
+defined in [Custom Themes](../user-guide/custom-themes.md#page). The
 old variable names issued a warning in version 0.16, but have been removed in
 version 1.0.
 
@@ -199,14 +324,14 @@ user created and third-party templates:
 | previous_page     | [page.previous_page]|
 | next_page         | [page.next_page]    |
 
-[page]: ../user-guide/custom-themes/#page
-[page.title]: ../user-guide/custom-themes/#pagetitle
-[page.content]: ../user-guide/custom-themes/#pagecontent
-[page.toc]: ../user-guide/custom-themes/#pagetoc
-[page.meta]: ../user-guide/custom-themes/#pagemeta
-[page.canonical_url]: ../user-guide/custom-themes/#pagecanonical_url
-[page.previous_page]: ../user-guide/custom-themes/#pageprevious_page
-[page.next_page]: ../user-guide/custom-themes/#pagenext_page
+[page]: ../user-guide/custom-themes.md#page
+[page.title]: ../user-guide/custom-themes.md#pagetitle
+[page.content]: ../user-guide/custom-themes.md#pagecontent
+[page.toc]: ../user-guide/custom-themes.md#pagetoc
+[page.meta]: ../user-guide/custom-themes.md#pagemeta
+[page.canonical_url]: ../user-guide/custom-themes.md#pagecanonical_url
+[page.previous_page]: ../user-guide/custom-themes.md#pageprevious_page
+[page.next_page]: ../user-guide/custom-themes.md#pagenext_page
 
 Additionally, a number of global variables have been altered and/or removed
 and user created and third-party templates should be updated as outlined below:
@@ -286,7 +411,7 @@ the `extra_css` or `extra_javascript` config settings going forward.
 ##### Page Context
 
 Page specific variable names in the template context have been refactored as
-defined in [Custom Themes](../user-guide/custom-themes/#page). The
+defined in [Custom Themes](../user-guide/custom-themes.md#page). The
 old variable names will issue a warning but continue to work for version 0.16,
 but may be removed in a future version.
 
@@ -304,14 +429,14 @@ user created and third-party templates:
 | previous_page     | [page.previous_page]|
 | next_page         | [page.next_page]    |
 
-[page]: ../user-guide/custom-themes/#page
-[page.title]: ../user-guide/custom-themes/#pagetitle
-[page.content]: ../user-guide/custom-themes/#pagecontent
-[page.toc]: ../user-guide/custom-themes/#pagetoc
-[page.meta]: ../user-guide/custom-themes/#pagemeta
-[page.canonical_url]: ../user-guide/custom-themes/#pagecanonical_url
-[page.previous_page]: ../user-guide/custom-themes/#pageprevious_page
-[page.next_page]: ../user-guide/custom-themes/#pagenext_page
+[page]: ../user-guide/custom-themes.md#page
+[page.title]: ../user-guide/custom-themes.md#pagetitle
+[page.content]: ../user-guide/custom-themes.md#pagecontent
+[page.toc]: ../user-guide/custom-themes.md#pagetoc
+[page.meta]: ../user-guide/custom-themes.md#pagemeta
+[page.canonical_url]: ../user-guide/custom-themes.md#pagecanonical_url
+[page.previous_page]: ../user-guide/custom-themes.md#pageprevious_page
+[page.next_page]: ../user-guide/custom-themes.md#pagenext_page
 
 ##### Global Context
 
@@ -400,7 +525,7 @@ overriding blocks in the same manner as the built-in themes. Third party themes
 are encouraged to wrap the various pieces of their templates in blocks in order
 to support such customization.
 
-[blocks]: ../user-guide/styling-your-docs/#overriding-template-blocks
+[blocks]: ../user-guide/styling-your-docs.md#overriding-template-blocks
 
 #### Auto-Populated `extra_css` and `extra_javascript` Deprecated. (#986)
 
@@ -444,7 +569,7 @@ the `docs_dir` is set to the directory which contains your config file rather
 than a child directory. You will need to rearrange you directory structure to
 better conform with the documented [layout].
 
-[layout]: ../user-guide/writing-your-docs/#file-layout
+[layout]: ../user-guide/writing-your-docs.md#file-layout
 
 ### Other Changes and Additions to Version 0.16.0
 
@@ -522,8 +647,8 @@ See the documentation for [Styling your docs] for more information about using
 and customizing themes and [Custom themes] for creating and distributing new
 themes
 
-[Styling your docs]: /user-guide/styling-your-docs.md
-[Custom themes]: /user-guide/custom-themes.md
+[Styling your docs]: ../user-guide/styling-your-docs.md
+[Custom themes]: ../user-guide/custom-themes.md
 
 ### Other Changes and Additions to Version 0.15.0
 
@@ -544,9 +669,9 @@ themes
 * Bugfix: Provide filename to Read the Docs. (#721 and RTD#1480)
 * Bugfix: Silence Click's unicode_literals warning. (#708)
 
-[site_description]: /user-guide/configuration.md#site_description
-[site_author]: /user-guide/configuration.md#site_author
-[ReadTheDocs]: /user-guide/styling-your-docs.md#readthedocs
+[site_description]: ../user-guide/configuration.md#site_description
+[site_author]: ../user-guide/configuration.md#site_author
+[ReadTheDocs]: ../user-guide/styling-your-docs.md#readthedocs
 
 ## Version 0.14.0 (2015-06-09)
 
@@ -604,7 +729,7 @@ This new file is created on every MkDocs build (with `mkdocs build`) and
 no configuration is needed to enable it.
 
 [future release]: https://github.com/mkdocs/mkdocs/pull/481
-[site_dir]: /user-guide/configuration.md#site_dir
+[site_dir]: ../user-guide/configuration.md#site_dir
 
 #### Change the pages configuration
 
@@ -612,8 +737,8 @@ Provide a [new way] to define pages, and specifically [nested pages], in the
 mkdocs.yml file and deprecate the existing approach, support will be removed
 with MkDocs 1.0.
 
-[new way]: /user-guide/writing-your-docs.md#configure-pages-and-navigation
-[nested pages]: /user-guide/writing-your-docs.md#multilevel-documentation
+[new way]: ../user-guide/writing-your-docs.md#configure-pages-and-navigation
+[nested pages]: ../user-guide/writing-your-docs.md#multilevel-documentation
 
 #### Warn users about the removal of builtin themes
 
@@ -631,7 +756,7 @@ JavaScript library [lunr.js]. It has been added to both the `mkdocs` and
 for adding it to your own themes.
 
 [lunr.js]: http://lunrjs.com/
-[supporting search]: /user-guide/styling-your-docs.md#search-and-themes
+[supporting search]: ../user-guide/styling-your-docs.md#search-and-themes
 
 #### New Command Line Interface
 
@@ -659,10 +784,10 @@ can also use Jinja2 syntax and take advantage of the [global variables].
 By default MkDocs will use this approach to create a sitemap for the
 documentation.
 
-[extra_javascript]: /user-guide/configuration.md#extra_javascript
-[extra_css]: /user-guide/configuration.md#extra_css
-[extra_templates]: /user-guide/configuration.md#extra_templates
-[global variables]: /user-guide/styling-your-docs.md#global-context
+[extra_javascript]: ../user-guide/configuration.md#extra_javascript
+[extra_css]: ../user-guide/configuration.md#extra_css
+[extra_templates]: ../user-guide/configuration.md#extra_templates
+[global variables]: ../user-guide/styling-your-docs.md#global-context
 
 ### Other Changes and Additions to Version 0.13.0
 
@@ -679,8 +804,8 @@ documentation.
   called index.md (#535)
 * Bugfix: Fix errors with Unicode filenames (#542).
 
-[extra config]: /user-guide/configuration.md#extra
-[Markdown extension configuration options]: /user-guide/configuration.md#markdown_extensions
+[extra config]: ../user-guide/configuration.md#extra
+[Markdown extension configuration options]: ../user-guide/configuration.md#markdown_extensions
 [wheels]: http://pythonwheels.com/
 
 ## Version 0.12.2 (2015-04-22)
