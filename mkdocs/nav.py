@@ -334,7 +334,7 @@ def _follow(config_line, url_context, config, header=None, title=None):
             header.children.append(page)
 
         yield page
-        raise StopIteration
+        return
 
     elif not isinstance(config_line, dict):
         msg = ("Line in 'page' config is of type {0}, dict or string "
@@ -347,7 +347,7 @@ def _follow(config_line, url_context, config, header=None, title=None):
             "config contains an invalid entry: {0}".format(config_line))
     elif len(config_line) == 0:
         log.warning("Ignoring empty line in the pages config.")
-        raise StopIteration
+        return
 
     next_cat_or_title, subpages_or_path = next(iter(config_line.items()))
 
@@ -355,7 +355,7 @@ def _follow(config_line, url_context, config, header=None, title=None):
         path = subpages_or_path
         for sub in _follow(path, url_context, config, header=header, title=next_cat_or_title):
             yield sub
-        raise StopIteration
+        return
 
     elif not isinstance(subpages_or_path, list):
         msg = ("Line in 'page' config is of type {0}, list or string "
