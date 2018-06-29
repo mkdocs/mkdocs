@@ -28,6 +28,8 @@ The default theme, which was built as a custom [Bootstrap] theme, supports most
 every feature of MkDocs. It only supports the default
 [theme configuration options].
 
+The mkdocs theme is located in the mkdocs repository at `mkdocs/themes/mkdocs/`.
+
 ![mkdocs](/img/mkdocs.png)
 
 ### readthedocs
@@ -35,6 +37,8 @@ every feature of MkDocs. It only supports the default
 A clone of the default theme used by the [Read the Docs] service. This theme
 only supports features in its parent theme and does not support any MkDocs
 [theme configuration options] in addition to the defaults.
+
+The readthedocs theme is located in the mkdocs repository at `mkdocs/themes/readthedocs/`.
 
 ![ReadTheDocs](http://docs.readthedocs.io/en/latest/_images/screen_mobile.png)
 
@@ -53,19 +57,26 @@ customizations, including overriding templates, you will need to use the theme
 
 ### Using the docs_dir
 
-The [extra_css] and [extra_javascript] configuration options can be used to
-make tweaks and customizations to existing themes. To use these, you simply
-need to include either CSS or JavaScript files within your [documentation
-directory].
+The [extra_css] and [extra_javascript] configuration options can be added to
+`mkdocs.yml` to add additional CSS and Javascript files to existing themes.
+Include CSS or Javascript files within `docs_dir` (`docs/` by default) and
+itemize them under the `extra_css` heading in `mkdocs.yml`.
 
 For example, to change the colour of the headers in your documentation, create
-a file called `extra.css` and place it next to the documentation Markdown. In
-that file add the following CSS.
+a file called `custom.css` and place it in `docs_dir` next to the other documentation
+files. In `custom.css`, add the following CSS:
 
 ```CSS
 h1 {
   color: red;
 }
+```
+
+Then add the following to your `mkdocs.yml`:
+
+```yaml
+extra_css:
+  - custom.css
 ```
 
 !!! note
@@ -76,9 +87,11 @@ h1 {
 
         extra_css: [extra.css]
 
-After making these changes, they should be visible when you run
-`mkdocs serve` - if you already had this running, you should see that the CSS
-changes were automatically picked up and the documentation will be updated.
+After addding these files and making the changes to `mkdocs.yml`,
+the changes should be visible when you run `mkdocs serve` -
+if you already had this running, you should see changes to the
+YAML file be automatically picked up and the documentation should be
+updated.
 
 !!! note
 
