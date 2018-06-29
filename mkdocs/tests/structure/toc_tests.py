@@ -178,3 +178,21 @@ class TableOfContentsTests(unittest.TestCase):
         toc = get_toc(html)
         self.assertEqual(str(toc).strip(), expected)
         self.assertEqual(len(toc), 1)
+
+    def test_level(self):
+        md = dedent("""
+        # Heading 1
+        ## Heading 1.1
+        ### Heading 1.1.1
+        ### Heading 1.1.2
+        ## Heading 1.2
+        """)
+        toc = get_toc(get_markdown_toc(md))
+
+        def get_level_sequence(items):
+            for item in items:
+                yield item.level
+                for c in get_level_sequence(item.children):
+                    yield c
+
+        self.assertEqual(tuple(get_level_sequence(toc)), (0, 1, 2, 2, 1))

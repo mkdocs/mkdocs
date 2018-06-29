@@ -234,8 +234,16 @@ The rendered Markdown as HTML, this is the contents of the documentation.
 
 ##### page.toc
 
-An object representing the Table of contents for a page. Displaying the table
-of contents as a simple list can be achieved like this.
+An iterable object representing the Table of contents for a page. Each item in
+the `toc` is an `AnchorLink` which contains the following attributes:
+
+* `AnchorLink.title`: The text of the item.
+* `AnchorLink.url`: The hash fragment of a URL pointing to the item.
+* `AnchorLink.level`: The zero-based level of the item.
+* `AnchorLink.children`: An iterable of any child items.
+
+The following example would display the top two levels of the Table of Contents
+for a page.
 
 ```django
 <ul>
