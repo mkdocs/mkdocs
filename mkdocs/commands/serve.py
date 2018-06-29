@@ -94,7 +94,7 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
     # Create a temporary build directory, and set some options to serve it
     # PY2 returns a byte string by default. The Unicode prefix ensures a Unicode
     # string is returned. And it makes MkDocs temp dirs easier to identify.
-    tempdir = tempfile.mkdtemp(prefix='mkdocs_')
+    site_dir = tempfile.mkdtemp(prefix='mkdocs_')
 
     def builder():
         log.info("Building documentation...")
@@ -103,10 +103,10 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
             dev_addr=dev_addr,
             strict=strict,
             theme=theme,
-            theme_dir=theme_dir
+            theme_dir=theme_dir,
+            site_dir=site_dir
         )
         # Override a few config settings after validation
-        config['site_dir'] = tempdir
         config['site_url'] = 'http://{0}/'.format(config['dev_addr'])
 
         live_server = livereload in ['dirty', 'livereload']
@@ -121,8 +121,8 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
         host, port = config['dev_addr']
 
         if livereload in ['livereload', 'dirty']:
-            _livereload(host, port, config, builder, tempdir)
+            _livereload(host, port, config, builder, site_dir)
         else:
-            _static_server(host, port, tempdir)
+            _static_server(host, port, site_dir)
     finally:
-        shutil.rmtree(tempdir)
+        shutil.rmtree(site_dir)
