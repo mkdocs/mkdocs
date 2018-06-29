@@ -25,8 +25,8 @@ the [Customizing a Theme][customize] section below.
 ### mkdocs
 
 The default theme, which was built as a custom [Bootstrap] theme, supports most
-every feature of MkDocs. It only supports the default
-[theme configuration options].
+every feature of MkDocs. It only supports the default [theme configuration
+options] and only officially supports two levels in the navigation (see #1107).
 
 ![mkdocs](/img/mkdocs.png)
 
@@ -34,7 +34,8 @@ every feature of MkDocs. It only supports the default
 
 A clone of the default theme used by the [Read the Docs] service. This theme
 only supports features in its parent theme and does not support any MkDocs
-[theme configuration options] in addition to the defaults.
+[theme configuration options] in addition to the defaults. Like its parent
+theme, only two levels are supported in the navigation.
 
 ![ReadTheDocs](http://docs.readthedocs.io/en/latest/_images/screen_mobile.png)
 
