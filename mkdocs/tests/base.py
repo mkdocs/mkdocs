@@ -54,8 +54,8 @@ def tempdir(files=None, **kw):
     """
     A decorator for building a temporary directory with prepopulated files.
 
-    The temproary directory and files are created just before the wrapped function is called and are destroyed
-    imediately after the wrapped function returns.
+    The temporary directory and files are created just before the wrapped function is called and are destroyed
+    immediately after the wrapped function returns.
 
     The `files` keyword should be a dict of file paths as keys and strings of file content as values.
     If `files` is a list, then each item is assumed to be a path of an empty file. All other
