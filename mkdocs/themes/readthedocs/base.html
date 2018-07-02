@@ -8,8 +8,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   {% if page and page.is_homepage %}<meta name="description" content="{{ config.site_description }}">{% endif %}
   {% if config.site_author %}<meta name="author" content="{{ config.site_author }}">{% endif %}
-  {% if config.site_favicon %}<link rel="shortcut icon" href="{{ base_url }}/{{ config.site_favicon }}">
-  {% else %}<link rel="shortcut icon" href="{{ base_url }}/img/favicon.ico">{% endif %}
+  {% if config.site_favicon %}<link rel="shortcut icon" href="{{ config.site_favicon|url }}">
+  {% else %}<link rel="shortcut icon" href="{{ 'img/favicon.ico'|url }}">{% endif %}
   {%- endblock %}
 
   {%- block htmltitle %}
@@ -19,11 +19,11 @@
   {%- block styles %}
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
-  <link rel="stylesheet" href="{{ base_url }}/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="{{ base_url }}/css/theme_extra.css" type="text/css" />
-  <link rel="stylesheet" href="{{ base_url }}/css/highlight.css">
-  {%- for path in extra_css %}
-  <link href="{{ path }}" rel="stylesheet">
+  <link rel="stylesheet" href="{{ 'css/theme.css'|url }}" type="text/css" />
+  <link rel="stylesheet" href="{{ 'css/theme_extra.css'|url }}" type="text/css" />
+  <link rel="stylesheet" href="{{ 'css/highlight.css'|url }}">
+  {%- for path in config['extra_css'] %}
+  <link href="{{ path|url }}" rel="stylesheet">
   {%- endfor %}
   {%- endblock %}
 
@@ -36,9 +36,9 @@
     var mkdocs_page_url = {{ page.abs_url|tojson|safe }};
   </script>
   {% endif %}
-  <script src="{{ base_url }}/js/jquery-2.1.1.min.js" defer></script>
-  <script src="{{ base_url }}/js/modernizr-2.8.3.min.js" defer></script>
-  <script type="text/javascript" src="{{ base_url }}/js/highlight.pack.js" defer></script>
+  <script src="{{ 'js/jquery-2.1.1.min.js'|url }}" defer></script>
+  <script src="{{ 'js/modernizr-2.8.3.min.js'|url }}" defer></script>
+  <script type="text/javascript" src="{{ 'js/highlight.pack.js'|url }}" defer></script>
   {%- endblock %}
 
   {%- block extrahead %} {% endblock %}
@@ -66,7 +66,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
       <div class="wy-side-nav-search">
     {%- block site_name %}
-        <a href="{{ base_url }}/{{ nav.homepage.url }}" class="icon icon-home"> {{ config.site_name }}</a>
+        <a href="{{ nav.homepage.url|url }}" class="icon icon-home"> {{ config.site_name }}</a>
 	  {%- endblock %}
 	  {%- block search_button %}
         {% if 'search' in config['plugins'] %}{% include "searchbox.html" %}{% endif %}
@@ -93,7 +93,7 @@
       {# MOBILE NAV, TRIGGLES SIDE NAV ON TOGGLE #}
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="{{ base_url }}/{{ nav.homepage.url }}">{{ config.site_name }}</a>
+        <a href="{{ nav.homepage.url|url }}">{{ config.site_name }}</a>
       </nav>
 
       {# PAGE CONTENT #}
@@ -121,9 +121,9 @@
 
   {%- block scripts %}
     <script>var base_url = '{{ base_url }}';</script>
-    <script src="{{ base_url }}/js/theme.js" defer></script>
-    {%- for path in extra_javascript %}
-      <script src="{{ path }}" defer></script>
+    <script src="{{ 'js/theme.js'|url }}" defer></script>
+    {%- for path in config['extra_javascript'] %}
+      <script src="{{ path|url }}" defer></script>
     {%- endfor %}
   {%- endblock %}
 

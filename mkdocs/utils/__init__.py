@@ -297,28 +297,31 @@ def get_relative_url(url, other):
     relurl = posixpath.relpath(url, other)
     return relurl + '/' if url.endswith('/') else relurl
 
+def normalize_url(path, page=None, base=''):
+    """ Return a URL relative to the given page or using the base. """
+    path = path_to_url(path or '.')
+    # Allow links to be fully qualified URL's
+    parsed = urlparse(path)
+    if parsed.scheme or parsed.netloc or path.startswith('/'):
+        return path
+
+    # We must be looking at a local path.
+    if page is not None:
+        return get_relative_url(path, page.url)
+    else:
+        return posixpath.join(base, path)
+
 
 def create_media_urls(path_list, page=None, base=''):
     """
     Return a list of URLs relative to the given page or using the base.
     """
-    final_urls = []
+    urls = []
 
     for path in path_list:
-        path = path_to_url(path)
-        # Allow links to be fully qualified URL's
-        parsed = urlparse(path)
-        if parsed.netloc:
-            final_urls.append(path)
-            continue
-        # We must be looking at a local path.
-        if page is not None:
-            url = get_relative_url(path, page.url)
-        else:
-            url = posixpath.join(base, path)
-        final_urls.append(url)
+        urls.append(normalize_url(path, page, base))
 
-    return final_urls
+    return urls
 
 
 def create_relative_media_url(nav, url):

@@ -8,8 +8,8 @@
         {% if page and page.is_homepage %}<meta name="description" content="{{ config['site_description'] }}">{% endif %}
         {% if config.site_author %}<meta name="author" content="{{ config.site_author }}">{% endif %}
         {% if page and page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}">{% endif %}
-        {% if config.site_favicon %}<link rel="shortcut icon" href="{{ base_url }}/{{ config.site_favicon }}">
-        {% else %}<link rel="shortcut icon" href="{{ base_url }}/img/favicon.ico">{% endif %}
+        {% if config.site_favicon %}<link rel="shortcut icon" href="{{ config.site_favicon|url }}">
+        {% else %}<link rel="shortcut icon" href="{{ 'img/favicon.ico'|url }}">{% endif %}
       {%- endblock %}
 
       {%- block htmltitle %}
@@ -17,12 +17,12 @@
       {%- endblock %}
 
       {%- block styles %}
-        <link href="{{ base_url }}/css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="{{ base_url }}/css/font-awesome.min.css" rel="stylesheet">
-        <link href="{{ base_url }}/css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="{{ base_url }}/css/highlight.css">
-        {%- for path in extra_css %}
-        <link href="{{ path }}" rel="stylesheet">
+        <link href="{{ 'css/bootstrap-custom.min.css'|url }}" rel="stylesheet">
+        <link href="{{ 'css/font-awesome.min.css'|url }}" rel="stylesheet">
+        <link href="{{ 'css/base.css'|url }}" rel="stylesheet">
+        <link rel="stylesheet" href="{{ 'css/highlight.css'|url }}">
+        {%- for path in config['extra_css'] %}
+        <link href="{{ path|url }}" rel="stylesheet">
         {%- endfor %}
       {%- endblock %}
 
@@ -33,9 +33,9 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="{{ base_url }}/js/jquery-1.10.2.min.js" defer></script>
-        <script src="{{ base_url }}/js/bootstrap-3.0.3.min.js" defer></script>
-        <script src="{{ base_url }}/js/highlight.pack.js" defer></script>
+        <script src="{{ 'js/jquery-1.10.2.min.js'|url }}" defer></script>
+        <script src="{{ 'js/bootstrap-3.0.3.min.js'|url }}" defer></script>
+        <script src="{{ 'js/highlight.pack.js'|url }}" defer></script>
       {%- endblock %}
 
       {%- block analytics %}
@@ -78,9 +78,9 @@
 
       {%- block scripts %}
         <script>var base_url = '{{ base_url }}';</script>
-        <script src="{{ base_url }}/js/base.js" defer></script>
-        {%- for path in extra_javascript %}
-        <script src="{{ path }}" defer></script>
+        <script src="{{ 'js/base.js'|url }}" defer></script>
+        {%- for path in config['extra_javascript'] %}
+        <script src="{{ path|url }}" defer></script>
         {%- endfor %}
       {%- endblock %}
 
