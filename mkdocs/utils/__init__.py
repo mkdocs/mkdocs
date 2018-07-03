@@ -297,6 +297,7 @@ def get_relative_url(url, other):
     relurl = posixpath.relpath(url, other)
     return relurl + '/' if url.endswith('/') else relurl
 
+
 def normalize_url(path, page=None, base=''):
     """ Return a URL relative to the given page or using the base. """
     path = path_to_url(path or '.')
