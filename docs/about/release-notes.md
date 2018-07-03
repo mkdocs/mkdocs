@@ -46,6 +46,8 @@ The changes included in the refactor are summarized below.
   This ensures all internal links are always computed correctly regardless of
   the configuration. This also allows all internal links to be validated, not
   just links to other Markdown pages. (#842 & #872).
+* A new [url] template filter smartly ensures all URLs are relative to the
+  current page (#1526).
 * An [on_files] plugin event has been added, which could be used to include
   files not in the `docs_dir`, exclude files, redefine page URLs (i.e.
   implement extensionless URLs), or to manipulate files in various other ways.
@@ -113,42 +115,51 @@ If both `pages` and `nav` are defined, the `pages` setting will be ignored.
 
 In previous versions of MkDocs some URLs expected the [base_url] template
 variable to be prepended to the URL and others did not. That inconsistency has
-been removed. All  URLs must now be joined with the `base_url`. As previously, a
-slash must be included between the `base_url` and the URL variable. For example,
-a theme template might have previously included a link to the `site_name` as:
+been removed in that no URLs are modified before being added to the template
+context.
+
+For example, a theme template might have previously included a link to
+the `site_name` as:
 
 ```django
 <a href="{{ nav.homepage.url }}">{{ config.site_name }}</a>
 ```
 
 And MkDocs would magically return a URL for the homepage which was relative to
-the current page. That "magic" has been removed and the `base_url` must now be
-explicitly included:
+the current page. That "magic" has been removed and the [url] template filter
+should be used:
 
 ```django
-<a href="{{ base_url }}/{{ nav.homepage.url }}">{{ config.site_name }}</a>
+<a href="{{ nav.homepage.url|url }}">{{ config.site_name }}</a>
 ```
 
 This change applies to any navigation items and pages, as well as the
 `page.next_page` and `page.previous_page` attributes. For the time being, the
 `extra_javascript` and `extra_css` variables continue to work as previously
-(without `base_url`), but they have been deprecated and the corresponding
-configuration values (`config.extra_javascript` and `config.extra_css`
-respectively) should be used with `base_url` instead.
-
-Note that navigation can now include links to external sites. Obviously, the
-`base_url` should not be prepended to these items. Therefore, all navigation
-items contain a `is_link` attribute which can be used to alter the behavior for
-external links.
+(without the `url` template filter), but they have been deprecated and the
+corresponding configuration values (`config.extra_javascript` and
+`config.extra_css` respectively) should be used with the filter instead.
 
 ```django
-<a href="{% if not nav_item.is_link %}{{ base_url }}/{% endif %}{{ nav_item.url }}">{{ nav_item.title }}</a>
+{% for path in config['extra_css'] %}
+    <link href="{{ path|url }}" rel="stylesheet">
+{% endfor %}
 ```
 
-Any other URL variables which should not be used with `base_url` are explicitly
-documented as such.
+Note that navigation can now include links to external sites. Obviously, the
+`base_url` should not be prepended to these items. However, the `url` template
+filter is smart enough to recognize the URL is absolute and does not alter it.
+Therefore, all navigation items can be passed to the filter and only those that
+need to will be altered.
+
+```django
+{% for nav_item in nav %}
+    <a href="{{ nav_item.url|url }}">{{ nav_item.title }}</a>
+{% endfor %}
+```
 
 [base_url]: ../user-guide/custom-themes.md#base_url
+[url]: ../user-guide/custom-themes.md#url
 
 #### Path Based Settings are Relative to Configuration File (#543)
 

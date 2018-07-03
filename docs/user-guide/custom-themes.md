@@ -170,14 +170,14 @@ navigation as a nested list.
                 <ul>
                 {% for nav_item in nav_item.children %}
                     <li class="{% if nav_item.active%}current{% endif %}">
-                        <a href="{% if not nav_item.is_link %}{{ base_url }}/{% endif %}{{ nav_item.url }}">{{ nav_item.title }}</a>
+                        <a href="{{ nav_item.url|url }}">{{ nav_item.title }}</a>
                     </li>
                 {% endfor %}
                 </ul>
             </li>
         {% else %}
             <li class="{% if nav_item.active%}current{% endif %}">
-                <a href="{% if not nav_item.is_link %}{{ base_url }}/{% endif %}{{ nav_item.url }}">{{ nav_item.title }}</a>
+                <a href="{{ nav_item.url|url }}">{{ nav_item.title }}</a>
             </li>
         {% endif %}
     {% endfor %}
@@ -187,14 +187,10 @@ navigation as a nested list.
 
 #### base_url
 
-The `base_url` provides a relative path to the root of the MkDocs project.
-This makes it easy to include links to static assets in your theme. For
-example, if your theme includes a `js` folder, to include `theme.js` from that
-folder on all pages you would do this:
-
-```django
-<script src="{{ base_url }}/js/theme.js"></script>
-```
+The `base_url` provides a relative path to the root of the MkDocs project. While
+this can be used directly by prepending it to a local relative URL, it is best
+to use the [url](#url) template filter, which is smarter about how it applies
+`base_url`.
 
 #### mkdocs_version
 
@@ -285,10 +281,11 @@ documentation page.
 ##### page.url
 
 The URL of the page relative to the MkDocs `site_dir`. It is expected that this
-be used with [base_url] to ensure the URL is relative to the current page.
+be used with the [url](#url) filter to ensure the URL is relative to the current
+page.
 
 ```django
-<a href="{{ base_url }}/{{ page.url }}">{{ page.title }}</a>
+<a href="{{ page.url|url }}">{{ page.title }}</a>
 ```
 
 [base_url]: #base_url
@@ -502,6 +499,32 @@ And then displayed with this HTML in the custom theme.
   {% endfor %}
   </ul>
 {% endif %}
+```
+
+## Template Filters
+
+In addition to Jinja's default filters, the following custom filters are
+available to use in MkDocs templates:
+
+### url
+
+Normalizes a URL. Absolute URLs are passed through unaltered. If the URL is
+relative and the template context includes a page object, then the URL is
+returned relative to the page object. Otherwise, the URL is returned with
+[base_url](#base_url) prepended.
+
+```django
+<a href="{{ page.url|url }}">{{ page.title }}</a>
+```
+
+### tojson
+
+Safety convert a Python object to a value in a JavaScript script.
+
+```django
+<script>
+    var mkdocs_page_name = {{ page.title|tojson|safe }};
+</script>
 ```
 
 ## Search and themes
