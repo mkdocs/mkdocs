@@ -202,6 +202,7 @@ authors should review how [search and themes] interact.
 
 ### Other Changes and Additions to Development Version
 
+* Close search modal when result is selected (#1527).
 * Add a level attribute to AnchorLinks (#1272).
 * Add MkDocs version check to gh-deploy script (#640).
 * Improve Markdown extension error messages. (#782).

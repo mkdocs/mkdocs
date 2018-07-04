@@ -27,6 +27,14 @@ $(document).ready(function() {
         $search_modal.find('#mkdocs-search-query').focus();
     });
 
+    // Close search modal when result is selected
+    // The links get added later so listen to parent
+    $('#mkdocs-search-results').click(function(e) {
+      if ($(e.target).is('a')) {
+        $search_modal.modal('hide');
+      }
+    });
+
     // Keyboard navigation
     document.addEventListener("keydown", function(e) {
         if ($(e.target).is(':input')) return true;
