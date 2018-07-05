@@ -25,17 +25,48 @@ the [Customizing a Theme][customize] section below.
 ### mkdocs
 
 The default theme, which was built as a custom [Bootstrap] theme, supports most
-every feature of MkDocs. It only supports the default [theme configuration
-options] and only officially supports two levels in the navigation (see #1107).
+every feature of MkDocs. It only officially supports two levels in the
+navigation (see #1107). In addition to the default [theme configuration
+options], the `mkdocs` theme supports the following options:
+
+* __`highlightjs`__: Enables highlighting of source code in code blocks using
+  the [highlight.js] JavaScript library. Default: `True`.
+
+* __`hljs_languages`__: By default, highlight.js only supports 23 common
+  languages. List additional languages here to include support for them.
+
+```yaml
+theme:
+    name: mkdocs
+    highlightjs: true
+    hljs_languages:
+        - yaml
+        - rust
+```
 
 ![mkdocs](/img/mkdocs.png)
 
 ### readthedocs
 
-A clone of the default theme used by the [Read the Docs] service. This theme
-only supports features in its parent theme and does not support any MkDocs
-[theme configuration options] in addition to the defaults. Like its parent
-theme, only two levels are supported in the navigation.
+A clone of the default theme used by the [Read the Docs] service, which offers
+the same restricted feature-set as its parent theme. Like its parent theme, only
+two levels of navigation are supported. In addition to the default [theme
+configuration options], the `readthedocs` theme supports the following options:
+
+* __`highlightjs`__: Enables highlighting of source code in code blocks using
+  the [highlight.js] JavaScript library. Default: `True`.
+
+* __`hljs_languages`__: By default, highlight.js only supports 23 common
+  languages. List additional languages here to include support for them.
+
+```yaml
+theme:
+    name: readthedocs
+    highlightjs: true
+    hljs_languages:
+        - yaml
+        - rust
+```
 
 ![ReadTheDocs](http://docs.readthedocs.io/en/latest/_images/screen_mobile.png)
 
@@ -279,3 +310,4 @@ any additional CSS files included in the `custom_dir`.
 [third party themes]: #third-party-themes
 [super block]: http://jinja.pocoo.org/docs/dev/templates/#super-blocks
 [base_url]: ./custom-themes.md#base_url
+[highlight.js]: https://highlightjs.org/
