@@ -44,7 +44,7 @@ theme:
         - rust
 ```
 
-![mkdocs](/img/mkdocs.png)
+![mkdocs](../img/mkdocs.png)
 
 ### readthedocs
 
@@ -68,7 +68,7 @@ theme:
         - rust
 ```
 
-![ReadTheDocs](https://raw.githubusercontent.com/rtfd/sphinx_rtd_theme/master/docs/demo/static/screen_mobile.png)
+![ReadTheDocs](../img/readthedocs.png)
 
 ### Third Party Themes
 
