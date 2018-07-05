@@ -132,7 +132,7 @@ class ConfigTests(unittest.TestCase):
                         'include_search_page': False,
                         'search_index_only': False,
                         'highlightjs': True,
-                        'extra_languages': []
+                        'hljs_languages': []
                     }
                 }, {
                     'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
@@ -141,7 +141,7 @@ class ConfigTests(unittest.TestCase):
                         'include_search_page': True,
                         'search_index_only': False,
                         'highlightjs': True,
-                        'extra_languages': []
+                        'hljs_languages': []
                     }
                 }, {
                     'dirs': [mytheme, mkdocs_templates_dir],
@@ -154,7 +154,7 @@ class ConfigTests(unittest.TestCase):
                         'include_search_page': True,
                         'search_index_only': False,
                         'highlightjs': True,
-                        'extra_languages': []
+                        'hljs_languages': []
                     }
                 }, {
                     'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
@@ -163,7 +163,7 @@ class ConfigTests(unittest.TestCase):
                         'include_search_page': True,
                         'search_index_only': False,
                         'highlightjs': True,
-                        'extra_languages': []
+                        'hljs_languages': []
                     }
                 }, {
                     'dirs': [mytheme, mkdocs_templates_dir],
@@ -176,7 +176,7 @@ class ConfigTests(unittest.TestCase):
                         'include_search_page': True,
                         'search_index_only': False,
                         'highlightjs': True,
-                        'extra_languages': []
+                        'hljs_languages': []
                     }
                 }, {
                     'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
@@ -187,7 +187,7 @@ class ConfigTests(unittest.TestCase):
                         'include_search_page': False,
                         'search_index_only': False,
                         'highlightjs': True,
-                        'extra_languages': []
+                        'hljs_languages': []
                     }
                 }
             )

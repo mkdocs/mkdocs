@@ -32,7 +32,7 @@ class ThemeTests(unittest.TestCase):
             'include_search_page': False,
             'search_index_only': False,
             'highlightjs': True,
-            'extra_languages': []
+            'hljs_languages': []
         })
 
     def test_custom_dir(self):
