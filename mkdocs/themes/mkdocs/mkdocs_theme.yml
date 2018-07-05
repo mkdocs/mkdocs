@@ -7,4 +7,4 @@ include_search_page: false
 search_index_only: false
 
 highlightjs: true
-extra_languages: []
+hljs_languages: []

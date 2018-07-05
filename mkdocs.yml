@@ -9,7 +9,7 @@ edit_uri: ""
 theme:
     name: mkdocs
     highlightjs: true
-    extra_languages:
+    hljs_languages:
         - yaml
         - django
 

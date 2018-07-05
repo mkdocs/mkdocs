@@ -42,7 +42,7 @@
   <script src="{{ 'js/modernizr-2.8.3.min.js'|url }}" defer></script>
   {%- if config.theme.highlightjs %}
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-  {%- for lang in config.theme.extra_languages %}
+  {%- for lang in config.theme.hljs_languages %}
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/{{lang}}.min.js"></script>
   {%- endfor %}
   <script>hljs.initHighlightingOnLoad();</script>
