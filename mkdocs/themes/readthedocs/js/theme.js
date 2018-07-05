@@ -35,8 +35,6 @@ $( document ).ready(function() {
     // Make tables responsive
     $("table.docutils:not(.field-list)").wrap("<div class='wy-table-responsive'></div>");
 
-    hljs.initHighlightingOnLoad();
-
     $('table').addClass('docutils');
 });
 
