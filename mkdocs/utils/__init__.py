@@ -151,6 +151,19 @@ def clean_directory(directory):
         else:
             os.unlink(path)
 
+def get_html_path(path):
+    """
+    Map a source file path to an output html path.
+
+    Paths like 'index.md' will be converted to 'index.html'
+    Paths like 'about.md' will be converted to 'about/index.html'
+    Paths like 'api-guide/core.md' will be converted to 'api-guide/core/index.html'
+    """
+    path = os.path.splitext(path)[0]
+    if os.path.basename(path) == 'index':
+        return path + '.html'
+    return "/".join((path, 'index.html'))
+
 
 def get_url_path(path, use_directory_urls=True):
     """
