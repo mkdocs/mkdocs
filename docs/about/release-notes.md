@@ -202,6 +202,7 @@ authors should review how [search and themes] interact.
 
 ### Other Changes and Additions to Development Version
 
+* Optimize `mkdocs.utils.copy_file` based on file size (#1331).
 * Add highlight.js configuration settings to built-in themes (#1284).
 * Close search modal when result is selected (#1527).
 * Add a level attribute to AnchorLinks (#1272).
