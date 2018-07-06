@@ -152,41 +152,6 @@ def clean_directory(directory):
             os.unlink(path)
 
 
-def copy_media_files(from_dir, to_dir,
-                     exclude=['*{0}'.format(x) for x in markdown_extensions], dirty=False):
-    """
-    Recursively copy all files except markdown and exclude[ed] files into another directory.
-
-    `exclude` accepts a list of Unix shell-style wildcards (`['*.py', '*.pyc']`).
-
-    Note that `exclude` only operates on file names, not directories.
-    """
-    for (source_dir, dirnames, filenames) in os.walk(from_dir, followlinks=True):
-        relative_path = os.path.relpath(source_dir, from_dir)
-        output_dir = os.path.normpath(os.path.join(to_dir, relative_path))
-
-        # Filter file names using Unix pattern matching
-        # Always filter file names starting with a '.'
-        exclude_patterns = ['.*']
-        exclude_patterns.extend(exclude or [])
-        for pattern in exclude_patterns:
-            filenames = [f for f in filenames if not fnmatch.fnmatch(f, pattern)]
-
-        # Filter the dirnames that start with a '.' and update the list in
-        # place to prevent us walking these.
-        dirnames[:] = [d for d in dirnames if not d.startswith('.')]
-
-        for filename in filenames:
-            source_path = os.path.join(source_dir, filename)
-            output_path = os.path.join(output_dir, filename)
-
-            # Do not copy when using --dirty if the file has not been modified
-            if dirty and (modified_time(source_path) < modified_time(output_path)):
-                continue
-
-            copy_file(source_path, output_path)
-
-
 def get_html_path(path):
     """
     Map a source file path to an output html path.
@@ -217,10 +182,6 @@ def get_url_path(path, use_directory_urls=True):
     if use_directory_urls:
         return url[:-len('index.html')]
     return url
-
-
-def is_homepage(path):
-    return os.path.splitext(path)[0] == 'index'
 
 
 def is_markdown_file(path):
@@ -325,55 +286,6 @@ def create_media_urls(path_list, page=None, base=''):
     return urls
 
 
-def create_relative_media_url(nav, url):
-    """
-    For a current page, create a relative url based on the given URL.
-
-    On index.md (which becomes /index.html):
-        image.png -> ./image.png
-        /image.png -> ./image.png
-
-    On sub/page.md (which becomes /sub/page/index.html):
-        image.png -> ../image.png
-        /image.png -> ../../image.png
-
-    On sub/index.md (which becomes /sub/index.html):
-        image.png -> ./image.png
-        /image.png -> ./image.png
-
-    """
-
-    # Allow links to fully qualified URL's
-    parsed = urlparse(url)
-    if parsed.netloc:
-        return url
-
-    # If the URL we are looking at starts with a /, then it should be
-    # considered as absolute and will be 'relative' to the root.
-    if url.startswith('/'):
-        base = '/'
-        url = url[1:]
-    else:
-        base = nav.url_context.base_path
-
-    relative_base = nav.url_context.make_relative(base)
-    if relative_base == "." and url.startswith("./"):
-        relative_url = url
-    else:
-        relative_url = '%s/%s' % (relative_base, url)
-
-    # TODO: Fix this, this is a hack. Relative urls are not being calculated
-    # correctly for images in the same directory as the markdown. I think this
-    # is due to us moving it into a directory with index.html, but I'm not sure
-    # win32 platform uses backslash "\". eg. "\level1\level2"
-    notindex = re.match(r'.*(?:\\|/)index.md$', nav.file_context.current_file) is None
-
-    if notindex and nav.url_context.base_path != '/' and relative_url.startswith("./"):
-        relative_url = ".%s" % relative_url
-
-    return relative_url
-
-
 def path_to_url(path):
     """Convert a system path to a URL."""
 
@@ -415,17 +327,6 @@ def get_theme_names():
     """Return a list of all installed themes by name."""
 
     return get_themes().keys()
-
-
-def filename_to_title(filename):
-
-    title = os.path.splitext(filename)[0]
-    title = title.replace('-', ' ').replace('_', ' ')
-    # Capitalize if the filename was all lowercase, otherwise leave it as-is.
-    if title.lower() == title:
-        title = title.capitalize()
-
-    return title
 
 
 def dirname_to_title(dirname):
