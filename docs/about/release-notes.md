@@ -21,9 +21,9 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
-## Development Version
+## Version 1.0 (2018-??-??)
 
-### Major Additions to Development Version
+### Major Additions to Version 1.0
 
 #### Internal Refactor of Pages, Files, and Navigation
 
@@ -226,6 +226,10 @@ authors should review how [search and themes] interact.
 * Remove PyPI Deployment Docs (#1360).
 * Update links to Python-Markdown library (#1360).
 * Document how to generate manpages for MkDocs commands (#686).
+
+## Version 0.17.5 (2018-07-06)
+
+* Bugfix: Fix Python 3.7 and PEP 479 incompatibility (#1518).
 
 ## Version 0.17.4
 
