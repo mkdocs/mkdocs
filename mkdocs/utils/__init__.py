@@ -151,6 +151,7 @@ def clean_directory(directory):
         else:
             os.unlink(path)
 
+
 def get_html_path(path):
     """
     Map a source file path to an output html path.
