@@ -21,6 +21,10 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Version 0.17.5 (2018-07-06)
+
+* Bugfix: Fix Python 3.7 and PEP 479 incompatibility (#1518).
+
 ## Version 0.17.4
 
 * Bugfix: Add multi-level nesting support to sitemap.xml (#1482).
