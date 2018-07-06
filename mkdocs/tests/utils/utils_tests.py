@@ -17,28 +17,6 @@ from mkdocs.tests.base import dedent, load_config
 
 
 class UtilsTests(unittest.TestCase):
-    def test_html_path(self):
-        expected_results = {
-            'index.md': 'index.html',
-            'api-guide.md': 'api-guide/index.html',
-            'api-guide/index.md': 'api-guide/index.html',
-            'api-guide/testing.md': 'api-guide/testing/index.html',
-        }
-        for file_path, expected_html_path in expected_results.items():
-            html_path = utils.get_html_path(file_path)
-            self.assertEqual(html_path, expected_html_path)
-
-    def test_url_path(self):
-        expected_results = {
-            'index.md': '/',
-            'api-guide.md': '/api-guide/',
-            'api-guide/index.md': '/api-guide/',
-            'api-guide/testing.md': '/api-guide/testing/',
-        }
-        for file_path, expected_html_path in expected_results.items():
-            html_path = utils.get_url_path(file_path)
-            self.assertEqual(html_path, expected_html_path)
-
     def test_is_markdown_file(self):
         expected_results = {
             'index.md': True,
