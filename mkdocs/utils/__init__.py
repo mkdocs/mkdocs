@@ -106,18 +106,44 @@ def reduce_list(data_set):
             item not in seen and not seen.add(item)]
 
 
-def copy_file(source_path, output_path):
+def copy_file(src, dst):
     """
-    Copy source_path to output_path, making sure any parent directories exist.
+    Copy src to dst ensuring parent directories are created.
 
-    The output_path may be a directory.
+    The dst may be a directory, as long as it already exists.
     """
-    output_dir = os.path.dirname(output_path)
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-    if os.path.isdir(output_path):
-        output_path = os.path.join(output_path, os.path.basename(source_path))
-    shutil.copyfile(source_path, output_path)
+    # If destination directory doesn't exist, create it.
+    dst_dir = os.path.dirname(dst)
+    if not os.path.exists(dst_dir):
+        os.makedirs(dst_dir)
+    # If destination is a directory, append source filename.
+    if os.path.isdir(dst):
+        dst = os.path.join(dst, os.path.basename(src))
+
+    # shutil.copyfile internals...
+    if shutil._samefile(src, dst):
+        raise shutil.SameFileError("{!r} and {!r} are the same file".format(src, dst))
+
+    for fn in [src, dst]:
+        try:
+            st = os.stat(fn)
+        except OSError:
+            # File most likely does not exist
+            pass
+        else:
+            # XXX What about other special files? (sockets, devices...)
+            if shutil.stat.S_ISFIFO(st.st_mode):
+                raise shutil.SpecialFileError("`%s` is a named pipe" % fn)
+
+    # Optimize the buffer size based on file size.
+    # http://blogs.blumetech.com/blumetechs-tech-blog/2011/05/faster-python-file-copy.html
+    buffer_size = min(10485760, os.path.getsize(src))
+    if(buffer_size == 0):
+        buffer_size = 1024
+
+    with open(src, 'rb') as fsrc:
+        with open(dst, 'wb') as fdst:
+            shutil.copyfileobj(fsrc, fdst, buffer_size)
 
 
 def write_file(content, output_path):
