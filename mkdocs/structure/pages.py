@@ -19,12 +19,6 @@ from mkdocs.exceptions import MarkdownNotFound
 log = logging.getLogger(__name__)
 
 
-@meta.transformer()
-def default(value):
-    """ By default, return all meta values as strings. """
-    return ' '.join(value)
-
-
 class Page(object):
     def __init__(self, title, file, config):
         file.page = self
