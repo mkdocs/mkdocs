@@ -35,13 +35,17 @@ Extracts, parses and transforms MultiMarkdown style data from documents.
 
 
 import re
-
+import yaml
+try:
+    from yaml import CSafeLoader as SafeLoader
+except ImportError:
+    from yaml import SafeLoader
 
 #####################################################################
 # Data Parser                                                       #
 #####################################################################
 
-YAML_RE = re.compile(r'^-{3}[ \t]*\n(.*?\n)(?:\.{3}|-{3})[ \t]*\n', re.UNICODE|re.DOTALL)
+YAML_RE = re.compile(r'^-{3}[ \t]*\n(.*?\n)(?:\.{3}|-{3})[ \t]*\n', re.UNICODE | re.DOTALL)
 META_RE = re.compile(r'^[ ]{0,3}(?P<key>[A-Za-z0-9_-]+):\s*(?P<value>.*)')
 META_MORE_RE = re.compile(r'^([ ]{4}|\t)(\s*)(?P<value>.*)')
 
@@ -63,7 +67,7 @@ def get_data(doc):
                 doc = doc[m.end():].lstrip('\n')
             else:
                 data = {}
-        except:
+        except Exception:
             pass
         return doc, data
 
