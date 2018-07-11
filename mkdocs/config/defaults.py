@@ -81,9 +81,8 @@ DEFAULT_SCHEMA = (
 
     # Specify which css or javascript files from the docs directory should be
     # additionally included in the site.
-    ('extra_css', config_options.Extras(file_match=utils.is_css_file, default=[])),
-    ('extra_javascript', config_options.Extras(
-        file_match=utils.is_javascript_file, default=[])),
+    ('extra_css', config_options.Type(list, default=[])),
+    ('extra_javascript', config_options.Type(list, default=[])),
 
     # Similar to the above, but each template (HTML or XML) will be build with
     # Jinja2 and the global context.
