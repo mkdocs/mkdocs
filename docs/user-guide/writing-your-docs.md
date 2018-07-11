@@ -326,43 +326,13 @@ appropriately for the rendered document.
 
 ### Meta-Data
 
-MkDocs includes support for [MultiMarkdown] style meta-data (often called
-front-matter). Meta-data consists of a series of keywords and values defined at
-the beginning of a Markdown document like this:
-
-```no-highlight
-Title:   My Document
-Summary: A brief description of my document.
-Authors: Waylan Limberg
-         Tom Christie
-Date:    January 23, 2018
-blank-value:
-some_url: http://example.com
-
-This is the first paragraph of the document.
-```
-
-The keywords are case-insensitive and may consist of letters, numbers,
-underscores and dashes and must end with a colon. The values consist of anything
-following the colon on the line and may even be blank.
-
-If a line is indented by 4 or more spaces, that line is assumed to be an
-additional line of the value for the previous keyword. A keyword may have as
-many lines as desired.
-
-The first blank line ends all meta-data for the document. Therefore, the first
-line of a document must not be blank.
-
-Alternatively, you may use YAML style deliminators to mark the start and/or end
-of your meta-data. When doing so, the first line of your document must be `---`.
-The meta-data ends at the first blank line or the first line containing an end
-deliminator (either `---` or `...`), whichever comes first. Even though YAML
-deliminators are supported, meta-data is not parsed as YAML.
-
-All meta-data is stripped from the document prior to being processing by
-Python-Markdown. The keys and values are passed by MkDocs to the page template.
-Therefore, if a theme includes support, the values of any keys can be displayed
-on the page. See the documentation for your theme for information about which
+MkDocs includes support for both YAML and MultiMarkdown style meta-data (often
+called front-matter). Meta-data consists of a series of keywords and values
+defined at the beginning of a Markdown document, which are stripped from the
+document prior to it being processing by Python-Markdown. The key/value pairs
+are passed by MkDocs to the page template. Therefore, if a theme includes
+support, the values of any keys can be displayed on the page or used to control
+the page rendering. See your theme's documentation for information about which
 keys may be supported, if any.
 
 In addition to displaying information in a template, MkDocs includes support for
@@ -393,6 +363,77 @@ specific page. The following keys are supported:
     Upon finding a title for a page, MkDoc does not continue checking any
     additional sources in the above list.
 
+#### YAML Style Meta-Data
+
+YAML style meta-data consists of [YAML] key/value pairs wrapped in YAML style
+deliminators to mark the start and/or end of the meta-data. The first line of
+a document must be `---`. The meta-data ends at the first line containing an
+end deliminator (either `---` or `...`). The content between the deliminators is
+parsed as [YAML].
+
+```no-highlight
+---
+title: My Document
+summary: A brief description of my document.
+authors:
+    - Waylan Limberg
+    - Tom Christie
+date: 2018-07-10
+some_url: http://example.com
+---
+This is the first paragraph of the document.
+```
+
+YAML is able to detect data types. Therefore, in the above example, the values
+of `title`, `summary` and `some_url` are strings, the value of `authors` is a
+list of strings and the value of `date` is a `datetime.date` object. Note that
+the YAML keys are case sensitive and MkDocs expects keys to be all lowercase.
+The top level of the YAML must be a collection of key/value pairs, which results
+in a Python `dict` being returned. If any other type is returned or the YAML
+parser encounters an error, then MkDocs does not recognize the section as
+meta-data, the page's `meta` attribute will be empty, and the section is not
+removed from the document.
+
+#### MultiMarkdown Style Meta-Data
+
+MultiMarkdown style meta-data uses a format first introduced by the
+[MultiMarkdown] project. The data consists of a series of keywords and values
+defined at the beginning of a Markdown document, like this:
+
+```no-highlight
+Title:   My Document
+Summary: A brief description of my document.
+Authors: Waylan Limberg
+         Tom Christie
+Date:    January 23, 2018
+blank-value:
+some_url: http://example.com
+
+This is the first paragraph of the document.
+```
+
+The keywords are case-insensitive and may consist of letters, numbers,
+underscores and dashes and must end with a colon. The values consist of anything
+following the colon on the line and may even be blank.
+
+If a line is indented by 4 or more spaces, that line is assumed to be an
+additional line of the value for the previous keyword. A keyword may have as
+many lines as desired. All lines are joined into a single string.
+
+The first blank line ends all meta-data for the document. Therefore, the first
+line of a document must not be blank.
+
+!!! note
+
+    MkDocs does not support YAML style deliminators (`---` or `...`) for
+    MultiMarkdown style meta-data. In fact, MkDocs relies on the the presence or
+    absence of the deliminators to determine whether YAML style meta-data or
+    MultiMarkdown style meta-data is being used. If the deliminators are
+    detected, but the content between the deliminators is not valid YAML
+    meta-data, MkDocs does not attempt to parse the content as MultiMarkdown
+    style meta-data.
+
+[YAML]: http://yaml.org
 [MultiMarkdown]: http://fletcherpenney.net/MultiMarkdown_Syntax_Guide#metadata
 [nav]: configuration.md#nav
 

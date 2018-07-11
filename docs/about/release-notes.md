@@ -180,6 +180,35 @@ mkdocs build --config-file /path/to/my/config/file.yml
 As previously, if no file is specified, MkDocs looks for a file named
 `mkdocs.yml` in the current working directory.
 
+#### Added support for YAML Meta-Data (#1542)
+
+Previously, MkDocs only supported MultiMarkdown style meta-data, which does not
+recognize different data types and is rather limited. MkDocs now also supports
+YAML style meta-data in Markdown documents. MkDocs relies on the the presence or
+absence of the deliminators (`---` or `...`) to determine whether YAML style
+meta-data or MultiMarkdown style meta-data is being used.
+
+Previously MkDocs would recognize MultiMarkdown style meta-data between the
+deliminators. Now, if the deliminators are detected, but the content between the
+deliminators is not valid YAML meta-data, MkDocs does not attempt to parse the
+content as MultiMarkdown style meta-data. Therefore, MultiMarkdowns style
+meta-data must not include the deliminators. See the [MultiMarkdown style
+meta-data documentation] for details.
+
+Prior to version 0.17, MkDocs returned all meta-data values as a list of strings
+(even a single line would return a list of one string). In version 0.17, that
+behavior was changed to return each value as a single string (multiple lines
+were joined), which some users found limiting (see #1471). That behavior
+continues for MultiMarkdown style meta-data in the current version. However,
+YAML style meta-data supports the full range of "safe" YAML data types.
+Therefore, it is recommended that any complex meta-data make use of the YAML
+style (see the [YAML style meta-data documentation] for details). In fact, a
+future version of MkDocs may deprecate support for MultiMarkdown style
+meta-data.
+
+[MultiMarkdown style meta-data documentation]: ../user-guide/writing-your-docs.md#multimarkdown-style-meta-data
+[YAML style meta-data documentation]: ../user-guide/writing-your-docs.md#yaml-style-meta-data
+
 #### Refactor Search Plugin
 
 The search plugin has been completely refactored to include support for the
