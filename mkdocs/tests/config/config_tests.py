@@ -105,8 +105,6 @@ class ConfigTests(unittest.TestCase):
             configs = [
                 dict(),  # default theme
                 {"theme": "readthedocs"},  # builtin theme
-                {"theme_dir": mytheme},  # custom only
-                {"theme": "readthedocs", "theme_dir": custom},  # builtin and custom
                 {"theme": {'name': 'readthedocs'}},  # builtin as complex
                 {"theme": {'name': None, 'custom_dir': mytheme}},  # custom only as complex
                 {"theme": {'name': 'readthedocs', 'custom_dir': custom}},  # builtin and custom as complex
@@ -136,19 +134,6 @@ class ConfigTests(unittest.TestCase):
                     }
                 }, {
                     'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
-                    'static_templates': ['404.html', 'sitemap.xml'],
-                    'vars': {
-                        'include_search_page': True,
-                        'search_index_only': False,
-                        'highlightjs': True,
-                        'hljs_languages': []
-                    }
-                }, {
-                    'dirs': [mytheme, mkdocs_templates_dir],
-                    'static_templates': ['sitemap.xml'],
-                    'vars': {}
-                }, {
-                    'dirs': [custom, os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],
                     'vars': {
                         'include_search_page': True,
@@ -194,10 +179,7 @@ class ConfigTests(unittest.TestCase):
 
             for config_contents, result in zip(configs, results):
 
-                c = config.Config(schema=(
-                    ('theme', config_options.Theme(default='mkdocs')),
-                    ('theme_dir', config_options.ThemeDir(exists=True)),
-                ))
+                c = config.Config(schema=(('theme', config_options.Theme(default='mkdocs')),))
                 c.load_dict(config_contents)
                 errors, warnings = c.validate()
                 self.assertEqual(len(errors), 0)

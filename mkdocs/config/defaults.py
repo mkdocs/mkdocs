@@ -42,10 +42,6 @@ DEFAULT_SCHEMA = (
     # The directory where the site will be built to
     ('site_dir', config_options.SiteDir(default='site')),
 
-    # The directory of a theme to use if not using one of the builtin MkDocs
-    # themes.
-    ('theme_dir', config_options.ThemeDir(exists=True)),
-
     # A copyright notice to add to the footer of documentation.
     ('copyright', config_options.Type(utils.string_types)),
 
