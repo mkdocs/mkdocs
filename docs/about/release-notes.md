@@ -229,8 +229,9 @@ authors should review how [search and themes] interact.
 [search config]: ../user-guide/configuration.md#search
 [search and themes]: ../user-guide/custom-themes.md#search_and_themes
 
-### Other Changes and Additions to Development Version
+### Other Changes and Additions to Version 1.0
 
+* Empty `extra_css` and `extra_javascript` settings no longer raise a warning.
 * Add highlight.js configuration settings to built-in themes (#1284).
 * Close search modal when result is selected (#1527).
 * Add a level attribute to AnchorLinks (#1272).
@@ -404,7 +405,7 @@ and user created and third-party templates should be updated as outlined below:
 In previous versions of MkDocs, if the `extra_css` or `extra_javascript` config
 settings were empty, MkDocs would scan the `docs_dir` and auto-populate each
 setting with all of the CSS and JavaScript files found. On version 0.16 this
-behavior was deprecated and a warning was issued. In 1.0 any unlisted CSS and
+behavior was deprecated and a warning was issued. In 0.17 any unlisted CSS and
 JavaScript files will not be included in the HTML templates, however, a warning
 will be issued. In other words, they will still be copied to the `site-dir`, but
 they will not have any effect on the theme if they are not explicitly listed.
