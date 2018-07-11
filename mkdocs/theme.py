@@ -83,12 +83,10 @@ class Theme(object):
                 theme_config = utils.yaml_load(f)
         except IOError as e:
             log.debug(e)
-            # TODO: Change this warning to an error in a future version
-            log.warning(
+            raise ValidationError(
                 "The theme '{0}' does not appear to have a configuration file. "
                 "Please upgrade to a current version of the theme.".format(name)
             )
-            return
 
         log.debug("Loaded theme configuration for '%s' from '%s': %s", name, file_path, theme_config)
 

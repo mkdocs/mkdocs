@@ -229,7 +229,7 @@ authors should review how [search and themes] interact.
 [search config]: ../user-guide/configuration.md#search
 [search and themes]: ../user-guide/custom-themes.md#search_and_themes
 
-#### `theme_dir` Configuration Option fully Deprecated.
+#### `theme_dir` Configuration Option fully Deprecated
 
 As of version 0.17, the [custom_dir] option replaced the deprecated `theme_dir`
 option. If users had set the `theme_dir` option, MkDocs version 0.17 copied the
@@ -238,6 +238,7 @@ value to the `theme.custom_dir` option and a warning was issued. As of version
 
 ### Other Changes and Additions to Version 1.0
 
+* A missing theme configuration file now raises an error.
 * Empty `extra_css` and `extra_javascript` settings no longer raise a warning.
 * Add highlight.js configuration settings to built-in themes (#1284).
 * Close search modal when result is selected (#1527).
