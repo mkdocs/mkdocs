@@ -9,6 +9,7 @@ import unittest
 import tempfile
 import shutil
 import stat
+import datetime
 
 from mkdocs import utils, exceptions
 from mkdocs.structure.files import File
@@ -363,3 +364,91 @@ class UtilsTests(unittest.TestCase):
                     os.chmod(src, stat.S_IRUSR | stat.S_IWUSR)
             shutil.rmtree(src_dir)
             shutil.rmtree(dst_dir)
+
+    def test_mm_meta_data(self):
+        doc = dedent(
+            """
+            Title: Foo Bar
+            Date: 2018-07-10
+            Summary: Line one
+                Line two
+            Tags: foo
+            Tags: bar
+
+            Doc body
+            """
+        )
+        self.assertEqual(
+            utils.meta.get_data(doc),
+            (
+                "Doc body",
+                {
+                    'title': 'Foo Bar',
+                    'date': '2018-07-10',
+                    'summary': 'Line one Line two',
+                    'tags': 'foo bar'
+                }
+            )
+        )
+
+    def test_mm_meta_data_blank_first_line(self):
+        doc = '\nfoo: bar\nDoc body'
+        self.assertEqual(utils.meta.get_data(doc), (doc.lstrip(), {}))
+
+    def test_yaml_meta_data(self):
+        doc = dedent(
+            """
+            ---
+            Title: Foo Bar
+            Date: 2018-07-10
+            Summary: Line one
+                Line two
+            Tags:
+                - foo
+                - bar
+            ---
+            Doc body
+            """
+        )
+        self.assertEqual(
+            utils.meta.get_data(doc),
+            (
+                "Doc body",
+                {
+                    'Title': 'Foo Bar',
+                    'Date': datetime.date(2018, 7, 10),
+                    'Summary': 'Line one Line two',
+                    'Tags': ['foo', 'bar']
+                }
+            )
+        )
+
+    def test_yaml_meta_data_not_dict(self):
+        doc = dedent(
+            """
+            ---
+            - List item
+            ---
+            Doc body
+            """
+        )
+        self.assertEqual(utils.meta.get_data(doc), (doc, {}))
+
+    def test_yaml_meta_data_invalid(self):
+        doc = dedent(
+            """
+            ---
+            foo: bar: baz
+            ---
+            Doc body
+            """
+        )
+        self.assertEqual(utils.meta.get_data(doc), (doc, {}))
+
+    def test_no_meta_data(self):
+        doc = dedent(
+            """
+            Doc body
+            """
+        )
+        self.assertEqual(utils.meta.get_data(doc), (doc, {}))

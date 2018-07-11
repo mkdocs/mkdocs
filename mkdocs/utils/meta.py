@@ -38,7 +38,7 @@ import re
 import yaml
 try:
     from yaml import CSafeLoader as SafeLoader
-except ImportError:
+except ImportError:  # pragma: no cover
     from yaml import SafeLoader
 
 #####################################################################
@@ -85,14 +85,14 @@ def get_data(doc):
             key = m1.group('key').lower().strip()
             value = m1.group('value').strip()
             if key in data:
-                data[key] += '\n{}'.format(value)
+                data[key] += ' {}'.format(value)
             else:
                 data[key] = value
         else:
             m2 = META_MORE_RE.match(line)
             if m2 and key:
                 # Add another line to existing key
-                data[key] += '\n{}'.format(m2.group('value').strip())
+                data[key] += ' {}'.format(m2.group('value').strip())
             else:
                 lines.insert(0, line)
                 break  # no meta data - done
