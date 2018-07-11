@@ -380,27 +380,6 @@ class SiteDir(Dir):
                  ).format(config['site_dir'], config['docs_dir']))
 
 
-class ThemeDir(Dir):
-    """
-    ThemeDir Config Option. Deprecated
-    """
-
-    def pre_validation(self, config, key_name):
-
-        if config.get(key_name) is None:
-            return
-
-        super(ThemeDir, self).pre_validation(config, key_name)
-
-        warning = ('The configuration option {0} has been deprecated and will '
-                   'be removed in a future release of MkDocs.')
-        self.warnings.append(warning)
-
-    def post_validation(self, config, key_name):
-        # The validation in the parent class this inherits from is not relevant here.
-        pass
-
-
 class Theme(BaseConfigOption):
     """
     Theme Config Option
@@ -437,15 +416,6 @@ class Theme(BaseConfigOption):
 
     def post_validation(self, config, key_name):
         theme_config = config[key_name]
-
-        # TODO: Remove when theme_dir is fully deprecated.
-        if config['theme_dir'] is not None:
-            if 'custom_dir' not in theme_config:
-                # Only pass in 'theme_dir' if it is set and 'custom_dir' is not set.
-                theme_config['custom_dir'] = config['theme_dir']
-            if not any(['theme' in c for c in config.user_configs]):
-                # If the user did not define a theme, but did define theme_dir, then remove default set in validate.
-                theme_config['name'] = None
 
         if not theme_config['name'] and 'custom_dir' not in theme_config:
             raise ValidationError("At least one of 'theme.name' or 'theme.custom_dir' must be defined.")

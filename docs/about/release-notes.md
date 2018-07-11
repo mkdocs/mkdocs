@@ -229,6 +229,13 @@ authors should review how [search and themes] interact.
 [search config]: ../user-guide/configuration.md#search
 [search and themes]: ../user-guide/custom-themes.md#search_and_themes
 
+#### `theme_dir` Configuration Option fully Deprecated.
+
+As of version 0.17, the [custom_dir] option replaced the deprecated `theme_dir`
+option. If users had set the `theme_dir` option, MkDocs version 0.17 copied the
+value to the `theme.custom_dir` option and a warning was issued. As of version
+1.0, the value is no longer copied and an error is raised.
+
 ### Other Changes and Additions to Version 1.0
 
 * Empty `extra_css` and `extra_javascript` settings no longer raise a warning.
@@ -308,7 +315,7 @@ Support had been added to provide theme specific customizations. Theme authors
 can define default options as documented in [Theme Configuration]. A theme can
 now inherit from another theme, define various static templates to be rendered,
 and define arbitrary default variables to control behavior in the templates.
-The theme configuration is defined in a configuruation file named
+The theme configuration is defined in a configuration file named
 `mkdocs_theme.yml` which should be placed at the root of your template files. A
 warning will be raised if no configuration file is found and an error will be
 raised in a future release.
