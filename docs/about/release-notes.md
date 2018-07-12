@@ -238,6 +238,7 @@ value to the `theme.custom_dir` option and a warning was issued. As of version
 
 ### Other Changes and Additions to Version 1.0
 
+* Officially support Python 3.7.
 * A missing theme configuration file now raises an error.
 * Empty `extra_css` and `extra_javascript` settings no longer raise a warning.
 * Add highlight.js configuration settings to built-in themes (#1284).
