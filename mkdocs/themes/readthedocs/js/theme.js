@@ -17,10 +17,10 @@ $( document ).ready(function() {
         var key = e.which || e.keyCode || window.event && window.event.keyCode;
         var page;
         switch (key) {
-            case 39:  // right arrow
+            case 78:  // n
                 page = $('[role="navigation"] a:contains(Next):first').prop('href');
                 break;
-            case 37:  // left arrow
+            case 80:  // p
                 page = $('[role="navigation"] a:contains(Previous):first').prop('href');
                 break;
             default: break;
