@@ -1,0 +1,16 @@
+{
+  // Enable all markdownlint rules
+  "default": true,
+
+  // Disable line length check for tables and code blocks
+  "MD013": { "line_length": 80, "code_blocks": false, "tables": false },
+
+  // Set Ordered list item prefix to "ordered" (use 1. 2. 3. not 1. 1. 1.)
+  "MD029": { "style": "ordered" },
+
+  // Set list indent level to 4 which Python-Markdown requires
+  "MD007": { "indent": 4 },
+
+  // Exclude code block style
+  "MD046": false
+}

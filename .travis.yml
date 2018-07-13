@@ -7,7 +7,7 @@ matrix:
     # Default Python
     - env: TOXENV=flake8
     - env: TOXENV=markdown-lint
-      before_install: gem install mdl
+      before_install: npm install -g markdownlint-cli
     - env: TOXENV=linkchecker
     - env: TOXENV=jshint
       before_install: npm install -g jshint
