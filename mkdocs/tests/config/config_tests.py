@@ -130,7 +130,8 @@ class ConfigTests(unittest.TestCase):
                         'include_search_page': False,
                         'search_index_only': False,
                         'highlightjs': True,
-                        'hljs_languages': []
+                        'hljs_languages': [],
+                        'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83}
                     }
                 }, {
                     'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
@@ -172,7 +173,8 @@ class ConfigTests(unittest.TestCase):
                         'include_search_page': False,
                         'search_index_only': False,
                         'highlightjs': True,
-                        'hljs_languages': []
+                        'hljs_languages': [],
+                        'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83}
                     }
                 }
             )

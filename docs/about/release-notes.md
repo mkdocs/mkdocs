@@ -238,6 +238,8 @@ value to the `theme.custom_dir` option and a warning was issued. As of version
 
 ### Other Changes and Additions to Version 1.0
 
+* Keyboard shortcuts changed to not conflict with commonly used accessibility
+  shortcuts (#1502.)
 * User friendly YAML parse errors (#1543).
 * Officially support Python 3.7.
 * A missing theme configuration file now raises an error.

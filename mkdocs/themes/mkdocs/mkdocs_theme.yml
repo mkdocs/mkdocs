@@ -8,3 +8,9 @@ search_index_only: false
 
 highlightjs: true
 hljs_languages: []
+
+shortcuts:
+    help: 191    # ?
+    next: 78     # n
+    previous: 80 # p
+    search: 83   # s

@@ -26,8 +26,12 @@ the [Customizing a Theme][customize] section below.
 
 The default theme, which was built as a custom [Bootstrap] theme, supports most
 every feature of MkDocs. It only officially supports two levels in the
-navigation (see #1107). In addition to the default [theme configuration
-options], the `mkdocs` theme supports the following options:
+navigation (see #1107).
+
+![mkdocs](../img/mkdocs.png)
+
+In addition to the default [theme configuration options], the `mkdocs` theme
+supports the following options:
 
 * __`highlightjs`__: Enables highlighting of source code in code blocks using
   the [highlight.js] JavaScript library. Default: `True`.
@@ -35,16 +39,35 @@ options], the `mkdocs` theme supports the following options:
 * __`hljs_languages`__: By default, highlight.js only supports 23 common
   languages. List additional languages here to include support for them.
 
-```yaml
-theme:
-    name: mkdocs
-    highlightjs: true
-    hljs_languages:
-        - yaml
-        - rust
-```
+        theme:
+            name: mkdocs
+            highlightjs: true
+            hljs_languages:
+                - yaml
+                - rust
 
-![mkdocs](../img/mkdocs.png)
+* __`shortcuts`__: Defines keyboard shortcut keys.
+
+        theme:
+            name: mkdocs
+            shortcuts:
+                help: 191    # ?
+                next: 78     # n
+                previous: 80 # p
+                search: 83   # s
+
+    All values much be numeric key codes. It is best to use keys which are
+    available on all keyboards. You may use <http://keycode.info/> to determine
+    the key code for a given key.
+
+    * __`help`__: Display a help modal which lists the keyboard shortcuts.
+      Default: `191` (&quest;)
+
+    * __`next`__: Navigate to the "next" page. Default: `78` (n)
+
+    * __`previous`__: Navigate to the "previous" page. Default: `80` (p)
+
+    * __`search`__: Display the search modal. Default: `83` (s)
 
 ### readthedocs
 
