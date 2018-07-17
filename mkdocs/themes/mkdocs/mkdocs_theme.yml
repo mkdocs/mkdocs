@@ -8,6 +8,7 @@ search_index_only: false
 
 highlightjs: true
 hljs_languages: []
+hljs_style: github
 
 shortcuts:
     help: 191    # ?

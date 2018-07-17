@@ -130,6 +130,7 @@ class ConfigTests(unittest.TestCase):
                         'include_search_page': False,
                         'search_index_only': False,
                         'highlightjs': True,
+                        'hljs_style': 'github',
                         'hljs_languages': [],
                         'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83}
                     }
@@ -173,6 +174,7 @@ class ConfigTests(unittest.TestCase):
                         'include_search_page': False,
                         'search_index_only': False,
                         'highlightjs': True,
+                        'hljs_style': 'github',
                         'hljs_languages': [],
                         'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83}
                     }

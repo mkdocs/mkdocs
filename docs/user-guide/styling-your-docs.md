@@ -36,6 +36,10 @@ supports the following options:
 * __`highlightjs`__: Enables highlighting of source code in code blocks using
   the [highlight.js] JavaScript library. Default: `True`.
 
+* __`hljs_style`__: The highlight.js library provides 79 different [styles]
+  (color variations) for highlighting source code in code blocks. Set this to
+  the name of the desired style. Default: `github`.
+
 * __`hljs_languages`__: By default, highlight.js only supports 23 common
   languages. List additional languages here to include support for them.
 
@@ -69,12 +73,18 @@ supports the following options:
 
     * __`search`__: Display the search modal. Default: `83` (s)
 
+[styles]: https://highlightjs.org/static/demo/
+
 ### readthedocs
 
 A clone of the default theme used by the [Read the Docs] service, which offers
 the same restricted feature-set as its parent theme. Like its parent theme, only
-two levels of navigation are supported. In addition to the default [theme
-configuration options], the `readthedocs` theme supports the following options:
+two levels of navigation are supported.
+
+![ReadTheDocs](../img/readthedocs.png)
+
+In addition to the default [theme configuration options], the `readthedocs`
+theme supports the following options:
 
 * __`highlightjs`__: Enables highlighting of source code in code blocks using
   the [highlight.js] JavaScript library. Default: `True`.
@@ -82,16 +92,12 @@ configuration options], the `readthedocs` theme supports the following options:
 * __`hljs_languages`__: By default, highlight.js only supports 23 common
   languages. List additional languages here to include support for them.
 
-```yaml
-theme:
-    name: readthedocs
-    highlightjs: true
-    hljs_languages:
-        - yaml
-        - rust
-```
-
-![ReadTheDocs](../img/readthedocs.png)
+        theme:
+            name: readthedocs
+            highlightjs: true
+            hljs_languages:
+                - yaml
+                - rust
 
 ### Third Party Themes
 
