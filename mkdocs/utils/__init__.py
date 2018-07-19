@@ -54,7 +54,7 @@ def yaml_load(source, loader=yaml.Loader):
     Wrap PyYaml's loader so we can extend it to suit our needs.
 
     Load all strings as unicode.
-    http://stackoverflow.com/a/2967461/3609487
+    https://stackoverflow.com/a/2967461/3609487
     """
 
     def construct_yaml_str(self, node):
@@ -188,7 +188,7 @@ def is_markdown_file(path):
     """
     Return True if the given file path is a Markdown file.
 
-    http://superuser.com/questions/249436/file-extension-for-markdown-files
+    https://superuser.com/questions/249436/file-extension-for-markdown-files
     """
     return any(fnmatch.fnmatch(path.lower(), '*{0}'.format(x)) for x in markdown_extensions)
 

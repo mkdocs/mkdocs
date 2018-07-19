@@ -8,7 +8,7 @@ import os
 config_text = 'site_name: My Docs\n'
 index_text = """# Welcome to MkDocs
 
-For full documentation visit [mkdocs.org](http://mkdocs.org).
+For full documentation visit [mkdocs.org](https://mkdocs.org).
 
 ## Commands
 

@@ -696,8 +696,8 @@ details about these specific themes.
 * [MkDocs Bootstrap]
 * [MkDocs Bootswatch]
 
-[MkDocs Bootstrap]: http://mkdocs.github.io/mkdocs-bootstrap/
-[MkDocs Bootswatch]: http://mkdocs.github.io/mkdocs-bootswatch/
+[MkDocs Bootstrap]: https://mkdocs.github.io/mkdocs-bootstrap/
+[MkDocs Bootswatch]: https://mkdocs.github.io/mkdocs-bootswatch/
 
 They will be included with MkDocs by default until a future release. After that
 they will be installable with pip: `pip install mkdocs-bootstrap` and `pip
@@ -815,7 +815,7 @@ JavaScript library [lunr.js]. It has been added to both the `mkdocs` and
 `readthedocs` themes. See the custom theme documentation on [supporting search]
 for adding it to your own themes.
 
-[lunr.js]: http://lunrjs.com/
+[lunr.js]: https://lunrjs.com/
 [supporting search]: ../user-guide/styling-your-docs.md#search-and-themes
 
 #### New Command Line Interface
