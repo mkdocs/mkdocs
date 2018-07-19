@@ -33,7 +33,7 @@ rooms, and mailing lists is expected to follow the [PyPA Code of Conduct].
 [travis-image]: https://img.shields.io/travis/mkdocs/mkdocs/master.svg
 [travis-link]: https://travis-ci.org/mkdocs/mkdocs
 
-[mkdocs]: http://www.mkdocs.org
-[release-notes]: http://www.mkdocs.org/about/release-notes/
+[mkdocs]: https://www.mkdocs.org
+[release-notes]: https://www.mkdocs.org/about/release-notes/
 
 [PyPA Code of Conduct]: https://www.pypa.io/en/latest/code-of-conduct/
