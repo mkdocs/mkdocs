@@ -50,7 +50,7 @@ use your package manager to install "Python" and "pip". Then you can use pip to
 [install MkDocs](#installing-mkdocs).
 
 [apt-get]: https://help.ubuntu.com/community/AptGet/Howto
-[homebrew]: http://brew.sh/
+[homebrew]: https://brew.sh/
 [dnf]: http://dnf.readthedocs.io/en/latest/index.html
 [yum]: http://yum.baseurl.org/
 [chocolatey]: https://chocolatey.org/
@@ -348,7 +348,7 @@ the MkDocs IRC channel `#mkdocs` on freenode.
 [readthedocs]: user-guide/styling-your-docs/#readthedocs
 [MkDocs wiki]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
 [build your own]: user-guide/custom-themes/
-[Amazon S3]: http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html
+[Amazon S3]: https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html
 [get-pip.py]: https://bootstrap.pypa.io/get-pip.py
 [pages]: user-guide/configuration/#pages
 [discussion group]: https://groups.google.com/forum/#!forum/mkdocs
