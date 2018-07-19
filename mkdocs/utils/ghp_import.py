@@ -62,7 +62,7 @@ else:
 
 def normalize_path(path):
     # Fix unicode pathnames on OS X
-    # See: http://stackoverflow.com/a/5582439/44289
+    # See: https://stackoverflow.com/a/5582439/44289
     if sys.platform == "darwin":
         return unicodedata.normalize("NFKC", dec(path))
     return path

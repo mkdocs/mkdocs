@@ -320,7 +320,7 @@ any additional CSS files included in the `custom_dir`.
 
 [browse source]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes/mkdocs
 [built-in themes]: #built-in-themes
-[Bootstrap]: http://getbootstrap.com/
+[Bootstrap]: https://getbootstrap.com/
 [theme configuration options]: ./configuration.md#theme
 [Read the Docs]: https://readthedocs.org/
 [community wiki]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes

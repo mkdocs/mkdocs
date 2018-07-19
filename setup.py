@@ -47,7 +47,7 @@ if sys.argv[-1] == 'publish':
 setup(
     name="mkdocs",
     version=get_version("mkdocs"),
-    url='http://www.mkdocs.org',
+    url='https://www.mkdocs.org',
     license='BSD',
     description='Project documentation with Markdown.',
     long_description=long_description,

@@ -151,7 +151,7 @@ class URLTest(unittest.TestCase):
 
     def test_valid_url(self):
 
-        url = "http://mkdocs.org"
+        url = "https://mkdocs.org"
 
         option = config_options.URL()
         value = option.validate(url)

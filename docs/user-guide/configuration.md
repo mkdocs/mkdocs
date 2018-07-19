@@ -199,7 +199,7 @@ site and you may want to link to other parts of the same site without including
 the full domain. In that case, you may use and appropriate relative URL.
 
 ```yaml
-site_url: http://example.com/foo/
+site_url: https://example.com/foo/
 
 nav:
     - Home: ../
@@ -211,8 +211,8 @@ In the above example, two different styles of external links are used. First
 note that the `site_url` indicates that the MkDocs site is hosted in the `/foo/`
 subdirectory of the domain. Therefore, the `Home` navigation item is a relative
 link which steps up one level to the server root and effectively points to
-`http://example.com/`. The `Bug Tracker` item uses an absolute path from the
-server root and effectively points to `http://example.com/bugs/`. Of course, the
+`https://example.com/`. The `Bug Tracker` item uses an absolute path from the
+server root and effectively points to `https://example.com/bugs/`. Of course, the
 `User Guide` points to a local MkDocs page.
 
 **default**: By default `nav` will contain an alphanumerically sorted, nested
@@ -576,7 +576,7 @@ You may [contribute additional languages].
 [styling your docs]: styling-your-docs.md
 [extra_css]: #extra_css
 [Plugins]: plugins.md
-[lunr.js]: http://lunrjs.com/
+[lunr.js]: https://lunrjs.com/
 [ISO 639-1]: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 [Lunr Languages]: https://github.com/MihaiValentin/lunr-languages#lunr-languages-----
 [contribute additional languages]: https://github.com/MihaiValentin/lunr-languages/blob/master/CONTRIBUTING.md
