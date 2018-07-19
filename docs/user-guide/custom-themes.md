@@ -297,9 +297,9 @@ assigned to the [site_url] configuration setting. The value includes any
 subdirectory included in the `site_url`, but not the domain. [base_url] should
 not be used with this variable.
 
-For example, if `site_url: http://example.com/`, then the value of
+For example, if `site_url: https://example.com/`, then the value of
 `page.abs_url` for the page `foo.md` would be `/foo/`. However, if
-`site_url: http://example.com/bar/`, then the value of `page.abs_url` for the
+`site_url: https://example.com/bar/`, then the value of `page.abs_url` for the
 page `foo.md` would be `/bar/foo/`.
 
 [site_url]: ./configuration.md#site_url
@@ -484,7 +484,7 @@ extra:
     links:
         - https://github.com/mkdocs
         - https://docs.readthedocs.org/en/latest/builds.html#mkdocs
-        - http://www.mkdocs.org/
+        - https://www.mkdocs.org/
 ```
 
 And then displayed with this HTML in the custom theme.
@@ -636,7 +636,7 @@ index when it is available. The `index` object was new in MkDocs version *1.0*.
 [Jinja2 template]: http://jinja.pocoo.org/docs/dev/
 [built-in themes]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes
 [theme's configuration file]: #theme-configuration
-[lunr.js]: http://lunrjs.com/
+[lunr.js]: https://lunrjs.com/
 [site_dir]: configuration.md#site_dir
 [prebuild_index]: configuration.md#prebuild_index
 
@@ -660,8 +660,8 @@ Bootswatch theme].
     their needs.
 
 [Python packaging]: https://packaging.python.org/en/latest/
-[MkDocs Bootstrap theme]: http://mkdocs.github.io/mkdocs-bootstrap/
-[MkDocs Bootswatch theme]: http://mkdocs.github.io/mkdocs-bootswatch/
+[MkDocs Bootstrap theme]: https://mkdocs.github.io/mkdocs-bootstrap/
+[MkDocs Bootswatch theme]: https://mkdocs.github.io/mkdocs-bootswatch/
 
 ### Package Layout
 
