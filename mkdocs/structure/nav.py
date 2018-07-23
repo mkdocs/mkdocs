@@ -126,8 +126,7 @@ def get_navigation(files, config):
     links = _get_by_type(items, Link)
     if links:
         # Assume all links are external.
-        # TODO: warn or error on internal links?
-        log.info(
+        log.debug(
             'The following paths are included in the "nav" configuration, '
             'but do not exist in the docs directory:\n  - {}'.format(
                 '\n  - '.join([link.url for link in links]))
