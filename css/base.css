@@ -1,8 +1,20 @@
 body {
     padding-top: 70px;
-    background: url(../img/grid.png) repeat-x;
-    background-attachment: fixed;
+}
+
+/* Replacement for `body { background-attachment: fixed; }`, which has
+   performance issues when scrolling on large displays. See #1394. */
+body::before {
+    content: ' ';
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
     background-color: #f8f8f8;
+    background: url(../img/grid.png) repeat-x;
+    will-change: transform;
+    z-index: -1;
 }
 
 body > .container {
@@ -15,6 +27,7 @@ ul.nav .main {
 
 .col-md-3 {
     padding-left: 0;
+    z-index: 1;
 }
 
 .col-md-9 {
@@ -39,13 +52,7 @@ ul.nav .main {
 /*
  * The code below adds some padding to the top of the current anchor target so
  * that, when navigating to it, the header isn't hidden by the navbar at the
- * top. This is especially complicated because we want to *remove* the padding
- * after navigation so that hovering over the header shows the permalink icon
- * correctly. Thus, we create a CSS animation to remove the extra padding after
- * a second. We have two animations so that navigating to an anchor within the
- * page always restarts the animation.
- *
- * See <https://github.com/mkdocs/mkdocs/issues/843> for more details.
+ * top.
  */
 :target::before {
     content: "";
@@ -53,25 +60,6 @@ ul.nav .main {
     margin-top: -75px;
     height: 75px;
     pointer-events: none;
-    animation: 0s 1s forwards collapse-anchor-padding-1;
-}
-
-.clicky :target::before {
-  animation-name: collapse-anchor-padding-2;
-}
-
-@keyframes collapse-anchor-padding-1 {
-    to {
-        margin-top: 0;
-        height: 0;
-    }
-}
-
-@keyframes collapse-anchor-padding-2 {
-    to {
-        margin-top: 0;
-        height: 0;
-    }
 }
 
 h1 {
@@ -206,6 +194,13 @@ footer {
 
 /* Show and affix the side nav when space allows it */
 @media (min-width: 992px) {
+    /* Workaround a Safari bug when zooming to < 100%
+       https://github.com/mkdocs/mkdocs/issues/1050 */
+    .col-md-9 {
+        box-sizing: border-box;  /* csslint allow: box-sizing */
+        padding-left: 25%;
+        width: 100%;
+    }
     .bs-sidebar .nav > .active > ul {
         display: block;
     }

@@ -10,24 +10,27 @@
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Plugins - MkDocs</title>
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="../../css/highlight.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
         <link href="../../css/extra.css" rel="stylesheet">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="../../js/jquery-1.10.2.min.js"></script>
-        <script src="../../js/bootstrap-3.0.3.min.js"></script>
-        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/django.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
             ga('create', 'UA-27795084-5', 'mkdocs.org');
             ga('send', 'pageview');
@@ -37,98 +40,98 @@
     <body>
 
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
+            <div class="container">
 
-        <!-- Collapsed navigation -->
-        <div class="navbar-header">
-            <!-- Expander button -->
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="../..">MkDocs</a>
-        </div>
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">MkDocs</a>
+                </div>
 
-        <!-- Expanded navigation -->
-        <div class="navbar-collapse collapse">
-                <!-- Main navigation -->
-                <ul class="nav navbar-nav">
-                    <li >
-                        <a href="../..">Home</a>
-                    </li>
-                    <li class="dropdown active">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../..">Home</a>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
 <li >
     <a href="../writing-your-docs/">Writing Your Docs</a>
 </li>
-                            
+                                    
 <li >
     <a href="../styling-your-docs/">Styling Your Docs</a>
 </li>
-                            
+                                    
 <li >
     <a href="../configuration/">Configuration</a>
 </li>
-                            
+                                    
 <li >
     <a href="../deploying-your-docs/">Deploying Your Docs</a>
 </li>
-                            
+                                    
 <li >
     <a href="../custom-themes/">Custom Themes</a>
 </li>
-                            
+                                    
 <li class="active">
     <a href="./">Plugins</a>
 </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
 <li >
     <a href="../../about/release-notes/">Release Notes</a>
 </li>
-                            
+                                    
 <li >
     <a href="../../about/contributing/">Contributing</a>
 </li>
-                            
+                                    
 <li >
     <a href="../../about/license/">License</a>
 </li>
+                                </ul>
+                            </li>
                         </ul>
-                    </li>
-                </ul>
 
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
-                        <i class="fa fa-search"></i> Search
-                    </a>
-                </li>
-                    <li >
-                        <a rel="next" href="../custom-themes/">
-                            <i class="fa fa-arrow-left"></i> Previous
-                        </a>
-                    </li>
-                    <li >
-                        <a rel="prev" href="../../about/release-notes/">
-                            Next <i class="fa fa-arrow-right"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/mkdocs/mkdocs/"><i class="fa fa-github"></i> GitHub</a>
-                    </li>
-            </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li >
+                                <a rel="next" href="../custom-themes/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../../about/release-notes/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/mkdocs/mkdocs/"><i class="fa fa-github"></i> GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
@@ -186,24 +189,50 @@ possible to define multiple plugins in the same module. At a minimum, a MkDocs
 Plugin must consist of a <a href="#baseplugin">BasePlugin</a> subclass and an <a href="#entry-point">entry point</a> which
 points to it.</p>
 <h3 id="baseplugin">BasePlugin<a class="headerlink" href="#baseplugin" title="Permanent link"></a></h3>
-<p>A subclass of <code>mkdocs.pluhgins.BasePlugin</code> should define the behavior of the plugin.
+<p>A subclass of <code>mkdocs.plugins.BasePlugin</code> should define the behavior of the plugin.
 The class generally consists of actions to perform on specific events in the build
 process as well as a configuration scheme for the plugin.</p>
 <p>All <code>BasePlugin</code> subclasses contain the following attributes:</p>
 <h4 id="config_scheme">config_scheme<a class="headerlink" href="#config_scheme" title="Permanent link"></a></h4>
 <dl>
-<dd>A tuple of configuration validation class instances (to be defined in a subclass).</dd>
+<dd>
+<p>A tuple of configuration validation instances. Each item must consist of a
+two item tuple in which the first item is the string name of the
+configuration option and the second item is an instance of
+<code>mkdocs.config.config_options.BaseConfigOption</code> or any of its subclasses.</p>
+<p>For example, the following <code>config_scheme</code> defines three configuration options: <code>foo</code>, which accepts a string; <code>bar</code>, which accepts an integer; and <code>baz</code>, which accepts a boolean value.</p>
+<pre><code>class MyPlugin(mkdocs.plugins.BasePlugin):
+    config_scheme = (
+        ('foo', mkdocs.config.config_options.Type(mkdocs.utils.string_types, default='a default value')),
+        ('bar', mkdocs.config.config_options.Type(int, default=0)),
+        ('baz', mkdocs.config.config_options.Type(bool, default=True))
+    )
+</code></pre>
+<p>When the user's configuration is loaded, the above scheme will be used to
+validate the configuration and fill in any defaults for settings not
+provided by the user. The validation classes may be any of the classes
+provided in <code>mkdocs.config.config_options</code> or a third party subclass defined
+in the plugin.</p>
+<p>Any settings provided by the user which fail validation or are not defined
+in the <code>config_scheme</code> will raise a <code>mkdocs.config.base.ValidationError</code>.</p>
+</dd>
 </dl>
 <h4 id="config">config<a class="headerlink" href="#config" title="Permanent link"></a></h4>
 <dl>
-<dd>A dictionary of configuration options for the plugin which is populated by the
-<code>load_config</code> method.</dd>
+<dd>A dictionary of configuration options for the plugin, which is populated by
+the <code>load_config</code> method after configuration validation has completed. Use
+this attribute to access options provided by the user.<pre><code>def on_pre_build(self, config):
+    if self.config['bool_option']:
+        # implement "bool_option" functionality here...
+</code></pre>
+</dd>
 </dl>
 <p>All <code>BasePlugin</code> subclasses contain the following method(s):</p>
 <h4 id="load_configoptions">load_config(options)<a class="headerlink" href="#load_configoptions" title="Permanent link"></a></h4>
 <dl>
-<dd>Loads configuration from a dictionary of options. Returns a tuple of <code>(errors,
-warnings)</code>.</dd>
+<dd>Loads configuration from a dictionary of options. Returns a tuple of
+<code>(errors, warnings)</code>. This method is called by MkDocs during configuration
+validation and should not need to be called by the plugin.</dd>
 </dl>
 <h4 id="on_event_name">on_&lt;event_name&gt;()<a class="headerlink" href="#on_event_name" title="Permanent link"></a></h4>
 <dl>
@@ -243,7 +272,7 @@ entire site.</p>
 <p>The <code>serve</code> event is only called when the <code>serve</code> command is used during
 development. It is passed the <code>Server</code> instance which can be modified before
 it is activated. For example, additional files or directories could be added
-to the list of "watched" filed for auto-reloading.</p>
+to the list of "watched" files for auto-reloading.</p>
 <dl>
 <dt>Parameters:</dt>
 <dd><strong>server:</strong> <code>livereload.Server</code> instance</dd>
@@ -278,6 +307,23 @@ pre-build scripts.</p>
 </dl>
 </dd>
 </dl>
+<h5 id="on_files">on_files<a class="headerlink" href="#on_files" title="Permanent link"></a></h5>
+<dl>
+<dd>
+<p>The <code>files</code> event is called after the files collection is populated from the
+<code>docs_dir</code>. Use this event to add, remove, or alter files in the
+collection. Note that Page objects have not yet been associated with the
+file objects in the collection. Use <a href="#page-events">Page Events</a> to manipulate page
+specific data.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd><strong>files:</strong> global files collection</dd>
+<dd><strong>config:</strong> global configuration object</dd>
+<dt>Returns:</dt>
+<dd>global files collection</dd>
+</dl>
+</dd>
+</dl>
 <h5 id="on_nav">on_nav<a class="headerlink" href="#on_nav" title="Permanent link"></a></h5>
 <dl>
 <dd>
@@ -285,8 +331,9 @@ pre-build scripts.</p>
 be used to alter the site navigation.</p>
 <dl>
 <dt>Parameters:</dt>
-<dd><strong>site_navigation:</strong> global navigation object</dd>
+<dd><strong>nav:</strong> global navigation object</dd>
 <dd><strong>config:</strong> global configuration object</dd>
+<dd><strong>files:</strong> global files collection</dd>
 <dt>Returns:</dt>
 <dd>global navigation object</dd>
 </dl>
@@ -373,8 +420,8 @@ written to disc.</p>
 </dl>
 <h4 id="page-events">Page Events<a class="headerlink" href="#page-events" title="Permanent link"></a></h4>
 <p>Page events are called once for each Markdown page included in the site. All
-page events are called after the <a href="#on_post_template">post_template</a> event and before the <a href="#on_post_build">post_build</a>
-event.</p>
+page events are called after the <a href="#on_post_template">post_template</a> event and before the
+<a href="#on_post_build">post_build</a> event.</p>
 <h5 id="on_pre_page">on_pre_page<a class="headerlink" href="#on_pre_page" title="Permanent link"></a></h5>
 <dl>
 <dd>
@@ -505,11 +552,14 @@ tell MkDocs to use if via the config.</p></div>
         <footer class="col-md-12">
             <hr>
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
-            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script>var base_url = '../..';</script>
-        <script src="../../js/base.js"></script>
-        <script src="../../search/main.js"></script>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">
@@ -525,7 +575,7 @@ tell MkDocs to use if via the config.</p></div>
                 </p>
                 <form role="form">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
                 <div id="mkdocs-search-results"></div>
@@ -551,19 +601,19 @@ tell MkDocs to use if via the config.</p></div>
                 </thead>
                 <tbody>
                   <tr>
-                    <td><kbd>?</kbd></td>
+                    <td class="help shortcut"><kbd>?</kbd></td>
                     <td>Open this help</td>
                   </tr>
                   <tr>
-                    <td><kbd>&larr;</kbd></td>
-                    <td>Previous page</td>
-                  </tr>
-                  <tr>
-                    <td><kbd>&rarr;</kbd></td>
+                    <td class="next shortcut"><kbd>n</kbd></td>
                     <td>Next page</td>
                   </tr>
                   <tr>
-                    <td><kbd>s</kbd></td>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
                     <td>Search</td>
                   </tr>
                 </tbody>
@@ -574,7 +624,6 @@ tell MkDocs to use if via the config.</p></div>
         </div>
     </div>
 </div>
-
 
     </body>
 </html>

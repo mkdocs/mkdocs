@@ -10,24 +10,27 @@
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Configuration - MkDocs</title>
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="../../css/highlight.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
         <link href="../../css/extra.css" rel="stylesheet">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="../../js/jquery-1.10.2.min.js"></script>
-        <script src="../../js/bootstrap-3.0.3.min.js"></script>
-        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/django.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
             ga('create', 'UA-27795084-5', 'mkdocs.org');
             ga('send', 'pageview');
@@ -37,98 +40,98 @@
     <body>
 
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
+            <div class="container">
 
-        <!-- Collapsed navigation -->
-        <div class="navbar-header">
-            <!-- Expander button -->
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="../..">MkDocs</a>
-        </div>
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">MkDocs</a>
+                </div>
 
-        <!-- Expanded navigation -->
-        <div class="navbar-collapse collapse">
-                <!-- Main navigation -->
-                <ul class="nav navbar-nav">
-                    <li >
-                        <a href="../..">Home</a>
-                    </li>
-                    <li class="dropdown active">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../..">Home</a>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
 <li >
     <a href="../writing-your-docs/">Writing Your Docs</a>
 </li>
-                            
+                                    
 <li >
     <a href="../styling-your-docs/">Styling Your Docs</a>
 </li>
-                            
+                                    
 <li class="active">
     <a href="./">Configuration</a>
 </li>
-                            
+                                    
 <li >
     <a href="../deploying-your-docs/">Deploying Your Docs</a>
 </li>
-                            
+                                    
 <li >
     <a href="../custom-themes/">Custom Themes</a>
 </li>
-                            
+                                    
 <li >
     <a href="../plugins/">Plugins</a>
 </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
 <li >
     <a href="../../about/release-notes/">Release Notes</a>
 </li>
-                            
+                                    
 <li >
     <a href="../../about/contributing/">Contributing</a>
 </li>
-                            
+                                    
 <li >
     <a href="../../about/license/">License</a>
 </li>
+                                </ul>
+                            </li>
                         </ul>
-                    </li>
-                </ul>
 
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
-                        <i class="fa fa-search"></i> Search
-                    </a>
-                </li>
-                    <li >
-                        <a rel="next" href="../styling-your-docs/">
-                            <i class="fa fa-arrow-left"></i> Previous
-                        </a>
-                    </li>
-                    <li >
-                        <a rel="prev" href="../deploying-your-docs/">
-                            Next <i class="fa fa-arrow-right"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/mkdocs/mkdocs/"><i class="fa fa-github"></i> GitHub</a>
-                    </li>
-            </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li >
+                                <a rel="next" href="../styling-your-docs/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../deploying-your-docs/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/mkdocs/mkdocs/"><i class="fa fa-github"></i> GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
@@ -166,15 +169,16 @@ variable.</p>
 URL to the generated HTML header.</p>
 <p><strong>default</strong>: <code>null</code></p>
 <h3 id="repo_url">repo_url<a class="headerlink" href="#repo_url" title="Permanent link"></a></h3>
-<p>When set, provides a link to your GitHub or Bitbucket repository on each page.</p>
+<p>When set, provides a link to your repository (GitHub, Bitbucket, GitLab, ...)
+on each page.</p>
 <pre><code class="yaml">repo_url: https://github.com/example/repository/
 </code></pre>
 
 <p><strong>default</strong>: <code>null</code></p>
 <h3 id="repo_name">repo_name<a class="headerlink" href="#repo_name" title="Permanent link"></a></h3>
-<p>When set, provides a link to your GitHub or Bitbucket repository on each page.</p>
-<p><strong>default</strong>: <code>'GitHub'</code> or <code>'Bitbucket'</code> if the <code>repo_url</code> matches those
-domains, otherwise <code>null</code></p>
+<p>When set, provides the name for the link to your repository on each page.</p>
+<p><strong>default</strong>: <code>'GitHub'</code>, <code>'Bitbucket'</code> or <code>'GitLab'</code> if the <code>repo_url</code> matches
+those domains, otherwise the hostname from the <code>repo_url</code>.</p>
 <h3 id="edit_uri">edit_uri<a class="headerlink" href="#edit_uri" title="Permanent link"></a></h3>
 <p>Path from the base <code>repo_url</code> to the docs directory when directly viewing a
 page, accounting for specifics of the repository host (e.g. GitHub, Bitbucket,
@@ -204,13 +208,13 @@ edit_uri: root/path/docs/
 
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>On a few known hosts (specifically GitHub and Bitbucket), the <code>edit_uri</code> is
-derived from the 'repo_url' and does not need to be set manually. Simply
-defining a <code>repo_url</code> will automatically populate the <code>edit_uri</code> config
-setting.</p>
-<p>For example, for a GitHub-hosted repository, the <code>edit_uri</code> would be
-automatically set as <code>edit/master/docs/</code> (Note the <code>edit</code> path and <code>master</code>
-branch).</p>
+<p>On a few known hosts (specifically GitHub, Bitbucket and GitLab), the
+<code>edit_uri</code> is derived from the 'repo_url' and does not need to be set
+manually. Simply defining a <code>repo_url</code> will automatically populate the
+<code>edit_uri</code> configs setting.</p>
+<p>For example, for a GitHub- or GitLab-hosted repository, the <code>edit_uri</code>
+would be automatically set as <code>edit/master/docs/</code> (Note the <code>edit</code> path
+and <code>master</code> branch).</p>
 <p>For a Bitbucket-hosted repository, the equivalent <code>edit_uri</code> would be
 automatically set as <code>src/default/docs/</code> (note the <code>src</code> path and <code>default</code>
 branch).</p>
@@ -221,15 +225,16 @@ string to disable the automatic setting.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>On GitHub, the default "edit" path (<code>edit/master/docs/</code>) opens the page in
-the online GitHub editor. This functionality requires that the user have and
-be logged in to a GitHub account. Otherwise, the user will be redirected to
-a login/signup page. Alternatively, use the "blob" path
+<p>On GitHub and GitLab, the default "edit" path (<code>edit/master/docs/</code>) opens
+the page in the online editor. This functionality requires that the user
+have and be logged in to a GitHub/GitLab account. Otherwise, the user will
+be redirected to a login/signup page. Alternatively, use the "blob" path
 (<code>blob/master/docs/</code>) to open a read-only view, which supports anonymous
 access.</p>
 </div>
-<p><strong>default</strong>: <code>edit/master/docs/</code> or <code>src/default/docs/</code> for GitHub or Bitbucket
-repos, respectively, if <code>repo_url</code> matches those domains, otherwise <code>null</code></p>
+<p><strong>default</strong>: <code>edit/master/docs/</code> for GitHub and GitLab repos or
+<code>src/default/docs/</code> for a Bitbucket repo, if <code>repo_url</code> matches those domains,
+otherwise <code>null</code></p>
 <h3 id="site_description">site_description<a class="headerlink" href="#site_description" title="Permanent link"></a></h3>
 <p>Set the site description. This will add a meta tag to the generated HTML header.</p>
 <p><strong>default</strong>: <code>null</code></p>
@@ -255,20 +260,50 @@ Pages. This option can be overridden by a command line option in <code>gh-deploy
 This option can be overridden by a command line option in <code>gh-deploy</code>.</p>
 <p><strong>default</strong>: <code>origin</code></p>
 <h2 id="documentation-layout">Documentation layout<a class="headerlink" href="#documentation-layout" title="Permanent link"></a></h2>
-<h3 id="pages">pages<a class="headerlink" href="#pages" title="Permanent link"></a></h3>
-<p>This setting is used to determine the set of pages that should be built for the
-documentation. For example, the following would create Introduction, User Guide
-and About pages, given the three source files <code>index.md</code>, <code>user-guide.md</code> and
-<code>about.md</code>, respectively.</p>
-<pre><code class="yaml">pages:
+<h3 id="nav">nav<a class="headerlink" href="#nav" title="Permanent link"></a></h3>
+<p>This setting is used to determine the format and layout of the global navigation
+for the site. For example, the following would create "Introduction", "User
+Guide" and "About" navigation items.</p>
+<pre><code class="yaml">nav:
     - 'Introduction': 'index.md'
     - 'User Guide': 'user-guide.md'
     - 'About': 'about.md'
 </code></pre>
 
-<p>See the section on <a href="../writing-your-docs/#configure-pages-and-navigation">configuring pages and navigation</a> for a more detailed
-breakdown, including how to create sub-sections.</p>
-<p><strong>default</strong>: By default <code>pages</code> will contain an alphanumerically sorted, nested
+<p>All paths must be relative to the <code>mkdocs.yml</code> configuration file. See the
+section on <a href="../writing-your-docs/#configure-pages-and-navigation">configuring pages and navigation</a> for a more detailed breakdown,
+including how to create sub-sections.</p>
+<p>Navigation items may also include links to external sites. While titles are
+optional for internal links, they are required for external links. An external
+link may be a full URL or a relative URL. Any path which is not found in the
+files is assumed to be an external link.</p>
+<pre><code class="yaml">nav:
+    - Home: index.md
+    - User Guide: user-guide.md
+    - Bug Tracker: https://example.com/
+</code></pre>
+
+<p>In the above example, the first two items point to local files while the third
+points to an external site.</p>
+<p>However, sometimes the MkDocs site is hosted in a subdirectory of a project's
+site and you may want to link to other parts of the same site without including
+the full domain. In that case, you may use and appropriate relative URL.</p>
+<pre><code class="yaml">site_url: https://example.com/foo/
+
+nav:
+    - Home: ../
+    - User Guide: user-guide.md
+    - Bug Tracker: /bugs/
+</code></pre>
+
+<p>In the above example, two different styles of external links are used. First
+note that the <code>site_url</code> indicates that the MkDocs site is hosted in the <code>/foo/</code>
+subdirectory of the domain. Therefore, the <code>Home</code> navigation item is a relative
+link which steps up one level to the server root and effectively points to
+<code>https://example.com/</code>. The <code>Bug Tracker</code> item uses an absolute path from the
+server root and effectively points to <code>https://example.com/bugs/</code>. Of course, the
+<code>User Guide</code> points to a local MkDocs page.</p>
+<p><strong>default</strong>: By default <code>nav</code> will contain an alphanumerically sorted, nested
 list of all the Markdown files found within the <code>docs_dir</code> and its
 sub-directories. If none are found it will be <code>[]</code> (an empty list).</p>
 <h2 id="build-directories">Build directories<a class="headerlink" href="#build-directories" title="Permanent link"></a></h2>
@@ -292,9 +327,10 @@ of available themes visit <a href="../styling-your-docs/">styling your docs</a>.
 <p>The string name of a known installed theme. For a list of available themes
 visit <a href="../styling-your-docs/">styling your docs</a>.</p>
 <h4 id="custom_dir">custom_dir:<a class="headerlink" href="#custom_dir" title="Permanent link"></a></h4>
-<p>A directory to custom a theme. This can either be a relative directory, in
-which case it is resolved relative to the directory containing your
-configuration file, or it can be an absolute directory path.</p>
+<p>A directory containing a custom theme. This can either be a relative
+directory, in which case it is resolved relative to the directory containing
+your configuration file, or it can be an absolute directory path from the
+root of your local file system.</p>
 <p>See <a href="../styling-your-docs/#using-the-theme_dir">styling your docs</a> for details if you would like to tweak an
 existing theme.</p>
 <p>See <a href="../custom-themes/">custom themes</a> if you would like to build your own theme from the
@@ -309,16 +345,16 @@ documentation for the theme you are using for details.</p>
 </div>
 <p><strong>default</strong>: <code>'mkdocs'</code></p>
 <h3 id="docs_dir">docs_dir<a class="headerlink" href="#docs_dir" title="Permanent link"></a></h3>
-<p>Lets you set the directory containing the documentation source markdown files.
-This can either be a relative directory, in which case it is resolved relative
-to the directory containing your configuration file, or it can be an absolute
-directory path from the root of your local file system.</p>
+<p>The directory containing the documentation source markdown files. This can
+either be a relative directory, in which case it is resolved relative to the
+directory containing your configuration file, or it can be an absolute directory
+path from the root of your local file system.</p>
 <p><strong>default</strong>: <code>'docs'</code></p>
 <h3 id="site_dir">site_dir<a class="headerlink" href="#site_dir" title="Permanent link"></a></h3>
-<p>Lets you set the directory where the output HTML and other files are created.
-This can either be a relative directory, in which case it is resolved relative
-to the directory containing your configuration file, or it can be an absolute
-directory path from the root of your local file system.</p>
+<p>The directory where the output HTML and other files are created. This can either
+be a relative directory, in which case it is resolved relative to the directory
+containing your configuration file, or it can be an absolute directory path from
+the root of your local file system.</p>
 <p><strong>default</strong>: <code>'site'</code></p>
 <div class="admonition note">
 <p class="admonition-title">Note:</p>
@@ -372,7 +408,6 @@ setting <code>use_directory_urls</code> to <code>true</code> or <code>false</cod
 <thead>
 <tr>
 <th>Source file</th>
-<th>Generated HTML</th>
 <th>use_directory_urls: true</th>
 <th>use_directory_urls: false</th>
 </tr>
@@ -380,21 +415,18 @@ setting <code>use_directory_urls</code> to <code>true</code> or <code>false</cod
 <tbody>
 <tr>
 <td>index.md</td>
-<td>index.html</td>
 <td>/</td>
 <td>/index.html</td>
 </tr>
 <tr>
 <td>api-guide.md</td>
-<td>api-guide/index.html</td>
 <td>/api-guide/</td>
-<td>/api-guide/index.html</td>
+<td>/api-guide.html</td>
 </tr>
 <tr>
-<td>about.md</td>
-<td>about/index.html</td>
-<td>/about/</td>
-<td>/about/index.html</td>
+<td>about/license.md</td>
+<td>/about/license/</td>
+<td>/about/license.html</td>
 </tr>
 </tbody>
 </table>
@@ -402,13 +434,12 @@ setting <code>use_directory_urls</code> to <code>true</code> or <code>false</cod
 and is usually what you'll want to use.</p>
 <p>The alternate style can occasionally be useful if you want your documentation to
 remain properly linked when opening pages directly from the file system, because
-it create links that point directly to the target <em>file</em> rather than the target
+it creates links that point directly to the target <em>file</em> rather than the target
 <em>directory</em>.</p>
 <p><strong>default</strong>: <code>true</code></p>
 <h3 id="strict">strict<a class="headerlink" href="#strict" title="Permanent link"></a></h3>
-<p>Determines if a broken link to a page within the documentation is considered a
-warning or an error (link to a page not listed in the pages setting). Set to
-true to halt processing when a broken link is found, false prints a warning.</p>
+<p>Determines how warnings are handled. Set to <code>true</code> to halt processing when a
+warning is raised. Set to <code>false</code> to print a warning and continue processing.</p>
 <p><strong>default</strong>: <code>false</code></p>
 <h3 id="dev_addr">dev_addr<a class="headerlink" href="#dev_addr" title="Permanent link"></a></h3>
 <p>Determines the address used when running <code>mkdocs serve</code>. Must be of the format
@@ -418,12 +449,12 @@ true to halt processing when a broken link is found, false prints a warning.</p>
 <p><strong>default</strong>: <code>'127.0.0.1:8000'</code></p>
 <h2 id="formatting-options">Formatting options<a class="headerlink" href="#formatting-options" title="Permanent link"></a></h2>
 <h3 id="markdown_extensions">markdown_extensions<a class="headerlink" href="#markdown_extensions" title="Permanent link"></a></h3>
-<p>MkDocs uses the <a href="https://pythonhosted.org/Markdown/">Python Markdown</a> library to translate Markdown files
-into HTML. Python Markdown supports a variety of <a href="https://pythonhosted.org/Markdown/extensions/index.html">extensions</a>
+<p>MkDocs uses the <a href="https://python-markdown.github.io/">Python Markdown</a> library to translate Markdown files
+into HTML. Python Markdown supports a variety of <a href="https://python-markdown.github.io/extensions/">extensions</a>
 that customize how pages are formatted. This setting lets you enable a list of
 extensions beyond the ones that MkDocs uses by default (<code>meta</code>, <code>toc</code>, <code>tables</code>,
 and <code>fenced_code</code>).</p>
-<p>For example, to enable the <a href="https://pythonhosted.org/Markdown/extensions/smarty.html">SmartyPants typography extension</a>, use:</p>
+<p>For example, to enable the <a href="https://python-markdown.github.io/extensions/smarty/">SmartyPants typography extension</a>, use:</p>
 <pre><code class="yaml">markdown_extensions:
     - smarty
 </code></pre>
@@ -461,10 +492,10 @@ for that extension:</p>
 
 <div class="admonition note">
 <p class="admonition-title">See Also:</p>
-<p>The Python-Markdown documentation provides a <a href="https://pythonhosted.org/Markdown/extensions/index.html">list of extensions</a>
+<p>The Python-Markdown documentation provides a <a href="https://python-markdown.github.io/extensions/">list of extensions</a>
 which are available out-of-the-box. For a list of configuration options
 available for a given extension, see the documentation for that extension.</p>
-<p>You may also install and use various <a href="https://github.com/waylan/Python-Markdown/wiki/Third-Party-Extensions">third party extensions</a>. Consult
+<p>You may also install and use various <a href="https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions">third party extensions</a>. Consult
 the documentation provided by those extensions for installation instructions
 and available configuration options.</p>
 </div>
@@ -485,17 +516,89 @@ setting to an empty list:</p>
 <pre><code class="yaml">plugins: []
 </code></pre>
 
-<p><strong>default</strong>: <code>['search']</code> (the "search" plugin included with MkDocs).</p></div>
+<p><strong>default</strong>: <code>['search']</code> (the "search" plugin included with MkDocs).</p>
+<h4 id="search">Search<a class="headerlink" href="#search" title="Permanent link"></a></h4>
+<p>A search plugin is provided by default with MkDocs which uses <a href="https://lunrjs.com/">lunr.js</a> as a
+search engine. The following config options are available to alter the behavior
+of the search plugin:</p>
+<h5 id="separator"><strong>separator</strong><a class="headerlink" href="#separator" title="Permanent link"></a></h5>
+<p>A regular expression which matches the characters used as word separators when
+building the index. By default whitespace and the hyphen (<code>-</code>) are used. To add
+the dot (<code>.</code>) as a word separator you might do this:</p>
+<pre><code class="yaml">plugins:
+    - search:
+        separator: '[\s\-\.]+'
+</code></pre>
+
+<p><strong>default</strong>: <code>'[\s\-]+'</code></p>
+<h5 id="lang"><strong>lang</strong><a class="headerlink" href="#lang" title="Permanent link"></a></h5>
+<p>A list of languages to use when building the search index as identified by their
+<a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes">ISO 639-1</a> language codes. With <a href="https://github.com/MihaiValentin/lunr-languages#lunr-languages-----">Lunr Languages</a>, the following languages are
+supported:</p>
+<ul>
+<li><code>da</code>: Danish</li>
+<li><code>du</code>: Dutch</li>
+<li><code>en</code>: English</li>
+<li><code>fi</code>: Finnish</li>
+<li><code>fr</code>: French</li>
+<li><code>de</code>: German</li>
+<li><code>hu</code>: Hungarian</li>
+<li><code>it</code>: Italian</li>
+<li><code>jp</code>: Japanese</li>
+<li><code>no</code>: Norwegian</li>
+<li><code>pt</code>: Portuguese</li>
+<li><code>ro</code>: Romanian</li>
+<li><code>ru</code>: Russian</li>
+<li><code>es</code>: Spanish</li>
+<li><code>sv</code>: Swedish</li>
+<li><code>th</code>: Thai</li>
+<li><code>tr</code>: Turkish</li>
+</ul>
+<p>You may <a href="https://github.com/MihaiValentin/lunr-languages/blob/master/CONTRIBUTING.md">contribute additional languages</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>While search does support using multiple languages together, it is best not
+to add additional languages unless you really need them. Each additional
+language adds significant bandwidth requirements and uses more browser
+resources. Generally it is best to keep each instance of MkDocs to a single
+language.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Lunr Languages does not currently include support for Chinese or other Asian
+languages. However, some users have reported decent results using Japanese.</p>
+</div>
+<p><strong>default</strong>: <code>['en']</code></p>
+<h5 id="prebuild_index"><strong>prebuild_index</strong><a class="headerlink" href="#prebuild_index" title="Permanent link"></a></h5>
+<p>Optionally generates a pre-built index of all pages, which provides some
+ performance improvements for larger sites. Before enabling, check that the
+ theme you are using explicitly supports using a prebuilt index (the builtin
+ themes do). The pre-build script requires that <a href="https://nodejs.org/">Node.js</a> be installed and the
+ command <code>node</code> be on the system path. If this feature is enabled and fails for
+ any reason, a warning is issued. You may use the <code>--strict</code> flag when building
+ to cause such a failure to raise an error instead.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>On smaller sites, using a pre-built index is not recommended as it creates a
+significant increase is bandwidth requirements with little to no noticeable
+improvement to your users. However, for larger sites (hundreds of pages),
+the bandwidth increase is relatively small and your users will notice a
+significant improvement in search performance.</p>
+</div>
+<p><strong>default</strong>: <code>False</code></p></div>
         </div>
 
         <footer class="col-md-12">
             <hr>
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
-            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script>var base_url = '../..';</script>
-        <script src="../../js/base.js"></script>
-        <script src="../../search/main.js"></script>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">
@@ -511,7 +614,7 @@ setting to an empty list:</p>
                 </p>
                 <form role="form">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
                 <div id="mkdocs-search-results"></div>
@@ -537,19 +640,19 @@ setting to an empty list:</p>
                 </thead>
                 <tbody>
                   <tr>
-                    <td><kbd>?</kbd></td>
+                    <td class="help shortcut"><kbd>?</kbd></td>
                     <td>Open this help</td>
                   </tr>
                   <tr>
-                    <td><kbd>&larr;</kbd></td>
-                    <td>Previous page</td>
-                  </tr>
-                  <tr>
-                    <td><kbd>&rarr;</kbd></td>
+                    <td class="next shortcut"><kbd>n</kbd></td>
                     <td>Next page</td>
                   </tr>
                   <tr>
-                    <td><kbd>s</kbd></td>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
                     <td>Search</td>
                   </tr>
                 </tbody>
@@ -560,7 +663,6 @@ setting to an empty list:</p>
         </div>
     </div>
 </div>
-
 
     </body>
 </html>

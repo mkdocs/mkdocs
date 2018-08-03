@@ -10,24 +10,27 @@
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Custom Themes - MkDocs</title>
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="../../css/highlight.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
         <link href="../../css/extra.css" rel="stylesheet">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="../../js/jquery-1.10.2.min.js"></script>
-        <script src="../../js/bootstrap-3.0.3.min.js"></script>
-        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/django.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
             ga('create', 'UA-27795084-5', 'mkdocs.org');
             ga('send', 'pageview');
@@ -37,98 +40,98 @@
     <body>
 
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
+            <div class="container">
 
-        <!-- Collapsed navigation -->
-        <div class="navbar-header">
-            <!-- Expander button -->
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="../..">MkDocs</a>
-        </div>
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">MkDocs</a>
+                </div>
 
-        <!-- Expanded navigation -->
-        <div class="navbar-collapse collapse">
-                <!-- Main navigation -->
-                <ul class="nav navbar-nav">
-                    <li >
-                        <a href="../..">Home</a>
-                    </li>
-                    <li class="dropdown active">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../..">Home</a>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
 <li >
     <a href="../writing-your-docs/">Writing Your Docs</a>
 </li>
-                            
+                                    
 <li >
     <a href="../styling-your-docs/">Styling Your Docs</a>
 </li>
-                            
+                                    
 <li >
     <a href="../configuration/">Configuration</a>
 </li>
-                            
+                                    
 <li >
     <a href="../deploying-your-docs/">Deploying Your Docs</a>
 </li>
-                            
+                                    
 <li class="active">
     <a href="./">Custom Themes</a>
 </li>
-                            
+                                    
 <li >
     <a href="../plugins/">Plugins</a>
 </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
 <li >
     <a href="../../about/release-notes/">Release Notes</a>
 </li>
-                            
+                                    
 <li >
     <a href="../../about/contributing/">Contributing</a>
 </li>
-                            
+                                    
 <li >
     <a href="../../about/license/">License</a>
 </li>
+                                </ul>
+                            </li>
                         </ul>
-                    </li>
-                </ul>
 
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
-                        <i class="fa fa-search"></i> Search
-                    </a>
-                </li>
-                    <li >
-                        <a rel="next" href="../deploying-your-docs/">
-                            <i class="fa fa-arrow-left"></i> Previous
-                        </a>
-                    </li>
-                    <li >
-                        <a rel="prev" href="../plugins/">
-                            Next <i class="fa fa-arrow-right"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/mkdocs/mkdocs/"><i class="fa fa-github"></i> GitHub</a>
-                    </li>
-            </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li >
+                                <a rel="next" href="../deploying-your-docs/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../plugins/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/mkdocs/mkdocs/"><i class="fa fa-github"></i> GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
@@ -137,6 +140,7 @@
             <li><a href="#creating-a-custom-theme">Creating a custom theme</a></li>
             <li><a href="#basic-theme">Basic theme</a></li>
             <li><a href="#template-variables">Template Variables</a></li>
+            <li><a href="#template-filters">Template Filters</a></li>
             <li><a href="#search-and-themes">Search and themes</a></li>
             <li><a href="#packaging-themes">Packaging Themes</a></li>
     </ul>
@@ -160,12 +164,11 @@ It contains detailed comments in the code to describe the different features
 and their usage.</p>
 <h2 id="creating-a-custom-theme">Creating a custom theme<a class="headerlink" href="#creating-a-custom-theme" title="Permanent link"></a></h2>
 <p>The bare minimum required for a custom theme is a <code>main.html</code> <a href="http://jinja.pocoo.org/docs/dev/">Jinja2 template</a>
-file. This should be placed in a directory which will be the <code>theme_dir</code> and it
-should be created next to the <code>mkdocs.yml</code> configuration file. Within
-<code>mkdocs.yml</code>, specify the theme <code>custom_dir</code> option and set it to the name of
-the directory containing <code>main.html</code>. For example, given this example project
-layout:</p>
-<pre><code>mkdocs.yml
+file which is placed in a directory that is <em>not</em> a child of the <a href="../configuration/#docs_dir">docs_dir</a>.
+Within <code>mkdocs.yml</code>, set the theme.<a href="../configuration/#custom_dir">custom_dir</a> option to the path of the
+directory containing <code>main.html</code>. The path should be relative to the
+configuration file. For example, given this example project layout:</p>
+<pre><code class="no-highlight">mkdocs.yml
 docs/
     index.md
     about.md
@@ -173,21 +176,24 @@ custom_theme/
     main.html
     ...
 </code></pre>
-<p>You would include the following settings in <code>mkdocs.yml</code> to use the custom theme
+
+<p>... you would include the following settings in <code>mkdocs.yml</code> to use the custom theme
 directory:</p>
-<pre><code>theme:
+<pre><code class="yaml">theme:
     name: null
-    custom_dir: 'custom_theme'
+    custom_dir: 'custom_theme/'
 </code></pre>
+
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Generally, when building your own custom theme, the theme <code>name</code>
-configuration setting would be set to <code>null</code>. However, if used in
-combination with the <code>custom_dir</code> configuration value a custom theme can be
-used to replace only specific parts of a built-in theme. For example, with
-the above layout and if you set <code>name: "mkdocs"</code> then the <code>main.html</code> file
-in the <code>custom_dir</code> would replace that in the theme but otherwise the
-<code>mkdocs</code> theme would remain the same. This is useful if you want to make
+<p>Generally, when building your own custom theme, the theme.<a href="../configuration/#name">name</a>
+configuration setting would be set to <code>null</code>. However, if the
+theme.<a href="../configuration/#custom_dir">custom_dir</a> configuration value is used in combination with an
+existing theme, the theme.<a href="../configuration/#custom_dir">custom_dir</a> can be used to replace only specific
+parts of a built-in theme. For example, with the above layout and if you set
+<code>name: "mkdocs"</code> then the <code>main.html</code> file in the theme.<a href="../configuration/#custom_dir">custom_dir</a> would
+replace the file of the same name in the <code>mkdocs</code> theme but otherwise the
+<code>mkdocs</code> theme would remain unchanged. This is useful if you want to make
 small adjustments to an existing theme.</p>
 <p>For more specific information, see <a href="../styling-your-docs/#using-the-theme-custom_dir">styling your docs</a>.</p>
 </div>
@@ -216,7 +222,7 @@ the <a href="https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes">built-i
 power of Jinja, including <a href="http://jinja.pocoo.org/docs/dev/templates/#template-inheritance">template inheritance</a>. You may notice that the
 themes included with MkDocs make extensive use of template inheritance and
 blocks, allowing users to easily override small bits and pieces of the
-templates from the theme [custom_dir]. Therefore, the built-in themes are
+templates from the theme <a href="../configuration/#custom_dir">custom_dir</a>. Therefore, the built-in themes are
 implemented in a <code>base.html</code> file, which <code>main.html</code> extends. Although not
 required, third party template authors are encouraged to follow a similar
 pattern and may want to define the same <a href="../styling-your-docs/#overriding-template-blocks">blocks</a> as are used in the built-in
@@ -240,14 +246,29 @@ used options include:</p>
 <li><a href="../configuration/#site_url">config.site_url</a></li>
 <li><a href="../configuration/#site_author">config.site_author</a></li>
 <li><a href="../configuration/#site_description">config.site_description</a></li>
+<li><a href="../configuration/#extra_javascript">config.extra_javascript</a></li>
+<li><a href="../configuration/#extra_css">config.extra_css</a></li>
 <li><a href="../configuration/#repo_url">config.repo_url</a></li>
 <li><a href="../configuration/#repo_name">config.repo_name</a></li>
 <li><a href="../configuration/#copyright">config.copyright</a></li>
 <li><a href="../configuration/#google_analytics">config.google_analytics</a></li>
 </ul>
 <h4 id="nav">nav<a class="headerlink" href="#nav" title="Permanent link"></a></h4>
-<p>The <code>nav</code> variable is used to create the navigation for the documentation.
-Following is a basic usage example which outputs the first and second level
+<p>The <code>nav</code> variable is used to create the navigation for the documentation. The
+<code>nav</code> object is an iterable of <a href="#navigation-objects">navigation objects</a> as
+defined by the <a href="../configuration/#nav">nav</a> configuration setting.</p>
+<p>In addition to the iterable of <a href="#navigation-objects">navigation objects</a>, the
+<code>nav</code> object contains the following attributes:</p>
+<h5 id="navhomepage">nav.homepage<a class="headerlink" href="#navhomepage" title="Permanent link"></a></h5>
+<p>The <a href="#page">page</a> object for the homepage of the site.</p>
+<h5 id="navpages">nav.pages<a class="headerlink" href="#navpages" title="Permanent link"></a></h5>
+<p>A flat list of all <a href="#page">page</a> objects contained in the navigation. This list
+is not necessarily a complete list of all site pages as it does not contain
+pages which are not included in the navigation. This list does match the list
+and order of pages used for all "next page" and "previous page" links. For a
+list of all pages, use the <a href="#pages">pages</a> template variable.</p>
+<h5 id="nav-example">Nav Example<a class="headerlink" href="#nav-example" title="Permanent link"></a></h5>
+<p>Following is a basic usage example which outputs the first and second level
 navigation as a nested list.</p>
 <pre><code class="django">{% if nav|length&gt;1 %}
     &lt;ul&gt;
@@ -256,15 +277,15 @@ navigation as a nested list.</p>
             &lt;li&gt;{{ nav_item.title }}
                 &lt;ul&gt;
                 {% for nav_item in nav_item.children %}
-                    &lt;li class=&quot;{% if nav_item.active%}current{%endif%}&quot;&gt;
-                        &lt;a href=&quot;{{ nav_item.url }}&quot;&gt;{{ nav_item.title }}&lt;/a&gt;
+                    &lt;li class=&quot;{% if nav_item.active%}current{% endif %}&quot;&gt;
+                        &lt;a href=&quot;{{ nav_item.url|url }}&quot;&gt;{{ nav_item.title }}&lt;/a&gt;
                     &lt;/li&gt;
                 {% endfor %}
                 &lt;/ul&gt;
             &lt;/li&gt;
         {% else %}
-            &lt;li class=&quot;{% if nav_item.active%}current{%endif%}&quot;&gt;
-                &lt;a href=&quot;{{ nav_item.url }}&quot;&gt;{{ nav_item.title }}&lt;/a&gt;
+            &lt;li class=&quot;{% if nav_item.active%}current{% endif %}&quot;&gt;
+                &lt;a href=&quot;{{ nav_item.url|url }}&quot;&gt;{{ nav_item.title }}&lt;/a&gt;
             &lt;/li&gt;
         {% endif %}
     {% endfor %}
@@ -272,41 +293,45 @@ navigation as a nested list.</p>
 {% endif %}
 </code></pre>
 
-<p>The <code>nav</code> object also contains a <code>homepage</code> object, which points to the <code>page</code>
-object of the homepage. For example, you may want to access <code>nav.homepage.url</code>.</p>
 <h4 id="base_url">base_url<a class="headerlink" href="#base_url" title="Permanent link"></a></h4>
-<p>The <code>base_url</code> provides a relative path to the root of the MkDocs project.
-This makes it easy to include links to static assets in your theme. For
-example, if your theme includes a <code>js</code> folder, to include <code>theme.js</code> from that
-folder on all pages you would do this:</p>
-<pre><code class="django">&lt;script src=&quot;{{ base_url }}/js/theme.js&quot;&gt;&lt;/script&gt;
-</code></pre>
-
-<h4 id="extra_css">extra_css<a class="headerlink" href="#extra_css" title="Permanent link"></a></h4>
-<p>Contains a list of URLs to the style-sheets listed in the <a href="../configuration/#extra_css">extra_css</a>
-config setting. Unlike the config setting, which contains local paths, this
-variable contains absolute paths from the homepage.</p>
-<h4 id="extra_javascript">extra_javascript<a class="headerlink" href="#extra_javascript" title="Permanent link"></a></h4>
-<p>Contains a list of URLs to the scripts listed in the <a href="../configuration/#extra_javascript">extra_javascript</a> config
-setting. Unlike the config setting, which contains local paths, this variable
-contains absolute paths from the homepage.</p>
+<p>The <code>base_url</code> provides a relative path to the root of the MkDocs project. While
+this can be used directly by prepending it to a local relative URL, it is best
+to use the <a href="#url">url</a> template filter, which is smarter about how it applies
+<code>base_url</code>.</p>
 <h4 id="mkdocs_version">mkdocs_version<a class="headerlink" href="#mkdocs_version" title="Permanent link"></a></h4>
 <p>Contains the current MkDocs version.</p>
 <h4 id="build_date_utc">build_date_utc<a class="headerlink" href="#build_date_utc" title="Permanent link"></a></h4>
 <p>A Python datetime object that represents the date and time the documentation
 was built in UTC. This is useful for showing how recently the documentation
 was updated.</p>
+<h4 id="pages">pages<a class="headerlink" href="#pages" title="Permanent link"></a></h4>
+<p>A list of <a href="#page">page</a> objects including <em>all</em> pages in the project. The list
+is a flat list with all pages sorted alphanumerically by directory and file
+name. Note that index pages sort to the top within a directory. This list can
+contain pages not included in the global <a href="#nav">navigation</a> and may not match
+the order of pages within that navigation.</p>
 <h4 id="page">page<a class="headerlink" href="#page" title="Permanent link"></a></h4>
 <p>In templates which are not rendered from a Markdown source file, the <code>page</code>
 variable is <code>None</code>. In templates which are rendered from a Markdown source file,
-the <code>page</code> variable contains a page object with the following attributes:</p>
+the <code>page</code> variable contains a <code>page</code> object. The same <code>page</code> objects are used
+as <code>page</code> <a href="#navigation-objects">navigation objects</a> in the global
+<a href="#nav">navigation</a> and in the <a href="#pages">pages</a> template variable.</p>
+<p>All <code>page</code> objects contain the following attributes:</p>
 <h5 id="pagetitle">page.title<a class="headerlink" href="#pagetitle" title="Permanent link"></a></h5>
 <p>Contains the Title for the current page.</p>
 <h5 id="pagecontent">page.content<a class="headerlink" href="#pagecontent" title="Permanent link"></a></h5>
 <p>The rendered Markdown as HTML, this is the contents of the documentation.</p>
 <h5 id="pagetoc">page.toc<a class="headerlink" href="#pagetoc" title="Permanent link"></a></h5>
-<p>An object representing the Table of contents for a page. Displaying the table
-of contents as a simple list can be achieved like this.</p>
+<p>An iterable object representing the Table of contents for a page. Each item in
+the <code>toc</code> is an <code>AnchorLink</code> which contains the following attributes:</p>
+<ul>
+<li><code>AnchorLink.title</code>: The text of the item.</li>
+<li><code>AnchorLink.url</code>: The hash fragment of a URL pointing to the item.</li>
+<li><code>AnchorLink.level</code>: The zero-based level of the item.</li>
+<li><code>AnchorLink.children</code>: An iterable of any child items.</li>
+</ul>
+<p>The following example would display the top two levels of the Table of Contents
+for a page.</p>
 <pre><code class="django">&lt;ul&gt;
 {% for toc_item in page.toc %}
     &lt;li&gt;&lt;a href=&quot;{{ toc_item.url }}&quot;&gt;{{ toc_item.title }}&lt;/a&gt;&lt;/li&gt;
@@ -338,14 +363,31 @@ documentation page.</p>
 {% endfor %}
 </code></pre>
 
-<h5 id="pagecanonical_url">page.canonical_url<a class="headerlink" href="#pagecanonical_url" title="Permanent link"></a></h5>
-<p>The full, canonical URL to the current page. This includes the <code>site_url</code> from
-the configuration.</p>
-<h5 id="pageedit_url">page.edit_url<a class="headerlink" href="#pageedit_url" title="Permanent link"></a></h5>
-<p>The full URL to the input page in the source repository. Typically used to
-provide a link to edit the source page.</p>
 <h5 id="pageurl">page.url<a class="headerlink" href="#pageurl" title="Permanent link"></a></h5>
-<p>The URL to the current page not including the <code>site_url</code> from the configuration.</p>
+<p>The URL of the page relative to the MkDocs <code>site_dir</code>. It is expected that this
+be used with the <a href="#url">url</a> filter to ensure the URL is relative to the current
+page.</p>
+<pre><code class="django">&lt;a href=&quot;{{ page.url|url }}&quot;&gt;{{ page.title }}&lt;/a&gt;
+</code></pre>
+
+<h5 id="pageabs_url">page.abs_url<a class="headerlink" href="#pageabs_url" title="Permanent link"></a></h5>
+<p>The absolute URL of the page from the server root as determined by the value
+assigned to the <a href="../configuration/#site_url">site_url</a> configuration setting. The value includes any
+subdirectory included in the <code>site_url</code>, but not the domain. <a href="#base_url">base_url</a> should
+not be used with this variable.</p>
+<p>For example, if <code>site_url: https://example.com/</code>, then the value of
+<code>page.abs_url</code> for the page <code>foo.md</code> would be <code>/foo/</code>. However, if
+<code>site_url: https://example.com/bar/</code>, then the value of <code>page.abs_url</code> for the
+page <code>foo.md</code> would be <code>/bar/foo/</code>.</p>
+<h5 id="pagecanonical_url">page.canonical_url<a class="headerlink" href="#pagecanonical_url" title="Permanent link"></a></h5>
+<p>The full, canonical URL to the current page as determined by the value assigned
+to the <a href="../configuration/#site_url">site_url</a> configuration setting. The value includes the domain and any
+subdirectory included in the <code>site_url</code>. <a href="#base_url">base_url</a> should not be used with this
+variable.</p>
+<h5 id="pageedit_url">page.edit_url<a class="headerlink" href="#pageedit_url" title="Permanent link"></a></h5>
+<p>The full URL to the source page in the source repository. Typically used to
+provide a link to edit the source page. <a href="#base_url">base_url</a> should not be used with this
+variable.</p>
 <h5 id="pageis_homepage">page.is_homepage<a class="headerlink" href="#pageis_homepage" title="Permanent link"></a></h5>
 <p>Evaluates to <code>True</code> for the homepage of the site and <code>False</code> for all other
 pages. This can be used in conjunction with other attributes of the <code>page</code>
@@ -355,10 +397,91 @@ on the homepage:</p>
 </code></pre>
 
 <h5 id="pageprevious_page">page.previous_page<a class="headerlink" href="#pageprevious_page" title="Permanent link"></a></h5>
-<p>The page object for the previous  page. The usage is the same as for
-<code>page</code>.</p>
+<p>The page object for the previous page or <code>None</code>. The value will be <code>None</code> if the
+current page is the first item in the site navigation or if the current page is
+not included in the navigation at all. When the value is a page object, the
+usage is the same as for <code>page</code>.</p>
 <h5 id="pagenext_page">page.next_page<a class="headerlink" href="#pagenext_page" title="Permanent link"></a></h5>
-<p>The page object for the next page.The usage is the same as for <code>page</code>.</p>
+<p>The page object for the next page or <code>None</code>. The value will be <code>None</code> if the
+current page is the last item in the site navigation or if the current page is
+not included in the navigation at all. When the value is a page object, the
+usage is the same as for <code>page</code>.</p>
+<h5 id="pageparent">page.parent<a class="headerlink" href="#pageparent" title="Permanent link"></a></h5>
+<p>The immediate parent of the page in the <a href="#nav">site navigation</a>. <code>None</code> if the
+page is at the top level.</p>
+<h5 id="pagechildren">page.children<a class="headerlink" href="#pagechildren" title="Permanent link"></a></h5>
+<p>Pages do not contain children and the attribute is always <code>None</code>.</p>
+<h5 id="pageactive">page.active<a class="headerlink" href="#pageactive" title="Permanent link"></a></h5>
+<p>When <code>True</code>, indicates that this page is the currently viewed page. Defaults
+to <code>False</code>.</p>
+<h5 id="pageis_section">page.is_section<a class="headerlink" href="#pageis_section" title="Permanent link"></a></h5>
+<p>Indicates that the navigation object is a "section" object. Always <code>False</code> for
+page objects.</p>
+<h5 id="pageis_page">page.is_page<a class="headerlink" href="#pageis_page" title="Permanent link"></a></h5>
+<p>Indicates that the navigation object is a "page" object. Always <code>True</code> for
+page objects.</p>
+<h5 id="pageis_link">page.is_link<a class="headerlink" href="#pageis_link" title="Permanent link"></a></h5>
+<p>Indicates that the navigation object is a "link" object. Always <code>False</code> for
+page objects.</p>
+<h3 id="navigation-objects">Navigation Objects<a class="headerlink" href="#navigation-objects" title="Permanent link"></a></h3>
+<p>Navigation objects contained in the <a href="#nav">nav</a> template variable may be one of
+<a href="#section">section</a> objects, <a href="#page">page</a> objects, and <a href="#link">link</a> objects.
+While section objects may contain nested navigation objects, pages and links do
+not.</p>
+<p>Page objects are the full page object as used for the current <a href="#page">page</a> with
+all of the same attributes available. Section and Link objects contain a subset
+of those attributes as defined below:</p>
+<h4 id="section">Section<a class="headerlink" href="#section" title="Permanent link"></a></h4>
+<p>A <code>section</code> navigation object defines a named section in the navigation and
+contains a list of child navigation objects. Note that sections do not contain
+URLs and are not links of any kind. However, by default, MkDocs sorts index
+pages to the top and the first child might be used as the URL for a section if a
+theme choses to do so.</p>
+<p>The following attributes are available on <code>section</code> objects:</p>
+<h5 id="sectiontitle">section.title<a class="headerlink" href="#sectiontitle" title="Permanent link"></a></h5>
+<p>The title of the section.</p>
+<h5 id="sectionparent">section.parent<a class="headerlink" href="#sectionparent" title="Permanent link"></a></h5>
+<p>The immediate parent of the section or <code>None</code> if the section is at the top
+level.</p>
+<h5 id="sectionchildren">section.children<a class="headerlink" href="#sectionchildren" title="Permanent link"></a></h5>
+<p>An iterable of all child navigation objects. Children may include nested
+sections, pages and links.</p>
+<h5 id="sectionactive">section.active<a class="headerlink" href="#sectionactive" title="Permanent link"></a></h5>
+<p>When <code>True</code>, indicates that a child page of this section is the current page and
+can be used to highlight the section as the currently viewed section. Defaults
+to <code>False</code>.</p>
+<h5 id="sectionis_section">section.is_section<a class="headerlink" href="#sectionis_section" title="Permanent link"></a></h5>
+<p>Indicates that the navigation object is a "section" object. Always <code>True</code> for
+section objects.</p>
+<h5 id="sectionis_page">section.is_page<a class="headerlink" href="#sectionis_page" title="Permanent link"></a></h5>
+<p>Indicates that the navigation object is a "page" object. Always <code>False</code> for
+section objects.</p>
+<h5 id="sectionis_link">section.is_link<a class="headerlink" href="#sectionis_link" title="Permanent link"></a></h5>
+<p>Indicates that the navigation object is a "link" object. Always <code>False</code> for
+section objects.</p>
+<h4 id="link">Link<a class="headerlink" href="#link" title="Permanent link"></a></h4>
+<p>A <code>link</code> navigation object contains a link which does not point to an internal
+MkDocs page. The following attributes are available on <code>link</code> objects:</p>
+<h5 id="linktitle">link.title<a class="headerlink" href="#linktitle" title="Permanent link"></a></h5>
+<p>The title of the link. This would generally be used as the label of the link.</p>
+<h5 id="linkurl">link.url<a class="headerlink" href="#linkurl" title="Permanent link"></a></h5>
+<p>The URL that the link points to. The URL should always be an absolute URLs and
+should not need to have <code>base_url</code> prepened.</p>
+<h5 id="linkparent">link.parent<a class="headerlink" href="#linkparent" title="Permanent link"></a></h5>
+<p>The immediate parent of the link. <code>None</code> if the link is at the top level.</p>
+<h5 id="linkchildren">link.children<a class="headerlink" href="#linkchildren" title="Permanent link"></a></h5>
+<p>Links do not contain children and the attribute is always <code>None</code>.</p>
+<h5 id="linkactive">link.active<a class="headerlink" href="#linkactive" title="Permanent link"></a></h5>
+<p>External links cannot be "active" and the attribute is always <code>False</code>.</p>
+<h5 id="linkis_section">link.is_section<a class="headerlink" href="#linkis_section" title="Permanent link"></a></h5>
+<p>Indicates that the navigation object is a "section" object. Always <code>False</code> for
+link objects.</p>
+<h5 id="linkis_page">link.is_page<a class="headerlink" href="#linkis_page" title="Permanent link"></a></h5>
+<p>Indicates that the navigation object is a "page" object. Always <code>False</code> for
+link objects.</p>
+<h5 id="linkis_link">link.is_link<a class="headerlink" href="#linkis_link" title="Permanent link"></a></h5>
+<p>Indicates that the navigation object is a "link" object. Always <code>True</code> for
+link objects.</p>
 <h3 id="extra-context">Extra Context<a class="headerlink" href="#extra-context" title="Permanent link"></a></h3>
 <p>Additional variables can be passed to the template with the
 <a href="../configuration/#extra"><code>extra</code></a> configuration option. This is a
@@ -371,7 +494,7 @@ following <code>extra</code> configuration:</p>
     links:
         - https://github.com/mkdocs
         - https://docs.readthedocs.org/en/latest/builds.html#mkdocs
-        - http://www.mkdocs.org/
+        - https://www.mkdocs.org/
 </code></pre>
 
 <p>And then displayed with this HTML in the custom theme.</p>
@@ -386,12 +509,30 @@ following <code>extra</code> configuration:</p>
 {% endif %}
 </code></pre>
 
+<h2 id="template-filters">Template Filters<a class="headerlink" href="#template-filters" title="Permanent link"></a></h2>
+<p>In addition to Jinja's default filters, the following custom filters are
+available to use in MkDocs templates:</p>
+<h3 id="url">url<a class="headerlink" href="#url" title="Permanent link"></a></h3>
+<p>Normalizes a URL. Absolute URLs are passed through unaltered. If the URL is
+relative and the template context includes a page object, then the URL is
+returned relative to the page object. Otherwise, the URL is returned with
+<a href="#base_url">base_url</a> prepended.</p>
+<pre><code class="django">&lt;a href=&quot;{{ page.url|url }}&quot;&gt;{{ page.title }}&lt;/a&gt;
+</code></pre>
+
+<h3 id="tojson">tojson<a class="headerlink" href="#tojson" title="Permanent link"></a></h3>
+<p>Safety convert a Python object to a value in a JavaScript script.</p>
+<pre><code class="django">&lt;script&gt;
+    var mkdocs_page_name = {{ page.title|tojson|safe }};
+&lt;/script&gt;
+</code></pre>
+
 <h2 id="search-and-themes">Search and themes<a class="headerlink" href="#search-and-themes" title="Permanent link"></a></h2>
-<p>As of MkDocs <code>0.17</code> client side search support has been added to MkDocs via the
-<code>search</code> plugin. A theme needs to provide a few things for the plugin to work
-with the theme.</p>
+<p>As of MkDocs version <em>0.17</em> client side search support has been added to MkDocs
+via the <code>search</code> plugin. A theme needs to provide a few things for the plugin to
+work with the theme.</p>
 <p>While the <code>search</code> plugin is activated by default, users can disable the plugin
-and themes should acount for this. It is recomended that theme templates wrap
+and themes should account for this. It is recommended that theme templates wrap
 search specific markup with a check for the plugin:</p>
 <pre><code class="django">{% if 'search' in config['plugins'] %}
     search stuff here...
@@ -402,43 +543,15 @@ search specific markup with a check for the plugin:</p>
 file which is no more than a JSON file containing the content of all pages.
 The theme would need to implement its own search functionality client-side.
 However, with a few settings and the necessary templates, the plugin can provide
-a complete functioning client-side search tool based on <a href="http://lunrjs.com/">lunr.js</a>.</p>
-<p>The following options can be set in the <a href="#theme-configuration">theme's configuration file</a>,
-<code>mkdocs_theme.yml</code>:</p>
-<h3 id="include_search_page">include_search_page<a class="headerlink" href="#include_search_page" title="Permanent link"></a></h3>
-<p>Determines whether the search plugin expects the theme to provide a dedicated
-search page via a template located at <code>search/search.html</code>.</p>
-<p>When <code>include_search_page</code> is set to <code>true</code>, the search template will be built
-and available at <code>search/search.html</code>. This method is used by the <code>readthedocs</code>
-theme.</p>
-<p>When <code>include_search_page</code> is set to <code>false</code> or not defined, it is expected that
-the theme provide some other mechanisms for displaying search results. For
-example, the <code>mkdocs</code> theme displays results on any page via a modal.</p>
-<h3 id="search_index_only">search_index_only<a class="headerlink" href="#search_index_only" title="Permanent link"></a></h3>
-<p>Determines whether the search plugin should only generate a search index or a
-complete search solution.</p>
-<p>When <code>search_index_only</code> is set to <code>true</code> or not defined, the search plugin
-makes no modifications to the Jinja environment. A complete solution using the
-provided index file is the responsability of the theme.</p>
-<p>When <code>search_index_only</code> is set to <code>false</code>, then the search plugin modifies the
-Jinja environment by adding its own <code>temaplates</code> directory (with a lower
-precedence than the theme) and adds its scripts to the <code>extra_javascript</code> config
-setting.</p>
+a complete functioning client-side search tool based on <a href="https://lunrjs.com/">lunr.js</a>.</p>
 <p>The following HTML needs to be added to the theme so that the provided
-JavaScript is able to properly load Lunr.js and make relative links to the
-search results from the current page.</p>
+JavaScript is able to properly load the search scripts and make relative links
+to the search results from the current page.</p>
 <pre><code class="django">&lt;script&gt;var base_url = '{{ base_url }}';&lt;/script&gt;
 </code></pre>
 
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The provided JavaScript will download the search index. For larger
-documentation projects this can be a heavy operation. In those cases, it
-is suggested that you either use <code>search_index_only: true</code> to only include
-search on one page or load the JavaScript on an event like a form submit.</p>
-</div>
-<p>The following HTML in a <code>search/search.html</code> template will add a full search
-implementation to your theme.</p>
+<p>With properly configured settings, the following HTML in a template  will add a
+full search implementation to your theme.</p>
 <pre><code class="django">&lt;h1 id=&quot;search&quot;&gt;Search Results&lt;/h1&gt;
 
 &lt;form action=&quot;search.html&quot;&gt;
@@ -451,14 +564,56 @@ implementation to your theme.</p>
 </code></pre>
 
 <p>The JavaScript in the plugin works by looking for the specific ID's used in the
-above HTML. The input for the user to type the search query must have the ID
-<code>mkdocs-search-query</code> and <code>mkdocs-search-results</code> is the div where the results
-will be placed.</p>
+above HTML. The form input for the user to type the search query must be
+identified with <code>id="mkdocs-search-query"</code> and the div where the results will be
+placed must be identified with <code>id="mkdocs-search-results"</code>.</p>
+<p>The plugin supports the following options being set in the <a href="#theme-configuration">theme's
+configuration file</a>, <code>mkdocs_theme.yml</code>:</p>
+<h3 id="include_search_page">include_search_page<a class="headerlink" href="#include_search_page" title="Permanent link"></a></h3>
+<p>Determines whether the search plugin expects the theme to provide a dedicated
+search page via a template located at <code>search/search.html</code>.</p>
+<p>When <code>include_search_page</code> is set to <code>true</code>, the search template will be built
+and available at <code>search/search.html</code>. This method is used by the <code>readthedocs</code>
+theme.</p>
+<p>When <code>include_search_page</code> is set to <code>false</code> or not defined, it is expected that
+the theme provide some other mechanisms for displaying search results. For
+example, the <code>mkdocs</code> theme displays results on any page via a modal.</p>
+<h3 id="search_index_only">search_index_only<a class="headerlink" href="#search_index_only" title="Permanent link"></a></h3>
+<p>Determines whether the search plugin should only generate a search index or a
+complete search solution.</p>
+<p>When <code>search_index_only</code> is set to <code>false</code>, then the search plugin modifies the
+Jinja environment by adding its own <code>templates</code> directory (with a lower
+precedence than the theme) and adds its scripts to the <code>extra_javascript</code> config
+setting.</p>
+<p>When <code>search_index_only</code> is set to <code>true</code> or not defined, the search plugin
+makes no modifications to the Jinja environment. A complete solution using the
+provided index file is the responsibility of the theme.</p>
+<p>The search index is written to a JSON file at <code>search/search_index.json</code> in the
+<a href="../configuration/#site_dir">site_dir</a>. The JSON object contained within the file may contain up to three
+objects.</p>
+<pre><code class="json">{
+    config: {...},
+    data: [...],
+    index: {...}
+}
+</code></pre>
+
+<p>If present, the <code>config</code> object contains the key/value pairs of config options
+defined for the plugin in the user's <code>mkdocs.yml</code> config file under
+<code>plugings.search</code>. The <code>config</code> object was new in MkDocs version <em>1.0</em>.</p>
+<p>The <code>data</code> object contains a list of document objects. Each document object is
+made up of a <code>location</code> (URL), a <code>title</code>, and <code>text</code> which can be used to create
+a search index and/or display search results.</p>
+<p>If present, the <code>index</code> object contains a pre-built index which offers
+performance improvements for larger sites. Note that the pre-built index is only
+created if the user explicitly enables the <a href="../configuration/#prebuild_index">prebuild_index</a> config option.
+Themes should expect the index to not be present, but can choose to use the
+index when it is available. The <code>index</code> object was new in MkDocs version <em>1.0</em>.</p>
 <h2 id="packaging-themes">Packaging Themes<a class="headerlink" href="#packaging-themes" title="Permanent link"></a></h2>
 <p>MkDocs makes use of <a href="https://packaging.python.org/en/latest/">Python packaging</a> to distribute themes. This comes with a
 few requirements.</p>
-<p>To see an example of a package containing one theme, see the <a href="http://mkdocs.github.io/mkdocs-bootstrap/">MkDocs Bootstrap
-theme</a> and to see a package that contains many themes, see the <a href="http://mkdocs.github.io/mkdocs-bootswatch/">MkDocs
+<p>To see an example of a package containing one theme, see the <a href="https://mkdocs.github.io/mkdocs-bootstrap/">MkDocs Bootstrap
+theme</a> and to see a package that contains many themes, see the <a href="https://mkdocs.github.io/mkdocs-bootswatch/">MkDocs
 Bootswatch theme</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -467,7 +622,7 @@ can be contained in the <code>custom_dir</code>. If you have created a "one-off 
 that should be sufficient. However, if you intend to distribute your theme
 for others to use, packaging the theme has some advantages. By packaging
 your theme, your users can more easily install it and they can then take
-advantage of the [custom_dir] to make tweaks to your theme to better suit
+advantage of the <a href="../configuration/#custom_dir">custom_dir</a> to make tweaks to your theme to better suit
 their needs.</p>
 </div>
 <h3 id="package-layout">Package Layout<a class="headerlink" href="#package-layout" title="Permanent link"></a></h3>
@@ -590,11 +745,14 @@ documentation for <a href="https://packaging.python.org/en/latest/distributing/"
         <footer class="col-md-12">
             <hr>
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
-            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script>var base_url = '../..';</script>
-        <script src="../../js/base.js"></script>
-        <script src="../../search/main.js"></script>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">
@@ -610,7 +768,7 @@ documentation for <a href="https://packaging.python.org/en/latest/distributing/"
                 </p>
                 <form role="form">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
                 <div id="mkdocs-search-results"></div>
@@ -636,19 +794,19 @@ documentation for <a href="https://packaging.python.org/en/latest/distributing/"
                 </thead>
                 <tbody>
                   <tr>
-                    <td><kbd>?</kbd></td>
+                    <td class="help shortcut"><kbd>?</kbd></td>
                     <td>Open this help</td>
                   </tr>
                   <tr>
-                    <td><kbd>&larr;</kbd></td>
-                    <td>Previous page</td>
-                  </tr>
-                  <tr>
-                    <td><kbd>&rarr;</kbd></td>
+                    <td class="next shortcut"><kbd>n</kbd></td>
                     <td>Next page</td>
                   </tr>
                   <tr>
-                    <td><kbd>s</kbd></td>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
                     <td>Search</td>
                   </tr>
                 </tbody>
@@ -659,7 +817,6 @@ documentation for <a href="https://packaging.python.org/en/latest/distributing/"
         </div>
     </div>
 </div>
-
 
     </body>
 </html>
