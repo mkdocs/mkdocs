@@ -13,7 +13,6 @@ You can determine your currently installed version using `mkdocs --version`:
     $ mkdocs --version
     mkdocs, version 1.0 from /path/to/mkdocs (Python 3.6)
 
-
 ## Maintenance team
 
 The current and past members of the MkDocs team.
