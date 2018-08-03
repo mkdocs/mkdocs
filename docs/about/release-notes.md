@@ -11,7 +11,8 @@ To upgrade MkDocs to the latest version, use pip:
 You can determine your currently installed version using `mkdocs --version`:
 
     $ mkdocs --version
-    mkdocs, version 0.15.2
+    mkdocs, version 1.0 from /path/to/mkdocs (Python 3.6)
+
 
 ## Maintenance team
 
@@ -21,7 +22,7 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
-## Version 1.0 (2018-??-??)
+## Version 1.0 (2018-08-03)
 
 ### Major Additions to Version 1.0
 
@@ -273,7 +274,7 @@ value to the `theme.custom_dir` option and a warning was issued. As of version
 
 * Bugfix: Fix Python 3.7 and PEP 479 incompatibility (#1518).
 
-## Version 0.17.4
+## Version 0.17.4 (2018-06-08)
 
 * Bugfix: Add multi-level nesting support to sitemap.xml (#1482).
 
