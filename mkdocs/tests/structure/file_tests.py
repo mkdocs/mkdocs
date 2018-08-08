@@ -48,6 +48,11 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
             ['a.md', 'a.md', 'b.md']
         )
 
+        self.assertEqual(
+            _sort_files(['A.md', 'B.md', 'README.md']),
+            ['README.md', 'A.md', 'B.md']
+        )
+
     def test_md_file(self):
         f = File('foo.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
         self.assertPathsEqual(f.src_path, 'foo.md')
@@ -529,6 +534,31 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         config = load_config(docs_dir=tdir, extra_css=['bar.css'], extra_javascript=['bar.js'])
         files = get_files(config)
         expected = ['index.md', 'bar.css', 'bar.html', 'bar.jpg', 'bar.js', 'bar.md']
+        self.assertIsInstance(files, Files)
+        self.assertEqual(len(files), len(expected))
+        self.assertEqual([f.src_path for f in files], expected)
+
+    @tempdir(files=[
+        'README.md',
+        'foo.md'
+    ])
+    def test_get_files_include_readme_without_index(self, tdir):
+        config = load_config(docs_dir=tdir)
+        files = get_files(config)
+        expected = ['README.md', 'foo.md']
+        self.assertIsInstance(files, Files)
+        self.assertEqual(len(files), len(expected))
+        self.assertEqual([f.src_path for f in files], expected)
+
+    @tempdir(files=[
+        'index.md',
+        'README.md',
+        'foo.md'
+    ])
+    def test_get_files_exclude_readme_with_index(self, tdir):
+        config = load_config(docs_dir=tdir)
+        files = get_files(config)
+        expected = ['index.md', 'foo.md']
         self.assertIsInstance(files, Files)
         self.assertEqual(len(files), len(expected))
         self.assertEqual([f.src_path for f in files], expected)

@@ -232,20 +232,23 @@ def get_files(config):
             # Skip any excluded files
             if _filter_paths(basename=filename, path=path, is_dir=False, exclude=exclude):
                 continue
+            # Skip README.md is an index file also exists in dir
+            if filename.lower() == 'readme.md' and 'index.md' in filenames:
+                continue
             files.append(File(path, config['docs_dir'], config['site_dir'], config['use_directory_urls']))
 
     return Files(files)
 
 
 def _sort_files(filenames):
-    """ Always sort `index` as first filename in list. """
+    """ Always sort `index` or `README` as first filename in list. """
 
     def compare(x, y):
         if x == y:
             return 0
-        if os.path.splitext(y)[0] == 'index':
+        if os.path.splitext(y)[0] in ['index', 'README']:
             return 1
-        if os.path.splitext(x)[0] == 'index' or x < y:
+        if os.path.splitext(x)[0] in ['index', 'README'] or x < y:
             return -1
         return 1
 
