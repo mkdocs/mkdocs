@@ -232,6 +232,9 @@ def get_files(config):
             # Skip any excluded files
             if _filter_paths(basename=filename, path=path, is_dir=False, exclude=exclude):
                 continue
+            # Skip README.md is an index file also exists in dir
+            if filename.lower() == 'readme.md' and 'index.md' in filenames:
+                continue
             files.append(File(path, config['docs_dir'], config['site_dir'], config['use_directory_urls']))
 
     return Files(files)

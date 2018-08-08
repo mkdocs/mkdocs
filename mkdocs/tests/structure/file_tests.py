@@ -533,6 +533,31 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         self.assertEqual(len(files), len(expected))
         self.assertEqual([f.src_path for f in files], expected)
 
+    @tempdir(files=[
+        'README.md',
+        'foo.md'
+    ])
+    def test_get_files_include_readme_without_index(self, tdir):
+        config = load_config(docs_dir=tdir)
+        files = get_files(config)
+        expected = ['README.md', 'foo.md']
+        self.assertIsInstance(files, Files)
+        self.assertEqual(len(files), len(expected))
+        self.assertEqual([f.src_path for f in files], expected)
+
+    @tempdir(files=[
+        'index.md',
+        'README.md',
+        'foo.md'
+    ])
+    def test_get_files_exclude_readme_with_index(self, tdir):
+        config = load_config(docs_dir=tdir)
+        files = get_files(config)
+        expected = ['index.md', 'foo.md']
+        self.assertIsInstance(files, Files)
+        self.assertEqual(len(files), len(expected))
+        self.assertEqual([f.src_path for f in files], expected)
+
     @tempdir()
     @tempdir(files={'test.txt': 'source content'})
     def test_copy_file(self, src_dir, dest_dir):
