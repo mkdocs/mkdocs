@@ -241,14 +241,14 @@ def get_files(config):
 
 
 def _sort_files(filenames):
-    """ Always sort `index` as first filename in list. """
+    """ Always sort `index` or `README` as first filename in list. """
 
     def compare(x, y):
         if x == y:
             return 0
-        if os.path.splitext(y)[0] == 'index':
+        if os.path.splitext(y)[0] in ['index', 'README']:
             return 1
-        if os.path.splitext(x)[0] == 'index' or x < y:
+        if os.path.splitext(x)[0] in ['index', 'README'] or x < y:
             return -1
         return 1
 

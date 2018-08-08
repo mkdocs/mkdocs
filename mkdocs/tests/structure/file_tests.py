@@ -48,6 +48,11 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
             ['a.md', 'a.md', 'b.md']
         )
 
+        self.assertEqual(
+            _sort_files(['A.md', 'B.md', 'README.md']),
+            ['README.md', 'A.md', 'B.md']
+        )
+
     def test_md_file(self):
         f = File('foo.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
         self.assertPathsEqual(f.src_path, 'foo.md')
