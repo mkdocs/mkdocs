@@ -59,6 +59,7 @@ setup(
         'click>=3.3',
         'Jinja2>=2.7.1',
         'livereload>=2.5.1',
+        'lunr[languages]>=0.5.0',
         'Markdown>=2.3.1',
         'PyYAML>=3.10',
         'tornado>=5.0'

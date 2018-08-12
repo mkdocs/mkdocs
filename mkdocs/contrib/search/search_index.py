@@ -7,6 +7,9 @@ import re
 import json
 import logging
 import subprocess
+
+from lunr import lunr
+
 from mkdocs import utils
 
 try:                                    # pragma: no cover
@@ -105,7 +108,7 @@ class SearchIndex(object):
         }
         data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
 
-        if self.config['prebuild_index']:
+        if self.config['prebuild_index'] == 'node':
             try:
                 script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'prebuild-index.js')
                 p = subprocess.Popen(
@@ -124,6 +127,12 @@ class SearchIndex(object):
                     log.warning('Failed to pre-build search index. Error: {}'.format(err))
             except (OSError, IOError, ValueError) as e:
                 log.warning('Failed to pre-build search index. Error: {}'.format(e))
+        elif self.config['prebuild_index'] == 'python':
+            idx = lunr(
+                ref='location', fields=('title', 'text'), documents=self._entries,
+                languages=self.config['lang'])
+            page_dicts['index'] = idx.serialize()
+            data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
 
         return data
 
