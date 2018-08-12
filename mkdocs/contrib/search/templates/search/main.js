@@ -70,7 +70,9 @@ if (!window.Worker) {
   $.getScript(base_url + "/search/worker.js").done(function () {
     console.log('Loaded worker');
     init();
-    window.postMessage = initSearch;
+    window.postMessage = function (msg) {
+      onWorkerMessage({data: msg});
+    };
   }).fail(function (jqxhr, settings, exception) {
     console.error('Could not load worker.js');
   });
