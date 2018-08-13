@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         <meta name="author" content="MkDocs Team">
-        <link rel="canonical" href="http://www.mkdocs.org/user-guide/writing-your-docs/">
+        <link rel="canonical" href="https://www.mkdocs.org/user-guide/writing-your-docs/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Writing Your Docs - MkDocs</title>
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
@@ -207,9 +207,9 @@ directory. Therefore, MkDocs will allow you to name your index pages as
 source code, the repository host can display the index page of that directory as
 it is a README file. However, when MkDocs renders your site, the file will be
 renamed to <code>index.html</code> so that the server will serve it as a proper index file.</p>
-<p>You should not include both an <code>index.md</code> file and a <code>README.md</code> file in the
-same directory. It is suggested that you chose a convention for your project and
-then stick to it.</p>
+<p>If both an <code>index.md</code> file and a <code>README.md</code> file are found in the same
+directory, then the <code>index.md</code> file is used and the <code>README.md</code> file is
+ignored.</p>
 <h3 id="configure-pages-and-navigation">Configure Pages and Navigation<a class="headerlink" href="#configure-pages-and-navigation" title="Permanent link"></a></h3>
 <p>The <a href="../configuration/#nav">nav</a> configuration setting in your <code>mkdocs.yml</code> file
 defines which pages are included in the global site navigation menu as well as
