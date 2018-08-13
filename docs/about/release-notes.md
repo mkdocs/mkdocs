@@ -21,6 +21,13 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Version 1.0.1 (2018-08-13)
+
+* Bugfix: Prevent page reload when [Enter] is pressed in search box (#1589).
+* Bugfix: Avoid calling `search` until all assets are ready (#1584).
+* Bugfix: Exclude `README.md` if `index.md` is present (#1580).
+* Bugfix: Fix `readthedocs` theme navigation bug with homepage (#1576).
+
 ## Version 1.0 (2018-08-03)
 
 ### Major Additions to Version 1.0
