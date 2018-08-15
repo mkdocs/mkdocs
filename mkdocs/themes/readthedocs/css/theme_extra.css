@@ -1,30 +1,4 @@
 /*
- * Long navigations run off the bottom of the screen as the nav
- * area doesn't scroll.
- *
- * https://github.com/mkdocs/mkdocs/pull/202
- *
- * Builds upon pull 202 https://github.com/mkdocs/mkdocs/pull/202
- * to make toc scrollbar end before navigations buttons to not be overlapping.
- */
-.wy-nav-side {
-    height: calc(100% - 45px);
-    overflow-y: auto;
-    min-height: 0;
-}
-
-.rst-versions{
-    border-top: 0;
-    height: 45px;
-}
-
-@media screen and (max-width: 768px) {
-    .wy-nav-side {
-        height: 100%;
-    }
-}
-
-/*
  * Wrap inline code samples otherwise they shoot of the side and
  * can't be read at all.
  *
@@ -32,7 +6,7 @@
  * https://github.com/mkdocs/mkdocs/issues/233
  * https://github.com/mkdocs/mkdocs/issues/834
  */
-code {
+.rst-content code {
     white-space: pre-wrap;
     word-wrap: break-word;
     padding: 2px 5px;
@@ -46,7 +20,7 @@ code {
  * https://github.com/mkdocs/mkdocs/issues/834
  * https://github.com/mkdocs/mkdocs/issues/233
  */
-pre code {
+.rst-content pre code {
   white-space: pre;
   word-wrap: normal;
   display: block;
@@ -88,7 +62,7 @@ pre .cs, pre .c {
  *
  * https://github.com/mkdocs/mkdocs/issues/319
  */
-.no-highlight {
+.rst-content .no-highlight {
   display: block;
   padding: 0.5em;
   color: #333;
@@ -124,7 +98,7 @@ form .search-query {
  *
  * https://github.com/mkdocs/mkdocs/issues/656
  */
- .admonition code {
+ .rst-content .admonition code {
   color: #404040;
   border: 1px solid #c7c9cb;
   border: 1px solid rgba(0, 0, 0, 0.2);
