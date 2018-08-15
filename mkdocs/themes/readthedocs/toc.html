@@ -1,10 +1,12 @@
-{% for toc_item in nav_item.toc %}
+{#- First level of toc is page title. Skip and go directly to second level. #}
+{%- set toc = nav_item.toc.items[0].children %}
+{%- for toc_item in toc %}
     <li class="toctree-l{{ navlevel + 1 }}"><a href="{% if not nav_item == page %}{{ nav_item.url|url }}{% endif %}{{ toc_item.url }}">{{ toc_item.title }}</a></li>
-    {% if toc_item.children %}
+    {%- if toc_item.children %}
         <ul>
-        {% for toc_item in toc_item.children %}
+        {%- for toc_item in toc_item.children %}
             <li><a class="toctree-l{{ navlevel + 2 }}" href="{% if not nav_item == page %}{{ nav_item.url|url }}{% endif %}{{ toc_item.url }}">{{ toc_item.title }}</a></li>
-        {% endfor %}
+        {%- endfor %}
         </ul>
-    {% endif %}
-{% endfor %}
+    {%- endif %}
+{%- endfor %}
