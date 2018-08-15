@@ -8,3 +8,5 @@ search_index_only: false
 
 highlightjs: true
 hljs_languages: []
+
+prev_next_buttons_location: bottom

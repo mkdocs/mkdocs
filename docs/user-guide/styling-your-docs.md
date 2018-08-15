@@ -99,6 +99,9 @@ theme supports the following options:
                 - yaml
                 - rust
 
+* __`prev_next_buttons_location`__: One of `bottom`, `top`, `both` , or `none`.
+  Displays the “Next” and “Previous” buttons accordingly. Default: `bottom`.
+
 ### Third Party Themes
 
 A list of third party themes can be found in the MkDocs [community wiki]. If you
