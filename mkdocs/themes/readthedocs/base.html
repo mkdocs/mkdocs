@@ -145,6 +145,11 @@
     {%- for path in config['extra_javascript'] %}
       <script src="{{ path|url }}" defer></script>
     {%- endfor %}
+    <script type="text/javascript" defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
   {%- endblock %}
 
 </body>
