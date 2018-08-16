@@ -99,6 +99,12 @@ theme supports the following options:
                 - yaml
                 - rust
 
+* __`include_homepage_in_sidebar`__: Lists the homepage in the sidebar menu. As
+  MkDocs requires that the homepage be listed in the `nav` configuration
+  option, this setting allows the homepage to be included or excluded from
+  the sidebar. Note that the site name/logo always links to the homepage.
+  Default: `True`.
+
 * __`prev_next_buttons_location`__: One of `bottom`, `top`, `both` , or `none`.
   Displays the “Next” and “Previous” buttons accordingly. Default: `bottom`.
 

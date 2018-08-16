@@ -9,4 +9,5 @@ search_index_only: false
 highlightjs: true
 hljs_languages: []
 
+include_homepage_in_sidebar: true
 prev_next_buttons_location: bottom

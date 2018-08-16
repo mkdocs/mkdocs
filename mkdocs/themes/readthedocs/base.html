@@ -95,7 +95,7 @@
                     </li>
                     {%- endfor %}
                 </ul>
-            {%- elif not nav_item == nav.homepage %}
+            {%- elif config.theme.include_homepage_in_sidebar or (not nav_item == nav.homepage) %}
                 <ul{% if nav_item.active %} class="current"{% endif %}>
                     <li class="toctree-l{{ navlevel }}{% if nav_item.active %} current{% endif %}">
                         {%- include 'nav.html' %}
