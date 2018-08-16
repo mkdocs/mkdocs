@@ -26,8 +26,7 @@
       {%- endblock %}
     </li>
   </ul>
-  {% if (config.theme.prev_next_buttons_location|lower == 'top'
-        or config.theme.prev_next_buttons_location|lower == 'both')
+  {% if config.theme.prev_next_buttons_location|lower in ['top', 'both']
         and page and (page.next_page or page.previous_page) %}
     <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
       {%- if page.next_page %}
