@@ -108,6 +108,9 @@ theme supports the following options:
 * __`prev_next_buttons_location`__: One of `bottom`, `top`, `both` , or `none`.
   Displays the “Next” and “Previous” buttons accordingly. Default: `bottom`.
 
+* __`navigation_depth`__: The maximum depth of the navigation tree in the
+  sidebar. Default: `4`.
+
 ### Third Party Themes
 
 A list of third party themes can be found in the MkDocs [community wiki]. If you
