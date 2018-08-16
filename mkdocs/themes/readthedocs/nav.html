@@ -5,7 +5,7 @@
 {%- endif %}
 {%- set navlevel = navlevel + 1 %}
 {%- if navlevel <= config.theme.navigation_depth
-    and ((nav_item.is_page and nav_item.toc.items)
+    and ((nav_item.is_page and nav_item.toc.items and not config.theme.titles_only)
     or (nav_item.is_section and nav_item.children)) %}
     <ul{% if nav_item.active %} class="current"{% endif %}>
         {%- if nav_item.is_page %}

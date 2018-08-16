@@ -111,6 +111,9 @@ theme supports the following options:
 * __`navigation_depth`__: The maximum depth of the navigation tree in the
   sidebar. Default: `4`.
 
+* __`titles_only`__: If True, removes headers within a page from the sidebar.
+  Default: `False`.
+
 ### Third Party Themes
 
 A list of third party themes can be found in the MkDocs [community wiki]. If you
