@@ -17,7 +17,7 @@
       {%- endblock %}
 
       {%- block styles %}
-        <link href="{{ 'css/bootstrap-custom.min.css'|url }}" rel="stylesheet">
+        <link href="{{ 'css/bootstrap.min.css'|url }}" rel="stylesheet">
         <link href="{{ 'css/font-awesome.min.css'|url }}" rel="stylesheet">
         <link href="{{ 'css/base.css'|url }}" rel="stylesheet">
         {%- if config.theme.highlightjs %}
@@ -36,7 +36,7 @@
         <![endif]-->
 
         <script src="{{ 'js/jquery-1.10.2.min.js'|url }}" defer></script>
-        <script src="{{ 'js/bootstrap-3.0.3.min.js'|url }}" defer></script>
+        <script src="{{ 'js/bootstrap.min.js'|url }}" defer></script>
         {%- if config.theme.highlightjs %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         {%- for lang in config.theme.hljs_languages %}
