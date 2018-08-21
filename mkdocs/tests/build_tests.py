@@ -91,12 +91,12 @@ class BuildTests(PathAssertionMixin, LogTestCase):
     def test_context_base_url_absolute_no_page(self):
         cfg = load_config(use_directory_urls=False)
         context = build.get_context(mock.Mock(), mock.Mock(), cfg, base_url='/')
-        self.assertEqual(context['base_url'], '')
+        self.assertEqual(context['base_url'], '/')
 
     def test_context_base_url__absolute_no_page_use_directory_urls(self):
         cfg = load_config()
         context = build.get_context(mock.Mock(), mock.Mock(), cfg, base_url='/')
-        self.assertEqual(context['base_url'], '')
+        self.assertEqual(context['base_url'], '/')
 
     def test_context_base_url_absolute_nested_no_page(self):
         cfg = load_config(use_directory_urls=False)
