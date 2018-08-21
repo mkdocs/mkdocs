@@ -52,7 +52,7 @@ def get_context(nav, files, config, page=None, base_url=''):
         'nav': nav,
         'pages': files.documentation_pages(),
 
-        'base_url': base_url.rstrip('/'),
+        'base_url': base_url,
 
         'extra_css': extra_css,
         'extra_javascript': extra_javascript,
@@ -78,8 +78,10 @@ def _build_template(name, template, files, config, nav):
     if utils.is_error_template(name):
         # Force absolute URLs in the nav of error pages and account for the
         # possability that the docs root might be different than the server root.
-        # See https://github.com/mkdocs/mkdocs/issues/77
-        base_url = utils.urlparse(config['site_url']).path
+        # See https://github.com/mkdocs/mkdocs/issues/77.
+        # However, if site_url is not set, assume the docs root and server root
+        # are the same. See https://github.com/mkdocs/mkdocs/issues/1598.
+        base_url = utils.urlparse(config['site_url'] or '/').path
     else:
         base_url = utils.get_relative_url('.', name)
 
