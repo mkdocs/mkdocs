@@ -51,8 +51,8 @@ def get_context(nav, files, config, page=None, base_url=''):
     return {
         'nav': nav,
         'pages': files.documentation_pages(),
-        # `/foo/` => `/foo` however `/` => `/`
-        'base_url': base_url, #.rstrip('/') if len(base_url) > 1 else base_url,
+
+        'base_url': base_url,
 
         'extra_css': extra_css,
         'extra_javascript': extra_javascript,
