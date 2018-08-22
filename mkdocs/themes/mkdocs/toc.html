@@ -1,9 +1,11 @@
-<div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
+<div class="bs-sidebar hidden-print affix card bg-secondary" role="complementary">
+    <ul class="nav flex-column bs-sidenav">
     {%- for toc_item in page.toc %}
-        <li class="main {% if toc_item.active %}active{% endif %}"><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
+        <li class="nav-item main"><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
         {%- for toc_item in toc_item.children %}
-            <li><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
+            <li class="nav-item">
+                <a href="{{ toc_item.url }}" class="nav-link{% if toc_item.active %} active{% endif %}">{{ toc_item.title }}</a>
+            </li>
         {%- endfor %}
     {%- endfor %}
     </ul>

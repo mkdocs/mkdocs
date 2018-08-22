@@ -148,7 +148,7 @@ footer {
     position: static;
 }
 
-.bs-sidebar.well { /* csslint allow: adjoining-classes */
+.bs-sidebar.card { /* csslint allow: adjoining-classes */
     padding: 0;
     max-height: 90%;
     overflow-y: auto;
@@ -172,9 +172,9 @@ footer {
     text-decoration: none;
     border-right: 1px solid;
 }
-.bs-sidebar .nav > .active > a,
-.bs-sidebar .nav > .active:hover > a,
-.bs-sidebar .nav > .active:focus > a {
+.bs-sidebar .nav > li > a.active,
+.bs-sidebar .nav > li > a.active:hover,
+.bs-sidebar .nav > li > a.active:focus {
     font-weight: bold;
     background-color: transparent;
     border-right: 1px solid;
@@ -199,9 +199,9 @@ footer {
     .col-md-9 {
         box-sizing: border-box;  /* csslint allow: box-sizing */
         padding-left: 25%;
-        width: 100%;
+        max-width: 100%;
     }
-    .bs-sidebar .nav > .active > ul {
+    .bs-sidebar .nav > li > a.active > ul {
         display: block;
     }
     /* Widen the fixed sidebar */
