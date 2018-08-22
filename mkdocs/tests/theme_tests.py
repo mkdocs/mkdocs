@@ -74,7 +74,7 @@ class ThemeTests(unittest.TestCase):
         self.assertTrue('new' in theme)
         self.assertEqual(theme['new'], 42)
 
-    @mock.patch('mkdocs.utils.yaml_load', return_value={})
+    @mock.patch('mkdocs.utils.yaml_load', return_value=None)
     def test_no_theme_config(self, m):
         theme = Theme(name='mkdocs')
         self.assertEqual(m.call_count, 1)
