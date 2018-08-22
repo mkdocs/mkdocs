@@ -171,10 +171,12 @@
         </div>
 
         <div class="container">
-            {%- block content %}
-                <div class="col-md-3">{% include "toc.html" %}</div>
-                <div class="col-md-9" role="main">{% include "content.html" %}</div>
-            {%- endblock %}
+            <div class="row">
+                {%- block content %}
+                    <div class="col-md-3">{% include "toc.html" %}</div>
+                    <div class="col-md-9" role="main">{% include "content.html" %}</div>
+                {%- endblock %}
+            </div>
         </div>
 
         <footer class="col-md-12">
