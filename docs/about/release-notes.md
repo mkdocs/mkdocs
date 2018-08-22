@@ -21,6 +21,10 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Version 1.0.2 (2018-08-22)
+
+* Bugfix: Provide absolute `base_url` to error templates (#1598).
+
 ## Version 1.0.1 (2018-08-13)
 
 * Bugfix: Prevent page reload when [Enter] is pressed in search box (#1589).
