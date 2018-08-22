@@ -99,6 +99,7 @@ code {
 }
 
 pre code {
+    display: block;
     background: transparent;
     border: none;
     white-space: pre;
