@@ -1,12 +1,21 @@
-<div class="bs-sidebar hidden-print affix card bg-secondary" role="complementary">
-    <ul class="nav flex-column bs-sidenav">
-    {%- for toc_item in page.toc %}
-        <li class="nav-item main"><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
-        {%- for toc_item in toc_item.children %}
-            <li class="nav-item">
-                <a href="{{ toc_item.url }}" class="nav-link{% if toc_item.active %} active{% endif %}">{{ toc_item.title }}</a>
-            </li>
+<div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#toc-collapse">
+            <span class="navbar-toggler-icon"></span>
+            Contents
+        </button>
+    </div>
+
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column bs-sidenav">
+        {%- for toc_item in page.toc %}
+            <li class="nav-item main"><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
+            {%- for toc_item in toc_item.children %}
+                <li class="nav-item">
+                    <a href="{{ toc_item.url }}" class="nav-link{% if toc_item.active %} active{% endif %}">{{ toc_item.title }}</a>
+                </li>
+            {%- endfor %}
         {%- endfor %}
-    {%- endfor %}
-    </ul>
+        </ul>
+    </div>
 </div>
