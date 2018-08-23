@@ -136,8 +136,10 @@ footer {
  */
 
 .bs-sidebar.affix { /* csslint allow: adjoining-classes */
+    /* csslint ignore:start */
     position: -webkit-sticky;
     position: sticky;
+    /* csslint ignore:end */
     top: 80px;
 }
 
