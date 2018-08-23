@@ -147,6 +147,23 @@ footer {
     overflow-y: auto;
 }
 
+/* Toggle (vertically flip) sidebar collapse icon */
+.bs-sidebar .navbar-toggler span {
+    -moz-transform: scale(1, -1);
+    -webkit-transform: scale(1, -1);
+    -o-transform: scale(1, -1);
+    -ms-transform: scale(1, -1);
+    transform: scale(1, -1);
+}
+
+.bs-sidebar .navbar-toggler.collapsed span { /* csslint allow: adjoining-classes */
+    -moz-transform: scale(1, 1);
+    -webkit-transform: scale(1, 1);
+    -o-transform: scale(1, 1);
+    -ms-transform: scale(1, 1);
+    transform: scale(1, 1);
+}
+
 /* First level of nav */
 .bs-sidenav {
     padding-top:    10px;
