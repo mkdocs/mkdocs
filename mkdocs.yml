@@ -43,5 +43,4 @@ copyright: Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom 
 google_analytics: ['UA-27795084-5', 'mkdocs.org']
 
 plugins:
-    - search:
-        prebuild_index: python
+    - search
