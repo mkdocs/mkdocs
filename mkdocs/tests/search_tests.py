@@ -60,7 +60,7 @@ class SearchPluginTests(unittest.TestCase):
         expected = {
             'lang': ['en'],
             'separator': r'[\s\-]+',
-            'prebuild_index': ''
+            'prebuild_index': False
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({})
@@ -72,7 +72,7 @@ class SearchPluginTests(unittest.TestCase):
         expected = {
             'lang': ['es'],
             'separator': r'[\s\-]+',
-            'prebuild_index': ''
+            'prebuild_index': False
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({'lang': 'es'})
@@ -84,7 +84,7 @@ class SearchPluginTests(unittest.TestCase):
         expected = {
             'lang': ['en'],
             'separator': r'[\s\-\.]+',
-            'prebuild_index': ''
+            'prebuild_index': False
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({'separator': r'[\s\-\.]+'})
@@ -96,10 +96,10 @@ class SearchPluginTests(unittest.TestCase):
         expected = {
             'lang': ['en'],
             'separator': r'[\s\-]+',
-            'prebuild_index': 'python'
+            'prebuild_index': True
         }
         plugin = search.SearchPlugin()
-        errors, warnings = plugin.load_config({'prebuild_index': 'python'})
+        errors, warnings = plugin.load_config({'prebuild_index': True})
         self.assertEqual(plugin.config, expected)
         self.assertEqual(errors, [])
         self.assertEqual(warnings, [])
@@ -327,10 +327,10 @@ class SearchIndexTests(unittest.TestCase):
         mock_popen_obj.communicate.return_value = ('{"mock": "index"}', None)
         mock_popen_obj.returncode = 0
 
-        index = search_index.SearchIndex(prebuild_index='node')
+        index = search_index.SearchIndex(prebuild_index=True)
         expected = {
             'docs': [],
-            'config': {'prebuild_index': 'node'},
+            'config': {'prebuild_index': True},
             'index': {'mock': 'index'}
         }
         result = json.loads(index.generate_search_index())
@@ -346,10 +346,10 @@ class SearchIndexTests(unittest.TestCase):
         mock_popen_obj.communicate.return_value = ('', 'Some Error')
         mock_popen_obj.returncode = 0
 
-        index = search_index.SearchIndex(prebuild_index='node')
+        index = search_index.SearchIndex(prebuild_index=True)
         expected = {
             'docs': [],
-            'config': {'prebuild_index': 'node'}
+            'config': {'prebuild_index': True}
         }
         result = json.loads(index.generate_search_index())
         self.assertEqual(mock_popen.call_count, 1)
@@ -364,10 +364,10 @@ class SearchIndexTests(unittest.TestCase):
         mock_popen_obj.communicate.side_effect = IOError
         mock_popen_obj.returncode = 1
 
-        index = search_index.SearchIndex(prebuild_index='node')
+        index = search_index.SearchIndex(prebuild_index=True)
         expected = {
             'docs': [],
-            'config': {'prebuild_index': 'node'}
+            'config': {'prebuild_index': True}
         }
         result = json.loads(index.generate_search_index())
         self.assertEqual(mock_popen.call_count, 1)
@@ -382,10 +382,10 @@ class SearchIndexTests(unittest.TestCase):
         mock_popen_obj.communicate.return_value = ('', '')
         mock_popen_obj.returncode = 0
 
-        index = search_index.SearchIndex(prebuild_index='node')
+        index = search_index.SearchIndex(prebuild_index=True)
         expected = {
             'docs': [],
-            'config': {'prebuild_index': 'node'}
+            'config': {'prebuild_index': True}
         }
         result = json.loads(index.generate_search_index())
         self.assertEqual(mock_popen.call_count, 1)
@@ -400,10 +400,10 @@ class SearchIndexTests(unittest.TestCase):
         mock_popen_obj.communicate.return_value = ('', '')
         mock_popen_obj.returncode = 0
 
-        index = search_index.SearchIndex(prebuild_index='')
+        index = search_index.SearchIndex(prebuild_index=False)
         expected = {
             'docs': [],
-            'config': {'prebuild_index': ''}
+            'config': {'prebuild_index': False}
         }
         result = json.loads(index.generate_search_index())
         self.assertEqual(mock_popen.call_count, 0)
@@ -421,4 +421,23 @@ class SearchIndexTests(unittest.TestCase):
         }
         result = json.loads(index.generate_search_index())
         self.assertEqual(mock_lunr.call_count, 1)
+        self.assertEqual(result, expected)
+
+    @mock.patch('subprocess.Popen', autospec=True)
+    def test_prebuild_index_node(self, mock_popen):
+        # See https://stackoverflow.com/a/36501078/866026
+        mock_popen.return_value = mock.Mock()
+        mock_popen_obj = mock_popen.return_value
+        mock_popen_obj.communicate.return_value = ('{"mock": "index"}', None)
+        mock_popen_obj.returncode = 0
+
+        index = search_index.SearchIndex(prebuild_index='node')
+        expected = {
+            'docs': [],
+            'config': {'prebuild_index': 'node'},
+            'index': {'mock': 'index'}
+        }
+        result = json.loads(index.generate_search_index())
+        self.assertEqual(mock_popen.call_count, 1)
+        self.assertEqual(mock_popen_obj.communicate.call_count, 1)
         self.assertEqual(result, expected)

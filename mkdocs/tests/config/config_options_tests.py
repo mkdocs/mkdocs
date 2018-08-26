@@ -80,6 +80,24 @@ class TypeTest(unittest.TestCase):
                           option.validate, "Testing Long")
 
 
+class ChoiceTest(unittest.TestCase):
+
+    def test_valid_choice(self):
+        option = config_options.Choice(('yes', 'no'))
+        value = option.validate("yes")
+        self.assertEqual(value, "yes")
+
+    def test_invalid_choice(self):
+        option = config_options.Choice(('yes', 'no'))
+        self.assertRaises(
+            config_options.ValidationError, option.validate, 'foo')
+
+    def test_invalid_choices(self):
+        self.assertRaises(ValueError, config_options.Choice, '')
+        self.assertRaises(ValueError, config_options.Choice, [])
+        self.assertRaises(ValueError, config_options.Choice, 5)
+
+
 class IpAddressTest(unittest.TestCase):
 
     def test_valid_address(self):

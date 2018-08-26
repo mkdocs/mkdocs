@@ -108,7 +108,7 @@ class SearchIndex(object):
         }
         data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
 
-        if self.config['prebuild_index'] == 'node':
+        if self.config['prebuild_index'] in (True, 'node'):
             try:
                 script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'prebuild-index.js')
                 p = subprocess.Popen(
