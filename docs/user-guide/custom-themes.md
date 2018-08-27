@@ -71,7 +71,7 @@ The simplest `main.html` file is the following:
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.name }}</title>
+    <title>{% if page.title %}{{ page.title }} - {% endif %}{{ config.site_name }}</title>
   </head>
   <body>
     {{ page.content }}
