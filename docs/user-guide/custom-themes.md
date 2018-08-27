@@ -71,16 +71,16 @@ The simplest `main.html` file is the following:
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{% if page_title %}{{ page_title }} - {% endif %}{{ site_name }}</title>
+    <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.name }}</title>
   </head>
   <body>
-    {{ content }}
+    {{ page.content }}
   </body>
 </html>
 ```
 
-Article content from each page specified in `mkdocs.yml` is inserted using the
-`{{ content }}` tag. Style-sheets and scripts can be brought into this theme as
+The body content from each page specified in `mkdocs.yml` is inserted using the
+`{{ page.content }}` tag. Style-sheets and scripts can be brought into this theme as
 with a normal HTML file. Navbars and tables of contents can also be generated
 and included automatically, through the `nav` and `toc` objects, respectively.
 If you wish to write your own theme, it is recommended to start with one of
