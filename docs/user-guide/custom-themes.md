@@ -80,11 +80,11 @@ The simplest `main.html` file is the following:
 ```
 
 The body content from each page specified in `mkdocs.yml` is inserted using the
-`{{ page.content }}` tag. Style-sheets and scripts can be brought into this theme as
-with a normal HTML file. Navbars and tables of contents can also be generated
-and included automatically, through the `nav` and `toc` objects, respectively.
-If you wish to write your own theme, it is recommended to start with one of
-the [built-in themes] and modify it accordingly.
+`{{ page.content }}` tag. Style-sheets and scripts can be brought into this
+theme as with a normal HTML file. Navbars and tables of contents can also be
+generated and included automatically, through the `nav` and `toc` objects,
+respectively. If you wish to write your own theme, it is recommended to start
+with one of the [built-in themes] and modify it accordingly.
 
 !!! Note
 
