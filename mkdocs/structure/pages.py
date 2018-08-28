@@ -14,7 +14,6 @@ from markdown.util import AMP_SUBSTITUTE
 
 from mkdocs.structure.toc import get_toc
 from mkdocs.utils import meta, urlparse, urlunparse, urljoin, get_markdown_title, warning_filter
-from mkdocs.exceptions import MarkdownNotFound
 
 log = logging.getLogger(__name__)
 log.addFilter(warning_filter)
@@ -175,7 +174,7 @@ class Page(object):
         """
 
         extensions = [
-            _RelativePathExtension(self.file, files, config['strict'])
+            _RelativePathExtension(self.file, files)
         ] + config['markdown_extensions']
 
         md = markdown.Markdown(
@@ -187,10 +186,9 @@ class Page(object):
 
 
 class _RelativePathTreeprocessor(Treeprocessor):
-    def __init__(self, file, files, strict):
+    def __init__(self, file, files):
         self.file = file
         self.files = files
-        self.strict = strict
 
     def run(self, root):
         """
@@ -228,16 +226,10 @@ class _RelativePathTreeprocessor(Treeprocessor):
 
         # Validate that the target exists in files collection.
         if target_path not in self.files:
-            msg = (
-                "Documentation file '{}' contains a link to '{}' which does not exist "
-                "in the documentation directory.".format(self.file.src_path, target_path)
+            log.warning(
+                "Documentation file '{}' contains a link to '{}' which is not found "
+                "in the documentation files.".format(self.file.src_path, target_path)
             )
-            # In strict mode raise an error at this point.
-            if self.strict:
-                raise MarkdownNotFound(msg)
-            # Otherwise, when strict mode isn't enabled, log a warning
-            # to the user and leave the URL as it is.
-            log.warning(msg)
             return url
         target_file = self.files.get_file_from_path(target_path)
         path = target_file.url_relative_to(self.file)
@@ -251,11 +243,10 @@ class _RelativePathExtension(Extension):
     registers the Treeprocessor.
     """
 
-    def __init__(self, file, files, strict):
+    def __init__(self, file, files):
         self.file = file
         self.files = files
-        self.strict = strict
 
     def extendMarkdown(self, md, md_globals):
-        relpath = _RelativePathTreeprocessor(self.file, self.files, self.strict)
+        relpath = _RelativePathTreeprocessor(self.file, self.files)
         md.treeprocessors.add("relpath", relpath, "_end")

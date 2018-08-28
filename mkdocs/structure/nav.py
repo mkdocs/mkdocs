@@ -5,7 +5,6 @@ import logging
 
 from mkdocs.structure.pages import Page
 from mkdocs.utils import string_types, nest_paths, urlparse, warning_filter
-from mkdocs.exceptions import ConfigurationError
 
 log = logging.getLogger(__name__)
 log.addFilter(warning_filter)
@@ -141,7 +140,7 @@ def get_navigation(files, config):
         else:
             msg = (
                 "A relative path to '{}' is included in the 'nav' configuration, "
-                "which does not exist in the docs directory".format(link.url)
+                "which is not found in the documentation files".format(link.url)
             )
             log.warning(msg)
     return Navigation(items, pages)
