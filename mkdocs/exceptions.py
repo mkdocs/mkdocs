@@ -11,4 +11,4 @@ class ConfigurationError(MkDocsException):
 
 
 class MarkdownNotFound(MkDocsException):
-    """A linked local Markdown file isn't found in the table of contents."""
+    """A linked local Markdown file isn't found in the documents."""
