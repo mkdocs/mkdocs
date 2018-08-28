@@ -13,10 +13,11 @@ from markdown.treeprocessors import Treeprocessor
 from markdown.util import AMP_SUBSTITUTE
 
 from mkdocs.structure.toc import get_toc
-from mkdocs.utils import meta, urlparse, urlunparse, urljoin, get_markdown_title
+from mkdocs.utils import meta, urlparse, urlunparse, urljoin, get_markdown_title, warning_filter
 from mkdocs.exceptions import MarkdownNotFound
 
 log = logging.getLogger(__name__)
+log.addFilter(warning_filter)
 
 
 class Page(object):

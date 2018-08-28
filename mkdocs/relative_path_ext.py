@@ -49,6 +49,7 @@ from mkdocs import utils
 from mkdocs.exceptions import MarkdownNotFound
 
 log = logging.getLogger(__name__)
+log.addFilter(utils.warning_filter)
 
 
 def path_to_url(url, nav, strict):

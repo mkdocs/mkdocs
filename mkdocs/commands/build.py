@@ -30,6 +30,7 @@ class DuplicateFilter(object):
 
 log = logging.getLogger(__name__)
 log.addFilter(DuplicateFilter())
+log.addFilter(utils.warning_filter)
 
 
 def get_context(nav, files, config, page=None, base_url=''):
@@ -296,6 +297,8 @@ def build(config, live_server=False, dirty=False):
     # Run `post_build` plugin events.
     config['plugins'].run_event('post_build', config)
 
+    if config['strict'] and utils.warning_filter.count:
+        raise SystemExit('\nExited with {} warnings in strict mode.'.format(utils.warning_filter.count))
 
 def site_directory_contains_stale_files(site_directory):
     """ Check if the site directory contains stale files from a previous build. """

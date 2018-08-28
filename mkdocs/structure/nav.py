@@ -4,10 +4,11 @@ from __future__ import unicode_literals
 import logging
 
 from mkdocs.structure.pages import Page
-from mkdocs.utils import string_types, nest_paths, urlparse
+from mkdocs.utils import string_types, nest_paths, urlparse, warning_filter
 from mkdocs.exceptions import ConfigurationError
 
 log = logging.getLogger(__name__)
+log.addFilter(warning_filter)
 
 
 class Navigation(object):
@@ -143,8 +144,6 @@ def get_navigation(files, config):
                 "which does not exist in the docs directory".format(link.url)
             )
             log.warning(msg)
-            if config['strict']:
-                raise ConfigurationError(msg)
     return Navigation(items, pages)
 
 
