@@ -300,6 +300,7 @@ def build(config, live_server=False, dirty=False):
     if config['strict'] and utils.warning_filter.count:
         raise SystemExit('\nExited with {} warnings in strict mode.'.format(utils.warning_filter.count))
 
+
 def site_directory_contains_stale_files(site_directory):
     """ Check if the site directory contains stale files from a previous build. """
 
