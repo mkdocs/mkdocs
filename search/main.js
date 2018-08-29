@@ -9,8 +9,20 @@ function getSearchTermFromLocation() {
   }
 }
 
+function joinUrl (base, path) {
+  if (path.substring(0, 1) === "/") {
+    // path starts with `/`. Thus it is absolute.
+    return path;
+  }
+  if (base.substring(base.length-1) === "/") {
+    // base ends with `/`
+    return base + path;
+  }
+  return base + "/" + path;
+}
+
 function formatResult (location, title, summary) {
-  return '<article><h3><a href="' + base_url + '/' + location + '">'+ title + '</a></h3><p>' + summary +'</p></article>';
+  return '<article><h3><a href="' + joinUrl(base_url, location) + '">'+ title + '</a></h3><p>' + summary +'</p></article>';
 }
 
 function displayResults (results) {
@@ -67,7 +79,7 @@ function onWorkerMessage (e) {
 if (!window.Worker) {
   console.log('Web Worker API not supported');
   // load index in main thread
-  $.getScript(base_url + "/search/worker.js").done(function () {
+  $.getScript(joinUrl(base_url, "search/worker.js")).done(function () {
     console.log('Loaded worker');
     init();
     window.postMessage = function (msg) {
@@ -78,7 +90,7 @@ if (!window.Worker) {
   });
 } else {
   // Wrap search in a web worker
-  var searchWorker = new Worker(base_url + "/search/worker.js");
+  var searchWorker = new Worker(joinUrl(base_url, "search/worker.js"));
   searchWorker.postMessage({init: true});
   searchWorker.onmessage = onWorkerMessage;
 }

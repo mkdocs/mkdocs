@@ -202,20 +202,20 @@ small adjustments to an existing theme.</p>
 <pre><code class="django">&lt;!DOCTYPE html&gt;
 &lt;html&gt;
   &lt;head&gt;
-    &lt;title&gt;{% if page_title %}{{ page_title }} - {% endif %}{{ site_name }}&lt;/title&gt;
+    &lt;title&gt;{% if page.title %}{{ page.title }} - {% endif %}{{ config.site_name }}&lt;/title&gt;
   &lt;/head&gt;
   &lt;body&gt;
-    {{ content }}
+    {{ page.content }}
   &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
 
-<p>Article content from each page specified in <code>mkdocs.yml</code> is inserted using the
-<code>{{ content }}</code> tag. Style-sheets and scripts can be brought into this theme as
-with a normal HTML file. Navbars and tables of contents can also be generated
-and included automatically, through the <code>nav</code> and <code>toc</code> objects, respectively.
-If you wish to write your own theme, it is recommended to start with one of
-the <a href="https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes">built-in themes</a> and modify it accordingly.</p>
+<p>The body content from each page specified in <code>mkdocs.yml</code> is inserted using the
+<code>{{ page.content }}</code> tag. Style-sheets and scripts can be brought into this
+theme as with a normal HTML file. Navbars and tables of contents can also be
+generated and included automatically, through the <code>nav</code> and <code>toc</code> objects,
+respectively. If you wish to write your own theme, it is recommended to start
+with one of the <a href="https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes">built-in themes</a> and modify it accordingly.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>As MkDocs uses <a href="http://jinja.pocoo.org/">Jinja</a> as its template engine, you have access to all the
