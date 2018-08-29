@@ -8,10 +8,10 @@ import unittest
 from mkdocs.structure.nav import get_navigation
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.pages import Page
-from mkdocs.tests.base import dedent, load_config
+from mkdocs.tests.base import dedent, load_config, LogTestCase
 
 
-class SiteNavigationTests(unittest.TestCase):
+class SiteNavigationTests(LogTestCase):
 
     maxDiff = None
 
@@ -105,7 +105,45 @@ class SiteNavigationTests(unittest.TestCase):
         """)
         cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
         files = Files([File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])])
-        site_navigation = get_navigation(files, cfg)
+        with self.assertLogs('mkdocs', level='DEBUG') as cm:
+            site_navigation = get_navigation(files, cfg)
+        self.assertEqual(
+            cm.output,
+            [
+                "DEBUG:mkdocs.structure.nav:An absolute path to '/local.html' is included in the "
+                "'nav' configuration, which presumably points to an external resource.",
+                "DEBUG:mkdocs.structure.nav:An external link to 'http://example.com/external.html' "
+                "is included in the 'nav' configuration."
+            ]
+        )
+        self.assertEqual(str(site_navigation).strip(), expected)
+        self.assertEqual(len(site_navigation.items), 3)
+        self.assertEqual(len(site_navigation.pages), 1)
+
+    def test_nav_bad_links(self):
+        nav_cfg = [
+            {'Home': 'index.md'},
+            {'Missing': 'missing.html'},
+            {'Bad External': 'example.com'}
+        ]
+        expected = dedent("""
+        Page(title='Home', url='/')
+        Link(title='Missing', url='missing.html')
+        Link(title='Bad External', url='example.com')
+        """)
+        cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
+        files = Files([File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])])
+        with self.assertLogs('mkdocs', level='WARNING') as cm:
+            site_navigation = get_navigation(files, cfg)
+        self.assertEqual(
+            cm.output,
+            [
+                "WARNING:mkdocs.structure.nav:A relative path to 'missing.html' is included "
+                "in the 'nav' configuration, which is not found in the documentation files",
+                "WARNING:mkdocs.structure.nav:A relative path to 'example.com' is included "
+                "in the 'nav' configuration, which is not found in the documentation files"
+            ]
+        )
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.items), 3)
         self.assertEqual(len(site_navigation.pages), 1)

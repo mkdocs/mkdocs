@@ -4,9 +4,10 @@ from __future__ import unicode_literals
 import logging
 
 from mkdocs.structure.pages import Page
-from mkdocs.utils import string_types, nest_paths
+from mkdocs.utils import string_types, nest_paths, urlparse, warning_filter
 
 log = logging.getLogger(__name__)
+log.addFilter(warning_filter)
 
 
 class Navigation(object):
@@ -124,13 +125,24 @@ def get_navigation(files, config):
             Page(None, file, config)
 
     links = _get_by_type(items, Link)
-    if links:
-        # Assume all links are external.
-        log.debug(
-            'The following paths are included in the "nav" configuration, '
-            'but do not exist in the docs directory:\n  - {}'.format(
-                '\n  - '.join([link.url for link in links]))
-        )
+    for link in links:
+        scheme, netloc, path, params, query, fragment = urlparse(link.url)
+        if scheme or netloc:
+            log.debug(
+                "An external link to '{}' is included in "
+                "the 'nav' configuration.".format(link.url)
+            )
+        elif link.url.startswith('/'):
+            log.debug(
+                "An absolute path to '{}' is included in the 'nav' configuration, "
+                "which presumably points to an external resource.".format(link.url)
+            )
+        else:
+            msg = (
+                "A relative path to '{}' is included in the 'nav' configuration, "
+                "which is not found in the documentation files".format(link.url)
+            )
+            log.warning(msg)
     return Navigation(items, pages)
 
 

@@ -15,7 +15,6 @@ except ImportError:
 from mkdocs.structure.pages import Page
 from mkdocs.structure.files import File, Files
 from mkdocs.tests.base import load_config, dedent, LogTestCase
-from mkdocs.exceptions import MarkdownNotFound
 
 
 class PageTests(unittest.TestCase):
@@ -652,8 +651,8 @@ class RelativePathExtensionTests(LogTestCase):
 
     DOCS_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../integration/subpages/docs')
 
-    def get_rendered_result(self, files, strict=False):
-        cfg = load_config(docs_dir=self.DOCS_DIR, strict=strict)
+    def get_rendered_result(self, files):
+        cfg = load_config(docs_dir=self.DOCS_DIR)
         fs = []
         for f in files:
             fs.append(File(f.replace('/', os.sep), cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']))
@@ -749,7 +748,7 @@ class RelativePathExtensionTests(LogTestCase):
     @mock.patch('io.open', mock.mock_open(read_data='*__not__ a link*.'))
     def test_no_links(self):
         self.assertEqual(
-            self.get_rendered_result(['index.md'], strict=True),
+            self.get_rendered_result(['index.md']),
             '<p><em><strong>not</strong> a link</em>.</p>'
         )
 
@@ -763,24 +762,20 @@ class RelativePathExtensionTests(LogTestCase):
         self.assertEqual(
             cm.output,
             ["WARNING:mkdocs.structure.pages:Documentation file 'index.md' contains a link "
-             "to 'non-existant.md' which does not exist in the documentation directory."]
+             "to 'non-existant.md' which is not found in the documentation files."]
         )
-
-    @mock.patch('io.open', mock.mock_open(read_data='[link](non-existant.md)'))
-    def test_bad_relative_html_link_strict(self):
-        self.assertRaises(MarkdownNotFound, self.get_rendered_result, ['index.md'], strict=True)
 
     @mock.patch('io.open', mock.mock_open(read_data='[external link](http://example.com/index.md)'))
     def test_external_link(self):
         self.assertEqual(
-            self.get_rendered_result(['index.md'], strict=True),
+            self.get_rendered_result(['index.md']),
             '<p><a href="http://example.com/index.md">external link</a></p>'
         )
 
     @mock.patch('io.open', mock.mock_open(read_data='<mail@example.com>'))
     def test_email_link(self):
         self.assertEqual(
-            self.get_rendered_result(['index.md'], strict=True),
+            self.get_rendered_result(['index.md']),
             # Markdown's default behavior is to obscure email addresses by entity-encoding them.
             # The following is equivalent to: '<p><a href="mailto:mail@example.com">mail@example.com</a></p>'
             '<p><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#109;&#97;&#105;&#108;&#64;&#101;'

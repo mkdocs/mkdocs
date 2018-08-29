@@ -382,3 +382,17 @@ def nest_paths(paths):
         branch.append(path)
 
     return nested
+
+
+class WarningFilter(logging.Filter):
+    """ Counts all WARNING level log messages. """
+    count = 0
+
+    def filter(self, record):
+        if record.levelno == logging.WARNING:
+            self.count += 1
+        return True
+
+
+# A global instance to use throughout package
+warning_filter = WarningFilter()
