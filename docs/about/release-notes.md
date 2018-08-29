@@ -21,6 +21,11 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Version 1.0.3 (2018-08-29)
+
+* Bugfix: Warn on relative paths in navigation (#1604).
+* Bugfix: Handle empty `theme_config.yml` files correctly (#1602).
+
 ## Version 1.0.2 (2018-08-22)
 
 * Bugfix: Provide absolute `base_url` to error templates (#1598).
