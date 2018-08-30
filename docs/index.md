@@ -224,7 +224,7 @@ setting:
 
 ```yaml
 site_name: MkLorum
-pages:
+nav:
     - Home: index.md
     - About: about.md
 ```
@@ -251,7 +251,7 @@ changing the theme. Edit the `mkdocs.yml` file and add a [`theme`][theme] settin
 
 ```yaml
 site_name: MkLorum
-pages:
+nav:
     - Home: index.md
     - About: about.md
 theme: readthedocs
