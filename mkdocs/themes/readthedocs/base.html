@@ -147,7 +147,7 @@
     {%- endfor %}
     <script type="text/javascript" defer>
         window.onload = function () {
-            SphinxRtdTheme.Navigation.enable(true);
+            SphinxRtdTheme.Navigation.enable({{ 'true' if config.theme.sticky_navigation else 'false' }});
         };
     </script>
   {%- endblock %}

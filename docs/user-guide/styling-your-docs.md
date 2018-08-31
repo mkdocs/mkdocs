@@ -114,6 +114,9 @@ theme supports the following options:
 * __`titles_only`__: If True, removes headers within a page from the sidebar.
   Default: `False`.
 
+* __`sticky_navigation`__: If True, causes the sidebar to scroll with the main
+  page content as you scroll the page. Default: `True`.
+
 ### Third Party Themes
 
 A list of third party themes can be found in the MkDocs [community wiki]. If you

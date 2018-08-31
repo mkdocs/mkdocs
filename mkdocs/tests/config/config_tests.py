@@ -145,6 +145,7 @@ class ConfigTests(unittest.TestCase):
                         'include_homepage_in_sidebar': True,
                         'prev_next_buttons_location': 'bottom',
                         'navigation_depth': 4,
+                        'sticky_navigation': True,
                         'titles_only': False
                     }
                 }, {
@@ -158,6 +159,7 @@ class ConfigTests(unittest.TestCase):
                         'include_homepage_in_sidebar': True,
                         'prev_next_buttons_location': 'bottom',
                         'navigation_depth': 4,
+                        'sticky_navigation': True,
                         'titles_only': False
                     }
                 }, {
@@ -175,6 +177,7 @@ class ConfigTests(unittest.TestCase):
                         'include_homepage_in_sidebar': True,
                         'prev_next_buttons_location': 'bottom',
                         'navigation_depth': 4,
+                        'sticky_navigation': True,
                         'titles_only': False
                     }
                 }, {
