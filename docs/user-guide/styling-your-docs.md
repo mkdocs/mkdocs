@@ -111,8 +111,11 @@ theme supports the following options:
 * __`navigation_depth`__: The maximum depth of the navigation tree in the
   sidebar. Default: `4`.
 
-* __`titles_only`__: If True, removes headers within a page from the sidebar.
-  Default: `False`.
+* __`collapse_navigation`__: Only include the page section headers in the
+  sidebar for the current page. Default: `True`.
+
+* __`titles_only`__: Only include page titles in the sidebar, excluding all
+  section headers for all pages. Default: `False`.
 
 * __`sticky_navigation`__: If True, causes the sidebar to scroll with the main
   page content as you scroll the page. Default: `True`.
