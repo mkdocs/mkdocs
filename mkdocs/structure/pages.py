@@ -214,7 +214,8 @@ class _RelativePathTreeprocessor(Treeprocessor):
     def path_to_url(self, url):
         scheme, netloc, path, params, query, fragment = urlparse(url)
 
-        if scheme or netloc or not path or AMP_SUBSTITUTE in url or '.' not in os.path.split(path)[-1]:
+        if (scheme or netloc or not path or url.startswith('/')
+                or AMP_SUBSTITUTE in url or '.' not in os.path.split(path)[-1]):
             # Ignore URLs unless they are a relative link to a source file.
             # AMP_SUBSTITUTE is used internally by Markdown only for email.
             # No '.' in the last part of a path indicates path does not point to a file.

@@ -772,6 +772,13 @@ class RelativePathExtensionTests(LogTestCase):
             '<p><a href="http://example.com/index.md">external link</a></p>'
         )
 
+    @mock.patch('io.open', mock.mock_open(read_data='[absolute link](/path/to/file.md)'))
+    def test_absolute_link(self):
+        self.assertEqual(
+            self.get_rendered_result(['index.md']),
+            '<p><a href="/path/to/file.md">absolute link</a></p>'
+        )
+
     @mock.patch('io.open', mock.mock_open(read_data='<mail@example.com>'))
     def test_email_link(self):
         self.assertEqual(
