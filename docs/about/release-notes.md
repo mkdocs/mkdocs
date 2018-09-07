@@ -21,6 +21,10 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Version 1.0.4 (2018-09-07)
+
+* Bugfix: Ignore absolute links in Markdown (#1621).
+
 ## Version 1.0.3 (2018-08-29)
 
 * Bugfix: Warn on relative paths in navigation (#1604).
