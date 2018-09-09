@@ -306,7 +306,7 @@ edit the configuration file and add some information about the order, title, and
 nesting of each page in the navigation header by adding a <a href="user-guide/configuration/#pages"><code>pages</code></a>
 setting:</p>
 <pre><code class="yaml">site_name: MkLorum
-pages:
+nav:
     - Home: index.md
     - About: about.md
 </code></pre>
@@ -326,7 +326,7 @@ part!</p>
 <p>Now change the configuration file to alter how the documentation is displayed by
 changing the theme. Edit the <code>mkdocs.yml</code> file and add a <a href="user-guide/configuration/#theme"><code>theme</code></a> setting:</p>
 <pre><code class="yaml">site_name: MkLorum
-pages:
+nav:
     - Home: index.md
     - About: about.md
 theme: readthedocs
@@ -335,7 +335,7 @@ theme: readthedocs
 <p>Save your changes, and you'll see the ReadTheDocs theme being used.</p>
 <p><img alt="Screenshot" src="img/readthedocs.png" /></p>
 <h2 id="changing-the-favicon-icon">Changing the Favicon Icon<a class="headerlink" href="#changing-the-favicon-icon" title="Permanent link"></a></h2>
-<p>By default, MkDocs uses the <a href="img/favicon.ico">MkDocs favicon</a> icon. To use a different icon, create
+<p>By default, MkDocs uses the <a href="/img/favicon.ico">MkDocs favicon</a> icon. To use a different icon, create
 an <code>img</code> subdirectory in your <code>docs_dir</code> and copy your custom <code>favicon.ico</code> file
 to that directory. MkDocs will automatically detect and use that file as your
 favicon icon.</p>
@@ -474,6 +474,6 @@ the MkDocs IRC channel <code>#mkdocs</code> on freenode.</p></div>
 </html>
 
 <!--
-MkDocs version : 1.0.3
-Build Date UTC : 2018-08-29 18:42:02
+MkDocs version : 1.0.4
+Build Date UTC : 2018-09-09 22:15:54
 -->
