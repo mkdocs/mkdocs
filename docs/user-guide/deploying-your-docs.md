@@ -131,7 +131,7 @@ public repository.
 
 [rtd]: https://readthedocs.org/
 [instructions]: https://read-the-docs.readthedocs.io/en/latest/getting_started.html#in-markdown
-[features]: http://read-the-docs.readthedocs.io/en/latest/features.html
+[features]: https://read-the-docs.readthedocs.io/en/latest/features.html
 [theme]: ./styling-your-docs.md#readthedocs
 
 ## Other Providers

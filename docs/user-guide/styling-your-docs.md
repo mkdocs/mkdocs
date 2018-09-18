@@ -61,7 +61,7 @@ supports the following options:
                 search: 83   # s
 
     All values much be numeric key codes. It is best to use keys which are
-    available on all keyboards. You may use <http://keycode.info/> to determine
+    available on all keyboards. You may use <https://keycode.info/> to determine
     the key code for a given key.
 
     * __`help`__: Display a help modal which lists the keyboard shortcuts.
