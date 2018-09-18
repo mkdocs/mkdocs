@@ -51,7 +51,7 @@ use your package manager to install "Python" and "pip". Then you can use pip to
 
 [apt-get]: https://help.ubuntu.com/community/AptGet/Howto
 [homebrew]: https://brew.sh/
-[dnf]: http://dnf.readthedocs.io/en/latest/index.html
+[dnf]: https://dnf.readthedocs.io/en/latest/index.html
 [yum]: http://yum.baseurl.org/
 [chocolatey]: https://chocolatey.org/
 
@@ -354,7 +354,7 @@ the MkDocs IRC channel `#mkdocs` on freenode.
 [discussion group]: https://groups.google.com/forum/#!forum/mkdocs
 [GitHub issues]: https://github.com/mkdocs/mkdocs/issues
 [GitHub project pages]: https://help.github.com/articles/creating-project-pages-manually/
-[pip]: http://pip.readthedocs.io/en/stable/installing/
+[pip]: https://pip.readthedocs.io/en/stable/installing/
 [Python]: https://www.python.org/
 [site_name]: user-guide/configuration/#site_name
 [theme]: user-guide/configuration/#theme

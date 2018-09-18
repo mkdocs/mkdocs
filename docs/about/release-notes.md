@@ -886,7 +886,7 @@ documentation.
 
 [extra config]: ../user-guide/configuration.md#extra
 [Markdown extension configuration options]: ../user-guide/configuration.md#markdown_extensions
-[wheels]: http://pythonwheels.com/
+[wheels]: https://pythonwheels.com/
 
 ## Version 0.12.2 (2015-04-22)
 
