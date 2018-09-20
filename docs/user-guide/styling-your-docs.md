@@ -245,13 +245,13 @@ template would contain the following:
 ```django
 {% extends "base.html" %}
 
-{% block title %}
+{% block htmltitle %}
 <title>Custom title goes here</title>
 {% endblock %}
 ```
 
-In the above example, the title block defined in your custom `main.html` file
-will be used in place of the default title block defined in the parent theme.
+In the above example, the `htmltitle` block defined in your custom `main.html` file
+will be used in place of the default `htmltitle` block defined in the parent theme.
 You may re-define as many blocks as you desire, as long as those blocks are
 defined in the parent. For example, you could replace the Google Analytics
 script with one for a different service or replace the search feature with your
