@@ -389,7 +389,7 @@ Determines the address used when running `mkdocs serve`. Must be of the format
 `IP:PORT`.
 
 Allows a custom default to be set without the need to pass it through the
-`--dev_addr` option every time the `mkdocs serve` command is called.
+`--dev-addr` option every time the `mkdocs serve` command is called.
 
 **default**: `'127.0.0.1:8000'`
 
