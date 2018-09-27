@@ -72,6 +72,7 @@
 
     {# SIDE NAV, TOGGLES ON MOBILE #}
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
     {%- block site_name %}
         <a href="{{ nav.homepage.url|url }}" class="icon icon-home"> {{ config.site_name }}</a>
@@ -83,17 +84,28 @@
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
         {%- block site_nav %}
-	<ul class="current">
-	  {% set navlevel = 1 %}
-          {% for nav_item in nav %}
-            <li class="toctree-l{{ navlevel }}{% if nav_item.active and not nav_item.children %} current{%endif%}">
-		{% include 'nav.html' %}
-	    </li>
-          {% endfor %}
-        </ul>
+        {%- set navlevel = 1 %}
+        {%- for nav_item in nav %}
+            {%- if nav_item.is_section %}
+                <p class="caption"><span class="caption-text">{{ nav_item.title }}</span></p>
+                <ul{% if nav_item.active %} class="current"{% endif %}>
+                    {%- for nav_item in nav_item.children %}
+                    <li class="toctree-l{{ navlevel }}{% if nav_item.active %} current{% endif %}">
+                        {%- include 'nav.html' %}
+                    </li>
+                    {%- endfor %}
+                </ul>
+            {%- elif config.theme.include_homepage_in_sidebar or (not nav_item == nav.homepage) %}
+                <ul{% if nav_item.active %} class="current"{% endif %}>
+                    <li class="toctree-l{{ navlevel }}{% if nav_item.active %} current{% endif %}">
+                        {%- include 'nav.html' %}
+                    </li>
+                </ul>
+            {%- endif %}
+        {%- endfor %}
     {%- endblock %}
       </div>
-      &nbsp;
+    </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
@@ -133,6 +145,11 @@
     {%- for path in config['extra_javascript'] %}
       <script src="{{ path|url }}" defer></script>
     {%- endfor %}
+    <script type="text/javascript" defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable({{ 'true' if config.theme.sticky_navigation else 'false' }});
+        };
+    </script>
   {%- endblock %}
 
 </body>

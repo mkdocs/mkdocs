@@ -141,7 +141,13 @@ class ConfigTests(unittest.TestCase):
                         'include_search_page': True,
                         'search_index_only': False,
                         'highlightjs': True,
-                        'hljs_languages': []
+                        'hljs_languages': [],
+                        'include_homepage_in_sidebar': True,
+                        'prev_next_buttons_location': 'bottom',
+                        'navigation_depth': 4,
+                        'sticky_navigation': True,
+                        'titles_only': False,
+                        'collapse_navigation': True
                     }
                 }, {
                     'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
@@ -150,7 +156,13 @@ class ConfigTests(unittest.TestCase):
                         'include_search_page': True,
                         'search_index_only': False,
                         'highlightjs': True,
-                        'hljs_languages': []
+                        'hljs_languages': [],
+                        'include_homepage_in_sidebar': True,
+                        'prev_next_buttons_location': 'bottom',
+                        'navigation_depth': 4,
+                        'sticky_navigation': True,
+                        'titles_only': False,
+                        'collapse_navigation': True
                     }
                 }, {
                     'dirs': [mytheme, mkdocs_templates_dir],
@@ -163,7 +175,13 @@ class ConfigTests(unittest.TestCase):
                         'include_search_page': True,
                         'search_index_only': False,
                         'highlightjs': True,
-                        'hljs_languages': []
+                        'hljs_languages': [],
+                        'include_homepage_in_sidebar': True,
+                        'prev_next_buttons_location': 'bottom',
+                        'navigation_depth': 4,
+                        'sticky_navigation': True,
+                        'titles_only': False,
+                        'collapse_navigation': True
                     }
                 }, {
                     'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
