@@ -23,7 +23,17 @@ The current and past members of the MkDocs team.
 
 ## Version 1.1 (*in development*)
 
-...
+### Major Additions to Version 1.1
+
+#### `readthedocs` theme updated with upstream (#588 and #1374)
+
+The `readthedocs` theme now more closely matches the [upstream] Sphinx theme
+(version 0.4.1). A number of new theme configuration settings were added which
+mirror the upstream configuration options. See the [theme
+documentation][rtd-docs] for details.
+
+[upstream]: https://github.com/rtfd/sphinx_rtd_theme/
+[rtd-docs]: ../user-guide/styling-your-docs.md#readthedocs
 
 ## Version 1.0.4 (2018-09-07)
 
