@@ -35,6 +35,15 @@ documentation][rtd-docs] for details.
 [upstream]: https://github.com/rtfd/sphinx_rtd_theme/
 [rtd-docs]: ../user-guide/styling-your-docs.md#readthedocs
 
+## Update `mkdocs` theme to bootswatch 4.1.3 (#1563)
+
+The `mkdocs` theme now supports all the features of [Bootswatch 4.1]. Note that
+the [dropdowns] used in the navigation only support one level of nesting. If
+your global navigation uses more than one level, things will likely be broken.
+
+[Bootswatch 4.1]: https://getbootstrap.com/docs/4.1/getting-started/introduction/
+[dropdowns]: https://getbootstrap.com/docs/4.1/components/navs/#pills-with-dropdowns
+
 ## Version 1.0.4 (2018-09-07)
 
 * Bugfix: Ignore absolute links in Markdown (#1621).

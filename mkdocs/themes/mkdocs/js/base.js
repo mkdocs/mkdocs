@@ -48,10 +48,10 @@ $(document).ready(function() {
         var page;
         switch (key) {
             case shortcuts.next:
-                page = $('[role="navigation"] a:contains(Next):first').prop('href');
+                page = $('.navbar a[rel="next"]:first').prop('href');
                 break;
             case shortcuts.previous:
-                page = $('[role="navigation"] a:contains(Previous):first').prop('href');
+                page = $('.navbar a[rel="prev"]:first').prop('href');
                 break;
             case shortcuts.search:
                 e.preventDefault();

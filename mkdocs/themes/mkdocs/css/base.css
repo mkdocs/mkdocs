@@ -25,15 +25,6 @@ ul.nav .main {
     font-weight: bold;
 }
 
-.col-md-3 {
-    padding-left: 0;
-    z-index: 1;
-}
-
-.col-md-9 {
-    padding-bottom: 100px;
-}
-
 .source-links {
     float: right;
 }
@@ -99,6 +90,7 @@ code {
 }
 
 pre code {
+    display: block;
     background: transparent;
     border: none;
     white-space: pre;
@@ -143,15 +135,35 @@ footer {
  * sections of docs content.
  */
 
-/* By default it's not affixed in mobile views, so undo that */
 .bs-sidebar.affix { /* csslint allow: adjoining-classes */
-    position: static;
+    /* csslint ignore:start */
+    position: -webkit-sticky;
+    position: sticky;
+    /* csslint ignore:end */
+    top: 80px;
 }
 
-.bs-sidebar.well { /* csslint allow: adjoining-classes */
+.bs-sidebar.card { /* csslint allow: adjoining-classes */
     padding: 0;
     max-height: 90%;
     overflow-y: auto;
+}
+
+/* Toggle (vertically flip) sidebar collapse icon */
+.bs-sidebar .navbar-toggler span {
+    -moz-transform: scale(1, -1);
+    -webkit-transform: scale(1, -1);
+    -o-transform: scale(1, -1);
+    -ms-transform: scale(1, -1);
+    transform: scale(1, -1);
+}
+
+.bs-sidebar .navbar-toggler.collapsed span { /* csslint allow: adjoining-classes */
+    -moz-transform: scale(1, 1);
+    -webkit-transform: scale(1, 1);
+    -o-transform: scale(1, 1);
+    -ms-transform: scale(1, 1);
+    transform: scale(1, 1);
 }
 
 /* First level of nav */
@@ -159,6 +171,7 @@ footer {
     padding-top:    10px;
     padding-bottom: 10px;
     border-radius: 5px;
+    width: 100%;
 }
 
 /* All levels of nav */
@@ -172,9 +185,9 @@ footer {
     text-decoration: none;
     border-right: 1px solid;
 }
-.bs-sidebar .nav > .active > a,
-.bs-sidebar .nav > .active:hover > a,
-.bs-sidebar .nav > .active:focus > a {
+.bs-sidebar .nav > li > a.active,
+.bs-sidebar .nav > li > a.active:hover,
+.bs-sidebar .nav > li > a.active:focus {
     font-weight: bold;
     background-color: transparent;
     border-right: 1px solid;
@@ -190,44 +203,6 @@ footer {
     padding-bottom: 3px;
     padding-left: 30px;
     font-size: 90%;
-}
-
-/* Show and affix the side nav when space allows it */
-@media (min-width: 992px) {
-    /* Workaround a Safari bug when zooming to < 100%
-       https://github.com/mkdocs/mkdocs/issues/1050 */
-    .col-md-9 {
-        box-sizing: border-box;  /* csslint allow: box-sizing */
-        padding-left: 25%;
-        width: 100%;
-    }
-    .bs-sidebar .nav > .active > ul {
-        display: block;
-    }
-    /* Widen the fixed sidebar */
-    .bs-sidebar.affix, /* csslint allow: adjoining-classes */
-    .bs-sidebar.affix-bottom { /* csslint allow: adjoining-classes */
-        width: 213px;
-    }
-    .bs-sidebar.affix { /* csslint allow: adjoining-classes */
-        position: fixed; /* Undo the static from mobile first approach */
-        top: 80px;
-    }
-    .bs-sidebar.affix-bottom { /* csslint allow: adjoining-classes */
-        position: absolute; /* Undo the static from mobile first approach */
-    }
-    .bs-sidebar.affix-bottom .bs-sidenav, /* csslint allow: adjoining-classes */
-    .bs-sidebar.affix .bs-sidenav { /* csslint allow: adjoining-classes */
-        margin-top: 0;
-        margin-bottom: 0;
-    }
-}
-@media (min-width: 1200px) {
-    /* Widen the fixed sidebar again */
-    .bs-sidebar.affix-bottom, /* csslint allow: adjoining-classes */
-    .bs-sidebar.affix { /* csslint allow: adjoining-classes */
-        width: 263px;
-    }
 }
 
 .headerlink {
