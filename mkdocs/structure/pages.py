@@ -206,12 +206,15 @@ class _RelativePathTreeprocessor(Treeprocessor):
                 continue
 
             url = element.get(key)
-            new_url = self.path_to_url(url)
+            scheme, netloc, path, params, query, fragment = urlparse(url) # can optimize reusing as components in path_to_url()
+            new_url = self.path_to_url(url) # components
             element.set(key, new_url)
+            if (key == 'href' and (scheme or netloc or not path or url.startswith('/'))):
+                element.set('rel', 'external')
 
         return root
 
-    def path_to_url(self, url):
+    def path_to_url(self, url):  # reuse? in utils/__init__.py
         scheme, netloc, path, params, query, fragment = urlparse(url)
 
         if (scheme or netloc or not path or url.startswith('/')
