@@ -553,16 +553,16 @@ themes do).
 
 There are two options for prebuilding the index:
 
-    * Using [Node.js] setting `prebuild_index` to `True` or `node`. This option
-    requires that Node.js be installed and the command `node` be on the system
-    path.
-    If this feature is enabled and fails for any reason, a warning is issued.
-    You may use the `--strict` flag when building to cause such a failure to raise
-    an error instead.
-    * Using [Lunr.py] setting `prebuild_index` to `python`. Lunr.py is installed
-    as part of mkdocs and guarantees compatibility with Lunr.js even on languages
-    other than english. If you find substantial inconsistencies or problems please
-    report it on [Lunr.py's issues] and fall back to the Node.js version.
+Using [Node.js] setting `prebuild_index` to `True` or `node`. This option
+requires that Node.js be installed and the command `node` be on the system
+path. If this feature is enabled and fails for any reason, a warning is issued.
+You may use the `--strict` flag when building to cause such a failure to raise
+an error instead.
+
+Using [Lunr.py] setting `prebuild_index` to `python`. Lunr.py is installed
+as part of mkdocs and guarantees compatibility with Lunr.js even on languages
+other than english. If you find substantial inconsistencies or problems please
+report it on [Lunr.py's issues] and fall back to the Node.js version.
 
 !!! Note
 
