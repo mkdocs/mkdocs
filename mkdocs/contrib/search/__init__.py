@@ -40,7 +40,7 @@ class SearchPlugin(BasePlugin):
     config_scheme = (
         ('lang', LangOption(default=['en'])),
         ('separator', config_options.Type(utils.string_types, default=r'[\s\-]+')),
-        ('prebuild_index', config_options.Type(bool, default=False)),
+        ('prebuild_index', config_options.Choice((False, True, 'node', 'python'), default=False)),
     )
 
     def on_config(self, config, **kwargs):

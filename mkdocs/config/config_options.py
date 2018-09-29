@@ -159,6 +159,35 @@ class Type(OptionallyRequired):
         raise ValidationError(msg)
 
 
+class Choice(OptionallyRequired):
+    """
+    Choice Config Option
+
+    Validate the config option against a strict set of values.
+    """
+
+    def __init__(self, choices, **kwargs):
+        super(Choice, self).__init__(**kwargs)
+        try:
+            length = len(choices)
+        except TypeError:
+            length = 0
+
+        if not length or isinstance(choices, utils.string_types):
+            raise ValueError('Expected iterable of choices, got {}', choices)
+
+        self.choices = choices
+
+    def run_validation(self, value):
+        if value not in self.choices:
+            msg = ("Expected one of: {0} but received: {1}"
+                   .format(self.choices, value))
+        else:
+            return value
+
+        raise ValidationError(msg)
+
+
 class Deprecated(BaseConfigOption):
 
     def __init__(self, moved_to=None):

@@ -25,6 +25,16 @@ The current and past members of the MkDocs team.
 
 ### Major Additions to Version 1.1
 
+#### Support for Lunr.py as `prebuild_index` engine
+
+Mkdocs now supports prebuilding indices using [Lunr.py][lunrpy-docs], a pure
+Python implementation of Lunr.js, allowing the user to avoid installing a
+NodeJS environment if so desired. For more information please read the
+[`prebuild_index` documentation][prebuildindex-docs].
+
+[lunrpy-docs]: http://lunr.readthedocs.io/
+[prebuildindex-docs]: ../../user-guide/configuration/#prebuild_index
+
 #### `readthedocs` theme updated with upstream (#588 and #1374)
 
 The `readthedocs` theme now more closely matches the [upstream] Sphinx theme

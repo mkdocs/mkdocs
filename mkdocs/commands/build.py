@@ -235,6 +235,8 @@ def _build_page(page, config, files, nav, env, dirty=False):
 
 def build(config, live_server=False, dirty=False):
     """ Perform a full site build. """
+    from time import time
+    start = time()
 
     # Run `config` plugin events.
     config = config['plugins'].run_event('config', config)
@@ -299,6 +301,8 @@ def build(config, live_server=False, dirty=False):
 
     if config['strict'] and utils.warning_filter.count:
         raise SystemExit('\nExited with {} warnings in strict mode.'.format(utils.warning_filter.count))
+
+    log.info('Documentation built in %.2f seconds', time() - start)
 
 
 def site_directory_contains_stale_files(site_directory):
