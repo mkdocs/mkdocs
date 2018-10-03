@@ -1,0 +1,9 @@
+mkdocs/contrib/search/lunr-language/** linguist-vendored
+mkdocs/themes/mkdocs/js/** linguist-vendored
+mkdocs/themes/mkdocs/js/base.js linguist-vendored=false
+mkdocs/themes/mkdocs/css/** linguist-vendored
+mkdocs/themes/mkdocs/css/base.css linguist-vendored=false
+mkdocs/themes/readthedocs/js/** linguist-vendored
+mkdocs/themes/readthedocs/js/theme.js linguist-vendored=false
+mkdocs/themes/readthedocs/css/** linguist-vendored
+mkdocs/themes/readthedocs/css/theme_extra.css linguist-vendored=false
