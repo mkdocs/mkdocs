@@ -125,8 +125,8 @@ mkdocs, version 0.15.3
         pip install click-man
         click-man --target path/to/man/pages mkdocs
 
-    See the [click-man documentation] for an explaination of why manpages are
-    not automaticaly generated and installed by pip.
+    See the [click-man documentation] for an explanation of why manpages are
+    not automatically generated and installed by pip.
 
 [click-man]: https://github.com/click-contrib/click-man
 [click-man documentation]: https://github.com/click-contrib/click-man#automatic-man-page-installation-with-setuptools-and-pip
@@ -239,7 +239,7 @@ Try the menu items and navigate back and forth between pages. Then click on
 `Search`. A search dialog will appear, allowing you to search for any text on
 any page. Notice that the search results include every occurrence of the search
 term on the site and links directly to the section of the page in which the
-search term appears. You get of all that with no effort or configuration on your
+search term appears. You get all of that with no effort or configuration on your
 part!
 
 ![Screenshot](img/search.png)
