@@ -95,7 +95,7 @@ pre code {
     border: none;
     white-space: pre;
     word-wrap: normal;
-    font-family: monospace,serif;
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 12px;
 }
 
