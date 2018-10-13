@@ -104,6 +104,11 @@ class UtilsTests(unittest.TestCase):
                 'style.css?v=20180308c',
                 'style.css?v=20180308c',
                 '../style.css?v=20180308c'
+            ],
+            '#some_id': [
+                '#some_id',
+                '#some_id',
+                '#some_id'
             ]
         }
 
@@ -160,6 +165,11 @@ class UtilsTests(unittest.TestCase):
                 'style.css?v=20180308c',
                 '../style.css?v=20180308c',
                 '../../style.css?v=20180308c'
+            ],
+            '#some_id': [
+                '#some_id',
+                '#some_id',
+                '#some_id'
             ]
         }
 

@@ -54,6 +54,10 @@ your global navigation uses more than one level, things will likely be broken.
 [Bootswatch 4.1]: https://getbootstrap.com/docs/4.1/getting-started/introduction/
 [dropdowns]: https://getbootstrap.com/docs/4.1/components/navs/#pills-with-dropdowns
 
+### Other Changes and Additions to Version 1.1
+
+* Bugfix: Do not normalize URL fragments (#1655).
+
 ## Version 1.0.4 (2018-09-07)
 
 * Bugfix: Ignore absolute links in Markdown (#1621).
