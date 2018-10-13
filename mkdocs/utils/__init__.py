@@ -243,7 +243,7 @@ def normalize_url(path, page=None, base=''):
     path = path_to_url(path or '.')
     # Allow links to be fully qualified URL's
     parsed = urlparse(path)
-    if parsed.scheme or parsed.netloc or path.startswith('/'):
+    if parsed.scheme or parsed.netloc or path.startswith(('/', '#')):
         return path
 
     # We must be looking at a local path.
