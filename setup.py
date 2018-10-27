@@ -61,7 +61,7 @@ setup(
         'livereload>=2.5.1',
         'lunr[languages]>=0.5.2',
         'Markdown>=2.3.1',
-        'PyYAML>=3.10',
+        'PyYAML>=4.2b4',
         'tornado>=5.0'
     ],
     python_requires='>=2.7.9,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*',
