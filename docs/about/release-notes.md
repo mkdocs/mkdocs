@@ -57,6 +57,7 @@ your global navigation uses more than one level, things will likely be broken.
 ### Other Changes and Additions to Version 1.1
 
 * Bugfix: Do not normalize URL fragments (#1655).
+* Add canonical tag to `readthedocs` theme (#1669).
 
 ## Version 1.0.4 (2018-09-07)
 
