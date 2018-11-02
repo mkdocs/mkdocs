@@ -320,13 +320,13 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         env = config['theme'].get_env()
         files = get_files(config)
         self.assertEqual(
-            files.src_paths.keys().sort(),
-            ['index.md', 'favicon.ico'].sort()
+            [file.src_path for file in files],
+            ['index.md', 'favicon.ico']
         )
         files.add_files_from_theme(env, config)
         self.assertEqual(
-            files.src_paths.keys().sort(),
-            ['index.md', 'favicon.ico', 'style.css'].sort()
+            [file.src_path for file in files],
+            ['index.md', 'favicon.ico', 'style.css']
         )
         # Ensure theme file does not override docs_dir file
         self.assertEqual(
