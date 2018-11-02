@@ -13,7 +13,7 @@ from markdown.treeprocessors import Treeprocessor
 from markdown.util import AMP_SUBSTITUTE
 
 from mkdocs.structure.toc import get_toc
-from mkdocs.utils import meta, urlparse, urlunparse, urljoin, get_markdown_title, warning_filter
+from mkdocs.utils import meta, urlparse, urlunparse, urljoin, urlunquote, get_markdown_title, warning_filter
 
 log = logging.getLogger(__name__)
 log.addFilter(warning_filter)
@@ -222,7 +222,7 @@ class _RelativePathTreeprocessor(Treeprocessor):
             return url
 
         # Determine the filepath of the target.
-        target_path = os.path.join(os.path.dirname(self.file.src_path), path)
+        target_path = os.path.join(os.path.dirname(self.file.src_path), urlunquote(path))
         target_path = os.path.normpath(target_path).lstrip(os.sep)
 
         # Validate that the target exists in files collection.

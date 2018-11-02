@@ -56,6 +56,7 @@ your global navigation uses more than one level, things will likely be broken.
 
 ### Other Changes and Additions to Version 1.1
 
+* Bugfix: Account for encoded URLs (#1670).
 * Bugfix: Ensure theme files do not override `docs_dir` files (#1671).
 * Bugfix: Do not normalize URL fragments (#1655).
 * Add canonical tag to `readthedocs` theme (#1669).

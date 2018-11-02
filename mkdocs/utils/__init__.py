@@ -23,9 +23,13 @@ from mkdocs import exceptions
 
 try:                                                        # pragma: no cover
     from urllib.parse import urlparse, urlunparse, urljoin  # noqa
+    from urllib.parse import quote as urlquote              # noqa
+    from urllib.parse import unquote as urlunquote          # noqa
     from collections import UserDict                        # noqa
 except ImportError:                                         # pragma: no cover
     from urlparse import urlparse, urlunparse, urljoin      # noqa
+    from urllib import quote as urlquote                    # noqa
+    from urllib import unquote as urlunquote                # noqa
     from UserDict import UserDict                           # noqa
 
 

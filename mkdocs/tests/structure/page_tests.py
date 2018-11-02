@@ -689,6 +689,20 @@ class RelativePathExtensionTests(LogTestCase):
             '<p><a href="sub2/non-index/">link</a></p>'  # No trailing /
         )
 
+    @mock.patch('io.open', mock.mock_open(read_data='[link](file%20name.md)'))
+    def test_relative_html_link_with_encoded_space(self):
+        self.assertEqual(
+            self.get_rendered_result(['index.md', 'file name.md']),
+            '<p><a href="file%20name/">link</a></p>'
+        )
+
+    @mock.patch('io.open', mock.mock_open(read_data='[link](file name.md)'))
+    def test_relative_html_link_with_unencoded_space(self):
+        self.assertEqual(
+            self.get_rendered_result(['index.md', 'file name.md']),
+            '<p><a href="file%20name/">link</a></p>'
+        )
+
     @mock.patch('io.open', mock.mock_open(read_data='[link](../index.md)'))
     def test_relative_html_link_parent_index(self):
         self.assertEqual(
