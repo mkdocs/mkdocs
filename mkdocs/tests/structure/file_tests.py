@@ -306,6 +306,34 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         self.assertTrue(extra_file.src_path in files)
         self.assertEqual(files.documentation_pages(), [fs[0], fs[1], extra_file])
 
+    @tempdir(files=[
+        'favicon.ico',
+        'index.md'
+    ])
+    @tempdir(files=[
+        'base.html',
+        'favicon.ico',
+        'style.css'
+    ])
+    def test_add_files_from_theme(self, tdir, ddir):
+        config = load_config(docs_dir=ddir, theme={'name': None, 'custom_dir': tdir})
+        env = config['theme'].get_env()
+        files = get_files(config)
+        self.assertEqual(
+            files.src_paths.keys().sort(),
+            ['index.md', 'favicon.ico'].sort()
+        )
+        files.add_files_from_theme(env, config)
+        self.assertEqual(
+            files.src_paths.keys().sort(),
+            ['index.md', 'favicon.ico', 'style.css'].sort()
+        )
+        # Ensure theme file does not override docs_dir file
+        self.assertEqual(
+            files.get_file_from_path('favicon.ico').abs_src_path,
+            os.path.normpath(os.path.join(ddir, 'favicon.ico'))
+        )
+
     def test_filter_paths(self):
         # Root level file
         self.assertFalse(_filter_paths('foo.md', 'foo.md', False, ['bar.md']))
