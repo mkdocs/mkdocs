@@ -28,8 +28,8 @@ try:                                                        # pragma: no cover
     from collections import UserDict                        # noqa
 except ImportError:                                         # pragma: no cover
     from urlparse import urlparse, urlunparse, urljoin      # noqa
-    from urllib import quote as urlquote                    # noqa
-    from urllib import unquote as urlunquote                # noqa
+    from urllib import quote                                # noqa
+    from urllib import unquote                              # noqa
     from UserDict import UserDict                           # noqa
 
 
@@ -41,6 +41,12 @@ if PY3:                         # pragma: no cover
 else:                           # pragma: no cover
     string_types = basestring,  # noqa
     text_type = unicode         # noqa
+
+    def urlunquote(path):
+        return unquote(path.encode('utf8', errors='backslashreplace')).decode('utf8', errors='replace')
+
+    def urlquote(path):
+        return quote(path.encode('utf8', errors='backslashreplace')).decode('utf8', errors='replace')
 
 log = logging.getLogger(__name__)
 
