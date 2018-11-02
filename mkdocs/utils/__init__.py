@@ -42,10 +42,10 @@ else:                           # pragma: no cover
     string_types = basestring,  # noqa
     text_type = unicode         # noqa
 
-    def urlunquote(path):
+    def urlunquote(path):  # noqa
         return unquote(path.encode('utf8', errors='backslashreplace')).decode('utf8', errors='replace')
 
-    def urlquote(path):
+    def urlquote(path):  # noqa
         return quote(path.encode('utf8', errors='backslashreplace')).decode('utf8', errors='replace')
 
 log = logging.getLogger(__name__)
