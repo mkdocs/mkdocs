@@ -73,11 +73,13 @@ class Files(object):
                     return False
             return True
         for path in env.list_templates(filter_func=filter):
-            for dir in config['theme'].dirs:
-                # Find the first theme dir which contains path
-                if os.path.isfile(os.path.join(dir, path)):
-                    self.append(File(path, dir, config['site_dir'], config['use_directory_urls']))
-                    break
+            # Theme files do not override docs_dir files
+            if path not in self:
+                for dir in config['theme'].dirs:
+                    # Find the first theme dir which contains path
+                    if os.path.isfile(os.path.join(dir, path)):
+                        self.append(File(path, dir, config['site_dir'], config['use_directory_urls']))
+                        break
 
 
 class File(object):
