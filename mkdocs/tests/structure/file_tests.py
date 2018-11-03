@@ -277,6 +277,15 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         self.assertFalse(f.is_javascript())
         self.assertTrue(f.is_css())
 
+    def test_file_name_with_space(self):
+        f = File('foo bar.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
+        self.assertPathsEqual(f.src_path, 'foo bar.md')
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo bar.md')
+        self.assertPathsEqual(f.dest_path, 'foo bar.html')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo bar.html')
+        self.assertEqual(f.url, 'foo%20bar.html')
+        self.assertEqual(f.name, 'foo bar')
+
     def test_files(self):
         fs = [
             File('index.md', '/path/to/docs', '/path/to/site', use_directory_urls=True),

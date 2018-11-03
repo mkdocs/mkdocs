@@ -165,7 +165,7 @@ class File(object):
                 url = '.'
             else:
                 url = dirname + '/'
-        return url
+        return utils.urlquote(url)
 
     def url_relative_to(self, other):
         """ Return url for file relative to other file. """
