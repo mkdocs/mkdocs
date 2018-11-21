@@ -354,7 +354,7 @@ page events are called after the [post_template] event and before the
 
 ##### on_post_page
 
-:   The `post_template` event is called after the template is rendered, but
+:   The `post_page` event is called after the template is rendered, but
     before it is written to disc and can be used to alter the output of the
     page. If an empty string is returned, the page is skipped and nothing is
     written to disc.
