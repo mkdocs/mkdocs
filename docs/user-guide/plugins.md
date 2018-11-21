@@ -347,7 +347,7 @@ page events are called after the [post_template] event and before the
     : __context__: dict of template context variables
     : __page:__ `mkdocs.nav.Page` instance
     : __config:__ global configuration object
-    : __site_navigation:__ global navigation object
+    : __nav:__ global navigation object
 
     Returns:
     : dict of template context variables
