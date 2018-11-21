@@ -360,10 +360,9 @@ page events are called after the [post_template] event and before the
     written to disc.
 
     Parameters:
-    : __output_content:__ output of rendered template as string
+    : __output:__ output of rendered template as string
     : __page:__ `mkdocs.nav.Page` instance
     : __config:__ global configuration object
-    : __site_navigation:__ global navigation object
 
     Returns:
     : output of rendered template as string
