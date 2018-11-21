@@ -214,7 +214,7 @@ entire site.
     Parameters:
     : __env:__ global Jinja environment
     : __config:__ global configuration object
-    : __site_navigation:__ global navigation object
+    : __files:__ global files collection
 
     Returns:
     : global Jinja Environment
@@ -290,7 +290,7 @@ page events are called after the [post_template] event and before the
     Parameters:
     : __page:__ `mkdocs.nav.Page` instance
     : __config:__ global configuration object
-    : __site_navigation:__ global navigation object
+    : __files:__ global files collection
 
     Returns:
     : `mkdocs.nav.Page` instance
@@ -318,7 +318,7 @@ page events are called after the [post_template] event and before the
     : __markdown:__ Markdown source text of page as string
     : __page:__ `mkdocs.nav.Page` instance
     : __config:__ global configuration object
-    : __site_navigation:__ global navigation object
+    : __files:__ global files collection
 
     Returns:
     : Markdown source text of page as string
@@ -333,7 +333,7 @@ page events are called after the [post_template] event and before the
     : __html:__ HTML rendered from Markdown source as string
     : __page:__ `mkdocs.nav.Page` instance
     : __config:__ global configuration object
-    : __site_navigation:__ global navigation object
+    : __files:__ global files collection
 
     Returns:
     : HTML rendered from Markdown source as string
