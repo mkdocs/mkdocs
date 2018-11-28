@@ -273,6 +273,7 @@ def build(config, live_server=False, dirty=False):
 
     log.debug("Reading markdown pages.")
     for file in files.documentation_pages():
+        log.debug("Reading: " + file.src_path)
         _populate_page(file.page, config, files, dirty)
 
     # Run `env` plugin events.
