@@ -123,8 +123,8 @@ class Page(object):
             self.edit_url = None
 
     def read_source(self, config):
-        source = config['plugins'].run_event('page_read_source', None, config=config, page=self)
-        if source is None:
+        source = config['plugins'].run_event('page_read_source', self, config=config)
+        if source is not self:
             try:
                 with io.open(self.file.abs_src_path, 'r', encoding='utf-8-sig', errors='strict') as f:
                     source = f.read()
