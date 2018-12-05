@@ -235,7 +235,7 @@ def get_files(config):
             # Skip any excluded files
             if _filter_paths(basename=filename, path=path, is_dir=False, exclude=exclude):
                 continue
-            # Skip README.md is an index file also exists in dir
+            # Skip README.md if an index file also exists in dir
             if filename.lower() == 'readme.md' and 'index.md' in filenames:
                 log.warning("Both index.md and readme.md found. Skipping readme.md from {}".format(source_dir))
                 continue
