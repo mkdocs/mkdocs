@@ -237,6 +237,7 @@ def get_files(config):
                 continue
             # Skip README.md is an index file also exists in dir
             if filename.lower() == 'readme.md' and 'index.md' in filenames:
+                log.warning("Both index.md and readme.md found. Skipping readme.md from {}".format(source_dir))
                 continue
             files.append(File(path, config['docs_dir'], config['site_dir'], config['use_directory_urls']))
 
