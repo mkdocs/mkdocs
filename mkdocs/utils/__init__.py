@@ -16,6 +16,10 @@ import shutil
 import re
 import sys
 import yaml
+try:
+    from yaml import CSafeLoader as SafeLoader
+except ImportError:  # pragma: no cover
+    from yaml import SafeLoader
 import fnmatch
 import posixpath
 
@@ -59,7 +63,7 @@ markdown_extensions = [
 ]
 
 
-def yaml_load(source, loader=yaml.Loader):
+def yaml_load(source, loader=SafeLoader):
     """
     Wrap PyYaml's loader so we can extend it to suit our needs.
 
