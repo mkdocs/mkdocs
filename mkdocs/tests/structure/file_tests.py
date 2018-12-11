@@ -564,8 +564,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         'bar.jpg',
         'bar.js',
         'bar.md',
-        '.dotfile',
-        'templates/foo.html'
+        '.dotfile'
     ])
     def test_get_files(self, tdir):
         config = load_config(docs_dir=tdir, extra_css=['bar.css'], extra_javascript=['bar.js'])
