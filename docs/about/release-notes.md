@@ -60,6 +60,7 @@ your global navigation uses more than one level, things will likely be broken.
 * Bugfix: Ensure theme files do not override `docs_dir` files (#1671).
 * Bugfix: Do not normalize URL fragments (#1655).
 * Add canonical tag to `readthedocs` theme (#1669).
+* No longer ignore a directory named `templates` inside of `docs_dir`. (#1699)
 
 ## Version 1.0.4 (2018-09-07)
 
