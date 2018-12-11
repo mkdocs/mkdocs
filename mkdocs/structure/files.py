@@ -218,7 +218,7 @@ class File(object):
 def get_files(config):
     """ Walk the `docs_dir` and return a Files collection. """
     files = []
-    exclude = ['.*', '/templates']
+    exclude = ['.*']
 
     for source_dir, dirnames, filenames in os.walk(config['docs_dir'], followlinks=True):
         relative_dir = os.path.relpath(source_dir, config['docs_dir'])
