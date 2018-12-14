@@ -242,7 +242,7 @@ def build(config, live_server=False, dirty=False):
     config = config['plugins'].run_event('config', config)
 
     # Run `pre_build` plugin events.
-    config['plugins'].run_event('pre_build', config)
+    config['plugins'].run_event('pre_build', config=config)
 
     if not dirty:
         log.info("Cleaning site directory")
@@ -298,7 +298,7 @@ def build(config, live_server=False, dirty=False):
         _build_page(file.page, config, files, nav, env, dirty)
 
     # Run `post_build` plugin events.
-    config['plugins'].run_event('post_build', config)
+    config['plugins'].run_event('post_build', config=config)
 
     if config['strict'] and utils.warning_filter.count:
         raise SystemExit('\nExited with {} warnings in strict mode.'.format(utils.warning_filter.count))
