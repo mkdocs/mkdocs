@@ -85,7 +85,8 @@ class PluginCollection(OrderedDict):
         """
         Run all registered methods of an event.
 
-        `item` is the object to be modified and returned by the event method.
+        `item` is the object to be modified or replaced and returned by the event method.
+        If it isn't given the event method creates a new object to be returned.
         All other keywords are variables for context, but would not generally
         be modified by the event method.
         """
