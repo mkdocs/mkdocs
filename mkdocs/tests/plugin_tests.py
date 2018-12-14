@@ -20,8 +20,8 @@ class DummyPlugin(plugins.BasePlugin):
     )
 
     def on_pre_page(self, content, **kwargs):
-        """ prepend `foo` config value to page content. """
-        return ' '.join((self.config['foo'], content))
+        """ modify page content by prepending `foo` config value. """
+        return '{} {}'.format(self.config['foo'], content)
 
     def on_nav(self, item, **kwargs):
         """ do nothing (return None) to not modify item. """
