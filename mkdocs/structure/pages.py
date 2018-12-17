@@ -126,7 +126,7 @@ class Page(object):
         source = config['plugins'].run_event(
             'page_read_source', page=self, config=config
         )
-        if source is not None:
+        if source is None:
             try:
                 with io.open(self.file.abs_src_path, 'r', encoding='utf-8-sig', errors='strict') as f:
                     source = f.read()
