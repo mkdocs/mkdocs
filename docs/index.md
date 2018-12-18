@@ -67,8 +67,8 @@ Python 2.7.2
 $ pip --version
 pip 1.5.2
 ```
-
-MkDocs supports Python versions 2.7, 3.4, 3.5, 3.6, 3.7 and pypy.
+MkDocs v1.0.0+ requires Python versions 2.7.9 or 3.4+
+MkDocs <v1.0.0 supports Python versions 2.7, 3.4, 3.5, 3.6, 3.7 and pypy.
 
 #### Installing Python
 
