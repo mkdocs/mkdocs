@@ -20,11 +20,19 @@ class DummyPlugin(plugins.BasePlugin):
     )
 
     def on_pre_page(self, content, **kwargs):
-        """ prepend `foo` config value to page content. """
-        return ' '.join((self.config['foo'], content))
+        """ modify page content by prepending `foo` config value. """
+        return '{} {}'.format(self.config['foo'], content)
 
     def on_nav(self, item, **kwargs):
         """ do nothing (return None) to not modify item. """
+        return None
+
+    def on_page_read_source(self, **kwargs):
+        """ create new source by prepending `foo` config value to 'source'. """
+        return '{} {}'.format(self.config['foo'], 'source')
+
+    def on_pre_build(self, **kwargs):
+        """ do nothing (return None). """
         return None
 
 
@@ -115,6 +123,20 @@ class TestPluginCollection(unittest.TestCase):
         plugin.load_config({'foo': 'new'})
         collection['foo'] = plugin
         self.assertEqual(collection.run_event('nav', 'nav item'), 'nav item')
+
+    def test_event_empty_item(self):
+        collection = plugins.PluginCollection()
+        plugin = DummyPlugin()
+        plugin.load_config({'foo': 'new'})
+        collection['foo'] = plugin
+        self.assertEqual(collection.run_event('page_read_source'), 'new source')
+
+    def test_event_empty_item_returns_None(self):
+        collection = plugins.PluginCollection()
+        plugin = DummyPlugin()
+        plugin.load_config({'foo': 'new'})
+        collection['foo'] = plugin
+        self.assertEqual(collection.run_event('pre_build'), None)
 
     def test_run_undefined_event_on_collection(self):
         collection = plugins.PluginCollection()

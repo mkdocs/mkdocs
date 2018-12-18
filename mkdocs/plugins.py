@@ -81,17 +81,22 @@ class PluginCollection(OrderedDict):
             if callable(method):
                 self._register_event(event_name[3:], method)
 
-    def run_event(self, name, item, **kwargs):
+    def run_event(self, name, item=None, **kwargs):
         """
         Run all registered methods of an event.
 
-        `item` is the object to be modified and returned by the event method.
+        `item` is the object to be modified or replaced and returned by the event method.
+        If it isn't given the event method creates a new object to be returned.
         All other keywords are variables for context, but would not generally
         be modified by the event method.
         """
 
+        pass_item = item is not None
         for method in self.events[name]:
-            result = method(item, **kwargs)
+            if pass_item:
+                result = method(item, **kwargs)
+            else:
+                result = method(**kwargs)
             # keep item if method returned `None`
             if result is not None:
                 item = result
