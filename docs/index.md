@@ -63,12 +63,12 @@ these already installed from the command line:
 
 ```bash
 $ python --version
-Python 2.7.2
+Python 2.7.14
 $ pip --version
-pip 1.5.2
+pip 18.1 from /usr/local/lib/python2.7/site-packages/pip (python 2.7)
 ```
 
-MkDocs supports Python versions 2.7, 3.4, 3.5, 3.6, 3.7 and pypy.
+MkDocs supports Python versions 2.7.9+, 3.4, 3.5, 3.6, 3.7, and pypy.
 
 #### Installing Python
 
