@@ -133,7 +133,7 @@ def _build_extra_template(template_name, files, config, nav):
 
     log.debug("Building extra template: {}".format(template_name))
 
-    file = files.get_file_from_path(template_name)
+    file = files.get_extra_template_file_from_path(template_name)
     if file is None:
         log.warn("Template skipped: '{}' not found in docs_dir.".format(template_name))
         return

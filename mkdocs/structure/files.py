@@ -15,9 +15,11 @@ log.addFilter(utils.warning_filter)
 
 class Files(object):
     """ A collection of File objects. """
-    def __init__(self, files):
+    def __init__(self, files, extra_templates):
         self._files = files
+        self._extra_templates = extra_templates
         self.src_paths = {file.src_path: file for file in files}
+        self.extra_template_src_paths = {file.src_path: file for file in extra_templates}
 
     def __iter__(self):
         return iter(self._files)
@@ -31,6 +33,10 @@ class Files(object):
     def get_file_from_path(self, path):
         """ Return a File instance with File.src_path equal to path. """
         return self.src_paths.get(os.path.normpath(path))
+
+    def get_extra_template_file_from_path(self, path):
+        """ Return a File instance for an extra template with File.src_path equal to path. """
+        return self.extra_template_src_paths.get(os.path.normpath(path))
 
     def append(self, file):
         """ Append file to Files collection. """
@@ -219,10 +225,13 @@ def get_files(config):
     """ Walk the `docs_dir` and return a Files collection. """
     files = []
     exclude = ['.*']
+    extra_templates = []
 
     # Exclude `extra_templates` in case they are in `docs_dir`
-    for extra_template in config['extra_templates']:
-        exclude.append("/" + extra_template)
+    if not (config['extra_templates'] is None):
+        for path in config['extra_templates']:
+            exclude.append("/" + path)
+            extra_templates.append(File(path, config['docs_dir'], config['site_dir'], config['use_directory_urls']))
 
     for source_dir, dirnames, filenames in os.walk(config['docs_dir'], followlinks=True):
         relative_dir = os.path.relpath(source_dir, config['docs_dir'])
@@ -245,7 +254,7 @@ def get_files(config):
                 continue
             files.append(File(path, config['docs_dir'], config['site_dir'], config['use_directory_urls']))
 
-    return Files(files)
+    return Files(files, extra_templates)
 
 
 def _sort_files(filenames):
