@@ -220,6 +220,10 @@ def get_files(config):
     files = []
     exclude = ['.*']
 
+    # Exclude `extra_templates` in case they are in `docs_dir`
+    for extra_template in config['extra_templates']:
+        exclude.append("/" + extra_template)
+
     for source_dir, dirnames, filenames in os.walk(config['docs_dir'], followlinks=True):
         relative_dir = os.path.relpath(source_dir, config['docs_dir'])
 

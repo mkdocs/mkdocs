@@ -564,10 +564,13 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         'bar.jpg',
         'bar.js',
         'bar.md',
-        '.dotfile'
+        '.dotfile',
+        'extra/template1.html',
+        'extra/template2.html'
     ])
     def test_get_files(self, tdir):
-        config = load_config(docs_dir=tdir, extra_css=['bar.css'], extra_javascript=['bar.js'])
+        config = load_config(docs_dir=tdir, extra_css=['bar.css'], extra_javascript=['bar.js'],
+                             extra_templates=['extra/template1.html', 'extra/template2.html'])
         files = get_files(config)
         expected = ['index.md', 'bar.css', 'bar.html', 'bar.jpg', 'bar.js', 'bar.md']
         self.assertIsInstance(files, Files)
