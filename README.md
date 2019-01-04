@@ -24,8 +24,8 @@ rooms, and mailing lists is expected to follow the [PyPA Code of Conduct].
 
 [appveyor-image]: https://img.shields.io/appveyor/ci/d0ugal/mkdocs/master.svg
 [appveyor-link]: https://ci.appveyor.com/project/d0ugal/mkdocs
-[codecov-image]: http://codecov.io/github/mkdocs/mkdocs/coverage.svg?branch=master
-[codecov-link]: http://codecov.io/github/mkdocs/mkdocs?branch=master
+[codecov-image]: https://codecov.io/github/mkdocs/mkdocs/coverage.svg?branch=master
+[codecov-link]: https://codecov.io/github/mkdocs/mkdocs?branch=master
 [landscape-image]: https://landscape.io/github/mkdocs/mkdocs/master/landscape.svg?style=flat
 [landscape-link]: https://landscape.io/github/mkdocs/mkdocs/master
 [pypi-v-image]: https://img.shields.io/pypi/v/mkdocs.svg
