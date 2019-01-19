@@ -139,6 +139,11 @@ class Page(object):
 
         self.markdown, self.meta = meta.get_data(source)
         self._set_title()
+        if 'edit_uri' in self.meta or 'repo_url' in self.meta:
+            self._set_edit_url(
+                self.meta.get('repo_url', config.get('repo_url', None)),
+                self.meta.get('edit_uri', config.get('edit_uri', None))
+            )
 
     def _set_title(self):
         """
