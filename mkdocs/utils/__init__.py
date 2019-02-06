@@ -319,7 +319,7 @@ def get_theme_names():
 
 
 def dirname_to_title(dirname):
-
+    """ Return a page tile obtained from a directory name. """
     title = dirname
     title = title.replace('-', ' ').replace('_', ' ')
     # Capitalize if the dirname was all lowercase, otherwise leave it as-is.
@@ -330,22 +330,22 @@ def dirname_to_title(dirname):
 
 
 def get_markdown_title(markdown_src):
-        """
-        Get the title of a Markdown document. The title in this case is considered
-        to be a H1 that occurs before any other content in the document.
-        The procedure is then to iterate through the lines, stopping at the first
-        non-whitespace content. If it is a title, return that, otherwise return
-        None.
-        """
+    """
+    Get the title of a Markdown document. The title in this case is considered
+    to be a H1 that occurs before any other content in the document.
+    The procedure is then to iterate through the lines, stopping at the first
+    non-whitespace content. If it is a title, return that, otherwise return
+    None.
+    """
 
-        lines = markdown_src.replace('\r\n', '\n').replace('\r', '\n').split('\n')
-        while lines:
-            line = lines.pop(0).strip()
-            if not line.strip():
-                continue
-            if not line.startswith('# '):
-                return
-            return line.lstrip('# ')
+    lines = markdown_src.replace('\r\n', '\n').replace('\r', '\n').split('\n')
+    while lines:
+        line = lines.pop(0).strip()
+        if not line.strip():
+            continue
+        if not line.startswith('# '):
+            return
+        return line.lstrip('# ')
 
 
 def find_or_create_node(branch, key):
