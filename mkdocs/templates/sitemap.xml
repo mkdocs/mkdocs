@@ -4,11 +4,13 @@
             {{ nav_item(child) }}
         {%- endfor -%}
     {%- else %}
+	{%- if not item.is_link -%}
     <url>
      <loc>{% if item.canonical_url %}{{ item.canonical_url }}{% else %}{{ item.abs_url }}{% endif %}</loc>
      {% if item.update_date %}<lastmod>{{item.update_date}}</lastmod>{% endif %}
      <changefreq>daily</changefreq>
     </url>
+        {%- endif -%}
     {%- endif -%}
 {%- endmacro -%}
 
