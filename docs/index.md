@@ -219,7 +219,7 @@ curl 'https://jaspervdj.be/lorem-markdownum/markdown.txt' > docs/about.md
 
 As our documentation site will include some navigation headers, you may want to
 edit the configuration file and add some information about the order, title, and
-nesting of each page in the navigation header by adding a [`pages`][pages]
+nesting of each page in the navigation header by adding a [`nav`][nav]
 setting:
 
 ```yaml
@@ -350,7 +350,7 @@ the MkDocs IRC channel `#mkdocs` on freenode.
 [build your own]: user-guide/custom-themes/
 [Amazon S3]: https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html
 [get-pip.py]: https://bootstrap.pypa.io/get-pip.py
-[pages]: user-guide/configuration/#pages
+[nav]: user-guide/configuration/#nav
 [discussion group]: https://groups.google.com/forum/#!forum/mkdocs
 [GitHub issues]: https://github.com/mkdocs/mkdocs/issues
 [GitHub project pages]: https://help.github.com/articles/creating-project-pages-manually/
