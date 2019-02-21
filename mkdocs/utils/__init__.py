@@ -394,15 +394,15 @@ def nest_paths(paths):
     return nested
 
 
-class WarningFilter(logging.Filter):
-    """ Counts all WARNING level log messages. """
-    count = 0
+class CountLogFilter(logging.Filter):
+    """ Counts log messages by level. """
+    def __init__(self):
+        self.DEBUG = self.INFO = self.WARNING = self.ERROR = self.CRITICAL = 0
 
     def filter(self, record):
-        if record.levelno == logging.WARNING:
-            self.count += 1
+        setattr(self, record.levelname, getattr(self, record.levelname, 0) + 1)
         return True
 
 
 # A global instance to use throughout package
-warning_filter = WarningFilter()
+log_counter = CountLogFilter()

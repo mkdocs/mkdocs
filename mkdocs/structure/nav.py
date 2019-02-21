@@ -4,10 +4,10 @@ from __future__ import unicode_literals
 import logging
 
 from mkdocs.structure.pages import Page
-from mkdocs.utils import string_types, nest_paths, urlparse, warning_filter
+from mkdocs.utils import string_types, nest_paths, urlparse, log_counter
 
 log = logging.getLogger(__name__)
-log.addFilter(warning_filter)
+log.addFilter(log_counter)
 
 
 class Navigation(object):

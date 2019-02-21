@@ -10,6 +10,7 @@ import tempfile
 import shutil
 import stat
 import datetime
+import logging
 
 from mkdocs import utils, exceptions
 from mkdocs.structure.files import File
@@ -462,3 +463,91 @@ class UtilsTests(unittest.TestCase):
             """
         )
         self.assertEqual(utils.meta.get_data(doc), (doc, {}))
+
+
+class LogCounterTests(unittest.TestCase):
+    def setUp(self):
+        self.log = logging.getLogger('dummy')
+        self.log.setLevel(logging.DEBUG)
+        self.counter = utils.CountLogFilter()
+        self.log.addFilter(self.counter)
+        self.log.addHandler(logging.NullHandler())
+
+    def tearDown(self):
+        self.log.removeFilter(self.counter)
+
+    def test_default_values(self):
+        self.assertEqual(self.counter.CRITICAL, 0)
+        self.assertEqual(self.counter.ERROR, 0)
+        self.assertEqual(self.counter.WARNING, 0)
+        self.assertEqual(self.counter.INFO, 0)
+        self.assertEqual(self.counter.DEBUG, 0)
+
+    def test_count_critical(self):
+        self.assertEqual(self.counter.CRITICAL, 0)
+        self.log.critical('msg')
+        self.assertEqual(self.counter.CRITICAL, 1)
+        self.assertEqual(self.counter.ERROR, 0)
+        self.assertEqual(self.counter.WARNING, 0)
+        self.assertEqual(self.counter.INFO, 0)
+        self.assertEqual(self.counter.DEBUG, 0)
+
+    def test_count_error(self):
+        self.assertEqual(self.counter.ERROR, 0)
+        self.log.error('msg')
+        self.assertEqual(self.counter.CRITICAL, 0)
+        self.assertEqual(self.counter.ERROR, 1)
+        self.assertEqual(self.counter.WARNING, 0)
+        self.assertEqual(self.counter.INFO, 0)
+        self.assertEqual(self.counter.DEBUG, 0)
+
+    def test_count_warning(self):
+        self.assertEqual(self.counter.WARNING, 0)
+        self.log.warning('msg')
+        self.assertEqual(self.counter.CRITICAL, 0)
+        self.assertEqual(self.counter.ERROR, 0)
+        self.assertEqual(self.counter.WARNING, 1)
+        self.assertEqual(self.counter.INFO, 0)
+        self.assertEqual(self.counter.DEBUG, 0)
+
+    def test_count_info(self):
+        self.assertEqual(self.counter.INFO, 0)
+        self.log.info('msg')
+        self.assertEqual(self.counter.CRITICAL, 0)
+        self.assertEqual(self.counter.ERROR, 0)
+        self.assertEqual(self.counter.WARNING, 0)
+        self.assertEqual(self.counter.INFO, 1)
+        self.assertEqual(self.counter.DEBUG, 0)
+
+    def test_count_debug(self):
+        self.assertEqual(self.counter.DEBUG, 0)
+        self.log.debug('msg')
+        self.assertEqual(self.counter.CRITICAL, 0)
+        self.assertEqual(self.counter.ERROR, 0)
+        self.assertEqual(self.counter.WARNING, 0)
+        self.assertEqual(self.counter.INFO, 0)
+        self.assertEqual(self.counter.DEBUG, 1)
+
+    def test_count_multiple(self):
+        self.assertEqual(self.counter.WARNING, 0)
+        self.log.warning('msg 1')
+        self.assertEqual(self.counter.WARNING, 1)
+        self.log.warning('msg 2')
+        self.assertEqual(self.counter.CRITICAL, 0)
+        self.assertEqual(self.counter.ERROR, 0)
+        self.assertEqual(self.counter.WARNING, 2)
+        self.assertEqual(self.counter.INFO, 0)
+        self.assertEqual(self.counter.DEBUG, 0)
+
+    def test_log_level(self):
+        self.assertEqual(self.counter.DEBUG, 0)
+        self.log.setLevel(logging.INFO)
+        self.log.debug('not counted')
+        self.assertEqual(self.counter.DEBUG, 0)
+        self.log.setLevel(logging.DEBUG)
+        self.log.debug('counted')
+        self.assertEqual(self.counter.CRITICAL, 0)
+        self.assertEqual(self.counter.ERROR, 0)
+        self.assertEqual(self.counter.WARNING, 0)
+        self.assertEqual(self.counter.INFO, 0)
+        self.assertEqual(self.counter.DEBUG, 1)

@@ -10,7 +10,7 @@ from mkdocs import utils
 
 
 log = logging.getLogger(__name__)
-log.addFilter(utils.warning_filter)
+log.addFilter(utils.log_counter)
 
 
 class Files(object):

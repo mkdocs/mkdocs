@@ -10,7 +10,7 @@ from mkdocs.utils import filters
 from mkdocs.config.base import ValidationError
 
 log = logging.getLogger(__name__)
-log.addFilter(utils.warning_filter)
+log.addFilter(utils.log_counter)
 
 
 class Theme(object):
