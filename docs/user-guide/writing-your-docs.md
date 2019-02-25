@@ -201,6 +201,9 @@ Please see the [project license](license.md) for further details.
 When the MkDocs build runs, these Markdown links will automatically be
 transformed into an HTML hyperlink to the appropriate HTML page.
 
+!!! warning
+    Using absolute paths with links is not officially supported. Relative paths are adjusted by MkDocs to ensure they are always relative to the page. Absolute paths are not modified at all. This means that your links using absolute paths might work fine in your local environment but they might break once you deploy them to your production server.
+
 If the target documentation file is in another directory you'll need to make
 sure to include any relative directory path in the link.
 
