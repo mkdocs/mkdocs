@@ -274,7 +274,10 @@ def build(config, live_server=False, dirty=False):
     log.debug("Reading markdown pages.")
     for file in files.documentation_pages():
         log.debug("Reading: " + file.src_path)
+        t1 = datetime.now()
         _populate_page(file.page, config, files, dirty)
+        t2 = datetime.now()
+        log.debug("Processing time: " + str(t2-t1))
 
     # Run `env` plugin events.
     env = config['plugins'].run_event(
