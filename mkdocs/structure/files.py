@@ -66,7 +66,7 @@ class Files(object):
     def add_files_from_theme(self, env, config):
         """ Retrieve static files from Jinja environment and add to collection. """
         def filter(name):
-            patterns = ['.*', '*.py', '*.pyc', '*.html', 'mkdocs_theme.yml']
+            patterns = ['.*', '*.py', '*.pyc', '*.html', '*.md', 'README*', 'readme*', 'mkdocs_theme.yml']
             patterns.extend(config['theme'].static_templates)
             for pattern in patterns:
                 if fnmatch.fnmatch(name, pattern):

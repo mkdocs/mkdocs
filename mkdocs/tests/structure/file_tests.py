@@ -322,7 +322,9 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
     @tempdir(files=[
         'base.html',
         'favicon.ico',
-        'style.css'
+        'style.css',
+        'foo.md',
+        'README'
     ])
     def test_add_files_from_theme(self, tdir, ddir):
         config = load_config(docs_dir=ddir, theme={'name': None, 'custom_dir': tdir})
