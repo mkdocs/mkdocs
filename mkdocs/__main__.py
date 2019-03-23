@@ -82,6 +82,7 @@ site_dir_help = "The directory to output the result of the documentation build."
 reload_help = "Enable the live reloading in the development server (this is the default)"
 no_reload_help = "Disable the live reloading in the development server."
 dirty_reload_help = "Enable the live reloading in the development server, but only re-build files that have changed"
+open_browser_help = "Open the site with the default web browser"
 commit_message_help = ("A commit message to use when committing to the "
                        "Github Pages remote branch. Commit {sha} and MkDocs {version} are available as expansions")
 remote_branch_help = ("The remote branch to commit to for Github Pages. This "
@@ -114,8 +115,9 @@ def cli():
 @click.option('--livereload', 'livereload', flag_value='livereload', help=reload_help, default=True)
 @click.option('--no-livereload', 'livereload', flag_value='no-livereload', help=no_reload_help)
 @click.option('--dirtyreload', 'livereload', flag_value='dirty', help=dirty_reload_help)
+@click.option('-o', '--openbrowser', is_flag=True, default=False, help=open_browser_help)
 @common_options
-def serve_command(dev_addr, config_file, strict, theme, theme_dir, livereload):
+def serve_command(dev_addr, config_file, strict, theme, theme_dir, livereload, openbrowser):
     """Run the builtin development server"""
 
     logging.getLogger('tornado').setLevel(logging.WARNING)
@@ -131,7 +133,8 @@ def serve_command(dev_addr, config_file, strict, theme, theme_dir, livereload):
             strict=strict,
             theme=theme,
             theme_dir=theme_dir,
-            livereload=livereload
+            livereload=livereload,
+            openbrowser=openbrowser
         )
     except (exceptions.ConfigurationError, socket.error) as e:  # pragma: no cover
         # Avoid ugly, unhelpful traceback

@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 import logging
 import shutil
 import tempfile
+import webbrowser
 
 from os.path import isfile, join
 from mkdocs.commands.build import build
@@ -82,7 +83,7 @@ def _static_server(host, port, site_dir):
 
 
 def serve(config_file=None, dev_addr=None, strict=None, theme=None,
-          theme_dir=None, livereload='livereload'):
+          theme_dir=None, livereload='livereload', openbrowser=None):
     """
     Start the MkDocs development server
 
@@ -119,6 +120,9 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
         config = builder()
 
         host, port = config['dev_addr']
+
+        if openbrowser:
+            webbrowser.open(config['site_url'])
 
         if livereload in ['livereload', 'dirty']:
             _livereload(host, port, config, builder, site_dir)
