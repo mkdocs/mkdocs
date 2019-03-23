@@ -82,7 +82,7 @@ site_dir_help = "The directory to output the result of the documentation build."
 reload_help = "Enable the live reloading in the development server (this is the default)"
 no_reload_help = "Disable the live reloading in the development server."
 dirty_reload_help = "Enable the live reloading in the development server, but only re-build files that have changed"
-open_browser_help = "Open the site with the default web browser"
+open_browser_help = "Open the development server's site with the default web browser"
 commit_message_help = ("A commit message to use when committing to the "
                        "Github Pages remote branch. Commit {sha} and MkDocs {version} are available as expansions")
 remote_branch_help = ("The remote branch to commit to for Github Pages. This "
