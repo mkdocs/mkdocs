@@ -49,16 +49,9 @@ to the git repository.
 
 ## Running the tests
 
-To run the tests, it is recommended that you use
-[Tox](https://pypi.org/project/tox/).
+To run the tests, it is recommended that you use [tox].
 
-Install Tox using [pip](https://pypi.org/project/pip/) by running the
-following command:
-
-```
-pip install tox
-```
-
+Install Tox using [pip] by running the command `pip install tox`.
 Then the test suite can be run for MkDocs by running the command `tox` in the
 root of your MkDocs repository.
 
@@ -73,6 +66,7 @@ it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.
 
 [virtualenv]: https://virtualenv.pypa.io/en/latest/userguide.html
+[pip]: https://pip.pypa.io/en/stable/
 [tox]: https://tox.readthedocs.io/en/latest/
 [travis]: https://travis-ci.org/repositories
 [PyPA Code of Conduct]: https://www.pypa.io/en/latest/code-of-conduct/
