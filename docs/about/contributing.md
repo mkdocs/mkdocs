@@ -54,9 +54,11 @@ To run the tests, it is recommended that you use
 
 Install Tox using [pip](https://pypi.org/project/pip/) by running the
 following command:
+
 ```
 pip install tox
 ```
+
 Then the test suite can be run for MkDocs by running the command `tox` in the
 root of your MkDocs repository.
 
