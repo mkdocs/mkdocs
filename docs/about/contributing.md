@@ -50,7 +50,7 @@ to the git repository.
 ## Running the tests
 
 To run the tests, it is recommended that you use [Tox]. This just needs
-to be pip installed and then the test suite can be ran for MkDocs but running
+[pip](https://pypi.org/project/pip/) to be installed and then the test suite can be run for MkDocs by running
 the command `tox` in the root of your MkDocs repository.
 
 It will attempt to run the tests against all of the Python versions we
