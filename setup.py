@@ -56,6 +56,7 @@ setup(
     packages=get_packages("mkdocs"),
     include_package_data=True,
     install_requires=[
+        'babel>=2.6.0',
         'click>=3.3',
         'Jinja2>=2.7.1',
         'livereload>=2.5.1',

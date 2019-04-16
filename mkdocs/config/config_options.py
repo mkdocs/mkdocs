@@ -415,6 +415,7 @@ class Theme(BaseConfigOption):
 
     Validate that the theme exists and build Theme instance.
     """
+    name = 'theme'
 
     def __init__(self, default=None):
         super(Theme, self).__init__()
@@ -447,7 +448,8 @@ class Theme(BaseConfigOption):
         theme_config = config[key_name]
 
         if not theme_config['name'] and 'custom_dir' not in theme_config:
-            raise ValidationError("At least one of 'theme.name' or 'theme.custom_dir' must be defined.")
+            raise ValidationError("At least one of '{name}.name' or '{name}.custom_dir' must be defined."
+                                  .format(name=self.name))
 
         # Ensure custom_dir is an absolute path
         if 'custom_dir' in theme_config and not os.path.isabs(theme_config['custom_dir']):
@@ -455,8 +457,11 @@ class Theme(BaseConfigOption):
             theme_config['custom_dir'] = os.path.join(config_dir, theme_config['custom_dir'])
 
         if 'custom_dir' in theme_config and not os.path.isdir(theme_config['custom_dir']):
-            raise ValidationError("The path set in {name}.custom_dir ('{path}') does not exist.".
-                                  format(path=theme_config['custom_dir'], name=self.name))
+            raise ValidationError("The path set in '{name}.custom_dir' ('{path}') does not exist."
+                                  .format(path=theme_config['custom_dir'], name=self.name))
+
+        if 'locale' in theme_config and not isinstance(theme_config['locale'], utils.string_types):
+            raise ValidationError("'{name}.locale' must be a string.".format(name=self.name))
 
         config[key_name] = theme.Theme(**theme_config)
 

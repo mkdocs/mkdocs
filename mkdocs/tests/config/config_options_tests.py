@@ -11,6 +11,7 @@ import mkdocs
 from mkdocs import utils
 from mkdocs.config import config_options
 from mkdocs.config.base import Config
+from mkdocs.tests.base import tempdir
 
 
 class OptionallyRequiredTest(unittest.TestCase):
@@ -542,6 +543,66 @@ class ThemeTest(unittest.TestCase):
         option = config_options.Theme()
         self.assertRaises(config_options.ValidationError,
                           option.validate, config)
+
+    def test_post_validation_none_theme_name_and_missing_custom_dir(self):
+
+        config = {
+            'theme': {
+                'name': None
+            }
+        }
+        option = config_options.Theme()
+        self.assertRaises(config_options.ValidationError,
+                          option.post_validation, config, 'theme')
+
+    @tempdir()
+    def test_post_validation_inexisting_custom_dir(self, abs_base_path):
+
+        config = {
+            'theme': {
+                'name': None,
+                'custom_dir': abs_base_path + '/inexisting_custom_dir',
+            }
+        }
+        option = config_options.Theme()
+        self.assertRaises(config_options.ValidationError,
+                          option.post_validation, config, 'theme')
+
+    def test_post_validation_locale_none(self):
+
+        config = {
+            'theme': {
+                'name': 'mkdocs',
+                'locale': None
+            }
+        }
+        option = config_options.Theme()
+        self.assertRaises(config_options.ValidationError,
+                          option.post_validation, config, 'theme')
+
+    def test_post_validation_locale_invalid_type(self):
+
+        config = {
+            'theme': {
+                'name': 'mkdocs',
+                'locale': 0
+            }
+        }
+        option = config_options.Theme()
+        self.assertRaises(config_options.ValidationError,
+                          option.post_validation, config, 'theme')
+
+    def test_post_validation_locale(self):
+
+        config = {
+            'theme': {
+                'name': 'mkdocs',
+                'locale': 'fr'
+            }
+        }
+        option = config_options.Theme()
+        option.post_validation(config, 'theme')
+        self.assertEqual('fr', config['theme']['locale'])
 
 
 class NavTest(unittest.TestCase):

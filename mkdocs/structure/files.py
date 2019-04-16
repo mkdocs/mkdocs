@@ -67,6 +67,8 @@ class Files(object):
         """ Retrieve static files from Jinja environment and add to collection. """
         def filter(name):
             patterns = ['.*', '*.py', '*.pyc', '*.html', '*readme*', 'mkdocs_theme.yml']
+            # Exclude translation files
+            patterns.append('locales/*')
             patterns.extend('*{0}'.format(x) for x in utils.markdown_extensions)
             patterns.extend(config['theme'].static_templates)
             for pattern in patterns:

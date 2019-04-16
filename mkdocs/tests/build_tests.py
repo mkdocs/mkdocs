@@ -333,7 +333,7 @@ class BuildTests(PathAssertionMixin, LogTestCase):
         page.title = 'Title'
         page.markdown = 'page content'
         page.content = '<p>page content</p>'
-        build._build_page(page, cfg, files, nav, cfg['theme'].get_env())
+        build._build_page(page, cfg, files, nav, self._get_env_with_null_translations(cfg))
         self.assertPathIsFile(site_dir, 'index.html')
 
     # TODO: fix this. It seems that jinja2 chokes on the mock object. Not sure how to resolve.
@@ -370,7 +370,7 @@ class BuildTests(PathAssertionMixin, LogTestCase):
         page.title = 'Title'
         page.markdown = 'new page content'
         page.content = '<p>new page content</p>'
-        build._build_page(page, cfg, files, nav, cfg['theme'].get_env(), dirty=True)
+        build._build_page(page, cfg, files, nav, self._get_env_with_null_translations(cfg), dirty=True)
         mock_write_file.assert_not_called()
 
     @tempdir(files={'testing.html': '<p>page content</p>'})
@@ -384,7 +384,7 @@ class BuildTests(PathAssertionMixin, LogTestCase):
         page.title = 'Title'
         page.markdown = 'page content'
         page.content = '<p>page content</p>'
-        build._build_page(page, cfg, files, nav, cfg['theme'].get_env(), dirty=True)
+        build._build_page(page, cfg, files, nav, self._get_env_with_null_translations(cfg), dirty=True)
         mock_write_file.assert_called_once()
 
     @tempdir()
@@ -398,7 +398,7 @@ class BuildTests(PathAssertionMixin, LogTestCase):
         page.meta = {'template': '404.html'}
         page.markdown = 'page content'
         page.content = '<p>page content</p>'
-        build._build_page(page, cfg, files, nav, cfg['theme'].get_env())
+        build._build_page(page, cfg, files, nav, self._get_env_with_null_translations(cfg))
         self.assertPathIsFile(site_dir, 'index.html')
 
     @tempdir()
@@ -413,12 +413,19 @@ class BuildTests(PathAssertionMixin, LogTestCase):
         page.markdown = 'page content'
         page.content = '<p>page content</p>'
         with self.assertLogs('mkdocs', level='ERROR') as cm:
-            self.assertRaises(IOError, build._build_page, page, cfg, files, nav, cfg['theme'].get_env())
+            self.assertRaises(IOError, build._build_page, page, cfg, files, nav,
+                              self._get_env_with_null_translations(cfg))
         self.assertEqual(
             cm.output,
             ["ERROR:mkdocs.commands.build:Error building page 'index.md': Error message."]
         )
         mock_write_file.assert_called_once()
+
+    def _get_env_with_null_translations(self, config):
+        env = config['theme'].get_env()
+        env.add_extension('jinja2.ext.i18n')
+        env.install_null_translations()
+        return env
 
     # Test build.build
 
@@ -449,7 +456,7 @@ class BuildTests(PathAssertionMixin, LogTestCase):
         cfg = load_config(docs_dir=docs_dir, site_dir=site_dir)
         build.build(cfg)
 
-        # Verify only theme media are copied, not templates or Python files.
+        # Verify only theme media are copied, not templates, Python or localization files
         self.assertPathIsFile(site_dir, 'index.html')
         self.assertPathIsFile(site_dir, '404.html')
         self.assertPathIsDir(site_dir, 'js')
@@ -461,6 +468,19 @@ class BuildTests(PathAssertionMixin, LogTestCase):
         self.assertPathNotExists(site_dir, 'base.html')
         self.assertPathNotExists(site_dir, 'content.html')
         self.assertPathNotExists(site_dir, 'main.html')
+        self.assertPathNotExists(site_dir, 'locales')
+
+    @tempdir(files={'index.md': 'page content'})
+    @tempdir()
+    @tempdir()
+    @mock.patch('mkdocs.commands.build.install_translations')
+    def test_translations_not_installed_if_locale_not_defined(self, site_dir, docs_dir, custom_dir,
+                                                              install_translations_mock):
+        cfg = load_config(docs_dir=docs_dir, site_dir=site_dir, theme={'name': None, 'custom_dir': custom_dir})
+
+        build.build(cfg)
+
+        install_translations_mock.assert_not_called()
 
     # Test build.site_directory_contains_stale_files
 
