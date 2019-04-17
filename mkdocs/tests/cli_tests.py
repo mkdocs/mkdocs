@@ -48,7 +48,7 @@ class CLITests(unittest.TestCase):
         self.assertTrue('config_file' in kwargs)
         if PY3:
             self.assertIsInstance(kwargs['config_file'], io.BufferedReader)
-        else:
+        else:  # noqa: F821
             self.assertTrue(isinstance(kwargs['config_file'], file))
         self.assertEqual(kwargs['config_file'].name, 'mkdocs.yml')
 
@@ -226,7 +226,7 @@ class CLITests(unittest.TestCase):
         self.assertTrue('config_file' in kwargs)
         if PY3:
             self.assertIsInstance(kwargs['config_file'], io.BufferedReader)
-        else:
+        else:  # noqa: F821
             self.assertTrue(isinstance(kwargs['config_file'], file))
         self.assertEqual(kwargs['config_file'].name, 'mkdocs.yml')
 
@@ -404,7 +404,7 @@ class CLITests(unittest.TestCase):
         self.assertTrue('config_file' in kwargs)
         if PY3:
             self.assertIsInstance(kwargs['config_file'], io.BufferedReader)
-        else:
+        else:  # noqa: F821
             self.assertTrue(isinstance(kwargs['config_file'], file))
         self.assertEqual(kwargs['config_file'].name, 'mkdocs.yml')
 

@@ -47,12 +47,12 @@ if sys.version_info[0] == 3:
                 raise
 else:
     def enc(text):
-        if isinstance(text, unicode):
+        if isinstance(text, unicode):  # noqa: F821
             return text.encode('utf-8')
         return text
 
     def dec(text):
-        if isinstance(text, unicode):
+        if isinstance(text, unicode):  # noqa: F821
             return text
         return text.decode('utf-8')
 
