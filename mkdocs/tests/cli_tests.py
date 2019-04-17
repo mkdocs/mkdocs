@@ -49,7 +49,7 @@ class CLITests(unittest.TestCase):
         if PY3:
             self.assertIsInstance(kwargs['config_file'], io.BufferedReader)
         else:
-            self.assertTrue(isinstance(kwargs['config_file'], file))
+            self.assertTrue(isinstance(kwargs['config_file'], file))  # noqa: F821
         self.assertEqual(kwargs['config_file'].name, 'mkdocs.yml')
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -227,7 +227,7 @@ class CLITests(unittest.TestCase):
         if PY3:
             self.assertIsInstance(kwargs['config_file'], io.BufferedReader)
         else:
-            self.assertTrue(isinstance(kwargs['config_file'], file))
+            self.assertTrue(isinstance(kwargs['config_file'], file))  # noqa: F821
         self.assertEqual(kwargs['config_file'].name, 'mkdocs.yml')
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
@@ -405,7 +405,7 @@ class CLITests(unittest.TestCase):
         if PY3:
             self.assertIsInstance(kwargs['config_file'], io.BufferedReader)
         else:
-            self.assertTrue(isinstance(kwargs['config_file'], file))
+            self.assertTrue(isinstance(kwargs['config_file'], file))  # noqa: F821
         self.assertEqual(kwargs['config_file'].name, 'mkdocs.yml')
 
     @mock.patch('mkdocs.config.load_config', autospec=True)

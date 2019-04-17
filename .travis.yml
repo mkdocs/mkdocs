@@ -9,6 +9,7 @@ matrix:
     - env: TOXENV=markdown-lint
       before_install: npm install -g markdownlint-cli
     - env: TOXENV=linkchecker
+      python: '2.7'
     - env: TOXENV=jshint
       before_install: npm install -g jshint
     - env: TOXENV=csslint
