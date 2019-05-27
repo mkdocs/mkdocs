@@ -108,7 +108,7 @@ def _parse_html_table_of_contents(html):
                 href = parser.attrs['href']
             except KeyError:
                 continue
-            title = parser.title
+            title = parser.title.replace('"', '&#34;').replace("'", '&#39;')
             nav = AnchorLink(title, href, level)
             # Add the item to its parent if required.  If it is a topmost
             # item then instead append it to our return value.
