@@ -58,10 +58,24 @@ theme:
 
     For more specific information, see [styling your docs].
 
+!!! Warning
+
+    A theme's [configuration] defined in a `mkdocs_theme.yml` file is not loaded 
+    from `theme.custom_dir`. When an entire theme exists in `theme.custom_dir`
+    and `theme.name` is set to `null`, then the entire theme configuration must
+    be defined in the [theme] configuration option in the `mkdocs.yml` file.
+
+    However, when a theme is [packaged] up for distribution, and loaded using
+    the `theme.name` configuration option, then a `mkdocs_theme.yml` file
+    is required for the theme.
+
 [styling your docs]: ./styling-your-docs.md#using-the-theme-custom_dir
 [custom_dir]: ./configuration.md#custom_dir
 [name]: ./configuration.md#name
 [docs_dir]:./configuration.md#docs_dir
+[configuration]: #theme-configuration
+[packaged]: #packaging-themes
+[theme]: ./configuration.md#theme
 
 ## Basic theme
 
@@ -655,9 +669,9 @@ Bootswatch theme].
     can be contained in the `custom_dir`. If you have created a "one-off theme,"
     that should be sufficient. However, if you intend to distribute your theme
     for others to use, packaging the theme has some advantages. By packaging
-    your theme, your users can more easily install it and they can then take
-    advantage of the [custom_dir] to make tweaks to your theme to better suit
-    their needs.
+    your theme, your users can more easily install it, they can rely on a default
+    [configuration] being defined, and they can then take advantage of the
+    [custom_dir] to make tweaks to your theme to better suit their needs.
 
 [Python packaging]: https://packaging.python.org/en/latest/
 [MkDocs Bootstrap theme]: https://mkdocs.github.io/mkdocs-bootstrap/
@@ -742,7 +756,8 @@ A packaged theme is required to include a configuration file named
 `mkdocs_theme.yml` which is placed in the root of your template files. The file
 should contain default configuration options for the theme. However, if the
 theme offers no configuration options, the file is still required and can be
-left blank.
+left blank. A theme which is not packaged does not need a `mkdocs_theme.yml`
+file as that file is not loaded from `theme.custom_dir`.
 
 The theme author is free to define any arbitrary options deemed necessary and
 those options will be made available in the templates to control behavior.
