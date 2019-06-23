@@ -130,8 +130,8 @@ public repository.
     specific themes and will not work with MkDocs.
 
 [rtd]: https://readthedocs.org/
-[instructions]: https://read-the-docs.readthedocs.io/en/latest/getting_started.html#in-markdown
-[features]: https://read-the-docs.readthedocs.io/en/latest/features.html
+[instructions]: https://docs.readthedocs.io/en/stable/intro/getting-started-with-mkdocs.html
+[features]: https://docs.readthedocs.io/en/latest/features.html
 [theme]: ./styling-your-docs.md#readthedocs
 
 ## Other Providers
