@@ -85,17 +85,26 @@ If both an `index.md` file and a `README.md` file are found in the same
 directory, then the `index.md` file is used and the `README.md` file is
 ignored.
 
-### Configure Pages and Navigation
+### Navigation
+
+MkDocs can generate a navigation for you. It is based on all Markdown files
+in the [documentation directory](configuration.md#docs_dir). Each navigation
+level is sorted alphanumerically by the page title. Index files however
+will always be listed first within a sub-section.
+
+The page title is based on meta data in the linked Markdown file, a level 1
+headline on the first line of the document body or the filename
+(see [Meta Data](writing-your-docs.md#meta-data)). Since `README.md` files are
+treated like index files as described above, these files will be named »index«.
+
+#### Configure Pages and Navigation
+
+It is possible to manually define your navigation configuration if you would
+like your navigation menu sorted differently or use other page titles.
 
 The [nav](configuration.md#nav) configuration setting in your `mkdocs.yml` file
 defines which pages are included in the global site navigation menu as well as
-the structure of that menu. If not provided, the navigation will be
-automatically created by discovering all the Markdown files in the
-[documentation directory](configuration.md#docs_dir). An automatically created
-navigation configuration will always be sorted alphanumerically by file name
-(except that index files will always be listed first within a sub-section). You
-will need to manually define your navigation configuration if you would like
-your navigation menu sorted differently.
+the structure of that menu.
 
 A simple navigation configuration looks like this:
 
