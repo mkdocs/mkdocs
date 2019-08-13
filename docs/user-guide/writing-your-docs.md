@@ -111,9 +111,9 @@ source files for the above configuration would be located at `docs/index.md` and
 `docs/about.md`.
 
 The above example will result in two navigation items being created at the top
-level and with their titles inferred from the contents of the file (or the
-filename if no title is defined within the file). To define a custom title for
-the pages, the title can be added before the filename.
+level and with their titles inferred from the contents of the Markdown file or,
+if no title is defined within the file, of the file name. To override the title
+in the `nav` setting add a title right before the filename.
 
 ```no-highlight
 nav:

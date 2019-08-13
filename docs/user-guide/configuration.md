@@ -182,7 +182,8 @@ including how to create sub-sections.
 Navigation items may also include links to external sites. While titles are
 optional for internal links, they are required for external links. An external
 link may be a full URL or a relative URL. Any path which is not found in the
-files is assumed to be an external link.
+files is assumed to be an external link. See the section about [Meta-Data] on
+how MkDocs determines the page title of a document.
 
 ```yaml
 nav:
@@ -217,7 +218,7 @@ server root and effectively points to `https://example.com/bugs/`. Of course, th
 
 **default**: By default `nav` will contain an alphanumerically sorted, nested
 list of all the Markdown files found within the `docs_dir` and its
-sub-directories. If none are found it will be `[]` (an empty list).
+sub-directories. Index files will always be listed first within a sub-section.
 
 ## Build directories
 
