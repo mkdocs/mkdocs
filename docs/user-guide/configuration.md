@@ -165,14 +165,12 @@ This option can be overridden by a command line option in `gh-deploy`.
 ### nav
 
 This setting is used to determine the format and layout of the global navigation
-for the site. For example, the following would create "Introduction", "User
-Guide" and "About" navigation items.
+for the site. A minimal navigation configuration could look like this:
 
 ```yaml
 nav:
-    - 'Introduction': 'index.md'
-    - 'User Guide': 'user-guide.md'
-    - 'About': 'about.md'
+    - 'index.md'
+    - 'about.md'
 ```
 
 All paths must be relative to the `mkdocs.yml` configuration file. See the
@@ -187,9 +185,9 @@ how MkDocs determines the page title of a document.
 
 ```yaml
 nav:
-    - Home: index.md
-    - User Guide: user-guide.md
-    - Bug Tracker: https://example.com/
+    - Introduction: 'index.md'
+    - 'about.md'
+    - 'Issue Tracker': 'https://example.com/'
 ```
 
 In the above example, the first two items point to local files while the third
@@ -203,9 +201,9 @@ the full domain. In that case, you may use and appropriate relative URL.
 site_url: https://example.com/foo/
 
 nav:
-    - Home: ../
-    - User Guide: user-guide.md
-    - Bug Tracker: /bugs/
+    - Home: '../'
+    - 'User Guide': 'user-guide.md'
+    - 'Bug Tracker': '/bugs/'
 ```
 
 In the above example, two different styles of external links are used. First
