@@ -53,7 +53,7 @@ def _livereload(host, port, config, builder, site_dir):
         server.watch(d, builder)
 
     # Run `serve` plugin events.
-    server = config['plugins'].run_event('serve', server, config=config)
+    server = config['plugins'].run_event('serve', server, config=config, builder=builder)
 
     server.serve(root=site_dir, host=host, port=port, restart_delay=0)
 
