@@ -456,7 +456,7 @@ class Theme(BaseConfigOption):
 
         if 'custom_dir' in theme_config and not os.path.isdir(theme_config['custom_dir']):
             raise ValidationError("The path set in {name}.custom_dir ('{path}') does not exist.".
-                                  format(path=theme_config['custom_dir'], name=self.name))
+                                  format(path=theme_config['custom_dir'], name=key_name))
 
         config[key_name] = theme.Theme(**theme_config)
 
