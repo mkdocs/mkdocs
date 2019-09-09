@@ -62,7 +62,6 @@ target/
 .python-version
 
 # virtualenv
-.venv/
 venv/
 ENV/
 
