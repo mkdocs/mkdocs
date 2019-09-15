@@ -29,7 +29,7 @@ class LangOption(config_options.OptionallyRequired):
         for lang in value:
             if lang != 'en' and not self.lang_file_exists(lang):
                 raise config_options.ValidationError(
-                    '"{}" is not a suported language code.'.format(lang)
+                    '"{}" is not a supported language code.'.format(lang)
                 )
         return value
 
