@@ -6,7 +6,7 @@
     {%- else %}
 	{%- if not item.is_link -%}
     <url>
-     <loc>{% if item.canonical_url %}{{ item.canonical_url }}{% else %}{{ item.abs_url }}{% endif %}</loc>
+     <loc>{% if item.canonical_url %}{{ item.canonical_url|e }}{% else %}{{ item.abs_url|e }}{% endif %}</loc>
      {% if item.update_date %}<lastmod>{{item.update_date}}</lastmod>{% endif %}
      <changefreq>daily</changefreq>
     </url>
