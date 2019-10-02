@@ -286,7 +286,7 @@ class RepoURL(URL):
         edit_uri = config.get('edit_uri')
 
         # derive repo_name from repo_url if unset
-        if config['repo_url'] is not None and config.get('repo_name') is None:
+        if config['repo_url'] is not '' and config.get('repo_name') is None:
             if repo_host == 'github.com':
                 config['repo_name'] = 'GitHub'
             elif repo_host == 'bitbucket.org':
@@ -297,7 +297,7 @@ class RepoURL(URL):
                 config['repo_name'] = repo_host.split('.')[0].title()
 
         # derive edit_uri from repo_name if unset
-        if config['repo_url'] is not None and edit_uri is None:
+        if config['repo_url'] is not '' and edit_uri is None:
             if repo_host == 'github.com' or repo_host == 'gitlab.com':
                 edit_uri = 'edit/master/docs/'
             elif repo_host == 'bitbucket.org':
@@ -308,6 +308,7 @@ class RepoURL(URL):
         # ensure a well-formed edit_uri
         if edit_uri:
             if not edit_uri.startswith(('?', '#')) \
+                    and config['repo_url'] is not '' \
                     and not config['repo_url'].endswith('/'):
                 config['repo_url'] += '/'
             if not edit_uri.endswith('/'):

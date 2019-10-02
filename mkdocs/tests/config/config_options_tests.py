@@ -254,6 +254,15 @@ class RepoURLTest(unittest.TestCase):
         option.post_validation(config, 'repo_url')
         self.assertEqual(config.get('edit_uri'), 'edit/master/docs/')
 
+    def test_empty_repo_url_and_edit_url(self):
+
+        option = config_options.RepoURL()
+        config = {'repo_url': '',
+                  'edit_uri': "https://github.com/mkdocs/mkdocs"}
+        option.post_validation(config, 'repo_url')
+        self.assertEqual(config.get('edit_uri'), "https://github.com/mkdocs/mkdocs/")
+        self.assertEqual(config.get('repo_url'), '')
+
 
 class DirTest(unittest.TestCase):
 
