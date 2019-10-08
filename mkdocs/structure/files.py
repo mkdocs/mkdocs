@@ -75,6 +75,7 @@ class Files(object):
             return True
         for path in env.list_templates(filter_func=filter):
             # Theme files do not override docs_dir files
+            path = os.path.normpath(path)
             if path not in self:
                 for dir in config['theme'].dirs:
                     # Find the first theme dir which contains path
