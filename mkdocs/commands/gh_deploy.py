@@ -58,7 +58,7 @@ def _check_version(branch):
 
     stdout, _ = proc.communicate()
     msg = stdout.decode('utf-8').strip()
-    m = re.search(r'\d+(\.\d+)+(((a|b|rc)|\.post|\.dev)\d+)*', msg, re.X | re.I)
+    m = re.search(r'\d+(\.\d+)+((a|b|rc)\d+)?(\.post\d+)?(\.dev\d+)?', msg, re.X | re.I)
     previousv = parse_version(m.group()) if m else None
     currentv = parse_version(mkdocs.__version__)
     if not previousv:
