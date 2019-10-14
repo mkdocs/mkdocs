@@ -62,7 +62,7 @@ def _check_version(branch):
     previousv = parse_version(m.group()) if m else None
     currentv = parse_version(mkdocs.__version__)
     if not previousv:
-        log.warn('Version check skipped: No version specificed in previous deployment.')
+        log.warn('Version check skipped: No version specified in previous deployment.')
     elif currentv > previousv:
         log.info(
             'Previous deployment was done with MkDocs version {}; '

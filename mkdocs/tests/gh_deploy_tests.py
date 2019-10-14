@@ -183,5 +183,5 @@ class TestGitHubDeployLogs(LogTestCase):
             gh_deploy._check_version('gh-pages')
         self.assertEqual(
             cm.output,
-            ['WARNING:mkdocs.commands.gh_deploy:Version check skipped: No version specificed in previous deployment.']
+            ['WARNING:mkdocs.commands.gh_deploy:Version check skipped: No version specified in previous deployment.']
         )
