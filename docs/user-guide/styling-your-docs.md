@@ -29,8 +29,10 @@ every feature of MkDocs. It only officially supports two levels in the
 navigation (see #1107).
 
 !!! note
-   As of version 1.1 Bootstrap has been updated from 3.0.3 to 4.1.3. After this update 2 filenames were changed to avoid confusion. If you are having issues with bootstrap you may need to change these filenames as described below.
+   As of version 1.1 Bootstrap has been updated from 3.0.3 to 4.1.3. After this update 2 filenames were changed to avoid confusion. 
    
+   Currently there are 2 themes which make use of inheritence from mkdocks [mkdocs-bootswatch](https://github.com/mkdocs/mkdocs-bootswatch) and [mkdocs-bootstrap](https://github.com/mkdocs/mkdocs-bootstrap),if you are using either of these and are having issues with bootstrap you may need to change the filenames as described below.
+
    Filename Updates:
    css/bootstrap-custom.min.css => css/bootstrap.min.css
    js/bootstrap-3.0.3.min.js => js/bootstrap.min.js
