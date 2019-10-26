@@ -31,7 +31,7 @@ navigation (see #1107).
 !!! Warning
    As of version 1.1 Bootstrap has been updated from 3.0.3 to 4.1.3. After this update 2 filenames were changed to avoid confusion. 
    
-   Currently there are 2 themes which make use of inheritence from mkdocks [MkDocs Bootstrap theme](https://github.com/mkdocs/mkdocs-bootstrap) and [MkDocs Bootswatch theme](https://github.com/mkdocs/mkdocs-bootswatch),if you are using either of these and are having issues with bootstrap you may need to change the filenames as described below.
+   Currently there are 2 themes which make use of inheritence from mkdocks [MkDocs Bootstrap theme](https://github.com/mkdocs/mkdocs-bootstrap) and [MkDocs Bootswatch theme](https://github.com/mkdocs/mkdocs-bootswatch),if you are using either of these and are having issues with bootstrap you may need to change the filenames paths to these files as described below.
 
    Filename Updates:
    css/bootstrap-custom.min.css => css/bootstrap.min.css

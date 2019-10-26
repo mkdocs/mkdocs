@@ -680,7 +680,7 @@ Bootswatch theme].
 !!! Warning
     As of version 1.1 Bootstrap has been updated from 3.0.3 to 4.1.3. After this update 2 filenames were changed to avoid confusion. 
 
-    [MkDocs Bootstrap theme](https://github.com/mkdocs/mkdocs-bootswatch), [MkDocs Bootswatch theme](https://github.com/mkdocs/mkdocs-bootstrap) both inherit directly from mkdocs, if you are using either of these themes and are having issues with bootstrap you may need to change the filenames as described below.
+    [MkDocs Bootstrap theme](https://github.com/mkdocs/mkdocs-bootswatch), [MkDocs Bootswatch theme](https://github.com/mkdocs/mkdocs-bootstrap) both inherit directly from mkdocs, if you are using either of these themes and are having issues with bootstrap you may need to change the filenames or paths to these files as described below.
 
     Filename Updates:
         css/bootstrap-custom.min.css => css/bootstrap.min.css
