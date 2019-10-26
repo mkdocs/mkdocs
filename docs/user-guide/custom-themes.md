@@ -673,18 +673,18 @@ Bootswatch theme].
     [configuration] being defined, and they can then take advantage of the
     [custom_dir] to make tweaks to your theme to better suit their needs.
 
-!!! Warning
-   As of version 1.1 Bootstrap has been updated from 3.0.3 to 4.1.3. After this update 2 filenames were changed to avoid confusion. 
-   
-   Currently there are 2 themes which make use of inheritence from mkdocks [mkdocs-bootswatch](https://github.com/mkdocs/mkdocs-bootswatch) and [mkdocs-bootstrap](https://github.com/mkdocs/mkdocs-bootstrap),if you are using either of these and are having issues with bootstrap you may need to change the filenames as described below.
-
-   Filename Updates:
-   css/bootstrap-custom.min.css => css/bootstrap.min.css
-   js/bootstrap-3.0.3.min.js => js/bootstrap.min.js
-
 [Python packaging]: https://packaging.python.org/en/latest/
 [MkDocs Bootstrap theme]: https://mkdocs.github.io/mkdocs-bootstrap/
 [MkDocs Bootswatch theme]: https://mkdocs.github.io/mkdocs-bootswatch/
+
+!!! Warning
+    As of version 1.1 Bootstrap has been updated from 3.0.3 to 4.1.3. After this update 2 filenames were changed to avoid confusion. 
+
+    [MkDocs Bootstrap theme](https://github.com/mkdocs/mkdocs-bootswatch), [MkDocs Bootswatch theme](https://github.com/mkdocs/mkdocs-bootstrap) both inherit directly from mkdocs, if you are using either of these themes and are having issues with bootstrap you may need to change the filenames as described below.
+
+    Filename Updates:
+        css/bootstrap-custom.min.css => css/bootstrap.min.css
+        js/bootstrap-3.0.3.min.js => js/bootstrap.min.js
 
 ### Package Layout
 
