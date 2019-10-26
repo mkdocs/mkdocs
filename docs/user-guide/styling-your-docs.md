@@ -28,6 +28,13 @@ The default theme, which was built as a custom [Bootstrap] theme, supports most
 every feature of MkDocs. It only officially supports two levels in the
 navigation (see #1107).
 
+!!! note
+   As of version 1.1 Bootstrap has been updated from 3.0.3 to 4.1.3. After this update 2 filenames were changed to avoid confusion. If you are having issues with bootstrap you may need to change these filenames as described below.
+   
+   Filename Updates:
+   css/bootstrap-custom.min.css => css/bootstrap.min.css
+   js/bootstrap-3.0.3.min.js => js/bootstrap.min.js
+
 ![mkdocs](../img/mkdocs.png)
 
 In addition to the default [theme configuration options], the `mkdocs` theme
