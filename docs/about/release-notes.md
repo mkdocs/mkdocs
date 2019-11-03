@@ -65,6 +65,13 @@ your global navigation uses more than one level, things will likely be broken.
 * Bugfix: Skip external URLs in sitemap.xml (#1742).
 * Add canonical tag to `readthedocs` theme (#1669).
 
+### Backward Incompatible Changes to Version 1.1
+   As of version 1.1 Bootstrap has been updated from 3.0.3 to 4.1.3. After this update 2 filenames were changed to avoid confusion. If you are having issues with bootstrap you may need to change these filenames as described below.
+
+   Filename Updates:
+   css/bootstrap-custom.min.css => css/bootstrap.min.css
+   js/bootstrap-3.0.3.min.js => js/bootstrap.min.js
+
 ## Version 1.0.4 (2018-09-07)
 
 * Bugfix: Ignore absolute links in Markdown (#1621).
