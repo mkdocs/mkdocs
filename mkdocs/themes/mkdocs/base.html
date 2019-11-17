@@ -37,7 +37,6 @@
         {%- for lang in config.theme.hljs_languages %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/{{lang}}.min.js"></script>
         {%- endfor %}
-        <script>hljs.initHighlightingOnLoad();</script>
         {%- endif %}
       {%- endblock %}
 
@@ -186,7 +185,9 @@
 
       {%- block scripts %}
         <script type="application/json" mkdocs-selector="data">
-            {{ {'base_url': base_url, 'shortcuts': config.theme.shortcuts} | tojson }}
+            {{ {'base_url': base_url,
+                'highlightjs': config.theme.highlightjs,
+                'shortcuts': config.theme.shortcuts} | tojson }}
         </script>
         <script src="{{ 'js/base.js'|url }}" defer></script>
         {%- for path in config['extra_javascript'] %}
