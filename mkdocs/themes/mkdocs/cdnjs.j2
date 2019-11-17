@@ -5,7 +5,7 @@
 {%- endmacro %}
 
 {% macro load(library, version, asset) -%}
-  href="{{url(library, version, asset)}}"
+  "{{url(library, version, asset)}}"
   integrity="{{cdnjs_hashes[library][version][asset]}}"
   crossorigin="anonymous"
 {%- endmacro %}
