@@ -15,18 +15,19 @@ function getSearchTerm()
 // Make base_url global, so external scripts can find it
 //  (e.g. the search plugin)
 window.base_url = JSON.parse(document.querySelector(
-  `script[type="application/json"][mkdocs-selector="data"]`
+  'script[type="application/json"][mkdocs-selector="data"]'
 ).textContent).base_url;
 
 $(document).ready(function() {
-    var {base_url, highlightjs, shortcuts} = JSON.parse(document.querySelector(
-      `script[type="application/json"][mkdocs-selector="data"]`
+    var data = JSON.parse(document.querySelector(
+      'script[type="application/json"][mkdocs-selector="data"]'
     ).textContent);
     var search_term = getSearchTerm(),
+        shortcuts = data.shortcuts,
         $search_modal = $('#mkdocs_search_modal'),
         $keyboard_modal = $('#mkdocs_keyboard_modal');
 
-    if(highlightjs) {
+    if(data.highlightjs) {
         hljs.initHighlightingOnLoad();
     }
 
