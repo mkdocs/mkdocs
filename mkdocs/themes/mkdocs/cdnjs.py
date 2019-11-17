@@ -46,10 +46,11 @@ if __name__ == "__main__":
     result = {}
     for lib, v in libs.items():
         result[lib] = {}
-        version, assets = cdnjs_lib(lib, version)
-        result[lib][version] = {}
+        version, assets = cdnjs_lib(lib, v)
+        result[lib]['version'] = version
+        result[lib]['assets'] = {}
         for asset in assets:
-            result[lib][version][asset] = hash_url(cdnjs_url(lib, version, asset))
+            result[lib]['assets'][asset] = hash_url(cdnjs_url(lib, version, asset))
 
     with (Path(__file__).parent / "cdnjs_hashes.j2").open("w") as result_f:
         result_f.write("{%- set cdnjs_hashes = ")
