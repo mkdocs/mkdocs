@@ -32,7 +32,7 @@ def cdnjs_lib(lib, version=None):
 
         version = max(assets, key=LooseVersion)
 
-    return [f"{asset}" for asset in assets[version]]
+    return version, [f"{asset}" for asset in assets[version]]
 
 
 def cdnjs_url(library, version, file):
@@ -44,10 +44,11 @@ if __name__ == "__main__":
         libs = json.load(libs_f)
 
     result = {}
-    for lib, version in libs.items():
+    for lib, v in libs.items():
         result[lib] = {}
+        version, assets = cdnjs_lib(lib, version)
         result[lib][version] = {}
-        for asset in cdnjs_lib(lib, version):
+        for asset in assets:
             result[lib][version][asset] = hash_url(cdnjs_url(lib, version, asset))
 
     with (Path(__file__).parent / "cdnjs_hashes.j2").open("w") as result_f:
