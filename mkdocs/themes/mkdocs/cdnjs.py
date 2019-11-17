@@ -54,4 +54,4 @@ if __name__ == "__main__":
     with (Path(__file__).parent / 'cdnjs_hashes.j2').open('w') as result_f:
         result_f.write("{%- set cdnjs_hashes = ")
         json.dump(result, result_f, indent=2)
-        result_f.write("\n -%}")
+        result_f.write(" -%}")
