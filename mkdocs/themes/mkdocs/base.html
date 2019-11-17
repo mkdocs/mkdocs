@@ -185,9 +185,8 @@
         </footer>
 
       {%- block scripts %}
-        <script>
-            var base_url = {{ base_url | tojson }},
-                shortcuts = {{ config.theme.shortcuts | tojson }};
+        <script type="application/json" mkdocs-selector="data">
+            {{ {'base_url': base_url, 'shortcuts': config.theme.shortcuts} | tojson }}
         </script>
         <script src="{{ 'js/base.js'|url }}" defer></script>
         {%- for path in config['extra_javascript'] %}

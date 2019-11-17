@@ -13,7 +13,9 @@ function getSearchTerm()
 }
 
 $(document).ready(function() {
-
+    var {base_url, shortcuts} = JSON.parse(document.querySelector(
+      `script[type="application/json"][mkdocs-selector="data"]`
+    ).textContent);
     var search_term = getSearchTerm(),
         $search_modal = $('#mkdocs_search_modal'),
         $keyboard_modal = $('#mkdocs_keyboard_modal');
