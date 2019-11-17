@@ -12,6 +12,12 @@ function getSearchTerm()
     }
 }
 
+// Make base_url global, so external scripts can find it
+//  (e.g. the search plugin)
+window.base_url = JSON.parse(document.querySelector(
+  `script[type="application/json"][mkdocs-selector="data"]`
+).textContent).base_url;
+
 $(document).ready(function() {
     var {base_url, highlightjs, shortcuts} = JSON.parse(document.querySelector(
       `script[type="application/json"][mkdocs-selector="data"]`
