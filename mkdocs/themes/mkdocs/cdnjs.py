@@ -56,6 +56,8 @@ if __name__ == "__main__":
     for lib, v in libs.items():
         result[lib] = {}
         version, assets = cdnjs_lib(lib, v)
+        print(f"Fetching and hashing {len(assets)} assets for '{lib}' version '{version}'")
+
         result[lib]['version'] = version
         result[lib]['assets'] = {}
         for asset in assets:
