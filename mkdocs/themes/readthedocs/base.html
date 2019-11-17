@@ -23,7 +23,10 @@
   <link rel="stylesheet" href="{{ 'css/theme.css'|url }}" />
   <link rel="stylesheet" href="{{ 'css/theme_extra.css'|url }}" />
   {%- if config.theme.highlightjs %}
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  {% import 'cdnjs.j2' as cdnjs %}
+  <link rel="stylesheet"
+        {{ cdnjs.load('highlight.js', '9.12.0', 'styles/github.min.css') }}
+  >
   {%- endif %}
   {%- for path in config['extra_css'] %}
   <link href="{{ path|url }}" rel="stylesheet" />
@@ -33,18 +36,19 @@
   {%- block libs %}
   {% if page %}
   <script>
-    // Current page data
-    var mkdocs_page_name = {{ page.title|tojson|safe }};
-    var mkdocs_page_input_path = {{ page.file.src_path|string|tojson|safe }};
-    var mkdocs_page_url = {{ page.abs_url|tojson|safe }};
+   // Current page data
+   var mkdocs_page_name = {{ page.title|tojson|safe }};
+   var mkdocs_page_input_path = {{ page.file.src_path|string|tojson|safe }};
+   var mkdocs_page_url = {{ page.abs_url|tojson|safe }};
   </script>
   {% endif %}
   <script src="{{ 'js/jquery-2.1.1.min.js'|url }}" defer></script>
   <script src="{{ 'js/modernizr-2.8.3.min.js'|url }}" defer></script>
   {%- if config.theme.highlightjs %}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  {% import 'cdnjs.j2' as cdnjs %}
+  <script {{ cdnjs.load('highlight.js', '9.12.0', 'highlight.min.js') }}></script>
   {%- for lang in config.theme.hljs_languages %}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/{{lang}}.min.js"></script>
+  <script {{ cdnjs.load('highlight.js', '9.12.0', 'languages/' + lang + '.min.js') }}></script>
   {%- endfor %}
   <script>hljs.initHighlightingOnLoad();</script>
   {%- endif %}
