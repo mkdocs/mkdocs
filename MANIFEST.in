@@ -1,6 +1,6 @@
 include README.md
 include LICENSE
-exclude mkdocs/themes/mkdocs/cdnjs.py
+exclude mkdocs/themes/*/cdnjs.py
 recursive-include mkdocs *.ico *.js *.css *.png *.html *.j2 *.eot *.svg *.ttf *.woff *.woff2 *.xml *.mustache *mkdocs_theme.yml
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
