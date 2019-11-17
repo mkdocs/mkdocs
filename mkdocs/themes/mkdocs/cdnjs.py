@@ -5,17 +5,26 @@ import base64
 import json
 from pathlib import Path
 
+from cryptography.hazmat.primitives import hashes
 import requests
+
+
+hash_algs = {
+    'sha256': hashes.SHA256,
+    'sha384': hashes.SHA384,
+    'sha512': hashes.SHA512,
+}
 
 
 def hash_url(url, hash_alg="sha384"):
     from cryptography.hazmat.backends import default_backend
-    from cryptography.hazmat.primitives import hashes
 
-    if hash_alg not in ["sha384"]:
+    try:
+        hasher = hash_algs[hash_alg]()
+    except KeyError:
         raise ValueError(f"Invalid hash algorithm: '{hash_alg}'")
 
-    digest = hashes.Hash(hashes.SHA384(), backend=default_backend())
+    digest = hashes.Hash(hasher, backend=default_backend())
     response = requests.get(url)
     response.raise_for_status()
     digest.update(response.content)
