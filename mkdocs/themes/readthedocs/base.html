@@ -25,7 +25,7 @@
   {%- if config.theme.highlightjs %}
   {% import 'cdnjs.j2' as cdnjs %}
   <link rel="stylesheet"
-        href={{ cdnjs.load('highlight.js', '9.12.0', 'styles/github.min.css') }}
+        href={{ cdnjs.load('highlight.js', 'styles/github.min.css') }}
   >
   {%- endif %}
   {%- for path in config['extra_css'] %}
@@ -46,9 +46,9 @@
   <script src="{{ 'js/modernizr-2.8.3.min.js'|url }}" defer></script>
   {%- if config.theme.highlightjs %}
   {% import 'cdnjs.j2' as cdnjs %}
-  <script src={{ cdnjs.load('highlight.js', '9.12.0', 'highlight.min.js') }}></script>
+  <script src={{ cdnjs.load('highlight.js', 'highlight.min.js') }}></script>
   {%- for lang in config.theme.hljs_languages %}
-  <script src={{ cdnjs.load('highlight.js', '9.12.0', 'languages/' + lang + '.min.js') }}></script>
+  <script src={{ cdnjs.load('highlight.js', 'languages/' + lang + '.min.js') }}></script>
   {%- endfor %}
   <script>hljs.initHighlightingOnLoad();</script>
   {%- endif %}
