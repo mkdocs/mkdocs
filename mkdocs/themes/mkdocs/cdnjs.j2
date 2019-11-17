@@ -1,0 +1,11 @@
+{% from 'cdnjs_hashes.j2' import cdnjs_hashes %}
+
+{% macro url(library, version, asset) -%}
+  https://cdnjs.cloudflare.com/ajax/libs/{{library}}/{{version}}/{{asset}}
+{%- endmacro %}
+
+{% macro load(library, version, asset) -%}
+  href="{{url(library, version, asset)}}"
+  integrity="{{cdnjs_hashes[library][version][asset]}}"
+  crossorigin="anonymous"
+{%- endmacro %}
