@@ -62,6 +62,7 @@ your global navigation uses more than one level, things will likely be broken.
 * Bugfix: Do not normalize URL fragments (#1655).
 * Bugfix: Skip external URLs in sitemap.xml (#1742).
 * Add canonical tag to `readthedocs` theme (#1669).
+* Improved error message for when `git` is not available.
 
 ## Version 1.0.4 (2018-09-07)
 
