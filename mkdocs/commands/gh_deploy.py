@@ -17,7 +17,7 @@ def _is_cwd_git_repo():
     try:
         proc = subprocess.Popen(
             ['git', 'rev-parse', '--is-inside-work-tree'],
-            stdout=subprocess.PIPE, 
+            stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
     except FileNotFoundError:
