@@ -18,7 +18,7 @@ def _is_cwd_git_repo():
         proc = subprocess.Popen(['git', 'rev-parse', '--is-inside-work-tree'],
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     except FileNotFoundError:
-        log.error("Could not find git - is it installed / on path?")
+        log.error("Could not find git - is it installed and on your path?")
         raise SystemExit(1)
     proc.communicate()
     return proc.wait() == 0
