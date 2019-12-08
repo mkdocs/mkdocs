@@ -74,7 +74,7 @@ class PageTests(unittest.TestCase):
         cfg = load_config(docs_dir=self.DOCS_DIR)
         fl = File('sub1/index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
         pg = Page('Foo', fl, cfg)
-        pg.parent = None # non-homepage at nav root level; see #1919.
+        pg.parent = None  # non-homepage at nav root level; see #1919.
         self.assertEqual(pg.url, 'sub1/')
         self.assertEqual(pg.abs_url, None)
         self.assertEqual(pg.canonical_url, None)
@@ -98,7 +98,7 @@ class PageTests(unittest.TestCase):
         cfg = load_config(docs_dir=self.DOCS_DIR, use_directory_urls=False)
         fl = File('sub1/index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
         pg = Page('Foo', fl, cfg)
-        pg.parent = None # non-homepage at nav root level; see #1919.
+        pg.parent = None  # non-homepage at nav root level; see #1919.
         self.assertEqual(pg.url, 'sub1/index.html')
         self.assertEqual(pg.abs_url, None)
         self.assertEqual(pg.canonical_url, None)
