@@ -56,6 +56,7 @@ your global navigation uses more than one level, things will likely be broken.
 
 ### Other Changes and Additions to Version 1.1
 
+* Bugfix: Ensure nested index pages do not get identified as the homepage (#1919).
 * Bugfix: Properly identify deployment version (#1879).
 * Bugfix: Properly build `ValidationError` message for `custom_dir` (#1849).
 * Bugfix: Exclude Markdown files and READMEs from theme (#1766).
