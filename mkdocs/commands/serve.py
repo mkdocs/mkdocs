@@ -3,12 +3,33 @@ from __future__ import unicode_literals
 import logging
 import shutil
 import tempfile
+import sys
 
 from os.path import isfile, join
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
 
 log = logging.getLogger(__name__)
+
+
+def _init_asyncio_patch():
+    """
+    Select compatible event loop for Tornado 5+.
+
+    As of Python 3.8, the default event loop on Windows is `proactor`,
+    however Tornado requires the old default "selector" event loop.
+    As Tornado has decided to leave this to users to set, MkDocs needs
+    to set it. See https://github.com/tornadoweb/tornado/issues/2608.
+    """
+    if sys.platform.startswith("win") and sys.version_info >= (3, 8):
+        import asyncio
+        try:
+            from asyncio import WindowsSelectorEventLoopPolicy
+        except ImportError:
+            pass  # Can't assign a policy which doesn't exist.
+        else:
+            if not isinstance(asyncio.get_event_loop_policy(), WindowsSelectorEventLoopPolicy):
+                asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())
 
 
 def _get_handler(site_dir, StaticFileHandler):
@@ -33,6 +54,7 @@ def _livereload(host, port, config, builder, site_dir):
 
     # We are importing here for anyone that has issues with livereload. Even if
     # this fails, the --no-livereload alternative should still work.
+    _init_asyncio_patch()
     from livereload import Server
     import livereload.handlers
 
@@ -62,6 +84,7 @@ def _static_server(host, port, site_dir):
 
     # Importing here to seperate the code paths from the --livereload
     # alternative.
+    _init_asyncio_patch()
     from tornado import ioloop
     from tornado import web
 
