@@ -111,12 +111,14 @@ code {
 }
 
 pre code {
-    background: transparent;
     border: none;
     white-space: pre;
     word-wrap: normal;
     font-family: monospace,serif;
     font-size: 12px;
+    /* Override styles from hljs theme */
+    background: transparent !important;
+    padding: 0 !important;
 }
 
 a code {
