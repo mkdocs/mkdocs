@@ -132,7 +132,8 @@ class ConfigTests(unittest.TestCase):
                         'highlightjs': True,
                         'hljs_style': 'github',
                         'hljs_languages': [],
-                        'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83}
+                        'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83},
+                        'nav_style': 'primary'
                     }
                 }, {
                     'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
@@ -194,7 +195,8 @@ class ConfigTests(unittest.TestCase):
                         'highlightjs': True,
                         'hljs_style': 'github',
                         'hljs_languages': [],
-                        'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83}
+                        'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83},
+                        'nav_style': 'primary'
                     }
                 }
             )

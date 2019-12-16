@@ -73,6 +73,14 @@ supports the following options:
 
     * __`search`__: Display the search modal. Default: `83` (s)
 
+* __`nav_style`__: This adjusts the visual style for the top navigation bar; by
+  default, this is set to `primary` (the default), but it can also be set to
+  `dark` or `light`.
+
+        theme:
+            name: mkdocs
+            nav_style: dark
+
 [styles]: https://highlightjs.org/static/demo/
 
 ### readthedocs
