@@ -68,6 +68,7 @@ your global navigation uses more than one level, things will likely be broken.
 * Bugfix: Ensure theme files do not override docs_dir files on Windows (#1876)
 * Add canonical tag to `readthedocs` theme (#1669).
 * Improved error message for when `git` is not available.
+* Add support for `nav_style` theme option for the `mkdocs` theme (#1930).
 
 ## Version 1.0.4 (2018-09-07)
 
