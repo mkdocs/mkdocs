@@ -1,3 +1,9 @@
+html {
+    /* csslint ignore:start */
+    scroll-padding-top: 70px;
+    /* csslint ignore:end */
+}
+
 body {
     padding-top: 70px;
 }
@@ -38,19 +44,6 @@ ul.nav .main {
     border: 1px solid #ddd;
     border-radius: 4px;
     margin: 20px auto 30px auto;
-}
-
-/*
- * The code below adds some padding to the top of the current anchor target so
- * that, when navigating to it, the header isn't hidden by the navbar at the
- * top.
- */
-:target::before {
-    content: "";
-    display: block;
-    margin-top: -75px;
-    height: 75px;
-    pointer-events: none;
 }
 
 h1 {
