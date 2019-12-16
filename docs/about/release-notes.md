@@ -45,7 +45,7 @@ documentation][rtd-docs] for details.
 [upstream]: https://github.com/rtfd/sphinx_rtd_theme/
 [rtd-docs]: ../user-guide/styling-your-docs.md#readthedocs
 
-## Update `mkdocs` theme to bootswatch 4.1.3 (#1563)
+#### Update `mkdocs` theme to bootswatch 4.1.3 (#1563)
 
 The `mkdocs` theme now supports all the features of [Bootswatch 4.1]. Note that
 the [dropdowns] used in the navigation only support one level of nesting. If
@@ -53,6 +53,16 @@ your global navigation uses more than one level, things will likely be broken.
 
 [Bootswatch 4.1]: https://getbootstrap.com/docs/4.1/getting-started/introduction/
 [dropdowns]: https://getbootstrap.com/docs/4.1/components/navs/#pills-with-dropdowns
+
+#### Improved configuration support on the command line (#1401)
+
+The `build`, `serve`, and `gh-deploy` subcommands now support flags to control
+whether [directory URLs][directory-urls] should be created:
+`--use-directory-urls` / `--no-directory-urls`. In addition, the `gh-deploy`
+subcommand now supports all the configuration options that `build` and `serve`
+do, adding `--strict`, `--theme`, `--theme-dir`, and `--site-dir`.
+
+[directory-urls]: ../user-guide/configuration.md#use_directory_urls
 
 ### Other Changes and Additions to Version 1.1
 

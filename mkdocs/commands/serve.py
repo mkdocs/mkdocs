@@ -105,7 +105,7 @@ def _static_server(host, port, site_dir):
 
 
 def serve(config_file=None, dev_addr=None, strict=None, theme=None,
-          theme_dir=None, livereload='livereload'):
+          theme_dir=None, livereload='livereload', **kwargs):
     """
     Start the MkDocs development server
 
@@ -127,7 +127,8 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
             strict=strict,
             theme=theme,
             theme_dir=theme_dir,
-            site_dir=site_dir
+            site_dir=site_dir,
+            **kwargs
         )
         # Override a few config settings after validation
         config['site_url'] = 'http://{0}/'.format(config['dev_addr'])
