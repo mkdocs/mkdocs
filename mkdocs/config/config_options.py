@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
 
 import os
-import sys
 from collections import Sequence, namedtuple
+from urllib.parse import urlparse
 import markdown
 
 from mkdocs import utils, theme, plugins
@@ -262,7 +262,7 @@ class URL(OptionallyRequired):
             return value
 
         try:
-            parsed_url = utils.urlparse(value)
+            parsed_url = urlparse(value)
         except (AttributeError, TypeError):
             raise ValidationError("Unable to parse the URL.")
 
@@ -282,7 +282,7 @@ class RepoURL(URL):
     """
 
     def post_validation(self, config, key_name):
-        repo_host = utils.urlparse(config['repo_url']).netloc.lower()
+        repo_host = urlparse(config['repo_url']).netloc.lower()
         edit_uri = config.get('edit_uri')
 
         # derive repo_name from repo_url if unset

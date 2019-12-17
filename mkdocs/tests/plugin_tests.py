@@ -8,7 +8,6 @@ import mock
 import os
 
 from mkdocs import plugins
-from mkdocs import utils
 from mkdocs import config
 
 

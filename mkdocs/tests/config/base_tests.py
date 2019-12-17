@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from tempfile import TemporaryDirectory
 
-from mkdocs import exceptions, utils
+from mkdocs import exceptions
 from mkdocs.config import base, defaults
 from mkdocs.config.config_options import BaseConfigOption
 

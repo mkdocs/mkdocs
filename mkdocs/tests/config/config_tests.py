@@ -9,7 +9,6 @@ from tempfile import TemporaryDirectory
 
 import mkdocs
 from mkdocs import config
-from mkdocs import utils
 from mkdocs.config import config_options
 from mkdocs.exceptions import ConfigurationError
 from mkdocs.tests.base import dedent

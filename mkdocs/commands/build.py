@@ -7,6 +7,7 @@ import logging
 import os
 import gzip
 import io
+from urllib.parse import urlparse
 
 from jinja2.exceptions import TemplateNotFound
 import jinja2
@@ -82,7 +83,7 @@ def _build_template(name, template, files, config, nav):
         # See https://github.com/mkdocs/mkdocs/issues/77.
         # However, if site_url is not set, assume the docs root and server root
         # are the same. See https://github.com/mkdocs/mkdocs/issues/1598.
-        base_url = utils.urlparse(config['site_url'] or '/').path
+        base_url = urlparse(config['site_url'] or '/').path
     else:
         base_url = utils.get_relative_url('.', name)
 

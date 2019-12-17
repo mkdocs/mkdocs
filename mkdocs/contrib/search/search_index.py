@@ -10,12 +10,7 @@ import subprocess
 
 from lunr import lunr
 
-from mkdocs import utils
-
-try:                                    # pragma: no cover
-    from html.parser import HTMLParser  # noqa
-except ImportError:                     # pragma: no cover
-    from HTMLParser import HTMLParser   # noqa
+from html.parser import HTMLParser
 
 log = logging.getLogger(__name__)
 

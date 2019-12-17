@@ -7,10 +7,7 @@ an HTML table of contents, and then parse that into the underlying data.
 """
 from __future__ import unicode_literals
 
-try:                                    # pragma: no cover
-    from html.parser import HTMLParser  # noqa
-except ImportError:                     # pragma: no cover
-    from HTMLParser import HTMLParser   # noqa
+from html.parser import HTMLParser
 
 
 def get_toc(toc_html):

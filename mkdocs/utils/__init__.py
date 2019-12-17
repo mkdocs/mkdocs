@@ -14,17 +14,12 @@ import os
 import pkg_resources
 import shutil
 import re
-import sys
 import yaml
 import fnmatch
 import posixpath
+from urllib.parse import urlparse
 
 from mkdocs import exceptions
-
-from urllib.parse import urlparse, urlunparse, urljoin
-from urllib.parse import quote as urlquote
-from urllib.parse import unquote as urlunquote
-from collections import UserDict
 
 log = logging.getLogger(__name__)
 

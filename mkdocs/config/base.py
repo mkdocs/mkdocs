@@ -3,6 +3,7 @@ import logging
 import os
 import sys
 from yaml import YAMLError
+from collections import UserDict
 
 from mkdocs import exceptions
 from mkdocs import utils
@@ -15,7 +16,7 @@ class ValidationError(Exception):
     """Raised during the validation process of the config on errors."""
 
 
-class Config(utils.UserDict):
+class Config(UserDict):
     """
     MkDocs Configuration dict
 

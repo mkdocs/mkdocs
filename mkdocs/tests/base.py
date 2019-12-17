@@ -2,9 +2,6 @@ from __future__ import unicode_literals
 import textwrap
 import markdown
 import os
-import logging
-import collections
-import unittest
 from functools import wraps
 from tempfile import TemporaryDirectory
 

@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 import unittest
 import mock
 import logging
-import sys
 import io
 
 from click.testing import CliRunner

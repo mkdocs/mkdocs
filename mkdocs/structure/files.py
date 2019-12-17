@@ -5,6 +5,7 @@ import fnmatch
 import os
 import logging
 from functools import cmp_to_key
+from urllib.parse import quote as urlquote
 
 from mkdocs import utils
 
@@ -167,7 +168,7 @@ class File(object):
                 url = '.'
             else:
                 url = dirname + '/'
-        return utils.urlquote(url)
+        return urlquote(url)
 
     def url_relative_to(self, other):
         """ Return url for file relative to other file. """

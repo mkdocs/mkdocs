@@ -8,7 +8,6 @@ import unittest
 from mock import patch
 
 import mkdocs
-from mkdocs import utils
 from mkdocs.config import config_options
 from mkdocs.config.base import Config
 
