@@ -4,7 +4,7 @@
 from __future__ import unicode_literals
 
 import unittest
-import mock
+from unittest import mock
 import os
 
 from mkdocs import plugins

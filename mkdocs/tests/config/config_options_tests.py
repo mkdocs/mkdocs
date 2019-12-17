@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import os
 import sys
 import unittest
-from mock import patch
+from unittest.mock import patch
 
 import mkdocs
 from mkdocs.config import config_options

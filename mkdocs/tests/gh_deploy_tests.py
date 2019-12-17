@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 import unittest
-import mock
+from unittest import mock
 
 from mkdocs.tests.base import load_config
 from mkdocs.commands import gh_deploy
@@ -9,6 +9,20 @@ from mkdocs import __version__
 
 
 class TestGitHubDeploy(unittest.TestCase):
+
+    def assert_mock_called_once(self, mock):
+        """assert that the mock was called only once.
+
+        The `mock.assert_called_once()` method was added in PY36.
+        TODO: Remove this when PY35 support is dropped.
+        """
+        try:
+            mock.assert_called_once()
+        except AttributeError:
+            if not mock.call_count == 1:
+                msg = ("Expected '%s' to have been called once. Called %s times." %
+                       (mock._mock_name or 'mock', self.call_count))
+                raise AssertionError(msg)
 
     @mock.patch('subprocess.Popen')
     def test_is_cwd_git_repo(self, mock_popeno):
@@ -114,7 +128,7 @@ class TestGitHubDeploy(unittest.TestCase):
             remote_branch='test',
         )
         gh_deploy.gh_deploy(config)
-        check_version.assert_called_once()
+        self.assert_mock_called_once(check_version)
 
     @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
     @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')

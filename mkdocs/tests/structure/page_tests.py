@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 import unittest
 import os
 import sys
-import mock
+from unittest import mock
 import io
 from tempfile import TemporaryDirectory
 

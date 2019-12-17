@@ -3,7 +3,7 @@
 
 from __future__ import unicode_literals
 import unittest
-import mock
+from unittest import mock
 import logging
 import io
 

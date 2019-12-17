@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 import os
 import tempfile
 import unittest
-import mock
+from unittest import mock
 
 import mkdocs
 from mkdocs.theme import Theme
