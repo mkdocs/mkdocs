@@ -3,7 +3,6 @@ from calendar import timegm
 import logging
 import os
 import gzip
-import io
 from urllib.parse import urlparse
 
 from jinja2.exceptions import TemplateNotFound

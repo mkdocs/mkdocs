@@ -1,6 +1,5 @@
 import unittest
 import os
-import io
 from unittest import mock
 
 from mkdocs.structure.files import Files, File, get_files, _sort_files, _filter_paths

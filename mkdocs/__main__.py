@@ -4,7 +4,6 @@ import os
 import sys
 import logging
 import click
-import socket
 
 from mkdocs import __version__
 from mkdocs import utils

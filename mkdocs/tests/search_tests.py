@@ -359,7 +359,7 @@ class SearchIndexTests(unittest.TestCase):
         # See https://stackoverflow.com/a/36501078/866026
         mock_popen.return_value = mock.Mock()
         mock_popen_obj = mock_popen.return_value
-        mock_popen_obj.communicate.side_effect = IOError
+        mock_popen_obj.communicate.side_effect = OSError
         mock_popen_obj.returncode = 1
 
         index = search_index.SearchIndex(prebuild_index=True)

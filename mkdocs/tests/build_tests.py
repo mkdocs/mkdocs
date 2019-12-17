@@ -241,7 +241,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
 
     # Test build._build_extra_template
 
-    @mock.patch('io.open', mock.mock_open(read_data='template content'))
+    @mock.patch('builtins.open', mock.mock_open(read_data='template content'))
     def test_build_extra_template(self):
         cfg = load_config()
         files = Files([
@@ -249,7 +249,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         ])
         build._build_extra_template('foo.html', files, cfg, mock.Mock())
 
-    @mock.patch('io.open', mock.mock_open(read_data='template content'))
+    @mock.patch('builtins.open', mock.mock_open(read_data='template content'))
     def test_skip_missing_extra_template(self):
         cfg = load_config()
         files = Files([
@@ -262,7 +262,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             ["WARNING:mkdocs.commands.build:Template skipped: 'missing.html' not found in docs_dir."]
         )
 
-    @mock.patch('io.open', side_effect=IOError('Error message.'))
+    @mock.patch('builtins.open', side_effect=OSError('Error message.'))
     def test_skip_ioerror_extra_template(self, mock_open):
         cfg = load_config()
         files = Files([
@@ -275,7 +275,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             ["WARNING:mkdocs.commands.build:Error reading template 'foo.html': Error message."]
         )
 
-    @mock.patch('io.open', mock.mock_open(read_data=''))
+    @mock.patch('builtins.open', mock.mock_open(read_data=''))
     def test_skip_extra_template_empty_output(self):
         cfg = load_config()
         files = Files([
@@ -319,13 +319,13 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         self.assertEqual(page.content, None)
 
     @tempdir(files={'index.md': 'new page content'})
-    @mock.patch('io.open', side_effect=IOError('Error message.'))
+    @mock.patch('builtins.open', side_effect=OSError('Error message.'))
     def test_populate_page_read_error(self, docs_dir, mock_open):
         cfg = load_config(docs_dir=docs_dir)
         file = File('missing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
         page = Page('Foo', file, cfg)
         with self.assertLogs('mkdocs', level='ERROR') as cm:
-            self.assertRaises(IOError, build._populate_page, page, cfg, Files([file]))
+            self.assertRaises(OSError, build._populate_page, page, cfg, Files([file]))
         self.assertEqual(
             cm.output, [
                 'ERROR:mkdocs.structure.pages:File not found: missing.md',
@@ -415,7 +415,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         self.assertPathIsFile(site_dir, 'index.html')
 
     @tempdir()
-    @mock.patch('mkdocs.utils.write_file', side_effect=IOError('Error message.'))
+    @mock.patch('mkdocs.utils.write_file', side_effect=OSError('Error message.'))
     def test_build_page_error(self, site_dir, mock_write_file):
         cfg = load_config(site_dir=site_dir, nav=['index.md'], plugins=[])
         files = Files([File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])])
@@ -426,7 +426,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         page.markdown = 'page content'
         page.content = '<p>page content</p>'
         with self.assertLogs('mkdocs', level='ERROR') as cm:
-            self.assertRaises(IOError, build._build_page, page, cfg, files, nav, cfg['theme'].get_env())
+            self.assertRaises(OSError, build._build_page, page, cfg, files, nav, cfg['theme'].get_env())
         self.assertEqual(
             cm.output,
             ["ERROR:mkdocs.commands.build:Error building page 'index.md': Error message."]

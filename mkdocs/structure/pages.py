@@ -1,5 +1,4 @@
 import os
-import io
 import datetime
 import logging
 from urllib.parse import urlparse, urlunparse, urljoin

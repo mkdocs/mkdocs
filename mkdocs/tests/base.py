@@ -62,7 +62,7 @@ def tempdir(files=None, **kw):
             assert os.path.isfile(os.path.join(tdir, 'foo.txt'))
             pth = os.path.join(tdir, 'bar.txt')
             assert os.path.isfile(pth)
-            with io.open(pth, 'r', encoding='utf-8') as f:
+            with open(pth, 'r', encoding='utf-8') as f:
                 assert f.read() == 'bar content'
     """
     files = {f: '' for f in files} if isinstance(files, (list, tuple)) else files or {}
