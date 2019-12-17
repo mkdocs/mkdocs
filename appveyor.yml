@@ -1,9 +1,6 @@
 build: false
 environment:
   matrix:
-    - TOXENV: py27-integration
-    - TOXENV: py27-min-req
-    - TOXENV: py27-unittests
     - TOXENV: py34-integration
     - TOXENV: py34-min-req
     - TOXENV: py34-unittests
@@ -20,9 +17,9 @@ environment:
 init:
   - "ECHO %TOXENV%"
 install:
-  - "c:\\python27\\Scripts\\pip install tox"
+  - "c:\\python37\\Scripts\\pip install tox"
 test_script:
   - "git clean -f -d -x"
-  - "c:\\python27\\Scripts\\tox --version"
-  - "c:\\python27\\Scripts\\pip --version"
-  - "c:\\python27\\Scripts\\tox"
+  - "c:\\python37\\Scripts\\tox --version"
+  - "c:\\python37\\Scripts\\pip --version"
+  - "c:\\python37\\Scripts\\tox"
