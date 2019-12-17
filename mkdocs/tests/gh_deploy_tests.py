@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 import unittest
 import mock
 
-from mkdocs.tests.base import load_config, LogTestCase
+from mkdocs.tests.base import load_config
 from mkdocs.commands import gh_deploy
 from mkdocs import __version__
 
@@ -147,7 +147,7 @@ class TestGitHubDeploy(unittest.TestCase):
                                                error_string)
 
 
-class TestGitHubDeployLogs(LogTestCase):
+class TestGitHubDeployLogs(unittest.TestCase):
 
     @mock.patch('subprocess.Popen')
     def test_mkdocs_newer(self, mock_popeno):

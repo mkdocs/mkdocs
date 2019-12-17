@@ -31,7 +31,7 @@ class Config(utils.UserDict):
         self._schema = schema
         self._schema_keys = set(dict(schema).keys())
         # Ensure config_file_path is a Unicode string
-        if config_file_path is not None and not isinstance(config_file_path, utils.text_type):
+        if config_file_path is not None and not isinstance(config_file_path, str):
             try:
                 # Assume config_file_path is encoded with the file system encoding.
                 config_file_path = config_file_path.decode(encoding=sys.getfilesystemencoding())
@@ -152,7 +152,7 @@ def _open_config_file(config_file):
     log.debug("Loading configuration file: {0}".format(config_file))
 
     # If it is a string, we can assume it is a path and attempt to open it.
-    if isinstance(config_file, utils.string_types):
+    if isinstance(config_file, str):
         if os.path.exists(config_file):
             config_file = open(config_file, 'rb')
         else:

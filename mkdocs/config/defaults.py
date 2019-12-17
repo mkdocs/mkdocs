@@ -14,10 +14,10 @@ from mkdocs.config import config_options
 DEFAULT_SCHEMA = (
 
     # Reserved for internal use, stores the mkdocs.yml config file.
-    ('config_file_path', config_options.Type(utils.string_types)),
+    ('config_file_path', config_options.Type(str)),
 
     # The title to use for the documentation
-    ('site_name', config_options.Type(utils.string_types, required=True)),
+    ('site_name', config_options.Type(str, required=True)),
 
     # Defines the structure of the navigation.
     ('nav', config_options.Nav()),
@@ -29,9 +29,9 @@ DEFAULT_SCHEMA = (
 
     # A description for the documentation project that will be added to the
     # HTML meta tags.
-    ('site_description', config_options.Type(utils.string_types)),
+    ('site_description', config_options.Type(str)),
     # The name of the author to add to the HTML meta tags
-    ('site_author', config_options.Type(utils.string_types)),
+    ('site_author', config_options.Type(str)),
 
     # The MkDocs theme for the documentation.
     ('theme', config_options.Theme(default='mkdocs')),
@@ -43,7 +43,7 @@ DEFAULT_SCHEMA = (
     ('site_dir', config_options.SiteDir(default='site')),
 
     # A copyright notice to add to the footer of documentation.
-    ('copyright', config_options.Type(utils.string_types)),
+    ('copyright', config_options.Type(str)),
 
     # set of values for Google analytics containing the account IO and domain,
     # this should look like, ['UA-27795084-5', 'mkdocs.org']
@@ -67,13 +67,13 @@ DEFAULT_SCHEMA = (
     # Default, If repo_url is unset then None, otherwise
     # "GitHub", "Bitbucket" or "GitLab" for known url or Hostname
     # for unknown urls.
-    ('repo_name', config_options.Type(utils.string_types)),
+    ('repo_name', config_options.Type(str)),
 
     # Specify a URI to the docs dir in the project source repo, relative to the
     # repo_url. When set, a link directly to the page in the source repo will
     # be added to the generated HTML. If repo_url is not set also, this option
     # is ignored.
-    ('edit_uri', config_options.Type(utils.string_types)),
+    ('edit_uri', config_options.Type(str)),
 
     # Specify which css or javascript files from the docs directory should be
     # additionally included in the site.
@@ -98,10 +98,10 @@ DEFAULT_SCHEMA = (
 
     # the remote branch to commit to when using gh-deploy
     ('remote_branch', config_options.Type(
-        utils.string_types, default='gh-pages')),
+        str, default='gh-pages')),
 
     # the remote name to push to when using gh-deploy
-    ('remote_name', config_options.Type(utils.string_types, default='origin')),
+    ('remote_name', config_options.Type(str, default='origin')),
 
     # extra is a mapping/dictionary of data that is passed to the template.
     # This allows template authors to require extra configuration that not

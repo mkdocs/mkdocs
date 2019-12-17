@@ -5,16 +5,11 @@ import os
 import sys
 import mock
 import io
-
-try:
-    # py>=3.2
-    from tempfile import TemporaryDirectory
-except ImportError:
-    from backports.tempfile import TemporaryDirectory
+from tempfile import TemporaryDirectory
 
 from mkdocs.structure.pages import Page
 from mkdocs.structure.files import File, Files
-from mkdocs.tests.base import load_config, dedent, LogTestCase
+from mkdocs.tests.base import load_config, dedent
 
 
 class PageTests(unittest.TestCase):
@@ -695,7 +690,7 @@ class SourceDateEpochTests(unittest.TestCase):
             del os.environ['SOURCE_DATE_EPOCH']
 
 
-class RelativePathExtensionTests(LogTestCase):
+class RelativePathExtensionTests(unittest.TestCase):
 
     DOCS_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../integration/subpages/docs')
 

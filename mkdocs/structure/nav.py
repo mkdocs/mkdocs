@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import logging
 
 from mkdocs.structure.pages import Page
-from mkdocs.utils import string_types, nest_paths, urlparse, warning_filter
+from mkdocs.utils import nest_paths, urlparse, warning_filter
 
 log = logging.getLogger(__name__)
 log.addFilter(warning_filter)
@@ -150,7 +150,7 @@ def _data_to_navigation(data, files, config):
     if isinstance(data, dict):
         return [
             _data_to_navigation((key, value), files, config)
-            if isinstance(value, string_types) else
+            if isinstance(value, str) else
             Section(title=key, children=_data_to_navigation(value, files, config))
             for key, value in data.items()
         ]

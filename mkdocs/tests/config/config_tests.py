@@ -5,13 +5,7 @@ from __future__ import unicode_literals
 import os
 import tempfile
 import unittest
-
-try:
-    # py>=3.2
-    from tempfile import TemporaryDirectory
-except ImportError:
-    from backports.tempfile import TemporaryDirectory
-
+from tempfile import TemporaryDirectory
 
 import mkdocs
 from mkdocs import config
@@ -19,10 +13,6 @@ from mkdocs import utils
 from mkdocs.config import config_options
 from mkdocs.exceptions import ConfigurationError
 from mkdocs.tests.base import dedent
-
-
-def ensure_utf(string):
-    return string.encode('utf-8') if not utils.PY3 else string
 
 
 class ConfigTests(unittest.TestCase):
@@ -60,7 +50,7 @@ class ConfigTests(unittest.TestCase):
         """)
         config_file = tempfile.NamedTemporaryFile('w', delete=False)
         try:
-            config_file.write(ensure_utf(file_contents))
+            config_file.write(file_contents)
             config_file.flush()
             config_file.close()
 
@@ -92,7 +82,7 @@ class ConfigTests(unittest.TestCase):
             config_path = os.path.join(temp_path, 'mkdocs.yml')
             config_file = open(config_path, 'w')
 
-            config_file.write(ensure_utf(file_contents))
+            config_file.write(file_contents)
             config_file.flush()
             config_file.close()
 
@@ -269,7 +259,7 @@ class ConfigTests(unittest.TestCase):
             c = config.Config(schema=(
                 ('docs_dir', config_options.Dir(default='docs')),
                 ('site_dir', config_options.SiteDir(default='site')),
-                ('config_file_path', config_options.Type(utils.string_types))
+                ('config_file_path', config_options.Type(str))
             ))
             c.load_dict(patch)
 

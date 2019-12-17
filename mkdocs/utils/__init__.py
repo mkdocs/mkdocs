@@ -21,32 +21,10 @@ import posixpath
 
 from mkdocs import exceptions
 
-try:                                                        # pragma: no cover
-    from urllib.parse import urlparse, urlunparse, urljoin  # noqa
-    from urllib.parse import quote as urlquote              # noqa
-    from urllib.parse import unquote as urlunquote          # noqa
-    from collections import UserDict                        # noqa
-except ImportError:                                         # pragma: no cover
-    from urlparse import urlparse, urlunparse, urljoin      # noqa
-    from urllib import quote                                # noqa
-    from urllib import unquote                              # noqa
-    from UserDict import UserDict                           # noqa
-
-
-PY3 = sys.version_info[0] == 3
-
-if PY3:                         # pragma: no cover
-    string_types = str,         # noqa
-    text_type = str             # noqa
-else:                           # pragma: no cover
-    string_types = basestring,  # noqa
-    text_type = unicode         # noqa
-
-    def urlunquote(path):  # noqa
-        return unquote(path.encode('utf8', errors='backslashreplace')).decode('utf8', errors='replace')
-
-    def urlquote(path):  # noqa
-        return quote(path.encode('utf8', errors='backslashreplace')).decode('utf8', errors='replace')
+from urllib.parse import urlparse, urlunparse, urljoin
+from urllib.parse import quote as urlquote
+from urllib.parse import unquote as urlunquote
+from collections import UserDict
 
 log = logging.getLogger(__name__)
 

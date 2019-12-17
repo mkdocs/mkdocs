@@ -14,7 +14,7 @@ from mkdocs import config
 
 class DummyPlugin(plugins.BasePlugin):
     config_scheme = (
-        ('foo', config.config_options.Type(utils.string_types, default='default foo')),
+        ('foo', config.config_options.Type(str, default='default foo')),
         ('bar', config.config_options.Type(int, default=0)),
         ('dir', config.config_options.Dir(exists=False)),
     )

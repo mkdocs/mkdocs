@@ -3,12 +3,13 @@
 
 from __future__ import unicode_literals
 import mock
+import unittest
 
 from mkdocs.structure.pages import Page
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.nav import get_navigation
 from mkdocs.commands import build
-from mkdocs.tests.base import load_config, LogTestCase, tempdir, PathAssertionMixin
+from mkdocs.tests.base import load_config, tempdir, PathAssertionMixin
 from mkdocs.utils import meta
 
 
@@ -22,7 +23,7 @@ def build_page(title, path, config, md_src=''):
     return page, files
 
 
-class BuildTests(PathAssertionMixin, LogTestCase):
+class BuildTests(PathAssertionMixin, unittest.TestCase):
 
     # Test build.get_context
 

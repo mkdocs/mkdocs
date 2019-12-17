@@ -173,7 +173,7 @@ class Choice(OptionallyRequired):
         except TypeError:
             length = 0
 
-        if not length or isinstance(choices, utils.string_types):
+        if not length or isinstance(choices, str):
             raise ValueError('Expected iterable of choices, got {}', choices)
 
         self.choices = choices
@@ -321,7 +321,7 @@ class FilesystemObject(Type):
     Base class for options that point to filesystem objects.
     """
     def __init__(self, exists=False, **kwargs):
-        super(FilesystemObject, self).__init__(type_=utils.string_types, **kwargs)
+        super(FilesystemObject, self).__init__(type_=str, **kwargs)
         self.exists = exists
         self.config_dir = None
 
@@ -330,21 +330,13 @@ class FilesystemObject(Type):
 
     def run_validation(self, value):
         value = super(FilesystemObject, self).run_validation(value)
-        # PY2 only: Ensure value is a Unicode string. On PY3 byte strings fail
-        # the type test (super.run_validation) so we never get this far.
-        if not isinstance(value, utils.text_type):
-            try:
-                # Assume value is encoded with the file system encoding.
-                value = value.decode(encoding=sys.getfilesystemencoding())
-            except UnicodeDecodeError:
-                raise ValidationError("The path is not a Unicode string.")
         if self.config_dir and not os.path.isabs(value):
             value = os.path.join(self.config_dir, value)
         if self.exists and not self.existence_test(value):
             raise ValidationError("The path {path} isn't an existing {name}.".
                                   format(path=value, name=self.name))
         value = os.path.abspath(value)
-        assert isinstance(value, utils.text_type)
+        assert isinstance(value, str)
         return value
 
 
@@ -424,7 +416,7 @@ class Theme(BaseConfigOption):
         if value is None and self.default is not None:
             value = {'name': self.default}
 
-        if isinstance(value, utils.string_types):
+        if isinstance(value, str):
             value = {'name': value}
 
         themes = utils.get_theme_names()
@@ -482,11 +474,11 @@ class Nav(OptionallyRequired):
             return
 
         config_types = set(type(l) for l in value)
-        if config_types.issubset({utils.text_type, dict, str}):
+        if config_types.issubset({str, dict, str}):
             return value
 
         raise ValidationError("Invalid pages config. {0} {1}".format(
-            config_types, {utils.text_type, dict}
+            config_types, {str, dict}
         ))
 
     def post_validation(self, config, key_name):
@@ -543,7 +535,7 @@ class MarkdownExtensions(OptionallyRequired):
                     raise ValidationError('Invalid config options for Markdown '
                                           "Extension '{0}'.".format(ext))
                 self.configdata[ext] = cfg
-            elif isinstance(item, utils.string_types):
+            elif isinstance(item, str):
                 extensions.append(item)
             else:
                 raise ValidationError('Invalid Markdown Extensions configuration')
@@ -595,7 +587,7 @@ class Plugins(OptionallyRequired):
             else:
                 cfg = {}
 
-            if not isinstance(item, utils.string_types):
+            if not isinstance(item, str):
                 raise ValidationError('Invalid Plugins configuration')
 
             plgins[item] = self.load_plugin(item, cfg)

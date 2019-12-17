@@ -54,7 +54,7 @@ class TypeTest(unittest.TestCase):
 
     def test_single_type(self):
 
-        option = config_options.Type(utils.string_types)
+        option = config_options.Type(str)
         value = option.validate("Testing")
         self.assertEqual(value, "Testing")
 
@@ -71,7 +71,7 @@ class TypeTest(unittest.TestCase):
                           option.validate, {'a': 1})
 
     def test_length(self):
-        option = config_options.Type(utils.string_types, length=7)
+        option = config_options.Type(str, length=7)
 
         value = option.validate("Testing")
         self.assertEqual(value, "Testing")
@@ -105,7 +105,7 @@ class IpAddressTest(unittest.TestCase):
 
         option = config_options.IpAddress()
         value = option.validate(addr)
-        self.assertEqual(utils.text_type(value), addr)
+        self.assertEqual(str(value), addr)
         self.assertEqual(value.host, '127.0.0.1')
         self.assertEqual(value.port, 8000)
 
@@ -114,7 +114,7 @@ class IpAddressTest(unittest.TestCase):
 
         option = config_options.IpAddress()
         value = option.validate(addr)
-        self.assertEqual(utils.text_type(value), addr)
+        self.assertEqual(str(value), addr)
         self.assertEqual(value.host, '[::1]')
         self.assertEqual(value.port, 8000)
 
@@ -123,7 +123,7 @@ class IpAddressTest(unittest.TestCase):
 
         option = config_options.IpAddress()
         value = option.validate(addr)
-        self.assertEqual(utils.text_type(value), addr)
+        self.assertEqual(str(value), addr)
         self.assertEqual(value.host, 'localhost')
         self.assertEqual(value.port, 8000)
 
@@ -132,7 +132,7 @@ class IpAddressTest(unittest.TestCase):
 
         option = config_options.IpAddress(default=addr)
         value = option.validate(None)
-        self.assertEqual(utils.text_type(value), addr)
+        self.assertEqual(str(value), addr)
         self.assertEqual(value.host, '127.0.0.1')
         self.assertEqual(value.port, 8000)
 
@@ -310,7 +310,7 @@ class DirTest(unittest.TestCase):
 
         self.assertEqual(len(fails), 0)
         self.assertEqual(len(warns), 0)
-        self.assertIsInstance(cfg['dir'], utils.text_type)
+        self.assertIsInstance(cfg['dir'], str)
 
     def test_dir_filesystemencoding(self):
         cfg = Config(
@@ -326,16 +326,9 @@ class DirTest(unittest.TestCase):
 
         fails, warns = cfg.validate()
 
-        if utils.PY3:
-            # In PY3 string_types does not include byte strings so validation fails
-            self.assertEqual(len(fails), 1)
-            self.assertEqual(len(warns), 0)
-        else:
-            # In PY2 string_types includes byte strings so validation passes
-            # This test confirms that the byte string is properly decoded
-            self.assertEqual(len(fails), 0)
-            self.assertEqual(len(warns), 0)
-            self.assertIsInstance(cfg['dir'], utils.text_type)
+        # str does not include byte strings so validation fails
+        self.assertEqual(len(fails), 1)
+        self.assertEqual(len(warns), 0)
 
     def test_dir_bad_encoding_fails(self):
         cfg = Config(
@@ -351,12 +344,7 @@ class DirTest(unittest.TestCase):
 
         fails, warns = cfg.validate()
 
-        if sys.platform.startswith('win') and not utils.PY3:
-            # PY2 on Windows seems to be able to decode anything we give it.
-            # But that just means less possable errors for those users so we allow it.
-            self.assertEqual(len(fails), 0)
-        else:
-            self.assertEqual(len(fails), 1)
+        self.assertEqual(len(fails), 1)
         self.assertEqual(len(warns), 0)
 
     def test_config_dir_prepended(self):
@@ -376,7 +364,7 @@ class DirTest(unittest.TestCase):
 
         self.assertEqual(len(fails), 0)
         self.assertEqual(len(warns), 0)
-        self.assertIsInstance(cfg['dir'], utils.text_type)
+        self.assertIsInstance(cfg['dir'], str)
         self.assertEqual(cfg['dir'], os.path.join(base_path, 'foo'))
 
     def test_dir_is_config_dir_fails(self):

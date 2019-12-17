@@ -52,7 +52,7 @@ class SearchIndex(object):
 
         self._entries.append({
             'title': title,
-            'text': utils.text_type(text.encode('utf-8'), encoding='utf-8'),
+            'text': str(text.encode('utf-8'), encoding='utf-8'),
             'location': loc
         })
 

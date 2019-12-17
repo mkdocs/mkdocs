@@ -2,12 +2,7 @@ from __future__ import unicode_literals
 import os
 import tempfile
 import unittest
-
-try:
-    # py>=3.2
-    from tempfile import TemporaryDirectory
-except ImportError:
-    from backports.tempfile import TemporaryDirectory
+from tempfile import TemporaryDirectory
 
 from mkdocs import exceptions, utils
 from mkdocs.config import base, defaults
@@ -274,6 +269,6 @@ class ConfigBaseTests(unittest.TestCase):
             self.assertEqual(cfg['site_name'], 'MkDocs Test')
             self.assertEqual(cfg['docs_dir'], docs_dir)
             self.assertEqual(cfg.config_file_path, config_fname)
-            self.assertIsInstance(cfg.config_file_path, utils.text_type)
+            self.assertIsInstance(cfg.config_file_path, str)
         finally:
             config_dir.cleanup()
