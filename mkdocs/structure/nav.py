@@ -1,6 +1,3 @@
-# coding: utf-8
-
-from __future__ import unicode_literals
 import logging
 from urllib.parse import urlparse
 
@@ -11,7 +8,7 @@ log = logging.getLogger(__name__)
 log.addFilter(warning_filter)
 
 
-class Navigation(object):
+class Navigation:
     def __init__(self, items, pages):
         self.items = items  # Nested List with full navigation of Sections, Pages, and Links.
         self.pages = pages  # Flat List of subset of Pages in nav, in order.
@@ -32,7 +29,7 @@ class Navigation(object):
         return len(self.items)
 
 
-class Section(object):
+class Section:
     def __init__(self, title, children):
         self.title = title
         self.children = children
@@ -45,7 +42,7 @@ class Section(object):
         self.is_link = False
 
     def __repr__(self):
-        return "Section(title='{0}')".format(self.title)
+        return "Section(title='{}')".format(self.title)
 
     def _get_active(self):
         """ Return active status of section. """
@@ -72,7 +69,7 @@ class Section(object):
         return '\n'.join(ret)
 
 
-class Link(object):
+class Link:
     def __init__(self, title, url):
         self.title = title
         self.url = url

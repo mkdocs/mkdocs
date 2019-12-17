@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from mkdocs.config import config_options
 
 # NOTE: The order here is important. During validation some config options

@@ -15,7 +15,6 @@
 
 #   0. opan saurce LOL
 
-from __future__ import unicode_literals
 
 import errno
 import logging
@@ -42,7 +41,7 @@ if sys.version_info[0] == 3:
     def write(pipe, data):
         try:
             pipe.stdin.write(data)
-        except IOError as e:
+        except OSError as e:
             if e.errno != errno.EPIPE:
                 raise
 else:
@@ -69,7 +68,7 @@ def normalize_path(path):
 
 
 def try_rebase(remote, branch):
-    cmd = ['git', 'rev-list', '--max-count=1', '%s/%s' % (remote, branch)]
+    cmd = ['git', 'rev-list', '--max-count=1', '{}/{}'.format(remote, branch)]
     p = sp.Popen(cmd, stdin=sp.PIPE, stdout=sp.PIPE, stderr=sp.PIPE)
     (rev, _) = p.communicate()
     if p.wait() != 0:
@@ -99,14 +98,14 @@ def mk_when(timestamp=None):
     if timestamp is None:
         timestamp = int(time.time())
     currtz = "%+05d" % (-1 * time.timezone / 36)  # / 3600 * 100
-    return "%s %s" % (timestamp, currtz)
+    return "{} {}".format(timestamp, currtz)
 
 
 def start_commit(pipe, branch, message):
     uname = dec(get_config("user.name"))
     email = dec(get_config("user.email"))
     write(pipe, enc('commit refs/heads/%s\n' % branch))
-    write(pipe, enc('committer %s <%s> %s\n' % (uname, email, mk_when())))
+    write(pipe, enc('committer {} <{}> {}\n'.format(uname, email, mk_when())))
     write(pipe, enc('data %d\n%s\n' % (len(message), message)))
     head = get_prev_commit(branch)
     if head:

@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import os
 import tempfile
 import unittest
@@ -16,7 +14,7 @@ theme_dir = os.path.abspath(os.path.join(mkdocs_dir, 'themes'))
 
 def get_vars(theme):
     """ Return dict of theme vars. """
-    return dict([(k, theme[k]) for k in iter(theme)])
+    return {k: theme[k] for k in iter(theme)}
 
 
 class ThemeTests(unittest.TestCase):
@@ -27,7 +25,7 @@ class ThemeTests(unittest.TestCase):
             theme.dirs,
             [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir]
         )
-        self.assertEqual(theme.static_templates, set(['404.html', 'sitemap.xml']))
+        self.assertEqual(theme.static_templates, {'404.html', 'sitemap.xml'})
         self.assertEqual(get_vars(theme), {
             'include_search_page': False,
             'search_index_only': False,
@@ -62,7 +60,7 @@ class ThemeTests(unittest.TestCase):
         theme = Theme(name='mkdocs', static_templates='foo.html')
         self.assertEqual(
             theme.static_templates,
-            set(['404.html', 'sitemap.xml', 'foo.html'])
+            {'404.html', 'sitemap.xml', 'foo.html'}
         )
 
     def test_vars(self):
@@ -79,7 +77,7 @@ class ThemeTests(unittest.TestCase):
     def test_no_theme_config(self, m):
         theme = Theme(name='mkdocs')
         self.assertEqual(m.call_count, 1)
-        self.assertEqual(theme.static_templates, set(['sitemap.xml']))
+        self.assertEqual(theme.static_templates, {'sitemap.xml'})
 
     def test_inherited_theme(self):
         m = mock.Mock(side_effect=[
@@ -98,5 +96,5 @@ class ThemeTests(unittest.TestCase):
                 ]
             )
             self.assertEqual(
-                theme.static_templates, set(['sitemap.xml', 'child.html', 'parent.html'])
+                theme.static_templates, {'sitemap.xml', 'child.html', 'parent.html'}
             )

@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import unicode_literals
 import os
 import tempfile
 import unittest
@@ -198,7 +196,7 @@ class ConfigTests(unittest.TestCase):
                 self.assertEqual(len(errors), 0)
                 self.assertEqual(c['theme'].dirs, result['dirs'])
                 self.assertEqual(c['theme'].static_templates, set(result['static_templates']))
-                self.assertEqual(dict([(k, c['theme'][k]) for k in iter(c['theme'])]), result['vars'])
+                self.assertEqual({k: c['theme'][k] for k in iter(c['theme'])}, result['vars'])
 
     def test_empty_nav(self):
         conf = config.Config(schema=config.DEFAULT_SCHEMA)

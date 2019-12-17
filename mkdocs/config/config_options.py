@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import os
 from collections import Sequence, namedtuple
 from urllib.parse import urlparse
@@ -9,7 +7,7 @@ from mkdocs import utils, theme, plugins
 from mkdocs.config.base import Config, ValidationError
 
 
-class BaseConfigOption(object):
+class BaseConfigOption:
 
     def __init__(self):
         self.warnings = []
@@ -101,7 +99,7 @@ class OptionallyRequired(BaseConfigOption):
     """
 
     def __init__(self, default=None, required=False):
-        super(OptionallyRequired, self).__init__()
+        super().__init__()
         self.default = default
         self.required = required
 
@@ -140,14 +138,14 @@ class Type(OptionallyRequired):
     """
 
     def __init__(self, type_, length=None, **kwargs):
-        super(Type, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self._type = type_
         self.length = length
 
     def run_validation(self, value):
 
         if not isinstance(value, self._type):
-            msg = ("Expected type: {0} but received: {1}"
+            msg = ("Expected type: {} but received: {}"
                    .format(self._type, type(value)))
         elif self.length is not None and len(value) != self.length:
             msg = ("Expected type: {0} with length {2} but received: {1} with "
@@ -167,7 +165,7 @@ class Choice(OptionallyRequired):
     """
 
     def __init__(self, choices, **kwargs):
-        super(Choice, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         try:
             length = len(choices)
         except TypeError:
@@ -180,7 +178,7 @@ class Choice(OptionallyRequired):
 
     def run_validation(self, value):
         if value not in self.choices:
-            msg = ("Expected one of: {0} but received: {1}"
+            msg = ("Expected one of: {} but received: {}"
                    .format(self.choices, value))
         else:
             return value
@@ -191,7 +189,7 @@ class Choice(OptionallyRequired):
 class Deprecated(BaseConfigOption):
 
     def __init__(self, moved_to=None):
-        super(Deprecated, self).__init__()
+        super().__init__()
         self.default = None
         self.moved_to = moved_to
 
@@ -200,7 +198,7 @@ class Deprecated(BaseConfigOption):
         if config.get(key_name) is None or self.moved_to is None:
             return
 
-        warning = ('The configuration option {0} has been deprecated and '
+        warning = ('The configuration option {} has been deprecated and '
                    'will be removed in a future release of MkDocs.'
                    ''.format(key_name))
         self.warnings.append(warning)
@@ -238,11 +236,11 @@ class IpAddress(OptionallyRequired):
         try:
             port = int(port)
         except Exception:
-            raise ValidationError("'{0}' is not a valid port".format(port))
+            raise ValidationError("'{}' is not a valid port".format(port))
 
         class Address(namedtuple('Address', 'host port')):
             def __str__(self):
-                return '{0}:{1}'.format(self.host, self.port)
+                return '{}:{}'.format(self.host, self.port)
 
         return Address(host, port)
 
@@ -255,7 +253,7 @@ class URL(OptionallyRequired):
     """
 
     def __init__(self, default='', required=False):
-        super(URL, self).__init__(default, required)
+        super().__init__(default, required)
 
     def run_validation(self, value):
         if value == '':
@@ -321,7 +319,7 @@ class FilesystemObject(Type):
     Base class for options that point to filesystem objects.
     """
     def __init__(self, exists=False, **kwargs):
-        super(FilesystemObject, self).__init__(type_=str, **kwargs)
+        super().__init__(type_=str, **kwargs)
         self.exists = exists
         self.config_dir = None
 
@@ -329,7 +327,7 @@ class FilesystemObject(Type):
         self.config_dir = os.path.dirname(config.config_file_path) if config.config_file_path else None
 
     def run_validation(self, value):
-        value = super(FilesystemObject, self).run_validation(value)
+        value = super().run_validation(value)
         if self.config_dir and not os.path.isabs(value):
             value = os.path.join(self.config_dir, value)
         if self.exists and not self.existence_test(value):
@@ -356,7 +354,7 @@ class Dir(FilesystemObject):
         # Validate that the dir is not the parent dir of the config file.
         if os.path.dirname(config.config_file_path) == config[key_name]:
             raise ValidationError(
-                ("The '{0}' should not be the parent directory of the config "
+                ("The '{}' should not be the parent directory of the config "
                  "file. Use a child directory instead so that the config file "
                  "is a sibling of the config file.").format(key_name))
 
@@ -380,7 +378,7 @@ class SiteDir(Dir):
 
     def post_validation(self, config, key_name):
 
-        super(SiteDir, self).post_validation(config, key_name)
+        super().post_validation(config, key_name)
 
         # Validate that the docs_dir and site_dir don't contain the
         # other as this will lead to copying back and forth on each
@@ -390,14 +388,14 @@ class SiteDir(Dir):
                 ("The 'docs_dir' should not be within the 'site_dir' as this "
                  "can mean the source files are overwritten by the output or "
                  "it will be deleted if --clean is passed to mkdocs build."
-                 "(site_dir: '{0}', docs_dir: '{1}')"
+                 "(site_dir: '{}', docs_dir: '{}')"
                  ).format(config['site_dir'], config['docs_dir']))
         elif (config['site_dir'] + os.sep).startswith(config['docs_dir'].rstrip(os.sep) + os.sep):
             raise ValidationError(
                 ("The 'site_dir' should not be within the 'docs_dir' as this "
                  "leads to the build directory being copied into itself and "
                  "duplicate nested files in the 'site_dir'."
-                 "(site_dir: '{0}', docs_dir: '{1}')"
+                 "(site_dir: '{}', docs_dir: '{}')"
                  ).format(config['site_dir'], config['docs_dir']))
 
 
@@ -409,7 +407,7 @@ class Theme(BaseConfigOption):
     """
 
     def __init__(self, default=None):
-        super(Theme, self).__init__()
+        super().__init__()
         self.default = default
 
     def validate(self, value):
@@ -427,13 +425,13 @@ class Theme(BaseConfigOption):
                     return value
 
                 raise ValidationError(
-                    "Unrecognised theme name: '{0}'. The available installed themes "
-                    "are: {1}".format(value['name'], ', '.join(themes))
+                    "Unrecognised theme name: '{}'. The available installed themes "
+                    "are: {}".format(value['name'], ', '.join(themes))
                 )
 
             raise ValidationError("No theme name set.")
 
-        raise ValidationError('Invalid type "{0}". Expected a string or key/value pairs.'.format(type(value)))
+        raise ValidationError('Invalid type "{}". Expected a string or key/value pairs.'.format(type(value)))
 
     def post_validation(self, config, key_name):
         theme_config = config[key_name]
@@ -461,23 +459,23 @@ class Nav(OptionallyRequired):
     """
 
     def __init__(self, **kwargs):
-        super(Nav, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.file_match = utils.is_markdown_file
 
     def run_validation(self, value):
 
         if not isinstance(value, list):
             raise ValidationError(
-                "Expected a list, got {0}".format(type(value)))
+                "Expected a list, got {}".format(type(value)))
 
         if len(value) == 0:
             return
 
-        config_types = set(type(l) for l in value)
+        config_types = {type(l) for l in value}
         if config_types.issubset({str, dict, str}):
             return value
 
-        raise ValidationError("Invalid pages config. {0} {1}".format(
+        raise ValidationError("Invalid pages config. {} {}".format(
             config_types, {str, dict}
         ))
 
@@ -514,7 +512,7 @@ class MarkdownExtensions(OptionallyRequired):
     config options for them if desired.
     """
     def __init__(self, builtins=None, configkey='mdx_configs', **kwargs):
-        super(MarkdownExtensions, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.builtins = builtins or []
         self.configkey = configkey
         self.configdata = {}
@@ -533,7 +531,7 @@ class MarkdownExtensions(OptionallyRequired):
                     continue
                 if not isinstance(cfg, dict):
                     raise ValidationError('Invalid config options for Markdown '
-                                          "Extension '{0}'.".format(ext))
+                                          "Extension '{}'.".format(ext))
                 self.configdata[ext] = cfg
             elif isinstance(item, str):
                 extensions.append(item)
@@ -563,7 +561,7 @@ class Plugins(OptionallyRequired):
     """
 
     def __init__(self, **kwargs):
-        super(Plugins, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.installed_plugins = plugins.get_plugins()
         self.config_file_path = None
 
@@ -582,7 +580,7 @@ class Plugins(OptionallyRequired):
                 cfg = cfg or {}  # Users may define a null (None) config
                 if not isinstance(cfg, dict):
                     raise ValidationError('Invalid config options for '
-                                          'the "{0}" plugin.'.format(name))
+                                          'the "{}" plugin.'.format(name))
                 item = name
             else:
                 cfg = {}
@@ -596,12 +594,12 @@ class Plugins(OptionallyRequired):
 
     def load_plugin(self, name, config):
         if name not in self.installed_plugins:
-            raise ValidationError('The "{0}" plugin is not installed'.format(name))
+            raise ValidationError('The "{}" plugin is not installed'.format(name))
 
         Plugin = self.installed_plugins[name].load()
 
         if not issubclass(Plugin, plugins.BasePlugin):
-            raise ValidationError('{0}.{1} must be a subclass of {2}.{3}'.format(
+            raise ValidationError('{}.{} must be a subclass of {}.{}'.format(
                 Plugin.__module__, Plugin.__name__, plugins.BasePlugin.__module__,
                 plugins.BasePlugin.__name__))
 

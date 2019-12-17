@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import unicode_literals
 import unittest
 from unittest import mock
 import json
@@ -110,7 +108,7 @@ class SearchPluginTests(unittest.TestCase):
         result = plugin.on_config(load_config(theme='mkdocs', extra_javascript=[]))
         self.assertFalse(result['theme']['search_index_only'])
         self.assertFalse(result['theme']['include_search_page'])
-        self.assertEqual(result['theme'].static_templates, set(['404.html', 'sitemap.xml']))
+        self.assertEqual(result['theme'].static_templates, {'404.html', 'sitemap.xml'})
         self.assertEqual(len(result['theme'].dirs), 3)
         self.assertEqual(result['extra_javascript'], ['search/main.js'])
 
@@ -121,7 +119,7 @@ class SearchPluginTests(unittest.TestCase):
         result = plugin.on_config(config)
         self.assertFalse(result['theme']['search_index_only'])
         self.assertTrue(result['theme']['include_search_page'])
-        self.assertEqual(result['theme'].static_templates, set(['404.html', 'sitemap.xml', 'search.html']))
+        self.assertEqual(result['theme'].static_templates, {'404.html', 'sitemap.xml', 'search.html'})
         self.assertEqual(len(result['theme'].dirs), 3)
         self.assertEqual(result['extra_javascript'], ['search/main.js'])
 
@@ -132,7 +130,7 @@ class SearchPluginTests(unittest.TestCase):
         result = plugin.on_config(config)
         self.assertTrue(result['theme']['search_index_only'])
         self.assertFalse(result['theme']['include_search_page'])
-        self.assertEqual(result['theme'].static_templates, set(['404.html', 'sitemap.xml']))
+        self.assertEqual(result['theme'].static_templates, {'404.html', 'sitemap.xml'})
         self.assertEqual(len(result['theme'].dirs), 2)
         self.assertEqual(len(result['extra_javascript']), 0)
 
@@ -309,15 +307,15 @@ class SearchIndexTests(unittest.TestCase):
 
             self.assertEqual(index._entries[1]['title'], "Heading 1")
             self.assertEqual(index._entries[1]['text'], "Content 1")
-            self.assertEqual(index._entries[1]['location'], "{0}#heading-1".format(loc))
+            self.assertEqual(index._entries[1]['location'], "{}#heading-1".format(loc))
 
             self.assertEqual(index._entries[2]['title'], "Heading 2")
             self.assertEqual(strip_whitespace(index._entries[2]['text']), "Content2")
-            self.assertEqual(index._entries[2]['location'], "{0}#heading-2".format(loc))
+            self.assertEqual(index._entries[2]['location'], "{}#heading-2".format(loc))
 
             self.assertEqual(index._entries[3]['title'], "Heading 3")
             self.assertEqual(strip_whitespace(index._entries[3]['text']), "Content3")
-            self.assertEqual(index._entries[3]['location'], "{0}#heading-3".format(loc))
+            self.assertEqual(index._entries[3]['location'], "{}#heading-3".format(loc))
 
     @mock.patch('subprocess.Popen', autospec=True)
     def test_prebuild_index(self, mock_popen):

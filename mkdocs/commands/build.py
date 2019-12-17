@@ -1,6 +1,3 @@
-# coding: utf-8
-
-from __future__ import unicode_literals
 from datetime import datetime
 from calendar import timegm
 import logging
@@ -18,7 +15,7 @@ from mkdocs.structure.nav import get_navigation
 import mkdocs
 
 
-class DuplicateFilter(object):
+class DuplicateFilter:
     ''' Avoid logging duplicate messages. '''
     def __init__(self):
         self.msgs = set()
@@ -140,7 +137,7 @@ def _build_extra_template(template_name, files, config, nav):
         return
 
     try:
-        with io.open(file.abs_src_path, 'r', encoding='utf-8', errors='strict') as f:
+        with open(file.abs_src_path, 'r', encoding='utf-8', errors='strict') as f:
             template = jinja2.Template(f.read())
     except Exception as e:
         log.warn("Error reading template '{}': {}".format(template_name, e))

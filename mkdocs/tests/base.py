@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 import textwrap
 import markdown
 import os
@@ -83,7 +82,7 @@ def tempdir(files=None, **kw):
     return decorator
 
 
-class PathAssertionMixin(object):
+class PathAssertionMixin:
     """
     Assertion methods for testing paths.
 

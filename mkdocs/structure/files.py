@@ -1,6 +1,3 @@
-# coding: utf-8
-
-from __future__ import unicode_literals
 import fnmatch
 import os
 import logging
@@ -14,7 +11,7 @@ log = logging.getLogger(__name__)
 log.addFilter(utils.warning_filter)
 
 
-class Files(object):
+class Files:
     """ A collection of File objects. """
     def __init__(self, files):
         self._files = files
@@ -68,7 +65,7 @@ class Files(object):
         """ Retrieve static files from Jinja environment and add to collection. """
         def filter(name):
             patterns = ['.*', '*.py', '*.pyc', '*.html', '*readme*', 'mkdocs_theme.yml']
-            patterns.extend('*{0}'.format(x) for x in utils.markdown_extensions)
+            patterns.extend('*{}'.format(x) for x in utils.markdown_extensions)
             patterns.extend(config['theme'].static_templates)
             for pattern in patterns:
                 if fnmatch.fnmatch(name.lower(), pattern):
@@ -85,7 +82,7 @@ class Files(object):
                         break
 
 
-class File(object):
+class File:
     """
     A MkDocs File object.
 
@@ -129,7 +126,7 @@ class File(object):
     def __eq__(self, other):
 
         def sub_dict(d):
-            return dict((key, value) for key, value in d.items() if key in ['src_path', 'abs_src_path', 'url'])
+            return {key: value for key, value in d.items() if key in ['src_path', 'abs_src_path', 'url']}
 
         return (isinstance(other, self.__class__) and sub_dict(self.__dict__) == sub_dict(other.__dict__))
 

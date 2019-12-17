@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 import logging
 import os
 import sys
@@ -68,7 +67,7 @@ class Config(UserDict):
 
         for key in (set(self.keys()) - self._schema_keys):
             warnings.append((
-                key, "Unrecognised configuration name: {0}".format(key)
+                key, "Unrecognised configuration name: {}".format(key)
             ))
 
         return failed, warnings
@@ -125,7 +124,7 @@ class Config(UserDict):
             raise exceptions.ConfigurationError(
                 "The configuration is invalid. The expected type was a key "
                 "value mapping (a python dict) but we got an object of type: "
-                "{0}".format(type(patch)))
+                "{}".format(type(patch)))
 
         self.user_configs.append(patch)
         self.data.update(patch)
@@ -150,7 +149,7 @@ def _open_config_file(config_file):
     if hasattr(config_file, 'closed') and config_file.closed:
         config_file = config_file.name
 
-    log.debug("Loading configuration file: {0}".format(config_file))
+    log.debug("Loading configuration file: {}".format(config_file))
 
     # If it is a string, we can assume it is a path and attempt to open it.
     if isinstance(config_file, str):
@@ -158,7 +157,7 @@ def _open_config_file(config_file):
             config_file = open(config_file, 'rb')
         else:
             raise exceptions.ConfigurationError(
-                "Config file '{0}' does not exist.".format(config_file))
+                "Config file '{}' does not exist.".format(config_file))
 
     # Ensure file descriptor is at begining
     config_file.seek(0)
@@ -208,11 +207,11 @@ def load_config(config_file=None, **kwargs):
 
     if len(errors) > 0:
         raise exceptions.ConfigurationError(
-            "Aborted with {0} Configuration Errors!".format(len(errors))
+            "Aborted with {} Configuration Errors!".format(len(errors))
         )
     elif cfg['strict'] and len(warnings) > 0:
         raise exceptions.ConfigurationError(
-            "Aborted with {0} Configuration Warnings in 'strict' mode!".format(len(warnings))
+            "Aborted with {} Configuration Warnings in 'strict' mode!".format(len(warnings))
         )
 
     return cfg

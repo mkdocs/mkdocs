@@ -1,7 +1,3 @@
-# coding: utf-8
-
-from __future__ import unicode_literals
-
 import os
 import re
 import json
@@ -15,7 +11,7 @@ from html.parser import HTMLParser
 log = logging.getLogger(__name__)
 
 
-class SearchIndex(object):
+class SearchIndex:
     """
     Search index is a collection of pages and sections (heading
     tags and their following content are sections).
@@ -91,7 +87,7 @@ class SearchIndex(object):
         if toc_item is not None:
             self._add_entry(
                 title=toc_item.title,
-                text=u" ".join(section.text),
+                text=" ".join(section.text),
                 loc=abs_url + toc_item.url
             )
 
@@ -120,7 +116,7 @@ class SearchIndex(object):
                     log.debug('Pre-built search index created successfully.')
                 else:
                     log.warning('Failed to pre-build search index. Error: {}'.format(err))
-            except (OSError, IOError, ValueError) as e:
+            except (OSError, ValueError) as e:
                 log.warning('Failed to pre-build search index. Error: {}'.format(e))
         elif self.config['prebuild_index'] == 'python':
             idx = lunr(
@@ -162,7 +158,7 @@ class HTMLStripper(HTMLParser):
         return '\n'.join(self.data)
 
 
-class ContentSection(object):
+class ContentSection:
     """
     Used by the ContentParser class to capture the information we
     need when it is parsing the HMTL.
