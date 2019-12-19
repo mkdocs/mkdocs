@@ -241,7 +241,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
 
     # Test build._build_extra_template
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='template content'))
+    @mock.patch('mkdocs.commands.build.open', mock.mock_open(read_data='template content'))
     def test_build_extra_template(self):
         cfg = load_config()
         files = Files([
@@ -249,7 +249,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         ])
         build._build_extra_template('foo.html', files, cfg, mock.Mock())
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='template content'))
+    @mock.patch('mkdocs.commands.build.open', mock.mock_open(read_data='template content'))
     def test_skip_missing_extra_template(self):
         cfg = load_config()
         files = Files([
@@ -262,7 +262,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             ["WARNING:mkdocs.commands.build:Template skipped: 'missing.html' not found in docs_dir."]
         )
 
-    @mock.patch('builtins.open', side_effect=OSError('Error message.'))
+    @mock.patch('mkdocs.commands.build.open', side_effect=OSError('Error message.'))
     def test_skip_ioerror_extra_template(self, mock_open):
         cfg = load_config()
         files = Files([
@@ -275,7 +275,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             ["WARNING:mkdocs.commands.build:Error reading template 'foo.html': Error message."]
         )
 
-    @mock.patch('builtins.open', mock.mock_open(read_data=''))
+    @mock.patch('mkdocs.commands.build.open', mock.mock_open(read_data=''))
     def test_skip_extra_template_empty_output(self):
         cfg = load_config()
         files = Files([
@@ -319,7 +319,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         self.assertEqual(page.content, None)
 
     @tempdir(files={'index.md': 'new page content'})
-    @mock.patch('builtins.open', side_effect=OSError('Error message.'))
+    @mock.patch('mkdocs.structure.pages.open', side_effect=OSError('Error message.'))
     def test_populate_page_read_error(self, docs_dir, mock_open):
         cfg = load_config(docs_dir=docs_dir)
         file = File('missing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])

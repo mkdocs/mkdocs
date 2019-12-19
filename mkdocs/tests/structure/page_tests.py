@@ -701,112 +701,112 @@ class RelativePathExtensionTests(unittest.TestCase):
         pg.render(cfg, Files(fs))
         return pg.content
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='[link](non-index.md)'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](non-index.md)'))
     def test_relative_html_link(self):
         self.assertEqual(
             self.get_rendered_result(['index.md', 'non-index.md']),
             '<p><a href="non-index/">link</a></p>'  # No trailing /
         )
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='[link](index.md)'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](index.md)'))
     def test_relative_html_link_index(self):
         self.assertEqual(
             self.get_rendered_result(['non-index.md', 'index.md']),
             '<p><a href="..">link</a></p>'
         )
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='[link](sub2/index.md)'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](sub2/index.md)'))
     def test_relative_html_link_sub_index(self):
         self.assertEqual(
             self.get_rendered_result(['index.md', 'sub2/index.md']),
             '<p><a href="sub2/">link</a></p>'  # No trailing /
         )
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='[link](sub2/non-index.md)'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](sub2/non-index.md)'))
     def test_relative_html_link_sub_page(self):
         self.assertEqual(
             self.get_rendered_result(['index.md', 'sub2/non-index.md']),
             '<p><a href="sub2/non-index/">link</a></p>'  # No trailing /
         )
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='[link](file%20name.md)'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](file%20name.md)'))
     def test_relative_html_link_with_encoded_space(self):
         self.assertEqual(
             self.get_rendered_result(['index.md', 'file name.md']),
             '<p><a href="file%20name/">link</a></p>'
         )
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='[link](file name.md)'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](file name.md)'))
     def test_relative_html_link_with_unencoded_space(self):
         self.assertEqual(
             self.get_rendered_result(['index.md', 'file name.md']),
             '<p><a href="file%20name/">link</a></p>'
         )
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='[link](../index.md)'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](../index.md)'))
     def test_relative_html_link_parent_index(self):
         self.assertEqual(
             self.get_rendered_result(['sub2/non-index.md', 'index.md']),
             '<p><a href="../..">link</a></p>'
         )
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='[link](non-index.md#hash)'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](non-index.md#hash)'))
     def test_relative_html_link_hash(self):
         self.assertEqual(
             self.get_rendered_result(['index.md', 'non-index.md']),
             '<p><a href="non-index/#hash">link</a></p>'
         )
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='[link](sub2/index.md#hash)'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](sub2/index.md#hash)'))
     def test_relative_html_link_sub_index_hash(self):
         self.assertEqual(
             self.get_rendered_result(['index.md', 'sub2/index.md']),
             '<p><a href="sub2/#hash">link</a></p>'
         )
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='[link](sub2/non-index.md#hash)'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](sub2/non-index.md#hash)'))
     def test_relative_html_link_sub_page_hash(self):
         self.assertEqual(
             self.get_rendered_result(['index.md', 'sub2/non-index.md']),
             '<p><a href="sub2/non-index/#hash">link</a></p>'
         )
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='[link](#hash)'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](#hash)'))
     def test_relative_html_link_hash_only(self):
         self.assertEqual(
             self.get_rendered_result(['index.md']),
             '<p><a href="#hash">link</a></p>'
         )
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='![image](image.png)'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='![image](image.png)'))
     def test_relative_image_link_from_homepage(self):
         self.assertEqual(
             self.get_rendered_result(['index.md', 'image.png']),
             '<p><img alt="image" src="image.png" /></p>'  # no opening ./
         )
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='![image](../image.png)'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='![image](../image.png)'))
     def test_relative_image_link_from_subpage(self):
         self.assertEqual(
             self.get_rendered_result(['sub2/non-index.md', 'image.png']),
             '<p><img alt="image" src="../../image.png" /></p>'
         )
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='![image](image.png)'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='![image](image.png)'))
     def test_relative_image_link_from_sibling(self):
         self.assertEqual(
             self.get_rendered_result(['non-index.md', 'image.png']),
             '<p><img alt="image" src="../image.png" /></p>'
         )
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='*__not__ a link*.'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='*__not__ a link*.'))
     def test_no_links(self):
         self.assertEqual(
             self.get_rendered_result(['index.md']),
             '<p><em><strong>not</strong> a link</em>.</p>'
         )
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='[link](non-existant.md)'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](non-existant.md)'))
     def test_bad_relative_html_link(self):
         with self.assertLogs('mkdocs', level='WARNING') as cm:
             self.assertEqual(
@@ -819,21 +819,21 @@ class RelativePathExtensionTests(unittest.TestCase):
              "to 'non-existant.md' which is not found in the documentation files."]
         )
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='[external link](http://example.com/index.md)'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[external](http://example.com/index.md)'))
     def test_external_link(self):
         self.assertEqual(
             self.get_rendered_result(['index.md']),
-            '<p><a href="http://example.com/index.md">external link</a></p>'
+            '<p><a href="http://example.com/index.md">external</a></p>'
         )
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='[absolute link](/path/to/file.md)'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[absolute link](/path/to/file.md)'))
     def test_absolute_link(self):
         self.assertEqual(
             self.get_rendered_result(['index.md']),
             '<p><a href="/path/to/file.md">absolute link</a></p>'
         )
 
-    @mock.patch('builtins.open', mock.mock_open(read_data='<mail@example.com>'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='<mail@example.com>'))
     def test_email_link(self):
         self.assertEqual(
             self.get_rendered_result(['index.md']),
