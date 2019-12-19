@@ -5,11 +5,16 @@ import sys
 import logging
 import click
 
-from mkdocs import __version__
-from mkdocs import utils
-from mkdocs import exceptions
-from mkdocs import config
-from mkdocs.commands import build, gh_deploy, new, serve
+# TODO: Remove this check at some point in the future.
+# (also remove flake8's 'ignore E402' comments below)
+if sys.version_info[0] < 3:  # pragma: no cover
+    raise ImportError('A recent version of Python 3 is required.')
+
+from mkdocs import __version__                            # noqa: E402
+from mkdocs import utils                                  # noqa: E402
+from mkdocs import exceptions                             # noqa: E402
+from mkdocs import config                                 # noqa: E402
+from mkdocs.commands import build, gh_deploy, new, serve  # noqa: E402
 
 log = logging.getLogger(__name__)
 
