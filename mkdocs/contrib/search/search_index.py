@@ -142,9 +142,7 @@ class HTMLStripper(HTMLParser):
     """
 
     def __init__(self, *args, **kwargs):
-        # HTMLParser is a old-style class in Python 2, so
-        # super() wont work here.
-        HTMLParser.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.data = []
 
@@ -186,9 +184,7 @@ class ContentParser(HTMLParser):
 
     def __init__(self, *args, **kwargs):
 
-        # HTMLParser is a old-style class in Python 2, so
-        # super() wont work here.
-        HTMLParser.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.data = []
         self.section = None
