@@ -55,7 +55,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'click>=3.3',
-        'Jinja2>=2.7.1',
+        'Jinja2>=2.10.1',
         'livereload>=2.5.1',
         'lunr[languages]>=0.5.2',
         'Markdown>=2.3.1',
