@@ -1,14 +1,13 @@
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import unicode_literals
-import mock
+from unittest import mock
+import unittest
 
 from mkdocs.structure.pages import Page
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.nav import get_navigation
 from mkdocs.commands import build
-from mkdocs.tests.base import load_config, LogTestCase, tempdir, PathAssertionMixin
+from mkdocs.tests.base import load_config, tempdir, PathAssertionMixin
 from mkdocs.utils import meta
 
 
@@ -22,7 +21,21 @@ def build_page(title, path, config, md_src=''):
     return page, files
 
 
-class BuildTests(PathAssertionMixin, LogTestCase):
+class BuildTests(PathAssertionMixin, unittest.TestCase):
+
+    def assert_mock_called_once(self, mock):
+        """assert that the mock was called only once.
+
+        The `mock.assert_called_once()` method was added in PY36.
+        TODO: Remove this when PY35 support is dropped.
+        """
+        try:
+            mock.assert_called_once()
+        except AttributeError:
+            if not mock.call_count == 1:
+                msg = ("Expected '%s' to have been called once. Called %s times." %
+                       (mock._mock_name or 'mock', self.call_count))
+                raise AssertionError(msg)
 
     # Test build.get_context
 
@@ -184,8 +197,8 @@ class BuildTests(PathAssertionMixin, LogTestCase):
         cfg = load_config()
         env = cfg['theme'].get_env()
         build._build_theme_template('main.html', env, mock.Mock(), cfg, mock.Mock())
-        mock_write_file.assert_called_once()
-        mock_build_template.assert_called_once()
+        self.assert_mock_called_once(mock_write_file)
+        self.assert_mock_called_once(mock_build_template)
 
     @mock.patch('mkdocs.utils.write_file')
     @mock.patch('mkdocs.commands.build._build_template', return_value='some content')
@@ -194,9 +207,9 @@ class BuildTests(PathAssertionMixin, LogTestCase):
         cfg = load_config()
         env = cfg['theme'].get_env()
         build._build_theme_template('sitemap.xml', env, mock.Mock(), cfg, mock.Mock())
-        mock_write_file.assert_called_once()
-        mock_build_template.assert_called_once()
-        mock_gzip_open.assert_called_once()
+        self.assert_mock_called_once(mock_write_file)
+        self.assert_mock_called_once(mock_build_template)
+        self.assert_mock_called_once(mock_gzip_open)
 
     @mock.patch('mkdocs.utils.write_file')
     @mock.patch('mkdocs.commands.build._build_template', return_value='')
@@ -224,11 +237,11 @@ class BuildTests(PathAssertionMixin, LogTestCase):
             ["INFO:mkdocs.commands.build:Template skipped: 'main.html' generated empty output."]
         )
         mock_write_file.assert_not_called()
-        mock_build_template.assert_called_once()
+        self.assert_mock_called_once(mock_build_template)
 
     # Test build._build_extra_template
 
-    @mock.patch('io.open', mock.mock_open(read_data='template content'))
+    @mock.patch('mkdocs.commands.build.open', mock.mock_open(read_data='template content'))
     def test_build_extra_template(self):
         cfg = load_config()
         files = Files([
@@ -236,7 +249,7 @@ class BuildTests(PathAssertionMixin, LogTestCase):
         ])
         build._build_extra_template('foo.html', files, cfg, mock.Mock())
 
-    @mock.patch('io.open', mock.mock_open(read_data='template content'))
+    @mock.patch('mkdocs.commands.build.open', mock.mock_open(read_data='template content'))
     def test_skip_missing_extra_template(self):
         cfg = load_config()
         files = Files([
@@ -249,7 +262,7 @@ class BuildTests(PathAssertionMixin, LogTestCase):
             ["WARNING:mkdocs.commands.build:Template skipped: 'missing.html' not found in docs_dir."]
         )
 
-    @mock.patch('io.open', side_effect=IOError('Error message.'))
+    @mock.patch('mkdocs.commands.build.open', side_effect=OSError('Error message.'))
     def test_skip_ioerror_extra_template(self, mock_open):
         cfg = load_config()
         files = Files([
@@ -262,7 +275,7 @@ class BuildTests(PathAssertionMixin, LogTestCase):
             ["WARNING:mkdocs.commands.build:Error reading template 'foo.html': Error message."]
         )
 
-    @mock.patch('io.open', mock.mock_open(read_data=''))
+    @mock.patch('mkdocs.commands.build.open', mock.mock_open(read_data=''))
     def test_skip_extra_template_empty_output(self):
         cfg = load_config()
         files = Files([
@@ -306,20 +319,20 @@ class BuildTests(PathAssertionMixin, LogTestCase):
         self.assertEqual(page.content, None)
 
     @tempdir(files={'index.md': 'new page content'})
-    @mock.patch('io.open', side_effect=IOError('Error message.'))
+    @mock.patch('mkdocs.structure.pages.open', side_effect=OSError('Error message.'))
     def test_populate_page_read_error(self, docs_dir, mock_open):
         cfg = load_config(docs_dir=docs_dir)
         file = File('missing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
         page = Page('Foo', file, cfg)
         with self.assertLogs('mkdocs', level='ERROR') as cm:
-            self.assertRaises(IOError, build._populate_page, page, cfg, Files([file]))
+            self.assertRaises(OSError, build._populate_page, page, cfg, Files([file]))
         self.assertEqual(
             cm.output, [
                 'ERROR:mkdocs.structure.pages:File not found: missing.md',
                 "ERROR:mkdocs.commands.build:Error reading page 'missing.md': Error message."
             ]
         )
-        mock_open.assert_called_once()
+        self.assert_mock_called_once(mock_open)
 
     # Test build._build_page
 
@@ -355,7 +368,7 @@ class BuildTests(PathAssertionMixin, LogTestCase):
     #         cm.output,
     #         ["INFO:mkdocs.commands.build:Page skipped: 'index.md'. Generated empty output."]
     #     )
-    #     mock_template.render.assert_called_once()
+    #     self.assert_mock_called_once(mock_template.render)
     #     self.assertPathNotFile(site_dir, 'index.html')
 
     @tempdir(files={'index.md': 'page content'})
@@ -385,7 +398,7 @@ class BuildTests(PathAssertionMixin, LogTestCase):
         page.markdown = 'page content'
         page.content = '<p>page content</p>'
         build._build_page(page, cfg, files, nav, cfg['theme'].get_env(), dirty=True)
-        mock_write_file.assert_called_once()
+        self.assert_mock_called_once(mock_write_file)
 
     @tempdir()
     def test_build_page_custom_template(self, site_dir):
@@ -402,7 +415,7 @@ class BuildTests(PathAssertionMixin, LogTestCase):
         self.assertPathIsFile(site_dir, 'index.html')
 
     @tempdir()
-    @mock.patch('mkdocs.utils.write_file', side_effect=IOError('Error message.'))
+    @mock.patch('mkdocs.utils.write_file', side_effect=OSError('Error message.'))
     def test_build_page_error(self, site_dir, mock_write_file):
         cfg = load_config(site_dir=site_dir, nav=['index.md'], plugins=[])
         files = Files([File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])])
@@ -413,12 +426,12 @@ class BuildTests(PathAssertionMixin, LogTestCase):
         page.markdown = 'page content'
         page.content = '<p>page content</p>'
         with self.assertLogs('mkdocs', level='ERROR') as cm:
-            self.assertRaises(IOError, build._build_page, page, cfg, files, nav, cfg['theme'].get_env())
+            self.assertRaises(OSError, build._build_page, page, cfg, files, nav, cfg['theme'].get_env())
         self.assertEqual(
             cm.output,
             ["ERROR:mkdocs.commands.build:Error building page 'index.md': Error message."]
         )
-        mock_write_file.assert_called_once()
+        self.assert_mock_called_once(mock_write_file)
 
     # Test build.build
 

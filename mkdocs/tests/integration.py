@@ -14,7 +14,6 @@ TODOs
     - Build documentation other than just MkDocs as it is relatively simple.
 """
 
-from __future__ import unicode_literals
 
 import click
 import logging
@@ -50,7 +49,7 @@ def main(output=None):
 
     log.debug("Building installed themes.")
     for theme in sorted(MKDOCS_THEMES):
-        log.debug("Building theme: {0}".format(theme))
+        log.debug("Building theme: {}".format(theme))
         project_dir = os.path.dirname(MKDOCS_CONFIG)
         out = os.path.join(output, theme)
         command = base_cmd + [out, '--theme', theme]
@@ -58,13 +57,13 @@ def main(output=None):
 
     log.debug("Building test projects.")
     for project in os.listdir(TEST_PROJECTS):
-        log.debug("Building test project: {0}".format(project))
+        log.debug("Building test project: {}".format(project))
         project_dir = os.path.join(TEST_PROJECTS, project)
         out = os.path.join(output, project)
         command = base_cmd + [out, ]
         subprocess.check_call(command, cwd=project_dir)
 
-    log.debug("Theme and integration builds are in {0}".format(output))
+    log.debug("Theme and integration builds are in {}".format(output))
 
 
 if __name__ == '__main__':

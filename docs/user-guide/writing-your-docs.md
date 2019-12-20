@@ -20,10 +20,18 @@ docs/
     index.md
 ```
 
-By convention your project homepage should always be named `index`. Any of the
-following extensions may be used for your Markdown source files: `markdown`,
-`mdown`, `mkdn`, `mkd`, `md`. All Markdown files included in your documentation
+By convention your project homepage should be named `index.md` (see [Index
+pages](#index_pages) below for details). Any of the following file
+extensions may be used for your Markdown source files: `markdown`, `mdown`,
+`mkdn`, `mkd`, `md`. All Markdown files included in your documentation
 directory will be rendered in the built site regardless of any settings.
+
+!!! note:
+
+    Files and directories with names which begin with a dot (for example:
+    `.foo.md` or `.bar/baz.md`) are ignored by MkDocs, which matches the
+    behavior of most web servers. There is no option to override this
+    behavior.
 
 You can also create multi-page documentation, by creating several Markdown
 files:
@@ -65,6 +73,11 @@ nested URLs, like so:
 /user-guide/configuration-options/
 /license/
 ```
+
+Any files which are not identified as Markdown files (by their file extension)
+within the [documentation directory](configuration.md#docs_dir) are copied by
+MkDocs to the built site unaltered. See [how to link to images and media]
+(#linking_to_images_and_media) below for details.
 
 ### Index pages
 
@@ -497,7 +510,7 @@ blocks without indentation.
 The first line should contain 3 or more backtick (`` ` ``) characters, and the
 last line should contain the same number of backtick characters (`` ` ``):
 
-~~~no-highlight
+````no-highlight
 ```
 Fenced code blocks are like Standard
 Markdown’s regular code blocks, except that
@@ -505,17 +518,17 @@ they’re not indented and instead rely on
 start and end fence lines to delimit the
 code block.
 ```
-~~~
+````
 
 With this approach, the language can optionally be specified on the first line
 after the backticks which informs any syntax highlighters of the language used:
 
-~~~no-highlight
+````no-highlight
 ```python
 def fn():
     pass
 ```
-~~~
+````
 
 Note that fenced code blocks can not be indented. Therefore, they cannot be
 nested inside list items, blockquotes, etc.

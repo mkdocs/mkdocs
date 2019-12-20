@@ -45,7 +45,7 @@ documentation][rtd-docs] for details.
 [upstream]: https://github.com/rtfd/sphinx_rtd_theme/
 [rtd-docs]: ../user-guide/styling-your-docs.md#readthedocs
 
-## Update `mkdocs` theme to Bootswatch 4.1.3 (#1563)
+#### Update `mkdocs` theme to Bootswatch 4.1.3 (#1563)
 
 The `mkdocs` theme now supports all the features of [Bootswatch 4.1]. Note that
 the [dropdowns] used in the navigation only support one level of nesting. If
@@ -60,8 +60,23 @@ as follows.
 [Bootswatch 4.1]: https://getbootstrap.com/docs/4.1/getting-started/introduction/
 [dropdowns]: https://getbootstrap.com/docs/4.1/components/navs/#pills-with-dropdowns
 
+#### Improved configuration support on the command line (#1401)
+
+The `build`, `serve`, and `gh-deploy` subcommands now support flags to control
+whether [directory URLs][directory-urls] should be created:
+`--use-directory-urls` / `--no-directory-urls`. In addition, the `gh-deploy`
+subcommand now supports all the configuration options that `build` and `serve`
+do, adding `--strict`, `--theme`, `--theme-dir`, and `--site-dir`.
+
+[directory-urls]: ../user-guide/configuration.md#use_directory_urls
+
 ### Other Changes and Additions to Version 1.1
 
+* Add support for Python 3.8.
+* Drop support for Python 3.4.
+* Drop support for Python 2.7. MkDocs is PY3 only now (#1926).
+* Bugfix: Select appropriate asyncio event loop on Windows for Python 3.8+ (#1885).
+* Bugfix: Ensure nested index pages do not get identified as the homepage (#1919).
 * Bugfix: Properly identify deployment version (#1879).
 * Bugfix: Properly build `ValidationError` message for `custom_dir` (#1849).
 * Bugfix: Exclude Markdown files and READMEs from theme (#1766).
@@ -69,7 +84,10 @@ as follows.
 * Bugfix: Ensure theme files do not override `docs_dir` files (#1671).
 * Bugfix: Do not normalize URL fragments (#1655).
 * Bugfix: Skip external URLs in sitemap.xml (#1742).
+* Bugfix: Ensure theme files do not override docs_dir files on Windows (#1876)
 * Add canonical tag to `readthedocs` theme (#1669).
+* Improved error message for when `git` is not available.
+* Add support for `nav_style` theme option for the `mkdocs` theme (#1930).
 
 ## Version 1.0.4 (2018-09-07)
 

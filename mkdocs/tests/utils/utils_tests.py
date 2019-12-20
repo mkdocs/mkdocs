@@ -1,9 +1,7 @@
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import unicode_literals
 
-import mock
+from unittest import mock
 import os
 import unittest
 import tempfile
@@ -304,8 +302,8 @@ class UtilsTests(unittest.TestCase):
         )
 
         config = utils.yaml_load(yaml_src)
-        self.assertTrue(isinstance(config['key'], utils.text_type))
-        self.assertTrue(isinstance(config['key2'][0], utils.text_type))
+        self.assertTrue(isinstance(config['key'], str))
+        self.assertTrue(isinstance(config['key2'][0], str))
 
     def test_copy_files(self):
         src_paths = [

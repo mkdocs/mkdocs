@@ -1,12 +1,6 @@
 build: false
 environment:
   matrix:
-    - TOXENV: py27-integration
-    - TOXENV: py27-min-req
-    - TOXENV: py27-unittests
-    - TOXENV: py34-integration
-    - TOXENV: py34-min-req
-    - TOXENV: py34-unittests
     - TOXENV: py35-integration
     - TOXENV: py35-min-req
     - TOXENV: py35-unittests
@@ -16,13 +10,16 @@ environment:
     - TOXENV: py37-integration
     - TOXENV: py37-min-req
     - TOXENV: py37-unittests
+    - TOXENV: py38-integration
+    - TOXENV: py38-min-req
+    - TOXENV: py38-unittests
     - TOXENV: flake8
 init:
   - "ECHO %TOXENV%"
 install:
-  - "c:\\python27\\Scripts\\pip install tox"
+  - "c:\\python37\\Scripts\\pip install tox"
 test_script:
   - "git clean -f -d -x"
-  - "c:\\python27\\Scripts\\tox --version"
-  - "c:\\python27\\Scripts\\pip --version"
-  - "c:\\python27\\Scripts\\tox"
+  - "c:\\python37\\Scripts\\tox --version"
+  - "c:\\python37\\Scripts\\pip --version"
+  - "c:\\python37\\Scripts\\tox"

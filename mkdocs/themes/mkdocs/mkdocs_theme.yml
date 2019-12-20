@@ -9,6 +9,7 @@ search_index_only: false
 highlightjs: true
 hljs_languages: []
 hljs_style: github
+nav_style: primary
 
 shortcuts:
     help: 191    # ?

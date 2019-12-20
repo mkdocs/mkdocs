@@ -1,9 +1,7 @@
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import unicode_literals
 
-import mock
+from unittest import mock
 import os
 import subprocess
 import tempfile
@@ -46,7 +44,7 @@ class UtilsTests(unittest.TestCase):
 
         result = ghp_import.get_prev_commit('test-branch')
 
-        self.assertEqual(result, u'4c82346e4b1b816be89dd709d35a6b169aa3df61')
+        self.assertEqual(result, '4c82346e4b1b816be89dd709d35a6b169aa3df61')
         mock_popen.assert_called_once_with(
             ['git', 'rev-list', '--max-count=1', 'test-branch', '--'],
             stdin=subprocess.PIPE, stdout=subprocess.PIPE,
@@ -62,7 +60,7 @@ class UtilsTests(unittest.TestCase):
 
         result = ghp_import.get_config('user.name')
 
-        self.assertEqual(result, u'Dougal Matthews')
+        self.assertEqual(result, 'Dougal Matthews')
         mock_popen.assert_called_once_with(
             ['git', 'config', 'user.name'],
             stdout=subprocess.PIPE, stdin=subprocess.PIPE)
