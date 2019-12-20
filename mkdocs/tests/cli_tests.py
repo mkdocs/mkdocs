@@ -23,12 +23,13 @@ class CLITests(unittest.TestCase):
 
         self.assertEqual(result.exit_code, 0)
         mock_serve.assert_called_once_with(
-            config_file=None,
             dev_addr=None,
+            livereload='livereload',
+            config_file=None,
             strict=None,
             theme=None,
             theme_dir=None,
-            livereload='livereload'
+            use_directory_urls=None
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -52,12 +53,13 @@ class CLITests(unittest.TestCase):
 
         self.assertEqual(result.exit_code, 0)
         mock_serve.assert_called_once_with(
-            config_file=None,
             dev_addr='0.0.0.0:80',
+            livereload='livereload',
+            config_file=None,
             strict=None,
             theme=None,
             theme_dir=None,
-            livereload='livereload'
+            use_directory_urls=None
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -68,12 +70,13 @@ class CLITests(unittest.TestCase):
 
         self.assertEqual(result.exit_code, 0)
         mock_serve.assert_called_once_with(
-            config_file=None,
             dev_addr=None,
+            livereload='livereload',
+            config_file=None,
             strict=True,
             theme=None,
             theme_dir=None,
-            livereload='livereload'
+            use_directory_urls=None
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -84,12 +87,13 @@ class CLITests(unittest.TestCase):
 
         self.assertEqual(result.exit_code, 0)
         mock_serve.assert_called_once_with(
-            config_file=None,
             dev_addr=None,
+            livereload='livereload',
+            config_file=None,
             strict=None,
             theme='readthedocs',
             theme_dir=None,
-            livereload='livereload'
+            use_directory_urls=None
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -100,12 +104,47 @@ class CLITests(unittest.TestCase):
 
         self.assertEqual(result.exit_code, 0)
         mock_serve.assert_called_once_with(
-            config_file=None,
             dev_addr=None,
+            livereload='livereload',
+            config_file=None,
             strict=None,
             theme=None,
             theme_dir='custom',
-            livereload='livereload'
+            use_directory_urls=None
+        )
+
+    @mock.patch('mkdocs.commands.serve.serve', autospec=True)
+    def test_serve_use_directory_urls(self, mock_serve):
+
+        result = self.runner.invoke(
+            cli.cli, ["serve", '--use-directory-urls'], catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        mock_serve.assert_called_once_with(
+            dev_addr=None,
+            livereload='livereload',
+            config_file=None,
+            strict=None,
+            theme=None,
+            theme_dir=None,
+            use_directory_urls=True
+        )
+
+    @mock.patch('mkdocs.commands.serve.serve', autospec=True)
+    def test_serve_no_directory_urls(self, mock_serve):
+
+        result = self.runner.invoke(
+            cli.cli, ["serve", '--no-directory-urls'], catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        mock_serve.assert_called_once_with(
+            dev_addr=None,
+            livereload='livereload',
+            config_file=None,
+            strict=None,
+            theme=None,
+            theme_dir=None,
+            use_directory_urls=False
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -116,12 +155,13 @@ class CLITests(unittest.TestCase):
 
         self.assertEqual(result.exit_code, 0)
         mock_serve.assert_called_once_with(
-            config_file=None,
             dev_addr=None,
+            livereload='livereload',
+            config_file=None,
             strict=None,
             theme=None,
             theme_dir=None,
-            livereload='livereload'
+            use_directory_urls=None
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -132,12 +172,13 @@ class CLITests(unittest.TestCase):
 
         self.assertEqual(result.exit_code, 0)
         mock_serve.assert_called_once_with(
-            config_file=None,
             dev_addr=None,
+            livereload='no-livereload',
+            config_file=None,
             strict=None,
             theme=None,
             theme_dir=None,
-            livereload='no-livereload'
+            use_directory_urls=None
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -148,12 +189,13 @@ class CLITests(unittest.TestCase):
 
         self.assertEqual(result.exit_code, 0)
         mock_serve.assert_called_once_with(
-            config_file=None,
             dev_addr=None,
+            livereload='dirty',
+            config_file=None,
             strict=None,
             theme=None,
             theme_dir=None,
-            livereload='dirty'
+            use_directory_urls=None
         )
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
@@ -173,6 +215,7 @@ class CLITests(unittest.TestCase):
             strict=None,
             theme=None,
             theme_dir=None,
+            use_directory_urls=None,
             site_dir=None
         )
         logger = logging.getLogger('mkdocs')
@@ -233,6 +276,7 @@ class CLITests(unittest.TestCase):
             strict=True,
             theme=None,
             theme_dir=None,
+            use_directory_urls=None,
             site_dir=None
         )
 
@@ -250,6 +294,7 @@ class CLITests(unittest.TestCase):
             strict=None,
             theme='readthedocs',
             theme_dir=None,
+            use_directory_urls=None,
             site_dir=None
         )
 
@@ -267,6 +312,43 @@ class CLITests(unittest.TestCase):
             strict=None,
             theme=None,
             theme_dir='custom',
+            use_directory_urls=None,
+            site_dir=None
+        )
+
+    @mock.patch('mkdocs.config.load_config', autospec=True)
+    @mock.patch('mkdocs.commands.build.build', autospec=True)
+    def test_build_use_directory_urls(self, mock_build, mock_load_config):
+
+        result = self.runner.invoke(
+            cli.cli, ['build', '--use-directory-urls'], catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(mock_build.call_count, 1)
+        mock_load_config.assert_called_once_with(
+            config_file=None,
+            strict=None,
+            theme=None,
+            theme_dir=None,
+            use_directory_urls=True,
+            site_dir=None
+        )
+
+    @mock.patch('mkdocs.config.load_config', autospec=True)
+    @mock.patch('mkdocs.commands.build.build', autospec=True)
+    def test_build_no_directory_urls(self, mock_build, mock_load_config):
+
+        result = self.runner.invoke(
+            cli.cli, ['build', '--no-directory-urls'], catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(mock_build.call_count, 1)
+        mock_load_config.assert_called_once_with(
+            config_file=None,
+            strict=None,
+            theme=None,
+            theme_dir=None,
+            use_directory_urls=False,
             site_dir=None
         )
 
@@ -284,7 +366,8 @@ class CLITests(unittest.TestCase):
             strict=None,
             theme=None,
             theme_dir=None,
-            site_dir='custom'
+            use_directory_urls=None,
+            site_dir='custom',
         )
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
@@ -342,9 +425,14 @@ class CLITests(unittest.TestCase):
         self.assertTrue('dirty' in b_kwargs)
         self.assertFalse(b_kwargs['dirty'])
         mock_load_config.assert_called_once_with(
-            config_file=None,
             remote_branch=None,
-            remote_name=None
+            remote_name=None,
+            config_file=None,
+            strict=None,
+            theme=None,
+            theme_dir=None,
+            use_directory_urls=None,
+            site_dir=None
         )
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
@@ -422,9 +510,14 @@ class CLITests(unittest.TestCase):
         self.assertEqual(mock_gh_deploy.call_count, 1)
         self.assertEqual(mock_build.call_count, 1)
         mock_load_config.assert_called_once_with(
-            config_file=None,
             remote_branch='foo',
-            remote_name=None
+            remote_name=None,
+            config_file=None,
+            strict=None,
+            theme=None,
+            theme_dir=None,
+            use_directory_urls=None,
+            site_dir=None
         )
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
@@ -439,9 +532,14 @@ class CLITests(unittest.TestCase):
         self.assertEqual(mock_gh_deploy.call_count, 1)
         self.assertEqual(mock_build.call_count, 1)
         mock_load_config.assert_called_once_with(
-            config_file=None,
             remote_branch=None,
-            remote_name='foo'
+            remote_name='foo',
+            config_file=None,
+            strict=None,
+            theme=None,
+            theme_dir=None,
+            use_directory_urls=None,
+            site_dir=None
         )
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
@@ -463,7 +561,7 @@ class CLITests(unittest.TestCase):
     @mock.patch('mkdocs.config.load_config', autospec=True)
     @mock.patch('mkdocs.commands.build.build', autospec=True)
     @mock.patch('mkdocs.commands.gh_deploy.gh_deploy', autospec=True)
-    def test_gh_deploy_ognore_version(self, mock_gh_deploy, mock_build, mock_load_config):
+    def test_gh_deploy_ignore_version(self, mock_gh_deploy, mock_build, mock_load_config):
 
         result = self.runner.invoke(
             cli.cli, ['gh-deploy', '--ignore-version'], catch_exceptions=False)
@@ -475,3 +573,135 @@ class CLITests(unittest.TestCase):
         self.assertEqual(g_kwargs['ignore_version'], True)
         self.assertEqual(mock_build.call_count, 1)
         self.assertEqual(mock_load_config.call_count, 1)
+
+    @mock.patch('mkdocs.config.load_config', autospec=True)
+    @mock.patch('mkdocs.commands.build.build', autospec=True)
+    @mock.patch('mkdocs.commands.gh_deploy.gh_deploy', autospec=True)
+    def test_gh_deploy_strict(self, mock_gh_deploy, mock_build, mock_load_config):
+
+        result = self.runner.invoke(
+            cli.cli, ['gh-deploy', '--strict'], catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(mock_gh_deploy.call_count, 1)
+        self.assertEqual(mock_build.call_count, 1)
+        mock_load_config.assert_called_once_with(
+            remote_branch=None,
+            remote_name=None,
+            config_file=None,
+            strict=True,
+            theme=None,
+            theme_dir=None,
+            use_directory_urls=None,
+            site_dir=None
+        )
+
+    @mock.patch('mkdocs.config.load_config', autospec=True)
+    @mock.patch('mkdocs.commands.build.build', autospec=True)
+    @mock.patch('mkdocs.commands.gh_deploy.gh_deploy', autospec=True)
+    def test_gh_deploy_theme(self, mock_gh_deploy, mock_build, mock_load_config):
+
+        result = self.runner.invoke(
+            cli.cli, ['gh-deploy', '--theme', 'readthedocs'], catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(mock_gh_deploy.call_count, 1)
+        self.assertEqual(mock_build.call_count, 1)
+        mock_load_config.assert_called_once_with(
+            remote_branch=None,
+            remote_name=None,
+            config_file=None,
+            strict=None,
+            theme='readthedocs',
+            theme_dir=None,
+            use_directory_urls=None,
+            site_dir=None
+        )
+
+    @mock.patch('mkdocs.config.load_config', autospec=True)
+    @mock.patch('mkdocs.commands.build.build', autospec=True)
+    @mock.patch('mkdocs.commands.gh_deploy.gh_deploy', autospec=True)
+    def test_gh_deploy_theme_dir(self, mock_gh_deploy, mock_build, mock_load_config):
+
+        result = self.runner.invoke(
+            cli.cli, ['gh-deploy', '--theme-dir', 'custom'], catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(mock_gh_deploy.call_count, 1)
+        self.assertEqual(mock_build.call_count, 1)
+        mock_load_config.assert_called_once_with(
+            remote_branch=None,
+            remote_name=None,
+            config_file=None,
+            strict=None,
+            theme=None,
+            theme_dir='custom',
+            use_directory_urls=None,
+            site_dir=None
+        )
+
+    @mock.patch('mkdocs.config.load_config', autospec=True)
+    @mock.patch('mkdocs.commands.build.build', autospec=True)
+    @mock.patch('mkdocs.commands.gh_deploy.gh_deploy', autospec=True)
+    def test_gh_deploy_use_directory_urls(self, mock_gh_deploy, mock_build, mock_load_config):
+
+        result = self.runner.invoke(
+            cli.cli, ['gh-deploy', '--use-directory-urls'], catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(mock_gh_deploy.call_count, 1)
+        self.assertEqual(mock_build.call_count, 1)
+        mock_load_config.assert_called_once_with(
+            remote_branch=None,
+            remote_name=None,
+            config_file=None,
+            strict=None,
+            theme=None,
+            theme_dir=None,
+            use_directory_urls=True,
+            site_dir=None
+        )
+
+    @mock.patch('mkdocs.config.load_config', autospec=True)
+    @mock.patch('mkdocs.commands.build.build', autospec=True)
+    @mock.patch('mkdocs.commands.gh_deploy.gh_deploy', autospec=True)
+    def test_gh_deploy_no_directory_urls(self, mock_gh_deploy, mock_build, mock_load_config):
+
+        result = self.runner.invoke(
+            cli.cli, ['gh-deploy', '--no-directory-urls'], catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(mock_gh_deploy.call_count, 1)
+        self.assertEqual(mock_build.call_count, 1)
+        mock_load_config.assert_called_once_with(
+            remote_branch=None,
+            remote_name=None,
+            config_file=None,
+            strict=None,
+            theme=None,
+            theme_dir=None,
+            use_directory_urls=False,
+            site_dir=None
+        )
+
+    @mock.patch('mkdocs.config.load_config', autospec=True)
+    @mock.patch('mkdocs.commands.build.build', autospec=True)
+    @mock.patch('mkdocs.commands.gh_deploy.gh_deploy', autospec=True)
+    def test_gh_deploy_site_dir(self, mock_gh_deploy, mock_build, mock_load_config):
+
+        result = self.runner.invoke(
+            cli.cli, ['gh-deploy', '--site-dir', 'custom'], catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(mock_gh_deploy.call_count, 1)
+        self.assertEqual(mock_build.call_count, 1)
+        mock_load_config.assert_called_once_with(
+            remote_branch=None,
+            remote_name=None,
+            config_file=None,
+            strict=None,
+            theme=None,
+            theme_dir=None,
+            use_directory_urls=None,
+            site_dir='custom'
+        )
