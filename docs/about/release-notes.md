@@ -51,8 +51,8 @@ The `mkdocs` theme now supports all the features of [Bootswatch 4.1]. Note that
 the [dropdowns] used in the navigation only support one level of nesting. If
 your global navigation uses more than one level, things will likely be broken.
 Additionaly, 2 filenames were changed in this update. If you are using a theme
-which inherits from the `mkdocs` theme, you may need to update these filenames
-as follows.
+which inherits from the `mkdocs` theme, the theme developer may need to update
+these filenames as follows.
 
    css/bootstrap-custom.min.css => css/bootstrap.min.css
    js/bootstrap-3.0.3.min.js => js/bootstrap.min.js
