@@ -56,6 +56,8 @@ your global navigation uses more than one level, things will likely be broken.
 
 ### Other Changes and Additions to Version 1.1
 
+* Updated minimum dependancy to Jinja 2.10.1 to address security
+  concerns (#1780).
 * Add support for Python 3.8.
 * Drop support for Python 3.4.
 * Drop support for Python 2.7. MkDocs is PY3 only now (#1926).
