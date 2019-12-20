@@ -1,18 +1,20 @@
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import unicode_literals
 import os
 import sys
 import logging
 import click
-import socket
 
-from mkdocs import __version__
-from mkdocs import utils
-from mkdocs import exceptions
-from mkdocs import config
-from mkdocs.commands import build, gh_deploy, new, serve
+# TODO: Remove this check at some point in the future.
+# (also remove flake8's 'ignore E402' comments below)
+if sys.version_info[0] < 3:  # pragma: no cover
+    raise ImportError('A recent version of Python 3 is required.')
+
+from mkdocs import __version__                            # noqa: E402
+from mkdocs import utils                                  # noqa: E402
+from mkdocs import exceptions                             # noqa: E402
+from mkdocs import config                                 # noqa: E402
+from mkdocs.commands import build, gh_deploy, new, serve  # noqa: E402
 
 log = logging.getLogger(__name__)
 
@@ -22,7 +24,7 @@ log = logging.getLogger(__name__)
 click.disable_unicode_literals_warning = True
 
 
-class State(object):
+class State:
     ''' Maintain logging level.'''
 
     def __init__(self, log_name='mkdocs', level=logging.INFO):
@@ -96,7 +98,7 @@ pgk_dir = os.path.dirname(os.path.abspath(__file__))
 
 @click.group(context_settings={'help_option_names': ['-h', '--help']})
 @click.version_option(
-    '{0} from {1} (Python {2})'.format(__version__, pgk_dir, sys.version[:3]),
+    '{} from {} (Python {})'.format(__version__, pgk_dir, sys.version[:3]),
     '-V', '--version')
 @common_options
 def cli():
@@ -133,7 +135,7 @@ def serve_command(dev_addr, config_file, strict, theme, theme_dir, livereload):
             theme_dir=theme_dir,
             livereload=livereload
         )
-    except (exceptions.ConfigurationError, socket.error) as e:  # pragma: no cover
+    except (exceptions.ConfigurationError, OSError) as e:  # pragma: no cover
         # Avoid ugly, unhelpful traceback
         raise SystemExit('\n' + str(e))
 

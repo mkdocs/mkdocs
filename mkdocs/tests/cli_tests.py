@@ -1,18 +1,13 @@
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import unicode_literals
 import unittest
-import mock
+from unittest import mock
 import logging
-import sys
 import io
 
 from click.testing import CliRunner
 
 from mkdocs import __main__ as cli
-
-PY3 = sys.version_info[0] == 3
 
 
 class CLITests(unittest.TestCase):
@@ -46,10 +41,7 @@ class CLITests(unittest.TestCase):
         self.assertEqual(mock_serve.call_count, 1)
         args, kwargs = mock_serve.call_args
         self.assertTrue('config_file' in kwargs)
-        if PY3:
-            self.assertIsInstance(kwargs['config_file'], io.BufferedReader)
-        else:
-            self.assertTrue(isinstance(kwargs['config_file'], file))  # noqa: F821
+        self.assertIsInstance(kwargs['config_file'], io.BufferedReader)
         self.assertEqual(kwargs['config_file'].name, 'mkdocs.yml')
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -224,10 +216,7 @@ class CLITests(unittest.TestCase):
         self.assertEqual(mock_load_config.call_count, 1)
         args, kwargs = mock_load_config.call_args
         self.assertTrue('config_file' in kwargs)
-        if PY3:
-            self.assertIsInstance(kwargs['config_file'], io.BufferedReader)
-        else:
-            self.assertTrue(isinstance(kwargs['config_file'], file))  # noqa: F821
+        self.assertIsInstance(kwargs['config_file'], io.BufferedReader)
         self.assertEqual(kwargs['config_file'].name, 'mkdocs.yml')
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
@@ -402,10 +391,7 @@ class CLITests(unittest.TestCase):
         self.assertEqual(mock_load_config.call_count, 1)
         args, kwargs = mock_load_config.call_args
         self.assertTrue('config_file' in kwargs)
-        if PY3:
-            self.assertIsInstance(kwargs['config_file'], io.BufferedReader)
-        else:
-            self.assertTrue(isinstance(kwargs['config_file'], file))  # noqa: F821
+        self.assertIsInstance(kwargs['config_file'], io.BufferedReader)
         self.assertEqual(kwargs['config_file'].name, 'mkdocs.yml')
 
     @mock.patch('mkdocs.config.load_config', autospec=True)

@@ -1,17 +1,15 @@
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import unicode_literals
 import sys
 import unittest
 
 from mkdocs.structure.nav import get_navigation
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.pages import Page
-from mkdocs.tests.base import dedent, load_config, LogTestCase
+from mkdocs.tests.base import dedent, load_config
 
 
-class SiteNavigationTests(LogTestCase):
+class SiteNavigationTests(unittest.TestCase):
 
     maxDiff = None
 

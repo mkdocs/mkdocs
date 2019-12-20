@@ -56,6 +56,7 @@ your global navigation uses more than one level, things will likely be broken.
 
 ### Other Changes and Additions to Version 1.1
 
+* Drop support for Python 2.7. MkDocs is PY3 only now (#1926).
 * Bugfix: Select appropriate asyncio event loop on Windows for Python 3.8+ (#1885).
 * Bugfix: Ensure nested index pages do not get identified as the homepage (#1919).
 * Bugfix: Properly identify deployment version (#1879).

@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import unicode_literals
 import unittest
 from mkdocs.structure.toc import get_toc
 from mkdocs.tests.base import dedent, get_markdown_toc
@@ -192,7 +190,6 @@ class TableOfContentsTests(unittest.TestCase):
         def get_level_sequence(items):
             for item in items:
                 yield item.level
-                for c in get_level_sequence(item.children):
-                    yield c
+                yield from get_level_sequence(item.children)
 
         self.assertEqual(tuple(get_level_sequence(toc)), (0, 1, 2, 2, 1))

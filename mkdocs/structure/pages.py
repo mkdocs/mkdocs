@@ -1,11 +1,8 @@
-# coding: utf-8
-
-from __future__ import unicode_literals
-
 import os
-import io
 import datetime
 import logging
+from urllib.parse import urlparse, urlunparse, urljoin
+from urllib.parse import unquote as urlunquote
 
 import markdown
 from markdown.extensions import Extension
@@ -13,13 +10,13 @@ from markdown.treeprocessors import Treeprocessor
 from markdown.util import AMP_SUBSTITUTE
 
 from mkdocs.structure.toc import get_toc
-from mkdocs.utils import meta, urlparse, urlunparse, urljoin, urlunquote, get_markdown_title, warning_filter
+from mkdocs.utils import meta, get_markdown_title, warning_filter
 
 log = logging.getLogger(__name__)
 log.addFilter(warning_filter)
 
 
-class Page(object):
+class Page:
     def __init__(self, title, file, config):
         file.page = self
         self.file = file
@@ -57,7 +54,7 @@ class Page(object):
     def __eq__(self, other):
 
         def sub_dict(d):
-            return dict((key, value) for key, value in d.items() if key in ['title', 'file'])
+            return {key: value for key, value in d.items() if key in ['title', 'file']}
 
         return (isinstance(other, self.__class__) and sub_dict(self.__dict__) == sub_dict(other.__dict__))
 
@@ -128,9 +125,9 @@ class Page(object):
         )
         if source is None:
             try:
-                with io.open(self.file.abs_src_path, 'r', encoding='utf-8-sig', errors='strict') as f:
+                with open(self.file.abs_src_path, 'r', encoding='utf-8-sig', errors='strict') as f:
                     source = f.read()
-            except IOError:
+            except OSError:
                 log.error('File not found: {}'.format(self.file.src_path))
                 raise
             except ValueError:

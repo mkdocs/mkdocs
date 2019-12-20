@@ -8,19 +8,15 @@ matrix:
     - env: TOXENV=flake8
     - env: TOXENV=markdown-lint
       before_install: npm install -g markdownlint-cli
-    - env: TOXENV=linkchecker
-      python: '2.7'
+    # Until Linkchecker is updated to Python 3, we will have skip this test.
+    # Watch https://github.com/linkchecker/linkchecker for updates.
+    # - env: TOXENV=linkchecker
+    #  python: '2.7'
     - env: TOXENV=jshint
       before_install: npm install -g jshint
     - env: TOXENV=csslint
       before_install: npm install -g csslint
     # Python version specific
-    - python: '2.7'
-      env: TOXENV=py27-integration
-    - python: '2.7'
-      env: TOXENV=py27-min-req
-    - python: '2.7'
-      env: TOXENV=py27-unittests
     - python: '3.4'
       env: TOXENV=py34-integration
     - python: '3.4'
@@ -51,12 +47,6 @@ matrix:
       env: TOXENV=py37-unittests
       dist: xenial
       sudo: true
-    - python: 'pypy'
-      env: TOXENV=pypy-integration
-    - python: 'pypy'
-      env: TOXENV=pypy-min-req
-    - python: 'pypy'
-      env: TOXENV=pypy-unittests
     - python: 'pypy3'
       env: TOXENV=pypy3-integration
     - python: 'pypy3'
@@ -83,4 +73,4 @@ deploy:
   on:
     tags: true
     repo: mkdocs/mkdocs
-    condition: "$TOXENV = py27-integration"
+    condition: "$TOXENV = py37-integration"

@@ -1,7 +1,6 @@
 import unittest
 import os
-import io
-import mock
+from unittest import mock
 
 from mkdocs.structure.files import Files, File, get_files, _sort_files, _filter_paths
 from mkdocs.tests.base import load_config, tempdir, PathAssertionMixin
@@ -619,7 +618,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         dest_path = os.path.join(dest_dir, 'test.txt')
         file.copy_file(dirty=False)
         self.assertPathIsFile(dest_path)
-        with io.open(dest_path, 'r', encoding='utf-8') as f:
+        with open(dest_path, 'r', encoding='utf-8') as f:
             self.assertEqual(f.read(), 'source content')
 
     @tempdir(files={'test.txt': 'destination content'})
@@ -630,7 +629,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         dest_path = os.path.join(dest_dir, 'test.txt')
         file.copy_file(dirty=True)
         self.assertPathIsFile(dest_path)
-        with io.open(dest_path, 'r', encoding='utf-8') as f:
+        with open(dest_path, 'r', encoding='utf-8') as f:
             self.assertEqual(f.read(), 'source content')
 
     @tempdir(files={'test.txt': 'destination content'})
@@ -641,5 +640,5 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         dest_path = os.path.join(dest_dir, 'test.txt')
         file.copy_file(dirty=True)
         self.assertPathIsFile(dest_path)
-        with io.open(dest_path, 'r', encoding='utf-8') as f:
+        with open(dest_path, 'r', encoding='utf-8') as f:
             self.assertEqual(f.read(), 'destination content')

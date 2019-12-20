@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import logging
 import shutil
 import tempfile
@@ -45,7 +43,7 @@ def _get_handler(site_dir, StaticFileHandler):
                 if isfile(join(site_dir, error_page)):
                     self.write(Loader(site_dir).load(error_page).generate())
                 else:
-                    super(WebHandler, self).write_error(status_code, **kwargs)
+                    super().write_error(status_code, **kwargs)
 
     return WebHandler
 
@@ -61,7 +59,7 @@ def _livereload(host, port, config, builder, site_dir):
     class LiveReloadServer(Server):
 
         def get_web_handlers(self, script):
-            handlers = super(LiveReloadServer, self).get_web_handlers(script)
+            handlers = super().get_web_handlers(script)
             # replace livereload handler
             return [(handlers[0][0], _get_handler(site_dir, livereload.handlers.StaticFileHandler), handlers[0][2],)]
 
@@ -130,7 +128,7 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
             site_dir=site_dir
         )
         # Override a few config settings after validation
-        config['site_url'] = 'http://{0}/'.format(config['dev_addr'])
+        config['site_url'] = 'http://{}/'.format(config['dev_addr'])
 
         live_server = livereload in ['dirty', 'livereload']
         dirty = livereload == 'dirty'

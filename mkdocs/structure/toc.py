@@ -1,16 +1,11 @@
-# coding: utf-8
 """
 Deals with generating the per-page table of contents.
 
 For the sake of simplicity we use an existing markdown extension to generate
 an HTML table of contents, and then parse that into the underlying data.
 """
-from __future__ import unicode_literals
 
-try:                                    # pragma: no cover
-    from html.parser import HTMLParser  # noqa
-except ImportError:                     # pragma: no cover
-    from HTMLParser import HTMLParser   # noqa
+from html.parser import HTMLParser
 
 
 def get_toc(toc_html):
@@ -18,7 +13,7 @@ def get_toc(toc_html):
     return TableOfContents(items)
 
 
-class TableOfContents(object):
+class TableOfContents:
     """
     Represents the table of contents for a given page.
     """
@@ -35,7 +30,7 @@ class TableOfContents(object):
         return ''.join([str(item) for item in self])
 
 
-class AnchorLink(object):
+class AnchorLink:
     """
     A single entry in the table of contents.
     """
@@ -48,7 +43,7 @@ class AnchorLink(object):
 
     def indent_print(self, depth=0):
         indent = '    ' * depth
-        ret = '%s%s - %s\n' % (indent, self.title, self.url)
+        ret = '{}{} - {}\n'.format(indent, self.title, self.url)
         for item in self.children:
             ret += item.indent_print(depth + 1)
         return ret

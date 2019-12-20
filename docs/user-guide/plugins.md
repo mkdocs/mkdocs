@@ -76,7 +76,7 @@ All `BasePlugin` subclasses contain the following attributes:
 
         class MyPlugin(mkdocs.plugins.BasePlugin):
             config_scheme = (
-                ('foo', mkdocs.config.config_options.Type(mkdocs.utils.string_types, default='a default value')),
+                ('foo', mkdocs.config.config_options.Type(str, default='a default value')),
                 ('bar', mkdocs.config.config_options.Type(int, default=0)),
                 ('baz', mkdocs.config.config_options.Type(bool, default=True))
             )

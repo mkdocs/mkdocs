@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 import logging
 import subprocess
 import os
@@ -131,5 +130,5 @@ def gh_deploy(config, message=None, force=False, ignore_version=False):
             username, repo = path.split('/', 1)
             if repo.endswith('.git'):
                 repo = repo[:-len('.git')]
-            url = 'https://%s.github.io/%s/' % (username, repo)
+            url = 'https://{}.github.io/{}/'.format(username, repo)
             log.info('Your documentation should shortly be available at: ' + url)

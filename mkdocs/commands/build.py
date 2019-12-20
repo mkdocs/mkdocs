@@ -1,12 +1,9 @@
-# coding: utf-8
-
-from __future__ import unicode_literals
 from datetime import datetime
 from calendar import timegm
 import logging
 import os
 import gzip
-import io
+from urllib.parse import urlparse
 
 from jinja2.exceptions import TemplateNotFound
 import jinja2
@@ -17,7 +14,7 @@ from mkdocs.structure.nav import get_navigation
 import mkdocs
 
 
-class DuplicateFilter(object):
+class DuplicateFilter:
     ''' Avoid logging duplicate messages. '''
     def __init__(self):
         self.msgs = set()
@@ -82,7 +79,7 @@ def _build_template(name, template, files, config, nav):
         # See https://github.com/mkdocs/mkdocs/issues/77.
         # However, if site_url is not set, assume the docs root and server root
         # are the same. See https://github.com/mkdocs/mkdocs/issues/1598.
-        base_url = utils.urlparse(config['site_url'] or '/').path
+        base_url = urlparse(config['site_url'] or '/').path
     else:
         base_url = utils.get_relative_url('.', name)
 
@@ -139,7 +136,7 @@ def _build_extra_template(template_name, files, config, nav):
         return
 
     try:
-        with io.open(file.abs_src_path, 'r', encoding='utf-8', errors='strict') as f:
+        with open(file.abs_src_path, 'r', encoding='utf-8', errors='strict') as f:
             template = jinja2.Template(f.read())
     except Exception as e:
         log.warn("Error reading template '{}': {}".format(template_name, e))
