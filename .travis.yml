@@ -41,6 +41,18 @@ matrix:
       env: TOXENV=py37-unittests
       dist: xenial
       sudo: true
+    - python: '3.8'
+      env: TOXENV=py38-integration
+      dist: xenial
+      sudo: true
+    - python: '3.8'
+      env: TOXENV=py38-min-req
+      dist: xenial
+      sudo: true
+    - python: '3.8'
+      env: TOXENV=py38-unittests
+      dist: xenial
+      sudo: true
     - python: 'pypy3'
       env: TOXENV=pypy3-integration
     - python: 'pypy3'
