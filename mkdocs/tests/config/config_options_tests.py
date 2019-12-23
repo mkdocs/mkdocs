@@ -409,7 +409,7 @@ class SiteDirTest(unittest.TestCase):
 
         j = os.path.join
         # The parent dir is not the same on every system, so use the actual dir name
-        parent_dir = os.path.abspath(mkdocs.__file__).split(os.sep)[-3]
+        parent_dir = mkdocs.__file__.split(os.sep)[-3]
 
         test_configs = (
             {'docs_dir': j('site', 'docs'), 'site_dir': 'site'},
