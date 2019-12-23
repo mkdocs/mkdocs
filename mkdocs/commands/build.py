@@ -108,7 +108,7 @@ def _build_theme_template(template_name, env, files, config, nav):
     try:
         template = env.get_template(template_name)
     except TemplateNotFound:
-        log.warn("Template skipped: '{}' not found in theme directories.".format(template_name))
+        log.warning("Template skipped: '{}' not found in theme directories.".format(template_name))
         return
 
     output = _build_template(template_name, template, files, config, nav)
@@ -132,14 +132,14 @@ def _build_extra_template(template_name, files, config, nav):
 
     file = files.get_file_from_path(template_name)
     if file is None:
-        log.warn("Template skipped: '{}' not found in docs_dir.".format(template_name))
+        log.warning("Template skipped: '{}' not found in docs_dir.".format(template_name))
         return
 
     try:
         with open(file.abs_src_path, 'r', encoding='utf-8', errors='strict') as f:
             template = jinja2.Template(f.read())
     except Exception as e:
-        log.warn("Error reading template '{}': {}".format(template_name, e))
+        log.warning("Error reading template '{}': {}".format(template_name, e))
         return
 
     output = _build_template(template_name, template, files, config, nav)
