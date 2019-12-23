@@ -389,7 +389,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @tempdir(files={'testing.html': '<p>page content</p>'})
     @mock.patch('mkdocs.utils.write_file')
     def test_build_page_dirty_not_modified(self, site_dir, mock_write_file):
-        cfg = load_config(site_dir=site_dir, nav=['index.md'], plugins=[])
+        cfg = load_config(site_dir=site_dir, nav=['testing.md'], plugins=[])
         files = Files([File('testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])])
         nav = get_navigation(files, cfg)
         page = files.documentation_pages()[0].page

@@ -55,6 +55,7 @@ class ConfigBaseTests(unittest.TestCase):
             self.assertEqual(cfg['site_name'], 'MkDocs Test')
         finally:
             os.remove(config_file.name)
+            temp_dir.cleanup()
 
     def test_load_from_missing_file(self):
 

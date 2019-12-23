@@ -138,7 +138,7 @@ class PageTests(unittest.TestCase):
         cfg = load_config()
         fl = File('testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
         pg = Page('Foo', fl, cfg)
-        self.assertRegexpMatches(pg.update_date, r'\d{4}-\d{2}-\d{2}')
+        self.assertRegex(pg.update_date, r'\d{4}-\d{2}-\d{2}')
         self.assertEqual(pg.url, 'testing/')
         self.assertEqual(pg.abs_url, None)
         self.assertEqual(pg.canonical_url, None)

@@ -187,7 +187,7 @@ class SearchIndexTests(unittest.TestCase):
 
         stripper.feed("<h1>Testing</h1><p>Content</p>")
 
-        self.assertEquals(stripper.data, ["Testing", "Content"])
+        self.assertEqual(stripper.data, ["Testing", "Content"])
 
     def test_content_parser(self):
 
@@ -196,7 +196,7 @@ class SearchIndexTests(unittest.TestCase):
         parser.feed('<h1 id="title">Title</h1>TEST')
         parser.close()
 
-        self.assertEquals(parser.data, [search_index.ContentSection(
+        self.assertEqual(parser.data, [search_index.ContentSection(
             text=["TEST"],
             id_="title",
             title="Title"
@@ -209,7 +209,7 @@ class SearchIndexTests(unittest.TestCase):
         parser.feed("<h1>Title</h1>TEST")
         parser.close()
 
-        self.assertEquals(parser.data, [search_index.ContentSection(
+        self.assertEqual(parser.data, [search_index.ContentSection(
             text=["TEST"],
             id_=None,
             title="Title"
@@ -222,7 +222,7 @@ class SearchIndexTests(unittest.TestCase):
         parser.feed("Content Before H1 <h1>Title</h1>TEST")
         parser.close()
 
-        self.assertEquals(parser.data, [search_index.ContentSection(
+        self.assertEqual(parser.data, [search_index.ContentSection(
             text=["TEST"],
             id_=None,
             title="Title"
@@ -234,7 +234,7 @@ class SearchIndexTests(unittest.TestCase):
 
         parser.feed("No H1 or H2<span>Title</span>TEST")
 
-        self.assertEquals(parser.data, [])
+        self.assertEqual(parser.data, [])
 
     def test_find_toc_by_id(self):
         """
