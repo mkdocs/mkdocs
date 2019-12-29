@@ -18,9 +18,9 @@ Amazon S3, or [anywhere][deploy] else you choose.
 
 ### Great themes available
 
-There's a stack of good looking themes available for MkDocs. Choose between
+There's a stack of good looking [themes] available for MkDocs. Choose between
 the built in themes: [mkdocs] and [readthedocs], select one of the 3rd
-party themes in the [MkDocs wiki], or [build your own].
+party themes listed on the [MkDocs Themes] wiki page, or [build your own].
 
 ### Preview your site as you work
 
@@ -31,7 +31,7 @@ your changes.
 ### Easy to customize
 
 Get your project documentation looking just the way you want it by customizing
-the theme.
+the [theme] and/or installing some [plugins].
 
 ---
 
@@ -347,7 +347,10 @@ the MkDocs IRC channel `#mkdocs` on freenode.
 [deploy]: user-guide/deploying-your-docs/
 [mkdocs]: user-guide/styling-your-docs/#mkdocs
 [readthedocs]: user-guide/styling-your-docs/#readthedocs
-[MkDocs wiki]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
+[theme]: user-guide/styling-your-docs/
+[themes]: user-guide/styling-your-docs/
+[plugins]: user-guide/plugins/
+[MkDocs Themes]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
 [build your own]: user-guide/custom-themes/
 [Amazon S3]: https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html
 [get-pip.py]: https://bootstrap.pypa.io/get-pip.py
