@@ -14,7 +14,8 @@ appropriate package name and install it using `pip`:
     pip install mkdocs-foo-plugin
 
 Once a plugin has been successfully installed, it is ready to use. It just needs
-to be [enabled](#using-plugins) in the configuration file.
+to be [enabled](#using-plugins) in the configuration file. The [MkDocs Plugins] 
+wiki page has a growing list of plugins that you can install and use.
 
 ## Using Plugins
 
@@ -412,3 +413,4 @@ tell MkDocs to use if via the config.
 [post_template]: #on_post_template
 [static_templates]: configuration.md#static_templates
 [Template Events]: #template-events
+[MkDocs Plugins]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Plugins
