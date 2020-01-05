@@ -146,7 +146,7 @@
     {%- for path in config['extra_javascript'] %}
       <script src="{{ path|url }}" defer></script>
     {%- endfor %}
-    <script type="text/javascript" defer>
+    <script defer>
         window.onload = function () {
             SphinxRtdTheme.Navigation.enable({{ 'true' if config.theme.sticky_navigation else 'false' }});
         };
