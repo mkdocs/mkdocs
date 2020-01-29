@@ -12,7 +12,18 @@ function getSearchTerm()
     }
 }
 
+function applyTopPadding() {
+    // Update various absolute positions to match where the main container
+    // starts. This is necessary for handling multi-line nav headers, since
+    // that pushes the main container down.
+    var offset = $('body > .container').offset();
+    $('html').css('scroll-padding-top', offset.top + 'px');
+    $('.bs-sidebar.affix').css('top', offset.top + 'px');
+}
+
 $(document).ready(function() {
+
+    applyTopPadding();
 
     var search_term = getSearchTerm(),
         $search_modal = $('#mkdocs_search_modal'),
@@ -147,6 +158,7 @@ $(document).ready(function() {
   });
 });
 
+$(window).on('resize', applyTopPadding);
 
 $('body').scrollspy({
     target: '.bs-sidebar',

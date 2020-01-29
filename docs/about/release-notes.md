@@ -91,6 +91,10 @@ do, adding `--strict`, `--theme`, `--theme-dir`, and `--site-dir`.
 * Add canonical tag to `readthedocs` theme (#1669).
 * Improved error message for when `git` is not available.
 * Add support for `nav_style` theme option for the `mkdocs` theme (#1930).
+* Bugfix: Long/nested dropdowns now behave more consistently for the `mkdocs`
+  theme (#1234).
+* Bugfix: Multi-row nav headers in the `mkdocs` theme no longer obscure the
+  document content (#716).
 
 ## Version 1.0.4 (2018-09-07)
 
