@@ -242,26 +242,23 @@ h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink, h4:hover .head
     text-align: left;
 }
 
-
-.dropdown-submenu {
-    position: relative;
+.navbar-collapse.show { /* csslint allow: adjoining-classes */
+    overflow-y: auto;
+    max-height: calc(100vh - 3.5rem);
 }
 
-.dropdown-submenu>.dropdown-menu {
-    top: 0;
-    left: 100%;
-    margin-top: -6px;
-    margin-left: -1px;
-    -webkit-border-radius: 0 6px 6px 6px;
-    -moz-border-radius: 0 6px 6px;
-    border-radius: 0 6px 6px 6px;
+.dropdown-item.open { /* csslint allow: adjoining-classes */
+    color: #fff;
+    background-color: #2FA4E7;
 }
 
-.dropdown-submenu:hover>.dropdown-menu {
-    display: block;
+.dropdown-submenu > .dropdown-menu {
+    margin: 0 0 0 1.5rem;
+    padding: 0;
+    border-width: 0;
 }
 
-.dropdown-submenu>a:after {
+.dropdown-submenu > a::after {
     display: block;
     content: " ";
     float: right;
@@ -275,18 +272,36 @@ h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink, h4:hover .head
     margin-right: -10px;
 }
 
-.dropdown-submenu:hover>a:after {
+.dropdown-submenu:hover > a::after {
     border-left-color: #fff;
 }
 
-.dropdown-submenu.pull-left { /* csslint allow: adjoining-classes */
-    float: none;
-}
+@media (min-width: 992px) {
+    .dropdown-menu {
+        overflow-y: auto;
+        max-height: calc(100vh - 3.5rem);
+    }
 
-.dropdown-submenu.pull-left>.dropdown-menu { /* csslint allow: adjoining-classes */
-    left: -100%;
-    margin-left: 10px;
-    -webkit-border-radius: 6px 0 6px 6px;
-    -moz-border-radius: 6px 0 6px 6px;
-    border-radius: 6px 0 6px 6px;
+    .dropdown-submenu {
+        position: relative;
+    }
+
+    .dropdown-submenu > .dropdown-menu {
+        /* csslint ignore:start */
+        position: fixed !important;
+        /* csslint ignore:end */
+        margin-top: -9px;
+        margin-left: -2px;
+        border-width: 1px;
+        padding: 0.5rem 0;
+    }
+
+    .dropdown-submenu.pull-left { /* csslint allow: adjoining-classes */
+        float: none;
+    }
+
+    .dropdown-submenu.pull-left > .dropdown-menu { /* csslint allow: adjoining-classes */
+        left: -100%;
+        margin-left: 10px;
+    }
 }
