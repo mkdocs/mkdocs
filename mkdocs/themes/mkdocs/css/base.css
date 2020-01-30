@@ -110,11 +110,19 @@ a:hover code, a:focus code {
     color: #157AB5;
 }
 
+centered {
+    text-align: center;
+}
+
 footer {
     margin-top: 30px;
     margin-bottom: 10px;
     text-align: center;
     font-weight: 200;
+}
+
+keyboard-keys {
+    width: 20%;
 }
 
 .modal-dialog {
