@@ -1,11 +1,9 @@
 html {
     /* csslint ignore:start */
-    scroll-padding-top: 70px;
+    /* The nav header is 3.5rem high, plus 20px for the margin-top of the
+       main container. */
+    scroll-padding-top: calc(3.5rem + 20px);
     /* csslint ignore:end */
-}
-
-body {
-    padding-top: 70px;
 }
 
 /* Replacement for `body { background-attachment: fixed; }`, which has
@@ -24,7 +22,15 @@ body::before {
 }
 
 body > .container {
+    margin-top: 20px;
     min-height: 400px;
+}
+
+.navbar.fixed-top { /* csslint allow: adjoining-classes */
+    /* csslint ignore:start */
+    position: -webkit-sticky;
+    position: sticky;
+    /* csslint ignore:end */
 }
 
 ul.nav .main {
@@ -133,7 +139,9 @@ footer {
     position: -webkit-sticky;
     position: sticky;
     /* csslint ignore:end */
-    top: 80px;
+    /* The nav header is 3.5rem high, plus 20px for the margin-top of the
+       main container. */
+    top: calc(3.5rem + 20px);
 }
 
 .bs-sidebar.card { /* csslint allow: adjoining-classes */
