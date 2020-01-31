@@ -250,9 +250,11 @@ h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink, h4:hover .head
     text-align: left;
 }
 
-.navbar-collapse.show { /* csslint allow: adjoining-classes */
-    overflow-y: auto;
-    max-height: calc(100vh - 3.5rem);
+@media (max-width: 991.98px) {
+    .navbar-collapse.show { /* csslint allow: adjoining-classes */
+        overflow-y: auto;
+        max-height: calc(100vh - 3.5rem);
+    }
 }
 
 .dropdown-item.open { /* csslint allow: adjoining-classes */
