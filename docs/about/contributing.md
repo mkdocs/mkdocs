@@ -65,7 +65,7 @@ Once you are happy with your changes or you are ready for some feedback, push
 it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.
 
-[virtualenv]: https://virtualenv.pypa.io/en/latest/userguide.html
+[virtualenv]: https://virtualenv.pypa.io/en/latest/user_guide.html
 [pip]: https://pip.pypa.io/en/stable/
 [tox]: https://tox.readthedocs.io/en/latest/
 [travis]: https://travis-ci.org/repositories
