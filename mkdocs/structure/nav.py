@@ -117,8 +117,9 @@ def get_navigation(files, config):
             'included in the "nav" configuration:\n  - {}'.format(
                 '\n  - '.join([file.src_path for file in missing_from_config]))
         )
-        # Any documentation files not found in the nav should still have an associated page.
-        # However, these page objects are only accessable from File instances as `file.page`.
+        # Any documentation files not found in the nav should still have an associated page, so we
+        # create them here. The Page object will automatically be assigned to `file.page` during
+        # its creation (and this is the only way in which these page objects are accessable).
         for file in missing_from_config:
             Page(None, file, config)
 
