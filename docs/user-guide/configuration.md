@@ -195,7 +195,7 @@ points to an external site.
 
 However, sometimes the MkDocs site is hosted in a subdirectory of a project's
 site and you may want to link to other parts of the same site without including
-the full domain. In that case, you may use and appropriate relative URL.
+the full domain. In that case, you may use an appropriate relative URL.
 
 ```yaml
 site_url: https://example.com/foo/
