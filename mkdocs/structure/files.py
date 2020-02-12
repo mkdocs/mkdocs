@@ -64,7 +64,8 @@ class Files:
     def add_files_from_theme(self, env, config):
         """ Retrieve static files from Jinja environment and add to collection. """
         def filter(name):
-            patterns = ['.*', '*.py', '*.pyc', '*.html', '*readme*', 'mkdocs_theme.yml']
+            # '.*' filters dot files/dirs at root level whereas '*/.*' filters nested levels
+            patterns = ['.*', '*/.*', '*.py', '*.pyc', '*.html', '*readme*', 'mkdocs_theme.yml']
             patterns.extend('*{}'.format(x) for x in utils.markdown_extensions)
             patterns.extend(config['theme'].static_templates)
             for pattern in patterns:
