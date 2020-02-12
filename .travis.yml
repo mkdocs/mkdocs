@@ -61,11 +61,13 @@ matrix:
       env: TOXENV=pypy3-unittests
 
 install:
+  - pip install 'virtualenv<20.0.0'
   - pip install codecov
   - pip install tox
 
 script:
   - git clean -f -d -x
+  - pip freeze
   - tox
 
 after_success: codecov
