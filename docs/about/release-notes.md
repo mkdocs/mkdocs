@@ -72,6 +72,7 @@ do, adding `--strict`, `--theme`, `--theme-dir`, and `--site-dir`.
 
 ### Other Changes and Additions to Version 1.1
 
+* Bugfix: Ensure nested dot files in themes are ignored and document behavior (#1981).
 * Update minimum dependancy to Markdown 3.0.1.
 * Updated minimum dependancy to Jinja 2.10.1 to address security
   concerns (#1780).
