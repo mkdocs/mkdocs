@@ -33,10 +33,6 @@ body > .container {
     /* csslint ignore:end */
 }
 
-ul.nav .main {
-    font-weight: bold;
-}
-
 .source-links {
     float: right;
 }
@@ -168,7 +164,7 @@ footer {
 }
 
 /* First level of nav */
-.bs-sidenav {
+.bs-sidebar > .navbar-collapse > .nav {
     padding-top:    10px;
     padding-bottom: 10px;
     border-radius: 5px;
@@ -194,16 +190,16 @@ footer {
     border-right: 1px solid;
 }
 
-/* Nav: second level (shown on .active) */
-.bs-sidebar .nav .nav {
-    display: none; /* Hide by default, but at >768px, show it */
-    margin-bottom: 8px;
+.bs-sidebar .nav .nav .nav {
+  margin-left: 1em;
 }
+
+.bs-sidebar .nav > li > a {
+    font-weight: bold;
+}
+
 .bs-sidebar .nav .nav > li > a {
-    padding-top:    3px;
-    padding-bottom: 3px;
-    padding-left: 30px;
-    font-size: 90%;
+    font-weight: normal;
 }
 
 .headerlink {

@@ -9,6 +9,8 @@ search_index_only: false
 highlightjs: true
 hljs_languages: []
 hljs_style: github
+
+navigation_depth: 2
 nav_style: primary
 
 shortcuts:

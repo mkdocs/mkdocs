@@ -27,7 +27,7 @@ class SearchIndex:
         and return the matched item in the TOC.
         """
         for toc_item in toc:
-            if toc_item.url[1:] == id_:
+            if toc_item.id == id_:
                 return toc_item
             toc_item_r = self._find_toc_by_id(toc_item.children, id_)
             if toc_item_r is not None:

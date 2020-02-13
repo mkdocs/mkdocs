@@ -58,7 +58,7 @@ setup(
         'Jinja2>=2.10.1',
         'livereload>=2.5.1',
         'lunr[languages]>=0.5.2',
-        'Markdown>=3.0.1',
+        'Markdown>=3.2.1',
         'PyYAML>=3.10',
         'tornado>=5.0'
     ],

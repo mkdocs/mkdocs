@@ -73,6 +73,9 @@ supports the following options:
 
     * __`search`__: Display the search modal. Default: `83` (s)
 
+* __`navigation_depth`__: The maximum depth of the navigation tree in the
+  sidebar. Default: `2`.
+
 * __`nav_style`__: This adjusts the visual style for the top navigation bar; by
   default, this is set to `primary` (the default), but it can also be set to
   `dark` or `light`.
