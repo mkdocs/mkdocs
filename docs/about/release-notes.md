@@ -96,6 +96,9 @@ do, adding `--strict`, `--theme`, `--theme-dir`, and `--site-dir`.
   theme (#1234).
 * Bugfix: Multi-row nav headers in the `mkdocs` theme no longer obscure the
   document content (#716).
+* Add support for `navigation_depth` theme option for the `mkdocs` theme (#1970).
+* `level` attribute in `page.toc` items is now 1-indexed to match the level in
+  `<hN>` tags (#1970).
 
 ## Version 1.0.4 (2018-09-07)
 

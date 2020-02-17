@@ -181,7 +181,7 @@ class Page:
             extension_configs=config['mdx_configs'] or {}
         )
         self.content = md.convert(self.markdown)
-        self.toc = get_toc(getattr(md, 'toc', ''))
+        self.toc = get_toc(getattr(md, 'toc_tokens', []))
 
 
 class _RelativePathTreeprocessor(Treeprocessor):

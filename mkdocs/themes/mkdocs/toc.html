@@ -5,15 +5,21 @@
         </button>
     </div>
 
+    {% macro toc_item(item) %}
+        {%- if item.level <= config.theme.navigation_depth %}
+            <li class="nav-item" data-level="{{ item.level }}"><a href="{{ item.url }}" class="nav-link">{{ item.title }}</a>
+              <ul class="nav flex-column">
+                {%- for child in item.children %}
+                    {{- toc_item(child) }}
+                {%- endfor %}
+              </ul>
+            </li>
+        {%- endif %}
+    {%- endmacro %}
     <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
-        <ul class="nav flex-column bs-sidenav">
-        {%- for toc_item in page.toc %}
-            <li class="nav-item main"><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
-            {%- for toc_item in toc_item.children %}
-                <li class="nav-item">
-                    <a href="{{ toc_item.url }}" class="nav-link{% if toc_item.active %} active{% endif %}">{{ toc_item.title }}</a>
-                </li>
-            {%- endfor %}
+        <ul class="nav flex-column">
+        {%- for item in page.toc %}
+            {{ toc_item(item) }}
         {%- endfor %}
         </ul>
     </div>
