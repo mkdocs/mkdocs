@@ -25,8 +25,7 @@ the [Customizing a Theme][customize] section below.
 ### mkdocs
 
 The default theme, which was built as a custom [Bootstrap] theme, supports most
-every feature of MkDocs. It only officially supports two levels in the
-navigation (see #1107).
+every feature of MkDocs.
 
 ![mkdocs](../img/mkdocs.png)
 

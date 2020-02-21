@@ -47,9 +47,7 @@ documentation][rtd-docs] for details.
 
 #### Update `mkdocs` theme to Bootswatch 4.1.3 (#1563)
 
-The `mkdocs` theme now supports all the features of [Bootswatch 4.1]. Note that
-the [dropdowns] used in the navigation only support one level of nesting. If
-your global navigation uses more than one level, things will likely be broken.
+The `mkdocs` theme now supports all the features of [Bootswatch 4.1].
 Additionaly, 2 filenames were changed in this update. If you are using a theme
 which inherits from the `mkdocs` theme, the theme developer may need to update
 these filenames as follows.
@@ -58,7 +56,6 @@ these filenames as follows.
    js/bootstrap-3.0.3.min.js => js/bootstrap.min.js
 
 [Bootswatch 4.1]: https://getbootstrap.com/docs/4.1/getting-started/introduction/
-[dropdowns]: https://getbootstrap.com/docs/4.1/components/navs/#pills-with-dropdowns
 
 #### Improved configuration support on the command line (#1401)
 
