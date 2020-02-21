@@ -76,6 +76,7 @@ do, adding `--strict`, `--theme`, `--theme-dir`, and `--site-dir`.
 * Update minimum dependancy to Markdown 3.0.1.
 * Updated minimum dependancy to Jinja 2.10.1 to address security
   concerns (#1780).
+* Update to lunr.js 2.3.8 (#1989).
 * Add support for Python 3.8.
 * Drop support for Python 3.4.
 * Drop support for Python 2.7. MkDocs is PY3 only now (#1926).
