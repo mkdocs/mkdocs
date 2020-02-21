@@ -52,15 +52,13 @@
       throw new Error('Lunr stemmer support is not present. Please include / require Lunr stemmer support before this script.');
     }
 
-    console.warn("[Lunr Languages] Please use the \"nl\" instead of the \"du\". The \"nl\" code is the standard code for Dutch language, and \"du\" will be removed in the next major versions.");
-
     /* register specific locale function */
-    lunr.du = function() {
+    lunr.nl = function() {
       this.pipeline.reset();
       this.pipeline.add(
-        lunr.du.trimmer,
-        lunr.du.stopWordFilter,
-        lunr.du.stemmer
+        lunr.nl.trimmer,
+        lunr.nl.stopWordFilter,
+        lunr.nl.stemmer
       );
 
       // for lunr version 2
@@ -68,18 +66,18 @@
       // in lunr <= 1 this is not needed, as it is done using the normal pipeline
       if (this.searchPipeline) {
         this.searchPipeline.reset();
-        this.searchPipeline.add(lunr.du.stemmer)
+        this.searchPipeline.add(lunr.nl.stemmer)
       }
     };
 
     /* lunr trimmer function */
-    lunr.du.wordCharacters = "A-Za-z\xAA\xBA\xC0-\xD6\xD8-\xF6\xF8-\u02B8\u02E0-\u02E4\u1D00-\u1D25\u1D2C-\u1D5C\u1D62-\u1D65\u1D6B-\u1D77\u1D79-\u1DBE\u1E00-\u1EFF\u2071\u207F\u2090-\u209C\u212A\u212B\u2132\u214E\u2160-\u2188\u2C60-\u2C7F\uA722-\uA787\uA78B-\uA7AD\uA7B0-\uA7B7\uA7F7-\uA7FF\uAB30-\uAB5A\uAB5C-\uAB64\uFB00-\uFB06\uFF21-\uFF3A\uFF41-\uFF5A";
-    lunr.du.trimmer = lunr.trimmerSupport.generateTrimmer(lunr.du.wordCharacters);
+    lunr.nl.wordCharacters = "A-Za-z\xAA\xBA\xC0-\xD6\xD8-\xF6\xF8-\u02B8\u02E0-\u02E4\u1D00-\u1D25\u1D2C-\u1D5C\u1D62-\u1D65\u1D6B-\u1D77\u1D79-\u1DBE\u1E00-\u1EFF\u2071\u207F\u2090-\u209C\u212A\u212B\u2132\u214E\u2160-\u2188\u2C60-\u2C7F\uA722-\uA787\uA78B-\uA7AD\uA7B0-\uA7B7\uA7F7-\uA7FF\uAB30-\uAB5A\uAB5C-\uAB64\uFB00-\uFB06\uFF21-\uFF3A\uFF41-\uFF5A";
+    lunr.nl.trimmer = lunr.trimmerSupport.generateTrimmer(lunr.nl.wordCharacters);
 
-    lunr.Pipeline.registerFunction(lunr.du.trimmer, 'trimmer-du');
+    lunr.Pipeline.registerFunction(lunr.nl.trimmer, 'trimmer-nl');
 
     /* lunr stemmer function */
-    lunr.du.stemmer = (function() {
+    lunr.nl.stemmer = (function() {
       /* create the wrapped stemmer object */
       var Among = lunr.stemmerSupport.Among,
         SnowballProgram = lunr.stemmerSupport.SnowballProgram,
@@ -441,10 +439,10 @@
       }
     })();
 
-    lunr.Pipeline.registerFunction(lunr.du.stemmer, 'stemmer-du');
+    lunr.Pipeline.registerFunction(lunr.nl.stemmer, 'stemmer-nl');
 
-    lunr.du.stopWordFilter = lunr.generateStopWordFilter(' aan al alles als altijd andere ben bij daar dan dat de der deze die dit doch doen door dus een eens en er ge geen geweest haar had heb hebben heeft hem het hier hij hoe hun iemand iets ik in is ja je kan kon kunnen maar me meer men met mij mijn moet na naar niet niets nog nu of om omdat onder ons ook op over reeds te tegen toch toen tot u uit uw van veel voor want waren was wat werd wezen wie wil worden wordt zal ze zelf zich zij zijn zo zonder zou'.split(' '));
+    lunr.nl.stopWordFilter = lunr.generateStopWordFilter(' aan al alles als altijd andere ben bij daar dan dat de der deze die dit doch doen door dus een eens en er ge geen geweest haar had heb hebben heeft hem het hier hij hoe hun iemand iets ik in is ja je kan kon kunnen maar me meer men met mij mijn moet na naar niet niets nog nu of om omdat onder ons ook op over reeds te tegen toch toen tot u uit uw van veel voor want waren was wat werd wezen wie wil worden wordt zal ze zelf zich zij zijn zo zonder zou'.split(' '));
 
-    lunr.Pipeline.registerFunction(lunr.du.stopWordFilter, 'stopWordFilter-du');
+    lunr.Pipeline.registerFunction(lunr.nl.stopWordFilter, 'stopWordFilter-nl');
   };
 }))

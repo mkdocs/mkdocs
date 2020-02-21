@@ -70,6 +70,14 @@ do, adding `--strict`, `--theme`, `--theme-dir`, and `--site-dir`.
 
 [directory-urls]: ../user-guide/configuration.md#use_directory_urls
 
+#### Updated lunr-languages support (#1729)
+
+The `lunr-languages` plugin has been updated to 1.4.0, adding support for
+Arabic (`ar`) and Vietnamese (`vi`) languages. In addition, the Dutch and
+Japanese language codes have been changed to their standard values: `nl` and
+`ja`, respectively. The old language codes (`du` and `jp`) remain as aliases but
+may be removed in a future version of MkDocs.
+
 ### Other Changes and Additions to Version 1.1
 
 * Bugfix: Ensure nested dot files in themes are ignored and document behavior (#1981).
