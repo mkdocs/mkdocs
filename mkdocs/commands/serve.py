@@ -80,7 +80,7 @@ def _livereload(host, port, config, builder, site_dir):
 
 def _static_server(host, port, site_dir):
 
-    # Importing here to seperate the code paths from the --livereload
+    # Importing here to separate the code paths from the --livereload
     # alternative.
     _init_asyncio_patch()
     from tornado import ioloop
