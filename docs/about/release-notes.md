@@ -21,7 +21,7 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
-## Version 1.1 (*in development*)
+## Version 1.1 (2020-02-22)
 
 ### Major Additions to Version 1.1
 
@@ -52,8 +52,10 @@ Additionaly, 2 filenames were changed in this update. If you are using a theme
 which inherits from the `mkdocs` theme, the theme developer may need to update
 these filenames as follows.
 
-   css/bootstrap-custom.min.css => css/bootstrap.min.css
-   js/bootstrap-3.0.3.min.js => js/bootstrap.min.js
+```text
+css/bootstrap-custom.min.css => css/bootstrap.min.css
+js/bootstrap-3.0.3.min.js => js/bootstrap.min.js
+```
 
 [Bootswatch 4.1]: https://getbootstrap.com/docs/4.1/getting-started/introduction/
 
