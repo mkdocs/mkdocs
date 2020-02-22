@@ -62,19 +62,16 @@
         <div class="navbar fixed-top navbar-expand-lg navbar-{% if config.theme.nav_style == "light" %}light{% else %}dark{% endif %} bg-{{ config.theme.nav_style }}">
             <div class="container">
 
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    {%- if nav|length>1 or (page and (page.next_page or page.previous_page)) or config.repo_url %}
-                    <!-- Expander button -->
-                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    {%- endif %}
+                {%- block site_name %}
+                <a class="navbar-brand" href="{{ nav.homepage.url|url }}">{{ config.site_name }}</a>
+                {%- endblock %}
 
-                  {%- block site_name %}
-                    <a class="navbar-brand" href="{{ nav.homepage.url|url }}">{{ config.site_name }}</a>
-                  {%- endblock %}
-                </div>
+                {%- if nav|length>1 or (page and (page.next_page or page.previous_page)) or config.repo_url %}
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                {%- endif %}
 
                 <!-- Expanded navigation -->
                 <div id="navbar-collapse" class="navbar-collapse collapse">
