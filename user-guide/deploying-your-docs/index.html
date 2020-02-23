@@ -9,19 +9,14 @@
         <link rel="canonical" href="https://www.mkdocs.org/user-guide/deploying-your-docs/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Deploying Your Docs - MkDocs</title>
-        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
         <link href="../../css/extra.css" rel="stylesheet">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
 
         <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/django.min.js"></script>
@@ -38,95 +33,87 @@
     </head>
 
     <body>
-
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    <!-- Expander button -->
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="../..">MkDocs</a>
-                </div>
+                <a class="navbar-brand" href="../..">MkDocs</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Expanded navigation -->
-                <div class="navbar-collapse collapse">
+                <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li >
-                                <a href="../..">Home</a>
+                            <li class="navitem">
+                                <a href="../.." class="nav-link">Home</a>
                             </li>
                             <li class="dropdown active">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
-<li >
-    <a href="../writing-your-docs/">Writing Your Docs</a>
+<li>
+    <a href="../writing-your-docs/" class="dropdown-item">Writing Your Docs</a>
 </li>
                                     
-<li >
-    <a href="../styling-your-docs/">Styling Your Docs</a>
+<li>
+    <a href="../styling-your-docs/" class="dropdown-item">Styling Your Docs</a>
 </li>
                                     
-<li >
-    <a href="../configuration/">Configuration</a>
+<li>
+    <a href="../configuration/" class="dropdown-item">Configuration</a>
 </li>
                                     
-<li class="active">
-    <a href="./">Deploying Your Docs</a>
+<li>
+    <a href="./" class="dropdown-item active">Deploying Your Docs</a>
 </li>
                                     
-<li >
-    <a href="../custom-themes/">Custom Themes</a>
+<li>
+    <a href="../custom-themes/" class="dropdown-item">Custom Themes</a>
 </li>
                                     
-<li >
-    <a href="../plugins/">Plugins</a>
+<li>
+    <a href="../plugins/" class="dropdown-item">Plugins</a>
 </li>
                                 </ul>
                             </li>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
-<li >
-    <a href="../../about/release-notes/">Release Notes</a>
+<li>
+    <a href="../../about/release-notes/" class="dropdown-item">Release Notes</a>
 </li>
                                     
-<li >
-    <a href="../../about/contributing/">Contributing</a>
+<li>
+    <a href="../../about/contributing/" class="dropdown-item">Contributing</a>
 </li>
                                     
-<li >
-    <a href="../../about/license/">License</a>
+<li>
+    <a href="../../about/license/" class="dropdown-item">License</a>
 </li>
                                 </ul>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li >
-                                <a rel="next" href="../configuration/">
+                            <li class="nav-item">
+                                <a rel="prev" href="../configuration/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
-                            <li >
-                                <a rel="prev" href="../custom-themes/">
+                            <li class="nav-item">
+                                <a rel="next" href="../custom-themes/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
-                            <li>
-                                <a href="https://github.com/mkdocs/mkdocs/"><i class="fa fa-github"></i> GitHub</a>
+                            <li class="nav-item">
+                                <a href="https://github.com/mkdocs/mkdocs/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -134,16 +121,42 @@
         </div>
 
         <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#deploying-your-docs">Deploying your docs</a></li>
-            <li><a href="#github-pages">GitHub Pages</a></li>
-            <li><a href="#read-the-docs">Read the Docs</a></li>
-            <li><a href="#other-providers">Other Providers</a></li>
-            <li><a href="#404-pages">404 Pages</a></li>
-    </ul>
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#deploying-your-docs" class="nav-link">Deploying your docs</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#github-pages" class="nav-link">GitHub Pages</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#read-the-docs" class="nav-link">Read the Docs</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#other-providers" class="nav-link">Other Providers</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#404-pages" class="nav-link">404 Pages</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
 </div></div>
-                <div class="col-md-9" role="main">
+                    <div class="col-md-9" role="main">
 
 <h1 id="deploying-your-docs">Deploying your docs<a class="headerlink" href="#deploying-your-docs" title="Permanent link"></a></h1>
 <p>A basic guide to deploying your docs to various hosting providers</p>
@@ -231,13 +244,13 @@ documentation on <a href="https://help.github.com/articles/troubleshooting-custo
 <p><a href="https://readthedocs.org/">Read the Docs</a> offers free documentation hosting. You can import your docs
 using any major version control system, including Mercurial, Git, Subversion,
 and Bazaar. Read the Docs supports MkDocs out-of-the-box. Follow the
-<a href="https://read-the-docs.readthedocs.io/en/latest/getting_started.html#in-markdown">instructions</a> on their site to arrange the files in your repository properly,
+<a href="https://docs.readthedocs.io/en/stable/intro/getting-started-with-mkdocs.html">instructions</a> on their site to arrange the files in your repository properly,
 create an account and point it at your publicly hosted repository. If properly
 configured, your documentation will update each time you push commits to your
 public repository.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>To benefit from all of the <a href="http://read-the-docs.readthedocs.io/en/latest/features.html">features</a> offered by Read the Docs, you will need
+<p>To benefit from all of the <a href="https://docs.readthedocs.io/en/latest/features.html">features</a> offered by Read the Docs, you will need
 to use the <a href="../styling-your-docs/#readthedocs">Read the Docs theme</a> which ships with MkDocs. The various
 themes which may be referenced in Read the Docs' documentation are Sphinx
 specific themes and will not work with MkDocs.</p>
@@ -272,6 +285,7 @@ their documentation for "ftp" or "uploading site".</p>
 deploying to <a href="#github-pages">GitHub</a> but only on a custom domain. Other web
 servers may be configured to use it but the feature won't always be available.
 See the documentation for your server of choice for more information.</p></div>
+            </div>
         </div>
 
         <footer class="col-md-12">
@@ -281,24 +295,24 @@ See the documentation for your server of choice for more information.</p></div>
         </footer>
         <script>
             var base_url = "../..",
-                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js" defer></script>
         <script src="../../search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
                 <p>
                     From here you can search these documents. Enter
                     your search terms below.
                 </p>
-                <form role="form">
+                <form>
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
@@ -309,12 +323,12 @@ See the documentation for your server of choice for more information.</p></div>
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">

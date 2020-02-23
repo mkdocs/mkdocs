@@ -9,19 +9,14 @@
         <link rel="canonical" href="https://www.mkdocs.org/user-guide/configuration/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Configuration - MkDocs</title>
-        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
         <link href="../../css/extra.css" rel="stylesheet">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
 
         <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/django.min.js"></script>
@@ -38,95 +33,87 @@
     </head>
 
     <body>
-
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    <!-- Expander button -->
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="../..">MkDocs</a>
-                </div>
+                <a class="navbar-brand" href="../..">MkDocs</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Expanded navigation -->
-                <div class="navbar-collapse collapse">
+                <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li >
-                                <a href="../..">Home</a>
+                            <li class="navitem">
+                                <a href="../.." class="nav-link">Home</a>
                             </li>
                             <li class="dropdown active">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
-<li >
-    <a href="../writing-your-docs/">Writing Your Docs</a>
+<li>
+    <a href="../writing-your-docs/" class="dropdown-item">Writing Your Docs</a>
 </li>
                                     
-<li >
-    <a href="../styling-your-docs/">Styling Your Docs</a>
+<li>
+    <a href="../styling-your-docs/" class="dropdown-item">Styling Your Docs</a>
 </li>
                                     
-<li class="active">
-    <a href="./">Configuration</a>
+<li>
+    <a href="./" class="dropdown-item active">Configuration</a>
 </li>
                                     
-<li >
-    <a href="../deploying-your-docs/">Deploying Your Docs</a>
+<li>
+    <a href="../deploying-your-docs/" class="dropdown-item">Deploying Your Docs</a>
 </li>
                                     
-<li >
-    <a href="../custom-themes/">Custom Themes</a>
+<li>
+    <a href="../custom-themes/" class="dropdown-item">Custom Themes</a>
 </li>
                                     
-<li >
-    <a href="../plugins/">Plugins</a>
+<li>
+    <a href="../plugins/" class="dropdown-item">Plugins</a>
 </li>
                                 </ul>
                             </li>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
-<li >
-    <a href="../../about/release-notes/">Release Notes</a>
+<li>
+    <a href="../../about/release-notes/" class="dropdown-item">Release Notes</a>
 </li>
                                     
-<li >
-    <a href="../../about/contributing/">Contributing</a>
+<li>
+    <a href="../../about/contributing/" class="dropdown-item">Contributing</a>
 </li>
                                     
-<li >
-    <a href="../../about/license/">License</a>
+<li>
+    <a href="../../about/license/" class="dropdown-item">License</a>
 </li>
                                 </ul>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li >
-                                <a rel="next" href="../styling-your-docs/">
+                            <li class="nav-item">
+                                <a rel="prev" href="../styling-your-docs/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
-                            <li >
-                                <a rel="prev" href="../deploying-your-docs/">
+                            <li class="nav-item">
+                                <a rel="next" href="../deploying-your-docs/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
-                            <li>
-                                <a href="https://github.com/mkdocs/mkdocs/"><i class="fa fa-github"></i> GitHub</a>
+                            <li class="nav-item">
+                                <a href="https://github.com/mkdocs/mkdocs/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -134,18 +121,50 @@
         </div>
 
         <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#configuration">Configuration</a></li>
-            <li><a href="#introduction">Introduction</a></li>
-            <li><a href="#project-information">Project information</a></li>
-            <li><a href="#documentation-layout">Documentation layout</a></li>
-            <li><a href="#build-directories">Build directories</a></li>
-            <li><a href="#preview-controls">Preview controls</a></li>
-            <li><a href="#formatting-options">Formatting options</a></li>
-    </ul>
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#configuration" class="nav-link">Configuration</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#introduction" class="nav-link">Introduction</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#project-information" class="nav-link">Project information</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#documentation-layout" class="nav-link">Documentation layout</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#build-directories" class="nav-link">Build directories</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#preview-controls" class="nav-link">Preview controls</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#formatting-options" class="nav-link">Formatting options</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
 </div></div>
-                <div class="col-md-9" role="main">
+                    <div class="col-md-9" role="main">
 
 <h1 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link"></a></h1>
 <p>Guide to all available configuration settings.</p>
@@ -262,12 +281,10 @@ This option can be overridden by a command line option in <code>gh-deploy</code>
 <h2 id="documentation-layout">Documentation layout<a class="headerlink" href="#documentation-layout" title="Permanent link"></a></h2>
 <h3 id="nav">nav<a class="headerlink" href="#nav" title="Permanent link"></a></h3>
 <p>This setting is used to determine the format and layout of the global navigation
-for the site. For example, the following would create "Introduction", "User
-Guide" and "About" navigation items.</p>
+for the site. A minimal navigation configuration could look like this:</p>
 <pre><code class="yaml">nav:
-    - 'Introduction': 'index.md'
-    - 'User Guide': 'user-guide.md'
-    - 'About': 'about.md'
+    - 'index.md'
+    - 'about.md'
 </code></pre>
 
 <p>All paths must be relative to the <code>mkdocs.yml</code> configuration file. See the
@@ -276,24 +293,25 @@ including how to create sub-sections.</p>
 <p>Navigation items may also include links to external sites. While titles are
 optional for internal links, they are required for external links. An external
 link may be a full URL or a relative URL. Any path which is not found in the
-files is assumed to be an external link.</p>
+files is assumed to be an external link. See the section about [Meta-Data] on
+how MkDocs determines the page title of a document.</p>
 <pre><code class="yaml">nav:
-    - Home: index.md
-    - User Guide: user-guide.md
-    - Bug Tracker: https://example.com/
+    - Introduction: 'index.md'
+    - 'about.md'
+    - 'Issue Tracker': 'https://example.com/'
 </code></pre>
 
 <p>In the above example, the first two items point to local files while the third
 points to an external site.</p>
 <p>However, sometimes the MkDocs site is hosted in a subdirectory of a project's
 site and you may want to link to other parts of the same site without including
-the full domain. In that case, you may use and appropriate relative URL.</p>
+the full domain. In that case, you may use an appropriate relative URL.</p>
 <pre><code class="yaml">site_url: https://example.com/foo/
 
 nav:
-    - Home: ../
-    - User Guide: user-guide.md
-    - Bug Tracker: /bugs/
+    - Home: '../'
+    - 'User Guide': 'user-guide.md'
+    - 'Bug Tracker': '/bugs/'
 </code></pre>
 
 <p>In the above example, two different styles of external links are used. First
@@ -305,7 +323,7 @@ server root and effectively points to <code>https://example.com/bugs/</code>. Of
 <code>User Guide</code> points to a local MkDocs page.</p>
 <p><strong>default</strong>: By default <code>nav</code> will contain an alphanumerically sorted, nested
 list of all the Markdown files found within the <code>docs_dir</code> and its
-sub-directories. If none are found it will be <code>[]</code> (an empty list).</p>
+sub-directories. Index files will always be listed first within a sub-section.</p>
 <h2 id="build-directories">Build directories<a class="headerlink" href="#build-directories" title="Permanent link"></a></h2>
 <h3 id="theme">theme<a class="headerlink" href="#theme" title="Permanent link"></a></h3>
 <p>Sets the theme and theme specific configuration of your documentation site.
@@ -445,7 +463,7 @@ warning is raised. Set to <code>false</code> to print a warning and continue pro
 <p>Determines the address used when running <code>mkdocs serve</code>. Must be of the format
 <code>IP:PORT</code>.</p>
 <p>Allows a custom default to be set without the need to pass it through the
-<code>--dev_addr</code> option every time the <code>mkdocs serve</code> command is called.</p>
+<code>--dev-addr</code> option every time the <code>mkdocs serve</code> command is called.</p>
 <p><strong>default</strong>: <code>'127.0.0.1:8000'</code></p>
 <h2 id="formatting-options">Formatting options<a class="headerlink" href="#formatting-options" title="Permanent link"></a></h2>
 <h3 id="markdown_extensions">markdown_extensions<a class="headerlink" href="#markdown_extensions" title="Permanent link"></a></h3>
@@ -536,15 +554,16 @@ the dot (<code>.</code>) as a word separator you might do this:</p>
 <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes">ISO 639-1</a> language codes. With <a href="https://github.com/MihaiValentin/lunr-languages#lunr-languages-----">Lunr Languages</a>, the following languages are
 supported:</p>
 <ul>
+<li><code>ar</code>: Arabic</li>
 <li><code>da</code>: Danish</li>
-<li><code>du</code>: Dutch</li>
+<li><code>nl</code>: Dutch</li>
 <li><code>en</code>: English</li>
 <li><code>fi</code>: Finnish</li>
 <li><code>fr</code>: French</li>
 <li><code>de</code>: German</li>
 <li><code>hu</code>: Hungarian</li>
 <li><code>it</code>: Italian</li>
-<li><code>jp</code>: Japanese</li>
+<li><code>ja</code>: Japanese</li>
 <li><code>no</code>: Norwegian</li>
 <li><code>pt</code>: Portuguese</li>
 <li><code>ro</code>: Romanian</li>
@@ -553,6 +572,7 @@ supported:</p>
 <li><code>sv</code>: Swedish</li>
 <li><code>th</code>: Thai</li>
 <li><code>tr</code>: Turkish</li>
+<li><code>vi</code>: Vietnamese</li>
 </ul>
 <p>You may <a href="https://github.com/MihaiValentin/lunr-languages/blob/master/CONTRIBUTING.md">contribute additional languages</a>.</p>
 <div class="admonition warning">
@@ -571,12 +591,19 @@ languages. However, some users have reported decent results using Japanese.</p>
 <p><strong>default</strong>: <code>['en']</code></p>
 <h5 id="prebuild_index"><strong>prebuild_index</strong><a class="headerlink" href="#prebuild_index" title="Permanent link"></a></h5>
 <p>Optionally generates a pre-built index of all pages, which provides some
- performance improvements for larger sites. Before enabling, check that the
- theme you are using explicitly supports using a prebuilt index (the builtin
- themes do). The pre-build script requires that <a href="https://nodejs.org/">Node.js</a> be installed and the
- command <code>node</code> be on the system path. If this feature is enabled and fails for
- any reason, a warning is issued. You may use the <code>--strict</code> flag when building
- to cause such a failure to raise an error instead.</p>
+performance improvements for larger sites. Before enabling, check that the
+theme you are using explicitly supports using a prebuilt index (the builtin
+themes do).</p>
+<p>There are two options for prebuilding the index:</p>
+<p>Using <a href="https://nodejs.org/">Node.js</a> setting <code>prebuild_index</code> to <code>True</code> or <code>node</code>. This option
+requires that Node.js be installed and the command <code>node</code> be on the system
+path. If this feature is enabled and fails for any reason, a warning is issued.
+You may use the <code>--strict</code> flag when building to cause such a failure to raise
+an error instead.</p>
+<p>Using <a href="http://lunr.readthedocs.io/">Lunr.py</a> setting <code>prebuild_index</code> to <code>python</code>. Lunr.py is installed
+as part of mkdocs and guarantees compatibility with Lunr.js even on languages
+other than english. If you find substantial inconsistencies or problems please
+report it on <a href="https://github.com/yeraydiazdiaz/lunr.py/issues">Lunr.py's issues</a> and fall back to the Node.js version.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>On smaller sites, using a pre-built index is not recommended as it creates a
@@ -586,6 +613,7 @@ the bandwidth increase is relatively small and your users will notice a
 significant improvement in search performance.</p>
 </div>
 <p><strong>default</strong>: <code>False</code></p></div>
+            </div>
         </div>
 
         <footer class="col-md-12">
@@ -595,24 +623,24 @@ significant improvement in search performance.</p>
         </footer>
         <script>
             var base_url = "../..",
-                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js" defer></script>
         <script src="../../search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
                 <p>
                     From here you can search these documents. Enter
                     your search terms below.
                 </p>
-                <form role="form">
+                <form>
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
@@ -623,12 +651,12 @@ significant improvement in search performance.</p>
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">

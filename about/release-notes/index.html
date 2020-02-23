@@ -9,19 +9,14 @@
         <link rel="canonical" href="https://www.mkdocs.org/about/release-notes/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Release Notes - MkDocs</title>
-        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
         <link href="../../css/extra.css" rel="stylesheet">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
 
         <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/django.min.js"></script>
@@ -38,95 +33,87 @@
     </head>
 
     <body>
-
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    <!-- Expander button -->
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="../..">MkDocs</a>
-                </div>
+                <a class="navbar-brand" href="../..">MkDocs</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Expanded navigation -->
-                <div class="navbar-collapse collapse">
+                <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li >
-                                <a href="../..">Home</a>
+                            <li class="navitem">
+                                <a href="../.." class="nav-link">Home</a>
                             </li>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
-<li >
-    <a href="../../user-guide/writing-your-docs/">Writing Your Docs</a>
+<li>
+    <a href="../../user-guide/writing-your-docs/" class="dropdown-item">Writing Your Docs</a>
 </li>
                                     
-<li >
-    <a href="../../user-guide/styling-your-docs/">Styling Your Docs</a>
+<li>
+    <a href="../../user-guide/styling-your-docs/" class="dropdown-item">Styling Your Docs</a>
 </li>
                                     
-<li >
-    <a href="../../user-guide/configuration/">Configuration</a>
+<li>
+    <a href="../../user-guide/configuration/" class="dropdown-item">Configuration</a>
 </li>
                                     
-<li >
-    <a href="../../user-guide/deploying-your-docs/">Deploying Your Docs</a>
+<li>
+    <a href="../../user-guide/deploying-your-docs/" class="dropdown-item">Deploying Your Docs</a>
 </li>
                                     
-<li >
-    <a href="../../user-guide/custom-themes/">Custom Themes</a>
+<li>
+    <a href="../../user-guide/custom-themes/" class="dropdown-item">Custom Themes</a>
 </li>
                                     
-<li >
-    <a href="../../user-guide/plugins/">Plugins</a>
+<li>
+    <a href="../../user-guide/plugins/" class="dropdown-item">Plugins</a>
 </li>
                                 </ul>
                             </li>
                             <li class="dropdown active">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
-<li class="active">
-    <a href="./">Release Notes</a>
+<li>
+    <a href="./" class="dropdown-item active">Release Notes</a>
 </li>
                                     
-<li >
-    <a href="../contributing/">Contributing</a>
+<li>
+    <a href="../contributing/" class="dropdown-item">Contributing</a>
 </li>
                                     
-<li >
-    <a href="../license/">License</a>
+<li>
+    <a href="../license/" class="dropdown-item">License</a>
 </li>
                                 </ul>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li >
-                                <a rel="next" href="../../user-guide/plugins/">
+                            <li class="nav-item">
+                                <a rel="prev" href="../../user-guide/plugins/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
-                            <li >
-                                <a rel="prev" href="../contributing/">
+                            <li class="nav-item">
+                                <a rel="next" href="../contributing/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
-                            <li>
-                                <a href="https://github.com/mkdocs/mkdocs/"><i class="fa fa-github"></i> GitHub</a>
+                            <li class="nav-item">
+                                <a href="https://github.com/mkdocs/mkdocs/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -134,44 +121,158 @@
         </div>
 
         <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#release-notes">Release Notes</a></li>
-            <li><a href="#upgrading">Upgrading</a></li>
-            <li><a href="#maintenance-team">Maintenance team</a></li>
-            <li><a href="#version-104-2018-09-07">Version 1.0.4 (2018-09-07)</a></li>
-            <li><a href="#version-103-2018-08-29">Version 1.0.3 (2018-08-29)</a></li>
-            <li><a href="#version-102-2018-08-22">Version 1.0.2 (2018-08-22)</a></li>
-            <li><a href="#version-101-2018-08-13">Version 1.0.1 (2018-08-13)</a></li>
-            <li><a href="#version-10-2018-08-03">Version 1.0 (2018-08-03)</a></li>
-            <li><a href="#version-0175-2018-07-06">Version 0.17.5 (2018-07-06)</a></li>
-            <li><a href="#version-0174-2018-06-08">Version 0.17.4 (2018-06-08)</a></li>
-            <li><a href="#version-0173-2018-03-07">Version 0.17.3 (2018-03-07)</a></li>
-            <li><a href="#version-0172-2017-11-15">Version 0.17.2 (2017-11-15)</a></li>
-            <li><a href="#version-0171-2017-10-30">Version 0.17.1 (2017-10-30)</a></li>
-            <li><a href="#version-0170-2017-10-19">Version 0.17.0 (2017-10-19)</a></li>
-            <li><a href="#version-0163-2017-04-04">Version 0.16.3 (2017-04-04)</a></li>
-            <li><a href="#version-0162-2017-03-13">Version 0.16.2 (2017-03-13)</a></li>
-            <li><a href="#version-0161-2016-12-22">Version 0.16.1 (2016-12-22)</a></li>
-            <li><a href="#version-016-2016-11-04">Version 0.16 (2016-11-04)</a></li>
-            <li><a href="#version-0153-2016-02-18">Version 0.15.3 (2016-02-18)</a></li>
-            <li><a href="#version-0152-2016-02-08">Version 0.15.2 (2016-02-08)</a></li>
-            <li><a href="#version-0151-2016-01-30">Version 0.15.1 (2016-01-30)</a></li>
-            <li><a href="#version-0150-2016-01-21">Version 0.15.0 (2016-01-21)</a></li>
-            <li><a href="#version-0140-2015-06-09">Version 0.14.0 (2015-06-09)</a></li>
-            <li><a href="#version-0133-2015-06-02">Version 0.13.3 (2015-06-02)</a></li>
-            <li><a href="#version-0132-2015-05-30">Version 0.13.2 (2015-05-30)</a></li>
-            <li><a href="#version-0131-2015-05-27">Version 0.13.1 (2015-05-27)</a></li>
-            <li><a href="#version-0130-2015-05-26">Version 0.13.0 (2015-05-26)</a></li>
-            <li><a href="#version-0122-2015-04-22">Version 0.12.2 (2015-04-22)</a></li>
-            <li><a href="#version-0121-2015-04-14">Version 0.12.1 (2015-04-14)</a></li>
-            <li><a href="#version-0120-2015-04-14">Version 0.12.0 (2015-04-14)</a></li>
-            <li><a href="#version-0111-2014-11-20">Version 0.11.1 (2014-11-20)</a></li>
-            <li><a href="#version-0110-2014-11-18">Version 0.11.0 (2014-11-18)</a></li>
-            <li><a href="#version-0100-2014-10-29">Version 0.10.0 (2014-10-29)</a></li>
-    </ul>
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#release-notes" class="nav-link">Release Notes</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#upgrading" class="nav-link">Upgrading</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#maintenance-team" class="nav-link">Maintenance team</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-11-2020-02-22" class="nav-link">Version 1.1 (2020-02-22)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-104-2018-09-07" class="nav-link">Version 1.0.4 (2018-09-07)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-103-2018-08-29" class="nav-link">Version 1.0.3 (2018-08-29)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-102-2018-08-22" class="nav-link">Version 1.0.2 (2018-08-22)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-101-2018-08-13" class="nav-link">Version 1.0.1 (2018-08-13)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-10-2018-08-03" class="nav-link">Version 1.0 (2018-08-03)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0175-2018-07-06" class="nav-link">Version 0.17.5 (2018-07-06)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0174-2018-06-08" class="nav-link">Version 0.17.4 (2018-06-08)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0173-2018-03-07" class="nav-link">Version 0.17.3 (2018-03-07)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0172-2017-11-15" class="nav-link">Version 0.17.2 (2017-11-15)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0171-2017-10-30" class="nav-link">Version 0.17.1 (2017-10-30)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0170-2017-10-19" class="nav-link">Version 0.17.0 (2017-10-19)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0163-2017-04-04" class="nav-link">Version 0.16.3 (2017-04-04)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0162-2017-03-13" class="nav-link">Version 0.16.2 (2017-03-13)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0161-2016-12-22" class="nav-link">Version 0.16.1 (2016-12-22)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-016-2016-11-04" class="nav-link">Version 0.16 (2016-11-04)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0153-2016-02-18" class="nav-link">Version 0.15.3 (2016-02-18)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0152-2016-02-08" class="nav-link">Version 0.15.2 (2016-02-08)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0151-2016-01-30" class="nav-link">Version 0.15.1 (2016-01-30)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0150-2016-01-21" class="nav-link">Version 0.15.0 (2016-01-21)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0140-2015-06-09" class="nav-link">Version 0.14.0 (2015-06-09)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0133-2015-06-02" class="nav-link">Version 0.13.3 (2015-06-02)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0132-2015-05-30" class="nav-link">Version 0.13.2 (2015-05-30)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0131-2015-05-27" class="nav-link">Version 0.13.1 (2015-05-27)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0130-2015-05-26" class="nav-link">Version 0.13.0 (2015-05-26)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0122-2015-04-22" class="nav-link">Version 0.12.2 (2015-04-22)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0121-2015-04-14" class="nav-link">Version 0.12.1 (2015-04-14)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0120-2015-04-14" class="nav-link">Version 0.12.0 (2015-04-14)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0111-2014-11-20" class="nav-link">Version 0.11.1 (2014-11-20)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0110-2014-11-18" class="nav-link">Version 0.11.0 (2014-11-18)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0100-2014-10-29" class="nav-link">Version 0.10.0 (2014-10-29)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
 </div></div>
-                <div class="col-md-9" role="main">
+                    <div class="col-md-9" role="main">
 
 <h1 id="release-notes">Release Notes<a class="headerlink" href="#release-notes" title="Permanent link"></a></h1>
 <hr />
@@ -189,6 +290,70 @@ mkdocs, version 1.0 from /path/to/mkdocs (Python 3.6)
 <li><a href="https://github.com/tomchristie/">@tomchristie</a></li>
 <li><a href="https://github.com/d0ugal/">@d0ugal</a></li>
 <li><a href="https://github.com/waylan/">@waylan</a></li>
+</ul>
+<h2 id="version-11-2020-02-22">Version 1.1 (2020-02-22)<a class="headerlink" href="#version-11-2020-02-22" title="Permanent link"></a></h2>
+<h3 id="major-additions-to-version-11">Major Additions to Version 1.1<a class="headerlink" href="#major-additions-to-version-11" title="Permanent link"></a></h3>
+<h4 id="support-for-lunrpy-as-prebuild_index-engine">Support for Lunr.py as <code>prebuild_index</code> engine<a class="headerlink" href="#support-for-lunrpy-as-prebuild_index-engine" title="Permanent link"></a></h4>
+<p>Mkdocs now supports prebuilding indices using <a href="http://lunr.readthedocs.io/">Lunr.py</a>, a pure
+Python implementation of Lunr.js, allowing the user to avoid installing a
+NodeJS environment if so desired. For more information please read the
+<a href="../../user-guide/configuration/#prebuild_index"><code>prebuild_index</code> documentation</a>.</p>
+<h4 id="readthedocs-theme-updated-with-upstream-588-and-1374"><code>readthedocs</code> theme updated with upstream (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/588" title="GitHub Issue mkdocs/mkdocs #588">#588</a> and <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1374" title="GitHub Issue mkdocs/mkdocs #1374">#1374</a>)<a class="headerlink" href="#readthedocs-theme-updated-with-upstream-588-and-1374" title="Permanent link"></a></h4>
+<p>The <code>readthedocs</code> theme now more closely matches the <a href="https://github.com/rtfd/sphinx_rtd_theme/">upstream</a> Sphinx theme
+(version 0.4.1). A number of new theme configuration settings were added which
+mirror the upstream configuration options. See the <a href="../../user-guide/styling-your-docs/#readthedocs">theme
+documentation</a> for details.</p>
+<h4 id="update-mkdocs-theme-to-bootswatch-413-1563">Update <code>mkdocs</code> theme to Bootswatch 4.1.3 (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1563" title="GitHub Issue mkdocs/mkdocs #1563">#1563</a>)<a class="headerlink" href="#update-mkdocs-theme-to-bootswatch-413-1563" title="Permanent link"></a></h4>
+<p>The <code>mkdocs</code> theme now supports all the features of <a href="https://getbootstrap.com/docs/4.1/getting-started/introduction/">Bootswatch 4.1</a>.
+Additionaly, 2 filenames were changed in this update. If you are using a theme
+which inherits from the <code>mkdocs</code> theme, the theme developer may need to update
+these filenames as follows.</p>
+<pre><code class="text">css/bootstrap-custom.min.css =&gt; css/bootstrap.min.css
+js/bootstrap-3.0.3.min.js =&gt; js/bootstrap.min.js
+</code></pre>
+
+<h4 id="improved-configuration-support-on-the-command-line-1401">Improved configuration support on the command line (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1401" title="GitHub Issue mkdocs/mkdocs #1401">#1401</a>)<a class="headerlink" href="#improved-configuration-support-on-the-command-line-1401" title="Permanent link"></a></h4>
+<p>The <code>build</code>, <code>serve</code>, and <code>gh-deploy</code> subcommands now support flags to control
+whether <a href="../../user-guide/configuration/#use_directory_urls">directory URLs</a> should be created:
+<code>--use-directory-urls</code> / <code>--no-directory-urls</code>. In addition, the <code>gh-deploy</code>
+subcommand now supports all the configuration options that <code>build</code> and <code>serve</code>
+do, adding <code>--strict</code>, <code>--theme</code>, <code>--theme-dir</code>, and <code>--site-dir</code>.</p>
+<h4 id="updated-lunr-languages-support-1729">Updated lunr-languages support (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1729" title="GitHub Issue mkdocs/mkdocs #1729">#1729</a>)<a class="headerlink" href="#updated-lunr-languages-support-1729" title="Permanent link"></a></h4>
+<p>The <code>lunr-languages</code> plugin has been updated to 1.4.0, adding support for
+Arabic (<code>ar</code>) and Vietnamese (<code>vi</code>) languages. In addition, the Dutch and
+Japanese language codes have been changed to their standard values: <code>nl</code> and
+<code>ja</code>, respectively. The old language codes (<code>du</code> and <code>jp</code>) remain as aliases but
+may be removed in a future version of MkDocs.</p>
+<h3 id="other-changes-and-additions-to-version-11">Other Changes and Additions to Version 1.1<a class="headerlink" href="#other-changes-and-additions-to-version-11" title="Permanent link"></a></h3>
+<ul>
+<li>Bugfix: Ensure nested dot files in themes are ignored and document behavior (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1981" title="GitHub Issue mkdocs/mkdocs #1981">#1981</a>).</li>
+<li>Update minimum dependancy to Markdown 3.0.1.</li>
+<li>Updated minimum dependancy to Jinja 2.10.1 to address security
+  concerns (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1780" title="GitHub Issue mkdocs/mkdocs #1780">#1780</a>).</li>
+<li>Update to lunr.js 2.3.8 (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1989" title="GitHub Issue mkdocs/mkdocs #1989">#1989</a>).</li>
+<li>Add support for Python 3.8.</li>
+<li>Drop support for Python 3.4.</li>
+<li>Drop support for Python 2.7. MkDocs is PY3 only now (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1926" title="GitHub Issue mkdocs/mkdocs #1926">#1926</a>).</li>
+<li>Bugfix: Select appropriate asyncio event loop on Windows for Python 3.8+ (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1885" title="GitHub Issue mkdocs/mkdocs #1885">#1885</a>).</li>
+<li>Bugfix: Ensure nested index pages do not get identified as the homepage (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1919" title="GitHub Issue mkdocs/mkdocs #1919">#1919</a>).</li>
+<li>Bugfix: Properly identify deployment version (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1879" title="GitHub Issue mkdocs/mkdocs #1879">#1879</a>).</li>
+<li>Bugfix: Properly build <code>ValidationError</code> message for <code>custom_dir</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1849" title="GitHub Issue mkdocs/mkdocs #1849">#1849</a>).</li>
+<li>Bugfix: Exclude Markdown files and READMEs from theme (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1766" title="GitHub Issue mkdocs/mkdocs #1766">#1766</a>).</li>
+<li>Bugfix: Account for encoded URLs (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1670" title="GitHub Issue mkdocs/mkdocs #1670">#1670</a>).</li>
+<li>Bugfix: Ensure theme files do not override <code>docs_dir</code> files (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1671" title="GitHub Issue mkdocs/mkdocs #1671">#1671</a>).</li>
+<li>Bugfix: Do not normalize URL fragments (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1655" title="GitHub Issue mkdocs/mkdocs #1655">#1655</a>).</li>
+<li>Bugfix: Skip external URLs in sitemap.xml (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1742" title="GitHub Issue mkdocs/mkdocs #1742">#1742</a>).</li>
+<li>Bugfix: Ensure theme files do not override docs_dir files on Windows (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1876" title="GitHub Issue mkdocs/mkdocs #1876">#1876</a>)</li>
+<li>Add canonical tag to <code>readthedocs</code> theme (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1669" title="GitHub Issue mkdocs/mkdocs #1669">#1669</a>).</li>
+<li>Improved error message for when <code>git</code> is not available.</li>
+<li>Add support for <code>nav_style</code> theme option for the <code>mkdocs</code> theme (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1930" title="GitHub Issue mkdocs/mkdocs #1930">#1930</a>).</li>
+<li>Bugfix: Long/nested dropdowns now behave more consistently for the <code>mkdocs</code>
+  theme (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1234" title="GitHub Issue mkdocs/mkdocs #1234">#1234</a>).</li>
+<li>Bugfix: Multi-row nav headers in the <code>mkdocs</code> theme no longer obscure the
+  document content (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/716" title="GitHub Issue mkdocs/mkdocs #716">#716</a>).</li>
+<li>Add support for <code>navigation_depth</code> theme option for the <code>mkdocs</code> theme (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1970" title="GitHub Issue mkdocs/mkdocs #1970">#1970</a>).</li>
+<li><code>level</code> attribute in <code>page.toc</code> items is now 1-indexed to match the level in
+  <code>&lt;hN&gt;</code> tags (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1970" title="GitHub Issue mkdocs/mkdocs #1970">#1970</a>).</li>
 </ul>
 <h2 id="version-104-2018-09-07">Version 1.0.4 (2018-09-07)<a class="headerlink" href="#version-104-2018-09-07" title="Permanent link"></a></h2>
 <ul>
@@ -1029,7 +1194,7 @@ documentation.</p>
 <h3 id="other-changes-and-additions-to-version-0130">Other Changes and Additions to Version 0.13.0<a class="headerlink" href="#other-changes-and-additions-to-version-0130" title="Permanent link"></a></h3>
 <ul>
 <li>Add support for <a href="../../user-guide/configuration/#markdown_extensions">Markdown extension configuration options</a>. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/435" title="GitHub Issue mkdocs/mkdocs #435">#435</a>)</li>
-<li>MkDocs now ships Python <a href="http://pythonwheels.com/">wheels</a>. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/486" title="GitHub Issue mkdocs/mkdocs #486">#486</a>)</li>
+<li>MkDocs now ships Python <a href="https://pythonwheels.com/">wheels</a>. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/486" title="GitHub Issue mkdocs/mkdocs #486">#486</a>)</li>
 <li>Only include the build date and MkDocs version on the homepage. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/490" title="GitHub Issue mkdocs/mkdocs #490">#490</a>)</li>
 <li>Generate sitemaps for documentation builds. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/436" title="GitHub Issue mkdocs/mkdocs #436">#436</a>)</li>
 <li>Add a clearer way to define nested pages in the configuration. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/482" title="GitHub Issue mkdocs/mkdocs #482">#482</a>)</li>
@@ -1150,6 +1315,7 @@ documentation.</p>
 <li>Bugfix: Correctly handle external <code>extra_javascript</code> and <code>extra_css</code>. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/92" title="GitHub Issue mkdocs/mkdocs #92">#92</a>)</li>
 <li>Bugfix: Fixed favicon support. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/87" title="GitHub Issue mkdocs/mkdocs #87">#87</a>)</li>
 </ul></div>
+            </div>
         </div>
 
         <footer class="col-md-12">
@@ -1159,24 +1325,24 @@ documentation.</p>
         </footer>
         <script>
             var base_url = "../..",
-                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js" defer></script>
         <script src="../../search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
                 <p>
                     From here you can search these documents. Enter
                     your search terms below.
                 </p>
-                <form role="form">
+                <form>
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
@@ -1187,12 +1353,12 @@ documentation.</p>
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">

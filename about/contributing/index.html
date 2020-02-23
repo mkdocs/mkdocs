@@ -9,19 +9,14 @@
         <link rel="canonical" href="https://www.mkdocs.org/about/contributing/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Contributing - MkDocs</title>
-        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
         <link href="../../css/extra.css" rel="stylesheet">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
 
         <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/django.min.js"></script>
@@ -38,95 +33,87 @@
     </head>
 
     <body>
-
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    <!-- Expander button -->
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="../..">MkDocs</a>
-                </div>
+                <a class="navbar-brand" href="../..">MkDocs</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Expanded navigation -->
-                <div class="navbar-collapse collapse">
+                <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li >
-                                <a href="../..">Home</a>
+                            <li class="navitem">
+                                <a href="../.." class="nav-link">Home</a>
                             </li>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
-<li >
-    <a href="../../user-guide/writing-your-docs/">Writing Your Docs</a>
+<li>
+    <a href="../../user-guide/writing-your-docs/" class="dropdown-item">Writing Your Docs</a>
 </li>
                                     
-<li >
-    <a href="../../user-guide/styling-your-docs/">Styling Your Docs</a>
+<li>
+    <a href="../../user-guide/styling-your-docs/" class="dropdown-item">Styling Your Docs</a>
 </li>
                                     
-<li >
-    <a href="../../user-guide/configuration/">Configuration</a>
+<li>
+    <a href="../../user-guide/configuration/" class="dropdown-item">Configuration</a>
 </li>
                                     
-<li >
-    <a href="../../user-guide/deploying-your-docs/">Deploying Your Docs</a>
+<li>
+    <a href="../../user-guide/deploying-your-docs/" class="dropdown-item">Deploying Your Docs</a>
 </li>
                                     
-<li >
-    <a href="../../user-guide/custom-themes/">Custom Themes</a>
+<li>
+    <a href="../../user-guide/custom-themes/" class="dropdown-item">Custom Themes</a>
 </li>
                                     
-<li >
-    <a href="../../user-guide/plugins/">Plugins</a>
+<li>
+    <a href="../../user-guide/plugins/" class="dropdown-item">Plugins</a>
 </li>
                                 </ul>
                             </li>
                             <li class="dropdown active">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
-<li >
-    <a href="../release-notes/">Release Notes</a>
+<li>
+    <a href="../release-notes/" class="dropdown-item">Release Notes</a>
 </li>
                                     
-<li class="active">
-    <a href="./">Contributing</a>
+<li>
+    <a href="./" class="dropdown-item active">Contributing</a>
 </li>
                                     
-<li >
-    <a href="../license/">License</a>
+<li>
+    <a href="../license/" class="dropdown-item">License</a>
 </li>
                                 </ul>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li >
-                                <a rel="next" href="../release-notes/">
+                            <li class="nav-item">
+                                <a rel="prev" href="../release-notes/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
-                            <li >
-                                <a rel="prev" href="../license/">
+                            <li class="nav-item">
+                                <a rel="next" href="../license/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
-                            <li>
-                                <a href="https://github.com/mkdocs/mkdocs/"><i class="fa fa-github"></i> GitHub</a>
+                            <li class="nav-item">
+                                <a href="https://github.com/mkdocs/mkdocs/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -134,18 +121,50 @@
         </div>
 
         <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#contributing-to-mkdocs">Contributing to MkDocs</a></li>
-            <li><a href="#code-of-conduct">Code of Conduct</a></li>
-            <li><a href="#reporting-an-issue">Reporting an Issue</a></li>
-            <li><a href="#testing-the-development-version">Testing the Development Version</a></li>
-            <li><a href="#installing-for-development">Installing for Development</a></li>
-            <li><a href="#running-the-tests">Running the tests</a></li>
-            <li><a href="#submitting-pull-requests">Submitting Pull Requests</a></li>
-    </ul>
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#contributing-to-mkdocs" class="nav-link">Contributing to MkDocs</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#code-of-conduct" class="nav-link">Code of Conduct</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#reporting-an-issue" class="nav-link">Reporting an Issue</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#testing-the-development-version" class="nav-link">Testing the Development Version</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#installing-for-development" class="nav-link">Installing for Development</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#running-the-tests" class="nav-link">Running the tests</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#submitting-pull-requests" class="nav-link">Submitting Pull Requests</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
 </div></div>
-                <div class="col-md-9" role="main">
+                    <div class="col-md-9" role="main">
 
 <h1 id="contributing-to-mkdocs">Contributing to MkDocs<a class="headerlink" href="#contributing-to-mkdocs" title="Permanent link"></a></h1>
 <p>An introduction to contributing to the MkDocs project.</p>
@@ -170,23 +189,24 @@ traceback.</p>
 MkDocs you can do so with the following command. This can be useful if you
 want to provide feedback for a new feature or want to confirm if a bug you
 have encountered is fixed in the git master. It is <strong>strongly</strong> recommended
-that you do this within a <a href="https://virtualenv.pypa.io/en/latest/userguide.html">virtualenv</a>.</p>
+that you do this within a <a href="https://virtualenv.pypa.io/en/latest/user_guide.html">virtualenv</a>.</p>
 <pre><code class="bash">pip install https://github.com/mkdocs/mkdocs/archive/master.tar.gz
 </code></pre>
 
 <h2 id="installing-for-development">Installing for Development<a class="headerlink" href="#installing-for-development" title="Permanent link"></a></h2>
 <p>First you'll need to fork and clone the repository. Once you have a local
 copy, run the following command. It is <strong>strongly</strong> recommended that you do
-this within a <a href="https://virtualenv.pypa.io/en/latest/userguide.html">virtualenv</a>.</p>
+this within a <a href="https://virtualenv.pypa.io/en/latest/user_guide.html">virtualenv</a>.</p>
 <pre><code class="bash">pip install --editable .
 </code></pre>
 
 <p>This will install MkDocs in development mode which binds the <code>mkdocs</code> command
 to the git repository.</p>
 <h2 id="running-the-tests">Running the tests<a class="headerlink" href="#running-the-tests" title="Permanent link"></a></h2>
-<p>To run the tests, it is recommended that you use <a href="https://tox.readthedocs.io/en/latest/">Tox</a>. This just needs
-to be pip installed and then the test suite can be ran for MkDocs but running
-the command <code>tox</code> in the root of your MkDocs repository.</p>
+<p>To run the tests, it is recommended that you use <a href="https://tox.readthedocs.io/en/latest/">tox</a>.</p>
+<p>Install Tox using <a href="https://pip.pypa.io/en/stable/">pip</a> by running the command <code>pip install tox</code>.
+Then the test suite can be run for MkDocs by running the command <code>tox</code> in the
+root of your MkDocs repository.</p>
 <p>It will attempt to run the tests against all of the Python versions we
 support. So don't be concerned if you are missing some and they fail. The rest
 will be verified by <a href="https://travis-ci.org/repositories">Travis</a> when you submit a pull request.</p>
@@ -194,6 +214,7 @@ will be verified by <a href="https://travis-ci.org/repositories">Travis</a> when
 <p>Once you are happy with your changes or you are ready for some feedback, push
 it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.</p></div>
+            </div>
         </div>
 
         <footer class="col-md-12">
@@ -203,24 +224,24 @@ most likely need to have tests and documentation if it is a new feature.</p></di
         </footer>
         <script>
             var base_url = "../..",
-                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js" defer></script>
         <script src="../../search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
                 <p>
                     From here you can search these documents. Enter
                     your search terms below.
                 </p>
-                <form role="form">
+                <form>
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
@@ -231,12 +252,12 @@ most likely need to have tests and documentation if it is a new feature.</p></di
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">

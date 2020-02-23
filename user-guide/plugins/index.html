@@ -9,19 +9,14 @@
         <link rel="canonical" href="https://www.mkdocs.org/user-guide/plugins/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Plugins - MkDocs</title>
-        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
         <link href="../../css/extra.css" rel="stylesheet">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
 
         <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/django.min.js"></script>
@@ -38,95 +33,87 @@
     </head>
 
     <body>
-
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    <!-- Expander button -->
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="../..">MkDocs</a>
-                </div>
+                <a class="navbar-brand" href="../..">MkDocs</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Expanded navigation -->
-                <div class="navbar-collapse collapse">
+                <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li >
-                                <a href="../..">Home</a>
+                            <li class="navitem">
+                                <a href="../.." class="nav-link">Home</a>
                             </li>
                             <li class="dropdown active">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
-<li >
-    <a href="../writing-your-docs/">Writing Your Docs</a>
+<li>
+    <a href="../writing-your-docs/" class="dropdown-item">Writing Your Docs</a>
 </li>
                                     
-<li >
-    <a href="../styling-your-docs/">Styling Your Docs</a>
+<li>
+    <a href="../styling-your-docs/" class="dropdown-item">Styling Your Docs</a>
 </li>
                                     
-<li >
-    <a href="../configuration/">Configuration</a>
+<li>
+    <a href="../configuration/" class="dropdown-item">Configuration</a>
 </li>
                                     
-<li >
-    <a href="../deploying-your-docs/">Deploying Your Docs</a>
+<li>
+    <a href="../deploying-your-docs/" class="dropdown-item">Deploying Your Docs</a>
 </li>
                                     
-<li >
-    <a href="../custom-themes/">Custom Themes</a>
+<li>
+    <a href="../custom-themes/" class="dropdown-item">Custom Themes</a>
 </li>
                                     
-<li class="active">
-    <a href="./">Plugins</a>
+<li>
+    <a href="./" class="dropdown-item active">Plugins</a>
 </li>
                                 </ul>
                             </li>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
-<li >
-    <a href="../../about/release-notes/">Release Notes</a>
+<li>
+    <a href="../../about/release-notes/" class="dropdown-item">Release Notes</a>
 </li>
                                     
-<li >
-    <a href="../../about/contributing/">Contributing</a>
+<li>
+    <a href="../../about/contributing/" class="dropdown-item">Contributing</a>
 </li>
                                     
-<li >
-    <a href="../../about/license/">License</a>
+<li>
+    <a href="../../about/license/" class="dropdown-item">License</a>
 </li>
                                 </ul>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li >
-                                <a rel="next" href="../custom-themes/">
+                            <li class="nav-item">
+                                <a rel="prev" href="../custom-themes/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
-                            <li >
-                                <a rel="prev" href="../../about/release-notes/">
+                            <li class="nav-item">
+                                <a rel="next" href="../../about/release-notes/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
-                            <li>
-                                <a href="https://github.com/mkdocs/mkdocs/"><i class="fa fa-github"></i> GitHub</a>
+                            <li class="nav-item">
+                                <a href="https://github.com/mkdocs/mkdocs/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -134,15 +121,38 @@
         </div>
 
         <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#mkdocs-plugins">MkDocs Plugins</a></li>
-            <li><a href="#installing-plugins">Installing Plugins</a></li>
-            <li><a href="#using-plugins">Using Plugins</a></li>
-            <li><a href="#developing-plugins">Developing Plugins</a></li>
-    </ul>
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#mkdocs-plugins" class="nav-link">MkDocs Plugins</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#installing-plugins" class="nav-link">Installing Plugins</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#using-plugins" class="nav-link">Using Plugins</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#developing-plugins" class="nav-link">Developing Plugins</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
 </div></div>
-                <div class="col-md-9" role="main">
+                    <div class="col-md-9" role="main">
 
 <h1 id="mkdocs-plugins">MkDocs Plugins<a class="headerlink" href="#mkdocs-plugins" title="Permanent link"></a></h1>
 <p>A Guide to installing, using and creating MkDocs Plugins</p>
@@ -155,7 +165,8 @@ appropriate package name and install it using <code>pip</code>:</p>
 <pre><code>pip install mkdocs-foo-plugin
 </code></pre>
 <p>Once a plugin has been successfully installed, it is ready to use. It just needs
-to be <a href="#using-plugins">enabled</a> in the configuration file.</p>
+to be <a href="#using-plugins">enabled</a> in the configuration file. The <a href="https://github.com/mkdocs/mkdocs/wiki/MkDocs-Plugins">MkDocs Plugins</a>
+wiki page has a growing list of plugins that you can install and use.</p>
 <h2 id="using-plugins">Using Plugins<a class="headerlink" href="#using-plugins" title="Permanent link"></a></h2>
 <p>The <a href="../configuration/#plugins"><code>plugins</code></a> configuration option should contain a list of plugins to
 use when building the site. Each "plugin" must be a string name assigned to the
@@ -203,7 +214,7 @@ configuration option and the second item is an instance of
 <p>For example, the following <code>config_scheme</code> defines three configuration options: <code>foo</code>, which accepts a string; <code>bar</code>, which accepts an integer; and <code>baz</code>, which accepts a boolean value.</p>
 <pre><code>class MyPlugin(mkdocs.plugins.BasePlugin):
     config_scheme = (
-        ('foo', mkdocs.config.config_options.Type(mkdocs.utils.string_types, default='a default value')),
+        ('foo', mkdocs.config.config_options.Type(str, default='a default value')),
         ('bar', mkdocs.config.config_options.Type(int, default=0)),
         ('baz', mkdocs.config.config_options.Type(bool, default=True))
     )
@@ -348,7 +359,7 @@ and can be used to alter the Jinja environment.</p>
 <dt>Parameters:</dt>
 <dd><strong>env:</strong> global Jinja environment</dd>
 <dd><strong>config:</strong> global configuration object</dd>
-<dd><strong>site_navigation:</strong> global navigation object</dd>
+<dd><strong>files:</strong> global files collection</dd>
 <dt>Returns:</dt>
 <dd>global Jinja Environment</dd>
 </dl>
@@ -431,7 +442,7 @@ page and can be used to alter the <code>Page</code> instance.</p>
 <dt>Parameters:</dt>
 <dd><strong>page:</strong> <code>mkdocs.nav.Page</code> instance</dd>
 <dd><strong>config:</strong> global configuration object</dd>
-<dd><strong>site_navigation:</strong> global navigation object</dd>
+<dd><strong>files:</strong> global files collection</dd>
 <dt>Returns:</dt>
 <dd><code>mkdocs.nav.Page</code> instance</dd>
 </dl>
@@ -463,7 +474,7 @@ data has been stripped off and is available as <code>page.meta</code> at this po
 <dd><strong>markdown:</strong> Markdown source text of page as string</dd>
 <dd><strong>page:</strong> <code>mkdocs.nav.Page</code> instance</dd>
 <dd><strong>config:</strong> global configuration object</dd>
-<dd><strong>site_navigation:</strong> global navigation object</dd>
+<dd><strong>files:</strong> global files collection</dd>
 <dt>Returns:</dt>
 <dd>Markdown source text of page as string</dd>
 </dl>
@@ -480,7 +491,7 @@ HTML body of the page.</p>
 <dd><strong>html:</strong> HTML rendered from Markdown source as string</dd>
 <dd><strong>page:</strong> <code>mkdocs.nav.Page</code> instance</dd>
 <dd><strong>config:</strong> global configuration object</dd>
-<dd><strong>site_navigation:</strong> global navigation object</dd>
+<dd><strong>files:</strong> global files collection</dd>
 <dt>Returns:</dt>
 <dd>HTML rendered from Markdown source as string</dd>
 </dl>
@@ -496,7 +507,7 @@ and can be used to alter the context for that specific page only.</p>
 <dd><strong>context</strong>: dict of template context variables</dd>
 <dd><strong>page:</strong> <code>mkdocs.nav.Page</code> instance</dd>
 <dd><strong>config:</strong> global configuration object</dd>
-<dd><strong>site_navigation:</strong> global navigation object</dd>
+<dd><strong>nav:</strong> global navigation object</dd>
 <dt>Returns:</dt>
 <dd>dict of template context variables</dd>
 </dl>
@@ -505,16 +516,15 @@ and can be used to alter the context for that specific page only.</p>
 <h5 id="on_post_page">on_post_page<a class="headerlink" href="#on_post_page" title="Permanent link"></a></h5>
 <dl>
 <dd>
-<p>The <code>post_template</code> event is called after the template is rendered, but
+<p>The <code>post_page</code> event is called after the template is rendered, but
 before it is written to disc and can be used to alter the output of the
 page. If an empty string is returned, the page is skipped and nothing is
 written to disc.</p>
 <dl>
 <dt>Parameters:</dt>
-<dd><strong>output_content:</strong> output of rendered template as string</dd>
+<dd><strong>output:</strong> output of rendered template as string</dd>
 <dd><strong>page:</strong> <code>mkdocs.nav.Page</code> instance</dd>
 <dd><strong>config:</strong> global configuration object</dd>
-<dd><strong>site_navigation:</strong> global navigation object</dd>
 <dt>Returns:</dt>
 <dd>output of rendered template as string</dd>
 </dl>
@@ -547,6 +557,7 @@ entry_point.</p>
 
 <p>Note that registering a plugin does not activate it. The user still needs to
 tell MkDocs to use if via the config.</p></div>
+            </div>
         </div>
 
         <footer class="col-md-12">
@@ -556,24 +567,24 @@ tell MkDocs to use if via the config.</p></div>
         </footer>
         <script>
             var base_url = "../..",
-                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js" defer></script>
         <script src="../../search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
                 <p>
                     From here you can search these documents. Enter
                     your search terms below.
                 </p>
-                <form role="form">
+                <form>
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
@@ -584,12 +595,12 @@ tell MkDocs to use if via the config.</p></div>
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">

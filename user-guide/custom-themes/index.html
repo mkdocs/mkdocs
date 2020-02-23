@@ -9,19 +9,14 @@
         <link rel="canonical" href="https://www.mkdocs.org/user-guide/custom-themes/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Custom Themes - MkDocs</title>
-        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
         <link href="../../css/extra.css" rel="stylesheet">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
 
         <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/django.min.js"></script>
@@ -38,95 +33,87 @@
     </head>
 
     <body>
-
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    <!-- Expander button -->
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="../..">MkDocs</a>
-                </div>
+                <a class="navbar-brand" href="../..">MkDocs</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Expanded navigation -->
-                <div class="navbar-collapse collapse">
+                <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li >
-                                <a href="../..">Home</a>
+                            <li class="navitem">
+                                <a href="../.." class="nav-link">Home</a>
                             </li>
                             <li class="dropdown active">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
-<li >
-    <a href="../writing-your-docs/">Writing Your Docs</a>
+<li>
+    <a href="../writing-your-docs/" class="dropdown-item">Writing Your Docs</a>
 </li>
                                     
-<li >
-    <a href="../styling-your-docs/">Styling Your Docs</a>
+<li>
+    <a href="../styling-your-docs/" class="dropdown-item">Styling Your Docs</a>
 </li>
                                     
-<li >
-    <a href="../configuration/">Configuration</a>
+<li>
+    <a href="../configuration/" class="dropdown-item">Configuration</a>
 </li>
                                     
-<li >
-    <a href="../deploying-your-docs/">Deploying Your Docs</a>
+<li>
+    <a href="../deploying-your-docs/" class="dropdown-item">Deploying Your Docs</a>
 </li>
                                     
-<li class="active">
-    <a href="./">Custom Themes</a>
+<li>
+    <a href="./" class="dropdown-item active">Custom Themes</a>
 </li>
                                     
-<li >
-    <a href="../plugins/">Plugins</a>
+<li>
+    <a href="../plugins/" class="dropdown-item">Plugins</a>
 </li>
                                 </ul>
                             </li>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
-<li >
-    <a href="../../about/release-notes/">Release Notes</a>
+<li>
+    <a href="../../about/release-notes/" class="dropdown-item">Release Notes</a>
 </li>
                                     
-<li >
-    <a href="../../about/contributing/">Contributing</a>
+<li>
+    <a href="../../about/contributing/" class="dropdown-item">Contributing</a>
 </li>
                                     
-<li >
-    <a href="../../about/license/">License</a>
+<li>
+    <a href="../../about/license/" class="dropdown-item">License</a>
 </li>
                                 </ul>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li >
-                                <a rel="next" href="../deploying-your-docs/">
+                            <li class="nav-item">
+                                <a rel="prev" href="../deploying-your-docs/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
-                            <li >
-                                <a rel="prev" href="../plugins/">
+                            <li class="nav-item">
+                                <a rel="next" href="../plugins/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
-                            <li>
-                                <a href="https://github.com/mkdocs/mkdocs/"><i class="fa fa-github"></i> GitHub</a>
+                            <li class="nav-item">
+                                <a href="https://github.com/mkdocs/mkdocs/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -134,18 +121,54 @@
         </div>
 
         <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#custom-themes">Custom themes</a></li>
-            <li><a href="#creating-a-custom-theme">Creating a custom theme</a></li>
-            <li><a href="#basic-theme">Basic theme</a></li>
-            <li><a href="#template-variables">Template Variables</a></li>
-            <li><a href="#template-filters">Template Filters</a></li>
-            <li><a href="#search-and-themes">Search and themes</a></li>
-            <li><a href="#packaging-themes">Packaging Themes</a></li>
-    </ul>
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#custom-themes" class="nav-link">Custom themes</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#creating-a-custom-theme" class="nav-link">Creating a custom theme</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#basic-theme" class="nav-link">Basic theme</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#theme-files" class="nav-link">Theme Files</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#template-variables" class="nav-link">Template Variables</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#template-filters" class="nav-link">Template Filters</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#search-and-themes" class="nav-link">Search and themes</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#packaging-themes" class="nav-link">Packaging Themes</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
 </div></div>
-                <div class="col-md-9" role="main">
+                    <div class="col-md-9" role="main">
 
 <h1 id="custom-themes">Custom themes<a class="headerlink" href="#custom-themes" title="Permanent link"></a></h1>
 <p>A guide to creating and distributing custom themes.</p>
@@ -197,6 +220,16 @@ replace the file of the same name in the <code>mkdocs</code> theme but otherwise
 small adjustments to an existing theme.</p>
 <p>For more specific information, see <a href="../styling-your-docs/#using-the-theme-custom_dir">styling your docs</a>.</p>
 </div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A theme's <a href="#theme-configuration">configuration</a> defined in a <code>mkdocs_theme.yml</code> file is not loaded 
+from <code>theme.custom_dir</code>. When an entire theme exists in <code>theme.custom_dir</code>
+and <code>theme.name</code> is set to <code>null</code>, then the entire theme configuration must
+be defined in the <a href="../configuration/#theme">theme</a> configuration option in the <code>mkdocs.yml</code> file.</p>
+<p>However, when a theme is <a href="#packaging-themes">packaged</a> up for distribution, and loaded using
+the <code>theme.name</code> configuration option, then a <code>mkdocs_theme.yml</code> file
+is required for the theme.</p>
+</div>
 <h2 id="basic-theme">Basic theme<a class="headerlink" href="#basic-theme" title="Permanent link"></a></h2>
 <p>The simplest <code>main.html</code> file is the following:</p>
 <pre><code class="django">&lt;!DOCTYPE html&gt;
@@ -228,6 +261,34 @@ required, third party template authors are encouraged to follow a similar
 pattern and may want to define the same <a href="../styling-your-docs/#overriding-template-blocks">blocks</a> as are used in the built-in
 themes for consistency.</p>
 </div>
+<h2 id="theme-files">Theme Files<a class="headerlink" href="#theme-files" title="Permanent link"></a></h2>
+<p>There are various files which a theme treats special in some way. Any other
+files are simply copied from the theme directory to the same path in the
+<code>site_dir</code> when the site it built. For example image and CSS files have no
+special significance and are copied as-is. Note, however, that if the user
+provides a file with the same path in their <code>docs_dir</code>, then the user's file
+will replace the theme file.</p>
+<h3 id="template-files">Template Files<a class="headerlink" href="#template-files" title="Permanent link"></a></h3>
+<p>Any files with the <code>.html</code> extension are considered to be template files and are
+not copied from the theme directory or any subdirectories. Also, any files
+listed in <a href="#static_templates">static_templates</a> are treated as templates regardless of their file
+extension.</p>
+<h3 id="theme-meta-files">Theme Meta Files<a class="headerlink" href="#theme-meta-files" title="Permanent link"></a></h3>
+<p>The various files required for packaging a theme are also ignored. Specifically,
+the <code>mkdocs_theme.yml</code> configuration file and any Python files.</p>
+<h3 id="dot-files">Dot Files<a class="headerlink" href="#dot-files" title="Permanent link"></a></h3>
+<p>Theme authors can explicitly force MkDocs to ignore files by starting a file or
+directory name with a dot. Any of the following files would be ignored:</p>
+<pre><code class="text">.ignored.txt
+.ignored/file.txt
+foo/.ignored.txt
+foo/.ignored/file.txt
+</code></pre>
+
+<h3 id="documentation-files">Documentation Files<a class="headerlink" href="#documentation-files" title="Permanent link"></a></h3>
+<p>All documentation files are ignored. Specifically, any Markdown files (using any
+of the file extensions supported by MKDocs). Additionally, any README files
+which may exist in the theme directories are ignored.</p>
 <h2 id="template-variables">Template Variables<a class="headerlink" href="#template-variables" title="Permanent link"></a></h2>
 <p>Each template in a theme is built with a template context. These are the
 variables that are available to themes. The context varies depending on the
@@ -621,9 +682,9 @@ Bootswatch theme</a>.</p>
 can be contained in the <code>custom_dir</code>. If you have created a "one-off theme,"
 that should be sufficient. However, if you intend to distribute your theme
 for others to use, packaging the theme has some advantages. By packaging
-your theme, your users can more easily install it and they can then take
-advantage of the <a href="../configuration/#custom_dir">custom_dir</a> to make tweaks to your theme to better suit
-their needs.</p>
+your theme, your users can more easily install it, they can rely on a default
+<a href="#theme-configuration">configuration</a> being defined, and they can then take advantage of the
+<a href="../configuration/#custom_dir">custom_dir</a> to make tweaks to your theme to better suit their needs.</p>
 </div>
 <h3 id="package-layout">Package Layout<a class="headerlink" href="#package-layout" title="Permanent link"></a></h3>
 <p>The following layout is recommended for themes. Two files at the top level
@@ -692,7 +753,8 @@ directory is a package.</p>
 <code>mkdocs_theme.yml</code> which is placed in the root of your template files. The file
 should contain default configuration options for the theme. However, if the
 theme offers no configuration options, the file is still required and can be
-left blank.</p>
+left blank. A theme which is not packaged does not need a <code>mkdocs_theme.yml</code>
+file as that file is not loaded from <code>theme.custom_dir</code>.</p>
 <p>The theme author is free to define any arbitrary options deemed necessary and
 those options will be made available in the templates to control behavior.
 For example, a theme might want to make a sidebar optional and include the
@@ -740,6 +802,7 @@ you should run the following command.</p>
 <p>If you don't have an account setup, you should be prompted to create one.</p>
 <p>For a much more detailed guide, see the official Python packaging
 documentation for <a href="https://packaging.python.org/en/latest/distributing/">Packaging and Distributing Projects</a>.</p></div>
+            </div>
         </div>
 
         <footer class="col-md-12">
@@ -749,24 +812,24 @@ documentation for <a href="https://packaging.python.org/en/latest/distributing/"
         </footer>
         <script>
             var base_url = "../..",
-                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js" defer></script>
         <script src="../../search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
                 <p>
                     From here you can search these documents. Enter
                     your search terms below.
                 </p>
-                <form role="form">
+                <form>
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
@@ -777,12 +840,12 @@ documentation for <a href="https://packaging.python.org/en/latest/distributing/"
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">

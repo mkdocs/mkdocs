@@ -9,19 +9,14 @@
         <link rel="canonical" href="https://www.mkdocs.org/user-guide/styling-your-docs/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Styling Your Docs - MkDocs</title>
-        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
         <link href="../../css/extra.css" rel="stylesheet">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
 
         <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/django.min.js"></script>
@@ -38,95 +33,87 @@
     </head>
 
     <body>
-
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    <!-- Expander button -->
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="../..">MkDocs</a>
-                </div>
+                <a class="navbar-brand" href="../..">MkDocs</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Expanded navigation -->
-                <div class="navbar-collapse collapse">
+                <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li >
-                                <a href="../..">Home</a>
+                            <li class="navitem">
+                                <a href="../.." class="nav-link">Home</a>
                             </li>
                             <li class="dropdown active">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
-<li >
-    <a href="../writing-your-docs/">Writing Your Docs</a>
+<li>
+    <a href="../writing-your-docs/" class="dropdown-item">Writing Your Docs</a>
 </li>
                                     
-<li class="active">
-    <a href="./">Styling Your Docs</a>
+<li>
+    <a href="./" class="dropdown-item active">Styling Your Docs</a>
 </li>
                                     
-<li >
-    <a href="../configuration/">Configuration</a>
+<li>
+    <a href="../configuration/" class="dropdown-item">Configuration</a>
 </li>
                                     
-<li >
-    <a href="../deploying-your-docs/">Deploying Your Docs</a>
+<li>
+    <a href="../deploying-your-docs/" class="dropdown-item">Deploying Your Docs</a>
 </li>
                                     
-<li >
-    <a href="../custom-themes/">Custom Themes</a>
+<li>
+    <a href="../custom-themes/" class="dropdown-item">Custom Themes</a>
 </li>
                                     
-<li >
-    <a href="../plugins/">Plugins</a>
+<li>
+    <a href="../plugins/" class="dropdown-item">Plugins</a>
 </li>
                                 </ul>
                             </li>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
-<li >
-    <a href="../../about/release-notes/">Release Notes</a>
+<li>
+    <a href="../../about/release-notes/" class="dropdown-item">Release Notes</a>
 </li>
                                     
-<li >
-    <a href="../../about/contributing/">Contributing</a>
+<li>
+    <a href="../../about/contributing/" class="dropdown-item">Contributing</a>
 </li>
                                     
-<li >
-    <a href="../../about/license/">License</a>
+<li>
+    <a href="../../about/license/" class="dropdown-item">License</a>
 </li>
                                 </ul>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li >
-                                <a rel="next" href="../writing-your-docs/">
+                            <li class="nav-item">
+                                <a rel="prev" href="../writing-your-docs/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
-                            <li >
-                                <a rel="prev" href="../configuration/">
+                            <li class="nav-item">
+                                <a rel="next" href="../configuration/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
-                            <li>
-                                <a href="https://github.com/mkdocs/mkdocs/"><i class="fa fa-github"></i> GitHub</a>
+                            <li class="nav-item">
+                                <a href="https://github.com/mkdocs/mkdocs/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -134,14 +121,34 @@
         </div>
 
         <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#styling-your-docs">Styling your docs</a></li>
-            <li><a href="#built-in-themes">Built-in themes</a></li>
-            <li><a href="#customizing-a-theme">Customizing a Theme</a></li>
-    </ul>
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#styling-your-docs" class="nav-link">Styling your docs</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#built-in-themes" class="nav-link">Built-in themes</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#customizing-a-theme" class="nav-link">Customizing a Theme</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
 </div></div>
-                <div class="col-md-9" role="main">
+                    <div class="col-md-9" role="main">
 
 <h1 id="styling-your-docs">Styling your docs<a class="headerlink" href="#styling-your-docs" title="Permanent link"></a></h1>
 <p>How to style and theme your documentation.</p>
@@ -161,8 +168,7 @@ the <a href="#customizing-a-theme">Customizing a Theme</a> section below.</p>
 <h2 id="built-in-themes">Built-in themes<a class="headerlink" href="#built-in-themes" title="Permanent link"></a></h2>
 <h3 id="mkdocs">mkdocs<a class="headerlink" href="#mkdocs" title="Permanent link"></a></h3>
 <p>The default theme, which was built as a custom <a href="https://getbootstrap.com/">Bootstrap</a> theme, supports most
-every feature of MkDocs. It only officially supports two levels in the
-navigation (see <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1107" title="GitHub Issue mkdocs/mkdocs #1107">#1107</a>).</p>
+every feature of MkDocs.</p>
 <p><img alt="mkdocs" src="../../img/mkdocs.png" /></p>
 <p>In addition to the default <a href="../configuration/#theme">theme configuration options</a>, the <code>mkdocs</code> theme
 supports the following options:</p>
@@ -198,7 +204,7 @@ supports the following options:</p>
         search: 83   # s
 </code></pre>
 <p>All values much be numeric key codes. It is best to use keys which are
-available on all keyboards. You may use <a href="http://keycode.info/">http://keycode.info/</a> to determine
+available on all keyboards. You may use <a href="https://keycode.info/">https://keycode.info/</a> to determine
 the key code for a given key.</p>
 <ul>
 <li>
@@ -215,6 +221,19 @@ the key code for a given key.</p>
 <p><strong><code>search</code></strong>: Display the search modal. Default: <code>83</code> (s)</p>
 </li>
 </ul>
+</li>
+<li>
+<p><strong><code>navigation_depth</code></strong>: The maximum depth of the navigation tree in the
+  sidebar. Default: <code>2</code>.</p>
+</li>
+<li>
+<p><strong><code>nav_style</code></strong>: This adjusts the visual style for the top navigation bar; by
+  default, this is set to <code>primary</code> (the default), but it can also be set to
+  <code>dark</code> or <code>light</code>.</p>
+<pre><code>theme:
+    name: mkdocs
+    nav_style: dark
+</code></pre>
 </li>
 </ul>
 <h3 id="readthedocs">readthedocs<a class="headerlink" href="#readthedocs" title="Permanent link"></a></h3>
@@ -239,6 +258,33 @@ theme supports the following options:</p>
         - yaml
         - rust
 </code></pre>
+</li>
+<li>
+<p><strong><code>include_homepage_in_sidebar</code></strong>: Lists the homepage in the sidebar menu. As
+  MkDocs requires that the homepage be listed in the <code>nav</code> configuration
+  option, this setting allows the homepage to be included or excluded from
+  the sidebar. Note that the site name/logo always links to the homepage.
+  Default: <code>True</code>.</p>
+</li>
+<li>
+<p><strong><code>prev_next_buttons_location</code></strong>: One of <code>bottom</code>, <code>top</code>, <code>both</code> , or <code>none</code>.
+  Displays the “Next” and “Previous” buttons accordingly. Default: <code>bottom</code>.</p>
+</li>
+<li>
+<p><strong><code>navigation_depth</code></strong>: The maximum depth of the navigation tree in the
+  sidebar. Default: <code>4</code>.</p>
+</li>
+<li>
+<p><strong><code>collapse_navigation</code></strong>: Only include the page section headers in the
+  sidebar for the current page. Default: <code>True</code>.</p>
+</li>
+<li>
+<p><strong><code>titles_only</code></strong>: Only include page titles in the sidebar, excluding all
+  section headers for all pages. Default: <code>False</code>.</p>
+</li>
+<li>
+<p><strong><code>sticky_navigation</code></strong>: If True, causes the sidebar to scroll with the main
+  page content as you scroll the page. Default: <code>True</code>.</p>
 </li>
 </ul>
 <h3 id="third-party-themes">Third Party Themes<a class="headerlink" href="#third-party-themes" title="Permanent link"></a></h3>
@@ -362,13 +408,13 @@ example, to alter the title of the MkDocs theme, your replacement <code>main.htm
 template would contain the following:</p>
 <pre><code class="django">{% extends &quot;base.html&quot; %}
 
-{% block title %}
+{% block htmltitle %}
 &lt;title&gt;Custom title goes here&lt;/title&gt;
 {% endblock %}
 </code></pre>
 
-<p>In the above example, the title block defined in your custom <code>main.html</code> file
-will be used in place of the default title block defined in the parent theme.
+<p>In the above example, the <code>htmltitle</code> block defined in your custom <code>main.html</code> file
+will be used in place of the default <code>htmltitle</code> block defined in the parent theme.
 You may re-define as many blocks as you desire, as long as those blocks are
 defined in the parent. For example, you could replace the Google Analytics
 script with one for a different service or replace the search feature with your
@@ -426,6 +472,7 @@ always relative to the current page.</p>
 <p>Now the generated pages will include links to the template provided libraries as
 well as the library included in the <code>custom_dir</code>. The same would be required for
 any additional CSS files included in the <code>custom_dir</code>.</p></div>
+            </div>
         </div>
 
         <footer class="col-md-12">
@@ -435,24 +482,24 @@ any additional CSS files included in the <code>custom_dir</code>.</p></div>
         </footer>
         <script>
             var base_url = "../..",
-                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js" defer></script>
         <script src="../../search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
                 <p>
                     From here you can search these documents. Enter
                     your search terms below.
                 </p>
-                <form role="form">
+                <form>
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
@@ -463,12 +510,12 @@ any additional CSS files included in the <code>custom_dir</code>.</p></div>
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">
