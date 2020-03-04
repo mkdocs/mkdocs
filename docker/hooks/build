@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+set -o xtrace
+
+docker build \
+	--build-arg BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
+	--build-arg SOURCE_BRANCH="${SOURCE_BRANCH}" \
+	--build-arg SOURCE_COMMIT="${SOURCE_COMMIT}" \
+	--file "${DOCKERFILE_PATH}" \
+	--tag "${IMAGE_NAME}" \
+	.
