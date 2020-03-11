@@ -506,8 +506,9 @@ plugins:
 
 An integer value that defines the minimum length for a search query. By default
 searches shorter than 3 chars in length are ignored as search result quality with
-short search terms is poor. However, for some use cases (e.g. searching for 'MQ') 
-it may be preferable to set a shorter limit.
+short search terms is poor. However, for some use cases (such as documentation
+about Message Queues which might generate searches for 'MQ') it may be preferable
+to set a shorter limit.
 
 ```yaml
 plugins:
