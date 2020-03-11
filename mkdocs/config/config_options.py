@@ -234,10 +234,12 @@ class IpAddress(OptionallyRequired):
         except Exception:
             raise ValidationError("Must be a string of format 'IP:PORT'")
 
-        try:
-            ipaddress.ip_address(host)
-        except ValueError as e:
-            raise ValidationError(e)
+
+        if host != 'localhost':
+            try:
+                ipaddress.ip_address(host)
+            except ValueError as e:
+                raise ValidationError(e)
 
         try:
             port = int(port)
@@ -252,11 +254,11 @@ class IpAddress(OptionallyRequired):
 
     def post_validation(self, config, key_name):
         host = config[key_name].host
-        if key_name == 'dev_addr' and host == '0.0.0.0':
+        if key_name == 'dev_addr' and host in ('0.0.0.0', '::'):
             raise ValidationError(
                 ("The MkDocs' server is intended for development purposes only. "
-                "Therefore, '{}' is not a supported IP address. Please use a "
-                "third party production-ready server instead.").format(host)
+                 "Therefore, '{}' is not a supported IP address. Please use a "
+                 "third party production-ready server instead.").format(host)
             )
 
 

@@ -131,6 +131,13 @@ class IpAddressTest(unittest.TestCase):
         self.assertEqual(value.host, '127.0.0.1')
         self.assertEqual(value.port, 8000)
 
+    def test_invalid_address_range(self):
+        option = config_options.IpAddress()
+        self.assertRaises(
+            config_options.ValidationError,
+            option.validate, '227.0.0.1:8000'
+        )
+
     def test_invalid_address_format(self):
         option = config_options.IpAddress()
         self.assertRaises(
@@ -157,6 +164,20 @@ class IpAddressTest(unittest.TestCase):
         self.assertRaises(
             config_options.ValidationError,
             option.validate, '127.0.0.1'
+        )
+
+    def test_disallowed_address(self):
+        option = config_options.IpAddress()
+        self.assertRaises(
+            config_options.ValidationError,
+            option.validate, '0.0.0.0:8000'
+        )
+
+    def test_disallowed_IPv6_address(self):
+        option = config_options.IpAddress()
+        self.assertRaises(
+            config_options.ValidationError,
+            option.validate, '[::]:8000'
         )
 
 
