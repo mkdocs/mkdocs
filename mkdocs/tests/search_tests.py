@@ -58,6 +58,7 @@ class SearchPluginTests(unittest.TestCase):
         expected = {
             'lang': ['en'],
             'separator': r'[\s\-]+',
+            'min_search_length': 3,
             'prebuild_index': False
         }
         plugin = search.SearchPlugin()
@@ -70,6 +71,7 @@ class SearchPluginTests(unittest.TestCase):
         expected = {
             'lang': ['es'],
             'separator': r'[\s\-]+',
+            'min_search_length': 3,
             'prebuild_index': False
         }
         plugin = search.SearchPlugin()
@@ -82,6 +84,7 @@ class SearchPluginTests(unittest.TestCase):
         expected = {
             'lang': ['en'],
             'separator': r'[\s\-\.]+',
+            'min_search_length': 3,
             'prebuild_index': False
         }
         plugin = search.SearchPlugin()
@@ -90,10 +93,24 @@ class SearchPluginTests(unittest.TestCase):
         self.assertEqual(errors, [])
         self.assertEqual(warnings, [])
 
+    def test_plugin_config_min_search_length(self):
+        expected = {
+            'lang': ['en'],
+            'separator': r'[\s\-]+',
+            'min_search_length': 2,
+            'prebuild_index': False
+        }
+        plugin = search.SearchPlugin()
+        errors, warnings = plugin.load_config({'min_search_length': 2})
+        self.assertEqual(plugin.config, expected)
+        self.assertEqual(errors, [])
+        self.assertEqual(warnings, [])
+
     def test_plugin_config_prebuild_index(self):
         expected = {
             'lang': ['en'],
             'separator': r'[\s\-]+',
+            'min_search_length': 3,
             'prebuild_index': True
         }
         plugin = search.SearchPlugin()
