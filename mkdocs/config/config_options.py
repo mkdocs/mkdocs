@@ -244,6 +244,15 @@ class IpAddress(OptionallyRequired):
 
         return Address(host, port)
 
+    def post_validation(self, config, key_name):
+        host = config[key_name].host
+        if key_name == 'dev_addr' and host == '0.0.0.0':
+            raise ValidationError(
+                ("The MkDocs' server is intended for development purposes only. "
+                "Therefore, '{}' is not a supported IP address. Please use a "
+                "third party production-ready server instead.").format(host)
+            )
+
 
 class URL(OptionallyRequired):
     """
