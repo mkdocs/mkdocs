@@ -1,6 +1,7 @@
 import os
 from collections import Sequence, namedtuple
 from urllib.parse import urlparse
+import ipaddress
 import markdown
 
 from mkdocs import utils, theme, plugins
@@ -232,6 +233,11 @@ class IpAddress(OptionallyRequired):
             host, port = value.rsplit(':', 1)
         except Exception:
             raise ValidationError("Must be a string of format 'IP:PORT'")
+
+        try:
+            ipaddress.ip_address(host)
+        except ValueError as e:
+            raise ValidationError(e)
 
         try:
             port = int(port)
