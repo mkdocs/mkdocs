@@ -21,6 +21,11 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Version 1.1.1 (in development)
+
+Bugfix: Ensure wheel is Python 3 only.
+Bugfix: Clean up `dev_addr` validation and disallow `0.0.0.0`.
+
 ## Version 1.1 (2020-02-22)
 
 ### Major Additions to Version 1.1
