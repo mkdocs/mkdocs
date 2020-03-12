@@ -1,6 +1,7 @@
 import os
 from collections import Sequence, namedtuple
 from urllib.parse import urlparse
+import ipaddress
 import markdown
 
 from mkdocs import utils, theme, plugins
@@ -233,6 +234,12 @@ class IpAddress(OptionallyRequired):
         except Exception:
             raise ValidationError("Must be a string of format 'IP:PORT'")
 
+        if host != 'localhost':
+            try:
+                ipaddress.ip_address(host)
+            except ValueError as e:
+                raise ValidationError(e)
+
         try:
             port = int(port)
         except Exception:
@@ -243,6 +250,15 @@ class IpAddress(OptionallyRequired):
                 return '{}:{}'.format(self.host, self.port)
 
         return Address(host, port)
+
+    def post_validation(self, config, key_name):
+        host = config[key_name].host
+        if key_name == 'dev_addr' and host in ['0.0.0.0', '::']:
+            raise ValidationError(
+                ("The MkDocs' server is intended for development purposes only. "
+                 "Therefore, '{}' is not a supported IP address. Please use a "
+                 "third party production-ready server instead.").format(host)
+            )
 
 
 class URL(OptionallyRequired):

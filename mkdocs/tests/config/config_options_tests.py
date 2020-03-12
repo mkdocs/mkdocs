@@ -105,12 +105,12 @@ class IpAddressTest(unittest.TestCase):
         self.assertEqual(value.port, 8000)
 
     def test_valid_IPv6_address(self):
-        addr = '[::1]:8000'
+        addr = '::1:8000'
 
         option = config_options.IpAddress()
         value = option.validate(addr)
         self.assertEqual(str(value), addr)
-        self.assertEqual(value.host, '[::1]')
+        self.assertEqual(value.host, '::1')
         self.assertEqual(value.port, 8000)
 
     def test_named_address(self):
@@ -130,6 +130,13 @@ class IpAddressTest(unittest.TestCase):
         self.assertEqual(str(value), addr)
         self.assertEqual(value.host, '127.0.0.1')
         self.assertEqual(value.port, 8000)
+
+    def test_invalid_address_range(self):
+        option = config_options.IpAddress()
+        self.assertRaises(
+            config_options.ValidationError,
+            option.validate, '277.0.0.1:8000'
+        )
 
     def test_invalid_address_format(self):
         option = config_options.IpAddress()
@@ -157,6 +164,34 @@ class IpAddressTest(unittest.TestCase):
         self.assertRaises(
             config_options.ValidationError,
             option.validate, '127.0.0.1'
+        )
+
+    def test_disallowed_address(self):
+        option = config_options.IpAddress()
+        value = option.validate('0.0.0.0:8000')
+        self.assertRaises(
+            config_options.ValidationError,
+            option.post_validation,
+            {'dev_addr': value},
+            'dev_addr'
+        )
+
+    def test_disallowed_IPv6_address(self):
+        option = config_options.IpAddress()
+        value = option.validate(':::8000')
+        self.assertRaises(
+            config_options.ValidationError,
+            option.post_validation,
+            {'dev_addr': value},
+            'dev_addr'
+        )
+
+    def test_invalid_IPv6_address(self):
+        # The server will error out with this so we treat it as invalid.
+        option = config_options.IpAddress()
+        self.assertRaises(
+            config_options.ValidationError,
+            option.validate, '[::1]:8000'
         )
 
 
