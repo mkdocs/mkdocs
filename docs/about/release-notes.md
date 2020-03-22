@@ -26,6 +26,7 @@ The current and past members of the MkDocs team.
 Bugfix: Ensure wheel is Python 3 only.
 Bugfix: Clean up `dev_addr` validation and disallow `0.0.0.0`.
 Add support for `min_search_length` parameter for search plugin (#2014).
+Bugfix: Code colors (#2027).
 
 ## Version 1.1 (2020-02-22)
 
