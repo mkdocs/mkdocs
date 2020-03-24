@@ -28,6 +28,20 @@
   font-size: 12px;
 }
 
+/**
+ * Fix code colors
+ *
+ * https://github.com/mkdocs/mkdocs/issues/2027
+ */
+.rst-content code {
+    color: #E74C3C;
+}
+
+.rst-content pre code {
+    color: #000;
+    background: #f8f8f8;
+}
+
 /*
  * Fix link colors when the link text is inline code.
  *
