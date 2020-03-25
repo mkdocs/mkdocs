@@ -64,12 +64,12 @@ these already installed from the command line:
 
 ```bash
 $ python --version
-Python 2.7.14
+Python 3.8.2
 $ pip --version
-pip 18.1 from /usr/local/lib/python2.7/site-packages/pip (python 2.7)
+pip 20.0.2 from /usr/local/lib/python3.8/site-packages/pip (python 3.8)
 ```
 
-MkDocs supports Python versions 2.7.9+, 3.4, 3.5, 3.6, 3.7, and pypy.
+MkDocs supports Python versions 3.5, 3.6, 3.7, 3.8, and pypy3.
 
 #### Installing Python
 
@@ -145,7 +145,7 @@ mkdocs, version 0.15.3
     For a more permanent solution, you may need to edit your `PATH` environment
     variable to include the `Scripts` directory of your Python installation.
     Recent versions of Python include a script to do this for you. Navigate to
-    your Python installation directory (for example `C:\Python34\`), open the
+    your Python installation directory (for example `C:\Python38\`), open the
     `Tools`, then `Scripts` folder, and run the `win_add2path.py` file by double
     clicking on it. Alternatively, you can [download][a2p] the script and run it
     (`python win_add2path.py`).
