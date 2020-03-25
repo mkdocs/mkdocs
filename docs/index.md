@@ -69,7 +69,7 @@ $ pip --version
 pip 20.0.2 from /usr/local/lib/python3.8/site-packages/pip (python 3.8)
 ```
 
-MkDocs supports Python versions 3.5, 3.6, 3.7, 3.8, and pypy.
+MkDocs supports Python versions 3.5, 3.6, 3.7, 3.8, and pypy3.
 
 #### Installing Python
 
