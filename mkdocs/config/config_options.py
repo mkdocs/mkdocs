@@ -370,8 +370,8 @@ class Dir(FilesystemObject):
         # Validate that the dir is not the parent dir of the config file.
         if os.path.dirname(config.config_file_path) == config[key_name]:
             raise ValidationError(
-                ("The '{}' should not be the parent directory of the config "
-                 "file. Use a child directory instead so that the config file "
+                ("The '{0}' should not be the parent directory of the config "
+                 "file. Use a child directory instead so that the '{0}' "
                  "is a sibling of the config file.").format(key_name))
 
 
