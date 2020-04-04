@@ -18,11 +18,6 @@ from mkdocs.commands import build, gh_deploy, new, serve  # noqa: E402
 
 log = logging.getLogger(__name__)
 
-# Disable the warning that Click displays (as of Click version 5.0) when users
-# use unicode_literals in Python 2.
-# See http://click.pocoo.org/dev/python3/#unicode-literals for more details.
-click.disable_unicode_literals_warning = True
-
 
 class State:
     ''' Maintain logging level.'''
