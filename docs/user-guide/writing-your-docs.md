@@ -26,8 +26,7 @@ extensions may be used for your Markdown source files: `markdown`, `mdown`,
 `mkdn`, `mkd`, `md`. All Markdown files included in your documentation
 directory will be rendered in the built site regardless of any settings.
 
-!!! note:
-
+!!! note
     Files and directories with names which begin with a dot (for example:
     `.foo.md` or `.bar/baz.md`) are ignored by MkDocs, which matches the
     behavior of most web servers. There is no option to override this
@@ -76,8 +75,8 @@ nested URLs, like so:
 
 Any files which are not identified as Markdown files (by their file extension)
 within the [documentation directory](configuration.md#docs_dir) are copied by
-MkDocs to the built site unaltered. See [how to link to images and media]
-(#linking_to_images_and_media) below for details.
+MkDocs to the built site unaltered. See [how to link to images and media](#linking_to_images_and_media)
+below for details.
 
 ### Index pages
 
@@ -447,7 +446,6 @@ The first blank line ends all meta-data for the document. Therefore, the first
 line of a document must not be blank.
 
 !!! note
-
     MkDocs does not support YAML style deliminators (`---` or `...`) for
     MultiMarkdown style meta-data. In fact, MkDocs relies on the the presence or
     absence of the deliminators to determine whether YAML style meta-data or
