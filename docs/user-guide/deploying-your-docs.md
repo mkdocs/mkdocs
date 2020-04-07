@@ -43,34 +43,23 @@ files locally.
 
 ### Organization and User Pages
 
-User and Organization Pages sites are not tied to a specific project, and the
-site files are deployed to the `master` branch in a dedicated repository named
-with the GitHub account name. Therefore, you need working copies of two
-repositories on our local system. For example, consider the following file
-structure:
+GitHub Pages also allows users to create [User and Organization Pages sites](https://help.github.com/en/github/working-with-github-pages/about-github-pages#types-of-github-pages-sites)
+that are not tied to a specific project. Rather, the site files are deployed to the
+`master` branch in a dedicated repository named with the GitHub account name,
+i.e. `<user>.github.io` or `<org>.github.io`.
 
-```no-highlight
-my-project/
-    mkdocs.yml
-    docs/
-orgname.github.io/
-```
-
-After making and verifying updates to your project you need to change
-directories to the `orgname.github.io` repository and call the
-`mkdocs gh-deploy` command from there:
+After making and verifying updates to a dedicated user or organization repository on
+its `master` branch, call `mkdocs gh-deploy` in the command line and specify the site
+type with the `--page-type` option. Inputs for this option include 'user', 'org', or
+'project'. For example, to create a user-specific site enter:
 
 ```sh
-cd ../orgname.github.io/
-mkdocs gh-deploy --config-file ../my-project/mkdocs.yml --remote-branch master
+mkdocs gh-deploy --remote-branch master --page-type user
 ```
 
-Note that you need to explicitly point to the `mkdocs.yml` configuration file as
-it is no longer in the current working directory. You also need to inform the
-deploy script to commit to the `master` branch. You may override the default
-with the [remote_branch] configuration setting, but if you forget to change
-directories before running the deploy script, it will commit to the `master`
-branch of your project, which you probably don't want.
+Note that you need to inform the deploy script to commit to the `master` branch rather
+than the default `gh-pages` branch. The command above should result in your docs being
+deployed to `https://<user.github.io>`.
 
 Be aware that you will not be able to review the built site before it is pushed
 to GitHub. Therefore, you may want to verify any changes you make to the docs
