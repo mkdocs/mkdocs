@@ -91,6 +91,7 @@ def gh_deploy(config, message=None, force=False, ignore_version=False):
 
     remote_branch = config['remote_branch']
     remote_name = config['remote_name']
+    page_type = config['page_type']
 
     if not ignore_version:
         _check_version(remote_branch)
@@ -126,9 +127,16 @@ def gh_deploy(config, message=None, force=False, ignore_version=False):
         if host is None:
             # This could be a GitHub Enterprise deployment.
             log.info('Your documentation should be available shortly.')
+        if page_type == 'user' or page_type == "org":
+            username, repo = path.split('/', 1)
+            if repo.endswith('.git'):
+                repo = repo[:-len('.git')]
+            url = 'https://{}.github.io/'.format(username)
+            log.info('Your documentation should shortly be available at: ' + url)
         else:
             username, repo = path.split('/', 1)
             if repo.endswith('.git'):
                 repo = repo[:-len('.git')]
             url = 'https://{}.github.io/{}/'.format(username, repo)
             log.info('Your documentation should shortly be available at: ' + url)
+

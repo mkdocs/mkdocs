@@ -18,6 +18,11 @@ from mkdocs.commands import build, gh_deploy, new, serve  # noqa: E402
 
 log = logging.getLogger(__name__)
 
+# Disable the warning that Click displays (as of Click version 5.0) when users
+# use unicode_literals in Python 2.
+# See http://click.pocoo.org/dev/python3/#unicode-literals for more details.
+click.disable_unicode_literals_warning = True
+
 
 class State:
     ''' Maintain logging level.'''
@@ -55,6 +60,7 @@ remote_branch_help = ("The remote branch to commit to for Github Pages. This "
                       "overrides the value specified in config")
 remote_name_help = ("The remote name to commit to for Github Pages. This "
                     "overrides the value specified in config")
+page_type_help = ("The page type to be created, either 'user', 'org', or 'project'.")
 force_help = "Force the push to the repository."
 ignore_version_help = "Ignore check that build is not being deployed with an older version of MkDocs."
 
@@ -162,17 +168,21 @@ def build_command(clean, **kwargs):
 @click.option('-m', '--message', help=commit_message_help)
 @click.option('-b', '--remote-branch', help=remote_branch_help)
 @click.option('-r', '--remote-name', help=remote_name_help)
+@click.option('--page-type',
+              type=click.Choice(['user', 'org', 'project'], case_sensitive=False),
+              help=page_type_help)
 @click.option('--force', is_flag=True, help=force_help)
 @click.option('--ignore-version', is_flag=True, help=ignore_version_help)
 @common_config_options
 @click.option('-d', '--site-dir', type=click.Path(), help=site_dir_help)
 @common_options
-def gh_deploy_command(clean, message, remote_branch, remote_name, force, ignore_version, **kwargs):
+def gh_deploy_command(clean, message, remote_branch, remote_name, page_type, force, ignore_version, **kwargs):
     """Deploy your documentation to GitHub Pages"""
     try:
         cfg = config.load_config(
             remote_branch=remote_branch,
             remote_name=remote_name,
+            page_type=page_type,
             **kwargs
         )
         build.build(cfg, dirty=not clean)
