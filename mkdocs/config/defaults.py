@@ -100,6 +100,10 @@ DEFAULT_SCHEMA = (
     # the remote name to push to when using gh-deploy
     ('remote_name', config_options.Type(str, default='origin')),
 
+    # the type of page being deployed, i.e. 'user', 'org',
+    # or 'project' when using gh-deploy
+    ('page_type', config_options.Type(str, default='project')),
+
     # extra is a mapping/dictionary of data that is passed to the template.
     # This allows template authors to require extra configuration that not
     # relevant to all themes and doesn't need to be explicitly supported by
