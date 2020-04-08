@@ -139,4 +139,3 @@ def gh_deploy(config, message=None, force=False, ignore_version=False):
                 repo = repo[:-len('.git')]
             url = 'https://{}.github.io/{}/'.format(username, repo)
             log.info('Your documentation should shortly be available at: ' + url)
-
