@@ -26,7 +26,7 @@ extensions may be used for your Markdown source files: `markdown`, `mdown`,
 `mkdn`, `mkd`, `md`. All Markdown files included in your documentation
 directory will be rendered in the built site regardless of any settings.
 
-!!! note:
+!!! note
 
     Files and directories with names which begin with a dot (for example:
     `.foo.md` or `.bar/baz.md`) are ignored by MkDocs, which matches the
