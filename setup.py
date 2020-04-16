@@ -58,6 +58,7 @@ setup(
         'Jinja2>=2.10.1',
         'livereload>=2.5.1',
         'lunr[languages]==0.5.6',  # must match lunr.js version included in search
+        'nltk<=3.4.5' # must be lower than 3.5.0 which breaks install. See issue 2062 on Github
         'Markdown>=3.2.1',
         'PyYAML>=3.10',
         'tornado>=5.0'
