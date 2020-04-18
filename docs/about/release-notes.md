@@ -23,10 +23,11 @@ The current and past members of the MkDocs team.
 
 ## Version 1.1.1 (in development)
 
-Bugfix: Ensure wheel is Python 3 only.
-Bugfix: Clean up `dev_addr` validation and disallow `0.0.0.0`.
-Add support for `min_search_length` parameter for search plugin (#2014).
-Bugfix: `readthedocs` theme `code` colors (#2027).
+* Bugfix: Use `lunr[languages]==0.5.8` to avoid `nltk` incompatibilities (#2062).
+* Bugfix: Ensure wheel is Python 3 only (#2021).
+* Bugfix: Clean up `dev_addr` validation and disallow `0.0.0.0` (#2022).
+* Add support for `min_search_length` parameter for search plugin (#2014).
+* Bugfix: `readthedocs` theme `code` colors (#2027).
 
 ## Version 1.1 (2020-02-22)
 
