@@ -833,6 +833,13 @@ class RelativePathExtensionTests(unittest.TestCase):
             '<p><a href="/path/to/file.md">absolute link</a></p>'
         )
 
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[absolute local path](\\image.png)'))
+    def test_absolute_win_local_path(self):
+        self.assertEqual(
+            self.get_rendered_result(['index.md']),
+            '<p><a href="\\image.png">absolute local path</a></p>'
+        )
+
     @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='<mail@example.com>'))
     def test_email_link(self):
         self.assertEqual(

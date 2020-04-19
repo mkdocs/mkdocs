@@ -23,6 +23,7 @@ The current and past members of the MkDocs team.
 
 ## Version 1.1.1 (in development)
 
+* Bugfix: Ignore links which start with a backslash (#1680).
 * Bugfix: Pass `builder` to the `on_serve` event so that it can be passed to
   `server.watch` by plugins (#1952).
 * Bugfix: Use `lunr[languages]==0.5.8` to avoid `nltk` incompatibilities (#2062).
