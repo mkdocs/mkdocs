@@ -41,7 +41,6 @@ dev_addr_help = ("IP address and port to serve documentation locally (default: "
                  "localhost:8000)")
 strict_help = ("Enable strict mode. This will cause MkDocs to abort the build "
                "on any warnings.")
-theme_dir_help = "The theme directory to use when building your documentation."
 theme_help = "The theme to use when building your documentation."
 theme_choices = utils.get_theme_names()
 site_dir_help = "The directory to output the result of the documentation build."
@@ -99,7 +98,6 @@ common_config_options = add_options([
     # Conveniently, load_config drops None values
     click.option('-s', '--strict', is_flag=True, default=None, help=strict_help),
     click.option('-t', '--theme', type=click.Choice(theme_choices), help=theme_help),
-    click.option('-e', '--theme-dir', type=click.Path(), help=theme_dir_help),
     # As with --strict, set the default to None so that this doesn't incorrectly
     # override the config file
     click.option('--use-directory-urls/--no-directory-urls', is_flag=True, default=None, help=use_directory_urls_help)
