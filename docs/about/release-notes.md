@@ -23,6 +23,8 @@ The current and past members of the MkDocs team.
 
 ## Version 1.1.1 (in development)
 
+* Bugfix: Pass `builder` to the `on_serve` event so that it can be passed to
+  `server.watch` by plugins (#1952).
 * Bugfix: Use `lunr[languages]==0.5.8` to avoid `nltk` incompatibilities (#2062).
 * Bugfix: Ensure wheel is Python 3 only (#2021).
 * Bugfix: Clean up `dev_addr` validation and disallow `0.0.0.0` (#2022).

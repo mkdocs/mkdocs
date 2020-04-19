@@ -155,6 +155,7 @@ entire site.
     Parameters:
     : __server:__ `livereload.Server` instance
     : __config:__ global configuration object
+    : __builder:__ a callable which gets passed to each call to `server.watch`
 
     Returns:
     : `livereload.Server` instance
