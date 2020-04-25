@@ -18,11 +18,6 @@ from mkdocs.commands import build, gh_deploy, new, serve  # noqa: E402
 
 log = logging.getLogger(__name__)
 
-# Disable the warning that Click displays (as of Click version 5.0) when users
-# use unicode_literals in Python 2.
-# See http://click.pocoo.org/dev/python3/#unicode-literals for more details.
-click.disable_unicode_literals_warning = True
-
 
 class State:
     ''' Maintain logging level.'''
@@ -60,7 +55,7 @@ remote_branch_help = ("The remote branch to commit to for Github Pages. This "
                       "overrides the value specified in config")
 remote_name_help = ("The remote name to commit to for Github Pages. This "
                     "overrides the value specified in config")
-page_type_help = ("The page type to be created, either 'user', 'org', or 'project'.")
+page_type_help = "The page type to be created, either 'user', 'org', or 'project'."
 force_help = "Force the push to the repository."
 ignore_version_help = "Ignore check that build is not being deployed with an older version of MkDocs."
 
