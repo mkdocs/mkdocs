@@ -164,8 +164,7 @@ def build_command(clean, **kwargs):
 @click.option('-b', '--remote-branch', help=remote_branch_help)
 @click.option('-r', '--remote-name', help=remote_name_help)
 @click.option('--page-type',
-              type=click.Choice(['user', 'org', 'project'], case_sensitive=False),
-              help=page_type_help)
+              type=click.Choice(['user', 'org', 'project']), help=page_type_help)
 @click.option('--force', is_flag=True, help=force_help)
 @click.option('--ignore-version', is_flag=True, help=ignore_version_help)
 @common_config_options
