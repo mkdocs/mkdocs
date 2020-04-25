@@ -28,7 +28,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            theme_dir=None,
             use_directory_urls=None
         )
 
@@ -58,7 +57,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            theme_dir=None,
             use_directory_urls=None
         )
 
@@ -75,7 +73,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=True,
             theme=None,
-            theme_dir=None,
             use_directory_urls=None
         )
 
@@ -92,24 +89,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme='readthedocs',
-            theme_dir=None,
-            use_directory_urls=None
-        )
-
-    @mock.patch('mkdocs.commands.serve.serve', autospec=True)
-    def test_serve_theme_dir(self, mock_serve):
-
-        result = self.runner.invoke(
-            cli.cli, ["serve", '--theme-dir', 'custom'], catch_exceptions=False)
-
-        self.assertEqual(result.exit_code, 0)
-        mock_serve.assert_called_once_with(
-            dev_addr=None,
-            livereload='livereload',
-            config_file=None,
-            strict=None,
-            theme=None,
-            theme_dir='custom',
             use_directory_urls=None
         )
 
@@ -126,7 +105,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            theme_dir=None,
             use_directory_urls=True
         )
 
@@ -143,7 +121,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            theme_dir=None,
             use_directory_urls=False
         )
 
@@ -160,7 +137,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            theme_dir=None,
             use_directory_urls=None
         )
 
@@ -177,7 +153,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            theme_dir=None,
             use_directory_urls=None
         )
 
@@ -194,7 +169,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            theme_dir=None,
             use_directory_urls=None
         )
 
@@ -214,7 +188,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            theme_dir=None,
             use_directory_urls=None,
             site_dir=None
         )
@@ -275,7 +248,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=True,
             theme=None,
-            theme_dir=None,
             use_directory_urls=None,
             site_dir=None
         )
@@ -293,25 +265,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme='readthedocs',
-            theme_dir=None,
-            use_directory_urls=None,
-            site_dir=None
-        )
-
-    @mock.patch('mkdocs.config.load_config', autospec=True)
-    @mock.patch('mkdocs.commands.build.build', autospec=True)
-    def test_build_theme_dir(self, mock_build, mock_load_config):
-
-        result = self.runner.invoke(
-            cli.cli, ['build', '--theme-dir', 'custom'], catch_exceptions=False)
-
-        self.assertEqual(result.exit_code, 0)
-        self.assertEqual(mock_build.call_count, 1)
-        mock_load_config.assert_called_once_with(
-            config_file=None,
-            strict=None,
-            theme=None,
-            theme_dir='custom',
             use_directory_urls=None,
             site_dir=None
         )
@@ -329,7 +282,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            theme_dir=None,
             use_directory_urls=True,
             site_dir=None
         )
@@ -347,7 +299,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            theme_dir=None,
             use_directory_urls=False,
             site_dir=None
         )
@@ -365,7 +316,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            theme_dir=None,
             use_directory_urls=None,
             site_dir='custom',
         )
@@ -431,7 +381,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            theme_dir=None,
             use_directory_urls=None,
             site_dir=None
         )
@@ -517,7 +466,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            theme_dir=None,
             use_directory_urls=None,
             site_dir=None
         )
@@ -540,7 +488,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            theme_dir=None,
             use_directory_urls=None,
             site_dir=None
         )
@@ -562,7 +509,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            theme_dir=None,
             use_directory_urls=None,
             site_dir=None
         )
@@ -584,7 +530,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            theme_dir=None,
             use_directory_urls=None,
             site_dir=None
         )
@@ -639,7 +584,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=True,
             theme=None,
-            theme_dir=None,
             use_directory_urls=None,
             site_dir=None
         )
@@ -662,30 +606,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme='readthedocs',
-            theme_dir=None,
-            use_directory_urls=None,
-            site_dir=None
-        )
-
-    @mock.patch('mkdocs.config.load_config', autospec=True)
-    @mock.patch('mkdocs.commands.build.build', autospec=True)
-    @mock.patch('mkdocs.commands.gh_deploy.gh_deploy', autospec=True)
-    def test_gh_deploy_theme_dir(self, mock_gh_deploy, mock_build, mock_load_config):
-
-        result = self.runner.invoke(
-            cli.cli, ['gh-deploy', '--theme-dir', 'custom'], catch_exceptions=False)
-
-        self.assertEqual(result.exit_code, 0)
-        self.assertEqual(mock_gh_deploy.call_count, 1)
-        self.assertEqual(mock_build.call_count, 1)
-        mock_load_config.assert_called_once_with(
-            remote_branch=None,
-            remote_name=None,
-            page_type=None,
-            config_file=None,
-            strict=None,
-            theme=None,
-            theme_dir='custom',
             use_directory_urls=None,
             site_dir=None
         )
@@ -707,7 +627,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            theme_dir=None,
             use_directory_urls=True,
             site_dir=None
         )
@@ -730,7 +649,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            theme_dir=None,
             use_directory_urls=False,
             site_dir=None
         )
@@ -753,7 +671,6 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            theme_dir=None,
             use_directory_urls=None,
             site_dir='custom'
         )
