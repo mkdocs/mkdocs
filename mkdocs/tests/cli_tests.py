@@ -624,6 +624,7 @@ class CLITests(unittest.TestCase):
         mock_load_config.assert_called_once_with(
             remote_branch=None,
             remote_name=None,
+            page_type=None,
             config_file=None,
             strict=None,
             theme=None,

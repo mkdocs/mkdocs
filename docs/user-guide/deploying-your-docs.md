@@ -55,7 +55,7 @@ Markdown files with HTML files, you need *two* working repositories
 installed locally. For example, consider the following file
 structure:
 
-```
+```no-highlight
 my-project/
     mkdocs.yml
     docs/
