@@ -43,17 +43,17 @@ files locally.
 
 ### Organization and User Pages
 
-GitHub also allows users to create User and Organization Pages sites
+GitHub also allows users to create User and Organization Pages sites 
 that are not tied to a specific project. Rather, the site files are deployed 
-from the `master` branch in a dedicated repository named with the GitHub
-account name, i.e. `<user>.github.io` or `<org>.github.io`.
+from the `master` branch in a dedicated repository named with the GitHub 
+account name, i.e. `<user>.github.io` or `<org>.github.io`. 
 
-However, because Github requires user and organization pages to be
-deployed from the `master` branch of the `<user>.github.io` repo
-and deploying from this same `master` branch would overwrite all
-Markdown files with HTML files, you need *two* working repositories
+However, because Github requires user and organization pages to be 
+deployed from the `master` branch of the `<user>.github.io` repo 
+and deploying from this same `master` branch would overwrite all 
+Markdown files with HTML files, you need *two* working repositories 
 installed locally. For example, consider the following file 
-structure:
+structure: 
 
 ```
 my-project/
@@ -62,15 +62,15 @@ my-project/
 orgname.github.io/
 ```
 
-The first repository, `my-project`, is for developing your Markdown
-documents and adding to your `mkdocs.yml` file. The second
-repository, `orgname.github.io`, is exclusively for deployment of
-your organization or user site and contains all of the HTML files
-that make up your static site.
+The first repository, `my-project`, is for developing your Markdown 
+documents and adding to your `mkdocs.yml` file. The second 
+repository, `orgname.github.io`, is exclusively for deployment of 
+your organization or user site and contains all of the HTML files 
+that make up your static site. 
 
-After making and verifying updates to the `my-project` repository
-on its `master` branch, change directories to the `orgname.github.io`
-and call the following in the command line:
+After making and verifying updates to the `my-project` repository 
+on its `master` branch, change directories to the `orgname.github.io` 
+and call the following in the command line: 
 
 ```sh
 cd ../orgname.github.io/
@@ -80,18 +80,18 @@ Note that you need to explicitly point to the mkdocs.yml configuration
 file as it is no longer in the current working directory. 
 Additionally, note that you should specify the site type with the 
 `--page-type` option. Inputs for this option include 'user', 'org', or 
-'project', with the default being the latter.
+'project', with the default being the latter. 
 
-Lastly, be aware that mkdocs automatically deploys from the `master`
-branch when `--page-type` is `user` or `org`. This is different from
-the default `gh-pages` branch that is deployed when using the
+Lastly, be aware that mkdocs automatically deploys from the `master` 
+branch when `--page-type` is `user` or `org`. This is different from 
+the default `gh-pages` branch that is deployed when using the 
 `project` option. The command above should result inyour docs being 
-deployed to `https://<org>.github.io`.
+deployed to `https://<org>.github.io`. 
 
-Be aware that you will not be able to review the built site before it is pushed
-to GitHub. Therefore, you may want to verify any changes you make to the docs
-beforehand by using the `build` or `serve` commands and reviewing the built
-files locally.
+Be aware that you will not be able to review the built site before it is pushed 
+to GitHub. Therefore, you may want to verify any changes you make to the docs 
+beforehand by using the `build` or `serve` commands and reviewing the built 
+files locally. 
 
 !!! warning
 
