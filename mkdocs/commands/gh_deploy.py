@@ -89,9 +89,14 @@ def gh_deploy(config, message=None, force=False, ignore_version=False):
         log.error('Cannot deploy - this directory does not appear to be a git '
                   'repository')
 
-    remote_branch = config['remote_branch']
-    remote_name = config['remote_name']
     page_type = config['page_type']
+
+    if page_type == 'user' or page_type == 'org':
+        remote_branch = 'master'
+    else:
+        remote_branch = config['remote_branch']
+
+    remote_name = config['remote_name']
 
     if not ignore_version:
         _check_version(remote_branch)
