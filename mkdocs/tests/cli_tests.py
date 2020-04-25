@@ -427,6 +427,7 @@ class CLITests(unittest.TestCase):
         mock_load_config.assert_called_once_with(
             remote_branch=None,
             remote_name=None,
+            page_type=None,
             config_file=None,
             strict=None,
             theme=None,
@@ -512,6 +513,7 @@ class CLITests(unittest.TestCase):
         mock_load_config.assert_called_once_with(
             remote_branch='foo',
             remote_name=None,
+            page_type=None,
             config_file=None,
             strict=None,
             theme=None,
@@ -534,6 +536,51 @@ class CLITests(unittest.TestCase):
         mock_load_config.assert_called_once_with(
             remote_branch=None,
             remote_name='foo',
+            page_type=None,
+            config_file=None,
+            strict=None,
+            theme=None,
+            theme_dir=None,
+            use_directory_urls=None,
+            site_dir=None
+        )
+
+    @mock.patch('mkdocs.config.load_config', autospec=True)
+    @mock.patch('mkdocs.commands.build.build', autospec=True)
+    @mock.patch('mkdocs.commands.gh_deploy.gh_deploy', autospec=True)
+    def test_gh_deploy_page_type_user(self, mock_gh_deploy, mock_build, mock_load_config):
+        result = self.runner.invoke(
+            cli.cli, ['gh-deploy', '--page-type', 'user'], catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(mock_gh_deploy.call_count, 1)
+        self.assertEqual(mock_build.call_count, 1)
+        mock_load_config.assert_called_once_with(
+            remote_branch=None,
+            remote_name=None,
+            page_type='user',
+            config_file=None,
+            strict=None,
+            theme=None,
+            theme_dir=None,
+            use_directory_urls=None,
+            site_dir=None
+        )
+
+    @mock.patch('mkdocs.config.load_config', autospec=True)
+    @mock.patch('mkdocs.commands.build.build', autospec=True)
+    @mock.patch('mkdocs.commands.gh_deploy.gh_deploy', autospec=True)
+    def test_gh_deploy_page_type_org(self, mock_gh_deploy, mock_build, mock_load_config):
+        result = self.runner.invoke(
+            cli.cli, ['gh-deploy', '--page-type', 'org'], catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(mock_gh_deploy.call_count, 1)
+        self.assertEqual(mock_build.call_count, 1)
+        mock_load_config.assert_called_once_with(
+            remote_branch=None,
+            remote_name=None,
+            page_type='org',
             config_file=None,
             strict=None,
             theme=None,
@@ -588,6 +635,7 @@ class CLITests(unittest.TestCase):
         mock_load_config.assert_called_once_with(
             remote_branch=None,
             remote_name=None,
+            page_type=None,
             config_file=None,
             strict=True,
             theme=None,
@@ -610,6 +658,7 @@ class CLITests(unittest.TestCase):
         mock_load_config.assert_called_once_with(
             remote_branch=None,
             remote_name=None,
+            page_type=None,
             config_file=None,
             strict=None,
             theme='readthedocs',
@@ -632,6 +681,7 @@ class CLITests(unittest.TestCase):
         mock_load_config.assert_called_once_with(
             remote_branch=None,
             remote_name=None,
+            page_type=None,
             config_file=None,
             strict=None,
             theme=None,
@@ -676,6 +726,7 @@ class CLITests(unittest.TestCase):
         mock_load_config.assert_called_once_with(
             remote_branch=None,
             remote_name=None,
+            page_type=None,
             config_file=None,
             strict=None,
             theme=None,
@@ -698,6 +749,7 @@ class CLITests(unittest.TestCase):
         mock_load_config.assert_called_once_with(
             remote_branch=None,
             remote_name=None,
+            page_type=None,
             config_file=None,
             strict=None,
             theme=None,
