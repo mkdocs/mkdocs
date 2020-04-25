@@ -143,18 +143,14 @@ class File:
     def _get_dest_path(self, use_directory_urls):
         """ Return destination path based on source path. """
         if self.is_documentation_page():
-            if use_directory_urls:
-                parent, filename = os.path.split(self.src_path)
-                if self.name == 'index':
-                    # index.md or README.md => index.html
-                    return os.path.join(parent, 'index.html')
-                else:
-                    # foo.md => foo/index.html
-                    return os.path.join(parent, self.name, 'index.html')
-            else:
+            parent, filename = os.path.split(self.src_path)
+            if not use_directory_urls or self.name == 'index':
+                # index.md or README.md => index.html
                 # foo.md => foo.html
-                root, ext = os.path.splitext(self.src_path)
-                return root + '.html'
+                return os.path.join(parent, self.name + '.html')
+            else:
+                # foo.md => foo/index.html
+                return os.path.join(parent, self.name, 'index.html')
         return self.src_path
 
     def _get_url(self, use_directory_urls):

@@ -122,10 +122,38 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         self.assertFalse(f.is_javascript())
         self.assertFalse(f.is_css())
 
+    def test_md_readme_index_file(self):
+        f = File('README.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
+        self.assertPathsEqual(f.src_path, 'README.md')
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/README.md')
+        self.assertPathsEqual(f.dest_path, 'index.html')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/index.html')
+        self.assertEqual(f.url, 'index.html')
+        self.assertEqual(f.name, 'index')
+        self.assertTrue(f.is_documentation_page())
+        self.assertFalse(f.is_static_page())
+        self.assertFalse(f.is_media_file())
+        self.assertFalse(f.is_javascript())
+        self.assertFalse(f.is_css())
+
     def test_md_index_file_use_directory_urls(self):
         f = File('index.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
         self.assertPathsEqual(f.src_path, 'index.md')
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/index.md')
+        self.assertPathsEqual(f.dest_path, 'index.html')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/index.html')
+        self.assertEqual(f.url, '.')
+        self.assertEqual(f.name, 'index')
+        self.assertTrue(f.is_documentation_page())
+        self.assertFalse(f.is_static_page())
+        self.assertFalse(f.is_media_file())
+        self.assertFalse(f.is_javascript())
+        self.assertFalse(f.is_css())
+
+    def test_md_readme_index_file_use_directory_urls(self):
+        f = File('README.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
+        self.assertPathsEqual(f.src_path, 'README.md')
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/README.md')
         self.assertPathsEqual(f.dest_path, 'index.html')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/index.html')
         self.assertEqual(f.url, '.')
