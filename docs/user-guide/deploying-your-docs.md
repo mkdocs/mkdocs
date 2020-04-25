@@ -76,6 +76,7 @@ and call the following in the command line:
 cd ../orgname.github.io/
 mkdocs gh-deploy --config-file ../my-project/mkdocs.yml --page-type org
 ```
+
 Note that you need to explicitly point to the mkdocs.yml configuration
 file as it is no longer in the current working directory.
 Additionally, note that you should specify the site type with the
