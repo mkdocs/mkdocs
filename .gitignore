@@ -67,3 +67,6 @@ ENV/
 
 # MkDocs documentation
 site/
+
+# IDEs
+.idea/
