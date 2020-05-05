@@ -58,6 +58,7 @@ force_help = "Force the push to the repository."
 ignore_version_help = "Ignore check that build is not being deployed with an older version of MkDocs."
 watch_theme_help = ("Include the theme in list of files to watch for live reloading. "
                     "Ignored when live reload is not used.")
+wait_help = "Wait the specified number of seconds before reloading (default 0)."
 
 
 def add_options(opts):
@@ -125,6 +126,7 @@ def cli():
 @click.option('--no-livereload', 'livereload', flag_value='no-livereload', help=no_reload_help)
 @click.option('--dirtyreload', 'livereload', flag_value='dirty', help=dirty_reload_help)
 @click.option('--watch-theme', help=watch_theme_help, is_flag=True)
+@click.option('-w', '--wait', help=wait_help, default=0)
 @common_config_options
 @common_options
 def serve_command(dev_addr, livereload, **kwargs):
