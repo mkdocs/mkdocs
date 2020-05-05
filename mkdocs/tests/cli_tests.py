@@ -28,7 +28,8 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            use_directory_urls=None
+            use_directory_urls=None,
+            watch_theme=False
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -57,7 +58,8 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            use_directory_urls=None
+            use_directory_urls=None,
+            watch_theme=False
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -73,7 +75,8 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=True,
             theme=None,
-            use_directory_urls=None
+            use_directory_urls=None,
+            watch_theme=False
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -89,7 +92,8 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme='readthedocs',
-            use_directory_urls=None
+            use_directory_urls=None,
+            watch_theme=False
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -105,7 +109,8 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            use_directory_urls=True
+            use_directory_urls=True,
+            watch_theme=False
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -121,7 +126,8 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            use_directory_urls=False
+            use_directory_urls=False,
+            watch_theme=False
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -137,7 +143,8 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            use_directory_urls=None
+            use_directory_urls=None,
+            watch_theme=False
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -153,7 +160,8 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            use_directory_urls=None
+            use_directory_urls=None,
+            watch_theme=False
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -169,7 +177,25 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            use_directory_urls=None
+            use_directory_urls=None,
+            watch_theme=False
+        )
+
+    @mock.patch('mkdocs.commands.serve.serve', autospec=True)
+    def test_serve_watch_theme(self, mock_serve):
+
+        result = self.runner.invoke(
+            cli.cli, ["serve", '--watch-theme'], catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        mock_serve.assert_called_once_with(
+            dev_addr=None,
+            livereload='livereload',
+            config_file=None,
+            strict=None,
+            theme=None,
+            use_directory_urls=None,
+            watch_theme=True
         )
 
     @mock.patch('mkdocs.config.load_config', autospec=True)

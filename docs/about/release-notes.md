@@ -21,7 +21,19 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
-## Version 1.1.3 (Under development)
+## Version 1.2 (Under development)
+
+### Major Additions to Version 1.2
+
+##### Backward Incompatible Changes
+
+A theme's files are now excluded from the list of watched files by default
+when using the `--livereload` server. This new default behavior is what most
+users need and provides better performance when editing site content.
+Theme developers can enable the old behavior with the `--watch-theme`
+option. (#2092).
+
+### Other Changes and Additions to Version 1.2
 
 * Bugfix: Properly process navigation child items in `_get_by_type` when
   filtering for sections (#2203).

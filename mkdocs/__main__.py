@@ -56,6 +56,8 @@ remote_name_help = ("The remote name to commit to for Github Pages. This "
                     "overrides the value specified in config")
 force_help = "Force the push to the repository."
 ignore_version_help = "Ignore check that build is not being deployed with an older version of MkDocs."
+watch_theme_help = ("Include the theme in list of files to watch for live reloading. "
+                    "Ignored when live reload is not used.")
 
 
 def add_options(opts):
@@ -122,6 +124,7 @@ def cli():
 @click.option('--livereload', 'livereload', flag_value='livereload', help=reload_help, default=True)
 @click.option('--no-livereload', 'livereload', flag_value='no-livereload', help=no_reload_help)
 @click.option('--dirtyreload', 'livereload', flag_value='dirty', help=dirty_reload_help)
+@click.option('--watch-theme', help=watch_theme_help, is_flag=True)
 @common_config_options
 @common_options
 def serve_command(dev_addr, livereload, **kwargs):
