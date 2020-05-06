@@ -7,10 +7,7 @@ matrix:
     # Default Python
     - env: TOXENV=flake8
     - env: TOXENV=markdown-lint
-      #language: node_js
-      node_js:
-        - 12
-      before_install: npm install -g markdownlint-cli
+      before_install: npm install -g markdownlint-cli@0.21.0
     # Until Linkchecker is updated to Python 3, we will have skip this test.
     # Watch https://github.com/linkchecker/linkchecker for updates.
     # - env: TOXENV=linkchecker
