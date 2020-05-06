@@ -7,7 +7,7 @@ matrix:
     # Default Python
     - env: TOXENV=flake8
     - env: TOXENV=markdown-lint
-      language: node_js
+      #language: node_js
       node_js:
         - 12
       before_install: npm install -g markdownlint-cli
