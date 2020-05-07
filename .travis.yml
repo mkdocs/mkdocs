@@ -7,7 +7,12 @@ matrix:
     # Default Python
     - env: TOXENV=flake8
     - env: TOXENV=markdown-lint
-      before_install: npm install -g markdownlint-cli
+      # Travis only gives us Node.js version 8 so we must use an older
+      # version of markdownlint. To declare a newer node.js version we
+      # lose the ability to have Python as the lang and install tox.
+      # If/when the default node version gets updated, remove the
+      # version restriction on markdownlint.
+      before_install: npm install -g markdownlint-cli@0.21.0
     # Until Linkchecker is updated to Python 3, we will have skip this test.
     # Watch https://github.com/linkchecker/linkchecker for updates.
     # - env: TOXENV=linkchecker

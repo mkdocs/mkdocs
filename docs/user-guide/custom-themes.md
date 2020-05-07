@@ -60,7 +60,7 @@ theme:
 
 !!! Warning
 
-    A theme's [configuration] defined in a `mkdocs_theme.yml` file is not loaded 
+    A theme's [configuration] defined in a `mkdocs_theme.yml` file is not loaded
     from `theme.custom_dir`. When an entire theme exists in `theme.custom_dir`
     and `theme.name` is set to `null`, then the entire theme configuration must
     be defined in the [theme] configuration option in the `mkdocs.yml` file.
