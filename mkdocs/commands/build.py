@@ -119,8 +119,10 @@ def _build_theme_template(template_name, env, files, config, nav):
 
         if template_name == 'sitemap.xml':
             log.debug("Gzipping template: %s", template_name)
-            with gzip.open('{}.gz'.format(output_path), 'wb') as f:
-                f.write(output.encode('utf-8'))
+            gz_filename = '{}.gz'.format(output_path)
+            with open(gz_filename, 'wb') as f:
+                with gzip.GzipFile(fileobj=f, filename=gz_filename, mode='wb', mtime=0) as gz_buf:
+                    gz_buf.write(output.encode('utf-8'))
     else:
         log.info("Template skipped: '{}' generated empty output.".format(template_name))
 
