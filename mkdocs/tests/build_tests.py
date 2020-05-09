@@ -202,14 +202,14 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
 
     @mock.patch('mkdocs.utils.write_file')
     @mock.patch('mkdocs.commands.build._build_template', return_value='some content')
-    @mock.patch('gzip.open')
-    def test_build_sitemap_template(self, mock_gzip_open, mock_build_template, mock_write_file):
+    @mock.patch('gzip.GzipFile')
+    def test_build_sitemap_template(self, mock_gzip_gzipfile, mock_build_template, mock_write_file):
         cfg = load_config()
         env = cfg['theme'].get_env()
         build._build_theme_template('sitemap.xml', env, mock.Mock(), cfg, mock.Mock())
         self.assert_mock_called_once(mock_write_file)
         self.assert_mock_called_once(mock_build_template)
-        self.assert_mock_called_once(mock_gzip_open)
+        self.assert_mock_called_once(mock_gzip_gzipfile)
 
     @mock.patch('mkdocs.utils.write_file')
     @mock.patch('mkdocs.commands.build._build_template', return_value='')
