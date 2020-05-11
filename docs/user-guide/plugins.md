@@ -229,6 +229,20 @@ entire site.
     Parameters:
     : __config:__ global configuration object
 
+##### on_build_error
+
+:   The `build_error` event is called when an `mkdocs.exceptions.BuildError`
+    is caught by MkDocs during the build process.
+    Catching this exception means the build process is interrupted.
+    After calling the event, MkDocs terminates with an error code and message.
+    Plugins can raise a subclass of this exception,
+    `mkdocs.exceptions.PluginError`, that will trigger the event as well.
+    Use this event to clean things up before MkDocs terminates.
+    See [Handling Errors] for more details.
+
+    Parameters:
+    : __error:__ exception raised
+
 #### Template Events
 
 Template events are called once for each non-page template. Each template event
@@ -369,6 +383,68 @@ page events are called after the [post_template] event and before the
     Returns:
     : output of rendered template as string
 
+### Handling Errors
+
+Sometimes errors can happen in your event hooks.
+
+Unexpected and uncaught exceptions will bubble up and be caught by MkDocs,
+logged as errors, and re-raised, interrupting the build process.
+
+However you might want to catch an exception yourself and abort the build
+with a useful message, as well as making sure to clean things up before exiting.
+
+To do that, you can raise a `PluginError` exception.
+
+The `PluginError` accepts a `reraise` boolean parameter which allows you
+to control whether the error should be raised again by MkDocs
+(like any other unexpected exception),
+or if MkDocs should simply abort the build and exit.
+
+The default is **not** to re-raise the exception.
+In both cases (re-raising or not re-raising),
+the [on_build_error] event will be triggered.
+
+Example:
+
+```python
+from mkdocs.exceptions import PluginError
+from mkdocs.plugins import BasePlugin
+
+
+class MyPlugin(BasePlugin):
+    def on_post_page(self, output, page, config, **kwargs):
+        try:
+            # some code that could throw a KeyError
+            ...
+        except KeyError as error:
+            raise PluginError(str(error))  # reraise=False by default
+
+    def on_build_error(self, error):
+        # some code to clean things up
+        ...
+```
+
+Now, if you want to abort the build, trigger the `on_build_error` event,
+and still show the traceback, simply pass `reraise=True`:
+
+```python
+from mkdocs.exceptions import PluginError
+from mkdocs.plugins import BasePlugin
+
+
+class MyPlugin(BasePlugin):
+    def on_post_page(self, output, page, config, **kwargs):
+        try:
+            # some code that could throw a KeyError
+            ...
+        except KeyError as error:
+            raise PluginError(reraise=True) from error
+
+    def on_build_error(self, error):
+        # some code to clean things up
+        ...
+```
+
 ### Entry Point
 
 Plugins need to be packaged as Python libraries (distributed on PyPI separate
@@ -415,3 +491,5 @@ tell MkDocs to use if via the config.
 [static_templates]: configuration.md#static_templates
 [Template Events]: #template-events
 [MkDocs Plugins]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Plugins
+[on_build_error]: #on_build_error
+[Handling Errors]: #handling-errors

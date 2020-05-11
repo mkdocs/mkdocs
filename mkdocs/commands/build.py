@@ -7,6 +7,7 @@ from jinja2.exceptions import TemplateNotFound
 import jinja2
 
 from mkdocs import utils
+from mkdocs.exceptions import BuildError
 from mkdocs.structure.files import get_files
 from mkdocs.structure.nav import get_navigation
 import mkdocs
@@ -229,75 +230,84 @@ def _build_page(page, config, files, nav, env, dirty=False):
 
 def build(config, live_server=False, dirty=False):
     """ Perform a full site build. """
-    from time import time
-    start = time()
+    try:
 
-    # Run `config` plugin events.
-    config = config['plugins'].run_event('config', config)
+        from time import time
+        start = time()
 
-    # Run `pre_build` plugin events.
-    config['plugins'].run_event('pre_build', config=config)
+        # Run `config` plugin events.
+        config = config['plugins'].run_event('config', config)
 
-    if not dirty:
-        log.info("Cleaning site directory")
-        utils.clean_directory(config['site_dir'])
-    else:  # pragma: no cover
-        # Warn user about problems that may occur with --dirty option
-        log.warning("A 'dirty' build is being performed, this will likely lead to inaccurate navigation and other"
-                    " links within your site. This option is designed for site development purposes only.")
+        # Run `pre_build` plugin events.
+        config['plugins'].run_event('pre_build', config=config)
 
-    if not live_server:  # pragma: no cover
-        log.info("Building documentation to directory: %s", config['site_dir'])
-        if dirty and site_directory_contains_stale_files(config['site_dir']):
-            log.info("The directory contains stale files. Use --clean to remove them.")
+        if not dirty:
+            log.info("Cleaning site directory")
+            utils.clean_directory(config['site_dir'])
+        else:  # pragma: no cover
+            # Warn user about problems that may occur with --dirty option
+            log.warning("A 'dirty' build is being performed, this will likely lead to inaccurate navigation and other"
+                        " links within your site. This option is designed for site development purposes only.")
 
-    # First gather all data from all files/pages to ensure all data is consistent across all pages.
+        if not live_server:  # pragma: no cover
+            log.info("Building documentation to directory: %s", config['site_dir'])
+            if dirty and site_directory_contains_stale_files(config['site_dir']):
+                log.info("The directory contains stale files. Use --clean to remove them.")
 
-    files = get_files(config)
-    env = config['theme'].get_env()
-    files.add_files_from_theme(env, config)
+        # First gather all data from all files/pages to ensure all data is consistent across all pages.
 
-    # Run `files` plugin events.
-    files = config['plugins'].run_event('files', files, config=config)
+        files = get_files(config)
+        env = config['theme'].get_env()
+        files.add_files_from_theme(env, config)
 
-    nav = get_navigation(files, config)
+        # Run `files` plugin events.
+        files = config['plugins'].run_event('files', files, config=config)
 
-    # Run `nav` plugin events.
-    nav = config['plugins'].run_event('nav', nav, config=config, files=files)
+        nav = get_navigation(files, config)
 
-    log.debug("Reading markdown pages.")
-    for file in files.documentation_pages():
-        log.debug("Reading: " + file.src_path)
-        _populate_page(file.page, config, files, dirty)
+        # Run `nav` plugin events.
+        nav = config['plugins'].run_event('nav', nav, config=config, files=files)
 
-    # Run `env` plugin events.
-    env = config['plugins'].run_event(
-        'env', env, config=config, files=files
-    )
+        log.debug("Reading markdown pages.")
+        for file in files.documentation_pages():
+            log.debug("Reading: " + file.src_path)
+            _populate_page(file.page, config, files, dirty)
 
-    # Start writing files to site_dir now that all data is gathered. Note that order matters. Files
-    # with lower precedence get written first so that files with higher precedence can overwrite them.
+        # Run `env` plugin events.
+        env = config['plugins'].run_event(
+            'env', env, config=config, files=files
+        )
 
-    log.debug("Copying static assets.")
-    files.copy_static_files(dirty=dirty)
+        # Start writing files to site_dir now that all data is gathered. Note that order matters. Files
+        # with lower precedence get written first so that files with higher precedence can overwrite them.
 
-    for template in config['theme'].static_templates:
-        _build_theme_template(template, env, files, config, nav)
+        log.debug("Copying static assets.")
+        files.copy_static_files(dirty=dirty)
 
-    for template in config['extra_templates']:
-        _build_extra_template(template, files, config, nav)
+        for template in config['theme'].static_templates:
+            _build_theme_template(template, env, files, config, nav)
 
-    log.debug("Building markdown pages.")
-    for file in files.documentation_pages():
-        _build_page(file.page, config, files, nav, env, dirty)
+        for template in config['extra_templates']:
+            _build_extra_template(template, files, config, nav)
 
-    # Run `post_build` plugin events.
-    config['plugins'].run_event('post_build', config=config)
+        log.debug("Building markdown pages.")
+        for file in files.documentation_pages():
+            _build_page(file.page, config, files, nav, env, dirty)
 
-    if config['strict'] and utils.warning_filter.count:
-        raise SystemExit('\nExited with {} warnings in strict mode.'.format(utils.warning_filter.count))
+        # Run `post_build` plugin events.
+        config['plugins'].run_event('post_build', config=config)
 
-    log.info('Documentation built in %.2f seconds', time() - start)
+        if config['strict'] and utils.warning_filter.count:
+            raise SystemExit('\nExited with {} warnings in strict mode.'.format(utils.warning_filter.count))
+
+        log.info('Documentation built in %.2f seconds', time() - start)
+
+    except BuildError as error:
+        # Run `build_error` plugin events.
+        config['plugins'].run_event('build_error', error=error)
+        if error.reraise:
+            raise error
+        raise SystemExit('\n' + str(error))
 
 
 def site_directory_contains_stale_files(site_directory):
