@@ -105,7 +105,7 @@ def get_build_datetime():
     if source_date_epoch is None:
         return datetime.now(timezone.utc)
 
-    return datetime.fromtimestamp(source_date_epoch, timezone.utc)
+    return datetime.fromtimestamp(int(source_date_epoch), timezone.utc)
 
 
 def get_build_date():
