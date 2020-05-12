@@ -21,7 +21,7 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
-## Version 1.1.1 (in development)
+## Version 1.1.1 (2020-05-12)
 
 * Bugfix: Use README.md as index.html even if use_directory_urls is false (#2081).
 * Bugfix: Ignore links which start with a backslash (#1680).
