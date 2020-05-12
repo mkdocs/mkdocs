@@ -1,5 +1,4 @@
 import os
-import datetime
 import logging
 from urllib.parse import urlparse, urlunparse, urljoin
 from urllib.parse import unquote as urlunquote
@@ -10,7 +9,7 @@ from markdown.treeprocessors import Treeprocessor
 from markdown.util import AMP_SUBSTITUTE
 
 from mkdocs.structure.toc import get_toc
-from mkdocs.utils import meta, get_markdown_title, warning_filter
+from mkdocs.utils import meta, get_build_date, get_markdown_title, warning_filter
 
 log = logging.getLogger(__name__)
 log.addFilter(warning_filter)
@@ -33,14 +32,7 @@ class Page:
         self.is_page = True
         self.is_link = False
 
-        # Support SOURCE_DATE_EPOCH environment variable for "reproducible" builds.
-        # See https://reproducible-builds.org/specs/source-date-epoch/
-        if 'SOURCE_DATE_EPOCH' in os.environ:
-            self.update_date = datetime.datetime.utcfromtimestamp(
-                int(os.environ['SOURCE_DATE_EPOCH'])
-            ).strftime("%Y-%m-%d")
-        else:
-            self.update_date = datetime.datetime.now().strftime("%Y-%m-%d")
+        self.update_date = get_build_date()
 
         self._set_canonical_url(config.get('site_url', None))
         self._set_edit_url(config.get('repo_url', None), config.get('edit_uri', None))
