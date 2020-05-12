@@ -27,7 +27,7 @@ jobs:
           - py37-integration
           - py37-min-req
           - py37-unittests
-          - py37-integration
+          - py38-integration
           - py38-min-req
           - py38-unittests
           - pypy3-integration
@@ -52,7 +52,7 @@ jobs:
             python-version: 3.7
           - tox-env: py37-unittests
             python-version: 3.7
-          - tox-env: py37-integration
+          - tox-env: py38-integration
             python-version: 3.8
           - tox-env: py38-min-req
             python-version: 3.8
