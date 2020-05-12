@@ -21,7 +21,7 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
-## Version 1.1.1 (in development)
+## Version 1.1.1 (2020-05-12)
 
 * Bugfix: Allow compressed sitemap to be deterministic by supporting the
   `SOURCE_DATE_EPOCH` environment variable (#2100).
