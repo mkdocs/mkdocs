@@ -11,9 +11,11 @@ import os
 import pkg_resources
 import shutil
 import re
+import time
 import yaml
 import fnmatch
 import posixpath
+from datetime import datetime, timezone
 from urllib.parse import urlparse
 
 from mkdocs import exceptions
@@ -77,6 +79,44 @@ def modified_time(file_path):
         return os.path.getmtime(file_path)
     else:
         return 0.0
+
+
+def get_build_timestamp():
+    """
+    Returns the number of seconds since the epoch.
+
+    Support SOURCE_DATE_EPOCH environment variable for reproducible builds.
+    See https://reproducible-builds.org/specs/source-date-epoch/
+    """
+    source_date_epoch = os.environ.get('SOURCE_DATE_EPOCH')
+    if source_date_epoch is None:
+        return int(datetime.now(timezone.utc).timestamp())
+
+    return int(source_date_epoch)
+
+
+def get_build_datetime():
+    """
+    Returns an aware datetime object.
+
+    Support SOURCE_DATE_EPOCH environment variable for reproducible builds.
+    See https://reproducible-builds.org/specs/source-date-epoch/
+    """
+    source_date_epoch = os.environ.get('SOURCE_DATE_EPOCH')
+    if source_date_epoch is None:
+        return datetime.now(timezone.utc)
+
+    return datetime.utcfromtimestamp(source_date_epoch, timezone.utc)
+
+
+def get_build_date():
+    """
+    Returns the displayable date string.
+
+    Support SOURCE_DATE_EPOCH environment variable for reproducible builds.
+    See https://reproducible-builds.org/specs/source-date-epoch/
+    """
+    return get_build_datetime().strftime('%Y-%m-%d')
 
 
 def reduce_list(data_set):

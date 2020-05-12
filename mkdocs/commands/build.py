@@ -1,5 +1,3 @@
-from datetime import datetime
-from calendar import timegm
 import logging
 import os
 import gzip
@@ -42,10 +40,6 @@ def get_context(nav, files, config, page=None, base_url=''):
 
     extra_css = utils.create_media_urls(config['extra_css'], page, base_url)
 
-    # Support SOURCE_DATE_EPOCH environment variable for "reproducible" builds.
-    # See https://reproducible-builds.org/specs/source-date-epoch/
-    timestamp = int(os.environ.get('SOURCE_DATE_EPOCH', timegm(datetime.utcnow().utctimetuple())))
-
     return {
         'nav': nav,
         'pages': files.documentation_pages(),
@@ -56,7 +50,7 @@ def get_context(nav, files, config, page=None, base_url=''):
         'extra_javascript': extra_javascript,
 
         'mkdocs_version': mkdocs.__version__,
-        'build_date_utc': datetime.utcfromtimestamp(timestamp),
+        'build_date_utc': utils.get_build_datetime(),
 
         'config': config,
         'page': page,
@@ -121,7 +115,8 @@ def _build_theme_template(template_name, env, files, config, nav):
             log.debug("Gzipping template: %s", template_name)
             gz_filename = '{}.gz'.format(output_path)
             with open(gz_filename, 'wb') as f:
-                with gzip.GzipFile(fileobj=f, filename=gz_filename, mode='wb', mtime=0) as gz_buf:
+                timestamp = utils.get_build_timestamp()
+                with gzip.GzipFile(fileobj=f, filename=gz_filename, mode='wb', mtime=timestamp) as gz_buf:
                     gz_buf.write(output.encode('utf-8'))
     else:
         log.info("Template skipped: '{}' generated empty output.".format(template_name))
