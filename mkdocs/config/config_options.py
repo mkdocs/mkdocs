@@ -487,8 +487,8 @@ class Nav(OptionallyRequired):
         if len(value) == 0:
             return
 
-        config_types = {type(l) for l in value}
-        if config_types.issubset({str, dict, str}):
+        config_types = {type(item) for item in value}
+        if config_types.issubset({str, dict}):
             return value
 
         raise ValidationError("Invalid pages config. {} {}".format(
