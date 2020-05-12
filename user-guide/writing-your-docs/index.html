@@ -170,12 +170,13 @@ pages</a> below for details). Any of the following file
 extensions may be used for your Markdown source files: <code>markdown</code>, <code>mdown</code>,
 <code>mkdn</code>, <code>mkd</code>, <code>md</code>. All Markdown files included in your documentation
 directory will be rendered in the built site regardless of any settings.</p>
-<p>!!! note:</p>
-<pre><code>Files and directories with names which begin with a dot (for example:
-`.foo.md` or `.bar/baz.md`) are ignored by MkDocs, which matches the
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Files and directories with names which begin with a dot (for example:
+<code>.foo.md</code> or <code>.bar/baz.md</code>) are ignored by MkDocs, which matches the
 behavior of most web servers. There is no option to override this
-behavior.
-</code></pre>
+behavior.</p>
+</div>
 <p>You can also create multi-page documentation, by creating several Markdown
 files:</p>
 <pre><code class="no-highlight">mkdocs.yml
@@ -599,7 +600,7 @@ nested inside list items, blockquotes, etc.</p></div>
                 </p>
                 <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
                 <div id="mkdocs-search-results"></div>

@@ -549,6 +549,18 @@ the dot (<code>.</code>) as a word separator you might do this:</p>
 </code></pre>
 
 <p><strong>default</strong>: <code>'[\s\-]+'</code></p>
+<h5 id="min_search_length"><strong>min_search_length</strong><a class="headerlink" href="#min_search_length" title="Permanent link"></a></h5>
+<p>An integer value that defines the minimum length for a search query. By default
+searches shorter than 3 chars in length are ignored as search result quality with
+short search terms is poor. However, for some use cases (such as documentation
+about Message Queues which might generate searches for 'MQ') it may be preferable
+to set a shorter limit.</p>
+<pre><code class="yaml">plugins:
+    - search:
+        min_search_length: 2
+</code></pre>
+
+<p><strong>default</strong>: 3</p>
 <h5 id="lang"><strong>lang</strong><a class="headerlink" href="#lang" title="Permanent link"></a></h5>
 <p>A list of languages to use when building the search index as identified by their
 <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes">ISO 639-1</a> language codes. With <a href="https://github.com/MihaiValentin/lunr-languages#lunr-languages-----">Lunr Languages</a>, the following languages are
@@ -642,7 +654,7 @@ significant improvement in search performance.</p>
                 </p>
                 <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
                 <div id="mkdocs-search-results"></div>

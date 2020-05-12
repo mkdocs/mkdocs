@@ -288,6 +288,7 @@ to the list of "watched" files for auto-reloading.</p>
 <dt>Parameters:</dt>
 <dd><strong>server:</strong> <code>livereload.Server</code> instance</dd>
 <dd><strong>config:</strong> global configuration object</dd>
+<dd><strong>builder:</strong> a callable which gets passed to each call to <code>server.watch</code></dd>
 <dt>Returns:</dt>
 <dd><code>livereload.Server</code> instance</dd>
 </dl>
@@ -586,7 +587,7 @@ tell MkDocs to use if via the config.</p></div>
                 </p>
                 <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
                 <div id="mkdocs-search-results"></div>

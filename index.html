@@ -221,12 +221,12 @@ use your package manager to install "Python" and "pip". Then you can use pip to
 system, as well as the Python package manager, <a href="https://pip.readthedocs.io/en/stable/installing/">pip</a>. You can check if you have
 these already installed from the command line:</p>
 <pre><code class="bash">$ python --version
-Python 2.7.14
+Python 3.8.2
 $ pip --version
-pip 18.1 from /usr/local/lib/python2.7/site-packages/pip (python 2.7)
+pip 20.0.2 from /usr/local/lib/python3.8/site-packages/pip (python 3.8)
 </code></pre>
 
-<p>MkDocs supports Python versions 2.7.9+, 3.4, 3.5, 3.6, 3.7, and pypy.</p>
+<p>MkDocs supports Python versions 3.5, 3.6, 3.7, 3.8, and pypy3.</p>
 <h4 id="installing-python">Installing Python<a class="headerlink" href="#installing-python" title="Permanent link"></a></h4>
 <p>Install <a href="https://www.python.org/">Python</a> by downloading an installer appropriate for your system from
 <a href="https://www.python.org/downloads/">python.org</a> and running it.</p>
@@ -282,7 +282,7 @@ python -m mkdocs
 <p>For a more permanent solution, you may need to edit your <code>PATH</code> environment
 variable to include the <code>Scripts</code> directory of your Python installation.
 Recent versions of Python include a script to do this for you. Navigate to
-your Python installation directory (for example <code>C:\Python34\</code>), open the
+your Python installation directory (for example <code>C:\Python38\</code>), open the
 <code>Tools</code>, then <code>Scripts</code> folder, and run the <code>win_add2path.py</code> file by double
 clicking on it. Alternatively, you can <a href="https://svn.python.org/projects/python/trunk/Tools/scripts/win_add2path.py">download</a> the script and run it
 (<code>python win_add2path.py</code>).</p>
@@ -453,7 +453,7 @@ the MkDocs IRC channel <code>#mkdocs</code> on freenode.</p></div>
                 </p>
                 <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
                 <div id="mkdocs-search-results"></div>
@@ -507,6 +507,6 @@ the MkDocs IRC channel <code>#mkdocs</code> on freenode.</p></div>
 </html>
 
 <!--
-MkDocs version : 1.1
-Build Date UTC : 2020-02-26 23:50:49
+MkDocs version : 1.1.1
+Build Date UTC : 2020-05-12 17:19:47.789855+00:00
 -->

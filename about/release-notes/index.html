@@ -143,6 +143,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-level="2"><a href="#version-111-2020-05-12" class="nav-link">Version 1.1.1 (2020-05-12)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-level="2"><a href="#version-11-2020-02-22" class="nav-link">Version 1.1 (2020-02-22)</a>
               <ul class="nav flex-column">
               </ul>
@@ -290,6 +294,20 @@ mkdocs, version 1.0 from /path/to/mkdocs (Python 3.6)
 <li><a href="https://github.com/tomchristie/">@tomchristie</a></li>
 <li><a href="https://github.com/d0ugal/">@d0ugal</a></li>
 <li><a href="https://github.com/waylan/">@waylan</a></li>
+</ul>
+<h2 id="version-111-2020-05-12">Version 1.1.1 (2020-05-12)<a class="headerlink" href="#version-111-2020-05-12" title="Permanent link"></a></h2>
+<ul>
+<li>Bugfix: Allow compressed sitemap to be deterministic by supporting the
+  <code>SOURCE_DATE_EPOCH</code> environment variable (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2100" title="GitHub Issue mkdocs/mkdocs #2100">#2100</a>).</li>
+<li>Bugfix: Use README.md as index.html even if use_directory_urls is false (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2081" title="GitHub Issue mkdocs/mkdocs #2081">#2081</a>).</li>
+<li>Bugfix: Ignore links which start with a backslash (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1680" title="GitHub Issue mkdocs/mkdocs #1680">#1680</a>).</li>
+<li>Bugfix: Pass <code>builder</code> to the <code>on_serve</code> event so that it can be passed to
+  <code>server.watch</code> by plugins (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1952" title="GitHub Issue mkdocs/mkdocs #1952">#1952</a>).</li>
+<li>Bugfix: Use <code>lunr[languages]==0.5.8</code> to avoid <code>nltk</code> incompatibilities (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2062" title="GitHub Issue mkdocs/mkdocs #2062">#2062</a>).</li>
+<li>Bugfix: Ensure wheel is Python 3 only (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2021" title="GitHub Issue mkdocs/mkdocs #2021">#2021</a>).</li>
+<li>Bugfix: Clean up <code>dev_addr</code> validation and disallow <code>0.0.0.0</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2022" title="GitHub Issue mkdocs/mkdocs #2022">#2022</a>).</li>
+<li>Add support for <code>min_search_length</code> parameter for search plugin (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2014" title="GitHub Issue mkdocs/mkdocs #2014">#2014</a>).</li>
+<li>Bugfix: <code>readthedocs</code> theme <code>code</code> colors (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2027" title="GitHub Issue mkdocs/mkdocs #2027">#2027</a>).</li>
 </ul>
 <h2 id="version-11-2020-02-22">Version 1.1 (2020-02-22)<a class="headerlink" href="#version-11-2020-02-22" title="Permanent link"></a></h2>
 <h3 id="major-additions-to-version-11">Major Additions to Version 1.1<a class="headerlink" href="#major-additions-to-version-11" title="Permanent link"></a></h3>
@@ -1344,7 +1362,7 @@ documentation.</p>
                 </p>
                 <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
                 <div id="mkdocs-search-results"></div>
