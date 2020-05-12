@@ -1,14 +1,14 @@
 name: CI
 
-on:
-  push:
-    branches:
-    - master
-    tags:
-    - '**'
-  pull_request:
-    branches:
-    - '**'
+on: [pull_request]
+#  push:
+#    branches:
+#    - master
+#    tags:
+#    - '**'
+#  pull_request:
+#    branches:
+#    - '**'
 
 jobs:
   test:
