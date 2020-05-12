@@ -1,0 +1,127 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - master
+    tags:
+    - '**'
+  pull_request:
+    branches:
+    - '**'
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        tox-env:
+          - py35-integration
+          - py35-min-req
+          - py35-unittests
+          - py36-integration
+          - py36-min-req
+          - py36-unittests
+          - py37-integration
+          - py37-min-req
+          - py37-unittests
+          - py37-integration
+          - py38-min-req
+          - py38-unittests
+          - pypy3-integration
+          - pypy3-min-req
+          - pypp3-unittests
+        include:
+          - tox-env: py35-integration
+            python-version: 3.5
+          - tox-env: py35-min-req
+            python-version: 3.5
+          - tox-env: py35-unittests
+            python-version: 3.5
+          - tox-env: py36-integration
+            python-version: 3.6
+          - tox-env: py36-min-req
+            python-version: 3.6
+          - tox-env: py36-unittests
+            python-version: 3.6
+          - tox-env: py37-integration
+            python-version: 3.7
+          - tox-env: py37-min-req
+            python-version: 3.7
+          - tox-env: py37-unittests
+            python-version: 3.7
+          - tox-env: py37-integration
+            python-version: 3.8
+          - tox-env: py38-min-req
+            python-version: 3.8
+          - tox-env: py38-unittests
+            python-version: 3.8
+          - tox-env: pypy3-integration
+            python-version: pypy3
+          - tox-env: pypy3-min-req
+            python-version: pypy3
+          - tox-env: pypp3-unittests
+            python-version: pypy3
+    env:
+      TOXENV: ${{ matrix.tox-env }}
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip tox coverage codecov
+    - name: Run tox
+      run: python -m tox
+    - name: Upload Codecov Results
+      if: success()
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: ${{ matrix.os }}-${{ matrix.tox-env }}
+        fail_ci_if_error: false
+
+  lint:
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        tox-env: [flake8, markdownlint, jslint, csslint]
+        include:
+          - tox-env: flake8
+            node-deps: false
+          - tox-env: markdownlint
+            node-deps: markdownlint-cli
+          - tox_env: jslint
+            node-deps: jslint
+          - tox-env: csslint
+            node-deps: csslint
+    env:
+      TOXENV: ${{ matrix.tox-env }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip tox
+    - name: Setup Node
+      if: ${{ matrix.node-deps }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: '10'
+    - name: Install Node dependencies
+      if: ${{ matrix.node-deps }}
+      run: |
+        npm install -g ${{ matrix.node-deps }}
+    - name: Run tox
+      run: python -m tox
