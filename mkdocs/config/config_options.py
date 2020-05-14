@@ -236,7 +236,8 @@ class IpAddress(OptionallyRequired):
 
         if host != 'localhost':
             try:
-                ipaddress.ip_address(host)
+                # Validate and normalize IP Address
+                host = str(ipaddress.ip_address(host))
             except ValueError as e:
                 raise ValidationError(e)
 
@@ -254,10 +255,11 @@ class IpAddress(OptionallyRequired):
     def post_validation(self, config, key_name):
         host = config[key_name].host
         if key_name == 'dev_addr' and host in ['0.0.0.0', '::']:
-            raise ValidationError(
-                ("The MkDocs' server is intended for development purposes only. "
-                 "Therefore, '{}' is not a supported IP address. Please use a "
-                 "third party production-ready server instead.").format(host)
+            self.warnings.append(
+                ("The use of the IP address '{}' suggests a production environment "
+                 "or the use of a proxy to connect to the MkDocs server. However, "
+                 "the MkDocs' server is intended for local development purposes only. "
+                 "Please use a third party production-ready server instead.").format(host)
             )
 
 

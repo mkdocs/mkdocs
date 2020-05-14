@@ -21,6 +21,10 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Version 1.1.2 (Under development)
+
+* Bugfix: Normalize IP addresses and change error to warning (#2108).
+
 ## Version 1.1.1 (2020-05-12)
 
 * Bugfix: Allow compressed sitemap to be deterministic by supporting the
