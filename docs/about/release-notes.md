@@ -21,15 +21,17 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
-## Version 1.1.2 (Under development)
+## Version 1.1.2 (2020-05-14)
 
-* Bugfix: Normalize IP addresses and change error to warning (#2108).
+* Bugfix: Normalize IP addresses and change unsupported address error to a
+  warning (#2108).
 
 ## Version 1.1.1 (2020-05-12)
 
 * Bugfix: Allow compressed sitemap to be deterministic by supporting the
   `SOURCE_DATE_EPOCH` environment variable (#2100).
-* Bugfix: Use README.md as index.html even if use_directory_urls is false (#2081).
+* Bugfix: Use `README.md` as `index.html` even if `use_directory_urls` is false
+  (#2081).
 * Bugfix: Ignore links which start with a backslash (#1680).
 * Bugfix: Pass `builder` to the `on_serve` event so that it can be passed to
   `server.watch` by plugins (#1952).
