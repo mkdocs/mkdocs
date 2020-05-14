@@ -131,6 +131,14 @@ class IpAddressTest(unittest.TestCase):
         self.assertEqual(value.host, '127.0.0.1')
         self.assertEqual(value.port, 8000)
 
+    def test_IP_normalization(self):
+        addr = '127.000.000.001:8000'
+        option = config_options.IpAddress(default=addr)
+        value = option.validate(None)
+        self.assertEqual(str(value), '127.0.0.1:8000')
+        self.assertEqual(value.host, '127.0.0.1')
+        self.assertEqual(value.port, 8000)
+
     def test_invalid_address_range(self):
         option = config_options.IpAddress()
         self.assertRaises(
@@ -166,25 +174,17 @@ class IpAddressTest(unittest.TestCase):
             option.validate, '127.0.0.1'
         )
 
-    def test_disallowed_address(self):
+    def test_unsupported_address(self):
         option = config_options.IpAddress()
         value = option.validate('0.0.0.0:8000')
-        self.assertRaises(
-            config_options.ValidationError,
-            option.post_validation,
-            {'dev_addr': value},
-            'dev_addr'
-        )
+        option.post_validation({'dev_addr': value}, 'dev_addr')
+        self.assertEqual(len(option.warnings), 1)
 
-    def test_disallowed_IPv6_address(self):
+    def test_unsupported_IPv6_address(self):
         option = config_options.IpAddress()
         value = option.validate(':::8000')
-        self.assertRaises(
-            config_options.ValidationError,
-            option.post_validation,
-            {'dev_addr': value},
-            'dev_addr'
-        )
+        option.post_validation({'dev_addr': value}, 'dev_addr')
+        self.assertEqual(len(option.warnings), 1)
 
     def test_invalid_IPv6_address(self):
         # The server will error out with this so we treat it as invalid.
