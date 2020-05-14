@@ -143,6 +143,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-level="2"><a href="#version-112-2020-05-14" class="nav-link">Version 1.1.2 (2020-05-14)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-level="2"><a href="#version-111-2020-05-12" class="nav-link">Version 1.1.1 (2020-05-12)</a>
               <ul class="nav flex-column">
               </ul>
@@ -295,11 +299,17 @@ mkdocs, version 1.0 from /path/to/mkdocs (Python 3.6)
 <li><a href="https://github.com/d0ugal/">@d0ugal</a></li>
 <li><a href="https://github.com/waylan/">@waylan</a></li>
 </ul>
+<h2 id="version-112-2020-05-14">Version 1.1.2 (2020-05-14)<a class="headerlink" href="#version-112-2020-05-14" title="Permanent link"></a></h2>
+<ul>
+<li>Bugfix: Normalize IP addresses and change unsupported address error to a
+  warning (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2108" title="GitHub Issue mkdocs/mkdocs #2108">#2108</a>).</li>
+</ul>
 <h2 id="version-111-2020-05-12">Version 1.1.1 (2020-05-12)<a class="headerlink" href="#version-111-2020-05-12" title="Permanent link"></a></h2>
 <ul>
 <li>Bugfix: Allow compressed sitemap to be deterministic by supporting the
   <code>SOURCE_DATE_EPOCH</code> environment variable (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2100" title="GitHub Issue mkdocs/mkdocs #2100">#2100</a>).</li>
-<li>Bugfix: Use README.md as index.html even if use_directory_urls is false (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2081" title="GitHub Issue mkdocs/mkdocs #2081">#2081</a>).</li>
+<li>Bugfix: Use <code>README.md</code> as <code>index.html</code> even if <code>use_directory_urls</code> is false
+  (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2081" title="GitHub Issue mkdocs/mkdocs #2081">#2081</a>).</li>
 <li>Bugfix: Ignore links which start with a backslash (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1680" title="GitHub Issue mkdocs/mkdocs #1680">#1680</a>).</li>
 <li>Bugfix: Pass <code>builder</code> to the <code>on_serve</code> event so that it can be passed to
   <code>server.watch</code> by plugins (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1952" title="GitHub Issue mkdocs/mkdocs #1952">#1952</a>).</li>
