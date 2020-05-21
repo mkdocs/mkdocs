@@ -403,7 +403,7 @@ MkDocs defines four error types:
 #### `mkdocs.exceptions.PluginError`
 
 :   A subclass of `mkdocs.exceptions.BuildError` which can be raised by plugin
-    events. 
+    events.
 
 Unexpected and uncaught exceptions will interrupt the build process and produce
 typical Python tracebacks, which are useful for debugging your code. However,
@@ -413,15 +413,17 @@ the error message, and exit immediately with only the helpful message displayed
 to the user.
 
 Therefore, you might want to catch any exceptions within your plugin and raise a
-`PluginError`, passing in your own custom-crafted message, so that the build process
-is aborted with a helpful message.
+`PluginError`, passing in your own custom-crafted message, so that the build
+process is aborted with a helpful message.
 
-The `PluginError` accepts a `reraise` boolean argument which allows you to control
-whether the error should be raised again by MkDocs (resulting in a traceback), or if
-MkDocs should simply abort the build and exit with the message only.
+The `PluginError` accepts a `reraise` boolean argument which allows you to
+control whether the error should be raised again by MkDocs (resulting in a
+traceback), or if MkDocs should simply abort the build and exit with the message
+only.
 
-The default is to **not** re-raise the exception. In either case (re-raising or not),
-the [on_build_error] event will be triggered for any `BuildError` or `PluginError`.
+The default is to **not** re-raise the exception. In either case (re-raising or
+not), the [on_build_error] event will be triggered for any `BuildError` or
+`PluginError`.
 
 For example:
 
