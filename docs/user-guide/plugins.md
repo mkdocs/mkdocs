@@ -231,14 +231,11 @@ entire site.
 
 ##### on_build_error
 
-:   The `build_error` event is called when an `mkdocs.exceptions.BuildError`
-    is caught by MkDocs during the build process.
-    Catching this exception means the build process is interrupted.
-    After calling the event, MkDocs terminates with an error code and message.
-    Plugins can raise a subclass of this exception,
-    `mkdocs.exceptions.PluginError`, that will trigger the event as well.
-    Use this event to clean things up before MkDocs terminates.
-    See [Handling Errors] for more details.
+:   The `build_error` event is called after a `mkdocs.exceptions.BuildError` or
+    `mkdocs.exceptions.PluginError` is caught by MkDocs during the build process.
+    Use this event to clean things up before MkDocs terminates. Note that any other
+    events which were scheduled to run after the error will have been skipped. See
+    [Handling Errors] for more details.
 
     Parameters:
     : __error:__ exception raised
@@ -385,26 +382,48 @@ page events are called after the [post_template] event and before the
 
 ### Handling Errors
 
-Sometimes errors can happen in your event hooks.
+MkDocs defines four error types:
 
-Unexpected and uncaught exceptions will bubble up and be caught by MkDocs,
-logged as errors, and re-raised, interrupting the build process.
+#### `mkdocs.exceptions.MkDocsException`
 
-However you might want to catch an exception yourself and abort the build
-with a useful message, as well as making sure to clean things up before exiting.
+:   The base class which all MkDocs exceptions inherit from. This should
+    not be raised directly. One of the sublcasses should be raised instead.
 
-To do that, you can raise a `PluginError` exception.
+#### `mkdocs.exceptions.ConfigurationError`
 
-The `PluginError` accepts a `reraise` boolean parameter which allows you
-to control whether the error should be raised again by MkDocs
-(like any other unexpected exception),
-or if MkDocs should simply abort the build and exit.
+:   This error is raised by configuration validation when a validation error
+    is encountered. This error should be raised by any configuration options
+    defined in a plugin's [config_scheme].
 
-The default is **not** to re-raise the exception.
-In both cases (re-raising or not re-raising),
-the [on_build_error] event will be triggered.
+#### `mkdocs.exceptions.BuildError`
 
-Example:
+:   This error may be raised by MkDocs during the build process. Plugins should
+    not raise this error.
+
+#### `mkdocs.exceptions.PluginError`
+
+:   A subclass of `mkdocs.exceptions.BuildError` which can be raised by plugin
+    events. 
+
+Unexpected and uncaught exceptions will interrupt the build process and produce
+typical Python tracebacks, which are useful for debugging your code. However,
+users generally find tracebacks overwhelming and often miss the helpful error
+message. Therefore, MkDocs will catch any of the errors listed above, retrieve
+the error message, and exit immediately with only the helpful message displayed
+to the user.
+
+Therefore, you might want to catch any exceptions within your plugin and raise a
+`PluginError`, passing in your own custom-crafted message, so that the build process
+is aborted with a helpful message.
+
+The `PluginError` accepts a `reraise` boolean argument which allows you to control
+whether the error should be raised again by MkDocs (resulting in a traceback), or if
+MkDocs should simply abort the build and exit with the message only.
+
+The default is to **not** re-raise the exception. In either case (re-raising or not),
+the [on_build_error] event will be triggered for any `BuildError` or `PluginError`.
+
+For example:
 
 ```python
 from mkdocs.exceptions import PluginError
@@ -424,8 +443,8 @@ class MyPlugin(BasePlugin):
         ...
 ```
 
-Now, if you want to abort the build, trigger the `on_build_error` event,
-and still show the traceback, simply pass `reraise=True`:
+To abort the build, trigger the `on_build_error` event, and still show the traceback,
+simply pass `reraise=True`:
 
 ```python
 from mkdocs.exceptions import PluginError
@@ -493,3 +512,4 @@ tell MkDocs to use if via the config.
 [MkDocs Plugins]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Plugins
 [on_build_error]: #on_build_error
 [Handling Errors]: #handling-errors
+[config_scheme]: #config_scheme
