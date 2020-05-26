@@ -165,7 +165,7 @@ class Page:
         """
 
         extensions = [
-            _RelativePathExtension(self.file, files)
+            _RelativePathExtension(self.file, files, config)
         ] + config['markdown_extensions']
 
         md = markdown.Markdown(
@@ -177,9 +177,12 @@ class Page:
 
 
 class _RelativePathTreeprocessor(Treeprocessor):
-    def __init__(self, file, files):
+    def __init__(self, file, files, docs_dir):
         self.file = file
         self.files = files
+
+        self.docs_dir = docs_dir
+        self.docs_rel_dir = docs_dir.replace(os.getcwd(), '').lstrip(os.sep)
 
     def run(self, root):
         """
@@ -213,8 +216,15 @@ class _RelativePathTreeprocessor(Treeprocessor):
             return url
 
         # Determine the filepath of the target.
-        target_path = os.path.join(os.path.dirname(self.file.src_path), urlunquote(path))
-        target_path = os.path.normpath(target_path).lstrip(os.sep)
+        target_path = os.path.join(os.path.dirname(self.file.abs_src_path), urlunquote(path))
+        target_path = os.path.normpath(target_path).replace(self.docs_dir, '').lstrip(os.sep)
+
+        # Fix for project rel path: docs/image.png
+        if target_path not in self.files:
+            if target_path.startswith(self.docs_rel_dir):
+                target_path_proj = target_path.replace(self.docs_rel_dir, "").lstrip(os.sep)
+                if target_path_proj in self.files:
+                    target_path = target_path_proj
 
         # Validate that the target exists in files collection.
         if target_path not in self.files:
@@ -235,10 +245,11 @@ class _RelativePathExtension(Extension):
     registers the Treeprocessor.
     """
 
-    def __init__(self, file, files):
+    def __init__(self, file, files, config):
         self.file = file
         self.files = files
+        self.docs_dir = config.get('docs_dir', '')
 
     def extendMarkdown(self, md):
-        relpath = _RelativePathTreeprocessor(self.file, self.files)
+        relpath = _RelativePathTreeprocessor(self.file, self.files, self.docs_dir)
         md.treeprocessors.register(relpath, "relpath", 0)
