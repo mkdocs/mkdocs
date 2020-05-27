@@ -764,7 +764,7 @@ class RelativePathExtensionTests(unittest.TestCase):
 
         with mock.patch(
             'mkdocs.structure.pages.open',
-            mock.mock_open(read_data='[link](../{}/non-index.md)'.format(docs_rel_dir))
+            mock.mock_open(read_data='[link](../docs/non-index.md)')
         ):
             self.assertEqual(
                 self.get_rendered_result(['index.md', 'non-index.md']),
