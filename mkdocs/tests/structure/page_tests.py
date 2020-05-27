@@ -750,6 +750,27 @@ class RelativePathExtensionTests(unittest.TestCase):
             '<p><a href="../..">link</a></p>'
         )
 
+    def test_project_relative_html_link_parent_index(self):
+        docs_rel_dir = self.DOCS_DIR.replace(os.getcwd(), '').lstrip(os.sep)
+
+        with mock.patch(
+            'mkdocs.structure.pages.open',
+            mock.mock_open(read_data='[link]({}/non-index.md)'.format(docs_rel_dir))
+        ):
+            self.assertEqual(
+                self.get_rendered_result(['index.md', 'non-index.md']),
+                '<p><a href="non-index/">link</a></p>'
+            )
+
+        with mock.patch(
+            'mkdocs.structure.pages.open',
+            mock.mock_open(read_data='[link](../{}/non-index.md)'.format(docs_rel_dir))
+        ):
+            self.assertEqual(
+                self.get_rendered_result(['index.md', 'non-index.md']),
+                '<p><a href="non-index/">link</a></p>'
+            )
+
     @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](non-index.md#hash)'))
     def test_relative_html_link_hash(self):
         self.assertEqual(
