@@ -211,7 +211,7 @@ entire site.
 ##### on_env
 
 :   The `env` event is called after the Jinja template environment is created
-    and can be used to alter the Jinja environment.
+    and can be used to alter the [Jinja environment](https://jinja.palletsprojects.com/en/master/api/#jinja2.Environment).
 
     Parameters:
     : __env:__ global Jinja environment
