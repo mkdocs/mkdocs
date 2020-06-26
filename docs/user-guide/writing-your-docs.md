@@ -21,7 +21,7 @@ docs/
 ```
 
 By convention your project homepage should be named `index.md` (see [Index
-pages](#index_pages) below for details). Any of the following file
+pages](#index-pages) below for details). Any of the following file
 extensions may be used for your Markdown source files: `markdown`, `mdown`,
 `mkdn`, `mkd`, `md`. All Markdown files included in your documentation
 directory will be rendered in the built site regardless of any settings.
