@@ -400,7 +400,7 @@ entry_points={
 ```
 
 Note that registering a plugin does not activate it. The user still needs to
-tell MkDocs to use if via the config.
+tell MkDocs to use it via the config.
 
 [BasePlugin]:#baseplugin
 [config]: configuration.md#plugins
