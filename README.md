@@ -12,10 +12,6 @@ Project documentation with Markdown.
 
 - View the [elstir documentation][elstir].
 - Project [release notes][release-notes].
-- Visit the [elstir wiki](https://github.com/elstir/elstir/wiki) for community
-  resources, including third party themes and a list of elstir users.
-- IRC channel: `#elstir` on freenode.
-- Discussions and support: <https://groups.google.com/forum/#!forum/elstir>
 
 ## Code of Conduct
 
