@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block libs %}
+{{ super() }}
+{% if page and page.schema %}
+<script src="schema_doc.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+{% endif %}
+
+{% endblock %}
+

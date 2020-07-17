@@ -65,5 +65,5 @@ target/
 venv/
 ENV/
 
-# MkDocs documentation
+# elstir documentation
 site/

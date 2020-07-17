@@ -1,8 +1,8 @@
-# Contributing to MkDocs
+# Contributing to elstir
 
-An introduction to contributing to the MkDocs project.
+An introduction to contributing to the elstir project.
 
-The MkDocs project welcomes, and depends, on contributions from developers and
+The elstir project welcomes, and depends, on contributions from developers and
 users in the open source community. Contributions can be made in a number of
 ways, a few examples are:
 
@@ -12,12 +12,12 @@ ways, a few examples are:
 
 ## Code of Conduct
 
-Everyone interacting in the MkDocs project's codebases, issue trackers, chat
+Everyone interacting in the elstir project's codebases, issue trackers, chat
 rooms, and mailing lists is expected to follow the [PyPA Code of Conduct].
 
 ## Reporting an Issue
 
-Please include as much detail as you can. Let us know your platform and MkDocs
+Please include as much detail as you can. Let us know your platform and elstir
 version. If the problem is visual (for example a theme or design issue) please
 add a screenshot and if you get an error please include the full error and
 traceback.
@@ -25,13 +25,13 @@ traceback.
 ## Testing the Development Version
 
 If you want to just install and try out the latest development version of
-MkDocs you can do so with the following command. This can be useful if you
+elstir you can do so with the following command. This can be useful if you
 want to provide feedback for a new feature or want to confirm if a bug you
 have encountered is fixed in the git master. It is **strongly** recommended
 that you do this within a [virtualenv].
 
 ```bash
-pip install https://github.com/mkdocs/mkdocs/archive/master.tar.gz
+pip install https://github.com/elstir/elstir/archive/master.tar.gz
 ```
 
 ## Installing for Development
@@ -44,7 +44,7 @@ this within a [virtualenv].
 pip install --editable .
 ```
 
-This will install MkDocs in development mode which binds the `mkdocs` command
+This will install elstir in development mode which binds the `elstir` command
 to the git repository.
 
 ## Running the tests
@@ -52,8 +52,8 @@ to the git repository.
 To run the tests, it is recommended that you use [tox].
 
 Install Tox using [pip] by running the command `pip install tox`.
-Then the test suite can be run for MkDocs by running the command `tox` in the
-root of your MkDocs repository.
+Then the test suite can be run for elstir by running the command `tox` in the
+root of your elstir repository.
 
 It will attempt to run the tests against all of the Python versions we
 support. So don't be concerned if you are missing some and they fail. The rest

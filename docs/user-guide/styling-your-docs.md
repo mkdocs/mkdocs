@@ -4,13 +4,13 @@ How to style and theme your documentation.
 
 ---
 
-MkDocs includes a couple [built-in themes] as well as various [third party
+elstir includes a couple [built-in themes] as well as various [third party
 themes], all of which can easily be customized with [extra CSS or
 JavaScript][docs_dir] or overridden from the theme's [custom_dir]. You can also
 create your own [custom theme] from the ground up for your documentation.
 
-To use a theme that is included in MkDocs, simply add this to your
-`mkdocs.yml` config file.
+To use a theme that is included in elstir, simply add this to your
+`elstir.yml` config file.
 
     theme: readthedocs
 
@@ -22,14 +22,14 @@ the [Customizing a Theme][customize] section below.
 
 ## Built-in themes
 
-### mkdocs
+### elstir
 
 The default theme, which was built as a custom [Bootstrap] theme, supports most
-every feature of MkDocs.
+every feature of elstir.
 
-![mkdocs](../img/mkdocs.png)
+![elstir](../img/elstir.png)
 
-In addition to the default [theme configuration options], the `mkdocs` theme
+In addition to the default [theme configuration options], the `elstir` theme
 supports the following options:
 
 * __`highlightjs`__: Enables highlighting of source code in code blocks using
@@ -43,7 +43,7 @@ supports the following options:
   languages. List additional languages here to include support for them.
 
         theme:
-            name: mkdocs
+            name: elstir
             highlightjs: true
             hljs_languages:
                 - yaml
@@ -52,7 +52,7 @@ supports the following options:
 * __`shortcuts`__: Defines keyboard shortcut keys.
 
         theme:
-            name: mkdocs
+            name: elstir
             shortcuts:
                 help: 191    # ?
                 next: 78     # n
@@ -80,7 +80,7 @@ supports the following options:
   `dark` or `light`.
 
         theme:
-            name: mkdocs
+            name: elstir
             nav_style: dark
 
 [styles]: https://highlightjs.org/static/demo/
@@ -110,7 +110,7 @@ theme supports the following options:
                 - rust
 
 * __`include_homepage_in_sidebar`__: Lists the homepage in the sidebar menu. As
-  MkDocs requires that the homepage be listed in the `nav` configuration
+  elstir requires that the homepage be listed in the `nav` configuration
   option, this setting allows the homepage to be included or excluded from
   the sidebar. Note that the site name/logo always links to the homepage.
   Default: `True`.
@@ -132,7 +132,7 @@ theme supports the following options:
 
 ### Third Party Themes
 
-A list of third party themes can be found in the MkDocs [community wiki]. If you
+A list of third party themes can be found in the elstir [community wiki]. If you
 have created your own, please feel free to add it to the list.
 
 ## Customizing a Theme
@@ -164,12 +164,12 @@ h1 {
 
     If you are deploying your documentation with [ReadTheDocs]. You will need
     to explicitly list the CSS and JavaScript files you want to include in
-    your config. To do this, add the following to your mkdocs.yml.
+    your config. To do this, add the following to your elstir.yml.
 
         extra_css: [extra.css]
 
 After making these changes, they should be visible when you run
-`mkdocs serve` - if you already had this running, you should see that the CSS
+`elstir serve` - if you already had this running, you should see that the CSS
 changes were automatically picked up and the documentation will be updated.
 
 !!! note
@@ -199,7 +199,7 @@ included in a theme.
     complete, standalone theme. See [Custom Themes][custom theme] for more
     information.
 
-For example, the [mkdocs] theme ([browse source]), contains the following
+For example, the [elstir] theme ([browse source]), contains the following
 directory structure (in part):
 
 ```nohighlight
@@ -224,11 +224,11 @@ next to your `docs_dir`:
 mkdir custom_theme
 ```
 
-And then point your `mkdocs.yml` configuration file at the new directory:
+And then point your `elstir.yml` configuration file at the new directory:
 
 ```yaml
 theme:
-    name: mkdocs
+    name: elstir
     custom_dir: custom_theme/
 ```
 
@@ -270,7 +270,7 @@ The built-in themes implement many of their parts inside template blocks which
 can be individually overridden in the `main.html` template. Simply create a
 `main.html` template file in your `custom_dir` and define replacement blocks
 within that file. Just make sure that the `main.html` extends `base.html`. For
-example, to alter the title of the MkDocs theme, your replacement `main.html`
+example, to alter the title of the elstir theme, your replacement `main.html`
 template would contain the following:
 
 ```django
@@ -287,7 +287,7 @@ You may re-define as many blocks as you desire, as long as those blocks are
 defined in the parent. For example, you could replace the Google Analytics
 script with one for a different service or replace the search feature with your
 own. You will need to consult the parent theme you are using to determine what
-blocks are available to override. The MkDocs and ReadTheDocs themes provide the
+blocks are available to override. The elstir and ReadTheDocs themes provide the
 following blocks:
 
 * `site_meta`: Contains meta tags in the document head.
@@ -313,7 +313,7 @@ explanation of blocks, consult the [Jinja documentation].
 #### Combining the custom_dir and Template Blocks
 
 Adding a JavaScript library to the `custom_dir` will make it available, but
-won't include it in the pages generated by MkDocs. Therefore, a link needs to
+won't include it in the pages generated by elstir. Therefore, a link needs to
 be added to the library from the HTML.
 
 Starting the with directory structure above (truncated):
@@ -349,12 +349,12 @@ Now the generated pages will include links to the template provided libraries as
 well as the library included in the `custom_dir`. The same would be required for
 any additional CSS files included in the `custom_dir`.
 
-[browse source]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes/mkdocs
+[browse source]: https://github.com/elstir/elstir/tree/master/elstir/themes/elstir
 [built-in themes]: #built-in-themes
 [Bootstrap]: https://getbootstrap.com/
 [theme configuration options]: ./configuration.md#theme
 [Read the Docs]: https://readthedocs.org/
-[community wiki]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
+[community wiki]: https://github.com/elstir/elstir/wiki/elstir-Themes
 [custom theme]: ./custom-themes.md
 [customize]: #customizing-a-theme
 [docs_dir]: #using-the-docs_dir
@@ -362,7 +362,7 @@ any additional CSS files included in the `custom_dir`.
 [extra_css]: ./configuration.md#extra_css
 [extra_javascript]: ./configuration.md#extra_javascript
 [Jinja documentation]: http://jinja.pocoo.org/docs/dev/templates/#template-inheritance
-[mkdocs]: #mkdocs
+[elstir]: #elstir
 [ReadTheDocs]: ./deploying-your-docs.md#readthedocs
 [Template Variables]: ./custom-themes.md#template-variables
 [custom_dir]: ./configuration.md#custom_dir

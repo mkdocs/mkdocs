@@ -1,0 +1,20 @@
+# Config options for 'elstir' theme
+
+static_templates:
+    - 404.html
+
+include_search_page: false
+search_index_only: false
+
+highlightjs: true
+hljs_languages: []
+hljs_style: github
+
+navigation_depth: 2
+nav_style: primary
+
+shortcuts:
+    help: 191    # ?
+    next: 78     # n
+    previous: 80 # p
+    search: 83   # s

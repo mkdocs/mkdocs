@@ -7,7 +7,7 @@ Guide to all available configuration settings.
 ## Introduction
 
 Project settings are always configured by using a YAML configuration file in the
-project directory named `mkdocs.yml`.
+project directory named `elstir.yml`.
 
 As a minimum this configuration file must contain the `site_name` setting. All
 other settings are optional.
@@ -55,7 +55,7 @@ those domains, otherwise the hostname from the `repo_url`.
 
 Path from the base `repo_url` to the docs directory when directly viewing a
 page, accounting for specifics of the repository host (e.g. GitHub, Bitbucket,
-etc), the branch, and the docs directory itself. MkDocs concatenates `repo_url`
+etc), the branch, and the docs directory itself. elstir concatenates `repo_url`
 and `edit_uri`, and appends the input path of the page.
 
 When set, and if your theme supports it, provides a link directly to the page in
@@ -141,7 +141,7 @@ Set the copyright information to be included in the documentation by the theme.
 Set the Google analytics tracking configuration.
 
 ```yaml
-google_analytics: ['UA-36723568-3', 'mkdocs.org']
+google_analytics: ['UA-36723568-3', 'elstir.org']
 ```
 
 **default**: `null`
@@ -173,7 +173,7 @@ nav:
     - 'about.md'
 ```
 
-All paths must be relative to the `mkdocs.yml` configuration file. See the
+All paths must be relative to the `elstir.yml` configuration file. See the
 section on [configuring pages and navigation] for a more detailed breakdown,
 including how to create sub-sections.
 
@@ -181,7 +181,7 @@ Navigation items may also include links to external sites. While titles are
 optional for internal links, they are required for external links. An external
 link may be a full URL or a relative URL. Any path which is not found in the
 files is assumed to be an external link. See the section about [Meta-Data] on
-how MkDocs determines the page title of a document.
+how elstir determines the page title of a document.
 
 ```yaml
 nav:
@@ -193,7 +193,7 @@ nav:
 In the above example, the first two items point to local files while the third
 points to an external site.
 
-However, sometimes the MkDocs site is hosted in a subdirectory of a project's
+However, sometimes the elstir site is hosted in a subdirectory of a project's
 site and you may want to link to other parts of the same site without including
 the full domain. In that case, you may use an appropriate relative URL.
 
@@ -207,12 +207,12 @@ nav:
 ```
 
 In the above example, two different styles of external links are used. First
-note that the `site_url` indicates that the MkDocs site is hosted in the `/foo/`
+note that the `site_url` indicates that the elstir site is hosted in the `/foo/`
 subdirectory of the domain. Therefore, the `Home` navigation item is a relative
 link which steps up one level to the server root and effectively points to
 `https://example.com/`. The `Bug Tracker` item uses an absolute path from the
 server root and effectively points to `https://example.com/bugs/`. Of course, the
-`User Guide` points to a local MkDocs page.
+`User Guide` points to a local elstir page.
 
 **default**: By default `nav` will contain an alphanumerically sorted, nested
 list of all the Markdown files found within the `docs_dir` and its
@@ -232,7 +232,7 @@ An example set of key/value pairs might look something like this:
 
 ```yaml
 theme:
-    name: mkdocs
+    name: elstir
     custom_dir: my_theme_customizations/
     static_templates:
         - sitemap.html
@@ -272,7 +272,7 @@ If a set of key/value pairs, the following nested keys can be defined:
     Any additional keywords supported by the theme can also be defined. See the
     documentation for the theme you are using for details.
 
-**default**: `'mkdocs'`
+**default**: `'elstir'`
 
 ### docs_dir
 
@@ -326,8 +326,8 @@ See the example in [extra_css] for usage.
 
 ### extra_templates
 
-Set a list of templates in your `docs_dir` to be built by MkDocs. To see more
-about writing templates for MkDocs read the documentation about [custom themes]
+Set a list of templates in your `docs_dir` to be built by elstir. To see more
+about writing templates for elstir read the documentation about [custom themes]
 and specifically the section about the [variables that are available] to
 templates. See the example in [extra_css] for usage.
 
@@ -384,11 +384,11 @@ warning is raised. Set to `false` to print a warning and continue processing.
 
 ### dev_addr
 
-Determines the address used when running `mkdocs serve`. Must be of the format
+Determines the address used when running `elstir serve`. Must be of the format
 `IP:PORT`.
 
 Allows a custom default to be set without the need to pass it through the
-`--dev-addr` option every time the `mkdocs serve` command is called.
+`--dev-addr` option every time the `elstir serve` command is called.
 
 **default**: `'127.0.0.1:8000'`
 
@@ -396,10 +396,10 @@ Allows a custom default to be set without the need to pass it through the
 
 ### markdown_extensions
 
-MkDocs uses the [Python Markdown][pymkd] library to translate Markdown files
+elstir uses the [Python Markdown][pymkd] library to translate Markdown files
 into HTML. Python Markdown supports a variety of [extensions][pymdk-extensions]
 that customize how pages are formatted. This setting lets you enable a list of
-extensions beyond the ones that MkDocs uses by default (`meta`, `toc`, `tables`,
+extensions beyond the ones that elstir uses by default (`meta`, `toc`, `tables`,
 and `fenced_code`).
 
 For example, to enable the [SmartyPants typography extension][smarty], use:
@@ -463,7 +463,7 @@ markdown_extensions:
 A list of plugins (with optional configuration settings) to use when building
 the site . See the [Plugins] documentation for full details.
 
-If the `plugins` config setting is defined in the `mkdocs.yml` config file, then
+If the `plugins` config setting is defined in the `elstir.yml` config file, then
 any defaults (such as `search`) are ignored and you need to explicitly re-enable
 the defaults if you would like to continue using them:
 
@@ -480,11 +480,11 @@ setting to an empty list:
 plugins: []
 ```
 
-**default**: `['search']` (the "search" plugin included with MkDocs).
+**default**: `['search']` (the "search" plugin included with elstir).
 
 #### Search
 
-A search plugin is provided by default with MkDocs which uses [lunr.js] as a
+A search plugin is provided by default with elstir which uses [lunr.js] as a
 search engine. The following config options are available to alter the behavior
 of the search plugin:
 
@@ -551,7 +551,7 @@ You may [contribute additional languages].
     While search does support using multiple languages together, it is best not
     to add additional languages unless you really need them. Each additional
     language adds significant bandwidth requirements and uses more browser
-    resources. Generally it is best to keep each instance of MkDocs to a single
+    resources. Generally it is best to keep each instance of elstir to a single
     language.
 
 !!! Note
@@ -577,7 +577,7 @@ You may use the `--strict` flag when building to cause such a failure to raise
 an error instead.
 
 Using [Lunr.py] setting `prebuild_index` to `python`. Lunr.py is installed
-as part of mkdocs and guarantees compatibility with Lunr.js even on languages
+as part of elstir and guarantees compatibility with Lunr.js even on languages
 other than english. If you find substantial inconsistencies or problems please
 report it on [Lunr.py's issues] and fall back to the Node.js version.
 

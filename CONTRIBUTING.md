@@ -1,6 +1,6 @@
-# Contributing to MkDocs
+# Contributing to elstir
 
 See the contributing guide in the documentation for an
-introduction to contributing to MkDocs.
+introduction to contributing to elstir.
 
-<https://www.mkdocs.org/about/contributing/>
+<https://github.com/claudioperez/elstir/about/contributing/>

@@ -12,7 +12,7 @@ Themes used under license from the ReadTheDocs projects.
 
 Many thanks to the authors and contributors of those wonderful projects.
 
-## MkDocs License (BSD)
+## elstir License (BSD)
 
 Copyright © 2014, Tom Christie. All rights reserved.
 

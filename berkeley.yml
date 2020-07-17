@@ -1,0 +1,46 @@
+site_name: elstir
+site_url: https://claudioperez.github.io/elstir
+site_description: Project documentation with Markdown.
+site_author: elstir Team
+
+repo_url: https://github.com/claudioperez/elstir/
+edit_uri: ""
+
+theme:
+    name: berkeley
+    highlightjs: true
+    hljs_languages:
+        - yaml
+        - django
+
+nav:
+    - Home: index.md
+    - User Guide:
+        - Writing Your Docs: user-guide/writing-your-docs.md
+        - Styling Your Docs: user-guide/styling-your-docs.md
+        - Configuration: user-guide/configuration.md
+        - Deploying Your Docs: user-guide/deploying-your-docs.md
+        - Custom Themes: user-guide/custom-themes.md
+        - Plugins: user-guide/plugins.md
+    - About:
+        - Release Notes: about/release-notes.md
+        - Contributing: about/contributing.md
+        - License: about/license.md
+
+extra_css:
+    - css/extra.css
+
+markdown_extensions:
+    - toc:
+        permalink: 
+    - admonition
+    - def_list
+    - mdx_gh_links:
+        user: elstir
+        repo: elstir
+
+# copyright: Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">elstir Team</a>.
+# google_analytics: ['UA-27795084-5', 'elstir.org']
+
+plugins:
+    - search

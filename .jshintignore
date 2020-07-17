@@ -1,7 +1,7 @@
-mkdocs/themes/**/js/highlight.pack.js
-mkdocs/themes/**/js/jquery-**.min.js
-mkdocs/themes/**/js/bootstrap.min.js
-mkdocs/themes/**/js/modernizr-**.min.js
-mkdocs/themes/readthedocs/js/theme.js
-mkdocs/contrib/search/templates/search/lunr.js
-mkdocs/contrib/search/lunr-language/lunr.**.js
+elstir/themes/**/js/highlight.pack.js
+elstir/themes/**/js/jquery-**.min.js
+elstir/themes/**/js/bootstrap.min.js
+elstir/themes/**/js/modernizr-**.min.js
+elstir/themes/readthedocs/js/theme.js
+elstir/contrib/search/templates/search/lunr.js
+elstir/contrib/search/lunr-language/lunr.**.js

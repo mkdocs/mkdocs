@@ -1,5 +1,17 @@
-include README.md
+graft docs
+graft src
+graft ci
+graft tests
+
+# include .coveragerc
+# include .editorconfig
+
+# include AUTHORS.md
+# include CHANGELOG.md
+# include CONTRIBUTING.md
 include LICENSE
-recursive-include mkdocs *.ico *.js *.css *.png *.html *.eot *.svg *.ttf *.woff *.woff2 *.xml *.mustache *mkdocs_theme.yml
-recursive-exclude * __pycache__
-recursive-exclude * *.py[co]
+include README.md
+
+include tox.ini .travis.yml .appveyor.yml
+
+global-exclude *.py[cod] __pycache__/* *.so *.dylib

@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 
-from setuptools import setup
+from setuptools import setup, find_packages
 import re
 import os
 import sys
 
+__version__ = '0.0.0'
 
 long_description = (
-    "MkDocs is a fast, simple and downright gorgeous static site generator "
+    "`elstir` is a fork of `mkdocs`. `mkdocs` is a fast, simple and downright gorgeous static site generator "
     "that's geared towards building project documentation. Documentation "
     "source files are written in Markdown, and configured with a single YAML "
     "configuration file."
@@ -20,11 +21,11 @@ def get_version(package):
     return re.search("__version__ = ['\"]([^'\"]+)['\"]", init_py).group(1)
 
 
-def get_packages(package):
-    """Return root package and all sub-packages."""
-    return [dirpath
-            for dirpath, dirnames, filenames in os.walk(package)
-            if os.path.exists(os.path.join(dirpath, '__init__.py'))]
+# def get_packages(package):
+#     """Return root package and all sub-packages."""
+#     return [dirpath
+#             for dirpath, dirnames, filenames in os.walk(package)
+#             if os.path.exists(os.path.join(dirpath, '__init__.py'))]
 
 
 if sys.argv[-1] == 'publish':
@@ -37,21 +38,22 @@ if sys.argv[-1] == 'publish':
     os.system("python setup.py sdist bdist_wheel")
     os.system("twine upload dist/*")
     print("You probably want to also tag the version now:")
-    print("  git tag -a {0} -m 'version {0}'".format(get_version("mkdocs")))
+    print("  git tag -a {0} -m 'version {0}'".format(__version__))
     print("  git push --tags")
     sys.exit()
 
 
 setup(
-    name="mkdocs",
-    version=get_version("mkdocs"),
-    url='https://www.mkdocs.org',
+    name="elstir",
+    version=__version__,
+    url='https://claudioperez.github.io/elstir',
     license='BSD',
     description='Project documentation with Markdown.',
     long_description=long_description,
-    author='Tom Christie',
-    author_email='tom@tomchristie.com',  # SEE NOTE BELOW (*)
-    packages=get_packages("mkdocs"),
+    author='Claudio Perez',
+    author_email='claudio_perez@berkeley.edu',  # SEE NOTE BELOW (*)
+    packages=find_packages("src"),
+    package_dir={'': 'src'},
     include_package_data=True,
     install_requires=[
         'click>=3.3',
@@ -65,18 +67,19 @@ setup(
     python_requires='>=3.5',
     entry_points={
         'console_scripts': [
-            'mkdocs = mkdocs.__main__:cli',
+            'elstir = elstir.__main__:cli',
         ],
-        'mkdocs.themes': [
-            'mkdocs = mkdocs.themes.mkdocs',
-            'readthedocs = mkdocs.themes.readthedocs',
+        'elstir.themes': [
+            'elstir = elstir.themes.elstir',
+            'readthedocs = elstir.themes.readthedocs',
+            'berkeley = elstir.themes.berkeley',
         ],
-        'mkdocs.plugins': [
-            'search = mkdocs.contrib.search:SearchPlugin',
+        'elstir.plugins': [
+            'search = elstir.contrib.search:SearchPlugin',
         ],
     },
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 2 - Pre-Alpha',
         'Environment :: Console',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
@@ -84,7 +87,6 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3 :: Only',
@@ -96,5 +98,3 @@ setup(
     zip_safe=False,
 )
 
-# (*) Please direct queries to the discussion group:
-#     https://groups.google.com/forum/#!forum/mkdocs

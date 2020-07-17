@@ -6,14 +6,14 @@ A guide to creating and distributing custom themes.
 
 !!! Note
 
-    If you are looking for third party themes, they are listed in the MkDocs
-    [community wiki](https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes). If
+    If you are looking for third party themes, they are listed in the elstir
+    [community wiki](https://github.com/elstir/elstir/wiki/elstir-Themes). If
     you want to share a theme you create, you should list it on the Wiki.
 
 When creating a new theme, you can either follow the steps in this guide to
-create one from scratch or you can download the `mkdocs-basic-theme` as a
+create one from scratch or you can download the `elstir-basic-theme` as a
 basic, yet complete, theme with all the boilerplate required. **You can find
-this base theme on [GitHub](https://github.com/mkdocs/mkdocs-basic-theme)**.
+this base theme on [GitHub](https://github.com/elstir/elstir-basic-theme)**.
 It contains detailed comments in the code to describe the different features
 and their usage.
 
@@ -21,12 +21,12 @@ and their usage.
 
 The bare minimum required for a custom theme is a `main.html` [Jinja2 template]
 file which is placed in a directory that is *not* a child of the [docs_dir].
-Within `mkdocs.yml`, set the theme.[custom_dir] option to the path of the
+Within `elstir.yml`, set the theme.[custom_dir] option to the path of the
 directory containing `main.html`. The path should be relative to the
 configuration file. For example, given this example project layout:
 
 ```no-highlight
-mkdocs.yml
+elstir.yml
 docs/
     index.md
     about.md
@@ -35,7 +35,7 @@ custom_theme/
     ...
 ```
 
-... you would include the following settings in `mkdocs.yml` to use the custom theme
+... you would include the following settings in `elstir.yml` to use the custom theme
 directory:
 
 ```yaml
@@ -51,22 +51,22 @@ theme:
     theme.[custom_dir] configuration value is used in combination with an
     existing theme, the theme.[custom_dir] can be used to replace only specific
     parts of a built-in theme. For example, with the above layout and if you set
-    `name: "mkdocs"` then the `main.html` file in the theme.[custom_dir] would
-    replace the file of the same name in the `mkdocs` theme but otherwise the
-    `mkdocs` theme would remain unchanged. This is useful if you want to make
+    `name: "elstir"` then the `main.html` file in the theme.[custom_dir] would
+    replace the file of the same name in the `elstir` theme but otherwise the
+    `elstir` theme would remain unchanged. This is useful if you want to make
     small adjustments to an existing theme.
 
     For more specific information, see [styling your docs].
 
 !!! Warning
 
-    A theme's [configuration] defined in a `mkdocs_theme.yml` file is not loaded
+    A theme's [configuration] defined in a `elstir_theme.yml` file is not loaded
     from `theme.custom_dir`. When an entire theme exists in `theme.custom_dir`
     and `theme.name` is set to `null`, then the entire theme configuration must
-    be defined in the [theme] configuration option in the `mkdocs.yml` file.
+    be defined in the [theme] configuration option in the `elstir.yml` file.
 
     However, when a theme is [packaged] up for distribution, and loaded using
-    the `theme.name` configuration option, then a `mkdocs_theme.yml` file
+    the `theme.name` configuration option, then a `elstir_theme.yml` file
     is required for the theme.
 
 [styling your docs]: ./styling-your-docs.md#using-the-theme-custom_dir
@@ -93,7 +93,7 @@ The simplest `main.html` file is the following:
 </html>
 ```
 
-The body content from each page specified in `mkdocs.yml` is inserted using the
+The body content from each page specified in `elstir.yml` is inserted using the
 `{{ page.content }}` tag. Style-sheets and scripts can be brought into this
 theme as with a normal HTML file. Navbars and tables of contents can also be
 generated and included automatically, through the `nav` and `toc` objects,
@@ -102,9 +102,9 @@ with one of the [built-in themes] and modify it accordingly.
 
 !!! Note
 
-    As MkDocs uses [Jinja] as its template engine, you have access to all the
+    As elstir uses [Jinja] as its template engine, you have access to all the
     power of Jinja, including [template inheritance]. You may notice that the
-    themes included with MkDocs make extensive use of template inheritance and
+    themes included with elstir make extensive use of template inheritance and
     blocks, allowing users to easily override small bits and pieces of the
     templates from the theme [custom_dir]. Therefore, the built-in themes are
     implemented in a `base.html` file, which `main.html` extends. Although not
@@ -138,11 +138,11 @@ extension.
 ### Theme Meta Files
 
 The various files required for packaging a theme are also ignored. Specifically,
-the `mkdocs_theme.yml` configuration file and any Python files.
+the `elstir_theme.yml` configuration file and any Python files.
 
 ### Dot Files
 
-Theme authors can explicitly force MkDocs to ignore files by starting a file or
+Theme authors can explicitly force elstir to ignore files by starting a file or
 directory name with a dot. Any of the following files would be ignored:
 
 ```text
@@ -155,7 +155,7 @@ foo/.ignored/file.txt
 ### Documentation Files
 
 All documentation files are ignored. Specifically, any Markdown files (using any
-of the file extensions supported by MKDocs). Additionally, any README files
+of the file extensions supported by elstir). Additionally, any README files
 which may exist in the theme directories are ignored.
 
 ## Template Variables
@@ -173,8 +173,8 @@ The following variables are available globally on any template.
 
 #### config
 
-The `config` variable is an instance of MkDocs' config object generated from the
-`mkdocs.yml` config file. While you can use any config option, some commonly
+The `config` variable is an instance of elstir' config object generated from the
+`elstir.yml` config file. While you can use any config option, some commonly
 used options include:
 
 * [config.site_name](./configuration.md#site_name)
@@ -242,14 +242,14 @@ navigation as a nested list.
 
 #### base_url
 
-The `base_url` provides a relative path to the root of the MkDocs project. While
+The `base_url` provides a relative path to the root of the elstir project. While
 this can be used directly by prepending it to a local relative URL, it is best
 to use the [url](#url) template filter, which is smarter about how it applies
 `base_url`.
 
-#### mkdocs_version
+#### elstir_version
 
-Contains the current MkDocs version.
+Contains the current elstir version.
 
 #### build_date_utc
 
@@ -335,7 +335,7 @@ documentation page.
 
 ##### page.url
 
-The URL of the page relative to the MkDocs `site_dir`. It is expected that this
+The URL of the page relative to the elstir `site_dir`. It is expected that this
 be used with the [url](#url) filter to ensure the URL is relative to the current
 page.
 
@@ -441,7 +441,7 @@ of those attributes as defined below:
 
 A `section` navigation object defines a named section in the navigation and
 contains a list of child navigation objects. Note that sections do not contain
-URLs and are not links of any kind. However, by default, MkDocs sorts index
+URLs and are not links of any kind. However, by default, elstir sorts index
 pages to the top and the first child might be used as the URL for a section if a
 theme choses to do so.
 
@@ -485,7 +485,7 @@ section objects.
 #### Link
 
 A `link` navigation object contains a link which does not point to an internal
-MkDocs page. The following attributes are available on `link` objects:
+elstir page. The following attributes are available on `link` objects:
 
 ##### link.title
 
@@ -537,9 +537,9 @@ following `extra` configuration:
 extra:
     version: 0.13.0
     links:
-        - https://github.com/mkdocs
-        - https://docs.readthedocs.org/en/latest/builds.html#mkdocs
-        - https://www.mkdocs.org/
+        - https://github.com/elstir
+        - https://docs.readthedocs.org/en/latest/builds.html#elstir
+        - https://github.com/claudioperez/elstir/
 ```
 
 And then displayed with this HTML in the custom theme.
@@ -559,7 +559,7 @@ And then displayed with this HTML in the custom theme.
 ## Template Filters
 
 In addition to Jinja's default filters, the following custom filters are
-available to use in MkDocs templates:
+available to use in elstir templates:
 
 ### url
 
@@ -578,13 +578,13 @@ Safety convert a Python object to a value in a JavaScript script.
 
 ```django
 <script>
-    var mkdocs_page_name = {{ page.title|tojson|safe }};
+    var elstir_page_name = {{ page.title|tojson|safe }};
 </script>
 ```
 
 ## Search and themes
 
-As of MkDocs version *0.17* client side search support has been added to MkDocs
+As of elstir version *0.17* client side search support has been added to elstir
 via the `search` plugin. A theme needs to provide a few things for the plugin to
 work with the theme.
 
@@ -619,21 +619,21 @@ full search implementation to your theme.
 <h1 id="search">Search Results</h1>
 
 <form action="search.html">
-  <input name="q" id="mkdocs-search-query" type="text" >
+  <input name="q" id="elstir-search-query" type="text" >
 </form>
 
-<div id="mkdocs-search-results">
+<div id="elstir-search-results">
   Sorry, page not found.
 </div>
 ```
 
 The JavaScript in the plugin works by looking for the specific ID's used in the
 above HTML. The form input for the user to type the search query must be
-identified with `id="mkdocs-search-query"` and the div where the results will be
-placed must be identified with `id="mkdocs-search-results"`.
+identified with `id="elstir-search-query"` and the div where the results will be
+placed must be identified with `id="elstir-search-results"`.
 
 The plugin supports the following options being set in the [theme's
-configuration file], `mkdocs_theme.yml`:
+configuration file], `elstir_theme.yml`:
 
 ### include_search_page
 
@@ -646,7 +646,7 @@ theme.
 
 When `include_search_page` is set to `false` or not defined, it is expected that
 the theme provide some other mechanisms for displaying search results. For
-example, the `mkdocs` theme displays results on any page via a modal.
+example, the `elstir` theme displays results on any page via a modal.
 
 ### search_index_only
 
@@ -675,8 +675,8 @@ objects.
 ```
 
 If present, the `config` object contains the key/value pairs of config options
-defined for the plugin in the user's `mkdocs.yml` config file under
-`plugings.search`. The `config` object was new in MkDocs version *1.0*.
+defined for the plugin in the user's `elstir.yml` config file under
+`plugings.search`. The `config` object was new in elstir version *1.0*.
 
 The `data` object contains a list of document objects. Each document object is
 made up of a `location` (URL), a `title`, and `text` which can be used to create
@@ -686,10 +686,10 @@ If present, the `index` object contains a pre-built index which offers
 performance improvements for larger sites. Note that the pre-built index is only
 created if the user explicitly enables the [prebuild_index] config option.
 Themes should expect the index to not be present, but can choose to use the
-index when it is available. The `index` object was new in MkDocs version *1.0*.
+index when it is available. The `index` object was new in elstir version *1.0*.
 
 [Jinja2 template]: http://jinja.pocoo.org/docs/dev/
-[built-in themes]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes
+[built-in themes]: https://github.com/elstir/elstir/tree/master/elstir/themes
 [theme's configuration file]: #theme-configuration
 [lunr.js]: https://lunrjs.com/
 [site_dir]: configuration.md#site_dir
@@ -697,11 +697,11 @@ index when it is available. The `index` object was new in MkDocs version *1.0*.
 
 ## Packaging Themes
 
-MkDocs makes use of [Python packaging] to distribute themes. This comes with a
+elstir makes use of [Python packaging] to distribute themes. This comes with a
 few requirements.
 
-To see an example of a package containing one theme, see the [MkDocs Bootstrap
-theme] and to see a package that contains many themes, see the [MkDocs
+To see an example of a package containing one theme, see the [elstir Bootstrap
+theme] and to see a package that contains many themes, see the [elstir
 Bootswatch theme].
 
 !!! Note
@@ -715,22 +715,22 @@ Bootswatch theme].
     [custom_dir] to make tweaks to your theme to better suit their needs.
 
 [Python packaging]: https://packaging.python.org/en/latest/
-[MkDocs Bootstrap theme]: https://mkdocs.github.io/mkdocs-bootstrap/
-[MkDocs Bootswatch theme]: https://mkdocs.github.io/mkdocs-bootswatch/
+[elstir Bootstrap theme]: https://elstir.github.io/elstir-bootstrap/
+[elstir Bootswatch theme]: https://elstir.github.io/elstir-bootswatch/
 
 ### Package Layout
 
 The following layout is recommended for themes. Two files at the top level
 directory called `MANIFEST.in` and `setup.py` beside the theme directory which
 contains an empty `__init__.py` file, a theme configuration file
-(`mkdocs-theme.yml`), and your template and media files.
+(`elstir-theme.yml`), and your template and media files.
 
 ```no-highlight
 .
 |-- MANIFEST.in
 |-- theme_name
 |   |-- __init__.py
-|   |-- mkdocs-theme.yml
+|   |-- elstir-theme.yml
 |   |-- main.html
 |   |-- styles.css
 `-- setup.py
@@ -755,7 +755,7 @@ VERSION = '0.0.1'
 
 
 setup(
-    name="mkdocs-themename",
+    name="elstir-themename",
     version=VERSION,
     url='',
     license='',
@@ -765,7 +765,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     entry_points={
-        'mkdocs.themes': [
+        'elstir.themes': [
             'themename = theme_name',
         ]
     },
@@ -775,14 +775,14 @@ setup(
 
 Fill in the URL, license, description, author and author email address.
 
-The name should follow the convention `mkdocs-themename` (like `mkdocs-
-bootstrap` and `mkdocs-bootswatch`), starting with MkDocs, using hyphens to
+The name should follow the convention `elstir-themename` (like `elstir-
+bootstrap` and `elstir-bootswatch`), starting with elstir, using hyphens to
 separate words and including the name of your theme.
 
 Most of the rest of the file can be left unedited. The last section we need to
-change is the entry_points. This is how MkDocs finds the theme(s) you are
+change is the entry_points. This is how elstir finds the theme(s) you are
 including in the package. The name on the left is the one that users will use
-in their mkdocs.yml and the one on the right is the directory containing your
+in their elstir.yml and the one on the right is the directory containing your
 theme files.
 
 The directory you created at the start of this section with the main.html file
@@ -794,16 +794,16 @@ directory is a package.
 ### Theme Configuration
 
 A packaged theme is required to include a configuration file named
-`mkdocs_theme.yml` which is placed in the root of your template files. The file
+`elstir_theme.yml` which is placed in the root of your template files. The file
 should contain default configuration options for the theme. However, if the
 theme offers no configuration options, the file is still required and can be
-left blank. A theme which is not packaged does not need a `mkdocs_theme.yml`
+left blank. A theme which is not packaged does not need a `elstir_theme.yml`
 file as that file is not loaded from `theme.custom_dir`.
 
 The theme author is free to define any arbitrary options deemed necessary and
 those options will be made available in the templates to control behavior.
 For example, a theme might want to make a sidebar optional and include the
-following in the `mkdocs_theme.yml` file:
+following in the `elstir_theme.yml` file:
 
 ```yaml
 show_sidebar: true
@@ -817,7 +817,7 @@ Then in a template, that config option could be referenced:
 {% endif %}
 ```
 
-And the user could override the default in their project's `mkdocs.yml` config
+And the user could override the default in their project's `elstir.yml` config
 file:
 
 ```yaml
@@ -826,7 +826,7 @@ theme:
     show_sidebar: false
 ```
 
-In addition to arbitrary options defined by the theme, MkDocs defines a few
+In addition to arbitrary options defined by the theme, elstir defines a few
 special options which alters its behavior:
 
 !!! block ""
@@ -853,7 +853,7 @@ With the above changes, your theme should now be ready to install. This can be
 done with pip, using `pip install .` if you are still in the same directory as
 the setup.py.
 
-Most Python packages, including MkDocs, are distributed on PyPI. To do this,
+Most Python packages, including elstir, are distributed on PyPI. To do this,
 you should run the following command.
 
 ```no-highlight

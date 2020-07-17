@@ -4,18 +4,18 @@
 
 ## Upgrading
 
-To upgrade MkDocs to the latest version, use pip:
+To upgrade elstir to the latest version, use pip:
 
-    pip install -U mkdocs
+    pip install -U elstir
 
-You can determine your currently installed version using `mkdocs --version`:
+You can determine your currently installed version using `elstir --version`:
 
-    $ mkdocs --version
-    mkdocs, version 1.0 from /path/to/mkdocs (Python 3.6)
+    $ elstir --version
+    elstir, version 1.0 from /path/to/elstir (Python 3.6)
 
 ## Maintenance team
 
-The current and past members of the MkDocs team.
+The current and past members of the elstir team.
 
 * [@tomchristie](https://github.com/tomchristie/)
 * [@d0ugal](https://github.com/d0ugal/)
@@ -47,7 +47,7 @@ The current and past members of the MkDocs team.
 
 #### Support for Lunr.py as `prebuild_index` engine
 
-Mkdocs now supports prebuilding indices using [Lunr.py][lunrpy-docs], a pure
+elstir now supports prebuilding indices using [Lunr.py][lunrpy-docs], a pure
 Python implementation of Lunr.js, allowing the user to avoid installing a
 NodeJS environment if so desired. For more information please read the
 [`prebuild_index` documentation][prebuildindex-docs].
@@ -65,11 +65,11 @@ documentation][rtd-docs] for details.
 [upstream]: https://github.com/rtfd/sphinx_rtd_theme/
 [rtd-docs]: ../user-guide/styling-your-docs.md#readthedocs
 
-#### Update `mkdocs` theme to Bootswatch 4.1.3 (#1563)
+#### Update `elstir` theme to Bootswatch 4.1.3 (#1563)
 
-The `mkdocs` theme now supports all the features of [Bootswatch 4.1].
+The `elstir` theme now supports all the features of [Bootswatch 4.1].
 Additionaly, 2 filenames were changed in this update. If you are using a theme
-which inherits from the `mkdocs` theme, the theme developer may need to update
+which inherits from the `elstir` theme, the theme developer may need to update
 these filenames as follows.
 
 ```text
@@ -95,7 +95,7 @@ The `lunr-languages` plugin has been updated to 1.4.0, adding support for
 Arabic (`ar`) and Vietnamese (`vi`) languages. In addition, the Dutch and
 Japanese language codes have been changed to their standard values: `nl` and
 `ja`, respectively. The old language codes (`du` and `jp`) remain as aliases but
-may be removed in a future version of MkDocs.
+may be removed in a future version of elstir.
 
 ### Other Changes and Additions to Version 1.1
 
@@ -106,7 +106,7 @@ may be removed in a future version of MkDocs.
 * Update to lunr.js 2.3.8 (#1989).
 * Add support for Python 3.8.
 * Drop support for Python 3.4.
-* Drop support for Python 2.7. MkDocs is PY3 only now (#1926).
+* Drop support for Python 2.7. elstir is PY3 only now (#1926).
 * Bugfix: Select appropriate asyncio event loop on Windows for Python 3.8+ (#1885).
 * Bugfix: Ensure nested index pages do not get identified as the homepage (#1919).
 * Bugfix: Properly identify deployment version (#1879).
@@ -119,12 +119,12 @@ may be removed in a future version of MkDocs.
 * Bugfix: Ensure theme files do not override docs_dir files on Windows (#1876)
 * Add canonical tag to `readthedocs` theme (#1669).
 * Improved error message for when `git` is not available.
-* Add support for `nav_style` theme option for the `mkdocs` theme (#1930).
-* Bugfix: Long/nested dropdowns now behave more consistently for the `mkdocs`
+* Add support for `nav_style` theme option for the `elstir` theme (#1930).
+* Bugfix: Long/nested dropdowns now behave more consistently for the `elstir`
   theme (#1234).
-* Bugfix: Multi-row nav headers in the `mkdocs` theme no longer obscure the
+* Bugfix: Multi-row nav headers in the `elstir` theme no longer obscure the
   document content (#716).
-* Add support for `navigation_depth` theme option for the `mkdocs` theme (#1970).
+* Add support for `navigation_depth` theme option for the `elstir` theme (#1970).
 * `level` attribute in `page.toc` items is now 1-indexed to match the level in
   `<hN>` tags (#1970).
 
@@ -197,7 +197,7 @@ all pages that were not already index files. As this behavior only effects a
 non-default configuration, and the most common user-case for setting the option
 to `False` is for local file system (`file://`) browsing, its not likely to
 effect most users. However, if you have `use_directory_urls` set to `False`
-for a MkDocs site hosted on a web server, most of your URLs will now be broken.
+for a elstir site hosted on a web server, most of your URLs will now be broken.
 As you can see below, the new URLs are much more sensible.
 
 | Markdown file   | Old URL              | New URL        |
@@ -207,7 +207,7 @@ As you can see below, the new URLs are much more sensible.
 | `foo/bar.md`    | `foo/bar/index.html` | `foo/bar.html` |
 
 Note that there has been no change to URLs or file paths when
-`use_directory_urls` is set to `True` (the default), except that MkDocs more
+`use_directory_urls` is set to `True` (the default), except that elstir more
 consistently includes an ending slash on all internally generated URLs.
 
 [use_directory_urls]: ../user-guide/configuration.md#use_directory_urls
@@ -240,7 +240,7 @@ If both `pages` and `nav` are defined, the `pages` setting will be ignored.
 
 ###### Template variables and `base_url`
 
-In previous versions of MkDocs some URLs expected the [base_url] template
+In previous versions of elstir some URLs expected the [base_url] template
 variable to be prepended to the URL and others did not. That inconsistency has
 been removed in that no URLs are modified before being added to the template
 context.
@@ -252,7 +252,7 @@ the `site_name` as:
 <a href="{{ nav.homepage.url }}">{{ config.site_name }}</a>
 ```
 
-And MkDocs would magically return a URL for the homepage which was relative to
+And elstir would magically return a URL for the homepage which was relative to
 the current page. That "magic" has been removed and the [url] template filter
 should be used:
 
@@ -293,7 +293,7 @@ need to will be altered.
 Previously any relative paths in the various configuration options were
 resolved relative to the current working directory. They are now resolved
 relative to the configuration file. As the documentation has always encouraged
-running the various MkDocs commands from the directory that contains the
+running the various elstir commands from the directory that contains the
 configuration file (project root), this change will not affect most users.
 However, it will make it much easier to implement automated builds or otherwise
 run commands from a location other than the project root.
@@ -301,28 +301,28 @@ run commands from a location other than the project root.
 Simply use the `-f/--config-file` option and point it at the configuration file:
 
 ```sh
-mkdocs build --config-file /path/to/my/config/file.yml
+elstir build --config-file /path/to/my/config/file.yml
 ```
 
-As previously, if no file is specified, MkDocs looks for a file named
-`mkdocs.yml` in the current working directory.
+As previously, if no file is specified, elstir looks for a file named
+`elstir.yml` in the current working directory.
 
 #### Added support for YAML Meta-Data (#1542)
 
-Previously, MkDocs only supported MultiMarkdown style meta-data, which does not
-recognize different data types and is rather limited. MkDocs now also supports
-YAML style meta-data in Markdown documents. MkDocs relies on the the presence or
+Previously, elstir only supported MultiMarkdown style meta-data, which does not
+recognize different data types and is rather limited. elstir now also supports
+YAML style meta-data in Markdown documents. elstir relies on the the presence or
 absence of the deliminators (`---` or `...`) to determine whether YAML style
 meta-data or MultiMarkdown style meta-data is being used.
 
-Previously MkDocs would recognize MultiMarkdown style meta-data between the
+Previously elstir would recognize MultiMarkdown style meta-data between the
 deliminators. Now, if the deliminators are detected, but the content between the
-deliminators is not valid YAML meta-data, MkDocs does not attempt to parse the
+deliminators is not valid YAML meta-data, elstir does not attempt to parse the
 content as MultiMarkdown style meta-data. Therefore, MultiMarkdowns style
 meta-data must not include the deliminators. See the [MultiMarkdown style
 meta-data documentation] for details.
 
-Prior to version 0.17, MkDocs returned all meta-data values as a list of strings
+Prior to version 0.17, elstir returned all meta-data values as a list of strings
 (even a single line would return a list of one string). In version 0.17, that
 behavior was changed to return each value as a single string (multiple lines
 were joined), which some users found limiting (see #1471). That behavior
@@ -330,7 +330,7 @@ continues for MultiMarkdown style meta-data in the current version. However,
 YAML style meta-data supports the full range of "safe" YAML data types.
 Therefore, it is recommended that any complex meta-data make use of the YAML
 style (see the [YAML style meta-data documentation] for details). In fact, a
-future version of MkDocs may deprecate support for MultiMarkdown style
+future version of elstir may deprecate support for MultiMarkdown style
 meta-data.
 
 [MultiMarkdown style meta-data documentation]: ../user-guide/writing-your-docs.md#multimarkdown-style-meta-data
@@ -359,7 +359,7 @@ authors should review how [search and themes] interact.
 #### `theme_dir` Configuration Option fully Deprecated
 
 As of version 0.17, the [custom_dir] option replaced the deprecated `theme_dir`
-option. If users had set the `theme_dir` option, MkDocs version 0.17 copied the
+option. If users had set the `theme_dir` option, elstir version 0.17 copied the
 value to the `theme.custom_dir` option and a warning was issued. As of version
 1.0, the value is no longer copied and an error is raised.
 
@@ -374,7 +374,7 @@ value to the `theme.custom_dir` option and a warning was issued. As of version
 * Add highlight.js configuration settings to built-in themes (#1284).
 * Close search modal when result is selected (#1527).
 * Add a level attribute to AnchorLinks (#1272).
-* Add MkDocs version check to gh-deploy script (#640).
+* Add elstir version check to gh-deploy script (#640).
 * Improve Markdown extension error messages. (#782).
 * Drop official support for Python 3.3 and set `tornado>=5.0` (#1427).
 * Add support for GitLab edit links (#1435).
@@ -394,7 +394,7 @@ value to the `theme.custom_dir` option and a warning was issued. As of version
 * Refactor `copy_media_files` util function for more flexibility (#1370).
 * Remove PyPI Deployment Docs (#1360).
 * Update links to Python-Markdown library (#1360).
-* Document how to generate manpages for MkDocs commands (#686).
+* Document how to generate manpages for elstir commands (#686).
 
 ## Version 0.17.5 (2018-07-06)
 
@@ -415,7 +415,7 @@ value to the `theme.custom_dir` option and a warning was issued. As of version
 ## Version 0.17.1 (2017-10-30)
 
 * Bugfix: Support `repo_url` with missing ending slash. (#1321).
-* Bugfix: Add length support to `mkdocs.toc.TableOfContext` (#1325).
+* Bugfix: Add length support to `elstir.toc.TableOfContext` (#1325).
 * Bugfix: Add some theme specific settings to the search plugin for third party
   themes (#1316).
 * Bugfix: Override `site_url` with `dev_addr` on local server (#1317).
@@ -426,14 +426,14 @@ value to the `theme.custom_dir` option and a warning was issued. As of version
 
 #### Plugin API. (#206)
 
-A new [Plugin API] has been added to MkDocs which allows users to define their
+A new [Plugin API] has been added to elstir which allows users to define their
 own custom behaviors. See the included documentation for a full explanation of
 the API.
 
 The previously built-in search functionality has been removed and wrapped in a
-plugin (named "search") with no changes in behavior. When MkDocs builds, the
+plugin (named "search") with no changes in behavior. When elstir builds, the
 search index is now written to `search/search_index.json` instead of
-`mkdocs/search_index.json`. If no plugins setting is defined in the config,
+`elstir/search_index.json`. If no plugins setting is defined in the config,
 then the `search` plugin will be included by default. See the
 [configuration][plugin_config] documentation for information on overriding the
 default.
@@ -448,12 +448,12 @@ can define default options as documented in [Theme Configuration]. A theme can
 now inherit from another theme, define various static templates to be rendered,
 and define arbitrary default variables to control behavior in the templates.
 The theme configuration is defined in a configuration file named
-`mkdocs_theme.yml` which should be placed at the root of your template files. A
+`elstir_theme.yml` which should be placed at the root of your template files. A
 warning will be raised if no configuration file is found and an error will be
 raised in a future release.
 
 Users can override those defaults under the [theme] configuration option of
-their `mkdocs.yml` configuration file, which now accepts nested options. One
+their `elstir.yml` configuration file, which now accepts nested options. One
 such nested option is the [custom_dir] option, which replaces the now deprecated
 `theme_dir` option. If users had previously set the `theme_dir` option, a
 warning will be issued, with an error expected in a future release.
@@ -461,7 +461,7 @@ warning will be issued, with an error expected in a future release.
 If a configuration previously defined a `theme_dir` like this:
 
 ```yaml
-theme: mkdocs
+theme: elstir
 theme_dir: custom
 ```
 
@@ -469,7 +469,7 @@ Then the configuration should be adjusted as follows:
 
 ```yaml
 theme:
-    name: mkdocs
+    name: elstir
     custom_dir: custom
 ```
 
@@ -541,8 +541,8 @@ and user created and third-party templates should be updated as outlined below:
 
 #### Auto-Populated extra_css and extra_javascript Fully Deprecated. (#986)
 
-In previous versions of MkDocs, if the `extra_css` or `extra_javascript` config
-settings were empty, MkDocs would scan the `docs_dir` and auto-populate each
+In previous versions of elstir, if the `extra_css` or `extra_javascript` config
+settings were empty, elstir would scan the `docs_dir` and auto-populate each
 setting with all of the CSS and JavaScript files found. On version 0.16 this
 behavior was deprecated and a warning was issued. In 0.17 any unlisted CSS and
 JavaScript files will not be included in the HTML templates, however, a warning
@@ -554,7 +554,7 @@ the `extra_css` or `extra_javascript` config settings going forward.
 
 ### Other Changes and Additions to Version 0.17.0
 
-* Add "edit Link" support to MkDocs theme (#1129)
+* Add "edit Link" support to elstir theme (#1129)
 * Open files with `utf-8-sig` to account for BOM (#1186)
 * Symbolic links are now followed consistently (#1134)
 * Support for keyboard navigation shortcuts added to included themes (#1095)
@@ -562,7 +562,7 @@ the `extra_css` or `extra_javascript` config settings going forward.
 * Officially added support for Python 3.6 (#1296)
 * 404 Error page added to readthedocs theme (#1296))
 * Internal refactor of Markdown processing (#713)
-* Removed special error message for mkdocs-bootstrap and mkdocs-bootswatch
+* Removed special error message for elstir-bootstrap and elstir-bootswatch
   themes (#1168)
 * The legacy pages config is no longer supported (#1168)
 * The deprecated `json` command has been removed (#481)
@@ -716,8 +716,8 @@ to support such customization.
 
 #### Auto-Populated `extra_css` and `extra_javascript` Deprecated. (#986)
 
-In previous versions of MkDocs, if the `extra_css` or `extra_javascript` config
-settings were empty, MkDocs would scan the `docs_dir` and auto-populate each
+In previous versions of elstir, if the `extra_css` or `extra_javascript` config
+settings were empty, elstir would scan the `docs_dir` and auto-populate each
 setting with all of the CSS and JavaScript files found. This behavior is
 deprecated and a warning will be issued. In the next release, the auto-populate
 feature will stop working and any unlisted CSS and JavaScript files will not be
@@ -734,14 +734,14 @@ For large sites the build time required to create the pages can become problemat
 thus a "dirty" build mode was created. This mode simply compares the modified time
 of the generated HTML and source markdown. If the markdown has changed since the
 HTML then the page is re-constructed. Otherwise, the page remains as is. This mode
-may be invoked in both the `mkdocs serve` and `mkdocs build` commands:
+may be invoked in both the `elstir serve` and `elstir build` commands:
 
 ```text
-mkdocs serve --dirtyreload
+elstir serve --dirtyreload
 ```
 
 ```text
-mkdocs build --dirty
+elstir build --dirty
 ```
 
 It is important to note that this method for building the pages is for development
@@ -766,9 +766,9 @@ better conform with the documented [layout].
 * Bugfix: Support livereload for config file changes (#735)
 * Bugfix: Non-media template files are no longer copied with media files (#807)
 * Add a flag (-e/--theme-dir) to specify theme directory with the commands
-  `mkdocs build` and `mkdocs serve` (#832)
+  `elstir build` and `elstir serve` (#832)
 * Fixed issues with Unicode file names under Windows and Python 2. (#833)
-* Improved the styling of in-line code in the MkDocs theme. (#718)
+* Improved the styling of in-line code in the elstir theme. (#718)
 * Bugfix: convert variables to JSON when being passed to JavaScript (#850)
 * Updated the ReadTheDocs theme to match the upstream font sizes and colors
   more closely. (#857)
@@ -802,7 +802,7 @@ better conform with the documented [layout].
 ## Version 0.15.2 (2016-02-08)
 
 * Fix an incorrect warning that states external themes [will be removed from
-  MkDocs](#add-support-for-installable-themes).
+  elstir](#add-support-for-installable-themes).
 
 ## Version 0.15.1 (2016-01-30)
 
@@ -815,20 +815,20 @@ better conform with the documented [layout].
 
 #### Add support for installable themes
 
-MkDocs now supports themes that are distributed via Python packages. With this
+elstir now supports themes that are distributed via Python packages. With this
 addition, the Bootstrap and Bootswatch themes have been moved to external git
 repositories and python packages. See their individual documentation for more
 details about these specific themes.
 
-* [MkDocs Bootstrap]
-* [MkDocs Bootswatch]
+* [elstir Bootstrap]
+* [elstir Bootswatch]
 
-[MkDocs Bootstrap]: https://mkdocs.github.io/mkdocs-bootstrap/
-[MkDocs Bootswatch]: https://mkdocs.github.io/mkdocs-bootswatch/
+[elstir Bootstrap]: https://elstir.github.io/elstir-bootstrap/
+[elstir Bootswatch]: https://elstir.github.io/elstir-bootswatch/
 
-They will be included with MkDocs by default until a future release. After that
-they will be installable with pip: `pip install mkdocs-bootstrap` and `pip
-install mkdocs-bootswatch`
+They will be included with elstir by default until a future release. After that
+they will be installable with pip: `pip install elstir-bootstrap` and `pip
+install elstir-bootswatch`
 
 See the documentation for [Styling your docs] for more information about using
 and customizing themes and [Custom themes] for creating and distributing new
@@ -848,7 +848,7 @@ themes
 * Increase IE support with X-UA-Compatible. (#785)
 * Added support for Python's `-m` flag. (#706)
 * Bugfix: Ensure consistent ordering of auto-populated pages. (#638)
-* Bugfix: Scroll the tables of contents on the MkDocs theme if it is too long
+* Bugfix: Scroll the tables of contents on the elstir theme if it is too long
   for the page. (#204)
 * Bugfix: Add all ancestors to the page attribute `ancestors` rather than just
   the initial one. (#693)
@@ -869,10 +869,10 @@ themes
 * Add `--quiet` and `--verbose` options to all sub-commands. (#579)
 * Add short options (`-a`) to most command line options. (#579)
 * Add copyright footer for readthedocs theme. (#568)
-* If the requested port in `mkdocs serve` is already in use, don't show the
+* If the requested port in `elstir serve` is already in use, don't show the
   user a full stack trace. (#596)
 * Bugfix: Fix a JavaScript encoding problem when searching with spaces. (#586)
-* Bugfix: gh-deploy now works if the mkdocs.yml is not in the git repo root.
+* Bugfix: gh-deploy now works if the elstir.yml is not in the git repo root.
   (#578)
 * Bugfix: Handle (pass-through instead of dropping) HTML entities while
   parsing TOC. (#612)
@@ -901,44 +901,44 @@ themes
 
 #### Deprecate the JSON command
 
-In this release the  `mkdocs json` command has been marked as deprecated and
+In this release the  `elstir json` command has been marked as deprecated and
 when used a deprecation warning will be shown. It will be removed in a [future
-release] of MkDocs, version 1.0 at the latest. The `mkdocs json` command
+release] of elstir, version 1.0 at the latest. The `elstir json` command
 provided  a convenient way for users to output the documentation contents as
-JSON files but with the additions of search to MkDocs this functionality is
+JSON files but with the additions of search to elstir this functionality is
 duplicated.
 
-A new index with all the contents from a MkDocs build is created in the
+A new index with all the contents from a elstir build is created in the
 [site_dir], so with the default value for the `site_dir` It can be found in
-`site/mkdocs/search_index.json`.
+`site/elstir/search_index.json`.
 
-This new file is created on every MkDocs build (with `mkdocs build`) and
+This new file is created on every elstir build (with `elstir build`) and
 no configuration is needed to enable it.
 
-[future release]: https://github.com/mkdocs/mkdocs/pull/481
+[future release]: https://github.com/elstir/elstir/pull/481
 [site_dir]: ../user-guide/configuration.md#site_dir
 
 #### Change the pages configuration
 
 Provide a [new way] to define pages, and specifically [nested pages], in the
-mkdocs.yml file and deprecate the existing approach, support will be removed
-with MkDocs 1.0.
+elstir.yml file and deprecate the existing approach, support will be removed
+with elstir 1.0.
 
 [new way]: ../user-guide/writing-your-docs.md#configure-pages-and-navigation
 [nested pages]: ../user-guide/writing-your-docs.md#multilevel-documentation
 
 #### Warn users about the removal of builtin themes
 
-All themes other than mkdocs and readthedocs will be moved into external
-packages in a future release of MkDocs. This will enable them to be more easily
-supported and updates outside MkDocs releases.
+All themes other than elstir and readthedocs will be moved into external
+packages in a future release of elstir. This will enable them to be more easily
+supported and updates outside elstir releases.
 
 ### Major Additions to Version 0.13.0
 
 #### Search
 
-Support for search has now been added to MkDocs. This is based on the
-JavaScript library [lunr.js]. It has been added to both the `mkdocs` and
+Support for search has now been added to elstir. This is based on the
+JavaScript library [lunr.js]. It has been added to both the `elstir` and
 `readthedocs` themes. See the custom theme documentation on [supporting search]
 for adding it to your own themes.
 
@@ -947,15 +947,15 @@ for adding it to your own themes.
 
 #### New Command Line Interface
 
-The command line interface for MkDocs has been re-written with the Python
-library [Click]. This means that MkDocs now has an easier to use interface
+The command line interface for elstir has been re-written with the Python
+library [Click]. This means that elstir now has an easier to use interface
 with better help output.
 
 This change is partially backwards incompatible as while undocumented it was
 possible to pass any configuration option to the different commands. Now only
 a small subset of the configuration options can be passed to the commands. To
-see in full commands and available arguments use `mkdocs --help` and
-`mkdocs build --help` to have them displayed.
+see in full commands and available arguments use `elstir --help` and
+`elstir build --help` to have them displayed.
 
 [Click]: http://click.pocoo.org/4/
 
@@ -968,7 +968,7 @@ populated with any `.html` or `.xml` files in the project docs directory.
 Users can place static HTML and XML files and they will be copied over, or they
 can also use Jinja2 syntax and take advantage of the [global variables].
 
-By default MkDocs will use this approach to create a sitemap for the
+By default elstir will use this approach to create a sitemap for the
 documentation.
 
 [extra_javascript]: ../user-guide/configuration.md#extra_javascript
@@ -979,14 +979,14 @@ documentation.
 ### Other Changes and Additions to Version 0.13.0
 
 * Add support for [Markdown extension configuration options]. (#435)
-* MkDocs now ships Python [wheels]. (#486)
-* Only include the build date and MkDocs version on the homepage. (#490)
+* elstir now ships Python [wheels]. (#486)
+* Only include the build date and elstir version on the homepage. (#490)
 * Generate sitemaps for documentation builds. (#436)
 * Add a clearer way to define nested pages in the configuration. (#482)
 * Add an [extra config] option for passing arbitrary variables to the template. (#510)
-* Add `--no-livereload` to `mkdocs serve` for a simpler development server. (#511)
+* Add `--no-livereload` to `elstir serve` for a simpler development server. (#511)
 * Add copyright display support to all themes (#549)
-* Add support for custom commit messages in a `mkdocs gh-deploy` (#516)
+* Add support for custom commit messages in a `elstir gh-deploy` (#516)
 * Bugfix: Fix linking to media within the same directory as a markdown file
   called index.md (#535)
 * Bugfix: Fix errors with Unicode filenames (#542).
@@ -1007,12 +1007,12 @@ documentation.
 
 ## Version 0.12.0 (2015-04-14)
 
-* Display the current MkDocs version in the CLI output. (#258)
+* Display the current elstir version in the CLI output. (#258)
 * Check for CNAME file when using gh-deploy. (#285)
 * Add the homepage back to the navigation on all themes. (#271)
 * Add a strict more for local link checking. (#279)
 * Add Google analytics support to all themes. (#333)
-* Add build date and MkDocs version to the ReadTheDocs and MkDocs theme
+* Add build date and elstir version to the ReadTheDocs and elstir theme
   outputs. (#382)
 * Standardize highlighting across all themes and add missing languages. (#387)
 * Add a verbose flag. (-v) to show more details about what the build. (#147)
@@ -1027,7 +1027,7 @@ documentation.
 * Bugfix: Fix issues with nested Markdown pages and the automatic pages
   configuration. (#276)
 * Bugfix: Fix a URL parsing error with GitHub enterprise. (#284)
-* Bugfix: Don't error if the mkdocs.yml is completely empty. (#288)
+* Bugfix: Don't error if the elstir.yml is completely empty. (#288)
 * Bugfix: Fix a number of problems with relative URLs and Markdown files. (#292)
 * Bugfix: Don't stop the build if a page can't be found, continue with other
   pages. (#150)
@@ -1037,7 +1037,7 @@ documentation.
 * Bugfix: Fix hostname for BitBucket. (#339)
 * Bugfix: Ensure all links end with a slash. (#344)
 * Bugfix: Fix repo links in the readthedocs theme. (#365)
-* Bugfix: Include jQuery locally to avoid problems using MkDocs offline. (#143)
+* Bugfix: Include jQuery locally to avoid problems using elstir offline. (#143)
 * Bugfix: Don't allow the docs_dir to be in the site_dir or vice versa. (#384)
 * Bugfix: Remove inline CSS in the ReadTheDocs theme. (#393)
 * Bugfix: Fix problems with the child titles due to the order the pages config
@@ -1051,12 +1051,12 @@ documentation.
   under the navigation. (#7)
 * Bugfix: Add nicer CSS classes to the HTML tables in bootswatch themes. (#295)
 * Bugfix: Fix an error when passing in a specific config file with
-  `mkdocs serve`. (#341)
-* Bugfix: Don't overwrite index.md files with the `mkdocs new` command. (#412)
+  `elstir serve`. (#341)
+* Bugfix: Don't overwrite index.md files with the `elstir new` command. (#412)
 * Bugfix: Remove bold and italic from code in the ReadTheDocs theme. (#411)
-* Bugfix: Display images inline in the MkDocs theme. (#415)
+* Bugfix: Display images inline in the elstir theme. (#415)
 * Bugfix: Fix problems with no-highlight in the ReadTheDocs theme. (#319)
-* Bugfix: Don't delete hidden files when using `mkdocs build --clean`. (#346)
+* Bugfix: Don't delete hidden files when using `elstir build --clean`. (#346)
 * Bugfix: Don't block newer versions of Python-markdown on Python >= 2.7. (#376)
 * Bugfix: Fix encoding issues when opening files across platforms. (#428)
 
@@ -1068,13 +1068,13 @@ documentation.
 ## Version 0.11.0 (2014-11-18)
 
 * Render 404.html files if they exist for the current theme. (#194)
-* Bugfix: Fix long nav bars, table rendering and code highlighting in MkDocs
+* Bugfix: Fix long nav bars, table rendering and code highlighting in elstir
   and ReadTheDocs themes. (#225)
 * Bugfix: Fix an issue with the google_analytics code. (#219)
 * Bugfix: Remove `__pycache__` from the package tar. (#196)
 * Bugfix: Fix markdown links that go to an anchor on the current page. (#197)
 * Bugfix: Don't add `prettyprint well` CSS classes to all HTML, only add it in
-  the MkDocs theme. (#183)
+  the elstir theme. (#183)
 * Bugfix: Display section titles in the ReadTheDocs theme. (#175)
 * Bugfix: Use the polling observer in watchdog so rebuilding works on
   filesystems without inotify. (#184)
@@ -1085,7 +1085,7 @@ documentation.
 * Added support for Python 3.3 and 3.4. (#103)
 * Configurable Python-Markdown extensions with the config setting
   `markdown_extensions`. (#74)
-* Added `mkdocs json` command to output your rendered
+* Added `elstir json` command to output your rendered
   documentation as json files. (#128)
 * Added `--clean` switch to `build`, `json` and `gh-deploy` commands to
   remove stale files from the output directory. (#157)
@@ -1100,6 +1100,6 @@ documentation.
 * Bugfix: Support `extra_javascript` and `extra_css` in all themes. (#90)
 * Bugfix: Fix path-handling under Windows. (#121)
 * Bugfix: Fix the menu generation in the readthedocs theme. (#110)
-* Bugfix: Fix the mkdocs command creation under Windows. (#122)
+* Bugfix: Fix the elstir command creation under Windows. (#122)
 * Bugfix: Correctly handle external `extra_javascript` and `extra_css`. (#92)
 * Bugfix: Fixed favicon support. (#87)

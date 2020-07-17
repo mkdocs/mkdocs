@@ -1,10 +1,10 @@
---exclude-list = mkdocs/themes/mkdocs/css/bootstrap.min.css,
-                 mkdocs/themes/readthedocs/css/bootstrap-custom.min.css,
-                 mkdocs/themes/mkdocs/css/font-awesome.min.css,
-                 mkdocs/themes/readthedocs/css/font-awesome-4.5.0.css,
-                 mkdocs/themes/mkdocs/css/highlight.css,
-                 mkdocs/themes/readthedocs/css/highlight.css,
-                 mkdocs/themes/readthedocs/css/theme.css
+--exclude-list = elstir/themes/elstir/css/bootstrap.min.css,
+                 elstir/themes/readthedocs/css/bootstrap-custom.min.css,
+                 elstir/themes/elstir/css/font-awesome.min.css,
+                 elstir/themes/readthedocs/css/font-awesome-4.5.0.css,
+                 elstir/themes/elstir/css/highlight.css,
+                 elstir/themes/readthedocs/css/highlight.css,
+                 elstir/themes/readthedocs/css/theme.css
 --errors = known-properties,
            box-sizing,
            outline-none,

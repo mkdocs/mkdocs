@@ -79,11 +79,11 @@ after_success: codecov
 
 deploy:
   provider: pypi
-  user: mkdocsdeploy
+  user: elstirdeploy
   distributions: "sdist bdist_wheel"
   password:
     secure: b4f6y1xw5B/RXXnOu6JIaNcgOBZ0/CkNaMeEXsoQSewYZNwobLPYALY9WaaOblarwrVa5NRD3e4x6SoL1/1NzQxfhCNMn7L82sssmtevnK+mSuUp4IZQa8WKyz+xLfnk28TlHgQbctAU9NaeQ6GuEflTRD7Bp8+xJ1C7h+yBUnw=
   on:
     tags: true
-    repo: mkdocs/mkdocs
+    repo: elstir/elstir
     condition: "$TOXENV = py37-integration"

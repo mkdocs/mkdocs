@@ -1,20 +1,20 @@
-# MkDocs Plugins
+# elstir Plugins
 
-A Guide to installing, using and creating MkDocs Plugins
+A Guide to installing, using and creating elstir Plugins
 
 ---
 
 ## Installing Plugins
 
 Before a plugin can be used, it must be installed on the system. If you are
-using a plugin which comes with MkDocs, then it was installed when you installed
-MkDocs. However, to install third party plugins, you need to determine the
+using a plugin which comes with elstir, then it was installed when you installed
+elstir. However, to install third party plugins, you need to determine the
 appropriate package name and install it using `pip`:
 
-    pip install mkdocs-foo-plugin
+    pip install elstir-foo-plugin
 
 Once a plugin has been successfully installed, it is ready to use. It just needs
-to be [enabled](#using-plugins) in the configuration file. The [MkDocs Plugins]
+to be [enabled](#using-plugins) in the configuration file. The [elstir Plugins]
 wiki page has a growing list of plugins that you can install and use.
 
 ## Using Plugins
@@ -52,15 +52,15 @@ For a list of default plugins and how to override them, see the
 
 ## Developing Plugins
 
-Like MkDocs, plugins must be written in Python. It is generally expected that
+Like elstir, plugins must be written in Python. It is generally expected that
 each plugin would be distributed as a separate Python module, although it is
-possible to define multiple plugins in the same module. At a minimum, a MkDocs
+possible to define multiple plugins in the same module. At a minimum, a elstir
 Plugin must consist of a [BasePlugin] subclass and an [entry point] which
 points to it.
 
 ### BasePlugin
 
-A subclass of `mkdocs.plugins.BasePlugin` should define the behavior of the plugin.
+A subclass of `elstir.plugins.BasePlugin` should define the behavior of the plugin.
 The class generally consists of actions to perform on specific events in the build
 process as well as a configuration scheme for the plugin.
 
@@ -71,25 +71,25 @@ All `BasePlugin` subclasses contain the following attributes:
 :   A tuple of configuration validation instances. Each item must consist of a
     two item tuple in which the first item is the string name of the
     configuration option and the second item is an instance of
-    `mkdocs.config.config_options.BaseConfigOption` or any of its subclasses.
+    `elstir.config.config_options.BaseConfigOption` or any of its subclasses.
 
     For example, the following `config_scheme` defines three configuration options: `foo`, which accepts a string; `bar`, which accepts an integer; and `baz`, which accepts a boolean value.
 
-        class MyPlugin(mkdocs.plugins.BasePlugin):
+        class MyPlugin(elstir.plugins.BasePlugin):
             config_scheme = (
-                ('foo', mkdocs.config.config_options.Type(str, default='a default value')),
-                ('bar', mkdocs.config.config_options.Type(int, default=0)),
-                ('baz', mkdocs.config.config_options.Type(bool, default=True))
+                ('foo', elstir.config.config_options.Type(str, default='a default value')),
+                ('bar', elstir.config.config_options.Type(int, default=0)),
+                ('baz', elstir.config.config_options.Type(bool, default=True))
             )
 
     When the user's configuration is loaded, the above scheme will be used to
     validate the configuration and fill in any defaults for settings not
     provided by the user. The validation classes may be any of the classes
-    provided in `mkdocs.config.config_options` or a third party subclass defined
+    provided in `elstir.config.config_options` or a third party subclass defined
     in the plugin.
 
     Any settings provided by the user which fail validation or are not defined
-    in the `config_scheme` will raise a `mkdocs.config.base.ValidationError`.
+    in the `config_scheme` will raise a `elstir.config.base.ValidationError`.
 
 #### config
 
@@ -106,7 +106,7 @@ All `BasePlugin` subclasses contain the following method(s):
 #### load_config(options)
 
 :   Loads configuration from a dictionary of options. Returns a tuple of
-    `(errors, warnings)`. This method is called by MkDocs during configuration
+    `(errors, warnings)`. This method is called by elstir during configuration
     validation and should not need to be called by the plugin.
 
 #### on_&lt;event_name&gt;()
@@ -123,7 +123,7 @@ All `BasePlugin` subclasses contain the following method(s):
     arguments are simply provided to give context and/or supply data which may
     be used to determine how the positional argument should be modified. It is
     good practice to accept keyword arguments as `**kwargs`. In the event that
-    additional keywords are provided to an event in a future version of MkDocs,
+    additional keywords are provided to an event in a future version of elstir,
     there will be no need to alter your plugin.
 
     For example, the following event would add an additional static_template to
@@ -290,12 +290,12 @@ page events are called after the [post_template] event and before the
     page and can be used to alter the `Page` instance.
 
     Parameters:
-    : __page:__ `mkdocs.nav.Page` instance
+    : __page:__ `elstir.nav.Page` instance
     : __config:__ global configuration object
     : __files:__ global files collection
 
     Returns:
-    : `mkdocs.nav.Page` instance
+    : `elstir.nav.Page` instance
 
 ##### on_page_read_source
 
@@ -303,7 +303,7 @@ page events are called after the [post_template] event and before the
     the contents of a page's source from the filesystem.
 
     Parameters:
-    : __page:__ `mkdocs.nav.Page` instance
+    : __page:__ `elstir.nav.Page` instance
     : __config:__ global configuration object
 
     Returns:
@@ -318,7 +318,7 @@ page events are called after the [post_template] event and before the
 
     Parameters:
     : __markdown:__ Markdown source text of page as string
-    : __page:__ `mkdocs.nav.Page` instance
+    : __page:__ `elstir.nav.Page` instance
     : __config:__ global configuration object
     : __files:__ global files collection
 
@@ -333,7 +333,7 @@ page events are called after the [post_template] event and before the
 
     Parameters:
     : __html:__ HTML rendered from Markdown source as string
-    : __page:__ `mkdocs.nav.Page` instance
+    : __page:__ `elstir.nav.Page` instance
     : __config:__ global configuration object
     : __files:__ global files collection
 
@@ -347,7 +347,7 @@ page events are called after the [post_template] event and before the
 
     Parameters:
     : __context__: dict of template context variables
-    : __page:__ `mkdocs.nav.Page` instance
+    : __page:__ `elstir.nav.Page` instance
     : __config:__ global configuration object
     : __nav:__ global navigation object
 
@@ -363,7 +363,7 @@ page events are called after the [post_template] event and before the
 
     Parameters:
     : __output:__ output of rendered template as string
-    : __page:__ `mkdocs.nav.Page` instance
+    : __page:__ `elstir.nav.Page` instance
     : __config:__ global configuration object
 
     Returns:
@@ -372,12 +372,12 @@ page events are called after the [post_template] event and before the
 ### Entry Point
 
 Plugins need to be packaged as Python libraries (distributed on PyPI separate
-from MkDocs) and each must register as a Plugin via a setuptools entry_point.
+from elstir) and each must register as a Plugin via a setuptools entry_point.
 Add the following to your `setup.py` script:
 
 ```python
 entry_points={
-    'mkdocs.plugins': [
+    'elstir.plugins': [
         'pluginname = path.to.some_plugin:SomePluginClass',
     ]
 }
@@ -392,7 +392,7 @@ entry_point.
 
 ```python
 entry_points={
-    'mkdocs.plugins': [
+    'elstir.plugins': [
         'featureA = path.to.my_plugins:PluginA',
         'featureB = path.to.my_plugins:PluginB'
     ]
@@ -400,7 +400,7 @@ entry_points={
 ```
 
 Note that registering a plugin does not activate it. The user still needs to
-tell MkDocs to use if via the config.
+tell elstir to use if via the config.
 
 [BasePlugin]:#baseplugin
 [config]: configuration.md#plugins
@@ -414,4 +414,4 @@ tell MkDocs to use if via the config.
 [post_template]: #on_post_template
 [static_templates]: configuration.md#static_templates
 [Template Events]: #template-events
-[MkDocs Plugins]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Plugins
+[elstir Plugins]: https://github.com/elstir/elstir/wiki/elstir-Plugins
