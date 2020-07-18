@@ -1,15 +1,36 @@
 @import url("basic.css");
 
 /* -- page layout ----------------------------------------------------------- */
+header {
+    width:270px;
+    float:left;
+    position:fixed;
+    -webkit-font-smoothing:subpixel-antialiased;
+  }
 
 body {
-    font-family: 'goudy old style', 'minion pro', 'bell mt', Georgia, 'Hiragino Mincho Pro', serif;
+    font-family: 'Garamond', 'Georgia', serif;
+    /* font-family: 'goudy old style', 'minion pro', 'bell mt', Georgia, 'Hiragino Mincho Pro', serif; */
     font-size: 17px;
     background-color: white;
     color: #000;
     margin: 0;
     padding: 0;
 }
+
+section {
+    width:500px;
+    float:right;
+    padding-bottom:50px;
+}
+
+footer {
+    width:270px;
+    float:left;
+    position:fixed;
+    bottom:50px;
+    -webkit-font-smoothing:subpixel-antialiased;
+  }
 
 div.document {
     width: 940px;
@@ -25,9 +46,9 @@ div.bodywrapper {
     margin: 0 0 0 220px;
 }
 
-div.sphinxsidebar {
+/* div.sphinxsidebar {
     width: 220px;
-}
+} */
 
 hr {
     border: 1px solid #B1B4B6;
@@ -39,9 +60,9 @@ div.body {
     padding: 0 30px 0 30px;
 }
 
-div.body > .section {
+/* div.body > .section {
     text-align: left;
-}
+} */
 
 div.footer {
     width: 940px;
@@ -64,21 +85,21 @@ div.relations {
 div.sphinxsidebar a {
     color: #444;
     text-decoration: none;
-    border-bottom: 1px dotted #999;
+    /* border-bottom: 1px dotted #999; */
 }
 
 div.sphinxsidebar a:hover {
     border-bottom: 1px solid #999;
 }
 
-div.sphinxsidebar {
+/* div.sphinxsidebar {
     font-size: 14px;
     line-height: 1.5;
-}
+} */
 
-div.sphinxsidebarwrapper {
+/* div.sphinxsidebarwrapper {
     padding: 18px 10px;
-}
+} */
 
 div.sphinxsidebarwrapper p.logo {
     padding: 0;
@@ -167,12 +188,12 @@ div.sphinxsidebar hr {
 
 a {
     color: #004B6B;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 a:hover {
     color: #6D4100;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 div.body h1,
@@ -216,9 +237,9 @@ div.admonition {
     border: 1px solid #FAA;
 }
 
-div.admonition tt.xref, div.admonition a tt {
+/* div.admonition tt.xref, div.admonition a tt {
     border-bottom: 1px solid #fafafa;
-}
+} */
 
 dd div.admonition {
     margin-left: -60px;
@@ -269,7 +290,7 @@ p.admonition-title:after {
 }
 
 pre, tt, code {
-    font-family: 'Consolas', 'Menlo', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+    /* font-family: 'Consolas', 'Menlo', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace; */
     font-size: 0.9em;
 }
 
@@ -394,28 +415,28 @@ tt, code {
 
 tt.xref, code.xref, a tt {
     background-color: #FBFBFB;
-    border-bottom: 1px solid white;
+    /* border-bottom: 1px solid white; */
 }
 
 a.reference {
     text-decoration: none;
-    border-bottom: 1px dotted #004B6B;
+    /* border-bottom: 1px dotted #004B6B; */
 }
 
-a.reference:hover {
+/* a.reference:hover {
     border-bottom: 1px solid #6D4100;
-}
+} */
 
 a.footnote-reference {
     text-decoration: none;
     font-size: 0.7em;
     vertical-align: top;
-    border-bottom: 1px dotted #004B6B;
+    /* border-bottom: 1px dotted #004B6B; */
 }
 
-a.footnote-reference:hover {
+/* a.footnote-reference:hover {
     border-bottom: 1px solid #6D4100;
-}
+} */
 
 a:hover tt, a:hover code {
     background: #EEE;

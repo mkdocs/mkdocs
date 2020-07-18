@@ -8,9 +8,9 @@
     <title>{% if page.title %}{{ page.title }} &mdash; {% endif %}{{ config.site_name }}</title>
 
     <link rel="shortcut icon" href="{{ base_url }}/img/favicon.ico">
-    <link rel="stylesheet" href="{{ base_url }}/css/alabaster.css" type="text/css">
-    <link rel="stylesheet" href="{{ base_url }}/css/alabaster-overrides.css" type="text/css">
-
+    <link rel="stylesheet" href="{{ base_url }}/css/odette.css" type="text/css">
+    <!-- <link rel="stylesheet" href="{{ base_url }}/css/alabaster-overrides.css" type="text/css"> -->
+    <link rel="stylesheet" href="fonts/Serif/cmun-serif.css">
     {% for path in extra_css %}
       <link href="{{ path }}" rel="stylesheet">
     {% endfor %}
@@ -38,9 +38,26 @@
 </head>
 <body>
 
-  <div class="document">
-    <div class="documentwrapper">
-      <div class="bodywrapper">
+  <div class="wrapper">
+    <!-- <div class="documentwrapper"> -->
+      <header>
+        <!-- <h1>{{ config.site_name }}</h1> -->
+        <!-- <div class="sphinxsidebar" role="navigation" aria-label="main navigation"> -->
+          <!-- <div class="sphinxsidebarwrapper"> -->
+            {% if page.is_homepage %}
+              {% for sidebar in theme.homepage_sidebars %}
+                {% include "sidebars/%s.html" % sidebar %}
+              {% endfor %}
+            {% else %}
+              {% for sidebar in theme.sidebars %}
+                {% include "sidebars/%s.html" % sidebar %}
+              {% endfor %}
+            {% endif %}
+          <!-- </div> -->
+        <!-- </div> -->
+      </header>
+      <!-- <div class="bodywrapper"> -->
+      <section>
         <div class="body" role="main">
           {% block content %}
             {{ page.content }}
@@ -49,8 +66,9 @@
             {% endif %}
           {% endblock %}
         </div>
-      </div>
-    </div>
+      </section>
+      <!-- </div> -->
+    <!-- </div> -->
     <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
       <div class="sphinxsidebarwrapper">
         {% if page.is_homepage %}
@@ -64,25 +82,22 @@
         {% endif %}
       </div>
     </div>
-    <div class="clearer"></div>
-  </div>
+    <!-- <div class="clearer"></div> -->
 
   {% block footer %}
-    <div class="footer">
+    <footer>
+    <!-- <div class="footer"> -->
       {% if config.copyright %}
         &copy; {{ config.copyright }}
       {% endif %}
       {% if theme.show_powered_by|default(True) %}
         {% if config.copyright %}|{% endif %}
-        Powered by <a href="http://www.mkdocs.org">mkdocs {{ mkdocs_version }}</a>
-        &amp; <a href="https://github.com/iamale/mkdocs-alabaster">mkdocs-alabaster</a>
+        Berkeley, CA
       {% endif %}
-    </div>
+    <!-- </div> -->
+    </footer>
   {% endblock %}
+</div>
 
-  <!--
-  MkDocs version      : {{ mkdocs_version }}
-  Docs Build Date UTC : {{ build_date_utc }}
-  -->
 </body>
 </html>

@@ -73,9 +73,11 @@ setup(
             'elstir = elstir.themes.elstir',
             'readthedocs = elstir.themes.readthedocs',
             'berkeley = elstir.themes.berkeley',
+            'odette = elstir.themes.odette',
         ],
         'elstir.plugins': [
             'search = elstir.contrib.search:SearchPlugin',
+            'exclude = elstir.contrib.exclude:Exclude',
         ],
     },
     classifiers=[
