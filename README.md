@@ -10,7 +10,6 @@ Project documentation with Markdown.
 [![Coverage Status][codecov-image]][codecov-link]
 [![Landscale Code Health][landscape-image]][landscape-link]
 
-- View the [elstir documentation][elstir].
 - Project [release notes][release-notes].
 
 ## Code of Conduct
