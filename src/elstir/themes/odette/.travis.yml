@@ -1,0 +1,19 @@
+language: python
+python:
+  - 3.6
+
+if: tag IS present
+
+install:
+  - curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+  - export PATH=$PATH:~/.poetry/bin
+  - poetry install
+
+script:
+  - "true"
+
+deploy:
+  provider: script
+  script: poetry publish --build --username="$PYPI_USERNAME" --password="$PYPI_PASSWORD"
+  on:
+    tags: true

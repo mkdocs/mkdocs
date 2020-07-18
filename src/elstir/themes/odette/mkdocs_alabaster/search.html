@@ -1,0 +1,37 @@
+{% extends "main.html" %}
+
+{% block extrahead %}
+  <script>var base_url = '{{ base_url }}';</script>
+  <script data-main="{{ base_url }}/mkdocs/js/search.js" src="{{ base_url }}/mkdocs/js/require.js"></script>
+{% endblock %}
+
+{% block content %}
+  <h1 id="search-documentation">Search</h1>
+
+  <noscript>
+    <div class="admonition warning">
+      <p>
+        Please activate JavaScript to enable the search
+        functionality.
+      </p>
+    </div>
+  </noscript>
+
+  <p>
+    From here you can search these documents. Enter your search
+    words into the box below and click "search". Note that the search
+    function will automatically search for all of the words. Pages
+    containing fewer words won't appear in the result list.
+  </p>
+
+  <form id="content_search" action="">
+    <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+    <input name="q" id="mkdocs-search-query" type="text" class="search_input search-query ui-autocomplete-input" autocomplete="off">
+    <input value="Search" type="submit">
+  </form>
+
+  <div id="mkdocs-search-results">
+    Sorry, page not found.
+  </div>
+
+{% endblock %}

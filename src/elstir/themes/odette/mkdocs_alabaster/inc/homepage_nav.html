@@ -1,0 +1,19 @@
+<h2>Navigation</h2>
+
+{% macro nav_tree(nav) -%}
+  <ul>
+  {% for nav_item in nav %}
+      {% if not nav_item.children %}
+        <li>
+          <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
+        </li>
+      {% else %}
+        <li>
+          {{ nav_item.title }}
+          {{ nav_tree(nav_item.children) }}
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{%- endmacro %}
+{{ nav_tree(nav) }}

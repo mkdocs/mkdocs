@@ -1,0 +1,16 @@
+{% if theme.logo %}
+  <p class="logo">
+    <a href="{{nav.homepage.url|url}}">
+      <img class="logo" src="{{base_url}}/{{theme.logo}}" title="{{theme.logo_title}}">
+    </a>
+  </p>
+  {% if theme.logo_name %}
+    <h1 class="logo">{{ config.site_name }}</h1>
+  {% endif %}
+{% else %}
+  <h1 class="logo"><a href="{{nav.homepage.url|url}}">{{ config.site_name }}</a></h1>
+{% endif %}
+
+{% if config.site_description %}
+  <p class="blurb">{{ config.site_description }}</p>
+{% endif %}

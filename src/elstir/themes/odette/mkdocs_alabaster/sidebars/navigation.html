@@ -1,0 +1,50 @@
+{% macro _toc_tree_inner(toc) -%}
+  <ul>
+    {% for toc_item in toc %}
+      <li><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
+      {{ _toc_tree_inner(toc_item.children) }}
+    {% endfor %}
+  </ul>
+{%- endmacro %}
+
+{% macro toc_tree(toc) -%}
+  {# This ignores H1s #}
+  {% for toc_item in toc %}
+    {{ _toc_tree_inner(toc_item.children) }}
+  {% endfor %}
+{%- endmacro %}
+
+{% macro nav_tree(nav) -%}
+  <ul>
+  {% for nav_item in nav %}
+    {% if not nav_item.children %}
+      <li>
+        <a href="{{ nav_item.url }}">{{ nav_item.title }}</a>
+      </li>
+      {% if nav_item == page %}
+        {{ toc_tree(page.toc) }}
+      {% endif %}
+    {% else %}
+      <li>
+        {{ nav_item.title }}
+        {{ nav_tree(nav_item.children) }}
+      </li>
+    {% endif %}
+  {% endfor %}
+  </ul>
+{%- endmacro %}
+
+<h3>Navigation</h3>
+
+<nav>
+  {{ nav_tree(nav) }}
+
+  {% if theme.extra_nav_links %}
+    <hr>
+    <ul>
+      {% for text, uri in theme.extra_nav_links.items() %}
+        <li class="toctree-l1"><a href="{{ uri }}">{{ text }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</nav>

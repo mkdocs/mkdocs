@@ -69,7 +69,8 @@
  
  body {
    margin: 0;
-   font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+   font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+   /* font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; */
    font-size: 0.8125rem;
    font-weight: 400;
    line-height: 1.5;
@@ -526,11 +527,7 @@
    background: #f5f5f5;
    border: solid 1px #ccc;
  }
- 
- a > code {
-   /* color: inherit; */
-   color: rgb(0,50,98);
- }
+
  
  kbd {
    padding: 0.2rem 0.4rem;
@@ -4652,6 +4649,7 @@
            justify-content: space-between;
    padding: 0.5rem 1rem;
    background-color: rgb(250, 250, 250);
+   border-bottom-width: 4px;
  }
  
  .navbar .container,

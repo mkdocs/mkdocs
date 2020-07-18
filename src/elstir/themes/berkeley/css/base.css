@@ -2,7 +2,8 @@ html {
     /* csslint ignore:start */
     /* The nav header is 3.5rem high, plus 20px for the margin-top of the
        main container. */
-    scroll-padding-top: calc(3.5rem + 20px);
+    /* scroll-padding-top: calc(3.5rem + 20px); */
+    scroll-padding-top: calc(3.3125rem + 4px + 20px);
     /* csslint ignore:end */
 }
 
@@ -104,12 +105,14 @@ kbd {
     box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
 }
 
-a code {
-    color: #2FA4E7;
+a > code {
+    /* color: inherit; */
+    color: rgb(0,50,98);
 }
 
 a:hover code, a:focus code {
-    color: #157AB5;
+    color: #0d5875;
+    /* color: #157AB5; */
 }
 
 footer {

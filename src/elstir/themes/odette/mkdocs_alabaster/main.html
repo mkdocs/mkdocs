@@ -1,0 +1,88 @@
+{% from "config.html" import theme with context %}
+<!DOCTYPE html>
+<html>
+<head>
+  {% block head %}
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <title>{% if page.title %}{{ page.title }} &mdash; {% endif %}{{ config.site_name }}</title>
+
+    <link rel="shortcut icon" href="{{ base_url }}/img/favicon.ico">
+    <link rel="stylesheet" href="{{ base_url }}/css/alabaster.css" type="text/css">
+    <link rel="stylesheet" href="{{ base_url }}/css/alabaster-overrides.css" type="text/css">
+
+    {% for path in extra_css %}
+      <link href="{{ path }}" rel="stylesheet">
+    {% endfor %}
+
+    {% for path in extra_javascript %}
+      <script src="{{ path }}"></script>
+    {% endfor %}
+
+    {% if config.google_analytics %}
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', '{{ config.google_analytics[0] }}', '{{ config.google_analytics[1] }}');
+        ga('send', 'pageview');
+      </script>
+    {% endif %}
+
+    <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+    {% block extrahead %}{% endblock %}
+  {% endblock %}
+</head>
+<body>
+
+  <div class="document">
+    <div class="documentwrapper">
+      <div class="bodywrapper">
+        <div class="body" role="main">
+          {% block content %}
+            {{ page.content }}
+            {% if page.is_homepage and theme.homepage_nav %}
+              {% include "inc/homepage_nav.html" %}
+            {% endif %}
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+    <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebarwrapper">
+        {% if page.is_homepage %}
+          {% for sidebar in theme.homepage_sidebars %}
+            {% include "sidebars/%s.html" % sidebar %}
+          {% endfor %}
+        {% else %}
+          {% for sidebar in theme.sidebars %}
+            {% include "sidebars/%s.html" % sidebar %}
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+    <div class="clearer"></div>
+  </div>
+
+  {% block footer %}
+    <div class="footer">
+      {% if config.copyright %}
+        &copy; {{ config.copyright }}
+      {% endif %}
+      {% if theme.show_powered_by|default(True) %}
+        {% if config.copyright %}|{% endif %}
+        Powered by <a href="http://www.mkdocs.org">mkdocs {{ mkdocs_version }}</a>
+        &amp; <a href="https://github.com/iamale/mkdocs-alabaster">mkdocs-alabaster</a>
+      {% endif %}
+    </div>
+  {% endblock %}
+
+  <!--
+  MkDocs version      : {{ mkdocs_version }}
+  Docs Build Date UTC : {{ build_date_utc }}
+  -->
+</body>
+</html>

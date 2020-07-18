@@ -1,0 +1,15 @@
+{% if page.previous_page or page.next_page %}
+  <h3>Related Topics</h3>
+  <ul>
+    {% if page.previous_page %}
+      <li>Previous: <a href="{{page.previous_page.url|url}}" title="previous chapter">
+        {{page.previous_page.title}}
+      </a></li>
+    {% endif %}
+    {% if page.next_page %}
+      <li>Next: <a href="{{page.next_page.url|url}}" title="next chapter">
+        {{page.next_page.title}}
+      </a></li>
+    {% endif %}
+  </ul>
+{% endif %}

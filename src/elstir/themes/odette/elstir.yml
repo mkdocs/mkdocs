@@ -1,0 +1,22 @@
+site_name: Alabaster
+copyright: 2019 Alexander Pushkov
+
+theme:
+    name: null
+    custom_dir: mkdocs_alabaster
+
+nav:
+  - Home: index.md
+  - User Guide: guide.md
+  - Developer Guide: dev.md
+  - License: license.md
+
+markdown_extensions:
+  - toc:
+      permalink: "¶"
+
+extra:
+  logo: logo.png
+  include_toc: yes
+  extra_nav_links:
+    Fork me on GitHub: https://github.com/notpushkin/mkdocs-alabaster

@@ -1,0 +1,7 @@
+# Config options for 'alabaster' theme
+
+static_templates:
+    - 404.html
+
+include_search_page: false
+search_index_only: false

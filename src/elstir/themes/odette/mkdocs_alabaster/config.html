@@ -1,0 +1,13 @@
+{% set c = config %}
+{% set e = config.extra %}
+{% set theme = {
+  "logo": e.logo                           | default(false),
+  "logo_title": e.logo_title               | default(c.site_name),
+  "logo_name": e.logo_name                 | default(false),
+  "include_toc": e.include_toc             | default(true),
+  "extra_nav_links": e.extra_nav_links     | default({}),
+  "show_powered_by": e.show_powered_by     | default(true),
+  "sidebars": e.sidebars                   | default(["about", "toc", "related", "search"]),
+  "homepage_nav": e.homepage_nav           | default(true),
+  "homepage_sidebars": e.homepage_sidebars | default(["about", "search"]),
+}%}
