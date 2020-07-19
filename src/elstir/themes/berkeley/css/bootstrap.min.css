@@ -178,7 +178,7 @@
  }
  
  a:hover {
-   color: #91170a;
+   color: #0d5875;
    text-decoration: underline;
  }
  
@@ -243,7 +243,7 @@
  }
  
  button {
-   border-radius: 0;
+   border-radius: 2px;
  }
  
  button:focus {
@@ -526,6 +526,7 @@
    padding: 1px 3px;
    background: #f5f5f5;
    border: solid 1px #ccc;
+   border-radius: 2px;
  }
 
  
@@ -4685,7 +4686,6 @@ ul.nav a:hover { color: rgb(196,130,14) !important; }
    font-size: 1.015625rem;
    line-height: inherit;
    white-space: nowrap;
-
    
    font-family: "Californian FB" !important;
  }
@@ -4998,7 +4998,7 @@ ul.nav a:hover { color: rgb(196,130,14) !important; }
  .navbar-expand .navbar-toggler {
    display: none;
  }
- 
+/*  
  .navbar-light .navbar-brand {
    color: rgba(0, 0, 0, 0.9);
  }
@@ -5046,7 +5046,7 @@ ul.nav a:hover { color: rgb(196,130,14) !important; }
  .navbar-light .navbar-text a:hover, .navbar-light .navbar-text a:focus {
    color: rgba(0, 0, 0, 0.9);
  }
- 
+  */
  .navbar-dark .navbar-brand {
    color: #fff;
  }

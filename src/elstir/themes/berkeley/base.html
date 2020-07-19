@@ -160,8 +160,16 @@
                 </div>
             </div>
         </div>
-        
         <div class="container">
+            {% if page and not page.is_homepage %}
+            <!-- <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Home</a></li>
+                  <li class="breadcrumb-item"><a href="#">Library</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Data</li>
+                </ol>
+            </nav> -->
+            {% endif %}
             <div class="row">
                 {%- block content %}
                     {% if page and page.meta.hide_toc %}
@@ -173,7 +181,8 @@
                     {% if page and page.meta.full_width %}
                         {% include "content.html" %}
                     {% else %}
-                        <div class="col-md-8" role="main">{% include "content.html" %}</div>
+                        <article class="col-md-8">{% include "content.html" %}</article>
+                        <!-- <div class="col-md-8" role="main">{# include "content.html" #}</div> -->
                     {% endif %}
                 {%- endblock %}
             </div>
@@ -205,6 +214,4 @@
 
     </body>
 </html>
-{% if page and page.is_homepage %}
 
-{% endif %}
