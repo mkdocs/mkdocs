@@ -4,6 +4,7 @@ import os
 import sys
 import logging
 import click
+import shutil 
 
 # TODO: Remove this check at some point in the future.
 # (also remove flake8's 'ignore E402' comments below)
@@ -15,6 +16,7 @@ from elstir import utils                                  # noqa: E402
 from elstir import exceptions                             # noqa: E402
 from elstir import config                                 # noqa: E402
 from elstir.commands import build, gh_deploy, new, serve  # noqa: E402
+from elstir.commands import simple
 
 log = logging.getLogger(__name__)
 
@@ -153,6 +155,25 @@ def build_command(clean, **kwargs):
     except exceptions.ConfigurationError as e:  # pragma: no cover
         # Avoid ugly, unhelpful traceback
         raise SystemExit('\n' + str(e))
+
+@cli.command(name="simple")
+@click.option('-c', '--clean/--dirty', is_flag=True, default=True, help=clean_help)
+@common_config_options
+@click.option('-d', '--site-dir', type=click.Path(), help=site_dir_help)
+@common_options
+def simple_command(clean, **kwargs):
+    """Build a simple page"""
+
+    config = config.load_config(**kwargs)
+    config['site_dir'] = '_temp_build'
+    simple.simple('_temp_build')
+    try:
+        build.build(config, dirty=not clean)
+    except exceptions.ConfigurationError as e:  # pragma: no cover
+        # Avoid ugly, unhelpful traceback
+        raise SystemExit('\n' + str(e))
+    shutil.copytree('_temp_build/',os.path.join(project_dir,'docs'))
+    os.rmdir('_temp_build')
 
 
 @cli.command(name="gh-deploy")

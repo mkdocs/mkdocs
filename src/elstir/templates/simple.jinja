@@ -1,0 +1,17 @@
+site_name: {{ config.site_name }}
+docs_dir:  {{ config.docs_dir }}
+site_dir:  _temp_build/
+
+theme:
+  name: odette
+
+extra_javascript: 
+    - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+
+markdown_extensions:
+    - tables
+    - mdx_math:
+        enable_dollar_delimiter: true 
+    - meta
+  
+
