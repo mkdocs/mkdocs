@@ -55,7 +55,7 @@ def sidebar(context,page,pages):
         #print('elif---------------------------------------')
         list_of_files = _index_dirs(os.path.dirname(folder),pages,page)
         return list_of_files
- 
+
     elif num_pages_in_dir > 1 and num_sub_dirs==0:
         #print('elif---------------------------------------')
         list_of_files = _index_files(folder,pages,page)

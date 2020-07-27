@@ -67,3 +67,4 @@ ENV/
 
 # elstir documentation
 site/
+*.swp
