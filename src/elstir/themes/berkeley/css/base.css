@@ -156,6 +156,7 @@ footer {
     padding: 0;
     max-height: 90%;
     overflow-y: auto;
+    overflow-x: auto;
 }
 
 /* Toggle (vertically flip) sidebar collapse icon */

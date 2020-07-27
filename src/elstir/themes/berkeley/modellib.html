@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{{ page.hide_toc = true }}
+
+<div class="table-responsive">
+<table class="table">
+    <thead> 
+       <tr><th scope="col">-</th><th scope="col">Element</th><th scope="col">Description</th></tr>
+    </thead>
+    <tbody>
+    {% for item in data %}    
+        <tr class="accordion-toggle collapsed" data-toggle="collapse" id="accordion{{{ item['name'] }}}" data-parent="#accordion{{ item['name'] }}" href="#collapse{{ item['name'] }}">
+        <td class="expand-button"></td>
+        <td><img src="../matlabicon.gif" alt="" border="">&nbsp;<a href="{{ item['name'] }}.html">{{ item['name'] }}</a></td>
+        <td>{{ item['description'] }}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+<script>
+$("a[id^=show_]").click(function(event) {$("#extra_" + $(this).attr('id').substr(5)).slideToggle("fast"); event.preventDefault();})
+</script>

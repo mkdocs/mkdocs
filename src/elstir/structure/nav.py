@@ -31,6 +31,11 @@ class Navigation:
 
 class Section:
     def __init__(self, title, children):
+        self.is_homepage = False
+        self.nav_incl = True
+        if '!' in title: 
+            title = title.replace('!','')
+            self.nav_incl = False
         self.title = title
         self.children = children
 
@@ -71,6 +76,7 @@ class Section:
 
 class Link:
     def __init__(self, title, url):
+        self.is_homepage = False
         self.title = title
         self.url = url
         self.parent = None
@@ -104,8 +110,8 @@ def get_navigation(files, config):
         items = [items]
 
     # Get only the pages from the navigation, ignoring any sections and links.
-    pages = _get_by_type(items, Page)
-
+    #pages = _get_by_type(items, Page)
+    pages = items
     # Include next, previous and parent links.
     _add_previous_and_next_links(pages)
     _add_parent_links(items)
@@ -161,10 +167,28 @@ def _data_to_navigation(data, files, config):
             for item in data
         ]
     title, path = data if isinstance(data, tuple) else (None, data)
+    log.debug('TITLE: {}'.format(title))
+    include = True
+    try:
+        sub = '!' in title
+    except: 
+        sub = False
+        # sub = isinstance(data,str) and '!' in data
+        pass
+    if sub:
+        include = False
+        log.debug('FOUND!')
+        title = title.replace('!','')
+        log.debug('TITLE: {}'.format(title))
+
     file = files.get_file_from_path(path)
     if file:
-        return Page(title, file, config)
-    return Link(title, path)
+        page = Page(title, file, config)
+        page.nav_incl = include
+        return page
+    link = Link(title, path)
+    link.nav_incl = include
+    return link
 
 
 def _get_by_type(nav, T):

@@ -5,6 +5,7 @@ import sys
 import logging
 import click
 import shutil 
+from pathlib import Path
 
 # TODO: Remove this check at some point in the future.
 # (also remove flake8's 'ignore E402' comments below)
@@ -59,6 +60,8 @@ remote_name_help = ("The remote name to commit to for Github Pages. This "
 force_help = "Force the push to the repository."
 ignore_version_help = "Ignore check that build is not being deployed with an older version of elstir."
 
+execute_default = os.path.join('src')
+execute_help = "Execute scripts in the src directory."
 
 def add_options(opts):
     def inner(f):
@@ -143,12 +146,19 @@ def serve_command(dev_addr, livereload, **kwargs):
 
 
 @cli.command(name="build")
+@click.option('-e', '--execute', type=click.Path(), default=None, help=execute_help)
 @click.option('-c', '--clean/--dirty', is_flag=True, default=True, help=clean_help)
 @common_config_options
 @click.option('-d', '--site-dir', type=click.Path(), help=site_dir_help)
 @common_options
-def build_command(clean, **kwargs):
+def build_command(clean, execute,**kwargs):
     """Build the elstir documentation"""
+    if execute is not None:
+        from importlib import import_module
+
+        for file in os.listdir(execute):
+            if Path(file).suffix == '.py':
+                os.system('python ' + os.path.join(execute,file))
 
     try:
         build.build(config.load_config(**kwargs), dirty=not clean)

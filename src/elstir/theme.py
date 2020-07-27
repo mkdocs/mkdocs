@@ -110,4 +110,5 @@ class Theme:
         env = jinja2.Environment(loader=loader)
         env.filters['tojson'] = filters.tojson
         env.filters['url'] = filters.url_filter
+        env.filters['sidebar'] = filters.sidebar
         return env

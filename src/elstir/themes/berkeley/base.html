@@ -87,19 +87,23 @@
                         <ul class="nav navbar-nav ml-auto"></ul>
                         <!-- <ul class="nav navbar-nav"> -->
                         {%- for nav_item in nav %}
-                        {%- if nav_item.children %}
+                        {%- if nav_item.nav_incl  %}
+                            {%- if nav_item.children %}
                             <li class="dropdown{% if nav_item.active %} active{% endif %}">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ nav_item.title }} <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                 {%- for nav_item in nav_item.children %}
+                                    {%- if nav_item.nav_incl  %}
                                     {% include "nav-sub.html" %}
+                                    {%- endif %}
                                 {%- endfor %}
                                 </ul>
                             </li>
-                        {%- else %}
+                            {%- else %}
                             <li class="navitem{% if nav_item.active %} active{% endif %}">
                                 <a href="{{ nav_item.url|url }}" class="nav-link">{{ nav_item.title }}</a>
                             </li>
+                            {%- endif %}
                         {%- endif %}
                         {%- endfor %}
                         <!-- </ul> -->
