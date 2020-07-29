@@ -7,7 +7,7 @@
 
     {% macro toc_item(item) %}
         {%- if item.level <= config.theme.navigation_depth %}
-            <li class="nav-item " data-level="{{ item.level }}"><a href="{{ item.url }}" class="nav-link {{ 'active' if item.active }}">{{ item.title }}</a>
+            <li class="nav-item {{ 'active' if item.active }}" data-level="{{ item.level }}"><a href="{{ item.url }}" class="nav-link {{ 'active' if item.active }}">{{ item.title }}</a>
               <ul class="nav flex-column">
               {{ '<div class="dropdown-divider"></div>' if item.level == 1 }} 
                 {%- for child in item.children %}
@@ -17,7 +17,7 @@
             </li>
         {%- endif %}
     {%- endmacro %}
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+    <div id="toc-collapse" class="navbar-collapse collapse card ">
         <ul class="nav flex-column">
         {% if page and page.meta.custom_toc %}
         {%- for item in page.meta.custom_toc %}
