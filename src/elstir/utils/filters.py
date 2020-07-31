@@ -20,8 +20,8 @@ def sidebar(context,page,pages):
     depth = len(context['base_url'].split('/'))
     print("DEPTH: {}".format(depth))
     print(page.title)
-    min_depth = 2
-    if depth <= 1: return {}
+    min_depth = context['config']['sidebar']['min_depth']
+    if depth <= min_depth: return {}
     page_paths = [pg.abs_src_path for pg in context['pages']]
     folder,file = os.path.split(page.file.abs_src_path)
     #folder = os.path.dirname(folder)
@@ -30,7 +30,7 @@ def sidebar(context,page,pages):
     dirs = [dr for dr in os.listdir(folder) if not os.path.isfile(os.path.join(folder,dr))]
     print(dirs)
     num_sub_dirs = len(dirs)
-    if depth==min_depth and num_pages_in_dir == 1 and num_sub_dirs > 0:
+    if depth==min_depth+1 and num_pages_in_dir == 1 and num_sub_dirs > 0:
         print(folder,file)
         print(os.listdir(folder))
         #try:
