@@ -84,8 +84,8 @@
                   {%- block site_nav %}
                     {%- if nav|length>1 %}
                         <!-- Main navigation -->
-                        <ul class="nav navbar-nav ml-auto"></ul>
-                        <!-- <ul class="nav navbar-nav"> -->
+                        <ul class="nav navbar-nav ml-auto">
+                        <!--<ul class="nav navbar-nav">-->
                         {%- for nav_item in nav %}
                         {%- if nav_item.nav_incl  %}
                             {%- if nav_item.children %}
@@ -106,7 +106,9 @@
                             {%- endif %}
                         {%- endif %}
                         {%- endfor %}
-                        <!-- </ul> -->
+                        <!--</ul>-->
+                        <!--</div>-->
+
                     {%- endif %}
                   {%- endblock %}
 
@@ -115,7 +117,7 @@
                         {%- if 'search' in config['plugins'] %}
                         <li class="nav-item">
                             <a href="#" class="nav-link" data-toggle="modal" data-target="#elstir_search_modal">
-                                <i class="fa fa-search"></i> Search
+                               <!--<img src="img/search.png" class="icon">--> <i class="fa fa-search"></i> Search
                             </a>
                         </li>
                         {%- endif %}

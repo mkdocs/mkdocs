@@ -2,7 +2,8 @@ html {
     /* csslint ignore:start */
     /* The nav header is 3.5rem high, plus 20px for the margin-top of the
        main container. */
-    scroll-padding-top: calc(3.5rem + 20px);
+    /* scroll-padding-top: calc(3.5rem + 20px); */
+    scroll-padding-top: calc(3.3125rem + 4px + 20px);
     /* csslint ignore:end */
 }
 
@@ -16,7 +17,7 @@ body::before {
     top: 0;
     left: 0;
     background-color: #f8f8f8;
-    background: url(../img/grid.png) repeat-x;
+    /* background: url(../img/grid.png) repeat-x; */
     will-change: transform;
     z-index: -1;
 }
@@ -26,11 +27,13 @@ body > .container {
     min-height: 400px;
 }
 
-.navbar-nav .dropdown-menu {
- position: static;
- float: none;
+article {
+    background-color: #fff;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,.3),0 1px 3px 1px rgba(60,64,67,.15);
+    border-radius: 2px;
+    padding: 40px;
+    display: block;
 }
-
 .navbar.fixed-top { /* csslint allow: adjoining-classes */
     /* csslint ignore:start */
     position: -webkit-sticky;
@@ -49,7 +52,7 @@ body > .container {
     line-height: 1.428571429;
     background-color: #fff;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 2px;
     margin: 20px auto 30px auto;
 }
 
@@ -104,17 +107,19 @@ kbd {
     font-size: 90%;
     color: #fff;
     background-color: #333;
-    border-radius: 3px;
+    border-radius: 2px;
     -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
     box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
 }
 
-a code {
-    color: #2FA4E7;
+a > code {
+    /* color: inherit; */
+    color: rgb(0,50,98);
 }
 
 a:hover code, a:focus code {
-    color: #157AB5;
+    color: #0d5875;
+    /* color: #157AB5; */
 }
 
 footer {
@@ -143,12 +148,15 @@ footer {
     /* The nav header is 3.5rem high, plus 20px for the margin-top of the
        main container. */
     top: calc(3.5rem + 20px);
+    /* border-radius: 2px; */
+    /* box-shadow: 0 1px 2px 0 rgba(60,64,67,.3),0 1px 3px 1px rgba(60,64,67,.15); */
 }
 
 .bs-sidebar.card { /* csslint allow: adjoining-classes */
     padding: 0;
     max-height: 90%;
     overflow-y: auto;
+    overflow-x: auto;
 }
 
 /* Toggle (vertically flip) sidebar collapse icon */
@@ -172,8 +180,9 @@ footer {
 .bs-sidebar > .navbar-collapse > .nav {
     padding-top:    10px;
     padding-bottom: 10px;
-    border-radius: 5px;
+    border-radius: 2px;
     width: 100%;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,.3),0 1px 3px 1px rgba(60,64,67,.15);
 }
 
 /* All levels of nav */
@@ -187,7 +196,7 @@ footer {
     text-decoration: none;
     border-right: 1px solid;
 }
-.bs-sidebar .nav > li > a.active,
+/* .bs-sidebar .nav > li > a.active, */
 .bs-sidebar .nav > li > a.active:hover,
 .bs-sidebar .nav > li > a.active:focus {
     font-weight: bold;
@@ -224,7 +233,7 @@ h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink, h4:hover .head
     padding: 15px;
     margin-bottom: 20px;
     border: 1px solid transparent;
-    border-radius: 4px;
+    border-radius: 2px;
     text-align: left;
 }
 
@@ -258,10 +267,11 @@ h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink, h4:hover .head
     }
 }
 
-.dropdown-item.open { /* csslint allow: adjoining-classes */
-    color: #fff;
-    background-color: #2FA4E7;
-}
+/* .dropdown-item.open {  */
+    /* csslint allow: adjoining-classes */
+    /* color: #fff;
+    background-color: #2FA4E7; */
+/* } */
 
 .dropdown-submenu > .dropdown-menu {
     margin: 0 0 0 1.5rem;

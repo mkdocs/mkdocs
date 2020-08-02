@@ -18,21 +18,22 @@ def url_filter(context, value):
 def sidebar(context,page,pages):
     """"""
     depth = len(context['base_url'].split('/'))
-    print("DEPTH: {}".format(depth))
-    print(page.title)
+    #print("DEPTH: {}".format(depth))
+    #print(page.title)
     min_depth = context['config']['sidebar']['min_depth']
-    if depth <= min_depth: return {}
+    max_depth = context['config']['sidebar']['max_depth']
+    if depth <= min_depth or depth >= max_depth: return {}
     page_paths = [pg.abs_src_path for pg in context['pages']]
     folder,file = os.path.split(page.file.abs_src_path)
     #folder = os.path.dirname(folder)
     list_of_files = []
-    num_pages_in_dir = len([pg for pg in os.listdir(folder) if os.path.isfile(os.path.join(folder,pg)) and pg[0]!='.'])
+    num_pages_in_dir = len([pg for pg in os.listdir(folder) if os.path.isfile(os.path.join(folder,pg)) and pg[0]!='.' and pg[~2:]=='.md'])
     dirs = [dr for dr in os.listdir(folder) if not os.path.isfile(os.path.join(folder,dr))]
-    print(dirs)
+    #print(dirs)
     num_sub_dirs = len(dirs)
     if depth==min_depth+1 and num_pages_in_dir == 1 and num_sub_dirs > 0:
-        print(folder,file)
-        print(os.listdir(folder))
+        #print(folder,file)
+        #print(os.listdir(folder))
         #try:
         list_of_files.append({
              "title": page.title,
@@ -64,15 +65,15 @@ def sidebar(context,page,pages):
 
 def _get_dir_index(path,pages,folder=None):
     if folder is not None: path = os.path.join(folder,path)
-#print('PATH: {}'.format(path))
+    #print('PATH: {}'.format(path))
     for page in pages:
-#print(page.abs_src_path)
-#print(os.path.join(path,'index.md'))
+        #print(page.abs_src_path)
+        #print(os.path.join(path,'index.md'))
         if page.abs_src_path == os.path.join(path,'index.md'):
             return page
 
 def _index_dirs(folder, pages, page):
-    print("PATH: {}".format(folder))
+    #print("PATH: {}".format(folder))
     list_of_files = []
     dirs = [dr for dr in os.listdir(folder) if not os.path.isfile(os.path.join(folder,dr))]
 #page =_get_dir_index(folder)
@@ -104,7 +105,7 @@ def _get_dir_page(path,pages,folder=None):
             return page
 
 def _index_files(folder, pages, page):
-    print('FILE: {}'.format(page.title))
+    #print('FILE: {}'.format(page.title))
     list_of_files = []
     files = [dr for dr in os.listdir(folder) if os.path.isfile(os.path.join(folder,dr))]
     #page =_get_dir_index(folder)

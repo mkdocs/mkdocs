@@ -23,8 +23,8 @@
         {%- for item in page.meta.custom_toc %}
             {{ toc_item(item) }}
         {%- endfor %}
-        {% elif 'Functions' in page.file.abs_src_path %}
-        {# else #}
+        {# elif 'Functions' in page.file.abs_src_path #}
+        {% else %}
         {#- for item in page.toc #}
         {%- for item in page|sidebar(pages) %}
             {{ toc_item(item) }}

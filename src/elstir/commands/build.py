@@ -227,7 +227,7 @@ def _build_page(page, config, files, nav, env, dirty=False):
         raise
 
 
-def build(config, live_server=False, dirty=False):
+def build(config, live_server=False, dirty=True):
     """ Perform a full site build. """
     from time import time
     start = time()
