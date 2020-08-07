@@ -1,0 +1,41 @@
+{
+  "extends": [
+    "stylelint-config-recommended",
+    "stylelint-config-rational-order"
+  ],
+  "plugins": [
+    "stylelint-order",
+    "stylelint-scss"
+  ],
+  "rules": {
+    "at-rule-empty-line-before": null,
+    "at-rule-no-unknown": null,
+    "at-rule-no-vendor-prefix": true,
+    "block-opening-brace-space-before": null,
+    "block-closing-brace-newline-after": ["always", {
+      "ignoreAtRules": [
+        "if",
+        "else",
+        "elseif"
+      ]
+    }],
+    "color-hex-case": "upper",
+    "color-hex-length": "long",
+    "color-named": "never",
+    "comment-empty-line-before": ["always", {
+      "ignore": ["stylelint-commands"]
+    }],
+    "font-family-name-quotes": "always-where-recommended",
+    "font-weight-notation": "numeric",
+    "function-url-quotes": "always",
+    "no-descending-specificity": null,
+    "no-unknown-animations": true,
+    "property-no-vendor-prefix": true,
+    "selector-class-pattern": "^[a-z0-9]+(-[a-z0-9]+)*(__[a-z]+)?(--[a-z]+)?$",
+    "selector-descendant-combinator-no-non-space": null,
+    "string-quotes": "double",
+    "unit-whitelist": ["px", "em", "deg", "ms", "%", "mm", "vh", "vw", "dppx"],
+    "value-keyword-case": "lower",
+    "value-no-vendor-prefix": true
+  }
+}

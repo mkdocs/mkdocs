@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block post_content %}
+{# super() #}
+{% set cards = page|get_children(pages) %}
+{% for card in cards[0].children %}
+<div class="card">
+<div class="card-body">
+<a href="{{ card.url }}" class="stretched-link">
+<h5 class="card-title">{{ card.title }}</h5>
+</a>
+<p class="card-text">{{ card.summary if card.summary else "" }}<p>
+</div>
+</div>
+{% endfor %}
+{% endblock %}
+

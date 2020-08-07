@@ -194,7 +194,10 @@
                     {% if page and page.meta.full_width %}
                         {% include "content.html" %}
                     {% else %}
-                        <article class="col-md-8">{% include "content.html" %}</article>
+                        <article class="col-md-9">
+                        {% include "content.html" %}
+                        {% block post_content %}{% endblock %}
+                        </article>
                         <!-- <div class="col-md-8" role="main">{# include "content.html" #}</div> -->
                     {% endif %}
                 {%- endblock %}

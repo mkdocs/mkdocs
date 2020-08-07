@@ -27,7 +27,7 @@ html {
     top: 0;
     left: 0;
     background-color: #f8f8f8;
-    /* background: url(../img/grid.png) repeat-x; */
+    /* background: url(img/grid.png) repeat-x; */
     will-change: transform;
     z-index: -1;
 }
@@ -40,7 +40,7 @@ body > .container {
 article {
     background-color: #fff;
     box-shadow: 0 1px 2px 0 rgba(60,64,67,.3),0 1px 3px 1px rgba(60,64,67,.15);
-    border-radius: 2px;
+    border-radius: 1.5px;
     padding: 40px;
     display: block;
 }
@@ -62,7 +62,7 @@ kbd {
     font-size: 90%;
     color: #fff;
     background-color: #333;
-    border-radius: 2px;
+    border-radius: 1.5px;
     -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
     box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
 }

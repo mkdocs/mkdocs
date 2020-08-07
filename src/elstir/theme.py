@@ -33,6 +33,8 @@ class Theme:
         # elstir provided static templates are always included
         package_dir = os.path.abspath(os.path.dirname(__file__))
         elstir_templates = os.path.join(package_dir, 'templates')
+        elstir_layouts =  os.path.join(package_dir, 'templates')
+
         self.static_templates = set(os.listdir(elstir_templates))
 
         # Build self.dirs from various sources in order of precedence
@@ -111,4 +113,6 @@ class Theme:
         env.filters['tojson'] = filters.tojson
         env.filters['url'] = filters.url_filter
         env.filters['sidebar'] = filters.sidebar
+        env.filters['get_children'] = filters.get_children
         return env
+

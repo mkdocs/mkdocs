@@ -1,0 +1,25 @@
+# gallery.card.width
+# gallery.cards
+# card.img_url
+# card.img_alt
+# card.description
+
+
+{% for card in gallery.cards %}
+<div class="card mb-3" style="max-width: 540px;">
+  <div class="row no-gutters">
+    <div class="col-md-{{ gallery.card.width }}">
+      <img src="card.img_url" class="card-img" alt="...">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">card.title</h5>
+        <p class="card-text">{{ card.description }}</p>
+        <p class="card-text"><small class="text-muted">...</small></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endfor %}
+

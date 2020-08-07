@@ -161,7 +161,7 @@ def clean_directory(directory):
 
         # Don't remove hidden files from the directory. We never copy files
         # that are hidden, so we shouldn't delete them either.
-        if entry.startswith('.'):
+        if entry.startswith('.') or '_auth' in entry:
             continue
 
         path = os.path.join(directory, entry)
