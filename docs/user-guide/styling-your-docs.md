@@ -59,7 +59,7 @@ supports the following options:
                 previous: 80 # p
                 search: 83   # s
 
-    All values much be numeric key codes. It is best to use keys which are
+    All values must be numeric key codes. It is best to use keys which are
     available on all keyboards. You may use <https://keycode.info/> to determine
     the key code for a given key.
 
