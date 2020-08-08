@@ -1,0 +1,115 @@
+html {
+    /* csslint ignore:start */
+    /* The nav header is 3.5rem high, plus 20px for the margin-top of the
+       main container. */
+    /* scroll-padding-top: calc(3.5rem + 20px); */
+    scroll-padding-top: calc(3.3125rem + 4px + 20px);
+    /* csslint ignore:end */
+}
+
+/* Replacement for `body { background-attachment: fixed; }`, which has
+   performance issues when scrolling on large displays. See #1394. */
+
+
+
+/*
+ * Side navigation
+ *
+ * Scrollspy and affixed enhanced navigation to highlight sections and secondary
+ * sections of docs content.
+ */
+
+ body::before {
+    content: ' ';
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #f8f8f8;
+    /* background: url(img/grid.png) repeat-x; */
+    will-change: transform;
+    z-index: -1;
+}
+
+body > .container {
+    margin-top: 20px;
+    min-height: 400px;
+}
+
+article {
+    background-color: #fff;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,.3),0 1px 3px 1px rgba(60,64,67,.15);
+    border-radius: 1.5px;
+    padding: 40px;
+    display: block;
+}
+
+/* .navbar-nav .dropdown-menu {
+ position: static;
+ float: none;
+} */
+
+.navbar.fixed-top { /* csslint allow: adjoining-classes */
+    /* csslint ignore:start */
+    position: -webkit-sticky;
+    position: sticky;
+    /* csslint ignore:end */
+}
+
+kbd {
+    padding: 2px 4px;
+    font-size: 90%;
+    color: #fff;
+    background-color: #333;
+    border-radius: 1.5px;
+    -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
+}
+
+.md-footer-icon {
+    display: inline-block;
+    width: 1.4rem;
+    height: 1.4rem;
+    text-align: center;
+}
+
+body {
+    display: flex;
+    min-height: 97vh;
+    flex-direction: column;
+}
+.container {
+    flex: 1;    /* same as flex-grow: 1; */
+}
+/* footer {
+    background-color: #555;
+    color: #bbb;
+    line-height: 1.5;
+} */
+
+/* .Site {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+  
+.Site-content {
+flex: 1;
+}
+main {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+article {
+    flex-grow: 1;
+} */
+
+/* .md-footer-meta__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: .2rem;
+} */

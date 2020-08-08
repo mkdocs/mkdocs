@@ -1,28 +1,23 @@
-# elstir
+---
+title: Elstir
+summary: 'Academic document publishing forked from <a href="https://www.mkdocs.org/">MkDocs</a>.'
+description: 'Elstir is a command line tool that was forked from <a href="https://www.mkdocs.org/">MkDocs</a> and introduces improvements to better accommodate the organized publication of academic projects to the web.'
+...
 
-Project documentation with Markdown.
+<h1>Elstir</h1>
+
+Academic document publishing forked from <a href="https://www.mkdocs.org/">MkDocs</a>.
 
 ---
 
 [![PyPI Version][pypi-v-image]][pypi-v-link]
 [![Build Status][travis-image]][travis-link]
-[![Windows Build Status][appveyor-image]][appveyor-link]
-[![Coverage Status][codecov-image]][codecov-link]
-[![Landscale Code Health][landscape-image]][landscape-link]
 
-- Project [release notes][release-notes].
+## Used By
 
-## Code of Conduct
+- [`FEDEASLab`](https://fcfilippou.github.io/fedeaslab/)
+- [claudioperez.xyz](https://claudioperez.xyz)
 
-Everyone interacting in the elstir project's codebases, issue trackers, chat
-rooms, and mailing lists is expected to follow the [PyPA Code of Conduct].
-
-[appveyor-image]: https://img.shields.io/appveyor/ci/d0ugal/elstir/master.svg
-[appveyor-link]: https://ci.appveyor.com/project/d0ugal/elstir
-[codecov-image]: https://codecov.io/github/elstir/elstir/coverage.svg?branch=master
-[codecov-link]: https://codecov.io/github/elstir/elstir?branch=master
-[landscape-image]: https://landscape.io/github/elstir/elstir/master/landscape.svg?style=flat
-[landscape-link]: https://landscape.io/github/elstir/elstir/master
 [pypi-v-image]: https://img.shields.io/pypi/v/elstir.svg
 [pypi-v-link]: https://pypi.org/project/elstir/
 [travis-image]: https://img.shields.io/travis/elstir/elstir/master.svg
@@ -30,5 +25,3 @@ rooms, and mailing lists is expected to follow the [PyPA Code of Conduct].
 
 [elstir]: https://github.com/claudioperez/elstir
 [release-notes]: https://github.com/claudioperez/elstir/about/release-notes/
-
-[PyPA Code of Conduct]: https://www.pypa.io/en/latest/code-of-conduct/
