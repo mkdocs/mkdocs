@@ -109,7 +109,7 @@ class Theme:
         """ Return a Jinja environment for the theme. """
 
         loader = jinja2.FileSystemLoader(self.dirs)
-        env = jinja2.Environment(loader=loader)
+        env = jinja2.Environment(loader=loader, extensions=['jinja2.ext.do'])
         env.filters['tojson'] = filters.tojson
         env.filters['url'] = filters.url_filter
         env.filters['sidebar'] = filters.sidebar

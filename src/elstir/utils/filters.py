@@ -137,6 +137,7 @@ def _index_dirs(folder, pages, page):
                 "summary": _get_description(_get_dir_index(dr,pages,folder).page),
                 "level": 2,
                 "image": _get_dir_image(_get_dir_index(dr,pages,folder).page.file.abs_src_path),
+                "meta": _get_dir_index(dr,pages,folder).page.meta,
                 "children": {}
                 } for dr in dirs if _get_dir_index(dr,pages,folder)]
             })
@@ -169,6 +170,7 @@ def _index_files(folder, pages, page):
             "summary": _get_description(_get_dir_page(file,pages,folder).page),
             "level": 2,
             "as_code": True,
+            "meta": _get_dir_page(file,pages,folder).page.meta,
             "children": {}
             } for file in files if _get_dir_page(file,pages,folder)]
          })

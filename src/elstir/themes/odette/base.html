@@ -195,7 +195,7 @@
                     {% if page and page.meta.full_width %}
                         {% include "content.html" %}
                     {% else %}
-                        <article class="col-md-9">
+                        <article class="col-md-{{ '12' if page.meta.hide_toc else '9' }} p-3">
                         {% include "content.html" %}
                         {% block post_content %}{% endblock %}
                         </article>
