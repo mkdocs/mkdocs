@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block post_content %}
-{# super() #}
 {% set cards = page|get_children(pages) %}
 {% for card in cards[0].children %}
 <div class="card">

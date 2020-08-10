@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block post_content %}
-{# super() #}
 {% set cards = page|get_children(pages) %}
 {% for card in cards[0].children %}
 <hr>
@@ -9,7 +8,7 @@
       <h2>{{ card.title }}</h2>
       <p class="lead font-weight-normal">{{ card.summary if card.summary else "" }}</p>
       <p>{{ card.description if card.description else "" }}</p>
-      <a class="btn btn-lg btn-outline-primary mb-3" href="{{ card.url }}">Learn More</a>
+      <a class="btn btn-lg btn-outline-primary mb-3" href="{{ card.url }}">Explore</a>
    </div>
    {% if card.image %}
    <div class="col-md-6 pl-md-5">
