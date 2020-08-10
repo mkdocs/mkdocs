@@ -14,10 +14,10 @@ def url_filter(context, value):
     return normalize_url(value, page=context['page'], base=context['base_url'])
 
 @jinja2.contextfilter
-def get_children(context,page,pages):
+def get_children(context,page,pages,depth=2):
     """"""
-    depth = len(context['base_url'].split('/'))
-    page_paths = [pg.abs_src_path for pg in context['pages']]
+    # depth = len(context['base_url'].split('/'))
+    # page_paths = [pg.abs_src_path for pg in context['pages']]
     folder, file = os.path.split(page.file.abs_src_path)
     list_of_files = []
     num_pages_in_dir = len([pg for pg in os.listdir(folder) if os.path.isfile(os.path.join(folder,pg)) and pg[0]!='.' and pg[~2:]=='.md'])
@@ -25,15 +25,15 @@ def get_children(context,page,pages):
     #print(dirs)
     num_sub_dirs = len(dirs)
     try:
-        if num_pages_in_dir == 1 or file=='index.md':
+        if num_pages_in_dir == 1 or (file=='index.md' and num_sub_dirs >0):
             #Index sibling directories
-            print("INDEXING SIBLING DIRECTORIES")
-            list_of_files = _index_dirs(folder,pages,page)
+            # print("INDEXING SIBLING DIRECTORIES")
+            list_of_files = _index_dirs(folder,pages,page,depth)
             return list_of_files
 
         elif num_pages_in_dir > 1 and num_sub_dirs==0:
             #Index sibling pages
-            list_of_files = _index_files(folder,pages,page)
+            list_of_files = _index_files(folder,pages,page,depth)
             return list_of_files
         else: return {}
     except Exception as e:
@@ -50,7 +50,7 @@ def sidebar(context,page,pages):
     min_depth = context['config']['sidebar']['min_depth']
     max_depth = context['config']['sidebar']['max_depth']
     if depth <= min_depth or depth >= max_depth: return {}
-    page_paths = [pg.abs_src_path for pg in context['pages']]
+    # page_paths = [pg.abs_src_path for pg in context['pages']]
     folder,file = os.path.split(page.file.abs_src_path)
     #folder = os.path.dirname(folder)
     list_of_files = []
@@ -120,7 +120,7 @@ def _get_dir_image(page_path):
         return False
 
 
-def _index_dirs(folder, pages, page):
+def _index_dirs(folder, pages, page, depth=2):
     list_of_files = []
     dirs = [dr for dr in os.listdir(folder) if not os.path.isfile(os.path.join(folder,dr))]
     if _get_dir_index(folder,pages):
@@ -129,17 +129,18 @@ def _index_dirs(folder, pages, page):
             "active": page.file.abs_src_path == os.path.join(folder,'index.md'),
             "url": _get_dir_index(folder,pages).page.abs_url,
             "level": 1,
-            "children": [{
-                "title": _get_dir_index(dr,pages,folder).page.title,
-                "active": _get_dir_index(dr,pages,folder).page.file.abs_src_path == page.file.abs_src_path,
-                "url": _get_dir_index(dr,pages,folder).page.abs_url,
-                #"url": os.path.join('..',dr),
-                "summary": _get_description(_get_dir_index(dr,pages,folder).page),
-                "level": 2,
-                "image": _get_dir_image(_get_dir_index(dr,pages,folder).page.file.abs_src_path),
-                "meta": _get_dir_index(dr,pages,folder).page.meta,
-                "children": {}
-                } for dr in dirs if _get_dir_index(dr,pages,folder)]
+            "children": _get_dir_children(dirs, pages, folder, page, 2, depth)
+            # "children": [{
+            #     "title": _get_dir_index(dr,pages,folder).page.title,
+            #     "active": _get_dir_index(dr,pages,folder).page.file.abs_src_path == page.file.abs_src_path,
+            #     "url": _get_dir_index(dr,pages,folder).page.abs_url,
+            #     #"url": os.path.join('..',dr),
+            #     "summary": _get_description(_get_dir_index(dr,pages,folder).page),
+            #     "level": 2,
+            #     "image": _get_dir_image(_get_dir_index(dr,pages,folder).page.file.abs_src_path),
+            #     "meta": _get_dir_index(dr,pages,folder).page.meta,
+            #     "children": []
+            #     } for dr in dirs if _get_dir_index(dr,pages,folder)]
             })
         return list_of_files
     else: return {}
@@ -153,7 +154,7 @@ def _get_dir_page(path,pages,folder=None):
         if page.abs_src_path == path:
             return page
 
-def _index_files(folder, pages, page):
+def _index_files(folder, pages, page, depth=2):
     #print('FILE: {}'.format(page.title))
     list_of_files = []
     files = [dr for dr in os.listdir(folder) if os.path.isfile(os.path.join(folder,dr))]
@@ -163,19 +164,71 @@ def _index_files(folder, pages, page):
          "active": page.file.abs_src_path == os.path.join(folder,'index.md'),
          "url": _get_dir_index(folder,pages).page.abs_url,
          "level": 1,
-         "children": [{
-            "title": "{}".format(_get_dir_page(file,pages,folder).page.title),
-            "active": _get_dir_page(file,pages,folder).page.file.abs_src_path == page.file.abs_src_path,
-            "url": _get_dir_page(file,pages,folder).page.abs_url,
-            "summary": _get_description(_get_dir_page(file,pages,folder).page),
-            "level": 2,
-            "as_code": True,
-            "meta": _get_dir_page(file,pages,folder).page.meta,
-            "children": {}
-            } for file in files if _get_dir_page(file,pages,folder)]
+         "children": _get_idx_children(files, pages, folder, page, 2)
+        #  "children": [{
+        #     "title": "{}".format(_get_dir_page(file,pages,folder).page.title),
+        #     "active": _get_dir_page(file,pages,folder).page.file.abs_src_path == page.file.abs_src_path,
+        #     "url": _get_dir_page(file,pages,folder).page.abs_url,
+        #     "summary": _get_description(_get_dir_page(file,pages,folder).page),
+        #     "level": 2,
+        #     "as_code": True,
+        #     "meta": _get_dir_page(file,pages,folder).page.meta,
+        #     "children": []
+        #     } for file in files if _get_dir_page(file,pages,folder)]
          })
     #print(list_of_files)
     return list_of_files
+
+def _get_dir_children(dirs, pages, folder, current_page, level, depth):
+    children = []
+    print("GET_DIR_CHILDREN")
+    for dr in dirs:
+        file = _get_dir_index(dr,pages,folder)
+        if file:
+            page = file.page
+            if level<=depth:
+                sub_folder = os.path.join(folder,dr)
+                # print("SUB-FOLDER: {}".format(sub_folder))
+                sub_dirs = [sdr for sdr in os.listdir(sub_folder) if not os.path.isfile(os.path.join(sub_folder,sdr))]
+                sub_children = _get_dir_children(sub_dirs, pages, sub_folder, page, level+1, depth)
+                if not sub_children:
+                    files = [sdr for sdr in os.listdir(sub_folder) if os.path.isfile(os.path.join(sub_folder,sdr))]
+                    sub_children = _get_idx_children(files, pages, sub_folder, page, level+1)
+            else:
+                sub_children = []
+            children.append({
+                "title": page.title,
+                "active": page.file.abs_src_path == current_page.file.abs_src_path,
+                "url": page.abs_url,
+                "summary": _get_description(page),
+                "level": level,
+                "image": _get_dir_image(page.file.abs_src_path),
+                "meta": page.meta,
+                "children":  sub_children
+                })
+    return children 
+
+def _get_idx_children(files, pages, folder, current_page, level):
+    children = []
+    print("INDEXING CHILDREN: {}".format(folder))
+    for file in files:
+        file = _get_dir_page(file,pages,folder)
+        
+        if file and os.path.basename(file.src_path).lower() not in ['index.md', 'readme.md']:
+        # if file:
+            page = file.page
+            print("     {}".format(page.title))
+            children.append({
+                "title": "{}".format(page.title),
+                "active": page.file.abs_src_path == current_page.file.abs_src_path,
+                "url": page.abs_url,
+                "summary": _get_description(page),
+                "level": level,
+                "as_code": True,
+                "meta": page.meta,
+                "children": []
+                })
+    return children
 
 def _get_description(page):
     if "summary" in page.meta:

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block post_content %}
+{% set cards = page|get_children(pages) %}
+{% set tabs = {} %}
+{% for Card in cards[0].children %}
+{% set tab = Card.meta.tab %}
+{% if tab not in tabs %}{% do tabs.update({tab: []}) %}{% endif %}
+    {% for card in cards[0].children %}
+    {% if card.meta.tab == tab and card not in tabs[tab] %}
+    {% do tabs[tab].append(card) %}
+    {% endif %}
+    {% endfor %}
+{% endfor %}
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+<li class="nav-item">
+    <a class="nav-link disabled">{{ page.meta.tab_title }}:</a>
+</li>
+{% for tab in tabs %}
+<li class="nav-item">
+    <a class="nav-link" id="{{ tab }}-tab" data-toggle="tab" href="#{{ tab.replace(' ','') }}" role="tab" aria-controls="{{ tab.replace(' ','') }}">{{ tab }}</a>
+</li>
+{% endfor %}
+</ul>
+
+{% set i = 0 %}
+<div class="tab-content" id="myTabContent">
+{% for tab in tabs %}
+<div class="tab-pane fade" id="{{ tab.replace(' ','') }}" role="tabpanel" aria-labelledby="{{ tab.replace(' ','') }}-tab">
+{% for card in tabs[tab] %}
+<div class="card">
+    <div class="row no-gutters">
+        {% if card.image %}
+        <div class="col-md-4">
+            <img src="{{ card.image }}" class="card-image">
+        </div>
+        {% endif %}
+        <div class="col-md-{{ '5' if card.image else '7' }}">
+        <div class="card-body">
+        <a href="{{ card.url }}" class="stretched-link">
+        <h5 class="card-title">{{ card.title }}</h5>
+        </a>
+        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+        <p class="card-text">{{ card.summary if card.summary else "" }}</p>
+        </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+</div>
+{% set i = i + 1 %}
+{% endfor %}
+</div>
+{% endblock %}
+
