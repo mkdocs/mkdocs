@@ -29,6 +29,30 @@ markdown_extensions = [
     '.md'
 ]
 
+# def my_compose_document(self):
+#     #https://stackoverflow.com/questions/44910886/pyyaml-include-file-and-yaml-aliases-anchors-references/44913652#44913652
+#     self.get_event()
+#     node = self.compose_node(None, None)
+#     self.get_event()
+#     # self.anchors = {}    # <<<< commented out
+#     return node
+
+# # adapted from http://code.activestate.com/recipes/577613-yaml-include-support/
+# def yaml_include(loader, node):
+#     with open(node.value) as inputfile:
+#         return list(my_safe_load(inputfile, master=loader).values())[0]
+# #              leave out the [0] if your include file drops the key ^^
+
+# yaml.SafeLoader.compose_document = my_compose_document
+
+# def my_safe_load(stream, Loader=yaml.SafeLoader, master=None):
+#     loader = Loader(stream)
+#     if master is not None:
+#         loader.anchors = master.anchors
+#     try:
+#         return loader.get_single_data()
+#     finally:
+#         loader.dispose()
 
 def yaml_load(source, loader=yaml.Loader):
     """
@@ -45,6 +69,7 @@ def yaml_load(source, loader=yaml.Loader):
         """
         return self.construct_scalar(node)
 
+
     class Loader(loader):
         """
         Define a custom loader derived from the global loader to leave the
@@ -53,8 +78,9 @@ def yaml_load(source, loader=yaml.Loader):
 
     # Attach our unicode constructor to our custom loader ensuring all strings
     # will be unicode on translation.
+    # Loader.compose_document = my_compose_document
+    # Loader.add_constructor("!include", yaml_include)
     Loader.add_constructor('tag:yaml.org,2002:str', construct_yaml_str)
-
     try:
         return yaml.load(source, Loader)
     finally:

@@ -28,7 +28,7 @@
 {% for tab in tabs %}
 <div class="tab-pane fade" id="{{ tab.replace(' ','') }}" role="tabpanel" aria-labelledby="{{ tab.replace(' ','') }}-tab">
 {% for card in tabs[tab] %}
-<div class="card bg-light">
+<div class="card">
     <div class="row no-gutters">
         {% if card.image %}
         <div class="col-md-4">
@@ -40,6 +40,7 @@
         <a href="{{ card.url }}" class="stretched-link">
         <h5 class="card-title">{{ card.title }}</h5>
         </a>
+        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
         <p class="card-text">{{ card.summary if card.summary else "" }}</p>
         </div>
         </div>

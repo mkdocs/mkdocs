@@ -114,5 +114,6 @@ class Theme:
         env.filters['url'] = filters.url_filter
         env.filters['sidebar'] = filters.sidebar
         env.filters['get_children'] = filters.get_children
+        env.filters['dirname'] = os.path.dirname
         return env
 

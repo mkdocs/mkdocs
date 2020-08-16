@@ -32,7 +32,7 @@
     <div class="row no-gutters">
         {% if card.image %}
         <div class="col-md-4">
-            <img src="{{ card.image }}" class="card-image">
+            <img src="{{ card.url|dirname|dirname }}/{{ card.image }}" class="card-image">
         </div>
         {% endif %}
         <div class="col-md-{{ '5' if card.image else '7' }}">
