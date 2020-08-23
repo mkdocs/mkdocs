@@ -5,7 +5,7 @@ import re
 import os
 import sys
 
-__version__ = '0.0.0'
+__version__ = '0.0.1'
 
 long_description = (
     "`elstir` is a fork of `mkdocs`. `mkdocs` is a fast, simple and downright gorgeous static site generator "
