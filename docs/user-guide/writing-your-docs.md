@@ -76,8 +76,7 @@ nested URLs, like so:
 
 Any files which are not identified as Markdown files (by their file extension)
 within the [documentation directory](configuration.md#docs_dir) are copied by
-MkDocs to the built site unaltered. See [how to link to images and media]
-(#linking_to_images_and_media) below for details.
+MkDocs to the built site unaltered. See [how to link to images and media](#linking_to_images_and_media) below for details.
 
 ### Index pages
 
