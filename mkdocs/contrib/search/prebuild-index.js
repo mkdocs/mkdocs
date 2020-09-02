@@ -19,9 +19,11 @@ stdin.on('end', function () {
       lang = data.config.lang;
       if (lang.length > 1 || lang[0] !== "en") {
         require('./lunr-language/lunr.stemmer.support')(lunr);
-        require('./lunr-language/tinyseg')(lunr);
         if (lang.length > 1) {
           require('./lunr-language/lunr.multi')(lunr);
+        }
+        if (lang.includes("ja") || lang.includes("jp")) {
+          require('./lunr-language/tinyseg')(lunr);
         }
         for (var i=0; i < lang.length; i++) {
           if (lang[i] != 'en') {
