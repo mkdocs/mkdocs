@@ -302,12 +302,12 @@ def build(config, live_server=False, dirty=False):
 
         log.info('Documentation built in %.2f seconds', time() - start)
 
-    except BuildError as error:
+    except Exception as e:
         # Run `build_error` plugin events.
-        config['plugins'].run_event('build_error', error=error)
-        if error.reraise:
-            raise error
-        raise SystemExit('\n' + str(error))
+        config['plugins'].run_event('build_error', error=e)
+        if isinstance(e, BuildError):
+            raise SystemExit('\n' + str(e))
+        raise
 
 
 def site_directory_contains_stale_files(site_directory):

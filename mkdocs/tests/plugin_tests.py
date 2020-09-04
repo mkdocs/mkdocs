@@ -155,7 +155,7 @@ class TestPluginCollection(unittest.TestCase):
 
             def on_pre_page(self, page, **kwargs):
                 if self.error_on == 'pre_page':
-                    raise BuildError('pre page error', reraise=True)
+                    raise BuildError('pre page error')
                 return page
 
             def on_page_markdown(self, markdown, **kwargs):
@@ -168,8 +168,16 @@ class TestPluginCollection(unittest.TestCase):
                     raise PluginError('page content error')
                 return html
 
+            def on_post_page(self, html, **kwargs):
+                if self.error_on == 'post_page':
+                    raise ValueError('post page error')
+
             def on_build_error(self, error, **kwargs):
                 build_errors.append(error)
+
+        cfg = load_config()
+        cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='pre_page')
+        self.assertRaises(SystemExit, build.build, cfg)
 
         cfg = load_config()
         cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='page_markdown')
@@ -180,20 +188,22 @@ class TestPluginCollection(unittest.TestCase):
         self.assertRaises(SystemExit, build.build, cfg)
 
         cfg = load_config()
+        cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='post_page')
+        self.assertRaises(ValueError, build.build, cfg)
+
+        cfg = load_config()
         cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='')
         build.build(cfg)
 
-        cfg = load_config()
-        cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='pre_page')
-        self.assertRaises(BuildError, build.build, cfg)
-
-        self.assertEqual(len(build_errors), 3)
+        self.assertEqual(len(build_errors), 4)
         self.assertIs(build_errors[0].__class__, BuildError)
-        self.assertEqual(build_errors[0].message, 'page markdown error')
-        self.assertIs(build_errors[1].__class__, PluginError)
-        self.assertEqual(build_errors[1].message, 'page content error')
-        self.assertIs(build_errors[2].__class__, BuildError)
-        self.assertEqual(build_errors[2].message, 'pre page error')
+        self.assertEqual(str(build_errors[0]), 'pre page error')
+        self.assertIs(build_errors[1].__class__, BuildError)
+        self.assertEqual(str(build_errors[1]), 'page markdown error')
+        self.assertIs(build_errors[2].__class__, PluginError)
+        self.assertEqual(str(build_errors[2]), 'page content error')
+        self.assertIs(build_errors[3].__class__, ValueError)
+        self.assertEqual(str(build_errors[3]), 'post page error')
 
 
 MockEntryPoint = mock.Mock()
