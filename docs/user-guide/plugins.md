@@ -231,8 +231,8 @@ entire site.
 
 ##### on_build_error
 
-:   The `build_error` event is called after a `mkdocs.exceptions.BuildError` or
-    `mkdocs.exceptions.PluginError` is caught by MkDocs during the build process.
+:   The `build_error` event is called after an exception of any kind
+    is caught by MkDocs during the build process.
     Use this event to clean things up before MkDocs terminates. Note that any other
     events which were scheduled to run after the error will have been skipped. See
     [Handling Errors] for more details.
@@ -416,14 +416,7 @@ Therefore, you might want to catch any exceptions within your plugin and raise a
 `PluginError`, passing in your own custom-crafted message, so that the build
 process is aborted with a helpful message.
 
-The `PluginError` accepts a `reraise` boolean argument which allows you to
-control whether the error should be raised again by MkDocs (resulting in a
-traceback), or if MkDocs should simply abort the build and exit with the message
-only.
-
-The default is to **not** re-raise the exception. In either case (re-raising or
-not), the [on_build_error] event will be triggered for any `BuildError` or
-`PluginError`.
+The [on_build_error] event will be triggered for any exception.
 
 For example:
 
@@ -438,28 +431,7 @@ class MyPlugin(BasePlugin):
             # some code that could throw a KeyError
             ...
         except KeyError as error:
-            raise PluginError(str(error))  # reraise=False by default
-
-    def on_build_error(self, error):
-        # some code to clean things up
-        ...
-```
-
-To abort the build, trigger the `on_build_error` event, and still show the traceback,
-simply pass `reraise=True`:
-
-```python
-from mkdocs.exceptions import PluginError
-from mkdocs.plugins import BasePlugin
-
-
-class MyPlugin(BasePlugin):
-    def on_post_page(self, output, page, config, **kwargs):
-        try:
-            # some code that could throw a KeyError
-            ...
-        except KeyError as error:
-            raise PluginError(reraise=True) from error
+            raise PluginError(str(error))
 
     def on_build_error(self, error):
         # some code to clean things up
