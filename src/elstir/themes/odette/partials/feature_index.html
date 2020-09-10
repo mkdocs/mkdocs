@@ -1,21 +1,24 @@
 {% extends "base.html" %}
 {% block post_content %}
 {% set cards = page|get_children(pages) %}
+<div class="mt-3 pt-3">
 {% for card in cards[0].children %}
 <hr>
-<div class="row mb-5 pb-md-4 align-items-center">
-   <div class="col-md-{{ '5' if card.image else '8' }}">
+<div class="row mb-4  mx-4 align-items-center">
+   <div class="col-md-{{ '5' if card.image else '7' }} ml-5 mr-auto">
       <h2>{{ card.title }}</h2>
-      <p class="lead font-weight-normal">{{ card.summary if card.summary else "" }}</p>
+      <p class="font-weight-normal">{{ card.summary if card.summary else "" }}</p>
       <p>{{ card.description if card.description else "" }}</p>
       <a class="btn btn-lg btn-outline-primary mb-3" href="{{ card.url }}">Explore</a>
    </div>
    {% if card.image %}
-   <div class="col-md-6 pl-md-5">
-        <img class="img-fluid mt-3 mx-auto" src="{{ card.image }}" loading="lazy" width="500">
+   <div class="col-md-4 mx-auto ">
+        <img class="img-fluid mt-3 mx-auto" src="{{ card.image }}" width="300">
+        <!-- <img class="img-fluid mt-3 mx-auto" src="{{ card.image }}" loading="lazy" width="500"> -->
    </div>
    {% endif %}
 </div>
 {% endfor %}
+</div>
 {% endblock %}
 

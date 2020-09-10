@@ -43,6 +43,7 @@ article {
     border-radius: 1.5px;
     padding: 40px;
     display: block;
+    margin-bottom: 1.5rem;
 }
 
 /* .navbar-nav .dropdown-menu {
@@ -76,7 +77,7 @@ kbd {
 
 body {
     display: flex;
-    min-height: 97vh;
+    min-height: 100vh;
     flex-direction: column;
 }
 .container {

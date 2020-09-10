@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block post_content %}
 {% set cards = page|get_children(pages) %}
+<div class="container mt-3 pt-3">
 {% for card in cards[0].children %}
-<div class="card bg-gray">
+<div class="card bg-gray my-1">
     <div class="row no-gutters">
         {% if card.image %}
         <div class="col-md-4 justify-content-center">
@@ -20,5 +21,6 @@
     </div>
 </div>
 {% endfor %}
+</div>
 {% endblock %}
 

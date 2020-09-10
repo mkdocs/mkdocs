@@ -205,14 +205,14 @@
             </div>
         </div>
         </main>
-        <footer class="footer">
-            <hr>
+        <footer class="footer mb-3 mt-2">
+        <hr class="mt-0 mb-2">
             <!-- https://webdesign.tutsplus.com/tutorials/how-to-build-a-responsive-multi-level-sticky-footer-with-flexbox--cms-33341 -->
             <section class="ft-legal container">
                 <div class="row">
                     <div class="col-md-3 mr-auto">
                         {%- if config.copyright %}
-                            {{ config.copyright }}
+                            <p class="my-0 font-size-base">{{ config.copyright }}</p>
                         {%- endif %}
                     </div>
                     <div class="col-md-3 ml-auto">
