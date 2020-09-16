@@ -5,19 +5,19 @@
 {% for card in cards[0].children %}
 <div class="card bg-gray my-1">
     <div class="row no-gutters">
-        {% if card.image %}
-        <div class="col-md-4 justify-content-center">
-            <img src="{{ card.image }}" class="card-image">
-        </div>
-        {% endif %}
         <div class="col-md-{{ '5' if card.image else '7' }}">
         <div class="card-body">
         <a href="{{ card.url }}" class="stretched-link">
         <h5 class="card-title">{{ card.title }}</h5>
         </a>
-        <p class="card-text">{{ card.summary if card.summary else "" }}</p>
+        <p class="card-text">{{ card.synopsis if card.synopsis else "" }}</p>
         </div>
         </div>
+        {% if card.image %}
+        <div class="col-md-4 ml-auto mr-2">
+            <img src="{{ card.image }}" class="card-image" width=220>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endfor %}
