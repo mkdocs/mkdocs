@@ -200,7 +200,7 @@ def _get_dir_children(dirs, pages, folder, current_page, level, depth):
                 "title": page.title,
                 "active": page.file.abs_src_path == current_page.file.abs_src_path,
                 "url": page.abs_url,
-                "summary": _get_description(page),
+                "synopsis": _get_description(page),
                 "level": level,
                 "image": _get_dir_image(page.file.abs_src_path),
                 "meta": page.meta,
@@ -222,7 +222,7 @@ def _get_idx_children(files, pages, folder, current_page, level):
                 "title": "{}".format(page.title),
                 "active": page.file.abs_src_path == current_page.file.abs_src_path,
                 "url": page.abs_url,
-                "summary": _get_description(page),
+                "synopsis": _get_description(page),
                 "level": level,
                 "as_code": True,
                 "meta": page.meta,
@@ -235,6 +235,8 @@ def _get_description(page):
         return page.meta["summary"]
     elif "description" in page.meta:
         return page.meta["description"]
+    elif "synopsis" in page.meta:
+        return page.meta["synopsis"]
     else:
         return False
 

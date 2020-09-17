@@ -10,7 +10,9 @@
         <a href="{{ card.url }}" class="stretched-link">
         <h5 class="card-title">{{ card.title }}</h5>
         </a>
-        <p class="card-text">{{ card.synopsis if card.synopsis else "" }}</p>
+        {% if card.synopsis %}
+            <p class="card-text">{{ card.synopsis }}</p>
+        {% endif %}
         </div>
         </div>
         {% if card.image %}

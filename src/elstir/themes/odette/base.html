@@ -124,7 +124,8 @@
                       {%- endblock %}
 
                       {%- block next_prev %}
-                        {%- if page and (page.next_page or page.previous_page) %}
+                        {% if false %}
+                        {#- if page and (page.next_page or page.previous_page) #}
                             <!-- <li class="nav-item">
                                 <a rel="prev" {% if page.previous_page %}href="{{ page.previous_page.url|url }}" class="nav-link"{% else %}class="nav-link disabled"{% endif %}>
                                     <i class="fa fa-arrow-left"></i> Previous
@@ -158,10 +159,6 @@
                                 <a href="{{ config.repo_url }}" class="nav-link">
                                     {%- if config.repo_name == 'GitHub' -%}
                                         <i class="fa fa-github"></i> {{ config.repo_name }}
-                                    <!-- {%- elif config.repo_name == 'Bitbucket' -%}
-                                        <i class="fa fa-bitbucket"></i> {{ config.repo_name }}
-                                    {%- elif config.repo_name == 'GitLab' -%}
-                                        <i class="fa fa-gitlab"></i> {{ config.repo_name }} -->
                                     {%- else -%}
                                     {{ config.repo_name }}
                                     {%- endif -%}
@@ -175,7 +172,8 @@
         </div>
         <div class="container">
             <main class="Site-content">
-            {% if page and not page.is_homepage %}
+            {% if false %}
+            {# if page and not page.is_homepage #}
             <!-- <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="#">Home</a></li>
@@ -207,7 +205,9 @@
         </main>
         <footer class="footer mb-3 mt-2">
         <hr class="mt-0 mb-2">
+            {% if false %}
             <!-- https://webdesign.tutsplus.com/tutorials/how-to-build-a-responsive-multi-level-sticky-footer-with-flexbox--cms-33341 -->
+            {% endif %}
             <section class="ft-legal container">
                 <div class="row">
                     <div class="col-md-3 mr-auto">
