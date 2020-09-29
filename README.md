@@ -1,12 +1,12 @@
 ---
 title: Elstir
-summary: 'Academic document publishing forked from <a href="https://www.mkdocs.org/">MkDocs</a>.'
+summary: 'Academic web publishing forked from <a href="https://www.mkdocs.org/">MkDocs</a>.'
 description: 'Elstir is a command line tool that was forked from <a href="https://www.mkdocs.org/">MkDocs</a> and introduces improvements to better accommodate the organized publication of academic projects to the web.'
 ...
 
 <h1>Elstir</h1>
 
-Academic document publishing forked from <a href="https://www.mkdocs.org/">MkDocs</a>.
+Academic web publishing forked from <a href="https://www.mkdocs.org/">MkDocs</a>.
 
 ---
 

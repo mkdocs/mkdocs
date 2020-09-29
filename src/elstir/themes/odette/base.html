@@ -196,7 +196,7 @@
                         <article class="col-md-{{ '12' if page.meta.hide_toc else '9' }} p-3">
                         {% include "content.html" %}
                         {% block post_content %}{% endblock %}
-                        </article>
+                        </article><!--<a href="#" onclick="printInfo(this)">Print</a>-->
                         <!-- <div class="col-md-8" role="main">{# include "content.html" #}</div> -->
                     {% endif %}
                 {%- endblock %}
@@ -236,6 +236,17 @@
                 shortcuts = {{ config.theme.shortcuts | tojson }};
         </script>
         <script src="{{ 'js/base.js'|url }}" defer></script>
+        <!-- <script>
+            function printInfo(ele) {
+                var openWindow = window.open("", "title", "attributes");
+                openWindow.document.write(ele.previousSibling.innerHTML);
+                openWindow.document.close();
+                openWindow.focus();
+                openWindow.print();
+                openWindow.close();
+            }
+        </script> -->
+
         {%- for path in config['extra_javascript'] %}
         <script src="{{ path|url }}" defer></script>
         {%- endfor %}
