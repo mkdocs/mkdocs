@@ -143,7 +143,12 @@ def _open_config_file(config_file):
 
     # Default to the standard config filename.
     if config_file is None:
-        config_file = os.path.abspath('mkdocs.yml')
+        for possible_file_ending in ('yml', 'yaml'):
+            config_file = os.path.abspath('mkdocs.{}'.format(possible_file_ending))
+            if os.path.exists(config_file):
+                break
+        else:
+            config_file = os.path.abspath('mkdocs.yml')
 
     # If closed file descriptor, get file path to reopen later.
     if hasattr(config_file, 'closed') and config_file.closed:
