@@ -131,7 +131,6 @@ class ConfigBaseTests(unittest.TestCase):
             temp_dir.cleanup()
             os.chdir(old_dir)
 
-
     def test_load_from_missing_file(self):
 
         self.assertRaises(exceptions.ConfigurationError,
