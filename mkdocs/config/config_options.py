@@ -1,5 +1,6 @@
 import os
-from collections import Sequence, namedtuple
+from collections import namedtuple
+from collections.abc import Sequence
 from urllib.parse import urlparse
 import ipaddress
 import markdown
