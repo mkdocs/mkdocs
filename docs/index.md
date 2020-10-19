@@ -357,7 +357,7 @@ the MkDocs IRC channel `#mkdocs` on freenode.
 [nav]: user-guide/configuration/#nav
 [discussion group]: https://groups.google.com/forum/#!forum/mkdocs
 [GitHub issues]: https://github.com/mkdocs/mkdocs/issues
-[GitHub project pages]: https://help.github.com/articles/creating-project-pages-manually/
+[GitHub project pages]: https://docs.github.com/en/enterprise-server@2.22/github/working-with-github-pages/creating-a-github-pages-site
 [pip]: https://pip.readthedocs.io/en/stable/installing/
 [Python]: https://www.python.org/
 [site_name]: user-guide/configuration/#site_name
