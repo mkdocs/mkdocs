@@ -5,20 +5,21 @@
 {% for Card in cards[0].children %}
 {% set tab = Card.meta.tab %}
 {% if tab not in tabs %}{% do tabs.update({tab: []}) %}{% endif %}
-    {% for card in cards[0].children %}
+    {% for card in cards[0].children %} {#  #}
     {% if card.meta.tab == tab and card not in tabs[tab] %}
     {% do tabs[tab].append(card) %}
     {% endif %}
     {% endfor %}
 {% endfor %}
 
+<div class="filters">
 <div class="input-group">
   <div class="input-group-prepend">
     <label class="input-group-text" for="inputGroupSelect01">
         {{ page.meta.tab_title }}
     </label>
   </div>
-<select class="custom-select" data-toggle="buttons" role="menu">
+<select class="custom-select" id="inputGroupSelect01" data-toggle="buttons" role="menu">
 {% for tab in tabs %}
 <option class="btn" value="{{ tab }}-tab" id="{{ tab }}-tab"  data-toggle="tab" role="tab" type="button" href="#{{ tab.replace(' ','') }}" aria-controls="{{ tab.replace(' ','') }}">
     {{ tab }}
@@ -27,12 +28,35 @@
 </select>
 </div>
 
+<div class="input-group">
+  <div class="input-group-prepend">
+    <label class="input-group-text" for="inputGroupSelect02">
+        Filter-2
+    </label>
+  </div>
+<select class="custom-select" id="inputGroupSelect02" data-toggle="buttons" role="menu">
+{% for tab in tabs %}
+<option class="btn" value="{{ tab }}-tab" id="{{ tab }}-tab"  data-toggle="tab" role="tab" type="button" href="#{{ tab.replace(' ','') }}" aria-controls="{{ tab.replace(' ','') }}">
+    {{ tab }}
+</option>
+<option class="btn" value="{{ tab }}-tab" id="{{ tab }}-tab"  data-toggle="tab" role="tab" type="button" href="#{{ tab.replace(' ','') }}" aria-controls="{{ tab.replace(' ','') }}">
+    {{ tab }}
+</option>
+<option class="btn" value="{{ tab }}-tab" id="{{ tab }}-tab"  data-toggle="tab" role="tab" type="button" href="#{{ tab.replace(' ','') }}" aria-controls="{{ tab.replace(' ','') }}">
+    {{ tab }}
+</option>
+{% endfor %}
+</select>
+</div>
+</div> <!--filters-->
+
+
 {% set i = 0 %}
 <div class="tab-content" id="myTabContent">
 {% for tab in tabs %}
 <div class="tab-pane fade" id="{{ tab.replace(' ','') }}" role="tabpanel" aria-labelledby="{{ tab.replace(' ','') }}-tab">
 {% for card in tabs[tab] %}
-<div class="card">
+<div class="card show">
     <div class="row no-gutters">
         {% if card.image %}
         <div class="col-md-4">
@@ -57,3 +81,66 @@
 </div>
 {% endblock %}
 
+<script>
+    let selectedFilters = [];
+    const images = [...document.querySelectorAll('.card')];
+    const filters = [...document.querySelectorAll('.filters select')];
+
+    for (const filter of filters) {
+    filter.addEventListener('change', function(event) {
+        selectedFilters = filters.map(filter => filter.value).filter(Boolean);
+        console.log(selectedFilters);
+        for (const image of images) {
+        image.classList[selectedFilters.some(filter => image.classList.contains(filter)) 
+            ? 'add'
+            : 'remove']('visible');
+        }
+    })
+    }
+    elstir_filterSelection("all")
+    function elstir_filterSelection(c) {
+        var x, i;
+        x = document.getElementsByClassName("card");
+        if (c=="all") c="";
+        for (i=0; i<x.length; i++) {
+            elstir_removeClass(x[i], "show")
+            if (x[i].className.indexOf(c) > -1) elstir_addClass(x[i], "show")
+        }
+    }
+
+    // Hide elements that are not selected
+    function elstir_addClass(element, name) {
+        var i, arr1, arr2;
+        arr1 = element.className.split(" ");
+        arr2 = name.split(" ");
+        for (i = 0; i < arr2.length; i++) {
+          if (arr1.indexOf(arr2[i]) == -1) {
+            element.className += " " + arr2[i];
+          }
+        }
+    }
+    
+    // Hide elements that are not selected
+    function elstir_removeClass(element, name) {
+        var i, arr1, arr2;
+        arr1 = element.className.split(" ");
+        arr2 = name.split(" ");
+        for (i = 0; i < arr2.length; i++) {
+        while (arr1.indexOf(arr2[i]) > -1) {
+            arr1.splice(arr1.indexOf(arr2[i]), 1);
+        }
+        }
+        element.className = arr1.join(" ");
+    }
+  
+    // Add active class to the current control button (highlight it)
+    var btnContainer = document.getElementById("myBtnContainer");
+    var btns = btnContainer.getElementsByClassName("btn");
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", function() {
+        var current = document.getElementsByClassName("active");
+        current[0].className = current[0].className.replace(" active", "");
+        this.className += " active";
+        });
+    }
+</script>

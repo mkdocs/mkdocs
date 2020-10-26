@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block post_content %}
+{% set cards = page|get_children(pages) %}
+{% set tabs = {} %}
+{% for Card in cards[0].children %}
+{% set tab = Card.meta.tab %}
+{% if tab not in tabs %}{% do tabs.update({tab: []}) %}{% endif %}
+    {% for card in cards[0].children %}{% if card.meta.tab == tab and card not in tabs[tab] %}{% do tabs[tab].append(card) %}{% endif %}{% endfor %}
+{% endfor %}
+
+<div class="filter">
+<div class="input-group">
+  <div class="input-group-prepend md-1">
+    <label class="input-group-text" for="inputGroupSelect01">
+        {{ page.meta.tab_title }}
+    </label>
+  </div>
+<select class="custom-select" id="inputGroupSelect01" data-toggle="buttons" role="menu">
+{% for tab in tabs %}
+<option class="btn" value="{{ tab.replace(' ','-') }}" id="{{ tab }}-tab" type="button" href="#{{ tab.replace(' ','') }}" aria-controls="{{ tab.replace(' ','') }}">
+    {{ tab }}
+</option>
+{% endfor %}
+</select>
+</div>
+
+<div class="input-group">
+  <div class="input-group-prepend md-1">
+    <label class="input-group-text" for="inputGroupSelect02">
+        FEM
+    </label>
+  </div>
+<select class="custom-select" id="inputGroupSelect02" data-toggle="buttons" role="menu">
+<option class="btn" value="OpenSeesPy" type="button" >
+    OpenSeesPy
+</option>
+<option class="btn" value="OpenSees"  type="button" >
+    OpenSees
+</option>
+<option class="btn" value="FEAP" type="button" >
+    FEAP
+</option>
+</select>
+</div> <!-- input-group -->
+</div> <!--filter-->
+
+
+{% set i = 0 %}
+<div class="gallery" id="gallery">
+{# for tab in tabs #}
+{% for card in cards[0].children %}
+<div class="card {{ card.meta.tab.replace(' ','-') }} {{ 'OpenSees' if i % 2 else 'FEAP' }} gallery-item">
+    <div class="row no-gutters">
+        {% if card.image %}
+        <div class="col-md-4">
+            <img src="{{ card.image }}" class="card-image">
+        </div>
+        {% endif %}
+        <div class="col-md-{{ '5' if card.image else '7' }}">
+        <div class="card-body">
+        <a href="{{ card.url }}" class="stretched-link">
+        <h5 class="card-title">{{ card.title }}</h5>
+        </a>
+        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+        <p class="card-text">{{ card.summary if card.summary else "" }}</p>
+        </div>
+        </div>
+    </div>
+</div>
+{% set i = i + 1 %}
+{% endfor %}
+{# endfor #}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    let selectedFilters = [];
+    //const images = [...document.querySelectorAll('.card')];
+    //const images = [ ...document.getElementById("gallery").children];
+    //const images = [].slice.call(document.getElementById('gallery').getElementsByTagName('*'),0);
+    const images = document.getElementsByClassName("gallery-item");
+    const filters = [...document.querySelectorAll('.filter select')];
+
+    var show = function (elem) {
+        elem.style.display = 'block';
+    };
+    var hide = function (elem) {
+        elem.style.display = 'none';
+    };
+    
+    for (const filter of filters) {
+    filter.addEventListener('change', function(event) {
+        selectedFilters = filters.map(filter => filter.value).filter(Boolean);
+        console.log(selectedFilters);
+        for (const image of images) {
+            //image.classList[selectedFilters.some(filter => image.classList.contains(filter)) 
+            //    ? 'add'
+            //    : 'remove']('visible');
+            //image.classList[selectedFilters.some(filter => image.classList.contains(filter)) 
+            //    ? 'remove'
+            //    : 'add']('invisible');
+            if (selectedFilters.every(filter => image.classList.contains(filter))) {
+                show(image);
+            }
+            else {hide(image)}
+        }
+    })
+    }
+
+</script>
+{% endblock %}
