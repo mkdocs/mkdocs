@@ -12,17 +12,19 @@
     {% endfor %}
 {% endfor %}
 
-<div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<div class="input-group">
+  <div class="input-group-prepend">
+    <label class="input-group-text" for="inputGroupSelect01">
         {{ page.meta.tab_title }}
-    </button>
-<div class="dropdown-menu btn-group-toggle" data-toggle="buttons" role="menu">
+    </label>
+  </div>
+<select class="custom-select" data-toggle="buttons" role="menu">
 {% for tab in tabs %}
-<button class="btn dropdown-item" id="{{ tab }}-tab"  data-toggle="tab" role="tab" type="button" href="#{{ tab.replace(' ','') }}" aria-controls="{{ tab.replace(' ','') }}">
+<option class="btn" value="{{ tab }}-tab" id="{{ tab }}-tab"  data-toggle="tab" role="tab" type="button" href="#{{ tab.replace(' ','') }}" aria-controls="{{ tab.replace(' ','') }}">
     {{ tab }}
-</button>
+</option>
 {% endfor %}
-</div>
+</select>
 </div>
 
 {% set i = 0 %}
