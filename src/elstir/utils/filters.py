@@ -148,7 +148,6 @@ def _get_dir_image(page_path):
 
 
 def _index_dirs(folder, pages, page, depth=2):
-    print("_INDEX_DIRS(")
     list_of_files = []
     dirs = [dr for dr in os.listdir(folder) if not os.path.isfile(os.path.join(folder,dr))]
     if _get_dir_index(folder,pages):
@@ -192,16 +191,6 @@ def _index_files(folder, pages, page, depth=2):
          "url": _get_dir_index(folder,pages).page.abs_url,
          "level": 1,
          "children": _get_idx_children(files, pages, folder, page, 2),
-        #  "children": [{
-        #     "title": "{}".format(_get_dir_page(file,pages,folder).page.title),
-        #     "active": _get_dir_page(file,pages,folder).page.file.abs_src_path == page.file.abs_src_path,
-        #     "url": _get_dir_page(file,pages,folder).page.abs_url,
-        #     "summary": _get_description(_get_dir_page(file,pages,folder).page),
-        #     "level": 2,
-        #     "as_code": True,
-        #     "meta": _get_dir_page(file,pages,folder).page.meta,
-        #     "children": []
-        #     } for file in files if _get_dir_page(file,pages,folder)]
         })
     return list_of_files
 
@@ -209,11 +198,11 @@ def _get_dir_children(dirs, pages, folder, current_page: object, level, depth):
     children = []
     if "template_data" in current_page.meta:
         data_fields = current_page.meta['template_data']
-        print(current_page.meta)
-        print(f"DATA FIELDS: {data_fields}")
+        # print(current_page.meta)
+        print(f"_get_dir_children.data_fields : {data_fields}")
     else:
         data_fields = False
-    print("GET_DIR_CHILDREN")
+    # print("GET_DIR_CHILDREN")
     for dr in dirs:
         file = _get_dir_index(dr,pages,folder)
         if file:
@@ -227,7 +216,6 @@ def _get_dir_children(dirs, pages, folder, current_page: object, level, depth):
                     sub_children = _get_idx_children(files, pages, sub_folder, page, level+1)
             else:
                 sub_children = []
-            # print(dr)
             children.append({
                 "title": page.title,
                 "active": page.file.abs_src_path == current_page.file.abs_src_path,
