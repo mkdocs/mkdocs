@@ -66,7 +66,7 @@
                 <a class="navbar-brand" href="{{ nav.homepage.url|url }}">{{ config.site_name }}</a>
                 {%- endblock %}
 
-                {%- if nav|length>1 or (page and (page.next_page or page.previous_page)) or config.repo_url %}
+                {%- if nav|length>0 or (page and (page.next_page or page.previous_page)) or config.repo_url %}
                 <!-- Expander button -->
                 <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
                     <span class="navbar-toggler-icon"></span>
@@ -76,7 +76,7 @@
                 <!-- Expanded navigation -->
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                   {%- block site_nav %}
-                    {%- if nav|length>1 %}
+                    {%- if nav|length>0 %}
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                         {%- for nav_item in nav %}
