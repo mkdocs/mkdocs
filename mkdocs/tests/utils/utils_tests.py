@@ -189,10 +189,8 @@ class UtilsTests(unittest.TestCase):
         )
 
     def test_get_themes(self):
-
-        self.assertEqual(
-            sorted(utils.get_theme_names()),
-            ['mkdocs', 'readthedocs'])
+        builtin = ['mkdocs', 'readthedocs']
+        self.assertEqual(builtin, sorted(list(set(builtin) & set(utils.get_theme_names()))))
 
     @mock.patch('pkg_resources.iter_entry_points', autospec=True)
     def test_get_theme_dir(self, mock_iter):
