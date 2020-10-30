@@ -25,18 +25,18 @@
 <summary>Filters</summary>
 <div class="filter">
 {% set filters = filters[0][1] %}{% for f in  filters %}
-<div class="input-group col-md-5">
+<div class="input-group col-md-5 my-1">
   <div class="input-group-prepend">
     <label class="input-group-text" for="inputGroupSelect0{{ loop.index }}">
         <div class="custom-control custom-switch form-switch">
-            <input type="checkbox" class="custom-control-input" id="customSwitch-{{ loop.index }}" checked >
+            <input type="checkbox" class="custom-control-input" id="customSwitch-{{ loop.index }}"  onchange="document.getElementById('inputGroupSelect0{{ loop.index }}').disabled = !this.checked;" />
             <label class="custom-control-label" for="customSwitch-{{ loop.index }}">
             {{ f }}
             </label>
         </div>
     </label>
   </div>
-<select class="custom-select" id="inputGroupSelect0{{ loop.index }}" data-toggle="buttons" role="menu">
+<select class="custom-select" id="inputGroupSelect0{{ loop.index }}" data-toggle="buttons" role="menu" disabled>
 <!-- <option class="btn" value="{% for fi in cards[0].filters[filters[f]] %} {{ fi }}{% endfor %}" id="{{ f }}-Any" type="button" href="#{{ f }}-Any" aria-controls="{{ f.replace(' ','') }}-Any">
     Any
 </option> -->
@@ -95,6 +95,7 @@
     //const images = [].slice.call(document.getElementById('gallery').getElementsByTagName('*'),0);
     const images = document.getElementsByClassName("gallery-item");
     const filters = [...document.querySelectorAll('.filter select')];
+    const toggles = [...document.querySelectorAll('.filter input')];
 
     var show = function (elem) {
         elem.style.display = 'block';
@@ -102,6 +103,9 @@
     var hide = function (elem) {
         elem.style.display = 'none';
     };
+    function toggleFilter(el,elid) {
+        document.getElementById('inputGroupSelect0{{ loop.index }}').disabled = !el.checked;
+    }
     
     for (const filter of filters) {
     filter.addEventListener('change', function(event) {
@@ -120,6 +124,12 @@
             else {hide(image)}
         }
     })
+    }
+    for (const toggle of toggles) {
+        toggle.addEventListener('change', function(event) {
+            console.log(toggle.closest('.input-group').querySelector("select"));
+            toggle.closest(".input-group").querySelector("select")
+        })
     }
 
 </script>

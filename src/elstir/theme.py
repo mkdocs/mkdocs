@@ -111,6 +111,7 @@ class Theme:
         loader = jinja2.FileSystemLoader(self.dirs)
         env = jinja2.Environment(loader=loader, extensions=['jinja2.ext.do'])
         env.filters['tojson'] = filters.tojson
+        env.filters['list'] = list
         env.filters['url'] = filters.url_filter
         env.filters['sidebar'] = filters.sidebar
         env.filters['get_children'] = filters.get_children

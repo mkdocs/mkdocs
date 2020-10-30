@@ -125,8 +125,8 @@ class Page:
             except ValueError:
                 log.error('Encoding error reading file: {}'.format(self.file.src_path))
                 raise
-
-        self.markdown, self.meta = meta.get_data(source)
+        include_dirs = config['meta_includes'] if "meta_includes" in config else None
+        self.markdown, self.meta = meta.get_data(source, include_dirs=include_dirs)
         self._set_title()
 
     def _set_title(self):

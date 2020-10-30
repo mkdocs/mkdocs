@@ -50,7 +50,7 @@ META_RE = re.compile(r'^[ ]{0,3}(?P<key>[A-Za-z0-9_-]+):\s*(?P<value>.*)')
 META_MORE_RE = re.compile(r'^([ ]{4}|\t)(\s*)(?P<value>.*)')
 
 
-def get_data(doc):
+def get_data(doc,include_dirs=None):
     """
     Extract meta-data from a text document.
 
@@ -62,6 +62,13 @@ def get_data(doc):
     m = YAML_RE.match(doc)
     if m:
         try:
+            import yeux
+            data = yeux.load(m.group(1),include="ccorp",include_dirs=include_dirs)
+            if isinstance(data, dict):
+                doc = doc[m.end():].lstrip('\n')
+            else:
+                data = {}
+        except Exception:
             data = yaml.load(m.group(1), SafeLoader)
             if isinstance(data, dict):
                 doc = doc[m.end():].lstrip('\n')

@@ -1,0 +1,480 @@
+// Override Bootstrap's Sass default variables
+//
+// Nearly all variables in Bootstrap are written with the `!default` flag.
+// This allows you to override the default values of those variables before
+// you import Bootstrap's source Sass files.
+//
+// Overriding the default variable values is the best way to customize your
+// CSS without writing _new_ styles. For example, change you can either change
+// `$body-color` or write more CSS that override's Bootstrap's CSS like so:
+// `body { color: red; }`.
+
+
+//
+// Override Bootstrap here
+//
+
+@import "bootswatch/variables.scss";
+
+// Toggle global options
+// $enable-gradients: true;
+// $enable-shadows: true;
+
+
+$font-size-base:              1.0rem;
+$lead-font-size:              $font-size-base * 1.2;
+$lead-font-weight:            300;
+
+// Headings
+$headings-font-weight:           300;
+$headings-color:              #444;
+
+
+$component-active-color:      $secondary;
+// $component-active-bg:         $secondary;
+
+// $navbar-light-color
+
+$navbar-dark-color:         $white;
+// $navbar-dark-hover-color:   $white;
+$navbar-dark-hover-color:   $secondary;
+
+$dropdown-link-hover-bg:            $gray-100;
+$dropdown-link-hover-color:         $secondary;
+$dropdown-link-active-bg:           transparent;
+$dropdown-link-active-color:        $secondary;
+// Customize some defaults
+// $body-color: purple;
+// $body-bg: #f5f5f5;
+
+
+//
+// Bring in Bootstrap
+//
+
+// Option 1
+//
+// Import all of Bootstrap's CSS
+
+// @import "bootstrap/scss/bootstrap";
+
+// Option 2
+//
+// Import just the styles you need. Note that some stylesheets are required no matter what.
+
+@import "../../node_modules/bootstrap/scss/functions"; // Required
+@import "../../node_modules/bootstrap/scss/variables"; // Required
+@import "../../node_modules/bootstrap/scss/mixins"; // Required
+@import "../../node_modules/bootstrap/scss/root";
+@import "../../node_modules/bootstrap/scss/reboot"; // Required
+@import "../../node_modules/bootstrap/scss/type";
+@import "../../node_modules/bootstrap/scss/images";
+@import "../../node_modules/bootstrap/scss/code";
+@import "../../node_modules/bootstrap/scss/grid";
+@import "../../node_modules/bootstrap/scss/tables";
+// @import "../../node_modules/bootstrap/scss/forms";
+@import "../../node_modules/bootstrap/scss/buttons";
+@import "../../node_modules/bootstrap/scss/transitions";
+@import "../../node_modules/bootstrap/scss/dropdown"; // cmp
+@import "../../node_modules/bootstrap/scss/button-group";
+// @import "../../node_modules/bootstrap/scss/input-group"; // Requires forms
+// @import "../../node_modules/bootstrap/scss/custom-forms";
+@import "../../node_modules/bootstrap/scss/nav";    // cmp
+@import "../../node_modules/bootstrap/scss/navbar"; // Requires nav
+@import "../../node_modules/bootstrap/scss/card";   // cmp
+@import "../../node_modules/bootstrap/scss/breadcrumb";
+@import "../../node_modules/bootstrap/scss/pagination";
+@import "../../node_modules/bootstrap/scss/badge";
+@import "../../node_modules/bootstrap/scss/jumbotron";
+@import "../../node_modules/bootstrap/scss/alert";
+@import "../../node_modules/bootstrap/scss/progress";
+@import "../../node_modules/bootstrap/scss/media";
+@import "../../node_modules/bootstrap/scss/list-group";
+@import "../../node_modules/bootstrap/scss/close";
+@import "../../node_modules/bootstrap/scss/toasts";
+@import "../../node_modules/bootstrap/scss/modal"; // Requires transitions
+@import "../../node_modules/bootstrap/scss/tooltip";
+@import "../../node_modules/bootstrap/scss/popover";
+@import "../../node_modules/bootstrap/scss/carousel";
+@import "../../node_modules/bootstrap/scss/spinners";
+@import "../../node_modules/bootstrap/scss/utilities";
+@import "../../node_modules/bootstrap/scss/print";
+
+
+
+
+//
+// Custom styles
+//
+
+// body {
+//   padding: 3rem;
+// }
+
+
+
+@import "bootswatch/bootswatch.scss";
+
+html {
+  /* csslint ignore:start */
+  /* The nav header is 3.5rem high, plus 20px for the margin-top of the
+     main container. */
+  /* scroll-padding-top: calc(3.5rem + 20px); */
+  scroll-padding-top: calc(3.3125rem + 4px + 20px);
+  /* csslint ignore:end */
+}
+
+body::before {
+  content: ' ';
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  // background-color: #f8f8f8;
+  // background: url(../img/grid.png) repeat-x;
+  will-change: transform;
+  z-index: -1;
+}
+
+body > .container {
+  margin-top: 20px;
+  min-height: 400px;
+}
+
+
+.source-links {
+  float: right;
+}
+
+.col-md-9 img {
+  max-width: 100%;
+  display: inline-block;
+  padding: 4px;
+  line-height: 1.428571429;
+  background-color: transparent;
+  // background-color: #fff;
+  // border: 1px solid #ddd;
+  border-radius: 2px;
+  margin: 20px auto 30px auto;
+}
+
+a {
+  color: $dark-2;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+h1 {
+  color: #444;
+  font-weight: 400;
+  font-size: 42px;
+}
+
+h2, h3, h4, h5, h6 {
+  color: #444;
+  font-weight: 300;
+}
+
+hr {
+  border-top: 1px solid #aaa;
+}
+
+pre, .rst-content tt {
+  max-width: 100%;
+  background: #fff;
+  border: solid 1px #e1e4e5;
+  color: #333;
+  overflow-x: auto;
+}
+
+code.code-large, .rst-content tt.code-large {
+  font-size: 90%;
+}
+
+code {
+  padding: 1px 5px;
+  background: #fff;
+  // border: solid 1px #e1e4e5;
+  color: #333;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+pre code {
+  display: block;
+  background: transparent;
+  border: none;
+  white-space: pre;
+  word-wrap: normal;
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 12px;
+}
+
+kbd {
+  padding: 2px 4px;
+  font-size: 95%;
+  color: #fff;
+  background-color: #333;
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
+  box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
+}
+
+a > code {
+  color: inherit; 
+  // color: $primary;
+}
+
+a:hover code, a:focus code {
+  color: #7a0000;
+}
+
+footer {
+  margin-top: 30px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: 200;
+}
+
+.modal-dialog {
+  margin-top: 60px;
+}
+
+/*
+* Side navigation
+*
+* Scrollspy and affixed enhanced navigation to highlight sections and secondary
+* sections of docs content.
+*/
+
+.bs-sidebar.affix { /* csslint allow: adjoining-classes */
+  /* csslint ignore:start */
+  position: -webkit-sticky;
+  position: sticky;
+  /* csslint ignore:end */
+  /* The nav header is 3.5rem high, plus 20px for the margin-top of the
+     main container. */
+  top: calc(3.5rem + 20px);
+  /* border-radius: 2px; */
+  /* box-shadow: 0 1px 2px 0 rgba(60,64,67,.3),0 1px 3px 1px rgba(60,64,67,.15); */
+}
+
+.bs-sidebar.card { /* csslint allow: adjoining-classes */
+  padding: 0;
+  max-height: 90%;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+/* Toggle (vertically flip) sidebar collapse icon */
+.bs-sidebar .navbar-toggler span {
+  -moz-transform: scale(1, -1);
+  -webkit-transform: scale(1, -1);
+  -o-transform: scale(1, -1);
+  -ms-transform: scale(1, -1);
+  transform: scale(1, -1);
+}
+
+.bs-sidebar .navbar-toggler.collapsed span { /* csslint allow: adjoining-classes */
+  -moz-transform: scale(1, 1);
+  -webkit-transform: scale(1, 1);
+  -o-transform: scale(1, 1);
+  -ms-transform: scale(1, 1);
+  transform: scale(1, 1);
+}
+
+/* First level of nav */
+.bs-sidebar > .navbar-collapse > .nav {
+  padding-top:    10px;
+  padding-bottom: 10px;
+  border-radius: 1.5px;
+  width: 100%;
+  box-shadow: 0 1px 2px 0 rgba(60,64,67,.3),0 1px 3px 1px rgba(60,64,67,.15);
+}
+
+/* All levels of nav */
+.bs-sidebar .nav > li > a {
+  display: block;
+  padding: 5px 20px;
+  z-index: 1;
+}
+.bs-sidebar .nav > li > a:hover,
+.bs-sidebar .nav > li > a:focus {
+  text-decoration: none;
+  border-right: 1px solid;
+}
+.bs-sidebar .nav > li > a.active,
+.bs-sidebar .nav > li > a.active:hover,
+.bs-sidebar .nav > li > a.active:focus {
+  color: $secondary;
+  font-weight: bold;
+  background-color: transparent;
+  border-right: 1px solid;
+}
+
+.bs-sidebar .nav .nav .nav {
+  margin-left: 1em;
+}
+
+// .bs-sidebar .nav > li > a {
+//   font-weight: bold;
+// }
+
+// .bs-sidebar .nav .nav > li > a {
+//   font-weight: normal;
+// }
+
+.headerlink {
+  font-family: FontAwesome;
+  font-size: 14px;
+  display: none;
+  padding-left: .5em;
+}
+
+h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink, h4:hover .headerlink, h5:hover .headerlink, h6:hover .headerlink{
+  display:inline-block;
+}
+
+.admonition {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  text-align: left;
+}
+
+.admonition.note { /* csslint allow: adjoining-classes */
+  color: #3a87ad;
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+}
+
+.admonition.warning { /* csslint allow: adjoining-classes */
+  color: #c09853;
+  background-color: #fcf8e3;
+  border-color: #fbeed5;
+}
+
+.admonition.danger { /* csslint allow: adjoining-classes */
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+}
+
+.admonition-title {
+  font-weight: bold;
+  text-align: left;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-collapse.show { /* csslint allow: adjoining-classes */
+      overflow-y: auto;
+      max-height: calc(100vh - 3.5rem);
+  }
+}
+
+/* .dropdown-item.open {  */
+  /* csslint allow: adjoining-classes */
+  /* color: #fff;
+  /* background-color: #2FA4E7; */
+/* } */
+
+.dropdown-submenu > .dropdown-menu {
+  margin: 0 0 0 1.5rem;
+  padding: 0;
+  border-width: 0;
+}
+
+.dropdown-submenu > a::after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #ccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+
+.dropdown-submenu:hover > a::after {
+  border-left-color: #fff;
+}
+
+@media (min-width: 992px) {
+  .dropdown-menu {
+      overflow-y: auto;
+      max-height: calc(100vh - 3.5rem);
+  }
+
+  .dropdown-submenu {
+      position: relative;
+  }
+
+  .dropdown-submenu > .dropdown-menu {
+      /* csslint ignore:start */
+      position: fixed !important;
+      /* csslint ignore:end */
+      margin-top: -9px;
+      margin-left: -2px;
+      border-width: 1px;
+      padding: 0.5rem 0;
+  }
+
+  .dropdown-submenu.pull-left { /* csslint allow: adjoining-classes */
+      float: none;
+  }
+
+  .dropdown-submenu.pull-left > .dropdown-menu { /* csslint allow: adjoining-classes */
+      left: -100%;
+      margin-left: 10px;
+  }
+}
+.navbar-dark .nav-link {
+  color: #8099B1;
+  color: #fff;
+}
+.nav-link {
+  display: block;
+  padding: 0.9rem 1rem;
+  font-weight: 400;
+  font-size: $font-size-base;
+}
+.nav-link a.active {
+  color: $secondary;
+}
+
+// .nav-link:hover {
+//   color: $secondary;
+// }
+
+.featurette-heading {
+  margin-top: 3rem;
+  // font-size: 50px;
+  font-size: $font-size-base * 1.75;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -.05rem;
+  padding-bottom: 1rem;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+}
+
+.comment {
+  color: #228B22;
+}
+pre {
+  padding: 0.5em;
+}
+pre, code {
+  background: #f0f0f0;
+  color: #000;
+  border: 1px solid rgba(0,0,0,0.125);
+  border-radius: 0.25rem;
+}

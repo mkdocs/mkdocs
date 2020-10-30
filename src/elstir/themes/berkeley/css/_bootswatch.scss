@@ -1,0 +1,514 @@
+// Simplex 4.5.0
+// Bootswatch
+
+
+// Variables ===================================================================
+
+$web-font-path: "https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" !default;
+@import url($web-font-path);
+
+@mixin btn-shadow($color){
+  @include gradient-y-three-colors(lighten($color, 3%), $color, 6%, darken($color, 3%));
+  filter: none;
+  border: 1px solid darken($color, 6.5%);
+}
+
+// Navbar ======================================================================
+
+.navbar {
+  // border-width: 1px;
+  border-width: 0 0 0.0px 0;
+  border-style: solid;
+  box-shadow: 0 0 0.5rem 0 rgba(221,221,221,0.5);
+
+  &-fixed-top {
+    border-width: 0 0 3px 0;
+    
+    /* csslint ignore:start */
+    position: -webkit-sticky;
+    position: sticky;
+    /* csslint ignore:end */
+  }
+
+  &-fixed-bottom {
+    border-top-width: 1px 0 0 0;
+    border-style: solid;
+  }
+}
+
+.bg-primary {
+  background-color: $primary !important;
+  border-color: darken($secondary, 6.5%) !important;
+}
+
+.bg-dark {
+  border-color: darken($dark, 6.5%) !important;
+}
+
+.bg-gray {
+  // border-color: darken(#fff, 6.5%);
+  // border-color: $primary;
+  background-color: $gray-100;
+}
+
+// Buttons =====================================================================
+
+.btn-primary,
+.btn-primary:hover {
+  @include btn-shadow($primary);
+}
+
+.btn-secondary,
+.btn-secondary:hover {
+  @include btn-shadow($secondary);
+}
+
+.btn-secondary:focus,
+.btn-secondary:not([disabled]):not(.disabled):active,
+.btn-secondary:not([disabled]):not(.disabled).active {
+  box-shadow: 0 0 0 0.2rem rgba($gray-200, 0.5);
+}
+
+.btn-success,
+.btn-success:hover {
+  @include btn-shadow($success);
+}
+
+.btn-info,
+.btn-info:hover {
+  @include btn-shadow($info);
+}
+
+.btn-warning,
+.btn-warning:hover {
+  @include btn-shadow($warning);
+}
+
+.btn-danger,
+.btn-danger:hover {
+  @include btn-shadow($danger);
+}
+
+.btn-dark,
+.btn-dark:hover {
+  @include btn-shadow($dark);
+}
+
+.btn-light,
+.btn-light:hover {
+  @include btn-shadow($light);
+}
+
+.btn-outline-secondary {
+  border-color: $gray-700;
+  color: $gray-700;
+
+  &:hover {
+    background-color: $gray-700;
+    color: $white;
+  }
+}
+
+// Typography ==================================================================
+
+.text-secondary {
+  color: $gray-700 !important;
+}
+
+// Tables ======================================================================
+
+// Forms =======================================================================
+
+legend,
+label {
+  color: $headings-color;
+}
+
+// Navs =======================================================================
+
+.breadcrumb {
+  border: 1px solid darken(#fff, 6.5%);
+}
+
+.pagination {
+  .page-link:hover {
+    text-decoration: none;
+  }
+}
+
+// Indicators ==================================================================
+
+// Progress bars ===============================================================
+
+// Containers ==================================================================
+
+html {
+  /* csslint ignore:start */
+  /* The nav header is 3.5rem high, plus 20px for the margin-top of the
+     main container. */
+  /* scroll-padding-top: calc(3.5rem + 20px); */
+  scroll-padding-top: calc(3.3125rem + 4px + 20px);
+  /* csslint ignore:end */
+}
+
+body::before {
+  content: ' ';
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  // background-color: #f8f8f8;
+  // background: url(../img/grid.png) repeat-x;
+  will-change: transform;
+  z-index: -1;
+}
+
+body > .container {
+  margin-top: 20px;
+  min-height: 400px;
+}
+
+
+.source-links {
+  float: right;
+}
+
+.col-md-9 img {
+  max-width: 100%;
+  display: inline-block;
+  padding: 4px;
+  line-height: 1.428571429;
+  background-color: transparent;
+  // background-color: #fff;
+  // border: 1px solid #ddd;
+  border-radius: 2px;
+  margin: 20px auto 30px auto;
+}
+
+a {
+  color: $dark-2;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+h1 {
+  color: #444;
+  font-weight: 400;
+  font-size: 42px;
+}
+
+h2, h3, h4, h5, h6 {
+  color: #444;
+  font-weight: 300;
+}
+
+hr {
+  border-top: 1px solid #aaa;
+}
+
+pre, .rst-content tt {
+  max-width: 100%;
+  background: #fff;
+  border: solid 1px #e1e4e5;
+  color: #333;
+  overflow-x: auto;
+}
+
+code.code-large, .rst-content tt.code-large {
+  font-size: 90%;
+}
+
+code {
+  padding: 1px 5px;
+  background: #fff;
+  // border: solid 1px #e1e4e5;
+  color: #333;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+pre {
+  max-width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+pre code {
+  display: block;
+  background: transparent;
+  border: none;
+  white-space: pre;
+  word-wrap: normal;
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 12px;
+}
+
+kbd {
+  padding: 2px 4px;
+  font-size: 95%;
+  color: #fff;
+  background-color: #333;
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
+  box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
+}
+
+a > code {
+  color: inherit; 
+  // color: $primary;
+}
+
+a:hover code, a:focus code {
+  // color: #0d5875;
+  color: #790909;
+}
+
+footer {
+  margin-top: 30px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: 200;
+}
+
+.modal-dialog {
+  margin-top: 60px;
+}
+
+/*
+* Side navigation
+*
+* Scrollspy and affixed enhanced navigation to highlight sections and secondary
+* sections of docs content.
+*/
+
+.bs-sidebar.affix { /* csslint allow: adjoining-classes */
+  /* csslint ignore:start */
+  position: -webkit-sticky;
+  position: sticky;
+  /* csslint ignore:end */
+  /* The nav header is 3.5rem high, plus 20px for the margin-top of the
+     main container. */
+  top: calc(3.5rem + 20px);
+  /* border-radius: 2px; */
+  /* box-shadow: 0 1px 2px 0 rgba(60,64,67,.3),0 1px 3px 1px rgba(60,64,67,.15); */
+}
+
+.bs-sidebar.card { /* csslint allow: adjoining-classes */
+  padding: 0;
+  max-height: 90%;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+/* Toggle (vertically flip) sidebar collapse icon */
+.bs-sidebar .navbar-toggler span {
+  -moz-transform: scale(1, -1);
+  -webkit-transform: scale(1, -1);
+  -o-transform: scale(1, -1);
+  -ms-transform: scale(1, -1);
+  transform: scale(1, -1);
+}
+
+.bs-sidebar .navbar-toggler.collapsed span { /* csslint allow: adjoining-classes */
+  -moz-transform: scale(1, 1);
+  -webkit-transform: scale(1, 1);
+  -o-transform: scale(1, 1);
+  -ms-transform: scale(1, 1);
+  transform: scale(1, 1);
+}
+
+/* First level of nav */
+.bs-sidebar > .navbar-collapse > .nav {
+  padding-top:    10px;
+  padding-bottom: 10px;
+  border-radius: 1.5px;
+  width: 100%;
+  box-shadow: 0 1px 2px 0 rgba(60,64,67,.3),0 1px 3px 1px rgba(60,64,67,.15);
+}
+
+/* All levels of nav */
+.bs-sidebar .nav > li > a {
+  display: block;
+  padding: 5px 20px;
+  z-index: 1;
+}
+.bs-sidebar .nav > li > a:hover,
+.bs-sidebar .nav > li > a:focus {
+  text-decoration: none;
+  border-right: 1px solid;
+}
+.bs-sidebar .nav > li > a.active,
+.bs-sidebar .nav > li > a.active:hover,
+.bs-sidebar .nav > li > a.active:focus {
+  color: $secondary;
+  font-weight: bold;
+  background-color: transparent;
+  border-right: 1px solid;
+}
+
+.bs-sidebar .nav .nav .nav {
+  margin-left: 1em;
+}
+
+// .bs-sidebar .nav > li > a {
+//   font-weight: bold;
+// }
+
+// .bs-sidebar .nav .nav > li > a {
+//   font-weight: normal;
+// }
+
+.headerlink {
+  font-family: FontAwesome;
+  font-size: 14px;
+  display: none;
+  padding-left: .5em;
+}
+
+h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink, h4:hover .headerlink, h5:hover .headerlink, h6:hover .headerlink{
+  display:inline-block;
+}
+
+.admonition {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  text-align: left;
+}
+
+.admonition.note { /* csslint allow: adjoining-classes */
+  color: #3a87ad;
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+}
+
+.admonition.warning { /* csslint allow: adjoining-classes */
+  color: #c09853;
+  background-color: #fcf8e3;
+  border-color: #fbeed5;
+}
+
+.admonition.danger { /* csslint allow: adjoining-classes */
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+}
+
+.admonition-title {
+  font-weight: bold;
+  text-align: left;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-collapse.show { /* csslint allow: adjoining-classes */
+      overflow-y: auto;
+      max-height: calc(100vh - 3.5rem);
+  }
+}
+
+/* .dropdown-item.open {  */
+  /* csslint allow: adjoining-classes */
+  /* color: #fff;
+  /* background-color: #2FA4E7; */
+/* } */
+
+.dropdown-submenu > .dropdown-menu {
+  margin: 0 0 0 1.5rem;
+  padding: 0;
+  border-width: 0;
+}
+
+.dropdown-submenu > a::after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #ccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+
+.dropdown-submenu:hover > a::after {
+  border-left-color: #fff;
+}
+
+@media (min-width: 992px) {
+  .dropdown-menu {
+      overflow-y: auto;
+      max-height: calc(100vh - 3.5rem);
+  }
+
+  .dropdown-submenu {
+      position: relative;
+  }
+
+  .dropdown-submenu > .dropdown-menu {
+      /* csslint ignore:start */
+      position: fixed !important;
+      /* csslint ignore:end */
+      margin-top: -9px;
+      margin-left: -2px;
+      border-width: 1px;
+      padding: 0.5rem 0;
+  }
+
+  .dropdown-submenu.pull-left { /* csslint allow: adjoining-classes */
+      float: none;
+  }
+
+  .dropdown-submenu.pull-left > .dropdown-menu { /* csslint allow: adjoining-classes */
+      left: -100%;
+      margin-left: 10px;
+  }
+}
+.navbar-dark .nav-link {
+  color: #8099B1;
+  color: #fff;
+}
+.nav-link {
+  display: block;
+  padding: 0.9rem 1rem;
+  font-weight: 400;
+  font-size: $font-size-base;
+}
+.nav-link a.active {
+  color: $secondary;
+}
+
+// .nav-link:hover {
+//   color: $secondary;
+// }
+
+.featurette-heading {
+  margin-top: 3rem;
+  // font-size: 50px;
+  font-size: $font-size-base * 1.75;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -.05rem;
+  padding-bottom: 1rem;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+}
+
+.comment {
+  color: #228B22;
+}
+// pre {
+//   padding: 0.5em;
+// }
+pre, code {
+  background: #f0f0f0;
+  color: #000;
+  border: 1px solid rgba(0,0,0,0.125);
+  border-radius: 0.25rem;
+}

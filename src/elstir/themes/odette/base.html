@@ -47,7 +47,6 @@
          });
          </script> -->
       {%- endblock %}
-
       {%- block analytics %}
         {%- if config.google_analytics %}
         <script>
@@ -61,8 +60,7 @@
         </script>
         {%- endif %}
       {%- endblock %}
-
-      {%- block extrahead %} {% endblock %}
+      {%- block extrahead %}{% endblock %}
     </head>
 
     <body{% if page and page.is_homepage %} class="homepage Site" {% else %} class="Site" {% endif %}>
