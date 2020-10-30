@@ -458,3 +458,89 @@ class UtilsTests(unittest.TestCase):
             """
         )
         self.assertEqual(utils.meta.get_data(doc), (doc, {}))
+
+    def test_get_relative_url_with_page_url_dot(self):
+        expected_results = {
+            '.': '.',
+            './': './',
+            './.': '.',
+            '..': '..',
+            '../.': '..',
+            '../..': '../..',
+            './..': '..',
+            # flaky (depends on pwd): '/..': '../../../..',
+            'api-guide': 'api-guide',
+            'api-guide/': 'api-guide/',
+            'api-guide/.': 'api-guide',
+            'api-guide/..': '.',
+            'api-guide/index.html': 'api-guide/index.html',
+            'api-guide/testing.html': 'api-guide/testing.html',
+        }
+        for value, expected_url in expected_results.items():
+            actual_url = utils.get_relative_url(value, ".")
+            self.assertEqual(expected_url, actual_url, "url: '{}'".format(value))
+
+    def test_get_relative_url_with_page_url(self):
+        expected_results = {
+            '.': '..',
+            './': '../',
+            './.': '..',
+            '..': '../..',
+            '../.': '../..',
+            '../..': '../../..',
+            './..': '../..',
+            # flaky (depends on pwd): '/..': '../../../../..',
+            'api-guide': '../api-guide',
+            'api-guide/': '../api-guide/',
+            'api-guide/.': '../api-guide',
+            'api-guide/..': '..',
+            'api-guide/index.html': '../api-guide/index.html',
+            'api-guide/testing.html': '../api-guide/testing.html',
+        }
+        for value, expected_url in expected_results.items():
+            actual_url = utils.get_relative_url(value, "build-system/testing.html")
+            self.assertEqual(expected_url, actual_url, "url: '{}'".format(value))
+
+    def test_normalize_url_with_no_page_and_empty_base(self):
+        expected_results = {
+            '': '.',
+            '.': '.',
+            './': './',
+            './.': './.',
+            '..': '..',
+            '../.': '../.',
+            '../..': '../..',
+            './..': './..',
+            '/..': '/..',
+            'api-guide': 'api-guide',
+            'api-guide/': 'api-guide/',
+            'api-guide/.': 'api-guide/.',
+            'api-guide/..': 'api-guide/..',
+            'api-guide/index.html': 'api-guide/index.html',
+            'api-guide/testing.html': 'api-guide/testing.html',
+        }
+        for value, expected_url in expected_results.items():
+            actual_url = utils.normalize_url(path=value, page=None, base="")
+            self.assertEqual(expected_url, actual_url, "path: '{}'".format(value))
+
+    def test_normalize_url_with_no_page_and_base(self):
+        expected_results = {
+            '': 'https://www.mkdocs.org/.',
+            '.': 'https://www.mkdocs.org/.',
+            './': 'https://www.mkdocs.org/./',
+            './.': 'https://www.mkdocs.org/./.',
+            '..': 'https://www.mkdocs.org/..',
+            '../.': 'https://www.mkdocs.org/../.',
+            '../..': 'https://www.mkdocs.org/../..',
+            './..': 'https://www.mkdocs.org/./..',
+            '/..': '/..',
+            'api-guide': 'https://www.mkdocs.org/api-guide',
+            'api-guide/': 'https://www.mkdocs.org/api-guide/',
+            'api-guide/.': 'https://www.mkdocs.org/api-guide/.',
+            'api-guide/..': 'https://www.mkdocs.org/api-guide/..',
+            'api-guide/index.html': 'https://www.mkdocs.org/api-guide/index.html',
+            'api-guide/testing.html': 'https://www.mkdocs.org/api-guide/testing.html',
+        }
+        for value, expected_url in expected_results.items():
+            actual_url = utils.normalize_url(path=value, page=None, base="https://www.mkdocs.org/")
+            self.assertEqual(expected_url, actual_url, "path: '{}'".format(value))
