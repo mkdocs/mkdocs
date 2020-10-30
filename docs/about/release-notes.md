@@ -23,6 +23,7 @@ The current and past members of the MkDocs team.
 
 ## Version 1.1.3 (Under development)
 
+* Bugfix: use_directory_urls: false breaks on an empty site_url (#2189).
 * Bugfix: Properly process navigation child items in `_get_by_type` when
   filtering for sections (#2203).
 

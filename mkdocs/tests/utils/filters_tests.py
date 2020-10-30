@@ -13,14 +13,14 @@ class UtilsTests(unittest.TestCase):
 
         # key is value
         expected_results = {
-            '': '.',                # the only url normalization is empty to single dot "" -> "."
-            '.': '.',
+            '': './index.html',
+            '.': './index.html',
             './': './',
-            './.': './.',
-            '..': '..',
-            '../.': '../.',
-            '../..': '../..',
-            './..': './..',
+            './.': '././index.html',
+            '..': '../index.html',
+            '../.': '.././index.html',
+            '../..': '../../index.html',
+            './..': './../index.html',
             '/..': '/..',
             'api-guide': 'api-guide',
             'api-guide/': 'api-guide/',
@@ -67,16 +67,16 @@ class UtilsTests(unittest.TestCase):
 
         # key is base_url
         expected_results = {
-            '':       '.',           # url normalization empty to single dot "" -> "."
+            '':       './index.html',
             'major':  'major/.',     # url normalization append slash to non-empty base, empty to single dot "" -> "."
             'major/': 'major/.',     # always adding the dot (compare with empty base_url)
-            '.': './.',
-            './': './.',
+            '.': '././index.html',
+            './': '././index.html',
             '/': '/.',
-            '..': '../.',
-            '../.': '.././.',
-            '../..': '../../.',
-            './..': './../.',
+            '..': '.././index.html',
+            '../.': '../././index.html',
+            '../..': '../.././index.html',
+            './..': './.././index.html',
             '/..': '/../.',
             'api-guide/.': 'api-guide/./.',
             'api-guide/..': 'api-guide/../.',
