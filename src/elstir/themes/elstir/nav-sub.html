@@ -1,8 +1,8 @@
-{%- if not nav_item.children %}
+{%- if not nav_item.children and nav_item.nav_incl %}
 <li>
     <a href="{{ nav_item.url|url }}" class="dropdown-item{% if nav_item.active %} active{% endif %}">{{ nav_item.title }}</a>
 </li>
-{%- else %}
+{%- elif nav_item.nav_incl %}
   <li class="dropdown-submenu">
     <a href="#" class="dropdown-item">{{ nav_item.title }}</a>
     <ul class="dropdown-menu">

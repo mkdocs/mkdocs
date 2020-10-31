@@ -1,4 +1,5 @@
-# Config options for 'elstir' theme
+# Config options for 'berkeley' theme
+extends: elstir
 
 static_templates:
     - 404.html

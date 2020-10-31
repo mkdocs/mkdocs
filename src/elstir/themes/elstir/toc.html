@@ -6,21 +6,38 @@
     </div>
 
     {% macro toc_item(item) %}
-        {%- if item.level <= config.theme.navigation_depth %}
-            <li class="nav-item" data-level="{{ item.level }}"><a href="{{ item.url }}" class="nav-link">{{ item.title }}</a>
+        {#- if item.level <= config.theme.navigation_depth #}
+            <li class="nav-item {{ 'active' if item.active }}" data-level="{{ item.level }}">
+              <a href="{{ item.url }}" class="{{ 'active' if item.active }}">{{ item.title }}</a>
+              <!-- <a href="{{ item.url }}" class="nav-link {{ 'active' if item.active }}">{{ item.title }}</a> -->
+              {% if item.level <= config.theme.navigation_depth + 1 %}
               <ul class="nav flex-column">
+              {{ '<div class="dropdown-divider"></div>' if item.level == 1 }} 
                 {%- for child in item.children %}
+                    {% if child.level <= config.theme.navigation_depth %}
                     {{- toc_item(child) }}
+                    {% endif %}
                 {%- endfor %}
               </ul>
+              {% endif %}
             </li>
-        {%- endif %}
+        {#- endif #}
     {%- endmacro %}
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+    <div id="toc-collapse" class="navbar-collapse collapse card ">
         <ul class="nav flex-column">
-        {%- for item in page.toc %}
+        {% if page and page.meta.custom_toc %}
+        {%- for item in page.meta.custom_toc %}
+            {%- if item.level <= config.theme.navigation_depth %}
+            {{ toc_item(item) }}
+            {% endif %}
+        {%- endfor %}
+        {# elif 'Functions' in page.file.abs_src_path #}
+        {% else %}
+        {#- for item in page.toc #}
+        {%- for item in page|sidebar(pages) %}
             {{ toc_item(item) }}
         {%- endfor %}
+        {% endif %}
         </ul>
     </div>
 </div>

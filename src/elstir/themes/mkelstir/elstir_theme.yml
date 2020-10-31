@@ -1,9 +1,5 @@
 # Config options for 'elstir' theme
 
-page_meta_file: meta.yaml
-
-
-
 static_templates:
     - 404.html
 
