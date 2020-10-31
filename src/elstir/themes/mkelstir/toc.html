@@ -1,6 +1,6 @@
 <div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Directory">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
@@ -18,15 +18,9 @@
     {%- endmacro %}
     <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
         <ul class="nav flex-column">
-        {% if page and page.meta.custom_toc %}
-        {%- for item in page.meta.custom_toc %}
-            {{ toc_item(item) }}
-        {%- endfor %}
-        {% else %}
         {%- for item in page.toc %}
             {{ toc_item(item) }}
         {%- endfor %}
-        {% endif %}
         </ul>
     </div>
 </div>

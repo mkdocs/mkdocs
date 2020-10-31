@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 
-{#
-The entry point for the elstir Theme.
- 
-Any theme customisations should override this file to redefine blocks defined in
-the various templates. The custom theme should only need to define a main.html
-which `{% extends "base.html" %}` and defines various blocks which will replace
-the blocks defined in base.html and its included child templates.
-#}
+{% block libs %}
+{{ super() }}
+{% if page and page.schema %}
+<script src="schema_doc.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+{% endif %}
+
+{% endblock %}
+
