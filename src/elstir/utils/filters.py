@@ -78,8 +78,36 @@ def get_children(context,page,pages,depth=2):
             return list_of_files
         else: return {}
     except Exception as e:
-        print(e)
+        print(f'get_children: {e}')
         return {}
+
+@jinja2.contextfilter
+def get_meta(context,page):
+    """"""
+    # depth = len(context['base_url'].split('/'))
+    # page_paths = [pg.abs_src_path for pg in context['pages']]
+    folder, file = os.path.split(page.file.abs_src_path)
+    metafile = context['config']['theme']['page_meta_file']
+    try:
+        with open(os.path.join(folder,metafile)) as f:
+            meta = yaml.load(f,Loader=yaml.Loader)
+    except Exception as e:
+        print(f"Exception: get_meta - {e}")
+
+# def _get_page_meta(page):
+#     meta = page.meta
+#     print(meta)
+#     try:
+#         with open(os.path.join(
+#             os.path.split(page.file.abs_src_path)[0],meta['meta-include'])
+#             ) as f: extra_meta = yaml.load(f, Loader=yaml.Loader)
+#         meta = {
+#             **meta,
+#             **extra_meta
+#             }
+#     except Exception as e:
+#         print(f'Exception - _get_page_meta: {e}')
+#     return meta
 
 
 @jinja2.contextfilter
@@ -157,17 +185,6 @@ def _index_dirs(folder, pages, page, depth=2):
             "url": _get_dir_index(folder,pages).page.abs_url,
             "level": 1,
             "children": _get_dir_children(dirs, pages, folder, page, 2, depth),
-            # "children": [{
-            #     "title": _get_dir_index(dr,pages,folder).page.title,
-            #     "active": _get_dir_index(dr,pages,folder).page.file.abs_src_path == page.file.abs_src_path,
-            #     "url": _get_dir_index(dr,pages,folder).page.abs_url,
-            #     #"url": os.path.join('..',dr),
-            #     "summary": _get_description(_get_dir_index(dr,pages,folder).page),
-            #     "level": 2,
-            #     "image": _get_dir_image(_get_dir_index(dr,pages,folder).page.file.abs_src_path),
-            #     "meta": _get_dir_index(dr,pages,folder).page.meta,
-            #     "children": []
-            #     } for dr in dirs if _get_dir_index(dr,pages,folder)]
             })
         if "template_data" in page.meta:
             list_of_files[0].update({"filters": getGalleryFilters(
@@ -207,7 +224,7 @@ def _get_dir_children(dirs, pages, folder, current_page: object, level, depth):
         file = _get_dir_index(dr,pages,folder)
         if file:
             page = file.page
-            if level<=depth:
+            if level <= depth:
                 sub_folder = os.path.join(folder,dr)
                 sub_dirs = [sdr for sdr in os.listdir(sub_folder) if not os.path.isfile(os.path.join(sub_folder,sdr))]
                 sub_children = _get_dir_children(sub_dirs, pages, sub_folder, page, level+1, depth)
@@ -223,25 +240,12 @@ def _get_dir_children(dirs, pages, folder, current_page: object, level, depth):
                 "synopsis": _get_description(page),
                 "level": level,
                 "image": _get_dir_image(page.file.abs_src_path),
-                "meta": _get_page_meta(page),
+                "meta": page.meta, #_get_page_meta(page), #
                 "children":  sub_children,
                 "template_data": getTemplateData(page, data_fields)
                 })
     return children
 
-def _get_page_meta(page):
-    meta = page.meta
-    print(meta)
-    try:
-        with open(os.path.join(
-            os.path.split(page.file.abs_src_path)[0],meta['meta-include'])
-            ) as f: extra_meta = yaml.load(f, Loader=yaml.Loader)
-        meta = {
-            **meta,
-            **extra_meta
-            }
-    except: pass
-    return meta
 
 def _get_idx_children(files, pages, folder, current_page, level):
     children = []
@@ -250,7 +254,6 @@ def _get_idx_children(files, pages, folder, current_page, level):
         file = _get_dir_page(file,pages,folder)
         
         if file and os.path.basename(file.src_path).lower() not in ['index.md', 'readme.md']:
-        # if file:
             page = file.page
             # print("     {}".format(page.title))
             children.append({
