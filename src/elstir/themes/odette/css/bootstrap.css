@@ -1,5 +1,5 @@
 /*!
- * Bootswatch v4.5.2
+ * Bootswatch v4.5.3
  * Homepage: https://bootswatch.com
  * Copyright 2012-2020 Thomas Park
  * Licensed under MIT
@@ -20740,7 +20740,7 @@ pre code {
   border: none;
   white-space: pre;
   word-wrap: normal;
-  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: SFMono-Regular, Menlo, Monaco, "Courier New", Consolas, "Liberation Mono", monospace;
   font-size: 11px;
 }
 
@@ -20987,4 +20987,3 @@ h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink, h4:hover .head
 .comment {
   color: #228B22;
 }
-/*# sourceMappingURL=bootstrap.css.map */

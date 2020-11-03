@@ -1,10 +1,15 @@
 from pathlib import Path
+from functools import reduce
 import json,os,sys
 import jinja2
 
 import yaml
 
 from elstir.utils import normalize_url
+
+
+class Resource: pass
+
 
 def get_nest(data, *args):
     """https://stackoverflow.com/questions/10399614/accessing-value-inside-nested-dictionaries"""
@@ -23,38 +28,36 @@ def url_filter(context, value):
     """ A Template filter to normalize URLs. """
     return normalize_url(value, page=context['page'], base=context['base_url'])
 
-def getGalleryFilters(children_data):
+def _get_gallery_filters(children_data):
     filters = {}
     for child in children_data:
         for fltr in child["template_data"]:
-            if fltr not in filters: 
+            if fltr not in filters:
                 filters.update({fltr: [child["template_data"][fltr]]})
             elif child["template_data"][fltr] not in filters[fltr]:
                 filters[fltr].append(child["template_data"][fltr])
     return filters
 
-def getTemplateData(page:object, data_fields:dict):
+def getParentTemplateFields(page:object, data_fields,filtered=False):
     if data_fields: # and "template_data" in page.meta:
-        print("getTempl: {}".format(page))
-        # template_data = page.meta['template_data']
         data_files = data_fields['gallery_items']
-
+        filters = data_fields["filters"] if "filters" in data_fields else []
         folder, _ = os.path.split(page.file.abs_src_path)
-        # folder = page.file.abs_src_path
         child_data = {}
         for filename in data_files:
             try:
                 with open(Path(folder)/filename) as f: data = yaml.load(f,Loader=yaml.Loader)
-                for key in data_files[filename]:
+                for prop in data_files[filename]:
                     if isinstance(data_files[filename], dict):
-                        key = data_files[filename][key]
-                    try:
-                        child_data.update({key: get_nest(data, *key.split('.'))})
-                    except Exception as e:
-                        print(e,sys.exc_info())
+                        key = data_files[filename][prop]
+                    # print(f"{prop}: {prop in filters}")
+                    if not filtered or (prop in filters):
+                        try:
+                            child_data.update({key: get_nest(data, *key.split('.'))})
+                        except Exception as e:
+                            print(e,sys.exc_info())
             except Exception as e:
-                print(e,sys.exc_info())
-        print(child_data)
+                print("EXCEPTION",e,sys.exc_info())
         return child_data
 
 @jinja2.contextfilter
@@ -78,41 +81,60 @@ def get_children(context,page,pages,depth=2):
             return list_of_files
         else: return {}
     except Exception as e:
-        print(f'get_children: {e}')
+        print(f'EXCEPTION: get_children: {e}')
         return {}
 
-@jinja2.contextfilter
-def get_meta(context,page):
-    """"""
-    # depth = len(context['base_url'].split('/'))
-    # page_paths = [pg.abs_src_path for pg in context['pages']]
-    folder, file = os.path.split(page.file.abs_src_path)
-    metafile = context['config']['theme']['page_meta_file']
-    try:
-        with open(os.path.join(folder,metafile)) as f:
-            meta = yaml.load(f,Loader=yaml.Loader)
-    except Exception as e:
-        print(f"Exception: get_meta - {e}")
 
-# def _get_page_meta(page):
-#     meta = page.meta
-#     print(meta)
+def elstir_get_filters(template_data: dict)-> dict:
+    if "filters" in template_data:
+        gallery_items = template_data['gallery_items']
+        filters = template_data['filters']
+        # print(gallery_items,filters)
+        args = [{k:v} for f in gallery_items.values() for k,v in f.items() if k in filters]
+        return reduce(lambda x,y: {**x,**y},args)
+    else:
+        return {}
+
+
+# @jinja2.contextfilter
+# def get_meta(context,page):
+#     """"""
+#     # depth = len(context['base_url'].split('/'))
+#     # page_paths = [pg.abs_src_path for pg in context['pages']]
+#     folder, file = os.path.split(page.file.abs_src_path)
+#     metafile = context['config']['theme']['page_meta_file']
 #     try:
-#         with open(os.path.join(
-#             os.path.split(page.file.abs_src_path)[0],meta['meta-include'])
-#             ) as f: extra_meta = yaml.load(f, Loader=yaml.Loader)
+#         with open(os.path.join(folder,metafile)) as f:
+#             meta = yaml.load(f,Loader=yaml.Loader)
+#     except Exception as e:
+#         print(f"Exception: get_meta - {e}")
+
+def _get_resource_meta(page, extra_data:dict=None):
+    meta = page.meta
+    try:
+        extra_meta = getParentTemplateFields(page,extra_data)
+        meta = {
+            **meta,
+            **extra_meta
+            }
+    except Exception as e:
+        print(f'Exception - _get_resource_meta: {e}')
+    return meta
+
+# def get_resource_filters(page: object,extra_fields:dict=None)->dict:
+#     meta = page.meta
+#     try:
+#         extra_meta = getParentTemplateFields(page,extra_data)
 #         meta = {
 #             **meta,
 #             **extra_meta
 #             }
 #     except Exception as e:
-#         print(f'Exception - _get_page_meta: {e}')
+#         print(f'Exception - _get_resource_meta: {e}')
 #     return meta
-
 
 @jinja2.contextfilter
 def sidebar(context,page,pages):
-    """"""
     depth = len(context['base_url'].split('/'))
     min_depth = context['config']['sidebar']['min_depth']
     max_depth = context['config']['sidebar']['max_depth']
@@ -187,7 +209,7 @@ def _index_dirs(folder, pages, page, depth=2):
             "children": _get_dir_children(dirs, pages, folder, page, 2, depth),
             })
         if "template_data" in page.meta:
-            list_of_files[0].update({"filters": getGalleryFilters(
+            list_of_files[0].update({"filters": _get_gallery_filters(
                 list_of_files[0]["children"]
             )})
         return list_of_files
@@ -216,7 +238,7 @@ def _get_dir_children(dirs, pages, folder, current_page: object, level, depth):
     if "template_data" in current_page.meta:
         data_fields = current_page.meta['template_data']
         # print(current_page.meta)
-        print(f"_get_dir_children.data_fields : {data_fields}")
+        # print(f"_get_dir_children.data_fields : {data_fields}")
     else:
         data_fields = False
     # print("GET_DIR_CHILDREN")
@@ -240,9 +262,9 @@ def _get_dir_children(dirs, pages, folder, current_page: object, level, depth):
                 "synopsis": _get_description(page),
                 "level": level,
                 "image": _get_dir_image(page.file.abs_src_path),
-                "meta": page.meta, #_get_page_meta(page), #
+                "meta": _get_resource_meta(page,extra_data=data_fields), #page.meta, #
                 "children":  sub_children,
-                "template_data": getTemplateData(page, data_fields)
+                "template_data": getParentTemplateFields(page, data_fields, filtered=True)
                 })
     return children
 
@@ -265,7 +287,7 @@ def _get_idx_children(files, pages, folder, current_page, level):
                 "as_code": True,
                 "meta": page.meta,
                 "children": [],
-                # "template_data": getTemplateData(page, page.meta)
+                # "template_data": getParentTemplateFields(page, page.meta)
                 })
     return children
 

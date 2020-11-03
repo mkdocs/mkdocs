@@ -1,4 +1,5 @@
 import os
+import functools
 import jinja2
 import logging
 
@@ -112,9 +113,12 @@ class Theme:
         env = jinja2.Environment(loader=loader, extensions=['jinja2.ext.do'])
         env.filters['tojson'] = filters.tojson
         env.filters['list'] = list
+        env.filters['print_console'] = lambda x: print("Template: {}".format(x))
         env.filters['url'] = filters.url_filter
         env.filters['sidebar'] = filters.sidebar
         env.filters['get_children'] = filters.get_children
         env.filters['dirname'] = os.path.dirname
+        env.filters['merge_dicts'] = lambda args: functools.reduce(lambda x,y: {**x,**y}, args)
+        env.filters['elstir_get_filters'] =  filters.elstir_get_filters
         return env
 

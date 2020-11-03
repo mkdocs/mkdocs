@@ -19,12 +19,11 @@
 {% if tab not in tabs %}{% do tabs.update({tab: []}) %}{% endif %}
     {% for card in cards[0].children %}{% if card.meta.tab == tab and card not in tabs[tab] %}{% do tabs[tab].append(card) %}{% endif %}{% endfor %}
 {% endfor %}
-
-{% set filters = page.meta.template_data.gallery_items.items()|list %}
+{% set filters = page.meta.template_data|elstir_get_filters %}
 <hr><details>
 <summary>Filters</summary>
 <div class="filter">
-{% set filters = filters[0][1] %}{% for f in  filters %}
+{% for f in  filters %}
 <div class="input-group my-1">
   <div class="input-group-prepend">
     <label class="input-group-text" for="inputGroupSelect0{{ loop.index }}">
@@ -37,9 +36,6 @@
     </label>
   </div>
 <select class="custom-select" id="inputGroupSelect0{{ loop.index }}" data-toggle="buttons" role="menu" disabled>
-<!-- <option class="btn" value="{% for fi in cards[0].filters[filters[f]] %} {{ fi }}{% endfor %}" id="{{ f }}-Any" type="button" href="#{{ f }}-Any" aria-controls="{{ f.replace(' ','') }}-Any">
-    Any
-</option> -->
 {% for fi in cards[0].filters[filters[f]] %}
 <option class="btn" value="{{ fi.replace(' ','-') if fi else '' }}" id="{{ fi }}-fi" type="button" href="#{{ fi.replace(' ','') if fi else '' }}" >
     {{ fi }}
@@ -61,10 +57,12 @@
         <div class="col-md-{{ '5' if card.image else '7' }}">
         <div class="card-body">
         <a href="{{ card.url }}" class="stretched-link">
-        <h5 class="card-title">{{ card.title }}</h5>
+        <h5 class="card-title">{{ card.meta.title if "title" in card.meta else card.title }}</h5>
         </a>
         <p class="card-text">
-            {%-if card.synopsis-%}
+            {% if card.meta.abstract %}
+            {{ card.meta.abstract }}
+            {%-elif card.synopsis-%}
             {{ card.synopsis }}
             {%-elif card.meta.summary-%}
             {{ card.meta.summary }}
@@ -90,9 +88,6 @@
 {{ super() }}
 <script>
     let selectedFilters = [];
-    //const images = [...document.querySelectorAll('.card')];
-    //const images = [ ...document.getElementById("gallery").children];
-    //const images = [].slice.call(document.getElementById('gallery').getElementsByTagName('*'),0);
     const images = document.getElementsByClassName("gallery-item");
     const filters = [...document.querySelectorAll('.filter select')];
     const toggles = [...document.querySelectorAll('.filter input')];
@@ -128,12 +123,6 @@
             };
         })
     };
-    //for (const toggle of toggles) {
-    //    toggle.addEventListener('change', function(event) {
-    //        console.log(toggle.closest('.input-group').querySelector("select"));
-    //        toggle.closest(".input-group").querySelector("select")
-    //    })
-    //}
 
 </script>
 {% endblock %}
