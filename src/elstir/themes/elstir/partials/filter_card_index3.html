@@ -52,12 +52,12 @@
 {% set i = 0 %}
 <div class="gallery" id="gallery">
 {% for card in cards[0].children %}
-<div class="card shadow-sm my-2 {% for f in card.template_data.values() %} {{ f.replace(' ','-') if f else '' }}{% endfor %} gallery-item" {% if card.template_data %}data-gallery_info='{{ card.template_data|tojson }}'{% endif %}>
+<div class="card shadow-sm my-3 {% for f in card.template_data.values() %} {{ f.replace(' ','-') if f else '' }}{% endfor %} gallery-item" {% if card.template_data %}data-gallery_info='{{ card.template_data|tojson }}'{% endif %}>
     <div class="row no-gutters">
         <div class="col-md-{{ '5' if card.image else '7' }}">
         <div class="card-body">
         <a href="{{ card.url }}" class="stretched-link">
-        <h5 class="card-title">{{ card.meta.title if "title" in card.meta else card.title }}</h5>
+        <h4 class="card-title">{{ card.meta.title if "title" in card.meta else card.title }}</h5>
         </a>
         <p class="card-text">
             {% if card.meta.abstract %}

@@ -1,18 +1,54 @@
 # Config options for 'odette' theme
 extends: elstir
 
-static_templates:
-    - 404.html
 
-include_search_page: false
-search_index_only: false
+markdown_extensions:
+    - tables
+    - mdx_math:
+        enable_dollar_delimiter: true
+    - meta
+    - markdown.extensions.admonition
+    - markdown.extensions.attr_list
+    - markdown.extensions.def_list
+    - markdown.extensions.footnotes
+    - markdown.extensions.meta
+    - markdown.extensions.toc:
+        permalink: true
+    # - mkautodoc
+    - pymdownx.arithmatex:
+        generic: true
+    - pymdownx.betterem:
+        smart_enable: all
+    - pymdownx.caret
+    - pymdownx.critic
+    - pymdownx.details
+    - pymdownx.highlight
+    - pymdownx.inlinehilite
+    - pymdownx.keys
+    - pymdownx.mark
+    - pymdownx.progressbar
+    - pymdownx.smartsymbols
+    - pymdownx.snippets:
+        check_paths: true
+    # - pymdownx.superfences
+    - pymdownx.tabbed
+    - pymdownx.tasklist:
+        custom_checkbox: true
+    - pymdownx.tilde
 
-highlightjs: true
-hljs_languages: []
-hljs_style: github
+
+# static_templates:
+#     - 404.html
+
+# include_search_page: false
+# search_index_only: false
+
+# highlightjs: true
+# hljs_languages: []
+# hljs_style: github
 
 navigation_depth: 2
-nav_style: primary
+nav_style: light
 
 shortcuts:
     help: 191    # ?
