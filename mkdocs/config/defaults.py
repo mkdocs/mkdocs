@@ -26,6 +26,9 @@ DEFAULT_SCHEMA = (
 
     # A description for the documentation project that will be added to the
     # HTML meta tags.
+    # The name of the keywords to add to the HTML meta tags
+    ('site_keywords', config_options.Type(str)),
+    # The name of the keywords to add to the HTML meta tags
     ('site_description', config_options.Type(str)),
     # The name of the author to add to the HTML meta tags
     ('site_author', config_options.Type(str)),

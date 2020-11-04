@@ -180,6 +180,7 @@ used options include:
 * [config.site_name](./configuration.md#site_name)
 * [config.site_url](./configuration.md#site_url)
 * [config.site_author](./configuration.md#site_author)
+* [config.site_keywords](./configuration.md#site_keywords)
 * [config.site_description](./configuration.md#site_description)
 * [config.extra_javascript](./configuration.md#extra_javascript)
 * [config.extra_css](./configuration.md#extra_css)
@@ -759,6 +760,7 @@ setup(
     version=VERSION,
     url='',
     license='',
+    keywords='',
     description='',
     author='',
     author_email='',
@@ -773,7 +775,7 @@ setup(
 )
 ```
 
-Fill in the URL, license, description, author and author email address.
+Fill in the URL, license, keywords, description, author and author email address.
 
 The name should follow the convention `mkdocs-themename` (like `mkdocs-
 bootstrap` and `mkdocs-bootswatch`), starting with MkDocs, using hyphens to

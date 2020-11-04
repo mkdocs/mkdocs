@@ -117,6 +117,12 @@ edit_uri: root/path/docs/
 `src/default/docs/` for a Bitbucket repo, if `repo_url` matches those domains,
 otherwise `null`
 
+### site_keywords
+
+Set the site keywords. This will add a meta tag to the generated HTML header.
+
+**default**: `null`
+
 ### site_description
 
 Set the site description. This will add a meta tag to the generated HTML header.
