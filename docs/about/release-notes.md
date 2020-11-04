@@ -25,7 +25,7 @@ The current and past members of the MkDocs team.
 
 ### Major Additions to Version 1.2
 
-##### Backward Incompatible Changes
+### Backward Incompatible Changes in 1.2
 
 A theme's files are now excluded from the list of watched files by default
 when using the `--livereload` server. This new default behavior is what most
