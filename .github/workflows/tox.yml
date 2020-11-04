@@ -3,12 +3,12 @@ name: CI
 on:
   push:
     branches:
-    - master
+      - master
     tags:
-    - '**'
+      - '**'
   pull_request:
     branches:
-    - '**'
+      - '**'
 
 jobs:
   test:
@@ -68,24 +68,24 @@ jobs:
       TOXENV: ${{ matrix.tox-env }}
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip tox coverage codecov
-    - name: Run tox
-      run: python -m tox
-    - name: Upload Codecov Results
-      if: success()
-      uses: codecov/codecov-action@v1
-      with:
-        file: ./coverage.xml
-        flags: unittests
-        name: ${{ matrix.os }}-${{ matrix.tox-env }}
-        fail_ci_if_error: false
+      - uses: actions/checkout@v2
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip tox coverage codecov
+      - name: Run tox
+        run: python -m tox
+      - name: Upload Codecov Results
+        if: success()
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          name: ${{ matrix.os }}-${{ matrix.tox-env }}
+          fail_ci_if_error: false
 
   lint:
     strategy:
@@ -106,22 +106,22 @@ jobs:
       TOXENV: ${{ matrix.tox-env }}
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup Python
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.7
-    - name: Install Python dependencies
-      run: |
-        python -m pip install --upgrade pip tox
-    - name: Setup Node
-      if: ${{ matrix.node-deps != false }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: '10'
-    - name: Install Node dependencies
-      if: ${{ matrix.node-deps != false }}
-      run: |
-        npm install -g ${{ matrix.node-deps }}
-    - name: Run tox
-      run: python -m tox
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip tox
+      - name: Setup Node
+        if: ${{ matrix.node-deps != false }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10'
+      - name: Install Node dependencies
+        if: ${{ matrix.node-deps != false }}
+        run: |
+          npm install -g ${{ matrix.node-deps }}
+      - name: Run tox
+        run: python -m tox
