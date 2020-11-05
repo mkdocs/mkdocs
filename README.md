@@ -5,8 +5,7 @@ Project documentation with Markdown.
 ---
 
 [![PyPI Version][pypi-v-image]][pypi-v-link]
-[![Build Status][travis-image]][travis-link]
-[![Windows Build Status][appveyor-image]][appveyor-link]
+[![Build Status][GHAction-image]][GHAction-link]
 [![Coverage Status][codecov-image]][codecov-link]
 [![Landscale Code Health][landscape-image]][landscape-link]
 
@@ -22,16 +21,14 @@ Project documentation with Markdown.
 Everyone interacting in the MkDocs project's codebases, issue trackers, chat
 rooms, and mailing lists is expected to follow the [PyPA Code of Conduct].
 
-[appveyor-image]: https://img.shields.io/appveyor/ci/d0ugal/mkdocs/master.svg
-[appveyor-link]: https://ci.appveyor.com/project/d0ugal/mkdocs
 [codecov-image]: https://codecov.io/github/mkdocs/mkdocs/coverage.svg?branch=master
 [codecov-link]: https://codecov.io/github/mkdocs/mkdocs?branch=master
 [landscape-image]: https://landscape.io/github/mkdocs/mkdocs/master/landscape.svg?style=flat
 [landscape-link]: https://landscape.io/github/mkdocs/mkdocs/master
 [pypi-v-image]: https://img.shields.io/pypi/v/mkdocs.svg
 [pypi-v-link]: https://pypi.org/project/mkdocs/
-[travis-image]: https://img.shields.io/travis/mkdocs/mkdocs/master.svg
-[travis-link]: https://travis-ci.org/mkdocs/mkdocs
+[GHAction-image]: https://github.com/mkdocs/mkdocs/workflows/CI/badge.svg?branch=master&event=push
+[GHAction-link]: https://github.com/mkdocs/mkdocs/actions?query=event%3Apush+branch%3Amaster
 
 [mkdocs]: https://www.mkdocs.org
 [release-notes]: https://www.mkdocs.org/about/release-notes/
