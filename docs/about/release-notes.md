@@ -25,6 +25,15 @@ The current and past members of the MkDocs team.
 
 ### Major Additions to Version 1.2
 
+#### A `--wait` flag has been added to the `serve` command (#2061)
+
+To delay a rebuild of the site when using the livereload server, use the
+`--wait` flag to specify the number of seconds to wait.
+
+```bash
+mkdocs serve --wait 60
+```
+
 ### Backward Incompatible Changes in 1.2
 
 A theme's files are now excluded from the list of watched files by default
