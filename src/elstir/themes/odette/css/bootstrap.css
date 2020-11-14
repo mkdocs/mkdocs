@@ -20809,6 +20809,10 @@ footer {
   transform: scale(1, -1);
 }
 
+.navbar-light .navbar-toggler {
+  border-color: transparent !important;
+}
+
 .bs-sidebar .navbar-toggler.collapsed span {
   /* csslint allow: adjoining-classes */
   -webkit-transform: scale(1, 1);
