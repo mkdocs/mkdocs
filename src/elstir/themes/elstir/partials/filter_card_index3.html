@@ -1,24 +1,8 @@
 {% extends "base.html" %}
-{% block styles %}
-{{ super() }}
-<style>
-.input-group>.input-group-prepend {
-    flex: 0 0 20%;
-}
-.input-group .input-group-text {
-    width: 100%;
-}
-</style>
-{% endblock %}
+{% from "single_item.html" import single_item with context %}
 
 {% block post_content %}
 {% set cards = page|get_children(pages) %}
-{% set tabs = {} %}
-{% for Card in cards[0].children %}
-{% set tab = Card.meta.tab %}
-{% if tab not in tabs %}{% do tabs.update({tab: []}) %}{% endif %}
-    {% for card in cards[0].children %}{% if card.meta.tab == tab and card not in tabs[tab] %}{% do tabs[tab].append(card) %}{% endif %}{% endfor %}
-{% endfor %}
 {% set filters = page.meta.template_data|elstir_get_filters %}
 <hr><details>
 <summary>Filters</summary>
@@ -47,37 +31,10 @@
 </div>
 </details>
 
-
 <hr>
-{% set i = 0 %}
 <div class="gallery" id="gallery">
 {% for card in cards[0].children %}
-<div class="card shadow-sm my-3 {% for f in card.template_data.values() %} {{ f.replace(' ','-') if f else '' }}{% endfor %} gallery-item" {% if card.template_data %}data-gallery_info='{{ card.template_data|tojson }}'{% endif %}>
-    <div class="row no-gutters">
-        <div class="col-md-{{ '5' if card.image else '7' }}">
-        <div class="card-body">
-        <a href="{{ card.url }}" class="stretched-link">
-        <h4 class="card-title">{{ card.meta.title if "title" in card.meta else card.title }}</h5>
-        </a>
-        <p class="card-text">
-            {% if card.meta.abstract %}
-            {{ card.meta.abstract }}
-            {%-elif card.synopsis-%}
-            {{ card.synopsis }}
-            {%-elif card.meta.summary-%}
-            {{ card.meta.summary }}
-            {%-endif-%}
-        </p>
-        </div>
-        </div>
-        {% if card.image %}
-        <div class="col-md-4 ml-auto mr-2">
-            <img src="{{ card.image }}" class="card-image" style="max-width:275px;max-height:220px;width:auto;height:auto;">
-        </div>
-        {% endif %}
-    </div>
-</div>
-{% set i = i + 1 %}
+{{ single_item(card) }}
 {% endfor %}
 </div>
 
@@ -88,7 +45,7 @@
 {{ super() }}
 <script>
     let selectedFilters = [];
-    const images = document.getElementsByClassName("gallery-item");
+    const images  = document.getElementsByClassName("gallery-item");
     const filters = [...document.querySelectorAll('.filter select')];
     const toggles = [...document.querySelectorAll('.filter input')];
 
