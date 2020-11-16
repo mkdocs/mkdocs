@@ -1,5 +1,6 @@
 ---
 title: Elstir
+url: https://github.com/claudioperez/elstir
 summary: 'Academic web publishing forked from <a href="https://www.mkdocs.org/">MkDocs</a>.'
 description: 'Elstir is a command line tool that was forked from <a href="https://www.mkdocs.org/">MkDocs</a> and introduces improvements to better accommodate the organized publication of academic projects to the web.'
 ...
