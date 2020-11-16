@@ -1,259 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-      {%- block site_meta %}
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        {% if page and page.is_homepage %}<meta name="description" content="{{ config['site_description'] }}">{% endif %}
-        {% if config.site_author %}<meta name="author" content="{{ config.site_author }}">{% endif %}
-        {% if page and page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}">{% endif %}
-        {% if config.site_favicon %}<link rel="shortcut icon" href="{{ config.site_favicon|url }}">
-        {% else %}<link rel="shortcut icon" href="{{ 'img/favicon.ico'|url }}">{% endif %}
-      {%- endblock %}
+  <head>
+{%- block site_meta %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if page and page.is_homepage %}<meta name="description" content="{{ config['site_description'] }}">{% endif %}
+    {% if config.site_author %}<meta name="author" content="{{ config.site_author }}">{% endif %}
+    {% if page and page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}">{% endif %}
+    {% if config.site_favicon %}<link rel="shortcut icon" href="{{ config.site_favicon|url }}">
+    {% else %}<link rel="shortcut icon" href="{{ 'img/favicon.ico'|url }}">{% endif %}
+{%- endblock %}
+{%- block htmltitle %}
+    <title>{% if page and page.title and not page.is_homepage %}{{ page.title }} - {% endif %}{{ config.site_name }}</title>
+{%- endblock %}
 
-      {%- block htmltitle %}
-        <title>{% if page and page.title and not page.is_homepage %}{{ page.title }} - {% endif %}{{ config.site_name }}</title>
-      {%- endblock %}
+{%- block styles %}
+    <link href="{{ 'css/bootstrap.min.css'|url }}" rel="stylesheet">
+    <link href="{{ 'css/font-awesome.min.css'|url }}" rel="stylesheet">
+    <link href="{{ 'css/base.css'|url }}" rel="stylesheet">
+    {%- if config.theme.highlightjs %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/{{ config.theme.hljs_style }}.min.css">
+    {%- endif %}
+    {%+ for path in config['extra_css'] %}
+    <link href="{{ path|url }}" rel="stylesheet">
+    {% endfor %}
+{%- endblock %}
 
-      {%- block styles %}
-        <link href="{{ 'css/bootstrap.min.css'|url }}" rel="stylesheet">
-        <link href="{{ 'css/font-awesome.min.css'|url }}" rel="stylesheet">
-        <link href="{{ 'css/base.css'|url }}" rel="stylesheet">
-        {%- if config.theme.highlightjs %}
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/{{ config.theme.hljs_style }}.min.css">
-        {%- endif %}
-        {%- for path in config['extra_css'] %}
-        <link href="{{ path|url }}" rel="stylesheet">
-        {%- endfor %}
-      {%- endblock %}
-
-      {%- block libs %}
+{%- block libs %}
+    {% if false %}
         <!-- <script src="{{ 'js/jquery-1.10.2.min.js'|url }}" defer></script> -->
         <!-- <script src="{{ 'js/bootstrap.min.js'|url }}" defer></script> -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-        {%- if config.theme.highlightjs %}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-        {%- for lang in config.theme.hljs_languages %}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/{{lang}}.min.js"></script>
-        {%- endfor %}
-        <script>hljs.initHighlightingOnLoad();</script>
-        {%- endif %}
-        <!-- <script>
-            $(".nav .nav-link").on("click", function(){
-            $(".nav").find(".active").removeClass("active");
-            $(this).addClass("active");
-         });
-         </script> -->
-      {%- endblock %}
-      {%- block analytics %}
-        {%- if config.google_analytics %}
+    {% endif %}
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    {%- if config.theme.highlightjs %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    {%- for lang in config.theme.hljs_languages %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/{{lang}}.min.js"></script>
+    {%- endfor %}
+    <script>hljs.initHighlightingOnLoad();</script>
+    {%- endif %}
+{%- endblock %}
+{%- block analytics %}
+    {%- if config.google_analytics %}
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
             ga('create', '{{ config.google_analytics[0] }}', '{{ config.google_analytics[1] }}');
             ga('send', 'pageview');
         </script>
-        {%- endif %}
-      {%- endblock %}
-      {%- block extrahead %}{% endblock %}
-    </head>
-
-    <body{% if page and page.is_homepage %} class="homepage Site" {% else %} class="Site" {% endif %}>
-        <div class="navbar fixed-top mb-4 navbar-expand-lg navbar-{% if config.theme.nav_style == "light" %}light{% else %}dark{% endif %} bg-{{ config.theme.nav_style }}">
-            <div class="container">
-
-                {%- block site_name %}
-                <a class="navbar-brand" href="{{ nav.homepage.url|url }}"><code style="font-weight: normal;">{{ config.site_name }}</code></a>
-                {%- endblock %}
-
-                {%- if nav|length>1 or (page and (page.next_page or page.previous_page)) or config.repo_url %}
-                <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                {%- endif %}
-
-                <!-- Expanded navigation -->
-                <div id="navbar-collapse" class="navbar-collapse collapse">
-                  {%- block site_nav %}
-                    {%- if nav|length>1 %}
-                        <!-- Main navigation -->
-                        <ul class="nav navbar-nav ml-auto">
-                        <!--<ul class="nav navbar-nav">-->
-                        {%- for nav_item in nav %}
+    {%- endif %}
+{%- endblock %}
+{%- block extrahead %}{% endblock %}
+  </head>
+  <body{% if page and page.is_homepage %} class="homepage Site" {% else %} class="Site" {% endif %}>
+    <div class="navbar fixed-top mb-4 navbar-expand-lg navbar-{% if config.theme.nav_style == "light" %}light{% else %}dark{% endif %} bg-{{ config.theme.nav_style }}">
+      <div class="container">
+{%- block site_name %}
+        <a class="navbar-brand" href="{{ nav.homepage.url|url }}"><code style="font-weight: normal;">{{ config.site_name }}</code></a>
+{%- endblock %}
+    {%- if nav|length>1 or (page and (page.next_page or page.previous_page)) or config.repo_url %}
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+    {%- endif %}
+        <div id="navbar-collapse" class="navbar-collapse collapse">
+{%- block site_nav %}
+    {%- if nav|length>1 %}
+          <!-- Main navigation -->
+          <ul class="nav navbar-nav ml-auto">
+                    {%- for nav_item in nav %}
                         {%- if nav_item.nav_incl  %}
                             {%- if nav_item.children %}
-                            <li class="dropdown{% if nav_item.active %} active{% endif %}">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ nav_item.title }} <b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                {%- for nav_item in nav_item.children %}
-                                    {%- if nav_item.nav_incl  %}
-                                    {% include "nav-sub.html" %}
-                                    {%- endif %}
-                                {%- endfor %}
-                                </ul>
-                            </li>
+            <li class="dropdown{% if nav_item.active %} active{% endif %}">
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ nav_item.title }} <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    {%- for nav_item in nav_item.children %}
+                        {%- if nav_item.nav_incl  %}
+                        {% include "nav-sub.html" %}
+                        {%- endif %}
+                    {%- endfor %}
+                </ul>
+            </li>
                             {%- else %}
-                            <li class="navitem{% if nav_item.active %} active{% endif %}">
-                                <a href="{{ nav_item.url|url }}" class="nav-link">{{ nav_item.title }}</a>
-                            </li>
+            <li class="navitem{% if nav_item.active %} active{% endif %}">
+                <a href="{{ nav_item.url|url }}" class="nav-link">{{ nav_item.title }}</a>
+            </li>
                             {%- endif %}
                         {%- endif %}
-                        {%- endfor %}
-                        <!--</ul>-->
-                        <!--</div>-->
-
+                    {%- endfor %}
+          </ul>
                     {%- endif %}
-                  {%- endblock %}
-
+{%- endblock %}
                     <!-- <ul class="nav navbar-nav ml-auto"> -->
-                      {%- block search_button %}
-                        {%- if 'search' in config['plugins'] %}
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#elstir_search_modal">
-                               <i class="fa fa-search"></i> Search
+{%- block search_button %}
+                    {%- if 'search' in config['plugins'] %}
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-toggle="modal" data-target="#elstir_search_modal">
+                    <i class="fa fa-search"></i> Search
+                </a>
+            </li>
+                    {%- endif %}
+{%- endblock %}
+{%- block next_prev %}
+                    {% if false %}
+                    {#- if page and (page.next_page or page.previous_page) #}
+                        <!-- <li class="nav-item">
+                            <a rel="prev" {% if page.previous_page %}href="{{ page.previous_page.url|url }}" class="nav-link"{% else %}class="nav-link disabled"{% endif %}>
+                                <i class="fa fa-arrow-left"></i> Previous
                             </a>
                         </li>
-                        {%- endif %}
-                      {%- endblock %}
-
-                      {%- block next_prev %}
-                        {% if false %}
-                        {#- if page and (page.next_page or page.previous_page) #}
-                            <!-- <li class="nav-item">
-                                <a rel="prev" {% if page.previous_page %}href="{{ page.previous_page.url|url }}" class="nav-link"{% else %}class="nav-link disabled"{% endif %}>
-                                    <i class="fa fa-arrow-left"></i> Previous
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a rel="next" {% if page.next_page %}href="{{ page.next_page.url|url }}" class="nav-link"{% else %}class="nav-link disabled"{% endif %}>
-                                    Next <i class="fa fa-arrow-right"></i>
-                                </a>
-                            </li> -->
-                        {%- endif %}
-                      {%- endblock %}
-
-                      {%- block repo %}
-                        {%- if page and page.edit_url %}
-                            <li class="nav-item">
-                                <a href="{{ page.edit_url }}" class="nav-link">
-                                    {%- if config.repo_name == 'GitHub' -%}
-                                        <i class="fa fa-github"></i> Edit on {{ config.repo_name }}
-                                    {%- elif config.repo_name == 'Bitbucket' -%}
-                                        <i class="fa fa-bitbucket"></i> Edit on {{ config.repo_name }}
-                                    {%- elif config.repo_name == 'GitLab' -%}
-                                        <i class="fa fa-gitlab"></i> Edit on {{ config.repo_name }}
-                                    {%- else -%}
-                                    Edit on {{ config.repo_name }}
-                                    {%- endif -%}
-                                </a>
-                            </li>
-                        {%- elif config.repo_url %}
-                            <li class="nav-item">
-                                <a href="{{ config.repo_url }}" class="nav-link">
-                                    {%- if config.repo_name == 'GitHub' -%}
-                                        <i class="fa fa-github"></i> {{ config.repo_name }}
-                                    {%- else -%}
-                                    {{ config.repo_name }}
-                                    {%- endif -%}
-                                </a>
-                            </li>
-                        {%- endif %}
-                      {%- endblock %}
-                    </ul>
-                </div>
-            </div>
+                        <li class="nav-item">
+                            <a rel="next" {% if page.next_page %}href="{{ page.next_page.url|url }}" class="nav-link"{% else %}class="nav-link disabled"{% endif %}>
+                                Next <i class="fa fa-arrow-right"></i>
+                            </a>
+                        </li> -->
+                    {%- endif %}
+{%- endblock %}
+{%- block repo %}
+{%- endblock %}
+          </ul>
         </div>
-        <div class="container">
-            <main class="Site-content">
-            {% if false %}
-            {# if page and not page.is_homepage #}
-            <!-- <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="#">Home</a></li>
-                  <li class="breadcrumb-item"><a href="#">Library</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Data</li>
-                </ol>
-            </nav> -->
-            {% endif %}
-            <div class="row">
-                {%- block content %}
-                    {% if page and page.meta.hide_toc %}
-                        <div>  </div>
-                    {% else %}
-                        <div class="col-md-3">{% include "toc.html" %}</div>
-                    {% endif %}
-
-                    {% if page and page.meta.full_width %}
-                        {% include "content.html" %}
-                    {% else %}
-                        <article class="col-md-{{ '12' if page.meta.hide_toc else '9' }} p-3">
-                        {% include "content.html" %}
-                        {% block post_content %}{% endblock %}
-                        </article><!--<a href="#" onclick="printInfo(this)">Print</a>-->
-                        <!-- <div class="col-md-8" role="main">{# include "content.html" #}</div> -->
-                    {% endif %}
-                {%- endblock %}
-            </div>
+      </div>
+    </div>
+    <div class="container">
+      <main class="Site-content">
+{%- block precontent %}
+{%- endblock %}
+        <!-- <div id="particles-js" style="background-size: cover; background-repeat: no-repeat; background-position: 50% 50%;"></div> -->
+        <div class="row"> <!-- style="z-index: 9999;"-->
+{%- block content %}
+  {% if page and page.meta.hide_toc %}
+  {% else %}
+          <div class="col-md-3">{% include "toc.html" %}</div>
+  {% endif %}
+  {% if page and page.meta.full_width %}
+          {% include "content.html" %}
+  {% else %}
+          <article class="col-md-{{ '12' if page.meta.hide_toc else '9' }} p-3">
+          {% include "content.html" %}
+    {% block post_content %}{% endblock %}
+          </article>
+  {% endif %}
+{%- endblock %}
         </div>
-        </main>
-        <footer class="footer mb-3 mt-2">
-        <hr class="mt-0 mb-2">
-            {% if false %}
-            <!-- https://webdesign.tutsplus.com/tutorials/how-to-build-a-responsive-multi-level-sticky-footer-with-flexbox--cms-33341 -->
-            {% endif %}
-            <section class="ft-legal container">
-                <div class="row">
-                    <div class="col-md-3 mr-auto">
-                        {%- if config.copyright %}
-                            <p class="my-0 font-size-base">{{ config.copyright }}</p>
-                        {%- endif %}
-                    </div>
-                    <div class="col-md-3 ml-auto">
-                        <a href="https://github.com/claudioperez" target="_blank" rel="noopener" title="github.com" class="md-footer-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
-                        </a>
-                        <a href="https://linkedin.com/in/claudiomperez/" target="_blank" rel="noopener" title="linkedin.com" class="md-footer-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"></path></svg>
-                        </a>
-                        <a href="/Perez_Claudio_Resume.pdf" class="md-footer-icon">
-                            <img src="/img/cv.svg" class="md-footer-icon">
-                        </a>
-                    </div>
-                </div>
-            </section>
-            </footer>
+      </main>
+    </div>
+    <footer class="footer mb-3 mt-2">
+    <hr class="mt-0 mb-2">
+    {% if false %}<!-- https://webdesign.tutsplus.com/tutorials/how-to-build-a-responsive-multi-level-sticky-footer-with-flexbox--cms-33341 -->{% endif %}
+        <section class="ft-legal container">
+          <div class="row">
+            <div class="col-md-3 mr-auto">
+              {%- if config.copyright %}
+              <p class="my-0 font-size-base">{{ config.copyright }}</p>
+              {%- endif %}
+            </div>
+            <div class="col-md-3 ml-auto">
+              <a href="https://github.com/claudioperez" target="_blank" rel="noopener" title="github.com" class="md-footer-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+              </a>
+              <a href="https://linkedin.com/in/claudiomperez/" target="_blank" rel="noopener" title="linkedin.com" class="md-footer-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"></path></svg>
+              </a>
+              <a href="/Perez_Claudio_Resume.pdf" class="md-footer-icon">
+                <img src="/img/cv.svg" class="md-footer-icon">
+              </a>
+            </div>
+          </div>
+        </section>
+    </footer>
 
       {%- block scripts %}
-        <script>
-            var base_url = {{ base_url | tojson }},
-                shortcuts = {{ config.theme.shortcuts | tojson }};
-        </script>
-        <script src="{{ 'js/base.js'|url }}" defer></script>
-        <!-- <script>
-            function printInfo(ele) {
-                var openWindow = window.open("", "title", "attributes");
-                openWindow.document.write(ele.previousSibling.innerHTML);
-                openWindow.document.close();
-                openWindow.focus();
-                openWindow.print();
-                openWindow.close();
-            }
-        </script> -->
-
-        {%- for path in config['extra_javascript'] %}
-        <script src="{{ path|url }}" defer></script>
-        {%- endfor %}
-      {%- endblock %}
-
-        {% if 'search' in config['plugins'] %}{%- include "search-modal.html" %}{% endif %}
-        {%- include "keyboard-modal.html" %}
-
-    </body>
+    <script>
+        var base_url = {{ base_url | tojson }},
+            shortcuts = {{ config.theme.shortcuts | tojson }};
+    </script>
+    <script src="{{ 'js/base.js'|url }}" defer></script>
+    {%- for path in config['extra_javascript'] %}
+    <script src="{{ path|url }}" defer></script>
+    {%- endfor %}
+{%- endblock %}
+    {% if false %}
+    {% if 'search' in config['plugins'] %}{%- include "search-modal.html" %}{% endif %}
+    {%- include "keyboard-modal.html" %}
+    {% endif %}
+  </body>
 </html>
 
