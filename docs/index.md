@@ -265,7 +265,7 @@ Save your changes, and you'll see the ReadTheDocs theme being used.
 ## Changing the Favicon Icon
 
 By default, MkDocs uses the [MkDocs favicon] icon. To use a different icon, create
-an `img` subdirectory in your `docs_dir` and copy your custom `favicon.ico` file
+an `img` subdirectory in your `docs` directory and copy your custom `favicon.ico` file
 to that directory. MkDocs will automatically detect and use that file as your
 favicon icon.
 
