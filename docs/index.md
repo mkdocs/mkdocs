@@ -168,7 +168,8 @@ Take a moment to review the initial project that has been created for you.
 ![The initial MkDocs layout](img/initial-layout.png)
 
 There's a single configuration file named `mkdocs.yml`, and a folder named
-`docs` that will contain your documentation source files. Right now the `docs`
+`docs` that will contain your documentation source files (`docs` is
+the default value for the `docs_dir` configuration setting). Right now the `docs`
 folder just contains a single documentation page, named `index.md`.
 
 MkDocs comes with a built-in dev-server that lets you preview your documentation
@@ -265,7 +266,7 @@ Save your changes, and you'll see the ReadTheDocs theme being used.
 ## Changing the Favicon Icon
 
 By default, MkDocs uses the [MkDocs favicon] icon. To use a different icon, create
-an `img` subdirectory in your `docs` directory and copy your custom `favicon.ico` file
+an `img` subdirectory in the `docs` directory and copy your custom `favicon.ico` file
 to that directory. MkDocs will automatically detect and use that file as your
 favicon icon.
 
