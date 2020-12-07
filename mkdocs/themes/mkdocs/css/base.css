@@ -314,5 +314,5 @@ h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink, h4:hover .head
 
 @media print {
     /* Remove sidebar when print */
-    .col-md-3 { display: none !important; }
+    .col-md-3 { display: none; }
 }
