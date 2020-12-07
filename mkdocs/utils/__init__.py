@@ -276,12 +276,7 @@ def create_media_urls(path_list, page=None, base=''):
     """
     Return a list of URLs relative to the given page or using the base.
     """
-    urls = []
-
-    for path in path_list:
-        urls.append(normalize_url(path, page, base))
-
-    return urls
+    return [normalize_url(path, page, base) for path in path_list]
 
 
 def path_to_url(path):

@@ -3,7 +3,7 @@
 import sys
 import unittest
 
-from mkdocs.structure.nav import get_navigation
+from mkdocs.structure.nav import get_navigation, _get_by_type, Section
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.pages import Page
 from mkdocs.tests.base import dedent, load_config
@@ -377,3 +377,18 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertFalse(site_navigation.items[1].children[3].children[0].active)
         self.assertFalse(site_navigation.items[1].children[3].active)
         self.assertFalse(site_navigation.items[1].active)
+
+    def test_get_by_type_nested_sections(self):
+        nav_cfg = [
+            {'Section 1': [
+                {'Section 2': [
+                    {'Page': 'page.md'}
+                ]}
+            ]}
+        ]
+        cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
+        files = Files([
+            File('page.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        ])
+        site_navigation = get_navigation(files, cfg)
+        self.assertEqual(len(_get_by_type(site_navigation, Section)), 2)

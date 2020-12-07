@@ -21,6 +21,32 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Version 1.2 (Under development)
+
+### Major Additions to Version 1.2
+
+#### A `--wait` flag has been added to the `serve` command (#2061)
+
+To delay a rebuild of the site when using the livereload server, use the
+`--wait` flag to specify the number of seconds to wait.
+
+```bash
+mkdocs serve --wait 60
+```
+
+### Backward Incompatible Changes in 1.2
+
+A theme's files are now excluded from the list of watched files by default
+when using the `--livereload` server. This new default behavior is what most
+users need and provides better performance when editing site content.
+Theme developers can enable the old behavior with the `--watch-theme`
+option. (#2092).
+
+### Other Changes and Additions to Version 1.2
+
+* Bugfix: Properly process navigation child items in `_get_by_type` when
+  filtering for sections (#2203).
+
 ## Version 1.1.2 (2020-05-14)
 
 * Bugfix: Normalize IP addresses and change unsupported address error to a

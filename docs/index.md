@@ -168,8 +168,11 @@ Take a moment to review the initial project that has been created for you.
 ![The initial MkDocs layout](img/initial-layout.png)
 
 There's a single configuration file named `mkdocs.yml`, and a folder named
-`docs` that will contain your documentation source files. Right now the `docs`
+`docs` that will contain your documentation source files (`docs` is
+the default value for the [docs_dir] configuration setting). Right now the `docs`
 folder just contains a single documentation page, named `index.md`.
+
+[docs_dir]: https://www.mkdocs.org/user-guide/configuration/#docs_dir
 
 MkDocs comes with a built-in dev-server that lets you preview your documentation
 as you work on it. Make sure you're in the same directory as the `mkdocs.yml`
@@ -265,8 +268,8 @@ Save your changes, and you'll see the ReadTheDocs theme being used.
 ## Changing the Favicon Icon
 
 By default, MkDocs uses the [MkDocs favicon] icon. To use a different icon, create
-an `img` subdirectory in your `docs_dir` and copy your custom `favicon.ico` file
-to that directory. MkDocs will automatically detect and use that file as your
+an `img` subdirectory in the `docs` directory and copy your custom `favicon.ico`
+file to that directory. MkDocs will automatically detect and use that file as your
 favicon icon.
 
 [MkDocs favicon]: /img/favicon.ico
@@ -333,9 +336,8 @@ mkdocs build --help
 ## Deploying
 
 The documentation site that you just built only uses static files so you'll be
-able to host it from pretty much anywhere. [GitHub project pages] and [Amazon
-S3] may be good hosting options, depending upon your needs. Upload the contents
-of the entire `site` directory to wherever you're hosting your website from and
+able to host it from pretty much anywhere. Simply upload the contents of the
+entire `site` directory to wherever you're hosting your website from and
 you're done. For specific instructions on a number of common hosts, see the
 [Deploying your Docs][deploy] page.
 
@@ -352,12 +354,10 @@ the MkDocs IRC channel `#mkdocs` on freenode.
 [plugins]: user-guide/plugins/
 [MkDocs Themes]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
 [build your own]: user-guide/custom-themes/
-[Amazon S3]: https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html
 [get-pip.py]: https://bootstrap.pypa.io/get-pip.py
 [nav]: user-guide/configuration/#nav
 [discussion group]: https://groups.google.com/forum/#!forum/mkdocs
 [GitHub issues]: https://github.com/mkdocs/mkdocs/issues
-[GitHub project pages]: https://help.github.com/articles/creating-project-pages-manually/
 [pip]: https://pip.readthedocs.io/en/stable/installing/
 [Python]: https://www.python.org/
 [site_name]: user-guide/configuration/#site_name
