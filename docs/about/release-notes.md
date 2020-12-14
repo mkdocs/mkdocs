@@ -36,6 +36,23 @@ mkdocs serve --wait 60
 
 ### Backward Incompatible Changes in 1.2
 
+The `google_analytics` configuration option is deprecated as Google appears to
+be fazing it out in favor of its new Google Analytics 4 property. See the
+documentation for your theme for alternatives which can be configured as part
+of your theme configuration. For exmaple, the [mkdocs][mkdocs-theme] and
+[readthedocs][rtd-theme] themes have each added a new `theme.analytics.gtag`
+configuration option which uses the new Google Analytics 4 property. See
+Google's documentation on how to [Upgrade to a Google Analytics 4
+property][ga4]. Then set  `theme.analytics.gtag` to the "G-" ID and delete the
+`google_analytics` configuration option which contains a "UA-" ID. So long
+as the old "UA-" ID and new "G-" ID are properly linked in your Google account,
+and you are using the "G-" ID, the data will be made available in both the old
+and new formats by Google Analytics. See #2252.
+
+[mkdocs-theme]: ../user-guide/styling-your-docs.md#mkdocs
+[rtd-theme]: ../user-guide/styling-your-docs.md#readthedocs
+[ga4]: https://support.google.com/analytics/answer/9744165?hl=en 
+
 A theme's files are now excluded from the list of watched files by default
 when using the `--livereload` server. This new default behavior is what most
 users need and provides better performance when editing site content.

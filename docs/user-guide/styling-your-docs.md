@@ -49,6 +49,21 @@ supports the following options:
                 - yaml
                 - rust
 
+* __`analytics`__: Defines configuration options for an analytics service.
+  Currently, only Google Analytics v4 is supported via the `gtag` option.
+
+    *   __`gtag`__: To enable Google Analytics, set to a Google Analytics v4 tracking ID, which uses the `G-` format. See Google's documentation to
+    [Set up Analytics for a website and/or app (GA4)][setup-GA4] or to
+    [Upgrade to a Google Analytics 4 property][upgrade-GA4].
+
+            theme:
+                name: mkdocs
+                analytics:
+                    gtag: G-ABC123
+
+        When set to the default (`null`) Google Analytics is disabled for the
+        site.
+
 * __`shortcuts`__: Defines keyboard shortcut keys.
 
         theme:
@@ -84,6 +99,8 @@ supports the following options:
             nav_style: dark
 
 [styles]: https://highlightjs.org/static/demo/
+[setup-GA4]: https://support.google.com/analytics/answer/9304153?hl=en&ref_topic=9303319
+[upgrade-GA4]: https://support.google.com/analytics/answer/9744165?hl=en&ref_topic=9303319
 
 ### readthedocs
 
@@ -108,6 +125,21 @@ theme supports the following options:
             hljs_languages:
                 - yaml
                 - rust
+
+* __`analytics`__: Defines configuration options for an analytics service.
+  Currently, only Google Analytics v4 is supported via the `gtag` option.
+
+    *   __`gtag`__: To enable Google Analytics, set to a Google Analytics v4 tracking ID, which uses the `G-` format. See Google's documentation to
+    [Set up Analytics for a website and/or app (GA4)][setup-GA4] or to
+    [Upgrade to a Google Analytics 4 property][upgrade-GA4].
+
+            theme:
+                name: readthedocs
+                analytics:
+                    gtag: G-ABC123
+
+        When set to the default (`null`) Google Analytics is disabled for the
+        site.
 
 * __`include_homepage_in_sidebar`__: Lists the homepage in the sidebar menu. As
   MkDocs requires that the homepage be listed in the `nav` configuration

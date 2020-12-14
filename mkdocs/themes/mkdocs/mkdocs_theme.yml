@@ -13,6 +13,9 @@ hljs_style: github
 navigation_depth: 2
 nav_style: primary
 
+analytics:
+  gtag: null
+
 shortcuts:
     help: 191    # ?
     next: 78     # n
