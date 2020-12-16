@@ -51,7 +51,7 @@ and new formats by Google Analytics. See #2252.
 
 [mkdocs-theme]: ../user-guide/styling-your-docs.md#mkdocs
 [rtd-theme]: ../user-guide/styling-your-docs.md#readthedocs
-[ga4]: https://support.google.com/analytics/answer/9744165?hl=en 
+[ga4]: https://support.google.com/analytics/answer/9744165?hl=en
 
 A theme's files are now excluded from the list of watched files by default
 when using the `--livereload` server. This new default behavior is what most

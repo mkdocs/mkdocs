@@ -52,7 +52,8 @@ supports the following options:
 * __`analytics`__: Defines configuration options for an analytics service.
   Currently, only Google Analytics v4 is supported via the `gtag` option.
 
-    *   __`gtag`__: To enable Google Analytics, set to a Google Analytics v4 tracking ID, which uses the `G-` format. See Google's documentation to
+    * __`gtag`__: To enable Google Analytics, set to a Google Analytics v4
+    tracking ID, which uses the `G-` format. See Google's documentation to
     [Set up Analytics for a website and/or app (GA4)][setup-GA4] or to
     [Upgrade to a Google Analytics 4 property][upgrade-GA4].
 
@@ -129,7 +130,8 @@ theme supports the following options:
 * __`analytics`__: Defines configuration options for an analytics service.
   Currently, only Google Analytics v4 is supported via the `gtag` option.
 
-    *   __`gtag`__: To enable Google Analytics, set to a Google Analytics v4 tracking ID, which uses the `G-` format. See Google's documentation to
+    * __`gtag`__: To enable Google Analytics, set to a Google Analytics v4
+    tracking ID, which uses the `G-` format. See Google's documentation to
     [Set up Analytics for a website and/or app (GA4)][setup-GA4] or to
     [Upgrade to a Google Analytics 4 property][upgrade-GA4].
 

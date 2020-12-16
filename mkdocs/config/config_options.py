@@ -192,7 +192,7 @@ class Deprecated(BaseConfigOption):
 
     Raises a warning the the option is deprecated. Uses `message` for the
     warning. If `move_to` is set to the name of a new config option, the value
-    is moved to the new option on pre_validation. If `option_type` is set to a 
+    is moved to the new option on pre_validation. If `option_type` is set to a
     ConfigOption instance, then the value is validated against that type.
     """
 

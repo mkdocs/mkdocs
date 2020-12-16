@@ -45,9 +45,11 @@ DEFAULT_SCHEMA = (
     # set of values for Google analytics containing the account IO and domain,
     # this should look like, ['UA-27795084-5', 'mkdocs.org']
     ('google_analytics', config_options.Deprecated(
-        message = ('The configuration option {} has been deprecated and '
+        message=(
+            'The configuration option {} has been deprecated and '
             'will be removed in a future release of MkDocs. See the '
-            'options available on your theme for an alternative.'),
+            'options available on your theme for an alternative.'
+        ),
         option_type=config_options.Type(list, length=2)
     )),
 
