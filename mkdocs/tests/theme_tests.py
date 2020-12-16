@@ -29,6 +29,7 @@ class ThemeTests(unittest.TestCase):
         self.assertEqual(get_vars(theme), {
             'include_search_page': False,
             'search_index_only': False,
+            'analytics': {'gtag': None},
             'highlightjs': True,
             'hljs_style': 'github',
             'hljs_languages': [],

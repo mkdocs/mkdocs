@@ -230,8 +230,8 @@ class Deprecated(BaseConfigOption):
 
                 target[target_key] = config.pop(key_name)
 
-    def run_validation(self, value):
-        return self.option.run_validation(value)
+    def validate(self, value):
+        return self.option.validate(value)
 
     def post_validation(self, config, key_name):
         self.option.post_validation(config, key_name)

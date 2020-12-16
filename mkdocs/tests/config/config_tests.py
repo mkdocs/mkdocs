@@ -116,6 +116,7 @@ class ConfigTests(unittest.TestCase):
                     'vars': {
                         'include_search_page': False,
                         'search_index_only': False,
+                        'analytics': {'gtag': None},
                         'highlightjs': True,
                         'hljs_style': 'github',
                         'hljs_languages': [],
@@ -129,6 +130,7 @@ class ConfigTests(unittest.TestCase):
                     'vars': {
                         'include_search_page': True,
                         'search_index_only': False,
+                        'analytics': {'gtag': None},
                         'highlightjs': True,
                         'hljs_languages': [],
                         'include_homepage_in_sidebar': True,
@@ -144,6 +146,7 @@ class ConfigTests(unittest.TestCase):
                     'vars': {
                         'include_search_page': True,
                         'search_index_only': False,
+                        'analytics': {'gtag': None},
                         'highlightjs': True,
                         'hljs_languages': [],
                         'include_homepage_in_sidebar': True,
@@ -163,6 +166,7 @@ class ConfigTests(unittest.TestCase):
                     'vars': {
                         'include_search_page': True,
                         'search_index_only': False,
+                        'analytics': {'gtag': None},
                         'highlightjs': True,
                         'hljs_languages': [],
                         'include_homepage_in_sidebar': True,
@@ -180,6 +184,7 @@ class ConfigTests(unittest.TestCase):
                         'some_var': 'bar',
                         'include_search_page': False,
                         'search_index_only': False,
+                        'analytics': {'gtag': None},
                         'highlightjs': True,
                         'hljs_style': 'github',
                         'hljs_languages': [],

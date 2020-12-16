@@ -112,6 +112,7 @@ class DeprecatedTest(unittest.TestCase):
         option = config_options.Deprecated(option_type=config_options.Type(str))
         option.pre_validation({'d': 'value'}, 'd')
         self.assertEqual(len(option.warnings), 1)
+        option.validate('value')
 
     def test_deprecated_option_with_invalid_type(self):
         option = config_options.Deprecated(option_type=config_options.Type(list))
@@ -123,6 +124,10 @@ class DeprecatedTest(unittest.TestCase):
             option.validate,
             config['d']
         )
+
+    def test_deprecated_option_with_type_undefined(self):
+        option = config_options.Deprecated(option_type=config_options.Type(str))
+        option.validate(None)
 
     def test_deprecated_option_move(self):
         option = config_options.Deprecated(moved_to='new')
