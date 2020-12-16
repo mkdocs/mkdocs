@@ -93,6 +93,66 @@ class ChoiceTest(unittest.TestCase):
         self.assertRaises(ValueError, config_options.Choice, 5)
 
 
+class DeprecatedTest(unittest.TestCase):
+
+    def test_deprecated_option_simple(self):
+        option = config_options.Deprecated()
+        option.pre_validation({'d': 'value'}, 'd')
+        self.assertEqual(len(option.warnings), 1)
+        option.validate('value')
+
+    def test_deprecated_option_message(self):
+        msg = 'custom message for {} key'
+        option = config_options.Deprecated(message=msg)
+        option.pre_validation({'d': 'value'}, 'd')
+        self.assertEqual(len(option.warnings), 1)
+        self.assertEqual(option.warnings[0], msg.format('d'))
+
+    def test_deprecated_option_with_type(self):
+        option = config_options.Deprecated(option_type=config_options.Type(str))
+        option.pre_validation({'d': 'value'}, 'd')
+        self.assertEqual(len(option.warnings), 1)
+
+    def test_deprecated_option_with_invalid_type(self):
+        option = config_options.Deprecated(option_type=config_options.Type(list))
+        config = {'d': 'string'}
+        option.pre_validation({'d': 'value'}, 'd')
+        self.assertEqual(len(option.warnings), 1)
+        self.assertRaises(
+            config_options.ValidationError,
+            option.validate,
+            config['d']
+        )
+
+    def test_deprecated_option_move(self):
+        option = config_options.Deprecated(moved_to='new')
+        config = {'old': 'value'}
+        option.pre_validation(config, 'old')
+        self.assertEqual(len(option.warnings), 1)
+        self.assertEqual(config, {'new': 'value'})
+
+    def test_deprecated_option_move_complex(self):
+        option = config_options.Deprecated(moved_to='foo.bar')
+        config = {'old': 'value'}
+        option.pre_validation(config, 'old')
+        self.assertEqual(len(option.warnings), 1)
+        self.assertEqual(config, {'foo': {'bar': 'value'}})
+
+    def test_deprecated_option_move_existing(self):
+        option = config_options.Deprecated(moved_to='foo.bar')
+        config = {'old': 'value', 'foo': {'existing': 'existing'}}
+        option.pre_validation(config, 'old')
+        self.assertEqual(len(option.warnings), 1)
+        self.assertEqual(config, {'foo': {'existing': 'existing', 'bar': 'value'}})
+
+    def test_deprecated_option_move_invalid(self):
+        option = config_options.Deprecated(moved_to='foo.bar')
+        config = {'old': 'value', 'foo': 'wrong type'}
+        option.pre_validation(config, 'old')
+        self.assertEqual(len(option.warnings), 1)
+        self.assertEqual(config, {'old': 'value', 'foo': 'wrong type'})
+
+
 class IpAddressTest(unittest.TestCase):
 
     def test_valid_address(self):
