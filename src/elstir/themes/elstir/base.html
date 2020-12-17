@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+  <head>
       {%- block site_meta %}
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -40,12 +40,6 @@
         {%- endfor %}
         <script>hljs.initHighlightingOnLoad();</script>
         {%- endif %}
-        <!-- <script>
-            $(".nav .nav-link").on("click", function(){
-            $(".nav").find(".active").removeClass("active");
-            $(this).addClass("active");
-         });
-         </script> -->
       {%- endblock %}
       {%- block analytics %}
         {%- if config.google_analytics %}
@@ -66,7 +60,6 @@
     <body{% if page and page.is_homepage %} class="homepage Site" {% else %} class="Site" {% endif %}>
         <div class="navbar fixed-top mb-4 navbar-expand-lg navbar-{% if config.theme.nav_style == "light" %}light{% else %}dark{% endif %} bg-{{ config.theme.nav_style }}">
             <div class="container">
-
                 {%- block site_name %}
                 <a class="navbar-brand" href="{{ nav.homepage.url|url }}"><code>{{ config.site_name }}</code></a>
                 {%- endblock %}
@@ -77,14 +70,12 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 {%- endif %}
-
                 <!-- Expanded navigation -->
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                   {%- block site_nav %}
                     {%- if nav|length>1 %}
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav ml-auto">
-                        <!--<ul class="nav navbar-nav">-->
                         {%- for nav_item in nav %}
                         {%- if nav_item.nav_incl  %}
                             {%- if nav_item.children %}

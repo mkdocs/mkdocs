@@ -4,7 +4,6 @@
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
-
     {% macro toc_item(item) %}
         {#- if item.level <= config.theme.navigation_depth #}
             <li class="nav-item {{ 'active' if item.active }}" data-level="{{ item.level }}">

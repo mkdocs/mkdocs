@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% from "single_item.html" import single_item with context %}
+{% from "build_filters.html" import build_filters with context %}
 
 {% block post_content %}
 {% set cards = page|get_children(pages) %}

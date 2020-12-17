@@ -1,0 +1,38 @@
+{% macro single_item(card) %}
+<div class="card shadow-sm my-3 {% for f in card.template_data.values() %} {{ f.replace(' ','-') if f else '' }}{% endfor %} gallery-item" {% if card.template_data %}data-gallery_info='{{ card.template_data|tojson }}'{% endif %}>
+  <div class="row no-gutters">
+    <div class="card-header">
+        <p><code>{{ card.meta.id if card.meta.id else "" }}</code></p>
+      {% if card.meta.URL %}
+        <p><a href="{{ card.meta.URL }}">
+          <code><img border="1" src="/img/git-logo-2-color.png" width="35px"></code>
+        </a></p>
+      {% endif %}
+    </div>
+    <div class="col-md-{{ '5' if card.image else '7' }}">
+      <div class="card-body">
+        <a href="{{ card.url }}" class="stretched-link">
+          <h5 class="card-title">{{ card.meta.title if "title" in card.meta else card.title }}</h5>
+        </a>
+        <p class="card-text">
+          {% if card.meta.abstract %}
+          {{ card.meta.abstract }}
+          {%-elif card.synopsis-%}
+          {{ card.synopsis }}
+          {%-elif card.meta.summary-%}
+          {{ card.meta.summary }}
+          {%-endif-%}
+        </p>
+      </div>
+    </div>
+        {% if card.image %}
+    <div class="col-md-4 ml-auto mr-2 my-1">
+      <img src="{{ card.image }}" class="card-image" style="max-width:275px;max-height:220px;width:auto;height:auto;">
+    </div>
+        {% endif %}
+  </div>
+  <!-- <div class="card-footer"> -->
+      <!-- <code>{{ card.meta.id if card.meta.id else "" }}</code> -->
+  <!-- </div> -->
+</div>
+{% endmacro %}

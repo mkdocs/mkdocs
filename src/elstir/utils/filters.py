@@ -29,6 +29,9 @@ def url_filter(context, value):
     return normalize_url(value, page=context['page'], base=context['base_url'])
 
 def _get_gallery_filters(children_data):
+    """
+    Used in aurore tmpl-0001
+    """
     filters = {}
     for child in children_data:
         for fltr in child["template_data"]:
@@ -38,11 +41,11 @@ def _get_gallery_filters(children_data):
                 filters[fltr].append(child["template_data"][fltr])
     return filters
 
-def getParentTemplateFields(page:object, data_fields,filtered=False):
+def getParentTemplateFields(abs_src_path, data_fields,filtered=False):
     if data_fields: # and "template_data" in page.meta:
         data_files = data_fields['gallery_items']
         filters = data_fields["filters"] if "filters" in data_fields else []
-        folder, _ = os.path.split(page.file.abs_src_path)
+        folder, _ = os.path.split(abs_src_path)
         child_data = {}
         for filename in data_files:
             try:
@@ -50,26 +53,24 @@ def getParentTemplateFields(page:object, data_fields,filtered=False):
                 for prop in data_files[filename]:
                     if isinstance(data_files[filename], dict):
                         key = data_files[filename][prop]
-                    # print(f"{prop}: {prop in filters}")
+                    
                     if not filtered or (prop in filters):
                         try:
                             child_data.update({key: get_nest(data, *key.split('.'))})
                         except Exception as e:
                             print(e,sys.exc_info())
             except Exception as e:
-                print("EXCEPTION",e,sys.exc_info())
+                pass
+                # print("EXCEPTION",e,sys.exc_info())
         return child_data
 
 @jinja2.contextfilter
 def get_children(context,page,pages,depth=2):
     """"""
-    # depth = len(context['base_url'].split('/'))
-    # page_paths = [pg.abs_src_path for pg in context['pages']]
     folder, file = os.path.split(page.file.abs_src_path)
     list_of_files = []
     num_pages_in_dir = len([pg for pg in os.listdir(folder) if os.path.isfile(os.path.join(folder,pg)) and pg[0]!='.' and pg[~2:]=='.md'])
     dirs = [dr for dr in os.listdir(folder) if not os.path.isfile(os.path.join(folder,dr))]
-    #print(dirs)
     num_sub_dirs = len(dirs)
     try:
         if num_pages_in_dir == 1 or (file=='index.md' and num_sub_dirs >0):
@@ -81,7 +82,7 @@ def get_children(context,page,pages,depth=2):
             return list_of_files
         else: return {}
     except Exception as e:
-        print(f'EXCEPTION: get_children: {e}')
+        # print(f'EXCEPTION: get_children: {e}')
         return {}
 
 
@@ -96,23 +97,11 @@ def elstir_get_filters(template_data: dict)-> dict:
         return {}
 
 
-# @jinja2.contextfilter
-# def get_meta(context,page):
-#     """"""
-#     # depth = len(context['base_url'].split('/'))
-#     # page_paths = [pg.abs_src_path for pg in context['pages']]
-#     folder, file = os.path.split(page.file.abs_src_path)
-#     metafile = context['config']['theme']['page_meta_file']
-#     try:
-#         with open(os.path.join(folder,metafile)) as f:
-#             meta = yaml.load(f,Loader=yaml.Loader)
-#     except Exception as e:
-#         print(f"Exception: get_meta - {e}")
 
-def _get_resource_meta(page, extra_data:dict=None):
+def _get_resource_meta(page: object, extra_data:dict=None):
     meta = page.meta
     try:
-        extra_meta = getParentTemplateFields(page,extra_data)
+        extra_meta = getParentTemplateFields(page.file.abs_src_path,extra_data)
         meta = {
             **meta,
             **extra_meta
@@ -121,17 +110,7 @@ def _get_resource_meta(page, extra_data:dict=None):
         print(f'Exception - _get_resource_meta: {e}')
     return meta
 
-# def get_resource_filters(page: object,extra_fields:dict=None)->dict:
-#     meta = page.meta
-#     try:
-#         extra_meta = getParentTemplateFields(page,extra_data)
-#         meta = {
-#             **meta,
-#             **extra_meta
-#             }
-#     except Exception as e:
-#         print(f'Exception - _get_resource_meta: {e}')
-#     return meta
+
 
 @jinja2.contextfilter
 def sidebar(context,page,pages):
@@ -187,9 +166,12 @@ def _get_dir_index(path,pages,folder=None):
 def _get_dir_image(page_path):
     folder = os.path.basename(os.path.dirname(page_path))
     path, _ = os.path.split(page_path)
-
+    item_id = os.path.dirname(page_path)
     image_path = os.path.join(path,'main.png')
-    if os.path.isfile(image_path):
+
+    if os.path.isfile(os.path.join(folder,folder + ".png")):
+        return os.path.join( folder, folder+".png")
+    elif os.path.isfile(image_path):
         return os.path.join( folder,'main.png' )
     elif os.path.isfile(os.path.join(path,'main.svg')):
         return os.path.join(folder,'main.svg')
@@ -264,7 +246,7 @@ def _get_dir_children(dirs, pages, folder, current_page: object, level, depth):
                 "image": _get_dir_image(page.file.abs_src_path),
                 "meta": _get_resource_meta(page,extra_data=data_fields), #page.meta, #
                 "children":  sub_children,
-                "template_data": getParentTemplateFields(page, data_fields, filtered=True)
+                "template_data": getParentTemplateFields(page.file.abs_src_path, data_fields, filtered=True)
                 })
     return children
 

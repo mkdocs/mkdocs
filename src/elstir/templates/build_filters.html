@@ -1,0 +1,25 @@
+{% macro build_filters(filters,items) %}
+<div class="filter">
+{% for f in  filters %}
+<div class="input-group my-1">
+  <div class="input-group-prepend">
+    <label class="input-group-text" for="inputGroupSelect0{{ loop.index }}">
+        <div class="custom-control custom-switch form-switch">
+            <input type="checkbox" class="custom-control-input" id="customSwitch-{{ loop.index }}"  onchange="toggleFilter(this,'inputGroupSelect0{{ loop.index }}');" />
+            <label class="custom-control-label" for="customSwitch-{{ loop.index }}">
+            {{ f }}
+            </label>
+        </div>
+    </label>
+  </div>
+<select class="custom-select" id="inputGroupSelect0{{ loop.index }}" data-toggle="buttons" role="menu" disabled>
+{% for fi in items.filters[filters[f]] %}
+<option class="btn" value="{{ fi.replace(' ','-') if fi else '' }}" id="{{ fi }}-fi" type="button" href="#{{ fi.replace(' ','') if fi else '' }}" >
+    {{ fi }}
+</option>
+{% endfor %}
+</select>
+</div>
+{% endfor %}
+</div>
+{% endmacro %}
