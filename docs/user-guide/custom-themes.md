@@ -526,7 +526,7 @@ link objects.
 ### Extra Context
 
 Additional variables can be passed to the template with the
-[`extra`](/user-guide/configuration.md#extra) configuration option. This is a
+[`extra`](./configuration.md#extra) configuration option. This is a
 set of key value pairs that can make custom templates far more flexible.
 
 For example, this could be used to include the project version of all pages
