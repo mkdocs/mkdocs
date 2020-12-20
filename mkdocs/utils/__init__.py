@@ -14,6 +14,7 @@ import re
 import yaml
 import fnmatch
 import posixpath
+import functools
 from datetime import datetime, timezone
 from urllib.parse import urlparse
 
@@ -259,15 +260,28 @@ def get_relative_url(url, other):
 
 def normalize_url(path, page=None, base=''):
     """ Return a URL relative to the given page or using the base. """
+    path, is_abs = _get_norm_url(path)
+    if is_abs:
+        return path
+    if page is not None:
+        base = page.url
+    return _get_rel_path(path, base, page is not None)
+
+
+@functools.lru_cache(maxsize=None)
+def _get_norm_url(path):
     path = path_to_url(path or '.')
     # Allow links to be fully qualified URL's
     parsed = urlparse(path)
     if parsed.scheme or parsed.netloc or path.startswith(('/', '#')):
-        return path
+        return path, True
+    return path, False
 
-    # We must be looking at a local path.
-    if page is not None:
-        return get_relative_url(path, page.url)
+
+@functools.lru_cache()
+def _get_rel_path(path, base, base_is_url):
+    if base_is_url:
+        return get_relative_url(path, base)
     else:
         return posixpath.join(base, path)
 
