@@ -168,11 +168,11 @@ class ContentSection:
         self.title = title
 
     def __eq__(self, other):
-        return all([
-            self.text == other.text,
-            self.id == other.id,
+        return (
+            self.text == other.text and
+            self.id == other.id and
             self.title == other.title
-        ])
+        )
 
 
 class ContentParser(HTMLParser):
