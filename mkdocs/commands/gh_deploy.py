@@ -105,8 +105,8 @@ def gh_deploy(config, message=None, force=False, ignore_version=False):
 
     try:
         ghp_import.ghp_import(
-            config['site_dir'], 
-            mesg=message, 
+            config['site_dir'],
+            mesg=message,
             remote=remote_name,
             branch=remote_branch,
             push=force,
