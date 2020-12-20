@@ -49,6 +49,9 @@ up horizontal space for better rendering of content like tables (#2193).
 
 * Bugfix: Properly process navigation child items in `_get_by_type` when
   filtering for sections (#2203).
+* Replace vendored (and modified) copy of ghp_import with dependency on
+  upstream library. As of version 1.0+ ghp_import includes a Python API.
+  MkDocs can now benefit from recent bugfixes and new features (#2170).
 
 ## Version 1.1.2 (2020-05-14)
 
