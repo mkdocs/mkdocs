@@ -60,7 +60,8 @@ setup(
         'lunr[languages]==0.5.8',  # must support lunr.js version included in search
         'Markdown>=3.2.1',
         'PyYAML>=3.10',
-        'tornado>=5.0'
+        'tornado>=5.0',
+        'ghp-import>=1.0'
     ],
     python_requires='>=3.5',
     entry_points={
