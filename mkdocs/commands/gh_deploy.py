@@ -83,7 +83,7 @@ def _check_version(branch):
         raise SystemExit(1)
 
 
-def gh_deploy(config, message=None, force=False, ignore_version=False):
+def gh_deploy(config, message=None, force=False, ignore_version=False, shell=False):
 
     if not _is_cwd_git_repo():
         log.error('Cannot deploy - this directory does not appear to be a git '
@@ -110,6 +110,7 @@ def gh_deploy(config, message=None, force=False, ignore_version=False):
             remote=remote_name,
             branch=remote_branch,
             push=force,
+            use_shell=shell,
             nojekyll=True
         )
     except ghp_import.GhpError as e:

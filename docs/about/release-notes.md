@@ -34,6 +34,20 @@ To delay a rebuild of the site when using the livereload server, use the
 mkdocs serve --wait 60
 ```
 
+#### Update `gh-deloy` command (#2170)
+
+The vendored (and modified) copy of ghp_import has been replaced with a
+dependency on the upstream library. As of version 1.0.0, [ghp_import] includes a
+Python API which makes it possible to call directly.
+
+MkDocs can now benefit from recent bug fixes and new features, including the following:
+
+* A `.nojekyll` file is automatically included when deploying to GitHub Pages.
+* The `--shell` flag is now available, which reportedly works better on Windows.
+* Git author and committer environment variables should be respected (#1383).
+
+[ghp-import]: https://github.com/c-w/ghp-import/
+
 ### Backward Incompatible Changes in 1.2
 
 A theme's files are now excluded from the list of watched files by default
@@ -49,9 +63,6 @@ up horizontal space for better rendering of content like tables (#2193).
 
 * Bugfix: Properly process navigation child items in `_get_by_type` when
   filtering for sections (#2203).
-* Replace vendored (and modified) copy of ghp_import with dependency on
-  upstream library. As of version 1.0+ ghp_import includes a Python API.
-  MkDocs can now benefit from recent bugfixes and new features (#2170).
 
 ## Version 1.1.2 (2020-05-14)
 
