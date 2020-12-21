@@ -63,6 +63,8 @@ up horizontal space for better rendering of content like tables (#2193).
 
 * Bugfix: Properly process navigation child items in `_get_by_type` when
   filtering for sections (#2203).
+* Official support for Python 3.9 has been added and support for Python 3.5
+  has been dropped.
 
 ## Version 1.1.2 (2020-05-14)
 
