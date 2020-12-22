@@ -1,3 +1,4 @@
+import io
 import os
 import re
 import json
@@ -68,7 +69,7 @@ class SearchIndex:
         # Create an entry for the full page.
         self._add_entry(
             title=page.title,
-            text=self.strip_tags(page.content).rstrip('\n'),
+            text=parser.stripped_html.getvalue().rstrip('\n'),
             loc=url
         )
 
@@ -127,34 +128,6 @@ class SearchIndex:
 
         return data
 
-    def strip_tags(self, html):
-        """strip html tags from data"""
-        s = HTMLStripper()
-        s.feed(html)
-        return s.get_data()
-
-
-class HTMLStripper(HTMLParser):
-    """
-    A simple HTML parser that stores all of the data within tags
-    but ignores the tags themselves and thus strips them from the
-    content.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.data = []
-
-    def handle_data(self, d):
-        """
-        Called for the text contents of each tag.
-        """
-        self.data.append(d)
-
-    def get_data(self):
-        return '\n'.join(self.data)
-
 
 class ContentSection:
     """
@@ -189,6 +162,7 @@ class ContentParser(HTMLParser):
         self.data = []
         self.section = None
         self.is_header_tag = False
+        self.stripped_html = io.StringIO()
 
     def handle_starttag(self, tag, attrs):
         """Called at the start of every HTML tag."""
@@ -220,6 +194,8 @@ class ContentParser(HTMLParser):
         """
         Called for the text contents of each tag.
         """
+
+        self.stripped_html.write(data)
 
         if self.section is None:
             # This means we have some content at the start of the
