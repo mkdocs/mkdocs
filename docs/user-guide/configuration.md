@@ -12,6 +12,43 @@ project directory named `mkdocs.yml`.
 As a minimum, this configuration file must contain the `site_name` setting. All
 other settings are optional.
 
+### Environment Variables
+
+In most cases, the value of a configuration option is set directly in the
+configuration file. However, as an option, the value of a configuration option
+may be set to the value of an environment variable using the `!ENV` tag. For
+example, to set the value of the `site_name` option to the value of the
+variable `SITE_NAME` the YAML file may contain the following:
+
+```yaml
+site_name: !ENV SITE_NAME
+```
+
+If the environment variable is not defined, then the configuration setting
+would be assigned a `null` (or `None` in Python) value. A default value can be
+defined as the last value in a list. Like this:
+
+```yaml
+site_name: !ENV [SITE_NAME, 'My default site name']
+```
+
+Multiple fallback variables can be used as well. Note that the last value is
+not an environment variable, but must be a value to use as a default if none
+of the specified environment variables are defined.
+
+```yaml
+site_name: !ENV [SITE_NAME, OTHER_NAME, 'My default site name']
+```
+
+Simple types defined within an environment variable such as string, bool,
+integer, float, datestamp and null are parsed as if they were defined directly
+in the YAML file, which means that the value will be converted to the
+appropriate type. However, complex types such as lists and key/value pairs
+cannot be defined within a single environment variable.
+
+For more details, see the [pyyaml_env_tag](https://github.com/waylan/pyyaml-env-tag)
+project.
+
 ## Project information
 
 ### site_name

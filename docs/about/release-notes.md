@@ -25,6 +25,20 @@ The current and past members of the MkDocs team.
 
 ### Major Additions to Version 1.2
 
+#### Support added for Environment Variables in the configuration file (#1954)
+
+Environments variables may now be specified in the configuration file with the
+`!ENV` tag. The value of the variable will be parsed by the YAML parser and
+converted to the appropriate type.
+
+```yaml
+somekey: !ENV VAR_NAME
+otherkey: !ENV [VAR_NAME, FALLBACK_VAR, 'default value']
+```
+
+See [Environment Variables](../user-guide/configuration.md#environment-variables)
+in the Configuration documentation for details.
+
 #### A `--wait` flag has been added to the `serve` command (#2061)
 
 To delay a rebuild of the site when using the livereload server, use the
@@ -34,7 +48,7 @@ To delay a rebuild of the site when using the livereload server, use the
 mkdocs serve --wait 60
 ```
 
-#### Update `gh-deloy` command (#2170)
+#### Update `gh-deploy` command (#2170)
 
 The vendored (and modified) copy of ghp_import has been replaced with a
 dependency on the upstream library. As of version 1.0.0, [ghp_import] includes a
