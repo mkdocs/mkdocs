@@ -1,4 +1,3 @@
-import io
 import os
 import re
 import json
@@ -69,7 +68,7 @@ class SearchIndex:
         # Create an entry for the full page.
         self._add_entry(
             title=page.title,
-            text=parser.stripped_html.getvalue().rstrip('\n'),
+            text=parser.stripped_html.rstrip('\n'),
             loc=url
         )
 
@@ -162,7 +161,7 @@ class ContentParser(HTMLParser):
         self.data = []
         self.section = None
         self.is_header_tag = False
-        self.stripped_html = io.StringIO()
+        self._stripped_html = []
 
     def handle_starttag(self, tag, attrs):
         """Called at the start of every HTML tag."""
@@ -195,7 +194,7 @@ class ContentParser(HTMLParser):
         Called for the text contents of each tag.
         """
 
-        self.stripped_html.write(data)
+        self._stripped_html.append(data)
 
         if self.section is None:
             # This means we have some content at the start of the
@@ -211,3 +210,7 @@ class ContentParser(HTMLParser):
             self.section.title = data
         else:
             self.section.text.append(data.rstrip('\n'))
+
+    @property
+    def stripped_html(self):
+        return '\n'.join(self._stripped_html)

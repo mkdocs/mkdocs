@@ -204,7 +204,7 @@ class SearchIndexTests(unittest.TestCase):
 
         stripper.feed("<h1>Testing</h1><p>Content</p>")
 
-        self.assertEqual(stripper.stripped_html.getvalue(), "TestingContent")
+        self.assertEqual(stripper.stripped_html, "Testing\nContent")
 
     def test_content_parser(self):
 
