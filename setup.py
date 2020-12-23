@@ -64,7 +64,7 @@ setup(
         'PyYAML>=3.10',
         'tornado>=5.0'
     ],
-    python_requires='>=3.5',
+    python_requires='>=3.6',
     entry_points={
         'console_scripts': [
             'elstir = elstir.__main__:cli',
