@@ -17,6 +17,7 @@ import posixpath
 import functools
 from datetime import datetime, timezone
 from urllib.parse import urlparse
+from yaml_env_tag import construct_env_tag
 
 from mkdocs import exceptions
 
@@ -55,6 +56,10 @@ def yaml_load(source, loader=yaml.Loader):
     # Attach our unicode constructor to our custom loader ensuring all strings
     # will be unicode on translation.
     Loader.add_constructor('tag:yaml.org,2002:str', construct_yaml_str)
+
+    # Attach Environment Variable constructor.
+    # See https://github.com/waylan/pyyaml-env-tag
+    Loader.add_constructor('!ENV', construct_env_tag)
 
     try:
         return yaml.load(source, Loader)
