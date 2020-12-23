@@ -35,15 +35,14 @@ class SearchIndex:
 
     def _add_entry(self, title, text, loc):
         """
-        A simple wrapper to add an entry and ensure the contents
-        is UTF8 encoded.
+        A simple wrapper to add an entry, dropping bad characters.
         """
         text = text.replace('\u00a0', ' ')
         text = re.sub(r'[ \t\n\r\f\v]+', ' ', text.strip())
 
         self._entries.append({
             'title': title,
-            'text': str(text.encode('utf-8'), encoding='utf-8'),
+            'text': text,
             'location': loc
         })
 
@@ -168,11 +167,11 @@ class ContentSection:
         self.title = title
 
     def __eq__(self, other):
-        return all([
-            self.text == other.text,
-            self.id == other.id,
+        return (
+            self.text == other.text and
+            self.id == other.id and
             self.title == other.title
-        ])
+        )
 
 
 class ContentParser(HTMLParser):

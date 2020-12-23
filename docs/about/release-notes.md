@@ -21,6 +21,65 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Version 1.2 (Under development)
+
+### Major Additions to Version 1.2
+
+#### Support added for Environment Variables in the configuration file (#1954)
+
+Environments variables may now be specified in the configuration file with the
+`!ENV` tag. The value of the variable will be parsed by the YAML parser and
+converted to the appropriate type.
+
+```yaml
+somekey: !ENV VAR_NAME
+otherkey: !ENV [VAR_NAME, FALLBACK_VAR, 'default value']
+```
+
+See [Environment Variables](../user-guide/configuration.md#environment-variables)
+in the Configuration documentation for details.
+
+#### A `--wait` flag has been added to the `serve` command (#2061)
+
+To delay a rebuild of the site when using the livereload server, use the
+`--wait` flag to specify the number of seconds to wait.
+
+```bash
+mkdocs serve --wait 60
+```
+
+#### Update `gh-deploy` command (#2170)
+
+The vendored (and modified) copy of ghp_import has been replaced with a
+dependency on the upstream library. As of version 1.0.0, [ghp_import] includes a
+Python API which makes it possible to call directly.
+
+MkDocs can now benefit from recent bug fixes and new features, including the following:
+
+* A `.nojekyll` file is automatically included when deploying to GitHub Pages.
+* The `--shell` flag is now available, which reportedly works better on Windows.
+* Git author and committer environment variables should be respected (#1383).
+
+[ghp-import]: https://github.com/c-w/ghp-import/
+
+### Backward Incompatible Changes in 1.2
+
+A theme's files are now excluded from the list of watched files by default
+when using the `--livereload` server. This new default behavior is what most
+users need and provides better performance when editing site content.
+Theme developers can enable the old behavior with the `--watch-theme`
+option. (#2092).
+
+The `mkdocs` theme now removes the sidebar when printing a page. This frees
+up horizontal space for better rendering of content like tables (#2193).
+
+### Other Changes and Additions to Version 1.2
+
+* Bugfix: Properly process navigation child items in `_get_by_type` when
+  filtering for sections (#2203).
+* Official support for Python 3.9 has been added and support for Python 3.5
+  has been dropped.
+
 ## Version 1.1.2 (2020-05-14)
 
 * Bugfix: Normalize IP addresses and change unsupported address error to a

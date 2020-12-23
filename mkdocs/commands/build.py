@@ -8,7 +8,7 @@ import jinja2
 
 from mkdocs import utils
 from mkdocs.exceptions import BuildError
-from mkdocs.structure.files import get_files
+from mkdocs.structure.files import Files, get_files
 from mkdocs.structure.nav import get_navigation
 import mkdocs
 
@@ -41,9 +41,12 @@ def get_context(nav, files, config, page=None, base_url=''):
 
     extra_css = utils.create_media_urls(config['extra_css'], page, base_url)
 
+    if isinstance(files, Files):
+        files = files.documentation_pages()
+
     return {
         'nav': nav,
-        'pages': files.documentation_pages(),
+        'pages': files,
 
         'base_url': base_url,
 
@@ -180,7 +183,7 @@ def _populate_page(page, config, files, dirty=False):
         raise
 
 
-def _build_page(page, config, files, nav, env, dirty=False):
+def _build_page(page, config, doc_files, nav, env, dirty=False):
     """ Pass a Page to theme template and write output to site_dir. """
 
     try:
@@ -194,7 +197,7 @@ def _build_page(page, config, files, nav, env, dirty=False):
         # Activate page. Signals to theme that this is the current page.
         page.active = True
 
-        context = get_context(nav, files, config, page)
+        context = get_context(nav, doc_files, config, page)
 
         # Allow 'template:' override in md source files.
         if 'template' in page.meta:
@@ -291,8 +294,9 @@ def build(config, live_server=False, dirty=False):
             _build_extra_template(template, files, config, nav)
 
         log.debug("Building markdown pages.")
-        for file in files.documentation_pages():
-            _build_page(file.page, config, files, nav, env, dirty)
+        doc_files = files.documentation_pages()
+        for file in doc_files:
+            _build_page(file.page, config, doc_files, nav, env, dirty)
 
         # Run `post_build` plugin events.
         config['plugins'].run_event('post_build', config=config)

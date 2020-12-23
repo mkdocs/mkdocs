@@ -107,7 +107,8 @@ class Theme:
         """ Return a Jinja environment for the theme. """
 
         loader = jinja2.FileSystemLoader(self.dirs)
-        env = jinja2.Environment(loader=loader)
+        # No autoreload because editing a template in the middle of a build is not useful.
+        env = jinja2.Environment(loader=loader, auto_reload=False)
         env.filters['tojson'] = filters.tojson
         env.filters['url'] = filters.url_filter
         return env

@@ -172,7 +172,7 @@ def _get_by_type(nav, T):
     for item in nav:
         if isinstance(item, T):
             ret.append(item)
-        elif item.children:
+        if item.children:
             ret.extend(_get_by_type(item.children, T))
     return ret
 

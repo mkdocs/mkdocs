@@ -44,11 +44,11 @@ class Page:
         self.meta = {}
 
     def __eq__(self, other):
-
-        def sub_dict(d):
-            return {key: value for key, value in d.items() if key in ['title', 'file']}
-
-        return (isinstance(other, self.__class__) and sub_dict(self.__dict__) == sub_dict(other.__dict__))
+        return (
+            isinstance(other, self.__class__) and
+            self.title == other.title and
+            self.file == other.file
+        )
 
     def __ne__(self, other):
         return not self.__eq__(other)

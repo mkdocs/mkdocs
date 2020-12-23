@@ -9,8 +9,45 @@ Guide to all available configuration settings.
 Project settings are always configured by using a YAML configuration file in the
 project directory named `mkdocs.yml`.
 
-As a minimum this configuration file must contain the `site_name` setting. All
+As a minimum, this configuration file must contain the `site_name` setting. All
 other settings are optional.
+
+### Environment Variables
+
+In most cases, the value of a configuration option is set directly in the
+configuration file. However, as an option, the value of a configuration option
+may be set to the value of an environment variable using the `!ENV` tag. For
+example, to set the value of the `site_name` option to the value of the
+variable `SITE_NAME` the YAML file may contain the following:
+
+```yaml
+site_name: !ENV SITE_NAME
+```
+
+If the environment variable is not defined, then the configuration setting
+would be assigned a `null` (or `None` in Python) value. A default value can be
+defined as the last value in a list. Like this:
+
+```yaml
+site_name: !ENV [SITE_NAME, 'My default site name']
+```
+
+Multiple fallback variables can be used as well. Note that the last value is
+not an environment variable, but must be a value to use as a default if none
+of the specified environment variables are defined.
+
+```yaml
+site_name: !ENV [SITE_NAME, OTHER_NAME, 'My default site name']
+```
+
+Simple types defined within an environment variable such as string, bool,
+integer, float, datestamp and null are parsed as if they were defined directly
+in the YAML file, which means that the value will be converted to the
+appropriate type. However, complex types such as lists and key/value pairs
+cannot be defined within a single environment variable.
+
+For more details, see the [pyyaml_env_tag](https://github.com/waylan/pyyaml-env-tag)
+project.
 
 ## Project information
 
@@ -53,7 +90,7 @@ those domains, otherwise the hostname from the `repo_url`.
 
 ### edit_uri
 
-Path from the base `repo_url` to the docs directory when directly viewing a
+The path from the base `repo_url` to the docs directory when directly viewing a
 page, accounting for specifics of the repository host (e.g. GitHub, Bitbucket,
 etc), the branch, and the docs directory itself. MkDocs concatenates `repo_url`
 and `edit_uri`, and appends the input path of the page.
@@ -206,10 +243,10 @@ nav:
     - 'Bug Tracker': '/bugs/'
 ```
 
-In the above example, two different styles of external links are used. First
+In the above example, two different styles of external links are used. First,
 note that the `site_url` indicates that the MkDocs site is hosted in the `/foo/`
 subdirectory of the domain. Therefore, the `Home` navigation item is a relative
-link which steps up one level to the server root and effectively points to
+link that steps up one level to the server root and effectively points to
 `https://example.com/`. The `Bug Tracker` item uses an absolute path from the
 server root and effectively points to `https://example.com/bugs/`. Of course, the
 `User Guide` points to a local MkDocs page.
@@ -252,7 +289,7 @@ If a set of key/value pairs, the following nested keys can be defined:
 
     A directory containing a custom theme. This can either be a relative
     directory, in which case it is resolved relative to the directory containing
-    your configuration file, or it can be an absolute directory path from the
+    your configuration file or it can be an absolute directory path from the
     root of your local file system.
 
     See [styling your docs][theme_dir] for details if you would like to tweak an
@@ -328,14 +365,14 @@ See the example in [extra_css] for usage.
 
 Set a list of templates in your `docs_dir` to be built by MkDocs. To see more
 about writing templates for MkDocs read the documentation about [custom themes]
-and specifically the section about the [variables that are available] to
+and specifically the section about the [available variables] to
 templates. See the example in [extra_css] for usage.
 
 **default**: `[]` (an empty list).
 
 ### extra
 
-A set of key value pairs, where the values can be any valid YAML construct, that
+A set of key-value pairs, where the values can be any valid YAML construct, that
 will be passed to the template. This allows for great flexibility when creating
 custom themes.
 
@@ -347,7 +384,7 @@ extra:
     version: 1.0
 ```
 
-**default**: By default `extra` will be an empty key value mapping.
+**default**: By default `extra` will be an empty key-value mapping.
 
 ## Preview controls
 
@@ -461,7 +498,7 @@ markdown_extensions:
 ### plugins
 
 A list of plugins (with optional configuration settings) to use when building
-the site . See the [Plugins] documentation for full details.
+the site. See the [Plugins] documentation for full details.
 
 If the `plugins` config setting is defined in the `mkdocs.yml` config file, then
 any defaults (such as `search`) are ignored and you need to explicitly re-enable
@@ -506,7 +543,7 @@ plugins:
 
 An integer value that defines the minimum length for a search query. By default
 searches shorter than 3 chars in length are ignored as search result quality with
-short search terms is poor. However, for some use cases (such as documentation
+short search terms are poor. However, for some use cases (such as documentation
 about Message Queues which might generate searches for 'MQ') it may be preferable
 to set a shorter limit.
 
@@ -551,7 +588,7 @@ You may [contribute additional languages].
     While search does support using multiple languages together, it is best not
     to add additional languages unless you really need them. Each additional
     language adds significant bandwidth requirements and uses more browser
-    resources. Generally it is best to keep each instance of MkDocs to a single
+    resources. Generally, it is best to keep each instance of MkDocs to a single
     language.
 
 !!! Note
@@ -578,7 +615,7 @@ an error instead.
 
 Using [Lunr.py] setting `prebuild_index` to `python`. Lunr.py is installed
 as part of mkdocs and guarantees compatibility with Lunr.js even on languages
-other than english. If you find substantial inconsistencies or problems please
+other than English. If you find substantial inconsistencies or problems please
 report it on [Lunr.py's issues] and fall back to the Node.js version.
 
 !!! Note
