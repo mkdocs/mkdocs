@@ -198,13 +198,13 @@ class SearchPluginTests(unittest.TestCase):
 
 class SearchIndexTests(unittest.TestCase):
 
-    def test_html_stripper(self):
+    def test_html_stripping(self):
 
-        stripper = search_index.HTMLStripper()
+        stripper = search_index.ContentParser()
 
         stripper.feed("<h1>Testing</h1><p>Content</p>")
 
-        self.assertEqual(stripper.data, ["Testing", "Content"])
+        self.assertEqual(stripper.stripped_html, "Testing\nContent")
 
     def test_content_parser(self):
 
