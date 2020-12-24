@@ -62,6 +62,27 @@ MkDocs can now benefit from recent bug fixes and new features, including the fol
 
 [ghp-import]: https://github.com/c-w/ghp-import/
 
+#### A `build_error` event was added (#2103)
+
+Plugin developers can now use the `on_build_error` hook
+to execute code when an exception is raised while building the site.
+
+See [`on_build_error`](../user-guide/plugins.md#on_build_error)
+in the Plugins documentation for details.
+
+#### Two new exceptions: BuildError and PluginError (#2103)
+
+MkDocs now has two new exceptions defined in `mkdocs.exceptions`,
+`BuildError` and `PluginError`:
+
+* `PluginError` can be raised from a plugin
+  to stop the build and log an error message *without traceback*.
+* `BuildError` should not be used by third-party plugins developers
+  and is reserved for internal use only.
+
+See [`Handling errors`](../user-guide/plugins.md#handling-errors)
+in the Plugins documentation for details.
+
 ### Backward Incompatible Changes in 1.2
 
 A theme's files are now excluded from the list of watched files by default

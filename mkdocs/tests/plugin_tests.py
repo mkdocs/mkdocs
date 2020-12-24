@@ -7,6 +7,9 @@ import os
 
 from mkdocs import plugins
 from mkdocs import config
+from mkdocs.commands import build
+from mkdocs.exceptions import BuildError, PluginError
+from mkdocs.tests.base import load_config
 
 
 class DummyPlugin(plugins.BasePlugin):
@@ -142,6 +145,65 @@ class TestPluginCollection(unittest.TestCase):
     def test_run_unknown_event_on_collection(self):
         collection = plugins.PluginCollection()
         self.assertRaises(KeyError, collection.run_event, 'unknown', 'page content')
+
+    def test_run_build_error_event(self):
+        build_errors = []
+
+        class PluginRaisingError(plugins.BasePlugin):
+            def __init__(self, error_on):
+                self.error_on = error_on
+
+            def on_pre_page(self, page, **kwargs):
+                if self.error_on == 'pre_page':
+                    raise BuildError('pre page error')
+                return page
+
+            def on_page_markdown(self, markdown, **kwargs):
+                if self.error_on == 'page_markdown':
+                    raise BuildError('page markdown error')
+                return markdown
+
+            def on_page_content(self, html, **kwargs):
+                if self.error_on == 'page_content':
+                    raise PluginError('page content error')
+                return html
+
+            def on_post_page(self, html, **kwargs):
+                if self.error_on == 'post_page':
+                    raise ValueError('post page error')
+
+            def on_build_error(self, error, **kwargs):
+                build_errors.append(error)
+
+        cfg = load_config()
+        cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='pre_page')
+        self.assertRaises(SystemExit, build.build, cfg)
+
+        cfg = load_config()
+        cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='page_markdown')
+        self.assertRaises(SystemExit, build.build, cfg)
+
+        cfg = load_config()
+        cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='page_content')
+        self.assertRaises(SystemExit, build.build, cfg)
+
+        cfg = load_config()
+        cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='post_page')
+        self.assertRaises(ValueError, build.build, cfg)
+
+        cfg = load_config()
+        cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='')
+        build.build(cfg)
+
+        self.assertEqual(len(build_errors), 4)
+        self.assertIs(build_errors[0].__class__, BuildError)
+        self.assertEqual(str(build_errors[0]), 'pre page error')
+        self.assertIs(build_errors[1].__class__, BuildError)
+        self.assertEqual(str(build_errors[1]), 'page markdown error')
+        self.assertIs(build_errors[2].__class__, PluginError)
+        self.assertEqual(str(build_errors[2]), 'page content error')
+        self.assertIs(build_errors[3].__class__, ValueError)
+        self.assertEqual(str(build_errors[3]), 'post page error')
 
 
 MockEntryPoint = mock.Mock()
