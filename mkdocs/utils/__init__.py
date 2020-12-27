@@ -255,11 +255,22 @@ def get_relative_url(url, other):
     """
     Return given url relative to other.
     """
-    if other != '.':
-        # Remove filename from other url if it has one.
-        parts = posixpath.split(other)
-        other = parts[0] if '.' in parts[1] else other
-    relurl = posixpath.relpath(url, other)
+    other_parts = [p for p in other.split('/') if p not in ('.', '')]
+    dest_parts = [p for p in url.split('/') if p not in ('.', '')]
+
+    # Remove filename from other url if it has one.
+    if other_parts and '.' in other_parts[-1]:
+        other_parts.pop()
+
+    common = 0
+    for a, b in zip(other_parts, dest_parts):
+        if a != b:
+            break
+        common += 1
+
+    rel_parts = ['..'] * (len(other_parts) - common) + dest_parts[common:]
+    relurl = '/'.join(rel_parts) or '.'
+
     return relurl + '/' if url.endswith('/') else relurl
 
 
@@ -269,8 +280,8 @@ def normalize_url(path, page=None, base=''):
     if is_abs:
         return path
     if page is not None:
-        base = page.url
-    return _get_rel_path(path, base, page is not None)
+        return get_relative_url(path, page.url)
+    return posixpath.join(base, path)
 
 
 @functools.lru_cache(maxsize=None)
@@ -281,14 +292,6 @@ def _get_norm_url(path):
     if parsed.scheme or parsed.netloc or path.startswith(('/', '#')):
         return path, True
     return path, False
-
-
-@functools.lru_cache()
-def _get_rel_path(path, base, base_is_url):
-    if base_is_url:
-        return get_relative_url(path, base)
-    else:
-        return posixpath.join(base, path)
 
 
 def create_media_urls(path_list, page=None, base=''):
