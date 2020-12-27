@@ -135,7 +135,7 @@ class Config(UserDict):
         except YAMLError as e:
             # MkDocs knows and understands ConfigurationErrors
             raise exceptions.ConfigurationError(
-                "MkDocs encountered as error parsing the configuration file: {}".format(e)
+                "MkDocs encountered an error parsing the configuration file: {}".format(e)
             )
 
 
