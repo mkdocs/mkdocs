@@ -255,13 +255,13 @@ def get_relative_url(url, other):
     """
     Return given url relative to other.
     """
-    other_parts = [p for p in other.split('/') if p not in ('.', '')]
-    dest_parts = [p for p in url.split('/') if p not in ('.', '')]
-
+    other_parts = other.split('/')
     # Remove filename from other url if it has one.
     if other_parts and '.' in other_parts[-1]:
         other_parts.pop()
 
+    other_parts = [p for p in other_parts if p not in ('.', '')]
+    dest_parts = [p for p in url.split('/') if p not in ('.', '')]
     common = 0
     for a, b in zip(other_parts, dest_parts):
         if a != b:
@@ -270,7 +270,6 @@ def get_relative_url(url, other):
 
     rel_parts = ['..'] * (len(other_parts) - common) + dest_parts[common:]
     relurl = '/'.join(rel_parts) or '.'
-
     return relurl + '/' if url.endswith('/') else relurl
 
 
