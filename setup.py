@@ -5,7 +5,6 @@ import re
 import os
 import sys
 
-__version__ = '0.0.1'
 
 long_description = (
     "`elstir` is a fork of `mkdocs`. `mkdocs` is a fast, simple and downright gorgeous static site generator "
@@ -16,8 +15,9 @@ long_description = (
 
 
 def get_version(package):
-    """Return package version as listed in `__version__` in `init.py`."""
-    init_py = open(os.path.join(package, '__init__.py')).read()
+    """Return package version as listed in `__version__` in `__init__.py`."""
+    with open(os.path.join(package, '__init__.py')) as f:
+        init_py = f.read()
     return re.search("__version__ = ['\"]([^'\"]+)['\"]", init_py).group(1)
 
 
@@ -28,21 +28,16 @@ def get_version(package):
 #             if os.path.exists(os.path.join(dirpath, '__init__.py'))]
 
 
-if sys.argv[-1] == 'publish':
-#    if os.system("pip freeze | grep wheel"):
-#        print("wheel not installed.\nUse `pip install wheel`.\nExiting.")
-#        sys.exit()
-#    if os.system("pip freeze | grep twine"):
-#        print("twine not installed.\nUse `pip install twine`.\nExiting.")
-#        sys.exit()
-    os.system("python setup.py sdist bdist_wheel")
-    os.system("twine upload dist/*")
-    print("You probably want to also tag the version now:")
-    print("  git tag -a {0} -m 'version {0}'".format(__version__))
-    print("  git push --tags")
-    sys.exit()
+# if sys.argv[-1] == 'publish':
+#     os.system("python setup.py sdist bdist_wheel")
+#     os.system("twine upload dist/*")
+#     print("You probably want to also tag the version now:")
+#     print("  git tag -a {0} -m 'version {0}'".format(__version__))
+#     print("  git push --tags")
+#     sys.exit()
 
 
+__version__ = get_version("elstir/src/elstir")
 setup(
     name="elstir",
     version=__version__,
@@ -51,7 +46,7 @@ setup(
     description='Project documentation with Markdown.',
     long_description=long_description,
     author='Claudio Perez',
-    author_email='claudio_perez@berkeley.edu',  # SEE NOTE BELOW (*)
+    author_email='claudio_perez@berkeley.edu',  
     packages=find_packages("src"),
     package_dir={'': 'src'},
     include_package_data=True,
