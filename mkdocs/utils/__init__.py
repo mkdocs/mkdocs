@@ -251,9 +251,10 @@ def is_error_template(path):
     return bool(_ERROR_TEMPLATE_RE.match(path))
 
 
+@functools.lru_cache(maxsize=None)
 def _norm_parts(parts):
     dest_parts = []
-    for p in parts:
+    for p in parts.split('/'):
         if p not in ('.', ''):
             if p == '..':
                 if dest_parts:
@@ -267,14 +268,13 @@ def get_relative_url(url, other):
     """
     Return given url relative to other.
     """
-    other_parts = other.split('/')
     # Remove filename from other url if it has one.
-    if other_parts and '.' in other_parts[-1]:
-        other_parts.pop()
+    dirname, _, basename = other.rpartition('/')
+    if '.' in basename:
+        other = dirname
 
-    other_parts = _norm_parts(other_parts)
-    dest_parts = _norm_parts(url.split('/'))
-
+    other_parts = _norm_parts(other)
+    dest_parts = _norm_parts(url)
     common = 0
     for a, b in zip(other_parts, dest_parts):
         if a != b:
