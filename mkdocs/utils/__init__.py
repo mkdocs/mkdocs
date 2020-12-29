@@ -252,21 +252,27 @@ def is_error_template(path):
 
 
 @functools.lru_cache(maxsize=None)
-def _norm_parts(parts):
-    dest_parts = []
-    for p in parts.split('/'):
+def _norm_parts(path):
+    parts = []
+    for p in path.split('/'):
         if p not in ('.', ''):
             if p == '..':
-                if dest_parts:
-                    dest_parts.pop()
+                if parts:
+                    parts.pop()
             else:
-                dest_parts.append(p)
-    return dest_parts
+                parts.append(p)
+    return parts
 
 
 def get_relative_url(url, other):
     """
     Return given url relative to other.
+
+    Both are operated as slash-separated paths, similarly to the 'path' part of a URL.
+    The last component of `other` is skipped if it contains a dot (considered a file).
+    Actual URLs (with schemas etc.) aren't supported. The leading slash is ignored.
+    Paths are normalized ('..' works as parent directory), but going higher than the
+    root has no effect ('foo/../../bar' ends up just as 'bar').
     """
     # Remove filename from other url if it has one.
     dirname, _, basename = other.rpartition('/')
