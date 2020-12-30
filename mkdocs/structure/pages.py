@@ -240,5 +240,6 @@ class _RelativePathExtension(Extension):
         self.files = files
 
     def extendMarkdown(self, md):
+        md.registerExtension(self)
         relpath = _RelativePathTreeprocessor(self.file, self.files)
         md.treeprocessors.register(relpath, "relpath", 0)
