@@ -37,7 +37,7 @@ def get_version(package):
 #     sys.exit()
 
 
-__version__ = get_version("elstir/src/elstir")
+__version__ = get_version("./src/elstir")
 setup(
     name="elstir",
     version=__version__,
