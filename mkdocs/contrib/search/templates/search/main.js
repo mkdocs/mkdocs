@@ -95,4 +95,5 @@ if (!window.Worker) {
   var searchWorker = new Worker(joinUrl(base_url, "search/worker.js"));
   searchWorker.postMessage({init: true});
   searchWorker.onmessage = onWorkerMessage;
+  doSearch()
 }
