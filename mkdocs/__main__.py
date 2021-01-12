@@ -5,9 +5,10 @@ import sys
 import logging
 import click
 
+PYTHON_VERSION = sys.version[:3]
 # TODO: Remove this check at some point in the future.
 # (also remove flake8's 'ignore E402' comments below)
-if sys.version_info[0] < 3:  # pragma: no cover
+if PYTHON_VERSION[0] != '3':  # pragma: no cover
     raise ImportError('A recent version of Python 3 is required.')
 
 from mkdocs import __version__                            # noqa: E402
@@ -107,13 +108,18 @@ common_config_options = add_options([
     click.option('--use-directory-urls/--no-directory-urls', is_flag=True, default=None, help=use_directory_urls_help)
 ])
 
-pgk_dir = os.path.dirname(os.path.abspath(__file__))
-
+PKG_DIR = os.path.dirname(os.path.abspath(__file__))
 
 @click.group(context_settings={'help_option_names': ['-h', '--help']})
+#@click.version_option(
+#    '{} from {} (Python {})'.format(__version__, pgk_dir, sys.version[:3]),
+#    '-V', '--version')
 @click.version_option(
-    '{} from {} (Python {})'.format(__version__, pgk_dir, sys.version[:3]),
-    '-V', '--version')
+    __version__,
+    '-V', '--version',
+    message='%(prog)s, version %(version)s from {} (Python {})'.format(
+        PKG_DIR, PYTHON_VERSION)
+)
 @common_options
 def cli():
     """
