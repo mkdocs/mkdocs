@@ -110,6 +110,7 @@ common_config_options = add_options([
 
 PKG_DIR = os.path.dirname(os.path.abspath(__file__))
 
+
 @click.group(context_settings={'help_option_names': ['-h', '--help']})
 @click.version_option(
     __version__,
