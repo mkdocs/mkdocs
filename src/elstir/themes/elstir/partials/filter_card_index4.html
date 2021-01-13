@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% from "single_item.html" import single_item with context %}
+{% from "build_filters.html" import build_filters with context %}
+
+{% block post_content %}
+{% set cards = page|get_children(pages) %}
+{% set filters = page.meta.template_data|elstir_get_filters %}
+<hr><details>
+<summary>Filters</summary>
+<div class="filter">
+{% for f in  filters %}
+<div class="input-group my-1">
+  <div class="input-group-prepend">
+    <label class="input-group-text" for="inputGroupSelect0{{ loop.index }}">
+        <div class="custom-control custom-switch form-switch">
+            <input type="checkbox" class="custom-control-input" id="customSwitch-{{ loop.index }}"  onchange="toggleFilter(this,'inputGroupSelect0{{ loop.index }}');" />
+            <label class="custom-control-label" for="customSwitch-{{ loop.index }}">
+            {{ f }}
+            </label>
+        </div>
+    </label>
+  </div>
+<select class="custom-select" id="inputGroupSelect0{{ loop.index }}" data-toggle="buttons" role="menu" disabled>
+{% for fi in cards[0].filters[filters[f]] %}
+<option class="btn" value="{{ fi.replace(' ','-') if fi else '' }}" id="{{ fi }}-fi" type="button" href="#{{ fi.replace(' ','') if fi else '' }}" >
+    {{ fi }}
+</option>
+{% endfor %}
+</select>
+</div>
+{% endfor %}
+</div>
+</details>
+
+<hr>
+<div class="gallery" id="gallery">
+{% for card in cards[0].children %}
+{{ single_item(card) }}
+{% endfor %}
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+  <!-- Load React. -->
+  <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script> 
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Load our React component. -->
+  <script src="filter.js"></script>
+<script>
+    let selectedFilters = [];
+    const images  = document.getElementsByClassName("gallery-item");
+    const filters = [...document.querySelectorAll('.filter select')];
+    const toggles = [...document.querySelectorAll('.filter input')];
+
+    var show = function (elem) {
+        elem.style.display = 'block';
+    };
+    var hide = function (elem) {
+        elem.style.display = 'none';
+    };
+    var toggleFilter =  function(el,elid) {
+        const filter = document.getElementById(elid);
+        filter.disabled = !el.checked;
+       
+        if ("createEvent" in document) {
+            var evt = document.createEvent("HTMLEvents");
+            evt.initEvent("change", false, true);
+            filter.dispatchEvent(evt);
+        }
+        else
+            filter.fireEvent("change");
+    };
+    
+    for (const filter of filters) {
+        filter.addEventListener('change', function(event) {
+            selectedFilters = filters.map(filter => filter.disabled ? '' : filter.value).filter(Boolean);
+            console.log(selectedFilters);
+            for (const image of images) {
+                if (selectedFilters.every(filter => image.classList.contains(filter))) {
+                    show(image);
+                }
+                else {hide(image)};
+            };
+        })
+    };
+
+</script>
+{% endblock %}

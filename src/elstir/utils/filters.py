@@ -70,7 +70,7 @@ def get_children(context,page,pages,depth=2):
     folder, file = os.path.split(page.file.abs_src_path)
     list_of_files = []
     num_pages_in_dir = len([pg for pg in os.listdir(folder) if os.path.isfile(os.path.join(folder,pg)) and pg[0]!='.' and pg[~2:]=='.md'])
-    dirs = [dr for dr in os.listdir(folder) if not os.path.isfile(os.path.join(folder,dr))]
+    dirs = [dr for dr in os.listdir(folder) if not os.path.isfile(os.path.join(folder,dr)) and "img" not in dr]
     num_sub_dirs = len(dirs)
     try:
         if num_pages_in_dir == 1 or (file=='index.md' and num_sub_dirs >0):
@@ -104,7 +104,7 @@ def _get_resource_meta(page: object, extra_data:dict=None):
         extra_meta = getParentTemplateFields(page.file.abs_src_path,extra_data)
         meta = {
             **meta,
-            **extra_meta
+            **(extra_meta if extra_meta else {})
             }
     except Exception as e:
         print(f'Exception - _get_resource_meta: {e}')
