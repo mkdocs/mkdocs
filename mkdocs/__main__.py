@@ -8,7 +8,7 @@ import click
 PYTHON_VERSION = sys.version[:3]
 # TODO: Remove this check at some point in the future.
 # (also remove flake8's 'ignore E402' comments below)
-if PYTHON_VERSION[0] != '3':  # pragma: no cover
+if PYTHON_VERSION < '3':  # pragma: no cover
     raise ImportError('A recent version of Python 3 is required.')
 
 from mkdocs import __version__                            # noqa: E402
@@ -115,8 +115,7 @@ PKG_DIR = os.path.dirname(os.path.abspath(__file__))
 @click.version_option(
     __version__,
     '-V', '--version',
-    message='%(prog)s, version %(version)s from {} (Python {})'.format(
-        PKG_DIR, PYTHON_VERSION)
+    message=f'(prog)s, version %(version)s from { PKG_DIR } (Python { PYTHON_VERSION })'
 )
 @common_options
 def cli():
