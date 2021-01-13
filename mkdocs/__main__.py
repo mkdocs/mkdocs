@@ -5,11 +5,11 @@ import sys
 import logging
 import click
 
-from mkdocs import __version__                            # noqa: E402
-from mkdocs import utils                                  # noqa: E402
-from mkdocs import exceptions                             # noqa: E402
-from mkdocs import config                                 # noqa: E402
-from mkdocs.commands import build, gh_deploy, new, serve  # noqa: E402
+from mkdocs import __version__
+from mkdocs import utils
+from mkdocs import exceptions
+from mkdocs import config
+from mkdocs.commands import build, gh_deploy, new, serve
 
 log = logging.getLogger(__name__)
 
