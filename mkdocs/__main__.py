@@ -5,16 +5,11 @@ import sys
 import logging
 import click
 
-# TODO: Remove this check at some point in the future.
-# (also remove flake8's 'ignore E402' comments below)
-if sys.version_info[0] < 3:  # pragma: no cover
-    raise ImportError('A recent version of Python 3 is required.')
-
-from mkdocs import __version__                            # noqa: E402
-from mkdocs import utils                                  # noqa: E402
-from mkdocs import exceptions                             # noqa: E402
-from mkdocs import config                                 # noqa: E402
-from mkdocs.commands import build, gh_deploy, new, serve  # noqa: E402
+from mkdocs import __version__
+from mkdocs import utils
+from mkdocs import exceptions
+from mkdocs import config
+from mkdocs.commands import build, gh_deploy, new, serve
 
 log = logging.getLogger(__name__)
 
@@ -107,13 +102,17 @@ common_config_options = add_options([
     click.option('--use-directory-urls/--no-directory-urls', is_flag=True, default=None, help=use_directory_urls_help)
 ])
 
-pgk_dir = os.path.dirname(os.path.abspath(__file__))
+PYTHON_VERSION = sys.version[:3]
+
+PKG_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 @click.group(context_settings={'help_option_names': ['-h', '--help']})
 @click.version_option(
-    '{} from {} (Python {})'.format(__version__, pgk_dir, sys.version[:3]),
-    '-V', '--version')
+    __version__,
+    '-V', '--version',
+    message=f'%(prog)s, version %(version)s from { PKG_DIR } (Python { PYTHON_VERSION })'
+)
 @common_options
 def cli():
     """
