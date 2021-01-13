@@ -5,12 +5,6 @@ import sys
 import logging
 import click
 
-PYTHON_VERSION = sys.version[:3]
-# TODO: Remove this check at some point in the future.
-# (also remove flake8's 'ignore E402' comments below)
-if PYTHON_VERSION < '3':  # pragma: no cover
-    raise ImportError('A recent version of Python 3 is required.')
-
 from mkdocs import __version__                            # noqa: E402
 from mkdocs import utils                                  # noqa: E402
 from mkdocs import exceptions                             # noqa: E402
@@ -107,6 +101,8 @@ common_config_options = add_options([
     # override the config file
     click.option('--use-directory-urls/--no-directory-urls', is_flag=True, default=None, help=use_directory_urls_help)
 ])
+
+PYTHON_VERSION = sys.version[:3]
 
 PKG_DIR = os.path.dirname(os.path.abspath(__file__))
 
