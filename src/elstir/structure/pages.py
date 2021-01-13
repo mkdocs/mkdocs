@@ -7,6 +7,7 @@ import markdown
 from markdown.extensions import Extension
 from markdown.treeprocessors import Treeprocessor
 from markdown.util import AMP_SUBSTITUTE
+import elstir.contrib.pandoc as pandoc
 
 from elstir.structure.toc import get_toc
 from elstir.utils import meta, get_build_date, get_markdown_title, warning_filter
@@ -172,7 +173,15 @@ class Page:
             extensions=extensions,
             extension_configs=config['mdx_configs'] or {}
         )
-        self.content = md.convert(self.markdown)
+        try:
+            doc = pandoc.Document()
+            doc.markdown = self.markdown 
+            self.content = doc.html
+        except Exception as e:
+            logging.warn(
+                f"Pandoc conversion failed with the following message: {e}"
+            )
+            self.content = md.convert(self.markdown)
         self.toc = get_toc(getattr(md, 'toc_tokens', []))
 
 
