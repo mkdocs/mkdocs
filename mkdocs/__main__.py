@@ -115,7 +115,7 @@ PKG_DIR = os.path.dirname(os.path.abspath(__file__))
 @click.version_option(
     __version__,
     '-V', '--version',
-    message=f'(prog)s, version %(version)s from { PKG_DIR } (Python { PYTHON_VERSION })'
+    message=f'%(prog)s, version %(version)s from { PKG_DIR } (Python { PYTHON_VERSION })'
 )
 @common_options
 def cli():
