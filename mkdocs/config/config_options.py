@@ -532,9 +532,9 @@ class MarkdownExtensions(OptionallyRequired):
         super().__init__(**kwargs)
         self.builtins = builtins or []
         self.configkey = configkey
-        self.configdata = {}
 
     def run_validation(self, value):
+        self.configdata = {}
         if not isinstance(value, (list, tuple)):
             raise ValidationError('Invalid Markdown Extensions configuration')
         extensions = []

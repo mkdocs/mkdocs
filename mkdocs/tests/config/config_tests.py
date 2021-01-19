@@ -266,3 +266,22 @@ class ConfigTests(unittest.TestCase):
 
             self.assertEqual(len(errors), 1)
             self.assertEqual(warnings, [])
+
+    def test_multiple_markdown_config_instantace(self):
+        # This had a bug where an extension config would persist to separate
+        # config instances that didn't specify extensions.
+
+        conf = config.Config(schema=config.DEFAULT_SCHEMA)
+        conf.load_dict({
+            'site_name': 'Example',
+            'markdown_extensions': [{'toc': {'permalink': '##'}}]
+        })
+        conf.validate()
+        self.assertEqual(conf['mdx_configs'].get('toc'), {'permalink': '##'})
+
+        conf = config.Config(schema=config.DEFAULT_SCHEMA)
+        conf.load_dict({
+            'site_name': 'Example'
+        })
+        conf.validate()
+        self.assertIsNone(conf['mdx_configs'].get('toc'))
