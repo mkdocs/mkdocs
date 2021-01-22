@@ -84,6 +84,19 @@ def _check_version(branch):
 
 
 def _check_cname(remote_name, branch, current_cname, site_dir):
+    # Fetch the gh-pages branch so that we can check the latest CNAME file.
+    # It's also possible that the gh-pages branch has never been fetched at
+    # all.
+    proc = subprocess.Popen(["git", "fetch", "--no-write-fetch-head", remote_name, branch],
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    _, _ = proc.communicate()
+    if(proc.returncode != 0):
+        # Couldn't fetch the branch so it doesn't exist and there's no way
+        # an existing CNAME could be configured.
+        return
+
+    # Get the contents of the CNAME file on the gh-pages branch.
     object_name = "%s/%s:CNAME" % (remote_name, branch)
     proc = subprocess.Popen(["git", "show", object_name],
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)

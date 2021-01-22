@@ -80,7 +80,7 @@ class TestGitHubDeploy(unittest.TestCase):
     @mock.patch('subprocess.Popen')
     def test_check_cname_non_existent(self, mock_popeno):
         mock_popeno().communicate.return_value = (b'', b'Not found')
-        mock_popeno().returncode = 128
+        type(mock_popeno).returncode = mock.PropertyMock(side_effect=[0, 128])
 
         try:
             gh_deploy._check_cname('origin', 'gh-pages', 'not-docs.example.com', 'docs')
@@ -240,7 +240,7 @@ class TestGitHubDeployLogs(unittest.TestCase):
     @mock.patch('subprocess.Popen')
     def test_check_cname_differ(self, mock_popeno):
 
-        mock_popeno().communicate.return_value = (b'docs.example.com\n', b'')
+        mock_popeno().communicate.side_effect = [(b'', b''), (b'docs.example.com\n', b'')]
         mock_popeno().returncode = 0
 
         with self.assertLogs('mkdocs', level='ERROR') as cm:
