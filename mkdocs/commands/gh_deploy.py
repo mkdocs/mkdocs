@@ -83,7 +83,32 @@ def _check_version(branch):
         raise SystemExit(1)
 
 
-def gh_deploy(config, message=None, force=False, ignore_version=False, shell=False):
+def _check_cname(remote_name, branch, current_cname, site_dir):
+    object_name = "%s/%s:CNAME" % (remote_name, branch)
+    proc = subprocess.Popen(["git", "show", object_name],
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    stdout, _ = proc.communicate()
+    if(proc.returncode != 0):
+        # No CNAME, so we're all good.
+        return
+
+    cname = stdout.decode('utf-8').strip()
+
+    if not cname:
+        # Empty CNAME, so we're all good.
+        return
+
+    if current_cname != cname:
+        log.error(
+            'Deployment terminated: gh-pages is configured with CNAME {} but '
+            'there isn\'t a matching CNAME file at {}/CNAME. Either create the '
+            'CNAME file or use --ignore-cname to deploy anyway.'.format(cname, site_dir)
+        )
+        raise SystemExit(1)
+
+
+def gh_deploy(config, message=None, force=False, ignore_version=False, shell=False, ignore_cname=False):
 
     if not _is_cwd_git_repo():
         log.error('Cannot deploy - this directory does not appear to be a git '
@@ -94,6 +119,18 @@ def gh_deploy(config, message=None, force=False, ignore_version=False, shell=Fal
 
     if not ignore_version:
         _check_version(remote_branch)
+
+    # Does this repository have a CNAME set for GitHub pages?
+    cname_file = os.path.join(config['site_dir'], 'CNAME')
+    if os.path.isfile(cname_file):
+        # This GitHub pages repository has a CNAME configured.
+        with(open(cname_file, 'r')) as f:
+            cname_host = f.read().strip()
+    else:
+        cname_host = None
+
+    if not ignore_cname:
+        _check_cname(remote_name, remote_branch, cname_host, config['site_dir'])
 
     if message is None:
         message = default_message
@@ -117,12 +154,7 @@ def gh_deploy(config, message=None, force=False, ignore_version=False, shell=Fal
         log.error("Failed to deploy to GitHub with error: \n{}".format(e.message))
         raise SystemExit(1)
 
-    cname_file = os.path.join(config['site_dir'], 'CNAME')
-    # Does this repository have a CNAME set for GitHub pages?
-    if os.path.isfile(cname_file):
-        # This GitHub pages repository has a CNAME configured.
-        with(open(cname_file, 'r')) as f:
-            cname_host = f.read().strip()
+    if cname_host is not None:
         log.info('Based on your CNAME file, your documentation should be '
                  'available shortly at: http://%s', cname_host)
         log.info('NOTE: Your DNS records must be configured appropriately for '

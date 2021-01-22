@@ -77,6 +77,29 @@ class TestGitHubDeploy(unittest.TestCase):
         expected = (None, None)
         self.assertEqual(expected, gh_deploy._get_remote_url('origin'))
 
+    @mock.patch('subprocess.Popen')
+    def test_check_cname_non_existent(self, mock_popeno):
+        mock_popeno().communicate.return_value = (b'', b'Not found')
+        mock_popeno().returncode = 128
+
+        try:
+            gh_deploy._check_cname('origin', 'gh-pages', 'not-docs.example.com', 'docs')
+        except SystemExit:
+            self.fail(
+                '_check_cname should not raise SystemExit when it can\'t determine '
+                'the upstream CNAME.')
+
+    @mock.patch('subprocess.Popen')
+    def test_check_cname_match(self, mock_popeno):
+        mock_popeno().communicate.return_value = (b'docs.example.com\n', b'')
+        mock_popeno().returncode = 0
+
+        try:
+            gh_deploy._check_cname('origin', 'gh-pages', 'docs.example.com', 'docs')
+        except SystemExit:
+            self.fail(
+                '_check_cname should not raise SystemExit when CNAMES match.')
+
     @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
     @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
     @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(None, None))
@@ -144,6 +167,20 @@ class TestGitHubDeploy(unittest.TestCase):
 
     @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
     @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
+    @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(None, None))
+    @mock.patch('mkdocs.commands.gh_deploy._check_version')
+    @mock.patch('mkdocs.commands.gh_deploy._check_cname')
+    @mock.patch('ghp_import.ghp_import')
+    def test_deploy_ignore_cname(self, mock_import, check_cname, check_version, get_remote, get_sha, is_repo):
+
+        config = load_config(
+            remote_branch='test',
+        )
+        gh_deploy.gh_deploy(config, ignore_cname=True)
+        check_cname.assert_not_called()
+
+    @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
+    @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
     @mock.patch('mkdocs.commands.gh_deploy._check_version')
     @mock.patch('ghp_import.ghp_import')
     @mock.patch('mkdocs.commands.gh_deploy.log')
@@ -198,4 +235,20 @@ class TestGitHubDeployLogs(unittest.TestCase):
         self.assertEqual(
             cm.output,
             ['WARNING:mkdocs.commands.gh_deploy:Version check skipped: No version specified in previous deployment.']
+        )
+
+    @mock.patch('subprocess.Popen')
+    def test_check_cname_differ(self, mock_popeno):
+
+        mock_popeno().communicate.return_value = (b'docs.example.com\n', b'')
+        mock_popeno().returncode = 0
+
+        with self.assertLogs('mkdocs', level='ERROR') as cm:
+            self.assertRaises(SystemExit, gh_deploy._check_cname, 'origin', 'gh-pages', 'not-docs.example.com', 'docs')
+
+        self.assertEqual(
+            cm.output,
+            ['ERROR:mkdocs.commands.gh_deploy:Deployment terminated: gh-pages is configured with CNAME '
+             'docs.example.com but there isn\'t a matching CNAME file at docs/CNAME. Either create the CNAME file or '
+             'use --ignore-cname to deploy anyway.']
         )

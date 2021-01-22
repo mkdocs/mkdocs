@@ -51,6 +51,7 @@ remote_name_help = ("The remote name to commit to for Github Pages. This "
                     "overrides the value specified in config")
 force_help = "Force the push to the repository."
 ignore_version_help = "Ignore check that build is not being deployed with an older version of MkDocs."
+ignore_cname_help = "Ignore check that deploying will remove an existing CNAME file."
 watch_theme_help = ("Include the theme in list of files to watch for live reloading. "
                     "Ignored when live reload is not used.")
 wait_help = "Wait the specified number of seconds before reloading (default 0)."
@@ -168,10 +169,12 @@ def build_command(clean, **kwargs):
 @click.option('--force', is_flag=True, help=force_help)
 @click.option('--ignore-version', is_flag=True, help=ignore_version_help)
 @click.option('--shell', is_flag=True, help=shell_help)
+@click.option('--ignore-cname', is_flag=True, help=ignore_cname_help)
 @common_config_options
 @click.option('-d', '--site-dir', type=click.Path(), help=site_dir_help)
 @common_options
-def gh_deploy_command(clean, message, remote_branch, remote_name, force, ignore_version, shell, **kwargs):
+def gh_deploy_command(clean, message, remote_branch, remote_name, force, ignore_version, shell,
+                      ignore_cname, **kwargs):
     """Deploy your documentation to GitHub Pages"""
     try:
         cfg = config.load_config(
@@ -180,7 +183,8 @@ def gh_deploy_command(clean, message, remote_branch, remote_name, force, ignore_
             **kwargs
         )
         build.build(cfg, dirty=not clean)
-        gh_deploy.gh_deploy(cfg, message=message, force=force, ignore_version=ignore_version, shell=shell)
+        gh_deploy.gh_deploy(cfg, message=message, force=force, ignore_version=ignore_version,
+                            shell=shell, ignore_cname=ignore_cname)
     except exceptions.ConfigurationError as e:  # pragma: no cover
         # Avoid ugly, unhelpful traceback
         raise SystemExit('\n' + str(e))
