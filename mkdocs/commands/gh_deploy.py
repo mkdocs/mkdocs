@@ -114,14 +114,15 @@ def _check_cname(remote_name, branch, current_cname, site_dir):
 
     if current_cname != cname:
         log.error(
-            'Deployment terminated: gh-pages is configured with CNAME {} but '
-            'there isn\'t a matching CNAME file at {}/CNAME. Either create the '
-            'CNAME file or use --ignore-cname to deploy anyway.'.format(cname, site_dir)
+            'Deployment terminated: gh-pages is configured with a custom '
+            'domain ({}) but there isn\'t a matching CNAME file at {}/CNAME. '
+            'Create or update docs/CNAME file with the custom domain.'.format(
+                cname, site_dir)
         )
         raise SystemExit(1)
 
 
-def gh_deploy(config, message=None, force=False, ignore_version=False, shell=False, ignore_cname=False):
+def gh_deploy(config, message=None, force=False, ignore_version=False, shell=False):
 
     if not _is_cwd_git_repo():
         log.error('Cannot deploy - this directory does not appear to be a git '
@@ -142,8 +143,7 @@ def gh_deploy(config, message=None, force=False, ignore_version=False, shell=Fal
     else:
         cname_host = None
 
-    if not ignore_cname:
-        _check_cname(remote_name, remote_branch, cname_host, config['site_dir'])
+    _check_cname(remote_name, remote_branch, cname_host, config['site_dir'])
 
     if message is None:
         message = default_message

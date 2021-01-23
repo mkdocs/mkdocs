@@ -167,20 +167,6 @@ class TestGitHubDeploy(unittest.TestCase):
 
     @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
     @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
-    @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(None, None))
-    @mock.patch('mkdocs.commands.gh_deploy._check_version')
-    @mock.patch('mkdocs.commands.gh_deploy._check_cname')
-    @mock.patch('ghp_import.ghp_import')
-    def test_deploy_ignore_cname(self, mock_import, check_cname, check_version, get_remote, get_sha, is_repo):
-
-        config = load_config(
-            remote_branch='test',
-        )
-        gh_deploy.gh_deploy(config, ignore_cname=True)
-        check_cname.assert_not_called()
-
-    @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
-    @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
     @mock.patch('mkdocs.commands.gh_deploy._check_version')
     @mock.patch('ghp_import.ghp_import')
     @mock.patch('mkdocs.commands.gh_deploy.log')
@@ -248,7 +234,7 @@ class TestGitHubDeployLogs(unittest.TestCase):
 
         self.assertEqual(
             cm.output,
-            ['ERROR:mkdocs.commands.gh_deploy:Deployment terminated: gh-pages is configured with CNAME '
-             'docs.example.com but there isn\'t a matching CNAME file at docs/CNAME. Either create the CNAME file or '
-             'use --ignore-cname to deploy anyway.']
+            ['ERROR:mkdocs.commands.gh_deploy:Deployment terminated: gh-pages is configured with a custom domain '
+             '(docs.example.com) but there isn\'t a matching CNAME file at docs/CNAME. Create or update docs/CNAME '
+             'file with the custom domain.']
         )
