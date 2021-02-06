@@ -96,23 +96,26 @@ class UtilsTests(unittest.TestCase):
             ('a', 'b'): '../a',
             ('a', 'b/..'): '../a',  # The dots are considered a file. Documenting a long-standing bug.
             ('a', 'b/../..'): 'a',
-            ('', ''): '.',
-            ('.', ''): '.',
-            ('', '.'): '.',
-            ('.', '.'): '.',
             ('a/..../b', 'a/../b'): '../a/..../b',
             ('a/я/b', 'a/я/c'): '../b',
             ('a/я/b', 'a/яя/c'): '../../я/b',
         }
-        # Leading slash intentionally ignored
-        for url_slash in ('', '/'):
-            for other_slash in ('', '/'):
-                for (url, other), expected_result in expected_results.items():
-                    # Acknowledge the only difference that a leading slash can cause:
-                    if url_slash + url == '/':
-                        expected_result += '/'
-                    relurl = utils.get_relative_url(url_slash + url, other_slash + other)
-                    self.assertEqual(relurl, expected_result)
+        for (url, other), expected_result in expected_results.items():
+            # Leading slash intentionally ignored
+            self.assertEqual(utils.get_relative_url(url, other), expected_result)
+            self.assertEqual(utils.get_relative_url('/' + url, other), expected_result)
+            self.assertEqual(utils.get_relative_url(url, '/' + other), expected_result)
+            self.assertEqual(utils.get_relative_url('/' + url, '/' + other), expected_result)
+
+    def test_get_relative_url_empty(self):
+        for url in ['', '.', '/.']:
+            for other in ['', '.', '/', '/.']:
+                self.assertEqual(utils.get_relative_url(url, other), '.')
+
+        self.assertEqual(utils.get_relative_url('/', ''), './')
+        self.assertEqual(utils.get_relative_url('/', '/'), './')
+        self.assertEqual(utils.get_relative_url('/', '.'), './')
+        self.assertEqual(utils.get_relative_url('/', '/.'), './')
 
     def test_create_media_urls(self):
 
