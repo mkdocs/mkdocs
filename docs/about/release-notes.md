@@ -100,6 +100,8 @@ up horizontal space for better rendering of content like tables (#2193).
   filtering for sections (#2203).
 * Official support for Python 3.9 has been added and support for Python 3.5
   has been dropped.
+* Bugfix: Fixes an issue that would result in a partially cut-off navigation
+  item in the ReadTheDocs theme (#2297).
 
 ## Version 1.1.2 (2020-05-14)
 
