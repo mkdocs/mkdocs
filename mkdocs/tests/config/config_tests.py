@@ -98,6 +98,7 @@ class ConfigTests(unittest.TestCase):
                 {  # user defined variables
                     'theme': {
                         'name': 'mkdocs',
+                        'locale': 'fr',
                         'static_templates': ['foo.html'],
                         'show_sidebar': False,
                         'some_var': 'bar'
@@ -114,6 +115,7 @@ class ConfigTests(unittest.TestCase):
                     'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],
                     'vars': {
+                        'locale': 'en',
                         'include_search_page': False,
                         'search_index_only': False,
                         'highlightjs': True,
@@ -176,6 +178,7 @@ class ConfigTests(unittest.TestCase):
                     'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml', 'foo.html'],
                     'vars': {
+                        'locale': 'fr',
                         'show_sidebar': False,
                         'some_var': 'bar',
                         'include_search_page': False,

@@ -27,6 +27,7 @@ class ThemeTests(unittest.TestCase):
         )
         self.assertEqual(theme.static_templates, {'404.html', 'sitemap.xml'})
         self.assertEqual(get_vars(theme), {
+            'locale': 'en',
             'include_search_page': False,
             'search_index_only': False,
             'highlightjs': True,
