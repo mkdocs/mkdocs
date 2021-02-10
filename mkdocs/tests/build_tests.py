@@ -3,6 +3,7 @@
 from unittest import mock
 import unittest
 
+from mkdocs.exceptions import PluginError
 from mkdocs.structure.pages import Page
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.nav import get_navigation
@@ -334,6 +335,21 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         )
         self.assert_mock_called_once(mock_open)
 
+    @tempdir(files={'index.md': 'page content'})
+    @mock.patch('mkdocs.plugins.PluginCollection.run_event', side_effect=PluginError('Error message.'))
+    def test_populate_page_read_plugin_error(self, docs_dir, mock_open):
+        cfg = load_config(docs_dir=docs_dir)
+        file = File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        page = Page('Foo', file, cfg)
+        with self.assertLogs('mkdocs', level='ERROR') as cm:
+            self.assertRaises(PluginError, build._populate_page, page, cfg, Files([file]))
+        self.assertEqual(
+            cm.output, [
+                "ERROR:mkdocs.commands.build:Error reading page 'index.md':"
+            ]
+        )
+        self.assert_mock_called_once(mock_open)
+
     # Test build._build_page
 
     @tempdir()
@@ -430,6 +446,25 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         self.assertEqual(
             cm.output,
             ["ERROR:mkdocs.commands.build:Error building page 'index.md': Error message."]
+        )
+        self.assert_mock_called_once(mock_write_file)
+
+    @tempdir()
+    @mock.patch('mkdocs.plugins.PluginCollection.run_event', side_effect=PluginError('Error message.'))
+    def test_build_page_plugin_error(self, site_dir, mock_write_file):
+        cfg = load_config(site_dir=site_dir, nav=['index.md'], plugins=[])
+        files = Files([File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])])
+        nav = get_navigation(files, cfg)
+        page = files.documentation_pages()[0].page
+        # Fake populate page
+        page.title = 'Title'
+        page.markdown = 'page content'
+        page.content = '<p>page content</p>'
+        with self.assertLogs('mkdocs', level='ERROR') as cm:
+            self.assertRaises(PluginError, build._build_page, page, cfg, files, nav, cfg['theme'].get_env())
+        self.assertEqual(
+            cm.output,
+            ["ERROR:mkdocs.commands.build:Error building page 'index.md':"]
         )
         self.assert_mock_called_once(mock_write_file)
 

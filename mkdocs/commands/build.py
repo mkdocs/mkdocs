@@ -179,7 +179,11 @@ def _populate_page(page, config, files, dirty=False):
             'page_content', page.content, page=page, config=config, files=files
         )
     except Exception as e:
-        log.error("Error reading page '{}': {}".format(page.file.src_path, e))
+        message = f"Error reading page '{page.file.src_path}':"
+        # Prevent duplicated the error message because it will be printed immediately afterwards.
+        if not isinstance(e, BuildError):
+            message += f" {e}"
+        log.error(message)
         raise
 
 
@@ -227,7 +231,11 @@ def _build_page(page, config, doc_files, nav, env, dirty=False):
         # Deactivate page
         page.active = False
     except Exception as e:
-        log.error("Error building page '{}': {}".format(page.file.src_path, e))
+        message = f"Error building page '{page.file.src_path}':"
+        # Prevent duplicated the error message because it will be printed immediately afterwards.
+        if not isinstance(e, BuildError):
+            message += f" {e}"
+        log.error(message)
         raise
 
 
