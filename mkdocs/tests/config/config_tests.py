@@ -129,6 +129,7 @@ class ConfigTests(unittest.TestCase):
                     'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],
                     'vars': {
+                        'locale': 'en',
                         'include_search_page': True,
                         'search_index_only': False,
                         'highlightjs': True,
@@ -144,6 +145,7 @@ class ConfigTests(unittest.TestCase):
                     'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],
                     'vars': {
+                        'locale': 'en',
                         'include_search_page': True,
                         'search_index_only': False,
                         'highlightjs': True,
@@ -163,6 +165,7 @@ class ConfigTests(unittest.TestCase):
                     'dirs': [custom, os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],
                     'vars': {
+                        'locale': 'en',
                         'include_search_page': True,
                         'search_index_only': False,
                         'highlightjs': True,
