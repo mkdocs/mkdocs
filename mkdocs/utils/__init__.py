@@ -321,8 +321,8 @@ def get_themes():
 
         if theme.name in builtins and theme.dist.key != 'mkdocs':
             raise exceptions.ConfigurationError(
-                "The theme {} is a builtin theme but {} provides a theme "
-                "with the same name".format(theme.name, theme.dist.key))
+                f"The theme {theme.name} is a builtin theme but "
+                f"{theme.dist.key} provides a theme with the same name")
 
         elif theme.name in themes:
             multiple_packages = ','.join([themes[theme.name].dist.key, theme.dist.key])

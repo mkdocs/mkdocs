@@ -171,7 +171,7 @@ class Choice(OptionallyRequired):
             length = 0
 
         if not length or isinstance(choices, str):
-            raise ValueError('Expected iterable of choices, got {}', choices)
+            raise ValueError(f'Expected iterable of choices, got {choices}')
 
         self.choices = choices
 
@@ -438,8 +438,8 @@ class Theme(BaseConfigOption):
                     return value
 
                 raise ValidationError(
-                    "Unrecognised theme name: '{}'. The available installed themes "
-                    "are: {}".format(value['name'], ', '.join(themes))
+                    f"Unrecognised theme name: '{value['name']}'. "
+                    f"The available installed themes are: {', '.join(themes)}"
                 )
 
             raise ValidationError("No theme name set.")

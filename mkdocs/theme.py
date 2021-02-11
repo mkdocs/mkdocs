@@ -54,7 +54,7 @@ class Theme:
     def __repr__(self):
         return "{}(name='{}', dirs={}, static_templates={}, {})".format(
             self.__class__.__name__, self.name, self.dirs, list(self.static_templates),
-            ', '.join('{}={}'.format(k, repr(v)) for k, v in self._vars.items())
+            ', '.join(f'{k}={v!r}' for k, v in self._vars.items())
         )
 
     def __getitem__(self, key):
@@ -95,8 +95,8 @@ class Theme:
             themes = utils.get_theme_names()
             if parent_theme not in themes:
                 raise ValidationError(
-                    "The theme '{}' inherits from '{}', which does not appear to be installed. "
-                    "The available installed themes are: {}".format(name, parent_theme, ', '.join(themes))
+                    f"The theme '{name}' inherits from '{parent_theme}', which does not appear to be installed. "
+                    f"The available installed themes are: {', '.join(themes)}"
                 )
             self._load_theme_config(parent_theme)
 
