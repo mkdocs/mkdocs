@@ -123,8 +123,8 @@ def gh_deploy(config, message=None, force=False, ignore_version=False, shell=Fal
         # This GitHub pages repository has a CNAME configured.
         with(open(cname_file, 'r')) as f:
             cname_host = f.read().strip()
-        log.info('Based on your CNAME file, your documentation should be '
-                 'available shortly at: http://%s', cname_host)
+        log.info(f'Based on your CNAME file, your documentation should be '
+                 f'available shortly at: http://{cname_host}')
         log.info('NOTE: Your DNS records must be configured appropriately for '
                  'your CNAME URL to work.')
         return
@@ -139,4 +139,4 @@ def gh_deploy(config, message=None, force=False, ignore_version=False, shell=Fal
         if repo.endswith('.git'):
             repo = repo[:-len('.git')]
         url = f'https://{username}.github.io/{repo}/'
-        log.info('Your documentation should shortly be available at: ' + url)
+        log.info(f"Your documentation should shortly be available at: {url}")

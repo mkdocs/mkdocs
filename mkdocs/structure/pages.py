@@ -219,8 +219,8 @@ class _RelativePathTreeprocessor(Treeprocessor):
         # Validate that the target exists in files collection.
         if target_path not in self.files:
             log.warning(
-                "Documentation file '{}' contains a link to '{}' which is not found "
-                "in the documentation files.".format(self.file.src_path, target_path)
+                f"Documentation file '{self.file.src_path}' contains a link to "
+                f"'{target_path}' which is not found in the documentation files."
             )
             return url
         target_file = self.files.get_file_from_path(target_path)

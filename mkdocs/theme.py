@@ -88,7 +88,7 @@ class Theme:
                 f"Please upgrade to a current version of the theme."
             )
 
-        log.debug("Loaded theme configuration for '%s' from '%s': %s", name, file_path, theme_config)
+        log.debug(f"Loaded theme configuration for '{name}' from '{file_path}': {theme_config}")
 
         parent_theme = theme_config.pop('extends', None)
         if parent_theme:

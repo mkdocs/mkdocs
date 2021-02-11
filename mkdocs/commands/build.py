@@ -116,7 +116,7 @@ def _build_theme_template(template_name, env, files, config, nav):
         utils.write_file(output.encode('utf-8'), output_path)
 
         if template_name == 'sitemap.xml':
-            log.debug("Gzipping template: %s", template_name)
+            log.debug(f"Gzipping template: {template_name}")
             gz_filename = f'{output_path}.gz'
             with open(gz_filename, 'wb') as f:
                 timestamp = utils.get_build_timestamp()
@@ -261,7 +261,7 @@ def build(config, live_server=False, dirty=False):
                         " links within your site. This option is designed for site development purposes only.")
 
         if not live_server:  # pragma: no cover
-            log.info("Building documentation to directory: %s", config['site_dir'])
+            log.info(f"Building documentation to directory: {config['site_dir']}")
             if dirty and site_directory_contains_stale_files(config['site_dir']):
                 log.info("The directory contains stale files. Use --clean to remove them.")
 
@@ -281,7 +281,7 @@ def build(config, live_server=False, dirty=False):
 
         log.debug("Reading markdown pages.")
         for file in files.documentation_pages():
-            log.debug("Reading: " + file.src_path)
+            log.debug(f"Reading: {file.src_path}")
             _populate_page(file.page, config, files, dirty)
 
         # Run `env` plugin events.

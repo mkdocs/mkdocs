@@ -95,7 +95,7 @@ def _static_server(host, port, site_dir):
     ])
     application.listen(port=port, address=host)
 
-    log.info('Running at: http://%s:%s/', host, port)
+    log.info(f'Running at: http://{host}:{port}/')
     log.info('Hold ctrl+c to quit.')
     try:
         ioloop.IOLoop.instance().start()

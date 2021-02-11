@@ -325,10 +325,10 @@ def get_themes():
                 "with the same name".format(theme.name, theme.dist.key))
 
         elif theme.name in themes:
-            multiple_packages = [themes[theme.name].dist.key, theme.dist.key]
-            log.warning("The theme %s is provided by the Python packages "
-                        "'%s'. The one in %s will be used.",
-                        theme.name, ','.join(multiple_packages), theme.dist.key)
+            multiple_packages = ','.join([themes[theme.name].dist.key, theme.dist.key])
+            log.warning(
+                f"The theme {theme.name} is provided by the Python packages '{multiple_packages}'. "
+                f"The one in {theme.dist.key} will be used.")
 
         themes[theme.name] = theme
 

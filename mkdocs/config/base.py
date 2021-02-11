@@ -197,13 +197,13 @@ def load_config(config_file=None, **kwargs):
     errors, warnings = cfg.validate()
 
     for config_name, warning in warnings:
-        log.warning("Config value: '%s'. Warning: %s", config_name, warning)
+        log.warning(f"Config value: '{config_name}'. Warning: {warning}")
 
     for config_name, error in errors:
-        log.error("Config value: '%s'. Error: %s", config_name, error)
+        log.error(f"Config value: '{config_name}'. Error: {error}")
 
     for key, value in cfg.items():
-        log.debug("Config value: '%s' = %r", key, value)
+        log.debug(f"Config value: '{key}' = {value!r}")
 
     if len(errors) > 0:
         raise exceptions.ConfigurationError(
