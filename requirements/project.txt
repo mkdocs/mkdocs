@@ -1,3 +1,4 @@
+babel>=2.9.0
 click>=7.0
 Jinja2>=2.10.3
 livereload>=2.6.1
