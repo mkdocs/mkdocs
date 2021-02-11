@@ -207,11 +207,11 @@ def load_config(config_file=None, **kwargs):
 
     if len(errors) > 0:
         raise exceptions.ConfigurationError(
-            "Aborted with {} Configuration Errors!".format(len(errors))
+            f"Aborted with {len(errors)} Configuration Errors!"
         )
     elif cfg['strict'] and len(warnings) > 0:
         raise exceptions.ConfigurationError(
-            "Aborted with {} Configuration Warnings in 'strict' mode!".format(len(warnings))
+            f"Aborted with {len(warnings)} Configuration Warnings in 'strict' mode!"
         )
 
     return cfg

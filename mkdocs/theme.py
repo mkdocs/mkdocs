@@ -84,8 +84,8 @@ class Theme:
         except OSError as e:
             log.debug(e)
             raise ValidationError(
-                "The theme '{}' does not appear to have a configuration file. "
-                "Please upgrade to a current version of the theme.".format(name)
+                f"The theme '{name}' does not appear to have a configuration file. "
+                f"Please upgrade to a current version of the theme."
             )
 
         log.debug("Loaded theme configuration for '%s' from '%s': %s", name, file_path, theme_config)

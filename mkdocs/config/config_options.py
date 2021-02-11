@@ -86,8 +86,8 @@ class ConfigItems(BaseConfigOption):
                 return ()
 
         if not isinstance(value, Sequence):
-            raise ValidationError('Expected a sequence of mappings, but a %s '
-                                  'was given.' % type(value))
+            raise ValidationError(f'Expected a sequence of mappings, but a '
+                                  f'{type(value)} was given.')
 
         return [self.item_config.validate(item) for item in value]
 
@@ -145,8 +145,7 @@ class Type(OptionallyRequired):
     def run_validation(self, value):
 
         if not isinstance(value, self._type):
-            msg = ("Expected type: {} but received: {}"
-                   .format(self._type, type(value)))
+            msg = f"Expected type: {self._type} but received: {type(value)}"
         elif self.length is not None and len(value) != self.length:
             msg = ("Expected type: {0} with length {2} but received: {1} with "
                    "length {3}").format(self._type, value, self.length,
@@ -178,8 +177,7 @@ class Choice(OptionallyRequired):
 
     def run_validation(self, value):
         if value not in self.choices:
-            msg = ("Expected one of: {} but received: {}"
-                   .format(self.choices, value))
+            msg = f"Expected one of: {self.choices} but received: {value}"
         else:
             return value
 
@@ -198,9 +196,8 @@ class Deprecated(BaseConfigOption):
         if config.get(key_name) is None or self.moved_to is None:
             return
 
-        warning = ('The configuration option {} has been deprecated and '
-                   'will be removed in a future release of MkDocs.'
-                   ''.format(key_name))
+        warning = (f'The configuration option {key_name} has been deprecated and '
+                   f'will be removed in a future release of MkDocs.')
         self.warnings.append(warning)
 
         if '.' not in self.moved_to:
@@ -348,8 +345,7 @@ class FilesystemObject(Type):
         if self.config_dir and not os.path.isabs(value):
             value = os.path.join(self.config_dir, value)
         if self.exists and not self.existence_test(value):
-            raise ValidationError("The path {path} isn't an existing {name}.".
-                                  format(path=value, name=self.name))
+            raise ValidationError(f"The path {value} isn't an existing {self.name}.")
         value = os.path.abspath(value)
         assert isinstance(value, str)
         return value
@@ -448,7 +444,7 @@ class Theme(BaseConfigOption):
 
             raise ValidationError("No theme name set.")
 
-        raise ValidationError('Invalid type "{}". Expected a string or key/value pairs.'.format(type(value)))
+        raise ValidationError(f'Invalid type "{type(value)}". Expected a string or key/value pairs.')
 
     def post_validation(self, config, key_name):
         theme_config = config[key_name]
@@ -482,8 +478,7 @@ class Nav(OptionallyRequired):
     def run_validation(self, value):
 
         if not isinstance(value, list):
-            raise ValidationError(
-                "Expected a list, got {}".format(type(value)))
+            raise ValidationError(f"Expected a list, got {type(value)}")
 
         if len(value) == 0:
             return
@@ -547,8 +542,7 @@ class MarkdownExtensions(OptionallyRequired):
                 if cfg is None:
                     continue
                 if not isinstance(cfg, dict):
-                    raise ValidationError('Invalid config options for Markdown '
-                                          "Extension '{}'.".format(ext))
+                    raise ValidationError(f"Invalid config options for Markdown Extension '{ext}'.")
                 self.configdata[ext] = cfg
             elif isinstance(item, str):
                 extensions.append(item)
@@ -596,8 +590,7 @@ class Plugins(OptionallyRequired):
                 name, cfg = item.popitem()
                 cfg = cfg or {}  # Users may define a null (None) config
                 if not isinstance(cfg, dict):
-                    raise ValidationError('Invalid config options for '
-                                          'the "{}" plugin.'.format(name))
+                    raise ValidationError(f'Invalid config options for the "{name}" plugin.')
                 item = name
             else:
                 cfg = {}

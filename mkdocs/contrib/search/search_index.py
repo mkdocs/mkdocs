@@ -166,7 +166,7 @@ class ContentParser(HTMLParser):
         """Called at the start of every HTML tag."""
 
         # We only care about the opening tag for headings.
-        if tag not in (["h%d" % x for x in range(1, 7)]):
+        if tag not in ([f"h{x}" for x in range(1, 7)]):
             return
 
         # We are dealing with a new header, create a new section
@@ -183,7 +183,7 @@ class ContentParser(HTMLParser):
         """Called at the end of every HTML tag."""
 
         # We only care about the opening tag for headings.
-        if tag not in (["h%d" % x for x in range(1, 7)]):
+        if tag not in ([f"h{x}" for x in range(1, 7)]):
             return
 
         self.is_header_tag = False
