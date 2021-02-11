@@ -49,7 +49,7 @@ class AnchorLink:
 
     def indent_print(self, depth=0):
         indent = '    ' * depth
-        ret = '{}{} - {}\n'.format(indent, self.title, self.url)
+        ret = f'{indent}{self.title} - {self.url}\n'
         for item in self.children:
             ret += item.indent_print(depth + 1)
         return ret

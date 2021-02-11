@@ -40,7 +40,7 @@ def _get_remote_url(remote_name):
 
     # No CNAME found.  We will use the origin URL to determine the GitHub
     # pages location.
-    remote = "remote.%s.url" % remote_name
+    remote = f"remote.{remote_name}.url"
     proc = subprocess.Popen(["git", "config", "--get", remote],
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
@@ -59,7 +59,7 @@ def _get_remote_url(remote_name):
 
 def _check_version(branch):
 
-    proc = subprocess.Popen(['git', 'show', '-s', '--format=%s', 'refs/heads/{}'.format(branch)],
+    proc = subprocess.Popen(['git', 'show', '-s', '--format=%s', f'refs/heads/{branch}'],
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     stdout, _ = proc.communicate()
@@ -114,7 +114,7 @@ def gh_deploy(config, message=None, force=False, ignore_version=False, shell=Fal
             nojekyll=True
         )
     except ghp_import.GhpError as e:
-        log.error("Failed to deploy to GitHub with error: \n{}".format(e.message))
+        log.error(f"Failed to deploy to GitHub with error: \n{e.message}")
         raise SystemExit(1)
 
     cname_file = os.path.join(config['site_dir'], 'CNAME')
@@ -138,5 +138,5 @@ def gh_deploy(config, message=None, force=False, ignore_version=False, shell=Fal
         username, repo = path.split('/', 1)
         if repo.endswith('.git'):
             repo = repo[:-len('.git')]
-        url = 'https://{}.github.io/{}/'.format(username, repo)
+        url = f'https://{username}.github.io/{repo}/'
         log.info('Your documentation should shortly be available at: ' + url)

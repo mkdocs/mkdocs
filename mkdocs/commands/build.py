@@ -101,12 +101,12 @@ def _build_template(name, template, files, config, nav):
 def _build_theme_template(template_name, env, files, config, nav):
     """ Build a template using the theme environment. """
 
-    log.debug("Building theme template: {}".format(template_name))
+    log.debug(f"Building theme template: {template_name}")
 
     try:
         template = env.get_template(template_name)
     except TemplateNotFound:
-        log.warning("Template skipped: '{}' not found in theme directories.".format(template_name))
+        log.warning(f"Template skipped: '{template_name}' not found in theme directories.")
         return
 
     output = _build_template(template_name, template, files, config, nav)
@@ -117,30 +117,30 @@ def _build_theme_template(template_name, env, files, config, nav):
 
         if template_name == 'sitemap.xml':
             log.debug("Gzipping template: %s", template_name)
-            gz_filename = '{}.gz'.format(output_path)
+            gz_filename = f'{output_path}.gz'
             with open(gz_filename, 'wb') as f:
                 timestamp = utils.get_build_timestamp()
                 with gzip.GzipFile(fileobj=f, filename=gz_filename, mode='wb', mtime=timestamp) as gz_buf:
                     gz_buf.write(output.encode('utf-8'))
     else:
-        log.info("Template skipped: '{}' generated empty output.".format(template_name))
+        log.info(f"Template skipped: '{template_name}' generated empty output.")
 
 
 def _build_extra_template(template_name, files, config, nav):
     """ Build user templates which are not part of the theme. """
 
-    log.debug("Building extra template: {}".format(template_name))
+    log.debug(f"Building extra template: {template_name}")
 
     file = files.get_file_from_path(template_name)
     if file is None:
-        log.warning("Template skipped: '{}' not found in docs_dir.".format(template_name))
+        log.warning(f"Template skipped: '{template_name}' not found in docs_dir.")
         return
 
     try:
         with open(file.abs_src_path, 'r', encoding='utf-8', errors='strict') as f:
             template = jinja2.Template(f.read())
     except Exception as e:
-        log.warning("Error reading template '{}': {}".format(template_name, e))
+        log.warning(f"Error reading template '{template_name}': {e}")
         return
 
     output = _build_template(template_name, template, files, config, nav)
@@ -148,7 +148,7 @@ def _build_extra_template(template_name, files, config, nav):
     if output.strip():
         utils.write_file(output.encode('utf-8'), file.abs_dest_path)
     else:
-        log.info("Template skipped: '{}' generated empty output.".format(template_name))
+        log.info(f"Template skipped: '{template_name}' generated empty output.")
 
 
 def _populate_page(page, config, files, dirty=False):
@@ -196,7 +196,7 @@ def _build_page(page, config, doc_files, nav, env, dirty=False):
         if dirty and not page.file.is_modified():
             return
 
-        log.debug("Building page {}".format(page.file.src_path))
+        log.debug(f"Building page {page.file.src_path}")
 
         # Activate page. Signals to theme that this is the current page.
         page.active = True
@@ -226,7 +226,7 @@ def _build_page(page, config, doc_files, nav, env, dirty=False):
         if output.strip():
             utils.write_file(output.encode('utf-8', errors='xmlcharrefreplace'), page.file.abs_dest_path)
         else:
-            log.info("Page skipped: '{}'. Generated empty output.".format(page.file.src_path))
+            log.info(f"Page skipped: '{page.file.src_path}'. Generated empty output.")
 
         # Deactivate page
         page.active = False
@@ -310,7 +310,7 @@ def build(config, live_server=False, dirty=False):
         config['plugins'].run_event('post_build', config=config)
 
         if config['strict'] and utils.warning_filter.count:
-            raise SystemExit('\nExited with {} warnings in strict mode.'.format(utils.warning_filter.count))
+            raise SystemExit(f'\nExited with {utils.warning_filter.count} warnings in strict mode.')
 
         log.info('Documentation built in %.2f seconds', time() - start)
 

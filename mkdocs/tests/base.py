@@ -95,35 +95,35 @@ class PathAssertionMixin:
     def assertPathExists(self, *parts):
         path = os.path.join(*parts)
         if not os.path.exists(path):
-            msg = self._formatMessage(None, "The path '{}' does not exist".format(path))
+            msg = self._formatMessage(None, f"The path '{path}' does not exist")
             raise self.failureException(msg)
 
     def assertPathNotExists(self, *parts):
         path = os.path.join(*parts)
         if os.path.exists(path):
-            msg = self._formatMessage(None, "The path '{}' does exist".format(path))
+            msg = self._formatMessage(None, f"The path '{path}' does exist")
             raise self.failureException(msg)
 
     def assertPathIsFile(self, *parts):
         path = os.path.join(*parts)
         if not os.path.isfile(path):
-            msg = self._formatMessage(None, "The path '{}' is not a file that exists".format(path))
+            msg = self._formatMessage(None, f"The path '{path}' is not a file that exists")
             raise self.failureException(msg)
 
     def assertPathNotFile(self, *parts):
         path = os.path.join(*parts)
         if os.path.isfile(path):
-            msg = self._formatMessage(None, "The path '{}' is a file that exists".format(path))
+            msg = self._formatMessage(None, f"The path '{path}' is a file that exists")
             raise self.failureException(msg)
 
     def assertPathIsDir(self, *parts):
         path = os.path.join(*parts)
         if not os.path.isdir(path):
-            msg = self._formatMessage(None, "The path '{}' is not a directory that exists".format(path))
+            msg = self._formatMessage(None, f"The path '{path}' is not a directory that exists")
             raise self.failureException(msg)
 
     def assertPathNotDir(self, *parts):
         path = os.path.join(*parts)
         if os.path.isfile(path):
-            msg = self._formatMessage(None, "The path '{}' is a directory that exists".format(path))
+            msg = self._formatMessage(None, f"The path '{path}' is a directory that exists")
             raise self.failureException(msg)

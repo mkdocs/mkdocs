@@ -76,7 +76,7 @@ class ConfigItems(BaseConfigOption):
         self.required = kwargs.get('required', False)
 
     def __repr__(self):
-        return '{}: {}'.format(self.__class__.__name__, self.item_config)
+        return f'{self.__class__.__name__}: {self.item_config}'
 
     def run_validation(self, value):
         if value is None:
@@ -243,11 +243,11 @@ class IpAddress(OptionallyRequired):
         try:
             port = int(port)
         except Exception:
-            raise ValidationError("'{}' is not a valid port".format(port))
+            raise ValidationError(f"'{port}' is not a valid port")
 
         class Address(namedtuple('Address', 'host port')):
             def __str__(self):
-                return '{}:{}'.format(self.host, self.port)
+                return f'{self.host}:{self.port}'
 
         return Address(host, port)
 
@@ -611,7 +611,7 @@ class Plugins(OptionallyRequired):
 
     def load_plugin(self, name, config):
         if name not in self.installed_plugins:
-            raise ValidationError('The "{}" plugin is not installed'.format(name))
+            raise ValidationError(f'The "{name}" plugin is not installed')
 
         Plugin = self.installed_plugins[name].load()
 
@@ -624,7 +624,7 @@ class Plugins(OptionallyRequired):
         errors, warnings = plugin.load_config(config, self.config_file_path)
         self.warnings.extend(warnings)
         errors_message = '\n'.join(
-            "Plugin value: '{}'. Error: {}".format(x, y)
+            f"Plugin value: '{x}'. Error: {y}"
             for x, y in errors
         )
         if errors_message:

@@ -68,7 +68,7 @@ class PluginCollection(OrderedDict):
     def __setitem__(self, key, value, **kwargs):
         if not isinstance(value, BasePlugin):
             raise TypeError(
-                '{0}.{1} only accepts values which are instances of {2}.{3} '
+                '{}.{} only accepts values which are instances of {}.{} '
                 'sublcasses'.format(self.__module__, self.__name__,
                                     BasePlugin.__module__, BasePlugin.__name__))
         super().__setitem__(key, value, **kwargs)

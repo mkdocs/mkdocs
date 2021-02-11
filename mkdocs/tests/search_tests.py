@@ -324,15 +324,15 @@ class SearchIndexTests(unittest.TestCase):
 
             self.assertEqual(index._entries[1]['title'], "Heading 1")
             self.assertEqual(index._entries[1]['text'], "Content 1")
-            self.assertEqual(index._entries[1]['location'], "{}#heading-1".format(loc))
+            self.assertEqual(index._entries[1]['location'], f"{loc}#heading-1")
 
             self.assertEqual(index._entries[2]['title'], "Heading 2")
             self.assertEqual(strip_whitespace(index._entries[2]['text']), "Content2")
-            self.assertEqual(index._entries[2]['location'], "{}#heading-2".format(loc))
+            self.assertEqual(index._entries[2]['location'], f"{loc}#heading-2")
 
             self.assertEqual(index._entries[3]['title'], "Heading 3")
             self.assertEqual(strip_whitespace(index._entries[3]['text']), "Content3")
-            self.assertEqual(index._entries[3]['location'], "{}#heading-3".format(loc))
+            self.assertEqual(index._entries[3]['location'], f"{loc}#heading-3")
 
     @mock.patch('subprocess.Popen', autospec=True)
     def test_prebuild_index(self, mock_popen):

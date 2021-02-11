@@ -114,9 +114,9 @@ class SearchIndex:
                     data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
                     log.debug('Pre-built search index created successfully.')
                 else:
-                    log.warning('Failed to pre-build search index. Error: {}'.format(err))
+                    log.warning(f'Failed to pre-build search index. Error: {err}')
             except (OSError, ValueError) as e:
-                log.warning('Failed to pre-build search index. Error: {}'.format(e))
+                log.warning(f'Failed to pre-build search index. Error: {e}')
         elif self.config['prebuild_index'] == 'python':
             idx = lunr(
                 ref='location', fields=('title', 'text'), documents=self._entries,

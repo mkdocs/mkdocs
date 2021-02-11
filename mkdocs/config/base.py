@@ -67,7 +67,7 @@ class Config(UserDict):
 
         for key in (set(self.keys()) - self._schema_keys):
             warnings.append((
-                key, "Unrecognised configuration name: {}".format(key)
+                key, f"Unrecognised configuration name: {key}"
             ))
 
         return failed, warnings
@@ -135,7 +135,7 @@ class Config(UserDict):
         except YAMLError as e:
             # MkDocs knows and understands ConfigurationErrors
             raise exceptions.ConfigurationError(
-                "MkDocs encountered an error parsing the configuration file: {}".format(e)
+                f"MkDocs encountered an error parsing the configuration file: {e}"
             )
 
 
@@ -149,7 +149,7 @@ def _open_config_file(config_file):
     if hasattr(config_file, 'closed') and config_file.closed:
         config_file = config_file.name
 
-    log.debug("Loading configuration file: {}".format(config_file))
+    log.debug(f"Loading configuration file: {config_file}")
 
     # If it is a string, we can assume it is a path and attempt to open it.
     if isinstance(config_file, str):
@@ -157,7 +157,7 @@ def _open_config_file(config_file):
             config_file = open(config_file, 'rb')
         else:
             raise exceptions.ConfigurationError(
-                "Config file '{}' does not exist.".format(config_file))
+                f"Config file '{config_file}' does not exist.")
 
     # Ensure file descriptor is at begining
     config_file.seek(0)

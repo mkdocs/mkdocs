@@ -157,7 +157,7 @@ class TestGitHubDeploy(unittest.TestCase):
 
         self.assertRaises(SystemExit, gh_deploy.gh_deploy, config)
         mock_log.error.assert_called_once_with(
-            'Failed to deploy to GitHub with error: \n{}'.format(error_string)
+            f'Failed to deploy to GitHub with error: \n{error_string}'
         )
 
 

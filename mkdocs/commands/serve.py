@@ -39,7 +39,7 @@ def _get_handler(site_dir, StaticFileHandler):
         def write_error(self, status_code, **kwargs):
 
             if status_code in (404, 500):
-                error_page = '{}.html'.format(status_code)
+                error_page = f'{status_code}.html'
                 if isfile(join(site_dir, error_page)):
                     self.write(Loader(site_dir).load(error_page).generate())
                 else:

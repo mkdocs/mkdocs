@@ -66,7 +66,7 @@ class Files:
         def filter(name):
             # '.*' filters dot files/dirs at root level whereas '*/.*' filters nested levels
             patterns = ['.*', '*/.*', '*.py', '*.pyc', '*.html', '*readme*', 'mkdocs_theme.yml']
-            patterns.extend('*{}'.format(x) for x in utils.markdown_extensions)
+            patterns.extend(f'*{x}' for x in utils.markdown_extensions)
             patterns.extend(config['theme'].static_templates)
             for pattern in patterns:
                 if fnmatch.fnmatch(name.lower(), pattern):
@@ -172,9 +172,9 @@ class File:
     def copy_file(self, dirty=False):
         """ Copy source file to destination, ensuring parent directories exist. """
         if dirty and not self.is_modified():
-            log.debug("Skip copying unmodified file: '{}'".format(self.src_path))
+            log.debug(f"Skip copying unmodified file: '{self.src_path}'")
         else:
-            log.debug("Copying media file: '{}'".format(self.src_path))
+            log.debug(f"Copying media file: '{self.src_path}'")
             utils.copy_file(self.abs_src_path, self.abs_dest_path)
 
     def is_modified(self):
@@ -235,7 +235,7 @@ def get_files(config):
                 continue
             # Skip README.md if an index file also exists in dir
             if filename.lower() == 'readme.md' and 'index.md' in filenames:
-                log.warning("Both index.md and readme.md found. Skipping readme.md from {}".format(source_dir))
+                log.warning(f"Both index.md and readme.md found. Skipping readme.md from {source_dir}")
                 continue
             files.append(File(path, config['docs_dir'], config['site_dir'], config['use_directory_urls']))
 
