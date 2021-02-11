@@ -1,0 +1,68 @@
+# French translations for mkdocs/themes/readthedocs.
+# Copyright (C) 2021 mkdocs
+# This file is distributed under the same license as the mkdocs/mkdocs
+# project.
+# Ultrabug, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version:  mkdocs/mkdocs\n"
+"POT-Creation-Date: 2021-02-11 22:51+0000\n"
+"PO-Revision-Date: 2021-02-11 21:44+0100\n"
+"Last-Translator: Ultrabug\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: 404.html
+msgid "Page not found"
+msgstr "Page non trouvée"
+
+#: searchbox.html
+msgid "Search docs"
+msgstr "Rechercher dans la documentation"
+
+#: searchbox.html
+msgid "Type search term here"
+msgstr "Entrer la recherche ici"
+
+#: search.html
+msgid "Search the Docs"
+msgstr "Rechercher dans la documentation"
+
+#: search.html
+msgid "Search Results"
+msgstr "Résultats de la recherche"
+
+#: search.html
+msgid "Searching..."
+msgstr "Recherche en cours..."
+
+#: search.html
+msgid "No results found"
+msgstr "Aucun résultat trouvé"
+
+#: breadcrumbs.html
+msgid "Docs"
+msgstr "Documents"
+
+#: breadcrumbs.html
+#, python-format
+msgid "Edit on %(repo_name)s"
+msgstr "Editer dans %(repo_name)s"
+
+#: breadcrumbs.html footer.html
+msgid "Previous"
+msgstr "Précédent"
+
+#: breadcrumbs.html footer.html
+msgid "Next"
+msgstr "Suivant"
+
+#: footer.html
+#, python-format
+msgid "Built with %(mkdocs_link)s using a %(sphinx_link)s provided by %(rtd_link)s."
+msgstr "Générée avec %(mkdocs_link)s avec un %(sphinx_link)s fourni par %(rtd_link)s."
