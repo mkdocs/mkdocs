@@ -18,6 +18,10 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip setuptools wheel
+      - name: Compile localization message files
+        run: |
+          pybabel compile -d mkdocs/themes/mkdocs/locales
+          pybabel compile -d mkdocs/themes/readthedocs/locales
       - name: Build
         run: |
           python setup.py bdist_wheel sdist --formats gztar
