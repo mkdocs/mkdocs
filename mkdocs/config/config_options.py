@@ -624,7 +624,7 @@ class Plugins(OptionallyRequired):
         errors, warnings = plugin.load_config(config, self.config_file_path)
         self.warnings.extend(warnings)
         errors_message = '\n'.join(
-            "Plugin value: '{}'. Error: {}".format(x, y)
+            "Plugin '{}' value: '{}'. Error: {}".format(name, x, y)
             for x, y in errors
         )
         if errors_message:
