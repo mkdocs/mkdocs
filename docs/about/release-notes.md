@@ -25,6 +25,15 @@ The current and past members of the MkDocs team.
 
 ### Major Additions to Version 1.2
 
+### Support added for Theme Localization (#2299)
+
+The `mkdocs` and `readthedocs` themes now support language localization using
+the `theme.locale` parameter that will default to `en` (English). The other
+supported language in this release is `fr` (French).
+
+Translation contributions are welcome and detailed in the [dedicated
+documentation](themes-translation.md).
+
 #### Support added for Environment Variables in the configuration file (#1954)
 
 Environments variables may now be specified in the configuration file with the

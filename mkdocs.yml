@@ -25,6 +25,7 @@ nav:
     - About:
         - Release Notes: about/release-notes.md
         - Contributing: about/contributing.md
+        - Themes Translation: about/themes-translation.md
         - License: about/license.md
 
 extra_css:

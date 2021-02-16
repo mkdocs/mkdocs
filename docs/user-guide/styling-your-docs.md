@@ -85,6 +85,9 @@ supports the following options:
 
 [styles]: https://highlightjs.org/static/demo/
 
+* __`locale`__: The language locale used to build your theme. If your language
+is not supported yet, it will fallback to English. Default: `en`.
+
 ### readthedocs
 
 A clone of the default theme used by the [Read the Docs] service, which offers
@@ -129,6 +132,9 @@ theme supports the following options:
 
 * __`sticky_navigation`__: If True, causes the sidebar to scroll with the main
   page content as you scroll the page. Default: `True`.
+
+* __`locale`__: The language locale used to build your theme. If your language
+is not supported yet, it will fallback to English. Default: `en`.
 
 ### Third Party Themes
 
@@ -349,6 +355,24 @@ Now the generated pages will include links to the template provided libraries as
 well as the library included in the `custom_dir`. The same would be required for
 any additional CSS files included in the `custom_dir`.
 
+## Localizing a theme
+
+The `mkdocs` and `readthedocs` themes support a `locale` parameter that allows
+you to change the language of your theme to help you localize your
+documentation.
+
+!!! Note
+    Theme localization only translates the elements of the theme, not the actual
+    content of your documentation. If you wish to create a multilingual
+    documentation, you need to combine theme localization with a third-party
+    internationalization/localization plugin.
+
+If you configure a language locale that is not supported by the theme yet,
+it will fallback to the default `en` (English) locale.
+
+Feel free to contribute theme translations using the [theme localization
+contributor guide][themes-translation-guide].
+
 [browse source]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes/mkdocs
 [built-in themes]: #built-in-themes
 [Bootstrap]: https://getbootstrap.com/
@@ -371,3 +395,4 @@ any additional CSS files included in the `custom_dir`.
 [super block]: http://jinja.pocoo.org/docs/dev/templates/#super-blocks
 [base_url]: ./custom-themes.md#base_url
 [highlight.js]: https://highlightjs.org/
+[themes-translation-guide]: ../about/themes-translation.md
