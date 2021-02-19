@@ -253,12 +253,12 @@ called after the [env] event and before any [page events].
     loaded and can be used to alter the content of the template.
 
     Parameters:
-    : __template__: the template contents as string
+    : __template__: the template contents as a [Jinja2 Template object](http://code.nabla.net/doc/jinja2/api/jinja2/environment/jinja2.environment.Template.html).
     : __template_name__: string filename of template
     : __config:__ global configuration object
 
     Returns:
-    : template contents as string
+    : template contents as a [Jinja2 Template object](http://code.nabla.net/doc/jinja2/api/jinja2/environment/jinja2.environment.Template.html)
 
 ##### on_template_context
 
