@@ -311,8 +311,22 @@ class SearchIndexTests(unittest.TestCase):
 
         base_cfg = load_config()
         pages = [
-            Page('Home',  File('index.md', base_cfg['docs_dir'], base_cfg['site_dir'], base_cfg['use_directory_urls']), base_cfg),
-            Page('About', File('about.md', base_cfg['docs_dir'], base_cfg['site_dir'], base_cfg['use_directory_urls']), base_cfg)
+            Page(
+                'Home',
+                File(
+                    'index.md',
+                    base_cfg['docs_dir'],
+                    base_cfg['site_dir'],
+                    base_cfg['use_directory_urls']),
+                base_cfg),
+            Page(
+                'About',
+                File(
+                    'about.md',
+                    base_cfg['docs_dir'],
+                    base_cfg['site_dir'],
+                    base_cfg['use_directory_urls']),
+                base_cfg)
         ]
 
         md = dedent("""
@@ -365,14 +379,14 @@ class SearchIndexTests(unittest.TestCase):
                     config['site_dir'],
                     config['use_directory_urls']),
                 config)
-            test_page.content="""
+            test_page.content = """
                 <h1 id="heading-1">Heading 1</h1>
                 <p>Content 1</p>
                 <h2 id="heading-2">Heading 2</h1>
                 <p>Content 2</p>
                 <h3 id="heading-3">Heading 3</h1>
                 <p>Content 3</p>"""
-            test_page.markdown=dedent("""
+            test_page.markdown = dedent("""
                 # Heading 1
                 ## Heading 2
                 ### Heading 3""")
@@ -381,20 +395,20 @@ class SearchIndexTests(unittest.TestCase):
 
         validate = {
             'full': (lambda data:
-                self.assertEqual(len(data[0]), 4) and
-                self.assertTrue([x for x in data[0][0] if x['title'] and x['text']])),
+                     self.assertEqual(len(data[0]), 4) and
+                     self.assertTrue([x for x in data[0][0] if x['title'] and x['text']])),
             'sections': (lambda data:
-                # Sanity
-                self.assertEqual(len(data[0]), 4) and
-                # Page
-                (self.assertEqual(data[0][0]['title'], data[1].title) and
-                    self.assertTrue(data[0][0]['text'])) and
-                # Headings
-                self.assertTrue([x for x in data[0][1:] if x['title'] and not x['text']])),
+                         # Sanity
+                         self.assertEqual(len(data[0]), 4) and
+                         # Page
+                         (self.assertEqual(data[0][0]['title'], data[1].title) and
+                             self.assertTrue(data[0][0]['text'])) and
+                         # Headings
+                         self.assertTrue([x for x in data[0][1:] if x['title'] and not x['text']])),
             'titles': (lambda data:
-                # Sanity
-                self.assertEqual(len(data[0]), 1) and
-                self.assertFalse([x for x in data[0] if x['text']]))
+                       # Sanity
+                       self.assertEqual(len(data[0]), 1) and
+                       self.assertFalse([x for x in data[0] if x['text']]))
         }
 
         for option in ['full', 'sections', 'titles']:
@@ -405,7 +419,7 @@ class SearchIndexTests(unittest.TestCase):
             self.assertEqual(errors, [])
             self.assertEqual(warnings, [])
 
-            base_cfg  = load_config()
+            base_cfg = load_config()
             base_cfg['plugins']['search'].config['indexing'] = option
 
             pages = [

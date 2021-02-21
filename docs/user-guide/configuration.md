@@ -631,8 +631,8 @@ report it on [Lunr.py's issues] and fall back to the Node.js version.
 ##### **indexing**
 
 Configures what strategy the search indexer will use when building the index
-for your pages. This property is particularly useful if your project is large in scale, and the index can take up an enormous amount of disk space.
-
+for your pages. This property is particularly useful if your project is large
+in scale, and the index takes up an enormous amount of disk space.
 
 ```yaml
 plugins:
@@ -641,6 +641,7 @@ plugins:
 ```
 
 ###### Options
+
 |Option|Description|
 |------|-----------|
 |`full`|Indexes the title, section headings, and full text of each page.|
