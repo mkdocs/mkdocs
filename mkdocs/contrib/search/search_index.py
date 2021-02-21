@@ -65,14 +65,16 @@ class SearchIndex:
         url = page.url
 
         # Create an entry for the full page.
+        text = parser.stripped_html.rstrip('\n') if self.config['indexing'] == 'full' else ''
         self._add_entry(
             title=page.title,
-            text=parser.stripped_html.rstrip('\n'),
+            text=text,
             loc=url
         )
 
-        for section in parser.data:
-            self.create_entry_for_section(section, page.toc, url)
+        if self.config['indexing'] in ['full', 'sections']:
+            for section in parser.data:
+                self.create_entry_for_section(section, page.toc, url)
 
     def create_entry_for_section(self, section, toc, abs_url):
         """
@@ -83,10 +85,11 @@ class SearchIndex:
 
         toc_item = self._find_toc_by_id(toc, section.id)
 
+        text = ' '.join(section.text) if self.config['indexing'] == 'full' else ''
         if toc_item is not None:
             self._add_entry(
                 title=toc_item.title,
-                text=" ".join(section.text),
+                text=text,
                 loc=abs_url + toc_item.url
             )
 

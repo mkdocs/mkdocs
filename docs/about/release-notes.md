@@ -83,6 +83,20 @@ MkDocs now has two new exceptions defined in `mkdocs.exceptions`,
 See [`Handling errors`](../user-guide/plugins.md#handling-errors)
 in the Plugins documentation for details.
 
+#### Search Indexing Strategy configuration
+
+Users can now specify which strategy they wish to use when indexing
+their site for search. A user can select between the following options:
+
+* **full**: Adds page title, section headings, and full page text to the
+search index.
+* **sections**: Adds page titles and section headings only to the search
+index.
+* **titles**: Adds only the page titles to the search index.
+
+See [`Search Indexing`](../user-guide/configuration.md#indexing) in the
+configuration documentation for details.
+
 ### Backward Incompatible Changes in 1.2
 
 A theme's files are now excluded from the list of watched files by default
