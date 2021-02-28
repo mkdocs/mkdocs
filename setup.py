@@ -5,6 +5,21 @@ import re
 import os
 import sys
 
+try:
+    from mkdocs.commands.babel import (
+        compile_catalog,
+        extract_messages,
+        init_catalog,
+        update_catalog
+    )
+    babel_classes = {
+        'compile_catalog': compile_catalog,
+        'extract_messages': extract_messages,
+        'init_catalog': init_catalog,
+        'update_catalog': update_catalog,
+    }
+except ImportError:
+    babel_classes = {}
 
 long_description = (
     "MkDocs is a fast, simple and downright gorgeous static site generator "
@@ -34,11 +49,12 @@ if sys.argv[-1] == 'publish':
     if os.system("pip freeze | grep twine"):
         print("twine not installed.\nUse `pip install twine`.\nExiting.")
         sys.exit()
-    if os.system("pip freeze | grep babel"):
+    if os.system("pip freeze | grep Babel"):
         print("babel not installed.\nUse `pip install babel`.\nExiting.")
         sys.exit()
-    os.system("pybabel compile -d mkdocs/themes/mkdocs/locales")
-    os.system("pybabel compile -d mkdocs/themes/readthedocs/locales")
+    for locale in os.listdir("mkdocs/themes/mkdocs/locales"):
+        os.system(f"python setup.py compile_catalog -t mkdocs -l {locale}")
+        os.system(f"python setup.py compile_catalog -t readthedocs -l {locale}")
     os.system("python setup.py sdist bdist_wheel")
     os.system("twine upload dist/*")
     print("You probably want to also tag the version now:")
@@ -103,6 +119,7 @@ setup(
         'Topic :: Text Processing',
     ],
     zip_safe=False,
+    cmdclass=babel_classes,
 )
 
 # (*) Please direct queries to the discussion group:
