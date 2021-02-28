@@ -117,6 +117,7 @@ up horizontal space for better rendering of content like tables (#2193).
 * Structure Files object now has a `remove` method to help plugin developers
   manipulate the Files tree. The corresponding `src_paths` has become a
   property to accomodate this possible dynamic behavior. See #2305.
+* Updated highlight.js to 10.5.0. See #2313.
 
 ## Version 1.1.2 (2020-05-14)
 
