@@ -59,6 +59,11 @@ It will attempt to run the tests against all of the Python versions we
 support. So don't be concerned if you are missing some and they fail. The rest
 will be verified by [Travis] when you submit a pull request.
 
+## Translating themes
+
+To localize a theme to your favorite language, follow the [themes translation
+guide][themes-translation] please. We do welcome translation Pull Requests!
+
 ## Submitting Pull Requests
 
 Once you are happy with your changes or you are ready for some feedback, push
@@ -70,3 +75,4 @@ most likely need to have tests and documentation if it is a new feature.
 [tox]: https://tox.readthedocs.io/en/latest/
 [travis]: https://travis-ci.org/repositories
 [PyPA Code of Conduct]: https://www.pypa.io/en/latest/code-of-conduct/
+[themes-translation]: themes-translation.md
