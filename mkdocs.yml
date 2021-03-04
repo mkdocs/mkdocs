@@ -22,6 +22,7 @@ nav:
         - Deploying Your Docs: user-guide/deploying-your-docs.md
         - Custom Themes: user-guide/custom-themes.md
         - Plugins: user-guide/plugins.md
+        - FAQ: user-guide/faq.md
     - About:
         - Release Notes: about/release-notes.md
         - Contributing: about/contributing.md

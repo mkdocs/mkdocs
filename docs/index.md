@@ -343,7 +343,8 @@ you're done. For specific instructions on a number of common hosts, see the
 
 ## Getting help
 
-To get help with MkDocs, please use the [discussion group], [GitHub issues] or
+Take a look at the [FAQ][FAQ], maybe the answer is already there? If not,
+please use the [discussion group], [GitHub issues] or
 the MkDocs IRC channel `#mkdocs` on freenode.
 
 [deploy]: user-guide/deploying-your-docs/
@@ -362,3 +363,4 @@ the MkDocs IRC channel `#mkdocs` on freenode.
 [Python]: https://www.python.org/
 [site_name]: user-guide/configuration/#site_name
 [theme]: user-guide/configuration/#theme
+[FAQ]: user-guide/faq/
