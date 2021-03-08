@@ -31,7 +31,6 @@ your changes.
 
 ### Easy to customize
 
-
 Give your project documentation, the look that you want by customizing the theme 
 and/or installing some plugins.
 
