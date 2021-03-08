@@ -31,8 +31,9 @@ your changes.
 
 ### Easy to customize
 
-Get your project documentation looking just the way you want it by customizing
-the [theme] and/or installing some [plugins].
+
+Give your project documentation, the look that you want by customizing the theme 
+and/or installing some plugins.
 
 ---
 
