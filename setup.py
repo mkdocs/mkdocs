@@ -75,7 +75,6 @@ setup(
     packages=get_packages("mkdocs"),
     include_package_data=True,
     install_requires=[
-        'babel>=2.9.0',
         'click>=3.3',
         'Jinja2>=2.10.1',
         'livereload>=2.5.1',
@@ -86,6 +85,7 @@ setup(
         'ghp-import>=1.0',
         'pyyaml_env_tag>=0.1'
     ],
+    extras_require={"l10n": ['babel>=2.9.0']},
     python_requires='>=3.6',
     entry_points={
         'console_scripts': [
