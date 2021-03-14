@@ -1,6 +1,6 @@
-# French translations for PROJECT.
-# Copyright (C) 2021 ORGANIZATION
-# This file is distributed under the same license as the PROJECT project.
+# French translations for MkDocs.
+# Copyright (C) 2021 MkDocs
+# This file is distributed under the same license as the MkDocs project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
 #
 msgid ""
