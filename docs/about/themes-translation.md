@@ -14,7 +14,7 @@ translations easy.
 Make sure translation requirements are installed in your environment:
 
 ```bash
-pip install -r requirements/project.txt
+pip install mkdocs[i18n]
 ```
 
 [babel]: http://babel.pocoo.org/en/latest/cmdline.html
