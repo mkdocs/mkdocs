@@ -27,10 +27,14 @@ following the steps below.
 
 Here is a quick recap of what you'll have to do:
 
-1. [Initialize new localization catalogs](#initializing-the-localization-catalogs) for your language
-2. [Add a translation](#translating-the-mkdocs-themes) for every text placeholder in the localized catalogs
-3. [Serve and test locally](#testing-themes-translations) the translated themes for your language
-4. [Contribute your translation](#contributing-your-translations) through a Pull Request
+1. [Initialize new localization catalogs](#initializing-the-localization-catalogs)
+for your language
+2. [Add a translation](#translating-the-mkdocs-themes) for every text placeholder
+in the localized catalogs
+3. [Serve and test locally](#testing-themes-translations) the translated themes
+for your language
+4. [Contribute your translation](#contributing-your-translations) through a
+Pull Request
 
 ### Initializing the localization catalogs
 
@@ -145,11 +149,14 @@ thank you!
 If you changed some text in the theme themselves and modified the HTML source
 of a theme, it is necessary to follow the steps below:
 
-1. [Extract each theme's text](#extracting-text-from-themes) to update their Portable Object Template files
-2. [Update the translation catalog `messages.po` files](#updating-the-translation-catalogs) for every supported locale
-3. [Translate](#translating-the-mkdocs-themes) the newly added text placeholders on every `messages.po` file for
-every supported locale
-4. [Contribute your updated translations](#contributing-your-translations) through a Pull Request
+1. [Extract each theme's text](#extracting-text-from-themes) to update their
+Portable Object Template files
+2. [Update the translation catalog `messages.po` files](#updating-the-translation-catalogs)
+for every supported locale
+3. [Translate](#translating-the-mkdocs-themes) the newly added text placeholders
+on every `messages.po` file for every supported locale
+4. [Contribute your updated translations](#contributing-your-translations)
+through a Pull Request
 
 ### Extracting text from themes
 
