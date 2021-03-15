@@ -11,7 +11,7 @@ files generation and compilation. We worked on wrapping its usage through
 `setup.py` commands as described below to make updating and contributing
 translations easy.
 
-Make sure they are installed in your environment:
+Make sure translation requirements are installed in your environment:
 
 ```bash
 pip install -r requirements/project.txt
@@ -19,67 +19,31 @@ pip install -r requirements/project.txt
 
 [babel]: http://babel.pocoo.org/en/latest/cmdline.html
 
-## Contributing theme translations
+## Contributing a theme translation
 
 If your favorite language locale is not supported yet on the `mkdocs` and
 `readthedocs` built-in themes, you can easily contribute it to the project by
 following the steps below.
 
-### Creating the theme localization files
+Here is a quick recap of what you'll have to do:
 
-Theme localization is achieved by *extracting text* to be translated from HTML
-theme files, then *initializing* a `messages.po` file for a given locale and
-finally *adding translations* into it.
+1. [Initialize new localization catalogs](#initializing-the-localization-catalogs) for your language
+2. [Add a translation](#translating-the-mkdocs-themes) for every text placeholder in the localized catalogs
+3. [Serve and test locally](#testing-themes-translations) the translated themes for your language
+4. [Contribute your translation](#contributing-your-translations) through a Pull Request
 
-Available translation locales are listed under the `locales` folder of every
-supported theme:
+### Initializing the localization catalogs
 
-```text
-mkdocs/themes/mkdocs/locales
-└── fr
-    └── LC_MESSAGES
-        └── messages.po
-```
+The MkDocs themes contain text placeholders that have been extracted into
+Portable Object Template (messages.pot) files present in each theme's folder.
 
-Say you'd like to add theme localization for the `es` (Spanish) language, you
-would follow the steps below:
+Initializing a catalog consists of running a command which will create a
+directory structure for your desired language and prepare a Portable Object
+(messages.po) file derived from the POT file of the theme.
 
-#### Extracting text from themes
-
-This step will parse and extract the text from the HTML sources of the themes:
-
-```bash
-$ python setup.py extract_messages -t mkdocs
-running extract_messages
-extracting messages from mkdocs/themes/mkdocs/404.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/mkdocs/base.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/mkdocs/content.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/mkdocs/keyboard-modal.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/mkdocs/main.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/mkdocs/nav-sub.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/mkdocs/search-modal.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/mkdocs/toc.html (ignore_tags="script,style", include_attrs="alt title summary")
-writing PO template file to mkdocs/themes/mkdocs/messages.pot
-
-$ python setup.py extract_messages -t readthedocs
-running extract_messages
-extracting messages from mkdocs/themes/readthedocs/404.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/readthedocs/base.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/readthedocs/breadcrumbs.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/readthedocs/footer.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/readthedocs/main.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/readthedocs/nav.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/readthedocs/search.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/readthedocs/searchbox.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/readthedocs/toc.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/readthedocs/versions.html (ignore_tags="script,style", include_attrs="alt title summary")
-writing PO template file to mkdocs/themes/readthedocs/messages.pot
-```
-
-#### Initializing a localization catalog
-
-Now that the text to be translated is extracted, create a catalog to host its
-translation for the target locale:
+Let's say you want to add a translation for the Spanish `es` language.
+You will be using the `init_catalog` command on each `-t <theme>` and providing
+the `-l <language>` like so:
 
 ```bash
 $ python setup.py init_catalog -t mkdocs -l es
@@ -169,6 +133,8 @@ And run `mkdocs serve` to check out your new localized version of the theme.
     all locales to end users so you only have to worry about contributing the
     actual text translation `messages.po` files (the rest is git ignored).
 
+### Contributing your translations
+
 It's now time for you to [contribute your nice work to the project][contribute],
 thank you!
 
@@ -176,20 +142,58 @@ thank you!
 
 ## Updating theme localization files
 
-When the HTML source files of a theme change it is necessary to *extract* the
-theme text again and *update* its translated locales.
+If you changed some text in the theme themselves and modified the HTML source
+of a theme, it is necessary to follow the steps below:
 
-1. Run the [text extraction command](#extracting-text-from-themes) on the
-modified theme.
-2. Update all available locale translations:
+1. [Extract each theme's text](#extracting-text-from-themes) to update their Portable Object Template files
+2. [Update the translation catalog `messages.po` files](#updating-the-translation-catalogs) for every supported locale
+3. [Translate](#translating-the-mkdocs-themes) the newly added text placeholders on every `messages.po` file for
+every supported locale
+4. [Contribute your updated translations](#contributing-your-translations) through a Pull Request
 
-        $ python setup.py update_catalog -t mkdocs -l fr
-        running update_catalog
-        updating catalog mkdocs/themes/mkdocs/locales/fr/LC_MESSAGES/messages.po based on mkdocs/themes/mkdocs/messages.pot
+### Extracting text from themes
 
-        $ python setup.py update_catalog -t mkdocs -l es
-        running update_catalog
-        updating catalog mkdocs/themes/mkdocs/locales/es/LC_MESSAGES/messages.po based on mkdocs/themes/mkdocs/messages.pot
+This step will parse and extract the text from the HTML sources of the themes:
 
-3. [Translate the added translations](#translating-the-mkdocs-themes) on all
-`messages.po` localization files
+```bash
+$ python setup.py extract_messages -t mkdocs
+running extract_messages
+extracting messages from mkdocs/themes/mkdocs/404.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/mkdocs/base.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/mkdocs/content.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/mkdocs/keyboard-modal.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/mkdocs/main.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/mkdocs/nav-sub.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/mkdocs/search-modal.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/mkdocs/toc.html (ignore_tags="script,style", include_attrs="alt title summary")
+writing PO template file to mkdocs/themes/mkdocs/messages.pot
+
+$ python setup.py extract_messages -t readthedocs
+running extract_messages
+extracting messages from mkdocs/themes/readthedocs/404.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/readthedocs/base.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/readthedocs/breadcrumbs.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/readthedocs/footer.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/readthedocs/main.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/readthedocs/nav.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/readthedocs/search.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/readthedocs/searchbox.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/readthedocs/toc.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/readthedocs/versions.html (ignore_tags="script,style", include_attrs="alt title summary")
+writing PO template file to mkdocs/themes/readthedocs/messages.pot
+```
+
+### Updating the translation catalogs
+
+This has to be done for every supported language. For example, on the `mkdocs`
+theme if there were only the `fr` and `es` locales you would need to:
+
+```bash
+$ python setup.py update_catalog -t mkdocs -l fr
+running update_catalog
+updating catalog mkdocs/themes/mkdocs/locales/fr/LC_MESSAGES/messages.po based on mkdocs/themes/mkdocs/messages.pot
+
+$ python setup.py update_catalog -t mkdocs -l es
+running update_catalog
+updating catalog mkdocs/themes/mkdocs/locales/es/LC_MESSAGES/messages.po based on mkdocs/themes/mkdocs/messages.pot
+```
