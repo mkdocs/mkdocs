@@ -695,6 +695,76 @@ index when it is available. The `index` object was new in MkDocs version *1.0*.
 [site_dir]: configuration.md#site_dir
 [prebuild_index]: configuration.md#prebuild_index
 
+## Localizing themes
+
+When installed with the `i18n` support, MkDocs allows themes to support being
+translated in various languages (referred to as locales) if they respect
+[Jinja's i18n extension](https://jinja.palletsprojects.com/en/master/extensions/#i18n-extension)
+using the `trans` statement around its text placeholders.
+
+Every time some translatable text placeholders is added, removed or changed,
+you need to:
+
+1. [Extract each theme's translatable texts](#extracting-translatable-texts-from-themes)
+to update their Portable Object Template files
+2. [Update the translation catalog `messages.po` files](#updating-the-translation-catalogs)
+for every supported locale
+3. [Contribute your updated theme catalogs](/about/contributing)
+through a Pull Request and kindly ask translators to add/update the translations
+in the `messages.po` catalogs you just updated
+
+!!! note
+    This will allow contributors to propose the translations needed for their
+    preferred language.
+
+### Extracting translatable texts from themes
+
+This step will parse and extract the text from the HTML sources of the themes:
+
+```bash
+$ python setup.py extract_messages -t mkdocs
+running extract_messages
+extracting messages from mkdocs/themes/mkdocs/404.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/mkdocs/base.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/mkdocs/content.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/mkdocs/keyboard-modal.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/mkdocs/main.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/mkdocs/nav-sub.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/mkdocs/search-modal.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/mkdocs/toc.html (ignore_tags="script,style", include_attrs="alt title summary")
+writing PO template file to mkdocs/themes/mkdocs/messages.pot
+
+$ python setup.py extract_messages -t readthedocs
+running extract_messages
+extracting messages from mkdocs/themes/readthedocs/404.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/readthedocs/base.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/readthedocs/breadcrumbs.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/readthedocs/footer.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/readthedocs/main.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/readthedocs/nav.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/readthedocs/search.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/readthedocs/searchbox.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/readthedocs/toc.html (ignore_tags="script,style", include_attrs="alt title summary")
+extracting messages from mkdocs/themes/readthedocs/versions.html (ignore_tags="script,style", include_attrs="alt title summary")
+writing PO template file to mkdocs/themes/readthedocs/messages.pot
+```
+
+### Updating the translation catalogs
+
+This has to be done for every language supported by the theme.
+For example, on the `mkdocs` theme if there were only the `fr` and `es` locales
+you would need to:
+
+```bash
+$ python setup.py update_catalog -t mkdocs -l fr
+running update_catalog
+updating catalog mkdocs/themes/mkdocs/locales/fr/LC_MESSAGES/messages.po based on mkdocs/themes/mkdocs/messages.pot
+
+$ python setup.py update_catalog -t mkdocs -l es
+running update_catalog
+updating catalog mkdocs/themes/mkdocs/locales/es/LC_MESSAGES/messages.po based on mkdocs/themes/mkdocs/messages.pot
+```
+
 ## Packaging Themes
 
 MkDocs makes use of [Python packaging] to distribute themes. This comes with a
