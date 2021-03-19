@@ -707,15 +707,13 @@ you need to:
 
 1. [Extract each theme's translatable texts](#extracting-translatable-texts-from-themes)
 to update their Portable Object Template files
-2. [Update the translation catalog `messages.po` files](#updating-the-translation-catalogs)
-for every supported locale
-3. [Contribute your updated theme catalogs](/about/contributing)
-through a Pull Request and kindly ask translators to add/update the translations
-in the `messages.po` catalogs you just updated
+2. [Contribute your updated theme template catalogs](/about/contributing)
+and kindly ask translators to update their translations catalogs `messages.po`
+files
 
 !!! note
-    This will allow contributors to propose the translations needed for their
-    preferred language.
+    This will allow translation contributors to propose the translations needed
+    for their preferred language [using this guide](/about/themes-translation#updating-the-translation-catalogs).
 
 ### Extracting translatable texts from themes
 
@@ -747,22 +745,6 @@ extracting messages from mkdocs/themes/readthedocs/searchbox.html (ignore_tags="
 extracting messages from mkdocs/themes/readthedocs/toc.html (ignore_tags="script,style", include_attrs="alt title summary")
 extracting messages from mkdocs/themes/readthedocs/versions.html (ignore_tags="script,style", include_attrs="alt title summary")
 writing PO template file to mkdocs/themes/readthedocs/messages.pot
-```
-
-### Updating the translation catalogs
-
-This has to be done for every language supported by the theme.
-For example, on the `mkdocs` theme if there were only the `fr` and `es` locales
-you would need to:
-
-```bash
-$ python setup.py update_catalog -t mkdocs -l fr
-running update_catalog
-updating catalog mkdocs/themes/mkdocs/locales/fr/LC_MESSAGES/messages.po based on mkdocs/themes/mkdocs/messages.pot
-
-$ python setup.py update_catalog -t mkdocs -l es
-running update_catalog
-updating catalog mkdocs/themes/mkdocs/locales/es/LC_MESSAGES/messages.po based on mkdocs/themes/mkdocs/messages.pot
 ```
 
 ## Packaging Themes
