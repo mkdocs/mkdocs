@@ -1,5 +1,5 @@
 click==3.3
-Jinja2==2.10.1
+Jinja2==2.11.3
 livereload==2.5.1
 Markdown==3.2.1
 PyYAML==5.1
