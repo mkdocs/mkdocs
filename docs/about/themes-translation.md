@@ -84,11 +84,13 @@ If a [theme's `messages.pot` template file has been updated](/user-guide/custom-
 since the `messages.po` was last updated for your locale, follow the steps below
 to update the theme's `messages.po` file:
 
-1. [Translate](#translating-the-mkdocs-themes) the newly added translatable text
+1. [Update the themes' translation catalogs](#updating-the-translation-catalogs)
+to refresh the translatable text placeholders of each theme
+2. [Translate](#translating-the-mkdocs-themes) the newly added translatable text
 placeholders on every `messages.po` catalog file language you can
-2. [Serve and test locally](#testing-themes-translations) the translated themes
+3. [Serve and test locally](#testing-themes-translations) the translated themes
 for your language
-3. [Contribute your updated translations](#contributing-your-translations)
+4. [Contribute your updated translations](#contributing-your-translations)
 through a Pull Request
 
 ### Updating the translation catalogs
