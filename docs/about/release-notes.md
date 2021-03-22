@@ -92,6 +92,20 @@ MkDocs now has two new exceptions defined in `mkdocs.exceptions`,
 See [`Handling errors`](../user-guide/plugins.md#handling-errors)
 in the Plugins documentation for details.
 
+#### Search Indexing Strategy configuration
+
+Users can now specify which strategy they wish to use when indexing
+their site for search. A user can select between the following options:
+
+* **full**: Adds page title, section headings, and full page text to the
+search index.
+* **sections**: Adds page titles and section headings only to the search
+index.
+* **titles**: Adds only the page titles to the search index.
+
+See [`Search Indexing`](../user-guide/configuration.md#indexing) in the
+configuration documentation for details.
+
 ### Backward Incompatible Changes in 1.2
 
 A theme's files are now excluded from the list of watched files by default
@@ -109,6 +123,10 @@ up horizontal space for better rendering of content like tables (#2193).
   filtering for sections (#2203).
 * Official support for Python 3.9 has been added and support for Python 3.5
   has been dropped.
+* Structure Files object now has a `remove` method to help plugin developers
+  manipulate the Files tree. The corresponding `src_paths` has become a
+  property to accomodate this possible dynamic behavior. See #2305.
+* Updated highlight.js to 10.5.0. See #2313.
 
 ## Version 1.1.2 (2020-05-14)
 

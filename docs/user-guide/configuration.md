@@ -628,6 +628,28 @@ report it on [Lunr.py's issues] and fall back to the Node.js version.
 
 **default**: `False`
 
+##### **indexing**
+
+Configures what strategy the search indexer will use when building the index
+for your pages. This property is particularly useful if your project is large
+in scale, and the index takes up an enormous amount of disk space.
+
+```yaml
+plugins:
+    - search:
+        indexing: 'full'
+```
+
+###### Options
+
+|Option|Description|
+|------|-----------|
+|`full`|Indexes the title, section headings, and full text of each page.|
+|`sections`|Indexes the title and section headings of each page.|
+|`titles`|Indexes only the title of each page.|
+
+**default**: `full`
+
 [custom themes]: custom-themes.md
 [variables that are available]: custom-themes.md#template-variables
 [pymdk-extensions]: https://python-markdown.github.io/extensions/
