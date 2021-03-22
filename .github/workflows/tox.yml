@@ -90,30 +90,14 @@ jobs:
     strategy:
       fail-fast: false
       max-parallel: 4
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: [3.6, 3.7, 3.8, 3.9, pypy3]
-        include:
-          - python-version: 3.6
-            tox-env: py36
-          - python-version: 3.7
-            tox-env: py37
-          - python-version: 3.8
-            tox-env: py38
-          - python-version: 3.9
-            tox-env: py39
-          - python-version: pypy3
-            tox-env: pypy3
-    env:
-      TOXENV: ${{ matrix.tox-env }}-{unittests,min-req,integration}
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
+          python-version: 3.7
+      - name: Install Python dependencies
         run: |
           python -m pip install -r requirements/project.txt
       - name: Check if Portable Object Templates should have been updated
@@ -122,10 +106,9 @@ jobs:
           python setup.py extract_messages -t readthedocs
           git diff --ignore-matching-lines 'POT-Creation-Date' --exit-code
         shell: bash
-      - name: Check if Portable Object translation files should be updated
-        continue-on-error: true
+      - name: Check if Portable Object translation files should be updated on mkdocs version change
         run: |
           for locale in $(ls mkdocs/themes/mkdocs/locales/); do python setup.py update_catalog -t mkdocs -l ${locale}; done
           for locale in $(ls mkdocs/themes/readthedocs/locales/); do python setup.py update_catalog -t readthedocs -l ${locale}; done
-          git diff --ignore-matching-lines 'POT-Creation-Date' --exit-code
+          git diff --quiet --exit-code mkdocs/__init__.py || git diff --ignore-matching-lines 'POT-Creation-Date' --exit-code
         shell: bash
