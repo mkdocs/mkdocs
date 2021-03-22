@@ -123,6 +123,7 @@ jobs:
           git diff --ignore-matching-lines 'POT-Creation-Date' --exit-code
         shell: bash
       - name: Check if Portable Object translation files should be updated
+        continue-on-error: true
         run: |
           for locale in $(ls mkdocs/themes/mkdocs/locales/); do python setup.py update_catalog -t mkdocs -l ${locale}; done
           for locale in $(ls mkdocs/themes/readthedocs/locales/); do python setup.py update_catalog -t readthedocs -l ${locale}; done
