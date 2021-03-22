@@ -104,11 +104,19 @@ jobs:
         run: |
           python setup.py extract_messages -t mkdocs
           python setup.py extract_messages -t readthedocs
-          git diff --ignore-matching-lines 'POT-Creation-Date' --exit-code
+          git diff --ignore-matching-lines 'POT-Creation-Date' --ignore-matching-lines 'Project-Id-Version' --exit-code
         shell: bash
+      - id: files
+        uses: jitterbit/get-changed-files@v1
       - name: Check if Portable Object translation files should be updated on mkdocs version change
         run: |
           for locale in $(ls mkdocs/themes/mkdocs/locales/); do python setup.py update_catalog -t mkdocs -l ${locale}; done
           for locale in $(ls mkdocs/themes/readthedocs/locales/); do python setup.py update_catalog -t readthedocs -l ${locale}; done
-          git diff --quiet --exit-code mkdocs/__init__.py || git diff --ignore-matching-lines 'POT-Creation-Date' --exit-code
+          for changed_file in ${{ steps.files.outputs.all }}; do
+            echo "inspecting changed file: ${changed_file}";
+            if [[ "${changed_file}" == "mkdocs/__init__.py" ]]; then
+              echo "mkdocs version changed!";
+              git diff --ignore-matching-lines 'POT-Creation-Date' --ignore-matching-lines 'Project-Id-Version' --exit-code;
+            fi
+          done
         shell: bash
