@@ -1,5 +1,6 @@
 import unittest
 from unittest import mock
+from ghp_import import GhpError
 
 from mkdocs.tests.base import load_config
 from mkdocs.commands import gh_deploy
@@ -80,7 +81,7 @@ class TestGitHubDeploy(unittest.TestCase):
     @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
     @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(None, None))
     @mock.patch('mkdocs.commands.gh_deploy._check_version')
-    @mock.patch('mkdocs.commands.gh_deploy.ghp_import.ghp_import', return_value=(True, ''))
+    @mock.patch('ghp_import.ghp_import')
     def test_deploy(self, mock_import, check_version, get_remote, get_sha, is_repo):
 
         config = load_config(
@@ -92,7 +93,7 @@ class TestGitHubDeploy(unittest.TestCase):
     @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
     @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(None, None))
     @mock.patch('mkdocs.commands.gh_deploy._check_version')
-    @mock.patch('mkdocs.commands.gh_deploy.ghp_import.ghp_import', return_value=(True, ''))
+    @mock.patch('ghp_import.ghp_import')
     @mock.patch('os.path.isfile', return_value=False)
     def test_deploy_no_cname(self, mock_isfile, mock_import, check_version, get_remote,
                              get_sha, is_repo):
@@ -107,7 +108,7 @@ class TestGitHubDeploy(unittest.TestCase):
     @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(
         'git@', 'mkdocs/mkdocs.git'))
     @mock.patch('mkdocs.commands.gh_deploy._check_version')
-    @mock.patch('mkdocs.commands.gh_deploy.ghp_import.ghp_import', return_value=(True, ''))
+    @mock.patch('ghp_import.ghp_import')
     def test_deploy_hostname(self, mock_import, check_version, get_remote, get_sha, is_repo):
 
         config = load_config(
@@ -119,7 +120,7 @@ class TestGitHubDeploy(unittest.TestCase):
     @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
     @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(None, None))
     @mock.patch('mkdocs.commands.gh_deploy._check_version')
-    @mock.patch('mkdocs.commands.gh_deploy.ghp_import.ghp_import', return_value=(True, ''))
+    @mock.patch('ghp_import.ghp_import')
     def test_deploy_ignore_version_default(self, mock_import, check_version, get_remote, get_sha, is_repo):
 
         config = load_config(
@@ -132,7 +133,7 @@ class TestGitHubDeploy(unittest.TestCase):
     @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
     @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(None, None))
     @mock.patch('mkdocs.commands.gh_deploy._check_version')
-    @mock.patch('mkdocs.commands.gh_deploy.ghp_import.ghp_import', return_value=(True, ''))
+    @mock.patch('ghp_import.ghp_import')
     def test_deploy_ignore_version(self, mock_import, check_version, get_remote, get_sha, is_repo):
 
         config = load_config(
@@ -144,19 +145,20 @@ class TestGitHubDeploy(unittest.TestCase):
     @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
     @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
     @mock.patch('mkdocs.commands.gh_deploy._check_version')
-    @mock.patch('mkdocs.utils.ghp_import.ghp_import')
+    @mock.patch('ghp_import.ghp_import')
     @mock.patch('mkdocs.commands.gh_deploy.log')
     def test_deploy_error(self, mock_log, mock_import, check_version, get_sha, is_repo):
         error_string = 'TestError123'
-        mock_import.return_value = (False, error_string)
+        mock_import.side_effect = GhpError(error_string)
 
         config = load_config(
             remote_branch='test',
         )
 
         self.assertRaises(SystemExit, gh_deploy.gh_deploy, config)
-        mock_log.error.assert_called_once_with('Failed to deploy to GitHub with error: \n%s',
-                                               error_string)
+        mock_log.error.assert_called_once_with(
+            'Failed to deploy to GitHub with error: \n{}'.format(error_string)
+        )
 
 
 class TestGitHubDeployLogs(unittest.TestCase):

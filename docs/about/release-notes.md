@@ -21,6 +21,104 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Version 1.2 (Under development)
+
+### Major Additions to Version 1.2
+
+#### Support added for Environment Variables in the configuration file (#1954)
+
+Environments variables may now be specified in the configuration file with the
+`!ENV` tag. The value of the variable will be parsed by the YAML parser and
+converted to the appropriate type.
+
+```yaml
+somekey: !ENV VAR_NAME
+otherkey: !ENV [VAR_NAME, FALLBACK_VAR, 'default value']
+```
+
+See [Environment Variables](../user-guide/configuration.md#environment-variables)
+in the Configuration documentation for details.
+
+#### A `--wait` flag has been added to the `serve` command (#2061)
+
+To delay a rebuild of the site when using the livereload server, use the
+`--wait` flag to specify the number of seconds to wait.
+
+```bash
+mkdocs serve --wait 60
+```
+
+#### Update `gh-deploy` command (#2170)
+
+The vendored (and modified) copy of ghp_import has been replaced with a
+dependency on the upstream library. As of version 1.0.0, [ghp_import] includes a
+Python API which makes it possible to call directly.
+
+MkDocs can now benefit from recent bug fixes and new features, including the following:
+
+* A `.nojekyll` file is automatically included when deploying to GitHub Pages.
+* The `--shell` flag is now available, which reportedly works better on Windows.
+* Git author and committer environment variables should be respected (#1383).
+
+[ghp-import]: https://github.com/c-w/ghp-import/
+
+#### A `build_error` event was added (#2103)
+
+Plugin developers can now use the `on_build_error` hook
+to execute code when an exception is raised while building the site.
+
+See [`on_build_error`](../user-guide/plugins.md#on_build_error)
+in the Plugins documentation for details.
+
+#### Two new exceptions: BuildError and PluginError (#2103)
+
+MkDocs now has two new exceptions defined in `mkdocs.exceptions`,
+`BuildError` and `PluginError`:
+
+* `PluginError` can be raised from a plugin
+  to stop the build and log an error message *without traceback*.
+* `BuildError` should not be used by third-party plugins developers
+  and is reserved for internal use only.
+
+See [`Handling errors`](../user-guide/plugins.md#handling-errors)
+in the Plugins documentation for details.
+
+#### Search Indexing Strategy configuration
+
+Users can now specify which strategy they wish to use when indexing
+their site for search. A user can select between the following options:
+
+* **full**: Adds page title, section headings, and full page text to the
+search index.
+* **sections**: Adds page titles and section headings only to the search
+index.
+* **titles**: Adds only the page titles to the search index.
+
+See [`Search Indexing`](../user-guide/configuration.md#indexing) in the
+configuration documentation for details.
+
+### Backward Incompatible Changes in 1.2
+
+A theme's files are now excluded from the list of watched files by default
+when using the `--livereload` server. This new default behavior is what most
+users need and provides better performance when editing site content.
+Theme developers can enable the old behavior with the `--watch-theme`
+option. (#2092).
+
+The `mkdocs` theme now removes the sidebar when printing a page. This frees
+up horizontal space for better rendering of content like tables (#2193).
+
+### Other Changes and Additions to Version 1.2
+
+* Bugfix: Properly process navigation child items in `_get_by_type` when
+  filtering for sections (#2203).
+* Official support for Python 3.9 has been added and support for Python 3.5
+  has been dropped.
+* Structure Files object now has a `remove` method to help plugin developers
+  manipulate the Files tree. The corresponding `src_paths` has become a
+  property to accomodate this possible dynamic behavior. See #2305.
+* Updated highlight.js to 10.5.0. See #2313.
+
 ## Version 1.1.2 (2020-05-14)
 
 * Bugfix: Normalize IP addresses and change unsupported address error to a

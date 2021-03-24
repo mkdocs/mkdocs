@@ -15,7 +15,6 @@ class Files:
     """ A collection of File objects. """
     def __init__(self, files):
         self._files = files
-        self.src_paths = {file.src_path: file for file in files}
 
     def __iter__(self):
         return iter(self._files)
@@ -26,6 +25,10 @@ class Files:
     def __contains__(self, path):
         return path in self.src_paths
 
+    @property
+    def src_paths(self):
+        return {file.src_path: file for file in self._files}
+
     def get_file_from_path(self, path):
         """ Return a File instance with File.src_path equal to path. """
         return self.src_paths.get(os.path.normpath(path))
@@ -33,7 +36,10 @@ class Files:
     def append(self, file):
         """ Append file to Files collection. """
         self._files.append(file)
-        self.src_paths[file.src_path] = file
+
+    def remove(self, file):
+        """ Remove file from Files collection. """
+        self._files.remove(file)
 
     def copy_static_files(self, dirty=False):
         """ Copy static files from source to destination. """
@@ -125,11 +131,12 @@ class File:
         self.url = self._get_url(use_directory_urls)
 
     def __eq__(self, other):
-
-        def sub_dict(d):
-            return {key: value for key, value in d.items() if key in ['src_path', 'abs_src_path', 'url']}
-
-        return (isinstance(other, self.__class__) and sub_dict(self.__dict__) == sub_dict(other.__dict__))
+        return (
+            isinstance(other, self.__class__) and
+            self.src_path == other.src_path and
+            self.abs_src_path == other.abs_src_path and
+            self.url == other.url
+        )
 
     def __ne__(self, other):
         return not self.__eq__(other)

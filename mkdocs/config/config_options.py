@@ -1,5 +1,6 @@
 import os
-from collections import Sequence, namedtuple
+from collections import namedtuple
+from collections.abc import Sequence
 from urllib.parse import urlparse
 import ipaddress
 import markdown
@@ -87,10 +88,8 @@ class ConfigItems(BaseConfigOption):
         if not isinstance(value, Sequence):
             raise ValidationError('Expected a sequence of mappings, but a %s '
                                   'was given.' % type(value))
-        result = []
-        for item in value:
-            result.append(self.item_config.validate(item))
-        return result
+
+        return [self.item_config.validate(item) for item in value]
 
 
 class OptionallyRequired(BaseConfigOption):
@@ -625,7 +624,7 @@ class Plugins(OptionallyRequired):
         errors, warnings = plugin.load_config(config, self.config_file_path)
         self.warnings.extend(warnings)
         errors_message = '\n'.join(
-            "Plugin value: '{}'. Error: {}".format(x, y)
+            "Plugin '{}' value: '{}'. Error: {}".format(name, x, y)
             for x, y in errors
         )
         if errors_message:

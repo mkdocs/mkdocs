@@ -305,6 +305,28 @@ class UtilsTests(unittest.TestCase):
         self.assertTrue(isinstance(config['key'], str))
         self.assertTrue(isinstance(config['key2'][0], str))
 
+    @mock.patch.dict(os.environ, {'VARNAME': 'Hello, World!', 'BOOLVAR': 'false'})
+    def test_env_var_in_yaml(self):
+
+        yaml_src = dedent(
+            '''
+            key1: !ENV VARNAME
+            key2: !ENV UNDEFINED
+            key3: !ENV [UNDEFINED, default]
+            key4: !ENV [UNDEFINED, VARNAME, default]
+            key5: !ENV BOOLVAR
+            '''
+        )
+        config = utils.yaml_load(yaml_src)
+        self.assertIsInstance(config['key1'], str)
+        self.assertEqual(config['key1'], 'Hello, World!')
+        self.assertIsNone(config['key2'])
+        self.assertIsInstance(config['key3'], str)
+        self.assertEqual(config['key3'], 'default')
+        self.assertIsInstance(config['key4'], str)
+        self.assertEqual(config['key4'], 'Hello, World!')
+        self.assertIs(config['key5'], False)
+
     def test_copy_files(self):
         src_paths = [
             'foo.txt',

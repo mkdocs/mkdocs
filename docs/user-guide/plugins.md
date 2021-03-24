@@ -211,7 +211,7 @@ entire site.
 ##### on_env
 
 :   The `env` event is called after the Jinja template environment is created
-    and can be used to alter the Jinja environment.
+    and can be used to alter the [Jinja environment](https://jinja.palletsprojects.com/en/master/api/#jinja2.Environment).
 
     Parameters:
     : __env:__ global Jinja environment
@@ -228,6 +228,17 @@ entire site.
 
     Parameters:
     : __config:__ global configuration object
+
+##### on_build_error
+
+:   The `build_error` event is called after an exception of any kind
+    is caught by MkDocs during the build process.
+    Use this event to clean things up before MkDocs terminates. Note that any other
+    events which were scheduled to run after the error will have been skipped. See
+    [Handling Errors] for more details.
+
+    Parameters:
+    : __error:__ exception raised
 
 #### Template Events
 
@@ -369,6 +380,64 @@ page events are called after the [post_template] event and before the
     Returns:
     : output of rendered template as string
 
+### Handling Errors
+
+MkDocs defines four error types:
+
+#### `mkdocs.exceptions.MkDocsException`
+
+:   The base class which all MkDocs exceptions inherit from. This should
+    not be raised directly. One of the sublcasses should be raised instead.
+
+#### `mkdocs.exceptions.ConfigurationError`
+
+:   This error is raised by configuration validation when a validation error
+    is encountered. This error should be raised by any configuration options
+    defined in a plugin's [config_scheme].
+
+#### `mkdocs.exceptions.BuildError`
+
+:   This error may be raised by MkDocs during the build process. Plugins should
+    not raise this error.
+
+#### `mkdocs.exceptions.PluginError`
+
+:   A subclass of `mkdocs.exceptions.BuildError` which can be raised by plugin
+    events.
+
+Unexpected and uncaught exceptions will interrupt the build process and produce
+typical Python tracebacks, which are useful for debugging your code. However,
+users generally find tracebacks overwhelming and often miss the helpful error
+message. Therefore, MkDocs will catch any of the errors listed above, retrieve
+the error message, and exit immediately with only the helpful message displayed
+to the user.
+
+Therefore, you might want to catch any exceptions within your plugin and raise a
+`PluginError`, passing in your own custom-crafted message, so that the build
+process is aborted with a helpful message.
+
+The [on_build_error] event will be triggered for any exception.
+
+For example:
+
+```python
+from mkdocs.exceptions import PluginError
+from mkdocs.plugins import BasePlugin
+
+
+class MyPlugin(BasePlugin):
+    def on_post_page(self, output, page, config, **kwargs):
+        try:
+            # some code that could throw a KeyError
+            ...
+        except KeyError as error:
+            raise PluginError(str(error))
+
+    def on_build_error(self, error):
+        # some code to clean things up
+        ...
+```
+
 ### Entry Point
 
 Plugins need to be packaged as Python libraries (distributed on PyPI separate
@@ -400,7 +469,7 @@ entry_points={
 ```
 
 Note that registering a plugin does not activate it. The user still needs to
-tell MkDocs to use if via the config.
+tell MkDocs to use it via the config.
 
 [BasePlugin]:#baseplugin
 [config]: configuration.md#plugins
@@ -415,3 +484,6 @@ tell MkDocs to use if via the config.
 [static_templates]: configuration.md#static_templates
 [Template Events]: #template-events
 [MkDocs Plugins]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Plugins
+[on_build_error]: #on_build_error
+[Handling Errors]: #handling-errors
+[config_scheme]: #config_scheme

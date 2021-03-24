@@ -5,16 +5,11 @@ import sys
 import logging
 import click
 
-# TODO: Remove this check at some point in the future.
-# (also remove flake8's 'ignore E402' comments below)
-if sys.version_info[0] < 3:  # pragma: no cover
-    raise ImportError('A recent version of Python 3 is required.')
-
-from mkdocs import __version__                            # noqa: E402
-from mkdocs import utils                                  # noqa: E402
-from mkdocs import exceptions                             # noqa: E402
-from mkdocs import config                                 # noqa: E402
-from mkdocs.commands import build, gh_deploy, new, serve  # noqa: E402
+from mkdocs import __version__
+from mkdocs import utils
+from mkdocs import exceptions
+from mkdocs import config
+from mkdocs.commands import build, gh_deploy, new, serve
 
 log = logging.getLogger(__name__)
 
@@ -56,6 +51,10 @@ remote_name_help = ("The remote name to commit to for Github Pages. This "
                     "overrides the value specified in config")
 force_help = "Force the push to the repository."
 ignore_version_help = "Ignore check that build is not being deployed with an older version of MkDocs."
+watch_theme_help = ("Include the theme in list of files to watch for live reloading. "
+                    "Ignored when live reload is not used.")
+wait_help = "Wait the specified number of seconds before reloading (default 0)."
+shell_help = "Use the shell when invoking Git."
 
 
 def add_options(opts):
@@ -103,13 +102,17 @@ common_config_options = add_options([
     click.option('--use-directory-urls/--no-directory-urls', is_flag=True, default=None, help=use_directory_urls_help)
 ])
 
-pgk_dir = os.path.dirname(os.path.abspath(__file__))
+PYTHON_VERSION = sys.version[:3]
+
+PKG_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 @click.group(context_settings={'help_option_names': ['-h', '--help']})
 @click.version_option(
-    '{} from {} (Python {})'.format(__version__, pgk_dir, sys.version[:3]),
-    '-V', '--version')
+    __version__,
+    '-V', '--version',
+    message=f'%(prog)s, version %(version)s from { PKG_DIR } (Python { PYTHON_VERSION })'
+)
 @common_options
 def cli():
     """
@@ -122,6 +125,8 @@ def cli():
 @click.option('--livereload', 'livereload', flag_value='livereload', help=reload_help, default=True)
 @click.option('--no-livereload', 'livereload', flag_value='no-livereload', help=no_reload_help)
 @click.option('--dirtyreload', 'livereload', flag_value='dirty', help=dirty_reload_help)
+@click.option('--watch-theme', help=watch_theme_help, is_flag=True)
+@click.option('-w', '--wait', help=wait_help, default=0)
 @common_config_options
 @common_options
 def serve_command(dev_addr, livereload, **kwargs):
@@ -162,10 +167,11 @@ def build_command(clean, **kwargs):
 @click.option('-r', '--remote-name', help=remote_name_help)
 @click.option('--force', is_flag=True, help=force_help)
 @click.option('--ignore-version', is_flag=True, help=ignore_version_help)
+@click.option('--shell', is_flag=True, help=shell_help)
 @common_config_options
 @click.option('-d', '--site-dir', type=click.Path(), help=site_dir_help)
 @common_options
-def gh_deploy_command(clean, message, remote_branch, remote_name, force, ignore_version, **kwargs):
+def gh_deploy_command(clean, message, remote_branch, remote_name, force, ignore_version, shell, **kwargs):
     """Deploy your documentation to GitHub Pages"""
     try:
         cfg = config.load_config(
@@ -174,7 +180,7 @@ def gh_deploy_command(clean, message, remote_branch, remote_name, force, ignore_
             **kwargs
         )
         build.build(cfg, dirty=not clean)
-        gh_deploy.gh_deploy(cfg, message=message, force=force, ignore_version=ignore_version)
+        gh_deploy.gh_deploy(cfg, message=message, force=force, ignore_version=ignore_version, shell=shell)
     except exceptions.ConfigurationError as e:  # pragma: no cover
         # Avoid ugly, unhelpful traceback
         raise SystemExit('\n' + str(e))
