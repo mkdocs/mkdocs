@@ -343,8 +343,7 @@ you're done. For specific instructions on a number of common hosts, see the
 
 ## Getting help
 
-To get help with MkDocs, please use the [GitHub discussions], [GitHub issues] or
-the MkDocs IRC channel `#mkdocs` on freenode.
+To get help with MkDocs, please use the [GitHub discussions] or [GitHub issues].
 
 [deploy]: user-guide/deploying-your-docs/
 [mkdocs]: user-guide/styling-your-docs/#mkdocs
