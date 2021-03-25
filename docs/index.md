@@ -343,8 +343,7 @@ you're done. For specific instructions on a number of common hosts, see the
 
 ## Getting help
 
-To get help with MkDocs, please use the [discussion group], [GitHub issues] or
-the MkDocs IRC channel `#mkdocs` on freenode.
+To get help with MkDocs, please use the [GitHub discussions] or [GitHub issues].
 
 [deploy]: user-guide/deploying-your-docs/
 [mkdocs]: user-guide/styling-your-docs/#mkdocs
@@ -356,7 +355,7 @@ the MkDocs IRC channel `#mkdocs` on freenode.
 [build your own]: user-guide/custom-themes/
 [get-pip.py]: https://bootstrap.pypa.io/get-pip.py
 [nav]: user-guide/configuration/#nav
-[discussion group]: https://groups.google.com/forum/#!forum/mkdocs
+[GitHub discussions]: https://github.com/mkdocs/mkdocs/discussions
 [GitHub issues]: https://github.com/mkdocs/mkdocs/issues
 [pip]: https://pip.readthedocs.io/en/stable/installing/
 [Python]: https://www.python.org/
