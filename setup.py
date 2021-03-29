@@ -6,12 +6,8 @@ import os
 import sys
 
 
-long_description = (
-    "MkDocs is a fast, simple and downright gorgeous static site generator "
-    "that's geared towards building project documentation. Documentation "
-    "source files are written in Markdown, and configured with a single YAML "
-    "configuration file."
-)
+with open('README.md') as f:
+    long_description = f.read()
 
 
 def get_version(package):
@@ -49,6 +45,7 @@ setup(
     license='BSD',
     description='Project documentation with Markdown.',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     author='Tom Christie',
     author_email='tom@tomchristie.com',  # SEE NOTE BELOW (*)
     packages=get_packages("mkdocs"),
