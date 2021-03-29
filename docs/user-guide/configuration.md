@@ -650,8 +650,8 @@ plugins:
 
 **default**: `full`
 
-[custom themes]: custom-themes.md
-[variables that are available]: custom-themes.md#template-variables
+[custom themes]: ../dev-guide/themes.md
+[variables that are available]: ../dev-guide/themes.md#template-variables
 [pymdk-extensions]: https://python-markdown.github.io/extensions/
 [pymkd]: https://python-markdown.github.io/
 [smarty]: https://python-markdown.github.io/extensions/smarty/
@@ -661,7 +661,7 @@ plugins:
 [theme_dir]: styling-your-docs.md#using-the-theme_dir
 [styling your docs]: styling-your-docs.md
 [extra_css]: #extra_css
-[Plugins]: plugins.md
+[Plugins]: ../dev-guide/plugins.md
 [lunr.js]: https://lunrjs.com/
 [ISO 639-1]: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 [Lunr Languages]: https://github.com/MihaiValentin/lunr-languages#lunr-languages-----

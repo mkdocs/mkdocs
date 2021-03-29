@@ -355,7 +355,7 @@ any additional CSS files included in the `custom_dir`.
 [theme configuration options]: ./configuration.md#theme
 [Read the Docs]: https://readthedocs.org/
 [community wiki]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
-[custom theme]: ./custom-themes.md
+[custom theme]: ../dev-guide/themes.md
 [customize]: #customizing-a-theme
 [docs_dir]: #using-the-docs_dir
 [documentation directory]: ./configuration.md#docs_dir
@@ -364,10 +364,10 @@ any additional CSS files included in the `custom_dir`.
 [Jinja documentation]: http://jinja.pocoo.org/docs/dev/templates/#template-inheritance
 [mkdocs]: #mkdocs
 [ReadTheDocs]: ./deploying-your-docs.md#readthedocs
-[Template Variables]: ./custom-themes.md#template-variables
+[Template Variables]: ../dev-guide/themes.md#template-variables
 [custom_dir]: ./configuration.md#custom_dir
 [name]: ./configuration.md#name
 [third party themes]: #third-party-themes
 [super block]: http://jinja.pocoo.org/docs/dev/templates/#super-blocks
-[base_url]: ./custom-themes.md#base_url
+[base_url]: ../dev-guide/themes.md#base_url
 [highlight.js]: https://highlightjs.org/

@@ -67,7 +67,7 @@ MkDocs can now benefit from recent bug fixes and new features, including the fol
 Plugin developers can now use the `on_build_error` hook
 to execute code when an exception is raised while building the site.
 
-See [`on_build_error`](../user-guide/plugins.md#on_build_error)
+See [`on_build_error`](../dev-guide/plugins.md#on_build_error)
 in the Plugins documentation for details.
 
 #### Two new exceptions: BuildError and PluginError (#2103)
@@ -80,7 +80,7 @@ MkDocs now has two new exceptions defined in `mkdocs.exceptions`,
 * `BuildError` should not be used by third-party plugins developers
   and is reserved for internal use only.
 
-See [`Handling errors`](../user-guide/plugins.md#handling-errors)
+See [`Handling errors`](../dev-guide/plugins.md#handling-errors)
 in the Plugins documentation for details.
 
 #### Search Indexing Strategy configuration
@@ -278,7 +278,7 @@ The changes included in the refactor are summarized below.
   files not in the `docs_dir`, exclude files, redefine page URLs (i.e.
   implement extensionless URLs), or to manipulate files in various other ways.
 
-  [on_files]: ../user-guide/plugins.md#on_files
+[on_files]: ../dev-guide/plugins.md#on_files
 
 ##### Backward Incompatible Changes
 
@@ -384,8 +384,8 @@ need to will be altered.
 {% endfor %}
 ```
 
-[base_url]: ../user-guide/custom-themes.md#base_url
-[url]: ../user-guide/custom-themes.md#url
+[base_url]: ../dev-guide/themes.md#base_url
+[url]: ../dev-guide/themes.md#url
 
 #### Path Based Settings are Relative to Configuration File (#543)
 
@@ -453,7 +453,7 @@ Users can review the [configuration options][search config] available and theme
 authors should review how [search and themes] interact.
 
 [search config]: ../user-guide/configuration.md#search
-[search and themes]: ../user-guide/custom-themes.md#search_and_themes
+[search and themes]: ../dev-guide/themes.md#search_and_themes
 
 #### `theme_dir` Configuration Option fully Deprecated
 
@@ -537,7 +537,7 @@ then the `search` plugin will be included by default. See the
 [configuration][plugin_config] documentation for information on overriding the
 default.
 
-[Plugin API]: ../user-guide/plugins.md
+[Plugin API]: ../dev-guide/plugins.md
 [plugin_config]: ../user-guide/configuration.md#plugins
 
 #### Theme Customization. (#1164)
@@ -574,7 +574,7 @@ theme:
 
 See the [theme] configuration option documentation for details.
 
-[Theme Configuration]: ../user-guide/custom-themes.md#theme-configuration
+[Theme Configuration]: ../dev-guide/themes.md#theme-configuration
 [theme]: ../user-guide/configuration.md#theme
 [custom_dir]: ../user-guide/configuration.md#custom_dir
 
@@ -592,7 +592,7 @@ template exists.
 ##### Context Variables
 
 Page specific variable names in the template context have been refactored as
-defined in [Custom Themes](../user-guide/custom-themes.md#page). The
+defined in [Custom Themes](../dev-guide/themes.md#page). The
 old variable names issued a warning in version 0.16, but have been removed in
 version 1.0.
 
@@ -610,14 +610,14 @@ user created and third-party templates:
 | previous_page     | [page.previous_page]|
 | next_page         | [page.next_page]    |
 
-[page]: ../user-guide/custom-themes.md#page
-[page.title]: ../user-guide/custom-themes.md#pagetitle
-[page.content]: ../user-guide/custom-themes.md#pagecontent
-[page.toc]: ../user-guide/custom-themes.md#pagetoc
-[page.meta]: ../user-guide/custom-themes.md#pagemeta
-[page.canonical_url]: ../user-guide/custom-themes.md#pagecanonical_url
-[page.previous_page]: ../user-guide/custom-themes.md#pageprevious_page
-[page.next_page]: ../user-guide/custom-themes.md#pagenext_page
+[page]: ../dev-guide/themes.md#page
+[page.title]: ../dev-guide/themes.md#pagetitle
+[page.content]: ../dev-guide/hemes.md#pagecontent
+[page.toc]: ../dev-guide/hemes.md#pagetoc
+[page.meta]: ../dev-guide/themes.md#pagemeta
+[page.canonical_url]: ../dev-guide/themes.md#pagecanonical_url
+[page.previous_page]: ../dev-guide/themes.md#pageprevious_page
+[page.next_page]: ../dev-guide/themes.md#pagenext_page
 
 Additionally, a number of global variables have been altered and/or removed
 and user created and third-party templates should be updated as outlined below:
@@ -697,7 +697,7 @@ the `extra_css` or `extra_javascript` config settings going forward.
 ##### Page Context
 
 Page specific variable names in the template context have been refactored as
-defined in [Custom Themes](../user-guide/custom-themes.md#page). The
+defined in [Custom Themes](../dev-guide/themes.md#page). The
 old variable names will issue a warning but continue to work for version 0.16,
 but may be removed in a future version.
 
@@ -715,14 +715,14 @@ user created and third-party templates:
 | previous_page     | [page.previous_page]|
 | next_page         | [page.next_page]    |
 
-[page]: ../user-guide/custom-themes.md#page
-[page.title]: ../user-guide/custom-themes.md#pagetitle
-[page.content]: ../user-guide/custom-themes.md#pagecontent
-[page.toc]: ../user-guide/custom-themes.md#pagetoc
-[page.meta]: ../user-guide/custom-themes.md#pagemeta
-[page.canonical_url]: ../user-guide/custom-themes.md#pagecanonical_url
-[page.previous_page]: ../user-guide/custom-themes.md#pageprevious_page
-[page.next_page]: ../user-guide/custom-themes.md#pagenext_page
+[page]: ../dev-guide/themes.md#page
+[page.title]: ../dev-guide/themes.md#pagetitle
+[page.content]: ../dev-guide/themes.md#pagecontent
+[page.toc]: ../dev-guide/themes.md#pagetoc
+[page.meta]: ../dev-guide/themes.md#pagemeta
+[page.canonical_url]: ../dev-guide/themes.md#pagecanonical_url
+[page.previous_page]: ../dev-guide/themes.md#pageprevious_page
+[page.next_page]: ../dev-guide/themes.md#pagenext_page
 
 ##### Global Context
 
@@ -934,7 +934,7 @@ and customizing themes and [Custom themes] for creating and distributing new
 themes
 
 [Styling your docs]: ../user-guide/styling-your-docs.md
-[Custom themes]: ../user-guide/custom-themes.md
+[Custom themes]: ../dev-guide/themes.md
 
 ### Other Changes and Additions to Version 0.15.0
 
