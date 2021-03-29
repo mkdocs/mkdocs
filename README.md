@@ -19,6 +19,7 @@ Please see the [Documentation][mkdocs] for a full guide on how to use it.
 - Much more!
 
 ## Support
+
 If you need help with MkDocs, do not hesitate to get in contact with us!
 
 You can either create an [Issue] on our Issue Tracker or open a [Discussion]. Later one is recommended for more general questions regarding MkDocs.  
