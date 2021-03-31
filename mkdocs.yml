@@ -20,7 +20,8 @@ nav:
         - Overview: user-guide/index.md
         - Installation: user-guide/installation.md
         - Writing Your Docs: user-guide/writing-your-docs.md
-        - Styling Your Docs: user-guide/styling-your-docs.md
+        - Choosing Your Theme: user-guide/choosing-your-theme.md
+        - Customizing Your Theme: user-guide/customizing-your-theme.md
         - Configuration: user-guide/configuration.md
         - Deploying Your Docs: user-guide/deploying-your-docs.md
     - Developer Guide:

@@ -56,7 +56,7 @@ theme:
     `mkdocs` theme would remain unchanged. This is useful if you want to make
     small adjustments to an existing theme.
 
-    For more specific information, see [styling your docs].
+    For more specific information, see [Customizing Your Theme].
 
 !!! Warning
 
@@ -69,7 +69,7 @@ theme:
     the `theme.name` configuration option, then a `mkdocs_theme.yml` file
     is required for the theme.
 
-[styling your docs]: ../user-guide/styling-your-docs.md#using-the-theme-custom_dir
+[Customizing Your Theme]: ../user-guide/customizing-your-theme.md#using-the-theme-custom_dir
 [custom_dir]: ../user-guide/configuration.md#custom_dir
 [name]: ../user-guide/configuration.md#name
 [docs_dir]: ../user-guide/configuration.md#docs_dir
@@ -114,8 +114,8 @@ with one of the [built-in themes] and modify it accordingly.
 
 [Jinja]: http://jinja.pocoo.org/
 [template inheritance]: http://jinja.pocoo.org/docs/dev/templates/#template-inheritance
-[theme_dir]: ../user-guide/styling-your-docs.md#using-the-theme_dir
-[blocks]: ../user-guide/styling-your-docs.md#overriding-template-blocks
+[theme_dir]: ../user-guide/customizing-your-theme.md#using-the-theme_dir
+[blocks]: ../user-guide/customizing-your-theme.md#overriding-template-blocks
 
 ## Theme Files
 

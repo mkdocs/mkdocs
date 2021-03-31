@@ -162,7 +162,7 @@ mirror the upstream configuration options. See the [theme
 documentation][rtd-docs] for details.
 
 [upstream]: https://github.com/rtfd/sphinx_rtd_theme/
-[rtd-docs]: ../user-guide/styling-your-docs.md#readthedocs
+[rtd-docs]: ../user-guide/choosing-your-theme.md#readthedocs
 
 #### Update `mkdocs` theme to Bootswatch 4.1.3 (#1563)
 
@@ -811,7 +811,7 @@ overriding blocks in the same manner as the built-in themes. Third party themes
 are encouraged to wrap the various pieces of their templates in blocks in order
 to support such customization.
 
-[blocks]: ../user-guide/styling-your-docs.md#overriding-template-blocks
+[blocks]: ../user-guide/customizing-your-theme.md#overriding-template-blocks
 
 #### Auto-Populated `extra_css` and `extra_javascript` Deprecated. (#986)
 
@@ -929,11 +929,11 @@ They will be included with MkDocs by default until a future release. After that
 they will be installable with pip: `pip install mkdocs-bootstrap` and `pip
 install mkdocs-bootswatch`
 
-See the documentation for [Styling your docs] for more information about using
+See the documentation for [Customizing Your Theme] for more information about using
 and customizing themes and [Custom themes] for creating and distributing new
 themes
 
-[Styling your docs]: ../user-guide/styling-your-docs.md
+[Customizing Your Theme]: ../user-guide/customizing-your-theme.md
 [Custom themes]: ../dev-guide/themes.md
 
 ### Other Changes and Additions to Version 0.15.0
@@ -957,7 +957,7 @@ themes
 
 [site_description]: ../user-guide/configuration.md#site_description
 [site_author]: ../user-guide/configuration.md#site_author
-[ReadTheDocs]: ../user-guide/styling-your-docs.md#readthedocs
+[ReadTheDocs]: ../user-guide/choosing-your-theme.md#readthedocs
 
 ## Version 0.14.0 (2015-06-09)
 
@@ -1042,7 +1042,7 @@ JavaScript library [lunr.js]. It has been added to both the `mkdocs` and
 for adding it to your own themes.
 
 [lunr.js]: https://lunrjs.com/
-[supporting search]: ../user-guide/styling-your-docs.md#search-and-themes
+[supporting search]: ../dev-guide/themes.md#search-and-themes
 
 #### New Command Line Interface
 
@@ -1073,7 +1073,7 @@ documentation.
 [extra_javascript]: ../user-guide/configuration.md#extra_javascript
 [extra_css]: ../user-guide/configuration.md#extra_css
 [extra_templates]: ../user-guide/configuration.md#extra_templates
-[global variables]: ../user-guide/styling-your-docs.md#global-context
+[global variables]: ../dev-guide/themes.md#global-context
 
 ### Other Changes and Additions to Version 0.13.0
 

@@ -263,7 +263,7 @@ Sets the theme and theme specific configuration of your documentation site.
 May be either a string or a set of key/value pairs.
 
 If a string, it must be the string name of a known installed theme. For a list
-of available themes visit [styling your docs].
+of available themes visit [Choosing Your Theme].
 
 An example set of key/value pairs might look something like this:
 
@@ -283,7 +283,7 @@ If a set of key/value pairs, the following nested keys can be defined:
     #### name:
 
     The string name of a known installed theme. For a list of available themes
-    visit [styling your docs].
+    visit [Choosing Your Theme].
 
     #### custom_dir:
 
@@ -292,11 +292,11 @@ If a set of key/value pairs, the following nested keys can be defined:
     your configuration file or it can be an absolute directory path from the
     root of your local file system.
 
-    See [styling your docs][theme_dir] for details if you would like to tweak an
+    See [Customizing Your Theme][theme_dir] for details if you would like to tweak an
     existing theme.
 
-    See [custom themes] if you would like to build your own theme from the
-    ground up.
+    See the [Theme Developer Guide] if you would like to build your own theme
+    from the ground up.
 
     #### static_templates:
 
@@ -650,7 +650,7 @@ plugins:
 
 **default**: `full`
 
-[custom themes]: ../dev-guide/themes.md
+[Theme Developer Guide]: ../dev-guide/themes.md
 [variables that are available]: ../dev-guide/themes.md#template-variables
 [pymdk-extensions]: https://python-markdown.github.io/extensions/
 [pymkd]: https://python-markdown.github.io/
@@ -658,8 +658,8 @@ plugins:
 [exts]: https://python-markdown.github.io/extensions/
 [3rd]: https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
 [configuring pages and navigation]: writing-your-docs.md#configure-pages-and-navigation
-[theme_dir]: styling-your-docs.md#using-the-theme_dir
-[styling your docs]: styling-your-docs.md
+[theme_dir]: customizing-your-theme.md#using-the-theme_dir
+[choosing your theme]: choosing-your-theme.md
 [extra_css]: #extra_css
 [Plugins]: ../dev-guide/plugins.md
 [lunr.js]: https://lunrjs.com/

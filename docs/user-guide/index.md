@@ -11,7 +11,8 @@ bar at the top of the page to move through the documention in order.
 
 - [Installation](installation.md)
 - [Writing Your Docs](writing-your-docs.md)
-- [Styling Your Docs](styling-your-docs.md)
+- [Choosing Your Theme](choosing-your-theme.md)
+- [Customizing Your Theme](customizing-your-theme.md)
 - [Configuration](configuration.md)
 - [Deploying Your Docs](deploying-your-docs.md)
 

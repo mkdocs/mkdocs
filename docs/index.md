@@ -38,9 +38,9 @@ your theme] and/or installing some [plugins]. Modify Markdown's behavior with
 [introductory tuorial]: getting-started.md
 [User Guide]: user-guide/index.md
 [deploy]: user-guide/deploying-your-docs.md
-[themes]: user-guide/styling-your-docs.md
-[mkdocs]: user-guide/styling-your-docs.md#mkdocs
-[readthedocs]: user-guide/styling-your-docs.md#readthedocs
+[themes]: user-guide/choosing-your-theme.md
+[mkdocs]: user-guide/choosing-your-theme.md#mkdocs
+[readthedocs]: user-guide/choosing-your-theme.md#readthedocs
 [MkDocs Themes]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
 [build your own]: dev-guide/themes.md
 [customizing your theme]: user-guide/configuration.md#theme
