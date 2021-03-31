@@ -194,6 +194,8 @@ you're done. For specific instructions on a number of common hosts, see the
 
 ## Getting help
 
+See the [User Guide] for more complete documentation of all of MkDocs' features.
+
 To get help with MkDocs, please use the [GitHub discussions] or [GitHub issues].
 
 [Installation Guide]: user-guide/installation.md
@@ -204,3 +206,4 @@ To get help with MkDocs, please use the [GitHub discussions] or [GitHub issues].
 [GitHub issues]: https://github.com/mkdocs/mkdocs/issues
 [site_name]: user-guide/configuration.md#site_name
 [theme]: user-guide/configuration.md#theme
+[User Guide]: user-guide/index.md
