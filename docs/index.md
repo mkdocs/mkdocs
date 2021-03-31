@@ -4,46 +4,89 @@ Project documentation with&nbsp;Markdown.
 
 ---
 
-## Overview
-
 MkDocs is a **fast**, **simple** and **downright gorgeous** static site
 generator that's geared towards building project documentation. Documentation
 source files are written in Markdown, and configured with a single YAML
 configuration file. Start by reading the [introductory tutorial], then check the
 [User Guide] for more information.
 
-### Host anywhere
-
-MkDocs builds completely static HTML sites that you can host on GitHub pages,
-Amazon S3, or [anywhere][deploy] else you choose.
-
-### Great themes available
-
-There's a stack of good looking [themes] available for MkDocs. Choose between
-the built in themes: [mkdocs] and [readthedocs], select one of the third-party
-themes listed on the [MkDocs Themes] wiki page, or [build your own].
-
-### Preview your site as you work
-
-The built-in dev-server allows you to preview your documentation as you're
-writing it. It will even auto-reload and refresh your browser whenever you save
-your changes.
-
-### Easy to customize
-
-Get your project documentation looking just the way you want it by [customizing
-your theme] and/or installing some [plugins]. Modify Markdown's behavior with
-[markdown_extensions]. See the full list of [configuration options] available.
-
 [introductory tutorial]: getting-started.md
 [User Guide]: user-guide/index.md
-[deploy]: user-guide/deploying-your-docs.md
-[themes]: user-guide/choosing-your-theme.md
-[mkdocs]: user-guide/choosing-your-theme.md#mkdocs
-[readthedocs]: user-guide/choosing-your-theme.md#readthedocs
-[MkDocs Themes]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
-[build your own]: dev-guide/themes.md
-[customizing your theme]: user-guide/configuration.md#theme
-[plugins]: user-guide/configuration.md#plugins
-[markdown_extensions]: user-guide/configuration.md#markdown_extensions
-[configuration options]: user-guide/configuration.md
+
+<div class="text-center">
+<a href="getting-started/" class="btn btn-primary" role="button">Getting Started</a>
+<a href="user-guide/" class="btn btn-primary" role="button">User Guide</a>
+</div>
+
+<p><br></p>
+<div class="jumbotron">
+<h2 class="display-4 text-center">Features</h2>
+
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Great themes available</h3>
+        <p class="card-text">
+            There's a stack of good looking <a
+            href="user-guide/choosing-your-theme">themes</a> available for
+            MkDocs. Choose between the built in themes: <a
+            href="user-guide/choosing-your-theme/#mkdocs">mkdocs</a> and <a
+            href="user-guide/choosing-your-theme/#readthedocs">readthedocs</a>,
+            select one of the third-party themes listed on the <a
+            href="">MkDocs Themes</a> wiki page, or <a href="">build your
+            own</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Easy to customize</h3>
+        <p class="card-text">
+            Get your project documentation looking just the way you want it by
+            <a href="user-guide/customizing-your-theme/">customizing your
+            theme</a> and/or installing some <a
+            href="user-guide/configuration/#plugins">plugins</a>. Modify
+            Markdown's behavior with <a
+            href="user-guide/configuration/#markdown_extensions">Markdown
+            extensions</a>. Many <a
+            href="user-guide/configuration/">configuration options</a> are
+            available.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p></p>
+
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Preview your site as you work</h3>
+        <p class="card-text">
+            The built-in dev-server allows you to preview your documentation
+            as you're writing it. It will even auto-reload and refresh your
+            browser whenever you save your changes.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Host anywhere</h3>
+        <p class="card-text">
+            MkDocs builds completely static HTML sites that you can host on
+            GitHub pages, Amazon S3, or <a
+            href="user-guide/deploying-your-docs/">anywhere</a> else you
+            choose.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

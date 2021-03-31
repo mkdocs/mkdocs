@@ -85,7 +85,7 @@ two levels of navigation are supported.
 
 ![ReadTheDocs](../img/readthedocs.png)
 
-In addition to the default [theme configuration options], the `readthedocs`
+In addition to the default [theme configuration options][theme], the `readthedocs`
 theme supports the following options:
 
 * __`highlightjs`__: Enables highlighting of source code in code blocks using
