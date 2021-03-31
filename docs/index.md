@@ -9,7 +9,7 @@ Project documentation with&nbsp;Markdown.
 MkDocs is a **fast**, **simple** and **downright gorgeous** static site
 generator that's geared towards building project documentation. Documentation
 source files are written in Markdown, and configured with a single YAML
-configuration file. Start by reading the [introductory tuorial], then check the 
+configuration file. Start by reading the [introductory tutorial], then check the
 [User Guide] for more information.
 
 ### Host anywhere
@@ -35,7 +35,7 @@ Get your project documentation looking just the way you want it by [customizing
 your theme] and/or installing some [plugins]. Modify Markdown's behavior with
 [markdown_extensions]. See the full list of [configuration options] available.
 
-[introductory tuorial]: getting-started.md
+[introductory tutorial]: getting-started.md
 [User Guide]: user-guide/index.md
 [deploy]: user-guide/deploying-your-docs.md
 [themes]: user-guide/choosing-your-theme.md

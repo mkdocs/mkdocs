@@ -1,4 +1,4 @@
-# Custom themes
+# Developing Themes
 
 A guide to creating and distributing custom themes.
 
@@ -6,24 +6,27 @@ A guide to creating and distributing custom themes.
 
 !!! Note
 
-    If you are looking for third party themes, they are listed in the MkDocs
-    [community wiki](https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes). If
-    you want to share a theme you create, you should list it on the Wiki.
+    If you are looking for existing third party themes, they are listed in the
+    MkDocs [community wiki]. If you want to share a theme you create, you
+    should list it on the Wiki.
 
 When creating a new theme, you can either follow the steps in this guide to
 create one from scratch or you can download the `mkdocs-basic-theme` as a
 basic, yet complete, theme with all the boilerplate required. **You can find
-this base theme on [GitHub](https://github.com/mkdocs/mkdocs-basic-theme)**.
-It contains detailed comments in the code to describe the different features
-and their usage.
+this base theme on [GitHub][basic theme]**. It contains detailed comments in
+the code to describe the different features and their usage.
+
+[community wiki]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
+[basic theme]: https://github.com/mkdocs/mkdocs-basic-theme
 
 ## Creating a custom theme
 
-The bare minimum required for a custom theme is a `main.html` [Jinja2 template]
-file which is placed in a directory that is *not* a child of the [docs_dir].
-Within `mkdocs.yml`, set the theme.[custom_dir] option to the path of the
-directory containing `main.html`. The path should be relative to the
-configuration file. For example, given this example project layout:
+The bare minimum required for a custom theme is a `main.html` [Jinja2
+template] file which is placed in a directory that is *not* a child of the
+[docs_dir]. Within `mkdocs.yml`, set the [`theme.custom_dir`][custom_dir]
+option to the path of the directory containing `main.html`. The path should be
+relative to the configuration file. For example, given this example project
+layout:
 
 ```no-highlight
 mkdocs.yml

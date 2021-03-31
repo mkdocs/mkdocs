@@ -6,7 +6,8 @@ A detailed guide.
 
 ## Requirements
 
-MkDocs requires a recent version of [Python] and the the Python package manager, [pip], to be installed on your system. 
+MkDocs requires a recent version of [Python] and the the Python package
+manager, [pip], to be installed on your system.
 
 You can check if you already have these installed from the command line:
 
@@ -17,7 +18,8 @@ $ pip --version
 pip 20.0.2 from /usr/local/lib/python3.8/site-packages/pip (python 3.8)
 ```
 
-If you already have those packages installed, you may skip down to [Installing MkDocs](#installing-mkdocs).
+If you already have those packages installed, you may skip down to [Installing
+MkDocs](#installing-mkdocs).
 
 ### Installing Python
 

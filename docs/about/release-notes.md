@@ -612,8 +612,8 @@ user created and third-party templates:
 
 [page]: ../dev-guide/themes.md#page
 [page.title]: ../dev-guide/themes.md#pagetitle
-[page.content]: ../dev-guide/hemes.md#pagecontent
-[page.toc]: ../dev-guide/hemes.md#pagetoc
+[page.content]: ../dev-guide/themes.md#pagecontent
+[page.toc]: ../dev-guide/themes.md#pagetoc
 [page.meta]: ../dev-guide/themes.md#pagemeta
 [page.canonical_url]: ../dev-guide/themes.md#pagecanonical_url
 [page.previous_page]: ../dev-guide/themes.md#pageprevious_page
