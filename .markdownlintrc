@@ -15,5 +15,5 @@
   "MD046": false,
 
   // Allow inline HTML
-  "MD033": false,
+  "MD033": false
 }
