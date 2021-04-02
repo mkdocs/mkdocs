@@ -50,3 +50,8 @@ google_analytics: ['UA-27795084-5', 'mkdocs.org']
 
 plugins:
     - search
+    - redirects:
+        redirect_maps:
+            user-guide/plugins.md: dev-guide/plugins.md
+            user-guide/custom-themes.md: dev-guide/themes.md
+            user-guide/styling-your-docs.md: user-guide/choosing-your-theme.md
