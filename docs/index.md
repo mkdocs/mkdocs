@@ -18,7 +18,6 @@ configuration file. Start by reading the [introductory tutorial], then check the
 <a href="user-guide/" class="btn btn-primary" role="button">User Guide</a>
 </div>
 
-<p><br></p>
 <div class="jumbotron">
 <h2 class="display-4 text-center">Features</h2>
 
@@ -59,8 +58,6 @@ configuration file. Start by reading the [introductory tutorial], then check the
     </div>
   </div>
 </div>
-
-<p></p>
 
 <div class="row">
   <div class="col-sm-6">
