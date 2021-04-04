@@ -252,12 +252,18 @@ def is_error_template(path):
 def get_relative_url(url, other):
     """
     Return given url relative to other.
+
+    Both are operated as slash-separated paths, similarly to the 'path' part of a URL.
+    The last component of `other` is skipped if it contains a dot (considered a file).
+    Actual URLs (with schemas etc.) aren't supported. The leading slash is ignored.
+    Paths are normalized ('..' works as parent directory), but going higher than the
+    root has no effect ('foo/../../bar' ends up just as 'bar').
     """
     if other != '.':
         # Remove filename from other url if it has one.
         parts = posixpath.split(other)
         other = parts[0] if '.' in parts[1] else other
-    relurl = posixpath.relpath(url, other)
+    relurl = posixpath.relpath('/' + url, '/' + other)
     return relurl + '/' if url.endswith('/') else relurl
 
 
