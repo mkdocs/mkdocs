@@ -119,6 +119,7 @@ up horizontal space for better rendering of content like tables (#2193).
   property to accomodate this possible dynamic behavior. See #2305.
 * Updated highlight.js to 10.5.0. See #2313.
 * Bugfix: Search plugin now works with Japanese language. See #2178.
+* Documentation has been refactored (#1629).
 
 ## Version 1.1.2 (2020-05-14)
 
