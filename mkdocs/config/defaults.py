@@ -8,6 +8,7 @@ from mkdocs.config import config_options
 # isn't really needed either as we always sequentially process the schema other
 # than at initialisation when we grab the full set of keys for convenience.
 
+
 def get_schema():
     return (
 
