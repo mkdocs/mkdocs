@@ -108,6 +108,10 @@ option. (#2092).
 The `mkdocs` theme now removes the sidebar when printing a page. This frees
 up horizontal space for better rendering of content like tables (#2193).
 
+The `mkdocs.config.DEFAULT_SCHEMA` global variable has been replaced with the
+function `mkdocs.config.defaults.get_schema()`, which ensures that each
+instance of the configuration is unique (#2289).
+
 ### Other Changes and Additions to Version 1.2
 
 * Bugfix: Properly process navigation child items in `_get_by_type` when
