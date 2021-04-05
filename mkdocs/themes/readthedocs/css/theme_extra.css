@@ -185,6 +185,7 @@ td, th {
  *
  * https://github.com/mkdocs/mkdocs/issues/2012
  */
-.rst-current-version span, .rst-current-version a {
+.rst-current-version span {
     flex: 1;
+    text-align: center;
 }
