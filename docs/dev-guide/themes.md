@@ -1,4 +1,4 @@
-# Custom themes
+# Developing Themes
 
 A guide to creating and distributing custom themes.
 
@@ -6,24 +6,27 @@ A guide to creating and distributing custom themes.
 
 !!! Note
 
-    If you are looking for third party themes, they are listed in the MkDocs
-    [community wiki](https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes). If
-    you want to share a theme you create, you should list it on the Wiki.
+    If you are looking for existing third party themes, they are listed in the
+    MkDocs [community wiki]. If you want to share a theme you create, you
+    should list it on the Wiki.
 
 When creating a new theme, you can either follow the steps in this guide to
 create one from scratch or you can download the `mkdocs-basic-theme` as a
 basic, yet complete, theme with all the boilerplate required. **You can find
-this base theme on [GitHub](https://github.com/mkdocs/mkdocs-basic-theme)**.
-It contains detailed comments in the code to describe the different features
-and their usage.
+this base theme on [GitHub][basic theme]**. It contains detailed comments in
+the code to describe the different features and their usage.
+
+[community wiki]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
+[basic theme]: https://github.com/mkdocs/mkdocs-basic-theme
 
 ## Creating a custom theme
 
-The bare minimum required for a custom theme is a `main.html` [Jinja2 template]
-file which is placed in a directory that is *not* a child of the [docs_dir].
-Within `mkdocs.yml`, set the theme.[custom_dir] option to the path of the
-directory containing `main.html`. The path should be relative to the
-configuration file. For example, given this example project layout:
+The bare minimum required for a custom theme is a `main.html` [Jinja2
+template] file which is placed in a directory that is *not* a child of the
+[docs_dir]. Within `mkdocs.yml`, set the [`theme.custom_dir`][custom_dir]
+option to the path of the directory containing `main.html`. The path should be
+relative to the configuration file. For example, given this example project
+layout:
 
 ```no-highlight
 mkdocs.yml
@@ -56,7 +59,7 @@ theme:
     `mkdocs` theme would remain unchanged. This is useful if you want to make
     small adjustments to an existing theme.
 
-    For more specific information, see [styling your docs].
+    For more specific information, see [Customizing Your Theme].
 
 !!! Warning
 
@@ -69,13 +72,13 @@ theme:
     the `theme.name` configuration option, then a `mkdocs_theme.yml` file
     is required for the theme.
 
-[styling your docs]: ./styling-your-docs.md#using-the-theme-custom_dir
-[custom_dir]: ./configuration.md#custom_dir
-[name]: ./configuration.md#name
-[docs_dir]:./configuration.md#docs_dir
+[Customizing Your Theme]: ../user-guide/customizing-your-theme.md#using-the-theme-custom_dir
+[custom_dir]: ../user-guide/configuration.md#custom_dir
+[name]: ../user-guide/configuration.md#name
+[docs_dir]: ../user-guide/configuration.md#docs_dir
 [configuration]: #theme-configuration
 [packaged]: #packaging-themes
-[theme]: ./configuration.md#theme
+[theme]: ../user-guide/configuration.md#theme
 
 ## Basic theme
 
@@ -114,8 +117,8 @@ with one of the [built-in themes] and modify it accordingly.
 
 [Jinja]: http://jinja.pocoo.org/
 [template inheritance]: http://jinja.pocoo.org/docs/dev/templates/#template-inheritance
-[theme_dir]: ./styling-your-docs.md#using-the-theme_dir
-[blocks]: ./styling-your-docs.md#overriding-template-blocks
+[theme_dir]: ../user-guide/customizing-your-theme.md#using-the-theme_dir
+[blocks]: ../user-guide/customizing-your-theme.md#overriding-template-blocks
 
 ## Theme Files
 
@@ -177,16 +180,16 @@ The `config` variable is an instance of MkDocs' config object generated from the
 `mkdocs.yml` config file. While you can use any config option, some commonly
 used options include:
 
-* [config.site_name](./configuration.md#site_name)
-* [config.site_url](./configuration.md#site_url)
-* [config.site_author](./configuration.md#site_author)
-* [config.site_description](./configuration.md#site_description)
-* [config.extra_javascript](./configuration.md#extra_javascript)
-* [config.extra_css](./configuration.md#extra_css)
-* [config.repo_url](./configuration.md#repo_url)
-* [config.repo_name](./configuration.md#repo_name)
-* [config.copyright](./configuration.md#copyright)
-* [config.google_analytics](./configuration.md#google_analytics)
+* [config.site_name](../user-guide/configuration.md#site_name)
+* [config.site_url](../user-guide/configuration.md#site_url)
+* [config.site_author](../user-guide/configuration.md#site_author)
+* [config.site_description](../user-guide/configuration.md#site_description)
+* [config.extra_javascript](../user-guide/configuration.md#extra_javascript)
+* [config.extra_css](../user-guide/configuration.md#extra_css)
+* [config.repo_url](../user-guide/configuration.md#repo_url)
+* [config.repo_name](../user-guide/configuration.md#repo_name)
+* [config.copyright](../user-guide/configuration.md#copyright)
+* [config.google_analytics](../user-guide/configuration.md#google_analytics)
 
 #### nav
 
@@ -194,7 +197,7 @@ The `nav` variable is used to create the navigation for the documentation. The
 `nav` object is an iterable of [navigation objects](#navigation-objects) as
 defined by the [nav] configuration setting.
 
-[nav]: configuration.md#nav
+[nav]: ../user-guide/configuration.md#nav
 
 In addition to the iterable of [navigation objects](#navigation-objects), the
 `nav` object contains the following attributes:
@@ -357,7 +360,7 @@ For example, if `site_url: https://example.com/`, then the value of
 `site_url: https://example.com/bar/`, then the value of `page.abs_url` for the
 page `foo.md` would be `/bar/foo/`.
 
-[site_url]: ./configuration.md#site_url
+[site_url]: ../user-guide/configuration.md#site_url
 
 ##### page.canonical_url
 
@@ -526,7 +529,7 @@ link objects.
 ### Extra Context
 
 Additional variables can be passed to the template with the
-[`extra`](./configuration.md#extra) configuration option. This is a
+[`extra`](../user-guide/configuration.md#extra) configuration option. This is a
 set of key value pairs that can make custom templates far more flexible.
 
 For example, this could be used to include the project version of all pages
@@ -692,8 +695,8 @@ index when it is available. The `index` object was new in MkDocs version *1.0*.
 [built-in themes]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes
 [theme's configuration file]: #theme-configuration
 [lunr.js]: https://lunrjs.com/
-[site_dir]: configuration.md#site_dir
-[prebuild_index]: configuration.md#prebuild_index
+[site_dir]: ../user-guide/configuration.md#site_dir
+[prebuild_index]: ../user-guide/configuration.md#prebuild_index
 
 ## Packaging Themes
 
@@ -866,4 +869,4 @@ For a much more detailed guide, see the official Python packaging
 documentation for [Packaging and Distributing Projects].
 
 [Packaging and Distributing Projects]: https://packaging.python.org/en/latest/distributing/
-[theme]: ./configuration.md#theme
+[theme]: ../user-guide/configuration.md#theme

@@ -5,3 +5,4 @@ mkdocs/themes/**/js/modernizr-**.min.js
 mkdocs/themes/readthedocs/js/theme.js
 mkdocs/contrib/search/templates/search/lunr.js
 mkdocs/contrib/search/lunr-language/lunr.**.js
+mkdocs/contrib/search/lunr-language/tinyseg.js
