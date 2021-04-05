@@ -170,7 +170,7 @@ td, th {
  *
  * https://github.com/mkdocs/mkdocs/issues/2012
  */
-.rst-current-version {
+.rst-versions .rst-current-version {
     padding: 0 12px;
     display: flex;
     font-size: initial;
