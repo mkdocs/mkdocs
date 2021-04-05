@@ -251,17 +251,17 @@ class UtilsTests(unittest.TestCase):
             sorted(utils.get_theme_names()),
             ['mkdocs', 'readthedocs'])
 
-    @mock.patch('pkg_resources.iter_entry_points', autospec=True)
+    @mock.patch('importlib_metadata.entry_points', autospec=True)
     def test_get_theme_dir(self, mock_iter):
 
         path = 'some/path'
 
         theme = mock.Mock()
         theme.name = 'mkdocs2'
-        theme.dist.key = 'mkdocs2'
+        theme.dist.name = 'mkdocs2'
         theme.load().__file__ = os.path.join(path, '__init__.py')
 
-        mock_iter.return_value = iter([theme])
+        mock_iter.return_value = [theme]
 
         self.assertEqual(utils.get_theme_dir(theme.name), os.path.abspath(path))
 
@@ -269,53 +269,51 @@ class UtilsTests(unittest.TestCase):
 
         self.assertRaises(KeyError, utils.get_theme_dir, 'nonexistanttheme')
 
-    @mock.patch('pkg_resources.iter_entry_points', autospec=True)
+    @mock.patch('importlib_metadata.entry_points', autospec=True)
     def test_get_theme_dir_importerror(self, mock_iter):
 
         theme = mock.Mock()
         theme.name = 'mkdocs2'
-        theme.dist.key = 'mkdocs2'
+        theme.dist.name = 'mkdocs2'
         theme.load.side_effect = ImportError()
 
-        mock_iter.return_value = iter([theme])
+        mock_iter.return_value = [theme]
 
         self.assertRaises(ImportError, utils.get_theme_dir, theme.name)
 
-    @mock.patch('pkg_resources.iter_entry_points', autospec=True)
+    @mock.patch('importlib_metadata.entry_points', autospec=True)
     def test_get_themes_warning(self, mock_iter):
 
         theme1 = mock.Mock()
         theme1.name = 'mkdocs2'
-        theme1.dist.key = 'mkdocs2'
+        theme1.dist.name = 'mkdocs2'
         theme1.load().__file__ = "some/path1"
 
         theme2 = mock.Mock()
         theme2.name = 'mkdocs2'
-        theme2.dist.key = 'mkdocs3'
+        theme2.dist.name = 'mkdocs3'
         theme2.load().__file__ = "some/path2"
 
-        mock_iter.return_value = iter([theme1, theme2])
+        mock_iter.return_value = [theme1, theme2]
 
         self.assertEqual(
             sorted(utils.get_theme_names()),
             sorted(['mkdocs2', ]))
 
-    @mock.patch('pkg_resources.iter_entry_points', autospec=True)
-    @mock.patch('pkg_resources.get_entry_map', autospec=True)
-    def test_get_themes_error(self, mock_get, mock_iter):
+    @mock.patch('importlib_metadata.entry_points', autospec=True)
+    def test_get_themes_error(self, mock_iter):
 
         theme1 = mock.Mock()
         theme1.name = 'mkdocs'
-        theme1.dist.key = 'mkdocs'
+        theme1.dist.name = 'mkdocs'
         theme1.load().__file__ = "some/path1"
 
         theme2 = mock.Mock()
         theme2.name = 'mkdocs'
-        theme2.dist.key = 'mkdocs2'
+        theme2.dist.name = 'mkdocs2'
         theme2.load().__file__ = "some/path2"
 
-        mock_iter.return_value = iter([theme1, theme2])
-        mock_get.return_value = {'mkdocs': theme1, }
+        mock_iter.return_value = [theme1, theme2]
 
         self.assertRaises(exceptions.ConfigurationError, utils.get_theme_names)
 

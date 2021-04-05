@@ -4,8 +4,8 @@ Implements the plugin API for MkDocs.
 """
 
 
-import pkg_resources
 import logging
+import importlib_metadata
 from collections import OrderedDict
 
 from mkdocs.config.base import Config
@@ -22,9 +22,9 @@ EVENTS = (
 
 
 def get_plugins():
-    """ Return a dict of all installed Plugins by name. """
+    """ Return a dict of all installed Plugins as {name: EntryPoint}. """
 
-    plugins = pkg_resources.iter_entry_points(group='mkdocs.plugins')
+    plugins = importlib_metadata.entry_points(group='mkdocs.plugins')
 
     return {plugin.name: plugin for plugin in plugins}
 

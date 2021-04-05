@@ -8,13 +8,13 @@ and structure of the site and pages in the site.
 
 import logging
 import os
-import pkg_resources
 import shutil
 import re
 import yaml
 import fnmatch
 import posixpath
 import functools
+import importlib_metadata
 from datetime import datetime, timezone
 from urllib.parse import urlparse
 from yaml_env_tag import construct_env_tag
@@ -316,23 +316,24 @@ def get_theme_dir(name):
 
 
 def get_themes():
-    """ Return a dict of all installed themes as (name, entry point) pairs. """
+    """ Return a dict of all installed themes as {name: EntryPoint}. """
 
     themes = {}
-    builtins = pkg_resources.get_entry_map(dist='mkdocs', group='mkdocs.themes')
+    eps = importlib_metadata.entry_points(group='mkdocs.themes')
+    builtins = [ep.name for ep in eps if ep.dist.name == 'mkdocs']
 
-    for theme in pkg_resources.iter_entry_points(group='mkdocs.themes'):
+    for theme in eps:
 
-        if theme.name in builtins and theme.dist.key != 'mkdocs':
+        if theme.name in builtins and theme.dist.name != 'mkdocs':
             raise exceptions.ConfigurationError(
-                "The theme {} is a builtin theme but {} provides a theme "
-                "with the same name".format(theme.name, theme.dist.key))
-
+                f"The theme '{theme.name}' is a builtin theme but the package '{theme.dist.name}' "
+                "attempts to provide a theme with the same name."
+            )
         elif theme.name in themes:
-            multiple_packages = [themes[theme.name].dist.key, theme.dist.key]
-            log.warning("The theme %s is provided by the Python packages "
-                        "'%s'. The one in %s will be used.",
-                        theme.name, ','.join(multiple_packages), theme.dist.key)
+            log.warning(
+                f"A theme named '{theme.name}' is provided by the Python packages '{theme.dist.name}'"
+                f"and '{themes[theme.name].dist.name}'. The one in '{theme.dist.name}' will be used."
+            )
 
         themes[theme.name] = theme
 
