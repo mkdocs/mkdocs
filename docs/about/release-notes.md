@@ -124,6 +124,7 @@ instance of the configuration is unique (#2289).
 * Updated highlight.js to 10.5.0. See #2313.
 * Bugfix: Search plugin now works with Japanese language. See #2178.
 * Documentation has been refactored (#1629).
+* Restore styling of tables in the `readthedocs` theme (#2028).
 
 ## Version 1.1.2 (2020-05-14)
 
