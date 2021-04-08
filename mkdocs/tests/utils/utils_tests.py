@@ -60,6 +60,63 @@ class UtilsTests(unittest.TestCase):
             is_html = utils.is_html_file(path)
             self.assertEqual(is_html, expected_result)
 
+    def test_get_relative_url(self):
+        expected_results = {
+            ('foo/bar', 'foo'): 'bar',
+            ('foo/bar.txt', 'foo'): 'bar.txt',
+            ('foo', 'foo/bar'): '..',
+            ('foo', 'foo/bar.txt'): '.',
+            ('foo/../../bar', '.'): 'bar',
+            ('foo/../../bar', 'foo'): '../bar',
+            ('foo//./bar/baz', 'foo/bar/baz'): '.',
+            ('a/b/.././../c', '.'): 'c',
+            ('a/b/c/d/ee', 'a/b/c/d/e'): '../ee',
+            ('a/b/c/d/ee', 'a/b/z/d/e'): '../../../c/d/ee',
+            ('foo', 'bar.'): 'foo',
+            ('foo', 'bar./'): '../foo',
+            ('foo', 'foo/bar./'): '..',
+            ('foo', 'foo/bar./.'): '..',
+            ('foo', 'foo/bar././'): '..',
+            ('foo/', 'foo/bar././'): '../',
+            ('foo', 'foo'): '.',
+            ('.foo', '.foo'): '.foo',
+            ('.foo/', '.foo'): '.foo/',
+            ('.foo', '.foo/'): '.',
+            ('.foo/', '.foo/'): './',
+            ('///', ''): './',
+            ('a///', ''): 'a/',
+            ('a///', 'a'): './',
+            ('.', 'here'): '..',
+            ('..', 'here'): '..',
+            ('../..', 'here'): '..',
+            ('../../a', 'here'): '../a',
+            ('..', 'here.txt'): '.',
+            ('a', ''): 'a',
+            ('a', '..'): 'a',
+            ('a', 'b'): '../a',
+            ('a', 'b/..'): '../a',  # The dots are considered a file. Documenting a long-standing bug.
+            ('a', 'b/../..'): 'a',
+            ('a/..../b', 'a/../b'): '../a/..../b',
+            ('a/я/b', 'a/я/c'): '../b',
+            ('a/я/b', 'a/яя/c'): '../../я/b',
+        }
+        for (url, other), expected_result in expected_results.items():
+            # Leading slash intentionally ignored
+            self.assertEqual(utils.get_relative_url(url, other), expected_result)
+            self.assertEqual(utils.get_relative_url('/' + url, other), expected_result)
+            self.assertEqual(utils.get_relative_url(url, '/' + other), expected_result)
+            self.assertEqual(utils.get_relative_url('/' + url, '/' + other), expected_result)
+
+    def test_get_relative_url_empty(self):
+        for url in ['', '.', '/.']:
+            for other in ['', '.', '/', '/.']:
+                self.assertEqual(utils.get_relative_url(url, other), '.')
+
+        self.assertEqual(utils.get_relative_url('/', ''), './')
+        self.assertEqual(utils.get_relative_url('/', '/'), './')
+        self.assertEqual(utils.get_relative_url('/', '.'), './')
+        self.assertEqual(utils.get_relative_url('/', '/.'), './')
+
     def test_create_media_urls(self):
 
         expected_results = {
@@ -194,17 +251,17 @@ class UtilsTests(unittest.TestCase):
             sorted(utils.get_theme_names()),
             ['mkdocs', 'readthedocs'])
 
-    @mock.patch('pkg_resources.iter_entry_points', autospec=True)
+    @mock.patch('importlib_metadata.entry_points', autospec=True)
     def test_get_theme_dir(self, mock_iter):
 
         path = 'some/path'
 
         theme = mock.Mock()
         theme.name = 'mkdocs2'
-        theme.dist.key = 'mkdocs2'
+        theme.dist.name = 'mkdocs2'
         theme.load().__file__ = os.path.join(path, '__init__.py')
 
-        mock_iter.return_value = iter([theme])
+        mock_iter.return_value = [theme]
 
         self.assertEqual(utils.get_theme_dir(theme.name), os.path.abspath(path))
 
@@ -212,53 +269,51 @@ class UtilsTests(unittest.TestCase):
 
         self.assertRaises(KeyError, utils.get_theme_dir, 'nonexistanttheme')
 
-    @mock.patch('pkg_resources.iter_entry_points', autospec=True)
+    @mock.patch('importlib_metadata.entry_points', autospec=True)
     def test_get_theme_dir_importerror(self, mock_iter):
 
         theme = mock.Mock()
         theme.name = 'mkdocs2'
-        theme.dist.key = 'mkdocs2'
+        theme.dist.name = 'mkdocs2'
         theme.load.side_effect = ImportError()
 
-        mock_iter.return_value = iter([theme])
+        mock_iter.return_value = [theme]
 
         self.assertRaises(ImportError, utils.get_theme_dir, theme.name)
 
-    @mock.patch('pkg_resources.iter_entry_points', autospec=True)
+    @mock.patch('importlib_metadata.entry_points', autospec=True)
     def test_get_themes_warning(self, mock_iter):
 
         theme1 = mock.Mock()
         theme1.name = 'mkdocs2'
-        theme1.dist.key = 'mkdocs2'
+        theme1.dist.name = 'mkdocs2'
         theme1.load().__file__ = "some/path1"
 
         theme2 = mock.Mock()
         theme2.name = 'mkdocs2'
-        theme2.dist.key = 'mkdocs3'
+        theme2.dist.name = 'mkdocs3'
         theme2.load().__file__ = "some/path2"
 
-        mock_iter.return_value = iter([theme1, theme2])
+        mock_iter.return_value = [theme1, theme2]
 
         self.assertEqual(
             sorted(utils.get_theme_names()),
             sorted(['mkdocs2', ]))
 
-    @mock.patch('pkg_resources.iter_entry_points', autospec=True)
-    @mock.patch('pkg_resources.get_entry_map', autospec=True)
-    def test_get_themes_error(self, mock_get, mock_iter):
+    @mock.patch('importlib_metadata.entry_points', autospec=True)
+    def test_get_themes_error(self, mock_iter):
 
         theme1 = mock.Mock()
         theme1.name = 'mkdocs'
-        theme1.dist.key = 'mkdocs'
+        theme1.dist.name = 'mkdocs'
         theme1.load().__file__ = "some/path1"
 
         theme2 = mock.Mock()
         theme2.name = 'mkdocs'
-        theme2.dist.key = 'mkdocs2'
+        theme2.dist.name = 'mkdocs2'
         theme2.load().__file__ = "some/path2"
 
-        mock_iter.return_value = iter([theme1, theme2])
-        mock_get.return_value = {'mkdocs': theme1, }
+        mock_iter.return_value = [theme1, theme2]
 
         self.assertRaises(exceptions.ConfigurationError, utils.get_theme_names)
 

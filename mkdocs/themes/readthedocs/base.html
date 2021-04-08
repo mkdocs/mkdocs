@@ -142,6 +142,7 @@
 
   {%- block scripts %}
     <script>var base_url = '{{ base_url }}';</script>
+    <script src="{{ 'js/theme_extra.js'|url }}" defer></script>
     <script src="{{ 'js/theme.js'|url }}" defer></script>
     {%- for path in config['extra_javascript'] %}
       <script src="{{ path|url }}" defer></script>

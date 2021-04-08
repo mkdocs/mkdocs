@@ -12,5 +12,8 @@
   "MD007": { "indent": 4 },
 
   // Exclude code block style
-  "MD046": false
+  "MD046": false,
+
+  // Allow inline HTML
+  "MD033": false
 }

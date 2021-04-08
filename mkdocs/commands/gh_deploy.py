@@ -2,7 +2,7 @@ import logging
 import subprocess
 import os
 import re
-from pkg_resources import parse_version
+from packaging import version
 
 import mkdocs
 import ghp_import
@@ -65,20 +65,20 @@ def _check_version(branch):
     stdout, _ = proc.communicate()
     msg = stdout.decode('utf-8').strip()
     m = re.search(r'\d+(\.\d+)+((a|b|rc)\d+)?(\.post\d+)?(\.dev\d+)?', msg, re.X | re.I)
-    previousv = parse_version(m.group()) if m else None
-    currentv = parse_version(mkdocs.__version__)
+    previousv = version.parse(m.group()) if m else None
+    currentv = version.parse(mkdocs.__version__)
     if not previousv:
         log.warning('Version check skipped: No version specified in previous deployment.')
     elif currentv > previousv:
         log.info(
-            'Previous deployment was done with MkDocs version {}; '
-            'you are deploying with a newer version ({})'.format(previousv, currentv)
+            f'Previous deployment was done with MkDocs version {previousv}; '
+            f'you are deploying with a newer version ({currentv})'
         )
     elif currentv < previousv:
         log.error(
-            'Deployment terminated: Previous deployment was made with MkDocs version {}; '
-            'you are attempting to deploy with an older version ({}). Use --ignore-version '
-            'to deploy anyway.'.format(previousv, currentv)
+            f'Deployment terminated: Previous deployment was made with MkDocs version {previousv}; '
+            f'you are attempting to deploy with an older version ({currentv}). Use --ignore-version '
+            'to deploy anyway.'
         )
         raise SystemExit(1)
 

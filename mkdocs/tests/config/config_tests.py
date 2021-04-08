@@ -8,6 +8,7 @@ from tempfile import TemporaryDirectory
 import mkdocs
 from mkdocs import config
 from mkdocs.config import config_options
+from mkdocs.config import defaults
 from mkdocs.exceptions import ConfigurationError
 from mkdocs.tests.base import dedent
 
@@ -20,7 +21,7 @@ class ConfigTests(unittest.TestCase):
         self.assertRaises(ConfigurationError, load_missing_config)
 
     def test_missing_site_name(self):
-        c = config.Config(schema=config.DEFAULT_SCHEMA)
+        c = config.Config(schema=defaults.get_schema())
         c.load_dict({})
         errors, warnings = c.validate()
         self.assertEqual(len(errors), 1)
@@ -207,7 +208,7 @@ class ConfigTests(unittest.TestCase):
                 self.assertEqual({k: c['theme'][k] for k in iter(c['theme'])}, result['vars'])
 
     def test_empty_nav(self):
-        conf = config.Config(schema=config.DEFAULT_SCHEMA)
+        conf = config.Config(schema=defaults.get_schema())
         conf.load_dict({
             'site_name': 'Example',
             'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
@@ -217,7 +218,7 @@ class ConfigTests(unittest.TestCase):
 
     def test_copy_pages_to_nav(self):
         # TODO: remove this when pages config setting is fully deprecated.
-        conf = config.Config(schema=config.DEFAULT_SCHEMA)
+        conf = config.Config(schema=defaults.get_schema())
         conf.load_dict({
             'site_name': 'Example',
             'pages': ['index.md', 'about.md'],
@@ -228,7 +229,7 @@ class ConfigTests(unittest.TestCase):
 
     def test_dont_overwrite_nav_with_pages(self):
         # TODO: remove this when pages config setting is fully deprecated.
-        conf = config.Config(schema=config.DEFAULT_SCHEMA)
+        conf = config.Config(schema=defaults.get_schema())
         conf.load_dict({
             'site_name': 'Example',
             'pages': ['index.md', 'about.md'],
@@ -272,3 +273,19 @@ class ConfigTests(unittest.TestCase):
 
             self.assertEqual(len(errors), 1)
             self.assertEqual(warnings, [])
+
+    def testConfigInstancesUnique(self):
+        conf = mkdocs.config.Config(mkdocs.config.defaults.get_schema())
+        conf.load_dict({'site_name': 'foo'})
+        conf.validate()
+        self.assertIsNone(conf['mdx_configs'].get('toc'))
+
+        conf = mkdocs.config.Config(mkdocs.config.defaults.get_schema())
+        conf.load_dict({'site_name': 'foo', 'markdown_extensions': [{"toc": {"permalink": "aaa"}}]})
+        conf.validate()
+        self.assertEqual(conf['mdx_configs'].get('toc'), {'permalink': 'aaa'})
+
+        conf = mkdocs.config.Config(mkdocs.config.defaults.get_schema())
+        conf.load_dict({'site_name': 'foo'})
+        conf.validate()
+        self.assertIsNone(conf['mdx_configs'].get('toc'))

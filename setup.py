@@ -21,12 +21,8 @@ try:
 except ImportError:
     babel_classes = {}
 
-long_description = (
-    "MkDocs is a fast, simple and downright gorgeous static site generator "
-    "that's geared towards building project documentation. Documentation "
-    "source files are written in Markdown, and configured with a single YAML "
-    "configuration file."
-)
+with open('README.md') as f:
+    long_description = f.read()
 
 
 def get_version(package):
@@ -70,6 +66,7 @@ setup(
     license='BSD',
     description='Project documentation with Markdown.',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     author='Tom Christie',
     author_email='tom@tomchristie.com',  # SEE NOTE BELOW (*)
     packages=get_packages("mkdocs"),
@@ -83,7 +80,9 @@ setup(
         'PyYAML>=3.10',
         'tornado>=5.0',
         'ghp-import>=1.0',
-        'pyyaml_env_tag>=0.1'
+        'pyyaml_env_tag>=0.1',
+        'importlib_metadata>=3.10',
+        'packaging>=20.5'
     ],
     extras_require={"i18n": ['babel>=2.9.0']},
     python_requires='>=3.6',
