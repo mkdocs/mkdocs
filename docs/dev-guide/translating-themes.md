@@ -1,6 +1,6 @@
-# MkDocs themes translation
+# Translating themes
 
-How to add a locale translation to MkDocs built-in themes.
+Theme localization guide.
 
 ---
 
@@ -19,7 +19,7 @@ pip install mkdocs[i18n]
 
 [babel]: http://babel.pocoo.org/en/latest/cmdline.html
 
-## Contributing a new theme translation
+## Adding language translations to themes
 
 If your favorite language locale is not supported yet on the `mkdocs` and
 `readthedocs` built-in themes, you can easily contribute it to the project by
@@ -28,14 +28,14 @@ following the steps below.
 Here is a quick recap of what you'll have to do:
 
 1. [Initialize new localization catalogs](#initializing-the-localization-catalogs)
-for your language (if a translation for your locale already exists,
-follow the [updating theme localization files](#updating-theme-localization-files)
+for your language (if a translation for your locale already exists, follow the
+[updating theme localization files](/user-guide/custom-themes/#localizing-themes)
 instead)
 2. [Add a translation](#translating-the-mkdocs-themes) for every text placeholder
 in the localized catalogs
 3. [Serve and test locally](#testing-themes-translations) the translated themes
 for your language
-4. [Contribute your translation](#contributing-your-translations) through a
+4. [Contribute your translation](#contributing-translations) through a
 Pull Request
 
 ### Initializing the localization catalogs
@@ -90,7 +90,7 @@ to refresh the translatable text placeholders of each theme
 placeholders on every `messages.po` catalog file language you can
 3. [Serve and test locally](#testing-themes-translations) the translated themes
 for your language
-4. [Contribute your updated translations](#contributing-your-translations)
+4. [Contribute your updated translations](#contributing-translations)
 through a Pull Request
 
 ### Updating the translation catalogs
@@ -179,9 +179,7 @@ And run `mkdocs serve` to check out your new localized version of the theme.
     all locales to end users so you only have to worry about contributing the
     actual text translation `messages.po` files (the rest is git ignored).
 
-### Contributing your translations
+## Contributing translations
 
-It's now time for you to [contribute your nice work to the project][contribute],
-thank you!
-
-[contribute]: contributing.md
+It's now time for you to [contribute your nice work to the
+project](../about/contributing.md), thank you!

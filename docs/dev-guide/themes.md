@@ -716,7 +716,7 @@ files
 
 !!! note
     This will allow translation contributors to propose the translations needed
-    for their preferred language [using this guide](/about/themes-translation#updating-the-translation-catalogs).
+    for their preferred language [using this guide](../dev-guide/translating-themes.md).
 
 ### Extracting translatable texts from themes
 

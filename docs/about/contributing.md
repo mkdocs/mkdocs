@@ -75,4 +75,4 @@ most likely need to have tests and documentation if it is a new feature.
 [tox]: https://tox.readthedocs.io/en/latest/
 [travis]: https://travis-ci.org/repositories
 [PyPA Code of Conduct]: https://www.pypa.io/en/latest/code-of-conduct/
-[themes-translation]: themes-translation.md
+[themes-translation]: ../dev-guide/translating-themes.md

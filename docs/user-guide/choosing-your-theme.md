@@ -77,6 +77,10 @@ supports the following options:
             name: mkdocs
             nav_style: dark
 
+* __`locale`__: The ISO-639-1 (2-letter) language locale used to build your
+theme. If your language is not supported yet, it will fallback to English.
+Default: `en`.
+
 ## readthedocs
 
 A clone of the default theme used by the [Read the Docs] service, which offers
@@ -121,6 +125,10 @@ theme supports the following options:
 
 * __`sticky_navigation`__: If True, causes the sidebar to scroll with the main
   page content as you scroll the page. Default: `True`.
+
+* __`locale`__: The ISO-639-1 (2-letter) language locale used to build your
+theme. If your language is not supported yet, it will fallback to English.
+Default: `en`.
 
 ## Third Party Themes
 
