@@ -114,12 +114,14 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
     """
 
     # Any builds triggered when `build_running` is True are ignored.
+    global build_running
     build_running = False
 
     # Create a temporary build directory, and set some options to serve it
     site_dir = tempfile.mkdtemp(prefix='mkdocs_')
 
     def builder():
+        global build_running
         if build_running:
             # A build is already running. Don't start another.
             return
