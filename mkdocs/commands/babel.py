@@ -1,8 +1,9 @@
 from distutils.errors import DistutilsOptionError
 from pathlib import Path
 
-from babel.messages import frontend as babel
+from mkdocs import __version__
 
+from babel.messages import frontend as babel
 
 VALID_THEMES = [
     d.name for d in Path("mkdocs/themes/").iterdir() if d.is_dir() and d.name[0] != "_"
@@ -35,10 +36,11 @@ class extract_messages(babel.extract_messages):
     def initialize_options(self):
         super().initialize_options()
         self.copyright_holder = "MkDocs"
-        self.msgid_bugs_address = "github@mkdocs.org"
+        self.msgid_bugs_address = "https://github.com/mkdocs/mkdocs/issues"
         self.no_wrap = True
         self.project = "MkDocs"
         self.theme = None
+        self.version = ".".join([i for i in __version__.split(".") if "dev" not in i])
 
     def finalize_options(self):
         if self.theme not in VALID_THEMES:

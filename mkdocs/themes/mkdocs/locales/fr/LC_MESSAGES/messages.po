@@ -1,17 +1,15 @@
 # French translations for MkDocs.
 # Copyright (C) 2021 MkDocs
 # This file is distributed under the same license as the MkDocs project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-02-28 21:37+0100\n"
+"Project-Id-Version: MkDocs 1.2\n"
+"Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
+"POT-Creation-Date: 2021-04-08 22:46+0200\n"
 "PO-Revision-Date: 2021-02-23 23:56+0100\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: Alexys Jacob @ultrabug\n"
 "Language: fr\n"
-"Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
