@@ -48,7 +48,7 @@ def _get_handler(site_dir, StaticFileHandler):
     return WebHandler
 
 
-def _livereload(host, port, config, builder, site_dir, watch_theme, delay):
+def _livereload(host, port, config, builder, site_dir, watch_theme):
 
     # We are importing here for anyone that has issues with livereload. Even if
     # this fails, the --no-livereload alternative should still work.
@@ -66,17 +66,17 @@ def _livereload(host, port, config, builder, site_dir, watch_theme, delay):
     server = LiveReloadServer()
 
     # Watch the documentation files, the config file and the theme files.
-    server.watch(config['docs_dir'], builder, delay=delay)
-    server.watch(config['config_file_path'], builder, delay=delay)
+    server.watch(config['docs_dir'], builder)
+    server.watch(config['config_file_path'], builder)
 
     if watch_theme:
         for d in config['theme'].dirs:
-            server.watch(d, builder, delay=delay)
+            server.watch(d, builder)
 
     # Run `serve` plugin events.
     server = config['plugins'].run_event('serve', server, config=config, builder=builder)
 
-    server.serve(root=site_dir, host=host, port=port, restart_delay=delay)
+    server.serve(root=site_dir, host=host, port=port, restart_delay=0)
 
 
 def _static_server(host, port, site_dir):
@@ -104,7 +104,7 @@ def _static_server(host, port, site_dir):
 
 
 def serve(config_file=None, dev_addr=None, strict=None, theme=None,
-          theme_dir=None, livereload='livereload', watch_theme=False, wait=0, **kwargs):
+          theme_dir=None, livereload='livereload', watch_theme=False, **kwargs):
     """
     Start the MkDocs development server
 
@@ -144,7 +144,7 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
         host, port = config['dev_addr']
 
         if livereload in ['livereload', 'dirty']:
-            _livereload(host, port, config, builder, site_dir, watch_theme, delay=wait)
+            _livereload(host, port, config, builder, site_dir, watch_theme)
         else:
             _static_server(host, port, site_dir)
     finally:

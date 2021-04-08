@@ -39,15 +39,6 @@ otherkey: !ENV [VAR_NAME, FALLBACK_VAR, 'default value']
 See [Environment Variables](../user-guide/configuration.md#environment-variables)
 in the Configuration documentation for details.
 
-#### A `--wait` flag has been added to the `serve` command (#2061)
-
-To delay a rebuild of the site when using the livereload server, use the
-`--wait` flag to specify the number of seconds to wait.
-
-```bash
-mkdocs serve --wait 60
-```
-
 #### Update `gh-deploy` command (#2170)
 
 The vendored (and modified) copy of ghp_import has been replaced with a
