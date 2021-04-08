@@ -32,7 +32,7 @@ the `theme.locale` parameter that will default to `en` (English). The other
 supported language in this release is `fr` (French).
 
 Translation contributions are welcome and detailed in the [dedicated
-documentation](themes-translation.md).
+documentation](../dev-guide/translating-themes.md).
 
 #### Support added for Environment Variables in the configuration file (#1954)
 
