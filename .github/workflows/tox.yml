@@ -104,7 +104,7 @@ jobs:
         run: |
           python setup.py extract_messages -t mkdocs
           python setup.py extract_messages -t readthedocs
-          git diff --ignore-matching-lines 'POT-Creation-Date' --ignore-matching-lines 'Project-Id-Version' --exit-code
+          git diff --ignore-matching-lines 'POT-Creation-Date' --ignore-matching-lines 'Project-Id-Version' --ignore-matching-lines 'Last-Translator' --ignore-matching-lines 'Language-Team' --ignore-matching-lines 'FIRST AUTHOR' --exit-code
         shell: bash
       - id: files
         uses: jitterbit/get-changed-files@v1
@@ -116,7 +116,7 @@ jobs:
             echo "inspecting changed file: ${changed_file}";
             if [[ "${changed_file}" == "mkdocs/__init__.py" ]]; then
               echo "mkdocs version changed!";
-              git diff --ignore-matching-lines 'POT-Creation-Date' --ignore-matching-lines 'Project-Id-Version' --exit-code;
+              git diff git diff --ignore-matching-lines 'POT-Creation-Date' --ignore-matching-lines 'Project-Id-Version' --ignore-matching-lines 'Last-Translator' --ignore-matching-lines 'Language-Team' --ignore-matching-lines 'FIRST AUTHOR'--ignore-matching-lines 'POT-Creation-Date' --ignore-matching-lines 'Project-Id-Version' --exit-code;
             fi
           done
         shell: bash
