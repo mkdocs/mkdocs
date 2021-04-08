@@ -17,6 +17,10 @@ Make sure translation requirements are installed in your environment:
 pip install mkdocs[i18n]
 ```
 
+!!! note
+    Translation locales follow the [ISO-639-1](https://en.wikipedia.org/wiki/ISO_639-1)
+    (2-letter) language codes to follow the HTML 5 *lang* attribute.
+
 [babel]: http://babel.pocoo.org/en/latest/cmdline.html
 
 ## Adding language translations to themes
