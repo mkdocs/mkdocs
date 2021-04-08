@@ -113,29 +113,37 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
     whenever a file is edited.
     """
 
+    # Any builds triggered when `build_running` is True are ignored.
+    build_running = False
+
     # Create a temporary build directory, and set some options to serve it
-    # PY2 returns a byte string by default. The Unicode prefix ensures a Unicode
-    # string is returned. And it makes MkDocs temp dirs easier to identify.
     site_dir = tempfile.mkdtemp(prefix='mkdocs_')
 
     def builder():
-        log.info("Building documentation...")
-        config = load_config(
-            config_file=config_file,
-            dev_addr=dev_addr,
-            strict=strict,
-            theme=theme,
-            theme_dir=theme_dir,
-            site_dir=site_dir,
-            **kwargs
-        )
-        # Override a few config settings after validation
-        config['site_url'] = 'http://{}/'.format(config['dev_addr'])
+        if build_running:
+            # A build is already running. Don't start another.
+            return
+        build_running = True
+        try:
+            log.info("Building documentation...")
+            config = load_config(
+                config_file=config_file,
+                dev_addr=dev_addr,
+                strict=strict,
+                theme=theme,
+                theme_dir=theme_dir,
+                site_dir=site_dir,
+                **kwargs
+            )
+            # Override a few config settings after validation
+            config['site_url'] = 'http://{}/'.format(config['dev_addr'])
 
-        live_server = livereload in ['dirty', 'livereload']
-        dirty = livereload == 'dirty'
-        build(config, live_server=live_server, dirty=dirty)
-        return config
+            live_server = livereload in ['dirty', 'livereload']
+            dirty = livereload == 'dirty'
+            build(config, live_server=live_server, dirty=dirty)
+            return config
+        finally:
+            build_running = False
 
     try:
         # Perform the initial build

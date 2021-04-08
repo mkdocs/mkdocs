@@ -116,6 +116,7 @@ instance of the configuration is unique (#2289).
 * Bugfix: Search plugin now works with Japanese language. See #2178.
 * Documentation has been refactored (#1629).
 * Restore styling of tables in the `readthedocs` theme (#2028).
+* Ensure only one build runs at a time (#2061 and #2285).
 
 ## Version 1.1.2 (2020-05-14)
 
