@@ -109,6 +109,8 @@ instance of the configuration is unique (#2289).
   filtering for sections (#2203).
 * Official support for Python 3.9 has been added and support for Python 3.5
   has been dropped.
+* Bugfix: Fixes an issue that would result in a partially cut-off navigation
+  item in the ReadTheDocs theme (#2297).
 * Structure Files object now has a `remove` method to help plugin developers
   manipulate the Files tree. The corresponding `src_paths` has become a
   property to accomodate this possible dynamic behavior. See #2305.
