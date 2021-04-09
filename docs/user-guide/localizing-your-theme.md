@@ -35,6 +35,9 @@ For example, to build the `mkdocs` theme in French you would use:
          name: mkdocs
          locale: fr
 
+Changing the theme's `locale` will change the HTML's `lang` attribute to the
+chosen locale automatically.
+
 ## Contributing theme translations
 
 If your theme has not been translated for your language yet, feel free to
