@@ -59,7 +59,9 @@ setup(
         'PyYAML>=3.10',
         'tornado>=5.0',
         'ghp-import>=1.0',
-        'pyyaml_env_tag>=0.1'
+        'pyyaml_env_tag>=0.1',
+        'importlib_metadata>=3.10',
+        'packaging>=20.5'
     ],
     python_requires='>=3.6',
     entry_points={

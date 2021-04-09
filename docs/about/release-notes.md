@@ -39,15 +39,6 @@ otherkey: !ENV [VAR_NAME, FALLBACK_VAR, 'default value']
 See [Environment Variables](../user-guide/configuration.md#environment-variables)
 in the Configuration documentation for details.
 
-#### A `--wait` flag has been added to the `serve` command (#2061)
-
-To delay a rebuild of the site when using the livereload server, use the
-`--wait` flag to specify the number of seconds to wait.
-
-```bash
-mkdocs serve --wait 60
-```
-
 #### Update `gh-deploy` command (#2170)
 
 The vendored (and modified) copy of ghp_import has been replaced with a
@@ -108,6 +99,10 @@ option. (#2092).
 The `mkdocs` theme now removes the sidebar when printing a page. This frees
 up horizontal space for better rendering of content like tables (#2193).
 
+The `mkdocs.config.DEFAULT_SCHEMA` global variable has been replaced with the
+function `mkdocs.config.defaults.get_schema()`, which ensures that each
+instance of the configuration is unique (#2289).
+
 ### Other Changes and Additions to Version 1.2
 
 * Bugfix: Properly process navigation child items in `_get_by_type` when
@@ -122,6 +117,7 @@ up horizontal space for better rendering of content like tables (#2193).
 * Updated highlight.js to 10.5.0. See #2313.
 * Bugfix: Search plugin now works with Japanese language. See #2178.
 * Documentation has been refactored (#1629).
+* Restore styling of tables in the `readthedocs` theme (#2028).
 
 ## Version 1.1.2 (2020-05-14)
 
