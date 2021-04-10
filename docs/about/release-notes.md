@@ -118,6 +118,7 @@ instance of the configuration is unique (#2289).
 * Bugfix: Search plugin now works with Japanese language. See #2178.
 * Documentation has been refactored (#1629).
 * Restore styling of tables in the `readthedocs` theme (#2028).
+* The `lunr` dependency has been updated to 0.5.9, and `lunr.js` to the corresponding 2.3.9 version
 
 ## Version 1.1.2 (2020-05-14)
 
