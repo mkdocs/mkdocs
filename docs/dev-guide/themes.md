@@ -262,11 +262,10 @@ was updated.
 
 #### pages
 
-A list of [page](#page) objects including *all* pages in the project. The list
-is a flat list with all pages sorted alphanumerically by directory and file
-name. Note that index pages sort to the top within a directory. This list can
+A flat list of `File` objects for *all* pages in the project. This list can
 contain pages not included in the global [navigation](#nav) and may not match
-the order of pages within that navigation.
+the order of pages within that navigation. The [page](#page) object for each
+`File` can be accessed from `file.page`.
 
 #### page
 
