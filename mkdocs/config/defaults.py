@@ -24,7 +24,7 @@ def get_schema():
         ('pages', config_options.Nav()),
 
         # The full URL to where the documentation will be hosted
-        ('site_url', config_options.URL()),
+        ('site_url', config_options.URL(is_dir=True)),
 
         # A description for the documentation project that will be added to the
         # HTML meta tags.
