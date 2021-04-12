@@ -15,6 +15,7 @@ import fnmatch
 import posixpath
 import functools
 import importlib_metadata
+from collections import defaultdict
 from datetime import datetime, timezone
 from urllib.parse import urlparse
 from yaml_env_tag import construct_env_tag
@@ -422,15 +423,22 @@ def nest_paths(paths):
     return nested
 
 
-class WarningFilter(logging.Filter):
-    """ Counts all WARNING level log messages. """
-    count = 0
+class CountHandler(logging.NullHandler):
+    """ Counts all logged messages >= level. """
 
-    def filter(self, record):
-        if record.levelno == logging.WARNING:
-            self.count += 1
-        return True
+    def __init__(self, **kwargs):
+        self.counts = defaultdict(int)
+        super().__init__(**kwargs)
 
+    def handle(self, record):
+        rv = self.filter(record)
+        if rv:
+            # Use levelno for keys so they can be sorted later
+            self.counts[record.levelno] += 1
+        return rv
+
+    def get_counts(self):
+        return [(logging.getLevelName(k), v) for k, v in sorted(self.counts.items(), reverse=True)]
 
 # A global instance to use throughout package
-warning_filter = WarningFilter()
+log_counter = CountHandler()

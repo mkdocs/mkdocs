@@ -218,7 +218,9 @@ class CLITests(unittest.TestCase):
             site_dir=None
         )
         logger = logging.getLogger('mkdocs')
-        self.assertEqual(logger.level, logging.INFO)
+        for handler in logger.handlers:
+            if isinstance(handler, logging.StreamHandler):
+                self.assertEqual(handler.level, logging.INFO)
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
     @mock.patch('mkdocs.commands.build.build', autospec=True)
@@ -356,7 +358,9 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(mock_build.call_count, 1)
         logger = logging.getLogger('mkdocs')
-        self.assertEqual(logger.level, logging.DEBUG)
+        for handler in logger.handlers:
+            if isinstance(handler, logging.StreamHandler):
+                self.assertEqual(handler.level, logging.DEBUG)
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
     @mock.patch('mkdocs.commands.build.build', autospec=True)
@@ -368,7 +372,9 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(mock_build.call_count, 1)
         logger = logging.getLogger('mkdocs')
-        self.assertEqual(logger.level, logging.ERROR)
+        for handler in logger.handlers:
+            if isinstance(handler, logging.StreamHandler):
+                self.assertEqual(handler.level, logging.ERROR)
 
     @mock.patch('mkdocs.commands.new.new', autospec=True)
     def test_new(self, mock_new):

@@ -19,13 +19,20 @@ class State:
 
     def __init__(self, log_name='mkdocs', level=logging.INFO):
         self.logger = logging.getLogger(log_name)
+        # Don't restrict level on logger; use handler
+        self.logger.setLevel(1)
         self.logger.propagate = False
-        stream = logging.StreamHandler()
-        formatter = logging.Formatter("%(levelname)-7s -  %(message)s ")
-        stream.setFormatter(formatter)
-        self.logger.addHandler(stream)
 
-        self.logger.setLevel(level)
+        self.stream = logging.StreamHandler()
+        formatter = logging.Formatter("%(levelname)-7s -  %(message)s ")
+        self.stream.setFormatter(formatter)
+        self.stream.setLevel(level)
+        self.logger.addHandler(self.stream)
+
+        # Add CountHandler for strict mode
+        self.counter = utils.log_counter
+        self.counter.setLevel(logging.WARNING)
+        self.logger.addHandler(self.counter)
 
 
 pass_state = click.make_pass_decorator(State, ensure=True)
@@ -69,7 +76,7 @@ def verbose_option(f):
     def callback(ctx, param, value):
         state = ctx.ensure_object(State)
         if value:
-            state.logger.setLevel(logging.DEBUG)
+            state.stream.setLevel(logging.DEBUG)
     return click.option('-v', '--verbose',
                         is_flag=True,
                         expose_value=False,
@@ -81,7 +88,7 @@ def quiet_option(f):
     def callback(ctx, param, value):
         state = ctx.ensure_object(State)
         if value:
-            state.logger.setLevel(logging.ERROR)
+            state.stream.setLevel(logging.ERROR)
     return click.option('-q', '--quiet',
                         is_flag=True,
                         expose_value=False,
