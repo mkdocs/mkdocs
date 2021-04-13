@@ -24,7 +24,7 @@ class State:
         self.logger.propagate = False
 
         self.stream = logging.StreamHandler()
-        formatter = logging.Formatter("%(levelname)-7s -  %(message)s ")
+        formatter = logging.Formatter("{levelname:<7} -  {message} ", style='{')
         self.stream.setFormatter(formatter)
         self.stream.setLevel(level)
         self.stream.name = 'MkDocsStreamHandler'
