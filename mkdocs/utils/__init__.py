@@ -440,5 +440,6 @@ class CountHandler(logging.NullHandler):
     def get_counts(self):
         return [(logging.getLevelName(k), v) for k, v in sorted(self.counts.items(), reverse=True)]
 
+
 # A global instance to use throughout package
 log_counter = CountHandler()

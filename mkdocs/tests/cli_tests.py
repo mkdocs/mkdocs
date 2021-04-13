@@ -217,10 +217,8 @@ class CLITests(unittest.TestCase):
             use_directory_urls=None,
             site_dir=None
         )
-        logger = logging.getLogger('mkdocs')
-        for handler in logger.handlers:
-            if isinstance(handler, logging.StreamHandler):
-                self.assertEqual(handler.level, logging.INFO)
+        handler = logging._handlers.get('MkDocsStreamHandler')
+        self.assertEqual(handler.level, logging.INFO)
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
     @mock.patch('mkdocs.commands.build.build', autospec=True)
@@ -357,10 +355,8 @@ class CLITests(unittest.TestCase):
 
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(mock_build.call_count, 1)
-        logger = logging.getLogger('mkdocs')
-        for handler in logger.handlers:
-            if isinstance(handler, logging.StreamHandler):
-                self.assertEqual(handler.level, logging.DEBUG)
+        handler = logging._handlers.get('MkDocsStreamHandler')
+        self.assertEqual(handler.level, logging.DEBUG)
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
     @mock.patch('mkdocs.commands.build.build', autospec=True)
@@ -371,10 +367,8 @@ class CLITests(unittest.TestCase):
 
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(mock_build.call_count, 1)
-        logger = logging.getLogger('mkdocs')
-        for handler in logger.handlers:
-            if isinstance(handler, logging.StreamHandler):
-                self.assertEqual(handler.level, logging.ERROR)
+        handler = logging._handlers.get('MkDocsStreamHandler')
+        self.assertEqual(handler.level, logging.ERROR)
 
     @mock.patch('mkdocs.commands.new.new', autospec=True)
     def test_new(self, mock_new):

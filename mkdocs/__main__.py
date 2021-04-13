@@ -27,6 +27,7 @@ class State:
         formatter = logging.Formatter("%(levelname)-7s -  %(message)s ")
         self.stream.setFormatter(formatter)
         self.stream.setLevel(level)
+        self.stream.name = 'MkDocsStreamHandler'
         self.logger.addHandler(self.stream)
 
         # Add CountHandler for strict mode
