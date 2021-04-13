@@ -443,3 +443,8 @@ class CountHandler(logging.NullHandler):
 
 # A global instance to use throughout package
 log_counter = CountHandler()
+
+# For backward compatability as some plugins import it.
+# It is no longer nessecary as all messages on the
+# `mkdocs` logger get counted automaticaly.
+warning_filter = logging.Filter()
