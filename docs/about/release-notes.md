@@ -48,15 +48,6 @@ otherkey: !ENV [VAR_NAME, FALLBACK_VAR, 'default value']
 See [Environment Variables](../user-guide/configuration.md#environment-variables)
 in the Configuration documentation for details.
 
-#### A `--wait` flag has been added to the `serve` command (#2061)
-
-To delay a rebuild of the site when using the livereload server, use the
-`--wait` flag to specify the number of seconds to wait.
-
-```bash
-mkdocs serve --wait 60
-```
-
 #### Update `gh-deploy` command (#2170)
 
 The vendored (and modified) copy of ghp_import has been replaced with a
@@ -127,6 +118,8 @@ instance of the configuration is unique (#2289).
   filtering for sections (#2203).
 * Official support for Python 3.9 has been added and support for Python 3.5
   has been dropped.
+* Bugfix: Fixes an issue that would result in a partially cut-off navigation
+  item in the ReadTheDocs theme (#2297).
 * Structure Files object now has a `remove` method to help plugin developers
   manipulate the Files tree. The corresponding `src_paths` has become a
   property to accomodate this possible dynamic behavior. See #2305.
@@ -134,6 +127,10 @@ instance of the configuration is unique (#2289).
 * Bugfix: Search plugin now works with Japanese language. See #2178.
 * Documentation has been refactored (#1629).
 * Restore styling of tables in the `readthedocs` theme (#2028).
+* Ensure `site_url` ends with a slash (#1785).
+* Correct documentation of `pages` template context variable (#1736).
+* The `lunr` dependency has been updated to 0.5.9, and `lunr.js` to
+  the corresponding 2.3.9 version (#2306).
 
 ## Version 1.1.2 (2020-05-14)
 

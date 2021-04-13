@@ -1,7 +1,7 @@
 import os
 from collections import namedtuple
 from collections.abc import Sequence
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlunparse
 import ipaddress
 import markdown
 
@@ -269,7 +269,8 @@ class URL(OptionallyRequired):
     Validate a URL by requiring a scheme is present.
     """
 
-    def __init__(self, default='', required=False):
+    def __init__(self, default='', required=False, is_dir=False):
+        self.is_dir = is_dir
         super().__init__(default, required)
 
     def run_validation(self, value):
@@ -282,7 +283,9 @@ class URL(OptionallyRequired):
             raise ValidationError("Unable to parse the URL.")
 
         if parsed_url.scheme:
-            return value
+            if self.is_dir and not parsed_url.path.endswith('/'):
+                parsed_url = parsed_url._replace(path=f'{parsed_url.path}/')
+            return urlunparse(parsed_url)
 
         raise ValidationError(
             "The URL isn't valid, it should include the http:// (scheme)")
