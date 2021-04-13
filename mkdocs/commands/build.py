@@ -311,7 +311,7 @@ def build(config, live_server=False, dirty=False):
         counts = utils.log_counter.get_counts()
         if config['strict'] and len(counts):
             msg = ', '.join([f'{v} {k.lower()}s' for k, v in counts])
-            raise SystemExit(f'\nExited with {msg} in strict mode.')
+            raise SystemExit(f'\nAborted with {msg} in strict mode.')
 
         log.info('Documentation built in %.2f seconds', time() - start)
 
@@ -320,7 +320,7 @@ def build(config, live_server=False, dirty=False):
         config['plugins'].run_event('build_error', error=e)
         if isinstance(e, BuildError):
             log.error(str(e))
-            raise SystemExit('\nExited with a BuildError!')
+            raise SystemExit('\nAborted with a BuildError!')
         raise
 
 
