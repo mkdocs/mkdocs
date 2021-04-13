@@ -319,7 +319,8 @@ def build(config, live_server=False, dirty=False):
         # Run `build_error` plugin events.
         config['plugins'].run_event('build_error', error=e)
         if isinstance(e, BuildError):
-            raise SystemExit('\n' + str(e))
+            log.error(str(e))
+            raise SystemExit('\nExited with a BuildError!')
         raise
 
 

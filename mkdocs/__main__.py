@@ -4,6 +4,7 @@ import os
 import sys
 import logging
 import click
+import textwrap
 
 from mkdocs import __version__
 from mkdocs import utils
@@ -12,6 +13,33 @@ from mkdocs import config
 from mkdocs.commands import build, gh_deploy, new, serve
 
 log = logging.getLogger(__name__)
+
+
+class ColorFormatter(logging.Formatter):
+    colors = {
+        'CRITICAL': 'red',
+        'ERROR': 'red',
+        'WARNING': 'yellow',
+        'DEBUG': 'blue'
+    }
+
+    def format(self, record):
+        prefix = f'{record.levelname:<8} -  '
+        if record.levelname in self.colors:
+            prefix = click.style(prefix, fg=self.colors[record.levelname])
+        lines = textwrap.wrap(record.getMessage(), width=68)
+        lines[0] = prefix + lines[0]
+        msg = '\n            '.join(lines)
+        return msg
+
+
+class ClickHandler(logging.Handler):
+    def emit(self, record):
+        try:
+            msg = self.format(record)
+            click.echo(msg)
+        except Exception:
+            self.handleError(record)
 
 
 class State:
@@ -23,9 +51,8 @@ class State:
         self.logger.setLevel(1)
         self.logger.propagate = False
 
-        self.stream = logging.StreamHandler()
-        formatter = logging.Formatter("{levelname:<7} -  {message} ", style='{')
-        self.stream.setFormatter(formatter)
+        self.stream = ClickHandler()
+        self.stream.setFormatter(ColorFormatter())
         self.stream.setLevel(level)
         self.stream.name = 'MkDocsStreamHandler'
         self.logger.addHandler(self.stream)
