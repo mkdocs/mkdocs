@@ -7,7 +7,7 @@ from jinja2.exceptions import TemplateNotFound
 import jinja2
 
 from mkdocs import utils
-from mkdocs.exceptions import BuildError
+from mkdocs.exceptions import BuildError, Abort
 from mkdocs.structure.files import Files, get_files
 from mkdocs.structure.nav import get_navigation
 import mkdocs
@@ -311,7 +311,7 @@ def build(config, live_server=False, dirty=False):
         counts = utils.log_counter.get_counts()
         if config['strict'] and len(counts):
             msg = ', '.join([f'{v} {k.lower()}s' for k, v in counts])
-            raise SystemExit(f'\nAborted with {msg} in strict mode.')
+            raise Abort(f'\nAborted with {msg} in strict mode!')
 
         log.info('Documentation built in %.2f seconds', time() - start)
 
@@ -320,7 +320,7 @@ def build(config, live_server=False, dirty=False):
         config['plugins'].run_event('build_error', error=e)
         if isinstance(e, BuildError):
             log.error(str(e))
-            raise SystemExit('\nAborted with a BuildError!')
+            raise Abort('\nAborted with a BuildError!')
         raise
 
 

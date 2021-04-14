@@ -6,6 +6,7 @@ from packaging import version
 
 import mkdocs
 import ghp_import
+from mkdocs.exceptions import Abort
 
 log = logging.getLogger(__name__)
 
@@ -21,7 +22,7 @@ def _is_cwd_git_repo():
         )
     except FileNotFoundError:
         log.error("Could not find git - is it installed and on your path?")
-        raise SystemExit(1)
+        raise Abort('Deployment Aborted!')
     proc.communicate()
     return proc.wait() == 0
 
@@ -80,7 +81,7 @@ def _check_version(branch):
             f'you are attempting to deploy with an older version ({currentv}). Use --ignore-version '
             'to deploy anyway.'
         )
-        raise SystemExit(1)
+        raise Abort('Deployment Aborted!')
 
 
 def gh_deploy(config, message=None, force=False, ignore_version=False, shell=False):
@@ -115,7 +116,7 @@ def gh_deploy(config, message=None, force=False, ignore_version=False, shell=Fal
         )
     except ghp_import.GhpError as e:
         log.error("Failed to deploy to GitHub with error: \n{}".format(e.message))
-        raise SystemExit(1)
+        raise Abort('Deployment Aborted!')
 
     cname_file = os.path.join(config['site_dir'], 'CNAME')
     # Does this repository have a CNAME set for GitHub pages?

@@ -167,15 +167,7 @@ def serve_command(dev_addr, livereload, **kwargs):
 
     logging.getLogger('tornado').setLevel(logging.WARNING)
 
-    try:
-        serve.serve(
-            dev_addr=dev_addr,
-            livereload=livereload,
-            **kwargs
-        )
-    except (exceptions.ConfigurationError, OSError) as e:  # pragma: no cover
-        # Avoid ugly, unhelpful traceback
-        raise SystemExit('\n' + str(e))
+    serve.serve(dev_addr=dev_addr, livereload=livereload, **kwargs)
 
 
 @cli.command(name="build")
@@ -185,12 +177,7 @@ def serve_command(dev_addr, livereload, **kwargs):
 @common_options
 def build_command(clean, **kwargs):
     """Build the MkDocs documentation"""
-
-    try:
-        build.build(config.load_config(**kwargs), dirty=not clean)
-    except exceptions.ConfigurationError as e:  # pragma: no cover
-        # Avoid ugly, unhelpful traceback
-        raise SystemExit('\n' + str(e))
+    build.build(config.load_config(**kwargs), dirty=not clean)
 
 
 @cli.command(name="gh-deploy")
@@ -206,17 +193,13 @@ def build_command(clean, **kwargs):
 @common_options
 def gh_deploy_command(clean, message, remote_branch, remote_name, force, ignore_version, shell, **kwargs):
     """Deploy your documentation to GitHub Pages"""
-    try:
-        cfg = config.load_config(
-            remote_branch=remote_branch,
-            remote_name=remote_name,
-            **kwargs
-        )
-        build.build(cfg, dirty=not clean)
-        gh_deploy.gh_deploy(cfg, message=message, force=force, ignore_version=ignore_version, shell=shell)
-    except exceptions.ConfigurationError as e:  # pragma: no cover
-        # Avoid ugly, unhelpful traceback
-        raise SystemExit('\n' + str(e))
+    cfg = config.load_config(
+        remote_branch=remote_branch,
+        remote_name=remote_name,
+        **kwargs
+    )
+    build.build(cfg, dirty=not clean)
+    gh_deploy.gh_deploy(cfg, message=message, force=force, ignore_version=ignore_version, shell=shell)
 
 
 @cli.command(name="new")
