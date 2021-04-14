@@ -8,7 +8,6 @@ from mkdocs import utils
 
 
 log = logging.getLogger(__name__)
-log.addFilter(utils.warning_filter)
 
 
 class Files:

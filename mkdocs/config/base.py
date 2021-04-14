@@ -206,11 +206,11 @@ def load_config(config_file=None, **kwargs):
         log.debug("Config value: '%s' = %r", key, value)
 
     if len(errors) > 0:
-        raise exceptions.ConfigurationError(
+        raise exceptions.Abort(
             "Aborted with {} Configuration Errors!".format(len(errors))
         )
     elif cfg['strict'] and len(warnings) > 0:
-        raise exceptions.ConfigurationError(
+        raise exceptions.Abort(
             "Aborted with {} Configuration Warnings in 'strict' mode!".format(len(warnings))
         )
 

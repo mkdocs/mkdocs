@@ -4,14 +4,41 @@ import os
 import sys
 import logging
 import click
+import textwrap
 
 from mkdocs import __version__
 from mkdocs import utils
-from mkdocs import exceptions
 from mkdocs import config
 from mkdocs.commands import build, gh_deploy, new, serve
 
 log = logging.getLogger(__name__)
+
+
+class ColorFormatter(logging.Formatter):
+    colors = {
+        'CRITICAL': 'red',
+        'ERROR': 'red',
+        'WARNING': 'yellow',
+        'DEBUG': 'blue'
+    }
+
+    def format(self, record):
+        prefix = f'{record.levelname:<8} -  '
+        if record.levelname in self.colors:
+            prefix = click.style(prefix, fg=self.colors[record.levelname])
+        lines = textwrap.wrap(record.getMessage(), width=68)
+        lines[0] = prefix + lines[0]
+        msg = '\n            '.join(lines)
+        return msg
+
+
+class ClickHandler(logging.Handler):
+    def emit(self, record):
+        try:
+            msg = self.format(record)
+            click.echo(msg)
+        except Exception:
+            self.handleError(record)
 
 
 class State:
@@ -19,13 +46,20 @@ class State:
 
     def __init__(self, log_name='mkdocs', level=logging.INFO):
         self.logger = logging.getLogger(log_name)
+        # Don't restrict level on logger; use handler
+        self.logger.setLevel(1)
         self.logger.propagate = False
-        stream = logging.StreamHandler()
-        formatter = logging.Formatter("%(levelname)-7s -  %(message)s ")
-        stream.setFormatter(formatter)
-        self.logger.addHandler(stream)
 
-        self.logger.setLevel(level)
+        self.stream = ClickHandler()
+        self.stream.setFormatter(ColorFormatter())
+        self.stream.setLevel(level)
+        self.stream.name = 'MkDocsStreamHandler'
+        self.logger.addHandler(self.stream)
+
+        # Add CountHandler for strict mode
+        self.counter = utils.log_counter
+        self.counter.setLevel(logging.WARNING)
+        self.logger.addHandler(self.counter)
 
 
 pass_state = click.make_pass_decorator(State, ensure=True)
@@ -69,7 +103,7 @@ def verbose_option(f):
     def callback(ctx, param, value):
         state = ctx.ensure_object(State)
         if value:
-            state.logger.setLevel(logging.DEBUG)
+            state.stream.setLevel(logging.DEBUG)
     return click.option('-v', '--verbose',
                         is_flag=True,
                         expose_value=False,
@@ -81,7 +115,7 @@ def quiet_option(f):
     def callback(ctx, param, value):
         state = ctx.ensure_object(State)
         if value:
-            state.logger.setLevel(logging.ERROR)
+            state.stream.setLevel(logging.ERROR)
     return click.option('-q', '--quiet',
                         is_flag=True,
                         expose_value=False,
@@ -132,15 +166,7 @@ def serve_command(dev_addr, livereload, **kwargs):
 
     logging.getLogger('tornado').setLevel(logging.WARNING)
 
-    try:
-        serve.serve(
-            dev_addr=dev_addr,
-            livereload=livereload,
-            **kwargs
-        )
-    except (exceptions.ConfigurationError, OSError) as e:  # pragma: no cover
-        # Avoid ugly, unhelpful traceback
-        raise SystemExit('\n' + str(e))
+    serve.serve(dev_addr=dev_addr, livereload=livereload, **kwargs)
 
 
 @cli.command(name="build")
@@ -150,12 +176,7 @@ def serve_command(dev_addr, livereload, **kwargs):
 @common_options
 def build_command(clean, **kwargs):
     """Build the MkDocs documentation"""
-
-    try:
-        build.build(config.load_config(**kwargs), dirty=not clean)
-    except exceptions.ConfigurationError as e:  # pragma: no cover
-        # Avoid ugly, unhelpful traceback
-        raise SystemExit('\n' + str(e))
+    build.build(config.load_config(**kwargs), dirty=not clean)
 
 
 @cli.command(name="gh-deploy")
@@ -171,17 +192,13 @@ def build_command(clean, **kwargs):
 @common_options
 def gh_deploy_command(clean, message, remote_branch, remote_name, force, ignore_version, shell, **kwargs):
     """Deploy your documentation to GitHub Pages"""
-    try:
-        cfg = config.load_config(
-            remote_branch=remote_branch,
-            remote_name=remote_name,
-            **kwargs
-        )
-        build.build(cfg, dirty=not clean)
-        gh_deploy.gh_deploy(cfg, message=message, force=force, ignore_version=ignore_version, shell=shell)
-    except exceptions.ConfigurationError as e:  # pragma: no cover
-        # Avoid ugly, unhelpful traceback
-        raise SystemExit('\n' + str(e))
+    cfg = config.load_config(
+        remote_branch=remote_branch,
+        remote_name=remote_name,
+        **kwargs
+    )
+    build.build(cfg, dirty=not clean)
+    gh_deploy.gh_deploy(cfg, message=message, force=force, ignore_version=ignore_version, shell=shell)
 
 
 @cli.command(name="new")
