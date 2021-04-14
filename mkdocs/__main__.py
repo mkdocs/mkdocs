@@ -8,7 +8,6 @@ import textwrap
 
 from mkdocs import __version__
 from mkdocs import utils
-from mkdocs import exceptions
 from mkdocs import config
 from mkdocs.commands import build, gh_deploy, new, serve
 
