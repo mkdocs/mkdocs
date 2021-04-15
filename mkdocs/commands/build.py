@@ -7,7 +7,7 @@ from jinja2.exceptions import TemplateNotFound
 import jinja2
 
 from mkdocs import utils
-from mkdocs.exceptions import BuildError
+from mkdocs.exceptions import BuildError, Abort
 from mkdocs.localization import install_translations
 from mkdocs.structure.files import Files, get_files
 from mkdocs.structure.nav import get_navigation
@@ -27,7 +27,6 @@ class DuplicateFilter:
 
 log = logging.getLogger(__name__)
 log.addFilter(DuplicateFilter())
-log.addFilter(utils.warning_filter)
 
 
 def get_context(nav, files, config, page=None, base_url=''):
@@ -313,8 +312,10 @@ def build(config, live_server=False, dirty=False):
         # Run `post_build` plugin events.
         config['plugins'].run_event('post_build', config=config)
 
-        if config['strict'] and utils.warning_filter.count:
-            raise SystemExit('\nExited with {} warnings in strict mode.'.format(utils.warning_filter.count))
+        counts = utils.log_counter.get_counts()
+        if config['strict'] and len(counts):
+            msg = ', '.join([f'{v} {k.lower()}s' for k, v in counts])
+            raise Abort(f'\nAborted with {msg} in strict mode!')
 
         log.info('Documentation built in %.2f seconds', time() - start)
 
@@ -322,7 +323,8 @@ def build(config, live_server=False, dirty=False):
         # Run `build_error` plugin events.
         config['plugins'].run_event('build_error', error=e)
         if isinstance(e, BuildError):
-            raise SystemExit('\n' + str(e))
+            log.error(str(e))
+            raise Abort('\nAborted with a BuildError!')
         raise
 
 

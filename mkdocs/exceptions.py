@@ -1,8 +1,14 @@
-from click import ClickException
+from click import ClickException, echo
 
 
 class MkDocsException(ClickException):
     """Base exceptions for all MkDocs Exceptions"""
+
+
+class Abort(MkDocsException):
+    """Abort the build"""
+    def show(self, **kwargs):
+        echo(self.format_message())
 
 
 class ConfigurationError(MkDocsException):

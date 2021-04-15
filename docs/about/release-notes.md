@@ -70,15 +70,17 @@ to execute code when an exception is raised while building the site.
 See [`on_build_error`](../dev-guide/plugins.md#on_build_error)
 in the Plugins documentation for details.
 
-#### Two new exceptions: BuildError and PluginError (#2103)
+#### Three new exceptions: BuildError PluginError and Abort (#2103)
 
-MkDocs now has two new exceptions defined in `mkdocs.exceptions`,
-`BuildError` and `PluginError`:
+MkDocs now has tree new exceptions defined in `mkdocs.exceptions`:
+`BuildError`, `PluginError`, and `Abort`:
 
 * `PluginError` can be raised from a plugin
   to stop the build and log an error message *without traceback*.
 * `BuildError` should not be used by third-party plugins developers
   and is reserved for internal use only.
+* `Abort` is used intenrally to abort the build and display an error
+  without a traceback.
 
 See [`Handling errors`](../dev-guide/plugins.md#handling-errors)
 in the Plugins documentation for details.
@@ -112,6 +114,11 @@ The `mkdocs.config.DEFAULT_SCHEMA` global variable has been replaced with the
 function `mkdocs.config.defaults.get_schema()`, which ensures that each
 instance of the configuration is unique (#2289).
 
+The `mkdocs.utils.warning_filter` is deprecated and now does nothing. Plugins
+ should remove any reference to is as it may be deleted in a future release.
+ To ensure any warnings get counted, simply log them to the `mkdocs` log (i.e:
+`mkdocs.plugins.pluginname`).
+
 ### Other Changes and Additions to Version 1.2
 
 * Bugfix: Properly process navigation child items in `_get_by_type` when
@@ -131,6 +138,9 @@ instance of the configuration is unique (#2289).
 * Correct documentation of `pages` template context variable (#1736).
 * The `lunr` dependency has been updated to 0.5.9, and `lunr.js` to
   the corresponding 2.3.9 version (#2306).
+* Color is now used in log messages to identify errors, warnings and debug
+  messages.
+* Bugfix: Identify homepage when `use_directory_urls` is `False` (#2362).
 
 ## Version 1.1.2 (2020-05-14)
 
