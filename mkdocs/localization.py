@@ -1,20 +1,41 @@
 import os
 import logging
-from babel.core import Locale
-from babel.support import Translations, NullTranslations
+
+from jinja2.ext import Extension, InternationalizationExtension
+
+try:
+    from babel.core import Locale
+    from babel.support import Translations, NullTranslations
+    has_babel = True
+except ImportError:
+    has_babel = False
 
 log = logging.getLogger(__name__)
 base_path = os.path.dirname(os.path.abspath(__file__))
 
 
-def install_translations(env, config):
-    locale = Locale.parse(config['theme']['locale'], sep='_')
+class NoBabelExtension(InternationalizationExtension):
+    def __init__(self, environment):
+        Extension.__init__(self, environment)
+        environment.extend(
+            install_null_translations=self._install_null,
+            newstyle_gettext=False,
+        )
 
-    env.add_extension('jinja2.ext.i18n')
-    translations = _get_merged_translations(config['theme'].dirs, 'locales', locale)
-    if translations is not None:
-        env.install_gettext_translations(translations)
+
+def install_translations(env, config):
+    if has_babel:
+        locale = Locale.parse(config['theme']['locale'], sep='_')
+
+        env.add_extension('jinja2.ext.i18n')
+        translations = _get_merged_translations(config['theme'].dirs, 'locales', locale)
+        if translations is not None:
+            env.install_gettext_translations(translations)
+        else:
+            env.install_null_translations()
     else:
+        # no babel installed, add dummy support for trans/endtrans blocks
+        env.add_extension(NoBabelExtension)
         env.install_null_translations()
 
 
