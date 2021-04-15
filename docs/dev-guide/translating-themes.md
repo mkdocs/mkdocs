@@ -11,12 +11,6 @@ files generation and compilation. We worked on wrapping its usage through
 `setup.py` commands as described below to make updating and contributing
 translations easy.
 
-Make sure translation requirements are installed in your environment:
-
-```bash
-pip install mkdocs[i18n]
-```
-
 !!! note
     Translation locales follow the [ISO-639-1](https://en.wikipedia.org/wiki/ISO_639-1)
     (2-letter) language codes to follow the HTML 5 `lang` attribute. When
