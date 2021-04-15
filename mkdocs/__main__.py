@@ -32,15 +32,6 @@ class ColorFormatter(logging.Formatter):
         return msg
 
 
-class ClickHandler(logging.Handler):
-    def emit(self, record):
-        try:
-            msg = self.format(record)
-            click.echo(msg)
-        except Exception:
-            self.handleError(record)
-
-
 class State:
     ''' Maintain logging level.'''
 
@@ -50,7 +41,7 @@ class State:
         self.logger.setLevel(1)
         self.logger.propagate = False
 
-        self.stream = ClickHandler()
+        self.stream = logging.StreamHandler()
         self.stream.setFormatter(ColorFormatter())
         self.stream.setLevel(level)
         self.stream.name = 'MkDocsStreamHandler'
