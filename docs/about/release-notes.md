@@ -131,6 +131,7 @@ The `mkdocs.utils.warning_filter` is deprecated and now does nothing. Plugins
   the corresponding 2.3.9 version (#2306).
 * Color is now used in log messages to identify errors, warnings and debug
   messages.
+* Bugfix: Identify homepage when `use_directory_urls` is `False` (#2362).
 
 ## Version 1.1.2 (2020-05-14)
 
