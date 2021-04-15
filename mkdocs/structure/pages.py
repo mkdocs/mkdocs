@@ -81,7 +81,7 @@ class Page:
 
     @property
     def is_homepage(self):
-        return self.is_top_level and self.is_index and self.file.url == '.'
+        return self.is_top_level and self.is_index and self.file.url in ['.', 'index.html']
 
     @property
     def url(self):
