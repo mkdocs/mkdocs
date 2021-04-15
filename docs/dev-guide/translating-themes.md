@@ -6,10 +6,15 @@ Theme localization guide.
 
 ## Localization tooling prerequisites
 
-Theme localization uses the [babel][babel] project to handle theme localization
-files generation and compilation. We worked on wrapping its usage through
-`setup.py` commands as described below to make updating and contributing
-translations easy.
+Theme localization makes use of the [babel][babel] project for generation and
+compilation of localization files. Custom commands are available from the
+MkDocs' `setup.py` script as described below to assist with the process of
+updating and contributing translations. You will need to be working from the
+git working tree on your local machine to make use of the helper scripts.
+
+See the [Contributing Guide] for direction on how to [Install for Development]
+and [Submit a Pull Request]. The instructions in this document assume that you
+are working from a properly configured development environment.
 
 !!! note
     Translation locales follow the [ISO-639-1](https://en.wikipedia.org/wiki/ISO_639-1)
@@ -18,65 +23,60 @@ translations easy.
     accordingly.
 
 [babel]: http://babel.pocoo.org/en/latest/cmdline.html
+[Contributing Guide]: ../about/contributing.md
+[Install for Development]: ../about/contributing.md#installing-for-development
+[Submit a Pull Request]: ../about/contributing.md#submitting-pull-requests
 
 ## Adding language translations to themes
 
-If your favorite language locale is not supported yet on the `mkdocs` and
-`readthedocs` built-in themes, you can easily contribute it to the project by
-following the steps below.
+If your favorite language locale is not yet supported on one (or both) of the
+built-in themes (`mkdocs` and `readthedocs`), you can easily contribute a
+translation by following the steps below.
 
-Here is a quick recap of what you'll have to do:
+Here is a quick summary of what you'll have to do:
 
-1. [Initialize new localization catalogs](#initializing-the-localization-catalogs)
-for your language (if a translation for your locale already exists, follow the
-[updating theme localization files](/user-guide/custom-themes/#localizing-themes)
-instead)
-2. [Add a translation](#translating-the-mkdocs-themes) for every text placeholder
-in the localized catalogs
-3. [Serve and test locally](#testing-themes-translations) the translated themes
-for your language
+1. [Initialize new localization
+   catalogs](#initializing-the-localization-catalogs) for your language (if a
+   translation for your locale already exists, follow the instructions for
+   [updating theme localization
+   files](/user-guide/custom-themes/#localizing-themes) instead).
+2. [Add a translation](#translating-the-mkdocs-themes) for every text
+   placeholder in the localized catalogs.
+3. [Locally serve and test](#testing-themes-translations) the translated themes
+   for your language.
 4. [Contribute your translation](#contributing-translations) through a
-Pull Request
+   Pull Request.
 
 ### Initializing the localization catalogs
 
-The MkDocs themes contain text placeholders that have been extracted into
-Portable Object Template (messages.pot) files present in each theme's folder.
+The templates for each theme contain text placeholders that have been extracted
+into a Portable Object Template (messages.pot) file, which is present in each
+theme's folder.
 
 Initializing a catalog consists of running a command which will create a
 directory structure for your desired language and prepare a Portable Object
 (messages.po) file derived from the POT file of the theme.
 
-Let's say you want to add a translation for the Spanish `es` language.
-You will be using the `init_catalog` command on each `-t <theme>` and providing
-the `-l <language>` like so:
+Use the `init_catalog` command on each theme (`-t <theme>`) and provide the
+appropriate language code (`-l <language>`). For example, to add a translation
+for the Spanish `es` language to the `readthedocs` theme, run the following command:
 
 ```bash
-$ python setup.py init_catalog -t mkdocs -l es
-running init_catalog
-creating catalog mkdocs/themes/mkdocs/locales/es/LC_MESSAGES/messages.po based on mkdocs/themes/mkdocs/messages.pot
-
-$ python setup.py init_catalog -t readthedocs -l es
-running init_catalog
-creating catalog mkdocs/themes/readthedocs/locales/es/LC_MESSAGES/messages.po based on mkdocs/themes/readthedocs/messages.pot
+python setup.py init_catalog -t readthedocs -l es
 ```
 
-Which will create:
+The above command will create the following file structure:
 
 ```text
-mkdocs/themes/mkdocs/locales
-├── es
-│   └── LC_MESSAGES
-│       └── messages.po
-...
 mkdocs/themes/readthedocs/locales
 ├── es
 │   └── LC_MESSAGES
 │       └── messages.po
 ```
 
-You can now move on to the next step and [add a translation](#translating-the-mkdocs-themes)
-for every text placeholder in the localized catalogs.
+You can now move on to the next step and [add a
+translation](#translating-the-mkdocs-themes) for every text placeholder in the
+localized catalog.
 
 ## Updating a theme translation
 
