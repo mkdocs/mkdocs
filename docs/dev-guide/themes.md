@@ -708,7 +708,8 @@ recommended that the locale be configured using the `locale` setting of the
 
 The method for managing translations is up to the developers of a theme.
 However, if a theme developer chooses to use the same mechanisms used by the
-built-in themes, then the appropriate [section] of the Contributing Guide and the [Translation Guide] may be helpful.
+built-in themes, then the appropriate [section] of the Contributing Guide and
+the [Translation Guide] may be helpful.
 
 !!! note
 
