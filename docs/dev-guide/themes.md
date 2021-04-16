@@ -697,57 +697,32 @@ index when it is available. The `index` object was new in MkDocs version *1.0*.
 [site_dir]: ../user-guide/configuration.md#site_dir
 [prebuild_index]: ../user-guide/configuration.md#prebuild_index
 
-## Localizing themes
+## Supporting theme localization/translation
 
-When installed with the `i18n` support, MkDocs allows themes to support being
-translated in various languages (referred to as locales) if they respect
-[Jinja's i18n extension](https://jinja.palletsprojects.com/en/master/extensions/#i18n-extension)
-using the `trans` statement around its text placeholders.
+While the built-in themes provide support for [localization/translation] of
+templates, custom themes and third-party themes may choose not to. However,
+when they do provide support, it would generally be best for users if all
+themes used the same method for choosing a language/locale. Therefore, it is
+recommended that the locale be configured using the `locale` setting of the
+`theme` configuration option. See [Theme Configuration] for details.
 
-Every time some translatable text placeholders is added, removed or changed,
-you need to:
-
-1. [Extract each theme's translatable texts](#extracting-translatable-texts-from-themes)
-to update their Portable Object Template files
-2. [Contribute your updated theme template catalogs](/about/contributing)
-and kindly ask translators to update their translations catalogs `messages.po`
-files
+The method for managing translations is up to the developers of a theme.
+However, if a theme developer chooses to use the same mechanisms used by the
+built-in themes, then the appropriate [section] of the Contributing Guide and the [Translation Guide] may be helpful.
 
 !!! note
-    This will allow translation contributors to propose the translations needed
-    for their preferred language [using this guide](../dev-guide/translating-themes.md).
 
-### Extracting translatable texts from themes
+    The translation related commands available on MkDocs' `setup.py` script
+    will only work on the built-in themes. However, those scripts are simple
+    wrappers of the commands provided by the [pybabel] package, which
+    auto-complete the path based on the theme name. You may use the
+    pybabel commands of the same name in your translation workflow.
 
-This step will parse and extract the text from the HTML sources of the themes:
-
-```bash
-$ python setup.py extract_messages -t mkdocs
-running extract_messages
-extracting messages from mkdocs/themes/mkdocs/404.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/mkdocs/base.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/mkdocs/content.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/mkdocs/keyboard-modal.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/mkdocs/main.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/mkdocs/nav-sub.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/mkdocs/search-modal.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/mkdocs/toc.html (ignore_tags="script,style", include_attrs="alt title summary")
-writing PO template file to mkdocs/themes/mkdocs/messages.pot
-
-$ python setup.py extract_messages -t readthedocs
-running extract_messages
-extracting messages from mkdocs/themes/readthedocs/404.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/readthedocs/base.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/readthedocs/breadcrumbs.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/readthedocs/footer.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/readthedocs/main.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/readthedocs/nav.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/readthedocs/search.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/readthedocs/searchbox.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/readthedocs/toc.html (ignore_tags="script,style", include_attrs="alt title summary")
-extracting messages from mkdocs/themes/readthedocs/versions.html (ignore_tags="script,style", include_attrs="alt title summary")
-writing PO template file to mkdocs/themes/readthedocs/messages.pot
-```
+[localization/translation]: ../user-guide/localizing-your-theme.md
+[Theme Configuration]: #theme-configuration
+[section]: ../about/contributing.md#submitting-changes-to-the-builtin-themes
+[Translation Guide]: translations.md
+[pybabel]: https://pypi.org/project/pybabel/
 
 ## Packaging Themes
 

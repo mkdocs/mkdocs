@@ -78,8 +78,8 @@ supports the following options:
             nav_style: dark
 
 * __`locale`__: The ISO-639-1 (2-letter) language locale used to build your
-theme. If your language is not supported yet, it will fallback to English.
-Default: `en`.
+theme. If your language is not yet supported, it will fallback to English.
+Default: `en`. See the guide to [localizing your theme] for details.
 
 ## readthedocs
 
@@ -127,8 +127,8 @@ theme supports the following options:
   page content as you scroll the page. Default: `True`.
 
 * __`locale`__: The ISO-639-1 (2-letter) language locale used to build your
-theme. If your language is not supported yet, it will fallback to English.
-Default: `en`.
+theme. If your language is not yet supported, it will fallback to English.
+Default: `en`. See the guide to [localizing your theme] for details.
 
 ## Third Party Themes
 
@@ -142,3 +142,4 @@ have created your own, please feel free to add it to the list.
 [styles]: https://highlightjs.org/static/demo/
 [Read the Docs]: https://readthedocs.org/
 [community wiki]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
+[localizing your theme]: localizing-your-theme.md

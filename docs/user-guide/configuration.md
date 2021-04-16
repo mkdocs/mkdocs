@@ -270,6 +270,7 @@ An example set of key/value pairs might look something like this:
 ```yaml
 theme:
     name: mkdocs
+    locale: en
     custom_dir: my_theme_customizations/
     static_templates:
         - sitemap.html

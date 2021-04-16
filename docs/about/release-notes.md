@@ -28,11 +28,27 @@ The current and past members of the MkDocs team.
 ### Support added for Theme Localization (#2299)
 
 The `mkdocs` and `readthedocs` themes now support language localization using
-the `theme.locale` parameter that will default to `en` (English). The other
-supported language in this release is `fr` (French).
+the `theme.locale` parameter, which defaults to `en` (English). The only other
+supported language in this release is `fr` (French). For details on using the
+provided translations, see the [user
+guide](../user-guide/localizing-your-theme.md). Note that translation will not
+happen by default. Users must first install the necessary dependencies with
+the following command:
 
-Translation contributions are welcome and detailed in the [dedicated
-documentation](../dev-guide/translating-themes.md).
+```bash
+pip install mkdocs[i18n]
+```
+
+Translation contributions are welcome and detailed in the [Translation
+Guide](../dev-guide/translations.md).
+
+Developers of third party themes may want to review the relevant section of
+the [Theme Development
+Guide](../dev-guide/themes.md#supporting-theme-localizationtranslation).
+
+Contributors who are updating the templates to the built-in themes should
+review the [Contributing
+Guide](contributing.md#submitting-changes-to-the-builtin-themes).
 
 #### Support added for Environment Variables in the configuration file (#1954)
 

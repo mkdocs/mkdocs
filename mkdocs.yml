@@ -8,6 +8,7 @@ edit_uri: ""
 
 theme:
     name: mkdocs
+    locale: en
     highlightjs: true
     hljs_languages:
         - yaml
@@ -28,7 +29,7 @@ nav:
     - Developer Guide:
         - Overview: dev-guide/index.md
         - Themes: dev-guide/themes.md
-        - Translating Themes: dev-guide/translating-themes.md
+        - Translations: dev-guide/translations.md
         - Plugins: dev-guide/plugins.md
     - About:
         - Release Notes: about/release-notes.md
