@@ -30,7 +30,7 @@ jobs:
           - python-version: pypy3
             tox-env: pypy3
     env:
-      TOXENV: ${{ matrix.tox-env }}-{unittests,min-req,integration}
+      TOXENV: ${{ matrix.tox-env }}-{unittests,min-req,integration,integration-no-babel}
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
