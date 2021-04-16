@@ -82,9 +82,9 @@ setup(
         'ghp-import>=1.0',
         'pyyaml_env_tag>=0.1',
         'importlib_metadata>=3.10',
-        'packaging>=20.5',
-        'babel>=2.9.0'
+        'packaging>=20.5'
     ],
+    extras_require={"i18n": ['babel>=2.9.0']},
     python_requires='>=3.6',
     entry_points={
         'console_scripts': [

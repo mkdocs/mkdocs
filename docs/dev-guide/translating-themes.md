@@ -16,6 +16,12 @@ See the [Contributing Guide] for direction on how to [Install for Development]
 and [Submit a Pull Request]. The instructions in this document assume that you
 are working from a properly configured development environment.
 
+Make sure translation requirements are installed in your environment:
+
+```bash
+pip install mkdocs[i18n]
+```
+
 !!! note
     Translation locales follow the [ISO-639-1](https://en.wikipedia.org/wiki/ISO_639-1)
     (2-letter) language codes to follow the HTML 5 `lang` attribute. When
