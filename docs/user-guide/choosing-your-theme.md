@@ -82,8 +82,9 @@ supports the following options:
   Default: `en`. See the guide to [localizing your theme] for details.
 
 ### mkdocs theme supported locales
-  - `en`: English
-  - `fr`: French
+
+* `en`: English
+* `fr`: French
 
 ## readthedocs
 
@@ -135,8 +136,9 @@ theme supports the following options:
   Default: `en`. See the guide to [localizing your theme] for details.
 
 ### readthedocs theme supported locales
-  - `en`: English
-  - `fr`: French
+
+* `en`: English
+* `fr`: French
 
 ## Third Party Themes
 
