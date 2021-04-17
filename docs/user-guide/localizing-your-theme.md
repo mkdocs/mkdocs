@@ -23,11 +23,11 @@ pip install mkdocs[i18n]
 
 ## Supported languages
 
-MkDocs provided themes `mkdocs` and `readthedocs` currently support the
-following `theme.locale` languages:
+MkDocs provided themes `mkdocs` and `readthedocs` supported `theme.locale`
+setting:
 
-- `en`: English
-- `fr`: French
+- [mkdocs theme supported locales]
+- [readthedocs theme supported locales]
 
 ## Usage
 
@@ -54,3 +54,5 @@ If a theme has not yet been translated for your language, feel free to
 contribute a translation using the [Translation Guide].
 
 [Translation Guide]: ../dev-guide/translations.md
+[mkdocs theme supported locales]: choosing-your-theme.md#mkdocs-theme-supported-locales
+[readthedocs theme supported locales]: choosing-your-theme.md#readthedocs-theme-supported-locales

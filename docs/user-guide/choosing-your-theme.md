@@ -78,8 +78,12 @@ supports the following options:
             nav_style: dark
 
 * __`locale`__: The ISO-639-1 (2-letter) language locale used to build your
-theme. If your language is not yet supported, it will fallback to English.
-Default: `en`. See the guide to [localizing your theme] for details.
+  theme. If your language is not yet supported, it will fallback to English.
+  Default: `en`. See the guide to [localizing your theme] for details.
+
+### mkdocs theme supported locales
+  - `en`: English
+  - `fr`: French
 
 ## readthedocs
 
@@ -127,8 +131,12 @@ theme supports the following options:
   page content as you scroll the page. Default: `True`.
 
 * __`locale`__: The ISO-639-1 (2-letter) language locale used to build your
-theme. If your language is not yet supported, it will fallback to English.
-Default: `en`. See the guide to [localizing your theme] for details.
+  theme. If your language is not yet supported, it will fallback to English.
+  Default: `en`. See the guide to [localizing your theme] for details.
+
+### readthedocs theme supported locales
+  - `en`: English
+  - `fr`: French
 
 ## Third Party Themes
 
