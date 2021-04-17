@@ -21,6 +21,14 @@ enable `i18n` (internationalization) support on MkDocs:
 pip install mkdocs[i18n]
 ```
 
+## Supported languages
+
+MkDocs provided themes `mkdocs` and `readthedocs` currently support the
+following `theme.locale` languages:
+
+- `en`: English
+- `fr`: French
+
 ## Usage
 
 !!! Warning
