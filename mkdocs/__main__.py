@@ -5,6 +5,7 @@ import sys
 import logging
 import click
 import textwrap
+import shutil
 
 from mkdocs import __version__
 from mkdocs import utils
@@ -22,14 +23,25 @@ class ColorFormatter(logging.Formatter):
         'DEBUG': 'blue'
     }
 
+    text_wrapper = textwrap.TextWrapper(
+        width=shutil.get_terminal_size(fallback=(0, 0)).columns,
+        replace_whitespace=False,
+        break_long_words=False,
+        break_on_hyphens=False,
+        initial_indent=' '*12,
+        subsequent_indent=' '*12
+    )
+
     def format(self, record):
         prefix = f'{record.levelname:<8} -  '
         if record.levelname in self.colors:
             prefix = click.style(prefix, fg=self.colors[record.levelname])
-        lines = textwrap.wrap(record.getMessage(), width=68)
-        lines[0] = prefix + lines[0]
-        msg = '\n            '.join(lines)
-        return msg
+        if self.text_wrapper.width:
+            # Only wrap text if a terminal width was detected
+            msg = self.text_wrapper.fill(record.getMessage())
+            # Prepend prefix after wrapping so that color codes don't affect length
+            return prefix + msg[12:]
+        return prefix + record.getMessage()
 
 
 class State:
