@@ -166,7 +166,7 @@ class SearchPluginTests(unittest.TestCase):
 
     def test_event_on_config_lang(self):
         plugin = search.SearchPlugin()
-        plugin.load_config({'lang':'es'})
+        plugin.load_config({'lang': 'es'})
         result = plugin.on_config(load_config(theme='mkdocs', extra_javascript=[]))
         self.assertFalse(result['theme']['search_index_only'])
         self.assertFalse(result['theme']['include_search_page'])
@@ -178,7 +178,7 @@ class SearchPluginTests(unittest.TestCase):
     def test_event_on_config_theme_locale(self):
         plugin = search.SearchPlugin()
         plugin.load_config({})
-        result = plugin.on_config(load_config(theme={'name':'mkdocs', 'locale': 'fr'}, extra_javascript=[]))
+        result = plugin.on_config(load_config(theme={'name': 'mkdocs', 'locale': 'fr'}, extra_javascript=[]))
         self.assertFalse(result['theme']['search_index_only'])
         self.assertFalse(result['theme']['include_search_page'])
         self.assertEqual(result['theme'].static_templates, {'404.html', 'sitemap.xml'})
