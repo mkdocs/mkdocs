@@ -2,9 +2,10 @@ import os
 import logging
 
 from jinja2.ext import Extension, InternationalizationExtension
+from mkdocs import exceptions
 
 try:
-    from babel.core import Locale
+    from babel.core import Locale, UnknownLocaleError
     from babel.support import Translations, NullTranslations
     has_babel = True
 except ImportError:
@@ -25,7 +26,10 @@ class NoBabelExtension(InternationalizationExtension):
 
 def install_translations(env, config):
     if has_babel:
-        locale = Locale.parse(config['theme']['locale'], sep='_')
+        try:
+            locale = Locale.parse(config['theme']['locale'], sep='_')
+        except (ValueError, UnknownLocaleError) as e:
+            raise exceptions.BuildError(f'Invalid value for theme.locale: {str(e)}')
 
         env.add_extension('jinja2.ext.i18n')
         translations = _get_merged_translations(config['theme'].dirs, 'locales', locale)
@@ -33,6 +37,11 @@ def install_translations(env, config):
             env.install_gettext_translations(translations)
         else:
             env.install_null_translations()
+            if config['theme']['locale'] != 'en':
+                log.warning(
+                    f"No translations could be found for the locale '{config['theme']['locale']}'. "
+                    'Defaulting to English.'
+                )
     else:
         # no babel installed, add dummy support for trans/endtrans blocks
         env.add_extension(NoBabelExtension)

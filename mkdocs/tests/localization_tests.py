@@ -7,6 +7,7 @@ import unittest
 
 from mkdocs.localization import install_translations
 from mkdocs.tests.base import load_config, tempdir
+from mkdocs import exceptions
 
 
 class LocalizationTests(unittest.TestCase):
@@ -18,6 +19,14 @@ class LocalizationTests(unittest.TestCase):
         config = load_config()
         install_translations(self.env, config)
         self.env.add_extension.assert_called_once_with('jinja2.ext.i18n')
+
+    def test_unknown_locale(self):
+        config = load_config(theme={'name': 'mkdocs', 'locale': 'foo'})
+        self.assertRaises(exceptions.BuildError, install_translations, self.env, config)
+
+    def test_invalid_locale(self):
+        config = load_config(theme={'name': 'mkdocs', 'locale': '42'})
+        self.assertRaises(exceptions.BuildError, install_translations, self.env, config)
 
     @tempdir()
     def test_no_translations_found(self, dir_without_translations):
