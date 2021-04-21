@@ -65,3 +65,7 @@ discussion forums is expected to follow the [PyPA Code of Conduct].
 [wiki]: https://github.com/mkdocs/mkdocs/wiki
 [Contributing Guide]: https://www.mkdocs.org/about/contributing/
 [PyPA Code of Conduct]: https://www.pypa.io/en/latest/code-of-conduct/
+
+## License
+
+[BSD-2-Clause](https://github.com/mkdocs/mkdocs/blob/master/LICENSE)

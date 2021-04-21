@@ -95,7 +95,7 @@ MkDocs now has tree new exceptions defined in `mkdocs.exceptions`:
   to stop the build and log an error message *without traceback*.
 * `BuildError` should not be used by third-party plugins developers
   and is reserved for internal use only.
-* `Abort` is used intenrally to abort the build and display an error
+* `Abort` is used internally to abort the build and display an error
   without a traceback.
 
 See [`Handling errors`](../dev-guide/plugins.md#handling-errors)
