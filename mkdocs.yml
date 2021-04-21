@@ -43,6 +43,7 @@ markdown_extensions:
     - toc:
         permalink: 
     - admonition
+    - attr_list
     - def_list
     - mdx_gh_links:
         user: mkdocs

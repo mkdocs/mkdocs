@@ -77,14 +77,16 @@ supports the following options:
             name: mkdocs
             nav_style: dark
 
-* __`locale`__: The ISO-639-1 (2-letter) language locale used to build your
-  theme. If your language is not yet supported, it will fallback to English.
-  Default: `en`. See the guide to [localizing your theme] for details.
+* __`locale`__{ #mkdocs-locale }: The ISO-639-1 (2-letter) language locale used
+  to build your theme. If your language is not yet supported, it will fallback
+  to the default.
 
-### mkdocs theme supported locales
+    The following languages are supported:
 
-* `en`: English
-* `fr`: French
+    * `en`: English (default)
+    * `fr`: French
+
+    See the guide to [localizing your theme] for details.
 
 ## readthedocs
 
@@ -131,14 +133,16 @@ theme supports the following options:
 * __`sticky_navigation`__: If True, causes the sidebar to scroll with the main
   page content as you scroll the page. Default: `True`.
 
-* __`locale`__: The ISO-639-1 (2-letter) language locale used to build your
-  theme. If your language is not yet supported, it will fallback to English.
-  Default: `en`. See the guide to [localizing your theme] for details.
+* __`locale`__{ #readthedocs-locale }: The ISO-639-1 (2-letter) language
+  locale used to build your theme. If your language is not yet supported, it
+  will fallback to the default.
 
-### readthedocs theme supported locales
+    The following languages are supported:
 
-* `en`: English
-* `fr`: French
+    * `en`: English (default)
+    * `fr`: French
+
+    See the guide to [localizing your theme] for details.
 
 ## Third Party Themes
 
