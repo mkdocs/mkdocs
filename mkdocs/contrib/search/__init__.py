@@ -34,7 +34,7 @@ class SearchPlugin(BasePlugin):
     """ Add a search feature to MkDocs. """
 
     config_scheme = (
-        ('lang', LangOption(default=['en'])),
+        ('lang', LangOption()),
         ('separator', config_options.Type(str, default=r'[\s\-]+')),
         ('min_search_length', config_options.Type(int, default=3)),
         ('prebuild_index', config_options.Choice((False, True, 'node', 'python'), default=False)),
@@ -50,6 +50,12 @@ class SearchPlugin(BasePlugin):
             config['theme'].dirs.append(path)
             if 'search/main.js' not in config['extra_javascript']:
                 config['extra_javascript'].append('search/main.js')
+        if self.config['lang'] is None:
+            # lang setting undefined. Set default based on theme locale
+            if 'locale' in config['theme']:
+                self.config['lang'] = [config['theme']['locale']]
+            else:
+                self.config['lang'] = ['en']
         return config
 
     def on_pre_build(self, config, **kwargs):

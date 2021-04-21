@@ -597,7 +597,7 @@ You may [contribute additional languages].
     Lunr Languages does not currently include support for Chinese or other Asian
     languages. However, some users have reported decent results using Japanese.
 
-**default**: `['en']`
+**default**: The value of `theme.locale` if set, otherwise `[en]`.
 
 ##### **prebuild_index**
 
