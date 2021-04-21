@@ -38,6 +38,12 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
                        (mock._mock_name or 'mock', self.call_count))
                 raise AssertionError(msg)
 
+    def _get_env_with_null_translations(self, config):
+        env = config['theme'].get_env()
+        env.add_extension('jinja2.ext.i18n')
+        env.install_null_translations()
+        return env
+
     # Test build.get_context
 
     def test_context_base_url_homepage(self):
@@ -528,21 +534,3 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @tempdir()
     def test_not_site_dir_contains_stale_files(self, site_dir):
         self.assertFalse(build.site_directory_contains_stale_files(site_dir))
-
-    @tempdir(files={'index.md': 'page content'})
-    @tempdir()
-    @tempdir()
-    @mock.patch('mkdocs.commands.build.install_translations')
-    def test_translations_not_installed_if_locale_not_defined(self, site_dir, docs_dir, custom_dir,
-                                                              install_translations_mock):
-        cfg = load_config(docs_dir=docs_dir, site_dir=site_dir, theme={'name': None, 'custom_dir': custom_dir})
-
-        build.build(cfg)
-
-        install_translations_mock.assert_not_called()
-
-    def _get_env_with_null_translations(self, config):
-        env = config['theme'].get_env()
-        env.add_extension('jinja2.ext.i18n')
-        env.install_null_translations()
-        return env

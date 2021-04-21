@@ -161,7 +161,7 @@ class ConfigTests(unittest.TestCase):
                 }, {
                     'dirs': [mytheme, mkdocs_templates_dir],
                     'static_templates': ['sitemap.xml'],
-                    'vars': {}
+                    'vars': {'locale': 'en'}
                 }, {
                     'dirs': [custom, os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],

@@ -700,11 +700,12 @@ index when it is available. The `index` object was new in MkDocs version *1.0*.
 ## Supporting theme localization/translation
 
 While the built-in themes provide support for [localization/translation] of
-templates, custom themes and third-party themes may choose not to. However,
-when they do provide support, it would generally be best for users if all
-themes used the same method for choosing a language/locale. Therefore, it is
-recommended that the locale be configured using the `locale` setting of the
-`theme` configuration option. See [Theme Configuration] for details.
+templates, custom themes and third-party themes may choose not to. Regardless,
+the [`locale`](#locale) setting of the `theme` configuration option is always
+present and is relied upon by other parts of the system. Therefore, it is
+recommended that all third-party themes use the same setting for designating
+language regardless of the system they use for translation. In that way, users
+will experience consistent behavior regardless of the theme they may choose.
 
 The method for managing translations is up to the developers of a theme.
 However, if a theme developer chooses to use the same mechanisms used by the
@@ -872,6 +873,17 @@ special options which alters its behavior:
 
     Defines a parent theme that this theme inherits from. The value should be
     the string name of the parent theme. Normal Jinja inheritance rules apply.
+
+    #### locale
+
+    Defines the ISO-639-1 (2-letter) locale/language of the theme. If this
+    value is not defined in the `mkdocs_theme.yml` file and the user does not
+    set it in `mkdocs.yml` then is will default to `en` (English). The value
+    is expected to match the language used in the text provided by the theme
+    (such a "next" and "previous" links) and should be used as the value of
+    the `<html>` tag's `lang` attribute. See [Supporting theme localization/
+    translation](#supporting-theme-localizationtranslation) for more
+    information.
 
 Plugins may also define some options which allow the theme to inform a plugin
 about which set of plugin options it expects. See the documentation for any

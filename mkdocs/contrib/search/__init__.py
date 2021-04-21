@@ -52,10 +52,7 @@ class SearchPlugin(BasePlugin):
                 config['extra_javascript'].append('search/main.js')
         if self.config['lang'] is None:
             # lang setting undefined. Set default based on theme locale
-            if 'locale' in config['theme']:
-                self.config['lang'] = [config['theme']['locale']]
-            else:
-                self.config['lang'] = ['en']
+            self.config['lang'] = [config['theme']['locale']]
         return config
 
     def on_pre_build(self, config, **kwargs):

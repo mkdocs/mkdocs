@@ -27,7 +27,7 @@ class Theme:
 
     def __init__(self, name=None, **user_config):
         self.name = name
-        self._vars = {}
+        self._vars = {'locale': 'en'}
 
         # MkDocs provided static templates are always included
         package_dir = os.path.abspath(os.path.dirname(__file__))

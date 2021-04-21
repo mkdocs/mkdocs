@@ -270,9 +270,7 @@ def build(config, live_server=False, dirty=False):
         files = get_files(config)
         env = config['theme'].get_env()
         files.add_files_from_theme(env, config)
-
-        if "locale" in config["theme"]:
-            install_translations(env, config)
+        install_translations(env, config)
 
         # Run `files` plugin events.
         files = config['plugins'].run_event('files', files, config=config)
