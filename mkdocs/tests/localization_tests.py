@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 import unittest
 
 from mkdocs.localization import install_translations, parse_locale
-from mkdocs.tests.base import load_config, tempdir
+from mkdocs.tests.base import tempdir
 from mkdocs.config.base import ValidationError
 
 

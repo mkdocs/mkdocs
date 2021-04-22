@@ -30,7 +30,7 @@ class NoBabelLocale(NamedTuple):
     territory: str = ''
 
     def __str__(self):
-        if territory:
+        if self.territory:
             return f'{self.language}_{self.territory}'
         return self.language
 

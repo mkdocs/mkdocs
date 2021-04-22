@@ -864,7 +864,6 @@ special options which alters its behavior:
 
 !!! block ""
 
-
     #### locale
 
     This option mirrors the [theme] config option of the same name. If this

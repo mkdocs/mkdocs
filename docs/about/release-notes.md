@@ -50,8 +50,8 @@ Contributors who are updating the templates to the built-in themes should
 review the [Contributing
 Guide](contributing.md#submitting-changes-to-the-builtin-themes).
 
-The `lang` setting of the `search` plugin now defaults to the value of
-`theme.locale`.
+The `lang` setting of the `search` plugin now defaults to the language
+specified in `theme.locale`.
 
 #### Support added for Environment Variables in the configuration file (#1954)
 
