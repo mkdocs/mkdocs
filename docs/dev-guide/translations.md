@@ -69,9 +69,9 @@ Here is a quick summary of what you'll need to do:
 
 !!! note
 
-    Translation locales are identified using the [ISO-639-1] (2-letter)
-    language codes. When selecting a locale for a theme, its HTML `lang`
-    attribute is adjusted accordingly.
+    Translation locales are usually identified using the [ISO-639-1] (2-letter)
+    language codes. While territory/region/county codes are also supported,
+    location specific translations should only be added after the general langauge transaltion has been completed and the regional dialect requires use of a term which differs from the general langauge translation.
 
 [ISO-639-1]: https://en.wikipedia.org/wiki/ISO_639-1
 

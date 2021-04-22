@@ -10,6 +10,7 @@ from mkdocs import config
 from mkdocs.config import config_options
 from mkdocs.config import defaults
 from mkdocs.exceptions import ConfigurationError
+from mkdocs.localization import parse_locale
 from mkdocs.tests.base import dedent
 
 
@@ -116,7 +117,7 @@ class ConfigTests(unittest.TestCase):
                     'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],
                     'vars': {
-                        'locale': 'en',
+                        'locale': parse_locale('en'),
                         'include_search_page': False,
                         'search_index_only': False,
                         'highlightjs': True,
@@ -130,7 +131,7 @@ class ConfigTests(unittest.TestCase):
                     'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],
                     'vars': {
-                        'locale': 'en',
+                        'locale': parse_locale('en'),
                         'include_search_page': True,
                         'search_index_only': False,
                         'highlightjs': True,
@@ -146,7 +147,7 @@ class ConfigTests(unittest.TestCase):
                     'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],
                     'vars': {
-                        'locale': 'en',
+                        'locale': parse_locale('en'),
                         'include_search_page': True,
                         'search_index_only': False,
                         'highlightjs': True,
@@ -161,12 +162,12 @@ class ConfigTests(unittest.TestCase):
                 }, {
                     'dirs': [mytheme, mkdocs_templates_dir],
                     'static_templates': ['sitemap.xml'],
-                    'vars': {'locale': 'en'}
+                    'vars': {'locale': parse_locale('en')}
                 }, {
                     'dirs': [custom, os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],
                     'vars': {
-                        'locale': 'en',
+                        'locale': parse_locale('en'),
                         'include_search_page': True,
                         'search_index_only': False,
                         'highlightjs': True,
@@ -182,7 +183,7 @@ class ConfigTests(unittest.TestCase):
                     'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml', 'foo.html'],
                     'vars': {
-                        'locale': 'fr',
+                        'locale': parse_locale('fr'),
                         'show_sidebar': False,
                         'some_var': 'bar',
                         'include_search_page': False,

@@ -162,7 +162,7 @@ class SearchPluginTests(unittest.TestCase):
         self.assertEqual(result['theme'].static_templates, {'404.html', 'sitemap.xml'})
         self.assertEqual(len(result['theme'].dirs), 3)
         self.assertEqual(result['extra_javascript'], ['search/main.js'])
-        self.assertEqual(plugin.config['lang'], [result['theme']['locale']])
+        self.assertEqual(plugin.config['lang'], [result['theme']['locale'].language])
 
     def test_event_on_config_lang(self):
         plugin = search.SearchPlugin()
@@ -184,7 +184,7 @@ class SearchPluginTests(unittest.TestCase):
         self.assertEqual(result['theme'].static_templates, {'404.html', 'sitemap.xml'})
         self.assertEqual(len(result['theme'].dirs), 3)
         self.assertEqual(result['extra_javascript'], ['search/main.js'])
-        self.assertEqual(plugin.config['lang'], [result['theme']['locale']])
+        self.assertEqual(plugin.config['lang'], [result['theme']['locale'].language])
 
     def test_event_on_config_include_search_page(self):
         plugin = search.SearchPlugin()

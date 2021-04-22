@@ -8,7 +8,6 @@ import jinja2
 
 from mkdocs import utils
 from mkdocs.exceptions import BuildError, Abort
-from mkdocs.localization import install_translations
 from mkdocs.structure.files import Files, get_files
 from mkdocs.structure.nav import get_navigation
 import mkdocs
@@ -270,7 +269,6 @@ def build(config, live_server=False, dirty=False):
         files = get_files(config)
         env = config['theme'].get_env()
         files.add_files_from_theme(env, config)
-        install_translations(env, config)
 
         # Run `files` plugin events.
         files = config['plugins'].run_event('files', files, config=config)

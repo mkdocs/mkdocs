@@ -286,6 +286,11 @@ If a set of key/value pairs, the following nested keys can be defined:
     The string name of a known installed theme. For a list of available themes
     visit [Choosing Your Theme].
 
+    #### locale:
+
+    A code representing the language of your site. See [Localizing your theme]
+    for details.
+
     #### custom_dir:
 
     A directory containing a custom theme. This can either be a relative
@@ -661,6 +666,7 @@ plugins:
 [configuring pages and navigation]: writing-your-docs.md#configure-pages-and-navigation
 [theme_dir]: customizing-your-theme.md#using-the-theme_dir
 [choosing your theme]: choosing-your-theme.md
+[Localizing your theme]: localizing-your-theme.md
 [extra_css]: #extra_css
 [Plugins]: ../dev-guide/plugins.md
 [lunr.js]: https://lunrjs.com/

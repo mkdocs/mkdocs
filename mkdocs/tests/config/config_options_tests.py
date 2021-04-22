@@ -634,7 +634,7 @@ class ThemeTest(unittest.TestCase):
         }
         option = config_options.Theme()
         option.post_validation(config, 'theme')
-        self.assertEqual('fr', config['theme']['locale'])
+        self.assertEqual('fr', config['theme']['locale'].language)
 
 
 class NavTest(unittest.TestCase):

@@ -2,7 +2,8 @@ import os
 import logging
 
 from jinja2.ext import Extension, InternationalizationExtension
-from mkdocs import exceptions
+from typing import NamedTuple
+from mkdocs.config.base import ValidationError
 
 try:
     from babel.core import Locale, UnknownLocaleError
@@ -24,22 +25,39 @@ class NoBabelExtension(InternationalizationExtension):
         )
 
 
-def install_translations(env, config):
+class NoBabelLocale(NamedTuple):
+    language: str
+    territory: str = ''
+
+    def __str__(self):
+        if territory:
+            return f'{self.language}_{self.territory}'
+        return self.language
+
+
+def parse_locale(locale):
     if has_babel:
         try:
-            locale = Locale.parse(config['theme']['locale'], sep='_')
+            return Locale.parse(locale, sep='_')
         except (ValueError, UnknownLocaleError) as e:
-            raise exceptions.BuildError(f'Invalid value for theme.locale: {str(e)}')
+            raise ValidationError(f'Invalid value for locale: {str(e)}')
+    else:
+        if '_' in locale:
+            return NoBabelLocale(*locale.split('_'))
+        return NoBabelLocale(locale)
 
+
+def install_translations(env, locale, theme_dirs):
+    if has_babel:
         env.add_extension('jinja2.ext.i18n')
-        translations = _get_merged_translations(config['theme'].dirs, 'locales', locale)
+        translations = _get_merged_translations(theme_dirs, 'locales', locale)
         if translations is not None:
             env.install_gettext_translations(translations)
         else:
             env.install_null_translations()
-            if config['theme']['locale'] != 'en':
+            if locale.language != 'en':
                 log.warning(
-                    f"No translations could be found for the locale '{config['theme']['locale']}'. "
+                    f"No translations could be found for the locale '{locale}'. "
                     'Defaulting to English.'
                 )
     else:

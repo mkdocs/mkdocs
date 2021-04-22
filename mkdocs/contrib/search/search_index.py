@@ -99,7 +99,7 @@ class SearchIndex:
             'docs': self._entries,
             'config': self.config
         }
-        data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
+        data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'), default=str)
 
         if self.config['prebuild_index'] in (True, 'node'):
             try:
