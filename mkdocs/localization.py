@@ -2,7 +2,6 @@ import os
 import logging
 
 from jinja2.ext import Extension, InternationalizationExtension
-from typing import NamedTuple
 from mkdocs.config.base import ValidationError
 
 try:
@@ -10,7 +9,35 @@ try:
     from babel.support import Translations, NullTranslations
     has_babel = True
 except ImportError:
+    from typing import NamedTuple
+    from string import ascii_letters
     has_babel = False
+
+
+    class UnknownLocaleError(Exception):
+        pass
+
+
+    class Locale(NamedTuple):
+        language: str
+        territory: str = ''
+
+        def __str__(self):
+            if self.territory:
+                return f'{self.language}_{self.territory}'
+            return self.language
+
+        @classmethod
+        def parse(cls, identifier, sep):
+            if not isinstance(identifier, str):
+                raise TypeError("Unexpected value for identifier: '{identifier}'")
+            locale = cls(*identifier.split(sep, 1))
+            if not all(x in ascii_letters for x in locale.language):
+                raise ValueError("expected only letters, got '{instance.language'")
+            if len(locale.language) != 2:
+                raise UnknownLocaleError("unknown locale '{instance}'")
+            return locale
+
 
 log = logging.getLogger(__name__)
 base_path = os.path.dirname(os.path.abspath(__file__))
@@ -25,26 +52,11 @@ class NoBabelExtension(InternationalizationExtension):
         )
 
 
-class NoBabelLocale(NamedTuple):
-    language: str
-    territory: str = ''
-
-    def __str__(self):
-        if self.territory:
-            return f'{self.language}_{self.territory}'
-        return self.language
-
-
 def parse_locale(locale):
-    if has_babel:
-        try:
-            return Locale.parse(locale, sep='_')
-        except (ValueError, UnknownLocaleError) as e:
+    try:
+        return Locale.parse(locale, sep='_')
+    except (ValueError, UnknownLocaleError, TypeError) as e:
             raise ValidationError(f'Invalid value for locale: {str(e)}')
-    else:
-        if '_' in locale:
-            return NoBabelLocale(*locale.split('_'))
-        return NoBabelLocale(locale)
 
 
 def install_translations(env, locale, theme_dirs):
