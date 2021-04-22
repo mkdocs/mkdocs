@@ -13,10 +13,8 @@ except ImportError:
     from string import ascii_letters
     has_babel = False
 
-
     class UnknownLocaleError(Exception):
         pass
-
 
     class Locale(NamedTuple):
         language: str
@@ -56,7 +54,7 @@ def parse_locale(locale):
     try:
         return Locale.parse(locale, sep='_')
     except (ValueError, UnknownLocaleError, TypeError) as e:
-            raise ValidationError(f'Invalid value for locale: {str(e)}')
+        raise ValidationError(f'Invalid value for locale: {str(e)}')
 
 
 def install_translations(env, locale, theme_dirs):
