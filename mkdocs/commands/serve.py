@@ -6,7 +6,6 @@ import sys
 from os.path import isfile, join
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
-from mkdocs.exceptions import Abort
 
 log = logging.getLogger(__name__)
 
@@ -150,6 +149,6 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
             _static_server(host, port, site_dir)
     except OSError as e:  # pragma: no cover
         # Avoid ugly, unhelpful traceback
-        raise Abort(str(e))
+        raise SystemExit(str(e))
     finally:
         shutil.rmtree(site_dir)

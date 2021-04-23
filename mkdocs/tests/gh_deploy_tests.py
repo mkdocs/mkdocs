@@ -4,7 +4,6 @@ from ghp_import import GhpError
 
 from mkdocs.tests.base import load_config
 from mkdocs.commands import gh_deploy
-from mkdocs.exceptions import Abort
 from mkdocs import __version__
 
 
@@ -156,7 +155,7 @@ class TestGitHubDeploy(unittest.TestCase):
             remote_branch='test',
         )
 
-        self.assertRaises(Abort, gh_deploy.gh_deploy, config)
+        self.assertRaises(SystemExit, gh_deploy.gh_deploy, config)
         mock_log.error.assert_called_once_with(
             'Failed to deploy to GitHub with error: \n{}'.format(error_string)
         )
@@ -182,7 +181,7 @@ class TestGitHubDeployLogs(unittest.TestCase):
         mock_popeno().communicate.return_value = (b'Deployed 12345678 with MkDocs version: 10.1.2\n', b'')
 
         with self.assertLogs('mkdocs', level='ERROR') as cm:
-            self.assertRaises(Abort, gh_deploy._check_version, 'gh-pages')
+            self.assertRaises(SystemExit, gh_deploy._check_version, 'gh-pages')
         self.assertEqual(
             cm.output, ['ERROR:mkdocs.commands.gh_deploy:Deployment terminated: Previous deployment was made with '
                         'MkDocs version 10.1.2; you are attempting to deploy with an older version ({}). Use '

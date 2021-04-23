@@ -133,7 +133,7 @@ class ConfigBaseTests(unittest.TestCase):
             config_file.flush()
             config_file.close()
 
-            self.assertRaises(exceptions.Abort,
+            self.assertRaises(SystemExit,
                               base.load_config, config_file=config_file.name)
         finally:
             os.remove(config_file.name)

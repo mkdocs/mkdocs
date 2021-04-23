@@ -61,17 +61,15 @@ to execute code when an exception is raised while building the site.
 See [`on_build_error`](../dev-guide/plugins.md#on_build_error)
 in the Plugins documentation for details.
 
-#### Three new exceptions: BuildError PluginError and Abort (#2103)
+#### Two new exceptions: BuildError and PluginError (#2103)
 
-MkDocs now has tree new exceptions defined in `mkdocs.exceptions`:
-`BuildError`, `PluginError`, and `Abort`:
+MkDocs now has two new exceptions defined in `mkdocs.exceptions`,
+`BuildError` and `PluginError`:
 
 * `PluginError` can be raised from a plugin
   to stop the build and log an error message *without traceback*.
 * `BuildError` should not be used by third-party plugins developers
   and is reserved for internal use only.
-* `Abort` is used internally to abort the build and display an error
-  without a traceback.
 
 See [`Handling errors`](../dev-guide/plugins.md#handling-errors)
 in the Plugins documentation for details.

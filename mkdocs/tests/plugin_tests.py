@@ -8,7 +8,7 @@ import os
 from mkdocs import plugins
 from mkdocs import config
 from mkdocs.commands import build
-from mkdocs.exceptions import BuildError, PluginError, Abort
+from mkdocs.exceptions import BuildError, PluginError
 from mkdocs.tests.base import load_config
 
 
@@ -177,15 +177,15 @@ class TestPluginCollection(unittest.TestCase):
 
         cfg = load_config()
         cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='pre_page')
-        self.assertRaises(Abort, build.build, cfg)
+        self.assertRaises(SystemExit, build.build, cfg)
 
         cfg = load_config()
         cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='page_markdown')
-        self.assertRaises(Abort, build.build, cfg)
+        self.assertRaises(SystemExit, build.build, cfg)
 
         cfg = load_config()
         cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='page_content')
-        self.assertRaises(Abort, build.build, cfg)
+        self.assertRaises(SystemExit, build.build, cfg)
 
         cfg = load_config()
         cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='post_page')
