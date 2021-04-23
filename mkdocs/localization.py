@@ -9,32 +9,8 @@ try:
     from babel.support import Translations, NullTranslations
     has_babel = True
 except ImportError:
-    from typing import NamedTuple
-    from string import ascii_letters
+    from mkdocs.utils.babel_stub import Locale, UnknownLocaleError
     has_babel = False
-
-    class UnknownLocaleError(Exception):
-        pass
-
-    class Locale(NamedTuple):
-        language: str
-        territory: str = ''
-
-        def __str__(self):
-            if self.territory:
-                return f'{self.language}_{self.territory}'
-            return self.language
-
-        @classmethod
-        def parse(cls, identifier, sep):
-            if not isinstance(identifier, str):
-                raise TypeError("Unexpected value for identifier: '{identifier}'")
-            locale = cls(*identifier.split(sep, 1))
-            if not all(x in ascii_letters for x in locale.language):
-                raise ValueError("expected only letters, got '{instance.language'")
-            if len(locale.language) != 2:
-                raise UnknownLocaleError("unknown locale '{instance}'")
-            return locale
 
 
 log = logging.getLogger(__name__)
