@@ -113,8 +113,8 @@ def get_navigation(files, config):
     if missing_from_config:
         log.info(
             'The following pages exist in the docs directory, but are not '
-            'included in the "nav" configuration:\n  - {}'.format(
-                '\n  - '.join([file.src_path for file in missing_from_config]))
+            'included in the "nav" configuration:\n- {}'.format(
+                '\n- '.join([file.src_path for file in missing_from_config]))
         )
         # Any documentation files not found in the nav should still have an associated page, so we
         # create them here. The Page object will automatically be assigned to `file.page` during
