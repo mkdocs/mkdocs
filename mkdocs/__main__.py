@@ -38,7 +38,10 @@ class ColorFormatter(logging.Formatter):
             prefix = click.style(prefix, fg=self.colors[record.levelname])
         if self.text_wrapper.width:
             # Only wrap text if a terminal width was detected
-            msg = self.text_wrapper.fill(record.getMessage())
+            msg = '\n'.join(
+                self.text_wrapper.fill(line)
+                for line in record.getMessage().splitlines()
+            )
             # Prepend prefix after wrapping so that color codes don't affect length
             return prefix + msg[12:]
         return prefix + record.getMessage()
