@@ -887,7 +887,8 @@ special options which alters its behavior:
 
         <html lang="fr_CA">
 
-    If you did not want the territory attribute to be included, then reference the `language` attribute directly:
+    If you did not want the territory attribute to be included, then reference
+    the `language` attribute directly:
 
         <html lang="{ config.theme.locale.language }">
 

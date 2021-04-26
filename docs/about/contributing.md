@@ -93,7 +93,9 @@ Themes] for details.
 
 !!! Note
 
-    Contributors are not expected to provide translations with their changes to a theme's templates. However, they are expected to include an updated `pot` file so that everything is ready for translators to do their job.
+    Contributors are not expected to provide translations with their changes to
+    a theme's templates. However, they are expected to include an updated `pot`
+    file so that everything is ready for translators to do their job.
 
 [virtualenv]: https://virtualenv.pypa.io/en/latest/user_guide.html
 [pip]: https://pip.pypa.io/en/stable/

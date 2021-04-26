@@ -71,7 +71,9 @@ Here is a quick summary of what you'll need to do:
 
     Translation locales are usually identified using the [ISO-639-1] (2-letter)
     language codes. While territory/region/county codes are also supported,
-    location specific translations should only be added after the general language transaltion has been completed and the regional dialect requires use of a term which differs from the general language translation.
+    location specific translations should only be added after the general
+    language translation has been completed and the regional dialect requires
+    use of a term which differs from the general language translation.
 
 [ISO-639-1]: https://en.wikipedia.org/wiki/ISO_639-1
 
