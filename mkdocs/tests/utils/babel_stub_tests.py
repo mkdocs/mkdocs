@@ -4,31 +4,31 @@ from mkdocs.utils.babel_stub import Locale, UnknownLocaleError
 
 class BabelStubTests(unittest.TestCase):
 
-    def test_locale_langauge_only(self):
+    def test_locale_language_only(self):
         locale = Locale('es')
         self.assertEqual(locale.language, 'es')
         self.assertEqual(locale.territory, '')
         self.assertEqual(str(locale), 'es')
 
-    def test_locale_langauge_territory(self):
+    def test_locale_language_territory(self):
         locale = Locale('es', 'ES')
         self.assertEqual(locale.language, 'es')
         self.assertEqual(locale.territory, 'ES')
         self.assertEqual(str(locale), 'es_ES')
 
-    def test_parse_locale_langauge_only(self):
+    def test_parse_locale_language_only(self):
         locale = Locale.parse('fr', '_')
         self.assertEqual(locale.language, 'fr')
         self.assertEqual(locale.territory, '')
         self.assertEqual(str(locale), 'fr')
 
-    def test_parse_locale_langauge_territory(self):
+    def test_parse_locale_language_territory(self):
         locale = Locale.parse('fr_FR', '_')
         self.assertEqual(locale.language, 'fr')
         self.assertEqual(locale.territory, 'FR')
         self.assertEqual(str(locale), 'fr_FR')
 
-    def test_parse_locale_langauge_territory_sep(self):
+    def test_parse_locale_language_territory_sep(self):
         locale = Locale.parse('fr-FR', '-')
         self.assertEqual(locale.language, 'fr')
         self.assertEqual(locale.territory, 'FR')
