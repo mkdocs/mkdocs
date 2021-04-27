@@ -113,10 +113,11 @@ jobs:
           for locale in $(ls mkdocs/themes/mkdocs/locales/); do python setup.py update_catalog -t mkdocs -l ${locale}; done
           for locale in $(ls mkdocs/themes/readthedocs/locales/); do python setup.py update_catalog -t readthedocs -l ${locale}; done
           for changed_file in ${{ steps.files.outputs.all }}; do
-            echo "inspecting changed file: ${changed_file}";
+            # echo "inspecting changed file: ${changed_file}";
             if [[ "${changed_file}" == "mkdocs/__init__.py" ]]; then
-              echo "mkdocs version changed!";
-              git diff -G "msgid" --exit-code && git diff -G "msgstr" --exit-code;
+              # echo "mkdocs version changed!";
+              git diff -G "msgid" --exit-code || exit 1
+              git diff -G "msgstr" --exit-code || exit 2
             fi
           done
         shell: bash
