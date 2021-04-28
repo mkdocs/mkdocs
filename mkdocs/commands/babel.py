@@ -1,6 +1,11 @@
 from distutils.errors import DistutilsOptionError
-from pathlib import Path
+from os import path
 from babel.messages import frontend as babel
+
+
+DEFAULT_MAPPING_FILE = path.normpath(path.join(
+    path.abspath(path.dirname(__file__)), '../themes/babel.cfg'
+))
 
 
 class ThemeMixin:
@@ -48,6 +53,8 @@ class extract_messages(babel.extract_messages, ThemeMixin):
         if not self.version:
             version = self.distribution.get_version()
             self.version = ".".join([i for i in version.split(".") if "dev" not in i])
+        if not self.mapping_file:
+            self.mapping_file = DEFAULT_MAPPING_FILE
         if self.theme:
             theme_dir = self.get_theme_dir()
             self.input_paths = theme_dir
