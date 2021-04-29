@@ -169,9 +169,6 @@ def cli():
 @common_options
 def serve_command(dev_addr, livereload, **kwargs):
     """Run the builtin development server"""
-
-    logging.getLogger('tornado').setLevel(logging.WARNING)
-
     serve.serve(dev_addr=dev_addr, livereload=livereload, **kwargs)
 
 
