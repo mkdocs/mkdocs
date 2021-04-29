@@ -74,7 +74,7 @@ class CommandTests(unittest.TestCase):
         cmd.initialize_options()
         cmd.theme = 'mkdocs'
         cmd.finalize_options()
-        self.assertEqual(cmd.directory, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs', 'locales'))
+        self.assertEqual(cmd.directory, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/locales'))
 
     def test_extract_messages(self):
         dist = Distribution(dict(name='foo', version='1.2'))
@@ -87,7 +87,7 @@ class CommandTests(unittest.TestCase):
         cmd.theme = 'mkdocs'
         cmd.finalize_options()
         self.assertEqual(cmd.input_paths, [path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs')])
-        self.assertEqual(cmd.output_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs', 'messages.pot'))
+        self.assertEqual(cmd.output_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot'))
         self.assertEqual(cmd.mapping_file, babel.DEFAULT_MAPPING_FILE)
         self.assertEqual(cmd.project, 'foo')
         self.assertEqual(cmd.version, '1.2')
@@ -103,8 +103,8 @@ class CommandTests(unittest.TestCase):
         cmd.theme = 'mkdocs'
         cmd.locale = 'en'
         cmd.finalize_options()
-        self.assertEqual(cmd.input_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs', 'messages.pot'))
-        self.assertEqual(cmd.output_dir, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs', 'locales'))
+        self.assertEqual(cmd.input_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot'))
+        self.assertEqual(cmd.output_dir, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/locales'))
 
     def test_update_catalog(self):
         dist = Distribution()
@@ -116,5 +116,5 @@ class CommandTests(unittest.TestCase):
         cmd.initialize_options()
         cmd.theme = 'mkdocs'
         cmd.finalize_options()
-        self.assertEqual(cmd.input_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs', 'messages.pot'))
-        self.assertEqual(cmd.output_dir, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs', 'locales'))
+        self.assertEqual(cmd.input_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot'))
+        self.assertEqual(cmd.output_dir, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/locales'))
