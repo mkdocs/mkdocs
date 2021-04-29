@@ -8,7 +8,7 @@ try:
     from babel.core import Locale, UnknownLocaleError
     from babel.support import Translations, NullTranslations
     has_babel = True
-except ImportError:
+except ImportError:  # pragma: no cover
     from mkdocs.utils.babel_stub import Locale, UnknownLocaleError
     has_babel = False
 
@@ -17,7 +17,7 @@ log = logging.getLogger(__name__)
 base_path = os.path.dirname(os.path.abspath(__file__))
 
 
-class NoBabelExtension(InternationalizationExtension):
+class NoBabelExtension(InternationalizationExtension):  # pragma: no cover
     def __init__(self, environment):
         Extension.__init__(self, environment)
         environment.extend(
@@ -46,7 +46,7 @@ def install_translations(env, locale, theme_dirs):
                     f"No translations could be found for the locale '{locale}'. "
                     'Defaulting to English.'
                 )
-    else:
+    else:  # pragma: no cover
         # no babel installed, add dummy support for trans/endtrans blocks
         env.add_extension(NoBabelExtension)
         env.install_null_translations()

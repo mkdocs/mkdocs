@@ -47,8 +47,6 @@ class extract_messages(babel.extract_messages, ThemeMixin):
         self.theme = None
 
     def finalize_options(self):
-        if not self.project:
-            self.project = self.distribution.get_name()
         if not self.version:
             version = self.distribution.get_version()
             self.version = ".".join([i for i in version.split(".") if "dev" not in i])
