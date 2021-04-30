@@ -165,98 +165,35 @@ entire site.
 
 ##### on_serve
 
-*   The `serve` event is only called when the `serve` command is used during
-    development. It is passed the `Server` instance which can be modified before
-    it is activated. For example, additional files or directories could be added
-    to the list of "watched" files for auto-reloading.
-
-    Parameters:
-    : __server:__ `livereload.Server` instance
-    : __config:__ global configuration object
-    : __builder:__ a callable which gets passed to each call to `server.watch`
-
-    Returns:
-    : `livereload.Server` instance
+::: mkdocs.plugins.BasePlugin.on_serve
 
 ##### on_config
 
-*   The `config` event is the first event called on build and is run immediately
-    after the user configuration is loaded and validated. Any alterations to the
-    config should be made here.
-
-    Parameters:
-    : __config:__ global configuration object
-
-    Returns:
-    : global configuration object
+::: mkdocs.plugins.BasePlugin.on_config
 
 ##### on_pre_build
 
-*   The `pre_build` event does not alter any variables. Use this event to call
-    pre-build scripts.
-
-    Parameters:
-    : __config:__ global configuration object
+::: mkdocs.plugins.BasePlugin.on_pre_build
 
 ##### on_files
 
-*   The `files` event is called after the files collection is populated from the
-    `docs_dir`. Use this event to add, remove, or alter files in the
-    collection. Note that Page objects have not yet been associated with the
-    file objects in the collection. Use [Page Events] to manipulate page
-    specific data.
-
-    Parameters:
-    : __files:__ global files collection
-    : __config:__ global configuration object
-
-    Returns:
-    : global files collection
+::: mkdocs.plugins.BasePlugin.on_files
 
 ##### on_nav
 
-*   The `nav` event is called after the site navigation is created and can
-    be used to alter the site navigation.
-
-    Parameters:
-    : __nav:__ global navigation object
-    : __config:__ global configuration object
-    : __files:__ global files collection
-
-    Returns:
-    : global navigation object
+::: mkdocs.plugins.BasePlugin.on_nav
 
 ##### on_env
 
-*   The `env` event is called after the Jinja template environment is created
-    and can be used to alter the [Jinja environment](https://jinja.palletsprojects.com/en/latest/api/#jinja2.Environment).
-
-    Parameters:
-    : __env:__ global Jinja environment
-    : __config:__ global configuration object
-    : __files:__ global files collection
-
-    Returns:
-    : global Jinja Environment
+::: mkdocs.plugins.BasePlugin.on_env
 
 ##### on_post_build
 
-*   The `post_build` event does not alter any variables. Use this event to call
-    post-build scripts.
-
-    Parameters:
-    : __config:__ global configuration object
+::: mkdocs.plugins.BasePlugin.on_post_build
 
 ##### on_build_error
 
-*   The `build_error` event is called after an exception of any kind
-    is caught by MkDocs during the build process.
-    Use this event to clean things up before MkDocs terminates. Note that any other
-    events which were scheduled to run after the error will have been skipped. See
-    [Handling Errors] for more details.
-
-    Parameters:
-    : __error:__ exception raised
+::: mkdocs.plugins.BasePlugin.on_build_error
 
 #### Template Events
 
@@ -267,45 +204,15 @@ called after the [env] event and before any [page events].
 
 ##### on_pre_template
 
-*   The `pre_template` event is called immediately after the subject template is
-    loaded and can be used to alter the template.
-
-    Parameters:
-    : __template__: a Jinja2 [Template] object
-    : __template_name__: string filename of template
-    : __config:__ global configuration object
-
-    Returns:
-    : a Jinja2 [Template] object
+::: mkdocs.plugins.BasePlugin.on_pre_template
 
 ##### on_template_context
 
-*   The `template_context` event is called immediately after the context is created
-    for the subject template and can be used to alter the context for that specific
-    template only.
-
-    Parameters:
-    : __context__: dict of template context variables
-    : __template_name__: string filename of template
-    : __config:__ global configuration object
-
-    Returns:
-    : dict of template context variables
+::: mkdocs.plugins.BasePlugin.on_template_context
 
 ##### on_post_template
 
-*   The `post_template` event is called after the template is rendered, but before
-    it is written to disc and can be used to alter the output of the template.
-    If an empty string is returned, the template is skipped and nothing is is
-    written to disc.
-
-    Parameters:
-    : __output_content__: output of rendered template as string
-    : __template_name__: string filename of template
-    : __config:__ global configuration object
-
-    Returns:
-    : output of rendered template as string
+::: mkdocs.plugins.BasePlugin.on_post_template
 
 #### Page Events
 
@@ -315,88 +222,27 @@ page events are called after the [post_template] event and before the
 
 ##### on_pre_page
 
-*   The `pre_page` event is called before any actions are taken on the subject
-    page and can be used to alter the `Page` instance.
-
-    Parameters:
-    : __page:__ `mkdocs.nav.Page` instance
-    : __config:__ global configuration object
-    : __files:__ global files collection
-
-    Returns:
-    : `mkdocs.nav.Page` instance
+::: mkdocs.plugins.BasePlugin.on_pre_page
 
 ##### on_page_read_source
 
-*   The `on_page_read_source` event can replace the default mechanism to read
-    the contents of a page's source from the filesystem.
-
-    Parameters:
-    : __page:__ `mkdocs.nav.Page` instance
-    : __config:__ global configuration object
-
-    Returns:
-    : The raw source for a page as unicode string. If `None` is returned, the
-      default loading from a file will be performed.
+::: mkdocs.plugins.BasePlugin.on_page_read_source
 
 ##### on_page_markdown
 
-*   The `page_markdown` event is called after the page's markdown is loaded
-    from file and can be used to alter the Markdown source text. The meta-
-    data has been stripped off and is available as `page.meta` at this point.
-
-    Parameters:
-    : __markdown:__ Markdown source text of page as string
-    : __page:__ `mkdocs.nav.Page` instance
-    : __config:__ global configuration object
-    : __files:__ global files collection
-
-    Returns:
-    : Markdown source text of page as string
+::: mkdocs.plugins.BasePlugin.on_page_markdown
 
 ##### on_page_content
 
-*   The `page_content` event is called after the Markdown text is rendered to
-    HTML (but before being passed to a template) and can be used to alter the
-    HTML body of the page.
-
-    Parameters:
-    : __html:__ HTML rendered from Markdown source as string
-    : __page:__ `mkdocs.nav.Page` instance
-    : __config:__ global configuration object
-    : __files:__ global files collection
-
-    Returns:
-    : HTML rendered from Markdown source as string
+::: mkdocs.plugins.BasePlugin.on_page_content
 
 ##### on_page_context
 
-*   The `page_context` event is called after the context for a page is created
-    and can be used to alter the context for that specific page only.
-
-    Parameters:
-    : __context__: dict of template context variables
-    : __page:__ `mkdocs.nav.Page` instance
-    : __config:__ global configuration object
-    : __nav:__ global navigation object
-
-    Returns:
-    : dict of template context variables
+::: mkdocs.plugins.BasePlugin.on_page_context
 
 ##### on_post_page
 
-*   The `post_page` event is called after the template is rendered, but
-    before it is written to disc and can be used to alter the output of the
-    page. If an empty string is returned, the page is skipped and nothing is
-    written to disc.
-
-    Parameters:
-    : __output:__ output of rendered template as string
-    : __page:__ `mkdocs.nav.Page` instance
-    : __config:__ global configuration object
-
-    Returns:
-    : output of rendered template as string
+::: mkdocs.plugins.BasePlugin.on_post_page
 
 ### Handling Errors
 
@@ -503,6 +349,4 @@ tell MkDocs to use it via the config.
 [Template Events]: #template-events
 [MkDocs Plugins]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Plugins
 [on_build_error]: #on_build_error
-[Handling Errors]: #handling-errors
 [config_scheme]: #config_scheme
-[Template]: http://code.nabla.net/doc/jinja2/api/jinja2/environment/jinja2.environment.Template.html

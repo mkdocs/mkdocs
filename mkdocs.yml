@@ -60,3 +60,12 @@ plugins:
             user-guide/plugins.md: dev-guide/plugins.md
             user-guide/custom-themes.md: dev-guide/themes.md
             user-guide/styling-your-docs.md: user-guide/choosing-your-theme.md
+    - mkdocstrings:
+        handlers:
+          python:
+            options:
+              show_root_toc_entry: false
+              show_source: false
+
+watch:
+    - mkdocs
