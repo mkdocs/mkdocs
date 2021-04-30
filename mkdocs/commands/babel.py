@@ -55,7 +55,7 @@ class extract_messages(babel.extract_messages, ThemeMixin):
         if self.theme:
             theme_dir = self.get_theme_dir()
             self.input_paths = theme_dir
-            self.output_file = f"{theme_dir}/messages.pot"
+            self.output_file = f"{theme_dir}/{self.domain}.pot"
         super().finalize_options()
 
 
@@ -71,7 +71,7 @@ class init_catalog(babel.init_catalog, ThemeMixin):
     def finalize_options(self):
         if self.theme:
             theme_dir = self.get_theme_dir()
-            self.input_file = f"{theme_dir}/messages.pot"
+            self.input_file = f"{theme_dir}/{self.domain}.pot"
             self.output_dir = f"{theme_dir}/locales"
         super().finalize_options()
 
@@ -88,6 +88,6 @@ class update_catalog(babel.update_catalog, ThemeMixin):
     def finalize_options(self):
         if self.theme:
             theme_dir = self.get_theme_dir()
-            self.input_file = f"{theme_dir}/messages.pot"
+            self.input_file = f"{theme_dir}/{self.domain}.pot"
             self.output_dir = f"{theme_dir}/locales"
         super().finalize_options()
