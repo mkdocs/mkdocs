@@ -1,0 +1,264 @@
+# Convert to SVG:
+# dot -Tsvg plugin-events.gv | awk '/^<svg/ {p = 1}; p' > plugin-events.svg
+
+digraph mkdocs {
+    compound=true
+
+    graph [fontname="inherit"];
+    node [fontname="inherit",style=filled];
+    edge [fontname="inherit"];
+
+    load_config [fillcolor="#00ff0044"]
+
+    load_config -> on_config:config:n
+    subgraph cluster_on_config {
+        label="on_config"
+        href="#on_config"
+        on_config [label="<config>config",shape=record,fillcolor="#ffffff99"concentrate=true]
+        bgcolor="#ffff0066"
+    }
+
+    on_config:config:s -> on_pre_build:config:n
+    subgraph cluster_on_pre_build {
+        label="on_pre_build"
+        href="#on_pre_build"
+        on_pre_build [label="<config>config",shape=record,fillcolor="#ffffff99"]
+        bgcolor="#ffff0066"
+    }
+
+    on_config:config:s -> get_files
+    get_files [fillcolor="#00ff0044"]
+
+    on_pre_build:s -> on_files:n [style=invis]
+
+    get_files -> on_files:files:n
+    subgraph cluster_on_files {
+        label="on_files"
+        href="#on_files"
+        on_files [label="<files>files|<config>config",shape=record,fillcolor="#ffffff99"]
+        bgcolor="#ffff0066"
+    }
+
+    on_files:files:s -> get_nav
+    get_nav[fillcolor="#00ff0044"]
+
+    get_nav -> on_nav:nav:n
+    on_files:files:s -> on_nav:files:n
+    subgraph cluster_on_nav {
+        label="on_nav"
+        href="#on_nav"
+        on_nav [label="<nav>nav|<config>config|<files>files",shape=record,fillcolor="#ffffff99"]
+        bgcolor="#ffff0066"
+    }
+
+    on_nav:s -> on_pre_page:n [style=invis]
+
+    on_nav:files:s -> pages_a1 [arrowhead=none]
+    pages_a1 [shape=point]
+    pages_a1 -> on_pre_page:page:n [style=dashed,penwidth=1.5]
+    pages_a1 -> on_pre_page:files:n [lhead=cluster_populate_page]
+
+    subgraph cluster_populate_page {
+        label="populate_page"
+
+        subgraph cluster_on_pre_page {
+            label="on_pre_page"
+            href="#on_pre_page"
+            on_pre_page [label="<page>page|<config>config|<files>files",shape=record,fillcolor="#ffffff99"]
+            bgcolor="#ffff0066"
+        }
+
+        on_pre_page:page:s -> on_read_source:page:n [style=dashed,penwidth=1.5]
+        subgraph cluster_on_read_source {
+            label="on_read_source"
+            href="#on_read_source"
+            on_read_source [label="<page>page|<config>config",shape=record,fillcolor="#ffffff99"]
+            bgcolor="#ffff0066"
+        }
+
+        on_read_source -> on_page_markdown:markdown:n [style=dashed,penwidth=1.5,ltail=cluster_on_read_source]
+        subgraph cluster_on_page_markdown {
+            label="on_page_markdown"
+            href="#on_page_markdown"
+            on_page_markdown [label="<markdown>markdown|<page>page|<config>config|<files>files",shape=record,style=filled,fillcolor="#ffffff99"]
+            bgcolor="#ffff0066"
+        }
+
+        on_page_markdown:markdown:s -> render_a [style=dashed,penwidth=1.5]
+        render_a [label="render",fillcolor="#00ff0044"]
+
+        render_a -> on_page_content:content:n [style=dashed,penwidth=1.5]
+        subgraph cluster_on_page_content {
+            label="on_page_content"
+            href="#on_page_content"
+            on_page_content [label="<content>html|<page>page|<config>config|<files>files",shape=record,fillcolor="#ffffff99"]
+            bgcolor="#ffff0066"
+        }
+    }
+
+    pages_a1 -> page_a2 [style=dashed,penwidth=1.5,lhead=cluster_populate_page_2]
+    subgraph cluster_populate_page_2 {
+        label="populate_page"
+        page_a2 [color=transparent,label="..."]
+    }
+
+    pages_a1 -> page_a3 [style=dashed,penwidth=1.5,lhead=cluster_populate_page_3]
+    subgraph cluster_populate_page_3 {
+        label="populate_page"
+        page_a3 [color=transparent,label="..."]
+    }
+
+    on_page_content:content:s -> pages_a2 [style=dashed,penwidth=1.5]
+    page_a2 -> pages_a2 [style=dashed,penwidth=1.5,ltail=cluster_populate_page_2]
+    page_a3 -> pages_a2 [style=dashed,penwidth=1.5,ltail=cluster_populate_page_3]
+    pages_a2 [shape=point]
+
+    on_page_content:s -> on_env:n [style=invis]
+
+    pages_a2 -> on_env:files:n
+    subgraph cluster_on_env {
+        label="on_env"
+        href="#on_env"
+        on_env [label="<env>env|<config>config|<files>files",shape=record,fillcolor="#ffffff99"]
+        bgcolor="#ffff0066"
+    }
+
+    on_nav:nav:s -> context_inputs [arrowhead=none]
+    on_env:env:s -> context_inputs [arrowhead=none]
+    context_inputs [shape=point]
+
+    pages_a2 -> pages_b1 [arrowhead=none]
+    pages_b1 [shape=point]
+    pages_b1 -> on_page_context:page:n [style=dashed,penwidth=1.5]
+    pages_b1 -> get_context [style=invis]
+
+    context_inputs -> get_context [lhead=cluster_build_page]
+
+
+    subgraph cluster_build_page {
+        label="build_page"
+
+        get_context [fillcolor="#00ff0044"]
+
+        get_template [fillcolor="#00ff0044"]
+
+        get_context -> on_page_context:context:n
+        subgraph cluster_on_page_context {
+            label="on_page_context"
+            href="#on_page_context"
+            on_page_context [label="<context>context|<page>page|<config>config|<nav>nav",shape=record,fillcolor="#ffffff99"]
+            bgcolor="#ffff0066"
+        }
+
+        on_page_context:context:s -> render_b
+        get_template -> render_b
+        render_b [label="render",fillcolor="#00ff0044"]
+
+        render_b -> on_post_page:output:n
+        subgraph cluster_on_post_page {
+            label="on_post_page"
+            href="#on_post_page"
+            on_post_page [label="<output>output|<page>page|<config>config",shape=record,fillcolor="#ffffff99"]
+            bgcolor="#ffff0066"
+        }
+
+        on_post_page:output:s -> write_file
+        write_file [fillcolor="#00ff0044"]
+    }
+
+    pages_b1 -> page_b2 [style=dashed,penwidth=1.5,lhead=cluster_build_page_2]
+    subgraph cluster_build_page_2 {
+        label="build_page"
+        page_b2 [color=transparent,label="..."]
+    }
+
+    pages_b1 -> page_b3 [style=dashed,penwidth=1.5,lhead=cluster_build_page_3]
+    subgraph cluster_build_page_3 {
+        label="build_page"
+        page_b3 [color=transparent,label="..."]
+    }
+
+    page_b2 -> page_b3 [style=invis]
+
+
+    templates [shape=point]
+    templates -> on_pre_template:template_name:n [style=dashed,penwidth=1.5]
+    templates -> get_template_t [style=invis]
+
+    on_env:env:s -> get_template_t [lhead=cluster_build_template]
+    subgraph cluster_build_template {
+        label="build_template"
+
+        get_template_t [label="get_template",fillcolor="#00ff0044"]
+
+        get_template_t -> on_pre_template:template:n
+        subgraph cluster_on_pre_template {
+            label="on_pre_template"
+            href="#on_pre_template"
+            on_pre_template [label="<template>template|<template_name>template_name|<config>config",shape=record,fillcolor="#ffffff99"]
+            bgcolor="#ffff0066"
+        }
+
+        on_pre_template:s -> on_template_context:n [style=invis]
+
+        get_context_t [label="get_context",fillcolor="#00ff0044"]
+
+        get_context_t -> on_template_context:context:n
+        subgraph cluster_on_template_context {
+            label="on_template_context"
+            href="#on_template_context"
+            on_template_context [label="<context>context|<template_name>template_name|<config>config",shape=record,fillcolor="#ffffff99"]
+            bgcolor="#ffff0066"
+        }
+
+        render_t [label="render",fillcolor="#00ff0044"]
+
+        on_pre_template:template:s -> render_t
+        on_template_context:context:s -> render_t
+
+        render_t -> on_post_template:output:n
+        subgraph cluster_on_post_template {
+            label="on_post_template"
+            href="#on_post_template"
+            on_post_template [label="<output>output|<template_name>template_name|<config>config",shape=record,fillcolor="#ffffff99"]
+            bgcolor="#ffff0066"
+        }
+
+        on_post_template:output:s -> write_file_t
+        write_file_t [label="write_file",fillcolor="#00ff0044"]
+    }
+
+    templates -> template_2 [style=dashed,penwidth=1.5,lhead=cluster_build_template_2]
+    subgraph cluster_build_template_2 {
+        label="build_template"
+        template_2 [color=transparent,label="..."]
+    }
+
+    templates -> template_3 [style=dashed,penwidth=1.5,lhead=cluster_build_template_3]
+    subgraph cluster_build_template_3 {
+        label="build_template"
+        template_3 [color=transparent,label="..."]
+    }
+
+    template_2 -> template_3 [style=invis]
+
+
+    write_file -> on_post_build:n [style=invis]
+    write_file_t -> on_post_build:n [style=invis]
+
+    subgraph cluster_on_post_build {
+        label="on_post_build"
+        href="#on_post_build"
+        on_post_build [label="<config>config",shape=record,fillcolor="#ffffff99"]
+        bgcolor="#ffff0066"
+    }
+
+    on_post_build:n -> on_serve:s [style=invis]
+
+    subgraph cluster_on_serve {
+        label="on_serve"
+        href="#on_serve"
+        on_serve [label="<server>server|<config>config",shape=record,fillcolor="#ffffff99"]
+        bgcolor="#ffff0066"
+    }
+}

@@ -1,0 +1,720 @@
+<svg width="1099pt" height="1670pt"
+ viewBox="0.00 0.00 1099.00 1669.72" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 1665.72)">
+<title>mkdocs</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-1665.72 1095,-1665.72 1095,4 -4,4"/>
+<g id="clust1" class="cluster">
+<title>cluster_on_config</title>
+<g id="a_clust1"><a xlink:href="#on_config" xlink:title="on_config">
+<polygon fill="#ffff00" fill-opacity="0.400000" stroke="black" points="377,-1541.72 377,-1617.72 457,-1617.72 457,-1541.72 377,-1541.72"/>
+<text text-anchor="middle" x="417" y="-1602.52" font-family="inherit" font-size="14.00">on_config</text>
+</a>
+</g>
+</g>
+<g id="clust2" class="cluster">
+<title>cluster_on_pre_build</title>
+<g id="a_clust2"><a xlink:href="#on_pre_build" xlink:title="on_pre_build">
+<polygon fill="#ffff00" fill-opacity="0.400000" stroke="black" points="308,-1457.72 308,-1533.72 408,-1533.72 408,-1457.72 308,-1457.72"/>
+<text text-anchor="middle" x="358" y="-1518.52" font-family="inherit" font-size="14.00">on_pre_build</text>
+</a>
+</g>
+</g>
+<g id="clust3" class="cluster">
+<title>cluster_on_files</title>
+<g id="a_clust3"><a xlink:href="#on_files" xlink:title="on_files">
+<polygon fill="#ffff00" fill-opacity="0.400000" stroke="black" points="373,-1373.72 373,-1449.72 489,-1449.72 489,-1373.72 373,-1373.72"/>
+<text text-anchor="middle" x="431" y="-1434.52" font-family="inherit" font-size="14.00">on_files</text>
+</a>
+</g>
+</g>
+<g id="clust4" class="cluster">
+<title>cluster_on_nav</title>
+<g id="a_clust4"><a xlink:href="#on_nav" xlink:title="on_nav">
+<polygon fill="#ffff00" fill-opacity="0.400000" stroke="black" points="325,-1225.72 325,-1301.72 479,-1301.72 479,-1225.72 325,-1225.72"/>
+<text text-anchor="middle" x="402" y="-1286.52" font-family="inherit" font-size="14.00">on_nav</text>
+</a>
+</g>
+</g>
+<g id="clust5" class="cluster">
+<title>cluster_populate_page</title>
+<polygon fill="none" stroke="black" points="251,-755.12 251,-1186.12 513,-1186.12 513,-755.12 251,-755.12"/>
+<text text-anchor="middle" x="382" y="-1170.92" font-family="inherit" font-size="14.00">populate_page</text>
+</g>
+<g id="clust6" class="cluster">
+<title>cluster_on_pre_page</title>
+<g id="a_clust6"><a xlink:href="#on_pre_page" xlink:title="on_pre_page">
+<polygon fill="#ffff00" fill-opacity="0.400000" stroke="black" points="320,-1079.12 320,-1155.12 484,-1155.12 484,-1079.12 320,-1079.12"/>
+<text text-anchor="middle" x="402" y="-1139.92" font-family="inherit" font-size="14.00">on_pre_page</text>
+</a>
+</g>
+</g>
+<g id="clust7" class="cluster">
+<title>cluster_on_read_source</title>
+<g id="a_clust7"><a xlink:href="#on_read_source" xlink:title="on_read_source">
+<polygon fill="#ffff00" fill-opacity="0.400000" stroke="black" points="300,-995.12 300,-1071.12 420,-1071.12 420,-995.12 300,-995.12"/>
+<text text-anchor="middle" x="360" y="-1055.92" font-family="inherit" font-size="14.00">on_read_source</text>
+</a>
+</g>
+</g>
+<g id="clust8" class="cluster">
+<title>cluster_on_page_markdown</title>
+<g id="a_clust8"><a xlink:href="#on_page_markdown" xlink:title="on_page_markdown">
+<polygon fill="#ffff00" fill-opacity="0.400000" stroke="black" points="259,-911.12 259,-987.12 505,-987.12 505,-911.12 259,-911.12"/>
+<text text-anchor="middle" x="382" y="-971.92" font-family="inherit" font-size="14.00">on_page_markdown</text>
+</a>
+</g>
+</g>
+<g id="clust9" class="cluster">
+<title>cluster_on_page_content</title>
+<g id="a_clust9"><a xlink:href="#on_page_content" xlink:title="on_page_content">
+<polygon fill="#ffff00" fill-opacity="0.400000" stroke="black" points="290,-763.12 290,-839.12 500,-839.12 500,-763.12 290,-763.12"/>
+<text text-anchor="middle" x="395" y="-823.92" font-family="inherit" font-size="14.00">on_page_content</text>
+</a>
+</g>
+</g>
+<g id="clust10" class="cluster">
+<title>cluster_populate_page_2</title>
+<polygon fill="none" stroke="black" points="521,-1079.62 521,-1154.62 633,-1154.62 633,-1079.62 521,-1079.62"/>
+<text text-anchor="middle" x="577" y="-1139.42" font-family="inherit" font-size="14.00">populate_page</text>
+</g>
+<g id="clust11" class="cluster">
+<title>cluster_populate_page_3</title>
+<polygon fill="none" stroke="black" points="641,-1079.62 641,-1154.62 753,-1154.62 753,-1079.62 641,-1079.62"/>
+<text text-anchor="middle" x="697" y="-1139.42" font-family="inherit" font-size="14.00">populate_page</text>
+</g>
+<g id="clust12" class="cluster">
+<title>cluster_on_env</title>
+<g id="a_clust12"><a xlink:href="#on_env" xlink:title="on_env">
+<polygon fill="#ffff00" fill-opacity="0.400000" stroke="black" points="318,-647.52 318,-723.52 472,-723.52 472,-647.52 318,-647.52"/>
+<text text-anchor="middle" x="395" y="-708.32" font-family="inherit" font-size="14.00">on_env</text>
+</a>
+</g>
+</g>
+<g id="clust13" class="cluster">
+<title>cluster_build_page</title>
+<polygon fill="none" stroke="black" points="8,-176.52 8,-556.02 390,-556.02 390,-176.52 8,-176.52"/>
+<text text-anchor="middle" x="199" y="-540.82" font-family="inherit" font-size="14.00">build_page</text>
+</g>
+<g id="clust14" class="cluster">
+<title>cluster_on_page_context</title>
+<g id="a_clust14"><a xlink:href="#on_page_context" xlink:title="on_page_context">
+<polygon fill="#ffff00" fill-opacity="0.400000" stroke="black" points="158,-396.52 158,-472.52 382,-472.52 382,-396.52 158,-396.52"/>
+<text text-anchor="middle" x="270" y="-457.32" font-family="inherit" font-size="14.00">on_page_context</text>
+</a>
+</g>
+</g>
+<g id="clust15" class="cluster">
+<title>cluster_on_post_page</title>
+<g id="a_clust15"><a xlink:href="#on_post_page" xlink:title="on_post_page">
+<polygon fill="#ffff00" fill-opacity="0.400000" stroke="black" points="180,-248.52 180,-324.52 362,-324.52 362,-248.52 180,-248.52"/>
+<text text-anchor="middle" x="271" y="-309.32" font-family="inherit" font-size="14.00">on_post_page</text>
+</a>
+</g>
+</g>
+<g id="clust16" class="cluster">
+<title>cluster_build_page_2</title>
+<polygon fill="none" stroke="black" points="398,-481.02 398,-556.02 485,-556.02 485,-481.02 398,-481.02"/>
+<text text-anchor="middle" x="441.5" y="-540.82" font-family="inherit" font-size="14.00">build_page</text>
+</g>
+<g id="clust17" class="cluster">
+<title>cluster_build_page_3</title>
+<polygon fill="none" stroke="black" points="417,-397.02 417,-472.02 504,-472.02 504,-397.02 417,-397.02"/>
+<text text-anchor="middle" x="460.5" y="-456.82" font-family="inherit" font-size="14.00">build_page</text>
+</g>
+<g id="clust18" class="cluster">
+<title>cluster_build_template</title>
+<polygon fill="none" stroke="black" points="523,-176.52 523,-639.52 933,-639.52 933,-176.52 523,-176.52"/>
+<text text-anchor="middle" x="728" y="-624.32" font-family="inherit" font-size="14.00">build_template</text>
+</g>
+<g id="clust19" class="cluster">
+<title>cluster_on_pre_template</title>
+<g id="a_clust19"><a xlink:href="#on_pre_template" xlink:title="on_pre_template">
+<polygon fill="#ffff00" fill-opacity="0.400000" stroke="black" points="663,-480.52 663,-556.52 925,-556.52 925,-480.52 663,-480.52"/>
+<text text-anchor="middle" x="794" y="-541.32" font-family="inherit" font-size="14.00">on_pre_template</text>
+</a>
+</g>
+</g>
+<g id="clust20" class="cluster">
+<title>cluster_on_template_context</title>
+<g id="a_clust20"><a xlink:href="#on_template_context" xlink:title="on_template_context">
+<polygon fill="#ffff00" fill-opacity="0.400000" stroke="black" points="549,-396.52 549,-472.52 803,-472.52 803,-396.52 549,-396.52"/>
+<text text-anchor="middle" x="676" y="-457.32" font-family="inherit" font-size="14.00">on_template_context</text>
+</a>
+</g>
+</g>
+<g id="clust21" class="cluster">
+<title>cluster_on_post_template</title>
+<g id="a_clust21"><a xlink:href="#on_post_template" xlink:title="on_post_template">
+<polygon fill="#ffff00" fill-opacity="0.400000" stroke="black" points="550,-248.52 550,-324.52 800,-324.52 800,-248.52 550,-248.52"/>
+<text text-anchor="middle" x="675" y="-309.32" font-family="inherit" font-size="14.00">on_post_template</text>
+</a>
+</g>
+</g>
+<g id="clust22" class="cluster">
+<title>cluster_build_template_2</title>
+<polygon fill="none" stroke="black" points="970,-564.52 970,-639.52 1083,-639.52 1083,-564.52 970,-564.52"/>
+<text text-anchor="middle" x="1026.5" y="-624.32" font-family="inherit" font-size="14.00">build_template</text>
+</g>
+<g id="clust23" class="cluster">
+<title>cluster_build_template_3</title>
+<polygon fill="none" stroke="black" points="955,-481.02 955,-556.02 1068,-556.02 1068,-481.02 955,-481.02"/>
+<text text-anchor="middle" x="1011.5" y="-540.82" font-family="inherit" font-size="14.00">build_template</text>
+</g>
+<g id="clust24" class="cluster">
+<title>cluster_on_post_build</title>
+<g id="a_clust24"><a xlink:href="#on_post_build" xlink:title="on_post_build">
+<polygon fill="#ffff00" fill-opacity="0.400000" stroke="black" points="377,-92.52 377,-168.52 484,-168.52 484,-92.52 377,-92.52"/>
+<text text-anchor="middle" x="430.5" y="-153.32" font-family="inherit" font-size="14.00">on_post_build</text>
+</a>
+</g>
+</g>
+<g id="clust25" class="cluster">
+<title>cluster_on_serve</title>
+<g id="a_clust25"><a xlink:href="#on_serve" xlink:title="on_serve">
+<polygon fill="#ffff00" fill-opacity="0.400000" stroke="black" points="366,-8.52 366,-84.52 494,-84.52 494,-8.52 366,-8.52"/>
+<text text-anchor="middle" x="430" y="-69.32" font-family="inherit" font-size="14.00">on_serve</text>
+</a>
+</g>
+</g>
+<!-- load_config -->
+<g id="node1" class="node">
+<title>load_config</title>
+<ellipse fill="#00ff00" fill-opacity="0.266667" stroke="black" cx="417" cy="-1643.72" rx="59.29" ry="18"/>
+<text text-anchor="middle" x="417" y="-1640.02" font-family="inherit" font-size="14.00">load_config</text>
+</g>
+<!-- on_config -->
+<g id="node2" class="node">
+<title>on_config</title>
+<polygon fill="#ffffff" fill-opacity="0.600000" stroke="black" points="389,-1550.22 389,-1586.22 445,-1586.22 445,-1550.22 389,-1550.22"/>
+<text text-anchor="middle" x="417" y="-1564.52" font-family="inherit" font-size="14.00">config</text>
+</g>
+<!-- load_config&#45;&gt;on_config -->
+<g id="edge1" class="edge">
+<title>load_config&#45;&gt;on_config:n</title>
+<path fill="none" stroke="black" d="M417,-1625.71C417,-1617.56 417,-1607.42 417,-1597.45"/>
+<polygon fill="black" stroke="black" points="420.5,-1597.22 417,-1587.22 413.5,-1597.22 420.5,-1597.22"/>
+</g>
+<!-- on_pre_build -->
+<g id="node3" class="node">
+<title>on_pre_build</title>
+<polygon fill="#ffffff" fill-opacity="0.600000" stroke="black" points="343,-1466.22 343,-1502.22 399,-1502.22 399,-1466.22 343,-1466.22"/>
+<text text-anchor="middle" x="371" y="-1480.52" font-family="inherit" font-size="14.00">config</text>
+</g>
+<!-- on_config&#45;&gt;on_pre_build -->
+<g id="edge2" class="edge">
+<title>on_config:s&#45;&gt;on_pre_build:n</title>
+<path fill="none" stroke="black" d="M417,-1549.22C417,-1537.7 387.79,-1524.51 375.92,-1512.31"/>
+<polygon fill="black" stroke="black" points="378.84,-1510.34 371,-1503.22 372.68,-1513.68 378.84,-1510.34"/>
+</g>
+<!-- get_files -->
+<g id="node4" class="node">
+<title>get_files</title>
+<ellipse fill="#00ff00" fill-opacity="0.266667" stroke="black" cx="463" cy="-1484.22" rx="46.29" ry="18"/>
+<text text-anchor="middle" x="463" y="-1480.52" font-family="inherit" font-size="14.00">get_files</text>
+</g>
+<!-- on_config&#45;&gt;get_files -->
+<g id="edge3" class="edge">
+<title>on_config:s&#45;&gt;get_files</title>
+<path fill="none" stroke="black" d="M417,-1549.22C417,-1533.54 426.21,-1519.08 436.39,-1507.88"/>
+<polygon fill="black" stroke="black" points="438.96,-1510.26 443.49,-1500.68 433.98,-1505.34 438.96,-1510.26"/>
+</g>
+<!-- on_files -->
+<g id="node5" class="node">
+<title>on_files</title>
+<polygon fill="#ffffff" fill-opacity="0.600000" stroke="black" points="381.5,-1382.22 381.5,-1418.22 480.5,-1418.22 480.5,-1382.22 381.5,-1382.22"/>
+<text text-anchor="middle" x="403" y="-1396.52" font-family="inherit" font-size="14.00">files</text>
+<polyline fill="none" stroke="black" points="424.5,-1382.22 424.5,-1418.22 "/>
+<text text-anchor="middle" x="452.5" y="-1396.52" font-family="inherit" font-size="14.00">config</text>
+</g>
+<!-- on_pre_build&#45;&gt;on_files -->
+<!-- get_files&#45;&gt;on_files -->
+<g id="edge5" class="edge">
+<title>get_files&#45;&gt;on_files:n</title>
+<path fill="none" stroke="black" d="M437.55,-1469.08C423.88,-1459.76 408.92,-1446.18 404.38,-1429.44"/>
+<polygon fill="black" stroke="black" points="407.81,-1428.66 403,-1419.22 400.87,-1429.6 407.81,-1428.66"/>
+</g>
+<!-- get_nav -->
+<g id="node6" class="node">
+<title>get_nav</title>
+<ellipse fill="#00ff00" fill-opacity="0.266667" stroke="black" cx="364" cy="-1327.72" rx="43.59" ry="18"/>
+<text text-anchor="middle" x="364" y="-1324.02" font-family="inherit" font-size="14.00">get_nav</text>
+</g>
+<!-- on_files&#45;&gt;get_nav -->
+<g id="edge6" class="edge">
+<title>on_files:s&#45;&gt;get_nav</title>
+<path fill="none" stroke="black" d="M403,-1381.22C403,-1370.2 397.4,-1360 390.45,-1351.57"/>
+<polygon fill="black" stroke="black" points="392.86,-1349.03 383.5,-1344.07 387.72,-1353.78 392.86,-1349.03"/>
+</g>
+<!-- on_nav -->
+<g id="node7" class="node">
+<title>on_nav</title>
+<polygon fill="#ffffff" fill-opacity="0.600000" stroke="black" points="333.5,-1234.22 333.5,-1270.22 470.5,-1270.22 470.5,-1234.22 333.5,-1234.22"/>
+<text text-anchor="middle" x="352.5" y="-1248.52" font-family="inherit" font-size="14.00">nav</text>
+<polyline fill="none" stroke="black" points="371.5,-1234.22 371.5,-1270.22 "/>
+<text text-anchor="middle" x="399.5" y="-1248.52" font-family="inherit" font-size="14.00">config</text>
+<polyline fill="none" stroke="black" points="427.5,-1234.22 427.5,-1270.22 "/>
+<text text-anchor="middle" x="449" y="-1248.52" font-family="inherit" font-size="14.00">files</text>
+</g>
+<!-- on_files&#45;&gt;on_nav -->
+<g id="edge8" class="edge">
+<title>on_files:s&#45;&gt;on_nav:n</title>
+<path fill="none" stroke="black" d="M403,-1381.22C403,-1375.68 435.14,-1307.16 445.69,-1280.96"/>
+<polygon fill="black" stroke="black" points="449.1,-1281.81 449,-1271.22 442.47,-1279.56 449.1,-1281.81"/>
+</g>
+<!-- get_nav&#45;&gt;on_nav -->
+<g id="edge7" class="edge">
+<title>get_nav&#45;&gt;on_nav:n</title>
+<path fill="none" stroke="black" d="M358.28,-1309.43C355.99,-1301.38 353.64,-1291.4 352.58,-1281.47"/>
+<polygon fill="black" stroke="black" points="356.06,-1281 352,-1271.22 349.07,-1281.4 356.06,-1281"/>
+</g>
+<!-- on_pre_page -->
+<g id="node8" class="node">
+<title>on_pre_page</title>
+<polygon fill="#ffffff" fill-opacity="0.600000" stroke="black" points="328.5,-1087.62 328.5,-1123.62 475.5,-1123.62 475.5,-1087.62 328.5,-1087.62"/>
+<text text-anchor="middle" x="352.5" y="-1101.92" font-family="inherit" font-size="14.00">page</text>
+<polyline fill="none" stroke="black" points="376.5,-1087.62 376.5,-1123.62 "/>
+<text text-anchor="middle" x="404.5" y="-1101.92" font-family="inherit" font-size="14.00">config</text>
+<polyline fill="none" stroke="black" points="432.5,-1087.62 432.5,-1123.62 "/>
+<text text-anchor="middle" x="454" y="-1101.92" font-family="inherit" font-size="14.00">files</text>
+</g>
+<!-- on_nav&#45;&gt;on_pre_page -->
+<!-- pages_a1 -->
+<g id="node9" class="node">
+<title>pages_a1</title>
+<ellipse fill="black" stroke="black" cx="454" cy="-1195.92" rx="1.8" ry="1.8"/>
+</g>
+<!-- on_nav&#45;&gt;pages_a1 -->
+<g id="edge10" class="edge">
+<title>on_nav:s&#45;&gt;pages_a1</title>
+<path fill="none" stroke="black" d="M449,-1233.22C449,-1218.97 452.83,-1201.86 453.79,-1197.81"/>
+</g>
+<!-- context_inputs -->
+<g id="node18" class="node">
+<title>context_inputs</title>
+<ellipse fill="black" stroke="black" cx="244" cy="-590.52" rx="1.8" ry="1.8"/>
+</g>
+<!-- on_nav&#45;&gt;context_inputs -->
+<g id="edge24" class="edge">
+<title>on_nav:s&#45;&gt;context_inputs</title>
+<path fill="none" stroke="black" d="M352,-1233.22C352,-1194.61 233,-1145.23 233,-1106.62 233,-1106.62 233,-1106.62 233,-732.32 233,-673.47 242.67,-601.21 243.88,-592.41"/>
+</g>
+<!-- on_read_source -->
+<g id="node10" class="node">
+<title>on_read_source</title>
+<polygon fill="#ffffff" fill-opacity="0.600000" stroke="black" points="308,-1003.62 308,-1039.62 412,-1039.62 412,-1003.62 308,-1003.62"/>
+<text text-anchor="middle" x="332" y="-1017.92" font-family="inherit" font-size="14.00">page</text>
+<polyline fill="none" stroke="black" points="356,-1003.62 356,-1039.62 "/>
+<text text-anchor="middle" x="384" y="-1017.92" font-family="inherit" font-size="14.00">config</text>
+</g>
+<!-- on_pre_page&#45;&gt;on_read_source -->
+<g id="edge13" class="edge">
+<title>on_pre_page:s&#45;&gt;on_read_source:n</title>
+<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M352,-1086.62C352,-1068.33 338.54,-1064.09 333.71,-1050.86"/>
+<polygon fill="black" stroke="black" stroke-width="1.5" points="337.1,-1049.91 332,-1040.62 330.19,-1051.06 337.1,-1049.91"/>
+</g>
+<!-- pages_a1&#45;&gt;on_pre_page -->
+<g id="edge11" class="edge">
+<title>pages_a1&#45;&gt;on_pre_page:n</title>
+<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M452.56,-1194.68C441.01,-1192.72 363.7,-1178.03 353.18,-1134.64"/>
+<polygon fill="black" stroke="black" stroke-width="1.5" points="356.65,-1134.14 352,-1124.62 349.7,-1134.96 356.65,-1134.14"/>
+</g>
+<!-- pages_a1&#45;&gt;on_pre_page -->
+<g id="edge12" class="edge">
+<title>pages_a1&#45;&gt;on_pre_page:n</title>
+<path fill="none" stroke="black" d="M454,-1193.93C454,-1193.84 454,-1193.75 454,-1193.65"/>
+<polygon fill="black" stroke="black" points="457.5,-1196.12 454,-1186.12 450.5,-1196.12 457.5,-1196.12"/>
+</g>
+<!-- page_a2 -->
+<g id="node14" class="node">
+<title>page_a2</title>
+<ellipse fill="transparent" stroke="transparent" cx="556" cy="-1105.62" rx="27" ry="18"/>
+<text text-anchor="middle" x="556" y="-1101.92" font-family="inherit" font-size="14.00">...</text>
+</g>
+<!-- pages_a1&#45;&gt;page_a2 -->
+<g id="edge17" class="edge">
+<title>pages_a1&#45;&gt;page_a2</title>
+<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M455.7,-1194.83C460.91,-1194.51 477.04,-1192.97 488,-1186.12 498.25,-1179.71 507.77,-1171.27 516.25,-1162.27"/>
+<polygon fill="black" stroke="black" stroke-width="1.5" points="519.04,-1164.4 523.11,-1154.61 513.83,-1159.72 519.04,-1164.4"/>
+</g>
+<!-- page_a3 -->
+<g id="node15" class="node">
+<title>page_a3</title>
+<ellipse fill="transparent" stroke="transparent" cx="676" cy="-1105.62" rx="27" ry="18"/>
+<text text-anchor="middle" x="676" y="-1101.92" font-family="inherit" font-size="14.00">...</text>
+</g>
+<!-- pages_a1&#45;&gt;page_a3 -->
+<g id="edge18" class="edge">
+<title>pages_a1&#45;&gt;page_a3</title>
+<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M455.87,-1194.94C474.17,-1195.16 621.05,-1196.6 637,-1186.12 645.52,-1180.52 652.24,-1172.48 657.53,-1163.65"/>
+<polygon fill="black" stroke="black" stroke-width="1.5" points="660.73,-1165.09 662.35,-1154.62 654.55,-1161.79 660.73,-1165.09"/>
+</g>
+<!-- on_page_markdown -->
+<g id="node11" class="node">
+<title>on_page_markdown</title>
+<polygon fill="#ffffff" fill-opacity="0.600000" stroke="black" points="266.5,-919.62 266.5,-955.62 497.5,-955.62 497.5,-919.62 266.5,-919.62"/>
+<text text-anchor="middle" x="308.5" y="-933.92" font-family="inherit" font-size="14.00">markdown</text>
+<polyline fill="none" stroke="black" points="350.5,-919.62 350.5,-955.62 "/>
+<text text-anchor="middle" x="374.5" y="-933.92" font-family="inherit" font-size="14.00">page</text>
+<polyline fill="none" stroke="black" points="398.5,-919.62 398.5,-955.62 "/>
+<text text-anchor="middle" x="426.5" y="-933.92" font-family="inherit" font-size="14.00">config</text>
+<polyline fill="none" stroke="black" points="454.5,-919.62 454.5,-955.62 "/>
+<text text-anchor="middle" x="476" y="-933.92" font-family="inherit" font-size="14.00">files</text>
+</g>
+<!-- on_read_source&#45;&gt;on_page_markdown -->
+<g id="edge14" class="edge">
+<title>on_read_source&#45;&gt;on_page_markdown:n</title>
+<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M326.44,-995.12C318.71,-987 311.96,-977.3 309.26,-966.55"/>
+<polygon fill="black" stroke="black" stroke-width="1.5" points="312.73,-966.1 308,-956.62 305.78,-966.98 312.73,-966.1"/>
+</g>
+<!-- render_a -->
+<g id="node12" class="node">
+<title>render_a</title>
+<ellipse fill="#00ff00" fill-opacity="0.266667" stroke="black" cx="317" cy="-865.12" rx="38.19" ry="18"/>
+<text text-anchor="middle" x="317" y="-861.42" font-family="inherit" font-size="14.00">render</text>
+</g>
+<!-- on_page_markdown&#45;&gt;render_a -->
+<g id="edge15" class="edge">
+<title>on_page_markdown:s&#45;&gt;render_a</title>
+<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M308,-918.62C308,-910.17 309.15,-901.06 310.62,-892.84"/>
+<polygon fill="black" stroke="black" stroke-width="1.5" points="314.06,-893.51 312.61,-883.02 307.2,-892.13 314.06,-893.51"/>
+</g>
+<!-- on_page_content -->
+<g id="node13" class="node">
+<title>on_page_content</title>
+<polygon fill="#ffffff" fill-opacity="0.600000" stroke="black" points="298,-771.62 298,-807.62 492,-807.62 492,-771.62 298,-771.62"/>
+<text text-anchor="middle" x="321.5" y="-785.92" font-family="inherit" font-size="14.00">html</text>
+<polyline fill="none" stroke="black" points="345,-771.62 345,-807.62 "/>
+<text text-anchor="middle" x="369" y="-785.92" font-family="inherit" font-size="14.00">page</text>
+<polyline fill="none" stroke="black" points="393,-771.62 393,-807.62 "/>
+<text text-anchor="middle" x="421" y="-785.92" font-family="inherit" font-size="14.00">config</text>
+<polyline fill="none" stroke="black" points="449,-771.62 449,-807.62 "/>
+<text text-anchor="middle" x="470.5" y="-785.92" font-family="inherit" font-size="14.00">files</text>
+</g>
+<!-- render_a&#45;&gt;on_page_content -->
+<g id="edge16" class="edge">
+<title>render_a&#45;&gt;on_page_content:n</title>
+<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M318.86,-847.14C319.63,-838.99 320.44,-828.85 320.8,-818.87"/>
+<polygon fill="black" stroke="black" stroke-width="1.5" points="324.31,-818.68 321,-808.62 317.31,-818.55 324.31,-818.68"/>
+</g>
+<!-- pages_a2 -->
+<g id="node16" class="node">
+<title>pages_a2</title>
+<ellipse fill="black" stroke="black" cx="492" cy="-733.32" rx="1.8" ry="1.8"/>
+</g>
+<!-- on_page_content&#45;&gt;pages_a2 -->
+<g id="edge19" class="edge">
+<title>on_page_content:s&#45;&gt;pages_a2</title>
+<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M321,-770.62C321,-738.04 441.26,-734.57 480.08,-734.3"/>
+<polygon fill="black" stroke="black" stroke-width="1.5" points="480.08,-737.8 490.08,-734.3 480.08,-730.8 480.08,-737.8"/>
+</g>
+<!-- on_env -->
+<g id="node17" class="node">
+<title>on_env</title>
+<polygon fill="#ffffff" fill-opacity="0.600000" stroke="black" points="326.5,-656.02 326.5,-692.02 463.5,-692.02 463.5,-656.02 326.5,-656.02"/>
+<text text-anchor="middle" x="345.5" y="-670.32" font-family="inherit" font-size="14.00">env</text>
+<polyline fill="none" stroke="black" points="364.5,-656.02 364.5,-692.02 "/>
+<text text-anchor="middle" x="392.5" y="-670.32" font-family="inherit" font-size="14.00">config</text>
+<polyline fill="none" stroke="black" points="420.5,-656.02 420.5,-692.02 "/>
+<text text-anchor="middle" x="442" y="-670.32" font-family="inherit" font-size="14.00">files</text>
+</g>
+<!-- on_page_content&#45;&gt;on_env -->
+<!-- page_a2&#45;&gt;pages_a2 -->
+<g id="edge20" class="edge">
+<title>page_a2&#45;&gt;pages_a2</title>
+<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M552.82,-1079.62C548.97,-1047.17 543,-988.77 543,-938.62 543,-938.62 543,-938.62 543,-864.12 543,-815.77 511.97,-763.87 498.32,-743.38"/>
+<polygon fill="black" stroke="black" stroke-width="1.5" points="501.15,-741.32 492.57,-735.09 495.4,-745.31 501.15,-741.32"/>
+</g>
+<!-- page_a3&#45;&gt;pages_a2 -->
+<g id="edge21" class="edge">
+<title>page_a3&#45;&gt;pages_a2</title>
+<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M665.55,-1079.62C653.11,-1047.56 634,-989.95 634,-938.62 634,-938.62 634,-938.62 634,-864.12 634,-793.35 536.73,-750.81 503.2,-738.25"/>
+<polygon fill="black" stroke="black" stroke-width="1.5" points="504.19,-734.89 493.59,-734.84 501.85,-741.48 504.19,-734.89"/>
+</g>
+<!-- pages_a2&#45;&gt;on_env -->
+<g id="edge23" class="edge">
+<title>pages_a2&#45;&gt;on_env:n</title>
+<path fill="none" stroke="black" d="M490.34,-731.91C482.88,-730.01 452.54,-721.24 444.16,-702.84"/>
+<polygon fill="black" stroke="black" points="447.56,-702.03 442,-693.02 440.73,-703.54 447.56,-702.03"/>
+</g>
+<!-- pages_b1 -->
+<g id="node19" class="node">
+<title>pages_b1</title>
+<ellipse fill="black" stroke="black" cx="448" cy="-590.52" rx="1.8" ry="1.8"/>
+</g>
+<!-- pages_a2&#45;&gt;pages_b1 -->
+<g id="edge26" class="edge">
+<title>pages_a2&#45;&gt;pages_b1</title>
+<path fill="none" stroke="black" d="M491.93,-731.46C491.36,-724.82 487.29,-681.02 476,-647.52 467.95,-623.62 451.49,-597.05 448.48,-592.27"/>
+</g>
+<!-- on_env&#45;&gt;context_inputs -->
+<g id="edge25" class="edge">
+<title>on_env:s&#45;&gt;context_inputs</title>
+<path fill="none" stroke="black" d="M345,-655.02C345,-605.72 257.7,-593.2 245.43,-591.68"/>
+</g>
+<!-- get_template_t -->
+<g id="node30" class="node">
+<title>get_template_t</title>
+<ellipse fill="#00ff00" fill-opacity="0.266667" stroke="black" cx="708" cy="-590.52" rx="66.09" ry="18"/>
+<text text-anchor="middle" x="708" y="-586.82" font-family="inherit" font-size="14.00">get_template</text>
+</g>
+<!-- on_env&#45;&gt;get_template_t -->
+<g id="edge40" class="edge">
+<title>on_env:s&#45;&gt;get_template_t</title>
+<path fill="none" stroke="black" d="M345,-655.02C345,-642.23 446.39,-641.59 459,-639.52 476.6,-636.63 494.87,-633.45 513.15,-630.15"/>
+<polygon fill="black" stroke="black" points="513.79,-633.59 523,-628.36 512.54,-626.7 513.79,-633.59"/>
+</g>
+<!-- get_context -->
+<g id="node21" class="node">
+<title>get_context</title>
+<ellipse fill="#00ff00" fill-opacity="0.266667" stroke="black" cx="244" cy="-507.02" rx="61.19" ry="18"/>
+<text text-anchor="middle" x="244" y="-503.32" font-family="inherit" font-size="14.00">get_context</text>
+</g>
+<!-- context_inputs&#45;&gt;get_context -->
+<g id="edge29" class="edge">
+<title>context_inputs&#45;&gt;get_context</title>
+<path fill="none" stroke="black" d="M244,-588.6C244,-585.81 244,-576.93 244,-566.02"/>
+<polygon fill="black" stroke="black" points="247.5,-566.02 244,-556.02 240.5,-566.02 247.5,-566.02"/>
+</g>
+<!-- on_page_context -->
+<g id="node20" class="node">
+<title>on_page_context</title>
+<polygon fill="#ffffff" fill-opacity="0.600000" stroke="black" points="166.5,-405.02 166.5,-441.02 373.5,-441.02 373.5,-405.02 166.5,-405.02"/>
+<text text-anchor="middle" x="199" y="-419.32" font-family="inherit" font-size="14.00">context</text>
+<polyline fill="none" stroke="black" points="231.5,-405.02 231.5,-441.02 "/>
+<text text-anchor="middle" x="255.5" y="-419.32" font-family="inherit" font-size="14.00">page</text>
+<polyline fill="none" stroke="black" points="279.5,-405.02 279.5,-441.02 "/>
+<text text-anchor="middle" x="307.5" y="-419.32" font-family="inherit" font-size="14.00">config</text>
+<polyline fill="none" stroke="black" points="335.5,-405.02 335.5,-441.02 "/>
+<text text-anchor="middle" x="354.5" y="-419.32" font-family="inherit" font-size="14.00">nav</text>
+</g>
+<!-- pages_b1&#45;&gt;on_page_context -->
+<g id="edge27" class="edge">
+<title>pages_b1&#45;&gt;on_page_context:n</title>
+<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M446.51,-588.9C439.77,-586.06 411.69,-573.63 394,-556.52 364.94,-528.41 374.96,-506.52 344,-480.52 314.09,-455.4 265.3,-479.58 256.41,-452.26"/>
+<polygon fill="black" stroke="black" stroke-width="1.5" points="259.83,-451.45 255,-442.02 252.9,-452.4 259.83,-451.45"/>
+</g>
+<!-- pages_b1&#45;&gt;get_context -->
+<!-- page_b2 -->
+<g id="node26" class="node">
+<title>page_b2</title>
+<ellipse fill="transparent" stroke="transparent" cx="448" cy="-507.02" rx="27" ry="18"/>
+<text text-anchor="middle" x="448" y="-503.32" font-family="inherit" font-size="14.00">...</text>
+</g>
+<!-- pages_b1&#45;&gt;page_b2 -->
+<g id="edge35" class="edge">
+<title>pages_b1&#45;&gt;page_b2</title>
+<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M448,-588.6C448,-585.81 448,-576.93 448,-566.02"/>
+<polygon fill="black" stroke="black" stroke-width="1.5" points="451.5,-566.02 448,-556.02 444.5,-566.02 451.5,-566.02"/>
+</g>
+<!-- page_b3 -->
+<g id="node27" class="node">
+<title>page_b3</title>
+<ellipse fill="transparent" stroke="transparent" cx="459" cy="-423.02" rx="27" ry="18"/>
+<text text-anchor="middle" x="459" y="-419.32" font-family="inherit" font-size="14.00">...</text>
+</g>
+<!-- pages_b1&#45;&gt;page_b3 -->
+<g id="edge36" class="edge">
+<title>pages_b1&#45;&gt;page_b3</title>
+<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M449.35,-588.97C455.4,-586.4 480.16,-574.98 489,-556.52 502.33,-528.67 498.11,-515.62 489.08,-482.06"/>
+<polygon fill="black" stroke="black" stroke-width="1.5" points="492.36,-480.78 486.41,-472.02 485.6,-482.58 492.36,-480.78"/>
+</g>
+<!-- render_b -->
+<g id="node23" class="node">
+<title>render_b</title>
+<ellipse fill="#00ff00" fill-opacity="0.266667" stroke="black" cx="199" cy="-350.52" rx="38.19" ry="18"/>
+<text text-anchor="middle" x="199" y="-346.82" font-family="inherit" font-size="14.00">render</text>
+</g>
+<!-- on_page_context&#45;&gt;render_b -->
+<g id="edge31" class="edge">
+<title>on_page_context:s&#45;&gt;render_b</title>
+<path fill="none" stroke="black" d="M199,-404.02C199,-395.78 199,-386.81 199,-378.66"/>
+<polygon fill="black" stroke="black" points="202.5,-378.54 199,-368.54 195.5,-378.54 202.5,-378.54"/>
+</g>
+<!-- get_context&#45;&gt;on_page_context -->
+<g id="edge30" class="edge">
+<title>get_context&#45;&gt;on_page_context:n</title>
+<path fill="none" stroke="black" d="M224.39,-489.96C214.45,-480.27 203.73,-466.92 200.2,-452.02"/>
+<polygon fill="black" stroke="black" points="203.67,-451.53 199,-442.02 196.72,-452.36 203.67,-451.53"/>
+</g>
+<!-- get_template -->
+<g id="node22" class="node">
+<title>get_template</title>
+<ellipse fill="#00ff00" fill-opacity="0.266667" stroke="black" cx="82" cy="-423.02" rx="66.09" ry="18"/>
+<text text-anchor="middle" x="82" y="-419.32" font-family="inherit" font-size="14.00">get_template</text>
+</g>
+<!-- get_template&#45;&gt;render_b -->
+<g id="edge32" class="edge">
+<title>get_template&#45;&gt;render_b</title>
+<path fill="none" stroke="black" d="M107.97,-406.37C125.55,-395.77 148.89,-381.71 167.54,-370.48"/>
+<polygon fill="black" stroke="black" points="169.51,-373.37 176.27,-365.22 165.9,-367.38 169.51,-373.37"/>
+</g>
+<!-- on_post_page -->
+<g id="node24" class="node">
+<title>on_post_page</title>
+<polygon fill="#ffffff" fill-opacity="0.600000" stroke="black" points="188,-257.02 188,-293.02 354,-293.02 354,-257.02 188,-257.02"/>
+<text text-anchor="middle" x="219" y="-271.32" font-family="inherit" font-size="14.00">output</text>
+<polyline fill="none" stroke="black" points="250,-257.02 250,-293.02 "/>
+<text text-anchor="middle" x="274" y="-271.32" font-family="inherit" font-size="14.00">page</text>
+<polyline fill="none" stroke="black" points="298,-257.02 298,-293.02 "/>
+<text text-anchor="middle" x="326" y="-271.32" font-family="inherit" font-size="14.00">config</text>
+</g>
+<!-- render_b&#45;&gt;on_post_page -->
+<g id="edge33" class="edge">
+<title>render_b&#45;&gt;on_post_page:n</title>
+<path fill="none" stroke="black" d="M208.53,-332.58C212.39,-324.55 216.35,-314.48 218.09,-304.24"/>
+<polygon fill="black" stroke="black" points="221.6,-304.29 219,-294.02 214.63,-303.67 221.6,-304.29"/>
+</g>
+<!-- write_file -->
+<g id="node25" class="node">
+<title>write_file</title>
+<ellipse fill="#00ff00" fill-opacity="0.266667" stroke="black" cx="275" cy="-202.52" rx="50.09" ry="18"/>
+<text text-anchor="middle" x="275" y="-198.82" font-family="inherit" font-size="14.00">write_file</text>
+</g>
+<!-- on_post_page&#45;&gt;write_file -->
+<g id="edge34" class="edge">
+<title>on_post_page:s&#45;&gt;write_file</title>
+<path fill="none" stroke="black" d="M219,-256.02C219,-242.64 227.61,-231.68 238.09,-223.3"/>
+<polygon fill="black" stroke="black" points="240.24,-226.06 246.34,-217.39 236.17,-220.36 240.24,-226.06"/>
+</g>
+<!-- on_post_build -->
+<g id="node38" class="node">
+<title>on_post_build</title>
+<polygon fill="#ffffff" fill-opacity="0.600000" stroke="black" points="402,-101.02 402,-137.02 458,-137.02 458,-101.02 402,-101.02"/>
+<text text-anchor="middle" x="430" y="-115.32" font-family="inherit" font-size="14.00">config</text>
+</g>
+<!-- write_file&#45;&gt;on_post_build -->
+<!-- page_b2&#45;&gt;page_b3 -->
+<!-- templates -->
+<g id="node28" class="node">
+<title>templates</title>
+<ellipse fill="black" stroke="black" cx="914" cy="-674.02" rx="1.8" ry="1.8"/>
+</g>
+<!-- on_pre_template -->
+<g id="node29" class="node">
+<title>on_pre_template</title>
+<polygon fill="#ffffff" fill-opacity="0.600000" stroke="black" points="671,-489.02 671,-525.02 917,-525.02 917,-489.02 671,-489.02"/>
+<text text-anchor="middle" x="708" y="-503.32" font-family="inherit" font-size="14.00">template</text>
+<polyline fill="none" stroke="black" points="745,-489.02 745,-525.02 "/>
+<text text-anchor="middle" x="803" y="-503.32" font-family="inherit" font-size="14.00">template_name</text>
+<polyline fill="none" stroke="black" points="861,-489.02 861,-525.02 "/>
+<text text-anchor="middle" x="889" y="-503.32" font-family="inherit" font-size="14.00">config</text>
+</g>
+<!-- templates&#45;&gt;on_pre_template -->
+<g id="edge38" class="edge">
+<title>templates&#45;&gt;on_pre_template:n</title>
+<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M913.29,-672.14C905.06,-661.98 827.48,-566.04 807.62,-535.03"/>
+<polygon fill="black" stroke="black" stroke-width="1.5" points="810.67,-533.32 803,-526.02 804.44,-536.51 810.67,-533.32"/>
+</g>
+<!-- templates&#45;&gt;get_template_t -->
+<!-- template_2 -->
+<g id="node36" class="node">
+<title>template_2</title>
+<ellipse fill="transparent" stroke="transparent" cx="1006" cy="-590.52" rx="27" ry="18"/>
+<text text-anchor="middle" x="1006" y="-586.82" font-family="inherit" font-size="14.00">...</text>
+</g>
+<!-- templates&#45;&gt;template_2 -->
+<g id="edge48" class="edge">
+<title>templates&#45;&gt;template_2</title>
+<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M915.36,-672.31C920.81,-669.45 941.63,-658.22 962.18,-641.54"/>
+<polygon fill="black" stroke="black" stroke-width="1.5" points="964.65,-644.03 970,-634.89 960.12,-638.7 964.65,-644.03"/>
+</g>
+<!-- template_3 -->
+<g id="node37" class="node">
+<title>template_3</title>
+<ellipse fill="transparent" stroke="transparent" cx="998" cy="-507.02" rx="27" ry="18"/>
+<text text-anchor="middle" x="998" y="-503.32" font-family="inherit" font-size="14.00">...</text>
+</g>
+<!-- templates&#45;&gt;template_3 -->
+<g id="edge49" class="edge">
+<title>templates&#45;&gt;template_3</title>
+<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M914.48,-671.94C918.03,-664.03 940.43,-614.34 965.9,-564.91"/>
+<polygon fill="black" stroke="black" stroke-width="1.5" points="969.02,-566.5 970.52,-556.02 962.81,-563.28 969.02,-566.5"/>
+</g>
+<!-- on_template_context -->
+<g id="node31" class="node">
+<title>on_template_context</title>
+<polygon fill="#ffffff" fill-opacity="0.600000" stroke="black" points="557.5,-405.02 557.5,-441.02 794.5,-441.02 794.5,-405.02 557.5,-405.02"/>
+<text text-anchor="middle" x="590" y="-419.32" font-family="inherit" font-size="14.00">context</text>
+<polyline fill="none" stroke="black" points="622.5,-405.02 622.5,-441.02 "/>
+<text text-anchor="middle" x="680.5" y="-419.32" font-family="inherit" font-size="14.00">template_name</text>
+<polyline fill="none" stroke="black" points="738.5,-405.02 738.5,-441.02 "/>
+<text text-anchor="middle" x="766.5" y="-419.32" font-family="inherit" font-size="14.00">config</text>
+</g>
+<!-- on_pre_template&#45;&gt;on_template_context -->
+<!-- render_t -->
+<g id="node33" class="node">
+<title>render_t</title>
+<ellipse fill="#00ff00" fill-opacity="0.266667" stroke="black" cx="590" cy="-350.52" rx="38.19" ry="18"/>
+<text text-anchor="middle" x="590" y="-346.82" font-family="inherit" font-size="14.00">render</text>
+</g>
+<!-- on_pre_template&#45;&gt;render_t -->
+<g id="edge44" class="edge">
+<title>on_pre_template:s&#45;&gt;render_t</title>
+<path fill="none" stroke="black" d="M708,-488.02C708,-465.75 792.52,-489.44 807,-472.52 828.96,-446.85 828.32,-422.72 807,-396.52 786.14,-370.88 695.54,-359.39 638.21,-354.6"/>
+<polygon fill="black" stroke="black" points="638.16,-351.09 627.91,-353.78 637.6,-358.06 638.16,-351.09"/>
+</g>
+<!-- get_template_t&#45;&gt;on_pre_template -->
+<g id="edge41" class="edge">
+<title>get_template_t&#45;&gt;on_pre_template:n</title>
+<path fill="none" stroke="black" d="M708,-572.27C708,-562.19 708,-548.97 708,-536.15"/>
+<polygon fill="black" stroke="black" points="711.5,-536.02 708,-526.02 704.5,-536.02 711.5,-536.02"/>
+</g>
+<!-- on_template_context&#45;&gt;render_t -->
+<g id="edge45" class="edge">
+<title>on_template_context:s&#45;&gt;render_t</title>
+<path fill="none" stroke="black" d="M590,-404.02C590,-395.78 590,-386.81 590,-378.66"/>
+<polygon fill="black" stroke="black" points="593.5,-378.54 590,-368.54 586.5,-378.54 593.5,-378.54"/>
+</g>
+<!-- get_context_t -->
+<g id="node32" class="node">
+<title>get_context_t</title>
+<ellipse fill="#00ff00" fill-opacity="0.266667" stroke="black" cx="592" cy="-507.02" rx="61.19" ry="18"/>
+<text text-anchor="middle" x="592" y="-503.32" font-family="inherit" font-size="14.00">get_context</text>
+</g>
+<!-- get_context_t&#45;&gt;on_template_context -->
+<g id="edge43" class="edge">
+<title>get_context_t&#45;&gt;on_template_context:n</title>
+<path fill="none" stroke="black" d="M591.17,-488.91C590.74,-478.74 590.26,-465.32 590.08,-452.3"/>
+<polygon fill="black" stroke="black" points="593.57,-451.99 590,-442.02 586.57,-452.04 593.57,-451.99"/>
+</g>
+<!-- on_post_template -->
+<g id="node34" class="node">
+<title>on_post_template</title>
+<polygon fill="#ffffff" fill-opacity="0.600000" stroke="black" points="558,-257.02 558,-293.02 792,-293.02 792,-257.02 558,-257.02"/>
+<text text-anchor="middle" x="589" y="-271.32" font-family="inherit" font-size="14.00">output</text>
+<polyline fill="none" stroke="black" points="620,-257.02 620,-293.02 "/>
+<text text-anchor="middle" x="678" y="-271.32" font-family="inherit" font-size="14.00">template_name</text>
+<polyline fill="none" stroke="black" points="736,-257.02 736,-293.02 "/>
+<text text-anchor="middle" x="764" y="-271.32" font-family="inherit" font-size="14.00">config</text>
+</g>
+<!-- render_t&#45;&gt;on_post_template -->
+<g id="edge46" class="edge">
+<title>render_t&#45;&gt;on_post_template:n</title>
+<path fill="none" stroke="black" d="M589.54,-332.52C589.34,-324.36 589.14,-314.22 589.05,-304.25"/>
+<polygon fill="black" stroke="black" points="592.55,-304 589,-294.02 585.55,-304.04 592.55,-304"/>
+</g>
+<!-- write_file_t -->
+<g id="node35" class="node">
+<title>write_file_t</title>
+<ellipse fill="#00ff00" fill-opacity="0.266667" stroke="black" cx="586" cy="-202.52" rx="50.09" ry="18"/>
+<text text-anchor="middle" x="586" y="-198.82" font-family="inherit" font-size="14.00">write_file</text>
+</g>
+<!-- on_post_template&#45;&gt;write_file_t -->
+<g id="edge47" class="edge">
+<title>on_post_template:s&#45;&gt;write_file_t</title>
+<path fill="none" stroke="black" d="M589,-256.02C589,-247.77 588.63,-238.8 588.14,-230.64"/>
+<polygon fill="black" stroke="black" points="591.63,-230.27 587.46,-220.53 584.64,-230.74 591.63,-230.27"/>
+</g>
+<!-- write_file_t&#45;&gt;on_post_build -->
+<!-- template_2&#45;&gt;template_3 -->
+<!-- on_serve -->
+<g id="node39" class="node">
+<title>on_serve</title>
+<polygon fill="#ffffff" fill-opacity="0.600000" stroke="black" points="374,-17.02 374,-53.02 486,-53.02 486,-17.02 374,-17.02"/>
+<text text-anchor="middle" x="402" y="-31.32" font-family="inherit" font-size="14.00">server</text>
+<polyline fill="none" stroke="black" points="430,-17.02 430,-53.02 "/>
+<text text-anchor="middle" x="458" y="-31.32" font-family="inherit" font-size="14.00">config</text>
+</g>
+<!-- on_post_build&#45;&gt;on_serve -->
+</g>
+</svg>

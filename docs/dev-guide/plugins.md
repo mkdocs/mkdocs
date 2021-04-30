@@ -139,6 +139,22 @@ All `BasePlugin` subclasses contain the following method(s):
 There are three kinds of events: [Global Events], [Page Events] and
 [Template Events].
 
+<details>
+<summary>See a diagram with relations between all the plugin events</summary>
+
+<ul>
+<li>The events themselves are shown in yellow, with their parameters.
+<li>Arrows show the flow of arguments and outputs of each event.
+    Sometimes they're omitted.
+<li>The events are chronologically ordered from top to bottom.
+<li>Dotted lines appear at splits from global events to per-page events.
+<li>Click the events' titles to jump to their description.
+</ul>
+
+--8<-- "docs/img/plugin-events.svg"
+</details>
+<br>
+
 #### Global Events
 
 Global events are called once per build at either the beginning or end of the

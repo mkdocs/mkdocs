@@ -8,5 +8,6 @@ mdx_gh_links==0.2
 ghp-import==1.0
 pyyaml_env_tag==0.1
 mkdocs-redirects==1.0.1
+pymdown-extensions==8.0.1
 importlib_metadata==3.10.0
 packaging==20.5

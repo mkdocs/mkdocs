@@ -7,3 +7,4 @@ mkdocs/themes/readthedocs/js/** linguist-vendored
 mkdocs/themes/readthedocs/js/theme.js linguist-vendored=false
 mkdocs/themes/readthedocs/css/** linguist-vendored
 mkdocs/themes/readthedocs/css/theme_extra.css linguist-vendored=false
+docs/img/plugin-events.svg linguist-generated

@@ -26,6 +26,11 @@ dd {
     padding-left: 20px;
 }
 
+svg {
+    width: 100%;
+    height: auto;
+}
+
 /* Homepage */
 
 body.homepage div.jumbotron {
