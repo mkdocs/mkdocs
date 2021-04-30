@@ -39,11 +39,13 @@ class compile_catalog(babel.compile_catalog, ThemeMixin):
 
 class extract_messages(babel.extract_messages, ThemeMixin):
     user_options = babel.extract_messages.user_options + [
+        ("domain=", "d", "domains of the POT output file"),
         ("theme=", "t", "theme name to work on"),
     ]
 
     def initialize_options(self):
         super().initialize_options()
+        self.domain = "messages"
         self.theme = None
 
     def finalize_options(self):
