@@ -58,7 +58,8 @@ def getParentTemplateFields(abs_src_path, data_fields,filtered=False):
                         try:
                             child_data.update({key: get_nest(data, *key.split('.'))})
                         except Exception as e:
-                            print(e,sys.exc_info())
+                            pass
+                            # print(e,sys.exc_info())
             except Exception as e:
                 pass
                 # print("EXCEPTION",e,sys.exc_info())
@@ -148,7 +149,7 @@ def sidebar(context,page,pages):
             return list_of_files
         else: return {}
     except Exception as e:
-        print(e)
+        # print(e)
         return {}
 
 def _get_dir_index(path,pages,folder=None):

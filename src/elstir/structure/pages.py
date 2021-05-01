@@ -174,7 +174,7 @@ class Page:
             extension_configs=config['mdx_configs'] or {}
         )
         try:
-            doc = pandoc.Document()
+            doc = pandoc.Document(defaults=config["pandoc"])
             doc.markdown = self.markdown 
             self.content = doc.html
         except Exception as e:
@@ -191,8 +191,7 @@ class _RelativePathTreeprocessor(Treeprocessor):
         self.files = files
 
     def run(self, root):
-        """
-        Update urls on anchors and images to make them relative
+        """Update urls on anchors and images to make them relative
 
         Iterates through the full document tree looking for specific
         tags and then makes them relative based on the site navigation
