@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- encoding: utf-8 -*-
 """
 
@@ -19,6 +18,40 @@ except ImportError:
 # Path to the executable
 PANDOC_PATH = which('pandoc')
 
+class Pandoc:
+    """
+    Examples
+    --------
+    ```python
+    >>> Pandoc(read="markdown", write="html") << "# Hello World"
+    '<h1 id="hello-world">Hello World</h1>\n'
+    >>> Pandoc(read="markdown", write="latex") << "# Hello World"
+    '\\hypertarget{hello-world}{%\n\\section{Hello World}\\label{hello-world}}\n'
+    ```
+    """
+    def __init__(self, *args,**kwds):
+        self.args = [PANDOC_PATH,*args]
+        for k, v in kwds.items():
+            flag = "--"+k
+            if isinstance(v, list):
+                for i in v:
+                    self.args.extend([flag, i])
+            else:
+                self.args.extend([flag,v])
+        self.stdin = subprocess.PIPE
+        self.stdout = subprocess.PIPE
+
+
+    def __lshift__(self, text):
+
+        p = subprocess.Popen(
+                self.args,
+                stdin=self.stdin,
+                stdout=self.stdout,
+                encoding='utf8'
+        )
+        return p.communicate(text)[0]
+
 
 class Document(object):
     """A formatted document."""
@@ -37,11 +70,12 @@ class Document(object):
 
     # TODO: Add odt, epub formats (requires file access, not stdout)
 
-    def __init__(self):
+    def __init__(self,defaults=None):
         self._content = None
         self._format = None
         self._register_formats()
         self.arguments = []
+        self.defaults = defaults
 
         if not exists(PANDOC_PATH):
             raise OSError("Path to pandoc executable does not exists")
@@ -87,8 +121,10 @@ class Document(object):
 
     def _output(self, format):
         subprocess_arguments = [
-            PANDOC_PATH, '--from=%s+raw_html-markdown_in_html_blocks' % self._format, '--to=%s' % format
+            PANDOC_PATH, f'--from={self._format}', f'--to={format}'
         ]
+        if self.defaults:
+            subprocess_arguments.append(f'--defaults={self.defaults}')
         subprocess_arguments.extend(self.arguments)
 
         p = subprocess.Popen(
