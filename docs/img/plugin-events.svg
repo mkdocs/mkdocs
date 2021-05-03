@@ -8,7 +8,7 @@
 <g id="clust1" class="cluster">
 <title>cluster_on_config</title>
 <g id="a_clust1"><a xlink:href="#on_config" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="black" points="505,-1541.2 505,-1617.2 585,-1617.2 585,-1541.2 505,-1541.2"/>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="505,-1541.2 505,-1617.2 585,-1617.2 585,-1541.2 505,-1541.2"/>
 <text text-anchor="middle" x="545" y="-1602" font-family="inherit" font-size="14.00">on_config</text>
 </a>
 </g>
@@ -16,7 +16,7 @@
 <g id="clust2" class="cluster">
 <title>cluster_on_pre_build</title>
 <g id="a_clust2"><a xlink:href="#on_pre_build" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="black" points="436,-1457.2 436,-1533.2 536,-1533.2 536,-1457.2 436,-1457.2"/>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="436,-1457.2 436,-1533.2 536,-1533.2 536,-1457.2 436,-1457.2"/>
 <text text-anchor="middle" x="486" y="-1518" font-family="inherit" font-size="14.00">on_pre_build</text>
 </a>
 </g>
@@ -24,7 +24,7 @@
 <g id="clust3" class="cluster">
 <title>cluster_on_files</title>
 <g id="a_clust3"><a xlink:href="#on_files" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="black" points="501,-1373.2 501,-1449.2 617,-1449.2 617,-1373.2 501,-1373.2"/>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="501,-1373.2 501,-1449.2 617,-1449.2 617,-1373.2 501,-1373.2"/>
 <text text-anchor="middle" x="559" y="-1434" font-family="inherit" font-size="14.00">on_files</text>
 </a>
 </g>
@@ -32,7 +32,7 @@
 <g id="clust4" class="cluster">
 <title>cluster_on_nav</title>
 <g id="a_clust4"><a xlink:href="#on_nav" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="black" points="456,-1225.2 456,-1301.2 610,-1301.2 610,-1225.2 456,-1225.2"/>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="456,-1225.2 456,-1301.2 610,-1301.2 610,-1225.2 456,-1225.2"/>
 <text text-anchor="middle" x="533" y="-1286" font-family="inherit" font-size="14.00">on_nav</text>
 </a>
 </g>
@@ -40,7 +40,7 @@
 <g id="clust5" class="cluster">
 <title>cluster_populate_page</title>
 <g id="a_clust5"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="220,-754.6 220,-1185.6 482,-1185.6 482,-754.6 220,-754.6"/>
+<polygon fill="#dddddd" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.400000" points="220,-754.6 220,-1185.6 482,-1185.6 482,-754.6 220,-754.6"/>
 <text text-anchor="middle" x="351" y="-1170.4" font-family="inherit" font-size="14.00">populate_page</text>
 </a>
 </g>
@@ -48,7 +48,7 @@
 <g id="clust6" class="cluster">
 <title>cluster_on_pre_page</title>
 <g id="a_clust6"><a xlink:href="#on_pre_page" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="black" points="228,-1078.6 228,-1154.6 392,-1154.6 392,-1078.6 228,-1078.6"/>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="228,-1078.6 228,-1154.6 392,-1154.6 392,-1078.6 228,-1078.6"/>
 <text text-anchor="middle" x="310" y="-1139.4" font-family="inherit" font-size="14.00">on_pre_page</text>
 </a>
 </g>
@@ -56,7 +56,7 @@
 <g id="clust7" class="cluster">
 <title>cluster_on_read_source</title>
 <g id="a_clust7"><a xlink:href="#on_read_source" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="black" points="228,-994.6 228,-1070.6 348,-1070.6 348,-994.6 228,-994.6"/>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="228,-994.6 228,-1070.6 348,-1070.6 348,-994.6 228,-994.6"/>
 <text text-anchor="middle" x="288" y="-1055.4" font-family="inherit" font-size="14.00">on_read_source</text>
 </a>
 </g>
@@ -64,7 +64,7 @@
 <g id="clust8" class="cluster">
 <title>cluster_on_page_markdown</title>
 <g id="a_clust8"><a xlink:href="#on_page_markdown" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="black" points="228,-910.6 228,-986.6 474,-986.6 474,-910.6 228,-910.6"/>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="228,-910.6 228,-986.6 474,-986.6 474,-910.6 228,-910.6"/>
 <text text-anchor="middle" x="351" y="-971.4" font-family="inherit" font-size="14.00">on_page_markdown</text>
 </a>
 </g>
@@ -72,7 +72,7 @@
 <g id="clust9" class="cluster">
 <title>cluster_on_page_content</title>
 <g id="a_clust9"><a xlink:href="#on_page_content" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="black" points="255,-762.6 255,-838.6 465,-838.6 465,-762.6 255,-762.6"/>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="255,-762.6 255,-838.6 465,-838.6 465,-762.6 255,-762.6"/>
 <text text-anchor="middle" x="360" y="-823.4" font-family="inherit" font-size="14.00">on_page_content</text>
 </a>
 </g>
@@ -80,7 +80,7 @@
 <g id="clust12" class="cluster">
 <title>cluster_on_env</title>
 <g id="a_clust12"><a xlink:href="#on_env" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="black" points="283,-647 283,-723 437,-723 437,-647 283,-647"/>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="283,-647 283,-723 437,-723 437,-647 283,-647"/>
 <text text-anchor="middle" x="360" y="-707.8" font-family="inherit" font-size="14.00">on_env</text>
 </a>
 </g>
@@ -88,7 +88,7 @@
 <g id="clust10" class="cluster">
 <title>cluster_populate_page_2</title>
 <g id="a_clust10"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="41,-763.1 41,-838.1 153,-838.1 153,-763.1 41,-763.1"/>
+<polygon fill="#dddddd" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.400000" points="41,-763.1 41,-838.1 153,-838.1 153,-763.1 41,-763.1"/>
 <text text-anchor="middle" x="97" y="-822.9" font-family="inherit" font-size="14.00">populate_page</text>
 </a>
 </g>
@@ -96,7 +96,7 @@
 <g id="clust11" class="cluster">
 <title>cluster_populate_page_3</title>
 <g id="a_clust11"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="100,-1079.1 100,-1154.1 212,-1154.1 212,-1079.1 100,-1079.1"/>
+<polygon fill="#dddddd" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.400000" points="100,-1079.1 100,-1154.1 212,-1154.1 212,-1079.1 100,-1079.1"/>
 <text text-anchor="middle" x="156" y="-1138.9" font-family="inherit" font-size="14.00">populate_page</text>
 </a>
 </g>
@@ -104,7 +104,7 @@
 <g id="clust13" class="cluster">
 <title>cluster_build_page</title>
 <g id="a_clust13"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="116,-176 116,-555.5 498,-555.5 498,-176 116,-176"/>
+<polygon fill="#dddddd" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.400000" points="116,-176 116,-555.5 498,-555.5 498,-176 116,-176"/>
 <text text-anchor="middle" x="307" y="-540.3" font-family="inherit" font-size="14.00">build_page</text>
 </a>
 </g>
@@ -112,7 +112,7 @@
 <g id="clust14" class="cluster">
 <title>cluster_on_page_context</title>
 <g id="a_clust14"><a xlink:href="#on_page_context" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="black" points="266,-396 266,-472 490,-472 490,-396 266,-396"/>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="266,-396 266,-472 490,-472 490,-396 266,-396"/>
 <text text-anchor="middle" x="378" y="-456.8" font-family="inherit" font-size="14.00">on_page_context</text>
 </a>
 </g>
@@ -120,7 +120,7 @@
 <g id="clust15" class="cluster">
 <title>cluster_on_post_page</title>
 <g id="a_clust15"><a xlink:href="#on_post_page" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="black" points="288,-248 288,-324 470,-324 470,-248 288,-248"/>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="288,-248 288,-324 470,-324 470,-248 288,-248"/>
 <text text-anchor="middle" x="379" y="-308.8" font-family="inherit" font-size="14.00">on_post_page</text>
 </a>
 </g>
@@ -128,7 +128,7 @@
 <g id="clust16" class="cluster">
 <title>cluster_build_page_2</title>
 <g id="a_clust16"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="21,-480.5 21,-555.5 108,-555.5 108,-480.5 21,-480.5"/>
+<polygon fill="#dddddd" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.400000" points="21,-480.5 21,-555.5 108,-555.5 108,-480.5 21,-480.5"/>
 <text text-anchor="middle" x="64.5" y="-540.3" font-family="inherit" font-size="14.00">build_page</text>
 </a>
 </g>
@@ -136,7 +136,7 @@
 <g id="clust17" class="cluster">
 <title>cluster_build_page_3</title>
 <g id="a_clust17"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="8,-396.5 8,-471.5 95,-471.5 95,-396.5 8,-396.5"/>
+<polygon fill="#dddddd" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.400000" points="8,-396.5 8,-471.5 95,-471.5 95,-396.5 8,-396.5"/>
 <text text-anchor="middle" x="51.5" y="-456.3" font-family="inherit" font-size="14.00">build_page</text>
 </a>
 </g>
@@ -144,7 +144,7 @@
 <g id="clust18" class="cluster">
 <title>cluster_build_template</title>
 <g id="a_clust18"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="506,-176 506,-639 916,-639 916,-176 506,-176"/>
+<polygon fill="#dddddd" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.400000" points="506,-176 506,-639 916,-639 916,-176 506,-176"/>
 <text text-anchor="middle" x="711" y="-623.8" font-family="inherit" font-size="14.00">build_template</text>
 </a>
 </g>
@@ -152,7 +152,7 @@
 <g id="clust19" class="cluster">
 <title>cluster_on_pre_template</title>
 <g id="a_clust19"><a xlink:href="#on_pre_template" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="black" points="646,-480 646,-556 908,-556 908,-480 646,-480"/>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="646,-480 646,-556 908,-556 908,-480 646,-480"/>
 <text text-anchor="middle" x="777" y="-540.8" font-family="inherit" font-size="14.00">on_pre_template</text>
 </a>
 </g>
@@ -160,7 +160,7 @@
 <g id="clust20" class="cluster">
 <title>cluster_on_template_context</title>
 <g id="a_clust20"><a xlink:href="#on_template_context" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="black" points="532,-396 532,-472 786,-472 786,-396 532,-396"/>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="532,-396 532,-472 786,-472 786,-396 532,-396"/>
 <text text-anchor="middle" x="659" y="-456.8" font-family="inherit" font-size="14.00">on_template_context</text>
 </a>
 </g>
@@ -168,7 +168,7 @@
 <g id="clust21" class="cluster">
 <title>cluster_on_post_template</title>
 <g id="a_clust21"><a xlink:href="#on_post_template" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="black" points="533,-248 533,-324 783,-324 783,-248 533,-248"/>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="533,-248 533,-324 783,-324 783,-248 533,-248"/>
 <text text-anchor="middle" x="658" y="-308.8" font-family="inherit" font-size="14.00">on_post_template</text>
 </a>
 </g>
@@ -176,7 +176,7 @@
 <g id="clust22" class="cluster">
 <title>cluster_build_template_2</title>
 <g id="a_clust22"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="953,-564 953,-639 1066,-639 1066,-564 953,-564"/>
+<polygon fill="#dddddd" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.400000" points="953,-564 953,-639 1066,-639 1066,-564 953,-564"/>
 <text text-anchor="middle" x="1009.5" y="-623.8" font-family="inherit" font-size="14.00">build_template</text>
 </a>
 </g>
@@ -184,7 +184,7 @@
 <g id="clust23" class="cluster">
 <title>cluster_build_template_3</title>
 <g id="a_clust23"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="938,-480.5 938,-555.5 1051,-555.5 1051,-480.5 938,-480.5"/>
+<polygon fill="#dddddd" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.400000" points="938,-480.5 938,-555.5 1051,-555.5 1051,-480.5 938,-480.5"/>
 <text text-anchor="middle" x="994.5" y="-540.3" font-family="inherit" font-size="14.00">build_template</text>
 </a>
 </g>
@@ -192,7 +192,7 @@
 <g id="clust24" class="cluster">
 <title>cluster_on_post_build</title>
 <g id="a_clust24"><a xlink:href="#on_post_build" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="black" points="423,-92 423,-168 530,-168 530,-92 423,-92"/>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="423,-92 423,-168 530,-168 530,-92 423,-92"/>
 <text text-anchor="middle" x="476.5" y="-152.8" font-family="inherit" font-size="14.00">on_post_build</text>
 </a>
 </g>
@@ -200,7 +200,7 @@
 <g id="clust25" class="cluster">
 <title>cluster_on_serve</title>
 <g id="a_clust25"><a xlink:href="#on_serve" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="black" points="412,-8 412,-84 540,-84 540,-8 412,-8"/>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="412,-8 412,-84 540,-84 540,-8 412,-8"/>
 <text text-anchor="middle" x="476" y="-68.8" font-family="inherit" font-size="14.00">on_serve</text>
 </a>
 </g>
@@ -209,7 +209,7 @@
 <g id="node1" class="node">
 <title>on_config</title>
 <g id="a_node1"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="517,-1549.7 517,-1585.7 573,-1585.7 573,-1549.7 517,-1549.7"/>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="517,-1549.7 517,-1585.7 573,-1585.7 573,-1549.7 517,-1549.7"/>
 <text text-anchor="middle" x="545" y="-1564" font-family="inherit" font-size="14.00">config</text>
 </a>
 </g>
@@ -218,7 +218,7 @@
 <g id="node2" class="node">
 <title>on_pre_build</title>
 <g id="a_node2"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="471,-1465.7 471,-1501.7 527,-1501.7 527,-1465.7 471,-1465.7"/>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="471,-1465.7 471,-1501.7 527,-1501.7 527,-1465.7 471,-1465.7"/>
 <text text-anchor="middle" x="499" y="-1480" font-family="inherit" font-size="14.00">config</text>
 </a>
 </g>
@@ -236,7 +236,7 @@
 <g id="node6" class="node">
 <title>get_files</title>
 <g id="a_node6"><a xlink:title=" ">
-<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="black" cx="591" cy="-1483.7" rx="46.29" ry="18"/>
+<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.600000" cx="591" cy="-1483.7" rx="46.29" ry="18"/>
 <text text-anchor="middle" x="591" y="-1480" font-family="inherit" font-size="14.00">get_files</text>
 </a>
 </g>
@@ -254,9 +254,9 @@
 <g id="node3" class="node">
 <title>on_files</title>
 <g id="a_node3"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="509.5,-1381.7 509.5,-1417.7 608.5,-1417.7 608.5,-1381.7 509.5,-1381.7"/>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="509.5,-1381.7 509.5,-1417.7 608.5,-1417.7 608.5,-1381.7 509.5,-1381.7"/>
 <text text-anchor="middle" x="531" y="-1396" font-family="inherit" font-size="14.00">files</text>
-<polyline fill="none" stroke="black" points="552.5,-1381.7 552.5,-1417.7 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="552.5,-1381.7 552.5,-1417.7 "/>
 <text text-anchor="middle" x="580.5" y="-1396" font-family="inherit" font-size="14.00">config</text>
 </a>
 </g>
@@ -266,11 +266,11 @@
 <g id="node4" class="node">
 <title>on_nav</title>
 <g id="a_node4"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="464.5,-1233.7 464.5,-1269.7 601.5,-1269.7 601.5,-1233.7 464.5,-1233.7"/>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="464.5,-1233.7 464.5,-1269.7 601.5,-1269.7 601.5,-1233.7 464.5,-1233.7"/>
 <text text-anchor="middle" x="483.5" y="-1248" font-family="inherit" font-size="14.00">nav</text>
-<polyline fill="none" stroke="black" points="502.5,-1233.7 502.5,-1269.7 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="502.5,-1233.7 502.5,-1269.7 "/>
 <text text-anchor="middle" x="530.5" y="-1248" font-family="inherit" font-size="14.00">config</text>
-<polyline fill="none" stroke="black" points="558.5,-1233.7 558.5,-1269.7 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="558.5,-1233.7 558.5,-1269.7 "/>
 <text text-anchor="middle" x="580" y="-1248" font-family="inherit" font-size="14.00">files</text>
 </a>
 </g>
@@ -288,7 +288,7 @@
 <g id="node7" class="node">
 <title>get_nav</title>
 <g id="a_node7"><a xlink:title=" ">
-<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="black" cx="495" cy="-1327.2" rx="43.59" ry="18"/>
+<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.600000" cx="495" cy="-1327.2" rx="43.59" ry="18"/>
 <text text-anchor="middle" x="495" y="-1323.5" font-family="inherit" font-size="14.00">get_nav</text>
 </a>
 </g>
@@ -306,7 +306,7 @@
 <g id="node12" class="node">
 <title>render_p</title>
 <g id="a_node12"><a xlink:title=" ">
-<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="black" cx="361" cy="-864.6" rx="38.19" ry="18"/>
+<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.600000" cx="361" cy="-864.6" rx="38.19" ry="18"/>
 <text text-anchor="middle" x="361" y="-860.9" font-family="inherit" font-size="14.00">render</text>
 </a>
 </g>
@@ -348,7 +348,7 @@
 <g id="node5" class="node">
 <title>load_config</title>
 <g id="a_node5"><a xlink:title=" ">
-<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="black" cx="545" cy="-1643.2" rx="59.29" ry="18"/>
+<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.600000" cx="545" cy="-1643.2" rx="59.29" ry="18"/>
 <text text-anchor="middle" x="545" y="-1639.5" font-family="inherit" font-size="14.00">load_config</text>
 </a>
 </g>
@@ -384,11 +384,11 @@
 <g id="node8" class="node">
 <title>on_pre_page</title>
 <g id="a_node8"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="236.5,-1087.1 236.5,-1123.1 383.5,-1123.1 383.5,-1087.1 236.5,-1087.1"/>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="236.5,-1087.1 236.5,-1123.1 383.5,-1123.1 383.5,-1087.1 236.5,-1087.1"/>
 <text text-anchor="middle" x="260.5" y="-1101.4" font-family="inherit" font-size="14.00">page</text>
-<polyline fill="none" stroke="black" points="284.5,-1087.1 284.5,-1123.1 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="284.5,-1087.1 284.5,-1123.1 "/>
 <text text-anchor="middle" x="312.5" y="-1101.4" font-family="inherit" font-size="14.00">config</text>
-<polyline fill="none" stroke="black" points="340.5,-1087.1 340.5,-1123.1 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="340.5,-1087.1 340.5,-1123.1 "/>
 <text text-anchor="middle" x="362" y="-1101.4" font-family="inherit" font-size="14.00">files</text>
 </a>
 </g>
@@ -397,9 +397,9 @@
 <g id="node9" class="node">
 <title>on_read_source</title>
 <g id="a_node9"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="236,-1003.1 236,-1039.1 340,-1039.1 340,-1003.1 236,-1003.1"/>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="236,-1003.1 236,-1039.1 340,-1039.1 340,-1003.1 236,-1003.1"/>
 <text text-anchor="middle" x="260" y="-1017.4" font-family="inherit" font-size="14.00">page</text>
-<polyline fill="none" stroke="black" points="284,-1003.1 284,-1039.1 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="284,-1003.1 284,-1039.1 "/>
 <text text-anchor="middle" x="312" y="-1017.4" font-family="inherit" font-size="14.00">config</text>
 </a>
 </g>
@@ -417,13 +417,13 @@
 <g id="node10" class="node">
 <title>on_page_markdown</title>
 <g id="a_node10"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="235.5,-919.1 235.5,-955.1 466.5,-955.1 466.5,-919.1 235.5,-919.1"/>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="235.5,-919.1 235.5,-955.1 466.5,-955.1 466.5,-919.1 235.5,-919.1"/>
 <text text-anchor="middle" x="277.5" y="-933.4" font-family="inherit" font-size="14.00">markdown</text>
-<polyline fill="none" stroke="black" points="319.5,-919.1 319.5,-955.1 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="319.5,-919.1 319.5,-955.1 "/>
 <text text-anchor="middle" x="343.5" y="-933.4" font-family="inherit" font-size="14.00">page</text>
-<polyline fill="none" stroke="black" points="367.5,-919.1 367.5,-955.1 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="367.5,-919.1 367.5,-955.1 "/>
 <text text-anchor="middle" x="395.5" y="-933.4" font-family="inherit" font-size="14.00">config</text>
-<polyline fill="none" stroke="black" points="423.5,-919.1 423.5,-955.1 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="423.5,-919.1 423.5,-955.1 "/>
 <text text-anchor="middle" x="445" y="-933.4" font-family="inherit" font-size="14.00">files</text>
 </a>
 </g>
@@ -450,13 +450,13 @@
 <g id="node11" class="node">
 <title>on_page_content</title>
 <g id="a_node11"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="263,-771.1 263,-807.1 457,-807.1 457,-771.1 263,-771.1"/>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="263,-771.1 263,-807.1 457,-807.1 457,-771.1 263,-771.1"/>
 <text text-anchor="middle" x="286.5" y="-785.4" font-family="inherit" font-size="14.00">html</text>
-<polyline fill="none" stroke="black" points="310,-771.1 310,-807.1 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="310,-771.1 310,-807.1 "/>
 <text text-anchor="middle" x="334" y="-785.4" font-family="inherit" font-size="14.00">page</text>
-<polyline fill="none" stroke="black" points="358,-771.1 358,-807.1 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="358,-771.1 358,-807.1 "/>
 <text text-anchor="middle" x="386" y="-785.4" font-family="inherit" font-size="14.00">config</text>
-<polyline fill="none" stroke="black" points="414,-771.1 414,-807.1 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="414,-771.1 414,-807.1 "/>
 <text text-anchor="middle" x="435.5" y="-785.4" font-family="inherit" font-size="14.00">files</text>
 </a>
 </g>
@@ -482,11 +482,11 @@
 <g id="node17" class="node">
 <title>on_env</title>
 <g id="a_node17"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="291.5,-655.5 291.5,-691.5 428.5,-691.5 428.5,-655.5 291.5,-655.5"/>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="291.5,-655.5 291.5,-691.5 428.5,-691.5 428.5,-655.5 291.5,-655.5"/>
 <text text-anchor="middle" x="310.5" y="-669.8" font-family="inherit" font-size="14.00">env</text>
-<polyline fill="none" stroke="black" points="329.5,-655.5 329.5,-691.5 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="329.5,-655.5 329.5,-691.5 "/>
 <text text-anchor="middle" x="357.5" y="-669.8" font-family="inherit" font-size="14.00">config</text>
-<polyline fill="none" stroke="black" points="385.5,-655.5 385.5,-691.5 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="385.5,-655.5 385.5,-691.5 "/>
 <text text-anchor="middle" x="407" y="-669.8" font-family="inherit" font-size="14.00">files</text>
 </a>
 </g>
@@ -610,7 +610,7 @@
 <g id="node32" class="node">
 <title>get_template_t</title>
 <g id="a_node32"><a xlink:title=" ">
-<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="black" cx="691" cy="-590" rx="66.09" ry="18"/>
+<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.600000" cx="691" cy="-590" rx="66.09" ry="18"/>
 <text text-anchor="middle" x="691" y="-586.3" font-family="inherit" font-size="14.00">get_template</text>
 </a>
 </g>
@@ -628,13 +628,13 @@
 <g id="node19" class="node">
 <title>on_page_context</title>
 <g id="a_node19"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="274.5,-404.5 274.5,-440.5 481.5,-440.5 481.5,-404.5 274.5,-404.5"/>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="274.5,-404.5 274.5,-440.5 481.5,-440.5 481.5,-404.5 274.5,-404.5"/>
 <text text-anchor="middle" x="307" y="-418.8" font-family="inherit" font-size="14.00">context</text>
-<polyline fill="none" stroke="black" points="339.5,-404.5 339.5,-440.5 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="339.5,-404.5 339.5,-440.5 "/>
 <text text-anchor="middle" x="363.5" y="-418.8" font-family="inherit" font-size="14.00">page</text>
-<polyline fill="none" stroke="black" points="387.5,-404.5 387.5,-440.5 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="387.5,-404.5 387.5,-440.5 "/>
 <text text-anchor="middle" x="415.5" y="-418.8" font-family="inherit" font-size="14.00">config</text>
-<polyline fill="none" stroke="black" points="443.5,-404.5 443.5,-440.5 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="443.5,-404.5 443.5,-440.5 "/>
 <text text-anchor="middle" x="462.5" y="-418.8" font-family="inherit" font-size="14.00">nav</text>
 </a>
 </g>
@@ -652,7 +652,7 @@
 <g id="node21" class="node">
 <title>get_context</title>
 <g id="a_node21"><a xlink:title=" ">
-<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="black" cx="307" cy="-506.5" rx="61.19" ry="18"/>
+<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.600000" cx="307" cy="-506.5" rx="61.19" ry="18"/>
 <text text-anchor="middle" x="307" y="-502.8" font-family="inherit" font-size="14.00">get_context</text>
 </a>
 </g>
@@ -698,7 +698,7 @@
 <g id="node22" class="node">
 <title>render</title>
 <g id="a_node22"><a xlink:title=" ">
-<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="black" cx="307" cy="-350" rx="38.19" ry="18"/>
+<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.600000" cx="307" cy="-350" rx="38.19" ry="18"/>
 <text text-anchor="middle" x="307" y="-346.3" font-family="inherit" font-size="14.00">render</text>
 </a>
 </g>
@@ -716,11 +716,11 @@
 <g id="node20" class="node">
 <title>on_post_page</title>
 <g id="a_node20"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="296,-256.5 296,-292.5 462,-292.5 462,-256.5 296,-256.5"/>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="296,-256.5 296,-292.5 462,-292.5 462,-256.5 296,-256.5"/>
 <text text-anchor="middle" x="327" y="-270.8" font-family="inherit" font-size="14.00">output</text>
-<polyline fill="none" stroke="black" points="358,-256.5 358,-292.5 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="358,-256.5 358,-292.5 "/>
 <text text-anchor="middle" x="382" y="-270.8" font-family="inherit" font-size="14.00">page</text>
-<polyline fill="none" stroke="black" points="406,-256.5 406,-292.5 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="406,-256.5 406,-292.5 "/>
 <text text-anchor="middle" x="434" y="-270.8" font-family="inherit" font-size="14.00">config</text>
 </a>
 </g>
@@ -729,7 +729,7 @@
 <g id="node24" class="node">
 <title>write_file</title>
 <g id="a_node24"><a xlink:title=" ">
-<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="black" cx="383" cy="-202" rx="50.09" ry="18"/>
+<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.600000" cx="383" cy="-202" rx="50.09" ry="18"/>
 <text text-anchor="middle" x="383" y="-198.3" font-family="inherit" font-size="14.00">write_file</text>
 </a>
 </g>
@@ -765,7 +765,7 @@
 <g id="node23" class="node">
 <title>get_template</title>
 <g id="a_node23"><a xlink:title=" ">
-<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="black" cx="190" cy="-422.5" rx="66.09" ry="18"/>
+<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.600000" cx="190" cy="-422.5" rx="66.09" ry="18"/>
 <text text-anchor="middle" x="190" y="-418.8" font-family="inherit" font-size="14.00">get_template</text>
 </a>
 </g>
@@ -783,7 +783,7 @@
 <g id="node38" class="node">
 <title>on_post_build</title>
 <g id="a_node38"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="448,-100.5 448,-136.5 504,-136.5 504,-100.5 448,-100.5"/>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="448,-100.5 448,-136.5 504,-136.5 504,-100.5 448,-100.5"/>
 <text text-anchor="middle" x="476" y="-114.8" font-family="inherit" font-size="14.00">config</text>
 </a>
 </g>
@@ -811,11 +811,11 @@
 <g id="node29" class="node">
 <title>on_pre_template</title>
 <g id="a_node29"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="654,-488.5 654,-524.5 900,-524.5 900,-488.5 654,-488.5"/>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="654,-488.5 654,-524.5 900,-524.5 900,-488.5 654,-488.5"/>
 <text text-anchor="middle" x="691" y="-502.8" font-family="inherit" font-size="14.00">template</text>
-<polyline fill="none" stroke="black" points="728,-488.5 728,-524.5 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="728,-488.5 728,-524.5 "/>
 <text text-anchor="middle" x="786" y="-502.8" font-family="inherit" font-size="14.00">template_name</text>
-<polyline fill="none" stroke="black" points="844,-488.5 844,-524.5 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="844,-488.5 844,-524.5 "/>
 <text text-anchor="middle" x="872" y="-502.8" font-family="inherit" font-size="14.00">config</text>
 </a>
 </g>
@@ -870,11 +870,11 @@
 <g id="node30" class="node">
 <title>on_template_context</title>
 <g id="a_node30"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="540.5,-404.5 540.5,-440.5 777.5,-440.5 777.5,-404.5 540.5,-404.5"/>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="540.5,-404.5 540.5,-440.5 777.5,-440.5 777.5,-404.5 540.5,-404.5"/>
 <text text-anchor="middle" x="573" y="-418.8" font-family="inherit" font-size="14.00">context</text>
-<polyline fill="none" stroke="black" points="605.5,-404.5 605.5,-440.5 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="605.5,-404.5 605.5,-440.5 "/>
 <text text-anchor="middle" x="663.5" y="-418.8" font-family="inherit" font-size="14.00">template_name</text>
-<polyline fill="none" stroke="black" points="721.5,-404.5 721.5,-440.5 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="721.5,-404.5 721.5,-440.5 "/>
 <text text-anchor="middle" x="749.5" y="-418.8" font-family="inherit" font-size="14.00">config</text>
 </a>
 </g>
@@ -884,7 +884,7 @@
 <g id="node34" class="node">
 <title>render_t</title>
 <g id="a_node34"><a xlink:title=" ">
-<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="black" cx="573" cy="-350" rx="38.19" ry="18"/>
+<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.600000" cx="573" cy="-350" rx="38.19" ry="18"/>
 <text text-anchor="middle" x="573" y="-346.3" font-family="inherit" font-size="14.00">render</text>
 </a>
 </g>
@@ -911,11 +911,11 @@
 <g id="node31" class="node">
 <title>on_post_template</title>
 <g id="a_node31"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="541,-256.5 541,-292.5 775,-292.5 775,-256.5 541,-256.5"/>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="541,-256.5 541,-292.5 775,-292.5 775,-256.5 541,-256.5"/>
 <text text-anchor="middle" x="572" y="-270.8" font-family="inherit" font-size="14.00">output</text>
-<polyline fill="none" stroke="black" points="603,-256.5 603,-292.5 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="603,-256.5 603,-292.5 "/>
 <text text-anchor="middle" x="661" y="-270.8" font-family="inherit" font-size="14.00">template_name</text>
-<polyline fill="none" stroke="black" points="719,-256.5 719,-292.5 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="719,-256.5 719,-292.5 "/>
 <text text-anchor="middle" x="747" y="-270.8" font-family="inherit" font-size="14.00">config</text>
 </a>
 </g>
@@ -924,7 +924,7 @@
 <g id="node35" class="node">
 <title>write_file_t</title>
 <g id="a_node35"><a xlink:title=" ">
-<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="black" cx="569" cy="-202" rx="50.09" ry="18"/>
+<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.600000" cx="569" cy="-202" rx="50.09" ry="18"/>
 <text text-anchor="middle" x="569" y="-198.3" font-family="inherit" font-size="14.00">write_file</text>
 </a>
 </g>
@@ -951,7 +951,7 @@
 <g id="node33" class="node">
 <title>get_context_t</title>
 <g id="a_node33"><a xlink:title=" ">
-<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="black" cx="575" cy="-506.5" rx="61.19" ry="18"/>
+<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.600000" cx="575" cy="-506.5" rx="61.19" ry="18"/>
 <text text-anchor="middle" x="575" y="-502.8" font-family="inherit" font-size="14.00">get_context</text>
 </a>
 </g>
@@ -980,9 +980,9 @@
 <g id="node39" class="node">
 <title>on_serve</title>
 <g id="a_node39"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="black" points="420,-16.5 420,-52.5 532,-52.5 532,-16.5 420,-16.5"/>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="420,-16.5 420,-52.5 532,-52.5 532,-16.5 420,-16.5"/>
 <text text-anchor="middle" x="448" y="-30.8" font-family="inherit" font-size="14.00">server</text>
-<polyline fill="none" stroke="black" points="476,-16.5 476,-52.5 "/>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="476,-16.5 476,-52.5 "/>
 <text text-anchor="middle" x="504" y="-30.8" font-family="inherit" font-size="14.00">config</text>
 </a>
 </g>

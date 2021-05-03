@@ -28,6 +28,7 @@ def node(g, name, **kwargs):
         kwargs.setdefault("shape", "point")
     else:
         kwargs.setdefault("fillcolor", "#77ff7788")
+        kwargs.setdefault("color", "#00000099")
     kwargs.setdefault("label", strip_suffix(name))
 
     g.node(name, **kwargs)
@@ -67,14 +68,17 @@ def ensure_order(a, b):
 def cluster(g, name, **kwargs):
     assert name.startswith("cluster_")
     kwargs.setdefault("label", strip_suffix(name)[len("cluster_") :])
-    kwargs.setdefault("bgcolor", "#ffffff55")
+    kwargs.setdefault("bgcolor", "#dddddd55")
+    kwargs.setdefault("pencolor", "#00000066")
     with g.subgraph(name=name) as c:
         c.attr(**kwargs)
         yield c
 
 
 def event(g, name, parameters):
-    with cluster(g, f"cluster_{name}", href=f"#{name}", bgcolor="#ffff3388") as c:
+    with cluster(
+        g, f"cluster_{name}", href=f"#{name}", bgcolor="#ffff3388", pencolor="#00000088"
+    ) as c:
         label = "|".join(f"<{p}>{p}" for p in parameters.split())
         node(c, name, shape="record", label=label, fillcolor="#ffffff55")
 
