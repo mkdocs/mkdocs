@@ -29,27 +29,33 @@ class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
         super().__init__((host, port), handler)
 
         self._epoch = _timestamp()  # The version of the site (time at which it was last built).
-        self._cond = threading.Condition()  # Must be held when accessing _epoch.
+        self._epoch_cond = threading.Condition()  # Must be held when accessing _epoch.
 
-        self.reload_event = threading.Event()
+        self._to_rebuild = {}  # Used as an ordered set of functions to call.
+        self._rebuild_cond = threading.Condition()  # Must be held when accessing _to_rebuild.
+
         self.observer = watchdog.observers.Observer()
 
         self.serve_thread = threading.Thread(target=self.serve_forever)
 
     def wait_for_epoch(self, epoch, timeout):
         """Wait until the site's version is newer than this."""
-        with self._cond:
-            self._cond.wait_for(lambda: self._epoch > epoch, timeout=timeout)
+        with self._epoch_cond:
+            self._epoch_cond.wait_for(lambda: self._epoch > epoch, timeout=timeout)
             return self._epoch
 
     def watch(self, path, func=None, recursive=True):
-        """Add the 'path' to watched paths, reload when any file changes under it."""
+        """Add the 'path' to watched paths, call the function and reload when any file changes under it."""
         path = os.path.abspath(path)
+        if func is None:
+            func = self.builder
 
-        if func not in (None, self.builder):
-            raise ValueError("The 'func' parameter of watch() was removed and must not be passed.")
+        def callback():
+            with self._rebuild_cond:
+                self._to_rebuild[func] = True
+                self._rebuild_cond.notify_all()
 
-        handler = _ThrottledEventHandler(self.reload_event)
+        handler = _ThrottledEventHandler(callback)
         self.observer.schedule(handler, path, recursive=recursive)
 
     def serve(self):
@@ -58,14 +64,21 @@ class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
         log.info("Serving on %s", self.url)
         self.serve_thread.start()
 
-        while self.reload_event.wait():
-            self.reload_event.clear()
-            now = _timestamp()
-            self.builder()
-            with self._cond:
+        while True:
+            with self._rebuild_cond:
+                self._rebuild_cond.wait()
+                log.debug("Detected file changes")
+                now = _timestamp()
+                funcs = list(self._to_rebuild)
+                self._to_rebuild.clear()
+
+            for func in funcs:
+                func()
+
+            with self._epoch_cond:
                 log.info("Reloading browsers")
                 self._epoch = now
-                self._cond.notify_all()
+                self._epoch_cond.notify_all()
 
     def shutdown(self):
         self.observer.stop()
@@ -146,15 +159,15 @@ def _timestamp():
 
 
 class _ThrottledEventHandler(watchdog.events.FileSystemEventHandler):
-    """Event handler for Watchdog, setting the passed event not more frequently than once per interval.
+    """Event handler for Watchdog, calling the callback not more frequently than once per interval.
 
     That is done for the 2 purposes:
       * collapsing a burst of events for 1 file into one;
       * throttling in case files are modified too frequently.
     """
 
-    def __init__(self, threading_event, interval=0.5):
-        self.event = threading_event
+    def __init__(self, callback, interval=0.5):
+        self.callback = callback
         self.interval = interval
         self.last_triggered = float("-inf")
         self._lock = threading.Lock()
@@ -165,6 +178,4 @@ class _ThrottledEventHandler(watchdog.events.FileSystemEventHandler):
             if now < self.last_triggered + self.interval:
                 return
             self.last_triggered = now
-            if not self.event.is_set():
-                log.debug("Detected file changes")
-                self.event.set()
+            self.callback()
