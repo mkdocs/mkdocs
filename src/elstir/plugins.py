@@ -4,8 +4,8 @@ Implements the plugin API for elstir.
 """
 
 
-import pkg_resources
 import logging
+import importlib_metadata
 from collections import OrderedDict
 
 from elstir.config.base import Config
@@ -17,14 +17,15 @@ log = logging.getLogger('elstir.plugins')
 EVENTS = (
     'config', 'pre_build', 'files', 'nav', 'env', 'pre_template', 'template_context',
     'post_template', 'pre_page', 'page_read_source', 'page_markdown',
-    'page_content', 'page_context', 'post_page', 'post_build', 'serve'
+    'page_content', 'page_context', 'post_page', 'post_build', 'serve', 'build_error'
 )
 
 
 def get_plugins():
-    """ Return a dict of all installed Plugins by name. """
+    """ Return a dict of all installed Plugins as {name: EntryPoint}. """
 
-    plugins = pkg_resources.iter_entry_points(group='elstir.plugins')
+    #plugins = pkg_resources.iter_entry_points(group='elstir.plugins')
+    plugins = importlib_metadata.entry_points(group='elstir.plugins')
 
     return {plugin.name: plugin for plugin in plugins}
 

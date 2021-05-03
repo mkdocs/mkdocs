@@ -217,6 +217,20 @@ class URLTest(unittest.TestCase):
         self.assertRaises(config_options.ValidationError,
                           option.validate, 1)
 
+    def test_url_is_dir(self):
+        url = "https://mkdocs.org/"
+
+        option = config_options.URL(is_dir=True)
+        value = option.validate(url)
+        self.assertEqual(value, url)
+
+    def test_url_transform_to_dir(self):
+        url = "https://mkdocs.org"
+
+        option = config_options.URL(is_dir=True)
+        value = option.validate(url)
+        self.assertEqual(value, f'{url}/')
+
 
 class RepoURLTest(unittest.TestCase):
 

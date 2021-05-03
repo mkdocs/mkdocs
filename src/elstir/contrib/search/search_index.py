@@ -35,15 +35,14 @@ class SearchIndex:
 
     def _add_entry(self, title, text, loc):
         """
-        A simple wrapper to add an entry and ensure the contents
-        is UTF8 encoded.
+        A simple wrapper to add an entry, dropping bad characters.
         """
         text = text.replace('\u00a0', ' ')
         text = re.sub(r'[ \t\n\r\f\v]+', ' ', text.strip())
 
         self._entries.append({
             'title': title,
-            'text': str(text.encode('utf-8'), encoding='utf-8'),
+            'text': text,
             'location': loc
         })
 
@@ -66,14 +65,16 @@ class SearchIndex:
         url = page.url
 
         # Create an entry for the full page.
+        text = parser.stripped_html.rstrip('\n') if self.config['indexing'] == 'full' else ''
         self._add_entry(
             title=page.title,
-            text=self.strip_tags(page.content).rstrip('\n'),
+            text=text,
             loc=url
         )
 
-        for section in parser.data:
-            self.create_entry_for_section(section, page.toc, url)
+        if self.config['indexing'] in ['full', 'sections']:
+            for section in parser.data:
+                self.create_entry_for_section(section, page.toc, url)
 
     def create_entry_for_section(self, section, toc, abs_url):
         """
@@ -84,10 +85,11 @@ class SearchIndex:
 
         toc_item = self._find_toc_by_id(toc, section.id)
 
+        text = ' '.join(section.text) if self.config['indexing'] == 'full' else ''
         if toc_item is not None:
             self._add_entry(
                 title=toc_item.title,
-                text=" ".join(section.text),
+                text=text,
                 loc=abs_url + toc_item.url
             )
 
@@ -127,34 +129,6 @@ class SearchIndex:
 
         return data
 
-    def strip_tags(self, html):
-        """strip html tags from data"""
-        s = HTMLStripper()
-        s.feed(html)
-        return s.get_data()
-
-
-class HTMLStripper(HTMLParser):
-    """
-    A simple HTML parser that stores all of the data within tags
-    but ignores the tags themselves and thus strips them from the
-    content.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.data = []
-
-    def handle_data(self, d):
-        """
-        Called for the text contents of each tag.
-        """
-        self.data.append(d)
-
-    def get_data(self):
-        return '\n'.join(self.data)
-
 
 class ContentSection:
     """
@@ -168,11 +142,11 @@ class ContentSection:
         self.title = title
 
     def __eq__(self, other):
-        return all([
-            self.text == other.text,
-            self.id == other.id,
+        return (
+            self.text == other.text and
+            self.id == other.id and
             self.title == other.title
-        ])
+        )
 
 
 class ContentParser(HTMLParser):
@@ -189,6 +163,7 @@ class ContentParser(HTMLParser):
         self.data = []
         self.section = None
         self.is_header_tag = False
+        self._stripped_html = []
 
     def handle_starttag(self, tag, attrs):
         """Called at the start of every HTML tag."""
@@ -221,6 +196,8 @@ class ContentParser(HTMLParser):
         Called for the text contents of each tag.
         """
 
+        self._stripped_html.append(data)
+
         if self.section is None:
             # This means we have some content at the start of the
             # HTML before we reach a heading tag. We don't actually
@@ -235,3 +212,7 @@ class ContentParser(HTMLParser):
             self.section.title = data
         else:
             self.section.text.append(data.rstrip('\n'))
+
+    @property
+    def stripped_html(self):
+        return '\n'.join(self._stripped_html)

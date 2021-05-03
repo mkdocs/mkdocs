@@ -2,10 +2,11 @@ import logging
 import subprocess
 import os
 import re
-from pkg_resources import parse_version
+from packaging import version
 
 import elstir
-from elstir.utils import ghp_import
+import ghp_import
+from elstir.exceptions import Abort
 
 log = logging.getLogger(__name__)
 
@@ -21,7 +22,7 @@ def _is_cwd_git_repo():
         )
     except FileNotFoundError:
         log.error("Could not find git - is it installed and on your path?")
-        raise SystemExit(1)
+        raise Abort('Deployment Aborted!')
     proc.communicate()
     return proc.wait() == 0
 
@@ -65,25 +66,25 @@ def _check_version(branch):
     stdout, _ = proc.communicate()
     msg = stdout.decode('utf-8').strip()
     m = re.search(r'\d+(\.\d+)+((a|b|rc)\d+)?(\.post\d+)?(\.dev\d+)?', msg, re.X | re.I)
-    previousv = parse_version(m.group()) if m else None
-    currentv = parse_version(elstir.__version__)
+    previousv = version.parse(m.group()) if m else None
+    currentv = version.parse(elstir.__version__)
     if not previousv:
         log.warning('Version check skipped: No version specified in previous deployment.')
     elif currentv > previousv:
         log.info(
-            'Previous deployment was done with elstir version {}; '
-            'you are deploying with a newer version ({})'.format(previousv, currentv)
+            f'Previous deployment was done with MkDocs version {previousv}; '
+            f'you are deploying with a newer version ({currentv})'
         )
     elif currentv < previousv:
         log.error(
-            'Deployment terminated: Previous deployment was made with elstir version {}; '
-            'you are attempting to deploy with an older version ({}). Use --ignore-version '
-            'to deploy anyway.'.format(previousv, currentv)
+            f'Deployment terminated: Previous deployment was made with MkDocs version {previousv}; '
+            f'you are attempting to deploy with an older version ({currentv}). Use --ignore-version '
+            'to deploy anyway.'
         )
-        raise SystemExit(1)
+        raise Abort('Deployment Aborted!')
 
 
-def gh_deploy(config, message=None, force=False, ignore_version=False):
+def gh_deploy(config, message=None, force=False, ignore_version=False, shell=False):
 
     if not _is_cwd_git_repo():
         log.error('Cannot deploy - this directory does not appear to be a git '
@@ -103,32 +104,40 @@ def gh_deploy(config, message=None, force=False, ignore_version=False):
     log.info("Copying '%s' to '%s' branch and pushing to GitHub.",
              config['site_dir'], config['remote_branch'])
 
-    result, error = ghp_import.ghp_import(config['site_dir'], message, remote_name,
-                                          remote_branch, force)
-    if not result:
-        log.error("Failed to deploy to GitHub with error: \n%s", error)
-        raise SystemExit(1)
+    try:
+        ghp_import.ghp_import(
+            config['site_dir'],
+            mesg=message,
+            remote=remote_name,
+            branch=remote_branch,
+            push=force,
+            use_shell=shell,
+            nojekyll=True
+        )
+    except ghp_import.GhpError as e:
+        log.error("Failed to deploy to GitHub with error: \n{}".format(e.message))
+        raise Abort('Deployment Aborted!')
+
+    cname_file = os.path.join(config['site_dir'], 'CNAME')
+    # Does this repository have a CNAME set for GitHub pages?
+    if os.path.isfile(cname_file):
+        # This GitHub pages repository has a CNAME configured.
+        with(open(cname_file, 'r')) as f:
+            cname_host = f.read().strip()
+        log.info('Based on your CNAME file, your documentation should be '
+                 'available shortly at: http://%s', cname_host)
+        log.info('NOTE: Your DNS records must be configured appropriately for '
+                 'your CNAME URL to work.')
+        return
+
+    host, path = _get_remote_url(remote_name)
+
+    if host is None:
+        # This could be a GitHub Enterprise deployment.
+        log.info('Your documentation should be available shortly.')
     else:
-        cname_file = os.path.join(config['site_dir'], 'CNAME')
-        # Does this repository have a CNAME set for GitHub pages?
-        if os.path.isfile(cname_file):
-            # This GitHub pages repository has a CNAME configured.
-            with(open(cname_file, 'r')) as f:
-                cname_host = f.read().strip()
-            log.info('Based on your CNAME file, your documentation should be '
-                     'available shortly at: http://%s', cname_host)
-            log.info('NOTE: Your DNS records must be configured appropriately for '
-                     'your CNAME URL to work.')
-            return
-
-        host, path = _get_remote_url(remote_name)
-
-        if host is None:
-            # This could be a GitHub Enterprise deployment.
-            log.info('Your documentation should be available shortly.')
-        else:
-            username, repo = path.split('/', 1)
-            if repo.endswith('.git'):
-                repo = repo[:-len('.git')]
-            url = 'https://{}.github.io/{}/'.format(username, repo)
-            log.info('Your documentation should shortly be available at: ' + url)
+        username, repo = path.split('/', 1)
+        if repo.endswith('.git'):
+            repo = repo[:-len('.git')]
+        url = 'https://{}.github.io/{}/'.format(username, repo)
+        log.info('Your documentation should shortly be available at: ' + url)

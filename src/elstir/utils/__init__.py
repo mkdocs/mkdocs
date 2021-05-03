@@ -8,14 +8,17 @@ and structure of the site and pages in the site.
 
 import logging
 import os
-import pkg_resources
 import shutil
 import re
 import yaml
 import fnmatch
 import posixpath
+import functools
+import importlib_metadata
+from collections import defaultdict
 from datetime import datetime, timezone
 from urllib.parse import urlparse
+from yaml_env_tag import construct_env_tag
 
 from elstir import exceptions
 
@@ -81,6 +84,11 @@ def yaml_load(source, loader=yaml.Loader):
     # Loader.compose_document = my_compose_document
     # Loader.add_constructor("!include", yaml_include)
     Loader.add_constructor('tag:yaml.org,2002:str', construct_yaml_str)
+
+    # Attach Environment Variable constructor.
+    # See https://github.com/waylan/pyyaml-env-tag
+    Loader.add_constructor('!ENV', construct_env_tag)
+
     try:
         return yaml.load(source, Loader)
     finally:
@@ -158,8 +166,7 @@ def copy_file(source_path, output_path):
     The output_path may be a directory.
     """
     output_dir = os.path.dirname(output_path)
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    os.makedirs(output_dir, exist_ok=True)
     if os.path.isdir(output_path):
         output_path = os.path.join(output_path, os.path.basename(source_path))
     shutil.copyfile(source_path, output_path)
@@ -170,8 +177,7 @@ def write_file(content, output_path):
     Write content to output_path, making sure any parent directories exist.
     """
     output_dir = os.path.dirname(output_path)
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    os.makedirs(output_dir, exist_ok=True)
     with open(output_path, 'wb') as f:
         f.write(content)
 
@@ -274,26 +280,45 @@ def is_error_template(path):
 def get_relative_url(url, other):
     """
     Return given url relative to other.
+
+    Both are operated as slash-separated paths, similarly to the 'path' part of a URL.
+    The last component of `other` is skipped if it contains a dot (considered a file).
+    Actual URLs (with schemas etc.) aren't supported. The leading slash is ignored.
+    Paths are normalized ('..' works as parent directory), but going higher than the
+    root has no effect ('foo/../../bar' ends up just as 'bar').
     """
     if other != '.':
         # Remove filename from other url if it has one.
         parts = posixpath.split(other)
         other = parts[0] if '.' in parts[1] else other
-    relurl = posixpath.relpath(url, other)
+    relurl = posixpath.relpath('/' + url, '/' + other)
     return relurl + '/' if url.endswith('/') else relurl
 
 
 def normalize_url(path, page=None, base=''):
     """ Return a URL relative to the given page or using the base. """
+    path, is_abs = _get_norm_url(path)
+    if is_abs:
+        return path
+    if page is not None:
+        base = page.url
+    return _get_rel_path(path, base, page is not None)
+
+
+@functools.lru_cache(maxsize=None)
+def _get_norm_url(path):
     path = path_to_url(path or '.')
     # Allow links to be fully qualified URL's
     parsed = urlparse(path)
     if parsed.scheme or parsed.netloc or path.startswith(('/', '#')):
-        return path
+        return path, True
+    return path, False
 
-    # We must be looking at a local path.
-    if page is not None:
-        return get_relative_url(path, page.url)
+
+@functools.lru_cache()
+def _get_rel_path(path, base, base_is_url):
+    if base_is_url:
+        return get_relative_url(path, base)
     else:
         return posixpath.join(base, path)
 
@@ -319,23 +344,24 @@ def get_theme_dir(name):
 
 
 def get_themes():
-    """ Return a dict of all installed themes as (name, entry point) pairs. """
+    """ Return a dict of all installed themes as {name: EntryPoint}. """
 
     themes = {}
-    builtins = pkg_resources.get_entry_map(dist='elstir', group='elstir.themes')
+    eps = importlib_metadata.entry_points(group='elstir.themes')
+    builtins = [ep.name for ep in eps if ep.dist.name == 'elstir']
 
-    for theme in pkg_resources.iter_entry_points(group='elstir.themes'):
+    for theme in eps:
 
-        if theme.name in builtins and theme.dist.key != 'elstir':
+        if theme.name in builtins and theme.dist.name != 'elstir':
             raise exceptions.ConfigurationError(
-                "The theme {} is a builtin theme but {} provides a theme "
-                "with the same name".format(theme.name, theme.dist.key))
-
+                f"The theme '{theme.name}' is a builtin theme but the package '{theme.dist.name}' "
+                "attempts to provide a theme with the same name."
+            )
         elif theme.name in themes:
-            multiple_packages = [themes[theme.name].dist.key, theme.dist.key]
-            log.warning("The theme %s is provided by the Python packages "
-                        "'%s'. The one in %s will be used.",
-                        theme.name, ','.join(multiple_packages), theme.dist.key)
+            log.warning(
+                f"A theme named '{theme.name}' is provided by the Python packages '{theme.dist.name}'"
+                f"and '{themes[theme.name].dist.name}'. The one in '{theme.dist.name}' will be used."
+            )
 
         themes[theme.name] = theme
 
@@ -424,15 +450,28 @@ def nest_paths(paths):
     return nested
 
 
-class WarningFilter(logging.Filter):
-    """ Counts all WARNING level log messages. """
-    count = 0
+class CountHandler(logging.NullHandler):
+    """ Counts all logged messages >= level. """
 
-    def filter(self, record):
-        if record.levelno == logging.WARNING:
-            self.count += 1
-        return True
+    def __init__(self, **kwargs):
+        self.counts = defaultdict(int)
+        super().__init__(**kwargs)
+
+    def handle(self, record):
+        rv = self.filter(record)
+        if rv:
+            # Use levelno for keys so they can be sorted later
+            self.counts[record.levelno] += 1
+        return rv
+
+    def get_counts(self):
+        return [(logging.getLevelName(k), v) for k, v in sorted(self.counts.items(), reverse=True)]
 
 
 # A global instance to use throughout package
-warning_filter = WarningFilter()
+log_counter = CountHandler()
+
+# For backward compatability as some plugins import it.
+# It is no longer nessecary as all messages on the
+# `mkdocs` logger get counted automaticaly.
+warning_filter = logging.Filter()

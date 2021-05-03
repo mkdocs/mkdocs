@@ -2,10 +2,9 @@ import logging
 from urllib.parse import urlparse
 
 from elstir.structure.pages import Page
-from elstir.utils import nest_paths, warning_filter
+from elstir.utils import nest_paths
 
 log = logging.getLogger(__name__)
-log.addFilter(warning_filter)
 
 
 class Navigation:

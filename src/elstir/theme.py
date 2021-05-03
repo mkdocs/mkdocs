@@ -8,7 +8,6 @@ from elstir.utils import filters
 from elstir.config.base import ValidationError
 
 log = logging.getLogger(__name__)
-log.addFilter(utils.warning_filter)
 
 
 class Theme:
@@ -110,6 +109,8 @@ class Theme:
         """ Return a Jinja environment for the theme. """
 
         loader = jinja2.FileSystemLoader(self.dirs)
+        # No autoreload because editing a template in the middle of a build is not useful.
+        #env = jinja2.Environment(loader=loader, auto_reload=False)
         env = jinja2.Environment(loader=loader, extensions=['jinja2.ext.do'])
         env.filters['tojson'] = filters.tojson
         env.filters['list'] = list
