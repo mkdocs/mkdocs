@@ -25,8 +25,8 @@
   {%- if config.theme.highlightjs %}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
   {%- endif %}
-  {%- for path in config['extra_css'] %}
-  <link href="{{ path|url }}" rel="stylesheet" />
+  {%- for path in extra_css %}
+  <link href="{{ path }}" rel="stylesheet" />
   {%- endfor %}
   {%- endblock %}
 
@@ -144,8 +144,8 @@
     <script>var base_url = '{{ base_url }}';</script>
     <script src="{{ 'js/theme_extra.js'|url }}" defer></script>
     <script src="{{ 'js/theme.js'|url }}" defer></script>
-    {%- for path in config['extra_javascript'] %}
-      <script src="{{ path|url }}" defer></script>
+    {%- for path in extra_javascript %}
+      <script src="{{ path }}" defer></script>
     {%- endfor %}
     <script defer>
         window.onload = function () {
