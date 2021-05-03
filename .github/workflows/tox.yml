@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: [3.6, 3.7, 3.8, 3.9, pypy3]
+        include:
+          - python-version: 3.6
+            tox-env: py36
+          - python-version: 3.7
+            tox-env: py37
+          - python-version: 3.8
+            tox-env: py38
+          - python-version: 3.9
+            tox-env: py39
+          - python-version: pypy3
+            tox-env: pypy3
+    env:
+      TOXENV: ${{ matrix.tox-env }}-{unittests,min-req,integration}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip tox coverage codecov
+      - name: Run tox
+        run: |
+          python -m tox --discover $(which python)
+        shell: bash
+      - name: Upload Codecov Results
+        if: success()
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          name: ${{ matrix.os }}/${{ matrix.tox-env }}
+          fail_ci_if_error: false
+
+  lint:
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        tox-env: ['flake8', 'markdown-lint', 'jshint', 'csslint']
+    env:
+      TOXENV: ${{ matrix.tox-env }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip tox
+      - name: Setup Node
+        if: ${{ matrix.tox-env != 'flake8' }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10'
+      - name: Install Node dependencies
+        if: ${{ matrix.tox-env != 'flake8' }}
+        run: |
+          if [[ "$TOXENV" == 'markdown-lint' ]]; then npm install -g markdownlint-cli; fi
+          if [[ "$TOXENV" == 'jshint' ]]; then npm install -g jshint; fi
+          if [[ "$TOXENV" == 'csslint' ]]; then npm install -g csslint; fi
+      - name: Run tox
+        run: python -m tox

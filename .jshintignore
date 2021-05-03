@@ -5,3 +5,4 @@ elstir/themes/**/js/modernizr-**.min.js
 elstir/themes/readthedocs/js/theme.js
 elstir/contrib/search/templates/search/lunr.js
 elstir/contrib/search/lunr-language/lunr.**.js
+elstir/contrib/search/lunr-language/tinyseg.js

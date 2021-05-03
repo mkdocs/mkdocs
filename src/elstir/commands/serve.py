@@ -6,6 +6,7 @@ import sys
 from os.path import isfile, join
 from elstir.commands.build import build
 from elstir.config import load_config
+from elstir.exceptions import Abort
 
 log = logging.getLogger(__name__)
 
@@ -48,7 +49,7 @@ def _get_handler(site_dir, StaticFileHandler):
     return WebHandler
 
 
-def _livereload(host, port, config, builder, site_dir):
+def _livereload(host, port, config, builder, site_dir, watch_theme):
 
     # We are importing here for anyone that has issues with livereload. Even if
     # this fails, the --no-livereload alternative should still work.
@@ -69,8 +70,9 @@ def _livereload(host, port, config, builder, site_dir):
     server.watch(config['docs_dir'], builder)
     server.watch(config['config_file_path'], builder)
 
-    for d in config['theme'].dirs:
-        server.watch(d, builder)
+    if watch_theme:
+        for d in config['theme'].dirs:
+            server.watch(d, builder)
 
     # Run `serve` plugin events.
     server = config['plugins'].run_event('serve', server, config=config, builder=builder)
@@ -103,7 +105,7 @@ def _static_server(host, port, site_dir):
 
 
 def serve(config_file=None, dev_addr=None, strict=None, theme=None,
-          theme_dir=None, livereload='livereload', **kwargs):
+          theme_dir=None, livereload='livereload', watch_theme=False, **kwargs):
     """
     Start the elstir development server
 
@@ -143,8 +145,11 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
         host, port = config['dev_addr']
 
         if livereload in ['livereload', 'dirty']:
-            _livereload(host, port, config, builder, site_dir)
+            _livereload(host, port, config, builder, site_dir, watch_theme)
         else:
             _static_server(host, port, site_dir)
+    except OSError as e:  # pragma: no cover
+        # Avoid ugly, unhelpful traceback
+        raise Abort(str(e))
     finally:
         shutil.rmtree(site_dir)

@@ -5,11 +5,12 @@ import tempfile
 import unittest
 from tempfile import TemporaryDirectory
 
-import elstir
-from elstir import config
-from elstir.config import config_options
-from elstir.exceptions import ConfigurationError
-from elstir.tests.base import dedent
+import mkdocs
+from mkdocs import config
+from mkdocs.config import config_options
+from mkdocs.config import defaults
+from mkdocs.exceptions import ConfigurationError
+from mkdocs.tests.base import dedent
 
 
 class ConfigTests(unittest.TestCase):
@@ -20,7 +21,7 @@ class ConfigTests(unittest.TestCase):
         self.assertRaises(ConfigurationError, load_missing_config)
 
     def test_missing_site_name(self):
-        c = config.Config(schema=config.DEFAULT_SCHEMA)
+        c = config.Config(schema=defaults.get_schema())
         c.load_dict({})
         errors, warnings = c.validate()
         self.assertEqual(len(errors), 1)
@@ -61,7 +62,7 @@ class ConfigTests(unittest.TestCase):
     def test_config_option(self):
         """
         Users can explicitly set the config file using the '--config' option.
-        Allows users to specify a config other than the default `elstir.yml`.
+        Allows users to specify a config other than the default `mkdocs.yml`.
         """
         expected_result = {
             'site_name': 'Example',
@@ -76,7 +77,7 @@ class ConfigTests(unittest.TestCase):
         """)
         with TemporaryDirectory() as temp_path:
             os.mkdir(os.path.join(temp_path, 'docs'))
-            config_path = os.path.join(temp_path, 'elstir.yml')
+            config_path = os.path.join(temp_path, 'mkdocs.yml')
             config_file = open(config_path, 'w')
 
             config_file.write(file_contents)
@@ -97,7 +98,7 @@ class ConfigTests(unittest.TestCase):
                 {"theme": {'name': 'readthedocs', 'custom_dir': custom}},  # builtin and custom as complex
                 {  # user defined variables
                     'theme': {
-                        'name': 'elstir',
+                        'name': 'mkdocs',
                         'static_templates': ['foo.html'],
                         'show_sidebar': False,
                         'some_var': 'bar'
@@ -105,13 +106,13 @@ class ConfigTests(unittest.TestCase):
                 }
             ]
 
-            elstir_dir = os.path.abspath(os.path.dirname(elstir.__file__))
-            elstir_templates_dir = os.path.join(elstir_dir, 'templates')
-            theme_dir = os.path.abspath(os.path.join(elstir_dir, 'themes'))
+            mkdocs_dir = os.path.abspath(os.path.dirname(mkdocs.__file__))
+            mkdocs_templates_dir = os.path.join(mkdocs_dir, 'templates')
+            theme_dir = os.path.abspath(os.path.join(mkdocs_dir, 'themes'))
 
             results = (
                 {
-                    'dirs': [os.path.join(theme_dir, 'elstir'), elstir_templates_dir],
+                    'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],
                     'vars': {
                         'include_search_page': False,
@@ -124,7 +125,7 @@ class ConfigTests(unittest.TestCase):
                         'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83}
                     }
                 }, {
-                    'dirs': [os.path.join(theme_dir, 'readthedocs'), elstir_templates_dir],
+                    'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],
                     'vars': {
                         'include_search_page': True,
@@ -139,7 +140,7 @@ class ConfigTests(unittest.TestCase):
                         'collapse_navigation': True
                     }
                 }, {
-                    'dirs': [os.path.join(theme_dir, 'readthedocs'), elstir_templates_dir],
+                    'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],
                     'vars': {
                         'include_search_page': True,
@@ -154,11 +155,11 @@ class ConfigTests(unittest.TestCase):
                         'collapse_navigation': True
                     }
                 }, {
-                    'dirs': [mytheme, elstir_templates_dir],
+                    'dirs': [mytheme, mkdocs_templates_dir],
                     'static_templates': ['sitemap.xml'],
                     'vars': {}
                 }, {
-                    'dirs': [custom, os.path.join(theme_dir, 'readthedocs'), elstir_templates_dir],
+                    'dirs': [custom, os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],
                     'vars': {
                         'include_search_page': True,
@@ -173,7 +174,7 @@ class ConfigTests(unittest.TestCase):
                         'collapse_navigation': True
                     }
                 }, {
-                    'dirs': [os.path.join(theme_dir, 'elstir'), elstir_templates_dir],
+                    'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml', 'foo.html'],
                     'vars': {
                         'show_sidebar': False,
@@ -192,7 +193,7 @@ class ConfigTests(unittest.TestCase):
 
             for config_contents, result in zip(configs, results):
 
-                c = config.Config(schema=(('theme', config_options.Theme(default='elstir')),))
+                c = config.Config(schema=(('theme', config_options.Theme(default='mkdocs')),))
                 c.load_dict(config_contents)
                 errors, warnings = c.validate()
                 self.assertEqual(len(errors), 0)
@@ -201,33 +202,33 @@ class ConfigTests(unittest.TestCase):
                 self.assertEqual({k: c['theme'][k] for k in iter(c['theme'])}, result['vars'])
 
     def test_empty_nav(self):
-        conf = config.Config(schema=config.DEFAULT_SCHEMA)
+        conf = config.Config(schema=defaults.get_schema())
         conf.load_dict({
             'site_name': 'Example',
-            'config_file_path': os.path.join(os.path.abspath('.'), 'elstir.yml')
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
         })
         conf.validate()
         self.assertEqual(conf['nav'], None)
 
     def test_copy_pages_to_nav(self):
         # TODO: remove this when pages config setting is fully deprecated.
-        conf = config.Config(schema=config.DEFAULT_SCHEMA)
+        conf = config.Config(schema=defaults.get_schema())
         conf.load_dict({
             'site_name': 'Example',
             'pages': ['index.md', 'about.md'],
-            'config_file_path': os.path.join(os.path.abspath('.'), 'elstir.yml')
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
         })
         conf.validate()
         self.assertEqual(conf['nav'], ['index.md', 'about.md'])
 
     def test_dont_overwrite_nav_with_pages(self):
         # TODO: remove this when pages config setting is fully deprecated.
-        conf = config.Config(schema=config.DEFAULT_SCHEMA)
+        conf = config.Config(schema=defaults.get_schema())
         conf.load_dict({
             'site_name': 'Example',
             'pages': ['index.md', 'about.md'],
             'nav': ['foo.md', 'bar.md'],
-            'config_file_path': os.path.join(os.path.abspath('.'), 'elstir.yml')
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
         })
         conf.validate()
         self.assertEqual(conf['nav'], ['foo.md', 'bar.md'])
@@ -246,7 +247,7 @@ class ConfigTests(unittest.TestCase):
         )
 
         conf = {
-            'config_file_path': j(os.path.abspath('..'), 'elstir.yml')
+            'config_file_path': j(os.path.abspath('..'), 'mkdocs.yml')
         }
 
         for test_config in test_configs:
@@ -266,3 +267,19 @@ class ConfigTests(unittest.TestCase):
 
             self.assertEqual(len(errors), 1)
             self.assertEqual(warnings, [])
+
+    def testConfigInstancesUnique(self):
+        conf = mkdocs.config.Config(mkdocs.config.defaults.get_schema())
+        conf.load_dict({'site_name': 'foo'})
+        conf.validate()
+        self.assertIsNone(conf['mdx_configs'].get('toc'))
+
+        conf = mkdocs.config.Config(mkdocs.config.defaults.get_schema())
+        conf.load_dict({'site_name': 'foo', 'markdown_extensions': [{"toc": {"permalink": "aaa"}}]})
+        conf.validate()
+        self.assertEqual(conf['mdx_configs'].get('toc'), {'permalink': 'aaa'})
+
+        conf = mkdocs.config.Config(mkdocs.config.defaults.get_schema())
+        conf.load_dict({'site_name': 'foo'})
+        conf.validate()
+        self.assertIsNone(conf['mdx_configs'].get('toc'))

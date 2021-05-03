@@ -10,10 +10,9 @@ from markdown.util import AMP_SUBSTITUTE
 import elstir.contrib.pandoc as pandoc
 
 from elstir.structure.toc import get_toc
-from elstir.utils import meta, get_build_date, get_markdown_title, warning_filter
+from elstir.utils import meta, get_build_date, get_markdown_title 
 
 log = logging.getLogger(__name__)
-log.addFilter(warning_filter)
 
 
 class Page:
@@ -45,11 +44,11 @@ class Page:
         self.meta = {}
 
     def __eq__(self, other):
-
-        def sub_dict(d):
-            return {key: value for key, value in d.items() if key in ['title', 'file']}
-
-        return (isinstance(other, self.__class__) and sub_dict(self.__dict__) == sub_dict(other.__dict__))
+        return (
+            isinstance(other, self.__class__) and
+            self.title == other.title and
+            self.file == other.file
+        )
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -83,7 +82,7 @@ class Page:
 
     @property
     def is_homepage(self):
-        return self.is_top_level and self.is_index and self.file.url == '.'
+        return self.is_top_level and self.is_index and self.file.url in ['.', 'index.html']
 
     @property
     def url(self):
