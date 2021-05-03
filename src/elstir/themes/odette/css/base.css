@@ -37,7 +37,7 @@ body > .container {
     min-height: 400px;
 }
 
-article {
+article.page {
     background-color: #fff;
     box-shadow: 0 1px 2px 0 rgba(60,64,67,.3),0 1px 3px 1px rgba(60,64,67,.15);
     border-radius: 1.5px;

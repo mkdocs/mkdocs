@@ -61,7 +61,8 @@
     <div class="navbar fixed-top mb-4 navbar-expand-lg navbar-{% if config.theme.nav_style == "light" %}light{% else %}dark{% endif %} bg-{{ config.theme.nav_style }}">
       <div class="container">
 {%- block site_name %}
-        <a class="navbar-brand" href="{{ nav.homepage.url|url }}"><code style="font-weight: normal;">{{ config.site_name }}</code></a>
+        {% if config.nav_logo %}<img width=40px src="{{ config.nav_logo|url }}"></img>{% endif %}
+        <a class="navbar-brand" href="{{ nav.homepage.url|url }}">{{ config.site_name }}</a>
 {%- endblock %}
     {%- if nav|length>1 or (page and (page.next_page or page.previous_page)) or config.repo_url %}
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
@@ -69,10 +70,10 @@
         </button>
     {%- endif %}
         <div id="navbar-collapse" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav ml-auto">
 {%- block site_nav %}
     {%- if nav|length>1 %}
           <!-- Main navigation -->
-          <ul class="nav navbar-nav ml-auto">
                     {%- for nav_item in nav %}
                         {%- if nav_item.nav_incl  %}
                             {%- if nav_item.children %}
@@ -93,10 +94,17 @@
                             {%- endif %}
                         {%- endif %}
                     {%- endfor %}
-          </ul>
                     {%- endif %}
 {%- endblock %}
                     <!-- <ul class="nav navbar-nav ml-auto"> -->
+{%- block repo %}
+            <li>
+            {% if config.repo_url %}
+	    <a href="{{ config.repo_url }}" class="nav-link"><i class="fa fa-github"></i></a>
+	    {% endif %}
+            </li>
+{%- endblock %}
+
 {%- block search_button %}
                     {%- if 'search' in config['plugins'] %}
             <li class="nav-item">
@@ -105,23 +113,6 @@
                 </a>
             </li>
                     {%- endif %}
-{%- endblock %}
-{%- block next_prev %}
-                    {% if false %}
-                    {#- if page and (page.next_page or page.previous_page) #}
-                        <!-- <li class="nav-item">
-                            <a rel="prev" {% if page.previous_page %}href="{{ page.previous_page.url|url }}" class="nav-link"{% else %}class="nav-link disabled"{% endif %}>
-                                <i class="fa fa-arrow-left"></i> Previous
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a rel="next" {% if page.next_page %}href="{{ page.next_page.url|url }}" class="nav-link"{% else %}class="nav-link disabled"{% endif %}>
-                                Next <i class="fa fa-arrow-right"></i>
-                            </a>
-                        </li> -->
-                    {%- endif %}
-{%- endblock %}
-{%- block repo %}
 {%- endblock %}
           </ul>
         </div>
@@ -132,7 +123,7 @@
 {%- block precontent %}
 {%- endblock %}
         <!-- <div id="particles-js" style="background-size: cover; background-repeat: no-repeat; background-position: 50% 50%;"></div> -->
-        <div class="row"> <!-- style="z-index: 9999;"-->
+	<div class="row" style="z-index: 9999;">
 {%- block content %}
   {% if page and page.meta.hide_toc %}
   {% else %}
@@ -141,7 +132,7 @@
   {% if page and page.meta.full_width %}
           {% include "content.html" %}
   {% else %}
-          <article class="col-md-{{ '12' if page.meta.hide_toc else '9' }} p-3">
+          <article class="page col-md-{{ '12' if page.meta.hide_toc else '9' }} p-3">
           {% include "content.html" %}
     {% block post_content %}{% endblock %}
           </article>
@@ -167,9 +158,10 @@
               <a href="https://linkedin.com/in/claudiomperez/" target="_blank" rel="noopener" title="linkedin.com" class="md-footer-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"></path></svg>
               </a>
-              <a href="/Perez_Claudio_Resume.pdf" class="md-footer-icon">
+              <!--<a href="/Perez_Claudio_Resume.pdf" class="md-footer-icon">
                 <img src="/img/cv.svg" class="md-footer-icon">
-              </a>
+	      </a> -->
+	      <a href="{{ 'site-info'|url }}" class="md-footer-icon">&#9432;</a>
             </div>
           </div>
         </section>
@@ -185,7 +177,7 @@
     <script src="{{ path|url }}" defer></script>
     {%- endfor %}
 {%- endblock %}
-    {% if false %}
+    {% if true %}
     {% if 'search' in config['plugins'] %}{%- include "search-modal.html" %}{% endif %}
     {%- include "keyboard-modal.html" %}
     {% endif %}
