@@ -963,7 +963,8 @@ the `setup` function.
 
 ### Using the Translation/Localization Scripts
 
-To call one of the translation scripts, from the root of your theme's working tree call the script as follows:
+To call one of the translation scripts, from the root of your theme's working
+tree call the script as follows:
 
 ```bash
 python setup.py <script_name> [OPTIONS]
