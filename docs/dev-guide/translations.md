@@ -11,7 +11,7 @@ guidance on modifying the existing themes, see the [Contributing Guide][update
 themes]. To enable a specific translation see the documentation about the
 specific theme you are using in the [User Guide][built-in themes]. For
 translations of third-party themes, please see the documentation for those
-themes.
+themes. For a third-party theme to make use of MkDoc's translation tools and methods, that theme must be properly [configured] to make use of those tools.
 
 !!! note
 
@@ -23,6 +23,7 @@ themes.
 
 [built-in themes]: ../user-guide/choosing-your-theme.md
 [update themes]: ../about/contributing.md#submitting-changes-to-the-builtin-themes
+[configured]: themes.md#supporting-theme-localizationtranslation
 
 ## Localization tooling prerequisites
 

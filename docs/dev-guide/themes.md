@@ -699,35 +699,6 @@ index when it is available. The `index` object was new in MkDocs version *1.0*.
 [site_dir]: ../user-guide/configuration.md#site_dir
 [prebuild_index]: ../user-guide/configuration.md#prebuild_index
 
-## Supporting theme localization/translation
-
-While the built-in themes provide support for [localization/translation] of
-templates, custom themes and third-party themes may choose not to. Regardless,
-the [`locale`](#locale) setting of the `theme` configuration option is always
-present and is relied upon by other parts of the system. Therefore, it is
-recommended that all third-party themes use the same setting for designating
-language regardless of the system they use for translation. In that way, users
-will experience consistent behavior regardless of the theme they may choose.
-
-The method for managing translations is up to the developers of a theme.
-However, if a theme developer chooses to use the same mechanisms used by the
-built-in themes, then the appropriate [section] of the Contributing Guide and
-the [Translation Guide] may be helpful.
-
-!!! note
-
-    The translation related commands available on MkDocs' `setup.py` script
-    will only work on the built-in themes. However, those scripts are simple
-    wrappers of the commands provided by the [pybabel] package, which
-    auto-complete the path based on the theme name. You may use the
-    pybabel commands of the same name in your translation workflow.
-
-[localization/translation]: ../user-guide/localizing-your-theme.md
-[Theme Configuration]: #theme-configuration
-[section]: ../about/contributing.md#submitting-changes-to-the-builtin-themes
-[Translation Guide]: translations.md
-[pybabel]: https://pypi.org/project/pybabel/
-
 ## Packaging Themes
 
 MkDocs makes use of [Python packaging] to distribute themes. This comes with a
@@ -785,7 +756,6 @@ described below.
 from setuptools import setup, find_packages
 
 VERSION = '0.0.1'
-
 
 setup(
     name="mkdocs-themename",
@@ -932,3 +902,169 @@ documentation for [Packaging and Distributing Projects].
 
 [Packaging and Distributing Projects]: https://packaging.python.org/en/latest/distributing/
 [theme]: ../user-guide/configuration.md#theme
+
+## Supporting theme localization/translation
+
+While the built-in themes provide support for [localization/translation] of
+templates, custom themes and third-party themes may choose not to. Regardless,
+the [`locale`](#locale) setting of the `theme` configuration option is always
+present and is relied upon by other parts of the system. Therefore, it is
+recommended that all third-party themes use the same setting for designating a
+language regardless of the system they use for translation. In that way, users
+will experience consistent behavior regardless of the theme they may choose.
+
+The method for managing translations is up to the developers of a theme.
+However, if a theme developer chooses to use the same mechanisms used by the
+built-in themes, the sections below outline how to enable and make use of the
+same scripts utilized by MkDocs.
+
+[localization/translation]: ../user-guide/localizing-your-theme.md
+[Theme Configuration]: #theme-configuration
+
+### Enabling the Translation/Localization Scripts
+
+MkDocs includes some scripts which are light wrappers around [pybabel's
+scripts][pybabel]. To use the scripts on your own theme, add the following to
+your theme's `setup.py` script:
+
+```python
+try:
+    from mkdocs.commands.babel import (
+        compile_catalog,
+        extract_messages,
+        init_catalog,
+        update_catalog
+    )
+    babel_classes = {
+        'compile_catalog': compile_catalog,
+        'extract_messages': extract_messages,
+        'init_catalog': init_catalog,
+        'update_catalog': update_catalog,
+    }
+except ImportError:
+    babel_classes = {}
+
+setup(
+    ...
+    cmdclass=babel_classes
+)
+```
+
+The command classes should be imported in a try/except block as pybabel is not
+installed by default and most users will not have pybabel installed. However,
+so long as the theme developers and/or translators have installed the necessary
+dependencies (using `pip install mkdocs[i18n]`), then the commands will be
+available for use.
+
+Finally, note that `cmdclass=babel_classes` was added an a parameter passed to
+the `setup` function.
+
+[pybabel]: https://babel.pocoo.org/en/latest/setup.html
+
+### Using the Translation/Localization Scripts
+
+To call one of the translation scripts, from the root of your theme's working tree call the script as follows:
+
+```bash
+python setup.py <script_name> [OPTIONS]
+```
+
+Each script provides a detailed list of options available with the `-h/--help`
+option.
+
+For an overview of the workflow used by MkDocs to translate the built-in
+themes, see the appropriate [section] of the Contributing Guide and the
+[Translation Guide].
+
+Default values for many of the options to the commands can be defined in a
+`setup.cfg` file. Create a section using the script name as the section name,
+and the long option name as the key. See MkDocs' own [setup.cfg] file for an
+example.
+
+A summary of changes/additions to the behavior and options of the upstream
+[pybabel scripts][pybabel] are summarized below.
+
+[section]: ../about/contributing.md#submitting-changes-to-the-builtin-themes
+[Translation Guide]: translations.md
+[setup.cfg]: https://github.com/mkdocs/mkdocs/blob/master/setup.cfg
+
+#### compile_catalog
+
+The `-t/--theme` option has been added to this command. The `theme` specified
+must be a `theme` defined as a entry point in the same `setup.py` script. Other
+themes will not be recognized. If only one `theme` has been defined as an entry
+point, then that `theme` will be used as the default if none is specified by
+this option. If more than one `theme` is defined as entry points, then no
+default is set and a `theme` must be specified by this option. The command only
+operates on one theme at a time. Therefore, the command needs to be run once
+for each theme included in a package.
+
+When a `theme` is specified, the directory of that `theme` as defined in the
+entry point is used to define a default value of the `-d/--directory` option.
+The `--directory` option is set to `{theme_dir}/locales`. If a `directory` is
+passed to the `--directory` option, then the `theme` option is ignored.
+
+#### extract_messages
+
+The `-t/--theme` option has been added to this command. The `theme` specified
+must be a `theme` defined as a entry point in the same `setup.py` script. Other
+themes will not be recognized. If only one `theme` has been defined as an entry
+point, then that `theme` will be used as the default if none is specified by
+this option. If more than one `theme` is defined as entry points, then no
+default is set and a `theme` must be specified by this option. The command only
+operates on one theme at a time. Therefore, the command needs to be run once
+for each theme included in a package.
+
+When a `theme` is specified, the directory of that `theme` as defined in the
+entry point is used to define a default value for the `--input-dirs` and
+`--output-file` options. The `--input-dirs` option is set to the `theme`
+directory and `--output-file` is set to `{theme_dir}/{domain}.pot`. If a path
+is provided to either option, then the `theme` option is ignored for that
+option.
+
+The `--domain` option has been added to this command and can be used to
+override the `domain` used for the `output-file` based on the `theme`.
+Defaults to `messages`.
+
+The `-F/--mapping-file` option defaults to the [mapping file] used by MkDocs'
+built-in themes. However, if that mapping file does not meet your theme's needs
+to can override it by providing your own and passing the path of that file into
+the option.
+
+[mapping file]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes/babel.cfg
+
+#### init_catalog
+
+The `-t/--theme` option has been added to this command. The `theme` specified
+must be a `theme` defined as a entry point in the same `setup.py` script. Other
+themes will not be recognized. If only one `theme` has been defined as an entry
+point, then that `theme` will be used as the default if none is specified by
+this option. If more than one `theme` is defined as entry points, then no
+default is set and a `theme` must be specified by this option. The command only
+operates on one theme at a time. Therefore, the command needs to be run once
+for each theme included in a package.
+
+When a `theme` is specified, the directory of that `theme` as defined in the
+entry point is used to define a default value for the `-i/--input-file` and
+`-d/--output-dir` options. The `--input-file` option is set to
+`{theme_dir}/{domain}.pot` (`domain` defaults to `messages`) and `--output-dir`
+is set to `{theme_dir}/locales`. If a path is provided to either option, then
+the `theme` option is ignored for that option.
+
+#### update_catalog
+
+The `-t/--theme` option has been added to this command. The `theme` specified
+must be a `theme` defined as a entry point in the same `setup.py` script. Other
+themes will not be recognized. If only one `theme` has been defined as an entry
+point, then that `theme` will be used as the default if none is specified by
+this option. If more than one `theme` is defined as entry points, then no
+default is set and a `theme` must be specified by this option. The command only
+operates on one theme at a time. Therefore, the command needs to be run once
+for each theme included in a package.
+
+When a `theme` is specified, the directory of that `theme` as defined in the
+entry point is used to define a default value for the `-i/--input-file` and
+`-d/--output-dir` options. The `--input-file` option is set to
+`{theme_dir}/{domain}.pot` (`domain` defaults to `messages`) and `--output-dir`
+is set to `{theme_dir}/locales`. If a path is provided to either option, then
+the `theme` option is ignored for that option.
