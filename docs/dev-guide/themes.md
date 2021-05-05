@@ -1057,3 +1057,49 @@ entry point is used to define a default value for the `-i/--input-file` and
 `{theme_dir}/{domain}.pot` (`domain` defaults to `messages`) and `--output-dir`
 is set to `{theme_dir}/locales`. If a path is provided to either option, then
 the `theme` option is ignored for that option.
+
+### Example custom theme Localization/Translation workflow
+
+Let's pretend you're working on your own copy of the [mkdocs-basic-theme] and
+want to add translations to it.
+
+You would first modify the `setup.py` like this:
+
+```diff
+--- a/setup.py
++++ b/setup.py
+@@ -1,4 +1,5 @@
+ from setuptools import setup, find_packages
++from mkdocs.commands.setup import babel_cmdclass
+ 
+ VERSION = '1.1'
+ 
+@@ -18,5 +19,6 @@ setup(
+             'basictheme = basic_theme',
+         ]
+     },
+-    zip_safe=False
++    zip_safe=False,
++    cmdclass=babel_cmdclass
+ )
+```
+
+Then you would start wrapping text in your HTML sources with `{% trans %}` and
+`{% endtrans %}` like this:
+
+```diff
+--- a/basic_theme/base.html
++++ b/basic_theme/base.html
+@@ -88,7 +88,7 @@
+ 
+ <body>
+ 
+-  <h1>This is an example theme for MkDocs.</h1>
++  <h1>{% trans %}This is an example theme for MkDocs.{% endtrans %}</h1>
+ 
+   <p>
+     It is designed to be read by looking at the theme HTML which is heavily
+```
+
+Then you would follow the [Translation Guide] as usual to get your translations
+running.
