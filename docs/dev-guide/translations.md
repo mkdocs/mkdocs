@@ -64,7 +64,7 @@ Here is a quick summary of what you'll need to do:
    files](/user-guide/custom-themes/#localizing-themes) instead).
 2. [Add a translation](#translating-the-mkdocs-themes) for every text
    placeholder in the localized catalogs.
-3. [Locally serve and test](#testing-themes-translations) the translated themes
+3. [Locally serve and test](#testing-theme-translations) the translated themes
    for your language.
 4. [Contribute your translation](#contributing-translations) through a
    Pull Request.
@@ -120,7 +120,7 @@ below to update the theme's `messages.po` file:
    to refresh the translatable text placeholders of each theme.
 2. [Translate](#translating-the-mkdocs-themes) the newly added translatable
    text placeholders on every `messages.po` catalog file language you can.
-3. [Locally serve and test](#testing-themes-translations) the translated themes
+3. [Locally serve and test](#testing-theme-translations) the translated themes
    for your language.
 4. [Contribute your translation](#contributing-translations) through a
    Pull Request.
@@ -160,7 +160,7 @@ msgstr "Siguiente"
 Once you have finished translating all of the terms listed in the `po` file,
 you'll want to [test your localized theme](#testing-theme-translations).
 
-### Testing themes translations
+### Testing theme translations
 
 To test a theme with translations, you need to first compile the `messages.po`
 files of your theme into `messages.mo` files. The following command will compile

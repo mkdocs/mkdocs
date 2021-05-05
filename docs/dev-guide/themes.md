@@ -1113,3 +1113,39 @@ Next, you would edit the templates by wrapping text in your HTML sources with
 
 Then you would follow the [Translation Guide] as usual to get your translations
 running.
+
+### Packaging Translations with your theme
+
+While the Portable Object Template (`pot`) file created by the
+`extract_messages` command and the Portable Object (`po`) files created by the
+`init_catalog` and `update_catalog` commands are useful for creating and
+editing translations, they are not used by MkDocs directly and do not need to
+be included in a packaged release of a theme. When MkDocs builds a site with
+translations, it only makes use of the binary `mo` files(s) for the specified
+locale. Therefore, when [packaging a theme], you would need to make the
+following addition to your `MANIFEST.in` file:
+
+```
+recursive-include theme_name *.mo
+```
+
+Then, before building your Python package, you will want to ensure that the
+binary `mo` file for each locale is up-to-date by running the `compile_catalog`
+command for each locale. MkDocs expects the binary `mo` files to be located at
+`locales/<locale>/LC_MESSAGES/messages.mo`, which the `compile_catalog`
+command automatically does for you. See [Testing theme translations] for
+details.
+
+!!! note
+
+    As outlined in our [Translation Guide], the MkDocs project has chosen to
+    include the `pot` and `po` files in our code repository, but not the
+    `mo` files. This requires us to always run `compile_catalog` before
+    packaging a new release regardless of whether any changes were made to a
+    translation or not. However, you may chose an alternate workflow for your
+    theme. At a minimum, you need to ensure that up-to-date `mo` files are
+    included at the correct location in each release. However, you may use a
+    different process for generating those `mo` files if you chose to do so.
+
+[packaging a theme]: #packaging-themes
+[Testing theme translations]: translations.md#testing-theme-translations
