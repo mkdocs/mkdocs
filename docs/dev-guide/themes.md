@@ -1060,6 +1060,15 @@ the `theme` option is ignored for that option.
 
 ### Example custom theme Localization/Translation workflow
 
+!!! note
+    If your custom theme is extending an existing one which is already
+    providing translation catalogs such as the built-in themes of MkDocs, your
+    custom theme's translations will inherit from the main the one it extends.
+
+    This means that you can only concentrate on the added translations and
+    still benefit from the translations from the theme you extend while being
+    allowed to override any of extended theme's translation!
+
 Let's pretend you're working on your own copy of the [mkdocs-basic-theme] and
 want to add translations to it.
 
