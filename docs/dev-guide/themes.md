@@ -1125,7 +1125,7 @@ translations, it only makes use of the binary `mo` files(s) for the specified
 locale. Therefore, when [packaging a theme], you would need to make the
 following addition to your `MANIFEST.in` file:
 
-```
+``` no-highlight
 recursive-include theme_name *.mo
 ```
 
