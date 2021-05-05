@@ -903,7 +903,7 @@ documentation for [Packaging and Distributing Projects].
 [Packaging and Distributing Projects]: https://packaging.python.org/en/latest/distributing/
 [theme]: ../user-guide/configuration.md#theme
 
-## Supporting theme localization/translation
+## Supporting theme Localization/Translation
 
 While the built-in themes provide support for [localization/translation] of
 templates, custom themes and third-party themes may choose not to. Regardless,
@@ -916,15 +916,15 @@ will experience consistent behavior regardless of the theme they may choose.
 The method for managing translations is up to the developers of a theme.
 However, if a theme developer chooses to use the same mechanisms used by the
 built-in themes, the sections below outline how to enable and make use of the
-same scripts utilized by MkDocs.
+same commands utilized by MkDocs.
 
 [localization/translation]: ../user-guide/localizing-your-theme.md
 [Theme Configuration]: #theme-configuration
 
-### Enabling the Translation/Localization Scripts
+### Enabling the Localization/Translation commands
 
-MkDocs includes some scripts which are light wrappers around [pybabel's
-scripts][pybabel]. To use the scripts on your own theme, add the following to
+MkDocs includes some helper commands which are light wrappers around [pybabel's
+commands][pybabel]. To use the commands on your own theme, add the following to
 your theme's `setup.py` script:
 
 ```python
@@ -936,27 +936,29 @@ setup(
 )
 ```
 
-The command classes should be imported in a try/except block as pybabel is not
-installed by default and most users will not have pybabel installed. However,
-so long as the theme developers and/or translators have installed the necessary
-dependencies (using `pip install mkdocs[i18n]`), then the commands will be
-available for use.
-
-Finally, note that `cmdclass=babel_classes` was added an a parameter passed to
+Note that `cmdclass=babel_cmdclass` was added an a parameter passed to
 the `setup` function.
+
+!!! warning
+    As **pybabel is not installed by default** and most users will not have
+    pybabel installed, theme developers and/or translators should make sure to
+    have installed the necessary dependencies
+    (using `pip install mkdocs[i18n]`) in order for the commands to be
+    available for use.
 
 [pybabel]: https://babel.pocoo.org/en/latest/setup.html
 
-### Using the Translation/Localization Scripts
+### Using the Localization/Translation commands
 
-To call one of the translation scripts, from the root of your theme's working
-tree call the script as follows:
+Since the translations commands are embedded in the `setup.py` script of your
+custom theme they should be called from the root of your theme's working
+tree as follows:
 
 ```bash
-python setup.py <script_name> [OPTIONS]
+python setup.py <command_name> [OPTIONS]
 ```
 
-Each script provides a detailed list of options available with the `-h/--help`
+Each command provides a detailed list of options available with the `-h/--help`
 option.
 
 For an overview of the workflow used by MkDocs to translate the built-in
@@ -964,7 +966,7 @@ themes, see the appropriate [section] of the Contributing Guide and the
 [Translation Guide].
 
 Default values for many of the options to the commands can be defined in a
-`setup.cfg` file. Create a section using the script name as the section name,
+`setup.cfg` file. Create a section using the command name as the section name,
 and the long option name as the key. See MkDocs' own [setup.cfg] file for an
 example.
 
