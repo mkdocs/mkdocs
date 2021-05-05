@@ -950,7 +950,7 @@ the `setup` function.
 
 ### Using the Localization/Translation commands
 
-Since the translations commands are embedded in the `setup.py` script of your
+Since the translation commands are embedded in the `setup.py` script of your
 custom theme they should be called from the root of your theme's working
 tree as follows:
 
@@ -971,7 +971,7 @@ and the long option name as the key. See MkDocs' own [setup.cfg] file for an
 example.
 
 A summary of changes/additions to the behavior and options of the upstream
-[pybabel scripts][pybabel] are summarized below.
+[pybabel commands][pybabel] are summarized below.
 
 [section]: ../about/contributing.md#submitting-changes-to-the-builtin-themes
 [Translation Guide]: translations.md
@@ -1061,16 +1061,17 @@ the `theme` option is ignored for that option.
 ### Example custom theme Localization/Translation workflow
 
 !!! note
-    If your custom theme is extending an existing one which is already
-    providing translation catalogs such as the built-in themes of MkDocs, your
-    custom theme's translations will inherit from the main the one it extends.
 
-    This means that you can only concentrate on the added translations and
-    still benefit from the translations from the theme you extend while being
-    allowed to override any of extended theme's translation!
+    If your theme inherits from an existing theme which already provides
+    translation catalogs, your theme's translations will be merged with the
+    parent theme's translations during a MkDocs build.
 
-Let's pretend you're working on your own copy of the [mkdocs-basic-theme] and
-want to add translations to it.
+    This means that you only need to concentrate on the added translations.
+    Yet, you will still benefit from the translations of the parent theme. At
+    the same time, you may override any of parent theme's translations!
+
+Let's suppose that you're working on your own fork of the
+[mkdocs-basic-theme][basic theme] and want to add translations to it.
 
 You would first modify the `setup.py` like this:
 
@@ -1080,9 +1081,9 @@ You would first modify the `setup.py` like this:
 @@ -1,4 +1,5 @@
  from setuptools import setup, find_packages
 +from mkdocs.commands.setup import babel_cmdclass
- 
+
  VERSION = '1.1'
- 
+
 @@ -18,5 +19,6 @@ setup(
              'basictheme = basic_theme',
          ]
@@ -1093,19 +1094,19 @@ You would first modify the `setup.py` like this:
  )
 ```
 
-Then you would start wrapping text in your HTML sources with `{% trans %}` and
-`{% endtrans %}` like this:
+Next, you would edit the templates by wrapping text in your HTML sources with
+`{% trans %}` and `{% endtrans %}` as follows:
 
 ```diff
 --- a/basic_theme/base.html
 +++ b/basic_theme/base.html
 @@ -88,7 +88,7 @@
- 
+
  <body>
- 
+
 -  <h1>This is an example theme for MkDocs.</h1>
 +  <h1>{% trans %}This is an example theme for MkDocs.{% endtrans %}</h1>
- 
+
    <p>
      It is designed to be read by looking at the theme HTML which is heavily
 ```
