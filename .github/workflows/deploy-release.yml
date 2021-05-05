@@ -20,8 +20,8 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
       - name: Compile localization message files
         run: |
-          pybabel compile -d mkdocs/themes/mkdocs/locales
-          pybabel compile -d mkdocs/themes/readthedocs/locales
+          python setup.py compile_catalog -t mkdocs
+          python setup.py compile_catalog -t readthedocs
       - name: Build
         run: |
           python setup.py bdist_wheel sdist --formats gztar
