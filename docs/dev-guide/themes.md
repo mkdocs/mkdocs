@@ -928,25 +928,11 @@ scripts][pybabel]. To use the scripts on your own theme, add the following to
 your theme's `setup.py` script:
 
 ```python
-try:
-    from mkdocs.commands.babel import (
-        compile_catalog,
-        extract_messages,
-        init_catalog,
-        update_catalog
-    )
-    babel_classes = {
-        'compile_catalog': compile_catalog,
-        'extract_messages': extract_messages,
-        'init_catalog': init_catalog,
-        'update_catalog': update_catalog,
-    }
-except ImportError:
-    babel_classes = {}
+from mkdocs.commands.setup import babel_cmdclass
 
 setup(
     ...
-    cmdclass=babel_classes
+    cmdclass=babel_cmdclass
 )
 ```
 

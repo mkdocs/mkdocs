@@ -5,21 +5,7 @@ import re
 import os
 import sys
 
-try:
-    from mkdocs.commands.babel import (
-        compile_catalog,
-        extract_messages,
-        init_catalog,
-        update_catalog
-    )
-    babel_classes = {
-        'compile_catalog': compile_catalog,
-        'extract_messages': extract_messages,
-        'init_catalog': init_catalog,
-        'update_catalog': update_catalog,
-    }
-except ImportError:
-    babel_classes = {}
+from mkdocs.commands.setup import babel_cmdclass
 
 with open('README.md') as f:
     long_description = f.read()
@@ -118,7 +104,7 @@ setup(
         'Topic :: Text Processing',
     ],
     zip_safe=False,
-    cmdclass=babel_classes,
+    cmdclass=babel_cmdclass,
 )
 
 # (*) Please direct queries to the discussion group:
