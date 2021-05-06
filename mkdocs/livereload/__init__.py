@@ -29,8 +29,9 @@ class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
         handler = functools.partial(LiveReloadRequestHandler, server=self, directory=root)
         super().__init__((host, port), handler)
 
-        self._epoch = _timestamp()  # The version of the site (time at which it was last built).
-        self._epoch_cond = threading.Condition()  # Must be held when accessing _epoch.
+        self._wanted_epoch = _timestamp()  # The version of the site that started building.
+        self._visible_epoch = self._wanted_epoch  # Latest fully built version of the site.
+        self._epoch_cond = threading.Condition()  # Must be held when accessing _visible_epoch.
 
         self._to_rebuild = {}  # Used as an ordered set of functions to call.
         self._rebuild_cond = threading.Condition()  # Must be held when accessing _to_rebuild.
@@ -39,11 +40,16 @@ class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
 
         self.serve_thread = threading.Thread(target=self.serve_forever)
 
-    def wait_for_epoch(self, epoch, timeout):
-        """Wait until the site's version is newer than this."""
+    def wait_for_build(self):
+        """Wait until the ongoing rebuild (if any) finishes."""
         with self._epoch_cond:
-            self._epoch_cond.wait_for(lambda: self._epoch > epoch, timeout=timeout)
-            return self._epoch
+            self._epoch_cond.wait_for(lambda: self._visible_epoch == self._wanted_epoch)
+
+    def wait_for_epoch(self, epoch, timeout):
+        """Wait until the site's version is newer than this (or timeout). Return the actual version"""
+        with self._epoch_cond:
+            self._epoch_cond.wait_for(lambda: self._visible_epoch > epoch, timeout=timeout)
+            return self._visible_epoch
 
     def watch(self, path, func=None, recursive=True):
         """Add the 'path' to watched paths, call the function and reload when any file changes under it."""
@@ -76,7 +82,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
             with self._rebuild_cond:
                 self._rebuild_cond.wait()
                 log.debug("Detected file changes")
-                now = _timestamp()
+                self._wanted_epoch = _timestamp()
                 funcs = list(self._to_rebuild)
                 self._to_rebuild.clear()
 
@@ -85,7 +91,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
 
             with self._epoch_cond:
                 log.info("Reloading browsers")
-                self._epoch = now
+                self._visible_epoch = self._wanted_epoch
                 self._epoch_cond.notify_all()
 
     def shutdown(self):
@@ -106,7 +112,7 @@ class LiveReloadRequestHandler(http.server.SimpleHTTPRequestHandler):
         return super().translate_path(path)
 
     def send_head(self):
-        epoch = self._server._epoch
+        epoch = self._server._visible_epoch
 
         file = super().send_head()
         if file and getattr(file, "name", "").endswith(".html"):
@@ -123,6 +129,8 @@ class LiveReloadRequestHandler(http.server.SimpleHTTPRequestHandler):
         m = re.fullmatch(r"/livereload/([0-9]+)/([0-9]+)", self.path)
         if m:
             return self._do_poll_response(epoch=int(m[1]), request_id=int(m[2]))
+
+        self._server.wait_for_build()  # Otherwise we may be looking at a half-built site.
         return super().do_GET()
 
     def _do_poll_response(self, epoch, request_id):
