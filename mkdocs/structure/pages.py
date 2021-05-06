@@ -9,10 +9,9 @@ from markdown.treeprocessors import Treeprocessor
 from markdown.util import AMP_SUBSTITUTE
 
 from mkdocs.structure.toc import get_toc
-from mkdocs.utils import meta, get_build_date, get_markdown_title, warning_filter
+from mkdocs.utils import meta, get_build_date, get_markdown_title
 
 log = logging.getLogger(__name__)
-log.addFilter(warning_filter)
 
 
 class Page:
@@ -82,7 +81,7 @@ class Page:
 
     @property
     def is_homepage(self):
-        return self.is_top_level and self.is_index and self.file.url == '.'
+        return self.is_top_level and self.is_index and self.file.url in ['.', 'index.html']
 
     @property
     def url(self):

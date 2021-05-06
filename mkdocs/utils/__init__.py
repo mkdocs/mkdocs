@@ -8,13 +8,14 @@ and structure of the site and pages in the site.
 
 import logging
 import os
-import pkg_resources
 import shutil
 import re
 import yaml
 import fnmatch
 import posixpath
 import functools
+import importlib_metadata
+from collections import defaultdict
 from datetime import datetime, timezone
 from urllib.parse import urlparse
 from yaml_env_tag import construct_env_tag
@@ -138,8 +139,7 @@ def copy_file(source_path, output_path):
     The output_path may be a directory.
     """
     output_dir = os.path.dirname(output_path)
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    os.makedirs(output_dir, exist_ok=True)
     if os.path.isdir(output_path):
         output_path = os.path.join(output_path, os.path.basename(source_path))
     shutil.copyfile(source_path, output_path)
@@ -150,8 +150,7 @@ def write_file(content, output_path):
     Write content to output_path, making sure any parent directories exist.
     """
     output_dir = os.path.dirname(output_path)
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    os.makedirs(output_dir, exist_ok=True)
     with open(output_path, 'wb') as f:
         f.write(content)
 
@@ -254,12 +253,18 @@ def is_error_template(path):
 def get_relative_url(url, other):
     """
     Return given url relative to other.
+
+    Both are operated as slash-separated paths, similarly to the 'path' part of a URL.
+    The last component of `other` is skipped if it contains a dot (considered a file).
+    Actual URLs (with schemas etc.) aren't supported. The leading slash is ignored.
+    Paths are normalized ('..' works as parent directory), but going higher than the
+    root has no effect ('foo/../../bar' ends up just as 'bar').
     """
     if other != '.':
         # Remove filename from other url if it has one.
         parts = posixpath.split(other)
         other = parts[0] if '.' in parts[1] else other
-    relurl = posixpath.relpath(url, other)
+    relurl = posixpath.relpath('/' + url, '/' + other)
     return relurl + '/' if url.endswith('/') else relurl
 
 
@@ -312,23 +317,24 @@ def get_theme_dir(name):
 
 
 def get_themes():
-    """ Return a dict of all installed themes as (name, entry point) pairs. """
+    """ Return a dict of all installed themes as {name: EntryPoint}. """
 
     themes = {}
-    builtins = pkg_resources.get_entry_map(dist='mkdocs', group='mkdocs.themes')
+    eps = importlib_metadata.entry_points(group='mkdocs.themes')
+    builtins = [ep.name for ep in eps if ep.dist.name == 'mkdocs']
 
-    for theme in pkg_resources.iter_entry_points(group='mkdocs.themes'):
+    for theme in eps:
 
-        if theme.name in builtins and theme.dist.key != 'mkdocs':
+        if theme.name in builtins and theme.dist.name != 'mkdocs':
             raise exceptions.ConfigurationError(
-                f"The theme {theme.name} is a builtin theme but "
-                f"{theme.dist.key} provides a theme with the same name")
-
+                f"The theme '{theme.name}' is a builtin theme but the package '{theme.dist.name}' "
+                "attempts to provide a theme with the same name."
+            )
         elif theme.name in themes:
-            multiple_packages = ','.join([themes[theme.name].dist.key, theme.dist.key])
             log.warning(
-                f"The theme {theme.name} is provided by the Python packages '{multiple_packages}'. "
-                f"The one in {theme.dist.key} will be used.")
+                f"A theme named '{theme.name}' is provided by the Python packages '{theme.dist.name}'"
+                f"and '{themes[theme.name].dist.name}'. The one in '{theme.dist.name}' will be used."
+            )
 
         themes[theme.name] = theme
 
@@ -417,15 +423,28 @@ def nest_paths(paths):
     return nested
 
 
-class WarningFilter(logging.Filter):
-    """ Counts all WARNING level log messages. """
-    count = 0
+class CountHandler(logging.NullHandler):
+    """ Counts all logged messages >= level. """
 
-    def filter(self, record):
-        if record.levelno == logging.WARNING:
-            self.count += 1
-        return True
+    def __init__(self, **kwargs):
+        self.counts = defaultdict(int)
+        super().__init__(**kwargs)
+
+    def handle(self, record):
+        rv = self.filter(record)
+        if rv:
+            # Use levelno for keys so they can be sorted later
+            self.counts[record.levelno] += 1
+        return rv
+
+    def get_counts(self):
+        return [(logging.getLevelName(k), v) for k, v in sorted(self.counts.items(), reverse=True)]
 
 
 # A global instance to use throughout package
-warning_filter = WarningFilter()
+log_counter = CountHandler()
+
+# For backward compatability as some plugins import it.
+# It is no longer nessecary as all messages on the
+# `mkdocs` logger get counted automaticaly.
+warning_filter = logging.Filter()

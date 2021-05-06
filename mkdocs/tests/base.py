@@ -32,7 +32,7 @@ def load_config(**cfg):
     if 'docs_dir' not in cfg:
         # Point to an actual dir to avoid a 'does not exist' error on validation.
         cfg['docs_dir'] = os.path.join(path_base, 'docs')
-    conf = config.Config(schema=config.DEFAULT_SCHEMA, config_file_path=cfg['config_file_path'])
+    conf = config.Config(schema=config.defaults.get_schema(), config_file_path=cfg['config_file_path'])
     conf.load_dict(cfg)
 
     errors_warnings = conf.validate()

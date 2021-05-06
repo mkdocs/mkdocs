@@ -263,13 +263,14 @@ Sets the theme and theme specific configuration of your documentation site.
 May be either a string or a set of key/value pairs.
 
 If a string, it must be the string name of a known installed theme. For a list
-of available themes visit [styling your docs].
+of available themes visit [Choosing Your Theme].
 
 An example set of key/value pairs might look something like this:
 
 ```yaml
 theme:
     name: mkdocs
+    locale: en
     custom_dir: my_theme_customizations/
     static_templates:
         - sitemap.html
@@ -283,7 +284,12 @@ If a set of key/value pairs, the following nested keys can be defined:
     #### name:
 
     The string name of a known installed theme. For a list of available themes
-    visit [styling your docs].
+    visit [Choosing Your Theme].
+
+    #### locale:
+
+    A code representing the language of your site. See [Localizing your theme]
+    for details.
 
     #### custom_dir:
 
@@ -292,11 +298,11 @@ If a set of key/value pairs, the following nested keys can be defined:
     your configuration file or it can be an absolute directory path from the
     root of your local file system.
 
-    See [styling your docs][theme_dir] for details if you would like to tweak an
+    See [Customizing Your Theme][theme_dir] for details if you would like to tweak an
     existing theme.
 
-    See [custom themes] if you would like to build your own theme from the
-    ground up.
+    See the [Theme Developer Guide] if you would like to build your own theme
+    from the ground up.
 
     #### static_templates:
 
@@ -596,7 +602,7 @@ You may [contribute additional languages].
     Lunr Languages does not currently include support for Chinese or other Asian
     languages. However, some users have reported decent results using Japanese.
 
-**default**: `['en']`
+**default**: The value of `theme.locale` if set, otherwise `[en]`.
 
 ##### **prebuild_index**
 
@@ -628,18 +634,41 @@ report it on [Lunr.py's issues] and fall back to the Node.js version.
 
 **default**: `False`
 
-[custom themes]: custom-themes.md
-[variables that are available]: custom-themes.md#template-variables
+##### **indexing**
+
+Configures what strategy the search indexer will use when building the index
+for your pages. This property is particularly useful if your project is large
+in scale, and the index takes up an enormous amount of disk space.
+
+```yaml
+plugins:
+    - search:
+        indexing: 'full'
+```
+
+###### Options
+
+|Option|Description|
+|------|-----------|
+|`full`|Indexes the title, section headings, and full text of each page.|
+|`sections`|Indexes the title and section headings of each page.|
+|`titles`|Indexes only the title of each page.|
+
+**default**: `full`
+
+[Theme Developer Guide]: ../dev-guide/themes.md
+[variables that are available]: ../dev-guide/themes.md#template-variables
 [pymdk-extensions]: https://python-markdown.github.io/extensions/
 [pymkd]: https://python-markdown.github.io/
 [smarty]: https://python-markdown.github.io/extensions/smarty/
 [exts]: https://python-markdown.github.io/extensions/
 [3rd]: https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
 [configuring pages and navigation]: writing-your-docs.md#configure-pages-and-navigation
-[theme_dir]: styling-your-docs.md#using-the-theme_dir
-[styling your docs]: styling-your-docs.md
+[theme_dir]: customizing-your-theme.md#using-the-theme_dir
+[choosing your theme]: choosing-your-theme.md
+[Localizing your theme]: localizing-your-theme.md
 [extra_css]: #extra_css
-[Plugins]: plugins.md
+[Plugins]: ../dev-guide/plugins.md
 [lunr.js]: https://lunrjs.com/
 [ISO 639-1]: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 [Lunr Languages]: https://github.com/MihaiValentin/lunr-languages#lunr-languages-----

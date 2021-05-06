@@ -8,7 +8,7 @@ import os
 from mkdocs import plugins
 from mkdocs import config
 from mkdocs.commands import build
-from mkdocs.exceptions import BuildError, PluginError
+from mkdocs.exceptions import BuildError, PluginError, Abort
 from mkdocs.tests.base import load_config
 
 
@@ -177,15 +177,15 @@ class TestPluginCollection(unittest.TestCase):
 
         cfg = load_config()
         cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='pre_page')
-        self.assertRaises(SystemExit, build.build, cfg)
+        self.assertRaises(Abort, build.build, cfg)
 
         cfg = load_config()
         cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='page_markdown')
-        self.assertRaises(SystemExit, build.build, cfg)
+        self.assertRaises(Abort, build.build, cfg)
 
         cfg = load_config()
         cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='page_content')
-        self.assertRaises(SystemExit, build.build, cfg)
+        self.assertRaises(Abort, build.build, cfg)
 
         cfg = load_config()
         cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='post_page')
@@ -210,7 +210,7 @@ MockEntryPoint = mock.Mock()
 MockEntryPoint.configure_mock(**{'name': 'sample', 'load.return_value': DummyPlugin})
 
 
-@mock.patch('pkg_resources.iter_entry_points', return_value=[MockEntryPoint])
+@mock.patch('importlib_metadata.entry_points', return_value=[MockEntryPoint])
 class TestPluginConfig(unittest.TestCase):
 
     def test_plugin_config_without_options(self, mock_class):

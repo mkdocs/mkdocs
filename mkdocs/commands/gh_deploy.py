@@ -2,10 +2,11 @@ import logging
 import subprocess
 import os
 import re
-from pkg_resources import parse_version
+from packaging import version
 
 import mkdocs
 import ghp_import
+from mkdocs.exceptions import Abort
 
 log = logging.getLogger(__name__)
 
@@ -21,7 +22,7 @@ def _is_cwd_git_repo():
         )
     except FileNotFoundError:
         log.error("Could not find git - is it installed and on your path?")
-        raise SystemExit(1)
+        raise Abort('Deployment Aborted!')
     proc.communicate()
     return proc.wait() == 0
 
@@ -65,22 +66,22 @@ def _check_version(branch):
     stdout, _ = proc.communicate()
     msg = stdout.decode('utf-8').strip()
     m = re.search(r'\d+(\.\d+)+((a|b|rc)\d+)?(\.post\d+)?(\.dev\d+)?', msg, re.X | re.I)
-    previousv = parse_version(m.group()) if m else None
-    currentv = parse_version(mkdocs.__version__)
+    previousv = version.parse(m.group()) if m else None
+    currentv = version.parse(mkdocs.__version__)
     if not previousv:
         log.warning('Version check skipped: No version specified in previous deployment.')
     elif currentv > previousv:
         log.info(
-            'Previous deployment was done with MkDocs version {}; '
-            'you are deploying with a newer version ({})'.format(previousv, currentv)
+            f'Previous deployment was done with MkDocs version {previousv}; '
+            f'you are deploying with a newer version ({currentv})'
         )
     elif currentv < previousv:
         log.error(
-            'Deployment terminated: Previous deployment was made with MkDocs version {}; '
-            'you are attempting to deploy with an older version ({}). Use --ignore-version '
-            'to deploy anyway.'.format(previousv, currentv)
+            f'Deployment terminated: Previous deployment was made with MkDocs version {previousv}; '
+            f'you are attempting to deploy with an older version ({currentv}). Use --ignore-version '
+            'to deploy anyway.'
         )
-        raise SystemExit(1)
+        raise Abort('Deployment Aborted!')
 
 
 def gh_deploy(config, message=None, force=False, ignore_version=False, shell=False):
@@ -114,8 +115,8 @@ def gh_deploy(config, message=None, force=False, ignore_version=False, shell=Fal
             nojekyll=True
         )
     except ghp_import.GhpError as e:
-        log.error(f"Failed to deploy to GitHub with error: \n{e.message}")
-        raise SystemExit(1)
+        log.error("Failed to deploy to GitHub with error: \n{}".format(e.message))
+        raise Abort('Deployment Aborted!')
 
     cname_file = os.path.join(config['site_dir'], 'CNAME')
     # Does this repository have a CNAME set for GitHub pages?

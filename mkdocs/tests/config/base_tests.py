@@ -12,7 +12,7 @@ class ConfigBaseTests(unittest.TestCase):
 
     def test_unrecognised_keys(self):
 
-        c = base.Config(schema=defaults.DEFAULT_SCHEMA)
+        c = base.Config(schema=defaults.get_schema())
         c.load_dict({
             'not_a_valid_config_option': "test"
         })
@@ -26,7 +26,7 @@ class ConfigBaseTests(unittest.TestCase):
 
     def test_missing_required(self):
 
-        c = base.Config(schema=defaults.DEFAULT_SCHEMA)
+        c = base.Config(schema=defaults.get_schema())
 
         errors, warnings = c.validate()
 
@@ -133,7 +133,7 @@ class ConfigBaseTests(unittest.TestCase):
             config_file.flush()
             config_file.close()
 
-            self.assertRaises(exceptions.ConfigurationError,
+            self.assertRaises(exceptions.Abort,
                               base.load_config, config_file=config_file.name)
         finally:
             os.remove(config_file.name)

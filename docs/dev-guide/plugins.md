@@ -472,16 +472,16 @@ Note that registering a plugin does not activate it. The user still needs to
 tell MkDocs to use it via the config.
 
 [BasePlugin]:#baseplugin
-[config]: configuration.md#plugins
+[config]: ../user-guide/configuration.md#plugins
 [entry point]: #entry-point
 [env]: #on_env
 [events]: #events
-[extra_templates]: configuration.md#extra_templates
+[extra_templates]: ../user-guide/configuration.md#extra_templates
 [Global Events]: #global-events
 [Page Events]: #page-events
 [post_build]: #on_post_build
 [post_template]: #on_post_template
-[static_templates]: configuration.md#static_templates
+[static_templates]: ../user-guide/configuration.md#static_templates
 [Template Events]: #template-events
 [MkDocs Plugins]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Plugins
 [on_build_error]: #on_build_error

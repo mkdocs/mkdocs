@@ -187,8 +187,8 @@ def load_config(config_file=None, **kwargs):
     options['config_file_path'] = getattr(config_file, 'name', '')
 
     # Initialise the config with the default schema .
-    from mkdocs import config
-    cfg = Config(schema=config.DEFAULT_SCHEMA, config_file_path=options['config_file_path'])
+    from mkdocs.config.defaults import get_schema
+    cfg = Config(schema=get_schema(), config_file_path=options['config_file_path'])
     # First load the config file
     cfg.load_file(config_file)
     # Then load the options to overwrite anything in the config.
@@ -206,12 +206,12 @@ def load_config(config_file=None, **kwargs):
         log.debug(f"Config value: '{key}' = {value!r}")
 
     if len(errors) > 0:
-        raise exceptions.ConfigurationError(
-            f"Aborted with {len(errors)} Configuration Errors!"
+        raise exceptions.Abort(
+            "Aborted with {} Configuration Errors!".format(len(errors))
         )
     elif cfg['strict'] and len(warnings) > 0:
-        raise exceptions.ConfigurationError(
-            f"Aborted with {len(warnings)} Configuration Warnings in 'strict' mode!"
+        raise exceptions.Abort(
+            "Aborted with {} Configuration Warnings in 'strict' mode!".format(len(warnings))
         )
 
     return cfg

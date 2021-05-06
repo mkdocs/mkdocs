@@ -1,7 +1,7 @@
 import os
 from collections import namedtuple
 from collections.abc import Sequence
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlunparse
 import ipaddress
 import markdown
 
@@ -266,7 +266,8 @@ class URL(OptionallyRequired):
     Validate a URL by requiring a scheme is present.
     """
 
-    def __init__(self, default='', required=False):
+    def __init__(self, default='', required=False, is_dir=False):
+        self.is_dir = is_dir
         super().__init__(default, required)
 
     def run_validation(self, value):
@@ -279,7 +280,9 @@ class URL(OptionallyRequired):
             raise ValidationError("Unable to parse the URL.")
 
         if parsed_url.scheme:
-            return value
+            if self.is_dir and not parsed_url.path.endswith('/'):
+                parsed_url = parsed_url._replace(path=f'{parsed_url.path}/')
+            return urlunparse(parsed_url)
 
         raise ValidationError(
             "The URL isn't valid, it should include the http:// (scheme)")
@@ -461,6 +464,9 @@ class Theme(BaseConfigOption):
             raise ValidationError("The path set in {name}.custom_dir ('{path}') does not exist.".
                                   format(path=theme_config['custom_dir'], name=key_name))
 
+        if 'locale' in theme_config and not isinstance(theme_config['locale'], str):
+            raise ValidationError("'{name}.locale' must be a string.".format(name=theme_config['name']))
+
         config[key_name] = theme.Theme(**theme_config)
 
 
@@ -617,7 +623,7 @@ class Plugins(OptionallyRequired):
         errors, warnings = plugin.load_config(config, self.config_file_path)
         self.warnings.extend(warnings)
         errors_message = '\n'.join(
-            f"Plugin value: '{x}'. Error: {y}"
+            f"Plugin '{name}' value: '{x}'. Error: {y}"
             for x, y in errors
         )
         if errors_message:

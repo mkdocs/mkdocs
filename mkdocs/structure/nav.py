@@ -2,10 +2,9 @@ import logging
 from urllib.parse import urlparse
 
 from mkdocs.structure.pages import Page
-from mkdocs.utils import nest_paths, warning_filter
+from mkdocs.utils import nest_paths
 
 log = logging.getLogger(__name__)
-log.addFilter(warning_filter)
 
 
 class Navigation:

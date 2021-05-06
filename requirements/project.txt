@@ -1,3 +1,4 @@
+babel>=2.9.0
 click>=7.0
 Jinja2>=2.10.3
 livereload>=2.6.1
@@ -7,3 +8,6 @@ tornado>=5.1.1
 mdx_gh_links>=0.2
 ghp-import>=1.0
 pyyaml_env_tag>=0.1
+mkdocs-redirects>=1.0.1
+importlib_metadata>=3.10
+packaging>=20.5

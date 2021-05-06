@@ -1,4 +1,4 @@
-# Custom themes
+# Developing Themes
 
 A guide to creating and distributing custom themes.
 
@@ -6,24 +6,27 @@ A guide to creating and distributing custom themes.
 
 !!! Note
 
-    If you are looking for third party themes, they are listed in the MkDocs
-    [community wiki](https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes). If
-    you want to share a theme you create, you should list it on the Wiki.
+    If you are looking for existing third party themes, they are listed in the
+    MkDocs [community wiki]. If you want to share a theme you create, you
+    should list it on the Wiki.
 
 When creating a new theme, you can either follow the steps in this guide to
 create one from scratch or you can download the `mkdocs-basic-theme` as a
 basic, yet complete, theme with all the boilerplate required. **You can find
-this base theme on [GitHub](https://github.com/mkdocs/mkdocs-basic-theme)**.
-It contains detailed comments in the code to describe the different features
-and their usage.
+this base theme on [GitHub][basic theme]**. It contains detailed comments in
+the code to describe the different features and their usage.
+
+[community wiki]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
+[basic theme]: https://github.com/mkdocs/mkdocs-basic-theme
 
 ## Creating a custom theme
 
-The bare minimum required for a custom theme is a `main.html` [Jinja2 template]
-file which is placed in a directory that is *not* a child of the [docs_dir].
-Within `mkdocs.yml`, set the theme.[custom_dir] option to the path of the
-directory containing `main.html`. The path should be relative to the
-configuration file. For example, given this example project layout:
+The bare minimum required for a custom theme is a `main.html` [Jinja2
+template] file which is placed in a directory that is *not* a child of the
+[docs_dir]. Within `mkdocs.yml`, set the [`theme.custom_dir`][custom_dir]
+option to the path of the directory containing `main.html`. The path should be
+relative to the configuration file. For example, given this example project
+layout:
 
 ```no-highlight
 mkdocs.yml
@@ -56,7 +59,7 @@ theme:
     `mkdocs` theme would remain unchanged. This is useful if you want to make
     small adjustments to an existing theme.
 
-    For more specific information, see [styling your docs].
+    For more specific information, see [Customizing Your Theme].
 
 !!! Warning
 
@@ -69,13 +72,13 @@ theme:
     the `theme.name` configuration option, then a `mkdocs_theme.yml` file
     is required for the theme.
 
-[styling your docs]: ./styling-your-docs.md#using-the-theme-custom_dir
-[custom_dir]: ./configuration.md#custom_dir
-[name]: ./configuration.md#name
-[docs_dir]:./configuration.md#docs_dir
+[Customizing Your Theme]: ../user-guide/customizing-your-theme.md#using-the-theme-custom_dir
+[custom_dir]: ../user-guide/configuration.md#custom_dir
+[name]: ../user-guide/configuration.md#name
+[docs_dir]: ../user-guide/configuration.md#docs_dir
 [configuration]: #theme-configuration
 [packaged]: #packaging-themes
-[theme]: ./configuration.md#theme
+[theme]: ../user-guide/configuration.md#theme
 
 ## Basic theme
 
@@ -114,8 +117,8 @@ with one of the [built-in themes] and modify it accordingly.
 
 [Jinja]: http://jinja.pocoo.org/
 [template inheritance]: http://jinja.pocoo.org/docs/dev/templates/#template-inheritance
-[theme_dir]: ./styling-your-docs.md#using-the-theme_dir
-[blocks]: ./styling-your-docs.md#overriding-template-blocks
+[theme_dir]: ../user-guide/customizing-your-theme.md#using-the-theme_dir
+[blocks]: ../user-guide/customizing-your-theme.md#overriding-template-blocks
 
 ## Theme Files
 
@@ -177,16 +180,18 @@ The `config` variable is an instance of MkDocs' config object generated from the
 `mkdocs.yml` config file. While you can use any config option, some commonly
 used options include:
 
-* [config.site_name](./configuration.md#site_name)
-* [config.site_url](./configuration.md#site_url)
-* [config.site_author](./configuration.md#site_author)
-* [config.site_description](./configuration.md#site_description)
-* [config.extra_javascript](./configuration.md#extra_javascript)
-* [config.extra_css](./configuration.md#extra_css)
-* [config.repo_url](./configuration.md#repo_url)
-* [config.repo_name](./configuration.md#repo_name)
-* [config.copyright](./configuration.md#copyright)
-* [config.google_analytics](./configuration.md#google_analytics)
+* [config.site_name](../user-guide/configuration.md#site_name)
+* [config.site_url](../user-guide/configuration.md#site_url)
+* [config.site_author](../user-guide/configuration.md#site_author)
+* [config.site_description](../user-guide/configuration.md#site_description)
+* [config.theme.locale](../user-guide/configuration.md#locale) (See also
+  [Theme Configuration](#locale) below)
+* [config.extra_javascript](../user-guide/configuration.md#extra_javascript)
+* [config.extra_css](../user-guide/configuration.md#extra_css)
+* [config.repo_url](../user-guide/configuration.md#repo_url)
+* [config.repo_name](../user-guide/configuration.md#repo_name)
+* [config.copyright](../user-guide/configuration.md#copyright)
+* [config.google_analytics](../user-guide/configuration.md#google_analytics)
 
 #### nav
 
@@ -194,7 +199,7 @@ The `nav` variable is used to create the navigation for the documentation. The
 `nav` object is an iterable of [navigation objects](#navigation-objects) as
 defined by the [nav] configuration setting.
 
-[nav]: configuration.md#nav
+[nav]: ../user-guide/configuration.md#nav
 
 In addition to the iterable of [navigation objects](#navigation-objects), the
 `nav` object contains the following attributes:
@@ -259,11 +264,10 @@ was updated.
 
 #### pages
 
-A list of [page](#page) objects including *all* pages in the project. The list
-is a flat list with all pages sorted alphanumerically by directory and file
-name. Note that index pages sort to the top within a directory. This list can
+A flat list of `File` objects for *all* pages in the project. This list can
 contain pages not included in the global [navigation](#nav) and may not match
-the order of pages within that navigation.
+the order of pages within that navigation. The [page](#page) object for each
+`File` can be accessed from `file.page`.
 
 #### page
 
@@ -357,7 +361,7 @@ For example, if `site_url: https://example.com/`, then the value of
 `site_url: https://example.com/bar/`, then the value of `page.abs_url` for the
 page `foo.md` would be `/bar/foo/`.
 
-[site_url]: ./configuration.md#site_url
+[site_url]: ../user-guide/configuration.md#site_url
 
 ##### page.canonical_url
 
@@ -526,7 +530,7 @@ link objects.
 ### Extra Context
 
 Additional variables can be passed to the template with the
-[`extra`](./configuration.md#extra) configuration option. This is a
+[`extra`](../user-guide/configuration.md#extra) configuration option. This is a
 set of key value pairs that can make custom templates far more flexible.
 
 For example, this could be used to include the project version of all pages
@@ -692,8 +696,8 @@ index when it is available. The `index` object was new in MkDocs version *1.0*.
 [built-in themes]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes
 [theme's configuration file]: #theme-configuration
 [lunr.js]: https://lunrjs.com/
-[site_dir]: configuration.md#site_dir
-[prebuild_index]: configuration.md#prebuild_index
+[site_dir]: ../user-guide/configuration.md#site_dir
+[prebuild_index]: ../user-guide/configuration.md#prebuild_index
 
 ## Packaging Themes
 
@@ -752,7 +756,6 @@ described below.
 from setuptools import setup, find_packages
 
 VERSION = '0.0.1'
-
 
 setup(
     name="mkdocs-themename",
@@ -831,6 +834,38 @@ special options which alters its behavior:
 
 !!! block ""
 
+    #### locale
+
+    This option mirrors the [theme] config option of the same name. If this
+    value is not defined in the `mkdocs_theme.yml` file and the user does not
+    set it in `mkdocs.yml` then it will default to `en` (English). The value
+    is expected to match the language used in the text provided by the theme
+    (such a "next" and "previous" links) and should be used as the value of
+    the `<html>` tag's `lang` attribute. See [Supporting theme localization/
+    translation](#supporting-theme-localizationtranslation) for more
+    information.
+
+    Note that during configuration validation, the provided string is converted
+    to a `Locale` object. The object contains `Locale.language` and
+    `Locale.territory` attributes and will resolve as a string from within a
+    template. Therefore, the following will work fine:
+
+        <html lang="{ config.theme.locale }">
+
+    If the locale was set to `fr_CA` (Canadian French), then the above template
+    would render as:
+
+        <html lang="fr_CA">
+
+    If you did not want the territory attribute to be included, then reference
+    the `language` attribute directly:
+
+        <html lang="{ config.theme.locale.language }">
+
+    That would render as:
+
+        <html lang="fr">
+
     #### static_templates
 
     This option mirrors the [theme] config option of the same name and allows
@@ -866,4 +901,251 @@ For a much more detailed guide, see the official Python packaging
 documentation for [Packaging and Distributing Projects].
 
 [Packaging and Distributing Projects]: https://packaging.python.org/en/latest/distributing/
-[theme]: ./configuration.md#theme
+[theme]: ../user-guide/configuration.md#theme
+
+## Supporting theme Localization/Translation
+
+While the built-in themes provide support for [localization/translation] of
+templates, custom themes and third-party themes may choose not to. Regardless,
+the [`locale`](#locale) setting of the `theme` configuration option is always
+present and is relied upon by other parts of the system. Therefore, it is
+recommended that all third-party themes use the same setting for designating a
+language regardless of the system they use for translation. In that way, users
+will experience consistent behavior regardless of the theme they may choose.
+
+The method for managing translations is up to the developers of a theme.
+However, if a theme developer chooses to use the same mechanisms used by the
+built-in themes, the sections below outline how to enable and make use of the
+same commands utilized by MkDocs.
+
+[localization/translation]: ../user-guide/localizing-your-theme.md
+[Theme Configuration]: #theme-configuration
+
+### Enabling the Localization/Translation commands
+
+MkDocs includes some helper commands which are light wrappers around [pybabel's
+commands][pybabel]. To use the commands on your own theme, add the following to
+your theme's `setup.py` script:
+
+```python
+from mkdocs.commands.setup import babel_cmdclass
+
+setup(
+    ...
+    cmdclass=babel_cmdclass
+)
+```
+
+Note that `cmdclass=babel_cmdclass` was added an a parameter passed to
+the `setup` function.
+
+!!! warning
+    As **pybabel is not installed by default** and most users will not have
+    pybabel installed, theme developers and/or translators should make sure to
+    have installed the necessary dependencies
+    (using `pip install mkdocs[i18n]`) in order for the commands to be
+    available for use.
+
+[pybabel]: https://babel.pocoo.org/en/latest/setup.html
+
+### Using the Localization/Translation commands
+
+Since the translation commands are embedded in the `setup.py` script of your
+custom theme they should be called from the root of your theme's working
+tree as follows:
+
+```bash
+python setup.py <command_name> [OPTIONS]
+```
+
+Each command provides a detailed list of options available with the `-h/--help`
+option.
+
+For an overview of the workflow used by MkDocs to translate the built-in
+themes, see the appropriate [section] of the Contributing Guide and the
+[Translation Guide].
+
+Default values for many of the options to the commands can be defined in a
+`setup.cfg` file. Create a section using the command name as the section name,
+and the long option name as the key. See MkDocs' own [setup.cfg] file for an
+example.
+
+A summary of changes/additions to the behavior and options of the upstream
+[pybabel commands][pybabel] are summarized below.
+
+[section]: ../about/contributing.md#submitting-changes-to-the-builtin-themes
+[Translation Guide]: translations.md
+[setup.cfg]: https://github.com/mkdocs/mkdocs/blob/master/setup.cfg
+
+#### compile_catalog
+
+The `-t/--theme` option has been added to this command. The `theme` specified
+must be a `theme` defined as a entry point in the same `setup.py` script. Other
+themes will not be recognized. If only one `theme` has been defined as an entry
+point, then that `theme` will be used as the default if none is specified by
+this option. If more than one `theme` is defined as entry points, then no
+default is set and a `theme` must be specified by this option. The command only
+operates on one theme at a time. Therefore, the command needs to be run once
+for each theme included in a package.
+
+When a `theme` is specified, the directory of that `theme` as defined in the
+entry point is used to define a default value of the `-d/--directory` option.
+The `--directory` option is set to `{theme_dir}/locales`. If a `directory` is
+passed to the `--directory` option, then the `theme` option is ignored.
+
+#### extract_messages
+
+The `-t/--theme` option has been added to this command. The `theme` specified
+must be a `theme` defined as a entry point in the same `setup.py` script. Other
+themes will not be recognized. If only one `theme` has been defined as an entry
+point, then that `theme` will be used as the default if none is specified by
+this option. If more than one `theme` is defined as entry points, then no
+default is set and a `theme` must be specified by this option. The command only
+operates on one theme at a time. Therefore, the command needs to be run once
+for each theme included in a package.
+
+When a `theme` is specified, the directory of that `theme` as defined in the
+entry point is used to define a default value for the `--input-dirs` and
+`--output-file` options. The `--input-dirs` option is set to the `theme`
+directory and `--output-file` is set to `{theme_dir}/{domain}.pot`. If a path
+is provided to either option, then the `theme` option is ignored for that
+option.
+
+The `--domain` option has been added to this command and can be used to
+override the `domain` used for the `output-file` based on the `theme`.
+Defaults to `messages`.
+
+The `-F/--mapping-file` option defaults to the [mapping file] used by MkDocs'
+built-in themes. However, if that mapping file does not meet your theme's needs
+to can override it by providing your own and passing the path of that file into
+the option.
+
+[mapping file]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes/babel.cfg
+
+#### init_catalog
+
+The `-t/--theme` option has been added to this command. The `theme` specified
+must be a `theme` defined as a entry point in the same `setup.py` script. Other
+themes will not be recognized. If only one `theme` has been defined as an entry
+point, then that `theme` will be used as the default if none is specified by
+this option. If more than one `theme` is defined as entry points, then no
+default is set and a `theme` must be specified by this option. The command only
+operates on one theme at a time. Therefore, the command needs to be run once
+for each theme included in a package.
+
+When a `theme` is specified, the directory of that `theme` as defined in the
+entry point is used to define a default value for the `-i/--input-file` and
+`-d/--output-dir` options. The `--input-file` option is set to
+`{theme_dir}/{domain}.pot` (`domain` defaults to `messages`) and `--output-dir`
+is set to `{theme_dir}/locales`. If a path is provided to either option, then
+the `theme` option is ignored for that option.
+
+#### update_catalog
+
+The `-t/--theme` option has been added to this command. The `theme` specified
+must be a `theme` defined as a entry point in the same `setup.py` script. Other
+themes will not be recognized. If only one `theme` has been defined as an entry
+point, then that `theme` will be used as the default if none is specified by
+this option. If more than one `theme` is defined as entry points, then no
+default is set and a `theme` must be specified by this option. The command only
+operates on one theme at a time. Therefore, the command needs to be run once
+for each theme included in a package.
+
+When a `theme` is specified, the directory of that `theme` as defined in the
+entry point is used to define a default value for the `-i/--input-file` and
+`-d/--output-dir` options. The `--input-file` option is set to
+`{theme_dir}/{domain}.pot` (`domain` defaults to `messages`) and `--output-dir`
+is set to `{theme_dir}/locales`. If a path is provided to either option, then
+the `theme` option is ignored for that option.
+
+### Example custom theme Localization/Translation workflow
+
+!!! note
+
+    If your theme inherits from an existing theme which already provides
+    translation catalogs, your theme's translations will be merged with the
+    parent theme's translations during a MkDocs build.
+
+    This means that you only need to concentrate on the added translations.
+    Yet, you will still benefit from the translations of the parent theme. At
+    the same time, you may override any of parent theme's translations!
+
+Let's suppose that you're working on your own fork of the
+[mkdocs-basic-theme][basic theme] and want to add translations to it.
+
+You would first modify the `setup.py` like this:
+
+```diff
+--- a/setup.py
++++ b/setup.py
+@@ -1,4 +1,5 @@
+ from setuptools import setup, find_packages
++from mkdocs.commands.setup import babel_cmdclass
+
+ VERSION = '1.1'
+
+@@ -18,5 +19,6 @@ setup(
+             'basictheme = basic_theme',
+         ]
+     },
+-    zip_safe=False
++    zip_safe=False,
++    cmdclass=babel_cmdclass
+ )
+```
+
+Next, you would edit the templates by wrapping text in your HTML sources with
+`{% trans %}` and `{% endtrans %}` as follows:
+
+```diff
+--- a/basic_theme/base.html
++++ b/basic_theme/base.html
+@@ -88,7 +88,7 @@
+
+ <body>
+
+-  <h1>This is an example theme for MkDocs.</h1>
++  <h1>{% trans %}This is an example theme for MkDocs.{% endtrans %}</h1>
+
+   <p>
+     It is designed to be read by looking at the theme HTML which is heavily
+```
+
+Then you would follow the [Translation Guide] as usual to get your translations
+running.
+
+### Packaging Translations with your theme
+
+While the Portable Object Template (`pot`) file created by the
+`extract_messages` command and the Portable Object (`po`) files created by the
+`init_catalog` and `update_catalog` commands are useful for creating and
+editing translations, they are not used by MkDocs directly and do not need to
+be included in a packaged release of a theme. When MkDocs builds a site with
+translations, it only makes use of the binary `mo` files(s) for the specified
+locale. Therefore, when [packaging a theme], you would need to make the
+following addition to your `MANIFEST.in` file:
+
+``` no-highlight
+recursive-include theme_name *.mo
+```
+
+Then, before building your Python package, you will want to ensure that the
+binary `mo` file for each locale is up-to-date by running the `compile_catalog`
+command for each locale. MkDocs expects the binary `mo` files to be located at
+`locales/<locale>/LC_MESSAGES/messages.mo`, which the `compile_catalog`
+command automatically does for you. See [Testing theme translations] for
+details.
+
+!!! note
+
+    As outlined in our [Translation Guide], the MkDocs project has chosen to
+    include the `pot` and `po` files in our code repository, but not the
+    `mo` files. This requires us to always run `compile_catalog` before
+    packaging a new release regardless of whether any changes were made to a
+    translation or not. However, you may chose an alternate workflow for your
+    theme. At a minimum, you need to ensure that up-to-date `mo` files are
+    included at the correct location in each release. However, you may use a
+    different process for generating those `mo` files if you chose to do so.
+
+[packaging a theme]: #packaging-themes
+[Testing theme translations]: translations.md#testing-theme-translations

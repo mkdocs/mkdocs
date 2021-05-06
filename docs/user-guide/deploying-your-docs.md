@@ -132,7 +132,7 @@ public repository.
 [rtd]: https://readthedocs.org/
 [instructions]: https://docs.readthedocs.io/en/stable/intro/getting-started-with-mkdocs.html
 [features]: https://docs.readthedocs.io/en/latest/features.html
-[theme]: ./styling-your-docs.md#readthedocs
+[theme]: ./choosing-your-theme.md#readthedocs
 
 ## Other Providers
 
