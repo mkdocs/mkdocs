@@ -26,7 +26,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
         self.error_handler = lambda code: None
 
         root = os.path.abspath(root)
-        handler = functools.partial(LiveReloadRequestHandler, server=self, directory=root)
+        handler = functools.partial(LiveReloadRequestHandler, directory=root)
         super().__init__((host, port), handler)
 
         self._wanted_epoch = _timestamp()  # The version of the site that started building.
@@ -102,17 +102,13 @@ class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
 
 
 class LiveReloadRequestHandler(http.server.SimpleHTTPRequestHandler):
-    def __init__(self, *args, server, **kwargs):
-        self._server = server
-        super().__init__(*args, **kwargs)
-
     def translate_path(self, path):
         if path == "/js/livereload.js":
             return os.path.join(os.path.dirname(os.path.abspath(__file__)), "livereload.js")
         return super().translate_path(path)
 
     def send_head(self):
-        epoch = self._server._visible_epoch
+        epoch = self.server._visible_epoch
 
         file = super().send_head()
         if file and getattr(file, "name", "").endswith(".html"):
@@ -130,7 +126,7 @@ class LiveReloadRequestHandler(http.server.SimpleHTTPRequestHandler):
         if m:
             return self._do_poll_response(epoch=int(m[1]), request_id=int(m[2]))
 
-        self._server.wait_for_build()  # Otherwise we may be looking at a half-built site.
+        self.server.wait_for_build()  # Otherwise we may be looking at a half-built site.
         return super().do_GET()
 
     def _do_poll_response(self, epoch, request_id):
@@ -140,7 +136,7 @@ class LiveReloadRequestHandler(http.server.SimpleHTTPRequestHandler):
         self._log_poll_request(self.headers.get("referer"), epoch, request_id)
         # Stall the browser, respond as soon as there's something new.
         # If there's not, respond anyway after a minute.
-        epoch = self._server.wait_for_epoch(epoch, timeout=60)
+        epoch = self.server.wait_for_epoch(epoch, timeout=60)
         self.wfile.write(b"%d" % epoch)
 
     @classmethod
@@ -156,7 +152,7 @@ class LiveReloadRequestHandler(http.server.SimpleHTTPRequestHandler):
 
     def send_error(self, code, message=None, *args, **kwargs):
         try:
-            error_content = self._server.error_handler(code)
+            error_content = self.server.error_handler(code)
         except Exception:
             log.exception("Failed to render an error message")
         else:
