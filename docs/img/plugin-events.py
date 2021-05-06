@@ -142,34 +142,12 @@ with cluster(g, "cluster_build_page") as c:
     edge(c, "on_post_page:output", "write_file")
 
 
-edge(g, "on_nav:nav", "context_inputs_point", arrowhead="none")
-edge(g, "on_env:env", "context_inputs_point", arrowhead="none")
-edge(g, "context_inputs_point", "cluster_build_page")
+edge(g, "on_nav:nav", "cluster_build_page")
+edge(g, "on_env:env", "cluster_build_page")
 
 for i in 2, 3:
     placeholder_cluster(g, f"cluster_build_page_{i}")
     edge(g, "pages_point_c", f"cluster_build_page_{i}", style="dashed")
-
-
-edge(g, "templates_point", "on_pre_template:template_name", style="dashed")
-
-with cluster(g, "cluster_build_template") as c:
-    event(c, "on_pre_template", "template template_name config")
-    event(c, "on_template_context", "context template_name config")
-    event(c, "on_post_template", "output template_name config")
-
-    edge(c, "get_template_t", "on_pre_template:template")
-    edge(c, "get_context_t", "on_template_context:context")
-    edge(c, "on_pre_template:template", "render_t")
-    edge(c, "on_template_context:context", "render_t")
-    edge(c, "render_t", "on_post_template:output")
-    edge(c, "on_post_template:output", "write_file_t")
-
-edge(g, "on_env:env", "cluster_build_template")
-
-for i in 2, 3:
-    placeholder_cluster(g, f"cluster_build_template_{i}")
-    edge(g, "templates_point", f"cluster_build_template_{i}", style="dashed")
 
 
 event(g, "on_post_build", "config")
@@ -178,14 +156,11 @@ event(g, "on_serve", "server config")
 
 ensure_order("on_pre_build", "on_files")
 ensure_order("on_nav", "cluster_populate_page")
+ensure_order("cluster_populate_page_2", "cluster_populate_page_3")
 ensure_order("on_page_content", "on_env")
 ensure_order("pages_point_c", "cluster_build_page")
 ensure_order("cluster_build_page_2", "cluster_build_page_3")
-ensure_order("on_pre_template", "on_template_context")
-ensure_order("templates_point", "cluster_build_template")
-ensure_order("cluster_build_template_2", "cluster_build_template_3")
 ensure_order("cluster_build_page", "on_post_build")
-ensure_order("cluster_build_template", "on_post_build")
 ensure_order("on_post_build", "on_serve")
 
 
