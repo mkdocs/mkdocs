@@ -55,16 +55,16 @@ def install_translations(env, locale, theme_dirs):
 def _get_merged_translations(theme_dirs, locales_dir, locale):
     merged_translations = None
 
-    log.debug("Looking for translations for locale '%s'", locale)
+    log.debug(f"Looking for translations for locale '{locale}'")
     for theme_dir in reversed(theme_dirs):
         dirname = os.path.join(theme_dir, locales_dir)
         translations = Translations.load(dirname, [locale])
 
         if type(translations) is NullTranslations:
-            log.debug("No translations found here: '%s'", dirname)
+            log.debug(f"No translations found here: '{dirname}'")
             continue
 
-        log.debug("Translations found here: '%s'", dirname)
+        log.debug(f"Translations found here: '{dirname}'")
         if merged_translations is None:
             merged_translations = translations
         else:
