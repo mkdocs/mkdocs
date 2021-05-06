@@ -270,6 +270,7 @@ An example set of key/value pairs might look something like this:
 ```yaml
 theme:
     name: mkdocs
+    locale: en
     custom_dir: my_theme_customizations/
     static_templates:
         - sitemap.html
@@ -284,6 +285,11 @@ If a set of key/value pairs, the following nested keys can be defined:
 
     The string name of a known installed theme. For a list of available themes
     visit [Choosing Your Theme].
+
+    #### locale:
+
+    A code representing the language of your site. See [Localizing your theme]
+    for details.
 
     #### custom_dir:
 
@@ -596,7 +602,7 @@ You may [contribute additional languages].
     Lunr Languages does not currently include support for Chinese or other Asian
     languages. However, some users have reported decent results using Japanese.
 
-**default**: `['en']`
+**default**: The value of `theme.locale` if set, otherwise `[en]`.
 
 ##### **prebuild_index**
 
@@ -660,6 +666,7 @@ plugins:
 [configuring pages and navigation]: writing-your-docs.md#configure-pages-and-navigation
 [theme_dir]: customizing-your-theme.md#using-the-theme_dir
 [choosing your theme]: choosing-your-theme.md
+[Localizing your theme]: localizing-your-theme.md
 [extra_css]: #extra_css
 [Plugins]: ../dev-guide/plugins.md
 [lunr.js]: https://lunrjs.com/

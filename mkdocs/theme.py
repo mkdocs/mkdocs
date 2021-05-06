@@ -5,6 +5,7 @@ import logging
 from mkdocs import utils
 from mkdocs.utils import filters
 from mkdocs.config.base import ValidationError
+from mkdocs import localization
 
 log = logging.getLogger(__name__)
 
@@ -27,7 +28,7 @@ class Theme:
 
     def __init__(self, name=None, **user_config):
         self.name = name
-        self._vars = {}
+        self._vars = {'locale': 'en'}
 
         # MkDocs provided static templates are always included
         package_dir = os.path.abspath(os.path.dirname(__file__))
@@ -49,6 +50,9 @@ class Theme:
         # Handle remaining user configs. Override theme configs (if set)
         self.static_templates.update(user_config.pop('static_templates', []))
         self._vars.update(user_config)
+
+        # Validate locale and convert to Locale object
+        self._vars['locale'] = localization.parse_locale(self._vars['locale'])
 
     def __repr__(self):
         return "{}(name='{}', dirs={}, static_templates={}, {})".format(
@@ -110,4 +114,5 @@ class Theme:
         env = jinja2.Environment(loader=loader, auto_reload=False)
         env.filters['tojson'] = filters.tojson
         env.filters['url'] = filters.url_filter
+        localization.install_translations(env, self._vars['locale'], self.dirs)
         return env
