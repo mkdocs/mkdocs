@@ -7,6 +7,7 @@ import re
 import socketserver
 import threading
 import time
+import warnings
 
 import watchdog.events
 import watchdog.observers
@@ -47,8 +48,15 @@ class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
     def watch(self, path, func=None, recursive=True):
         """Add the 'path' to watched paths, call the function and reload when any file changes under it."""
         path = os.path.abspath(path)
-        if func is None:
+        if func in (None, self.builder):
             func = self.builder
+        else:
+            warnings.warn(
+                "Plugins should not pass the 'func' parameter of watch(). "
+                "The ability to execute custom callbacks will be removed soon.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
 
         def callback():
             with self._rebuild_cond:
