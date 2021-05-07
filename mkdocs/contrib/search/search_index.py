@@ -117,9 +117,9 @@ class SearchIndex:
                     data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
                     log.debug('Pre-built search index created successfully.')
                 else:
-                    log.warning('Failed to pre-build search index. Error: {}'.format(err))
+                    log.warning(f'Failed to pre-build search index. Error: {err}')
             except (OSError, ValueError) as e:
-                log.warning('Failed to pre-build search index. Error: {}'.format(e))
+                log.warning(f'Failed to pre-build search index. Error: {e}')
         elif self.config['prebuild_index'] == 'python':
             idx = lunr(
                 ref='location', fields=('title', 'text'), documents=self._entries,
@@ -169,7 +169,7 @@ class ContentParser(HTMLParser):
         """Called at the start of every HTML tag."""
 
         # We only care about the opening tag for headings.
-        if tag not in (["h%d" % x for x in range(1, 7)]):
+        if tag not in ([f"h{x}" for x in range(1, 7)]):
             return
 
         # We are dealing with a new header, create a new section
@@ -186,7 +186,7 @@ class ContentParser(HTMLParser):
         """Called at the end of every HTML tag."""
 
         # We only care about the opening tag for headings.
-        if tag not in (["h%d" % x for x in range(1, 7)]):
+        if tag not in ([f"h{x}" for x in range(1, 7)]):
             return
 
         self.is_header_tag = False

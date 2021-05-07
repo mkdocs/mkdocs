@@ -85,7 +85,7 @@ def get_data(doc):
             key = m1.group('key').lower().strip()
             value = m1.group('value').strip()
             if key in data:
-                data[key] += ' {}'.format(value)
+                data[key] += f' {value}'
             else:
                 data[key] = value
         else:

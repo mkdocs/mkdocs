@@ -14,7 +14,7 @@ class LangOption(config_options.OptionallyRequired):
     """ Validate Language(s) provided in config are known languages. """
 
     def lang_file_exists(self, lang):
-        path = os.path.join(base_path, 'lunr-language', 'lunr.{}.js'.format(lang))
+        path = os.path.join(base_path, 'lunr-language', f'lunr.{lang}.js')
         return os.path.isfile(path)
 
     def run_validation(self, value):
@@ -25,7 +25,7 @@ class LangOption(config_options.OptionallyRequired):
         for lang in value:
             if lang != 'en' and not self.lang_file_exists(lang):
                 raise config_options.ValidationError(
-                    '"{}" is not a supported language code.'.format(lang)
+                    f'"{lang}" is not a supported language code.'
                 )
         return value
 
@@ -83,7 +83,7 @@ class SearchPlugin(BasePlugin):
                 files.append('tinyseg.js')
             for lang in self.config['lang']:
                 if (lang != 'en'):
-                    files.append('lunr.{}.js'.format(lang))
+                    files.append(f'lunr.{lang}.js')
 
             for filename in files:
                 from_path = os.path.join(base_path, 'lunr-language', filename)

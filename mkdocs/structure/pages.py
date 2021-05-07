@@ -53,7 +53,7 @@ class Page:
         return not self.__eq__(other)
 
     def __repr__(self):
-        title = "'{}'".format(self.title) if (self.title is not None) else '[blank]'
+        title = f"'{self.title}'" if (self.title is not None) else '[blank]'
         return "Page(title={}, url='{}')".format(title, self.abs_url or self.file.url)
 
     def _indent_print(self, depth=0):
@@ -119,10 +119,10 @@ class Page:
                 with open(self.file.abs_src_path, 'r', encoding='utf-8-sig', errors='strict') as f:
                     source = f.read()
             except OSError:
-                log.error('File not found: {}'.format(self.file.src_path))
+                log.error(f'File not found: {self.file.src_path}')
                 raise
             except ValueError:
-                log.error('Encoding error reading file: {}'.format(self.file.src_path))
+                log.error(f'Encoding error reading file: {self.file.src_path}')
                 raise
 
         self.markdown, self.meta = meta.get_data(source)
@@ -218,8 +218,8 @@ class _RelativePathTreeprocessor(Treeprocessor):
         # Validate that the target exists in files collection.
         if target_path not in self.files:
             log.warning(
-                "Documentation file '{}' contains a link to '{}' which is not found "
-                "in the documentation files.".format(self.file.src_path, target_path)
+                f"Documentation file '{self.file.src_path}' contains a link to "
+                f"'{target_path}' which is not found in the documentation files."
             )
             return url
         target_file = self.files.get_file_from_path(target_path)

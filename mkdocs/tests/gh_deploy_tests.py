@@ -20,8 +20,8 @@ class TestGitHubDeploy(unittest.TestCase):
             mock.assert_called_once()
         except AttributeError:
             if not mock.call_count == 1:
-                msg = ("Expected '%s' to have been called once. Called %s times." %
-                       (mock._mock_name or 'mock', self.call_count))
+                mock_name = mock._mock_name or 'mock'
+                msg = f"Expected '{mock_name}' to have been called once. Called {self.call_count} times."
                 raise AssertionError(msg)
 
     @mock.patch('subprocess.Popen')
@@ -158,7 +158,7 @@ class TestGitHubDeploy(unittest.TestCase):
 
         self.assertRaises(Abort, gh_deploy.gh_deploy, config)
         mock_log.error.assert_called_once_with(
-            'Failed to deploy to GitHub with error: \n{}'.format(error_string)
+            f'Failed to deploy to GitHub with error: \n{error_string}'
         )
 
 
