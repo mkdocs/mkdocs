@@ -132,13 +132,17 @@ class IpAddressTest(unittest.TestCase):
         self.assertEqual(value.host, '127.0.0.1')
         self.assertEqual(value.port, 8000)
 
-    def test_invalid_leading_zeros(self):
-        addr = '0127.000.000.001:8000'
+    @unittest.skipIf(
+        sys.version_info >= (3, 9, 5),
+        "Leading zeros not allowed in IP addresses since Python3.9.5",
+    )
+    def test_IP_normalization(self):
+        addr = '127.000.000.001:8000'
         option = config_options.IpAddress(default=addr)
-        self.assertRaises(
-            config_options.ValidationError,
-            option.validate, addr
-        )
+        value = option.validate(None)
+        self.assertEqual(str(value), '127.0.0.1:8000')
+        self.assertEqual(value.host, '127.0.0.1')
+        self.assertEqual(value.port, 8000)
 
     def test_invalid_address_range(self):
         option = config_options.IpAddress()
