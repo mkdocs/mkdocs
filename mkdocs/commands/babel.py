@@ -4,23 +4,21 @@ from pkg_resources import EntryPoint
 from babel.messages import frontend as babel
 
 
-DEFAULT_MAPPING_FILE = path.normpath(path.join(
-    path.abspath(path.dirname(__file__)), '../themes/babel.cfg'
-))
+DEFAULT_MAPPING_FILE = path.normpath(path.join(path.abspath(path.dirname(__file__)), "../themes/babel.cfg"))
 
 
 class ThemeMixin:
     def get_theme_dir(self):
-        ''' Validate theme option and return path to theme's root obtained from entry point. '''
+        """Validate theme option and return path to theme's root obtained from entry point."""
         entry_points = EntryPoint.parse_map(self.distribution.entry_points, self.distribution)
-        if 'mkdocs.themes' not in entry_points:
+        if "mkdocs.themes" not in entry_points:
             raise DistutilsOptionError("no mkdocs.themes are defined in entry_points")
-        if self.theme is None and len(entry_points['mkdocs.themes']) == 1:
+        if self.theme is None and len(entry_points["mkdocs.themes"]) == 1:
             # Default to the only theme defined in entry_points as none specified.
-            self.theme = tuple(entry_points['mkdocs.themes'].keys())[0]
-        if self.theme not in entry_points['mkdocs.themes']:
+            self.theme = tuple(entry_points["mkdocs.themes"].keys())[0]
+        if self.theme not in entry_points["mkdocs.themes"]:
             raise DistutilsOptionError("you must specify a valid theme name to work on")
-        theme = entry_points['mkdocs.themes'][self.theme]
+        theme = entry_points["mkdocs.themes"][self.theme]
         return path.dirname(theme.resolve().__file__)
 
 

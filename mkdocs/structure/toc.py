@@ -19,6 +19,7 @@ class TableOfContents:
     """
     Represents the table of contents for a given page.
     """
+
     def __init__(self, items):
         self.items = items
 
@@ -29,34 +30,35 @@ class TableOfContents:
         return len(self.items)
 
     def __str__(self):
-        return ''.join([str(item) for item in self])
+        return "".join([str(item) for item in self])
 
 
 class AnchorLink:
     """
     A single entry in the table of contents.
     """
+
     def __init__(self, title, id, level):
         self.title, self.id, self.level = title, id, level
         self.children = []
 
     @property
     def url(self):
-        return '#' + self.id
+        return "#" + self.id
 
     def __str__(self):
         return self.indent_print()
 
     def indent_print(self, depth=0):
-        indent = '    ' * depth
-        ret = f'{indent}{self.title} - {self.url}\n'
+        indent = "    " * depth
+        ret = f"{indent}{self.title} - {self.url}\n"
         for item in self.children:
             ret += item.indent_print(depth + 1)
         return ret
 
 
 def _parse_toc_token(token):
-    anchor = AnchorLink(token['name'], token['id'], token['level'])
-    for i in token['children']:
+    anchor = AnchorLink(token["name"], token["id"], token["level"])
+    for i in token["children"]:
         anchor.children.append(_parse_toc_token(i))
     return anchor

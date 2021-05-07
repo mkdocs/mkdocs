@@ -22,6 +22,7 @@ def _init_asyncio_patch():
     """
     if sys.platform.startswith("win") and sys.version_info >= (3, 8):
         import asyncio
+
         try:
             from asyncio import WindowsSelectorEventLoopPolicy
         except ImportError:
@@ -36,11 +37,10 @@ def _get_handler(site_dir, StaticFileHandler):
     from tornado.template import Loader
 
     class WebHandler(StaticFileHandler):
-
         def write_error(self, status_code, **kwargs):
 
             if status_code in (404, 500):
-                error_page = f'{status_code}.html'
+                error_page = f"{status_code}.html"
                 if isfile(join(site_dir, error_page)):
                     self.write(Loader(site_dir).load(error_page).generate())
                 else:
@@ -58,24 +58,29 @@ def _livereload(host, port, config, builder, site_dir, watch_theme):
     import livereload.handlers
 
     class LiveReloadServer(Server):
-
         def get_web_handlers(self, script):
             handlers = super().get_web_handlers(script)
             # replace livereload handler
-            return [(handlers[0][0], _get_handler(site_dir, livereload.handlers.StaticFileHandler), handlers[0][2],)]
+            return [
+                (
+                    handlers[0][0],
+                    _get_handler(site_dir, livereload.handlers.StaticFileHandler),
+                    handlers[0][2],
+                )
+            ]
 
     server = LiveReloadServer()
 
     # Watch the documentation files, the config file and the theme files.
-    server.watch(config['docs_dir'], builder)
-    server.watch(config['config_file_path'], builder)
+    server.watch(config["docs_dir"], builder)
+    server.watch(config["config_file_path"], builder)
 
     if watch_theme:
-        for d in config['theme'].dirs:
+        for d in config["theme"].dirs:
             server.watch(d, builder)
 
     # Run `serve` plugin events.
-    server = config['plugins'].run_event('serve', server, config=config, builder=builder)
+    server = config["plugins"].run_event("serve", server, config=config, builder=builder)
 
     server.serve(root=site_dir, host=host, port=port, restart_delay=0)
 
@@ -88,24 +93,35 @@ def _static_server(host, port, site_dir):
     from tornado import ioloop
     from tornado import web
 
-    application = web.Application([
-        (r"/(.*)", _get_handler(site_dir, web.StaticFileHandler), {
-            "path": site_dir,
-            "default_filename": "index.html"
-        }),
-    ])
+    application = web.Application(
+        [
+            (
+                r"/(.*)",
+                _get_handler(site_dir, web.StaticFileHandler),
+                {"path": site_dir, "default_filename": "index.html"},
+            ),
+        ]
+    )
     application.listen(port=port, address=host)
 
-    log.info(f'Running at: http://{host}:{port}/')
-    log.info('Hold ctrl+c to quit.')
+    log.info(f"Running at: http://{host}:{port}/")
+    log.info("Hold ctrl+c to quit.")
     try:
         ioloop.IOLoop.instance().start()
     except KeyboardInterrupt:
-        log.info('Stopping server...')
+        log.info("Stopping server...")
 
 
-def serve(config_file=None, dev_addr=None, strict=None, theme=None,
-          theme_dir=None, livereload='livereload', watch_theme=False, **kwargs):
+def serve(
+    config_file=None,
+    dev_addr=None,
+    strict=None,
+    theme=None,
+    theme_dir=None,
+    livereload="livereload",
+    watch_theme=False,
+    **kwargs,
+):
     """
     Start the MkDocs development server
 
@@ -117,7 +133,7 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
     # Create a temporary build directory, and set some options to serve it
     # PY2 returns a byte string by default. The Unicode prefix ensures a Unicode
     # string is returned. And it makes MkDocs temp dirs easier to identify.
-    site_dir = tempfile.mkdtemp(prefix='mkdocs_')
+    site_dir = tempfile.mkdtemp(prefix="mkdocs_")
 
     def builder():
         log.info("Building documentation...")
@@ -128,13 +144,13 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
             theme=theme,
             theme_dir=theme_dir,
             site_dir=site_dir,
-            **kwargs
+            **kwargs,
         )
         # Override a few config settings after validation
-        config['site_url'] = 'http://{}/'.format(config['dev_addr'])
+        config["site_url"] = "http://{}/".format(config["dev_addr"])
 
-        live_server = livereload in ['dirty', 'livereload']
-        dirty = livereload == 'dirty'
+        live_server = livereload in ["dirty", "livereload"]
+        dirty = livereload == "dirty"
         build(config, live_server=live_server, dirty=dirty)
         return config
 
@@ -142,9 +158,9 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
         # Perform the initial build
         config = builder()
 
-        host, port = config['dev_addr']
+        host, port = config["dev_addr"]
 
-        if livereload in ['livereload', 'dirty']:
+        if livereload in ["livereload", "dirty"]:
             _livereload(host, port, config, builder, site_dir, watch_theme)
         else:
             _static_server(host, port, site_dir)

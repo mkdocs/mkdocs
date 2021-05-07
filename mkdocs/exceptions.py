@@ -7,6 +7,7 @@ class MkDocsException(ClickException):
 
 class Abort(MkDocsException):
     """Abort the build"""
+
     def show(self, **kwargs):
         echo(self.format_message())
 

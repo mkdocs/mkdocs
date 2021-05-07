@@ -7,9 +7,11 @@ from mkdocs.config.base import ValidationError
 try:
     from babel.core import Locale, UnknownLocaleError
     from babel.support import Translations, NullTranslations
+
     has_babel = True
 except ImportError:  # pragma: no cover
     from mkdocs.utils.babel_stub import Locale, UnknownLocaleError
+
     has_babel = False
 
 
@@ -28,24 +30,21 @@ class NoBabelExtension(InternationalizationExtension):  # pragma: no cover
 
 def parse_locale(locale):
     try:
-        return Locale.parse(locale, sep='_')
+        return Locale.parse(locale, sep="_")
     except (ValueError, UnknownLocaleError, TypeError) as e:
-        raise ValidationError(f'Invalid value for locale: {str(e)}')
+        raise ValidationError(f"Invalid value for locale: {str(e)}")
 
 
 def install_translations(env, locale, theme_dirs):
     if has_babel:
-        env.add_extension('jinja2.ext.i18n')
-        translations = _get_merged_translations(theme_dirs, 'locales', locale)
+        env.add_extension("jinja2.ext.i18n")
+        translations = _get_merged_translations(theme_dirs, "locales", locale)
         if translations is not None:
             env.install_gettext_translations(translations)
         else:
             env.install_null_translations()
-            if locale.language != 'en':
-                log.warning(
-                    f"No translations could be found for the locale '{locale}'. "
-                    'Defaulting to English.'
-                )
+            if locale.language != "en":
+                log.warning(f"No translations could be found for the locale '{locale}'. " "Defaulting to English.")
     else:  # pragma: no cover
         # no babel installed, add dummy support for trans/endtrans blocks
         env.add_extension(NoBabelExtension)

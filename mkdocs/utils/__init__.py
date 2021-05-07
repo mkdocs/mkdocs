@@ -24,13 +24,7 @@ from mkdocs import exceptions
 
 log = logging.getLogger(__name__)
 
-markdown_extensions = [
-    '.markdown',
-    '.mdown',
-    '.mkdn',
-    '.mkd',
-    '.md'
-]
+markdown_extensions = [".markdown", ".mdown", ".mkdn", ".mkd", ".md"]
 
 
 def yaml_load(source, loader=yaml.Loader):
@@ -56,11 +50,11 @@ def yaml_load(source, loader=yaml.Loader):
 
     # Attach our unicode constructor to our custom loader ensuring all strings
     # will be unicode on translation.
-    Loader.add_constructor('tag:yaml.org,2002:str', construct_yaml_str)
+    Loader.add_constructor("tag:yaml.org,2002:str", construct_yaml_str)
 
     # Attach Environment Variable constructor.
     # See https://github.com/waylan/pyyaml-env-tag
-    Loader.add_constructor('!ENV', construct_env_tag)
+    Loader.add_constructor("!ENV", construct_env_tag)
 
     try:
         return yaml.load(source, Loader)
@@ -72,7 +66,7 @@ def yaml_load(source, loader=yaml.Loader):
         # closing that object, there will be an access error. This will
         # process the file and close it as there should be no more use for the
         # file once we process the yaml content.
-        if hasattr(source, 'close'):
+        if hasattr(source, "close"):
             source.close()
 
 
@@ -94,7 +88,7 @@ def get_build_timestamp():
     Support SOURCE_DATE_EPOCH environment variable for reproducible builds.
     See https://reproducible-builds.org/specs/source-date-epoch/
     """
-    source_date_epoch = os.environ.get('SOURCE_DATE_EPOCH')
+    source_date_epoch = os.environ.get("SOURCE_DATE_EPOCH")
     if source_date_epoch is None:
         return int(datetime.now(timezone.utc).timestamp())
 
@@ -108,7 +102,7 @@ def get_build_datetime():
     Support SOURCE_DATE_EPOCH environment variable for reproducible builds.
     See https://reproducible-builds.org/specs/source-date-epoch/
     """
-    source_date_epoch = os.environ.get('SOURCE_DATE_EPOCH')
+    source_date_epoch = os.environ.get("SOURCE_DATE_EPOCH")
     if source_date_epoch is None:
         return datetime.now(timezone.utc)
 
@@ -122,14 +116,13 @@ def get_build_date():
     Support SOURCE_DATE_EPOCH environment variable for reproducible builds.
     See https://reproducible-builds.org/specs/source-date-epoch/
     """
-    return get_build_datetime().strftime('%Y-%m-%d')
+    return get_build_datetime().strftime("%Y-%m-%d")
 
 
 def reduce_list(data_set):
-    """ Reduce duplicate items in a list and preserve order """
+    """Reduce duplicate items in a list and preserve order"""
     seen = set()
-    return [item for item in data_set if
-            item not in seen and not seen.add(item)]
+    return [item for item in data_set if item not in seen and not seen.add(item)]
 
 
 def copy_file(source_path, output_path):
@@ -151,7 +144,7 @@ def write_file(content, output_path):
     """
     output_dir = os.path.dirname(output_path)
     os.makedirs(output_dir, exist_ok=True)
-    with open(output_path, 'wb') as f:
+    with open(output_path, "wb") as f:
         f.write(content)
 
 
@@ -166,7 +159,7 @@ def clean_directory(directory):
 
         # Don't remove hidden files from the directory. We never copy files
         # that are hidden, so we shouldn't delete them either.
-        if entry.startswith('.'):
+        if entry.startswith("."):
             continue
 
         path = os.path.join(directory, entry)
@@ -185,9 +178,9 @@ def get_html_path(path):
     Paths like 'api-guide/core.md' will be converted to 'api-guide/core/index.html'
     """
     path = os.path.splitext(path)[0]
-    if os.path.basename(path) == 'index':
-        return path + '.html'
-    return "/".join((path, 'index.html'))
+    if os.path.basename(path) == "index":
+        return path + ".html"
+    return "/".join((path, "index.html"))
 
 
 def get_url_path(path, use_directory_urls=True):
@@ -202,9 +195,9 @@ def get_url_path(path, use_directory_urls=True):
     `index.html` rather than just returning the directory path.
     """
     path = get_html_path(path)
-    url = '/' + path.replace(os.path.sep, '/')
+    url = "/" + path.replace(os.path.sep, "/")
     if use_directory_urls:
-        return url[:-len('index.html')]
+        return url[: -len("index.html")]
     return url
 
 
@@ -214,7 +207,7 @@ def is_markdown_file(path):
 
     https://superuser.com/questions/249436/file-extension-for-markdown-files
     """
-    return any(fnmatch.fnmatch(path.lower(), f'*{x}') for x in markdown_extensions)
+    return any(fnmatch.fnmatch(path.lower(), f"*{x}") for x in markdown_extensions)
 
 
 def is_html_file(path):
@@ -223,8 +216,8 @@ def is_html_file(path):
     """
     ext = os.path.splitext(path)[1].lower()
     return ext in [
-        '.html',
-        '.htm',
+        ".html",
+        ".htm",
     ]
 
 
@@ -234,13 +227,13 @@ def is_template_file(path):
     """
     ext = os.path.splitext(path)[1].lower()
     return ext in [
-        '.html',
-        '.htm',
-        '.xml',
+        ".html",
+        ".htm",
+        ".xml",
     ]
 
 
-_ERROR_TEMPLATE_RE = re.compile(r'^\d{3}\.html?$')
+_ERROR_TEMPLATE_RE = re.compile(r"^\d{3}\.html?$")
 
 
 def is_error_template(path):
@@ -260,16 +253,16 @@ def get_relative_url(url, other):
     Paths are normalized ('..' works as parent directory), but going higher than the
     root has no effect ('foo/../../bar' ends up just as 'bar').
     """
-    if other != '.':
+    if other != ".":
         # Remove filename from other url if it has one.
         parts = posixpath.split(other)
-        other = parts[0] if '.' in parts[1] else other
-    relurl = posixpath.relpath('/' + url, '/' + other)
-    return relurl + '/' if url.endswith('/') else relurl
+        other = parts[0] if "." in parts[1] else other
+    relurl = posixpath.relpath("/" + url, "/" + other)
+    return relurl + "/" if url.endswith("/") else relurl
 
 
-def normalize_url(path, page=None, base=''):
-    """ Return a URL relative to the given page or using the base. """
+def normalize_url(path, page=None, base=""):
+    """Return a URL relative to the given page or using the base."""
     path, is_abs = _get_norm_url(path)
     if is_abs:
         return path
@@ -280,10 +273,10 @@ def normalize_url(path, page=None, base=''):
 
 @functools.lru_cache(maxsize=None)
 def _get_norm_url(path):
-    path = path_to_url(path or '.')
+    path = path_to_url(path or ".")
     # Allow links to be fully qualified URL's
     parsed = urlparse(path)
-    if parsed.scheme or parsed.netloc or path.startswith(('/', '#')):
+    if parsed.scheme or parsed.netloc or path.startswith(("/", "#")):
         return path, True
     return path, False
 
@@ -296,7 +289,7 @@ def _get_rel_path(path, base, base_is_url):
         return posixpath.join(base, path)
 
 
-def create_media_urls(path_list, page=None, base=''):
+def create_media_urls(path_list, page=None, base=""):
     """
     Return a list of URLs relative to the given page or using the base.
     """
@@ -306,26 +299,26 @@ def create_media_urls(path_list, page=None, base=''):
 def path_to_url(path):
     """Convert a system path to a URL."""
 
-    return '/'.join(path.split('\\'))
+    return "/".join(path.split("\\"))
 
 
 def get_theme_dir(name):
-    """ Return the directory of an installed theme by name. """
+    """Return the directory of an installed theme by name."""
 
     theme = get_themes()[name]
     return os.path.dirname(os.path.abspath(theme.load().__file__))
 
 
 def get_themes():
-    """ Return a dict of all installed themes as {name: EntryPoint}. """
+    """Return a dict of all installed themes as {name: EntryPoint}."""
 
     themes = {}
-    eps = importlib_metadata.entry_points(group='mkdocs.themes')
-    builtins = [ep.name for ep in eps if ep.dist.name == 'mkdocs']
+    eps = importlib_metadata.entry_points(group="mkdocs.themes")
+    builtins = [ep.name for ep in eps if ep.dist.name == "mkdocs"]
 
     for theme in eps:
 
-        if theme.name in builtins and theme.dist.name != 'mkdocs':
+        if theme.name in builtins and theme.dist.name != "mkdocs":
             raise exceptions.ConfigurationError(
                 f"The theme '{theme.name}' is a builtin theme but the package '{theme.dist.name}' "
                 "attempts to provide a theme with the same name."
@@ -348,9 +341,9 @@ def get_theme_names():
 
 
 def dirname_to_title(dirname):
-    """ Return a page tile obtained from a directory name. """
+    """Return a page tile obtained from a directory name."""
     title = dirname
-    title = title.replace('-', ' ').replace('_', ' ')
+    title = title.replace("-", " ").replace("_", " ")
     # Capitalize if the dirname was all lowercase, otherwise leave it as-is.
     if title.lower() == title:
         title = title.capitalize()
@@ -367,14 +360,14 @@ def get_markdown_title(markdown_src):
     None.
     """
 
-    lines = markdown_src.replace('\r\n', '\n').replace('\r', '\n').split('\n')
+    lines = markdown_src.replace("\r\n", "\n").replace("\r", "\n").split("\n")
     while lines:
         line = lines.pop(0).strip()
         if not line.strip():
             continue
-        if not line.startswith('# '):
+        if not line.startswith("# "):
             return
-        return line.lstrip('# ')
+        return line.lstrip("# ")
 
 
 def find_or_create_node(branch, key):
@@ -424,7 +417,7 @@ def nest_paths(paths):
 
 
 class CountHandler(logging.NullHandler):
-    """ Counts all logged messages >= level. """
+    """Counts all logged messages >= level."""
 
     def __init__(self, **kwargs):
         self.counts = defaultdict(int)

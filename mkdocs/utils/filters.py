@@ -10,5 +10,5 @@ def tojson(obj, **kwargs):
 
 @jinja2.contextfilter
 def url_filter(context, value):
-    """ A Template filter to normalize URLs. """
-    return normalize_url(value, page=context['page'], base=context['base_url'])
+    """A Template filter to normalize URLs."""
+    return normalize_url(value, page=context["page"], base=context["base_url"])

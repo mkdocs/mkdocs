@@ -19,7 +19,7 @@ class Navigation:
                 break
 
     def __repr__(self):
-        return '\n'.join([item._indent_print() for item in self])
+        return "\n".join([item._indent_print() for item in self])
 
     def __iter__(self):
         return iter(self.items)
@@ -44,11 +44,11 @@ class Section:
         return f"Section(title='{self.title}')"
 
     def _get_active(self):
-        """ Return active status of section. """
+        """Return active status of section."""
         return self.__active
 
     def _set_active(self, value):
-        """ Set active status of section and ancestors. """
+        """Set active status of section and ancestors."""
         self.__active = bool(value)
         if self.parent is not None:
             self.parent.active = bool(value)
@@ -62,10 +62,10 @@ class Section:
         return [self.parent] + self.parent.ancestors
 
     def _indent_print(self, depth=0):
-        ret = ['{}{}'.format('    ' * depth, repr(self))]
+        ret = ["{}{}".format("    " * depth, repr(self))]
         for item in self.children:
             ret.append(item._indent_print(depth + 1))
-        return '\n'.join(ret)
+        return "\n".join(ret)
 
 
 class Link:
@@ -82,7 +82,7 @@ class Link:
         self.is_link = True
 
     def __repr__(self):
-        title = f"'{self.title}'" if (self.title is not None) else '[blank]'
+        title = f"'{self.title}'" if (self.title is not None) else "[blank]"
         return f"Link(title={title}, url='{self.url}')"
 
     @property
@@ -92,12 +92,12 @@ class Link:
         return [self.parent] + self.parent.ancestors
 
     def _indent_print(self, depth=0):
-        return '{}{}'.format('    ' * depth, repr(self))
+        return "{}{}".format("    " * depth, repr(self))
 
 
 def get_navigation(files, config):
-    """ Build site navigation from config and files."""
-    nav_config = config['nav'] or nest_paths(f.src_path for f in files.documentation_pages())
+    """Build site navigation from config and files."""
+    nav_config = config["nav"] or nest_paths(f.src_path for f in files.documentation_pages())
     items = _data_to_navigation(nav_config, files, config)
     if not isinstance(items, list):
         items = [items]
@@ -112,9 +112,10 @@ def get_navigation(files, config):
     missing_from_config = [file for file in files.documentation_pages() if file.page is None]
     if missing_from_config:
         log.info(
-            'The following pages exist in the docs directory, but are not '
+            "The following pages exist in the docs directory, but are not "
             'included in the "nav" configuration:\n  - {}'.format(
-                '\n  - '.join([file.src_path for file in missing_from_config]))
+                "\n  - ".join([file.src_path for file in missing_from_config])
+            )
         )
         # Any documentation files not found in the nav should still have an associated page, so we
         # create them here. The Page object will automatically be assigned to `file.page` during
@@ -126,11 +127,8 @@ def get_navigation(files, config):
     for link in links:
         scheme, netloc, path, params, query, fragment = urlparse(link.url)
         if scheme or netloc:
-            log.debug(
-                "An external link to '{}' is included in "
-                "the 'nav' configuration.".format(link.url)
-            )
-        elif link.url.startswith('/'):
+            log.debug("An external link to '{}' is included in " "the 'nav' configuration.".format(link.url))
+        elif link.url.startswith("/"):
             log.debug(
                 "An absolute path to '{}' is included in the 'nav' configuration, "
                 "which presumably points to an external resource.".format(link.url)
@@ -148,15 +146,15 @@ def _data_to_navigation(data, files, config):
     if isinstance(data, dict):
         return [
             _data_to_navigation((key, value), files, config)
-            if isinstance(value, str) else
-            Section(title=key, children=_data_to_navigation(value, files, config))
+            if isinstance(value, str)
+            else Section(title=key, children=_data_to_navigation(value, files, config))
             for key, value in data.items()
         ]
     elif isinstance(data, list):
         return [
             _data_to_navigation(item, files, config)[0]
-            if isinstance(item, dict) and len(item) == 1 else
-            _data_to_navigation(item, files, config)
+            if isinstance(item, dict) and len(item) == 1
+            else _data_to_navigation(item, files, config)
             for item in data
         ]
     title, path = data if isinstance(data, tuple) else (None, data)

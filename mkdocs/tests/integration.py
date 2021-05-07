@@ -22,37 +22,44 @@ import subprocess
 
 from mkdocs import utils
 
-log = logging.getLogger('mkdocs')
+log = logging.getLogger("mkdocs")
 
 DIR = os.path.dirname(__file__)
-MKDOCS_CONFIG = os.path.abspath(os.path.join(DIR, '../../mkdocs.yml'))
+MKDOCS_CONFIG = os.path.abspath(os.path.join(DIR, "../../mkdocs.yml"))
 MKDOCS_THEMES = utils.get_theme_names()
-TEST_PROJECTS = os.path.abspath(os.path.join(DIR, 'integration'))
+TEST_PROJECTS = os.path.abspath(os.path.join(DIR, "integration"))
 
 
 @click.command()
-@click.option('--output',
-              help="The output directory to use when building themes",
-              type=click.Path(file_okay=False, writable=True),
-              required=True)
+@click.option(
+    "--output",
+    help="The output directory to use when building themes",
+    type=click.Path(file_okay=False, writable=True),
+    required=True,
+)
 def main(output=None):
 
     log.propagate = False
     stream = logging.StreamHandler()
-    formatter = logging.Formatter(
-        "\033[1m\033[1;32m *** %(message)s *** \033[0m")
+    formatter = logging.Formatter("\033[1m\033[1;32m *** %(message)s *** \033[0m")
     stream.setFormatter(formatter)
     log.addHandler(stream)
     log.setLevel(logging.DEBUG)
 
-    base_cmd = ['mkdocs', 'build', '-s', '-v', '--site-dir', ]
+    base_cmd = [
+        "mkdocs",
+        "build",
+        "-s",
+        "-v",
+        "--site-dir",
+    ]
 
     log.debug("Building installed themes.")
     for theme in sorted(MKDOCS_THEMES):
         log.debug(f"Building theme: {theme}")
         project_dir = os.path.dirname(MKDOCS_CONFIG)
         out = os.path.join(output, theme)
-        command = base_cmd + [out, '--theme', theme]
+        command = base_cmd + [out, "--theme", theme]
         subprocess.check_call(command, cwd=project_dir)
 
     log.debug("Building test projects.")
@@ -60,11 +67,13 @@ def main(output=None):
         log.debug(f"Building test project: {project}")
         project_dir = os.path.join(TEST_PROJECTS, project)
         out = os.path.join(output, project)
-        command = base_cmd + [out, ]
+        command = base_cmd + [
+            out,
+        ]
         subprocess.check_call(command, cwd=project_dir)
 
     log.debug(f"Theme and integration builds are in {output}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -36,6 +36,7 @@ Extracts, parses and transforms MultiMarkdown style data from documents.
 
 import re
 import yaml
+
 try:
     from yaml import CSafeLoader as SafeLoader
 except ImportError:  # pragma: no cover
@@ -45,9 +46,9 @@ except ImportError:  # pragma: no cover
 # Data Parser                                                       #
 #####################################################################
 
-YAML_RE = re.compile(r'^-{3}[ \t]*\n(.*?\n)(?:\.{3}|-{3})[ \t]*\n', re.UNICODE | re.DOTALL)
-META_RE = re.compile(r'^[ ]{0,3}(?P<key>[A-Za-z0-9_-]+):\s*(?P<value>.*)')
-META_MORE_RE = re.compile(r'^([ ]{4}|\t)(\s*)(?P<value>.*)')
+YAML_RE = re.compile(r"^-{3}[ \t]*\n(.*?\n)(?:\.{3}|-{3})[ \t]*\n", re.UNICODE | re.DOTALL)
+META_RE = re.compile(r"^[ ]{0,3}(?P<key>[A-Za-z0-9_-]+):\s*(?P<value>.*)")
+META_MORE_RE = re.compile(r"^([ ]{4}|\t)(\s*)(?P<value>.*)")
 
 
 def get_data(doc):
@@ -64,7 +65,7 @@ def get_data(doc):
         try:
             data = yaml.load(m.group(1), SafeLoader)
             if isinstance(data, dict):
-                doc = doc[m.end():].lstrip('\n')
+                doc = doc[m.end():].lstrip("\n")
             else:
                 data = {}
         except Exception:
@@ -72,28 +73,28 @@ def get_data(doc):
         return doc, data
 
     # No YAML deliminators. Try MultiMarkdown style
-    lines = doc.replace('\r\n', '\n').replace('\r', '\n').split('\n')
+    lines = doc.replace("\r\n", "\n").replace("\r", "\n").split("\n")
 
     key = None
     while lines:
         line = lines.pop(0)
 
-        if line.strip() == '':
+        if line.strip() == "":
             break  # blank line - done
         m1 = META_RE.match(line)
         if m1:
-            key = m1.group('key').lower().strip()
-            value = m1.group('value').strip()
+            key = m1.group("key").lower().strip()
+            value = m1.group("value").strip()
             if key in data:
-                data[key] += f' {value}'
+                data[key] += f" {value}"
             else:
                 data[key] = value
         else:
             m2 = META_MORE_RE.match(line)
             if m2 and key:
                 # Add another line to existing key
-                data[key] += ' {}'.format(m2.group('value').strip())
+                data[key] += " {}".format(m2.group("value").strip())
             else:
                 lines.insert(0, line)
                 break  # no meta data - done
-    return '\n'.join(lines).lstrip('\n'), data
+    return "\n".join(lines).lstrip("\n"), data

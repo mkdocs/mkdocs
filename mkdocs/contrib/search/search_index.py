@@ -37,14 +37,10 @@ class SearchIndex:
         """
         A simple wrapper to add an entry, dropping bad characters.
         """
-        text = text.replace('\u00a0', ' ')
-        text = re.sub(r'[ \t\n\r\f\v]+', ' ', text.strip())
+        text = text.replace("\u00a0", " ")
+        text = re.sub(r"[ \t\n\r\f\v]+", " ", text.strip())
 
-        self._entries.append({
-            'title': title,
-            'text': text,
-            'location': loc
-        })
+        self._entries.append({"title": title, "text": text, "location": loc})
 
     def add_entry_from_context(self, page):
         """
@@ -65,14 +61,10 @@ class SearchIndex:
         url = page.url
 
         # Create an entry for the full page.
-        text = parser.stripped_html.rstrip('\n') if self.config['indexing'] == 'full' else ''
-        self._add_entry(
-            title=page.title,
-            text=text,
-            loc=url
-        )
+        text = parser.stripped_html.rstrip("\n") if self.config["indexing"] == "full" else ""
+        self._add_entry(title=page.title, text=text, loc=url)
 
-        if self.config['indexing'] in ['full', 'sections']:
+        if self.config["indexing"] in ["full", "sections"]:
             for section in parser.data:
                 self.create_entry_for_section(section, page.toc, url)
 
@@ -85,47 +77,43 @@ class SearchIndex:
 
         toc_item = self._find_toc_by_id(toc, section.id)
 
-        text = ' '.join(section.text) if self.config['indexing'] == 'full' else ''
+        text = " ".join(section.text) if self.config["indexing"] == "full" else ""
         if toc_item is not None:
-            self._add_entry(
-                title=toc_item.title,
-                text=text,
-                loc=abs_url + toc_item.url
-            )
+            self._add_entry(title=toc_item.title, text=text, loc=abs_url + toc_item.url)
 
     def generate_search_index(self):
         """python to json conversion"""
-        page_dicts = {
-            'docs': self._entries,
-            'config': self.config
-        }
-        data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'), default=str)
+        page_dicts = {"docs": self._entries, "config": self.config}
+        data = json.dumps(page_dicts, sort_keys=True, separators=(",", ":"), default=str)
 
-        if self.config['prebuild_index'] in (True, 'node'):
+        if self.config["prebuild_index"] in (True, "node"):
             try:
-                script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'prebuild-index.js')
+                script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "prebuild-index.js")
                 p = subprocess.Popen(
-                    ['node', script_path],
+                    ["node", script_path],
                     stdin=subprocess.PIPE,
                     stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE
+                    stderr=subprocess.PIPE,
                 )
-                idx, err = p.communicate(data.encode('utf-8'))
+                idx, err = p.communicate(data.encode("utf-8"))
                 if not err:
-                    idx = idx.decode('utf-8') if hasattr(idx, 'decode') else idx
-                    page_dicts['index'] = json.loads(idx)
-                    data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
-                    log.debug('Pre-built search index created successfully.')
+                    idx = idx.decode("utf-8") if hasattr(idx, "decode") else idx
+                    page_dicts["index"] = json.loads(idx)
+                    data = json.dumps(page_dicts, sort_keys=True, separators=(",", ":"))
+                    log.debug("Pre-built search index created successfully.")
                 else:
-                    log.warning(f'Failed to pre-build search index. Error: {err}')
+                    log.warning(f"Failed to pre-build search index. Error: {err}")
             except (OSError, ValueError) as e:
-                log.warning(f'Failed to pre-build search index. Error: {e}')
-        elif self.config['prebuild_index'] == 'python':
+                log.warning(f"Failed to pre-build search index. Error: {e}")
+        elif self.config["prebuild_index"] == "python":
             idx = lunr(
-                ref='location', fields=('title', 'text'), documents=self._entries,
-                languages=self.config['lang'])
-            page_dicts['index'] = idx.serialize()
-            data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
+                ref="location",
+                fields=("title", "text"),
+                documents=self._entries,
+                languages=self.config["lang"],
+            )
+            page_dicts["index"] = idx.serialize()
+            data = json.dumps(page_dicts, sort_keys=True, separators=(",", ":"))
 
         return data
 
@@ -142,11 +130,7 @@ class ContentSection:
         self.title = title
 
     def __eq__(self, other):
-        return (
-            self.text == other.text and
-            self.id == other.id and
-            self.title == other.title
-        )
+        return self.text == other.text and self.id == other.id and self.title == other.title
 
 
 class ContentParser(HTMLParser):
@@ -211,8 +195,8 @@ class ContentParser(HTMLParser):
         if self.is_header_tag:
             self.section.title = data
         else:
-            self.section.text.append(data.rstrip('\n'))
+            self.section.text.append(data.rstrip("\n"))
 
     @property
     def stripped_html(self):
-        return '\n'.join(self._stripped_html)
+        return "\n".join(self._stripped_html)
