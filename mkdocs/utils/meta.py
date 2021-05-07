@@ -65,7 +65,7 @@ def get_data(doc):
         try:
             data = yaml.load(m.group(1), SafeLoader)
             if isinstance(data, dict):
-                doc = doc[m.end():].lstrip("\n")
+                doc = doc[m.end() :].lstrip("\n")  # noqa black vs flake8
             else:
                 data = {}
         except Exception:
