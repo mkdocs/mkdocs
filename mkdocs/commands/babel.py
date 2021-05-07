@@ -1,6 +1,6 @@
 from distutils.errors import DistutilsOptionError
 from os import path
-from pkg_resources import EntryPoint
+from importlib_metadata import entry_points
 from babel.messages import frontend as babel
 
 
@@ -12,16 +12,16 @@ DEFAULT_MAPPING_FILE = path.normpath(path.join(
 class ThemeMixin:
     def get_theme_dir(self):
         ''' Validate theme option and return path to theme's root obtained from entry point. '''
-        entry_points = EntryPoint.parse_map(self.distribution.entry_points, self.distribution)
-        if 'mkdocs.themes' not in entry_points:
+        entry_themes = entry_points(group='mkdocs.themes')
+        if not entry_themes:
             raise DistutilsOptionError("no mkdocs.themes are defined in entry_points")
-        if self.theme is None and len(entry_points['mkdocs.themes']) == 1:
+        if self.theme is None and len(entry_themes) == 1:
             # Default to the only theme defined in entry_points as none specified.
-            self.theme = tuple(entry_points['mkdocs.themes'].keys())[0]
-        if self.theme not in entry_points['mkdocs.themes']:
+            self.theme = entry_themes[entry_themes.names.pop()]
+        if self.theme not in entry_themes.names:
             raise DistutilsOptionError("you must specify a valid theme name to work on")
-        theme = entry_points['mkdocs.themes'][self.theme]
-        return path.dirname(theme.resolve().__file__)
+        theme = entry_themes[self.theme]
+        return path.dirname(theme.load().__file__)
 
 
 class compile_catalog(babel.compile_catalog, ThemeMixin):
