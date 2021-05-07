@@ -66,7 +66,9 @@ Here is a quick summary of what you'll need to do:
    placeholder in the localized catalogs.
 3. [Locally serve and test](#testing-theme-translations) the translated themes
    for your language.
-4. [Contribute your translation](#contributing-translations) through a
+4. [Update the documentation](#updating-theme-documentation) about
+   supported translations for each translated theme.
+5. [Contribute your translation](#contributing-translations) through a
    Pull Request.
 
 !!! note
@@ -202,6 +204,12 @@ Finally, run `mkdocs serve` to check out your new localized version of the theme
     After you have finished testing your work, be sure to undo the change to
     the `locale` setting in the `mkdocs.yml` file before submitting your
     changes.
+
+## Updating theme documentation
+
+Update the lists of supported translations for each translated theme located at
+[Choosing your theme](../user-guide/choosing-your-theme.md)
+(`docs/user-guide/choosing-your-theme.md`), in their __`locale`__ options.
 
 ## Contributing translations
 
