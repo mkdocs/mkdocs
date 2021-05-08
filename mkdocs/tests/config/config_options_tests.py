@@ -144,6 +144,18 @@ class IpAddressTest(unittest.TestCase):
         self.assertEqual(value.host, '127.0.0.1')
         self.assertEqual(value.port, 8000)
 
+    @unittest.skipIf(
+        sys.version_info < (3, 9, 5),
+        "Leading zeros allowed in IP addresses before Python3.9.5",
+    )
+    def test_invalid_leading_zeros(self):
+        addr = '127.000.000.001:8000'
+        option = config_options.IpAddress(default=addr)
+        self.assertRaises(
+            config_options.ValidationError,
+            option.validate, addr
+        )
+
     def test_invalid_address_range(self):
         option = config_options.IpAddress()
         self.assertRaises(
