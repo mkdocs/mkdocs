@@ -81,6 +81,25 @@ MkDocs can now benefit from recent bug fixes and new features, including the fol
 
 [ghp-import]: https://github.com/c-w/ghp-import/
 
+#### Rework auto-reload and HTTP server for `mkdocs serve` (#2385)
+
+`mkdocs serve` now uses a new underlying server + file watcher implementation.
+It is based on [http.server] from standard library and provides similar
+functionality to the previously used [livereload] library (which is now dropped
+from dependencies, along with [tornado]).
+
+This makes reloads more responsive and consistent in terms of timing. Multiple
+rapid file changes no longer cause the site to repeatedly rebuild (issue #2061).
+
+Almost every aspect of the server is slightly different, but actual visible
+changes are minor. The logging outputs are only *similar* to the old ones.
+Degradations in behavior are not expected, and should be reported if there are
+any.
+
+[http.server]: https://docs.python.org/3/library/http.server.html
+[livereload]: https://pypi.org/project/livereload/
+[tornado]: https://pypi.org/project/tornado/
+
 #### A `build_error` event was added (#2103)
 
 Plugin developers can now use the `on_build_error` hook
@@ -137,6 +156,15 @@ The `mkdocs.utils.warning_filter` is deprecated and now does nothing. Plugins
  should remove any reference to is as it may be deleted in a future release.
  To ensure any warnings get counted, simply log them to the `mkdocs` log (i.e:
 `mkdocs.plugins.pluginname`).
+
+The `on_serve` event (which receives the `server` object and the `builder`
+function) is affected by the server rewrite. `server` is now a
+`mkdocs.livereload.LiveReloadServer` instead of `livereload.server.Server`. The
+typical action that plugins can do with these is to call `server.watch(some_dir,
+builder)`, which basically adds that directory to watched directories, causing
+the site to be rebuilt on file changes. That still works, but passing any other
+function to `watch` is deprecated. The 2nd parameter is already optional, and
+will accept only this exact `builder` function just for compatibility.
 
 ### Other Changes and Additions to Version 1.2
 
