@@ -115,12 +115,16 @@ class LiveReloadRequestHandler(http.server.SimpleHTTPRequestHandler):
 
         file = super().send_head()
         if file and getattr(file, "name", "").endswith(".html"):
-            parts = file.read().rpartition(b"</body>")
+            content = file.read()
+            try:
+                body_end = content.rindex(b"</body>")
+            except ValueError:
+                body_end = len(content)
             # The page will reload if the livereload poller returns a newer epoch than what it knows.
             # The other timestamp becomes just a unique identifier for the initiating page.
             file = io.BytesIO(
-                b'%b<script src="/js/livereload.js"></script><script>livereload(%d, %d);</script>%b%b'
-                % (parts[0], epoch, _timestamp(), parts[1], parts[2])
+                b'%b<script src="/js/livereload.js"></script><script>livereload(%d, %d);</script>%b'
+                % (content[:body_end], epoch, _timestamp(), content[body_end:])
             )
         return file
 
