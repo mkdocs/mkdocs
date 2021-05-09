@@ -83,7 +83,7 @@ class BuildTests(unittest.TestCase):
             self.assertEqual(output, "original")
 
             Path(docs_dir, "foo.docs").write_text("b")
-            started_building.wait()
+            self.assertTrue(started_building.wait(timeout=10))
 
             _, output = do_request(server, "GET /foo.site")
             self.assertEqual(output, "bbbbb")
@@ -101,7 +101,7 @@ class BuildTests(unittest.TestCase):
             server.watch(docs_dir, rebuild)
 
             Path(docs_dir, "foo.docs").write_text("b")
-            started_building.wait()
+            self.assertTrue(started_building.wait(timeout=10))
 
             with self.assertLogs("mkdocs.livereload"):
                 _, output = do_request(server, "GET /foo.site")
@@ -124,7 +124,7 @@ class BuildTests(unittest.TestCase):
             self.assertIn("livereload_tests.py", cm.filename)
 
             Path(docs_dir, "foo.docs").write_text("b")
-            started_building.wait()
+            self.assertTrue(started_building.wait(timeout=10))
 
             _, output = do_request(server, "GET /foo.site")
             self.assertEqual(output, "bbbbb")
@@ -149,7 +149,7 @@ class BuildTests(unittest.TestCase):
             _, output = do_request(server, "GET /foo.site")
             Path(docs_dir, "foo.docs").write_text("docs2")
             Path(extra_dir, "foo.extra").write_text("extra2")
-            started_building.wait()
+            self.assertTrue(started_building.wait(timeout=10))
 
             _, output = do_request(server, "GET /foo.site")
             self.assertEqual(output, "docs2extra2")
@@ -163,21 +163,21 @@ class BuildTests(unittest.TestCase):
         def rebuild():
             content = Path(docs_dir, "foo.docs").read_text()
             Path(site_dir, "foo.site").write_text(content * 5)
-            before_finished_building.wait()
-            can_finish_building.wait()
+            before_finished_building.wait(timeout=10)
+            self.assertTrue(can_finish_building.wait(timeout=10))
 
         with testing_server(site_dir, rebuild) as server:
             server.watch(docs_dir)
 
             Path(docs_dir, "foo.docs").write_text("b")
-            before_finished_building.wait()
+            before_finished_building.wait(timeout=10)
             Path(docs_dir, "foo.docs").write_text("c")
             can_finish_building.set()
 
             _, output = do_request(server, "GET /foo.site")
             self.assertEqual(output, "bbbbb")
 
-            before_finished_building.wait()
+            before_finished_building.wait(timeout=10)
 
             _, output = do_request(server, "GET /foo.site")
             self.assertEqual(output, "ccccc")
