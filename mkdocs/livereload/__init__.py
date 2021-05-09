@@ -1,7 +1,9 @@
+import sys
 import functools
 import http.server
 import io
 import logging
+import os
 import os.path
 import re
 import socketserver
@@ -119,9 +121,27 @@ class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
 
 
 class LiveReloadRequestHandler(http.server.SimpleHTTPRequestHandler):
+    _directory_lock = threading.Lock()
+
+    def __init__(self, *args, **kwargs):
+        if sys.version_info < (3, 7):
+            self.directory = kwargs.pop("directory")
+        super().__init__(*args, **kwargs)
+
     def translate_path(self, path):
         if path == "/js/livereload.js":
             return os.path.join(os.path.dirname(os.path.abspath(__file__)), "livereload.js")
+
+        # https://github.com/python/cpython/commit/a17a2f52c4c3b37414da95a152fc8669978c7c83
+        if sys.version_info < (3, 7):
+            with self._directory_lock:
+                old_cwd = os.getcwd()
+                os.chdir(self.directory)
+                try:
+                    return super().translate_path(path)
+                finally:
+                    os.chdir(old_cwd)
+
         return super().translate_path(path)
 
     def send_head(self):
