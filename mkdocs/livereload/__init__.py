@@ -17,8 +17,11 @@ log = logging.getLogger(__name__)
 
 class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
     daemon_threads = True
+    poll_response_timeout = 60
 
-    def __init__(self, builder, host, port, root=".", build_delay=0.1, shutdown_delay=0.25):
+    def __init__(
+        self, builder, host, port, root=".", build_delay=0.1, shutdown_delay=0.25, **kwargs
+    ):
         self.builder = builder
         self.url = f"http://{host}:{port}/"
         self.build_delay = build_delay
@@ -27,7 +30,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
 
         root = os.path.abspath(root)
         handler = functools.partial(LiveReloadRequestHandler, directory=root)
-        super().__init__((host, port), handler)
+        super().__init__((host, port), handler, **kwargs)
 
         self._wanted_epoch = _timestamp()  # The version of the site that started building.
         self._visible_epoch = self._wanted_epoch  # Latest fully built version of the site.
@@ -36,6 +39,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
         self._to_rebuild = {}  # Used as an ordered set of functions to call.
         self._rebuild_cond = threading.Condition()  # Must be held when accessing _to_rebuild.
 
+        self._shutdown = False
         self.serve_thread = threading.Thread(target=lambda: self.serve_forever(shutdown_delay))
         self.observer = watchdog.observers.Observer(timeout=shutdown_delay)
 
@@ -78,9 +82,14 @@ class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
         log.info(f"Serving on {self.url}")
         self.serve_thread.start()
 
+        self._build_loop()
+
+    def _build_loop(self):
         while True:
             with self._rebuild_cond:
-                self._rebuild_cond.wait_for(lambda: self._to_rebuild)
+                self._rebuild_cond.wait_for(lambda: self._to_rebuild or self._shutdown)
+                if self._shutdown:
+                    break
                 log.debug("Detected file changes")
                 while self._rebuild_cond.wait(timeout=self.build_delay):
                     log.debug("Waiting for file changes to stop happening")
@@ -99,9 +108,14 @@ class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
 
     def shutdown(self):
         self.observer.stop()
-        super().shutdown()
-        self.observer.join()
-        self.serve_thread.join()
+        with self._rebuild_cond:
+            self._shutdown = True
+            self._rebuild_cond.notify_all()
+
+        if self.serve_thread.is_alive():
+            super().shutdown()
+            self.serve_thread.join()
+            self.observer.join()
 
 
 class LiveReloadRequestHandler(http.server.SimpleHTTPRequestHandler):
@@ -115,7 +129,10 @@ class LiveReloadRequestHandler(http.server.SimpleHTTPRequestHandler):
 
         file = super().send_head()
         if file and getattr(file, "name", "").endswith(".html"):
-            content = file.read()
+            try:
+                content = file.read()
+            finally:
+                file.close()
             try:
                 body_end = content.rindex(b"</body>")
             except ValueError:
@@ -143,7 +160,7 @@ class LiveReloadRequestHandler(http.server.SimpleHTTPRequestHandler):
         self._log_poll_request(self.headers.get("referer"), epoch, request_id)
         # Stall the browser, respond as soon as there's something new.
         # If there's not, respond anyway after a minute.
-        epoch = self.server.wait_for_epoch(epoch, timeout=60)
+        epoch = self.server.wait_for_epoch(epoch, timeout=self.server.poll_response_timeout)
         self.wfile.write(b"%d" % epoch)
 
     @classmethod
