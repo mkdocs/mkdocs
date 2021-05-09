@@ -18,10 +18,10 @@ log = logging.getLogger(__name__)
 class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
     daemon_threads = True
 
-    def __init__(self, builder, host, port, root="."):
+    def __init__(self, builder, host, port, root=".", build_delay=0.1, shutdown_delay=0.25):
         self.builder = builder
-
         self.url = f"http://{host}:{port}/"
+        self.build_delay = build_delay
         # To allow custom error pages.
         self.error_handler = lambda code: None
 
@@ -36,9 +36,8 @@ class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
         self._to_rebuild = {}  # Used as an ordered set of functions to call.
         self._rebuild_cond = threading.Condition()  # Must be held when accessing _to_rebuild.
 
-        self.observer = watchdog.observers.Observer()
-
-        self.serve_thread = threading.Thread(target=self.serve_forever)
+        self.serve_thread = threading.Thread(target=lambda: self.serve_forever(shutdown_delay))
+        self.observer = watchdog.observers.Observer(timeout=shutdown_delay)
 
     def wait_for_build(self):
         """Wait until the ongoing rebuild (if any) finishes."""
@@ -64,12 +63,13 @@ class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
                 stacklevel=2,
             )
 
-        def callback():
+        def callback(event):
             with self._rebuild_cond:
                 self._to_rebuild[func] = True
                 self._rebuild_cond.notify_all()
 
-        handler = _ThrottledEventHandler(callback)
+        handler = watchdog.events.FileSystemEventHandler()
+        handler.on_any_event = callback
         self.observer.schedule(handler, path, recursive=recursive)
 
     def serve(self):
@@ -80,8 +80,11 @@ class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
 
         while True:
             with self._rebuild_cond:
-                self._rebuild_cond.wait()
+                self._rebuild_cond.wait_for(lambda: self._to_rebuild)
                 log.debug("Detected file changes")
+                while self._rebuild_cond.wait(timeout=self.build_delay):
+                    log.debug("Waiting for file changes to stop happening")
+
                 self._wanted_epoch = _timestamp()
                 funcs = list(self._to_rebuild)
                 self._to_rebuild.clear()
@@ -168,26 +171,3 @@ class LiveReloadRequestHandler(http.server.SimpleHTTPRequestHandler):
 
 def _timestamp():
     return round(time.monotonic() * 1000)
-
-
-class _ThrottledEventHandler(watchdog.events.FileSystemEventHandler):
-    """Event handler for Watchdog, calling the callback not more frequently than once per interval.
-
-    That is done for the 2 purposes:
-      * collapsing a burst of events for 1 file into one;
-      * throttling in case files are modified too frequently.
-    """
-
-    def __init__(self, callback, interval=0.5):
-        self.callback = callback
-        self.interval = interval
-        self.last_triggered = float("-inf")
-        self._lock = threading.Lock()
-
-    def on_any_event(self, event):
-        with self._lock:
-            now = time.monotonic()
-            if now < self.last_triggered + self.interval:
-                return
-            self.last_triggered = now
-            self.callback()
