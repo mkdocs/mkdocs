@@ -190,5 +190,8 @@ class LiveReloadRequestHandler(http.server.SimpleHTTPRequestHandler):
         return super().send_error(code, message, *args, **kwargs)
 
 
+LiveReloadRequestHandler.extensions_map[".js"] = "application/javascript"
+
+
 def _timestamp():
     return round(time.monotonic() * 1000)

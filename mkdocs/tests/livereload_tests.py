@@ -210,7 +210,7 @@ class BuildTests(unittest.TestCase):
         with testing_server(site_dir) as server:
             headers, output = do_request(server, "GET /js/livereload.js")
             self.assertIn("function livereload", output)
-            self.assertIn("/javascript", headers["content-type"])
+            self.assertEqual(headers["content-type"], "application/javascript")
 
     @tempdir()
     def test_serves_polling_instantly(self, site_dir):
