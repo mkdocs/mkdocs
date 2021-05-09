@@ -214,7 +214,7 @@ def is_markdown_file(path):
 
     https://superuser.com/questions/249436/file-extension-for-markdown-files
     """
-    return any(fnmatch.fnmatch(path.lower(), '*{}'.format(x)) for x in markdown_extensions)
+    return any(fnmatch.fnmatch(path.lower(), f'*{x}') for x in markdown_extensions)
 
 
 def is_html_file(path):

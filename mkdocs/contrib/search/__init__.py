@@ -14,7 +14,7 @@ class LangOption(config_options.OptionallyRequired):
     """ Validate Language(s) provided in config are known languages. """
 
     def lang_file_exists(self, lang):
-        path = os.path.join(base_path, 'lunr-language', 'lunr.{}.js'.format(lang))
+        path = os.path.join(base_path, 'lunr-language', f'lunr.{lang}.js')
         return os.path.isfile(path)
 
     def run_validation(self, value):
@@ -25,7 +25,7 @@ class LangOption(config_options.OptionallyRequired):
         for lang in value:
             if lang != 'en' and not self.lang_file_exists(lang):
                 raise config_options.ValidationError(
-                    '"{}" is not a supported language code.'.format(lang)
+                    f'"{lang}" is not a supported language code.'
                 )
         return value
 
@@ -34,7 +34,7 @@ class SearchPlugin(BasePlugin):
     """ Add a search feature to MkDocs. """
 
     config_scheme = (
-        ('lang', LangOption(default=['en'])),
+        ('lang', LangOption()),
         ('separator', config_options.Type(str, default=r'[\s\-]+')),
         ('min_search_length', config_options.Type(int, default=3)),
         ('prebuild_index', config_options.Choice((False, True, 'node', 'python'), default=False)),
@@ -50,6 +50,10 @@ class SearchPlugin(BasePlugin):
             config['theme'].dirs.append(path)
             if 'search/main.js' not in config['extra_javascript']:
                 config['extra_javascript'].append('search/main.js')
+        if self.config['lang'] is None:
+            # lang setting undefined. Set default based on theme locale
+            validate = self.config_scheme[0][1].run_validation
+            self.config['lang'] = validate(config['theme']['locale'].language)
         return config
 
     def on_pre_build(self, config, **kwargs):
@@ -79,7 +83,7 @@ class SearchPlugin(BasePlugin):
                 files.append('tinyseg.js')
             for lang in self.config['lang']:
                 if (lang != 'en'):
-                    files.append('lunr.{}.js'.format(lang))
+                    files.append(f'lunr.{lang}.js')
 
             for filename in files:
                 from_path = os.path.join(base_path, 'lunr-language', filename)

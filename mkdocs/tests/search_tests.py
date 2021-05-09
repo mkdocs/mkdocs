@@ -39,6 +39,21 @@ class SearchConfigTests(unittest.TestCase):
         value = option.validate(['en', 'es', 'fr'])
         self.assertEqual(['en', 'es', 'fr'], value)
 
+    def test_lang_no_default_none(self):
+        option = search.LangOption()
+        value = option.validate(None)
+        self.assertIsNone(value)
+
+    def test_lang_no_default_str(self):
+        option = search.LangOption(default=[])
+        value = option.validate('en')
+        self.assertEqual(['en'], value)
+
+    def test_lang_no_default_list(self):
+        option = search.LangOption(default=[])
+        value = option.validate(['en'])
+        self.assertEqual(['en'], value)
+
     def test_lang_bad_type(self):
         option = search.LangOption()
         self.assertRaises(ValidationError, option.validate, {})
@@ -56,7 +71,7 @@ class SearchPluginTests(unittest.TestCase):
 
     def test_plugin_config_defaults(self):
         expected = {
-            'lang': ['en'],
+            'lang': None,
             'separator': r'[\s\-]+',
             'min_search_length': 3,
             'prebuild_index': False,
@@ -84,7 +99,7 @@ class SearchPluginTests(unittest.TestCase):
 
     def test_plugin_config_separator(self):
         expected = {
-            'lang': ['en'],
+            'lang': None,
             'separator': r'[\s\-\.]+',
             'min_search_length': 3,
             'prebuild_index': False,
@@ -98,7 +113,7 @@ class SearchPluginTests(unittest.TestCase):
 
     def test_plugin_config_min_search_length(self):
         expected = {
-            'lang': ['en'],
+            'lang': None,
             'separator': r'[\s\-]+',
             'min_search_length': 2,
             'prebuild_index': False,
@@ -112,7 +127,7 @@ class SearchPluginTests(unittest.TestCase):
 
     def test_plugin_config_prebuild_index(self):
         expected = {
-            'lang': ['en'],
+            'lang': None,
             'separator': r'[\s\-]+',
             'min_search_length': 3,
             'prebuild_index': True,
@@ -126,7 +141,7 @@ class SearchPluginTests(unittest.TestCase):
 
     def test_plugin_config_indexing(self):
         expected = {
-            'lang': ['en'],
+            'lang': None,
             'separator': r'[\s\-]+',
             'min_search_length': 3,
             'prebuild_index': False,
@@ -147,6 +162,29 @@ class SearchPluginTests(unittest.TestCase):
         self.assertEqual(result['theme'].static_templates, {'404.html', 'sitemap.xml'})
         self.assertEqual(len(result['theme'].dirs), 3)
         self.assertEqual(result['extra_javascript'], ['search/main.js'])
+        self.assertEqual(plugin.config['lang'], [result['theme']['locale'].language])
+
+    def test_event_on_config_lang(self):
+        plugin = search.SearchPlugin()
+        plugin.load_config({'lang': 'es'})
+        result = plugin.on_config(load_config(theme='mkdocs', extra_javascript=[]))
+        self.assertFalse(result['theme']['search_index_only'])
+        self.assertFalse(result['theme']['include_search_page'])
+        self.assertEqual(result['theme'].static_templates, {'404.html', 'sitemap.xml'})
+        self.assertEqual(len(result['theme'].dirs), 3)
+        self.assertEqual(result['extra_javascript'], ['search/main.js'])
+        self.assertEqual(plugin.config['lang'], ['es'])
+
+    def test_event_on_config_theme_locale(self):
+        plugin = search.SearchPlugin()
+        plugin.load_config({})
+        result = plugin.on_config(load_config(theme={'name': 'mkdocs', 'locale': 'fr'}, extra_javascript=[]))
+        self.assertFalse(result['theme']['search_index_only'])
+        self.assertFalse(result['theme']['include_search_page'])
+        self.assertEqual(result['theme'].static_templates, {'404.html', 'sitemap.xml'})
+        self.assertEqual(len(result['theme'].dirs), 3)
+        self.assertEqual(result['extra_javascript'], ['search/main.js'])
+        self.assertEqual(plugin.config['lang'], [result['theme']['locale'].language])
 
     def test_event_on_config_include_search_page(self):
         plugin = search.SearchPlugin()
@@ -176,6 +214,7 @@ class SearchPluginTests(unittest.TestCase):
         plugin = search.SearchPlugin()
         plugin.load_config({})
         config = load_config(theme='mkdocs')
+        plugin.on_config(config)
         plugin.on_pre_build(config)
         plugin.on_post_build(config)
         self.assertEqual(mock_copy_file.call_count, 0)
@@ -360,15 +399,15 @@ class SearchIndexTests(unittest.TestCase):
 
             self.assertEqual(index._entries[1]['title'], "Heading 1")
             self.assertEqual(index._entries[1]['text'], "Content 1")
-            self.assertEqual(index._entries[1]['location'], "{}#heading-1".format(loc))
+            self.assertEqual(index._entries[1]['location'], f"{loc}#heading-1")
 
             self.assertEqual(index._entries[2]['title'], "Heading 2")
             self.assertEqual(strip_whitespace(index._entries[2]['text']), "Content2")
-            self.assertEqual(index._entries[2]['location'], "{}#heading-2".format(loc))
+            self.assertEqual(index._entries[2]['location'], f"{loc}#heading-2")
 
             self.assertEqual(index._entries[3]['title'], "Heading 3")
             self.assertEqual(strip_whitespace(index._entries[3]['text']), "Content3")
-            self.assertEqual(index._entries[3]['location'], "{}#heading-3".format(loc))
+            self.assertEqual(index._entries[3]['location'], f"{loc}#heading-3")
 
     def test_search_indexing_options(self):
         def test_page(title, filename, config):

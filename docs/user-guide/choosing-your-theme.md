@@ -77,6 +77,18 @@ supports the following options:
             name: mkdocs
             nav_style: dark
 
+* __`locale`__{ #mkdocs-locale }: The locale (languange/location) used to
+  build the theme. If your locale is not yet supported, it will fallback
+  to the default.
+
+    The following locales are supported by this theme:
+
+    * `en`: English (default)
+    * `fr`: French
+    * `es`: Spanish
+
+    See the guide on [localizing your theme] for more information.
+
 ## readthedocs
 
 A clone of the default theme used by the [Read the Docs] service, which offers
@@ -122,6 +134,18 @@ theme supports the following options:
 * __`sticky_navigation`__: If True, causes the sidebar to scroll with the main
   page content as you scroll the page. Default: `True`.
 
+* __`locale`__{ #readthedocs-locale }: The locale (languange/location) used to
+  build the theme. If your locale is not yet supported, it will fallback
+  to the default.
+
+    The following locales are supported by this theme:
+
+    * `en`: English (default)
+    * `fr`: French
+    * `es`: Spanish
+
+    See the guide on [localizing your theme] for more information.
+
 ## Third Party Themes
 
 A list of third party themes can be found in the MkDocs [community wiki]. If you
@@ -134,3 +158,4 @@ have created your own, please feel free to add it to the list.
 [styles]: https://highlightjs.org/static/demo/
 [Read the Docs]: https://readthedocs.org/
 [community wiki]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
+[localizing your theme]: localizing-your-theme.md

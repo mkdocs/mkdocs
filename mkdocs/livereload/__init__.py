@@ -61,7 +61,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
     def serve(self):
         self.observer.start()
 
-        log.info("Serving on %s", self.url)
+        log.info(f"Serving on {self.url}")
         self.serve_thread.start()
 
         while True:
@@ -130,7 +130,7 @@ class LiveReloadRequestHandler(http.server.SimpleHTTPRequestHandler):
     @classmethod
     @functools.lru_cache()  # "Cache" to not repeat the same message for the same browser tab.
     def _log_poll_request(cls, url, epoch, request_id):
-        log.info("Browser connected: %s", url)
+        log.info(f"Browser connected: {url}")
 
     def log_message(self, format, *args):
         log.debug(format, *args)
