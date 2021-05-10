@@ -283,7 +283,7 @@ class BuildTests(unittest.TestCase):
             self.assertEqual(headers["content-type"], "text/html")
 
             headers, _ = do_request(server, "GET /test.xml")
-            self.assertEqual(headers["content-type"], "text/xml")
+            self.assertIn(headers["content-type"], ["text/xml", "application/xml"])
 
             headers, _ = do_request(server, "GET /test.css")
             self.assertEqual(headers["content-type"], "text/css")
