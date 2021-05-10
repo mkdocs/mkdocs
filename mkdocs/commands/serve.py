@@ -11,38 +11,6 @@ from mkdocs.livereload import LiveReloadServer
 log = logging.getLogger(__name__)
 
 
-def _run_server(host, port, config, builder, site_dir, livereload, watch_theme):
-    server = LiveReloadServer(builder=builder, host=host, port=port, root=site_dir)
-
-    def error_handler(code):
-        if code in (404, 500):
-            error_page = join(site_dir, f'{code}.html')
-            if isfile(error_page):
-                with open(error_page, 'rb') as f:
-                    return f.read()
-
-    server.error_handler = error_handler
-
-    if livereload:
-        # Watch the documentation files, the config file and the theme files.
-        server.watch(config['docs_dir'])
-        server.watch(config['config_file_path'])
-
-        if watch_theme:
-            for d in config['theme'].dirs:
-                server.watch(d)
-
-    # Run `serve` plugin events.
-    server = config['plugins'].run_event('serve', server, config=config, builder=builder)
-
-    try:
-        server.serve()
-    except KeyboardInterrupt:
-        log.info("Shutting down...")
-    finally:
-        server.shutdown()
-
-
 def serve(config_file=None, dev_addr=None, strict=None, theme=None,
           theme_dir=None, livereload='livereload', watch_theme=False, **kwargs):
     """
@@ -83,8 +51,35 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
 
         host, port = config['dev_addr']
 
-        do_livereload = livereload in ['livereload', 'dirty']
-        _run_server(host, port, config, builder, site_dir, do_livereload, watch_theme)
+        server = LiveReloadServer(builder=builder, host=host, port=port, root=site_dir)
+
+        def error_handler(code):
+            if code in (404, 500):
+                error_page = join(site_dir, f'{code}.html')
+                if isfile(error_page):
+                    with open(error_page, 'rb') as f:
+                        return f.read()
+
+        server.error_handler = error_handler
+
+        if livereload in ['livereload', 'dirty']:
+            # Watch the documentation files, the config file and the theme files.
+            server.watch(config['docs_dir'])
+            server.watch(config['config_file_path'])
+
+            if watch_theme:
+                for d in config['theme'].dirs:
+                    server.watch(d)
+
+            # Run `serve` plugin events.
+            server = config['plugins'].run_event('serve', server, config=config, builder=builder)
+
+        try:
+            server.serve()
+        except KeyboardInterrupt:
+            log.info("Shutting down...")
+        finally:
+            server.shutdown()
     except OSError as e:  # pragma: no cover
         # Avoid ugly, unhelpful traceback
         raise Abort(str(e))
