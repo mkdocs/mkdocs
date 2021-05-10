@@ -108,6 +108,29 @@ class BuildTests(unittest.TestCase):
 
             self.assertIn("404", output)
 
+    @tempdir({"aaa": "something"})
+    def test_rebuild_after_rename(self, site_dir):
+        started_building = threading.Event()
+
+        with testing_server(site_dir, started_building.set) as server:
+            server.watch(site_dir)
+
+            Path(site_dir, "aaa").rename(Path(site_dir, "bbb"))
+            self.assertTrue(started_building.wait(timeout=10))
+
+    @tempdir()
+    def test_no_rebuild_on_edit(self, site_dir):
+        started_building = threading.Event()
+
+        with open(Path(site_dir, "test"), "wb") as f:
+            with testing_server(site_dir, started_building.set) as server:
+                server.watch(site_dir)
+
+                f.write(b"hi\n")
+                f.flush()
+
+                self.assertFalse(started_building.wait(timeout=0.2))
+
     @tempdir({"foo.docs": "a"})
     @tempdir({"foo.site": "original"})
     def test_custom_action_warns(self, site_dir, docs_dir):
