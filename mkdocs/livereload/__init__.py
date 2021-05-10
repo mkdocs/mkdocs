@@ -210,6 +210,9 @@ class LiveReloadRequestHandler(http.server.SimpleHTTPRequestHandler):
         return super().send_error(code, message, *args, **kwargs)
 
 
+# Override the MIME type, as it's misconfigured by default on Windows.
+# MkDocs only ensures a few common types (as seen in livereload_tests.py::test_mime_types).
+# Other uncommon types will not be accepted.
 LiveReloadRequestHandler.extensions_map[".js"] = "application/javascript"
 
 

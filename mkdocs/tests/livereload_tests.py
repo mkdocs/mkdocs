@@ -267,3 +267,29 @@ class BuildTests(unittest.TestCase):
             self.assertRegex(
                 "\n".join(cm.output), r"Failed to render an error message[\s\S]+/missing.+code 404"
             )
+
+    @tempdir(
+        {
+            "test.html": "<!DOCTYPE html>\nhi",
+            "test.xml": '<?xml version="1.0" encoding="UTF-8"?>\n<foo></foo>',
+            "test.css": "div { color: red; }",
+            "test.js": "use strict;",
+            "test.json": '{"a": "b"}',
+        }
+    )
+    def test_mime_types(self, site_dir):
+        with testing_server(site_dir) as server:
+            headers, _ = do_request(server, "GET /test.html")
+            self.assertEqual(headers["content-type"], "text/html")
+
+            headers, _ = do_request(server, "GET /test.xml")
+            self.assertEqual(headers["content-type"], "text/xml")
+
+            headers, _ = do_request(server, "GET /test.css")
+            self.assertEqual(headers["content-type"], "text/css")
+
+            headers, _ = do_request(server, "GET /test.js")
+            self.assertEqual(headers["content-type"], "application/javascript")
+
+            headers, _ = do_request(server, "GET /test.json")
+            self.assertEqual(headers["content-type"], "application/json")
