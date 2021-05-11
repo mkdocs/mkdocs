@@ -563,6 +563,7 @@ class SearchIndexTests(unittest.TestCase):
         self.assertEqual(mock_popen_obj.communicate.call_count, 0)
         self.assertEqual(result, expected)
 
+    @unittest.skipUnless(search_index.haslunrpy, 'lunr.py is not installed')
     @mock.patch('mkdocs.contrib.search.search_index.lunr', autospec=True)
     def test_prebuild_index_python(self, mock_lunr):
         mock_lunr.return_value.serialize.return_value = {'mock': 'index'}
@@ -574,6 +575,17 @@ class SearchIndexTests(unittest.TestCase):
         }
         result = json.loads(index.generate_search_index())
         self.assertEqual(mock_lunr.call_count, 1)
+        self.assertEqual(result, expected)
+
+    @unittest.skipIf(search_index.haslunrpy, 'lunr.py is installed')
+    def test_prebuild_index_python_missing_lunr(self):
+        # When the lunr.py dependencies are not installed no prebuilt index is created.
+        index = search_index.SearchIndex(prebuild_index='python', lang='en')
+        expected = {
+            'docs': [],
+            'config': {'prebuild_index': 'python', 'lang': 'en'}
+        }
+        result = json.loads(index.generate_search_index())
         self.assertEqual(result, expected)
 
     @mock.patch('subprocess.Popen', autospec=True)

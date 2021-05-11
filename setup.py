@@ -61,7 +61,6 @@ setup(
         'click>=3.3',
         'Jinja2>=2.10.1',
         'livereload>=2.5.1',
-        'lunr[languages]==0.5.9',  # must support lunr.js version included in search
         'Markdown>=3.2.1',
         'PyYAML>=3.10',
         'tornado>=5.0',
@@ -70,7 +69,10 @@ setup(
         'importlib_metadata>=3.10',
         'packaging>=20.5'
     ],
-    extras_require={"i18n": ['babel>=2.9.0']},
+    extras_require={
+        "i18n": ['babel>=2.9.0'],
+        'lunrpy': ['lunr']
+    },
     python_requires='>=3.6',
     entry_points={
         'console_scripts': [
