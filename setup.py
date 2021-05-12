@@ -69,10 +69,7 @@ setup(
         'importlib_metadata>=3.10',
         'packaging>=20.5'
     ],
-    extras_require={
-        "i18n": ['babel>=2.9.0'],
-        'lunrpy': ['lunr']
-    },
+    extras_require={"i18n": ['babel>=2.9.0']},
     python_requires='>=3.6',
     entry_points={
         'console_scripts': [

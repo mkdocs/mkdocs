@@ -54,6 +54,13 @@ class SearchPlugin(BasePlugin):
             # lang setting undefined. Set default based on theme locale
             validate = self.config_scheme[0][1].run_validation
             self.config['lang'] = validate(config['theme']['locale'].language)
+        # The `python` method of `prebuild_index` is pending deprecation as of version 1.2.
+        # TODO: Raise a deprecation warning in a future release (1.3?).
+        if self.config['prebuild_index'] == 'python'
+            log.info(
+                "The 'python' method of the search plugin's 'prebuild_index' config option "
+                "is pending deprecation and will not be supported in a future release."
+            )
         return config
 
     def on_pre_build(self, config, **kwargs):

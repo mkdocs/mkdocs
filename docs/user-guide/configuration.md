@@ -607,23 +607,16 @@ You may [contribute additional languages].
 ##### **prebuild_index**
 
 Optionally generates a pre-built index of all pages, which provides some
-performance improvements for larger sites. Before enabling, check that the
+performance improvements for larger sites. Before enabling, confirm that the
 theme you are using explicitly supports using a prebuilt index (the builtin
-themes do).
+themes do). Set to `true` to enable.
 
-There are two options for prebuilding the index:
+!!! warning
 
-Using [Node.js] by setting `prebuild_index` to `True` or `node`. This option
-requires that Node.js be installed and the command `node` be on the system
-path. If this feature is enabled and fails for any reason, a warning is issued.
-You may use the `--strict` flag when building to cause such a failure to raise
-an error instead.
-
-Using [Lunr.py] by setting `prebuild_index` to `python`. This option requires
-that Lunr.py is installed in your Python environment (`pip install lunr`). For
-support of languages other than English, `lunr[languages]` also needs to be
-installed. If you find substantial inconsistencies or problems please report
-them to [Lunr.py's issues] and fall back to the Node.js version.
+    This option requires that [Node.js] be installed and the command `node` be
+    on the system path. If the call to `node` fails for any reason, a warning
+    is issued and the build continues uninterupted. You may use the `--strict`
+    flag when building to cause such a failure to raise an error instead.
 
 !!! Note
 
@@ -634,6 +627,8 @@ them to [Lunr.py's issues] and fall back to the Node.js version.
     significant improvement in search performance.
 
 **default**: `False`
+
+[Node.js]: https://nodejs.org/
 
 ##### **indexing**
 

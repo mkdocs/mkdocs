@@ -138,14 +138,18 @@ The `mkdocs.utils.warning_filter` is deprecated and now does nothing. Plugins
  To ensure any warnings get counted, simply log them to the `mkdocs` log (i.e:
 `mkdocs.plugins.pluginname`).
 
+The `python` method of the `plugins.search.prebuild_index` configuration option
+is pending deprecation as of version 1.2. It is expected that in version 1.3 it
+will raise a warning if used and in version 1.4 it will raise an error. Users
+are encouraged to use an alternate method to generate a prebuilt index for
+search.
+
 The `lunr` and `lunr[languages]` dependencies are no longer installed by
 default. The dependencies are only needed for the rare user who prebuilds the
-search index and uses the `python` option. As this feature was always
-experimental and rarely used, there is no reason to force all users to install
-the dependencies. Especially considering the larger dependencies for
-`lunr[languages]`. If you use this feature, then you will need to manually
-install `lunr` and `lunr[languages]`. A warning is issued if the dependencies
-are needed but not installed.
+search index and uses the `python` option, which is now pending deprecation. If
+you use this feature, then you will need to manually install `lunr` and
+`lunr[languages]`. A warning is issued if the dependencies are needed but not
+installed.
 
 ### Other Changes and Additions to Version 1.2
 
