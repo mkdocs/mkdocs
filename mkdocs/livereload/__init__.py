@@ -70,13 +70,16 @@ class LiveReloadServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
             )
 
         def callback(event):
-            # Text editors always cause a "file close" event in addition to "modified" when saving a
-            # file. Some editors also have "swap" functionality that keeps writing into another file
-            # that's never closed. Prevent such write events from causing a rebuild.
-            if not isinstance(event, watchdog.events.FileModifiedEvent):
-                with self._rebuild_cond:
-                    self._to_rebuild[func] = True
-                    self._rebuild_cond.notify_all()
+            # Text editors always cause a "file close" event in addition to "modified" when saving
+            # a file. Some editors also have "swap" functionality that keeps writing into another
+            # file that's never closed. Prevent such write events from causing a rebuild.
+            if isinstance(event, watchdog.events.FileModifiedEvent):
+                # But FileClosedEvent is implemented only on Linux, otherwise we mustn't skip this:
+                if type(self.observer).__name__ == "InotifyObserver":
+                    return
+            with self._rebuild_cond:
+                self._to_rebuild[func] = True
+                self._rebuild_cond.notify_all()
 
         handler = watchdog.events.FileSystemEventHandler()
         handler.on_any_event = callback
