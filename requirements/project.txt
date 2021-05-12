@@ -1,6 +1,7 @@
 babel>=2.9.0
 click>=7.0
 Jinja2>=2.10.3
+MarkupSafe>=0.23
 livereload>=2.6.1
 Markdown>=3.2.1
 PyYAML>=5.2
