@@ -123,11 +123,14 @@ class BuildTests(unittest.TestCase):
         started_building = threading.Event()
 
         with open(Path(site_dir, "test"), "wb") as f:
+            time.sleep(0.01)
+
             with testing_server(site_dir, started_building.set) as server:
                 server.watch(site_dir)
 
                 f.write(b"hi\n")
                 f.flush()
+                time.sleep(0.01)
 
                 self.assertFalse(started_building.wait(timeout=0.2))
 
