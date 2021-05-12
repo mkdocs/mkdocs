@@ -178,7 +178,10 @@ class LiveReloadRequestHandler(http.server.SimpleHTTPRequestHandler):
             return self._do_poll_response(epoch=int(m[1]), request_id=int(m[2]))
 
         self.server.wait_for_build()  # Otherwise we may be looking at a half-built site.
-        return super().do_GET()
+        try:
+            return super().do_GET()
+        except BrokenPipeError:  # The client disconnected before reading the response.
+            pass
 
     def _do_poll_response(self, epoch, request_id):
         self.send_response(http.HTTPStatus.OK)
