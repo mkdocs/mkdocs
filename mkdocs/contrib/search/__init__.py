@@ -56,7 +56,7 @@ class SearchPlugin(BasePlugin):
             self.config['lang'] = validate(config['theme']['locale'].language)
         # The `python` method of `prebuild_index` is pending deprecation as of version 1.2.
         # TODO: Raise a deprecation warning in a future release (1.3?).
-        if self.config['prebuild_index'] == 'python'
+        if self.config['prebuild_index'] == 'python':
             log.info(
                 "The 'python' method of the search plugin's 'prebuild_index' config option "
                 "is pending deprecation and will not be supported in a future release."
