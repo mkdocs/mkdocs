@@ -23,7 +23,7 @@ class ConfigTests(unittest.TestCase):
 
     def test_missing_site_name(self):
         c = config.Config(schema=defaults.get_schema())
-        c.load_dict({})
+        c.load_dict({'site_url': 'https://example.com'})
         errors, warnings = c.validate()
         self.assertEqual(len(errors), 1)
         self.assertEqual(errors[0][0], 'site_name')
@@ -290,3 +290,123 @@ class ConfigTests(unittest.TestCase):
         conf.load_dict({'site_name': 'foo'})
         conf.validate()
         self.assertIsNone(conf['mdx_configs'].get('toc'))
+
+    def test_site_url_and_use_directory_urls_undefined(self):
+        conf = config.Config(schema=defaults.get_schema())
+        conf.load_dict({
+            'site_name': 'Example',
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        errors, warnings = conf.validate()
+        self.assertEqual(conf['site_url'], '')
+        self.assertFalse(conf['use_directory_urls'])
+        self.assertEqual(len(warnings), 2)
+        self.assertEqual(len(errors), 0)
+
+    def test_site_url_undefined_and_use_directory_urls_false(self):
+        conf = config.Config(schema=defaults.get_schema())
+        conf.load_dict({
+            'site_name': 'Example',
+            'use_directory_urls': False,
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        errors, warnings = conf.validate()
+        self.assertEqual(conf['site_url'], '')
+        self.assertFalse(conf['use_directory_urls'])
+        self.assertEqual(len(warnings), 1)
+        self.assertEqual(len(errors), 0)
+
+    def test_site_url_undefined_and_use_directory_urls_true(self):
+        conf = config.Config(schema=defaults.get_schema())
+        conf.load_dict({
+            'site_name': 'Example',
+            'use_directory_urls': True,
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        errors, warnings = conf.validate()
+        self.assertEqual(conf['site_url'], '')
+        self.assertFalse(conf['use_directory_urls'])
+        self.assertEqual(len(warnings), 2)
+        self.assertEqual(len(errors), 0)
+
+    def test_site_url_empty_and_use_directory_urls_undefined(self):
+        conf = config.Config(schema=defaults.get_schema())
+        conf.load_dict({
+            'site_name': 'Example',
+            'site_url': '',
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        errors, warnings = conf.validate()
+        self.assertEqual(conf['site_url'], '')
+        self.assertFalse(conf['use_directory_urls'])
+        self.assertEqual(len(warnings), 1)
+        self.assertEqual(len(errors), 0)
+
+    def test_site_url_empty_and_use_directory_urls_false(self):
+        conf = config.Config(schema=defaults.get_schema())
+        conf.load_dict({
+            'site_name': 'Example',
+            'site_url': '',
+            'use_directory_urls': False,
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        errors, warnings = conf.validate()
+        self.assertEqual(conf['site_url'], '')
+        self.assertFalse(conf['use_directory_urls'])
+        self.assertEqual(len(warnings), 0)
+        self.assertEqual(len(errors), 0)
+
+    def test_site_url_empty_and_use_directory_urls_true(self):
+        conf = config.Config(schema=defaults.get_schema())
+        conf.load_dict({
+            'site_name': 'Example',
+            'site_url': '',
+            'use_directory_urls': True,
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        errors, warnings = conf.validate()
+        self.assertEqual(conf['site_url'], '')
+        self.assertFalse(conf['use_directory_urls'])
+        self.assertEqual(len(warnings), 1)
+        self.assertEqual(len(errors), 0)
+
+    def test_site_url_defined_and_use_directory_urls_undefined(self):
+        conf = config.Config(schema=defaults.get_schema())
+        conf.load_dict({
+            'site_name': 'Example',
+            'site_url': 'http://example.com/',
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        errors, warnings = conf.validate()
+        self.assertEqual(conf['site_url'], 'http://example.com/')
+        self.assertTrue(conf['use_directory_urls'])
+        self.assertEqual(len(warnings), 0)
+        self.assertEqual(len(errors), 0)
+
+    def test_site_url_defined_and_use_directory_urls_false(self):
+        conf = config.Config(schema=defaults.get_schema())
+        conf.load_dict({
+            'site_name': 'Example',
+            'site_url': 'http://example.com/',
+            'use_directory_urls': False,
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        errors, warnings = conf.validate()
+        self.assertEqual(conf['site_url'], 'http://example.com/')
+        self.assertFalse(conf['use_directory_urls'])
+        self.assertEqual(len(warnings), 0)
+        self.assertEqual(len(errors), 0)
+
+    def test_site_url_defined_and_use_directory_urls_true(self):
+        conf = config.Config(schema=defaults.get_schema())
+        conf.load_dict({
+            'site_name': 'Example',
+            'site_url': 'http://example.com/',
+            'use_directory_urls': True,
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        errors, warnings = conf.validate()
+        self.assertEqual(conf['site_url'], 'http://example.com/')
+        self.assertTrue(conf['use_directory_urls'])
+        self.assertEqual(len(warnings), 0)
+        self.assertEqual(len(errors), 0)

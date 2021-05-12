@@ -120,6 +120,15 @@ configuration documentation for details.
 
 ### Backward Incompatible Changes in 1.2
 
+The [site_url](../user-guide.md#site_url) configuration option is now
+**required**. If it is not set, a warning will be issued. In a future release an
+error will be raised (#2189).
+
+The [use_directory_urls](../user-guide.md#use_directory_urls) configuration
+option will be forced to `false` if [site_url](../user-guide.md#site_url) is set
+to an emtpy string. If `use_direcotry_urls` is not explicitly set to `false` a
+warning will be issued (#2189).
+
 A theme's files are now excluded from the list of watched files by default
 when using the `--livereload` server. This new default behavior is what most
 users need and provides better performance when editing site content.

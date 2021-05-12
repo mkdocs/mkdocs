@@ -65,10 +65,16 @@ variable.
 
 ### site_url
 
-Set the canonical URL of the site. This will add a link tag with the canonical
-URL to the generated HTML header.
+Set the canonical URL of the site. This is a **required setting**.  If the
+'root' of the MkDocs site will be within a subdirectory of a domain, be sure to
+include that subdirectory in the setting (`https://example.com/foo/`). If the
+domain is yet to be determined, you may use a placeholder domain, which will
+need to be updated prior to deployment.
 
-**default**: `null`
+If the built site will not be behind a server, then you may set the value to an
+empty string (`''`). When set to an empty string, some features of MkDocs may
+act differently. For example, the [use_directory_urls](#use_direcotry_urls)
+setting must be set to `false`.
 
 ### repo_url
 
@@ -411,10 +417,11 @@ about/license.md | /about/license/           | /about/license.html
 The default style of `use_directory_urls: true` creates more user friendly URLs,
 and is usually what you'll want to use.
 
-The alternate style can occasionally be useful if you want your documentation to
-remain properly linked when opening pages directly from the file system, because
-it creates links that point directly to the target *file* rather than the target
-*directory*.
+The alternate style can be useful if you want your documentation to remain
+properly linked when opening pages directly from the file system, because it
+creates links that point directly to the target *file* rather than the target
+*directory*. In fact, this setting **must be** `false` if [site_url](#site_url)
+is set to an emtpy string.
 
 **default**: `true`
 
