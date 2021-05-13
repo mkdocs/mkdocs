@@ -288,8 +288,9 @@ class BuildTests(unittest.TestCase):
                 _, output = do_request(server, "GET /missing")
 
             self.assertEqual(output, "[404]")
-            self.assertEqual(
-                cm.output, ['WARNING:mkdocs.livereload:"GET /missing HTTP/1.1" code 404']
+            self.assertRegex(
+                "\n".join(cm.output),
+                r'^WARNING:mkdocs.livereload:.*"GET /missing HTTP/1.1" code 404',
             )
 
     @tempdir()

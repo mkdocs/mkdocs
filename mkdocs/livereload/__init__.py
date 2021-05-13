@@ -14,7 +14,11 @@ import wsgiref.simple_server
 import watchdog.events
 import watchdog.observers
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
+
+
+def log(level, msg, *args):
+    logger.log(level, time.strftime("[%H:%M:%S] ") + msg, *args)
 
 
 class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGIServer):
@@ -90,7 +94,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
     def serve(self):
         self.observer.start()
 
-        log.info(f"Serving on {self.url}")
+        log(logging.INFO, f"Serving on {self.url}")
         self.serve_thread.start()
 
         self._build_loop()
@@ -101,9 +105,9 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 self._rebuild_cond.wait_for(lambda: self._to_rebuild or self._shutdown)
                 if self._shutdown:
                     break
-                log.info("Detected file changes")
+                log(logging.INFO, "Detected file changes")
                 while self._rebuild_cond.wait(timeout=self.build_delay):
-                    log.debug("Waiting for file changes to stop happening")
+                    log(logging.DEBUG, "Waiting for file changes to stop happening")
 
                 self._wanted_epoch = _timestamp()
                 funcs = list(self._to_rebuild)
@@ -113,7 +117,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 func()
 
             with self._epoch_cond:
-                log.info("Reloading browsers")
+                log(logging.INFO, "Reloading browsers")
                 self._visible_epoch = self._wanted_epoch
                 self._epoch_cond.notify_all()
 
@@ -134,7 +138,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         except Exception:
             code = 500
             msg = "500 Internal Server Error"
-            log.exception(msg)
+            logger.exception(msg)
         else:
             if result is not None:
                 return result
@@ -145,7 +149,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         try:
             error_content = self.error_handler(code)
         except Exception:
-            log.exception(f"Failed to render an error message!")
+            logger.exception(f"Failed to render an error message!")
         if error_content is None:
             error_content = msg.encode()
 
@@ -210,7 +214,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
     @classmethod
     @functools.lru_cache()  # "Cache" to not repeat the same message for the same browser tab.
     def _log_poll_request(cls, url, request_id):
-        log.info(f"Browser connected: {url}")
+        log(logging.INFO, f"Browser connected: {url}")
 
     # MkDocs only ensures a few common types (as seen in livereload_tests.py::test_mime_types).
     # Other uncommon types will not be accepted.
@@ -224,10 +228,10 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
 class _Handler(wsgiref.simple_server.WSGIRequestHandler):
     def log_request(self, code="-", size="-"):
         level = logging.DEBUG if str(code) == "200" else logging.WARNING
-        log.log(level, f'"{self.requestline}" code {code}')
+        log(level, f'"{self.requestline}" code {code}')
 
     def log_message(self, format, *args):
-        log.debug(format, *args)
+        log(logging.DEBUG, format, *args)
 
 
 def _timestamp():
