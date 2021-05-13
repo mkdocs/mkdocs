@@ -60,7 +60,6 @@ setup(
     install_requires=[
         'click>=3.3',
         'Jinja2>=2.10.1',
-        'lunr[languages]==0.5.9',  # must support lunr.js version included in search
         'Markdown>=3.2.1',
         'PyYAML>=3.10',
         'watchdog>=2.0',
