@@ -1,7 +1,7 @@
 import functools
-import http.server
 import io
 import logging
+import mimetypes
 import os
 import os.path
 import re
@@ -192,7 +192,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         else:
             content_length = os.path.getsize(file_path)
 
-        content_type = self.guess_type(file_path)
+        content_type = self._guess_type(file_path)
         start_response(
             "200 OK", [("Content-Type", content_type), ("Content-Length", str(content_length))]
         )
@@ -216,13 +216,18 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
     def _log_poll_request(cls, url, request_id):
         log(logging.INFO, f"Browser connected: {url}")
 
-    # MkDocs only ensures a few common types (as seen in livereload_tests.py::test_mime_types).
-    # Other uncommon types will not be accepted.
-    extensions_map = {
-        ".gz": "application/gzip",
-        ".js": "application/javascript",
-    }
-    guess_type = http.server.SimpleHTTPRequestHandler.guess_type
+    def _guess_type(cls, path):
+        # MkDocs only ensures a few common types (as seen in livereload_tests.py::test_mime_types).
+        # Other uncommon types will not be accepted.
+        if path.endswith((".js", ".JS")):
+            return "application/javascript"
+        if path.endswith(".gz"):
+            return "application/gzip"
+
+        guess, _ = mimetypes.guess_type(path)
+        if guess:
+            return guess
+        return "application/octet-stream"
 
 
 class _Handler(wsgiref.simple_server.WSGIRequestHandler):
