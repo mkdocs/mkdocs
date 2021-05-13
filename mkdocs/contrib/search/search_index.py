@@ -4,9 +4,13 @@ import json
 import logging
 import subprocess
 
-from lunr import lunr
-
 from html.parser import HTMLParser
+
+try:
+    from lunr import lunr
+    haslunrpy = True
+except ImportError:
+    haslunrpy = False
 
 log = logging.getLogger(__name__)
 
@@ -121,11 +125,19 @@ class SearchIndex:
             except (OSError, ValueError) as e:
                 log.warning(f'Failed to pre-build search index. Error: {e}')
         elif self.config['prebuild_index'] == 'python':
-            idx = lunr(
-                ref='location', fields=('title', 'text'), documents=self._entries,
-                languages=self.config['lang'])
-            page_dicts['index'] = idx.serialize()
-            data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
+            if haslunrpy:
+                idx = lunr(
+                    ref='location', fields=('title', 'text'), documents=self._entries,
+                    languages=self.config['lang'])
+                page_dicts['index'] = idx.serialize()
+                data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
+            else:
+                log.warning(
+                    "Failed to pre-build search index. The 'python' method was specified; "
+                    "however, the 'lunr.py' library does not appear to be installed. Try "
+                    "installing it with 'pip install lunr'. If you are using any language "
+                    "other than English you will also need to install 'lunr[languages]'."
+                )
 
         return data
 
