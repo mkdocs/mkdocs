@@ -22,7 +22,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
     poll_response_timeout = 60
 
     def __init__(
-        self, builder, host, port, root=".", build_delay=0.1, shutdown_delay=0.25, **kwargs
+        self, builder, host, port, root=".", build_delay=0.25, shutdown_delay=0.25, **kwargs
     ):
         self.builder = builder
         self.server_name = host
