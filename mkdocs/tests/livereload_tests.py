@@ -56,15 +56,12 @@ SCRIPT_REGEX = (
 
 
 class BuildTests(unittest.TestCase):
-    @tempdir({"index.html": "<body>aaa</body>", "foo/index.html": "<body>bbb</body>"})
-    def test_serves_index(self, site_dir):
+    @tempdir({"test.css": "div { color: red; }"})
+    def test_serves_normal_file(self, site_dir):
         with testing_server(site_dir) as server:
-            headers, output = do_request(server, "GET /")
-            self.assertRegex(output, "^<body>aaa<")
-            self.assertEqual(headers["content-type"], "text/html")
-
-            _, output = do_request(server, "GET /foo/")
-            self.assertRegex(output, "^<body>bbb<")
+            headers, output = do_request(server, "GET /test.css")
+            self.assertEqual(output, "div { color: red; }")
+            self.assertEqual(int(headers["content-length"]), len(output))
 
     @tempdir({"foo.docs": "a"})
     @tempdir({"foo.site": "original"})
@@ -221,15 +218,28 @@ class BuildTests(unittest.TestCase):
             headers, output = do_request(server, "GET /normal.html")
             self.assertRegex(output, fr"^<html><body>hello{SCRIPT_REGEX}</body></html>$")
             self.assertEqual(headers["content-type"], "text/html")
+            self.assertEqual(int(headers["content-length"]), len(output))
 
             _, output = do_request(server, "GET /no_body.html")
             self.assertRegex(output, fr"^<p>hi{SCRIPT_REGEX}$")
 
-            _, output = do_request(server, "GET /empty.html")
+            headers, output = do_request(server, "GET /empty.html")
             self.assertRegex(output, fr"^{SCRIPT_REGEX}$")
+            self.assertEqual(int(headers["content-length"]), len(output))
 
             _, output = do_request(server, "GET /multi_body.html")
             self.assertRegex(output, fr"^<body>foo</body><body>bar{SCRIPT_REGEX}</body>$")
+
+    @tempdir({"index.html": "<body>aaa</body>", "foo/index.html": "<body>bbb</body>"})
+    def test_serves_modified_index(self, site_dir):
+        with testing_server(site_dir) as server:
+            headers, output = do_request(server, "GET /")
+            self.assertRegex(output, "^<body>aaa{SCRIPT_REGEX}</body>$")
+            self.assertEqual(headers["content-type"], "text/html")
+            self.assertEqual(int(headers["content-length"]), len(output))
+
+            _, output = do_request(server, "GET /foo/")
+            self.assertRegex(output, "^<body>bbb{SCRIPT_REGEX}</body>$")
 
     @tempdir()
     def test_serves_js(self, site_dir):

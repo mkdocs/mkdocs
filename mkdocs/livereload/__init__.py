@@ -1,7 +1,6 @@
 import sys
 import functools
 import http.server
-import io
 import logging
 import os
 import os.path
@@ -151,33 +150,22 @@ class LiveReloadRequestHandler(http.server.SimpleHTTPRequestHandler):
 
         return super().translate_path(path)
 
-    def send_head(self):
-        epoch = self.server._visible_epoch
-
-        file = super().send_head()
-        if file and getattr(file, "name", "").endswith(".html"):
-            try:
-                content = file.read()
-            finally:
-                file.close()
-            try:
-                body_end = content.rindex(b"</body>")
-            except ValueError:
-                body_end = len(content)
-            # The page will reload if the livereload poller returns a newer epoch than what it knows.
-            # The other timestamp becomes just a unique identifier for the initiating page.
-            file = io.BytesIO(
-                b'%b<script src="/js/livereload.js"></script><script>livereload(%d, %d);</script>%b'
-                % (content[:body_end], epoch, _timestamp(), content[body_end:])
-            )
-        return file
-
     def do_GET(self):
         m = re.fullmatch(r"/livereload/([0-9]+)/([0-9]+)", self.path)
         if m:
             return self._do_poll_response(epoch=int(m[1]), request_id=int(m[2]))
-
         self.server.wait_for_build()  # Otherwise we may be looking at a half-built site.
+
+        file_path = self.translate_path(self.path)
+        if file_path.endswith(".html"):
+            try:
+                with open(file_path, "rb") as f:
+                    content = f.read()
+            except OSError:
+                pass
+            else:
+                return self._do_modified_response(content)
+
         try:
             return super().do_GET()
         except BrokenPipeError:  # The client disconnected before reading the response.
@@ -192,6 +180,23 @@ class LiveReloadRequestHandler(http.server.SimpleHTTPRequestHandler):
         # If there's not, respond anyway after a minute.
         epoch = self.server.wait_for_epoch(epoch, timeout=self.server.poll_response_timeout)
         self.wfile.write(b"%d" % epoch)
+
+    def _do_modified_response(self, content):
+        try:
+            body_end = content.rindex(b"</body>")
+        except ValueError:
+            body_end = len(content)
+        # The page will reload if the livereload poller returns a newer epoch than what it knows.
+        # The other timestamp becomes just a unique identifier for the initiating page.
+        content = (
+            b'%b<script src="/js/livereload.js"></script><script>livereload(%d, %d);</script>%b'
+            % (content[:body_end], self.server._visible_epoch, _timestamp(), content[body_end:])
+        )
+        self.send_response(http.HTTPStatus.OK)
+        self.send_header("Content-type", "text/html")
+        self.send_header("Content-Length", str(len(content)))
+        self.end_headers()
+        self.wfile.write(content)
 
     @classmethod
     @functools.lru_cache()  # "Cache" to not repeat the same message for the same browser tab.
