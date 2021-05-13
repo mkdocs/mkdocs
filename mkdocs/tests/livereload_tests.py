@@ -33,6 +33,7 @@ def testing_server(root, builder=lambda: None):
         server = LiveReloadServer(
             builder, host="localhost", port=0, root=root, bind_and_activate=False
         )
+        server.setup_environ()
     server.observer.start()
     thread = threading.Thread(target=server._build_loop, daemon=True)
     thread.start()
@@ -61,7 +62,7 @@ class BuildTests(unittest.TestCase):
         with testing_server(site_dir) as server:
             headers, output = do_request(server, "GET /test.css")
             self.assertEqual(output, "div { color: red; }")
-            self.assertEqual(int(headers["content-length"]), len(output))
+            self.assertEqual(headers.get("content-length"), str(len(output)))
 
     @tempdir({"foo.docs": "a"})
     @tempdir({"foo.site": "original"})
@@ -217,15 +218,15 @@ class BuildTests(unittest.TestCase):
         with testing_server(site_dir) as server:
             headers, output = do_request(server, "GET /normal.html")
             self.assertRegex(output, fr"^<html><body>hello{SCRIPT_REGEX}</body></html>$")
-            self.assertEqual(headers["content-type"], "text/html")
-            self.assertEqual(int(headers["content-length"]), len(output))
+            self.assertEqual(headers.get("content-type"), "text/html")
+            self.assertEqual(headers.get("content-length"), str(len(output)))
 
             _, output = do_request(server, "GET /no_body.html")
             self.assertRegex(output, fr"^<p>hi{SCRIPT_REGEX}$")
 
             headers, output = do_request(server, "GET /empty.html")
             self.assertRegex(output, fr"^{SCRIPT_REGEX}$")
-            self.assertEqual(int(headers["content-length"]), len(output))
+            self.assertEqual(headers.get("content-length"), str(len(output)))
 
             _, output = do_request(server, "GET /multi_body.html")
             self.assertRegex(output, fr"^<body>foo</body><body>bar{SCRIPT_REGEX}</body>$")
@@ -234,19 +235,19 @@ class BuildTests(unittest.TestCase):
     def test_serves_modified_index(self, site_dir):
         with testing_server(site_dir) as server:
             headers, output = do_request(server, "GET /")
-            self.assertRegex(output, "^<body>aaa{SCRIPT_REGEX}</body>$")
-            self.assertEqual(headers["content-type"], "text/html")
-            self.assertEqual(int(headers["content-length"]), len(output))
+            self.assertRegex(output, fr"^<body>aaa{SCRIPT_REGEX}</body>$")
+            self.assertEqual(headers.get("content-type"), "text/html")
+            self.assertEqual(headers.get("content-length"), str(len(output)))
 
             _, output = do_request(server, "GET /foo/")
-            self.assertRegex(output, "^<body>bbb{SCRIPT_REGEX}</body>$")
+            self.assertRegex(output, fr"^<body>bbb{SCRIPT_REGEX}</body>$")
 
     @tempdir()
     def test_serves_js(self, site_dir):
         with testing_server(site_dir) as server:
             headers, output = do_request(server, "GET /js/livereload.js")
             self.assertIn("function livereload", output)
-            self.assertEqual(headers["content-type"], "application/javascript")
+            self.assertEqual(headers.get("content-type"), "application/javascript")
 
     @tempdir()
     def test_serves_polling_instantly(self, site_dir):
@@ -316,16 +317,16 @@ class BuildTests(unittest.TestCase):
     def test_mime_types(self, site_dir):
         with testing_server(site_dir) as server:
             headers, _ = do_request(server, "GET /test.html")
-            self.assertEqual(headers["content-type"], "text/html")
+            self.assertEqual(headers.get("content-type"), "text/html")
 
             headers, _ = do_request(server, "GET /test.xml")
-            self.assertIn(headers["content-type"], ["text/xml", "application/xml"])
+            self.assertIn(headers.get("content-type"), ["text/xml", "application/xml"])
 
             headers, _ = do_request(server, "GET /test.css")
-            self.assertEqual(headers["content-type"], "text/css")
+            self.assertEqual(headers.get("content-type"), "text/css")
 
             headers, _ = do_request(server, "GET /test.js")
-            self.assertEqual(headers["content-type"], "application/javascript")
+            self.assertEqual(headers.get("content-type"), "application/javascript")
 
             headers, _ = do_request(server, "GET /test.json")
-            self.assertEqual(headers["content-type"], "application/json")
+            self.assertEqual(headers.get("content-type"), "application/json")
