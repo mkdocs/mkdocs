@@ -54,17 +54,6 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         self.serve_thread = threading.Thread(target=lambda: self.serve_forever(shutdown_delay))
         self.observer = watchdog.observers.Observer(timeout=shutdown_delay)
 
-    def wait_for_build(self):
-        """Wait until the ongoing rebuild (if any) finishes."""
-        with self._epoch_cond:
-            self._epoch_cond.wait_for(lambda: self._visible_epoch == self._wanted_epoch)
-
-    def wait_for_epoch(self, epoch, timeout):
-        """Wait until the site's version is newer than this (or timeout). Return the actual version"""
-        with self._epoch_cond:
-            self._epoch_cond.wait_for(lambda: self._visible_epoch > epoch, timeout=timeout)
-            return self._visible_epoch
-
     def watch(self, path, func=None, recursive=True):
         """Add the 'path' to watched paths, call the function and reload when any file changes under it."""
         path = os.path.abspath(path)
@@ -173,12 +162,18 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         m = re.fullmatch(r"/livereload/([0-9]+)/[0-9]+", path)
         if m:
             epoch = int(m[1])
-            self._log_poll_request(environ.get("HTTP_REFERER"), request_id=path)
             start_response("200 OK", [("Content-Type", "text/plain")])
-            # Stall the browser, respond as soon as there's something new.
-            # If there's not, respond anyway after a minute.
-            epoch = self.wait_for_epoch(epoch, timeout=self.poll_response_timeout)
-            return [b"%d" % epoch]
+
+            def condition():
+                return self._visible_epoch > epoch
+
+            with self._epoch_cond:
+                if not condition():
+                    # Stall the browser, respond as soon as there's something new.
+                    # If there's not, respond anyway after a minute.
+                    self._log_poll_request(environ.get("HTTP_REFERER"), request_id=path)
+                    self._epoch_cond.wait_for(condition, timeout=self.poll_response_timeout)
+                return [b"%d" % self._visible_epoch]
 
         if path == "/js/livereload.js":
             file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "livereload.js")
@@ -187,8 +182,11 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 path += "index.html"
             file_path = os.path.join(self.root, path.lstrip("/"))
 
-        self.wait_for_build()  # Otherwise we may be looking at a half-built site.
-        epoch = self._visible_epoch
+        # Wait until the ongoing rebuild (if any) finishes, so we're not serving a half-built site.
+        with self._epoch_cond:
+            self._epoch_cond.wait_for(lambda: self._visible_epoch == self._wanted_epoch)
+            epoch = self._visible_epoch
+
         try:
             file = open(file_path, "rb")
         except OSError:
