@@ -78,6 +78,8 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
             )
 
         def callback(event):
+            if event.is_directory:
+                return
             # Text editors always cause a "file close" event in addition to "modified" when saving
             # a file. Some editors also have "swap" functionality that keeps writing into another
             # file that's never closed. Prevent such write events from causing a rebuild.
@@ -85,6 +87,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 # But FileClosedEvent is implemented only on Linux, otherwise we mustn't skip this:
                 if type(self.observer).__name__ == "InotifyObserver":
                     return
+            log.debug(str(event))
             with self._rebuild_cond:
                 self._to_rebuild[func] = True
                 self._rebuild_cond.notify_all()
