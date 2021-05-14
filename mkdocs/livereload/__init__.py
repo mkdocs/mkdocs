@@ -36,6 +36,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         self.url = f"http://{host}:{port}/"
         self.root = os.path.abspath(root)
         self.build_delay = build_delay
+        self.shutdown_delay = shutdown_delay
         # To allow custom error pages.
         self.error_handler = lambda code: None
 
@@ -107,7 +108,12 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
     def _build_loop(self):
         while True:
             with self._rebuild_cond:
-                self._rebuild_cond.wait_for(lambda: self._to_rebuild or self._shutdown)
+                while not self._rebuild_cond.wait_for(
+                    lambda: self._to_rebuild or self._shutdown, timeout=self.shutdown_delay
+                ):
+                    # We could have used just one wait instead of a loop + timeout, but we need
+                    # occasional breaks, otherwise on Windows we can't receive KeyboardInterrupt.
+                    pass
                 if self._shutdown:
                     break
                 log.info("Detected file changes")
