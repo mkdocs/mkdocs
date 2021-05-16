@@ -12,6 +12,7 @@ import shutil
 import re
 import yaml
 import fnmatch
+import pathlib
 import posixpath
 import functools
 import importlib_metadata
@@ -250,6 +251,11 @@ def is_error_template(path):
     return bool(_ERROR_TEMPLATE_RE.match(path))
 
 
+@functools.lru_cache(maxsize=None)
+def _norm_parts(path):
+    return pathlib.PosixPath('/' + path).resolve().parts[1:]
+
+
 def get_relative_url(url, other):
     """
     Return given url relative to other.
@@ -260,11 +266,21 @@ def get_relative_url(url, other):
     Paths are normalized ('..' works as parent directory), but going higher than the
     root has no effect ('foo/../../bar' ends up just as 'bar').
     """
-    if other != '.':
-        # Remove filename from other url if it has one.
-        parts = posixpath.split(other)
-        other = parts[0] if '.' in parts[1] else other
-    relurl = posixpath.relpath('/' + url, '/' + other)
+    # Remove filename from other url if it has one.
+    dirname, _, basename = other.rpartition('/')
+    if '.' in basename:
+        other = dirname
+
+    other_parts = _norm_parts(other)
+    dest_parts = _norm_parts(url)
+    common = 0
+    for a, b in zip(other_parts, dest_parts):
+        if a != b:
+            break
+        common += 1
+
+    rel_parts = ('..',) * (len(other_parts) - common) + dest_parts[common:]
+    relurl = '/'.join(rel_parts) or '.'
     return relurl + '/' if url.endswith('/') else relurl
 
 
@@ -274,8 +290,8 @@ def normalize_url(path, page=None, base=''):
     if is_abs:
         return path
     if page is not None:
-        base = page.url
-    return _get_rel_path(path, base, page is not None)
+        return get_relative_url(path, page.url)
+    return posixpath.join(base, path)
 
 
 @functools.lru_cache(maxsize=None)
@@ -286,14 +302,6 @@ def _get_norm_url(path):
     if parsed.scheme or parsed.netloc or path.startswith(('/', '#')):
         return path, True
     return path, False
-
-
-@functools.lru_cache()
-def _get_rel_path(path, base, base_is_url):
-    if base_is_url:
-        return get_relative_url(path, base)
-    else:
-        return posixpath.join(base, path)
 
 
 def create_media_urls(path_list, page=None, base=''):
