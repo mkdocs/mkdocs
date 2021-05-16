@@ -12,7 +12,6 @@ import shutil
 import re
 import yaml
 import fnmatch
-import pathlib
 import posixpath
 import functools
 import importlib_metadata
@@ -253,7 +252,10 @@ def is_error_template(path):
 
 @functools.lru_cache(maxsize=None)
 def _norm_parts(path):
-    return pathlib.PosixPath('/' + path).resolve().parts[1:]
+    if not path.startswith('/'):
+        path = '/' + path
+    path = posixpath.normpath(path)[1:]
+    return path.split('/') if path else []
 
 
 def get_relative_url(url, other):
@@ -279,7 +281,7 @@ def get_relative_url(url, other):
             break
         common += 1
 
-    rel_parts = ('..',) * (len(other_parts) - common) + dest_parts[common:]
+    rel_parts = ['..'] * (len(other_parts) - common) + dest_parts[common:]
     relurl = '/'.join(rel_parts) or '.'
     return relurl + '/' if url.endswith('/') else relurl
 
