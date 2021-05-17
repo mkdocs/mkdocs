@@ -1,7 +1,7 @@
 import os
 from collections import namedtuple
 from collections.abc import Sequence
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlunparse
 import ipaddress
 import markdown
 
@@ -76,7 +76,7 @@ class ConfigItems(BaseConfigOption):
         self.required = kwargs.get('required', False)
 
     def __repr__(self):
-        return '{}: {}'.format(self.__class__.__name__, self.item_config)
+        return f'{self.__class__.__name__}: {self.item_config}'
 
     def run_validation(self, value):
         if value is None:
@@ -86,8 +86,8 @@ class ConfigItems(BaseConfigOption):
                 return ()
 
         if not isinstance(value, Sequence):
-            raise ValidationError('Expected a sequence of mappings, but a %s '
-                                  'was given.' % type(value))
+            raise ValidationError(f'Expected a sequence of mappings, but a '
+                                  f'{type(value)} was given.')
 
         return [self.item_config.validate(item) for item in value]
 
@@ -145,8 +145,7 @@ class Type(OptionallyRequired):
     def run_validation(self, value):
 
         if not isinstance(value, self._type):
-            msg = ("Expected type: {} but received: {}"
-                   .format(self._type, type(value)))
+            msg = f"Expected type: {self._type} but received: {type(value)}"
         elif self.length is not None and len(value) != self.length:
             msg = ("Expected type: {0} with length {2} but received: {1} with "
                    "length {3}").format(self._type, value, self.length,
@@ -172,14 +171,13 @@ class Choice(OptionallyRequired):
             length = 0
 
         if not length or isinstance(choices, str):
-            raise ValueError('Expected iterable of choices, got {}', choices)
+            raise ValueError(f'Expected iterable of choices, got {choices}')
 
         self.choices = choices
 
     def run_validation(self, value):
         if value not in self.choices:
-            msg = ("Expected one of: {} but received: {}"
-                   .format(self.choices, value))
+            msg = f"Expected one of: {self.choices} but received: {value}"
         else:
             return value
 
@@ -190,7 +188,7 @@ class Deprecated(BaseConfigOption):
     """
     Deprecated Config Option
 
-    Raises a warning the the option is deprecated. Uses `message` for the
+    Raises a warning as the option is deprecated. Uses `message` for the
     warning. If `move_to` is set to the name of a new config option, the value
     is moved to the new option on pre_validation. If `option_type` is set to a
     ConfigOption instance, then the value is validated against that type.
@@ -264,11 +262,11 @@ class IpAddress(OptionallyRequired):
         try:
             port = int(port)
         except Exception:
-            raise ValidationError("'{}' is not a valid port".format(port))
+            raise ValidationError(f"'{port}' is not a valid port")
 
         class Address(namedtuple('Address', 'host port')):
             def __str__(self):
-                return '{}:{}'.format(self.host, self.port)
+                return f'{self.host}:{self.port}'
 
         return Address(host, port)
 
@@ -290,8 +288,18 @@ class URL(OptionallyRequired):
     Validate a URL by requiring a scheme is present.
     """
 
-    def __init__(self, default='', required=False):
+    def __init__(self, default='', required=False, is_dir=False):
+        self.is_dir = is_dir
         super().__init__(default, required)
+
+    def pre_validation(self, config, key_name):
+        # TODO: replace this with an error in a future release (1.3?)
+        user_defined_keys = sum([list(x.keys()) for x in config.user_configs], [])
+        if key_name == 'site_url' and key_name not in user_defined_keys:
+            self.warnings.append(
+                'This option is now required. Set to a valid URL or '
+                'an empty string to avoid an error in a future release.'
+            )
 
     def run_validation(self, value):
         if value == '':
@@ -303,10 +311,22 @@ class URL(OptionallyRequired):
             raise ValidationError("Unable to parse the URL.")
 
         if parsed_url.scheme:
-            return value
+            if self.is_dir and not parsed_url.path.endswith('/'):
+                parsed_url = parsed_url._replace(path=f'{parsed_url.path}/')
+            return urlunparse(parsed_url)
 
         raise ValidationError(
             "The URL isn't valid, it should include the http:// (scheme)")
+
+    def post_validation(self, config, key_name):
+        if key_name == 'site_url':
+            if config[key_name] in ['', None] and config['use_directory_urls']:
+                config['use_directory_urls'] = False
+                self.warnings.append(
+                    "The 'use_directory_urls' option has been disabled because "
+                    "'site_url' contains an empty value. Either define a valid "
+                    "URL for 'site_url' or set 'use_directory_urls' to False."
+                )
 
 
 class RepoURL(URL):
@@ -369,8 +389,7 @@ class FilesystemObject(Type):
         if self.config_dir and not os.path.isabs(value):
             value = os.path.join(self.config_dir, value)
         if self.exists and not self.existence_test(value):
-            raise ValidationError("The path {path} isn't an existing {name}.".
-                                  format(path=value, name=self.name))
+            raise ValidationError(f"The path {value} isn't an existing {self.name}.")
         value = os.path.abspath(value)
         assert isinstance(value, str)
         return value
@@ -463,13 +482,13 @@ class Theme(BaseConfigOption):
                     return value
 
                 raise ValidationError(
-                    "Unrecognised theme name: '{}'. The available installed themes "
-                    "are: {}".format(value['name'], ', '.join(themes))
+                    f"Unrecognised theme name: '{value['name']}'. "
+                    f"The available installed themes are: {', '.join(themes)}"
                 )
 
             raise ValidationError("No theme name set.")
 
-        raise ValidationError('Invalid type "{}". Expected a string or key/value pairs.'.format(type(value)))
+        raise ValidationError(f'Invalid type "{type(value)}". Expected a string or key/value pairs.')
 
     def post_validation(self, config, key_name):
         theme_config = config[key_name]
@@ -485,6 +504,9 @@ class Theme(BaseConfigOption):
         if 'custom_dir' in theme_config and not os.path.isdir(theme_config['custom_dir']):
             raise ValidationError("The path set in {name}.custom_dir ('{path}') does not exist.".
                                   format(path=theme_config['custom_dir'], name=key_name))
+
+        if 'locale' in theme_config and not isinstance(theme_config['locale'], str):
+            raise ValidationError("'{name}.locale' must be a string.".format(name=theme_config['name']))
 
         config[key_name] = theme.Theme(**theme_config)
 
@@ -503,8 +525,7 @@ class Nav(OptionallyRequired):
     def run_validation(self, value):
 
         if not isinstance(value, list):
-            raise ValidationError(
-                "Expected a list, got {}".format(type(value)))
+            raise ValidationError(f"Expected a list, got {type(value)}")
 
         if len(value) == 0:
             return
@@ -568,8 +589,7 @@ class MarkdownExtensions(OptionallyRequired):
                 if cfg is None:
                     continue
                 if not isinstance(cfg, dict):
-                    raise ValidationError('Invalid config options for Markdown '
-                                          "Extension '{}'.".format(ext))
+                    raise ValidationError(f"Invalid config options for Markdown Extension '{ext}'.")
                 self.configdata[ext] = cfg
             elif isinstance(item, str):
                 extensions.append(item)
@@ -617,8 +637,7 @@ class Plugins(OptionallyRequired):
                 name, cfg = item.popitem()
                 cfg = cfg or {}  # Users may define a null (None) config
                 if not isinstance(cfg, dict):
-                    raise ValidationError('Invalid config options for '
-                                          'the "{}" plugin.'.format(name))
+                    raise ValidationError(f'Invalid config options for the "{name}" plugin.')
                 item = name
             else:
                 cfg = {}
@@ -632,7 +651,7 @@ class Plugins(OptionallyRequired):
 
     def load_plugin(self, name, config):
         if name not in self.installed_plugins:
-            raise ValidationError('The "{}" plugin is not installed'.format(name))
+            raise ValidationError(f'The "{name}" plugin is not installed')
 
         Plugin = self.installed_plugins[name].load()
 
@@ -645,7 +664,7 @@ class Plugins(OptionallyRequired):
         errors, warnings = plugin.load_config(config, self.config_file_path)
         self.warnings.extend(warnings)
         errors_message = '\n'.join(
-            "Plugin value: '{}'. Error: {}".format(x, y)
+            f"Plugin '{name}' value: '{x}'. Error: {y}"
             for x, y in errors
         )
         if errors_message:

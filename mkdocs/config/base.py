@@ -67,7 +67,7 @@ class Config(UserDict):
 
         for key in (set(self.keys()) - self._schema_keys):
             warnings.append((
-                key, "Unrecognised configuration name: {}".format(key)
+                key, f"Unrecognised configuration name: {key}"
             ))
 
         return failed, warnings
@@ -135,7 +135,7 @@ class Config(UserDict):
         except YAMLError as e:
             # MkDocs knows and understands ConfigurationErrors
             raise exceptions.ConfigurationError(
-                "MkDocs encountered as error parsing the configuration file: {}".format(e)
+                f"MkDocs encountered an error parsing the configuration file: {e}"
             )
 
 
@@ -149,7 +149,7 @@ def _open_config_file(config_file):
     if hasattr(config_file, 'closed') and config_file.closed:
         config_file = config_file.name
 
-    log.debug("Loading configuration file: {}".format(config_file))
+    log.debug(f"Loading configuration file: {config_file}")
 
     # If it is a string, we can assume it is a path and attempt to open it.
     if isinstance(config_file, str):
@@ -157,7 +157,7 @@ def _open_config_file(config_file):
             config_file = open(config_file, 'rb')
         else:
             raise exceptions.ConfigurationError(
-                "Config file '{}' does not exist.".format(config_file))
+                f"Config file '{config_file}' does not exist.")
 
     # Ensure file descriptor is at begining
     config_file.seek(0)
@@ -187,8 +187,8 @@ def load_config(config_file=None, **kwargs):
     options['config_file_path'] = getattr(config_file, 'name', '')
 
     # Initialise the config with the default schema .
-    from mkdocs import config
-    cfg = Config(schema=config.DEFAULT_SCHEMA, config_file_path=options['config_file_path'])
+    from mkdocs.config.defaults import get_schema
+    cfg = Config(schema=get_schema(), config_file_path=options['config_file_path'])
     # First load the config file
     cfg.load_file(config_file)
     # Then load the options to overwrite anything in the config.
@@ -197,20 +197,20 @@ def load_config(config_file=None, **kwargs):
     errors, warnings = cfg.validate()
 
     for config_name, warning in warnings:
-        log.warning("Config value: '%s'. Warning: %s", config_name, warning)
+        log.warning(f"Config value: '{config_name}'. Warning: {warning}")
 
     for config_name, error in errors:
-        log.error("Config value: '%s'. Error: %s", config_name, error)
+        log.error(f"Config value: '{config_name}'. Error: {error}")
 
     for key, value in cfg.items():
-        log.debug("Config value: '%s' = %r", key, value)
+        log.debug(f"Config value: '{key}' = {value!r}")
 
     if len(errors) > 0:
-        raise exceptions.ConfigurationError(
+        raise exceptions.Abort(
             "Aborted with {} Configuration Errors!".format(len(errors))
         )
     elif cfg['strict'] and len(warnings) > 0:
-        raise exceptions.ConfigurationError(
+        raise exceptions.Abort(
             "Aborted with {} Configuration Warnings in 'strict' mode!".format(len(warnings))
         )
 

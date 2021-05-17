@@ -12,6 +12,43 @@ project directory named `mkdocs.yml`.
 As a minimum, this configuration file must contain the `site_name` setting. All
 other settings are optional.
 
+### Environment Variables
+
+In most cases, the value of a configuration option is set directly in the
+configuration file. However, as an option, the value of a configuration option
+may be set to the value of an environment variable using the `!ENV` tag. For
+example, to set the value of the `site_name` option to the value of the
+variable `SITE_NAME` the YAML file may contain the following:
+
+```yaml
+site_name: !ENV SITE_NAME
+```
+
+If the environment variable is not defined, then the configuration setting
+would be assigned a `null` (or `None` in Python) value. A default value can be
+defined as the last value in a list. Like this:
+
+```yaml
+site_name: !ENV [SITE_NAME, 'My default site name']
+```
+
+Multiple fallback variables can be used as well. Note that the last value is
+not an environment variable, but must be a value to use as a default if none
+of the specified environment variables are defined.
+
+```yaml
+site_name: !ENV [SITE_NAME, OTHER_NAME, 'My default site name']
+```
+
+Simple types defined within an environment variable such as string, bool,
+integer, float, datestamp and null are parsed as if they were defined directly
+in the YAML file, which means that the value will be converted to the
+appropriate type. However, complex types such as lists and key/value pairs
+cannot be defined within a single environment variable.
+
+For more details, see the [pyyaml_env_tag](https://github.com/waylan/pyyaml-env-tag)
+project.
+
 ## Project information
 
 ### site_name
@@ -28,10 +65,16 @@ variable.
 
 ### site_url
 
-Set the canonical URL of the site. This will add a link tag with the canonical
-URL to the generated HTML header.
+Set the canonical URL of the site. This is a **required setting**.  If the
+'root' of the MkDocs site will be within a subdirectory of a domain, be sure to
+include that subdirectory in the setting (`https://example.com/foo/`). If the
+domain is yet to be determined, you may use a placeholder domain, which will
+need to be updated prior to deployment.
 
-**default**: `null`
+If the built site will not be behind a server, then you may set the value to an
+empty string (`''`). When set to an empty string, some features of MkDocs may
+act differently. For example, the [use_directory_urls](#use_direcotry_urls)
+setting must be set to `false`.
 
 ### repo_url
 
@@ -216,13 +259,14 @@ Sets the theme and theme specific configuration of your documentation site.
 May be either a string or a set of key/value pairs.
 
 If a string, it must be the string name of a known installed theme. For a list
-of available themes visit [styling your docs].
+of available themes visit [Choosing Your Theme].
 
 An example set of key/value pairs might look something like this:
 
 ```yaml
 theme:
     name: mkdocs
+    locale: en
     custom_dir: my_theme_customizations/
     static_templates:
         - sitemap.html
@@ -236,7 +280,12 @@ If a set of key/value pairs, the following nested keys can be defined:
     #### name:
 
     The string name of a known installed theme. For a list of available themes
-    visit [styling your docs].
+    visit [Choosing Your Theme].
+
+    #### locale:
+
+    A code representing the language of your site. See [Localizing your theme]
+    for details.
 
     #### custom_dir:
 
@@ -245,11 +294,11 @@ If a set of key/value pairs, the following nested keys can be defined:
     your configuration file or it can be an absolute directory path from the
     root of your local file system.
 
-    See [styling your docs][theme_dir] for details if you would like to tweak an
+    See [Customizing Your Theme][theme_dir] for details if you would like to tweak an
     existing theme.
 
-    See [custom themes] if you would like to build your own theme from the
-    ground up.
+    See the [Theme Developer Guide] if you would like to build your own theme
+    from the ground up.
 
     #### static_templates:
 
@@ -358,10 +407,11 @@ about/license.md | /about/license/           | /about/license.html
 The default style of `use_directory_urls: true` creates more user friendly URLs,
 and is usually what you'll want to use.
 
-The alternate style can occasionally be useful if you want your documentation to
-remain properly linked when opening pages directly from the file system, because
-it creates links that point directly to the target *file* rather than the target
-*directory*.
+The alternate style can be useful if you want your documentation to remain
+properly linked when opening pages directly from the file system, because it
+creates links that point directly to the target *file* rather than the target
+*directory*. In fact, this setting **must be** `false` if [site_url](#site_url)
+is set to an emtpy string.
 
 **default**: `true`
 
@@ -549,27 +599,21 @@ You may [contribute additional languages].
     Lunr Languages does not currently include support for Chinese or other Asian
     languages. However, some users have reported decent results using Japanese.
 
-**default**: `['en']`
+**default**: The value of `theme.locale` if set, otherwise `[en]`.
 
 ##### **prebuild_index**
 
 Optionally generates a pre-built index of all pages, which provides some
-performance improvements for larger sites. Before enabling, check that the
+performance improvements for larger sites. Before enabling, confirm that the
 theme you are using explicitly supports using a prebuilt index (the builtin
-themes do).
+themes do). Set to `true` to enable.
 
-There are two options for prebuilding the index:
+!!! warning
 
-Using [Node.js] setting `prebuild_index` to `True` or `node`. This option
-requires that Node.js be installed and the command `node` be on the system
-path. If this feature is enabled and fails for any reason, a warning is issued.
-You may use the `--strict` flag when building to cause such a failure to raise
-an error instead.
-
-Using [Lunr.py] setting `prebuild_index` to `python`. Lunr.py is installed
-as part of mkdocs and guarantees compatibility with Lunr.js even on languages
-other than English. If you find substantial inconsistencies or problems please
-report it on [Lunr.py's issues] and fall back to the Node.js version.
+    This option requires that [Node.js] be installed and the command `node` be
+    on the system path. If the call to `node` fails for any reason, a warning
+    is issued and the build continues uninterupted. You may use the `--strict`
+    flag when building to cause such a failure to raise an error instead.
 
 !!! Note
 
@@ -581,18 +625,43 @@ report it on [Lunr.py's issues] and fall back to the Node.js version.
 
 **default**: `False`
 
-[custom themes]: custom-themes.md
-[variables that are available]: custom-themes.md#template-variables
+[Node.js]: https://nodejs.org/
+
+##### **indexing**
+
+Configures what strategy the search indexer will use when building the index
+for your pages. This property is particularly useful if your project is large
+in scale, and the index takes up an enormous amount of disk space.
+
+```yaml
+plugins:
+    - search:
+        indexing: 'full'
+```
+
+###### Options
+
+|Option|Description|
+|------|-----------|
+|`full`|Indexes the title, section headings, and full text of each page.|
+|`sections`|Indexes the title and section headings of each page.|
+|`titles`|Indexes only the title of each page.|
+
+**default**: `full`
+
+[Theme Developer Guide]: ../dev-guide/themes.md
+[variables that are available]: ../dev-guide/themes.md#template-variables
 [pymdk-extensions]: https://python-markdown.github.io/extensions/
 [pymkd]: https://python-markdown.github.io/
 [smarty]: https://python-markdown.github.io/extensions/smarty/
 [exts]: https://python-markdown.github.io/extensions/
 [3rd]: https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
 [configuring pages and navigation]: writing-your-docs.md#configure-pages-and-navigation
-[theme_dir]: styling-your-docs.md#using-the-theme_dir
-[styling your docs]: styling-your-docs.md
+[theme_dir]: customizing-your-theme.md#using-the-theme_dir
+[choosing your theme]: choosing-your-theme.md
+[Localizing your theme]: localizing-your-theme.md
 [extra_css]: #extra_css
-[Plugins]: plugins.md
+[Plugins]: ../dev-guide/plugins.md
 [lunr.js]: https://lunrjs.com/
 [ISO 639-1]: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 [Lunr Languages]: https://github.com/MihaiValentin/lunr-languages#lunr-languages-----

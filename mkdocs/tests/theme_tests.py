@@ -5,6 +5,7 @@ from unittest import mock
 
 import mkdocs
 from mkdocs.theme import Theme
+from localization import parse_locale
 
 abs_path = os.path.abspath(os.path.dirname(__file__))
 mkdocs_dir = os.path.abspath(os.path.dirname(mkdocs.__file__))
@@ -27,6 +28,7 @@ class ThemeTests(unittest.TestCase):
         )
         self.assertEqual(theme.static_templates, {'404.html', 'sitemap.xml'})
         self.assertEqual(get_vars(theme), {
+            'locale': parse_locale('en'),
             'include_search_page': False,
             'search_index_only': False,
             'analytics': {'gtag': None},

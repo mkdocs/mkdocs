@@ -9,10 +9,9 @@ from markdown.treeprocessors import Treeprocessor
 from markdown.util import AMP_SUBSTITUTE
 
 from mkdocs.structure.toc import get_toc
-from mkdocs.utils import meta, get_build_date, get_markdown_title, warning_filter
+from mkdocs.utils import meta, get_build_date, get_markdown_title
 
 log = logging.getLogger(__name__)
-log.addFilter(warning_filter)
 
 
 class Page:
@@ -44,17 +43,17 @@ class Page:
         self.meta = {}
 
     def __eq__(self, other):
-
-        def sub_dict(d):
-            return {key: value for key, value in d.items() if key in ['title', 'file']}
-
-        return (isinstance(other, self.__class__) and sub_dict(self.__dict__) == sub_dict(other.__dict__))
+        return (
+            isinstance(other, self.__class__) and
+            self.title == other.title and
+            self.file == other.file
+        )
 
     def __ne__(self, other):
         return not self.__eq__(other)
 
     def __repr__(self):
-        title = "'{}'".format(self.title) if (self.title is not None) else '[blank]'
+        title = f"'{self.title}'" if (self.title is not None) else '[blank]'
         return "Page(title={}, url='{}')".format(title, self.abs_url or self.file.url)
 
     def _indent_print(self, depth=0):
@@ -82,7 +81,7 @@ class Page:
 
     @property
     def is_homepage(self):
-        return self.is_top_level and self.is_index and self.file.url == '.'
+        return self.is_top_level and self.is_index and self.file.url in ['.', 'index.html']
 
     @property
     def url(self):
@@ -120,10 +119,10 @@ class Page:
                 with open(self.file.abs_src_path, 'r', encoding='utf-8-sig', errors='strict') as f:
                     source = f.read()
             except OSError:
-                log.error('File not found: {}'.format(self.file.src_path))
+                log.error(f'File not found: {self.file.src_path}')
                 raise
             except ValueError:
-                log.error('Encoding error reading file: {}'.format(self.file.src_path))
+                log.error(f'Encoding error reading file: {self.file.src_path}')
                 raise
 
         self.markdown, self.meta = meta.get_data(source)
@@ -219,8 +218,8 @@ class _RelativePathTreeprocessor(Treeprocessor):
         # Validate that the target exists in files collection.
         if target_path not in self.files:
             log.warning(
-                "Documentation file '{}' contains a link to '{}' which is not found "
-                "in the documentation files.".format(self.file.src_path, target_path)
+                f"Documentation file '{self.file.src_path}' contains a link to "
+                f"'{target_path}' which is not found in the documentation files."
             )
             return url
         target_file = self.files.get_file_from_path(target_path)

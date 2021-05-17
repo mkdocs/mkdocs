@@ -2,10 +2,9 @@ import logging
 from urllib.parse import urlparse
 
 from mkdocs.structure.pages import Page
-from mkdocs.utils import nest_paths, warning_filter
+from mkdocs.utils import nest_paths
 
 log = logging.getLogger(__name__)
-log.addFilter(warning_filter)
 
 
 class Navigation:
@@ -42,7 +41,7 @@ class Section:
         self.is_link = False
 
     def __repr__(self):
-        return "Section(title='{}')".format(self.title)
+        return f"Section(title='{self.title}')"
 
     def _get_active(self):
         """ Return active status of section. """
@@ -83,8 +82,8 @@ class Link:
         self.is_link = True
 
     def __repr__(self):
-        title = "'{}'".format(self.title) if (self.title is not None) else '[blank]'
-        return "Link(title={}, url='{}')".format(title, self.url)
+        title = f"'{self.title}'" if (self.title is not None) else '[blank]'
+        return f"Link(title={title}, url='{self.url}')"
 
     @property
     def ancestors(self):

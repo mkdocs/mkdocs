@@ -1,0 +1,77 @@
+# French translations for MkDocs.
+# Copyright (C) 2021 MkDocs
+# This file is distributed under the same license as the MkDocs project.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MkDocs 1.2\n"
+"Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
+"POT-Creation-Date: 2021-04-08 22:46+0200\n"
+"PO-Revision-Date: 2021-02-23 23:56+0100\n"
+"Last-Translator: Alexys Jacob @ultrabug\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: mkdocs/themes/readthedocs/404.html:7
+msgid "Page not found"
+msgstr "Page non trouvée"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:3
+msgid "Docs"
+msgstr "Documents"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:24
+#, python-format
+msgid "Edit on %(repo_name)s"
+msgstr "Editer dans %(repo_name)s"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:33
+#: mkdocs/themes/readthedocs/footer.html:7
+#: mkdocs/themes/readthedocs/versions.html:14
+msgid "Next"
+msgstr "Suivant"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:36
+#: mkdocs/themes/readthedocs/footer.html:10
+#: mkdocs/themes/readthedocs/versions.html:11
+msgid "Previous"
+msgstr "Précédent"
+
+#: mkdocs/themes/readthedocs/footer.html:25
+#, python-format
+msgid ""
+"Built with %(mkdocs_link)s using a %(sphinx_link)s provided by "
+"%(rtd_link)s."
+msgstr ""
+"Générée avec %(mkdocs_link)s avec un %(sphinx_link)s fourni par "
+"%(rtd_link)s."
+
+#: mkdocs/themes/readthedocs/search.html:5
+msgid "Search Results"
+msgstr "Résultats de la recherche"
+
+#: mkdocs/themes/readthedocs/search.html:9
+msgid "Search the Docs"
+msgstr "Rechercher dans la documentation"
+
+#: mkdocs/themes/readthedocs/search.html:9
+#: mkdocs/themes/readthedocs/searchbox.html:3
+msgid "Type search term here"
+msgstr "Tapez vos mots clés ici"
+
+#: mkdocs/themes/readthedocs/search.html:12
+msgid "No results found"
+msgstr "Aucun résultat trouvé"
+
+#: mkdocs/themes/readthedocs/search.html:13
+msgid "Searching..."
+msgstr "Recherche en cours..."
+
+#: mkdocs/themes/readthedocs/searchbox.html:3
+msgid "Search docs"
+msgstr "Rechercher des documents"
+

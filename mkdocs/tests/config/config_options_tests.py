@@ -6,6 +6,7 @@ from unittest.mock import patch
 import mkdocs
 from mkdocs.config import config_options
 from mkdocs.config.base import Config
+from mkdocs.tests.base import tempdir
 
 
 class OptionallyRequiredTest(unittest.TestCase):
@@ -196,6 +197,10 @@ class IpAddressTest(unittest.TestCase):
         self.assertEqual(value.host, '127.0.0.1')
         self.assertEqual(value.port, 8000)
 
+    @unittest.skipIf(
+        sys.version_info >= (3, 9, 5),
+        "Leading zeros not allowed in IP addresses since Python3.9.5",
+    )
     def test_IP_normalization(self):
         addr = '127.000.000.001:8000'
         option = config_options.IpAddress(default=addr)
@@ -203,6 +208,18 @@ class IpAddressTest(unittest.TestCase):
         self.assertEqual(str(value), '127.0.0.1:8000')
         self.assertEqual(value.host, '127.0.0.1')
         self.assertEqual(value.port, 8000)
+
+    @unittest.skipIf(
+        sys.version_info < (3, 9, 5),
+        "Leading zeros allowed in IP addresses before Python3.9.5",
+    )
+    def test_invalid_leading_zeros(self):
+        addr = '127.000.000.001:8000'
+        option = config_options.IpAddress(default=addr)
+        self.assertRaises(
+            config_options.ValidationError,
+            option.validate, addr
+        )
 
     def test_invalid_address_range(self):
         option = config_options.IpAddress()
@@ -281,6 +298,20 @@ class URLTest(unittest.TestCase):
         option = config_options.URL()
         self.assertRaises(config_options.ValidationError,
                           option.validate, 1)
+
+    def test_url_is_dir(self):
+        url = "https://mkdocs.org/"
+
+        option = config_options.URL(is_dir=True)
+        value = option.validate(url)
+        self.assertEqual(value, url)
+
+    def test_url_transform_to_dir(self):
+        url = "https://mkdocs.org"
+
+        option = config_options.URL(is_dir=True)
+        value = option.validate(url)
+        self.assertEqual(value, f'{url}/')
 
 
 class RepoURLTest(unittest.TestCase):
@@ -625,6 +656,66 @@ class ThemeTest(unittest.TestCase):
         option = config_options.Theme()
         self.assertRaises(config_options.ValidationError,
                           option.validate, config)
+
+    def test_post_validation_none_theme_name_and_missing_custom_dir(self):
+
+        config = {
+            'theme': {
+                'name': None
+            }
+        }
+        option = config_options.Theme()
+        self.assertRaises(config_options.ValidationError,
+                          option.post_validation, config, 'theme')
+
+    @tempdir()
+    def test_post_validation_inexisting_custom_dir(self, abs_base_path):
+
+        config = {
+            'theme': {
+                'name': None,
+                'custom_dir': abs_base_path + '/inexisting_custom_dir',
+            }
+        }
+        option = config_options.Theme()
+        self.assertRaises(config_options.ValidationError,
+                          option.post_validation, config, 'theme')
+
+    def test_post_validation_locale_none(self):
+
+        config = {
+            'theme': {
+                'name': 'mkdocs',
+                'locale': None
+            }
+        }
+        option = config_options.Theme()
+        self.assertRaises(config_options.ValidationError,
+                          option.post_validation, config, 'theme')
+
+    def test_post_validation_locale_invalid_type(self):
+
+        config = {
+            'theme': {
+                'name': 'mkdocs',
+                'locale': 0
+            }
+        }
+        option = config_options.Theme()
+        self.assertRaises(config_options.ValidationError,
+                          option.post_validation, config, 'theme')
+
+    def test_post_validation_locale(self):
+
+        config = {
+            'theme': {
+                'name': 'mkdocs',
+                'locale': 'fr'
+            }
+        }
+        option = config_options.Theme()
+        option.post_validation(config, 'theme')
+        self.assertEqual('fr', config['theme']['locale'].language)
 
 
 class NavTest(unittest.TestCase):

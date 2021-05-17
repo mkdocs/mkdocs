@@ -6,6 +6,7 @@ import sys
 from os.path import isfile, join
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
+from mkdocs.exceptions import Abort
 
 log = logging.getLogger(__name__)
 
@@ -39,7 +40,7 @@ def _get_handler(site_dir, StaticFileHandler):
         def write_error(self, status_code, **kwargs):
 
             if status_code in (404, 500):
-                error_page = '{}.html'.format(status_code)
+                error_page = f'{status_code}.html'
                 if isfile(join(site_dir, error_page)):
                     self.write(Loader(site_dir).load(error_page).generate())
                 else:
@@ -48,7 +49,7 @@ def _get_handler(site_dir, StaticFileHandler):
     return WebHandler
 
 
-def _livereload(host, port, config, builder, site_dir, watch_theme, delay):
+def _livereload(host, port, config, builder, site_dir, watch_theme):
 
     # We are importing here for anyone that has issues with livereload. Even if
     # this fails, the --no-livereload alternative should still work.
@@ -66,17 +67,17 @@ def _livereload(host, port, config, builder, site_dir, watch_theme, delay):
     server = LiveReloadServer()
 
     # Watch the documentation files, the config file and the theme files.
-    server.watch(config['docs_dir'], builder, delay=delay)
-    server.watch(config['config_file_path'], builder, delay=delay)
+    server.watch(config['docs_dir'], builder)
+    server.watch(config['config_file_path'], builder)
 
     if watch_theme:
         for d in config['theme'].dirs:
-            server.watch(d, builder, delay=delay)
+            server.watch(d, builder)
 
     # Run `serve` plugin events.
     server = config['plugins'].run_event('serve', server, config=config, builder=builder)
 
-    server.serve(root=site_dir, host=host, port=port, restart_delay=delay)
+    server.serve(root=site_dir, host=host, port=port, restart_delay=0)
 
 
 def _static_server(host, port, site_dir):
@@ -95,7 +96,7 @@ def _static_server(host, port, site_dir):
     ])
     application.listen(port=port, address=host)
 
-    log.info('Running at: http://%s:%s/', host, port)
+    log.info(f'Running at: http://{host}:{port}/')
     log.info('Hold ctrl+c to quit.')
     try:
         ioloop.IOLoop.instance().start()
@@ -104,7 +105,7 @@ def _static_server(host, port, site_dir):
 
 
 def serve(config_file=None, dev_addr=None, strict=None, theme=None,
-          theme_dir=None, livereload='livereload', watch_theme=False, wait=0, **kwargs):
+          theme_dir=None, livereload='livereload', watch_theme=False, **kwargs):
     """
     Start the MkDocs development server
 
@@ -144,8 +145,11 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
         host, port = config['dev_addr']
 
         if livereload in ['livereload', 'dirty']:
-            _livereload(host, port, config, builder, site_dir, watch_theme, delay=wait)
+            _livereload(host, port, config, builder, site_dir, watch_theme)
         else:
             _static_server(host, port, site_dir)
+    except OSError as e:  # pragma: no cover
+        # Avoid ugly, unhelpful traceback
+        raise Abort(str(e))
     finally:
         shutil.rmtree(site_dir)

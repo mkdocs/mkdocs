@@ -59,14 +59,48 @@ It will attempt to run the tests against all of the Python versions we
 support. So don't be concerned if you are missing some and they fail. The rest
 will be verified by [Travis] when you submit a pull request.
 
+## Translating themes
+
+To localize a theme to your favorite language, follow the guide on [Translating
+Themes]. We welcome translation Pull Requests!
+
 ## Submitting Pull Requests
 
 Once you are happy with your changes or you are ready for some feedback, push
 it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.
 
+### Submitting changes to the builtin themes
+
+When installed with `i18n` support (`pip install mkdocs[i18n]`), MkDocs allows
+themes to support being translated into various languages (referred to as
+locales) if they respect [Jinja's i18n extension] by wrapping text placeholders
+with `{% trans %}` and `{% endtrans %}` tags.
+
+Each time a translatable text placeholder is added, removed or changed in a
+theme template, the theme's Portable Object Template (`pot`) file needs to be
+updated by running the `extract_messages` command. For example, to update the
+`pot` file of the `mkdocs` theme, run the following command:
+
+```bash
+python setup.py extract_messages -t mkdocs
+```
+
+The updated `pot` file should be included in a PR with the updated template.
+The updated `pot` file will allow translation contributors to propose the
+translations needed for their preferred language. See the guide on [Translating
+Themes] for details.
+
+!!! Note
+
+    Contributors are not expected to provide translations with their changes to
+    a theme's templates. However, they are expected to include an updated `pot`
+    file so that everything is ready for translators to do their job.
+
 [virtualenv]: https://virtualenv.pypa.io/en/latest/user_guide.html
 [pip]: https://pip.pypa.io/en/stable/
 [tox]: https://tox.readthedocs.io/en/latest/
 [travis]: https://travis-ci.org/repositories
 [PyPA Code of Conduct]: https://www.pypa.io/en/latest/code-of-conduct/
+[Translating Themes]: ../dev-guide/translations.md
+[Jinja's i18n extension]: https://jinja.palletsprojects.com/en/master/extensions/#i18n-extension
