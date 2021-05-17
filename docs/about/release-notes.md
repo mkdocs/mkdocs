@@ -127,7 +127,7 @@ release an error will be raised (#2189).
 The [use_directory_urls](../user-guide/configuration.md#use_directory_urls)
 configuration option will be forced to `false` if
 [site_url](../user-guide/configuration.md#site_url) is set to an emtpy string.
-If `use_direcotry_urls` is not explicitly set to `false` a warning will be
+If `use_directory_urls` is not explicitly set to `false` a warning will be
 issued (#2189).
 
 A theme's files are now excluded from the list of watched files by default
