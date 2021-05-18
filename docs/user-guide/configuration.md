@@ -9,8 +9,8 @@ Guide to all available configuration settings.
 Project settings are always configured by using a YAML configuration file in the
 project directory named `mkdocs.yml`.
 
-As a minimum, this configuration file must contain the `site_name` setting. All
-other settings are optional.
+As a minimum, this configuration file must contain the `site_name` and
+`site_url` settings. All other settings are optional.
 
 ### Environment Variables
 
@@ -73,7 +73,7 @@ need to be updated prior to deployment.
 
 If the built site will not be behind a server, then you may set the value to an
 empty string (`''`). When set to an empty string, some features of MkDocs may
-act differently. For example, the [use_directory_urls](#use_direcotry_urls)
+act differently. For example, the [use_directory_urls](#use_directory_urls)
 setting must be set to `false`.
 
 ### repo_url

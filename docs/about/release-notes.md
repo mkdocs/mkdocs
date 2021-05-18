@@ -70,7 +70,7 @@ in the Configuration documentation for details.
 #### Update `gh-deploy` command (#2170)
 
 The vendored (and modified) copy of ghp_import has been replaced with a
-dependency on the upstream library. As of version 1.0.0, [ghp_import] includes a
+dependency on the upstream library. As of version 1.0.0, [ghp-import] includes a
 Python API which makes it possible to call directly.
 
 MkDocs can now benefit from recent bug fixes and new features, including the following:
@@ -120,46 +120,46 @@ configuration documentation for details.
 
 ### Backward Incompatible Changes in 1.2
 
-The [site_url](../user-guide/configuration.md#site_url) configuration option is
-now **required**. If it is not set, a warning will be issued. In a future
-release an error will be raised (#2189).
+* The [site_url](../user-guide/configuration.md#site_url) configuration option
+  is now **required**. If it is not set, a warning will be issued. In a future
+  release an error will be raised (#2189).
 
-The [use_directory_urls](../user-guide/configuration.md#use_directory_urls)
-configuration option will be forced to `false` if
-[site_url](../user-guide/configuration.md#site_url) is set to an emtpy string.
-If `use_directory_urls` is not explicitly set to `false` a warning will be
-issued (#2189).
+    The [use_directory_urls](../user-guide/configuration.md#use_directory_urls)
+    configuration option will be forced to `false` if
+    [site_url](../user-guide/configuration.md#site_url) is set to an emtpy
+    string. In that case, if `use_directory_urls` is not explicitly set to
+    `false`, a warning will be issued (#2189).
 
-A theme's files are now excluded from the list of watched files by default
-when using the `--livereload` server. This new default behavior is what most
-users need and provides better performance when editing site content.
-Theme developers can enable the old behavior with the `--watch-theme`
-option. (#2092).
+* A theme's files are now excluded from the list of watched files by default
+  when using the `--livereload` server. This new default behavior is what most
+  users need and provides better performance when editing site content.
+  Theme developers can enable the old behavior with the `--watch-theme`
+  option. (#2092).
 
-The `mkdocs` theme now removes the sidebar when printing a page. This frees
-up horizontal space for better rendering of content like tables (#2193).
+* The `mkdocs` theme now removes the sidebar when printing a page. This frees
+  up horizontal space for better rendering of content like tables (#2193).
 
-The `mkdocs.config.DEFAULT_SCHEMA` global variable has been replaced with the
-function `mkdocs.config.defaults.get_schema()`, which ensures that each
-instance of the configuration is unique (#2289).
+* The `mkdocs.config.DEFAULT_SCHEMA` global variable has been replaced with the
+  function `mkdocs.config.defaults.get_schema()`, which ensures that each
+  instance of the configuration is unique (#2289).
 
-The `mkdocs.utils.warning_filter` is deprecated and now does nothing. Plugins
- should remove any reference to is as it may be deleted in a future release.
- To ensure any warnings get counted, simply log them to the `mkdocs` log (i.e:
-`mkdocs.plugins.pluginname`).
+* The `mkdocs.utils.warning_filter` is deprecated and now does nothing. Plugins
+  should remove any reference to is as it may be deleted in a future release.
+  To ensure any warnings get counted, simply log them to the `mkdocs` log (i.e:
+  `mkdocs.plugins.pluginname`).
 
-The `python` method of the `plugins.search.prebuild_index` configuration option
-is pending deprecation as of version 1.2. It is expected that in version 1.3 it
-will raise a warning if used and in version 1.4 it will raise an error. Users
-are encouraged to use an alternate method to generate a prebuilt index for
-search.
+* The `python` method of the `plugins.search.prebuild_index` configuration
+  option is pending deprecation as of version 1.2. It is expected that in
+  version 1.3 it will raise a warning if used and in version 1.4 it will raise
+  an error. Users are encouraged to use an alternate method to generate a
+  prebuilt index for search.
 
-The `lunr` and `lunr[languages]` dependencies are no longer installed by
-default. The dependencies are only needed for the rare user who prebuilds the
-search index and uses the `python` option, which is now pending deprecation. If
-you use this feature, then you will need to manually install `lunr` and
-`lunr[languages]`. A warning is issued if the dependencies are needed but not
-installed.
+* The `lunr` and `lunr[languages]` dependencies are no longer installed by
+  default. The dependencies are only needed for the rare user who prebuilds the
+  search index and uses the `python` option, which is now pending deprecation.
+  If you use this feature, then you will need to manually install `lunr` and
+  `lunr[languages]`. A warning is issued if the dependencies are needed but not
+  installed.
 
 ### Other Changes and Additions to Version 1.2
 
