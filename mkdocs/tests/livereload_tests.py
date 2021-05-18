@@ -76,6 +76,7 @@ class BuildTests(unittest.TestCase):
 
         with testing_server(site_dir, rebuild) as server:
             server.watch(docs_dir, rebuild)
+            time.sleep(0.01)
 
             _, output = do_request(server, "GET /foo.site")
             self.assertEqual(output, "original")
@@ -97,6 +98,7 @@ class BuildTests(unittest.TestCase):
 
         with testing_server(site_dir, rebuild) as server:
             server.watch(docs_dir, rebuild)
+            time.sleep(0.01)
 
             Path(docs_dir, "foo.docs").write_text("b")
             self.assertTrue(started_building.wait(timeout=10))
@@ -112,6 +114,7 @@ class BuildTests(unittest.TestCase):
 
         with testing_server(site_dir, started_building.set) as server:
             server.watch(site_dir)
+            time.sleep(0.01)
 
             Path(site_dir, "aaa").rename(Path(site_dir, "bbb"))
             self.assertTrue(started_building.wait(timeout=10))
@@ -125,10 +128,10 @@ class BuildTests(unittest.TestCase):
 
             with testing_server(site_dir, started_building.set) as server:
                 server.watch(site_dir)
+                time.sleep(0.01)
 
                 f.write(b"hi\n")
                 f.flush()
-                time.sleep(0.01)
 
                 self.assertFalse(started_building.wait(timeout=0.2))
 
@@ -145,6 +148,7 @@ class BuildTests(unittest.TestCase):
         with testing_server(site_dir) as server:
             with self.assertWarnsRegex(DeprecationWarning, "func") as cm:
                 server.watch(docs_dir, rebuild)
+                time.sleep(0.01)
             self.assertIn("livereload_tests.py", cm.filename)
 
             Path(docs_dir, "foo.docs").write_text("b")
@@ -168,6 +172,7 @@ class BuildTests(unittest.TestCase):
         with testing_server(site_dir, rebuild) as server:
             server.watch(docs_dir)
             server.watch(extra_dir)
+            time.sleep(0.01)
 
             Path(docs_dir, "foo.docs").write_text("docs2")
             started_building.wait(timeout=10)
@@ -197,6 +202,7 @@ class BuildTests(unittest.TestCase):
         with testing_server(site_dir, rebuild) as server:
             server.watch(docs_dir)
             server.watch(extra_dir)
+            time.sleep(0.01)
 
             _, output = do_request(server, "GET /foo.site")
             Path(docs_dir, "foo.docs").write_text("docs2")
@@ -220,6 +226,7 @@ class BuildTests(unittest.TestCase):
 
         with testing_server(site_dir, rebuild) as server:
             server.watch(docs_dir)
+            time.sleep(0.01)
 
             Path(docs_dir, "foo.docs").write_text("b")
             before_finished_building.wait(timeout=10)
@@ -287,8 +294,10 @@ class BuildTests(unittest.TestCase):
     @tempdir()
     def test_serves_polling_after_event(self, site_dir, docs_dir):
         with testing_server(site_dir) as server:
-            server.watch(docs_dir)
             initial_epoch = server._visible_epoch
+
+            server.watch(docs_dir)
+            time.sleep(0.01)
 
             Path(docs_dir, "foo.docs").write_text("b")
 
