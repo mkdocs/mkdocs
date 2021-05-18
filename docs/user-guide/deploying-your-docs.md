@@ -169,6 +169,58 @@ your hosts' file system.
 See your host's documentation for specifics. You will likely want to search
 their documentation for "ftp" or "uploading site".
 
+## Local Files
+
+Rather than hosting your documentation on a server, you may instead distribute
+the files directly, which can then be viewed in a browser using the `file://`
+scheme.
+
+Note that, due to the security settings of all modern browsers, some things
+will not work the same and some features may not work at all. In fact, a few
+settings will need to be customized in very specific ways.
+
+- [site_url]:
+
+    The `site_url` must be set to an empty string, which instructs MkDocs to
+    build your site so that it will work with the `file://` scheme.
+
+        site_url: ""
+
+- [use_directory_urls]:
+
+    Set `use_directory_urls` to `false`. Otherwise, internal links between
+    pages will not work properly.
+
+        use_directory_urls: false
+
+- [search]:
+
+    You will need to either disable the search plugin, or use a third-party
+    search plugin which is specifically designed to work with the `file://`
+    scheme. To disable all plugins, set the `plugins` setting to an empty list.
+
+        plugins: []
+
+    If you have other plugins enabled, simply ensure that `search` is not
+    included in the list.
+
+When writing your documentation, it is imperative that all internal links use
+relative URLs as [documented][internal links]. Remember, each reader of your
+documentation will be using a different device and the files will likely be in a
+different location on that device.
+
+If you expect your documentation to be viewed off-line, you may also need to be
+careful about which themes you choose. Many themes make use of CDNs for various
+support files, which require a live Internet connection. You will need to choose
+a theme which includes all support files directly in the theme.
+
+When you build your site (using the `mkdocs build` command), all of the files
+are written to the directory assigned to the [site_dir] configuration option
+(defaults to `"site"`) in your `mkdocs.yaml` config file. Generally, you will
+simply need to copy the contents of that directory and distribute it to your
+readers. Alternatively, you may choose to use a third party tool to convert the
+HTML files to some other documentation format.
+
 ## 404 Pages
 
 When MkDocs builds the documentation it will include a 404.html file in the
@@ -178,3 +230,7 @@ servers may be configured to use it but the feature won't always be available.
 See the documentation for your server of choice for more information.
 
 [site_dir]: ./configuration.md#site_dir
+[site_url]: ./configuration.md#site_url
+[use_directory_urls]: ./configuration.md#use_directory_urls
+[search]: ./configuration.md#search
+[internal links]: ./writing-your-docs.md#internal-links
