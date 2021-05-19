@@ -497,6 +497,19 @@ markdown_extensions:
     - sane_lists
 ```
 
+In the above examples, each extension is a list item (starts with a `-`). As an
+alternative, key/value pairs can be used instead. However, in that case an empty
+value must be provided for extensions for which no options are defined.
+Therefore, the last example above could also be defined as follows:
+
+```yaml
+markdown_extensions:
+    smarty: {}
+    toc:
+        permalink: True
+    sane_lists: {}
+```
+
 !!! note "See Also:"
     The Python-Markdown documentation provides a [list of extensions][exts]
     which are available out-of-the-box. For a list of configuration options
