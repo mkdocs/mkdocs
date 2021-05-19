@@ -602,7 +602,7 @@ class Plugins(OptionallyRequired):
     """
     Plugins config option.
 
-    A list of plugins. If a plugin defines config options those are used when
+    A list or dict of plugins. If a plugin defines config options those are used when
     initializing the plugin class.
     """
 
@@ -615,31 +615,33 @@ class Plugins(OptionallyRequired):
         self.config_file_path = config.config_file_path
 
     def run_validation(self, value):
-        if not isinstance(value, (list, tuple)):
-            raise ValidationError('Invalid Plugins configuration. Expected a list of plugins')
+        if not isinstance(value, (list, tuple, dict)):
+            raise ValidationError('Invalid Plugins configuration. Expected a list or dict.')
         plgins = plugins.PluginCollection()
-        for item in value:
-            if isinstance(item, dict):
-                if len(item) > 1:
-                    raise ValidationError('Invalid Plugins configuration')
-                name, cfg = item.popitem()
-                cfg = cfg or {}  # Users may define a null (None) config
-                if not isinstance(cfg, dict):
-                    raise ValidationError(f'Invalid config options for the "{name}" plugin.')
-                item = name
-            else:
-                cfg = {}
-
-            if not isinstance(item, str):
-                raise ValidationError('Invalid Plugins configuration')
-
-            plgins[item] = self.load_plugin(item, cfg)
-
+        if isinstance(value, dict):
+            for name, cfg in value.items():
+                plgins[name] = self.load_plugin(name, cfg)
+        else:
+            for item in value:
+                if isinstance(item, dict):
+                    if len(item) > 1:
+                        raise ValidationError('Invalid Plugins configuration')
+                    name, cfg = item.popitem()
+                    item = name
+                else:
+                    cfg = {}
+                plgins[item] = self.load_plugin(item, cfg)
         return plgins
 
     def load_plugin(self, name, config):
+        if not isinstance(name, str):
+            raise ValidationError(f"'{name}' is not a valid plugin name.")
         if name not in self.installed_plugins:
             raise ValidationError(f'The "{name}" plugin is not installed')
+
+        config = config or {}  # Users may define a null (None) config
+        if not isinstance(config, dict):
+            raise ValidationError(f"Invalid config options for the '{name}' plugin.")
 
         Plugin = self.installed_plugins[name].load()
 

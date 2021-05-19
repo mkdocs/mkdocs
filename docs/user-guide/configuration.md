@@ -536,6 +536,29 @@ plugins:
     - your_other_plugin
 ```
 
+To define options for a given plugin, use a nested set of key/value pairs:
+
+```yaml
+plugins:
+    - search
+    - your_other_plugin:
+        option1: value
+        option2: other value
+```
+
+In the above examples, each plugin is a list item (starts with a `-`). As an
+alternative, key/value pairs can be used instead. However, in that case an empty
+value must be provided for plugins for which no options are defined. Therefore,
+the last example above could also be defined as follows:
+
+```yaml
+plugins:
+    search: {}
+    your_other_plugin:
+        option1: value
+        option2: other value
+```
+
 To completely disable all plugins, including any defaults, set the `plugins`
 setting to an empty list:
 
