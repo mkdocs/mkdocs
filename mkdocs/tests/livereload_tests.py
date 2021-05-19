@@ -156,6 +156,34 @@ class BuildTests(unittest.TestCase):
     @tempdir({"foo.docs": "docs1"})
     @tempdir({"foo.extra": "extra1"})
     @tempdir({"foo.site": "original"})
+    def test_multiple_dirs_can_cause_rebuild(self, site_dir, extra_dir, docs_dir):
+        started_building = threading.Barrier(2)
+
+        def rebuild():
+            started_building.wait(timeout=10)
+            content1 = Path(docs_dir, "foo.docs").read_text()
+            content2 = Path(extra_dir, "foo.extra").read_text()
+            Path(site_dir, "foo.site").write_text(content1 + content2)
+
+        with testing_server(site_dir, rebuild) as server:
+            server.watch(docs_dir)
+            server.watch(extra_dir)
+
+            Path(docs_dir, "foo.docs").write_text("docs2")
+            started_building.wait(timeout=10)
+
+            _, output = do_request(server, "GET /foo.site")
+            self.assertEqual(output, "docs2extra1")
+
+            Path(extra_dir, "foo.extra").write_text("extra2")
+            started_building.wait(timeout=10)
+
+            _, output = do_request(server, "GET /foo.site")
+            self.assertEqual(output, "docs2extra2")
+
+    @tempdir({"foo.docs": "docs1"})
+    @tempdir({"foo.extra": "extra1"})
+    @tempdir({"foo.site": "original"})
     def test_multiple_dirs_changes_rebuild_only_once(self, site_dir, extra_dir, docs_dir):
         started_building = threading.Event()
 
