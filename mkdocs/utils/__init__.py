@@ -33,20 +33,8 @@ markdown_extensions = [
 ]
 
 
-def yaml_load(source, loader=yaml.Loader):
-    """
-    Wrap PyYaml's loader so we can extend it to suit our needs.
-
-    Load all strings as unicode.
-    https://stackoverflow.com/a/2967461/3609487
-    """
-
-    def construct_yaml_str(self, node):
-        """
-        Override the default string handling function to always return
-        unicode objects.
-        """
-        return self.construct_scalar(node)
+def get_yaml_loader(loader=yaml.Loader):
+    """ Wrap PyYaml's loader so we can extend it to suit our needs. """
 
     class Loader(loader):
         """
@@ -54,15 +42,16 @@ def yaml_load(source, loader=yaml.Loader):
         global loader unaltered.
         """
 
-    # Attach our unicode constructor to our custom loader ensuring all strings
-    # will be unicode on translation.
-    Loader.add_constructor('tag:yaml.org,2002:str', construct_yaml_str)
-
     # Attach Environment Variable constructor.
     # See https://github.com/waylan/pyyaml-env-tag
     Loader.add_constructor('!ENV', construct_env_tag)
 
-    return yaml.load(source, Loader)
+    return Loader
+
+
+def yaml_load(source, loader=None):
+    Loader = loader or get_yaml_loader()
+    return yaml.load(source, Loader=Loader)
 
 
 def modified_time(file_path):

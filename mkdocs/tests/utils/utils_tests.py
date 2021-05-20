@@ -355,7 +355,7 @@ class UtilsTests(unittest.TestCase):
             key2:
               - value
             '''
-        )
+        ).encode('utf-8')
 
         config = utils.yaml_load(yaml_src)
         self.assertTrue(isinstance(config['key'], str))
