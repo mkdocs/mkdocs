@@ -3,6 +3,7 @@ import os
 import sys
 from yaml import YAMLError
 from collections import UserDict
+from contextlib import contextmanager
 
 from mkdocs import exceptions
 from mkdocs import utils
@@ -119,6 +120,7 @@ class Config(UserDict):
         return failed, warnings
 
     def load_dict(self, patch):
+        """ Load config options from a dictionary. """
 
         if not isinstance(patch, dict):
             raise exceptions.ConfigurationError(
@@ -130,6 +132,7 @@ class Config(UserDict):
         self.data.update(patch)
 
     def load_file(self, config_file):
+        """ Load config options from the open file descriptor of a YAML file. """
         try:
             return self.load_dict(utils.yaml_load(config_file))
         except YAMLError as e:
@@ -139,7 +142,17 @@ class Config(UserDict):
             )
 
 
+@contextmanager
 def _open_config_file(config_file):
+    """
+    A context manager which yields an open file descriptor ready to be read.
+
+    Accepts a filename as a string, an open or closed file descriptor, or None.
+    When None, it defaults to `mkdocs.yml` in the CWD. If a closed file descriptor
+    is received, a new file descriptor is opened for the same file.
+
+    The file descriptor is automaticaly closed when the context manager block is existed.
+    """
 
     # Default to the standard config filename.
     if config_file is None:
@@ -161,8 +174,11 @@ def _open_config_file(config_file):
 
     # Ensure file descriptor is at begining
     config_file.seek(0)
-
-    return config_file
+    try:
+        yield config_file
+    finally:
+        if hasattr(config_file, 'close'):
+            config_file.close()
 
 
 def load_config(config_file=None, **kwargs):
@@ -183,14 +199,15 @@ def load_config(config_file=None, **kwargs):
         if value is None:
             options.pop(key)
 
-    config_file = _open_config_file(config_file)
-    options['config_file_path'] = getattr(config_file, 'name', '')
+    with _open_config_file(config_file) as fd:
+        options['config_file_path'] = getattr(fd, 'name', '')
 
-    # Initialise the config with the default schema .
-    from mkdocs.config.defaults import get_schema
-    cfg = Config(schema=get_schema(), config_file_path=options['config_file_path'])
-    # First load the config file
-    cfg.load_file(config_file)
+        # Initialise the config with the default schema.
+        from mkdocs.config.defaults import get_schema
+        cfg = Config(schema=get_schema(), config_file_path=options['config_file_path'])
+        # load the config file
+        cfg.load_file(fd)
+
     # Then load the options to overwrite anything in the config.
     cfg.load_dict(options)
 
