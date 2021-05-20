@@ -7,6 +7,18 @@ html {
     /* csslint ignore:end */
 }
 
+blockquote {
+  display: block;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: 40px;
+  margin-right: 40px;
+  background: #f9f9f9;
+  border-left: 5px solid #ccc;
+  padding: 0.5em 10px;
+  quotes: "\201C""\201D""\2018""\2019";
+}
+
 /* Replacement for `body { background-attachment: fixed; }`, which has
    performance issues when scrolling on large displays. See #1394. */
 
