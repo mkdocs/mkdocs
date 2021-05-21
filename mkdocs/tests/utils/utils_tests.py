@@ -13,7 +13,29 @@ import logging
 from mkdocs import utils, exceptions
 from mkdocs.structure.files import File
 from mkdocs.structure.pages import Page
-from mkdocs.tests.base import dedent, load_config
+from mkdocs.tests.base import dedent, load_config, tempdir
+
+BASEYML = """
+INHERIT: parent.yml
+foo: bar
+baz:
+    sub1: replaced
+    sub3: new
+deep1:
+    deep2-1:
+        deep3-1: replaced
+"""
+PARENTYML = """
+foo: foo
+baz:
+    sub1: 1
+    sub2: 2
+deep1:
+    deep2-1:
+        deep3-1: foo
+        deep3-2: bar
+    deep2-2: baz
+"""
 
 
 class UtilsTests(unittest.TestCase):
@@ -382,6 +404,32 @@ class UtilsTests(unittest.TestCase):
         self.assertIsInstance(config['key4'], str)
         self.assertEqual(config['key4'], 'Hello, World!')
         self.assertIs(config['key5'], False)
+
+    @tempdir(files={'base.yml': BASEYML, 'parent.yml': PARENTYML})
+    def test_yaml_inheritance(self, tdir):
+        expected = {
+            'foo': 'bar',
+            'baz': {
+                'sub1': 'replaced',
+                'sub2': 2,
+                'sub3': 'new'
+            },
+            'deep1': {
+                'deep2-1': {
+                    'deep3-1': 'replaced',
+                    'deep3-2': 'bar'
+                },
+                'deep2-2': 'baz'
+            }
+        }
+        with open(os.path.join(tdir, 'base.yml')) as fd:
+            result = utils.yaml_load(fd)
+        self.assertEqual(result, expected)
+
+    @tempdir(files={'base.yml': BASEYML})
+    def test_yaml_inheritance_missing_parent(self, tdir):
+        with open(os.path.join(tdir, 'base.yml')) as fd:
+            self.assertRaises(exceptions.ConfigurationError, utils.yaml_load, fd)
 
     def test_copy_files(self):
         src_paths = [

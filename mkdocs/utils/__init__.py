@@ -19,6 +19,7 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from urllib.parse import urlparse
 from yaml_env_tag import construct_env_tag
+from mergedeep import merge
 
 from mkdocs import exceptions
 
@@ -50,8 +51,20 @@ def get_yaml_loader(loader=yaml.Loader):
 
 
 def yaml_load(source, loader=None):
+    """ Return dict of source YAML file using loader, recursively deep merging inherited parent. """
     Loader = loader or get_yaml_loader()
-    return yaml.load(source, Loader=Loader)
+    result = yaml.load(source, Loader=Loader)
+    if 'INHERIT' in result:
+        relpath = result.pop('INHERIT')
+        abspath = os.path.normpath(os.path.join(os.path.dirname(source.name), relpath))
+        if not os.path.exists(abspath):
+            raise exceptions.ConfigurationError(
+                f"Inherited config file '{relpath}' does not exist at '{abspath}'.")
+        log.debug(f"Loading inherited configuration file: {abspath}")
+        with open(abspath, 'rb') as fd:
+            parent = yaml_load(fd, Loader)
+        result = merge(parent, result)
+    return result
 
 
 def modified_time(file_path):
