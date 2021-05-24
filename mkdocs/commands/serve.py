@@ -2,7 +2,7 @@ import logging
 import shutil
 import tempfile
 
-from os.path import isfile, join
+from os.path import isdir, isfile, join
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
 from mkdocs.exceptions import Abort
@@ -84,4 +84,5 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
         # Avoid ugly, unhelpful traceback
         raise Abort(str(e))
     finally:
-        shutil.rmtree(site_dir)
+        if isdir(site_dir):
+            shutil.rmtree(site_dir)
