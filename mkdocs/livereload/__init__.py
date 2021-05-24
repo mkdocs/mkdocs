@@ -95,6 +95,26 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         handler.on_any_event = callback
         self.observer.schedule(handler, path, recursive=recursive)
 
+        # 1. path deviation of docs_dir, config_file_path
+        if not path == os.path.realpath(path):
+            self.observer.schedule(handler, os.path.realpath(path), recursive=recursive)
+
+        # 2. symbolic links of config_file_path and (in) docs_dir
+        def schedule(handler, path, recursive=True):
+            if schedule.depth >= schedule.limit:
+                return
+            schedule.depth += 1
+            if os.path.islink(path):
+                self.observer.schedule(handler, os.path.realpath(path), recursive=recursive)
+            elif recursive and os.path.isdir(path):
+                for name in os.listdir(path):
+                    schedule(handler, os.path.join(path, name), recursive=recursive)
+            schedule.depth -= 1
+
+        schedule.limit = 9
+        schedule.depth = 1
+        schedule(handler, os.path.realpath(path), recursive=recursive)
+
     def serve(self):
         self.observer.start()
 
