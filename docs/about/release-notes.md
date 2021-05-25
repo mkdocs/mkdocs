@@ -100,6 +100,13 @@ Degradations in behavior are not expected, and should be reported if found.
 [livereload]: https://pypi.org/project/livereload/
 [tornado]: https://pypi.org/project/tornado/
 
+##### Offset the local site root according to the sub-path of the `site_url` (#2424)
+
+When using `mkdocs serve` and having the `site_url` specified as e.g.
+`http://example.org/sub/path/`, now the root of the locally served site
+becomes `http://127.0.0.1:8000/sub/path/` and all document paths are offset
+accordingly.
+
 #### A `build_error` event was added (#2103)
 
 Plugin developers can now use the `on_build_error` hook
