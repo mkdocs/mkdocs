@@ -54,7 +54,7 @@ def yaml_load(source, loader=None):
     """ Return dict of source YAML file using loader, recursively deep merging inherited parent. """
     Loader = loader or get_yaml_loader()
     result = yaml.load(source, Loader=Loader)
-    if 'INHERIT' in result:
+    if result is not None and 'INHERIT' in result:
         relpath = result.pop('INHERIT')
         abspath = os.path.normpath(os.path.join(os.path.dirname(source.name), relpath))
         if not os.path.exists(abspath):
