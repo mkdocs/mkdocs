@@ -1,8 +1,9 @@
 import logging
 import shutil
 import tempfile
-
+from urllib.parse import urlparse
 from os.path import isdir, isfile, join
+
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
 from mkdocs.exceptions import Abort
@@ -26,6 +27,9 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
     # string is returned. And it makes MkDocs temp dirs easier to identify.
     site_dir = tempfile.mkdtemp(prefix='mkdocs_')
 
+    def mount_path(config):
+        return urlparse(config['site_url'] or '/').path
+
     def builder():
         log.info("Building documentation...")
         config = load_config(
@@ -38,7 +42,7 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
             **kwargs
         )
         # Override a few config settings after validation
-        config['site_url'] = 'http://{}/'.format(config['dev_addr'])
+        config['site_url'] = 'http://{}{}'.format(config['dev_addr'], mount_path(config))
 
         live_server = livereload in ['dirty', 'livereload']
         dirty = livereload == 'dirty'
@@ -50,8 +54,7 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
         config = builder()
 
         host, port = config['dev_addr']
-
-        server = LiveReloadServer(builder=builder, host=host, port=port, root=site_dir)
+        server = LiveReloadServer(builder=builder, host=host, port=port, root=site_dir, mount_path=mount_path(config))
 
         def error_handler(code):
             if code in (404, 500):

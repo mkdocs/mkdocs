@@ -28,13 +28,22 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
     poll_response_timeout = 60
 
     def __init__(
-        self, builder, host, port, root=".", build_delay=0.25, shutdown_delay=0.25, **kwargs
+        self,
+        builder,
+        host,
+        port,
+        root,
+        mount_path="/",
+        build_delay=0.25,
+        shutdown_delay=0.25,
+        **kwargs,
     ):
         self.builder = builder
         self.server_name = host
         self.server_port = port
-        self.url = f"http://{host}:{port}/"
         self.root = os.path.abspath(root)
+        self.mount_path = ("/" + mount_path.lstrip("/")).rstrip("/") + "/"
+        self.url = f"http://{self.server_name}:{self.server_port}{self.mount_path}"
         self.build_delay = build_delay
         self.shutdown_delay = shutdown_delay
         # To allow custom error pages.
@@ -177,10 +186,16 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
 
         if path == "/js/livereload.js":
             file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "livereload.js")
-        else:
+        elif path.startswith(self.mount_path):
             if path.endswith("/"):
                 path += "index.html"
+            path = path[len(self.mount_path):]
             file_path = os.path.join(self.root, path.lstrip("/"))
+        elif path == "/":
+            start_response("302 Found", [("Location", self.mount_path)])
+            return []
+        else:
+            return None  # Not found
 
         # Wait until the ongoing rebuild (if any) finishes, so we're not serving a half-built site.
         with self._epoch_cond:

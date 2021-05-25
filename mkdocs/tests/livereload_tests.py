@@ -27,11 +27,16 @@ class FakeRequest:
 
 
 @contextlib.contextmanager
-def testing_server(root, builder=lambda: None):
+def testing_server(root, builder=lambda: None, mount_path="/"):
     """Create the server and start most of its parts, but don't listen on a socket."""
     with mock.patch("socket.socket"):
         server = LiveReloadServer(
-            builder, host="localhost", port=0, root=root, bind_and_activate=False
+            builder,
+            host="localhost",
+            port=0,
+            root=root,
+            mount_path=mount_path,
+            bind_and_activate=False,
         )
         server.setup_environ()
     server.observer.start()
@@ -46,9 +51,14 @@ def do_request(server, content):
     request = FakeRequest(content + " HTTP/1.1")
     server.RequestHandlerClass(request, ("127.0.0.1", 0), server)
     response = request.out_file.getvalue()
+
     headers, _, content = response.partition(b"\r\n\r\n")
-    message, _, headers = headers.partition(b"\r\n")
-    return email.message_from_bytes(headers), content.decode()
+    status, _, headers = headers.partition(b"\r\n")
+    status = status.split(None, 1)[1].decode()
+
+    headers = email.message_from_bytes(headers)
+    headers["_status"] = status
+    return headers, content.decode()
 
 
 SCRIPT_REGEX = (
@@ -62,6 +72,7 @@ class BuildTests(unittest.TestCase):
         with testing_server(site_dir) as server:
             headers, output = do_request(server, "GET /test.css")
             self.assertEqual(output, "div { color: red; }")
+            self.assertEqual(headers["_status"], "200 OK")
             self.assertEqual(headers.get("content-length"), str(len(output)))
 
     @tempdir({"foo.docs": "a"})
@@ -271,6 +282,7 @@ class BuildTests(unittest.TestCase):
         with testing_server(site_dir) as server:
             headers, output = do_request(server, "GET /")
             self.assertRegex(output, fr"^<body>aaa{SCRIPT_REGEX}</body>$")
+            self.assertEqual(headers["_status"], "200 OK")
             self.assertEqual(headers.get("content-type"), "text/html")
             self.assertEqual(headers.get("content-length"), str(len(output)))
 
@@ -280,9 +292,13 @@ class BuildTests(unittest.TestCase):
     @tempdir()
     def test_serves_js(self, site_dir):
         with testing_server(site_dir) as server:
-            headers, output = do_request(server, "GET /js/livereload.js")
-            self.assertIn("function livereload", output)
-            self.assertEqual(headers.get("content-type"), "application/javascript")
+            for mount_path in "/", "/sub/":
+                server.mount_path = mount_path
+
+                headers, output = do_request(server, "GET /js/livereload.js")
+                self.assertIn("function livereload", output)
+                self.assertEqual(headers["_status"], "200 OK")
+                self.assertEqual(headers.get("content-type"), "application/javascript")
 
     @tempdir()
     def test_serves_polling_instantly(self, site_dir):
@@ -322,8 +338,9 @@ class BuildTests(unittest.TestCase):
         with testing_server(site_dir) as server:
             server.error_handler = lambda code: b"[%d]" % code
             with self.assertLogs("mkdocs.livereload") as cm:
-                _, output = do_request(server, "GET /missing")
+                headers, output = do_request(server, "GET /missing")
 
+            self.assertEqual(headers["_status"], "404 Not Found")
             self.assertEqual(output, "[404]")
             self.assertRegex(
                 "\n".join(cm.output),
@@ -336,8 +353,9 @@ class BuildTests(unittest.TestCase):
         with testing_server(site_dir) as server:
             server.error_handler = lambda code: 0 / 0
             with self.assertLogs("mkdocs.livereload") as cm:
-                _, output = do_request(server, "GET /missing")
+                headers, output = do_request(server, "GET /missing")
 
+            self.assertEqual(headers["_status"], "404 Not Found")
             self.assertIn("404", output)
             self.assertRegex(
                 "\n".join(cm.output), r"Failed to render an error message[\s\S]+/missing.+code 404"
@@ -368,3 +386,25 @@ class BuildTests(unittest.TestCase):
 
             headers, _ = do_request(server, "GET /test.json")
             self.assertEqual(headers.get("content-type"), "application/json")
+
+    @tempdir({"index.html": "<body>aaa</body>", "sub/sub.html": "<body>bbb</body>"})
+    def test_serves_from_mount_path(self, site_dir):
+        with testing_server(site_dir, mount_path="/sub") as server:
+            headers, output = do_request(server, "GET /sub/")
+            self.assertRegex(output, fr"^<body>aaa{SCRIPT_REGEX}</body>$")
+            self.assertEqual(headers.get("content-type"), "text/html")
+
+            _, output = do_request(server, "GET /sub/sub/sub.html")
+            self.assertRegex(output, fr"^<body>bbb{SCRIPT_REGEX}</body>$")
+
+            with self.assertLogs("mkdocs.livereload"):
+                headers, _ = do_request(server, "GET /sub/sub.html")
+            self.assertEqual(headers["_status"], "404 Not Found")
+
+    @tempdir()
+    def test_redirects_to_mount_path(self, site_dir):
+        with testing_server(site_dir, mount_path="/mount/path") as server:
+            with self.assertLogs("mkdocs.livereload"):
+                headers, _ = do_request(server, "GET /")
+            self.assertEqual(headers["_status"], "302 Found")
+            self.assertEqual(headers.get("location"), "/mount/path/")
