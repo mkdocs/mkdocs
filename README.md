@@ -14,10 +14,6 @@ Academic web publishing forked from <a href="https://www.mkdocs.org/">MkDocs</a>
 [![PyPI Version][pypi-v-image]][pypi-v-link]
 [![Build Status][travis-image]][travis-link]
 
-## Used By
-
-- [`FEDEASLab`](https://fcfilippou.github.io/fedeaslab/)
-- [claudioperez.xyz](https://claudioperez.xyz)
 
 [pypi-v-image]: https://img.shields.io/pypi/v/elstir.svg
 [pypi-v-link]: https://pypi.org/project/elstir/
