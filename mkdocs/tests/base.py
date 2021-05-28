@@ -70,8 +70,7 @@ def tempdir(files=None, **kw):
     """
     files = {f: '' for f in files} if isinstance(files, (list, tuple)) else files or {}
 
-    if 'prefix' not in kw:
-        kw['prefix'] = 'mkdocs_test-'
+    kw['prefix'] = 'mkdocs_test-' + kw.get('prefix', '')
 
     def decorator(fn):
         @wraps(fn)

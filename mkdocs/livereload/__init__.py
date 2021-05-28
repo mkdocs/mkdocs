@@ -4,6 +4,7 @@ import logging
 import mimetypes
 import os
 import os.path
+import pathlib
 import re
 import socketserver
 import threading
@@ -77,7 +78,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
             )
 
         def callback(event, allowed_path=None):
-            if event.is_directory:
+            if isinstance(event, watchdog.events.DirCreatedEvent):
                 return
             if allowed_path is not None and event.src_path != allowed_path:
                 return
@@ -96,7 +97,10 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         dir_handler = watchdog.events.FileSystemEventHandler()
         dir_handler.on_any_event = callback
 
+        seen = set()
+
         def schedule(path):
+            seen.add(path)
             if os.path.isfile(path):
                 # Watchdog doesn't support watching files, so watch its directory and filter by path
                 handler = watchdog.events.FileSystemEventHandler()
@@ -110,6 +114,23 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 self.observer.schedule(dir_handler, path, recursive=recursive)
 
         schedule(os.path.realpath(path))
+
+        def watch_symlink_targets(path_obj):  # path is os.DirEntry or pathlib.Path
+            if path_obj.is_symlink():
+                # The extra `readlink` is needed due to https://bugs.python.org/issue9949
+                target = os.path.realpath(os.readlink(os.fspath(path_obj)))
+                if target in seen or not os.path.exists(target):
+                    return
+                schedule(target)
+
+                path_obj = pathlib.Path(target)
+
+            if path_obj.is_dir() and recursive:
+                with os.scandir(os.fspath(path_obj)) as scan:
+                    for entry in scan:
+                        watch_symlink_targets(entry)
+
+        watch_symlink_targets(pathlib.Path(path))
 
     def serve(self):
         self.observer.start()
