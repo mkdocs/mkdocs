@@ -75,28 +75,40 @@ class BuildTests(unittest.TestCase):
             self.assertEqual(headers["_status"], "200 OK")
             self.assertEqual(headers.get("content-length"), str(len(output)))
 
-    @tempdir({"foo.docs": "a"})
+    @tempdir({"docs/foo.docs": "docs1", "mkdocs.yml": "yml1"})
     @tempdir({"foo.site": "original"})
-    def test_basic_rebuild(self, site_dir, docs_dir):
+    def test_basic_rebuild(self, site_dir, origin_dir):
+        docs_dir = Path(origin_dir, "docs")
+
         started_building = threading.Event()
 
         def rebuild():
             started_building.set()
-            content = Path(docs_dir, "foo.docs").read_text()
-            Path(site_dir, "foo.site").write_text(content * 5)
+            Path(site_dir, "foo.site").write_text(
+                Path(docs_dir, "foo.docs").read_text() + Path(origin_dir, "mkdocs.yml").read_text()
+            )
 
         with testing_server(site_dir, rebuild) as server:
             server.watch(docs_dir, rebuild)
+            server.watch(Path(origin_dir, "mkdocs.yml"), rebuild)
             time.sleep(0.01)
 
             _, output = do_request(server, "GET /foo.site")
             self.assertEqual(output, "original")
 
-            Path(docs_dir, "foo.docs").write_text("b")
+            Path(docs_dir, "foo.docs").write_text("docs2")
             self.assertTrue(started_building.wait(timeout=10))
+            started_building.clear()
 
             _, output = do_request(server, "GET /foo.site")
-            self.assertEqual(output, "bbbbb")
+            self.assertEqual(output, "docs2yml1")
+
+            Path(origin_dir, "mkdocs.yml").write_text("yml2")
+            self.assertTrue(started_building.wait(timeout=10))
+            started_building.clear()
+
+            _, output = do_request(server, "GET /foo.site")
+            self.assertEqual(output, "docs2yml2")
 
     @tempdir({"foo.docs": "a"})
     @tempdir({"foo.site": "original"})

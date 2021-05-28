@@ -76,8 +76,10 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 stacklevel=2,
             )
 
-        def callback(event):
+        def callback(event, allowed_path=None):
             if event.is_directory:
+                return
+            if allowed_path is not None and event.src_path != allowed_path:
                 return
             # Text editors always cause a "file close" event in addition to "modified" when saving
             # a file. Some editors also have "swap" functionality that keeps writing into another
@@ -91,9 +93,23 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 self._to_rebuild[func] = True
                 self._rebuild_cond.notify_all()
 
-        handler = watchdog.events.FileSystemEventHandler()
-        handler.on_any_event = callback
-        self.observer.schedule(handler, path, recursive=recursive)
+        dir_handler = watchdog.events.FileSystemEventHandler()
+        dir_handler.on_any_event = callback
+
+        def schedule(path):
+            if os.path.isfile(path):
+                # Watchdog doesn't support watching files, so watch its directory and filter by path
+                handler = watchdog.events.FileSystemEventHandler()
+                handler.on_any_event = lambda event: callback(event, allowed_path=path)
+
+                parent = os.path.dirname(path)
+                log.debug(f"Watching file '{path}' through directory '{parent}'")
+                self.observer.schedule(handler, parent)
+            else:
+                log.debug(f"Watching directory '{path}'")
+                self.observer.schedule(dir_handler, path, recursive=recursive)
+
+        schedule(os.path.realpath(path))
 
     def serve(self):
         self.observer.start()
