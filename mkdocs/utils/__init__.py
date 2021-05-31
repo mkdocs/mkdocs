@@ -320,8 +320,8 @@ def get_themes():
     """ Return a dict of all installed themes as {name: EntryPoint}. """
 
     themes = {}
-    eps = importlib_metadata.entry_points(group='mkdocs.themes')
-    builtins = [ep.name for ep in eps if ep.dist.name == 'mkdocs']
+    eps = set(importlib_metadata.entry_points(group='mkdocs.themes'))
+    builtins = {ep.name for ep in eps if ep.dist.name == 'mkdocs'}
 
     for theme in eps:
 
@@ -332,7 +332,7 @@ def get_themes():
             )
         elif theme.name in themes:
             log.warning(
-                f"A theme named '{theme.name}' is provided by the Python packages '{theme.dist.name}'"
+                f"A theme named '{theme.name}' is provided by the Python packages '{theme.dist.name}' "
                 f"and '{themes[theme.name].dist.name}'. The one in '{theme.dist.name}' will be used."
             )
 
