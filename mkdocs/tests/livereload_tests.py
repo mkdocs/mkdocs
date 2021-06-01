@@ -3,6 +3,7 @@
 import contextlib
 import email
 import io
+import sys
 import threading
 import time
 import unittest
@@ -36,6 +37,7 @@ def testing_server(root, builder=lambda: None, mount_path="/"):
             port=0,
             root=root,
             mount_path=mount_path,
+            build_delay=0.1,
             bind_and_activate=False,
         )
         server.setup_environ()
@@ -75,28 +77,40 @@ class BuildTests(unittest.TestCase):
             self.assertEqual(headers["_status"], "200 OK")
             self.assertEqual(headers.get("content-length"), str(len(output)))
 
-    @tempdir({"foo.docs": "a"})
+    @tempdir({"docs/foo.docs": "docs1", "mkdocs.yml": "yml1"})
     @tempdir({"foo.site": "original"})
-    def test_basic_rebuild(self, site_dir, docs_dir):
+    def test_basic_rebuild(self, site_dir, origin_dir):
+        docs_dir = Path(origin_dir, "docs")
+
         started_building = threading.Event()
 
         def rebuild():
             started_building.set()
-            content = Path(docs_dir, "foo.docs").read_text()
-            Path(site_dir, "foo.site").write_text(content * 5)
+            Path(site_dir, "foo.site").write_text(
+                Path(docs_dir, "foo.docs").read_text() + Path(origin_dir, "mkdocs.yml").read_text()
+            )
 
         with testing_server(site_dir, rebuild) as server:
             server.watch(docs_dir, rebuild)
+            server.watch(Path(origin_dir, "mkdocs.yml"), rebuild)
             time.sleep(0.01)
 
             _, output = do_request(server, "GET /foo.site")
             self.assertEqual(output, "original")
 
-            Path(docs_dir, "foo.docs").write_text("b")
+            Path(docs_dir, "foo.docs").write_text("docs2")
             self.assertTrue(started_building.wait(timeout=10))
+            started_building.clear()
 
             _, output = do_request(server, "GET /foo.site")
-            self.assertEqual(output, "bbbbb")
+            self.assertEqual(output, "docs2yml1")
+
+            Path(origin_dir, "mkdocs.yml").write_text("yml2")
+            self.assertTrue(started_building.wait(timeout=10))
+            started_building.clear()
+
+            _, output = do_request(server, "GET /foo.site")
+            self.assertEqual(output, "docs2yml2")
 
     @tempdir({"foo.docs": "a"})
     @tempdir({"foo.site": "original"})
@@ -408,3 +422,99 @@ class BuildTests(unittest.TestCase):
                 headers, _ = do_request(server, "GET /")
             self.assertEqual(headers["_status"], "302 Found")
             self.assertEqual(headers.get("location"), "/mount/path/")
+
+    @tempdir({"mkdocs.yml": "original", "mkdocs2.yml": "original"}, prefix="tmp_dir")
+    @tempdir(prefix="origin_dir")
+    @tempdir({"subdir/foo.md": "original"}, prefix="dest_docs_dir")
+    def test_watches_direct_symlinks(self, dest_docs_dir, origin_dir, tmp_dir):
+        try:
+            Path(origin_dir, "docs").symlink_to(dest_docs_dir, target_is_directory=True)
+            Path(origin_dir, "mkdocs.yml").symlink_to(Path(tmp_dir, "mkdocs.yml"))
+        except NotImplementedError:  # PyPy on Windows
+            self.skipTest("Creating symlinks not supported")
+
+        started_building = threading.Event()
+
+        def wait_for_build():
+            result = started_building.wait(timeout=10)
+            started_building.clear()
+            with self.assertLogs("mkdocs.livereload"):
+                do_request(server, "GET /")
+            return result
+
+        with testing_server(tmp_dir, started_building.set) as server:
+            server.watch(Path(origin_dir, "docs"))
+            server.watch(Path(origin_dir, "mkdocs.yml"))
+            time.sleep(0.01)
+
+            Path(tmp_dir, "mkdocs.yml").write_text("edited")
+            self.assertTrue(wait_for_build())
+
+            Path(dest_docs_dir, "subdir", "foo.md").write_text("edited")
+            self.assertTrue(wait_for_build())
+
+            Path(origin_dir, "unrelated.md").write_text("foo")
+            self.assertFalse(started_building.wait(timeout=0.2))
+
+    @tempdir(["file_dest_1.md", "file_dest_2.md", "file_dest_unused.md"], prefix="tmp_dir")
+    @tempdir(["file_under.md"], prefix="dir_to_link_to")
+    @tempdir()
+    def test_watches_through_symlinks(self, docs_dir, dir_to_link_to, tmp_dir):
+        try:
+            Path(docs_dir, "link1.md").symlink_to(Path(tmp_dir, "file_dest_1.md"))
+            Path(docs_dir, "linked_dir").symlink_to(dir_to_link_to, target_is_directory=True)
+
+            Path(dir_to_link_to, "sublink.md").symlink_to(Path(tmp_dir, "file_dest_2.md"))
+        except NotImplementedError:  # PyPy on Windows
+            self.skipTest("Creating symlinks not supported")
+
+        started_building = threading.Event()
+
+        def wait_for_build():
+            result = started_building.wait(timeout=10)
+            started_building.clear()
+            with self.assertLogs("mkdocs.livereload"):
+                do_request(server, "GET /")
+            return result
+
+        with testing_server(docs_dir, started_building.set) as server:
+            server.watch(docs_dir)
+            time.sleep(0.01)
+
+            Path(tmp_dir, "file_dest_1.md").write_text("edited")
+            self.assertTrue(wait_for_build())
+
+            Path(dir_to_link_to, "file_under.md").write_text("edited")
+            self.assertTrue(wait_for_build())
+
+            Path(tmp_dir, "file_dest_2.md").write_text("edited")
+            self.assertTrue(wait_for_build())
+
+            Path(docs_dir, "link1.md").unlink()
+            self.assertTrue(wait_for_build())
+
+            Path(tmp_dir, "file_dest_unused.md").write_text("edited")
+            self.assertFalse(started_building.wait(timeout=0.2))
+
+    @tempdir()
+    def test_watch_with_broken_symlinks(self, docs_dir):
+        Path(docs_dir, "subdir").mkdir()
+
+        try:
+            if sys.platform != "win32":
+                Path(docs_dir, "subdir", "circular").symlink_to(Path(docs_dir))
+            Path(docs_dir, "self_link").symlink_to(Path(docs_dir, "self_link"))
+
+            Path(docs_dir, "broken_1").symlink_to(Path(docs_dir, "oh no"))
+            Path(docs_dir, "broken_2").symlink_to(Path(docs_dir, "oh no"), target_is_directory=True)
+            Path(docs_dir, "broken_3").symlink_to(Path(docs_dir, "broken_2"))
+        except NotImplementedError:  # PyPy on Windows
+            self.skipTest("Creating symlinks not supported")
+
+        started_building = threading.Event()
+        with testing_server(docs_dir, started_building.set) as server:
+            server.watch(docs_dir)
+            time.sleep(0.01)
+
+            Path(docs_dir, "subdir", "test").write_text("test")
+            self.assertTrue(started_building.wait(timeout=10))

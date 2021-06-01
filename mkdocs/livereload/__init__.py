@@ -4,6 +4,7 @@ import logging
 import mimetypes
 import os
 import os.path
+import pathlib
 import re
 import socketserver
 import threading
@@ -76,8 +77,10 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 stacklevel=2,
             )
 
-        def callback(event):
-            if event.is_directory:
+        def callback(event, allowed_path=None):
+            if isinstance(event, watchdog.events.DirCreatedEvent):
+                return
+            if allowed_path is not None and event.src_path != allowed_path:
                 return
             # Text editors always cause a "file close" event in addition to "modified" when saving
             # a file. Some editors also have "swap" functionality that keeps writing into another
@@ -91,9 +94,43 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 self._to_rebuild[func] = True
                 self._rebuild_cond.notify_all()
 
-        handler = watchdog.events.FileSystemEventHandler()
-        handler.on_any_event = callback
-        self.observer.schedule(handler, path, recursive=recursive)
+        dir_handler = watchdog.events.FileSystemEventHandler()
+        dir_handler.on_any_event = callback
+
+        seen = set()
+
+        def schedule(path):
+            seen.add(path)
+            if os.path.isfile(path):
+                # Watchdog doesn't support watching files, so watch its directory and filter by path
+                handler = watchdog.events.FileSystemEventHandler()
+                handler.on_any_event = lambda event: callback(event, allowed_path=path)
+
+                parent = os.path.dirname(path)
+                log.debug(f"Watching file '{path}' through directory '{parent}'")
+                self.observer.schedule(handler, parent)
+            else:
+                log.debug(f"Watching directory '{path}'")
+                self.observer.schedule(dir_handler, path, recursive=recursive)
+
+        schedule(os.path.realpath(path))
+
+        def watch_symlink_targets(path_obj):  # path is os.DirEntry or pathlib.Path
+            if path_obj.is_symlink():
+                # The extra `readlink` is needed due to https://bugs.python.org/issue9949
+                target = os.path.realpath(os.readlink(os.fspath(path_obj)))
+                if target in seen or not os.path.exists(target):
+                    return
+                schedule(target)
+
+                path_obj = pathlib.Path(target)
+
+            if path_obj.is_dir() and recursive:
+                with os.scandir(os.fspath(path_obj)) as scan:
+                    for entry in scan:
+                        watch_symlink_targets(entry)
+
+        watch_symlink_targets(pathlib.Path(path))
 
     def serve(self):
         self.observer.start()
