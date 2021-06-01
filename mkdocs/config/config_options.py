@@ -542,37 +542,47 @@ class MarkdownExtensions(OptionallyRequired):
     """
     Markdown Extensions Config Option
 
-    A list of extensions. If a list item contains extension configs,
-    those are set on the private  setting passed to `configkey`. The
-    `builtins` keyword accepts a list of extensions which cannot be
-    overriden by the user. However, builtins can be duplicated to define
-    config options for them if desired.
-    """
+    A list or dict of extensions. Each list item may contain either a string or a one item dict.
+    A string must be a valid Markdown extension name with no config options defined. The key of
+    a dict item must be a valid Markdown extension name and the value must be a dict of config
+    options for that extension. Extension configs are set on the private setting passed to
+    `configkey`. The `builtins` keyword accepts a list of extensions which cannot be overriden by
+    the user. However, builtins can be duplicated to define config options for them if desired. """
     def __init__(self, builtins=None, configkey='mdx_configs', **kwargs):
         super().__init__(**kwargs)
         self.builtins = builtins or []
         self.configkey = configkey
         self.configdata = {}
 
+    def validate_ext_cfg(self, ext, cfg):
+        if not isinstance(ext, str):
+            raise ValidationError(f"'{ext}' is not a valid Markdown Extension name.")
+        if not cfg:
+            return
+        if not isinstance(cfg, dict):
+            raise ValidationError(f"Invalid config options for Markdown Extension '{ext}'.")
+        self.configdata[ext] = cfg
+
     def run_validation(self, value):
-        if not isinstance(value, (list, tuple)):
+        if not isinstance(value, (list, tuple, dict)):
             raise ValidationError('Invalid Markdown Extensions configuration')
         extensions = []
-        for item in value:
-            if isinstance(item, dict):
-                if len(item) > 1:
-                    raise ValidationError('Invalid Markdown Extensions configuration')
-                ext, cfg = item.popitem()
+        if isinstance(value, dict):
+            for ext, cfg in value.items():
+                self.validate_ext_cfg(ext, cfg)
                 extensions.append(ext)
-                if cfg is None:
-                    continue
-                if not isinstance(cfg, dict):
-                    raise ValidationError(f"Invalid config options for Markdown Extension '{ext}'.")
-                self.configdata[ext] = cfg
-            elif isinstance(item, str):
-                extensions.append(item)
-            else:
-                raise ValidationError('Invalid Markdown Extensions configuration')
+        else:
+            for item in value:
+                if isinstance(item, dict):
+                    if len(item) > 1:
+                        raise ValidationError('Invalid Markdown Extensions configuration')
+                    ext, cfg = item.popitem()
+                    self.validate_ext_cfg(ext, cfg)
+                    extensions.append(ext)
+                elif isinstance(item, str):
+                    extensions.append(item)
+                else:
+                    raise ValidationError('Invalid Markdown Extensions configuration')
 
         extensions = utils.reduce_list(self.builtins + extensions)
 
@@ -592,7 +602,7 @@ class Plugins(OptionallyRequired):
     """
     Plugins config option.
 
-    A list of plugins. If a plugin defines config options those are used when
+    A list or dict of plugins. If a plugin defines config options those are used when
     initializing the plugin class.
     """
 
@@ -605,31 +615,33 @@ class Plugins(OptionallyRequired):
         self.config_file_path = config.config_file_path
 
     def run_validation(self, value):
-        if not isinstance(value, (list, tuple)):
-            raise ValidationError('Invalid Plugins configuration. Expected a list of plugins')
+        if not isinstance(value, (list, tuple, dict)):
+            raise ValidationError('Invalid Plugins configuration. Expected a list or dict.')
         plgins = plugins.PluginCollection()
-        for item in value:
-            if isinstance(item, dict):
-                if len(item) > 1:
-                    raise ValidationError('Invalid Plugins configuration')
-                name, cfg = item.popitem()
-                cfg = cfg or {}  # Users may define a null (None) config
-                if not isinstance(cfg, dict):
-                    raise ValidationError(f'Invalid config options for the "{name}" plugin.')
-                item = name
-            else:
-                cfg = {}
-
-            if not isinstance(item, str):
-                raise ValidationError('Invalid Plugins configuration')
-
-            plgins[item] = self.load_plugin(item, cfg)
-
+        if isinstance(value, dict):
+            for name, cfg in value.items():
+                plgins[name] = self.load_plugin(name, cfg)
+        else:
+            for item in value:
+                if isinstance(item, dict):
+                    if len(item) > 1:
+                        raise ValidationError('Invalid Plugins configuration')
+                    name, cfg = item.popitem()
+                    item = name
+                else:
+                    cfg = {}
+                plgins[item] = self.load_plugin(item, cfg)
         return plgins
 
     def load_plugin(self, name, config):
+        if not isinstance(name, str):
+            raise ValidationError(f"'{name}' is not a valid plugin name.")
         if name not in self.installed_plugins:
             raise ValidationError(f'The "{name}" plugin is not installed')
+
+        config = config or {}  # Users may define a null (None) config
+        if not isinstance(config, dict):
+            raise ValidationError(f"Invalid config options for the '{name}' plugin.")
 
         Plugin = self.installed_plugins[name].load()
 

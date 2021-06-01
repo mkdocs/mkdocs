@@ -67,6 +67,19 @@ otherkey: !ENV [VAR_NAME, FALLBACK_VAR, 'default value']
 See [Environment Variables](../user-guide/configuration.md#environment-variables)
 in the Configuration documentation for details.
 
+#### Support added for Configuration Inheritance (#2218)
+
+A configuration file may now inherit from a parent configuration file. In the
+primary file set the `INHERIT` key to the relative path of the parent file.
+
+```yaml
+INHERIT: path/to/base.yml
+```
+
+The two files will then be deep merged. See
+[Configuration Inheritance](../user-guide/configuration.md#configuration-inheritance)
+for details.
+
 #### Update `gh-deploy` command (#2170)
 
 The vendored (and modified) copy of ghp_import has been replaced with a

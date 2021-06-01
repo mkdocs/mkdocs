@@ -19,6 +19,7 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from urllib.parse import urlparse
 from yaml_env_tag import construct_env_tag
+from mergedeep import merge
 
 from mkdocs import exceptions
 
@@ -33,20 +34,8 @@ markdown_extensions = [
 ]
 
 
-def yaml_load(source, loader=yaml.Loader):
-    """
-    Wrap PyYaml's loader so we can extend it to suit our needs.
-
-    Load all strings as unicode.
-    https://stackoverflow.com/a/2967461/3609487
-    """
-
-    def construct_yaml_str(self, node):
-        """
-        Override the default string handling function to always return
-        unicode objects.
-        """
-        return self.construct_scalar(node)
+def get_yaml_loader(loader=yaml.Loader):
+    """ Wrap PyYaml's loader so we can extend it to suit our needs. """
 
     class Loader(loader):
         """
@@ -54,26 +43,28 @@ def yaml_load(source, loader=yaml.Loader):
         global loader unaltered.
         """
 
-    # Attach our unicode constructor to our custom loader ensuring all strings
-    # will be unicode on translation.
-    Loader.add_constructor('tag:yaml.org,2002:str', construct_yaml_str)
-
     # Attach Environment Variable constructor.
     # See https://github.com/waylan/pyyaml-env-tag
     Loader.add_constructor('!ENV', construct_env_tag)
 
-    try:
-        return yaml.load(source, Loader)
-    finally:
-        # TODO: Remove this when external calls are properly cleaning up file
-        # objects. Some mkdocs internal calls, sometimes in test lib, will
-        # load configs with a file object but never close it.  On some
-        # systems, if a delete action is performed on that file without Python
-        # closing that object, there will be an access error. This will
-        # process the file and close it as there should be no more use for the
-        # file once we process the yaml content.
-        if hasattr(source, 'close'):
-            source.close()
+    return Loader
+
+
+def yaml_load(source, loader=None):
+    """ Return dict of source YAML file using loader, recursively deep merging inherited parent. """
+    Loader = loader or get_yaml_loader()
+    result = yaml.load(source, Loader=Loader)
+    if result is not None and 'INHERIT' in result:
+        relpath = result.pop('INHERIT')
+        abspath = os.path.normpath(os.path.join(os.path.dirname(source.name), relpath))
+        if not os.path.exists(abspath):
+            raise exceptions.ConfigurationError(
+                f"Inherited config file '{relpath}' does not exist at '{abspath}'.")
+        log.debug(f"Loading inherited configuration file: {abspath}")
+        with open(abspath, 'rb') as fd:
+            parent = yaml_load(fd, Loader)
+        result = merge(parent, result)
+    return result
 
 
 def modified_time(file_path):

@@ -252,6 +252,29 @@ class TestPluginConfig(unittest.TestCase):
         }
         self.assertEqual(cfg['plugins']['sample'].config, expected)
 
+    def test_plugin_config_as_dict(self, mock_class):
+
+        cfg = {
+            'plugins': {
+                'sample': {
+                    'foo': 'foo value',
+                    'bar': 42
+                }
+            }
+        }
+        option = config.config_options.Plugins()
+        cfg['plugins'] = option.validate(cfg['plugins'])
+
+        self.assertIsInstance(cfg['plugins'], plugins.PluginCollection)
+        self.assertIn('sample', cfg['plugins'])
+        self.assertIsInstance(cfg['plugins']['sample'], plugins.BasePlugin)
+        expected = {
+            'foo': 'foo value',
+            'bar': 42,
+            'dir': None,
+        }
+        self.assertEqual(cfg['plugins']['sample'].config, expected)
+
     def test_plugin_config_empty_list_with_empty_default(self, mock_class):
         cfg = {'plugins': []}
         option = config.config_options.Plugins(default=[])
