@@ -526,7 +526,6 @@ class BuildTests(unittest.TestCase):
         try:
             if sys.platform != "win32":
                 Path(docs_dir, "subdir", "circular").symlink_to(Path(docs_dir))
-            Path(docs_dir, "self_link").symlink_to(Path(docs_dir, "self_link"))
 
             Path(docs_dir, "broken_1").symlink_to(Path(docs_dir, "oh no"))
             Path(docs_dir, "broken_2").symlink_to(Path(docs_dir, "oh no"), target_is_directory=True)
