@@ -824,6 +824,26 @@ class MarkdownExtensionsTest(unittest.TestCase):
         }, config)
 
     @patch('markdown.Markdown')
+    def test_dict_of_dicts(self, mockMd):
+        option = config_options.MarkdownExtensions()
+        config = {
+            'markdown_extensions': {
+                'foo': {'foo_option': 'foo value'},
+                'bar': {'bar_option': 'bar value'},
+                'baz': {}
+            }
+        }
+        config['markdown_extensions'] = option.validate(config['markdown_extensions'])
+        option.post_validation(config, 'markdown_extensions')
+        self.assertEqual({
+            'markdown_extensions': ['foo', 'bar', 'baz'],
+            'mdx_configs': {
+                'foo': {'foo_option': 'foo value'},
+                'bar': {'bar_option': 'bar value'}
+            }
+        }, config)
+
+    @patch('markdown.Markdown')
     def test_builtins(self, mockMd):
         option = config_options.MarkdownExtensions(builtins=['meta', 'toc'])
         config = {

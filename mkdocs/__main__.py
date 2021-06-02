@@ -33,6 +33,7 @@ class ColorFormatter(logging.Formatter):
     )
 
     def format(self, record):
+        message = super().format(record)
         prefix = f'{record.levelname:<8} -  '
         if record.levelname in self.colors:
             prefix = click.style(prefix, fg=self.colors[record.levelname])
@@ -40,11 +41,11 @@ class ColorFormatter(logging.Formatter):
             # Only wrap text if a terminal width was detected
             msg = '\n'.join(
                 self.text_wrapper.fill(line)
-                for line in record.getMessage().splitlines()
+                for line in message.splitlines()
             )
             # Prepend prefix after wrapping so that color codes don't affect length
             return prefix + msg[12:]
-        return prefix + record.getMessage()
+        return prefix + message
 
 
 class State:
@@ -169,9 +170,6 @@ def cli():
 @common_options
 def serve_command(dev_addr, livereload, **kwargs):
     """Run the builtin development server"""
-
-    logging.getLogger('tornado').setLevel(logging.WARNING)
-
     serve.serve(dev_addr=dev_addr, livereload=livereload, **kwargs)
 
 

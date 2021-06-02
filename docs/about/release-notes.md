@@ -67,10 +67,23 @@ otherkey: !ENV [VAR_NAME, FALLBACK_VAR, 'default value']
 See [Environment Variables](../user-guide/configuration.md#environment-variables)
 in the Configuration documentation for details.
 
+#### Support added for Configuration Inheritance (#2218)
+
+A configuration file may now inherit from a parent configuration file. In the
+primary file set the `INHERIT` key to the relative path of the parent file.
+
+```yaml
+INHERIT: path/to/base.yml
+```
+
+The two files will then be deep merged. See
+[Configuration Inheritance](../user-guide/configuration.md#configuration-inheritance)
+for details.
+
 #### Update `gh-deploy` command (#2170)
 
 The vendored (and modified) copy of ghp_import has been replaced with a
-dependency on the upstream library. As of version 1.0.0, [ghp_import] includes a
+dependency on the upstream library. As of version 1.0.0, [ghp-import] includes a
 Python API which makes it possible to call directly.
 
 MkDocs can now benefit from recent bug fixes and new features, including the following:
@@ -80,6 +93,32 @@ MkDocs can now benefit from recent bug fixes and new features, including the fol
 * Git author and committer environment variables should be respected (#1383).
 
 [ghp-import]: https://github.com/c-w/ghp-import/
+
+#### Rework auto-reload and HTTP server for `mkdocs serve` (#2385)
+
+`mkdocs serve` now uses a new underlying server + file watcher implementation,
+based on [http.server] from standard library and [watchdog]. It provides similar
+functionality to the previously used [livereload] library (which is now dropped
+from dependencies, along with [tornado]).
+
+This makes reloads more responsive and consistent in terms of timing. Multiple
+rapid file changes no longer cause the site to repeatedly rebuild (issue #2061).
+
+Almost every aspect of the server is slightly different, but actual visible
+changes are minor. The logging outputs are only *similar* to the old ones.
+Degradations in behavior are not expected, and should be reported if found.
+
+[http.server]: https://docs.python.org/3/library/http.server.html
+[watchdog]: https://pypi.org/project/watchdog/
+[livereload]: https://pypi.org/project/livereload/
+[tornado]: https://pypi.org/project/tornado/
+
+##### Offset the local site root according to the sub-path of the `site_url` (#2424)
+
+When using `mkdocs serve` and having the `site_url` specified as e.g.
+`http://example.org/sub/path/`, now the root of the locally served site
+becomes `http://127.0.0.1:8000/sub/path/` and all document paths are offset
+accordingly.
 
 #### A `build_error` event was added (#2103)
 
@@ -120,63 +159,73 @@ configuration documentation for details.
 
 ### Backward Incompatible Changes in 1.2
 
-The [site_url](../user-guide/configuration.md#site_url) configuration option is
-now **required**. If it is not set, a warning will be issued. In a future
-release an error will be raised (#2189).
+* The [site_url](../user-guide/configuration.md#site_url) configuration option
+  is now **required**. If it is not set, a warning will be issued. In a future
+  release an error will be raised (#2189).
 
-The [use_directory_urls](../user-guide/configuration.md#use_directory_urls)
-configuration option will be forced to `false` if
-[site_url](../user-guide/configuration.md#site_url) is set to an emtpy string.
-If `use_direcotry_urls` is not explicitly set to `false` a warning will be
-issued (#2189).
+    The [use_directory_urls](../user-guide/configuration.md#use_directory_urls)
+    configuration option will be forced to `false` if
+    [site_url](../user-guide/configuration.md#site_url) is set to an emtpy
+    string. In that case, if `use_directory_urls` is not explicitly set to
+    `false`, a warning will be issued (#2189).
 
-The `google_analytics` configuration option is deprecated as Google appears to
-be fazing it out in favor of its new Google Analytics 4 property. See the
-documentation for your theme for alternatives which can be configured as part
-of your theme configuration. For exmaple, the [mkdocs][mkdocs-theme] and
-[readthedocs][rtd-theme] themes have each added a new `theme.analytics.gtag`
-configuration option which uses the new Google Analytics 4 property. See
-Google's documentation on how to [Upgrade to a Google Analytics 4
-property][ga4]. Then set  `theme.analytics.gtag` to the "G-" ID and delete the
-`google_analytics` configuration option which contains a "UA-" ID. So long
-as the old "UA-" ID and new "G-" ID are properly linked in your Google account,
-and you are using the "G-" ID, the data will be made available in both the old
-and new formats by Google Analytics. See #2252.
+* The `google_analytics` configuration option is deprecated as Google appears to
+  be fazing it out in favor of its new Google Analytics 4 property. See the
+  documentation for your theme for alternatives which can be configured as part
+  of your theme configuration. For exmaple, the [mkdocs][mkdocs-theme] and
+  [readthedocs][rtd-theme] themes have each added a new `theme.analytics.gtag`
+  configuration option which uses the new Google Analytics 4 property. See
+  Google's documentation on how to [Upgrade to a Google Analytics 4
+  property][ga4]. Then set  `theme.analytics.gtag` to the "G-" ID and delete the
+  `google_analytics` configuration option which contains a "UA-" ID. So long
+  as the old "UA-" ID and new "G-" ID are properly linked in your Google
+  account, and you are using the "G-" ID, the data will be made available in
+  both the old and new formats by Google Analytics. See #2252.
+
+* A theme's files are now excluded from the list of watched files by default
+  when using the `--livereload` server. This new default behavior is what most
+  users need and provides better performance when editing site content.
+  Theme developers can enable the old behavior with the `--watch-theme`
+  option. (#2092).
+
+* The `mkdocs` theme now removes the sidebar when printing a page. This frees
+  up horizontal space for better rendering of content like tables (#2193).
+
+* The `mkdocs.config.DEFAULT_SCHEMA` global variable has been replaced with the
+  function `mkdocs.config.defaults.get_schema()`, which ensures that each
+  instance of the configuration is unique (#2289).
+
+* The `mkdocs.utils.warning_filter` is deprecated and now does nothing. Plugins
+  should remove any reference to is as it may be deleted in a future release.
+  To ensure any warnings get counted, simply log them to the `mkdocs` log (i.e:
+  `mkdocs.plugins.pluginname`).
+
+* The `on_serve` event (which receives the `server` object and the `builder`
+  function) is affected by the server rewrite. `server` is now a
+  `mkdocs.livereload.LiveReloadServer` instead of `livereload.server.Server`.
+  The typical action that plugins can do with these is to call
+  `server.watch(some_dir, builder)`, which basically adds that directory to
+  watched directories, causing the site to be rebuilt on file changes. That
+  still works, but passing any other function to `watch` is deprecated and shows
+  a warning. This 2nd parameter is already optional, and will accept only this
+  exact `builder` function just for compatibility.
+
+* The `python` method of the `plugins.search.prebuild_index` configuration
+  option is pending deprecation as of version 1.2. It is expected that in
+  version 1.3 it will raise a warning if used and in version 1.4 it will raise
+  an error. Users are encouraged to use an alternate method to generate a
+  prebuilt index for search.
+
+* The `lunr` and `lunr[languages]` dependencies are no longer installed by
+  default. The dependencies are only needed for the rare user who prebuilds the
+  search index and uses the `python` option, which is now pending deprecation.
+  If you use this feature, then you will need to manually install `lunr` and
+  `lunr[languages]`. A warning is issued if the dependencies are needed but not
+  installed.
 
 [mkdocs-theme]: ../user-guide/choosing-your-theme.md#mkdocs
 [rtd-theme]: ../user-guide/choosing-your-theme.md#readthedocs
 [ga4]: https://support.google.com/analytics/answer/9744165?hl=en
-
-A theme's files are now excluded from the list of watched files by default
-when using the `--livereload` server. This new default behavior is what most
-users need and provides better performance when editing site content.
-Theme developers can enable the old behavior with the `--watch-theme`
-option. (#2092).
-
-The `mkdocs` theme now removes the sidebar when printing a page. This frees
-up horizontal space for better rendering of content like tables (#2193).
-
-The `mkdocs.config.DEFAULT_SCHEMA` global variable has been replaced with the
-function `mkdocs.config.defaults.get_schema()`, which ensures that each
-instance of the configuration is unique (#2289).
-
-The `mkdocs.utils.warning_filter` is deprecated and now does nothing. Plugins
- should remove any reference to is as it may be deleted in a future release.
- To ensure any warnings get counted, simply log them to the `mkdocs` log (i.e:
-`mkdocs.plugins.pluginname`).
-
-The `python` method of the `plugins.search.prebuild_index` configuration option
-is pending deprecation as of version 1.2. It is expected that in version 1.3 it
-will raise a warning if used and in version 1.4 it will raise an error. Users
-are encouraged to use an alternate method to generate a prebuilt index for
-search.
-
-The `lunr` and `lunr[languages]` dependencies are no longer installed by
-default. The dependencies are only needed for the rare user who prebuilds the
-search index and uses the `python` option, which is now pending deprecation. If
-you use this feature, then you will need to manually install `lunr` and
-`lunr[languages]`. A warning is issued if the dependencies are needed but not
-installed.
 
 ### Other Changes and Additions to Version 1.2
 

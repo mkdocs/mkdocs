@@ -9,45 +9,8 @@ Guide to all available configuration settings.
 Project settings are always configured by using a YAML configuration file in the
 project directory named `mkdocs.yml`.
 
-As a minimum, this configuration file must contain the `site_name` setting. All
-other settings are optional.
-
-### Environment Variables
-
-In most cases, the value of a configuration option is set directly in the
-configuration file. However, as an option, the value of a configuration option
-may be set to the value of an environment variable using the `!ENV` tag. For
-example, to set the value of the `site_name` option to the value of the
-variable `SITE_NAME` the YAML file may contain the following:
-
-```yaml
-site_name: !ENV SITE_NAME
-```
-
-If the environment variable is not defined, then the configuration setting
-would be assigned a `null` (or `None` in Python) value. A default value can be
-defined as the last value in a list. Like this:
-
-```yaml
-site_name: !ENV [SITE_NAME, 'My default site name']
-```
-
-Multiple fallback variables can be used as well. Note that the last value is
-not an environment variable, but must be a value to use as a default if none
-of the specified environment variables are defined.
-
-```yaml
-site_name: !ENV [SITE_NAME, OTHER_NAME, 'My default site name']
-```
-
-Simple types defined within an environment variable such as string, bool,
-integer, float, datestamp and null are parsed as if they were defined directly
-in the YAML file, which means that the value will be converted to the
-appropriate type. However, complex types such as lists and key/value pairs
-cannot be defined within a single environment variable.
-
-For more details, see the [pyyaml_env_tag](https://github.com/waylan/pyyaml-env-tag)
-project.
+As a minimum, this configuration file must contain the `site_name` and
+`site_url` settings. All other settings are optional.
 
 ## Project information
 
@@ -73,7 +36,7 @@ need to be updated prior to deployment.
 
 If the built site will not be behind a server, then you may set the value to an
 empty string (`''`). When set to an empty string, some features of MkDocs may
-act differently. For example, the [use_directory_urls](#use_direcotry_urls)
+act differently. For example, the [use_directory_urls](#use_directory_urls)
 setting must be set to `false`.
 
 ### repo_url
@@ -487,6 +450,22 @@ markdown_extensions:
     - sane_lists
 ```
 
+In the above examples, each extension is a list item (starts with a `-`). As an
+alternative, key/value pairs can be used instead. However, in that case an empty
+value must be provided for extensions for which no options are defined.
+Therefore, the last example above could also be defined as follows:
+
+```yaml
+markdown_extensions:
+    smarty: {}
+    toc:
+        permalink: True
+    sane_lists: {}
+```
+
+This alternative syntax is required if you intend to override some options via
+[inheritance].
+
 !!! note "See Also:"
     The Python-Markdown documentation provides a [list of extensions][exts]
     which are available out-of-the-box. For a list of configuration options
@@ -512,6 +491,32 @@ plugins:
     - search
     - your_other_plugin
 ```
+
+To define options for a given plugin, use a nested set of key/value pairs:
+
+```yaml
+plugins:
+    - search
+    - your_other_plugin:
+        option1: value
+        option2: other value
+```
+
+In the above examples, each plugin is a list item (starts with a `-`). As an
+alternative, key/value pairs can be used instead. However, in that case an empty
+value must be provided for plugins for which no options are defined. Therefore,
+the last example above could also be defined as follows:
+
+```yaml
+plugins:
+    search: {}
+    your_other_plugin:
+        option1: value
+        option2: other value
+```
+
+This alternative syntax is required if you intend to override some options via
+[inheritance].
 
 To completely disable all plugins, including any defaults, set the `plugins`
 setting to an empty list:
@@ -649,6 +654,161 @@ plugins:
 
 **default**: `full`
 
+## Environment Variables
+
+In most cases, the value of a configuration option is set directly in the
+configuration file. However, as an option, the value of a configuration option
+may be set to the value of an environment variable using the `!ENV` tag. For
+example, to set the value of the `site_name` option to the value of the
+variable `SITE_NAME` the YAML file may contain the following:
+
+```yaml
+site_name: !ENV SITE_NAME
+```
+
+If the environment variable is not defined, then the configuration setting
+would be assigned a `null` (or `None` in Python) value. A default value can be
+defined as the last value in a list. Like this:
+
+```yaml
+site_name: !ENV [SITE_NAME, 'My default site name']
+```
+
+Multiple fallback variables can be used as well. Note that the last value is
+not an environment variable, but must be a value to use as a default if none
+of the specified environment variables are defined.
+
+```yaml
+site_name: !ENV [SITE_NAME, OTHER_NAME, 'My default site name']
+```
+
+Simple types defined within an environment variable such as string, bool,
+integer, float, datestamp and null are parsed as if they were defined directly
+in the YAML file, which means that the value will be converted to the
+appropriate type. However, complex types such as lists and key/value pairs
+cannot be defined within a single environment variable.
+
+For more details, see the [pyyaml_env_tag](https://github.com/waylan/pyyaml-env-tag)
+project.
+
+## Configuration Inheritance
+
+Generally, a single file would hold the entire configuration for a site.
+However, some organizations may maintain multiple sites which all share a common
+configuration across them. Rather than maintaining separate configurations for
+each, the common configuration options can be defined in a parent configuration
+while which each site's primary configuration file inherits.
+
+To define the parent for a configuration file, set the `INHERIT` (all caps) key
+to the path of the parent file. The path must be relative to the location of the
+primary file.
+
+For configuration options to be merged with a parent configuration, those
+options must be defined as key/value pairs. Specifically, the
+[markdown_extensions] and [plugins] options must use the alternative syntax
+which does not use list items (lines which start with  `-`).
+
+For example, suppose the common (parent) configuration is defined in `base.yml`:
+
+```yaml
+theme:
+    name: mkdocs
+    locale: en
+    highlightjs: true
+
+markdown_extensions:
+    toc:
+        permalink: true
+    admonition: {}
+```
+
+Then, for the "foo" site, the primary configuration file would be defined at
+`foo/mkdocs.yml`:
+
+```yml
+INHERIT: ../base.yml
+site_name: Foo Project
+site_url: https://example.com/foo
+```
+
+When running `mkdocs build`, the file at `foo/mkdocs.yml` would be passed in as
+the configuration file. MkDocs will then parse that file, retrieve and parse the
+parent file `base.yml` and deep merge the two. This would result in MkDocs
+receiving the following merged configuration:
+
+```yaml
+site_name: Foo Project
+site_url: https://example.com/foo
+
+theme:
+    name: mkdocs
+    locale: en
+    highlightjs: true
+
+markdown_extensions:
+    toc:
+        permalink: true
+    admonition: {}
+```
+
+Deep merging allows you to add and/or override various values in your primary
+configuration file. For example, suppose for one site you wanted to add support
+for definition lists, use a different symbol for permalinks, and define a
+different separator. In that site's primary configuration file you could do:
+
+```yaml
+INHERIT: ../base.yml
+site_name: Bar Project
+site_url: https://example.com/bar
+
+markdown_extensions:
+    def_list: {}
+    toc:
+        permalink: 
+        separator: "_"
+```
+
+In that case, the above configuration would be deep merged with `base.yml` and
+result in the following configuration:
+
+```yaml
+site_name: Bar Project
+site_url: https://example.com/bar
+
+theme:
+    name: mkdocs
+    locale: en
+    highlightjs: true
+
+markdown_extensions:
+    def_list: {}
+    toc:
+        permalink: 
+        separator: "_"
+    admonition: {}
+```
+
+Notice that the `admonition` extension was retained from the parent
+configuration, the `def_list` extension was added, the value of
+`toc.permalink` was replaced, and the value of `toc.separator` was added.
+
+You can replace or merge the value of any key. However, any non-key is always
+replaced. Therefore, you cannot append items to a list. You must redefine the
+entire list.
+
+As the [nav] configuration is made up of nested lists, this means that you
+cannot merge navigation items. Of course, you can replace the entire `nav`
+configuration with a new one. However, it is generally expected that the entire
+navigation would be defined in the primary configuration file for a project.
+
+!!! warning
+
+    As a reminder, all path based configuration options must be relative to the
+    primary configuration file and MkDocs does not alter the paths when merging.
+    Therefore, defining paths in a parent file which is inherited by multiple
+    different sites may not work as expected. It is generally best to define
+    path based options in the primary configuration file only.
+
 [Theme Developer Guide]: ../dev-guide/themes.md
 [variables that are available]: ../dev-guide/themes.md#template-variables
 [pymdk-extensions]: https://python-markdown.github.io/extensions/
@@ -669,3 +829,7 @@ plugins:
 [Node.js]: https://nodejs.org/
 [Lunr.py]: http://lunr.readthedocs.io/
 [Lunr.py's issues]: https://github.com/yeraydiazdiaz/lunr.py/issues
+[markdown_extensions]: #markdown_extensions
+[plugins]: #plugins
+[nav]: #nav
+[inheritance]: #configuration-inheritance

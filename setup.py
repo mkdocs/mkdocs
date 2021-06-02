@@ -60,14 +60,14 @@ setup(
     install_requires=[
         'click>=3.3',
         'Jinja2>=2.10.1',
-        'livereload>=2.5.1',
         'Markdown>=3.2.1',
         'PyYAML>=3.10',
-        'tornado>=5.0',
+        'watchdog>=2.0',
         'ghp-import>=1.0',
         'pyyaml_env_tag>=0.1',
         'importlib_metadata>=3.10',
-        'packaging>=20.5'
+        'packaging>=20.5',
+        'mergedeep>=1.3.4'
     ],
     extras_require={"i18n": ['babel>=2.9.0']},
     python_requires='>=3.6',
