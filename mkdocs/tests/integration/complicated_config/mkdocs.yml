@@ -18,9 +18,9 @@ site_dir: output
 theme:
     name: mkdocs
     custom_dir: theme_tweaks
+    analytics: {gtag: 'G-ABC123'}
 
 copyright: "Dougal Matthews"
-google_analytics: ["1", "2"]
 dev_addr: ::1:8000
 use_directory_urls: false
 

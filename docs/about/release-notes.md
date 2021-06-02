@@ -169,6 +169,19 @@ configuration documentation for details.
     string. In that case, if `use_directory_urls` is not explicitly set to
     `false`, a warning will be issued (#2189).
 
+* The `google_analytics` configuration option is deprecated as Google appears to
+  be fazing it out in favor of its new Google Analytics 4 property. See the
+  documentation for your theme for alternatives which can be configured as part
+  of your theme configuration. For exmaple, the [mkdocs][mkdocs-theme] and
+  [readthedocs][rtd-theme] themes have each added a new `theme.analytics.gtag`
+  configuration option which uses the new Google Analytics 4 property. See
+  Google's documentation on how to [Upgrade to a Google Analytics 4
+  property][ga4]. Then set  `theme.analytics.gtag` to the "G-" ID and delete the
+  `google_analytics` configuration option which contains a "UA-" ID. So long
+  as the old "UA-" ID and new "G-" ID are properly linked in your Google
+  account, and you are using the "G-" ID, the data will be made available in
+  both the old and new formats by Google Analytics. See #2252.
+
 * A theme's files are now excluded from the list of watched files by default
   when using the `--livereload` server. This new default behavior is what most
   users need and provides better performance when editing site content.
@@ -209,6 +222,10 @@ configuration documentation for details.
   If you use this feature, then you will need to manually install `lunr` and
   `lunr[languages]`. A warning is issued if the dependencies are needed but not
   installed.
+
+[mkdocs-theme]: ../user-guide/choosing-your-theme.md#mkdocs
+[rtd-theme]: ../user-guide/choosing-your-theme.md#readthedocs
+[ga4]: https://support.google.com/analytics/answer/9744165?hl=en
 
 ### Other Changes and Additions to Version 1.2
 
