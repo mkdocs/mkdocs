@@ -118,7 +118,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         def watch_symlink_targets(path_obj):  # path is os.DirEntry or pathlib.Path
             if path_obj.is_symlink():
                 # The extra `readlink` is needed due to https://bugs.python.org/issue9949
-                target = os.path.realpath(os.readlink(os.fspath(path_obj)))
+                target = os.path.realpath(os.fspath(path_obj))
                 if target in seen or not os.path.exists(target):
                     return
                 schedule(target)

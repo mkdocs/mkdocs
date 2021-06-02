@@ -3,6 +3,7 @@
 import contextlib
 import email
 import io
+import os
 import sys
 import threading
 import time
@@ -495,6 +496,28 @@ class BuildTests(unittest.TestCase):
 
             Path(tmp_dir, "file_dest_unused.md").write_text("edited")
             self.assertFalse(started_building.wait(timeout=0.2))
+
+    @tempdir(prefix="site_dir")
+    @tempdir(["docs/unused.md", "README.md"], prefix="origin_dir")
+    def test_watches_through_relative_symlinks(self, origin_dir, site_dir):
+        docs_dir = Path(origin_dir, "docs")
+        old_cwd = os.getcwd()
+        os.chdir(docs_dir)
+        try:
+            Path(docs_dir, "README.md").symlink_to(Path("..", "README.md"))
+        except NotImplementedError:  # PyPy on Windows
+            self.skipTest("Creating symlinks not supported")
+        finally:
+            os.chdir(old_cwd)
+
+        started_building = threading.Event()
+
+        with testing_server(docs_dir, started_building.set) as server:
+            server.watch(docs_dir)
+            time.sleep(0.01)
+
+            Path(origin_dir, "README.md").write_text("edited")
+            self.assertTrue(started_building.wait(timeout=10))
 
     @tempdir()
     def test_watch_with_broken_symlinks(self, docs_dir):
