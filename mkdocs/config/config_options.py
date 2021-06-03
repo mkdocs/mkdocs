@@ -185,36 +185,58 @@ class Choice(OptionallyRequired):
 
 
 class Deprecated(BaseConfigOption):
+    """
+    Deprecated Config Option
 
-    def __init__(self, moved_to=None):
+    Raises a warning as the option is deprecated. Uses `message` for the
+    warning. If `move_to` is set to the name of a new config option, the value
+    is moved to the new option on pre_validation. If `option_type` is set to a
+    ConfigOption instance, then the value is validated against that type.
+    """
+
+    def __init__(self, moved_to=None, message='', option_type=None):
         super().__init__()
         self.default = None
         self.moved_to = moved_to
+        self.message = message or (
+            'The configuration option {} has been deprecated and '
+            'will be removed in a future release of MkDocs.'
+        )
+        self.option = option_type or BaseConfigOption()
+        self.warnings = self.option.warnings
 
     def pre_validation(self, config, key_name):
+        self.option.pre_validation(config, key_name)
 
-        if config.get(key_name) is None or self.moved_to is None:
-            return
+        if config.get(key_name) is not None:
+            self.warnings.append(self.message.format(key_name))
 
-        warning = (f'The configuration option {key_name} has been deprecated and '
-                   f'will be removed in a future release of MkDocs.')
-        self.warnings.append(warning)
+            if self.moved_to is not None:
+                if '.' not in self.moved_to:
+                    target = config
+                    target_key = self.moved_to
+                else:
+                    move_to, target_key = self.moved_to.rsplit('.', 1)
 
-        if '.' not in self.moved_to:
-            target = config
-            target_key = self.moved_to
-        else:
-            move_to, target_key = self.moved_to.rsplit('.', 1)
+                    target = config
+                    for key in move_to.split('.'):
+                        target = target.setdefault(key, {})
 
-            target = config
-            for key in move_to.split('.'):
-                target = target.setdefault(key, {})
+                        if not isinstance(target, dict):
+                            # We can't move it for the user
+                            return
 
-                if not isinstance(target, dict):
-                    # We can't move it for the user
-                    return
+                target[target_key] = config.pop(key_name)
 
-        target[target_key] = config.pop(key_name)
+    def validate(self, value):
+        return self.option.validate(value)
+
+    def post_validation(self, config, key_name):
+        self.option.post_validation(config, key_name)
+
+    def reset_warnings(self):
+        self.option.reset_warnings()
+        self.warnings = self.option.warnings
 
 
 class IpAddress(OptionallyRequired):

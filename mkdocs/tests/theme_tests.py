@@ -31,6 +31,7 @@ class ThemeTests(unittest.TestCase):
             'locale': parse_locale('en'),
             'include_search_page': False,
             'search_index_only': False,
+            'analytics': {'gtag': None},
             'highlightjs': True,
             'hljs_style': 'github',
             'hljs_languages': [],

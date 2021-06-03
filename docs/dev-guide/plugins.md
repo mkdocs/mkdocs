@@ -250,15 +250,15 @@ called after the [env] event and before any [page events].
 ##### on_pre_template
 
 :   The `pre_template` event is called immediately after the subject template is
-    loaded and can be used to alter the content of the template.
+    loaded and can be used to alter the template.
 
     Parameters:
-    : __template__: the template contents as string
+    : __template__: a Jinja2 [Template] object
     : __template_name__: string filename of template
     : __config:__ global configuration object
 
     Returns:
-    : template contents as string
+    : a Jinja2 [Template] object
 
 ##### on_template_context
 
@@ -487,3 +487,4 @@ tell MkDocs to use it via the config.
 [on_build_error]: #on_build_error
 [Handling Errors]: #handling-errors
 [config_scheme]: #config_scheme
+[Template]: http://code.nabla.net/doc/jinja2/api/jinja2/environment/jinja2.environment.Template.html
