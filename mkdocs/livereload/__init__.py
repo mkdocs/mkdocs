@@ -101,29 +101,26 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
 
         def schedule(path):
             seen.add(path)
-            if os.path.isfile(path):
+            if path.is_file():
                 # Watchdog doesn't support watching files, so watch its directory and filter by path
                 handler = watchdog.events.FileSystemEventHandler()
-                handler.on_any_event = lambda event: callback(event, allowed_path=path)
+                handler.on_any_event = lambda event: callback(event, allowed_path=os.fspath(path))
 
-                parent = os.path.dirname(path)
+                parent = path.parent
                 log.debug(f"Watching file '{path}' through directory '{parent}'")
                 self.observer.schedule(handler, parent)
             else:
                 log.debug(f"Watching directory '{path}'")
                 self.observer.schedule(dir_handler, path, recursive=recursive)
 
-        schedule(os.path.realpath(path))
+        schedule(pathlib.Path(path).resolve())
 
         def watch_symlink_targets(path_obj):  # path is os.DirEntry or pathlib.Path
             if path_obj.is_symlink():
-                # The extra `readlink` is needed due to https://bugs.python.org/issue9949
-                target = os.path.realpath(os.readlink(os.fspath(path_obj)))
-                if target in seen or not os.path.exists(target):
+                path_obj = pathlib.Path(path_obj).resolve()
+                if path_obj in seen or not path_obj.exists():
                     return
-                schedule(target)
-
-                path_obj = pathlib.Path(target)
+                schedule(path_obj)
 
             if path_obj.is_dir() and recursive:
                 with os.scandir(os.fspath(path_obj)) as scan:
