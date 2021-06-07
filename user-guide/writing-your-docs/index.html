@@ -12,23 +12,22 @@
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
         <link href="../../css/extra.css" rel="stylesheet">
 
         <script src="../../js/jquery-1.10.2.min.js" defer></script>
         <script src="../../js/bootstrap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/django.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/django.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-274394082"></script>
         <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
 
-            ga('create', 'UA-27795084-5', 'mkdocs.org');
-            ga('send', 'pageview');
+          gtag('config', 'G-274394082');
         </script> 
     </head>
 
@@ -48,16 +47,35 @@
                             <li class="navitem">
                                 <a href="../.." class="nav-link">Home</a>
                             </li>
+                            <li class="navitem">
+                                <a href="../../getting-started/" class="nav-link">Getting Started</a>
+                            </li>
                             <li class="dropdown active">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../" class="dropdown-item">Overview</a>
+</li>
+                                    
+<li>
+    <a href="../installation/" class="dropdown-item">Installation</a>
+</li>
                                     
 <li>
     <a href="./" class="dropdown-item active">Writing Your Docs</a>
 </li>
                                     
 <li>
-    <a href="../styling-your-docs/" class="dropdown-item">Styling Your Docs</a>
+    <a href="../choosing-your-theme/" class="dropdown-item">Choosing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../customizing-your-theme/" class="dropdown-item">Customizing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../localizing-your-theme/" class="dropdown-item">Localizing Your Theme</a>
 </li>
                                     
 <li>
@@ -67,13 +85,26 @@
 <li>
     <a href="../deploying-your-docs/" class="dropdown-item">Deploying Your Docs</a>
 </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
                                     
 <li>
-    <a href="../custom-themes/" class="dropdown-item">Custom Themes</a>
+    <a href="../../dev-guide/" class="dropdown-item">Overview</a>
 </li>
                                     
 <li>
-    <a href="../plugins/" class="dropdown-item">Plugins</a>
+    <a href="../../dev-guide/themes/" class="dropdown-item">Themes</a>
+</li>
+                                    
+<li>
+    <a href="../../dev-guide/translations/" class="dropdown-item">Translations</a>
+</li>
+                                    
+<li>
+    <a href="../../dev-guide/plugins/" class="dropdown-item">Plugins</a>
 </li>
                                 </ul>
                             </li>
@@ -103,12 +134,12 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" href="../.." class="nav-link">
+                                <a rel="prev" href="../installation/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../styling-your-docs/" class="nav-link">
+                                <a rel="next" href="../choosing-your-theme/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -160,12 +191,11 @@
 will be named <code>docs</code> and will exist at the top level of your project, alongside
 the <code>mkdocs.yml</code> configuration file.</p>
 <p>The simplest project you can create will look something like this:</p>
-<pre><code class="no-highlight">mkdocs.yml
+<pre><code class="language-no-highlight">mkdocs.yml
 docs/
     index.md
 </code></pre>
-
-<p>By convention your project homepage should be named <code>index.md</code> (see <a href="#index_pages">Index
+<p>By convention your project homepage should be named <code>index.md</code> (see <a href="#index-pages">Index
 pages</a> below for details). Any of the following file
 extensions may be used for your Markdown source files: <code>markdown</code>, <code>mdown</code>,
 <code>mkdn</code>, <code>mkd</code>, <code>md</code>. All Markdown files included in your documentation
@@ -179,41 +209,37 @@ behavior.</p>
 </div>
 <p>You can also create multi-page documentation, by creating several Markdown
 files:</p>
-<pre><code class="no-highlight">mkdocs.yml
+<pre><code class="language-no-highlight">mkdocs.yml
 docs/
     index.md
     about.md
     license.md
 </code></pre>
-
 <p>The file layout you use determines the URLs that are used for the generated
 pages. Given the above layout, pages would be generated for the following URLs:</p>
-<pre><code class="no-highlight">/
+<pre><code class="language-no-highlight">/
 /about/
 /license/
 </code></pre>
-
 <p>You can also include your Markdown files in nested directories if that better
 suits your documentation layout.</p>
-<pre><code class="no-highlight">docs/
+<pre><code class="language-no-highlight">docs/
     index.md
     user-guide/getting-started.md
     user-guide/configuration-options.md
     license.md
 </code></pre>
-
 <p>Source files inside nested directories will cause pages to be generated with
 nested URLs, like so:</p>
-<pre><code class="no-highlight">/
+<pre><code class="language-no-highlight">/
 /user-guide/getting-started/
 /user-guide/configuration-options/
 /license/
 </code></pre>
-
 <p>Any files which are not identified as Markdown files (by their file extension)
 within the <a href="../configuration/#docs_dir">documentation directory</a> are copied by
-MkDocs to the built site unaltered. See [how to link to images and media]
-(#linking_to_images_and_media) below for details.</p>
+MkDocs to the built site unaltered. See
+<a href="#linking-to-images-and-media">how to link to images and media</a> below for details.</p>
 <h3 id="index-pages">Index pages<a class="headerlink" href="#index-pages" title="Permanent link"></a></h3>
 <p>When a directory is requested, by default, most web servers will return an index
 file (usually named <code>index.html</code>) contained within that directory if one exists.
@@ -240,11 +266,10 @@ navigation configuration will always be sorted alphanumerically by file name
 will need to manually define your navigation configuration if you would like
 your navigation menu sorted differently.</p>
 <p>A minimal navigation configuration could look like this:</p>
-<pre><code class="no-highlight">nav:
+<pre><code class="language-no-highlight">nav:
     - 'index.md'
     - 'about.md'
 </code></pre>
-
 <p>All paths in the navigation configuration must be relative to the <code>docs_dir</code>
 configuration option. If that option is set to the default value, <code>docs</code>, the
 source files for the above configuration would be located at <code>docs/index.md</code> and
@@ -253,17 +278,16 @@ source files for the above configuration would be located at <code>docs/index.md
 level and with their titles inferred from the contents of the Markdown file or,
 if no title is defined within the file, of the file name. To override the title
 in the <code>nav</code> setting add a title right before the filename.</p>
-<pre><code class="no-highlight">nav:
+<pre><code class="language-no-highlight">nav:
     - Home: 'index.md'
     - About: 'about.md'
 </code></pre>
-
 <p>Note that if a title is defined for a page in the navigation, that title will be
 used throughout the site for that page and will override any title defined
 within the page itself.</p>
 <p>Navigation sub-sections can be created by listing related pages together under a
 section title. For example:</p>
-<pre><code class="no-highlight">nav:
+<pre><code class="language-no-highlight">nav:
     - Home: 'index.md'
     - 'User Guide':
         - 'Writing your docs': 'writing-your-docs.md'
@@ -272,7 +296,6 @@ section title. For example:</p>
         - 'License': 'license.md'
         - 'Release Notes': 'release-notes.md'
 </code></pre>
-
 <p>With the above configuration we have three top level items: "Home", "User Guide"
 and "About." "Home" is a link to the homepage for the site. Under the "User
 Guide" section two pages are listed: "Writing your docs" and "Styling your
@@ -307,9 +330,8 @@ specifically for MkDocs as outlined below.</p>
 <p>When linking between pages in the documentation you can simply use the regular
 Markdown <a href="https://daringfireball.net/projects/markdown/syntax#link">linking</a> syntax, including the <em>relative path</em> to the Markdown
 document you wish to link to.</p>
-<pre><code class="no-highlight">Please see the [project license](license.md) for further details.
+<pre><code class="language-no-highlight">Please see the [project license](license.md) for further details.
 </code></pre>
-
 <p>When the MkDocs build runs, these Markdown links will automatically be
 transformed into an HTML hyperlink to the appropriate HTML page.</p>
 <div class="admonition warning">
@@ -322,16 +344,14 @@ them to your production server.</p>
 </div>
 <p>If the target documentation file is in another directory you'll need to make
 sure to include any relative directory path in the link.</p>
-<pre><code class="no-highlight">Please see the [project license](../about/license.md) for further details.
+<pre><code class="language-no-highlight">Please see the [project license](../about/license.md) for further details.
 </code></pre>
-
 <p>The <a href="https://python-markdown.github.io/extensions/toc/">toc</a> extension is used by MkDocs to generate an ID for every header in your
 Markdown documents. You can use that ID to link to a section within a target
 document by using an anchor link. The generated HTML will correctly transform
 the path portion of the link, and leave the anchor portion intact.</p>
-<pre><code class="no-highlight">Please see the [project license](about.md#license) for further details.
+<pre><code class="language-no-highlight">Please see the [project license](about.md#license) for further details.
 </code></pre>
-
 <p>Note that IDs are created from the text of a header. All text is converted to
 lowercase and any disallowed characters, including white-space, are converted to
 dashes. Consecutive dashes are then reduced to a single dash.</p>
@@ -378,13 +398,12 @@ underscores, then do:</p>
 <p>Note that if you would like to define multiple of the above settings, you must
 do so under a single <code>toc</code> entry in the <code>markdown_extensions</code> configuration
 option.</p>
-<pre><code class="yml">markdown_extensions:
+<pre><code class="language-yml">markdown_extensions:
     - toc:
         permalink: &quot;#&quot;
         baselevel: 2
         separator: &quot;_&quot;
 </code></pre>
-
 <h4 id="linking-to-images-and-media">Linking to images and media<a class="headerlink" href="#linking-to-images-and-media" title="Permanent link"></a></h4>
 <p>As well as the Markdown source files, you can also include other file types in
 your documentation, which will be copied across when generating your
@@ -392,7 +411,7 @@ documentation site. These might include images and other media.</p>
 <p>For example, if your project documentation needed to include a <a href="https://help.github.com/articles/using-a-custom-domain-with-github-pages/">GitHub pages
 CNAME file</a> and a PNG formatted screenshot image then your file layout might
 look as follows:</p>
-<pre><code class="no-highlight">mkdocs.yml
+<pre><code class="language-no-highlight">mkdocs.yml
 docs/
     CNAME
     index.md
@@ -401,16 +420,14 @@ docs/
     img/
         screenshot.png
 </code></pre>
-
 <p>To include images in your documentation source files, simply use any of the
 regular Markdown image syntaxes:</p>
-<pre><code class="Markdown">Cupcake indexer is a snazzy new project for indexing small cakes.
+<pre><code class="language-Markdown">Cupcake indexer is a snazzy new project for indexing small cakes.
 
 ![Screenshot](img/screenshot.png)
 
 *Above: Cupcake indexer in progress*
 </code></pre>
-
 <p>Your image will now be embedded when you build the documentation, and should
 also be previewed if you're working on the documentation with a Markdown editor.</p>
 <h4 id="linking-from-raw-html">Linking from raw HTML<a class="headerlink" href="#linking-from-raw-html" title="Permanent link"></a></h4>
@@ -463,7 +480,7 @@ deliminators to mark the start and/or end of the meta-data. The first line of
 a document must be <code>---</code>. The meta-data ends at the first line containing an
 end deliminator (either <code>---</code> or <code>...</code>). The content between the deliminators is
 parsed as <a href="http://yaml.org">YAML</a>.</p>
-<pre><code class="no-highlight">---
+<pre><code class="language-no-highlight">---
 title: My Document
 summary: A brief description of my document.
 authors:
@@ -474,7 +491,6 @@ some_url: https://example.com
 ---
 This is the first paragraph of the document.
 </code></pre>
-
 <p>YAML is able to detect data types. Therefore, in the above example, the values
 of <code>title</code>, <code>summary</code> and <code>some_url</code> are strings, the value of <code>authors</code> is a
 list of strings and the value of <code>date</code> is a <code>datetime.date</code> object. Note that
@@ -488,7 +504,7 @@ removed from the document.</p>
 <p>MultiMarkdown style meta-data uses a format first introduced by the
 <a href="http://fletcherpenney.net/MultiMarkdown_Syntax_Guide#metadata">MultiMarkdown</a> project. The data consists of a series of keywords and values
 defined at the beginning of a Markdown document, like this:</p>
-<pre><code class="no-highlight">Title:   My Document
+<pre><code class="language-no-highlight">Title:   My Document
 Summary: A brief description of my document.
 Authors: Waylan Limberg
          Tom Christie
@@ -498,7 +514,6 @@ some_url: https://example.com
 
 This is the first paragraph of the document.
 </code></pre>
-
 <p>The keywords are case-insensitive and may consist of letters, numbers,
 underscores and dashes and must end with a colon. The values consist of anything
 following the colon on the line and may even be blank.</p>
@@ -522,26 +537,23 @@ style meta-data.</p>
 across multiple implementations. The syntax is rather simple and is generally
 only useful for simple tabular data.</p>
 <p>A simple table looks like this:</p>
-<pre><code class="no-highlight">First Header | Second Header | Third Header
+<pre><code class="language-no-highlight">First Header | Second Header | Third Header
 ------------ | ------------- | ------------
 Content Cell | Content Cell  | Content Cell
 Content Cell | Content Cell  | Content Cell
 </code></pre>
-
 <p>If you wish, you can add a leading and tailing pipe to each line of the table:</p>
-<pre><code class="no-highlight">| First Header | Second Header | Third Header |
+<pre><code class="language-no-highlight">| First Header | Second Header | Third Header |
 | ------------ | ------------- | ------------ |
 | Content Cell | Content Cell  | Content Cell |
 | Content Cell | Content Cell  | Content Cell |
 </code></pre>
-
 <p>Specify alignment for each column by adding colons to separator lines:</p>
-<pre><code class="no-highlight">First Header | Second Header | Third Header
+<pre><code class="language-no-highlight">First Header | Second Header | Third Header
 :----------- |:-------------:| -----------:
 Left         | Center        | Right
 Left         | Center        | Right
 </code></pre>
-
 <p>Note that table cells cannot contain any block level elements and cannot contain
 multiple lines of text. They can, however, include inline Markdown as defined in
 Markdown's <a href="https://daringfireball.net/projects/markdown/syntax">syntax</a> rules.</p>
@@ -552,7 +564,7 @@ line before and after the table.</p>
 blocks without indentation.</p>
 <p>The first line should contain 3 or more backtick (<code>`</code>) characters, and the
 last line should contain the same number of backtick characters (<code>`</code>):</p>
-<pre><code class="no-highlight">```
+<pre><code class="language-no-highlight">```
 Fenced code blocks are like Standard
 Markdown’s regular code blocks, except that
 they’re not indented and instead rely on
@@ -560,15 +572,13 @@ start and end fence lines to delimit the
 code block.
 ```
 </code></pre>
-
 <p>With this approach, the language can optionally be specified on the first line
 after the backticks which informs any syntax highlighters of the language used:</p>
-<pre><code class="no-highlight">```python
+<pre><code class="language-no-highlight">```python
 def fn():
     pass
 ```
 </code></pre>
-
 <p>Note that fenced code blocks can not be indented. Therefore, they cannot be
 nested inside list items, blockquotes, etc.</p></div>
             </div>
@@ -594,16 +604,13 @@ nested inside list items, blockquotes, etc.</p></div>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body">
-                <p>
-                    From here you can search these documents. Enter
-                    your search terms below.
-                </p>
+                <p>From here you can search these documents. Enter your search terms below.</p>
                 <form>
                     <div class="form-group">
                         <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
-                <div id="mkdocs-search-results"></div>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
             </div>
             <div class="modal-footer">
             </div>

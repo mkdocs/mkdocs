@@ -12,23 +12,22 @@
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
         <link href="../../css/extra.css" rel="stylesheet">
 
         <script src="../../js/jquery-1.10.2.min.js" defer></script>
         <script src="../../js/bootstrap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/django.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/django.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-274394082"></script>
         <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
 
-            ga('create', 'UA-27795084-5', 'mkdocs.org');
-            ga('send', 'pageview');
+          gtag('config', 'G-274394082');
         </script> 
     </head>
 
@@ -48,16 +47,35 @@
                             <li class="navitem">
                                 <a href="../.." class="nav-link">Home</a>
                             </li>
+                            <li class="navitem">
+                                <a href="../../getting-started/" class="nav-link">Getting Started</a>
+                            </li>
                             <li class="dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../user-guide/" class="dropdown-item">Overview</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/installation/" class="dropdown-item">Installation</a>
+</li>
                                     
 <li>
     <a href="../../user-guide/writing-your-docs/" class="dropdown-item">Writing Your Docs</a>
 </li>
                                     
 <li>
-    <a href="../../user-guide/styling-your-docs/" class="dropdown-item">Styling Your Docs</a>
+    <a href="../../user-guide/choosing-your-theme/" class="dropdown-item">Choosing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/customizing-your-theme/" class="dropdown-item">Customizing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/localizing-your-theme/" class="dropdown-item">Localizing Your Theme</a>
 </li>
                                     
 <li>
@@ -67,13 +85,26 @@
 <li>
     <a href="../../user-guide/deploying-your-docs/" class="dropdown-item">Deploying Your Docs</a>
 </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
                                     
 <li>
-    <a href="../../user-guide/custom-themes/" class="dropdown-item">Custom Themes</a>
+    <a href="../../dev-guide/" class="dropdown-item">Overview</a>
 </li>
                                     
 <li>
-    <a href="../../user-guide/plugins/" class="dropdown-item">Plugins</a>
+    <a href="../../dev-guide/themes/" class="dropdown-item">Themes</a>
+</li>
+                                    
+<li>
+    <a href="../../dev-guide/translations/" class="dropdown-item">Translations</a>
+</li>
+                                    
+<li>
+    <a href="../../dev-guide/plugins/" class="dropdown-item">Plugins</a>
 </li>
                                 </ul>
                             </li>
@@ -103,7 +134,7 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" href="../../user-guide/plugins/" class="nav-link">
+                                <a rel="prev" href="../../dev-guide/plugins/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
@@ -140,6 +171,10 @@
               </ul>
             </li>
             <li class="nav-item" data-level="2"><a href="#maintenance-team" class="nav-link">Maintenance team</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-12-2021-06-04" class="nav-link">Version 1.2 (2021-06-04)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -299,6 +334,198 @@ mkdocs, version 1.0 from /path/to/mkdocs (Python 3.6)
 <li><a href="https://github.com/d0ugal/">@d0ugal</a></li>
 <li><a href="https://github.com/waylan/">@waylan</a></li>
 </ul>
+<h2 id="version-12-2021-06-04">Version 1.2 (2021-06-04)<a class="headerlink" href="#version-12-2021-06-04" title="Permanent link"></a></h2>
+<h3 id="major-additions-to-version-12">Major Additions to Version 1.2<a class="headerlink" href="#major-additions-to-version-12" title="Permanent link"></a></h3>
+<h3 id="support-added-for-theme-localization-2299">Support added for Theme Localization (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2299" title="GitHub Issue mkdocs/mkdocs #2299">#2299</a>)<a class="headerlink" href="#support-added-for-theme-localization-2299" title="Permanent link"></a></h3>
+<p>The <code>mkdocs</code> and <code>readthedocs</code> themes now support language localization using
+the <code>theme.locale</code> parameter, which defaults to <code>en</code> (English). The only other
+supported languages in this release are <code>fr</code> (French) and <code>es</code> (Spanish). For
+details on using the provided translations, see the <a href="../../user-guide/localizing-your-theme/">user
+guide</a>. Note that translation will not
+happen by default. Users must first install the necessary dependencies with
+the following command:</p>
+<pre><code class="language-bash">pip install mkdocs[i18n]
+</code></pre>
+<p>Translation contributions are welcome and detailed in the <a href="../../dev-guide/translations/">Translation
+Guide</a>.</p>
+<p>Developers of third party themes may want to review the relevant section of
+the <a href="../../dev-guide/themes/#supporting-theme-localizationtranslation">Theme Development
+Guide</a>.</p>
+<p>Contributors who are updating the templates to the built-in themes should
+review the <a href="../contributing/#submitting-changes-to-the-builtin-themes">Contributing
+Guide</a>.</p>
+<p>The <code>lang</code> setting of the <code>search</code> plugin now defaults to the language
+specified in <code>theme.locale</code>.</p>
+<h4 id="support-added-for-environment-variables-in-the-configuration-file-1954">Support added for Environment Variables in the configuration file (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1954" title="GitHub Issue mkdocs/mkdocs #1954">#1954</a>)<a class="headerlink" href="#support-added-for-environment-variables-in-the-configuration-file-1954" title="Permanent link"></a></h4>
+<p>Environments variables may now be specified in the configuration file with the
+<code>!ENV</code> tag. The value of the variable will be parsed by the YAML parser and
+converted to the appropriate type.</p>
+<pre><code class="language-yaml">somekey: !ENV VAR_NAME
+otherkey: !ENV [VAR_NAME, FALLBACK_VAR, 'default value']
+</code></pre>
+<p>See <a href="../../user-guide/configuration/#environment-variables">Environment Variables</a>
+in the Configuration documentation for details.</p>
+<h4 id="support-added-for-configuration-inheritance-2218">Support added for Configuration Inheritance (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2218" title="GitHub Issue mkdocs/mkdocs #2218">#2218</a>)<a class="headerlink" href="#support-added-for-configuration-inheritance-2218" title="Permanent link"></a></h4>
+<p>A configuration file may now inherit from a parent configuration file. In the
+primary file set the <code>INHERIT</code> key to the relative path of the parent file.</p>
+<pre><code class="language-yaml">INHERIT: path/to/base.yml
+</code></pre>
+<p>The two files will then be deep merged. See
+<a href="../../user-guide/configuration/#configuration-inheritance">Configuration Inheritance</a>
+for details.</p>
+<h4 id="update-gh-deploy-command-2170">Update <code>gh-deploy</code> command (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2170" title="GitHub Issue mkdocs/mkdocs #2170">#2170</a>)<a class="headerlink" href="#update-gh-deploy-command-2170" title="Permanent link"></a></h4>
+<p>The vendored (and modified) copy of ghp_import has been replaced with a
+dependency on the upstream library. As of version 1.0.0, <a href="https://github.com/c-w/ghp-import/">ghp-import</a> includes a
+Python API which makes it possible to call directly.</p>
+<p>MkDocs can now benefit from recent bug fixes and new features, including the following:</p>
+<ul>
+<li>A <code>.nojekyll</code> file is automatically included when deploying to GitHub Pages.</li>
+<li>The <code>--shell</code> flag is now available, which reportedly works better on Windows.</li>
+<li>Git author and committer environment variables should be respected (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1383" title="GitHub Issue mkdocs/mkdocs #1383">#1383</a>).</li>
+</ul>
+<h4 id="rework-auto-reload-and-http-server-for-mkdocs-serve-2385">Rework auto-reload and HTTP server for <code>mkdocs serve</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2385" title="GitHub Issue mkdocs/mkdocs #2385">#2385</a>)<a class="headerlink" href="#rework-auto-reload-and-http-server-for-mkdocs-serve-2385" title="Permanent link"></a></h4>
+<p><code>mkdocs serve</code> now uses a new underlying server + file watcher implementation,
+based on <a href="https://docs.python.org/3/library/http.server.html">http.server</a> from standard library and <a href="https://pypi.org/project/watchdog/">watchdog</a>. It provides similar
+functionality to the previously used <a href="https://pypi.org/project/livereload/">livereload</a> library (which is now dropped
+from dependencies, along with <a href="https://pypi.org/project/tornado/">tornado</a>).</p>
+<p>This makes reloads more responsive and consistent in terms of timing. Multiple
+rapid file changes no longer cause the site to repeatedly rebuild (issue <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2061" title="GitHub Issue mkdocs/mkdocs #2061">#2061</a>).</p>
+<p>Almost every aspect of the server is slightly different, but actual visible
+changes are minor. The logging outputs are only <em>similar</em> to the old ones.
+Degradations in behavior are not expected, and should be reported if found.</p>
+<h5 id="offset-the-local-site-root-according-to-the-sub-path-of-the-site_url-2424">Offset the local site root according to the sub-path of the <code>site_url</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2424" title="GitHub Issue mkdocs/mkdocs #2424">#2424</a>)<a class="headerlink" href="#offset-the-local-site-root-according-to-the-sub-path-of-the-site_url-2424" title="Permanent link"></a></h5>
+<p>When using <code>mkdocs serve</code> and having the <code>site_url</code> specified as e.g.
+<code>http://example.org/sub/path/</code>, now the root of the locally served site
+becomes <code>http://127.0.0.1:8000/sub/path/</code> and all document paths are offset
+accordingly.</p>
+<h4 id="a-build_error-event-was-added-2103">A <code>build_error</code> event was added (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2103" title="GitHub Issue mkdocs/mkdocs #2103">#2103</a>)<a class="headerlink" href="#a-build_error-event-was-added-2103" title="Permanent link"></a></h4>
+<p>Plugin developers can now use the <code>on_build_error</code> hook
+to execute code when an exception is raised while building the site.</p>
+<p>See <a href="../../dev-guide/plugins/#on_build_error"><code>on_build_error</code></a>
+in the Plugins documentation for details.</p>
+<h4 id="three-new-exceptions-builderror-pluginerror-and-abort-2103">Three new exceptions: BuildError PluginError and Abort (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2103" title="GitHub Issue mkdocs/mkdocs #2103">#2103</a>)<a class="headerlink" href="#three-new-exceptions-builderror-pluginerror-and-abort-2103" title="Permanent link"></a></h4>
+<p>MkDocs now has tree new exceptions defined in <code>mkdocs.exceptions</code>:
+<code>BuildError</code>, <code>PluginError</code>, and <code>Abort</code>:</p>
+<ul>
+<li><code>PluginError</code> can be raised from a plugin
+  to stop the build and log an error message <em>without traceback</em>.</li>
+<li><code>BuildError</code> should not be used by third-party plugins developers
+  and is reserved for internal use only.</li>
+<li><code>Abort</code> is used internally to abort the build and display an error
+  without a traceback.</li>
+</ul>
+<p>See <a href="../../dev-guide/plugins/#handling-errors"><code>Handling errors</code></a>
+in the Plugins documentation for details.</p>
+<h4 id="search-indexing-strategy-configuration">Search Indexing Strategy configuration<a class="headerlink" href="#search-indexing-strategy-configuration" title="Permanent link"></a></h4>
+<p>Users can now specify which strategy they wish to use when indexing
+their site for search. A user can select between the following options:</p>
+<ul>
+<li><strong>full</strong>: Adds page title, section headings, and full page text to the
+search index.</li>
+<li><strong>sections</strong>: Adds page titles and section headings only to the search
+index.</li>
+<li><strong>titles</strong>: Adds only the page titles to the search index.</li>
+</ul>
+<p>See <a href="../../user-guide/configuration/#indexing"><code>Search Indexing</code></a> in the
+configuration documentation for details.</p>
+<h3 id="backward-incompatible-changes-in-12">Backward Incompatible Changes in 1.2<a class="headerlink" href="#backward-incompatible-changes-in-12" title="Permanent link"></a></h3>
+<ul>
+<li>
+<p>The <a href="../../user-guide/configuration/#site_url">site_url</a> configuration option
+  is now <strong>required</strong>. If it is not set, a warning will be issued. In a future
+  release an error will be raised (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2189" title="GitHub Issue mkdocs/mkdocs #2189">#2189</a>).</p>
+<p>The <a href="../../user-guide/configuration/#use_directory_urls">use_directory_urls</a>
+configuration option will be forced to <code>false</code> if
+<a href="../../user-guide/configuration/#site_url">site_url</a> is set to an emtpy
+string. In that case, if <code>use_directory_urls</code> is not explicitly set to
+<code>false</code>, a warning will be issued (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2189" title="GitHub Issue mkdocs/mkdocs #2189">#2189</a>).</p>
+</li>
+<li>
+<p>The <code>google_analytics</code> configuration option is deprecated as Google appears to
+  be fazing it out in favor of its new Google Analytics 4 property. See the
+  documentation for your theme for alternatives which can be configured as part
+  of your theme configuration. For exmaple, the <a href="../../user-guide/choosing-your-theme/#mkdocs">mkdocs</a> and
+  <a href="../../user-guide/choosing-your-theme/#readthedocs">readthedocs</a> themes have each added a new <code>theme.analytics.gtag</code>
+  configuration option which uses the new Google Analytics 4 property. See
+  Google's documentation on how to <a href="https://support.google.com/analytics/answer/9744165?hl=en">Upgrade to a Google Analytics 4
+  property</a>. Then set  <code>theme.analytics.gtag</code> to the "G-" ID and delete the
+  <code>google_analytics</code> configuration option which contains a "UA-" ID. So long
+  as the old "UA-" ID and new "G-" ID are properly linked in your Google
+  account, and you are using the "G-" ID, the data will be made available in
+  both the old and new formats by Google Analytics. See <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2252" title="GitHub Issue mkdocs/mkdocs #2252">#2252</a>.</p>
+</li>
+<li>
+<p>A theme's files are now excluded from the list of watched files by default
+  when using the <code>--livereload</code> server. This new default behavior is what most
+  users need and provides better performance when editing site content.
+  Theme developers can enable the old behavior with the <code>--watch-theme</code>
+  option. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2092" title="GitHub Issue mkdocs/mkdocs #2092">#2092</a>).</p>
+</li>
+<li>
+<p>The <code>mkdocs</code> theme now removes the sidebar when printing a page. This frees
+  up horizontal space for better rendering of content like tables (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2193" title="GitHub Issue mkdocs/mkdocs #2193">#2193</a>).</p>
+</li>
+<li>
+<p>The <code>mkdocs.config.DEFAULT_SCHEMA</code> global variable has been replaced with the
+  function <code>mkdocs.config.defaults.get_schema()</code>, which ensures that each
+  instance of the configuration is unique (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2289" title="GitHub Issue mkdocs/mkdocs #2289">#2289</a>).</p>
+</li>
+<li>
+<p>The <code>mkdocs.utils.warning_filter</code> is deprecated and now does nothing. Plugins
+  should remove any reference to is as it may be deleted in a future release.
+  To ensure any warnings get counted, simply log them to the <code>mkdocs</code> log (i.e:
+  <code>mkdocs.plugins.pluginname</code>).</p>
+</li>
+<li>
+<p>The <code>on_serve</code> event (which receives the <code>server</code> object and the <code>builder</code>
+  function) is affected by the server rewrite. <code>server</code> is now a
+  <code>mkdocs.livereload.LiveReloadServer</code> instead of <code>livereload.server.Server</code>.
+  The typical action that plugins can do with these is to call
+  <code>server.watch(some_dir, builder)</code>, which basically adds that directory to
+  watched directories, causing the site to be rebuilt on file changes. That
+  still works, but passing any other function to <code>watch</code> is deprecated and shows
+  a warning. This 2nd parameter is already optional, and will accept only this
+  exact <code>builder</code> function just for compatibility.</p>
+</li>
+<li>
+<p>The <code>python</code> method of the <code>plugins.search.prebuild_index</code> configuration
+  option is pending deprecation as of version 1.2. It is expected that in
+  version 1.3 it will raise a warning if used and in version 1.4 it will raise
+  an error. Users are encouraged to use an alternate method to generate a
+  prebuilt index for search.</p>
+</li>
+<li>
+<p>The <code>lunr</code> and <code>lunr[languages]</code> dependencies are no longer installed by
+  default. The dependencies are only needed for the rare user who prebuilds the
+  search index and uses the <code>python</code> option, which is now pending deprecation.
+  If you use this feature, then you will need to manually install <code>lunr</code> and
+  <code>lunr[languages]</code>. A warning is issued if the dependencies are needed but not
+  installed.</p>
+</li>
+</ul>
+<h3 id="other-changes-and-additions-to-version-12">Other Changes and Additions to Version 1.2<a class="headerlink" href="#other-changes-and-additions-to-version-12" title="Permanent link"></a></h3>
+<ul>
+<li>Bugfix: Properly process navigation child items in <code>_get_by_type</code> when
+  filtering for sections (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2203" title="GitHub Issue mkdocs/mkdocs #2203">#2203</a>).</li>
+<li>Official support for Python 3.9 has been added and support for Python 3.5
+  has been dropped.</li>
+<li>Bugfix: Fixes an issue that would result in a partially cut-off navigation
+  item in the ReadTheDocs theme (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2297" title="GitHub Issue mkdocs/mkdocs #2297">#2297</a>).</li>
+<li>Structure Files object now has a <code>remove</code> method to help plugin developers
+  manipulate the Files tree. The corresponding <code>src_paths</code> has become a
+  property to accomodate this possible dynamic behavior. See <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2305" title="GitHub Issue mkdocs/mkdocs #2305">#2305</a>.</li>
+<li>Updated highlight.js to 10.5.0. See <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2313" title="GitHub Issue mkdocs/mkdocs #2313">#2313</a>.</li>
+<li>Bugfix: Search plugin now works with Japanese language. See <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2178" title="GitHub Issue mkdocs/mkdocs #2178">#2178</a>.</li>
+<li>Documentation has been refactored (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1629" title="GitHub Issue mkdocs/mkdocs #1629">#1629</a>).</li>
+<li>Restore styling of tables in the <code>readthedocs</code> theme (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2028" title="GitHub Issue mkdocs/mkdocs #2028">#2028</a>).</li>
+<li>Ensure <code>site_url</code> ends with a slash (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1785" title="GitHub Issue mkdocs/mkdocs #1785">#1785</a>).</li>
+<li>Correct documentation of <code>pages</code> template context variable (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1736" title="GitHub Issue mkdocs/mkdocs #1736">#1736</a>).</li>
+<li>The <code>lunr</code> dependency has been updated to 0.5.9, and <code>lunr.js</code> to
+  the corresponding 2.3.9 version (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2306" title="GitHub Issue mkdocs/mkdocs #2306">#2306</a>).</li>
+<li>Color is now used in log messages to identify errors, warnings and debug
+  messages.</li>
+<li>Bugfix: Identify homepage when <code>use_directory_urls</code> is <code>False</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2362" title="GitHub Issue mkdocs/mkdocs #2362">#2362</a>).</li>
+</ul>
 <h2 id="version-112-2020-05-14">Version 1.1.2 (2020-05-14)<a class="headerlink" href="#version-112-2020-05-14" title="Permanent link"></a></h2>
 <ul>
 <li>Bugfix: Normalize IP addresses and change unsupported address error to a
@@ -329,17 +556,16 @@ NodeJS environment if so desired. For more information please read the
 <h4 id="readthedocs-theme-updated-with-upstream-588-and-1374"><code>readthedocs</code> theme updated with upstream (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/588" title="GitHub Issue mkdocs/mkdocs #588">#588</a> and <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1374" title="GitHub Issue mkdocs/mkdocs #1374">#1374</a>)<a class="headerlink" href="#readthedocs-theme-updated-with-upstream-588-and-1374" title="Permanent link"></a></h4>
 <p>The <code>readthedocs</code> theme now more closely matches the <a href="https://github.com/rtfd/sphinx_rtd_theme/">upstream</a> Sphinx theme
 (version 0.4.1). A number of new theme configuration settings were added which
-mirror the upstream configuration options. See the <a href="../../user-guide/styling-your-docs/#readthedocs">theme
+mirror the upstream configuration options. See the <a href="../../user-guide/choosing-your-theme/#readthedocs">theme
 documentation</a> for details.</p>
 <h4 id="update-mkdocs-theme-to-bootswatch-413-1563">Update <code>mkdocs</code> theme to Bootswatch 4.1.3 (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1563" title="GitHub Issue mkdocs/mkdocs #1563">#1563</a>)<a class="headerlink" href="#update-mkdocs-theme-to-bootswatch-413-1563" title="Permanent link"></a></h4>
 <p>The <code>mkdocs</code> theme now supports all the features of <a href="https://getbootstrap.com/docs/4.1/getting-started/introduction/">Bootswatch 4.1</a>.
 Additionaly, 2 filenames were changed in this update. If you are using a theme
 which inherits from the <code>mkdocs</code> theme, the theme developer may need to update
 these filenames as follows.</p>
-<pre><code class="text">css/bootstrap-custom.min.css =&gt; css/bootstrap.min.css
+<pre><code class="language-text">css/bootstrap-custom.min.css =&gt; css/bootstrap.min.css
 js/bootstrap-3.0.3.min.js =&gt; js/bootstrap.min.js
 </code></pre>
-
 <h4 id="improved-configuration-support-on-the-command-line-1401">Improved configuration support on the command line (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1401" title="GitHub Issue mkdocs/mkdocs #1401">#1401</a>)<a class="headerlink" href="#improved-configuration-support-on-the-command-line-1401" title="Permanent link"></a></h4>
 <p>The <code>build</code>, <code>serve</code>, and <code>gh-deploy</code> subcommands now support flags to control
 whether <a href="../../user-guide/configuration/#use_directory_urls">directory URLs</a> should be created:
@@ -425,9 +651,9 @@ The changes included in the refactor are summarized below.</p>
   This ensures all internal links are always computed correctly regardless of
   the configuration. This also allows all internal links to be validated, not
   just links to other Markdown pages. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/842" title="GitHub Issue mkdocs/mkdocs #842">#842</a> &amp; <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/872" title="GitHub Issue mkdocs/mkdocs #872">#872</a>).</li>
-<li>A new <a href="../../user-guide/custom-themes/#url">url</a> template filter smartly ensures all URLs are relative to the
+<li>A new <a href="../../dev-guide/themes/#url">url</a> template filter smartly ensures all URLs are relative to the
   current page (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1526" title="GitHub Issue mkdocs/mkdocs #1526">#1526</a>).</li>
-<li>An <a href="../../user-guide/plugins/#on_files">on_files</a> plugin event has been added, which could be used to include
+<li>An <a href="../../dev-guide/plugins/#on_files">on_files</a> plugin event has been added, which could be used to include
   files not in the <code>docs_dir</code>, exclude files, redefine page URLs (i.e.
   implement extensionless URLs), or to manipulate files in various other ways.</li>
 </ul>
@@ -480,58 +706,52 @@ consistently includes an ending slash on all internally generated URLs.</p>
 in the configuration file. The setting has been renamed <code>nav</code>. To update your
 configuration, simply rename the setting to <code>nav</code>. In other words, if your
 configuration looked like this:</p>
-<pre><code class="yaml">pages:
+<pre><code class="language-yaml">pages:
     - Home: index.md
     - User Guide: user-guide.md
 </code></pre>
-
 <p>Simply edit the configuration as follows:</p>
-<pre><code class="yaml">nav:
+<pre><code class="language-yaml">nav:
     - Home: index.md
     - User Guide: user-guide.md
 </code></pre>
-
 <p>In the current release, any configuration which includes a <code>pages</code> setting, but
 no <code>nav</code> setting, the <code>pages</code> configuration will be copied to <code>nav</code> and a
 warning will be issued. However, in a future release, that may no longer happen.
 If both <code>pages</code> and <code>nav</code> are defined, the <code>pages</code> setting will be ignored.</p>
 <h6 id="template-variables-and-base_url">Template variables and <code>base_url</code><a class="headerlink" href="#template-variables-and-base_url" title="Permanent link"></a></h6>
-<p>In previous versions of MkDocs some URLs expected the <a href="../../user-guide/custom-themes/#base_url">base_url</a> template
+<p>In previous versions of MkDocs some URLs expected the <a href="../../dev-guide/themes/#base_url">base_url</a> template
 variable to be prepended to the URL and others did not. That inconsistency has
 been removed in that no URLs are modified before being added to the template
 context.</p>
 <p>For example, a theme template might have previously included a link to
 the <code>site_name</code> as:</p>
-<pre><code class="django">&lt;a href=&quot;{{ nav.homepage.url }}&quot;&gt;{{ config.site_name }}&lt;/a&gt;
+<pre><code class="language-django">&lt;a href=&quot;{{ nav.homepage.url }}&quot;&gt;{{ config.site_name }}&lt;/a&gt;
 </code></pre>
-
 <p>And MkDocs would magically return a URL for the homepage which was relative to
-the current page. That "magic" has been removed and the <a href="../../user-guide/custom-themes/#url">url</a> template filter
+the current page. That "magic" has been removed and the <a href="../../dev-guide/themes/#url">url</a> template filter
 should be used:</p>
-<pre><code class="django">&lt;a href=&quot;{{ nav.homepage.url|url }}&quot;&gt;{{ config.site_name }}&lt;/a&gt;
+<pre><code class="language-django">&lt;a href=&quot;{{ nav.homepage.url|url }}&quot;&gt;{{ config.site_name }}&lt;/a&gt;
 </code></pre>
-
 <p>This change applies to any navigation items and pages, as well as the
 <code>page.next_page</code> and <code>page.previous_page</code> attributes. For the time being, the
 <code>extra_javascript</code> and <code>extra_css</code> variables continue to work as previously
 (without the <code>url</code> template filter), but they have been deprecated and the
 corresponding configuration values (<code>config.extra_javascript</code> and
 <code>config.extra_css</code> respectively) should be used with the filter instead.</p>
-<pre><code class="django">{% for path in config['extra_css'] %}
+<pre><code class="language-django">{% for path in config['extra_css'] %}
     &lt;link href=&quot;{{ path|url }}&quot; rel=&quot;stylesheet&quot;&gt;
 {% endfor %}
 </code></pre>
-
 <p>Note that navigation can now include links to external sites. Obviously, the
 <code>base_url</code> should not be prepended to these items. However, the <code>url</code> template
 filter is smart enough to recognize the URL is absolute and does not alter it.
 Therefore, all navigation items can be passed to the filter and only those that
 need to will be altered.</p>
-<pre><code class="django">{% for nav_item in nav %}
+<pre><code class="language-django">{% for nav_item in nav %}
     &lt;a href=&quot;{{ nav_item.url|url }}&quot;&gt;{{ nav_item.title }}&lt;/a&gt;
 {% endfor %}
 </code></pre>
-
 <h4 id="path-based-settings-are-relative-to-configuration-file-543">Path Based Settings are Relative to Configuration File (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/543" title="GitHub Issue mkdocs/mkdocs #543">#543</a>)<a class="headerlink" href="#path-based-settings-are-relative-to-configuration-file-543" title="Permanent link"></a></h4>
 <p>Previously any relative paths in the various configuration options were
 resolved relative to the current working directory. They are now resolved
@@ -541,9 +761,8 @@ configuration file (project root), this change will not affect most users.
 However, it will make it much easier to implement automated builds or otherwise
 run commands from a location other than the project root.</p>
 <p>Simply use the <code>-f/--config-file</code> option and point it at the configuration file:</p>
-<pre><code class="sh">mkdocs build --config-file /path/to/my/config/file.yml
+<pre><code class="language-sh">mkdocs build --config-file /path/to/my/config/file.yml
 </code></pre>
-
 <p>As previously, if no file is specified, MkDocs looks for a file named
 <code>mkdocs.yml</code> in the current working directory.</p>
 <h4 id="added-support-for-yaml-meta-data-1542">Added support for YAML Meta-Data (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1542" title="GitHub Issue mkdocs/mkdocs #1542">#1542</a>)<a class="headerlink" href="#added-support-for-yaml-meta-data-1542" title="Permanent link"></a></h4>
@@ -582,7 +801,7 @@ following features:</p>
 <li>Compress the search index (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1128" title="GitHub Issue mkdocs/mkdocs #1128">#1128</a>).</li>
 </ul>
 <p>Users can review the <a href="../../user-guide/configuration/#search">configuration options</a> available and theme
-authors should review how <a href="../../user-guide/custom-themes/#search_and_themes">search and themes</a> interact.</p>
+authors should review how <a href="../../dev-guide/themes/#search_and_themes">search and themes</a> interact.</p>
 <h4 id="theme_dir-configuration-option-fully-deprecated"><code>theme_dir</code> Configuration Option fully Deprecated<a class="headerlink" href="#theme_dir-configuration-option-fully-deprecated" title="Permanent link"></a></h4>
 <p>As of version 0.17, the <a href="../../user-guide/configuration/#custom_dir">custom_dir</a> option replaced the deprecated <code>theme_dir</code>
 option. If users had set the <code>theme_dir</code> option, MkDocs version 0.17 copied the
@@ -648,7 +867,7 @@ value to the <code>theme.custom_dir</code> option and a warning was issued. As o
 <h2 id="version-0170-2017-10-19">Version 0.17.0 (2017-10-19)<a class="headerlink" href="#version-0170-2017-10-19" title="Permanent link"></a></h2>
 <h3 id="major-additions-to-version-0170">Major Additions to Version 0.17.0<a class="headerlink" href="#major-additions-to-version-0170" title="Permanent link"></a></h3>
 <h4 id="plugin-api-206">Plugin API. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/206" title="GitHub Issue mkdocs/mkdocs #206">#206</a>)<a class="headerlink" href="#plugin-api-206" title="Permanent link"></a></h4>
-<p>A new <a href="../../user-guide/plugins/">Plugin API</a> has been added to MkDocs which allows users to define their
+<p>A new <a href="../../dev-guide/plugins/">Plugin API</a> has been added to MkDocs which allows users to define their
 own custom behaviors. See the included documentation for a full explanation of
 the API.</p>
 <p>The previously built-in search functionality has been removed and wrapped in a
@@ -660,7 +879,7 @@ then the <code>search</code> plugin will be included by default. See the
 default.</p>
 <h4 id="theme-customization-1164">Theme Customization. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1164" title="GitHub Issue mkdocs/mkdocs #1164">#1164</a>)<a class="headerlink" href="#theme-customization-1164" title="Permanent link"></a></h4>
 <p>Support had been added to provide theme specific customizations. Theme authors
-can define default options as documented in <a href="../../user-guide/custom-themes/#theme-configuration">Theme Configuration</a>. A theme can
+can define default options as documented in <a href="../../dev-guide/themes/#theme-configuration">Theme Configuration</a>. A theme can
 now inherit from another theme, define various static templates to be rendered,
 and define arbitrary default variables to control behavior in the templates.
 The theme configuration is defined in a configuration file named
@@ -673,16 +892,14 @@ such nested option is the <a href="../../user-guide/configuration/#custom_dir">c
 <code>theme_dir</code> option. If users had previously set the <code>theme_dir</code> option, a
 warning will be issued, with an error expected in a future release.</p>
 <p>If a configuration previously defined a <code>theme_dir</code> like this:</p>
-<pre><code class="yaml">theme: mkdocs
+<pre><code class="language-yaml">theme: mkdocs
 theme_dir: custom
 </code></pre>
-
 <p>Then the configuration should be adjusted as follows:</p>
-<pre><code class="yaml">theme:
+<pre><code class="language-yaml">theme:
     name: mkdocs
     custom_dir: custom
 </code></pre>
-
 <p>See the <a href="../../user-guide/configuration/#theme">theme</a> configuration option documentation for details.</p>
 <h4 id="previously-deprecated-template-variables-removed-1168">Previously deprecated Template variables removed. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1168" title="GitHub Issue mkdocs/mkdocs #1168">#1168</a>)<a class="headerlink" href="#previously-deprecated-template-variables-removed-1168" title="Permanent link"></a></h4>
 <h5 id="page-template">Page Template<a class="headerlink" href="#page-template" title="Permanent link"></a></h5>
@@ -694,7 +911,7 @@ deprecation warning. In version 1.0, a build will fail if no <code>main.html</co
 template exists.</p>
 <h5 id="context-variables">Context Variables<a class="headerlink" href="#context-variables" title="Permanent link"></a></h5>
 <p>Page specific variable names in the template context have been refactored as
-defined in <a href="../../user-guide/custom-themes/#page">Custom Themes</a>. The
+defined in <a href="../../dev-guide/themes/#page">Custom Themes</a>. The
 old variable names issued a warning in version 0.16, but have been removed in
 version 1.0.</p>
 <p>Any of the following old page variables should be updated to the new ones in
@@ -709,35 +926,35 @@ user created and third-party templates:</p>
 <tbody>
 <tr>
 <td>current_page</td>
-<td><a href="../../user-guide/custom-themes/#page">page</a></td>
+<td><a href="../../dev-guide/themes/#page">page</a></td>
 </tr>
 <tr>
 <td>page_title</td>
-<td><a href="../../user-guide/custom-themes/#pagetitle">page.title</a></td>
+<td><a href="../../dev-guide/themes/#pagetitle">page.title</a></td>
 </tr>
 <tr>
 <td>content</td>
-<td><a href="../../user-guide/custom-themes/#pagecontent">page.content</a></td>
+<td><a href="../../dev-guide/themes/#pagecontent">page.content</a></td>
 </tr>
 <tr>
 <td>toc</td>
-<td><a href="../../user-guide/custom-themes/#pagetoc">page.toc</a></td>
+<td><a href="../../dev-guide/themes/#pagetoc">page.toc</a></td>
 </tr>
 <tr>
 <td>meta</td>
-<td><a href="../../user-guide/custom-themes/#pagemeta">page.meta</a></td>
+<td><a href="../../dev-guide/themes/#pagemeta">page.meta</a></td>
 </tr>
 <tr>
 <td>canonical_url</td>
-<td><a href="../../user-guide/custom-themes/#pagecanonical_url">page.canonical_url</a></td>
+<td><a href="../../dev-guide/themes/#pagecanonical_url">page.canonical_url</a></td>
 </tr>
 <tr>
 <td>previous_page</td>
-<td><a href="../../user-guide/custom-themes/#pageprevious_page">page.previous_page</a></td>
+<td><a href="../../dev-guide/themes/#pageprevious_page">page.previous_page</a></td>
 </tr>
 <tr>
 <td>next_page</td>
-<td><a href="../../user-guide/custom-themes/#pagenext_page">page.next_page</a></td>
+<td><a href="../../dev-guide/themes/#pagenext_page">page.next_page</a></td>
 </tr>
 </tbody>
 </table>
@@ -857,7 +1074,7 @@ the <code>extra_css</code> or <code>extra_javascript</code> config settings goin
 <h4 id="template-variables-refactored-874">Template variables refactored. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/874" title="GitHub Issue mkdocs/mkdocs #874">#874</a>)<a class="headerlink" href="#template-variables-refactored-874" title="Permanent link"></a></h4>
 <h5 id="page-context">Page Context<a class="headerlink" href="#page-context" title="Permanent link"></a></h5>
 <p>Page specific variable names in the template context have been refactored as
-defined in <a href="../../user-guide/custom-themes/#page">Custom Themes</a>. The
+defined in <a href="../../dev-guide/themes/#page">Custom Themes</a>. The
 old variable names will issue a warning but continue to work for version 0.16,
 but may be removed in a future version.</p>
 <p>Any of the following old page variables should be updated to the new ones in
@@ -872,35 +1089,35 @@ user created and third-party templates:</p>
 <tbody>
 <tr>
 <td>current_page</td>
-<td><a href="../../user-guide/custom-themes/#page">page</a></td>
+<td><a href="../../dev-guide/themes/#page">page</a></td>
 </tr>
 <tr>
 <td>page_title</td>
-<td><a href="../../user-guide/custom-themes/#pagetitle">page.title</a></td>
+<td><a href="../../dev-guide/themes/#pagetitle">page.title</a></td>
 </tr>
 <tr>
 <td>content</td>
-<td><a href="../../user-guide/custom-themes/#pagecontent">page.content</a></td>
+<td><a href="../../dev-guide/themes/#pagecontent">page.content</a></td>
 </tr>
 <tr>
 <td>toc</td>
-<td><a href="../../user-guide/custom-themes/#pagetoc">page.toc</a></td>
+<td><a href="../../dev-guide/themes/#pagetoc">page.toc</a></td>
 </tr>
 <tr>
 <td>meta</td>
-<td><a href="../../user-guide/custom-themes/#pagemeta">page.meta</a></td>
+<td><a href="../../dev-guide/themes/#pagemeta">page.meta</a></td>
 </tr>
 <tr>
 <td>canonical_url</td>
-<td><a href="../../user-guide/custom-themes/#pagecanonical_url">page.canonical_url</a></td>
+<td><a href="../../dev-guide/themes/#pagecanonical_url">page.canonical_url</a></td>
 </tr>
 <tr>
 <td>previous_page</td>
-<td><a href="../../user-guide/custom-themes/#pageprevious_page">page.previous_page</a></td>
+<td><a href="../../dev-guide/themes/#pageprevious_page">page.previous_page</a></td>
 </tr>
 <tr>
 <td>next_page</td>
-<td><a href="../../user-guide/custom-themes/#pagenext_page">page.next_page</a></td>
+<td><a href="../../dev-guide/themes/#pagenext_page">page.next_page</a></td>
 </tr>
 </tbody>
 </table>
@@ -1003,7 +1220,7 @@ in template blocks which allow each individual block to be easily overridden
 using the <code>theme_dir</code> config setting. Without any new settings, you can use a
 different analytics service, replace the default search function, or alter the
 behavior of the navigation, among other things. See the relevant
-<a href="../../user-guide/styling-your-docs/#overriding-template-blocks">documentation</a> for more details.</p>
+<a href="../../user-guide/customizing-your-theme/#overriding-template-blocks">documentation</a> for more details.</p>
 <p>To enable this feature, the primary entry point for page templates has been
 changed from <code>base.html</code> to <code>main.html</code>. This allows <code>base.html</code> to continue to
 exist while allowing users to override <code>main.html</code> and extend <code>base.html</code>. For
@@ -1013,9 +1230,8 @@ will fail if no <code>main.html</code> template exists. Any custom and third par
 templates should be updated accordingly.</p>
 <p>The easiest way for a third party theme to be updated would be to simply add a
 <code>main.html</code> file which only contains the following line:</p>
-<pre><code class="django">{% extends &quot;base.html&quot; %}
+<pre><code class="language-django">{% extends &quot;base.html&quot; %}
 </code></pre>
-
 <p>That way, the theme contains the <code>main.html</code> entry point, and also supports
 overriding blocks in the same manner as the built-in themes. Third party themes
 are encouraged to wrap the various pieces of their templates in blocks in order
@@ -1037,12 +1253,10 @@ thus a "dirty" build mode was created. This mode simply compares the modified ti
 of the generated HTML and source markdown. If the markdown has changed since the
 HTML then the page is re-constructed. Otherwise, the page remains as is. This mode
 may be invoked in both the <code>mkdocs serve</code> and <code>mkdocs build</code> commands:</p>
-<pre><code class="text">mkdocs serve --dirtyreload
+<pre><code class="language-text">mkdocs serve --dirtyreload
 </code></pre>
-
-<pre><code class="text">mkdocs build --dirty
+<pre><code class="language-text">mkdocs build --dirty
 </code></pre>
-
 <p>It is important to note that this method for building the pages is for development
 of content only, since the navigation and other links do not get updated on other
 pages.</p>
@@ -1117,15 +1331,15 @@ details about these specific themes.</p>
 <p>They will be included with MkDocs by default until a future release. After that
 they will be installable with pip: <code>pip install mkdocs-bootstrap</code> and <code>pip
 install mkdocs-bootswatch</code></p>
-<p>See the documentation for <a href="../../user-guide/styling-your-docs/">Styling your docs</a> for more information about using
-and customizing themes and <a href="../../user-guide/custom-themes/">Custom themes</a> for creating and distributing new
+<p>See the documentation for <a href="../../user-guide/customizing-your-theme/">Customizing Your Theme</a> for more information about using
+and customizing themes and <a href="../../dev-guide/themes/">Custom themes</a> for creating and distributing new
 themes</p>
 <h3 id="other-changes-and-additions-to-version-0150">Other Changes and Additions to Version 0.15.0<a class="headerlink" href="#other-changes-and-additions-to-version-0150" title="Permanent link"></a></h3>
 <ul>
 <li>Fix issues when using absolute links to Markdown files. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/628" title="GitHub Issue mkdocs/mkdocs #628">#628</a>)</li>
 <li>Deprecate support of Python 2.6, pending removal in 1.0.0. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/165" title="GitHub Issue mkdocs/mkdocs #165">#165</a>)</li>
 <li>Add official support for Python version 3.5.</li>
-<li>Add support for <a href="../../user-guide/configuration/#site_description">site_description</a> and <a href="../../user-guide/configuration/#site_author">site_author</a> to the <a href="../../user-guide/styling-your-docs/#readthedocs">ReadTheDocs</a>
+<li>Add support for <a href="../../user-guide/configuration/#site_description">site_description</a> and <a href="../../user-guide/configuration/#site_author">site_author</a> to the <a href="../../user-guide/choosing-your-theme/#readthedocs">ReadTheDocs</a>
   theme. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/631" title="GitHub Issue mkdocs/mkdocs #631">#631</a>)</li>
 <li>Update FontAwesome to 4.5.0. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/789" title="GitHub Issue mkdocs/mkdocs #789">#789</a>)</li>
 <li>Increase IE support with X-UA-Compatible. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/785" title="GitHub Issue mkdocs/mkdocs #785">#785</a>)</li>
@@ -1200,7 +1414,7 @@ supported and updates outside MkDocs releases.</p>
 <h4 id="search">Search<a class="headerlink" href="#search" title="Permanent link"></a></h4>
 <p>Support for search has now been added to MkDocs. This is based on the
 JavaScript library <a href="https://lunrjs.com/">lunr.js</a>. It has been added to both the <code>mkdocs</code> and
-<code>readthedocs</code> themes. See the custom theme documentation on <a href="../../user-guide/styling-your-docs/#search-and-themes">supporting search</a>
+<code>readthedocs</code> themes. See the custom theme documentation on <a href="../../dev-guide/themes/#search-and-themes">supporting search</a>
 for adding it to your own themes.</p>
 <h4 id="new-command-line-interface">New Command Line Interface<a class="headerlink" href="#new-command-line-interface" title="Permanent link"></a></h4>
 <p>The command line interface for MkDocs has been re-written with the Python
@@ -1216,7 +1430,7 @@ see in full commands and available arguments use <code>mkdocs --help</code> and
 option named <a href="../../user-guide/configuration/#extra_templates">extra_templates</a> has been added. This will automatically be
 populated with any <code>.html</code> or <code>.xml</code> files in the project docs directory.</p>
 <p>Users can place static HTML and XML files and they will be copied over, or they
-can also use Jinja2 syntax and take advantage of the <a href="../../user-guide/styling-your-docs/#global-context">global variables</a>.</p>
+can also use Jinja2 syntax and take advantage of the <a href="../../dev-guide/themes/#global-context">global variables</a>.</p>
 <p>By default MkDocs will use this approach to create a sitemap for the
 documentation.</p>
 <h3 id="other-changes-and-additions-to-version-0130">Other Changes and Additions to Version 0.13.0<a class="headerlink" href="#other-changes-and-additions-to-version-0130" title="Permanent link"></a></h3>
@@ -1366,16 +1580,13 @@ documentation.</p>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body">
-                <p>
-                    From here you can search these documents. Enter
-                    your search terms below.
-                </p>
+                <p>From here you can search these documents. Enter your search terms below.</p>
                 <form>
                     <div class="form-group">
                         <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
-                <div id="mkdocs-search-results"></div>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
             </div>
             <div class="modal-footer">
             </div>

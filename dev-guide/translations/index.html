@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="MkDocs Team">
+        <link rel="canonical" href="https://www.mkdocs.org/dev-guide/translations/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Translations - MkDocs</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link href="../../css/extra.css" rel="stylesheet">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/django.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-274394082"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-274394082');
+        </script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">MkDocs</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../.." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../getting-started/" class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../user-guide/" class="dropdown-item">Overview</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/installation/" class="dropdown-item">Installation</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/writing-your-docs/" class="dropdown-item">Writing Your Docs</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/choosing-your-theme/" class="dropdown-item">Choosing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/customizing-your-theme/" class="dropdown-item">Customizing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/localizing-your-theme/" class="dropdown-item">Localizing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/configuration/" class="dropdown-item">Configuration</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/deploying-your-docs/" class="dropdown-item">Deploying Your Docs</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../" class="dropdown-item">Overview</a>
+</li>
+                                    
+<li>
+    <a href="../themes/" class="dropdown-item">Themes</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active">Translations</a>
+</li>
+                                    
+<li>
+    <a href="../plugins/" class="dropdown-item">Plugins</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../about/release-notes/" class="dropdown-item">Release Notes</a>
+</li>
+                                    
+<li>
+    <a href="../../about/contributing/" class="dropdown-item">Contributing</a>
+</li>
+                                    
+<li>
+    <a href="../../about/license/" class="dropdown-item">License</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../themes/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../plugins/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/mkdocs/mkdocs/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#translations" class="nav-link">Translations</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#localization-tooling-prerequisites" class="nav-link">Localization tooling prerequisites</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#adding-language-translations-to-themes" class="nav-link">Adding language translations to themes</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#updating-a-theme-translation" class="nav-link">Updating a theme translation</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#updating-theme-documentation" class="nav-link">Updating theme documentation</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#contributing-translations" class="nav-link">Contributing translations</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="translations">Translations<a class="headerlink" href="#translations" title="Permanent link"></a></h1>
+<p>Theme localization guide.</p>
+<hr />
+<p>The <a href="../../user-guide/choosing-your-theme/">built-in themes</a> that are included with MkDocs provide support for
+translations. This is a guide for translators, which documents the process for
+contributing new translations and/or updating existing translations. For
+guidance on modifying the existing themes, see the <a href="../../about/contributing/#submitting-changes-to-the-builtin-themes">Contributing Guide</a>. To enable a specific translation see the documentation about the
+specific theme you are using in the <a href="../../user-guide/choosing-your-theme/">User Guide</a>. For
+translations of third-party themes, please see the documentation for those
+themes. For a third-party theme to make use of MkDoc's translation tools and
+methods, that theme must be properly <a href="../themes/#supporting-theme-localizationtranslation">configured</a> to make use of those tools.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Translations only apply to text contained within a theme's template, such
+as "next" and "previous" links. The Markdown content of a page is not
+translated. If you wish to create multilingual documentation, you need to
+combine theme localization with a third-party
+internationalization/localization plugin.</p>
+</div>
+<h2 id="localization-tooling-prerequisites">Localization tooling prerequisites<a class="headerlink" href="#localization-tooling-prerequisites" title="Permanent link"></a></h2>
+<p>Theme localization makes use of the <a href="http://babel.pocoo.org/en/latest/cmdline.html">babel</a> project for generation and
+compilation of localization files. Custom commands are available from the
+MkDocs' <code>setup.py</code> script as described below to assist with the process of
+updating and contributing translations. You will need to be working from the
+git working tree on your local machine to make use of the helper scripts.</p>
+<p>See the <a href="../../about/contributing/">Contributing Guide</a> for direction on how to <a href="../../about/contributing/#installing-for-development">Install for Development</a>
+and <a href="../../about/contributing/#submitting-pull-requests">Submit a Pull Request</a>. The instructions in this document assume that you
+are working from a properly configured development environment.</p>
+<p>Make sure translation requirements are installed in your environment:</p>
+<pre><code class="language-bash">pip install mkdocs[i18n]
+</code></pre>
+<h2 id="adding-language-translations-to-themes">Adding language translations to themes<a class="headerlink" href="#adding-language-translations-to-themes" title="Permanent link"></a></h2>
+<p>If your favorite language locale is not yet supported on one (or both) of the
+built-in themes (<code>mkdocs</code> and <code>readthedocs</code>), you can easily contribute a
+translation by following the steps below.</p>
+<p>Here is a quick summary of what you'll need to do:</p>
+<ol>
+<li><a href="#initializing-the-localization-catalogs">Initialize new localization
+   catalogs</a> for your language (if a
+   translation for your locale already exists, follow the instructions for
+   <a href="/user-guide/custom-themes/#localizing-themes">updating theme localization
+   files</a> instead).</li>
+<li><a href="#translating-the-mkdocs-themes">Add a translation</a> for every text
+   placeholder in the localized catalogs.</li>
+<li><a href="#testing-theme-translations">Locally serve and test</a> the translated themes
+   for your language.</li>
+<li><a href="#updating-theme-documentation">Update the documentation</a> about
+   supported translations for each translated theme.</li>
+<li><a href="#contributing-translations">Contribute your translation</a> through a
+   Pull Request.</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Translation locales are usually identified using the <a href="https://en.wikipedia.org/wiki/ISO_639-1">ISO-639-1</a> (2-letter)
+language codes. While territory/region/county codes are also supported,
+location specific translations should only be added after the general
+language translation has been completed and the regional dialect requires
+use of a term which differs from the general language translation.</p>
+</div>
+<h3 id="initializing-the-localization-catalogs">Initializing the localization catalogs<a class="headerlink" href="#initializing-the-localization-catalogs" title="Permanent link"></a></h3>
+<p>The templates for each theme contain text placeholders that have been extracted
+into a Portable Object Template (<code>messages.pot</code>) file, which is present in each
+theme's folder.</p>
+<p>Initializing a catalog consists of running a command which will create a
+directory structure for your desired language and prepare a Portable Object
+(<code>messages.po</code>) file derived from the <code>pot</code> file of the theme.</p>
+<p>Use the <code>init_catalog</code> command on each theme (<code>-t &lt;theme&gt;</code>) and provide the
+appropriate language code (<code>-l &lt;language&gt;</code>). For example, to add a translation
+for the Spanish <code>es</code> language to the <code>mkdocs</code> theme, run the following command:</p>
+<pre><code class="language-bash">python setup.py init_catalog -t mkdocs -l es
+</code></pre>
+<p>The above command will create the following file structure:</p>
+<pre><code class="language-text">mkdocs/themes/mkdocs/locales
+├── es
+│   └── LC_MESSAGES
+│       └── messages.po
+</code></pre>
+<p>You can now move on to the next step and <a href="#translating-the-mkdocs-themes">add a
+translation</a> for every text placeholder in the
+localized catalog.</p>
+<h2 id="updating-a-theme-translation">Updating a theme translation<a class="headerlink" href="#updating-a-theme-translation" title="Permanent link"></a></h2>
+<p>If a theme's <code>messages.pot</code> template file has been <a href="../../about/contributing/#submitting-changes-to-the-builtin-themes">updated</a>
+since the <code>messages.po</code> was last updated for your locale, follow the steps
+below to update the theme's <code>messages.po</code> file:</p>
+<ol>
+<li><a href="#updating-the-translation-catalogs">Update the theme's translation catalog</a>
+   to refresh the translatable text placeholders of each theme.</li>
+<li><a href="#translating-the-mkdocs-themes">Translate</a> the newly added translatable
+   text placeholders on every <code>messages.po</code> catalog file language you can.</li>
+<li><a href="#testing-theme-translations">Locally serve and test</a> the translated themes
+   for your language.</li>
+<li><a href="#contributing-translations">Contribute your translation</a> through a
+   Pull Request.</li>
+</ol>
+<h3 id="updating-the-translation-catalogs">Updating the translation catalogs<a class="headerlink" href="#updating-the-translation-catalogs" title="Permanent link"></a></h3>
+<p>This step should be completed after a theme template have been <a href="../../about/contributing/#submitting-changes-to-the-builtin-themes">updated</a> for each language that you are comfortable contributing a translation
+for.</p>
+<p>To update the <code>fr</code> translation catalog of the <code>mkdocs</code> theme, use the following
+command:</p>
+<pre><code class="language-bash">python setup.py update_catalog -t mkdocs -l fr
+</code></pre>
+<p>You can now move on to the next step and <a href="#translating-the-mkdocs-themes">add a translation</a> for every updated
+text placeholder in the localized catalog.</p>
+<h3 id="translating-the-mkdocs-themes">Translating the MkDocs themes<a class="headerlink" href="#translating-the-mkdocs-themes" title="Permanent link"></a></h3>
+<p>Now that your localized <code>messages.po</code> files are ready, all you need to do is
+add a translation in each <code>msgstr</code> item for each <code>msgid</code> item in the file.</p>
+<pre><code class="language-text">msgid &quot;Next&quot;
+msgstr &quot;Siguiente&quot;
+</code></pre>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not modify the <code>msgid</code> as it is common to all translations. Just add
+its translation in the <code>msgstr</code> item.</p>
+</div>
+<p>Once you have finished translating all of the terms listed in the <code>po</code> file,
+you'll want to <a href="#testing-theme-translations">test your localized theme</a>.</p>
+<h3 id="testing-theme-translations">Testing theme translations<a class="headerlink" href="#testing-theme-translations" title="Permanent link"></a></h3>
+<p>To test a theme with translations, you need to first compile the <code>messages.po</code>
+files of your theme into <code>messages.mo</code> files. The following command will compile
+the <code>es</code> translation for the <code>mkdocs</code> theme.</p>
+<pre><code class="language-bash">python setup.py compile_catalog -t mkdocs -l es
+</code></pre>
+<p>The above command results in the following file structure:</p>
+<pre><code class="language-text">mkdocs/themes/mkdocs/locales
+├── es
+│   └── LC_MESSAGES
+│       ├── messages.mo
+│       └── messages.po
+</code></pre>
+<p>Note that the compiled <code>messages.mo</code> file was generated based on the
+<code>messages.po</code> file that you just edited.</p>
+<p>Then modify the <code>mkdocs.yml</code> file at the root of the project to test the new
+and/or updated locale:</p>
+<pre><code class="language-yaml">theme:
+    name: mkdocs
+    locale: es
+</code></pre>
+<p>Finally, run <code>mkdocs serve</code> to check out your new localized version of the theme.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The build and release process takes care of compiling and distributing
+all locales to end users so you only have to worry about contributing the
+actual text translation <code>messages.po</code> files (the rest is ignored by git).</p>
+<p>After you have finished testing your work, be sure to undo the change to
+the <code>locale</code> setting in the <code>mkdocs.yml</code> file before submitting your
+changes.</p>
+</div>
+<h2 id="updating-theme-documentation">Updating theme documentation<a class="headerlink" href="#updating-theme-documentation" title="Permanent link"></a></h2>
+<p>Update the lists of supported translations for each translated theme located at
+<a href="../../user-guide/choosing-your-theme/">Choosing your theme</a>
+(<code>docs/user-guide/choosing-your-theme.md</code>), in their <strong><code>locale</code></strong> options.</p>
+<h2 id="contributing-translations">Contributing translations<a class="headerlink" href="#contributing-translations" title="Permanent link"></a></h2>
+<p>It is now time for you to <a href="../../about/contributing/">contribute</a> your nice work
+to the project. Thank you!</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

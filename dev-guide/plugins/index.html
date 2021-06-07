@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="MkDocs Team">
+        <link rel="canonical" href="https://www.mkdocs.org/dev-guide/plugins/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Plugins - MkDocs</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link href="../../css/extra.css" rel="stylesheet">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/django.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-274394082"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-274394082');
+        </script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">MkDocs</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../.." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../getting-started/" class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../user-guide/" class="dropdown-item">Overview</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/installation/" class="dropdown-item">Installation</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/writing-your-docs/" class="dropdown-item">Writing Your Docs</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/choosing-your-theme/" class="dropdown-item">Choosing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/customizing-your-theme/" class="dropdown-item">Customizing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/localizing-your-theme/" class="dropdown-item">Localizing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/configuration/" class="dropdown-item">Configuration</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/deploying-your-docs/" class="dropdown-item">Deploying Your Docs</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../" class="dropdown-item">Overview</a>
+</li>
+                                    
+<li>
+    <a href="../themes/" class="dropdown-item">Themes</a>
+</li>
+                                    
+<li>
+    <a href="../translations/" class="dropdown-item">Translations</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active">Plugins</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../about/release-notes/" class="dropdown-item">Release Notes</a>
+</li>
+                                    
+<li>
+    <a href="../../about/contributing/" class="dropdown-item">Contributing</a>
+</li>
+                                    
+<li>
+    <a href="../../about/license/" class="dropdown-item">License</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../translations/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../../about/release-notes/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/mkdocs/mkdocs/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#mkdocs-plugins" class="nav-link">MkDocs Plugins</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#installing-plugins" class="nav-link">Installing Plugins</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#using-plugins" class="nav-link">Using Plugins</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#developing-plugins" class="nav-link">Developing Plugins</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="mkdocs-plugins">MkDocs Plugins<a class="headerlink" href="#mkdocs-plugins" title="Permanent link"></a></h1>
+<p>A Guide to installing, using and creating MkDocs Plugins</p>
+<hr />
+<h2 id="installing-plugins">Installing Plugins<a class="headerlink" href="#installing-plugins" title="Permanent link"></a></h2>
+<p>Before a plugin can be used, it must be installed on the system. If you are
+using a plugin which comes with MkDocs, then it was installed when you installed
+MkDocs. However, to install third party plugins, you need to determine the
+appropriate package name and install it using <code>pip</code>:</p>
+<pre><code>pip install mkdocs-foo-plugin
+</code></pre>
+<p>Once a plugin has been successfully installed, it is ready to use. It just needs
+to be <a href="#using-plugins">enabled</a> in the configuration file. The <a href="https://github.com/mkdocs/mkdocs/wiki/MkDocs-Plugins">MkDocs Plugins</a>
+wiki page has a growing list of plugins that you can install and use.</p>
+<h2 id="using-plugins">Using Plugins<a class="headerlink" href="#using-plugins" title="Permanent link"></a></h2>
+<p>The <a href="../../user-guide/configuration/#plugins"><code>plugins</code></a> configuration option should contain a list of plugins to
+use when building the site. Each "plugin" must be a string name assigned to the
+plugin (see the documentation for a given plugin to determine its "name"). A
+plugin listed here must already be <a href="#installing-plugins">installed</a>.</p>
+<pre><code class="language-yaml">plugins:
+    - search
+</code></pre>
+<p>Some plugins may provide configuration options of their own. If you would like
+to set any configuration options, then you can nest a key/value mapping
+(<code>option_name: option value</code>) of any options that a given plugin supports. Note
+that a colon (<code>:</code>) must follow the plugin name and then on a new line the option
+name and value must be indented and separated by a colon. If you would like to
+define multiple options for a single plugin, each option must be defined on a
+separate line.</p>
+<pre><code class="language-yaml">plugins:
+    - search:
+        lang: en
+        foo: bar
+</code></pre>
+<p>For information regarding the configuration options available for a given plugin,
+see that plugin's documentation.</p>
+<p>For a list of default plugins and how to override them, see the
+<a href="../../user-guide/configuration/#plugins">configuration</a> documentation.</p>
+<h2 id="developing-plugins">Developing Plugins<a class="headerlink" href="#developing-plugins" title="Permanent link"></a></h2>
+<p>Like MkDocs, plugins must be written in Python. It is generally expected that
+each plugin would be distributed as a separate Python module, although it is
+possible to define multiple plugins in the same module. At a minimum, a MkDocs
+Plugin must consist of a <a href="#baseplugin">BasePlugin</a> subclass and an <a href="#entry-point">entry point</a> which
+points to it.</p>
+<h3 id="baseplugin">BasePlugin<a class="headerlink" href="#baseplugin" title="Permanent link"></a></h3>
+<p>A subclass of <code>mkdocs.plugins.BasePlugin</code> should define the behavior of the plugin.
+The class generally consists of actions to perform on specific events in the build
+process as well as a configuration scheme for the plugin.</p>
+<p>All <code>BasePlugin</code> subclasses contain the following attributes:</p>
+<h4 id="config_scheme">config_scheme<a class="headerlink" href="#config_scheme" title="Permanent link"></a></h4>
+<dl>
+<dd>
+<p>A tuple of configuration validation instances. Each item must consist of a
+two item tuple in which the first item is the string name of the
+configuration option and the second item is an instance of
+<code>mkdocs.config.config_options.BaseConfigOption</code> or any of its subclasses.</p>
+<p>For example, the following <code>config_scheme</code> defines three configuration options: <code>foo</code>, which accepts a string; <code>bar</code>, which accepts an integer; and <code>baz</code>, which accepts a boolean value.</p>
+<pre><code>class MyPlugin(mkdocs.plugins.BasePlugin):
+    config_scheme = (
+        ('foo', mkdocs.config.config_options.Type(str, default='a default value')),
+        ('bar', mkdocs.config.config_options.Type(int, default=0)),
+        ('baz', mkdocs.config.config_options.Type(bool, default=True))
+    )
+</code></pre>
+<p>When the user's configuration is loaded, the above scheme will be used to
+validate the configuration and fill in any defaults for settings not
+provided by the user. The validation classes may be any of the classes
+provided in <code>mkdocs.config.config_options</code> or a third party subclass defined
+in the plugin.</p>
+<p>Any settings provided by the user which fail validation or are not defined
+in the <code>config_scheme</code> will raise a <code>mkdocs.config.base.ValidationError</code>.</p>
+</dd>
+</dl>
+<h4 id="config">config<a class="headerlink" href="#config" title="Permanent link"></a></h4>
+<dl>
+<dd>A dictionary of configuration options for the plugin, which is populated by
+the <code>load_config</code> method after configuration validation has completed. Use
+this attribute to access options provided by the user.<pre><code>def on_pre_build(self, config):
+    if self.config['bool_option']:
+        # implement "bool_option" functionality here...
+</code></pre>
+</dd>
+</dl>
+<p>All <code>BasePlugin</code> subclasses contain the following method(s):</p>
+<h4 id="load_configoptions">load_config(options)<a class="headerlink" href="#load_configoptions" title="Permanent link"></a></h4>
+<dl>
+<dd>Loads configuration from a dictionary of options. Returns a tuple of
+<code>(errors, warnings)</code>. This method is called by MkDocs during configuration
+validation and should not need to be called by the plugin.</dd>
+</dl>
+<h4 id="on_event_name">on_&lt;event_name&gt;()<a class="headerlink" href="#on_event_name" title="Permanent link"></a></h4>
+<dl>
+<dd>
+<p>Optional methods which define the behavior for specific <a href="#events">events</a>. The plugin
+should define its behavior within these methods. Replace <code>&lt;event_name&gt;</code> with
+the actual name of the event. For example, the <code>pre_build</code> event would be
+defined in the <code>on_pre_build</code> method.</p>
+<p>Most events accept one positional argument and various keyword arguments. It
+is generally expected that the positional argument would be modified (or
+replaced) by the plugin and returned. If nothing is returned (the method
+returns <code>None</code>), then the original, unmodified object is used. The keyword
+arguments are simply provided to give context and/or supply data which may
+be used to determine how the positional argument should be modified. It is
+good practice to accept keyword arguments as <code>**kwargs</code>. In the event that
+additional keywords are provided to an event in a future version of MkDocs,
+there will be no need to alter your plugin.</p>
+<p>For example, the following event would add an additional static_template to
+the theme config:</p>
+<pre><code>class MyPlugin(BasePlugin):
+    def on_config(self, config, **kwargs):
+        config['theme'].static_templates.add('my_template.html')
+        return config
+</code></pre>
+</dd>
+</dl>
+<h3 id="events">Events<a class="headerlink" href="#events" title="Permanent link"></a></h3>
+<p>There are three kinds of events: <a href="#global-events">Global Events</a>, <a href="#page-events">Page Events</a> and
+<a href="#template-events">Template Events</a>.</p>
+<h4 id="global-events">Global Events<a class="headerlink" href="#global-events" title="Permanent link"></a></h4>
+<p>Global events are called once per build at either the beginning or end of the
+build process. Any changes made in these events will have a global effect on the
+entire site.</p>
+<h5 id="on_serve">on_serve<a class="headerlink" href="#on_serve" title="Permanent link"></a></h5>
+<dl>
+<dd>
+<p>The <code>serve</code> event is only called when the <code>serve</code> command is used during
+development. It is passed the <code>Server</code> instance which can be modified before
+it is activated. For example, additional files or directories could be added
+to the list of "watched" files for auto-reloading.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd><strong>server:</strong> <code>livereload.Server</code> instance</dd>
+<dd><strong>config:</strong> global configuration object</dd>
+<dd><strong>builder:</strong> a callable which gets passed to each call to <code>server.watch</code></dd>
+<dt>Returns:</dt>
+<dd><code>livereload.Server</code> instance</dd>
+</dl>
+</dd>
+</dl>
+<h5 id="on_config">on_config<a class="headerlink" href="#on_config" title="Permanent link"></a></h5>
+<dl>
+<dd>
+<p>The <code>config</code> event is the first event called on build and is run immediately
+after the user configuration is loaded and validated. Any alterations to the
+config should be made here.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd><strong>config:</strong> global configuration object</dd>
+<dt>Returns:</dt>
+<dd>global configuration object</dd>
+</dl>
+</dd>
+</dl>
+<h5 id="on_pre_build">on_pre_build<a class="headerlink" href="#on_pre_build" title="Permanent link"></a></h5>
+<dl>
+<dd>
+<p>The <code>pre_build</code> event does not alter any variables. Use this event to call
+pre-build scripts.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd><strong>config:</strong> global configuration object</dd>
+</dl>
+</dd>
+</dl>
+<h5 id="on_files">on_files<a class="headerlink" href="#on_files" title="Permanent link"></a></h5>
+<dl>
+<dd>
+<p>The <code>files</code> event is called after the files collection is populated from the
+<code>docs_dir</code>. Use this event to add, remove, or alter files in the
+collection. Note that Page objects have not yet been associated with the
+file objects in the collection. Use <a href="#page-events">Page Events</a> to manipulate page
+specific data.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd><strong>files:</strong> global files collection</dd>
+<dd><strong>config:</strong> global configuration object</dd>
+<dt>Returns:</dt>
+<dd>global files collection</dd>
+</dl>
+</dd>
+</dl>
+<h5 id="on_nav">on_nav<a class="headerlink" href="#on_nav" title="Permanent link"></a></h5>
+<dl>
+<dd>
+<p>The <code>nav</code> event is called after the site navigation is created and can
+be used to alter the site navigation.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd><strong>nav:</strong> global navigation object</dd>
+<dd><strong>config:</strong> global configuration object</dd>
+<dd><strong>files:</strong> global files collection</dd>
+<dt>Returns:</dt>
+<dd>global navigation object</dd>
+</dl>
+</dd>
+</dl>
+<h5 id="on_env">on_env<a class="headerlink" href="#on_env" title="Permanent link"></a></h5>
+<dl>
+<dd>
+<p>The <code>env</code> event is called after the Jinja template environment is created
+and can be used to alter the <a href="https://jinja.palletsprojects.com/en/master/api/#jinja2.Environment">Jinja environment</a>.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd><strong>env:</strong> global Jinja environment</dd>
+<dd><strong>config:</strong> global configuration object</dd>
+<dd><strong>files:</strong> global files collection</dd>
+<dt>Returns:</dt>
+<dd>global Jinja Environment</dd>
+</dl>
+</dd>
+</dl>
+<h5 id="on_post_build">on_post_build<a class="headerlink" href="#on_post_build" title="Permanent link"></a></h5>
+<dl>
+<dd>
+<p>The <code>post_build</code> event does not alter any variables. Use this event to call
+post-build scripts.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd><strong>config:</strong> global configuration object</dd>
+</dl>
+</dd>
+</dl>
+<h5 id="on_build_error">on_build_error<a class="headerlink" href="#on_build_error" title="Permanent link"></a></h5>
+<dl>
+<dd>
+<p>The <code>build_error</code> event is called after an exception of any kind
+is caught by MkDocs during the build process.
+Use this event to clean things up before MkDocs terminates. Note that any other
+events which were scheduled to run after the error will have been skipped. See
+<a href="#handling-errors">Handling Errors</a> for more details.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd><strong>error:</strong> exception raised</dd>
+</dl>
+</dd>
+</dl>
+<h4 id="template-events">Template Events<a class="headerlink" href="#template-events" title="Permanent link"></a></h4>
+<p>Template events are called once for each non-page template. Each template event
+will be called for each template defined in the <a href="../../user-guide/configuration/#extra_templates">extra_templates</a> config setting
+as well as any <a href="../../user-guide/configuration/#static_templates">static_templates</a> defined in the theme. All template events are
+called after the <a href="#on_env">env</a> event and before any <a href="#page-events">page events</a>.</p>
+<h5 id="on_pre_template">on_pre_template<a class="headerlink" href="#on_pre_template" title="Permanent link"></a></h5>
+<dl>
+<dd>
+<p>The <code>pre_template</code> event is called immediately after the subject template is
+loaded and can be used to alter the template.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd><strong>template</strong>: a Jinja2 <a href="http://code.nabla.net/doc/jinja2/api/jinja2/environment/jinja2.environment.Template.html">Template</a> object</dd>
+<dd><strong>template_name</strong>: string filename of template</dd>
+<dd><strong>config:</strong> global configuration object</dd>
+<dt>Returns:</dt>
+<dd>a Jinja2 <a href="http://code.nabla.net/doc/jinja2/api/jinja2/environment/jinja2.environment.Template.html">Template</a> object</dd>
+</dl>
+</dd>
+</dl>
+<h5 id="on_template_context">on_template_context<a class="headerlink" href="#on_template_context" title="Permanent link"></a></h5>
+<dl>
+<dd>
+<p>The <code>template_context</code> event is called immediately after the context is created
+for the subject template and can be used to alter the context for that specific
+template only.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd><strong>context</strong>: dict of template context variables</dd>
+<dd><strong>template_name</strong>: string filename of template</dd>
+<dd><strong>config:</strong> global configuration object</dd>
+<dt>Returns:</dt>
+<dd>dict of template context variables</dd>
+</dl>
+</dd>
+</dl>
+<h5 id="on_post_template">on_post_template<a class="headerlink" href="#on_post_template" title="Permanent link"></a></h5>
+<dl>
+<dd>
+<p>The <code>post_template</code> event is called after the template is rendered, but before
+it is written to disc and can be used to alter the output of the template.
+If an empty string is returned, the template is skipped and nothing is is
+written to disc.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd><strong>output_content</strong>: output of rendered template as string</dd>
+<dd><strong>template_name</strong>: string filename of template</dd>
+<dd><strong>config:</strong> global configuration object</dd>
+<dt>Returns:</dt>
+<dd>output of rendered template as string</dd>
+</dl>
+</dd>
+</dl>
+<h4 id="page-events">Page Events<a class="headerlink" href="#page-events" title="Permanent link"></a></h4>
+<p>Page events are called once for each Markdown page included in the site. All
+page events are called after the <a href="#on_post_template">post_template</a> event and before the
+<a href="#on_post_build">post_build</a> event.</p>
+<h5 id="on_pre_page">on_pre_page<a class="headerlink" href="#on_pre_page" title="Permanent link"></a></h5>
+<dl>
+<dd>
+<p>The <code>pre_page</code> event is called before any actions are taken on the subject
+page and can be used to alter the <code>Page</code> instance.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd><strong>page:</strong> <code>mkdocs.nav.Page</code> instance</dd>
+<dd><strong>config:</strong> global configuration object</dd>
+<dd><strong>files:</strong> global files collection</dd>
+<dt>Returns:</dt>
+<dd><code>mkdocs.nav.Page</code> instance</dd>
+</dl>
+</dd>
+</dl>
+<h5 id="on_page_read_source">on_page_read_source<a class="headerlink" href="#on_page_read_source" title="Permanent link"></a></h5>
+<dl>
+<dd>
+<p>The <code>on_page_read_source</code> event can replace the default mechanism to read
+the contents of a page's source from the filesystem.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd><strong>page:</strong> <code>mkdocs.nav.Page</code> instance</dd>
+<dd><strong>config:</strong> global configuration object</dd>
+<dt>Returns:</dt>
+<dd>The raw source for a page as unicode string. If <code>None</code> is returned, the
+  default loading from a file will be performed.</dd>
+</dl>
+</dd>
+</dl>
+<h5 id="on_page_markdown">on_page_markdown<a class="headerlink" href="#on_page_markdown" title="Permanent link"></a></h5>
+<dl>
+<dd>
+<p>The <code>page_markdown</code> event is called after the page's markdown is loaded
+from file and can be used to alter the Markdown source text. The meta-
+data has been stripped off and is available as <code>page.meta</code> at this point.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd><strong>markdown:</strong> Markdown source text of page as string</dd>
+<dd><strong>page:</strong> <code>mkdocs.nav.Page</code> instance</dd>
+<dd><strong>config:</strong> global configuration object</dd>
+<dd><strong>files:</strong> global files collection</dd>
+<dt>Returns:</dt>
+<dd>Markdown source text of page as string</dd>
+</dl>
+</dd>
+</dl>
+<h5 id="on_page_content">on_page_content<a class="headerlink" href="#on_page_content" title="Permanent link"></a></h5>
+<dl>
+<dd>
+<p>The <code>page_content</code> event is called after the Markdown text is rendered to
+HTML (but before being passed to a template) and can be used to alter the
+HTML body of the page.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd><strong>html:</strong> HTML rendered from Markdown source as string</dd>
+<dd><strong>page:</strong> <code>mkdocs.nav.Page</code> instance</dd>
+<dd><strong>config:</strong> global configuration object</dd>
+<dd><strong>files:</strong> global files collection</dd>
+<dt>Returns:</dt>
+<dd>HTML rendered from Markdown source as string</dd>
+</dl>
+</dd>
+</dl>
+<h5 id="on_page_context">on_page_context<a class="headerlink" href="#on_page_context" title="Permanent link"></a></h5>
+<dl>
+<dd>
+<p>The <code>page_context</code> event is called after the context for a page is created
+and can be used to alter the context for that specific page only.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd><strong>context</strong>: dict of template context variables</dd>
+<dd><strong>page:</strong> <code>mkdocs.nav.Page</code> instance</dd>
+<dd><strong>config:</strong> global configuration object</dd>
+<dd><strong>nav:</strong> global navigation object</dd>
+<dt>Returns:</dt>
+<dd>dict of template context variables</dd>
+</dl>
+</dd>
+</dl>
+<h5 id="on_post_page">on_post_page<a class="headerlink" href="#on_post_page" title="Permanent link"></a></h5>
+<dl>
+<dd>
+<p>The <code>post_page</code> event is called after the template is rendered, but
+before it is written to disc and can be used to alter the output of the
+page. If an empty string is returned, the page is skipped and nothing is
+written to disc.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd><strong>output:</strong> output of rendered template as string</dd>
+<dd><strong>page:</strong> <code>mkdocs.nav.Page</code> instance</dd>
+<dd><strong>config:</strong> global configuration object</dd>
+<dt>Returns:</dt>
+<dd>output of rendered template as string</dd>
+</dl>
+</dd>
+</dl>
+<h3 id="handling-errors">Handling Errors<a class="headerlink" href="#handling-errors" title="Permanent link"></a></h3>
+<p>MkDocs defines four error types:</p>
+<h4 id="mkdocsexceptionsmkdocsexception"><code>mkdocs.exceptions.MkDocsException</code><a class="headerlink" href="#mkdocsexceptionsmkdocsexception" title="Permanent link"></a></h4>
+<dl>
+<dd>The base class which all MkDocs exceptions inherit from. This should
+not be raised directly. One of the sublcasses should be raised instead.</dd>
+</dl>
+<h4 id="mkdocsexceptionsconfigurationerror"><code>mkdocs.exceptions.ConfigurationError</code><a class="headerlink" href="#mkdocsexceptionsconfigurationerror" title="Permanent link"></a></h4>
+<dl>
+<dd>This error is raised by configuration validation when a validation error
+is encountered. This error should be raised by any configuration options
+defined in a plugin's <a href="#config_scheme">config_scheme</a>.</dd>
+</dl>
+<h4 id="mkdocsexceptionsbuilderror"><code>mkdocs.exceptions.BuildError</code><a class="headerlink" href="#mkdocsexceptionsbuilderror" title="Permanent link"></a></h4>
+<dl>
+<dd>This error may be raised by MkDocs during the build process. Plugins should
+not raise this error.</dd>
+</dl>
+<h4 id="mkdocsexceptionspluginerror"><code>mkdocs.exceptions.PluginError</code><a class="headerlink" href="#mkdocsexceptionspluginerror" title="Permanent link"></a></h4>
+<dl>
+<dd>A subclass of <code>mkdocs.exceptions.BuildError</code> which can be raised by plugin
+events.</dd>
+</dl>
+<p>Unexpected and uncaught exceptions will interrupt the build process and produce
+typical Python tracebacks, which are useful for debugging your code. However,
+users generally find tracebacks overwhelming and often miss the helpful error
+message. Therefore, MkDocs will catch any of the errors listed above, retrieve
+the error message, and exit immediately with only the helpful message displayed
+to the user.</p>
+<p>Therefore, you might want to catch any exceptions within your plugin and raise a
+<code>PluginError</code>, passing in your own custom-crafted message, so that the build
+process is aborted with a helpful message.</p>
+<p>The <a href="#on_build_error">on_build_error</a> event will be triggered for any exception.</p>
+<p>For example:</p>
+<pre><code class="language-python">from mkdocs.exceptions import PluginError
+from mkdocs.plugins import BasePlugin
+
+
+class MyPlugin(BasePlugin):
+    def on_post_page(self, output, page, config, **kwargs):
+        try:
+            # some code that could throw a KeyError
+            ...
+        except KeyError as error:
+            raise PluginError(str(error))
+
+    def on_build_error(self, error):
+        # some code to clean things up
+        ...
+</code></pre>
+<h3 id="entry-point">Entry Point<a class="headerlink" href="#entry-point" title="Permanent link"></a></h3>
+<p>Plugins need to be packaged as Python libraries (distributed on PyPI separate
+from MkDocs) and each must register as a Plugin via a setuptools entry_point.
+Add the following to your <code>setup.py</code> script:</p>
+<pre><code class="language-python">entry_points={
+    'mkdocs.plugins': [
+        'pluginname = path.to.some_plugin:SomePluginClass',
+    ]
+}
+</code></pre>
+<p>The <code>pluginname</code> would be the name used by users (in the config file) and
+<code>path.to.some_plugin:SomePluginClass</code> would be the importable plugin itself
+(<code>from path.to.some_plugin import SomePluginClass</code>) where <code>SomePluginClass</code> is a
+subclass of <a href="#baseplugin">BasePlugin</a> which defines the plugin behavior. Naturally, multiple
+Plugin classes could exist in the same module. Simply define each as a separate
+entry_point.</p>
+<pre><code class="language-python">entry_points={
+    'mkdocs.plugins': [
+        'featureA = path.to.my_plugins:PluginA',
+        'featureB = path.to.my_plugins:PluginB'
+    ]
+}
+</code></pre>
+<p>Note that registering a plugin does not activate it. The user still needs to
+tell MkDocs to use it via the config.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

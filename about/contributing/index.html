@@ -12,23 +12,22 @@
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
         <link href="../../css/extra.css" rel="stylesheet">
 
         <script src="../../js/jquery-1.10.2.min.js" defer></script>
         <script src="../../js/bootstrap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/django.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/django.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-274394082"></script>
         <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
 
-            ga('create', 'UA-27795084-5', 'mkdocs.org');
-            ga('send', 'pageview');
+          gtag('config', 'G-274394082');
         </script> 
     </head>
 
@@ -48,16 +47,35 @@
                             <li class="navitem">
                                 <a href="../.." class="nav-link">Home</a>
                             </li>
+                            <li class="navitem">
+                                <a href="../../getting-started/" class="nav-link">Getting Started</a>
+                            </li>
                             <li class="dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../user-guide/" class="dropdown-item">Overview</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/installation/" class="dropdown-item">Installation</a>
+</li>
                                     
 <li>
     <a href="../../user-guide/writing-your-docs/" class="dropdown-item">Writing Your Docs</a>
 </li>
                                     
 <li>
-    <a href="../../user-guide/styling-your-docs/" class="dropdown-item">Styling Your Docs</a>
+    <a href="../../user-guide/choosing-your-theme/" class="dropdown-item">Choosing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/customizing-your-theme/" class="dropdown-item">Customizing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/localizing-your-theme/" class="dropdown-item">Localizing Your Theme</a>
 </li>
                                     
 <li>
@@ -67,13 +85,26 @@
 <li>
     <a href="../../user-guide/deploying-your-docs/" class="dropdown-item">Deploying Your Docs</a>
 </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
                                     
 <li>
-    <a href="../../user-guide/custom-themes/" class="dropdown-item">Custom Themes</a>
+    <a href="../../dev-guide/" class="dropdown-item">Overview</a>
 </li>
                                     
 <li>
-    <a href="../../user-guide/plugins/" class="dropdown-item">Plugins</a>
+    <a href="../../dev-guide/themes/" class="dropdown-item">Themes</a>
+</li>
+                                    
+<li>
+    <a href="../../dev-guide/translations/" class="dropdown-item">Translations</a>
+</li>
+                                    
+<li>
+    <a href="../../dev-guide/plugins/" class="dropdown-item">Plugins</a>
 </li>
                                 </ul>
                             </li>
@@ -155,6 +186,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-level="2"><a href="#translating-themes" class="nav-link">Translating themes</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-level="2"><a href="#submitting-pull-requests" class="nav-link">Submitting Pull Requests</a>
               <ul class="nav flex-column">
               </ul>
@@ -190,16 +225,14 @@ MkDocs you can do so with the following command. This can be useful if you
 want to provide feedback for a new feature or want to confirm if a bug you
 have encountered is fixed in the git master. It is <strong>strongly</strong> recommended
 that you do this within a <a href="https://virtualenv.pypa.io/en/latest/user_guide.html">virtualenv</a>.</p>
-<pre><code class="bash">pip install https://github.com/mkdocs/mkdocs/archive/master.tar.gz
+<pre><code class="language-bash">pip install https://github.com/mkdocs/mkdocs/archive/master.tar.gz
 </code></pre>
-
 <h2 id="installing-for-development">Installing for Development<a class="headerlink" href="#installing-for-development" title="Permanent link"></a></h2>
 <p>First you'll need to fork and clone the repository. Once you have a local
 copy, run the following command. It is <strong>strongly</strong> recommended that you do
 this within a <a href="https://virtualenv.pypa.io/en/latest/user_guide.html">virtualenv</a>.</p>
-<pre><code class="bash">pip install --editable .
+<pre><code class="language-bash">pip install --editable .
 </code></pre>
-
 <p>This will install MkDocs in development mode which binds the <code>mkdocs</code> command
 to the git repository.</p>
 <h2 id="running-the-tests">Running the tests<a class="headerlink" href="#running-the-tests" title="Permanent link"></a></h2>
@@ -210,10 +243,34 @@ root of your MkDocs repository.</p>
 <p>It will attempt to run the tests against all of the Python versions we
 support. So don't be concerned if you are missing some and they fail. The rest
 will be verified by <a href="https://travis-ci.org/repositories">Travis</a> when you submit a pull request.</p>
+<h2 id="translating-themes">Translating themes<a class="headerlink" href="#translating-themes" title="Permanent link"></a></h2>
+<p>To localize a theme to your favorite language, follow the guide on <a href="../../dev-guide/translations/">Translating
+Themes</a>. We welcome translation Pull Requests!</p>
 <h2 id="submitting-pull-requests">Submitting Pull Requests<a class="headerlink" href="#submitting-pull-requests" title="Permanent link"></a></h2>
 <p>Once you are happy with your changes or you are ready for some feedback, push
 it to your fork and send a pull request. For a change to be accepted it will
-most likely need to have tests and documentation if it is a new feature.</p></div>
+most likely need to have tests and documentation if it is a new feature.</p>
+<h3 id="submitting-changes-to-the-builtin-themes">Submitting changes to the builtin themes<a class="headerlink" href="#submitting-changes-to-the-builtin-themes" title="Permanent link"></a></h3>
+<p>When installed with <code>i18n</code> support (<code>pip install mkdocs[i18n]</code>), MkDocs allows
+themes to support being translated into various languages (referred to as
+locales) if they respect <a href="https://jinja.palletsprojects.com/en/master/extensions/#i18n-extension">Jinja's i18n extension</a> by wrapping text placeholders
+with <code>{% trans %}</code> and <code>{% endtrans %}</code> tags.</p>
+<p>Each time a translatable text placeholder is added, removed or changed in a
+theme template, the theme's Portable Object Template (<code>pot</code>) file needs to be
+updated by running the <code>extract_messages</code> command. For example, to update the
+<code>pot</code> file of the <code>mkdocs</code> theme, run the following command:</p>
+<pre><code class="language-bash">python setup.py extract_messages -t mkdocs
+</code></pre>
+<p>The updated <code>pot</code> file should be included in a PR with the updated template.
+The updated <code>pot</code> file will allow translation contributors to propose the
+translations needed for their preferred language. See the guide on <a href="../../dev-guide/translations/">Translating
+Themes</a> for details.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Contributors are not expected to provide translations with their changes to
+a theme's templates. However, they are expected to include an updated <code>pot</code>
+file so that everything is ready for translators to do their job.</p>
+</div></div>
             </div>
         </div>
 
@@ -237,16 +294,13 @@ most likely need to have tests and documentation if it is a new feature.</p></di
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body">
-                <p>
-                    From here you can search these documents. Enter
-                    your search terms below.
-                </p>
+                <p>From here you can search these documents. Enter your search terms below.</p>
                 <form>
                     <div class="form-group">
                         <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
-                <div id="mkdocs-search-results"></div>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
             </div>
             <div class="modal-footer">
             </div>

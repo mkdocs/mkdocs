@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="MkDocs Team">
+        <link rel="canonical" href="https://www.mkdocs.org/getting-started/">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Getting Started - MkDocs</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link href="../css/extra.css" rel="stylesheet">
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/django.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-274394082"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-274394082');
+        </script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">MkDocs</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem active">
+                                <a href="./" class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../user-guide/" class="dropdown-item">Overview</a>
+</li>
+                                    
+<li>
+    <a href="../user-guide/installation/" class="dropdown-item">Installation</a>
+</li>
+                                    
+<li>
+    <a href="../user-guide/writing-your-docs/" class="dropdown-item">Writing Your Docs</a>
+</li>
+                                    
+<li>
+    <a href="../user-guide/choosing-your-theme/" class="dropdown-item">Choosing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../user-guide/customizing-your-theme/" class="dropdown-item">Customizing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../user-guide/localizing-your-theme/" class="dropdown-item">Localizing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../user-guide/configuration/" class="dropdown-item">Configuration</a>
+</li>
+                                    
+<li>
+    <a href="../user-guide/deploying-your-docs/" class="dropdown-item">Deploying Your Docs</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../dev-guide/" class="dropdown-item">Overview</a>
+</li>
+                                    
+<li>
+    <a href="../dev-guide/themes/" class="dropdown-item">Themes</a>
+</li>
+                                    
+<li>
+    <a href="../dev-guide/translations/" class="dropdown-item">Translations</a>
+</li>
+                                    
+<li>
+    <a href="../dev-guide/plugins/" class="dropdown-item">Plugins</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../about/release-notes/" class="dropdown-item">Release Notes</a>
+</li>
+                                    
+<li>
+    <a href="../about/contributing/" class="dropdown-item">Contributing</a>
+</li>
+                                    
+<li>
+    <a href="../about/license/" class="dropdown-item">License</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href=".." class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../user-guide/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/mkdocs/mkdocs/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#getting-started-with-mkdocs" class="nav-link">Getting Started with MkDocs</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#installation" class="nav-link">Installation</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#creating-a-new-project" class="nav-link">Creating a new project</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#adding-pages" class="nav-link">Adding pages</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#theming-our-documentation" class="nav-link">Theming our documentation</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#changing-the-favicon-icon" class="nav-link">Changing the Favicon Icon</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#building-the-site" class="nav-link">Building the site</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#other-commands-and-options" class="nav-link">Other Commands and Options</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#deploying" class="nav-link">Deploying</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#getting-help" class="nav-link">Getting help</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="getting-started-with-mkdocs">Getting Started with MkDocs<a class="headerlink" href="#getting-started-with-mkdocs" title="Permanent link"></a></h1>
+<p>An introductory tutorial!</p>
+<hr />
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link"></a></h2>
+<p>To install MkDocs, run the following command from the command line:</p>
+<pre><code class="language-bash">pip install mkdocs
+</code></pre>
+<p>For more details, see the <a href="../user-guide/installation/">Installation Guide</a>.</p>
+<h2 id="creating-a-new-project">Creating a new project<a class="headerlink" href="#creating-a-new-project" title="Permanent link"></a></h2>
+<p>Getting started is super easy. To create a new project, run the following
+command from the command line:</p>
+<pre><code class="language-bash">mkdocs new my-project
+cd my-project
+</code></pre>
+<p>Take a moment to review the initial project that has been created for you.</p>
+<p><img alt="The initial MkDocs layout" src="../img/initial-layout.png" /></p>
+<p>There's a single configuration file named <code>mkdocs.yml</code>, and a folder named
+<code>docs</code> that will contain your documentation source files (<code>docs</code> is
+the default value for the <a href="../user-guide/configuration/#docs_dir">docs_dir</a> configuration setting). Right now the <code>docs</code>
+folder just contains a single documentation page, named <code>index.md</code>.</p>
+<p>MkDocs comes with a built-in dev-server that lets you preview your documentation
+as you work on it. Make sure you're in the same directory as the <code>mkdocs.yml</code>
+configuration file, and then start the server by running the <code>mkdocs serve</code>
+command:</p>
+<pre><code class="language-bash">$ mkdocs serve
+INFO    -  Building documentation...
+INFO    -  Cleaning site directory
+[I 160402 15:50:43 server:271] Serving on http://127.0.0.1:8000
+[I 160402 15:50:43 handlers:58] Start watching changes
+[I 160402 15:50:43 handlers:60] Start detecting changes
+</code></pre>
+<p>Open up <code>http://127.0.0.1:8000/</code> in your browser, and you'll see the default
+home page being displayed:</p>
+<p><img alt="The MkDocs live server" src="../img/screenshot.png" /></p>
+<p>The dev-server also supports auto-reloading, and will rebuild your documentation
+whenever anything in the configuration file, documentation directory, or theme
+directory changes.</p>
+<p>Open the <code>docs/index.md</code> document in your text editor of choice, change the
+initial heading to <code>MkLorum</code>, and save your changes. Your browser will
+auto-reload and you should see your updated documentation immediately.</p>
+<p>Now try editing the configuration file: <code>mkdocs.yml</code>. Change the
+<a href="../user-guide/configuration/#site_name"><code>site_name</code></a> setting to <code>MkLorum</code> and save the file.</p>
+<pre><code class="language-yaml">site_name: MkLorum
+site_url: https://example.com/
+</code></pre>
+<p>Your browser should immediately reload, and you'll see your new site name take
+effect.</p>
+<p><img alt="The site_name setting" src="../img/site-name.png" /></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <a href="../user-guide/configuration/#site_name"><code>site_name</code></a> and <a href="../user-guide/configuration/#site_url"><code>site_url</code></a> configuration
+options are the only two required options in your configuration file. When
+you create a new project, the <code>site_url</code> option is assigned the placeholder
+value: <code>https://example.com</code>. If the final location is known, you can change
+the setting now to point to it. Or you may choose to leave it alone for now.
+Just be sure to edit it before you deploy your site to a production server.</p>
+</div>
+<h2 id="adding-pages">Adding pages<a class="headerlink" href="#adding-pages" title="Permanent link"></a></h2>
+<p>Now add a second page to your documentation:</p>
+<pre><code class="language-bash">curl 'https://jaspervdj.be/lorem-markdownum/markdown.txt' &gt; docs/about.md
+</code></pre>
+<p>As our documentation site will include some navigation headers, you may want to
+edit the configuration file and add some information about the order, title, and
+nesting of each page in the navigation header by adding a <a href="../user-guide/configuration/#nav"><code>nav</code></a>
+setting:</p>
+<pre><code class="language-yaml">site_name: MkLorum
+site_url: https://example.com/
+nav:
+    - Home: index.md
+    - About: about.md
+</code></pre>
+<p>Save your changes and you'll now see a navigation bar with <code>Home</code> and <code>About</code>
+items on the left as well as <code>Search</code>, <code>Previous</code>, and <code>Next</code> items on the
+right.</p>
+<p><img alt="Screenshot" src="../img/multipage.png" /></p>
+<p>Try the menu items and navigate back and forth between pages. Then click on
+<code>Search</code>. A search dialog will appear, allowing you to search for any text on
+any page. Notice that the search results include every occurrence of the search
+term on the site and links directly to the section of the page in which the
+search term appears. You get all of that with no effort or configuration on your
+part!</p>
+<p><img alt="Screenshot" src="../img/search.png" /></p>
+<h2 id="theming-our-documentation">Theming our documentation<a class="headerlink" href="#theming-our-documentation" title="Permanent link"></a></h2>
+<p>Now change the configuration file to alter how the documentation is displayed by
+changing the theme. Edit the <code>mkdocs.yml</code> file and add a <a href="../user-guide/configuration/#theme"><code>theme</code></a> setting:</p>
+<pre><code class="language-yaml">site_name: MkLorum
+site_url: https://example.com/
+nav:
+    - Home: index.md
+    - About: about.md
+theme: readthedocs
+</code></pre>
+<p>Save your changes, and you'll see the ReadTheDocs theme being used.</p>
+<p><img alt="Screenshot" src="../img/readthedocs.png" /></p>
+<h2 id="changing-the-favicon-icon">Changing the Favicon Icon<a class="headerlink" href="#changing-the-favicon-icon" title="Permanent link"></a></h2>
+<p>By default, MkDocs uses the <a href="../img/favicon.ico">MkDocs favicon</a> icon. To use a different icon, create
+an <code>img</code> subdirectory in the <code>docs</code> directory and copy your custom <code>favicon.ico</code>
+file to that directory. MkDocs will automatically detect and use that file as your
+favicon icon.</p>
+<h2 id="building-the-site">Building the site<a class="headerlink" href="#building-the-site" title="Permanent link"></a></h2>
+<p>That's looking good. You're ready to deploy the first pass of your <code>MkLorum</code>
+documentation. First build the documentation:</p>
+<pre><code class="language-bash">mkdocs build
+</code></pre>
+<p>This will create a new directory, named <code>site</code>. Take a look inside the
+directory:</p>
+<pre><code class="language-bash">$ ls site
+about  fonts  index.html  license  search.html
+css    img    js          mkdocs   sitemap.xml
+</code></pre>
+<p>Notice that your source documentation has been output as two HTML files named
+<code>index.html</code> and <code>about/index.html</code>. You also have various other media that's
+been copied into the <code>site</code> directory as part of the documentation theme. You
+even have a <code>sitemap.xml</code> file and <code>mkdocs/search_index.json</code>.</p>
+<p>If you're using source code control such as <code>git</code> you probably don't want to
+check your documentation builds into the repository. Add a line containing
+<code>site/</code> to your <code>.gitignore</code> file.</p>
+<pre><code class="language-bash">echo &quot;site/&quot; &gt;&gt; .gitignore
+</code></pre>
+<p>If you're using another source code control tool you'll want to check its
+documentation on how to ignore specific directories.</p>
+<h2 id="other-commands-and-options">Other Commands and Options<a class="headerlink" href="#other-commands-and-options" title="Permanent link"></a></h2>
+<p>There are various other commands and options available. For a complete list of
+commands, use the <code>--help</code> flag:</p>
+<pre><code class="language-bash">mkdocs --help
+</code></pre>
+<p>To view a list of options available on a given command, use the <code>--help</code> flag
+with that command. For example, to get a list of all options available for the
+<code>build</code> command run the following:</p>
+<pre><code class="language-bash">mkdocs build --help
+</code></pre>
+<h2 id="deploying">Deploying<a class="headerlink" href="#deploying" title="Permanent link"></a></h2>
+<p>The documentation site that you just built only uses static files so you'll be
+able to host it from pretty much anywhere. Simply upload the contents of the
+entire <code>site</code> directory to wherever you're hosting your website from and
+you're done. For specific instructions on a number of common hosts, see the
+<a href="../user-guide/deploying-your-docs/">Deploying your Docs</a> page.</p>
+<h2 id="getting-help">Getting help<a class="headerlink" href="#getting-help" title="Permanent link"></a></h2>
+<p>See the <a href="../user-guide/">User Guide</a> for more complete documentation of all of MkDocs' features.</p>
+<p>To get help with MkDocs, please use the <a href="https://github.com/mkdocs/mkdocs/discussions">GitHub discussions</a> or <a href="https://github.com/mkdocs/mkdocs/issues">GitHub issues</a>.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

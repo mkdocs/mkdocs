@@ -12,23 +12,22 @@
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
         <link href="../../css/extra.css" rel="stylesheet">
 
         <script src="../../js/jquery-1.10.2.min.js" defer></script>
         <script src="../../js/bootstrap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/django.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/django.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-274394082"></script>
         <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
 
-            ga('create', 'UA-27795084-5', 'mkdocs.org');
-            ga('send', 'pageview');
+          gtag('config', 'G-274394082');
         </script> 
     </head>
 
@@ -48,16 +47,35 @@
                             <li class="navitem">
                                 <a href="../.." class="nav-link">Home</a>
                             </li>
+                            <li class="navitem">
+                                <a href="../../getting-started/" class="nav-link">Getting Started</a>
+                            </li>
                             <li class="dropdown active">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../" class="dropdown-item">Overview</a>
+</li>
+                                    
+<li>
+    <a href="../installation/" class="dropdown-item">Installation</a>
+</li>
                                     
 <li>
     <a href="../writing-your-docs/" class="dropdown-item">Writing Your Docs</a>
 </li>
                                     
 <li>
-    <a href="../styling-your-docs/" class="dropdown-item">Styling Your Docs</a>
+    <a href="../choosing-your-theme/" class="dropdown-item">Choosing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../customizing-your-theme/" class="dropdown-item">Customizing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../localizing-your-theme/" class="dropdown-item">Localizing Your Theme</a>
 </li>
                                     
 <li>
@@ -67,13 +85,26 @@
 <li>
     <a href="./" class="dropdown-item active">Deploying Your Docs</a>
 </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
                                     
 <li>
-    <a href="../custom-themes/" class="dropdown-item">Custom Themes</a>
+    <a href="../../dev-guide/" class="dropdown-item">Overview</a>
 </li>
                                     
 <li>
-    <a href="../plugins/" class="dropdown-item">Plugins</a>
+    <a href="../../dev-guide/themes/" class="dropdown-item">Themes</a>
+</li>
+                                    
+<li>
+    <a href="../../dev-guide/translations/" class="dropdown-item">Translations</a>
+</li>
+                                    
+<li>
+    <a href="../../dev-guide/plugins/" class="dropdown-item">Plugins</a>
 </li>
                                 </ul>
                             </li>
@@ -108,7 +139,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../custom-themes/" class="nav-link">
+                                <a rel="next" href="../../dev-guide/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -147,6 +178,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-level="2"><a href="#local-files" class="nav-link">Local Files</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-level="2"><a href="#404-pages" class="nav-link">404 Pages</a>
               <ul class="nav flex-column">
               </ul>
@@ -172,9 +207,8 @@ which require a different work flow when deploying.</p>
 within the project repository (<code>gh-pages</code> by default). After you <code>checkout</code> the
 primary working branch (usually <code>master</code>) of the git repository where you
 maintain the source documentation for your project, run the following command:</p>
-<pre><code class="sh">mkdocs gh-deploy
+<pre><code class="language-sh">mkdocs gh-deploy
 </code></pre>
-
 <p>That's it! Behind the scenes, MkDocs will build your docs and use the
 <a href="https://github.com/davisp/ghp-import">ghp-import</a> tool to commit them to the <code>gh-pages</code> branch and push the
 <code>gh-pages</code> branch to GitHub.</p>
@@ -196,19 +230,17 @@ site files are deployed to the <code>master</code> branch in a dedicated reposit
 with the GitHub account name. Therefore, you need working copies of two
 repositories on our local system. For example, consider the following file
 structure:</p>
-<pre><code class="no-highlight">my-project/
+<pre><code class="language-no-highlight">my-project/
     mkdocs.yml
     docs/
 orgname.github.io/
 </code></pre>
-
 <p>After making and verifying updates to your project you need to change
 directories to the <code>orgname.github.io</code> repository and call the
 <code>mkdocs gh-deploy</code> command from there:</p>
-<pre><code class="sh">cd ../orgname.github.io/
+<pre><code class="language-sh">cd ../orgname.github.io/
 mkdocs gh-deploy --config-file ../my-project/mkdocs.yml --remote-branch master
 </code></pre>
-
 <p>Note that you need to explicitly point to the <code>mkdocs.yml</code> configuration file as
 it is no longer in the current working directory. You also need to inform the
 deploy script to commit to the <code>master</code> branch. You may override the default
@@ -251,7 +283,7 @@ public repository.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>To benefit from all of the <a href="https://docs.readthedocs.io/en/latest/features.html">features</a> offered by Read the Docs, you will need
-to use the <a href="../styling-your-docs/#readthedocs">Read the Docs theme</a> which ships with MkDocs. The various
+to use the <a href="../choosing-your-theme/#readthedocs">Read the Docs theme</a> which ships with MkDocs. The various
 themes which may be referenced in Read the Docs' documentation are Sphinx
 specific themes and will not work with MkDocs.</p>
 </div>
@@ -269,16 +301,62 @@ need to use a graphical or command line <a href="https://en.wikipedia.org/wiki/F
 the files.</p>
 <p>For example, a typical set of commands from the command line might look
 something like this:</p>
-<pre><code class="sh">mkdocs build
+<pre><code class="language-sh">mkdocs build
 scp -r ./site user@host:/path/to/server/root
 </code></pre>
-
 <p>Of course, you will need to replace <code>user</code> with the username you have with your
 hosting provider and <code>host</code> with the appropriate domain name. Additionally, you
 will need to adjust the <code>/path/to/server/root</code> to match the configuration of
 your hosts' file system.</p>
 <p>See your host's documentation for specifics. You will likely want to search
 their documentation for "ftp" or "uploading site".</p>
+<h2 id="local-files">Local Files<a class="headerlink" href="#local-files" title="Permanent link"></a></h2>
+<p>Rather than hosting your documentation on a server, you may instead distribute
+the files directly, which can then be viewed in a browser using the <code>file://</code>
+scheme.</p>
+<p>Note that, due to the security settings of all modern browsers, some things
+will not work the same and some features may not work at all. In fact, a few
+settings will need to be customized in very specific ways.</p>
+<ul>
+<li>
+<p><a href="../configuration/#site_url">site_url</a>:</p>
+<p>The <code>site_url</code> must be set to an empty string, which instructs MkDocs to
+build your site so that it will work with the <code>file://</code> scheme.</p>
+<pre><code>site_url: ""
+</code></pre>
+</li>
+<li>
+<p><a href="../configuration/#use_directory_urls">use_directory_urls</a>:</p>
+<p>Set <code>use_directory_urls</code> to <code>false</code>. Otherwise, internal links between
+pages will not work properly.</p>
+<pre><code>use_directory_urls: false
+</code></pre>
+</li>
+<li>
+<p><a href="../configuration/#search">search</a>:</p>
+<p>You will need to either disable the search plugin, or use a third-party
+search plugin which is specifically designed to work with the <code>file://</code>
+scheme. To disable all plugins, set the <code>plugins</code> setting to an empty list.</p>
+<pre><code>plugins: []
+</code></pre>
+<p>If you have other plugins enabled, simply ensure that <code>search</code> is not
+included in the list.</p>
+</li>
+</ul>
+<p>When writing your documentation, it is imperative that all internal links use
+relative URLs as <a href="../writing-your-docs/#internal-links">documented</a>. Remember, each reader of your
+documentation will be using a different device and the files will likely be in a
+different location on that device.</p>
+<p>If you expect your documentation to be viewed off-line, you may also need to be
+careful about which themes you choose. Many themes make use of CDNs for various
+support files, which require a live Internet connection. You will need to choose
+a theme which includes all support files directly in the theme.</p>
+<p>When you build your site (using the <code>mkdocs build</code> command), all of the files
+are written to the directory assigned to the <a href="../configuration/#site_dir">site_dir</a> configuration option
+(defaults to <code>"site"</code>) in your <code>mkdocs.yaml</code> config file. Generally, you will
+simply need to copy the contents of that directory and distribute it to your
+readers. Alternatively, you may choose to use a third party tool to convert the
+HTML files to some other documentation format.</p>
 <h2 id="404-pages">404 Pages<a class="headerlink" href="#404-pages" title="Permanent link"></a></h2>
 <p>When MkDocs builds the documentation it will include a 404.html file in the
 <a href="../configuration/#site_dir">build directory</a>. This file will be automatically used when
@@ -308,16 +386,13 @@ See the documentation for your server of choice for more information.</p></div>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body">
-                <p>
-                    From here you can search these documents. Enter
-                    your search terms below.
-                </p>
+                <p>From here you can search these documents. Enter your search terms below.</p>
                 <form>
                     <div class="form-group">
                         <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
-                <div id="mkdocs-search-results"></div>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
             </div>
             <div class="modal-footer">
             </div>
