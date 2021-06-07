@@ -110,7 +110,8 @@ def gh_deploy(config, message=None, force=False, ignore_version=False, shell=Fal
             mesg=message,
             remote=remote_name,
             branch=remote_branch,
-            push=force,
+            push=True,
+            force=force,
             use_shell=shell,
             nojekyll=True
         )
