@@ -200,7 +200,9 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         return [error_content]
 
     def _serve_request(self, environ, start_response):
-        path = environ["PATH_INFO"]
+        # https://bugs.python.org/issue16679
+        # https://github.com/bottlepy/bottle/blob/f9b1849db4/bottle.py#L984
+        path = environ["PATH_INFO"].encode("latin-1").decode("utf-8", "ignore")
 
         m = re.fullmatch(r"/livereload/([0-9]+)/[0-9]+", path)
         if m:
