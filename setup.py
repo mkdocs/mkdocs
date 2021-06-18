@@ -67,7 +67,9 @@ setup(
         'pyyaml_env_tag>=0.1',
         'importlib_metadata>=3.10',
         'packaging>=20.5',
-        'mergedeep>=1.3.4'
+        'mergedeep>=1.3.4',
+        'mdx_gh_links>=0.2',
+        'mkdocs-redirects>=1.0.3'
     ],
     extras_require={"i18n": ['babel>=2.9.0']},
     python_requires='>=3.6',
