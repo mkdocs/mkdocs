@@ -4,7 +4,6 @@ import logging
 import mimetypes
 import os
 import os.path
-import pathlib
 import re
 import socketserver
 import threading
@@ -13,7 +12,7 @@ import warnings
 import wsgiref.simple_server
 
 import watchdog.events
-import watchdog.observers
+import watchdog.observers.polling
 
 
 class _LoggerAdapter(logging.LoggerAdapter):
@@ -35,7 +34,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         port,
         root,
         mount_path="/",
-        build_delay=0.25,
+        polling_interval=0.5,
         shutdown_delay=0.25,
         **kwargs,
     ):
@@ -45,7 +44,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         self.root = os.path.abspath(root)
         self.mount_path = ("/" + mount_path.lstrip("/")).rstrip("/") + "/"
         self.url = f"http://{self.server_name}:{self.server_port}{self.mount_path}"
-        self.build_delay = build_delay
+        self.build_delay = 0.1
         self.shutdown_delay = shutdown_delay
         # To allow custom error pages.
         self.error_handler = lambda code: None
@@ -62,7 +61,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
 
         self._shutdown = False
         self.serve_thread = threading.Thread(target=lambda: self.serve_forever(shutdown_delay))
-        self.observer = watchdog.observers.Observer(timeout=shutdown_delay)
+        self.observer = watchdog.observers.polling.PollingObserver(timeout=polling_interval)
 
     def watch(self, path, func=None, recursive=True):
         """Add the 'path' to watched paths, call the function and reload when any file changes under it."""
@@ -77,57 +76,18 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 stacklevel=2,
             )
 
-        def callback(event, allowed_path=None):
-            if isinstance(event, watchdog.events.DirCreatedEvent):
+        def callback(event):
+            if event.is_directory:
                 return
-            if allowed_path is not None and event.src_path != allowed_path:
-                return
-            # Text editors always cause a "file close" event in addition to "modified" when saving
-            # a file. Some editors also have "swap" functionality that keeps writing into another
-            # file that's never closed. Prevent such write events from causing a rebuild.
-            if isinstance(event, watchdog.events.FileModifiedEvent):
-                # But FileClosedEvent is implemented only on Linux, otherwise we mustn't skip this:
-                if type(self.observer).__name__ == "InotifyObserver":
-                    return
             log.debug(str(event))
             with self._rebuild_cond:
                 self._to_rebuild[func] = True
                 self._rebuild_cond.notify_all()
 
-        dir_handler = watchdog.events.FileSystemEventHandler()
-        dir_handler.on_any_event = callback
-
-        seen = set()
-
-        def schedule(path):
-            seen.add(path)
-            if path.is_file():
-                # Watchdog doesn't support watching files, so watch its directory and filter by path
-                handler = watchdog.events.FileSystemEventHandler()
-                handler.on_any_event = lambda event: callback(event, allowed_path=os.fspath(path))
-
-                parent = path.parent
-                log.debug(f"Watching file '{path}' through directory '{parent}'")
-                self.observer.schedule(handler, parent)
-            else:
-                log.debug(f"Watching directory '{path}'")
-                self.observer.schedule(dir_handler, path, recursive=recursive)
-
-        schedule(pathlib.Path(path).resolve())
-
-        def watch_symlink_targets(path_obj):  # path is os.DirEntry or pathlib.Path
-            if path_obj.is_symlink():
-                path_obj = pathlib.Path(path_obj).resolve()
-                if path_obj in seen or not path_obj.exists():
-                    return
-                schedule(path_obj)
-
-            if path_obj.is_dir() and recursive:
-                with os.scandir(os.fspath(path_obj)) as scan:
-                    for entry in scan:
-                        watch_symlink_targets(entry)
-
-        watch_symlink_targets(pathlib.Path(path))
+        handler = watchdog.events.FileSystemEventHandler()
+        handler.on_any_event = callback
+        log.debug(f"Watching '{path}'")
+        self.observer.schedule(handler, path, recursive=recursive)
 
     def serve(self):
         self.observer.start()
