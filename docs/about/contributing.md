@@ -47,6 +47,14 @@ pip install --editable .
 This will install MkDocs in development mode which binds the `mkdocs` command
 to the git repository.
 
+If _mkdocs-redirects_ is not already present run the following command (**strongly** recommended that you do
+this within a [virtualenv]).
+
+```bash
+pip install mkdocs-redirects
+```
+
+
 ## Running the tests
 
 To run the tests, it is recommended that you use [tox].
