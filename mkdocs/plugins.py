@@ -4,8 +4,8 @@ Implements the plugin API for MkDocs.
 """
 
 
-import pkg_resources
 import logging
+import importlib_metadata
 from collections import OrderedDict
 
 from mkdocs.config.base import Config
@@ -17,14 +17,14 @@ log = logging.getLogger('mkdocs.plugins')
 EVENTS = (
     'config', 'pre_build', 'files', 'nav', 'env', 'pre_template', 'template_context',
     'post_template', 'pre_page', 'page_read_source', 'page_markdown',
-    'page_content', 'page_context', 'post_page', 'post_build', 'serve'
+    'page_content', 'page_context', 'post_page', 'post_build', 'serve', 'build_error'
 )
 
 
 def get_plugins():
-    """ Return a dict of all installed Plugins by name. """
+    """ Return a dict of all installed Plugins as {name: EntryPoint}. """
 
-    plugins = pkg_resources.iter_entry_points(group='mkdocs.plugins')
+    plugins = importlib_metadata.entry_points(group='mkdocs.plugins')
 
     return {plugin.name: plugin for plugin in plugins}
 
@@ -68,7 +68,7 @@ class PluginCollection(OrderedDict):
     def __setitem__(self, key, value, **kwargs):
         if not isinstance(value, BasePlugin):
             raise TypeError(
-                '{0}.{1} only accepts values which are instances of {2}.{3} '
+                '{}.{} only accepts values which are instances of {}.{} '
                 'sublcasses'.format(self.__module__, self.__name__,
                                     BasePlugin.__module__, BasePlugin.__name__))
         super().__setitem__(key, value, **kwargs)

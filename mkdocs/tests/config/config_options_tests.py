@@ -6,6 +6,7 @@ from unittest.mock import patch
 import mkdocs
 from mkdocs.config import config_options
 from mkdocs.config.base import Config
+from mkdocs.tests.base import tempdir
 
 
 class OptionallyRequiredTest(unittest.TestCase):
@@ -93,6 +94,71 @@ class ChoiceTest(unittest.TestCase):
         self.assertRaises(ValueError, config_options.Choice, 5)
 
 
+class DeprecatedTest(unittest.TestCase):
+
+    def test_deprecated_option_simple(self):
+        option = config_options.Deprecated()
+        option.pre_validation({'d': 'value'}, 'd')
+        self.assertEqual(len(option.warnings), 1)
+        option.validate('value')
+
+    def test_deprecated_option_message(self):
+        msg = 'custom message for {} key'
+        option = config_options.Deprecated(message=msg)
+        option.pre_validation({'d': 'value'}, 'd')
+        self.assertEqual(len(option.warnings), 1)
+        self.assertEqual(option.warnings[0], msg.format('d'))
+
+    def test_deprecated_option_with_type(self):
+        option = config_options.Deprecated(option_type=config_options.Type(str))
+        option.pre_validation({'d': 'value'}, 'd')
+        self.assertEqual(len(option.warnings), 1)
+        option.validate('value')
+
+    def test_deprecated_option_with_invalid_type(self):
+        option = config_options.Deprecated(option_type=config_options.Type(list))
+        config = {'d': 'string'}
+        option.pre_validation({'d': 'value'}, 'd')
+        self.assertEqual(len(option.warnings), 1)
+        self.assertRaises(
+            config_options.ValidationError,
+            option.validate,
+            config['d']
+        )
+
+    def test_deprecated_option_with_type_undefined(self):
+        option = config_options.Deprecated(option_type=config_options.Type(str))
+        option.validate(None)
+
+    def test_deprecated_option_move(self):
+        option = config_options.Deprecated(moved_to='new')
+        config = {'old': 'value'}
+        option.pre_validation(config, 'old')
+        self.assertEqual(len(option.warnings), 1)
+        self.assertEqual(config, {'new': 'value'})
+
+    def test_deprecated_option_move_complex(self):
+        option = config_options.Deprecated(moved_to='foo.bar')
+        config = {'old': 'value'}
+        option.pre_validation(config, 'old')
+        self.assertEqual(len(option.warnings), 1)
+        self.assertEqual(config, {'foo': {'bar': 'value'}})
+
+    def test_deprecated_option_move_existing(self):
+        option = config_options.Deprecated(moved_to='foo.bar')
+        config = {'old': 'value', 'foo': {'existing': 'existing'}}
+        option.pre_validation(config, 'old')
+        self.assertEqual(len(option.warnings), 1)
+        self.assertEqual(config, {'foo': {'existing': 'existing', 'bar': 'value'}})
+
+    def test_deprecated_option_move_invalid(self):
+        option = config_options.Deprecated(moved_to='foo.bar')
+        config = {'old': 'value', 'foo': 'wrong type'}
+        option.pre_validation(config, 'old')
+        self.assertEqual(len(option.warnings), 1)
+        self.assertEqual(config, {'old': 'value', 'foo': 'wrong type'})
+
+
 class IpAddressTest(unittest.TestCase):
 
     def test_valid_address(self):
@@ -131,6 +197,10 @@ class IpAddressTest(unittest.TestCase):
         self.assertEqual(value.host, '127.0.0.1')
         self.assertEqual(value.port, 8000)
 
+    @unittest.skipIf(
+        sys.version_info >= (3, 9, 5),
+        "Leading zeros not allowed in IP addresses since Python3.9.5",
+    )
     def test_IP_normalization(self):
         addr = '127.000.000.001:8000'
         option = config_options.IpAddress(default=addr)
@@ -138,6 +208,18 @@ class IpAddressTest(unittest.TestCase):
         self.assertEqual(str(value), '127.0.0.1:8000')
         self.assertEqual(value.host, '127.0.0.1')
         self.assertEqual(value.port, 8000)
+
+    @unittest.skipIf(
+        sys.version_info < (3, 9, 5),
+        "Leading zeros allowed in IP addresses before Python3.9.5",
+    )
+    def test_invalid_leading_zeros(self):
+        addr = '127.000.000.001:8000'
+        option = config_options.IpAddress(default=addr)
+        self.assertRaises(
+            config_options.ValidationError,
+            option.validate, addr
+        )
 
     def test_invalid_address_range(self):
         option = config_options.IpAddress()
@@ -216,6 +298,20 @@ class URLTest(unittest.TestCase):
         option = config_options.URL()
         self.assertRaises(config_options.ValidationError,
                           option.validate, 1)
+
+    def test_url_is_dir(self):
+        url = "https://mkdocs.org/"
+
+        option = config_options.URL(is_dir=True)
+        value = option.validate(url)
+        self.assertEqual(value, url)
+
+    def test_url_transform_to_dir(self):
+        url = "https://mkdocs.org"
+
+        option = config_options.URL(is_dir=True)
+        value = option.validate(url)
+        self.assertEqual(value, f'{url}/')
 
 
 class RepoURLTest(unittest.TestCase):
@@ -561,6 +657,66 @@ class ThemeTest(unittest.TestCase):
         self.assertRaises(config_options.ValidationError,
                           option.validate, config)
 
+    def test_post_validation_none_theme_name_and_missing_custom_dir(self):
+
+        config = {
+            'theme': {
+                'name': None
+            }
+        }
+        option = config_options.Theme()
+        self.assertRaises(config_options.ValidationError,
+                          option.post_validation, config, 'theme')
+
+    @tempdir()
+    def test_post_validation_inexisting_custom_dir(self, abs_base_path):
+
+        config = {
+            'theme': {
+                'name': None,
+                'custom_dir': abs_base_path + '/inexisting_custom_dir',
+            }
+        }
+        option = config_options.Theme()
+        self.assertRaises(config_options.ValidationError,
+                          option.post_validation, config, 'theme')
+
+    def test_post_validation_locale_none(self):
+
+        config = {
+            'theme': {
+                'name': 'mkdocs',
+                'locale': None
+            }
+        }
+        option = config_options.Theme()
+        self.assertRaises(config_options.ValidationError,
+                          option.post_validation, config, 'theme')
+
+    def test_post_validation_locale_invalid_type(self):
+
+        config = {
+            'theme': {
+                'name': 'mkdocs',
+                'locale': 0
+            }
+        }
+        option = config_options.Theme()
+        self.assertRaises(config_options.ValidationError,
+                          option.post_validation, config, 'theme')
+
+    def test_post_validation_locale(self):
+
+        config = {
+            'theme': {
+                'name': 'mkdocs',
+                'locale': 'fr'
+            }
+        }
+        option = config_options.Theme()
+        option.post_validation(config, 'theme')
+        self.assertEqual('fr', config['theme']['locale'].language)
+
 
 class NavTest(unittest.TestCase):
 
@@ -663,6 +819,26 @@ class MarkdownExtensionsTest(unittest.TestCase):
         self.assertEqual({
             'markdown_extensions': ['foo', 'bar'],
             'mdx_configs': {
+                'bar': {'bar_option': 'bar value'}
+            }
+        }, config)
+
+    @patch('markdown.Markdown')
+    def test_dict_of_dicts(self, mockMd):
+        option = config_options.MarkdownExtensions()
+        config = {
+            'markdown_extensions': {
+                'foo': {'foo_option': 'foo value'},
+                'bar': {'bar_option': 'bar value'},
+                'baz': {}
+            }
+        }
+        config['markdown_extensions'] = option.validate(config['markdown_extensions'])
+        option.post_validation(config, 'markdown_extensions')
+        self.assertEqual({
+            'markdown_extensions': ['foo', 'bar', 'baz'],
+            'mdx_configs': {
+                'foo': {'foo_option': 'foo value'},
                 'bar': {'bar_option': 'bar value'}
             }
         }, config)

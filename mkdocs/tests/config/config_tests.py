@@ -8,7 +8,9 @@ from tempfile import TemporaryDirectory
 import mkdocs
 from mkdocs import config
 from mkdocs.config import config_options
+from mkdocs.config import defaults
 from mkdocs.exceptions import ConfigurationError
+from mkdocs.localization import parse_locale
 from mkdocs.tests.base import dedent
 
 
@@ -20,8 +22,8 @@ class ConfigTests(unittest.TestCase):
         self.assertRaises(ConfigurationError, load_missing_config)
 
     def test_missing_site_name(self):
-        c = config.Config(schema=config.DEFAULT_SCHEMA)
-        c.load_dict({})
+        c = config.Config(schema=defaults.get_schema())
+        c.load_dict({'site_url': 'https://example.com'})
         errors, warnings = c.validate()
         self.assertEqual(len(errors), 1)
         self.assertEqual(errors[0][0], 'site_name')
@@ -98,6 +100,7 @@ class ConfigTests(unittest.TestCase):
                 {  # user defined variables
                     'theme': {
                         'name': 'mkdocs',
+                        'locale': 'fr',
                         'static_templates': ['foo.html'],
                         'show_sidebar': False,
                         'some_var': 'bar'
@@ -114,8 +117,10 @@ class ConfigTests(unittest.TestCase):
                     'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],
                     'vars': {
+                        'locale': parse_locale('en'),
                         'include_search_page': False,
                         'search_index_only': False,
+                        'analytics': {'gtag': None},
                         'highlightjs': True,
                         'hljs_style': 'github',
                         'hljs_languages': [],
@@ -127,8 +132,10 @@ class ConfigTests(unittest.TestCase):
                     'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],
                     'vars': {
+                        'locale': parse_locale('en'),
                         'include_search_page': True,
                         'search_index_only': False,
+                        'analytics': {'gtag': None},
                         'highlightjs': True,
                         'hljs_languages': [],
                         'include_homepage_in_sidebar': True,
@@ -142,8 +149,10 @@ class ConfigTests(unittest.TestCase):
                     'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],
                     'vars': {
+                        'locale': parse_locale('en'),
                         'include_search_page': True,
                         'search_index_only': False,
+                        'analytics': {'gtag': None},
                         'highlightjs': True,
                         'hljs_languages': [],
                         'include_homepage_in_sidebar': True,
@@ -156,13 +165,15 @@ class ConfigTests(unittest.TestCase):
                 }, {
                     'dirs': [mytheme, mkdocs_templates_dir],
                     'static_templates': ['sitemap.xml'],
-                    'vars': {}
+                    'vars': {'locale': parse_locale('en')}
                 }, {
                     'dirs': [custom, os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],
                     'vars': {
+                        'locale': parse_locale('en'),
                         'include_search_page': True,
                         'search_index_only': False,
+                        'analytics': {'gtag': None},
                         'highlightjs': True,
                         'hljs_languages': [],
                         'include_homepage_in_sidebar': True,
@@ -176,10 +187,12 @@ class ConfigTests(unittest.TestCase):
                     'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml', 'foo.html'],
                     'vars': {
+                        'locale': parse_locale('fr'),
                         'show_sidebar': False,
                         'some_var': 'bar',
                         'include_search_page': False,
                         'search_index_only': False,
+                        'analytics': {'gtag': None},
                         'highlightjs': True,
                         'hljs_style': 'github',
                         'hljs_languages': [],
@@ -201,7 +214,7 @@ class ConfigTests(unittest.TestCase):
                 self.assertEqual({k: c['theme'][k] for k in iter(c['theme'])}, result['vars'])
 
     def test_empty_nav(self):
-        conf = config.Config(schema=config.DEFAULT_SCHEMA)
+        conf = config.Config(schema=defaults.get_schema())
         conf.load_dict({
             'site_name': 'Example',
             'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
@@ -211,7 +224,7 @@ class ConfigTests(unittest.TestCase):
 
     def test_copy_pages_to_nav(self):
         # TODO: remove this when pages config setting is fully deprecated.
-        conf = config.Config(schema=config.DEFAULT_SCHEMA)
+        conf = config.Config(schema=defaults.get_schema())
         conf.load_dict({
             'site_name': 'Example',
             'pages': ['index.md', 'about.md'],
@@ -222,7 +235,7 @@ class ConfigTests(unittest.TestCase):
 
     def test_dont_overwrite_nav_with_pages(self):
         # TODO: remove this when pages config setting is fully deprecated.
-        conf = config.Config(schema=config.DEFAULT_SCHEMA)
+        conf = config.Config(schema=defaults.get_schema())
         conf.load_dict({
             'site_name': 'Example',
             'pages': ['index.md', 'about.md'],
@@ -266,3 +279,139 @@ class ConfigTests(unittest.TestCase):
 
             self.assertEqual(len(errors), 1)
             self.assertEqual(warnings, [])
+
+    def testConfigInstancesUnique(self):
+        conf = mkdocs.config.Config(mkdocs.config.defaults.get_schema())
+        conf.load_dict({'site_name': 'foo'})
+        conf.validate()
+        self.assertIsNone(conf['mdx_configs'].get('toc'))
+
+        conf = mkdocs.config.Config(mkdocs.config.defaults.get_schema())
+        conf.load_dict({'site_name': 'foo', 'markdown_extensions': [{"toc": {"permalink": "aaa"}}]})
+        conf.validate()
+        self.assertEqual(conf['mdx_configs'].get('toc'), {'permalink': 'aaa'})
+
+        conf = mkdocs.config.Config(mkdocs.config.defaults.get_schema())
+        conf.load_dict({'site_name': 'foo'})
+        conf.validate()
+        self.assertIsNone(conf['mdx_configs'].get('toc'))
+
+    def test_site_url_and_use_directory_urls_undefined(self):
+        conf = config.Config(schema=defaults.get_schema())
+        conf.load_dict({
+            'site_name': 'Example',
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        errors, warnings = conf.validate()
+        self.assertEqual(conf['site_url'], '')
+        self.assertFalse(conf['use_directory_urls'])
+        self.assertEqual(len(warnings), 2)
+        self.assertEqual(len(errors), 0)
+
+    def test_site_url_undefined_and_use_directory_urls_false(self):
+        conf = config.Config(schema=defaults.get_schema())
+        conf.load_dict({
+            'site_name': 'Example',
+            'use_directory_urls': False,
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        errors, warnings = conf.validate()
+        self.assertEqual(conf['site_url'], '')
+        self.assertFalse(conf['use_directory_urls'])
+        self.assertEqual(len(warnings), 1)
+        self.assertEqual(len(errors), 0)
+
+    def test_site_url_undefined_and_use_directory_urls_true(self):
+        conf = config.Config(schema=defaults.get_schema())
+        conf.load_dict({
+            'site_name': 'Example',
+            'use_directory_urls': True,
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        errors, warnings = conf.validate()
+        self.assertEqual(conf['site_url'], '')
+        self.assertFalse(conf['use_directory_urls'])
+        self.assertEqual(len(warnings), 2)
+        self.assertEqual(len(errors), 0)
+
+    def test_site_url_empty_and_use_directory_urls_undefined(self):
+        conf = config.Config(schema=defaults.get_schema())
+        conf.load_dict({
+            'site_name': 'Example',
+            'site_url': '',
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        errors, warnings = conf.validate()
+        self.assertEqual(conf['site_url'], '')
+        self.assertFalse(conf['use_directory_urls'])
+        self.assertEqual(len(warnings), 1)
+        self.assertEqual(len(errors), 0)
+
+    def test_site_url_empty_and_use_directory_urls_false(self):
+        conf = config.Config(schema=defaults.get_schema())
+        conf.load_dict({
+            'site_name': 'Example',
+            'site_url': '',
+            'use_directory_urls': False,
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        errors, warnings = conf.validate()
+        self.assertEqual(conf['site_url'], '')
+        self.assertFalse(conf['use_directory_urls'])
+        self.assertEqual(len(warnings), 0)
+        self.assertEqual(len(errors), 0)
+
+    def test_site_url_empty_and_use_directory_urls_true(self):
+        conf = config.Config(schema=defaults.get_schema())
+        conf.load_dict({
+            'site_name': 'Example',
+            'site_url': '',
+            'use_directory_urls': True,
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        errors, warnings = conf.validate()
+        self.assertEqual(conf['site_url'], '')
+        self.assertFalse(conf['use_directory_urls'])
+        self.assertEqual(len(warnings), 1)
+        self.assertEqual(len(errors), 0)
+
+    def test_site_url_defined_and_use_directory_urls_undefined(self):
+        conf = config.Config(schema=defaults.get_schema())
+        conf.load_dict({
+            'site_name': 'Example',
+            'site_url': 'http://example.com/',
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        errors, warnings = conf.validate()
+        self.assertEqual(conf['site_url'], 'http://example.com/')
+        self.assertTrue(conf['use_directory_urls'])
+        self.assertEqual(len(warnings), 0)
+        self.assertEqual(len(errors), 0)
+
+    def test_site_url_defined_and_use_directory_urls_false(self):
+        conf = config.Config(schema=defaults.get_schema())
+        conf.load_dict({
+            'site_name': 'Example',
+            'site_url': 'http://example.com/',
+            'use_directory_urls': False,
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        errors, warnings = conf.validate()
+        self.assertEqual(conf['site_url'], 'http://example.com/')
+        self.assertFalse(conf['use_directory_urls'])
+        self.assertEqual(len(warnings), 0)
+        self.assertEqual(len(errors), 0)
+
+    def test_site_url_defined_and_use_directory_urls_true(self):
+        conf = config.Config(schema=defaults.get_schema())
+        conf.load_dict({
+            'site_name': 'Example',
+            'site_url': 'http://example.com/',
+            'use_directory_urls': True,
+            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
+        })
+        errors, warnings = conf.validate()
+        self.assertEqual(conf['site_url'], 'http://example.com/')
+        self.assertTrue(conf['use_directory_urls'])
+        self.assertEqual(len(warnings), 0)
+        self.assertEqual(len(errors), 0)

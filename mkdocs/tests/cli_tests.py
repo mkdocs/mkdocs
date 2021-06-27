@@ -28,7 +28,8 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            use_directory_urls=None
+            use_directory_urls=None,
+            watch_theme=False
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -57,7 +58,8 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            use_directory_urls=None
+            use_directory_urls=None,
+            watch_theme=False
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -73,7 +75,8 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=True,
             theme=None,
-            use_directory_urls=None
+            use_directory_urls=None,
+            watch_theme=False
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -89,7 +92,8 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme='readthedocs',
-            use_directory_urls=None
+            use_directory_urls=None,
+            watch_theme=False
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -105,7 +109,8 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            use_directory_urls=True
+            use_directory_urls=True,
+            watch_theme=False
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -121,7 +126,8 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            use_directory_urls=False
+            use_directory_urls=False,
+            watch_theme=False
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -137,7 +143,8 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            use_directory_urls=None
+            use_directory_urls=None,
+            watch_theme=False
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -153,7 +160,8 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            use_directory_urls=None
+            use_directory_urls=None,
+            watch_theme=False
         )
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
@@ -169,7 +177,25 @@ class CLITests(unittest.TestCase):
             config_file=None,
             strict=None,
             theme=None,
-            use_directory_urls=None
+            use_directory_urls=None,
+            watch_theme=False
+        )
+
+    @mock.patch('mkdocs.commands.serve.serve', autospec=True)
+    def test_serve_watch_theme(self, mock_serve):
+
+        result = self.runner.invoke(
+            cli.cli, ["serve", '--watch-theme'], catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        mock_serve.assert_called_once_with(
+            dev_addr=None,
+            livereload='livereload',
+            config_file=None,
+            strict=None,
+            theme=None,
+            use_directory_urls=None,
+            watch_theme=True
         )
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
@@ -191,8 +217,8 @@ class CLITests(unittest.TestCase):
             use_directory_urls=None,
             site_dir=None
         )
-        logger = logging.getLogger('mkdocs')
-        self.assertEqual(logger.level, logging.INFO)
+        handler = logging._handlers.get('MkDocsStreamHandler')
+        self.assertEqual(handler.level, logging.INFO)
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
     @mock.patch('mkdocs.commands.build.build', autospec=True)
@@ -329,8 +355,8 @@ class CLITests(unittest.TestCase):
 
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(mock_build.call_count, 1)
-        logger = logging.getLogger('mkdocs')
-        self.assertEqual(logger.level, logging.DEBUG)
+        handler = logging._handlers.get('MkDocsStreamHandler')
+        self.assertEqual(handler.level, logging.DEBUG)
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
     @mock.patch('mkdocs.commands.build.build', autospec=True)
@@ -341,8 +367,8 @@ class CLITests(unittest.TestCase):
 
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(mock_build.call_count, 1)
-        logger = logging.getLogger('mkdocs')
-        self.assertEqual(logger.level, logging.ERROR)
+        handler = logging._handlers.get('MkDocsStreamHandler')
+        self.assertEqual(handler.level, logging.ERROR)
 
     @mock.patch('mkdocs.commands.new.new', autospec=True)
     def test_new(self, mock_new):

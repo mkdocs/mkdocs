@@ -1,0 +1,33 @@
+name: deploy-release
+
+on:
+  push:
+    tags:
+    - '*'
+
+jobs:
+
+  pypi:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel babel
+      - name: Compile localization message files
+        run: |
+          python setup.py compile_catalog -t mkdocs
+          python setup.py compile_catalog -t readthedocs
+      - name: Build
+        run: |
+          python setup.py bdist_wheel sdist --formats gztar
+      - name: Publish
+        if: success()
+        uses: pypa/gh-action-pypi-publish@v1.4.1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_PASSWORD }}
