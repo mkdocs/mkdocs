@@ -55,7 +55,6 @@ class ConfigBaseTests(unittest.TestCase):
             self.assertTrue(isinstance(cfg, base.Config))
             self.assertEqual(cfg['site_name'], 'MkDocs Test')
         finally:
-            os.remove(config_file.name)
             temp_dir.cleanup()
 
     def test_load_default_file(self):
@@ -77,9 +76,8 @@ class ConfigBaseTests(unittest.TestCase):
             self.assertTrue(isinstance(cfg, base.Config))
             self.assertEqual(cfg['site_name'], 'MkDocs Test')
         finally:
-            os.remove(config_file.name)
-            temp_dir.cleanup()
             os.chdir(old_dir)
+            temp_dir.cleanup()
 
     def test_load_default_file_with_yaml(self):
         """
@@ -100,9 +98,8 @@ class ConfigBaseTests(unittest.TestCase):
             self.assertTrue(isinstance(cfg, base.Config))
             self.assertEqual(cfg['site_name'], 'MkDocs Test')
         finally:
-            os.remove(config_file.name)
-            temp_dir.cleanup()
             os.chdir(old_dir)
+            temp_dir.cleanup()
 
     def test_load_default_file_prefer_yml(self):
         """
@@ -127,10 +124,8 @@ class ConfigBaseTests(unittest.TestCase):
             self.assertTrue(isinstance(cfg, base.Config))
             self.assertEqual(cfg['site_name'], 'MkDocs Test1')
         finally:
-            os.remove(config_file1.name)
-            os.remove(config_file2.name)
-            temp_dir.cleanup()
             os.chdir(old_dir)
+            temp_dir.cleanup()
 
     def test_load_from_missing_file(self):
 
