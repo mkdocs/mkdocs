@@ -29,7 +29,7 @@ def _is_cwd_git_repo():
 
 def _get_current_sha(repo_path):
 
-    proc = subprocess.Popen(['git', 'rev-parse', '--short', 'HEAD'], cwd=repo_path,
+    proc = subprocess.Popen(['git', 'rev-parse', '--short', 'HEAD'], cwd=repo_path or None,
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     stdout, _ = proc.communicate()
