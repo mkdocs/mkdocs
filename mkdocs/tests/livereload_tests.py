@@ -304,6 +304,23 @@ class BuildTests(unittest.TestCase):
             _, output = do_request(server, "GET /foo/")
             self.assertRegex(output, fr"^<body>bbb{SCRIPT_REGEX}</body>$")
 
+    @tempdir({"я.html": "<body>aaa</body>", "测试2/index.html": "<body>bbb</body>"})
+    def test_serves_with_unicode_characters(self, site_dir):
+        with testing_server(site_dir) as server:
+            _, output = do_request(server, "GET /я.html")
+            self.assertRegex(output, fr"^<body>aaa{SCRIPT_REGEX}</body>$")
+            _, output = do_request(server, "GET /%D1%8F.html")
+            self.assertRegex(output, fr"^<body>aaa{SCRIPT_REGEX}</body>$")
+
+            with self.assertLogs("mkdocs.livereload"):
+                headers, _ = do_request(server, "GET /%D1.html")
+            self.assertEqual(headers["_status"], "404 Not Found")
+
+            _, output = do_request(server, "GET /测试2/")
+            self.assertRegex(output, fr"^<body>bbb{SCRIPT_REGEX}</body>$")
+            _, output = do_request(server, "GET /%E6%B5%8B%E8%AF%952/index.html")
+            self.assertRegex(output, fr"^<body>bbb{SCRIPT_REGEX}</body>$")
+
     @tempdir()
     def test_serves_js(self, site_dir):
         with testing_server(site_dir) as server:
