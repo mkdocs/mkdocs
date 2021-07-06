@@ -63,6 +63,8 @@ class PluginCollection(OrderedDict):
 
     def _register_event(self, event_name, method):
         """ Register a method for an event. """
+        if(event_name in self.events and method in self.events[event_name]):
+            return
         self.events[event_name].append(method)
 
     def __setitem__(self, key, value, **kwargs):
