@@ -2,7 +2,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="{{ nav.homepage.url|url }}">{% trans %}Docs{% endtrans %}</a> &raquo;</li>
     {% if page %}
-      {% for doc in page.ancestors %}
+      {% for doc in page.ancestors[::-1] %}
         {% if doc.link %}
           <li><a href="{{ doc.link|e }}">{{ doc.title }}</a> &raquo;</li>
         {% else %}
