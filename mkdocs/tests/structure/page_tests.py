@@ -440,7 +440,7 @@ class PageTests(unittest.TestCase):
             cfg = load_config(docs_dir=docs_dir)
             fl = File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
             pg = Page(None, fl, cfg)
-            # Create an UTF-8 Encoded file with BOM (as Micorsoft editors do). See #1186
+            # Create an UTF-8 Encoded file with BOM (as Microsoft editors do). See #1186
             with open(fl.abs_src_path, 'w', encoding='utf-8-sig') as f:
                 f.write(md_src)
             # Now read the file.

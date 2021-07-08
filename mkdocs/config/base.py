@@ -151,7 +151,7 @@ def _open_config_file(config_file):
     When None, it defaults to `mkdocs.yml` in the CWD. If a closed file descriptor
     is received, a new file descriptor is opened for the same file.
 
-    The file descriptor is automaticaly closed when the context manager block is existed.
+    The file descriptor is automatically closed when the context manager block is existed.
     """
 
     # Default to the standard config filename.
@@ -181,7 +181,7 @@ def _open_config_file(config_file):
                 f"Config file '{paths_to_try[0]}' does not exist.")
     else:
         log.debug(f"Loading configuration file: {config_file}")
-        # Ensure file descriptor is at begining
+        # Ensure file descriptor is at beginning
         config_file.seek(0)
 
     try:
@@ -212,7 +212,7 @@ def load_config(config_file=None, **kwargs):
     with _open_config_file(config_file) as fd:
         options['config_file_path'] = getattr(fd, 'name', '')
 
-        # Initialise the config with the default schema.
+        # Initialize the config with the default schema.
         from mkdocs.config.defaults import get_schema
         cfg = Config(schema=get_schema(), config_file_path=options['config_file_path'])
         # load the config file

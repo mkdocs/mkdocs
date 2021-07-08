@@ -144,14 +144,14 @@ Set the copyright information to be included in the documentation by the theme.
 
 ### remote_branch
 
-Set the remote branch to commit to when using `gh-deploy` to deploy to Github
+Set the remote branch to commit to when using `gh-deploy` to deploy to GitHub
 Pages. This option can be overridden by a command line option in `gh-deploy`.
 
 **default**: `gh-pages`
 
 ### remote_name
 
-Set the remote name to push to when using `gh-deploy` to deploy to Github Pages.
+Set the remote name to push to when using `gh-deploy` to deploy to GitHub Pages.
 This option can be overridden by a command line option in `gh-deploy`.
 
 **default**: `origin`
@@ -374,7 +374,7 @@ The alternate style can be useful if you want your documentation to remain
 properly linked when opening pages directly from the file system, because it
 creates links that point directly to the target *file* rather than the target
 *directory*. In fact, this setting **must be** `false` if [site_url](#site_url)
-is set to an emtpy string.
+is set to an empty string.
 
 **default**: `true`
 

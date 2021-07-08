@@ -72,7 +72,7 @@ def _build_template(name, template, files, config, nav):
 
     if utils.is_error_template(name):
         # Force absolute URLs in the nav of error pages and account for the
-        # possability that the docs root might be different than the server root.
+        # possibility that the docs root might be different than the server root.
         # See https://github.com/mkdocs/mkdocs/issues/77.
         # However, if site_url is not set, assume the docs root and server root
         # are the same. See https://github.com/mkdocs/mkdocs/issues/1598.

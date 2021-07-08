@@ -290,7 +290,7 @@ def normalize_url(path, page=None, base=''):
 @functools.lru_cache(maxsize=None)
 def _get_norm_url(path):
     path = path_to_url(path or '.')
-    # Allow links to be fully qualified URL's
+    # Allow links to be fully qualified URLs
     parsed = urlparse(path)
     if parsed.scheme or parsed.netloc or path.startswith(('/', '#')):
         return path, True
@@ -445,7 +445,7 @@ class CountHandler(logging.NullHandler):
 # A global instance to use throughout package
 log_counter = CountHandler()
 
-# For backward compatability as some plugins import it.
-# It is no longer nessecary as all messages on the
-# `mkdocs` logger get counted automaticaly.
+# For backward compatibility as some plugins import it.
+# It is no longer necessary as all messages on the
+# `mkdocs` logger get counted automatically.
 warning_filter = logging.Filter()

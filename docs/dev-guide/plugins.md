@@ -387,7 +387,7 @@ MkDocs defines four error types:
 #### `mkdocs.exceptions.MkDocsException`
 
 :   The base class which all MkDocs exceptions inherit from. This should
-    not be raised directly. One of the sublcasses should be raised instead.
+    not be raised directly. One of the subclasses should be raised instead.
 
 #### `mkdocs.exceptions.ConfigurationError`
 
