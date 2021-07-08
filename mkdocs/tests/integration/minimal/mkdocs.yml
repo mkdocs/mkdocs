@@ -1,5 +1,4 @@
 site_name: MyTest
-site_url: 'https://example.com'
 
 nav:
     - 'testing.md'
