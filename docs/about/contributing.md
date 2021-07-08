@@ -10,6 +10,10 @@ ways, a few examples are:
 - Documentation improvements
 - Bug reports and patch reviews
 
+For information about available communication channels please refer to the
+[README](https://github.com/mkdocs/mkdocs/blob/master/README.md) file in our
+GitHub repository.
+
 ## Code of Conduct
 
 Everyone interacting in the MkDocs project's codebases, issue trackers, chat
