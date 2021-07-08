@@ -38,7 +38,7 @@ def testing_server(root, builder=lambda: None, mount_path="/"):
             port=0,
             root=root,
             mount_path=mount_path,
-            build_delay=0.1,
+            polling_interval=0.2,
             bind_and_activate=False,
         )
         server.setup_environ()
@@ -146,7 +146,7 @@ class BuildTests(unittest.TestCase):
             self.assertTrue(started_building.wait(timeout=10))
 
     @tempdir()
-    def test_no_rebuild_on_edit(self, site_dir):
+    def test_rebuild_on_edit(self, site_dir):
         started_building = threading.Event()
 
         with open(Path(site_dir, "test"), "wb") as f:
@@ -159,7 +159,7 @@ class BuildTests(unittest.TestCase):
                 f.write(b"hi\n")
                 f.flush()
 
-                self.assertFalse(started_building.wait(timeout=0.2))
+                self.assertTrue(started_building.wait(timeout=10))
 
     @tempdir({"foo.docs": "a"})
     @tempdir({"foo.site": "original"})
@@ -465,14 +465,14 @@ class BuildTests(unittest.TestCase):
             server.watch(Path(origin_dir, "mkdocs.yml"))
             time.sleep(0.01)
 
+            Path(origin_dir, "unrelated.md").write_text("foo")
+            self.assertFalse(started_building.wait(timeout=0.5))
+
             Path(tmp_dir, "mkdocs.yml").write_text("edited")
             self.assertTrue(wait_for_build())
 
             Path(dest_docs_dir, "subdir", "foo.md").write_text("edited")
             self.assertTrue(wait_for_build())
-
-            Path(origin_dir, "unrelated.md").write_text("foo")
-            self.assertFalse(started_building.wait(timeout=0.2))
 
     @tempdir(["file_dest_1.md", "file_dest_2.md", "file_dest_unused.md"], prefix="tmp_dir")
     @tempdir(["file_under.md"], prefix="dir_to_link_to")
@@ -512,7 +512,7 @@ class BuildTests(unittest.TestCase):
             self.assertTrue(wait_for_build())
 
             Path(tmp_dir, "file_dest_unused.md").write_text("edited")
-            self.assertFalse(started_building.wait(timeout=0.2))
+            self.assertFalse(started_building.wait(timeout=0.5))
 
     @tempdir(prefix="site_dir")
     @tempdir(["docs/unused.md", "README.md"], prefix="origin_dir")
