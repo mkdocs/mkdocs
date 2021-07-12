@@ -21,15 +21,38 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Version 1.2.2 (Under development)
+
+* Bugfix (regression in 1.2): Fix serving files/paths with Unicode characters
+  (#2464)
+
+* Bugfix (regression in 1.2): Revert livereload file watching to use polling
+  observer (#2477)
+
+    This had to be done to reasonably support usages that span virtual
+    filesystems such as non-native Docker and network mounts.
+
+    This goes back to the polling approach, very similar to that was always used
+    prior, meaning most of the same downsides with latency and CPU usage.
+
+* Revert from 1.2: Remove the requirement of a `site_url` config and the
+  restriction on `use_directory_urls` (#2490)
+
+* Bugfix: Fix `gh_deploy` with config-file in the current directory (#2481)
+
+* Bugfix: Fix reversed breadcrumbs in "readthedocs" theme (#2179)
+
+* Allow "mkdocs.yaml" as the file name when '--config' is not passed (#2478)
+
 ## Version 1.2.1 (2021-06-09)
 
-* Bugfix: Ensure 'gh-deploy' always pushes.
+* Bugfix (regression in 1.2): Ensure 'gh-deploy' always pushes.
 
 ## Version 1.2 (2021-06-04)
 
 ### Major Additions to Version 1.2
 
-### Support added for Theme Localization (#2299)
+#### Support added for Theme Localization (#2299)
 
 The `mkdocs` and `readthedocs` themes now support language localization using
 the `theme.locale` parameter, which defaults to `en` (English). The only other
@@ -172,6 +195,9 @@ configuration documentation for details.
     [site_url](../user-guide/configuration.md#site_url) is set to an emtpy
     string. In that case, if `use_directory_urls` is not explicitly set to
     `false`, a warning will be issued (#2189).
+
+    !!! note
+        This was reverted in release 1.2.2
 
 * The `google_analytics` configuration option is deprecated as Google appears to
   be fazing it out in favor of its new Google Analytics 4 property. See the
