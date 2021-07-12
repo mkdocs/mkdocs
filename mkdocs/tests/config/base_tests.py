@@ -19,11 +19,10 @@ class ConfigBaseTests(unittest.TestCase):
 
         failed, warnings = c.validate()
 
-        self.assertIn(
+        self.assertEqual(warnings, [
             ('not_a_valid_config_option',
-                'Unrecognised configuration name: not_a_valid_config_option'),
-            warnings
-        )
+                'Unrecognised configuration name: not_a_valid_config_option')
+        ])
 
     def test_missing_required(self):
 
@@ -35,7 +34,7 @@ class ConfigBaseTests(unittest.TestCase):
         self.assertEqual(errors[0][0], 'site_name')
         self.assertEqual(str(errors[0][1]), 'Required configuration not provided.')
 
-        self.assertEqual(len(warnings), 1)
+        self.assertEqual(len(warnings), 0)
 
     def test_load_from_file(self):
         """
