@@ -37,7 +37,8 @@ This setting is also used for `mkdocs serve`: the server will be mounted onto a
 path taken from the path component of the URL, e.g. `some/page.md` will be
 served from `http://127.0.0.1:8000/foo/some/page/` to mimick the expected remote
 layout. If you want to use this setting *only* for `mkdocs serve`, you can set
-`site_url` to just a path (`/foo/`).
+`site_url` to just a path (`/foo/`). Note that that is allowed only since
+version 1.2.2.
 
 **default**: `null` (equivalent to `/`)
 
