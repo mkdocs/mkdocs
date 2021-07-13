@@ -1,6 +1,6 @@
 import os
 import logging
-from urllib.parse import urlparse, urlunparse, urljoin
+from urllib.parse import urlsplit, urlunsplit, urljoin
 from urllib.parse import unquote as urlunquote
 
 import markdown
@@ -98,7 +98,7 @@ class Page:
             if not base.endswith('/'):
                 base += '/'
             self.canonical_url = urljoin(base, self.url)
-            self.abs_url = urlparse(self.canonical_url).path
+            self.abs_url = urlsplit(self.canonical_url).path
         else:
             self.canonical_url = None
             self.abs_url = None
@@ -202,7 +202,7 @@ class _RelativePathTreeprocessor(Treeprocessor):
         return root
 
     def path_to_url(self, url):
-        scheme, netloc, path, params, query, fragment = urlparse(url)
+        scheme, netloc, path, query, fragment = urlsplit(url)
 
         if (scheme or netloc or not path or url.startswith('/') or url.startswith('\\')
                 or AMP_SUBSTITUTE in url or '.' not in os.path.split(path)[-1]):
@@ -224,8 +224,8 @@ class _RelativePathTreeprocessor(Treeprocessor):
             return url
         target_file = self.files.get_file_from_path(target_path)
         path = target_file.url_relative_to(self.file)
-        components = (scheme, netloc, path, params, query, fragment)
-        return urlunparse(components)
+        components = (scheme, netloc, path, query, fragment)
+        return urlunsplit(components)
 
 
 class _RelativePathExtension(Extension):
