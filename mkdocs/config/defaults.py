@@ -6,7 +6,7 @@ from mkdocs.config import config_options
 
 # Once we drop Python 2.6 support, this could be an OrderedDict, however, it
 # isn't really needed either as we always sequentially process the schema other
-# than at initialisation when we grab the full set of keys for convenience.
+# than at initialization when we grab the full set of keys for convenience.
 
 
 def get_schema():

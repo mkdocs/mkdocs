@@ -93,7 +93,7 @@ supports the following options:
             name: mkdocs
             nav_style: dark
 
-* __`locale`__{ #mkdocs-locale }: The locale (languange/location) used to
+* __`locale`__{ #mkdocs-locale }: The locale (language/location) used to
   build the theme. If your locale is not yet supported, it will fallback
   to the default.
 
@@ -166,7 +166,7 @@ theme supports the following options:
 * __`sticky_navigation`__: If True, causes the sidebar to scroll with the main
   page content as you scroll the page. Default: `True`.
 
-* __`locale`__{ #readthedocs-locale }: The locale (languange/location) used to
+* __`locale`__{ #readthedocs-locale }: The locale (language/location) used to
   build the theme. If your locale is not yet supported, it will fallback
   to the default.
 

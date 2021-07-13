@@ -42,7 +42,7 @@ class BaseConfigOption:
     def post_validation(self, config, key_name):
         """
         After all options have passed validation, perform a post-validation
-        process to do any additional changes dependant on other config values.
+        process to do any additional changes dependent on other config values.
 
         The post-validation process method should be implemented by subclasses.
         """
@@ -243,7 +243,7 @@ class IpAddress(OptionallyRequired):
     """
     IpAddress Config Option
 
-    Validate that an IP address is in an apprioriate format
+    Validate that an IP address is in an appropriate format
     """
 
     def run_validation(self, value):

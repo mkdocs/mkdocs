@@ -497,7 +497,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         cfg = load_config(docs_dir=docs_dir, site_dir=site_dir)
         build.build(cfg)
 
-        # Verify that only non-empty md file (coverted to html), static HTML file and image are copied.
+        # Verify that only non-empty md file (converted to html), static HTML file and image are copied.
         self.assertPathIsFile(site_dir, 'index.html')
         self.assertPathIsFile(site_dir, 'img.jpg')
         self.assertPathIsFile(site_dir, 'static.html')

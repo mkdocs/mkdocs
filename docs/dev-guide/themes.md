@@ -447,7 +447,7 @@ A `section` navigation object defines a named section in the navigation and
 contains a list of child navigation objects. Note that sections do not contain
 URLs and are not links of any kind. However, by default, MkDocs sorts index
 pages to the top and the first child might be used as the URL for a section if a
-theme choses to do so.
+theme chooses to do so.
 
  The following attributes are available on `section` objects:
 
@@ -498,7 +498,7 @@ The title of the link. This would generally be used as the label of the link.
 ##### link.url
 
 The URL that the link points to. The URL should always be an absolute URLs and
-should not need to have `base_url` prepened.
+should not need to have `base_url` prepended.
 
 ##### link.parent
 
