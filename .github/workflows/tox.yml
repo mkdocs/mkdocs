@@ -86,9 +86,6 @@ jobs:
         run: python -m tox -e csslint
 
   translation:
-    strategy:
-      fail-fast: false
-      max-parallel: 4
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
