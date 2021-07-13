@@ -141,14 +141,14 @@ Set the copyright information to be included in the documentation by the theme.
 
 ### remote_branch
 
-Set the remote branch to commit to when using `gh-deploy` to deploy to Github
+Set the remote branch to commit to when using `gh-deploy` to deploy to GitHub
 Pages. This option can be overridden by a command line option in `gh-deploy`.
 
 **default**: `gh-pages`
 
 ### remote_name
 
-Set the remote name to push to when using `gh-deploy` to deploy to Github Pages.
+Set the remote name to push to when using `gh-deploy` to deploy to GitHub Pages.
 This option can be overridden by a command line option in `gh-deploy`.
 
 **default**: `origin`
