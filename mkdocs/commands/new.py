@@ -1,9 +1,7 @@
 import logging
 import os
 
-config_text = """site_name: My Docs
-site_url: https://example.com/
-"""
+config_text = 'site_name: My Docs\n'
 index_text = """# Welcome to MkDocs
 
 For full documentation visit [mkdocs.org](https://www.mkdocs.org).

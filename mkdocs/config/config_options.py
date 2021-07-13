@@ -292,15 +292,6 @@ class URL(OptionallyRequired):
         self.is_dir = is_dir
         super().__init__(default, required)
 
-    def pre_validation(self, config, key_name):
-        # TODO: replace this with an error in a future release (1.3?)
-        user_defined_keys = sum([list(x.keys()) for x in config.user_configs], [])
-        if key_name == 'site_url' and key_name not in user_defined_keys:
-            self.warnings.append(
-                'This option is now required. Set to a valid URL or '
-                'an empty string to avoid an error in a future release.'
-            )
-
     def run_validation(self, value):
         if value == '':
             return value
@@ -317,16 +308,6 @@ class URL(OptionallyRequired):
 
         raise ValidationError(
             "The URL isn't valid, it should include the http:// (scheme)")
-
-    def post_validation(self, config, key_name):
-        if key_name == 'site_url':
-            if config[key_name] in ['', None] and config['use_directory_urls']:
-                config['use_directory_urls'] = False
-                self.warnings.append(
-                    "The 'use_directory_urls' option has been disabled because "
-                    "'site_url' contains an empty value. Either define a valid "
-                    "URL for 'site_url' or set 'use_directory_urls' to False."
-                )
 
 
 class RepoURL(URL):
