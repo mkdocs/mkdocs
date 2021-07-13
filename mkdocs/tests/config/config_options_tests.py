@@ -280,38 +280,52 @@ class IpAddressTest(unittest.TestCase):
 class URLTest(unittest.TestCase):
 
     def test_valid_url(self):
-
-        url = "https://mkdocs.org"
-
         option = config_options.URL()
-        value = option.validate(url)
-        self.assertEqual(value, url)
+
+        self.assertEqual(option.validate("https://mkdocs.org"), "https://mkdocs.org")
+        self.assertEqual(option.validate(""), "")
+
+    def test_valid_url_is_dir(self):
+        option = config_options.URL(is_dir=True)
+
+        self.assertEqual(option.validate("http://mkdocs.org/"), "http://mkdocs.org/")
+        self.assertEqual(option.validate("https://mkdocs.org"), "https://mkdocs.org/")
+
+    def test_valid_path_is_dir(self):
+        option = config_options.URL(require_domain=False, is_dir=True)
+
+        self.assertEqual(option.validate("/test"), "/test/")
+        self.assertEqual(option.validate("/test;/"), "/test;/")
+        self.assertEqual(option.validate("/test?/"), "/test/?/")
 
     def test_invalid_url(self):
-
         option = config_options.URL()
+
         self.assertRaises(config_options.ValidationError,
                           option.validate, "www.mkdocs.org")
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, "//mkdocs.org/test")
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, "http:/mkdocs.org/")
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, "/hello/")
 
-    def test_invalid(self):
+    def test_invalid_url_or_path(self):
+        option = config_options.URL(require_domain=False)
 
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, "www.mkdocs.org")
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, "//mkdocs.org/test")
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, "http:/mkdocs.org/")
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, "hello/")
+
+    def test_invalid_type(self):
         option = config_options.URL()
         self.assertRaises(config_options.ValidationError,
                           option.validate, 1)
-
-    def test_url_is_dir(self):
-        url = "https://mkdocs.org/"
-
-        option = config_options.URL(is_dir=True)
-        value = option.validate(url)
-        self.assertEqual(value, url)
-
-    def test_url_transform_to_dir(self):
-        url = "https://mkdocs.org"
-
-        option = config_options.URL(is_dir=True)
-        value = option.validate(url)
-        self.assertEqual(value, f'{url}/')
 
 
 class RepoURLTest(unittest.TestCase):

@@ -94,14 +94,16 @@ class Page:
         return [self.parent] + self.parent.ancestors
 
     def _set_canonical_url(self, base):
+        self.canonical_url = None
+        self.abs_url = None
         if base:
             if not base.endswith('/'):
                 base += '/'
-            self.canonical_url = urljoin(base, self.url)
-            self.abs_url = urlsplit(self.canonical_url).path
-        else:
-            self.canonical_url = None
-            self.abs_url = None
+            url = urljoin(base, self.url)
+            parsed = urlsplit(url)
+            if parsed.netloc:
+                self.canonical_url = url
+            self.abs_url = parsed.path
 
     def _set_edit_url(self, repo_url, edit_uri):
         if repo_url and edit_uri:

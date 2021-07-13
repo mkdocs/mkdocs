@@ -288,8 +288,9 @@ class URL(OptionallyRequired):
     Validate a URL by requiring a scheme is present.
     """
 
-    def __init__(self, default='', required=False, is_dir=False):
+    def __init__(self, default='', required=False, is_dir=False, require_domain=True):
         self.is_dir = is_dir
+        self.require_domain = require_domain
         super().__init__(default, required)
 
     def run_validation(self, value):
@@ -301,13 +302,18 @@ class URL(OptionallyRequired):
         except (AttributeError, TypeError):
             raise ValidationError("Unable to parse the URL.")
 
-        if parsed_url.scheme:
+        prefixes = bool(parsed_url.scheme) + bool(parsed_url.netloc)
+        valid = (prefixes == 2 or
+                 (not self.require_domain and prefixes == 0 and parsed_url.path.startswith('/')))
+        if valid:
             if self.is_dir and not parsed_url.path.endswith('/'):
                 parsed_url = parsed_url._replace(path=f'{parsed_url.path}/')
             return urlunsplit(parsed_url)
 
-        raise ValidationError(
-            "The URL isn't valid, it should include the http:// (scheme)")
+        error = "The URL isn't valid, it should include the http:// (scheme)"
+        if not self.require_domain:
+            error += " or be an absolute path"
+        raise ValidationError(error)
 
 
 class RepoURL(URL):
