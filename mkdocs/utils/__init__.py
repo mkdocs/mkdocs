@@ -17,7 +17,7 @@ import functools
 import importlib_metadata
 from collections import defaultdict
 from datetime import datetime, timezone
-from urllib.parse import urlparse
+from urllib.parse import urlsplit
 from yaml_env_tag import construct_env_tag
 from mergedeep import merge
 
@@ -291,7 +291,7 @@ def normalize_url(path, page=None, base=''):
 def _get_norm_url(path):
     path = path_to_url(path or '.')
     # Allow links to be fully qualified URLs
-    parsed = urlparse(path)
+    parsed = urlsplit(path)
     if parsed.scheme or parsed.netloc or path.startswith(('/', '#')):
         return path, True
     return path, False

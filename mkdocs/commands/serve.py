@@ -1,7 +1,7 @@
 import logging
 import shutil
 import tempfile
-from urllib.parse import urlparse
+from urllib.parse import urlsplit
 from os.path import isdir, isfile, join
 
 from mkdocs.commands.build import build
@@ -28,7 +28,7 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
     site_dir = tempfile.mkdtemp(prefix='mkdocs_')
 
     def mount_path(config):
-        return urlparse(config['site_url'] or '/').path
+        return urlsplit(config['site_url'] or '/').path
 
     def builder():
         log.info("Building documentation...")

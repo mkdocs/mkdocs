@@ -1,5 +1,5 @@
 import logging
-from urllib.parse import urlparse
+from urllib.parse import urlsplit
 
 from mkdocs.structure.pages import Page
 from mkdocs.utils import nest_paths
@@ -124,7 +124,7 @@ def get_navigation(files, config):
 
     links = _get_by_type(items, Link)
     for link in links:
-        scheme, netloc, path, params, query, fragment = urlparse(link.url)
+        scheme, netloc, path, query, fragment = urlsplit(link.url)
         if scheme or netloc:
             log.debug(
                 "An external link to '{}' is included in "
