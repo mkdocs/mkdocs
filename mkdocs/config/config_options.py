@@ -1,7 +1,7 @@
 import os
 from collections import namedtuple
 from collections.abc import Sequence
-from urllib.parse import urlparse, urlunparse
+from urllib.parse import urlsplit, urlunsplit
 import ipaddress
 import markdown
 
@@ -297,14 +297,14 @@ class URL(OptionallyRequired):
             return value
 
         try:
-            parsed_url = urlparse(value)
+            parsed_url = urlsplit(value)
         except (AttributeError, TypeError):
             raise ValidationError("Unable to parse the URL.")
 
         if parsed_url.scheme:
             if self.is_dir and not parsed_url.path.endswith('/'):
                 parsed_url = parsed_url._replace(path=f'{parsed_url.path}/')
-            return urlunparse(parsed_url)
+            return urlunsplit(parsed_url)
 
         raise ValidationError(
             "The URL isn't valid, it should include the http:// (scheme)")
@@ -319,7 +319,7 @@ class RepoURL(URL):
     """
 
     def post_validation(self, config, key_name):
-        repo_host = urlparse(config['repo_url']).netloc.lower()
+        repo_host = urlsplit(config['repo_url']).netloc.lower()
         edit_uri = config.get('edit_uri')
 
         # derive repo_name from repo_url if unset
