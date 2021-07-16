@@ -42,7 +42,11 @@ The current and past members of the MkDocs team.
 
 * Bugfix: Fix reversed breadcrumbs in "readthedocs" theme (#2179)
 
+* Translate official themes to Simplified Chinese (#2497)
+
 * Allow "mkdocs.yaml" as the file name when '--config' is not passed (#2478)
+
+* Stop treating ";" as a special character in URLs: urlparse -> urlsplit (#2502)
 
 ## Version 1.2.1 (2021-06-09)
 
