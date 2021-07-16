@@ -301,7 +301,7 @@ class URL(OptionallyRequired):
         except (AttributeError, TypeError):
             raise ValidationError("Unable to parse the URL.")
 
-        if parsed_url.scheme:
+        if parsed_url.scheme and parsed_url.netloc:
             if self.is_dir and not parsed_url.path.endswith('/'):
                 parsed_url = parsed_url._replace(path=f'{parsed_url.path}/')
             return urlunsplit(parsed_url)
