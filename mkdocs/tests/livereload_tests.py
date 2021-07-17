@@ -293,7 +293,7 @@ class BuildTests(unittest.TestCase):
             self.assertRegex(output, fr"^<body>foo</body><body>bar{SCRIPT_REGEX}</body>$")
 
     @tempdir({"index.html": "<body>aaa</body>", "foo/index.html": "<body>bbb</body>"})
-    def test_serves_modified_index(self, site_dir):
+    def test_serves_directory_index(self, site_dir):
         with testing_server(site_dir) as server:
             headers, output = do_request(server, "GET /")
             self.assertRegex(output, fr"^<body>aaa{SCRIPT_REGEX}</body>$")
@@ -301,8 +301,21 @@ class BuildTests(unittest.TestCase):
             self.assertEqual(headers.get("content-type"), "text/html")
             self.assertEqual(headers.get("content-length"), str(len(output)))
 
-            _, output = do_request(server, "GET /foo/")
-            self.assertRegex(output, fr"^<body>bbb{SCRIPT_REGEX}</body>$")
+            for path in "/foo/", "/foo/index.html":
+                _, output = do_request(server, "GET /foo/")
+                self.assertRegex(output, fr"^<body>bbb{SCRIPT_REGEX}</body>$")
+
+            with self.assertLogs("mkdocs.livereload"):
+                headers, _ = do_request(server, "GET /foo/index.html/")
+            self.assertEqual(headers["_status"], "404 Not Found")
+
+    @tempdir({"foo/bar/index.html": "<body>aaa</body>"})
+    def test_redirects_to_directory(self, site_dir):
+        with testing_server(site_dir, mount_path="/sub") as server:
+            with self.assertLogs("mkdocs.livereload"):
+                headers, _ = do_request(server, "GET /sub/foo/bar")
+            self.assertEqual(headers["_status"], "302 Found")
+            self.assertEqual(headers.get("location"), "/sub/foo/bar/")
 
     @tempdir({"я.html": "<body>aaa</body>", "测试2/index.html": "<body>bbb</body>"})
     def test_serves_with_unicode_characters(self, site_dir):
