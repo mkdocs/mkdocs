@@ -1,0 +1,77 @@
+# Chinese (Simplified, China) translations for MkDocs.
+# Copyright (C) 2021 MkDocs
+# This file is distributed under the same license as the MkDocs project.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MkDocs\n"
+"Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
+"POT-Creation-Date: 2021-04-08 22:46+0200\n"
+"PO-Revision-Date: 2021-07-14 06:01+0800\n"
+"Last-Translator: xingkong0113 <dingpengyu06@gmail.com>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_Hans_CN <dingpengyu06@gmail.com>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+"X-Generator: Poedit 3.0\n"
+
+#: mkdocs/themes/readthedocs/404.html:7
+msgid "Page not found"
+msgstr "找不到页面"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:3
+msgid "Docs"
+msgstr "文档"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:24
+#, python-format
+msgid "Edit on %(repo_name)s"
+msgstr "在%(repo_name)s上编辑"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:33
+#: mkdocs/themes/readthedocs/footer.html:7
+#: mkdocs/themes/readthedocs/versions.html:14
+msgid "Next"
+msgstr "下一张"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:36
+#: mkdocs/themes/readthedocs/footer.html:10
+#: mkdocs/themes/readthedocs/versions.html:11
+msgid "Previous"
+msgstr "上一张"
+
+#: mkdocs/themes/readthedocs/footer.html:25
+#, python-format
+msgid ""
+"Built with %(mkdocs_link)s using a %(sphinx_link)s provided by "
+"%(rtd_link)s."
+msgstr ""
+"用%(mkdocs_link)s构建，使用%(rtd_link)s提供的%(sphinx_link)s。"
+
+#: mkdocs/themes/readthedocs/search.html:5
+msgid "Search Results"
+msgstr "搜索结果"
+
+#: mkdocs/themes/readthedocs/search.html:9
+msgid "Search the Docs"
+msgstr "搜索文档"
+
+#: mkdocs/themes/readthedocs/search.html:9
+#: mkdocs/themes/readthedocs/searchbox.html:3
+msgid "Type search term here"
+msgstr "在此输入需要搜索的内容"
+
+#: mkdocs/themes/readthedocs/search.html:12
+msgid "No results found"
+msgstr "没有搜到结果"
+
+#: mkdocs/themes/readthedocs/search.html:13
+msgid "Searching..."
+msgstr "搜索中..."
+
+#: mkdocs/themes/readthedocs/searchbox.html:3
+msgid "Search docs"
+msgstr "搜索文档"
