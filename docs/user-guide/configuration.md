@@ -28,13 +28,17 @@ variable.
 
 ### site_url
 
-Set the canonical URL of the site. This will add a link tag with the canonical
-URL to the generated HTML header.
+Set the canonical URL of the site. This will add a `link` tag with the
+`canonical` URL to the `head` section of each HTML page. If the 'root' of the
+MkDocs site will be within a subdirectory of a domain, be sure to include that
+subdirectory in the setting (`https://example.com/foo/`).
 
-If the built site will not be behind a server, then you may set the value to an
-empty string (`''`). When set to an empty string, some features of MkDocs may
-act differently. For example, the [use_directory_urls](#use_directory_urls)
-setting must be set to `false`.
+This setting is also used for `mkdocs serve`: the server will be mounted onto a
+path taken from the path component of the URL, e.g. `some/page.md` will be
+served from `http://127.0.0.1:8000/foo/some/page/` to mimick the expected remote
+layout.
+
+**default**: `null`
 
 ### repo_url
 
@@ -390,6 +394,8 @@ Allows a custom default to be set without the need to pass it through the
 `--dev-addr` option every time the `mkdocs serve` command is called.
 
 **default**: `'127.0.0.1:8000'`
+
+See also: [site_url](#site_url).
 
 ## Formatting options
 
