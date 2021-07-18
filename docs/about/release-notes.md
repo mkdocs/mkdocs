@@ -52,6 +52,9 @@ The current and past members of the MkDocs team.
 
 * Stop treating ";" as a special character in URLs: urlparse -> urlsplit (#2502)
 
+* Improve build performance for sites with many pages (partly already done in
+  1.2) (#2407)
+
 ## Version 1.2.1 (2021-06-09)
 
 * Bugfix (regression in 1.2): Ensure 'gh-deploy' always pushes.
