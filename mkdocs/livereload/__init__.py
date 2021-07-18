@@ -183,10 +183,10 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         if path == "/js/livereload.js":
             file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "livereload.js")
         elif path.startswith(self.mount_path):
+            rel_file_path = path[len(self.mount_path):].lstrip("/")
             if path.endswith("/"):
-                path += "index.html"
-            path = path[len(self.mount_path):]
-            file_path = os.path.join(self.root, path.lstrip("/"))
+                rel_file_path += "index.html"
+            file_path = os.path.join(self.root, rel_file_path)
         elif path == "/":
             start_response("302 Found", [("Location", self.mount_path)])
             return []
@@ -201,9 +201,12 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         try:
             file = open(file_path, "rb")
         except OSError:
+            if not path.endswith("/") and os.path.isfile(os.path.join(file_path, "index.html")):
+                start_response("302 Found", [("Location", path + "/")])
+                return []
             return None  # Not found
 
-        if path.endswith(".html"):
+        if file_path.endswith(".html"):
             with file:
                 content = file.read()
             content = self._inject_js_into_html(content, epoch)
