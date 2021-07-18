@@ -41,8 +41,8 @@ The current and past members of the MkDocs team.
 * Bugfix (regression in 1.2): Don't require trailing slash in the URL when
   serving a directory index in `mkdocs serve` server (#2507)
 
-  Instead of showing a 404 error, detect if it's a directory and redirect to a
-  path with a trailing slash added, like before.
+    Instead of showing a 404 error, detect if it's a directory and redirect to a
+    path with a trailing slash added, like before.
 
 * Bugfix: Fix `gh_deploy` with config-file in the current directory (#2481)
 
