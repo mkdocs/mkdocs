@@ -21,7 +21,7 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
-## Version 1.2.2 (Under development)
+## Version 1.2.2 (2021-07-18)
 
 * Bugfix (regression in 1.2): Fix serving files/paths with Unicode characters
   (#2464)
@@ -47,8 +47,6 @@ The current and past members of the MkDocs team.
 * Bugfix: Fix `gh_deploy` with config-file in the current directory (#2481)
 
 * Bugfix: Fix reversed breadcrumbs in "readthedocs" theme (#2179)
-
-* Translate official themes to Simplified Chinese (#2497)
 
 * Allow "mkdocs.yaml" as the file name when '--config' is not passed (#2478)
 
