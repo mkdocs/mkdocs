@@ -102,7 +102,6 @@ supports the following options:
     * `en`: English (default)
     * `fr`: French
     * `es`: Spanish
-    * `zh_CN`: Simplified Chinese
 
     See the guide on [localizing your theme] for more information.
 
@@ -175,7 +174,6 @@ theme supports the following options:
     * `en`: English (default)
     * `fr`: French
     * `es`: Spanish
-    * `zh_CN`: Simplified Chinese
 
     See the guide on [localizing your theme] for more information.
 
