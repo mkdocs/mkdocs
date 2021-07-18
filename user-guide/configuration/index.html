@@ -222,15 +222,15 @@ title for the project documentation. For example:</p>
 <p>When rendering the theme this setting will be passed as the <code>site_name</code> context
 variable.</p>
 <h3 id="site_url">site_url<a class="headerlink" href="#site_url" title="Permanent link"></a></h3>
-<p>Set the canonical URL of the site. This is a <strong>required setting</strong>.  If the
-'root' of the MkDocs site will be within a subdirectory of a domain, be sure to
-include that subdirectory in the setting (<code>https://example.com/foo/</code>). If the
-domain is yet to be determined, you may use a placeholder domain, which will
-need to be updated prior to deployment.</p>
-<p>If the built site will not be behind a server, then you may set the value to an
-empty string (<code>''</code>). When set to an empty string, some features of MkDocs may
-act differently. For example, the <a href="#use_directory_urls">use_directory_urls</a>
-setting must be set to <code>false</code>.</p>
+<p>Set the canonical URL of the site. This will add a <code>link</code> tag with the
+<code>canonical</code> URL to the <code>head</code> section of each HTML page. If the 'root' of the
+MkDocs site will be within a subdirectory of a domain, be sure to include that
+subdirectory in the setting (<code>https://example.com/foo/</code>).</p>
+<p>This setting is also used for <code>mkdocs serve</code>: the server will be mounted onto a
+path taken from the path component of the URL, e.g. <code>some/page.md</code> will be
+served from <code>http://127.0.0.1:8000/foo/some/page/</code> to mimick the expected remote
+layout.</p>
+<p><strong>default</strong>: <code>null</code></p>
 <h3 id="repo_url">repo_url<a class="headerlink" href="#repo_url" title="Permanent link"></a></h3>
 <p>When set, provides a link to your repository (GitHub, Bitbucket, GitLab, ...)
 on each page.</p>
@@ -305,11 +305,11 @@ header.</p>
 <p>Set the copyright information to be included in the documentation by the theme.</p>
 <p><strong>default</strong>: <code>null</code></p>
 <h3 id="remote_branch">remote_branch<a class="headerlink" href="#remote_branch" title="Permanent link"></a></h3>
-<p>Set the remote branch to commit to when using <code>gh-deploy</code> to deploy to Github
+<p>Set the remote branch to commit to when using <code>gh-deploy</code> to deploy to GitHub
 Pages. This option can be overridden by a command line option in <code>gh-deploy</code>.</p>
 <p><strong>default</strong>: <code>gh-pages</code></p>
 <h3 id="remote_name">remote_name<a class="headerlink" href="#remote_name" title="Permanent link"></a></h3>
-<p>Set the remote name to push to when using <code>gh-deploy</code> to deploy to Github Pages.
+<p>Set the remote name to push to when using <code>gh-deploy</code> to deploy to GitHub Pages.
 This option can be overridden by a command line option in <code>gh-deploy</code>.</p>
 <p><strong>default</strong>: <code>origin</code></p>
 <h2 id="documentation-layout">Documentation layout<a class="headerlink" href="#documentation-layout" title="Permanent link"></a></h2>
@@ -485,8 +485,7 @@ and is usually what you'll want to use.</p>
 <p>The alternate style can be useful if you want your documentation to remain
 properly linked when opening pages directly from the file system, because it
 creates links that point directly to the target <em>file</em> rather than the target
-<em>directory</em>. In fact, this setting <strong>must be</strong> <code>false</code> if <a href="#site_url">site_url</a>
-is set to an emtpy string.</p>
+<em>directory</em>.</p>
 <p><strong>default</strong>: <code>true</code></p>
 <h3 id="strict">strict<a class="headerlink" href="#strict" title="Permanent link"></a></h3>
 <p>Determines how warnings are handled. Set to <code>true</code> to halt processing when a
@@ -498,6 +497,7 @@ warning is raised. Set to <code>false</code> to print a warning and continue pro
 <p>Allows a custom default to be set without the need to pass it through the
 <code>--dev-addr</code> option every time the <code>mkdocs serve</code> command is called.</p>
 <p><strong>default</strong>: <code>'127.0.0.1:8000'</code></p>
+<p>See also: <a href="#site_url">site_url</a>.</p>
 <h2 id="formatting-options">Formatting options<a class="headerlink" href="#formatting-options" title="Permanent link"></a></h2>
 <h3 id="markdown_extensions">markdown_extensions<a class="headerlink" href="#markdown_extensions" title="Permanent link"></a></h3>
 <p>MkDocs uses the <a href="https://python-markdown.github.io/">Python Markdown</a> library to translate Markdown files
