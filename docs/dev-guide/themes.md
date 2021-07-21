@@ -562,7 +562,7 @@ And then displayed with this HTML in the custom theme.
 
 ## Template Filters
 
-In addition to Jinja's default filters, the following custom filters are
+In addition to [Jinja's default filters], the following custom filters are
 available to use in MkDocs templates:
 
 ### url
@@ -698,6 +698,7 @@ index when it is available. The `index` object was new in MkDocs version *1.0*.
 [lunr.js]: https://lunrjs.com/
 [site_dir]: ../user-guide/configuration.md#site_dir
 [prebuild_index]: ../user-guide/configuration.md#prebuild_index
+[Jinja's default filters]: https://jinja.palletsprojects.com/en/latest/templates/#builtin-filters
 
 ## Packaging Themes
 
@@ -778,9 +779,9 @@ setup(
 
 Fill in the URL, license, description, author and author email address.
 
-The name should follow the convention `mkdocs-themename` (like `mkdocs-
-bootstrap` and `mkdocs-bootswatch`), starting with MkDocs, using hyphens to
-separate words and including the name of your theme.
+The name should follow the convention `mkdocs-themename` (like
+`mkdocs-bootstrap` and `mkdocs-bootswatch`), starting with MkDocs, using
+hyphens to separate words and including the name of your theme.
 
 Most of the rest of the file can be left unedited. The last section we need to
 change is the entry_points. This is how MkDocs finds the theme(s) you are
@@ -876,7 +877,8 @@ special options which alters its behavior:
     #### extends
 
     Defines a parent theme that this theme inherits from. The value should be
-    the string name of the parent theme. Normal Jinja inheritance rules apply.
+    the string name of the parent theme. Normal [Jinja inheritance rules]
+    apply.
 
 Plugins may also define some options which allow the theme to inform a plugin
 about which set of plugin options it expects. See the documentation for any
@@ -902,6 +904,7 @@ documentation for [Packaging and Distributing Projects].
 
 [Packaging and Distributing Projects]: https://packaging.python.org/en/latest/distributing/
 [theme]: ../user-guide/configuration.md#theme
+[Jinja inheritance rules]: https://jinja.palletsprojects.com/en/latest/templates/#template-inheritance
 
 ## Supporting theme Localization/Translation
 
