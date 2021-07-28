@@ -23,7 +23,7 @@ pip install mkdocs[i18n]
 
 ## Supported locales
 
-In most cases a locale is designated by the ISO-639-1 (2-letter) abbreviation
+In most cases a locale is designated by the [ISO-639-1] (2-letter) abbreviation
 for your language. However, a locale may also include a territory (or region or
 county) code as well. The language and territory must be separated by an
 underscore. For example, some possible locales for English might include `en`,
@@ -64,3 +64,4 @@ contribute a translation using the [Translation Guide].
 [readthedocs]: choosing-your-theme.md#readthedocs-locale
 [locale]: configuration.md#locale
 [theme]: configuration.md#theme
+[ISO-639-1]: https://en.wikipedia.org/wiki/ISO_639-1
