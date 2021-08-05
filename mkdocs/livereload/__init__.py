@@ -79,6 +79,9 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         def callback(event):
             if event.is_directory:
                 return
+            filename = os.path.basename(event.src_path)
+            if filename[0] == '.':
+                return
             log.debug(str(event))
             with self._rebuild_cond:
                 self._to_rebuild[func] = True
