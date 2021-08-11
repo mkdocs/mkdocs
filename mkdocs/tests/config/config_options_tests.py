@@ -291,6 +291,13 @@ class URLTest(unittest.TestCase):
         self.assertEqual(option.validate("http://mkdocs.org/"), "http://mkdocs.org/")
         self.assertEqual(option.validate("https://mkdocs.org"), "https://mkdocs.org/")
 
+    def test_valid_path_is_dir(self):
+        option = config_options.URL(require_domain=False, is_dir=True)
+
+        self.assertEqual(option.validate("/test"), "/test/")
+        self.assertEqual(option.validate("/test;/"), "/test;/")
+        self.assertEqual(option.validate("/test?/"), "/test/?/")
+
     def test_invalid_url(self):
         option = config_options.URL()
 
@@ -302,6 +309,18 @@ class URLTest(unittest.TestCase):
                           option.validate, "http:/mkdocs.org/")
         self.assertRaises(config_options.ValidationError,
                           option.validate, "/hello/")
+
+    def test_invalid_url_or_path(self):
+        option = config_options.URL(require_domain=False)
+
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, "www.mkdocs.org")
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, "//mkdocs.org/test")
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, "http:/mkdocs.org/")
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, "hello/")
 
     def test_invalid_type(self):
         option = config_options.URL()
