@@ -141,6 +141,9 @@ class File:
     def __ne__(self, other):
         return not self.__eq__(other)
 
+    def __repr__(self):
+        return "File(src_path='{}', url='{}')".format(self.src_path, self.url)
+
     def _get_stem(self):
         """ Return the name of the file without it's extension. """
         filename = os.path.basename(self.src_path)
