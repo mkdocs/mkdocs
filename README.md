@@ -19,7 +19,7 @@ user guide.
 
 - Build static HTML files from Markdown files.
 - Use Plugins and Markdown Extensions to enhance MkDocs.
-- Use the build-in themes, third party themes or create your own.
+- Use the built-in themes, third party themes or create your own.
 - Publish your documentation anywhere that static files can be served.
 - Much more!
 

@@ -35,7 +35,7 @@ subdirectory in the setting (`https://example.com/foo/`).
 
 This setting is also used for `mkdocs serve`: the server will be mounted onto a
 path taken from the path component of the URL, e.g. `some/page.md` will be
-served from `http://127.0.0.1:8000/foo/some/page/` to mimick the expected remote
+served from `http://127.0.0.1:8000/foo/some/page/` to mimic the expected remote
 layout.
 
 **default**: `null`
@@ -619,7 +619,7 @@ themes do). Set to `true` to enable.
 
     This option requires that [Node.js] be installed and the command `node` be
     on the system path. If the call to `node` fails for any reason, a warning
-    is issued and the build continues uninterupted. You may use the `--strict`
+    is issued and the build continues uninterrupted. You may use the `--strict`
     flag when building to cause such a failure to raise an error instead.
 
 !!! Note
