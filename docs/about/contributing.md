@@ -61,7 +61,7 @@ root of your MkDocs repository.
 
 It will attempt to run the tests against all of the Python versions we
 support. So don't be concerned if you are missing some and they fail. The rest
-will be verified by [Travis] when you submit a pull request.
+will be verified by [Github Actions] when you submit a pull request.
 
 ## Translating themes
 
@@ -104,7 +104,7 @@ Themes] for details.
 [virtualenv]: https://virtualenv.pypa.io/en/latest/user_guide.html
 [pip]: https://pip.pypa.io/en/stable/
 [tox]: https://tox.readthedocs.io/en/latest/
-[travis]: https://travis-ci.org/repositories
+[Github Actions]: https://docs.github.com/actions
 [PyPA Code of Conduct]: https://www.pypa.io/en/latest/code-of-conduct/
 [Translating Themes]: ../dev-guide/translations.md
-[Jinja's i18n extension]: https://jinja.palletsprojects.com/en/master/extensions/#i18n-extension
+[Jinja's i18n extension]: https://jinja.palletsprojects.com/en/latest/extensions/#i18n-extension
