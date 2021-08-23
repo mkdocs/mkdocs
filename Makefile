@@ -8,13 +8,9 @@ test:
 install:
 	pip install -e .
 
-
-
-
-
 publish:
 	python setup.py clean --all sdist bdist_wheel
 	twine upload --skip-existing dist/*
 
-	git tag -a $(VERSION) -m 'version $(VERSION)'
-	git push --tags
+	#git tag -a $(VERSION) -m 'version $(VERSION)'
+	#git push --tags

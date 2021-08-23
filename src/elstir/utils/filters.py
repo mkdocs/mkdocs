@@ -53,7 +53,7 @@ def getParentTemplateFields(abs_src_path, data_fields,filtered=False):
                 for prop in data_files[filename]:
                     if isinstance(data_files[filename], dict):
                         key = data_files[filename][prop]
-                    
+
                     if not filtered or (prop in filters):
                         try:
                             child_data.update({key: get_nest(data, *key.split('.'))})
@@ -70,17 +70,18 @@ def get_children(context,page,pages,depth=2):
     """"""
     folder, file = os.path.split(page.file.abs_src_path)
     list_of_files = []
-    num_pages_in_dir = len([pg for pg in os.listdir(folder) if os.path.isfile(os.path.join(folder,pg)) and pg[0]!='.' and pg[~2:]=='.md'])
-    dirs = [dr for dr in os.listdir(folder) if not os.path.isfile(os.path.join(folder,dr)) and "img" not in dr]
+    #num_pages_in_dir = len([pg for pg in os.listdir(folder) if os.path.isfile(os.path.join(folder,pg)) and pg[0]!='.' and pg[~2:]=='.md'])
+    num_pages_in_dir = sum(1 for pg in Path(folder).glob("*.md") if pg.name[0]!='.')
+    dirs = [dr for dr in Path(folder).glob("*/") if  "img" not in dr.name]
     num_sub_dirs = len(dirs)
     try:
-        if num_pages_in_dir == 1 or (file=='index.md' and num_sub_dirs >0):
+        if num_pages_in_dir > 1 and num_sub_dirs <= 1:
+            list_of_files = _index_files(folder,pages,page,depth)
+            return list_of_files
+        elif num_pages_in_dir == 1 or (file=='index.md' and num_sub_dirs >0):
             list_of_files = _index_dirs(folder,pages,page,depth)
             return list_of_files
 
-        elif num_pages_in_dir > 1 and num_sub_dirs==0:
-            list_of_files = _index_files(folder,pages,page,depth)
-            return list_of_files
         else: return {}
     except Exception as e:
         # print(f'EXCEPTION: get_children: {e}')
@@ -121,8 +122,10 @@ def sidebar(context,page,pages):
     if depth <= min_depth or depth >= max_depth: return {}
     folder,file = os.path.split(page.file.abs_src_path)
     list_of_files = []
-    num_pages_in_dir = len([pg for pg in os.listdir(folder) if os.path.isfile(os.path.join(folder,pg)) and pg[0]!='.' and pg[~2:]=='.md'])
-    dirs = [dr for dr in os.listdir(folder) if not os.path.isfile(os.path.join(folder,dr))]
+    #num_pages_in_dir = len([pg for pg in os.listdir(folder) if os.path.isfile(os.path.join(folder,pg)) and pg[0]!='.' and pg[~2:]=='.md'])
+    #dirs = [dr for dr in os.listdir(folder) if not os.path.isfile(os.path.join(folder,dr))]
+    num_pages_in_dir = sum(1 for pg in Path(folder).glob("*.md") if pg.name[0]!='.')
+    dirs = [dr for dr in Path(folder).glob("*/") if  "img" not in dr.name]
     num_sub_dirs = len(dirs)
     try:
         if depth==min_depth+1 and num_pages_in_dir == 1 and num_sub_dirs > 0:
@@ -144,7 +147,7 @@ def sidebar(context,page,pages):
             list_of_files = _index_dirs(os.path.dirname(folder),pages,page)
             return list_of_files
 
-        elif num_pages_in_dir > 1 and num_sub_dirs==0:
+        elif num_pages_in_dir > 1: #and num_sub_dirs<=1:
             list_of_files = _index_files(folder,pages,page)
             return list_of_files
         else: return {}
@@ -182,7 +185,8 @@ def _get_dir_image(page_path):
 
 def _index_dirs(folder, pages, page, depth=2):
     list_of_files = []
-    dirs = [dr for dr in os.listdir(folder) if not os.path.isfile(os.path.join(folder,dr))]
+    dirs = [dr for dr in Path(folder).glob("*/") if  "img" not in dr.name]
+    #dirs = [dr for dr in os.listdir(folder) if not os.path.isfile(os.path.join(folder,dr))]
     if _get_dir_index(folder,pages):
         list_of_files.append({
             "title": _get_dir_index(folder,pages).page.title,

@@ -7,8 +7,7 @@
     {% macro toc_item(item) %}
         {#- if item.level <= config.theme.navigation_depth #}
             <li class="nav-item {{ 'active' if item.active }}" data-level="{{ item.level }}">
-              <a href="{{ item.url }}" class="{{ 'active' if item.active }}">{{ item.title }}</a>
-              <!-- <a href="{{ item.url }}" class="nav-link {{ 'active' if item.active }}">{{ item.title }}</a> -->
+              <a href="{{ item.url }}" class="{{ 'active' if item.active }}">{% if not item.children %}&raquo; {% endif %}{{ item.title }}</a>
               {% if item.level <= config.theme.navigation_depth + 1 %}
               <ul class="nav flex-column">
               {{ '<div class="dropdown-divider"></div>' if item.level == 1 }} 
@@ -30,9 +29,11 @@
             {{ toc_item(item) }}
             {% endif %}
         {%- endfor %}
-        {# elif 'Functions' in page.file.abs_src_path #}
+        {% elif page.meta.use_heading_toc %}
+        {%- for item in page.toc %}
+            {{ toc_item(item) }}
+        {%- endfor %}
         {% else %}
-        {#- for item in page.toc #}
         {%- for item in page|sidebar(pages) %}
             {{ toc_item(item) }}
         {%- endfor %}
