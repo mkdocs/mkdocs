@@ -99,6 +99,12 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install -r requirements/project.txt
+      - name: Check if the locales are supported by lunr.js
+        run: |
+          for locale in $(ls mkdocs/themes/mkdocs/locales/); do
+            python -m pip show -f mkdocs | grep -q "lunr.${locale}.js" || exit 1;
+          done
+        shell: bash
       - name: Check if Portable Object Templates should have been updated
         run: |
           python setup.py extract_messages -t mkdocs
