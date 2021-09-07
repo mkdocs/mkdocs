@@ -441,7 +441,7 @@ class MyPlugin(BasePlugin):
 ### Entry Point
 
 Plugins need to be packaged as Python libraries (distributed on PyPI separate
-from MkDocs) and each must register as a Plugin via a setuptools entry_point.
+from MkDocs) and each must register as a Plugin via a setuptools `entry_points`.
 Add the following to your `setup.py` script:
 
 ```python
@@ -457,7 +457,7 @@ The `pluginname` would be the name used by users (in the config file) and
 (`from path.to.some_plugin import SomePluginClass`) where `SomePluginClass` is a
 subclass of [BasePlugin] which defines the plugin behavior. Naturally, multiple
 Plugin classes could exist in the same module. Simply define each as a separate
-entry_point.
+entry point.
 
 ```python
 entry_points={
