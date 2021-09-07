@@ -1,4 +1,4 @@
-# Spanish translations for MkDocs.
+# Portuguese translations for MkDocs.
 # Copyright (C) 2021 MkDocs
 # This file is distributed under the same license as the MkDocs project.
 #
@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: MkDocs 1.2\n"
 "Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
 "POT-Creation-Date: 2021-04-08 22:44+0200\n"
-"PO-Revision-Date: 2021-07-28 12:06+0200\n"
+"PO-Revision-Date: 2021-09-07 12:06+0200\n"
 "Last-Translator: Nicole Buitoni <ni.buitoni@gmail.com>\n"
-"Language: pt\n"
-"Language-Team: pt\n"
+"Language: pt_BR\n"
+"Language-Team: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -94,4 +94,4 @@ msgstr "Não foram encontrados resultados"
 
 #: mkdocs/themes/mkdocs/toc.html:3
 msgid "Table of Contents"
-msgstr "Taela de Conteúdos"
+msgstr "Tabela de Conteúdos"
