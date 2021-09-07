@@ -1,0 +1,77 @@
+# Japanese translations for MkDocs.
+# Copyright (C) 2021 MkDocs
+# This file is distributed under the same license as the MkDocs project.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MkDocs 1.2\n"
+"Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
+"POT-Creation-Date: 2021-04-08 22:46+0200\n"
+"PO-Revision-Date: 2021-07-31 12:07+0900\n"
+"Last-Translator: Goto Hayato <habita.gh@gmail.com>\n"
+"Language: ja\n"
+"Language-Team: ja <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: mkdocs/themes/readthedocs/404.html:7
+msgid "Page not found"
+msgstr "ページが見つかりません"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:3
+msgid "Docs"
+msgstr "ドキュメント"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:24
+#, python-format
+msgid "Edit on %(repo_name)s"
+msgstr "%(repo_name)s で編集"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:33
+#: mkdocs/themes/readthedocs/footer.html:7
+#: mkdocs/themes/readthedocs/versions.html:14
+msgid "Next"
+msgstr "次へ"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:36
+#: mkdocs/themes/readthedocs/footer.html:10
+#: mkdocs/themes/readthedocs/versions.html:11
+msgid "Previous"
+msgstr "前へ"
+
+#: mkdocs/themes/readthedocs/footer.html:25
+#, python-format
+msgid ""
+"Built with %(mkdocs_link)s using a %(sphinx_link)s provided by "
+"%(rtd_link)s."
+msgstr "%(rtd_link)s 提供の %(sphinx_link)s を使って "
+"%(mkdocs_link)s でビルドされました。"
+
+#: mkdocs/themes/readthedocs/search.html:5
+msgid "Search Results"
+msgstr "検索結果"
+
+#: mkdocs/themes/readthedocs/search.html:9
+msgid "Search the Docs"
+msgstr "ドキュメントを検索"
+
+#: mkdocs/themes/readthedocs/search.html:9
+#: mkdocs/themes/readthedocs/searchbox.html:3
+msgid "Type search term here"
+msgstr "検索語句を入力してください"
+
+#: mkdocs/themes/readthedocs/search.html:12
+msgid "No results found"
+msgstr "結果がありません"
+
+#: mkdocs/themes/readthedocs/search.html:13
+msgid "Searching..."
+msgstr "検索しています..."
+
+#: mkdocs/themes/readthedocs/searchbox.html:3
+msgid "Search docs"
+msgstr "ドキュメントを検索"
+
