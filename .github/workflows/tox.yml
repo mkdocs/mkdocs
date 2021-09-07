@@ -102,7 +102,11 @@ jobs:
       - name: Check if the locales are supported by lunr.js
         run: |
           for locale in $(ls mkdocs/themes/mkdocs/locales/); do
-            python -m pip show -f mkdocs | grep -q "lunr.${locale}.js" || exit 1;
+            if [[ "${locale}" != "en" ]]; then
+              if [[ ! -f "mkdocs/contrib/search/lunr-language/lunr.${locale}.js" ]]; then
+                exit 1
+              fi
+            fi
           done
         shell: bash
       - name: Check if Portable Object Templates should have been updated
