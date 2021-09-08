@@ -22,11 +22,12 @@ class LangOption(config_options.OptionallyRequired):
             value = [value]
         elif not isinstance(value, (list, tuple)):
             raise config_options.ValidationError('Expected a list of language codes.')
-        for lang in value:
+        for lang in list(value):
             if lang != 'en' and not self.lang_file_exists(lang):
-                raise config_options.ValidationError(
-                    f'"{lang}" is not a supported language code.'
+                log.warning(
+                    f'Ignoring search.lang "{lang}" as it is not a supported language code.'
                 )
+                value.remove(lang)
         return value
 
 

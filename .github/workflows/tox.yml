@@ -104,8 +104,7 @@ jobs:
           for locale in $(ls mkdocs/themes/mkdocs/locales/); do
             if [[ "${locale}" != "en" ]]; then
               if [[ ! -f "mkdocs/contrib/search/lunr-language/lunr.${locale}.js" ]]; then
-                echo "unsupported locale: mkdocs/contrib/search/lunr-language/lunr.${locale}.js does not exist"
-                exit 1
+                echo "WARNING: locale '${locale}' is not supported by lunr.js"
               fi
             fi
           done
