@@ -56,9 +56,13 @@ def _get_merged_translations(theme_dirs, locales_dir, locale):
     merged_translations = None
 
     log.debug(f"Looking for translations for locale '{locale}'")
+    if locale.territory:
+        locale_str = f"{locale.language}_{locale.territory}"
+    else:
+        locale_str = locale.language
     for theme_dir in reversed(theme_dirs):
         dirname = os.path.join(theme_dir, locales_dir)
-        translations = Translations.load(dirname, [locale])
+        translations = Translations.load(dirname, [locale_str])
 
         if type(translations) is NullTranslations:
             log.debug(f"No translations found here: '{dirname}'")
