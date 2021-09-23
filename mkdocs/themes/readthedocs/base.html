@@ -98,6 +98,11 @@
         {%- endif %}
         </a>
       {%- endblock %}
+      {%- if config.extra.version %}
+        <div class="version">
+          {{ config.extra.version }}
+        </div>
+      {%- endif %}
    	  {%- block search_button %}
         {%- if 'search' in config['plugins'] %}{%- include "searchbox.html" %}{%- endif %}
    	  {%- endblock %}
