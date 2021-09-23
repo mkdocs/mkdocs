@@ -2,14 +2,14 @@
 <html class="writer-html5" lang="{{ config.theme.locale|default('en') }}" >
 <head>
   {%- block site_meta %}
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  {% if page and page.is_homepage %}<meta name="description" content="{{ config.site_description }}">{% endif %}
-  {% if config.site_author %}<meta name="author" content="{{ config.site_author }}">{% endif %}
-  {% if page and page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}">{% endif %}
-  {% if config.site_favicon %}<link rel="shortcut icon" href="{{ config.site_favicon|url }}">
-  {% else %}<link rel="shortcut icon" href="{{ 'img/favicon.ico'|url }}">{% endif %}
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {% if page and page.is_homepage %}<meta name="description" content="{{ config.site_description }}" />{% endif %}
+  {% if config.site_author %}<meta name="author" content="{{ config.site_author }}" />{% endif %}
+  {% if page and page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}" />{% endif %}
+  {% if config.site_favicon %}<link rel="shortcut icon" href="{{ config.site_favicon|url }}" />
+  {% else %}<link rel="shortcut icon" href="{{ 'img/favicon.ico'|url }}" />{% endif %}
   {%- endblock %}
 
   {%- block htmltitle %}
@@ -61,7 +61,7 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
-    gtag('config', '{{ config.theme.analytics.gtag }}');
+    gtag('config', '{{ config.theme.analytics.gtag }}'{%- if config.theme.analytics.anonymize_ip %}, {'anonymize_ip': true}{%- endif %});
   </script>
   {%- elif config.google_analytics %}
   <script>
@@ -71,6 +71,7 @@
       })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
       ga('create', '{{ config.google_analytics[0] }}', '{{ config.google_analytics[1] }}');
+      {%- if config.theme.analytics.anonymize_ip %}ga('set', 'anonymizeIp', true);{%- endif %}
       ga('send', 'pageview');
   </script>
   {% endif %}
@@ -86,7 +87,7 @@
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search" {% if config.theme.style_nav_header_background %} style="background: {{config.theme.style_nav_header_background}}" {% endif %}>
       {%- block site_name %}
-        <a href="{{ nav.homepage.url|url }}" class="icon icon-home" alt="{% trans %}Docs{% endtrans %}"> {{ config.site_name }}</a>
+        <a href="{{ nav.homepage.url|url }}" class="icon icon-home"> {{ config.site_name }}</a>
       {%- endblock %}
    	  {%- block search_button %}
         {% if 'search' in config['plugins'] %}{% include "searchbox.html" %}{% endif %}
