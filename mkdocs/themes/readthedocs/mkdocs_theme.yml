@@ -24,3 +24,5 @@ sticky_navigation: true
 collapse_navigation: true
 # Should be the css background shorthand, using single quotes.
 style_nav_header_background:
+# Logo
+logo:

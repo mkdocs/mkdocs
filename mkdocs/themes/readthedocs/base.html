@@ -88,7 +88,15 @@
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search" {% if config.theme.style_nav_header_background %} style="background: {{config.theme.style_nav_header_background}}" {% endif %}>
       {%- block site_name %}
-        <a href="{{ nav.homepage.url|url }}" class="icon icon-home"> {{ config.site_name }}</a>
+        {%- if config.theme.logo %}
+          <a href="{{ nav.homepage.url|url }}">
+        {%- else %}
+          <a href="{{ nav.homepage.url|url }}" class="icon icon-home"> {{ config.site_name }}
+        {%- endif %}
+        {%- if config.theme.logo %}
+          <img src="{{ config.theme.logo|url }}" class="logo" alt="{% trans %}Logo{% endtrans %}"/>
+        {%- endif %}
+        </a>
       {%- endblock %}
    	  {%- block search_button %}
         {%- if 'search' in config['plugins'] %}{%- include "searchbox.html" %}{%- endif %}

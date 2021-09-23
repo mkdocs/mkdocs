@@ -143,6 +143,7 @@ class ConfigTests(unittest.TestCase):
                         'navigation_depth': 4,
                         'sticky_navigation': True,
                         'style_nav_header_background': None,
+                        'logo': None,
                         'titles_only': False,
                         'collapse_navigation': True
                     }
@@ -161,6 +162,7 @@ class ConfigTests(unittest.TestCase):
                         'navigation_depth': 4,
                         'sticky_navigation': True,
                         'style_nav_header_background': None,
+                        'logo': None,
                         'titles_only': False,
                         'collapse_navigation': True
                     }
@@ -183,6 +185,7 @@ class ConfigTests(unittest.TestCase):
                         'navigation_depth': 4,
                         'sticky_navigation': True,
                         'style_nav_header_background': None,
+                        'logo': None,
                         'titles_only': False,
                         'collapse_navigation': True
                     }
