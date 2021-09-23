@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="{{ config.theme.locale|default('en') }}" > <!--<![endif]-->
+<html lang="{{ config.theme.locale|default('en') }}" >
 <head>
   {%- block site_meta %}
   <meta charset="utf-8">
@@ -40,7 +39,9 @@
   </script>
   {% endif %}
   <script src="{{ 'js/jquery-2.1.1.min.js'|url }}" defer></script>
-  <script src="{{ 'js/modernizr-2.8.3.min.js'|url }}" defer></script>
+  <!--[if lt IE 9]>
+    <script src="{{ 'js/html5shiv.min.js'|url }}"></script>
+  <![endif]-->
   {%- if config.theme.highlightjs %}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
   {%- for lang in config.theme.hljs_languages %}
@@ -84,36 +85,36 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search" {% if config.theme.style_nav_header_background %} style="background: {{config.theme.style_nav_header_background}}" {% endif %}>
-    {%- block site_name %}
-        <a href="{{ nav.homepage.url|url }}" class="icon icon-home"> {{ config.site_name }}</a>
-	  {%- endblock %}
-	  {%- block search_button %}
+      {%- block site_name %}
+        <a href="{{ nav.homepage.url|url }}" class="icon icon-home" alt="{% trans %}Docs{% endtrans %}"> {{ config.site_name }}</a>
+      {%- endblock %}
+   	  {%- block search_button %}
         {% if 'search' in config['plugins'] %}{% include "searchbox.html" %}{% endif %}
-	  {%- endblock %}
+   	  {%- endblock %}
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
         {%- block site_nav %}
-        {%- set navlevel = 1 %}
-        {%- for nav_item in nav %}
+          {%- set navlevel = 1 %}
+          {%- for nav_item in nav %}
             {%- if nav_item.is_section %}
-                <p class="caption"><span class="caption-text">{{ nav_item.title }}</span></p>
-                <ul{% if nav_item.active %} class="current"{% endif %}>
-                    {%- for nav_item in nav_item.children %}
-                    <li class="toctree-l{{ navlevel }}{% if nav_item.active %} current{% endif %}">
-                        {%- include 'nav.html' %}
-                    </li>
-                    {%- endfor %}
-                </ul>
+              <p class="caption"><span class="caption-text">{{ nav_item.title }}</span></p>
+              <ul{% if nav_item.active %} class="current"{% endif %}>
+                {%- for nav_item in nav_item.children %}
+                  <li class="toctree-l{{ navlevel }}{% if nav_item.active %} current{% endif %}">
+                    {%- include 'nav.html' %}
+                  </li>
+                {%- endfor %}
+              </ul>
             {%- elif config.theme.include_homepage_in_sidebar or (not nav_item == nav.homepage) %}
-                <ul{% if nav_item.active %} class="current"{% endif %}>
-                    <li class="toctree-l{{ navlevel }}{% if nav_item.active %} current{% endif %}">
-                        {%- include 'nav.html' %}
-                    </li>
-                </ul>
+              <ul{% if nav_item.active %} class="current"{% endif %}>
+                <li class="toctree-l{{ navlevel }}{% if nav_item.active %} current{% endif %}">
+                  {%- include 'nav.html' %}
+                </li>
+              </ul>
             {%- endif %}
-        {%- endfor %}
-    {%- endblock %}
+          {%- endfor %}
+        {%- endblock %}
       </div>
     </div>
     </nav>
