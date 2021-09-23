@@ -2,79 +2,80 @@
 <html class="writer-html5" lang="{{ config.theme.locale|default('en') }}" >
 <head>
   {%- block site_meta %}
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  {% if page and page.is_homepage %}<meta name="description" content="{{ config.site_description }}" />{% endif %}
-  {% if config.site_author %}<meta name="author" content="{{ config.site_author }}" />{% endif %}
-  {% if page and page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}" />{% endif %}
-  {% if config.site_favicon %}<link rel="shortcut icon" href="{{ config.site_favicon|url }}" />
-  {% else %}<link rel="shortcut icon" href="{{ 'img/favicon.ico'|url }}" />{% endif %}
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {%- if page and page.is_homepage %}<meta name="description" content="{{ config.site_description }}" />{%- endif %}
+    {%- if config.site_author %}<meta name="author" content="{{ config.site_author }}" />{%- endif %}
+    {%- if page and page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}" />{%- endif %}
+    {%- if config.site_favicon %}
+      <link rel="shortcut icon" href="{{ config.site_favicon|url }}" />
+    {%- else %}
+      <link rel="shortcut icon" href="{{ 'img/favicon.ico'|url }}" />
+    {%- endif %}
   {%- endblock %}
 
   {%- block htmltitle %}
-  <title>{% if page and page.title and not page.is_homepage %}{{ page.title }} - {% endif %}{{ config.site_name }}</title>
+    <title>{% if page and page.title and not page.is_homepage %}{{ page.title }} - {% endif %}{{ config.site_name }}</title>
   {%- endblock %}
 
   {%- block styles %}
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
-
-  <link rel="stylesheet" href="{{ 'css/theme.css'|url }}" />
-  <link rel="stylesheet" href="{{ 'css/theme_extra.css'|url }}" />
-  {%- if config.theme.highlightjs %}
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
-  {%- endif %}
-  {%- for path in extra_css %}
-  <link href="{{ path }}" rel="stylesheet" />
-  {%- endfor %}
+    <link rel="stylesheet" href="{{ 'css/theme.css'|url }}" />
+    <link rel="stylesheet" href="{{ 'css/theme_extra.css'|url }}" />
+    {%- if config.theme.highlightjs %}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    {%- endif %}
+    {%- for path in extra_css %}
+        <link href="{{ path }}" rel="stylesheet" />
+    {%- endfor %}
   {%- endblock %}
 
   {%- block libs %}
-  {% if page %}
-  <script>
-    // Current page data
-    var mkdocs_page_name = {{ page.title|tojson|safe }};
-    var mkdocs_page_input_path = {{ page.file.src_path|string|tojson|safe }};
-    var mkdocs_page_url = {{ page.abs_url|tojson|safe }};
-  </script>
-  {% endif %}
-  <script src="{{ 'js/jquery-2.1.1.min.js'|url }}" defer></script>
-  <!--[if lt IE 9]>
-    <script src="{{ 'js/html5shiv.min.js'|url }}"></script>
-  <![endif]-->
-  {%- if config.theme.highlightjs %}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
-  {%- for lang in config.theme.hljs_languages %}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/{{lang}}.min.js"></script>
-  {%- endfor %}
-  <script>hljs.initHighlightingOnLoad();</script>
-  {%- endif %}
+    {% if page %}
+      <script>
+        // Current page data
+        var mkdocs_page_name = {{ page.title|tojson|safe }};
+        var mkdocs_page_input_path = {{ page.file.src_path|string|tojson|safe }};
+        var mkdocs_page_url = {{ page.abs_url|tojson|safe }};
+      </script>
+    {% endif %}
+    <script src="{{ 'js/jquery-2.1.1.min.js'|url }}" defer></script>
+    <!--[if lt IE 9]>
+      <script src="{{ 'js/html5shiv.min.js'|url }}"></script>
+    <![endif]-->
+    {%- if config.theme.highlightjs %}
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      {%- for lang in config.theme.hljs_languages %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/{{lang}}.min.js"></script>
+      {%- endfor %}
+      <script>hljs.initHighlightingOnLoad();</script>
+    {%- endif %}
   {%- endblock %}
 
   {%- block extrahead %} {% endblock %}
 
   {%- block analytics %}
-  {%- if config.theme.analytics.gtag %}
-  <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.theme.analytics.gtag }}"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+    {%- if config.theme.analytics.gtag %}
+      <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.theme.analytics.gtag }}"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-    gtag('config', '{{ config.theme.analytics.gtag }}'{%- if config.theme.analytics.anonymize_ip %}, {'anonymize_ip': true}{%- endif %});
-  </script>
-  {%- elif config.google_analytics %}
-  <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        gtag('config', '{{ config.theme.analytics.gtag }}'{%- if config.theme.analytics.anonymize_ip %}, {'anonymize_ip': true}{%- endif %});
+      </script>
+    {%- elif config.google_analytics %}
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-      ga('create', '{{ config.google_analytics[0] }}', '{{ config.google_analytics[1] }}');
-      {%- if config.theme.analytics.anonymize_ip %}ga('set', 'anonymizeIp', true);{%- endif %}
-      ga('send', 'pageview');
-  </script>
-  {% endif %}
+        ga('create', '{{ config.google_analytics[0] }}', '{{ config.google_analytics[1] }}');
+        {%- if config.theme.analytics.anonymize_ip %}ga('set', 'anonymizeIp', true);{%- endif %}
+        ga('send', 'pageview');
+      </script>
+    {% endif %}
   {%- endblock %}
 </head>
 
@@ -82,7 +83,7 @@
 
   <div class="wy-grid-for-nav">
 
-    {# SIDE NAV, TOGGLES ON MOBILE #}
+    {#- SIDE NAV, TOGGLES ON MOBILE #}
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search" {% if config.theme.style_nav_header_background %} style="background: {{config.theme.style_nav_header_background}}" {% endif %}>
@@ -90,11 +91,11 @@
         <a href="{{ nav.homepage.url|url }}" class="icon icon-home"> {{ config.site_name }}</a>
       {%- endblock %}
    	  {%- block search_button %}
-        {% if 'search' in config['plugins'] %}{% include "searchbox.html" %}{% endif %}
+        {%- if 'search' in config['plugins'] %}{%- include "searchbox.html" %}{%- endif %}
    	  {%- endblock %}
       </div>
 
-      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="{% trans %}Navigation menu{% endtrans %}">
         {%- block site_nav %}
           {%- set navlevel = 1 %}
           {%- for nav_item in nav %}
@@ -122,26 +123,28 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
-      {# MOBILE NAV, TRIGGLES SIDE NAV ON TOGGLE #}
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="{{ nav.homepage.url|url }}">{{ config.site_name }}</a>
+      {#- MOBILE NAV, TRIGGLES SIDE NAV ON TOGGLE #}
+      <nav class="wy-nav-top" role="navigation" aria-label="{% trans %}Top Navigation{% endtrans %}" {% if config.theme.style_nav_header_background %} style="background: {{config.theme.style_nav_header_background}}" {% endif %}>
+        {%- block mobile_nav %}
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="{{ nav.homepage.url|url }}">{{ config.site_name }}</a>
+        {% endblock %}
       </nav>
 
-      {# PAGE CONTENT #}
+      {#- PAGE CONTENT #}
       <div class="wy-nav-content">
         <div class="rst-content">
-          {% include "breadcrumbs.html" %}
-          <div role="main">
-            <div class="section">
+          {%- include "breadcrumbs.html" %}
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
               {% block content %}
                 {{ page.content }}
               {% endblock %}
             </div>
           </div>
-      {%- block footer %}
-          {% include "footer.html" %}
-      {% endblock %}
+          {%- block footer %}
+            {%- include "footer.html" %}
+          {% endblock %}
         </div>
       </div>
 
@@ -149,7 +152,7 @@
 
   </div>
 
-  {% include "versions.html" %}
+  {% include "versions.html" -%}
 
   {%- block scripts %}
     <script>var base_url = '{{ base_url }}';</script>
