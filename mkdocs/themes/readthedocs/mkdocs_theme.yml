@@ -20,3 +20,5 @@ navigation_depth: 4
 titles_only: false
 sticky_navigation: true
 collapse_navigation: true
+# should be url('')
+style_nav_header_background:
