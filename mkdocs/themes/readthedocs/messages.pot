@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MkDocs 1.2.2\n"
 "Report-Msgid-Bugs-To: \"https://github.com/mkdocs/mkdocs/issues\"\n"
-"POT-Creation-Date: 2021-09-23 15:43-0400\n"
+"POT-Creation-Date: 2021-09-27 10:43-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,12 +25,12 @@ msgstr ""
 msgid "Logo"
 msgstr ""
 
-#: mkdocs/themes/readthedocs/base.html:106
+#: mkdocs/themes/readthedocs/base.html:111
 msgid "Navigation menu"
 msgstr ""
 
-#: mkdocs/themes/readthedocs/base.html:135
-msgid "Top Navigation"
+#: mkdocs/themes/readthedocs/base.html:140
+msgid "Mobile navigation menu"
 msgstr ""
 
 #: mkdocs/themes/readthedocs/breadcrumbs.html:3
