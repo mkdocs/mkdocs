@@ -86,7 +86,7 @@
     {#- SIDE NAV, TOGGLES ON MOBILE #}
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
-      <div class="wy-side-nav-search" {% if config.theme.style_nav_header_background %} style="background: {{config.theme.style_nav_header_background}}" {% endif %}>
+      <div class="wy-side-nav-search">
       {%- block site_name %}
         {%- if config.theme.logo %}
           <a href="{{ nav.homepage.url|url }}">
@@ -137,7 +137,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       {#- MOBILE NAV, TRIGGLES SIDE NAV ON TOGGLE #}
-      <nav class="wy-nav-top" role="navigation" aria-label="{% trans %}Top Navigation{% endtrans %}" {% if config.theme.style_nav_header_background %} style="background: {{config.theme.style_nav_header_background}}" {% endif %}>
+      <nav class="wy-nav-top" role="navigation" aria-label="{% trans %}Top Navigation{% endtrans %}">
         {%- block mobile_nav %}
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="{{ nav.homepage.url|url }}">{{ config.site_name }}</a>
