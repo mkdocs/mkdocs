@@ -13,7 +13,6 @@ hljs_languages: []
 
 analytics:
   gtag: null
-  # Set to true to anonymize the ip for Google Analytics
   anonymize_ip: false
 
 include_homepage_in_sidebar: true
