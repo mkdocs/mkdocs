@@ -1,7 +1,6 @@
 import fnmatch
 import os
 import logging
-from functools import cmp_to_key
 from urllib.parse import quote as urlquote
 
 from mkdocs import utils
@@ -142,6 +141,11 @@ class File:
     def __ne__(self, other):
         return not self.__eq__(other)
 
+    def __repr__(self):
+        return "File(src_path='{}', dest_path='{}', name='{}', url='{}')".format(
+            self.src_path, self.dest_path, self.name, self.url
+        )
+
     def _get_stem(self):
         """ Return the name of the file without it's extension. """
         filename = os.path.basename(self.src_path)
@@ -252,16 +256,12 @@ def get_files(config):
 def _sort_files(filenames):
     """ Always sort `index` or `README` as first filename in list. """
 
-    def compare(x, y):
-        if x == y:
-            return 0
-        if os.path.splitext(y)[0] in ['index', 'README']:
-            return 1
-        if os.path.splitext(x)[0] in ['index', 'README'] or x < y:
-            return -1
-        return 1
+    def key(f):
+        if os.path.splitext(f)[0] in ['index', 'README']:
+            return (0,)
+        return (1, f)
 
-    return sorted(filenames, key=cmp_to_key(compare))
+    return sorted(filenames, key=key)
 
 
 def _filter_paths(basename, path, is_dir, exclude):

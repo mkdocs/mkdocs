@@ -84,6 +84,9 @@ jobs:
       - name: Check with csslint
         if: always()
         run: python -m tox -e csslint
+      - name: Check with codespell
+        if: always()
+        run: python -m tox -e codespell
 
   translation:
     runs-on: ubuntu-latest

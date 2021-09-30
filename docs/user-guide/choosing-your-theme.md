@@ -102,6 +102,7 @@ supports the following options:
     * `en`: English (default)
     * `fr`: French
     * `es`: Spanish
+    * `ja`: Japanese
     * `pt-BR`: Portuguese (Brazil)
 
     See the guide on [localizing your theme] for more information.
@@ -175,6 +176,7 @@ theme supports the following options:
     * `en`: English (default)
     * `fr`: French
     * `es`: Spanish
+    * `ja`: Japanese
     * `pt-BR`: Portuguese (Brazil)
 
     See the guide on [localizing your theme] for more information.

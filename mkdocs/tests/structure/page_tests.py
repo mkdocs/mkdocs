@@ -806,17 +806,17 @@ class RelativePathExtensionTests(unittest.TestCase):
             '<p><em><strong>not</strong> a link</em>.</p>'
         )
 
-    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](non-existant.md)'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](non-existent.md)'))
     def test_bad_relative_html_link(self):
         with self.assertLogs('mkdocs', level='WARNING') as cm:
             self.assertEqual(
                 self.get_rendered_result(['index.md']),
-                '<p><a href="non-existant.md">link</a></p>'
+                '<p><a href="non-existent.md">link</a></p>'
             )
         self.assertEqual(
             cm.output,
             ["WARNING:mkdocs.structure.pages:Documentation file 'index.md' contains a link "
-             "to 'non-existant.md' which is not found in the documentation files."]
+             "to 'non-existent.md' which is not found in the documentation files."]
         )
 
     @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[external](http://example.com/index.md)'))
