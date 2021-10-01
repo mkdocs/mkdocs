@@ -26,7 +26,15 @@ def get_plugins():
 
     plugins = importlib_metadata.entry_points(group='mkdocs.plugins')
 
-    return {plugin.name: plugin for plugin in plugins}
+    # Allow third-party plugins to override core plugins
+    pluginmap = {}
+    for plugin in plugins:
+        if plugin.name in pluginmap and "mkdocs.contrib" in plugin.value:
+            continue
+
+        pluginmap[plugin.name] = plugin
+
+    return pluginmap
 
 
 class BasePlugin:
