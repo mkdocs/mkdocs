@@ -84,7 +84,7 @@ def _check_version(branch):
         raise Abort('Deployment Aborted!')
 
 
-def gh_deploy(config, message=None, force=False, ignore_version=False, shell=False):
+def gh_deploy(config, message=None, force=False, no_history=False, ignore_version=False, shell=False):
 
     if not _is_cwd_git_repo():
         log.error('Cannot deploy - this directory does not appear to be a git '
@@ -113,6 +113,7 @@ def gh_deploy(config, message=None, force=False, ignore_version=False, shell=Fal
             push=True,
             force=force,
             use_shell=shell,
+            no_history=no_history,
             nojekyll=True
         )
     except ghp_import.GhpError as e:
