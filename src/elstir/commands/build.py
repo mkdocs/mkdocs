@@ -248,6 +248,16 @@ def build(config, live_server=False, dirty=False):
         # Run `config` plugin events.
         config = config['plugins'].run_event('config', config)
 
+        prelude = ''
+        if config['prelude']:
+            for file in config['prelude']:
+                print(file,prelude)
+                with open(file, 'r') as f:
+                    prelude += f.read()
+
+        config['prelude'] = prelude
+
+
         # Run `pre_build` plugin events.
         config['plugins'].run_event('pre_build', config=config)
 

@@ -11,11 +11,13 @@ from elstir.config import config_options
 
 def get_schema():
     return (
-        
+
         # Reserved for internal use, stores the elstir.yml config file.
         ('config_file_path', config_options.Type(str)),
-        
+
         ('pandoc', config_options.Type(str)),
+
+        ('prelude', config_options.Type(list)),
 
         # The title to use for the documentation
         ('site_name', config_options.Type(str, required=True)),

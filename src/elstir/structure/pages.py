@@ -174,7 +174,7 @@ class Page:
         )
         try:
             doc = pandoc.Document(defaults=config["pandoc"])
-            doc.markdown = self.markdown 
+            doc.markdown = "\n".join([config['prelude'] , self.markdown])
             self.content = doc.html
         except Exception as e:
             logging.warn(
