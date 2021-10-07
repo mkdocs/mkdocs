@@ -29,7 +29,7 @@ def get_plugins():
     # Allow third-party plugins to override core plugins
     pluginmap = {}
     for plugin in plugins:
-        if plugin.name in pluginmap and "mkdocs.contrib" in plugin.value:
+        if plugin.name in pluginmap and plugin.value.startswith("mkdocs.contrib."):
             continue
 
         pluginmap[plugin.name] = plugin
