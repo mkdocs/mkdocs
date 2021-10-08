@@ -91,7 +91,7 @@ remote_branch_help = ("The remote branch to commit to for Github Pages. This "
 remote_name_help = ("The remote name to commit to for Github Pages. This "
                     "overrides the value specified in config")
 force_help = "Force the push to the repository."
-no_history_help = "Force new commit without parent history."
+no_history_help = "Replace the whole Git history with one new commit."
 ignore_version_help = "Ignore check that build is not being deployed with an older version of MkDocs."
 watch_theme_help = ("Include the theme in list of files to watch for live reloading. "
                     "Ignored when live reload is not used.")
