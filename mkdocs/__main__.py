@@ -204,7 +204,14 @@ def gh_deploy_command(clean, message, remote_branch, remote_name, force, no_hist
         **kwargs
     )
     build.build(cfg, dirty=not clean)
-    gh_deploy.gh_deploy(cfg, message=message, force=force, no_history=no_history, ignore_version=ignore_version, shell=shell)
+    gh_deploy.gh_deploy(
+        cfg,
+        message=message,
+        force=force,
+        no_history=no_history,
+        ignore_version=ignore_version,
+        shell=shell
+    )
 
 
 @cli.command(name="new")
