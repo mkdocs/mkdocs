@@ -68,7 +68,7 @@ class SearchConfigTests(unittest.TestCase):
         value = option.validate(['en', 'foo'])
         self.assertEqual(['en'], value)
 
-    def test_lang_good_and_bad_and_territory(self):
+    def test_lang_missing_and_with_territory(self):
         option = search.LangOption()
         value = option.validate(['zh_CN', 'pt_BR', 'fr'])
         self.assertEqual(['fr', 'en', 'pt'], value)
