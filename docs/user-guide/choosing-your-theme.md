@@ -103,7 +103,7 @@ supports the following options:
     * `fr`: French
     * `es`: Spanish
     * `ja`: Japanese
-    * `pt-BR`: Portuguese (Brazil)
+    * `pt_BR`: Portuguese (Brazil)
 
     See the guide on [localizing your theme] for more information.
 
@@ -177,7 +177,7 @@ theme supports the following options:
     * `fr`: French
     * `es`: Spanish
     * `ja`: Japanese
-    * `pt-BR`: Portuguese (Brazil)
+    * `pt_BR`: Portuguese (Brazil)
 
     See the guide on [localizing your theme] for more information.
 
