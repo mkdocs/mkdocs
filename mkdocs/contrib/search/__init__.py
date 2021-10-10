@@ -24,13 +24,13 @@ class LangOption(config_options.OptionallyRequired):
             value = [value]
         elif not isinstance(value, (list, tuple)):
             raise config_options.ValidationError('Expected a list of language codes.')
-        for lang in value:
+        for lang in list(value):
             if lang != 'en':
                 lang_detected = self.get_lunr_supported_lang(lang)
                 if not lang_detected:
                     log.info(f"Option search.lang '{lang}' is not supported, falling back to 'en'")
+                    value.remove(lang)
                     if 'en' not in value:
-                        value.remove(lang)
                         value.append('en')
                 elif lang_detected != lang:
                     value.remove(lang)
