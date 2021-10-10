@@ -63,7 +63,6 @@ class SearchIndex:
         if self.config['full_path_in_title']:
             for ancestor in page.ancestors:
                 title_parts.insert(0, ancestor.title)
-
         page_title = ' / '.join(title_parts)
         # Create the content parser and feed in the HTML for the
         # full page. This handles all the parsing and prepares
@@ -107,7 +106,6 @@ class SearchIndex:
         text = ' '.join(section.text) if self.config['indexing'] == 'full' else ''
         if toc_item is not None:
             self._add_entry(title=title or toc_item.title, text=text, loc=abs_url + toc_item.url)
-
 
     def generate_search_index(self) -> str:
         """python to json conversion"""
