@@ -103,8 +103,8 @@ supports the following options:
     * `fr`: French
     * `es`: Spanish
     * `ja`: Japanese
+    * `pt_BR`: Portuguese (Brazil)
     * `zh_CN`: Simplified Chinese
-    * `pt-BR`: Portuguese (Brazil)
 
     See the guide on [localizing your theme] for more information.
 
@@ -178,8 +178,8 @@ theme supports the following options:
     * `fr`: French
     * `es`: Spanish
     * `ja`: Japanese
+    * `pt_BR`: Portuguese (Brazil)
     * `zh_CN`: Simplified Chinese
-    * `pt-BR`: Portuguese (Brazil)
 
     See the guide on [localizing your theme] for more information.
 
