@@ -12,6 +12,15 @@ from mkdocs import utils
 from mkdocs import config
 from mkdocs.commands import build, gh_deploy, new, serve
 
+
+if sys.platform.startswith("win"):
+    try:
+        import colorama
+    except ImportError:
+        pass
+    else:
+        colorama.init()
+
 log = logging.getLogger(__name__)
 
 
