@@ -13,21 +13,20 @@ base_path = os.path.dirname(os.path.abspath(__file__))
 class LangOption(config_options.OptionallyRequired):
     """ Validate Language(s) provided in config are known languages. """
 
-    def lang_file_exists(self, lang):
+    def get_lunr_supported_lang(self, lang):
         for lang_part in lang.split("_"):
             lang_part = lang_part.lower()
             if os.path.isfile(os.path.join(base_path, 'lunr-language', f'lunr.{lang_part}.js')):
                 return lang_part
-        return False
 
     def run_validation(self, value):
         if isinstance(value, str):
             value = [value]
         elif not isinstance(value, (list, tuple)):
             raise config_options.ValidationError('Expected a list of language codes.')
-        for lang in list(value):
+        for lang in value:
             if lang != 'en':
-                lang_detected = self.lang_file_exists(lang)
+                lang_detected = self.get_lunr_supported_lang(lang)
                 if not lang_detected:
                     log.info(f"Option search.lang '{lang}' is not supported, falling back to 'en'")
                     if 'en' not in value:
