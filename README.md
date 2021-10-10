@@ -38,7 +38,7 @@ questions or bug reports about features of third-party themes, plugins,
 extensions or similar should be made to their respective projects.  
 But, such questions are *not* banned from the [chat room].
 
-Make sure stick around to answer some questions as well!
+Make sure to stick around to answer some questions as well!
 
 ## Links
 
