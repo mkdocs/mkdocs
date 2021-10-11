@@ -72,11 +72,6 @@ class State:
         self.stream.name = 'MkDocsStreamHandler'
         self.logger.addHandler(self.stream)
 
-        # Add CountHandler for strict mode
-        self.counter = utils.log_counter
-        self.counter.setLevel(logging.WARNING)
-        self.logger.addHandler(self.counter)
-
 
 pass_state = click.make_pass_decorator(State, ensure=True)
 
