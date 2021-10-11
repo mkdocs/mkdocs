@@ -4,6 +4,7 @@ import logging
 import mimetypes
 import os
 import os.path
+import posixpath
 import re
 import socketserver
 import threading
@@ -183,9 +184,11 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         if path == "/js/livereload.js":
             file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "livereload.js")
         elif path.startswith(self.mount_path):
-            rel_file_path = path[len(self.mount_path):].lstrip("/")
+            rel_file_path = path[len(self.mount_path):]
             if path.endswith("/"):
                 rel_file_path += "index.html"
+            # Prevent directory traversal - normalize the path.
+            rel_file_path = posixpath.normpath("/" + rel_file_path).lstrip("/")
             file_path = os.path.join(self.root, rel_file_path)
         elif path == "/":
             start_response("302 Found", [("Location", self.mount_path)])
