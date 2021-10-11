@@ -442,9 +442,6 @@ class CountHandler(logging.NullHandler):
         return [(logging.getLevelName(k), v) for k, v in sorted(self.counts.items(), reverse=True)]
 
 
-# A global instance to use throughout package
-log_counter = CountHandler()
-
 # For backward compatibility as some plugins import it.
 # It is no longer necessary as all messages on the
 # `mkdocs` logger get counted automatically.

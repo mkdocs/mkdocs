@@ -24,20 +24,6 @@ def build_page(title, path, config, md_src=''):
 
 class BuildTests(PathAssertionMixin, unittest.TestCase):
 
-    def assert_mock_called_once(self, mock):
-        """assert that the mock was called only once.
-
-        The `mock.assert_called_once()` method was added in PY36.
-        TODO: Remove this when PY35 support is dropped.
-        """
-        try:
-            mock.assert_called_once()
-        except AttributeError:
-            if not mock.call_count == 1:
-                mock_name = mock._mock_name or 'mock'
-                msg = f"Expected '{mock_name}' to have been called once. Called {self.call_count} times."
-                raise AssertionError(msg)
-
     def _get_env_with_null_translations(self, config):
         env = config['theme'].get_env()
         env.add_extension('jinja2.ext.i18n')
@@ -204,8 +190,8 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         cfg = load_config()
         env = cfg['theme'].get_env()
         build._build_theme_template('main.html', env, mock.Mock(), cfg, mock.Mock())
-        self.assert_mock_called_once(mock_write_file)
-        self.assert_mock_called_once(mock_build_template)
+        mock_write_file.assert_called_once()
+        mock_build_template.assert_called_once()
 
     @mock.patch('mkdocs.utils.write_file')
     @mock.patch('mkdocs.commands.build._build_template', return_value='some content')
@@ -214,9 +200,9 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         cfg = load_config()
         env = cfg['theme'].get_env()
         build._build_theme_template('sitemap.xml', env, mock.Mock(), cfg, mock.Mock())
-        self.assert_mock_called_once(mock_write_file)
-        self.assert_mock_called_once(mock_build_template)
-        self.assert_mock_called_once(mock_gzip_gzipfile)
+        mock_write_file.assert_called_once()
+        mock_build_template.assert_called_once()
+        mock_gzip_gzipfile.assert_called_once()
 
     @mock.patch('mkdocs.utils.write_file')
     @mock.patch('mkdocs.commands.build._build_template', return_value='')
@@ -244,7 +230,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             ["INFO:mkdocs.commands.build:Template skipped: 'main.html' generated empty output."]
         )
         mock_write_file.assert_not_called()
-        self.assert_mock_called_once(mock_build_template)
+        mock_build_template.assert_called_once()
 
     # Test build._build_extra_template
 
@@ -339,7 +325,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
                 "ERROR:mkdocs.commands.build:Error reading page 'missing.md': Error message."
             ]
         )
-        self.assert_mock_called_once(mock_open)
+        mock_open.assert_called_once()
 
     @tempdir(files={'index.md': 'page content'})
     @mock.patch('mkdocs.plugins.PluginCollection.run_event', side_effect=PluginError('Error message.'))
@@ -354,7 +340,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
                 "ERROR:mkdocs.commands.build:Error reading page 'index.md':"
             ]
         )
-        self.assert_mock_called_once(mock_open)
+        mock_open.assert_called_once()
 
     # Test build._build_page
 
@@ -390,7 +376,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     #         cm.output,
     #         ["INFO:mkdocs.commands.build:Page skipped: 'index.md'. Generated empty output."]
     #     )
-    #     self.assert_mock_called_once(mock_template.render)
+    #     mock_template.render.assert_called_once()
     #     self.assertPathNotFile(site_dir, 'index.html')
 
     @tempdir(files={'index.md': 'page content'})
@@ -420,7 +406,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         page.markdown = 'page content'
         page.content = '<p>page content</p>'
         build._build_page(page, cfg, files, nav, self._get_env_with_null_translations(cfg), dirty=True)
-        self.assert_mock_called_once(mock_write_file)
+        mock_write_file.assert_called_once()
 
     @tempdir()
     def test_build_page_custom_template(self, site_dir):
@@ -461,7 +447,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             cm.output,
             ["ERROR:mkdocs.commands.build:Error building page 'index.md': Error message."]
         )
-        self.assert_mock_called_once(mock_write_file)
+        mock_write_file.assert_called_once()
 
     @tempdir()
     @mock.patch('mkdocs.plugins.PluginCollection.run_event', side_effect=PluginError('Error message.'))
@@ -480,7 +466,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             cm.output,
             ["ERROR:mkdocs.commands.build:Error building page 'index.md':"]
         )
-        self.assert_mock_called_once(mock_write_file)
+        mock_write_file.assert_called_once()
 
     # Test build.build
 

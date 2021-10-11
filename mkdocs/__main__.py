@@ -12,6 +12,15 @@ from mkdocs import utils
 from mkdocs import config
 from mkdocs.commands import build, gh_deploy, new, serve
 
+
+if sys.platform.startswith("win"):
+    try:
+        import colorama
+    except ImportError:
+        pass
+    else:
+        colorama.init()
+
 log = logging.getLogger(__name__)
 
 
@@ -62,11 +71,6 @@ class State:
         self.stream.setLevel(level)
         self.stream.name = 'MkDocsStreamHandler'
         self.logger.addHandler(self.stream)
-
-        # Add CountHandler for strict mode
-        self.counter = utils.log_counter
-        self.counter.setLevel(logging.WARNING)
-        self.logger.addHandler(self.counter)
 
 
 pass_state = click.make_pass_decorator(State, ensure=True)
