@@ -136,7 +136,7 @@ def _build_extra_template(template_name, files, config, nav):
         return
 
     try:
-        with open(file.abs_src_path, 'r', encoding='utf-8', errors='strict') as f:
+        with open(file.abs_src_path, encoding='utf-8', errors='strict') as f:
             template = jinja2.Template(f.read())
     except Exception as e:
         log.warning(f"Error reading template '{template_name}': {e}")

@@ -173,7 +173,7 @@ class TestGitHubDeployLogs(unittest.TestCase):
             gh_deploy._check_version('gh-pages')
         self.assertEqual(
             cm.output, ['INFO:mkdocs.commands.gh_deploy:Previous deployment was done with MkDocs '
-                        'version 0.1.2; you are deploying with a newer version ({})'.format(__version__)]
+                        f'version 0.1.2; you are deploying with a newer version ({__version__})']
         )
 
     @mock.patch('subprocess.Popen')
@@ -185,8 +185,8 @@ class TestGitHubDeployLogs(unittest.TestCase):
             self.assertRaises(Abort, gh_deploy._check_version, 'gh-pages')
         self.assertEqual(
             cm.output, ['ERROR:mkdocs.commands.gh_deploy:Deployment terminated: Previous deployment was made with '
-                        'MkDocs version 10.1.2; you are attempting to deploy with an older version ({}). Use '
-                        '--ignore-version to deploy anyway.'.format(__version__)]
+                        f'MkDocs version 10.1.2; you are attempting to deploy with an older version ({__version__}).'
+                        ' Use --ignore-version to deploy anyway.']
         )
 
     @mock.patch('subprocess.Popen')

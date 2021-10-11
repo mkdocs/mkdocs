@@ -92,7 +92,7 @@ def get_data(doc):
             m2 = META_MORE_RE.match(line)
             if m2 and key:
                 # Add another line to existing key
-                data[key] += ' {}'.format(m2.group('value').strip())
+                data[key] += f' {m2.group("value").strip()}'
             else:
                 lines.insert(0, line)
                 break  # no meta data - done

@@ -21,7 +21,7 @@ class DummyPlugin(plugins.BasePlugin):
 
     def on_pre_page(self, content, **kwargs):
         """ modify page content by prepending `foo` config value. """
-        return '{} {}'.format(self.config['foo'], content)
+        return f'{self.config["foo"]} {content}'
 
     def on_nav(self, item, **kwargs):
         """ do nothing (return None) to not modify item. """
@@ -29,7 +29,7 @@ class DummyPlugin(plugins.BasePlugin):
 
     def on_page_read_source(self, **kwargs):
         """ create new source by prepending `foo` config value to 'source'. """
-        return '{} {}'.format(self.config['foo'], 'source')
+        return f'{self.config["foo"]} source'
 
     def on_pre_build(self, **kwargs):
         """ do nothing (return None). """
