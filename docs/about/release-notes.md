@@ -43,6 +43,8 @@ The current and past members of the MkDocs team.
 
 * Bugfix: Correctly print colorful messages in the terminal on Windows (#2606)
 
+* Bugfix: Python version 3.10 was displayed incorrectly in `--version` (#2618)
+
 Other small improvements; see
 [commit log](https://github.com/mkdocs/mkdocs/compare/1.2.2...1.2.3).
 
