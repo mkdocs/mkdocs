@@ -209,8 +209,9 @@
 <p>Guide to all available configuration settings.</p>
 <hr />
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link"></a></h2>
-<p>Project settings are always configured by using a YAML configuration file in the
-project directory named <code>mkdocs.yml</code>.</p>
+<p>Project settings are configured by default using a YAML configuration file in
+the project directory named <code>mkdocs.yml</code>. You can specify another path for it
+by using the <code>-f</code>/<code>--config-file</code> option (see <code>mkdocs build --help</code>).</p>
 <p>As a minimum, this configuration file must contain the <code>site_name</code> and
 <code>site_url</code> settings. All other settings are optional.</p>
 <h2 id="project-information">Project information<a class="headerlink" href="#project-information" title="Permanent link"></a></h2>
@@ -228,7 +229,7 @@ MkDocs site will be within a subdirectory of a domain, be sure to include that
 subdirectory in the setting (<code>https://example.com/foo/</code>).</p>
 <p>This setting is also used for <code>mkdocs serve</code>: the server will be mounted onto a
 path taken from the path component of the URL, e.g. <code>some/page.md</code> will be
-served from <code>http://127.0.0.1:8000/foo/some/page/</code> to mimick the expected remote
+served from <code>http://127.0.0.1:8000/foo/some/page/</code> to mimic the expected remote
 layout.</p>
 <p><strong>default</strong>: <code>null</code></p>
 <h3 id="repo_url">repo_url<a class="headerlink" href="#repo_url" title="Permanent link"></a></h3>
@@ -666,7 +667,7 @@ themes do). Set to <code>true</code> to enable.</p>
 <p class="admonition-title">Warning</p>
 <p>This option requires that <a href="https://nodejs.org/">Node.js</a> be installed and the command <code>node</code> be
 on the system path. If the call to <code>node</code> fails for any reason, a warning
-is issued and the build continues uninterupted. You may use the <code>--strict</code>
+is issued and the build continues uninterrupted. You may use the <code>--strict</code>
 flag when building to cause such a failure to raise an error instead.</p>
 </div>
 <div class="admonition note">

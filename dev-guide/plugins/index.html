@@ -384,7 +384,7 @@ be used to alter the site navigation.</p>
 <dl>
 <dd>
 <p>The <code>env</code> event is called after the Jinja template environment is created
-and can be used to alter the <a href="https://jinja.palletsprojects.com/en/master/api/#jinja2.Environment">Jinja environment</a>.</p>
+and can be used to alter the <a href="https://jinja.palletsprojects.com/en/latest/api/#jinja2.Environment">Jinja environment</a>.</p>
 <dl>
 <dt>Parameters:</dt>
 <dd><strong>env:</strong> global Jinja environment</dd>
@@ -626,7 +626,7 @@ class MyPlugin(BasePlugin):
 </code></pre>
 <h3 id="entry-point">Entry Point<a class="headerlink" href="#entry-point" title="Permanent link"></a></h3>
 <p>Plugins need to be packaged as Python libraries (distributed on PyPI separate
-from MkDocs) and each must register as a Plugin via a setuptools entry_point.
+from MkDocs) and each must register as a Plugin via a setuptools <code>entry_points</code>.
 Add the following to your <code>setup.py</code> script:</p>
 <pre><code class="language-python">entry_points={
     'mkdocs.plugins': [
@@ -639,7 +639,7 @@ Add the following to your <code>setup.py</code> script:</p>
 (<code>from path.to.some_plugin import SomePluginClass</code>) where <code>SomePluginClass</code> is a
 subclass of <a href="#baseplugin">BasePlugin</a> which defines the plugin behavior. Naturally, multiple
 Plugin classes could exist in the same module. Simply define each as a separate
-entry_point.</p>
+entry point.</p>
 <pre><code class="language-python">entry_points={
     'mkdocs.plugins': [
         'featureA = path.to.my_plugins:PluginA',

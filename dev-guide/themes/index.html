@@ -595,7 +595,7 @@ following <code>extra</code> configuration:</p>
 {% endif %}
 </code></pre>
 <h2 id="template-filters">Template Filters<a class="headerlink" href="#template-filters" title="Permanent link"></a></h2>
-<p>In addition to Jinja's default filters, the following custom filters are
+<p>In addition to <a href="https://jinja.palletsprojects.com/en/latest/templates/#builtin-filters">Jinja's default filters</a>, the following custom filters are
 available to use in MkDocs templates:</p>
 <h3 id="url">url<a class="headerlink" href="#url" title="Permanent link"></a></h3>
 <p>Normalizes a URL. Absolute URLs are passed through unaltered. If the URL is
@@ -749,9 +749,9 @@ setup(
 )
 </code></pre>
 <p>Fill in the URL, license, description, author and author email address.</p>
-<p>The name should follow the convention <code>mkdocs-themename</code> (like <code>mkdocs-
-bootstrap</code> and <code>mkdocs-bootswatch</code>), starting with MkDocs, using hyphens to
-separate words and including the name of your theme.</p>
+<p>The name should follow the convention <code>mkdocs-themename</code> (like
+<code>mkdocs-bootstrap</code> and <code>mkdocs-bootswatch</code>), starting with MkDocs, using
+hyphens to separate words and including the name of your theme.</p>
 <p>Most of the rest of the file can be left unedited. The last section we need to
 change is the entry_points. This is how MkDocs finds the theme(s) you are
 including in the package. The name on the left is the one that users will use
@@ -822,7 +822,8 @@ templates to this list, the user cannot remove templates included in the
 theme's config.</p>
 <h4 id="extends">extends<a class="headerlink" href="#extends" title="Permanent link"></a></h4>
 <p>Defines a parent theme that this theme inherits from. The value should be
-the string name of the parent theme. Normal Jinja inheritance rules apply.</p>
+the string name of the parent theme. Normal <a href="https://jinja.palletsprojects.com/en/latest/templates/#template-inheritance">Jinja inheritance rules</a>
+apply.</p>
 </div>
 <p>Plugins may also define some options which allow the theme to inform a plugin
 about which set of plugin options it expects. See the documentation for any

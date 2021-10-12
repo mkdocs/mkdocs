@@ -174,6 +174,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-level="2"><a href="#version-123-2021-10-12" class="nav-link">Version 1.2.3 (2021-10-12)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-level="2"><a href="#version-122-2021-07-18" class="nav-link">Version 1.2.2 (2021-07-18)</a>
               <ul class="nav flex-column">
               </ul>
@@ -342,6 +346,42 @@ mkdocs, version 1.0 from /path/to/mkdocs (Python 3.6)
 <li><a href="https://github.com/d0ugal/">@d0ugal</a></li>
 <li><a href="https://github.com/waylan/">@waylan</a></li>
 </ul>
+<h2 id="version-123-2021-10-12">Version 1.2.3 (2021-10-12)<a class="headerlink" href="#version-123-2021-10-12" title="Permanent link"></a></h2>
+<ul>
+<li>
+<p>Built-in themes now also support these languages:</p>
+<ul>
+<li>Simplified Chinese (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2497" title="GitHub Issue mkdocs/mkdocs #2497">#2497</a>)</li>
+<li>Japanese (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2525" title="GitHub Issue mkdocs/mkdocs #2525">#2525</a>)</li>
+<li>Brazilian Portuguese (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2535" title="GitHub Issue mkdocs/mkdocs #2535">#2535</a>)</li>
+<li>Spanish (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2545" title="GitHub Issue mkdocs/mkdocs #2545">#2545</a>, previously <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2396" title="GitHub Issue mkdocs/mkdocs #2396">#2396</a>)</li>
+</ul>
+</li>
+<li>
+<p>Third-party plugins will take precedence over built-in plugins with the same
+  name (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2591" title="GitHub Issue mkdocs/mkdocs #2591">#2591</a>)</p>
+</li>
+<li>
+<p>Bugfix: Fix ability to load translations for some languages:
+  core support (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2565" title="GitHub Issue mkdocs/mkdocs #2565">#2565</a>) and search plugin support with fallbacks (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2602" title="GitHub Issue mkdocs/mkdocs #2602">#2602</a>)</p>
+</li>
+<li>
+<p>Bugfix (regression in 1.2): Prevent directory traversal in the dev server
+  (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2604" title="GitHub Issue mkdocs/mkdocs #2604">#2604</a>)</p>
+</li>
+<li>
+<p>Bugfix (regression in 1.2): Prevent webserver warnings from being treated as
+  a build failure in strict mode (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2607" title="GitHub Issue mkdocs/mkdocs #2607">#2607</a>)</p>
+</li>
+<li>
+<p>Bugfix: Correctly print colorful messages in the terminal on Windows (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2606" title="GitHub Issue mkdocs/mkdocs #2606">#2606</a>)</p>
+</li>
+<li>
+<p>Bugfix: Python version 3.10 was displayed incorrectly in <code>--version</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2618" title="GitHub Issue mkdocs/mkdocs #2618">#2618</a>)</p>
+</li>
+</ul>
+<p>Other small improvements; see
+<a href="https://github.com/mkdocs/mkdocs/compare/1.2.2...1.2.3">commit log</a>.</p>
 <h2 id="version-122-2021-07-18">Version 1.2.2 (2021-07-18)<a class="headerlink" href="#version-122-2021-07-18" title="Permanent link"></a></h2>
 <ul>
 <li>
