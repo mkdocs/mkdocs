@@ -70,7 +70,10 @@ Themes]. We welcome translation Pull Requests!
 
 ## Submitting Pull Requests
 
-Once you are happy with your changes or you are ready for some feedback, push
+If you're considering a large code contribution to MkDocs, please prefer to
+open an issue first to get early feedback on the idea.
+
+Once you think the code is ready to be reviewed, push
 it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.
 
