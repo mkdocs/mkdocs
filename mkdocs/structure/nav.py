@@ -62,7 +62,7 @@ class Section:
         return [self.parent] + self.parent.ancestors
 
     def _indent_print(self, depth=0):
-        ret = [f'{"    " * depth}{repr(self)}']
+        ret = ['{}{}'.format('    ' * depth, repr(self))]
         for item in self.children:
             ret.append(item._indent_print(depth + 1))
         return '\n'.join(ret)
@@ -92,7 +92,7 @@ class Link:
         return [self.parent] + self.parent.ancestors
 
     def _indent_print(self, depth=0):
-        return f'{"    " * depth}{repr(self)}'
+        return '{}{}'.format('    ' * depth, repr(self))
 
 
 def get_navigation(files, config):

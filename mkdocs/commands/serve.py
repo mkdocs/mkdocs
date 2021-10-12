@@ -42,7 +42,7 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
             **kwargs
         )
         # Override a few config settings after validation
-        config['site_url'] = f'http://{config["dev_addr"]}{mount_path(config)}'
+        config['site_url'] = 'http://{}{}'.format(config['dev_addr'], mount_path(config))
 
         live_server = livereload in ['dirty', 'livereload']
         dirty = livereload == 'dirty'

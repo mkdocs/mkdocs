@@ -54,10 +54,11 @@ class Page:
 
     def __repr__(self):
         title = f"'{self.title}'" if (self.title is not None) else '[blank]'
-        return f"Page(title={title}, url='{self.abs_url or self.file.url}')"
+        url = self.abs_url or self.file.url
+        return f"Page(title={title}, url='{url}')"
 
     def _indent_print(self, depth=0):
-        return f'{"    " * depth}{repr(self)}'
+        return '{}{}'.format('    ' * depth, repr(self))
 
     def _get_active(self):
         """ Return active status of page. """

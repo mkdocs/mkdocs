@@ -55,9 +55,10 @@ class Theme:
         self._vars['locale'] = localization.parse_locale(self._vars['locale'])
 
     def __repr__(self):
-        return (f"{self.__class__.__name__}(name='{self.name}',"
-                f" dirs={self.dirs}, static_templates={list(self.static_templates)},"
-                f" {', '.join(f'{k}={v!r}' for k, v in self._vars.items())})")
+        return "{}(name='{}', dirs={}, static_templates={}, {})".format(
+            self.__class__.__name__, self.name, self.dirs, list(self.static_templates),
+            ', '.join(f'{k}={v!r}' for k, v in self._vars.items())
+        )
 
     def __getitem__(self, key):
         return self._vars[key]

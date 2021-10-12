@@ -425,15 +425,15 @@ class SiteDir(Dir):
                 ("The 'docs_dir' should not be within the 'site_dir' as this "
                  "can mean the source files are overwritten by the output or "
                  "it will be deleted if --clean is passed to mkdocs build."
-                 f"(site_dir: '{config['site_dir']}',"
-                 f" docs_dir: '{config['docs_dir']}')"))
+                 "(site_dir: '{}', docs_dir: '{}')"
+                 ).format(config['site_dir'], config['docs_dir']))
         elif (config['site_dir'] + os.sep).startswith(config['docs_dir'].rstrip(os.sep) + os.sep):
             raise ValidationError(
                 ("The 'site_dir' should not be within the 'docs_dir' as this "
                  "leads to the build directory being copied into itself and "
                  "duplicate nested files in the 'site_dir'."
-                 f"(site_dir: '{config['site_dir']}',"
-                 f" docs_dir: '{config['docs_dir']}')"))
+                 "(site_dir: '{}', docs_dir: '{}')"
+                 ).format(config['site_dir'], config['docs_dir']))
 
 
 class Theme(BaseConfigOption):
