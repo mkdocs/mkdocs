@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  MkDocs\n"
+"Project-Id-Version: MkDocs 1.2\n"
 "Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
 "POT-Creation-Date: 2021-04-08 22:46+0200\n"
 "PO-Revision-Date: 2021-07-14 06:01+0800\n"
