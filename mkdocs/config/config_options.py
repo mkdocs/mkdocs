@@ -510,11 +510,19 @@ class Nav(OptionallyRequired):
         if len(value) == 0:
             return
 
+        valid_types = {str, dict}
+
         config_types = {type(item) for item in value}
-        if config_types.issubset({str, dict}):
+        if config_types.issubset(valid_types):
             return value
 
-        raise ValidationError(f"Invalid pages config. {config_types} {{str, dict}}")
+        invalid_types = ', '.join([
+            item_type.__name__ for item_type in config_types
+            if item_type not in valid_types
+        ])
+        raise ValidationError(
+            "Invalid navigation config types. Expected str and"
+            f" dict, got: {invalid_types}")
 
     def post_validation(self, config, key_name):
         # TODO: remove this when `pages` config setting is fully deprecated.
