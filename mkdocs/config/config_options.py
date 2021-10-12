@@ -507,9 +507,8 @@ class Nav(OptionallyRequired):
         if len(value) == 0:
             return
 
-        valid_types = {str, dict}
         config_types = {type(item) for item in value}
-        if config_types.issubset(valid_types):
+        if config_types.issubset({str, dict}):
             return value
 
         types = ', '.join(set(
