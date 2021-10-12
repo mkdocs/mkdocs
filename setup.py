@@ -59,7 +59,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'click>=3.3',
-        'Jinja2>=2.10.3',
+        'Jinja2>=2.10.2',
         'Markdown>=3.2.1',
         'PyYAML>=3.10',
         'watchdog>=2.0',
