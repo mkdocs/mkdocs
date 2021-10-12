@@ -495,12 +495,8 @@ class Nav(OptionallyRequired):
     """
     Nav Config Option
 
-    Validate the Nav config. Automatically add all markdown files if empty.
+    Validate the Nav config.
     """
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.file_match = utils.is_markdown_file
 
     def run_validation(self, value):
 
