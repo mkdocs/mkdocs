@@ -496,12 +496,8 @@ class Nav(OptionallyRequired):
     """
     Nav Config Option
 
-    Validate the Nav config. Automatically add all markdown files if empty.
+    Validate the Nav config.
     """
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.file_match = utils.is_markdown_file
 
     def run_validation(self, value):
 
@@ -511,13 +507,16 @@ class Nav(OptionallyRequired):
         if len(value) == 0:
             return
 
+        valid_types = {str, dict}
         config_types = {type(item) for item in value}
-        if config_types.issubset({str, dict}):
+        if config_types.issubset(valid_types):
             return value
 
-        raise ValidationError("Invalid pages config. {} {}".format(
-            config_types, {str, dict}
+        types = ', '.join(set(
+            item_type.__name__ for item_type in config_types
         ))
+        raise ValidationError(
+            f"Invalid navigation config types. Expected str and dict, got: {types}")
 
     def post_validation(self, config, key_name):
         # TODO: remove this when `pages` config setting is fully deprecated.
