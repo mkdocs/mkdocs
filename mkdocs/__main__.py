@@ -146,7 +146,7 @@ common_config_options = add_options([
     click.option('--use-directory-urls/--no-directory-urls', is_flag=True, default=None, help=use_directory_urls_help)
 ])
 
-PYTHON_VERSION = sys.version[:3]
+PYTHON_VERSION = f"{sys.version_info.major}.{sys.version_info.minor}"
 
 PKG_DIR = os.path.dirname(os.path.abspath(__file__))
 
