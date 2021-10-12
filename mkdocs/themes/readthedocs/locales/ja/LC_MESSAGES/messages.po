@@ -47,8 +47,7 @@ msgstr "前へ"
 msgid ""
 "Built with %(mkdocs_link)s using a %(sphinx_link)s provided by "
 "%(rtd_link)s."
-msgstr "%(rtd_link)s 提供の %(sphinx_link)s を使って "
-"%(mkdocs_link)s でビルドされました。"
+msgstr "%(rtd_link)s 提供の %(sphinx_link)s を使って %(mkdocs_link)s でビルドされました。"
 
 #: mkdocs/themes/readthedocs/search.html:5
 msgid "Search Results"
