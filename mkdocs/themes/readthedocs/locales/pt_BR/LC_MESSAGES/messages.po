@@ -1,4 +1,4 @@
-# Portuguese translations for MkDocs.
+# Portuguese (Brazil) translations for MkDocs.
 # Copyright (C) 2021 MkDocs
 # This file is distributed under the same license as the MkDocs project.
 #
@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MkDocs 1.2\n"
 "Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
-"POT-Creation-Date: 2021-04-08 22:44+0200\n"
+"POT-Creation-Date: 2021-04-08 22:46+0200\n"
 "PO-Revision-Date: 2021-09-07 12:06+0200\n"
 "Last-Translator: Nicole Buitoni <ni.buitoni@gmail.com>\n"
 "Language: pt_BR\n"
@@ -17,81 +17,61 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: mkdocs/themes/mkdocs/404.html:8
+#: mkdocs/themes/readthedocs/404.html:7
 msgid "Page not found"
 msgstr "Página não encontrada"
 
-#: mkdocs/themes/mkdocs/base.html:107
-#: mkdocs/themes/mkdocs/keyboard-modal.html:31
-#: mkdocs/themes/mkdocs/search-modal.html:5
-msgid "Search"
-msgstr "Buscar"
+#: mkdocs/themes/readthedocs/breadcrumbs.html:3
+msgid "Docs"
+msgstr ""
 
-#: mkdocs/themes/mkdocs/base.html:117
-msgid "Previous"
-msgstr "Anterior"
-
-#: mkdocs/themes/mkdocs/base.html:122
-msgid "Next"
-msgstr "Seguinte"
-
-#: mkdocs/themes/mkdocs/base.html:133 mkdocs/themes/mkdocs/base.html:135
-#: mkdocs/themes/mkdocs/base.html:137 mkdocs/themes/mkdocs/base.html:139
+#: mkdocs/themes/readthedocs/breadcrumbs.html:24
 #, python-format
 msgid "Edit on %(repo_name)s"
 msgstr "Editar em %(repo_name)s"
 
-#: mkdocs/themes/mkdocs/base.html:179
+#: mkdocs/themes/readthedocs/breadcrumbs.html:33
+#: mkdocs/themes/readthedocs/footer.html:7
+#: mkdocs/themes/readthedocs/versions.html:14
+msgid "Next"
+msgstr "Seguinte"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:36
+#: mkdocs/themes/readthedocs/footer.html:10
+#: mkdocs/themes/readthedocs/versions.html:11
+msgid "Previous"
+msgstr "Anterior"
+
+#: mkdocs/themes/readthedocs/footer.html:25
 #, python-format
-msgid "Documentation built with %(mkdocs_link)s."
-msgstr "Documentação construída com %(mkdocs_link)s."
-
-#: mkdocs/themes/mkdocs/keyboard-modal.html:5
-msgid "Keyboard Shortcuts"
-msgstr "Atalhos de teclado"
-
-#: mkdocs/themes/mkdocs/keyboard-modal.html:6
-#: mkdocs/themes/mkdocs/search-modal.html:6
-msgid "Close"
-msgstr "Fechar"
-
-#: mkdocs/themes/mkdocs/keyboard-modal.html:12
-msgid "Keys"
-msgstr "Teclas"
-
-#: mkdocs/themes/mkdocs/keyboard-modal.html:13
-msgid "Action"
-msgstr "Ação"
-
-#: mkdocs/themes/mkdocs/keyboard-modal.html:19
-msgid "Open this help"
-msgstr "Abrir esta ajuda"
-
-#: mkdocs/themes/mkdocs/keyboard-modal.html:23
-msgid "Next page"
-msgstr "Próxima página"
-
-#: mkdocs/themes/mkdocs/keyboard-modal.html:27
-msgid "Previous page"
-msgstr "Página anterior"
-
-#: mkdocs/themes/mkdocs/search-modal.html:9
-msgid "From here you can search these documents. Enter your search terms below."
+msgid ""
+"Built with %(mkdocs_link)s using a %(sphinx_link)s provided by "
+"%(rtd_link)s."
 msgstr ""
-"A partir daqui você pode buscar pelo documento. Digite os termos de pesquisa abaixo."
 
-#: mkdocs/themes/mkdocs/search-modal.html:12
-msgid "Search..."
-msgstr "Buscando..."
+#: mkdocs/themes/readthedocs/search.html:5
+msgid "Search Results"
+msgstr ""
 
-#: mkdocs/themes/mkdocs/search-modal.html:12
+#: mkdocs/themes/readthedocs/search.html:9
+msgid "Search the Docs"
+msgstr ""
+
+#: mkdocs/themes/readthedocs/search.html:9
+#: mkdocs/themes/readthedocs/searchbox.html:3
 msgid "Type search term here"
 msgstr "Digite o termo a ser buscado aqui"
 
-#: mkdocs/themes/mkdocs/search-modal.html:15
+#: mkdocs/themes/readthedocs/search.html:12
 msgid "No results found"
 msgstr "Não foram encontrados resultados"
 
-#: mkdocs/themes/mkdocs/toc.html:3
-msgid "Table of Contents"
-msgstr "Tabela de Conteúdos"
+#: mkdocs/themes/readthedocs/search.html:13
+#, fuzzy
+msgid "Searching..."
+msgstr "Buscando..."
+
+#: mkdocs/themes/readthedocs/searchbox.html:3
+msgid "Search docs"
+msgstr ""
+
