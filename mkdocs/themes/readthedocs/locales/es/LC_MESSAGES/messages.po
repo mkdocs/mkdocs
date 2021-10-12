@@ -76,3 +76,4 @@ msgstr "Buscando..."
 #: mkdocs/themes/readthedocs/searchbox.html:3
 msgid "Search docs"
 msgstr "Buscar documentos"
+
