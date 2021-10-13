@@ -357,27 +357,20 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         build._build_page(page, cfg, files, nav, self._get_env_with_null_translations(cfg))
         self.assertPathIsFile(site_dir, 'index.html')
 
-    # TODO: fix this. It seems that jinja2 chokes on the mock object. Not sure how to resolve.
-    # @tempdir()
-    # @mock.patch('jinja2.environment.Template')
-    # def test_build_page_empty(self, site_dir, mock_template):
-    #     mock_template.render = mock.Mock(return_value='')
-    #     cfg = load_config(site_dir=site_dir, nav=['index.md'], plugins=[])
-    #     files = Files([File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])])
-    #     nav = get_navigation(files, cfg)
-    #     page = files.documentation_pages()[0].page
-    #     # Fake populate page
-    #     page.title = ''
-    #     page.markdown = ''
-    #     page.content = ''
-    #     with self.assertLogs('mkdocs', level='INFO') as cm:
-    #         build._build_page(page, cfg, files, nav, cfg['theme'].get_env())
-    #     self.assertEqual(
-    #         cm.output,
-    #         ["INFO:mkdocs.commands.build:Page skipped: 'index.md'. Generated empty output."]
-    #     )
-    #     mock_template.render.assert_called_once()
-    #     self.assertPathNotFile(site_dir, 'index.html')
+    @tempdir()
+    @mock.patch('jinja2.environment.Template.render', return_value='')
+    def test_build_page_empty(self, site_dir, render_mock):
+        cfg = load_config(site_dir=site_dir, nav=['index.md'], plugins=[])
+        files = Files([File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])])
+        nav = get_navigation(files, cfg)
+        with self.assertLogs('mkdocs', level='INFO') as cm:
+            build._build_page(files.documentation_pages()[0].page, cfg, files, nav, cfg['theme'].get_env())
+        self.assertEqual(
+            cm.output,
+            ["INFO:mkdocs.commands.build:Page skipped: 'index.md'. Generated empty output."]
+        )
+        self.assertPathNotFile(site_dir, 'index.html')
+        render_mock.assert_called_once()
 
     @tempdir(files={'index.md': 'page content'})
     @tempdir(files={'index.html': '<p>page content</p>'})
