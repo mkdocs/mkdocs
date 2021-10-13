@@ -21,6 +21,33 @@ The current and past members of the MkDocs team.
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
 
+## Version 1.2.3 (2021-10-12)
+
+* Built-in themes now also support these languages:
+    * Simplified Chinese (#2497)
+    * Japanese (#2525)
+    * Brazilian Portuguese (#2535)
+    * Spanish (#2545, previously #2396)
+
+* Third-party plugins will take precedence over built-in plugins with the same
+  name (#2591)
+
+* Bugfix: Fix ability to load translations for some languages:
+  core support (#2565) and search plugin support with fallbacks (#2602)
+
+* Bugfix (regression in 1.2): Prevent directory traversal in the dev server
+  (#2604)
+
+* Bugfix (regression in 1.2): Prevent webserver warnings from being treated as
+  a build failure in strict mode (#2607)
+
+* Bugfix: Correctly print colorful messages in the terminal on Windows (#2606)
+
+* Bugfix: Python version 3.10 was displayed incorrectly in `--version` (#2618)
+
+Other small improvements; see
+[commit log](https://github.com/mkdocs/mkdocs/compare/1.2.2...1.2.3).
+
 ## Version 1.2.2 (2021-07-18)
 
 * Bugfix (regression in 1.2): Fix serving files/paths with Unicode characters

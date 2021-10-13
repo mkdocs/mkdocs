@@ -12,6 +12,15 @@ from mkdocs import utils
 from mkdocs import config
 from mkdocs.commands import build, gh_deploy, new, serve
 
+
+if sys.platform.startswith("win"):
+    try:
+        import colorama
+    except ImportError:
+        pass
+    else:
+        colorama.init()
+
 log = logging.getLogger(__name__)
 
 
@@ -62,11 +71,6 @@ class State:
         self.stream.setLevel(level)
         self.stream.name = 'MkDocsStreamHandler'
         self.logger.addHandler(self.stream)
-
-        # Add CountHandler for strict mode
-        self.counter = utils.log_counter
-        self.counter.setLevel(logging.WARNING)
-        self.logger.addHandler(self.counter)
 
 
 pass_state = click.make_pass_decorator(State, ensure=True)
@@ -142,7 +146,7 @@ common_config_options = add_options([
     click.option('--use-directory-urls/--no-directory-urls', is_flag=True, default=None, help=use_directory_urls_help)
 ])
 
-PYTHON_VERSION = sys.version[:3]
+PYTHON_VERSION = f"{sys.version_info.major}.{sys.version_info.minor}"
 
 PKG_DIR = os.path.dirname(os.path.abspath(__file__))
 

@@ -240,8 +240,16 @@ def _build_page(page, config, doc_files, nav, env, dirty=False):
 
 def build(config, live_server=False, dirty=False):
     """ Perform a full site build. """
-    try:
 
+    logger = logging.getLogger('mkdocs')
+
+    # Add CountHandler for strict mode
+    warning_counter = utils.CountHandler()
+    warning_counter.setLevel(logging.WARNING)
+    if config['strict']:
+        logging.getLogger('mkdocs').addHandler(warning_counter)
+
+    try:
         from time import time
         start = time()
 
@@ -308,8 +316,8 @@ def build(config, live_server=False, dirty=False):
         # Run `post_build` plugin events.
         config['plugins'].run_event('post_build', config=config)
 
-        counts = utils.log_counter.get_counts()
-        if config['strict'] and len(counts):
+        counts = warning_counter.get_counts()
+        if counts:
             msg = ', '.join([f'{v} {k.lower()}s' for k, v in counts])
             raise Abort(f'\nAborted with {msg} in strict mode!')
 
@@ -322,6 +330,9 @@ def build(config, live_server=False, dirty=False):
             log.error(str(e))
             raise Abort('\nAborted with a BuildError!')
         raise
+
+    finally:
+        logger.removeHandler(warning_counter)
 
 
 def site_directory_contains_stale_files(site_directory):
