@@ -85,7 +85,7 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
             server.shutdown()
     except OSError as e:  # pragma: no cover
         # Avoid ugly, unhelpful traceback
-        raise Abort(str(e))
+        raise Abort("Unexpected error: " + str(e))
     finally:
         if isdir(site_dir):
             shutil.rmtree(site_dir)
