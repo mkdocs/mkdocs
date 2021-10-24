@@ -54,7 +54,8 @@ class Page:
 
     def __repr__(self):
         title = f"'{self.title}'" if (self.title is not None) else '[blank]'
-        return "Page(title={}, url='{}')".format(title, self.abs_url or self.file.url)
+        url = self.abs_url or self.file.url
+        return f"Page(title={title}, url='{url}')"
 
     def _indent_print(self, depth=0):
         return '{}{}'.format('    ' * depth, repr(self))
@@ -116,7 +117,7 @@ class Page:
         )
         if source is None:
             try:
-                with open(self.file.abs_src_path, 'r', encoding='utf-8-sig', errors='strict') as f:
+                with open(self.file.abs_src_path, encoding='utf-8-sig', errors='strict') as f:
                     source = f.read()
             except OSError:
                 log.error(f'File not found: {self.file.src_path}')

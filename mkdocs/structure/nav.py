@@ -127,18 +127,17 @@ def get_navigation(files, config):
         scheme, netloc, path, query, fragment = urlsplit(link.url)
         if scheme or netloc:
             log.debug(
-                "An external link to '{}' is included in "
-                "the 'nav' configuration.".format(link.url)
+                f"An external link to '{link.url}' is included in the 'nav' configuration."
             )
         elif link.url.startswith('/'):
             log.debug(
-                "An absolute path to '{}' is included in the 'nav' configuration, "
-                "which presumably points to an external resource.".format(link.url)
+                f"An absolute path to '{link.url}' is included in the 'nav' "
+                "configuration, which presumably points to an external resource."
             )
         else:
             msg = (
-                "A relative path to '{}' is included in the 'nav' configuration, "
-                "which is not found in the documentation files".format(link.url)
+                f"A relative path to '{link.url}' is included in the 'nav' "
+                "configuration, which is not found in the documentation files"
             )
             log.warning(msg)
     return Navigation(items, pages)

@@ -382,7 +382,7 @@ class SearchIndexTests(unittest.TestCase):
         """)
         toc = get_toc(get_markdown_toc(md))
 
-        full_content = ''.join("""Heading{0}Content{0}""".format(i) for i in range(1, 4))
+        full_content = ''.join(f"Heading{i}Content{i}" for i in range(1, 4))
 
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({})
