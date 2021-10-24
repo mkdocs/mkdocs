@@ -737,11 +737,29 @@ class NavTest(unittest.TestCase):
         self.assertRaises(config_options.ValidationError,
                           option.validate, {})
 
-    def test_invalid_config(self):
+    def test_invalid_config_int(self):
 
         option = config_options.Nav()
         self.assertRaises(config_options.ValidationError,
                           option.validate, [[], 1])
+
+    def test_invalid_config_None(self):
+
+        option = config_options.Nav()
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, [None])
+
+    def test_invalid_children_config_int(self):
+
+        option = config_options.Nav()
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, [{"foo.md": {"bar.md": 1}}])
+
+    def test_invalid_children_config_None(self):
+
+        option = config_options.Nav()
+        self.assertRaises(config_options.ValidationError,
+                          option.validate, [{"foo.md": {"bar.md": None}}])
 
 
 class PrivateTest(unittest.TestCase):

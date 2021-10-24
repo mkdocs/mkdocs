@@ -498,6 +498,16 @@ class Nav(OptionallyRequired):
     Validate the Nav config.
     """
 
+    def yield_nav_values(self, current_value):
+        if isinstance(current_value, dict):
+            for key, value in current_value.items():
+                yield key
+                yield from self.yield_nav_values(value)
+        if isinstance(current_value, list):
+            for value in current_value:
+                yield from self.yield_nav_values(value)
+        yield current_value
+
     def run_validation(self, value):
 
         if not isinstance(value, list):
@@ -506,15 +516,23 @@ class Nav(OptionallyRequired):
         if len(value) == 0:
             return
 
-        config_types = {type(item) for item in value}
-        if config_types.issubset({str, dict}):
+        root_config_types = set([type(config) for config in value])
+        if not root_config_types.issubset({str, dict}):
+            types = ', '.join(
+                item_type.__name__ for item_type in root_config_types
+            )
+            raise ValidationError(
+                f"Invalid navigation config types. Expected str and dict, got: {types}")
+
+        children_config_types = set([type(config) for config in self.yield_nav_values(value)])
+        if children_config_types.issubset({str, dict, list}):
             return value
 
-        types = ', '.join(set(
-            item_type.__name__ for item_type in config_types
-        ))
+        types = ', '.join(
+            item_type.__name__ for item_type in children_config_types
+        )
         raise ValidationError(
-            f"Invalid navigation config types. Expected str and dict, got: {types}")
+            f"Invalid navigation config types. Expected str, dict and list, got: {types}")
 
     def post_validation(self, config, key_name):
         # TODO: remove this when `pages` config setting is fully deprecated.
