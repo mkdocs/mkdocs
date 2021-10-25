@@ -81,7 +81,7 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
             # convert to set in case CLI params match config file settings
             watch_list = dict.fromkeys(config["watch"])
             for item in watch_list:
-                log.info(f"Watching additional directory: {item}")
+                log.info(f"Watching additional path: {item}")
                 server.watch(item)
 
             # Run `serve` plugin events.
