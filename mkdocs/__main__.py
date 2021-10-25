@@ -99,6 +99,8 @@ ignore_version_help = "Ignore check that build is not being deployed with an old
 watch_theme_help = ("Include the theme in list of files to watch for live reloading. "
                     "Ignored when live reload is not used.")
 shell_help = "Use the shell when invoking Git."
+watch_help = ("A directory to watch for live reloading. "
+              "Can be supplied multiple times.")
 
 
 def add_options(opts):
@@ -170,11 +172,12 @@ def cli():
 @click.option('--no-livereload', 'livereload', flag_value='no-livereload', help=no_reload_help)
 @click.option('--dirtyreload', 'livereload', flag_value='dirty', help=dirty_reload_help)
 @click.option('--watch-theme', help=watch_theme_help, is_flag=True)
+@click.option('-w', '--watch', help=watch_help, multiple=True, default=[])
 @common_config_options
 @common_options
-def serve_command(dev_addr, livereload, **kwargs):
+def serve_command(dev_addr, livereload, watch, **kwargs):
     """Run the builtin development server"""
-    serve.serve(dev_addr=dev_addr, livereload=livereload, **kwargs)
+    serve.serve(dev_addr=dev_addr, livereload=livereload, watch=watch, **kwargs)
 
 
 @cli.command(name="build")
