@@ -171,9 +171,10 @@ nav:
     - 'about.md'
 ```
 
-All paths must be relative to the `mkdocs.yml` configuration file. See the
-section on [configuring pages and navigation] for a more detailed breakdown,
-including how to create sub-sections.
+All paths in the navigation configuration must be relative to the
+[`docs_dir`](#docs_dir) configuration option. See the section on [configuring
+pages and navigation] for a more detailed breakdown, including how to create
+sub-sections.
 
 Navigation items may also include links to external sites. While titles are
 optional for internal links, they are required for external links. An external
