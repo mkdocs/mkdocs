@@ -35,16 +35,21 @@ class BabelStubTests(unittest.TestCase):
         self.assertEqual(str(locale), 'fr_FR')
 
     def test_parse_locale_bad_type(self):
-        self.assertRaises(TypeError, Locale.parse, ['list'], '_')
+        with self.assertRaises(TypeError):
+            Locale.parse(['list'], '_')
 
     def test_parse_locale_invalid_characters(self):
-        self.assertRaises(ValueError, Locale.parse, '42', '_')
+        with self.assertRaises(ValueError):
+            Locale.parse('42', '_')
 
     def test_parse_locale_bad_format(self):
-        self.assertRaises(ValueError, Locale.parse, 'en-GB', '_')
+        with self.assertRaises(ValueError):
+            Locale.parse('en-GB', '_')
 
     def test_parse_locale_bad_format_sep(self):
-        self.assertRaises(ValueError, Locale.parse, 'en_GB', '-')
+        with self.assertRaises(ValueError):
+            Locale.parse('en_GB', '-')
 
     def test_parse_locale_unknown_locale(self):
-        self.assertRaises(UnknownLocaleError, Locale.parse, 'foo', '_')
+        with self.assertRaises(UnknownLocaleError):
+            Locale.parse('foo', '_')

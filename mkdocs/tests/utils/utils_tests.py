@@ -290,7 +290,8 @@ class UtilsTests(unittest.TestCase):
 
     def test_get_theme_dir_keyerror(self):
 
-        self.assertRaises(KeyError, utils.get_theme_dir, 'nonexistanttheme')
+        with self.assertRaises(KeyError):
+            utils.get_theme_dir('nonexistanttheme')
 
     @mock.patch('importlib_metadata.entry_points', autospec=True)
     def test_get_theme_dir_importerror(self, mock_iter):
@@ -302,7 +303,8 @@ class UtilsTests(unittest.TestCase):
 
         mock_iter.return_value = [theme]
 
-        self.assertRaises(ImportError, utils.get_theme_dir, theme.name)
+        with self.assertRaises(ImportError):
+            utils.get_theme_dir(theme.name)
 
     @mock.patch('importlib_metadata.entry_points', autospec=True)
     def test_get_themes_warning(self, mock_iter):
@@ -338,7 +340,8 @@ class UtilsTests(unittest.TestCase):
 
         mock_iter.return_value = [theme1, theme2]
 
-        self.assertRaises(exceptions.ConfigurationError, utils.get_theme_names)
+        with self.assertRaises(exceptions.ConfigurationError):
+            utils.get_theme_names()
 
     def test_nest_paths(self):
 
@@ -429,7 +432,8 @@ class UtilsTests(unittest.TestCase):
     @tempdir(files={'base.yml': BASEYML})
     def test_yaml_inheritance_missing_parent(self, tdir):
         with open(os.path.join(tdir, 'base.yml')) as fd:
-            self.assertRaises(exceptions.ConfigurationError, utils.yaml_load, fd)
+            with self.assertRaises(exceptions.ConfigurationError):
+                utils.yaml_load(fd)
 
     def test_copy_files(self):
         src_paths = [

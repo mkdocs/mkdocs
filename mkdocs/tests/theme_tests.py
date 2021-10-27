@@ -72,7 +72,8 @@ class ThemeTests(unittest.TestCase):
         self.assertEqual(theme['foo'], 'bar')
         self.assertEqual(theme['baz'], True)
         self.assertTrue('new' not in theme)
-        self.assertRaises(KeyError, lambda t, k: t[k], theme, 'new')
+        with self.assertRaises(KeyError):
+            theme['new']
         theme['new'] = 42
         self.assertTrue('new' in theme)
         self.assertEqual(theme['new'], 42)

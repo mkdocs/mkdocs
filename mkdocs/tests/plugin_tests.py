@@ -144,7 +144,8 @@ class TestPluginCollection(unittest.TestCase):
 
     def test_run_unknown_event_on_collection(self):
         collection = plugins.PluginCollection()
-        self.assertRaises(KeyError, collection.run_event, 'unknown', 'page content')
+        with self.assertRaises(KeyError):
+            collection.run_event('unknown', 'page content')
 
     def test_run_build_error_event(self):
         build_errors = []
@@ -320,13 +321,15 @@ class TestPluginConfig(unittest.TestCase):
 
         cfg = {'plugins': ['uninstalled']}
         option = config.config_options.Plugins()
-        self.assertRaises(config.base.ValidationError, option.validate, cfg['plugins'])
+        with self.assertRaises(config.base.ValidationError):
+            option.validate(cfg['plugins'])
 
     def test_plugin_config_not_list(self, mock_class):
 
         cfg = {'plugins': 'sample'}  # should be a list
         option = config.config_options.Plugins()
-        self.assertRaises(config.base.ValidationError, option.validate, cfg['plugins'])
+        with self.assertRaises(config.base.ValidationError):
+            option.validate(cfg['plugins'])
 
     def test_plugin_config_multivalue_dict(self, mock_class):
 
@@ -340,7 +343,8 @@ class TestPluginConfig(unittest.TestCase):
             }]
         }
         option = config.config_options.Plugins()
-        self.assertRaises(config.base.ValidationError, option.validate, cfg['plugins'])
+        with self.assertRaises(config.base.ValidationError):
+            option.validate(cfg['plugins'])
 
     def test_plugin_config_not_string_or_dict(self, mock_class):
 
@@ -348,7 +352,8 @@ class TestPluginConfig(unittest.TestCase):
             'plugins': [('not a string or dict',)]
         }
         option = config.config_options.Plugins()
-        self.assertRaises(config.base.ValidationError, option.validate, cfg['plugins'])
+        with self.assertRaises(config.base.ValidationError):
+            option.validate(cfg['plugins'])
 
     def test_plugin_config_options_not_dict(self, mock_class):
 
@@ -358,4 +363,5 @@ class TestPluginConfig(unittest.TestCase):
             }]
         }
         option = config.config_options.Plugins()
-        self.assertRaises(config.base.ValidationError, option.validate, cfg['plugins'])
+        with self.assertRaises(config.base.ValidationError):
+            option.validate(cfg['plugins'])

@@ -665,7 +665,8 @@ class PageTests(unittest.TestCase):
         cfg = load_config()
         fl = File('missing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
         pg = Page('Foo', fl, cfg)
-        self.assertRaises(OSError, pg.read_source, cfg)
+        with self.assertRaises(OSError):
+            pg.read_source(cfg)
 
 
 class SourceDateEpochTests(unittest.TestCase):
