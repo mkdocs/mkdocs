@@ -743,7 +743,7 @@ class NavTest(unittest.TestCase):
         self.assertRaises(config_options.ValidationError,
                           option.validate, [[], 1])
 
-    def test_invalid_config_None(self):
+    def test_invalid_config_none(self):
 
         option = config_options.Nav()
         self.assertRaises(config_options.ValidationError,
@@ -755,7 +755,7 @@ class NavTest(unittest.TestCase):
         self.assertRaises(config_options.ValidationError,
                           option.validate, [{"foo.md": {"bar.md": 1}}])
 
-    def test_invalid_children_config_None(self):
+    def test_invalid_children_config_none(self):
 
         option = config_options.Nav()
         self.assertRaises(config_options.ValidationError,

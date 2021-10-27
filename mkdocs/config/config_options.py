@@ -498,14 +498,14 @@ class Nav(OptionallyRequired):
     Validate the Nav config.
     """
 
-    def yield_nav_values(self, current_value):
+    def _yield_nav_values(self, current_value):
         if isinstance(current_value, dict):
             for key, value in current_value.items():
                 yield key
-                yield from self.yield_nav_values(value)
+                yield from self._yield_nav_values(value)
         if isinstance(current_value, list):
             for value in current_value:
-                yield from self.yield_nav_values(value)
+                yield from self._yield_nav_values(value)
         yield current_value
 
     def run_validation(self, value):
@@ -516,7 +516,7 @@ class Nav(OptionallyRequired):
         if len(value) == 0:
             return
 
-        root_config_types = set([type(config) for config in value])
+        root_config_types = {type(config) for config in value}
         if not root_config_types.issubset({str, dict}):
             types = ', '.join(
                 item_type.__name__ for item_type in root_config_types
@@ -524,7 +524,7 @@ class Nav(OptionallyRequired):
             raise ValidationError(
                 f"Invalid navigation config types. Expected str and dict, got: {types}")
 
-        children_config_types = set([type(config) for config in self.yield_nav_values(value)])
+        children_config_types = {type(config) for config in self._yield_nav_values(value)}
         if children_config_types.issubset({str, dict, list}):
             return value
 
