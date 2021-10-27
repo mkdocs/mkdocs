@@ -193,21 +193,33 @@ class Deprecated(BaseConfigOption):
     ConfigOption instance, then the value is validated against that type.
     """
 
-    def __init__(self, moved_to=None, message='', option_type=None):
+    def __init__(self, moved_to=None, message=None, removed=False, option_type=None):
         super().__init__()
         self.default = None
         self.moved_to = moved_to
-        self.message = message or (
-            'The configuration option {} has been deprecated and '
-            'will be removed in a future release of MkDocs.'
-        )
+        if not message:
+            if removed:
+                message = "The configuration option '{}' was removed from MkDocs."
+            else:
+                message = (
+                    "The configuration option '{}' has been deprecated and "
+                    "will be removed in a future release of MkDocs."
+                )
+            if moved_to:
+                message += f" Use '{moved_to}' instead."
+
+        self.message = message
+        self.removed = removed
         self.option = option_type or BaseConfigOption()
+
         self.warnings = self.option.warnings
 
     def pre_validation(self, config, key_name):
         self.option.pre_validation(config, key_name)
 
         if config.get(key_name) is not None:
+            if self.removed:
+                raise ValidationError(self.message.format(key_name))
             self.warnings.append(self.message.format(key_name))
 
             if self.moved_to is not None:
@@ -515,16 +527,6 @@ class Nav(OptionallyRequired):
         ))
         raise ValidationError(
             f"Invalid navigation config types. Expected str and dict, got: {types}")
-
-    def post_validation(self, config, key_name):
-        # TODO: remove this when `pages` config setting is fully deprecated.
-        if key_name == 'pages' and config['pages'] is not None:
-            if config['nav'] is None:
-                # copy `pages` config to new 'nav' config setting
-                config['nav'] = config['pages']
-            warning = ("The 'pages' configuration option has been deprecated and will "
-                       "be removed in a future release of MkDocs. Use 'nav' instead.")
-            self.warnings.append(warning)
 
 
 class Private(OptionallyRequired):
