@@ -4,6 +4,7 @@ import logging
 import mimetypes
 import os
 import os.path
+import pathlib
 import posixpath
 import re
 import socketserver
@@ -64,6 +65,8 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         self.serve_thread = threading.Thread(target=lambda: self.serve_forever(shutdown_delay))
         self.observer = watchdog.observers.polling.PollingObserver(timeout=polling_interval)
 
+        self._watched_paths = {}  # Used as an ordered set.
+
     def watch(self, path, func=None, recursive=True):
         """Add the 'path' to watched paths, call the function and reload when any file changes under it."""
         path = os.path.abspath(path)
@@ -76,6 +79,9 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 DeprecationWarning,
                 stacklevel=2,
             )
+
+        if path in self._watched_paths:
+            return
 
         def callback(event):
             if event.is_directory:
@@ -90,8 +96,13 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         log.debug(f"Watching '{path}'")
         self.observer.schedule(handler, path, recursive=recursive)
 
+        self._watched_paths[path] = True
+
     def serve(self):
         self.observer.start()
+
+        paths_str = ", ".join(f"'{_try_relativize_path(path)}'" for path in self._watched_paths)
+        log.info(f"Watching paths for changes: {paths_str}")
 
         log.info(f"Serving on {self.url}")
         self.serve_thread.start()
@@ -267,3 +278,13 @@ class _Handler(wsgiref.simple_server.WSGIRequestHandler):
 
 def _timestamp():
     return round(time.monotonic() * 1000)
+
+
+def _try_relativize_path(path):
+    """Make the path relative to current directory if it's under that directory."""
+    path = pathlib.Path(path)
+    try:
+        path = path.relative_to(os.getcwd())
+    except ValueError:
+        pass
+    return str(path)

@@ -78,14 +78,11 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
                 for d in config['theme'].dirs:
                     server.watch(d)
 
-            # convert to set in case CLI params match config file settings
-            watch_list = dict.fromkeys(config["watch"])
-            for item in watch_list:
-                log.info(f"Watching additional path: {item}")
-                server.watch(item)
-
             # Run `serve` plugin events.
             server = config['plugins'].run_event('serve', server, config=config, builder=builder)
+
+            for item in config['watch']:
+                server.watch(item)
 
         try:
             server.serve()
