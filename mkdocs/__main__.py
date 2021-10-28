@@ -99,7 +99,7 @@ ignore_version_help = "Ignore check that build is not being deployed with an old
 watch_theme_help = ("Include the theme in list of files to watch for live reloading. "
                     "Ignored when live reload is not used.")
 shell_help = "Use the shell when invoking Git."
-watch_help = ("A directory to watch for live reloading. "
+watch_help = ("A directory or file to watch for live reloading. "
               "Can be supplied multiple times.")
 
 
