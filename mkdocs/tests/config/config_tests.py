@@ -16,10 +16,8 @@ from mkdocs.tests.base import dedent
 
 class ConfigTests(unittest.TestCase):
     def test_missing_config_file(self):
-
-        def load_missing_config():
+        with self.assertRaises(ConfigurationError):
             config.load_config(config_file='bad_filename.yaml')
-        self.assertRaises(ConfigurationError, load_missing_config)
 
     def test_missing_site_name(self):
         c = config.Config(schema=defaults.get_schema())
@@ -32,14 +30,12 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(len(warnings), 0)
 
     def test_empty_config(self):
-        def load_empty_config():
+        with self.assertRaises(ConfigurationError):
             config.load_config(config_file='/dev/null')
-        self.assertRaises(ConfigurationError, load_empty_config)
 
     def test_nonexistant_config(self):
-        def load_empty_config():
+        with self.assertRaises(ConfigurationError):
             config.load_config(config_file='/path/that/is/not/real')
-        self.assertRaises(ConfigurationError, load_empty_config)
 
     def test_invalid_config(self):
         file_contents = dedent("""
@@ -53,10 +49,8 @@ class ConfigTests(unittest.TestCase):
             config_file.flush()
             config_file.close()
 
-            self.assertRaises(
-                ConfigurationError,
-                config.load_config, config_file=open(config_file.name, 'rb')
-            )
+            with self.assertRaises(ConfigurationError):
+                config.load_config(config_file=open(config_file.name, 'rb'))
         finally:
             os.remove(config_file.name)
 
