@@ -172,7 +172,7 @@ def cli():
 @click.option('--no-livereload', 'livereload', flag_value='no-livereload', help=no_reload_help)
 @click.option('--dirtyreload', 'livereload', flag_value='dirty', help=dirty_reload_help)
 @click.option('--watch-theme', help=watch_theme_help, is_flag=True)
-@click.option('-w', '--watch', help=watch_help, type=click.Path(), multiple=True, default=[])
+@click.option('-w', '--watch', help=watch_help, type=click.Path(exists=True), multiple=True, default=[])
 @common_config_options
 @common_options
 def serve_command(dev_addr, livereload, watch, **kwargs):
