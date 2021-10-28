@@ -121,6 +121,6 @@ def get_schema():
         # options (as the value).
         ('plugins', config_options.Plugins(default=['search'])),
 
-        # a list of extra directories to watch while running `mkdocs serve`
-        ('watch', config_options.Type(list, default=[]))
+        # a list of extra paths to watch while running `mkdocs serve`
+        ('watch', config_options.ListOfPaths(default=[]))
     )
