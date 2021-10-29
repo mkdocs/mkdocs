@@ -433,7 +433,6 @@ class ListOfPaths(OptionallyRequired):
             if not os.path.exists(path):
                 raise ValidationError(f"The path {path} does not exist.")
             path = os.path.abspath(path)
-            assert isinstance(path, str)
             paths.append(path)
         return paths
 
