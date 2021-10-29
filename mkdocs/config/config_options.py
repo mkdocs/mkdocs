@@ -414,6 +414,10 @@ class ListOfPaths(OptionallyRequired):
     A list of file system paths. Raises an error if one of the paths does not exist. 
     """
 
+    def __init__(self, default=[], required=False):
+        self.config_dir = None
+        super().__init__(default, required)
+
     def pre_validation(self, config, key_name):
         self.config_dir = os.path.dirname(config.config_file_path) if config.config_file_path else None
 
