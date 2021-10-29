@@ -502,7 +502,7 @@ class ListOfPathsTest(unittest.TestCase):
         option.validate(paths)
 
     def test_missing_path(self):
-        paths = [os.path.join("doesnt", "exist", "i", "hope")]
+        paths = [os.path.join("does", "not", "exist", "i", "hope")]
         option = config_options.ListOfPaths()
         self.assertRaises(config_options.ValidationError, option.validate, paths)
 
