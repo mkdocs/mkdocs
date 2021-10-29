@@ -497,12 +497,12 @@ class DirTest(unittest.TestCase):
 class ListOfPathsTest(unittest.TestCase):
 
     def test_valid_path(self):
-        paths = [ os.path.dirname(__file__) ]
+        paths = [os.path.dirname(__file__)]
         option = config_options.ListOfPaths()
         option.validate(paths)
 
     def test_missing_path(self):
-        paths = [ os.path.join("doesnt", "exist", "i", "hope") ]
+        paths = [os.path.join("doesnt", "exist", "i", "hope")]
         option = config_options.ListOfPaths()
         self.assertRaises(config_options.ValidationError, option.validate, paths)
 
@@ -517,7 +517,7 @@ class ListOfPathsTest(unittest.TestCase):
         self.assertRaises(config_options.ValidationError, option.validate, paths)
 
     def test_file(self):
-        paths = [ __file__ ]
+        paths = [__file__]
         option = config_options.ListOfPaths()
         option.validate(paths)
 
@@ -528,15 +528,15 @@ class ListOfPathsTest(unittest.TestCase):
             config_file_path=os.path.join(base_path, 'mkdocs.yml'),
         )
         test_config = {
-            'watch': [ 'foo' ]
+            'watch': ['foo']
         }
         cfg.load_dict(test_config)
         fails, warns = cfg.validate()
         self.assertEqual(len(fails), 0)
         self.assertEqual(len(warns), 0)
         self.assertIsInstance(cfg['watch'], list)
-        self.assertEqual(cfg['watch'], [ os.path.join(base_path, 'foo') ])
-    
+        self.assertEqual(cfg['watch'], [os.path.join(base_path, 'foo')])
+
 
 class SiteDirTest(unittest.TestCase):
 

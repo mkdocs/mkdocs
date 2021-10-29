@@ -411,7 +411,7 @@ class ListOfPaths(OptionallyRequired):
     """
     List of Paths Config Option
 
-    A list of file system paths. Raises an error if one of the paths does not exist. 
+    A list of file system paths. Raises an error if one of the paths does not exist.
     """
 
     def __init__(self, default=[], required=False):
