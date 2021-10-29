@@ -515,7 +515,8 @@ class ListOfPathsTest(unittest.TestCase):
     def test_non_list(self):
         paths = os.path.dirname(__file__)
         option = config_options.ListOfPaths()
-        self.assertRaises(config_options.ValidationError, option.validate, paths)
+        with self.assertRaises(config_options.ValidationError):
+            option.validate(paths)
 
     def test_file(self):
         paths = [__file__]
