@@ -225,7 +225,7 @@ configuration documentation for details.
         This was reverted in release 1.2.2
 
 * The `google_analytics` configuration option is deprecated as Google appears to
-  be fazing it out in favor of its new Google Analytics 4 property. See the
+  be phasing it out in favor of its new Google Analytics 4 property. See the
   documentation for your theme for alternatives which can be configured as part
   of your theme configuration. For example, the [mkdocs][mkdocs-theme] and
   [readthedocs][rtd-theme] themes have each added a new `theme.analytics.gtag`
