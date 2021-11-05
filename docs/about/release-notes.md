@@ -20,6 +20,8 @@ The current and past members of the MkDocs team.
 * [@tomchristie](https://github.com/tomchristie/)
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
+* [@oprypin](https://github.com/oprypin/)
+* [@ultrabug](https://github.com/ultrabug/)
 
 ## Version 1.2.3 (2021-10-12)
 
