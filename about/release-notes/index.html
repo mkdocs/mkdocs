@@ -345,6 +345,8 @@ mkdocs, version 1.0 from /path/to/mkdocs (Python 3.6)
 <li><a href="https://github.com/tomchristie/">@tomchristie</a></li>
 <li><a href="https://github.com/d0ugal/">@d0ugal</a></li>
 <li><a href="https://github.com/waylan/">@waylan</a></li>
+<li><a href="https://github.com/oprypin/">@oprypin</a></li>
+<li><a href="https://github.com/ultrabug/">@ultrabug</a></li>
 </ul>
 <h2 id="version-123-2021-10-12">Version 1.2.3 (2021-10-12)<a class="headerlink" href="#version-123-2021-10-12" title="Permanent link"></a></h2>
 <ul>
@@ -358,20 +360,16 @@ mkdocs, version 1.0 from /path/to/mkdocs (Python 3.6)
 </ul>
 </li>
 <li>
-<p>Third-party plugins will take precedence over built-in plugins with the same
-  name (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2591" title="GitHub Issue mkdocs/mkdocs #2591">#2591</a>)</p>
+<p>Third-party plugins will take precedence over built-in plugins with the same name (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2591" title="GitHub Issue mkdocs/mkdocs #2591">#2591</a>)</p>
 </li>
 <li>
-<p>Bugfix: Fix ability to load translations for some languages:
-  core support (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2565" title="GitHub Issue mkdocs/mkdocs #2565">#2565</a>) and search plugin support with fallbacks (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2602" title="GitHub Issue mkdocs/mkdocs #2602">#2602</a>)</p>
+<p>Bugfix: Fix ability to load translations for some languages: core support (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2565" title="GitHub Issue mkdocs/mkdocs #2565">#2565</a>) and search plugin support with fallbacks (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2602" title="GitHub Issue mkdocs/mkdocs #2602">#2602</a>)</p>
 </li>
 <li>
-<p>Bugfix (regression in 1.2): Prevent directory traversal in the dev server
-  (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2604" title="GitHub Issue mkdocs/mkdocs #2604">#2604</a>)</p>
+<p>Bugfix (regression in 1.2): Prevent directory traversal in the dev server (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2604" title="GitHub Issue mkdocs/mkdocs #2604">#2604</a>)</p>
 </li>
 <li>
-<p>Bugfix (regression in 1.2): Prevent webserver warnings from being treated as
-  a build failure in strict mode (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2607" title="GitHub Issue mkdocs/mkdocs #2607">#2607</a>)</p>
+<p>Bugfix (regression in 1.2): Prevent webserver warnings from being treated as a build failure in strict mode (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2607" title="GitHub Issue mkdocs/mkdocs #2607">#2607</a>)</p>
 </li>
 <li>
 <p>Bugfix: Correctly print colorful messages in the terminal on Windows (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2606" title="GitHub Issue mkdocs/mkdocs #2606">#2606</a>)</p>
@@ -380,31 +378,23 @@ mkdocs, version 1.0 from /path/to/mkdocs (Python 3.6)
 <p>Bugfix: Python version 3.10 was displayed incorrectly in <code>--version</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2618" title="GitHub Issue mkdocs/mkdocs #2618">#2618</a>)</p>
 </li>
 </ul>
-<p>Other small improvements; see
-<a href="https://github.com/mkdocs/mkdocs/compare/1.2.2...1.2.3">commit log</a>.</p>
+<p>Other small improvements; see <a href="https://github.com/mkdocs/mkdocs/compare/1.2.2...1.2.3">commit log</a>.</p>
 <h2 id="version-122-2021-07-18">Version 1.2.2 (2021-07-18)<a class="headerlink" href="#version-122-2021-07-18" title="Permanent link"></a></h2>
 <ul>
 <li>
-<p>Bugfix (regression in 1.2): Fix serving files/paths with Unicode characters
-  (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2464" title="GitHub Issue mkdocs/mkdocs #2464">#2464</a>)</p>
+<p>Bugfix (regression in 1.2): Fix serving files/paths with Unicode characters (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2464" title="GitHub Issue mkdocs/mkdocs #2464">#2464</a>)</p>
 </li>
 <li>
-<p>Bugfix (regression in 1.2): Revert livereload file watching to use polling
-  observer (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2477" title="GitHub Issue mkdocs/mkdocs #2477">#2477</a>)</p>
-<p>This had to be done to reasonably support usages that span virtual
-filesystems such as non-native Docker and network mounts.</p>
-<p>This goes back to the polling approach, very similar to that was always used
-prior, meaning most of the same downsides with latency and CPU usage.</p>
+<p>Bugfix (regression in 1.2): Revert livereload file watching to use polling observer (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2477" title="GitHub Issue mkdocs/mkdocs #2477">#2477</a>)</p>
+<p>This had to be done to reasonably support usages that span virtual filesystems such as non-native Docker and network mounts.</p>
+<p>This goes back to the polling approach, very similar to that was always used prior, meaning most of the same downsides with latency and CPU usage.</p>
 </li>
 <li>
-<p>Revert from 1.2: Remove the requirement of a <code>site_url</code> config and the
-  restriction on <code>use_directory_urls</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2490" title="GitHub Issue mkdocs/mkdocs #2490">#2490</a>)</p>
+<p>Revert from 1.2: Remove the requirement of a <code>site_url</code> config and the restriction on <code>use_directory_urls</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2490" title="GitHub Issue mkdocs/mkdocs #2490">#2490</a>)</p>
 </li>
 <li>
-<p>Bugfix (regression in 1.2): Don't require trailing slash in the URL when
-  serving a directory index in <code>mkdocs serve</code> server (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2507" title="GitHub Issue mkdocs/mkdocs #2507">#2507</a>)</p>
-<p>Instead of showing a 404 error, detect if it's a directory and redirect to a
-path with a trailing slash added, like before.</p>
+<p>Bugfix (regression in 1.2): Don't require trailing slash in the URL when serving a directory index in <code>mkdocs serve</code> server (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2507" title="GitHub Issue mkdocs/mkdocs #2507">#2507</a>)</p>
+<p>Instead of showing a 404 error, detect if it's a directory and redirect to a path with a trailing slash added, like before.</p>
 </li>
 <li>
 <p>Bugfix: Fix <code>gh_deploy</code> with config-file in the current directory (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2481" title="GitHub Issue mkdocs/mkdocs #2481">#2481</a>)</p>
@@ -419,8 +409,7 @@ path with a trailing slash added, like before.</p>
 <p>Stop treating ";" as a special character in URLs: urlparse -&gt; urlsplit (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2502" title="GitHub Issue mkdocs/mkdocs #2502">#2502</a>)</p>
 </li>
 <li>
-<p>Improve build performance for sites with many pages (partly already done in
-  1.2) (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2407" title="GitHub Issue mkdocs/mkdocs #2407">#2407</a>)</p>
+<p>Improve build performance for sites with many pages (partly already done in 1.2) (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2407" title="GitHub Issue mkdocs/mkdocs #2407">#2407</a>)</p>
 </li>
 </ul>
 <h2 id="version-121-2021-06-09">Version 1.2.1 (2021-06-09)<a class="headerlink" href="#version-121-2021-06-09" title="Permanent link"></a></h2>
@@ -539,7 +528,7 @@ string. In that case, if <code>use_directory_urls</code> is not explicitly set t
 </li>
 <li>
 <p>The <code>google_analytics</code> configuration option is deprecated as Google appears to
-  be fazing it out in favor of its new Google Analytics 4 property. See the
+  be phasing it out in favor of its new Google Analytics 4 property. See the
   documentation for your theme for alternatives which can be configured as part
   of your theme configuration. For example, the <a href="../../user-guide/choosing-your-theme/#mkdocs">mkdocs</a> and
   <a href="../../user-guide/choosing-your-theme/#readthedocs">readthedocs</a> themes have each added a new <code>theme.analytics.gtag</code>
