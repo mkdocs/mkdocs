@@ -72,17 +72,6 @@ with the [remote_branch] configuration setting, but if you forget to change
 directories before running the deploy script, it will commit to the `master`
 branch of your project, which you probably don't want.
 
-Be aware that you will not be able to review the built site before it is pushed
-to GitHub. Therefore, you may want to verify any changes you make to the docs
-beforehand by using the `build` or `serve` commands and reviewing the built
-files locally.
-
-!!! warning
-
-    You should never edit files in your pages repository by hand if you're using
-    the `gh-deploy` command because you will lose your work the next time you
-    run the command.
-
 ### Custom Domains
 
 GitHub Pages includes support for using a [Custom Domain] for your site. In
