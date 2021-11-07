@@ -129,13 +129,14 @@ class ConfigTests(unittest.TestCase):
                         'locale': parse_locale('en'),
                         'include_search_page': True,
                         'search_index_only': False,
-                        'analytics': {'gtag': None},
+                        'analytics': {'anonymize_ip': False, 'gtag': None},
                         'highlightjs': True,
                         'hljs_languages': [],
                         'include_homepage_in_sidebar': True,
                         'prev_next_buttons_location': 'bottom',
                         'navigation_depth': 4,
                         'sticky_navigation': True,
+                        'logo': None,
                         'titles_only': False,
                         'collapse_navigation': True
                     }
@@ -146,13 +147,14 @@ class ConfigTests(unittest.TestCase):
                         'locale': parse_locale('en'),
                         'include_search_page': True,
                         'search_index_only': False,
-                        'analytics': {'gtag': None},
+                        'analytics': {'anonymize_ip': False, 'gtag': None},
                         'highlightjs': True,
                         'hljs_languages': [],
                         'include_homepage_in_sidebar': True,
                         'prev_next_buttons_location': 'bottom',
                         'navigation_depth': 4,
                         'sticky_navigation': True,
+                        'logo': None,
                         'titles_only': False,
                         'collapse_navigation': True
                     }
@@ -167,13 +169,14 @@ class ConfigTests(unittest.TestCase):
                         'locale': parse_locale('en'),
                         'include_search_page': True,
                         'search_index_only': False,
-                        'analytics': {'gtag': None},
+                        'analytics': {'anonymize_ip': False, 'gtag': None},
                         'highlightjs': True,
                         'hljs_languages': [],
                         'include_homepage_in_sidebar': True,
                         'prev_next_buttons_location': 'bottom',
                         'navigation_depth': 4,
                         'sticky_navigation': True,
+                        'logo': None,
                         'titles_only': False,
                         'collapse_navigation': True
                     }
