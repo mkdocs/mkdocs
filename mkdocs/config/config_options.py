@@ -356,6 +356,7 @@ class FilesystemObject(Type):
     """
     Base class for options that point to filesystem objects.
     """
+
     def __init__(self, exists=False, **kwargs):
         super().__init__(type_=str, **kwargs)
         self.exists = exists
@@ -404,6 +405,36 @@ class File(FilesystemObject):
     """
     existence_test = staticmethod(os.path.isfile)
     name = 'file'
+
+
+class ListOfPaths(OptionallyRequired):
+    """
+    List of Paths Config Option
+
+    A list of file system paths. Raises an error if one of the paths does not exist.
+    """
+
+    def __init__(self, default=[], required=False):
+        self.config_dir = None
+        super().__init__(default, required)
+
+    def pre_validation(self, config, key_name):
+        self.config_dir = os.path.dirname(config.config_file_path) if config.config_file_path else None
+
+    def run_validation(self, value):
+        if not isinstance(value, list):
+            raise ValidationError(f"Expected a list, got {type(value)}")
+        if len(value) == 0:
+            return
+        paths = []
+        for path in value:
+            if self.config_dir and not os.path.isabs(path):
+                path = os.path.join(self.config_dir, path)
+            if not os.path.exists(path):
+                raise ValidationError(f"The path {path} does not exist.")
+            path = os.path.abspath(path)
+            paths.append(path)
+        return paths
 
 
 class SiteDir(Dir):

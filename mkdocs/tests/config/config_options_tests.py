@@ -477,6 +477,52 @@ class DirTest(unittest.TestCase):
         self.assertEqual(len(warns), 0)
 
 
+class ListOfPathsTest(unittest.TestCase):
+
+    def test_valid_path(self):
+        paths = [os.path.dirname(__file__)]
+        option = config_options.ListOfPaths()
+        option.validate(paths)
+
+    def test_missing_path(self):
+        paths = [os.path.join("does", "not", "exist", "i", "hope")]
+        option = config_options.ListOfPaths()
+        with self.assertRaises(config_options.ValidationError):
+            option.validate(paths)
+
+    def test_empty_list(self):
+        paths = []
+        option = config_options.ListOfPaths()
+        option.validate(paths)
+
+    def test_non_list(self):
+        paths = os.path.dirname(__file__)
+        option = config_options.ListOfPaths()
+        with self.assertRaises(config_options.ValidationError):
+            option.validate(paths)
+
+    def test_file(self):
+        paths = [__file__]
+        option = config_options.ListOfPaths()
+        option.validate(paths)
+
+    def test_paths_localized_to_config(self):
+        base_path = os.path.abspath('.')
+        cfg = Config(
+            [('watch', config_options.ListOfPaths())],
+            config_file_path=os.path.join(base_path, 'mkdocs.yml'),
+        )
+        test_config = {
+            'watch': ['foo']
+        }
+        cfg.load_dict(test_config)
+        fails, warns = cfg.validate()
+        self.assertEqual(len(fails), 0)
+        self.assertEqual(len(warns), 0)
+        self.assertIsInstance(cfg['watch'], list)
+        self.assertEqual(cfg['watch'], [os.path.join(base_path, 'foo')])
+
+
 class SiteDirTest(unittest.TestCase):
 
     def validate_config(self, config):
