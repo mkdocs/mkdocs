@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: MkDocs 1.2\n"
 "Report-Msgid-Bugs-To: \"https://github.com/mkdocs/mkdocs/issues\"\n"
 "POT-Creation-Date: 2021-09-27 10:43-0400\n"
-"PO-Revision-Date: 2021-11-10 17:23+0800\n"
+"PO-Revision-Date: 2021-11-13 10:14+0800\n"
 "Last-Translator: xingkong0113 <dingpengyu06@gmail.com>\n"
 "Language-Team: zh_Hans_CN <dingpengyu06@gmail.com>\n"
 "Language: zh_CN\n"
@@ -24,7 +24,7 @@ msgstr "找不到页面"
 
 #: mkdocs/themes/readthedocs/base.html:97
 msgid "Logo"
-msgstr "站点Logo"
+msgstr "Logo"
 
 #: mkdocs/themes/readthedocs/base.html:111
 msgid "Navigation menu"
