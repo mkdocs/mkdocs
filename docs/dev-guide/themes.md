@@ -4,11 +4,10 @@ A guide to creating and distributing custom themes.
 
 ---
 
-!!! Note
-
-    If you are looking for existing third party themes, they are listed in the
-    MkDocs [community wiki]. If you want to share a theme you create, you
-    should list it on the Wiki.
+NOTE:
+If you are looking for existing third party themes, they are listed in the
+MkDocs [community wiki]. If you want to share a theme you create, you
+should list it on the Wiki.
 
 When creating a new theme, you can either follow the steps in this guide to
 create one from scratch or you can download the `mkdocs-basic-theme` as a
@@ -47,30 +46,28 @@ theme:
     custom_dir: 'custom_theme/'
 ```
 
-!!! Note
+> NOTE:
+> Generally, when building your own custom theme, the theme.[name]
+> configuration setting would be set to `null`. However, if the
+> theme.[custom_dir] configuration value is used in combination with an
+> existing theme, the theme.[custom_dir] can be used to replace only specific
+> parts of a built-in theme. For example, with the above layout and if you set
+> `name: "mkdocs"` then the `main.html` file in the theme.[custom_dir] would
+> replace the file of the same name in the `mkdocs` theme but otherwise the
+> `mkdocs` theme would remain unchanged. This is useful if you want to make
+> small adjustments to an existing theme.
+>
+> For more specific information, see [Customizing Your Theme].
 
-    Generally, when building your own custom theme, the theme.[name]
-    configuration setting would be set to `null`. However, if the
-    theme.[custom_dir] configuration value is used in combination with an
-    existing theme, the theme.[custom_dir] can be used to replace only specific
-    parts of a built-in theme. For example, with the above layout and if you set
-    `name: "mkdocs"` then the `main.html` file in the theme.[custom_dir] would
-    replace the file of the same name in the `mkdocs` theme but otherwise the
-    `mkdocs` theme would remain unchanged. This is useful if you want to make
-    small adjustments to an existing theme.
-
-    For more specific information, see [Customizing Your Theme].
-
-!!! Warning
-
-    A theme's [configuration] defined in a `mkdocs_theme.yml` file is not loaded
-    from `theme.custom_dir`. When an entire theme exists in `theme.custom_dir`
-    and `theme.name` is set to `null`, then the entire theme configuration must
-    be defined in the [theme] configuration option in the `mkdocs.yml` file.
-
-    However, when a theme is [packaged] up for distribution, and loaded using
-    the `theme.name` configuration option, then a `mkdocs_theme.yml` file
-    is required for the theme.
+> WARNING:
+> A theme's [configuration] defined in a `mkdocs_theme.yml` file is not loaded
+> from `theme.custom_dir`. When an entire theme exists in `theme.custom_dir`
+> and `theme.name` is set to `null`, then the entire theme configuration must
+> be defined in the [theme] configuration option in the `mkdocs.yml` file.
+>
+> However, when a theme is [packaged] up for distribution, and loaded using
+> the `theme.name` configuration option, then a `mkdocs_theme.yml` file
+> is required for the theme.
 
 [Customizing Your Theme]: ../user-guide/customizing-your-theme.md#using-the-theme-custom_dir
 [custom_dir]: ../user-guide/configuration.md#custom_dir
@@ -103,17 +100,16 @@ generated and included automatically, through the `nav` and `toc` objects,
 respectively. If you wish to write your own theme, it is recommended to start
 with one of the [built-in themes] and modify it accordingly.
 
-!!! Note
-
-    As MkDocs uses [Jinja] as its template engine, you have access to all the
-    power of Jinja, including [template inheritance]. You may notice that the
-    themes included with MkDocs make extensive use of template inheritance and
-    blocks, allowing users to easily override small bits and pieces of the
-    templates from the theme [custom_dir]. Therefore, the built-in themes are
-    implemented in a `base.html` file, which `main.html` extends. Although not
-    required, third party template authors are encouraged to follow a similar
-    pattern and may want to define the same [blocks] as are used in the built-in
-    themes for consistency.
+NOTE:
+As MkDocs uses [Jinja] as its template engine, you have access to all the
+power of Jinja, including [template inheritance]. You may notice that the
+themes included with MkDocs make extensive use of template inheritance and
+blocks, allowing users to easily override small bits and pieces of the
+templates from the theme [custom_dir]. Therefore, the built-in themes are
+implemented in a `base.html` file, which `main.html` extends. Although not
+required, third party template authors are encouraged to follow a similar
+pattern and may want to define the same [blocks] as are used in the built-in
+themes for consistency.
 
 [Jinja]: http://jinja.pocoo.org/
 [template inheritance]: http://jinja.pocoo.org/docs/dev/templates/#template-inheritance
@@ -709,15 +705,14 @@ To see an example of a package containing one theme, see the [MkDocs Bootstrap
 theme] and to see a package that contains many themes, see the [MkDocs
 Bootswatch theme].
 
-!!! Note
-
-    It is not strictly necessary to package a theme, as the entire theme
-    can be contained in the `custom_dir`. If you have created a "one-off theme,"
-    that should be sufficient. However, if you intend to distribute your theme
-    for others to use, packaging the theme has some advantages. By packaging
-    your theme, your users can more easily install it, they can rely on a default
-    [configuration] being defined, and they can then take advantage of the
-    [custom_dir] to make tweaks to your theme to better suit their needs.
+NOTE:
+It is not strictly necessary to package a theme, as the entire theme
+can be contained in the `custom_dir`. If you have created a "one-off theme,"
+that should be sufficient. However, if you intend to distribute your theme
+for others to use, packaging the theme has some advantages. By packaging
+your theme, your users can more easily install it, they can rely on a default
+[configuration] being defined, and they can then take advantage of the
+[custom_dir] to make tweaks to your theme to better suit their needs.
 
 [Python packaging]: https://packaging.python.org/en/latest/
 [MkDocs Bootstrap theme]: https://mkdocs.github.io/mkdocs-bootstrap/
@@ -942,12 +937,12 @@ setup(
 Note that `cmdclass=babel_cmdclass` was added an a parameter passed to
 the `setup` function.
 
-!!! warning
-    As **pybabel is not installed by default** and most users will not have
-    pybabel installed, theme developers and/or translators should make sure to
-    have installed the necessary dependencies
-    (using `pip install mkdocs[i18n]`) in order for the commands to be
-    available for use.
+WARNING:
+As **pybabel is not installed by default** and most users will not have
+pybabel installed, theme developers and/or translators should make sure to
+have installed the necessary dependencies
+(using `pip install mkdocs[i18n]`) in order for the commands to be
+available for use.
 
 [pybabel]: https://babel.pocoo.org/en/latest/setup.html
 
@@ -1063,15 +1058,13 @@ the `theme` option is ignored for that option.
 
 ### Example custom theme Localization/Translation workflow
 
-!!! note
-
-    If your theme inherits from an existing theme which already provides
-    translation catalogs, your theme's translations will be merged with the
-    parent theme's translations during a MkDocs build.
-
-    This means that you only need to concentrate on the added translations.
-    Yet, you will still benefit from the translations of the parent theme. At
-    the same time, you may override any of parent theme's translations!
+> NOTE: If your theme inherits from an existing theme which already provides
+> translation catalogs, your theme's translations will be merged with the
+> parent theme's translations during a MkDocs build.
+>
+> This means that you only need to concentrate on the added translations.
+> Yet, you will still benefit from the translations of the parent theme. At
+> the same time, you may override any of parent theme's translations!
 
 Let's suppose that you're working on your own fork of the
 [mkdocs-basic-theme][basic theme] and want to add translations to it.
@@ -1139,16 +1132,15 @@ command for each locale. MkDocs expects the binary `mo` files to be located at
 command automatically does for you. See [Testing theme translations] for
 details.
 
-!!! note
-
-    As outlined in our [Translation Guide], the MkDocs project has chosen to
-    include the `pot` and `po` files in our code repository, but not the
-    `mo` files. This requires us to always run `compile_catalog` before
-    packaging a new release regardless of whether any changes were made to a
-    translation or not. However, you may chose an alternate workflow for your
-    theme. At a minimum, you need to ensure that up-to-date `mo` files are
-    included at the correct location in each release. However, you may use a
-    different process for generating those `mo` files if you chose to do so.
+NOTE:
+As outlined in our [Translation Guide], the MkDocs project has chosen to
+include the `pot` and `po` files in our code repository, but not the
+`mo` files. This requires us to always run `compile_catalog` before
+packaging a new release regardless of whether any changes were made to a
+translation or not. However, you may chose an alternate workflow for your
+theme. At a minimum, you need to ensure that up-to-date `mo` files are
+included at the correct location in each release. However, you may use a
+different process for generating those `mo` files if you chose to do so.
 
 [packaging a theme]: #packaging-themes
 [Testing theme translations]: translations.md#testing-theme-translations

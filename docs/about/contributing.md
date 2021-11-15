@@ -98,11 +98,10 @@ The updated `pot` file will allow translation contributors to propose the
 translations needed for their preferred language. See the guide on [Translating
 Themes] for details.
 
-!!! Note
-
-    Contributors are not expected to provide translations with their changes to
-    a theme's templates. However, they are expected to include an updated `pot`
-    file so that everything is ready for translators to do their job.
+NOTE:
+Contributors are not expected to provide translations with their changes to
+a theme's templates. However, they are expected to include an updated `pot`
+file so that everything is ready for translators to do their job.
 
 [virtualenv]: https://virtualenv.pypa.io/en/latest/user_guide.html
 [pip]: https://pip.pypa.io/en/stable/

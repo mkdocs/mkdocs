@@ -43,9 +43,10 @@ extra_css:
 markdown_extensions:
     - toc:
         permalink: 
-    - admonition
     - attr_list
     - def_list
+    - admonition
+    - callouts
     - mdx_gh_links:
         user: mkdocs
         repo: mkdocs

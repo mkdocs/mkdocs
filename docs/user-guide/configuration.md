@@ -94,32 +94,32 @@ directory.
 edit_uri: root/path/docs/
 ```
 
-!!! note
-    On a few known hosts (specifically GitHub, Bitbucket and GitLab), the
-    `edit_uri` is derived from the 'repo_url' and does not need to be set
-    manually. Simply defining a `repo_url` will automatically populate the
-    `edit_uri` configs setting.
+> NOTE:
+> On a few known hosts (specifically GitHub, Bitbucket and GitLab), the
+> `edit_uri` is derived from the 'repo_url' and does not need to be set
+> manually. Simply defining a `repo_url` will automatically populate the
+> `edit_uri` configs setting.
+>
+> For example, for a GitHub- or GitLab-hosted repository, the `edit_uri`
+> would be automatically set as `edit/master/docs/` (Note the `edit` path
+> and `master` branch).
+>
+> For a Bitbucket-hosted repository, the equivalent `edit_uri` would be
+> automatically set as `src/default/docs/` (note the `src` path and `default`
+> branch).
+>
+> To use a different URI than the default (for example a different branch),
+> simply set the `edit_uri` to your desired string. If you do not want any
+> "edit URL link" displayed on your pages, then set `edit_uri` to an empty
+> string to disable the automatic setting.
 
-    For example, for a GitHub- or GitLab-hosted repository, the `edit_uri`
-    would be automatically set as `edit/master/docs/` (Note the `edit` path
-    and `master` branch).
-
-    For a Bitbucket-hosted repository, the equivalent `edit_uri` would be
-    automatically set as `src/default/docs/` (note the `src` path and `default`
-    branch).
-
-    To use a different URI than the default (for example a different branch),
-    simply set the `edit_uri` to your desired string. If you do not want any
-    "edit URL link" displayed on your pages, then set `edit_uri` to an empty
-    string to disable the automatic setting.
-
-!!! warning
-    On GitHub and GitLab, the default "edit" path (`edit/master/docs/`) opens
-    the page in the online editor. This functionality requires that the user
-    have and be logged in to a GitHub/GitLab account. Otherwise, the user will
-    be redirected to a login/signup page. Alternatively, use the "blob" path
-    (`blob/master/docs/`) to open a read-only view, which supports anonymous
-    access.
+WARNING:
+On GitHub and GitLab, the default "edit" path (`edit/master/docs/`) opens
+the page in the online editor. This functionality requires that the user
+have and be logged in to a GitHub/GitLab account. Otherwise, the user will
+be redirected to a login/signup page. Alternatively, use the "blob" path
+(`blob/master/docs/`) to open a read-only view, which supports anonymous
+access.
 
 **default**: `edit/master/docs/` for GitHub and GitLab repos or
 `src/default/docs/` for a Bitbucket repo, if `repo_url` matches those domains,
@@ -372,11 +372,10 @@ watch:
 Allows a custom default to be set without the need to pass it through the `-w`/`--watch`
 option every time the `mkdocs serve` command is called.
 
-!!! Note
-
-    The paths provided via the configuration file are relative to the configuration file.
-
-    The paths provided via the `-w`/`--watch` CLI parameters are not. 
+> NOTE:
+> The paths provided via the configuration file are relative to the configuration file.
+>
+> The paths provided via the `-w`/`--watch` CLI parameters are not.
 
 ### use_directory_urls
 
@@ -492,14 +491,15 @@ markdown_extensions:
 This alternative syntax is required if you intend to override some options via
 [inheritance].
 
-!!! note "See Also:"
-    The Python-Markdown documentation provides a [list of extensions][exts]
-    which are available out-of-the-box. For a list of configuration options
-    available for a given extension, see the documentation for that extension.
-
-    You may also install and use various [third party extensions][3rd]. Consult
-    the documentation provided by those extensions for installation instructions
-    and available configuration options.
+> NOTE: **See Also:**
+>
+> The Python-Markdown documentation provides a [list of extensions][exts]
+> which are available out-of-the-box. For a list of configuration options
+> available for a given extension, see the documentation for that extension.
+>
+> You may also install and use various [third party extensions][3rd]. Consult
+> the documentation provided by those extensions for installation instructions
+> and available configuration options.
 
 **default**: `[]` (an empty list).
 
@@ -617,18 +617,16 @@ supported:
 
 You may [contribute additional languages].
 
-!!! Warning
+WARNING:
+While search does support using multiple languages together, it is best not
+to add additional languages unless you really need them. Each additional
+language adds significant bandwidth requirements and uses more browser
+resources. Generally, it is best to keep each instance of MkDocs to a single
+language.
 
-    While search does support using multiple languages together, it is best not
-    to add additional languages unless you really need them. Each additional
-    language adds significant bandwidth requirements and uses more browser
-    resources. Generally, it is best to keep each instance of MkDocs to a single
-    language.
-
-!!! Note
-
-    Lunr Languages does not currently include support for Chinese or other Asian
-    languages. However, some users have reported decent results using Japanese.
+NOTE:
+Lunr Languages does not currently include support for Chinese or other Asian
+languages. However, some users have reported decent results using Japanese.
 
 **default**: The value of `theme.locale` if set, otherwise `[en]`.
 
@@ -639,20 +637,18 @@ performance improvements for larger sites. Before enabling, confirm that the
 theme you are using explicitly supports using a prebuilt index (the builtin
 themes do). Set to `true` to enable.
 
-!!! warning
+WARNING:
+This option requires that [Node.js] be installed and the command `node` be
+on the system path. If the call to `node` fails for any reason, a warning
+is issued and the build continues uninterrupted. You may use the `--strict`
+flag when building to cause such a failure to raise an error instead.
 
-    This option requires that [Node.js] be installed and the command `node` be
-    on the system path. If the call to `node` fails for any reason, a warning
-    is issued and the build continues uninterrupted. You may use the `--strict`
-    flag when building to cause such a failure to raise an error instead.
-
-!!! Note
-
-    On smaller sites, using a pre-built index is not recommended as it creates a
-    significant increase is bandwidth requirements with little to no noticeable
-    improvement to your users. However, for larger sites (hundreds of pages),
-    the bandwidth increase is relatively small and your users will notice a
-    significant improvement in search performance.
+NOTE:
+On smaller sites, using a pre-built index is not recommended as it creates a
+significant increase is bandwidth requirements with little to no noticeable
+improvement to your users. However, for larger sites (hundreds of pages),
+the bandwidth increase is relatively small and your users will notice a
+significant improvement in search performance.
 
 **default**: `False`
 
@@ -827,13 +823,12 @@ cannot merge navigation items. Of course, you can replace the entire `nav`
 configuration with a new one. However, it is generally expected that the entire
 navigation would be defined in the primary configuration file for a project.
 
-!!! warning
-
-    As a reminder, all path based configuration options must be relative to the
-    primary configuration file and MkDocs does not alter the paths when merging.
-    Therefore, defining paths in a parent file which is inherited by multiple
-    different sites may not work as expected. It is generally best to define
-    path based options in the primary configuration file only.
+WARNING:
+As a reminder, all path based configuration options must be relative to the
+primary configuration file and MkDocs does not alter the paths when merging.
+Therefore, defining paths in a parent file which is inherited by multiple
+different sites may not work as expected. It is generally best to define
+path based options in the primary configuration file only.
 
 [Theme Developer Guide]: ../dev-guide/themes.md
 [variables that are available]: ../dev-guide/themes.md#template-variables

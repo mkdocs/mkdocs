@@ -223,8 +223,7 @@ configuration documentation for details.
     string. In that case, if `use_directory_urls` is not explicitly set to
     `false`, a warning will be issued (#2189).
 
-    !!! note
-        This was reverted in release 1.2.2
+    NOTE: This was reverted in release 1.2.2
 
 * The `google_analytics` configuration option is deprecated as Google appears to
   be phasing it out in favor of its new Google Analytics 4 property. See the

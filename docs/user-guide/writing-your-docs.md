@@ -26,12 +26,11 @@ extensions may be used for your Markdown source files: `markdown`, `mdown`,
 `mkdn`, `mkd`, `md`. All Markdown files included in your documentation
 directory will be rendered in the built site regardless of any settings.
 
-!!! note
-
-    Files and directories with names which begin with a dot (for example:
-    `.foo.md` or `.bar/baz.md`) are ignored by MkDocs, which matches the
-    behavior of most web servers. There is no option to override this
-    behavior.
+NOTE:
+Files and directories with names which begin with a dot (for example:
+`.foo.md` or `.bar/baz.md`) are ignored by MkDocs, which matches the
+behavior of most web servers. There is no option to override this
+behavior.
 
 You can also create multi-page documentation, by creating several Markdown
 files:
@@ -214,12 +213,12 @@ Please see the [project license](license.md) for further details.
 When the MkDocs build runs, these Markdown links will automatically be
 transformed into an HTML hyperlink to the appropriate HTML page.
 
-!!! warning
-    Using absolute paths with links is not officially supported. Relative paths
-    are adjusted by MkDocs to ensure they are always relative to the page. Absolute
-    paths are not modified at all. This means that your links using absolute paths
-    might work fine in your local environment but they might break once you deploy
-    them to your production server.
+WARNING:
+Using absolute paths with links is not officially supported. Relative paths
+are adjusted by MkDocs to ensure they are always relative to the page. Absolute
+paths are not modified at all. This means that your links using absolute paths
+might work fine in your local environment but they might break once you deploy
+them to your production server.
 
 If the target documentation file is in another directory you'll need to make
 sure to include any relative directory path in the link.
@@ -446,15 +445,14 @@ many lines as desired. All lines are joined into a single string.
 The first blank line ends all meta-data for the document. Therefore, the first
 line of a document must not be blank.
 
-!!! note
-
-    MkDocs does not support YAML style deliminators (`---` or `...`) for
-    MultiMarkdown style meta-data. In fact, MkDocs relies on the the presence or
-    absence of the deliminators to determine whether YAML style meta-data or
-    MultiMarkdown style meta-data is being used. If the deliminators are
-    detected, but the content between the deliminators is not valid YAML
-    meta-data, MkDocs does not attempt to parse the content as MultiMarkdown
-    style meta-data.
+NOTE:
+MkDocs does not support YAML style deliminators (`---` or `...`) for
+MultiMarkdown style meta-data. In fact, MkDocs relies on the the presence or
+absence of the deliminators to determine whether YAML style meta-data or
+MultiMarkdown style meta-data is being used. If the deliminators are
+detected, but the content between the deliminators is not valid YAML
+meta-data, MkDocs does not attempt to parse the content as MultiMarkdown
+style meta-data.
 
 [YAML]: http://yaml.org
 [MultiMarkdown]: http://fletcherpenney.net/MultiMarkdown_Syntax_Guide#metadata

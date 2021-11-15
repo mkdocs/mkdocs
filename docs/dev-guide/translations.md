@@ -14,13 +14,12 @@ translations of third-party themes, please see the documentation for those
 themes. For a third-party theme to make use of MkDocs' translation tools and
 methods, that theme must be properly [configured] to make use of those tools.
 
-!!! note
-
-    Translations only apply to text contained within a theme's template, such
-    as "next" and "previous" links. The Markdown content of a page is not
-    translated. If you wish to create multilingual documentation, you need to
-    combine theme localization with a third-party
-    internationalization/localization plugin.
+NOTE:
+Translations only apply to text contained within a theme's template, such
+as "next" and "previous" links. The Markdown content of a page is not
+translated. If you wish to create multilingual documentation, you need to
+combine theme localization with a third-party
+internationalization/localization plugin.
 
 [built-in themes]: ../user-guide/choosing-your-theme.md
 [update themes]: ../about/contributing.md#submitting-changes-to-the-builtin-themes
@@ -71,13 +70,12 @@ Here is a quick summary of what you'll need to do:
 5. [Contribute your translation](#contributing-translations) through a
    Pull Request.
 
-!!! note
-
-    Translation locales are usually identified using the [ISO-639-1] (2-letter)
-    language codes. While territory/region/county codes are also supported,
-    location specific translations should only be added after the general
-    language translation has been completed and the regional dialect requires
-    use of a term which differs from the general language translation.
+NOTE:
+Translation locales are usually identified using the [ISO-639-1] (2-letter)
+language codes. While territory/region/county codes are also supported,
+location specific translations should only be added after the general
+language translation has been completed and the regional dialect requires
+use of a term which differs from the general language translation.
 
 [ISO-639-1]: https://en.wikipedia.org/wiki/ISO_639-1
 
@@ -155,9 +153,9 @@ msgid "Next"
 msgstr "Siguiente"
 ```
 
-!!! Warning
-    Do not modify the `msgid` as it is common to all translations. Just add
-    its translation in the `msgstr` item.
+WARNING:
+Do not modify the `msgid` as it is common to all translations. Just add
+its translation in the `msgstr` item.
 
 Once you have finished translating all of the terms listed in the `po` file,
 you'll want to [test your localized theme](#testing-theme-translations).
@@ -196,14 +194,14 @@ theme:
 
 Finally, run `mkdocs serve` to check out your new localized version of the theme.
 
-!!! Note
-    The build and release process takes care of compiling and distributing
-    all locales to end users so you only have to worry about contributing the
-    actual text translation `messages.po` files (the rest is ignored by git).
-
-    After you have finished testing your work, be sure to undo the change to
-    the `locale` setting in the `mkdocs.yml` file before submitting your
-    changes.
+> NOTE:
+> The build and release process takes care of compiling and distributing
+> all locales to end users so you only have to worry about contributing the
+> actual text translation `messages.po` files (the rest is ignored by git).
+>
+> After you have finished testing your work, be sure to undo the change to
+> the `locale` setting in the `mkdocs.yml` file before submitting your
+> changes.
 
 ## Updating theme documentation
 
