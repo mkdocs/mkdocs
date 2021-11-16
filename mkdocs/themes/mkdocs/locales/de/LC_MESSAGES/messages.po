@@ -77,7 +77,8 @@ msgstr "Vorherige Seite"
 
 #: mkdocs/themes/mkdocs/search-modal.html:9
 msgid "From here you can search these documents. Enter your search terms below."
-msgstr "Von hier aus können Sie diese Dokumente durchsuchen. Geben Sie unten Ihre Suchanfrage ein."
+msgstr "Von hier aus können Sie diese Dokumente durchsuchen. Geben Sie"
+" unten Ihre Suchanfrage ein."
 
 #: mkdocs/themes/mkdocs/search-modal.html:12
 msgid "Search..."
