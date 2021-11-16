@@ -498,30 +498,44 @@ class Nav(OptionallyRequired):
     Validate the Nav config.
     """
 
+    def run_validation(self, value, *, top=True):
+        if isinstance(value, list):
+            for subitem in value:
+                self._validate_nav_item(subitem)
+            if top and not value:
+                value = None
+        elif isinstance(value, dict):
+            error = f"Expected nav to be a list, got {self._repr_item(value)}"
+            if top or not value:
+                raise ValidationError(error)
+            self.warnings.append(error)  # TODO: this should be an error.
+            for subitem in value.values():
+                self.run_validation(subitem, top=False)
+        elif isinstance(value, str) and not top:
+            pass
+        else:
+            raise ValidationError(f"Expected nav to be a list, got {self._repr_item(value)}")
+        return value
+
     def _validate_nav_item(self, value):
         if isinstance(value, str):
             pass
         elif isinstance(value, dict):
             if len(value) != 1:
-                raise ValidationError(f"Expected a dict of size 1, got dict with {value.keys()}")
+                raise ValidationError(f"Expected nav item to be a dict of size 1, got {self._repr_item(value)}")
             for subnav in value.values():
                 self.run_validation(subnav, top=False)
         else:
-            raise ValidationError(f"Expected nav item to be a string or dict, got a {type(value).__name__}: {value!r}")
+            raise ValidationError(f"Expected nav item to be a string or dict, got {self._repr_item(value)}")
 
-    def run_validation(self, value, *, top=True):
-        if isinstance(value, list):
-            for subitem in value:
-                self._validate_nav_item(subitem)
-        elif isinstance(value, dict) and not top:
-            self.warnings.append(f"Expected nav to be a list, got dict with {value.keys()}")
-            for subitem in value.values():
-                self.run_validation(subitem)
-        elif isinstance(value, str) and not top:
-            pass
+    @classmethod
+    def _repr_item(cls, value):
+        if isinstance(value, dict) and value:
+            return f"dict with keys ({tuple(value.keys())})"
+        elif isinstance(value, (str, type(None))):
+            return repr(value)
         else:
-            raise ValidationError(f"Expected nav to be a list, got a {type(value).__name__}: {value!r}")
-        return value
+            return f"a {type(value).__name__}: {value!r}"
 
     def post_validation(self, config, key_name):
         # TODO: remove this when `pages` config setting is fully deprecated.
