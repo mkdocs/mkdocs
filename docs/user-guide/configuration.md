@@ -356,6 +356,28 @@ extra:
 
 ## Preview controls
 
+## Live Reloading
+
+### watch
+
+Determines additional directories to watch when running `mkdocs serve`.
+Configuration is a YAML list.
+
+```yaml
+watch:
+- directory_a
+- directory_b
+```
+
+Allows a custom default to be set without the need to pass it through the `-w`/`--watch`
+option every time the `mkdocs serve` command is called.
+
+!!! Note
+
+    The paths provided via the configuration file are relative to the configuration file.
+
+    The paths provided via the `-w`/`--watch` CLI parameters are not. 
+
 ### use_directory_urls
 
 This setting controls the style used for linking to pages within the

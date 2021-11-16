@@ -128,8 +128,8 @@ class ConfigBaseTests(unittest.TestCase):
 
     def test_load_from_missing_file(self):
 
-        self.assertRaises(exceptions.ConfigurationError,
-                          base.load_config, config_file='missing_file.yml')
+        with self.assertRaises(exceptions.ConfigurationError):
+            base.load_config(config_file='missing_file.yml')
 
     def test_load_from_open_file(self):
         """
@@ -187,8 +187,8 @@ class ConfigBaseTests(unittest.TestCase):
             config_file.close()
         finally:
             os.remove(config_file.name)
-        self.assertRaises(exceptions.ConfigurationError,
-                          base.load_config, config_file=config_file)
+        with self.assertRaises(exceptions.ConfigurationError):
+            base.load_config(config_file=config_file)
 
     def test_load_missing_required(self):
         """
@@ -202,8 +202,8 @@ class ConfigBaseTests(unittest.TestCase):
             config_file.flush()
             config_file.close()
 
-            self.assertRaises(exceptions.Abort,
-                              base.load_config, config_file=config_file.name)
+            with self.assertRaises(exceptions.Abort):
+                base.load_config(config_file=config_file.name)
         finally:
             os.remove(config_file.name)
 

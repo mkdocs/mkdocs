@@ -120,4 +120,7 @@ def get_schema():
         # A key value pair should be the string name (as the key) and a dict of config
         # options (as the value).
         ('plugins', config_options.Plugins(default=['search'])),
+
+        # a list of extra paths to watch while running `mkdocs serve`
+        ('watch', config_options.ListOfPaths(default=[]))
     )

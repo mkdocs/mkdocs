@@ -56,7 +56,8 @@ class SearchConfigTests(unittest.TestCase):
 
     def test_lang_bad_type(self):
         option = search.LangOption()
-        self.assertRaises(ValidationError, option.validate, {})
+        with self.assertRaises(ValidationError):
+            option.validate({})
 
     def test_lang_bad_code(self):
         option = search.LangOption()
