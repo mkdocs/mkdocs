@@ -535,11 +535,9 @@ class Nav(OptionallyRequired):
                 self._validate_nav_item(subitem)
             if top and not value:
                 value = None
-        elif isinstance(value, dict):
-            error = f"Expected nav to be a list, got {self._repr_item(value)}"
-            if top or not value:
-                raise ValidationError(error)
-            self.warnings.append(error)  # TODO: this should be an error.
+        elif isinstance(value, dict) and value and not top:
+            # TODO: this should be an error.
+            self.warnings.append(f"Expected nav to be a list, got {self._repr_item(value)}")
             for subitem in value.values():
                 self.run_validation(subitem, top=False)
         elif isinstance(value, str) and not top:
@@ -562,7 +560,7 @@ class Nav(OptionallyRequired):
     @classmethod
     def _repr_item(cls, value):
         if isinstance(value, dict) and value:
-            return f"dict with keys ({tuple(value.keys())})"
+            return f"dict with keys {tuple(value.keys())}"
         elif isinstance(value, (str, type(None))):
             return repr(value)
         else:
