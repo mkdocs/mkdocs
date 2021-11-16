@@ -147,9 +147,8 @@ class Type(OptionallyRequired):
         if not isinstance(value, self._type):
             msg = f"Expected type: {self._type} but received: {type(value)}"
         elif self.length is not None and len(value) != self.length:
-            msg = ("Expected type: {0} with length {2} but received: {1} with "
-                   "length {3}").format(self._type, value, self.length,
-                                        len(value))
+            msg = (f"Expected type: {self._type} with length {self.length}"
+                   f" but received: {value} with length {len(value)}")
         else:
             return value
 
@@ -274,10 +273,10 @@ class IpAddress(OptionallyRequired):
         host = config[key_name].host
         if key_name == 'dev_addr' and host in ['0.0.0.0', '::']:
             self.warnings.append(
-                ("The use of the IP address '{}' suggests a production environment "
+                (f"The use of the IP address '{host}' suggests a production environment "
                  "or the use of a proxy to connect to the MkDocs server. However, "
                  "the MkDocs' server is intended for local development purposes only. "
-                 "Please use a third party production-ready server instead.").format(host)
+                 "Please use a third party production-ready server instead.")
             )
 
 
@@ -357,6 +356,7 @@ class FilesystemObject(Type):
     """
     Base class for options that point to filesystem objects.
     """
+
     def __init__(self, exists=False, **kwargs):
         super().__init__(type_=str, **kwargs)
         self.exists = exists
@@ -392,9 +392,9 @@ class Dir(FilesystemObject):
         # Validate that the dir is not the parent dir of the config file.
         if os.path.dirname(config.config_file_path) == config[key_name]:
             raise ValidationError(
-                ("The '{0}' should not be the parent directory of the config "
-                 "file. Use a child directory instead so that the '{0}' "
-                 "is a sibling of the config file.").format(key_name))
+                (f"The '{key_name}' should not be the parent directory of the"
+                 " config file. Use a child directory instead so that the"
+                 f" '{key_name}' is a sibling of the config file."))
 
 
 class File(FilesystemObject):
@@ -405,6 +405,36 @@ class File(FilesystemObject):
     """
     existence_test = staticmethod(os.path.isfile)
     name = 'file'
+
+
+class ListOfPaths(OptionallyRequired):
+    """
+    List of Paths Config Option
+
+    A list of file system paths. Raises an error if one of the paths does not exist.
+    """
+
+    def __init__(self, default=[], required=False):
+        self.config_dir = None
+        super().__init__(default, required)
+
+    def pre_validation(self, config, key_name):
+        self.config_dir = os.path.dirname(config.config_file_path) if config.config_file_path else None
+
+    def run_validation(self, value):
+        if not isinstance(value, list):
+            raise ValidationError(f"Expected a list, got {type(value)}")
+        if len(value) == 0:
+            return
+        paths = []
+        for path in value:
+            if self.config_dir and not os.path.isabs(path):
+                path = os.path.join(self.config_dir, path)
+            if not os.path.exists(path):
+                raise ValidationError(f"The path {path} does not exist.")
+            path = os.path.abspath(path)
+            paths.append(path)
+        return paths
 
 
 class SiteDir(Dir):
@@ -487,7 +517,7 @@ class Theme(BaseConfigOption):
                                   format(path=theme_config['custom_dir'], name=key_name))
 
         if 'locale' in theme_config and not isinstance(theme_config['locale'], str):
-            raise ValidationError("'{name}.locale' must be a string.".format(name=theme_config['name']))
+            raise ValidationError(f"'{theme_config['name']}.locale' must be a string.")
 
         config[key_name] = theme.Theme(**theme_config)
 
@@ -647,9 +677,9 @@ class Plugins(OptionallyRequired):
         Plugin = self.installed_plugins[name].load()
 
         if not issubclass(Plugin, plugins.BasePlugin):
-            raise ValidationError('{}.{} must be a subclass of {}.{}'.format(
-                Plugin.__module__, Plugin.__name__, plugins.BasePlugin.__module__,
-                plugins.BasePlugin.__name__))
+            raise ValidationError(
+                f'{Plugin.__module__}.{Plugin.__name__} must be a subclass of'
+                f' {plugins.BasePlugin.__module__}.{plugins.BasePlugin.__name__}')
 
         plugin = Plugin()
         errors, warnings = plugin.load_config(config, self.config_file_path)

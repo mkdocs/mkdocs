@@ -171,9 +171,10 @@ nav:
     - 'about.md'
 ```
 
-All paths must be relative to the `mkdocs.yml` configuration file. See the
-section on [configuring pages and navigation] for a more detailed breakdown,
-including how to create sub-sections.
+All paths in the navigation configuration must be relative to the
+[`docs_dir`](#docs_dir) configuration option. See the section on [configuring
+pages and navigation] for a more detailed breakdown, including how to create
+sub-sections.
 
 Navigation items may also include links to external sites. While titles are
 optional for internal links, they are required for external links. An external
@@ -354,6 +355,28 @@ extra:
 **default**: By default `extra` will be an empty key-value mapping.
 
 ## Preview controls
+
+## Live Reloading
+
+### watch
+
+Determines additional directories to watch when running `mkdocs serve`.
+Configuration is a YAML list.
+
+```yaml
+watch:
+- directory_a
+- directory_b
+```
+
+Allows a custom default to be set without the need to pass it through the `-w`/`--watch`
+option every time the `mkdocs serve` command is called.
+
+!!! Note
+
+    The paths provided via the configuration file are relative to the configuration file.
+
+    The paths provided via the `-w`/`--watch` CLI parameters are not. 
 
 ### use_directory_urls
 

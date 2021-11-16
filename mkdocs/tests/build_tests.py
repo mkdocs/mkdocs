@@ -318,7 +318,8 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         file = File('missing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
         page = Page('Foo', file, cfg)
         with self.assertLogs('mkdocs', level='ERROR') as cm:
-            self.assertRaises(OSError, build._populate_page, page, cfg, Files([file]))
+            with self.assertRaises(OSError):
+                build._populate_page(page, cfg, Files([file]))
         self.assertEqual(
             cm.output, [
                 'ERROR:mkdocs.structure.pages:File not found: missing.md',
@@ -334,7 +335,8 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         file = File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
         page = Page('Foo', file, cfg)
         with self.assertLogs('mkdocs', level='ERROR') as cm:
-            self.assertRaises(PluginError, build._populate_page, page, cfg, Files([file]))
+            with self.assertRaises(PluginError):
+                build._populate_page(page, cfg, Files([file]))
         self.assertEqual(
             cm.output, [
                 "ERROR:mkdocs.commands.build:Error reading page 'index.md':"
@@ -427,15 +429,14 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         page.markdown = 'page content'
         page.content = '<p>page content</p>'
         with self.assertLogs('mkdocs', level='ERROR') as cm:
-            self.assertRaises(
-                    OSError,
-                    build._build_page,
+            with self.assertRaises(OSError):
+                build._build_page(
                     page,
                     cfg,
                     files,
                     nav,
                     self._get_env_with_null_translations(cfg)
-            )
+                )
         self.assertEqual(
             cm.output,
             ["ERROR:mkdocs.commands.build:Error building page 'index.md': Error message."]
@@ -454,7 +455,8 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         page.markdown = 'page content'
         page.content = '<p>page content</p>'
         with self.assertLogs('mkdocs', level='ERROR') as cm:
-            self.assertRaises(PluginError, build._build_page, page, cfg, files, nav, cfg['theme'].get_env())
+            with self.assertRaises(PluginError):
+                build._build_page(page, cfg, files, nav, cfg['theme'].get_env())
         self.assertEqual(
             cm.output,
             ["ERROR:mkdocs.commands.build:Error building page 'index.md':"]

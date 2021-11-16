@@ -126,7 +126,7 @@ class Config(UserDict):
             raise exceptions.ConfigurationError(
                 "The configuration is invalid. The expected type was a key "
                 "value mapping (a python dict) but we got an object of type: "
-                "{}".format(type(patch)))
+                f"{type(patch)}")
 
         self.user_configs.append(patch)
         self.data.update(patch)
@@ -234,11 +234,11 @@ def load_config(config_file=None, **kwargs):
 
     if len(errors) > 0:
         raise exceptions.Abort(
-            "Aborted with {} Configuration Errors!".format(len(errors))
+            f"Aborted with {len(errors)} Configuration Errors!"
         )
     elif cfg['strict'] and len(warnings) > 0:
         raise exceptions.Abort(
-            "Aborted with {} Configuration Warnings in 'strict' mode!".format(len(warnings))
+            f"Aborted with {len(warnings)} Configuration Warnings in 'strict' mode!"
         )
 
     return cfg
