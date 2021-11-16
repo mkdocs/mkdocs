@@ -177,6 +177,9 @@ def _populate_page(page, config, files, dirty=False):
         page.content = config['plugins'].run_event(
             'page_content', page.content, page=page, config=config, files=files
         )
+        
+        del page.markdown
+        
     except Exception as e:
         message = f"Error reading page '{page.file.src_path}':"
         # Prevent duplicated the error message because it will be printed immediately afterwards.
