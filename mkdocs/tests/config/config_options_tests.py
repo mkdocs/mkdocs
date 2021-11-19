@@ -749,6 +749,7 @@ class NavTest(unittest.TestCase):
         self.assertEqual(['index.md', {'Page': 'page.md'}], value)
 
         option.post_validation({'extra_stuff': []}, 'extra_stuff')
+        self.assertEqual(option.warnings, [])
 
     def test_provided_empty(self):
         option = config_options.Nav()
@@ -756,6 +757,7 @@ class NavTest(unittest.TestCase):
         self.assertEqual(None, value)
 
         option.post_validation({'extra_stuff': []}, 'extra_stuff')
+        self.assertEqual(option.warnings, [])
 
     def test_normal_nav(self):
         nav = yaml_load(textwrap.dedent('''\
@@ -768,20 +770,27 @@ class NavTest(unittest.TestCase):
 
         option = config_options.Nav()
         self.assertEqual(option.validate(nav), nav)
+        self.assertEqual(option.warnings, [])
 
-    def test_invalid_type(self):
+    def test_invalid_type_dict(self):
         option = config_options.Nav()
         with self.assertRaises(config_options.ValidationError) as cm:
             option.validate({})
         self.assertEqual(str(cm.exception), "Expected nav to be a list, got a dict: {}")
 
-    def test_invalid_config_int(self):
+    def test_invalid_type_int(self):
+        option = config_options.Nav()
+        with self.assertRaises(config_options.ValidationError) as cm:
+            option.validate(5)
+        self.assertEqual(str(cm.exception), "Expected nav to be a list, got a int: 5")
+
+    def test_invalid_item_int(self):
         option = config_options.Nav()
         with self.assertRaises(config_options.ValidationError) as cm:
             option.validate([1])
         self.assertEqual(str(cm.exception), "Expected nav item to be a string or dict, got a int: 1")
 
-    def test_invalid_config_none(self):
+    def test_invalid_item_none(self):
         option = config_options.Nav()
         with self.assertRaises(config_options.ValidationError) as cm:
             option.validate([None])
@@ -790,13 +799,13 @@ class NavTest(unittest.TestCase):
     def test_invalid_children_config_int(self):
         option = config_options.Nav()
         with self.assertRaises(config_options.ValidationError) as cm:
-            option.validate([{"foo.md": {"bar.md": 1}}])
+            option.validate([{"foo.md": [{"bar.md": 1}]}])
         self.assertEqual(str(cm.exception), "Expected nav to be a list, got a int: 1")
 
     def test_invalid_children_config_none(self):
         option = config_options.Nav()
         with self.assertRaises(config_options.ValidationError) as cm:
-            option.validate([{"foo.md": {"bar.md": None}}])
+            option.validate([{"foo.md": None}])
         self.assertEqual(str(cm.exception), "Expected nav to be a list, got None")
 
     def test_invalid_children_empty_dict(self):
@@ -821,6 +830,11 @@ class NavTest(unittest.TestCase):
             option.validate(nav)
         msg = "Expected nav item to be a dict of size 1, got dict with keys ('bbb', 'ccc')"
         self.assertEqual(str(cm.exception), msg)
+
+    def test_warns_for_dict(self):
+        option = config_options.Nav()
+        option.validate([{"a": {"b": "c.md", "d": "e.md"}}])
+        self.assertEqual(option.warnings, ["Expected nav to be a list, got dict with keys ('b', 'd')"])
 
 
 class PrivateTest(unittest.TestCase):
