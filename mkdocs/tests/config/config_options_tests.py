@@ -125,6 +125,11 @@ class DeprecatedTest(unittest.TestCase):
         with self.assertRaises(config_options.ValidationError):
             option.validate(config['d'])
 
+    def test_removed_option(self):
+        option = config_options.Deprecated(removed=True, moved_to='foo')
+        with self.assertRaises(config_options.ValidationError):
+            option.pre_validation({'d': 'value'}, 'd')
+
     def test_deprecated_option_with_type_undefined(self):
         option = config_options.Deprecated(option_type=config_options.Type(str))
         option.validate(None)
