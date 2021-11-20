@@ -529,23 +529,42 @@ class Nav(OptionallyRequired):
     Validate the Nav config.
     """
 
-    def run_validation(self, value):
+    def run_validation(self, value, *, top=True):
+        if isinstance(value, list):
+            for subitem in value:
+                self._validate_nav_item(subitem)
+            if top and not value:
+                value = None
+        elif isinstance(value, dict) and value and not top:
+            # TODO: this should be an error.
+            self.warnings.append(f"Expected nav to be a list, got {self._repr_item(value)}")
+            for subitem in value.values():
+                self.run_validation(subitem, top=False)
+        elif isinstance(value, str) and not top:
+            pass
+        else:
+            raise ValidationError(f"Expected nav to be a list, got {self._repr_item(value)}")
+        return value
 
-        if not isinstance(value, list):
-            raise ValidationError(f"Expected a list, got {type(value)}")
+    def _validate_nav_item(self, value):
+        if isinstance(value, str):
+            pass
+        elif isinstance(value, dict):
+            if len(value) != 1:
+                raise ValidationError(f"Expected nav item to be a dict of size 1, got {self._repr_item(value)}")
+            for subnav in value.values():
+                self.run_validation(subnav, top=False)
+        else:
+            raise ValidationError(f"Expected nav item to be a string or dict, got {self._repr_item(value)}")
 
-        if len(value) == 0:
-            return
-
-        config_types = {type(item) for item in value}
-        if config_types.issubset({str, dict}):
-            return value
-
-        types = ', '.join(set(
-            item_type.__name__ for item_type in config_types
-        ))
-        raise ValidationError(
-            f"Invalid navigation config types. Expected str and dict, got: {types}")
+    @classmethod
+    def _repr_item(cls, value):
+        if isinstance(value, dict) and value:
+            return f"dict with keys {tuple(value.keys())}"
+        elif isinstance(value, (str, type(None))):
+            return repr(value)
+        else:
+            return f"a {type(value).__name__}: {value!r}"
 
     def post_validation(self, config, key_name):
         # TODO: remove this when `pages` config setting is fully deprecated.
