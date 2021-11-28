@@ -58,7 +58,7 @@ theme:
 > small adjustments to an existing theme.
 >
 > For more specific information, see [Customizing Your Theme].
-
+<!-- -->
 > WARNING:
 > A theme's [configuration] defined in a `mkdocs_theme.yml` file is not loaded
 > from `theme.custom_dir`. When an entire theme exists in `theme.custom_dir`

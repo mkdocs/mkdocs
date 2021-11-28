@@ -75,7 +75,7 @@ mkdocs, version 1.2.0 from /usr/local/lib/python3.8/site-packages/mkdocs (Python
 >
 > See the [click-man documentation] for an explanation of why manpages are
 > not automatically generated and installed by pip.
-
+<!-- -->
 > NOTE:
 > If you are using Windows, some of the above commands may not work
 > out-of-the-box.
