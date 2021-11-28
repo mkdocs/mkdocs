@@ -1,14 +1,6 @@
 name: CI
 
-on:
-  push:
-    branches:
-      - master
-    tags:
-      - '**'
-  pull_request:
-    branches:
-      - '**'
+on: [push, pull_request]
 
 jobs:
   test:
