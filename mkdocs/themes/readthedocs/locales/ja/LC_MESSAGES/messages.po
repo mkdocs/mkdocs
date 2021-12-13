@@ -1,12 +1,13 @@
 # Japanese translations for MkDocs.
 # Copyright (C) 2021 MkDocs
 # This file is distributed under the same license as the MkDocs project.
+# Goto Hayato <habita.gh@gmail.com>, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: MkDocs 1.2\n"
 "Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
-"POT-Creation-Date: 2021-04-08 22:46+0200\n"
+"POT-Creation-Date: 2021-09-27 10:43-0400\n"
 "PO-Revision-Date: 2021-07-31 12:07+0900\n"
 "Last-Translator: Goto Hayato <habita.gh@gmail.com>\n"
 "Language: ja\n"
@@ -21,6 +22,18 @@ msgstr ""
 msgid "Page not found"
 msgstr "ページが見つかりません"
 
+#: mkdocs/themes/readthedocs/base.html:97
+msgid "Logo"
+msgstr "ロゴ"
+
+#: mkdocs/themes/readthedocs/base.html:111
+msgid "Navigation menu"
+msgstr "ナビゲーションメニュー"
+
+#: mkdocs/themes/readthedocs/base.html:140
+msgid "Mobile navigation menu"
+msgstr "モバイルナビゲーションメニュー"
+
 #: mkdocs/themes/readthedocs/breadcrumbs.html:3
 msgid "Docs"
 msgstr "ドキュメント"
@@ -30,17 +43,25 @@ msgstr "ドキュメント"
 msgid "Edit on %(repo_name)s"
 msgstr "%(repo_name)s で編集"
 
+#: mkdocs/themes/readthedocs/breadcrumbs.html:31
+msgid "Breadcrumb Navigation"
+msgstr "パンくずリストナビゲーション"
+
 #: mkdocs/themes/readthedocs/breadcrumbs.html:33
 #: mkdocs/themes/readthedocs/footer.html:7
-#: mkdocs/themes/readthedocs/versions.html:14
-msgid "Next"
-msgstr "次へ"
+#: mkdocs/themes/readthedocs/versions.html:17
+msgid "Previous"
+msgstr "前へ"
 
 #: mkdocs/themes/readthedocs/breadcrumbs.html:36
 #: mkdocs/themes/readthedocs/footer.html:10
-#: mkdocs/themes/readthedocs/versions.html:11
-msgid "Previous"
-msgstr "前へ"
+#: mkdocs/themes/readthedocs/versions.html:20
+msgid "Next"
+msgstr "次へ"
+
+#: mkdocs/themes/readthedocs/footer.html:5
+msgid "Footer Navigation"
+msgstr "フッターナビゲーション"
 
 #: mkdocs/themes/readthedocs/footer.html:25
 #, python-format
@@ -73,4 +94,8 @@ msgstr "検索しています..."
 #: mkdocs/themes/readthedocs/searchbox.html:3
 msgid "Search docs"
 msgstr "ドキュメントを検索"
+
+#: mkdocs/themes/readthedocs/versions.html:1
+msgid "Versions"
+msgstr "バージョン"
 
