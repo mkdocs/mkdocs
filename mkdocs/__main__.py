@@ -88,6 +88,7 @@ use_directory_urls_help = "Use directory URLs when building pages (the default).
 reload_help = "Enable the live reloading in the development server (this is the default)"
 no_reload_help = "Disable the live reloading in the development server."
 dirty_reload_help = "Enable the live reloading in the development server, but only re-build files that have changed"
+cached_help = "Use a cached build directory. Only re-build files that have changed."
 commit_message_help = ("A commit message to use when committing to the "
                        "Github Pages remote branch. Commit {sha} and MkDocs {version} are available as expansions")
 remote_branch_help = ("The remote branch to commit to for Github Pages. This "
@@ -171,13 +172,14 @@ def cli():
 @click.option('--livereload', 'livereload', flag_value='livereload', help=reload_help, default=True)
 @click.option('--no-livereload', 'livereload', flag_value='no-livereload', help=no_reload_help)
 @click.option('--dirtyreload', 'livereload', flag_value='dirty', help=dirty_reload_help)
+@click.option('--cached', help=cached_help, default=False)
 @click.option('--watch-theme', help=watch_theme_help, is_flag=True)
 @click.option('-w', '--watch', help=watch_help, type=click.Path(exists=True), multiple=True, default=[])
 @common_config_options
 @common_options
-def serve_command(dev_addr, livereload, watch, **kwargs):
+def serve_command(dev_addr, livereload, cached, watch, **kwargs):
     """Run the builtin development server"""
-    serve.serve(dev_addr=dev_addr, livereload=livereload, watch=watch, **kwargs)
+    serve.serve(dev_addr=dev_addr, livereload=livereload, cached=cached, watch=watch, **kwargs)
 
 
 @cli.command(name="build")

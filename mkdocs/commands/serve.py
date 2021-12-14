@@ -1,6 +1,7 @@
 import logging
 import shutil
 import tempfile
+import os
 from urllib.parse import urlsplit
 from os.path import isdir, isfile, join
 
@@ -13,7 +14,7 @@ log = logging.getLogger(__name__)
 
 
 def serve(config_file=None, dev_addr=None, strict=None, theme=None,
-          theme_dir=None, livereload='livereload', watch_theme=False, watch=[], **kwargs):
+          theme_dir=None, livereload='livereload', cached=False, watch_theme=False, watch=[], **kwargs):
     """
     Start the MkDocs development server
 
@@ -38,9 +39,13 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
             strict=strict,
             theme=theme,
             theme_dir=theme_dir,
-            site_dir=site_dir,
             **kwargs
         )
+
+        if not cached:
+            config["site_dir"] = site_dir
+        elif not config["site_dir"]:
+            config["site_dir"] = os.path.join(os.path.dirname(config_file), "__mkdocs_cache__")
 
         # combine CLI watch arguments with config file values
         if config["watch"] is None:
@@ -97,5 +102,5 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
         # Avoid ugly, unhelpful traceback
         raise Abort(str(e))
     finally:
-        if isdir(site_dir):
+        if isdir(site_dir) and not cached:
             shutil.rmtree(site_dir)
