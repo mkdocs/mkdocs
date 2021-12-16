@@ -65,6 +65,8 @@ class SubConfig(BaseConfigOption, Config):
             key, err = failed[0]
             raise ValidationError(f"Sub-option {key!r} configuration error: {err}")
 
+        return self
+
 
 class ConfigItems(BaseConfigOption):
     """
