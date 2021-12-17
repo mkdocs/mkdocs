@@ -1,13 +1,6 @@
-import json
-
 import jinja2
-import markupsafe
 
 from mkdocs.utils import normalize_url
-
-
-def tojson(obj, **kwargs):
-    return markupsafe.Markup(json.dumps(obj, **kwargs))
 
 
 @jinja2.contextfilter
