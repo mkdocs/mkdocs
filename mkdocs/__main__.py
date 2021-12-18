@@ -10,7 +10,6 @@ import shutil
 from mkdocs import __version__
 from mkdocs import utils
 from mkdocs import config
-from mkdocs.commands import build, gh_deploy, new, serve
 
 
 if sys.platform.startswith("win"):
@@ -177,6 +176,7 @@ def cli():
 @common_options
 def serve_command(dev_addr, livereload, watch, **kwargs):
     """Run the builtin development server"""
+    from mkdocs.commands import serve
     serve.serve(dev_addr=dev_addr, livereload=livereload, watch=watch, **kwargs)
 
 
@@ -187,6 +187,7 @@ def serve_command(dev_addr, livereload, watch, **kwargs):
 @common_options
 def build_command(clean, **kwargs):
     """Build the MkDocs documentation"""
+    from mkdocs.commands import build
     build.build(config.load_config(**kwargs), dirty=not clean)
 
 
@@ -208,6 +209,7 @@ def gh_deploy_command(clean, message, remote_branch, remote_name, force, ignore_
         remote_name=remote_name,
         **kwargs
     )
+    from mkdocs.commands import build, gh_deploy
     build.build(cfg, dirty=not clean)
     gh_deploy.gh_deploy(cfg, message=message, force=force, ignore_version=ignore_version, shell=shell)
 
@@ -217,6 +219,7 @@ def gh_deploy_command(clean, message, remote_branch, remote_name, force, ignore_
 @common_options
 def new_command(project_directory):
     """Create a new MkDocs project"""
+    from mkdocs.commands import new
     new.new(project_directory)
 
 
