@@ -121,5 +121,8 @@ def get_schema():
         ('plugins', config_options.Plugins(default=['search'])),
 
         # a list of extra paths to watch while running `mkdocs serve`
-        ('watch', config_options.ListOfPaths(default=[]))
+        ('watch', config_options.ListOfPaths(default=[])),
+
+        # Clean the directory names when auto generating page names from them
+        ('clean_names', config_options.Type(bool, default=True))
     )

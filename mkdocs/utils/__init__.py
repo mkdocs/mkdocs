@@ -398,7 +398,7 @@ def find_or_create_node(branch, key):
     return new_branch
 
 
-def nest_paths(paths):
+def nest_paths(paths, config):
     """
     Given a list of paths, convert them into a nested structure that will match
     the pages config.
@@ -415,8 +415,11 @@ def nest_paths(paths):
         parts = directory.split(os.path.sep)
 
         branch = nested
+
+        clean_names = config.get('clean_names', None)
         for part in parts:
-            part = dirname_to_title(part)
+            if clean_names:
+                part = dirname_to_title(part)
             branch = find_or_create_node(branch, part)
 
         branch.append(path)

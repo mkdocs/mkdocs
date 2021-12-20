@@ -36,6 +36,8 @@ class Page:
         self._set_canonical_url(config.get('site_url', None))
         self._set_edit_url(config.get('repo_url', None), config.get('edit_uri', None))
 
+        self.clean_names = config.get('clean_names', None)
+
         # Placeholders to be filled in later in the build process.
         self.markdown = None
         self.content = None
@@ -152,10 +154,13 @@ class Page:
             if self.is_homepage:
                 title = 'Home'
             else:
-                title = self.file.name.replace('-', ' ').replace('_', ' ')
-                # Capitalize if the filename was all lowercase, otherwise leave it as-is.
-                if title.lower() == title:
-                    title = title.capitalize()
+                if self.clean_names:
+                    title = self.file.name.replace('-', ' ').replace('_', ' ')
+                    # Capitalize if the filename was all lowercase, otherwise leave it as-is.
+                    if title.lower() == title:
+                        title = title.capitalize()
+                else:
+                    title = self.file.name
 
         self.title = title
 
