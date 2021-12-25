@@ -223,3 +223,7 @@ See the documentation for your server of choice for more information.
 [use_directory_urls]: ./configuration.md#use_directory_urls
 [search]: ./configuration.md#search
 [internal links]: ./writing-your-docs.md#internal-links
+
+## Layer0
+
+See [Creating and Deploying a MkDocs App with Layer0](https://docs.layer0.co/guides/mkdocs).
