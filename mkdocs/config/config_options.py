@@ -354,12 +354,8 @@ class RepoURL(URL):
                 edit_uri = ''
 
         # ensure a well-formed edit_uri
-        if edit_uri:
-            if not edit_uri.startswith(('?', '#')) \
-                    and not config['repo_url'].endswith('/'):
-                config['repo_url'] += '/'
-            if not edit_uri.endswith('/'):
-                edit_uri += '/'
+        if edit_uri and not edit_uri.endswith('/'):
+            edit_uri += '/'
 
         config['edit_uri'] = edit_uri
 
