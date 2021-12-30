@@ -20,29 +20,46 @@ The current and past members of the MkDocs team.
 * [@tomchristie](https://github.com/tomchristie/)
 * [@d0ugal](https://github.com/d0ugal/)
 * [@waylan](https://github.com/waylan/)
+* [@oprypin](https://github.com/oprypin/)
+* [@ultrabug](https://github.com/ultrabug/)
+
+## Version 1.2.3 (2021-10-12)
+
+* Built-in themes now also support these languages:
+    * Simplified Chinese (#2497)
+    * Japanese (#2525)
+    * Brazilian Portuguese (#2535)
+    * Spanish (#2545, previously #2396)
+
+* Third-party plugins will take precedence over built-in plugins with the same name (#2591)
+
+* Bugfix: Fix ability to load translations for some languages: core support (#2565) and search plugin support with fallbacks (#2602)
+
+* Bugfix (regression in 1.2): Prevent directory traversal in the dev server (#2604)
+
+* Bugfix (regression in 1.2): Prevent webserver warnings from being treated as a build failure in strict mode (#2607)
+
+* Bugfix: Correctly print colorful messages in the terminal on Windows (#2606)
+
+* Bugfix: Python version 3.10 was displayed incorrectly in `--version` (#2618)
+
+Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.2.2...1.2.3).
 
 ## Version 1.2.2 (2021-07-18)
 
-* Bugfix (regression in 1.2): Fix serving files/paths with Unicode characters
-  (#2464)
+* Bugfix (regression in 1.2): Fix serving files/paths with Unicode characters (#2464)
 
-* Bugfix (regression in 1.2): Revert livereload file watching to use polling
-  observer (#2477)
+* Bugfix (regression in 1.2): Revert livereload file watching to use polling observer (#2477)
 
-    This had to be done to reasonably support usages that span virtual
-    filesystems such as non-native Docker and network mounts.
+    This had to be done to reasonably support usages that span virtual filesystems such as non-native Docker and network mounts.
 
-    This goes back to the polling approach, very similar to that was always used
-    prior, meaning most of the same downsides with latency and CPU usage.
+    This goes back to the polling approach, very similar to that was always used prior, meaning most of the same downsides with latency and CPU usage.
 
-* Revert from 1.2: Remove the requirement of a `site_url` config and the
-  restriction on `use_directory_urls` (#2490)
-  
-* Bugfix (regression in 1.2): Don't require trailing slash in the URL when
-  serving a directory index in `mkdocs serve` server (#2507)
+* Revert from 1.2: Remove the requirement of a `site_url` config and the restriction on `use_directory_urls` (#2490)
 
-    Instead of showing a 404 error, detect if it's a directory and redirect to a
-    path with a trailing slash added, like before.
+* Bugfix (regression in 1.2): Don't require trailing slash in the URL when serving a directory index in `mkdocs serve` server (#2507)
+
+    Instead of showing a 404 error, detect if it's a directory and redirect to a path with a trailing slash added, like before.
 
 * Bugfix: Fix `gh_deploy` with config-file in the current directory (#2481)
 
@@ -52,8 +69,7 @@ The current and past members of the MkDocs team.
 
 * Stop treating ";" as a special character in URLs: urlparse -> urlsplit (#2502)
 
-* Improve build performance for sites with many pages (partly already done in
-  1.2) (#2407)
+* Improve build performance for sites with many pages (partly already done in 1.2) (#2407)
 
 ## Version 1.2.1 (2021-06-09)
 
@@ -211,7 +227,7 @@ configuration documentation for details.
         This was reverted in release 1.2.2
 
 * The `google_analytics` configuration option is deprecated as Google appears to
-  be fazing it out in favor of its new Google Analytics 4 property. See the
+  be phasing it out in favor of its new Google Analytics 4 property. See the
   documentation for your theme for alternatives which can be configured as part
   of your theme configuration. For example, the [mkdocs][mkdocs-theme] and
   [readthedocs][rtd-theme] themes have each added a new `theme.analytics.gtag`

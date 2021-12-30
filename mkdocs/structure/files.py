@@ -142,8 +142,9 @@ class File:
         return not self.__eq__(other)
 
     def __repr__(self):
-        return "File(src_path='{}', dest_path='{}', name='{}', url='{}')".format(
-            self.src_path, self.dest_path, self.name, self.url
+        return (
+            f"File(src_path='{self.src_path}', dest_path='{self.dest_path}',"
+            f" name='{self.name}', url='{self.url}')"
         )
 
     def _get_stem(self):

@@ -13,7 +13,7 @@ log = logging.getLogger(__name__)
 
 
 def serve(config_file=None, dev_addr=None, strict=None, theme=None,
-          theme_dir=None, livereload='livereload', watch_theme=False, **kwargs):
+          theme_dir=None, livereload='livereload', watch_theme=False, watch=[], **kwargs):
     """
     Start the MkDocs development server
 
@@ -41,6 +41,13 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
             site_dir=site_dir,
             **kwargs
         )
+
+        # combine CLI watch arguments with config file values
+        if config["watch"] is None:
+            config["watch"] = watch
+        else:
+            config["watch"].extend(watch)
+
         # Override a few config settings after validation
         config['site_url'] = 'http://{}{}'.format(config['dev_addr'], mount_path(config))
 
@@ -76,6 +83,9 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
 
             # Run `serve` plugin events.
             server = config['plugins'].run_event('serve', server, config=config, builder=builder)
+
+            for item in config['watch']:
+                server.watch(item)
 
         try:
             server.serve()

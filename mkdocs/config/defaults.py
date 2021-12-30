@@ -20,8 +20,7 @@ def get_schema():
 
         # Defines the structure of the navigation.
         ('nav', config_options.Nav()),
-        # TODO: remove this when the `pages` config setting is fully deprecated.
-        ('pages', config_options.Nav()),
+        ('pages', config_options.Deprecated(removed=True, moved_to='nav')),
 
         # The full URL to where the documentation will be hosted
         ('site_url', config_options.URL(is_dir=True)),
@@ -120,4 +119,7 @@ def get_schema():
         # A key value pair should be the string name (as the key) and a dict of config
         # options (as the value).
         ('plugins', config_options.Plugins(default=['search'])),
+
+        # a list of extra paths to watch while running `mkdocs serve`
+        ('watch', config_options.ListOfPaths(default=[]))
     )

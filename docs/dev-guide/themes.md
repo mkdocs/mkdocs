@@ -728,14 +728,14 @@ Bootswatch theme].
 The following layout is recommended for themes. Two files at the top level
 directory called `MANIFEST.in` and `setup.py` beside the theme directory which
 contains an empty `__init__.py` file, a theme configuration file
-(`mkdocs-theme.yml`), and your template and media files.
+(`mkdocs_theme.yml`), and your template and media files.
 
 ```no-highlight
 .
 |-- MANIFEST.in
 |-- theme_name
 |   |-- __init__.py
-|   |-- mkdocs-theme.yml
+|   |-- mkdocs_theme.yml
 |   |-- main.html
 |   |-- styles.css
 `-- setup.py

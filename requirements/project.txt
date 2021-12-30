@@ -1,7 +1,6 @@
 babel>=2.9.0
 click>=7.0
 Jinja2>=2.10.2
-MarkupSafe>=1.1.0
 Markdown>=3.2.1
 PyYAML>=5.2
 watchdog>=2.0.0

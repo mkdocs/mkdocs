@@ -147,9 +147,8 @@ class Type(OptionallyRequired):
         if not isinstance(value, self._type):
             msg = f"Expected type: {self._type} but received: {type(value)}"
         elif self.length is not None and len(value) != self.length:
-            msg = ("Expected type: {0} with length {2} but received: {1} with "
-                   "length {3}").format(self._type, value, self.length,
-                                        len(value))
+            msg = (f"Expected type: {self._type} with length {self.length}"
+                   f" but received: {value} with length {len(value)}")
         else:
             return value
 
@@ -194,21 +193,33 @@ class Deprecated(BaseConfigOption):
     ConfigOption instance, then the value is validated against that type.
     """
 
-    def __init__(self, moved_to=None, message='', option_type=None):
+    def __init__(self, moved_to=None, message=None, removed=False, option_type=None):
         super().__init__()
         self.default = None
         self.moved_to = moved_to
-        self.message = message or (
-            'The configuration option {} has been deprecated and '
-            'will be removed in a future release of MkDocs.'
-        )
+        if not message:
+            if removed:
+                message = "The configuration option '{}' was removed from MkDocs."
+            else:
+                message = (
+                    "The configuration option '{}' has been deprecated and "
+                    "will be removed in a future release of MkDocs."
+                )
+            if moved_to:
+                message += f" Use '{moved_to}' instead."
+
+        self.message = message
+        self.removed = removed
         self.option = option_type or BaseConfigOption()
+
         self.warnings = self.option.warnings
 
     def pre_validation(self, config, key_name):
         self.option.pre_validation(config, key_name)
 
         if config.get(key_name) is not None:
+            if self.removed:
+                raise ValidationError(self.message.format(key_name))
             self.warnings.append(self.message.format(key_name))
 
             if self.moved_to is not None:
@@ -274,10 +285,10 @@ class IpAddress(OptionallyRequired):
         host = config[key_name].host
         if key_name == 'dev_addr' and host in ['0.0.0.0', '::']:
             self.warnings.append(
-                ("The use of the IP address '{}' suggests a production environment "
+                (f"The use of the IP address '{host}' suggests a production environment "
                  "or the use of a proxy to connect to the MkDocs server. However, "
                  "the MkDocs' server is intended for local development purposes only. "
-                 "Please use a third party production-ready server instead.").format(host)
+                 "Please use a third party production-ready server instead.")
             )
 
 
@@ -357,6 +368,7 @@ class FilesystemObject(Type):
     """
     Base class for options that point to filesystem objects.
     """
+
     def __init__(self, exists=False, **kwargs):
         super().__init__(type_=str, **kwargs)
         self.exists = exists
@@ -371,9 +383,7 @@ class FilesystemObject(Type):
             value = os.path.join(self.config_dir, value)
         if self.exists and not self.existence_test(value):
             raise ValidationError(f"The path {value} isn't an existing {self.name}.")
-        value = os.path.abspath(value)
-        assert isinstance(value, str)
-        return value
+        return os.path.abspath(value)
 
 
 class Dir(FilesystemObject):
@@ -392,9 +402,9 @@ class Dir(FilesystemObject):
         # Validate that the dir is not the parent dir of the config file.
         if os.path.dirname(config.config_file_path) == config[key_name]:
             raise ValidationError(
-                ("The '{0}' should not be the parent directory of the config "
-                 "file. Use a child directory instead so that the '{0}' "
-                 "is a sibling of the config file.").format(key_name))
+                (f"The '{key_name}' should not be the parent directory of the"
+                 " config file. Use a child directory instead so that the"
+                 f" '{key_name}' is a sibling of the config file."))
 
 
 class File(FilesystemObject):
@@ -405,6 +415,36 @@ class File(FilesystemObject):
     """
     existence_test = staticmethod(os.path.isfile)
     name = 'file'
+
+
+class ListOfPaths(OptionallyRequired):
+    """
+    List of Paths Config Option
+
+    A list of file system paths. Raises an error if one of the paths does not exist.
+    """
+
+    def __init__(self, default=[], required=False):
+        self.config_dir = None
+        super().__init__(default, required)
+
+    def pre_validation(self, config, key_name):
+        self.config_dir = os.path.dirname(config.config_file_path) if config.config_file_path else None
+
+    def run_validation(self, value):
+        if not isinstance(value, list):
+            raise ValidationError(f"Expected a list, got {type(value)}")
+        if len(value) == 0:
+            return
+        paths = []
+        for path in value:
+            if self.config_dir and not os.path.isabs(path):
+                path = os.path.join(self.config_dir, path)
+            if not os.path.exists(path):
+                raise ValidationError(f"The path {path} does not exist.")
+            path = os.path.abspath(path)
+            paths.append(path)
+        return paths
 
 
 class SiteDir(Dir):
@@ -487,7 +527,7 @@ class Theme(BaseConfigOption):
                                   format(path=theme_config['custom_dir'], name=key_name))
 
         if 'locale' in theme_config and not isinstance(theme_config['locale'], str):
-            raise ValidationError("'{name}.locale' must be a string.".format(name=theme_config['name']))
+            raise ValidationError(f"'{theme_config['name']}.locale' must be a string.")
 
         config[key_name] = theme.Theme(**theme_config)
 
@@ -496,38 +536,45 @@ class Nav(OptionallyRequired):
     """
     Nav Config Option
 
-    Validate the Nav config. Automatically add all markdown files if empty.
+    Validate the Nav config.
     """
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.file_match = utils.is_markdown_file
+    def run_validation(self, value, *, top=True):
+        if isinstance(value, list):
+            for subitem in value:
+                self._validate_nav_item(subitem)
+            if top and not value:
+                value = None
+        elif isinstance(value, dict) and value and not top:
+            # TODO: this should be an error.
+            self.warnings.append(f"Expected nav to be a list, got {self._repr_item(value)}")
+            for subitem in value.values():
+                self.run_validation(subitem, top=False)
+        elif isinstance(value, str) and not top:
+            pass
+        else:
+            raise ValidationError(f"Expected nav to be a list, got {self._repr_item(value)}")
+        return value
 
-    def run_validation(self, value):
+    def _validate_nav_item(self, value):
+        if isinstance(value, str):
+            pass
+        elif isinstance(value, dict):
+            if len(value) != 1:
+                raise ValidationError(f"Expected nav item to be a dict of size 1, got {self._repr_item(value)}")
+            for subnav in value.values():
+                self.run_validation(subnav, top=False)
+        else:
+            raise ValidationError(f"Expected nav item to be a string or dict, got {self._repr_item(value)}")
 
-        if not isinstance(value, list):
-            raise ValidationError(f"Expected a list, got {type(value)}")
-
-        if len(value) == 0:
-            return
-
-        config_types = {type(item) for item in value}
-        if config_types.issubset({str, dict}):
-            return value
-
-        raise ValidationError("Invalid pages config. {} {}".format(
-            config_types, {str, dict}
-        ))
-
-    def post_validation(self, config, key_name):
-        # TODO: remove this when `pages` config setting is fully deprecated.
-        if key_name == 'pages' and config['pages'] is not None:
-            if config['nav'] is None:
-                # copy `pages` config to new 'nav' config setting
-                config['nav'] = config['pages']
-            warning = ("The 'pages' configuration option has been deprecated and will "
-                       "be removed in a future release of MkDocs. Use 'nav' instead.")
-            self.warnings.append(warning)
+    @classmethod
+    def _repr_item(cls, value):
+        if isinstance(value, dict) and value:
+            return f"dict with keys {tuple(value.keys())}"
+        elif isinstance(value, (str, type(None))):
+            return repr(value)
+        else:
+            return f"a {type(value).__name__}: {value!r}"
 
 
 class Private(OptionallyRequired):
@@ -649,9 +696,9 @@ class Plugins(OptionallyRequired):
         Plugin = self.installed_plugins[name].load()
 
         if not issubclass(Plugin, plugins.BasePlugin):
-            raise ValidationError('{}.{} must be a subclass of {}.{}'.format(
-                Plugin.__module__, Plugin.__name__, plugins.BasePlugin.__module__,
-                plugins.BasePlugin.__name__))
+            raise ValidationError(
+                f'{Plugin.__module__}.{Plugin.__name__} must be a subclass of'
+                f' {plugins.BasePlugin.__module__}.{plugins.BasePlugin.__name__}')
 
         plugin = Plugin()
         errors, warnings = plugin.load_config(config, self.config_file_path)

@@ -10,7 +10,6 @@ import shutil
 from mkdocs import __version__
 from mkdocs import utils
 from mkdocs import config
-from mkdocs.commands import build, gh_deploy, new, serve
 
 
 if sys.platform.startswith("win"):
@@ -99,6 +98,8 @@ ignore_version_help = "Ignore check that build is not being deployed with an old
 watch_theme_help = ("Include the theme in list of files to watch for live reloading. "
                     "Ignored when live reload is not used.")
 shell_help = "Use the shell when invoking Git."
+watch_help = ("A directory or file to watch for live reloading. "
+              "Can be supplied multiple times.")
 
 
 def add_options(opts):
@@ -170,11 +171,13 @@ def cli():
 @click.option('--no-livereload', 'livereload', flag_value='no-livereload', help=no_reload_help)
 @click.option('--dirtyreload', 'livereload', flag_value='dirty', help=dirty_reload_help)
 @click.option('--watch-theme', help=watch_theme_help, is_flag=True)
+@click.option('-w', '--watch', help=watch_help, type=click.Path(exists=True), multiple=True, default=[])
 @common_config_options
 @common_options
-def serve_command(dev_addr, livereload, **kwargs):
+def serve_command(dev_addr, livereload, watch, **kwargs):
     """Run the builtin development server"""
-    serve.serve(dev_addr=dev_addr, livereload=livereload, **kwargs)
+    from mkdocs.commands import serve
+    serve.serve(dev_addr=dev_addr, livereload=livereload, watch=watch, **kwargs)
 
 
 @cli.command(name="build")
@@ -184,6 +187,7 @@ def serve_command(dev_addr, livereload, **kwargs):
 @common_options
 def build_command(clean, **kwargs):
     """Build the MkDocs documentation"""
+    from mkdocs.commands import build
     build.build(config.load_config(**kwargs), dirty=not clean)
 
 
@@ -205,6 +209,7 @@ def gh_deploy_command(clean, message, remote_branch, remote_name, force, ignore_
         remote_name=remote_name,
         **kwargs
     )
+    from mkdocs.commands import build, gh_deploy
     build.build(cfg, dirty=not clean)
     gh_deploy.gh_deploy(cfg, message=message, force=force, ignore_version=ignore_version, shell=shell)
 
@@ -214,6 +219,7 @@ def gh_deploy_command(clean, message, remote_branch, remote_name, force, ignore_
 @common_options
 def new_command(project_directory):
     """Create a new MkDocs project"""
+    from mkdocs.commands import new
     new.new(project_directory)
 
 

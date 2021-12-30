@@ -16,10 +16,8 @@ from mkdocs.tests.base import dedent
 
 class ConfigTests(unittest.TestCase):
     def test_missing_config_file(self):
-
-        def load_missing_config():
+        with self.assertRaises(ConfigurationError):
             config.load_config(config_file='bad_filename.yaml')
-        self.assertRaises(ConfigurationError, load_missing_config)
 
     def test_missing_site_name(self):
         c = config.Config(schema=defaults.get_schema())
@@ -32,14 +30,12 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(len(warnings), 0)
 
     def test_empty_config(self):
-        def load_empty_config():
+        with self.assertRaises(ConfigurationError):
             config.load_config(config_file='/dev/null')
-        self.assertRaises(ConfigurationError, load_empty_config)
 
     def test_nonexistant_config(self):
-        def load_empty_config():
+        with self.assertRaises(ConfigurationError):
             config.load_config(config_file='/path/that/is/not/real')
-        self.assertRaises(ConfigurationError, load_empty_config)
 
     def test_invalid_config(self):
         file_contents = dedent("""
@@ -53,10 +49,8 @@ class ConfigTests(unittest.TestCase):
             config_file.flush()
             config_file.close()
 
-            self.assertRaises(
-                ConfigurationError,
-                config.load_config, config_file=open(config_file.name, 'rb')
-            )
+            with self.assertRaises(ConfigurationError):
+                config.load_config(config_file=open(config_file.name, 'rb'))
         finally:
             os.remove(config_file.name)
 
@@ -67,13 +61,13 @@ class ConfigTests(unittest.TestCase):
         """
         expected_result = {
             'site_name': 'Example',
-            'pages': [
+            'nav': [
                 {'Introduction': 'index.md'}
             ],
         }
         file_contents = dedent("""
         site_name: Example
-        pages:
+        nav:
         - 'Introduction': 'index.md'
         """)
         with TemporaryDirectory() as temp_path:
@@ -87,7 +81,7 @@ class ConfigTests(unittest.TestCase):
 
             result = config.load_config(config_file=config_file.name)
             self.assertEqual(result['site_name'], expected_result['site_name'])
-            self.assertEqual(result['pages'], expected_result['pages'])
+            self.assertEqual(result['nav'], expected_result['nav'])
 
     def test_theme(self):
         with TemporaryDirectory() as mytheme, TemporaryDirectory() as custom:
@@ -135,13 +129,14 @@ class ConfigTests(unittest.TestCase):
                         'locale': parse_locale('en'),
                         'include_search_page': True,
                         'search_index_only': False,
-                        'analytics': {'gtag': None},
+                        'analytics': {'anonymize_ip': False, 'gtag': None},
                         'highlightjs': True,
                         'hljs_languages': [],
                         'include_homepage_in_sidebar': True,
                         'prev_next_buttons_location': 'bottom',
                         'navigation_depth': 4,
                         'sticky_navigation': True,
+                        'logo': None,
                         'titles_only': False,
                         'collapse_navigation': True
                     }
@@ -152,13 +147,14 @@ class ConfigTests(unittest.TestCase):
                         'locale': parse_locale('en'),
                         'include_search_page': True,
                         'search_index_only': False,
-                        'analytics': {'gtag': None},
+                        'analytics': {'anonymize_ip': False, 'gtag': None},
                         'highlightjs': True,
                         'hljs_languages': [],
                         'include_homepage_in_sidebar': True,
                         'prev_next_buttons_location': 'bottom',
                         'navigation_depth': 4,
                         'sticky_navigation': True,
+                        'logo': None,
                         'titles_only': False,
                         'collapse_navigation': True
                     }
@@ -173,13 +169,14 @@ class ConfigTests(unittest.TestCase):
                         'locale': parse_locale('en'),
                         'include_search_page': True,
                         'search_index_only': False,
-                        'analytics': {'gtag': None},
+                        'analytics': {'anonymize_ip': False, 'gtag': None},
                         'highlightjs': True,
                         'hljs_languages': [],
                         'include_homepage_in_sidebar': True,
                         'prev_next_buttons_location': 'bottom',
                         'navigation_depth': 4,
                         'sticky_navigation': True,
+                        'logo': None,
                         'titles_only': False,
                         'collapse_navigation': True
                     }
@@ -222,28 +219,19 @@ class ConfigTests(unittest.TestCase):
         conf.validate()
         self.assertEqual(conf['nav'], None)
 
-    def test_copy_pages_to_nav(self):
-        # TODO: remove this when pages config setting is fully deprecated.
+    def test_error_on_pages(self):
         conf = config.Config(schema=defaults.get_schema())
         conf.load_dict({
             'site_name': 'Example',
             'pages': ['index.md', 'about.md'],
-            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
         })
-        conf.validate()
-        self.assertEqual(conf['nav'], ['index.md', 'about.md'])
-
-    def test_dont_overwrite_nav_with_pages(self):
-        # TODO: remove this when pages config setting is fully deprecated.
-        conf = config.Config(schema=defaults.get_schema())
-        conf.load_dict({
-            'site_name': 'Example',
-            'pages': ['index.md', 'about.md'],
-            'nav': ['foo.md', 'bar.md'],
-            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
-        })
-        conf.validate()
-        self.assertEqual(conf['nav'], ['foo.md', 'bar.md'])
+        errors, warnings = conf.validate()
+        self.assertEqual(warnings, [])
+        self.assertEqual(len(errors), 1)
+        self.assertEqual(
+            str(errors[0][1]),
+            "The configuration option 'pages' was removed from MkDocs. Use 'nav' instead."
+        )
 
     def test_doc_dir_in_site_dir(self):
 
