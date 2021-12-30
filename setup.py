@@ -60,7 +60,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'click>=3.3',
-        'Jinja2>=2.10.1',
+        'Jinja2>=2.10.2',
         'Markdown>=3.2.1',
         'PyYAML>=3.10',
         'watchdog>=2.0',
@@ -97,6 +97,7 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3 :: Only',
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
