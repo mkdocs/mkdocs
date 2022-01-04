@@ -204,7 +204,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         if path.startswith(self.mount_path):
             rel_file_path = path[len(self.mount_path):]
 
-            m = re.fullmatch(rf"livereload/([0-9]+)/[0-9]+", rel_file_path)
+            m = re.fullmatch(r"livereload/([0-9]+)/[0-9]+", rel_file_path)
             if m:
                 epoch = int(m[1])
                 start_response("200 OK", [("Content-Type", "text/plain")])
