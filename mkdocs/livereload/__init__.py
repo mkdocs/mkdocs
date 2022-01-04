@@ -220,7 +220,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 return []
             return None  # Not found
 
-        if file_path.endswith(".html"):
+        if self._watched_paths and file_path.endswith(".html"):
             with file:
                 content = file.read()
             content = self._inject_js_into_html(content, epoch)
