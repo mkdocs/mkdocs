@@ -176,7 +176,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         # https://github.com/bottlepy/bottle/blob/f9b1849db4/bottle.py#L984
         path = environ["PATH_INFO"].encode("latin-1").decode("utf-8", "ignore")
 
-        m = re.fullmatch(r"/livereload/([0-9]+)/[0-9]+", path)
+        m = re.fullmatch(rf"{self.mount_path}/livereload/([0-9]+)/[0-9]+", path)
         if m:
             epoch = int(m[1])
             start_response("200 OK", [("Content-Type", "text/plain")])
@@ -192,7 +192,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                     self._epoch_cond.wait_for(condition, timeout=self.poll_response_timeout)
                 return [b"%d" % self._visible_epoch]
 
-        if path == "/js/livereload.js":
+        if path == f"{self.mount_path}/js/livereload.js":
             file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "livereload.js")
         elif path.startswith(self.mount_path):
             rel_file_path = path[len(self.mount_path):]
@@ -235,8 +235,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         )
         return wsgiref.util.FileWrapper(file)
 
-    @classmethod
-    def _inject_js_into_html(cls, content, epoch):
+    def _inject_js_into_html(self, content, epoch):
         try:
             body_end = content.rindex(b"</body>")
         except ValueError:
@@ -244,8 +243,8 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         # The page will reload if the livereload poller returns a newer epoch than what it knows.
         # The other timestamp becomes just a unique identifier for the initiating page.
         return (
-            b'%b<script src="/js/livereload.js"></script><script>livereload(%d, %d);</script>%b'
-            % (content[:body_end], epoch, _timestamp(), content[body_end:])
+            b'%b<script src="%s/js/livereload.js"></script><script>livereload(%d, %d);</script>%b'
+            % (content[:body_end], self.mount_path, epoch, _timestamp(), content[body_end:])
         )
 
     @classmethod
