@@ -63,7 +63,6 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         mount_path="/",
         polling_interval=0.5,
         shutdown_delay=0.25,
-        live_server=False,
         **kwargs,
     ):
         self.builder = builder
@@ -74,7 +73,6 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         self.url = f"http://{self.server_name}:{self.server_port}{self.mount_path}"
         self.build_delay = 0.1
         self.shutdown_delay = shutdown_delay
-        self.live_server = live_server
         # To allow custom error pages.
         self.error_handler = lambda code: None
 
@@ -245,7 +243,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 return []
             return None  # Not found
 
-        if file_path.endswith(".html") and self.live_server:
+        if file_path.endswith(".html"):
             with file:
                 content = file.read()
             content = self._inject_js_into_html(content, epoch)
