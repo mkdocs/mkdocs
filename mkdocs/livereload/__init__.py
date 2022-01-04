@@ -8,6 +8,7 @@ import pathlib
 import posixpath
 import re
 import socketserver
+import string
 import threading
 import time
 import warnings
@@ -15,6 +16,30 @@ import wsgiref.simple_server
 
 import watchdog.events
 import watchdog.observers.polling
+
+_SCRIPT_TEMPLATE = """
+var livereload = function(epoch, requestId) {
+    var req = new XMLHttpRequest();
+    req.onloadend = function() {
+        if (parseFloat(this.responseText) > epoch) {
+            location.reload();
+            return;
+        }
+        var launchNext = livereload.bind(this, epoch, requestId);
+        if (this.status === 200) {
+            launchNext();
+        } else {
+            setTimeout(launchNext, 3000);
+        }
+    };
+    req.open("GET", "${mount_path}livereload/" + epoch + "/" + requestId);
+    req.send();
+
+    console.log('Enabled live reload');
+}
+livereload(${epoch}, ${request_id});
+"""
+_SCRIPT_TEMPLATE = string.Template(_SCRIPT_TEMPLATE)
 
 
 class _LoggerAdapter(logging.LoggerAdapter):
@@ -240,30 +265,13 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
             body_end = len(content)
         # The page will reload if the livereload poller returns a newer epoch than what it knows.
         # The other timestamp becomes just a unique identifier for the initiating page.
-        script = """function livereload(epoch, requestId) {
-    var req = new XMLHttpRequest();
-    req.onloadend = function() {
-        if (parseFloat(this.responseText) > epoch) {
-            location.reload();
-            return;
-        }
-        var launchNext = livereload.bind(this, epoch, requestId);
-        if (this.status === 200) {
-            launchNext();
-        } else {
-            setTimeout(launchNext, 3000);
-        }
-    };
-    req.open("GET", "%slivereload/" + epoch + "/" + requestId);
-    req.send();
-
-    console.log('Enabled live reload');
-}
-livereload(%d, %d);
-""" % (self.mount_path, epoch, _timestamp())
-        return (
-            b'%b<script>%b</script>%b'
-            % (content[:body_end], script.encode("utf-8"), content[body_end:])
+        script = _SCRIPT_TEMPLATE.substitute(
+            mount_path=self.mount_path, epoch=epoch, request_id=_timestamp()
+        )
+        return b"%b<script>%b</script>%b" % (
+            content[:body_end],
+            script.encode(),
+            content[body_end:],
         )
 
     @classmethod
