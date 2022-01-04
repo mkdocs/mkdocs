@@ -65,7 +65,7 @@ def do_request(server, content):
 
 
 SCRIPT_REGEX = (
-    r'<script>.+?livereload\([0-9]+, [0-9]+\);</script>'
+    r'<script>[\S\s]+?livereload\([0-9]+, [0-9]+\);\s*</script>'
 )
 
 
