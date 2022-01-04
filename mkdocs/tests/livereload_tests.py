@@ -65,7 +65,7 @@ def do_request(server, content):
 
 
 SCRIPT_REGEX = (
-    r'<script src="/js/livereload.js"></script><script>livereload\([0-9]+, [0-9]+\);</script>'
+    r'<script>.+?livereload\([0-9]+, [0-9]+\);</script>'
 )
 
 
@@ -333,17 +333,6 @@ class BuildTests(unittest.TestCase):
             self.assertRegex(output, fr"^<body>bbb{SCRIPT_REGEX}</body>$")
             _, output = do_request(server, "GET /%E6%B5%8B%E8%AF%952/index.html")
             self.assertRegex(output, fr"^<body>bbb{SCRIPT_REGEX}</body>$")
-
-    @tempdir()
-    def test_serves_js(self, site_dir):
-        with testing_server(site_dir) as server:
-            for mount_path in "/", "/sub/":
-                server.mount_path = mount_path
-
-                headers, output = do_request(server, "GET /js/livereload.js")
-                self.assertIn("function livereload", output)
-                self.assertEqual(headers["_status"], "200 OK")
-                self.assertEqual(headers.get("content-type"), "application/javascript")
 
     @tempdir()
     def test_serves_polling_instantly(self, site_dir):
