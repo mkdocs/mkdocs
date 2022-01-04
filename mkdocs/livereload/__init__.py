@@ -201,24 +201,25 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         # https://github.com/bottlepy/bottle/blob/f9b1849db4/bottle.py#L984
         path = environ["PATH_INFO"].encode("latin-1").decode("utf-8", "ignore")
 
-        m = re.fullmatch(rf"{self.mount_path}livereload/([0-9]+)/[0-9]+", path)
-        if m:
-            epoch = int(m[1])
-            start_response("200 OK", [("Content-Type", "text/plain")])
-
-            def condition():
-                return self._visible_epoch > epoch
-
-            with self._epoch_cond:
-                if not condition():
-                    # Stall the browser, respond as soon as there's something new.
-                    # If there's not, respond anyway after a minute.
-                    self._log_poll_request(environ.get("HTTP_REFERER"), request_id=path)
-                    self._epoch_cond.wait_for(condition, timeout=self.poll_response_timeout)
-                return [b"%d" % self._visible_epoch]
-
         if path.startswith(self.mount_path):
             rel_file_path = path[len(self.mount_path):]
+
+            m = re.fullmatch(rf"livereload/([0-9]+)/[0-9]+", rel_file_path)
+            if m:
+                epoch = int(m[1])
+                start_response("200 OK", [("Content-Type", "text/plain")])
+
+                def condition():
+                    return self._visible_epoch > epoch
+
+                with self._epoch_cond:
+                    if not condition():
+                        # Stall the browser, respond as soon as there's something new.
+                        # If there's not, respond anyway after a minute.
+                        self._log_poll_request(environ.get("HTTP_REFERER"), request_id=path)
+                        self._epoch_cond.wait_for(condition, timeout=self.poll_response_timeout)
+                    return [b"%d" % self._visible_epoch]
+
             if path.endswith("/"):
                 rel_file_path += "index.html"
             # Prevent directory traversal - normalize the path.
