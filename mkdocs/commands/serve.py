@@ -30,6 +30,9 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
     def mount_path(config):
         return urlsplit(config['site_url'] or '/').path
 
+    live_server = livereload in ['dirty', 'livereload']
+    dirty = livereload == 'dirty'
+
     def builder():
         log.info("Building documentation...")
         config = load_config(
@@ -51,8 +54,6 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
         # Override a few config settings after validation
         config['site_url'] = 'http://{}{}'.format(config['dev_addr'], mount_path(config))
 
-        live_server = livereload in ['dirty', 'livereload']
-        dirty = livereload == 'dirty'
         build(config, live_server=live_server, dirty=dirty)
         return config
 
@@ -61,7 +62,7 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
         config = builder()
 
         host, port = config['dev_addr']
-        server = LiveReloadServer(builder=builder, host=host, port=port, root=site_dir, mount_path=mount_path(config))
+        server = LiveReloadServer(builder=builder, host=host, port=port, root=site_dir, mount_path=mount_path(config), live_server=live_server)
 
         def error_handler(code):
             if code in (404, 500):
