@@ -8,15 +8,16 @@ import os
 from mkdocs import plugins
 from mkdocs import config
 from mkdocs.commands import build
+from mkdocs.config import config_options
 from mkdocs.exceptions import BuildError, PluginError, Abort
 from mkdocs.tests.base import load_config
 
 
 class DummyPlugin(plugins.BasePlugin):
     config_scheme = (
-        ('foo', config.config_options.Type(str, default='default foo')),
-        ('bar', config.config_options.Type(int, default=0)),
-        ('dir', config.config_options.Dir(exists=False)),
+        ('foo', config_options.Type(str, default='default foo')),
+        ('bar', config_options.Type(int, default=0)),
+        ('dir', config_options.Dir(exists=False)),
     )
 
     def on_pre_page(self, content, **kwargs):
