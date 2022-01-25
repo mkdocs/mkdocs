@@ -9,7 +9,7 @@ jobs:
       max-parallel: 4
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: [3.6, 3.7, 3.8, 3.9, '3.10', pypy3]
+        python-version: [3.6, 3.7, 3.8, 3.9, '3.10', pypy-3.7-v7.x]
         include:
           - python-version: 3.6
             tox-env: py36
@@ -21,7 +21,7 @@ jobs:
             tox-env: py39
           - python-version: '3.10'
             tox-env: py310
-          - python-version: pypy3
+          - python-version: pypy-3.7-v7.x
             tox-env: pypy3
     env:
       TOXENV: ${{ matrix.tox-env }}-{unittests,min-req,integration,integration-no-babel}
