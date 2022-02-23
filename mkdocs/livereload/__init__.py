@@ -119,9 +119,13 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         handler = watchdog.events.FileSystemEventHandler()
         handler.on_any_event = callback
         log.debug(f"Watching '{path}'")
-        self.observer.schedule(handler, path, recursive=recursive)
+        self._watched_paths[path] = self.observer.schedule(handler, path, recursive=recursive)
 
-        self._watched_paths[path] = True
+    def unwatch(self, path):
+        """Stop watching file changes for path."""
+        path = os.path.abspath(path)
+        self.observer.unschedule(self._watched_paths[path])
+        del self._watched_paths[path]
 
     def serve(self):
         self.observer.start()
