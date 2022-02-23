@@ -120,6 +120,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         handler.on_any_event = callback
         log.debug(f"Watching '{path}'")
         self._watched_paths[path] = self.observer.schedule(handler, path, recursive=recursive)
+        return self._watched_paths[path]
 
     def unwatch(self, path):
         """Stop watching file changes for path."""
