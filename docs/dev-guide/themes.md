@@ -673,7 +673,7 @@ objects.
 ```json
 {
     config: {...},
-    data: [...],
+    docs: [...],
     index: {...}
 }
 ```
@@ -682,7 +682,7 @@ If present, the `config` object contains the key/value pairs of config options
 defined for the plugin in the user's `mkdocs.yml` config file under
 `plugings.search`. The `config` object was new in MkDocs version *1.0*.
 
-The `data` object contains a list of document objects. Each document object is
+The `docs` object contains a list of document objects. Each document object is
 made up of a `location` (URL), a `title`, and `text` which can be used to create
 a search index and/or display search results.
 
