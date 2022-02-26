@@ -125,6 +125,8 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
     def unwatch(self, path):
         """Stop watching file changes for path."""
         path = os.path.abspath(path)
+        if path not in self._watched_paths:
+            return
         self.observer.unschedule(self._watched_paths[path])
         del self._watched_paths[path]
 
