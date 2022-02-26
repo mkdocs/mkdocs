@@ -5,4 +5,4 @@ wheel==0.24.0
 twine==1.5.0
 
 # Babel for messages.po localization compilation
-babel==2.9.0
+babel==2.9.1
