@@ -21,7 +21,7 @@ function joinUrl (base, path) {
   return base + "/" + path;
 }
 
-function htmlEncode (value) {
+function escapeHtml (value) {
   return value.replace(/&/g, '&amp;')
     .replace(/"/g, '&quot;')
     .replace(/</g, '&lt;')
@@ -29,7 +29,7 @@ function htmlEncode (value) {
 }
 
 function formatResult (location, title, summary) {
-  return '<article><h3><a href="' + joinUrl(base_url, location) + '">'+ htmlEncode(title) + '</a></h3><p>' + htmlEncode(summary) +'</p></article>';
+  return '<article><h3><a href="' + joinUrl(base_url, location) + '">'+ escapeHtml(title) + '</a></h3><p>' + escapeHtml(summary) +'</p></article>';
 }
 
 function displayResults (results) {
