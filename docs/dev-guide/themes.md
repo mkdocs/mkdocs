@@ -349,6 +349,10 @@ page.
 
 [base_url]: #base_url
 
+##### page.file
+
+The documentation `File` that the page is being rendered from.
+
 ##### page.abs_url
 
 The absolute URL of the page from the server root as determined by the value
