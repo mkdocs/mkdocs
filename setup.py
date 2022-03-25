@@ -66,7 +66,7 @@ setup(
         'watchdog>=2.0',
         'ghp-import>=1.0',
         'pyyaml_env_tag>=0.1',
-        'importlib_metadata>=3.10',
+        'importlib_metadata>=4.3',
         'packaging>=20.5',
         'mergedeep>=1.3.4'
     ],
