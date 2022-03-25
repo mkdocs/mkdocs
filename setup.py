@@ -50,6 +50,9 @@ setup(
     name="mkdocs",
     version=get_version("mkdocs"),
     url='https://www.mkdocs.org',
+    project_urls={
+        'Source': 'https://github.com/mkdocs/mkdocs',
+    },
     license='BSD',
     description='Project documentation with Markdown.',
     long_description=long_description,
