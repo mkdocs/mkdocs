@@ -458,6 +458,8 @@ be used with the <a href="#url">url</a> filter to ensure the URL is relative to 
 page.</p>
 <pre><code class="language-django">&lt;a href=&quot;{{ page.url|url }}&quot;&gt;{{ page.title }}&lt;/a&gt;
 </code></pre>
+<h5 id="pagefile">page.file<a class="headerlink" href="#pagefile" title="Permanent link"></a></h5>
+<p>The documentation <code>File</code> that the page is being rendered from.</p>
 <h5 id="pageabs_url">page.abs_url<a class="headerlink" href="#pageabs_url" title="Permanent link"></a></h5>
 <p>The absolute URL of the page from the server root as determined by the value
 assigned to the <a href="../../user-guide/configuration/#site_url">site_url</a> configuration setting. The value includes any
@@ -673,14 +675,14 @@ provided index file is the responsibility of the theme.</p>
 objects.</p>
 <pre><code class="language-json">{
     config: {...},
-    data: [...],
+    docs: [...],
     index: {...}
 }
 </code></pre>
 <p>If present, the <code>config</code> object contains the key/value pairs of config options
 defined for the plugin in the user's <code>mkdocs.yml</code> config file under
 <code>plugings.search</code>. The <code>config</code> object was new in MkDocs version <em>1.0</em>.</p>
-<p>The <code>data</code> object contains a list of document objects. Each document object is
+<p>The <code>docs</code> object contains a list of document objects. Each document object is
 made up of a <code>location</code> (URL), a <code>title</code>, and <code>text</code> which can be used to create
 a search index and/or display search results.</p>
 <p>If present, the <code>index</code> object contains a pre-built index which offers

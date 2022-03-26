@@ -296,6 +296,8 @@ the key code for a given key.</p>
 <li><code>ja</code>: Japanese</li>
 <li><code>pt_BR</code>: Portuguese (Brazil)</li>
 <li><code>zh_CN</code>: Simplified Chinese</li>
+<li><code>de</code>: German</li>
+<li><code>fa</code>: Persian (Farsi)</li>
 </ul>
 <p>See the guide on <a href="../localizing-your-theme/">localizing your theme</a> for more information.</p>
 </li>
@@ -324,8 +326,7 @@ theme supports the following options:</p>
 </code></pre>
 </li>
 <li>
-<p><strong><code>analytics</code></strong>: Defines configuration options for an analytics service.
-  Currently, only Google Analytics v4 is supported via the <code>gtag</code> option.</p>
+<p><strong><code>analytics</code></strong>: Defines configuration options for an analytics service.</p>
 <ul>
 <li>
 <p><strong><code>gtag</code></strong>: To enable Google Analytics, set to a Google Analytics v4
@@ -338,6 +339,10 @@ tracking ID, which uses the <code>G-</code> format. See Google's documentation t
         gtag: G-ABC123
 </code></pre>
 <p>When set to the default (<code>null</code>) Google Analytics is disabled for the</p>
+</li>
+<li>
+<p><strong><code>anonymize_ip</code></strong>: To enable anonymous IP address for Google Analytics,
+set this to <code>True</code>. Default: <code>False</code>.</p>
 </li>
 </ul>
 </li>
@@ -380,8 +385,14 @@ tracking ID, which uses the <code>G-</code> format. See Google's documentation t
 <li><code>ja</code>: Japanese</li>
 <li><code>pt_BR</code>: Portuguese (Brazil)</li>
 <li><code>zh_CN</code>: Simplified Chinese</li>
+<li><code>de</code>: German</li>
+<li><code>fa</code>: Persian (Farsi)</li>
 </ul>
 <p>See the guide on <a href="../localizing-your-theme/">localizing your theme</a> for more information.</p>
+</li>
+<li>
+<p><strong><code>logo</code></strong>: To set a logo on your project instead of the plain text
+  <code>site_name</code>, set this variable to be the location of your image. Default: <code>null</code>.</p>
 </li>
 </ul>
 <h2 id="third-party-themes">Third Party Themes<a class="headerlink" href="#third-party-themes" title="Permanent link"></a></h2>

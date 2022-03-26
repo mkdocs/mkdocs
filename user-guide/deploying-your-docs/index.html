@@ -247,16 +247,6 @@ deploy script to commit to the <code>master</code> branch. You may override the 
 with the <a href="../configuration/#remote_branch">remote_branch</a> configuration setting, but if you forget to change
 directories before running the deploy script, it will commit to the <code>master</code>
 branch of your project, which you probably don't want.</p>
-<p>Be aware that you will not be able to review the built site before it is pushed
-to GitHub. Therefore, you may want to verify any changes you make to the docs
-beforehand by using the <code>build</code> or <code>serve</code> commands and reviewing the built
-files locally.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>You should never edit files in your pages repository by hand if you're using
-the <code>gh-deploy</code> command because you will lose your work the next time you
-run the command.</p>
-</div>
 <h3 id="custom-domains">Custom Domains<a class="headerlink" href="#custom-domains" title="Permanent link"></a></h3>
 <p>GitHub Pages includes support for using a <a href="https://help.github.com/articles/adding-or-removing-a-custom-domain-for-your-github-pages-site">Custom Domain</a> for your site. In
 addition to the steps documented by GitHub, you need to take one additional step

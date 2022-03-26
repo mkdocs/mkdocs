@@ -174,6 +174,14 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-level="2"><a href="#version-130-2022-03-26" class="nav-link">Version 1.3.0 (2022-03-26)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-124-2022-03-26" class="nav-link">Version 1.2.4 (2022-03-26)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-level="2"><a href="#version-123-2021-10-12" class="nav-link">Version 1.2.3 (2021-10-12)</a>
               <ul class="nav flex-column">
               </ul>
@@ -347,6 +355,70 @@ mkdocs, version 1.0 from /path/to/mkdocs (Python 3.6)
 <li><a href="https://github.com/waylan/">@waylan</a></li>
 <li><a href="https://github.com/oprypin/">@oprypin</a></li>
 <li><a href="https://github.com/ultrabug/">@ultrabug</a></li>
+</ul>
+<h2 id="version-130-2022-03-26">Version 1.3.0 (2022-03-26)<a class="headerlink" href="#version-130-2022-03-26" title="Permanent link"></a></h2>
+<h3 id="feature-upgrades">Feature upgrades<a class="headerlink" href="#feature-upgrades" title="Permanent link"></a></h3>
+<ul>
+<li>
+<p>ReadTheDocs theme updated from v0.4.1 to v1.0.0 according to upstream (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2585" title="GitHub Issue mkdocs/mkdocs #2585">#2585</a>)</p>
+<p>The most notable changes:</p>
+<ul>
+<li>New option <code>logo</code>: Rather than displaying the <code>site_name</code> in the title, one can specify a path to an image to display instead.</li>
+<li>New option <code>anonymize_ip</code> for Google Analytics.</li>
+<li>Dependencies were upgraded: jQuery upgraded to 3.6.0, Modernizr.js dropped, and others.</li>
+</ul>
+<p>See <a href="https://www.mkdocs.org/user-guide/choosing-your-theme/#readthedocs">documentation of config options for the theme</a></p>
+</li>
+<li>
+<p>Built-in themes now also support these languages:</p>
+<ul>
+<li>German (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2633" title="GitHub Issue mkdocs/mkdocs #2633">#2633</a>)</li>
+<li>Persian (Farsi) (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2787" title="GitHub Issue mkdocs/mkdocs #2787">#2787</a>)</li>
+</ul>
+</li>
+<li>
+<p>Support custom directories to watch when running <code>mkdocs serve</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2642" title="GitHub Issue mkdocs/mkdocs #2642">#2642</a>)</p>
+<p>MkDocs by default watches the <em>docs</em> directory and the config file. Now there is a way to add more directories to watch for changes, either via the YAML <code>watch</code> key or the command line flag <code>--watch</code>.</p>
+<p>Normally MkDocs never reaches into any other directories (so this feature shouldn't be necessary), but some plugins and extensions may do so.</p>
+<p>See <a href="https://www.mkdocs.org/user-guide/configuration/#watch">documentation</a>.</p>
+</li>
+<li>
+<p>New <code>--no-history</code> option for <code>gh_deploy</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2594" title="GitHub Issue mkdocs/mkdocs #2594">#2594</a>)</p>
+<p>Allows to discard the history of commits when deploying, and instead replace it with one root commit</p>
+</li>
+</ul>
+<h3 id="bug-fixes">Bug fixes<a class="headerlink" href="#bug-fixes" title="Permanent link"></a></h3>
+<ul>
+<li>
+<p>An XSS vulnerability when using the search function in built-in themes was fixed (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2791" title="GitHub Issue mkdocs/mkdocs #2791">#2791</a>)</p>
+</li>
+<li>
+<p>Setting the <code>edit_uri</code> option no longer erroneously adds a trailing slash to <code>repo_url</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2733" title="GitHub Issue mkdocs/mkdocs #2733">#2733</a>)</p>
+</li>
+</ul>
+<h3 id="miscellaneous">Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permanent link"></a></h3>
+<ul>
+<li>
+<p>Breaking change: the <code>pages</code> config option that was deprecated for a very long time now causes an error when used (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2652" title="GitHub Issue mkdocs/mkdocs #2652">#2652</a>)</p>
+<p>To fix the error, just change from <code>pages</code> to <code>nav</code>.</p>
+</li>
+<li>
+<p>Performance optimization: during startup of MkDocs, code and dependencies of other commands will not be imported (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2714" title="GitHub Issue mkdocs/mkdocs #2714">#2714</a>)</p>
+<p>The most visible effect of this is that dependencies of <code>mkdocs serve</code> will not be imported when <code>mkdocs build</code> is used.</p>
+</li>
+<li>
+<p>Recursively validate <code>nav</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2680" title="GitHub Issue mkdocs/mkdocs #2680">#2680</a>)</p>
+<p>Validation of the nested <code>nav</code> structure has been reworked to report errors early and reliably. Some <a href="https://github.com/mkdocs/mkdocs/blob/b7272150bbc9bf8f66c878f6517742de3528972b/mkdocs/tests/config/config_options_tests.py#L783">edge cases</a> have been declared invalid.</p>
+</li>
+</ul>
+<p>Other small improvements; see <a href="https://github.com/mkdocs/mkdocs/compare/1.2.3...1.3.0">commit log</a>.</p>
+<h2 id="version-124-2022-03-26">Version 1.2.4 (2022-03-26)<a class="headerlink" href="#version-124-2022-03-26" title="Permanent link"></a></h2>
+<ul>
+<li>
+<p>Compatibility with Jinja2 3.1.0 (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2800" title="GitHub Issue mkdocs/mkdocs #2800">#2800</a>)</p>
+<p>Due to a breaking change in Jinja2, MkDocs would crash with the message
+<code>AttributeError: module 'jinja2' has no attribute 'contextfilter'</code></p>
+</li>
 </ul>
 <h2 id="version-123-2021-10-12">Version 1.2.3 (2021-10-12)<a class="headerlink" href="#version-123-2021-10-12" title="Permanent link"></a></h2>
 <ul>

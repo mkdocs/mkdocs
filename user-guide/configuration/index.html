@@ -186,6 +186,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-level="2"><a href="#live-reloading" class="nav-link">Live Reloading</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-level="2"><a href="#formatting-options" class="nav-link">Formatting options</a>
               <ul class="nav flex-column">
               </ul>
@@ -451,6 +455,21 @@ version, you can pass it to the theme like this:</p>
 </code></pre>
 <p><strong>default</strong>: By default <code>extra</code> will be an empty key-value mapping.</p>
 <h2 id="preview-controls">Preview controls<a class="headerlink" href="#preview-controls" title="Permanent link"></a></h2>
+<h2 id="live-reloading">Live Reloading<a class="headerlink" href="#live-reloading" title="Permanent link"></a></h2>
+<h3 id="watch">watch<a class="headerlink" href="#watch" title="Permanent link"></a></h3>
+<p>Determines additional directories to watch when running <code>mkdocs serve</code>.
+Configuration is a YAML list.</p>
+<pre><code class="language-yaml">watch:
+- directory_a
+- directory_b
+</code></pre>
+<p>Allows a custom default to be set without the need to pass it through the <code>-w</code>/<code>--watch</code>
+option every time the <code>mkdocs serve</code> command is called.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The paths provided via the configuration file are relative to the configuration file.</p>
+<p>The paths provided via the <code>-w</code>/<code>--watch</code> CLI parameters are not. </p>
+</div>
 <h3 id="use_directory_urls">use_directory_urls<a class="headerlink" href="#use_directory_urls" title="Permanent link"></a></h3>
 <p>This setting controls the style used for linking to pages within the
 documentation.</p>
