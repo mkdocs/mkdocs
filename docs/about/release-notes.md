@@ -23,6 +23,62 @@ The current and past members of the MkDocs team.
 * [@oprypin](https://github.com/oprypin/)
 * [@ultrabug](https://github.com/ultrabug/)
 
+## Version 1.3.0 (2022-03-26)
+
+### Important fixes
+
+* Compatibility with Jinja2 3.1.0 (#2800)
+
+    Due to a breaking change in Jinja2, MkDocs would crash with the message `AttributeError: module 'jinja2' has no attribute 'contextfilter'`
+
+* An XSS vulnerability when using the search function in built-in themes was fixed (#2791)
+
+* Setting the `edit_uri` option no longer erroneously adds a trailing slash to `repo_url` (#2733)
+
+### Feature upgrades
+
+* ReadTheDocs theme updated from v0.4.1 to v1.0.0 according to upstream (#2585)
+
+    The most notable changes:
+
+    * New option `logo`: Rather than displaying the `site_name` in the title, one can specify a path to an image to display instead.
+    * New option `anonymize_ip` for Google Analytics.
+    * Dependencies were upgraded: jQuery upgraded to 3.6.0, Modernizr.js dropped, and others.
+
+    See [documentation of config options for the theme](https://www.mkdocs.org/user-guide/choosing-your-theme/#readthedocs)
+
+* Built-in themes now also support these languages:
+    * German (#2633)
+    * Persian (Farsi) (#2787)
+
+* Support custom directories to watch when running `mkdocs serve` (#2642)
+
+    MkDocs by default watches the *docs* directory and the config file. Now there is a way to add more directories to watch for changes, either via the YAML `watch` key or the command line flag `--watch`.
+
+    Normally MkDocs never reaches into any other directories (so this feature shouldn't be necessary), but some plugins and extensions may do so.
+
+    See [documentation](https://www.mkdocs.org/user-guide/configuration/#watch).
+
+* New `--no-history` option for `gh_deploy` (#2594)
+
+    Allows to discard the history of commits when deploying, and instead replace it with one root commit
+
+### Miscellaneous
+
+* Breaking change: the `pages` config option that was deprecated for a very long time now causes an error when used (#2652)
+
+    To fix the error, just change from `pages` to `nav`.
+
+* Performance optimization: during startup of MkDocs, code and dependencies of other commands will not be imported (#2714)
+
+    The most visible effect of this is that dependencies of `mkdocs serve` will not be imported when `mkdocs build` is used.
+
+* Recursively validate `nav` (#2680)
+
+    Validation of the nested `nav` structure has been reworked to report errors early and reliably. Some [edge cases](https://github.com/mkdocs/mkdocs/blob/b7272150bbc9bf8f66c878f6517742de3528972b/mkdocs/tests/config/config_options_tests.py#L783) have been declared invalid.
+
+Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.2.3...1.3.0).
+
 ## Version 1.2.3 (2021-10-12)
 
 * Built-in themes now also support these languages:
