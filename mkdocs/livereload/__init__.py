@@ -32,7 +32,7 @@ var livereload = function(epoch, requestId) {
             setTimeout(launchNext, 3000);
         }
     };
-    req.open("GET", "${mount_path}livereload/" + epoch + "/" + requestId);
+    req.open("GET", "/livereload/" + epoch + "/" + requestId);
     req.send();
 
     console.log('Enabled live reload');
@@ -201,10 +201,8 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         # https://github.com/bottlepy/bottle/blob/f9b1849db4/bottle.py#L984
         path = environ["PATH_INFO"].encode("latin-1").decode("utf-8", "ignore")
 
-        if path.startswith(self.mount_path):
-            rel_file_path = path[len(self.mount_path):]
-
-            m = re.fullmatch(r"livereload/([0-9]+)/[0-9]+", rel_file_path)
+        if path.startswith("/livereload/"):
+            m = re.fullmatch(r"/livereload/([0-9]+)/[0-9]+", path)
             if m:
                 epoch = int(m[1])
                 start_response("200 OK", [("Content-Type", "text/plain")])
@@ -219,6 +217,9 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                         self._log_poll_request(environ.get("HTTP_REFERER"), request_id=path)
                         self._epoch_cond.wait_for(condition, timeout=self.poll_response_timeout)
                     return [b"%d" % self._visible_epoch]
+
+        if path.startswith(self.mount_path):
+            rel_file_path = path[len(self.mount_path):]
 
             if path.endswith("/"):
                 rel_file_path += "index.html"
@@ -266,9 +267,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
             body_end = len(content)
         # The page will reload if the livereload poller returns a newer epoch than what it knows.
         # The other timestamp becomes just a unique identifier for the initiating page.
-        script = _SCRIPT_TEMPLATE.substitute(
-            mount_path=self.mount_path, epoch=epoch, request_id=_timestamp()
-        )
+        script = _SCRIPT_TEMPLATE.substitute(epoch=epoch, request_id=_timestamp())
         return b"%b<script>%b</script>%b" % (
             content[:body_end],
             script.encode(),
