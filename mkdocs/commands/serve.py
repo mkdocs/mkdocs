@@ -4,6 +4,8 @@ import tempfile
 from urllib.parse import urlsplit
 from os.path import isdir, isfile, join
 
+import jinja2.exceptions
+
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
 from mkdocs.exceptions import Abort
@@ -93,9 +95,12 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
             log.info("Shutting down...")
         finally:
             server.shutdown()
+    except jinja2.exceptions.TemplateError:
+        # This is a subclass of OSError, but shouldn't be suppressed.
+        raise
     except OSError as e:  # pragma: no cover
         # Avoid ugly, unhelpful traceback
-        raise Abort(str(e))
+        raise Abort(f'{type(e).__name__}: {e}')
     finally:
         if isdir(site_dir):
             shutil.rmtree(site_dir)

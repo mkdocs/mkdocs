@@ -5,7 +5,7 @@ from unittest import mock
 
 import mkdocs
 from mkdocs.theme import Theme
-from localization import parse_locale
+from mkdocs.localization import parse_locale
 
 abs_path = os.path.abspath(os.path.dirname(__file__))
 mkdocs_dir = os.path.abspath(os.path.dirname(mkdocs.__file__))

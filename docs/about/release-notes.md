@@ -339,7 +339,7 @@ NodeJS environment if so desired. For more information please read the
 [`prebuild_index` documentation][prebuildindex-docs].
 
 [lunrpy-docs]: http://lunr.readthedocs.io/
-[prebuildindex-docs]: ../../user-guide/configuration/#prebuild_index
+[prebuildindex-docs]: ../user-guide/configuration.md#prebuild_index
 
 #### `readthedocs` theme updated with upstream (#588 and #1374)
 
