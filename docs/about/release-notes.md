@@ -23,6 +23,13 @@ The current and past members of the MkDocs team.
 * [@oprypin](https://github.com/oprypin/)
 * [@ultrabug](https://github.com/ultrabug/)
 
+## Version 1.2.4 (2022-03-26)
+
+* Compatibility with Jinja2 3.1.0 (#2800)
+
+    Due to a breaking change in Jinja2, MkDocs would crash with the message
+    `AttributeError: module 'jinja2' has no attribute 'contextfilter'`
+
 ## Version 1.2.3 (2021-10-12)
 
 * Built-in themes now also support these languages:
