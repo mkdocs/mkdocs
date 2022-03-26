@@ -25,12 +25,6 @@ The current and past members of the MkDocs team.
 
 ## Version 1.3.0 (2022-03-26)
 
-### Important fixes
-
-* An XSS vulnerability when using the search function in built-in themes was fixed (#2791)
-
-* Setting the `edit_uri` option no longer erroneously adds a trailing slash to `repo_url` (#2733)
-
 ### Feature upgrades
 
 * ReadTheDocs theme updated from v0.4.1 to v1.0.0 according to upstream (#2585)
@@ -58,6 +52,12 @@ The current and past members of the MkDocs team.
 * New `--no-history` option for `gh_deploy` (#2594)
 
     Allows to discard the history of commits when deploying, and instead replace it with one root commit
+
+### Bug fixes
+
+* An XSS vulnerability when using the search function in built-in themes was fixed (#2791)
+
+* Setting the `edit_uri` option no longer erroneously adds a trailing slash to `repo_url` (#2733)
 
 ### Miscellaneous
 
