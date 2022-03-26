@@ -59,12 +59,7 @@ class SubConfig(BaseConfigOption, Config):
         return self.run_validation(value)
 
     def run_validation(self, value):
-        failed, self.warnings = Config.validate(self)
-        if len(failed) > 0:
-            # get the first failing one
-            key, err = failed[0]
-            raise ValidationError(f"Sub-option {key!r} configuration error: {err}")
-
+        Config.validate(self)
         return self
 
 
