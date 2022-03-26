@@ -27,10 +27,6 @@ The current and past members of the MkDocs team.
 
 ### Important fixes
 
-* Compatibility with Jinja2 3.1.0 (#2800)
-
-    Due to a breaking change in Jinja2, MkDocs would crash with the message `AttributeError: module 'jinja2' has no attribute 'contextfilter'`
-
 * An XSS vulnerability when using the search function in built-in themes was fixed (#2791)
 
 * Setting the `edit_uri` option no longer erroneously adds a trailing slash to `repo_url` (#2733)
@@ -78,6 +74,13 @@ The current and past members of the MkDocs team.
     Validation of the nested `nav` structure has been reworked to report errors early and reliably. Some [edge cases](https://github.com/mkdocs/mkdocs/blob/b7272150bbc9bf8f66c878f6517742de3528972b/mkdocs/tests/config/config_options_tests.py#L783) have been declared invalid.
 
 Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.2.3...1.3.0).
+
+## Version 1.2.4 (2022-03-26)
+
+* Compatibility with Jinja2 3.1.0 (#2800)
+
+    Due to a breaking change in Jinja2, MkDocs would crash with the message
+    `AttributeError: module 'jinja2' has no attribute 'contextfilter'`
 
 ## Version 1.2.3 (2021-10-12)
 
