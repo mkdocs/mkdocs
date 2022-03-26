@@ -138,9 +138,6 @@ class File:
             self.url == other.url
         )
 
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
     def __repr__(self):
         return (
             f"File(src_path='{self.src_path}', dest_path='{self.dest_path}',"

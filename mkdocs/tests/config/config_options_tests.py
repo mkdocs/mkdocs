@@ -323,6 +323,7 @@ class RepoURLTest(unittest.TestCase):
         config = {'repo_url': "https://github.com/mkdocs/mkdocs"}
         option.post_validation(config, 'repo_url')
         self.assertEqual(config['edit_uri'], 'edit/master/docs/')
+        self.assertEqual(config['repo_url'], "https://github.com/mkdocs/mkdocs")
 
     def test_edit_uri_bitbucket(self):
 
@@ -330,6 +331,7 @@ class RepoURLTest(unittest.TestCase):
         config = {'repo_url': "https://bitbucket.org/gutworth/six/"}
         option.post_validation(config, 'repo_url')
         self.assertEqual(config['edit_uri'], 'src/default/docs/')
+        self.assertEqual(config['repo_url'], "https://bitbucket.org/gutworth/six/")
 
     def test_edit_uri_gitlab(self):
 
@@ -344,6 +346,7 @@ class RepoURLTest(unittest.TestCase):
         config = {'repo_url': "https://launchpad.net/python-tuskarclient"}
         option.post_validation(config, 'repo_url')
         self.assertEqual(config.get('edit_uri'), '')
+        self.assertEqual(config['repo_url'], "https://launchpad.net/python-tuskarclient")
 
     def test_repo_name_custom_and_empty_edit_uri(self):
 

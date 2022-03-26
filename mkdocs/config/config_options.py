@@ -359,12 +359,8 @@ class RepoURL(URL):
                 edit_uri = ''
 
         # ensure a well-formed edit_uri
-        if edit_uri:
-            if not edit_uri.startswith(('?', '#')) \
-                    and not config['repo_url'].endswith('/'):
-                config['repo_url'] += '/'
-            if not edit_uri.endswith('/'):
-                edit_uri += '/'
+        if edit_uri and not edit_uri.endswith('/'):
+            edit_uri += '/'
 
         config['edit_uri'] = edit_uri
 
@@ -388,9 +384,7 @@ class FilesystemObject(Type):
             value = os.path.join(self.config_dir, value)
         if self.exists and not self.existence_test(value):
             raise ValidationError(f"The path {value} isn't an existing {self.name}.")
-        value = os.path.abspath(value)
-        assert isinstance(value, str)
-        return value
+        return os.path.abspath(value)
 
 
 class Dir(FilesystemObject):

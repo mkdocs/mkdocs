@@ -10,7 +10,6 @@ import shutil
 from mkdocs import __version__
 from mkdocs import utils
 from mkdocs import config
-from mkdocs.commands import build, gh_deploy, new, serve
 
 
 if sys.platform.startswith("win"):
@@ -95,6 +94,7 @@ remote_branch_help = ("The remote branch to commit to for Github Pages. This "
 remote_name_help = ("The remote name to commit to for Github Pages. This "
                     "overrides the value specified in config")
 force_help = "Force the push to the repository."
+no_history_help = "Replace the whole Git history with one new commit."
 ignore_version_help = "Ignore check that build is not being deployed with an older version of MkDocs."
 watch_theme_help = ("Include the theme in list of files to watch for live reloading. "
                     "Ignored when live reload is not used.")
@@ -177,6 +177,7 @@ def cli():
 @common_options
 def serve_command(dev_addr, livereload, watch, **kwargs):
     """Run the builtin development server"""
+    from mkdocs.commands import serve
     serve.serve(dev_addr=dev_addr, livereload=livereload, watch=watch, **kwargs)
 
 
@@ -187,6 +188,7 @@ def serve_command(dev_addr, livereload, watch, **kwargs):
 @common_options
 def build_command(clean, **kwargs):
     """Build the MkDocs documentation"""
+    from mkdocs.commands import build
     build.build(config.load_config(**kwargs), dirty=not clean)
 
 
@@ -196,20 +198,29 @@ def build_command(clean, **kwargs):
 @click.option('-b', '--remote-branch', help=remote_branch_help)
 @click.option('-r', '--remote-name', help=remote_name_help)
 @click.option('--force', is_flag=True, help=force_help)
+@click.option('--no-history', is_flag=True, help=no_history_help)
 @click.option('--ignore-version', is_flag=True, help=ignore_version_help)
 @click.option('--shell', is_flag=True, help=shell_help)
 @common_config_options
 @click.option('-d', '--site-dir', type=click.Path(), help=site_dir_help)
 @common_options
-def gh_deploy_command(clean, message, remote_branch, remote_name, force, ignore_version, shell, **kwargs):
+def gh_deploy_command(clean, message, remote_branch, remote_name, force, no_history, ignore_version, shell, **kwargs):
     """Deploy your documentation to GitHub Pages"""
     cfg = config.load_config(
         remote_branch=remote_branch,
         remote_name=remote_name,
         **kwargs
     )
+    from mkdocs.commands import build, gh_deploy
     build.build(cfg, dirty=not clean)
-    gh_deploy.gh_deploy(cfg, message=message, force=force, ignore_version=ignore_version, shell=shell)
+    gh_deploy.gh_deploy(
+        cfg,
+        message=message,
+        force=force,
+        no_history=no_history,
+        ignore_version=ignore_version,
+        shell=shell
+    )
 
 
 @cli.command(name="new")
@@ -217,6 +228,7 @@ def gh_deploy_command(clean, message, remote_branch, remote_name, force, ignore_
 @common_options
 def new_command(project_directory):
     """Create a new MkDocs project"""
+    from mkdocs.commands import new
     new.new(project_directory)
 
 

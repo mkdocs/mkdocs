@@ -8,6 +8,7 @@ import pathlib
 import posixpath
 import re
 import socketserver
+import string
 import threading
 import time
 import warnings
@@ -15,6 +16,30 @@ import wsgiref.simple_server
 
 import watchdog.events
 import watchdog.observers.polling
+
+_SCRIPT_TEMPLATE = """
+var livereload = function(epoch, requestId) {
+    var req = new XMLHttpRequest();
+    req.onloadend = function() {
+        if (parseFloat(this.responseText) > epoch) {
+            location.reload();
+            return;
+        }
+        var launchNext = livereload.bind(this, epoch, requestId);
+        if (this.status === 200) {
+            launchNext();
+        } else {
+            setTimeout(launchNext, 3000);
+        }
+    };
+    req.open("GET", "${mount_path}livereload/" + epoch + "/" + requestId);
+    req.send();
+
+    console.log('Enabled live reload');
+}
+livereload(${epoch}, ${request_id});
+"""
+_SCRIPT_TEMPLATE = string.Template(_SCRIPT_TEMPLATE)
 
 
 class _LoggerAdapter(logging.LoggerAdapter):
@@ -176,26 +201,25 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         # https://github.com/bottlepy/bottle/blob/f9b1849db4/bottle.py#L984
         path = environ["PATH_INFO"].encode("latin-1").decode("utf-8", "ignore")
 
-        m = re.fullmatch(r"/livereload/([0-9]+)/[0-9]+", path)
-        if m:
-            epoch = int(m[1])
-            start_response("200 OK", [("Content-Type", "text/plain")])
-
-            def condition():
-                return self._visible_epoch > epoch
-
-            with self._epoch_cond:
-                if not condition():
-                    # Stall the browser, respond as soon as there's something new.
-                    # If there's not, respond anyway after a minute.
-                    self._log_poll_request(environ.get("HTTP_REFERER"), request_id=path)
-                    self._epoch_cond.wait_for(condition, timeout=self.poll_response_timeout)
-                return [b"%d" % self._visible_epoch]
-
-        if path == "/js/livereload.js":
-            file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "livereload.js")
-        elif path.startswith(self.mount_path):
+        if path.startswith(self.mount_path):
             rel_file_path = path[len(self.mount_path):]
+
+            m = re.fullmatch(r"livereload/([0-9]+)/[0-9]+", rel_file_path)
+            if m:
+                epoch = int(m[1])
+                start_response("200 OK", [("Content-Type", "text/plain")])
+
+                def condition():
+                    return self._visible_epoch > epoch
+
+                with self._epoch_cond:
+                    if not condition():
+                        # Stall the browser, respond as soon as there's something new.
+                        # If there's not, respond anyway after a minute.
+                        self._log_poll_request(environ.get("HTTP_REFERER"), request_id=path)
+                        self._epoch_cond.wait_for(condition, timeout=self.poll_response_timeout)
+                    return [b"%d" % self._visible_epoch]
+
             if path.endswith("/"):
                 rel_file_path += "index.html"
             # Prevent directory traversal - normalize the path.
@@ -220,7 +244,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 return []
             return None  # Not found
 
-        if file_path.endswith(".html"):
+        if self._watched_paths and file_path.endswith(".html"):
             with file:
                 content = file.read()
             content = self._inject_js_into_html(content, epoch)
@@ -235,17 +259,20 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         )
         return wsgiref.util.FileWrapper(file)
 
-    @classmethod
-    def _inject_js_into_html(cls, content, epoch):
+    def _inject_js_into_html(self, content, epoch):
         try:
             body_end = content.rindex(b"</body>")
         except ValueError:
             body_end = len(content)
         # The page will reload if the livereload poller returns a newer epoch than what it knows.
         # The other timestamp becomes just a unique identifier for the initiating page.
-        return (
-            b'%b<script src="/js/livereload.js"></script><script>livereload(%d, %d);</script>%b'
-            % (content[:body_end], epoch, _timestamp(), content[body_end:])
+        script = _SCRIPT_TEMPLATE.substitute(
+            mount_path=self.mount_path, epoch=epoch, request_id=_timestamp()
+        )
+        return b"%b<script>%b</script>%b" % (
+            content[:body_end],
+            script.encode(),
+            content[body_end:],
         )
 
     @classmethod

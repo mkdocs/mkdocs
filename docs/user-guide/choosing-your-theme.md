@@ -106,6 +106,7 @@ supports the following options:
     * `pt_BR`: Portuguese (Brazil)
     * `zh_CN`: Simplified Chinese
     * `de`: German
+    * `fa`: Persian (Farsi)
 
     See the guide on [localizing your theme] for more information.
 
@@ -184,6 +185,7 @@ theme supports the following options:
     * `pt_BR`: Portuguese (Brazil)
     * `zh_CN`: Simplified Chinese
     * `de`: German
+    * `fa`: Persian (Farsi)
 
     See the guide on [localizing your theme] for more information.
 
