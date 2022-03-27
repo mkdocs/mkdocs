@@ -7,6 +7,7 @@ from unittest.mock import patch
 import mkdocs
 from mkdocs.config import config_options
 from mkdocs.config.base import Config
+from mkdocs.exceptions import ConfigurationError
 from mkdocs.tests.base import tempdir
 from mkdocs.utils import yaml_load
 
@@ -852,6 +853,67 @@ class PrivateTest(unittest.TestCase):
         option = config_options.Private()
         with self.assertRaises(config_options.ValidationError):
             option.validate('somevalue')
+
+
+class SubConfigTest(unittest.TestCase):
+
+    def test_subconfig_wrong_type(self):
+        # Test that an error is raised if subconfig does not receive a dict
+        option = config_options.SubConfig()
+        with self.assertRaises(ConfigurationError):
+            option.validate("not_a_dict")
+        with self.assertRaises(ConfigurationError):
+            option.validate(("not_a_dict",))
+        with self.assertRaises(ConfigurationError):
+            option.validate(["not_a_dict"])
+
+    def test_subconfig_default(self):
+        """Default behaviour of subconfig: validation is ignored"""
+
+        # Nominal
+        option = config_options.SubConfig(('c', config_options.Choice(('foo', 'bar'))))
+        res = option.validate(dict(c='foo'))
+        assert option.warnings == []
+        assert res == dict(c='foo')
+
+        # Invalid option ! No error
+        option = config_options.SubConfig(('c', config_options.Choice(('foo', 'bar'))))
+        res = option.validate(dict(c=True))
+        assert option.warnings == []
+        assert res == dict(c=True)
+
+        # Missing option ! Will be considered optional with default None
+        option = config_options.SubConfig(('c', config_options.Choice(('foo', 'bar'))))
+        res = option.validate(dict())
+        assert option.warnings == []
+        assert res == dict(c=None)
+
+        # Unknown option ! No warning
+        option = config_options.SubConfig(('c', config_options.Choice(('foo', 'bar'))))
+        res = option.validate({"unknown_key_is_ok": 0})
+        assert option.warnings == []
+        assert res == {"c": None, "unknown_key_is_ok": 0}
+
+    def test_subconfig_strict(self):
+        """Strict validation mode for subconfigs."""
+
+        # Unknown option: warning
+        option = config_options.SubConfig(ignore_validation=False)
+        res = option.validate({"unknown": 0})
+        assert option.warnings == [('unknown', 'Unrecognised configuration name: unknown')]
+        assert res == {"unknown": 0}
+
+        # Invalid option: error
+        option = config_options.SubConfig(
+            ('c', config_options.Choice(('foo', 'bar'))),
+            ignore_validation=False,
+        )
+        with self.assertRaises(config_options.ValidationError):
+            option.validate(dict(c=True))
+
+        # Nominal
+        res = option.validate(dict(c='foo'))
+        assert res == dict(c='foo')
 
 
 class MarkdownExtensionsTest(unittest.TestCase):

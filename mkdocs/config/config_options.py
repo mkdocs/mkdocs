@@ -49,21 +49,36 @@ class BaseConfigOption:
 
 
 class SubConfig(BaseConfigOption, Config):
-    def __init__(self, *config_options):
+    """
+    Subconfig Config Option
+
+    A set of `config_options` grouped under a single config option.
+    By default validation errors and warnings resulting from validating
+    `config_options` are ignored (`ignore_validation=True`). Users may switch to
+    `ignore_validation=False` to enable strict validation.
+    """
+    def __init__(self, *config_options, ignore_validation=True):
         BaseConfigOption.__init__(self)
         Config.__init__(self, config_options)
         self.default = {}
+        self.ignore_validation = ignore_validation
 
     def validate(self, value):
         self.load_dict(value)
         return self.run_validation(value)
 
     def run_validation(self, value):
-        failed, self.warnings = Config.validate(self)
-        if len(failed) > 0:
-            # get the first failing one
-            key, err = failed[0]
-            raise ValidationError(f"Sub-option {key!r} configuration error: {err}")
+        failed, warnings = Config.validate(self)
+        if self.ignore_validation:
+            # Default behaviour: simply ignore the errors and warnings
+            pass
+        else:
+            # Capture errors and warnings
+            self.warnings = warnings
+            if len(failed) > 0:
+                # get the first failing one
+                key, err = failed[0]
+                raise ValidationError(f"Sub-option {key!r} configuration error: {err}")
 
         return self
 
