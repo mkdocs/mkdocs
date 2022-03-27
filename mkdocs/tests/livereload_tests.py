@@ -343,9 +343,9 @@ class BuildTests(unittest.TestCase):
             self.assertTrue(output.isdigit())
 
     @tempdir()
-    def test_serves_polling_from_mount_path(self, site_dir):
+    def test_serves_polling_with_mount_path(self, site_dir):
         with testing_server(site_dir, mount_path="/test/f*o") as server:
-            _, output = do_request(server, "GET /test/f*o/livereload/0/0")
+            _, output = do_request(server, "GET /livereload/0/0")
             self.assertTrue(output.isdigit())
 
     @tempdir()
