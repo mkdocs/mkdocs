@@ -10,7 +10,9 @@
         {%- endif %}
       {%- endfor %}
     {%- endif %}
-    {%- if page %}<li>&nbsp;{{ page.title }}</li>{%- endif %}
+    {%- if page %}
+      <li>{{ page.title }}</li>
+    {%- endif %}
     <li class="wy-breadcrumbs-aside">
       {%- block repo %}
       {%- if page and page.edit_url %}
@@ -39,4 +41,3 @@
   {%- endif %}
   <hr/>
 </div>
-
