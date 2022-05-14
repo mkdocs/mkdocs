@@ -111,11 +111,6 @@ def get_navigation(files, config):
 
     missing_from_config = [file for file in files.documentation_pages() if file.page is None]
     if missing_from_config:
-        log.info(
-            'The following pages exist in the docs directory, but are not '
-            'included in the "nav" configuration:\n  - {}'.format(
-                '\n  - '.join([file.src_path for file in missing_from_config]))
-        )
         # Any documentation files not found in the nav should still have an associated page, so we
         # create them here. The Page object will automatically be assigned to `file.page` during
         # its creation (and this is the only way in which these page objects are accessible).
@@ -134,36 +129,59 @@ def get_navigation(files, config):
                 f"An absolute path to '{link.url}' is included in the 'nav' "
                 "configuration, which presumably points to an external resource."
             )
-        else:
-            msg = (
-                f"A relative path to '{link.url}' is included in the 'nav' "
-                "configuration, which is not found in the documentation files"
-            )
-            log.warning(msg)
     return Navigation(items, pages)
 
-
 def _data_to_navigation(data, files, config):
-    if isinstance(data, dict):
-        return [
-            _data_to_navigation((key, value), files, config)
-            if isinstance(value, str) else
-            Section(title=key, children=_data_to_navigation(value, files, config))
-            for key, value in data.items()
-        ]
-    elif isinstance(data, list):
-        return [
-            _data_to_navigation(item, files, config)[0]
-            if isinstance(item, dict) and len(item) == 1 else
-            _data_to_navigation(item, files, config)
-            for item in data
-        ]
-    title, path = data if isinstance(data, tuple) else (None, data)
-    file = files.get_file_from_path(path)
-    if file:
-        return Page(title, file, config)
-    return Link(title, path)
+    return [_handle_nav_element(element, files, config) for element in data]
 
+def _handle_nav_element(data, files, config):
+    assert type(data) in [dict, str], 'each nav element should be a dict or string'
+
+    if isinstance(data, str):
+        return Page(None, files.get_file_from_path(data), config)
+
+    if isinstance(data, dict):
+        assert len(data) == 1, 'each nav element dict should only have one element'
+        name, value = list(data.items())[0]
+
+        if isinstance(value, list):
+            items = _merge_dicts(value)
+            return _handle_blog_page(name, items, files, config) if items.get('sections', False) \
+                else Section(title=name, children=_data_to_navigation(value, files, config))
+        
+        return Page(name, files.get_file_from_path(value), config)
+
+    raise Exception('No conditions met when handling nav elements')
+
+def _handle_blog_page(key, items, files, config):
+    name = items['name'] if items.get('name', False) else \
+                (None if key.endswith('.md') else key)
+    file_path = items['path'] if items.get('path', False) else \
+            (key if key.endswith('.md') else None)
+
+    assert file_path, f'file path to {name} must be set in config file'
+
+    page = Page(name, files.get_file_from_path(file_path), config)
+    page.sections = _handle_blog_sections(items['sections'], files, config, page)
+    return page
+
+def _handle_blog_sections(sections, files, config, parent):
+    sections = _merge_dicts(sections)
+    ret = {}
+    for name, folder_path in sections.items():
+        article_files = files.get_files_from_folder_path(folder_path)
+        article_pages = [Page(None, article_file, config, parent) for article_file in article_files]
+        _add_previous_and_next_links(article_pages)
+        ret[name] = article_pages
+    return ret
+
+def _merge_dicts(l):
+    ret = {}
+    for i in l:
+        if isinstance(i, str):
+            continue
+        ret.update(i)
+    return ret
 
 def _get_by_type(nav, T):
     ret = []

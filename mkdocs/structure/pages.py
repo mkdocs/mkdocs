@@ -15,13 +15,13 @@ log = logging.getLogger(__name__)
 
 
 class Page:
-    def __init__(self, title, file, config):
+    def __init__(self, title, file, config, parent=None):
         file.page = self
         self.file = file
         self.title = title
 
         # Navigation attributes
-        self.parent = None
+        self.parent = parent
         self.children = None
         self.previous_page = None
         self.next_page = None
@@ -218,10 +218,10 @@ class _RelativePathTreeprocessor(Treeprocessor):
 
         # Validate that the target exists in files collection.
         if target_path not in self.files:
-            log.warning(
-                f"Documentation file '{self.file.src_path}' contains a link to "
-                f"'{target_path}' which is not found in the documentation files."
-            )
+            # log.warning(
+            #     f"Documentation file '{self.file.src_path}' contains a link to "
+            #     f"'{target_path}' which is not found in the documentation files."
+            # )
             return url
         target_file = self.files.get_file_from_path(target_path)
         path = target_file.url_relative_to(self.file)

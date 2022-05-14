@@ -30,6 +30,13 @@ class Files:
     def get_file_from_path(self, path):
         """ Return a File instance with File.src_path equal to path. """
         return self.src_paths.get(os.path.normpath(path))
+    
+    def get_files_from_folder_path(self, path):
+        """ Return a list of File instances located within path. """
+        return [
+            file for file in self._files 
+            if file.src_path.startswith(os.path.normpath(path)) and file.is_documentation_page()
+        ]
 
     def append(self, file):
         """ Append file to Files collection. """
