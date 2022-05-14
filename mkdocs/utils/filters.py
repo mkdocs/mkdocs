@@ -1,9 +1,17 @@
+import json
+
+import markupsafe
+
 try:
     from jinja2 import pass_context as contextfilter
 except ImportError:
     from jinja2 import contextfilter
 
 from mkdocs.utils import normalize_url
+
+
+def tojson(obj, **kwargs):
+    return markupsafe.Markup(json.dumps(obj, **kwargs))
 
 
 @contextfilter
