@@ -131,16 +131,18 @@ def get_navigation(files, config):
             )
     return Navigation(items, pages)
 
+
 def _data_to_navigation(data, files, config):
+    """ Return list of navigation elements from nav data list. """
     return [_handle_nav_element(element, files, config) for element in data]
 
-def _handle_nav_element(data, files, config):
-    assert type(data) in [dict, str], 'each nav element should be a dict or string'
 
+def _handle_nav_element(data, files, config):
+    """ Converts each nav element into corresponding Page/Section/Link object. """
     if isinstance(data, str):
         return Page(None, files.get_file_from_path(data), config)
 
-    if isinstance(data, dict):
+    elif isinstance(data, dict):
         assert len(data) == 1, 'each nav element dict should only have one element'
         name, value = list(data.items())[0]
 
@@ -149,15 +151,18 @@ def _handle_nav_element(data, files, config):
             return _handle_blog_page(name, items, files, config) if items.get('sections', False) \
                 else Section(title=name, children=_data_to_navigation(value, files, config))
         
-        return Page(name, files.get_file_from_path(value), config)
-
+        if isinstance(value, str):
+            file = files.get_file_from_path(value)
+            return Page(name, files.get_file_from_path(value), config) if file \
+                else Link(name, value)
+        
     raise Exception('No conditions met when handling nav elements')
 
+
 def _handle_blog_page(key, items, files, config):
-    name = items['name'] if items.get('name', False) else \
-                (None if key.endswith('.md') else key)
-    file_path = items['path'] if items.get('path', False) else \
-            (key if key.endswith('.md') else None)
+    """ Return blog page with correct name and path. """
+    name = items.get('name',  key if not key.endswith('.md') else None)
+    file_path = items.get('path', key if key.endswith('.md') else None)
 
     assert file_path, f'file path to {name} must be set in config file'
 
@@ -165,7 +170,9 @@ def _handle_blog_page(key, items, files, config):
     page.sections = _handle_blog_sections(items['sections'], files, config, page)
     return page
 
+
 def _handle_blog_sections(sections, files, config, parent):
+    """ Generates and links all child articles for blog page. """
     sections = _merge_dicts(sections)
     ret = {}
     for name, folder_path in sections.items():
@@ -175,6 +182,7 @@ def _handle_blog_sections(sections, files, config, parent):
         ret[name] = article_pages
     return ret
 
+
 def _merge_dicts(l):
     ret = {}
     for i in l:
@@ -182,6 +190,7 @@ def _merge_dicts(l):
             continue
         ret.update(i)
     return ret
+
 
 def _get_by_type(nav, T):
     ret = []
