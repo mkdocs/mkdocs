@@ -88,10 +88,10 @@ reload_help = "Enable the live reloading in the development server (this is the 
 no_reload_help = "Disable the live reloading in the development server."
 dirty_reload_help = "Enable the live reloading in the development server, but only re-build files that have changed"
 commit_message_help = ("A commit message to use when committing to the "
-                       "Github Pages remote branch. Commit {sha} and MkDocs {version} are available as expansions")
-remote_branch_help = ("The remote branch to commit to for Github Pages. This "
+                       "GitHub Pages remote branch. Commit {sha} and MkDocs {version} are available as expansions")
+remote_branch_help = ("The remote branch to commit to for GitHub Pages. This "
                       "overrides the value specified in config")
-remote_name_help = ("The remote name to commit to for Github Pages. This "
+remote_name_help = ("The remote name to commit to for GitHub Pages. This "
                     "overrides the value specified in config")
 force_help = "Force the push to the repository."
 no_history_help = "Replace the whole Git history with one new commit."
