@@ -723,7 +723,7 @@ Generally, a single file would hold the entire configuration for a site.
 However, some organizations may maintain multiple sites which all share a common
 configuration across them. Rather than maintaining separate configurations for
 each, the common configuration options can be defined in a parent configuration
-while which each site's primary configuration file inherits.
+file which each site's primary configuration file inherits.
 
 To define the parent for a configuration file, set the `INHERIT` (all caps) key
 to the path of the parent file. The path must be relative to the location of the
