@@ -229,14 +229,14 @@ navigation as a nested list.
             <li>{{ nav_item.title }}
                 <ul>
                 {% for nav_item in nav_item.children %}
-                    <li class="{% if nav_item.active%}current{% endif %}">
+                    <li class="{% if nav_item.active %}current{% endif %}">
                         <a href="{{ nav_item.url|url }}">{{ nav_item.title }}</a>
                     </li>
                 {% endfor %}
                 </ul>
             </li>
         {% else %}
-            <li class="{% if nav_item.active%}current{% endif %}">
+            <li class="{% if nav_item.active %}current{% endif %}">
                 <a href="{{ nav_item.url|url }}">{{ nav_item.title }}</a>
             </li>
         {% endif %}
