@@ -1,5 +1,5 @@
-# French translations for MkDocs.
-# Copyright (C) 2021 MkDocs
+# Italian translations for MkDocs.
+# Copyright (C) 2022 MkDocs
 # This file is distributed under the same license as the MkDocs project.
 #
 msgid ""
