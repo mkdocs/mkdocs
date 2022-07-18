@@ -1,4 +1,6 @@
 import os
+import sys
+import traceback
 from collections import namedtuple
 from collections.abc import Sequence
 from urllib.parse import urlsplit, urlunsplit
@@ -633,10 +635,19 @@ class MarkdownExtensions(OptionallyRequired):
         extensions = utils.reduce_list(self.builtins + extensions)
 
         # Confirm that Markdown considers extensions to be valid
-        try:
-            markdown.Markdown(extensions=extensions, extension_configs=self.configdata)
-        except Exception as e:
-            raise ValidationError(e.args[0])
+        md = markdown.Markdown()
+        for ext in extensions:
+            try:
+                md.registerExtensions((ext,), self.configdata)
+            except Exception as e:
+                stack = []
+                for frame in reversed(traceback.extract_tb(sys.exc_info()[2])):
+                    if not frame.line:  # Ignore frames before <frozen importlib._bootstrap>
+                        break
+                    stack.insert(0, frame)
+                tb = ''.join(traceback.format_list(stack)).rstrip()
+
+                raise ValidationError(f"Failed to load extension '{ext}'.\n\n{tb}\n{type(e).__name__}: {e}")
 
         return extensions
 
