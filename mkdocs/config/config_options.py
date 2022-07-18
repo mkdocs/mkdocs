@@ -645,9 +645,9 @@ class MarkdownExtensions(OptionallyRequired):
                     if not frame.line:  # Ignore frames before <frozen importlib._bootstrap>
                         break
                     stack.insert(0, frame)
-                tb = ''.join(traceback.format_list(stack)).rstrip()
+                tb = ''.join(traceback.format_list(stack))
 
-                raise ValidationError(f"Failed to load extension '{ext}'.\n\n{tb}\n{type(e).__name__}: {e}")
+                raise ValidationError(f"Failed to load extension '{ext}'.\n{tb}{type(e).__name__}: {e}")
 
         return extensions
 
