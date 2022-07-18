@@ -23,6 +23,19 @@ The current and past members of the MkDocs team.
 * [@oprypin](https://github.com/oprypin/)
 * [@ultrabug](https://github.com/ultrabug/)
 
+## Version 1.3.1 (2022-07-19)
+
+* When a Markdown extension fails to load, print its name and traceback (#2894)
+
+* Bugfix for "readthedocs" theme (regression in 1.3.0): add missing space in breadcrumbs (#2810)
+
+* Bugfix: don't complain when a file "readme.md" (lowercase) exists, it's not recognized otherwise (#2852)
+
+* Built-in themes now also support these languages:
+    * Italian (#2860)
+
+Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.3.0...1.3.1).
+
 ## Version 1.3.0 (2022-03-26)
 
 ### Feature upgrades
