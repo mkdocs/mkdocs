@@ -25,6 +25,8 @@ The current and past members of the MkDocs team.
 
 ## Version 1.3.1 (2022-07-19)
 
+* Pin Python-Markdown version to &lt;3.4, thus excluding its latest release that breaks too many external extensions (#2893)
+
 * When a Markdown extension fails to load, print its name and traceback (#2894)
 
 * Bugfix for "readthedocs" theme (regression in 1.3.0): add missing space in breadcrumbs (#2810)
