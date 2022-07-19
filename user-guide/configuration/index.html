@@ -216,8 +216,7 @@
 <p>Project settings are configured by default using a YAML configuration file in
 the project directory named <code>mkdocs.yml</code>. You can specify another path for it
 by using the <code>-f</code>/<code>--config-file</code> option (see <code>mkdocs build --help</code>).</p>
-<p>As a minimum, this configuration file must contain the <code>site_name</code> and
-<code>site_url</code> settings. All other settings are optional.</p>
+<p>As a minimum, this configuration file must contain the <code>site_name</code>. All other settings are optional.</p>
 <h2 id="project-information">Project information<a class="headerlink" href="#project-information" title="Permanent link"></a></h2>
 <h3 id="site_name">site_name<a class="headerlink" href="#site_name" title="Permanent link"></a></h3>
 <p>This is a <strong>required setting</strong>, and should be a string that is used as the main
@@ -761,7 +760,7 @@ project.</p>
 However, some organizations may maintain multiple sites which all share a common
 configuration across them. Rather than maintaining separate configurations for
 each, the common configuration options can be defined in a parent configuration
-while which each site's primary configuration file inherits.</p>
+file which each site's primary configuration file inherits.</p>
 <p>To define the parent for a configuration file, set the <code>INHERIT</code> (all caps) key
 to the path of the parent file. The path must be relative to the location of the
 primary file.</p>

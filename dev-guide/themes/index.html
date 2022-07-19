@@ -371,14 +371,14 @@ navigation as a nested list.</p>
             &lt;li&gt;{{ nav_item.title }}
                 &lt;ul&gt;
                 {% for nav_item in nav_item.children %}
-                    &lt;li class=&quot;{% if nav_item.active%}current{% endif %}&quot;&gt;
+                    &lt;li class=&quot;{% if nav_item.active %}current{% endif %}&quot;&gt;
                         &lt;a href=&quot;{{ nav_item.url|url }}&quot;&gt;{{ nav_item.title }}&lt;/a&gt;
                     &lt;/li&gt;
                 {% endfor %}
                 &lt;/ul&gt;
             &lt;/li&gt;
         {% else %}
-            &lt;li class=&quot;{% if nav_item.active%}current{% endif %}&quot;&gt;
+            &lt;li class=&quot;{% if nav_item.active %}current{% endif %}&quot;&gt;
                 &lt;a href=&quot;{{ nav_item.url|url }}&quot;&gt;{{ nav_item.title }}&lt;/a&gt;
             &lt;/li&gt;
         {% endif %}
