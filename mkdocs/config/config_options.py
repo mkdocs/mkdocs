@@ -1,3 +1,4 @@
+import logging
 import os
 import sys
 import traceback
@@ -9,6 +10,16 @@ import markdown
 
 from mkdocs import utils, theme, plugins
 from mkdocs.config.base import Config, ValidationError
+
+try:
+    import pkg_resources
+
+    markdown_dist = pkg_resources.get_distribution("markdown")
+    markdown_version = markdown_dist.version
+except Exception:
+    markdown_version = None
+
+log = logging.getLogger("mkdocs.config")
 
 
 class BaseConfigOption:
@@ -634,6 +645,24 @@ class MarkdownExtensions(OptionallyRequired):
 
         extensions = utils.reduce_list(self.builtins + extensions)
 
+        # List some of the Python-Markdown 3.4 deprecations
+        # https://python-markdown.github.io/change_log/release-3.4/
+        # see mkdocs#2892 and Python-Markdown#1277
+        md_34_deprecations = [
+                "Processor",
+                "Registry",
+                "etree",
+                "extendMarkdown",
+                "int2str",
+                "isBlockLevel",
+                "iterrange",
+                "markdown.util",
+                "markdown.version",
+                "markdown.version_info",
+                "md_globals",
+                "string_type",
+                "text_type",
+        ]
         # Confirm that Markdown considers extensions to be valid
         md = markdown.Markdown()
         for ext in extensions:
@@ -646,6 +675,13 @@ class MarkdownExtensions(OptionallyRequired):
                         break
                     stack.insert(0, frame)
                 tb = ''.join(traceback.format_list(stack))
+
+                if markdown_version >= "3.4":
+                    if isinstance(e, ImportError) or isinstance(e, TypeError):
+                        for word in tb.split():
+                            if word in md_34_deprecations:
+                                log.warn(f"The extension '{ext}' might not be compatible with Markdown-{markdown_version}: check Python-Markdown#1277")
+                                break
 
                 raise ValidationError(f"Failed to load extension '{ext}'.\n{tb}{type(e).__name__}: {e}")
 
