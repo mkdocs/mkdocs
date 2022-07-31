@@ -6,6 +6,8 @@ import logging
 import click
 import textwrap
 import shutil
+import warnings
+import traceback
 
 from mkdocs import __version__
 from mkdocs import utils
@@ -21,6 +23,27 @@ if sys.platform.startswith("win"):
         colorama.init()
 
 log = logging.getLogger(__name__)
+
+
+def _showwarning(message, category, filename, lineno, file=None, line=None):
+    try:
+        # Last stack frames:
+        # * ...
+        # * Location of call to deprecated function   <-- include this
+        # * Location of call to warn()                <-- include this
+        # * (stdlib) Location of call to showwarning function
+        # * (this function) Location of call to extract_stack()
+        stack = traceback.extract_stack()[-4:-2]
+        tb = ''.join(traceback.format_list(stack))
+    except Exception:
+        tb = f'  File "{filename}", line {lineno}'
+
+    log.info(f'{category.__name__}: {message}\n{tb}')
+
+
+def _enable_warnings():
+    warnings.simplefilter('module', DeprecationWarning)
+    warnings.showwarning = _showwarning
 
 
 class ColorFormatter(logging.Formatter):
@@ -178,6 +201,7 @@ def cli():
 def serve_command(dev_addr, livereload, watch, **kwargs):
     """Run the builtin development server"""
     from mkdocs.commands import serve
+    _enable_warnings()
     serve.serve(dev_addr=dev_addr, livereload=livereload, watch=watch, **kwargs)
 
 
@@ -189,6 +213,7 @@ def serve_command(dev_addr, livereload, watch, **kwargs):
 def build_command(clean, **kwargs):
     """Build the MkDocs documentation"""
     from mkdocs.commands import build
+    _enable_warnings()
     build.build(config.load_config(**kwargs), dirty=not clean)
 
 
@@ -206,12 +231,13 @@ def build_command(clean, **kwargs):
 @common_options
 def gh_deploy_command(clean, message, remote_branch, remote_name, force, no_history, ignore_version, shell, **kwargs):
     """Deploy your documentation to GitHub Pages"""
+    from mkdocs.commands import build, gh_deploy
+    _enable_warnings()
     cfg = config.load_config(
         remote_branch=remote_branch,
         remote_name=remote_name,
         **kwargs
     )
-    from mkdocs.commands import build, gh_deploy
     build.build(cfg, dirty=not clean)
     gh_deploy.gh_deploy(
         cfg,
