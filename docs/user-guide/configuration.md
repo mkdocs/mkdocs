@@ -240,41 +240,41 @@ theme:
 
 If a set of key/value pairs, the following nested keys can be defined:
 
-!!! block ""
-
-    #### name:
-
-    The string name of a known installed theme. For a list of available themes
-    visit [Choosing Your Theme].
-
-    #### locale:
-
-    A code representing the language of your site. See [Localizing your theme]
-    for details.
-
-    #### custom_dir:
-
-    A directory containing a custom theme. This can either be a relative
-    directory, in which case it is resolved relative to the directory containing
-    your configuration file or it can be an absolute directory path from the
-    root of your local file system.
-
-    See [Customizing Your Theme][theme_dir] for details if you would like to tweak an
-    existing theme.
-
-    See the [Theme Developer Guide] if you would like to build your own theme
-    from the ground up.
-
-    #### static_templates:
-
-    A list of templates to render as static pages. The templates must be located
-    in either the theme's template directory or in the `custom_dir` defined in
-    the theme configuration.
-
-    #### (theme specific keywords)
-
-    Any additional keywords supported by the theme can also be defined. See the
-    documentation for the theme you are using for details.
+> BLOCK:
+>
+> #### name:
+>
+> The string name of a known installed theme. For a list of available themes
+> visit [Choosing Your Theme].
+>
+> #### locale:
+>
+> A code representing the language of your site. See [Localizing your theme]
+> for details.
+>
+> #### custom_dir:
+>
+> A directory containing a custom theme. This can either be a relative
+> directory, in which case it is resolved relative to the directory containing
+> your configuration file or it can be an absolute directory path from the
+> root of your local file system.
+>
+> See [Customizing Your Theme][theme_dir] for details if you would like to tweak an
+> existing theme.
+>
+> See the [Theme Developer Guide] if you would like to build your own theme
+> from the ground up.
+>
+> #### static_templates:
+>
+> A list of templates to render as static pages. The templates must be located
+> in either the theme's template directory or in the `custom_dir` defined in
+> the theme configuration.
+>
+> #### (theme specific keywords)
+>
+> Any additional keywords supported by the theme can also be defined. See the
+> documentation for the theme you are using for details.
 
 **default**: `'mkdocs'`
 
@@ -296,16 +296,16 @@ the root of your local file system.
 
 **default**: `'site'`
 
-!!! note "Note:"
-    If you are using source code control you will normally want to ensure that
-    your *build output* files are not committed into the repository, and only
-    keep the *source* files under version control. For example, if using `git`
-    you might add the following line to your `.gitignore` file:
-
-        site/
-
-    If you're using another source code control tool, you'll want to check its
-    documentation on how to ignore specific directories.
+> NOTE:
+> If you are using source code control you will normally want to ensure that
+> your *build output* files are not committed into the repository, and only
+> keep the *source* files under version control. For example, if using `git`
+> you might add the following line to your `.gitignore` file:
+>
+>     site/
+>
+> If you're using another source code control tool, you'll want to check its
+> documentation on how to ignore specific directories.
 
 ### extra_css
 

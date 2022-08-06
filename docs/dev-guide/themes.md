@@ -832,52 +832,52 @@ theme:
 In addition to arbitrary options defined by the theme, MkDocs defines a few
 special options which alters its behavior:
 
-!!! block ""
-
-    #### locale
-
-    This option mirrors the [theme] config option of the same name. If this
-    value is not defined in the `mkdocs_theme.yml` file and the user does not
-    set it in `mkdocs.yml` then it will default to `en` (English). The value
-    is expected to match the language used in the text provided by the theme
-    (such a "next" and "previous" links) and should be used as the value of
-    the `<html>` tag's `lang` attribute. See [Supporting theme localization/
-    translation](#supporting-theme-localizationtranslation) for more
-    information.
-
-    Note that during configuration validation, the provided string is converted
-    to a `Locale` object. The object contains `Locale.language` and
-    `Locale.territory` attributes and will resolve as a string from within a
-    template. Therefore, the following will work fine:
-
-        <html lang="{ config.theme.locale }">
-
-    If the locale was set to `fr_CA` (Canadian French), then the above template
-    would render as:
-
-        <html lang="fr_CA">
-
-    If you did not want the territory attribute to be included, then reference
-    the `language` attribute directly:
-
-        <html lang="{ config.theme.locale.language }">
-
-    That would render as:
-
-        <html lang="fr">
-
-    #### static_templates
-
-    This option mirrors the [theme] config option of the same name and allows
-    some defaults to be set by the theme. Note that while the user can add
-    templates to this list, the user cannot remove templates included in the
-    theme's config.
-
-    #### extends
-
-    Defines a parent theme that this theme inherits from. The value should be
-    the string name of the parent theme. Normal [Jinja inheritance rules]
-    apply.
+> BLOCK:
+>
+> #### locale
+>
+> This option mirrors the [theme] config option of the same name. If this
+> value is not defined in the `mkdocs_theme.yml` file and the user does not
+> set it in `mkdocs.yml` then it will default to `en` (English). The value
+> is expected to match the language used in the text provided by the theme
+> (such a "next" and "previous" links) and should be used as the value of
+> the `<html>` tag's `lang` attribute. See [Supporting theme localization/
+> translation](#supporting-theme-localizationtranslation) for more
+> information.
+>
+> Note that during configuration validation, the provided string is converted
+> to a `Locale` object. The object contains `Locale.language` and
+> `Locale.territory` attributes and will resolve as a string from within a
+> template. Therefore, the following will work fine:
+>
+>     <html lang="{ config.theme.locale }">
+>
+> If the locale was set to `fr_CA` (Canadian French), then the above template
+> would render as:
+>
+>     <html lang="fr_CA">
+>
+> If you did not want the territory attribute to be included, then reference
+> the `language` attribute directly:
+>
+>     <html lang="{ config.theme.locale.language }">
+>
+> That would render as:
+>
+>     <html lang="fr">
+>
+> #### static_templates
+>
+> This option mirrors the [theme] config option of the same name and allows
+> some defaults to be set by the theme. Note that while the user can add
+> templates to this list, the user cannot remove templates included in the
+> theme's config.
+>
+> #### extends
+>
+> Defines a parent theme that this theme inherits from. The value should be
+> the string name of the parent theme. Normal [Jinja inheritance rules]
+> apply.
 
 Plugins may also define some options which allow the theme to inform a plugin
 about which set of plugin options it expects. See the documentation for any
