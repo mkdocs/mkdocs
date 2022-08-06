@@ -243,9 +243,9 @@ dashes. Consecutive dashes are then reduced to a single dash.
 There are a few configuration settings provided by the toc extension which you
 can set in your `mkdocs.yml` configuration file to alter the default behavior:
 
-`permalink`:
+* **`permalink`**
 
-: Generate permanent links at the end of each header. Default: `False`.
+    Generate permanent links at the end of each header. Default: `False`.
 
     When set to True the paragraph symbol (&para; or `&para;`) is used as the
     link text. When set to a string, the provided string is used as the link
@@ -255,9 +255,9 @@ can set in your `mkdocs.yml` configuration file to alter the default behavior:
             - toc:
                 permalink: "#"
 
-`baselevel`:
+* **`baselevel`**
 
-: Base level for headers. Default: `1`.
+    Base level for headers. Default: `1`.
 
     This setting allows the header levels to be automatically adjusted to fit
     within the hierarchy of your HTML templates. For example, if the Markdown
@@ -272,9 +272,9 @@ can set in your `mkdocs.yml` configuration file to alter the default behavior:
     header `# Header` would be rendered as a level 2 header (`<h2>`) in the HTML
     output.
 
-`separator`:
+* **`separator`**
 
-: Word separator. Default: `-`.
+    Word separator. Default: `-`.
 
     Character which replaces white-space in generated IDs. If you prefer
     underscores, then do:
@@ -358,18 +358,18 @@ In addition to displaying information in a template, MkDocs includes support for
 a few predefined meta-data keys which can alter the behavior of MkDocs for that
 specific page. The following keys are supported:
 
-`template`:
+* **`template`**
 
-: The template to use with the current page.
+    The template to use with the current page.
 
     By default, MkDocs uses the `main.html` template of a theme to render
     Markdown pages. You can use the `template` meta-data key to define a
     different template file for that specific page. The template file must be
     available on the path(s) defined in the theme's environment.
 
-`title`:
+* **`title`**
 
-: The "title" to use for the document.
+    The "title" to use for the document.
 
     MkDocs will attempt to determine the title of a document in the following
     ways, in order:

@@ -242,17 +242,17 @@ If a set of key/value pairs, the following nested keys can be defined:
 
 > BLOCK:
 >
-> #### name:
+> #### name
 >
 > The string name of a known installed theme. For a list of available themes
 > visit [Choosing Your Theme].
 >
-> #### locale:
+> #### locale
 >
 > A code representing the language of your site. See [Localizing your theme]
 > for details.
 >
-> #### custom_dir:
+> #### custom_dir
 >
 > A directory containing a custom theme. This can either be a relative
 > directory, in which case it is resolved relative to the directory containing
@@ -265,7 +265,7 @@ If a set of key/value pairs, the following nested keys can be defined:
 > See the [Theme Developer Guide] if you would like to build your own theme
 > from the ground up.
 >
-> #### static_templates:
+> #### static_templates
 >
 > A list of templates to render as static pages. The templates must be located
 > in either the theme's template directory or in the `custom_dir` defined in
@@ -651,8 +651,6 @@ significant improvement in search performance.
 
 **default**: `False`
 
-[Node.js]: https://nodejs.org/
-
 ##### **indexing**
 
 Configures what strategy the search indexer will use when building the index
@@ -726,7 +724,7 @@ primary file.
 
 For configuration options to be merged with a parent configuration, those
 options must be defined as key/value pairs. Specifically, the
-[markdown_extensions] and [plugins] options must use the alternative syntax
+[markdown_extensions] and [plugins](#plugins) options must use the alternative syntax
 which does not use list items (lines which start with  `-`).
 
 For example, suppose the common (parent) configuration is defined in `base.yml`:
@@ -830,7 +828,6 @@ different sites may not work as expected. It is generally best to define
 path based options in the primary configuration file only.
 
 [Theme Developer Guide]: ../dev-guide/themes.md
-[variables that are available]: ../dev-guide/themes.md#template-variables
 [pymdk-extensions]: https://python-markdown.github.io/extensions/
 [pymkd]: https://python-markdown.github.io/
 [smarty]: https://python-markdown.github.io/extensions/smarty/
@@ -847,9 +844,6 @@ path based options in the primary configuration file only.
 [Lunr Languages]: https://github.com/MihaiValentin/lunr-languages#lunr-languages-----
 [contribute additional languages]: https://github.com/MihaiValentin/lunr-languages/blob/master/CONTRIBUTING.md
 [Node.js]: https://nodejs.org/
-[Lunr.py]: http://lunr.readthedocs.io/
-[Lunr.py's issues]: https://github.com/yeraydiazdiaz/lunr.py/issues
 [markdown_extensions]: #markdown_extensions
-[plugins]: #plugins
 [nav]: #nav
 [inheritance]: #configuration-inheritance
