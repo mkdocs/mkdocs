@@ -37,7 +37,7 @@ def load_config(**cfg):
     conf.load_dict(cfg)
 
     errors_warnings = conf.validate()
-    assert(errors_warnings == ([], [])), errors_warnings
+    assert errors_warnings == ([], []), errors_warnings
     return conf
 
 
