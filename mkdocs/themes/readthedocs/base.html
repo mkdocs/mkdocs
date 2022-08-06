@@ -34,9 +34,9 @@
     {% if page %}
       <script>
         // Current page data
-        var mkdocs_page_name = {{ page.title|tojson|safe }};
-        var mkdocs_page_input_path = {{ page.file.src_path|string|tojson|safe }};
-        var mkdocs_page_url = {{ page.abs_url|tojson|safe }};
+        var mkdocs_page_name = {{ page.title|tojson }};
+        var mkdocs_page_input_path = {{ page.file.src_path|string|tojson }};
+        var mkdocs_page_url = {{ page.abs_url|tojson }};
       </script>
     {% endif %}
     <script src="{{ 'js/jquery-3.6.0.min.js'|url }}" defer></script>
@@ -103,9 +103,9 @@
           {{ config.extra.version }}
         </div>
       {%- endif %}
-   	  {%- block search_button %}
+      {%- block search_button %}
         {%- if 'search' in config['plugins'] %}{%- include "searchbox.html" %}{%- endif %}
-   	  {%- endblock %}
+      {%- endblock %}
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="{% trans %}Navigation menu{% endtrans %}">

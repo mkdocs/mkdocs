@@ -105,6 +105,9 @@ supports the following options:
     * `ja`: Japanese
     * `pt_BR`: Portuguese (Brazil)
     * `zh_CN`: Simplified Chinese
+    * `de`: German
+    * `fa`: Persian (Farsi)
+    * `it`: Italian
 
     See the guide on [localizing your theme] for more information.
 
@@ -182,6 +185,9 @@ theme supports the following options:
     * `ja`: Japanese
     * `pt_BR`: Portuguese (Brazil)
     * `zh_CN`: Simplified Chinese
+    * `de`: German
+    * `fa`: Persian (Farsi)
+    * `it`: Italian
 
     See the guide on [localizing your theme] for more information.
 

@@ -1,4 +1,6 @@
 import os
+import sys
+import traceback
 from collections import namedtuple
 from collections.abc import Sequence
 from urllib.parse import urlsplit, urlunsplit
@@ -193,21 +195,33 @@ class Deprecated(BaseConfigOption):
     ConfigOption instance, then the value is validated against that type.
     """
 
-    def __init__(self, moved_to=None, message='', option_type=None):
+    def __init__(self, moved_to=None, message=None, removed=False, option_type=None):
         super().__init__()
         self.default = None
         self.moved_to = moved_to
-        self.message = message or (
-            'The configuration option {} has been deprecated and '
-            'will be removed in a future release of MkDocs.'
-        )
+        if not message:
+            if removed:
+                message = "The configuration option '{}' was removed from MkDocs."
+            else:
+                message = (
+                    "The configuration option '{}' has been deprecated and "
+                    "will be removed in a future release of MkDocs."
+                )
+            if moved_to:
+                message += f" Use '{moved_to}' instead."
+
+        self.message = message
+        self.removed = removed
         self.option = option_type or BaseConfigOption()
+
         self.warnings = self.option.warnings
 
     def pre_validation(self, config, key_name):
         self.option.pre_validation(config, key_name)
 
         if config.get(key_name) is not None:
+            if self.removed:
+                raise ValidationError(self.message.format(key_name))
             self.warnings.append(self.message.format(key_name))
 
             if self.moved_to is not None:
@@ -342,12 +356,8 @@ class RepoURL(URL):
                 edit_uri = ''
 
         # ensure a well-formed edit_uri
-        if edit_uri:
-            if not edit_uri.startswith(('?', '#')) \
-                    and not config['repo_url'].endswith('/'):
-                config['repo_url'] += '/'
-            if not edit_uri.endswith('/'):
-                edit_uri += '/'
+        if edit_uri and not edit_uri.endswith('/'):
+            edit_uri += '/'
 
         config['edit_uri'] = edit_uri
 
@@ -371,9 +381,7 @@ class FilesystemObject(Type):
             value = os.path.join(self.config_dir, value)
         if self.exists and not self.existence_test(value):
             raise ValidationError(f"The path {value} isn't an existing {self.name}.")
-        value = os.path.abspath(value)
-        assert isinstance(value, str)
-        return value
+        return os.path.abspath(value)
 
 
 class Dir(FilesystemObject):
@@ -529,33 +537,42 @@ class Nav(OptionallyRequired):
     Validate the Nav config.
     """
 
-    def run_validation(self, value):
+    def run_validation(self, value, *, top=True):
+        if isinstance(value, list):
+            for subitem in value:
+                self._validate_nav_item(subitem)
+            if top and not value:
+                value = None
+        elif isinstance(value, dict) and value and not top:
+            # TODO: this should be an error.
+            self.warnings.append(f"Expected nav to be a list, got {self._repr_item(value)}")
+            for subitem in value.values():
+                self.run_validation(subitem, top=False)
+        elif isinstance(value, str) and not top:
+            pass
+        else:
+            raise ValidationError(f"Expected nav to be a list, got {self._repr_item(value)}")
+        return value
 
-        if not isinstance(value, list):
-            raise ValidationError(f"Expected a list, got {type(value)}")
+    def _validate_nav_item(self, value):
+        if isinstance(value, str):
+            pass
+        elif isinstance(value, dict):
+            if len(value) != 1:
+                raise ValidationError(f"Expected nav item to be a dict of size 1, got {self._repr_item(value)}")
+            for subnav in value.values():
+                self.run_validation(subnav, top=False)
+        else:
+            raise ValidationError(f"Expected nav item to be a string or dict, got {self._repr_item(value)}")
 
-        if len(value) == 0:
-            return
-
-        config_types = {type(item) for item in value}
-        if config_types.issubset({str, dict}):
-            return value
-
-        types = ', '.join(set(
-            item_type.__name__ for item_type in config_types
-        ))
-        raise ValidationError(
-            f"Invalid navigation config types. Expected str and dict, got: {types}")
-
-    def post_validation(self, config, key_name):
-        # TODO: remove this when `pages` config setting is fully deprecated.
-        if key_name == 'pages' and config['pages'] is not None:
-            if config['nav'] is None:
-                # copy `pages` config to new 'nav' config setting
-                config['nav'] = config['pages']
-            warning = ("The 'pages' configuration option has been deprecated and will "
-                       "be removed in a future release of MkDocs. Use 'nav' instead.")
-            self.warnings.append(warning)
+    @classmethod
+    def _repr_item(cls, value):
+        if isinstance(value, dict) and value:
+            return f"dict with keys {tuple(value.keys())}"
+        elif isinstance(value, (str, type(None))):
+            return repr(value)
+        else:
+            return f"a {type(value).__name__}: {value!r}"
 
 
 class Private(OptionallyRequired):
@@ -618,10 +635,19 @@ class MarkdownExtensions(OptionallyRequired):
         extensions = utils.reduce_list(self.builtins + extensions)
 
         # Confirm that Markdown considers extensions to be valid
-        try:
-            markdown.Markdown(extensions=extensions, extension_configs=self.configdata)
-        except Exception as e:
-            raise ValidationError(e.args[0])
+        md = markdown.Markdown()
+        for ext in extensions:
+            try:
+                md.registerExtensions((ext,), self.configdata)
+            except Exception as e:
+                stack = []
+                for frame in reversed(traceback.extract_tb(sys.exc_info()[2])):
+                    if not frame.line:  # Ignore frames before <frozen importlib._bootstrap>
+                        break
+                    stack.insert(0, frame)
+                tb = ''.join(traceback.format_list(stack))
+
+                raise ValidationError(f"Failed to load extension '{ext}'.\n{tb}{type(e).__name__}: {e}")
 
         return extensions
 

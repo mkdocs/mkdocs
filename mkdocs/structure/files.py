@@ -138,9 +138,6 @@ class File:
             self.url == other.url
         )
 
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
     def __repr__(self):
         return (
             f"File(src_path='{self.src_path}', dest_path='{self.dest_path}',"
@@ -246,8 +243,8 @@ def get_files(config):
             if _filter_paths(basename=filename, path=path, is_dir=False, exclude=exclude):
                 continue
             # Skip README.md if an index file also exists in dir
-            if filename.lower() == 'readme.md' and 'index.md' in filenames:
-                log.warning(f"Both index.md and readme.md found. Skipping readme.md from {source_dir}")
+            if filename == 'README.md' and 'index.md' in filenames:
+                log.warning(f"Both index.md and README.md found. Skipping README.md from {source_dir}")
                 continue
             files.append(File(path, config['docs_dir'], config['site_dir'], config['use_directory_urls']))
 

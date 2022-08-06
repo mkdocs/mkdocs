@@ -61,13 +61,13 @@ class ConfigTests(unittest.TestCase):
         """
         expected_result = {
             'site_name': 'Example',
-            'pages': [
+            'nav': [
                 {'Introduction': 'index.md'}
             ],
         }
         file_contents = dedent("""
         site_name: Example
-        pages:
+        nav:
         - 'Introduction': 'index.md'
         """)
         with TemporaryDirectory() as temp_path:
@@ -81,7 +81,7 @@ class ConfigTests(unittest.TestCase):
 
             result = config.load_config(config_file=config_file.name)
             self.assertEqual(result['site_name'], expected_result['site_name'])
-            self.assertEqual(result['pages'], expected_result['pages'])
+            self.assertEqual(result['nav'], expected_result['nav'])
 
     def test_theme(self):
         with TemporaryDirectory() as mytheme, TemporaryDirectory() as custom:
@@ -219,28 +219,19 @@ class ConfigTests(unittest.TestCase):
         conf.validate()
         self.assertEqual(conf['nav'], None)
 
-    def test_copy_pages_to_nav(self):
-        # TODO: remove this when pages config setting is fully deprecated.
+    def test_error_on_pages(self):
         conf = config.Config(schema=defaults.get_schema())
         conf.load_dict({
             'site_name': 'Example',
             'pages': ['index.md', 'about.md'],
-            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
         })
-        conf.validate()
-        self.assertEqual(conf['nav'], ['index.md', 'about.md'])
-
-    def test_dont_overwrite_nav_with_pages(self):
-        # TODO: remove this when pages config setting is fully deprecated.
-        conf = config.Config(schema=defaults.get_schema())
-        conf.load_dict({
-            'site_name': 'Example',
-            'pages': ['index.md', 'about.md'],
-            'nav': ['foo.md', 'bar.md'],
-            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
-        })
-        conf.validate()
-        self.assertEqual(conf['nav'], ['foo.md', 'bar.md'])
+        errors, warnings = conf.validate()
+        self.assertEqual(warnings, [])
+        self.assertEqual(len(errors), 1)
+        self.assertEqual(
+            str(errors[0][1]),
+            "The configuration option 'pages' was removed from MkDocs. Use 'nav' instead."
+        )
 
     def test_doc_dir_in_site_dir(self):
 

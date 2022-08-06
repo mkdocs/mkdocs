@@ -592,6 +592,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     @tempdir(files=[
         'index.md',
+        'readme.md',
         'bar.css',
         'bar.html',
         'bar.jpg',
@@ -603,7 +604,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
     def test_get_files(self, tdir):
         config = load_config(docs_dir=tdir, extra_css=['bar.css'], extra_javascript=['bar.js'])
         files = get_files(config)
-        expected = ['index.md', 'bar.css', 'bar.html', 'bar.jpg', 'bar.js', 'bar.md']
+        expected = ['index.md', 'bar.css', 'bar.html', 'bar.jpg', 'bar.js', 'bar.md', 'readme.md']
         self.assertIsInstance(files, Files)
         self.assertEqual(len(files), len(expected))
         self.assertEqual([f.src_path for f in files], expected)

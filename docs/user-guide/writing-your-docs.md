@@ -388,9 +388,9 @@ specific page. The following keys are supported:
 #### YAML Style Meta-Data
 
 YAML style meta-data consists of [YAML] key/value pairs wrapped in YAML style
-deliminators to mark the start and/or end of the meta-data. The first line of
+delimiters to mark the start and/or end of the meta-data. The first line of
 a document must be `---`. The meta-data ends at the first line containing an
-end deliminator (either `---` or `...`). The content between the deliminators is
+end deliminator (either `---` or `...`). The content between the delimiters is
 parsed as [YAML].
 
 ```no-highlight
@@ -446,11 +446,11 @@ The first blank line ends all meta-data for the document. Therefore, the first
 line of a document must not be blank.
 
 NOTE:
-MkDocs does not support YAML style deliminators (`---` or `...`) for
+MkDocs does not support YAML style delimiters (`---` or `...`) for
 MultiMarkdown style meta-data. In fact, MkDocs relies on the the presence or
-absence of the deliminators to determine whether YAML style meta-data or
-MultiMarkdown style meta-data is being used. If the deliminators are
-detected, but the content between the deliminators is not valid YAML
+absence of the delimiters to determine whether YAML style meta-data or
+MultiMarkdown style meta-data is being used. If the delimiters are
+detected, but the content between the delimiters is not valid YAML
 meta-data, MkDocs does not attempt to parse the content as MultiMarkdown
 style meta-data.
 

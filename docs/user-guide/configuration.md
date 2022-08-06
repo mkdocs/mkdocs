@@ -10,8 +10,7 @@ Project settings are configured by default using a YAML configuration file in
 the project directory named `mkdocs.yml`. You can specify another path for it
 by using the `-f`/`--config-file` option (see `mkdocs build --help`).
 
-As a minimum, this configuration file must contain the `site_name` and
-`site_url` settings. All other settings are optional.
+As a minimum, this configuration file must contain the `site_name`. All other settings are optional.
 
 ## Project information
 
@@ -719,7 +718,7 @@ Generally, a single file would hold the entire configuration for a site.
 However, some organizations may maintain multiple sites which all share a common
 configuration across them. Rather than maintaining separate configurations for
 each, the common configuration options can be defined in a parent configuration
-while which each site's primary configuration file inherits.
+file which each site's primary configuration file inherits.
 
 To define the parent for a configuration file, set the `INHERIT` (all caps) key
 to the path of the parent file. The path must be relative to the location of the

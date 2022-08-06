@@ -1,5 +1,6 @@
 import os
 import sys
+import textwrap
 import unittest
 from unittest.mock import patch
 
@@ -7,6 +8,7 @@ import mkdocs
 from mkdocs.config import config_options
 from mkdocs.config.base import Config
 from mkdocs.tests.base import tempdir
+from mkdocs.utils import yaml_load
 
 
 class OptionallyRequiredTest(unittest.TestCase):
@@ -122,6 +124,11 @@ class DeprecatedTest(unittest.TestCase):
         self.assertEqual(len(option.warnings), 1)
         with self.assertRaises(config_options.ValidationError):
             option.validate(config['d'])
+
+    def test_removed_option(self):
+        option = config_options.Deprecated(removed=True, moved_to='foo')
+        with self.assertRaises(config_options.ValidationError):
+            option.pre_validation({'d': 'value'}, 'd')
 
     def test_deprecated_option_with_type_undefined(self):
         option = config_options.Deprecated(option_type=config_options.Type(str))
@@ -316,6 +323,7 @@ class RepoURLTest(unittest.TestCase):
         config = {'repo_url': "https://github.com/mkdocs/mkdocs"}
         option.post_validation(config, 'repo_url')
         self.assertEqual(config['edit_uri'], 'edit/master/docs/')
+        self.assertEqual(config['repo_url'], "https://github.com/mkdocs/mkdocs")
 
     def test_edit_uri_bitbucket(self):
 
@@ -323,6 +331,7 @@ class RepoURLTest(unittest.TestCase):
         config = {'repo_url': "https://bitbucket.org/gutworth/six/"}
         option.post_validation(config, 'repo_url')
         self.assertEqual(config['edit_uri'], 'src/default/docs/')
+        self.assertEqual(config['repo_url'], "https://bitbucket.org/gutworth/six/")
 
     def test_edit_uri_gitlab(self):
 
@@ -337,6 +346,7 @@ class RepoURLTest(unittest.TestCase):
         config = {'repo_url': "https://launchpad.net/python-tuskarclient"}
         option.post_validation(config, 'repo_url')
         self.assertEqual(config.get('edit_uri'), '')
+        self.assertEqual(config['repo_url'], "https://launchpad.net/python-tuskarclient")
 
     def test_repo_name_custom_and_empty_edit_uri(self):
 
@@ -733,13 +743,12 @@ class ThemeTest(unittest.TestCase):
 class NavTest(unittest.TestCase):
 
     def test_old_format(self):
-
         option = config_options.Nav()
-        with self.assertRaises(config_options.ValidationError):
+        with self.assertRaises(config_options.ValidationError) as cm:
             option.validate([['index.md']])
+        self.assertEqual(str(cm.exception), "Expected nav item to be a string or dict, got a list: ['index.md']")
 
     def test_provided_dict(self):
-
         option = config_options.Nav()
         value = option.validate([
             'index.md',
@@ -748,26 +757,92 @@ class NavTest(unittest.TestCase):
         self.assertEqual(['index.md', {'Page': 'page.md'}], value)
 
         option.post_validation({'extra_stuff': []}, 'extra_stuff')
+        self.assertEqual(option.warnings, [])
 
     def test_provided_empty(self):
-
         option = config_options.Nav()
         value = option.validate([])
         self.assertEqual(None, value)
 
         option.post_validation({'extra_stuff': []}, 'extra_stuff')
+        self.assertEqual(option.warnings, [])
 
-    def test_invalid_type(self):
+    def test_normal_nav(self):
+        nav = yaml_load(textwrap.dedent('''\
+            - Home: index.md
+            - getting-started.md
+            - User Guide:
+                - Overview: user-guide/index.md
+                - Installation: user-guide/installation.md
+        ''').encode())
 
         option = config_options.Nav()
-        with self.assertRaises(config_options.ValidationError):
+        self.assertEqual(option.validate(nav), nav)
+        self.assertEqual(option.warnings, [])
+
+    def test_invalid_type_dict(self):
+        option = config_options.Nav()
+        with self.assertRaises(config_options.ValidationError) as cm:
             option.validate({})
+        self.assertEqual(str(cm.exception), "Expected nav to be a list, got a dict: {}")
 
-    def test_invalid_config(self):
-
+    def test_invalid_type_int(self):
         option = config_options.Nav()
-        with self.assertRaises(config_options.ValidationError):
-            option.validate([[], 1])
+        with self.assertRaises(config_options.ValidationError) as cm:
+            option.validate(5)
+        self.assertEqual(str(cm.exception), "Expected nav to be a list, got a int: 5")
+
+    def test_invalid_item_int(self):
+        option = config_options.Nav()
+        with self.assertRaises(config_options.ValidationError) as cm:
+            option.validate([1])
+        self.assertEqual(str(cm.exception), "Expected nav item to be a string or dict, got a int: 1")
+
+    def test_invalid_item_none(self):
+        option = config_options.Nav()
+        with self.assertRaises(config_options.ValidationError) as cm:
+            option.validate([None])
+        self.assertEqual(str(cm.exception), "Expected nav item to be a string or dict, got None")
+
+    def test_invalid_children_config_int(self):
+        option = config_options.Nav()
+        with self.assertRaises(config_options.ValidationError) as cm:
+            option.validate([{"foo.md": [{"bar.md": 1}]}])
+        self.assertEqual(str(cm.exception), "Expected nav to be a list, got a int: 1")
+
+    def test_invalid_children_config_none(self):
+        option = config_options.Nav()
+        with self.assertRaises(config_options.ValidationError) as cm:
+            option.validate([{"foo.md": None}])
+        self.assertEqual(str(cm.exception), "Expected nav to be a list, got None")
+
+    def test_invalid_children_empty_dict(self):
+        option = config_options.Nav()
+        nav = ['foo', {}]
+        with self.assertRaises(config_options.ValidationError) as cm:
+            option.validate(nav)
+        self.assertEqual(str(cm.exception), "Expected nav item to be a dict of size 1, got a dict: {}")
+
+    def test_invalid_nested_list(self):
+        option = config_options.Nav()
+        nav = [{'aaa': [[{"bbb": "user-guide/index.md"}]]}]
+        with self.assertRaises(config_options.ValidationError) as cm:
+            option.validate(nav)
+        msg = "Expected nav item to be a string or dict, got a list: [{'bbb': 'user-guide/index.md'}]"
+        self.assertEqual(str(cm.exception), msg)
+
+    def test_invalid_children_oversized_dict(self):
+        option = config_options.Nav()
+        nav = [{"aaa": [{"bbb": "user-guide/index.md", "ccc": "user-guide/installation.md"}]}]
+        with self.assertRaises(config_options.ValidationError) as cm:
+            option.validate(nav)
+        msg = "Expected nav item to be a dict of size 1, got dict with keys ('bbb', 'ccc')"
+        self.assertEqual(str(cm.exception), msg)
+
+    def test_warns_for_dict(self):
+        option = config_options.Nav()
+        option.validate([{"a": {"b": "c.md", "d": "e.md"}}])
+        self.assertEqual(option.warnings, ["Expected nav to be a list, got dict with keys ('b', 'd')"])
 
 
 class PrivateTest(unittest.TestCase):

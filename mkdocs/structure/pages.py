@@ -49,9 +49,6 @@ class Page:
             self.file == other.file
         )
 
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
     def __repr__(self):
         title = f"'{self.title}'" if (self.title is not None) else '[blank]'
         url = self.abs_url or self.file.url
@@ -107,6 +104,9 @@ class Page:
     def _set_edit_url(self, repo_url, edit_uri):
         if repo_url and edit_uri:
             src_path = self.file.src_path.replace('\\', '/')
+            # Ensure urljoin behavior is correct
+            if not edit_uri.startswith(('?', '#')) and not repo_url.endswith('/'):
+                repo_url += '/'
             self.edit_url = urljoin(repo_url, edit_uri + src_path)
         else:
             self.edit_url = None

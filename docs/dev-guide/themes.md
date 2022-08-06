@@ -225,14 +225,14 @@ navigation as a nested list.
             <li>{{ nav_item.title }}
                 <ul>
                 {% for nav_item in nav_item.children %}
-                    <li class="{% if nav_item.active%}current{% endif %}">
+                    <li class="{% if nav_item.active %}current{% endif %}">
                         <a href="{{ nav_item.url|url }}">{{ nav_item.title }}</a>
                     </li>
                 {% endfor %}
                 </ul>
             </li>
         {% else %}
-            <li class="{% if nav_item.active%}current{% endif %}">
+            <li class="{% if nav_item.active %}current{% endif %}">
                 <a href="{{ nav_item.url|url }}">{{ nav_item.title }}</a>
             </li>
         {% endif %}
@@ -344,6 +344,10 @@ page.
 ```
 
 [base_url]: #base_url
+
+##### page.file
+
+The documentation `File` that the page is being rendered from.
 
 ##### page.abs_url
 
@@ -669,7 +673,7 @@ objects.
 ```json
 {
     config: {...},
-    data: [...],
+    docs: [...],
     index: {...}
 }
 ```
@@ -678,7 +682,7 @@ If present, the `config` object contains the key/value pairs of config options
 defined for the plugin in the user's `mkdocs.yml` config file under
 `plugings.search`. The `config` object was new in MkDocs version *1.0*.
 
-The `data` object contains a list of document objects. Each document object is
+The `docs` object contains a list of document objects. Each document object is
 made up of a `location` (URL), a `title`, and `text` which can be used to create
 a search index and/or display search results.
 
