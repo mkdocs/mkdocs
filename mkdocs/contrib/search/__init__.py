@@ -11,7 +11,7 @@ base_path = os.path.dirname(os.path.abspath(__file__))
 
 
 class LangOption(config_options.OptionallyRequired):
-    """ Validate Language(s) provided in config are known languages. """
+    """Validate Language(s) provided in config are known languages."""
 
     def get_lunr_supported_lang(self, lang):
         for lang_part in lang.split("_"):
@@ -40,7 +40,7 @@ class LangOption(config_options.OptionallyRequired):
 
 
 class SearchPlugin(BasePlugin):
-    """ Add a search feature to MkDocs. """
+    """Add a search feature to MkDocs."""
 
     config_scheme = (
         ('lang', LangOption()),

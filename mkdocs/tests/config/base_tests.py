@@ -253,7 +253,7 @@ class ConfigBaseTests(unittest.TestCase):
         self.assertEqual(len(warnings), 0)
 
     def test_pre_and_run_validation_errors(self):
-        """ A pre_validation error does not stop run_validation from running. """
+        """A pre_validation error does not stop run_validation from running."""
         class InvalidConfigOption(BaseConfigOption):
             def pre_validation(self, config, key_name):
                 raise base.ValidationError('pre_validation error')
@@ -275,7 +275,7 @@ class ConfigBaseTests(unittest.TestCase):
         self.assertEqual(len(warnings), 0)
 
     def test_run_and_post_validation_errors(self):
-        """ A run_validation error stops post_validation from running. """
+        """A run_validation error stops post_validation from running."""
         class InvalidConfigOption(BaseConfigOption):
             def run_validation(self, value):
                 raise base.ValidationError('run_validation error')

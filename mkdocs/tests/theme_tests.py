@@ -14,7 +14,7 @@ theme_dir = os.path.abspath(os.path.join(mkdocs_dir, 'themes'))
 
 
 def get_vars(theme):
-    """ Return dict of theme vars. """
+    """Return dict of theme vars."""
     return {k: theme[k] for k in iter(theme)}
 
 

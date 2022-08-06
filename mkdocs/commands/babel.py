@@ -11,7 +11,7 @@ DEFAULT_MAPPING_FILE = path.normpath(path.join(
 
 class ThemeMixin:
     def get_theme_dir(self):
-        ''' Validate theme option and return path to theme's root obtained from entry point. '''
+        """Validate theme option and return path to theme's root obtained from entry point."""
         entry_points = EntryPoint.parse_map(self.distribution.entry_points, self.distribution)
         if 'mkdocs.themes' not in entry_points:
             raise DistutilsOptionError("no mkdocs.themes are defined in entry_points")

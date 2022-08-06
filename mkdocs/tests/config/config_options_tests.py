@@ -536,7 +536,7 @@ class ListOfPathsTest(unittest.TestCase):
 class SiteDirTest(unittest.TestCase):
 
     def validate_config(self, config):
-        """ Given a config with values for site_dir and doc_dir, run site_dir post_validation. """
+        """Given a config with values for site_dir and doc_dir, run site_dir post_validation."""
         site_dir = config_options.SiteDir()
         docs_dir = config_options.Dir()
 
@@ -594,7 +594,7 @@ class SiteDirTest(unittest.TestCase):
                 self.validate_config(test_config)
 
     def test_common_prefix(self):
-        """ Legitimate settings with common prefixes should not fail validation. """
+        """Legitimate settings with common prefixes should not fail validation."""
 
         test_configs = (
             {'docs_dir': 'docs', 'site_dir': 'docs-site'},

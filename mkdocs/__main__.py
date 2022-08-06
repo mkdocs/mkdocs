@@ -80,7 +80,7 @@ class ColorFormatter(logging.Formatter):
 
 
 class State:
-    ''' Maintain logging level.'''
+    """Maintain logging level."""
 
     def __init__(self, log_name='mkdocs', level=logging.INFO):
         self.logger = logging.getLogger(log_name)

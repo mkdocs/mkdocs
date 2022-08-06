@@ -58,11 +58,11 @@ class Page:
         return '{}{}'.format('    ' * depth, repr(self))
 
     def _get_active(self):
-        """ Return active status of page. """
+        """Return active status of page."""
         return self.__active
 
     def _set_active(self, value):
-        """ Set active status of page and ancestors. """
+        """Set active status of page and ancestors."""
         self.__active = bool(value)
         if self.parent is not None:
             self.parent.active = bool(value)

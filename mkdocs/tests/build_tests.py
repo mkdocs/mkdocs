@@ -13,7 +13,7 @@ from mkdocs.utils import meta
 
 
 def build_page(title, path, config, md_src=''):
-    """ Helper which returns a Page object. """
+    """Helper which returns a Page object."""
 
     files = Files([File(path, config['docs_dir'], config['site_dir'], config['use_directory_urls'])])
     page = Page(title, list(files)[0], config)

@@ -595,7 +595,7 @@ class MarkdownExtensions(OptionallyRequired):
     a dict item must be a valid Markdown extension name and the value must be a dict of config
     options for that extension. Extension configs are set on the private setting passed to
     `configkey`. The `builtins` keyword accepts a list of extensions which cannot be overridden by
-    the user. However, builtins can be duplicated to define config options for them if desired. """
+    the user. However, builtins can be duplicated to define config options for them if desired."""
     def __init__(self, builtins=None, configkey='mdx_configs', **kwargs):
         super().__init__(**kwargs)
         self.builtins = builtins or []

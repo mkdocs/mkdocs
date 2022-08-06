@@ -14,7 +14,7 @@ import mkdocs
 
 
 class DuplicateFilter:
-    ''' Avoid logging duplicate messages. '''
+    """Avoid logging duplicate messages."""
     def __init__(self):
         self.msgs = set()
 
@@ -98,7 +98,7 @@ def _build_template(name, template, files, config, nav):
 
 
 def _build_theme_template(template_name, env, files, config, nav):
-    """ Build a template using the theme environment. """
+    """Build a template using the theme environment."""
 
     log.debug(f"Building theme template: {template_name}")
 
@@ -126,7 +126,7 @@ def _build_theme_template(template_name, env, files, config, nav):
 
 
 def _build_extra_template(template_name, files, config, nav):
-    """ Build user templates which are not part of the theme. """
+    """Build user templates which are not part of the theme."""
 
     log.debug(f"Building extra template: {template_name}")
 
@@ -151,7 +151,7 @@ def _build_extra_template(template_name, files, config, nav):
 
 
 def _populate_page(page, config, files, dirty=False):
-    """ Read page content from docs_dir and render Markdown. """
+    """Read page content from docs_dir and render Markdown."""
 
     try:
         # When --dirty is used, only read the page if the file has been modified since the
@@ -187,7 +187,7 @@ def _populate_page(page, config, files, dirty=False):
 
 
 def _build_page(page, config, doc_files, nav, env, dirty=False):
-    """ Pass a Page to theme template and write output to site_dir. """
+    """Pass a Page to theme template and write output to site_dir."""
 
     try:
         # When --dirty is used, only build the page if the file has been modified since the
@@ -239,7 +239,7 @@ def _build_page(page, config, doc_files, nav, env, dirty=False):
 
 
 def build(config, live_server=False, dirty=False):
-    """ Perform a full site build. """
+    """Perform a full site build."""
 
     logger = logging.getLogger('mkdocs')
 
@@ -336,6 +336,6 @@ def build(config, live_server=False, dirty=False):
 
 
 def site_directory_contains_stale_files(site_directory):
-    """ Check if the site directory contains stale files from a previous build. """
+    """Check if the site directory contains stale files from a previous build."""
 
     return True if os.path.exists(site_directory) and os.listdir(site_directory) else False

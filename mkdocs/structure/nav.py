@@ -44,11 +44,11 @@ class Section:
         return f"Section(title='{self.title}')"
 
     def _get_active(self):
-        """ Return active status of section. """
+        """Return active status of section."""
         return self.__active
 
     def _set_active(self, value):
-        """ Set active status of section and ancestors. """
+        """Set active status of section and ancestors."""
         self.__active = bool(value)
         if self.parent is not None:
             self.parent.active = bool(value)
@@ -96,7 +96,7 @@ class Link:
 
 
 def get_navigation(files, config):
-    """ Build site navigation from config and files."""
+    """Build site navigation from config and files."""
     nav_config = config['nav'] or nest_paths(f.src_path for f in files.documentation_pages())
     items = _data_to_navigation(nav_config, files, config)
     if not isinstance(items, list):

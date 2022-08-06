@@ -22,7 +22,7 @@ EVENTS = (
 
 
 def get_plugins():
-    """ Return a dict of all installed Plugins as {name: EntryPoint}. """
+    """Return a dict of all installed Plugins as {name: EntryPoint}."""
 
     plugins = importlib_metadata.entry_points(group='mkdocs.plugins')
 
@@ -48,7 +48,7 @@ class BasePlugin:
     config = {}
 
     def load_config(self, options, config_file_path=None):
-        """ Load config from a dict of options. Returns a tuple of (errors, warnings)."""
+        """Load config from a dict of options. Returns a tuple of (errors, warnings)."""
 
         self.config = Config(schema=self.config_scheme, config_file_path=config_file_path)
         self.config.load_dict(options)
@@ -70,7 +70,7 @@ class PluginCollection(OrderedDict):
         self.events = {x: [] for x in EVENTS}
 
     def _register_event(self, event_name, method):
-        """ Register a method for an event. """
+        """Register a method for an event."""
         self.events[event_name].append(method)
 
     def __setitem__(self, key, value, **kwargs):

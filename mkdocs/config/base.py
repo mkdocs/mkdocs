@@ -120,7 +120,7 @@ class Config(UserDict):
         return failed, warnings
 
     def load_dict(self, patch):
-        """ Load config options from a dictionary. """
+        """Load config options from a dictionary."""
 
         if not isinstance(patch, dict):
             raise exceptions.ConfigurationError(
@@ -132,7 +132,7 @@ class Config(UserDict):
         self.data.update(patch)
 
     def load_file(self, config_file):
-        """ Load config options from the open file descriptor of a YAML file. """
+        """Load config options from the open file descriptor of a YAML file."""
         try:
             return self.load_dict(utils.yaml_load(config_file))
         except YAMLError as e:
