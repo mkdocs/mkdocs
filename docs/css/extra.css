@@ -26,8 +26,9 @@ dd {
     padding-left: 20px;
 }
 
-svg {
+.card-body svg {
     width: 100%;
+    padding: 0 50px;
     height: auto;
 }
 
