@@ -56,8 +56,11 @@ class Theme:
 
     def __repr__(self):
         return "{}(name='{}', dirs={}, static_templates={}, {})".format(
-            self.__class__.__name__, self.name, self.dirs, list(self.static_templates),
-            ', '.join(f'{k}={v!r}' for k, v in self._vars.items())
+            self.__class__.__name__,
+            self.name,
+            self.dirs,
+            list(self.static_templates),
+            ', '.join(f'{k}={v!r}' for k, v in self._vars.items()),
         )
 
     def __getitem__(self, key):

@@ -11,6 +11,7 @@ log = logging.getLogger(__name__)
 
 class Files:
     """A collection of File objects."""
+
     def __init__(self, files):
         self._files = files
 
@@ -67,6 +68,7 @@ class Files:
 
     def add_files_from_theme(self, env, config):
         """Retrieve static files from Jinja environment and add to collection."""
+
         def filter(name):
             # '.*' filters dot files/dirs at root level whereas '*/.*' filters nested levels
             patterns = ['.*', '*/.*', '*.py', '*.pyc', '*.html', '*readme*', 'mkdocs_theme.yml']
@@ -78,6 +80,7 @@ class Files:
                 if fnmatch.fnmatch(name.lower(), pattern):
                     return False
             return True
+
         for path in env.list_templates(filter_func=filter):
             # Theme files do not override docs_dir files
             path = os.path.normpath(path)
@@ -85,7 +88,9 @@ class Files:
                 for dir in config['theme'].dirs:
                     # Find the first theme dir which contains path
                     if os.path.isfile(os.path.join(dir, path)):
-                        self.append(File(path, dir, config['site_dir'], config['use_directory_urls']))
+                        self.append(
+                            File(path, dir, config['site_dir'], config['use_directory_urls'])
+                        )
                         break
 
 
@@ -121,6 +126,7 @@ class File:
     File.url
         The url of the destination file relative to the destination directory as a string.
     """
+
     def __init__(self, path, src_dir, dest_dir, use_directory_urls):
         self.page = None
         self.src_path = os.path.normpath(path)
@@ -132,10 +138,10 @@ class File:
 
     def __eq__(self, other):
         return (
-            isinstance(other, self.__class__) and
-            self.src_path == other.src_path and
-            self.abs_src_path == other.abs_src_path and
-            self.url == other.url
+            isinstance(other, self.__class__)
+            and self.src_path == other.src_path
+            and self.abs_src_path == other.abs_src_path
+            and self.url == other.url
         )
 
     def __repr__(self):
@@ -234,9 +240,13 @@ def get_files(config):
                 continue
             # Skip README.md if an index file also exists in dir
             if filename == 'README.md' and 'index.md' in filenames:
-                log.warning(f"Both index.md and README.md found. Skipping README.md from {source_dir}")
+                log.warning(
+                    f"Both index.md and README.md found. Skipping README.md from {source_dir}"
+                )
                 continue
-            files.append(File(path, config['docs_dir'], config['site_dir'], config['use_directory_urls']))
+            files.append(
+                File(path, config['docs_dir'], config['site_dir'], config['use_directory_urls'])
+            )
 
     return Files(files)
 

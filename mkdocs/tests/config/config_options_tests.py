@@ -12,7 +12,6 @@ from mkdocs.utils import yaml_load
 
 
 class OptionallyRequiredTest(unittest.TestCase):
-
     def test_empty(self):
 
         option = config_options.OptionallyRequired()
@@ -49,7 +48,6 @@ class OptionallyRequiredTest(unittest.TestCase):
 
 
 class TypeTest(unittest.TestCase):
-
     def test_single_type(self):
 
         option = config_options.Type(str)
@@ -79,7 +77,6 @@ class TypeTest(unittest.TestCase):
 
 
 class ChoiceTest(unittest.TestCase):
-
     def test_valid_choice(self):
         option = config_options.Choice(('python', 'node'))
         value = option.validate('python')
@@ -97,7 +94,6 @@ class ChoiceTest(unittest.TestCase):
 
 
 class DeprecatedTest(unittest.TestCase):
-
     def test_deprecated_option_simple(self):
         option = config_options.Deprecated()
         option.pre_validation({'d': 'value'}, 'd')
@@ -164,7 +160,6 @@ class DeprecatedTest(unittest.TestCase):
 
 
 class IpAddressTest(unittest.TestCase):
-
     def test_valid_address(self):
         addr = '127.0.0.1:8000'
 
@@ -256,7 +251,6 @@ class IpAddressTest(unittest.TestCase):
 
 
 class URLTest(unittest.TestCase):
-
     def test_valid_url(self):
         option = config_options.URL()
 
@@ -288,7 +282,6 @@ class URLTest(unittest.TestCase):
 
 
 class RepoURLTest(unittest.TestCase):
-
     def test_repo_name_github(self):
 
         option = config_options.RepoURL()
@@ -351,14 +344,12 @@ class RepoURLTest(unittest.TestCase):
     def test_repo_name_custom_and_empty_edit_uri(self):
 
         option = config_options.RepoURL()
-        config = {'repo_url': "https://github.com/mkdocs/mkdocs",
-                  'repo_name': 'mkdocs'}
+        config = {'repo_url': "https://github.com/mkdocs/mkdocs", 'repo_name': 'mkdocs'}
         option.post_validation(config, 'repo_url')
         self.assertEqual(config.get('edit_uri'), 'edit/master/docs/')
 
 
 class DirTest(unittest.TestCase):
-
     def test_valid_dir(self):
 
         d = os.path.dirname(__file__)
@@ -488,7 +479,6 @@ class DirTest(unittest.TestCase):
 
 
 class ListOfPathsTest(unittest.TestCase):
-
     def test_valid_path(self):
         paths = [os.path.dirname(__file__)]
         option = config_options.ListOfPaths()
@@ -534,7 +524,6 @@ class ListOfPathsTest(unittest.TestCase):
 
 
 class SiteDirTest(unittest.TestCase):
-
     def validate_config(self, config):
         """Given a config with values for site_dir and doc_dir, run site_dir post_validation."""
         site_dir = config_options.SiteDir()
@@ -571,7 +560,7 @@ class SiteDirTest(unittest.TestCase):
             {'docs_dir': 'docs', 'site_dir': ''},
             {'docs_dir': '', 'site_dir': ''},
             {'docs_dir': j('..', parent_dir, 'docs'), 'site_dir': 'docs'},
-            {'docs_dir': 'docs', 'site_dir': '/'}
+            {'docs_dir': 'docs', 'site_dir': '/'},
         )
 
         for test_config in test_configs:
@@ -606,7 +595,6 @@ class SiteDirTest(unittest.TestCase):
 
 
 class ThemeTest(unittest.TestCase):
-
     def test_theme_as_string(self):
 
         option = config_options.Theme()
@@ -639,7 +627,7 @@ class ThemeTest(unittest.TestCase):
             'name': 'mkdocs',
             'custom_dir': 'custom',
             'static_templates': ['sitemap.html'],
-            'show_sidebar': False
+            'show_sidebar': False,
         }
         option = config_options.Theme()
         value = option.validate(config)
@@ -741,19 +729,17 @@ class ThemeTest(unittest.TestCase):
 
 
 class NavTest(unittest.TestCase):
-
     def test_old_format(self):
         option = config_options.Nav()
         with self.assertRaises(config_options.ValidationError) as cm:
             option.validate([['index.md']])
-        self.assertEqual(str(cm.exception), "Expected nav item to be a string or dict, got a list: ['index.md']")
+        self.assertEqual(
+            str(cm.exception), "Expected nav item to be a string or dict, got a list: ['index.md']"
+        )
 
     def test_provided_dict(self):
         option = config_options.Nav()
-        value = option.validate([
-            'index.md',
-            {"Page": "page.md"}
-        ])
+        value = option.validate(['index.md', {"Page": "page.md"}])
         self.assertEqual(['index.md', {'Page': 'page.md'}], value)
 
         option.post_validation({'extra_stuff': []}, 'extra_stuff')
@@ -800,7 +786,9 @@ class NavTest(unittest.TestCase):
         option = config_options.Nav()
         with self.assertRaises(config_options.ValidationError) as cm:
             option.validate([1])
-        self.assertEqual(str(cm.exception), "Expected nav item to be a string or dict, got a int: 1")
+        self.assertEqual(
+            str(cm.exception), "Expected nav item to be a string or dict, got a int: 1"
+        )
 
     def test_invalid_item_none(self):
         option = config_options.Nav()
@@ -825,14 +813,18 @@ class NavTest(unittest.TestCase):
         nav = ['foo', {}]
         with self.assertRaises(config_options.ValidationError) as cm:
             option.validate(nav)
-        self.assertEqual(str(cm.exception), "Expected nav item to be a dict of size 1, got a dict: {}")
+        self.assertEqual(
+            str(cm.exception), "Expected nav item to be a dict of size 1, got a dict: {}"
+        )
 
     def test_invalid_nested_list(self):
         option = config_options.Nav()
         nav = [{'aaa': [[{"bbb": "user-guide/index.md"}]]}]
         with self.assertRaises(config_options.ValidationError) as cm:
             option.validate(nav)
-        msg = "Expected nav item to be a string or dict, got a list: [{'bbb': 'user-guide/index.md'}]"
+        msg = (
+            "Expected nav item to be a string or dict, got a list: [{'bbb': 'user-guide/index.md'}]"
+        )
         self.assertEqual(str(cm.exception), msg)
 
     def test_invalid_children_oversized_dict(self):
@@ -846,11 +838,12 @@ class NavTest(unittest.TestCase):
     def test_warns_for_dict(self):
         option = config_options.Nav()
         option.validate([{"a": {"b": "c.md", "d": "e.md"}}])
-        self.assertEqual(option.warnings, ["Expected nav to be a list, got dict with keys ('b', 'd')"])
+        self.assertEqual(
+            option.warnings, ["Expected nav to be a list, got dict with keys ('b', 'd')"]
+        )
 
 
 class PrivateTest(unittest.TestCase):
-
     def test_defined(self):
 
         option = config_options.Private()
@@ -859,7 +852,6 @@ class PrivateTest(unittest.TestCase):
 
 
 class MarkdownExtensionsTest(unittest.TestCase):
-
     @patch('markdown.Markdown')
     def test_simple_list(self, mockMd):
         option = config_options.MarkdownExtensions()
@@ -868,10 +860,13 @@ class MarkdownExtensionsTest(unittest.TestCase):
         }
         config['markdown_extensions'] = option.validate(config['markdown_extensions'])
         option.post_validation(config, 'markdown_extensions')
-        self.assertEqual({
-            'markdown_extensions': ['foo', 'bar'],
-            'mdx_configs': {},
-        }, config)
+        self.assertEqual(
+            {
+                'markdown_extensions': ['foo', 'bar'],
+                'mdx_configs': {},
+            },
+            config,
+        )
 
     @patch('markdown.Markdown')
     def test_list_dicts(self, mockMd):
@@ -880,18 +875,21 @@ class MarkdownExtensionsTest(unittest.TestCase):
             'markdown_extensions': [
                 {'foo': {'foo_option': 'foo value'}},
                 {'bar': {'bar_option': 'bar value'}},
-                {'baz': None}
+                {'baz': None},
             ]
         }
         config['markdown_extensions'] = option.validate(config['markdown_extensions'])
         option.post_validation(config, 'markdown_extensions')
-        self.assertEqual({
-            'markdown_extensions': ['foo', 'bar', 'baz'],
-            'mdx_configs': {
-                'foo': {'foo_option': 'foo value'},
-                'bar': {'bar_option': 'bar value'},
-            }
-        }, config)
+        self.assertEqual(
+            {
+                'markdown_extensions': ['foo', 'bar', 'baz'],
+                'mdx_configs': {
+                    'foo': {'foo_option': 'foo value'},
+                    'bar': {'bar_option': 'bar value'},
+                },
+            },
+            config,
+        )
 
     @patch('markdown.Markdown')
     def test_mixed_list(self, mockMd):
@@ -904,12 +902,15 @@ class MarkdownExtensionsTest(unittest.TestCase):
         }
         config['markdown_extensions'] = option.validate(config['markdown_extensions'])
         option.post_validation(config, 'markdown_extensions')
-        self.assertEqual({
-            'markdown_extensions': ['foo', 'bar'],
-            'mdx_configs': {
-                'bar': {'bar_option': 'bar value'},
-            }
-        }, config)
+        self.assertEqual(
+            {
+                'markdown_extensions': ['foo', 'bar'],
+                'mdx_configs': {
+                    'bar': {'bar_option': 'bar value'},
+                },
+            },
+            config,
+        )
 
     @patch('markdown.Markdown')
     def test_dict_of_dicts(self, mockMd):
@@ -918,18 +919,21 @@ class MarkdownExtensionsTest(unittest.TestCase):
             'markdown_extensions': {
                 'foo': {'foo_option': 'foo value'},
                 'bar': {'bar_option': 'bar value'},
-                'baz': {}
+                'baz': {},
             }
         }
         config['markdown_extensions'] = option.validate(config['markdown_extensions'])
         option.post_validation(config, 'markdown_extensions')
-        self.assertEqual({
-            'markdown_extensions': ['foo', 'bar', 'baz'],
-            'mdx_configs': {
-                'foo': {'foo_option': 'foo value'},
-                'bar': {'bar_option': 'bar value'},
-            }
-        }, config)
+        self.assertEqual(
+            {
+                'markdown_extensions': ['foo', 'bar', 'baz'],
+                'mdx_configs': {
+                    'foo': {'foo_option': 'foo value'},
+                    'bar': {'bar_option': 'bar value'},
+                },
+            },
+            config,
+        )
 
     @patch('markdown.Markdown')
     def test_builtins(self, mockMd):
@@ -939,10 +943,13 @@ class MarkdownExtensionsTest(unittest.TestCase):
         }
         config['markdown_extensions'] = option.validate(config['markdown_extensions'])
         option.post_validation(config, 'markdown_extensions')
-        self.assertEqual({
-            'markdown_extensions': ['meta', 'toc', 'foo', 'bar'],
-            'mdx_configs': {},
-        }, config)
+        self.assertEqual(
+            {
+                'markdown_extensions': ['meta', 'toc', 'foo', 'bar'],
+                'mdx_configs': {},
+            },
+            config,
+        )
 
     def test_duplicates(self):
         option = config_options.MarkdownExtensions(builtins=['meta', 'toc'])
@@ -951,10 +958,13 @@ class MarkdownExtensionsTest(unittest.TestCase):
         }
         config['markdown_extensions'] = option.validate(config['markdown_extensions'])
         option.post_validation(config, 'markdown_extensions')
-        self.assertEqual({
-            'markdown_extensions': ['meta', 'toc'],
-            'mdx_configs': {},
-        }, config)
+        self.assertEqual(
+            {
+                'markdown_extensions': ['meta', 'toc'],
+                'mdx_configs': {},
+            },
+            config,
+        )
 
     def test_builtins_config(self):
         option = config_options.MarkdownExtensions(builtins=['meta', 'toc'])
@@ -965,10 +975,13 @@ class MarkdownExtensionsTest(unittest.TestCase):
         }
         config['markdown_extensions'] = option.validate(config['markdown_extensions'])
         option.post_validation(config, 'markdown_extensions')
-        self.assertEqual({
-            'markdown_extensions': ['meta', 'toc'],
-            'mdx_configs': {'toc': {'permalink': True}},
-        }, config)
+        self.assertEqual(
+            {
+                'markdown_extensions': ['meta', 'toc'],
+                'mdx_configs': {'toc': {'permalink': True}},
+            },
+            config,
+        )
 
     @patch('markdown.Markdown')
     def test_configkey(self, mockMd):
@@ -980,12 +993,15 @@ class MarkdownExtensionsTest(unittest.TestCase):
         }
         config['markdown_extensions'] = option.validate(config['markdown_extensions'])
         option.post_validation(config, 'markdown_extensions')
-        self.assertEqual({
-            'markdown_extensions': ['foo'],
-            'bar': {
-                'foo': {'foo_option': 'foo value'},
+        self.assertEqual(
+            {
+                'markdown_extensions': ['foo'],
+                'bar': {
+                    'foo': {'foo_option': 'foo value'},
+                },
             },
-        }, config)
+            config,
+        )
 
     def test_none(self):
         option = config_options.MarkdownExtensions(default=[])
@@ -994,10 +1010,13 @@ class MarkdownExtensionsTest(unittest.TestCase):
         }
         config['markdown_extensions'] = option.validate(config['markdown_extensions'])
         option.post_validation(config, 'markdown_extensions')
-        self.assertEqual({
-            'markdown_extensions': [],
-            'mdx_configs': {},
-        }, config)
+        self.assertEqual(
+            {
+                'markdown_extensions': [],
+                'mdx_configs': {},
+            },
+            config,
+        )
 
     @patch('markdown.Markdown')
     def test_not_list(self, mockMd):

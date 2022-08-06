@@ -15,9 +15,23 @@ log = logging.getLogger('mkdocs.plugins')
 
 
 EVENTS = (
-    'config', 'pre_build', 'files', 'nav', 'env', 'pre_template', 'template_context',
-    'post_template', 'pre_page', 'page_read_source', 'page_markdown',
-    'page_content', 'page_context', 'post_page', 'post_build', 'serve', 'build_error'
+    'config',
+    'pre_build',
+    'files',
+    'nav',
+    'env',
+    'pre_template',
+    'template_context',
+    'post_template',
+    'pre_page',
+    'page_read_source',
+    'page_markdown',
+    'page_content',
+    'page_context',
+    'post_page',
+    'post_build',
+    'serve',
+    'build_error',
 )
 
 
@@ -78,7 +92,8 @@ class PluginCollection(OrderedDict):
             raise TypeError(
                 f'{self.__module__}.{self.__name__} only accepts values which'
                 f' are instances of {BasePlugin.__module__}.{BasePlugin.__name__}'
-                ' subclasses')
+                ' subclasses'
+            )
         super().__setitem__(key, value, **kwargs)
         # Register all of the event methods defined for this Plugin.
         for event_name in (x for x in dir(value) if x.startswith('on_')):

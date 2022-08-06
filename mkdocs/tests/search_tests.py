@@ -18,7 +18,6 @@ def strip_whitespace(string):
 
 
 class SearchConfigTests(unittest.TestCase):
-
     def test_lang_default(self):
         option = search.LangOption(default=['en'])
         value = option.validate(None)
@@ -76,14 +75,13 @@ class SearchConfigTests(unittest.TestCase):
 
 
 class SearchPluginTests(unittest.TestCase):
-
     def test_plugin_config_defaults(self):
         expected = {
             'lang': None,
             'separator': r'[\s\-]+',
             'min_search_length': 3,
             'prebuild_index': False,
-            'indexing': 'full'
+            'indexing': 'full',
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({})
@@ -97,7 +95,7 @@ class SearchPluginTests(unittest.TestCase):
             'separator': r'[\s\-]+',
             'min_search_length': 3,
             'prebuild_index': False,
-            'indexing': 'full'
+            'indexing': 'full',
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({'lang': 'es'})
@@ -111,7 +109,7 @@ class SearchPluginTests(unittest.TestCase):
             'separator': r'[\s\-\.]+',
             'min_search_length': 3,
             'prebuild_index': False,
-            'indexing': 'full'
+            'indexing': 'full',
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({'separator': r'[\s\-\.]+'})
@@ -125,7 +123,7 @@ class SearchPluginTests(unittest.TestCase):
             'separator': r'[\s\-]+',
             'min_search_length': 2,
             'prebuild_index': False,
-            'indexing': 'full'
+            'indexing': 'full',
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({'min_search_length': 2})
@@ -139,7 +137,7 @@ class SearchPluginTests(unittest.TestCase):
             'separator': r'[\s\-]+',
             'min_search_length': 3,
             'prebuild_index': True,
-            'indexing': 'full'
+            'indexing': 'full',
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({'prebuild_index': True})
@@ -153,7 +151,7 @@ class SearchPluginTests(unittest.TestCase):
             'separator': r'[\s\-]+',
             'min_search_length': 3,
             'prebuild_index': False,
-            'indexing': 'titles'
+            'indexing': 'titles',
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({'indexing': 'titles'})
@@ -186,7 +184,9 @@ class SearchPluginTests(unittest.TestCase):
     def test_event_on_config_theme_locale(self):
         plugin = search.SearchPlugin()
         plugin.load_config({})
-        result = plugin.on_config(load_config(theme={'name': 'mkdocs', 'locale': 'fr'}, extra_javascript=[]))
+        result = plugin.on_config(
+            load_config(theme={'name': 'mkdocs', 'locale': 'fr'}, extra_javascript=[])
+        )
         self.assertFalse(result['theme']['search_index_only'])
         self.assertFalse(result['theme']['include_search_page'])
         self.assertEqual(result['theme'].static_templates, {'404.html', 'sitemap.xml'})
@@ -197,18 +197,24 @@ class SearchPluginTests(unittest.TestCase):
     def test_event_on_config_include_search_page(self):
         plugin = search.SearchPlugin()
         plugin.load_config({})
-        config = load_config(theme={'name': 'mkdocs', 'include_search_page': True}, extra_javascript=[])
+        config = load_config(
+            theme={'name': 'mkdocs', 'include_search_page': True}, extra_javascript=[]
+        )
         result = plugin.on_config(config)
         self.assertFalse(result['theme']['search_index_only'])
         self.assertTrue(result['theme']['include_search_page'])
-        self.assertEqual(result['theme'].static_templates, {'404.html', 'sitemap.xml', 'search.html'})
+        self.assertEqual(
+            result['theme'].static_templates, {'404.html', 'sitemap.xml', 'search.html'}
+        )
         self.assertEqual(len(result['theme'].dirs), 3)
         self.assertEqual(result['extra_javascript'], ['search/main.js'])
 
     def test_event_on_config_search_index_only(self):
         plugin = search.SearchPlugin()
         plugin.load_config({})
-        config = load_config(theme={'name': 'mkdocs', 'search_index_only': True}, extra_javascript=[])
+        config = load_config(
+            theme={'name': 'mkdocs', 'search_index_only': True}, extra_javascript=[]
+        )
         result = plugin.on_config(config)
         self.assertTrue(result['theme']['search_index_only'])
         self.assertFalse(result['theme']['include_search_page'])
@@ -263,7 +269,6 @@ class SearchPluginTests(unittest.TestCase):
 
 
 class SearchIndexTests(unittest.TestCase):
-
     def test_html_stripping(self):
 
         stripper = search_index.ContentParser()
@@ -279,11 +284,9 @@ class SearchIndexTests(unittest.TestCase):
         parser.feed('<h1 id="title">Title</h1>TEST')
         parser.close()
 
-        self.assertEqual(parser.data, [search_index.ContentSection(
-            text=["TEST"],
-            id_="title",
-            title="Title"
-        )])
+        self.assertEqual(
+            parser.data, [search_index.ContentSection(text=["TEST"], id_="title", title="Title")]
+        )
 
     def test_content_parser_no_id(self):
 
@@ -292,11 +295,9 @@ class SearchIndexTests(unittest.TestCase):
         parser.feed("<h1>Title</h1>TEST")
         parser.close()
 
-        self.assertEqual(parser.data, [search_index.ContentSection(
-            text=["TEST"],
-            id_=None,
-            title="Title"
-        )])
+        self.assertEqual(
+            parser.data, [search_index.ContentSection(text=["TEST"], id_=None, title="Title")]
+        )
 
     def test_content_parser_content_before_header(self):
 
@@ -305,11 +306,9 @@ class SearchIndexTests(unittest.TestCase):
         parser.feed("Content Before H1 <h1>Title</h1>TEST")
         parser.close()
 
-        self.assertEqual(parser.data, [search_index.ContentSection(
-            text=["TEST"],
-            id_=None,
-            title="Title"
-        )])
+        self.assertEqual(
+            parser.data, [search_index.ContentSection(text=["TEST"], id_=None, title="Title")]
+        )
 
     def test_content_parser_no_sections(self):
 
@@ -366,16 +365,20 @@ class SearchIndexTests(unittest.TestCase):
                     'index.md',
                     base_cfg['docs_dir'],
                     base_cfg['site_dir'],
-                    base_cfg['use_directory_urls']),
-                base_cfg),
+                    base_cfg['use_directory_urls'],
+                ),
+                base_cfg,
+            ),
             Page(
                 'About',
                 File(
                     'about.md',
                     base_cfg['docs_dir'],
                     base_cfg['site_dir'],
-                    base_cfg['use_directory_urls']),
-                base_cfg)
+                    base_cfg['use_directory_urls'],
+                ),
+                base_cfg,
+            ),
         ]
 
         md = dedent(
@@ -424,12 +427,12 @@ class SearchIndexTests(unittest.TestCase):
     def test_search_indexing_options(self):
         def test_page(title, filename, config):
             test_page = Page(
-                title, File(
-                    filename,
-                    config['docs_dir'],
-                    config['site_dir'],
-                    config['use_directory_urls']),
-                config)
+                title,
+                File(
+                    filename, config['docs_dir'], config['site_dir'], config['use_directory_urls']
+                ),
+                config,
+            )
             test_page.content = """
                 <h1 id="heading-1">Heading 1</h1>
                 <p>Content 1</p>
@@ -437,29 +440,40 @@ class SearchIndexTests(unittest.TestCase):
                 <p>Content 2</p>
                 <h3 id="heading-3">Heading 3</h1>
                 <p>Content 3</p>"""
-            test_page.markdown = dedent("""
+            test_page.markdown = dedent(
+                """
                 # Heading 1
                 ## Heading 2
-                ### Heading 3""")
+                ### Heading 3"""
+            )
             test_page.toc = get_toc(get_markdown_toc(test_page.markdown))
             return test_page
 
         validate = {
-            'full': (lambda data:
-                     self.assertEqual(len(data[0]), 4) and
-                     self.assertTrue([x for x in data[0][0] if x['title'] and x['text']])),
-            'sections': (lambda data:
-                         # Sanity
-                         self.assertEqual(len(data[0]), 4) and
-                         # Page
-                         (self.assertEqual(data[0][0]['title'], data[1].title) and
-                             self.assertTrue(data[0][0]['text'])) and
-                         # Headings
-                         self.assertTrue([x for x in data[0][1:] if x['title'] and not x['text']])),
-            'titles': (lambda data:
-                       # Sanity
-                       self.assertEqual(len(data[0]), 1) and
-                       self.assertFalse([x for x in data[0] if x['text']]))
+            'full': (
+                lambda data: self.assertEqual(len(data[0]), 4)
+                and self.assertTrue([x for x in data[0][0] if x['title'] and x['text']])
+            ),
+            'sections': (
+                lambda data:
+                # Sanity
+                self.assertEqual(len(data[0]), 4)
+                and
+                # Page
+                (
+                    self.assertEqual(data[0][0]['title'], data[1].title)
+                    and self.assertTrue(data[0][0]['text'])
+                )
+                and
+                # Headings
+                self.assertTrue([x for x in data[0][1:] if x['title'] and not x['text']])
+            ),
+            'titles': (
+                lambda data:
+                # Sanity
+                self.assertEqual(len(data[0]), 1)
+                and self.assertFalse([x for x in data[0] if x['text']])
+            ),
         }
 
         for option in ['full', 'sections', 'titles']:
@@ -475,7 +489,7 @@ class SearchIndexTests(unittest.TestCase):
 
             pages = [
                 test_page('Home', 'index.md', base_cfg),
-                test_page('About', 'about.md', base_cfg)
+                test_page('About', 'about.md', base_cfg),
             ]
 
             for page in pages:

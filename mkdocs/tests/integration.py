@@ -31,16 +31,17 @@ TEST_PROJECTS = os.path.abspath(os.path.join(DIR, 'integration'))
 
 
 @click.command()
-@click.option('--output',
-              help="The output directory to use when building themes",
-              type=click.Path(file_okay=False, writable=True),
-              required=True)
+@click.option(
+    '--output',
+    help="The output directory to use when building themes",
+    type=click.Path(file_okay=False, writable=True),
+    required=True,
+)
 def main(output=None):
 
     log.propagate = False
     stream = logging.StreamHandler()
-    formatter = logging.Formatter(
-        "\033[1m\033[1;32m *** %(message)s *** \033[0m")
+    formatter = logging.Formatter("\033[1m\033[1;32m *** %(message)s *** \033[0m")
     stream.setFormatter(formatter)
     log.addHandler(stream)
     log.setLevel(logging.DEBUG)

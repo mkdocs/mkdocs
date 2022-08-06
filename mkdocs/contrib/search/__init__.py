@@ -47,7 +47,7 @@ class SearchPlugin(BasePlugin):
         ('separator', config_options.Type(str, default=r'[\s\-]+')),
         ('min_search_length', config_options.Type(int, default=3)),
         ('prebuild_index', config_options.Choice((False, True, 'node', 'python'), default=False)),
-        ('indexing', config_options.Choice(('full', 'sections', 'titles'), default='full'))
+        ('indexing', config_options.Choice(('full', 'sections', 'titles'), default='full')),
     )
 
     def on_config(self, config, **kwargs):
@@ -95,10 +95,10 @@ class SearchPlugin(BasePlugin):
                 files.append('lunr.stemmer.support.js')
             if len(self.config['lang']) > 1:
                 files.append('lunr.multi.js')
-            if ('ja' in self.config['lang'] or 'jp' in self.config['lang']):
+            if 'ja' in self.config['lang'] or 'jp' in self.config['lang']:
                 files.append('tinyseg.js')
             for lang in self.config['lang']:
-                if (lang != 'en'):
+                if lang != 'en':
                     files.append(f'lunr.{lang}.js')
 
             for filename in files:

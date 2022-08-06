@@ -59,7 +59,8 @@ def yaml_load(source, loader=None):
         abspath = os.path.normpath(os.path.join(os.path.dirname(source.name), relpath))
         if not os.path.exists(abspath):
             raise exceptions.ConfigurationError(
-                f"Inherited config file '{relpath}' does not exist at '{abspath}'.")
+                f"Inherited config file '{relpath}' does not exist at '{abspath}'."
+            )
         log.debug(f"Loading inherited configuration file: {abspath}")
         with open(abspath, 'rb') as fd:
             parent = yaml_load(fd, Loader)
@@ -181,7 +182,7 @@ def get_url_path(path, use_directory_urls=True):
     path = get_html_path(path)
     url = '/' + path.replace(os.path.sep, '/')
     if use_directory_urls:
-        return url[:-len('index.html')]
+        return url[: -len('index.html')]
     return url
 
 

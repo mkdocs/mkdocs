@@ -4,9 +4,9 @@ from pkg_resources import EntryPoint
 from babel.messages import frontend as babel
 
 
-DEFAULT_MAPPING_FILE = path.normpath(path.join(
-    path.abspath(path.dirname(__file__)), '../themes/babel.cfg'
-))
+DEFAULT_MAPPING_FILE = path.normpath(
+    path.join(path.abspath(path.dirname(__file__)), '../themes/babel.cfg')
+)
 
 
 class ThemeMixin:

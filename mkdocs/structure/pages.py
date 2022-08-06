@@ -44,9 +44,9 @@ class Page:
 
     def __eq__(self, other):
         return (
-            isinstance(other, self.__class__) and
-            self.title == other.title and
-            self.file == other.file
+            isinstance(other, self.__class__)
+            and self.title == other.title
+            and self.file == other.file
         )
 
     def __repr__(self):
@@ -112,9 +112,7 @@ class Page:
             self.edit_url = None
 
     def read_source(self, config):
-        source = config['plugins'].run_event(
-            'page_read_source', page=self, config=config
-        )
+        source = config['plugins'].run_event('page_read_source', page=self, config=config)
         if source is None:
             try:
                 with open(self.file.abs_src_path, encoding='utf-8-sig', errors='strict') as f:
@@ -164,9 +162,7 @@ class Page:
         Convert the Markdown source file to HTML as per the config.
         """
 
-        extensions = [
-            _RelativePathExtension(self.file, files)
-        ] + config['markdown_extensions']
+        extensions = [_RelativePathExtension(self.file, files)] + config['markdown_extensions']
 
         md = markdown.Markdown(
             extensions=extensions,
@@ -205,8 +201,15 @@ class _RelativePathTreeprocessor(Treeprocessor):
     def path_to_url(self, url):
         scheme, netloc, path, query, fragment = urlsplit(url)
 
-        if (scheme or netloc or not path or url.startswith('/') or url.startswith('\\')
-                or AMP_SUBSTITUTE in url or '.' not in os.path.split(path)[-1]):
+        if (
+            scheme
+            or netloc
+            or not path
+            or url.startswith('/')
+            or url.startswith('\\')
+            or AMP_SUBSTITUTE in url
+            or '.' not in os.path.split(path)[-1]
+        ):
             # Ignore URLs unless they are a relative link to a source file.
             # AMP_SUBSTITUTE is used internally by Markdown only for email.
             # No '.' in the last part of a path indicates path does not point to a file.

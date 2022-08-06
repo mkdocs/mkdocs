@@ -19,7 +19,6 @@ def get_vars(theme):
 
 
 class ThemeTests(unittest.TestCase):
-
     def test_simple_theme(self):
         theme = Theme(name='mkdocs')
         self.assertEqual(
@@ -27,18 +26,21 @@ class ThemeTests(unittest.TestCase):
             [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
         )
         self.assertEqual(theme.static_templates, {'404.html', 'sitemap.xml'})
-        self.assertEqual(get_vars(theme), {
-            'locale': parse_locale('en'),
-            'include_search_page': False,
-            'search_index_only': False,
-            'analytics': {'gtag': None},
-            'highlightjs': True,
-            'hljs_style': 'github',
-            'hljs_languages': [],
-            'navigation_depth': 2,
-            'nav_style': 'primary',
-            'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83}
-        })
+        self.assertEqual(
+            get_vars(theme),
+            {
+                'locale': parse_locale('en'),
+                'include_search_page': False,
+                'search_index_only': False,
+                'analytics': {'gtag': None},
+                'highlightjs': True,
+                'hljs_style': 'github',
+                'hljs_languages': [],
+                'navigation_depth': 2,
+                'nav_style': 'primary',
+                'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83},
+            },
+        )
 
     def test_custom_dir(self):
         custom = tempfile.mkdtemp()
@@ -49,7 +51,7 @@ class ThemeTests(unittest.TestCase):
                 custom,
                 os.path.join(theme_dir, 'mkdocs'),
                 mkdocs_templates_dir,
-            ]
+            ],
         )
 
     def test_custom_dir_only(self):
@@ -85,10 +87,12 @@ class ThemeTests(unittest.TestCase):
         self.assertEqual(theme.static_templates, {'sitemap.xml'})
 
     def test_inherited_theme(self):
-        m = mock.Mock(side_effect=[
-            {'extends': 'readthedocs', 'static_templates': ['child.html']},
-            {'static_templates': ['parent.html']}
-        ])
+        m = mock.Mock(
+            side_effect=[
+                {'extends': 'readthedocs', 'static_templates': ['child.html']},
+                {'static_templates': ['parent.html']},
+            ]
+        )
         with mock.patch('mkdocs.utils.yaml_load', m) as m:
             theme = Theme(name='mkdocs')
             self.assertEqual(m.call_count, 2)
@@ -97,9 +101,7 @@ class ThemeTests(unittest.TestCase):
                 [
                     os.path.join(theme_dir, 'mkdocs'),
                     os.path.join(theme_dir, 'readthedocs'),
-                    mkdocs_templates_dir
-                ]
+                    mkdocs_templates_dir,
+                ],
             )
-            self.assertEqual(
-                theme.static_templates, {'sitemap.xml', 'child.html', 'parent.html'}
-            )
+            self.assertEqual(theme.static_templates, {'sitemap.xml', 'child.html', 'parent.html'})

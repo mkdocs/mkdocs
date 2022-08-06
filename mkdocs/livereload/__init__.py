@@ -219,7 +219,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                     return [b"%d" % self._visible_epoch]
 
         if path.startswith(self.mount_path):
-            rel_file_path = path[len(self.mount_path):]
+            rel_file_path = path[len(self.mount_path) :]
 
             if path.endswith("/"):
                 rel_file_path += "index.html"

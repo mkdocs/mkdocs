@@ -26,7 +26,9 @@ class SiteNavigationTests(unittest.TestCase):
         )
         cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
         fs = [
-            File(list(item.values())[0], cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+            File(
+                list(item.values())[0], cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']
+            )
             for item in nav_cfg
         ]
         files = Files(fs)
@@ -49,7 +51,9 @@ class SiteNavigationTests(unittest.TestCase):
         )
         cfg = load_config(nav=nav_cfg, use_directory_urls=False, site_url='http://example.com/')
         fs = [
-            File(list(item.values())[0], cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+            File(
+                list(item.values())[0], cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']
+            )
             for item in nav_cfg
         ]
         files = Files(fs)
@@ -71,7 +75,7 @@ class SiteNavigationTests(unittest.TestCase):
         cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
         fs = [
             File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-            File('page_not_in_nav.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+            File('page_not_in_nav.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
         ]
         files = Files(fs)
         site_navigation = get_navigation(files, cfg)
@@ -95,7 +99,7 @@ class SiteNavigationTests(unittest.TestCase):
         cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
         fs = [
             File(nav_cfg[0], cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-            File(nav_cfg[1]['About'], cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+            File(nav_cfg[1]['About'], cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
         ]
         files = Files(fs)
         site_navigation = get_navigation(files, cfg)
@@ -107,7 +111,7 @@ class SiteNavigationTests(unittest.TestCase):
         nav_cfg = [
             {'Home': 'index.md'},
             {'Local': '/local.html'},
-            {'External': 'http://example.com/external.html'}
+            {'External': 'http://example.com/external.html'},
         ]
         expected = dedent(
             """
@@ -127,8 +131,8 @@ class SiteNavigationTests(unittest.TestCase):
                 "DEBUG:mkdocs.structure.nav:An absolute path to '/local.html' is included in the "
                 "'nav' configuration, which presumably points to an external resource.",
                 "DEBUG:mkdocs.structure.nav:An external link to 'http://example.com/external.html' "
-                "is included in the 'nav' configuration."
-            ]
+                "is included in the 'nav' configuration.",
+            ],
         )
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.items), 3)
@@ -138,7 +142,7 @@ class SiteNavigationTests(unittest.TestCase):
         nav_cfg = [
             {'Home': 'index.md'},
             {'Missing': 'missing.html'},
-            {'Bad External': 'example.com'}
+            {'Bad External': 'example.com'},
         ]
         expected = dedent(
             """
@@ -158,8 +162,8 @@ class SiteNavigationTests(unittest.TestCase):
                 "WARNING:mkdocs.structure.nav:A relative path to 'missing.html' is included "
                 "in the 'nav' configuration, which is not found in the documentation files",
                 "WARNING:mkdocs.structure.nav:A relative path to 'example.com' is included "
-                "in the 'nav' configuration, which is not found in the documentation files"
-            ]
+                "in the 'nav' configuration, which is not found in the documentation files",
+            ],
         )
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.items), 3)
@@ -168,19 +172,25 @@ class SiteNavigationTests(unittest.TestCase):
     def test_indented_nav(self):
         nav_cfg = [
             {'Home': 'index.md'},
-            {'API Guide': [
-                {'Running': 'api-guide/running.md'},
-                {'Testing': 'api-guide/testing.md'},
-                {'Debugging': 'api-guide/debugging.md'},
-                {'Advanced': [
-                    {'Part 1': 'api-guide/advanced/part-1.md'},
-                ]},
-            ]},
-            {'About': [
-                {'Release notes': 'about/release-notes.md'},
-                {'License': '/license.html'},
-            ]},
-            {'External': 'https://example.com/'}
+            {
+                'API Guide': [
+                    {'Running': 'api-guide/running.md'},
+                    {'Testing': 'api-guide/testing.md'},
+                    {'Debugging': 'api-guide/debugging.md'},
+                    {
+                        'Advanced': [
+                            {'Part 1': 'api-guide/advanced/part-1.md'},
+                        ]
+                    },
+                ]
+            },
+            {
+                'About': [
+                    {'Release notes': 'about/release-notes.md'},
+                    {'License': '/license.html'},
+                ]
+            },
+            {'External': 'https://example.com/'},
         ]
         expected = dedent(
             """
@@ -219,23 +229,40 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertIsNone(site_navigation.items[1].parent)
         self.assertEqual(site_navigation.items[1].ancestors, [])
         self.assertEqual(len(site_navigation.items[1].children), 4)
-        self.assertEqual(repr(site_navigation.items[1].children[0].parent), "Section(title='API Guide')")
+        self.assertEqual(
+            repr(site_navigation.items[1].children[0].parent), "Section(title='API Guide')"
+        )
         self.assertEqual(site_navigation.items[1].children[0].ancestors, [site_navigation.items[1]])
-        self.assertEqual(repr(site_navigation.items[1].children[1].parent), "Section(title='API Guide')")
+        self.assertEqual(
+            repr(site_navigation.items[1].children[1].parent), "Section(title='API Guide')"
+        )
         self.assertEqual(site_navigation.items[1].children[1].ancestors, [site_navigation.items[1]])
-        self.assertEqual(repr(site_navigation.items[1].children[2].parent), "Section(title='API Guide')")
+        self.assertEqual(
+            repr(site_navigation.items[1].children[2].parent), "Section(title='API Guide')"
+        )
         self.assertEqual(site_navigation.items[1].children[2].ancestors, [site_navigation.items[1]])
-        self.assertEqual(repr(site_navigation.items[1].children[3].parent), "Section(title='API Guide')")
+        self.assertEqual(
+            repr(site_navigation.items[1].children[3].parent), "Section(title='API Guide')"
+        )
         self.assertEqual(site_navigation.items[1].children[3].ancestors, [site_navigation.items[1]])
         self.assertEqual(len(site_navigation.items[1].children[3].children), 1)
-        self.assertEqual(repr(site_navigation.items[1].children[3].children[0].parent), "Section(title='Advanced')")
-        self.assertEqual(site_navigation.items[1].children[3].children[0].ancestors,
-                         [site_navigation.items[1].children[3], site_navigation.items[1]])
+        self.assertEqual(
+            repr(site_navigation.items[1].children[3].children[0].parent),
+            "Section(title='Advanced')",
+        )
+        self.assertEqual(
+            site_navigation.items[1].children[3].children[0].ancestors,
+            [site_navigation.items[1].children[3], site_navigation.items[1]],
+        )
         self.assertIsNone(site_navigation.items[2].parent)
         self.assertEqual(len(site_navigation.items[2].children), 2)
-        self.assertEqual(repr(site_navigation.items[2].children[0].parent), "Section(title='About')")
+        self.assertEqual(
+            repr(site_navigation.items[2].children[0].parent), "Section(title='About')"
+        )
         self.assertEqual(site_navigation.items[2].children[0].ancestors, [site_navigation.items[2]])
-        self.assertEqual(repr(site_navigation.items[2].children[1].parent), "Section(title='About')")
+        self.assertEqual(
+            repr(site_navigation.items[2].children[1].parent), "Section(title='About')"
+        )
         self.assertEqual(site_navigation.items[2].children[1].ancestors, [site_navigation.items[2]])
         self.assertIsNone(site_navigation.items[3].parent)
         self.assertEqual(site_navigation.items[3].ancestors, [])
@@ -256,7 +283,9 @@ class SiteNavigationTests(unittest.TestCase):
         )
         cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
         fs = [
-            File(list(item.values())[0], cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+            File(
+                list(item.values())[0], cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']
+            )
             for item in nav_cfg
         ]
         files = Files(fs)
@@ -327,7 +356,7 @@ class SiteNavigationTests(unittest.TestCase):
         cfg = load_config(site_url='http://example.com/')
         fs = [
             File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-            File('about.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+            File('about.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
         ]
         files = Files(fs)
         site_navigation = get_navigation(files, cfg)
@@ -373,18 +402,24 @@ class SiteNavigationTests(unittest.TestCase):
     def test_active(self):
         nav_cfg = [
             {'Home': 'index.md'},
-            {'API Guide': [
-                {'Running': 'api-guide/running.md'},
-                {'Testing': 'api-guide/testing.md'},
-                {'Debugging': 'api-guide/debugging.md'},
-                {'Advanced': [
-                    {'Part 1': 'api-guide/advanced/part-1.md'},
-                ]},
-            ]},
-            {'About': [
-                {'Release notes': 'about/release-notes.md'},
-                {'License': 'about/license.md'},
-            ]}
+            {
+                'API Guide': [
+                    {'Running': 'api-guide/running.md'},
+                    {'Testing': 'api-guide/testing.md'},
+                    {'Debugging': 'api-guide/debugging.md'},
+                    {
+                        'Advanced': [
+                            {'Part 1': 'api-guide/advanced/part-1.md'},
+                        ]
+                    },
+                ]
+            },
+            {
+                'About': [
+                    {'Release notes': 'about/release-notes.md'},
+                    {'License': 'about/license.md'},
+                ]
+            },
         ]
         cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
         fs = [
@@ -426,11 +461,15 @@ class SiteNavigationTests(unittest.TestCase):
 
     def test_get_by_type_nested_sections(self):
         nav_cfg = [
-            {'Section 1': [
-                {'Section 2': [
-                    {'Page': 'page.md'},
-                ]},
-            ]},
+            {
+                'Section 1': [
+                    {
+                        'Section 2': [
+                            {'Page': 'page.md'},
+                        ]
+                    },
+                ]
+            },
         ]
         cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
         fs = [File('page.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]

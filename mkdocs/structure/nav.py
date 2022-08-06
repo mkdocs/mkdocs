@@ -114,7 +114,8 @@ def get_navigation(files, config):
         log.info(
             'The following pages exist in the docs directory, but are not '
             'included in the "nav" configuration:\n  - {}'.format(
-                '\n  - '.join([file.src_path for file in missing_from_config]))
+                '\n  - '.join([file.src_path for file in missing_from_config])
+            )
         )
         # Any documentation files not found in the nav should still have an associated page, so we
         # create them here. The Page object will automatically be assigned to `file.page` during
@@ -126,9 +127,7 @@ def get_navigation(files, config):
     for link in links:
         scheme, netloc, path, query, fragment = urlsplit(link.url)
         if scheme or netloc:
-            log.debug(
-                f"An external link to '{link.url}' is included in the 'nav' configuration."
-            )
+            log.debug(f"An external link to '{link.url}' is included in the 'nav' configuration.")
         elif link.url.startswith('/'):
             log.debug(
                 f"An absolute path to '{link.url}' is included in the 'nav' "
@@ -147,15 +146,15 @@ def _data_to_navigation(data, files, config):
     if isinstance(data, dict):
         return [
             _data_to_navigation((key, value), files, config)
-            if isinstance(value, str) else
-            Section(title=key, children=_data_to_navigation(value, files, config))
+            if isinstance(value, str)
+            else Section(title=key, children=_data_to_navigation(value, files, config))
             for key, value in data.items()
         ]
     elif isinstance(data, list):
         return [
             _data_to_navigation(item, files, config)[0]
-            if isinstance(item, dict) and len(item) == 1 else
-            _data_to_navigation(item, files, config)
+            if isinstance(item, dict) and len(item) == 1
+            else _data_to_navigation(item, files, config)
             for item in data
         ]
     title, path = data if isinstance(data, tuple) else (None, data)

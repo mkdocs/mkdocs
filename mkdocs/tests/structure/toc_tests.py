@@ -6,7 +6,6 @@ from mkdocs.tests.base import dedent, get_markdown_toc
 
 
 class TableOfContentsTests(unittest.TestCase):
-
     def test_indented_toc(self):
         md = dedent(
             """
