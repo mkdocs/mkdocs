@@ -66,6 +66,9 @@ jobs:
       - name: Install Node dependencies
         run: |
           npm install -g markdownlint-cli jshint csslint
+      - name: Check with black
+        if: always()
+        run: python -m tox -e black && git diff --exit-code
       - name: Check with flake8
         if: always()
         run: python -m tox -e flake8

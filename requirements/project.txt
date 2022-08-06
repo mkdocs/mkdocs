@@ -1,5 +1,5 @@
 babel>=2.9.0
-click>=7.0
+click>=8.0
 Jinja2>=2.10.2
 Markdown>=3.3,<3.4
 PyYAML>=5.2
