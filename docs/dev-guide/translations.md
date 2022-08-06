@@ -56,19 +56,11 @@ translation by following the steps below.
 
 Here is a quick summary of what you'll need to do:
 
-1. [Initialize new localization
-   catalogs](#initializing-the-localization-catalogs) for your language (if a
-   translation for your locale already exists, follow the instructions for
-   [updating theme localization
-   files](/user-guide/custom-themes/#localizing-themes) instead).
-2. [Add a translation](#translating-the-mkdocs-themes) for every text
-   placeholder in the localized catalogs.
-3. [Locally serve and test](#testing-theme-translations) the translated themes
-   for your language.
-4. [Update the documentation](#updating-theme-documentation) about
-   supported translations for each translated theme.
-5. [Contribute your translation](#contributing-translations) through a
-   Pull Request.
+1. [Initialize new localization catalogs](#initializing-the-localization-catalogs) for your language (if a translation for your locale already exists, follow the instructions for [updating theme localization files](/user-guide/custom-themes/#localizing-themes) instead).
+2. [Add a translation](#translating-the-mkdocs-themes) for every text placeholder in the localized catalogs.
+3. [Locally serve and test](#testing-theme-translations) the translated themes for your language.
+4. [Update the documentation](#updating-theme-documentation) about supported translations for each translated theme.
+5. [Contribute your translation](#contributing-translations) through a Pull Request.
 
 NOTE:
 Translation locales are usually identified using the [ISO-639-1] (2-letter)
@@ -116,14 +108,10 @@ If a theme's `messages.pot` template file has been [updated][update themes]
 since the `messages.po` was last updated for your locale, follow the steps
 below to update the theme's `messages.po` file:
 
-1. [Update the theme's translation catalog](#updating-the-translation-catalogs)
-   to refresh the translatable text placeholders of each theme.
-2. [Translate](#translating-the-mkdocs-themes) the newly added translatable
-   text placeholders on every `messages.po` catalog file language you can.
-3. [Locally serve and test](#testing-theme-translations) the translated themes
-   for your language.
-4. [Contribute your translation](#contributing-translations) through a
-   Pull Request.
+1. [Update the theme's translation catalog](#updating-the-translation-catalogs) to refresh the translatable text placeholders of each theme.
+2. [Translate](#translating-the-mkdocs-themes) the newly added translatable text placeholders on every `messages.po` catalog file language you can.
+3. [Locally serve and test](#testing-theme-translations) the translated themes for your language.
+4. [Contribute your translation](#contributing-translations) through a Pull Request.
 
 ### Updating the translation catalogs
 

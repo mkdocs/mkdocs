@@ -166,21 +166,21 @@ Note that, due to the security settings of all modern browsers, some things
 will not work the same and some features may not work at all. In fact, a few
 settings will need to be customized in very specific ways.
 
-- [site_url]:
+-   [site_url]:
 
     The `site_url` must be set to an empty string, which instructs MkDocs to
     build your site so that it will work with the `file://` scheme.
 
         site_url: ""
 
-- [use_directory_urls]:
+-   [use_directory_urls]:
 
     Set `use_directory_urls` to `false`. Otherwise, internal links between
     pages will not work properly.
 
         use_directory_urls: false
 
-- [search]:
+-   [search]:
 
     You will need to either disable the search plugin, or use a third-party
     search plugin which is specifically designed to work with the `file://`
