@@ -193,16 +193,11 @@ class File:
 
     def is_documentation_page(self):
         """ Return True if file is a Markdown page. """
-        return os.path.splitext(self.src_path)[1] in utils.markdown_extensions
+        return utils.is_markdown_file(self.src_path)
 
     def is_static_page(self):
         """ Return True if file is a static page (html, xml, json). """
-        return os.path.splitext(self.src_path)[1] in (
-            '.html',
-            '.htm',
-            '.xml',
-            '.json',
-        )
+        return self.src_path.endswith(('.html', '.htm', '.xml', '.json'))
 
     def is_media_file(self):
         """ Return True if file is not a documentation or static page. """
@@ -210,16 +205,11 @@ class File:
 
     def is_javascript(self):
         """ Return True if file is a JavaScript file. """
-        return os.path.splitext(self.src_path)[1] in (
-            '.js',
-            '.javascript',
-        )
+        return self.src_path.endswith(('.js', '.javascript'))
 
     def is_css(self):
         """ Return True if file is a CSS file. """
-        return os.path.splitext(self.src_path)[1] in (
-            '.css',
-        )
+        return self.src_path.endswith('.css')
 
 
 def get_files(config):
