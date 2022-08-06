@@ -2,10 +2,11 @@ babel==2.9.0
 click==3.3
 Jinja2==2.10.2
 markupsafe<=2.0.1
-Markdown==3.2.1
+Markdown==3.3
 PyYAML==5.1
 watchdog==2.0.0
 mdx_gh_links==0.2
+markdown-callouts==0.2
 ghp-import==1.0
 pyyaml_env_tag==0.1
 mkdocs-redirects==1.0.1
