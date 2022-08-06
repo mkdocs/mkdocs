@@ -71,7 +71,7 @@ def get_data(doc):
             pass
         return doc, data
 
-    # No YAML deliminators. Try MultiMarkdown style
+    # No YAML delimiters. Try MultiMarkdown style
     lines = doc.replace('\r\n', '\n').replace('\r', '\n').split('\n')
 
     key = None
@@ -85,7 +85,7 @@ def get_data(doc):
             key = m1.group('key').lower().strip()
             value = m1.group('value').strip()
             if key in data:
-                data[key] += ' {}'.format(value)
+                data[key] += f' {value}'
             else:
                 data[key] = value
         else:

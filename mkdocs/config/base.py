@@ -3,6 +3,7 @@ import os
 import sys
 from yaml import YAMLError
 from collections import UserDict
+from contextlib import contextmanager
 
 from mkdocs import exceptions
 from mkdocs import utils
@@ -67,7 +68,7 @@ class Config(UserDict):
 
         for key in (set(self.keys()) - self._schema_keys):
             warnings.append((
-                key, "Unrecognised configuration name: {}".format(key)
+                key, f"Unrecognised configuration name: {key}"
             ))
 
         return failed, warnings
@@ -119,50 +120,75 @@ class Config(UserDict):
         return failed, warnings
 
     def load_dict(self, patch):
+        """ Load config options from a dictionary. """
 
         if not isinstance(patch, dict):
             raise exceptions.ConfigurationError(
                 "The configuration is invalid. The expected type was a key "
                 "value mapping (a python dict) but we got an object of type: "
-                "{}".format(type(patch)))
+                f"{type(patch)}")
 
         self.user_configs.append(patch)
         self.data.update(patch)
 
     def load_file(self, config_file):
+        """ Load config options from the open file descriptor of a YAML file. """
         try:
             return self.load_dict(utils.yaml_load(config_file))
         except YAMLError as e:
             # MkDocs knows and understands ConfigurationErrors
             raise exceptions.ConfigurationError(
-                "MkDocs encountered an error parsing the configuration file: {}".format(e)
+                f"MkDocs encountered an error parsing the configuration file: {e}"
             )
 
 
+@contextmanager
 def _open_config_file(config_file):
+    """
+    A context manager which yields an open file descriptor ready to be read.
+
+    Accepts a filename as a string, an open or closed file descriptor, or None.
+    When None, it defaults to `mkdocs.yml` in the CWD. If a closed file descriptor
+    is received, a new file descriptor is opened for the same file.
+
+    The file descriptor is automatically closed when the context manager block is existed.
+    """
 
     # Default to the standard config filename.
     if config_file is None:
-        config_file = os.path.abspath('mkdocs.yml')
-
-    # If closed file descriptor, get file path to reopen later.
-    if hasattr(config_file, 'closed') and config_file.closed:
-        config_file = config_file.name
-
-    log.debug("Loading configuration file: {}".format(config_file))
-
+        paths_to_try = ['mkdocs.yml', 'mkdocs.yaml']
     # If it is a string, we can assume it is a path and attempt to open it.
-    if isinstance(config_file, str):
-        if os.path.exists(config_file):
-            config_file = open(config_file, 'rb')
+    elif isinstance(config_file, str):
+        paths_to_try = [config_file]
+    # If closed file descriptor, get file path to reopen later.
+    elif getattr(config_file, 'closed', False):
+        paths_to_try = [config_file.name]
+    else:
+        paths_to_try = None
+
+    if paths_to_try:
+        # config_file is not a file descriptor, so open it as a path.
+        for path in paths_to_try:
+            path = os.path.abspath(path)
+            log.debug(f"Loading configuration file: {path}")
+            try:
+                config_file = open(path, 'rb')
+                break
+            except FileNotFoundError:
+                continue
         else:
             raise exceptions.ConfigurationError(
-                "Config file '{}' does not exist.".format(config_file))
+                f"Config file '{paths_to_try[0]}' does not exist.")
+    else:
+        log.debug(f"Loading configuration file: {config_file}")
+        # Ensure file descriptor is at beginning
+        config_file.seek(0)
 
-    # Ensure file descriptor is at begining
-    config_file.seek(0)
-
-    return config_file
+    try:
+        yield config_file
+    finally:
+        if hasattr(config_file, 'close'):
+            config_file.close()
 
 
 def load_config(config_file=None, **kwargs):
@@ -183,35 +209,36 @@ def load_config(config_file=None, **kwargs):
         if value is None:
             options.pop(key)
 
-    config_file = _open_config_file(config_file)
-    options['config_file_path'] = getattr(config_file, 'name', '')
+    with _open_config_file(config_file) as fd:
+        options['config_file_path'] = getattr(fd, 'name', '')
 
-    # Initialise the config with the default schema .
-    from mkdocs.config.defaults import get_schema
-    cfg = Config(schema=get_schema(), config_file_path=options['config_file_path'])
-    # First load the config file
-    cfg.load_file(config_file)
+        # Initialize the config with the default schema.
+        from mkdocs.config.defaults import get_schema
+        cfg = Config(schema=get_schema(), config_file_path=options['config_file_path'])
+        # load the config file
+        cfg.load_file(fd)
+
     # Then load the options to overwrite anything in the config.
     cfg.load_dict(options)
 
     errors, warnings = cfg.validate()
 
     for config_name, warning in warnings:
-        log.warning("Config value: '%s'. Warning: %s", config_name, warning)
+        log.warning(f"Config value: '{config_name}'. Warning: {warning}")
 
     for config_name, error in errors:
-        log.error("Config value: '%s'. Error: %s", config_name, error)
+        log.error(f"Config value: '{config_name}'. Error: {error}")
 
     for key, value in cfg.items():
-        log.debug("Config value: '%s' = %r", key, value)
+        log.debug(f"Config value: '{key}' = {value!r}")
 
     if len(errors) > 0:
         raise exceptions.Abort(
-            "Aborted with {} Configuration Errors!".format(len(errors))
+            f"Aborted with {len(errors)} Configuration Errors!"
         )
     elif cfg['strict'] and len(warnings) > 0:
         raise exceptions.Abort(
-            "Aborted with {} Configuration Warnings in 'strict' mode!".format(len(warnings))
+            f"Aborted with {len(warnings)} Configuration Warnings in 'strict' mode!"
         )
 
     return cfg

@@ -17,8 +17,9 @@ import functools
 import importlib_metadata
 from collections import defaultdict
 from datetime import datetime, timezone
-from urllib.parse import urlparse
+from urllib.parse import urlsplit
 from yaml_env_tag import construct_env_tag
+from mergedeep import merge
 
 from mkdocs import exceptions
 
@@ -33,20 +34,8 @@ markdown_extensions = [
 ]
 
 
-def yaml_load(source, loader=yaml.Loader):
-    """
-    Wrap PyYaml's loader so we can extend it to suit our needs.
-
-    Load all strings as unicode.
-    https://stackoverflow.com/a/2967461/3609487
-    """
-
-    def construct_yaml_str(self, node):
-        """
-        Override the default string handling function to always return
-        unicode objects.
-        """
-        return self.construct_scalar(node)
+def get_yaml_loader(loader=yaml.Loader):
+    """ Wrap PyYaml's loader so we can extend it to suit our needs. """
 
     class Loader(loader):
         """
@@ -54,26 +43,28 @@ def yaml_load(source, loader=yaml.Loader):
         global loader unaltered.
         """
 
-    # Attach our unicode constructor to our custom loader ensuring all strings
-    # will be unicode on translation.
-    Loader.add_constructor('tag:yaml.org,2002:str', construct_yaml_str)
-
     # Attach Environment Variable constructor.
     # See https://github.com/waylan/pyyaml-env-tag
     Loader.add_constructor('!ENV', construct_env_tag)
 
-    try:
-        return yaml.load(source, Loader)
-    finally:
-        # TODO: Remove this when external calls are properly cleaning up file
-        # objects. Some mkdocs internal calls, sometimes in test lib, will
-        # load configs with a file object but never close it.  On some
-        # systems, if a delete action is performed on that file without Python
-        # closing that object, there will be an access error. This will
-        # process the file and close it as there should be no more use for the
-        # file once we process the yaml content.
-        if hasattr(source, 'close'):
-            source.close()
+    return Loader
+
+
+def yaml_load(source, loader=None):
+    """ Return dict of source YAML file using loader, recursively deep merging inherited parent. """
+    Loader = loader or get_yaml_loader()
+    result = yaml.load(source, Loader=Loader)
+    if result is not None and 'INHERIT' in result:
+        relpath = result.pop('INHERIT')
+        abspath = os.path.normpath(os.path.join(os.path.dirname(source.name), relpath))
+        if not os.path.exists(abspath):
+            raise exceptions.ConfigurationError(
+                f"Inherited config file '{relpath}' does not exist at '{abspath}'.")
+        log.debug(f"Loading inherited configuration file: {abspath}")
+        with open(abspath, 'rb') as fd:
+            parent = yaml_load(fd, Loader)
+        result = merge(parent, result)
+    return result
 
 
 def modified_time(file_path):
@@ -214,7 +205,7 @@ def is_markdown_file(path):
 
     https://superuser.com/questions/249436/file-extension-for-markdown-files
     """
-    return any(fnmatch.fnmatch(path.lower(), '*{}'.format(x)) for x in markdown_extensions)
+    return any(fnmatch.fnmatch(path.lower(), f'*{x}') for x in markdown_extensions)
 
 
 def is_html_file(path):
@@ -250,6 +241,14 @@ def is_error_template(path):
     return bool(_ERROR_TEMPLATE_RE.match(path))
 
 
+@functools.lru_cache(maxsize=None)
+def _norm_parts(path):
+    if not path.startswith('/'):
+        path = '/' + path
+    path = posixpath.normpath(path)[1:]
+    return path.split('/') if path else []
+
+
 def get_relative_url(url, other):
     """
     Return given url relative to other.
@@ -260,11 +259,21 @@ def get_relative_url(url, other):
     Paths are normalized ('..' works as parent directory), but going higher than the
     root has no effect ('foo/../../bar' ends up just as 'bar').
     """
-    if other != '.':
-        # Remove filename from other url if it has one.
-        parts = posixpath.split(other)
-        other = parts[0] if '.' in parts[1] else other
-    relurl = posixpath.relpath('/' + url, '/' + other)
+    # Remove filename from other url if it has one.
+    dirname, _, basename = other.rpartition('/')
+    if '.' in basename:
+        other = dirname
+
+    other_parts = _norm_parts(other)
+    dest_parts = _norm_parts(url)
+    common = 0
+    for a, b in zip(other_parts, dest_parts):
+        if a != b:
+            break
+        common += 1
+
+    rel_parts = ['..'] * (len(other_parts) - common) + dest_parts[common:]
+    relurl = '/'.join(rel_parts) or '.'
     return relurl + '/' if url.endswith('/') else relurl
 
 
@@ -274,26 +283,18 @@ def normalize_url(path, page=None, base=''):
     if is_abs:
         return path
     if page is not None:
-        base = page.url
-    return _get_rel_path(path, base, page is not None)
+        return get_relative_url(path, page.url)
+    return posixpath.join(base, path)
 
 
 @functools.lru_cache(maxsize=None)
 def _get_norm_url(path):
     path = path_to_url(path or '.')
-    # Allow links to be fully qualified URL's
-    parsed = urlparse(path)
+    # Allow links to be fully qualified URLs
+    parsed = urlsplit(path)
     if parsed.scheme or parsed.netloc or path.startswith(('/', '#')):
         return path, True
     return path, False
-
-
-@functools.lru_cache()
-def _get_rel_path(path, base, base_is_url):
-    if base_is_url:
-        return get_relative_url(path, base)
-    else:
-        return posixpath.join(base, path)
 
 
 def create_media_urls(path_list, page=None, base=''):
@@ -320,8 +321,8 @@ def get_themes():
     """ Return a dict of all installed themes as {name: EntryPoint}. """
 
     themes = {}
-    eps = importlib_metadata.entry_points(group='mkdocs.themes')
-    builtins = [ep.name for ep in eps if ep.dist.name == 'mkdocs']
+    eps = set(importlib_metadata.entry_points(group='mkdocs.themes'))
+    builtins = {ep.name for ep in eps if ep.dist.name == 'mkdocs'}
 
     for theme in eps:
 
@@ -332,7 +333,7 @@ def get_themes():
             )
         elif theme.name in themes:
             log.warning(
-                f"A theme named '{theme.name}' is provided by the Python packages '{theme.dist.name}'"
+                f"A theme named '{theme.name}' is provided by the Python packages '{theme.dist.name}' "
                 f"and '{themes[theme.name].dist.name}'. The one in '{theme.dist.name}' will be used."
             )
 
@@ -441,10 +442,7 @@ class CountHandler(logging.NullHandler):
         return [(logging.getLevelName(k), v) for k, v in sorted(self.counts.items(), reverse=True)]
 
 
-# A global instance to use throughout package
-log_counter = CountHandler()
-
-# For backward compatability as some plugins import it.
-# It is no longer nessecary as all messages on the
-# `mkdocs` logger get counted automaticaly.
+# For backward compatibility as some plugins import it.
+# It is no longer necessary as all messages on the
+# `mkdocs` logger get counted automatically.
 warning_filter = logging.Filter()

@@ -13,7 +13,29 @@ import logging
 from mkdocs import utils, exceptions
 from mkdocs.structure.files import File
 from mkdocs.structure.pages import Page
-from mkdocs.tests.base import dedent, load_config
+from mkdocs.tests.base import dedent, load_config, tempdir
+
+BASEYML = """
+INHERIT: parent.yml
+foo: bar
+baz:
+    sub1: replaced
+    sub3: new
+deep1:
+    deep2-1:
+        deep3-1: replaced
+"""
+PARENTYML = """
+foo: foo
+baz:
+    sub1: 1
+    sub2: 2
+deep1:
+    deep2-1:
+        deep3-1: foo
+        deep3-2: bar
+    deep2-2: baz
+"""
 
 
 class UtilsTests(unittest.TestCase):
@@ -268,7 +290,8 @@ class UtilsTests(unittest.TestCase):
 
     def test_get_theme_dir_keyerror(self):
 
-        self.assertRaises(KeyError, utils.get_theme_dir, 'nonexistanttheme')
+        with self.assertRaises(KeyError):
+            utils.get_theme_dir('nonexistanttheme')
 
     @mock.patch('importlib_metadata.entry_points', autospec=True)
     def test_get_theme_dir_importerror(self, mock_iter):
@@ -280,7 +303,8 @@ class UtilsTests(unittest.TestCase):
 
         mock_iter.return_value = [theme]
 
-        self.assertRaises(ImportError, utils.get_theme_dir, theme.name)
+        with self.assertRaises(ImportError):
+            utils.get_theme_dir(theme.name)
 
     @mock.patch('importlib_metadata.entry_points', autospec=True)
     def test_get_themes_warning(self, mock_iter):
@@ -316,7 +340,8 @@ class UtilsTests(unittest.TestCase):
 
         mock_iter.return_value = [theme1, theme2]
 
-        self.assertRaises(exceptions.ConfigurationError, utils.get_theme_names)
+        with self.assertRaises(exceptions.ConfigurationError):
+            utils.get_theme_names()
 
     def test_nest_paths(self):
 
@@ -355,7 +380,7 @@ class UtilsTests(unittest.TestCase):
             key2:
               - value
             '''
-        )
+        ).encode('utf-8')
 
         config = utils.yaml_load(yaml_src)
         self.assertTrue(isinstance(config['key'], str))
@@ -382,6 +407,33 @@ class UtilsTests(unittest.TestCase):
         self.assertIsInstance(config['key4'], str)
         self.assertEqual(config['key4'], 'Hello, World!')
         self.assertIs(config['key5'], False)
+
+    @tempdir(files={'base.yml': BASEYML, 'parent.yml': PARENTYML})
+    def test_yaml_inheritance(self, tdir):
+        expected = {
+            'foo': 'bar',
+            'baz': {
+                'sub1': 'replaced',
+                'sub2': 2,
+                'sub3': 'new'
+            },
+            'deep1': {
+                'deep2-1': {
+                    'deep3-1': 'replaced',
+                    'deep3-2': 'bar'
+                },
+                'deep2-2': 'baz'
+            }
+        }
+        with open(os.path.join(tdir, 'base.yml')) as fd:
+            result = utils.yaml_load(fd)
+        self.assertEqual(result, expected)
+
+    @tempdir(files={'base.yml': BASEYML})
+    def test_yaml_inheritance_missing_parent(self, tdir):
+        with open(os.path.join(tdir, 'base.yml')) as fd:
+            with self.assertRaises(exceptions.ConfigurationError):
+                utils.yaml_load(fd)
 
     def test_copy_files(self):
         src_paths = [

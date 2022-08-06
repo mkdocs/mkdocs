@@ -21,11 +21,11 @@
  * https://github.com/mkdocs/mkdocs/issues/233
  */
 .rst-content pre code {
-  white-space: pre;
-  word-wrap: normal;
-  display: block;
-  padding: 12px;
-  font-size: 12px;
+    white-space: pre;
+    word-wrap: normal;
+    display: block;
+    padding: 12px;
+    font-size: 12px;
 }
 
 /**
@@ -77,9 +77,9 @@ pre .cs, pre .c {
  * https://github.com/mkdocs/mkdocs/issues/319
  */
 .rst-content .no-highlight {
-  display: block;
-  padding: 0.5em;
-  color: #333;
+    display: block;
+    padding: 0.5em;
+    color: #333;
 }
 
 
@@ -113,16 +113,16 @@ form .search-query {
  * https://github.com/mkdocs/mkdocs/issues/656
  */
  .rst-content .admonition code {
-  color: #404040;
-  border: 1px solid #c7c9cb;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  background: #f8fbfd;
-  background: rgba(255, 255, 255, 0.7);
+    color: #404040;
+    border: 1px solid #c7c9cb;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background: #f8fbfd;
+    background: rgba(255, 255, 255, 0.7);
 }
 
 /*
  * Account for wide tables which go off the side.
- * Override borders to avoid wierdness on narrow tables.
+ * Override borders to avoid weirdness on narrow tables.
  *
  * https://github.com/mkdocs/mkdocs/issues/834
  * https://github.com/mkdocs/mkdocs/pull/1034
@@ -135,8 +135,8 @@ form .search-query {
 }
 
 td, th {
-   border: 1px solid #e1e4e5 !important; /* csslint allow: important */
-   border-collapse: collapse;
+    border: 1px solid #e1e4e5 !important; /* csslint allow: important */
+    border-collapse: collapse;
 }
 
 /*

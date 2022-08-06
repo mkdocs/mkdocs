@@ -19,7 +19,7 @@ user guide.
 
 - Build static HTML files from Markdown files.
 - Use Plugins and Markdown Extensions to enhance MkDocs.
-- Use the build-in themes, third party themes or create your own.
+- Use the built-in themes, third party themes or create your own.
 - Publish your documentation anywhere that static files can be served.
 - Much more!
 
@@ -27,11 +27,18 @@ user guide.
 
 If you need help with MkDocs, do not hesitate to get in contact with us!
 
-You can either open a [Discussion] to ask questions or create an [Issue] to
-report a bug or make a feature request. Please note that we may only provide
+- For questions and high-level discussions, use **[Discussions]** on GitHub.
+    - For small questions, a good alternative is the **[Chat room]** on
+      Gitter/Matrix (**new!**)
+- To report a bug or make a feature request, open an **[Issue]** on GitHub.
+
+Please note that we may only provide
 support for problems/questions regarding core features of MkDocs. Any
 questions or bug reports about features of third-party themes, plugins,
-extensions or similar should be made to their respective projects.
+extensions or similar should be made to their respective projects.  
+But, such questions are *not* banned from the [chat room].
+
+Make sure to stick around to answer some questions as well!
 
 ## Links
 
@@ -60,7 +67,8 @@ discussion forums is expected to follow the [PyPA Code of Conduct].
 <!-- Links -->
 [mkdocs]: https://www.mkdocs.org
 [Issue]: https://github.com/mkdocs/mkdocs/issues
-[Discussion]: https://github.com/mkdocs/mkdocs/discussions
+[Discussions]: https://github.com/mkdocs/mkdocs/discussions
+[Chat room]: https://gitter.im/mkdocs/community
 [release-notes]: https://www.mkdocs.org/about/release-notes/
 [wiki]: https://github.com/mkdocs/mkdocs/wiki
 [Contributing Guide]: https://www.mkdocs.org/about/contributing/

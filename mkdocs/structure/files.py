@@ -1,7 +1,6 @@
 import fnmatch
 import os
 import logging
-from functools import cmp_to_key
 from urllib.parse import quote as urlquote
 
 from mkdocs import utils
@@ -71,7 +70,9 @@ class Files:
         def filter(name):
             # '.*' filters dot files/dirs at root level whereas '*/.*' filters nested levels
             patterns = ['.*', '*/.*', '*.py', '*.pyc', '*.html', '*readme*', 'mkdocs_theme.yml']
-            patterns.extend('*{}'.format(x) for x in utils.markdown_extensions)
+            # Exclude translation files
+            patterns.append("locales/*")
+            patterns.extend(f'*{x}' for x in utils.markdown_extensions)
             patterns.extend(config['theme'].static_templates)
             for pattern in patterns:
                 if fnmatch.fnmatch(name.lower(), pattern):
@@ -137,8 +138,11 @@ class File:
             self.url == other.url
         )
 
-    def __ne__(self, other):
-        return not self.__eq__(other)
+    def __repr__(self):
+        return (
+            f"File(src_path='{self.src_path}', dest_path='{self.dest_path}',"
+            f" name='{self.name}', url='{self.url}')"
+        )
 
     def _get_stem(self):
         """ Return the name of the file without it's extension. """
@@ -177,9 +181,9 @@ class File:
     def copy_file(self, dirty=False):
         """ Copy source file to destination, ensuring parent directories exist. """
         if dirty and not self.is_modified():
-            log.debug("Skip copying unmodified file: '{}'".format(self.src_path))
+            log.debug(f"Skip copying unmodified file: '{self.src_path}'")
         else:
-            log.debug("Copying media file: '{}'".format(self.src_path))
+            log.debug(f"Copying media file: '{self.src_path}'")
             utils.copy_file(self.abs_src_path, self.abs_dest_path)
 
     def is_modified(self):
@@ -239,8 +243,8 @@ def get_files(config):
             if _filter_paths(basename=filename, path=path, is_dir=False, exclude=exclude):
                 continue
             # Skip README.md if an index file also exists in dir
-            if filename.lower() == 'readme.md' and 'index.md' in filenames:
-                log.warning("Both index.md and readme.md found. Skipping readme.md from {}".format(source_dir))
+            if filename == 'README.md' and 'index.md' in filenames:
+                log.warning(f"Both index.md and README.md found. Skipping README.md from {source_dir}")
                 continue
             files.append(File(path, config['docs_dir'], config['site_dir'], config['use_directory_urls']))
 
@@ -250,16 +254,12 @@ def get_files(config):
 def _sort_files(filenames):
     """ Always sort `index` or `README` as first filename in list. """
 
-    def compare(x, y):
-        if x == y:
-            return 0
-        if os.path.splitext(y)[0] in ['index', 'README']:
-            return 1
-        if os.path.splitext(x)[0] in ['index', 'README'] or x < y:
-            return -1
-        return 1
+    def key(f):
+        if os.path.splitext(f)[0] in ['index', 'README']:
+            return (0,)
+        return (1, f)
 
-    return sorted(filenames, key=cmp_to_key(compare))
+    return sorted(filenames, key=key)
 
 
 def _filter_paths(basename, path, is_dir, exclude):

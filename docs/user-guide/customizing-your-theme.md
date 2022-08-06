@@ -17,7 +17,7 @@ make tweaks and customizations to existing themes. To use these, you simply
 need to include either CSS or JavaScript files within your [documentation
 directory].
 
-For example, to change the colour of the headers in your documentation, create
+For example, to change the color of the headers in your documentation, create
 a file called `extra.css` and place it next to the documentation Markdown. In
 that file add the following CSS.
 
@@ -27,24 +27,22 @@ h1 {
 }
 ```
 
-!!! note
-
-    If you are deploying your documentation with [ReadTheDocs]. You will need
-    to explicitly list the CSS and JavaScript files you want to include in
-    your config. To do this, add the following to your mkdocs.yml.
-
-        extra_css: [extra.css]
+> NOTE:
+> If you are deploying your documentation with [ReadTheDocs]. You will need
+> to explicitly list the CSS and JavaScript files you want to include in
+> your config. To do this, add the following to your mkdocs.yml.
+>
+>     extra_css: [extra.css]
 
 After making these changes, they should be visible when you run
 `mkdocs serve` - if you already had this running, you should see that the CSS
 changes were automatically picked up and the documentation will be updated.
 
-!!! note
-
-    Any extra CSS or JavaScript files will be added to the generated HTML
-    document after the page content. If you desire to include a JavaScript
-    library, you may have better success including the library by using the
-    theme [custom_dir].
+NOTE:
+Any extra CSS or JavaScript files will be added to the generated HTML
+document after the page content. If you desire to include a JavaScript
+library, you may have better success including the library by using the
+theme [custom_dir].
 
 ## Using the theme custom_dir
 
@@ -58,13 +56,12 @@ contents of the `custom_dir` should mirror the directory structure of the
 parent theme. You may include templates, JavaScript files, CSS files, images,
 fonts, or any other media included in a theme.
 
-!!! Note
-
-    For this to work, the `theme.name` setting must be set to a known
-    installed theme. If the `name` setting is instead set to `null` (or not
-    defined), then there is no theme to override and the contents of the
-    `custom_dir` must be a complete, standalone theme. See the [Theme
-    Developer Guide][custom theme] for more information.
+NOTE:
+For this to work, the `theme.name` setting must be set to a known
+installed theme. If the `name` setting is instead set to `null` (or not
+defined), then there is no theme to override and the contents of the
+`custom_dir` must be a complete, standalone theme. See the [Theme
+Developer Guide][custom theme] for more information.
 
 For example, the [mkdocs] theme ([browse source]), contains the following
 directory structure (in part):
@@ -123,13 +120,12 @@ Your directory structure should now look like this:
 - config.yml
 ```
 
-!!! Note
-
-    Any files included in the parent theme (defined in `name`) but not
-    included in the `custom_dir` will still be utilized. The `custom_dir` will
-    only override/replace files in the parent theme. If you want to remove
-    files, or build a theme from scratch, then you should review the [Theme
-    Developer Guide][custom theme].
+NOTE:
+Any files included in the parent theme (defined in `name`) but not
+included in the `custom_dir` will still be utilized. The `custom_dir` will
+only override/replace files in the parent theme. If you want to remove
+files, or build a theme from scratch, then you should review the [Theme
+Developer Guide][custom theme].
 
 ### Overriding Template Blocks
 

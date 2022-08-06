@@ -229,7 +229,7 @@ entire site.
 ##### on_env
 
 :   The `env` event is called after the Jinja template environment is created
-    and can be used to alter the [Jinja environment](https://jinja.palletsprojects.com/en/master/api/#jinja2.Environment).
+    and can be used to alter the [Jinja environment](https://jinja.palletsprojects.com/en/latest/api/#jinja2.Environment).
 
     Parameters:
     : __env:__ global Jinja environment
@@ -268,15 +268,15 @@ called after the [env] event and before any [page events].
 ##### on_pre_template
 
 :   The `pre_template` event is called immediately after the subject template is
-    loaded and can be used to alter the content of the template.
+    loaded and can be used to alter the template.
 
     Parameters:
-    : __template__: the template contents as string
+    : __template__: a Jinja2 [Template] object
     : __template_name__: string filename of template
     : __config:__ global configuration object
 
     Returns:
-    : template contents as string
+    : a Jinja2 [Template] object
 
 ##### on_template_context
 
@@ -405,7 +405,7 @@ MkDocs defines four error types:
 #### `mkdocs.exceptions.MkDocsException`
 
 :   The base class which all MkDocs exceptions inherit from. This should
-    not be raised directly. One of the sublcasses should be raised instead.
+    not be raised directly. One of the subclasses should be raised instead.
 
 #### `mkdocs.exceptions.ConfigurationError`
 
@@ -459,7 +459,7 @@ class MyPlugin(BasePlugin):
 ### Entry Point
 
 Plugins need to be packaged as Python libraries (distributed on PyPI separate
-from MkDocs) and each must register as a Plugin via a setuptools entry_point.
+from MkDocs) and each must register as a Plugin via a setuptools `entry_points`.
 Add the following to your `setup.py` script:
 
 ```python
@@ -475,7 +475,7 @@ The `pluginname` would be the name used by users (in the config file) and
 (`from path.to.some_plugin import SomePluginClass`) where `SomePluginClass` is a
 subclass of [BasePlugin] which defines the plugin behavior. Naturally, multiple
 Plugin classes could exist in the same module. Simply define each as a separate
-entry_point.
+entry point.
 
 ```python
 entry_points={
@@ -505,3 +505,4 @@ tell MkDocs to use it via the config.
 [on_build_error]: #on_build_error
 [Handling Errors]: #handling-errors
 [config_scheme]: #config_scheme
+[Template]: http://code.nabla.net/doc/jinja2/api/jinja2/environment/jinja2.environment.Template.html

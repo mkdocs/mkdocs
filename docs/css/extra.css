@@ -20,6 +20,10 @@ code.no-highlight {
     color: black;
 }
 
+div.admonition.block>.admonition-title {
+    display: none;
+}
+
 /* Definition List styles */
 
 dd {

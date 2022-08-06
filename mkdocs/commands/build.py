@@ -1,7 +1,7 @@
 import logging
 import os
 import gzip
-from urllib.parse import urlparse
+from urllib.parse import urlsplit
 
 from jinja2.exceptions import TemplateNotFound
 import jinja2
@@ -72,11 +72,11 @@ def _build_template(name, template, files, config, nav):
 
     if utils.is_error_template(name):
         # Force absolute URLs in the nav of error pages and account for the
-        # possability that the docs root might be different than the server root.
+        # possibility that the docs root might be different than the server root.
         # See https://github.com/mkdocs/mkdocs/issues/77.
         # However, if site_url is not set, assume the docs root and server root
         # are the same. See https://github.com/mkdocs/mkdocs/issues/1598.
-        base_url = urlparse(config['site_url'] or '/').path
+        base_url = urlsplit(config['site_url'] or '/').path
     else:
         base_url = utils.get_relative_url('.', name)
 
@@ -100,12 +100,12 @@ def _build_template(name, template, files, config, nav):
 def _build_theme_template(template_name, env, files, config, nav):
     """ Build a template using the theme environment. """
 
-    log.debug("Building theme template: {}".format(template_name))
+    log.debug(f"Building theme template: {template_name}")
 
     try:
         template = env.get_template(template_name)
     except TemplateNotFound:
-        log.warning("Template skipped: '{}' not found in theme directories.".format(template_name))
+        log.warning(f"Template skipped: '{template_name}' not found in theme directories.")
         return
 
     output = _build_template(template_name, template, files, config, nav)
@@ -115,31 +115,31 @@ def _build_theme_template(template_name, env, files, config, nav):
         utils.write_file(output.encode('utf-8'), output_path)
 
         if template_name == 'sitemap.xml':
-            log.debug("Gzipping template: %s", template_name)
-            gz_filename = '{}.gz'.format(output_path)
+            log.debug(f"Gzipping template: {template_name}")
+            gz_filename = f'{output_path}.gz'
             with open(gz_filename, 'wb') as f:
                 timestamp = utils.get_build_timestamp()
                 with gzip.GzipFile(fileobj=f, filename=gz_filename, mode='wb', mtime=timestamp) as gz_buf:
                     gz_buf.write(output.encode('utf-8'))
     else:
-        log.info("Template skipped: '{}' generated empty output.".format(template_name))
+        log.info(f"Template skipped: '{template_name}' generated empty output.")
 
 
 def _build_extra_template(template_name, files, config, nav):
     """ Build user templates which are not part of the theme. """
 
-    log.debug("Building extra template: {}".format(template_name))
+    log.debug(f"Building extra template: {template_name}")
 
     file = files.get_file_from_path(template_name)
     if file is None:
-        log.warning("Template skipped: '{}' not found in docs_dir.".format(template_name))
+        log.warning(f"Template skipped: '{template_name}' not found in docs_dir.")
         return
 
     try:
-        with open(file.abs_src_path, 'r', encoding='utf-8', errors='strict') as f:
+        with open(file.abs_src_path, encoding='utf-8', errors='strict') as f:
             template = jinja2.Template(f.read())
     except Exception as e:
-        log.warning("Error reading template '{}': {}".format(template_name, e))
+        log.warning(f"Error reading template '{template_name}': {e}")
         return
 
     output = _build_template(template_name, template, files, config, nav)
@@ -147,7 +147,7 @@ def _build_extra_template(template_name, files, config, nav):
     if output.strip():
         utils.write_file(output.encode('utf-8'), file.abs_dest_path)
     else:
-        log.info("Template skipped: '{}' generated empty output.".format(template_name))
+        log.info(f"Template skipped: '{template_name}' generated empty output.")
 
 
 def _populate_page(page, config, files, dirty=False):
@@ -195,7 +195,7 @@ def _build_page(page, config, doc_files, nav, env, dirty=False):
         if dirty and not page.file.is_modified():
             return
 
-        log.debug("Building page {}".format(page.file.src_path))
+        log.debug(f"Building page {page.file.src_path}")
 
         # Activate page. Signals to theme that this is the current page.
         page.active = True
@@ -225,7 +225,7 @@ def _build_page(page, config, doc_files, nav, env, dirty=False):
         if output.strip():
             utils.write_file(output.encode('utf-8', errors='xmlcharrefreplace'), page.file.abs_dest_path)
         else:
-            log.info("Page skipped: '{}'. Generated empty output.".format(page.file.src_path))
+            log.info(f"Page skipped: '{page.file.src_path}'. Generated empty output.")
 
         # Deactivate page
         page.active = False
@@ -240,8 +240,16 @@ def _build_page(page, config, doc_files, nav, env, dirty=False):
 
 def build(config, live_server=False, dirty=False):
     """ Perform a full site build. """
-    try:
 
+    logger = logging.getLogger('mkdocs')
+
+    # Add CountHandler for strict mode
+    warning_counter = utils.CountHandler()
+    warning_counter.setLevel(logging.WARNING)
+    if config['strict']:
+        logging.getLogger('mkdocs').addHandler(warning_counter)
+
+    try:
         from time import time
         start = time()
 
@@ -260,7 +268,7 @@ def build(config, live_server=False, dirty=False):
                         " links within your site. This option is designed for site development purposes only.")
 
         if not live_server:  # pragma: no cover
-            log.info("Building documentation to directory: %s", config['site_dir'])
+            log.info(f"Building documentation to directory: {config['site_dir']}")
             if dirty and site_directory_contains_stale_files(config['site_dir']):
                 log.info("The directory contains stale files. Use --clean to remove them.")
 
@@ -280,7 +288,7 @@ def build(config, live_server=False, dirty=False):
 
         log.debug("Reading markdown pages.")
         for file in files.documentation_pages():
-            log.debug("Reading: " + file.src_path)
+            log.debug(f"Reading: {file.src_path}")
             _populate_page(file.page, config, files, dirty)
 
         # Run `env` plugin events.
@@ -308,8 +316,8 @@ def build(config, live_server=False, dirty=False):
         # Run `post_build` plugin events.
         config['plugins'].run_event('post_build', config=config)
 
-        counts = utils.log_counter.get_counts()
-        if config['strict'] and len(counts):
+        counts = warning_counter.get_counts()
+        if counts:
             msg = ', '.join([f'{v} {k.lower()}s' for k, v in counts])
             raise Abort(f'\nAborted with {msg} in strict mode!')
 
@@ -322,6 +330,9 @@ def build(config, live_server=False, dirty=False):
             log.error(str(e))
             raise Abort('\nAborted with a BuildError!')
         raise
+
+    finally:
+        logger.removeHandler(warning_counter)
 
 
 def site_directory_contains_stale_files(site_directory):
