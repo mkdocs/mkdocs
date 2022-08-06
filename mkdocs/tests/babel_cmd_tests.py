@@ -15,8 +15,8 @@ class ThemeMixinTests(unittest.TestCase):
         inst.distribution = Distribution()
         inst.distribution.entry_points = {
             'mkdocs.themes': [
-                'mkdocs = mkdocs.themes.mkdocs'
-            ]
+                'mkdocs = mkdocs.themes.mkdocs',
+            ],
         }
         inst.theme = 'mkdocs'
         self.assertEqual(inst.get_theme_dir(), path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs'))
@@ -36,8 +36,8 @@ class ThemeMixinTests(unittest.TestCase):
         inst.distribution = Distribution()
         inst.distribution.entry_points = {
             'mkdocs.themes': [
-                'mkdocs = mkdocs.themes.mkdocs'
-            ]
+                'mkdocs = mkdocs.themes.mkdocs',
+            ],
         }
         inst.theme = None
         self.assertEqual(inst.get_theme_dir(), path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs'))
@@ -49,7 +49,7 @@ class ThemeMixinTests(unittest.TestCase):
             'mkdocs.themes': [
                 'mkdocs = mkdocs.themes.mkdocs',
                 'readthedocs = mkdocs.themes.readthedocs',
-            ]
+            ],
         }
         inst.theme = 'readthedocs'
         self.assertEqual(inst.get_theme_dir(), path.join(BASE_DIR, 'mkdocs', 'themes', 'readthedocs'))
@@ -61,7 +61,7 @@ class ThemeMixinTests(unittest.TestCase):
             'mkdocs.themes': [
                 'mkdocs = mkdocs.themes.mkdocs',
                 'readthedocs = mkdocs.themes.readthedocs',
-            ]
+            ],
         }
         inst.theme = None
         self.assertRaises(DistutilsOptionError, inst.get_theme_dir)
@@ -78,8 +78,8 @@ class ThemeMixinTests(unittest.TestCase):
         inst.distribution = Distribution()
         inst.distribution.entry_points = {
             'mkdocs.themes': [
-                'mkdocs = mkdocs.themes.mkdocs'
-            ]
+                'mkdocs = mkdocs.themes.mkdocs',
+            ],
         }
         inst.theme = 'undefined'
         self.assertRaises(DistutilsOptionError, inst.get_theme_dir)

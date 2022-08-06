@@ -30,7 +30,7 @@ markdown_extensions = (
     '.mdown',
     '.mkdn',
     '.mkd',
-    '.md'
+    '.md',
 )
 
 

@@ -326,11 +326,13 @@ class SearchIndexTests(unittest.TestCase):
 
         index = search_index.SearchIndex()
 
-        md = dedent("""
-        # Heading 1
-        ## Heading 2
-        ### Heading 3
-        """)
+        md = dedent(
+            """
+            # Heading 1
+            ## Heading 2
+            ### Heading 3
+            """
+        )
         toc = get_toc(get_markdown_toc(md))
 
         toc_item = index._find_toc_by_id(toc, "heading-1")
@@ -376,11 +378,13 @@ class SearchIndexTests(unittest.TestCase):
                 base_cfg)
         ]
 
-        md = dedent("""
-        # Heading 1
-        ## Heading 2
-        ### Heading 3
-        """)
+        md = dedent(
+            """
+            # Heading 1
+            ## Heading 2
+            ### Heading 3
+            """
+        )
         toc = get_toc(get_markdown_toc(md))
 
         full_content = ''.join(f"Heading{i}Content{i}" for i in range(1, 4))
@@ -492,7 +496,7 @@ class SearchIndexTests(unittest.TestCase):
         expected = {
             'docs': [],
             'config': {'prebuild_index': True},
-            'index': {'mock': 'index'}
+            'index': {'mock': 'index'},
         }
         result = json.loads(index.generate_search_index())
         self.assertEqual(mock_popen.call_count, 1)
@@ -510,7 +514,7 @@ class SearchIndexTests(unittest.TestCase):
         index = search_index.SearchIndex(prebuild_index=True)
         expected = {
             'docs': [],
-            'config': {'prebuild_index': True}
+            'config': {'prebuild_index': True},
         }
         result = json.loads(index.generate_search_index())
         self.assertEqual(mock_popen.call_count, 1)
@@ -528,7 +532,7 @@ class SearchIndexTests(unittest.TestCase):
         index = search_index.SearchIndex(prebuild_index=True)
         expected = {
             'docs': [],
-            'config': {'prebuild_index': True}
+            'config': {'prebuild_index': True},
         }
         result = json.loads(index.generate_search_index())
         self.assertEqual(mock_popen.call_count, 1)
@@ -546,7 +550,7 @@ class SearchIndexTests(unittest.TestCase):
         index = search_index.SearchIndex(prebuild_index=True)
         expected = {
             'docs': [],
-            'config': {'prebuild_index': True}
+            'config': {'prebuild_index': True},
         }
         result = json.loads(index.generate_search_index())
         self.assertEqual(mock_popen.call_count, 1)
@@ -564,7 +568,7 @@ class SearchIndexTests(unittest.TestCase):
         index = search_index.SearchIndex(prebuild_index=False)
         expected = {
             'docs': [],
-            'config': {'prebuild_index': False}
+            'config': {'prebuild_index': False},
         }
         result = json.loads(index.generate_search_index())
         self.assertEqual(mock_popen.call_count, 0)
@@ -579,7 +583,7 @@ class SearchIndexTests(unittest.TestCase):
         expected = {
             'docs': [],
             'config': {'prebuild_index': 'python', 'lang': 'en'},
-            'index': {'mock': 'index'}
+            'index': {'mock': 'index'},
         }
         result = json.loads(index.generate_search_index())
         self.assertEqual(mock_lunr.call_count, 1)
@@ -591,7 +595,7 @@ class SearchIndexTests(unittest.TestCase):
         index = search_index.SearchIndex(prebuild_index='python', lang='en')
         expected = {
             'docs': [],
-            'config': {'prebuild_index': 'python', 'lang': 'en'}
+            'config': {'prebuild_index': 'python', 'lang': 'en'},
         }
         result = json.loads(index.generate_search_index())
         self.assertEqual(result, expected)
@@ -608,7 +612,7 @@ class SearchIndexTests(unittest.TestCase):
         expected = {
             'docs': [],
             'config': {'prebuild_index': 'node'},
-            'index': {'mock': 'index'}
+            'index': {'mock': 'index'},
         }
         result = json.loads(index.generate_search_index())
         self.assertEqual(mock_popen.call_count, 1)

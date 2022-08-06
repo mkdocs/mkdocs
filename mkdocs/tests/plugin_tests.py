@@ -237,9 +237,9 @@ class TestPluginConfig(unittest.TestCase):
             'plugins': [{
                 'sample': {
                     'foo': 'foo value',
-                    'bar': 42
-                }
-            }]
+                    'bar': 42,
+                },
+            }],
         }
         option = config.config_options.Plugins()
         cfg['plugins'] = option.validate(cfg['plugins'])
@@ -260,9 +260,9 @@ class TestPluginConfig(unittest.TestCase):
             'plugins': {
                 'sample': {
                     'foo': 'foo value',
-                    'bar': 42
-                }
-            }
+                    'bar': 42,
+                },
+            },
         }
         option = config.config_options.Plugins()
         cfg['plugins'] = option.validate(cfg['plugins'])
@@ -338,10 +338,10 @@ class TestPluginConfig(unittest.TestCase):
             'plugins': [{
                 'sample': {
                     'foo': 'foo value',
-                    'bar': 42
+                    'bar': 42,
                 },
-                'extra_key': 'baz'
-            }]
+                'extra_key': 'baz',
+            }],
         }
         option = config.config_options.Plugins()
         with self.assertRaises(config.base.ValidationError):
@@ -350,7 +350,7 @@ class TestPluginConfig(unittest.TestCase):
     def test_plugin_config_not_string_or_dict(self, mock_class):
 
         cfg = {
-            'plugins': [('not a string or dict',)]
+            'plugins': [('not a string or dict',)],
         }
         option = config.config_options.Plugins()
         with self.assertRaises(config.base.ValidationError):
@@ -360,8 +360,8 @@ class TestPluginConfig(unittest.TestCase):
 
         cfg = {
             'plugins': [{
-                'sample': 'not a dict'
-            }]
+                'sample': 'not a dict',
+            }],
         }
         option = config.config_options.Plugins()
         with self.assertRaises(config.base.ValidationError):

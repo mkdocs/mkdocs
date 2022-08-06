@@ -38,11 +38,13 @@ class ConfigTests(unittest.TestCase):
             config.load_config(config_file='/path/that/is/not/real')
 
     def test_invalid_config(self):
-        file_contents = dedent("""
-        - ['index.md', 'Introduction']
-        - ['index.md', 'Introduction']
-        - ['index.md', 'Introduction']
-        """)
+        file_contents = dedent(
+            """
+            - ['index.md', 'Introduction']
+            - ['index.md', 'Introduction']
+            - ['index.md', 'Introduction']
+            """
+        )
         config_file = tempfile.NamedTemporaryFile('w', delete=False)
         try:
             config_file.write(file_contents)
@@ -65,11 +67,13 @@ class ConfigTests(unittest.TestCase):
                 {'Introduction': 'index.md'}
             ],
         }
-        file_contents = dedent("""
-        site_name: Example
-        nav:
-        - 'Introduction': 'index.md'
-        """)
+        file_contents = dedent(
+            """
+            site_name: Example
+            nav:
+            - 'Introduction': 'index.md'
+            """
+        )
         with TemporaryDirectory() as temp_path:
             os.mkdir(os.path.join(temp_path, 'docs'))
             config_path = os.path.join(temp_path, 'mkdocs.yml')
@@ -247,7 +251,7 @@ class ConfigTests(unittest.TestCase):
         )
 
         conf = {
-            'config_file_path': j(os.path.abspath('..'), 'mkdocs.yml')
+            'config_file_path': j(os.path.abspath('..'), 'mkdocs.yml'),
         }
 
         for test_config in test_configs:

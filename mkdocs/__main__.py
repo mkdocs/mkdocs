@@ -51,7 +51,7 @@ class ColorFormatter(logging.Formatter):
         'CRITICAL': 'red',
         'ERROR': 'red',
         'WARNING': 'yellow',
-        'DEBUG': 'blue'
+        'DEBUG': 'blue',
     }
 
     text_wrapper = textwrap.TextWrapper(
@@ -99,10 +99,8 @@ pass_state = click.make_pass_decorator(State, ensure=True)
 
 clean_help = "Remove old files from the site_dir before building (the default)."
 config_help = "Provide a specific MkDocs config"
-dev_addr_help = ("IP address and port to serve documentation locally (default: "
-                 "localhost:8000)")
-strict_help = ("Enable strict mode. This will cause MkDocs to abort the build "
-               "on any warnings.")
+dev_addr_help = "IP address and port to serve documentation locally (default: localhost:8000)"
+strict_help = "Enable strict mode. This will cause MkDocs to abort the build on any warnings."
 theme_help = "The theme to use when building your documentation."
 theme_choices = utils.get_theme_names()
 site_dir_help = "The directory to output the result of the documentation build."
@@ -114,19 +112,17 @@ commit_message_help = ("A commit message to use when committing to the "
                        "GitHub Pages remote branch. Commit {sha} and MkDocs {version} are available as expansions")
 remote_branch_help = ("The remote branch to commit to for GitHub Pages. This "
                       "overrides the value specified in config")
-remote_name_help = ("The remote name to commit to for GitHub Pages. This "
-                    "overrides the value specified in config")
+remote_name_help = "The remote name to commit to for GitHub Pages. This overrides the value specified in config"
 force_help = "Force the push to the repository."
 no_history_help = "Replace the whole Git history with one new commit."
 ignore_version_help = "Ignore check that build is not being deployed with an older version of MkDocs."
 watch_theme_help = ("Include the theme in list of files to watch for live reloading. "
                     "Ignored when live reload is not used.")
 shell_help = "Use the shell when invoking Git."
-watch_help = ("A directory or file to watch for live reloading. "
-              "Can be supplied multiple times.")
+watch_help = "A directory or file to watch for live reloading. Can be supplied multiple times."
 
 
-def add_options(opts):
+def add_options(*opts):
     def inner(f):
         for i in reversed(opts):
             f = i(f)
@@ -159,8 +155,8 @@ def quiet_option(f):
                         callback=callback)(f)
 
 
-common_options = add_options([quiet_option, verbose_option])
-common_config_options = add_options([
+common_options = add_options(quiet_option, verbose_option)
+common_config_options = add_options(
     click.option('-f', '--config-file', type=click.File('rb'), help=config_help),
     # Don't override config value if user did not specify --strict flag
     # Conveniently, load_config drops None values
@@ -169,7 +165,7 @@ common_config_options = add_options([
     # As with --strict, set the default to None so that this doesn't incorrectly
     # override the config file
     click.option('--use-directory-urls/--no-directory-urls', is_flag=True, default=None, help=use_directory_urls_help)
-])
+)
 
 PYTHON_VERSION = f"{sys.version_info.major}.{sys.version_info.minor}"
 

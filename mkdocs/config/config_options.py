@@ -287,10 +287,10 @@ class IpAddress(OptionallyRequired):
         host = config[key_name].host
         if key_name == 'dev_addr' and host in ['0.0.0.0', '::']:
             self.warnings.append(
-                (f"The use of the IP address '{host}' suggests a production environment "
-                 "or the use of a proxy to connect to the MkDocs server. However, "
-                 "the MkDocs' server is intended for local development purposes only. "
-                 "Please use a third party production-ready server instead.")
+                f"The use of the IP address '{host}' suggests a production environment "
+                "or the use of a proxy to connect to the MkDocs server. However, "
+                "the MkDocs' server is intended for local development purposes only. "
+                "Please use a third party production-ready server instead."
             )
 
 
@@ -400,9 +400,10 @@ class Dir(FilesystemObject):
         # Validate that the dir is not the parent dir of the config file.
         if os.path.dirname(config.config_file_path) == config[key_name]:
             raise ValidationError(
-                (f"The '{key_name}' should not be the parent directory of the"
-                 " config file. Use a child directory instead so that the"
-                 f" '{key_name}' is a sibling of the config file."))
+                f"The '{key_name}' should not be the parent directory of the"
+                f" config file. Use a child directory instead so that the"
+                f" '{key_name}' is a sibling of the config file."
+            )
 
 
 class File(FilesystemObject):
@@ -455,24 +456,26 @@ class SiteDir(Dir):
     def post_validation(self, config, key_name):
 
         super().post_validation(config, key_name)
+        docs_dir = config['docs_dir']
+        site_dir = config['site_dir']
 
         # Validate that the docs_dir and site_dir don't contain the
         # other as this will lead to copying back and forth on each
         # and eventually make a deep nested mess.
-        if (config['docs_dir'] + os.sep).startswith(config['site_dir'].rstrip(os.sep) + os.sep):
+        if (docs_dir + os.sep).startswith(site_dir.rstrip(os.sep) + os.sep):
             raise ValidationError(
-                ("The 'docs_dir' should not be within the 'site_dir' as this "
-                 "can mean the source files are overwritten by the output or "
-                 "it will be deleted if --clean is passed to mkdocs build."
-                 "(site_dir: '{}', docs_dir: '{}')"
-                 ).format(config['site_dir'], config['docs_dir']))
-        elif (config['site_dir'] + os.sep).startswith(config['docs_dir'].rstrip(os.sep) + os.sep):
+                f"The 'docs_dir' should not be within the 'site_dir' as this "
+                f"can mean the source files are overwritten by the output or "
+                f"it will be deleted if --clean is passed to mkdocs build."
+                f"(site_dir: '{site_dir}', docs_dir: '{docs_dir}')"
+            )
+        elif (site_dir + os.sep).startswith(docs_dir.rstrip(os.sep) + os.sep):
             raise ValidationError(
-                ("The 'site_dir' should not be within the 'docs_dir' as this "
-                 "leads to the build directory being copied into itself and "
-                 "duplicate nested files in the 'site_dir'."
-                 "(site_dir: '{}', docs_dir: '{}')"
-                 ).format(config['site_dir'], config['docs_dir']))
+                f"The 'site_dir' should not be within the 'docs_dir' as this "
+                f"leads to the build directory being copied into itself and "
+                f"duplicate nested files in the 'site_dir'."
+                f"(site_dir: '{site_dir}', docs_dir: '{docs_dir}')"
+            )
 
 
 class Theme(BaseConfigOption):

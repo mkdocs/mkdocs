@@ -655,11 +655,16 @@ class PageTests(unittest.TestCase):
         self.assertTrue(pg.content.startswith(
             '<h1 id="welcome-to-mkdocs">Welcome to MkDocs</h1>\n'
         ))
-        self.assertEqual(str(pg.toc).strip(), dedent("""
-            Welcome to MkDocs - #welcome-to-mkdocs
-                Commands - #commands
-                Project layout - #project-layout
-        """))
+        self.assertEqual(
+            str(pg.toc).strip(),
+            dedent(
+                """
+                Welcome to MkDocs - #welcome-to-mkdocs
+                    Commands - #commands
+                    Project layout - #project-layout
+                """
+            ),
+        )
 
     def test_missing_page(self):
         cfg = load_config()
@@ -694,9 +699,10 @@ class RelativePathExtensionTests(unittest.TestCase):
 
     def get_rendered_result(self, files):
         cfg = load_config(docs_dir=self.DOCS_DIR)
-        fs = []
-        for f in files:
-            fs.append(File(f.replace('/', os.sep), cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']))
+        fs = [
+            File(f.replace('/', os.sep), cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+            for f in files
+        ]
         pg = Page('Foo', fs[0], cfg)
         pg.read_source(cfg)
         pg.render(cfg, Files(fs))
@@ -713,7 +719,7 @@ class RelativePathExtensionTests(unittest.TestCase):
     def test_relative_html_link_index(self):
         self.assertEqual(
             self.get_rendered_result(['non-index.md', 'index.md']),
-            '<p><a href="..">link</a></p>'
+            '<p><a href="..">link</a></p>',
         )
 
     @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](sub2/index.md)'))
@@ -776,7 +782,7 @@ class RelativePathExtensionTests(unittest.TestCase):
     def test_relative_html_link_hash_only(self):
         self.assertEqual(
             self.get_rendered_result(['index.md']),
-            '<p><a href="#hash">link</a></p>'
+            '<p><a href="#hash">link</a></p>',
         )
 
     @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='![image](image.png)'))
@@ -804,7 +810,7 @@ class RelativePathExtensionTests(unittest.TestCase):
     def test_no_links(self):
         self.assertEqual(
             self.get_rendered_result(['index.md']),
-            '<p><em><strong>not</strong> a link</em>.</p>'
+            '<p><em><strong>not</strong> a link</em>.</p>',
         )
 
     @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](non-existent.md)'))
@@ -812,7 +818,7 @@ class RelativePathExtensionTests(unittest.TestCase):
         with self.assertLogs('mkdocs', level='WARNING') as cm:
             self.assertEqual(
                 self.get_rendered_result(['index.md']),
-                '<p><a href="non-existent.md">link</a></p>'
+                '<p><a href="non-existent.md">link</a></p>',
             )
         self.assertEqual(
             cm.output,

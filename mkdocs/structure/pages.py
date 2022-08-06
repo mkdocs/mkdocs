@@ -170,7 +170,7 @@ class Page:
 
         md = markdown.Markdown(
             extensions=extensions,
-            extension_configs=config['mdx_configs'] or {}
+            extension_configs=config['mdx_configs'] or {},
         )
         self.content = md.convert(self.markdown)
         self.toc = get_toc(getattr(md, 'toc_tokens', []))

@@ -43,7 +43,7 @@ def _get_remote_url(remote_name):
     # pages location.
     remote = f"remote.{remote_name}.url"
     proc = subprocess.Popen(["git", "config", "--get", remote],
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE,)
 
     stdout, _ = proc.communicate()
     url = stdout.decode('utf-8').strip()
@@ -87,8 +87,7 @@ def _check_version(branch):
 def gh_deploy(config, message=None, force=False, no_history=False, ignore_version=False, shell=False):
 
     if not _is_cwd_git_repo():
-        log.error('Cannot deploy - this directory does not appear to be a git '
-                  'repository')
+        log.error('Cannot deploy - this directory does not appear to be a git repository')
 
     remote_branch = config['remote_branch']
     remote_name = config['remote_name']
@@ -128,8 +127,7 @@ def gh_deploy(config, message=None, force=False, no_history=False, ignore_versio
             cname_host = f.read().strip()
         log.info(f'Based on your CNAME file, your documentation should be '
                  f'available shortly at: http://{cname_host}')
-        log.info('NOTE: Your DNS records must be configured appropriately for '
-                 'your CNAME URL to work.')
+        log.info('NOTE: Your DNS records must be configured appropriately for your CNAME URL to work.')
         return
 
     host, path = _get_remote_url(remote_name)

@@ -14,7 +14,7 @@ class ConfigBaseTests(unittest.TestCase):
 
         c = base.Config(schema=defaults.get_schema())
         c.load_dict({
-            'not_a_valid_config_option': "test"
+            'not_a_valid_config_option': "test",
         })
 
         failed, warnings = c.validate()

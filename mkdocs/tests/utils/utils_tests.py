@@ -85,7 +85,8 @@ class UtilsTests(unittest.TestCase):
             ('a', ''): 'a',
             ('a', '..'): 'a',
             ('a', 'b'): '../a',
-            ('a', 'b/..'): '../a',  # The dots are considered a file. Documenting a long-standing bug.
+            # The dots are considered a file. Documenting a long-standing bug:
+            ('a', 'b/..'): '../a',
             ('a', 'b/../..'): 'a',
             ('a/..../b', 'a/../b'): '../a/..../b',
             ('a/я/b', 'a/я/c'): '../b',
@@ -144,7 +145,7 @@ class UtilsTests(unittest.TestCase):
             'image.png': [
                 'image.png',
                 'image.png',
-                '../image.png'
+                '../image.png',
             ],
             'style.css?v=20180308c': [
                 'style.css?v=20180308c',
@@ -154,8 +155,8 @@ class UtilsTests(unittest.TestCase):
             '#some_id': [
                 '#some_id',
                 '#some_id',
-                '#some_id'
-            ]
+                '#some_id',
+            ],
         }
 
         cfg = load_config(use_directory_urls=False)
@@ -205,7 +206,7 @@ class UtilsTests(unittest.TestCase):
             'image.png': [
                 'image.png',
                 '../image.png',
-                '../../image.png'
+                '../../image.png',
             ],
             'style.css?v=20180308c': [
                 'style.css?v=20180308c',
@@ -215,8 +216,8 @@ class UtilsTests(unittest.TestCase):
             '#some_id': [
                 '#some_id',
                 '#some_id',
-                '#some_id'
-            ]
+                '#some_id',
+            ],
         }
 
         cfg = load_config(use_directory_urls=True)
@@ -233,7 +234,7 @@ class UtilsTests(unittest.TestCase):
     def test_reduce_list(self):
         self.assertEqual(
             utils.reduce_list([1, 2, 3, 4, 5, 5, 2, 4, 6, 7, 8]),
-            [1, 2, 3, 4, 5, 6, 7, 8]
+            [1, 2, 3, 4, 5, 6, 7, 8],
         )
 
     def test_get_themes(self):
@@ -291,7 +292,8 @@ class UtilsTests(unittest.TestCase):
 
         self.assertEqual(
             sorted(utils.get_theme_names()),
-            sorted(['mkdocs2', ]))
+            sorted(['mkdocs2'])
+        )
 
     @mock.patch('importlib_metadata.entry_points', autospec=True)
     def test_get_themes_error(self, mock_iter):
@@ -383,15 +385,15 @@ class UtilsTests(unittest.TestCase):
             'baz': {
                 'sub1': 'replaced',
                 'sub2': 2,
-                'sub3': 'new'
+                'sub3': 'new',
             },
             'deep1': {
                 'deep2-1': {
                     'deep3-1': 'replaced',
-                    'deep3-2': 'bar'
+                    'deep3-2': 'bar',
                 },
-                'deep2-2': 'baz'
-            }
+                'deep2-2': 'baz',
+            },
         }
         with open(os.path.join(tdir, 'base.yml')) as fd:
             result = utils.yaml_load(fd)

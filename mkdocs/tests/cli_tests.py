@@ -225,7 +225,7 @@ class CLITests(unittest.TestCase):
             strict=None,
             theme=None,
             use_directory_urls=None,
-            site_dir=None
+            site_dir=None,
         )
         handler = logging._handlers.get('MkDocsStreamHandler')
         self.assertEqual(handler.level, logging.INFO)
@@ -285,7 +285,7 @@ class CLITests(unittest.TestCase):
             strict=True,
             theme=None,
             use_directory_urls=None,
-            site_dir=None
+            site_dir=None,
         )
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
@@ -302,7 +302,7 @@ class CLITests(unittest.TestCase):
             strict=None,
             theme='readthedocs',
             use_directory_urls=None,
-            site_dir=None
+            site_dir=None,
         )
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
@@ -319,7 +319,7 @@ class CLITests(unittest.TestCase):
             strict=None,
             theme=None,
             use_directory_urls=True,
-            site_dir=None
+            site_dir=None,
         )
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
@@ -336,7 +336,7 @@ class CLITests(unittest.TestCase):
             strict=None,
             theme=None,
             use_directory_urls=False,
-            site_dir=None
+            site_dir=None,
         )
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
@@ -417,7 +417,7 @@ class CLITests(unittest.TestCase):
             strict=None,
             theme=None,
             use_directory_urls=None,
-            site_dir=None
+            site_dir=None,
         )
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
@@ -501,7 +501,7 @@ class CLITests(unittest.TestCase):
             strict=None,
             theme=None,
             use_directory_urls=None,
-            site_dir=None
+            site_dir=None,
         )
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
@@ -522,7 +522,7 @@ class CLITests(unittest.TestCase):
             strict=None,
             theme=None,
             use_directory_urls=None,
-            site_dir=None
+            site_dir=None,
         )
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
@@ -575,7 +575,7 @@ class CLITests(unittest.TestCase):
             strict=True,
             theme=None,
             use_directory_urls=None,
-            site_dir=None
+            site_dir=None,
         )
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
@@ -596,7 +596,7 @@ class CLITests(unittest.TestCase):
             strict=None,
             theme='readthedocs',
             use_directory_urls=None,
-            site_dir=None
+            site_dir=None,
         )
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
@@ -617,7 +617,7 @@ class CLITests(unittest.TestCase):
             strict=None,
             theme=None,
             use_directory_urls=True,
-            site_dir=None
+            site_dir=None,
         )
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
@@ -638,7 +638,7 @@ class CLITests(unittest.TestCase):
             strict=None,
             theme=None,
             use_directory_urls=False,
-            site_dir=None
+            site_dir=None,
         )
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
@@ -659,5 +659,5 @@ class CLITests(unittest.TestCase):
             strict=None,
             theme=None,
             use_directory_urls=None,
-            site_dir='custom'
+            site_dir='custom',
         )

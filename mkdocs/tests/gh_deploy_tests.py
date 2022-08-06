@@ -36,7 +36,7 @@ class TestGitHubDeploy(unittest.TestCase):
 
         mock_popeno().communicate.return_value = (
             b'git@github.com:mkdocs/mkdocs.git\n',
-            b''
+            b'',
         )
 
         expected = ('git@', 'mkdocs/mkdocs.git')
@@ -47,7 +47,7 @@ class TestGitHubDeploy(unittest.TestCase):
 
         mock_popeno().communicate.return_value = (
             b'https://github.com/mkdocs/mkdocs.git\n',
-            b''
+            b'',
         )
 
         expected = ('https://', 'mkdocs/mkdocs.git')
@@ -58,7 +58,7 @@ class TestGitHubDeploy(unittest.TestCase):
 
         mock_popeno().communicate.return_value = (
             b'https://notgh.com/mkdocs/mkdocs.git\n',
-            b''
+            b'',
         )
 
         expected = (None, None)

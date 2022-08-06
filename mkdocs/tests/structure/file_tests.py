@@ -24,32 +24,32 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
     def test_sort_files(self):
         self.assertEqual(
             _sort_files(['b.md', 'bb.md', 'a.md', 'index.md', 'aa.md']),
-            ['index.md', 'a.md', 'aa.md', 'b.md', 'bb.md']
+            ['index.md', 'a.md', 'aa.md', 'b.md', 'bb.md'],
         )
 
         self.assertEqual(
             _sort_files(['b.md', 'index.html', 'a.md', 'index.md']),
-            ['index.html', 'index.md', 'a.md', 'b.md']
+            ['index.html', 'index.md', 'a.md', 'b.md'],
         )
 
         self.assertEqual(
             _sort_files(['a.md', 'index.md', 'b.md', 'index.html']),
-            ['index.md', 'index.html', 'a.md', 'b.md']
+            ['index.md', 'index.html', 'a.md', 'b.md'],
         )
 
         self.assertEqual(
             _sort_files(['.md', '_.md', 'a.md', 'index.md', '1.md']),
-            ['index.md', '.md', '1.md', '_.md', 'a.md']
+            ['index.md', '.md', '1.md', '_.md', 'a.md'],
         )
 
         self.assertEqual(
             _sort_files(['a.md', 'b.md', 'a.md']),
-            ['a.md', 'a.md', 'b.md']
+            ['a.md', 'a.md', 'b.md'],
         )
 
         self.assertEqual(
             _sort_files(['A.md', 'B.md', 'README.md']),
-            ['README.md', 'A.md', 'B.md']
+            ['README.md', 'A.md', 'B.md'],
         )
 
     def test_md_file(self):
@@ -344,7 +344,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     @tempdir(files=[
         'favicon.ico',
-        'index.md'
+        'index.md',
     ])
     @tempdir(files=[
         'base.html',
@@ -363,12 +363,12 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         files = get_files(config)
         self.assertEqual(
             [file.src_path for file in files],
-            ['index.md', 'favicon.ico']
+            ['index.md', 'favicon.ico'],
         )
         files.add_files_from_theme(env, config)
         self.assertEqual(
             [file.src_path for file in files],
-            ['index.md', 'favicon.ico', 'style.css']
+            ['index.md', 'favicon.ico', 'style.css'],
         )
         # Ensure theme file does not override docs_dir file
         self.assertEqual(
@@ -412,7 +412,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
             'foo/bar/baz/index.md',
             'foo.md',
             'foo/bar.md',
-            'foo/bar/baz.md'
+            'foo/bar/baz.md',
         ]
 
         to_file_urls = [
@@ -422,7 +422,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
             'foo/bar/baz/',
             'foo/',
             'foo/bar/',
-            'foo/bar/baz/'
+            'foo/bar/baz/',
         ]
 
         from_file = File('img.jpg', '/path/to/docs', '/path/to/site', use_directory_urls=True)
@@ -505,7 +505,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
             'foo/bar/baz/index.md',
             'foo.md',
             'foo/bar.md',
-            'foo/bar/baz.md'
+            'foo/bar/baz.md',
         ]
 
         to_file_urls = [
@@ -515,7 +515,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
             'foo/bar/baz/index.html',
             'foo.html',
             'foo/bar.html',
-            'foo/bar/baz.html'
+            'foo/bar/baz.html',
         ]
 
         from_file = File('img.jpg', '/path/to/docs', '/path/to/site', use_directory_urls=False)
@@ -611,7 +611,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     @tempdir(files=[
         'README.md',
-        'foo.md'
+        'foo.md',
     ])
     def test_get_files_include_readme_without_index(self, tdir):
         config = load_config(docs_dir=tdir)
@@ -624,7 +624,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
     @tempdir(files=[
         'index.md',
         'README.md',
-        'foo.md'
+        'foo.md',
     ])
     def test_get_files_exclude_readme_with_index(self, tdir):
         config = load_config(docs_dir=tdir)

@@ -45,7 +45,7 @@ def main(output=None):
     log.addHandler(stream)
     log.setLevel(logging.DEBUG)
 
-    base_cmd = ['mkdocs', 'build', '-s', '-v', '--site-dir', ]
+    base_cmd = ['mkdocs', 'build', '-s', '-v', '--site-dir']
 
     log.debug("Building installed themes.")
     for theme in sorted(MKDOCS_THEMES):
@@ -60,7 +60,7 @@ def main(output=None):
         log.debug(f"Building test project: {project}")
         project_dir = os.path.join(TEST_PROJECTS, project)
         out = os.path.join(output, project)
-        command = base_cmd + [out, ]
+        command = base_cmd + [out]
         subprocess.check_call(command, cwd=project_dir)
 
     log.debug(f"Theme and integration builds are in {output}")
