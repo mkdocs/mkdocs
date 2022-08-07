@@ -113,7 +113,6 @@ themes for consistency.
 
 [Jinja]: http://jinja.pocoo.org/
 [template inheritance]: http://jinja.pocoo.org/docs/dev/templates/#template-inheritance
-[theme_dir]: ../user-guide/customizing-your-theme.md#using-the-theme_dir
 [blocks]: ../user-guide/customizing-your-theme.md#overriding-template-blocks
 
 ## Theme Files
@@ -902,7 +901,6 @@ For a much more detailed guide, see the official Python packaging
 documentation for [Packaging and Distributing Projects].
 
 [Packaging and Distributing Projects]: https://packaging.python.org/en/latest/distributing/
-[theme]: ../user-guide/configuration.md#theme
 [Jinja inheritance rules]: https://jinja.palletsprojects.com/en/latest/templates/#template-inheritance
 
 ## Supporting theme Localization/Translation
@@ -921,7 +919,6 @@ built-in themes, the sections below outline how to enable and make use of the
 same commands utilized by MkDocs.
 
 [localization/translation]: ../user-guide/localizing-your-theme.md
-[Theme Configuration]: #theme-configuration
 
 ### Enabling the Localization/Translation commands
 

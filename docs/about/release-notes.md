@@ -975,15 +975,6 @@ user created and third-party templates:
 | previous_page     | [page.previous_page]|
 | next_page         | [page.next_page]    |
 
-[page]: ../dev-guide/themes.md#page
-[page.title]: ../dev-guide/themes.md#pagetitle
-[page.content]: ../dev-guide/themes.md#pagecontent
-[page.toc]: ../dev-guide/themes.md#pagetoc
-[page.meta]: ../dev-guide/themes.md#pagemeta
-[page.canonical_url]: ../dev-guide/themes.md#pagecanonical_url
-[page.previous_page]: ../dev-guide/themes.md#pageprevious_page
-[page.next_page]: ../dev-guide/themes.md#pagenext_page
-
 ##### Global Context
 
 Additionally, a number of global variables have been altered and/or deprecated
