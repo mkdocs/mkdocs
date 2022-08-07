@@ -268,6 +268,24 @@ class ConfigTests(unittest.TestCase):
             self.assertEqual(len(errors), 1)
             self.assertEqual(warnings, [])
 
+    SUBCONFIG_TEST_SCHEMA = {
+        "items": mkdocs.config.config_options.ConfigItems(
+            ("value", mkdocs.config.config_options.Type(str)),
+        ),
+    }.items()
+
+    def test_subconfig_with_multiple_items(self):
+        # This had a bug where subsequent items would get merged into the same dict.
+        conf = config.Config(schema=self.SUBCONFIG_TEST_SCHEMA)
+        conf.load_dict({
+            'items': [
+                {'value': 'a'},
+                {'value': 'b'},
+            ]
+        })
+        conf.validate()
+        self.assertEqual(conf['items'], [{'value': 'a'}, {'value': 'b'}])
+
     def testConfigInstancesUnique(self):
         conf = mkdocs.config.Config(mkdocs.config.defaults.get_schema())
         conf.load_dict({'site_name': 'foo'})

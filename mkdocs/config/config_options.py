@@ -50,19 +50,17 @@ class BaseConfigOption:
         """
 
 
-class SubConfig(BaseConfigOption, Config):
+class SubConfig(BaseConfigOption):
     def __init__(self, *config_options):
-        BaseConfigOption.__init__(self)
-        Config.__init__(self, config_options)
+        super().__init__()
         self.default = {}
-
-    def validate(self, value):
-        self.load_dict(value)
-        return self.run_validation(value)
+        self.config_options = config_options
 
     def run_validation(self, value):
-        Config.validate(self)
-        return self
+        config = Config(self.config_options)
+        config.load_dict(value)
+        config.validate()
+        return config
 
 
 class ConfigItems(BaseConfigOption):
