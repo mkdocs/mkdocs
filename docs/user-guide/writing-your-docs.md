@@ -243,7 +243,7 @@ dashes. Consecutive dashes are then reduced to a single dash.
 There are a few configuration settings provided by the toc extension which you
 can set in your `mkdocs.yml` configuration file to alter the default behavior:
 
-* **`permalink`**
+*   **`permalink`**
 
     Generate permanent links at the end of each header. Default: `False`.
 
@@ -255,7 +255,7 @@ can set in your `mkdocs.yml` configuration file to alter the default behavior:
             - toc:
                 permalink: "#"
 
-* **`baselevel`**
+*   **`baselevel`**
 
     Base level for headers. Default: `1`.
 
@@ -272,7 +272,7 @@ can set in your `mkdocs.yml` configuration file to alter the default behavior:
     header `# Header` would be rendered as a level 2 header (`<h2>`) in the HTML
     output.
 
-* **`separator`**
+*   **`separator`**
 
     Word separator. Default: `-`.
 
@@ -358,7 +358,7 @@ In addition to displaying information in a template, MkDocs includes support for
 a few predefined meta-data keys which can alter the behavior of MkDocs for that
 specific page. The following keys are supported:
 
-* **`template`**
+*   **`template`**
 
     The template to use with the current page.
 
@@ -367,7 +367,7 @@ specific page. The following keys are supported:
     different template file for that specific page. The template file must be
     available on the path(s) defined in the theme's environment.
 
-* **`title`**
+*   **`title`**
 
     The "title" to use for the document.
 
@@ -376,8 +376,7 @@ specific page. The following keys are supported:
 
     1. A title defined in the [nav] configuration setting for a document.
     2. A title defined in the `title` meta-data key of a document.
-    3. A level 1 Markdown header on the first line of the document body.
-       Please note that [Setext-style] headers are not supported.
+    3. A level 1 Markdown header on the first line of the document body. Please note that [Setext-style] headers are not supported.
     4. The filename of a document.
 
     Upon finding a title for a page, MkDoc does not continue checking any

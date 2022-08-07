@@ -179,8 +179,7 @@ used options include:
 * [config.site_url](../user-guide/configuration.md#site_url)
 * [config.site_author](../user-guide/configuration.md#site_author)
 * [config.site_description](../user-guide/configuration.md#site_description)
-* [config.theme.locale](../user-guide/configuration.md#locale) (See also
-  [Theme Configuration](#locale) below)
+* [config.theme.locale](../user-guide/configuration.md#locale) (See also [Theme Configuration](#locale) below)
 * [config.extra_javascript](../user-guide/configuration.md#extra_javascript)
 * [config.extra_css](../user-guide/configuration.md#extra_css)
 * [config.repo_url](../user-guide/configuration.md#repo_url)
