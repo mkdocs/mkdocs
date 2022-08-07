@@ -13,6 +13,7 @@ import re
 import yaml
 import posixpath
 import functools
+import warnings
 import importlib_metadata
 from collections import defaultdict
 from datetime import datetime, timezone
@@ -64,6 +65,16 @@ def yaml_load(source, loader=None):
             parent = yaml_load(fd, Loader)
         result = merge(parent, result)
     return result
+
+
+def modified_time(file_path):
+    warnings.warn(
+        "modified_time is never used in MkDocs and will be removed soon.", DeprecationWarning
+    )
+    if os.path.exists(file_path):
+        return os.path.getmtime(file_path)
+    else:
+        return 0.0
 
 
 def get_build_timestamp():
@@ -153,6 +164,27 @@ def clean_directory(directory):
             os.unlink(path)
 
 
+def get_html_path(path):
+    warnings.warn(
+        "get_html_path is never used in MkDocs and will be removed soon.", DeprecationWarning
+    )
+    path = os.path.splitext(path)[0]
+    if os.path.basename(path) == 'index':
+        return path + '.html'
+    return "/".join((path, 'index.html'))
+
+
+def get_url_path(path, use_directory_urls=True):
+    warnings.warn(
+        "get_url_path is never used in MkDocs and will be removed soon.", DeprecationWarning
+    )
+    path = get_html_path(path)
+    url = '/' + path.replace(os.path.sep, '/')
+    if use_directory_urls:
+        return url[:-len('index.html')]
+    return url
+
+
 def is_markdown_file(path):
     """
     Return True if the given file path is a Markdown file.
@@ -160,6 +192,20 @@ def is_markdown_file(path):
     https://superuser.com/questions/249436/file-extension-for-markdown-files
     """
     return path.endswith(markdown_extensions)
+
+
+def is_html_file(path):
+    warnings.warn(
+        "is_html_file is never used in MkDocs and will be removed soon.", DeprecationWarning
+    )
+    return path.lower().endswith(('.html', '.htm'))
+
+
+def is_template_file(path):
+    warnings.warn(
+        "is_template_file is never used in MkDocs and will be removed soon.", DeprecationWarning
+    )
+    return path.lower().endswith(('.html', '.htm', '.xml'))
 
 
 _ERROR_TEMPLATE_RE = re.compile(r'^\d{3}\.html?$')
