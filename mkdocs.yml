@@ -45,6 +45,7 @@ markdown_extensions:
         permalink: 
     - attr_list
     - def_list
+    - pymdownx.snippets
     - callouts
     - mdx_gh_links:
         user: mkdocs
