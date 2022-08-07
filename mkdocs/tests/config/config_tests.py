@@ -268,7 +268,7 @@ class ConfigTests(unittest.TestCase):
             self.assertEqual(len(errors), 1)
             self.assertEqual(warnings, [])
 
-    def test_multiple_markdown_config_instantace(self):
+    def test_multiple_markdown_config_instances(self):
         # This had a bug where an extension config would persist to separate
         # config instances that didn't specify extensions.
 
