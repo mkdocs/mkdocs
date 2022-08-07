@@ -11,9 +11,9 @@ import os
 import shutil
 import re
 import yaml
-import fnmatch
 import posixpath
 import functools
+import warnings
 import importlib_metadata
 from collections import defaultdict
 from datetime import datetime, timezone
@@ -25,13 +25,13 @@ from mkdocs import exceptions
 
 log = logging.getLogger(__name__)
 
-markdown_extensions = [
+markdown_extensions = (
     '.markdown',
     '.mdown',
     '.mkdn',
     '.mkd',
     '.md'
-]
+)
 
 
 def get_yaml_loader(loader=yaml.Loader):
@@ -68,10 +68,9 @@ def yaml_load(source, loader=None):
 
 
 def modified_time(file_path):
-    """
-    Return the modified time of the supplied file. If the file does not exists zero is returned.
-    see build_pages for use.
-    """
+    warnings.warn(
+        "modified_time is never used in MkDocs and will be removed soon.", DeprecationWarning
+    )
     if os.path.exists(file_path):
         return os.path.getmtime(file_path)
     else:
@@ -118,9 +117,7 @@ def get_build_date():
 
 def reduce_list(data_set):
     """ Reduce duplicate items in a list and preserve order """
-    seen = set()
-    return [item for item in data_set if
-            item not in seen and not seen.add(item)]
+    return list(dict.fromkeys(data_set))
 
 
 def copy_file(source_path, output_path):
@@ -168,13 +165,9 @@ def clean_directory(directory):
 
 
 def get_html_path(path):
-    """
-    Map a source file path to an output html path.
-
-    Paths like 'index.md' will be converted to 'index.html'
-    Paths like 'about.md' will be converted to 'about/index.html'
-    Paths like 'api-guide/core.md' will be converted to 'api-guide/core/index.html'
-    """
+    warnings.warn(
+        "get_html_path is never used in MkDocs and will be removed soon.", DeprecationWarning
+    )
     path = os.path.splitext(path)[0]
     if os.path.basename(path) == 'index':
         return path + '.html'
@@ -182,16 +175,9 @@ def get_html_path(path):
 
 
 def get_url_path(path, use_directory_urls=True):
-    """
-    Map a source file path to an output html path.
-
-    Paths like 'index.md' will be converted to '/'
-    Paths like 'about.md' will be converted to '/about/'
-    Paths like 'api-guide/core.md' will be converted to '/api-guide/core/'
-
-    If `use_directory_urls` is `False`, returned URLs will include the a trailing
-    `index.html` rather than just returning the directory path.
-    """
+    warnings.warn(
+        "get_url_path is never used in MkDocs and will be removed soon.", DeprecationWarning
+    )
     path = get_html_path(path)
     url = '/' + path.replace(os.path.sep, '/')
     if use_directory_urls:
@@ -205,30 +191,21 @@ def is_markdown_file(path):
 
     https://superuser.com/questions/249436/file-extension-for-markdown-files
     """
-    return any(fnmatch.fnmatch(path.lower(), f'*{x}') for x in markdown_extensions)
+    return path.endswith(markdown_extensions)
 
 
 def is_html_file(path):
-    """
-    Return True if the given file path is an HTML file.
-    """
-    ext = os.path.splitext(path)[1].lower()
-    return ext in [
-        '.html',
-        '.htm',
-    ]
+    warnings.warn(
+        "is_html_file is never used in MkDocs and will be removed soon.", DeprecationWarning
+    )
+    return path.lower().endswith(('.html', '.htm'))
 
 
 def is_template_file(path):
-    """
-    Return True if the given file path is an HTML file.
-    """
-    ext = os.path.splitext(path)[1].lower()
-    return ext in [
-        '.html',
-        '.htm',
-        '.xml',
-    ]
+    warnings.warn(
+        "is_template_file is never used in MkDocs and will be removed soon.", DeprecationWarning
+    )
+    return path.lower().endswith(('.html', '.htm', '.xml'))
 
 
 _ERROR_TEMPLATE_RE = re.compile(r'^\d{3}\.html?$')
