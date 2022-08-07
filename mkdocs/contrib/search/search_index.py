@@ -4,9 +4,13 @@ import json
 import logging
 import subprocess
 
-from lunr import lunr
-
 from html.parser import HTMLParser
+
+try:
+    from lunr import lunr
+    haslunrpy = True
+except ImportError:
+    haslunrpy = False
 
 log = logging.getLogger(__name__)
 
@@ -65,14 +69,16 @@ class SearchIndex:
         url = page.url
 
         # Create an entry for the full page.
+        text = parser.stripped_html.rstrip('\n') if self.config['indexing'] == 'full' else ''
         self._add_entry(
             title=page.title,
-            text=parser.stripped_html.rstrip('\n'),
+            text=text,
             loc=url
         )
 
-        for section in parser.data:
-            self.create_entry_for_section(section, page.toc, url)
+        if self.config['indexing'] in ['full', 'sections']:
+            for section in parser.data:
+                self.create_entry_for_section(section, page.toc, url)
 
     def create_entry_for_section(self, section, toc, abs_url):
         """
@@ -83,10 +89,11 @@ class SearchIndex:
 
         toc_item = self._find_toc_by_id(toc, section.id)
 
+        text = ' '.join(section.text) if self.config['indexing'] == 'full' else ''
         if toc_item is not None:
             self._add_entry(
                 title=toc_item.title,
-                text=" ".join(section.text),
+                text=text,
                 loc=abs_url + toc_item.url
             )
 
@@ -96,7 +103,7 @@ class SearchIndex:
             'docs': self._entries,
             'config': self.config
         }
-        data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
+        data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'), default=str)
 
         if self.config['prebuild_index'] in (True, 'node'):
             try:
@@ -114,15 +121,23 @@ class SearchIndex:
                     data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
                     log.debug('Pre-built search index created successfully.')
                 else:
-                    log.warning('Failed to pre-build search index. Error: {}'.format(err))
+                    log.warning(f'Failed to pre-build search index. Error: {err}')
             except (OSError, ValueError) as e:
-                log.warning('Failed to pre-build search index. Error: {}'.format(e))
+                log.warning(f'Failed to pre-build search index. Error: {e}')
         elif self.config['prebuild_index'] == 'python':
-            idx = lunr(
-                ref='location', fields=('title', 'text'), documents=self._entries,
-                languages=self.config['lang'])
-            page_dicts['index'] = idx.serialize()
-            data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
+            if haslunrpy:
+                idx = lunr(
+                    ref='location', fields=('title', 'text'), documents=self._entries,
+                    languages=self.config['lang'])
+                page_dicts['index'] = idx.serialize()
+                data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
+            else:
+                log.warning(
+                    "Failed to pre-build search index. The 'python' method was specified; "
+                    "however, the 'lunr.py' library does not appear to be installed. Try "
+                    "installing it with 'pip install lunr'. If you are using any language "
+                    "other than English you will also need to install 'lunr[languages]'."
+                )
 
         return data
 
@@ -166,7 +181,7 @@ class ContentParser(HTMLParser):
         """Called at the start of every HTML tag."""
 
         # We only care about the opening tag for headings.
-        if tag not in (["h%d" % x for x in range(1, 7)]):
+        if tag not in ([f"h{x}" for x in range(1, 7)]):
             return
 
         # We are dealing with a new header, create a new section
@@ -183,7 +198,7 @@ class ContentParser(HTMLParser):
         """Called at the end of every HTML tag."""
 
         # We only care about the opening tag for headings.
-        if tag not in (["h%d" % x for x in range(1, 7)]):
+        if tag not in ([f"h{x}" for x in range(1, 7)]):
             return
 
         self.is_header_tag = False

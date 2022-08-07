@@ -20,8 +20,40 @@ code.no-highlight {
     color: black;
 }
 
+div.admonition.block>.admonition-title {
+    display: none;
+}
+
 /* Definition List styles */
 
 dd {
     padding-left: 20px;
+}
+
+.card-body svg {
+    width: 100%;
+    padding: 0 50px;
+    height: auto;
+}
+
+/* Homepage */
+
+body.homepage div.jumbotron {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    padding-bottom: 0;
+}
+
+body.homepage div.jumbotron div.card {
+    margin-bottom: 2rem;
+}
+
+body.homepage>div.container>div.row>div.col-md-3 {
+    display: none;
+}
+
+body.homepage>div.container>div.row>div.col-md-9 {
+    margin-left: 0;
+    flex: 0 0 100%;
+    max-width: 100%;
 }

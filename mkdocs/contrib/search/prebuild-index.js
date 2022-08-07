@@ -22,6 +22,9 @@ stdin.on('end', function () {
         if (lang.length > 1) {
           require('./lunr-language/lunr.multi')(lunr);
         }
+        if (lang.includes("ja") || lang.includes("jp")) {
+          require('./lunr-language/tinyseg')(lunr);
+        }
         for (var i=0; i < lang.length; i++) {
           if (lang[i] != 'en') {
             require('./lunr-language/lunr.' + lang[i])(lunr);

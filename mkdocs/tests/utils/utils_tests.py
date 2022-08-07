@@ -8,40 +8,42 @@ import tempfile
 import shutil
 import stat
 import datetime
+import logging
 
 from mkdocs import utils, exceptions
 from mkdocs.structure.files import File
 from mkdocs.structure.pages import Page
-from mkdocs.tests.base import dedent, load_config
+from mkdocs.tests.base import dedent, load_config, tempdir
+
+BASEYML = """
+INHERIT: parent.yml
+foo: bar
+baz:
+    sub1: replaced
+    sub3: new
+deep1:
+    deep2-1:
+        deep3-1: replaced
+"""
+PARENTYML = """
+foo: foo
+baz:
+    sub1: 1
+    sub2: 2
+deep1:
+    deep2-1:
+        deep3-1: foo
+        deep3-2: bar
+    deep2-2: baz
+"""
 
 
 class UtilsTests(unittest.TestCase):
-    def test_html_path(self):
-        expected_results = {
-            'index.md': 'index.html',
-            'api-guide.md': 'api-guide/index.html',
-            'api-guide/index.md': 'api-guide/index.html',
-            'api-guide/testing.md': 'api-guide/testing/index.html',
-        }
-        for file_path, expected_html_path in expected_results.items():
-            html_path = utils.get_html_path(file_path)
-            self.assertEqual(html_path, expected_html_path)
-
-    def test_url_path(self):
-        expected_results = {
-            'index.md': '/',
-            'api-guide.md': '/api-guide/',
-            'api-guide/index.md': '/api-guide/',
-            'api-guide/testing.md': '/api-guide/testing/',
-        }
-        for file_path, expected_html_path in expected_results.items():
-            html_path = utils.get_url_path(file_path)
-            self.assertEqual(html_path, expected_html_path)
-
     def test_is_markdown_file(self):
         expected_results = {
             'index.md': True,
-            'index.MARKDOWN': True,
+            'index.markdown': True,
+            'index.MARKDOWN': False,
             'index.txt': False,
             'indexmd': False
         }
@@ -49,16 +51,62 @@ class UtilsTests(unittest.TestCase):
             is_markdown = utils.is_markdown_file(path)
             self.assertEqual(is_markdown, expected_result)
 
-    def test_is_html_file(self):
+    def test_get_relative_url(self):
         expected_results = {
-            'index.htm': True,
-            'index.HTML': True,
-            'index.txt': False,
-            'indexhtml': False
+            ('foo/bar', 'foo'): 'bar',
+            ('foo/bar.txt', 'foo'): 'bar.txt',
+            ('foo', 'foo/bar'): '..',
+            ('foo', 'foo/bar.txt'): '.',
+            ('foo/../../bar', '.'): 'bar',
+            ('foo/../../bar', 'foo'): '../bar',
+            ('foo//./bar/baz', 'foo/bar/baz'): '.',
+            ('a/b/.././../c', '.'): 'c',
+            ('a/b/c/d/ee', 'a/b/c/d/e'): '../ee',
+            ('a/b/c/d/ee', 'a/b/z/d/e'): '../../../c/d/ee',
+            ('foo', 'bar.'): 'foo',
+            ('foo', 'bar./'): '../foo',
+            ('foo', 'foo/bar./'): '..',
+            ('foo', 'foo/bar./.'): '..',
+            ('foo', 'foo/bar././'): '..',
+            ('foo/', 'foo/bar././'): '../',
+            ('foo', 'foo'): '.',
+            ('.foo', '.foo'): '.foo',
+            ('.foo/', '.foo'): '.foo/',
+            ('.foo', '.foo/'): '.',
+            ('.foo/', '.foo/'): './',
+            ('///', ''): './',
+            ('a///', ''): 'a/',
+            ('a///', 'a'): './',
+            ('.', 'here'): '..',
+            ('..', 'here'): '..',
+            ('../..', 'here'): '..',
+            ('../../a', 'here'): '../a',
+            ('..', 'here.txt'): '.',
+            ('a', ''): 'a',
+            ('a', '..'): 'a',
+            ('a', 'b'): '../a',
+            ('a', 'b/..'): '../a',  # The dots are considered a file. Documenting a long-standing bug.
+            ('a', 'b/../..'): 'a',
+            ('a/..../b', 'a/../b'): '../a/..../b',
+            ('a/я/b', 'a/я/c'): '../b',
+            ('a/я/b', 'a/яя/c'): '../../я/b',
         }
-        for path, expected_result in expected_results.items():
-            is_html = utils.is_html_file(path)
-            self.assertEqual(is_html, expected_result)
+        for (url, other), expected_result in expected_results.items():
+            # Leading slash intentionally ignored
+            self.assertEqual(utils.get_relative_url(url, other), expected_result)
+            self.assertEqual(utils.get_relative_url('/' + url, other), expected_result)
+            self.assertEqual(utils.get_relative_url(url, '/' + other), expected_result)
+            self.assertEqual(utils.get_relative_url('/' + url, '/' + other), expected_result)
+
+    def test_get_relative_url_empty(self):
+        for url in ['', '.', '/.']:
+            for other in ['', '.', '/', '/.']:
+                self.assertEqual(utils.get_relative_url(url, other), '.')
+
+        self.assertEqual(utils.get_relative_url('/', ''), './')
+        self.assertEqual(utils.get_relative_url('/', '/'), './')
+        self.assertEqual(utils.get_relative_url('/', '.'), './')
+        self.assertEqual(utils.get_relative_url('/', '/.'), './')
 
     def test_create_media_urls(self):
 
@@ -194,73 +242,74 @@ class UtilsTests(unittest.TestCase):
             sorted(utils.get_theme_names()),
             ['mkdocs', 'readthedocs'])
 
-    @mock.patch('pkg_resources.iter_entry_points', autospec=True)
+    @mock.patch('importlib_metadata.entry_points', autospec=True)
     def test_get_theme_dir(self, mock_iter):
 
         path = 'some/path'
 
         theme = mock.Mock()
         theme.name = 'mkdocs2'
-        theme.dist.key = 'mkdocs2'
+        theme.dist.name = 'mkdocs2'
         theme.load().__file__ = os.path.join(path, '__init__.py')
 
-        mock_iter.return_value = iter([theme])
+        mock_iter.return_value = [theme]
 
         self.assertEqual(utils.get_theme_dir(theme.name), os.path.abspath(path))
 
     def test_get_theme_dir_keyerror(self):
 
-        self.assertRaises(KeyError, utils.get_theme_dir, 'nonexistanttheme')
+        with self.assertRaises(KeyError):
+            utils.get_theme_dir('nonexistanttheme')
 
-    @mock.patch('pkg_resources.iter_entry_points', autospec=True)
+    @mock.patch('importlib_metadata.entry_points', autospec=True)
     def test_get_theme_dir_importerror(self, mock_iter):
 
         theme = mock.Mock()
         theme.name = 'mkdocs2'
-        theme.dist.key = 'mkdocs2'
+        theme.dist.name = 'mkdocs2'
         theme.load.side_effect = ImportError()
 
-        mock_iter.return_value = iter([theme])
+        mock_iter.return_value = [theme]
 
-        self.assertRaises(ImportError, utils.get_theme_dir, theme.name)
+        with self.assertRaises(ImportError):
+            utils.get_theme_dir(theme.name)
 
-    @mock.patch('pkg_resources.iter_entry_points', autospec=True)
+    @mock.patch('importlib_metadata.entry_points', autospec=True)
     def test_get_themes_warning(self, mock_iter):
 
         theme1 = mock.Mock()
         theme1.name = 'mkdocs2'
-        theme1.dist.key = 'mkdocs2'
+        theme1.dist.name = 'mkdocs2'
         theme1.load().__file__ = "some/path1"
 
         theme2 = mock.Mock()
         theme2.name = 'mkdocs2'
-        theme2.dist.key = 'mkdocs3'
+        theme2.dist.name = 'mkdocs3'
         theme2.load().__file__ = "some/path2"
 
-        mock_iter.return_value = iter([theme1, theme2])
+        mock_iter.return_value = [theme1, theme2]
 
         self.assertEqual(
             sorted(utils.get_theme_names()),
             sorted(['mkdocs2', ]))
 
-    @mock.patch('pkg_resources.iter_entry_points', autospec=True)
-    @mock.patch('pkg_resources.get_entry_map', autospec=True)
-    def test_get_themes_error(self, mock_get, mock_iter):
+    @mock.patch('importlib_metadata.entry_points', autospec=True)
+    def test_get_themes_error(self, mock_iter):
 
         theme1 = mock.Mock()
         theme1.name = 'mkdocs'
-        theme1.dist.key = 'mkdocs'
+        theme1.dist.name = 'mkdocs'
         theme1.load().__file__ = "some/path1"
 
         theme2 = mock.Mock()
         theme2.name = 'mkdocs'
-        theme2.dist.key = 'mkdocs2'
+        theme2.dist.name = 'mkdocs2'
         theme2.load().__file__ = "some/path2"
 
-        mock_iter.return_value = iter([theme1, theme2])
-        mock_get.return_value = {'mkdocs': theme1, }
+        mock_iter.return_value = [theme1, theme2]
 
-        self.assertRaises(exceptions.ConfigurationError, utils.get_theme_names)
+        with self.assertRaises(exceptions.ConfigurationError):
+            utils.get_theme_names()
 
     def test_nest_paths(self):
 
@@ -299,7 +348,7 @@ class UtilsTests(unittest.TestCase):
             key2:
               - value
             '''
-        )
+        ).encode('utf-8')
 
         config = utils.yaml_load(yaml_src)
         self.assertTrue(isinstance(config['key'], str))
@@ -326,6 +375,33 @@ class UtilsTests(unittest.TestCase):
         self.assertIsInstance(config['key4'], str)
         self.assertEqual(config['key4'], 'Hello, World!')
         self.assertIs(config['key5'], False)
+
+    @tempdir(files={'base.yml': BASEYML, 'parent.yml': PARENTYML})
+    def test_yaml_inheritance(self, tdir):
+        expected = {
+            'foo': 'bar',
+            'baz': {
+                'sub1': 'replaced',
+                'sub2': 2,
+                'sub3': 'new'
+            },
+            'deep1': {
+                'deep2-1': {
+                    'deep3-1': 'replaced',
+                    'deep3-2': 'bar'
+                },
+                'deep2-2': 'baz'
+            }
+        }
+        with open(os.path.join(tdir, 'base.yml')) as fd:
+            result = utils.yaml_load(fd)
+        self.assertEqual(result, expected)
+
+    @tempdir(files={'base.yml': BASEYML})
+    def test_yaml_inheritance_missing_parent(self, tdir):
+        with open(os.path.join(tdir, 'base.yml')) as fd:
+            with self.assertRaises(exceptions.ConfigurationError):
+                utils.yaml_load(fd)
 
     def test_copy_files(self):
         src_paths = [
@@ -482,3 +558,67 @@ class UtilsTests(unittest.TestCase):
             """
         )
         self.assertEqual(utils.meta.get_data(doc), (doc, {}))
+
+
+class LogCounterTests(unittest.TestCase):
+    def setUp(self):
+        self.log = logging.getLogger('dummy')
+        self.log.propagate = False
+        self.log.setLevel(1)
+        self.counter = utils.CountHandler()
+        self.log.addHandler(self.counter)
+
+    def tearDown(self):
+        self.log.removeHandler(self.counter)
+
+    def test_default_values(self):
+        self.assertEqual(self.counter.get_counts(), [])
+
+    def test_count_critical(self):
+        self.assertEqual(self.counter.get_counts(), [])
+        self.log.critical('msg')
+        self.assertEqual(self.counter.get_counts(), [('CRITICAL', 1)])
+
+    def test_count_error(self):
+        self.assertEqual(self.counter.get_counts(), [])
+        self.log.error('msg')
+        self.assertEqual(self.counter.get_counts(), [('ERROR', 1)])
+
+    def test_count_warning(self):
+        self.assertEqual(self.counter.get_counts(), [])
+        self.log.warning('msg')
+        self.assertEqual(self.counter.get_counts(), [('WARNING', 1)])
+
+    def test_count_info(self):
+        self.assertEqual(self.counter.get_counts(), [])
+        self.log.info('msg')
+        self.assertEqual(self.counter.get_counts(), [('INFO', 1)])
+
+    def test_count_debug(self):
+        self.assertEqual(self.counter.get_counts(), [])
+        self.log.debug('msg')
+        self.assertEqual(self.counter.get_counts(), [('DEBUG', 1)])
+
+    def test_count_multiple(self):
+        self.assertEqual(self.counter.get_counts(), [])
+        self.log.warning('msg 1')
+        self.assertEqual(self.counter.get_counts(), [('WARNING', 1)])
+        self.log.warning('msg 2')
+        self.assertEqual(self.counter.get_counts(), [('WARNING', 2)])
+        self.log.debug('msg 3')
+        self.assertEqual(self.counter.get_counts(), [('WARNING', 2), ('DEBUG', 1)])
+        self.log.error('mdg 4')
+        self.assertEqual(self.counter.get_counts(), [('ERROR', 1), ('WARNING', 2), ('DEBUG', 1)])
+
+    def test_log_level(self):
+        self.assertEqual(self.counter.get_counts(), [])
+        self.counter.setLevel(logging.ERROR)
+        self.log.error('counted')
+        self.log.warning('not counted')
+        self.log.info('not counted')
+        self.assertEqual(self.counter.get_counts(), [('ERROR', 1)])
+        self.counter.setLevel(logging.WARNING)
+        self.log.error('counted')
+        self.log.warning('counted')
+        self.log.info('not counted')
+        self.assertEqual(self.counter.get_counts(), [('ERROR', 2), ('WARNING', 1)])

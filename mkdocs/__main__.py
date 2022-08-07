@@ -4,14 +4,79 @@ import os
 import sys
 import logging
 import click
+import textwrap
+import shutil
+import warnings
+import traceback
 
 from mkdocs import __version__
 from mkdocs import utils
-from mkdocs import exceptions
 from mkdocs import config
-from mkdocs.commands import build, gh_deploy, new, serve
+
+
+if sys.platform.startswith("win"):
+    try:
+        import colorama
+    except ImportError:
+        pass
+    else:
+        colorama.init()
 
 log = logging.getLogger(__name__)
+
+
+def _showwarning(message, category, filename, lineno, file=None, line=None):
+    try:
+        # Last stack frames:
+        # * ...
+        # * Location of call to deprecated function   <-- include this
+        # * Location of call to warn()                <-- include this
+        # * (stdlib) Location of call to showwarning function
+        # * (this function) Location of call to extract_stack()
+        stack = traceback.extract_stack()[-4:-2]
+        tb = ''.join(traceback.format_list(stack))
+    except Exception:
+        tb = f'  File "{filename}", line {lineno}'
+
+    log.info(f'{category.__name__}: {message}\n{tb}')
+
+
+def _enable_warnings():
+    warnings.simplefilter('module', DeprecationWarning)
+    warnings.showwarning = _showwarning
+
+
+class ColorFormatter(logging.Formatter):
+    colors = {
+        'CRITICAL': 'red',
+        'ERROR': 'red',
+        'WARNING': 'yellow',
+        'DEBUG': 'blue'
+    }
+
+    text_wrapper = textwrap.TextWrapper(
+        width=shutil.get_terminal_size(fallback=(0, 0)).columns,
+        replace_whitespace=False,
+        break_long_words=False,
+        break_on_hyphens=False,
+        initial_indent=' '*12,
+        subsequent_indent=' '*12
+    )
+
+    def format(self, record):
+        message = super().format(record)
+        prefix = f'{record.levelname:<8} -  '
+        if record.levelname in self.colors:
+            prefix = click.style(prefix, fg=self.colors[record.levelname])
+        if self.text_wrapper.width:
+            # Only wrap text if a terminal width was detected
+            msg = '\n'.join(
+                self.text_wrapper.fill(line)
+                for line in message.splitlines()
+            )
+            # Prepend prefix after wrapping so that color codes don't affect length
+            return prefix + msg[12:]
+        return prefix + message
 
 
 class State:
@@ -19,13 +84,15 @@ class State:
 
     def __init__(self, log_name='mkdocs', level=logging.INFO):
         self.logger = logging.getLogger(log_name)
+        # Don't restrict level on logger; use handler
+        self.logger.setLevel(1)
         self.logger.propagate = False
-        stream = logging.StreamHandler()
-        formatter = logging.Formatter("%(levelname)-7s -  %(message)s ")
-        stream.setFormatter(formatter)
-        self.logger.addHandler(stream)
 
-        self.logger.setLevel(level)
+        self.stream = logging.StreamHandler()
+        self.stream.setFormatter(ColorFormatter())
+        self.stream.setLevel(level)
+        self.stream.name = 'MkDocsStreamHandler'
+        self.logger.addHandler(self.stream)
 
 
 pass_state = click.make_pass_decorator(State, ensure=True)
@@ -44,17 +111,19 @@ reload_help = "Enable the live reloading in the development server (this is the 
 no_reload_help = "Disable the live reloading in the development server."
 dirty_reload_help = "Enable the live reloading in the development server, but only re-build files that have changed"
 commit_message_help = ("A commit message to use when committing to the "
-                       "Github Pages remote branch. Commit {sha} and MkDocs {version} are available as expansions")
-remote_branch_help = ("The remote branch to commit to for Github Pages. This "
+                       "GitHub Pages remote branch. Commit {sha} and MkDocs {version} are available as expansions")
+remote_branch_help = ("The remote branch to commit to for GitHub Pages. This "
                       "overrides the value specified in config")
-remote_name_help = ("The remote name to commit to for Github Pages. This "
+remote_name_help = ("The remote name to commit to for GitHub Pages. This "
                     "overrides the value specified in config")
 force_help = "Force the push to the repository."
+no_history_help = "Replace the whole Git history with one new commit."
 ignore_version_help = "Ignore check that build is not being deployed with an older version of MkDocs."
 watch_theme_help = ("Include the theme in list of files to watch for live reloading. "
                     "Ignored when live reload is not used.")
-wait_help = "Wait the specified number of seconds before reloading (default 0)."
 shell_help = "Use the shell when invoking Git."
+watch_help = ("A directory or file to watch for live reloading. "
+              "Can be supplied multiple times.")
 
 
 def add_options(opts):
@@ -70,7 +139,7 @@ def verbose_option(f):
     def callback(ctx, param, value):
         state = ctx.ensure_object(State)
         if value:
-            state.logger.setLevel(logging.DEBUG)
+            state.stream.setLevel(logging.DEBUG)
     return click.option('-v', '--verbose',
                         is_flag=True,
                         expose_value=False,
@@ -82,7 +151,7 @@ def quiet_option(f):
     def callback(ctx, param, value):
         state = ctx.ensure_object(State)
         if value:
-            state.logger.setLevel(logging.ERROR)
+            state.stream.setLevel(logging.ERROR)
     return click.option('-q', '--quiet',
                         is_flag=True,
                         expose_value=False,
@@ -102,7 +171,7 @@ common_config_options = add_options([
     click.option('--use-directory-urls/--no-directory-urls', is_flag=True, default=None, help=use_directory_urls_help)
 ])
 
-PYTHON_VERSION = sys.version[:3]
+PYTHON_VERSION = f"{sys.version_info.major}.{sys.version_info.minor}"
 
 PKG_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -126,23 +195,14 @@ def cli():
 @click.option('--no-livereload', 'livereload', flag_value='no-livereload', help=no_reload_help)
 @click.option('--dirtyreload', 'livereload', flag_value='dirty', help=dirty_reload_help)
 @click.option('--watch-theme', help=watch_theme_help, is_flag=True)
-@click.option('-w', '--wait', help=wait_help, default=0)
+@click.option('-w', '--watch', help=watch_help, type=click.Path(exists=True), multiple=True, default=[])
 @common_config_options
 @common_options
-def serve_command(dev_addr, livereload, **kwargs):
+def serve_command(dev_addr, livereload, watch, **kwargs):
     """Run the builtin development server"""
-
-    logging.getLogger('tornado').setLevel(logging.WARNING)
-
-    try:
-        serve.serve(
-            dev_addr=dev_addr,
-            livereload=livereload,
-            **kwargs
-        )
-    except (exceptions.ConfigurationError, OSError) as e:  # pragma: no cover
-        # Avoid ugly, unhelpful traceback
-        raise SystemExit('\n' + str(e))
+    from mkdocs.commands import serve
+    _enable_warnings()
+    serve.serve(dev_addr=dev_addr, livereload=livereload, watch=watch, **kwargs)
 
 
 @cli.command(name="build")
@@ -152,12 +212,9 @@ def serve_command(dev_addr, livereload, **kwargs):
 @common_options
 def build_command(clean, **kwargs):
     """Build the MkDocs documentation"""
-
-    try:
-        build.build(config.load_config(**kwargs), dirty=not clean)
-    except exceptions.ConfigurationError as e:  # pragma: no cover
-        # Avoid ugly, unhelpful traceback
-        raise SystemExit('\n' + str(e))
+    from mkdocs.commands import build
+    _enable_warnings()
+    build.build(config.load_config(**kwargs), dirty=not clean)
 
 
 @cli.command(name="gh-deploy")
@@ -166,24 +223,30 @@ def build_command(clean, **kwargs):
 @click.option('-b', '--remote-branch', help=remote_branch_help)
 @click.option('-r', '--remote-name', help=remote_name_help)
 @click.option('--force', is_flag=True, help=force_help)
+@click.option('--no-history', is_flag=True, help=no_history_help)
 @click.option('--ignore-version', is_flag=True, help=ignore_version_help)
 @click.option('--shell', is_flag=True, help=shell_help)
 @common_config_options
 @click.option('-d', '--site-dir', type=click.Path(), help=site_dir_help)
 @common_options
-def gh_deploy_command(clean, message, remote_branch, remote_name, force, ignore_version, shell, **kwargs):
+def gh_deploy_command(clean, message, remote_branch, remote_name, force, no_history, ignore_version, shell, **kwargs):
     """Deploy your documentation to GitHub Pages"""
-    try:
-        cfg = config.load_config(
-            remote_branch=remote_branch,
-            remote_name=remote_name,
-            **kwargs
-        )
-        build.build(cfg, dirty=not clean)
-        gh_deploy.gh_deploy(cfg, message=message, force=force, ignore_version=ignore_version, shell=shell)
-    except exceptions.ConfigurationError as e:  # pragma: no cover
-        # Avoid ugly, unhelpful traceback
-        raise SystemExit('\n' + str(e))
+    from mkdocs.commands import build, gh_deploy
+    _enable_warnings()
+    cfg = config.load_config(
+        remote_branch=remote_branch,
+        remote_name=remote_name,
+        **kwargs
+    )
+    build.build(cfg, dirty=not clean)
+    gh_deploy.gh_deploy(
+        cfg,
+        message=message,
+        force=force,
+        no_history=no_history,
+        ignore_version=ignore_version,
+        shell=shell
+    )
 
 
 @cli.command(name="new")
@@ -191,6 +254,7 @@ def gh_deploy_command(clean, message, remote_branch, remote_name, force, ignore_
 @common_options
 def new_command(project_directory):
     """Create a new MkDocs project"""
+    from mkdocs.commands import new
     new.new(project_directory)
 
 

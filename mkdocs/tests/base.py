@@ -6,6 +6,7 @@ from tempfile import TemporaryDirectory
 
 from mkdocs import config
 from mkdocs import utils
+from mkdocs.config import defaults as config_defaults
 
 
 def dedent(text):
@@ -32,11 +33,11 @@ def load_config(**cfg):
     if 'docs_dir' not in cfg:
         # Point to an actual dir to avoid a 'does not exist' error on validation.
         cfg['docs_dir'] = os.path.join(path_base, 'docs')
-    conf = config.Config(schema=config.DEFAULT_SCHEMA, config_file_path=cfg['config_file_path'])
+    conf = config.Config(schema=config_defaults.get_schema(), config_file_path=cfg['config_file_path'])
     conf.load_dict(cfg)
 
     errors_warnings = conf.validate()
-    assert(errors_warnings == ([], [])), errors_warnings
+    assert errors_warnings == ([], []), errors_warnings
     return conf
 
 
@@ -67,8 +68,7 @@ def tempdir(files=None, **kw):
     """
     files = {f: '' for f in files} if isinstance(files, (list, tuple)) else files or {}
 
-    if 'prefix' not in kw:
-        kw['prefix'] = 'mkdocs_test-'
+    kw['prefix'] = 'mkdocs_test-' + kw.get('prefix', '')
 
     def decorator(fn):
         @wraps(fn)
@@ -95,35 +95,35 @@ class PathAssertionMixin:
     def assertPathExists(self, *parts):
         path = os.path.join(*parts)
         if not os.path.exists(path):
-            msg = self._formatMessage(None, "The path '{}' does not exist".format(path))
+            msg = self._formatMessage(None, f"The path '{path}' does not exist")
             raise self.failureException(msg)
 
     def assertPathNotExists(self, *parts):
         path = os.path.join(*parts)
         if os.path.exists(path):
-            msg = self._formatMessage(None, "The path '{}' does exist".format(path))
+            msg = self._formatMessage(None, f"The path '{path}' does exist")
             raise self.failureException(msg)
 
     def assertPathIsFile(self, *parts):
         path = os.path.join(*parts)
         if not os.path.isfile(path):
-            msg = self._formatMessage(None, "The path '{}' is not a file that exists".format(path))
+            msg = self._formatMessage(None, f"The path '{path}' is not a file that exists")
             raise self.failureException(msg)
 
     def assertPathNotFile(self, *parts):
         path = os.path.join(*parts)
         if os.path.isfile(path):
-            msg = self._formatMessage(None, "The path '{}' is a file that exists".format(path))
+            msg = self._formatMessage(None, f"The path '{path}' is a file that exists")
             raise self.failureException(msg)
 
     def assertPathIsDir(self, *parts):
         path = os.path.join(*parts)
         if not os.path.isdir(path):
-            msg = self._formatMessage(None, "The path '{}' is not a directory that exists".format(path))
+            msg = self._formatMessage(None, f"The path '{path}' is not a directory that exists")
             raise self.failureException(msg)
 
     def assertPathNotDir(self, *parts):
         path = os.path.join(*parts)
         if os.path.isfile(path):
-            msg = self._formatMessage(None, "The path '{}' is a directory that exists".format(path))
+            msg = self._formatMessage(None, f"The path '{path}' is a directory that exists")
             raise self.failureException(msg)

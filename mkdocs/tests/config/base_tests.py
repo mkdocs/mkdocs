@@ -12,7 +12,7 @@ class ConfigBaseTests(unittest.TestCase):
 
     def test_unrecognised_keys(self):
 
-        c = base.Config(schema=defaults.DEFAULT_SCHEMA)
+        c = base.Config(schema=defaults.get_schema())
         c.load_dict({
             'not_a_valid_config_option': "test"
         })
@@ -26,7 +26,7 @@ class ConfigBaseTests(unittest.TestCase):
 
     def test_missing_required(self):
 
-        c = base.Config(schema=defaults.DEFAULT_SCHEMA)
+        c = base.Config(schema=defaults.get_schema())
 
         errors, warnings = c.validate()
 
@@ -54,13 +54,82 @@ class ConfigBaseTests(unittest.TestCase):
             self.assertTrue(isinstance(cfg, base.Config))
             self.assertEqual(cfg['site_name'], 'MkDocs Test')
         finally:
-            os.remove(config_file.name)
+            temp_dir.cleanup()
+
+    def test_load_default_file(self):
+        """
+        test that `mkdocs.yml` will be loaded when '--config' is not set.
+        """
+
+        temp_dir = TemporaryDirectory()
+        config_file = open(os.path.join(temp_dir.name, 'mkdocs.yml'), 'w')
+        os.mkdir(os.path.join(temp_dir.name, 'docs'))
+        old_dir = os.getcwd()
+        try:
+            os.chdir(temp_dir.name)
+            config_file.write("site_name: MkDocs Test\n")
+            config_file.flush()
+            config_file.close()
+
+            cfg = base.load_config(config_file=None)
+            self.assertTrue(isinstance(cfg, base.Config))
+            self.assertEqual(cfg['site_name'], 'MkDocs Test')
+        finally:
+            os.chdir(old_dir)
+            temp_dir.cleanup()
+
+    def test_load_default_file_with_yaml(self):
+        """
+        test that `mkdocs.yml` will be loaded when '--config' is not set.
+        """
+
+        temp_dir = TemporaryDirectory()
+        config_file = open(os.path.join(temp_dir.name, 'mkdocs.yaml'), 'w')
+        os.mkdir(os.path.join(temp_dir.name, 'docs'))
+        old_dir = os.getcwd()
+        try:
+            os.chdir(temp_dir.name)
+            config_file.write("site_name: MkDocs Test\n")
+            config_file.flush()
+            config_file.close()
+
+            cfg = base.load_config(config_file=None)
+            self.assertTrue(isinstance(cfg, base.Config))
+            self.assertEqual(cfg['site_name'], 'MkDocs Test')
+        finally:
+            os.chdir(old_dir)
+            temp_dir.cleanup()
+
+    def test_load_default_file_prefer_yml(self):
+        """
+        test that `mkdocs.yml` will be loaded when '--config' is not set.
+        """
+
+        temp_dir = TemporaryDirectory()
+        config_file1 = open(os.path.join(temp_dir.name, 'mkdocs.yml'), 'w')
+        config_file2 = open(os.path.join(temp_dir.name, 'mkdocs.yaml'), 'w')
+        os.mkdir(os.path.join(temp_dir.name, 'docs'))
+        old_dir = os.getcwd()
+        try:
+            os.chdir(temp_dir.name)
+            config_file1.write("site_name: MkDocs Test1\n")
+            config_file1.flush()
+            config_file1.close()
+            config_file2.write("site_name: MkDocs Test2\n")
+            config_file2.flush()
+            config_file2.close()
+
+            cfg = base.load_config(config_file=None)
+            self.assertTrue(isinstance(cfg, base.Config))
+            self.assertEqual(cfg['site_name'], 'MkDocs Test1')
+        finally:
+            os.chdir(old_dir)
             temp_dir.cleanup()
 
     def test_load_from_missing_file(self):
 
-        self.assertRaises(exceptions.ConfigurationError,
-                          base.load_config, config_file='missing_file.yml')
+        with self.assertRaises(exceptions.ConfigurationError):
+            base.load_config(config_file='missing_file.yml')
 
     def test_load_from_open_file(self):
         """
@@ -118,8 +187,8 @@ class ConfigBaseTests(unittest.TestCase):
             config_file.close()
         finally:
             os.remove(config_file.name)
-        self.assertRaises(exceptions.ConfigurationError,
-                          base.load_config, config_file=config_file)
+        with self.assertRaises(exceptions.ConfigurationError):
+            base.load_config(config_file=config_file)
 
     def test_load_missing_required(self):
         """
@@ -133,8 +202,8 @@ class ConfigBaseTests(unittest.TestCase):
             config_file.flush()
             config_file.close()
 
-            self.assertRaises(exceptions.ConfigurationError,
-                              base.load_config, config_file=config_file.name)
+            with self.assertRaises(exceptions.Abort):
+                base.load_config(config_file=config_file.name)
         finally:
             os.remove(config_file.name)
 

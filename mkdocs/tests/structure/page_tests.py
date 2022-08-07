@@ -417,7 +417,7 @@ class PageTests(unittest.TestCase):
             cfg = load_config(docs_dir=docs_dir)
             fl = File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
             pg = Page(None, fl, cfg)
-            # Create an UTF-8 Encoded file with BOM (as Micorsoft editors do). See #1186
+            # Create an UTF-8 Encoded file with BOM (as Microsoft editors do). See #1186
             with open(fl.abs_src_path, 'w', encoding='utf-8-sig') as f:
                 f.write(md_src)
             # Now read the file.
@@ -665,7 +665,8 @@ class PageTests(unittest.TestCase):
         cfg = load_config()
         fl = File('missing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
         pg = Page('Foo', fl, cfg)
-        self.assertRaises(OSError, pg.read_source, cfg)
+        with self.assertRaises(OSError):
+            pg.read_source(cfg)
 
 
 class SourceDateEpochTests(unittest.TestCase):
@@ -806,17 +807,17 @@ class RelativePathExtensionTests(unittest.TestCase):
             '<p><em><strong>not</strong> a link</em>.</p>'
         )
 
-    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](non-existant.md)'))
+    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](non-existent.md)'))
     def test_bad_relative_html_link(self):
         with self.assertLogs('mkdocs', level='WARNING') as cm:
             self.assertEqual(
                 self.get_rendered_result(['index.md']),
-                '<p><a href="non-existant.md">link</a></p>'
+                '<p><a href="non-existent.md">link</a></p>'
             )
         self.assertEqual(
             cm.output,
             ["WARNING:mkdocs.structure.pages:Documentation file 'index.md' contains a link "
-             "to 'non-existant.md' which is not found in the documentation files."]
+             "to 'non-existent.md' which is not found in the documentation files."]
         )
 
     @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[external](http://example.com/index.md)'))

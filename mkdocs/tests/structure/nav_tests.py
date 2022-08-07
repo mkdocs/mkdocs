@@ -51,6 +51,7 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.items), 2)
         self.assertEqual(len(site_navigation.pages), 2)
+        self.assertEqual(repr(site_navigation.homepage), "Page(title='Home', url='/index.html')")
 
     def test_nav_missing_page(self):
         nav_cfg = [

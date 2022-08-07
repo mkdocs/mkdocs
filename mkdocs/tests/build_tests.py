@@ -3,6 +3,7 @@
 from unittest import mock
 import unittest
 
+from mkdocs.exceptions import PluginError
 from mkdocs.structure.pages import Page
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.nav import get_navigation
@@ -23,19 +24,11 @@ def build_page(title, path, config, md_src=''):
 
 class BuildTests(PathAssertionMixin, unittest.TestCase):
 
-    def assert_mock_called_once(self, mock):
-        """assert that the mock was called only once.
-
-        The `mock.assert_called_once()` method was added in PY36.
-        TODO: Remove this when PY35 support is dropped.
-        """
-        try:
-            mock.assert_called_once()
-        except AttributeError:
-            if not mock.call_count == 1:
-                msg = ("Expected '%s' to have been called once. Called %s times." %
-                       (mock._mock_name or 'mock', self.call_count))
-                raise AssertionError(msg)
+    def _get_env_with_null_translations(self, config):
+        env = config['theme'].get_env()
+        env.add_extension('jinja2.ext.i18n')
+        env.install_null_translations()
+        return env
 
     # Test build.get_context
 
@@ -197,8 +190,8 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         cfg = load_config()
         env = cfg['theme'].get_env()
         build._build_theme_template('main.html', env, mock.Mock(), cfg, mock.Mock())
-        self.assert_mock_called_once(mock_write_file)
-        self.assert_mock_called_once(mock_build_template)
+        mock_write_file.assert_called_once()
+        mock_build_template.assert_called_once()
 
     @mock.patch('mkdocs.utils.write_file')
     @mock.patch('mkdocs.commands.build._build_template', return_value='some content')
@@ -207,9 +200,9 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         cfg = load_config()
         env = cfg['theme'].get_env()
         build._build_theme_template('sitemap.xml', env, mock.Mock(), cfg, mock.Mock())
-        self.assert_mock_called_once(mock_write_file)
-        self.assert_mock_called_once(mock_build_template)
-        self.assert_mock_called_once(mock_gzip_gzipfile)
+        mock_write_file.assert_called_once()
+        mock_build_template.assert_called_once()
+        mock_gzip_gzipfile.assert_called_once()
 
     @mock.patch('mkdocs.utils.write_file')
     @mock.patch('mkdocs.commands.build._build_template', return_value='')
@@ -237,7 +230,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             ["INFO:mkdocs.commands.build:Template skipped: 'main.html' generated empty output."]
         )
         mock_write_file.assert_not_called()
-        self.assert_mock_called_once(mock_build_template)
+        mock_build_template.assert_called_once()
 
     # Test build._build_extra_template
 
@@ -325,14 +318,31 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         file = File('missing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
         page = Page('Foo', file, cfg)
         with self.assertLogs('mkdocs', level='ERROR') as cm:
-            self.assertRaises(OSError, build._populate_page, page, cfg, Files([file]))
+            with self.assertRaises(OSError):
+                build._populate_page(page, cfg, Files([file]))
         self.assertEqual(
             cm.output, [
                 'ERROR:mkdocs.structure.pages:File not found: missing.md',
                 "ERROR:mkdocs.commands.build:Error reading page 'missing.md': Error message."
             ]
         )
-        self.assert_mock_called_once(mock_open)
+        mock_open.assert_called_once()
+
+    @tempdir(files={'index.md': 'page content'})
+    @mock.patch('mkdocs.plugins.PluginCollection.run_event', side_effect=PluginError('Error message.'))
+    def test_populate_page_read_plugin_error(self, docs_dir, mock_open):
+        cfg = load_config(docs_dir=docs_dir)
+        file = File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        page = Page('Foo', file, cfg)
+        with self.assertLogs('mkdocs', level='ERROR') as cm:
+            with self.assertRaises(PluginError):
+                build._populate_page(page, cfg, Files([file]))
+        self.assertEqual(
+            cm.output, [
+                "ERROR:mkdocs.commands.build:Error reading page 'index.md':"
+            ]
+        )
+        mock_open.assert_called_once()
 
     # Test build._build_page
 
@@ -346,30 +356,23 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         page.title = 'Title'
         page.markdown = 'page content'
         page.content = '<p>page content</p>'
-        build._build_page(page, cfg, files, nav, cfg['theme'].get_env())
+        build._build_page(page, cfg, files, nav, self._get_env_with_null_translations(cfg))
         self.assertPathIsFile(site_dir, 'index.html')
 
-    # TODO: fix this. It seems that jinja2 chokes on the mock object. Not sure how to resolve.
-    # @tempdir()
-    # @mock.patch('jinja2.environment.Template')
-    # def test_build_page_empty(self, site_dir, mock_template):
-    #     mock_template.render = mock.Mock(return_value='')
-    #     cfg = load_config(site_dir=site_dir, nav=['index.md'], plugins=[])
-    #     files = Files([File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])])
-    #     nav = get_navigation(files, cfg)
-    #     page = files.documentation_pages()[0].page
-    #     # Fake populate page
-    #     page.title = ''
-    #     page.markdown = ''
-    #     page.content = ''
-    #     with self.assertLogs('mkdocs', level='INFO') as cm:
-    #         build._build_page(page, cfg, files, nav, cfg['theme'].get_env())
-    #     self.assertEqual(
-    #         cm.output,
-    #         ["INFO:mkdocs.commands.build:Page skipped: 'index.md'. Generated empty output."]
-    #     )
-    #     self.assert_mock_called_once(mock_template.render)
-    #     self.assertPathNotFile(site_dir, 'index.html')
+    @tempdir()
+    @mock.patch('jinja2.environment.Template.render', return_value='')
+    def test_build_page_empty(self, site_dir, render_mock):
+        cfg = load_config(site_dir=site_dir, nav=['index.md'], plugins=[])
+        files = Files([File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])])
+        nav = get_navigation(files, cfg)
+        with self.assertLogs('mkdocs', level='INFO') as cm:
+            build._build_page(files.documentation_pages()[0].page, cfg, files, nav, cfg['theme'].get_env())
+        self.assertEqual(
+            cm.output,
+            ["INFO:mkdocs.commands.build:Page skipped: 'index.md'. Generated empty output."]
+        )
+        self.assertPathNotFile(site_dir, 'index.html')
+        render_mock.assert_called_once()
 
     @tempdir(files={'index.md': 'page content'})
     @tempdir(files={'index.html': '<p>page content</p>'})
@@ -383,7 +386,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         page.title = 'Title'
         page.markdown = 'new page content'
         page.content = '<p>new page content</p>'
-        build._build_page(page, cfg, files, nav, cfg['theme'].get_env(), dirty=True)
+        build._build_page(page, cfg, files, nav, self._get_env_with_null_translations(cfg), dirty=True)
         mock_write_file.assert_not_called()
 
     @tempdir(files={'testing.html': '<p>page content</p>'})
@@ -397,8 +400,8 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         page.title = 'Title'
         page.markdown = 'page content'
         page.content = '<p>page content</p>'
-        build._build_page(page, cfg, files, nav, cfg['theme'].get_env(), dirty=True)
-        self.assert_mock_called_once(mock_write_file)
+        build._build_page(page, cfg, files, nav, self._get_env_with_null_translations(cfg), dirty=True)
+        mock_write_file.assert_called_once()
 
     @tempdir()
     def test_build_page_custom_template(self, site_dir):
@@ -411,7 +414,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         page.meta = {'template': '404.html'}
         page.markdown = 'page content'
         page.content = '<p>page content</p>'
-        build._build_page(page, cfg, files, nav, cfg['theme'].get_env())
+        build._build_page(page, cfg, files, nav, self._get_env_with_null_translations(cfg))
         self.assertPathIsFile(site_dir, 'index.html')
 
     @tempdir()
@@ -426,12 +429,39 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         page.markdown = 'page content'
         page.content = '<p>page content</p>'
         with self.assertLogs('mkdocs', level='ERROR') as cm:
-            self.assertRaises(OSError, build._build_page, page, cfg, files, nav, cfg['theme'].get_env())
+            with self.assertRaises(OSError):
+                build._build_page(
+                    page,
+                    cfg,
+                    files,
+                    nav,
+                    self._get_env_with_null_translations(cfg)
+                )
         self.assertEqual(
             cm.output,
             ["ERROR:mkdocs.commands.build:Error building page 'index.md': Error message."]
         )
-        self.assert_mock_called_once(mock_write_file)
+        mock_write_file.assert_called_once()
+
+    @tempdir()
+    @mock.patch('mkdocs.plugins.PluginCollection.run_event', side_effect=PluginError('Error message.'))
+    def test_build_page_plugin_error(self, site_dir, mock_write_file):
+        cfg = load_config(site_dir=site_dir, nav=['index.md'], plugins=[])
+        files = Files([File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])])
+        nav = get_navigation(files, cfg)
+        page = files.documentation_pages()[0].page
+        # Fake populate page
+        page.title = 'Title'
+        page.markdown = 'page content'
+        page.content = '<p>page content</p>'
+        with self.assertLogs('mkdocs', level='ERROR') as cm:
+            with self.assertRaises(PluginError):
+                build._build_page(page, cfg, files, nav, cfg['theme'].get_env())
+        self.assertEqual(
+            cm.output,
+            ["ERROR:mkdocs.commands.build:Error building page 'index.md':"]
+        )
+        mock_write_file.assert_called_once()
 
     # Test build.build
 
@@ -448,7 +478,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         cfg = load_config(docs_dir=docs_dir, site_dir=site_dir)
         build.build(cfg)
 
-        # Verify that only non-empty md file (coverted to html), static HTML file and image are copied.
+        # Verify that only non-empty md file (converted to html), static HTML file and image are copied.
         self.assertPathIsFile(site_dir, 'index.html')
         self.assertPathIsFile(site_dir, 'img.jpg')
         self.assertPathIsFile(site_dir, 'static.html')
@@ -462,7 +492,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         cfg = load_config(docs_dir=docs_dir, site_dir=site_dir)
         build.build(cfg)
 
-        # Verify only theme media are copied, not templates or Python files.
+        # Verify only theme media are copied, not templates, Python or localization files.
         self.assertPathIsFile(site_dir, 'index.html')
         self.assertPathIsFile(site_dir, '404.html')
         self.assertPathIsDir(site_dir, 'js')
@@ -474,6 +504,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         self.assertPathNotExists(site_dir, 'base.html')
         self.assertPathNotExists(site_dir, 'content.html')
         self.assertPathNotExists(site_dir, 'main.html')
+        self.assertPathNotExists(site_dir, 'locales')
 
     # Test build.site_directory_contains_stale_files
 

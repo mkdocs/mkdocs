@@ -1,110 +1,21 @@
 import logging
 import shutil
 import tempfile
-import sys
+from urllib.parse import urlsplit
+from os.path import isdir, isfile, join
 
-from os.path import isfile, join
+import jinja2.exceptions
+
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
+from mkdocs.exceptions import Abort
+from mkdocs.livereload import LiveReloadServer
 
 log = logging.getLogger(__name__)
 
 
-def _init_asyncio_patch():
-    """
-    Select compatible event loop for Tornado 5+.
-
-    As of Python 3.8, the default event loop on Windows is `proactor`,
-    however Tornado requires the old default "selector" event loop.
-    As Tornado has decided to leave this to users to set, MkDocs needs
-    to set it. See https://github.com/tornadoweb/tornado/issues/2608.
-    """
-    if sys.platform.startswith("win") and sys.version_info >= (3, 8):
-        import asyncio
-        try:
-            from asyncio import WindowsSelectorEventLoopPolicy
-        except ImportError:
-            pass  # Can't assign a policy which doesn't exist.
-        else:
-            if not isinstance(asyncio.get_event_loop_policy(), WindowsSelectorEventLoopPolicy):
-                asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())
-
-
-def _get_handler(site_dir, StaticFileHandler):
-
-    from tornado.template import Loader
-
-    class WebHandler(StaticFileHandler):
-
-        def write_error(self, status_code, **kwargs):
-
-            if status_code in (404, 500):
-                error_page = '{}.html'.format(status_code)
-                if isfile(join(site_dir, error_page)):
-                    self.write(Loader(site_dir).load(error_page).generate())
-                else:
-                    super().write_error(status_code, **kwargs)
-
-    return WebHandler
-
-
-def _livereload(host, port, config, builder, site_dir, watch_theme, delay):
-
-    # We are importing here for anyone that has issues with livereload. Even if
-    # this fails, the --no-livereload alternative should still work.
-    _init_asyncio_patch()
-    from livereload import Server
-    import livereload.handlers
-
-    class LiveReloadServer(Server):
-
-        def get_web_handlers(self, script):
-            handlers = super().get_web_handlers(script)
-            # replace livereload handler
-            return [(handlers[0][0], _get_handler(site_dir, livereload.handlers.StaticFileHandler), handlers[0][2],)]
-
-    server = LiveReloadServer()
-
-    # Watch the documentation files, the config file and the theme files.
-    server.watch(config['docs_dir'], builder, delay=delay)
-    server.watch(config['config_file_path'], builder, delay=delay)
-
-    if watch_theme:
-        for d in config['theme'].dirs:
-            server.watch(d, builder, delay=delay)
-
-    # Run `serve` plugin events.
-    server = config['plugins'].run_event('serve', server, config=config, builder=builder)
-
-    server.serve(root=site_dir, host=host, port=port, restart_delay=delay)
-
-
-def _static_server(host, port, site_dir):
-
-    # Importing here to separate the code paths from the --livereload
-    # alternative.
-    _init_asyncio_patch()
-    from tornado import ioloop
-    from tornado import web
-
-    application = web.Application([
-        (r"/(.*)", _get_handler(site_dir, web.StaticFileHandler), {
-            "path": site_dir,
-            "default_filename": "index.html"
-        }),
-    ])
-    application.listen(port=port, address=host)
-
-    log.info('Running at: http://%s:%s/', host, port)
-    log.info('Hold ctrl+c to quit.')
-    try:
-        ioloop.IOLoop.instance().start()
-    except KeyboardInterrupt:
-        log.info('Stopping server...')
-
-
 def serve(config_file=None, dev_addr=None, strict=None, theme=None,
-          theme_dir=None, livereload='livereload', watch_theme=False, wait=0, **kwargs):
+          theme_dir=None, livereload='livereload', watch_theme=False, watch=[], **kwargs):
     """
     Start the MkDocs development server
 
@@ -118,6 +29,9 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
     # string is returned. And it makes MkDocs temp dirs easier to identify.
     site_dir = tempfile.mkdtemp(prefix='mkdocs_')
 
+    def mount_path(config):
+        return urlsplit(config['site_url'] or '/').path
+
     def builder():
         log.info("Building documentation...")
         config = load_config(
@@ -129,8 +43,15 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
             site_dir=site_dir,
             **kwargs
         )
+
+        # combine CLI watch arguments with config file values
+        if config["watch"] is None:
+            config["watch"] = watch
+        else:
+            config["watch"].extend(watch)
+
         # Override a few config settings after validation
-        config['site_url'] = 'http://{}/'.format(config['dev_addr'])
+        config['site_url'] = 'http://{}{}'.format(config['dev_addr'], mount_path(config))
 
         live_server = livereload in ['dirty', 'livereload']
         dirty = livereload == 'dirty'
@@ -142,10 +63,44 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
         config = builder()
 
         host, port = config['dev_addr']
+        server = LiveReloadServer(builder=builder, host=host, port=port, root=site_dir, mount_path=mount_path(config))
+
+        def error_handler(code):
+            if code in (404, 500):
+                error_page = join(site_dir, f'{code}.html')
+                if isfile(error_page):
+                    with open(error_page, 'rb') as f:
+                        return f.read()
+
+        server.error_handler = error_handler
 
         if livereload in ['livereload', 'dirty']:
-            _livereload(host, port, config, builder, site_dir, watch_theme, delay=wait)
-        else:
-            _static_server(host, port, site_dir)
+            # Watch the documentation files, the config file and the theme files.
+            server.watch(config['docs_dir'])
+            server.watch(config['config_file_path'])
+
+            if watch_theme:
+                for d in config['theme'].dirs:
+                    server.watch(d)
+
+            # Run `serve` plugin events.
+            server = config['plugins'].run_event('serve', server, config=config, builder=builder)
+
+            for item in config['watch']:
+                server.watch(item)
+
+        try:
+            server.serve()
+        except KeyboardInterrupt:
+            log.info("Shutting down...")
+        finally:
+            server.shutdown()
+    except jinja2.exceptions.TemplateError:
+        # This is a subclass of OSError, but shouldn't be suppressed.
+        raise
+    except OSError as e:  # pragma: no cover
+        # Avoid ugly, unhelpful traceback
+        raise Abort(f'{type(e).__name__}: {e}')
     finally:
-        shutil.rmtree(site_dir)
+        if isdir(site_dir):
+            shutil.rmtree(site_dir)

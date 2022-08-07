@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ config.theme.locale|default('en') }}">
     <head>
       {%- block site_meta %}
         <meta charset="utf-8">
@@ -21,10 +21,10 @@
         <link href="{{ 'css/font-awesome.min.css'|url }}" rel="stylesheet">
         <link href="{{ 'css/base.css'|url }}" rel="stylesheet">
         {%- if config.theme.highlightjs %}
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/{{ config.theme.hljs_style }}.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/{{ config.theme.hljs_style }}.min.css">
         {%- endif %}
-        {%- for path in config['extra_css'] %}
-        <link href="{{ path|url }}" rel="stylesheet">
+        {%- for path in extra_css %}
+        <link href="{{ path }}" rel="stylesheet">
         {%- endfor %}
       {%- endblock %}
 
@@ -33,16 +33,25 @@
         <script src="{{ 'js/jquery-1.10.2.min.js'|url }}" defer></script>
         <script src="{{ 'js/bootstrap.min.js'|url }}" defer></script>
         {%- if config.theme.highlightjs %}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
         {%- for lang in config.theme.hljs_languages %}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/{{lang}}.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/{{lang}}.min.js"></script>
         {%- endfor %}
         <script>hljs.initHighlightingOnLoad();</script>
         {%- endif %}
       {%- endblock %}
 
       {%- block analytics %}
-        {%- if config.google_analytics %}
+        {%- if config.theme.analytics.gtag %}
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.theme.analytics.gtag }}"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', '{{ config.theme.analytics.gtag }}');
+        </script>
+        {%- elif config.google_analytics %}
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -104,7 +113,7 @@
                         {%- if 'search' in config['plugins'] %}
                         <li class="nav-item">
                             <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
-                                <i class="fa fa-search"></i> Search
+                                <i class="fa fa-search"></i> {% trans %}Search{% endtrans %}
                             </a>
                         </li>
                         {%- endif %}
@@ -114,12 +123,12 @@
                         {%- if page and (page.next_page or page.previous_page) %}
                             <li class="nav-item">
                                 <a rel="prev" {% if page.previous_page %}href="{{ page.previous_page.url|url }}" class="nav-link"{% else %}class="nav-link disabled"{% endif %}>
-                                    <i class="fa fa-arrow-left"></i> Previous
+                                    <i class="fa fa-arrow-left"></i> {% trans %}Previous{% endtrans %}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a rel="next" {% if page.next_page %}href="{{ page.next_page.url|url }}" class="nav-link"{% else %}class="nav-link disabled"{% endif %}>
-                                    Next <i class="fa fa-arrow-right"></i>
+                                    {% trans %}Next{% endtrans %} <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
                         {%- endif %}
@@ -130,13 +139,13 @@
                             <li class="nav-item">
                                 <a href="{{ page.edit_url }}" class="nav-link">
                                     {%- if config.repo_name == 'GitHub' -%}
-                                        <i class="fa fa-github"></i> Edit on {{ config.repo_name }}
+                                        <i class="fa fa-github"></i> {% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}
                                     {%- elif config.repo_name == 'Bitbucket' -%}
-                                        <i class="fa fa-bitbucket"></i> Edit on {{ config.repo_name }}
+                                        <i class="fa fa-bitbucket"></i> {% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}
                                     {%- elif config.repo_name == 'GitLab' -%}
-                                        <i class="fa fa-gitlab"></i> Edit on {{ config.repo_name }}
+                                        <i class="fa fa-gitlab"></i> {% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}
                                     {%- else -%}
-                                    Edit on {{ config.repo_name }}
+                                    {% trans repo_name=config.repo_name%}Edit on {{ repo_name }}{% endtrans %}
                                     {%- endif -%}
                                 </a>
                             </li>
@@ -176,7 +185,7 @@
             {%- if config.copyright %}
                 <p>{{ config.copyright }}</p>
             {%- endif %}
-            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+            <p>{% trans mkdocs_link='<a href="https://www.mkdocs.org/">MkDocs</a>' %}Documentation built with {{ mkdocs_link }}.{% endtrans %}</p>
           {%- endblock %}
         </footer>
 
@@ -186,8 +195,8 @@
                 shortcuts = {{ config.theme.shortcuts | tojson }};
         </script>
         <script src="{{ 'js/base.js'|url }}" defer></script>
-        {%- for path in config['extra_javascript'] %}
-        <script src="{{ path|url }}" defer></script>
+        {%- for path in extra_javascript %}
+        <script src="{{ path }}" defer></script>
         {%- endfor %}
       {%- endblock %}
 

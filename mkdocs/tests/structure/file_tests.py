@@ -592,6 +592,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     @tempdir(files=[
         'index.md',
+        'readme.md',
         'bar.css',
         'bar.html',
         'bar.jpg',
@@ -603,7 +604,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
     def test_get_files(self, tdir):
         config = load_config(docs_dir=tdir, extra_css=['bar.css'], extra_javascript=['bar.js'])
         files = get_files(config)
-        expected = ['index.md', 'bar.css', 'bar.html', 'bar.jpg', 'bar.js', 'bar.md']
+        expected = ['index.md', 'bar.css', 'bar.html', 'bar.jpg', 'bar.js', 'bar.md', 'readme.md']
         self.assertIsInstance(files, Files)
         self.assertEqual(len(files), len(expected))
         self.assertEqual([f.src_path for f in files], expected)
@@ -650,7 +651,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         dest_path = os.path.join(dest_dir, 'test.txt')
         file.copy_file(dirty=False)
         self.assertPathIsFile(dest_path)
-        with open(dest_path, 'r', encoding='utf-8') as f:
+        with open(dest_path, encoding='utf-8') as f:
             self.assertEqual(f.read(), 'source content')
 
     @tempdir(files={'test.txt': 'destination content'})
@@ -661,7 +662,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         dest_path = os.path.join(dest_dir, 'test.txt')
         file.copy_file(dirty=True)
         self.assertPathIsFile(dest_path)
-        with open(dest_path, 'r', encoding='utf-8') as f:
+        with open(dest_path, encoding='utf-8') as f:
             self.assertEqual(f.read(), 'source content')
 
     @tempdir(files={'test.txt': 'destination content'})
@@ -672,5 +673,28 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         dest_path = os.path.join(dest_dir, 'test.txt')
         file.copy_file(dirty=True)
         self.assertPathIsFile(dest_path)
-        with open(dest_path, 'r', encoding='utf-8') as f:
+        with open(dest_path, encoding='utf-8') as f:
             self.assertEqual(f.read(), 'destination content')
+
+    def test_files_append_remove_src_paths(self):
+        fs = [
+            File('index.md', '/path/to/docs', '/path/to/site', use_directory_urls=True),
+            File('foo/bar.md', '/path/to/docs', '/path/to/site', use_directory_urls=True),
+            File('foo/bar.html', '/path/to/docs', '/path/to/site', use_directory_urls=True),
+            File('foo/bar.jpg', '/path/to/docs', '/path/to/site', use_directory_urls=True),
+            File('foo/bar.js', '/path/to/docs', '/path/to/site', use_directory_urls=True),
+            File('foo/bar.css', '/path/to/docs', '/path/to/site', use_directory_urls=True)
+        ]
+        files = Files(fs)
+        self.assertEqual(len(files), 6)
+        self.assertEqual(len(files.src_paths), 6)
+        extra_file = File('extra.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
+        self.assertFalse(extra_file.src_path in files)
+        files.append(extra_file)
+        self.assertEqual(len(files), 7)
+        self.assertEqual(len(files.src_paths), 7)
+        self.assertTrue(extra_file.src_path in files)
+        files.remove(extra_file)
+        self.assertEqual(len(files), 6)
+        self.assertEqual(len(files.src_paths), 6)
+        self.assertFalse(extra_file.src_path in files)
