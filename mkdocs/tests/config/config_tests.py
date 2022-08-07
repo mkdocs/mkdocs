@@ -271,8 +271,9 @@ class ConfigTests(unittest.TestCase):
     def test_multiple_markdown_config_instances(self):
         # This had a bug where an extension config would persist to separate
         # config instances that didn't specify extensions.
+        schema = config.defaults.get_schema()
 
-        conf = config.Config(schema=config.defaults.get_schema())
+        conf = config.Config(schema=schema)
         conf.load_dict({
             'site_name': 'Example',
             'markdown_extensions': [{'toc': {'permalink': '##'}}]
@@ -280,7 +281,7 @@ class ConfigTests(unittest.TestCase):
         conf.validate()
         self.assertEqual(conf['mdx_configs'].get('toc'), {'permalink': '##'})
 
-        conf = config.Config(schema=config.defaults.get_schema())
+        conf = config.Config(schema=schema)
         conf.load_dict({
             'site_name': 'Example'
         })
