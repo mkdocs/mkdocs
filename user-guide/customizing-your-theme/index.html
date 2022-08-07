@@ -203,7 +203,8 @@ that file add the following CSS.</p>
 </code></pre>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If you are deploying your documentation with <a href="../deploying-your-docs/#readthedocs">ReadTheDocs</a>. You will need
+<p>
+If you are deploying your documentation with <a href="../deploying-your-docs/#readthedocs">ReadTheDocs</a>. You will need
 to explicitly list the CSS and JavaScript files you want to include in
 your config. To do this, add the following to your mkdocs.yml.</p>
 <pre><code>extra_css: [extra.css]
@@ -214,7 +215,8 @@ your config. To do this, add the following to your mkdocs.yml.</p>
 changes were automatically picked up and the documentation will be updated.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Any extra CSS or JavaScript files will be added to the generated HTML
+<p>
+Any extra CSS or JavaScript files will be added to the generated HTML
 document after the page content. If you desire to include a JavaScript
 library, you may have better success including the library by using the
 theme <a href="../configuration/#custom_dir">custom_dir</a>.</p>
@@ -231,7 +233,8 @@ parent theme. You may include templates, JavaScript files, CSS files, images,
 fonts, or any other media included in a theme.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For this to work, the <code>theme.name</code> setting must be set to a known
+<p>
+For this to work, the <code>theme.name</code> setting must be set to a known
 installed theme. If the <code>name</code> setting is instead set to <code>null</code> (or not
 defined), then there is no theme to override and the contents of the
 <code>custom_dir</code> must be a complete, standalone theme. See the <a href="../../dev-guide/themes/">Theme
@@ -281,7 +284,8 @@ directory.</p>
 </code></pre>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Any files included in the parent theme (defined in <code>name</code>) but not
+<p>
+Any files included in the parent theme (defined in <code>name</code>) but not
 included in the <code>custom_dir</code> will still be utilized. The <code>custom_dir</code> will
 only override/replace files in the parent theme. If you want to remove
 files, or build a theme from scratch, then you should review the <a href="../../dev-guide/themes/">Theme

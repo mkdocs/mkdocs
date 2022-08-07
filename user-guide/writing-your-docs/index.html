@@ -202,7 +202,8 @@ extensions may be used for your Markdown source files: <code>markdown</code>, <c
 directory will be rendered in the built site regardless of any settings.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Files and directories with names which begin with a dot (for example:
+<p>
+Files and directories with names which begin with a dot (for example:
 <code>.foo.md</code> or <code>.bar/baz.md</code>) are ignored by MkDocs, which matches the
 behavior of most web servers. There is no option to override this
 behavior.</p>
@@ -336,7 +337,8 @@ document you wish to link to.</p>
 transformed into an HTML hyperlink to the appropriate HTML page.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Using absolute paths with links is not officially supported. Relative paths
+<p>
+Using absolute paths with links is not officially supported. Relative paths
 are adjusted by MkDocs to ensure they are always relative to the page. Absolute
 paths are not modified at all. This means that your links using absolute paths
 might work fine in your local environment but they might break once you deploy
@@ -357,9 +359,9 @@ lowercase and any disallowed characters, including white-space, are converted to
 dashes. Consecutive dashes are then reduced to a single dash.</p>
 <p>There are a few configuration settings provided by the toc extension which you
 can set in your <code>mkdocs.yml</code> configuration file to alter the default behavior:</p>
-<dl>
-<dt><code>permalink</code>:</dt>
-<dd>
+<ul>
+<li>
+<p><strong><code>permalink</code></strong></p>
 <p>Generate permanent links at the end of each header. Default: <code>False</code>.</p>
 <p>When set to True the paragraph symbol (&para; or <code>&amp;para;</code>) is used as the
 link text. When set to a string, the provided string is used as the link
@@ -368,9 +370,9 @@ text. For example, to use the hash symbol (<code>#</code>) instead, do:</p>
     - toc:
         permalink: "#"
 </code></pre>
-</dd>
-<dt><code>baselevel</code>:</dt>
-<dd>
+</li>
+<li>
+<p><strong><code>baselevel</code></strong></p>
 <p>Base level for headers. Default: <code>1</code>.</p>
 <p>This setting allows the header levels to be automatically adjusted to fit
 within the hierarchy of your HTML templates. For example, if the Markdown
@@ -383,9 +385,9 @@ do:</p>
 <p>Then any headers in your document would be increased by 1. For example, the
 header <code># Header</code> would be rendered as a level 2 header (<code>&lt;h2&gt;</code>) in the HTML
 output.</p>
-</dd>
-<dt><code>separator</code>:</dt>
-<dd>
+</li>
+<li>
+<p><strong><code>separator</code></strong></p>
 <p>Word separator. Default: <code>-</code>.</p>
 <p>Character which replaces white-space in generated IDs. If you prefer
 underscores, then do:</p>
@@ -393,8 +395,8 @@ underscores, then do:</p>
     - toc:
         separator: "_"
 </code></pre>
-</dd>
-</dl>
+</li>
+</ul>
 <p>Note that if you would like to define multiple of the above settings, you must
 do so under a single <code>toc</code> entry in the <code>markdown_extensions</code> configuration
 option.</p>
@@ -449,36 +451,35 @@ keys may be supported, if any.</p>
 <p>In addition to displaying information in a template, MkDocs includes support for
 a few predefined meta-data keys which can alter the behavior of MkDocs for that
 specific page. The following keys are supported:</p>
-<dl>
-<dt><code>template</code>:</dt>
-<dd>
+<ul>
+<li>
+<p><strong><code>template</code></strong></p>
 <p>The template to use with the current page.</p>
 <p>By default, MkDocs uses the <code>main.html</code> template of a theme to render
 Markdown pages. You can use the <code>template</code> meta-data key to define a
 different template file for that specific page. The template file must be
 available on the path(s) defined in the theme's environment.</p>
-</dd>
-<dt><code>title</code>:</dt>
-<dd>
+</li>
+<li>
+<p><strong><code>title</code></strong></p>
 <p>The "title" to use for the document.</p>
 <p>MkDocs will attempt to determine the title of a document in the following
 ways, in order:</p>
 <ol>
 <li>A title defined in the <a href="../configuration/#nav">nav</a> configuration setting for a document.</li>
 <li>A title defined in the <code>title</code> meta-data key of a document.</li>
-<li>A level 1 Markdown header on the first line of the document body.
-   Please note that <a href="https://daringfireball.net/projects/markdown/syntax#header">Setext-style</a> headers are not supported.</li>
+<li>A level 1 Markdown header on the first line of the document body. Please note that <a href="https://daringfireball.net/projects/markdown/syntax#header">Setext-style</a> headers are not supported.</li>
 <li>The filename of a document.</li>
 </ol>
 <p>Upon finding a title for a page, MkDoc does not continue checking any
 additional sources in the above list.</p>
-</dd>
-</dl>
+</li>
+</ul>
 <h4 id="yaml-style-meta-data">YAML Style Meta-Data<a class="headerlink" href="#yaml-style-meta-data" title="Permanent link"></a></h4>
 <p>YAML style meta-data consists of <a href="http://yaml.org">YAML</a> key/value pairs wrapped in YAML style
-deliminators to mark the start and/or end of the meta-data. The first line of
+delimiters to mark the start and/or end of the meta-data. The first line of
 a document must be <code>---</code>. The meta-data ends at the first line containing an
-end deliminator (either <code>---</code> or <code>...</code>). The content between the deliminators is
+end deliminator (either <code>---</code> or <code>...</code>). The content between the delimiters is
 parsed as <a href="http://yaml.org">YAML</a>.</p>
 <pre><code class="language-no-highlight">---
 title: My Document
@@ -524,11 +525,12 @@ many lines as desired. All lines are joined into a single string.</p>
 line of a document must not be blank.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>MkDocs does not support YAML style deliminators (<code>---</code> or <code>...</code>) for
+<p>
+MkDocs does not support YAML style delimiters (<code>---</code> or <code>...</code>) for
 MultiMarkdown style meta-data. In fact, MkDocs relies on the the presence or
-absence of the deliminators to determine whether YAML style meta-data or
-MultiMarkdown style meta-data is being used. If the deliminators are
-detected, but the content between the deliminators is not valid YAML
+absence of the delimiters to determine whether YAML style meta-data or
+MultiMarkdown style meta-data is being used. If the delimiters are
+detected, but the content between the delimiters is not valid YAML
 meta-data, MkDocs does not attempt to parse the content as MultiMarkdown
 style meta-data.</p>
 </div>

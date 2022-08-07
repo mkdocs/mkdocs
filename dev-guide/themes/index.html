@@ -210,7 +210,8 @@
 <hr />
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If you are looking for existing third party themes, they are listed in the
+<p>
+If you are looking for existing third party themes, they are listed in the
 MkDocs <a href="https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes">community wiki</a>. If you want to share a theme you create, you
 should list it on the Wiki.</p>
 </div>
@@ -242,7 +243,8 @@ directory:</p>
 </code></pre>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Generally, when building your own custom theme, the theme.<a href="../../user-guide/configuration/#name">name</a>
+<p>
+Generally, when building your own custom theme, the theme.<a href="../../user-guide/configuration/#name">name</a>
 configuration setting would be set to <code>null</code>. However, if the
 theme.<a href="../../user-guide/configuration/#custom_dir">custom_dir</a> configuration value is used in combination with an
 existing theme, the theme.<a href="../../user-guide/configuration/#custom_dir">custom_dir</a> can be used to replace only specific
@@ -253,9 +255,11 @@ replace the file of the same name in the <code>mkdocs</code> theme but otherwise
 small adjustments to an existing theme.</p>
 <p>For more specific information, see <a href="../../user-guide/customizing-your-theme/#using-the-theme-custom_dir">Customizing Your Theme</a>.</p>
 </div>
+<!-- -->
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>A theme's <a href="#theme-configuration">configuration</a> defined in a <code>mkdocs_theme.yml</code> file is not loaded
+<p>
+A theme's <a href="#theme-configuration">configuration</a> defined in a <code>mkdocs_theme.yml</code> file is not loaded
 from <code>theme.custom_dir</code>. When an entire theme exists in <code>theme.custom_dir</code>
 and <code>theme.name</code> is set to <code>null</code>, then the entire theme configuration must
 be defined in the <a href="../../user-guide/configuration/#theme">theme</a> configuration option in the <code>mkdocs.yml</code> file.</p>
@@ -283,7 +287,8 @@ respectively. If you wish to write your own theme, it is recommended to start
 with one of the <a href="https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes">built-in themes</a> and modify it accordingly.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>As MkDocs uses <a href="http://jinja.pocoo.org/">Jinja</a> as its template engine, you have access to all the
+<p>
+As MkDocs uses <a href="http://jinja.pocoo.org/">Jinja</a> as its template engine, you have access to all the
 power of Jinja, including <a href="http://jinja.pocoo.org/docs/dev/templates/#template-inheritance">template inheritance</a>. You may notice that the
 themes included with MkDocs make extensive use of template inheritance and
 blocks, allowing users to easily override small bits and pieces of the
@@ -338,8 +343,7 @@ used options include:</p>
 <li><a href="../../user-guide/configuration/#site_url">config.site_url</a></li>
 <li><a href="../../user-guide/configuration/#site_author">config.site_author</a></li>
 <li><a href="../../user-guide/configuration/#site_description">config.site_description</a></li>
-<li><a href="../../user-guide/configuration/#locale">config.theme.locale</a> (See also
-  <a href="#locale">Theme Configuration</a> below)</li>
+<li><a href="../../user-guide/configuration/#locale">config.theme.locale</a> (See also <a href="#locale">Theme Configuration</a> below)</li>
 <li><a href="../../user-guide/configuration/#extra_javascript">config.extra_javascript</a></li>
 <li><a href="../../user-guide/configuration/#extra_css">config.extra_css</a></li>
 <li><a href="../../user-guide/configuration/#repo_url">config.repo_url</a></li>
@@ -698,7 +702,8 @@ theme</a> and to see a package that contains many themes, see the <a href="https
 Bootswatch theme</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>It is not strictly necessary to package a theme, as the entire theme
+<p>
+It is not strictly necessary to package a theme, as the entire theme
 can be contained in the <code>custom_dir</code>. If you have created a "one-off theme,"
 that should be sufficient. However, if you intend to distribute your theme
 for others to use, packaging the theme has some advantages. By packaging
@@ -791,7 +796,9 @@ file:</p>
 <p>In addition to arbitrary options defined by the theme, MkDocs defines a few
 special options which alters its behavior:</p>
 <div class="admonition block">
-<h4 id="locale">locale<a class="headerlink" href="#locale" title="Permanent link"></a></h4>
+<p class="admonition-title">Block</p>
+<h4 id="locale">
+locale<a class="headerlink" href="#locale" title="Permanent link"></a></h4>
 <p>This option mirrors the <a href="../../user-guide/configuration/#theme">theme</a> config option of the same name. If this
 value is not defined in the <code>mkdocs_theme.yml</code> file and the user does not
 set it in <code>mkdocs.yml</code> then it will default to <code>en</code> (English). The value
@@ -868,7 +875,8 @@ setup(
 the <code>setup</code> function.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>As <strong>pybabel is not installed by default</strong> and most users will not have
+<p>
+As <strong>pybabel is not installed by default</strong> and most users will not have
 pybabel installed, theme developers and/or translators should make sure to
 have installed the necessary dependencies
 (using <code>pip install mkdocs[i18n]</code>) in order for the commands to be
@@ -1021,7 +1029,8 @@ command automatically does for you. See <a href="../translations/#testing-theme-
 details.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>As outlined in our <a href="../translations/">Translation Guide</a>, the MkDocs project has chosen to
+<p>
+As outlined in our <a href="../translations/">Translation Guide</a>, the MkDocs project has chosen to
 include the <code>pot</code> and <code>po</code> files in our code repository, but not the
 <code>mo</code> files. This requires us to always run <code>compile_catalog</code> before
 packaging a new release regardless of whether any changes were made to a

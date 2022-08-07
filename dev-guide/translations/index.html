@@ -206,7 +206,8 @@ themes. For a third-party theme to make use of MkDocs' translation tools and
 methods, that theme must be properly <a href="../themes/#supporting-theme-localizationtranslation">configured</a> to make use of those tools.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Translations only apply to text contained within a theme's template, such
+<p>
+Translations only apply to text contained within a theme's template, such
 as "next" and "previous" links. The Markdown content of a page is not
 translated. If you wish to create multilingual documentation, you need to
 combine theme localization with a third-party
@@ -230,23 +231,16 @@ built-in themes (<code>mkdocs</code> and <code>readthedocs</code>), you can easi
 translation by following the steps below.</p>
 <p>Here is a quick summary of what you'll need to do:</p>
 <ol>
-<li><a href="#initializing-the-localization-catalogs">Initialize new localization
-   catalogs</a> for your language (if a
-   translation for your locale already exists, follow the instructions for
-   <a href="/user-guide/custom-themes/#localizing-themes">updating theme localization
-   files</a> instead).</li>
-<li><a href="#translating-the-mkdocs-themes">Add a translation</a> for every text
-   placeholder in the localized catalogs.</li>
-<li><a href="#testing-theme-translations">Locally serve and test</a> the translated themes
-   for your language.</li>
-<li><a href="#updating-theme-documentation">Update the documentation</a> about
-   supported translations for each translated theme.</li>
-<li><a href="#contributing-translations">Contribute your translation</a> through a
-   Pull Request.</li>
+<li><a href="#initializing-the-localization-catalogs">Initialize new localization catalogs</a> for your language (if a translation for your locale already exists, follow the instructions for <a href="/user-guide/custom-themes/#localizing-themes">updating theme localization files</a> instead).</li>
+<li><a href="#translating-the-mkdocs-themes">Add a translation</a> for every text placeholder in the localized catalogs.</li>
+<li><a href="#testing-theme-translations">Locally serve and test</a> the translated themes for your language.</li>
+<li><a href="#updating-theme-documentation">Update the documentation</a> about supported translations for each translated theme.</li>
+<li><a href="#contributing-translations">Contribute your translation</a> through a Pull Request.</li>
 </ol>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Translation locales are usually identified using the <a href="https://en.wikipedia.org/wiki/ISO_639-1">ISO-639-1</a> (2-letter)
+<p>
+Translation locales are usually identified using the <a href="https://en.wikipedia.org/wiki/ISO_639-1">ISO-639-1</a> (2-letter)
 language codes. While territory/region/county codes are also supported,
 location specific translations should only be added after the general
 language translation has been completed and the regional dialect requires
@@ -278,14 +272,10 @@ localized catalog.</p>
 since the <code>messages.po</code> was last updated for your locale, follow the steps
 below to update the theme's <code>messages.po</code> file:</p>
 <ol>
-<li><a href="#updating-the-translation-catalogs">Update the theme's translation catalog</a>
-   to refresh the translatable text placeholders of each theme.</li>
-<li><a href="#translating-the-mkdocs-themes">Translate</a> the newly added translatable
-   text placeholders on every <code>messages.po</code> catalog file language you can.</li>
-<li><a href="#testing-theme-translations">Locally serve and test</a> the translated themes
-   for your language.</li>
-<li><a href="#contributing-translations">Contribute your translation</a> through a
-   Pull Request.</li>
+<li><a href="#updating-the-translation-catalogs">Update the theme's translation catalog</a> to refresh the translatable text placeholders of each theme.</li>
+<li><a href="#translating-the-mkdocs-themes">Translate</a> the newly added translatable text placeholders on every <code>messages.po</code> catalog file language you can.</li>
+<li><a href="#testing-theme-translations">Locally serve and test</a> the translated themes for your language.</li>
+<li><a href="#contributing-translations">Contribute your translation</a> through a Pull Request.</li>
 </ol>
 <h3 id="updating-the-translation-catalogs">Updating the translation catalogs<a class="headerlink" href="#updating-the-translation-catalogs" title="Permanent link"></a></h3>
 <p>This step should be completed after a theme template have been <a href="../../about/contributing/#submitting-changes-to-the-builtin-themes">updated</a> for each language that you are comfortable contributing a translation
@@ -304,7 +294,8 @@ msgstr &quot;Siguiente&quot;
 </code></pre>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Do not modify the <code>msgid</code> as it is common to all translations. Just add
+<p>
+Do not modify the <code>msgid</code> as it is common to all translations. Just add
 its translation in the <code>msgstr</code> item.</p>
 </div>
 <p>Once you have finished translating all of the terms listed in the <code>po</code> file,
@@ -333,7 +324,8 @@ and/or updated locale:</p>
 <p>Finally, run <code>mkdocs serve</code> to check out your new localized version of the theme.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The build and release process takes care of compiling and distributing
+<p>
+The build and release process takes care of compiling and distributing
 all locales to end users so you only have to worry about contributing the
 actual text translation <code>messages.po</code> files (the rest is ignored by git).</p>
 <p>After you have finished testing your work, be sure to undo the change to

@@ -271,7 +271,8 @@ edit_uri: root/path/docs/
 </code></pre>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>On a few known hosts (specifically GitHub, Bitbucket and GitLab), the
+<p>
+On a few known hosts (specifically GitHub, Bitbucket and GitLab), the
 <code>edit_uri</code> is derived from the 'repo_url' and does not need to be set
 manually. Simply defining a <code>repo_url</code> will automatically populate the
 <code>edit_uri</code> configs setting.</p>
@@ -288,7 +289,8 @@ string to disable the automatic setting.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>On GitHub and GitLab, the default "edit" path (<code>edit/master/docs/</code>) opens
+<p>
+On GitHub and GitLab, the default "edit" path (<code>edit/master/docs/</code>) opens
 the page in the online editor. This functionality requires that the user
 have and be logged in to a GitHub/GitLab account. Otherwise, the user will
 be redirected to a login/signup page. Alternatively, use the "blob" path
@@ -377,13 +379,15 @@ of available themes visit <a href="../choosing-your-theme/">Choosing Your Theme<
 </code></pre>
 <p>If a set of key/value pairs, the following nested keys can be defined:</p>
 <div class="admonition block">
-<h4 id="name">name:<a class="headerlink" href="#name" title="Permanent link"></a></h4>
+<p class="admonition-title">Block</p>
+<h4 id="name">
+name<a class="headerlink" href="#name" title="Permanent link"></a></h4>
 <p>The string name of a known installed theme. For a list of available themes
 visit <a href="../choosing-your-theme/">Choosing Your Theme</a>.</p>
-<h4 id="locale">locale:<a class="headerlink" href="#locale" title="Permanent link"></a></h4>
+<h4 id="locale">locale<a class="headerlink" href="#locale" title="Permanent link"></a></h4>
 <p>A code representing the language of your site. See <a href="../localizing-your-theme/">Localizing your theme</a>
 for details.</p>
-<h4 id="custom_dir">custom_dir:<a class="headerlink" href="#custom_dir" title="Permanent link"></a></h4>
+<h4 id="custom_dir">custom_dir<a class="headerlink" href="#custom_dir" title="Permanent link"></a></h4>
 <p>A directory containing a custom theme. This can either be a relative
 directory, in which case it is resolved relative to the directory containing
 your configuration file or it can be an absolute directory path from the
@@ -392,7 +396,7 @@ root of your local file system.</p>
 existing theme.</p>
 <p>See the <a href="../../dev-guide/themes/">Theme Developer Guide</a> if you would like to build your own theme
 from the ground up.</p>
-<h4 id="static_templates">static_templates:<a class="headerlink" href="#static_templates" title="Permanent link"></a></h4>
+<h4 id="static_templates">static_templates<a class="headerlink" href="#static_templates" title="Permanent link"></a></h4>
 <p>A list of templates to render as static pages. The templates must be located
 in either the theme's template directory or in the <code>custom_dir</code> defined in
 the theme configuration.</p>
@@ -414,8 +418,9 @@ containing your configuration file, or it can be an absolute directory path from
 the root of your local file system.</p>
 <p><strong>default</strong>: <code>'site'</code></p>
 <div class="admonition note">
-<p class="admonition-title">Note:</p>
-<p>If you are using source code control you will normally want to ensure that
+<p class="admonition-title">Note</p>
+<p>
+If you are using source code control you will normally want to ensure that
 your <em>build output</em> files are not committed into the repository, and only
 keep the <em>source</em> files under version control. For example, if using <code>git</code>
 you might add the following line to your <code>.gitignore</code> file:</p>
@@ -466,8 +471,9 @@ Configuration is a YAML list.</p>
 option every time the <code>mkdocs serve</code> command is called.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The paths provided via the configuration file are relative to the configuration file.</p>
-<p>The paths provided via the <code>-w</code>/<code>--watch</code> CLI parameters are not. </p>
+<p>
+The paths provided via the configuration file are relative to the configuration file.</p>
+<p>The paths provided via the <code>-w</code>/<code>--watch</code> CLI parameters are not.</p>
 </div>
 <h3 id="use_directory_urls">use_directory_urls<a class="headerlink" href="#use_directory_urls" title="Permanent link"></a></h3>
 <p>This setting controls the style used for linking to pages within the
@@ -581,7 +587,7 @@ and available configuration options.</p>
 <p><strong>default</strong>: <code>[]</code> (an empty list).</p>
 <h3 id="plugins">plugins<a class="headerlink" href="#plugins" title="Permanent link"></a></h3>
 <p>A list of plugins (with optional configuration settings) to use when building
-the site. See the <a href="#plugins">Plugins</a> documentation for full details.</p>
+the site. See the <a href="../../dev-guide/plugins/">Plugins</a> documentation for full details.</p>
 <p>If the <code>plugins</code> config setting is defined in the <code>mkdocs.yml</code> config file, then
 any defaults (such as <code>search</code>) are ignored and you need to explicitly re-enable
 the defaults if you would like to continue using them:</p>
@@ -665,7 +671,8 @@ supported:</p>
 <p>You may <a href="https://github.com/MihaiValentin/lunr-languages/blob/master/CONTRIBUTING.md">contribute additional languages</a>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>While search does support using multiple languages together, it is best not
+<p>
+While search does support using multiple languages together, it is best not
 to add additional languages unless you really need them. Each additional
 language adds significant bandwidth requirements and uses more browser
 resources. Generally, it is best to keep each instance of MkDocs to a single
@@ -673,7 +680,8 @@ language.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Lunr Languages does not currently include support for Chinese or other Asian
+<p>
+Lunr Languages does not currently include support for Chinese or other Asian
 languages. However, some users have reported decent results using Japanese.</p>
 </div>
 <p><strong>default</strong>: The value of <code>theme.locale</code> if set, otherwise <code>[en]</code>.</p>
@@ -684,14 +692,16 @@ theme you are using explicitly supports using a prebuilt index (the builtin
 themes do). Set to <code>true</code> to enable.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This option requires that <a href="https://nodejs.org/">Node.js</a> be installed and the command <code>node</code> be
+<p>
+This option requires that <a href="https://nodejs.org/">Node.js</a> be installed and the command <code>node</code> be
 on the system path. If the call to <code>node</code> fails for any reason, a warning
 is issued and the build continues uninterrupted. You may use the <code>--strict</code>
 flag when building to cause such a failure to raise an error instead.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>On smaller sites, using a pre-built index is not recommended as it creates a
+<p>
+On smaller sites, using a pre-built index is not recommended as it creates a
 significant increase is bandwidth requirements with little to no noticeable
 improvement to your users. However, for larger sites (hundreds of pages),
 the bandwidth increase is relatively small and your users will notice a
@@ -845,7 +855,8 @@ configuration with a new one. However, it is generally expected that the entire
 navigation would be defined in the primary configuration file for a project.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>As a reminder, all path based configuration options must be relative to the
+<p>
+As a reminder, all path based configuration options must be relative to the
 primary configuration file and MkDocs does not alter the paths when merging.
 Therefore, defining paths in a parent file which is inherited by multiple
 different sites may not work as expected. It is generally best to define

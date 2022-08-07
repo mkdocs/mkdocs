@@ -587,12 +587,9 @@ in the Plugins documentation for details.</p>
 <p>MkDocs now has tree new exceptions defined in <code>mkdocs.exceptions</code>:
 <code>BuildError</code>, <code>PluginError</code>, and <code>Abort</code>:</p>
 <ul>
-<li><code>PluginError</code> can be raised from a plugin
-  to stop the build and log an error message <em>without traceback</em>.</li>
-<li><code>BuildError</code> should not be used by third-party plugins developers
-  and is reserved for internal use only.</li>
-<li><code>Abort</code> is used internally to abort the build and display an error
-  without a traceback.</li>
+<li><code>PluginError</code> can be raised from a plugin to stop the build and log an error message <em>without traceback</em>.</li>
+<li><code>BuildError</code> should not be used by third-party plugins developers and is reserved for internal use only.</li>
+<li><code>Abort</code> is used internally to abort the build and display an error without a traceback.</li>
 </ul>
 <p>See <a href="../../dev-guide/plugins/#handling-errors"><code>Handling errors</code></a>
 in the Plugins documentation for details.</p>
@@ -600,10 +597,8 @@ in the Plugins documentation for details.</p>
 <p>Users can now specify which strategy they wish to use when indexing
 their site for search. A user can select between the following options:</p>
 <ul>
-<li><strong>full</strong>: Adds page title, section headings, and full page text to the
-search index.</li>
-<li><strong>sections</strong>: Adds page titles and section headings only to the search
-index.</li>
+<li><strong>full</strong>: Adds page title, section headings, and full page text to the search index.</li>
+<li><strong>sections</strong>: Adds page titles and section headings only to the search index.</li>
 <li><strong>titles</strong>: Adds only the page titles to the search index.</li>
 </ul>
 <p>See <a href="../../user-guide/configuration/#indexing"><code>Search Indexing</code></a> in the
@@ -612,8 +607,8 @@ configuration documentation for details.</p>
 <ul>
 <li>
 <p>The <a href="../../user-guide/configuration/#site_url">site_url</a> configuration option
-  is now <strong>required</strong>. If it is not set, a warning will be issued. In a future
-  release an error will be raised (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2189" title="GitHub Issue mkdocs/mkdocs #2189">#2189</a>).</p>
+    is now <strong>required</strong>. If it is not set, a warning will be issued. In a future
+    release an error will be raised (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2189" title="GitHub Issue mkdocs/mkdocs #2189">#2189</a>).</p>
 <p>The <a href="../../user-guide/configuration/#use_directory_urls">use_directory_urls</a>
 configuration option will be forced to <code>false</code> if
 <a href="../../user-guide/configuration/#site_url">site_url</a> is set to an empty
@@ -626,104 +621,93 @@ string. In that case, if <code>use_directory_urls</code> is not explicitly set t
 </li>
 <li>
 <p>The <code>google_analytics</code> configuration option is deprecated as Google appears to
-  be phasing it out in favor of its new Google Analytics 4 property. See the
-  documentation for your theme for alternatives which can be configured as part
-  of your theme configuration. For example, the <a href="../../user-guide/choosing-your-theme/#mkdocs">mkdocs</a> and
-  <a href="../../user-guide/choosing-your-theme/#readthedocs">readthedocs</a> themes have each added a new <code>theme.analytics.gtag</code>
-  configuration option which uses the new Google Analytics 4 property. See
-  Google's documentation on how to <a href="https://support.google.com/analytics/answer/9744165?hl=en">Upgrade to a Google Analytics 4
-  property</a>. Then set  <code>theme.analytics.gtag</code> to the "G-" ID and delete the
-  <code>google_analytics</code> configuration option which contains a "UA-" ID. So long
-  as the old "UA-" ID and new "G-" ID are properly linked in your Google
-  account, and you are using the "G-" ID, the data will be made available in
-  both the old and new formats by Google Analytics. See <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2252" title="GitHub Issue mkdocs/mkdocs #2252">#2252</a>.</p>
+    be phasing it out in favor of its new Google Analytics 4 property. See the
+    documentation for your theme for alternatives which can be configured as part
+    of your theme configuration. For example, the <a href="../../user-guide/choosing-your-theme/#mkdocs">mkdocs</a> and
+    <a href="../../user-guide/choosing-your-theme/#readthedocs">readthedocs</a> themes have each added a new <code>theme.analytics.gtag</code>
+    configuration option which uses the new Google Analytics 4 property. See
+    Google's documentation on how to <a href="https://support.google.com/analytics/answer/9744165?hl=en">Upgrade to a Google Analytics 4
+    property</a>. Then set  <code>theme.analytics.gtag</code> to the "G-" ID and delete the
+    <code>google_analytics</code> configuration option which contains a "UA-" ID. So long
+    as the old "UA-" ID and new "G-" ID are properly linked in your Google
+    account, and you are using the "G-" ID, the data will be made available in
+    both the old and new formats by Google Analytics. See <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2252" title="GitHub Issue mkdocs/mkdocs #2252">#2252</a>.</p>
 </li>
 <li>
 <p>A theme's files are now excluded from the list of watched files by default
-  when using the <code>--livereload</code> server. This new default behavior is what most
-  users need and provides better performance when editing site content.
-  Theme developers can enable the old behavior with the <code>--watch-theme</code>
-  option. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2092" title="GitHub Issue mkdocs/mkdocs #2092">#2092</a>).</p>
+    when using the <code>--livereload</code> server. This new default behavior is what most
+    users need and provides better performance when editing site content.
+    Theme developers can enable the old behavior with the <code>--watch-theme</code>
+    option. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2092" title="GitHub Issue mkdocs/mkdocs #2092">#2092</a>).</p>
 </li>
 <li>
 <p>The <code>mkdocs</code> theme now removes the sidebar when printing a page. This frees
-  up horizontal space for better rendering of content like tables (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2193" title="GitHub Issue mkdocs/mkdocs #2193">#2193</a>).</p>
+    up horizontal space for better rendering of content like tables (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2193" title="GitHub Issue mkdocs/mkdocs #2193">#2193</a>).</p>
 </li>
 <li>
 <p>The <code>mkdocs.config.DEFAULT_SCHEMA</code> global variable has been replaced with the
-  function <code>mkdocs.config.defaults.get_schema()</code>, which ensures that each
-  instance of the configuration is unique (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2289" title="GitHub Issue mkdocs/mkdocs #2289">#2289</a>).</p>
+    function <code>mkdocs.config.defaults.get_schema()</code>, which ensures that each
+    instance of the configuration is unique (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2289" title="GitHub Issue mkdocs/mkdocs #2289">#2289</a>).</p>
 </li>
 <li>
 <p>The <code>mkdocs.utils.warning_filter</code> is deprecated and now does nothing. Plugins
-  should remove any reference to is as it may be deleted in a future release.
-  To ensure any warnings get counted, simply log them to the <code>mkdocs</code> log (i.e.:
-  <code>mkdocs.plugins.pluginname</code>).</p>
+    should remove any reference to is as it may be deleted in a future release.
+    To ensure any warnings get counted, simply log them to the <code>mkdocs</code> log (i.e.:
+    <code>mkdocs.plugins.pluginname</code>).</p>
 </li>
 <li>
 <p>The <code>on_serve</code> event (which receives the <code>server</code> object and the <code>builder</code>
-  function) is affected by the server rewrite. <code>server</code> is now a
-  <code>mkdocs.livereload.LiveReloadServer</code> instead of <code>livereload.server.Server</code>.
-  The typical action that plugins can do with these is to call
-  <code>server.watch(some_dir, builder)</code>, which basically adds that directory to
-  watched directories, causing the site to be rebuilt on file changes. That
-  still works, but passing any other function to <code>watch</code> is deprecated and shows
-  a warning. This 2nd parameter is already optional, and will accept only this
-  exact <code>builder</code> function just for compatibility.</p>
+    function) is affected by the server rewrite. <code>server</code> is now a
+    <code>mkdocs.livereload.LiveReloadServer</code> instead of <code>livereload.server.Server</code>.
+    The typical action that plugins can do with these is to call
+    <code>server.watch(some_dir, builder)</code>, which basically adds that directory to
+    watched directories, causing the site to be rebuilt on file changes. That
+    still works, but passing any other function to <code>watch</code> is deprecated and shows
+    a warning. This 2nd parameter is already optional, and will accept only this
+    exact <code>builder</code> function just for compatibility.</p>
 </li>
 <li>
 <p>The <code>python</code> method of the <code>plugins.search.prebuild_index</code> configuration
-  option is pending deprecation as of version 1.2. It is expected that in
-  version 1.3 it will raise a warning if used and in version 1.4 it will raise
-  an error. Users are encouraged to use an alternate method to generate a
-  prebuilt index for search.</p>
+    option is pending deprecation as of version 1.2. It is expected that in
+    version 1.3 it will raise a warning if used and in version 1.4 it will raise
+    an error. Users are encouraged to use an alternate method to generate a
+    prebuilt index for search.</p>
 </li>
 <li>
 <p>The <code>lunr</code> and <code>lunr[languages]</code> dependencies are no longer installed by
-  default. The dependencies are only needed for the rare user who pre-builds the
-  search index and uses the <code>python</code> option, which is now pending deprecation.
-  If you use this feature, then you will need to manually install <code>lunr</code> and
-  <code>lunr[languages]</code>. A warning is issued if the dependencies are needed but not
-  installed.</p>
+    default. The dependencies are only needed for the rare user who pre-builds the
+    search index and uses the <code>python</code> option, which is now pending deprecation.
+    If you use this feature, then you will need to manually install <code>lunr</code> and
+    <code>lunr[languages]</code>. A warning is issued if the dependencies are needed but not
+    installed.</p>
 </li>
 </ul>
 <h3 id="other-changes-and-additions-to-version-12">Other Changes and Additions to Version 1.2<a class="headerlink" href="#other-changes-and-additions-to-version-12" title="Permanent link"></a></h3>
 <ul>
-<li>Bugfix: Properly process navigation child items in <code>_get_by_type</code> when
-  filtering for sections (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2203" title="GitHub Issue mkdocs/mkdocs #2203">#2203</a>).</li>
-<li>Official support for Python 3.9 has been added and support for Python 3.5
-  has been dropped.</li>
-<li>Bugfix: Fixes an issue that would result in a partially cut-off navigation
-  item in the ReadTheDocs theme (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2297" title="GitHub Issue mkdocs/mkdocs #2297">#2297</a>).</li>
-<li>Structure Files object now has a <code>remove</code> method to help plugin developers
-  manipulate the Files tree. The corresponding <code>src_paths</code> has become a
-  property to accommodate this possible dynamic behavior. See <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2305" title="GitHub Issue mkdocs/mkdocs #2305">#2305</a>.</li>
+<li>Bugfix: Properly process navigation child items in <code>_get_by_type</code> when filtering for sections (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2203" title="GitHub Issue mkdocs/mkdocs #2203">#2203</a>).</li>
+<li>Official support for Python 3.9 has been added and support for Python 3.5 has been dropped.</li>
+<li>Bugfix: Fixes an issue that would result in a partially cut-off navigation item in the ReadTheDocs theme (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2297" title="GitHub Issue mkdocs/mkdocs #2297">#2297</a>).</li>
+<li>Structure Files object now has a <code>remove</code> method to help plugin developers manipulate the Files tree. The corresponding <code>src_paths</code> has become a property to accommodate this possible dynamic behavior. See <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2305" title="GitHub Issue mkdocs/mkdocs #2305">#2305</a>.</li>
 <li>Updated highlight.js to 10.5.0. See <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2313" title="GitHub Issue mkdocs/mkdocs #2313">#2313</a>.</li>
 <li>Bugfix: Search plugin now works with Japanese language. See <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2178" title="GitHub Issue mkdocs/mkdocs #2178">#2178</a>.</li>
 <li>Documentation has been refactored (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1629" title="GitHub Issue mkdocs/mkdocs #1629">#1629</a>).</li>
 <li>Restore styling of tables in the <code>readthedocs</code> theme (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2028" title="GitHub Issue mkdocs/mkdocs #2028">#2028</a>).</li>
 <li>Ensure <code>site_url</code> ends with a slash (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1785" title="GitHub Issue mkdocs/mkdocs #1785">#1785</a>).</li>
 <li>Correct documentation of <code>pages</code> template context variable (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1736" title="GitHub Issue mkdocs/mkdocs #1736">#1736</a>).</li>
-<li>The <code>lunr</code> dependency has been updated to 0.5.9, and <code>lunr.js</code> to
-  the corresponding 2.3.9 version (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2306" title="GitHub Issue mkdocs/mkdocs #2306">#2306</a>).</li>
-<li>Color is now used in log messages to identify errors, warnings and debug
-  messages.</li>
+<li>The <code>lunr</code> dependency has been updated to 0.5.9, and <code>lunr.js</code> to the corresponding 2.3.9 version (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2306" title="GitHub Issue mkdocs/mkdocs #2306">#2306</a>).</li>
+<li>Color is now used in log messages to identify errors, warnings and debug messages.</li>
 <li>Bugfix: Identify homepage when <code>use_directory_urls</code> is <code>False</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2362" title="GitHub Issue mkdocs/mkdocs #2362">#2362</a>).</li>
 </ul>
 <h2 id="version-112-2020-05-14">Version 1.1.2 (2020-05-14)<a class="headerlink" href="#version-112-2020-05-14" title="Permanent link"></a></h2>
 <ul>
-<li>Bugfix: Normalize IP addresses and change unsupported address error to a
-  warning (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2108" title="GitHub Issue mkdocs/mkdocs #2108">#2108</a>).</li>
+<li>Bugfix: Normalize IP addresses and change unsupported address error to a warning (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2108" title="GitHub Issue mkdocs/mkdocs #2108">#2108</a>).</li>
 </ul>
 <h2 id="version-111-2020-05-12">Version 1.1.1 (2020-05-12)<a class="headerlink" href="#version-111-2020-05-12" title="Permanent link"></a></h2>
 <ul>
-<li>Bugfix: Allow compressed sitemap to be deterministic by supporting the
-  <code>SOURCE_DATE_EPOCH</code> environment variable (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2100" title="GitHub Issue mkdocs/mkdocs #2100">#2100</a>).</li>
-<li>Bugfix: Use <code>README.md</code> as <code>index.html</code> even if <code>use_directory_urls</code> is false
-  (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2081" title="GitHub Issue mkdocs/mkdocs #2081">#2081</a>).</li>
+<li>Bugfix: Allow compressed sitemap to be deterministic by supporting the <code>SOURCE_DATE_EPOCH</code> environment variable (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2100" title="GitHub Issue mkdocs/mkdocs #2100">#2100</a>).</li>
+<li>Bugfix: Use <code>README.md</code> as <code>index.html</code> even if <code>use_directory_urls</code> is false (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2081" title="GitHub Issue mkdocs/mkdocs #2081">#2081</a>).</li>
 <li>Bugfix: Ignore links which start with a backslash (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1680" title="GitHub Issue mkdocs/mkdocs #1680">#1680</a>).</li>
-<li>Bugfix: Pass <code>builder</code> to the <code>on_serve</code> event so that it can be passed to
-  <code>server.watch</code> by plugins (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1952" title="GitHub Issue mkdocs/mkdocs #1952">#1952</a>).</li>
+<li>Bugfix: Pass <code>builder</code> to the <code>on_serve</code> event so that it can be passed to <code>server.watch</code> by plugins (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1952" title="GitHub Issue mkdocs/mkdocs #1952">#1952</a>).</li>
 <li>Bugfix: Use <code>lunr[languages]==0.5.8</code> to avoid <code>nltk</code> incompatibilities (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2062" title="GitHub Issue mkdocs/mkdocs #2062">#2062</a>).</li>
 <li>Bugfix: Ensure wheel is Python 3 only (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2021" title="GitHub Issue mkdocs/mkdocs #2021">#2021</a>).</li>
 <li>Bugfix: Clean up <code>dev_addr</code> validation and disallow <code>0.0.0.0</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2022" title="GitHub Issue mkdocs/mkdocs #2022">#2022</a>).</li>
@@ -766,8 +750,7 @@ may be removed in a future version of MkDocs.</p>
 <ul>
 <li>Bugfix: Ensure nested dot files in themes are ignored and document behavior (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1981" title="GitHub Issue mkdocs/mkdocs #1981">#1981</a>).</li>
 <li>Update minimum dependency to Markdown 3.2.1.</li>
-<li>Updated minimum dependency to Jinja 2.10.1 to address security
-  concerns (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1780" title="GitHub Issue mkdocs/mkdocs #1780">#1780</a>).</li>
+<li>Updated minimum dependency to Jinja 2.10.1 to address security concerns (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1780" title="GitHub Issue mkdocs/mkdocs #1780">#1780</a>).</li>
 <li>Update to lunr.js 2.3.8 (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1989" title="GitHub Issue mkdocs/mkdocs #1989">#1989</a>).</li>
 <li>Add support for Python 3.8.</li>
 <li>Drop support for Python 3.4.</li>
@@ -785,13 +768,10 @@ may be removed in a future version of MkDocs.</p>
 <li>Add canonical tag to <code>readthedocs</code> theme (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1669" title="GitHub Issue mkdocs/mkdocs #1669">#1669</a>).</li>
 <li>Improved error message for when <code>git</code> is not available.</li>
 <li>Add support for <code>nav_style</code> theme option for the <code>mkdocs</code> theme (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1930" title="GitHub Issue mkdocs/mkdocs #1930">#1930</a>).</li>
-<li>Bugfix: Long/nested dropdowns now behave more consistently for the <code>mkdocs</code>
-  theme (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1234" title="GitHub Issue mkdocs/mkdocs #1234">#1234</a>).</li>
-<li>Bugfix: Multi-row nav headers in the <code>mkdocs</code> theme no longer obscure the
-  document content (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/716" title="GitHub Issue mkdocs/mkdocs #716">#716</a>).</li>
+<li>Bugfix: Long/nested dropdowns now behave more consistently for the <code>mkdocs</code> theme (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1234" title="GitHub Issue mkdocs/mkdocs #1234">#1234</a>).</li>
+<li>Bugfix: Multi-row nav headers in the <code>mkdocs</code> theme no longer obscure the document content (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/716" title="GitHub Issue mkdocs/mkdocs #716">#716</a>).</li>
 <li>Add support for <code>navigation_depth</code> theme option for the <code>mkdocs</code> theme (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1970" title="GitHub Issue mkdocs/mkdocs #1970">#1970</a>).</li>
-<li><code>level</code> attribute in <code>page.toc</code> items is now 1-indexed to match the level in
-  <code>&lt;hN&gt;</code> tags (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1970" title="GitHub Issue mkdocs/mkdocs #1970">#1970</a>).</li>
+<li><code>level</code> attribute in <code>page.toc</code> items is now 1-indexed to match the level in <code>&lt;hN&gt;</code> tags (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1970" title="GitHub Issue mkdocs/mkdocs #1970">#1970</a>).</li>
 </ul>
 <h2 id="version-104-2018-09-07">Version 1.0.4 (2018-09-07)<a class="headerlink" href="#version-104-2018-09-07" title="Permanent link"></a></h2>
 <ul>
@@ -820,26 +800,26 @@ may be removed in a future version of MkDocs.</p>
 The changes included in the refactor are summarized below.</p>
 <ul>
 <li>Support for hidden pages. All Markdown pages are now included in the build
-  regardless of whether they are included in the navigation configuration
-  (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/699" title="GitHub Issue mkdocs/mkdocs #699">#699</a>).</li>
+    regardless of whether they are included in the navigation configuration
+    (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/699" title="GitHub Issue mkdocs/mkdocs #699">#699</a>).</li>
 <li>The navigation can now include links to external sites (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/989" title="GitHub Issue mkdocs/mkdocs #989">#989</a> <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1373" title="GitHub Issue mkdocs/mkdocs #1373">#1373</a> &amp; <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1406" title="GitHub Issue mkdocs/mkdocs #1406">#1406</a>).</li>
 <li>Page data (including titles) is properly determined for all pages before any
-  page is rendered (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1347" title="GitHub Issue mkdocs/mkdocs #1347">#1347</a>).</li>
+    page is rendered (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1347" title="GitHub Issue mkdocs/mkdocs #1347">#1347</a>).</li>
 <li>Automatically populated navigation now sorts index pages to the top. In other
-  words, The index page will be listed as the first child of a directory, while
-  all other documents are sorted alphanumerically by file name after the index
-  page (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/73" title="GitHub Issue mkdocs/mkdocs #73">#73</a> &amp; <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1042" title="GitHub Issue mkdocs/mkdocs #1042">#1042</a>).</li>
+    words, The index page will be listed as the first child of a directory, while
+    all other documents are sorted alphanumerically by file name after the index
+    page (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/73" title="GitHub Issue mkdocs/mkdocs #73">#73</a> &amp; <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1042" title="GitHub Issue mkdocs/mkdocs #1042">#1042</a>).</li>
 <li>A <code>README.md</code> file is now treated as an index file within a directory and
-  will be rendered to <code>index.html</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/608" title="GitHub Issue mkdocs/mkdocs #608">#608</a>).</li>
+    will be rendered to <code>index.html</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/608" title="GitHub Issue mkdocs/mkdocs #608">#608</a>).</li>
 <li>The URLs for all files are computed once and stored in a files collection.
-  This ensures all internal links are always computed correctly regardless of
-  the configuration. This also allows all internal links to be validated, not
-  just links to other Markdown pages. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/842" title="GitHub Issue mkdocs/mkdocs #842">#842</a> &amp; <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/872" title="GitHub Issue mkdocs/mkdocs #872">#872</a>).</li>
+    This ensures all internal links are always computed correctly regardless of
+    the configuration. This also allows all internal links to be validated, not
+    just links to other Markdown pages. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/842" title="GitHub Issue mkdocs/mkdocs #842">#842</a> &amp; <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/872" title="GitHub Issue mkdocs/mkdocs #872">#872</a>).</li>
 <li>A new <a href="../../dev-guide/themes/#url">url</a> template filter smartly ensures all URLs are relative to the
-  current page (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1526" title="GitHub Issue mkdocs/mkdocs #1526">#1526</a>).</li>
+    current page (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1526" title="GitHub Issue mkdocs/mkdocs #1526">#1526</a>).</li>
 <li>An <a href="../../dev-guide/plugins/#on_files">on_files</a> plugin event has been added, which could be used to include
-  files not in the <code>docs_dir</code>, exclude files, redefine page URLs (i.e.
-  implement extensionless URLs), or to manipulate files in various other ways.</li>
+    files not in the <code>docs_dir</code>, exclude files, redefine page URLs (i.e.
+    implement extensionless URLs), or to manipulate files in various other ways.</li>
 </ul>
 <h5 id="backward-incompatible-changes">Backward Incompatible Changes<a class="headerlink" href="#backward-incompatible-changes" title="Permanent link"></a></h5>
 <p>As part of the internal refactor, a number of backward incompatible changes have
@@ -993,8 +973,7 @@ value to the <code>theme.custom_dir</code> option and a warning was issued. As o
 1.0, the value is no longer copied and an error is raised.</p>
 <h3 id="other-changes-and-additions-to-version-10">Other Changes and Additions to Version 1.0<a class="headerlink" href="#other-changes-and-additions-to-version-10" title="Permanent link"></a></h3>
 <ul>
-<li>Keyboard shortcuts changed to not conflict with commonly used accessibility
-  shortcuts (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1502" title="GitHub Issue mkdocs/mkdocs #1502">#1502</a>.)</li>
+<li>Keyboard shortcuts changed to not conflict with commonly used accessibility shortcuts (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1502" title="GitHub Issue mkdocs/mkdocs #1502">#1502</a>.)</li>
 <li>User friendly YAML parse errors (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1543" title="GitHub Issue mkdocs/mkdocs #1543">#1543</a>).</li>
 <li>Officially support Python 3.7.</li>
 <li>A missing theme configuration file now raises an error.</li>
@@ -1044,8 +1023,7 @@ value to the <code>theme.custom_dir</code> option and a warning was issued. As o
 <ul>
 <li>Bugfix: Support <code>repo_url</code> with missing ending slash. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1321" title="GitHub Issue mkdocs/mkdocs #1321">#1321</a>).</li>
 <li>Bugfix: Add length support to <code>mkdocs.toc.TableOfContext</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1325" title="GitHub Issue mkdocs/mkdocs #1325">#1325</a>).</li>
-<li>Bugfix: Add some theme specific settings to the search plugin for third party
-  themes (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1316" title="GitHub Issue mkdocs/mkdocs #1316">#1316</a>).</li>
+<li>Bugfix: Add some theme specific settings to the search plugin for third party themes (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1316" title="GitHub Issue mkdocs/mkdocs #1316">#1316</a>).</li>
 <li>Bugfix: Override <code>site_url</code> with <code>dev_addr</code> on local server (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1317" title="GitHub Issue mkdocs/mkdocs #1317">#1317</a>).</li>
 </ul>
 <h2 id="version-0170-2017-10-19">Version 0.17.0 (2017-10-19)<a class="headerlink" href="#version-0170-2017-10-19" title="Permanent link"></a></h2>
@@ -1226,8 +1204,7 @@ the <code>extra_css</code> or <code>extra_javascript</code> config settings goin
 <li>Officially added support for Python 3.6 (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1296" title="GitHub Issue mkdocs/mkdocs #1296">#1296</a>)</li>
 <li>404 Error page added to readthedocs theme (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1296" title="GitHub Issue mkdocs/mkdocs #1296">#1296</a>))</li>
 <li>Internal refactor of Markdown processing (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/713" title="GitHub Issue mkdocs/mkdocs #713">#713</a>)</li>
-<li>Removed special error message for mkdocs-bootstrap and mkdocs-bootswatch
-  themes (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1168" title="GitHub Issue mkdocs/mkdocs #1168">#1168</a>)</li>
+<li>Removed special error message for mkdocs-bootstrap and mkdocs-bootswatch themes (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1168" title="GitHub Issue mkdocs/mkdocs #1168">#1168</a>)</li>
 <li>The legacy pages config is no longer supported (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1168" title="GitHub Issue mkdocs/mkdocs #1168">#1168</a>)</li>
 <li>The deprecated <code>json</code> command has been removed (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/481" title="GitHub Issue mkdocs/mkdocs #481">#481</a>)</li>
 <li>Support for Python 2.6 has been dropped (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/165" title="GitHub Issue mkdocs/mkdocs #165">#165</a>)</li>
@@ -1457,29 +1434,19 @@ better conform with the documented <a href="../../user-guide/writing-your-docs/#
 <li>Various updates and improvements to Documentation Home Page/Tutorial (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/870" title="GitHub Issue mkdocs/mkdocs #870">#870</a>)</li>
 <li>Bugfix: Support livereload for config file changes (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/735" title="GitHub Issue mkdocs/mkdocs #735">#735</a>)</li>
 <li>Bugfix: Non-media template files are no longer copied with media files (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/807" title="GitHub Issue mkdocs/mkdocs #807">#807</a>)</li>
-<li>Add a flag (-e/--theme-dir) to specify theme directory with the commands
-  <code>mkdocs build</code> and <code>mkdocs serve</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/832" title="GitHub Issue mkdocs/mkdocs #832">#832</a>)</li>
+<li>Add a flag (-e/--theme-dir) to specify theme directory with the commands <code>mkdocs build</code> and <code>mkdocs serve</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/832" title="GitHub Issue mkdocs/mkdocs #832">#832</a>)</li>
 <li>Fixed issues with Unicode file names under Windows and Python 2. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/833" title="GitHub Issue mkdocs/mkdocs #833">#833</a>)</li>
 <li>Improved the styling of in-line code in the MkDocs theme. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/718" title="GitHub Issue mkdocs/mkdocs #718">#718</a>)</li>
 <li>Bugfix: convert variables to JSON when being passed to JavaScript (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/850" title="GitHub Issue mkdocs/mkdocs #850">#850</a>)</li>
-<li>Updated the ReadTheDocs theme to match the upstream font sizes and colors
-  more closely. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/857" title="GitHub Issue mkdocs/mkdocs #857">#857</a>)</li>
-<li>Fixes an issue with permalink markers showing when the mouse was far above
-  them (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/843" title="GitHub Issue mkdocs/mkdocs #843">#843</a>)</li>
-<li>Bugfix: Handle periods in directory name when automatically creating the
-  pages config. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/728" title="GitHub Issue mkdocs/mkdocs #728">#728</a>)</li>
-<li>Update searching to Lunr 0.7, which comes with some performance enhancements
-  for larger documents (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/859" title="GitHub Issue mkdocs/mkdocs #859">#859</a>)</li>
-<li>Bugfix: Support SOURCE_DATE_EPOCH environment variable for "reproducible"
-  builds (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/938" title="GitHub Issue mkdocs/mkdocs #938">#938</a>)</li>
+<li>Updated the ReadTheDocs theme to match the upstream font sizes and colors more closely. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/857" title="GitHub Issue mkdocs/mkdocs #857">#857</a>)</li>
+<li>Fixes an issue with permalink markers showing when the mouse was far above them (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/843" title="GitHub Issue mkdocs/mkdocs #843">#843</a>)</li>
+<li>Bugfix: Handle periods in directory name when automatically creating the pages config. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/728" title="GitHub Issue mkdocs/mkdocs #728">#728</a>)</li>
+<li>Update searching to Lunr 0.7, which comes with some performance enhancements for larger documents (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/859" title="GitHub Issue mkdocs/mkdocs #859">#859</a>)</li>
+<li>Bugfix: Support SOURCE_DATE_EPOCH environment variable for "reproducible" builds (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/938" title="GitHub Issue mkdocs/mkdocs #938">#938</a>)</li>
 <li>Follow links when copying media files (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/869" title="GitHub Issue mkdocs/mkdocs #869">#869</a>).</li>
-<li>Change "Edit on..." links to point directly to the file in the source
-  repository, rather than to the root of the repository (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/975" title="GitHub Issue mkdocs/mkdocs #975">#975</a>), configurable
-  via the new <a href="../../user-guide/configuration/#edit_uri"><code>edit_uri</code></a> setting.</li>
-<li>Bugfix: Don't override config value for strict mode if not specified on CLI
-  (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/738" title="GitHub Issue mkdocs/mkdocs #738">#738</a>).</li>
-<li>Add a <code>--force</code> flag to the <code>gh-deploy</code> command to force the push to the
-  repository (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/973" title="GitHub Issue mkdocs/mkdocs #973">#973</a>).</li>
+<li>Change "Edit on..." links to point directly to the file in the source repository, rather than to the root of the repository (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/975" title="GitHub Issue mkdocs/mkdocs #975">#975</a>), configurable via the new <a href="../../user-guide/configuration/#edit_uri"><code>edit_uri</code></a> setting.</li>
+<li>Bugfix: Don't override config value for strict mode if not specified on CLI (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/738" title="GitHub Issue mkdocs/mkdocs #738">#738</a>).</li>
+<li>Add a <code>--force</code> flag to the <code>gh-deploy</code> command to force the push to the repository (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/973" title="GitHub Issue mkdocs/mkdocs #973">#973</a>).</li>
 <li>Improve alignment for current selected menu item in readthedocs theme (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/888" title="GitHub Issue mkdocs/mkdocs #888">#888</a>).</li>
 <li><code>http://user.github.io/repo</code> =&gt; <code>https://user.github.io/repo/</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1029" title="GitHub Issue mkdocs/mkdocs #1029">#1029</a>).</li>
 <li>Improve installation instructions (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1028" title="GitHub Issue mkdocs/mkdocs #1028">#1028</a>).</li>
@@ -1493,13 +1460,11 @@ better conform with the documented <a href="../../user-guide/writing-your-docs/#
 </ul>
 <h2 id="version-0152-2016-02-08">Version 0.15.2 (2016-02-08)<a class="headerlink" href="#version-0152-2016-02-08" title="Permanent link"></a></h2>
 <ul>
-<li>Fix an incorrect warning that states external themes <a href="#add-support-for-installable-themes">will be removed from
-  MkDocs</a>.</li>
+<li>Fix an incorrect warning that states external themes <a href="#add-support-for-installable-themes">will be removed from MkDocs</a>.</li>
 </ul>
 <h2 id="version-0151-2016-01-30">Version 0.15.1 (2016-01-30)<a class="headerlink" href="#version-0151-2016-01-30" title="Permanent link"></a></h2>
 <ul>
-<li>Lower the minimum supported Click version to 3.3 for package maintainers.
-  (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/763" title="GitHub Issue mkdocs/mkdocs #763">#763</a>)</li>
+<li>Lower the minimum supported Click version to 3.3 for package maintainers. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/763" title="GitHub Issue mkdocs/mkdocs #763">#763</a>)</li>
 </ul>
 <h2 id="version-0150-2016-01-21">Version 0.15.0 (2016-01-21)<a class="headerlink" href="#version-0150-2016-01-21" title="Permanent link"></a></h2>
 <h3 id="major-additions-to-version-0150">Major Additions to Version 0.15.0<a class="headerlink" href="#major-additions-to-version-0150" title="Permanent link"></a></h3>
@@ -1523,44 +1488,34 @@ themes</p>
 <li>Fix issues when using absolute links to Markdown files. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/628" title="GitHub Issue mkdocs/mkdocs #628">#628</a>)</li>
 <li>Deprecate support of Python 2.6, pending removal in 1.0.0. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/165" title="GitHub Issue mkdocs/mkdocs #165">#165</a>)</li>
 <li>Add official support for Python version 3.5.</li>
-<li>Add support for <a href="../../user-guide/configuration/#site_description">site_description</a> and <a href="../../user-guide/configuration/#site_author">site_author</a> to the <a href="../../user-guide/choosing-your-theme/#readthedocs">ReadTheDocs</a>
-  theme. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/631" title="GitHub Issue mkdocs/mkdocs #631">#631</a>)</li>
+<li>Add support for <a href="../../user-guide/configuration/#site_description">site_description</a> and <a href="../../user-guide/configuration/#site_author">site_author</a> to the <a href="../../user-guide/choosing-your-theme/#readthedocs">ReadTheDocs</a> theme. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/631" title="GitHub Issue mkdocs/mkdocs #631">#631</a>)</li>
 <li>Update FontAwesome to 4.5.0. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/789" title="GitHub Issue mkdocs/mkdocs #789">#789</a>)</li>
 <li>Increase IE support with X-UA-Compatible. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/785" title="GitHub Issue mkdocs/mkdocs #785">#785</a>)</li>
 <li>Added support for Python's <code>-m</code> flag. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/706" title="GitHub Issue mkdocs/mkdocs #706">#706</a>)</li>
 <li>Bugfix: Ensure consistent ordering of auto-populated pages. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/638" title="GitHub Issue mkdocs/mkdocs #638">#638</a>)</li>
-<li>Bugfix: Scroll the tables of contents on the MkDocs theme if it is too long
-  for the page. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/204" title="GitHub Issue mkdocs/mkdocs #204">#204</a>)</li>
-<li>Bugfix: Add all ancestors to the page attribute <code>ancestors</code> rather than just
-  the initial one. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/693" title="GitHub Issue mkdocs/mkdocs #693">#693</a>)</li>
+<li>Bugfix: Scroll the tables of contents on the MkDocs theme if it is too long for the page. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/204" title="GitHub Issue mkdocs/mkdocs #204">#204</a>)</li>
+<li>Bugfix: Add all ancestors to the page attribute <code>ancestors</code> rather than just the initial one. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/693" title="GitHub Issue mkdocs/mkdocs #693">#693</a>)</li>
 <li>Bugfix: Include HTML in the build output again. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/691" title="GitHub Issue mkdocs/mkdocs #691">#691</a>)</li>
 <li>Bugfix: Provide filename to Read the Docs. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/721" title="GitHub Issue mkdocs/mkdocs #721">#721</a> and RTD<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1480" title="GitHub Issue mkdocs/mkdocs #1480">#1480</a>)</li>
 <li>Bugfix: Silence Click's unicode_literals warning. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/708" title="GitHub Issue mkdocs/mkdocs #708">#708</a>)</li>
 </ul>
 <h2 id="version-0140-2015-06-09">Version 0.14.0 (2015-06-09)<a class="headerlink" href="#version-0140-2015-06-09" title="Permanent link"></a></h2>
 <ul>
-<li>Improve Unicode handling by ensuring that all config strings are loaded as
-  Unicode. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/592" title="GitHub Issue mkdocs/mkdocs #592">#592</a>)</li>
+<li>Improve Unicode handling by ensuring that all config strings are loaded as Unicode. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/592" title="GitHub Issue mkdocs/mkdocs #592">#592</a>)</li>
 <li>Remove dependency on the six library. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/583" title="GitHub Issue mkdocs/mkdocs #583">#583</a>)</li>
 <li>Remove dependency on the ghp-import library. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/547" title="GitHub Issue mkdocs/mkdocs #547">#547</a>)</li>
 <li>Add <code>--quiet</code> and <code>--verbose</code> options to all sub-commands. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/579" title="GitHub Issue mkdocs/mkdocs #579">#579</a>)</li>
 <li>Add short options (<code>-a</code>) to most command line options. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/579" title="GitHub Issue mkdocs/mkdocs #579">#579</a>)</li>
 <li>Add copyright footer for readthedocs theme. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/568" title="GitHub Issue mkdocs/mkdocs #568">#568</a>)</li>
-<li>If the requested port in <code>mkdocs serve</code> is already in use, don't show the
-  user a full stack trace. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/596" title="GitHub Issue mkdocs/mkdocs #596">#596</a>)</li>
+<li>If the requested port in <code>mkdocs serve</code> is already in use, don't show the user a full stack trace. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/596" title="GitHub Issue mkdocs/mkdocs #596">#596</a>)</li>
 <li>Bugfix: Fix a JavaScript encoding problem when searching with spaces. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/586" title="GitHub Issue mkdocs/mkdocs #586">#586</a>)</li>
-<li>Bugfix: gh-deploy now works if the mkdocs.yml is not in the git repo root.
-  (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/578" title="GitHub Issue mkdocs/mkdocs #578">#578</a>)</li>
-<li>Bugfix: Handle (pass-through instead of dropping) HTML entities while
-  parsing TOC. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/612" title="GitHub Issue mkdocs/mkdocs #612">#612</a>)</li>
-<li>Bugfix: Default extra_templates to an empty list, don't automatically
-  discover them. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/616" title="GitHub Issue mkdocs/mkdocs #616">#616</a>)</li>
+<li>Bugfix: gh-deploy now works if the mkdocs.yml is not in the git repo root. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/578" title="GitHub Issue mkdocs/mkdocs #578">#578</a>)</li>
+<li>Bugfix: Handle (pass-through instead of dropping) HTML entities while parsing TOC. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/612" title="GitHub Issue mkdocs/mkdocs #612">#612</a>)</li>
+<li>Bugfix: Default extra_templates to an empty list, don't automatically discover them. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/616" title="GitHub Issue mkdocs/mkdocs #616">#616</a>)</li>
 </ul>
 <h2 id="version-0133-2015-06-02">Version 0.13.3 (2015-06-02)<a class="headerlink" href="#version-0133-2015-06-02" title="Permanent link"></a></h2>
 <ul>
-<li>Bugfix: Reduce validation error to a warning if the site_dir is within
-  the docs_dir as this shouldn't cause any problems with building but will
-  inconvenience users building multiple times. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/580" title="GitHub Issue mkdocs/mkdocs #580">#580</a>)</li>
+<li>Bugfix: Reduce validation error to a warning if the site_dir is within the docs_dir as this shouldn't cause any problems with building but will inconvenience users building multiple times. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/580" title="GitHub Issue mkdocs/mkdocs #580">#580</a>)</li>
 </ul>
 <h2 id="version-0132-2015-05-30">Version 0.13.2 (2015-05-30)<a class="headerlink" href="#version-0132-2015-05-30" title="Permanent link"></a></h2>
 <ul>
@@ -1569,8 +1524,7 @@ themes</p>
 </ul>
 <h2 id="version-0131-2015-05-27">Version 0.13.1 (2015-05-27)<a class="headerlink" href="#version-0131-2015-05-27" title="Permanent link"></a></h2>
 <ul>
-<li>Bugfix: Fix a problem with minimal configurations which only contain a list
-  of paths in the pages config. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/562" title="GitHub Issue mkdocs/mkdocs #562">#562</a>)</li>
+<li>Bugfix: Fix a problem with minimal configurations which only contain a list of paths in the pages config. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/562" title="GitHub Issue mkdocs/mkdocs #562">#562</a>)</li>
 </ul>
 <h2 id="version-0130-2015-05-26">Version 0.13.0 (2015-05-26)<a class="headerlink" href="#version-0130-2015-05-26" title="Permanent link"></a></h2>
 <h3 id="deprecations-to-version-0130">Deprecations to Version 0.13.0<a class="headerlink" href="#deprecations-to-version-0130" title="Permanent link"></a></h3>
@@ -1628,19 +1582,16 @@ documentation.</p>
 <li>Add <code>--no-livereload</code> to <code>mkdocs serve</code> for a simpler development server. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/511" title="GitHub Issue mkdocs/mkdocs #511">#511</a>)</li>
 <li>Add copyright display support to all themes (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/549" title="GitHub Issue mkdocs/mkdocs #549">#549</a>)</li>
 <li>Add support for custom commit messages in a <code>mkdocs gh-deploy</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/516" title="GitHub Issue mkdocs/mkdocs #516">#516</a>)</li>
-<li>Bugfix: Fix linking to media within the same directory as a markdown file
-  called index.md (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/535" title="GitHub Issue mkdocs/mkdocs #535">#535</a>)</li>
+<li>Bugfix: Fix linking to media within the same directory as a markdown file called index.md (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/535" title="GitHub Issue mkdocs/mkdocs #535">#535</a>)</li>
 <li>Bugfix: Fix errors with Unicode filenames (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/542" title="GitHub Issue mkdocs/mkdocs #542">#542</a>).</li>
 </ul>
 <h2 id="version-0122-2015-04-22">Version 0.12.2 (2015-04-22)<a class="headerlink" href="#version-0122-2015-04-22" title="Permanent link"></a></h2>
 <ul>
-<li>Bugfix: Fix a regression where there would be an error if some child titles
-  were missing but others were provided in the pages config. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/464" title="GitHub Issue mkdocs/mkdocs #464">#464</a>)</li>
+<li>Bugfix: Fix a regression where there would be an error if some child titles were missing but others were provided in the pages config. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/464" title="GitHub Issue mkdocs/mkdocs #464">#464</a>)</li>
 </ul>
 <h2 id="version-0121-2015-04-14">Version 0.12.1 (2015-04-14)<a class="headerlink" href="#version-0121-2015-04-14" title="Permanent link"></a></h2>
 <ul>
-<li>Bugfix: Fixed a CSS bug in the table of contents on some browsers where the
-  bottom item was not clickable.</li>
+<li>Bugfix: Fixed a CSS bug in the table of contents on some browsers where the bottom item was not clickable.</li>
 </ul>
 <h2 id="version-0120-2015-04-14">Version 0.12.0 (2015-04-14)<a class="headerlink" href="#version-0120-2015-04-14" title="Permanent link"></a></h2>
 <ul>
@@ -1649,27 +1600,22 @@ documentation.</p>
 <li>Add the homepage back to the navigation on all themes. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/271" title="GitHub Issue mkdocs/mkdocs #271">#271</a>)</li>
 <li>Add a strict more for local link checking. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/279" title="GitHub Issue mkdocs/mkdocs #279">#279</a>)</li>
 <li>Add Google analytics support to all themes. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/333" title="GitHub Issue mkdocs/mkdocs #333">#333</a>)</li>
-<li>Add build date and MkDocs version to the ReadTheDocs and MkDocs theme
-  outputs. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/382" title="GitHub Issue mkdocs/mkdocs #382">#382</a>)</li>
+<li>Add build date and MkDocs version to the ReadTheDocs and MkDocs theme outputs. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/382" title="GitHub Issue mkdocs/mkdocs #382">#382</a>)</li>
 <li>Standardize highlighting across all themes and add missing languages. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/387" title="GitHub Issue mkdocs/mkdocs #387">#387</a>)</li>
 <li>Add a verbose flag. (-v) to show more details about what the build. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/147" title="GitHub Issue mkdocs/mkdocs #147">#147</a>)</li>
-<li>Add the option to specify a remote branch when deploying to GitHub. This
-  enables deploying to GitHub pages on personal and repo sites. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/354" title="GitHub Issue mkdocs/mkdocs #354">#354</a>)</li>
+<li>Add the option to specify a remote branch when deploying to GitHub. This enables deploying to GitHub pages on personal and repo sites. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/354" title="GitHub Issue mkdocs/mkdocs #354">#354</a>)</li>
 <li>Add favicon support to the ReadTheDocs theme HTML. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/422" title="GitHub Issue mkdocs/mkdocs #422">#422</a>)</li>
 <li>Automatically refresh the browser when files are edited. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/163" title="GitHub Issue mkdocs/mkdocs #163">#163</a>)</li>
 <li>Bugfix: Never re-write URLs in code blocks. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/240" title="GitHub Issue mkdocs/mkdocs #240">#240</a>)</li>
 <li>Bugfix: Don't copy dotfiles when copying media from the <code>docs_dir</code>. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/254" title="GitHub Issue mkdocs/mkdocs #254">#254</a>)</li>
 <li>Bugfix: Fix the rendering of tables in the ReadTheDocs theme. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/106" title="GitHub Issue mkdocs/mkdocs #106">#106</a>)</li>
 <li>Bugfix: Add padding to the bottom of all bootstrap themes. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/255" title="GitHub Issue mkdocs/mkdocs #255">#255</a>)</li>
-<li>Bugfix: Fix issues with nested Markdown pages and the automatic pages
-  configuration. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/276" title="GitHub Issue mkdocs/mkdocs #276">#276</a>)</li>
+<li>Bugfix: Fix issues with nested Markdown pages and the automatic pages configuration. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/276" title="GitHub Issue mkdocs/mkdocs #276">#276</a>)</li>
 <li>Bugfix: Fix a URL parsing error with GitHub enterprise. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/284" title="GitHub Issue mkdocs/mkdocs #284">#284</a>)</li>
 <li>Bugfix: Don't error if the mkdocs.yml is completely empty. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/288" title="GitHub Issue mkdocs/mkdocs #288">#288</a>)</li>
 <li>Bugfix: Fix a number of problems with relative URLs and Markdown files. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/292" title="GitHub Issue mkdocs/mkdocs #292">#292</a>)</li>
-<li>Bugfix: Don't stop the build if a page can't be found, continue with other
-  pages. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/150" title="GitHub Issue mkdocs/mkdocs #150">#150</a>)</li>
-<li>Bugfix: Remove the site_name from the page title, this needs to be added
-  manually. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/299" title="GitHub Issue mkdocs/mkdocs #299">#299</a>)</li>
+<li>Bugfix: Don't stop the build if a page can't be found, continue with other pages. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/150" title="GitHub Issue mkdocs/mkdocs #150">#150</a>)</li>
+<li>Bugfix: Remove the site_name from the page title, this needs to be added manually. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/299" title="GitHub Issue mkdocs/mkdocs #299">#299</a>)</li>
 <li>Bugfix: Fix an issue with table of contents cutting off Markdown. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/294" title="GitHub Issue mkdocs/mkdocs #294">#294</a>)</li>
 <li>Bugfix: Fix hostname for BitBucket. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/339" title="GitHub Issue mkdocs/mkdocs #339">#339</a>)</li>
 <li>Bugfix: Ensure all links end with a slash. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/344" title="GitHub Issue mkdocs/mkdocs #344">#344</a>)</li>
@@ -1677,18 +1623,14 @@ documentation.</p>
 <li>Bugfix: Include jQuery locally to avoid problems using MkDocs offline. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/143" title="GitHub Issue mkdocs/mkdocs #143">#143</a>)</li>
 <li>Bugfix: Don't allow the docs_dir to be in the site_dir or vice versa. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/384" title="GitHub Issue mkdocs/mkdocs #384">#384</a>)</li>
 <li>Bugfix: Remove inline CSS in the ReadTheDocs theme. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/393" title="GitHub Issue mkdocs/mkdocs #393">#393</a>)</li>
-<li>Bugfix: Fix problems with the child titles due to the order the pages config
-  was processed. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/395" title="GitHub Issue mkdocs/mkdocs #395">#395</a>)</li>
+<li>Bugfix: Fix problems with the child titles due to the order the pages config was processed. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/395" title="GitHub Issue mkdocs/mkdocs #395">#395</a>)</li>
 <li>Bugfix: Don't error during live reload when the theme doesn't exist. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/373" title="GitHub Issue mkdocs/mkdocs #373">#373</a>)</li>
 <li>Bugfix: Fix problems with the Meta extension when it may not exist. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/398" title="GitHub Issue mkdocs/mkdocs #398">#398</a>)</li>
 <li>Bugfix: Wrap long inline code otherwise they will run off the screen. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/313" title="GitHub Issue mkdocs/mkdocs #313">#313</a>)</li>
-<li>Bugfix: Remove HTML parsing regular expressions and parse with HTMLParser to
-  fix problems with titles containing code. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/367" title="GitHub Issue mkdocs/mkdocs #367">#367</a>)</li>
-<li>Bugfix: Fix an issue with the scroll to anchor causing the title to be hidden
-  under the navigation. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/7" title="GitHub Issue mkdocs/mkdocs #7">#7</a>)</li>
+<li>Bugfix: Remove HTML parsing regular expressions and parse with HTMLParser to fix problems with titles containing code. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/367" title="GitHub Issue mkdocs/mkdocs #367">#367</a>)</li>
+<li>Bugfix: Fix an issue with the scroll to anchor causing the title to be hidden under the navigation. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/7" title="GitHub Issue mkdocs/mkdocs #7">#7</a>)</li>
 <li>Bugfix: Add nicer CSS classes to the HTML tables in bootswatch themes. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/295" title="GitHub Issue mkdocs/mkdocs #295">#295</a>)</li>
-<li>Bugfix: Fix an error when passing in a specific config file with
-  <code>mkdocs serve</code>. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/341" title="GitHub Issue mkdocs/mkdocs #341">#341</a>)</li>
+<li>Bugfix: Fix an error when passing in a specific config file with <code>mkdocs serve</code>. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/341" title="GitHub Issue mkdocs/mkdocs #341">#341</a>)</li>
 <li>Bugfix: Don't overwrite index.md files with the <code>mkdocs new</code> command. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/412" title="GitHub Issue mkdocs/mkdocs #412">#412</a>)</li>
 <li>Bugfix: Remove bold and italic from code in the ReadTheDocs theme. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/411" title="GitHub Issue mkdocs/mkdocs #411">#411</a>)</li>
 <li>Bugfix: Display images inline in the MkDocs theme. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/415" title="GitHub Issue mkdocs/mkdocs #415">#415</a>)</li>
@@ -1699,35 +1641,27 @@ documentation.</p>
 </ul>
 <h2 id="version-0111-2014-11-20">Version 0.11.1 (2014-11-20)<a class="headerlink" href="#version-0111-2014-11-20" title="Permanent link"></a></h2>
 <ul>
-<li>Bugfix: Fix a CSS wrapping issue with code highlighting in the ReadTheDocs
-  theme. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/233" title="GitHub Issue mkdocs/mkdocs #233">#233</a>)</li>
+<li>Bugfix: Fix a CSS wrapping issue with code highlighting in the ReadTheDocs theme. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/233" title="GitHub Issue mkdocs/mkdocs #233">#233</a>)</li>
 </ul>
 <h2 id="version-0110-2014-11-18">Version 0.11.0 (2014-11-18)<a class="headerlink" href="#version-0110-2014-11-18" title="Permanent link"></a></h2>
 <ul>
 <li>Render 404.html files if they exist for the current theme. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/194" title="GitHub Issue mkdocs/mkdocs #194">#194</a>)</li>
-<li>Bugfix: Fix long nav bars, table rendering and code highlighting in MkDocs
-  and ReadTheDocs themes. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/225" title="GitHub Issue mkdocs/mkdocs #225">#225</a>)</li>
+<li>Bugfix: Fix long nav bars, table rendering and code highlighting in MkDocs and ReadTheDocs themes. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/225" title="GitHub Issue mkdocs/mkdocs #225">#225</a>)</li>
 <li>Bugfix: Fix an issue with the google_analytics code. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/219" title="GitHub Issue mkdocs/mkdocs #219">#219</a>)</li>
 <li>Bugfix: Remove <code>__pycache__</code> from the package tar. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/196" title="GitHub Issue mkdocs/mkdocs #196">#196</a>)</li>
 <li>Bugfix: Fix markdown links that go to an anchor on the current page. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/197" title="GitHub Issue mkdocs/mkdocs #197">#197</a>)</li>
-<li>Bugfix: Don't add <code>prettyprint well</code> CSS classes to all HTML, only add it in
-  the MkDocs theme. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/183" title="GitHub Issue mkdocs/mkdocs #183">#183</a>)</li>
+<li>Bugfix: Don't add <code>prettyprint well</code> CSS classes to all HTML, only add it in the MkDocs theme. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/183" title="GitHub Issue mkdocs/mkdocs #183">#183</a>)</li>
 <li>Bugfix: Display section titles in the ReadTheDocs theme. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/175" title="GitHub Issue mkdocs/mkdocs #175">#175</a>)</li>
-<li>Bugfix: Use the polling observer in watchdog so rebuilding works on
-  filesystems without inotify. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/184" title="GitHub Issue mkdocs/mkdocs #184">#184</a>)</li>
+<li>Bugfix: Use the polling observer in watchdog so rebuilding works on filesystems without inotify. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/184" title="GitHub Issue mkdocs/mkdocs #184">#184</a>)</li>
 <li>Bugfix: Improve error output for common configuration related errors. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/176" title="GitHub Issue mkdocs/mkdocs #176">#176</a>)</li>
 </ul>
 <h2 id="version-0100-2014-10-29">Version 0.10.0 (2014-10-29)<a class="headerlink" href="#version-0100-2014-10-29" title="Permanent link"></a></h2>
 <ul>
 <li>Added support for Python 3.3 and 3.4. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/103" title="GitHub Issue mkdocs/mkdocs #103">#103</a>)</li>
-<li>Configurable Python-Markdown extensions with the config setting
-  <code>markdown_extensions</code>. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/74" title="GitHub Issue mkdocs/mkdocs #74">#74</a>)</li>
-<li>Added <code>mkdocs json</code> command to output your rendered
-  documentation as json files. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/128" title="GitHub Issue mkdocs/mkdocs #128">#128</a>)</li>
-<li>Added <code>--clean</code> switch to <code>build</code>, <code>json</code> and <code>gh-deploy</code> commands to
-  remove stale files from the output directory. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/157" title="GitHub Issue mkdocs/mkdocs #157">#157</a>)</li>
-<li>Support multiple theme directories to allow replacement of
-  individual templates rather than copying the full theme. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/129" title="GitHub Issue mkdocs/mkdocs #129">#129</a>)</li>
+<li>Configurable Python-Markdown extensions with the config setting <code>markdown_extensions</code>. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/74" title="GitHub Issue mkdocs/mkdocs #74">#74</a>)</li>
+<li>Added <code>mkdocs json</code> command to output your rendered documentation as json files. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/128" title="GitHub Issue mkdocs/mkdocs #128">#128</a>)</li>
+<li>Added <code>--clean</code> switch to <code>build</code>, <code>json</code> and <code>gh-deploy</code> commands to remove stale files from the output directory. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/157" title="GitHub Issue mkdocs/mkdocs #157">#157</a>)</li>
+<li>Support multiple theme directories to allow replacement of individual templates rather than copying the full theme. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/129" title="GitHub Issue mkdocs/mkdocs #129">#129</a>)</li>
 <li>Bugfix: Fix <code>&lt;ul&gt;</code> rendering in readthedocs theme. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/171" title="GitHub Issue mkdocs/mkdocs #171">#171</a>)</li>
 <li>Bugfix: Improve the readthedocs theme on smaller displays. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/168" title="GitHub Issue mkdocs/mkdocs #168">#168</a>)</li>
 <li>Bugfix: Relaxed required python package versions to avoid clashes. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/104" title="GitHub Issue mkdocs/mkdocs #104">#104</a>)</li>
