@@ -86,31 +86,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Python ${{ matrix.python-version }}
+      - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.7
       - name: Install Python dependencies
         run: |
-          python -m pip install -r requirements/project.txt
-      - name: Check if Portable Object Templates should have been updated
+          python -m pip install setuptools babel
+      - name: Compile localization message files
         run: |
-          python setup.py extract_messages -t mkdocs
-          python setup.py extract_messages -t readthedocs
-          git diff -G "msgid" --exit-code mkdocs/themes/*/*.pot
-        shell: bash
-      - id: files
-        uses: jitterbit/get-changed-files@v1
-      - name: Check if Portable Object translation files should be updated on mkdocs version change
-        run: |
-          for locale in $(ls mkdocs/themes/mkdocs/locales/); do python setup.py update_catalog -t mkdocs -l ${locale}; done
-          for locale in $(ls mkdocs/themes/readthedocs/locales/); do python setup.py update_catalog -t readthedocs -l ${locale}; done
-          for changed_file in ${{ steps.files.outputs.all }}; do
-            # echo "inspecting changed file: ${changed_file}";
-            if [[ "${changed_file}" == "mkdocs/__init__.py" ]]; then
-              # echo "mkdocs version changed!";
-              git diff -G "msgid" --exit-code || exit 1
-              git diff -G "msgstr" --exit-code || exit 2
-            fi
-          done
-        shell: bash
+          python setup.py compile_catalog -t mkdocs
+          python setup.py compile_catalog -t readthedocs
