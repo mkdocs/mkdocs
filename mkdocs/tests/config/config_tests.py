@@ -283,18 +283,24 @@ class ConfigTests(unittest.TestCase):
             self.assertEqual(len(errors), 1)
             self.assertEqual(warnings, [])
 
-    def testConfigInstancesUnique(self):
-        conf = mkdocs.config.Config(mkdocs.config.defaults.get_schema())
-        conf.load_dict({'site_name': 'foo'})
-        conf.validate()
-        self.assertIsNone(conf['mdx_configs'].get('toc'))
+    def test_multiple_markdown_config_instances(self):
+        # This had a bug where an extension config would persist to separate
+        # config instances that didn't specify extensions.
+        schema = config.defaults.get_schema()
 
-        conf = mkdocs.config.Config(mkdocs.config.defaults.get_schema())
-        conf.load_dict({'site_name': 'foo', 'markdown_extensions': [{"toc": {"permalink": "aaa"}}]})
+        conf = config.Config(schema=schema)
+        conf.load_dict(
+            {
+                'site_name': 'Example',
+                'markdown_extensions': [{'toc': {'permalink': '##'}}],
+            }
+        )
         conf.validate()
-        self.assertEqual(conf['mdx_configs'].get('toc'), {'permalink': 'aaa'})
+        self.assertEqual(conf['mdx_configs'].get('toc'), {'permalink': '##'})
 
-        conf = mkdocs.config.Config(mkdocs.config.defaults.get_schema())
-        conf.load_dict({'site_name': 'foo'})
+        conf = config.Config(schema=schema)
+        conf.load_dict(
+            {'site_name': 'Example'},
+        )
         conf.validate()
         self.assertIsNone(conf['mdx_configs'].get('toc'))
