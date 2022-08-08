@@ -21,24 +21,23 @@ class DummyPlugin(plugins.BasePlugin):
     )
 
     def on_pre_page(self, content, **kwargs):
-        """ modify page content by prepending `foo` config value. """
+        """modify page content by prepending `foo` config value."""
         return f'{self.config["foo"]} {content}'
 
     def on_nav(self, item, **kwargs):
-        """ do nothing (return None) to not modify item. """
+        """do nothing (return None) to not modify item."""
         return None
 
     def on_page_read_source(self, **kwargs):
-        """ create new source by prepending `foo` config value to 'source'. """
+        """create new source by prepending `foo` config value to 'source'."""
         return f'{self.config["foo"]} source'
 
     def on_pre_build(self, **kwargs):
-        """ do nothing (return None). """
+        """do nothing (return None)."""
         return None
 
 
 class TestPluginClass(unittest.TestCase):
-
     def test_valid_plugin_options(self):
         test_dir = 'test'
 
@@ -85,7 +84,6 @@ class TestPluginClass(unittest.TestCase):
 
 
 class TestPluginCollection(unittest.TestCase):
-
     def test_set_plugin_on_collection(self):
         collection = plugins.PluginCollection()
         plugin = DummyPlugin()
@@ -98,7 +96,9 @@ class TestPluginCollection(unittest.TestCase):
         collection['foo'] = plugin1
         plugin2 = DummyPlugin()
         collection['bar'] = plugin2
-        self.assertEqual([(k, v) for k, v in collection.items()], [('foo', plugin1), ('bar', plugin2)])
+        self.assertEqual(
+            [(k, v) for k, v in collection.items()], [('foo', plugin1), ('bar', plugin2)]
+        )
 
     def test_run_event_on_collection(self):
         collection = plugins.PluginCollection()
@@ -115,8 +115,9 @@ class TestPluginCollection(unittest.TestCase):
         plugin2 = DummyPlugin()
         plugin2.load_config({'foo': 'second'})
         collection['bar'] = plugin2
-        self.assertEqual(collection.run_event('pre_page', 'page content'),
-                         'second new page content')
+        self.assertEqual(
+            collection.run_event('pre_page', 'page content'), 'second new page content'
+        )
 
     def test_event_returns_None(self):
         collection = plugins.PluginCollection()
@@ -214,7 +215,6 @@ MockEntryPoint.configure_mock(**{'name': 'sample', 'load.return_value': DummyPlu
 
 @mock.patch('importlib_metadata.entry_points', return_value=[MockEntryPoint])
 class TestPluginConfig(unittest.TestCase):
-
     def test_plugin_config_without_options(self, mock_class):
 
         cfg = {'plugins': ['sample']}
@@ -234,12 +234,14 @@ class TestPluginConfig(unittest.TestCase):
     def test_plugin_config_with_options(self, mock_class):
 
         cfg = {
-            'plugins': [{
-                'sample': {
-                    'foo': 'foo value',
-                    'bar': 42
+            'plugins': [
+                {
+                    'sample': {
+                        'foo': 'foo value',
+                        'bar': 42,
+                    },
                 }
-            }]
+            ],
         }
         option = config.config_options.Plugins()
         cfg['plugins'] = option.validate(cfg['plugins'])
@@ -260,9 +262,9 @@ class TestPluginConfig(unittest.TestCase):
             'plugins': {
                 'sample': {
                     'foo': 'foo value',
-                    'bar': 42
-                }
-            }
+                    'bar': 42,
+                },
+            },
         }
         option = config.config_options.Plugins()
         cfg['plugins'] = option.validate(cfg['plugins'])
@@ -335,13 +337,15 @@ class TestPluginConfig(unittest.TestCase):
     def test_plugin_config_multivalue_dict(self, mock_class):
 
         cfg = {
-            'plugins': [{
-                'sample': {
-                    'foo': 'foo value',
-                    'bar': 42
-                },
-                'extra_key': 'baz'
-            }]
+            'plugins': [
+                {
+                    'sample': {
+                        'foo': 'foo value',
+                        'bar': 42,
+                    },
+                    'extra_key': 'baz',
+                }
+            ],
         }
         option = config.config_options.Plugins()
         with self.assertRaises(config.base.ValidationError):
@@ -350,7 +354,7 @@ class TestPluginConfig(unittest.TestCase):
     def test_plugin_config_not_string_or_dict(self, mock_class):
 
         cfg = {
-            'plugins': [('not a string or dict',)]
+            'plugins': [('not a string or dict',)],
         }
         option = config.config_options.Plugins()
         with self.assertRaises(config.base.ValidationError):
@@ -359,9 +363,11 @@ class TestPluginConfig(unittest.TestCase):
     def test_plugin_config_options_not_dict(self, mock_class):
 
         cfg = {
-            'plugins': [{
-                'sample': 'not a dict'
-            }]
+            'plugins': [
+                {
+                    'sample': 'not a dict',
+                }
+            ],
         }
         option = config.config_options.Plugins()
         with self.assertRaises(config.base.ValidationError):

@@ -56,8 +56,11 @@ class Theme:
 
     def __repr__(self):
         return "{}(name='{}', dirs={}, static_templates={}, {})".format(
-            self.__class__.__name__, self.name, self.dirs, list(self.static_templates),
-            ', '.join(f'{k}={v!r}' for k, v in self._vars.items())
+            self.__class__.__name__,
+            self.name,
+            self.dirs,
+            list(self.static_templates),
+            ', '.join(f'{k}={v!r}' for k, v in self._vars.items()),
         )
 
     def __getitem__(self, key):
@@ -73,7 +76,7 @@ class Theme:
         return iter(self._vars)
 
     def _load_theme_config(self, name):
-        """ Recursively load theme and any parent themes. """
+        """Recursively load theme and any parent themes."""
 
         theme_dir = utils.get_theme_dir(name)
         self.dirs.append(theme_dir)
@@ -107,7 +110,7 @@ class Theme:
         self._vars.update(theme_config)
 
     def get_env(self):
-        """ Return a Jinja environment for the theme. """
+        """Return a Jinja environment for the theme."""
 
         loader = jinja2.FileSystemLoader(self.dirs)
         # No autoreload because editing a template in the middle of a build is not useful.

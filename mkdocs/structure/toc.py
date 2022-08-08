@@ -19,6 +19,7 @@ class TableOfContents:
     """
     Represents the table of contents for a given page.
     """
+
     def __init__(self, items):
         self.items = items
 
@@ -36,6 +37,7 @@ class AnchorLink:
     """
     A single entry in the table of contents.
     """
+
     def __init__(self, title, id, level):
         self.title, self.id, self.level = title, id, level
         self.children = []

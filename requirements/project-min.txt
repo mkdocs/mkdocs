@@ -1,5 +1,5 @@
 babel==2.9.0
-click==3.3
+click==8.0
 Jinja2==2.10.2
 markupsafe<=2.0.1
 Markdown==3.3
