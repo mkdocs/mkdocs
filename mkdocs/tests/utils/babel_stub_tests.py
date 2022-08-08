@@ -3,7 +3,6 @@ from mkdocs.utils.babel_stub import Locale, UnknownLocaleError
 
 
 class BabelStubTests(unittest.TestCase):
-
     def test_locale_language_only(self):
         locale = Locale('es')
         self.assertEqual(locale.language, 'es')

@@ -8,6 +8,7 @@ from html.parser import HTMLParser
 
 try:
     from lunr import lunr
+
     haslunrpy = True
 except ImportError:
     haslunrpy = False
@@ -44,11 +45,7 @@ class SearchIndex:
         text = text.replace('\u00a0', ' ')
         text = re.sub(r'[ \t\n\r\f\v]+', ' ', text.strip())
 
-        self._entries.append({
-            'title': title,
-            'text': text,
-            'location': loc
-        })
+        self._entries.append({'title': title, 'text': text, 'location': loc})
 
     def add_entry_from_context(self, page):
         """
@@ -70,11 +67,7 @@ class SearchIndex:
 
         # Create an entry for the full page.
         text = parser.stripped_html.rstrip('\n') if self.config['indexing'] == 'full' else ''
-        self._add_entry(
-            title=page.title,
-            text=text,
-            loc=url
-        )
+        self._add_entry(title=page.title, text=text, loc=url)
 
         if self.config['indexing'] in ['full', 'sections']:
             for section in parser.data:
@@ -91,28 +84,23 @@ class SearchIndex:
 
         text = ' '.join(section.text) if self.config['indexing'] == 'full' else ''
         if toc_item is not None:
-            self._add_entry(
-                title=toc_item.title,
-                text=text,
-                loc=abs_url + toc_item.url
-            )
+            self._add_entry(title=toc_item.title, text=text, loc=abs_url + toc_item.url)
 
     def generate_search_index(self):
         """python to json conversion"""
-        page_dicts = {
-            'docs': self._entries,
-            'config': self.config
-        }
+        page_dicts = {'docs': self._entries, 'config': self.config}
         data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'), default=str)
 
         if self.config['prebuild_index'] in (True, 'node'):
             try:
-                script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'prebuild-index.js')
+                script_path = os.path.join(
+                    os.path.dirname(os.path.abspath(__file__)), 'prebuild-index.js'
+                )
                 p = subprocess.Popen(
                     ['node', script_path],
                     stdin=subprocess.PIPE,
                     stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE
+                    stderr=subprocess.PIPE,
                 )
                 idx, err = p.communicate(data.encode('utf-8'))
                 if not err:
@@ -127,8 +115,11 @@ class SearchIndex:
         elif self.config['prebuild_index'] == 'python':
             if haslunrpy:
                 idx = lunr(
-                    ref='location', fields=('title', 'text'), documents=self._entries,
-                    languages=self.config['lang'])
+                    ref='location',
+                    fields=('title', 'text'),
+                    documents=self._entries,
+                    languages=self.config['lang'],
+                )
                 page_dicts['index'] = idx.serialize()
                 data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
             else:
@@ -154,11 +145,7 @@ class ContentSection:
         self.title = title
 
     def __eq__(self, other):
-        return (
-            self.text == other.text and
-            self.id == other.id and
-            self.title == other.title
-        )
+        return self.text == other.text and self.id == other.id and self.title == other.title
 
 
 class ContentParser(HTMLParser):

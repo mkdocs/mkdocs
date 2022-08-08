@@ -9,14 +9,13 @@ BASE_DIR = path.normpath(path.join(path.abspath(path.dirname(__file__)), '../../
 
 
 class ThemeMixinTests(unittest.TestCase):
-
     def test_dict_entry_point(self):
         inst = babel.ThemeMixin()
         inst.distribution = Distribution()
         inst.distribution.entry_points = {
             'mkdocs.themes': [
-                'mkdocs = mkdocs.themes.mkdocs'
-            ]
+                'mkdocs = mkdocs.themes.mkdocs',
+            ],
         }
         inst.theme = 'mkdocs'
         self.assertEqual(inst.get_theme_dir(), path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs'))
@@ -36,8 +35,8 @@ class ThemeMixinTests(unittest.TestCase):
         inst.distribution = Distribution()
         inst.distribution.entry_points = {
             'mkdocs.themes': [
-                'mkdocs = mkdocs.themes.mkdocs'
-            ]
+                'mkdocs = mkdocs.themes.mkdocs',
+            ],
         }
         inst.theme = None
         self.assertEqual(inst.get_theme_dir(), path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs'))
@@ -49,10 +48,12 @@ class ThemeMixinTests(unittest.TestCase):
             'mkdocs.themes': [
                 'mkdocs = mkdocs.themes.mkdocs',
                 'readthedocs = mkdocs.themes.readthedocs',
-            ]
+            ],
         }
         inst.theme = 'readthedocs'
-        self.assertEqual(inst.get_theme_dir(), path.join(BASE_DIR, 'mkdocs', 'themes', 'readthedocs'))
+        self.assertEqual(
+            inst.get_theme_dir(), path.join(BASE_DIR, 'mkdocs', 'themes', 'readthedocs')
+        )
 
     def test_multiple_entry_points_no_default(self):
         inst = babel.ThemeMixin()
@@ -61,7 +62,7 @@ class ThemeMixinTests(unittest.TestCase):
             'mkdocs.themes': [
                 'mkdocs = mkdocs.themes.mkdocs',
                 'readthedocs = mkdocs.themes.readthedocs',
-            ]
+            ],
         }
         inst.theme = None
         self.assertRaises(DistutilsOptionError, inst.get_theme_dir)
@@ -78,15 +79,14 @@ class ThemeMixinTests(unittest.TestCase):
         inst.distribution = Distribution()
         inst.distribution.entry_points = {
             'mkdocs.themes': [
-                'mkdocs = mkdocs.themes.mkdocs'
-            ]
+                'mkdocs = mkdocs.themes.mkdocs',
+            ],
         }
         inst.theme = 'undefined'
         self.assertRaises(DistutilsOptionError, inst.get_theme_dir)
 
 
 class CommandTests(unittest.TestCase):
-
     def test_compile_catalog(self):
         dist = Distribution()
         dist.entry_points = '''
@@ -136,7 +136,9 @@ class CommandTests(unittest.TestCase):
         cmd.theme = 'mkdocs'
         cmd.finalize_options()
         self.assertEqual(cmd.input_paths, [path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs')])
-        self.assertEqual(cmd.output_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot'))
+        self.assertEqual(
+            cmd.output_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot')
+        )
         self.assertEqual(cmd.mapping_file, babel.DEFAULT_MAPPING_FILE)
         self.assertEqual(cmd.project, 'foo')
         self.assertEqual(cmd.version, '1.2')
@@ -153,7 +155,9 @@ class CommandTests(unittest.TestCase):
         cmd.finalize_options()
         self.assertEqual(cmd.theme, 'mkdocs')
         self.assertEqual(cmd.input_paths, [path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs')])
-        self.assertEqual(cmd.output_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot'))
+        self.assertEqual(
+            cmd.output_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot')
+        )
 
     def test_extract_messages_ingore_theme(self):
         dist = Distribution(dict(name='foo', version='1.2'))
@@ -182,7 +186,9 @@ class CommandTests(unittest.TestCase):
         cmd.input_paths = 'mkdocs/tests'
         cmd.finalize_options()
         self.assertEqual(cmd.input_paths, ['mkdocs/tests'])
-        self.assertEqual(cmd.output_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot'))
+        self.assertEqual(
+            cmd.output_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot')
+        )
 
     def test_extract_messages_ingore_theme_for_output(self):
         dist = Distribution(dict(name='foo', version='1.2'))
@@ -209,7 +215,9 @@ class CommandTests(unittest.TestCase):
         cmd.theme = 'mkdocs'
         cmd.locale = 'en'
         cmd.finalize_options()
-        self.assertEqual(cmd.input_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot'))
+        self.assertEqual(
+            cmd.input_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot')
+        )
         self.assertEqual(cmd.output_dir, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/locales'))
 
     def test_init_catalog_default_theme(self):
@@ -224,7 +232,9 @@ class CommandTests(unittest.TestCase):
         self.assertIsNone(cmd.theme)
         cmd.finalize_options()
         self.assertEqual(cmd.theme, 'mkdocs')
-        self.assertEqual(cmd.input_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot'))
+        self.assertEqual(
+            cmd.input_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot')
+        )
         self.assertEqual(cmd.output_dir, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/locales'))
 
     def test_init_catalog_ignore_theme(self):
@@ -270,7 +280,9 @@ class CommandTests(unittest.TestCase):
         cmd.locale = 'en'
         cmd.output_dir = 'foo/bar'
         cmd.finalize_options()
-        self.assertEqual(cmd.input_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot'))
+        self.assertEqual(
+            cmd.input_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot')
+        )
         self.assertEqual(cmd.output_dir, 'foo/bar')
 
     def test_update_catalog(self):
@@ -283,7 +295,9 @@ class CommandTests(unittest.TestCase):
         cmd.initialize_options()
         cmd.theme = 'mkdocs'
         cmd.finalize_options()
-        self.assertEqual(cmd.input_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot'))
+        self.assertEqual(
+            cmd.input_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot')
+        )
         self.assertEqual(cmd.output_dir, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/locales'))
 
     def test_update_catalog_default_theme(self):
@@ -298,7 +312,9 @@ class CommandTests(unittest.TestCase):
         self.assertIsNone(cmd.theme)
         cmd.finalize_options()
         self.assertEqual(cmd.theme, 'mkdocs')
-        self.assertEqual(cmd.input_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot'))
+        self.assertEqual(
+            cmd.input_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot')
+        )
         self.assertEqual(cmd.output_dir, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/locales'))
 
     def test_update_catalog_ignore_theme(self):
@@ -344,5 +360,7 @@ class CommandTests(unittest.TestCase):
         cmd.locale = 'en'
         cmd.output_dir = 'foo/bar'
         cmd.finalize_options()
-        self.assertEqual(cmd.input_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot'))
+        self.assertEqual(
+            cmd.input_file, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/messages.pot')
+        )
         self.assertEqual(cmd.output_dir, 'foo/bar')
