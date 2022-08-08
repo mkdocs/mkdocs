@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 
 
+import os
 import unittest
 from unittest import mock
-import os
 
-from mkdocs import plugins
-from mkdocs import config
+from mkdocs import config, plugins
 from mkdocs.commands import build
 from mkdocs.config import config_options
-from mkdocs.exceptions import BuildError, PluginError, Abort
+from mkdocs.exceptions import Abort, BuildError, PluginError
 from mkdocs.tests.base import load_config
 
 

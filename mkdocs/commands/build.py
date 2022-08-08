@@ -1,16 +1,16 @@
+import gzip
 import logging
 import os
-import gzip
 from urllib.parse import urlsplit
 
-from jinja2.exceptions import TemplateNotFound
 import jinja2
+from jinja2.exceptions import TemplateNotFound
 
+import mkdocs
 from mkdocs import utils
-from mkdocs.exceptions import BuildError, Abort
+from mkdocs.exceptions import Abort, BuildError
 from mkdocs.structure.files import Files, get_files
 from mkdocs.structure.nav import get_navigation
-import mkdocs
 
 
 class DuplicateFilter:

@@ -1,12 +1,12 @@
-import unittest
 import os
 import sys
-from unittest import mock
+import unittest
 from tempfile import TemporaryDirectory
+from unittest import mock
 
-from mkdocs.structure.pages import Page
 from mkdocs.structure.files import File, Files
-from mkdocs.tests.base import load_config, dedent
+from mkdocs.structure.pages import Page
+from mkdocs.tests.base import dedent, load_config
 
 
 class PageTests(unittest.TestCase):

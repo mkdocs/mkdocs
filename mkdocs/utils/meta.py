@@ -35,6 +35,7 @@ Extracts, parses and transforms MultiMarkdown style data from documents.
 
 
 import re
+
 import yaml
 
 try:

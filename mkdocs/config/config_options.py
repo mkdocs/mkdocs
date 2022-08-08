@@ -1,13 +1,14 @@
+import ipaddress
 import os
 import sys
 import traceback
 from collections import namedtuple
 from collections.abc import Sequence
 from urllib.parse import urlsplit, urlunsplit
-import ipaddress
+
 import markdown
 
-from mkdocs import utils, theme, plugins
+from mkdocs import plugins, theme, utils
 from mkdocs.config.base import Config, ValidationError
 
 

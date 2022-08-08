@@ -5,11 +5,11 @@ Implements the plugin API for MkDocs.
 
 
 import logging
-import importlib_metadata
 from collections import OrderedDict
 
-from mkdocs.config.base import Config
+import importlib_metadata
 
+from mkdocs.config.base import Config
 
 log = logging.getLogger('mkdocs.plugins')
 

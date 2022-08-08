@@ -1,13 +1,12 @@
 import logging
 import os
 import sys
-from yaml import YAMLError
 from collections import UserDict
 from contextlib import contextmanager
 
-from mkdocs import exceptions
-from mkdocs import utils
+from yaml import YAMLError
 
+from mkdocs import exceptions, utils
 
 log = logging.getLogger('mkdocs.config')
 

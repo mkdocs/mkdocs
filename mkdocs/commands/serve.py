@@ -1,8 +1,8 @@
 import logging
 import shutil
 import tempfile
-from urllib.parse import urlsplit
 from os.path import isdir, isfile, join
+from urllib.parse import urlsplit
 
 import jinja2.exceptions
 

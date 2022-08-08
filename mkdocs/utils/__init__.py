@@ -6,20 +6,21 @@ and structure of the site and pages in the site.
 """
 
 
+import functools
 import logging
 import os
-import shutil
-import re
-import yaml
 import posixpath
-import functools
+import re
+import shutil
 import warnings
-import importlib_metadata
 from collections import defaultdict
 from datetime import datetime, timezone
 from urllib.parse import urlsplit
-from yaml_env_tag import construct_env_tag
+
+import importlib_metadata
+import yaml
 from mergedeep import merge
+from yaml_env_tag import construct_env_tag
 
 from mkdocs import exceptions
 

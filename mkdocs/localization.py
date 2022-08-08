@@ -1,12 +1,13 @@
-import os
 import logging
+import os
 
 from jinja2.ext import Extension, InternationalizationExtension
+
 from mkdocs.config.base import ValidationError
 
 try:
     from babel.core import Locale, UnknownLocaleError
-    from babel.support import Translations, NullTranslations
+    from babel.support import NullTranslations, Translations
 
     has_babel = True
 except ImportError:  # pragma: no cover

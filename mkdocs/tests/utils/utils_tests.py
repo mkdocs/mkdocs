@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 
 
-from unittest import mock
-import os
-import unittest
-import tempfile
-import shutil
-import stat
 import datetime
 import logging
+import os
+import shutil
+import stat
+import tempfile
+import unittest
+from unittest import mock
 
-from mkdocs import utils, exceptions
+from mkdocs import exceptions, utils
 from mkdocs.structure.files import File
 from mkdocs.structure.pages import Page
 from mkdocs.tests.base import dedent, load_config, tempdir

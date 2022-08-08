@@ -1,11 +1,12 @@
 import unittest
 from unittest import mock
+
 from ghp_import import GhpError
 
-from mkdocs.tests.base import load_config
+from mkdocs import __version__
 from mkdocs.commands import gh_deploy
 from mkdocs.exceptions import Abort
-from mkdocs import __version__
+from mkdocs.tests.base import load_config
 
 
 class TestGitHubDeploy(unittest.TestCase):

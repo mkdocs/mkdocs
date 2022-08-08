@@ -1,8 +1,8 @@
 from distutils.errors import DistutilsOptionError
 from os import path
-from pkg_resources import EntryPoint
-from babel.messages import frontend as babel
 
+from babel.messages import frontend as babel
+from pkg_resources import EntryPoint
 
 DEFAULT_MAPPING_FILE = path.normpath(
     path.join(path.abspath(path.dirname(__file__)), '../themes/babel.cfg')
