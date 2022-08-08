@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from click import ClickException, echo
 
 

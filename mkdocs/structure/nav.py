@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 from typing import Iterator, List, Optional, Union
 from urllib.parse import urlsplit

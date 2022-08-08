@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 try:
     from jinja2 import pass_context as contextfilter
 except ImportError:
