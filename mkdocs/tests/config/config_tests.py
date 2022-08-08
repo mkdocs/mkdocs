@@ -304,19 +304,3 @@ class ConfigTests(unittest.TestCase):
         )
         conf.validate()
         self.assertIsNone(conf['mdx_configs'].get('toc'))
-
-    def testConfigInstancesUnique(self):
-        conf = mkdocs.config.Config(mkdocs.config.defaults.get_schema())
-        conf.load_dict({'site_name': 'foo'})
-        conf.validate()
-        self.assertIsNone(conf['mdx_configs'].get('toc'))
-
-        conf = mkdocs.config.Config(mkdocs.config.defaults.get_schema())
-        conf.load_dict({'site_name': 'foo', 'markdown_extensions': [{"toc": {"permalink": "aaa"}}]})
-        conf.validate()
-        self.assertEqual(conf['mdx_configs'].get('toc'), {'permalink': 'aaa'})
-
-        conf = mkdocs.config.Config(mkdocs.config.defaults.get_schema())
-        conf.load_dict({'site_name': 'foo'})
-        conf.validate()
-        self.assertIsNone(conf['mdx_configs'].get('toc'))
