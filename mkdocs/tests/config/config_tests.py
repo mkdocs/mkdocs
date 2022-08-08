@@ -289,17 +289,19 @@ class ConfigTests(unittest.TestCase):
         schema = config.defaults.get_schema()
 
         conf = config.Config(schema=schema)
-        conf.load_dict({
-            'site_name': 'Example',
-            'markdown_extensions': [{'toc': {'permalink': '##'}}]
-        })
+        conf.load_dict(
+            {
+                'site_name': 'Example',
+                'markdown_extensions': [{'toc': {'permalink': '##'}}],
+            }
+        )
         conf.validate()
         self.assertEqual(conf['mdx_configs'].get('toc'), {'permalink': '##'})
 
         conf = config.Config(schema=schema)
-        conf.load_dict({
-            'site_name': 'Example'
-        })
+        conf.load_dict(
+            {'site_name': 'Example'},
+        )
         conf.validate()
         self.assertIsNone(conf['mdx_configs'].get('toc'))
 
