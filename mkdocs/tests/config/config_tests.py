@@ -283,6 +283,26 @@ class ConfigTests(unittest.TestCase):
             self.assertEqual(len(errors), 1)
             self.assertEqual(warnings, [])
 
+    SUBCONFIG_TEST_SCHEMA = {
+        "items": mkdocs.config.config_options.ConfigItems(
+            ("value", mkdocs.config.config_options.Type(str)),
+        ),
+    }.items()
+
+    def test_subconfig_with_multiple_items(self):
+        # This had a bug where subsequent items would get merged into the same dict.
+        conf = config.Config(schema=self.SUBCONFIG_TEST_SCHEMA)
+        conf.load_dict(
+            {
+                'items': [
+                    {'value': 'a'},
+                    {'value': 'b'},
+                ]
+            }
+        )
+        conf.validate()
+        self.assertEqual(conf['items'], [{'value': 'a'}, {'value': 'b'}])
+
     def test_multiple_markdown_config_instances(self):
         # This had a bug where an extension config would persist to separate
         # config instances that didn't specify extensions.
