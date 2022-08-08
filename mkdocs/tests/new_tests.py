@@ -8,7 +8,6 @@ from mkdocs.commands import new
 
 
 class NewTests(unittest.TestCase):
-
     def test_new(self):
 
         tempdir = tempfile.mkdtemp()

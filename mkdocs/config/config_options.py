@@ -12,7 +12,6 @@ from mkdocs.config.base import Config, ValidationError
 
 
 class BaseConfigOption:
-
     def __init__(self):
         self.warnings = []
         self.default = None
@@ -70,6 +69,7 @@ class ConfigItems(BaseConfigOption):
     Validates a list of mappings that all must match the same set of
     options.
     """
+
     def __init__(self, *config_options, **kwargs):
         BaseConfigOption.__init__(self)
         self.item_config = SubConfig(*config_options)
@@ -86,8 +86,9 @@ class ConfigItems(BaseConfigOption):
                 return ()
 
         if not isinstance(value, Sequence):
-            raise ValidationError(f'Expected a sequence of mappings, but a '
-                                  f'{type(value)} was given.')
+            raise ValidationError(
+                f'Expected a sequence of mappings, but a ' f'{type(value)} was given.'
+            )
 
         return [self.item_config.validate(item) for item in value]
 
@@ -147,8 +148,10 @@ class Type(OptionallyRequired):
         if not isinstance(value, self._type):
             msg = f"Expected type: {self._type} but received: {type(value)}"
         elif self.length is not None and len(value) != self.length:
-            msg = (f"Expected type: {self._type} with length {self.length}"
-                   f" but received: {value} with length {len(value)}")
+            msg = (
+                f"Expected type: {self._type} with length {self.length}"
+                f" but received: {value} with length {len(value)}"
+            )
         else:
             return value
 
@@ -285,10 +288,10 @@ class IpAddress(OptionallyRequired):
         host = config[key_name].host
         if key_name == 'dev_addr' and host in ['0.0.0.0', '::']:
             self.warnings.append(
-                (f"The use of the IP address '{host}' suggests a production environment "
-                 "or the use of a proxy to connect to the MkDocs server. However, "
-                 "the MkDocs' server is intended for local development purposes only. "
-                 "Please use a third party production-ready server instead.")
+                f"The use of the IP address '{host}' suggests a production environment "
+                "or the use of a proxy to connect to the MkDocs server. However, "
+                "the MkDocs' server is intended for local development purposes only. "
+                "Please use a third party production-ready server instead."
             )
 
 
@@ -317,8 +320,7 @@ class URL(OptionallyRequired):
                 parsed_url = parsed_url._replace(path=f'{parsed_url.path}/')
             return urlunsplit(parsed_url)
 
-        raise ValidationError(
-            "The URL isn't valid, it should include the http:// (scheme)")
+        raise ValidationError("The URL isn't valid, it should include the http:// (scheme)")
 
 
 class RepoURL(URL):
@@ -371,7 +373,9 @@ class FilesystemObject(Type):
         self.config_dir = None
 
     def pre_validation(self, config, key_name):
-        self.config_dir = os.path.dirname(config.config_file_path) if config.config_file_path else None
+        self.config_dir = (
+            os.path.dirname(config.config_file_path) if config.config_file_path else None
+        )
 
     def run_validation(self, value):
         value = super().run_validation(value)
@@ -388,6 +392,7 @@ class Dir(FilesystemObject):
 
     Validate a path to a directory, optionally verifying that it exists.
     """
+
     existence_test = staticmethod(os.path.isdir)
     name = 'directory'
 
@@ -398,9 +403,10 @@ class Dir(FilesystemObject):
         # Validate that the dir is not the parent dir of the config file.
         if os.path.dirname(config.config_file_path) == config[key_name]:
             raise ValidationError(
-                (f"The '{key_name}' should not be the parent directory of the"
-                 " config file. Use a child directory instead so that the"
-                 f" '{key_name}' is a sibling of the config file."))
+                f"The '{key_name}' should not be the parent directory of the"
+                f" config file. Use a child directory instead so that the"
+                f" '{key_name}' is a sibling of the config file."
+            )
 
 
 class File(FilesystemObject):
@@ -409,6 +415,7 @@ class File(FilesystemObject):
 
     Validate a path to a file, optionally verifying that it exists.
     """
+
     existence_test = staticmethod(os.path.isfile)
     name = 'file'
 
@@ -425,7 +432,9 @@ class ListOfPaths(OptionallyRequired):
         super().__init__(default, required)
 
     def pre_validation(self, config, key_name):
-        self.config_dir = os.path.dirname(config.config_file_path) if config.config_file_path else None
+        self.config_dir = (
+            os.path.dirname(config.config_file_path) if config.config_file_path else None
+        )
 
     def run_validation(self, value):
         if not isinstance(value, list):
@@ -453,24 +462,26 @@ class SiteDir(Dir):
     def post_validation(self, config, key_name):
 
         super().post_validation(config, key_name)
+        docs_dir = config['docs_dir']
+        site_dir = config['site_dir']
 
         # Validate that the docs_dir and site_dir don't contain the
         # other as this will lead to copying back and forth on each
         # and eventually make a deep nested mess.
-        if (config['docs_dir'] + os.sep).startswith(config['site_dir'].rstrip(os.sep) + os.sep):
+        if (docs_dir + os.sep).startswith(site_dir.rstrip(os.sep) + os.sep):
             raise ValidationError(
-                ("The 'docs_dir' should not be within the 'site_dir' as this "
-                 "can mean the source files are overwritten by the output or "
-                 "it will be deleted if --clean is passed to mkdocs build."
-                 "(site_dir: '{}', docs_dir: '{}')"
-                 ).format(config['site_dir'], config['docs_dir']))
-        elif (config['site_dir'] + os.sep).startswith(config['docs_dir'].rstrip(os.sep) + os.sep):
+                f"The 'docs_dir' should not be within the 'site_dir' as this "
+                f"can mean the source files are overwritten by the output or "
+                f"it will be deleted if --clean is passed to mkdocs build."
+                f"(site_dir: '{site_dir}', docs_dir: '{docs_dir}')"
+            )
+        elif (site_dir + os.sep).startswith(docs_dir.rstrip(os.sep) + os.sep):
             raise ValidationError(
-                ("The 'site_dir' should not be within the 'docs_dir' as this "
-                 "leads to the build directory being copied into itself and "
-                 "duplicate nested files in the 'site_dir'."
-                 "(site_dir: '{}', docs_dir: '{}')"
-                 ).format(config['site_dir'], config['docs_dir']))
+                f"The 'site_dir' should not be within the 'docs_dir' as this "
+                f"leads to the build directory being copied into itself and "
+                f"duplicate nested files in the 'site_dir'."
+                f"(site_dir: '{site_dir}', docs_dir: '{docs_dir}')"
+            )
 
 
 class Theme(BaseConfigOption):
@@ -505,13 +516,17 @@ class Theme(BaseConfigOption):
 
             raise ValidationError("No theme name set.")
 
-        raise ValidationError(f'Invalid type "{type(value)}". Expected a string or key/value pairs.')
+        raise ValidationError(
+            f'Invalid type "{type(value)}". Expected a string or key/value pairs.'
+        )
 
     def post_validation(self, config, key_name):
         theme_config = config[key_name]
 
         if not theme_config['name'] and 'custom_dir' not in theme_config:
-            raise ValidationError("At least one of 'theme.name' or 'theme.custom_dir' must be defined.")
+            raise ValidationError(
+                "At least one of 'theme.name' or 'theme.custom_dir' must be defined."
+            )
 
         # Ensure custom_dir is an absolute path
         if 'custom_dir' in theme_config and not os.path.isabs(theme_config['custom_dir']):
@@ -519,8 +534,11 @@ class Theme(BaseConfigOption):
             theme_config['custom_dir'] = os.path.join(config_dir, theme_config['custom_dir'])
 
         if 'custom_dir' in theme_config and not os.path.isdir(theme_config['custom_dir']):
-            raise ValidationError("The path set in {name}.custom_dir ('{path}') does not exist.".
-                                  format(path=theme_config['custom_dir'], name=key_name))
+            raise ValidationError(
+                "The path set in {name}.custom_dir ('{path}') does not exist.".format(
+                    path=theme_config['custom_dir'], name=key_name
+                )
+            )
 
         if 'locale' in theme_config and not isinstance(theme_config['locale'], str):
             raise ValidationError(f"'{theme_config['name']}.locale' must be a string.")
@@ -557,11 +575,15 @@ class Nav(OptionallyRequired):
             pass
         elif isinstance(value, dict):
             if len(value) != 1:
-                raise ValidationError(f"Expected nav item to be a dict of size 1, got {self._repr_item(value)}")
+                raise ValidationError(
+                    f"Expected nav item to be a dict of size 1, got {self._repr_item(value)}"
+                )
             for subnav in value.values():
                 self.run_validation(subnav, top=False)
         else:
-            raise ValidationError(f"Expected nav item to be a string or dict, got {self._repr_item(value)}")
+            raise ValidationError(
+                f"Expected nav item to be a string or dict, got {self._repr_item(value)}"
+            )
 
     @classmethod
     def _repr_item(cls, value):
@@ -593,7 +615,8 @@ class MarkdownExtensions(OptionallyRequired):
     a dict item must be a valid Markdown extension name and the value must be a dict of config
     options for that extension. Extension configs are set on the private setting passed to
     `configkey`. The `builtins` keyword accepts a list of extensions which cannot be overridden by
-    the user. However, builtins can be duplicated to define config options for them if desired. """
+    the user. However, builtins can be duplicated to define config options for them if desired."""
+
     def __init__(self, builtins=None, configkey='mdx_configs', **kwargs):
         super().__init__(**kwargs)
         self.builtins = builtins or []
@@ -645,7 +668,9 @@ class MarkdownExtensions(OptionallyRequired):
                     stack.insert(0, frame)
                 tb = ''.join(traceback.format_list(stack))
 
-                raise ValidationError(f"Failed to load extension '{ext}'.\n{tb}{type(e).__name__}: {e}")
+                raise ValidationError(
+                    f"Failed to load extension '{ext}'.\n{tb}{type(e).__name__}: {e}"
+                )
 
         return extensions
 
@@ -703,15 +728,13 @@ class Plugins(OptionallyRequired):
         if not issubclass(Plugin, plugins.BasePlugin):
             raise ValidationError(
                 f'{Plugin.__module__}.{Plugin.__name__} must be a subclass of'
-                f' {plugins.BasePlugin.__module__}.{plugins.BasePlugin.__name__}')
+                f' {plugins.BasePlugin.__module__}.{plugins.BasePlugin.__name__}'
+            )
 
         plugin = Plugin()
         errors, warnings = plugin.load_config(config, self.config_file_path)
         self.warnings.extend(warnings)
-        errors_message = '\n'.join(
-            f"Plugin '{name}' value: '{x}'. Error: {y}"
-            for x, y in errors
-        )
+        errors_message = '\n'.join(f"Plugin '{name}' value: '{x}'. Error: {y}" for x, y in errors)
         if errors_message:
             raise ValidationError(errors_message)
         return plugin

@@ -9,7 +9,6 @@ from mkdocs.config.base import ValidationError
 
 
 class LocalizationTests(unittest.TestCase):
-
     def setUp(self):
         self.env = unittest.mock.Mock()
 
@@ -42,7 +41,9 @@ class LocalizationTests(unittest.TestCase):
     def test_translations_found(self, tdir):
         translations = unittest.mock.Mock()
 
-        with unittest.mock.patch('mkdocs.localization.Translations.load', return_value=translations):
+        with unittest.mock.patch(
+            'mkdocs.localization.Translations.load', return_value=translations
+        ):
             install_translations(self.env, parse_locale('en'), [tdir])
 
         self.env.install_gettext_translations.assert_called_once_with(translations)

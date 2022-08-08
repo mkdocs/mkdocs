@@ -38,11 +38,13 @@ class ConfigTests(unittest.TestCase):
             config.load_config(config_file='/path/that/is/not/real')
 
     def test_invalid_config(self):
-        file_contents = dedent("""
-        - ['index.md', 'Introduction']
-        - ['index.md', 'Introduction']
-        - ['index.md', 'Introduction']
-        """)
+        file_contents = dedent(
+            """
+            - ['index.md', 'Introduction']
+            - ['index.md', 'Introduction']
+            - ['index.md', 'Introduction']
+            """
+        )
         config_file = tempfile.NamedTemporaryFile('w', delete=False)
         try:
             config_file.write(file_contents)
@@ -61,15 +63,15 @@ class ConfigTests(unittest.TestCase):
         """
         expected_result = {
             'site_name': 'Example',
-            'nav': [
-                {'Introduction': 'index.md'}
-            ],
+            'nav': [{'Introduction': 'index.md'}],
         }
-        file_contents = dedent("""
-        site_name: Example
-        nav:
-        - 'Introduction': 'index.md'
-        """)
+        file_contents = dedent(
+            """
+            site_name: Example
+            nav:
+            - 'Introduction': 'index.md'
+            """
+        )
         with TemporaryDirectory() as temp_path:
             os.mkdir(os.path.join(temp_path, 'docs'))
             config_path = os.path.join(temp_path, 'mkdocs.yml')
@@ -90,16 +92,18 @@ class ConfigTests(unittest.TestCase):
                 {"theme": "readthedocs"},  # builtin theme
                 {"theme": {'name': 'readthedocs'}},  # builtin as complex
                 {"theme": {'name': None, 'custom_dir': mytheme}},  # custom only as complex
-                {"theme": {'name': 'readthedocs', 'custom_dir': custom}},  # builtin and custom as complex
+                {
+                    "theme": {'name': 'readthedocs', 'custom_dir': custom}
+                },  # builtin and custom as complex
                 {  # user defined variables
                     'theme': {
                         'name': 'mkdocs',
                         'locale': 'fr',
                         'static_templates': ['foo.html'],
                         'show_sidebar': False,
-                        'some_var': 'bar'
+                        'some_var': 'bar',
                     }
-                }
+                },
             ]
 
             mkdocs_dir = os.path.abspath(os.path.dirname(mkdocs.__file__))
@@ -120,9 +124,10 @@ class ConfigTests(unittest.TestCase):
                         'hljs_languages': [],
                         'navigation_depth': 2,
                         'nav_style': 'primary',
-                        'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83}
-                    }
-                }, {
+                        'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83},
+                    },
+                },
+                {
                     'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],
                     'vars': {
@@ -138,9 +143,10 @@ class ConfigTests(unittest.TestCase):
                         'sticky_navigation': True,
                         'logo': None,
                         'titles_only': False,
-                        'collapse_navigation': True
-                    }
-                }, {
+                        'collapse_navigation': True,
+                    },
+                },
+                {
                     'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],
                     'vars': {
@@ -156,13 +162,15 @@ class ConfigTests(unittest.TestCase):
                         'sticky_navigation': True,
                         'logo': None,
                         'titles_only': False,
-                        'collapse_navigation': True
-                    }
-                }, {
+                        'collapse_navigation': True,
+                    },
+                },
+                {
                     'dirs': [mytheme, mkdocs_templates_dir],
                     'static_templates': ['sitemap.xml'],
-                    'vars': {'locale': parse_locale('en')}
-                }, {
+                    'vars': {'locale': parse_locale('en')},
+                },
+                {
                     'dirs': [custom, os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml'],
                     'vars': {
@@ -178,9 +186,10 @@ class ConfigTests(unittest.TestCase):
                         'sticky_navigation': True,
                         'logo': None,
                         'titles_only': False,
-                        'collapse_navigation': True
-                    }
-                }, {
+                        'collapse_navigation': True,
+                    },
+                },
+                {
                     'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
                     'static_templates': ['404.html', 'sitemap.xml', 'foo.html'],
                     'vars': {
@@ -195,9 +204,9 @@ class ConfigTests(unittest.TestCase):
                         'hljs_languages': [],
                         'navigation_depth': 2,
                         'nav_style': 'primary',
-                        'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83}
-                    }
-                }
+                        'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83},
+                    },
+                },
             )
 
             for config_contents, result in zip(configs, results):
@@ -212,25 +221,29 @@ class ConfigTests(unittest.TestCase):
 
     def test_empty_nav(self):
         conf = config.Config(schema=defaults.get_schema())
-        conf.load_dict({
-            'site_name': 'Example',
-            'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml')
-        })
+        conf.load_dict(
+            {
+                'site_name': 'Example',
+                'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
+            }
+        )
         conf.validate()
         self.assertEqual(conf['nav'], None)
 
     def test_error_on_pages(self):
         conf = config.Config(schema=defaults.get_schema())
-        conf.load_dict({
-            'site_name': 'Example',
-            'pages': ['index.md', 'about.md'],
-        })
+        conf.load_dict(
+            {
+                'site_name': 'Example',
+                'pages': ['index.md', 'about.md'],
+            }
+        )
         errors, warnings = conf.validate()
         self.assertEqual(warnings, [])
         self.assertEqual(len(errors), 1)
         self.assertEqual(
             str(errors[0][1]),
-            "The configuration option 'pages' was removed from MkDocs. Use 'nav' instead."
+            "The configuration option 'pages' was removed from MkDocs. Use 'nav' instead.",
         )
 
     def test_doc_dir_in_site_dir(self):
@@ -247,7 +260,7 @@ class ConfigTests(unittest.TestCase):
         )
 
         conf = {
-            'config_file_path': j(os.path.abspath('..'), 'mkdocs.yml')
+            'config_file_path': j(os.path.abspath('..'), 'mkdocs.yml'),
         }
 
         for test_config in test_configs:
@@ -256,11 +269,13 @@ class ConfigTests(unittest.TestCase):
             patch.update(test_config)
 
             # Same as the default schema, but don't verify the docs_dir exists.
-            c = config.Config(schema=(
-                ('docs_dir', config_options.Dir(default='docs')),
-                ('site_dir', config_options.SiteDir(default='site')),
-                ('config_file_path', config_options.Type(str))
-            ))
+            c = config.Config(
+                schema=(
+                    ('docs_dir', config_options.Dir(default='docs')),
+                    ('site_dir', config_options.SiteDir(default='site')),
+                    ('config_file_path', config_options.Type(str)),
+                )
+            )
             c.load_dict(patch)
 
             errors, warnings = c.validate()
@@ -277,12 +292,14 @@ class ConfigTests(unittest.TestCase):
     def test_subconfig_with_multiple_items(self):
         # This had a bug where subsequent items would get merged into the same dict.
         conf = config.Config(schema=self.SUBCONFIG_TEST_SCHEMA)
-        conf.load_dict({
-            'items': [
-                {'value': 'a'},
-                {'value': 'b'},
-            ]
-        })
+        conf.load_dict(
+            {
+                'items': [
+                    {'value': 'a'},
+                    {'value': 'b'},
+                ]
+            }
+        )
         conf.validate()
         self.assertEqual(conf['items'], [{'value': 'a'}, {'value': 'b'}])
 

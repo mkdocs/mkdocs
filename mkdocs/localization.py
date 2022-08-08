@@ -7,9 +7,11 @@ from mkdocs.config.base import ValidationError
 try:
     from babel.core import Locale, UnknownLocaleError
     from babel.support import Translations, NullTranslations
+
     has_babel = True
 except ImportError:  # pragma: no cover
     from mkdocs.utils.babel_stub import Locale, UnknownLocaleError
+
     has_babel = False
 
 

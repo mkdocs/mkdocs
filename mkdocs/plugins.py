@@ -15,14 +15,28 @@ log = logging.getLogger('mkdocs.plugins')
 
 
 EVENTS = (
-    'config', 'pre_build', 'files', 'nav', 'env', 'pre_template', 'template_context',
-    'post_template', 'pre_page', 'page_read_source', 'page_markdown',
-    'page_content', 'page_context', 'post_page', 'post_build', 'serve', 'build_error'
+    'config',
+    'pre_build',
+    'files',
+    'nav',
+    'env',
+    'pre_template',
+    'template_context',
+    'post_template',
+    'pre_page',
+    'page_read_source',
+    'page_markdown',
+    'page_content',
+    'page_context',
+    'post_page',
+    'post_build',
+    'serve',
+    'build_error',
 )
 
 
 def get_plugins():
-    """ Return a dict of all installed Plugins as {name: EntryPoint}. """
+    """Return a dict of all installed Plugins as {name: EntryPoint}."""
 
     plugins = importlib_metadata.entry_points(group='mkdocs.plugins')
 
@@ -48,7 +62,7 @@ class BasePlugin:
     config = {}
 
     def load_config(self, options, config_file_path=None):
-        """ Load config from a dict of options. Returns a tuple of (errors, warnings)."""
+        """Load config from a dict of options. Returns a tuple of (errors, warnings)."""
 
         self.config = Config(schema=self.config_scheme, config_file_path=config_file_path)
         self.config.load_dict(options)
@@ -70,7 +84,7 @@ class PluginCollection(OrderedDict):
         self.events = {x: [] for x in EVENTS}
 
     def _register_event(self, event_name, method):
-        """ Register a method for an event. """
+        """Register a method for an event."""
         self.events[event_name].append(method)
 
     def __setitem__(self, key, value, **kwargs):
@@ -78,7 +92,8 @@ class PluginCollection(OrderedDict):
             raise TypeError(
                 f'{self.__module__}.{self.__name__} only accepts values which'
                 f' are instances of {BasePlugin.__module__}.{BasePlugin.__name__}'
-                ' subclasses')
+                ' subclasses'
+            )
         super().__setitem__(key, value, **kwargs)
         # Register all of the event methods defined for this Plugin.
         for event_name in (x for x in dir(value) if x.startswith('on_')):

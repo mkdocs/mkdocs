@@ -36,6 +36,7 @@ Extracts, parses and transforms MultiMarkdown style data from documents.
 
 import re
 import yaml
+
 try:
     from yaml import CSafeLoader as SafeLoader
 except ImportError:  # pragma: no cover
@@ -64,7 +65,7 @@ def get_data(doc):
         try:
             data = yaml.load(m.group(1), SafeLoader)
             if isinstance(data, dict):
-                doc = doc[m.end():].lstrip('\n')
+                doc = doc[m.end() :].lstrip('\n')
             else:
                 data = {}
         except Exception:
