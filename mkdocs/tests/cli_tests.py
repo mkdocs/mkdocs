@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
+import io
+import logging
 import unittest
 from unittest import mock
-import logging
-import io
 
 from click.testing import CliRunner
 

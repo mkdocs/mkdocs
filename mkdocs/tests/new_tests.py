@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
+import os
 import tempfile
 import unittest
-import os
 
 from mkdocs.commands import new
 

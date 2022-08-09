@@ -1,7 +1,7 @@
-import os
 import logging
-from urllib.parse import urlsplit, urlunsplit, urljoin
+import os
 from urllib.parse import unquote as urlunquote
+from urllib.parse import urljoin, urlsplit, urlunsplit
 
 import markdown
 from markdown.extensions import Extension
@@ -9,7 +9,7 @@ from markdown.treeprocessors import Treeprocessor
 from markdown.util import AMP_SUBSTITUTE
 
 from mkdocs.structure.toc import get_toc
-from mkdocs.utils import meta, get_build_date, get_markdown_title
+from mkdocs.utils import get_build_date, get_markdown_title, meta
 
 log = logging.getLogger(__name__)
 

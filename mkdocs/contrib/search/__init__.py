@@ -1,10 +1,10 @@
-import os
 import logging
+import os
+
 from mkdocs import utils
-from mkdocs.plugins import BasePlugin
 from mkdocs.config import config_options
 from mkdocs.contrib.search.search_index import SearchIndex
-
+from mkdocs.plugins import BasePlugin
 
 log = logging.getLogger(__name__)
 base_path = os.path.dirname(os.path.abspath(__file__))

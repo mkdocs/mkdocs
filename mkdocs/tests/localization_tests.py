@@ -3,9 +3,9 @@
 
 import unittest
 
+from mkdocs.config.base import ValidationError
 from mkdocs.localization import install_translations, parse_locale
 from mkdocs.tests.base import tempdir
-from mkdocs.config.base import ValidationError
 
 
 class LocalizationTests(unittest.TestCase):

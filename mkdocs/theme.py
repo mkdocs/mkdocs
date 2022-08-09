@@ -1,11 +1,11 @@
-import os
-import jinja2
 import logging
+import os
 
-from mkdocs import utils
-from mkdocs.utils import filters
+import jinja2
+
+from mkdocs import localization, utils
 from mkdocs.config.base import ValidationError
-from mkdocs import localization
+from mkdocs.utils import filters
 
 log = logging.getLogger(__name__)
 

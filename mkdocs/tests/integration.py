@@ -15,10 +15,11 @@ TODOs
 """
 
 
-import click
 import logging
 import os
 import subprocess
+
+import click
 
 from mkdocs import utils
 

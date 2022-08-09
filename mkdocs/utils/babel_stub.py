@@ -1,5 +1,5 @@
-from typing import NamedTuple
 from string import ascii_letters
+from typing import NamedTuple
 
 
 class UnknownLocaleError(Exception):

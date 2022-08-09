@@ -1,18 +1,16 @@
 #!/usr/bin/env python
 
-import os
-import sys
 import logging
-import click
-import textwrap
+import os
 import shutil
-import warnings
+import sys
+import textwrap
 import traceback
+import warnings
 
-from mkdocs import __version__
-from mkdocs import utils
-from mkdocs import config
+import click
 
+from mkdocs import __version__, config, utils
 
 if sys.platform.startswith("win"):
     try:

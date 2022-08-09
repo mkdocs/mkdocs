@@ -1,11 +1,12 @@
 import logging
-import subprocess
 import os
 import re
+import subprocess
+
+import ghp_import
 from packaging import version
 
 import mkdocs
-import ghp_import
 from mkdocs.exceptions import Abort
 
 log = logging.getLogger(__name__)

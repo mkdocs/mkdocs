@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 
+import json
 import unittest
 from unittest import mock
-import json
 
+from mkdocs.config.config_options import ValidationError
+from mkdocs.contrib import search
+from mkdocs.contrib.search import search_index
 from mkdocs.structure.files import File
 from mkdocs.structure.pages import Page
 from mkdocs.structure.toc import get_toc
-from mkdocs.contrib import search
-from mkdocs.contrib.search import search_index
-from mkdocs.config.config_options import ValidationError
 from mkdocs.tests.base import dedent, get_markdown_toc, load_config
 
 

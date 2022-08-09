@@ -1,10 +1,9 @@
 import fnmatch
-import os
 import logging
+import os
 from urllib.parse import quote as urlquote
 
 from mkdocs import utils
-
 
 log = logging.getLogger(__name__)
 

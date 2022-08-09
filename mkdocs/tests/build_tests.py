@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 
-from unittest import mock
 import unittest
+from unittest import mock
 
+from mkdocs.commands import build
 from mkdocs.exceptions import PluginError
-from mkdocs.structure.pages import Page
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.nav import get_navigation
-from mkdocs.commands import build
-from mkdocs.tests.base import load_config, tempdir, PathAssertionMixin
+from mkdocs.structure.pages import Page
+from mkdocs.tests.base import PathAssertionMixin, load_config, tempdir
 from mkdocs.utils import meta
 
 

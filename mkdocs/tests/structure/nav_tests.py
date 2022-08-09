@@ -3,8 +3,8 @@
 import sys
 import unittest
 
-from mkdocs.structure.nav import get_navigation, _get_by_type, Section
 from mkdocs.structure.files import File, Files
+from mkdocs.structure.nav import Section, _get_by_type, get_navigation
 from mkdocs.structure.pages import Page
 from mkdocs.tests.base import dedent, load_config
 

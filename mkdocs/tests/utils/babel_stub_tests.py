@@ -1,4 +1,5 @@
 import unittest
+
 from mkdocs.utils.babel_stub import Locale, UnknownLocaleError
 
 

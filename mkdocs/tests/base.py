@@ -1,11 +1,11 @@
-import textwrap
-import markdown
 import os
+import textwrap
 from functools import wraps
 from tempfile import TemporaryDirectory
 
-from mkdocs import config
-from mkdocs import utils
+import markdown
+
+from mkdocs import config, utils
 from mkdocs.config import defaults as config_defaults
 
 

@@ -7,8 +7,7 @@ from tempfile import TemporaryDirectory
 
 import mkdocs
 from mkdocs import config
-from mkdocs.config import config_options
-from mkdocs.config import defaults
+from mkdocs.config import config_options, defaults
 from mkdocs.exceptions import ConfigurationError
 from mkdocs.localization import parse_locale
 from mkdocs.tests.base import dedent

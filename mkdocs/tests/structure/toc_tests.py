@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import unittest
+
 from mkdocs.structure.toc import get_toc
 from mkdocs.tests.base import dedent, get_markdown_toc
 
