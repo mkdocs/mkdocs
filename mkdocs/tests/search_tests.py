@@ -449,34 +449,34 @@ class SearchIndexTests(unittest.TestCase):
             test_page.toc = get_toc(get_markdown_toc(test_page.markdown))
             return test_page
 
-        validate = {
-            'full': (
-                lambda data: self.assertEqual(len(data[0]), 4)
-                and self.assertTrue([x for x in data[0][0] if x['title'] and x['text']])
-            ),
-            'sections': (
-                lambda data:
-                # Sanity
-                self.assertEqual(len(data[0]), 4)
-                and
-                # Page
-                (
-                    self.assertEqual(data[0][0]['title'], data[1].title)
-                    and self.assertTrue(data[0][0]['text'])
-                )
-                and
-                # Headings
-                self.assertTrue([x for x in data[0][1:] if x['title'] and not x['text']])
-            ),
-            'titles': (
-                lambda data:
-                # Sanity
-                self.assertEqual(len(data[0]), 1)
-                and self.assertFalse([x for x in data[0] if x['text']])
-            ),
-        }
+        def validate_full(data, page):
+            self.assertEqual(len(data), 4)
+            for x in data:
+                self.assertTrue(x['title'])
+                self.assertTrue(x['text'])
 
-        for option in ['full', 'sections', 'titles']:
+        def validate_sections(data, page):
+            # Sanity
+            self.assertEqual(len(data), 4)
+            # Page
+            self.assertEqual(data[0]['title'], page.title)
+            self.assertFalse(data[0]['text'])
+            # Headings
+            for x in data[1:]:
+                self.assertTrue(x['title'])
+                self.assertFalse(x['text'])
+
+        def validate_titles(data, page):
+            # Sanity
+            self.assertEqual(len(data), 1)
+            for x in data:
+                self.assertFalse(x['text'])
+
+        for option, validate in {
+            'full': validate_full,
+            'sections': validate_sections,
+            'titles': validate_titles,
+        }.items():
             plugin = search.SearchPlugin()
 
             # Load plugin config, overriding indexing for test case
@@ -496,7 +496,7 @@ class SearchIndexTests(unittest.TestCase):
                 index = search_index.SearchIndex(**plugin.config)
                 index.add_entry_from_context(page)
                 data = index.generate_search_index()
-                validate[option]((json.loads(data)['docs'], page))
+                validate(json.loads(data)['docs'], page)
 
     @mock.patch('subprocess.Popen', autospec=True)
     def test_prebuild_index(self, mock_popen):
