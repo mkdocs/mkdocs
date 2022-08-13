@@ -515,9 +515,7 @@ class PageTests(unittest.TestCase):
         for i, c in enumerate(configs):
             c['docs_dir'] = self.DOCS_DIR
             cfg = load_config(**c)
-            fl = File(
-                'sub1/non-index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']
-            )
+            fl = File(file_src_path, cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
             pg = Page('Foo', fl, cfg)
             self.assertEqual(pg.url, 'sub1/non-index/')
             self.assertEqual(pg.edit_url, expected[i])
