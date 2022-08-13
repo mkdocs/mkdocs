@@ -419,9 +419,9 @@ class URLTest(TestCase):
 
 class RepoURLTest(TestCase):
     class Schema:
-        repo_url = config_options.RepoURL()
-        repo_name = config_options.Type(str)
-        edit_uri = config_options.Type(str)
+        repo_url = config_options.URL()
+        repo_name = config_options.RepoName('repo_url')
+        edit_uri = config_options.EditURI('repo_url')
 
     def test_repo_name_github(self):
         config = self.get_config(
@@ -479,7 +479,7 @@ class RepoURLTest(TestCase):
             self.Schema,
             {'repo_url': "https://launchpad.net/python-tuskarclient"},
         )
-        self.assertEqual(config.get('edit_uri'), '')
+        self.assertEqual(config.get('edit_uri'), None)
         self.assertEqual(config['repo_url'], "https://launchpad.net/python-tuskarclient")
 
     def test_repo_name_custom_and_empty_edit_uri(self):

@@ -5,6 +5,7 @@ import os
 import sys
 import traceback
 import typing as t
+import warnings
 from typing import NamedTuple
 from urllib.parse import urlsplit, urlunsplit
 
@@ -347,12 +348,11 @@ class URL(OptionallyRequired):
 
 
 class RepoURL(URL):
-    """
-    Repo URL Config Option
-
-    A small extension to the URL config that sets the repo_name and edit_uri,
-    based on the url if they haven't already been provided.
-    """
+    def __init__(self, *args, **kwargs):
+        warnings.warn(
+            "RepoURL is no longer used in MkDocs and will be removed.", DeprecationWarning
+        )
+        super().__init__(*args, **kwargs)
 
     def post_validation(self, config, key_name):
         repo_host = urlsplit(config['repo_url']).netloc.lower()
@@ -383,6 +383,52 @@ class RepoURL(URL):
             edit_uri += '/'
 
         config['edit_uri'] = edit_uri
+
+
+class EditURI(Type):
+    def __init__(self, repo_url_key):
+        super().__init__(str)
+        self.repo_url_key = repo_url_key
+
+    def post_validation(self, config, key_name):
+        edit_uri = config.get(key_name)
+        repo_url = config.get(self.repo_url_key)
+
+        if edit_uri is None and repo_url is not None:
+            repo_host = urlsplit(repo_url).netloc.lower()
+            if repo_host == 'github.com' or repo_host == 'gitlab.com':
+                edit_uri = 'edit/master/docs/'
+            elif repo_host == 'bitbucket.org':
+                edit_uri = 'src/default/docs/'
+
+        # ensure a well-formed edit_uri
+        if edit_uri and not edit_uri.endswith('/'):
+            edit_uri += '/'
+
+        config[key_name] = edit_uri
+
+
+class RepoName(Type):
+    def __init__(self, repo_url_key):
+        super().__init__(str)
+        self.repo_url_key = repo_url_key
+
+    def post_validation(self, config, key_name):
+        repo_name = config.get(key_name)
+        repo_url = config.get(self.repo_url_key)
+
+        # derive repo_name from repo_url if unset
+        if repo_url is not None and repo_name is None:
+            repo_host = urlsplit(config['repo_url']).netloc.lower()
+            if repo_host == 'github.com':
+                repo_name = 'GitHub'
+            elif repo_host == 'bitbucket.org':
+                repo_name = 'Bitbucket'
+            elif repo_host == 'gitlab.com':
+                repo_name = 'GitLab'
+            else:
+                repo_name = repo_host.split('.')[0].title()
+            config[key_name] = repo_name
 
 
 class FilesystemObject(Type):
