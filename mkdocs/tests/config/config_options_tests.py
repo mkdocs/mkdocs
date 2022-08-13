@@ -564,8 +564,9 @@ class SiteDirTest(unittest.TestCase):
         )
 
         for test_config in test_configs:
-            with self.assertRaises(config_options.ValidationError):
-                self.validate_config(test_config)
+            with self.subTest(test_config):
+                with self.assertRaises(config_options.ValidationError):
+                    self.validate_config(test_config)
 
     def test_site_dir_in_docs_dir(self):
 
@@ -579,8 +580,9 @@ class SiteDirTest(unittest.TestCase):
         )
 
         for test_config in test_configs:
-            with self.assertRaises(config_options.ValidationError):
-                self.validate_config(test_config)
+            with self.subTest(test_config):
+                with self.assertRaises(config_options.ValidationError):
+                    self.validate_config(test_config)
 
     def test_common_prefix(self):
         """Legitimate settings with common prefixes should not fail validation."""
@@ -591,7 +593,8 @@ class SiteDirTest(unittest.TestCase):
         )
 
         for test_config in test_configs:
-            assert self.validate_config(test_config)
+            with self.subTest(test_config):
+                assert self.validate_config(test_config)
 
 
 class ThemeTest(unittest.TestCase):

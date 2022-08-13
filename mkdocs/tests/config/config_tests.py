@@ -209,14 +209,14 @@ class ConfigTests(unittest.TestCase):
             )
 
             for config_contents, result in zip(configs, results):
-
-                c = config.Config(schema=(('theme', config_options.Theme(default='mkdocs')),))
-                c.load_dict(config_contents)
-                errors, warnings = c.validate()
-                self.assertEqual(len(errors), 0)
-                self.assertEqual(c['theme'].dirs, result['dirs'])
-                self.assertEqual(c['theme'].static_templates, set(result['static_templates']))
-                self.assertEqual({k: c['theme'][k] for k in iter(c['theme'])}, result['vars'])
+                with self.subTest(config_contents):
+                    c = config.Config(schema=(('theme', config_options.Theme(default='mkdocs')),))
+                    c.load_dict(config_contents)
+                    errors, warnings = c.validate()
+                    self.assertEqual(len(errors), 0)
+                    self.assertEqual(c['theme'].dirs, result['dirs'])
+                    self.assertEqual(c['theme'].static_templates, set(result['static_templates']))
+                    self.assertEqual({k: c['theme'][k] for k in iter(c['theme'])}, result['vars'])
 
     def test_empty_nav(self):
         conf = config.Config(schema=defaults.get_schema())
@@ -263,24 +263,24 @@ class ConfigTests(unittest.TestCase):
         }
 
         for test_config in test_configs:
+            with self.subTest(test_config):
+                patch = conf.copy()
+                patch.update(test_config)
 
-            patch = conf.copy()
-            patch.update(test_config)
-
-            # Same as the default schema, but don't verify the docs_dir exists.
-            c = config.Config(
-                schema=(
-                    ('docs_dir', config_options.Dir(default='docs')),
-                    ('site_dir', config_options.SiteDir(default='site')),
-                    ('config_file_path', config_options.Type(str)),
+                # Same as the default schema, but don't verify the docs_dir exists.
+                c = config.Config(
+                    schema=(
+                        ('docs_dir', config_options.Dir(default='docs')),
+                        ('site_dir', config_options.SiteDir(default='site')),
+                        ('config_file_path', config_options.Type(str)),
+                    )
                 )
-            )
-            c.load_dict(patch)
+                c.load_dict(patch)
 
-            errors, warnings = c.validate()
+                errors, warnings = c.validate()
 
-            self.assertEqual(len(errors), 1)
-            self.assertEqual(warnings, [])
+                self.assertEqual(len(errors), 1)
+                self.assertEqual(warnings, [])
 
     SUBCONFIG_TEST_SCHEMA = {
         "items": mkdocs.config.config_options.ConfigItems(

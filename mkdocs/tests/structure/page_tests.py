@@ -430,95 +430,143 @@ class PageTests(unittest.TestCase):
             self.assertEqual(pg.meta, {})
 
     def test_page_edit_url(self):
-        configs = [
-            {'repo_url': 'http://github.com/mkdocs/mkdocs'},
-            {'repo_url': 'https://github.com/mkdocs/mkdocs/'},
-            {'repo_url': 'http://example.com'},
-            {'repo_url': 'http://example.com', 'edit_uri': 'edit/master'},
-            {'repo_url': 'http://example.com', 'edit_uri': '/edit/master'},
-            {'repo_url': 'http://example.com/foo/', 'edit_uri': '/edit/master/'},
-            {'repo_url': 'http://example.com/foo', 'edit_uri': '/edit/master/'},
-            {'repo_url': 'http://example.com/foo/', 'edit_uri': '/edit/master'},
-            {'repo_url': 'http://example.com/foo/', 'edit_uri': 'edit/master/'},
-            {'repo_url': 'http://example.com/foo', 'edit_uri': 'edit/master/'},
-            {'repo_url': 'http://example.com', 'edit_uri': '?query=edit/master'},
-            {'repo_url': 'http://example.com/', 'edit_uri': '?query=edit/master/'},
-            {'repo_url': 'http://example.com', 'edit_uri': '#edit/master'},
-            {'repo_url': 'http://example.com/', 'edit_uri': '#edit/master/'},
-            {'repo_url': 'http://example.com', 'edit_uri': ''},  # Set to blank value
-            {
-                # Nothing defined
-            },
-        ]
-
-        expected = [
-            'http://github.com/mkdocs/mkdocs/edit/master/docs/testing.md',
-            'https://github.com/mkdocs/mkdocs/edit/master/docs/testing.md',
-            None,
-            'http://example.com/edit/master/testing.md',
-            'http://example.com/edit/master/testing.md',
-            'http://example.com/edit/master/testing.md',
-            'http://example.com/edit/master/testing.md',
-            'http://example.com/edit/master/testing.md',
-            'http://example.com/foo/edit/master/testing.md',
-            'http://example.com/foo/edit/master/testing.md',
-            'http://example.com?query=edit/master/testing.md',
-            'http://example.com/?query=edit/master/testing.md',
-            'http://example.com#edit/master/testing.md',
-            'http://example.com/#edit/master/testing.md',
-            None,
-            None,
-        ]
-
-        for i, c in enumerate(configs):
-            cfg = load_config(**c)
-            fl = File('testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
-            pg = Page('Foo', fl, cfg)
-            self.assertEqual(pg.url, 'testing/')
-            self.assertEqual(pg.edit_url, expected[i])
+        for case in [
+            dict(
+                config={'repo_url': 'http://github.com/mkdocs/mkdocs'},
+                edit_url='http://github.com/mkdocs/mkdocs/edit/master/docs/testing.md',
+            ),
+            dict(
+                config={'repo_url': 'https://github.com/mkdocs/mkdocs/'},
+                edit_url='https://github.com/mkdocs/mkdocs/edit/master/docs/testing.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com'},
+                edit_url=None,
+            ),
+            dict(
+                config={'repo_url': 'http://example.com', 'edit_uri': 'edit/master'},
+                edit_url='http://example.com/edit/master/testing.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com', 'edit_uri': '/edit/master'},
+                edit_url='http://example.com/edit/master/testing.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com/foo/', 'edit_uri': '/edit/master/'},
+                edit_url='http://example.com/edit/master/testing.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com/foo', 'edit_uri': '/edit/master/'},
+                edit_url='http://example.com/edit/master/testing.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com/foo/', 'edit_uri': '/edit/master'},
+                edit_url='http://example.com/edit/master/testing.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com/foo/', 'edit_uri': 'edit/master/'},
+                edit_url='http://example.com/foo/edit/master/testing.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com/foo', 'edit_uri': 'edit/master/'},
+                edit_url='http://example.com/foo/edit/master/testing.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com', 'edit_uri': '?query=edit/master'},
+                edit_url='http://example.com?query=edit/master/testing.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com/', 'edit_uri': '?query=edit/master/'},
+                edit_url='http://example.com/?query=edit/master/testing.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com', 'edit_uri': '#edit/master'},
+                edit_url='http://example.com#edit/master/testing.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com/', 'edit_uri': '#edit/master/'},
+                edit_url='http://example.com/#edit/master/testing.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com', 'edit_uri': ''},  # Set to blank value
+                edit_url=None,
+            ),
+            dict(config={}, edit_url=None),  # Nothing defined
+        ]:
+            with self.subTest(case['config']):
+                cfg = load_config(**case['config'])
+                fl = File('testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+                pg = Page('Foo', fl, cfg)
+                self.assertEqual(pg.url, 'testing/')
+                self.assertEqual(pg.edit_url, case['edit_url'])
 
     def test_nested_page_edit_url(self, file_src_path='sub1/non-index.md'):
-        configs = [
-            {'repo_url': 'http://github.com/mkdocs/mkdocs'},
-            {'repo_url': 'https://github.com/mkdocs/mkdocs/'},
-            {'repo_url': 'http://example.com'},
-            {'repo_url': 'http://example.com', 'edit_uri': 'edit/master'},
-            {'repo_url': 'http://example.com', 'edit_uri': '/edit/master'},
-            {'repo_url': 'http://example.com/foo/', 'edit_uri': '/edit/master/'},
-            {'repo_url': 'http://example.com/foo', 'edit_uri': '/edit/master/'},
-            {'repo_url': 'http://example.com/foo/', 'edit_uri': '/edit/master'},
-            {'repo_url': 'http://example.com/foo/', 'edit_uri': 'edit/master/'},
-            {'repo_url': 'http://example.com/foo', 'edit_uri': 'edit/master/'},
-            {'repo_url': 'http://example.com', 'edit_uri': '?query=edit/master'},
-            {'repo_url': 'http://example.com/', 'edit_uri': '?query=edit/master/'},
-            {'repo_url': 'http://example.com', 'edit_uri': '#edit/master'},
-            {'repo_url': 'http://example.com/', 'edit_uri': '#edit/master/'},
-        ]
-
-        expected = [
-            'http://github.com/mkdocs/mkdocs/edit/master/docs/sub1/non-index.md',
-            'https://github.com/mkdocs/mkdocs/edit/master/docs/sub1/non-index.md',
-            None,
-            'http://example.com/edit/master/sub1/non-index.md',
-            'http://example.com/edit/master/sub1/non-index.md',
-            'http://example.com/edit/master/sub1/non-index.md',
-            'http://example.com/edit/master/sub1/non-index.md',
-            'http://example.com/edit/master/sub1/non-index.md',
-            'http://example.com/foo/edit/master/sub1/non-index.md',
-            'http://example.com/foo/edit/master/sub1/non-index.md',
-            'http://example.com?query=edit/master/sub1/non-index.md',
-            'http://example.com/?query=edit/master/sub1/non-index.md',
-            'http://example.com#edit/master/sub1/non-index.md',
-            'http://example.com/#edit/master/sub1/non-index.md',
-        ]
-
-        for i, c in enumerate(configs):
-            c['docs_dir'] = self.DOCS_DIR
-            cfg = load_config(**c)
-            fl = File(file_src_path, cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
-            pg = Page('Foo', fl, cfg)
-            self.assertEqual(pg.url, 'sub1/non-index/')
-            self.assertEqual(pg.edit_url, expected[i])
+        for case in [
+            dict(
+                config={'repo_url': 'http://github.com/mkdocs/mkdocs'},
+                edit_url='http://github.com/mkdocs/mkdocs/edit/master/docs/sub1/non-index.md',
+            ),
+            dict(
+                config={'repo_url': 'https://github.com/mkdocs/mkdocs/'},
+                edit_url='https://github.com/mkdocs/mkdocs/edit/master/docs/sub1/non-index.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com'},
+                edit_url=None,
+            ),
+            dict(
+                config={'repo_url': 'http://example.com', 'edit_uri': 'edit/master'},
+                edit_url='http://example.com/edit/master/sub1/non-index.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com', 'edit_uri': '/edit/master'},
+                edit_url='http://example.com/edit/master/sub1/non-index.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com/foo/', 'edit_uri': '/edit/master/'},
+                edit_url='http://example.com/edit/master/sub1/non-index.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com/foo', 'edit_uri': '/edit/master/'},
+                edit_url='http://example.com/edit/master/sub1/non-index.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com/foo/', 'edit_uri': '/edit/master'},
+                edit_url='http://example.com/edit/master/sub1/non-index.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com/foo/', 'edit_uri': 'edit/master/'},
+                edit_url='http://example.com/foo/edit/master/sub1/non-index.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com/foo', 'edit_uri': 'edit/master/'},
+                edit_url='http://example.com/foo/edit/master/sub1/non-index.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com', 'edit_uri': '?query=edit/master'},
+                edit_url='http://example.com?query=edit/master/sub1/non-index.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com/', 'edit_uri': '?query=edit/master/'},
+                edit_url='http://example.com/?query=edit/master/sub1/non-index.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com', 'edit_uri': '#edit/master'},
+                edit_url='http://example.com#edit/master/sub1/non-index.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com/', 'edit_uri': '#edit/master/'},
+                edit_url='http://example.com/#edit/master/sub1/non-index.md',
+            ),
+        ]:
+            with self.subTest(case['config']):
+                cfg = load_config(**case['config'], docs_dir=self.DOCS_DIR)
+                fl = File(
+                    file_src_path, cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']
+                )
+                pg = Page('Foo', fl, cfg)
+                self.assertEqual(pg.url, 'sub1/non-index/')
+                self.assertEqual(pg.edit_url, case['edit_url'])
 
     @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
     def test_nested_page_edit_url_windows(self):

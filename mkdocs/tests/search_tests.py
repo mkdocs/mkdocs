@@ -477,26 +477,27 @@ class SearchIndexTests(unittest.TestCase):
             'sections': validate_sections,
             'titles': validate_titles,
         }.items():
-            plugin = search.SearchPlugin()
+            with self.subTest(option):
+                plugin = search.SearchPlugin()
 
-            # Load plugin config, overriding indexing for test case
-            errors, warnings = plugin.load_config({'indexing': option})
-            self.assertEqual(errors, [])
-            self.assertEqual(warnings, [])
+                # Load plugin config, overriding indexing for test case
+                errors, warnings = plugin.load_config({'indexing': option})
+                self.assertEqual(errors, [])
+                self.assertEqual(warnings, [])
 
-            base_cfg = load_config()
-            base_cfg['plugins']['search'].config['indexing'] = option
+                base_cfg = load_config()
+                base_cfg['plugins']['search'].config['indexing'] = option
 
-            pages = [
-                test_page('Home', 'index.md', base_cfg),
-                test_page('About', 'about.md', base_cfg),
-            ]
+                pages = [
+                    test_page('Home', 'index.md', base_cfg),
+                    test_page('About', 'about.md', base_cfg),
+                ]
 
-            for page in pages:
-                index = search_index.SearchIndex(**plugin.config)
-                index.add_entry_from_context(page)
-                data = index.generate_search_index()
-                validate(json.loads(data)['docs'], page)
+                for page in pages:
+                    index = search_index.SearchIndex(**plugin.config)
+                    index.add_entry_from_context(page)
+                    data = index.generate_search_index()
+                    validate(json.loads(data)['docs'], page)
 
     @mock.patch('subprocess.Popen', autospec=True)
     def test_prebuild_index(self, mock_popen):

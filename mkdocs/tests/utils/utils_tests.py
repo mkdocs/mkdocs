@@ -48,61 +48,64 @@ class UtilsTests(unittest.TestCase):
             'indexmd': False,
         }
         for path, expected_result in expected_results.items():
-            is_markdown = utils.is_markdown_file(path)
-            self.assertEqual(is_markdown, expected_result)
+            with self.subTest(path):
+                is_markdown = utils.is_markdown_file(path)
+                self.assertEqual(is_markdown, expected_result)
 
     def test_get_relative_url(self):
-        expected_results = {
-            ('foo/bar', 'foo'): 'bar',
-            ('foo/bar.txt', 'foo'): 'bar.txt',
-            ('foo', 'foo/bar'): '..',
-            ('foo', 'foo/bar.txt'): '.',
-            ('foo/../../bar', '.'): 'bar',
-            ('foo/../../bar', 'foo'): '../bar',
-            ('foo//./bar/baz', 'foo/bar/baz'): '.',
-            ('a/b/.././../c', '.'): 'c',
-            ('a/b/c/d/ee', 'a/b/c/d/e'): '../ee',
-            ('a/b/c/d/ee', 'a/b/z/d/e'): '../../../c/d/ee',
-            ('foo', 'bar.'): 'foo',
-            ('foo', 'bar./'): '../foo',
-            ('foo', 'foo/bar./'): '..',
-            ('foo', 'foo/bar./.'): '..',
-            ('foo', 'foo/bar././'): '..',
-            ('foo/', 'foo/bar././'): '../',
-            ('foo', 'foo'): '.',
-            ('.foo', '.foo'): '.foo',
-            ('.foo/', '.foo'): '.foo/',
-            ('.foo', '.foo/'): '.',
-            ('.foo/', '.foo/'): './',
-            ('///', ''): './',
-            ('a///', ''): 'a/',
-            ('a///', 'a'): './',
-            ('.', 'here'): '..',
-            ('..', 'here'): '..',
-            ('../..', 'here'): '..',
-            ('../../a', 'here'): '../a',
-            ('..', 'here.txt'): '.',
-            ('a', ''): 'a',
-            ('a', '..'): 'a',
-            ('a', 'b'): '../a',
+        for case in [
+            dict(url='foo/bar', other='foo', expected='bar'),
+            dict(url='foo/bar.txt', other='foo', expected='bar.txt'),
+            dict(url='foo', other='foo/bar', expected='..'),
+            dict(url='foo', other='foo/bar.txt', expected='.'),
+            dict(url='foo/../../bar', other='.', expected='bar'),
+            dict(url='foo/../../bar', other='foo', expected='../bar'),
+            dict(url='foo//./bar/baz', other='foo/bar/baz', expected='.'),
+            dict(url='a/b/.././../c', other='.', expected='c'),
+            dict(url='a/b/c/d/ee', other='a/b/c/d/e', expected='../ee'),
+            dict(url='a/b/c/d/ee', other='a/b/z/d/e', expected='../../../c/d/ee'),
+            dict(url='foo', other='bar.', expected='foo'),
+            dict(url='foo', other='bar./', expected='../foo'),
+            dict(url='foo', other='foo/bar./', expected='..'),
+            dict(url='foo', other='foo/bar./.', expected='..'),
+            dict(url='foo', other='foo/bar././', expected='..'),
+            dict(url='foo/', other='foo/bar././', expected='../'),
+            dict(url='foo', other='foo', expected='.'),
+            dict(url='.foo', other='.foo', expected='.foo'),
+            dict(url='.foo/', other='.foo', expected='.foo/'),
+            dict(url='.foo', other='.foo/', expected='.'),
+            dict(url='.foo/', other='.foo/', expected='./'),
+            dict(url='///', other='', expected='./'),
+            dict(url='a///', other='', expected='a/'),
+            dict(url='a///', other='a', expected='./'),
+            dict(url='.', other='here', expected='..'),
+            dict(url='..', other='here', expected='..'),
+            dict(url='../..', other='here', expected='..'),
+            dict(url='../../a', other='here', expected='../a'),
+            dict(url='..', other='here.txt', expected='.'),
+            dict(url='a', other='', expected='a'),
+            dict(url='a', other='..', expected='a'),
+            dict(url='a', other='b', expected='../a'),
             # The dots are considered a file. Documenting a long-standing bug:
-            ('a', 'b/..'): '../a',
-            ('a', 'b/../..'): 'a',
-            ('a/..../b', 'a/../b'): '../a/..../b',
-            ('a/я/b', 'a/я/c'): '../b',
-            ('a/я/b', 'a/яя/c'): '../../я/b',
-        }
-        for (url, other), expected_result in expected_results.items():
-            # Leading slash intentionally ignored
-            self.assertEqual(utils.get_relative_url(url, other), expected_result)
-            self.assertEqual(utils.get_relative_url('/' + url, other), expected_result)
-            self.assertEqual(utils.get_relative_url(url, '/' + other), expected_result)
-            self.assertEqual(utils.get_relative_url('/' + url, '/' + other), expected_result)
+            dict(url='a', other='b/..', expected='../a'),
+            dict(url='a', other='b/../..', expected='a'),
+            dict(url='a/..../b', other='a/../b', expected='../a/..../b'),
+            dict(url='a/я/b', other='a/я/c', expected='../b'),
+            dict(url='a/я/b', other='a/яя/c', expected='../../я/b'),
+        ]:
+            url, other, expected = case['url'], case['other'], case['expected']
+            with self.subTest(url=url, other=other):
+                # Leading slash intentionally ignored
+                self.assertEqual(utils.get_relative_url(url, other), expected)
+                self.assertEqual(utils.get_relative_url('/' + url, other), expected)
+                self.assertEqual(utils.get_relative_url(url, '/' + other), expected)
+                self.assertEqual(utils.get_relative_url('/' + url, '/' + other), expected)
 
     def test_get_relative_url_empty(self):
         for url in ['', '.', '/.']:
             for other in ['', '.', '/', '/.']:
-                self.assertEqual(utils.get_relative_url(url, other), '.')
+                with self.subTest(url=url, other=other):
+                    self.assertEqual(utils.get_relative_url(url, other), '.')
 
         self.assertEqual(utils.get_relative_url('/', ''), './')
         self.assertEqual(utils.get_relative_url('/', '/'), './')
@@ -433,70 +436,71 @@ class UtilsTests(unittest.TestCase):
                 utils.yaml_load(fd)
 
     def test_copy_files(self):
-        src_paths = [
-            'foo.txt',
-            'bar.txt',
-            'baz.txt',
-        ]
-        dst_paths = [
-            'foo.txt',
-            'foo/',  # ensure src filename is appended
-            'foo/bar/baz.txt',  # ensure missing dirs are created
-        ]
-        expected = [
-            'foo.txt',
-            'foo/bar.txt',
-            'foo/bar/baz.txt',
+        cases = [
+            dict(
+                src_path='foo.txt',
+                dst_path='foo.txt',
+                expected='foo.txt',
+            ),
+            dict(
+                src_path='bar.txt',
+                dst_path='foo/',  # ensure src filename is appended
+                expected='foo/bar.txt',
+            ),
+            dict(
+                src_path='baz.txt',
+                dst_path='foo/bar/baz.txt',  # ensure missing dirs are created
+                expected='foo/bar/baz.txt',
+            ),
         ]
 
         src_dir = tempfile.mkdtemp()
         dst_dir = tempfile.mkdtemp()
 
         try:
-            for i, src in enumerate(src_paths):
-                src = os.path.join(src_dir, src)
-                with open(src, 'w') as f:
-                    f.write('content')
-                dst = os.path.join(dst_dir, dst_paths[i])
-                utils.copy_file(src, dst)
-                self.assertTrue(os.path.isfile(os.path.join(dst_dir, expected[i])))
+            for case in cases:
+                src, dst, expected = case['src_path'], case['dst_path'], case['expected']
+                with self.subTest(src):
+                    src = os.path.join(src_dir, src)
+                    with open(src, 'w') as f:
+                        f.write('content')
+                    dst = os.path.join(dst_dir, dst)
+                    utils.copy_file(src, dst)
+                    self.assertTrue(os.path.isfile(os.path.join(dst_dir, expected)))
         finally:
             shutil.rmtree(src_dir)
             shutil.rmtree(dst_dir)
 
     def test_copy_files_without_permissions(self):
-        src_paths = [
-            'foo.txt',
-            'bar.txt',
-            'baz.txt',
-        ]
-        expected = [
-            'foo.txt',
-            'bar.txt',
-            'baz.txt',
+        cases = [
+            dict(src_path='foo.txt', expected='foo.txt'),
+            dict(src_path='bar.txt', expected='bar.txt'),
+            dict(src_path='baz.txt', expected='baz.txt'),
         ]
 
         src_dir = tempfile.mkdtemp()
         dst_dir = tempfile.mkdtemp()
 
         try:
-            for i, src in enumerate(src_paths):
-                src = os.path.join(src_dir, src)
-                with open(src, 'w') as f:
-                    f.write('content')
-                # Set src file to read-only
-                os.chmod(src, stat.S_IRUSR)
-                utils.copy_file(src, dst_dir)
-                self.assertTrue(os.path.isfile(os.path.join(dst_dir, expected[i])))
-                self.assertNotEqual(
-                    os.stat(src).st_mode, os.stat(os.path.join(dst_dir, expected[i])).st_mode
-                )
-                # While src was read-only, dst must remain writable
-                self.assertTrue(os.access(os.path.join(dst_dir, expected[i]), os.W_OK))
+            for case in cases:
+                src, expected = case['src_path'], case['expected']
+                with self.subTest(src):
+                    src = os.path.join(src_dir, src)
+                    with open(src, 'w') as f:
+                        f.write('content')
+                    # Set src file to read-only
+                    os.chmod(src, stat.S_IRUSR)
+                    utils.copy_file(src, dst_dir)
+                    self.assertTrue(os.path.isfile(os.path.join(dst_dir, expected)))
+                    self.assertNotEqual(
+                        os.stat(src).st_mode, os.stat(os.path.join(dst_dir, expected)).st_mode
+                    )
+                    # While src was read-only, dst must remain writable
+                    self.assertTrue(os.access(os.path.join(dst_dir, expected), os.W_OK))
         finally:
-            for src in src_paths:
+            for case in cases:
                 # Undo read-only so we can delete temp files
-                src = os.path.join(src_dir, src)
+                src = os.path.join(src_dir, case['src_path'])
                 if os.path.exists(src):
                     os.chmod(src, stat.S_IRUSR | stat.S_IWUSR)
             shutil.rmtree(src_dir)
