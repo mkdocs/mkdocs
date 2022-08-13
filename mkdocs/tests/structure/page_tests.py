@@ -477,7 +477,7 @@ class PageTests(unittest.TestCase):
             self.assertEqual(pg.url, 'testing/')
             self.assertEqual(pg.edit_url, expected[i])
 
-    def test_nested_page_edit_url(self):
+    def test_nested_page_edit_url(self, file_src_path='sub1/non-index.md'):
         configs = [
             {'repo_url': 'http://github.com/mkdocs/mkdocs'},
             {'repo_url': 'https://github.com/mkdocs/mkdocs/'},
@@ -524,49 +524,7 @@ class PageTests(unittest.TestCase):
 
     @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
     def test_nested_page_edit_url_windows(self):
-        configs = [
-            {'repo_url': 'http://github.com/mkdocs/mkdocs'},
-            {'repo_url': 'https://github.com/mkdocs/mkdocs/'},
-            {'repo_url': 'http://example.com'},
-            {'repo_url': 'http://example.com', 'edit_uri': 'edit/master'},
-            {'repo_url': 'http://example.com', 'edit_uri': '/edit/master'},
-            {'repo_url': 'http://example.com/foo/', 'edit_uri': '/edit/master/'},
-            {'repo_url': 'http://example.com/foo', 'edit_uri': '/edit/master/'},
-            {'repo_url': 'http://example.com/foo/', 'edit_uri': '/edit/master'},
-            {'repo_url': 'http://example.com/foo/', 'edit_uri': 'edit/master/'},
-            {'repo_url': 'http://example.com/foo', 'edit_uri': 'edit/master/'},
-            {'repo_url': 'http://example.com', 'edit_uri': '?query=edit/master'},
-            {'repo_url': 'http://example.com/', 'edit_uri': '?query=edit/master/'},
-            {'repo_url': 'http://example.com', 'edit_uri': '#edit/master'},
-            {'repo_url': 'http://example.com/', 'edit_uri': '#edit/master/'},
-        ]
-
-        expected = [
-            'http://github.com/mkdocs/mkdocs/edit/master/docs/sub1/non-index.md',
-            'https://github.com/mkdocs/mkdocs/edit/master/docs/sub1/non-index.md',
-            None,
-            'http://example.com/edit/master/sub1/non-index.md',
-            'http://example.com/edit/master/sub1/non-index.md',
-            'http://example.com/edit/master/sub1/non-index.md',
-            'http://example.com/edit/master/sub1/non-index.md',
-            'http://example.com/edit/master/sub1/non-index.md',
-            'http://example.com/foo/edit/master/sub1/non-index.md',
-            'http://example.com/foo/edit/master/sub1/non-index.md',
-            'http://example.com?query=edit/master/sub1/non-index.md',
-            'http://example.com/?query=edit/master/sub1/non-index.md',
-            'http://example.com#edit/master/sub1/non-index.md',
-            'http://example.com/#edit/master/sub1/non-index.md',
-        ]
-
-        for i, c in enumerate(configs):
-            c['docs_dir'] = self.DOCS_DIR
-            cfg = load_config(**c)
-            fl = File(
-                'sub1\\non-index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']
-            )
-            pg = Page('Foo', fl, cfg)
-            self.assertEqual(pg.url, 'sub1/non-index/')
-            self.assertEqual(pg.edit_url, expected[i])
+        self.test_nested_page_edit_url(file_src_path='sub1\\non-index.md')
 
     def test_page_render(self):
         cfg = load_config()
