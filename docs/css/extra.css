@@ -30,6 +30,10 @@ dd {
     padding-left: 20px;
 }
 
+.doc-contents .field-body p:first-of-type {
+    display: inline;
+}
+
 .card-body svg {
     width: 100%;
     padding: 0 50px;

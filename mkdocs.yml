@@ -64,6 +64,7 @@ plugins:
         handlers:
           python:
             options:
+              docstring_section_style: list
               show_root_toc_entry: false
               show_source: false
 
