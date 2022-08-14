@@ -1,5 +1,6 @@
 import logging
 import os
+import posixpath
 from urllib.parse import unquote as urlunquote
 from urllib.parse import urljoin, urlsplit, urlunsplit
 
@@ -103,11 +104,11 @@ class Page:
 
     def _set_edit_url(self, repo_url, edit_uri):
         if repo_url and edit_uri:
-            src_path = self.file.src_path.replace('\\', '/')
+            src_uri = self.file.src_uri
             # Ensure urljoin behavior is correct
             if not edit_uri.startswith(('?', '#')) and not repo_url.endswith('/'):
                 repo_url += '/'
-            self.edit_url = urljoin(repo_url, edit_uri + src_path)
+            self.edit_url = urljoin(repo_url, edit_uri + src_uri)
         else:
             self.edit_url = None
 
@@ -216,17 +217,17 @@ class _RelativePathTreeprocessor(Treeprocessor):
             return url
 
         # Determine the filepath of the target.
-        target_path = os.path.join(os.path.dirname(self.file.src_path), urlunquote(path))
-        target_path = os.path.normpath(target_path).lstrip(os.sep)
+        target_uri = posixpath.join(posixpath.dirname(self.file.src_uri), urlunquote(path))
+        target_uri = posixpath.normpath(target_uri).lstrip('/')
 
         # Validate that the target exists in files collection.
-        if target_path not in self.files:
+        if target_uri not in self.files:
             log.warning(
-                f"Documentation file '{self.file.src_path}' contains a link to "
-                f"'{target_path}' which is not found in the documentation files."
+                f"Documentation file '{self.file.src_uri}' contains a link to "
+                f"'{target_uri}' which is not found in the documentation files."
             )
             return url
-        target_file = self.files.get_file_from_path(target_path)
+        target_file = self.files.get_file_from_path(target_uri)
         path = target_file.url_relative_to(self.file)
         components = (scheme, netloc, path, query, fragment)
         return urlunsplit(components)

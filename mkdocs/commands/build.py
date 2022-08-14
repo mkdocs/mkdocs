@@ -173,7 +173,7 @@ def _populate_page(page, config, files, dirty=False):
             'page_content', page.content, page=page, config=config, files=files
         )
     except Exception as e:
-        message = f"Error reading page '{page.file.src_path}':"
+        message = f"Error reading page '{page.file.src_uri}':"
         # Prevent duplicated the error message because it will be printed immediately afterwards.
         if not isinstance(e, BuildError):
             message += f" {e}"
@@ -190,7 +190,7 @@ def _build_page(page, config, doc_files, nav, env, dirty=False):
         if dirty and not page.file.is_modified():
             return
 
-        log.debug(f"Building page {page.file.src_path}")
+        log.debug(f"Building page {page.file.src_uri}")
 
         # Activate page. Signals to theme that this is the current page.
         page.active = True
@@ -220,12 +220,12 @@ def _build_page(page, config, doc_files, nav, env, dirty=False):
                 output.encode('utf-8', errors='xmlcharrefreplace'), page.file.abs_dest_path
             )
         else:
-            log.info(f"Page skipped: '{page.file.src_path}'. Generated empty output.")
+            log.info(f"Page skipped: '{page.file.src_uri}'. Generated empty output.")
 
         # Deactivate page
         page.active = False
     except Exception as e:
-        message = f"Error building page '{page.file.src_path}':"
+        message = f"Error building page '{page.file.src_uri}':"
         # Prevent duplicated the error message because it will be printed immediately afterwards.
         if not isinstance(e, BuildError):
             message += f" {e}"
@@ -286,7 +286,7 @@ def build(config, live_server=False, dirty=False):
 
         log.debug("Reading markdown pages.")
         for file in files.documentation_pages():
-            log.debug(f"Reading: {file.src_path}")
+            log.debug(f"Reading: {file.src_uri}")
             _populate_page(file.page, config, files, dirty)
 
         # Run `env` plugin events.

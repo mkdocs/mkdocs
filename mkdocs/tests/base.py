@@ -92,7 +92,7 @@ class PathAssertionMixin:
     """
 
     def assertPathsEqual(self, a, b, msg=None):
-        self.assertEqual(a.replace('\\', '/'), b.replace('\\', '/'))
+        self.assertEqual(a.replace(os.sep, '/'), b.replace(os.sep, '/'))
 
     def assertPathExists(self, *parts):
         path = os.path.join(*parts)

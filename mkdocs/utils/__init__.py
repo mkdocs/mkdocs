@@ -15,6 +15,7 @@ import shutil
 import warnings
 from collections import defaultdict
 from datetime import datetime, timezone
+from pathlib import PurePath
 from urllib.parse import urlsplit
 
 import importlib_metadata
@@ -181,7 +182,7 @@ def get_url_path(path, use_directory_urls=True):
         "get_url_path is never used in MkDocs and will be removed soon.", DeprecationWarning
     )
     path = get_html_path(path)
-    url = '/' + path.replace(os.path.sep, '/')
+    url = '/' + path.replace(os.sep, '/')
     if use_directory_urls:
         return url[: -len('index.html')]
     return url
@@ -286,7 +287,7 @@ def create_media_urls(path_list, page=None, base=''):
 def path_to_url(path):
     """Convert a system path to a URL."""
 
-    return '/'.join(path.split('\\'))
+    return path.replace(os.sep, '/')
 
 
 def get_theme_dir(name):
@@ -385,13 +386,7 @@ def nest_paths(paths):
     nested = []
 
     for path in paths:
-
-        if os.path.sep not in path:
-            nested.append(path)
-            continue
-
-        directory, _ = os.path.split(path)
-        parts = directory.split(os.path.sep)
+        parts = PurePath(path).parent.parts
 
         branch = nested
         for part in parts:
