@@ -6,7 +6,7 @@ Implements the plugin API for MkDocs.
 
 import logging
 from collections import OrderedDict
-from typing import Any, Callable, Dict, List, Optional, Tuple, TypeVar
+from typing import Any, Callable, Dict, Optional, Tuple, TypeVar
 
 import importlib_metadata
 import jinja2.environment
@@ -69,7 +69,7 @@ class BasePlugin:
 
     def load_config(
         self, options: Dict[str, Any], config_file_path: Optional[str] = None
-    ) -> Tuple[List[str], List[str]]:
+    ) -> Tuple[list, list]:
         """Load config from a dict of options. Returns a tuple of (errors, warnings)."""
 
         self.config = Config(schema=self.config_scheme, config_file_path=config_file_path)

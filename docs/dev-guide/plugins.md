@@ -166,34 +166,50 @@ entire site.
 ##### on_serve
 
 ::: mkdocs.plugins.BasePlugin.on_serve
+    options:
+        show_root_heading: false
 
 ##### on_config
 
 ::: mkdocs.plugins.BasePlugin.on_config
+    options:
+        show_root_heading: false
 
 ##### on_pre_build
 
 ::: mkdocs.plugins.BasePlugin.on_pre_build
+    options:
+        show_root_heading: false
 
 ##### on_files
 
 ::: mkdocs.plugins.BasePlugin.on_files
+    options:
+        show_root_heading: false
 
 ##### on_nav
 
 ::: mkdocs.plugins.BasePlugin.on_nav
+    options:
+        show_root_heading: false
 
 ##### on_env
 
 ::: mkdocs.plugins.BasePlugin.on_env
+    options:
+        show_root_heading: false
 
 ##### on_post_build
 
 ::: mkdocs.plugins.BasePlugin.on_post_build
+    options:
+        show_root_heading: false
 
 ##### on_build_error
 
 ::: mkdocs.plugins.BasePlugin.on_build_error
+    options:
+        show_root_heading: false
 
 #### Template Events
 
@@ -205,14 +221,20 @@ called after the [env] event and before any [page events].
 ##### on_pre_template
 
 ::: mkdocs.plugins.BasePlugin.on_pre_template
+    options:
+        show_root_heading: false
 
 ##### on_template_context
 
 ::: mkdocs.plugins.BasePlugin.on_template_context
+    options:
+        show_root_heading: false
 
 ##### on_post_template
 
 ::: mkdocs.plugins.BasePlugin.on_post_template
+    options:
+        show_root_heading: false
 
 #### Page Events
 
@@ -223,26 +245,38 @@ page events are called after the [post_template] event and before the
 ##### on_pre_page
 
 ::: mkdocs.plugins.BasePlugin.on_pre_page
+    options:
+        show_root_heading: false
 
 ##### on_page_read_source
 
 ::: mkdocs.plugins.BasePlugin.on_page_read_source
+    options:
+        show_root_heading: false
 
 ##### on_page_markdown
 
 ::: mkdocs.plugins.BasePlugin.on_page_markdown
+    options:
+        show_root_heading: false
 
 ##### on_page_content
 
 ::: mkdocs.plugins.BasePlugin.on_page_content
+    options:
+        show_root_heading: false
 
 ##### on_page_context
 
 ::: mkdocs.plugins.BasePlugin.on_page_context
+    options:
+        show_root_heading: false
 
 ##### on_post_page
 
 ::: mkdocs.plugins.BasePlugin.on_post_page
+    options:
+        show_root_heading: false
 
 ### Handling Errors
 

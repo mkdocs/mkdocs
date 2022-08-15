@@ -30,10 +30,6 @@ dd {
     padding-left: 20px;
 }
 
-.doc-contents .field-body p:first-of-type {
-    display: inline;
-}
-
 .card-body svg {
     width: 100%;
     padding: 0 50px;
@@ -60,4 +56,31 @@ body.homepage>div.container>div.row>div.col-md-9 {
     margin-left: 0;
     flex: 0 0 100%;
     max-width: 100%;
+}
+
+/* mkdocstrings */
+
+.doc-contents .field-body p:first-of-type {
+    display: inline;
+}
+
+.doc-label-class-attribute {
+    display: none;
+}
+
+h2.doc-heading {
+    font-size: 1.5rem;
+}
+h3.doc-heading {
+    font-size: 1.4rem;
+}
+h4.doc-heading {
+    font-size: 1.3rem;
+}
+h5.doc-heading {
+    font-size: 1.2rem;
+}
+
+.doc-contents {
+    padding-left: 0;
 }

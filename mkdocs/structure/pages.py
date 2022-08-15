@@ -1,22 +1,27 @@
 import logging
 import os
 import posixpath
+from typing import Any, Iterable, Mapping, Optional
 from urllib.parse import unquote as urlunquote
 from urllib.parse import urljoin, urlsplit, urlunsplit
+from xml.etree.ElementTree import Element
 
 import markdown
 from markdown.extensions import Extension
 from markdown.treeprocessors import Treeprocessor
 from markdown.util import AMP_SUBSTITUTE
 
-from mkdocs.structure.toc import get_toc
+from mkdocs.config.base import Config
+from mkdocs.structure import nav
+from mkdocs.structure.files import File, Files
+from mkdocs.structure.toc import AnchorLink, get_toc
 from mkdocs.utils import get_build_date, get_markdown_title, meta
 
 log = logging.getLogger(__name__)
 
 
 class Page:
-    def __init__(self, title, file, config):
+    def __init__(self, title: Optional[str], file: File, config: Config) -> None:
         file.page = self
         self.file = file
         self.title = title
@@ -27,10 +32,6 @@ class Page:
         self.previous_page = None
         self.next_page = None
         self.active = False
-
-        self.is_section = False
-        self.is_page = True
-        self.is_link = False
 
         self.update_date = get_build_date()
 
@@ -58,33 +59,97 @@ class Page:
     def _indent_print(self, depth=0):
         return '{}{}'.format('    ' * depth, repr(self))
 
-    def _get_active(self):
-        """Return active status of page."""
+    title: Optional[str]
+    """Contains the Title for the current page."""
+
+    content: Optional[str]
+    """The rendered Markdown as HTML, this is the contents of the documentation."""
+
+    toc: Iterable[AnchorLink]
+    """An iterable object representing the Table of contents for a page. Each item in
+    the `toc` is an [`AnchorLink`][mkdocs.structure.toc.AnchorLink]."""
+
+    meta: Mapping[str, Any]
+    """A mapping of the metadata included at the top of the markdown page."""
+
+    @property
+    def url(self) -> str:
+        """The URL of the page relative to the MkDocs `site_dir`."""
+        return '' if self.file.url == '.' else self.file.url
+
+    file: File
+    """The documentation [`File`][mkdocs.structure.files.File] that the page is being rendered from."""
+
+    abs_url: str
+    """The absolute URL of the page from the server root as determined by the value
+    assigned to the [site_url][] configuration setting. The value includes any
+    subdirectory included in the `site_url`, but not the domain. [base_url][] should
+    not be used with this variable."""
+
+    canonical_url: str
+    """The full, canonical URL to the current page as determined by the value assigned
+    to the [site_url][] configuration setting. The value includes the domain and any
+    subdirectory included in the `site_url`. [base_url][] should not be used with this
+    variable."""
+
+    @property
+    def active(self) -> bool:
+        """When `True`, indicates that this page is the currently viewed page. Defaults to `False`."""
         return self.__active
 
-    def _set_active(self, value):
+    @active.setter
+    def active(self, value: bool):
         """Set active status of page and ancestors."""
         self.__active = bool(value)
         if self.parent is not None:
             self.parent.active = bool(value)
 
-    active = property(_get_active, _set_active)
-
     @property
-    def is_index(self):
+    def is_index(self) -> bool:
         return self.file.name == 'index'
 
     @property
-    def is_top_level(self):
+    def is_top_level(self) -> bool:
         return self.parent is None
 
-    @property
-    def is_homepage(self):
-        return self.is_top_level and self.is_index and self.file.url in ['.', 'index.html']
+    edit_url: str
+    """The full URL to the source page in the source repository. Typically used to
+    provide a link to edit the source page. [base_url][] should not be used with this
+    variable."""
 
     @property
-    def url(self):
-        return '' if self.file.url == '.' else self.file.url
+    def is_homepage(self) -> bool:
+        """Evaluates to `True` for the homepage of the site and `False` for all other pages."""
+        return self.is_top_level and self.is_index and self.file.url in ['.', 'index.html']
+
+    previous_page: Optional['Page']
+    """The [page][mkdocs.structure.pages.Page] object for the previous page or `None`.
+    The value will be `None` if the current page is the first item in the site navigation
+    or if the current page is not included in the navigation at all."""
+
+    next_page: Optional['Page']
+    """The [page][mkdocs.structure.pages.Page] object for the next page or `None`.
+    The value will be `None` if the current page is the last item in the site navigation
+    or if the current page is not included in the navigation at all."""
+
+    parent: Optional['nav.Section']
+    """The immediate parent of the page in the site navigation. `None` if the
+    page is at the top level."""
+
+    children: None = None
+    """Pages do not contain children and the attribute is always `None`."""
+
+    active: bool
+    """When `True`, indicates that this page is the currently viewed page. Defaults to `False`."""
+
+    is_section: bool = False
+    """Indicates that the navigation object is a "section" object. Always `False` for page objects."""
+
+    is_page: bool = True
+    """Indicates that the navigation object is a "page" object. Always `True` for page objects."""
+
+    is_link: bool = False
+    """Indicates that the navigation object is a "link" object. Always `False` for page objects."""
 
     @property
     def ancestors(self):
@@ -92,7 +157,7 @@ class Page:
             return []
         return [self.parent] + self.parent.ancestors
 
-    def _set_canonical_url(self, base):
+    def _set_canonical_url(self, base) -> None:
         if base:
             if not base.endswith('/'):
                 base += '/'
@@ -102,7 +167,7 @@ class Page:
             self.canonical_url = None
             self.abs_url = None
 
-    def _set_edit_url(self, repo_url, edit_uri):
+    def _set_edit_url(self, repo_url, edit_uri) -> None:
         if edit_uri:
             src_uri = self.file.src_uri
             edit_uri += src_uri
@@ -124,7 +189,7 @@ class Page:
         else:
             self.edit_url = None
 
-    def read_source(self, config):
+    def read_source(self, config: Config) -> None:
         source = config['plugins'].run_event('page_read_source', page=self, config=config)
         if source is None:
             try:
@@ -140,7 +205,7 @@ class Page:
         self.markdown, self.meta = meta.get_data(source)
         self._set_title()
 
-    def _set_title(self):
+    def _set_title(self) -> None:
         """
         Set the title for a Markdown document.
 
@@ -170,7 +235,7 @@ class Page:
 
         self.title = title
 
-    def render(self, config, files):
+    def render(self, config: Config, files: Files) -> None:
         """
         Convert the Markdown source file to HTML as per the config.
         """
@@ -186,11 +251,11 @@ class Page:
 
 
 class _RelativePathTreeprocessor(Treeprocessor):
-    def __init__(self, file, files):
+    def __init__(self, file: File, files: Files) -> None:
         self.file = file
         self.files = files
 
-    def run(self, root):
+    def run(self, root: Element) -> Element:
         """
         Update urls on anchors and images to make them relative
 
@@ -211,7 +276,7 @@ class _RelativePathTreeprocessor(Treeprocessor):
 
         return root
 
-    def path_to_url(self, url):
+    def path_to_url(self, url: str) -> str:
         scheme, netloc, path, query, fragment = urlsplit(url)
 
         if (
@@ -251,10 +316,10 @@ class _RelativePathExtension(Extension):
     registers the Treeprocessor.
     """
 
-    def __init__(self, file, files):
+    def __init__(self, file: File, files: Files) -> None:
         self.file = file
         self.files = files
 
-    def extendMarkdown(self, md):
+    def extendMarkdown(self, md) -> None:
         relpath = _RelativePathTreeprocessor(self.file, self.files)
         md.treeprocessors.register(relpath, "relpath", 0)

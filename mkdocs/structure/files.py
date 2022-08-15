@@ -3,81 +3,90 @@ import logging
 import os
 import posixpath
 from pathlib import PurePath
+from typing import Dict, Iterable, Iterator, List, Optional
 from urllib.parse import quote as urlquote
 
+import jinja2.environment
+
 from mkdocs import utils
+from mkdocs.config.base import Config
 
 log = logging.getLogger(__name__)
 
 
 class Files:
-    """A collection of File objects."""
+    """A collection of [File][mkdocs.structure.files.File] objects."""
 
-    def __init__(self, files):
+    def __init__(self, files: List['File']):
         self._files = files
         self._src_uris = None
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator['File']:
+        """Iterate over the files within."""
         return iter(self._files)
 
-    def __len__(self):
+    def __len__(self) -> int:
+        """The number of files within."""
         return len(self._files)
 
-    def __contains__(self, path):
+    def __contains__(self, path: str) -> bool:
+        """Whether the file with this `src_uri` is in the collection."""
         return PurePath(path).as_posix() in self.src_uris
 
     @property
-    def src_paths(self):
-        """Soft-deprecated, prefer `.src_uris`."""
+    def src_paths(self) -> Dict[str, 'File']:
+        """Soft-deprecated, prefer `src_uris`."""
         return {file.src_path: file for file in self._files}
 
     @property
-    def src_uris(self):
+    def src_uris(self) -> Dict[str, 'File']:
+        """A mapping containing every file, with the keys being their
+        [`src_uri`][mkdocs.structure.files.File.src_uri]."""
         if self._src_uris is None:
             self._src_uris = {file.src_uri: file for file in self._files}
         return self._src_uris
 
-    def get_file_from_path(self, path):
+    def get_file_from_path(self, path: str) -> Optional['File']:
         """Return a File instance with File.src_uri equal to path."""
         return self.src_uris.get(PurePath(path).as_posix())
 
-    def append(self, file):
+    def append(self, file: 'File') -> None:
         """Append file to Files collection."""
         self._src_uris = None
         self._files.append(file)
 
-    def remove(self, file):
+    def remove(self, file: 'File') -> None:
         """Remove file from Files collection."""
         self._src_uris = None
         self._files.remove(file)
 
-    def copy_static_files(self, dirty=False):
+    def copy_static_files(self, dirty: bool = False) -> None:
         """Copy static files from source to destination."""
         for file in self:
             if not file.is_documentation_page():
                 file.copy_file(dirty)
 
-    def documentation_pages(self):
+    def documentation_pages(self) -> Iterable['File']:
         """Return iterable of all Markdown page file objects."""
         return [file for file in self if file.is_documentation_page()]
 
-    def static_pages(self):
+    def static_pages(self) -> Iterable['File']:
         """Return iterable of all static page file objects."""
         return [file for file in self if file.is_static_page()]
 
-    def media_files(self):
+    def media_files(self) -> Iterable['File']:
         """Return iterable of all file objects which are not documentation or static pages."""
         return [file for file in self if file.is_media_file()]
 
-    def javascript_files(self):
+    def javascript_files(self) -> Iterable['File']:
         """Return iterable of all javascript file objects."""
         return [file for file in self if file.is_javascript()]
 
-    def css_files(self):
+    def css_files(self) -> Iterable['File']:
         """Return iterable of all CSS file objects."""
         return [file for file in self if file.is_css()]
 
-    def add_files_from_theme(self, env, config):
+    def add_files_from_theme(self, env: jinja2.Environment, config: Config) -> None:
         """Retrieve static files from Jinja environment and add to collection."""
 
         def filter(name):
@@ -121,34 +130,26 @@ class File:
     `use_directory_urls` argument has no effect on non-Markdown files.
 
     File objects have the following properties, which are Unicode strings:
-
-    File.src_uri
-        The pure path (always '/'-separated) of the source file relative to the source directory.
-
-    File.abs_src_path
-        The absolute concrete path of the source file.
-
-    File.dest_uri
-        The pure path (always '/'-separated) of the destination file relative to the destination directory.
-
-    File.abs_dest_path
-        The absolute concrete path of the destination file.
-
-    File.url
-        The url of the destination file relative to the destination directory as a string.
     """
 
-    def __init__(self, path, src_dir, dest_dir, use_directory_urls):
-        self.page = None
-        self.src_path = path
-        self.abs_src_path = os.path.normpath(os.path.join(src_dir, self.src_path))
-        self.name = self._get_stem()
-        self.dest_uri = self._get_dest_path(use_directory_urls)
-        self.abs_dest_path = os.path.normpath(os.path.join(dest_dir, self.dest_path))
-        self.url = self._get_url(use_directory_urls)
+    src_uri: str
+    """The pure path (always '/'-separated) of the source file relative to the source directory."""
+
+    abs_src_path: str
+    """The absolute concrete path of the source file. Will use backslashes on Windows."""
+
+    dest_uri: str
+    """The pure path (always '/'-separated) of the destination file relative to the destination directory."""
+
+    abs_dest_path: str
+    """The absolute concrete path of the destination file. Will use backslashes on Windows."""
+
+    url: str
+    """The URI of the destination file relative to the destination directory as a string."""
 
     @property
-    def src_path(self):
+    def src_path(self) -> str:
+        """Same as `src_uri` (and synchronized with it) but will use backslashes on Windows. Discouraged."""
         return os.path.normpath(self.src_uri)
 
     @src_path.setter
@@ -156,12 +157,22 @@ class File:
         self.src_uri = PurePath(value).as_posix()
 
     @property
-    def dest_path(self):
+    def dest_path(self) -> str:
+        """Same as `dest_uri` (and synchronized with it) but will use backslashes on Windows. Discouraged."""
         return os.path.normpath(self.dest_uri)
 
     @dest_path.setter
     def dest_path(self, value):
         self.dest_uri = PurePath(value).as_posix()
+
+    def __init__(self, path: str, src_dir: str, dest_dir: str, use_directory_urls: bool):
+        self.page = None
+        self.src_path = path
+        self.abs_src_path = os.path.normpath(os.path.join(src_dir, self.src_path))
+        self.name = self._get_stem()
+        self.dest_uri = self._get_dest_path(use_directory_urls)
+        self.abs_dest_path = os.path.normpath(os.path.join(dest_dir, self.dest_path))
+        self.url = self._get_url(use_directory_urls)
 
     def __eq__(self, other):
         return (
@@ -177,13 +188,13 @@ class File:
             f" name='{self.name}', url='{self.url}')"
         )
 
-    def _get_stem(self):
+    def _get_stem(self) -> str:
         """Return the name of the file without it's extension."""
         filename = posixpath.basename(self.src_uri)
         stem, ext = posixpath.splitext(filename)
         return 'index' if stem in ('index', 'README') else stem
 
-    def _get_dest_path(self, use_directory_urls):
+    def _get_dest_path(self, use_directory_urls: bool) -> str:
         """Return destination path based on source path."""
         if self.is_documentation_page():
             parent, filename = posixpath.split(self.src_uri)
@@ -196,7 +207,7 @@ class File:
                 return posixpath.join(parent, self.name, 'index.html')
         return self.src_uri
 
-    def _get_url(self, use_directory_urls):
+    def _get_url(self, use_directory_urls: bool) -> str:
         """Return url based in destination path."""
         url = self.dest_uri
         dirname, filename = posixpath.split(url)
@@ -207,11 +218,11 @@ class File:
                 url = dirname + '/'
         return urlquote(url)
 
-    def url_relative_to(self, other):
+    def url_relative_to(self, other: 'File') -> str:
         """Return url for file relative to other file."""
         return utils.get_relative_url(self.url, other.url if isinstance(other, File) else other)
 
-    def copy_file(self, dirty=False):
+    def copy_file(self, dirty: bool = False) -> None:
         """Copy source file to destination, ensuring parent directories exist."""
         if dirty and not self.is_modified():
             log.debug(f"Skip copying unmodified file: '{self.src_uri}'")
@@ -219,33 +230,33 @@ class File:
             log.debug(f"Copying media file: '{self.src_uri}'")
             utils.copy_file(self.abs_src_path, self.abs_dest_path)
 
-    def is_modified(self):
+    def is_modified(self) -> bool:
         if os.path.isfile(self.abs_dest_path):
             return os.path.getmtime(self.abs_dest_path) < os.path.getmtime(self.abs_src_path)
         return True
 
-    def is_documentation_page(self):
+    def is_documentation_page(self) -> bool:
         """Return True if file is a Markdown page."""
         return utils.is_markdown_file(self.src_uri)
 
-    def is_static_page(self):
-        """Return True if file is a static page (html, xml, json)."""
+    def is_static_page(self) -> bool:
+        """Return True if file is a static page (HTML, XML, JSON)."""
         return self.src_uri.endswith(('.html', '.htm', '.xml', '.json'))
 
-    def is_media_file(self):
+    def is_media_file(self) -> bool:
         """Return True if file is not a documentation or static page."""
         return not (self.is_documentation_page() or self.is_static_page())
 
-    def is_javascript(self):
+    def is_javascript(self) -> bool:
         """Return True if file is a JavaScript file."""
         return self.src_uri.endswith(('.js', '.javascript'))
 
-    def is_css(self):
+    def is_css(self) -> bool:
         """Return True if file is a CSS file."""
         return self.src_uri.endswith('.css')
 
 
-def get_files(config):
+def get_files(config: Config) -> Files:
     """Walk the `docs_dir` and return a Files collection."""
     files = []
     exclude = ['.*', '/templates']
@@ -278,7 +289,7 @@ def get_files(config):
     return Files(files)
 
 
-def _sort_files(filenames):
+def _sort_files(filenames: Iterable[str]) -> List[str]:
     """Always sort `index` or `README` as first filename in list."""
 
     def key(f):
@@ -289,7 +300,7 @@ def _sort_files(filenames):
     return sorted(filenames, key=key)
 
 
-def _filter_paths(basename, path, is_dir, exclude):
+def _filter_paths(basename: str, path: str, is_dir: bool, exclude: Iterable[str]) -> bool:
     """.gitignore style file filtering."""
     for item in exclude:
         # Items ending in '/' apply only to directories.
