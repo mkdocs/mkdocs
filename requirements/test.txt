@@ -2,3 +2,4 @@ coverage
 black
 isort
 flake8
+babel>=2.9.0
