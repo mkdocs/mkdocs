@@ -488,6 +488,10 @@ class PageTests(unittest.TestCase):
                 edit_url='http://example.com/#edit/master/testing.md',
             ),
             dict(
+                config={'edit_uri': 'http://example.com/edit/master'},
+                edit_url='http://example.com/edit/master/testing.md',
+            ),
+            dict(
                 config={'repo_url': 'http://example.com', 'edit_uri': ''},  # Set to blank value
                 edit_url=None,
             ),
@@ -558,6 +562,14 @@ class PageTests(unittest.TestCase):
                 config={'repo_url': 'http://example.com/', 'edit_uri': '#edit/master/'},
                 edit_url='http://example.com/#edit/master/sub1/non-index.md',
             ),
+            dict(
+                config={'edit_uri': 'http://example.com/edit/master'},
+                edit_url='http://example.com/edit/master/sub1/non-index.md',
+            ),
+            dict(
+                config={'repo_url': 'http://example.com', 'edit_uri': ''},  # Set to blank value
+                edit_url=None,
+            ),
         ]:
             with self.subTest(case['config']):
                 cfg = load_config(**case['config'], docs_dir=self.DOCS_DIR)
@@ -567,6 +579,26 @@ class PageTests(unittest.TestCase):
                 pg = Page('Foo', fl, cfg)
                 self.assertEqual(pg.url, 'sub1/non-index/')
                 self.assertEqual(pg.edit_url, case['edit_url'])
+
+    def test_page_edit_url_warning(self):
+        for case in [
+            dict(
+                config={'edit_uri': 'edit/master'},
+                edit_url='edit/master/testing.md',
+                warning="WARNING:mkdocs.structure.pages:edit_uri: "
+                "'edit/master/testing.md' is not a valid URL, it should include the http:// (scheme)",
+            ),
+        ]:
+            with self.subTest(case['config']):
+                with self.assertLogs('mkdocs', level='WARN') as cm:
+                    cfg = load_config(**case['config'])
+                    fl = File(
+                        'testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']
+                    )
+                    pg = Page('Foo', fl, cfg)
+                self.assertEqual(pg.url, 'testing/')
+                self.assertEqual(pg.edit_url, case['edit_url'])
+                self.assertEqual(cm.output, [case['warning']])
 
     @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
     def test_nested_page_edit_url_windows(self):

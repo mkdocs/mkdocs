@@ -144,8 +144,10 @@
                                         <i class="fa fa-bitbucket"></i> {% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}
                                     {%- elif config.repo_name == 'GitLab' -%}
                                         <i class="fa fa-gitlab"></i> {% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}
-                                    {%- else -%}
-                                    {% trans repo_name=config.repo_name%}Edit on {{ repo_name }}{% endtrans %}
+                                    {%- elif config.repo_name -%}
+                                        {% trans repo_name=config.repo_name%}Edit on {{ repo_name }}{% endtrans %}
+                                    {% else %}
+                                        {% trans repo_name=config.repo_name%}Edit{% endtrans %}
                                     {%- endif -%}
                                 </a>
                             </li>

@@ -1,5 +1,5 @@
 # German translations for MkDocs.
-# Copyright (C) 2021 MkDocs
+# Copyright (C) 2022 MkDocs
 # This file is distributed under the same license as the MkDocs project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
 #
@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MkDocs 1.2.3\n"
 "Report-Msgid-Bugs-To: \"https://github.com/mkdocs/mkdocs/issues\"\n"
-"POT-Creation-Date: 2021-09-27 10:43-0400\n"
+"POT-Creation-Date: 2022-08-15 17:05+0200\n"
 "PO-Revision-Date: 2021-10-23 18:52+0200\n"
 "Last-Translator: Marc Dietz <marc@projectleviathan.de>\n"
 "Language: de\n"
 "Language-Team: de <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.10.3\n"
 
 #: mkdocs/themes/readthedocs/404.html:7
 msgid "Page not found"
@@ -38,22 +38,29 @@ msgstr "Mobile Navigationsmenü"
 msgid "Docs"
 msgstr "Dokumentation"
 
+#: mkdocs/themes/readthedocs/breadcrumbs.html:18
+#: mkdocs/themes/readthedocs/breadcrumbs.html:20
+#: mkdocs/themes/readthedocs/breadcrumbs.html:22
 #: mkdocs/themes/readthedocs/breadcrumbs.html:24
 #, python-format
 msgid "Edit on %(repo_name)s"
 msgstr "Bearbeiten auf %(repo_name)s"
 
-#: mkdocs/themes/readthedocs/breadcrumbs.html:31
+#: mkdocs/themes/readthedocs/breadcrumbs.html:26
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:34
 msgid "Breadcrumb Navigation"
 msgstr "Breadcrumb-Navigation"
 
-#: mkdocs/themes/readthedocs/breadcrumbs.html:33
+#: mkdocs/themes/readthedocs/breadcrumbs.html:36
 #: mkdocs/themes/readthedocs/footer.html:7
 #: mkdocs/themes/readthedocs/versions.html:17
 msgid "Previous"
 msgstr "Zurück"
 
-#: mkdocs/themes/readthedocs/breadcrumbs.html:36
+#: mkdocs/themes/readthedocs/breadcrumbs.html:39
 #: mkdocs/themes/readthedocs/footer.html:10
 #: mkdocs/themes/readthedocs/versions.html:20
 msgid "Next"

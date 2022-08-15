@@ -103,12 +103,24 @@ class Page:
             self.abs_url = None
 
     def _set_edit_url(self, repo_url, edit_uri):
-        if repo_url and edit_uri:
+        if edit_uri:
             src_uri = self.file.src_uri
-            # Ensure urljoin behavior is correct
-            if not edit_uri.startswith(('?', '#')) and not repo_url.endswith('/'):
-                repo_url += '/'
-            self.edit_url = urljoin(repo_url, edit_uri + src_uri)
+            edit_uri += src_uri
+            if repo_url:
+                # Ensure urljoin behavior is correct
+                if not edit_uri.startswith(('?', '#')) and not repo_url.endswith('/'):
+                    repo_url += '/'
+            else:
+                try:
+                    parsed_url = urlsplit(edit_uri)
+                    if not parsed_url.scheme or not parsed_url.netloc:
+                        log.warning(
+                            f"edit_uri: {edit_uri!r} is not a valid URL, it should include the http:// (scheme)"
+                        )
+                except ValueError as e:
+                    log.warning(f"edit_uri: {edit_uri!r} is not a valid URL: {e}")
+
+            self.edit_url = urljoin(repo_url, edit_uri)
         else:
             self.edit_url = None
 
