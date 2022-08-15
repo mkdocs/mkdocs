@@ -628,12 +628,7 @@ class RelativePathExtensionTests(unittest.TestCase):
 
     def get_rendered_result(self, files):
         cfg = load_config(docs_dir=self.DOCS_DIR)
-        fs = [
-            File(
-                f.replace('/', os.sep), cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']
-            )
-            for f in files
-        ]
+        fs = [File(f, cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']) for f in files]
         pg = Page('Foo', fs[0], cfg)
         pg.read_source(cfg)
         pg.render(cfg, Files(fs))

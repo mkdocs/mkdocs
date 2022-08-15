@@ -97,7 +97,7 @@ class Link:
 
 def get_navigation(files, config):
     """Build site navigation from config and files."""
-    nav_config = config['nav'] or nest_paths(f.src_path for f in files.documentation_pages())
+    nav_config = config['nav'] or nest_paths(f.src_uri for f in files.documentation_pages())
     items = _data_to_navigation(nav_config, files, config)
     if not isinstance(items, list):
         items = [items]

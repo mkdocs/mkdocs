@@ -1,4 +1,5 @@
 import os
+import sys
 import unittest
 from unittest import mock
 
@@ -27,6 +28,24 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         self.assertTrue(
             file != File('a.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
         )
+
+    @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
+    def test_src_path_windows(self):
+        f = File('foo\\a.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
+        self.assertEqual(f.src_uri, 'foo/a.md')
+        self.assertEqual(f.src_path, 'foo\\a.md')
+        f.src_uri = 'foo/b.md'
+        self.assertEqual(f.src_uri, 'foo/b.md')
+        self.assertEqual(f.src_path, 'foo\\b.md')
+        f.src_path = 'foo/c.md'
+        self.assertEqual(f.src_uri, 'foo/c.md')
+        self.assertEqual(f.src_path, 'foo\\c.md')
+        f.src_path = 'foo\\d.md'
+        self.assertEqual(f.src_uri, 'foo/d.md')
+        self.assertEqual(f.src_path, 'foo\\d.md')
+        f.src_uri = 'foo\\e.md'
+        self.assertEqual(f.src_uri, 'foo\\e.md')
+        self.assertEqual(f.src_path, 'foo\\e.md')
 
     def test_sort_files(self):
         self.assertEqual(
@@ -61,9 +80,9 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     def test_md_file(self):
         f = File('foo.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertPathsEqual(f.src_path, 'foo.md')
+        self.assertEqual(f.src_uri, 'foo.md')
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo.md')
-        self.assertPathsEqual(f.dest_path, 'foo.html')
+        self.assertEqual(f.dest_uri, 'foo.html')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo.html')
         self.assertEqual(f.url, 'foo.html')
         self.assertEqual(f.name, 'foo')
@@ -75,9 +94,9 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     def test_md_file_use_directory_urls(self):
         f = File('foo.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertPathsEqual(f.src_path, 'foo.md')
+        self.assertEqual(f.src_uri, 'foo.md')
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo.md')
-        self.assertPathsEqual(f.dest_path, 'foo/index.html')
+        self.assertEqual(f.dest_uri, 'foo/index.html')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/index.html')
         self.assertEqual(f.url, 'foo/')
         self.assertEqual(f.name, 'foo')
@@ -89,9 +108,9 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     def test_md_file_nested(self):
         f = File('foo/bar.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertPathsEqual(f.src_path, 'foo/bar.md')
+        self.assertEqual(f.src_uri, 'foo/bar.md')
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.md')
-        self.assertPathsEqual(f.dest_path, 'foo/bar.html')
+        self.assertEqual(f.dest_uri, 'foo/bar.html')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.html')
         self.assertEqual(f.url, 'foo/bar.html')
         self.assertEqual(f.name, 'bar')
@@ -103,9 +122,9 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     def test_md_file_nested_use_directory_urls(self):
         f = File('foo/bar.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertPathsEqual(f.src_path, 'foo/bar.md')
+        self.assertEqual(f.src_uri, 'foo/bar.md')
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.md')
-        self.assertPathsEqual(f.dest_path, 'foo/bar/index.html')
+        self.assertEqual(f.dest_uri, 'foo/bar/index.html')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar/index.html')
         self.assertEqual(f.url, 'foo/bar/')
         self.assertEqual(f.name, 'bar')
@@ -117,9 +136,9 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     def test_md_index_file(self):
         f = File('index.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertPathsEqual(f.src_path, 'index.md')
+        self.assertEqual(f.src_uri, 'index.md')
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/index.md')
-        self.assertPathsEqual(f.dest_path, 'index.html')
+        self.assertEqual(f.dest_uri, 'index.html')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/index.html')
         self.assertEqual(f.url, 'index.html')
         self.assertEqual(f.name, 'index')
@@ -131,9 +150,9 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     def test_md_readme_index_file(self):
         f = File('README.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertPathsEqual(f.src_path, 'README.md')
+        self.assertEqual(f.src_uri, 'README.md')
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/README.md')
-        self.assertPathsEqual(f.dest_path, 'index.html')
+        self.assertEqual(f.dest_uri, 'index.html')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/index.html')
         self.assertEqual(f.url, 'index.html')
         self.assertEqual(f.name, 'index')
@@ -145,9 +164,9 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     def test_md_index_file_use_directory_urls(self):
         f = File('index.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertPathsEqual(f.src_path, 'index.md')
+        self.assertEqual(f.src_uri, 'index.md')
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/index.md')
-        self.assertPathsEqual(f.dest_path, 'index.html')
+        self.assertEqual(f.dest_uri, 'index.html')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/index.html')
         self.assertEqual(f.url, '.')
         self.assertEqual(f.name, 'index')
@@ -159,9 +178,9 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     def test_md_readme_index_file_use_directory_urls(self):
         f = File('README.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertPathsEqual(f.src_path, 'README.md')
+        self.assertEqual(f.src_uri, 'README.md')
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/README.md')
-        self.assertPathsEqual(f.dest_path, 'index.html')
+        self.assertEqual(f.dest_uri, 'index.html')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/index.html')
         self.assertEqual(f.url, '.')
         self.assertEqual(f.name, 'index')
@@ -173,9 +192,9 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     def test_md_index_file_nested(self):
         f = File('foo/index.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertPathsEqual(f.src_path, 'foo/index.md')
+        self.assertEqual(f.src_uri, 'foo/index.md')
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/index.md')
-        self.assertPathsEqual(f.dest_path, 'foo/index.html')
+        self.assertEqual(f.dest_uri, 'foo/index.html')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/index.html')
         self.assertEqual(f.url, 'foo/index.html')
         self.assertEqual(f.name, 'index')
@@ -187,9 +206,9 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     def test_md_index_file_nested_use_directory_urls(self):
         f = File('foo/index.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertPathsEqual(f.src_path, 'foo/index.md')
+        self.assertEqual(f.src_uri, 'foo/index.md')
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/index.md')
-        self.assertPathsEqual(f.dest_path, 'foo/index.html')
+        self.assertEqual(f.dest_uri, 'foo/index.html')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/index.html')
         self.assertEqual(f.url, 'foo/')
         self.assertEqual(f.name, 'index')
@@ -201,9 +220,9 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     def test_static_file(self):
         f = File('foo/bar.html', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertPathsEqual(f.src_path, 'foo/bar.html')
+        self.assertEqual(f.src_uri, 'foo/bar.html')
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.html')
-        self.assertPathsEqual(f.dest_path, 'foo/bar.html')
+        self.assertEqual(f.dest_uri, 'foo/bar.html')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.html')
         self.assertEqual(f.url, 'foo/bar.html')
         self.assertEqual(f.name, 'bar')
@@ -215,9 +234,9 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     def test_static_file_use_directory_urls(self):
         f = File('foo/bar.html', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertPathsEqual(f.src_path, 'foo/bar.html')
+        self.assertEqual(f.src_uri, 'foo/bar.html')
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.html')
-        self.assertPathsEqual(f.dest_path, 'foo/bar.html')
+        self.assertEqual(f.dest_uri, 'foo/bar.html')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.html')
         self.assertEqual(f.url, 'foo/bar.html')
         self.assertEqual(f.name, 'bar')
@@ -229,9 +248,9 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     def test_media_file(self):
         f = File('foo/bar.jpg', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertPathsEqual(f.src_path, 'foo/bar.jpg')
+        self.assertEqual(f.src_uri, 'foo/bar.jpg')
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.jpg')
-        self.assertPathsEqual(f.dest_path, 'foo/bar.jpg')
+        self.assertEqual(f.dest_uri, 'foo/bar.jpg')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.jpg')
         self.assertEqual(f.url, 'foo/bar.jpg')
         self.assertEqual(f.name, 'bar')
@@ -243,9 +262,9 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     def test_media_file_use_directory_urls(self):
         f = File('foo/bar.jpg', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertPathsEqual(f.src_path, 'foo/bar.jpg')
+        self.assertEqual(f.src_uri, 'foo/bar.jpg')
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.jpg')
-        self.assertPathsEqual(f.dest_path, 'foo/bar.jpg')
+        self.assertEqual(f.dest_uri, 'foo/bar.jpg')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.jpg')
         self.assertEqual(f.url, 'foo/bar.jpg')
         self.assertEqual(f.name, 'bar')
@@ -257,9 +276,9 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     def test_javascript_file(self):
         f = File('foo/bar.js', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertPathsEqual(f.src_path, 'foo/bar.js')
+        self.assertEqual(f.src_uri, 'foo/bar.js')
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.js')
-        self.assertPathsEqual(f.dest_path, 'foo/bar.js')
+        self.assertEqual(f.dest_uri, 'foo/bar.js')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.js')
         self.assertEqual(f.url, 'foo/bar.js')
         self.assertEqual(f.name, 'bar')
@@ -271,9 +290,9 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     def test_javascript_file_use_directory_urls(self):
         f = File('foo/bar.js', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertPathsEqual(f.src_path, 'foo/bar.js')
+        self.assertEqual(f.src_uri, 'foo/bar.js')
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.js')
-        self.assertPathsEqual(f.dest_path, 'foo/bar.js')
+        self.assertEqual(f.dest_uri, 'foo/bar.js')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.js')
         self.assertEqual(f.url, 'foo/bar.js')
         self.assertEqual(f.name, 'bar')
@@ -285,9 +304,9 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     def test_css_file(self):
         f = File('foo/bar.css', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertPathsEqual(f.src_path, 'foo/bar.css')
+        self.assertEqual(f.src_uri, 'foo/bar.css')
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.css')
-        self.assertPathsEqual(f.dest_path, 'foo/bar.css')
+        self.assertEqual(f.dest_uri, 'foo/bar.css')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.css')
         self.assertEqual(f.url, 'foo/bar.css')
         self.assertEqual(f.name, 'bar')
@@ -299,9 +318,9 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     def test_css_file_use_directory_urls(self):
         f = File('foo/bar.css', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertPathsEqual(f.src_path, 'foo/bar.css')
+        self.assertEqual(f.src_uri, 'foo/bar.css')
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.css')
-        self.assertPathsEqual(f.dest_path, 'foo/bar.css')
+        self.assertEqual(f.dest_uri, 'foo/bar.css')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.css')
         self.assertEqual(f.url, 'foo/bar.css')
         self.assertEqual(f.name, 'bar')
@@ -313,9 +332,9 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
     def test_file_name_with_space(self):
         f = File('foo bar.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertPathsEqual(f.src_path, 'foo bar.md')
+        self.assertEqual(f.src_uri, 'foo bar.md')
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo bar.md')
-        self.assertPathsEqual(f.dest_path, 'foo bar.html')
+        self.assertEqual(f.dest_uri, 'foo bar.html')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo bar.html')
         self.assertEqual(f.url, 'foo%20bar.html')
         self.assertEqual(f.name, 'foo bar')
@@ -340,13 +359,13 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         self.assertEqual(files.get_file_from_path('foo/bar.jpg'), fs[3])
         self.assertEqual(files.get_file_from_path('foo/bar.jpg'), fs[3])
         self.assertEqual(files.get_file_from_path('missing.jpg'), None)
-        self.assertTrue(fs[2].src_path in files)
-        self.assertTrue(fs[2].src_path in files)
+        self.assertTrue(fs[2].src_uri in files.src_uris)
+        self.assertTrue(fs[2].src_uri in files.src_uris)
         extra_file = File('extra.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertFalse(extra_file.src_path in files)
+        self.assertFalse(extra_file.src_uri in files.src_uris)
         files.append(extra_file)
         self.assertEqual(len(files), 7)
-        self.assertTrue(extra_file.src_path in files)
+        self.assertTrue(extra_file.src_uri in files.src_uris)
         self.assertEqual(files.documentation_pages(), [fs[0], fs[1], extra_file])
 
     @tempdir(
@@ -708,14 +727,14 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         ]
         files = Files(fs)
         self.assertEqual(len(files), 6)
-        self.assertEqual(len(files.src_paths), 6)
+        self.assertEqual(len(files.src_uris), 6)
         extra_file = File('extra.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertFalse(extra_file.src_path in files)
+        self.assertFalse(extra_file.src_uri in files.src_uris)
         files.append(extra_file)
         self.assertEqual(len(files), 7)
-        self.assertEqual(len(files.src_paths), 7)
-        self.assertTrue(extra_file.src_path in files)
+        self.assertEqual(len(files.src_uris), 7)
+        self.assertTrue(extra_file.src_uri in files.src_uris)
         files.remove(extra_file)
         self.assertEqual(len(files), 6)
-        self.assertEqual(len(files.src_paths), 6)
-        self.assertFalse(extra_file.src_path in files)
+        self.assertEqual(len(files.src_uris), 6)
+        self.assertFalse(extra_file.src_uri in files.src_uris)

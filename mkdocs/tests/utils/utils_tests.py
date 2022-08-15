@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
-
 import datetime
 import logging
 import os
+import posixpath
 import shutil
 import stat
+import sys
 import tempfile
 import unittest
 from unittest import mock
@@ -140,11 +141,6 @@ class UtilsTests(unittest.TestCase):
                 'local/file/jquery.js',
                 '../local/file/jquery.js',
             ],
-            'local\\windows\\file\\jquery.js': [
-                'local/windows/file/jquery.js',
-                'local/windows/file/jquery.js',
-                '../local/windows/file/jquery.js',
-            ],
             'image.png': [
                 'image.png',
                 'image.png',
@@ -213,11 +209,6 @@ class UtilsTests(unittest.TestCase):
                 '../local/file/jquery.js',
                 '../../local/file/jquery.js',
             ],
-            'local\\windows\\file\\jquery.js': [
-                'local/windows/file/jquery.js',
-                '../local/windows/file/jquery.js',
-                '../../local/windows/file/jquery.js',
-            ],
             'image.png': [
                 'image.png',
                 '../image.png',
@@ -236,6 +227,40 @@ class UtilsTests(unittest.TestCase):
         }
 
         cfg = load_config(use_directory_urls=True)
+        pages = [
+            Page(
+                'Home',
+                File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+                cfg,
+            ),
+            Page(
+                'About',
+                File('about.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+                cfg,
+            ),
+            Page(
+                'FooBar',
+                File('foo/bar.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+                cfg,
+            ),
+        ]
+
+        for i, page in enumerate(pages):
+            urls = utils.create_media_urls(expected_results.keys(), page)
+            self.assertEqual([v[i] for v in expected_results.values()], urls)
+
+    @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
+    def test_create_media_urls_windows(self):
+
+        expected_results = {
+            'local\\windows\\file\\jquery.js': [
+                'local/windows/file/jquery.js',
+                'local/windows/file/jquery.js',
+                '../local/windows/file/jquery.js',
+            ],
+        }
+
+        cfg = load_config(use_directory_urls=False)
         pages = [
             Page(
                 'Home',
@@ -335,10 +360,7 @@ class UtilsTests(unittest.TestCase):
         with self.assertRaises(exceptions.ConfigurationError):
             utils.get_theme_names()
 
-    def test_nest_paths(self):
-
-        j = os.path.join
-
+    def test_nest_paths(self, j=posixpath.join):
         result = utils.nest_paths(
             [
                 'index.md',
@@ -371,6 +393,9 @@ class UtilsTests(unittest.TestCase):
                 },
             ],
         )
+
+    def test_nest_paths_native(self):
+        self.test_nest_paths(os.path.join)
 
     def test_unicode_yaml(self):
 
