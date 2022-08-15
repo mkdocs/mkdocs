@@ -269,7 +269,14 @@ def normalize_url(path, page=None, base=''):
 
 @functools.lru_cache(maxsize=None)
 def _get_norm_url(path):
-    path = path_to_url(path or '.')
+    if not path:
+        path = '.'
+    elif os.sep != '/' and os.sep in path:
+        log.warning(
+            f"Path '{path}' uses OS-specific separator '{os.sep}', "
+            f"change it to '/' so it is recognized on other systems."
+        )
+        path = path.replace(os.sep, '/')
     # Allow links to be fully qualified URLs
     parsed = urlsplit(path)
     if parsed.scheme or parsed.netloc or path.startswith(('/', '#')):
@@ -285,9 +292,8 @@ def create_media_urls(path_list, page=None, base=''):
 
 
 def path_to_url(path):
-    """Convert a system path to a URL."""
-
-    return path.replace(os.sep, '/')
+    """Soft-deprecated, do not use."""
+    return path.replace('\\', '/')
 
 
 def get_theme_dir(name):

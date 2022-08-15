@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import sys
 import unittest
 from unittest import mock
 
@@ -178,6 +179,32 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         context = build.get_context(nav, files, cfg, nav.pages[1])
         self.assertEqual(context['extra_css'], ['../../style.css'])
         self.assertEqual(context['extra_javascript'], ['../../script.js'])
+
+    @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
+    def test_context_extra_css_path_warning(self):
+        nav_cfg = [
+            {'Home': 'index.md'},
+        ]
+        cfg = load_config(
+            nav=nav_cfg,
+            extra_css=['assets\\style.css'],
+            use_directory_urls=False,
+        )
+        fs = [
+            File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+        ]
+        files = Files(fs)
+        nav = get_navigation(files, cfg)
+        with self.assertLogs('mkdocs', level='WARN') as cm:
+            context = build.get_context(nav, files, cfg, nav.pages[0])
+        self.assertEqual(context['extra_css'], ['assets/style.css'])
+        self.assertEqual(
+            cm.output,
+            [
+                "WARNING:mkdocs.utils:Path 'assets\\style.css' uses OS-specific separator '\\', "
+                "change it to '/' so it is recognized on other systems."
+            ],
+        )
 
     def test_context_extra_css_js_no_page(self):
         cfg = load_config(extra_css=['style.css'], extra_javascript=['script.js'])
