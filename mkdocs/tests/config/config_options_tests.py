@@ -421,6 +421,7 @@ class RepoURLTest(TestCase):
     class Schema:
         repo_url = config_options.URL()
         repo_name = config_options.RepoName('repo_url')
+        edit_uri_template = config_options.EditURITemplate('edit_uri')
         edit_uri = config_options.EditURI('repo_url')
 
     def test_repo_name_github(self):

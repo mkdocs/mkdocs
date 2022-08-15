@@ -73,6 +73,7 @@ class _MkDocsConfig:
     "GitHub", "Bitbucket" or "GitLab" for known url or Hostname
     for unknown urls."""
 
+    edit_uri_template = config_options.EditURITemplate('edit_uri')
     edit_uri = config_options.EditURI('repo_url')
     """Specify a URI to the docs dir in the project source repo, relative to the
     repo_url. When set, a link directly to the page in the source repo will

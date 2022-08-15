@@ -2,11 +2,14 @@ from __future__ import annotations
 
 import ipaddress
 import os
+import string
 import sys
 import traceback
 import typing as t
 import warnings
+from collections import UserString
 from typing import NamedTuple
+from urllib.parse import quote as urlquote
 from urllib.parse import urlsplit, urlunsplit
 
 import markdown
@@ -406,6 +409,42 @@ class EditURI(Type):
             edit_uri += '/'
 
         config[key_name] = edit_uri
+
+
+class EditURITemplate(OptionallyRequired):
+    class Formatter(string.Formatter):
+        def convert_field(self, value, conversion):
+            if conversion == 'q':
+                return urlquote(value, safe='')
+            return super().convert_field(value, conversion)
+
+    class Template(UserString):
+        def __init__(self, formatter, data):
+            super().__init__(data)
+            self.formatter = formatter
+            try:
+                self.format('', '')
+            except KeyError as e:
+                raise ValueError(f"Unknown template substitute: {e}")
+
+        def format(self, path, path_noext):
+            return self.formatter.format(self.data, path=path, path_noext=path_noext)
+
+    def __init__(self, edit_uri_key=None):
+        super().__init__()
+        self.edit_uri_key = edit_uri_key
+
+    def run_validation(self, value):
+        try:
+            return self.Template(self.Formatter(), value)
+        except Exception as e:
+            raise ValidationError(e)
+
+    def post_validation(self, config, key_name):
+        if self.edit_uri_key and config.get(key_name) and config.get(self.edit_uri_key):
+            self.warnings.append(
+                f"The option '{self.edit_uri_key}' has no effect when '{key_name}' is set."
+            )
 
 
 class RepoName(Type):
