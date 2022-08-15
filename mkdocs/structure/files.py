@@ -15,6 +15,7 @@ class Files:
 
     def __init__(self, files):
         self._files = files
+        self._src_uris = None
 
     def __iter__(self):
         return iter(self._files)
@@ -27,12 +28,14 @@ class Files:
 
     @property
     def src_paths(self):
-        """Soft-deprecated, do not use."""
+        """Soft-deprecated, prefer `.src_uris`."""
         return {file.src_path: file for file in self._files}
 
     @property
     def src_uris(self):
-        return {file.src_uri: file for file in self._files}
+        if self._src_uris is None:
+            self._src_uris = {file.src_uri: file for file in self._files}
+        return self._src_uris
 
     def get_file_from_path(self, path):
         """Return a File instance with File.src_uri equal to path."""
@@ -40,10 +43,12 @@ class Files:
 
     def append(self, file):
         """Append file to Files collection."""
+        self._src_uris = None
         self._files.append(file)
 
     def remove(self, file):
         """Remove file from Files collection."""
+        self._src_uris = None
         self._files.remove(file)
 
     def copy_static_files(self, dirty=False):
