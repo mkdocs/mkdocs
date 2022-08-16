@@ -9,20 +9,26 @@ from mkdocs.config.config_options import BaseConfigOption
 
 
 class ConfigBaseTests(unittest.TestCase):
-
     def test_unrecognised_keys(self):
 
         c = base.Config(schema=defaults.get_schema())
-        c.load_dict({
-            'not_a_valid_config_option': "test"
-        })
+        c.load_dict(
+            {
+                'not_a_valid_config_option': "test",
+            }
+        )
 
         failed, warnings = c.validate()
 
-        self.assertEqual(warnings, [
-            ('not_a_valid_config_option',
-                'Unrecognised configuration name: not_a_valid_config_option')
-        ])
+        self.assertEqual(
+            warnings,
+            [
+                (
+                    'not_a_valid_config_option',
+                    'Unrecognised configuration name: not_a_valid_config_option',
+                )
+            ],
+        )
 
     def test_missing_required(self):
 
@@ -197,8 +203,7 @@ class ConfigBaseTests(unittest.TestCase):
 
         config_file = tempfile.NamedTemporaryFile('w', delete=False)
         try:
-            config_file.write(
-                "site_dir: output\nsite_uri: https://www.mkdocs.org\n")
+            config_file.write("site_dir: output\nsite_uri: https://www.mkdocs.org\n")
             config_file.flush()
             config_file.close()
 
@@ -212,7 +217,7 @@ class ConfigBaseTests(unittest.TestCase):
             def pre_validation(self, config, key_name):
                 raise base.ValidationError('pre_validation error')
 
-        c = base.Config(schema=(('invalid_option', InvalidConfigOption()), ))
+        c = base.Config(schema=(('invalid_option', InvalidConfigOption()),))
 
         errors, warnings = c.validate()
 
@@ -227,7 +232,7 @@ class ConfigBaseTests(unittest.TestCase):
             def run_validation(self, value):
                 raise base.ValidationError('run_validation error')
 
-        c = base.Config(schema=(('invalid_option', InvalidConfigOption()), ))
+        c = base.Config(schema=(('invalid_option', InvalidConfigOption()),))
 
         errors, warnings = c.validate()
 
@@ -242,7 +247,7 @@ class ConfigBaseTests(unittest.TestCase):
             def post_validation(self, config, key_name):
                 raise base.ValidationError('post_validation error')
 
-        c = base.Config(schema=(('invalid_option', InvalidConfigOption()), ))
+        c = base.Config(schema=(('invalid_option', InvalidConfigOption()),))
 
         errors, warnings = c.validate()
 
@@ -253,7 +258,8 @@ class ConfigBaseTests(unittest.TestCase):
         self.assertEqual(len(warnings), 0)
 
     def test_pre_and_run_validation_errors(self):
-        """ A pre_validation error does not stop run_validation from running. """
+        """A pre_validation error does not stop run_validation from running."""
+
         class InvalidConfigOption(BaseConfigOption):
             def pre_validation(self, config, key_name):
                 raise base.ValidationError('pre_validation error')
@@ -261,7 +267,7 @@ class ConfigBaseTests(unittest.TestCase):
             def run_validation(self, value):
                 raise base.ValidationError('run_validation error')
 
-        c = base.Config(schema=(('invalid_option', InvalidConfigOption()), ))
+        c = base.Config(schema=(('invalid_option', InvalidConfigOption()),))
 
         errors, warnings = c.validate()
 
@@ -275,7 +281,8 @@ class ConfigBaseTests(unittest.TestCase):
         self.assertEqual(len(warnings), 0)
 
     def test_run_and_post_validation_errors(self):
-        """ A run_validation error stops post_validation from running. """
+        """A run_validation error stops post_validation from running."""
+
         class InvalidConfigOption(BaseConfigOption):
             def run_validation(self, value):
                 raise base.ValidationError('run_validation error')
@@ -283,7 +290,7 @@ class ConfigBaseTests(unittest.TestCase):
             def post_validation(self, config, key_name):
                 raise base.ValidationError('post_validation error')
 
-        c = base.Config(schema=(('invalid_option', InvalidConfigOption()), ))
+        c = base.Config(schema=(('invalid_option', InvalidConfigOption()),))
 
         errors, warnings = c.validate()
 
@@ -304,16 +311,19 @@ class ConfigBaseTests(unittest.TestCase):
             def post_validation(self, config, key_name):
                 self.warnings.append('post_validation warning')
 
-        c = base.Config(schema=(('invalid_option', InvalidConfigOption()), ))
+        c = base.Config(schema=(('invalid_option', InvalidConfigOption()),))
 
         errors, warnings = c.validate()
 
         self.assertEqual(len(errors), 0)
-        self.assertEqual(warnings, [
-            ('invalid_option', 'pre_validation warning'),
-            ('invalid_option', 'run_validation warning'),
-            ('invalid_option', 'post_validation warning'),
-        ])
+        self.assertEqual(
+            warnings,
+            [
+                ('invalid_option', 'pre_validation warning'),
+                ('invalid_option', 'run_validation warning'),
+                ('invalid_option', 'post_validation warning'),
+            ],
+        )
 
     def test_load_from_file_with_relative_paths(self):
         """

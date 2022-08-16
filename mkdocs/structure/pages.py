@@ -1,7 +1,8 @@
-import os
 import logging
-from urllib.parse import urlsplit, urlunsplit, urljoin
+import os
+import posixpath
 from urllib.parse import unquote as urlunquote
+from urllib.parse import urljoin, urlsplit, urlunsplit
 
 import markdown
 from markdown.extensions import Extension
@@ -9,7 +10,7 @@ from markdown.treeprocessors import Treeprocessor
 from markdown.util import AMP_SUBSTITUTE
 
 from mkdocs.structure.toc import get_toc
-from mkdocs.utils import meta, get_build_date, get_markdown_title
+from mkdocs.utils import get_build_date, get_markdown_title, meta
 
 log = logging.getLogger(__name__)
 
@@ -44,9 +45,9 @@ class Page:
 
     def __eq__(self, other):
         return (
-            isinstance(other, self.__class__) and
-            self.title == other.title and
-            self.file == other.file
+            isinstance(other, self.__class__)
+            and self.title == other.title
+            and self.file == other.file
         )
 
     def __repr__(self):
@@ -58,11 +59,11 @@ class Page:
         return '{}{}'.format('    ' * depth, repr(self))
 
     def _get_active(self):
-        """ Return active status of page. """
+        """Return active status of page."""
         return self.__active
 
     def _set_active(self, value):
-        """ Set active status of page and ancestors. """
+        """Set active status of page and ancestors."""
         self.__active = bool(value)
         if self.parent is not None:
             self.parent.active = bool(value)
@@ -102,19 +103,29 @@ class Page:
             self.abs_url = None
 
     def _set_edit_url(self, repo_url, edit_uri):
-        if repo_url and edit_uri:
-            src_path = self.file.src_path.replace('\\', '/')
-            # Ensure urljoin behavior is correct
-            if not edit_uri.startswith(('?', '#')) and not repo_url.endswith('/'):
-                repo_url += '/'
-            self.edit_url = urljoin(repo_url, edit_uri + src_path)
+        if edit_uri:
+            src_uri = self.file.src_uri
+            edit_uri += src_uri
+            if repo_url:
+                # Ensure urljoin behavior is correct
+                if not edit_uri.startswith(('?', '#')) and not repo_url.endswith('/'):
+                    repo_url += '/'
+            else:
+                try:
+                    parsed_url = urlsplit(edit_uri)
+                    if not parsed_url.scheme or not parsed_url.netloc:
+                        log.warning(
+                            f"edit_uri: {edit_uri!r} is not a valid URL, it should include the http:// (scheme)"
+                        )
+                except ValueError as e:
+                    log.warning(f"edit_uri: {edit_uri!r} is not a valid URL: {e}")
+
+            self.edit_url = urljoin(repo_url, edit_uri)
         else:
             self.edit_url = None
 
     def read_source(self, config):
-        source = config['plugins'].run_event(
-            'page_read_source', page=self, config=config
-        )
+        source = config['plugins'].run_event('page_read_source', page=self, config=config)
         if source is None:
             try:
                 with open(self.file.abs_src_path, encoding='utf-8-sig', errors='strict') as f:
@@ -164,13 +175,11 @@ class Page:
         Convert the Markdown source file to HTML as per the config.
         """
 
-        extensions = [
-            _RelativePathExtension(self.file, files)
-        ] + config['markdown_extensions']
+        extensions = [_RelativePathExtension(self.file, files)] + config['markdown_extensions']
 
         md = markdown.Markdown(
             extensions=extensions,
-            extension_configs=config['mdx_configs'] or {}
+            extension_configs=config['mdx_configs'] or {},
         )
         self.content = md.convert(self.markdown)
         self.toc = get_toc(getattr(md, 'toc_tokens', []))
@@ -205,25 +214,32 @@ class _RelativePathTreeprocessor(Treeprocessor):
     def path_to_url(self, url):
         scheme, netloc, path, query, fragment = urlsplit(url)
 
-        if (scheme or netloc or not path or url.startswith('/') or url.startswith('\\')
-                or AMP_SUBSTITUTE in url or '.' not in os.path.split(path)[-1]):
+        if (
+            scheme
+            or netloc
+            or not path
+            or url.startswith('/')
+            or url.startswith('\\')
+            or AMP_SUBSTITUTE in url
+            or '.' not in os.path.split(path)[-1]
+        ):
             # Ignore URLs unless they are a relative link to a source file.
             # AMP_SUBSTITUTE is used internally by Markdown only for email.
             # No '.' in the last part of a path indicates path does not point to a file.
             return url
 
         # Determine the filepath of the target.
-        target_path = os.path.join(os.path.dirname(self.file.src_path), urlunquote(path))
-        target_path = os.path.normpath(target_path).lstrip(os.sep)
+        target_uri = posixpath.join(posixpath.dirname(self.file.src_uri), urlunquote(path))
+        target_uri = posixpath.normpath(target_uri).lstrip('/')
 
         # Validate that the target exists in files collection.
-        if target_path not in self.files:
+        if target_uri not in self.files:
             log.warning(
-                f"Documentation file '{self.file.src_path}' contains a link to "
-                f"'{target_path}' which is not found in the documentation files."
+                f"Documentation file '{self.file.src_uri}' contains a link to "
+                f"'{target_uri}' which is not found in the documentation files."
             )
             return url
-        target_file = self.files.get_file_from_path(target_path)
+        target_file = self.files.get_file_from_path(target_uri)
         path = target_file.url_relative_to(self.file)
         components = (scheme, netloc, path, query, fragment)
         return urlunsplit(components)

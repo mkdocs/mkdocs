@@ -20,10 +20,24 @@ code.no-highlight {
     color: black;
 }
 
+div.admonition.block>.admonition-title {
+    display: none;
+}
+
 /* Definition List styles */
 
 dd {
     padding-left: 20px;
+}
+
+.doc-contents .field-body p:first-of-type {
+    display: inline;
+}
+
+.card-body svg {
+    width: 100%;
+    padding: 0 50px;
+    height: auto;
 }
 
 /* Homepage */

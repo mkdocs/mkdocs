@@ -35,7 +35,9 @@ Extracts, parses and transforms MultiMarkdown style data from documents.
 
 
 import re
+
 import yaml
+
 try:
     from yaml import CSafeLoader as SafeLoader
 except ImportError:  # pragma: no cover
@@ -64,14 +66,14 @@ def get_data(doc):
         try:
             data = yaml.load(m.group(1), SafeLoader)
             if isinstance(data, dict):
-                doc = doc[m.end():].lstrip('\n')
+                doc = doc[m.end() :].lstrip('\n')
             else:
                 data = {}
         except Exception:
             pass
         return doc, data
 
-    # No YAML deliminators. Try MultiMarkdown style
+    # No YAML delimiters. Try MultiMarkdown style
     lines = doc.replace('\r\n', '\n').replace('\r', '\n').split('\n')
 
     key = None

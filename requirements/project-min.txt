@@ -1,15 +1,18 @@
 babel==2.9.0
-click==3.3
-Jinja2==2.10.2
+click==8.0
+Jinja2==2.11.1
 markupsafe<=2.0.1
-Markdown==3.2.1
+Markdown==3.3
 PyYAML==5.1
 watchdog==2.0.0
 mdx_gh_links==0.2
+markdown-callouts==0.2
 ghp-import==1.0
 pyyaml_env_tag==0.1
 mkdocs-redirects==1.0.1
+pymdown-extensions==8.0.1
 importlib_metadata==4.3
 packaging==20.5
 mergedeep==1.3.4
 colorama==0.4; platform_system == 'Windows'
+mkdocstrings-python==0.7.1; python_version >= '3.7'

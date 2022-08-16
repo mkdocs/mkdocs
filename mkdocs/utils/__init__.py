@@ -6,36 +6,38 @@ and structure of the site and pages in the site.
 """
 
 
+import functools
 import logging
 import os
-import shutil
-import re
-import yaml
-import fnmatch
 import posixpath
-import functools
-import importlib_metadata
+import re
+import shutil
+import warnings
 from collections import defaultdict
 from datetime import datetime, timezone
+from pathlib import PurePath
 from urllib.parse import urlsplit
-from yaml_env_tag import construct_env_tag
+
+import importlib_metadata
+import yaml
 from mergedeep import merge
+from yaml_env_tag import construct_env_tag
 
 from mkdocs import exceptions
 
 log = logging.getLogger(__name__)
 
-markdown_extensions = [
+markdown_extensions = (
     '.markdown',
     '.mdown',
     '.mkdn',
     '.mkd',
-    '.md'
-]
+    '.md',
+)
 
 
 def get_yaml_loader(loader=yaml.Loader):
-    """ Wrap PyYaml's loader so we can extend it to suit our needs. """
+    """Wrap PyYaml's loader so we can extend it to suit our needs."""
 
     class Loader(loader):
         """
@@ -51,7 +53,7 @@ def get_yaml_loader(loader=yaml.Loader):
 
 
 def yaml_load(source, loader=None):
-    """ Return dict of source YAML file using loader, recursively deep merging inherited parent. """
+    """Return dict of source YAML file using loader, recursively deep merging inherited parent."""
     Loader = loader or get_yaml_loader()
     result = yaml.load(source, Loader=Loader)
     if result is not None and 'INHERIT' in result:
@@ -59,7 +61,8 @@ def yaml_load(source, loader=None):
         abspath = os.path.normpath(os.path.join(os.path.dirname(source.name), relpath))
         if not os.path.exists(abspath):
             raise exceptions.ConfigurationError(
-                f"Inherited config file '{relpath}' does not exist at '{abspath}'.")
+                f"Inherited config file '{relpath}' does not exist at '{abspath}'."
+            )
         log.debug(f"Loading inherited configuration file: {abspath}")
         with open(abspath, 'rb') as fd:
             parent = yaml_load(fd, Loader)
@@ -68,10 +71,9 @@ def yaml_load(source, loader=None):
 
 
 def modified_time(file_path):
-    """
-    Return the modified time of the supplied file. If the file does not exists zero is returned.
-    see build_pages for use.
-    """
+    warnings.warn(
+        "modified_time is never used in MkDocs and will be removed soon.", DeprecationWarning
+    )
     if os.path.exists(file_path):
         return os.path.getmtime(file_path)
     else:
@@ -117,10 +119,8 @@ def get_build_date():
 
 
 def reduce_list(data_set):
-    """ Reduce duplicate items in a list and preserve order """
-    seen = set()
-    return [item for item in data_set if
-            item not in seen and not seen.add(item)]
+    """Reduce duplicate items in a list and preserve order"""
+    return list(dict.fromkeys(data_set))
 
 
 def copy_file(source_path, output_path):
@@ -168,13 +168,9 @@ def clean_directory(directory):
 
 
 def get_html_path(path):
-    """
-    Map a source file path to an output html path.
-
-    Paths like 'index.md' will be converted to 'index.html'
-    Paths like 'about.md' will be converted to 'about/index.html'
-    Paths like 'api-guide/core.md' will be converted to 'api-guide/core/index.html'
-    """
+    warnings.warn(
+        "get_html_path is never used in MkDocs and will be removed soon.", DeprecationWarning
+    )
     path = os.path.splitext(path)[0]
     if os.path.basename(path) == 'index':
         return path + '.html'
@@ -182,20 +178,13 @@ def get_html_path(path):
 
 
 def get_url_path(path, use_directory_urls=True):
-    """
-    Map a source file path to an output html path.
-
-    Paths like 'index.md' will be converted to '/'
-    Paths like 'about.md' will be converted to '/about/'
-    Paths like 'api-guide/core.md' will be converted to '/api-guide/core/'
-
-    If `use_directory_urls` is `False`, returned URLs will include the a trailing
-    `index.html` rather than just returning the directory path.
-    """
+    warnings.warn(
+        "get_url_path is never used in MkDocs and will be removed soon.", DeprecationWarning
+    )
     path = get_html_path(path)
-    url = '/' + path.replace(os.path.sep, '/')
+    url = '/' + path.replace(os.sep, '/')
     if use_directory_urls:
-        return url[:-len('index.html')]
+        return url[: -len('index.html')]
     return url
 
 
@@ -205,30 +194,21 @@ def is_markdown_file(path):
 
     https://superuser.com/questions/249436/file-extension-for-markdown-files
     """
-    return any(fnmatch.fnmatch(path.lower(), f'*{x}') for x in markdown_extensions)
+    return path.endswith(markdown_extensions)
 
 
 def is_html_file(path):
-    """
-    Return True if the given file path is an HTML file.
-    """
-    ext = os.path.splitext(path)[1].lower()
-    return ext in [
-        '.html',
-        '.htm',
-    ]
+    warnings.warn(
+        "is_html_file is never used in MkDocs and will be removed soon.", DeprecationWarning
+    )
+    return path.lower().endswith(('.html', '.htm'))
 
 
 def is_template_file(path):
-    """
-    Return True if the given file path is an HTML file.
-    """
-    ext = os.path.splitext(path)[1].lower()
-    return ext in [
-        '.html',
-        '.htm',
-        '.xml',
-    ]
+    warnings.warn(
+        "is_template_file is never used in MkDocs and will be removed soon.", DeprecationWarning
+    )
+    return path.lower().endswith(('.html', '.htm', '.xml'))
 
 
 _ERROR_TEMPLATE_RE = re.compile(r'^\d{3}\.html?$')
@@ -278,7 +258,7 @@ def get_relative_url(url, other):
 
 
 def normalize_url(path, page=None, base=''):
-    """ Return a URL relative to the given page or using the base. """
+    """Return a URL relative to the given page or using the base."""
     path, is_abs = _get_norm_url(path)
     if is_abs:
         return path
@@ -289,7 +269,14 @@ def normalize_url(path, page=None, base=''):
 
 @functools.lru_cache(maxsize=None)
 def _get_norm_url(path):
-    path = path_to_url(path or '.')
+    if not path:
+        path = '.'
+    elif os.sep != '/' and os.sep in path:
+        log.warning(
+            f"Path '{path}' uses OS-specific separator '{os.sep}', "
+            f"change it to '/' so it is recognized on other systems."
+        )
+        path = path.replace(os.sep, '/')
     # Allow links to be fully qualified URLs
     parsed = urlsplit(path)
     if parsed.scheme or parsed.netloc or path.startswith(('/', '#')):
@@ -305,20 +292,19 @@ def create_media_urls(path_list, page=None, base=''):
 
 
 def path_to_url(path):
-    """Convert a system path to a URL."""
-
-    return '/'.join(path.split('\\'))
+    """Soft-deprecated, do not use."""
+    return path.replace('\\', '/')
 
 
 def get_theme_dir(name):
-    """ Return the directory of an installed theme by name. """
+    """Return the directory of an installed theme by name."""
 
     theme = get_themes()[name]
     return os.path.dirname(os.path.abspath(theme.load().__file__))
 
 
 def get_themes():
-    """ Return a dict of all installed themes as {name: EntryPoint}. """
+    """Return a dict of all installed themes as {name: EntryPoint}."""
 
     themes = {}
     eps = set(importlib_metadata.entry_points(group='mkdocs.themes'))
@@ -349,7 +335,7 @@ def get_theme_names():
 
 
 def dirname_to_title(dirname):
-    """ Return a page tile obtained from a directory name. """
+    """Return a page tile obtained from a directory name."""
     title = dirname
     title = title.replace('-', ' ').replace('_', ' ')
     # Capitalize if the dirname was all lowercase, otherwise leave it as-is.
@@ -406,13 +392,7 @@ def nest_paths(paths):
     nested = []
 
     for path in paths:
-
-        if os.path.sep not in path:
-            nested.append(path)
-            continue
-
-        directory, _ = os.path.split(path)
-        parts = directory.split(os.path.sep)
+        parts = PurePath(path).parent.parts
 
         branch = nested
         for part in parts:
@@ -425,7 +405,7 @@ def nest_paths(paths):
 
 
 class CountHandler(logging.NullHandler):
-    """ Counts all logged messages >= level. """
+    """Counts all logged messages >= level."""
 
     def __init__(self, **kwargs):
         self.counts = defaultdict(int)

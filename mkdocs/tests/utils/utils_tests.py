@@ -1,16 +1,17 @@
 #!/usr/bin/env python
 
-
-from unittest import mock
-import os
-import unittest
-import tempfile
-import shutil
-import stat
 import datetime
 import logging
+import os
+import posixpath
+import shutil
+import stat
+import sys
+import tempfile
+import unittest
+from unittest import mock
 
-from mkdocs import utils, exceptions
+from mkdocs import exceptions, utils
 from mkdocs.structure.files import File
 from mkdocs.structure.pages import Page
 from mkdocs.tests.base import dedent, load_config, tempdir
@@ -39,101 +40,73 @@ deep1:
 
 
 class UtilsTests(unittest.TestCase):
-    def test_html_path(self):
-        expected_results = {
-            'index.md': 'index.html',
-            'api-guide.md': 'api-guide/index.html',
-            'api-guide/index.md': 'api-guide/index.html',
-            'api-guide/testing.md': 'api-guide/testing/index.html',
-        }
-        for file_path, expected_html_path in expected_results.items():
-            html_path = utils.get_html_path(file_path)
-            self.assertEqual(html_path, expected_html_path)
-
-    def test_url_path(self):
-        expected_results = {
-            'index.md': '/',
-            'api-guide.md': '/api-guide/',
-            'api-guide/index.md': '/api-guide/',
-            'api-guide/testing.md': '/api-guide/testing/',
-        }
-        for file_path, expected_html_path in expected_results.items():
-            html_path = utils.get_url_path(file_path)
-            self.assertEqual(html_path, expected_html_path)
-
     def test_is_markdown_file(self):
         expected_results = {
             'index.md': True,
-            'index.MARKDOWN': True,
+            'index.markdown': True,
+            'index.MARKDOWN': False,
             'index.txt': False,
-            'indexmd': False
+            'indexmd': False,
         }
         for path, expected_result in expected_results.items():
-            is_markdown = utils.is_markdown_file(path)
-            self.assertEqual(is_markdown, expected_result)
-
-    def test_is_html_file(self):
-        expected_results = {
-            'index.htm': True,
-            'index.HTML': True,
-            'index.txt': False,
-            'indexhtml': False
-        }
-        for path, expected_result in expected_results.items():
-            is_html = utils.is_html_file(path)
-            self.assertEqual(is_html, expected_result)
+            with self.subTest(path):
+                is_markdown = utils.is_markdown_file(path)
+                self.assertEqual(is_markdown, expected_result)
 
     def test_get_relative_url(self):
-        expected_results = {
-            ('foo/bar', 'foo'): 'bar',
-            ('foo/bar.txt', 'foo'): 'bar.txt',
-            ('foo', 'foo/bar'): '..',
-            ('foo', 'foo/bar.txt'): '.',
-            ('foo/../../bar', '.'): 'bar',
-            ('foo/../../bar', 'foo'): '../bar',
-            ('foo//./bar/baz', 'foo/bar/baz'): '.',
-            ('a/b/.././../c', '.'): 'c',
-            ('a/b/c/d/ee', 'a/b/c/d/e'): '../ee',
-            ('a/b/c/d/ee', 'a/b/z/d/e'): '../../../c/d/ee',
-            ('foo', 'bar.'): 'foo',
-            ('foo', 'bar./'): '../foo',
-            ('foo', 'foo/bar./'): '..',
-            ('foo', 'foo/bar./.'): '..',
-            ('foo', 'foo/bar././'): '..',
-            ('foo/', 'foo/bar././'): '../',
-            ('foo', 'foo'): '.',
-            ('.foo', '.foo'): '.foo',
-            ('.foo/', '.foo'): '.foo/',
-            ('.foo', '.foo/'): '.',
-            ('.foo/', '.foo/'): './',
-            ('///', ''): './',
-            ('a///', ''): 'a/',
-            ('a///', 'a'): './',
-            ('.', 'here'): '..',
-            ('..', 'here'): '..',
-            ('../..', 'here'): '..',
-            ('../../a', 'here'): '../a',
-            ('..', 'here.txt'): '.',
-            ('a', ''): 'a',
-            ('a', '..'): 'a',
-            ('a', 'b'): '../a',
-            ('a', 'b/..'): '../a',  # The dots are considered a file. Documenting a long-standing bug.
-            ('a', 'b/../..'): 'a',
-            ('a/..../b', 'a/../b'): '../a/..../b',
-            ('a/я/b', 'a/я/c'): '../b',
-            ('a/я/b', 'a/яя/c'): '../../я/b',
-        }
-        for (url, other), expected_result in expected_results.items():
-            # Leading slash intentionally ignored
-            self.assertEqual(utils.get_relative_url(url, other), expected_result)
-            self.assertEqual(utils.get_relative_url('/' + url, other), expected_result)
-            self.assertEqual(utils.get_relative_url(url, '/' + other), expected_result)
-            self.assertEqual(utils.get_relative_url('/' + url, '/' + other), expected_result)
+        for case in [
+            dict(url='foo/bar', other='foo', expected='bar'),
+            dict(url='foo/bar.txt', other='foo', expected='bar.txt'),
+            dict(url='foo', other='foo/bar', expected='..'),
+            dict(url='foo', other='foo/bar.txt', expected='.'),
+            dict(url='foo/../../bar', other='.', expected='bar'),
+            dict(url='foo/../../bar', other='foo', expected='../bar'),
+            dict(url='foo//./bar/baz', other='foo/bar/baz', expected='.'),
+            dict(url='a/b/.././../c', other='.', expected='c'),
+            dict(url='a/b/c/d/ee', other='a/b/c/d/e', expected='../ee'),
+            dict(url='a/b/c/d/ee', other='a/b/z/d/e', expected='../../../c/d/ee'),
+            dict(url='foo', other='bar.', expected='foo'),
+            dict(url='foo', other='bar./', expected='../foo'),
+            dict(url='foo', other='foo/bar./', expected='..'),
+            dict(url='foo', other='foo/bar./.', expected='..'),
+            dict(url='foo', other='foo/bar././', expected='..'),
+            dict(url='foo/', other='foo/bar././', expected='../'),
+            dict(url='foo', other='foo', expected='.'),
+            dict(url='.foo', other='.foo', expected='.foo'),
+            dict(url='.foo/', other='.foo', expected='.foo/'),
+            dict(url='.foo', other='.foo/', expected='.'),
+            dict(url='.foo/', other='.foo/', expected='./'),
+            dict(url='///', other='', expected='./'),
+            dict(url='a///', other='', expected='a/'),
+            dict(url='a///', other='a', expected='./'),
+            dict(url='.', other='here', expected='..'),
+            dict(url='..', other='here', expected='..'),
+            dict(url='../..', other='here', expected='..'),
+            dict(url='../../a', other='here', expected='../a'),
+            dict(url='..', other='here.txt', expected='.'),
+            dict(url='a', other='', expected='a'),
+            dict(url='a', other='..', expected='a'),
+            dict(url='a', other='b', expected='../a'),
+            # The dots are considered a file. Documenting a long-standing bug:
+            dict(url='a', other='b/..', expected='../a'),
+            dict(url='a', other='b/../..', expected='a'),
+            dict(url='a/..../b', other='a/../b', expected='../a/..../b'),
+            dict(url='a/я/b', other='a/я/c', expected='../b'),
+            dict(url='a/я/b', other='a/яя/c', expected='../../я/b'),
+        ]:
+            url, other, expected = case['url'], case['other'], case['expected']
+            with self.subTest(url=url, other=other):
+                # Leading slash intentionally ignored
+                self.assertEqual(utils.get_relative_url(url, other), expected)
+                self.assertEqual(utils.get_relative_url('/' + url, other), expected)
+                self.assertEqual(utils.get_relative_url(url, '/' + other), expected)
+                self.assertEqual(utils.get_relative_url('/' + url, '/' + other), expected)
 
     def test_get_relative_url_empty(self):
         for url in ['', '.', '/.']:
             for other in ['', '.', '/', '/.']:
-                self.assertEqual(utils.get_relative_url(url, other), '.')
+                with self.subTest(url=url, other=other):
+                    self.assertEqual(utils.get_relative_url(url, other), '.')
 
         self.assertEqual(utils.get_relative_url('/', ''), './')
         self.assertEqual(utils.get_relative_url('/', '/'), './')
@@ -146,55 +119,62 @@ class UtilsTests(unittest.TestCase):
             'https://media.cdn.org/jq.js': [
                 'https://media.cdn.org/jq.js',
                 'https://media.cdn.org/jq.js',
-                'https://media.cdn.org/jq.js'
+                'https://media.cdn.org/jq.js',
             ],
             'http://media.cdn.org/jquery.js': [
                 'http://media.cdn.org/jquery.js',
                 'http://media.cdn.org/jquery.js',
-                'http://media.cdn.org/jquery.js'
+                'http://media.cdn.org/jquery.js',
             ],
             '//media.cdn.org/jquery.js': [
                 '//media.cdn.org/jquery.js',
                 '//media.cdn.org/jquery.js',
-                '//media.cdn.org/jquery.js'
+                '//media.cdn.org/jquery.js',
             ],
             'media.cdn.org/jquery.js': [
                 'media.cdn.org/jquery.js',
                 'media.cdn.org/jquery.js',
-                '../media.cdn.org/jquery.js'
+                '../media.cdn.org/jquery.js',
             ],
             'local/file/jquery.js': [
                 'local/file/jquery.js',
                 'local/file/jquery.js',
-                '../local/file/jquery.js'
-            ],
-            'local\\windows\\file\\jquery.js': [
-                'local/windows/file/jquery.js',
-                'local/windows/file/jquery.js',
-                '../local/windows/file/jquery.js'
+                '../local/file/jquery.js',
             ],
             'image.png': [
                 'image.png',
                 'image.png',
-                '../image.png'
+                '../image.png',
             ],
             'style.css?v=20180308c': [
                 'style.css?v=20180308c',
                 'style.css?v=20180308c',
-                '../style.css?v=20180308c'
+                '../style.css?v=20180308c',
             ],
             '#some_id': [
                 '#some_id',
                 '#some_id',
-                '#some_id'
-            ]
+                '#some_id',
+            ],
         }
 
         cfg = load_config(use_directory_urls=False)
         pages = [
-            Page('Home', File('index.md',  cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']), cfg),
-            Page('About', File('about.md',  cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']), cfg),
-            Page('FooBar', File('foo/bar.md',  cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']), cfg)
+            Page(
+                'Home',
+                File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+                cfg,
+            ),
+            Page(
+                'About',
+                File('about.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+                cfg,
+            ),
+            Page(
+                'FooBar',
+                File('foo/bar.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+                cfg,
+            ),
         ]
 
         for i, page in enumerate(pages):
@@ -207,55 +187,96 @@ class UtilsTests(unittest.TestCase):
             'https://media.cdn.org/jq.js': [
                 'https://media.cdn.org/jq.js',
                 'https://media.cdn.org/jq.js',
-                'https://media.cdn.org/jq.js'
+                'https://media.cdn.org/jq.js',
             ],
             'http://media.cdn.org/jquery.js': [
                 'http://media.cdn.org/jquery.js',
                 'http://media.cdn.org/jquery.js',
-                'http://media.cdn.org/jquery.js'
+                'http://media.cdn.org/jquery.js',
             ],
             '//media.cdn.org/jquery.js': [
                 '//media.cdn.org/jquery.js',
                 '//media.cdn.org/jquery.js',
-                '//media.cdn.org/jquery.js'
+                '//media.cdn.org/jquery.js',
             ],
             'media.cdn.org/jquery.js': [
                 'media.cdn.org/jquery.js',
                 '../media.cdn.org/jquery.js',
-                '../../media.cdn.org/jquery.js'
+                '../../media.cdn.org/jquery.js',
             ],
             'local/file/jquery.js': [
                 'local/file/jquery.js',
                 '../local/file/jquery.js',
-                '../../local/file/jquery.js'
-            ],
-            'local\\windows\\file\\jquery.js': [
-                'local/windows/file/jquery.js',
-                '../local/windows/file/jquery.js',
-                '../../local/windows/file/jquery.js'
+                '../../local/file/jquery.js',
             ],
             'image.png': [
                 'image.png',
                 '../image.png',
-                '../../image.png'
+                '../../image.png',
             ],
             'style.css?v=20180308c': [
                 'style.css?v=20180308c',
                 '../style.css?v=20180308c',
-                '../../style.css?v=20180308c'
+                '../../style.css?v=20180308c',
             ],
             '#some_id': [
                 '#some_id',
                 '#some_id',
-                '#some_id'
-            ]
+                '#some_id',
+            ],
         }
 
         cfg = load_config(use_directory_urls=True)
         pages = [
-            Page('Home', File('index.md',  cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']), cfg),
-            Page('About', File('about.md',  cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']), cfg),
-            Page('FooBar', File('foo/bar.md',  cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']), cfg)
+            Page(
+                'Home',
+                File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+                cfg,
+            ),
+            Page(
+                'About',
+                File('about.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+                cfg,
+            ),
+            Page(
+                'FooBar',
+                File('foo/bar.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+                cfg,
+            ),
+        ]
+
+        for i, page in enumerate(pages):
+            urls = utils.create_media_urls(expected_results.keys(), page)
+            self.assertEqual([v[i] for v in expected_results.values()], urls)
+
+    @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
+    def test_create_media_urls_windows(self):
+
+        expected_results = {
+            'local\\windows\\file\\jquery.js': [
+                'local/windows/file/jquery.js',
+                'local/windows/file/jquery.js',
+                '../local/windows/file/jquery.js',
+            ],
+        }
+
+        cfg = load_config(use_directory_urls=False)
+        pages = [
+            Page(
+                'Home',
+                File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+                cfg,
+            ),
+            Page(
+                'About',
+                File('about.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+                cfg,
+            ),
+            Page(
+                'FooBar',
+                File('foo/bar.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+                cfg,
+            ),
         ]
 
         for i, page in enumerate(pages):
@@ -265,14 +286,12 @@ class UtilsTests(unittest.TestCase):
     def test_reduce_list(self):
         self.assertEqual(
             utils.reduce_list([1, 2, 3, 4, 5, 5, 2, 4, 6, 7, 8]),
-            [1, 2, 3, 4, 5, 6, 7, 8]
+            [1, 2, 3, 4, 5, 6, 7, 8],
         )
 
     def test_get_themes(self):
 
-        self.assertEqual(
-            sorted(utils.get_theme_names()),
-            ['mkdocs', 'readthedocs'])
+        self.assertEqual(sorted(utils.get_theme_names()), ['mkdocs', 'readthedocs'])
 
     @mock.patch('importlib_metadata.entry_points', autospec=True)
     def test_get_theme_dir(self, mock_iter):
@@ -321,9 +340,7 @@ class UtilsTests(unittest.TestCase):
 
         mock_iter.return_value = [theme1, theme2]
 
-        self.assertEqual(
-            sorted(utils.get_theme_names()),
-            sorted(['mkdocs2', ]))
+        self.assertEqual(sorted(utils.get_theme_names()), sorted(['mkdocs2']))
 
     @mock.patch('importlib_metadata.entry_points', autospec=True)
     def test_get_themes_error(self, mock_iter):
@@ -343,34 +360,42 @@ class UtilsTests(unittest.TestCase):
         with self.assertRaises(exceptions.ConfigurationError):
             utils.get_theme_names()
 
-    def test_nest_paths(self):
-
-        j = os.path.join
-
-        result = utils.nest_paths([
-            'index.md',
-            j('user-guide', 'configuration.md'),
-            j('user-guide', 'styling-your-docs.md'),
-            j('user-guide', 'writing-your-docs.md'),
-            j('about', 'contributing.md'),
-            j('about', 'license.md'),
-            j('about', 'release-notes.md'),
-        ])
+    def test_nest_paths(self, j=posixpath.join):
+        result = utils.nest_paths(
+            [
+                'index.md',
+                j('user-guide', 'configuration.md'),
+                j('user-guide', 'styling-your-docs.md'),
+                j('user-guide', 'writing-your-docs.md'),
+                j('about', 'contributing.md'),
+                j('about', 'license.md'),
+                j('about', 'release-notes.md'),
+            ]
+        )
 
         self.assertEqual(
             result,
             [
                 'index.md',
-                {'User guide': [
-                    j('user-guide', 'configuration.md'),
-                    j('user-guide', 'styling-your-docs.md'),
-                    j('user-guide', 'writing-your-docs.md')]},
-                {'About': [
-                    j('about', 'contributing.md'),
-                    j('about', 'license.md'),
-                    j('about', 'release-notes.md')]}
-            ]
+                {
+                    'User guide': [
+                        j('user-guide', 'configuration.md'),
+                        j('user-guide', 'styling-your-docs.md'),
+                        j('user-guide', 'writing-your-docs.md'),
+                    ]
+                },
+                {
+                    'About': [
+                        j('about', 'contributing.md'),
+                        j('about', 'license.md'),
+                        j('about', 'release-notes.md'),
+                    ]
+                },
+            ],
         )
+
+    def test_nest_paths_native(self):
+        self.test_nest_paths(os.path.join)
 
     def test_unicode_yaml(self):
 
@@ -415,15 +440,15 @@ class UtilsTests(unittest.TestCase):
             'baz': {
                 'sub1': 'replaced',
                 'sub2': 2,
-                'sub3': 'new'
+                'sub3': 'new',
             },
             'deep1': {
                 'deep2-1': {
                     'deep3-1': 'replaced',
-                    'deep3-2': 'bar'
+                    'deep3-2': 'bar',
                 },
-                'deep2-2': 'baz'
-            }
+                'deep2-2': 'baz',
+            },
         }
         with open(os.path.join(tdir, 'base.yml')) as fd:
             result = utils.yaml_load(fd)
@@ -436,68 +461,71 @@ class UtilsTests(unittest.TestCase):
                 utils.yaml_load(fd)
 
     def test_copy_files(self):
-        src_paths = [
-            'foo.txt',
-            'bar.txt',
-            'baz.txt',
-        ]
-        dst_paths = [
-            'foo.txt',
-            'foo/',             # ensure src filename is appended
-            'foo/bar/baz.txt'   # ensure missing dirs are created
-        ]
-        expected = [
-            'foo.txt',
-            'foo/bar.txt',
-            'foo/bar/baz.txt',
+        cases = [
+            dict(
+                src_path='foo.txt',
+                dst_path='foo.txt',
+                expected='foo.txt',
+            ),
+            dict(
+                src_path='bar.txt',
+                dst_path='foo/',  # ensure src filename is appended
+                expected='foo/bar.txt',
+            ),
+            dict(
+                src_path='baz.txt',
+                dst_path='foo/bar/baz.txt',  # ensure missing dirs are created
+                expected='foo/bar/baz.txt',
+            ),
         ]
 
         src_dir = tempfile.mkdtemp()
         dst_dir = tempfile.mkdtemp()
 
         try:
-            for i, src in enumerate(src_paths):
-                src = os.path.join(src_dir, src)
-                with open(src, 'w') as f:
-                    f.write('content')
-                dst = os.path.join(dst_dir, dst_paths[i])
-                utils.copy_file(src, dst)
-                self.assertTrue(os.path.isfile(os.path.join(dst_dir, expected[i])))
+            for case in cases:
+                src, dst, expected = case['src_path'], case['dst_path'], case['expected']
+                with self.subTest(src):
+                    src = os.path.join(src_dir, src)
+                    with open(src, 'w') as f:
+                        f.write('content')
+                    dst = os.path.join(dst_dir, dst)
+                    utils.copy_file(src, dst)
+                    self.assertTrue(os.path.isfile(os.path.join(dst_dir, expected)))
         finally:
             shutil.rmtree(src_dir)
             shutil.rmtree(dst_dir)
 
     def test_copy_files_without_permissions(self):
-        src_paths = [
-            'foo.txt',
-            'bar.txt',
-            'baz.txt',
-        ]
-        expected = [
-            'foo.txt',
-            'bar.txt',
-            'baz.txt',
+        cases = [
+            dict(src_path='foo.txt', expected='foo.txt'),
+            dict(src_path='bar.txt', expected='bar.txt'),
+            dict(src_path='baz.txt', expected='baz.txt'),
         ]
 
         src_dir = tempfile.mkdtemp()
         dst_dir = tempfile.mkdtemp()
 
         try:
-            for i, src in enumerate(src_paths):
-                src = os.path.join(src_dir, src)
-                with open(src, 'w') as f:
-                    f.write('content')
-                # Set src file to read-only
-                os.chmod(src, stat.S_IRUSR)
-                utils.copy_file(src, dst_dir)
-                self.assertTrue(os.path.isfile(os.path.join(dst_dir, expected[i])))
-                self.assertNotEqual(os.stat(src).st_mode, os.stat(os.path.join(dst_dir, expected[i])).st_mode)
-                # While src was read-only, dst must remain writable
-                self.assertTrue(os.access(os.path.join(dst_dir, expected[i]), os.W_OK))
+            for case in cases:
+                src, expected = case['src_path'], case['expected']
+                with self.subTest(src):
+                    src = os.path.join(src_dir, src)
+                    with open(src, 'w') as f:
+                        f.write('content')
+                    # Set src file to read-only
+                    os.chmod(src, stat.S_IRUSR)
+                    utils.copy_file(src, dst_dir)
+                    self.assertTrue(os.path.isfile(os.path.join(dst_dir, expected)))
+                    self.assertNotEqual(
+                        os.stat(src).st_mode, os.stat(os.path.join(dst_dir, expected)).st_mode
+                    )
+                    # While src was read-only, dst must remain writable
+                    self.assertTrue(os.access(os.path.join(dst_dir, expected), os.W_OK))
         finally:
-            for src in src_paths:
+            for case in cases:
                 # Undo read-only so we can delete temp files
-                src = os.path.join(src_dir, src)
+                src = os.path.join(src_dir, case['src_path'])
                 if os.path.exists(src):
                     os.chmod(src, stat.S_IRUSR | stat.S_IWUSR)
             shutil.rmtree(src_dir)
@@ -524,9 +552,9 @@ class UtilsTests(unittest.TestCase):
                     'title': 'Foo Bar',
                     'date': '2018-07-10',
                     'summary': 'Line one Line two',
-                    'tags': 'foo bar'
-                }
-            )
+                    'tags': 'foo bar',
+                },
+            ),
         )
 
     def test_mm_meta_data_blank_first_line(self):
@@ -556,9 +584,9 @@ class UtilsTests(unittest.TestCase):
                     'Title': 'Foo Bar',
                     'Date': datetime.date(2018, 7, 10),
                     'Summary': 'Line one Line two',
-                    'Tags': ['foo', 'bar']
-                }
-            )
+                    'Tags': ['foo', 'bar'],
+                },
+            ),
         )
 
     def test_yaml_meta_data_not_dict(self):

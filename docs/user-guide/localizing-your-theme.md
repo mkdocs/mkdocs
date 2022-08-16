@@ -4,13 +4,12 @@ Display your theme in your preferred language.
 
 ---
 
-!!! Note
-
-    Theme localization only translates the text elements of the theme itself
-    (such as "next" and "previous" links), not the actual content of your
-    documentation. If you wish to create multilingual documentation, you need
-    to combine theme localization as described here with a third-party
-    internationalization/localization plugin.
+NOTE:
+Theme localization only translates the text elements of the theme itself
+(such as "next" and "previous" links), not the actual content of your
+documentation. If you wish to create multilingual documentation, you need
+to combine theme localization as described here with a third-party
+internationalization/localization plugin.
 
 ## Installation
 
@@ -35,10 +34,9 @@ documentation.
 - [mkdocs]
 - [readthedocs]
 
-!!! Warning
-
-    If you configure a language locale which is not yet supported by the theme
-    that you are using, MkDocs will fall back to the theme's default locale.
+WARNING:
+If you configure a language locale which is not yet supported by the theme
+that you are using, MkDocs will fall back to the theme's default locale.
 
 ## Usage
 

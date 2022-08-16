@@ -64,9 +64,7 @@ def do_request(server, content):
     return headers, content.decode()
 
 
-SCRIPT_REGEX = (
-    r'<script>[\S\s]+?livereload\([0-9]+, [0-9]+\);\s*</script>'
-)
+SCRIPT_REGEX = r'<script>[\S\s]+?livereload\([0-9]+, [0-9]+\);\s*</script>'
 
 
 class BuildTests(unittest.TestCase):

@@ -23,11 +23,26 @@ The current and past members of the MkDocs team.
 * [@oprypin](https://github.com/oprypin/)
 * [@ultrabug](https://github.com/ultrabug/)
 
+## Version 1.3.1 (2022-07-19)
+
+*   Pin Python-Markdown version to &lt;3.4, thus excluding its latest release that breaks too many external extensions (#2893)
+
+*   When a Markdown extension fails to load, print its name and traceback (#2894)
+
+*   Bugfix for "readthedocs" theme (regression in 1.3.0): add missing space in breadcrumbs (#2810)
+
+*   Bugfix: don't complain when a file "readme.md" (lowercase) exists, it's not recognized otherwise (#2852)
+
+*   Built-in themes now also support these languages:
+    * Italian (#2860)
+
+Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.3.0...1.3.1).
+
 ## Version 1.3.0 (2022-03-26)
 
 ### Feature upgrades
 
-* ReadTheDocs theme updated from v0.4.1 to v1.0.0 according to upstream (#2585)
+*   ReadTheDocs theme updated from v0.4.1 to v1.0.0 according to upstream (#2585)
 
     The most notable changes:
 
@@ -37,11 +52,11 @@ The current and past members of the MkDocs team.
 
     See [documentation of config options for the theme](https://www.mkdocs.org/user-guide/choosing-your-theme/#readthedocs)
 
-* Built-in themes now also support these languages:
+*   Built-in themes now also support these languages:
     * German (#2633)
     * Persian (Farsi) (#2787)
 
-* Support custom directories to watch when running `mkdocs serve` (#2642)
+*   Support custom directories to watch when running `mkdocs serve` (#2642)
 
     MkDocs by default watches the *docs* directory and the config file. Now there is a way to add more directories to watch for changes, either via the YAML `watch` key or the command line flag `--watch`.
 
@@ -49,27 +64,27 @@ The current and past members of the MkDocs team.
 
     See [documentation](https://www.mkdocs.org/user-guide/configuration/#watch).
 
-* New `--no-history` option for `gh_deploy` (#2594)
+*   New `--no-history` option for `gh_deploy` (#2594)
 
     Allows to discard the history of commits when deploying, and instead replace it with one root commit
 
 ### Bug fixes
 
-* An XSS vulnerability when using the search function in built-in themes was fixed (#2791)
+*   An XSS vulnerability when using the search function in built-in themes was fixed (#2791)
 
-* Setting the `edit_uri` option no longer erroneously adds a trailing slash to `repo_url` (#2733)
+*   Setting the `edit_uri` option no longer erroneously adds a trailing slash to `repo_url` (#2733)
 
 ### Miscellaneous
 
-* Breaking change: the `pages` config option that was deprecated for a very long time now causes an error when used (#2652)
+*   Breaking change: the `pages` config option that was deprecated for a very long time now causes an error when used (#2652)
 
     To fix the error, just change from `pages` to `nav`.
 
-* Performance optimization: during startup of MkDocs, code and dependencies of other commands will not be imported (#2714)
+*   Performance optimization: during startup of MkDocs, code and dependencies of other commands will not be imported (#2714)
 
     The most visible effect of this is that dependencies of `mkdocs serve` will not be imported when `mkdocs build` is used.
 
-* Recursively validate `nav` (#2680)
+*   Recursively validate `nav` (#2680)
 
     Validation of the nested `nav` structure has been reworked to report errors early and reliably. Some [edge cases](https://github.com/mkdocs/mkdocs/blob/b7272150bbc9bf8f66c878f6517742de3528972b/mkdocs/tests/config/config_options_tests.py#L783) have been declared invalid.
 
@@ -77,58 +92,58 @@ Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/comp
 
 ## Version 1.2.4 (2022-03-26)
 
-* Compatibility with Jinja2 3.1.0 (#2800)
+*   Compatibility with Jinja2 3.1.0 (#2800)
 
     Due to a breaking change in Jinja2, MkDocs would crash with the message
     `AttributeError: module 'jinja2' has no attribute 'contextfilter'`
 
 ## Version 1.2.3 (2021-10-12)
 
-* Built-in themes now also support these languages:
+*   Built-in themes now also support these languages:
     * Simplified Chinese (#2497)
     * Japanese (#2525)
     * Brazilian Portuguese (#2535)
     * Spanish (#2545, previously #2396)
 
-* Third-party plugins will take precedence over built-in plugins with the same name (#2591)
+*   Third-party plugins will take precedence over built-in plugins with the same name (#2591)
 
-* Bugfix: Fix ability to load translations for some languages: core support (#2565) and search plugin support with fallbacks (#2602)
+*   Bugfix: Fix ability to load translations for some languages: core support (#2565) and search plugin support with fallbacks (#2602)
 
-* Bugfix (regression in 1.2): Prevent directory traversal in the dev server (#2604)
+*   Bugfix (regression in 1.2): Prevent directory traversal in the dev server (#2604)
 
-* Bugfix (regression in 1.2): Prevent webserver warnings from being treated as a build failure in strict mode (#2607)
+*   Bugfix (regression in 1.2): Prevent webserver warnings from being treated as a build failure in strict mode (#2607)
 
-* Bugfix: Correctly print colorful messages in the terminal on Windows (#2606)
+*   Bugfix: Correctly print colorful messages in the terminal on Windows (#2606)
 
-* Bugfix: Python version 3.10 was displayed incorrectly in `--version` (#2618)
+*   Bugfix: Python version 3.10 was displayed incorrectly in `--version` (#2618)
 
 Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.2.2...1.2.3).
 
 ## Version 1.2.2 (2021-07-18)
 
-* Bugfix (regression in 1.2): Fix serving files/paths with Unicode characters (#2464)
+*   Bugfix (regression in 1.2): Fix serving files/paths with Unicode characters (#2464)
 
-* Bugfix (regression in 1.2): Revert livereload file watching to use polling observer (#2477)
+*   Bugfix (regression in 1.2): Revert livereload file watching to use polling observer (#2477)
 
     This had to be done to reasonably support usages that span virtual filesystems such as non-native Docker and network mounts.
 
     This goes back to the polling approach, very similar to that was always used prior, meaning most of the same downsides with latency and CPU usage.
 
-* Revert from 1.2: Remove the requirement of a `site_url` config and the restriction on `use_directory_urls` (#2490)
+*   Revert from 1.2: Remove the requirement of a `site_url` config and the restriction on `use_directory_urls` (#2490)
 
-* Bugfix (regression in 1.2): Don't require trailing slash in the URL when serving a directory index in `mkdocs serve` server (#2507)
+*   Bugfix (regression in 1.2): Don't require trailing slash in the URL when serving a directory index in `mkdocs serve` server (#2507)
 
     Instead of showing a 404 error, detect if it's a directory and redirect to a path with a trailing slash added, like before.
 
-* Bugfix: Fix `gh_deploy` with config-file in the current directory (#2481)
+*   Bugfix: Fix `gh_deploy` with config-file in the current directory (#2481)
 
-* Bugfix: Fix reversed breadcrumbs in "readthedocs" theme (#2179)
+*   Bugfix: Fix reversed breadcrumbs in "readthedocs" theme (#2179)
 
-* Allow "mkdocs.yaml" as the file name when '--config' is not passed (#2478)
+*   Allow "mkdocs.yaml" as the file name when '--config' is not passed (#2478)
 
-* Stop treating ";" as a special character in URLs: urlparse -> urlsplit (#2502)
+*   Stop treating ";" as a special character in URLs: urlparse -> urlsplit (#2502)
 
-* Improve build performance for sites with many pages (partly already done in 1.2) (#2407)
+*   Improve build performance for sites with many pages (partly already done in 1.2) (#2407)
 
 ## Version 1.2.1 (2021-06-09)
 
@@ -246,12 +261,9 @@ in the Plugins documentation for details.
 MkDocs now has tree new exceptions defined in `mkdocs.exceptions`:
 `BuildError`, `PluginError`, and `Abort`:
 
-* `PluginError` can be raised from a plugin
-  to stop the build and log an error message *without traceback*.
-* `BuildError` should not be used by third-party plugins developers
-  and is reserved for internal use only.
-* `Abort` is used internally to abort the build and display an error
-  without a traceback.
+* `PluginError` can be raised from a plugin to stop the build and log an error message *without traceback*.
+* `BuildError` should not be used by third-party plugins developers and is reserved for internal use only.
+* `Abort` is used internally to abort the build and display an error without a traceback.
 
 See [`Handling errors`](../dev-guide/plugins.md#handling-errors)
 in the Plugins documentation for details.
@@ -261,10 +273,8 @@ in the Plugins documentation for details.
 Users can now specify which strategy they wish to use when indexing
 their site for search. A user can select between the following options:
 
-* **full**: Adds page title, section headings, and full page text to the
-search index.
-* **sections**: Adds page titles and section headings only to the search
-index.
+* **full**: Adds page title, section headings, and full page text to the search index.
+* **sections**: Adds page titles and section headings only to the search index.
 * **titles**: Adds only the page titles to the search index.
 
 See [`Search Indexing`](../user-guide/configuration.md#indexing) in the
@@ -272,9 +282,9 @@ configuration documentation for details.
 
 ### Backward Incompatible Changes in 1.2
 
-* The [site_url](../user-guide/configuration.md#site_url) configuration option
-  is now **required**. If it is not set, a warning will be issued. In a future
-  release an error will be raised (#2189).
+*   The [site_url](../user-guide/configuration.md#site_url) configuration option
+    is now **required**. If it is not set, a warning will be issued. In a future
+    release an error will be raised (#2189).
 
     The [use_directory_urls](../user-guide/configuration.md#use_directory_urls)
     configuration option will be forced to `false` if
@@ -282,62 +292,61 @@ configuration documentation for details.
     string. In that case, if `use_directory_urls` is not explicitly set to
     `false`, a warning will be issued (#2189).
 
-    !!! note
-        This was reverted in release 1.2.2
+    NOTE: This was reverted in release 1.2.2
 
-* The `google_analytics` configuration option is deprecated as Google appears to
-  be phasing it out in favor of its new Google Analytics 4 property. See the
-  documentation for your theme for alternatives which can be configured as part
-  of your theme configuration. For example, the [mkdocs][mkdocs-theme] and
-  [readthedocs][rtd-theme] themes have each added a new `theme.analytics.gtag`
-  configuration option which uses the new Google Analytics 4 property. See
-  Google's documentation on how to [Upgrade to a Google Analytics 4
-  property][ga4]. Then set  `theme.analytics.gtag` to the "G-" ID and delete the
-  `google_analytics` configuration option which contains a "UA-" ID. So long
-  as the old "UA-" ID and new "G-" ID are properly linked in your Google
-  account, and you are using the "G-" ID, the data will be made available in
-  both the old and new formats by Google Analytics. See #2252.
+*   The `google_analytics` configuration option is deprecated as Google appears to
+    be phasing it out in favor of its new Google Analytics 4 property. See the
+    documentation for your theme for alternatives which can be configured as part
+    of your theme configuration. For example, the [mkdocs][mkdocs-theme] and
+    [readthedocs][rtd-theme] themes have each added a new `theme.analytics.gtag`
+    configuration option which uses the new Google Analytics 4 property. See
+    Google's documentation on how to [Upgrade to a Google Analytics 4
+    property][ga4]. Then set  `theme.analytics.gtag` to the "G-" ID and delete the
+    `google_analytics` configuration option which contains a "UA-" ID. So long
+    as the old "UA-" ID and new "G-" ID are properly linked in your Google
+    account, and you are using the "G-" ID, the data will be made available in
+    both the old and new formats by Google Analytics. See #2252.
 
-* A theme's files are now excluded from the list of watched files by default
-  when using the `--livereload` server. This new default behavior is what most
-  users need and provides better performance when editing site content.
-  Theme developers can enable the old behavior with the `--watch-theme`
-  option. (#2092).
+*   A theme's files are now excluded from the list of watched files by default
+    when using the `--livereload` server. This new default behavior is what most
+    users need and provides better performance when editing site content.
+    Theme developers can enable the old behavior with the `--watch-theme`
+    option. (#2092).
 
-* The `mkdocs` theme now removes the sidebar when printing a page. This frees
-  up horizontal space for better rendering of content like tables (#2193).
+*   The `mkdocs` theme now removes the sidebar when printing a page. This frees
+    up horizontal space for better rendering of content like tables (#2193).
 
-* The `mkdocs.config.DEFAULT_SCHEMA` global variable has been replaced with the
-  function `mkdocs.config.defaults.get_schema()`, which ensures that each
-  instance of the configuration is unique (#2289).
+*   The `mkdocs.config.DEFAULT_SCHEMA` global variable has been replaced with the
+    function `mkdocs.config.defaults.get_schema()`, which ensures that each
+    instance of the configuration is unique (#2289).
 
-* The `mkdocs.utils.warning_filter` is deprecated and now does nothing. Plugins
-  should remove any reference to is as it may be deleted in a future release.
-  To ensure any warnings get counted, simply log them to the `mkdocs` log (i.e.:
-  `mkdocs.plugins.pluginname`).
+*   The `mkdocs.utils.warning_filter` is deprecated and now does nothing. Plugins
+    should remove any reference to is as it may be deleted in a future release.
+    To ensure any warnings get counted, simply log them to the `mkdocs` log (i.e.:
+    `mkdocs.plugins.pluginname`).
 
-* The `on_serve` event (which receives the `server` object and the `builder`
-  function) is affected by the server rewrite. `server` is now a
-  `mkdocs.livereload.LiveReloadServer` instead of `livereload.server.Server`.
-  The typical action that plugins can do with these is to call
-  `server.watch(some_dir, builder)`, which basically adds that directory to
-  watched directories, causing the site to be rebuilt on file changes. That
-  still works, but passing any other function to `watch` is deprecated and shows
-  a warning. This 2nd parameter is already optional, and will accept only this
-  exact `builder` function just for compatibility.
+*   The `on_serve` event (which receives the `server` object and the `builder`
+    function) is affected by the server rewrite. `server` is now a
+    `mkdocs.livereload.LiveReloadServer` instead of `livereload.server.Server`.
+    The typical action that plugins can do with these is to call
+    `server.watch(some_dir, builder)`, which basically adds that directory to
+    watched directories, causing the site to be rebuilt on file changes. That
+    still works, but passing any other function to `watch` is deprecated and shows
+    a warning. This 2nd parameter is already optional, and will accept only this
+    exact `builder` function just for compatibility.
 
-* The `python` method of the `plugins.search.prebuild_index` configuration
-  option is pending deprecation as of version 1.2. It is expected that in
-  version 1.3 it will raise a warning if used and in version 1.4 it will raise
-  an error. Users are encouraged to use an alternate method to generate a
-  prebuilt index for search.
+*   The `python` method of the `plugins.search.prebuild_index` configuration
+    option is pending deprecation as of version 1.2. It is expected that in
+    version 1.3 it will raise a warning if used and in version 1.4 it will raise
+    an error. Users are encouraged to use an alternate method to generate a
+    prebuilt index for search.
 
-* The `lunr` and `lunr[languages]` dependencies are no longer installed by
-  default. The dependencies are only needed for the rare user who pre-builds the
-  search index and uses the `python` option, which is now pending deprecation.
-  If you use this feature, then you will need to manually install `lunr` and
-  `lunr[languages]`. A warning is issued if the dependencies are needed but not
-  installed.
+*   The `lunr` and `lunr[languages]` dependencies are no longer installed by
+    default. The dependencies are only needed for the rare user who pre-builds the
+    search index and uses the `python` option, which is now pending deprecation.
+    If you use this feature, then you will need to manually install `lunr` and
+    `lunr[languages]`. A warning is issued if the dependencies are needed but not
+    installed.
 
 [mkdocs-theme]: ../user-guide/choosing-your-theme.md#mkdocs
 [rtd-theme]: ../user-guide/choosing-your-theme.md#readthedocs
@@ -345,41 +354,30 @@ configuration documentation for details.
 
 ### Other Changes and Additions to Version 1.2
 
-* Bugfix: Properly process navigation child items in `_get_by_type` when
-  filtering for sections (#2203).
-* Official support for Python 3.9 has been added and support for Python 3.5
-  has been dropped.
-* Bugfix: Fixes an issue that would result in a partially cut-off navigation
-  item in the ReadTheDocs theme (#2297).
-* Structure Files object now has a `remove` method to help plugin developers
-  manipulate the Files tree. The corresponding `src_paths` has become a
-  property to accommodate this possible dynamic behavior. See #2305.
+* Bugfix: Properly process navigation child items in `_get_by_type` when filtering for sections (#2203).
+* Official support for Python 3.9 has been added and support for Python 3.5 has been dropped.
+* Bugfix: Fixes an issue that would result in a partially cut-off navigation item in the ReadTheDocs theme (#2297).
+* Structure Files object now has a `remove` method to help plugin developers manipulate the Files tree. The corresponding `src_paths` has become a property to accommodate this possible dynamic behavior. See #2305.
 * Updated highlight.js to 10.5.0. See #2313.
 * Bugfix: Search plugin now works with Japanese language. See #2178.
 * Documentation has been refactored (#1629).
 * Restore styling of tables in the `readthedocs` theme (#2028).
 * Ensure `site_url` ends with a slash (#1785).
 * Correct documentation of `pages` template context variable (#1736).
-* The `lunr` dependency has been updated to 0.5.9, and `lunr.js` to
-  the corresponding 2.3.9 version (#2306).
-* Color is now used in log messages to identify errors, warnings and debug
-  messages.
+* The `lunr` dependency has been updated to 0.5.9, and `lunr.js` to the corresponding 2.3.9 version (#2306).
+* Color is now used in log messages to identify errors, warnings and debug messages.
 * Bugfix: Identify homepage when `use_directory_urls` is `False` (#2362).
 
 ## Version 1.1.2 (2020-05-14)
 
-* Bugfix: Normalize IP addresses and change unsupported address error to a
-  warning (#2108).
+* Bugfix: Normalize IP addresses and change unsupported address error to a warning (#2108).
 
 ## Version 1.1.1 (2020-05-12)
 
-* Bugfix: Allow compressed sitemap to be deterministic by supporting the
-  `SOURCE_DATE_EPOCH` environment variable (#2100).
-* Bugfix: Use `README.md` as `index.html` even if `use_directory_urls` is false
-  (#2081).
+* Bugfix: Allow compressed sitemap to be deterministic by supporting the `SOURCE_DATE_EPOCH` environment variable (#2100).
+* Bugfix: Use `README.md` as `index.html` even if `use_directory_urls` is false (#2081).
 * Bugfix: Ignore links which start with a backslash (#1680).
-* Bugfix: Pass `builder` to the `on_serve` event so that it can be passed to
-  `server.watch` by plugins (#1952).
+* Bugfix: Pass `builder` to the `on_serve` event so that it can be passed to `server.watch` by plugins (#1952).
 * Bugfix: Use `lunr[languages]==0.5.8` to avoid `nltk` incompatibilities (#2062).
 * Bugfix: Ensure wheel is Python 3 only (#2021).
 * Bugfix: Clean up `dev_addr` validation and disallow `0.0.0.0` (#2022).
@@ -446,8 +444,7 @@ may be removed in a future version of MkDocs.
 
 * Bugfix: Ensure nested dot files in themes are ignored and document behavior (#1981).
 * Update minimum dependency to Markdown 3.2.1.
-* Updated minimum dependency to Jinja 2.10.1 to address security
-  concerns (#1780).
+* Updated minimum dependency to Jinja 2.10.1 to address security concerns (#1780).
 * Update to lunr.js 2.3.8 (#1989).
 * Add support for Python 3.8.
 * Drop support for Python 3.4.
@@ -465,13 +462,10 @@ may be removed in a future version of MkDocs.
 * Add canonical tag to `readthedocs` theme (#1669).
 * Improved error message for when `git` is not available.
 * Add support for `nav_style` theme option for the `mkdocs` theme (#1930).
-* Bugfix: Long/nested dropdowns now behave more consistently for the `mkdocs`
-  theme (#1234).
-* Bugfix: Multi-row nav headers in the `mkdocs` theme no longer obscure the
-  document content (#716).
+* Bugfix: Long/nested dropdowns now behave more consistently for the `mkdocs` theme (#1234).
+* Bugfix: Multi-row nav headers in the `mkdocs` theme no longer obscure the document content (#716).
 * Add support for `navigation_depth` theme option for the `mkdocs` theme (#1970).
-* `level` attribute in `page.toc` items is now 1-indexed to match the level in
-  `<hN>` tags (#1970).
+* `level` attribute in `page.toc` items is now 1-indexed to match the level in `<hN>` tags (#1970).
 
 ## Version 1.0.4 (2018-09-07)
 
@@ -502,27 +496,27 @@ may be removed in a future version of MkDocs.
 Internal handling of pages, files and navigation has been completely refactored.
 The changes included in the refactor are summarized below.
 
-* Support for hidden pages. All Markdown pages are now included in the build
-  regardless of whether they are included in the navigation configuration
-  (#699).
-* The navigation can now include links to external sites (#989 #1373 & #1406).
-* Page data (including titles) is properly determined for all pages before any
-  page is rendered (#1347).
-* Automatically populated navigation now sorts index pages to the top. In other
-  words, The index page will be listed as the first child of a directory, while
-  all other documents are sorted alphanumerically by file name after the index
-  page (#73 & #1042).
-* A `README.md` file is now treated as an index file within a directory and
-  will be rendered to `index.html` (#608).
-* The URLs for all files are computed once and stored in a files collection.
-  This ensures all internal links are always computed correctly regardless of
-  the configuration. This also allows all internal links to be validated, not
-  just links to other Markdown pages. (#842 & #872).
-* A new [url] template filter smartly ensures all URLs are relative to the
-  current page (#1526).
-* An [on_files] plugin event has been added, which could be used to include
-  files not in the `docs_dir`, exclude files, redefine page URLs (i.e.
-  implement extensionless URLs), or to manipulate files in various other ways.
+*   Support for hidden pages. All Markdown pages are now included in the build
+    regardless of whether they are included in the navigation configuration
+    (#699).
+*   The navigation can now include links to external sites (#989 #1373 & #1406).
+*   Page data (including titles) is properly determined for all pages before any
+    page is rendered (#1347).
+*   Automatically populated navigation now sorts index pages to the top. In other
+    words, The index page will be listed as the first child of a directory, while
+    all other documents are sorted alphanumerically by file name after the index
+    page (#73 & #1042).
+*   A `README.md` file is now treated as an index file within a directory and
+    will be rendered to `index.html` (#608).
+*   The URLs for all files are computed once and stored in a files collection.
+    This ensures all internal links are always computed correctly regardless of
+    the configuration. This also allows all internal links to be validated, not
+    just links to other Markdown pages. (#842 & #872).
+*   A new [url] template filter smartly ensures all URLs are relative to the
+    current page (#1526).
+*   An [on_files] plugin event has been added, which could be used to include
+    files not in the `docs_dir`, exclude files, redefine page URLs (i.e.
+    implement extensionless URLs), or to manipulate files in various other ways.
 
 [on_files]: ../dev-guide/plugins.md#on_files
 
@@ -710,8 +704,7 @@ value to the `theme.custom_dir` option and a warning was issued. As of version
 
 ### Other Changes and Additions to Version 1.0
 
-* Keyboard shortcuts changed to not conflict with commonly used accessibility
-  shortcuts (#1502.)
+* Keyboard shortcuts changed to not conflict with commonly used accessibility shortcuts (#1502.)
 * User friendly YAML parse errors (#1543).
 * Officially support Python 3.7.
 * A missing theme configuration file now raises an error.
@@ -761,8 +754,7 @@ value to the `theme.custom_dir` option and a warning was issued. As of version
 
 * Bugfix: Support `repo_url` with missing ending slash. (#1321).
 * Bugfix: Add length support to `mkdocs.toc.TableOfContext` (#1325).
-* Bugfix: Add some theme specific settings to the search plugin for third party
-  themes (#1316).
+* Bugfix: Add some theme specific settings to the search plugin for third party themes (#1316).
 * Bugfix: Override `site_url` with `dev_addr` on local server (#1317).
 
 ## Version 0.17.0 (2017-10-19)
@@ -907,8 +899,7 @@ the `extra_css` or `extra_javascript` config settings going forward.
 * Officially added support for Python 3.6 (#1296)
 * 404 Error page added to readthedocs theme (#1296))
 * Internal refactor of Markdown processing (#713)
-* Removed special error message for mkdocs-bootstrap and mkdocs-bootswatch
-  themes (#1168)
+* Removed special error message for mkdocs-bootstrap and mkdocs-bootswatch themes (#1168)
 * The legacy pages config is no longer supported (#1168)
 * The deprecated `json` command has been removed (#481)
 * Support for Python 2.6 has been dropped (#165)
@@ -960,15 +951,6 @@ user created and third-party templates:
 | canonical_url     | [page.canonical_url]|
 | previous_page     | [page.previous_page]|
 | next_page         | [page.next_page]    |
-
-[page]: ../dev-guide/themes.md#page
-[page.title]: ../dev-guide/themes.md#pagetitle
-[page.content]: ../dev-guide/themes.md#pagecontent
-[page.toc]: ../dev-guide/themes.md#pagetoc
-[page.meta]: ../dev-guide/themes.md#pagemeta
-[page.canonical_url]: ../dev-guide/themes.md#pagecanonical_url
-[page.previous_page]: ../dev-guide/themes.md#pageprevious_page
-[page.next_page]: ../dev-guide/themes.md#pagenext_page
 
 ##### Global Context
 
@@ -1110,29 +1092,19 @@ better conform with the documented [layout].
 * Various updates and improvements to Documentation Home Page/Tutorial (#870)
 * Bugfix: Support livereload for config file changes (#735)
 * Bugfix: Non-media template files are no longer copied with media files (#807)
-* Add a flag (-e/--theme-dir) to specify theme directory with the commands
-  `mkdocs build` and `mkdocs serve` (#832)
+* Add a flag (-e/--theme-dir) to specify theme directory with the commands `mkdocs build` and `mkdocs serve` (#832)
 * Fixed issues with Unicode file names under Windows and Python 2. (#833)
 * Improved the styling of in-line code in the MkDocs theme. (#718)
 * Bugfix: convert variables to JSON when being passed to JavaScript (#850)
-* Updated the ReadTheDocs theme to match the upstream font sizes and colors
-  more closely. (#857)
-* Fixes an issue with permalink markers showing when the mouse was far above
-  them (#843)
-* Bugfix: Handle periods in directory name when automatically creating the
-  pages config. (#728)
-* Update searching to Lunr 0.7, which comes with some performance enhancements
-  for larger documents (#859)
-* Bugfix: Support SOURCE_DATE_EPOCH environment variable for "reproducible"
-  builds (#938)
+* Updated the ReadTheDocs theme to match the upstream font sizes and colors more closely. (#857)
+* Fixes an issue with permalink markers showing when the mouse was far above them (#843)
+* Bugfix: Handle periods in directory name when automatically creating the pages config. (#728)
+* Update searching to Lunr 0.7, which comes with some performance enhancements for larger documents (#859)
+* Bugfix: Support SOURCE_DATE_EPOCH environment variable for "reproducible" builds (#938)
 * Follow links when copying media files (#869).
-* Change "Edit on..." links to point directly to the file in the source
-  repository, rather than to the root of the repository (#975), configurable
-  via the new [`edit_uri`](../user-guide/configuration.md#edit_uri) setting.
-* Bugfix: Don't override config value for strict mode if not specified on CLI
-  (#738).
-* Add a `--force` flag to the `gh-deploy` command to force the push to the
-  repository (#973).
+* Change "Edit on..." links to point directly to the file in the source repository, rather than to the root of the repository (#975), configurable via the new [`edit_uri`](../user-guide/configuration.md#edit_uri) setting.
+* Bugfix: Don't override config value for strict mode if not specified on CLI (#738).
+* Add a `--force` flag to the `gh-deploy` command to force the push to the repository (#973).
 * Improve alignment for current selected menu item in readthedocs theme (#888).
 * `http://user.github.io/repo` => `https://user.github.io/repo/` (#1029).
 * Improve installation instructions (#1028).
@@ -1146,13 +1118,11 @@ better conform with the documented [layout].
 
 ## Version 0.15.2 (2016-02-08)
 
-* Fix an incorrect warning that states external themes [will be removed from
-  MkDocs](#add-support-for-installable-themes).
+* Fix an incorrect warning that states external themes [will be removed from MkDocs](#add-support-for-installable-themes).
 
 ## Version 0.15.1 (2016-01-30)
 
-* Lower the minimum supported Click version to 3.3 for package maintainers.
-  (#763)
+* Lower the minimum supported Click version to 3.3 for package maintainers. (#763)
 
 ## Version 0.15.0 (2016-01-21)
 
@@ -1187,16 +1157,13 @@ themes
 * Fix issues when using absolute links to Markdown files. (#628)
 * Deprecate support of Python 2.6, pending removal in 1.0.0. (#165)
 * Add official support for Python version 3.5.
-* Add support for [site_description] and [site_author] to the [ReadTheDocs]
-  theme. (#631)
+* Add support for [site_description] and [site_author] to the [ReadTheDocs] theme. (#631)
 * Update FontAwesome to 4.5.0. (#789)
 * Increase IE support with X-UA-Compatible. (#785)
 * Added support for Python's `-m` flag. (#706)
 * Bugfix: Ensure consistent ordering of auto-populated pages. (#638)
-* Bugfix: Scroll the tables of contents on the MkDocs theme if it is too long
-  for the page. (#204)
-* Bugfix: Add all ancestors to the page attribute `ancestors` rather than just
-  the initial one. (#693)
+* Bugfix: Scroll the tables of contents on the MkDocs theme if it is too long for the page. (#204)
+* Bugfix: Add all ancestors to the page attribute `ancestors` rather than just the initial one. (#693)
 * Bugfix: Include HTML in the build output again. (#691)
 * Bugfix: Provide filename to Read the Docs. (#721 and RTD#1480)
 * Bugfix: Silence Click's unicode_literals warning. (#708)
@@ -1207,28 +1174,21 @@ themes
 
 ## Version 0.14.0 (2015-06-09)
 
-* Improve Unicode handling by ensuring that all config strings are loaded as
-  Unicode. (#592)
+* Improve Unicode handling by ensuring that all config strings are loaded as Unicode. (#592)
 * Remove dependency on the six library. (#583)
 * Remove dependency on the ghp-import library. (#547)
 * Add `--quiet` and `--verbose` options to all sub-commands. (#579)
 * Add short options (`-a`) to most command line options. (#579)
 * Add copyright footer for readthedocs theme. (#568)
-* If the requested port in `mkdocs serve` is already in use, don't show the
-  user a full stack trace. (#596)
+* If the requested port in `mkdocs serve` is already in use, don't show the user a full stack trace. (#596)
 * Bugfix: Fix a JavaScript encoding problem when searching with spaces. (#586)
-* Bugfix: gh-deploy now works if the mkdocs.yml is not in the git repo root.
-  (#578)
-* Bugfix: Handle (pass-through instead of dropping) HTML entities while
-  parsing TOC. (#612)
-* Bugfix: Default extra_templates to an empty list, don't automatically
-  discover them. (#616)
+* Bugfix: gh-deploy now works if the mkdocs.yml is not in the git repo root. (#578)
+* Bugfix: Handle (pass-through instead of dropping) HTML entities while parsing TOC. (#612)
+* Bugfix: Default extra_templates to an empty list, don't automatically discover them. (#616)
 
 ## Version 0.13.3 (2015-06-02)
 
-* Bugfix: Reduce validation error to a warning if the site_dir is within
-  the docs_dir as this shouldn't cause any problems with building but will
-  inconvenience users building multiple times. (#580)
+* Bugfix: Reduce validation error to a warning if the site_dir is within the docs_dir as this shouldn't cause any problems with building but will inconvenience users building multiple times. (#580)
 
 ## Version 0.13.2 (2015-05-30)
 
@@ -1237,8 +1197,7 @@ themes
 
 ## Version 0.13.1 (2015-05-27)
 
-* Bugfix: Fix a problem with minimal configurations which only contain a list
-  of paths in the pages config. (#562)
+* Bugfix: Fix a problem with minimal configurations which only contain a list of paths in the pages config. (#562)
 
 ## Version 0.13.0 (2015-05-26)
 
@@ -1332,8 +1291,7 @@ documentation.
 * Add `--no-livereload` to `mkdocs serve` for a simpler development server. (#511)
 * Add copyright display support to all themes (#549)
 * Add support for custom commit messages in a `mkdocs gh-deploy` (#516)
-* Bugfix: Fix linking to media within the same directory as a markdown file
-  called index.md (#535)
+* Bugfix: Fix linking to media within the same directory as a markdown file called index.md (#535)
 * Bugfix: Fix errors with Unicode filenames (#542).
 
 [extra config]: ../user-guide/configuration.md#extra
@@ -1342,13 +1300,11 @@ documentation.
 
 ## Version 0.12.2 (2015-04-22)
 
-* Bugfix: Fix a regression where there would be an error if some child titles
-  were missing but others were provided in the pages config. (#464)
+* Bugfix: Fix a regression where there would be an error if some child titles were missing but others were provided in the pages config. (#464)
 
 ## Version 0.12.1 (2015-04-14)
 
-* Bugfix: Fixed a CSS bug in the table of contents on some browsers where the
-  bottom item was not clickable.
+* Bugfix: Fixed a CSS bug in the table of contents on some browsers where the bottom item was not clickable.
 
 ## Version 0.12.0 (2015-04-14)
 
@@ -1357,27 +1313,22 @@ documentation.
 * Add the homepage back to the navigation on all themes. (#271)
 * Add a strict more for local link checking. (#279)
 * Add Google analytics support to all themes. (#333)
-* Add build date and MkDocs version to the ReadTheDocs and MkDocs theme
-  outputs. (#382)
+* Add build date and MkDocs version to the ReadTheDocs and MkDocs theme outputs. (#382)
 * Standardize highlighting across all themes and add missing languages. (#387)
 * Add a verbose flag. (-v) to show more details about what the build. (#147)
-* Add the option to specify a remote branch when deploying to GitHub. This
-  enables deploying to GitHub pages on personal and repo sites. (#354)
+* Add the option to specify a remote branch when deploying to GitHub. This enables deploying to GitHub pages on personal and repo sites. (#354)
 * Add favicon support to the ReadTheDocs theme HTML. (#422)
 * Automatically refresh the browser when files are edited. (#163)
 * Bugfix: Never re-write URLs in code blocks. (#240)
 * Bugfix: Don't copy dotfiles when copying media from the `docs_dir`. (#254)
 * Bugfix: Fix the rendering of tables in the ReadTheDocs theme. (#106)
 * Bugfix: Add padding to the bottom of all bootstrap themes. (#255)
-* Bugfix: Fix issues with nested Markdown pages and the automatic pages
-  configuration. (#276)
+* Bugfix: Fix issues with nested Markdown pages and the automatic pages configuration. (#276)
 * Bugfix: Fix a URL parsing error with GitHub enterprise. (#284)
 * Bugfix: Don't error if the mkdocs.yml is completely empty. (#288)
 * Bugfix: Fix a number of problems with relative URLs and Markdown files. (#292)
-* Bugfix: Don't stop the build if a page can't be found, continue with other
-  pages. (#150)
-* Bugfix: Remove the site_name from the page title, this needs to be added
-  manually. (#299)
+* Bugfix: Don't stop the build if a page can't be found, continue with other pages. (#150)
+* Bugfix: Remove the site_name from the page title, this needs to be added manually. (#299)
 * Bugfix: Fix an issue with table of contents cutting off Markdown. (#294)
 * Bugfix: Fix hostname for BitBucket. (#339)
 * Bugfix: Ensure all links end with a slash. (#344)
@@ -1385,18 +1336,14 @@ documentation.
 * Bugfix: Include jQuery locally to avoid problems using MkDocs offline. (#143)
 * Bugfix: Don't allow the docs_dir to be in the site_dir or vice versa. (#384)
 * Bugfix: Remove inline CSS in the ReadTheDocs theme. (#393)
-* Bugfix: Fix problems with the child titles due to the order the pages config
-  was processed. (#395)
+* Bugfix: Fix problems with the child titles due to the order the pages config was processed. (#395)
 * Bugfix: Don't error during live reload when the theme doesn't exist. (#373)
 * Bugfix: Fix problems with the Meta extension when it may not exist. (#398)
 * Bugfix: Wrap long inline code otherwise they will run off the screen. (#313)
-* Bugfix: Remove HTML parsing regular expressions and parse with HTMLParser to
-  fix problems with titles containing code. (#367)
-* Bugfix: Fix an issue with the scroll to anchor causing the title to be hidden
-  under the navigation. (#7)
+* Bugfix: Remove HTML parsing regular expressions and parse with HTMLParser to fix problems with titles containing code. (#367)
+* Bugfix: Fix an issue with the scroll to anchor causing the title to be hidden under the navigation. (#7)
 * Bugfix: Add nicer CSS classes to the HTML tables in bootswatch themes. (#295)
-* Bugfix: Fix an error when passing in a specific config file with
-  `mkdocs serve`. (#341)
+* Bugfix: Fix an error when passing in a specific config file with `mkdocs serve`. (#341)
 * Bugfix: Don't overwrite index.md files with the `mkdocs new` command. (#412)
 * Bugfix: Remove bold and italic from code in the ReadTheDocs theme. (#411)
 * Bugfix: Display images inline in the MkDocs theme. (#415)
@@ -1407,35 +1354,27 @@ documentation.
 
 ## Version 0.11.1 (2014-11-20)
 
-* Bugfix: Fix a CSS wrapping issue with code highlighting in the ReadTheDocs
-  theme. (#233)
+* Bugfix: Fix a CSS wrapping issue with code highlighting in the ReadTheDocs theme. (#233)
 
 ## Version 0.11.0 (2014-11-18)
 
 * Render 404.html files if they exist for the current theme. (#194)
-* Bugfix: Fix long nav bars, table rendering and code highlighting in MkDocs
-  and ReadTheDocs themes. (#225)
+* Bugfix: Fix long nav bars, table rendering and code highlighting in MkDocs and ReadTheDocs themes. (#225)
 * Bugfix: Fix an issue with the google_analytics code. (#219)
 * Bugfix: Remove `__pycache__` from the package tar. (#196)
 * Bugfix: Fix markdown links that go to an anchor on the current page. (#197)
-* Bugfix: Don't add `prettyprint well` CSS classes to all HTML, only add it in
-  the MkDocs theme. (#183)
+* Bugfix: Don't add `prettyprint well` CSS classes to all HTML, only add it in the MkDocs theme. (#183)
 * Bugfix: Display section titles in the ReadTheDocs theme. (#175)
-* Bugfix: Use the polling observer in watchdog so rebuilding works on
-  filesystems without inotify. (#184)
+* Bugfix: Use the polling observer in watchdog so rebuilding works on filesystems without inotify. (#184)
 * Bugfix: Improve error output for common configuration related errors. (#176)
 
 ## Version 0.10.0 (2014-10-29)
 
 * Added support for Python 3.3 and 3.4. (#103)
-* Configurable Python-Markdown extensions with the config setting
-  `markdown_extensions`. (#74)
-* Added `mkdocs json` command to output your rendered
-  documentation as json files. (#128)
-* Added `--clean` switch to `build`, `json` and `gh-deploy` commands to
-  remove stale files from the output directory. (#157)
-* Support multiple theme directories to allow replacement of
-  individual templates rather than copying the full theme. (#129)
+* Configurable Python-Markdown extensions with the config setting `markdown_extensions`. (#74)
+* Added `mkdocs json` command to output your rendered documentation as json files. (#128)
+* Added `--clean` switch to `build`, `json` and `gh-deploy` commands to remove stale files from the output directory. (#157)
+* Support multiple theme directories to allow replacement of individual templates rather than copying the full theme. (#129)
 * Bugfix: Fix `<ul>` rendering in readthedocs theme. (#171)
 * Bugfix: Improve the readthedocs theme on smaller displays. (#168)
 * Bugfix: Relaxed required python package versions to avoid clashes. (#104)

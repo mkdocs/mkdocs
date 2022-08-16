@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 
+import os
 import tempfile
 import unittest
-import os
 
 from mkdocs.commands import new
 
 
 class NewTests(unittest.TestCase):
-
     def test_new(self):
 
         tempdir = tempfile.mkdtemp()

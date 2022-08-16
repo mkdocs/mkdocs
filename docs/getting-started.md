@@ -73,14 +73,13 @@ effect.
 
 ![The site_name setting](img/site-name.png)
 
-!!! note
-
-    The [`site_name`][site_name] and [`site_url`][site_url] configuration
-    options are the only two required options in your configuration file. When
-    you create a new project, the `site_url` option is assigned the placeholder
-    value: `https://example.com`. If the final location is known, you can change
-    the setting now to point to it. Or you may choose to leave it alone for now.
-    Just be sure to edit it before you deploy your site to a production server.
+NOTE:
+The [`site_name`][site_name] and [`site_url`][site_url] configuration
+options are the only two required options in your configuration file. When
+you create a new project, the `site_url` option is assigned the placeholder
+value: `https://example.com`. If the final location is known, you can change
+the setting now to point to it. Or you may choose to leave it alone for now.
+Just be sure to edit it before you deploy your site to a production server.
 
 ## Adding pages
 

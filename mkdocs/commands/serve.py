@@ -1,8 +1,8 @@
 import logging
 import shutil
 import tempfile
-from urllib.parse import urlsplit
 from os.path import isdir, isfile, join
+from urllib.parse import urlsplit
 
 import jinja2.exceptions
 
@@ -14,8 +14,17 @@ from mkdocs.livereload import LiveReloadServer
 log = logging.getLogger(__name__)
 
 
-def serve(config_file=None, dev_addr=None, strict=None, theme=None,
-          theme_dir=None, livereload='livereload', watch_theme=False, watch=[], **kwargs):
+def serve(
+    config_file=None,
+    dev_addr=None,
+    strict=None,
+    theme=None,
+    theme_dir=None,
+    livereload='livereload',
+    watch_theme=False,
+    watch=[],
+    **kwargs,
+):
     """
     Start the MkDocs development server
 
@@ -41,7 +50,7 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
             theme=theme,
             theme_dir=theme_dir,
             site_dir=site_dir,
-            **kwargs
+            **kwargs,
         )
 
         # combine CLI watch arguments with config file values
@@ -63,7 +72,9 @@ def serve(config_file=None, dev_addr=None, strict=None, theme=None,
         config = builder()
 
         host, port = config['dev_addr']
-        server = LiveReloadServer(builder=builder, host=host, port=port, root=site_dir, mount_path=mount_path(config))
+        server = LiveReloadServer(
+            builder=builder, host=host, port=port, root=site_dir, mount_path=mount_path(config)
+        )
 
         def error_handler(code):
             if code in (404, 500):

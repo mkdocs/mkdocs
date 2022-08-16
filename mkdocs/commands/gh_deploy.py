@@ -1,11 +1,12 @@
 import logging
-import subprocess
 import os
 import re
+import subprocess
+
+import ghp_import
 from packaging import version
 
 import mkdocs
-import ghp_import
 from mkdocs.exceptions import Abort
 
 log = logging.getLogger(__name__)
@@ -18,7 +19,7 @@ def _is_cwd_git_repo():
         proc = subprocess.Popen(
             ['git', 'rev-parse', '--is-inside-work-tree'],
             stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
+            stderr=subprocess.PIPE,
         )
     except FileNotFoundError:
         log.error("Could not find git - is it installed and on your path?")
@@ -29,8 +30,12 @@ def _is_cwd_git_repo():
 
 def _get_current_sha(repo_path):
 
-    proc = subprocess.Popen(['git', 'rev-parse', '--short', 'HEAD'], cwd=repo_path or None,
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc = subprocess.Popen(
+        ['git', 'rev-parse', '--short', 'HEAD'],
+        cwd=repo_path or None,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
 
     stdout, _ = proc.communicate()
     sha = stdout.decode('utf-8').strip()
@@ -42,8 +47,11 @@ def _get_remote_url(remote_name):
     # No CNAME found.  We will use the origin URL to determine the GitHub
     # pages location.
     remote = f"remote.{remote_name}.url"
-    proc = subprocess.Popen(["git", "config", "--get", remote],
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc = subprocess.Popen(
+        ["git", "config", "--get", remote],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
 
     stdout, _ = proc.communicate()
     url = stdout.decode('utf-8').strip()
@@ -60,8 +68,11 @@ def _get_remote_url(remote_name):
 
 def _check_version(branch):
 
-    proc = subprocess.Popen(['git', 'show', '-s', '--format=%s', f'refs/heads/{branch}'],
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc = subprocess.Popen(
+        ['git', 'show', '-s', '--format=%s', f'refs/heads/{branch}'],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
 
     stdout, _ = proc.communicate()
     msg = stdout.decode('utf-8').strip()
@@ -84,11 +95,12 @@ def _check_version(branch):
         raise Abort('Deployment Aborted!')
 
 
-def gh_deploy(config, message=None, force=False, no_history=False, ignore_version=False, shell=False):
+def gh_deploy(
+    config, message=None, force=False, no_history=False, ignore_version=False, shell=False
+):
 
     if not _is_cwd_git_repo():
-        log.error('Cannot deploy - this directory does not appear to be a git '
-                  'repository')
+        log.error('Cannot deploy - this directory does not appear to be a git repository')
 
     remote_branch = config['remote_branch']
     remote_name = config['remote_name']
@@ -101,8 +113,11 @@ def gh_deploy(config, message=None, force=False, no_history=False, ignore_versio
     sha = _get_current_sha(os.path.dirname(config.config_file_path))
     message = message.format(version=mkdocs.__version__, sha=sha)
 
-    log.info("Copying '%s' to '%s' branch and pushing to GitHub.",
-             config['site_dir'], config['remote_branch'])
+    log.info(
+        "Copying '%s' to '%s' branch and pushing to GitHub.",
+        config['site_dir'],
+        config['remote_branch'],
+    )
 
     try:
         ghp_import.ghp_import(
@@ -114,7 +129,7 @@ def gh_deploy(config, message=None, force=False, no_history=False, ignore_versio
             force=force,
             use_shell=shell,
             no_history=no_history,
-            nojekyll=True
+            nojekyll=True,
         )
     except ghp_import.GhpError as e:
         log.error(f"Failed to deploy to GitHub with error: \n{e.message}")
@@ -126,10 +141,13 @@ def gh_deploy(config, message=None, force=False, no_history=False, ignore_versio
         # This GitHub pages repository has a CNAME configured.
         with open(cname_file) as f:
             cname_host = f.read().strip()
-        log.info(f'Based on your CNAME file, your documentation should be '
-                 f'available shortly at: http://{cname_host}')
-        log.info('NOTE: Your DNS records must be configured appropriately for '
-                 'your CNAME URL to work.')
+        log.info(
+            f'Based on your CNAME file, your documentation should be '
+            f'available shortly at: http://{cname_host}'
+        )
+        log.info(
+            'NOTE: Your DNS records must be configured appropriately for your CNAME URL to work.'
+        )
         return
 
     host, path = _get_remote_url(remote_name)
@@ -140,6 +158,6 @@ def gh_deploy(config, message=None, force=False, no_history=False, ignore_versio
     else:
         username, repo = path.split('/', 1)
         if repo.endswith('.git'):
-            repo = repo[:-len('.git')]
+            repo = repo[: -len('.git')]
         url = f'https://{username}.github.io/{repo}/'
         log.info(f"Your documentation should shortly be available at: {url}")
