@@ -12,6 +12,8 @@ from mkdocs.exceptions import ConfigurationError
 from mkdocs.localization import parse_locale
 from mkdocs.tests.base import dedent
 
+DEFAULT_SCHEMA = defaults.get_schema()
+
 
 class ConfigTests(unittest.TestCase):
     def test_missing_config_file(self):
@@ -19,7 +21,7 @@ class ConfigTests(unittest.TestCase):
             config.load_config(config_file='bad_filename.yaml')
 
     def test_missing_site_name(self):
-        c = config.Config(schema=defaults.get_schema())
+        c = config.Config(schema=DEFAULT_SCHEMA)
         c.load_dict({})
         errors, warnings = c.validate()
         self.assertEqual(len(errors), 1)
@@ -219,7 +221,7 @@ class ConfigTests(unittest.TestCase):
                     self.assertEqual({k: c['theme'][k] for k in iter(c['theme'])}, result['vars'])
 
     def test_empty_nav(self):
-        conf = config.Config(schema=defaults.get_schema())
+        conf = config.Config(schema=DEFAULT_SCHEMA)
         conf.load_dict(
             {
                 'site_name': 'Example',
@@ -230,7 +232,7 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(conf['nav'], None)
 
     def test_error_on_pages(self):
-        conf = config.Config(schema=defaults.get_schema())
+        conf = config.Config(schema=DEFAULT_SCHEMA)
         conf.load_dict(
             {
                 'site_name': 'Example',
@@ -305,9 +307,8 @@ class ConfigTests(unittest.TestCase):
     def test_multiple_markdown_config_instances(self):
         # This had a bug where an extension config would persist to separate
         # config instances that didn't specify extensions.
-        schema = config.defaults.get_schema()
 
-        conf = config.Config(schema=schema)
+        conf = config.Config(schema=DEFAULT_SCHEMA)
         conf.load_dict(
             {
                 'site_name': 'Example',
@@ -317,7 +318,7 @@ class ConfigTests(unittest.TestCase):
         conf.validate()
         self.assertEqual(conf['mdx_configs'].get('toc'), {'permalink': '##'})
 
-        conf = config.Config(schema=schema)
+        conf = config.Config(schema=DEFAULT_SCHEMA)
         conf.load_dict(
             {'site_name': 'Example'},
         )

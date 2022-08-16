@@ -1,14 +1,13 @@
+import functools
+
 from mkdocs.config import config_options
 
 # NOTE: The order here is important. During validation some config options
 # depend on others. So, if config option A depends on B, then A should be
 # listed higher in the schema.
 
-# Once we drop Python 2.6 support, this could be an OrderedDict, however, it
-# isn't really needed either as we always sequentially process the schema other
-# than at initialization when we grab the full set of keys for convenience.
 
-
+@functools.lru_cache(maxsize=None)
 def get_schema():
     schema = {
         # Reserved for internal use, stores the mkdocs.yml config file.
