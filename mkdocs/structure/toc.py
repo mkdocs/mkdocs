@@ -5,7 +5,7 @@ For the sake of simplicity we use the Python-Markdown `toc` extension to
 generate a list of dicts for each toc item, and then store it as AnchorLinks to
 maintain compatibility with older versions of MkDocs.
 """
-from typing import Iterable
+from typing import List
 
 
 def get_toc(toc_tokens):
@@ -54,7 +54,7 @@ class AnchorLink:
     level: int
     """The zero-based level of the item."""
 
-    children: Iterable['AnchorLink']
+    children: List['AnchorLink']
     """An iterable of any child items."""
 
     def __str__(self):
