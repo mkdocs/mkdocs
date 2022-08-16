@@ -350,61 +350,75 @@ class RepoURLTest(unittest.TestCase):
         self.assertEqual(config.get('edit_uri'), 'edit/master/docs/')
 
 
-class DirTest(unittest.TestCase):
+class FilesystemObjectTest(unittest.TestCase):
     def test_valid_dir(self):
+        for cls in config_options.Dir, config_options.FilesystemObject:
+            with self.subTest(cls):
+                d = os.path.dirname(__file__)
+                option = cls(exists=True)
+                value = option.validate(d)
+                self.assertEqual(d, value)
 
-        d = os.path.dirname(__file__)
-        option = config_options.Dir(exists=True)
-        value = option.validate(d)
-        self.assertEqual(d, value)
+    def test_valid_file(self):
+        for cls in config_options.File, config_options.FilesystemObject:
+            with self.subTest(cls):
+                f = __file__
+                option = cls(exists=True)
+                value = option.validate(f)
+                self.assertEqual(f, value)
 
-    def test_missing_dir(self):
+    def test_missing_without_exists(self):
+        for cls in config_options.Dir, config_options.File, config_options.FilesystemObject:
+            with self.subTest(cls):
+                d = os.path.join("not", "a", "real", "path", "I", "hope")
+                option = cls()
+                value = option.validate(d)
+                self.assertEqual(os.path.abspath(d), value)
 
-        d = os.path.join("not", "a", "real", "path", "I", "hope")
-        option = config_options.Dir()
-        value = option.validate(d)
-        self.assertEqual(os.path.abspath(d), value)
+    def test_missing_but_required(self):
+        for cls in config_options.Dir, config_options.File, config_options.FilesystemObject:
+            with self.subTest(cls):
+                d = os.path.join("not", "a", "real", "path", "I", "hope")
+                option = cls(exists=True)
+                with self.assertRaises(config_options.ValidationError):
+                    option.validate(d)
 
-    def test_missing_dir_but_required(self):
-
-        d = os.path.join("not", "a", "real", "path", "I", "hope")
-        option = config_options.Dir(exists=True)
-        with self.assertRaises(config_options.ValidationError):
-            option.validate(d)
-
-    def test_file(self):
+    def test_not_a_dir(self):
         d = __file__
         option = config_options.Dir(exists=True)
         with self.assertRaises(config_options.ValidationError):
             option.validate(d)
 
-    def test_incorrect_type_attribute_error(self):
-        option = config_options.Dir()
+    def test_not_a_file(self):
+        d = os.path.dirname(__file__)
+        option = config_options.File(exists=True)
         with self.assertRaises(config_options.ValidationError):
-            option.validate(1)
+            option.validate(d)
 
-    def test_incorrect_type_type_error(self):
-        option = config_options.Dir()
-        with self.assertRaises(config_options.ValidationError):
-            option.validate([])
+    def test_incorrect_type_error(self):
+        for cls in config_options.Dir, config_options.File, config_options.FilesystemObject:
+            with self.subTest(cls):
+                option = cls()
+                with self.assertRaises(config_options.ValidationError):
+                    option.validate(1)
+                with self.assertRaises(config_options.ValidationError):
+                    option.validate([])
 
-    def test_dir_unicode(self):
-        cfg = Config(
-            [('dir', config_options.Dir())],
-            config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
-        )
+    def test_with_unicode(self):
+        for cls in config_options.Dir, config_options.File, config_options.FilesystemObject:
+            with self.subTest(cls):
+                cfg = Config(
+                    [('dir', cls())],
+                    config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
+                )
 
-        test_config = {
-            'dir': 'юникод',
-        }
+                cfg.load_dict({'dir': 'юникод'})
 
-        cfg.load_dict(test_config)
+                fails, warns = cfg.validate()
 
-        fails, warns = cfg.validate()
-
-        self.assertEqual(len(fails), 0)
-        self.assertEqual(len(warns), 0)
-        self.assertIsInstance(cfg['dir'], str)
+                self.assertEqual(len(fails), 0)
+                self.assertEqual(len(warns), 0)
+                self.assertIsInstance(cfg['dir'], str)
 
     def test_dir_filesystemencoding(self):
         cfg = Config(
@@ -442,28 +456,30 @@ class DirTest(unittest.TestCase):
         self.assertEqual(len(warns), 0)
 
     def test_config_dir_prepended(self):
-        base_path = os.path.abspath('.')
+        for cls in config_options.Dir, config_options.File, config_options.FilesystemObject:
+            with self.subTest(cls):
+                base_path = os.path.abspath('.')
+                cfg = Config(
+                    [('dir', cls())],
+                    config_file_path=os.path.join(base_path, 'mkdocs.yml'),
+                )
+
+                test_config = {
+                    'dir': 'foo',
+                }
+
+                cfg.load_dict(test_config)
+
+                fails, warns = cfg.validate()
+
+                self.assertEqual(len(fails), 0)
+                self.assertEqual(len(warns), 0)
+                self.assertIsInstance(cfg['dir'], str)
+                self.assertEqual(cfg['dir'], os.path.join(base_path, 'foo'))
+
+    def test_site_dir_is_config_dir_fails(self):
         cfg = Config(
-            [('dir', config_options.Dir())],
-            config_file_path=os.path.join(base_path, 'mkdocs.yml'),
-        )
-
-        test_config = {
-            'dir': 'foo',
-        }
-
-        cfg.load_dict(test_config)
-
-        fails, warns = cfg.validate()
-
-        self.assertEqual(len(fails), 0)
-        self.assertEqual(len(warns), 0)
-        self.assertIsInstance(cfg['dir'], str)
-        self.assertEqual(cfg['dir'], os.path.join(base_path, 'foo'))
-
-    def test_dir_is_config_dir_fails(self):
-        cfg = Config(
-            [('dir', config_options.Dir())],
+            [('dir', config_options.DocsDir())],
             config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
         )
 

@@ -27,7 +27,7 @@ def get_schema():
         # The MkDocs theme for the documentation.
         'theme': config_options.Theme(default='mkdocs'),
         # The directory containing the documentation markdown.
-        'docs_dir': config_options.Dir(default='docs', exists=True),
+        'docs_dir': config_options.DocsDir(default='docs', exists=True),
         # The directory where the site will be built to
         'site_dir': config_options.SiteDir(default='site'),
         # A copyright notice to add to the footer of documentation.
