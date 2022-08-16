@@ -897,7 +897,7 @@ class SubConfigTest(unittest.TestCase):
         """Strict validation mode for subconfigs."""
 
         # Unknown option: warning
-        option = config_options.SubConfig(ignore_validation=False)
+        option = config_options.SubConfig(validate=True)
         res = option.validate({"unknown": 0})
         assert option.warnings == [('unknown', 'Unrecognised configuration name: unknown')]
         assert res == {"unknown": 0}
@@ -905,7 +905,7 @@ class SubConfigTest(unittest.TestCase):
         # Invalid option: error
         option = config_options.SubConfig(
             ('c', config_options.Choice(('foo', 'bar'))),
-            ignore_validation=False,
+            validate=True,
         )
         with self.assertRaises(config_options.ValidationError):
             option.validate(dict(c=True))
