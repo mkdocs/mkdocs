@@ -145,7 +145,7 @@ class TestPluginCollection(unittest.TestCase):
 
     def test_run_unknown_event_on_collection(self):
         collection = plugins.PluginCollection()
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(KeyError):
             collection.run_event('unknown', 'page content')
 
     def test_run_build_error_event(self):
