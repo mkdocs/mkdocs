@@ -56,6 +56,8 @@ class BasePlugin:
 
         return self.config.validate()
 
+    # (Note that event implementations shouldn't actually be static methods in subclasses)
+
     # Global events
 
     @staticmethod
