@@ -9,45 +9,7 @@ from urllib.parse import urlsplit, urlunsplit
 import markdown
 
 from mkdocs import plugins, theme, utils
-from mkdocs.config.base import Config, ValidationError
-
-
-class BaseConfigOption:
-    def __init__(self):
-        self.warnings = []
-        self.default = None
-
-    def is_required(self):
-        return False
-
-    def validate(self, value):
-        return self.run_validation(value)
-
-    def reset_warnings(self):
-        self.warnings = []
-
-    def pre_validation(self, config, key_name):
-        """
-        Before all options are validated, perform a pre-validation process.
-
-        The pre-validation process method should be implemented by subclasses.
-        """
-
-    def run_validation(self, value):
-        """
-        Perform validation for a value.
-
-        The run_validation method should be implemented by subclasses.
-        """
-        return value
-
-    def post_validation(self, config, key_name):
-        """
-        After all options have passed validation, perform a post-validation
-        process to do any additional changes dependent on other config values.
-
-        The post-validation process method should be implemented by subclasses.
-        """
+from mkdocs.config.base import BaseConfigOption, Config, ValidationError
 
 
 class SubConfig(BaseConfigOption):

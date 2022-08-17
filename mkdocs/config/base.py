@@ -3,12 +3,51 @@ import os
 import sys
 from collections import UserDict
 from contextlib import contextmanager
+from typing import IO, Optional, Sequence, Tuple
 
 from yaml import YAMLError
 
 from mkdocs import exceptions, utils
 
 log = logging.getLogger('mkdocs.config')
+
+
+class BaseConfigOption:
+    def __init__(self):
+        self.warnings = []
+        self.default = None
+
+    def is_required(self):
+        return False
+
+    def validate(self, value):
+        return self.run_validation(value)
+
+    def reset_warnings(self):
+        self.warnings = []
+
+    def pre_validation(self, config, key_name):
+        """
+        Before all options are validated, perform a pre-validation process.
+
+        The pre-validation process method should be implemented by subclasses.
+        """
+
+    def run_validation(self, value):
+        """
+        Perform validation for a value.
+
+        The run_validation method should be implemented by subclasses.
+        """
+        return value
+
+    def post_validation(self, config, key_name):
+        """
+        After all options have passed validation, perform a post-validation
+        process to do any additional changes dependent on other config values.
+
+        The post-validation process method should be implemented by subclasses.
+        """
 
 
 class ValidationError(Exception):
@@ -23,7 +62,9 @@ class Config(UserDict):
     for running validation on the structure and contents.
     """
 
-    def __init__(self, schema, config_file_path=None):
+    def __init__(
+        self, schema: Sequence[Tuple[str, BaseConfigOption]], config_file_path: Optional[str] = None
+    ):
         """
         The schema is a Python dict which maps the config name to a validator.
         """
@@ -43,7 +84,7 @@ class Config(UserDict):
         self.user_configs = []
         self.set_defaults()
 
-    def set_defaults(self):
+    def set_defaults(self) -> None:
         """
         Set the base config by going through each validator and getting the
         default if it has one.
@@ -116,7 +157,7 @@ class Config(UserDict):
 
         return failed, warnings
 
-    def load_dict(self, patch):
+    def load_dict(self, patch: dict) -> None:
         """Load config options from a dictionary."""
 
         if not isinstance(patch, dict):
@@ -129,7 +170,7 @@ class Config(UserDict):
         self.user_configs.append(patch)
         self.data.update(patch)
 
-    def load_file(self, config_file):
+    def load_file(self, config_file: IO) -> None:
         """Load config options from the open file descriptor of a YAML file."""
         try:
             return self.load_dict(utils.yaml_load(config_file))

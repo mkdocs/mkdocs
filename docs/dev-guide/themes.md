@@ -195,17 +195,27 @@ defined by the [nav] configuration setting.
 
 [nav]: ../user-guide/configuration.md#nav
 
+::: mkdocs.structure.nav.Navigation
+    options:
+        show_root_heading: false
+        show_root_toc_entry: true
+        members: []
+        heading_level: 4
+
 In addition to the iterable of [navigation objects](#navigation-objects), the
 `nav` object contains the following attributes:
 
-##### nav.homepage
+::: mkdocs.structure.nav.Navigation.homepage
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-The [page](#page) object for the homepage of the site.
+::: mkdocs.structure.nav.Navigation.pages
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### nav.pages
-
-A flat list of all [page](#page) objects contained in the navigation. This list
-is not necessarily a complete list of all site pages as it does not contain
+This list is not necessarily a complete list of all site pages as it does not contain
 pages which are not included in the navigation. This list does match the list
 and order of pages used for all "next page" and "previous page" links. For a
 list of all pages, use the [pages](#pages) template variable.
@@ -271,25 +281,29 @@ the `page` variable contains a `page` object. The same `page` objects are used
 as `page` [navigation objects](#navigation-objects) in the global
 [navigation](#nav) and in the [pages](#pages) template variable.
 
+::: mkdocs.structure.pages.Page
+    options:
+        show_root_heading: false
+        show_root_toc_entry: true
+        members: []
+        heading_level: 4
+
 All `page` objects contain the following attributes:
 
-##### page.title
+::: mkdocs.structure.pages.Page.title
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-Contains the Title for the current page.
+::: mkdocs.structure.pages.Page.content
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### page.content
-
-The rendered Markdown as HTML, this is the contents of the documentation.
-
-##### page.toc
-
-An iterable object representing the Table of contents for a page. Each item in
-the `toc` is an `AnchorLink` which contains the following attributes:
-
-* `AnchorLink.title`: The text of the item.
-* `AnchorLink.url`: The hash fragment of a URL pointing to the item.
-* `AnchorLink.level`: The zero-based level of the item.
-* `AnchorLink.children`: An iterable of any child items.
+::: mkdocs.structure.pages.Page.toc
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
 The following example would display the top two levels of the Table of Contents
 for a page.
@@ -305,10 +319,12 @@ for a page.
 </ul>
 ```
 
-##### page.meta
+::: mkdocs.structure.pages.Page.meta
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-A mapping of the metadata included at the top of the markdown page. In this
-example we define a `source` property above the page title.
+In this example we define a `source` property above the page title:
 
 ```no-highlight
 source: generics.py
@@ -331,53 +347,49 @@ documentation page.
 {% endfor %}
 ```
 
-##### page.url
+::: mkdocs.structure.pages.Page.url
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-The URL of the page relative to the MkDocs `site_dir`. It is expected that this
-be used with the [url](#url) filter to ensure the URL is relative to the current
+It is expected that this be used with the [url](#url) filter to ensure the URL is relative to the current
 page.
 
 ```django
 <a href="{{ page.url|url }}">{{ page.title }}</a>
 ```
 
-[base_url]: #base_url
+::: mkdocs.structure.pages.Page.file
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### page.file
-
-The documentation `File` that the page is being rendered from.
-
-##### page.abs_url
-
-The absolute URL of the page from the server root as determined by the value
-assigned to the [site_url] configuration setting. The value includes any
-subdirectory included in the `site_url`, but not the domain. [base_url] should
-not be used with this variable.
+::: mkdocs.structure.pages.Page.abs_url
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
 For example, if `site_url: https://example.com/`, then the value of
 `page.abs_url` for the page `foo.md` would be `/foo/`. However, if
 `site_url: https://example.com/bar/`, then the value of `page.abs_url` for the
 page `foo.md` would be `/bar/foo/`.
 
-[site_url]: ../user-guide/configuration.md#site_url
+::: mkdocs.structure.pages.Page.canonical_url
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### page.canonical_url
+::: mkdocs.structure.pages.Page.edit_url
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-The full, canonical URL to the current page as determined by the value assigned
-to the [site_url] configuration setting. The value includes the domain and any
-subdirectory included in the `site_url`. [base_url] should not be used with this
-variable.
+::: mkdocs.structure.pages.Page.is_homepage
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### page.edit_url
-
-The full URL to the source page in the source repository. Typically used to
-provide a link to edit the source page. [base_url] should not be used with this
-variable.
-
-##### page.is_homepage
-
-Evaluates to `True` for the homepage of the site and `False` for all other
-pages. This can be used in conjunction with other attributes of the `page`
+This can be used in conjunction with other attributes of the `page`
 object to alter the behavior. For example, to display a different title
 on the homepage:
 
@@ -385,48 +397,53 @@ on the homepage:
 {% if not page.is_homepage %}{{ page.title }} - {% endif %}{{ site_name }}
 ```
 
-##### page.previous_page
+::: mkdocs.structure.pages.Page.previous_page
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-The page object for the previous page or `None`. The value will be `None` if the
-current page is the first item in the site navigation or if the current page is
-not included in the navigation at all. When the value is a page object, the
-usage is the same as for `page`.
+::: mkdocs.structure.pages.Page.next_page
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### page.next_page
+::: mkdocs.structure.pages.Page.parent
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-The page object for the next page or `None`. The value will be `None` if the
-current page is the last item in the site navigation or if the current page is
-not included in the navigation at all. When the value is a page object, the
-usage is the same as for `page`.
+::: mkdocs.structure.pages.Page.children
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### page.parent
+::: mkdocs.structure.pages.Page.active
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-The immediate parent of the page in the [site navigation](#nav). `None` if the
-page is at the top level.
+::: mkdocs.structure.pages.Page.is_section
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### page.children
+::: mkdocs.structure.pages.Page.is_page
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-Pages do not contain children and the attribute is always `None`.
+::: mkdocs.structure.pages.Page.is_link
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### page.active
+#### AnchorLink
 
-When `True`, indicates that this page is the currently viewed page. Defaults
-to `False`.
-
-##### page.is_section
-
-Indicates that the navigation object is a "section" object. Always `False` for
-page objects.
-
-##### page.is_page
-
-Indicates that the navigation object is a "page" object. Always `True` for
-page objects.
-
-##### page.is_link
-
-Indicates that the navigation object is a "link" object. Always `False` for
-page objects.
+::: mkdocs.structure.toc.AnchorLink
+    options:
+        show_root_heading: false
+        show_root_toc_entry: true
+        heading_level: 5
 
 ### Navigation Objects
 
@@ -447,83 +464,103 @@ URLs and are not links of any kind. However, by default, MkDocs sorts index
 pages to the top and the first child might be used as the URL for a section if a
 theme chooses to do so.
 
- The following attributes are available on `section` objects:
+::: mkdocs.structure.nav.Section
+    options:
+        show_root_heading: false
+        show_root_toc_entry: true
+        members: []
+        heading_level: 4
 
-##### section.title
+The following attributes are available on `section` objects:
 
-The title of the section.
+::: mkdocs.structure.nav.Section.title
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### section.parent
+::: mkdocs.structure.nav.Section.parent
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-The immediate parent of the section or `None` if the section is at the top
-level.
+::: mkdocs.structure.nav.Section.children
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### section.children
+::: mkdocs.structure.nav.Section.active
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-An iterable of all child navigation objects. Children may include nested
-sections, pages and links.
+::: mkdocs.structure.nav.Section.is_section
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### section.active
+::: mkdocs.structure.nav.Section.is_page
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-When `True`, indicates that a child page of this section is the current page and
-can be used to highlight the section as the currently viewed section. Defaults
-to `False`.
-
-##### section.is_section
-
-Indicates that the navigation object is a "section" object. Always `True` for
-section objects.
-
-##### section.is_page
-
-Indicates that the navigation object is a "page" object. Always `False` for
-section objects.
-
-##### section.is_link
-
-Indicates that the navigation object is a "link" object. Always `False` for
-section objects.
+::: mkdocs.structure.nav.Section.is_link
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
 #### Link
 
 A `link` navigation object contains a link which does not point to an internal
-MkDocs page. The following attributes are available on `link` objects:
+MkDocs page.
 
-##### link.title
+::: mkdocs.structure.nav.Link
+    options:
+        show_root_heading: false
+        show_root_toc_entry: true
+        members: []
+        heading_level: 4
 
-The title of the link. This would generally be used as the label of the link.
+The following attributes are available on `link` objects:
 
-##### link.url
+::: mkdocs.structure.nav.Link.title
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-The URL that the link points to. The URL should always be an absolute URLs and
-should not need to have `base_url` prepended.
+::: mkdocs.structure.nav.Link.url
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### link.parent
+::: mkdocs.structure.nav.Link.parent
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-The immediate parent of the link. `None` if the link is at the top level.
+::: mkdocs.structure.nav.Link.children
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### link.children
+::: mkdocs.structure.nav.Link.active
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-Links do not contain children and the attribute is always `None`.
+::: mkdocs.structure.nav.Link.is_section
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### link.active
+::: mkdocs.structure.nav.Link.is_page
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-External links cannot be "active" and the attribute is always `False`.
-
-##### link.is_section
-
-Indicates that the navigation object is a "section" object. Always `False` for
-link objects.
-
-##### link.is_page
-
-Indicates that the navigation object is a "page" object. Always `False` for
-link objects.
-
-##### link.is_link
-
-Indicates that the navigation object is a "link" object. Always `True` for
-link objects.
+::: mkdocs.structure.nav.Link.is_link
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
 ### Extra Context
 

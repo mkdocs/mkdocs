@@ -32,6 +32,7 @@ nav:
         - Themes: dev-guide/themes.md
         - Translations: dev-guide/translations.md
         - Plugins: dev-guide/plugins.md
+        - API Reference: dev-guide/api.md
     - About:
         - Release Notes: about/release-notes.md
         - Contributing: about/contributing.md
@@ -60,13 +61,16 @@ plugins:
             user-guide/plugins.md: dev-guide/plugins.md
             user-guide/custom-themes.md: dev-guide/themes.md
             user-guide/styling-your-docs.md: user-guide/choosing-your-theme.md
+    - autorefs
     - mkdocstrings:
         handlers:
           python:
             options:
               docstring_section_style: list
-              show_root_toc_entry: false
+              members_order: source
+              show_root_heading: true
               show_source: false
+              show_signature_annotations: true
 
 watch:
     - mkdocs
