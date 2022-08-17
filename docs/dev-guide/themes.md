@@ -513,14 +513,14 @@ The following attributes are available on `section` objects:
 A `link` navigation object contains a link which does not point to an internal
 MkDocs page.
 
-The following attributes are available on `link` objects:
-
 ::: mkdocs.structure.nav.Link
     options:
         show_root_heading: false
         show_root_toc_entry: true
         members: []
         heading_level: 4
+
+The following attributes are available on `link` objects:
 
 ::: mkdocs.structure.nav.Link.title
     options:
