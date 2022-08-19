@@ -45,6 +45,7 @@ Make sure to stick around to answer some questions as well!
 - [Official Documentation][mkdocs]
 - [Latest Release Notes][release-notes]
 - [MkDocs Wiki][wiki] (Third-party themes, recipes, plugins and more)
+- [Best-of-MkDocs][best-of] (Curated list of themes, plugins and more)
 
 ## Contributing to MkDocs
 
@@ -73,6 +74,7 @@ discussion forums is expected to follow the [PyPA Code of Conduct].
 [wiki]: https://github.com/mkdocs/mkdocs/wiki
 [Contributing Guide]: https://www.mkdocs.org/about/contributing/
 [PyPA Code of Conduct]: https://www.pypa.io/en/latest/code-of-conduct/
+[best-of]: https://github.com/pawamoy/best-of-mkdocs
 
 ## License
 
