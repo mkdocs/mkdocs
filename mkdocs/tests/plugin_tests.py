@@ -21,8 +21,6 @@ class _DummyPluginConfig(base.Config):
 
 
 class DummyPlugin(plugins.BasePlugin[_DummyPluginConfig]):
-    config_class = _DummyPluginConfig
-
     def on_pre_page(self, content, **kwargs):
         """modify page content by prepending `foo` config value."""
         return f'{self.config.foo} {content}'
