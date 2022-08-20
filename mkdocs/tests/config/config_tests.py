@@ -12,8 +12,6 @@ from mkdocs.exceptions import ConfigurationError
 from mkdocs.localization import parse_locale
 from mkdocs.tests.base import dedent, tempdir
 
-DEFAULT_SCHEMA = defaults.get_schema()
-
 
 class ConfigTests(unittest.TestCase):
     def test_missing_config_file(self):
@@ -21,7 +19,7 @@ class ConfigTests(unittest.TestCase):
             config.load_config(config_file='bad_filename.yaml')
 
     def test_missing_site_name(self):
-        conf = config.Config(schema=DEFAULT_SCHEMA)
+        conf = defaults.MkDocsConfig()
         conf.load_dict({})
         errors, warnings = conf.validate()
         self.assertEqual(
@@ -216,7 +214,7 @@ class ConfigTests(unittest.TestCase):
                 self.assertEqual({k: conf['theme'][k] for k in iter(conf['theme'])}, result['vars'])
 
     def test_empty_nav(self):
-        conf = config.Config(schema=DEFAULT_SCHEMA)
+        conf = defaults.MkDocsConfig()
         conf.load_dict(
             {
                 'site_name': 'Example',
@@ -227,7 +225,7 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(conf['nav'], None)
 
     def test_error_on_pages(self):
-        conf = config.Config(schema=DEFAULT_SCHEMA)
+        conf = defaults.MkDocsConfig()
         conf.load_dict(
             {
                 'site_name': 'Example',

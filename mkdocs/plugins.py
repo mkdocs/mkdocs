@@ -7,7 +7,7 @@ from __future__ import annotations
 import logging
 import sys
 from collections import OrderedDict
-from typing import Any, Callable, Dict, List, Optional, Tuple, TypeVar, overload
+from typing import Any, Callable, Dict, List, Optional, Tuple, Type, TypeVar, overload
 
 if sys.version_info >= (3, 10):
     from importlib.metadata import EntryPoint, entry_points
@@ -22,7 +22,7 @@ else:
 import jinja2.environment
 
 from mkdocs import utils
-from mkdocs.config.base import Config, ConfigErrors, ConfigWarnings, PlainConfigSchema
+from mkdocs.config.base import Config, ConfigErrors, ConfigWarnings, LegacyConfig, PlainConfigSchema
 from mkdocs.livereload import LiveReloadServer
 from mkdocs.structure.files import Files
 from mkdocs.structure.nav import Navigation
@@ -54,15 +54,28 @@ class BasePlugin:
     All plugins should subclass this class.
     """
 
+    config_class: Type[Config] = LegacyConfig
     config_scheme: PlainConfigSchema = ()
     config: Config = {}  # type: ignore[assignment]
+
+    def __init_subclass__(cls):
+        if not issubclass(cls.config_class, Config):
+            raise TypeError(
+                f"config_class {cls.config_class} must be a subclass of `mkdocs.config.base.Config`"
+            )
+        if cls.config_class is not LegacyConfig:
+            cls.config_scheme = cls.config_class._schema  # For compatibility.
 
     def load_config(
         self, options: Dict[str, Any], config_file_path: Optional[str] = None
     ) -> Tuple[ConfigErrors, ConfigWarnings]:
         """Load config from a dict of options. Returns a tuple of (errors, warnings)."""
 
-        self.config = Config(schema=self.config_scheme, config_file_path=config_file_path)
+        if self.config_class is LegacyConfig:
+            self.config = LegacyConfig(self.config_scheme, config_file_path=config_file_path)
+        else:
+            self.config = self.config_class(config_file_path=config_file_path)
+
         self.config.load_dict(options)
 
         return self.config.validate()

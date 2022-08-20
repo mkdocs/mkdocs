@@ -61,6 +61,21 @@ class BaseConfigOption:
         The post-validation process method should be implemented by subclasses.
         """
 
+    def __set_name__(self, owner, name):
+        self._name = name
+
+    def __get__(self, obj, type=None):
+        if not isinstance(obj, Config):
+            return self
+        return obj[self._name]
+
+    def __set__(self, obj, value):
+        if not isinstance(obj, Config):
+            raise AttributeError(
+                f"can't set attribute ({self._name}) because the parent is a {type(obj)} not a {Config}"
+            )
+        obj[self._name] = value
+
 
 class ValidationError(Exception):
     """Raised during the validation process of the config on errors."""
@@ -78,20 +93,35 @@ ConfigWarnings = List[Tuple[str, str]]
 
 class Config(UserDict):
     """
-    MkDocs Configuration dict
+    Base class for MkDocs configuration, plugin configuration (and sub-configuration) objects.
 
-    This is a fairly simple extension of a standard dictionary. It adds methods
-    for running validation on the structure and contents.
+    It should be subclassed and have `ConfigOption`s defined as attributes.
+    For examples, see mkdocs/contrib/search/__init__.py and mkdocs/config/defaults.py.
+
+    Behavior as it was prior to MkDocs 1.4 is now handled by LegacyConfig.
     """
 
-    def __init__(
-        self, schema: PlainConfigSchema, config_file_path: Optional[Union[str, bytes]] = None
-    ) -> None:
-        """
-        The schema is a Python dict which maps the config name to a validator.
-        """
-        self._schema = schema
-        self._schema_keys = set(dict(schema).keys())
+    _schema: PlainConfigSchema
+
+    def __init_subclass__(cls):
+        schema = dict(getattr(cls, '_schema', ()))
+        for attr_name, attr in cls.__dict__.items():
+            if isinstance(attr, BaseConfigOption):
+                schema[attr_name] = attr
+        cls._schema = tuple(schema.items())
+
+    def __new__(cls, *args, **kwargs) -> Config:
+        """Compatibility: allow referring to `LegacyConfig(...)` constructor as `Config(...)`."""
+        if cls is Config:
+            return LegacyConfig(*args, **kwargs)
+        return super().__new__(cls)
+
+    def __init__(self, config_file_path: Optional[Union[str, bytes]] = None):
+        super().__init__()
+        self.user_configs: List[dict] = []
+        self.set_defaults()
+
+        self._schema_keys = {k for k, v in self._schema}
         # Ensure config_file_path is a Unicode string
         if config_file_path is not None and not isinstance(config_file_path, str):
             try:
@@ -100,10 +130,6 @@ class Config(UserDict):
             except UnicodeDecodeError:
                 raise ValidationError("config_file_path is not a Unicode string.")
         self.config_file_path = config_file_path
-        self.data = {}
-
-        self.user_configs: List[dict] = []
-        self.set_defaults()
 
     def set_defaults(self) -> None:
         """
@@ -187,7 +213,7 @@ class Config(UserDict):
             )
 
         self.user_configs.append(patch)
-        self.data.update(patch)
+        self.update(patch)
 
     def load_file(self, config_file: IO) -> None:
         """Load config options from the open file descriptor of a YAML file."""
@@ -204,10 +230,20 @@ class Config(UserDict):
 def get_schema(cls: type) -> PlainConfigSchema:
     """
     Extract ConfigOptions defined in a class (used just as a container) and put them into a schema tuple.
-
-    See mkdocs/config/defaults.py for an example.
     """
+    if issubclass(cls, Config):
+        return cls._schema
     return tuple((k, v) for k, v in cls.__dict__.items() if isinstance(v, BaseConfigOption))
+
+
+class LegacyConfig(Config):
+    """
+    A configuration object for plugins, as just a dict without type-safe attribute access.
+    """
+
+    def __init__(self, schema: PlainConfigSchema, config_file_path: Optional[str] = None):
+        self._schema = schema
+        super().__init__(config_file_path)
 
 
 @contextmanager
@@ -277,12 +313,10 @@ def load_config(config_file: Optional[Union[str, IO]] = None, **kwargs) -> Confi
             options.pop(key)
 
     with _open_config_file(config_file) as fd:
-        options['config_file_path'] = getattr(fd, 'name', '')
-
         # Initialize the config with the default schema.
-        from mkdocs.config import defaults
+        from mkdocs.config.defaults import MkDocsConfig
 
-        cfg = Config(schema=defaults.get_schema(), config_file_path=options['config_file_path'])
+        cfg = MkDocsConfig(config_file_path=getattr(fd, 'name', ''))
         # load the config file
         cfg.load_file(fd)
 

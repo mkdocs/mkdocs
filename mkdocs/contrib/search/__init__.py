@@ -46,7 +46,7 @@ class LangOption(c.OptionallyRequired):
         return value
 
 
-class _PluginConfig:
+class _PluginConfig(base.Config):
     lang = LangOption()
     separator = c.Type(str, default=r'[\s\-]+')
     min_search_length = c.Type(int, default=3)
@@ -57,7 +57,7 @@ class _PluginConfig:
 class SearchPlugin(BasePlugin):
     """Add a search feature to MkDocs."""
 
-    config_scheme = base.get_schema(_PluginConfig)
+    config_class = _PluginConfig
 
     def on_config(self, config: Config, **kwargs) -> Config:
         "Add plugin templates and scripts to config."

@@ -5,14 +5,16 @@ from mkdocs.config import config_options as c
 
 
 def get_schema() -> base.PlainConfigSchema:
-    return base.get_schema(_MkDocsConfig)
+    return MkDocsConfig._schema
 
 
 # NOTE: The order here is important. During validation some config options
 # depend on others. So, if config option A depends on B, then A should be
 # listed higher in the schema.
-class _MkDocsConfig:
-    config_file_path = c.Type(str)
+class MkDocsConfig(base.Config):
+    """The configuration of MkDocs itself (the root object of mkdocs.yml)."""
+
+    config_file_path = c.Type(str)  # type: ignore[assignment]
     """Reserved for internal use, stores the mkdocs.yml config file."""
 
     site_name = c.Type(str, required=True)

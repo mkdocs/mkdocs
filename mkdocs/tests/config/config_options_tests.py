@@ -1,4 +1,5 @@
 import contextlib
+import copy
 import io
 import os
 import re
@@ -37,7 +38,7 @@ class TestCase(unittest.TestCase):
         warnings={},
         config_file_path=None,
     ):
-        config = base.Config(base.get_schema(schema), config_file_path=config_file_path)
+        config = base.LegacyConfig(base.get_schema(schema), config_file_path=config_file_path)
         config.load_dict(cfg)
         actual_errors, actual_warnings = config.validate()
         if actual_errors:
@@ -1612,3 +1613,20 @@ class TestHooks(TestCase):
         )
         self.assertEqual(hook.on_page_markdown('foo foo'), 'zoo zoo')
         self.assertFalse(hasattr(hook, 'on_nav'))
+
+
+class SchemaTest(TestCase):
+    def test_copy(self):
+        copy.deepcopy(
+            base.LegacyConfig(
+                (('foo', c.MarkdownExtensions()),),
+            ),
+        )
+
+        copy.deepcopy(self.get_config(IpAddressTest.Schema, {'option': '1.2.3.4:5678'}))
+        copy.deepcopy(IpAddressTest.Schema)
+        copy.deepcopy(base.get_schema(IpAddressTest.Schema))
+
+        copy.deepcopy(self.get_config(EditURITest.Schema, {}))
+        copy.deepcopy(EditURITest.Schema)
+        copy.deepcopy(base.get_schema(EditURITest.Schema))

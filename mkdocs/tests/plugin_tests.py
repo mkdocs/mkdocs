@@ -14,14 +14,14 @@ from mkdocs.exceptions import Abort, BuildError, PluginError
 from mkdocs.tests.base import load_config
 
 
-class _DummyPluginConfig:
+class _DummyPluginConfig(base.Config):
     foo = c.Type(str, default='default foo')
     bar = c.Type(int, default=0)
     dir = c.Dir(exists=False)
 
 
 class DummyPlugin(plugins.BasePlugin):
-    config_scheme = base.get_schema(_DummyPluginConfig)
+    config_class = _DummyPluginConfig
 
     def on_pre_page(self, content, **kwargs):
         """modify page content by prepending `foo` config value."""
