@@ -158,8 +158,8 @@ class Page:
         if base:
             if not base.endswith('/'):
                 base += '/'
-            self.canonical_url = urljoin(base, self.url)
-            self.abs_url = urlsplit(self.canonical_url).path
+            self.canonical_url = canonical_url = urljoin(base, self.url)
+            self.abs_url = urlsplit(canonical_url).path
         else:
             self.canonical_url = None
             self.abs_url = None
@@ -238,7 +238,7 @@ class Page:
         Convert the Markdown source file to HTML as per the config.
         """
 
-        extensions = [_RelativePathExtension(self.file, files)] + config['markdown_extensions']
+        extensions = [_RelativePathExtension(self.file, files), *config['markdown_extensions']]
 
         md = markdown.Markdown(
             extensions=extensions,
