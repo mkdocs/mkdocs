@@ -12,7 +12,7 @@ from jinja2.exceptions import TemplateNotFound
 
 import mkdocs
 from mkdocs import utils
-from mkdocs.config.base import Config
+from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.exceptions import Abort, BuildError
 from mkdocs.structure.files import File, Files, get_files
 from mkdocs.structure.nav import Navigation, get_navigation
@@ -38,7 +38,7 @@ log.addFilter(DuplicateFilter())
 def get_context(
     nav: Navigation,
     files: Union[Sequence[File], Files],
-    config: Config,
+    config: MkDocsConfig,
     page: Optional[Page] = None,
     base_url: str = '',
 ) -> Dict[str, Any]:
@@ -69,7 +69,7 @@ def get_context(
 
 
 def _build_template(
-    name: str, template: jinja2.Template, files: Files, config: Config, nav: Navigation
+    name: str, template: jinja2.Template, files: Files, config: MkDocsConfig, nav: Navigation
 ) -> str:
     """
     Return rendered output for given template as a string.
@@ -105,7 +105,7 @@ def _build_template(
 
 
 def _build_theme_template(
-    template_name: str, env: jinja2.Environment, files: Files, config: Config, nav: Navigation
+    template_name: str, env: jinja2.Environment, files: Files, config: MkDocsConfig, nav: Navigation
 ) -> None:
     """Build a template using the theme environment."""
 
@@ -136,7 +136,7 @@ def _build_theme_template(
         log.info(f"Template skipped: '{template_name}' generated empty output.")
 
 
-def _build_extra_template(template_name: str, files: Files, config: Config, nav: Navigation):
+def _build_extra_template(template_name: str, files: Files, config: MkDocsConfig, nav: Navigation):
     """Build user templates which are not part of the theme."""
 
     log.debug(f"Building extra template: {template_name}")
@@ -161,7 +161,7 @@ def _build_extra_template(template_name: str, files: Files, config: Config, nav:
         log.info(f"Template skipped: '{template_name}' generated empty output.")
 
 
-def _populate_page(page: Page, config: Config, files: Files, dirty: bool = False) -> None:
+def _populate_page(page: Page, config: MkDocsConfig, files: Files, dirty: bool = False) -> None:
     """Read page content from docs_dir and render Markdown."""
 
     try:
@@ -197,7 +197,7 @@ def _populate_page(page: Page, config: Config, files: Files, dirty: bool = False
 
 def _build_page(
     page: Page,
-    config: Config,
+    config: MkDocsConfig,
     doc_files: Sequence[File],
     nav: Navigation,
     env: jinja2.Environment,
@@ -254,7 +254,7 @@ def _build_page(
         raise
 
 
-def build(config: Config, live_server: bool = False, dirty: bool = False) -> None:
+def build(config: MkDocsConfig, live_server: bool = False, dirty: bool = False) -> None:
     """Perform a full site build."""
 
     logger = logging.getLogger('mkdocs')

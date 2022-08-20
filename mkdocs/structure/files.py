@@ -23,10 +23,11 @@ from urllib.parse import quote as urlquote
 import jinja2.environment
 
 from mkdocs import utils
-from mkdocs.config.base import Config
 
 if TYPE_CHECKING:
+    from mkdocs.config.defaults import MkDocsConfig
     from mkdocs.structure.pages import Page
+
 
 log = logging.getLogger(__name__)
 
@@ -103,7 +104,7 @@ class Files:
         """Return iterable of all CSS file objects."""
         return [file for file in self if file.is_css()]
 
-    def add_files_from_theme(self, env: jinja2.Environment, config: Config) -> None:
+    def add_files_from_theme(self, env: jinja2.Environment, config: MkDocsConfig) -> None:
         """Retrieve static files from Jinja environment and add to collection."""
 
         def filter(name):
@@ -278,7 +279,7 @@ class File:
         return self.src_uri.endswith('.css')
 
 
-def get_files(config: Union[Config, Mapping[str, Any]]) -> Files:
+def get_files(config: Union[MkDocsConfig, Mapping[str, Any]]) -> Files:
     """Walk the `docs_dir` and return a Files collection."""
     files = []
     exclude = ['.*', '/templates']

@@ -21,7 +21,7 @@ def get_markdown_toc(markdown_source):
     return md.toc_tokens
 
 
-def load_config(**cfg):
+def load_config(**cfg) -> MkDocsConfig:
     """Helper to build a simple config for testing."""
     path_base = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'integration', 'minimal')
     cfg = cfg or {}

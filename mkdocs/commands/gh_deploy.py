@@ -9,6 +9,7 @@ import ghp_import
 from packaging import version
 
 import mkdocs
+from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.exceptions import Abort
 
 log = logging.getLogger(__name__)
@@ -95,7 +96,12 @@ def _check_version(branch):
 
 
 def gh_deploy(
-    config, message=None, force=False, no_history=False, ignore_version=False, shell=False
+    config: MkDocsConfig,
+    message=None,
+    force=False,
+    no_history=False,
+    ignore_version=False,
+    shell=False,
 ):
     if not _is_cwd_git_repo():
         log.error('Cannot deploy - this directory does not appear to be a git repository')

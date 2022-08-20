@@ -6,11 +6,27 @@ import os
 import sys
 from collections import UserDict
 from contextlib import contextmanager
-from typing import IO, Generic, Iterator, List, Optional, Sequence, Tuple, TypeVar, Union, overload
+from typing import (
+    IO,
+    TYPE_CHECKING,
+    Generic,
+    Iterator,
+    List,
+    Optional,
+    Sequence,
+    Tuple,
+    TypeVar,
+    Union,
+    overload,
+)
 
 from yaml import YAMLError
 
 from mkdocs import exceptions, utils
+
+if TYPE_CHECKING:
+    from mkdocs.config.defaults import MkDocsConfig
+
 
 log = logging.getLogger('mkdocs.config')
 
@@ -306,7 +322,7 @@ def _open_config_file(config_file: Optional[Union[str, IO]]) -> Iterator[IO]:
             result_config_file.close()
 
 
-def load_config(config_file: Optional[Union[str, IO]] = None, **kwargs) -> Config:
+def load_config(config_file: Optional[Union[str, IO]] = None, **kwargs) -> MkDocsConfig:
     """
     Load the configuration for a given file object or name
 

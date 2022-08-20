@@ -7,7 +7,7 @@ from typing import Any, Dict, List
 from mkdocs import utils
 from mkdocs.config import base
 from mkdocs.config import config_options as c
-from mkdocs.config.base import Config
+from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.contrib.search.search_index import SearchIndex
 from mkdocs.plugins import BasePlugin
 
@@ -59,7 +59,7 @@ class SearchPlugin(BasePlugin[_PluginConfig]):
 
     config_class = _PluginConfig
 
-    def on_config(self, config: Config, **kwargs) -> Config:
+    def on_config(self, config: MkDocsConfig, **kwargs) -> MkDocsConfig:
         "Add plugin templates and scripts to config."
         if 'include_search_page' in config['theme'] and config['theme']['include_search_page']:
             config['theme'].static_templates.add('search.html')
@@ -81,7 +81,7 @@ class SearchPlugin(BasePlugin[_PluginConfig]):
             )
         return config
 
-    def on_pre_build(self, config: Config, **kwargs) -> None:
+    def on_pre_build(self, config: MkDocsConfig, **kwargs) -> None:
         "Create search index instance for later use."
         self.search_index = SearchIndex(**self.config)
 
@@ -89,7 +89,7 @@ class SearchPlugin(BasePlugin[_PluginConfig]):
         "Add page to search index."
         self.search_index.add_entry_from_context(context['page'])
 
-    def on_post_build(self, config: Config, **kwargs) -> None:
+    def on_post_build(self, config: MkDocsConfig, **kwargs) -> None:
         "Build search index."
         output_base_path = os.path.join(config['site_dir'], 'search')
         search_index = self.search_index.generate_search_index()

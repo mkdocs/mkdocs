@@ -11,6 +11,7 @@ import jinja2.exceptions
 
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
+from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.exceptions import Abort
 from mkdocs.livereload import LiveReloadServer
 
@@ -40,7 +41,7 @@ def serve(
     # string is returned. And it makes MkDocs temp dirs easier to identify.
     site_dir = tempfile.mkdtemp(prefix='mkdocs_')
 
-    def mount_path(config):
+    def mount_path(config: MkDocsConfig):
         return urlsplit(config['site_url'] or '/').path
 
     get_config = functools.partial(
