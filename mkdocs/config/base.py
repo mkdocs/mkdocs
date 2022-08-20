@@ -64,6 +64,10 @@ class ValidationError(Exception):
     """Raised during the validation process of the config on errors."""
 
 
+PlainConfigSchemaItem = Tuple[str, BaseConfigOption]
+PlainConfigSchema = Sequence[PlainConfigSchemaItem]
+
+
 class Config(UserDict):
     """
     MkDocs Configuration dict
@@ -72,9 +76,7 @@ class Config(UserDict):
     for running validation on the structure and contents.
     """
 
-    def __init__(
-        self, schema: Sequence[Tuple[str, BaseConfigOption]], config_file_path: Optional[str] = None
-    ):
+    def __init__(self, schema: PlainConfigSchema, config_file_path: Optional[str] = None):
         """
         The schema is a Python dict which maps the config name to a validator.
         """
@@ -192,7 +194,7 @@ class Config(UserDict):
 
 
 @functools.lru_cache(maxsize=None)
-def get_schema(cls: type) -> Sequence[Tuple[str, BaseConfigOption]]:
+def get_schema(cls: type) -> PlainConfigSchema:
     """
     Extract ConfigOptions defined in a class (used just as a container) and put them into a schema tuple.
 

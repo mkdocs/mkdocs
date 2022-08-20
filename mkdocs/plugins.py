@@ -6,12 +6,12 @@ Implements the plugin API for MkDocs.
 
 import logging
 from collections import OrderedDict
-from typing import Any, Callable, Dict, Optional, Sequence, Tuple, TypeVar, overload
+from typing import Any, Callable, Dict, Optional, Tuple, TypeVar, overload
 
 import importlib_metadata
 import jinja2.environment
 
-from mkdocs.config.base import BaseConfigOption, Config
+from mkdocs.config.base import Config, PlainConfigSchema
 from mkdocs.livereload import LiveReloadServer
 from mkdocs.structure.files import Files
 from mkdocs.structure.nav import Navigation
@@ -43,7 +43,7 @@ class BasePlugin:
     All plugins should subclass this class.
     """
 
-    config_scheme: Sequence[Tuple[str, BaseConfigOption]] = ()
+    config_scheme: PlainConfigSchema = ()
     config: Config = {}  # type: ignore[assignment]
 
     def load_config(

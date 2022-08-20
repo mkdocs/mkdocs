@@ -8,7 +8,7 @@ from urllib.parse import urlsplit, urlunsplit
 import markdown
 
 from mkdocs import plugins, theme, utils
-from mkdocs.config.base import BaseConfigOption, Config, ValidationError
+from mkdocs.config.base import BaseConfigOption, Config, PlainConfigSchemaItem, ValidationError
 from mkdocs.exceptions import ConfigurationError
 
 
@@ -22,7 +22,7 @@ class SubConfig(BaseConfigOption):
     enable validation with `validate=True`.
     """
 
-    def __init__(self, *config_options, validate=False):
+    def __init__(self, *config_options: PlainConfigSchemaItem, validate=False):
         super().__init__()
         self.default = {}
         self.config_options = config_options
@@ -137,7 +137,7 @@ class ConfigItems(ListOfItems):
     options.
     """
 
-    def __init__(self, *config_options, required=False, validate=False):
+    def __init__(self, *config_options: PlainConfigSchemaItem, required=False, validate=False):
         super().__init__(SubConfig(*config_options, validate=validate))
         self.required = required
 
