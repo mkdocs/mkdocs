@@ -44,7 +44,7 @@ class BasePlugin:
     """
 
     config_scheme = ()
-    config: Config = {}  # type: ignore
+    config: Config = {}  # type: ignore[assignment]
 
     def load_config(
         self, options: Dict[str, Any], config_file_path: Optional[str] = None
