@@ -106,8 +106,8 @@ def gh_deploy(
     if not _is_cwd_git_repo():
         log.error('Cannot deploy - this directory does not appear to be a git repository')
 
-    remote_branch = config['remote_branch']
-    remote_name = config['remote_name']
+    remote_branch = config.remote_branch
+    remote_name = config.remote_name
 
     if not ignore_version:
         _check_version(remote_branch)
@@ -119,13 +119,13 @@ def gh_deploy(
 
     log.info(
         "Copying '%s' to '%s' branch and pushing to GitHub.",
-        config['site_dir'],
-        config['remote_branch'],
+        config.site_dir,
+        config.remote_branch,
     )
 
     try:
         ghp_import.ghp_import(
-            config['site_dir'],
+            config.site_dir,
             mesg=message,
             remote=remote_name,
             branch=remote_branch,
@@ -139,7 +139,7 @@ def gh_deploy(
         log.error(f"Failed to deploy to GitHub with error: \n{e.message}")
         raise Abort('Deployment Aborted!')
 
-    cname_file = os.path.join(config['site_dir'], 'CNAME')
+    cname_file = os.path.join(config.site_dir, 'CNAME')
     # Does this repository have a CNAME set for GitHub pages?
     if os.path.isfile(cname_file):
         # This GitHub pages repository has a CNAME configured.

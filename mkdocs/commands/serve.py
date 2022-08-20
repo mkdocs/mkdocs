@@ -42,7 +42,7 @@ def serve(
     site_dir = tempfile.mkdtemp(prefix='mkdocs_')
 
     def mount_path(config: MkDocsConfig):
-        return urlsplit(config['site_url'] or '/').path
+        return urlsplit(config.site_url or '/').path
 
     get_config = functools.partial(
         load_config,
@@ -64,13 +64,13 @@ def serve(
             config = get_config()
 
         # combine CLI watch arguments with config file values
-        if config["watch"] is None:
-            config["watch"] = watch
+        if config.watch is None:
+            config.watch = watch
         else:
-            config["watch"].extend(watch)
+            config.watch.extend(watch)
 
         # Override a few config settings after validation
-        config['site_url'] = 'http://{}{}'.format(config['dev_addr'], mount_path(config))
+        config.site_url = f'http://{config.dev_addr}{mount_path(config)}'
 
         build(config, live_server=live_server, dirty=dirty)
 
@@ -81,7 +81,7 @@ def serve(
         # Perform the initial build
         builder(config)
 
-        host, port = config['dev_addr']
+        host, port = config.dev_addr
         server = LiveReloadServer(
             builder=builder, host=host, port=port, root=site_dir, mount_path=mount_path(config)
         )
@@ -97,17 +97,17 @@ def serve(
 
         if live_server:
             # Watch the documentation files, the config file and the theme files.
-            server.watch(config['docs_dir'])
-            server.watch(config['config_file_path'])
+            server.watch(config.docs_dir)
+            server.watch(config.config_file_path)
 
             if watch_theme:
-                for d in config['theme'].dirs:
+                for d in config.theme.dirs:
                     server.watch(d)
 
             # Run `serve` plugin events.
-            server = config['plugins'].run_event('serve', server, config=config, builder=builder)
+            server = config.plugins.run_event('serve', server, config=config, builder=builder)
 
-            for item in config['watch']:
+            for item in config.watch:
                 server.watch(item)
 
         try:

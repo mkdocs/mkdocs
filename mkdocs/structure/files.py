@@ -113,7 +113,7 @@ class Files:
             # Exclude translation files
             patterns.append("locales/*")
             patterns.extend(f'*{x}' for x in utils.markdown_extensions)
-            patterns.extend(config['theme'].static_templates)
+            patterns.extend(config.theme.static_templates)
             for pattern in patterns:
                 if fnmatch.fnmatch(name.lower(), pattern):
                     return False
@@ -123,12 +123,10 @@ class Files:
             # Theme files do not override docs_dir files
             path = PurePath(path).as_posix()
             if path not in self.src_uris:
-                for dir in config['theme'].dirs:
+                for dir in config.theme.dirs:
                     # Find the first theme dir which contains path
                     if os.path.isfile(os.path.join(dir, path)):
-                        self.append(
-                            File(path, dir, config['site_dir'], config['use_directory_urls'])
-                        )
+                        self.append(File(path, dir, config.site_dir, config.use_directory_urls))
                         break
 
 

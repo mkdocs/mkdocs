@@ -168,7 +168,7 @@ class SearchPluginTests(unittest.TestCase):
         self.assertEqual(result['theme'].static_templates, {'404.html', 'sitemap.xml'})
         self.assertEqual(len(result['theme'].dirs), 3)
         self.assertEqual(result['extra_javascript'], ['search/main.js'])
-        self.assertEqual(plugin.config['lang'], [result['theme']['locale'].language])
+        self.assertEqual(plugin.config.lang, [result['theme']['locale'].language])
 
     def test_event_on_config_lang(self):
         plugin = search.SearchPlugin()
@@ -179,7 +179,7 @@ class SearchPluginTests(unittest.TestCase):
         self.assertEqual(result['theme'].static_templates, {'404.html', 'sitemap.xml'})
         self.assertEqual(len(result['theme'].dirs), 3)
         self.assertEqual(result['extra_javascript'], ['search/main.js'])
-        self.assertEqual(plugin.config['lang'], ['es'])
+        self.assertEqual(plugin.config.lang, ['es'])
 
     def test_event_on_config_theme_locale(self):
         plugin = search.SearchPlugin()
@@ -192,7 +192,7 @@ class SearchPluginTests(unittest.TestCase):
         self.assertEqual(result['theme'].static_templates, {'404.html', 'sitemap.xml'})
         self.assertEqual(len(result['theme'].dirs), 3)
         self.assertEqual(result['extra_javascript'], ['search/main.js'])
-        self.assertEqual(plugin.config['lang'], [result['theme']['locale'].language])
+        self.assertEqual(plugin.config.lang, [result['theme']['locale'].language])
 
     def test_event_on_config_include_search_page(self):
         plugin = search.SearchPlugin()
@@ -421,9 +421,7 @@ class SearchIndexTests(unittest.TestCase):
         def test_page(title, filename, config):
             test_page = Page(
                 title,
-                File(
-                    filename, config['docs_dir'], config['site_dir'], config['use_directory_urls']
-                ),
+                File(filename, config.docs_dir, config.site_dir, config.use_directory_urls),
                 config,
             )
             test_page.content = """
@@ -479,7 +477,7 @@ class SearchIndexTests(unittest.TestCase):
                 self.assertEqual(warnings, [])
 
                 base_cfg = load_config()
-                base_cfg['plugins']['search'].config['indexing'] = option
+                base_cfg['plugins']['search'].config.indexing = option
 
                 pages = [
                     test_page('Home', 'index.md', base_cfg),

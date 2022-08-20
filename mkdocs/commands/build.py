@@ -48,9 +48,9 @@ def get_context(
     if page is not None:
         base_url = utils.get_relative_url('.', page.url)
 
-    extra_javascript = utils.create_media_urls(config['extra_javascript'], page, base_url)
+    extra_javascript = utils.create_media_urls(config.extra_javascript, page, base_url)
 
-    extra_css = utils.create_media_urls(config['extra_css'], page, base_url)
+    extra_css = utils.create_media_urls(config.extra_css, page, base_url)
 
     if isinstance(files, Files):
         files = files.documentation_pages()
@@ -75,9 +75,7 @@ def _build_template(
     Return rendered output for given template as a string.
     """
     # Run `pre_template` plugin events.
-    template = config['plugins'].run_event(
-        'pre_template', template, template_name=name, config=config
-    )
+    template = config.plugins.run_event('pre_template', template, template_name=name, config=config)
 
     if utils.is_error_template(name):
         # Force absolute URLs in the nav of error pages and account for the
@@ -85,21 +83,21 @@ def _build_template(
         # See https://github.com/mkdocs/mkdocs/issues/77.
         # However, if site_url is not set, assume the docs root and server root
         # are the same. See https://github.com/mkdocs/mkdocs/issues/1598.
-        base_url = urlsplit(config['site_url'] or '/').path
+        base_url = urlsplit(config.site_url or '/').path
     else:
         base_url = utils.get_relative_url('.', name)
 
     context = get_context(nav, files, config, base_url=base_url)
 
     # Run `template_context` plugin events.
-    context = config['plugins'].run_event(
+    context = config.plugins.run_event(
         'template_context', context, template_name=name, config=config
     )
 
     output = template.render(context)
 
     # Run `post_template` plugin events.
-    output = config['plugins'].run_event('post_template', output, template_name=name, config=config)
+    output = config.plugins.run_event('post_template', output, template_name=name, config=config)
 
     return output
 
@@ -120,7 +118,7 @@ def _build_theme_template(
     output = _build_template(template_name, template, files, config, nav)
 
     if output.strip():
-        output_path = os.path.join(config['site_dir'], template_name)
+        output_path = os.path.join(config.site_dir, template_name)
         utils.write_file(output.encode('utf-8'), output_path)
 
         if template_name == 'sitemap.xml':
@@ -171,19 +169,19 @@ def _populate_page(page: Page, config: MkDocsConfig, files: Files, dirty: bool =
             return
 
         # Run the `pre_page` plugin event
-        page = config['plugins'].run_event('pre_page', page, config=config, files=files)
+        page = config.plugins.run_event('pre_page', page, config=config, files=files)
 
         page.read_source(config)
 
         # Run `page_markdown` plugin events.
-        page.markdown = config['plugins'].run_event(
+        page.markdown = config.plugins.run_event(
             'page_markdown', page.markdown, page=page, config=config, files=files
         )
 
         page.render(config, files)
 
         # Run `page_content` plugin events.
-        page.content = config['plugins'].run_event(
+        page.content = config.plugins.run_event(
             'page_content', page.content, page=page, config=config, files=files
         )
     except Exception as e:
@@ -225,7 +223,7 @@ def _build_page(
             template = env.get_template('main.html')
 
         # Run `page_context` plugin events.
-        context = config['plugins'].run_event(
+        context = config.plugins.run_event(
             'page_context', context, page=page, config=config, nav=nav
         )
 
@@ -233,7 +231,7 @@ def _build_page(
         output = template.render(context)
 
         # Run `post_page` plugin events.
-        output = config['plugins'].run_event('post_page', output, page=page, config=config)
+        output = config.plugins.run_event('post_page', output, page=page, config=config)
 
         # Write the output file.
         if output.strip():
@@ -262,21 +260,21 @@ def build(config: MkDocsConfig, live_server: bool = False, dirty: bool = False) 
     # Add CountHandler for strict mode
     warning_counter = utils.CountHandler()
     warning_counter.setLevel(logging.WARNING)
-    if config['strict']:
+    if config.strict:
         logging.getLogger('mkdocs').addHandler(warning_counter)
 
     try:
         start = time.monotonic()
 
         # Run `config` plugin events.
-        config = config['plugins'].run_event('config', config)
+        config = config.plugins.run_event('config', config)
 
         # Run `pre_build` plugin events.
-        config['plugins'].run_event('pre_build', config=config)
+        config.plugins.run_event('pre_build', config=config)
 
         if not dirty:
             log.info("Cleaning site directory")
-            utils.clean_directory(config['site_dir'])
+            utils.clean_directory(config.site_dir)
         else:  # pragma: no cover
             # Warn user about problems that may occur with --dirty option
             log.warning(
@@ -285,23 +283,23 @@ def build(config: MkDocsConfig, live_server: bool = False, dirty: bool = False) 
             )
 
         if not live_server:  # pragma: no cover
-            log.info(f"Building documentation to directory: {config['site_dir']}")
-            if dirty and site_directory_contains_stale_files(config['site_dir']):
+            log.info(f"Building documentation to directory: {config.site_dir}")
+            if dirty and site_directory_contains_stale_files(config.site_dir):
                 log.info("The directory contains stale files. Use --clean to remove them.")
 
         # First gather all data from all files/pages to ensure all data is consistent across all pages.
 
         files = get_files(config)
-        env = config['theme'].get_env()
+        env = config.theme.get_env()
         files.add_files_from_theme(env, config)
 
         # Run `files` plugin events.
-        files = config['plugins'].run_event('files', files, config=config)
+        files = config.plugins.run_event('files', files, config=config)
 
         nav = get_navigation(files, config)
 
         # Run `nav` plugin events.
-        nav = config['plugins'].run_event('nav', nav, config=config, files=files)
+        nav = config.plugins.run_event('nav', nav, config=config, files=files)
 
         log.debug("Reading markdown pages.")
         for file in files.documentation_pages():
@@ -310,7 +308,7 @@ def build(config: MkDocsConfig, live_server: bool = False, dirty: bool = False) 
             _populate_page(file.page, config, files, dirty)
 
         # Run `env` plugin events.
-        env = config['plugins'].run_event('env', env, config=config, files=files)
+        env = config.plugins.run_event('env', env, config=config, files=files)
 
         # Start writing files to site_dir now that all data is gathered. Note that order matters. Files
         # with lower precedence get written first so that files with higher precedence can overwrite them.
@@ -318,10 +316,10 @@ def build(config: MkDocsConfig, live_server: bool = False, dirty: bool = False) 
         log.debug("Copying static assets.")
         files.copy_static_files(dirty=dirty)
 
-        for template in config['theme'].static_templates:
+        for template in config.theme.static_templates:
             _build_theme_template(template, env, files, config, nav)
 
-        for template in config['extra_templates']:
+        for template in config.extra_templates:
             _build_extra_template(template, files, config, nav)
 
         log.debug("Building markdown pages.")
@@ -331,7 +329,7 @@ def build(config: MkDocsConfig, live_server: bool = False, dirty: bool = False) 
             _build_page(file.page, config, doc_files, nav, env, dirty)
 
         # Run `post_build` plugin events.
-        config['plugins'].run_event('post_build', config=config)
+        config.plugins.run_event('post_build', config=config)
 
         counts = warning_counter.get_counts()
         if counts:
@@ -342,7 +340,7 @@ def build(config: MkDocsConfig, live_server: bool = False, dirty: bool = False) 
 
     except Exception as e:
         # Run `build_error` plugin events.
-        config['plugins'].run_event('build_error', error=e)
+        config.plugins.run_event('build_error', error=e)
         if isinstance(e, BuildError):
             log.error(str(e))
             raise Abort('\nAborted with a BuildError!')

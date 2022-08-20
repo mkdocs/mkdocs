@@ -389,7 +389,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
     )
     def test_add_files_from_theme(self, tdir, ddir):
         config = load_config(docs_dir=ddir, theme={'name': None, 'custom_dir': tdir})
-        env = config['theme'].get_env()
+        env = config.theme.get_env()
         files = get_files(config)
         self.assertEqual(
             [file.src_path for file in files],
