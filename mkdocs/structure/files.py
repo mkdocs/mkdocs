@@ -3,13 +3,16 @@ import logging
 import os
 import posixpath
 from pathlib import PurePath
-from typing import Dict, Iterable, Iterator, List, Optional
+from typing import TYPE_CHECKING, Dict, Iterable, Iterator, List, Optional
 from urllib.parse import quote as urlquote
 
 import jinja2.environment
 
 from mkdocs import utils
 from mkdocs.config.base import Config
+
+if TYPE_CHECKING:
+    from mkdocs.structure.pages import Page
 
 log = logging.getLogger(__name__)
 
@@ -19,7 +22,7 @@ class Files:
 
     def __init__(self, files: List['File']):
         self._files = files
-        self._src_uris = None
+        self._src_uris: Optional[Dict[str, 'File']] = None
 
     def __iter__(self) -> Iterator['File']:
         """Iterate over the files within."""
@@ -164,6 +167,8 @@ class File:
     @dest_path.setter
     def dest_path(self, value):
         self.dest_uri = PurePath(value).as_posix()
+
+    page: Optional['Page']
 
     def __init__(self, path: str, src_dir: str, dest_dir: str, use_directory_urls: bool):
         self.page = None

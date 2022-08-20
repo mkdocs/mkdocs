@@ -3,7 +3,7 @@ import os
 import sys
 from collections import UserDict
 from contextlib import contextmanager
-from typing import IO, Optional, Sequence, Tuple
+from typing import IO, List, Optional, Sequence, Tuple
 
 from yaml import YAMLError
 
@@ -81,7 +81,7 @@ class Config(UserDict):
         self.config_file_path = config_file_path
         self.data = {}
 
-        self.user_configs = []
+        self.user_configs: List[dict] = []
         self.set_defaults()
 
     def set_defaults(self) -> None:

@@ -6,7 +6,7 @@ Implements the plugin API for MkDocs.
 
 import logging
 from collections import OrderedDict
-from typing import Any, Callable, Dict, Optional, Tuple, TypeVar
+from typing import Any, Callable, Dict, Optional, Tuple, TypeVar, overload
 
 import importlib_metadata
 import jinja2.environment
@@ -44,7 +44,7 @@ class BasePlugin:
     """
 
     config_scheme = ()
-    config = {}
+    config: Config = {}  # type: ignore
 
     def load_config(
         self, options: Dict[str, Any], config_file_path: Optional[str] = None
@@ -382,7 +382,15 @@ class PluginCollection(OrderedDict):
             if callable(method) and method is not getattr(BasePlugin, event_name):
                 self._register_event(event_name[3:], method)
 
-    def run_event(self, name: str, item: T = None, **kwargs) -> T:
+    @overload
+    def run_event(self, name: str, item: None, **kwargs) -> None:
+        ...
+
+    @overload
+    def run_event(self, name: str, item: T, **kwargs) -> T:
+        ...
+
+    def run_event(self, name: str, item: T = None, **kwargs) -> Optional[T]:
         """
         Run all registered methods of an event.
 
