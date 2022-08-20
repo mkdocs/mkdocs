@@ -1,3 +1,4 @@
+import functools
 import logging
 import os
 import sys
@@ -188,6 +189,17 @@ class Config(UserDict):
             raise exceptions.ConfigurationError(
                 f"MkDocs encountered an error parsing the configuration file: {e}"
             )
+
+
+@functools.lru_cache(maxsize=None)
+def get_schema(cls: type) -> Sequence[Tuple[str, BaseConfigOption]]:
+    """
+    Extract ConfigOptions defined in a class (used just as a container) and put them into a schema tuple.
+
+    See mkdocs/config/defaults.py for an example.
+    """
+    all_items = ((k, getattr(cls, k)) for k in dir(cls) if not k.startswith('_'))
+    return tuple((k, v) for k, v in all_items if isinstance(v, BaseConfigOption))
 
 
 @contextmanager

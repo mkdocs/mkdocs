@@ -2,7 +2,7 @@ import logging
 import os
 
 from mkdocs import utils
-from mkdocs.config import config_options
+from mkdocs.config import base, config_options
 from mkdocs.contrib.search.search_index import SearchIndex
 from mkdocs.plugins import BasePlugin
 
@@ -39,16 +39,18 @@ class LangOption(config_options.OptionallyRequired):
         return value
 
 
+class _PluginConfig:
+    lang = LangOption()
+    separator = config_options.Type(str, default=r'[\s\-]+')
+    min_search_length = config_options.Type(int, default=3)
+    prebuild_index = config_options.Choice((False, True, 'node', 'python'), default=False)
+    indexing = config_options.Choice(('full', 'sections', 'titles'), default='full')
+
+
 class SearchPlugin(BasePlugin):
     """Add a search feature to MkDocs."""
 
-    config_scheme = (
-        ('lang', LangOption()),
-        ('separator', config_options.Type(str, default=r'[\s\-]+')),
-        ('min_search_length', config_options.Type(int, default=3)),
-        ('prebuild_index', config_options.Choice((False, True, 'node', 'python'), default=False)),
-        ('indexing', config_options.Choice(('full', 'sections', 'titles'), default='full')),
-    )
+    config_scheme = base.get_schema(_PluginConfig)
 
     def on_config(self, config, **kwargs):
         "Add plugin templates and scripts to config."
@@ -61,7 +63,7 @@ class SearchPlugin(BasePlugin):
                 config['extra_javascript'].append('search/main.js')
         if self.config['lang'] is None:
             # lang setting undefined. Set default based on theme locale
-            validate = self.config_scheme[0][1].run_validation
+            validate = _PluginConfig.lang.run_validation
             self.config['lang'] = validate(config['theme']['locale'].language)
         # The `python` method of `prebuild_index` is pending deprecation as of version 1.2.
         # TODO: Raise a deprecation warning in a future release (1.3?).

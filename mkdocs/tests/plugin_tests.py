@@ -7,17 +7,19 @@ from unittest import mock
 
 from mkdocs import config, plugins
 from mkdocs.commands import build
-from mkdocs.config import config_options
+from mkdocs.config import base, config_options
 from mkdocs.exceptions import Abort, BuildError, PluginError
 from mkdocs.tests.base import load_config
 
 
+class _DummyPluginConfig:
+    foo = config_options.Type(str, default='default foo')
+    bar = config_options.Type(int, default=0)
+    dir = config_options.Dir(exists=False)
+
+
 class DummyPlugin(plugins.BasePlugin):
-    config_scheme = (
-        ('foo', config_options.Type(str, default='default foo')),
-        ('bar', config_options.Type(int, default=0)),
-        ('dir', config_options.Dir(exists=False)),
-    )
+    config_scheme = base.get_schema(_DummyPluginConfig)
 
     def on_pre_page(self, content, **kwargs):
         """modify page content by prepending `foo` config value."""
