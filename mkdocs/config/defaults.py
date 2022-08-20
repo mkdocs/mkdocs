@@ -72,7 +72,7 @@ def get_schema():
         'extra_templates': config_options.Type(list, default=[]),
         # PyMarkdown extension names.
         'markdown_extensions': config_options.MarkdownExtensions(
-            builtins=['toc', 'tables', 'fenced_code'], configkey='mdx_configs', default=[]
+            builtins=['toc', 'tables', 'fenced_code'], configkey='mdx_configs'
         ),
         # PyMarkdown Extension Configs. For internal use only.
         'mdx_configs': config_options.Private(),

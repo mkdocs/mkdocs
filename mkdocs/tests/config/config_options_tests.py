@@ -1083,6 +1083,19 @@ class MarkdownExtensionsTest(unittest.TestCase):
             config,
         )
 
+    def test_missing_default(self):
+        option = config_options.MarkdownExtensions()
+        config = {}
+        config['markdown_extensions'] = option.validate(None)
+        option.post_validation(config, 'markdown_extensions')
+        self.assertEqual(
+            {
+                'markdown_extensions': [],
+                'mdx_configs': {},
+            },
+            config,
+        )
+
     def test_none(self):
         option = config_options.MarkdownExtensions(default=[])
         config = {

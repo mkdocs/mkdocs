@@ -604,8 +604,8 @@ class MarkdownExtensions(OptionallyRequired):
     `configkey`. The `builtins` keyword accepts a list of extensions which cannot be overridden by
     the user. However, builtins can be duplicated to define config options for them if desired."""
 
-    def __init__(self, builtins=None, configkey='mdx_configs', **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, builtins=None, configkey='mdx_configs', default=[], **kwargs):
+        super().__init__(default=default, **kwargs)
         self.builtins = builtins or []
         self.configkey = configkey
 
