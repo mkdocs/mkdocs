@@ -41,7 +41,7 @@ import yaml
 try:
     from yaml import CSafeLoader as SafeLoader
 except ImportError:  # pragma: no cover
-    from yaml import SafeLoader
+    from yaml import SafeLoader  # type: ignore
 
 #####################################################################
 # Data Parser                                                       #

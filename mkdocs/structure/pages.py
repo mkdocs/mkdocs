@@ -80,13 +80,13 @@ class Page:
     file: File
     """The documentation [`File`][mkdocs.structure.files.File] that the page is being rendered from."""
 
-    abs_url: str
+    abs_url: Optional[str]
     """The absolute URL of the page from the server root as determined by the value
     assigned to the [site_url][] configuration setting. The value includes any
     subdirectory included in the `site_url`, but not the domain. [base_url][] should
     not be used with this variable."""
 
-    canonical_url: str
+    canonical_url: Optional[str]
     """The full, canonical URL to the current page as determined by the value assigned
     to the [site_url][] configuration setting. The value includes the domain and any
     subdirectory included in the `site_url`. [base_url][] should not be used with this
@@ -112,7 +112,7 @@ class Page:
     def is_top_level(self) -> bool:
         return self.parent is None
 
-    edit_url: str
+    edit_url: Optional[str]
     """The full URL to the source page in the source repository. Typically used to
     provide a link to edit the source page. [base_url][] should not be used with this
     variable."""
@@ -138,9 +138,6 @@ class Page:
 
     children: None = None
     """Pages do not contain children and the attribute is always `None`."""
-
-    active: bool
-    """When `True`, indicates that this page is the currently viewed page. Defaults to `False`."""
 
     is_section: bool = False
     """Indicates that the navigation object is a "section" object. Always `False` for page objects."""
@@ -222,6 +219,7 @@ class Page:
             self.title = self.meta['title']
             return
 
+        assert self.markdown is not None
         title = get_markdown_title(self.markdown)
 
         if title is None:
@@ -246,6 +244,7 @@ class Page:
             extensions=extensions,
             extension_configs=config['mdx_configs'] or {},
         )
+        assert self.markdown is not None
         self.content = md.convert(self.markdown)
         self.toc = get_toc(getattr(md, 'toc_tokens', []))
 
@@ -271,6 +270,7 @@ class _RelativePathTreeprocessor(Treeprocessor):
                 continue
 
             url = element.get(key)
+            assert url is not None
             new_url = self.path_to_url(url)
             element.set(key, new_url)
 
@@ -298,13 +298,13 @@ class _RelativePathTreeprocessor(Treeprocessor):
         target_uri = posixpath.normpath(target_uri).lstrip('/')
 
         # Validate that the target exists in files collection.
-        if target_uri not in self.files:
+        target_file = self.files.get_file_from_path(target_uri)
+        if target_file is None:
             log.warning(
                 f"Documentation file '{self.file.src_uri}' contains a link to "
                 f"'{target_uri}' which is not found in the documentation files."
             )
             return url
-        target_file = self.files.get_file_from_path(target_uri)
         path = target_file.url_relative_to(self.file)
         components = (scheme, netloc, path, query, fragment)
         return urlunsplit(components)

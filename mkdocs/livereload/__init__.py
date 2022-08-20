@@ -18,7 +18,7 @@ from typing import Callable, Optional
 import watchdog.events
 import watchdog.observers.polling
 
-_SCRIPT_TEMPLATE = """
+_SCRIPT_TEMPLATE_STR = """
 var livereload = function(epoch, requestId) {
     var req = new XMLHttpRequest();
     req.onloadend = function() {
@@ -40,7 +40,7 @@ var livereload = function(epoch, requestId) {
 }
 livereload(${epoch}, ${request_id});
 """
-_SCRIPT_TEMPLATE = string.Template(_SCRIPT_TEMPLATE)
+_SCRIPT_TEMPLATE = string.Template(_SCRIPT_TEMPLATE_STR)
 
 
 class _LoggerAdapter(logging.LoggerAdapter):

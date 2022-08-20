@@ -1,7 +1,7 @@
 try:
     from jinja2 import pass_context as contextfilter
 except ImportError:
-    from jinja2 import contextfilter
+    from jinja2 import contextfilter  # type: ignore
 
 from mkdocs.utils import normalize_url
 
