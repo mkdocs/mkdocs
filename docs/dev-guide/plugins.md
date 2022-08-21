@@ -86,6 +86,20 @@ All `BasePlugin` subclasses contain the following attributes:
         )
     ```
 
+    > NEW: **New in version 1.4.**
+    >
+    > To get type safety benefits, if you're targeting only MkDocs 1.4+, define the config schema as a class instead:
+    >
+    > ```python
+    > class MyPluginConfig(mkdocs.config.base.Config):
+    >     foo = mkdocs.config.config_options.Type(str, default='a default value')
+    >     bar = mkdocs.config.config_options.Type(int, default=0)
+    >     baz = mkdocs.config.config_options.Type(bool, default=True)
+    >
+    > class MyPlugin(mkdocs.plugins.BasePlugin[MyPluginConfig]):
+    >     ...
+    > ```
+
     When the user's configuration is loaded, the above scheme will be used to
     validate the configuration and fill in any defaults for settings not
     provided by the user. The validation classes may be any of the classes
@@ -103,9 +117,19 @@ All `BasePlugin` subclasses contain the following attributes:
 
     ```python
     def on_pre_build(self, config, **kwargs):
-        if self.config['bool_option']:
-            # implement "bool_option" functionality here...
+        if self.config['baz']:
+            # implement "baz" functionality here...
     ```
+
+    > NEW: **New in version 1.4.**
+    >
+    > To get type safety benefits, if you're targeting only MkDocs 1.4+, access options as attributes instead:
+    >
+    > ```python
+    > def on_pre_build(self, config, **kwargs):
+    >     if self.config.baz:
+    >         print(self.config.bar ** 2)
+    > ```
 
 All `BasePlugin` subclasses contain the following method(s):
 
@@ -141,6 +165,16 @@ All `BasePlugin` subclasses contain the following method(s):
             config['theme'].static_templates.add('my_template.html')
             return config
     ```
+
+    > NEW: **New in version 1.4.**
+    >
+    > To get type safety benefits, if you're targeting only MkDocs 1.4+, access config options as attributes instead:
+    >
+    > ```python
+    > def on_config(self, config: MkDocsConfig):
+    >     config.theme.static_templates.add('my_template.html')
+    >         return config
+    > ```
 
 ### Events
 
