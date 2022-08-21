@@ -7,7 +7,6 @@ import re
 
 from graphviz import Digraph
 
-
 g = Digraph("MkDocs", format="svg")
 g.attr(compound="true", bgcolor="transparent")
 g.graph_attr.update(fontname="inherit", tooltip=" ")
@@ -103,12 +102,12 @@ edge(g, "on_files:files", "on_nav:files")
 
 with cluster(g, "cluster_populate_page") as c:
     event(c, "on_pre_page", "page config files")
-    event(c, "on_read_source", "page config")
+    event(c, "on_page_read_source", "page config")
     event(c, "on_page_markdown", "markdown page config files")
     event(c, "on_page_content", "html page config files")
 
-    edge(c, "on_pre_page:page", "on_read_source:page", style="dashed")
-    edge(c, "cluster_on_read_source", "on_page_markdown:markdown", style="dashed")
+    edge(c, "on_pre_page:page", "on_page_read_source:page", style="dashed")
+    edge(c, "cluster_on_page_read_source", "on_page_markdown:markdown", style="dashed")
     edge(c, "on_page_markdown:markdown", "render_p", style="dashed")
     edge(c, "render_p", "on_page_content:html", style="dashed")
 
