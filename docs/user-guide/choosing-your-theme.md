@@ -189,6 +189,7 @@ theme supports the following options:
     * `de`: German
     * `fa`: Persian (Farsi)
     * `it`: Italian
+    * `tr_TR`: Turkish (Turkey)
 
     See the guide on [localizing your theme] for more information.
 
