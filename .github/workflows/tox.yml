@@ -83,6 +83,9 @@ jobs:
       - name: Check with flake8
         if: always()
         run: python -m tox -e flake8
+      - name: Check with mypy
+        if: always()
+        run: python -m tox -e mypy
       - name: Check with markdown-lint
         if: always()
         run: python -m tox -e markdown-lint
