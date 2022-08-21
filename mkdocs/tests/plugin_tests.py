@@ -83,6 +83,33 @@ class TestPluginClass(unittest.TestCase):
 
 
 class TestPluginCollection(unittest.TestCase):
+    def test_correct_events_registered(self):
+        collection = plugins.PluginCollection()
+        plugin = DummyPlugin()
+        collection['foo'] = plugin
+        self.assertEqual(
+            collection.events,
+            {
+                'serve': [],
+                'config': [],
+                'pre_build': [plugin.on_pre_build],
+                'files': [],
+                'nav': [plugin.on_nav],
+                'env': [],
+                'post_build': [],
+                'build_error': [],
+                'pre_template': [],
+                'template_context': [],
+                'post_template': [],
+                'pre_page': [plugin.on_pre_page],
+                'page_read_source': [plugin.on_page_read_source],
+                'page_markdown': [],
+                'page_content': [],
+                'page_context': [],
+                'post_page': [],
+            },
+        )
+
     def test_set_plugin_on_collection(self):
         collection = plugins.PluginCollection()
         plugin = DummyPlugin()

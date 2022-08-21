@@ -1,5 +1,5 @@
 import logging
-from typing import Iterable, Iterator, List, Optional, Union
+from typing import Iterator, List, Optional, Union
 from urllib.parse import urlsplit
 
 from mkdocs.config.base import Config
@@ -54,7 +54,7 @@ class Section:
     parent: Optional['Section']
     """The immediate parent of the section or `None` if the section is at the top level."""
 
-    children: Iterable[Union[Page, 'Section', 'Link']]
+    children: List[Union[Page, 'Section', 'Link']]
     """An iterable of all child navigation objects. Children may include nested sections, pages and links."""
 
     @property
