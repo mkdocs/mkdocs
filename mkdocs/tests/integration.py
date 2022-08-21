@@ -47,7 +47,7 @@ def main(output=None):
     log.addHandler(stream)
     log.setLevel(logging.DEBUG)
 
-    base_cmd = ['mkdocs', 'build', '-s', '-v', '--site-dir']
+    base_cmd = ['mkdocs', 'build', '-s', '--site-dir']
 
     log.debug("Building installed themes.")
     for theme in sorted(MKDOCS_THEMES):

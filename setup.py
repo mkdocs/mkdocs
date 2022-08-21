@@ -62,10 +62,10 @@ setup(
     packages=get_packages("mkdocs"),
     include_package_data=True,
     install_requires=[
-        'click>=3.3',
-        'Jinja2>=2.10.2',
+        'click>=7.0',
+        'Jinja2>=2.11.1',
         'Markdown>=3.2.1,<3.4',
-        'PyYAML>=3.10',
+        'PyYAML>=5.1',
         'watchdog>=2.0',
         'ghp-import>=1.0',
         'pyyaml_env_tag>=0.1',
