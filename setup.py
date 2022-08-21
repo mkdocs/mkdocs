@@ -61,6 +61,7 @@ setup(
     author_email='tom@tomchristie.com',  # SEE NOTE BELOW (*)
     packages=get_packages("mkdocs"),
     include_package_data=True,
+    package_data={'mkdocs': ['py.typed']},
     install_requires=[
         'click>=7.0',
         'Jinja2>=2.11.1',
