@@ -6,10 +6,9 @@ jobs:
   test:
     strategy:
       fail-fast: false
-      max-parallel: 4
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: [3.6, 3.7, 3.8, 3.9, '3.10', pypy-3.7-v7.x]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         include:
           - python-version: 3.6
             tox-env: py36
@@ -23,6 +22,18 @@ jobs:
             tox-env: py310
           - python-version: pypy-3.7-v7.x
             tox-env: pypy3
+        # Just to slim down the test matrix:
+        exclude:
+          - python-version: 3.7
+            os: windows-latest
+          - python-version: 3.7
+            os: ubuntu-latest
+          - python-version: 3.8
+            os: macos-latest
+          - python-version: 3.8
+            os: windows-latest
+          - python-version: 3.9
+            os: ubuntu-latest
     env:
       TOXENV: ${{ matrix.tox-env }}-{unittests,min-req,integration,integration-no-babel}
     runs-on: ${{ matrix.os }}
