@@ -373,7 +373,7 @@ class PluginCollection(OrderedDict):
                 self._register_event(event_name[3:], method)
 
     @overload
-    def run_event(self, name: str, item: None, **kwargs) -> None:
+    def run_event(self, name: str, item: None = None, **kwargs) -> Any:
         ...
 
     @overload
