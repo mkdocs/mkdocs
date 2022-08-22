@@ -147,8 +147,8 @@ class Choice(OptionallyRequired):
     Validate the config option against a strict set of values.
     """
 
-    def __init__(self, choices, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, choices, default=None, **kwargs):
+        super().__init__(default=default, **kwargs)
         try:
             length = len(choices)
         except TypeError:
@@ -156,16 +156,15 @@ class Choice(OptionallyRequired):
 
         if not length or isinstance(choices, str):
             raise ValueError(f'Expected iterable of choices, got {choices}')
+        if default is not None and default not in choices:
+            raise ValueError(f'{default!r} is not one of {choices!r}')
 
         self.choices = choices
 
     def run_validation(self, value):
         if value not in self.choices:
-            msg = f"Expected one of: {self.choices} but received: {value}"
-        else:
-            return value
-
-        raise ValidationError(msg)
+            raise ValidationError(f"Expected one of: {self.choices} but received: {value}")
+        return value
 
 
 class Deprecated(BaseConfigOption):

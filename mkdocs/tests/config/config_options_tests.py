@@ -83,6 +83,15 @@ class ChoiceTest(unittest.TestCase):
         value = option.validate('python')
         self.assertEqual(value, 'python')
 
+    def test_default(self):
+        option = config_options.Choice(('python', 'node'), default='node')
+        value = option.validate(None)
+        self.assertEqual(value, 'node')
+
+    def test_excluded_default(self):
+        with self.assertRaises(ValueError):
+            config_options.Choice(('python', 'node'), default='a')
+
     def test_invalid_choice(self):
         option = config_options.Choice(('python', 'node'))
         with self.assertRaises(config_options.ValidationError):
