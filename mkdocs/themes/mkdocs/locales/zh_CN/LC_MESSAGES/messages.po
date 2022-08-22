@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: MkDocs 1.2\n"
 "Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
 "POT-Creation-Date: 2022-08-15 17:05+0200\n"
-"PO-Revision-Date: 2021-07-14 06:00+0800\n"
+"PO-Revision-Date: 2022-08-23 04:28+0800\n"
 "Last-Translator: xingkong0113 <dingpengyu06@gmail.com>\n"
 "Language: zh_CN\n"
 "Language-Team: zh_Hans_CN <dingpengyu06@gmail.com>\n"
@@ -16,6 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
+"X-Generator: Poedit 2.4.3\n"
 
 #: mkdocs/themes/mkdocs/404.html:8
 msgid "Page not found"
@@ -43,7 +44,7 @@ msgstr "在%(repo_name)s上编辑"
 
 #: mkdocs/themes/mkdocs/base.html:150
 msgid "Edit"
-msgstr ""
+msgstr "编辑"
 
 #: mkdocs/themes/mkdocs/base.html:190
 #, python-format
@@ -98,4 +99,3 @@ msgstr "没有搜索到结果"
 #: mkdocs/themes/mkdocs/toc.html:3
 msgid "Table of Contents"
 msgstr "目录"
-
