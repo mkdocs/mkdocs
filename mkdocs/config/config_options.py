@@ -2,7 +2,7 @@ import ipaddress
 import os
 import sys
 import traceback
-from collections import namedtuple
+from typing import NamedTuple
 from urllib.parse import urlsplit, urlunsplit
 
 import markdown
@@ -263,6 +263,14 @@ class Deprecated(BaseConfigOption):
         self.warnings = self.option.warnings
 
 
+class _IpAddressValue(NamedTuple):
+    host: str
+    port: int
+
+    def __str__(self):
+        return f'{self.host}:{self.port}'
+
+
 class IpAddress(OptionallyRequired):
     """
     IpAddress Config Option
@@ -288,11 +296,7 @@ class IpAddress(OptionallyRequired):
         except Exception:
             raise ValidationError(f"'{port}' is not a valid port")
 
-        class Address(namedtuple('Address', 'host port')):
-            def __str__(self):
-                return f'{self.host}:{self.port}'
-
-        return Address(host, port)
+        return _IpAddressValue(host, port)
 
     def post_validation(self, config, key_name):
         host = config[key_name].host
