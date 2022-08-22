@@ -86,9 +86,6 @@ class OptionallyRequired(BaseConfigOption):
         self.default = default
         self.required = required
 
-    def is_required(self):
-        return self.required
-
     def validate(self, value):
         """
         Perform some initial validation.

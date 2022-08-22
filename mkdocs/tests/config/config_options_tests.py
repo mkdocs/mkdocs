@@ -19,7 +19,7 @@ class OptionallyRequiredTest(unittest.TestCase):
         value = option.validate(None)
         self.assertEqual(value, None)
 
-        self.assertEqual(option.is_required(), False)
+        self.assertEqual(option.required, False)
 
     def test_required(self):
 
@@ -27,7 +27,7 @@ class OptionallyRequiredTest(unittest.TestCase):
         with self.assertRaises(config_options.ValidationError):
             option.validate(None)
 
-        self.assertEqual(option.is_required(), True)
+        self.assertEqual(option.required, True)
 
     def test_required_no_default(self):
 

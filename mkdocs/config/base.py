@@ -17,9 +17,6 @@ class BaseConfigOption:
         self.warnings = []
         self.default = None
 
-    def is_required(self):
-        return False
-
     def validate(self, value):
         return self.run_validation(value)
 
