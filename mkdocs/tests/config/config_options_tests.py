@@ -7,7 +7,6 @@ from unittest.mock import patch
 import mkdocs
 from mkdocs.config import config_options
 from mkdocs.config.base import Config
-from mkdocs.exceptions import ConfigurationError
 from mkdocs.tests.base import tempdir
 from mkdocs.utils import yaml_load
 
@@ -884,11 +883,11 @@ class SubConfigTest(unittest.TestCase):
     def test_subconfig_wrong_type(self):
         # Test that an error is raised if subconfig does not receive a dict
         option = config_options.SubConfig()
-        with self.assertRaises(ConfigurationError):
+        with self.assertRaises(config_options.ValidationError):
             option.validate("not_a_dict")
-        with self.assertRaises(ConfigurationError):
+        with self.assertRaises(config_options.ValidationError):
             option.validate(("not_a_dict",))
-        with self.assertRaises(ConfigurationError):
+        with self.assertRaises(config_options.ValidationError):
             option.validate(["not_a_dict"])
 
     def test_subconfig_default(self):

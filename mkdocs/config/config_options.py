@@ -10,6 +10,7 @@ import markdown
 
 from mkdocs import plugins, theme, utils
 from mkdocs.config.base import BaseConfigOption, Config, ValidationError
+from mkdocs.exceptions import ConfigurationError
 
 
 class SubConfig(BaseConfigOption):
@@ -30,8 +31,11 @@ class SubConfig(BaseConfigOption):
 
     def run_validation(self, value):
         config = Config(self.config_options)
-        config.load_dict(value)
-        failed, warnings = config.validate()
+        try:
+            config.load_dict(value)
+            failed, warnings = config.validate()
+        except ConfigurationError as e:
+            raise ValidationError(str(e))
 
         if self._do_validation:
             # Capture errors and warnings
