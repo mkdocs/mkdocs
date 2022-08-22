@@ -1,3 +1,4 @@
+import contextlib
 import os
 import sys
 import textwrap
@@ -9,6 +10,28 @@ from mkdocs.config import config_options
 from mkdocs.config.base import Config
 from mkdocs.tests.base import tempdir
 from mkdocs.utils import yaml_load
+
+
+class UnexpectedError(Exception):
+    pass
+
+
+class TestCase(unittest.TestCase):
+    @contextlib.contextmanager
+    def expect_error(self, **kwargs):
+        [(key, msg)] = kwargs.items()
+        with self.assertRaises(UnexpectedError) as cm:
+            yield
+        self.assertEqual(f'{key}="{msg}"', str(cm.exception))
+
+    def get_config(self, schema, cfg, warnings={}):
+        config = Config(schema)
+        config.load_dict(cfg)
+        actual_errors, actual_warnings = config.validate()
+        if actual_errors:
+            raise UnexpectedError(', '.join(f'{key}="{msg}"' for key, msg in actual_errors))
+        self.assertEqual(warnings, dict(actual_warnings))
+        return config
 
 
 class OptionallyRequiredTest(unittest.TestCase):
@@ -358,6 +381,69 @@ class RepoURLTest(unittest.TestCase):
         self.assertEqual(config.get('edit_uri'), 'edit/master/docs/')
 
 
+class ListOfItemsTest(TestCase):
+    def test_int_type(self):
+        schema = [
+            ('option', config_options.ListOfItems(config_options.Type(int))),
+        ]
+        cfg = self.get_config(schema, {'option': [1, 2, 3]})
+        self.assertEqual(cfg['option'], [1, 2, 3])
+
+        with self.expect_error(
+            option="Expected type: <class 'int'> but received: <class 'NoneType'>"
+        ):
+            cfg = self.get_config(schema, {'option': [1, None, 3]})
+
+    def test_combined_float_type(self):
+        schema = [
+            ('option', config_options.ListOfItems(config_options.Type((int, float)))),
+        ]
+        cfg = self.get_config(schema, {'option': [1.4, 2, 3]})
+        self.assertEqual(cfg['option'], [1.4, 2, 3])
+
+        with self.expect_error(
+            option="Expected type: (<class 'int'>, <class 'float'>) but received: <class 'str'>"
+        ):
+            self.get_config(schema, {'option': ['a']})
+
+    def test_list_default(self):
+        schema = [
+            ('option', config_options.ListOfItems(config_options.Type(int))),
+        ]
+        cfg = self.get_config(schema, {})
+        self.assertEqual(cfg['option'], [])
+
+        cfg = self.get_config(schema, {'option': None})
+        self.assertEqual(cfg['option'], [])
+
+    def test_none_default(self):
+        schema = [
+            ('option', config_options.ListOfItems(config_options.Type(str), default=None)),
+        ]
+        cfg = self.get_config(schema, {})
+        self.assertEqual(cfg['option'], None)
+
+        cfg = self.get_config(schema, {'option': None})
+        self.assertEqual(cfg['option'], None)
+
+        cfg = self.get_config(schema, {'option': ['foo']})
+        self.assertEqual(cfg['option'], ['foo'])
+
+    def test_string_not_a_list_of_strings(self):
+        schema = [
+            ('option', config_options.ListOfItems(config_options.Type(str))),
+        ]
+        with self.expect_error(option="Expected a list of items, but a <class 'str'> was given."):
+            self.get_config(schema, {'option': 'foo'})
+
+    def test_post_validation_error(self):
+        schema = [
+            ('option', config_options.ListOfItems(config_options.IpAddress())),
+        ]
+        with self.expect_error(option="'asdf' is not a valid port"):
+            self.get_config(schema, {'option': ["localhost:8000", "1.2.3.4:asdf"]})
+
+
 class FilesystemObjectTest(unittest.TestCase):
     def test_valid_dir(self):
         for cls in config_options.Dir, config_options.FilesystemObject:
@@ -511,6 +597,12 @@ class ListOfPathsTest(unittest.TestCase):
 
     def test_missing_path(self):
         paths = [os.path.join("does", "not", "exist", "i", "hope")]
+        option = config_options.ListOfPaths()
+        with self.assertRaises(config_options.ValidationError):
+            option.validate(paths)
+
+    def test_non_path(self):
+        paths = [os.path.dirname(__file__), None]
         option = config_options.ListOfPaths()
         with self.assertRaises(config_options.ValidationError):
             option.validate(paths)
@@ -937,6 +1029,74 @@ class SubConfigTest(unittest.TestCase):
         # Nominal
         res = option.validate(dict(c='foo'))
         assert res == dict(c='foo')
+
+
+class ConfigItemsTest(TestCase):
+    def test_non_required(self):
+        schema = {
+            'sub': config_options.ConfigItems(
+                ('opt', config_options.Type(int)),
+                validate=True,
+            ),
+        }.items()
+
+        cfg = self.get_config(schema, {})
+        self.assertEqual(cfg['sub'], [])
+
+        cfg = self.get_config(schema, {'sub': None})
+        self.assertEqual(cfg['sub'], [])
+
+        cfg = self.get_config(schema, {'sub': [{'opt': 1}, {}]})
+        self.assertEqual(cfg['sub'], [{'opt': 1}, {'opt': None}])
+
+    def test_required(self):
+        schema = {
+            'sub': config_options.ConfigItems(
+                ('opt', config_options.Type(str, required=True)),
+                validate=True,
+            ),
+        }.items()
+
+        cfg = self.get_config(schema, {})
+        self.assertEqual(cfg['sub'], [])
+
+        cfg = self.get_config(schema, {'sub': None})
+        self.assertEqual(cfg['sub'], [])
+
+        with self.expect_error(
+            sub="Sub-option 'opt' configuration error: Expected type: <class 'str'> but received: <class 'int'>"
+        ):
+            cfg = self.get_config(schema, {'sub': [{'opt': 1}, {}]})
+
+    def test_common(self):
+        for required in False, True:
+            with self.subTest(required=required):
+                schema = {
+                    'sub': config_options.ConfigItems(
+                        ('opt', config_options.Type(int, required=required)),
+                        validate=True,
+                    ),
+                }.items()
+
+                cfg = self.get_config(schema, {'sub': None})
+                self.assertEqual(cfg['sub'], [])
+
+                cfg = self.get_config(schema, {'sub': []})
+
+                cfg = self.get_config(schema, {'sub': [{'opt': 1}, {'opt': 2}]})
+                self.assertEqual(cfg['sub'], [{'opt': 1}, {'opt': 2}])
+
+                with self.expect_error(
+                    sub="Sub-option 'opt' configuration error: "
+                    "Expected type: <class 'int'> but received: <class 'str'>"
+                ):
+                    cfg = self.get_config(schema, {'sub': [{'opt': 'z'}, {'opt': 2}]})
+
+                with self.expect_error(
+                    sub="The configuration is invalid. The expected type was a key value mapping "
+                    "(a python dict) but we got an object of type: <class 'int'>"
+                ):
+                    cfg = self.get_config(schema, {'sub': [1, 2]})
 
 
 class MarkdownExtensionsTest(unittest.TestCase):

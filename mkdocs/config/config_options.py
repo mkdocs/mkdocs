@@ -3,7 +3,6 @@ import os
 import sys
 import traceback
 from collections import namedtuple
-from collections.abc import Sequence
 from urllib.parse import urlsplit, urlunsplit
 
 import markdown
@@ -48,37 +47,6 @@ class SubConfig(BaseConfigOption):
         return config
 
 
-class ConfigItems(BaseConfigOption):
-    """
-    Config Items Option
-
-    Validates a list of mappings that all must match the same set of
-    options.
-    """
-
-    def __init__(self, *config_options, **kwargs):
-        BaseConfigOption.__init__(self)
-        self.item_config = SubConfig(*config_options)
-        self.required = kwargs.get('required', False)
-
-    def __repr__(self):
-        return f'{self.__class__.__name__}: {self.item_config}'
-
-    def run_validation(self, value):
-        if value is None:
-            if self.required:
-                raise ValidationError("Required configuration not provided.")
-            else:
-                return ()
-
-        if not isinstance(value, Sequence):
-            raise ValidationError(
-                f'Expected a sequence of mappings, but a ' f'{type(value)} was given.'
-            )
-
-        return [self.item_config.validate(item) for item in value]
-
-
 class OptionallyRequired(BaseConfigOption):
     """
     A subclass of BaseConfigOption that adds support for default values and
@@ -112,6 +80,70 @@ class OptionallyRequired(BaseConfigOption):
                 raise ValidationError("Required configuration not provided.")
 
         return self.run_validation(value)
+
+
+class ListOfItems(BaseConfigOption):
+    """
+    Validates a homogeneous list of items.
+
+    E.g. for `config_options.ListOfItems(config_options.Type(int))` a valid item is `[1, 2, 3]`.
+    """
+
+    required = False
+
+    def __init__(self, option_type: BaseConfigOption, default=[]):
+        super().__init__()
+        self.default = default
+        self.option_type = option_type
+        self.option_type.warnings = self.warnings
+
+    def __repr__(self):
+        return f'{type(self).__name__}: {self.option_type}'
+
+    def pre_validation(self, config, key_name):
+        self._config = config
+        self._key_name = key_name
+
+    def run_validation(self, value):
+        if value is None and not self.required:
+            return self.default
+
+        if not isinstance(value, list):
+            raise ValidationError(f'Expected a list of items, but a {type(value)} was given.')
+
+        fake_config = Config(())
+        try:
+            fake_config.config_file_path = self._config.config_file_path
+        except AttributeError:
+            pass
+
+        # Emulate a config-like environment for pre_validation and post_validation.
+        parent_key_name = getattr(self, '_key_name', '')
+        fake_keys = [f'{parent_key_name}[{i}]' for i in range(len(value))]
+        fake_config.data = dict(zip(fake_keys, value))
+
+        for key_name in fake_config:
+            self.option_type.pre_validation(fake_config, key_name)
+        for key_name in fake_config:
+            # Specifically not running `validate` to avoid the OptionallyRequired effect.
+            fake_config[key_name] = self.option_type.run_validation(fake_config[key_name])
+        for key_name in fake_config:
+            self.option_type.post_validation(fake_config, key_name)
+
+        return [fake_config[k] for k in fake_keys]
+
+
+class ConfigItems(ListOfItems):
+    """
+    Config Items Option
+
+    Validates a list of mappings that all must match the same set of
+    options.
+    """
+
+    def __init__(self, *config_options, required=False, validate=False):
+        super().__init__(SubConfig(*config_options, validate=validate))
+        self.required = required
 
 
 class Type(OptionallyRequired):
@@ -407,36 +439,20 @@ class File(FilesystemObject):
     name = 'file'
 
 
-class ListOfPaths(OptionallyRequired):
+class ListOfPaths(ListOfItems):
     """
     List of Paths Config Option
 
     A list of file system paths. Raises an error if one of the paths does not exist.
+
+    For greater flexibility, prefer ListOfItems, e.g. to require files specifically:
+
+        config_options.ListOfItems(config_options.File(exists=True))
     """
 
     def __init__(self, default=[], required=False):
-        self.config_dir = None
-        super().__init__(default, required)
-
-    def pre_validation(self, config, key_name):
-        self.config_dir = (
-            os.path.dirname(config.config_file_path) if config.config_file_path else None
-        )
-
-    def run_validation(self, value):
-        if not isinstance(value, list):
-            raise ValidationError(f"Expected a list, got {type(value)}")
-        if len(value) == 0:
-            return
-        paths = []
-        for path in value:
-            if self.config_dir and not os.path.isabs(path):
-                path = os.path.join(self.config_dir, path)
-            if not os.path.exists(path):
-                raise ValidationError(f"The path {path} does not exist.")
-            path = os.path.abspath(path)
-            paths.append(path)
-        return paths
+        super().__init__(FilesystemObject(exists=True), default)
+        self.required = required
 
 
 class SiteDir(Dir):
@@ -482,7 +498,7 @@ class Theme(BaseConfigOption):
         super().__init__()
         self.default = default
 
-    def validate(self, value):
+    def run_validation(self, value):
         if value is None and self.default is not None:
             value = {'name': self.default}
 
