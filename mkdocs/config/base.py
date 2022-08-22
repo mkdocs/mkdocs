@@ -17,6 +17,18 @@ class BaseConfigOption:
         self.warnings = []
         self.default = None
 
+    @property
+    def default(self):
+        try:
+            # ensure no mutable values are assigned
+            return self._default.copy()
+        except AttributeError:
+            return self._default
+
+    @default.setter
+    def default(self, value):
+        self._default = value
+
     def validate(self, value):
         return self.run_validation(value)
 
