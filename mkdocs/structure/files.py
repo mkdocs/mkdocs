@@ -22,11 +22,11 @@ log = logging.getLogger(__name__)
 class Files:
     """A collection of [File][mkdocs.structure.files.File] objects."""
 
-    def __init__(self, files: List['File']):
+    def __init__(self, files: List[File]):
         self._files = files
-        self._src_uris: Optional[Dict[str, 'File']] = None
+        self._src_uris: Optional[Dict[str, File]] = None
 
-    def __iter__(self) -> Iterator['File']:
+    def __iter__(self) -> Iterator[File]:
         """Iterate over the files within."""
         return iter(self._files)
 
@@ -39,28 +39,28 @@ class Files:
         return PurePath(path).as_posix() in self.src_uris
 
     @property
-    def src_paths(self) -> Dict[str, 'File']:
+    def src_paths(self) -> Dict[str, File]:
         """Soft-deprecated, prefer `src_uris`."""
         return {file.src_path: file for file in self._files}
 
     @property
-    def src_uris(self) -> Dict[str, 'File']:
+    def src_uris(self) -> Dict[str, File]:
         """A mapping containing every file, with the keys being their
         [`src_uri`][mkdocs.structure.files.File.src_uri]."""
         if self._src_uris is None:
             self._src_uris = {file.src_uri: file for file in self._files}
         return self._src_uris
 
-    def get_file_from_path(self, path: str) -> Optional['File']:
+    def get_file_from_path(self, path: str) -> Optional[File]:
         """Return a File instance with File.src_uri equal to path."""
         return self.src_uris.get(PurePath(path).as_posix())
 
-    def append(self, file: 'File') -> None:
+    def append(self, file: File) -> None:
         """Append file to Files collection."""
         self._src_uris = None
         self._files.append(file)
 
-    def remove(self, file: 'File') -> None:
+    def remove(self, file: File) -> None:
         """Remove file from Files collection."""
         self._src_uris = None
         self._files.remove(file)
@@ -71,23 +71,23 @@ class Files:
             if not file.is_documentation_page():
                 file.copy_file(dirty)
 
-    def documentation_pages(self) -> Iterable['File']:
+    def documentation_pages(self) -> Iterable[File]:
         """Return iterable of all Markdown page file objects."""
         return [file for file in self if file.is_documentation_page()]
 
-    def static_pages(self) -> Iterable['File']:
+    def static_pages(self) -> Iterable[File]:
         """Return iterable of all static page file objects."""
         return [file for file in self if file.is_static_page()]
 
-    def media_files(self) -> Iterable['File']:
+    def media_files(self) -> Iterable[File]:
         """Return iterable of all file objects which are not documentation or static pages."""
         return [file for file in self if file.is_media_file()]
 
-    def javascript_files(self) -> Iterable['File']:
+    def javascript_files(self) -> Iterable[File]:
         """Return iterable of all javascript file objects."""
         return [file for file in self if file.is_javascript()]
 
-    def css_files(self) -> Iterable['File']:
+    def css_files(self) -> Iterable[File]:
         """Return iterable of all CSS file objects."""
         return [file for file in self if file.is_css()]
 
@@ -170,7 +170,7 @@ class File:
     def dest_path(self, value):
         self.dest_uri = PurePath(value).as_posix()
 
-    page: Optional['Page']
+    page: Optional[Page]
 
     def __init__(self, path: str, src_dir: str, dest_dir: str, use_directory_urls: bool):
         self.page = None
@@ -225,7 +225,7 @@ class File:
                 url = dirname + '/'
         return urlquote(url)
 
-    def url_relative_to(self, other: 'File') -> str:
+    def url_relative_to(self, other: File) -> str:
         """Return url for file relative to other file."""
         return utils.get_relative_url(self.url, other.url if isinstance(other, File) else other)
 

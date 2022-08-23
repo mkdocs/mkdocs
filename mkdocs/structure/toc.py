@@ -56,7 +56,7 @@ class AnchorLink:
     level: int
     """The zero-based level of the item."""
 
-    children: List['AnchorLink']
+    children: List[AnchorLink]
     """An iterable of any child items."""
 
     def __str__(self):

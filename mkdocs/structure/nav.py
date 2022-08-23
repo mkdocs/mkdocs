@@ -13,7 +13,7 @@ log = logging.getLogger(__name__)
 
 
 class Navigation:
-    def __init__(self, items: List[Union[Page, 'Section', 'Link']], pages: List[Page]) -> None:
+    def __init__(self, items: List[Union[Page, Section, Link]], pages: List[Page]) -> None:
         self.items = items  # Nested List with full navigation of Sections, Pages, and Links.
         self.pages = pages  # Flat List of subset of Pages in nav, in order.
 
@@ -32,7 +32,7 @@ class Navigation:
     def __repr__(self):
         return '\n'.join([item._indent_print() for item in self])
 
-    def __iter__(self) -> Iterator[Union[Page, 'Section', 'Link']]:
+    def __iter__(self) -> Iterator[Union[Page, Section, Link]]:
         return iter(self.items)
 
     def __len__(self) -> int:
@@ -40,7 +40,7 @@ class Navigation:
 
 
 class Section:
-    def __init__(self, title: str, children: List[Union[Page, 'Section', 'Link']]) -> None:
+    def __init__(self, title: str, children: List[Union[Page, Section, Link]]) -> None:
         self.title = title
         self.children = children
 
@@ -53,10 +53,10 @@ class Section:
     title: str
     """The title of the section."""
 
-    parent: Optional['Section']
+    parent: Optional[Section]
     """The immediate parent of the section or `None` if the section is at the top level."""
 
-    children: List[Union[Page, 'Section', 'Link']]
+    children: List[Union[Page, Section, Link]]
     """An iterable of all child navigation objects. Children may include nested sections, pages and links."""
 
     @property
@@ -114,7 +114,7 @@ class Link:
     """The URL that the link points to. The URL should always be an absolute URLs and
     should not need to have `base_url` prepended."""
 
-    parent: Optional['Section']
+    parent: Optional[Section]
     """The immediate parent of the link. `None` if the link is at the top level."""
 
     children: None = None
