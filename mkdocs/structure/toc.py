@@ -31,7 +31,7 @@ class TableOfContents:
         return len(self.items)
 
     def __str__(self):
-        return ''.join([str(item) for item in self])
+        return ''.join(str(item) for item in self)
 
 
 class AnchorLink:

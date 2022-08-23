@@ -54,7 +54,7 @@ class extract_messages(babel.extract_messages, ThemeMixin):
     def finalize_options(self):
         if not self.version:
             version = self.distribution.get_version()
-            self.version = ".".join([i for i in version.split(".") if "dev" not in i])
+            self.version = ".".join(i for i in version.split(".") if "dev" not in i)
         if not self.mapping_file:
             self.mapping_file = DEFAULT_MAPPING_FILE
         if not self.input_paths or not self.output_file:
