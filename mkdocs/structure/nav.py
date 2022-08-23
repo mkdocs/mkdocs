@@ -28,7 +28,7 @@ class Navigation:
     """A flat list of all [page][mkdocs.structure.pages.Page] objects contained in the navigation. """
 
     def __repr__(self):
-        return '\n'.join([item._indent_print() for item in self])
+        return '\n'.join(item._indent_print() for item in self)
 
     def __iter__(self) -> Iterator[Union[Page, 'Section', 'Link']]:
         return iter(self.items)
@@ -159,7 +159,7 @@ def get_navigation(files: Files, config: Config) -> Navigation:
         log.info(
             'The following pages exist in the docs directory, but are not '
             'included in the "nav" configuration:\n  - {}'.format(
-                '\n  - '.join([file.src_path for file in missing_from_config])
+                '\n  - '.join(file.src_path for file in missing_from_config)
             )
         )
         # Any documentation files not found in the nav should still have an associated page, so we
