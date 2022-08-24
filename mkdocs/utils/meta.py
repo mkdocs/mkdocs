@@ -32,7 +32,7 @@ MultiMarkdown Meta-Data
 Extracts, parses and transforms MultiMarkdown style data from documents.
 
 """
-
+from __future__ import annotations
 
 import re
 

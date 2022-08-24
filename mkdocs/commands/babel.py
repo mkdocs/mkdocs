@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from distutils.errors import DistutilsOptionError
 from os import path
 

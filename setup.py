@@ -75,7 +75,7 @@ setup(
         'mergedeep>=1.3.4'
     ],
     extras_require={"i18n": ['babel>=2.9.0']},
-    python_requires='>=3.6',
+    python_requires='>=3.7',
     entry_points={
         'console_scripts': [
             'mkdocs = mkdocs.__main__:cli',

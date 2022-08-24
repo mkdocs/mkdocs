@@ -16,4 +16,4 @@ mdx_gh_links==0.2
 markdown-callouts==0.2
 mkdocs-redirects==1.0.1
 pymdown-extensions==8.0.1
-mkdocstrings-python==0.7.1; python_version >= '3.7'
+mkdocstrings-python==0.7.1

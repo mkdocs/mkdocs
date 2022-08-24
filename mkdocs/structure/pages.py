@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 import os
 import posixpath
@@ -122,12 +124,12 @@ class Page:
         """Evaluates to `True` for the homepage of the site and `False` for all other pages."""
         return self.is_top_level and self.is_index and self.file.url in ['.', 'index.html']
 
-    previous_page: Optional['Page']
+    previous_page: Optional[Page]
     """The [page][mkdocs.structure.pages.Page] object for the previous page or `None`.
     The value will be `None` if the current page is the first item in the site navigation
     or if the current page is not included in the navigation at all."""
 
-    next_page: Optional['Page']
+    next_page: Optional[Page]
     """The [page][mkdocs.structure.pages.Page] object for the next page or `None`.
     The value will be `None` if the current page is the last item in the site navigation
     or if the current page is not included in the navigation at all."""

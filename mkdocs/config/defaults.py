@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from mkdocs.config import config_options
 
 # NOTE: The order here is important. During validation some config options

@@ -4,7 +4,7 @@ Standalone file utils.
 Nothing in this module should have an knowledge of config or the layout
 and structure of the site and pages in the site.
 """
-
+from __future__ import annotations
 
 import functools
 import logging
