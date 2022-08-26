@@ -18,9 +18,14 @@
   <div role="contentinfo">
     <!-- Copyright etc -->
     {%- if config.copyright %}
-      <p>{{ config.copyright }}</p>
+    <p>{{ config.copyright }}</p>
+    {%- else %}
+    <p>
+      Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.
+    </p>
     {%- endif %}
   </div>
-
+  {%- if config.author %}
   {% trans mkdocs_link='<a href="https://www.mkdocs.org/">MkDocs</a>', sphinx_link='<a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>', rtd_link='<a href="https://readthedocs.org">Read the Docs</a>' %}Built with %(mkdocs_link)s using a %(sphinx_link)s provided by %(rtd_link)s.{% endtrans %}
+  {%- endif %}
 </footer>

@@ -143,6 +143,12 @@ Set the copyright information to be included in the documentation by the theme.
 
 **default**: `null`
 
+### author
+
+Decide whether to mention Mkdocs in the footer (we would be very grateful if this stayed *true*)
+
+**default**: `true`
+
 ### remote_branch
 
 Set the remote branch to commit to when using `gh-deploy` to deploy to GitHub

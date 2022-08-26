@@ -182,13 +182,21 @@
         </div>
 
         <footer class="col-md-12">
-          {%- block footer %}
+            {%- block footer %}
             <hr>
             {%- if config.copyright %}
-                <p>{{ config.copyright }}</p>
+            <p>{{ config.copyright }}</p>
+            {%- else %}
+            <p>
+                Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.
+            </p>
             {%- endif %}
-            <p>{% trans mkdocs_link='<a href="https://www.mkdocs.org/">MkDocs</a>' %}Documentation built with {{ mkdocs_link }}.{% endtrans %}</p>
-          {%- endblock %}
+            {%- if config.author %}
+            <p>
+                {% trans mkdocs_link='<a href="https://www.mkdocs.org/">MkDocs</a>' %}Documentation built with {{ mkdocs_link }}.{% endtrans %}
+            </p>
+            {%- endif %}
+            {%- endblock %}
         </footer>
 
       {%- block scripts %}
