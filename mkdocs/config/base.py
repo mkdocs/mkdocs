@@ -279,7 +279,7 @@ class LegacyConfig(Config):
     """
 
     def __init__(self, schema: PlainConfigSchema, config_file_path: Optional[str] = None):
-        self._schema = schema
+        self._schema = tuple((k, v) for k, v in schema)  # Re-create just for validation
         super().__init__(config_file_path)
 
 

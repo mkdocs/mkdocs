@@ -26,11 +26,16 @@ from mkdocs.config.base import (
 from mkdocs.exceptions import ConfigurationError
 
 T = TypeVar('T')
+SomeConfig = TypeVar('SomeConfig', bound=Config)
 
 
-class SubConfig(BaseConfigOption[Config]):
+class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
     """
     Subconfig Config Option
+
+    New: If targeting MkDocs 1.4+, please pass a subclass of Config to the
+    constructor, instead of the old style of a sequence of ConfigOption instances.
+    Validation is then enabled by default.
 
     A set of `config_options` grouped under a single config option.
     By default, validation errors and warnings resulting from validating
@@ -38,14 +43,37 @@ class SubConfig(BaseConfigOption[Config]):
     enable validation with `validate=True`.
     """
 
-    def __init__(self, *config_options: PlainConfigSchemaItem, validate: bool = False):
+    @overload
+    def __init__(
+        self: SubConfig[SomeConfig], config_class: t.Type[SomeConfig], *, validate: bool = True
+    ):
+        """Create a sub-config in a type-safe way, using fields defined in a Config subclass."""
+
+    @overload
+    def __init__(
+        self: SubConfig[LegacyConfig],
+        *config_options: PlainConfigSchemaItem,
+        validate: bool = False,
+    ):
+        """Create an untyped sub-config, using directly passed fields."""
+
+    def __init__(self, *config_options, validate=None):
         super().__init__()
         self.default = {}
-        self.config_options = config_options
-        self._do_validation = validate
+        if (
+            len(config_options) == 1
+            and isinstance(config_options[0], type)
+            and issubclass(config_options[0], Config)
+        ):
+            if validate is None:
+                validate = True
+            (self._make_config,) = config_options
+        else:
+            self._make_config = functools.partial(LegacyConfig, config_options)
+        self._do_validation = bool(validate)
 
     def run_validation(self, value):
-        config = LegacyConfig(self.config_options)
+        config = self._make_config()
         try:
             config.load_dict(value)
             failed, warnings = config.validate()
@@ -153,7 +181,7 @@ class ListOfItems(Generic[T], BaseConfigOption[List[T]]):
         return [fake_config[k] for k in fake_keys]
 
 
-class ConfigItems(ListOfItems[Config]):
+class ConfigItems(ListOfItems[LegacyConfig]):
     """
     Deprecated: Use `ListOfItems(SubConfig(...))` instead of `ConfigItems(...)`.
 
