@@ -2,6 +2,7 @@ import ipaddress
 import os
 import sys
 import traceback
+import typing as t
 from typing import NamedTuple
 from urllib.parse import urlsplit, urlunsplit
 
@@ -22,7 +23,7 @@ class SubConfig(BaseConfigOption):
     enable validation with `validate=True`.
     """
 
-    def __init__(self, *config_options: PlainConfigSchemaItem, validate=False):
+    def __init__(self, *config_options: PlainConfigSchemaItem, validate: bool = False):
         super().__init__()
         self.default = {}
         self.config_options = config_options
@@ -53,7 +54,7 @@ class OptionallyRequired(BaseConfigOption):
     required values. It is a base class for config options.
     """
 
-    def __init__(self, default=None, required=False):
+    def __init__(self, default=None, required: bool = False):
         super().__init__()
         self.default = default
         self.required = required
@@ -137,7 +138,9 @@ class ConfigItems(ListOfItems):
     options.
     """
 
-    def __init__(self, *config_options: PlainConfigSchemaItem, required=False, validate=False):
+    def __init__(
+        self, *config_options: PlainConfigSchemaItem, required: bool = False, validate: bool = False
+    ):
         super().__init__(SubConfig(*config_options, validate=validate))
         self.required = required
 
@@ -149,7 +152,7 @@ class Type(OptionallyRequired):
     Validate the type of a config option against a given Python type.
     """
 
-    def __init__(self, type_, length=None, **kwargs):
+    def __init__(self, type_, length: t.Optional[int] = None, **kwargs):
         super().__init__(**kwargs)
         self._type = type_
         self.length = length
@@ -206,7 +209,13 @@ class Deprecated(BaseConfigOption):
     ConfigOption instance, then the value is validated against that type.
     """
 
-    def __init__(self, moved_to=None, message=None, removed=False, option_type=None):
+    def __init__(
+        self,
+        moved_to: t.Optional[str] = None,
+        message: t.Optional[str] = None,
+        removed: bool = False,
+        option_type: t.Optional[BaseConfigOption] = None,
+    ):
         super().__init__()
         self.default = None
         self.moved_to = moved_to
@@ -316,7 +325,7 @@ class URL(OptionallyRequired):
     Validate a URL by requiring a scheme is present.
     """
 
-    def __init__(self, default='', required=False, is_dir=False):
+    def __init__(self, default='', required: bool = False, is_dir: bool = False):
         self.is_dir = is_dir
         super().__init__(default, required)
 
@@ -384,7 +393,7 @@ class FilesystemObject(Type):
     existence_test = staticmethod(os.path.exists)
     name = 'file or directory'
 
-    def __init__(self, exists=False, **kwargs):
+    def __init__(self, exists: bool = False, **kwargs):
         super().__init__(type_=str, **kwargs)
         self.exists = exists
         self.config_dir = None
@@ -450,7 +459,7 @@ class ListOfPaths(ListOfItems):
         config_options.ListOfItems(config_options.File(exists=True))
     """
 
-    def __init__(self, default=[], required=False):
+    def __init__(self, default=[], required: bool = False):
         super().__init__(FilesystemObject(exists=True), default)
         self.required = required
 
@@ -620,7 +629,13 @@ class MarkdownExtensions(OptionallyRequired):
     `configkey`. The `builtins` keyword accepts a list of extensions which cannot be overridden by
     the user. However, builtins can be duplicated to define config options for them if desired."""
 
-    def __init__(self, builtins=None, configkey='mdx_configs', default=[], **kwargs):
+    def __init__(
+        self,
+        builtins: t.Optional[list] = None,
+        configkey: str = 'mdx_configs',
+        default=[],
+        **kwargs,
+    ):
         super().__init__(default=default, **kwargs)
         self.builtins = builtins or []
         self.configkey = configkey
