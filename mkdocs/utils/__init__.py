@@ -19,16 +19,16 @@ from datetime import datetime, timezone
 from pathlib import PurePath
 from urllib.parse import urlsplit
 
+if sys.version_info >= (3, 10):
+    from importlib.metadata import entry_points
+else:
+    from importlib_metadata import entry_points
+
 import yaml
 from mergedeep import merge
 from yaml_env_tag import construct_env_tag
 
 from mkdocs import exceptions
-
-if sys.version_info >= (3, 10):
-    from importlib.metadata import entry_points
-else:
-    from importlib_metadata import entry_points
 
 log = logging.getLogger(__name__)
 
