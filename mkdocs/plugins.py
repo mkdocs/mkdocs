@@ -385,7 +385,7 @@ class PluginCollection(OrderedDict):
     def run_event(self, name: str, item: T, **kwargs) -> T:
         ...
 
-    def run_event(self, name: str, item: T = None, **kwargs) -> Optional[T]:
+    def run_event(self, name, item=None, **kwargs) -> Optional[T]:
         """
         Run all registered methods of an event.
 
