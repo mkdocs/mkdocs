@@ -20,7 +20,7 @@ from mkdocs.structure.pages import Page
 if sys.version_info >= (3, 10):
     from importlib.metadata import entry_points
 else:
-    from importlib_metadata import entry_points  # type: ignore
+    from importlib_metadata import entry_points
 
 log = logging.getLogger('mkdocs.plugins')
 
