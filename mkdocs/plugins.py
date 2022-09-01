@@ -5,6 +5,7 @@ Implements the plugin API for MkDocs.
 from __future__ import annotations
 
 import logging
+import sys
 from collections import OrderedDict
 from typing import Any, Callable, Dict, Optional, Sequence, Tuple, TypeVar, overload
 
@@ -16,10 +17,10 @@ from mkdocs.structure.files import Files
 from mkdocs.structure.nav import Navigation
 from mkdocs.structure.pages import Page
 
-try:
-    from importlib_metadata import entry_points
-except ImportError:
-    from importlib.metadata import entry_points  # type: ignore[misc]
+if sys.version_info >= (3, 10):
+    from importlib.metadata import entry_points
+else:
+    from importlib_metadata import entry_points  # type: ignore
 
 log = logging.getLogger('mkdocs.plugins')
 

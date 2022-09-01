@@ -12,6 +12,7 @@ import os
 import posixpath
 import re
 import shutil
+import sys
 import warnings
 from collections import defaultdict
 from datetime import datetime, timezone
@@ -24,10 +25,10 @@ from yaml_env_tag import construct_env_tag
 
 from mkdocs import exceptions
 
-try:
-    from importlib_metadata import entry_points
-except ImportError:
-    from importlib.metadata import entry_points  # type: ignore[misc]
+if sys.version_info >= (3, 10):
+    from importlib.metadata import entry_points
+else:
+    from importlib_metadata import entry_points  # type: ignore
 
 log = logging.getLogger(__name__)
 
