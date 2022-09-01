@@ -18,12 +18,16 @@ from datetime import datetime, timezone
 from pathlib import PurePath
 from urllib.parse import urlsplit
 
-import importlib_metadata
 import yaml
 from mergedeep import merge
 from yaml_env_tag import construct_env_tag
 
 from mkdocs import exceptions
+
+try:
+    from importlib_metadata import entry_points
+except ImportError:
+    from importlib.metadata import entry_points  # type: ignore[misc]
 
 log = logging.getLogger(__name__)
 
@@ -307,7 +311,7 @@ def get_themes():
     """Return a dict of all installed themes as {name: EntryPoint}."""
 
     themes = {}
-    eps = set(importlib_metadata.entry_points(group='mkdocs.themes'))
+    eps = set(entry_points(group='mkdocs.themes'))
     builtins = {ep.name for ep in eps if ep.dist.name == 'mkdocs'}
 
     for theme in eps:

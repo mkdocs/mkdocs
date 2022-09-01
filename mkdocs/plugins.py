@@ -8,7 +8,6 @@ import logging
 from collections import OrderedDict
 from typing import Any, Callable, Dict, Optional, Sequence, Tuple, TypeVar, overload
 
-import importlib_metadata
 import jinja2.environment
 
 from mkdocs.config.base import BaseConfigOption, Config
@@ -17,13 +16,18 @@ from mkdocs.structure.files import Files
 from mkdocs.structure.nav import Navigation
 from mkdocs.structure.pages import Page
 
+try:
+    from importlib_metadata import entry_points
+except ImportError:
+    from importlib.metadata import entry_points  # type: ignore[misc]
+
 log = logging.getLogger('mkdocs.plugins')
 
 
 def get_plugins():
     """Return a dict of all installed Plugins as {name: EntryPoint}."""
 
-    plugins = importlib_metadata.entry_points(group='mkdocs.plugins')
+    plugins = entry_points(group='mkdocs.plugins')
 
     # Allow third-party plugins to override core plugins
     pluginmap = {}
