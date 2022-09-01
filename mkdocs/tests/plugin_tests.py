@@ -239,7 +239,7 @@ MockEntryPoint = mock.Mock()
 MockEntryPoint.configure_mock(**{'name': 'sample', 'load.return_value': DummyPlugin})
 
 
-@mock.patch('importlib_metadata.entry_points', return_value=[MockEntryPoint])
+@mock.patch('mkdocs.plugins.entry_points', return_value=[MockEntryPoint])
 class TestPluginConfig(unittest.TestCase):
     def test_plugin_config_without_options(self, mock_class):
 

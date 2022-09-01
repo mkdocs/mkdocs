@@ -293,7 +293,7 @@ class UtilsTests(unittest.TestCase):
 
         self.assertEqual(sorted(utils.get_theme_names()), ['mkdocs', 'readthedocs'])
 
-    @mock.patch('importlib_metadata.entry_points', autospec=True)
+    @mock.patch('mkdocs.utils.entry_points', autospec=True)
     def test_get_theme_dir(self, mock_iter):
 
         path = 'some/path'
@@ -312,7 +312,7 @@ class UtilsTests(unittest.TestCase):
         with self.assertRaises(KeyError):
             utils.get_theme_dir('nonexistanttheme')
 
-    @mock.patch('importlib_metadata.entry_points', autospec=True)
+    @mock.patch('mkdocs.utils.entry_points', autospec=True)
     def test_get_theme_dir_importerror(self, mock_iter):
 
         theme = mock.Mock()
@@ -325,7 +325,7 @@ class UtilsTests(unittest.TestCase):
         with self.assertRaises(ImportError):
             utils.get_theme_dir(theme.name)
 
-    @mock.patch('importlib_metadata.entry_points', autospec=True)
+    @mock.patch('mkdocs.utils.entry_points', autospec=True)
     def test_get_themes_warning(self, mock_iter):
 
         theme1 = mock.Mock()
@@ -342,7 +342,7 @@ class UtilsTests(unittest.TestCase):
 
         self.assertEqual(sorted(utils.get_theme_names()), sorted(['mkdocs2']))
 
-    @mock.patch('importlib_metadata.entry_points', autospec=True)
+    @mock.patch('mkdocs.utils.entry_points', autospec=True)
     def test_get_themes_error(self, mock_iter):
 
         theme1 = mock.Mock()

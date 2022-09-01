@@ -12,13 +12,18 @@ import os
 import posixpath
 import re
 import shutil
+import sys
 import warnings
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import PurePath
 from urllib.parse import urlsplit
 
-import importlib_metadata
+if sys.version_info >= (3, 10):
+    from importlib.metadata import entry_points
+else:
+    from importlib_metadata import entry_points
+
 import yaml
 from mergedeep import merge
 from yaml_env_tag import construct_env_tag
@@ -307,7 +312,7 @@ def get_themes():
     """Return a dict of all installed themes as {name: EntryPoint}."""
 
     themes = {}
-    eps = set(importlib_metadata.entry_points(group='mkdocs.themes'))
+    eps = set(entry_points(group='mkdocs.themes'))
     builtins = {ep.name for ep in eps if ep.dist.name == 'mkdocs'}
 
     for theme in eps:

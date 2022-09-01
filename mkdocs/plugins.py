@@ -5,10 +5,15 @@ Implements the plugin API for MkDocs.
 from __future__ import annotations
 
 import logging
+import sys
 from collections import OrderedDict
 from typing import Any, Callable, Dict, Optional, Sequence, Tuple, TypeVar, overload
 
-import importlib_metadata
+if sys.version_info >= (3, 10):
+    from importlib.metadata import entry_points
+else:
+    from importlib_metadata import entry_points
+
 import jinja2.environment
 
 from mkdocs.config.base import BaseConfigOption, Config
@@ -23,7 +28,7 @@ log = logging.getLogger('mkdocs.plugins')
 def get_plugins():
     """Return a dict of all installed Plugins as {name: EntryPoint}."""
 
-    plugins = importlib_metadata.entry_points(group='mkdocs.plugins')
+    plugins = entry_points(group='mkdocs.plugins')
 
     # Allow third-party plugins to override core plugins
     pluginmap = {}
