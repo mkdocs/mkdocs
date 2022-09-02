@@ -4,6 +4,7 @@ import fnmatch
 import logging
 import os
 import posixpath
+import shutil
 from pathlib import PurePath
 from typing import TYPE_CHECKING, Dict, Iterable, Iterator, List, Optional
 from urllib.parse import quote as urlquote
@@ -235,7 +236,10 @@ class File:
             log.debug(f"Skip copying unmodified file: '{self.src_uri}'")
         else:
             log.debug(f"Copying media file: '{self.src_uri}'")
-            utils.copy_file(self.abs_src_path, self.abs_dest_path)
+            try:
+                utils.copy_file(self.abs_src_path, self.abs_dest_path)
+            except shutil.SameFileError:
+                pass  # Let plugins write directly into site_dir.
 
     def is_modified(self) -> bool:
         if os.path.isfile(self.abs_dest_path):

@@ -683,6 +683,15 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         file.copy_file()
         self.assertPathIsFile(dest_path)
 
+    @tempdir(files={'test.txt': 'source content'})
+    def test_copy_file_same_file(self, dest_dir):
+        file = File('test.txt', dest_dir, dest_dir, use_directory_urls=False)
+        dest_path = os.path.join(dest_dir, 'test.txt')
+        file.copy_file()
+        self.assertPathIsFile(dest_path)
+        with open(dest_path, encoding='utf-8') as f:
+            self.assertEqual(f.read(), 'source content')
+
     @tempdir(files={'test.txt': 'destination content'})
     @tempdir(files={'test.txt': 'source content'})
     def test_copy_file_clean_modified(self, src_dir, dest_dir):
