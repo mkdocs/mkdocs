@@ -247,9 +247,9 @@ def build(config, live_server=False, dirty=False):
         logging.getLogger('mkdocs').addHandler(warning_counter)
 
     try:
-        from time import time
+        import time
 
-        start = time()
+        start = time.monotonic()
 
         # Run `config` plugin events.
         config = config['plugins'].run_event('config', config)
@@ -319,7 +319,7 @@ def build(config, live_server=False, dirty=False):
             msg = ', '.join(f'{v} {k.lower()}s' for k, v in counts)
             raise Abort(f'\nAborted with {msg} in strict mode!')
 
-        log.info('Documentation built in %.2f seconds', time() - start)
+        log.info('Documentation built in %.2f seconds', time.monotonic() - start)
 
     except Exception as e:
         # Run `build_error` plugin events.
