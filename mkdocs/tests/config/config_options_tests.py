@@ -1,3 +1,4 @@
+import contextlib
 import os
 import sys
 import textwrap
@@ -7,9 +8,30 @@ from unittest.mock import patch
 import mkdocs
 from mkdocs.config import config_options
 from mkdocs.config.base import Config
-from mkdocs.exceptions import ConfigurationError
 from mkdocs.tests.base import tempdir
 from mkdocs.utils import yaml_load
+
+
+class UnexpectedError(Exception):
+    pass
+
+
+class TestCase(unittest.TestCase):
+    @contextlib.contextmanager
+    def expect_error(self, **kwargs):
+        [(key, msg)] = kwargs.items()
+        with self.assertRaises(UnexpectedError) as cm:
+            yield
+        self.assertEqual(f'{key}="{msg}"', str(cm.exception))
+
+    def get_config(self, schema, cfg, warnings={}):
+        config = Config(schema)
+        config.load_dict(cfg)
+        actual_errors, actual_warnings = config.validate()
+        if actual_errors:
+            raise UnexpectedError(', '.join(f'{key}="{msg}"' for key, msg in actual_errors))
+        self.assertEqual(warnings, dict(actual_warnings))
+        return config
 
 
 class OptionallyRequiredTest(unittest.TestCase):
@@ -19,7 +41,7 @@ class OptionallyRequiredTest(unittest.TestCase):
         value = option.validate(None)
         self.assertEqual(value, None)
 
-        self.assertEqual(option.is_required(), False)
+        self.assertEqual(option.required, False)
 
     def test_required(self):
 
@@ -27,7 +49,7 @@ class OptionallyRequiredTest(unittest.TestCase):
         with self.assertRaises(config_options.ValidationError):
             option.validate(None)
 
-        self.assertEqual(option.is_required(), True)
+        self.assertEqual(option.required, True)
 
     def test_required_no_default(self):
 
@@ -82,6 +104,15 @@ class ChoiceTest(unittest.TestCase):
         option = config_options.Choice(('python', 'node'))
         value = option.validate('python')
         self.assertEqual(value, 'python')
+
+    def test_default(self):
+        option = config_options.Choice(('python', 'node'), default='node')
+        value = option.validate(None)
+        self.assertEqual(value, 'node')
+
+    def test_excluded_default(self):
+        with self.assertRaises(ValueError):
+            config_options.Choice(('python', 'node'), default='a')
 
     def test_invalid_choice(self):
         option = config_options.Choice(('python', 'node'))
@@ -350,61 +381,138 @@ class RepoURLTest(unittest.TestCase):
         self.assertEqual(config.get('edit_uri'), 'edit/master/docs/')
 
 
-class DirTest(unittest.TestCase):
+class ListOfItemsTest(TestCase):
+    def test_int_type(self):
+        schema = [
+            ('option', config_options.ListOfItems(config_options.Type(int))),
+        ]
+        cfg = self.get_config(schema, {'option': [1, 2, 3]})
+        self.assertEqual(cfg['option'], [1, 2, 3])
+
+        with self.expect_error(
+            option="Expected type: <class 'int'> but received: <class 'NoneType'>"
+        ):
+            cfg = self.get_config(schema, {'option': [1, None, 3]})
+
+    def test_combined_float_type(self):
+        schema = [
+            ('option', config_options.ListOfItems(config_options.Type((int, float)))),
+        ]
+        cfg = self.get_config(schema, {'option': [1.4, 2, 3]})
+        self.assertEqual(cfg['option'], [1.4, 2, 3])
+
+        with self.expect_error(
+            option="Expected type: (<class 'int'>, <class 'float'>) but received: <class 'str'>"
+        ):
+            self.get_config(schema, {'option': ['a']})
+
+    def test_list_default(self):
+        schema = [
+            ('option', config_options.ListOfItems(config_options.Type(int))),
+        ]
+        cfg = self.get_config(schema, {})
+        self.assertEqual(cfg['option'], [])
+
+        cfg = self.get_config(schema, {'option': None})
+        self.assertEqual(cfg['option'], [])
+
+    def test_none_default(self):
+        schema = [
+            ('option', config_options.ListOfItems(config_options.Type(str), default=None)),
+        ]
+        cfg = self.get_config(schema, {})
+        self.assertEqual(cfg['option'], None)
+
+        cfg = self.get_config(schema, {'option': None})
+        self.assertEqual(cfg['option'], None)
+
+        cfg = self.get_config(schema, {'option': ['foo']})
+        self.assertEqual(cfg['option'], ['foo'])
+
+    def test_string_not_a_list_of_strings(self):
+        schema = [
+            ('option', config_options.ListOfItems(config_options.Type(str))),
+        ]
+        with self.expect_error(option="Expected a list of items, but a <class 'str'> was given."):
+            self.get_config(schema, {'option': 'foo'})
+
+    def test_post_validation_error(self):
+        schema = [
+            ('option', config_options.ListOfItems(config_options.IpAddress())),
+        ]
+        with self.expect_error(option="'asdf' is not a valid port"):
+            self.get_config(schema, {'option': ["localhost:8000", "1.2.3.4:asdf"]})
+
+
+class FilesystemObjectTest(unittest.TestCase):
     def test_valid_dir(self):
+        for cls in config_options.Dir, config_options.FilesystemObject:
+            with self.subTest(cls):
+                d = os.path.dirname(__file__)
+                option = cls(exists=True)
+                value = option.validate(d)
+                self.assertEqual(d, value)
 
-        d = os.path.dirname(__file__)
-        option = config_options.Dir(exists=True)
-        value = option.validate(d)
-        self.assertEqual(d, value)
+    def test_valid_file(self):
+        for cls in config_options.File, config_options.FilesystemObject:
+            with self.subTest(cls):
+                f = __file__
+                option = cls(exists=True)
+                value = option.validate(f)
+                self.assertEqual(f, value)
 
-    def test_missing_dir(self):
+    def test_missing_without_exists(self):
+        for cls in config_options.Dir, config_options.File, config_options.FilesystemObject:
+            with self.subTest(cls):
+                d = os.path.join("not", "a", "real", "path", "I", "hope")
+                option = cls()
+                value = option.validate(d)
+                self.assertEqual(os.path.abspath(d), value)
 
-        d = os.path.join("not", "a", "real", "path", "I", "hope")
-        option = config_options.Dir()
-        value = option.validate(d)
-        self.assertEqual(os.path.abspath(d), value)
+    def test_missing_but_required(self):
+        for cls in config_options.Dir, config_options.File, config_options.FilesystemObject:
+            with self.subTest(cls):
+                d = os.path.join("not", "a", "real", "path", "I", "hope")
+                option = cls(exists=True)
+                with self.assertRaises(config_options.ValidationError):
+                    option.validate(d)
 
-    def test_missing_dir_but_required(self):
-
-        d = os.path.join("not", "a", "real", "path", "I", "hope")
-        option = config_options.Dir(exists=True)
-        with self.assertRaises(config_options.ValidationError):
-            option.validate(d)
-
-    def test_file(self):
+    def test_not_a_dir(self):
         d = __file__
         option = config_options.Dir(exists=True)
         with self.assertRaises(config_options.ValidationError):
             option.validate(d)
 
-    def test_incorrect_type_attribute_error(self):
-        option = config_options.Dir()
+    def test_not_a_file(self):
+        d = os.path.dirname(__file__)
+        option = config_options.File(exists=True)
         with self.assertRaises(config_options.ValidationError):
-            option.validate(1)
+            option.validate(d)
 
-    def test_incorrect_type_type_error(self):
-        option = config_options.Dir()
-        with self.assertRaises(config_options.ValidationError):
-            option.validate([])
+    def test_incorrect_type_error(self):
+        for cls in config_options.Dir, config_options.File, config_options.FilesystemObject:
+            with self.subTest(cls):
+                option = cls()
+                with self.assertRaises(config_options.ValidationError):
+                    option.validate(1)
+                with self.assertRaises(config_options.ValidationError):
+                    option.validate([])
 
-    def test_dir_unicode(self):
-        cfg = Config(
-            [('dir', config_options.Dir())],
-            config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
-        )
+    def test_with_unicode(self):
+        for cls in config_options.Dir, config_options.File, config_options.FilesystemObject:
+            with self.subTest(cls):
+                cfg = Config(
+                    [('dir', cls())],
+                    config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
+                )
 
-        test_config = {
-            'dir': 'юникод',
-        }
+                cfg.load_dict({'dir': 'юникод'})
 
-        cfg.load_dict(test_config)
+                fails, warns = cfg.validate()
 
-        fails, warns = cfg.validate()
-
-        self.assertEqual(len(fails), 0)
-        self.assertEqual(len(warns), 0)
-        self.assertIsInstance(cfg['dir'], str)
+                self.assertEqual(len(fails), 0)
+                self.assertEqual(len(warns), 0)
+                self.assertIsInstance(cfg['dir'], str)
 
     def test_dir_filesystemencoding(self):
         cfg = Config(
@@ -442,28 +550,30 @@ class DirTest(unittest.TestCase):
         self.assertEqual(len(warns), 0)
 
     def test_config_dir_prepended(self):
-        base_path = os.path.abspath('.')
+        for cls in config_options.Dir, config_options.File, config_options.FilesystemObject:
+            with self.subTest(cls):
+                base_path = os.path.abspath('.')
+                cfg = Config(
+                    [('dir', cls())],
+                    config_file_path=os.path.join(base_path, 'mkdocs.yml'),
+                )
+
+                test_config = {
+                    'dir': 'foo',
+                }
+
+                cfg.load_dict(test_config)
+
+                fails, warns = cfg.validate()
+
+                self.assertEqual(len(fails), 0)
+                self.assertEqual(len(warns), 0)
+                self.assertIsInstance(cfg['dir'], str)
+                self.assertEqual(cfg['dir'], os.path.join(base_path, 'foo'))
+
+    def test_site_dir_is_config_dir_fails(self):
         cfg = Config(
-            [('dir', config_options.Dir())],
-            config_file_path=os.path.join(base_path, 'mkdocs.yml'),
-        )
-
-        test_config = {
-            'dir': 'foo',
-        }
-
-        cfg.load_dict(test_config)
-
-        fails, warns = cfg.validate()
-
-        self.assertEqual(len(fails), 0)
-        self.assertEqual(len(warns), 0)
-        self.assertIsInstance(cfg['dir'], str)
-        self.assertEqual(cfg['dir'], os.path.join(base_path, 'foo'))
-
-    def test_dir_is_config_dir_fails(self):
-        cfg = Config(
-            [('dir', config_options.Dir())],
+            [('dir', config_options.DocsDir())],
             config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
         )
 
@@ -487,6 +597,12 @@ class ListOfPathsTest(unittest.TestCase):
 
     def test_missing_path(self):
         paths = [os.path.join("does", "not", "exist", "i", "hope")]
+        option = config_options.ListOfPaths()
+        with self.assertRaises(config_options.ValidationError):
+            option.validate(paths)
+
+    def test_non_path(self):
+        paths = [os.path.dirname(__file__), None]
         option = config_options.ListOfPaths()
         with self.assertRaises(config_options.ValidationError):
             option.validate(paths)
@@ -859,11 +975,11 @@ class SubConfigTest(unittest.TestCase):
     def test_subconfig_wrong_type(self):
         # Test that an error is raised if subconfig does not receive a dict
         option = config_options.SubConfig()
-        with self.assertRaises(ConfigurationError):
+        with self.assertRaises(config_options.ValidationError):
             option.validate("not_a_dict")
-        with self.assertRaises(ConfigurationError):
+        with self.assertRaises(config_options.ValidationError):
             option.validate(("not_a_dict",))
-        with self.assertRaises(ConfigurationError):
+        with self.assertRaises(config_options.ValidationError):
             option.validate(["not_a_dict"])
 
     def test_subconfig_default(self):
@@ -913,6 +1029,74 @@ class SubConfigTest(unittest.TestCase):
         # Nominal
         res = option.validate(dict(c='foo'))
         assert res == dict(c='foo')
+
+
+class ConfigItemsTest(TestCase):
+    def test_non_required(self):
+        schema = {
+            'sub': config_options.ConfigItems(
+                ('opt', config_options.Type(int)),
+                validate=True,
+            ),
+        }.items()
+
+        cfg = self.get_config(schema, {})
+        self.assertEqual(cfg['sub'], [])
+
+        cfg = self.get_config(schema, {'sub': None})
+        self.assertEqual(cfg['sub'], [])
+
+        cfg = self.get_config(schema, {'sub': [{'opt': 1}, {}]})
+        self.assertEqual(cfg['sub'], [{'opt': 1}, {'opt': None}])
+
+    def test_required(self):
+        schema = {
+            'sub': config_options.ConfigItems(
+                ('opt', config_options.Type(str, required=True)),
+                validate=True,
+            ),
+        }.items()
+
+        cfg = self.get_config(schema, {})
+        self.assertEqual(cfg['sub'], [])
+
+        cfg = self.get_config(schema, {'sub': None})
+        self.assertEqual(cfg['sub'], [])
+
+        with self.expect_error(
+            sub="Sub-option 'opt' configuration error: Expected type: <class 'str'> but received: <class 'int'>"
+        ):
+            cfg = self.get_config(schema, {'sub': [{'opt': 1}, {}]})
+
+    def test_common(self):
+        for required in False, True:
+            with self.subTest(required=required):
+                schema = {
+                    'sub': config_options.ConfigItems(
+                        ('opt', config_options.Type(int, required=required)),
+                        validate=True,
+                    ),
+                }.items()
+
+                cfg = self.get_config(schema, {'sub': None})
+                self.assertEqual(cfg['sub'], [])
+
+                cfg = self.get_config(schema, {'sub': []})
+
+                cfg = self.get_config(schema, {'sub': [{'opt': 1}, {'opt': 2}]})
+                self.assertEqual(cfg['sub'], [{'opt': 1}, {'opt': 2}])
+
+                with self.expect_error(
+                    sub="Sub-option 'opt' configuration error: "
+                    "Expected type: <class 'int'> but received: <class 'str'>"
+                ):
+                    cfg = self.get_config(schema, {'sub': [{'opt': 'z'}, {'opt': 2}]})
+
+                with self.expect_error(
+                    sub="The configuration is invalid. The expected type was a key value mapping "
+                    "(a python dict) but we got an object of type: <class 'int'>"
+                ):
+                    cfg = self.get_config(schema, {'sub': [1, 2]})
 
 
 class MarkdownExtensionsTest(unittest.TestCase):
@@ -1063,6 +1247,19 @@ class MarkdownExtensionsTest(unittest.TestCase):
                 'bar': {
                     'foo': {'foo_option': 'foo value'},
                 },
+            },
+            config,
+        )
+
+    def test_missing_default(self):
+        option = config_options.MarkdownExtensions()
+        config = {}
+        config['markdown_extensions'] = option.validate(None)
+        option.post_validation(config, 'markdown_extensions')
+        self.assertEqual(
+            {
+                'markdown_extensions': [],
+                'mdx_configs': {},
             },
             config,
         )

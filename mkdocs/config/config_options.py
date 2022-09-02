@@ -4,14 +4,15 @@ import ipaddress
 import os
 import sys
 import traceback
-from collections import namedtuple
-from collections.abc import Sequence
+import typing as t
+from typing import NamedTuple
 from urllib.parse import urlsplit, urlunsplit
 
 import markdown
 
 from mkdocs import plugins, theme, utils
-from mkdocs.config.base import BaseConfigOption, Config, ValidationError
+from mkdocs.config.base import BaseConfigOption, Config, PlainConfigSchemaItem, ValidationError
+from mkdocs.exceptions import ConfigurationError
 
 
 class SubConfig(BaseConfigOption):
@@ -24,7 +25,7 @@ class SubConfig(BaseConfigOption):
     enable validation with `validate=True`.
     """
 
-    def __init__(self, *config_options, validate=False):
+    def __init__(self, *config_options: PlainConfigSchemaItem, validate: bool = False):
         super().__init__()
         self.default = {}
         self.config_options = config_options
@@ -32,8 +33,11 @@ class SubConfig(BaseConfigOption):
 
     def run_validation(self, value):
         config = Config(self.config_options)
-        config.load_dict(value)
-        failed, warnings = config.validate()
+        try:
+            config.load_dict(value)
+            failed, warnings = config.validate()
+        except ConfigurationError as e:
+            raise ValidationError(str(e))
 
         if self._do_validation:
             # Capture errors and warnings
@@ -46,50 +50,16 @@ class SubConfig(BaseConfigOption):
         return config
 
 
-class ConfigItems(BaseConfigOption):
-    """
-    Config Items Option
-
-    Validates a list of mappings that all must match the same set of
-    options.
-    """
-
-    def __init__(self, *config_options, **kwargs):
-        BaseConfigOption.__init__(self)
-        self.item_config = SubConfig(*config_options)
-        self.required = kwargs.get('required', False)
-
-    def __repr__(self):
-        return f'{self.__class__.__name__}: {self.item_config}'
-
-    def run_validation(self, value):
-        if value is None:
-            if self.required:
-                raise ValidationError("Required configuration not provided.")
-            else:
-                return ()
-
-        if not isinstance(value, Sequence):
-            raise ValidationError(
-                f'Expected a sequence of mappings, but a ' f'{type(value)} was given.'
-            )
-
-        return [self.item_config.validate(item) for item in value]
-
-
 class OptionallyRequired(BaseConfigOption):
     """
     A subclass of BaseConfigOption that adds support for default values and
     required values. It is a base class for config options.
     """
 
-    def __init__(self, default=None, required=False):
+    def __init__(self, default=None, required: bool = False):
         super().__init__()
         self.default = default
         self.required = required
-
-    def is_required(self):
-        return self.required
 
     def validate(self, value):
         """
@@ -102,17 +72,79 @@ class OptionallyRequired(BaseConfigOption):
 
         if value is None:
             if self.default is not None:
-                if hasattr(self.default, 'copy'):
-                    # ensure no mutable values are assigned
-                    value = self.default.copy()
-                else:
-                    value = self.default
+                value = self.default
             elif not self.required:
-                return
+                return None
             elif self.required:
                 raise ValidationError("Required configuration not provided.")
 
         return self.run_validation(value)
+
+
+class ListOfItems(BaseConfigOption):
+    """
+    Validates a homogeneous list of items.
+
+    E.g. for `config_options.ListOfItems(config_options.Type(int))` a valid item is `[1, 2, 3]`.
+    """
+
+    required = False
+
+    def __init__(self, option_type: BaseConfigOption, default=[]):
+        super().__init__()
+        self.default = default
+        self.option_type = option_type
+        self.option_type.warnings = self.warnings
+
+    def __repr__(self):
+        return f'{type(self).__name__}: {self.option_type}'
+
+    def pre_validation(self, config, key_name):
+        self._config = config
+        self._key_name = key_name
+
+    def run_validation(self, value):
+        if value is None and not self.required:
+            return self.default
+
+        if not isinstance(value, list):
+            raise ValidationError(f'Expected a list of items, but a {type(value)} was given.')
+
+        fake_config = Config(())
+        try:
+            fake_config.config_file_path = self._config.config_file_path
+        except AttributeError:
+            pass
+
+        # Emulate a config-like environment for pre_validation and post_validation.
+        parent_key_name = getattr(self, '_key_name', '')
+        fake_keys = [f'{parent_key_name}[{i}]' for i in range(len(value))]
+        fake_config.data = dict(zip(fake_keys, value))
+
+        for key_name in fake_config:
+            self.option_type.pre_validation(fake_config, key_name)
+        for key_name in fake_config:
+            # Specifically not running `validate` to avoid the OptionallyRequired effect.
+            fake_config[key_name] = self.option_type.run_validation(fake_config[key_name])
+        for key_name in fake_config:
+            self.option_type.post_validation(fake_config, key_name)
+
+        return [fake_config[k] for k in fake_keys]
+
+
+class ConfigItems(ListOfItems):
+    """
+    Config Items Option
+
+    Validates a list of mappings that all must match the same set of
+    options.
+    """
+
+    def __init__(
+        self, *config_options: PlainConfigSchemaItem, required: bool = False, validate: bool = False
+    ):
+        super().__init__(SubConfig(*config_options, validate=validate))
+        self.required = required
 
 
 class Type(OptionallyRequired):
@@ -122,7 +154,7 @@ class Type(OptionallyRequired):
     Validate the type of a config option against a given Python type.
     """
 
-    def __init__(self, type_, length=None, **kwargs):
+    def __init__(self, type_, length: t.Optional[int] = None, **kwargs):
         super().__init__(**kwargs)
         self._type = type_
         self.length = length
@@ -149,8 +181,8 @@ class Choice(OptionallyRequired):
     Validate the config option against a strict set of values.
     """
 
-    def __init__(self, choices, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, choices, default=None, **kwargs):
+        super().__init__(default=default, **kwargs)
         try:
             length = len(choices)
         except TypeError:
@@ -158,16 +190,15 @@ class Choice(OptionallyRequired):
 
         if not length or isinstance(choices, str):
             raise ValueError(f'Expected iterable of choices, got {choices}')
+        if default is not None and default not in choices:
+            raise ValueError(f'{default!r} is not one of {choices!r}')
 
         self.choices = choices
 
     def run_validation(self, value):
         if value not in self.choices:
-            msg = f"Expected one of: {self.choices} but received: {value}"
-        else:
-            return value
-
-        raise ValidationError(msg)
+            raise ValidationError(f"Expected one of: {self.choices} but received: {value}")
+        return value
 
 
 class Deprecated(BaseConfigOption):
@@ -180,7 +211,13 @@ class Deprecated(BaseConfigOption):
     ConfigOption instance, then the value is validated against that type.
     """
 
-    def __init__(self, moved_to=None, message=None, removed=False, option_type=None):
+    def __init__(
+        self,
+        moved_to: t.Optional[str] = None,
+        message: t.Optional[str] = None,
+        removed: bool = False,
+        option_type: t.Optional[BaseConfigOption] = None,
+    ):
         super().__init__()
         self.default = None
         self.moved_to = moved_to
@@ -237,6 +274,14 @@ class Deprecated(BaseConfigOption):
         self.warnings = self.option.warnings
 
 
+class _IpAddressValue(NamedTuple):
+    host: str
+    port: int
+
+    def __str__(self):
+        return f'{self.host}:{self.port}'
+
+
 class IpAddress(OptionallyRequired):
     """
     IpAddress Config Option
@@ -262,11 +307,7 @@ class IpAddress(OptionallyRequired):
         except Exception:
             raise ValidationError(f"'{port}' is not a valid port")
 
-        class Address(namedtuple('Address', 'host port')):
-            def __str__(self):
-                return f'{self.host}:{self.port}'
-
-        return Address(host, port)
+        return _IpAddressValue(host, port)
 
     def post_validation(self, config, key_name):
         host = config[key_name].host
@@ -286,7 +327,7 @@ class URL(OptionallyRequired):
     Validate a URL by requiring a scheme is present.
     """
 
-    def __init__(self, default='', required=False, is_dir=False):
+    def __init__(self, default='', required: bool = False, is_dir: bool = False):
         self.is_dir = is_dir
         super().__init__(default, required)
 
@@ -351,7 +392,10 @@ class FilesystemObject(Type):
     Base class for options that point to filesystem objects.
     """
 
-    def __init__(self, exists=False, **kwargs):
+    existence_test = staticmethod(os.path.exists)
+    name = 'file or directory'
+
+    def __init__(self, exists: bool = False, **kwargs):
         super().__init__(type_=str, **kwargs)
         self.exists = exists
         self.config_dir = None
@@ -380,6 +424,8 @@ class Dir(FilesystemObject):
     existence_test = staticmethod(os.path.isdir)
     name = 'directory'
 
+
+class DocsDir(Dir):
     def post_validation(self, config, key_name):
         if config.config_file_path is None:
             return
@@ -404,36 +450,20 @@ class File(FilesystemObject):
     name = 'file'
 
 
-class ListOfPaths(OptionallyRequired):
+class ListOfPaths(ListOfItems):
     """
     List of Paths Config Option
 
     A list of file system paths. Raises an error if one of the paths does not exist.
+
+    For greater flexibility, prefer ListOfItems, e.g. to require files specifically:
+
+        config_options.ListOfItems(config_options.File(exists=True))
     """
 
-    def __init__(self, default=[], required=False):
-        self.config_dir = None
-        super().__init__(default, required)
-
-    def pre_validation(self, config, key_name):
-        self.config_dir = (
-            os.path.dirname(config.config_file_path) if config.config_file_path else None
-        )
-
-    def run_validation(self, value):
-        if not isinstance(value, list):
-            raise ValidationError(f"Expected a list, got {type(value)}")
-        if len(value) == 0:
-            return
-        paths = []
-        for path in value:
-            if self.config_dir and not os.path.isabs(path):
-                path = os.path.join(self.config_dir, path)
-            if not os.path.exists(path):
-                raise ValidationError(f"The path {path} does not exist.")
-            path = os.path.abspath(path)
-            paths.append(path)
-        return paths
+    def __init__(self, default=[], required: bool = False):
+        super().__init__(FilesystemObject(exists=True), default)
+        self.required = required
 
 
 class SiteDir(Dir):
@@ -479,7 +509,7 @@ class Theme(BaseConfigOption):
         super().__init__()
         self.default = default
 
-    def validate(self, value):
+    def run_validation(self, value):
         if value is None and self.default is not None:
             value = {'name': self.default}
 
@@ -601,8 +631,14 @@ class MarkdownExtensions(OptionallyRequired):
     `configkey`. The `builtins` keyword accepts a list of extensions which cannot be overridden by
     the user. However, builtins can be duplicated to define config options for them if desired."""
 
-    def __init__(self, builtins=None, configkey='mdx_configs', **kwargs):
-        super().__init__(**kwargs)
+    def __init__(
+        self,
+        builtins: t.Optional[list] = None,
+        configkey: str = 'mdx_configs',
+        default=[],
+        **kwargs,
+    ):
+        super().__init__(default=default, **kwargs)
         self.builtins = builtins or []
         self.configkey = configkey
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import logging
 import os
 import sys
@@ -19,8 +20,17 @@ class BaseConfigOption:
         self.warnings = []
         self.default = None
 
-    def is_required(self):
-        return False
+    @property
+    def default(self):
+        try:
+            # ensure no mutable values are assigned
+            return self._default.copy()
+        except AttributeError:
+            return self._default
+
+    @default.setter
+    def default(self, value):
+        self._default = value
 
     def validate(self, value):
         return self.run_validation(value)
@@ -56,6 +66,10 @@ class ValidationError(Exception):
     """Raised during the validation process of the config on errors."""
 
 
+PlainConfigSchemaItem = Tuple[str, BaseConfigOption]
+PlainConfigSchema = Sequence[PlainConfigSchemaItem]
+
+
 class Config(UserDict):
     """
     MkDocs Configuration dict
@@ -64,9 +78,7 @@ class Config(UserDict):
     for running validation on the structure and contents.
     """
 
-    def __init__(
-        self, schema: Sequence[Tuple[str, BaseConfigOption]], config_file_path: Optional[str] = None
-    ):
+    def __init__(self, schema: PlainConfigSchema, config_file_path: Optional[str] = None):
         """
         The schema is a Python dict which maps the config name to a validator.
         """
@@ -181,6 +193,17 @@ class Config(UserDict):
             raise exceptions.ConfigurationError(
                 f"MkDocs encountered an error parsing the configuration file: {e}"
             )
+
+
+@functools.lru_cache(maxsize=None)
+def get_schema(cls: type) -> PlainConfigSchema:
+    """
+    Extract ConfigOptions defined in a class (used just as a container) and put them into a schema tuple.
+
+    See mkdocs/config/defaults.py for an example.
+    """
+    all_items = ((k, getattr(cls, k)) for k in dir(cls) if not k.startswith('_'))
+    return tuple((k, v) for k, v in all_items if isinstance(v, BaseConfigOption))
 
 
 @contextmanager
