@@ -91,6 +91,9 @@ class State:
         self.stream.name = 'MkDocsStreamHandler'
         self.logger.addHandler(self.stream)
 
+    def __del__(self):
+        self.logger.removeHandler(self.stream)
+
 
 pass_state = click.make_pass_decorator(State, ensure=True)
 

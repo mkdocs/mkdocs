@@ -312,7 +312,7 @@ def get_themes():
     """Return a dict of all installed themes as {name: EntryPoint}."""
 
     themes = {}
-    eps = set(entry_points(group='mkdocs.themes'))
+    eps = dict.fromkeys(entry_points(group='mkdocs.themes'))
     builtins = {ep.name for ep in eps if ep.dist.name == 'mkdocs'}
 
     for theme in eps:

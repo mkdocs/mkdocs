@@ -590,7 +590,7 @@ class PageTests(unittest.TestCase):
             ),
         ]:
             with self.subTest(case['config']):
-                with self.assertLogs('mkdocs', level='WARN') as cm:
+                with self.assertLogs('mkdocs') as cm:
                     cfg = load_config(**case['config'])
                     fl = File(
                         'testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']
@@ -630,8 +630,12 @@ class PageTests(unittest.TestCase):
         cfg = load_config()
         fl = File('missing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
         pg = Page('Foo', fl, cfg)
-        with self.assertRaises(OSError):
-            pg.read_source(cfg)
+        with self.assertLogs('mkdocs') as cm:
+            with self.assertRaises(OSError):
+                pg.read_source(cfg)
+        self.assertEqual(
+            '\n'.join(cm.output), 'ERROR:mkdocs.structure.pages:File not found: missing.md'
+        )
 
 
 class SourceDateEpochTests(unittest.TestCase):
@@ -781,17 +785,15 @@ class RelativePathExtensionTests(unittest.TestCase):
 
     @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](non-existent.md)'))
     def test_bad_relative_html_link(self):
-        with self.assertLogs('mkdocs', level='WARNING') as cm:
+        with self.assertLogs('mkdocs') as cm:
             self.assertEqual(
                 self.get_rendered_result(['index.md']),
                 '<p><a href="non-existent.md">link</a></p>',
             )
         self.assertEqual(
-            cm.output,
-            [
-                "WARNING:mkdocs.structure.pages:Documentation file 'index.md' contains a link "
-                "to 'non-existent.md' which is not found in the documentation files."
-            ],
+            '\n'.join(cm.output),
+            "WARNING:mkdocs.structure.pages:Documentation file 'index.md' contains a link "
+            "to 'non-existent.md' which is not found in the documentation files.",
         )
 
     @mock.patch(

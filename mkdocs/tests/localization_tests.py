@@ -34,7 +34,13 @@ class LocalizationTests(unittest.TestCase):
 
     @tempdir()
     def test_no_translations_found(self, dir_without_translations):
-        install_translations(self.env, parse_locale('fr_CA'), [dir_without_translations])
+        with self.assertLogs('mkdocs') as cm:
+            install_translations(self.env, parse_locale('fr_CA'), [dir_without_translations])
+        self.assertEqual(
+            '\n'.join(cm.output),
+            "WARNING:mkdocs.localization:No translations could be found for the locale 'fr_CA'. "
+            "Defaulting to English.",
+        )
         self.env.install_null_translations.assert_called_once()
 
     @tempdir

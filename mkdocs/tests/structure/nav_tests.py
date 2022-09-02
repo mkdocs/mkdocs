@@ -154,7 +154,7 @@ class SiteNavigationTests(unittest.TestCase):
         cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
         fs = [File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]
         files = Files(fs)
-        with self.assertLogs('mkdocs', level='WARNING') as cm:
+        with self.assertLogs('mkdocs') as cm:
             site_navigation = get_navigation(files, cfg)
         self.assertEqual(
             cm.output,

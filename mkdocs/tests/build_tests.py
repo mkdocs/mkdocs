@@ -195,15 +195,13 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         ]
         files = Files(fs)
         nav = get_navigation(files, cfg)
-        with self.assertLogs('mkdocs', level='WARN') as cm:
+        with self.assertLogs('mkdocs') as cm:
             context = build.get_context(nav, files, cfg, nav.pages[0])
         self.assertEqual(context['extra_css'], ['assets/style.css'])
         self.assertEqual(
-            cm.output,
-            [
-                "WARNING:mkdocs.utils:Path 'assets\\style.css' uses OS-specific separator '\\', "
-                "change it to '/' so it is recognized on other systems."
-            ],
+            '\n'.join(cm.output),
+            "WARNING:mkdocs.utils:Path 'assets\\style.css' uses OS-specific separator '\\', "
+            "change it to '/' so it is recognized on other systems.",
         )
 
     def test_context_extra_css_js_no_page(self):
@@ -244,13 +242,11 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     def test_skip_missing_theme_template(self, mock_build_template, mock_write_file):
         cfg = load_config()
         env = cfg['theme'].get_env()
-        with self.assertLogs('mkdocs', level='WARN') as cm:
+        with self.assertLogs('mkdocs') as cm:
             build._build_theme_template('missing.html', env, mock.Mock(), cfg, mock.Mock())
         self.assertEqual(
-            cm.output,
-            [
-                "WARNING:mkdocs.commands.build:Template skipped: 'missing.html' not found in theme directories."
-            ],
+            '\n'.join(cm.output),
+            "WARNING:mkdocs.commands.build:Template skipped: 'missing.html' not found in theme directories.",
         )
         mock_write_file.assert_not_called()
         mock_build_template.assert_not_called()
@@ -260,11 +256,11 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     def test_skip_theme_template_empty_output(self, mock_build_template, mock_write_file):
         cfg = load_config()
         env = cfg['theme'].get_env()
-        with self.assertLogs('mkdocs', level='INFO') as cm:
+        with self.assertLogs('mkdocs') as cm:
             build._build_theme_template('main.html', env, mock.Mock(), cfg, mock.Mock())
         self.assertEqual(
-            cm.output,
-            ["INFO:mkdocs.commands.build:Template skipped: 'main.html' generated empty output."],
+            '\n'.join(cm.output),
+            "INFO:mkdocs.commands.build:Template skipped: 'main.html' generated empty output.",
         )
         mock_write_file.assert_not_called()
         mock_build_template.assert_called_once()
@@ -287,13 +283,11 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             File('foo.html', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
         ]
         files = Files(fs)
-        with self.assertLogs('mkdocs', level='INFO') as cm:
+        with self.assertLogs('mkdocs') as cm:
             build._build_extra_template('missing.html', files, cfg, mock.Mock())
         self.assertEqual(
-            cm.output,
-            [
-                "WARNING:mkdocs.commands.build:Template skipped: 'missing.html' not found in docs_dir."
-            ],
+            '\n'.join(cm.output),
+            "WARNING:mkdocs.commands.build:Template skipped: 'missing.html' not found in docs_dir.",
         )
 
     @mock.patch('mkdocs.commands.build.open', side_effect=OSError('Error message.'))
@@ -303,11 +297,11 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             File('foo.html', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
         ]
         files = Files(fs)
-        with self.assertLogs('mkdocs', level='INFO') as cm:
+        with self.assertLogs('mkdocs') as cm:
             build._build_extra_template('foo.html', files, cfg, mock.Mock())
         self.assertEqual(
-            cm.output,
-            ["WARNING:mkdocs.commands.build:Error reading template 'foo.html': Error message."],
+            '\n'.join(cm.output),
+            "WARNING:mkdocs.commands.build:Error reading template 'foo.html': Error message.",
         )
 
     @mock.patch('mkdocs.commands.build.open', mock.mock_open(read_data=''))
@@ -317,11 +311,11 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             File('foo.html', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
         ]
         files = Files(fs)
-        with self.assertLogs('mkdocs', level='INFO') as cm:
+        with self.assertLogs('mkdocs') as cm:
             build._build_extra_template('foo.html', files, cfg, mock.Mock())
         self.assertEqual(
-            cm.output,
-            ["INFO:mkdocs.commands.build:Template skipped: 'foo.html' generated empty output."],
+            '\n'.join(cm.output),
+            "INFO:mkdocs.commands.build:Template skipped: 'foo.html' generated empty output.",
         )
 
     # Test build._populate_page
@@ -362,7 +356,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         cfg = load_config(docs_dir=docs_dir)
         file = File('missing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
         page = Page('Foo', file, cfg)
-        with self.assertLogs('mkdocs', level='ERROR') as cm:
+        with self.assertLogs('mkdocs') as cm:
             with self.assertRaises(OSError):
                 build._populate_page(page, cfg, Files([file]))
         self.assertEqual(
@@ -382,12 +376,12 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         cfg = load_config(docs_dir=docs_dir)
         file = File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
         page = Page('Foo', file, cfg)
-        with self.assertLogs('mkdocs', level='ERROR') as cm:
+        with self.assertLogs('mkdocs') as cm:
             with self.assertRaises(PluginError):
                 build._populate_page(page, cfg, Files([file]))
         self.assertEqual(
-            cm.output,
-            ["ERROR:mkdocs.commands.build:Error reading page 'index.md':"],
+            '\n'.join(cm.output),
+            "ERROR:mkdocs.commands.build:Error reading page 'index.md':",
         )
         mock_open.assert_called_once()
 
@@ -414,13 +408,13 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         fs = [File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]
         files = Files(fs)
         nav = get_navigation(files, cfg)
-        with self.assertLogs('mkdocs', level='INFO') as cm:
+        with self.assertLogs('mkdocs') as cm:
             build._build_page(
                 files.documentation_pages()[0].page, cfg, files, nav, cfg['theme'].get_env()
             )
         self.assertEqual(
-            cm.output,
-            ["INFO:mkdocs.commands.build:Page skipped: 'index.md'. Generated empty output."],
+            '\n'.join(cm.output),
+            "INFO:mkdocs.commands.build:Page skipped: 'index.md'. Generated empty output.",
         )
         self.assertPathNotFile(site_dir, 'index.html')
         render_mock.assert_called_once()
@@ -487,12 +481,12 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         page.title = 'Title'
         page.markdown = 'page content'
         page.content = '<p>page content</p>'
-        with self.assertLogs('mkdocs', level='ERROR') as cm:
+        with self.assertLogs('mkdocs') as cm:
             with self.assertRaises(OSError):
                 build._build_page(page, cfg, files, nav, self._get_env_with_null_translations(cfg))
         self.assertEqual(
-            cm.output,
-            ["ERROR:mkdocs.commands.build:Error building page 'index.md': Error message."],
+            '\n'.join(cm.output),
+            "ERROR:mkdocs.commands.build:Error building page 'index.md': Error message.",
         )
         mock_write_file.assert_called_once()
 
@@ -510,12 +504,12 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         page.title = 'Title'
         page.markdown = 'page content'
         page.content = '<p>page content</p>'
-        with self.assertLogs('mkdocs', level='ERROR') as cm:
+        with self.assertLogs('mkdocs') as cm:
             with self.assertRaises(PluginError):
                 build._build_page(page, cfg, files, nav, cfg['theme'].get_env())
         self.assertEqual(
-            cm.output,
-            ["ERROR:mkdocs.commands.build:Error building page 'index.md':"],
+            '\n'.join(cm.output),
+            "ERROR:mkdocs.commands.build:Error building page 'index.md':",
         )
         mock_write_file.assert_called_once()
 

@@ -668,7 +668,12 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
     )
     def test_get_files_exclude_readme_with_index(self, tdir):
         config = load_config(docs_dir=tdir)
-        files = get_files(config)
+        with self.assertLogs('mkdocs') as cm:
+            files = get_files(config)
+        self.assertRegex(
+            '\n'.join(cm.output),
+            r"^WARNING:mkdocs.structure.files:Both index.md and README.md found. Skipping README.md .+$",
+        )
         expected = ['index.md', 'foo.md']
         self.assertIsInstance(files, Files)
         self.assertEqual(len(files), len(expected))

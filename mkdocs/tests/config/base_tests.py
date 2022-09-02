@@ -1,5 +1,4 @@
 import os
-import tempfile
 import unittest
 from tempfile import TemporaryDirectory
 
@@ -134,7 +133,9 @@ class ConfigBaseTests(unittest.TestCase):
 
     def test_load_from_missing_file(self):
 
-        with self.assertRaises(exceptions.ConfigurationError):
+        with self.assertRaisesRegex(
+            exceptions.ConfigurationError, "Config file 'missing_file.yml' does not exist."
+        ):
             base.load_config(config_file='missing_file.yml')
 
     def test_load_from_open_file(self):
@@ -181,34 +182,27 @@ class ConfigBaseTests(unittest.TestCase):
         finally:
             temp_dir.cleanup()
 
-    def test_load_from_deleted_file(self):
-        """
-        Deleting the config file could trigger a server reload.
-        """
-
-        config_file = tempfile.NamedTemporaryFile('w', delete=False)
-        try:
-            config_file.write("site_name: MkDocs Test\n")
-            config_file.flush()
-            config_file.close()
-        finally:
-            os.remove(config_file.name)
-        with self.assertRaises(exceptions.ConfigurationError):
-            base.load_config(config_file=config_file)
-
     def test_load_missing_required(self):
         """
         `site_name` is a required setting.
         """
 
-        config_file = tempfile.NamedTemporaryFile('w', delete=False)
+        temp_dir = TemporaryDirectory()
+        config_file = open(os.path.join(temp_dir.name, 'mkdocs.yml'), 'w')
+        os.mkdir(os.path.join(temp_dir.name, 'docs'))
         try:
-            config_file.write("site_dir: output\nsite_uri: https://www.mkdocs.org\n")
+            config_file.write("site_dir: output\nsite_url: https://www.mkdocs.org\n")
             config_file.flush()
             config_file.close()
 
-            with self.assertRaises(exceptions.Abort):
-                base.load_config(config_file=config_file.name)
+            with self.assertLogs('mkdocs') as cm:
+                with self.assertRaises(exceptions.Abort):
+                    base.load_config(config_file=config_file.name)
+            self.assertEqual(
+                '\n'.join(cm.output),
+                "ERROR:mkdocs.config:Config value: 'site_name'. Error: Required configuration not provided.",
+            )
+
         finally:
             os.remove(config_file.name)
 

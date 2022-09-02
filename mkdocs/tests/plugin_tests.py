@@ -208,19 +208,23 @@ class TestPluginCollection(unittest.TestCase):
 
         cfg = load_config()
         cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='pre_page')
-        self.assertRaises(Abort, build.build, cfg)
+        with self.assertLogs('mkdocs', level='ERROR'):
+            self.assertRaises(Abort, build.build, cfg)
 
         cfg = load_config()
         cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='page_markdown')
-        self.assertRaises(Abort, build.build, cfg)
+        with self.assertLogs('mkdocs', level='ERROR'):
+            self.assertRaises(Abort, build.build, cfg)
 
         cfg = load_config()
         cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='page_content')
-        self.assertRaises(Abort, build.build, cfg)
+        with self.assertLogs('mkdocs', level='ERROR'):
+            self.assertRaises(Abort, build.build, cfg)
 
         cfg = load_config()
         cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='post_page')
-        self.assertRaises(ValueError, build.build, cfg)
+        with self.assertLogs('mkdocs', level='ERROR'):
+            self.assertRaises(ValueError, build.build, cfg)
 
         cfg = load_config()
         cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='')

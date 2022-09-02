@@ -279,9 +279,10 @@ class UtilsTests(unittest.TestCase):
             ),
         ]
 
-        for i, page in enumerate(pages):
-            urls = utils.create_media_urls(expected_results.keys(), page)
-            self.assertEqual([v[i] for v in expected_results.values()], urls)
+        with self.assertLogs('mkdocs', level='WARNING'):
+            for i, page in enumerate(pages):
+                urls = utils.create_media_urls(expected_results.keys(), page)
+                self.assertEqual([v[i] for v in expected_results.values()], urls)
 
     def test_reduce_list(self):
         self.assertEqual(
@@ -290,8 +291,9 @@ class UtilsTests(unittest.TestCase):
         )
 
     def test_get_themes(self):
-
-        self.assertEqual(sorted(utils.get_theme_names()), ['mkdocs', 'readthedocs'])
+        themes = utils.get_theme_names()
+        self.assertIn('mkdocs', themes)
+        self.assertIn('readthedocs', themes)
 
     @mock.patch('mkdocs.utils.entry_points', autospec=True)
     def test_get_theme_dir(self, mock_iter):
@@ -340,7 +342,14 @@ class UtilsTests(unittest.TestCase):
 
         mock_iter.return_value = [theme1, theme2]
 
-        self.assertEqual(sorted(utils.get_theme_names()), sorted(['mkdocs2']))
+        with self.assertLogs('mkdocs') as cm:
+            theme_names = utils.get_theme_names()
+        self.assertEqual(
+            '\n'.join(cm.output),
+            "WARNING:mkdocs.utils:A theme named 'mkdocs2' is provided by the Python "
+            "packages 'mkdocs3' and 'mkdocs2'. The one in 'mkdocs3' will be used.",
+        )
+        self.assertCountEqual(theme_names, ['mkdocs2'])
 
     @mock.patch('mkdocs.utils.entry_points', autospec=True)
     def test_get_themes_error(self, mock_iter):
@@ -357,7 +366,11 @@ class UtilsTests(unittest.TestCase):
 
         mock_iter.return_value = [theme1, theme2]
 
-        with self.assertRaises(exceptions.ConfigurationError):
+        with self.assertRaisesRegex(
+            exceptions.ConfigurationError,
+            "The theme 'mkdocs' is a builtin theme but the package 'mkdocs2' "
+            "attempts to provide a theme with the same name.",
+        ):
             utils.get_theme_names()
 
     def test_nest_paths(self, j=posixpath.join):
