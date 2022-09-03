@@ -36,7 +36,6 @@ class TestCase(unittest.TestCase):
 
 class OptionallyRequiredTest(unittest.TestCase):
     def test_empty(self):
-
         option = config_options.OptionallyRequired()
         value = option.validate(None)
         self.assertEqual(value, None)
@@ -44,7 +43,6 @@ class OptionallyRequiredTest(unittest.TestCase):
         self.assertEqual(option.required, False)
 
     def test_required(self):
-
         option = config_options.OptionallyRequired(required=True)
         with self.assertRaises(config_options.ValidationError):
             option.validate(None)
@@ -52,19 +50,16 @@ class OptionallyRequiredTest(unittest.TestCase):
         self.assertEqual(option.required, True)
 
     def test_required_no_default(self):
-
         option = config_options.OptionallyRequired(required=True)
         value = option.validate(2)
         self.assertEqual(2, value)
 
     def test_default(self):
-
         option = config_options.OptionallyRequired(default=1)
         value = option.validate(None)
         self.assertEqual(1, value)
 
     def test_replace_default(self):
-
         option = config_options.OptionallyRequired(default=1)
         value = option.validate(2)
         self.assertEqual(2, value)
@@ -72,7 +67,6 @@ class OptionallyRequiredTest(unittest.TestCase):
 
 class TypeTest(unittest.TestCase):
     def test_single_type(self):
-
         option = config_options.Type(str)
         value = option.validate("Testing")
         self.assertEqual(value, "Testing")
@@ -315,35 +309,30 @@ class URLTest(unittest.TestCase):
 
 class RepoURLTest(unittest.TestCase):
     def test_repo_name_github(self):
-
         option = config_options.RepoURL()
         config = {'repo_url': "https://github.com/mkdocs/mkdocs"}
         option.post_validation(config, 'repo_url')
         self.assertEqual(config['repo_name'], "GitHub")
 
     def test_repo_name_bitbucket(self):
-
         option = config_options.RepoURL()
         config = {'repo_url': "https://bitbucket.org/gutworth/six/"}
         option.post_validation(config, 'repo_url')
         self.assertEqual(config['repo_name'], "Bitbucket")
 
     def test_repo_name_gitlab(self):
-
         option = config_options.RepoURL()
         config = {'repo_url': "https://gitlab.com/gitlab-org/gitlab-ce/"}
         option.post_validation(config, 'repo_url')
         self.assertEqual(config['repo_name'], "GitLab")
 
     def test_repo_name_custom(self):
-
         option = config_options.RepoURL()
         config = {'repo_url': "https://launchpad.net/python-tuskarclient"}
         option.post_validation(config, 'repo_url')
         self.assertEqual(config['repo_name'], "Launchpad")
 
     def test_edit_uri_github(self):
-
         option = config_options.RepoURL()
         config = {'repo_url': "https://github.com/mkdocs/mkdocs"}
         option.post_validation(config, 'repo_url')
@@ -351,7 +340,6 @@ class RepoURLTest(unittest.TestCase):
         self.assertEqual(config['repo_url'], "https://github.com/mkdocs/mkdocs")
 
     def test_edit_uri_bitbucket(self):
-
         option = config_options.RepoURL()
         config = {'repo_url': "https://bitbucket.org/gutworth/six/"}
         option.post_validation(config, 'repo_url')
@@ -359,14 +347,12 @@ class RepoURLTest(unittest.TestCase):
         self.assertEqual(config['repo_url'], "https://bitbucket.org/gutworth/six/")
 
     def test_edit_uri_gitlab(self):
-
         option = config_options.RepoURL()
         config = {'repo_url': "https://gitlab.com/gitlab-org/gitlab-ce/"}
         option.post_validation(config, 'repo_url')
         self.assertEqual(config['edit_uri'], 'edit/master/docs/')
 
     def test_edit_uri_custom(self):
-
         option = config_options.RepoURL()
         config = {'repo_url': "https://launchpad.net/python-tuskarclient"}
         option.post_validation(config, 'repo_url')
@@ -374,7 +360,6 @@ class RepoURLTest(unittest.TestCase):
         self.assertEqual(config['repo_url'], "https://launchpad.net/python-tuskarclient")
 
     def test_repo_name_custom_and_empty_edit_uri(self):
-
         option = config_options.RepoURL()
         config = {'repo_url': "https://github.com/mkdocs/mkdocs", 'repo_name': 'mkdocs'}
         option.post_validation(config, 'repo_url')
@@ -665,7 +650,6 @@ class SiteDirTest(unittest.TestCase):
         return True
 
     def test_doc_dir_in_site_dir(self):
-
         j = os.path.join
         # The parent dir is not the same on every system, so use the actual dir name
         parent_dir = mkdocs.__file__.split(os.sep)[-3]
@@ -686,7 +670,6 @@ class SiteDirTest(unittest.TestCase):
                     self.validate_config(test_config)
 
     def test_site_dir_in_docs_dir(self):
-
         j = os.path.join
 
         test_configs = (
@@ -716,13 +699,11 @@ class SiteDirTest(unittest.TestCase):
 
 class ThemeTest(unittest.TestCase):
     def test_theme_as_string(self):
-
         option = config_options.Theme()
         value = option.validate("mkdocs")
         self.assertEqual({'name': 'mkdocs'}, value)
 
     def test_uninstalled_theme_as_string(self):
-
         option = config_options.Theme()
         with self.assertRaises(config_options.ValidationError):
             option.validate("mkdocs2")
@@ -733,7 +714,6 @@ class ThemeTest(unittest.TestCase):
         self.assertEqual({'name': 'mkdocs'}, value)
 
     def test_theme_as_simple_config(self):
-
         config = {
             'name': 'mkdocs',
         }
@@ -742,7 +722,6 @@ class ThemeTest(unittest.TestCase):
         self.assertEqual(config, value)
 
     def test_theme_as_complex_config(self):
-
         config = {
             'name': 'mkdocs',
             'custom_dir': 'custom',
@@ -754,7 +733,6 @@ class ThemeTest(unittest.TestCase):
         self.assertEqual(config, value)
 
     def test_theme_name_is_none(self):
-
         config = {
             'name': None,
         }
@@ -763,7 +741,6 @@ class ThemeTest(unittest.TestCase):
         self.assertEqual(config, value)
 
     def test_theme_config_missing_name(self):
-
         config = {
             'custom_dir': 'custom',
         }
@@ -772,7 +749,6 @@ class ThemeTest(unittest.TestCase):
             option.validate(config)
 
     def test_uninstalled_theme_as_config(self):
-
         config = {
             'name': 'mkdocs2',
         }
@@ -781,14 +757,12 @@ class ThemeTest(unittest.TestCase):
             option.validate(config)
 
     def test_theme_invalid_type(self):
-
         config = ['mkdocs2']
         option = config_options.Theme()
         with self.assertRaises(config_options.ValidationError):
             option.validate(config)
 
     def test_post_validation_none_theme_name_and_missing_custom_dir(self):
-
         config = {
             'theme': {
                 'name': None,
@@ -800,7 +774,6 @@ class ThemeTest(unittest.TestCase):
 
     @tempdir()
     def test_post_validation_inexisting_custom_dir(self, abs_base_path):
-
         config = {
             'theme': {
                 'name': None,
@@ -812,7 +785,6 @@ class ThemeTest(unittest.TestCase):
             option.post_validation(config, 'theme')
 
     def test_post_validation_locale_none(self):
-
         config = {
             'theme': {
                 'name': 'mkdocs',
@@ -824,7 +796,6 @@ class ThemeTest(unittest.TestCase):
             option.post_validation(config, 'theme')
 
     def test_post_validation_locale_invalid_type(self):
-
         config = {
             'theme': {
                 'name': 'mkdocs',
@@ -836,7 +807,6 @@ class ThemeTest(unittest.TestCase):
             option.post_validation(config, 'theme')
 
     def test_post_validation_locale(self):
-
         config = {
             'theme': {
                 'name': 'mkdocs',
@@ -965,7 +935,6 @@ class NavTest(unittest.TestCase):
 
 class PrivateTest(unittest.TestCase):
     def test_defined(self):
-
         option = config_options.Private()
         with self.assertRaises(config_options.ValidationError):
             option.validate('somevalue')

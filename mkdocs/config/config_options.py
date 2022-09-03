@@ -69,7 +69,6 @@ class OptionallyRequired(BaseConfigOption):
         it is empty but has a default, use that. Finally, call the
         run_validation method on the subclass unless.
         """
-
         if value is None:
             if self.default is not None:
                 value = self.default
@@ -160,7 +159,6 @@ class Type(OptionallyRequired):
         self.length = length
 
     def run_validation(self, value):
-
         if not isinstance(value, self._type):
             msg = f"Expected type: {self._type} but received: {type(value)}"
         elif self.length is not None and len(value) != self.length:
@@ -474,7 +472,6 @@ class SiteDir(Dir):
     """
 
     def post_validation(self, config, key_name):
-
         super().post_validation(config, key_name)
         docs_dir = config['docs_dir']
         site_dir = config['site_dir']

@@ -394,7 +394,6 @@ class PluginCollection(OrderedDict):
         All other keywords are variables for context, but would not generally
         be modified by the event method.
         """
-
         pass_item = item is not None
         for method in self.events[name]:
             if pass_item:

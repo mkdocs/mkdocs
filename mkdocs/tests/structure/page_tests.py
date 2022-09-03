@@ -9,7 +9,6 @@ from mkdocs.tests.base import dedent, load_config, tempdir
 
 
 class PageTests(unittest.TestCase):
-
     DOCS_DIR = os.path.join(
         os.path.abspath(os.path.dirname(__file__)), '../integration/subpages/docs'
     )
@@ -655,7 +654,6 @@ class SourceDateEpochTests(unittest.TestCase):
 
 
 class RelativePathExtensionTests(unittest.TestCase):
-
     DOCS_DIR = os.path.join(
         os.path.abspath(os.path.dirname(__file__)), '../integration/subpages/docs'
     )

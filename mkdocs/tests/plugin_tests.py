@@ -66,7 +66,6 @@ class TestPluginClass(unittest.TestCase):
         self.assertEqual(warnings, [])
 
     def test_invalid_plugin_options(self):
-
         plugin = DummyPlugin()
         errors, warnings = plugin.load_config({'foo': 42})
         self.assertEqual(len(errors), 1)
@@ -248,7 +247,6 @@ MockEntryPoint.configure_mock(**{'name': 'sample', 'load.return_value': DummyPlu
 @mock.patch('mkdocs.plugins.entry_points', return_value=[MockEntryPoint])
 class TestPluginConfig(unittest.TestCase):
     def test_plugin_config_without_options(self, mock_class):
-
         cfg = {'plugins': ['sample']}
         option = config.config_options.Plugins()
         cfg['plugins'] = option.validate(cfg['plugins'])
@@ -264,7 +262,6 @@ class TestPluginConfig(unittest.TestCase):
         self.assertEqual(cfg['plugins']['sample'].config, expected)
 
     def test_plugin_config_with_options(self, mock_class):
-
         cfg = {
             'plugins': [
                 {
@@ -289,7 +286,6 @@ class TestPluginConfig(unittest.TestCase):
         self.assertEqual(cfg['plugins']['sample'].config, expected)
 
     def test_plugin_config_as_dict(self, mock_class):
-
         cfg = {
             'plugins': {
                 'sample': {
@@ -353,21 +349,18 @@ class TestPluginConfig(unittest.TestCase):
         self.assertEqual(cfg['plugins']['sample'].config, expected)
 
     def test_plugin_config_uninstalled(self, mock_class):
-
         cfg = {'plugins': ['uninstalled']}
         option = config.config_options.Plugins()
         with self.assertRaises(config.base.ValidationError):
             option.validate(cfg['plugins'])
 
     def test_plugin_config_not_list(self, mock_class):
-
         cfg = {'plugins': 'sample'}  # should be a list
         option = config.config_options.Plugins()
         with self.assertRaises(config.base.ValidationError):
             option.validate(cfg['plugins'])
 
     def test_plugin_config_multivalue_dict(self, mock_class):
-
         cfg = {
             'plugins': [
                 {
@@ -384,7 +377,6 @@ class TestPluginConfig(unittest.TestCase):
             option.validate(cfg['plugins'])
 
     def test_plugin_config_not_string_or_dict(self, mock_class):
-
         cfg = {
             'plugins': [('not a string or dict',)],
         }
@@ -393,7 +385,6 @@ class TestPluginConfig(unittest.TestCase):
             option.validate(cfg['plugins'])
 
     def test_plugin_config_options_not_dict(self, mock_class):
-
         cfg = {
             'plugins': [
                 {

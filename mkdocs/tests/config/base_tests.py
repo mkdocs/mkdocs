@@ -9,7 +9,6 @@ from mkdocs.tests.base import change_dir, tempdir
 
 class ConfigBaseTests(unittest.TestCase):
     def test_unrecognised_keys(self):
-
         c = base.Config(schema=defaults.get_schema())
         c.load_dict(
             {
@@ -30,7 +29,6 @@ class ConfigBaseTests(unittest.TestCase):
         )
 
     def test_missing_required(self):
-
         c = base.Config(schema=defaults.get_schema())
 
         errors, warnings = c.validate()
@@ -47,7 +45,6 @@ class ConfigBaseTests(unittest.TestCase):
         Users can explicitly set the config file using the '--config' option.
         Allows users to specify a config other than the default `mkdocs.yml`.
         """
-
         with open(os.path.join(temp_dir, 'mkdocs.yml'), 'w') as config_file:
             config_file.write("site_name: MkDocs Test\n")
         os.mkdir(os.path.join(temp_dir, 'docs'))
@@ -61,7 +58,6 @@ class ConfigBaseTests(unittest.TestCase):
         """
         test that `mkdocs.yml` will be loaded when '--config' is not set.
         """
-
         with open(os.path.join(temp_dir, 'mkdocs.yml'), 'w') as config_file:
             config_file.write("site_name: MkDocs Test\n")
         os.mkdir(os.path.join(temp_dir, 'docs'))
@@ -75,7 +71,6 @@ class ConfigBaseTests(unittest.TestCase):
         """
         test that `mkdocs.yml` will be loaded when '--config' is not set.
         """
-
         with open(os.path.join(temp_dir, 'mkdocs.yaml'), 'w') as config_file:
             config_file.write("site_name: MkDocs Test\n")
         os.mkdir(os.path.join(temp_dir, 'docs'))
@@ -89,7 +84,6 @@ class ConfigBaseTests(unittest.TestCase):
         """
         test that `mkdocs.yml` will be loaded when '--config' is not set.
         """
-
         with open(os.path.join(temp_dir, 'mkdocs.yml'), 'w') as config_file1:
             config_file1.write("site_name: MkDocs Test1\n")
         with open(os.path.join(temp_dir, 'mkdocs.yaml'), 'w') as config_file2:
@@ -102,7 +96,6 @@ class ConfigBaseTests(unittest.TestCase):
             self.assertEqual(cfg['site_name'], 'MkDocs Test1')
 
     def test_load_from_missing_file(self):
-
         with self.assertRaisesRegex(
             exceptions.ConfigurationError, "Config file 'missing_file.yml' does not exist."
         ):
@@ -113,7 +106,6 @@ class ConfigBaseTests(unittest.TestCase):
         """
         `load_config` can accept an open file descriptor.
         """
-
         config_fname = os.path.join(temp_path, 'mkdocs.yml')
         config_file = open(config_fname, 'w+')
         config_file.write("site_name: MkDocs Test\n")
@@ -132,7 +124,6 @@ class ConfigBaseTests(unittest.TestCase):
         The `serve` command with auto-reload may pass in a closed file descriptor.
         Ensure `load_config` reloads the closed file.
         """
-
         with open(os.path.join(temp_dir, 'mkdocs.yml'), 'w') as config_file:
             config_file.write("site_name: MkDocs Test\n")
         os.mkdir(os.path.join(temp_dir, 'docs'))
@@ -146,7 +137,6 @@ class ConfigBaseTests(unittest.TestCase):
         """
         `site_name` is a required setting.
         """
-
         with open(os.path.join(temp_dir, 'mkdocs.yml'), 'w') as config_file:
             config_file.write("site_dir: output\nsite_url: https://www.mkdocs.org\n")
         os.mkdir(os.path.join(temp_dir, 'docs'))
@@ -278,7 +268,6 @@ class ConfigBaseTests(unittest.TestCase):
         When explicitly setting a config file, paths should be relative to the
         config file, not the working directory.
         """
-
         config_fname = os.path.join(config_dir, 'mkdocs.yml')
         with open(config_fname, 'w') as config_file:
             config_file.write("docs_dir: src\nsite_name: MkDocs Test\n")

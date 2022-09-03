@@ -112,7 +112,6 @@ class UtilsTests(unittest.TestCase):
         self.assertEqual(utils.get_relative_url('/', '/.'), './')
 
     def test_create_media_urls(self):
-
         expected_results = {
             'https://media.cdn.org/jq.js': [
                 'https://media.cdn.org/jq.js',
@@ -180,7 +179,6 @@ class UtilsTests(unittest.TestCase):
             self.assertEqual([v[i] for v in expected_results.values()], urls)
 
     def test_create_media_urls_use_directory_urls(self):
-
         expected_results = {
             'https://media.cdn.org/jq.js': [
                 'https://media.cdn.org/jq.js',
@@ -249,7 +247,6 @@ class UtilsTests(unittest.TestCase):
 
     @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
     def test_create_media_urls_windows(self):
-
         expected_results = {
             'local\\windows\\file\\jquery.js': [
                 'local/windows/file/jquery.js',
@@ -295,7 +292,6 @@ class UtilsTests(unittest.TestCase):
 
     @mock.patch('mkdocs.utils.entry_points', autospec=True)
     def test_get_theme_dir(self, mock_iter):
-
         path = 'some/path'
 
         theme = mock.Mock()
@@ -308,13 +304,11 @@ class UtilsTests(unittest.TestCase):
         self.assertEqual(utils.get_theme_dir(theme.name), os.path.abspath(path))
 
     def test_get_theme_dir_keyerror(self):
-
         with self.assertRaises(KeyError):
             utils.get_theme_dir('nonexistanttheme')
 
     @mock.patch('mkdocs.utils.entry_points', autospec=True)
     def test_get_theme_dir_importerror(self, mock_iter):
-
         theme = mock.Mock()
         theme.name = 'mkdocs2'
         theme.dist.name = 'mkdocs2'
@@ -327,7 +321,6 @@ class UtilsTests(unittest.TestCase):
 
     @mock.patch('mkdocs.utils.entry_points', autospec=True)
     def test_get_themes_warning(self, mock_iter):
-
         theme1 = mock.Mock()
         theme1.name = 'mkdocs2'
         theme1.dist.name = 'mkdocs2'
@@ -351,7 +344,6 @@ class UtilsTests(unittest.TestCase):
 
     @mock.patch('mkdocs.utils.entry_points', autospec=True)
     def test_get_themes_error(self, mock_iter):
-
         theme1 = mock.Mock()
         theme1.name = 'mkdocs'
         theme1.dist.name = 'mkdocs'
@@ -409,7 +401,6 @@ class UtilsTests(unittest.TestCase):
         self.test_nest_paths(os.path.join)
 
     def test_unicode_yaml(self):
-
         yaml_src = dedent(
             '''
             key: value
@@ -424,7 +415,6 @@ class UtilsTests(unittest.TestCase):
 
     @mock.patch.dict(os.environ, {'VARNAME': 'Hello, World!', 'BOOLVAR': 'false'})
     def test_env_var_in_yaml(self):
-
         yaml_src = dedent(
             '''
             key1: !ENV VARNAME

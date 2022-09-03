@@ -10,7 +10,6 @@ from mkdocs.tests.base import dedent, load_config
 
 
 class SiteNavigationTests(unittest.TestCase):
-
     maxDiff = None
 
     def test_simple_nav(self):

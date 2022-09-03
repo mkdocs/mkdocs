@@ -35,7 +35,6 @@ def get_context(nav, files, config, page=None, base_url=''):
     """
     Return the template context for a given page or template.
     """
-
     if page is not None:
         base_url = utils.get_relative_url('.', page.url)
 
@@ -63,7 +62,6 @@ def _build_template(name, template, files, config, nav):
     """
     Return rendered output for given template as a string.
     """
-
     # Run `pre_template` plugin events.
     template = config['plugins'].run_event(
         'pre_template', template, template_name=name, config=config

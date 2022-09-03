@@ -241,7 +241,6 @@ class ConfigTests(unittest.TestCase):
         )
 
     def test_doc_dir_in_site_dir(self):
-
         j = os.path.join
 
         test_configs = (

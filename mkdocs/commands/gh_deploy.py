@@ -31,7 +31,6 @@ def _is_cwd_git_repo():
 
 
 def _get_current_sha(repo_path):
-
     proc = subprocess.Popen(
         ['git', 'rev-parse', '--short', 'HEAD'],
         cwd=repo_path or None,
@@ -45,7 +44,6 @@ def _get_current_sha(repo_path):
 
 
 def _get_remote_url(remote_name):
-
     # No CNAME found.  We will use the origin URL to determine the GitHub
     # pages location.
     remote = f"remote.{remote_name}.url"
@@ -69,7 +67,6 @@ def _get_remote_url(remote_name):
 
 
 def _check_version(branch):
-
     proc = subprocess.Popen(
         ['git', 'show', '-s', '--format=%s', f'refs/heads/{branch}'],
         stdout=subprocess.PIPE,
@@ -100,7 +97,6 @@ def _check_version(branch):
 def gh_deploy(
     config, message=None, force=False, no_history=False, ignore_version=False, shell=False
 ):
-
     if not _is_cwd_git_repo():
         log.error('Cannot deploy - this directory does not appear to be a git repository')
 

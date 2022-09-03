@@ -270,7 +270,6 @@ class SearchPluginTests(unittest.TestCase):
 
 class SearchIndexTests(unittest.TestCase):
     def test_html_stripping(self):
-
         stripper = search_index.ContentParser()
 
         stripper.feed("<h1>Testing</h1><p>Content</p>")
@@ -278,7 +277,6 @@ class SearchIndexTests(unittest.TestCase):
         self.assertEqual(stripper.stripped_html, "Testing\nContent")
 
     def test_content_parser(self):
-
         parser = search_index.ContentParser()
 
         parser.feed('<h1 id="title">Title</h1>TEST')
@@ -289,7 +287,6 @@ class SearchIndexTests(unittest.TestCase):
         )
 
     def test_content_parser_no_id(self):
-
         parser = search_index.ContentParser()
 
         parser.feed("<h1>Title</h1>TEST")
@@ -300,7 +297,6 @@ class SearchIndexTests(unittest.TestCase):
         )
 
     def test_content_parser_content_before_header(self):
-
         parser = search_index.ContentParser()
 
         parser.feed("Content Before H1 <h1>Title</h1>TEST")
@@ -311,7 +307,6 @@ class SearchIndexTests(unittest.TestCase):
         )
 
     def test_content_parser_no_sections(self):
-
         parser = search_index.ContentParser()
 
         parser.feed("No H1 or H2<span>Title</span>TEST")
@@ -322,7 +317,6 @@ class SearchIndexTests(unittest.TestCase):
         """
         Test finding the relevant TOC item by the tag ID.
         """
-
         index = search_index.SearchIndex()
 
         md = dedent(
@@ -347,7 +341,6 @@ class SearchIndexTests(unittest.TestCase):
         self.assertEqual(toc_item3.title, "Heading 3")
 
     def test_create_search_index(self):
-
         html_content = """
         <h1 id="heading-1">Heading 1</h1>
         <p>Content 1</p>

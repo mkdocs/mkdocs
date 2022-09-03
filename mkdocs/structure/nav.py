@@ -27,7 +27,7 @@ class Navigation:
     """The [page][mkdocs.structure.pages.Page] object for the homepage of the site."""
 
     pages: List[Page]
-    """A flat list of all [page][mkdocs.structure.pages.Page] objects contained in the navigation. """
+    """A flat list of all [page][mkdocs.structure.pages.Page] objects contained in the navigation."""
 
     def __repr__(self):
         return '\n'.join(item._indent_print() for item in self)

@@ -54,7 +54,6 @@ class SearchIndex:
         the page itself and then one for each of its' heading
         tags.
         """
-
         # Create the content parser and feed in the HTML for the
         # full page. This handles all the parsing and prepares
         # us to iterate through it.
@@ -80,7 +79,6 @@ class SearchIndex:
         the absolute url for the page create an entry in the
         index
         """
-
         toc_item = self._find_toc_by_id(toc, section.id)
 
         text = ' '.join(section.text) if self.config['indexing'] == 'full' else ''
@@ -160,7 +158,6 @@ class ContentParser(HTMLParser):
     """
 
     def __init__(self, *args, **kwargs):
-
         super().__init__(*args, **kwargs)
 
         self.data = []
@@ -198,7 +195,6 @@ class ContentParser(HTMLParser):
         """
         Called for the text contents of each tag.
         """
-
         self._stripped_html.append(data)
 
         if self.section is None:

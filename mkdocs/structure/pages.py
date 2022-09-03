@@ -239,7 +239,6 @@ class Page:
         """
         Convert the Markdown source file to HTML as per the config.
         """
-
         extensions = [_RelativePathExtension(self.file, files), *config['markdown_extensions']]
 
         md = markdown.Markdown(

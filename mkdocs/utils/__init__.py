@@ -159,7 +159,6 @@ def clean_directory(directory):
         return
 
     for entry in os.listdir(directory):
-
         # Don't remove hidden files from the directory. We never copy files
         # that are hidden, so we shouldn't delete them either.
         if entry.startswith('.'):
@@ -358,7 +357,6 @@ def get_markdown_title(markdown_src):
     non-whitespace content. If it is a title, return that, otherwise return
     None.
     """
-
     lines = markdown_src.replace('\r\n', '\n').replace('\r', '\n').split('\n')
     while lines:
         line = lines.pop(0).strip()
@@ -375,7 +373,6 @@ def find_or_create_node(branch, key):
     value. If it doesn't exist, create it with the value of an empty list and
     return that.
     """
-
     for node in branch:
         if not isinstance(node, dict):
             continue

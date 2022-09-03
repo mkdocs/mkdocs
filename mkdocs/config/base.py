@@ -82,7 +82,6 @@ class Config(UserDict):
         """
         The schema is a Python dict which maps the config name to a validator.
         """
-
         self._schema = schema
         self._schema_keys = set(dict(schema).keys())
         # Ensure config_file_path is a Unicode string
@@ -103,12 +102,10 @@ class Config(UserDict):
         Set the base config by going through each validator and getting the
         default if it has one.
         """
-
         for key, config_option in self._schema:
             self[key] = config_option.default
 
     def _validate(self):
-
         failed, warnings = [], []
 
         for key, config_option in self._schema:
@@ -126,7 +123,6 @@ class Config(UserDict):
         return failed, warnings
 
     def _pre_validate(self):
-
         failed, warnings = [], []
 
         for key, config_option in self._schema:
@@ -140,7 +136,6 @@ class Config(UserDict):
         return failed, warnings
 
     def _post_validate(self):
-
         failed, warnings = [], []
 
         for key, config_option in self._schema:
@@ -154,7 +149,6 @@ class Config(UserDict):
         return failed, warnings
 
     def validate(self):
-
         failed, warnings = self._pre_validate()
 
         run_failed, run_warnings = self._validate()
@@ -217,7 +211,6 @@ def _open_config_file(config_file):
 
     The file descriptor is automatically closed when the context manager block is existed.
     """
-
     # Default to the standard config filename.
     if config_file is None:
         paths_to_try = ['mkdocs.yml', 'mkdocs.yaml']
