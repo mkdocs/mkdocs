@@ -1,10 +1,10 @@
 import os
 import unittest
-from tempfile import TemporaryDirectory
 
 from mkdocs import exceptions
 from mkdocs.config import base, defaults
 from mkdocs.config.config_options import BaseConfigOption
+from mkdocs.tests.base import change_dir, tempdir
 
 
 class ConfigBaseTests(unittest.TestCase):
@@ -41,95 +41,65 @@ class ConfigBaseTests(unittest.TestCase):
 
         self.assertEqual(len(warnings), 0)
 
-    def test_load_from_file(self):
+    @tempdir()
+    def test_load_from_file(self, temp_dir):
         """
         Users can explicitly set the config file using the '--config' option.
         Allows users to specify a config other than the default `mkdocs.yml`.
         """
 
-        temp_dir = TemporaryDirectory()
-        config_file = open(os.path.join(temp_dir.name, 'mkdocs.yml'), 'w')
-        os.mkdir(os.path.join(temp_dir.name, 'docs'))
-        try:
+        with open(os.path.join(temp_dir, 'mkdocs.yml'), 'w') as config_file:
             config_file.write("site_name: MkDocs Test\n")
-            config_file.flush()
-            config_file.close()
+        os.mkdir(os.path.join(temp_dir, 'docs'))
 
-            cfg = base.load_config(config_file=config_file.name)
-            self.assertTrue(isinstance(cfg, base.Config))
-            self.assertEqual(cfg['site_name'], 'MkDocs Test')
-        finally:
-            temp_dir.cleanup()
+        cfg = base.load_config(config_file=config_file.name)
+        self.assertTrue(isinstance(cfg, base.Config))
+        self.assertEqual(cfg['site_name'], 'MkDocs Test')
 
-    def test_load_default_file(self):
+    @tempdir()
+    def test_load_default_file(self, temp_dir):
         """
         test that `mkdocs.yml` will be loaded when '--config' is not set.
         """
 
-        temp_dir = TemporaryDirectory()
-        config_file = open(os.path.join(temp_dir.name, 'mkdocs.yml'), 'w')
-        os.mkdir(os.path.join(temp_dir.name, 'docs'))
-        old_dir = os.getcwd()
-        try:
-            os.chdir(temp_dir.name)
+        with open(os.path.join(temp_dir, 'mkdocs.yml'), 'w') as config_file:
             config_file.write("site_name: MkDocs Test\n")
-            config_file.flush()
-            config_file.close()
-
+        os.mkdir(os.path.join(temp_dir, 'docs'))
+        with change_dir(temp_dir):
             cfg = base.load_config(config_file=None)
             self.assertTrue(isinstance(cfg, base.Config))
             self.assertEqual(cfg['site_name'], 'MkDocs Test')
-        finally:
-            os.chdir(old_dir)
-            temp_dir.cleanup()
 
-    def test_load_default_file_with_yaml(self):
+    @tempdir
+    def test_load_default_file_with_yaml(self, temp_dir):
         """
         test that `mkdocs.yml` will be loaded when '--config' is not set.
         """
 
-        temp_dir = TemporaryDirectory()
-        config_file = open(os.path.join(temp_dir.name, 'mkdocs.yaml'), 'w')
-        os.mkdir(os.path.join(temp_dir.name, 'docs'))
-        old_dir = os.getcwd()
-        try:
-            os.chdir(temp_dir.name)
+        with open(os.path.join(temp_dir, 'mkdocs.yaml'), 'w') as config_file:
             config_file.write("site_name: MkDocs Test\n")
-            config_file.flush()
-            config_file.close()
-
+        os.mkdir(os.path.join(temp_dir, 'docs'))
+        with change_dir(temp_dir):
             cfg = base.load_config(config_file=None)
             self.assertTrue(isinstance(cfg, base.Config))
             self.assertEqual(cfg['site_name'], 'MkDocs Test')
-        finally:
-            os.chdir(old_dir)
-            temp_dir.cleanup()
 
-    def test_load_default_file_prefer_yml(self):
+    @tempdir()
+    def test_load_default_file_prefer_yml(self, temp_dir):
         """
         test that `mkdocs.yml` will be loaded when '--config' is not set.
         """
 
-        temp_dir = TemporaryDirectory()
-        config_file1 = open(os.path.join(temp_dir.name, 'mkdocs.yml'), 'w')
-        config_file2 = open(os.path.join(temp_dir.name, 'mkdocs.yaml'), 'w')
-        os.mkdir(os.path.join(temp_dir.name, 'docs'))
-        old_dir = os.getcwd()
-        try:
-            os.chdir(temp_dir.name)
+        with open(os.path.join(temp_dir, 'mkdocs.yml'), 'w') as config_file1:
             config_file1.write("site_name: MkDocs Test1\n")
-            config_file1.flush()
-            config_file1.close()
+        with open(os.path.join(temp_dir, 'mkdocs.yaml'), 'w') as config_file2:
             config_file2.write("site_name: MkDocs Test2\n")
-            config_file2.flush()
-            config_file2.close()
 
+        os.mkdir(os.path.join(temp_dir, 'docs'))
+        with change_dir(temp_dir):
             cfg = base.load_config(config_file=None)
             self.assertTrue(isinstance(cfg, base.Config))
             self.assertEqual(cfg['site_name'], 'MkDocs Test1')
-        finally:
-            os.chdir(old_dir)
-            temp_dir.cleanup()
 
     def test_load_from_missing_file(self):
 
@@ -138,73 +108,56 @@ class ConfigBaseTests(unittest.TestCase):
         ):
             base.load_config(config_file='missing_file.yml')
 
-    def test_load_from_open_file(self):
+    @tempdir()
+    def test_load_from_open_file(self, temp_path):
         """
         `load_config` can accept an open file descriptor.
         """
 
-        temp_dir = TemporaryDirectory()
-        temp_path = temp_dir.name
         config_fname = os.path.join(temp_path, 'mkdocs.yml')
-
         config_file = open(config_fname, 'w+')
+        config_file.write("site_name: MkDocs Test\n")
+        config_file.flush()
         os.mkdir(os.path.join(temp_path, 'docs'))
-        try:
-            config_file.write("site_name: MkDocs Test\n")
-            config_file.flush()
 
-            cfg = base.load_config(config_file=config_file)
-            self.assertTrue(isinstance(cfg, base.Config))
-            self.assertEqual(cfg['site_name'], 'MkDocs Test')
-            # load_config will always close the file
-            self.assertTrue(config_file.closed)
-        finally:
-            temp_dir.cleanup()
+        cfg = base.load_config(config_file=config_file)
+        self.assertTrue(isinstance(cfg, base.Config))
+        self.assertEqual(cfg['site_name'], 'MkDocs Test')
+        # load_config will always close the file
+        self.assertTrue(config_file.closed)
 
-    def test_load_from_closed_file(self):
+    @tempdir()
+    def test_load_from_closed_file(self, temp_dir):
         """
         The `serve` command with auto-reload may pass in a closed file descriptor.
         Ensure `load_config` reloads the closed file.
         """
 
-        temp_dir = TemporaryDirectory()
-        config_file = open(os.path.join(temp_dir.name, 'mkdocs.yml'), 'w')
-        os.mkdir(os.path.join(temp_dir.name, 'docs'))
-
-        try:
+        with open(os.path.join(temp_dir, 'mkdocs.yml'), 'w') as config_file:
             config_file.write("site_name: MkDocs Test\n")
-            config_file.flush()
-            config_file.close()
+        os.mkdir(os.path.join(temp_dir, 'docs'))
 
-            cfg = base.load_config(config_file=config_file)
-            self.assertTrue(isinstance(cfg, base.Config))
-            self.assertEqual(cfg['site_name'], 'MkDocs Test')
-        finally:
-            temp_dir.cleanup()
+        cfg = base.load_config(config_file=config_file)
+        self.assertTrue(isinstance(cfg, base.Config))
+        self.assertEqual(cfg['site_name'], 'MkDocs Test')
 
-    def test_load_missing_required(self):
+    @tempdir
+    def test_load_missing_required(self, temp_dir):
         """
         `site_name` is a required setting.
         """
 
-        temp_dir = TemporaryDirectory()
-        config_file = open(os.path.join(temp_dir.name, 'mkdocs.yml'), 'w')
-        os.mkdir(os.path.join(temp_dir.name, 'docs'))
-        try:
+        with open(os.path.join(temp_dir, 'mkdocs.yml'), 'w') as config_file:
             config_file.write("site_dir: output\nsite_url: https://www.mkdocs.org\n")
-            config_file.flush()
-            config_file.close()
+        os.mkdir(os.path.join(temp_dir, 'docs'))
 
-            with self.assertLogs('mkdocs') as cm:
-                with self.assertRaises(exceptions.Abort):
-                    base.load_config(config_file=config_file.name)
-            self.assertEqual(
-                '\n'.join(cm.output),
-                "ERROR:mkdocs.config:Config value: 'site_name'. Error: Required configuration not provided.",
-            )
-
-        finally:
-            os.remove(config_file.name)
+        with self.assertLogs('mkdocs') as cm:
+            with self.assertRaises(exceptions.Abort):
+                base.load_config(config_file=config_file.name)
+        self.assertEqual(
+            '\n'.join(cm.output),
+            "ERROR:mkdocs.config:Config value: 'site_name'. Error: Required configuration not provided.",
+        )
 
     def test_pre_validation_error(self):
         class InvalidConfigOption(BaseConfigOption):
@@ -319,29 +272,22 @@ class ConfigBaseTests(unittest.TestCase):
             ],
         )
 
-    def test_load_from_file_with_relative_paths(self):
+    @tempdir()
+    def test_load_from_file_with_relative_paths(self, config_dir):
         """
         When explicitly setting a config file, paths should be relative to the
         config file, not the working directory.
         """
 
-        config_dir = TemporaryDirectory()
-        config_fname = os.path.join(config_dir.name, 'mkdocs.yml')
-        docs_dir = os.path.join(config_dir.name, 'src')
+        config_fname = os.path.join(config_dir, 'mkdocs.yml')
+        with open(config_fname, 'w') as config_file:
+            config_file.write("docs_dir: src\nsite_name: MkDocs Test\n")
+        docs_dir = os.path.join(config_dir, 'src')
         os.mkdir(docs_dir)
 
-        config_file = open(config_fname, 'w')
-
-        try:
-            config_file.write("docs_dir: src\nsite_name: MkDocs Test\n")
-            config_file.flush()
-            config_file.close()
-
-            cfg = base.load_config(config_file=config_file)
-            self.assertTrue(isinstance(cfg, base.Config))
-            self.assertEqual(cfg['site_name'], 'MkDocs Test')
-            self.assertEqual(cfg['docs_dir'], docs_dir)
-            self.assertEqual(cfg.config_file_path, config_fname)
-            self.assertIsInstance(cfg.config_file_path, str)
-        finally:
-            config_dir.cleanup()
+        cfg = base.load_config(config_file=config_file)
+        self.assertTrue(isinstance(cfg, base.Config))
+        self.assertEqual(cfg['site_name'], 'MkDocs Test')
+        self.assertEqual(cfg['docs_dir'], docs_dir)
+        self.assertEqual(cfg.config_file_path, config_fname)
+        self.assertIsInstance(cfg.config_file_path, str)

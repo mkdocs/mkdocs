@@ -3,7 +3,6 @@
 import contextlib
 import email
 import io
-import os
 import sys
 import threading
 import time
@@ -12,7 +11,7 @@ from pathlib import Path
 from unittest import mock
 
 from mkdocs.livereload import LiveReloadServer
-from mkdocs.tests.base import tempdir
+from mkdocs.tests.base import change_dir, tempdir
 
 
 class FakeRequest:
@@ -526,14 +525,11 @@ class BuildTests(unittest.TestCase):
     @tempdir(["docs/unused.md", "README.md"], prefix="origin_dir")
     def test_watches_through_relative_symlinks(self, origin_dir, site_dir):
         docs_dir = Path(origin_dir, "docs")
-        old_cwd = os.getcwd()
-        os.chdir(docs_dir)
-        try:
-            Path(docs_dir, "README.md").symlink_to(Path("..", "README.md"))
-        except NotImplementedError:  # PyPy on Windows
-            self.skipTest("Creating symlinks not supported")
-        finally:
-            os.chdir(old_cwd)
+        with change_dir(docs_dir):
+            try:
+                Path(docs_dir, "README.md").symlink_to(Path("..", "README.md"))
+            except NotImplementedError:  # PyPy on Windows
+                self.skipTest("Creating symlinks not supported")
 
         started_building = threading.Event()
 

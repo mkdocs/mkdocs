@@ -1,10 +1,10 @@
 import os
-import tempfile
 import unittest
 from unittest import mock
 
 import mkdocs
 from mkdocs.localization import parse_locale
+from mkdocs.tests.base import tempdir
 from mkdocs.theme import Theme
 
 abs_path = os.path.abspath(os.path.dirname(__file__))
@@ -42,8 +42,8 @@ class ThemeTests(unittest.TestCase):
             },
         )
 
-    def test_custom_dir(self):
-        custom = tempfile.mkdtemp()
+    @tempdir()
+    def test_custom_dir(self, custom):
         theme = Theme(name='mkdocs', custom_dir=custom)
         self.assertEqual(
             theme.dirs,
@@ -54,8 +54,8 @@ class ThemeTests(unittest.TestCase):
             ],
         )
 
-    def test_custom_dir_only(self):
-        custom = tempfile.mkdtemp()
+    @tempdir()
+    def test_custom_dir_only(self, custom):
         theme = Theme(name=None, custom_dir=custom)
         self.assertEqual(
             theme.dirs,

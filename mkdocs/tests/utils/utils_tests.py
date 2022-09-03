@@ -4,10 +4,8 @@ import datetime
 import logging
 import os
 import posixpath
-import shutil
 import stat
 import sys
-import tempfile
 import unittest
 from unittest import mock
 
@@ -473,7 +471,9 @@ class UtilsTests(unittest.TestCase):
             with self.assertRaises(exceptions.ConfigurationError):
                 utils.yaml_load(fd)
 
-    def test_copy_files(self):
+    @tempdir()
+    @tempdir()
+    def test_copy_files(self, src_dir, dst_dir):
         cases = [
             dict(
                 src_path='foo.txt',
@@ -492,32 +492,24 @@ class UtilsTests(unittest.TestCase):
             ),
         ]
 
-        src_dir = tempfile.mkdtemp()
-        dst_dir = tempfile.mkdtemp()
+        for case in cases:
+            src, dst, expected = case['src_path'], case['dst_path'], case['expected']
+            with self.subTest(src):
+                src = os.path.join(src_dir, src)
+                with open(src, 'w') as f:
+                    f.write('content')
+                dst = os.path.join(dst_dir, dst)
+                utils.copy_file(src, dst)
+                self.assertTrue(os.path.isfile(os.path.join(dst_dir, expected)))
 
-        try:
-            for case in cases:
-                src, dst, expected = case['src_path'], case['dst_path'], case['expected']
-                with self.subTest(src):
-                    src = os.path.join(src_dir, src)
-                    with open(src, 'w') as f:
-                        f.write('content')
-                    dst = os.path.join(dst_dir, dst)
-                    utils.copy_file(src, dst)
-                    self.assertTrue(os.path.isfile(os.path.join(dst_dir, expected)))
-        finally:
-            shutil.rmtree(src_dir)
-            shutil.rmtree(dst_dir)
-
-    def test_copy_files_without_permissions(self):
+    @tempdir()
+    @tempdir()
+    def test_copy_files_without_permissions(self, src_dir, dst_dir):
         cases = [
             dict(src_path='foo.txt', expected='foo.txt'),
             dict(src_path='bar.txt', expected='bar.txt'),
             dict(src_path='baz.txt', expected='baz.txt'),
         ]
-
-        src_dir = tempfile.mkdtemp()
-        dst_dir = tempfile.mkdtemp()
 
         try:
             for case in cases:
@@ -541,8 +533,6 @@ class UtilsTests(unittest.TestCase):
                 src = os.path.join(src_dir, case['src_path'])
                 if os.path.exists(src):
                     os.chmod(src, stat.S_IRUSR | stat.S_IWUSR)
-            shutil.rmtree(src_dir)
-            shutil.rmtree(dst_dir)
 
     def test_mm_meta_data(self):
         doc = dedent(

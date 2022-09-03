@@ -1,3 +1,4 @@
+import contextlib
 import os
 import textwrap
 from functools import wraps
@@ -82,6 +83,16 @@ def tempdir(files=None, **kw):
         return wrapper
 
     return decorator
+
+
+@contextlib.contextmanager
+def change_dir(path):
+    old_cwd = os.getcwd()
+    os.chdir(path)
+    try:
+        yield
+    finally:
+        os.chdir(old_cwd)
 
 
 class PathAssertionMixin:

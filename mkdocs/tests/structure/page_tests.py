@@ -1,12 +1,11 @@
 import os
 import sys
 import unittest
-from tempfile import TemporaryDirectory
 from unittest import mock
 
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.pages import Page
-from mkdocs.tests.base import dedent, load_config
+from mkdocs.tests.base import dedent, load_config, tempdir
 
 
 class PageTests(unittest.TestCase):
@@ -412,22 +411,21 @@ class PageTests(unittest.TestCase):
         # Different File
         self.assertTrue(pg != Page('Foo', f2, cfg))
 
-    def test_BOM(self):
+    @tempdir()
+    def test_BOM(self, docs_dir):
         md_src = '# An UTF-8 encoded file with a BOM'
-        with TemporaryDirectory() as docs_dir:
-            # We don't use mkdocs.tests.base.tempdir decorator here due to uniqueness of this test.
-            cfg = load_config(docs_dir=docs_dir)
-            fl = File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
-            pg = Page(None, fl, cfg)
-            # Create an UTF-8 Encoded file with BOM (as Microsoft editors do). See #1186
-            with open(fl.abs_src_path, 'w', encoding='utf-8-sig') as f:
-                f.write(md_src)
-            # Now read the file.
-            pg.read_source(cfg)
-            # Ensure the BOM (`\ufeff`) is removed
-            self.assertNotIn('\ufeff', pg.markdown)
-            self.assertEqual(pg.markdown, md_src)
-            self.assertEqual(pg.meta, {})
+        cfg = load_config(docs_dir=docs_dir)
+        fl = File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        pg = Page(None, fl, cfg)
+        # Create an UTF-8 Encoded file with BOM (as Microsoft editors do). See #1186
+        with open(fl.abs_src_path, 'w', encoding='utf-8-sig') as f:
+            f.write(md_src)
+        # Now read the file.
+        pg.read_source(cfg)
+        # Ensure the BOM (`\ufeff`) is removed
+        self.assertNotIn('\ufeff', pg.markdown)
+        self.assertEqual(pg.markdown, md_src)
+        self.assertEqual(pg.meta, {})
 
     def test_page_edit_url(self):
         for case in [

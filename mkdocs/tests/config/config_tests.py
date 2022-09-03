@@ -1,16 +1,14 @@
 #!/usr/bin/env python
 
 import os
-import tempfile
 import unittest
-from tempfile import TemporaryDirectory
 
 import mkdocs
 from mkdocs import config
 from mkdocs.config import config_options, defaults
 from mkdocs.exceptions import ConfigurationError
 from mkdocs.localization import parse_locale
-from mkdocs.tests.base import dedent
+from mkdocs.tests.base import dedent, tempdir
 
 DEFAULT_SCHEMA = defaults.get_schema()
 
@@ -38,7 +36,8 @@ class ConfigTests(unittest.TestCase):
         with self.assertRaises(ConfigurationError):
             config.load_config(config_file='/path/that/is/not/real')
 
-    def test_invalid_config(self):
+    @tempdir()
+    def test_invalid_config(self, temp_path):
         file_contents = dedent(
             """
             - ['index.md', 'Introduction']
@@ -46,18 +45,15 @@ class ConfigTests(unittest.TestCase):
             - ['index.md', 'Introduction']
             """
         )
-        config_file = tempfile.NamedTemporaryFile('w', delete=False)
-        try:
+        config_path = os.path.join(temp_path, 'foo.yml')
+        with open(config_path, 'w') as config_file:
             config_file.write(file_contents)
-            config_file.flush()
-            config_file.close()
 
-            with self.assertRaises(ConfigurationError):
-                config.load_config(config_file=open(config_file.name, 'rb'))
-        finally:
-            os.remove(config_file.name)
+        with self.assertRaises(ConfigurationError):
+            config.load_config(config_file=open(config_file.name, 'rb'))
 
-    def test_config_option(self):
+    @tempdir()
+    def test_config_option(self, temp_path):
         """
         Users can explicitly set the config file using the '--config' option.
         Allows users to specify a config other than the default `mkdocs.yml`.
@@ -73,152 +69,149 @@ class ConfigTests(unittest.TestCase):
             - 'Introduction': 'index.md'
             """
         )
-        with TemporaryDirectory() as temp_path:
-            os.mkdir(os.path.join(temp_path, 'docs'))
-            config_path = os.path.join(temp_path, 'mkdocs.yml')
-            config_file = open(config_path, 'w')
-
+        config_path = os.path.join(temp_path, 'mkdocs.yml')
+        with open(config_path, 'w') as config_file:
             config_file.write(file_contents)
-            config_file.flush()
-            config_file.close()
+        os.mkdir(os.path.join(temp_path, 'docs'))
 
-            result = config.load_config(config_file=config_file.name)
-            self.assertEqual(result['site_name'], expected_result['site_name'])
-            self.assertEqual(result['nav'], expected_result['nav'])
+        result = config.load_config(config_file=config_file.name)
+        self.assertEqual(result['site_name'], expected_result['site_name'])
+        self.assertEqual(result['nav'], expected_result['nav'])
 
-    def test_theme(self):
-        with TemporaryDirectory() as mytheme, TemporaryDirectory() as custom:
-            configs = [
-                dict(),  # default theme
-                {"theme": "readthedocs"},  # builtin theme
-                {"theme": {'name': 'readthedocs'}},  # builtin as complex
-                {"theme": {'name': None, 'custom_dir': mytheme}},  # custom only as complex
-                {
-                    "theme": {'name': 'readthedocs', 'custom_dir': custom}
-                },  # builtin and custom as complex
-                {  # user defined variables
-                    'theme': {
-                        'name': 'mkdocs',
-                        'locale': 'fr',
-                        'static_templates': ['foo.html'],
-                        'show_sidebar': False,
-                        'some_var': 'bar',
-                    }
-                },
-            ]
+    @tempdir()
+    @tempdir()
+    def test_theme(self, mytheme, custom):
+        configs = [
+            dict(),  # default theme
+            {"theme": "readthedocs"},  # builtin theme
+            {"theme": {'name': 'readthedocs'}},  # builtin as complex
+            {"theme": {'name': None, 'custom_dir': mytheme}},  # custom only as complex
+            {
+                "theme": {'name': 'readthedocs', 'custom_dir': custom}
+            },  # builtin and custom as complex
+            {  # user defined variables
+                'theme': {
+                    'name': 'mkdocs',
+                    'locale': 'fr',
+                    'static_templates': ['foo.html'],
+                    'show_sidebar': False,
+                    'some_var': 'bar',
+                }
+            },
+        ]
 
-            mkdocs_dir = os.path.abspath(os.path.dirname(mkdocs.__file__))
-            mkdocs_templates_dir = os.path.join(mkdocs_dir, 'templates')
-            theme_dir = os.path.abspath(os.path.join(mkdocs_dir, 'themes'))
+        mkdocs_dir = os.path.abspath(os.path.dirname(mkdocs.__file__))
+        mkdocs_templates_dir = os.path.join(mkdocs_dir, 'templates')
+        theme_dir = os.path.abspath(os.path.join(mkdocs_dir, 'themes'))
 
-            results = (
-                {
-                    'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
-                    'static_templates': ['404.html', 'sitemap.xml'],
-                    'vars': {
-                        'locale': parse_locale('en'),
-                        'include_search_page': False,
-                        'search_index_only': False,
-                        'analytics': {'gtag': None},
-                        'highlightjs': True,
-                        'hljs_style': 'github',
-                        'hljs_languages': [],
-                        'navigation_depth': 2,
-                        'nav_style': 'primary',
-                        'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83},
-                    },
+        results = (
+            {
+                'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
+                'static_templates': ['404.html', 'sitemap.xml'],
+                'vars': {
+                    'locale': parse_locale('en'),
+                    'include_search_page': False,
+                    'search_index_only': False,
+                    'analytics': {'gtag': None},
+                    'highlightjs': True,
+                    'hljs_style': 'github',
+                    'hljs_languages': [],
+                    'navigation_depth': 2,
+                    'nav_style': 'primary',
+                    'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83},
                 },
-                {
-                    'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
-                    'static_templates': ['404.html', 'sitemap.xml'],
-                    'vars': {
-                        'locale': parse_locale('en'),
-                        'include_search_page': True,
-                        'search_index_only': False,
-                        'analytics': {'anonymize_ip': False, 'gtag': None},
-                        'highlightjs': True,
-                        'hljs_languages': [],
-                        'include_homepage_in_sidebar': True,
-                        'prev_next_buttons_location': 'bottom',
-                        'navigation_depth': 4,
-                        'sticky_navigation': True,
-                        'logo': None,
-                        'titles_only': False,
-                        'collapse_navigation': True,
-                    },
+            },
+            {
+                'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
+                'static_templates': ['404.html', 'sitemap.xml'],
+                'vars': {
+                    'locale': parse_locale('en'),
+                    'include_search_page': True,
+                    'search_index_only': False,
+                    'analytics': {'anonymize_ip': False, 'gtag': None},
+                    'highlightjs': True,
+                    'hljs_languages': [],
+                    'include_homepage_in_sidebar': True,
+                    'prev_next_buttons_location': 'bottom',
+                    'navigation_depth': 4,
+                    'sticky_navigation': True,
+                    'logo': None,
+                    'titles_only': False,
+                    'collapse_navigation': True,
                 },
-                {
-                    'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
-                    'static_templates': ['404.html', 'sitemap.xml'],
-                    'vars': {
-                        'locale': parse_locale('en'),
-                        'include_search_page': True,
-                        'search_index_only': False,
-                        'analytics': {'anonymize_ip': False, 'gtag': None},
-                        'highlightjs': True,
-                        'hljs_languages': [],
-                        'include_homepage_in_sidebar': True,
-                        'prev_next_buttons_location': 'bottom',
-                        'navigation_depth': 4,
-                        'sticky_navigation': True,
-                        'logo': None,
-                        'titles_only': False,
-                        'collapse_navigation': True,
-                    },
+            },
+            {
+                'dirs': [os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
+                'static_templates': ['404.html', 'sitemap.xml'],
+                'vars': {
+                    'locale': parse_locale('en'),
+                    'include_search_page': True,
+                    'search_index_only': False,
+                    'analytics': {'anonymize_ip': False, 'gtag': None},
+                    'highlightjs': True,
+                    'hljs_languages': [],
+                    'include_homepage_in_sidebar': True,
+                    'prev_next_buttons_location': 'bottom',
+                    'navigation_depth': 4,
+                    'sticky_navigation': True,
+                    'logo': None,
+                    'titles_only': False,
+                    'collapse_navigation': True,
                 },
-                {
-                    'dirs': [mytheme, mkdocs_templates_dir],
-                    'static_templates': ['sitemap.xml'],
-                    'vars': {'locale': parse_locale('en')},
+            },
+            {
+                'dirs': [mytheme, mkdocs_templates_dir],
+                'static_templates': ['sitemap.xml'],
+                'vars': {'locale': parse_locale('en')},
+            },
+            {
+                'dirs': [custom, os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
+                'static_templates': ['404.html', 'sitemap.xml'],
+                'vars': {
+                    'locale': parse_locale('en'),
+                    'include_search_page': True,
+                    'search_index_only': False,
+                    'analytics': {'anonymize_ip': False, 'gtag': None},
+                    'highlightjs': True,
+                    'hljs_languages': [],
+                    'include_homepage_in_sidebar': True,
+                    'prev_next_buttons_location': 'bottom',
+                    'navigation_depth': 4,
+                    'sticky_navigation': True,
+                    'logo': None,
+                    'titles_only': False,
+                    'collapse_navigation': True,
                 },
-                {
-                    'dirs': [custom, os.path.join(theme_dir, 'readthedocs'), mkdocs_templates_dir],
-                    'static_templates': ['404.html', 'sitemap.xml'],
-                    'vars': {
-                        'locale': parse_locale('en'),
-                        'include_search_page': True,
-                        'search_index_only': False,
-                        'analytics': {'anonymize_ip': False, 'gtag': None},
-                        'highlightjs': True,
-                        'hljs_languages': [],
-                        'include_homepage_in_sidebar': True,
-                        'prev_next_buttons_location': 'bottom',
-                        'navigation_depth': 4,
-                        'sticky_navigation': True,
-                        'logo': None,
-                        'titles_only': False,
-                        'collapse_navigation': True,
-                    },
+            },
+            {
+                'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
+                'static_templates': ['404.html', 'sitemap.xml', 'foo.html'],
+                'vars': {
+                    'locale': parse_locale('fr'),
+                    'show_sidebar': False,
+                    'some_var': 'bar',
+                    'include_search_page': False,
+                    'search_index_only': False,
+                    'analytics': {'gtag': None},
+                    'highlightjs': True,
+                    'hljs_style': 'github',
+                    'hljs_languages': [],
+                    'navigation_depth': 2,
+                    'nav_style': 'primary',
+                    'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83},
                 },
-                {
-                    'dirs': [os.path.join(theme_dir, 'mkdocs'), mkdocs_templates_dir],
-                    'static_templates': ['404.html', 'sitemap.xml', 'foo.html'],
-                    'vars': {
-                        'locale': parse_locale('fr'),
-                        'show_sidebar': False,
-                        'some_var': 'bar',
-                        'include_search_page': False,
-                        'search_index_only': False,
-                        'analytics': {'gtag': None},
-                        'highlightjs': True,
-                        'hljs_style': 'github',
-                        'hljs_languages': [],
-                        'navigation_depth': 2,
-                        'nav_style': 'primary',
-                        'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83},
-                    },
-                },
-            )
+            },
+        )
 
-            for config_contents, result in zip(configs, results):
-                with self.subTest(config_contents):
-                    c = config.Config(schema=(('theme', config_options.Theme(default='mkdocs')),))
-                    c.load_dict(config_contents)
-                    errors, warnings = c.validate()
-                    self.assertEqual(len(errors), 0)
-                    self.assertEqual(c['theme'].dirs, result['dirs'])
-                    self.assertEqual(c['theme'].static_templates, set(result['static_templates']))
-                    self.assertEqual({k: c['theme'][k] for k in iter(c['theme'])}, result['vars'])
+        for config_contents, result in zip(configs, results):
+            with self.subTest(config_contents):
+                c = config.Config(schema=(('theme', config_options.Theme(default='mkdocs')),))
+                c.load_dict(config_contents)
+                errors, warnings = c.validate()
+                self.assertEqual(len(errors), 0)
+                self.assertEqual(c['theme'].dirs, result['dirs'])
+                self.assertEqual(c['theme'].static_templates, set(result['static_templates']))
+                self.assertEqual({k: c['theme'][k] for k in iter(c['theme'])}, result['vars'])
 
     def test_empty_nav(self):
         conf = config.Config(schema=DEFAULT_SCHEMA)
