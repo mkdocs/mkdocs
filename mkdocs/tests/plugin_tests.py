@@ -8,6 +8,7 @@ from unittest import mock
 from mkdocs import config, plugins
 from mkdocs.commands import build
 from mkdocs.config import base, config_options
+from mkdocs.config.base import ValidationError
 from mkdocs.exceptions import Abort, BuildError, PluginError
 from mkdocs.tests.base import load_config
 
@@ -68,19 +69,24 @@ class TestPluginClass(unittest.TestCase):
     def test_invalid_plugin_options(self):
         plugin = DummyPlugin()
         errors, warnings = plugin.load_config({'foo': 42})
-        self.assertEqual(len(errors), 1)
-        self.assertIn('foo', errors[0])
+        self.assertEqual(
+            errors,
+            [('foo', ValidationError("Expected type: <class 'str'> but received: <class 'int'>"))],
+        )
         self.assertEqual(warnings, [])
 
         errors, warnings = plugin.load_config({'bar': 'a string'})
-        self.assertEqual(len(errors), 1)
-        self.assertIn('bar', errors[0])
+        self.assertEqual(
+            errors,
+            [('bar', ValidationError("Expected type: <class 'int'> but received: <class 'str'>"))],
+        )
         self.assertEqual(warnings, [])
 
         errors, warnings = plugin.load_config({'invalid_key': 'value'})
         self.assertEqual(errors, [])
-        self.assertEqual(len(warnings), 1)
-        self.assertIn('invalid_key', warnings[0])
+        self.assertEqual(
+            warnings, [('invalid_key', "Unrecognised configuration name: invalid_key")]
+        )
 
 
 class TestPluginCollection(unittest.TestCase):

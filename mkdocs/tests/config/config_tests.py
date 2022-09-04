@@ -6,6 +6,7 @@ import unittest
 import mkdocs
 from mkdocs import config
 from mkdocs.config import config_options, defaults
+from mkdocs.config.base import ValidationError
 from mkdocs.exceptions import ConfigurationError
 from mkdocs.localization import parse_locale
 from mkdocs.tests.base import dedent, tempdir
@@ -22,11 +23,10 @@ class ConfigTests(unittest.TestCase):
         c = config.Config(schema=DEFAULT_SCHEMA)
         c.load_dict({})
         errors, warnings = c.validate()
-        self.assertEqual(len(errors), 1)
-        self.assertEqual(errors[0][0], 'site_name')
-        self.assertEqual(str(errors[0][1]), 'Required configuration not provided.')
-
-        self.assertEqual(len(warnings), 0)
+        self.assertEqual(
+            errors, [('site_name', ValidationError("Required configuration not provided."))]
+        )
+        self.assertEqual(warnings, [])
 
     def test_empty_config(self):
         with self.assertRaises(ConfigurationError):
@@ -208,7 +208,8 @@ class ConfigTests(unittest.TestCase):
                 c = config.Config(schema=(('theme', config_options.Theme(default='mkdocs')),))
                 c.load_dict(config_contents)
                 errors, warnings = c.validate()
-                self.assertEqual(len(errors), 0)
+                self.assertEqual(errors, [])
+                self.assertEqual(warnings, [])
                 self.assertEqual(c['theme'].dirs, result['dirs'])
                 self.assertEqual(c['theme'].static_templates, set(result['static_templates']))
                 self.assertEqual({k: c['theme'][k] for k in iter(c['theme'])}, result['vars'])
@@ -233,12 +234,9 @@ class ConfigTests(unittest.TestCase):
             }
         )
         errors, warnings = conf.validate()
+        exp_error = "The configuration option 'pages' was removed from MkDocs. Use 'nav' instead."
+        self.assertEqual(errors, [('pages', ValidationError(exp_error))])
         self.assertEqual(warnings, [])
-        self.assertEqual(len(errors), 1)
-        self.assertEqual(
-            str(errors[0][1]),
-            "The configuration option 'pages' was removed from MkDocs. Use 'nav' instead.",
-        )
 
     def test_doc_dir_in_site_dir(self):
         j = os.path.join

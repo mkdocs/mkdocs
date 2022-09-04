@@ -65,6 +65,9 @@ class BaseConfigOption:
 class ValidationError(Exception):
     """Raised during the validation process of the config on errors."""
 
+    def __eq__(self, other):
+        return type(self) is type(other) and str(self) == str(other)
+
 
 PlainConfigSchemaItem = Tuple[str, BaseConfigOption]
 PlainConfigSchema = Sequence[PlainConfigSchemaItem]

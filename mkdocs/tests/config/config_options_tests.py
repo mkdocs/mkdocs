@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 import mkdocs
 from mkdocs.config import config_options
-from mkdocs.config.base import Config
+from mkdocs.config.base import Config, ValidationError
 from mkdocs.tests.base import tempdir
 from mkdocs.utils import yaml_load
 
@@ -123,33 +123,52 @@ class DeprecatedTest(unittest.TestCase):
     def test_deprecated_option_simple(self):
         option = config_options.Deprecated()
         option.pre_validation({'d': 'value'}, 'd')
-        self.assertEqual(len(option.warnings), 1)
+        self.assertEqual(
+            option.warnings,
+            [
+                "The configuration option 'd' has been deprecated and will be removed in a future release of MkDocs."
+            ],
+        )
         option.validate('value')
 
     def test_deprecated_option_message(self):
-        msg = 'custom message for {} key'
-        option = config_options.Deprecated(message=msg)
+        option = config_options.Deprecated(message='custom message for {} key')
         option.pre_validation({'d': 'value'}, 'd')
-        self.assertEqual(len(option.warnings), 1)
-        self.assertEqual(option.warnings[0], msg.format('d'))
+        self.assertEqual(option.warnings, ['custom message for d key'])
 
     def test_deprecated_option_with_type(self):
         option = config_options.Deprecated(option_type=config_options.Type(str))
         option.pre_validation({'d': 'value'}, 'd')
-        self.assertEqual(len(option.warnings), 1)
+        self.assertEqual(
+            option.warnings,
+            [
+                "The configuration option 'd' has been deprecated and will be removed in a future release of MkDocs."
+            ],
+        )
         option.validate('value')
 
     def test_deprecated_option_with_invalid_type(self):
         option = config_options.Deprecated(option_type=config_options.Type(list))
         config = {'d': 'string'}
         option.pre_validation({'d': 'value'}, 'd')
-        self.assertEqual(len(option.warnings), 1)
-        with self.assertRaises(config_options.ValidationError):
+        self.assertEqual(
+            option.warnings,
+            [
+                "The configuration option 'd' has been deprecated and will be removed in a future release of MkDocs."
+            ],
+        )
+        with self.assertRaisesRegex(
+            config_options.ValidationError,
+            "Expected type: <class 'list'> but received: <class 'str'>",
+        ):
             option.validate(config['d'])
 
     def test_removed_option(self):
         option = config_options.Deprecated(removed=True, moved_to='foo')
-        with self.assertRaises(config_options.ValidationError):
+        with self.assertRaisesRegex(
+            config_options.ValidationError,
+            "The configuration option 'd' was removed from MkDocs. Use 'foo' instead.",
+        ):
             option.pre_validation({'d': 'value'}, 'd')
 
     def test_deprecated_option_with_type_undefined(self):
@@ -160,28 +179,52 @@ class DeprecatedTest(unittest.TestCase):
         option = config_options.Deprecated(moved_to='new')
         config = {'old': 'value'}
         option.pre_validation(config, 'old')
-        self.assertEqual(len(option.warnings), 1)
+        self.assertEqual(
+            option.warnings,
+            [
+                "The configuration option 'old' has been deprecated and will be removed in a "
+                "future release of MkDocs. Use 'new' instead."
+            ],
+        )
         self.assertEqual(config, {'new': 'value'})
 
     def test_deprecated_option_move_complex(self):
         option = config_options.Deprecated(moved_to='foo.bar')
         config = {'old': 'value'}
         option.pre_validation(config, 'old')
-        self.assertEqual(len(option.warnings), 1)
+        self.assertEqual(
+            option.warnings,
+            [
+                "The configuration option 'old' has been deprecated and will be removed in a "
+                "future release of MkDocs. Use 'foo.bar' instead."
+            ],
+        )
         self.assertEqual(config, {'foo': {'bar': 'value'}})
 
     def test_deprecated_option_move_existing(self):
         option = config_options.Deprecated(moved_to='foo.bar')
         config = {'old': 'value', 'foo': {'existing': 'existing'}}
         option.pre_validation(config, 'old')
-        self.assertEqual(len(option.warnings), 1)
+        self.assertEqual(
+            option.warnings,
+            [
+                "The configuration option 'old' has been deprecated and will be removed in a "
+                "future release of MkDocs. Use 'foo.bar' instead."
+            ],
+        )
         self.assertEqual(config, {'foo': {'existing': 'existing', 'bar': 'value'}})
 
     def test_deprecated_option_move_invalid(self):
         option = config_options.Deprecated(moved_to='foo.bar')
         config = {'old': 'value', 'foo': 'wrong type'}
         option.pre_validation(config, 'old')
-        self.assertEqual(len(option.warnings), 1)
+        self.assertEqual(
+            option.warnings,
+            [
+                "The configuration option 'old' has been deprecated and will be removed in a "
+                "future release of MkDocs. Use 'foo.bar' instead."
+            ],
+        )
         self.assertEqual(config, {'old': 'value', 'foo': 'wrong type'})
 
 
@@ -495,44 +538,27 @@ class FilesystemObjectTest(unittest.TestCase):
 
                 fails, warns = cfg.validate()
 
-                self.assertEqual(len(fails), 0)
-                self.assertEqual(len(warns), 0)
+                self.assertEqual(fails, [])
+                self.assertEqual(warns, [])
                 self.assertIsInstance(cfg['dir'], str)
 
-    def test_dir_filesystemencoding(self):
+    def test_dir_bytes(self):
         cfg = Config(
             [('dir', config_options.Dir())],
             config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
         )
 
         test_config = {
-            'dir': 'Übersicht'.encode(encoding=sys.getfilesystemencoding()),
+            'dir': b'foo',
         }
 
         cfg.load_dict(test_config)
 
         fails, warns = cfg.validate()
 
-        # str does not include byte strings so validation fails
-        self.assertEqual(len(fails), 1)
-        self.assertEqual(len(warns), 0)
-
-    def test_dir_bad_encoding_fails(self):
-        cfg = Config(
-            [('dir', config_options.Dir())],
-            config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
-        )
-
-        test_config = {
-            'dir': 'юникод'.encode(encoding='ISO 8859-5'),
-        }
-
-        cfg.load_dict(test_config)
-
-        fails, warns = cfg.validate()
-
-        self.assertEqual(len(fails), 1)
-        self.assertEqual(len(warns), 0)
+        exp_error = "Expected type: <class 'str'> but received: <class 'bytes'>"
+        self.assertEqual(fails, [('dir', ValidationError(exp_error))])
+        self.assertEqual(warns, [])
 
     def test_config_dir_prepended(self):
         for cls in config_options.Dir, config_options.File, config_options.FilesystemObject:
@@ -551,9 +577,8 @@ class FilesystemObjectTest(unittest.TestCase):
 
                 fails, warns = cfg.validate()
 
-                self.assertEqual(len(fails), 0)
-                self.assertEqual(len(warns), 0)
-                self.assertIsInstance(cfg['dir'], str)
+                self.assertEqual(fails, [])
+                self.assertEqual(warns, [])
                 self.assertEqual(cfg['dir'], os.path.join(base_path, 'foo'))
 
     def test_site_dir_is_config_dir_fails(self):
@@ -619,9 +644,8 @@ class ListOfPathsTest(unittest.TestCase):
         }
         cfg.load_dict(test_config)
         fails, warns = cfg.validate()
-        self.assertEqual(len(fails), 0)
-        self.assertEqual(len(warns), 0)
-        self.assertIsInstance(cfg['watch'], list)
+        self.assertEqual(fails, [])
+        self.assertEqual(warns, [])
         self.assertEqual(cfg['watch'], [os.path.join(base_path, 'foo')])
 
 

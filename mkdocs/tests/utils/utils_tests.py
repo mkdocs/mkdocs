@@ -425,12 +425,9 @@ class UtilsTests(unittest.TestCase):
             '''
         )
         config = utils.yaml_load(yaml_src)
-        self.assertIsInstance(config['key1'], str)
         self.assertEqual(config['key1'], 'Hello, World!')
         self.assertIsNone(config['key2'])
-        self.assertIsInstance(config['key3'], str)
         self.assertEqual(config['key3'], 'default')
-        self.assertIsInstance(config['key4'], str)
         self.assertEqual(config['key4'], 'Hello, World!')
         self.assertIs(config['key5'], False)
 
