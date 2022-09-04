@@ -245,19 +245,17 @@ class Deprecated(BaseConfigOption):
             self.warnings.append(self.message.format(key_name))
 
             if self.moved_to is not None:
-                if '.' not in self.moved_to:
-                    target = config
-                    target_key = self.moved_to
-                else:
-                    move_to, target_key = self.moved_to.rsplit('.', 1)
+                *parent_keys, target_key = self.moved_to.split('.')
+                target = config
 
-                    target = config
-                    for key in move_to.split('.'):
-                        target = target.setdefault(key, {})
+                for key in parent_keys:
+                    if target.get(key) is None:
+                        target[key] = {}
+                    target = target[key]
 
-                        if not isinstance(target, dict):
-                            # We can't move it for the user
-                            return
+                    if not isinstance(target, dict):
+                        # We can't move it for the user
+                        return
 
                 target[target_key] = config.pop(key_name)
 
