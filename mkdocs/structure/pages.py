@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import os
 import posixpath
-from typing import Any, Iterable, Mapping, Optional
+from typing import TYPE_CHECKING, Any, Iterable, Mapping, Optional
 from urllib.parse import unquote as urlunquote
 from urllib.parse import urljoin, urlsplit, urlunsplit
 from xml.etree.ElementTree import Element
@@ -14,10 +14,12 @@ from markdown.treeprocessors import Treeprocessor
 from markdown.util import AMP_SUBSTITUTE
 
 from mkdocs.config.base import Config
-from mkdocs.structure import nav
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.toc import AnchorLink, get_toc
 from mkdocs.utils import get_build_date, get_markdown_title, meta
+
+if TYPE_CHECKING:
+    from mkdocs.structure.nav import Section
 
 log = logging.getLogger(__name__)
 
@@ -134,7 +136,7 @@ class Page:
     The value will be `None` if the current page is the last item in the site navigation
     or if the current page is not included in the navigation at all."""
 
-    parent: Optional['nav.Section']
+    parent: Optional[Section]
     """The immediate parent of the page in the site navigation. `None` if the
     page is at the top level."""
 
