@@ -1,3 +1,4 @@
+import functools
 import unittest
 from distutils.dist import Distribution
 from distutils.errors import DistutilsOptionError
@@ -8,10 +9,15 @@ from mkdocs.commands import babel
 BASE_DIR = path.normpath(path.join(path.abspath(path.dirname(__file__)), '../../'))
 
 
+@functools.lru_cache(maxsize=None)
+def _distribution(**kwargs):
+    return Distribution(kwargs)
+
+
 class ThemeMixinTests(unittest.TestCase):
     def test_dict_entry_point(self):
         inst = babel.ThemeMixin()
-        inst.distribution = Distribution()
+        inst.distribution = _distribution()
         inst.distribution.entry_points = {
             'mkdocs.themes': [
                 'mkdocs = mkdocs.themes.mkdocs',
@@ -22,7 +28,7 @@ class ThemeMixinTests(unittest.TestCase):
 
     def test_ini_entry_point(self):
         inst = babel.ThemeMixin()
-        inst.distribution = Distribution()
+        inst.distribution = _distribution()
         inst.distribution.entry_points = '''
             [mkdocs.themes]
             mkdocs = mkdocs.themes.mkdocs
@@ -32,7 +38,7 @@ class ThemeMixinTests(unittest.TestCase):
 
     def test_one_entry_point_as_default(self):
         inst = babel.ThemeMixin()
-        inst.distribution = Distribution()
+        inst.distribution = _distribution()
         inst.distribution.entry_points = {
             'mkdocs.themes': [
                 'mkdocs = mkdocs.themes.mkdocs',
@@ -43,7 +49,7 @@ class ThemeMixinTests(unittest.TestCase):
 
     def test_multiple_entry_points(self):
         inst = babel.ThemeMixin()
-        inst.distribution = Distribution()
+        inst.distribution = _distribution()
         inst.distribution.entry_points = {
             'mkdocs.themes': [
                 'mkdocs = mkdocs.themes.mkdocs',
@@ -57,7 +63,7 @@ class ThemeMixinTests(unittest.TestCase):
 
     def test_multiple_entry_points_no_default(self):
         inst = babel.ThemeMixin()
-        inst.distribution = Distribution()
+        inst.distribution = _distribution()
         inst.distribution.entry_points = {
             'mkdocs.themes': [
                 'mkdocs = mkdocs.themes.mkdocs',
@@ -69,14 +75,14 @@ class ThemeMixinTests(unittest.TestCase):
 
     def test_no_entry_points(self):
         inst = babel.ThemeMixin()
-        inst.distribution = Distribution()
+        inst.distribution = _distribution()
         inst.distribution.entry_points = {}
         inst.theme = 'mkdocs'
         self.assertRaises(DistutilsOptionError, inst.get_theme_dir)
 
     def test_undefined_entry_point(self):
         inst = babel.ThemeMixin()
-        inst.distribution = Distribution()
+        inst.distribution = _distribution()
         inst.distribution.entry_points = {
             'mkdocs.themes': [
                 'mkdocs = mkdocs.themes.mkdocs',
@@ -88,7 +94,7 @@ class ThemeMixinTests(unittest.TestCase):
 
 class CommandTests(unittest.TestCase):
     def test_compile_catalog(self):
-        dist = Distribution()
+        dist = _distribution()
         dist.entry_points = '''
             [mkdocs.themes]
             mkdocs = mkdocs.themes.mkdocs
@@ -100,7 +106,7 @@ class CommandTests(unittest.TestCase):
         self.assertEqual(cmd.directory, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/locales'))
 
     def test_compile_catalog_default_theme(self):
-        dist = Distribution()
+        dist = _distribution()
         dist.entry_points = '''
             [mkdocs.themes]
             mkdocs = mkdocs.themes.mkdocs
@@ -113,7 +119,7 @@ class CommandTests(unittest.TestCase):
         self.assertEqual(cmd.directory, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/locales'))
 
     def test_compile_catalog_ignore_theme(self):
-        dist = Distribution()
+        dist = _distribution()
         dist.entry_points = '''
             [mkdocs.themes]
             mkdocs = mkdocs.themes.mkdocs
@@ -126,7 +132,7 @@ class CommandTests(unittest.TestCase):
         self.assertEqual(cmd.directory, 'foo/bar')
 
     def test_extract_messages(self):
-        dist = Distribution(dict(name='foo', version='1.2'))
+        dist = _distribution(name='foo', version='1.2')
         dist.entry_points = '''
             [mkdocs.themes]
             mkdocs = mkdocs.themes.mkdocs
@@ -144,7 +150,7 @@ class CommandTests(unittest.TestCase):
         self.assertEqual(cmd.version, '1.2')
 
     def test_extract_messages_default_theme(self):
-        dist = Distribution(dict(name='foo', version='1.2'))
+        dist = _distribution(name='foo', version='1.2')
         dist.entry_points = '''
             [mkdocs.themes]
             mkdocs = mkdocs.themes.mkdocs
@@ -160,7 +166,7 @@ class CommandTests(unittest.TestCase):
         )
 
     def test_extract_messages_ingore_theme(self):
-        dist = Distribution(dict(name='foo', version='1.2'))
+        dist = _distribution(name='foo', version='1.2')
         dist.entry_points = '''
             [mkdocs.themes]
             mkdocs = mkdocs.themes.mkdocs
@@ -175,7 +181,7 @@ class CommandTests(unittest.TestCase):
         self.assertEqual(cmd.output_file, 'foo/bar/messages.pot')
 
     def test_extract_messages_ingore_theme_for_input(self):
-        dist = Distribution(dict(name='foo', version='1.2'))
+        dist = _distribution(name='foo', version='1.2')
         dist.entry_points = '''
             [mkdocs.themes]
             mkdocs = mkdocs.themes.mkdocs
@@ -191,7 +197,7 @@ class CommandTests(unittest.TestCase):
         )
 
     def test_extract_messages_ingore_theme_for_output(self):
-        dist = Distribution(dict(name='foo', version='1.2'))
+        dist = _distribution(name='foo', version='1.2')
         dist.entry_points = '''
             [mkdocs.themes]
             mkdocs = mkdocs.themes.mkdocs
@@ -205,7 +211,7 @@ class CommandTests(unittest.TestCase):
         self.assertEqual(cmd.output_file, 'foo/bar/messages.pot')
 
     def test_init_catalog(self):
-        dist = Distribution()
+        dist = _distribution()
         dist.entry_points = '''
             [mkdocs.themes]
             mkdocs = mkdocs.themes.mkdocs
@@ -221,7 +227,7 @@ class CommandTests(unittest.TestCase):
         self.assertEqual(cmd.output_dir, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/locales'))
 
     def test_init_catalog_default_theme(self):
-        dist = Distribution()
+        dist = _distribution()
         dist.entry_points = '''
             [mkdocs.themes]
             mkdocs = mkdocs.themes.mkdocs
@@ -238,7 +244,7 @@ class CommandTests(unittest.TestCase):
         self.assertEqual(cmd.output_dir, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/locales'))
 
     def test_init_catalog_ignore_theme(self):
-        dist = Distribution()
+        dist = _distribution()
         dist.entry_points = '''
             [mkdocs.themes]
             mkdocs = mkdocs.themes.mkdocs
@@ -254,7 +260,7 @@ class CommandTests(unittest.TestCase):
         self.assertEqual(cmd.output_dir, 'foo/bar')
 
     def test_init_catalog_ignore_theme_for_input(self):
-        dist = Distribution()
+        dist = _distribution()
         dist.entry_points = '''
             [mkdocs.themes]
             mkdocs = mkdocs.themes.mkdocs
@@ -269,7 +275,7 @@ class CommandTests(unittest.TestCase):
         self.assertEqual(cmd.output_dir, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/locales'))
 
     def test_init_catalog_ignore_theme_for_output(self):
-        dist = Distribution()
+        dist = _distribution()
         dist.entry_points = '''
             [mkdocs.themes]
             mkdocs = mkdocs.themes.mkdocs
@@ -286,7 +292,7 @@ class CommandTests(unittest.TestCase):
         self.assertEqual(cmd.output_dir, 'foo/bar')
 
     def test_update_catalog(self):
-        dist = Distribution()
+        dist = _distribution()
         dist.entry_points = '''
             [mkdocs.themes]
             mkdocs = mkdocs.themes.mkdocs
@@ -301,7 +307,7 @@ class CommandTests(unittest.TestCase):
         self.assertEqual(cmd.output_dir, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/locales'))
 
     def test_update_catalog_default_theme(self):
-        dist = Distribution()
+        dist = _distribution()
         dist.entry_points = '''
             [mkdocs.themes]
             mkdocs = mkdocs.themes.mkdocs
@@ -318,7 +324,7 @@ class CommandTests(unittest.TestCase):
         self.assertEqual(cmd.output_dir, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/locales'))
 
     def test_update_catalog_ignore_theme(self):
-        dist = Distribution()
+        dist = _distribution()
         dist.entry_points = '''
             [mkdocs.themes]
             mkdocs = mkdocs.themes.mkdocs
@@ -334,7 +340,7 @@ class CommandTests(unittest.TestCase):
         self.assertEqual(cmd.output_dir, 'foo/bar')
 
     def test_update_catalog_ignore_theme_for_input(self):
-        dist = Distribution()
+        dist = _distribution()
         dist.entry_points = '''
             [mkdocs.themes]
             mkdocs = mkdocs.themes.mkdocs
@@ -349,7 +355,7 @@ class CommandTests(unittest.TestCase):
         self.assertEqual(cmd.output_dir, path.join(BASE_DIR, 'mkdocs', 'themes', 'mkdocs/locales'))
 
     def test_update_catalog_ignore_theme_for_output(self):
-        dist = Distribution()
+        dist = _distribution()
         dist.entry_points = '''
             [mkdocs.themes]
             mkdocs = mkdocs.themes.mkdocs

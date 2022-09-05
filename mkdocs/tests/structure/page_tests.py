@@ -1,3 +1,4 @@
+import functools
 import os
 import sys
 import unittest
@@ -6,6 +7,8 @@ from unittest import mock
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.pages import Page
 from mkdocs.tests.base import dedent, load_config, tempdir
+
+load_config = functools.lru_cache(maxsize=None)(load_config)
 
 
 class PageTests(unittest.TestCase):
