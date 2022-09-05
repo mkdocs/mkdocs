@@ -164,7 +164,7 @@ class Type(OptionallyRequired):
         elif self.length is not None and len(value) != self.length:
             msg = (
                 f"Expected type: {self._type} with length {self.length}"
-                f" but received: {value} with length {len(value)}"
+                f" but received: {value!r} with length {len(value)}"
             )
         else:
             return value
@@ -195,7 +195,7 @@ class Choice(OptionallyRequired):
 
     def run_validation(self, value):
         if value not in self.choices:
-            raise ValidationError(f"Expected one of: {self.choices} but received: {value}")
+            raise ValidationError(f"Expected one of: {self.choices} but received: {value!r}")
         return value
 
 
@@ -245,19 +245,17 @@ class Deprecated(BaseConfigOption):
             self.warnings.append(self.message.format(key_name))
 
             if self.moved_to is not None:
-                if '.' not in self.moved_to:
-                    target = config
-                    target_key = self.moved_to
-                else:
-                    move_to, target_key = self.moved_to.rsplit('.', 1)
+                *parent_keys, target_key = self.moved_to.split('.')
+                target = config
 
-                    target = config
-                    for key in move_to.split('.'):
-                        target = target.setdefault(key, {})
+                for key in parent_keys:
+                    if target.get(key) is None:
+                        target[key] = {}
+                    target = target[key]
 
-                        if not isinstance(target, dict):
-                            # We can't move it for the user
-                            return
+                    if not isinstance(target, dict):
+                        # We can't move it for the user
+                        return
 
                 target[target_key] = config.pop(key_name)
 
@@ -408,7 +406,7 @@ class FilesystemObject(Type):
         if self.config_dir and not os.path.isabs(value):
             value = os.path.join(self.config_dir, value)
         if self.exists and not self.existence_test(value):
-            raise ValidationError(f"The path {value} isn't an existing {self.name}.")
+            raise ValidationError(f"The path '{value}' isn't an existing {self.name}.")
         return os.path.abspath(value)
 
 
@@ -483,14 +481,14 @@ class SiteDir(Dir):
             raise ValidationError(
                 f"The 'docs_dir' should not be within the 'site_dir' as this "
                 f"can mean the source files are overwritten by the output or "
-                f"it will be deleted if --clean is passed to mkdocs build."
+                f"it will be deleted if --clean is passed to mkdocs build. "
                 f"(site_dir: '{site_dir}', docs_dir: '{docs_dir}')"
             )
         elif (site_dir + os.sep).startswith(docs_dir.rstrip(os.sep) + os.sep):
             raise ValidationError(
                 f"The 'site_dir' should not be within the 'docs_dir' as this "
                 f"leads to the build directory being copied into itself and "
-                f"duplicate nested files in the 'site_dir'."
+                f"duplicate nested files in the 'site_dir'. "
                 f"(site_dir: '{site_dir}', docs_dir: '{docs_dir}')"
             )
 
@@ -527,16 +525,14 @@ class Theme(BaseConfigOption):
 
             raise ValidationError("No theme name set.")
 
-        raise ValidationError(
-            f'Invalid type "{type(value)}". Expected a string or key/value pairs.'
-        )
+        raise ValidationError(f'Invalid type {type(value)}. Expected a string or key/value pairs.')
 
     def post_validation(self, config, key_name):
         theme_config = config[key_name]
 
         if not theme_config['name'] and 'custom_dir' not in theme_config:
             raise ValidationError(
-                "At least one of 'theme.name' or 'theme.custom_dir' must be defined."
+                f"At least one of '{key_name}.name' or '{key_name}.custom_dir' must be defined."
             )
 
         # Ensure custom_dir is an absolute path
@@ -552,7 +548,7 @@ class Theme(BaseConfigOption):
             )
 
         if 'locale' in theme_config and not isinstance(theme_config['locale'], str):
-            raise ValidationError(f"'{theme_config['name']}.locale' must be a string.")
+            raise ValidationError(f"'{key_name}.locale' must be a string.")
 
         config[key_name] = theme.Theme(**theme_config)
 
