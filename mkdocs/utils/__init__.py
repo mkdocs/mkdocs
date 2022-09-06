@@ -17,18 +17,22 @@ import warnings
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import PurePath
+from typing import IO, TYPE_CHECKING, Any, Dict, Iterable, List, Optional, Tuple
 from urllib.parse import urlsplit
 
 if sys.version_info >= (3, 10):
-    from importlib.metadata import entry_points
+    from importlib.metadata import EntryPoint, entry_points
 else:
-    from importlib_metadata import entry_points
+    from importlib_metadata import EntryPoint, entry_points
 
 import yaml
 from mergedeep import merge
 from yaml_env_tag import construct_env_tag
 
 from mkdocs import exceptions
+
+if TYPE_CHECKING:
+    from mkdocs.structure.pages import Page
 
 log = logging.getLogger(__name__)
 
@@ -57,7 +61,7 @@ def get_yaml_loader(loader=yaml.Loader):
     return Loader
 
 
-def yaml_load(source, loader=None):
+def yaml_load(source: IO, loader=None) -> Optional[Dict[str, Any]]:
     """Return dict of source YAML file using loader, recursively deep merging inherited parent."""
     Loader = loader or get_yaml_loader()
     result = yaml.load(source, Loader=Loader)
@@ -85,7 +89,7 @@ def modified_time(file_path):
         return 0.0
 
 
-def get_build_timestamp():
+def get_build_timestamp() -> int:
     """
     Returns the number of seconds since the epoch.
 
@@ -99,7 +103,7 @@ def get_build_timestamp():
     return int(source_date_epoch)
 
 
-def get_build_datetime():
+def get_build_datetime() -> datetime:
     """
     Returns an aware datetime object.
 
@@ -113,7 +117,7 @@ def get_build_datetime():
     return datetime.fromtimestamp(int(source_date_epoch), timezone.utc)
 
 
-def get_build_date():
+def get_build_date() -> str:
     """
     Returns the displayable date string.
 
@@ -123,12 +127,12 @@ def get_build_date():
     return get_build_datetime().strftime('%Y-%m-%d')
 
 
-def reduce_list(data_set):
+def reduce_list(data_set: Iterable[str]) -> List[str]:
     """Reduce duplicate items in a list and preserve order"""
     return list(dict.fromkeys(data_set))
 
 
-def copy_file(source_path, output_path):
+def copy_file(source_path: str, output_path: str) -> None:
     """
     Copy source_path to output_path, making sure any parent directories exist.
 
@@ -141,7 +145,7 @@ def copy_file(source_path, output_path):
     shutil.copyfile(source_path, output_path)
 
 
-def write_file(content, output_path):
+def write_file(content: bytes, output_path: str) -> None:
     """
     Write content to output_path, making sure any parent directories exist.
     """
@@ -151,7 +155,7 @@ def write_file(content, output_path):
         f.write(content)
 
 
-def clean_directory(directory):
+def clean_directory(directory: str) -> None:
     """
     Remove the content of a directory recursively but not the directory itself.
     """
@@ -192,7 +196,7 @@ def get_url_path(path, use_directory_urls=True):
     return url
 
 
-def is_markdown_file(path):
+def is_markdown_file(path: str) -> bool:
     """
     Return True if the given file path is a Markdown file.
 
@@ -218,7 +222,7 @@ def is_template_file(path):
 _ERROR_TEMPLATE_RE = re.compile(r'^\d{3}\.html?$')
 
 
-def is_error_template(path):
+def is_error_template(path: str) -> bool:
     """
     Return True if the given file path is an HTTP error template.
     """
@@ -226,14 +230,14 @@ def is_error_template(path):
 
 
 @functools.lru_cache(maxsize=None)
-def _norm_parts(path):
+def _norm_parts(path: str) -> List[str]:
     if not path.startswith('/'):
         path = '/' + path
     path = posixpath.normpath(path)[1:]
     return path.split('/') if path else []
 
 
-def get_relative_url(url, other):
+def get_relative_url(url: str, other: str) -> str:
     """
     Return given url relative to other.
 
@@ -261,7 +265,7 @@ def get_relative_url(url, other):
     return relurl + '/' if url.endswith('/') else relurl
 
 
-def normalize_url(path, page=None, base=''):
+def normalize_url(path: str, page: Optional[Page] = None, base: str = '') -> str:
     """Return a URL relative to the given page or using the base."""
     path, is_abs = _get_norm_url(path)
     if is_abs:
@@ -272,7 +276,7 @@ def normalize_url(path, page=None, base=''):
 
 
 @functools.lru_cache(maxsize=None)
-def _get_norm_url(path):
+def _get_norm_url(path: str) -> Tuple[str, bool]:
     if not path:
         path = '.'
     elif os.sep != '/' and os.sep in path:
@@ -288,7 +292,9 @@ def _get_norm_url(path):
     return path, False
 
 
-def create_media_urls(path_list, page=None, base=''):
+def create_media_urls(
+    path_list: List[str], page: Optional[Page] = None, base: str = ''
+) -> List[str]:
     """
     Return a list of URLs relative to the given page or using the base.
     """
@@ -300,21 +306,22 @@ def path_to_url(path):
     return path.replace('\\', '/')
 
 
-def get_theme_dir(name):
+def get_theme_dir(name: str) -> str:
     """Return the directory of an installed theme by name."""
 
     theme = get_themes()[name]
     return os.path.dirname(os.path.abspath(theme.load().__file__))
 
 
-def get_themes():
+def get_themes() -> Dict[str, EntryPoint]:
     """Return a dict of all installed themes as {name: EntryPoint}."""
 
-    themes = {}
-    eps = dict.fromkeys(entry_points(group='mkdocs.themes'))
-    builtins = {ep.name for ep in eps if ep.dist.name == 'mkdocs'}
+    themes: Dict[str, EntryPoint] = {}
+    eps: Dict[EntryPoint, None] = dict.fromkeys(entry_points(group='mkdocs.themes'))
+    builtins = {ep.name for ep in eps if ep.dist is not None and ep.dist.name == 'mkdocs'}
 
     for theme in eps:
+        assert theme.dist is not None
 
         if theme.name in builtins and theme.dist.name != 'mkdocs':
             raise exceptions.ConfigurationError(
@@ -322,9 +329,11 @@ def get_themes():
                 "attempts to provide a theme with the same name."
             )
         elif theme.name in themes:
+            other_dist = themes[theme.name].dist
+            assert other_dist is not None
             log.warning(
                 f"A theme named '{theme.name}' is provided by the Python packages '{theme.dist.name}' "
-                f"and '{themes[theme.name].dist.name}'. The one in '{theme.dist.name}' will be used."
+                f"and '{other_dist.name}'. The one in '{theme.dist.name}' will be used."
             )
 
         themes[theme.name] = theme
@@ -338,7 +347,7 @@ def get_theme_names():
     return get_themes().keys()
 
 
-def dirname_to_title(dirname):
+def dirname_to_title(dirname: str) -> str:
     """Return a page tile obtained from a directory name."""
     title = dirname
     title = title.replace('-', ' ').replace('_', ' ')
@@ -349,7 +358,7 @@ def dirname_to_title(dirname):
     return title
 
 
-def get_markdown_title(markdown_src):
+def get_markdown_title(markdown_src: str) -> Optional[str]:
     """
     Get the title of a Markdown document. The title in this case is considered
     to be a H1 that occurs before any other content in the document.
@@ -363,8 +372,9 @@ def get_markdown_title(markdown_src):
         if not line.strip():
             continue
         if not line.startswith('# '):
-            return
+            return None
         return line.lstrip('# ')
+    return None
 
 
 def find_or_create_node(branch, key):
@@ -409,8 +419,8 @@ def nest_paths(paths):
 class CountHandler(logging.NullHandler):
     """Counts all logged messages >= level."""
 
-    def __init__(self, **kwargs):
-        self.counts = defaultdict(int)
+    def __init__(self, **kwargs) -> None:
+        self.counts: Dict[int, int] = defaultdict(int)
         super().__init__(**kwargs)
 
     def handle(self, record):
@@ -420,7 +430,7 @@ class CountHandler(logging.NullHandler):
             self.counts[record.levelno] += 1
         return rv
 
-    def get_counts(self):
+    def get_counts(self) -> List[Tuple[str, int]]:
         return [(logging.getLevelName(k), v) for k, v in sorted(self.counts.items(), reverse=True)]
 
 

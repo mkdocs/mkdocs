@@ -6,6 +6,10 @@ import os
 import re
 import subprocess
 from html.parser import HTMLParser
+from typing import List, Optional, Tuple
+
+from mkdocs.structure.pages import Page
+from mkdocs.structure.toc import AnchorLink, TableOfContents
 
 try:
     from lunr import lunr
@@ -23,11 +27,11 @@ class SearchIndex:
     tags and their following content are sections).
     """
 
-    def __init__(self, **config):
-        self._entries = []
+    def __init__(self, **config) -> None:
+        self._entries: List[dict] = []
         self.config = config
 
-    def _find_toc_by_id(self, toc, id_):
+    def _find_toc_by_id(self, toc, id_: Optional[str]) -> Optional[AnchorLink]:
         """
         Given a table of contents and HTML ID, iterate through
         and return the matched item in the TOC.
@@ -38,8 +42,9 @@ class SearchIndex:
             toc_item_r = self._find_toc_by_id(toc_item.children, id_)
             if toc_item_r is not None:
                 return toc_item_r
+        return None
 
-    def _add_entry(self, title, text, loc):
+    def _add_entry(self, title: Optional[str], text: str, loc: str) -> None:
         """
         A simple wrapper to add an entry, dropping bad characters.
         """
@@ -48,7 +53,7 @@ class SearchIndex:
 
         self._entries.append({'title': title, 'text': text, 'location': loc})
 
-    def add_entry_from_context(self, page):
+    def add_entry_from_context(self, page: Page) -> None:
         """
         Create a set of entries in the index for a page. One for
         the page itself and then one for each of its' heading
@@ -58,6 +63,7 @@ class SearchIndex:
         # full page. This handles all the parsing and prepares
         # us to iterate through it.
         parser = ContentParser()
+        assert page.content is not None
         parser.feed(page.content)
         parser.close()
 
@@ -73,7 +79,9 @@ class SearchIndex:
             for section in parser.data:
                 self.create_entry_for_section(section, page.toc, url)
 
-    def create_entry_for_section(self, section, toc, abs_url):
+    def create_entry_for_section(
+        self, section: ContentSection, toc: TableOfContents, abs_url: str
+    ) -> None:
         """
         Given a section on the page, the table of contents and
         the absolute url for the page create an entry in the
@@ -85,7 +93,7 @@ class SearchIndex:
         if toc_item is not None:
             self._add_entry(title=toc_item.title, text=text, loc=abs_url + toc_item.url)
 
-    def generate_search_index(self):
+    def generate_search_index(self) -> str:
         """python to json conversion"""
         page_dicts = {'docs': self._entries, 'config': self.config}
         data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'), default=str)
@@ -100,10 +108,10 @@ class SearchIndex:
                     stdin=subprocess.PIPE,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
+                    encoding='utf-8',
                 )
-                idx, err = p.communicate(data.encode('utf-8'))
+                idx, err = p.communicate(data)
                 if not err:
-                    idx = idx.decode('utf-8') if hasattr(idx, 'decode') else idx
                     page_dicts['index'] = json.loads(idx)
                     data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
                     log.debug('Pre-built search index created successfully.')
@@ -113,13 +121,13 @@ class SearchIndex:
                 log.warning(f'Failed to pre-build search index. Error: {e}')
         elif self.config['prebuild_index'] == 'python':
             if haslunrpy:
-                idx = lunr(
+                lunr_idx = lunr(
                     ref='location',
                     fields=('title', 'text'),
                     documents=self._entries,
                     languages=self.config['lang'],
                 )
-                page_dicts['index'] = idx.serialize()
+                page_dicts['index'] = lunr_idx.serialize()
                 data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'))
             else:
                 log.warning(
@@ -138,7 +146,12 @@ class ContentSection:
     need when it is parsing the HMTL.
     """
 
-    def __init__(self, text=None, id_=None, title=None):
+    def __init__(
+        self,
+        text: Optional[List[str]] = None,
+        id_: Optional[str] = None,
+        title: Optional[str] = None,
+    ) -> None:
         self.text = text or []
         self.id = id_
         self.title = title
@@ -157,15 +170,15 @@ class ContentParser(HTMLParser):
     for that section.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
-        self.data = []
-        self.section = None
+        self.data: List[ContentSection] = []
+        self.section: Optional[ContentSection] = None
         self.is_header_tag = False
-        self._stripped_html = []
+        self._stripped_html: List[str] = []
 
-    def handle_starttag(self, tag, attrs):
+    def handle_starttag(self, tag: str, attrs: List[Tuple[str, Optional[str]]]) -> None:
         """Called at the start of every HTML tag."""
 
         # We only care about the opening tag for headings.
@@ -182,7 +195,7 @@ class ContentParser(HTMLParser):
             if attr[0] == "id":
                 self.section.id = attr[1]
 
-    def handle_endtag(self, tag):
+    def handle_endtag(self, tag: str) -> None:
         """Called at the end of every HTML tag."""
 
         # We only care about the opening tag for headings.
@@ -191,7 +204,7 @@ class ContentParser(HTMLParser):
 
         self.is_header_tag = False
 
-    def handle_data(self, data):
+    def handle_data(self, data: str) -> None:
         """
         Called for the text contents of each tag.
         """
@@ -213,5 +226,5 @@ class ContentParser(HTMLParser):
             self.section.text.append(data.rstrip('\n'))
 
     @property
-    def stripped_html(self):
+    def stripped_html(self) -> str:
         return '\n'.join(self._stripped_html)

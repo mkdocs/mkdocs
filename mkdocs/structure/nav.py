@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Iterator, List, Optional, Union
+from typing import Iterator, List, Optional, Type, TypeVar, Union
 from urllib.parse import urlsplit
 
 from mkdocs.config.base import Config
@@ -211,7 +211,10 @@ def _data_to_navigation(data, files: Files, config: Config):
     return Link(title, path)
 
 
-def _get_by_type(nav, T):
+T = TypeVar('T')
+
+
+def _get_by_type(nav, T: Type[T]) -> List[T]:
     ret = []
     for item in nav:
         if isinstance(item, T):
@@ -221,7 +224,7 @@ def _get_by_type(nav, T):
     return ret
 
 
-def _add_parent_links(nav):
+def _add_parent_links(nav) -> None:
     for item in nav:
         if item.is_section:
             for child in item.children:
@@ -229,8 +232,8 @@ def _add_parent_links(nav):
             _add_parent_links(item.children)
 
 
-def _add_previous_and_next_links(pages):
-    bookended = [None] + pages + [None]
-    zipped = zip(bookended[:-2], bookended[1:-1], bookended[2:])
+def _add_previous_and_next_links(pages: List[Page]) -> None:
+    bookended = [None, *pages, None]
+    zipped = zip(bookended[:-2], pages, bookended[2:])
     for page0, page1, page2 in zipped:
         page1.previous_page, page1.next_page = page0, page2

@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import os
 import posixpath
-from typing import TYPE_CHECKING, Any, Iterable, Mapping, Optional
+from typing import TYPE_CHECKING, Any, Mapping, Optional
 from urllib.parse import unquote as urlunquote
 from urllib.parse import urljoin, urlsplit, urlunsplit
 from xml.etree.ElementTree import Element
@@ -15,11 +15,12 @@ from markdown.util import AMP_SUBSTITUTE
 
 from mkdocs.config.base import Config
 from mkdocs.structure.files import File, Files
-from mkdocs.structure.toc import AnchorLink, get_toc
+from mkdocs.structure.toc import get_toc
 from mkdocs.utils import get_build_date, get_markdown_title, meta
 
 if TYPE_CHECKING:
     from mkdocs.structure.nav import Section
+    from mkdocs.structure.toc import TableOfContents
 
 log = logging.getLogger(__name__)
 
@@ -45,10 +46,10 @@ class Page:
         # Placeholders to be filled in later in the build process.
         self.markdown = None
         self.content = None
-        self.toc = []
+        self.toc = []  # type: ignore
         self.meta = {}
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return (
             isinstance(other, self.__class__)
             and self.title == other.title
@@ -66,10 +67,13 @@ class Page:
     title: Optional[str]
     """Contains the Title for the current page."""
 
+    markdown: Optional[str]
+    """The original Markdown content from the file."""
+
     content: Optional[str]
     """The rendered Markdown as HTML, this is the contents of the documentation."""
 
-    toc: Iterable[AnchorLink]
+    toc: TableOfContents
     """An iterable object representing the Table of contents for a page. Each item in
     the `toc` is an [`AnchorLink`][mkdocs.structure.toc.AnchorLink]."""
 
@@ -158,7 +162,7 @@ class Page:
             return []
         return [self.parent] + self.parent.ancestors
 
-    def _set_canonical_url(self, base) -> None:
+    def _set_canonical_url(self, base: Optional[str]) -> None:
         if base:
             if not base.endswith('/'):
                 base += '/'
@@ -168,7 +172,7 @@ class Page:
             self.canonical_url = None
             self.abs_url = None
 
-    def _set_edit_url(self, repo_url, edit_uri) -> None:
+    def _set_edit_url(self, repo_url: Optional[str], edit_uri: Optional[str]) -> None:
         if edit_uri:
             src_uri = self.file.src_uri
             edit_uri += src_uri
@@ -186,7 +190,7 @@ class Page:
                 except ValueError as e:
                     log.warning(f"edit_uri: {edit_uri!r} is not a valid URL: {e}")
 
-            self.edit_url = urljoin(repo_url, edit_uri)
+            self.edit_url = urljoin(repo_url or '', edit_uri)
         else:
             self.edit_url = None
 
@@ -323,6 +327,6 @@ class _RelativePathExtension(Extension):
         self.file = file
         self.files = files
 
-    def extendMarkdown(self, md) -> None:
+    def extendMarkdown(self, md: markdown.Markdown) -> None:
         relpath = _RelativePathTreeprocessor(self.file, self.files)
         md.treeprocessors.register(relpath, "relpath", 0)
