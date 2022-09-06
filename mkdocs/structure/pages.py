@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import os
 import posixpath
-from typing import TYPE_CHECKING, Any, Mapping, Optional
+from typing import TYPE_CHECKING, Any, Mapping, MutableMapping, Optional, Union
 from urllib.parse import unquote as urlunquote
 from urllib.parse import urljoin, urlsplit, urlunsplit
 from xml.etree.ElementTree import Element
@@ -26,7 +26,9 @@ log = logging.getLogger(__name__)
 
 
 class Page:
-    def __init__(self, title: Optional[str], file: File, config: Config) -> None:
+    def __init__(
+        self, title: Optional[str], file: File, config: Union[Config, Mapping[str, Any]]
+    ) -> None:
         file.page = self
         self.file = file
         self.title = title
@@ -79,7 +81,7 @@ class Page:
     """An iterable object representing the Table of contents for a page. Each item in
     the `toc` is an [`AnchorLink`][mkdocs.structure.toc.AnchorLink]."""
 
-    meta: Mapping[str, Any]
+    meta: MutableMapping[str, Any]
     """A mapping of the metadata included at the top of the markdown page."""
 
     @property

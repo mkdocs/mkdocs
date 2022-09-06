@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Iterator, List, Optional, Type, TypeVar, Union
+from typing import Any, Iterator, List, Mapping, Optional, Type, TypeVar, Union
 from urllib.parse import urlsplit
 
 from mkdocs.config.base import Config
@@ -142,7 +142,7 @@ class Link:
         return '{}{}'.format('    ' * depth, repr(self))
 
 
-def get_navigation(files: Files, config: Config) -> Navigation:
+def get_navigation(files: Files, config: Union[Config, Mapping[str, Any]]) -> Navigation:
     """Build site navigation from config and files."""
     nav_config = config['nav'] or nest_paths(f.src_uri for f in files.documentation_pages())
     items = _data_to_navigation(nav_config, files, config)
@@ -189,7 +189,7 @@ def get_navigation(files: Files, config: Config) -> Navigation:
     return Navigation(items, pages)
 
 
-def _data_to_navigation(data, files: Files, config: Config):
+def _data_to_navigation(data, files: Files, config: Union[Config, Mapping[str, Any]]):
     if isinstance(data, dict):
         return [
             _data_to_navigation((key, value), files, config)
