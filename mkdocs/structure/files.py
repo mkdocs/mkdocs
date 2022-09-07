@@ -6,7 +6,7 @@ import os
 import posixpath
 import shutil
 from pathlib import PurePath
-from typing import TYPE_CHECKING, Dict, Iterable, Iterator, List, Optional
+from typing import TYPE_CHECKING, Dict, Iterable, Iterator, List, Optional, Sequence
 from urllib.parse import quote as urlquote
 
 import jinja2.environment
@@ -23,7 +23,7 @@ log = logging.getLogger(__name__)
 class Files:
     """A collection of [File][mkdocs.structure.files.File] objects."""
 
-    def __init__(self, files: List[File]):
+    def __init__(self, files: List[File]) -> None:
         self._files = files
         self._src_uris: Optional[Dict[str, File]] = None
 
@@ -72,23 +72,23 @@ class Files:
             if not file.is_documentation_page():
                 file.copy_file(dirty)
 
-    def documentation_pages(self) -> Iterable[File]:
+    def documentation_pages(self) -> Sequence[File]:
         """Return iterable of all Markdown page file objects."""
         return [file for file in self if file.is_documentation_page()]
 
-    def static_pages(self) -> Iterable[File]:
+    def static_pages(self) -> Sequence[File]:
         """Return iterable of all static page file objects."""
         return [file for file in self if file.is_static_page()]
 
-    def media_files(self) -> Iterable[File]:
+    def media_files(self) -> Sequence[File]:
         """Return iterable of all file objects which are not documentation or static pages."""
         return [file for file in self if file.is_media_file()]
 
-    def javascript_files(self) -> Iterable[File]:
+    def javascript_files(self) -> Sequence[File]:
         """Return iterable of all javascript file objects."""
         return [file for file in self if file.is_javascript()]
 
-    def css_files(self) -> Iterable[File]:
+    def css_files(self) -> Sequence[File]:
         """Return iterable of all CSS file objects."""
         return [file for file in self if file.is_css()]
 
@@ -173,7 +173,7 @@ class File:
 
     page: Optional[Page]
 
-    def __init__(self, path: str, src_dir: str, dest_dir: str, use_directory_urls: bool):
+    def __init__(self, path: str, src_dir: str, dest_dir: str, use_directory_urls: bool) -> None:
         self.page = None
         self.src_path = path
         self.abs_src_path = os.path.normpath(os.path.join(src_dir, self.src_path))
@@ -182,7 +182,7 @@ class File:
         self.abs_dest_path = os.path.normpath(os.path.join(dest_dir, self.dest_path))
         self.url = self._get_url(use_directory_urls)
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return (
             isinstance(other, self.__class__)
             and self.src_uri == other.src_uri

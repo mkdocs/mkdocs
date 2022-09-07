@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import logging
 import os
+from typing import Optional, Sequence
 
+import jinja2
 from jinja2.ext import Extension, InternationalizationExtension
 
 from mkdocs.config.base import ValidationError
@@ -31,14 +33,16 @@ class NoBabelExtension(InternationalizationExtension):  # pragma: no cover
         )
 
 
-def parse_locale(locale):
+def parse_locale(locale: str) -> Locale:
     try:
         return Locale.parse(locale, sep='_')
     except (ValueError, UnknownLocaleError, TypeError) as e:
         raise ValidationError(f'Invalid value for locale: {str(e)}')
 
 
-def install_translations(env, locale, theme_dirs):
+def install_translations(
+    env: jinja2.Environment, locale: Locale, theme_dirs: Sequence[str]
+) -> None:
     if has_babel:
         env.add_extension('jinja2.ext.i18n')
         translations = _get_merged_translations(theme_dirs, 'locales', locale)
@@ -57,8 +61,10 @@ def install_translations(env, locale, theme_dirs):
         env.install_null_translations()
 
 
-def _get_merged_translations(theme_dirs, locales_dir, locale):
-    merged_translations = None
+def _get_merged_translations(
+    theme_dirs: Sequence[str], locales_dir: str, locale: Locale
+) -> Translations:
+    merged_translations: Optional[Translations] = None
 
     log.debug(f"Looking for translations for locale '{locale}'")
     if locale.territory:

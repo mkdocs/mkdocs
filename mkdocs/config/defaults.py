@@ -3,7 +3,7 @@ from __future__ import annotations
 from mkdocs.config import base, config_options
 
 
-def get_schema():
+def get_schema() -> base.PlainConfigSchema:
     return base.get_schema(_MkDocsConfig)
 
 

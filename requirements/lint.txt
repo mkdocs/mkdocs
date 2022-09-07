@@ -5,4 +5,5 @@ mypy
 types-setuptools
 types-PyYAML
 types-Markdown
+types-Jinja2
 codespell
