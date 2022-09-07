@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import functools
 import io
+import ipaddress
 import logging
 import mimetypes
 import os
@@ -9,6 +10,7 @@ import os.path
 import pathlib
 import posixpath
 import re
+import socket
 import socketserver
 import string
 import threading
@@ -71,6 +73,8 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         self.builder = builder
         self.server_name = host
         self.server_port = port
+        if isinstance(ipaddress.ip_address(host), ipaddress.IPv6Address):
+            self.address_family = socket.AF_INET6
         self.root = os.path.abspath(root)
         self.mount_path = ("/" + mount_path.lstrip("/")).rstrip("/") + "/"
         self.url = f"http://{self.server_name}:{self.server_port}{self.mount_path}"

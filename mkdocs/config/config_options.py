@@ -292,6 +292,8 @@ class IpAddress(OptionallyRequired):
             raise ValidationError("Must be a string of format 'IP:PORT'")
 
         if host != 'localhost':
+            if host.startswith('[') and host.endswith(']'):
+                host = host[1:-1]
             try:
                 # Validate and normalize IP Address
                 host = str(ipaddress.ip_address(host))

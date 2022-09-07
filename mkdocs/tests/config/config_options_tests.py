@@ -289,6 +289,13 @@ class IpAddressTest(TestCase):
         self.assertEqual(conf['option'].host, '::1')
         self.assertEqual(conf['option'].port, 8000)
 
+    def test_valid_full_IPv6_address(self):
+        addr = '[2001:db8:85a3::8a2e:370:7334]:123'
+
+        conf = self.get_config(self.Schema, {'option': addr})
+        self.assertEqual(conf['option'].host, '2001:db8:85a3::8a2e:370:7334')
+        self.assertEqual(conf['option'].port, 123)
+
     def test_named_address(self):
         addr = 'localhost:8000'
 
@@ -368,11 +375,6 @@ class IpAddressTest(TestCase):
                 "only. Please use a third party production-ready server instead."
             ),
         )
-
-    def test_invalid_IPv6_address(self):
-        # The server will error out with this so we treat it as invalid.
-        with self.expect_error(option="'[::1]' does not appear to be an IPv4 or IPv6 address"):
-            self.get_config(self.Schema, {'option': '[::1]:8000'})
 
 
 class URLTest(TestCase):
