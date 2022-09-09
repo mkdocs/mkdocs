@@ -2,7 +2,7 @@ import os
 import unittest
 
 from mkdocs import exceptions
-from mkdocs.config import base, defaults
+from mkdocs.config import base, config_options, defaults
 from mkdocs.config.base import ValidationError
 from mkdocs.config.config_options import BaseConfigOption
 from mkdocs.tests.base import change_dir, tempdir
@@ -268,3 +268,16 @@ class ConfigBaseTests(unittest.TestCase):
         self.assertEqual(cfg['docs_dir'], docs_dir)
         self.assertEqual(cfg.config_file_path, config_fname)
         self.assertIsInstance(cfg.config_file_path, str)
+
+    def test_get_schema(self):
+        class FooConfig:
+            z = config_options.URL()
+            aa = config_options.Type(int)
+
+        self.assertEqual(
+            base.get_schema(FooConfig),
+            (
+                ('z', FooConfig.z),
+                ('aa', FooConfig.aa),
+            ),
+        )
