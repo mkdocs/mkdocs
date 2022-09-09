@@ -186,6 +186,7 @@ class Page:
                 noext = posixpath.splitext(src_uri)[0]
                 edit_uri = edit_uri_template.format(path=src_uri, path_noext=noext)
             else:
+                assert edit_uri is not None and edit_uri.endswith('/')
                 edit_uri += src_uri
             if repo_url:
                 # Ensure urljoin behavior is correct

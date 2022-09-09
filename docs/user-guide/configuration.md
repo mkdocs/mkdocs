@@ -93,6 +93,24 @@ directory.
 edit_uri: root/path/docs/
 ```
 
+For example, having this config:
+
+```yaml
+repo_url: https://example.com/project/repo
+edit_uri: blob/main/docs/
+```
+
+means that a page named 'foo/bar.md' will have its edit link lead to:  
+<https://example.com/project/repo/blob/main/docs/foo/bar.md>
+
+`edit_uri` can actually be just an absolute URL, not necessarily relative to `repo_url`, so this can achieve the same result:
+
+```yaml
+repo_url: https://example.com/project/repo/blob/main/docs/
+```
+
+For more flexibility, see [edit_uri_template](#edit_uri_template) below.
+
 > NOTE:
 > On a few known hosts (specifically GitHub, Bitbucket and GitLab), the
 > `edit_uri` is derived from the 'repo_url' and does not need to be set
@@ -123,6 +141,63 @@ access.
 **default**: `edit/master/docs/` for GitHub and GitLab repos or
 `src/default/docs/` for a Bitbucket repo, if `repo_url` matches those domains,
 otherwise `null`
+
+### edit_uri_template
+
+The more flexible variant of [edit_uri](#edit_uri). These two are equivalent:
+
+```yaml
+edit_uri: 'blob/main/docs/'
+edit_uri_template: 'blob/main/docs/{path}'
+```
+
+(they are also mutually exclusive -- don't specify both).
+
+Starting from here, you can change the positioning or formatting of the path, in case the default behavior of appending the path isn't enough.
+
+The contents of `edit_uri_template` are normal [Python format strings](https://docs.python.org/3/library/string.html#formatstrings), with only these fields available:
+
+* `{path}`, e.g. `foo/bar.md`
+* `{path_noext}`, e.g. `foo/bar`
+
+And the conversion flag `!q` is available, to percent-encode the field:
+
+* `{path!q}`, e.g. `foo%2Fbar.md`
+
+Here are some suggested configurations that can be useful:
+
+GitHub Wiki:  
+(e.g. `https://github.com/project/repo/wiki/foo/bar/_edit`)
+
+```yaml
+repo_url: 'https://github.com/project/repo/wiki'
+edit_uri_template: '{path_noext}/_edit'
+```
+
+BitBucket editor:  
+(e.g. `https://bitbucket.org/project/repo/src/master/docs/foo/bar.md?mode=edit`)
+
+```yaml
+repo_url: 'https://bitbucket.org/project/repo/'
+edit_uri_template: 'src/master/docs/{path}?mode=edit'
+```
+
+GitLab Static Site Editor:  
+(e.g. `https://gitlab.com/project/repo/-/sse/master/docs%2Ffoo%2bar.md`)
+
+```yaml
+repo_url: 'https://gitlab.com/project/repo'
+edit_uri_template: '-/sse/master/docs%2F{path!q}'
+```
+
+GitLab Web IDE:  
+(e.g. `https://gitlab.com/-/ide/project/repo/edit/master/-/docs/foo/bar.md`)
+
+```yaml
+edit_uri_template: 'https://gitlab.com/-/ide/project/repo/edit/master/-/docs/{path}'
+```
+
+**default**: `null`
 
 ### site_description
 

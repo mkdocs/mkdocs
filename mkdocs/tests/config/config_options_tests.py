@@ -417,7 +417,7 @@ class URLTest(TestCase):
             self.get_config(Schema, {'option': 1})
 
 
-class RepoURLTest(TestCase):
+class EditURITest(TestCase):
     class Schema:
         repo_url = config_options.URL()
         repo_name = config_options.RepoName('repo_url')
@@ -489,6 +489,60 @@ class RepoURLTest(TestCase):
             {'repo_url': "https://github.com/mkdocs/mkdocs", 'repo_name': 'mkdocs'},
         )
         self.assertEqual(config.get('edit_uri'), 'edit/master/docs/')
+
+    def test_edit_uri_template_ok(self):
+        config = self.get_config(
+            self.Schema,
+            {
+                'repo_url': "https://github.com/mkdocs/mkdocs",
+                'edit_uri_template': 'edit/foo/docs/{path}',
+            },
+        )
+        self.assertEqual(config['edit_uri_template'], 'edit/foo/docs/{path}')
+
+    def test_edit_uri_template_errors(self):
+        with self.expect_error(
+            edit_uri_template=re.compile(r'.*[{}].*')  # Complains about unclosed '{' or missing '}'
+        ):
+            self.get_config(
+                self.Schema,
+                {
+                    'repo_url': "https://github.com/mkdocs/mkdocs",
+                    'edit_uri_template': 'edit/master/{path',
+                },
+            )
+
+        with self.expect_error(edit_uri_template=re.compile(r'.*\bz\b.*')):
+            self.get_config(
+                self.Schema,
+                {
+                    'repo_url': "https://github.com/mkdocs/mkdocs",
+                    'edit_uri_template': 'edit/master/{path!z}',
+                },
+            )
+
+        with self.expect_error(edit_uri_template="Unknown template substitute: 'foo'"):
+            self.get_config(
+                self.Schema,
+                {
+                    'repo_url': "https://github.com/mkdocs/mkdocs",
+                    'edit_uri_template': 'edit/master/{foo}',
+                },
+            )
+
+    def test_edit_uri_template_warning(self):
+        config = self.get_config(
+            self.Schema,
+            {
+                'repo_url': "https://github.com/mkdocs/mkdocs",
+                'edit_uri': 'edit',
+                'edit_uri_template': 'edit/master/{path}',
+            },
+            warnings=dict(
+                edit_uri_template="The option 'edit_uri' has no effect when 'edit_uri_template' is set."
+            ),
+        )
+        self.assertEqual(config['edit_uri_template'], 'edit/master/{path}')
 
 
 class ListOfItemsTest(TestCase):
