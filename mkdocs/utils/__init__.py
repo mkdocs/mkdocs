@@ -17,7 +17,18 @@ import warnings
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import PurePath
-from typing import IO, TYPE_CHECKING, Any, Dict, Iterable, List, Optional, Tuple
+from typing import (
+    IO,
+    TYPE_CHECKING,
+    Any,
+    Dict,
+    Iterable,
+    List,
+    MutableSequence,
+    Optional,
+    Tuple,
+    TypeVar,
+)
 from urllib.parse import urlsplit
 
 if sys.version_info >= (3, 10):
@@ -33,6 +44,8 @@ from mkdocs import exceptions
 
 if TYPE_CHECKING:
     from mkdocs.structure.pages import Page
+
+T = TypeVar('T')
 
 log = logging.getLogger(__name__)
 
@@ -130,6 +143,18 @@ def get_build_date() -> str:
 def reduce_list(data_set: Iterable[str]) -> List[str]:
     """Reduce duplicate items in a list and preserve order"""
     return list(dict.fromkeys(data_set))
+
+
+if sys.version_info >= (3, 10):
+    from bisect import insort
+else:
+
+    def insort(a: MutableSequence[T], x: T, *, key=lambda v: v) -> None:
+        kx = key(x)
+        i = len(a)
+        while i > 0 and kx < key(a[i - 1]):
+            i -= 1
+        a.insert(i, x)
 
 
 def copy_file(source_path: str, output_path: str) -> None:

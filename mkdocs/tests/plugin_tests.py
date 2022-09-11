@@ -117,6 +117,45 @@ class TestPluginCollection(unittest.TestCase):
             },
         )
 
+    def test_event_priorities(self):
+        class PrioPlugin(plugins.BasePlugin):
+            config_scheme = base.get_schema(_DummyPluginConfig)
+
+            @plugins.event_priority(100)
+            def on_pre_page(self, content, **kwargs):
+                pass
+
+            @plugins.event_priority(-100)
+            def on_nav(self, item, **kwargs):
+                pass
+
+            def on_page_read_source(self, **kwargs):
+                pass
+
+            @plugins.event_priority(-50)
+            def on_post_build(self, **kwargs):
+                pass
+
+        collection = plugins.PluginCollection()
+        collection['dummy'] = dummy = DummyPlugin()
+        collection['prio'] = prio = PrioPlugin()
+        self.assertEqual(
+            collection.events['pre_page'],
+            [prio.on_pre_page, dummy.on_pre_page],
+        )
+        self.assertEqual(
+            collection.events['nav'],
+            [dummy.on_nav, prio.on_nav],
+        )
+        self.assertEqual(
+            collection.events['page_read_source'],
+            [dummy.on_page_read_source, prio.on_page_read_source],
+        )
+        self.assertEqual(
+            collection.events['post_build'],
+            [prio.on_post_build],
+        )
+
     def test_set_plugin_on_collection(self):
         collection = plugins.PluginCollection()
         plugin = DummyPlugin()
