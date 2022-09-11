@@ -241,7 +241,7 @@ def build_command(clean, **kwargs):
 
     _enable_warnings()
     cfg = config.load_config(**kwargs)
-    cfg['plugins'].run_event('startup', command='build')
+    cfg['plugins'].run_event('startup', command='build', dirty=not clean)
     try:
         build.build(cfg, dirty=not clean)
     finally:
@@ -268,7 +268,7 @@ def gh_deploy_command(
 
     _enable_warnings()
     cfg = config.load_config(remote_branch=remote_branch, remote_name=remote_name, **kwargs)
-    cfg['plugins'].run_event('startup', command='gh-deploy')
+    cfg['plugins'].run_event('startup', command='gh-deploy', dirty=not clean)
     try:
         build.build(cfg, dirty=not clean)
     finally:

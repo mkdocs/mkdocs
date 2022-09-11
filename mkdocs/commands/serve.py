@@ -54,6 +54,9 @@ def serve(
         **kwargs,
     )
 
+    live_server = livereload in ('dirty', 'livereload')
+    dirty = livereload == 'dirty'
+
     def builder(config=None):
         log.info("Building documentation...")
         if config is None:
@@ -68,12 +71,10 @@ def serve(
         # Override a few config settings after validation
         config['site_url'] = 'http://{}{}'.format(config['dev_addr'], mount_path(config))
 
-        live_server = livereload in ['dirty', 'livereload']
-        dirty = livereload == 'dirty'
         build(config, live_server=live_server, dirty=dirty)
 
     config = get_config()
-    config['plugins'].run_event('startup', command='serve')
+    config['plugins'].run_event('startup', command='serve', dirty=dirty)
 
     try:
         # Perform the initial build
@@ -93,7 +94,7 @@ def serve(
 
         server.error_handler = error_handler
 
-        if livereload in ['livereload', 'dirty']:
+        if live_server:
             # Watch the documentation files, the config file and the theme files.
             server.watch(config['docs_dir'])
             server.watch(config['config_file_path'])

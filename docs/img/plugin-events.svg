@@ -8,8 +8,8 @@
 <g id="clust1" class="cluster">
 <title>cluster_on_startup</title>
 <g id="a_clust1"><a xlink:href="#on_startup" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="227,-1693.8 227,-1769.8 321,-1769.8 321,-1693.8 227,-1693.8"/>
-<text text-anchor="middle" x="274" y="-1754.6" font-family="inherit" font-size="14.00">on_startup</text>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="199,-1693.8 199,-1769.8 341,-1769.8 341,-1693.8 199,-1693.8"/>
+<text text-anchor="middle" x="270" y="-1754.6" font-family="inherit" font-size="14.00">on_startup</text>
 </a>
 </g>
 </g>
@@ -24,32 +24,32 @@
 <g id="clust3" class="cluster">
 <title>cluster_on_config</title>
 <g id="a_clust3"><a xlink:href="#on_config" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="234,-1534.8 234,-1610.8 314,-1610.8 314,-1534.8 234,-1534.8"/>
-<text text-anchor="middle" x="274" y="-1595.6" font-family="inherit" font-size="14.00">on_config</text>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="230,-1534.8 230,-1610.8 310,-1610.8 310,-1534.8 230,-1534.8"/>
+<text text-anchor="middle" x="270" y="-1595.6" font-family="inherit" font-size="14.00">on_config</text>
 </a>
 </g>
 </g>
 <g id="clust4" class="cluster">
 <title>cluster_on_pre_build</title>
 <g id="a_clust4"><a xlink:href="#on_pre_build" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="165,-1450.8 165,-1526.8 265,-1526.8 265,-1450.8 165,-1450.8"/>
-<text text-anchor="middle" x="215" y="-1511.6" font-family="inherit" font-size="14.00">on_pre_build</text>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="161,-1450.8 161,-1526.8 261,-1526.8 261,-1450.8 161,-1450.8"/>
+<text text-anchor="middle" x="211" y="-1511.6" font-family="inherit" font-size="14.00">on_pre_build</text>
 </a>
 </g>
 </g>
 <g id="clust5" class="cluster">
 <title>cluster_on_files</title>
 <g id="a_clust5"><a xlink:href="#on_files" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="230,-1366.8 230,-1442.8 346,-1442.8 346,-1366.8 230,-1366.8"/>
-<text text-anchor="middle" x="288" y="-1427.6" font-family="inherit" font-size="14.00">on_files</text>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="226,-1366.8 226,-1442.8 342,-1442.8 342,-1366.8 226,-1366.8"/>
+<text text-anchor="middle" x="284" y="-1427.6" font-family="inherit" font-size="14.00">on_files</text>
 </a>
 </g>
 </g>
 <g id="clust6" class="cluster">
 <title>cluster_on_nav</title>
 <g id="a_clust6"><a xlink:href="#on_nav" xlink:title=" ">
-<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="185,-1218.8 185,-1294.8 339,-1294.8 339,-1218.8 185,-1218.8"/>
-<text text-anchor="middle" x="262" y="-1279.6" font-family="inherit" font-size="14.00">on_nav</text>
+<polygon fill="#ffff33" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.533333" points="181,-1218.8 181,-1294.8 335,-1294.8 335,-1218.8 181,-1218.8"/>
+<text text-anchor="middle" x="258" y="-1279.6" font-family="inherit" font-size="14.00">on_nav</text>
 </a>
 </g>
 </g>
@@ -185,8 +185,10 @@
 <g id="node1" class="node">
 <title>on_startup</title>
 <g id="a_node1"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="234.5,-1702.3 234.5,-1738.3 313.5,-1738.3 313.5,-1702.3 234.5,-1702.3"/>
-<text text-anchor="middle" x="274" y="-1716.6" font-family="inherit" font-size="14.00">command</text>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="207,-1702.3 207,-1738.3 333,-1738.3 333,-1702.3 207,-1702.3"/>
+<text text-anchor="middle" x="246.5" y="-1716.6" font-family="inherit" font-size="14.00">command</text>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="286,-1702.3 286,-1738.3"/>
+<text text-anchor="middle" x="309.5" y="-1716.6" font-family="inherit" font-size="14.00">dirty</text>
 </a>
 </g>
 </g>
@@ -194,8 +196,8 @@
 <g id="node6" class="node">
 <title>load_config</title>
 <g id="a_node6"><a xlink:title=" ">
-<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.600000" cx="274" cy="-1636.8" rx="59.29" ry="18"/>
-<text text-anchor="middle" x="274" y="-1633.1" font-family="inherit" font-size="14.00">load_config</text>
+<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.600000" cx="270" cy="-1636.8" rx="59.29" ry="18"/>
+<text text-anchor="middle" x="270" y="-1633.1" font-family="inherit" font-size="14.00">load_config</text>
 </a>
 </g>
 </g>
@@ -204,8 +206,8 @@
 <g id="node2" class="node">
 <title>on_config</title>
 <g id="a_node2"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="246,-1543.3 246,-1579.3 302,-1579.3 302,-1543.3 246,-1543.3"/>
-<text text-anchor="middle" x="274" y="-1557.6" font-family="inherit" font-size="14.00">config</text>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="242,-1543.3 242,-1579.3 298,-1579.3 298,-1543.3 242,-1543.3"/>
+<text text-anchor="middle" x="270" y="-1557.6" font-family="inherit" font-size="14.00">config</text>
 </a>
 </g>
 </g>
@@ -213,8 +215,8 @@
 <g id="node3" class="node">
 <title>on_pre_build</title>
 <g id="a_node3"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="200,-1459.3 200,-1495.3 256,-1495.3 256,-1459.3 200,-1459.3"/>
-<text text-anchor="middle" x="228" y="-1473.6" font-family="inherit" font-size="14.00">config</text>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="196,-1459.3 196,-1495.3 252,-1495.3 252,-1459.3 196,-1459.3"/>
+<text text-anchor="middle" x="224" y="-1473.6" font-family="inherit" font-size="14.00">config</text>
 </a>
 </g>
 </g>
@@ -222,8 +224,8 @@
 <g id="edge2" class="edge">
 <title>on_config:s&#45;&gt;on_pre_build:n</title>
 <g id="a_edge2"><a xlink:title=" ">
-<path fill="none" stroke="black" d="M274,-1542.3C274,-1536.71 246.48,-1516.57 234.01,-1504.39"/>
-<polygon fill="black" stroke="black" points="236.77,-1502.24 228,-1496.3 231.16,-1506.41 236.77,-1502.24"/>
+<path fill="none" stroke="black" d="M270,-1542.3C270,-1536.71 242.48,-1516.57 230.01,-1504.39"/>
+<polygon fill="black" stroke="black" points="232.77,-1502.24 224,-1496.3 227.16,-1506.41 232.77,-1502.24"/>
 </a>
 </g>
 </g>
@@ -231,8 +233,8 @@
 <g id="node7" class="node">
 <title>get_files</title>
 <g id="a_node7"><a xlink:title=" ">
-<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.600000" cx="320" cy="-1477.3" rx="46.29" ry="18"/>
-<text text-anchor="middle" x="320" y="-1473.6" font-family="inherit" font-size="14.00">get_files</text>
+<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.600000" cx="316" cy="-1477.3" rx="46.29" ry="18"/>
+<text text-anchor="middle" x="316" y="-1473.6" font-family="inherit" font-size="14.00">get_files</text>
 </a>
 </g>
 </g>
@@ -240,8 +242,8 @@
 <g id="edge3" class="edge">
 <title>on_config:s&#45;&gt;get_files</title>
 <g id="a_edge3"><a xlink:title=" ">
-<path fill="none" stroke="black" d="M274,-1542.3C274,-1526.62 283.21,-1512.16 293.39,-1500.97"/>
-<polygon fill="black" stroke="black" points="295.96,-1503.34 300.49,-1493.76 290.98,-1498.43 295.96,-1503.34"/>
+<path fill="none" stroke="black" d="M270,-1542.3C270,-1526.62 279.21,-1512.16 289.39,-1500.97"/>
+<polygon fill="black" stroke="black" points="291.96,-1503.34 296.49,-1493.76 286.98,-1498.43 291.96,-1503.34"/>
 </a>
 </g>
 </g>
@@ -249,10 +251,10 @@
 <g id="node4" class="node">
 <title>on_files</title>
 <g id="a_node4"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="238.5,-1375.3 238.5,-1411.3 337.5,-1411.3 337.5,-1375.3 238.5,-1375.3"/>
-<text text-anchor="middle" x="260" y="-1389.6" font-family="inherit" font-size="14.00">files</text>
-<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="281.5,-1375.3 281.5,-1411.3"/>
-<text text-anchor="middle" x="309.5" y="-1389.6" font-family="inherit" font-size="14.00">config</text>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="234.5,-1375.3 234.5,-1411.3 333.5,-1411.3 333.5,-1375.3 234.5,-1375.3"/>
+<text text-anchor="middle" x="256" y="-1389.6" font-family="inherit" font-size="14.00">files</text>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="277.5,-1375.3 277.5,-1411.3"/>
+<text text-anchor="middle" x="305.5" y="-1389.6" font-family="inherit" font-size="14.00">config</text>
 </a>
 </g>
 </g>
@@ -261,12 +263,12 @@
 <g id="node5" class="node">
 <title>on_nav</title>
 <g id="a_node5"><a xlink:title=" ">
-<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="193.5,-1227.3 193.5,-1263.3 330.5,-1263.3 330.5,-1227.3 193.5,-1227.3"/>
-<text text-anchor="middle" x="212.5" y="-1241.6" font-family="inherit" font-size="14.00">nav</text>
-<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="231.5,-1227.3 231.5,-1263.3"/>
-<text text-anchor="middle" x="259.5" y="-1241.6" font-family="inherit" font-size="14.00">config</text>
-<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="287.5,-1227.3 287.5,-1263.3"/>
-<text text-anchor="middle" x="309" y="-1241.6" font-family="inherit" font-size="14.00">files</text>
+<polygon fill="#ffffff" fill-opacity="0.333333" stroke="#000000" stroke-opacity="0.600000" points="189.5,-1227.3 189.5,-1263.3 326.5,-1263.3 326.5,-1227.3 189.5,-1227.3"/>
+<text text-anchor="middle" x="208.5" y="-1241.6" font-family="inherit" font-size="14.00">nav</text>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="227.5,-1227.3 227.5,-1263.3"/>
+<text text-anchor="middle" x="255.5" y="-1241.6" font-family="inherit" font-size="14.00">config</text>
+<polyline fill="none" stroke="#000000" stroke-opacity="0.600000" points="283.5,-1227.3 283.5,-1263.3"/>
+<text text-anchor="middle" x="305" y="-1241.6" font-family="inherit" font-size="14.00">files</text>
 </a>
 </g>
 </g>
@@ -274,8 +276,8 @@
 <g id="edge7" class="edge">
 <title>on_files:s&#45;&gt;on_nav:n</title>
 <g id="a_edge7"><a xlink:title=" ">
-<path fill="none" stroke="black" d="M260,-1374.3C260,-1352.14 284.73,-1358.43 295,-1338.8 308.91,-1312.21 309.15,-1300.61 309.03,-1274.59"/>
-<polygon fill="black" stroke="black" points="312.53,-1274.29 309,-1264.3 305.53,-1274.31 312.53,-1274.29"/>
+<path fill="none" stroke="black" d="M256,-1374.3C256,-1352.14 280.73,-1358.43 291,-1338.8 304.91,-1312.21 305.15,-1300.61 305.03,-1274.59"/>
+<polygon fill="black" stroke="black" points="308.53,-1274.29 305,-1264.3 301.53,-1274.31 308.53,-1274.29"/>
 </a>
 </g>
 </g>
@@ -283,8 +285,8 @@
 <g id="node8" class="node">
 <title>get_nav</title>
 <g id="a_node8"><a xlink:title=" ">
-<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.600000" cx="220" cy="-1320.8" rx="43.59" ry="18"/>
-<text text-anchor="middle" x="220" y="-1317.1" font-family="inherit" font-size="14.00">get_nav</text>
+<ellipse fill="#77ff77" fill-opacity="0.533333" stroke="#000000" stroke-opacity="0.600000" cx="216" cy="-1320.8" rx="43.59" ry="18"/>
+<text text-anchor="middle" x="216" y="-1317.1" font-family="inherit" font-size="14.00">get_nav</text>
 </a>
 </g>
 </g>
@@ -292,8 +294,8 @@
 <g id="edge5" class="edge">
 <title>on_files:s&#45;&gt;get_nav</title>
 <g id="a_edge5"><a xlink:title=" ">
-<path fill="none" stroke="black" d="M260,-1374.3C260,-1363.19 254.26,-1352.96 247.12,-1344.54"/>
-<polygon fill="black" stroke="black" points="249.43,-1341.88 240,-1337.05 244.36,-1346.71 249.43,-1341.88"/>
+<path fill="none" stroke="black" d="M256,-1374.3C256,-1363.19 250.26,-1352.96 243.12,-1344.54"/>
+<polygon fill="black" stroke="black" points="245.43,-1341.88 236,-1337.05 240.36,-1346.71 245.43,-1341.88"/>
 </a>
 </g>
 </g>
@@ -311,7 +313,7 @@
 <g id="node14" class="node">
 <title>pages_point_a</title>
 <g id="a_node14"><a xlink:title=" ">
-<ellipse fill="black" stroke="black" cx="309" cy="-1189" rx="1.8" ry="1.8"/>
+<ellipse fill="black" stroke="black" cx="305" cy="-1189" rx="1.8" ry="1.8"/>
 </a>
 </g>
 </g>
@@ -319,7 +321,7 @@
 <g id="edge12" class="edge">
 <title>on_nav:s&#45;&gt;pages_point_a</title>
 <g id="a_edge12"><a xlink:title=" ">
-<path fill="none" stroke="black" d="M309,-1226.3C309,-1212.18 309,-1194.98 309,-1190.9"/>
+<path fill="none" stroke="black" d="M305,-1226.3C305,-1212.18 305,-1194.98 305,-1190.9"/>
 </a>
 </g>
 </g>
@@ -336,7 +338,7 @@
 <g id="edge28" class="edge">
 <title>on_nav:s&#45;&gt;get_context</title>
 <g id="a_edge28"><a xlink:title=" ">
-<path fill="none" stroke="black" d="M212,-1226.3C212,-1177.66 395.51,-1227 428,-1190.8 455.08,-1160.62 433,-1140.25 433,-1099.7 433,-1099.7 433,-1099.7 433,-706.4 433,-656.67 403.87,-645.02 360,-621.6 337.19,-609.42 324.79,-620.79 303.65,-616.51"/>
+<path fill="none" stroke="black" d="M208,-1226.3C208,-1176.78 394.87,-1227.61 428,-1190.8 455.13,-1160.66 433,-1140.25 433,-1099.7 433,-1099.7 433,-1099.7 433,-706.4 433,-656.67 403.87,-645.02 360,-621.6 337.19,-609.42 324.79,-620.79 303.65,-616.51"/>
 <polygon fill="black" stroke="black" points="304.58,-613.13 294,-613.6 302.57,-619.84 304.58,-613.13"/>
 </a>
 </g>
@@ -345,8 +347,8 @@
 <g id="edge1" class="edge">
 <title>load_config&#45;&gt;on_config:n</title>
 <g id="a_edge1"><a xlink:title=" ">
-<path fill="none" stroke="black" d="M274,-1618.8C274,-1610.64 274,-1600.5 274,-1590.53"/>
-<polygon fill="black" stroke="black" points="277.5,-1590.3 274,-1580.3 270.5,-1590.3 277.5,-1590.3"/>
+<path fill="none" stroke="black" d="M270,-1618.8C270,-1610.64 270,-1600.5 270,-1590.53"/>
+<polygon fill="black" stroke="black" points="273.5,-1590.3 270,-1580.3 266.5,-1590.3 273.5,-1590.3"/>
 </a>
 </g>
 </g>
@@ -354,8 +356,8 @@
 <g id="edge4" class="edge">
 <title>get_files&#45;&gt;on_files:n</title>
 <g id="a_edge4"><a xlink:title=" ">
-<path fill="none" stroke="black" d="M294.55,-1462.16C280.88,-1452.84 265.92,-1439.27 261.38,-1422.52"/>
-<polygon fill="black" stroke="black" points="264.81,-1421.74 260,-1412.3 257.87,-1422.68 264.81,-1421.74"/>
+<path fill="none" stroke="black" d="M290.55,-1462.16C276.88,-1452.84 261.92,-1439.27 257.38,-1422.52"/>
+<polygon fill="black" stroke="black" points="260.81,-1421.74 256,-1412.3 253.87,-1422.68 260.81,-1421.74"/>
 </a>
 </g>
 </g>
@@ -363,8 +365,8 @@
 <g id="edge6" class="edge">
 <title>get_nav&#45;&gt;on_nav:n</title>
 <g id="a_edge6"><a xlink:title=" ">
-<path fill="none" stroke="black" d="M216.19,-1302.4C214.66,-1294.31 213.09,-1284.32 212.39,-1274.45"/>
-<polygon fill="black" stroke="black" points="215.88,-1274.16 212,-1264.3 208.88,-1274.43 215.88,-1274.16"/>
+<path fill="none" stroke="black" d="M212.19,-1302.4C210.66,-1294.31 209.09,-1284.32 208.39,-1274.45"/>
+<polygon fill="black" stroke="black" points="211.88,-1274.16 208,-1264.3 204.88,-1274.43 211.88,-1274.16"/>
 </a>
 </g>
 </g>
@@ -493,7 +495,7 @@
 <g id="edge13" class="edge">
 <title>pages_point_a&#45;&gt;on_pre_page:n</title>
 <g id="a_edge13"><a xlink:title=" ">
-<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M307.25,-1187.98C299.31,-1187.85 265.94,-1186.87 240,-1179.2 183.02,-1162.36 119.88,-1178.66 112.68,-1127.97"/>
+<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M303.35,-1187.97C295.87,-1187.77 264.43,-1186.52 240,-1179.2 183.09,-1162.14 119.89,-1178.63 112.68,-1127.97"/>
 <polygon fill="black" stroke="black" stroke-width="1.5" points="116.15,-1127.45 112,-1117.7 109.17,-1127.91 116.15,-1127.45"/>
 </a>
 </g>
@@ -502,8 +504,8 @@
 <g id="edge14" class="edge">
 <title>pages_point_a&#45;&gt;render_p</title>
 <g id="a_edge14"><a xlink:title=" ">
-<path fill="none" stroke="black" d="M308.53,-1187.21C307.66,-1185.71 305.82,-1182.31 305,-1179.2 275.1,-1066.19 350.26,-1004.92 290.04,-917.48"/>
-<polygon fill="black" stroke="black" points="292.72,-915.22 284,-909.21 287.07,-919.35 292.72,-915.22"/>
+<path fill="none" stroke="black" d="M304.65,-1187.19C304,-1185.67 302.63,-1182.23 302,-1179.2 290.63,-1124.31 314.02,-979.63 288.52,-918.91"/>
+<polygon fill="black" stroke="black" points="291.62,-917.28 284,-909.91 285.36,-920.42 291.62,-917.28"/>
 </a>
 </g>
 </g>
@@ -520,8 +522,8 @@
 <g id="edge15" class="edge">
 <title>pages_point_a&#45;&gt;placeholder_cluster_populate_page_2:n</title>
 <g id="a_edge15"><a xlink:title=" ">
-<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M309.08,-1187.2C310.26,-1175.35 323.98,-1034.83 326.58,-906.22"/>
-<polygon fill="black" stroke="black" stroke-width="1.5" points="330.08,-906.26 326.76,-896.2 323.08,-906.13 330.08,-906.26"/>
+<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M305.1,-1187.2C306.53,-1175.36 323.3,-1034.9 326.48,-906.23"/>
+<polygon fill="black" stroke="black" stroke-width="1.5" points="329.98,-906.27 326.7,-896.2 322.98,-906.12 329.98,-906.27"/>
 </a>
 </g>
 </g>
@@ -538,7 +540,7 @@
 <g id="edge17" class="edge">
 <title>pages_point_a&#45;&gt;placeholder_cluster_populate_page_3:n</title>
 <g id="a_edge17"><a xlink:title=" ">
-<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M310.17,-1187.05C321.59,-1177.62 413,-1099.56 413,-1015.7 413,-1015.7 413,-1015.7 413,-929.7 413,-881.43 431.96,-863.11 408,-821.2 407.81,-820.86 407.61,-820.54 407.41,-820.22"/>
+<path fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5,2" d="M306.14,-1187.29C308.27,-1185.92 312.92,-1182.74 316,-1179.2 371.44,-1115.44 413,-1100.19 413,-1015.7 413,-1015.7 413,-1015.7 413,-929.7 413,-881.43 431.96,-863.11 408,-821.2 407.81,-820.86 407.61,-820.54 407.41,-820.22"/>
 <polygon fill="black" stroke="black" stroke-width="1.5" points="409.89,-817.74 400.58,-812.7 404.71,-822.45 409.89,-817.74"/>
 </a>
 </g>

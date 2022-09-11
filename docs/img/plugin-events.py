@@ -87,7 +87,7 @@ def placeholder_cluster(g, name):
         node(c, f"placeholder_{name}", label="...", fillcolor="transparent", color="transparent")
 
 
-event(graph, "on_startup", "command")
+event(graph, "on_startup", "command dirty")
 
 with cluster(graph, "cluster_build", bgcolor="#dddddd11") as g:
     event(g, "on_config", "config")

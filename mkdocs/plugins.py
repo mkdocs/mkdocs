@@ -68,7 +68,7 @@ class BasePlugin:
 
     # One-time events
 
-    def on_startup(self, command: Literal['build', 'gh-deploy', 'serve']) -> None:
+    def on_startup(self, command: Literal['build', 'gh-deploy', 'serve'], dirty: bool) -> None:
         """
         The `startup` event runs once at the very beginning of an `mkdocs` invocation.
 
@@ -82,6 +82,7 @@ class BasePlugin:
 
         Parameters:
             command: the command that MkDocs was invoked with, e.g. "serve" for `mkdocs serve`.
+            dirty: whether `--dirtyreload` or `--dirty` flags were passed.
         """
 
     def on_shutdown(self) -> None:
