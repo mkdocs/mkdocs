@@ -14,6 +14,11 @@ if sys.version_info >= (3, 10):
 else:
     from importlib_metadata import EntryPoint, entry_points
 
+if sys.version_info >= (3, 8):
+    from typing import Literal
+else:
+    from typing_extensions import Literal
+
 import jinja2.environment
 
 from mkdocs.config.base import Config, ConfigErrors, ConfigWarnings, PlainConfigSchema
@@ -61,16 +66,48 @@ class BasePlugin:
 
         return self.config.validate()
 
-    # (Note that event implementations shouldn't actually be static methods in subclasses)
+    # One-time events
 
-    # Global events
+    def on_startup(self, command: Literal['build', 'gh-deploy', 'serve']) -> None:
+        """
+        The `startup` event runs once at the very beginning of an `mkdocs` invocation.
+
+        New in MkDocs 1.4.
+
+        The presence of an `on_startup` method (even if empty) migrates the plugin to the new
+        system where the plugin object is kept across builds within one `mkdocs serve`.
+
+        Note that for initializing variables, the `__init__` method is still preferred.
+        For initializing per-build variables (and whenever in doubt), use the `on_config` event.
+
+        Parameters:
+            command: the command that MkDocs was invoked with, e.g. "serve" for `mkdocs serve`.
+        """
+
+    def on_shutdown(self) -> None:
+        """
+        The `shutdown` event runs once at the very end of an `mkdocs` invocation, before exiting.
+
+        This event is relevant only for support of `mkdocs serve`, otherwise within a
+        single build it's undistinguishable from `on_post_build`.
+
+        New in MkDocs 1.4.
+
+        The presence of an `on_shutdown` method (even if empty) migrates the plugin to the new
+        system where the plugin object is kept across builds within one `mkdocs serve`.
+
+        Note the `on_post_build` method is still preferred for cleanups, when possible, as it has
+        a much higher chance of actually triggering. `on_shutdown` is "best effort" because it
+        relies on detecting a graceful shutdown of MkDocs.
+        """
 
     def on_serve(
         self, server: LiveReloadServer, config: Config, builder: Callable
     ) -> Optional[LiveReloadServer]:
         """
         The `serve` event is only called when the `serve` command is used during
-        development. It is passed the `Server` instance which can be modified before
+        development. It runs only once, after the first build finishes.
+        It is passed the `Server` instance which can be modified before
         it is activated. For example, additional files or directories could be added
         to the list of "watched" files for auto-reloading.
 
@@ -83,6 +120,8 @@ class BasePlugin:
             `livereload.Server` instance
         """
         return server
+
+    # Global events
 
     def on_config(self, config: Config) -> Optional[Config]:
         """
@@ -395,7 +434,10 @@ class PluginCollection(OrderedDict):
         be modified by the event method.
         """
         pass_item = item is not None
-        for method in self.events[name]:
+        events = self.events[name]
+        if events:
+            log.debug(f'Running {len(events)} `{name}` events')
+        for method in events:
             if pass_item:
                 result = method(item, **kwargs)
             else:

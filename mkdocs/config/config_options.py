@@ -5,7 +5,7 @@ import os
 import sys
 import traceback
 import typing as t
-from typing import NamedTuple
+from typing import Dict, NamedTuple
 from urllib.parse import urlsplit, urlunsplit
 
 import markdown
@@ -705,6 +705,7 @@ class Plugins(OptionallyRequired):
         super().__init__(**kwargs)
         self.installed_plugins = plugins.get_plugins()
         self.config_file_path = None
+        self.plugin_cache: Dict[str, plugins.BasePlugin] = {}
 
     def pre_validation(self, config, key_name):
         self.config_file_path = config.config_file_path
@@ -738,15 +739,22 @@ class Plugins(OptionallyRequired):
         if not isinstance(config, dict):
             raise ValidationError(f"Invalid config options for the '{name}' plugin.")
 
-        Plugin = self.installed_plugins[name].load()
+        try:
+            plugin = self.plugin_cache[name]
+        except KeyError:
+            Plugin = self.installed_plugins[name].load()
 
-        if not issubclass(Plugin, plugins.BasePlugin):
-            raise ValidationError(
-                f'{Plugin.__module__}.{Plugin.__name__} must be a subclass of'
-                f' {plugins.BasePlugin.__module__}.{plugins.BasePlugin.__name__}'
-            )
+            if not issubclass(Plugin, plugins.BasePlugin):
+                raise ValidationError(
+                    f'{Plugin.__module__}.{Plugin.__name__} must be a subclass of'
+                    f' {plugins.BasePlugin.__module__}.{plugins.BasePlugin.__name__}'
+                )
 
-        plugin = Plugin()
+            plugin = Plugin()
+
+            if hasattr(plugin, 'on_startup') or hasattr(plugin, 'on_shutdown'):
+                self.plugin_cache[name] = plugin
+
         errors, warnings = plugin.load_config(config, self.config_file_path)
         self.warnings.extend(warnings)
         errors_message = '\n'.join(f"Plugin '{name}' value: '{x}'. Error: {y}" for x, y in errors)

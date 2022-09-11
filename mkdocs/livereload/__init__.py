@@ -171,7 +171,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 self._visible_epoch = self._wanted_epoch
                 self._epoch_cond.notify_all()
 
-    def shutdown(self) -> None:
+    def shutdown(self, wait=False) -> None:
         self.observer.stop()
         with self._rebuild_cond:
             self._shutdown = True
@@ -179,6 +179,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
 
         if self.serve_thread.is_alive():
             super().shutdown()
+        if wait:
             self.serve_thread.join()
             self.observer.join()
 

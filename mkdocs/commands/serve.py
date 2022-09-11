@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import logging
 import shutil
 import tempfile
@@ -42,17 +43,21 @@ def serve(
     def mount_path(config):
         return urlsplit(config['site_url'] or '/').path
 
-    def builder():
+    get_config = functools.partial(
+        load_config,
+        config_file=config_file,
+        dev_addr=dev_addr,
+        strict=strict,
+        theme=theme,
+        theme_dir=theme_dir,
+        site_dir=site_dir,
+        **kwargs,
+    )
+
+    def builder(config=None):
         log.info("Building documentation...")
-        config = load_config(
-            config_file=config_file,
-            dev_addr=dev_addr,
-            strict=strict,
-            theme=theme,
-            theme_dir=theme_dir,
-            site_dir=site_dir,
-            **kwargs,
-        )
+        if config is None:
+            config = get_config()
 
         # combine CLI watch arguments with config file values
         if config["watch"] is None:
@@ -66,11 +71,13 @@ def serve(
         live_server = livereload in ['dirty', 'livereload']
         dirty = livereload == 'dirty'
         build(config, live_server=live_server, dirty=dirty)
-        return config
+
+    config = get_config()
+    config['plugins'].run_event('startup', command='serve')
 
     try:
         # Perform the initial build
-        config = builder()
+        builder(config)
 
         host, port = config['dev_addr']
         server = LiveReloadServer(
@@ -114,5 +121,6 @@ def serve(
         # Avoid ugly, unhelpful traceback
         raise Abort(f'{type(e).__name__}: {e}')
     finally:
+        config['plugins'].run_event('shutdown')
         if isdir(site_dir):
             shutil.rmtree(site_dir)

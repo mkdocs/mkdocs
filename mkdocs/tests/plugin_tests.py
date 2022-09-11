@@ -97,6 +97,8 @@ class TestPluginCollection(unittest.TestCase):
         self.assertEqual(
             collection.events,
             {
+                'startup': [],
+                'shutdown': [],
                 'serve': [],
                 'config': [],
                 'pre_build': [plugin.on_pre_build],
