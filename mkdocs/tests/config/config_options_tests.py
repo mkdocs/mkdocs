@@ -6,14 +6,25 @@ import re
 import sys
 import textwrap
 import unittest
-from typing import Any, Dict
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type, TypeVar
 from unittest.mock import patch
 
+if TYPE_CHECKING:
+    from typing_extensions import assert_type
+else:
+
+    def assert_type(val, typ):
+        return None
+
+
 import mkdocs
-from mkdocs.config import base
 from mkdocs.config import config_options as c
+from mkdocs.config.base import Config
 from mkdocs.tests.base import tempdir
+from mkdocs.theme import Theme
 from mkdocs.utils import write_file, yaml_load
+
+SomeConfig = TypeVar('SomeConfig', bound=Config)
 
 
 class UnexpectedError(Exception):
@@ -33,12 +44,12 @@ class TestCase(unittest.TestCase):
 
     def get_config(
         self,
-        schema: type,
+        config_class: Type[SomeConfig],
         cfg: Dict[str, Any],
         warnings={},
         config_file_path=None,
-    ):
-        config = base.LegacyConfig(base.get_schema(schema), config_file_path=config_file_path)
+    ) -> SomeConfig:
+        config = config_class(config_file_path=config_file_path)
         config.load_dict(cfg)
         actual_errors, actual_warnings = config.validate()
         if actual_errors:
@@ -47,76 +58,37 @@ class TestCase(unittest.TestCase):
         return config
 
 
-class OptionallyRequiredTest(TestCase):
-    def test_empty(self):
-        class Schema:
-            option = c.OptionallyRequired()
-
-        conf = self.get_config(Schema, {'option': None})
-        self.assertEqual(conf['option'], None)
-
-        self.assertEqual(Schema.option.required, False)
-
-    def test_required(self):
-        class Schema:
-            option = c.OptionallyRequired(required=True)
-
-        with self.expect_error(option="Required configuration not provided."):
-            self.get_config(Schema, {'option': None})
-
-        self.assertEqual(Schema.option.required, True)
-
-    def test_required_no_default(self):
-        class Schema:
-            option = c.OptionallyRequired(required=True)
-
-        conf = self.get_config(Schema, {'option': 2})
-        self.assertEqual(conf['option'], 2)
-
-    def test_default(self):
-        class Schema:
-            option = c.OptionallyRequired(default=1)
-
-        conf = self.get_config(Schema, {'option': None})
-        self.assertEqual(conf['option'], 1)
-
-    def test_replace_default(self):
-        class Schema:
-            option = c.OptionallyRequired(default=1)
-
-        conf = self.get_config(Schema, {'option': 2})
-        self.assertEqual(conf['option'], 2)
-
-
 class TypeTest(TestCase):
-    def test_single_type(self):
-        class Schema:
+    def test_single_type(self) -> None:
+        class Schema(Config):
             option = c.Type(str)
 
         conf = self.get_config(Schema, {'option': "Testing"})
-        self.assertEqual(conf['option'], "Testing")
+        assert_type(conf.option, str)
+        self.assertEqual(conf.option, "Testing")
 
-    def test_multiple_types(self):
-        class Schema:
+    def test_multiple_types(self) -> None:
+        class Schema(Config):
             option = c.Type((list, tuple))
 
         conf = self.get_config(Schema, {'option': [1, 2, 3]})
-        self.assertEqual(conf['option'], [1, 2, 3])
+        self.assertEqual(conf.option, [1, 2, 3])
 
         conf = self.get_config(Schema, {'option': (1, 2, 3)})
-        self.assertEqual(conf['option'], (1, 2, 3))
+        self.assertEqual(conf.option, (1, 2, 3))
 
         with self.expect_error(
             option="Expected type: (<class 'list'>, <class 'tuple'>) but received: <class 'dict'>"
         ):
             self.get_config(Schema, {'option': {'a': 1}})
 
-    def test_length(self):
-        class Schema:
+    def test_length(self) -> None:
+        class Schema(Config):
             option = c.Type(str, length=7)
 
         conf = self.get_config(Schema, {'option': "Testing"})
-        self.assertEqual(conf['option'], "Testing")
+        assert_type(conf.option, str)
+        self.assertEqual(conf.option, "Testing")
 
         with self.expect_error(
             option="Expected type: <class 'str'> with length 7 but received: 'Testing Long' with length 12"
@@ -125,64 +97,68 @@ class TypeTest(TestCase):
 
 
 class ChoiceTest(TestCase):
-    def test_required(self):
-        class Schema:
-            option = c.Choice(('python', 'node'), required=True)
-
-        conf = self.get_config(Schema, {'option': 'python'})
-        self.assertEqual(conf['option'], 'python')
-
-    def test_optional(self):
-        class Schema:
+    def test_required(self) -> None:
+        class Schema(Config):
             option = c.Choice(('python', 'node'))
 
         conf = self.get_config(Schema, {'option': 'python'})
-        self.assertEqual(conf['option'], 'python')
+        assert_type(conf.option, str)
+        self.assertEqual(conf.option, 'python')
+
+    def test_optional(self) -> None:
+        class Schema(Config):
+            option = c.Optional(c.Choice(('python', 'node')))
+
+        conf = self.get_config(Schema, {'option': 'python'})
+        assert_type(conf.option, Optional[str])
+        self.assertEqual(conf.option, 'python')
 
         conf = self.get_config(Schema, {})
-        self.assertEqual(conf['option'], None)
+        self.assertEqual(conf.option, None)
 
         conf = self.get_config(Schema, {'option': None})
-        self.assertEqual(conf['option'], None)
+        self.assertEqual(conf.option, None)
 
-    def test_default(self):
-        class Schema:
+    def test_default(self) -> None:
+        class Schema(Config):
             option = c.Choice(('a', 'b', 'c'), default='b')
 
         conf = self.get_config(Schema, {})
-        self.assertEqual(conf['option'], 'b')
+        assert_type(conf.option, str)
+        self.assertEqual(conf.option, 'b')
+
+        conf = self.get_config(Schema, {})
+        self.assertEqual(conf.option, 'b')
 
         conf = self.get_config(Schema, {'option': None})
-        self.assertEqual(conf['option'], 'b')
+        self.assertEqual(conf.option, 'b')
 
         with self.expect_error(option="Expected one of: ('a', 'b', 'c') but received: 'go'"):
             self.get_config(Schema, {'option': 'go'})
 
-    def test_invalid_default(self):
+    def test_invalid_default(self) -> None:
         with self.assertRaises(ValueError):
             c.Choice(('a', 'b'), default='c')
         with self.assertRaises(ValueError):
             c.Choice(('a', 'b'), default='c', required=True)
 
-    def test_invalid_choice(self):
-        class Schema:
+    def test_invalid_choice(self) -> None:
+        class Schema(Config):
             option = c.Choice(('python', 'node'))
 
         with self.expect_error(option="Expected one of: ('python', 'node') but received: 'go'"):
             self.get_config(Schema, {'option': 'go'})
 
-    def test_invalid_choices(self):
+    def test_invalid_choices(self) -> None:
         with self.assertRaises(ValueError):
             c.Choice('')
         with self.assertRaises(ValueError):
             c.Choice([])
-        with self.assertRaises(ValueError):
-            c.Choice(5)
 
 
 class DeprecatedTest(TestCase):
-    def test_deprecated_option_simple(self):
-        class Schema:
+    def test_deprecated_option_simple(self) -> None:
+        class Schema(Config):
             d = c.Deprecated()
 
         self.get_config(
@@ -194,14 +170,14 @@ class DeprecatedTest(TestCase):
             ),
         )
 
-    def test_deprecated_option_message(self):
-        class Schema:
+    def test_deprecated_option_message(self) -> None:
+        class Schema(Config):
             d = c.Deprecated(message='custom message for {} key')
 
         self.get_config(Schema, {'d': 'value'}, warnings={'d': 'custom message for d key'})
 
-    def test_deprecated_option_with_type(self):
-        class Schema:
+    def test_deprecated_option_with_type(self) -> None:
+        class Schema(Config):
             d = c.Deprecated(option_type=c.Type(str))
 
         self.get_config(
@@ -213,8 +189,8 @@ class DeprecatedTest(TestCase):
             ),
         )
 
-    def test_deprecated_option_with_invalid_type(self):
-        class Schema:
+    def test_deprecated_option_with_invalid_type(self) -> None:
+        class Schema(Config):
             d = c.Deprecated(option_type=c.Type(list))
 
         with self.expect_error(d="Expected type: <class 'list'> but received: <class 'str'>"):
@@ -227,8 +203,8 @@ class DeprecatedTest(TestCase):
                 ),
             )
 
-    def test_removed_option(self):
-        class Schema:
+    def test_removed_option(self) -> None:
+        class Schema(Config):
             d = c.Deprecated(removed=True, moved_to='foo')
 
         with self.expect_error(
@@ -236,14 +212,14 @@ class DeprecatedTest(TestCase):
         ):
             self.get_config(Schema, {'d': 'value'})
 
-    def test_deprecated_option_with_type_undefined(self):
-        class Schema:
+    def test_deprecated_option_with_type_undefined(self) -> None:
+        class Schema(Config):
             option = c.Deprecated(option_type=c.Type(str))
 
         self.get_config(Schema, {'option': None})
 
-    def test_deprecated_option_move(self):
-        class Schema:
+    def test_deprecated_option_move(self) -> None:
+        class Schema(Config):
             new = c.Type(str)
             old = c.Deprecated(moved_to='new')
 
@@ -257,8 +233,8 @@ class DeprecatedTest(TestCase):
         )
         self.assertEqual(conf, {'new': 'value', 'old': None})
 
-    def test_deprecated_option_move_complex(self):
-        class Schema:
+    def test_deprecated_option_move_complex(self) -> None:
+        class Schema(Config):
             foo = c.Type(dict)
             old = c.Deprecated(moved_to='foo.bar')
 
@@ -272,8 +248,8 @@ class DeprecatedTest(TestCase):
         )
         self.assertEqual(conf, {'foo': {'bar': 'value'}, 'old': None})
 
-    def test_deprecated_option_move_existing(self):
-        class Schema:
+    def test_deprecated_option_move_existing(self) -> None:
+        class Schema(Config):
             foo = c.Type(dict)
             old = c.Deprecated(moved_to='foo.bar')
 
@@ -287,8 +263,8 @@ class DeprecatedTest(TestCase):
         )
         self.assertEqual(conf, {'foo': {'existing': 'existing', 'bar': 'value'}, 'old': None})
 
-    def test_deprecated_option_move_invalid(self):
-        class Schema:
+    def test_deprecated_option_move_invalid(self) -> None:
+        class Schema(Config):
             foo = c.Type(dict)
             old = c.Deprecated(moved_to='foo.bar')
 
@@ -304,83 +280,88 @@ class DeprecatedTest(TestCase):
 
 
 class IpAddressTest(TestCase):
-    class Schema:
+    class Schema(Config):
         option = c.IpAddress()
 
-    def test_valid_address(self):
+    def test_valid_address(self) -> None:
         addr = '127.0.0.1:8000'
 
         conf = self.get_config(self.Schema, {'option': addr})
-        self.assertEqual(str(conf['option']), addr)
-        self.assertEqual(conf['option'].host, '127.0.0.1')
-        self.assertEqual(conf['option'].port, 8000)
 
-    def test_valid_IPv6_address(self):
+        assert_type(conf.option, c._IpAddressValue)
+        assert_type(conf.option.host, str)
+        assert_type(conf.option.port, int)
+
+        self.assertEqual(str(conf.option), addr)
+        self.assertEqual(conf.option.host, '127.0.0.1')
+        self.assertEqual(conf.option.port, 8000)
+
+    def test_valid_IPv6_address(self) -> None:
         addr = '::1:8000'
 
         conf = self.get_config(self.Schema, {'option': addr})
-        self.assertEqual(str(conf['option']), addr)
-        self.assertEqual(conf['option'].host, '::1')
-        self.assertEqual(conf['option'].port, 8000)
+        self.assertEqual(str(conf.option), addr)
+        self.assertEqual(conf.option.host, '::1')
+        self.assertEqual(conf.option.port, 8000)
 
-    def test_valid_full_IPv6_address(self):
+    def test_valid_full_IPv6_address(self) -> None:
         addr = '[2001:db8:85a3::8a2e:370:7334]:123'
 
         conf = self.get_config(self.Schema, {'option': addr})
-        self.assertEqual(conf['option'].host, '2001:db8:85a3::8a2e:370:7334')
-        self.assertEqual(conf['option'].port, 123)
+        self.assertEqual(conf.option.host, '2001:db8:85a3::8a2e:370:7334')
+        self.assertEqual(conf.option.port, 123)
 
-    def test_named_address(self):
+    def test_named_address(self) -> None:
         addr = 'localhost:8000'
 
         conf = self.get_config(self.Schema, {'option': addr})
-        self.assertEqual(str(conf['option']), addr)
-        self.assertEqual(conf['option'].host, 'localhost')
-        self.assertEqual(conf['option'].port, 8000)
+        self.assertEqual(str(conf.option), addr)
+        self.assertEqual(conf.option.host, 'localhost')
+        self.assertEqual(conf.option.port, 8000)
 
-    def test_default_address(self):
+    def test_default_address(self) -> None:
         addr = '127.0.0.1:8000'
 
-        class Schema:
+        class Schema(Config):
             option = c.IpAddress(default=addr)
 
         conf = self.get_config(Schema, {'option': None})
-        self.assertEqual(str(conf['option']), addr)
-        self.assertEqual(conf['option'].host, '127.0.0.1')
-        self.assertEqual(conf['option'].port, 8000)
+        self.assertEqual(str(conf.option), addr)
+        self.assertEqual(conf.option.host, '127.0.0.1')
+        self.assertEqual(conf.option.port, 8000)
 
     @unittest.skipIf(
         sys.version_info < (3, 9, 5),
         "Leading zeros allowed in IP addresses before Python3.9.5",
     )
-    def test_invalid_leading_zeros(self):
+    def test_invalid_leading_zeros(self) -> None:
         with self.expect_error(
             option="'127.000.000.001' does not appear to be an IPv4 or IPv6 address"
         ):
             self.get_config(self.Schema, {'option': '127.000.000.001:8000'})
 
-    def test_invalid_address_range(self):
+    def test_invalid_address_range(self) -> None:
         with self.expect_error(option="'277.0.0.1' does not appear to be an IPv4 or IPv6 address"):
             self.get_config(self.Schema, {'option': '277.0.0.1:8000'})
 
-    def test_invalid_address_format(self):
+    def test_invalid_address_format(self) -> None:
         with self.expect_error(option="Must be a string of format 'IP:PORT'"):
             self.get_config(self.Schema, {'option': '127.0.0.18000'})
 
-    def test_invalid_address_type(self):
+    def test_invalid_address_type(self) -> None:
         with self.expect_error(option="Must be a string of format 'IP:PORT'"):
             self.get_config(self.Schema, {'option': 123})
 
-    def test_invalid_address_port(self):
+    def test_invalid_address_port(self) -> None:
         with self.expect_error(option="'foo' is not a valid port"):
             self.get_config(self.Schema, {'option': '127.0.0.1:foo'})
 
-    def test_invalid_address_missing_port(self):
+    def test_invalid_address_missing_port(self) -> None:
         with self.expect_error(option="Must be a string of format 'IP:PORT'"):
             self.get_config(self.Schema, {'option': '127.0.0.1'})
 
-    def test_unsupported_address(self):
-        class Schema:
+    def test_unsupported_address(self) -> None:
+        class Schema(Config):
             dev_addr = c.IpAddress()
 
         self.get_config(
@@ -395,8 +376,8 @@ class IpAddressTest(TestCase):
             ),
         )
 
-    def test_unsupported_IPv6_address(self):
-        class Schema:
+    def test_unsupported_IPv6_address(self) -> None:
+        class Schema(Config):
             dev_addr = c.IpAddress()
 
         self.get_config(
@@ -412,28 +393,29 @@ class IpAddressTest(TestCase):
 
 
 class URLTest(TestCase):
-    def test_valid_url(self):
-        class Schema:
+    def test_valid_url(self) -> None:
+        class Schema(Config):
             option = c.URL()
 
         conf = self.get_config(Schema, {'option': "https://mkdocs.org"})
-        self.assertEqual(conf['option'], "https://mkdocs.org")
+        assert_type(conf.option, str)
+        self.assertEqual(conf.option, "https://mkdocs.org")
 
         conf = self.get_config(Schema, {'option': ""})
-        self.assertEqual(conf['option'], "")
+        self.assertEqual(conf.option, "")
 
-    def test_valid_url_is_dir(self):
-        class Schema:
+    def test_valid_url_is_dir(self) -> None:
+        class Schema(Config):
             option = c.URL(is_dir=True)
 
         conf = self.get_config(Schema, {'option': "http://mkdocs.org/"})
-        self.assertEqual(conf['option'], "http://mkdocs.org/")
+        self.assertEqual(conf.option, "http://mkdocs.org/")
 
         conf = self.get_config(Schema, {'option': "https://mkdocs.org"})
-        self.assertEqual(conf['option'], "https://mkdocs.org/")
+        self.assertEqual(conf.option, "https://mkdocs.org/")
 
-    def test_invalid_url(self):
-        class Schema:
+    def test_invalid_url(self) -> None:
+        class Schema(Config):
             option = c.URL()
 
         for url in "www.mkdocs.org", "//mkdocs.org/test", "http:/mkdocs.org/", "/hello/":
@@ -443,8 +425,8 @@ class URLTest(TestCase):
                 ):
                     self.get_config(Schema, {'option': url})
 
-    def test_invalid_type(self):
-        class Schema:
+    def test_invalid_type(self) -> None:
+        class Schema(Config):
             option = c.URL()
 
         with self.expect_error(option="Unable to parse the URL."):
@@ -452,79 +434,82 @@ class URLTest(TestCase):
 
 
 class EditURITest(TestCase):
-    class Schema:
-        repo_url = c.URL()
-        repo_name = c.RepoName('repo_url')
-        edit_uri_template = c.EditURITemplate('edit_uri')
-        edit_uri = c.EditURI('repo_url')
+    class Schema(Config):
+        repo_url = c.Optional(c.URL())
+        repo_name = c.Optional(c.RepoName('repo_url'))
+        edit_uri_template = c.Optional(c.EditURITemplate('edit_uri'))
+        edit_uri = c.Optional(c.EditURI('repo_url'))
 
-    def test_repo_name_github(self):
+    def test_repo_name_github(self) -> None:
         conf = self.get_config(
             self.Schema,
             {'repo_url': "https://github.com/mkdocs/mkdocs"},
         )
-        self.assertEqual(conf['repo_name'], "GitHub")
+        assert_type(conf.repo_name, Optional[str])
+        self.assertEqual(conf.repo_name, "GitHub")
 
-    def test_repo_name_bitbucket(self):
+    def test_repo_name_bitbucket(self) -> None:
         conf = self.get_config(
             self.Schema,
             {'repo_url': "https://bitbucket.org/gutworth/six/"},
         )
-        self.assertEqual(conf['repo_name'], "Bitbucket")
+        self.assertEqual(conf.repo_name, "Bitbucket")
 
-    def test_repo_name_gitlab(self):
+    def test_repo_name_gitlab(self) -> None:
         conf = self.get_config(
             self.Schema,
             {'repo_url': "https://gitlab.com/gitlab-org/gitlab-ce/"},
         )
-        self.assertEqual(conf['repo_name'], "GitLab")
+        self.assertEqual(conf.repo_name, "GitLab")
 
-    def test_repo_name_custom(self):
+    def test_repo_name_custom(self) -> None:
         conf = self.get_config(
             self.Schema,
             {'repo_url': "https://launchpad.net/python-tuskarclient"},
         )
-        self.assertEqual(conf['repo_name'], "Launchpad")
+        self.assertEqual(conf.repo_name, "Launchpad")
 
-    def test_edit_uri_github(self):
+    def test_edit_uri_github(self) -> None:
         conf = self.get_config(
             self.Schema,
             {'repo_url': "https://github.com/mkdocs/mkdocs"},
         )
-        self.assertEqual(conf['edit_uri'], 'edit/master/docs/')
-        self.assertEqual(conf['repo_url'], "https://github.com/mkdocs/mkdocs")
+        assert_type(conf.edit_uri, Optional[str])
+        assert_type(conf.repo_url, Optional[str])
+        self.assertEqual(conf.edit_uri, 'edit/master/docs/')
+        self.assertEqual(conf.repo_url, "https://github.com/mkdocs/mkdocs")
 
-    def test_edit_uri_bitbucket(self):
+    def test_edit_uri_bitbucket(self) -> None:
         conf = self.get_config(
             self.Schema,
             {'repo_url': "https://bitbucket.org/gutworth/six/"},
         )
-        self.assertEqual(conf['edit_uri'], 'src/default/docs/')
-        self.assertEqual(conf['repo_url'], "https://bitbucket.org/gutworth/six/")
+        self.assertEqual(conf.edit_uri, 'src/default/docs/')
+        self.assertEqual(conf.repo_url, "https://bitbucket.org/gutworth/six/")
 
-    def test_edit_uri_gitlab(self):
+    def test_edit_uri_gitlab(self) -> None:
         conf = self.get_config(
             self.Schema,
             {'repo_url': "https://gitlab.com/gitlab-org/gitlab-ce/"},
         )
-        self.assertEqual(conf['edit_uri'], 'edit/master/docs/')
+        self.assertEqual(conf.edit_uri, 'edit/master/docs/')
 
-    def test_edit_uri_custom(self):
+    def test_edit_uri_custom(self) -> None:
         conf = self.get_config(
             self.Schema,
             {'repo_url': "https://launchpad.net/python-tuskarclient"},
         )
-        self.assertEqual(conf['edit_uri'], None)
-        self.assertEqual(conf['repo_url'], "https://launchpad.net/python-tuskarclient")
+        self.assertEqual(conf.edit_uri, None)
+        self.assertEqual(conf.repo_url, "https://launchpad.net/python-tuskarclient")
 
-    def test_repo_name_custom_and_empty_edit_uri(self):
+    def test_repo_name_custom_and_empty_edit_uri(self) -> None:
         conf = self.get_config(
             self.Schema,
             {'repo_url': "https://github.com/mkdocs/mkdocs", 'repo_name': 'mkdocs'},
         )
-        self.assertEqual(conf['edit_uri'], 'edit/master/docs/')
+        self.assertEqual(conf.edit_uri, 'edit/master/docs/')
 
-    def test_edit_uri_template_ok(self):
+    def test_edit_uri_template_ok(self) -> None:
         conf = self.get_config(
             self.Schema,
             {
@@ -532,9 +517,10 @@ class EditURITest(TestCase):
                 'edit_uri_template': 'edit/foo/docs/{path}',
             },
         )
-        self.assertEqual(conf['edit_uri_template'], 'edit/foo/docs/{path}')
+        assert_type(conf.edit_uri_template, Optional[str])
+        self.assertEqual(conf.edit_uri_template, 'edit/foo/docs/{path}')
 
-    def test_edit_uri_template_errors(self):
+    def test_edit_uri_template_errors(self) -> None:
         with self.expect_error(
             edit_uri_template=re.compile(r'.*[{}].*')  # Complains about unclosed '{' or missing '}'
         ):
@@ -564,7 +550,7 @@ class EditURITest(TestCase):
                 },
             )
 
-    def test_edit_uri_template_warning(self):
+    def test_edit_uri_template_warning(self) -> None:
         conf = self.get_config(
             self.Schema,
             {
@@ -576,46 +562,48 @@ class EditURITest(TestCase):
                 edit_uri_template="The option 'edit_uri' has no effect when 'edit_uri_template' is set."
             ),
         )
-        self.assertEqual(conf['edit_uri_template'], 'edit/master/{path}')
+        self.assertEqual(conf.edit_uri_template, 'edit/master/{path}')
 
 
 class ListOfItemsTest(TestCase):
-    def test_int_type(self):
-        class Schema:
+    def test_int_type(self) -> None:
+        class Schema(Config):
             option = c.ListOfItems(c.Type(int))
 
         conf = self.get_config(Schema, {'option': [1, 2, 3]})
-        self.assertEqual(conf['option'], [1, 2, 3])
+        assert_type(conf.option, List[int])
+        self.assertEqual(conf.option, [1, 2, 3])
 
         with self.expect_error(
             option="Expected type: <class 'int'> but received: <class 'NoneType'>"
         ):
             conf = self.get_config(Schema, {'option': [1, None, 3]})
 
-    def test_combined_float_type(self):
-        class Schema:
+    def test_combined_float_type(self) -> None:
+        class Schema(Config):
             option = c.ListOfItems(c.Type((int, float)))
 
         conf = self.get_config(Schema, {'option': [1.4, 2, 3]})
-        self.assertEqual(conf['option'], [1.4, 2, 3])
+        self.assertEqual(conf.option, [1.4, 2, 3])
 
         with self.expect_error(
             option="Expected type: (<class 'int'>, <class 'float'>) but received: <class 'str'>"
         ):
             self.get_config(Schema, {'option': ['a']})
 
-    def test_list_default(self):
-        class Schema:
+    def test_list_default(self) -> None:
+        class Schema(Config):
             option = c.ListOfItems(c.Type(int), default=[])
 
         conf = self.get_config(Schema, {})
-        self.assertEqual(conf['option'], [])
+        assert_type(conf.option, List[int])
+        self.assertEqual(conf.option, [])
 
-        conf = self.get_config(Schema, {'option': None})
-        self.assertEqual(conf['option'], [])
+        with self.expect_error(option="Required configuration not provided."):
+            conf = self.get_config(Schema, {'option': None})
 
-    def test_none_without_default(self):
-        class Schema:
+    def test_none_without_default(self) -> None:
+        class Schema(Config):
             option = c.ListOfItems(c.Type(str))
 
         with self.expect_error(option="Required configuration not provided."):
@@ -625,17 +613,46 @@ class ListOfItemsTest(TestCase):
             conf = self.get_config(Schema, {'option': None})
 
         conf = self.get_config(Schema, {'option': ['foo']})
-        self.assertEqual(conf['option'], ['foo'])
+        self.assertEqual(conf.option, ['foo'])
 
-    def test_string_not_a_list_of_strings(self):
-        class Schema:
+    def test_optional(self) -> None:
+        class Schema(Config):
+            option = c.Optional(c.ListOfItems(c.Type(str)))
+
+        conf = self.get_config(Schema, {})
+        assert_type(conf.option, Optional[List[str]])
+        self.assertEqual(conf.option, None)
+
+        conf = self.get_config(Schema, {'option': None})
+        self.assertEqual(conf.option, None)
+
+        conf = self.get_config(Schema, {'option': ['foo']})
+        self.assertEqual(conf.option, ['foo'])
+
+    def test_list_of_optional(self) -> None:
+        class Schema(Config):
+            option = c.ListOfItems(c.Optional(c.Type(int)), default=[])
+
+        conf = self.get_config(Schema, {})
+        assert_type(conf.option, List[Optional[int]])
+        self.assertEqual(conf.option, [])
+
+        conf = self.get_config(Schema, {'option': [4, None]})
+        self.assertEqual(conf.option, [4, None])
+
+        with self.expect_error(option="Expected type: <class 'int'> but received: <class 'str'>"):
+            conf = self.get_config(Schema, {'option': ['foo']})
+            self.assertEqual(conf.option, ['foo'])
+
+    def test_string_not_a_list_of_strings(self) -> None:
+        class Schema(Config):
             option = c.ListOfItems(c.Type(str))
 
         with self.expect_error(option="Expected a list of items, but a <class 'str'> was given."):
             self.get_config(Schema, {'option': 'foo'})
 
-    def test_post_validation_error(self):
-        class Schema:
+    def test_post_validation_error(self) -> None:
+        class Schema(Config):
             option = c.ListOfItems(c.IpAddress())
 
         with self.expect_error(option="'asdf' is not a valid port"):
@@ -643,73 +660,76 @@ class ListOfItemsTest(TestCase):
 
 
 class FilesystemObjectTest(TestCase):
-    def test_valid_dir(self):
+    def test_valid_dir(self) -> None:
         for cls in c.Dir, c.FilesystemObject:
             with self.subTest(cls):
                 d = os.path.dirname(__file__)
 
-                class Schema:
+                class Schema(Config):
                     option = cls(exists=True)
 
                 conf = self.get_config(Schema, {'option': d})
-                self.assertEqual(conf['option'], d)
+                assert_type(conf.option, str)
+                self.assertEqual(conf.option, d)
 
-    def test_valid_file(self):
+    def test_valid_file(self) -> None:
         for cls in c.File, c.FilesystemObject:
             with self.subTest(cls):
                 f = __file__
 
-                class Schema:
+                class Schema(Config):
                     option = cls(exists=True)
 
                 conf = self.get_config(Schema, {'option': f})
-                self.assertEqual(conf['option'], f)
+                assert_type(conf.option, str)
+                self.assertEqual(conf.option, f)
 
-    def test_missing_without_exists(self):
+    def test_missing_without_exists(self) -> None:
         for cls in c.Dir, c.File, c.FilesystemObject:
             with self.subTest(cls):
                 d = os.path.join("not", "a", "real", "path", "I", "hope")
 
-                class Schema:
+                class Schema(Config):
                     option = cls()
 
                 conf = self.get_config(Schema, {'option': d})
-                self.assertEqual(conf['option'], os.path.abspath(d))
+                assert_type(conf.option, str)
+                self.assertEqual(conf.option, os.path.abspath(d))
 
-    def test_missing_but_required(self):
+    def test_missing_but_required(self) -> None:
         for cls in c.Dir, c.File, c.FilesystemObject:
             with self.subTest(cls):
                 d = os.path.join("not", "a", "real", "path", "I", "hope")
 
-                class Schema:
+                class Schema(Config):
                     option = cls(exists=True)
 
                 with self.expect_error(option=re.compile(r"The path '.+' isn't an existing .+")):
                     self.get_config(Schema, {'option': d})
 
-    def test_not_a_dir(self):
+    def test_not_a_dir(self) -> None:
         d = __file__
 
-        class Schema:
+        class Schema(Config):
             option = c.Dir(exists=True)
 
         with self.expect_error(option=re.compile(r"The path '.+' isn't an existing directory.")):
             self.get_config(Schema, {'option': d})
 
-    def test_not_a_file(self):
+    def test_not_a_file(self) -> None:
         d = os.path.dirname(__file__)
 
-        class Schema:
+        class Schema(Config):
             option = c.File(exists=True)
 
         with self.expect_error(option=re.compile(r"The path '.+' isn't an existing file.")):
             self.get_config(Schema, {'option': d})
 
-    def test_incorrect_type_error(self):
+    def test_incorrect_type_error(self) -> None:
         for cls in c.Dir, c.File, c.FilesystemObject:
             with self.subTest(cls):
 
-                class Schema:
+                class Schema(Config):
                     option = cls()
 
                 with self.expect_error(
@@ -721,29 +741,29 @@ class FilesystemObjectTest(TestCase):
                 ):
                     self.get_config(Schema, {'option': []})
 
-    def test_with_unicode(self):
+    def test_with_unicode(self) -> None:
         for cls in c.Dir, c.File, c.FilesystemObject:
             with self.subTest(cls):
 
-                class Schema:
+                class Schema(Config):
                     dir = cls()
 
                 conf = self.get_config(Schema, {'dir': 'юникод'})
-                self.assertIsInstance(conf['dir'], str)
+                self.assertIsInstance(conf.dir, str)
 
-    def test_dir_bytes(self):
-        class Schema:
+    def test_dir_bytes(self) -> None:
+        class Schema(Config):
             dir = c.Dir()
 
         with self.expect_error(dir="Expected type: <class 'str'> but received: <class 'bytes'>"):
             self.get_config(Schema, {'dir': b'foo'})
 
-    def test_config_dir_prepended(self):
+    def test_config_dir_prepended(self) -> None:
         for cls in c.Dir, c.File, c.FilesystemObject:
             with self.subTest(cls):
                 base_path = os.path.dirname(os.path.abspath(__file__))
 
-                class Schema:
+                class Schema(Config):
                     dir = cls()
 
                 conf = self.get_config(
@@ -751,10 +771,10 @@ class FilesystemObjectTest(TestCase):
                     {'dir': 'foo'},
                     config_file_path=os.path.join(base_path, 'mkdocs.yml'),
                 )
-                self.assertEqual(conf['dir'], os.path.join(base_path, 'foo'))
+                self.assertEqual(conf.dir, os.path.join(base_path, 'foo'))
 
-    def test_site_dir_is_config_dir_fails(self):
-        class Schema:
+    def test_site_dir_is_config_dir_fails(self) -> None:
+        class Schema(Config):
             dir = c.DocsDir()
 
         with self.expect_error(
@@ -769,18 +789,18 @@ class FilesystemObjectTest(TestCase):
 
 
 class ListOfPathsTest(TestCase):
-    def test_valid_path(self):
+    def test_valid_path(self) -> None:
         paths = [os.path.dirname(__file__)]
 
-        class Schema:
+        class Schema(Config):
             option = c.ListOfPaths()
 
         self.get_config(Schema, {'option': paths})
 
-    def test_missing_path(self):
+    def test_missing_path(self) -> None:
         paths = [os.path.join("does", "not", "exist", "i", "hope")]
 
-        class Schema:
+        class Schema(Config):
             option = c.ListOfPaths()
 
         with self.expect_error(
@@ -788,10 +808,10 @@ class ListOfPathsTest(TestCase):
         ):
             self.get_config(Schema, {'option': paths})
 
-    def test_non_path(self):
+    def test_non_path(self) -> None:
         paths = [os.path.dirname(__file__), None]
 
-        class Schema:
+        class Schema(Config):
             option = c.ListOfPaths()
 
         with self.expect_error(
@@ -799,36 +819,45 @@ class ListOfPathsTest(TestCase):
         ):
             self.get_config(Schema, {'option': paths})
 
-    def test_empty_list(self):
-        class Schema:
+    def test_empty_list(self) -> None:
+        class Schema(Config):
             option = c.ListOfPaths()
 
         conf = self.get_config(Schema, {'option': []})
-        self.assertEqual(conf['option'], [])
+        assert_type(conf.option, List[str])
+        self.assertEqual(conf.option, [])
 
-    def test_non_list(self):
+    def test_none(self) -> None:
+        class Schema(Config):
+            option = c.ListOfPaths()
+
+        with self.expect_error(option="Required configuration not provided."):
+            self.get_config(Schema, {'option': None})
+
+    def test_non_list(self) -> None:
         paths = os.path.dirname(__file__)
 
-        class Schema:
+        class Schema(Config):
             option = c.ListOfPaths()
 
         with self.expect_error(option="Expected a list of items, but a <class 'str'> was given."):
             self.get_config(Schema, {'option': paths})
 
-    def test_file(self):
+    def test_file(self) -> None:
         paths = [__file__]
 
-        class Schema:
+        class Schema(Config):
             option = c.ListOfPaths()
 
-        self.get_config(Schema, {'option': paths})
+        conf = self.get_config(Schema, {'option': paths})
+        assert_type(conf.option, List[str])
 
     @tempdir()
-    def test_paths_localized_to_config(self, base_path):
+    def test_paths_localized_to_config(self, base_path) -> None:
         with open(os.path.join(base_path, 'foo'), 'w') as f:
             f.write('hi')
 
-        class Schema:
+        class Schema(Config):
             watch = c.ListOfPaths()
 
         conf = self.get_config(
@@ -837,15 +866,15 @@ class ListOfPathsTest(TestCase):
             config_file_path=os.path.join(base_path, 'mkdocs.yml'),
         )
 
-        self.assertEqual(conf['watch'], [os.path.join(base_path, 'foo')])
+        self.assertEqual(conf.watch, [os.path.join(base_path, 'foo')])
 
 
 class SiteDirTest(TestCase):
-    class Schema:
+    class Schema(Config):
         site_dir = c.SiteDir()
         docs_dir = c.Dir()
 
-    def test_doc_dir_in_site_dir(self):
+    def test_doc_dir_in_site_dir(self) -> None:
         j = os.path.join
         # The parent dir is not the same on every system, so use the actual dir name
         parent_dir = mkdocs.__file__.split(os.sep)[-3]
@@ -867,7 +896,7 @@ class SiteDirTest(TestCase):
                 ):
                     self.get_config(self.Schema, test_config)
 
-    def test_site_dir_in_docs_dir(self):
+    def test_site_dir_in_docs_dir(self) -> None:
         j = os.path.join
 
         test_configs = (
@@ -884,7 +913,7 @@ class SiteDirTest(TestCase):
                 ):
                     self.get_config(self.Schema, test_config)
 
-    def test_common_prefix(self):
+    def test_common_prefix(self) -> None:
         """Legitimate settings with common prefixes should not fail validation."""
 
         test_configs = (
@@ -898,15 +927,17 @@ class SiteDirTest(TestCase):
 
 
 class ThemeTest(TestCase):
-    def test_theme_as_string(self):
-        class Schema:
+    def test_theme_as_string(self) -> None:
+        class Schema(Config):
             option = c.Theme()
 
         conf = self.get_config(Schema, {'option': "mkdocs"})
-        self.assertEqual(conf['option'].name, 'mkdocs')
+        assert_type(conf.option, Theme)
+        assert_type(conf.option.name, Optional[str])
+        self.assertEqual(conf.option.name, 'mkdocs')
 
-    def test_uninstalled_theme_as_string(self):
-        class Schema:
+    def test_uninstalled_theme_as_string(self) -> None:
+        class Schema(Config):
             option = c.Theme()
 
         with self.expect_error(
@@ -916,26 +947,26 @@ class ThemeTest(TestCase):
         ):
             self.get_config(Schema, {'option': "mkdocs2"})
 
-    def test_theme_default(self):
-        class Schema:
+    def test_theme_default(self) -> None:
+        class Schema(Config):
             option = c.Theme(default='mkdocs')
 
         conf = self.get_config(Schema, {'option': None})
-        self.assertEqual(conf['option'].name, 'mkdocs')
+        self.assertEqual(conf.option.name, 'mkdocs')
 
-    def test_theme_as_simple_config(self):
+    def test_theme_as_simple_config(self) -> None:
         config = {
             'name': 'mkdocs',
         }
 
-        class Schema:
+        class Schema(Config):
             option = c.Theme()
 
         conf = self.get_config(Schema, {'option': config})
-        self.assertEqual(conf['option'].name, 'mkdocs')
+        self.assertEqual(conf.option.name, 'mkdocs')
 
     @tempdir()
-    def test_theme_as_complex_config(self, custom_dir):
+    def test_theme_as_complex_config(self, custom_dir) -> None:
         config = {
             'name': 'mkdocs',
             'custom_dir': custom_dir,
@@ -943,24 +974,24 @@ class ThemeTest(TestCase):
             'show_sidebar': False,
         }
 
-        class Schema:
+        class Schema(Config):
             option = c.Theme()
 
         conf = self.get_config(Schema, {'option': config})
-        self.assertEqual(conf['option'].name, 'mkdocs')
-        self.assertIn(custom_dir, conf['option'].dirs)
+        self.assertEqual(conf.option.name, 'mkdocs')
+        self.assertIn(custom_dir, conf.option.dirs)
         self.assertEqual(
-            conf['option'].static_templates,
+            conf.option.static_templates,
             {'404.html', 'sitemap.xml', 'sitemap.html'},
         )
-        self.assertEqual(conf['option']['show_sidebar'], False)
+        self.assertEqual(conf.option['show_sidebar'], False)
 
-    def test_theme_name_is_none(self):
+    def test_theme_name_is_none(self) -> None:
         config = {
             'name': None,
         }
 
-        class Schema:
+        class Schema(Config):
             option = c.Theme()
 
         with self.expect_error(
@@ -968,23 +999,23 @@ class ThemeTest(TestCase):
         ):
             self.get_config(Schema, {'option': config})
 
-    def test_theme_config_missing_name(self):
+    def test_theme_config_missing_name(self) -> None:
         config = {
             'custom_dir': 'custom',
         }
 
-        class Schema:
+        class Schema(Config):
             option = c.Theme()
 
         with self.expect_error(option="No theme name set."):
             self.get_config(Schema, {'option': config})
 
-    def test_uninstalled_theme_as_config(self):
+    def test_uninstalled_theme_as_config(self) -> None:
         config = {
             'name': 'mkdocs2',
         }
 
-        class Schema:
+        class Schema(Config):
             option = c.Theme()
 
         with self.expect_error(
@@ -994,10 +1025,10 @@ class ThemeTest(TestCase):
         ):
             self.get_config(Schema, {'option': config})
 
-    def test_theme_invalid_type(self):
+    def test_theme_invalid_type(self) -> None:
         config = ['mkdocs2']
 
-        class Schema:
+        class Schema(Config):
             option = c.Theme()
 
         with self.expect_error(
@@ -1005,14 +1036,14 @@ class ThemeTest(TestCase):
         ):
             self.get_config(Schema, {'option': config})
 
-    def test_post_validation_none_theme_name_and_missing_custom_dir(self):
+    def test_post_validation_none_theme_name_and_missing_custom_dir(self) -> None:
         config = {
             'theme': {
                 'name': None,
             },
         }
 
-        class Schema:
+        class Schema(Config):
             theme = c.Theme()
 
         with self.expect_error(
@@ -1021,7 +1052,7 @@ class ThemeTest(TestCase):
             self.get_config(Schema, config)
 
     @tempdir()
-    def test_post_validation_inexisting_custom_dir(self, abs_base_path):
+    def test_post_validation_inexisting_custom_dir(self, abs_base_path) -> None:
         path = os.path.join(abs_base_path, 'inexisting_custom_dir')
         config = {
             'theme': {
@@ -1030,7 +1061,7 @@ class ThemeTest(TestCase):
             },
         }
 
-        class Schema:
+        class Schema(Config):
             theme = c.Theme()
 
         with self.expect_error(
@@ -1038,7 +1069,7 @@ class ThemeTest(TestCase):
         ):
             self.get_config(Schema, config)
 
-    def test_post_validation_locale_none(self):
+    def test_post_validation_locale_none(self) -> None:
         config = {
             'theme': {
                 'name': 'mkdocs',
@@ -1046,13 +1077,13 @@ class ThemeTest(TestCase):
             },
         }
 
-        class Schema:
+        class Schema(Config):
             theme = c.Theme()
 
         with self.expect_error(theme="'theme.locale' must be a string."):
             self.get_config(Schema, config)
 
-    def test_post_validation_locale_invalid_type(self):
+    def test_post_validation_locale_invalid_type(self) -> None:
         config = {
             'theme': {
                 'name': 'mkdocs',
@@ -1060,13 +1091,13 @@ class ThemeTest(TestCase):
             },
         }
 
-        class Schema:
+        class Schema(Config):
             theme = c.Theme()
 
         with self.expect_error(theme="'theme.locale' must be a string."):
             self.get_config(Schema, config)
 
-    def test_post_validation_locale(self):
+    def test_post_validation_locale(self) -> None:
         config = {
             'theme': {
                 'name': 'mkdocs',
@@ -1074,32 +1105,32 @@ class ThemeTest(TestCase):
             },
         }
 
-        class Schema:
+        class Schema(Config):
             theme = c.Theme()
 
         conf = self.get_config(Schema, config)
-        self.assertEqual(conf['theme']['locale'].language, 'fr')
+        self.assertEqual(conf.theme['locale'].language, 'fr')
 
 
 class NavTest(TestCase):
-    class Schema:
+    class Schema(Config):
         option = c.Nav()
 
-    def test_old_format(self):
+    def test_old_format(self) -> None:
         with self.expect_error(
             option="Expected nav item to be a string or dict, got a list: ['index.md']"
         ):
             self.get_config(self.Schema, {'option': [['index.md']]})
 
-    def test_provided_dict(self):
+    def test_provided_dict(self) -> None:
         conf = self.get_config(self.Schema, {'option': ['index.md', {"Page": "page.md"}]})
-        self.assertEqual(conf['option'], ['index.md', {'Page': 'page.md'}])
+        self.assertEqual(conf.option, ['index.md', {'Page': 'page.md'}])
 
-    def test_provided_empty(self):
+    def test_provided_empty(self) -> None:
         conf = self.get_config(self.Schema, {'option': []})
-        self.assertEqual(conf['option'], None)
+        self.assertEqual(conf.option, None)
 
-    def test_normal_nav(self):
+    def test_normal_nav(self) -> None:
         nav_yaml = textwrap.dedent(
             '''\
             - Home: index.md
@@ -1112,52 +1143,52 @@ class NavTest(TestCase):
         nav = yaml_load(io.StringIO(nav_yaml))
 
         conf = self.get_config(self.Schema, {'option': nav})
-        self.assertEqual(conf['option'], nav)
+        self.assertEqual(conf.option, nav)
 
-    def test_invalid_type_dict(self):
+    def test_invalid_type_dict(self) -> None:
         with self.expect_error(option="Expected nav to be a list, got a dict: {}"):
             self.get_config(self.Schema, {'option': {}})
 
-    def test_invalid_type_int(self):
+    def test_invalid_type_int(self) -> None:
         with self.expect_error(option="Expected nav to be a list, got a int: 5"):
             self.get_config(self.Schema, {'option': 5})
 
-    def test_invalid_item_int(self):
+    def test_invalid_item_int(self) -> None:
         with self.expect_error(option="Expected nav item to be a string or dict, got a int: 1"):
             self.get_config(self.Schema, {'option': [1]})
 
-    def test_invalid_item_none(self):
+    def test_invalid_item_none(self) -> None:
         with self.expect_error(option="Expected nav item to be a string or dict, got None"):
             self.get_config(self.Schema, {'option': [None]})
 
-    def test_invalid_children_config_int(self):
+    def test_invalid_children_config_int(self) -> None:
         with self.expect_error(option="Expected nav to be a list, got a int: 1"):
             self.get_config(self.Schema, {'option': [{"foo.md": [{"bar.md": 1}]}]})
 
-    def test_invalid_children_config_none(self):
+    def test_invalid_children_config_none(self) -> None:
         with self.expect_error(option="Expected nav to be a list, got None"):
             self.get_config(self.Schema, {'option': [{"foo.md": None}]})
 
-    def test_invalid_children_empty_dict(self):
+    def test_invalid_children_empty_dict(self) -> None:
         nav = ['foo', {}]
         with self.expect_error(option="Expected nav item to be a dict of size 1, got a dict: {}"):
             self.get_config(self.Schema, {'option': nav})
 
-    def test_invalid_nested_list(self):
+    def test_invalid_nested_list(self) -> None:
         nav = [{'aaa': [[{"bbb": "user-guide/index.md"}]]}]
         with self.expect_error(
             option="Expected nav item to be a string or dict, got a list: [{'bbb': 'user-guide/index.md'}]"
         ):
             self.get_config(self.Schema, {'option': nav})
 
-    def test_invalid_children_oversized_dict(self):
+    def test_invalid_children_oversized_dict(self) -> None:
         nav = [{"aaa": [{"bbb": "user-guide/index.md", "ccc": "user-guide/installation.md"}]}]
         with self.expect_error(
             option="Expected nav item to be a dict of size 1, got dict with keys ('bbb', 'ccc')"
         ):
             self.get_config(self.Schema, {'option': nav})
 
-    def test_warns_for_dict(self):
+    def test_warns_for_dict(self) -> None:
         self.get_config(
             self.Schema,
             {'option': [{"a": {"b": "c.md", "d": "e.md"}}]},
@@ -1166,8 +1197,8 @@ class NavTest(TestCase):
 
 
 class PrivateTest(TestCase):
-    def test_defined(self):
-        class Schema:
+    def test_defined(self) -> None:
+        class Schema(Config):
             option = c.Private()
 
         with self.expect_error(option="For internal use only."):
@@ -1175,9 +1206,9 @@ class PrivateTest(TestCase):
 
 
 class SubConfigTest(TestCase):
-    def test_subconfig_wrong_type(self):
+    def test_subconfig_wrong_type(self) -> None:
         # Test that an error is raised if subconfig does not receive a dict
-        class Schema:
+        class Schema(Config):
             option = c.SubConfig()
 
         for val in "not_a_dict", ("not_a_dict",), ["not_a_dict"]:
@@ -1190,39 +1221,8 @@ class SubConfigTest(TestCase):
                 ):
                     self.get_config(Schema, {'option': val})
 
-    def test_subconfig_ignored(self):
-        """Default behaviour of subconfig: validation is ignored"""
-
-        # Nominal
-        class Schema:
-            option = c.SubConfig(('cc', c.Choice(('foo', 'bar'))))
-
-        conf = self.get_config(Schema, {'option': {'cc': 'foo'}})
-        self.assertEqual(conf, {'option': {'cc': 'foo'}})
-
-        # Invalid option: No error
-        class Schema:
-            option = c.SubConfig(('cc', c.Choice(('foo', 'bar'))))
-
-        conf = self.get_config(Schema, {'option': {'cc': True}})
-        self.assertEqual(conf, {'option': {'cc': True}})
-
-        # Missing option: Will be considered optional with default None
-        class Schema:
-            option = c.SubConfig(('cc', c.Choice(('foo', 'bar'))))
-
-        conf = self.get_config(Schema, {'option': {}})
-        self.assertEqual(conf, {'option': {'cc': None}})
-
-        # Unknown option: No warning
-        class Schema:
-            option = c.SubConfig(('cc', c.Choice(('foo', 'bar'))))
-
-        conf = self.get_config(Schema, {'option': {'unknown_key_is_ok': 0}})
-        self.assertEqual(conf, {'option': {'cc': None, 'unknown_key_is_ok': 0}})
-
-    def test_subconfig_unknown_option(self):
-        class Schema:
+    def test_subconfig_unknown_option(self) -> None:
+        class Schema(Config):
             option = c.SubConfig(validate=True)
 
         conf = self.get_config(
@@ -1230,37 +1230,40 @@ class SubConfigTest(TestCase):
             {'option': {'unknown': 0}},
             warnings=dict(option=('unknown', 'Unrecognised configuration name: unknown')),
         )
-        self.assertEqual(conf['option'], {"unknown": 0})
+        self.assertEqual(conf.option, {"unknown": 0})
 
-    def test_subconfig_invalid_option(self):
-        class Schema:
-            option = c.SubConfig(
-                ('cc', c.Choice(('foo', 'bar'))),
-                validate=True,
-            )
+    def test_subconfig_invalid_option(self) -> None:
+        class Sub(Config):
+            cc = c.Choice(('foo', 'bar'))
+
+        class Schema(Config):
+            option = c.SubConfig(Sub)
 
         with self.expect_error(
             option="Sub-option 'cc' configuration error: Expected one of: ('foo', 'bar') but received: True"
         ):
             self.get_config(Schema, {'option': {'cc': True}})
 
-    def test_subconfig_normal(self):
-        class Schema:
-            option = c.SubConfig(
-                ('cc', c.Choice(('foo', 'bar'))),
-            )
+    def test_subconfig_normal(self) -> None:
+        class Sub(Config):
+            cc = c.Choice(('foo', 'bar'))
+
+        class Schema(Config):
+            option = c.SubConfig(Sub)
 
         conf = self.get_config(Schema, {'option': {'cc': 'foo'}})
-        self.assertEqual(conf['option'], {'cc': 'foo'})
+        assert_type(conf.option, Sub)
+        self.assertEqual(conf.option, {'cc': 'foo'})
+        assert_type(conf.option.cc, str)
+        self.assertEqual(conf.option.cc, 'foo')
 
-
-class ConfigItemsTest(TestCase):
-    def test_subconfig_with_multiple_items(self):
+    def test_subconfig_with_multiple_items(self) -> None:
         # This had a bug where subsequent items would get merged into the same dict.
-        class Schema:
-            the_items = c.ConfigItems(
-                ("value", c.Type(str)),
-            )
+        class Sub(Config):
+            value = c.Type(str)
+
+        class Schema(Config):
+            the_items = c.ListOfItems(c.SubConfig(Sub))
 
         conf = self.get_config(
             Schema,
@@ -1271,40 +1274,42 @@ class ConfigItemsTest(TestCase):
                 ]
             },
         )
-        self.assertEqual(conf['the_items'], [{'value': 'a'}, {'value': 'b'}])
+        assert_type(conf.the_items, List[Sub])
+        self.assertEqual(conf.the_items, [{'value': 'a'}, {'value': 'b'}])
+        assert_type(conf.the_items[1].value, str)
+        self.assertEqual(conf.the_items[1].value, 'b')
 
-    def test_optional(self):
-        class Schema:
-            sub = c.ListOfItems(
-                c.SubConfig(
-                    ('opt', c.Type(int)),
-                    validate=True,
-                ),
-                default=[],
-            )
+    def test_optional(self) -> None:
+        class Sub(Config):
+            opt = c.Optional(c.Type(int))
+
+        class Schema(Config):
+            sub = c.Optional(c.ListOfItems(c.SubConfig(Sub)))
 
         conf = self.get_config(Schema, {})
-        self.assertEqual(conf['sub'], [])
+        self.assertEqual(conf.sub, None)
 
         conf = self.get_config(Schema, {'sub': None})
-        self.assertEqual(conf['sub'], [])
+        self.assertEqual(conf.sub, None)
 
         conf = self.get_config(Schema, {'sub': [{'opt': 1}, {}]})
-        self.assertEqual(conf['sub'], [{'opt': 1}, {'opt': None}])
+        assert_type(conf.sub, Optional[List[Sub]])
+        self.assertEqual(conf.sub, [{'opt': 1}, {'opt': None}])
+        assert conf.sub is not None
+        assert_type(conf.sub[0].opt, Optional[int])
+        self.assertEqual(conf.sub[0].opt, 1)
 
         conf = self.get_config(Schema, {'sub': []})
 
         conf = self.get_config(Schema, {'sub': [{'opt': 1}, {'opt': 2}]})
-        self.assertEqual(conf['sub'], [{'opt': 1}, {'opt': 2}])
+        self.assertEqual(conf.sub, [{'opt': 1}, {'opt': 2}])
 
-    def test_required(self):
-        class Schema:
-            sub = c.ListOfItems(
-                c.SubConfig(
-                    ('opt', c.Type(int, required=True)),
-                    validate=True,
-                )
-            )
+    def test_required(self) -> None:
+        class Sub(Config):
+            opt = c.Type(int)
+
+        class Schema(Config):
+            sub = c.ListOfItems(c.SubConfig(Sub))
 
         with self.expect_error(sub="Required configuration not provided."):
             conf = self.get_config(Schema, {})
@@ -1320,7 +1325,10 @@ class ConfigItemsTest(TestCase):
         conf = self.get_config(Schema, {'sub': []})
 
         conf = self.get_config(Schema, {'sub': [{'opt': 1}, {'opt': 2}]})
-        self.assertEqual(conf['sub'], [{'opt': 1}, {'opt': 2}])
+        assert_type(conf.sub, List[Sub])
+        self.assertEqual(conf.sub, [{'opt': 1}, {'opt': 2}])
+        assert_type(conf.sub[0].opt, int)
+        self.assertEqual(conf.sub[0].opt, 1)
 
         with self.expect_error(
             sub="Sub-option 'opt' configuration error: Expected type: <class 'int'> but "
@@ -1340,11 +1348,25 @@ class ConfigItemsTest(TestCase):
         ):
             conf = self.get_config(Schema, {'sub': [1, 2]})
 
+    def test_default(self) -> None:
+        class Sub(Config):
+            opt = c.Type(int)
+
+        class Schema(Config):
+            sub = c.ListOfItems(c.SubConfig(Sub), default=[])
+
+        conf = self.get_config(Schema, {})
+        assert_type(conf.sub, List[Sub])
+        self.assertEqual(conf.sub, [])
+
+        with self.expect_error(sub="Required configuration not provided."):
+            conf = self.get_config(Schema, {'sub': None})
+
 
 class MarkdownExtensionsTest(TestCase):
     @patch('markdown.Markdown')
-    def test_simple_list(self, mock_md):
-        class Schema:
+    def test_simple_list(self, mock_md) -> None:
+        class Schema(Config):
             markdown_extensions = c.MarkdownExtensions()
             mdx_configs = c.Private()
 
@@ -1352,12 +1374,13 @@ class MarkdownExtensionsTest(TestCase):
             'markdown_extensions': ['foo', 'bar'],
         }
         conf = self.get_config(Schema, config)
-        self.assertEqual(conf['markdown_extensions'], ['foo', 'bar'])
-        self.assertEqual(conf['mdx_configs'], {})
+        assert_type(conf.markdown_extensions, List[str])
+        self.assertEqual(conf.markdown_extensions, ['foo', 'bar'])
+        self.assertEqual(conf.mdx_configs, {})
 
     @patch('markdown.Markdown')
-    def test_list_dicts(self, mock_md):
-        class Schema:
+    def test_list_dicts(self, mock_md) -> None:
+        class Schema(Config):
             markdown_extensions = c.MarkdownExtensions()
             mdx_configs = c.Private()
 
@@ -1369,9 +1392,9 @@ class MarkdownExtensionsTest(TestCase):
             ]
         }
         conf = self.get_config(Schema, config)
-        self.assertEqual(conf['markdown_extensions'], ['foo', 'bar', 'baz'])
+        self.assertEqual(conf.markdown_extensions, ['foo', 'bar', 'baz'])
         self.assertEqual(
-            conf['mdx_configs'],
+            conf.mdx_configs,
             {
                 'foo': {'foo_option': 'foo value'},
                 'bar': {'bar_option': 'bar value'},
@@ -1379,8 +1402,8 @@ class MarkdownExtensionsTest(TestCase):
         )
 
     @patch('markdown.Markdown')
-    def test_mixed_list(self, mock_md):
-        class Schema:
+    def test_mixed_list(self, mock_md) -> None:
+        class Schema(Config):
             markdown_extensions = c.MarkdownExtensions()
             mdx_configs = c.Private()
 
@@ -1391,17 +1414,17 @@ class MarkdownExtensionsTest(TestCase):
             ]
         }
         conf = self.get_config(Schema, config)
-        self.assertEqual(conf['markdown_extensions'], ['foo', 'bar'])
+        self.assertEqual(conf.markdown_extensions, ['foo', 'bar'])
         self.assertEqual(
-            conf['mdx_configs'],
+            conf.mdx_configs,
             {
                 'bar': {'bar_option': 'bar value'},
             },
         )
 
     @patch('markdown.Markdown')
-    def test_dict_of_dicts(self, mock_md):
-        class Schema:
+    def test_dict_of_dicts(self, mock_md) -> None:
+        class Schema(Config):
             markdown_extensions = c.MarkdownExtensions()
             mdx_configs = c.Private()
 
@@ -1413,9 +1436,9 @@ class MarkdownExtensionsTest(TestCase):
             }
         }
         conf = self.get_config(Schema, config)
-        self.assertEqual(conf['markdown_extensions'], ['foo', 'bar', 'baz'])
+        self.assertEqual(conf.markdown_extensions, ['foo', 'bar', 'baz'])
         self.assertEqual(
-            conf['mdx_configs'],
+            conf.mdx_configs,
             {
                 'foo': {'foo_option': 'foo value'},
                 'bar': {'bar_option': 'bar value'},
@@ -1423,8 +1446,8 @@ class MarkdownExtensionsTest(TestCase):
         )
 
     @patch('markdown.Markdown')
-    def test_builtins(self, mock_md):
-        class Schema:
+    def test_builtins(self, mock_md) -> None:
+        class Schema(Config):
             markdown_extensions = c.MarkdownExtensions(builtins=['meta', 'toc'])
             mdx_configs = c.Private()
 
@@ -1432,11 +1455,11 @@ class MarkdownExtensionsTest(TestCase):
             'markdown_extensions': ['foo', 'bar'],
         }
         conf = self.get_config(Schema, config)
-        self.assertEqual(conf['markdown_extensions'], ['meta', 'toc', 'foo', 'bar'])
-        self.assertEqual(conf['mdx_configs'], {})
+        self.assertEqual(conf.markdown_extensions, ['meta', 'toc', 'foo', 'bar'])
+        self.assertEqual(conf.mdx_configs, {})
 
-    def test_duplicates(self):
-        class Schema:
+    def test_duplicates(self) -> None:
+        class Schema(Config):
             markdown_extensions = c.MarkdownExtensions(builtins=['meta', 'toc'])
             mdx_configs = c.Private()
 
@@ -1444,11 +1467,11 @@ class MarkdownExtensionsTest(TestCase):
             'markdown_extensions': ['meta', 'toc'],
         }
         conf = self.get_config(Schema, config)
-        self.assertEqual(conf['markdown_extensions'], ['meta', 'toc'])
-        self.assertEqual(conf['mdx_configs'], {})
+        self.assertEqual(conf.markdown_extensions, ['meta', 'toc'])
+        self.assertEqual(conf.mdx_configs, {})
 
-    def test_builtins_config(self):
-        class Schema:
+    def test_builtins_config(self) -> None:
+        class Schema(Config):
             markdown_extensions = c.MarkdownExtensions(builtins=['meta', 'toc'])
             mdx_configs = c.Private()
 
@@ -1458,12 +1481,12 @@ class MarkdownExtensionsTest(TestCase):
             ],
         }
         conf = self.get_config(Schema, config)
-        self.assertEqual(conf['markdown_extensions'], ['meta', 'toc'])
-        self.assertEqual(conf['mdx_configs'], {'toc': {'permalink': True}})
+        self.assertEqual(conf.markdown_extensions, ['meta', 'toc'])
+        self.assertEqual(conf.mdx_configs, {'toc': {'permalink': True}})
 
     @patch('markdown.Markdown')
-    def test_configkey(self, mock_md):
-        class Schema:
+    def test_configkey(self, mock_md) -> None:
+        class Schema(Config):
             markdown_extensions = c.MarkdownExtensions(configkey='bar')
             bar = c.Private()
 
@@ -1473,25 +1496,25 @@ class MarkdownExtensionsTest(TestCase):
             ]
         }
         conf = self.get_config(Schema, config)
-        self.assertEqual(conf['markdown_extensions'], ['foo'])
+        self.assertEqual(conf.markdown_extensions, ['foo'])
         self.assertEqual(
-            conf['bar'],
+            conf.bar,
             {
                 'foo': {'foo_option': 'foo value'},
             },
         )
 
-    def test_missing_default(self):
-        class Schema:
+    def test_missing_default(self) -> None:
+        class Schema(Config):
             markdown_extensions = c.MarkdownExtensions()
             mdx_configs = c.Private()
 
         conf = self.get_config(Schema, {})
-        self.assertEqual(conf['markdown_extensions'], [])
-        self.assertEqual(conf['mdx_configs'], {})
+        self.assertEqual(conf.markdown_extensions, [])
+        self.assertEqual(conf.mdx_configs, {})
 
-    def test_none(self):
-        class Schema:
+    def test_none(self) -> None:
+        class Schema(Config):
             markdown_extensions = c.MarkdownExtensions(default=[])
             mdx_configs = c.Private()
 
@@ -1499,20 +1522,20 @@ class MarkdownExtensionsTest(TestCase):
             'markdown_extensions': None,
         }
         conf = self.get_config(Schema, config)
-        self.assertEqual(conf['markdown_extensions'], [])
-        self.assertEqual(conf['mdx_configs'], {})
+        self.assertEqual(conf.markdown_extensions, [])
+        self.assertEqual(conf.mdx_configs, {})
 
     @patch('markdown.Markdown')
-    def test_not_list(self, mock_md):
-        class Schema:
+    def test_not_list(self, mock_md) -> None:
+        class Schema(Config):
             option = c.MarkdownExtensions()
 
         with self.expect_error(option="Invalid Markdown Extensions configuration"):
             self.get_config(Schema, {'option': 'not a list'})
 
     @patch('markdown.Markdown')
-    def test_invalid_config_option(self, mock_md):
-        class Schema:
+    def test_invalid_config_option(self, mock_md) -> None:
+        class Schema(Config):
             markdown_extensions = c.MarkdownExtensions()
 
         config = {
@@ -1526,8 +1549,8 @@ class MarkdownExtensionsTest(TestCase):
             self.get_config(Schema, config)
 
     @patch('markdown.Markdown')
-    def test_invalid_config_item(self, mock_md):
-        class Schema:
+    def test_invalid_config_item(self, mock_md) -> None:
+        class Schema(Config):
             markdown_extensions = c.MarkdownExtensions()
 
         config = {
@@ -1539,8 +1562,8 @@ class MarkdownExtensionsTest(TestCase):
             self.get_config(Schema, config)
 
     @patch('markdown.Markdown')
-    def test_invalid_dict_item(self, mock_md):
-        class Schema:
+    def test_invalid_dict_item(self, mock_md) -> None:
+        class Schema(Config):
             markdown_extensions = c.MarkdownExtensions()
 
         config = {
@@ -1551,8 +1574,8 @@ class MarkdownExtensionsTest(TestCase):
         with self.expect_error(markdown_extensions="Invalid Markdown Extensions configuration"):
             self.get_config(Schema, config)
 
-    def test_unknown_extension(self):
-        class Schema:
+    def test_unknown_extension(self) -> None:
+        class Schema(Config):
             markdown_extensions = c.MarkdownExtensions()
 
         config = {
@@ -1563,10 +1586,10 @@ class MarkdownExtensionsTest(TestCase):
         ):
             self.get_config(Schema, config)
 
-    def test_multiple_markdown_config_instances(self):
+    def test_multiple_markdown_config_instances(self) -> None:
         # This had a bug where an extension config would persist to separate
         # config instances that didn't specify extensions.
-        class Schema:
+        class Schema(Config):
             markdown_extensions = c.MarkdownExtensions()
             mdx_configs = c.Private()
 
@@ -1576,22 +1599,22 @@ class MarkdownExtensionsTest(TestCase):
                 'markdown_extensions': [{'toc': {'permalink': '##'}}],
             },
         )
-        self.assertEqual(conf['mdx_configs']['toc'], {'permalink': '##'})
+        self.assertEqual(conf.mdx_configs['toc'], {'permalink': '##'})
 
         conf = self.get_config(
             Schema,
             {},
         )
-        self.assertIsNone(conf['mdx_configs'].get('toc'))
+        self.assertIsNone(conf.mdx_configs.get('toc'))
 
 
 class TestHooks(TestCase):
-    class Schema:
+    class Schema(Config):
         plugins = c.Plugins(default=[])
         hooks = c.Hooks('plugins')
 
     @tempdir()
-    def test_hooks(self, src_dir):
+    def test_hooks(self, src_dir) -> None:
         write_file(
             b'def on_page_markdown(markdown, **kwargs): return markdown.replace("f", "z")',
             os.path.join(src_dir, 'hooks', 'my_hook.py'),
@@ -1605,29 +1628,28 @@ class TestHooks(TestCase):
             {'hooks': ['hooks/my_hook.py']},
             config_file_path=os.path.join(src_dir, 'mkdocs.yml'),
         )
-        self.assertIn('hooks/my_hook.py', conf['plugins'])
-        hook = conf['plugins']['hooks/my_hook.py']
+        self.assertIn('hooks/my_hook.py', conf.plugins)
+        hook = conf.plugins['hooks/my_hook.py']
         self.assertTrue(hasattr(hook, 'on_page_markdown'))
         self.assertEqual(
-            {**conf['plugins'].events, 'page_markdown': [hook.on_page_markdown]},
-            conf['plugins'].events,
+            {**conf.plugins.events, 'page_markdown': [hook.on_page_markdown]},
+            conf.plugins.events,
         )
         self.assertEqual(hook.on_page_markdown('foo foo'), 'zoo zoo')
         self.assertFalse(hasattr(hook, 'on_nav'))
 
 
 class SchemaTest(TestCase):
-    def test_copy(self):
-        copy.deepcopy(
-            base.LegacyConfig(
-                (('foo', c.MarkdownExtensions()),),
-            ),
-        )
+    def test_copy(self) -> None:
+        class Schema(Config):
+            foo = c.MarkdownExtensions()
+
+        copy.deepcopy(Schema())
 
         copy.deepcopy(self.get_config(IpAddressTest.Schema, {'option': '1.2.3.4:5678'}))
         copy.deepcopy(IpAddressTest.Schema)
-        copy.deepcopy(base.get_schema(IpAddressTest.Schema))
+        copy.deepcopy(IpAddressTest.Schema())
 
         copy.deepcopy(self.get_config(EditURITest.Schema, {}))
         copy.deepcopy(EditURITest.Schema)
-        copy.deepcopy(base.get_schema(EditURITest.Schema))
+        copy.deepcopy(EditURITest.Schema())
