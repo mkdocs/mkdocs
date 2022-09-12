@@ -97,7 +97,7 @@ All `BasePlugin` subclasses contain the following attributes:
     the `load_config` method after configuration validation has completed. Use
     this attribute to access options provided by the user.
 
-        def on_pre_build(self, config):
+        def on_pre_build(self, config, **kwargs):
             if self.config['bool_option']:
                 # implement "bool_option" functionality here...
 
@@ -376,7 +376,7 @@ class MyPlugin(BasePlugin):
         except KeyError as error:
             raise PluginError(str(error))
 
-    def on_build_error(self, error):
+    def on_build_error(self, error, **kwargs):
         # some code to clean things up
         ...
 ```

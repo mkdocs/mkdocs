@@ -69,7 +69,7 @@ class BasePlugin:
 
     # One-time events
 
-    def on_startup(self, command: Literal['build', 'gh-deploy', 'serve'], dirty: bool) -> None:
+    def on_startup(self, *, command: Literal['build', 'gh-deploy', 'serve'], dirty: bool) -> None:
         """
         The `startup` event runs once at the very beginning of an `mkdocs` invocation.
 
@@ -104,7 +104,7 @@ class BasePlugin:
         """
 
     def on_serve(
-        self, server: LiveReloadServer, config: Config, builder: Callable
+        self, server: LiveReloadServer, *, config: Config, builder: Callable
     ) -> Optional[LiveReloadServer]:
         """
         The `serve` event is only called when the `serve` command is used during
@@ -139,7 +139,7 @@ class BasePlugin:
         """
         return config
 
-    def on_pre_build(self, config: Config) -> None:
+    def on_pre_build(self, *, config: Config) -> None:
         """
         The `pre_build` event does not alter any variables. Use this event to call
         pre-build scripts.
@@ -148,7 +148,7 @@ class BasePlugin:
             config: global configuration object
         """
 
-    def on_files(self, files: Files, config: Config) -> Optional[Files]:
+    def on_files(self, files: Files, *, config: Config) -> Optional[Files]:
         """
         The `files` event is called after the files collection is populated from the
         `docs_dir`. Use this event to add, remove, or alter files in the
@@ -165,7 +165,7 @@ class BasePlugin:
         """
         return files
 
-    def on_nav(self, nav: Navigation, config: Config, files: Files) -> Optional[Navigation]:
+    def on_nav(self, nav: Navigation, *, config: Config, files: Files) -> Optional[Navigation]:
         """
         The `nav` event is called after the site navigation is created and can
         be used to alter the site navigation.
@@ -181,7 +181,7 @@ class BasePlugin:
         return nav
 
     def on_env(
-        self, env: jinja2.Environment, config: Config, files: Files
+        self, env: jinja2.Environment, *, config: Config, files: Files
     ) -> Optional[jinja2.Environment]:
         """
         The `env` event is called after the Jinja template environment is created
@@ -198,7 +198,7 @@ class BasePlugin:
         """
         return env
 
-    def on_post_build(self, config: Config) -> None:
+    def on_post_build(self, *, config: Config) -> None:
         """
         The `post_build` event does not alter any variables. Use this event to call
         post-build scripts.
@@ -222,7 +222,7 @@ class BasePlugin:
     # Template events
 
     def on_pre_template(
-        self, template: jinja2.Template, template_name: str, config: Config
+        self, template: jinja2.Template, *, template_name: str, config: Config
     ) -> Optional[jinja2.Template]:
         """
         The `pre_template` event is called immediately after the subject template is
@@ -239,7 +239,7 @@ class BasePlugin:
         return template
 
     def on_template_context(
-        self, context: Dict[str, Any], template_name: str, config: Config
+        self, context: Dict[str, Any], *, template_name: str, config: Config
     ) -> Optional[Dict[str, Any]]:
         """
         The `template_context` event is called immediately after the context is created
@@ -256,7 +256,9 @@ class BasePlugin:
         """
         return context
 
-    def on_post_template(self, output_content: str, template_name: str, config: Config) -> str:
+    def on_post_template(
+        self, output_content: str, *, template_name: str, config: Config
+    ) -> Optional[str]:
         """
         The `post_template` event is called after the template is rendered, but before
         it is written to disc and can be used to alter the output of the template.
@@ -275,7 +277,7 @@ class BasePlugin:
 
     # Page events
 
-    def on_pre_page(self, page: Page, config: Config, files: Files) -> Optional[Page]:
+    def on_pre_page(self, page: Page, *, config: Config, files: Files) -> Optional[Page]:
         """
         The `pre_page` event is called before any actions are taken on the subject
         page and can be used to alter the `Page` instance.
@@ -290,7 +292,7 @@ class BasePlugin:
         """
         return page
 
-    def on_page_read_source(self, page: Page, config: Config) -> Optional[str]:
+    def on_page_read_source(self, *, page: Page, config: Config) -> Optional[str]:
         """
         The `on_page_read_source` event can replace the default mechanism to read
         the contents of a page's source from the filesystem.
@@ -306,7 +308,7 @@ class BasePlugin:
         return None
 
     def on_page_markdown(
-        self, markdown: str, page: Page, config: Config, files: Files
+        self, markdown: str, *, page: Page, config: Config, files: Files
     ) -> Optional[str]:
         """
         The `page_markdown` event is called after the page's markdown is loaded
@@ -324,7 +326,9 @@ class BasePlugin:
         """
         return markdown
 
-    def on_page_content(self, html: str, page: Page, config: Config, files: Files) -> Optional[str]:
+    def on_page_content(
+        self, html: str, *, page: Page, config: Config, files: Files
+    ) -> Optional[str]:
         """
         The `page_content` event is called after the Markdown text is rendered to
         HTML (but before being passed to a template) and can be used to alter the
@@ -342,7 +346,7 @@ class BasePlugin:
         return html
 
     def on_page_context(
-        self, context: Dict[str, Any], page: Page, config: Config, nav: Navigation
+        self, context: Dict[str, Any], *, page: Page, config: Config, nav: Navigation
     ) -> Optional[Dict[str, Any]]:
         """
         The `page_context` event is called after the context for a page is created
@@ -359,7 +363,7 @@ class BasePlugin:
         """
         return context
 
-    def on_post_page(self, output: str, page: Page, config: Config) -> str:
+    def on_post_page(self, output: str, *, page: Page, config: Config) -> Optional[str]:
         """
         The `post_page` event is called after the template is rendered, but
         before it is written to disc and can be used to alter the output of the
