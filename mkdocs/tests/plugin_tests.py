@@ -17,7 +17,7 @@ from mkdocs.tests.base import load_config
 class _DummyPluginConfig(base.Config):
     foo = c.Type(str, default='default foo')
     bar = c.Type(int, default=0)
-    dir = c.Dir(exists=False)
+    dir = c.Optional(c.Dir(exists=False))
 
 
 class DummyPlugin(plugins.BasePlugin[_DummyPluginConfig]):

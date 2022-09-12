@@ -14,23 +14,23 @@ def get_schema() -> base.PlainConfigSchema:
 class MkDocsConfig(base.Config):
     """The configuration of MkDocs itself (the root object of mkdocs.yml)."""
 
-    config_file_path: str = c.Type(str)  # type: ignore[assignment]
+    config_file_path: str = c.Optional(c.Type(str))  # type: ignore[assignment]
     """Reserved for internal use, stores the mkdocs.yml config file."""
 
-    site_name = c.Type(str, required=True)
+    site_name = c.Type(str)
     """The title to use for the documentation."""
 
-    nav = c.Nav()
+    nav = c.Optional(c.Nav())
     """Defines the structure of the navigation."""
     pages = c.Deprecated(removed=True, moved_to='nav')
 
-    site_url = c.URL(is_dir=True)
+    site_url = c.Optional(c.URL(is_dir=True))
     """The full URL to where the documentation will be hosted."""
 
-    site_description = c.Type(str)
+    site_description = c.Optional(c.Type(str))
     """A description for the documentation project that will be added to the
     HTML meta tags."""
-    site_author = c.Type(str)
+    site_author = c.Optional(c.Type(str))
     """The name of the author to add to the HTML meta tags."""
 
     theme = c.Theme(default='mkdocs')
@@ -42,7 +42,7 @@ class MkDocsConfig(base.Config):
     site_dir = c.SiteDir(default='site')
     """The directory where the site will be built to"""
 
-    copyright = c.Type(str)
+    copyright = c.Optional(c.Type(str))
     """A copyright notice to add to the footer of documentation."""
 
     google_analytics = c.Deprecated(
@@ -66,18 +66,18 @@ class MkDocsConfig(base.Config):
     True generates nicer URLs, but False is useful if browsing the output on
     a filesystem."""
 
-    repo_url = c.URL()
+    repo_url = c.Optional(c.URL())
     """Specify a link to the project source repo to be included
     in the documentation pages."""
 
-    repo_name = c.RepoName('repo_url')
+    repo_name = c.Optional(c.RepoName('repo_url'))
     """A name to use for the link to the project source repo.
     Default, If repo_url is unset then None, otherwise
     "GitHub", "Bitbucket" or "GitLab" for known url or Hostname
     for unknown urls."""
 
-    edit_uri_template = c.EditURITemplate('edit_uri')
-    edit_uri = c.EditURI('repo_url')
+    edit_uri_template = c.Optional(c.EditURITemplate('edit_uri'))
+    edit_uri = c.Optional(c.EditURI('repo_url'))
     """Specify a URI to the docs dir in the project source repo, relative to the
     repo_url. When set, a link directly to the page in the source repo will
     be added to the generated HTML. If repo_url is not set also, this option

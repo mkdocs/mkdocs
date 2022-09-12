@@ -138,6 +138,15 @@ class Config(UserDict):
                 schema[attr_name] = attr
         cls._schema = tuple(schema.items())
 
+        for attr_name, attr in cls._schema:
+            attr.required = True
+            if getattr(attr, '_legacy_required', None) is not None:
+                raise TypeError(
+                    f"{cls.__name__}.{attr_name}: "
+                    "Setting 'required' is unsupported in class-based configs. "
+                    "All values are required, or can be wrapped into config_options.Optional"
+                )
+
     def __new__(cls, *args, **kwargs) -> Config:
         """Compatibility: allow referring to `LegacyConfig(...)` constructor as `Config(...)`."""
         if cls is Config:

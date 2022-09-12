@@ -9,7 +9,7 @@ import traceback
 import typing as t
 import warnings
 from collections import UserString
-from typing import Collection, Dict, Generic, List, NamedTuple, TypeVar
+from typing import Collection, Dict, Generic, List, NamedTuple, Tuple, TypeVar, Union, overload
 from urllib.parse import quote as urlquote
 from urllib.parse import urlsplit, urlunsplit
 
@@ -69,10 +69,19 @@ class OptionallyRequired(Generic[T], BaseConfigOption[T]):
     required values. It is a base class for config options.
     """
 
-    def __init__(self, default=None, required: bool = False):
+    @overload
+    def __init__(self, default=None):
+        ...
+
+    @overload
+    def __init__(self, default=None, *, required: bool):
+        ...
+
+    def __init__(self, default=None, required=None):
         super().__init__()
         self.default = default
-        self.required = required
+        self._legacy_required = required
+        self.required = bool(required)
 
     def validate(self, value):
         """
@@ -100,7 +109,7 @@ class ListOfItems(Generic[T], BaseConfigOption[List[T]]):
     E.g. for `config_options.ListOfItems(config_options.Type(int))` a valid item is `[1, 2, 3]`.
     """
 
-    required = False
+    required: Union[bool, None] = None  # Only for subclasses to set.
 
     def __init__(self, option_type: BaseConfigOption[T], default: List[T] = []):
         super().__init__()
@@ -152,9 +161,18 @@ class ConfigItems(ListOfItems[Config]):
     options.
     """
 
-    def __init__(self, *config_options: PlainConfigSchemaItem, required: bool = False):
+    @overload
+    def __init__(self, *config_options: PlainConfigSchemaItem):
+        ...
+
+    @overload
+    def __init__(self, *config_options: PlainConfigSchemaItem, required: bool):
+        ...
+
+    def __init__(self, *config_options: PlainConfigSchemaItem, required=None):
         super().__init__(SubConfig(*config_options))
-        self.required = required
+        self._legacy_required = required
+        self.required = bool(required)
 
 
 class Type(Generic[T], OptionallyRequired[T]):
@@ -164,7 +182,15 @@ class Type(Generic[T], OptionallyRequired[T]):
     Validate the type of a config option against a given Python type.
     """
 
+    @overload
     def __init__(self, type_: t.Type[T], length: t.Optional[int] = None, **kwargs):
+        ...
+
+    @overload
+    def __init__(self, type_: Tuple[t.Type[T], ...], length: t.Optional[int] = None, **kwargs):
+        ...
+
+    def __init__(self, type_, length=None, **kwargs):
         super().__init__(**kwargs)
         self._type = type_
         self.length = length
@@ -336,9 +362,17 @@ class URL(OptionallyRequired[str]):
     Validate a URL by requiring a scheme is present.
     """
 
-    def __init__(self, default='', required: bool = False, is_dir: bool = False):
+    @overload
+    def __init__(self, default='', *, is_dir: bool = False):
+        ...
+
+    @overload
+    def __init__(self, default='', *, required: bool, is_dir: bool = False):
+        ...
+
+    def __init__(self, default='', required=None, is_dir: bool = False):
         self.is_dir = is_dir
-        super().__init__(default, required)
+        super().__init__(default, required=required)
 
     def run_validation(self, value):
         if value == '':
@@ -355,6 +389,40 @@ class URL(OptionallyRequired[str]):
             return urlunsplit(parsed_url)
 
         raise ValidationError("The URL isn't valid, it should include the http:// (scheme)")
+
+
+class Optional(Generic[T], BaseConfigOption[Union[T, None]]):
+    """Wraps a field and makes a None value possible for it when no value is set.
+
+    E.g. `my_field = config_options.Optional(config_options.Type(str))`
+    """
+
+    def __init__(self, config_option: BaseConfigOption[T]):
+        super().__init__()
+        self.option = config_option
+        self.warnings = config_option.warnings
+
+    def __getattr__(self, key):
+        if key in ('option', 'warnings'):
+            raise AttributeError
+        return getattr(self.option, key)
+
+    def pre_validation(self, config, key_name):
+        return self.option.pre_validation(config, key_name)
+
+    def run_validation(self, value):
+        if value is None:
+            return self.default
+        return self.option.validate(value)
+
+    def post_validation(self, config, key_name):
+        result = self.option.post_validation(config, key_name)
+        self.warnings = self.option.warnings
+        return result
+
+    def reset_warnings(self):
+        self.option.reset_warnings()
+        self.warnings = self.option.warnings
 
 
 class RepoURL(URL):
@@ -418,7 +486,7 @@ class EditURI(Type[str]):
         config[key_name] = edit_uri
 
 
-class EditURITemplate(OptionallyRequired[str]):
+class EditURITemplate(BaseConfigOption[str]):
     class Formatter(string.Formatter):
         def convert_field(self, value, conversion):
             if conversion == 'q':
@@ -551,7 +619,15 @@ class ListOfPaths(ListOfItems[str]):
         config_options.ListOfItems(config_options.File(exists=True))
     """
 
-    def __init__(self, default=[], required: bool = False):
+    @overload
+    def __init__(self, default=[]):
+        ...
+
+    @overload
+    def __init__(self, default=[], *, required: bool):
+        ...
+
+    def __init__(self, default=[], required=None):
         super().__init__(FilesystemObject(exists=True), default)
         self.required = required
 
@@ -696,7 +772,7 @@ class Nav(OptionallyRequired):
             return f"a {type(value).__name__}: {value!r}"
 
 
-class Private(OptionallyRequired):
+class Private(BaseConfigOption):
     """
     Private Config Option
 
@@ -704,7 +780,8 @@ class Private(OptionallyRequired):
     """
 
     def run_validation(self, value):
-        raise ValidationError('For internal use only.')
+        if value is not None:
+            raise ValidationError('For internal use only.')
 
 
 class MarkdownExtensions(OptionallyRequired[List[str]]):

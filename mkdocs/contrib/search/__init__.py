@@ -47,7 +47,7 @@ class LangOption(c.OptionallyRequired[List[str]]):
 
 
 class _PluginConfig(base.Config):
-    lang = LangOption()
+    lang = c.Optional(LangOption())
     separator = c.Type(str, default=r'[\s\-]+')
     min_search_length = c.Type(int, default=3)
     prebuild_index = c.Choice((False, True, 'node', 'python'), default=False)
