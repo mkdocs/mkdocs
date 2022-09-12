@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import os
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 from mkdocs import utils
 from mkdocs.config import base
@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 base_path = os.path.dirname(os.path.abspath(__file__))
 
 
-class LangOption(c.OptionallyRequired):
+class LangOption(c.OptionallyRequired[List[str]]):
     """Validate Language(s) provided in config are known languages."""
 
     def get_lunr_supported_lang(self, lang):
@@ -54,7 +54,7 @@ class _PluginConfig(base.Config):
     indexing = c.Choice(('full', 'sections', 'titles'), default='full')
 
 
-class SearchPlugin(BasePlugin):
+class SearchPlugin(BasePlugin[_PluginConfig]):
     """Add a search feature to MkDocs."""
 
     config_class = _PluginConfig

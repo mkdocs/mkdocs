@@ -9,18 +9,26 @@ import traceback
 import typing as t
 import warnings
 from collections import UserString
-from typing import Dict, NamedTuple
+from typing import Collection, Dict, Generic, List, NamedTuple, TypeVar
 from urllib.parse import quote as urlquote
 from urllib.parse import urlsplit, urlunsplit
 
 import markdown
 
 from mkdocs import plugins, theme, utils
-from mkdocs.config.base import BaseConfigOption, Config, PlainConfigSchemaItem, ValidationError
+from mkdocs.config.base import (
+    BaseConfigOption,
+    Config,
+    LegacyConfig,
+    PlainConfigSchemaItem,
+    ValidationError,
+)
 from mkdocs.exceptions import ConfigurationError
 
+T = TypeVar('T')
 
-class SubConfig(BaseConfigOption):
+
+class SubConfig(BaseConfigOption[Config]):
     """
     Subconfig Config Option
 
@@ -37,7 +45,7 @@ class SubConfig(BaseConfigOption):
         self._do_validation = validate
 
     def run_validation(self, value):
-        config = Config(self.config_options)
+        config = LegacyConfig(self.config_options)
         try:
             config.load_dict(value)
             failed, warnings = config.validate()
@@ -55,7 +63,7 @@ class SubConfig(BaseConfigOption):
         return config
 
 
-class OptionallyRequired(BaseConfigOption):
+class OptionallyRequired(Generic[T], BaseConfigOption[T]):
     """
     A subclass of BaseConfigOption that adds support for default values and
     required values. It is a base class for config options.
@@ -85,7 +93,7 @@ class OptionallyRequired(BaseConfigOption):
         return self.run_validation(value)
 
 
-class ListOfItems(BaseConfigOption):
+class ListOfItems(Generic[T], BaseConfigOption[List[T]]):
     """
     Validates a homogeneous list of items.
 
@@ -94,7 +102,7 @@ class ListOfItems(BaseConfigOption):
 
     required = False
 
-    def __init__(self, option_type: BaseConfigOption, default=[]):
+    def __init__(self, option_type: BaseConfigOption[T], default: List[T] = []):
         super().__init__()
         self.default = default
         self.option_type = option_type
@@ -136,7 +144,7 @@ class ListOfItems(BaseConfigOption):
         return [fake_config[k] for k in fake_keys]
 
 
-class ConfigItems(ListOfItems):
+class ConfigItems(ListOfItems[Config]):
     """
     Deprecated: Use `ListOfItems(SubConfig(...))` instead of `ConfigItems(...)`.
 
@@ -149,14 +157,14 @@ class ConfigItems(ListOfItems):
         self.required = required
 
 
-class Type(OptionallyRequired):
+class Type(Generic[T], OptionallyRequired[T]):
     """
     Type Config Option
 
     Validate the type of a config option against a given Python type.
     """
 
-    def __init__(self, type_, length: t.Optional[int] = None, **kwargs):
+    def __init__(self, type_: t.Type[T], length: t.Optional[int] = None, **kwargs):
         super().__init__(**kwargs)
         self._type = type_
         self.length = length
@@ -175,14 +183,14 @@ class Type(OptionallyRequired):
         raise ValidationError(msg)
 
 
-class Choice(OptionallyRequired):
+class Choice(Generic[T], OptionallyRequired[T]):
     """
     Choice Config Option
 
     Validate the config option against a strict set of values.
     """
 
-    def __init__(self, choices, default=None, **kwargs):
+    def __init__(self, choices: Collection[T], default: t.Optional[T] = None, **kwargs):
         super().__init__(default=default, **kwargs)
         try:
             length = len(choices)
@@ -281,7 +289,7 @@ class _IpAddressValue(NamedTuple):
         return f'{self.host}:{self.port}'
 
 
-class IpAddress(OptionallyRequired):
+class IpAddress(OptionallyRequired[_IpAddressValue]):
     """
     IpAddress Config Option
 
@@ -321,7 +329,7 @@ class IpAddress(OptionallyRequired):
             )
 
 
-class URL(OptionallyRequired):
+class URL(OptionallyRequired[str]):
     """
     URL Config Option
 
@@ -387,8 +395,8 @@ class RepoURL(URL):
         config['edit_uri'] = edit_uri
 
 
-class EditURI(Type):
-    def __init__(self, repo_url_key):
+class EditURI(Type[str]):
+    def __init__(self, repo_url_key: str):
         super().__init__(str)
         self.repo_url_key = repo_url_key
 
@@ -410,7 +418,7 @@ class EditURI(Type):
         config[key_name] = edit_uri
 
 
-class EditURITemplate(OptionallyRequired):
+class EditURITemplate(OptionallyRequired[str]):
     class Formatter(string.Formatter):
         def convert_field(self, value, conversion):
             if conversion == 'q':
@@ -446,8 +454,8 @@ class EditURITemplate(OptionallyRequired):
             )
 
 
-class RepoName(Type):
-    def __init__(self, repo_url_key):
+class RepoName(Type[str]):
+    def __init__(self, repo_url_key: str):
         super().__init__(str)
         self.repo_url_key = repo_url_key
 
@@ -469,7 +477,7 @@ class RepoName(Type):
             config[key_name] = repo_name
 
 
-class FilesystemObject(Type):
+class FilesystemObject(Type[str]):
     """
     Base class for options that point to filesystem objects.
     """
@@ -532,7 +540,7 @@ class File(FilesystemObject):
     name = 'file'
 
 
-class ListOfPaths(ListOfItems):
+class ListOfPaths(ListOfItems[str]):
     """
     List of Paths Config Option
 
@@ -579,7 +587,7 @@ class SiteDir(Dir):
             )
 
 
-class Theme(BaseConfigOption):
+class Theme(BaseConfigOption[theme.Theme]):
     """
     Theme Config Option
 
@@ -699,7 +707,7 @@ class Private(OptionallyRequired):
         raise ValidationError('For internal use only.')
 
 
-class MarkdownExtensions(OptionallyRequired):
+class MarkdownExtensions(OptionallyRequired[List[str]]):
     """
     Markdown Extensions Config Option
 
@@ -712,9 +720,9 @@ class MarkdownExtensions(OptionallyRequired):
 
     def __init__(
         self,
-        builtins: t.Optional[list] = None,
+        builtins: t.Optional[List[str]] = None,
         configkey: str = 'mdx_configs',
-        default=[],
+        default: List[str] = [],
         **kwargs,
     ):
         super().__init__(default=default, **kwargs)
@@ -777,7 +785,7 @@ class MarkdownExtensions(OptionallyRequired):
         config[self.configkey] = self.configdata
 
 
-class Plugins(OptionallyRequired):
+class Plugins(OptionallyRequired[plugins.PluginCollection]):
     """
     Plugins config option.
 

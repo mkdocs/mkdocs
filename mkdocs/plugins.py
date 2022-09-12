@@ -7,7 +7,7 @@ from __future__ import annotations
 import logging
 import sys
 from collections import OrderedDict
-from typing import Any, Callable, Dict, List, Optional, Tuple, Type, TypeVar, overload
+from typing import Any, Callable, Dict, Generic, List, Optional, Tuple, Type, TypeVar, overload
 
 if sys.version_info >= (3, 10):
     from importlib.metadata import EntryPoint, entry_points
@@ -47,16 +47,19 @@ def get_plugins() -> Dict[str, EntryPoint]:
     return pluginmap
 
 
-class BasePlugin:
+SomeConfig = TypeVar('SomeConfig', bound=Config)
+
+
+class BasePlugin(Generic[SomeConfig]):
     """
     Plugin base class.
 
     All plugins should subclass this class.
     """
 
-    config_class: Type[Config] = LegacyConfig
+    config_class: Type[SomeConfig] = LegacyConfig  # type: ignore[assignment]
     config_scheme: PlainConfigSchema = ()
-    config: Config = {}  # type: ignore[assignment]
+    config: SomeConfig = {}  # type: ignore[assignment]
 
     def __init_subclass__(cls):
         if not issubclass(cls.config_class, Config):
@@ -72,7 +75,7 @@ class BasePlugin:
         """Load config from a dict of options. Returns a tuple of (errors, warnings)."""
 
         if self.config_class is LegacyConfig:
-            self.config = LegacyConfig(self.config_scheme, config_file_path=config_file_path)
+            self.config = LegacyConfig(self.config_scheme, config_file_path=config_file_path)  # type: ignore
         else:
             self.config = self.config_class(config_file_path=config_file_path)
 

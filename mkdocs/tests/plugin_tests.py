@@ -20,7 +20,7 @@ class _DummyPluginConfig(base.Config):
     dir = c.Dir(exists=False)
 
 
-class DummyPlugin(plugins.BasePlugin):
+class DummyPlugin(plugins.BasePlugin[_DummyPluginConfig]):
     config_class = _DummyPluginConfig
 
     def on_pre_page(self, content, **kwargs):

@@ -14,7 +14,7 @@ def get_schema() -> base.PlainConfigSchema:
 class MkDocsConfig(base.Config):
     """The configuration of MkDocs itself (the root object of mkdocs.yml)."""
 
-    config_file_path = c.Type(str)  # type: ignore[assignment]
+    config_file_path: str = c.Type(str)  # type: ignore[assignment]
     """Reserved for internal use, stores the mkdocs.yml config file."""
 
     site_name = c.Type(str, required=True)

@@ -6,7 +6,7 @@ import os
 import sys
 from collections import UserDict
 from contextlib import contextmanager
-from typing import IO, Iterator, List, Optional, Sequence, Tuple, Union
+from typing import IO, Generic, Iterator, List, Optional, Sequence, Tuple, TypeVar, Union, overload
 
 from yaml import YAMLError
 
@@ -15,8 +15,11 @@ from mkdocs import exceptions, utils
 log = logging.getLogger('mkdocs.config')
 
 
-class BaseConfigOption:
-    def __init__(self) -> None:
+T = TypeVar('T')
+
+
+class BaseConfigOption(Generic[T]):
+    def __init__(self):
         self.warnings: List[str] = []
         self.default = None
 
@@ -32,7 +35,7 @@ class BaseConfigOption:
     def default(self, value):
         self._default = value
 
-    def validate(self, value):
+    def validate(self, value) -> T:
         return self.run_validation(value)
 
     def reset_warnings(self) -> None:
@@ -64,12 +67,20 @@ class BaseConfigOption:
     def __set_name__(self, owner, name):
         self._name = name
 
+    @overload
+    def __get__(self, obj: Config, type=None) -> T:
+        ...
+
+    @overload
+    def __get__(self, obj, type=None) -> BaseConfigOption:
+        ...
+
     def __get__(self, obj, type=None):
         if not isinstance(obj, Config):
             return self
         return obj[self._name]
 
-    def __set__(self, obj, value):
+    def __set__(self, obj, value: T):
         if not isinstance(obj, Config):
             raise AttributeError(
                 f"can't set attribute ({self._name}) because the parent is a {type(obj)} not a {Config}"
@@ -102,6 +113,7 @@ class Config(UserDict):
     """
 
     _schema: PlainConfigSchema
+    config_file_path: Optional[str]
 
     def __init_subclass__(cls):
         schema = dict(getattr(cls, '_schema', ()))
