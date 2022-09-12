@@ -41,7 +41,9 @@ class Page:
         self.update_date = get_build_date()
 
         self._set_canonical_url(config.get('site_url', None))
-        self._set_edit_url(config.get('repo_url', None), config.get('edit_uri', None))
+        self._set_edit_url(
+            config.get('repo_url', None), config.get('edit_uri'), config.get('edit_uri_template')
+        )
 
         # Placeholders to be filled in later in the build process.
         self.markdown = None
@@ -172,10 +174,20 @@ class Page:
             self.canonical_url = None
             self.abs_url = None
 
-    def _set_edit_url(self, repo_url: Optional[str], edit_uri: Optional[str]) -> None:
-        if edit_uri:
+    def _set_edit_url(
+        self,
+        repo_url: Optional[str],
+        edit_uri: Optional[str] = None,
+        edit_uri_template: Optional[str] = None,
+    ) -> None:
+        if edit_uri or edit_uri_template:
             src_uri = self.file.src_uri
-            edit_uri += src_uri
+            if edit_uri_template:
+                noext = posixpath.splitext(src_uri)[0]
+                edit_uri = edit_uri_template.format(path=src_uri, path_noext=noext)
+            else:
+                assert edit_uri is not None and edit_uri.endswith('/')
+                edit_uri += src_uri
             if repo_url:
                 # Ensure urljoin behavior is correct
                 if not edit_uri.startswith(('?', '#')) and not repo_url.endswith('/'):

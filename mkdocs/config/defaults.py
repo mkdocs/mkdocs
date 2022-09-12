@@ -63,17 +63,18 @@ class _MkDocsConfig:
     True generates nicer URLs, but False is useful if browsing the output on
     a filesystem."""
 
-    repo_url = config_options.RepoURL()
+    repo_url = config_options.URL()
     """Specify a link to the project source repo to be included
     in the documentation pages."""
 
-    repo_name = config_options.Type(str)
+    repo_name = config_options.RepoName('repo_url')
     """A name to use for the link to the project source repo.
     Default, If repo_url is unset then None, otherwise
     "GitHub", "Bitbucket" or "GitLab" for known url or Hostname
     for unknown urls."""
 
-    edit_uri = config_options.Type(str)
+    edit_uri_template = config_options.EditURITemplate('edit_uri')
+    edit_uri = config_options.EditURI('repo_url')
     """Specify a URI to the docs dir in the project source repo, relative to the
     repo_url. When set, a link directly to the page in the source repo will
     be added to the generated HTML. If repo_url is not set also, this option

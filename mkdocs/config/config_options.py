@@ -2,10 +2,14 @@ from __future__ import annotations
 
 import ipaddress
 import os
+import string
 import sys
 import traceback
 import typing as t
+import warnings
+from collections import UserString
 from typing import NamedTuple
+from urllib.parse import quote as urlquote
 from urllib.parse import urlsplit, urlunsplit
 
 import markdown
@@ -347,12 +351,11 @@ class URL(OptionallyRequired):
 
 
 class RepoURL(URL):
-    """
-    Repo URL Config Option
-
-    A small extension to the URL config that sets the repo_name and edit_uri,
-    based on the url if they haven't already been provided.
-    """
+    def __init__(self, *args, **kwargs):
+        warnings.warn(
+            "RepoURL is no longer used in MkDocs and will be removed.", DeprecationWarning
+        )
+        super().__init__(*args, **kwargs)
 
     def post_validation(self, config, key_name):
         repo_host = urlsplit(config['repo_url']).netloc.lower()
@@ -383,6 +386,88 @@ class RepoURL(URL):
             edit_uri += '/'
 
         config['edit_uri'] = edit_uri
+
+
+class EditURI(Type):
+    def __init__(self, repo_url_key):
+        super().__init__(str)
+        self.repo_url_key = repo_url_key
+
+    def post_validation(self, config, key_name):
+        edit_uri = config.get(key_name)
+        repo_url = config.get(self.repo_url_key)
+
+        if edit_uri is None and repo_url is not None:
+            repo_host = urlsplit(repo_url).netloc.lower()
+            if repo_host == 'github.com' or repo_host == 'gitlab.com':
+                edit_uri = 'edit/master/docs/'
+            elif repo_host == 'bitbucket.org':
+                edit_uri = 'src/default/docs/'
+
+        # ensure a well-formed edit_uri
+        if edit_uri and not edit_uri.endswith('/'):
+            edit_uri += '/'
+
+        config[key_name] = edit_uri
+
+
+class EditURITemplate(OptionallyRequired):
+    class Formatter(string.Formatter):
+        def convert_field(self, value, conversion):
+            if conversion == 'q':
+                return urlquote(value, safe='')
+            return super().convert_field(value, conversion)
+
+    class Template(UserString):
+        def __init__(self, formatter, data):
+            super().__init__(data)
+            self.formatter = formatter
+            try:
+                self.format('', '')
+            except KeyError as e:
+                raise ValueError(f"Unknown template substitute: {e}")
+
+        def format(self, path, path_noext):
+            return self.formatter.format(self.data, path=path, path_noext=path_noext)
+
+    def __init__(self, edit_uri_key=None):
+        super().__init__()
+        self.edit_uri_key = edit_uri_key
+
+    def run_validation(self, value):
+        try:
+            return self.Template(self.Formatter(), value)
+        except Exception as e:
+            raise ValidationError(e)
+
+    def post_validation(self, config, key_name):
+        if self.edit_uri_key and config.get(key_name) and config.get(self.edit_uri_key):
+            self.warnings.append(
+                f"The option '{self.edit_uri_key}' has no effect when '{key_name}' is set."
+            )
+
+
+class RepoName(Type):
+    def __init__(self, repo_url_key):
+        super().__init__(str)
+        self.repo_url_key = repo_url_key
+
+    def post_validation(self, config, key_name):
+        repo_name = config.get(key_name)
+        repo_url = config.get(self.repo_url_key)
+
+        # derive repo_name from repo_url if unset
+        if repo_url is not None and repo_name is None:
+            repo_host = urlsplit(config['repo_url']).netloc.lower()
+            if repo_host == 'github.com':
+                repo_name = 'GitHub'
+            elif repo_host == 'bitbucket.org':
+                repo_name = 'Bitbucket'
+            elif repo_host == 'gitlab.com':
+                repo_name = 'GitLab'
+            else:
+                repo_name = repo_host.split('.')[0].title()
+            config[key_name] = repo_name
 
 
 class FilesystemObject(Type):
