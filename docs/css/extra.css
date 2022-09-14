@@ -60,6 +60,11 @@ body.homepage>div.container>div.row>div.col-md-9 {
 
 /* mkdocstrings */
 
+.doc-object {
+    padding-left: 10px;
+    border-left: 4px solid rgba(230, 230, 230);
+}
+
 .doc-contents .field-body p:first-of-type {
     display: inline;
 }

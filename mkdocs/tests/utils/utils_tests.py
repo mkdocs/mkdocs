@@ -285,6 +285,22 @@ class UtilsTests(unittest.TestCase):
             [1, 2, 3, 4, 5, 6, 7, 8],
         )
 
+    def test_insort(self):
+        a = [1, 2, 3]
+        utils.insort(a, 5)
+        self.assertEqual(a, [1, 2, 3, 5])
+        utils.insort(a, -1)
+        self.assertEqual(a, [-1, 1, 2, 3, 5])
+        utils.insort(a, 2)
+        self.assertEqual(a, [-1, 1, 2, 2, 3, 5])
+        utils.insort(a, 4)
+        self.assertEqual(a, [-1, 1, 2, 2, 3, 4, 5])
+
+    def test_insort_key(self):
+        a = [(1, 'a'), (1, 'b'), (2, 'c')]
+        utils.insort(a, (1, 'a'), key=lambda v: v[0])
+        self.assertEqual(a, [(1, 'a'), (1, 'b'), (1, 'a'), (2, 'c')])
+
     def test_get_themes(self):
         themes = utils.get_theme_names()
         self.assertIn('mkdocs', themes)
