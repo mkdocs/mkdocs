@@ -19,7 +19,7 @@ msgstr ""
 
 #: mkdocs/themes/readthedocs/404.html:7
 msgid "Page not found"
-msgstr "Страница не найдана"
+msgstr "Страница не найдена"
 
 #: mkdocs/themes/readthedocs/base.html:97
 msgid "Logo"
@@ -31,7 +31,7 @@ msgstr "Навигационное меню"
 
 #: mkdocs/themes/readthedocs/base.html:140
 msgid "Mobile navigation menu"
-msgstr "Мобильная версия навигации"
+msgstr "Мобильная версия"
 
 #: mkdocs/themes/readthedocs/breadcrumbs.html:3
 msgid "Docs"
@@ -51,7 +51,7 @@ msgstr "Редактировать"
 
 #: mkdocs/themes/readthedocs/breadcrumbs.html:34
 msgid "Breadcrumb Navigation"
-msgstr "Навигация по хлебным крошкам"
+msgstr "Навигационная цепочка"
 
 #: mkdocs/themes/readthedocs/breadcrumbs.html:36
 #: mkdocs/themes/readthedocs/footer.html:7
@@ -63,7 +63,7 @@ msgstr "Назад"
 #: mkdocs/themes/readthedocs/footer.html:10
 #: mkdocs/themes/readthedocs/versions.html:20
 msgid "Next"
-msgstr "Дальше"
+msgstr "Вперед"
 
 #: mkdocs/themes/readthedocs/footer.html:5
 msgid "Footer Navigation"
@@ -93,11 +93,11 @@ msgstr "Введите поисковый запрос"
 
 #: mkdocs/themes/readthedocs/search.html:12
 msgid "No results found"
-msgstr "Результаты не найдены"
+msgstr "Ничего не найдено"
 
 #: mkdocs/themes/readthedocs/search.html:13
 msgid "Searching..."
-msgstr "Найти..."
+msgstr "Поиск..."
 
 #: mkdocs/themes/readthedocs/searchbox.html:3
 msgid "Search docs"

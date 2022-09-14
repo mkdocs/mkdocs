@@ -33,7 +33,7 @@ msgstr "Назад"
 
 #: mkdocs/themes/mkdocs/base.html:131
 msgid "Next"
-msgstr "Дальше"
+msgstr "Вперед"
 
 #: mkdocs/themes/mkdocs/base.html:142 mkdocs/themes/mkdocs/base.html:144
 #: mkdocs/themes/mkdocs/base.html:146 mkdocs/themes/mkdocs/base.html:148
@@ -51,8 +51,8 @@ msgid "Documentation built with %(mkdocs_link)s."
 msgstr "Документация создана с помощью %(mkdocs_link)s."
 
 #: mkdocs/themes/mkdocs/keyboard-modal.html:5
-msgid "Сочетания клавиш"
-msgstr "Tastenkombinationen"
+msgid "Keyboard Shortcuts"
+msgstr "Сочетания клавиш"
 
 #: mkdocs/themes/mkdocs/keyboard-modal.html:6
 #: mkdocs/themes/mkdocs/search-modal.html:6
@@ -61,7 +61,7 @@ msgstr "Закрыть"
 
 #: mkdocs/themes/mkdocs/keyboard-modal.html:12
 msgid "Keys"
-msgstr "Клавиша"
+msgstr "Клавиши"
 
 #: mkdocs/themes/mkdocs/keyboard-modal.html:13
 msgid "Action"
@@ -77,7 +77,7 @@ msgstr "Следующая страница"
 
 #: mkdocs/themes/mkdocs/keyboard-modal.html:27
 msgid "Previous page"
-msgstr "Предудущая страница"
+msgstr "Предыдущая страница"
 
 #: mkdocs/themes/mkdocs/search-modal.html:9
 msgid "From here you can search these documents. Enter your search terms below."
@@ -85,7 +85,7 @@ msgstr "Вы можете воспользоваться поиском по м 
 
 #: mkdocs/themes/mkdocs/search-modal.html:12
 msgid "Search..."
-msgstr "Найти..."
+msgstr "Поиск..."
 
 #: mkdocs/themes/mkdocs/search-modal.html:12
 msgid "Type search term here"
@@ -93,7 +93,7 @@ msgstr "Введите поисковый запрос"
 
 #: mkdocs/themes/mkdocs/search-modal.html:15
 msgid "No results found"
-msgstr "Результаты не найдены"
+msgstr "Ничего не найдено"
 
 #: mkdocs/themes/mkdocs/toc.html:3
 msgid "Table of Contents"
