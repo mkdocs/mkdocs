@@ -157,11 +157,23 @@ There are three kinds of events: [Global Events], [Page Events] and
 </details>
 <br>
 
-#### Global Events
+#### One-time Events
 
-Global events are called once per build at either the beginning or end of the
-build process. Any changes made in these events will have a global effect on the
-entire site.
+One-time events run once per `mkdocs` invocation. The only case where these tangibly differ from [global events](#global-events) is for `mkdocs serve`: global events, unlike these, will run multiple times -- once per *build*.
+
+##### on_startup
+
+::: mkdocs.plugins.BasePlugin.on_startup
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
+
+##### on_shutdown
+
+::: mkdocs.plugins.BasePlugin.on_shutdown
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
 
 ##### on_serve
 
@@ -169,6 +181,12 @@ entire site.
     options:
         show_root_heading: false
         show_root_toc_entry: false
+
+#### Global Events
+
+Global events are called once per build at either the beginning or end of the
+build process. Any changes made in these events will have a global effect on the
+entire site.
 
 ##### on_config
 
