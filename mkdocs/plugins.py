@@ -16,6 +16,7 @@ else:
 
 import jinja2.environment
 
+from mkdocs import utils
 from mkdocs.config.base import Config, ConfigErrors, ConfigWarnings, PlainConfigSchema
 from mkdocs.livereload import LiveReloadServer
 from mkdocs.structure.files import Files
@@ -346,6 +347,37 @@ for k in EVENTS:
 T = TypeVar('T')
 
 
+def event_priority(priority: float) -> Callable[[T], T]:
+    """A decorator to set an event priority for an event handler method.
+
+    Recommended priority values:
+    `100` "first", `50` "early", `0` "default", `-50` "late", `-100` "last".
+    As different plugins discover more precise relations to each other, the values should be further tweaked.
+
+    ```python
+    @plugins.event_priority(-100)  # Wishing to run this after all other plugins' `on_files` events.
+    def on_files(self, files, config, **kwargs):
+        ...
+    ```
+
+    New in MkDocs 1.4.
+    Recommended shim for backwards compatibility:
+
+    ```python
+    try:
+        from mkdocs.plugins import event_priority
+    except ImportError:
+        event_priority = lambda priority: lambda f: f  # No-op fallback
+    ```
+    """
+
+    def decorator(event_method):
+        event_method.mkdocs_priority = priority
+        return event_method
+
+    return decorator
+
+
 class PluginCollection(OrderedDict):
     """
     A collection of plugins.
@@ -361,7 +393,9 @@ class PluginCollection(OrderedDict):
 
     def _register_event(self, event_name: str, method: Callable) -> None:
         """Register a method for an event."""
-        self.events[event_name].append(method)
+        utils.insort(
+            self.events[event_name], method, key=lambda m: -getattr(m, 'mkdocs_priority', 0)
+        )
 
     def __setitem__(self, key: str, value: BasePlugin, **kwargs) -> None:
         if not isinstance(value, BasePlugin):

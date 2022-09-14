@@ -295,6 +295,16 @@ page events are called after the [post_template] event and before the
         show_root_heading: false
         show_root_toc_entry: false
 
+### Event Priorities
+
+For each event type, corresponding methods of plugins are called in the order that the plugins appear in the `plugins` [config][].
+
+Since MkDocs 1.4, plugins can choose to set a priority value for their events. Events with higher priority are called first. Events without a chosen priority get a default of 0. Events that have the same priority are ordered as they appear in the config.
+
+::: mkdocs.plugins.event_priority
+    options:
+      show_root_heading: true
+
 ### Handling Errors
 
 MkDocs defines four error types:
