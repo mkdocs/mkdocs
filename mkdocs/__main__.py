@@ -33,7 +33,11 @@ def _showwarning(message, category, filename, lineno, file=None, line=None):
         # * Location of call to warn()                <-- include this
         # * (stdlib) Location of call to showwarning function
         # * (this function) Location of call to extract_stack()
-        stack = traceback.extract_stack()[-4:-2]
+        stack = [frame for frame in traceback.extract_stack() if frame.line][-4:-2]
+        # Make sure the actual affected file's name is still present (the case of syntax warning):
+        if not any(frame.filename == filename for frame in stack):
+            stack = stack[-1:] + [traceback.FrameSummary(filename, lineno, '')]
+
         tb = ''.join(traceback.format_list(stack))
     except Exception:
         tb = f'  File "{filename}", line {lineno}'
