@@ -78,11 +78,11 @@ class SearchPlugin(BasePlugin):
             )
         return config
 
-    def on_pre_build(self, config: Config, *args, **kwargs) -> None:
+    def on_pre_build(self, config: Config, **kwargs) -> None:
         "Create search index instance for later use."
         self.search_index = SearchIndex(**self.config)
 
-    def on_page_context(self, context: Dict[str, Any], *args, **kwargs) -> None:
+    def on_page_context(self, context: Dict[str, Any], **kwargs) -> None:
         "Add page to search index."
         self.search_index.add_entry_from_context(context['page'])
 

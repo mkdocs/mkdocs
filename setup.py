@@ -72,6 +72,7 @@ setup(
         'ghp-import>=1.0',
         'pyyaml_env_tag>=0.1',
         'importlib_metadata>=4.3; python_version < "3.10"',
+        'typing_extensions>=3.10; python_version < "3.8"',
         'packaging>=20.5',
         'mergedeep>=1.3.4'
     ],

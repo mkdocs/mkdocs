@@ -33,7 +33,11 @@ def _showwarning(message, category, filename, lineno, file=None, line=None):
         # * Location of call to warn()                <-- include this
         # * (stdlib) Location of call to showwarning function
         # * (this function) Location of call to extract_stack()
-        stack = traceback.extract_stack()[-4:-2]
+        stack = [frame for frame in traceback.extract_stack() if frame.line][-4:-2]
+        # Make sure the actual affected file's name is still present (the case of syntax warning):
+        if not any(frame.filename == filename for frame in stack):
+            stack = stack[-1:] + [traceback.FrameSummary(filename, lineno, '')]
+
         tb = ''.join(traceback.format_list(stack))
     except Exception:
         tb = f'  File "{filename}", line {lineno}'
@@ -240,7 +244,12 @@ def build_command(clean, **kwargs):
     from mkdocs.commands import build
 
     _enable_warnings()
-    build.build(config.load_config(**kwargs), dirty=not clean)
+    cfg = config.load_config(**kwargs)
+    cfg['plugins'].run_event('startup', command='build', dirty=not clean)
+    try:
+        build.build(cfg, dirty=not clean)
+    finally:
+        cfg['plugins'].run_event('shutdown')
 
 
 @cli.command(name="gh-deploy")
@@ -263,7 +272,11 @@ def gh_deploy_command(
 
     _enable_warnings()
     cfg = config.load_config(remote_branch=remote_branch, remote_name=remote_name, **kwargs)
-    build.build(cfg, dirty=not clean)
+    cfg['plugins'].run_event('startup', command='gh-deploy', dirty=not clean)
+    try:
+        build.build(cfg, dirty=not clean)
+    finally:
+        cfg['plugins'].run_event('shutdown')
     gh_deploy.gh_deploy(
         cfg,
         message=message,

@@ -3,6 +3,7 @@ from __future__ import annotations
 import gzip
 import logging
 import os
+import time
 from typing import Any, Dict, Optional, Sequence, Set, Union
 from urllib.parse import urlsplit
 
@@ -265,8 +266,6 @@ def build(config: Config, live_server: bool = False, dirty: bool = False) -> Non
         logging.getLogger('mkdocs').addHandler(warning_counter)
 
     try:
-        import time
-
         start = time.monotonic()
 
         # Run `config` plugin events.
