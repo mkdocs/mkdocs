@@ -23,6 +23,11 @@ code.no-highlight {
 div.admonition.block>.admonition-title {
     display: none;
 }
+div.admonition.new {
+    color: #15654a;
+    background-color: #e4f7f1;
+    border-color: #bcf1e8;
+}
 
 /* Definition List styles */
 

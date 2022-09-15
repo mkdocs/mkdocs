@@ -9,7 +9,7 @@ from unittest.mock import patch
 import mkdocs
 from mkdocs.config import base, config_options
 from mkdocs.tests.base import tempdir
-from mkdocs.utils import yaml_load
+from mkdocs.utils import write_file, yaml_load
 
 
 class UnexpectedError(Exception):
@@ -1536,3 +1536,34 @@ class MarkdownExtensionsTest(TestCase):
             {},
         )
         self.assertIsNone(conf['mdx_configs'].get('toc'))
+
+
+class TestHooks(TestCase):
+    class Schema:
+        plugins = config_options.Plugins(default=[])
+        hooks = config_options.Hooks('plugins')
+
+    @tempdir()
+    def test_hooks(self, src_dir):
+        write_file(
+            b'def on_page_markdown(markdown, **kwargs): return markdown.replace("f", "z")',
+            os.path.join(src_dir, 'hooks', 'my_hook.py'),
+        )
+        write_file(
+            b'foo foo',
+            os.path.join(src_dir, 'docs', 'index.md'),
+        )
+        conf = self.get_config(
+            self.Schema,
+            {'hooks': ['hooks/my_hook.py']},
+            config_file_path=os.path.join(src_dir, 'mkdocs.yml'),
+        )
+        self.assertIn('hooks/my_hook.py', conf['plugins'])
+        hook = conf['plugins']['hooks/my_hook.py']
+        self.assertTrue(hasattr(hook, 'on_page_markdown'))
+        self.assertEqual(
+            {**conf['plugins'].events, 'page_markdown': [hook.on_page_markdown]},
+            conf['plugins'].events,
+        )
+        self.assertEqual(hook.on_page_markdown('foo foo'), 'zoo zoo')
+        self.assertFalse(hasattr(hook, 'on_nav'))
