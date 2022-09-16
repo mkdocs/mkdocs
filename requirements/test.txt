@@ -1,2 +1,2 @@
 coverage
-flake8
+babel>=2.9.0

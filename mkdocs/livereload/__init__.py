@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import functools
 import io
+import ipaddress
 import logging
 import mimetypes
 import os
@@ -7,17 +10,19 @@ import os.path
 import pathlib
 import posixpath
 import re
+import socket
 import socketserver
 import string
 import threading
 import time
 import warnings
 import wsgiref.simple_server
+from typing import Callable, Dict, Optional, Tuple
 
 import watchdog.events
 import watchdog.observers.polling
 
-_SCRIPT_TEMPLATE = """
+_SCRIPT_TEMPLATE_STR = """
 var livereload = function(epoch, requestId) {
     var req = new XMLHttpRequest();
     req.onloadend = function() {
@@ -32,18 +37,18 @@ var livereload = function(epoch, requestId) {
             setTimeout(launchNext, 3000);
         }
     };
-    req.open("GET", "${mount_path}livereload/" + epoch + "/" + requestId);
+    req.open("GET", "/livereload/" + epoch + "/" + requestId);
     req.send();
 
     console.log('Enabled live reload');
 }
 livereload(${epoch}, ${request_id});
 """
-_SCRIPT_TEMPLATE = string.Template(_SCRIPT_TEMPLATE)
+_SCRIPT_TEMPLATE = string.Template(_SCRIPT_TEMPLATE_STR)
 
 
 class _LoggerAdapter(logging.LoggerAdapter):
-    def process(self, msg, kwargs):
+    def process(self, msg: str, kwargs: dict) -> Tuple[str, dict]:  # type: ignore[override]
         return time.strftime("[%H:%M:%S] ") + msg, kwargs
 
 
@@ -56,18 +61,23 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
 
     def __init__(
         self,
-        builder,
-        host,
-        port,
-        root,
-        mount_path="/",
-        polling_interval=0.5,
-        shutdown_delay=0.25,
+        builder: Callable,
+        host: str,
+        port: int,
+        root: str,
+        mount_path: str = "/",
+        polling_interval: float = 0.5,
+        shutdown_delay: float = 0.25,
         **kwargs,
-    ):
+    ) -> None:
         self.builder = builder
         self.server_name = host
         self.server_port = port
+        try:
+            if isinstance(ipaddress.ip_address(host), ipaddress.IPv6Address):
+                self.address_family = socket.AF_INET6
+        except Exception:
+            pass
         self.root = os.path.abspath(root)
         self.mount_path = ("/" + mount_path.lstrip("/")).rstrip("/") + "/"
         self.url = f"http://{self.server_name}:{self.server_port}{self.mount_path}"
@@ -83,16 +93,16 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         self._visible_epoch = self._wanted_epoch  # Latest fully built version of the site.
         self._epoch_cond = threading.Condition()  # Must be held when accessing _visible_epoch.
 
-        self._to_rebuild = {}  # Used as an ordered set of functions to call.
+        self._to_rebuild: Dict[Callable, bool] = {}  # Used as an ordered set of functions to call.
         self._rebuild_cond = threading.Condition()  # Must be held when accessing _to_rebuild.
 
         self._shutdown = False
         self.serve_thread = threading.Thread(target=lambda: self.serve_forever(shutdown_delay))
         self.observer = watchdog.observers.polling.PollingObserver(timeout=polling_interval)
 
-        self._watched_paths = {}  # Used as an ordered set.
+        self._watched_paths: Dict[str, bool] = {}  # Used as an ordered set.
 
-    def watch(self, path, func=None, recursive=True):
+    def watch(self, path: str, func: Optional[Callable] = None, recursive: bool = True) -> None:
         """Add the 'path' to watched paths, call the function and reload when any file changes under it."""
         path = os.path.abspath(path)
         if func in (None, self.builder):
@@ -168,7 +178,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 self._visible_epoch = self._wanted_epoch
                 self._epoch_cond.notify_all()
 
-    def shutdown(self):
+    def shutdown(self, wait=False) -> None:
         self.observer.stop()
         with self._rebuild_cond:
             self._shutdown = True
@@ -176,6 +186,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
 
         if self.serve_thread.is_alive():
             super().shutdown()
+        if wait:
             self.serve_thread.join()
             self.observer.join()
 
@@ -208,10 +219,8 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         # https://github.com/bottlepy/bottle/blob/f9b1849db4/bottle.py#L984
         path = environ["PATH_INFO"].encode("latin-1").decode("utf-8", "ignore")
 
-        if path.startswith(self.mount_path):
-            rel_file_path = path[len(self.mount_path):]
-
-            m = re.fullmatch(r"livereload/([0-9]+)/[0-9]+", rel_file_path)
+        if path.startswith("/livereload/"):
+            m = re.fullmatch(r"/livereload/([0-9]+)/[0-9]+", path)
             if m:
                 epoch = int(m[1])
                 start_response("200 OK", [("Content-Type", "text/plain")])
@@ -226,6 +235,9 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                         self._log_poll_request(environ.get("HTTP_REFERER"), request_id=path)
                         self._epoch_cond.wait_for(condition, timeout=self.poll_response_timeout)
                     return [b"%d" % self._visible_epoch]
+
+        if path.startswith(self.mount_path):
+            rel_file_path = path[len(self.mount_path) :]
 
             if path.endswith("/"):
                 rel_file_path += "index.html"
@@ -273,9 +285,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
             body_end = len(content)
         # The page will reload if the livereload poller returns a newer epoch than what it knows.
         # The other timestamp becomes just a unique identifier for the initiating page.
-        script = _SCRIPT_TEMPLATE.substitute(
-            mount_path=self.mount_path, epoch=epoch, request_id=_timestamp()
-        )
+        script = _SCRIPT_TEMPLATE.substitute(epoch=epoch, request_id=_timestamp())
         return b"%b<script>%b</script>%b" % (
             content[:body_end],
             script.encode(),
@@ -310,15 +320,15 @@ class _Handler(wsgiref.simple_server.WSGIRequestHandler):
         log.debug(format, *args)
 
 
-def _timestamp():
+def _timestamp() -> int:
     return round(time.monotonic() * 1000)
 
 
-def _try_relativize_path(path):
+def _try_relativize_path(path: str) -> str:
     """Make the path relative to current directory if it's under that directory."""
-    path = pathlib.Path(path)
+    p = pathlib.Path(path)
     try:
-        path = path.relative_to(os.getcwd())
+        p = p.relative_to(os.getcwd())
     except ValueError:
         pass
-    return str(path)
+    return str(p)

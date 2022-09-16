@@ -1,22 +1,22 @@
 # Portuguese (Brazil) translations for MkDocs.
-# Copyright (C) 2021 MkDocs
+# Copyright (C) 2022 MkDocs
 # This file is distributed under the same license as the MkDocs project.
-# FIRST AUTHOR ni.buitoni@gmail.com, 2021.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: MkDocs 1.2\n"
 "Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
-"POT-Creation-Date: 2021-09-27 10:43-0400\n"
+"POT-Creation-Date: 2022-08-15 17:05+0200\n"
 "PO-Revision-Date: 2021-09-07 12:06+0200\n"
 "Last-Translator: Gustavo Lucas Valente <gutivalente@gmail.com>\n"
 "Language: pt_BR\n"
 "Language-Team: pt_BR\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.10.3\n"
 
 #: mkdocs/themes/readthedocs/404.html:7
 msgid "Page not found"
@@ -38,22 +38,29 @@ msgstr "Menu de navegação em dispositivo móvel"
 msgid "Docs"
 msgstr "Documentos"
 
+#: mkdocs/themes/readthedocs/breadcrumbs.html:18
+#: mkdocs/themes/readthedocs/breadcrumbs.html:20
+#: mkdocs/themes/readthedocs/breadcrumbs.html:22
 #: mkdocs/themes/readthedocs/breadcrumbs.html:24
 #, python-format
 msgid "Edit on %(repo_name)s"
 msgstr "Editar em %(repo_name)s"
 
-#: mkdocs/themes/readthedocs/breadcrumbs.html:31
+#: mkdocs/themes/readthedocs/breadcrumbs.html:26
+msgid "Edit"
+msgstr "Editar"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:34
 msgid "Breadcrumb Navigation"
 msgstr "Caminho de migalhas"
 
-#: mkdocs/themes/readthedocs/breadcrumbs.html:33
+#: mkdocs/themes/readthedocs/breadcrumbs.html:36
 #: mkdocs/themes/readthedocs/footer.html:7
 #: mkdocs/themes/readthedocs/versions.html:17
 msgid "Previous"
 msgstr "Anterior"
 
-#: mkdocs/themes/readthedocs/breadcrumbs.html:36
+#: mkdocs/themes/readthedocs/breadcrumbs.html:39
 #: mkdocs/themes/readthedocs/footer.html:10
 #: mkdocs/themes/readthedocs/versions.html:20
 msgid "Next"

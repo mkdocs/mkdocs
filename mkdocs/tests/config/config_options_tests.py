@@ -1,94 +1,144 @@
+import contextlib
 import os
+import re
 import sys
 import textwrap
 import unittest
 from unittest.mock import patch
 
 import mkdocs
-from mkdocs.config import config_options
-from mkdocs.config.base import Config
+from mkdocs.config import base, config_options
 from mkdocs.tests.base import tempdir
 from mkdocs.utils import yaml_load
 
 
-class OptionallyRequiredTest(unittest.TestCase):
+class UnexpectedError(Exception):
+    pass
 
+
+class TestCase(unittest.TestCase):
+    @contextlib.contextmanager
+    def expect_error(self, **kwargs):
+        [(key, msg)] = kwargs.items()
+        with self.assertRaises(UnexpectedError) as cm:
+            yield
+        if isinstance(msg, re.Pattern):
+            self.assertRegex(str(cm.exception), f'^{key}="{msg.pattern}"$')
+        else:
+            self.assertEqual(f'{key}="{msg}"', str(cm.exception))
+
+    def get_config(self, schema, cfg, warnings={}, config_file_path=None):
+        config = base.Config(base.get_schema(schema), config_file_path=config_file_path)
+        config.load_dict(cfg)
+        actual_errors, actual_warnings = config.validate()
+        if actual_errors:
+            raise UnexpectedError(', '.join(f'{key}="{msg}"' for key, msg in actual_errors))
+        self.assertEqual(warnings, dict(actual_warnings))
+        return config
+
+
+class OptionallyRequiredTest(TestCase):
     def test_empty(self):
+        class Schema:
+            option = config_options.OptionallyRequired()
 
-        option = config_options.OptionallyRequired()
-        value = option.validate(None)
-        self.assertEqual(value, None)
+        conf = self.get_config(Schema, {'option': None})
+        self.assertEqual(conf['option'], None)
 
-        self.assertEqual(option.is_required(), False)
+        self.assertEqual(Schema.option.required, False)
 
     def test_required(self):
+        class Schema:
+            option = config_options.OptionallyRequired(required=True)
 
-        option = config_options.OptionallyRequired(required=True)
-        with self.assertRaises(config_options.ValidationError):
-            option.validate(None)
+        with self.expect_error(option="Required configuration not provided."):
+            self.get_config(Schema, {'option': None})
 
-        self.assertEqual(option.is_required(), True)
+        self.assertEqual(Schema.option.required, True)
 
     def test_required_no_default(self):
+        class Schema:
+            option = config_options.OptionallyRequired(required=True)
 
-        option = config_options.OptionallyRequired(required=True)
-        value = option.validate(2)
-        self.assertEqual(2, value)
+        conf = self.get_config(Schema, {'option': 2})
+        self.assertEqual(conf['option'], 2)
 
     def test_default(self):
+        class Schema:
+            option = config_options.OptionallyRequired(default=1)
 
-        option = config_options.OptionallyRequired(default=1)
-        value = option.validate(None)
-        self.assertEqual(1, value)
+        conf = self.get_config(Schema, {'option': None})
+        self.assertEqual(conf['option'], 1)
 
     def test_replace_default(self):
+        class Schema:
+            option = config_options.OptionallyRequired(default=1)
 
-        option = config_options.OptionallyRequired(default=1)
-        value = option.validate(2)
-        self.assertEqual(2, value)
+        conf = self.get_config(Schema, {'option': 2})
+        self.assertEqual(conf['option'], 2)
 
 
-class TypeTest(unittest.TestCase):
-
+class TypeTest(TestCase):
     def test_single_type(self):
+        class Schema:
+            option = config_options.Type(str)
 
-        option = config_options.Type(str)
-        value = option.validate("Testing")
-        self.assertEqual(value, "Testing")
+        conf = self.get_config(Schema, {'option': "Testing"})
+        self.assertEqual(conf['option'], "Testing")
 
     def test_multiple_types(self):
-        option = config_options.Type((list, tuple))
+        class Schema:
+            option = config_options.Type((list, tuple))
 
-        value = option.validate([1, 2, 3])
-        self.assertEqual(value, [1, 2, 3])
+        conf = self.get_config(Schema, {'option': [1, 2, 3]})
+        self.assertEqual(conf['option'], [1, 2, 3])
 
-        value = option.validate((1, 2, 3))
-        self.assertEqual(value, (1, 2, 3))
+        conf = self.get_config(Schema, {'option': (1, 2, 3)})
+        self.assertEqual(conf['option'], (1, 2, 3))
 
-        with self.assertRaises(config_options.ValidationError):
-            option.validate({'a': 1})
+        with self.expect_error(
+            option="Expected type: (<class 'list'>, <class 'tuple'>) but received: <class 'dict'>"
+        ):
+            self.get_config(Schema, {'option': {'a': 1}})
 
     def test_length(self):
-        option = config_options.Type(str, length=7)
+        class Schema:
+            option = config_options.Type(str, length=7)
 
-        value = option.validate("Testing")
-        self.assertEqual(value, "Testing")
+        conf = self.get_config(Schema, {'option': "Testing"})
+        self.assertEqual(conf['option'], "Testing")
 
-        with self.assertRaises(config_options.ValidationError):
-            option.validate("Testing Long")
+        with self.expect_error(
+            option="Expected type: <class 'str'> with length 7 but received: 'Testing Long' with length 12"
+        ):
+            self.get_config(Schema, {'option': "Testing Long"})
 
 
-class ChoiceTest(unittest.TestCase):
-
+class ChoiceTest(TestCase):
     def test_valid_choice(self):
-        option = config_options.Choice(('python', 'node'))
-        value = option.validate('python')
-        self.assertEqual(value, 'python')
+        class Schema:
+            option = config_options.Choice(('python', 'node'))
+
+        conf = self.get_config(Schema, {'option': 'python'})
+        self.assertEqual(conf['option'], 'python')
+
+    def test_default(self):
+        class Schema:
+            option = config_options.Choice(('python', 'node'), default='node')
+
+        conf = self.get_config(Schema, {'option': None})
+        self.assertEqual(conf['option'], 'node')
+
+    def test_excluded_default(self):
+        with self.assertRaises(ValueError):
+            config_options.Choice(('python', 'node'), default='a')
 
     def test_invalid_choice(self):
-        option = config_options.Choice(('python', 'node'))
-        with self.assertRaises(config_options.ValidationError):
-            option.validate('go')
+        class Schema:
+            option = config_options.Choice(('python', 'node'))
+
+        with self.expect_error(option="Expected one of: ('python', 'node') but received: 'go'"):
+            self.get_config(Schema, {'option': 'go'})
 
     def test_invalid_choices(self):
         self.assertRaises(ValueError, config_options.Choice, '')
@@ -96,470 +146,673 @@ class ChoiceTest(unittest.TestCase):
         self.assertRaises(ValueError, config_options.Choice, 5)
 
 
-class DeprecatedTest(unittest.TestCase):
-
+class DeprecatedTest(TestCase):
     def test_deprecated_option_simple(self):
-        option = config_options.Deprecated()
-        option.pre_validation({'d': 'value'}, 'd')
-        self.assertEqual(len(option.warnings), 1)
-        option.validate('value')
+        class Schema:
+            d = config_options.Deprecated()
+
+        self.get_config(
+            Schema,
+            {'d': 'value'},
+            warnings=dict(
+                d="The configuration option 'd' has been deprecated and will be removed in a "
+                "future release of MkDocs."
+            ),
+        )
 
     def test_deprecated_option_message(self):
-        msg = 'custom message for {} key'
-        option = config_options.Deprecated(message=msg)
-        option.pre_validation({'d': 'value'}, 'd')
-        self.assertEqual(len(option.warnings), 1)
-        self.assertEqual(option.warnings[0], msg.format('d'))
+        class Schema:
+            d = config_options.Deprecated(message='custom message for {} key')
+
+        self.get_config(Schema, {'d': 'value'}, warnings={'d': 'custom message for d key'})
 
     def test_deprecated_option_with_type(self):
-        option = config_options.Deprecated(option_type=config_options.Type(str))
-        option.pre_validation({'d': 'value'}, 'd')
-        self.assertEqual(len(option.warnings), 1)
-        option.validate('value')
+        class Schema:
+            d = config_options.Deprecated(option_type=config_options.Type(str))
+
+        self.get_config(
+            Schema,
+            {'d': 'value'},
+            warnings=dict(
+                d="The configuration option 'd' has been deprecated and will be removed in a "
+                "future release of MkDocs."
+            ),
+        )
 
     def test_deprecated_option_with_invalid_type(self):
-        option = config_options.Deprecated(option_type=config_options.Type(list))
-        config = {'d': 'string'}
-        option.pre_validation({'d': 'value'}, 'd')
-        self.assertEqual(len(option.warnings), 1)
-        with self.assertRaises(config_options.ValidationError):
-            option.validate(config['d'])
+        class Schema:
+            d = config_options.Deprecated(option_type=config_options.Type(list))
+
+        with self.expect_error(d="Expected type: <class 'list'> but received: <class 'str'>"):
+            self.get_config(
+                Schema,
+                {'d': 'value'},
+                warnings=dict(
+                    d="The configuration option 'd' has been deprecated and will be removed in a "
+                    "future release of MkDocs."
+                ),
+            )
 
     def test_removed_option(self):
-        option = config_options.Deprecated(removed=True, moved_to='foo')
-        with self.assertRaises(config_options.ValidationError):
-            option.pre_validation({'d': 'value'}, 'd')
+        class Schema:
+            d = config_options.Deprecated(removed=True, moved_to='foo')
+
+        with self.expect_error(
+            d="The configuration option 'd' was removed from MkDocs. Use 'foo' instead.",
+        ):
+            self.get_config(Schema, {'d': 'value'})
 
     def test_deprecated_option_with_type_undefined(self):
-        option = config_options.Deprecated(option_type=config_options.Type(str))
-        option.validate(None)
+        class Schema:
+            option = config_options.Deprecated(option_type=config_options.Type(str))
+
+        self.get_config(Schema, {'option': None})
 
     def test_deprecated_option_move(self):
-        option = config_options.Deprecated(moved_to='new')
-        config = {'old': 'value'}
-        option.pre_validation(config, 'old')
-        self.assertEqual(len(option.warnings), 1)
-        self.assertEqual(config, {'new': 'value'})
+        class Schema:
+            new = config_options.Type(str)
+            old = config_options.Deprecated(moved_to='new')
+
+        conf = self.get_config(
+            Schema,
+            {'old': 'value'},
+            warnings=dict(
+                old="The configuration option 'old' has been deprecated and will be removed in a "
+                "future release of MkDocs. Use 'new' instead."
+            ),
+        )
+        self.assertEqual(conf, {'new': 'value', 'old': None})
 
     def test_deprecated_option_move_complex(self):
-        option = config_options.Deprecated(moved_to='foo.bar')
-        config = {'old': 'value'}
-        option.pre_validation(config, 'old')
-        self.assertEqual(len(option.warnings), 1)
-        self.assertEqual(config, {'foo': {'bar': 'value'}})
+        class Schema:
+            foo = config_options.Type(dict)
+            old = config_options.Deprecated(moved_to='foo.bar')
+
+        conf = self.get_config(
+            Schema,
+            {'old': 'value'},
+            warnings=dict(
+                old="The configuration option 'old' has been deprecated and will be removed in a "
+                "future release of MkDocs. Use 'foo.bar' instead."
+            ),
+        )
+        self.assertEqual(conf, {'foo': {'bar': 'value'}, 'old': None})
 
     def test_deprecated_option_move_existing(self):
-        option = config_options.Deprecated(moved_to='foo.bar')
-        config = {'old': 'value', 'foo': {'existing': 'existing'}}
-        option.pre_validation(config, 'old')
-        self.assertEqual(len(option.warnings), 1)
-        self.assertEqual(config, {'foo': {'existing': 'existing', 'bar': 'value'}})
+        class Schema:
+            foo = config_options.Type(dict)
+            old = config_options.Deprecated(moved_to='foo.bar')
+
+        conf = self.get_config(
+            Schema,
+            {'old': 'value', 'foo': {'existing': 'existing'}},
+            warnings=dict(
+                old="The configuration option 'old' has been deprecated and will be removed in a "
+                "future release of MkDocs. Use 'foo.bar' instead."
+            ),
+        )
+        self.assertEqual(conf, {'foo': {'existing': 'existing', 'bar': 'value'}, 'old': None})
 
     def test_deprecated_option_move_invalid(self):
-        option = config_options.Deprecated(moved_to='foo.bar')
-        config = {'old': 'value', 'foo': 'wrong type'}
-        option.pre_validation(config, 'old')
-        self.assertEqual(len(option.warnings), 1)
-        self.assertEqual(config, {'old': 'value', 'foo': 'wrong type'})
+        class Schema:
+            foo = config_options.Type(dict)
+            old = config_options.Deprecated(moved_to='foo.bar')
+
+        with self.expect_error(foo="Expected type: <class 'dict'> but received: <class 'str'>"):
+            self.get_config(
+                Schema,
+                {'old': 'value', 'foo': 'wrong type'},
+                warnings=dict(
+                    old="The configuration option 'old' has been deprecated and will be removed in a "
+                    "future release of MkDocs. Use 'foo.bar' instead."
+                ),
+            )
 
 
-class IpAddressTest(unittest.TestCase):
+class IpAddressTest(TestCase):
+    class Schema:
+        option = config_options.IpAddress()
 
     def test_valid_address(self):
         addr = '127.0.0.1:8000'
 
-        option = config_options.IpAddress()
-        value = option.validate(addr)
-        self.assertEqual(str(value), addr)
-        self.assertEqual(value.host, '127.0.0.1')
-        self.assertEqual(value.port, 8000)
+        conf = self.get_config(self.Schema, {'option': addr})
+        self.assertEqual(str(conf['option']), addr)
+        self.assertEqual(conf['option'].host, '127.0.0.1')
+        self.assertEqual(conf['option'].port, 8000)
 
     def test_valid_IPv6_address(self):
         addr = '::1:8000'
 
-        option = config_options.IpAddress()
-        value = option.validate(addr)
-        self.assertEqual(str(value), addr)
-        self.assertEqual(value.host, '::1')
-        self.assertEqual(value.port, 8000)
+        conf = self.get_config(self.Schema, {'option': addr})
+        self.assertEqual(str(conf['option']), addr)
+        self.assertEqual(conf['option'].host, '::1')
+        self.assertEqual(conf['option'].port, 8000)
+
+    def test_valid_full_IPv6_address(self):
+        addr = '[2001:db8:85a3::8a2e:370:7334]:123'
+
+        conf = self.get_config(self.Schema, {'option': addr})
+        self.assertEqual(conf['option'].host, '2001:db8:85a3::8a2e:370:7334')
+        self.assertEqual(conf['option'].port, 123)
 
     def test_named_address(self):
         addr = 'localhost:8000'
 
-        option = config_options.IpAddress()
-        value = option.validate(addr)
-        self.assertEqual(str(value), addr)
-        self.assertEqual(value.host, 'localhost')
-        self.assertEqual(value.port, 8000)
+        conf = self.get_config(self.Schema, {'option': addr})
+        self.assertEqual(str(conf['option']), addr)
+        self.assertEqual(conf['option'].host, 'localhost')
+        self.assertEqual(conf['option'].port, 8000)
 
     def test_default_address(self):
         addr = '127.0.0.1:8000'
 
-        option = config_options.IpAddress(default=addr)
-        value = option.validate(None)
-        self.assertEqual(str(value), addr)
-        self.assertEqual(value.host, '127.0.0.1')
-        self.assertEqual(value.port, 8000)
+        class Schema:
+            option = config_options.IpAddress(default=addr)
+
+        conf = self.get_config(Schema, {'option': None})
+        self.assertEqual(str(conf['option']), addr)
+        self.assertEqual(conf['option'].host, '127.0.0.1')
+        self.assertEqual(conf['option'].port, 8000)
 
     @unittest.skipIf(
         sys.version_info < (3, 9, 5),
         "Leading zeros allowed in IP addresses before Python3.9.5",
     )
     def test_invalid_leading_zeros(self):
-        addr = '127.000.000.001:8000'
-        option = config_options.IpAddress(default=addr)
-        with self.assertRaises(config_options.ValidationError):
-            option.validate(addr)
+        with self.expect_error(
+            option="'127.000.000.001' does not appear to be an IPv4 or IPv6 address"
+        ):
+            self.get_config(self.Schema, {'option': '127.000.000.001:8000'})
 
     def test_invalid_address_range(self):
-        option = config_options.IpAddress()
-        with self.assertRaises(config_options.ValidationError):
-            option.validate('277.0.0.1:8000')
+        with self.expect_error(option="'277.0.0.1' does not appear to be an IPv4 or IPv6 address"):
+            self.get_config(self.Schema, {'option': '277.0.0.1:8000'})
 
     def test_invalid_address_format(self):
-        option = config_options.IpAddress()
-        with self.assertRaises(config_options.ValidationError):
-            option.validate('127.0.0.18000')
+        with self.expect_error(option="Must be a string of format 'IP:PORT'"):
+            self.get_config(self.Schema, {'option': '127.0.0.18000'})
 
     def test_invalid_address_type(self):
-        option = config_options.IpAddress()
-        with self.assertRaises(config_options.ValidationError):
-            option.validate(123)
+        with self.expect_error(option="Must be a string of format 'IP:PORT'"):
+            self.get_config(self.Schema, {'option': 123})
 
     def test_invalid_address_port(self):
-        option = config_options.IpAddress()
-        with self.assertRaises(config_options.ValidationError):
-            option.validate('127.0.0.1:foo')
+        with self.expect_error(option="'foo' is not a valid port"):
+            self.get_config(self.Schema, {'option': '127.0.0.1:foo'})
 
     def test_invalid_address_missing_port(self):
-        option = config_options.IpAddress()
-        with self.assertRaises(config_options.ValidationError):
-            option.validate('127.0.0.1')
+        with self.expect_error(option="Must be a string of format 'IP:PORT'"):
+            self.get_config(self.Schema, {'option': '127.0.0.1'})
 
     def test_unsupported_address(self):
-        option = config_options.IpAddress()
-        value = option.validate('0.0.0.0:8000')
-        option.post_validation({'dev_addr': value}, 'dev_addr')
-        self.assertEqual(len(option.warnings), 1)
+        class Schema:
+            dev_addr = config_options.IpAddress()
+
+        self.get_config(
+            Schema,
+            {'dev_addr': '0.0.0.0:8000'},
+            warnings=dict(
+                dev_addr="The use of the IP address '0.0.0.0' suggests a production "
+                "environment or the use of a proxy to connect to the MkDocs "
+                "server. However, the MkDocs' server is intended for local "
+                "development purposes only. Please use a third party "
+                "production-ready server instead."
+            ),
+        )
 
     def test_unsupported_IPv6_address(self):
-        option = config_options.IpAddress()
-        value = option.validate(':::8000')
-        option.post_validation({'dev_addr': value}, 'dev_addr')
-        self.assertEqual(len(option.warnings), 1)
+        class Schema:
+            dev_addr = config_options.IpAddress()
 
-    def test_invalid_IPv6_address(self):
-        # The server will error out with this so we treat it as invalid.
-        option = config_options.IpAddress()
-        with self.assertRaises(config_options.ValidationError):
-            option.validate('[::1]:8000')
+        self.get_config(
+            Schema,
+            {'dev_addr': ':::8000'},
+            warnings=dict(
+                dev_addr="The use of the IP address '::' suggests a production environment "
+                "or the use of a proxy to connect to the MkDocs server. However, "
+                "the MkDocs' server is intended for local development purposes "
+                "only. Please use a third party production-ready server instead."
+            ),
+        )
 
 
-class URLTest(unittest.TestCase):
-
+class URLTest(TestCase):
     def test_valid_url(self):
-        option = config_options.URL()
+        class Schema:
+            option = config_options.URL()
 
-        self.assertEqual(option.validate("https://mkdocs.org"), "https://mkdocs.org")
-        self.assertEqual(option.validate(""), "")
+        conf = self.get_config(Schema, {'option': "https://mkdocs.org"})
+        self.assertEqual(conf['option'], "https://mkdocs.org")
+
+        conf = self.get_config(Schema, {'option': ""})
+        self.assertEqual(conf['option'], "")
 
     def test_valid_url_is_dir(self):
-        option = config_options.URL(is_dir=True)
+        class Schema:
+            option = config_options.URL(is_dir=True)
 
-        self.assertEqual(option.validate("http://mkdocs.org/"), "http://mkdocs.org/")
-        self.assertEqual(option.validate("https://mkdocs.org"), "https://mkdocs.org/")
+        conf = self.get_config(Schema, {'option': "http://mkdocs.org/"})
+        self.assertEqual(conf['option'], "http://mkdocs.org/")
+
+        conf = self.get_config(Schema, {'option': "https://mkdocs.org"})
+        self.assertEqual(conf['option'], "https://mkdocs.org/")
 
     def test_invalid_url(self):
-        option = config_options.URL()
+        class Schema:
+            option = config_options.URL()
 
-        with self.assertRaises(config_options.ValidationError):
-            option.validate("www.mkdocs.org")
-        with self.assertRaises(config_options.ValidationError):
-            option.validate("//mkdocs.org/test")
-        with self.assertRaises(config_options.ValidationError):
-            option.validate("http:/mkdocs.org/")
-        with self.assertRaises(config_options.ValidationError):
-            option.validate("/hello/")
+        for url in "www.mkdocs.org", "//mkdocs.org/test", "http:/mkdocs.org/", "/hello/":
+            with self.subTest(url=url):
+                with self.expect_error(
+                    option="The URL isn't valid, it should include the http:// (scheme)"
+                ):
+                    self.get_config(Schema, {'option': url})
 
     def test_invalid_type(self):
-        option = config_options.URL()
-        with self.assertRaises(config_options.ValidationError):
-            option.validate(1)
+        class Schema:
+            option = config_options.URL()
+
+        with self.expect_error(option="Unable to parse the URL."):
+            self.get_config(Schema, {'option': 1})
 
 
-class RepoURLTest(unittest.TestCase):
+class EditURITest(TestCase):
+    class Schema:
+        repo_url = config_options.URL()
+        repo_name = config_options.RepoName('repo_url')
+        edit_uri_template = config_options.EditURITemplate('edit_uri')
+        edit_uri = config_options.EditURI('repo_url')
 
     def test_repo_name_github(self):
-
-        option = config_options.RepoURL()
-        config = {'repo_url': "https://github.com/mkdocs/mkdocs"}
-        option.post_validation(config, 'repo_url')
+        config = self.get_config(
+            self.Schema,
+            {'repo_url': "https://github.com/mkdocs/mkdocs"},
+        )
         self.assertEqual(config['repo_name'], "GitHub")
 
     def test_repo_name_bitbucket(self):
-
-        option = config_options.RepoURL()
-        config = {'repo_url': "https://bitbucket.org/gutworth/six/"}
-        option.post_validation(config, 'repo_url')
+        config = self.get_config(
+            self.Schema,
+            {'repo_url': "https://bitbucket.org/gutworth/six/"},
+        )
         self.assertEqual(config['repo_name'], "Bitbucket")
 
     def test_repo_name_gitlab(self):
-
-        option = config_options.RepoURL()
-        config = {'repo_url': "https://gitlab.com/gitlab-org/gitlab-ce/"}
-        option.post_validation(config, 'repo_url')
+        config = self.get_config(
+            self.Schema,
+            {'repo_url': "https://gitlab.com/gitlab-org/gitlab-ce/"},
+        )
         self.assertEqual(config['repo_name'], "GitLab")
 
     def test_repo_name_custom(self):
-
-        option = config_options.RepoURL()
-        config = {'repo_url': "https://launchpad.net/python-tuskarclient"}
-        option.post_validation(config, 'repo_url')
+        config = self.get_config(
+            self.Schema,
+            {'repo_url': "https://launchpad.net/python-tuskarclient"},
+        )
         self.assertEqual(config['repo_name'], "Launchpad")
 
     def test_edit_uri_github(self):
-
-        option = config_options.RepoURL()
-        config = {'repo_url': "https://github.com/mkdocs/mkdocs"}
-        option.post_validation(config, 'repo_url')
+        config = self.get_config(
+            self.Schema,
+            {'repo_url': "https://github.com/mkdocs/mkdocs"},
+        )
         self.assertEqual(config['edit_uri'], 'edit/master/docs/')
         self.assertEqual(config['repo_url'], "https://github.com/mkdocs/mkdocs")
 
     def test_edit_uri_bitbucket(self):
-
-        option = config_options.RepoURL()
-        config = {'repo_url': "https://bitbucket.org/gutworth/six/"}
-        option.post_validation(config, 'repo_url')
+        config = self.get_config(
+            self.Schema,
+            {'repo_url': "https://bitbucket.org/gutworth/six/"},
+        )
         self.assertEqual(config['edit_uri'], 'src/default/docs/')
         self.assertEqual(config['repo_url'], "https://bitbucket.org/gutworth/six/")
 
     def test_edit_uri_gitlab(self):
-
-        option = config_options.RepoURL()
-        config = {'repo_url': "https://gitlab.com/gitlab-org/gitlab-ce/"}
-        option.post_validation(config, 'repo_url')
+        config = self.get_config(
+            self.Schema,
+            {'repo_url': "https://gitlab.com/gitlab-org/gitlab-ce/"},
+        )
         self.assertEqual(config['edit_uri'], 'edit/master/docs/')
 
     def test_edit_uri_custom(self):
-
-        option = config_options.RepoURL()
-        config = {'repo_url': "https://launchpad.net/python-tuskarclient"}
-        option.post_validation(config, 'repo_url')
-        self.assertEqual(config.get('edit_uri'), '')
+        config = self.get_config(
+            self.Schema,
+            {'repo_url': "https://launchpad.net/python-tuskarclient"},
+        )
+        self.assertEqual(config.get('edit_uri'), None)
         self.assertEqual(config['repo_url'], "https://launchpad.net/python-tuskarclient")
 
     def test_repo_name_custom_and_empty_edit_uri(self):
-
-        option = config_options.RepoURL()
-        config = {'repo_url': "https://github.com/mkdocs/mkdocs",
-                  'repo_name': 'mkdocs'}
-        option.post_validation(config, 'repo_url')
+        config = self.get_config(
+            self.Schema,
+            {'repo_url': "https://github.com/mkdocs/mkdocs", 'repo_name': 'mkdocs'},
+        )
         self.assertEqual(config.get('edit_uri'), 'edit/master/docs/')
 
+    def test_edit_uri_template_ok(self):
+        config = self.get_config(
+            self.Schema,
+            {
+                'repo_url': "https://github.com/mkdocs/mkdocs",
+                'edit_uri_template': 'edit/foo/docs/{path}',
+            },
+        )
+        self.assertEqual(config['edit_uri_template'], 'edit/foo/docs/{path}')
 
-class DirTest(unittest.TestCase):
+    def test_edit_uri_template_errors(self):
+        with self.expect_error(
+            edit_uri_template=re.compile(r'.*[{}].*')  # Complains about unclosed '{' or missing '}'
+        ):
+            self.get_config(
+                self.Schema,
+                {
+                    'repo_url': "https://github.com/mkdocs/mkdocs",
+                    'edit_uri_template': 'edit/master/{path',
+                },
+            )
 
+        with self.expect_error(edit_uri_template=re.compile(r'.*\bz\b.*')):
+            self.get_config(
+                self.Schema,
+                {
+                    'repo_url': "https://github.com/mkdocs/mkdocs",
+                    'edit_uri_template': 'edit/master/{path!z}',
+                },
+            )
+
+        with self.expect_error(edit_uri_template="Unknown template substitute: 'foo'"):
+            self.get_config(
+                self.Schema,
+                {
+                    'repo_url': "https://github.com/mkdocs/mkdocs",
+                    'edit_uri_template': 'edit/master/{foo}',
+                },
+            )
+
+    def test_edit_uri_template_warning(self):
+        config = self.get_config(
+            self.Schema,
+            {
+                'repo_url': "https://github.com/mkdocs/mkdocs",
+                'edit_uri': 'edit',
+                'edit_uri_template': 'edit/master/{path}',
+            },
+            warnings=dict(
+                edit_uri_template="The option 'edit_uri' has no effect when 'edit_uri_template' is set."
+            ),
+        )
+        self.assertEqual(config['edit_uri_template'], 'edit/master/{path}')
+
+
+class ListOfItemsTest(TestCase):
+    def test_int_type(self):
+        class Schema:
+            option = config_options.ListOfItems(config_options.Type(int))
+
+        cfg = self.get_config(Schema, {'option': [1, 2, 3]})
+        self.assertEqual(cfg['option'], [1, 2, 3])
+
+        with self.expect_error(
+            option="Expected type: <class 'int'> but received: <class 'NoneType'>"
+        ):
+            cfg = self.get_config(Schema, {'option': [1, None, 3]})
+
+    def test_combined_float_type(self):
+        class Schema:
+            option = config_options.ListOfItems(config_options.Type((int, float)))
+
+        cfg = self.get_config(Schema, {'option': [1.4, 2, 3]})
+        self.assertEqual(cfg['option'], [1.4, 2, 3])
+
+        with self.expect_error(
+            option="Expected type: (<class 'int'>, <class 'float'>) but received: <class 'str'>"
+        ):
+            self.get_config(Schema, {'option': ['a']})
+
+    def test_list_default(self):
+        class Schema:
+            option = config_options.ListOfItems(config_options.Type(int))
+
+        cfg = self.get_config(Schema, {})
+        self.assertEqual(cfg['option'], [])
+
+        cfg = self.get_config(Schema, {'option': None})
+        self.assertEqual(cfg['option'], [])
+
+    def test_none_default(self):
+        class Schema:
+            option = config_options.ListOfItems(config_options.Type(str), default=None)
+
+        cfg = self.get_config(Schema, {})
+        self.assertEqual(cfg['option'], None)
+
+        cfg = self.get_config(Schema, {'option': None})
+        self.assertEqual(cfg['option'], None)
+
+        cfg = self.get_config(Schema, {'option': ['foo']})
+        self.assertEqual(cfg['option'], ['foo'])
+
+    def test_string_not_a_list_of_strings(self):
+        class Schema:
+            option = config_options.ListOfItems(config_options.Type(str))
+
+        with self.expect_error(option="Expected a list of items, but a <class 'str'> was given."):
+            self.get_config(Schema, {'option': 'foo'})
+
+    def test_post_validation_error(self):
+        class Schema:
+            option = config_options.ListOfItems(config_options.IpAddress())
+
+        with self.expect_error(option="'asdf' is not a valid port"):
+            self.get_config(Schema, {'option': ["localhost:8000", "1.2.3.4:asdf"]})
+
+
+class FilesystemObjectTest(TestCase):
     def test_valid_dir(self):
+        for cls in config_options.Dir, config_options.FilesystemObject:
+            with self.subTest(cls):
+                d = os.path.dirname(__file__)
 
-        d = os.path.dirname(__file__)
-        option = config_options.Dir(exists=True)
-        value = option.validate(d)
-        self.assertEqual(d, value)
+                class Schema:
+                    option = cls(exists=True)
 
-    def test_missing_dir(self):
+                conf = self.get_config(Schema, {'option': d})
+                self.assertEqual(conf['option'], d)
 
-        d = os.path.join("not", "a", "real", "path", "I", "hope")
-        option = config_options.Dir()
-        value = option.validate(d)
-        self.assertEqual(os.path.abspath(d), value)
+    def test_valid_file(self):
+        for cls in config_options.File, config_options.FilesystemObject:
+            with self.subTest(cls):
+                f = __file__
 
-    def test_missing_dir_but_required(self):
+                class Schema:
+                    option = cls(exists=True)
 
-        d = os.path.join("not", "a", "real", "path", "I", "hope")
-        option = config_options.Dir(exists=True)
-        with self.assertRaises(config_options.ValidationError):
-            option.validate(d)
+                conf = self.get_config(Schema, {'option': f})
+                self.assertEqual(conf['option'], f)
 
-    def test_file(self):
+    def test_missing_without_exists(self):
+        for cls in config_options.Dir, config_options.File, config_options.FilesystemObject:
+            with self.subTest(cls):
+                d = os.path.join("not", "a", "real", "path", "I", "hope")
+
+                class Schema:
+                    option = cls()
+
+                conf = self.get_config(Schema, {'option': d})
+                self.assertEqual(conf['option'], os.path.abspath(d))
+
+    def test_missing_but_required(self):
+        for cls in config_options.Dir, config_options.File, config_options.FilesystemObject:
+            with self.subTest(cls):
+                d = os.path.join("not", "a", "real", "path", "I", "hope")
+
+                class Schema:
+                    option = cls(exists=True)
+
+                with self.expect_error(option=re.compile(r"The path '.+' isn't an existing .+")):
+                    self.get_config(Schema, {'option': d})
+
+    def test_not_a_dir(self):
         d = __file__
-        option = config_options.Dir(exists=True)
-        with self.assertRaises(config_options.ValidationError):
-            option.validate(d)
 
-    def test_incorrect_type_attribute_error(self):
-        option = config_options.Dir()
-        with self.assertRaises(config_options.ValidationError):
-            option.validate(1)
+        class Schema:
+            option = config_options.Dir(exists=True)
 
-    def test_incorrect_type_type_error(self):
-        option = config_options.Dir()
-        with self.assertRaises(config_options.ValidationError):
-            option.validate([])
+        with self.expect_error(option=re.compile(r"The path '.+' isn't an existing directory.")):
+            self.get_config(Schema, {'option': d})
 
-    def test_dir_unicode(self):
-        cfg = Config(
-            [('dir', config_options.Dir())],
-            config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
-        )
+    def test_not_a_file(self):
+        d = os.path.dirname(__file__)
 
-        test_config = {
-            'dir': 'юникод'
-        }
+        class Schema:
+            option = config_options.File(exists=True)
 
-        cfg.load_dict(test_config)
+        with self.expect_error(option=re.compile(r"The path '.+' isn't an existing file.")):
+            self.get_config(Schema, {'option': d})
 
-        fails, warns = cfg.validate()
+    def test_incorrect_type_error(self):
+        for cls in config_options.Dir, config_options.File, config_options.FilesystemObject:
+            with self.subTest(cls):
 
-        self.assertEqual(len(fails), 0)
-        self.assertEqual(len(warns), 0)
-        self.assertIsInstance(cfg['dir'], str)
+                class Schema:
+                    option = cls()
 
-    def test_dir_filesystemencoding(self):
-        cfg = Config(
-            [('dir', config_options.Dir())],
-            config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
-        )
+                with self.expect_error(
+                    option="Expected type: <class 'str'> but received: <class 'int'>"
+                ):
+                    self.get_config(Schema, {'option': 1})
+                with self.expect_error(
+                    option="Expected type: <class 'str'> but received: <class 'list'>"
+                ):
+                    self.get_config(Schema, {'option': []})
 
-        test_config = {
-            'dir': 'Übersicht'.encode(encoding=sys.getfilesystemencoding())
-        }
+    def test_with_unicode(self):
+        for cls in config_options.Dir, config_options.File, config_options.FilesystemObject:
+            with self.subTest(cls):
 
-        cfg.load_dict(test_config)
+                class Schema:
+                    dir = cls()
 
-        fails, warns = cfg.validate()
+                conf = self.get_config(Schema, {'dir': 'юникод'})
+                self.assertIsInstance(conf['dir'], str)
 
-        # str does not include byte strings so validation fails
-        self.assertEqual(len(fails), 1)
-        self.assertEqual(len(warns), 0)
+    def test_dir_bytes(self):
+        class Schema:
+            dir = config_options.Dir()
 
-    def test_dir_bad_encoding_fails(self):
-        cfg = Config(
-            [('dir', config_options.Dir())],
-            config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
-        )
-
-        test_config = {
-            'dir': 'юникод'.encode(encoding='ISO 8859-5')
-        }
-
-        cfg.load_dict(test_config)
-
-        fails, warns = cfg.validate()
-
-        self.assertEqual(len(fails), 1)
-        self.assertEqual(len(warns), 0)
+        with self.expect_error(dir="Expected type: <class 'str'> but received: <class 'bytes'>"):
+            self.get_config(Schema, {'dir': b'foo'})
 
     def test_config_dir_prepended(self):
-        base_path = os.path.abspath('.')
-        cfg = Config(
-            [('dir', config_options.Dir())],
-            config_file_path=os.path.join(base_path, 'mkdocs.yml'),
-        )
+        for cls in config_options.Dir, config_options.File, config_options.FilesystemObject:
+            with self.subTest(cls):
+                base_path = os.path.dirname(os.path.abspath(__file__))
 
-        test_config = {
-            'dir': 'foo'
-        }
+                class Schema:
+                    dir = cls()
 
-        cfg.load_dict(test_config)
+                conf = self.get_config(
+                    Schema,
+                    {'dir': 'foo'},
+                    config_file_path=os.path.join(base_path, 'mkdocs.yml'),
+                )
+                self.assertEqual(conf['dir'], os.path.join(base_path, 'foo'))
 
-        fails, warns = cfg.validate()
+    def test_site_dir_is_config_dir_fails(self):
+        class Schema:
+            dir = config_options.DocsDir()
 
-        self.assertEqual(len(fails), 0)
-        self.assertEqual(len(warns), 0)
-        self.assertIsInstance(cfg['dir'], str)
-        self.assertEqual(cfg['dir'], os.path.join(base_path, 'foo'))
-
-    def test_dir_is_config_dir_fails(self):
-        cfg = Config(
-            [('dir', config_options.Dir())],
-            config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
-        )
-
-        test_config = {
-            'dir': '.'
-        }
-
-        cfg.load_dict(test_config)
-
-        fails, warns = cfg.validate()
-
-        self.assertEqual(len(fails), 1)
-        self.assertEqual(len(warns), 0)
+        with self.expect_error(
+            dir="The 'dir' should not be the parent directory of the config file. "
+            "Use a child directory instead so that the 'dir' is a sibling of the config file."
+        ):
+            self.get_config(
+                Schema,
+                {'dir': '.'},
+                config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
+            )
 
 
-class ListOfPathsTest(unittest.TestCase):
-
+class ListOfPathsTest(TestCase):
     def test_valid_path(self):
         paths = [os.path.dirname(__file__)]
-        option = config_options.ListOfPaths()
-        option.validate(paths)
+
+        class Schema:
+            option = config_options.ListOfPaths()
+
+        self.get_config(Schema, {'option': paths})
 
     def test_missing_path(self):
         paths = [os.path.join("does", "not", "exist", "i", "hope")]
-        option = config_options.ListOfPaths()
-        with self.assertRaises(config_options.ValidationError):
-            option.validate(paths)
+
+        class Schema:
+            option = config_options.ListOfPaths()
+
+        with self.expect_error(
+            option=f"The path '{paths[0]}' isn't an existing file or directory."
+        ):
+            self.get_config(Schema, {'option': paths})
+
+    def test_non_path(self):
+        paths = [os.path.dirname(__file__), None]
+
+        class Schema:
+            option = config_options.ListOfPaths()
+
+        with self.expect_error(
+            option="Expected type: <class 'str'> but received: <class 'NoneType'>"
+        ):
+            self.get_config(Schema, {'option': paths})
 
     def test_empty_list(self):
         paths = []
-        option = config_options.ListOfPaths()
-        option.validate(paths)
+
+        class Schema:
+            option = config_options.ListOfPaths()
+
+        self.get_config(Schema, {'option': paths})
 
     def test_non_list(self):
         paths = os.path.dirname(__file__)
-        option = config_options.ListOfPaths()
-        with self.assertRaises(config_options.ValidationError):
-            option.validate(paths)
+
+        class Schema:
+            option = config_options.ListOfPaths()
+
+        with self.expect_error(option="Expected a list of items, but a <class 'str'> was given."):
+            self.get_config(Schema, {'option': paths})
 
     def test_file(self):
         paths = [__file__]
-        option = config_options.ListOfPaths()
-        option.validate(paths)
 
-    def test_paths_localized_to_config(self):
-        base_path = os.path.abspath('.')
-        cfg = Config(
-            [('watch', config_options.ListOfPaths())],
+        class Schema:
+            option = config_options.ListOfPaths()
+
+        self.get_config(Schema, {'option': paths})
+
+    @tempdir()
+    def test_paths_localized_to_config(self, base_path):
+        with open(os.path.join(base_path, 'foo'), 'w') as f:
+            f.write('hi')
+
+        class Schema:
+            watch = config_options.ListOfPaths()
+
+        conf = self.get_config(
+            Schema,
+            {'watch': ['foo']},
             config_file_path=os.path.join(base_path, 'mkdocs.yml'),
         )
-        test_config = {
-            'watch': ['foo']
-        }
-        cfg.load_dict(test_config)
-        fails, warns = cfg.validate()
-        self.assertEqual(len(fails), 0)
-        self.assertEqual(len(warns), 0)
-        self.assertIsInstance(cfg['watch'], list)
-        self.assertEqual(cfg['watch'], [os.path.join(base_path, 'foo')])
+
+        self.assertEqual(conf['watch'], [os.path.join(base_path, 'foo')])
 
 
-class SiteDirTest(unittest.TestCase):
-
-    def validate_config(self, config):
-        """ Given a config with values for site_dir and doc_dir, run site_dir post_validation. """
+class SiteDirTest(TestCase):
+    class Schema:
         site_dir = config_options.SiteDir()
         docs_dir = config_options.Dir()
 
-        fname = os.path.join(os.path.abspath('..'), 'mkdocs.yml')
-
-        config['docs_dir'] = docs_dir.validate(config['docs_dir'])
-        config['site_dir'] = site_dir.validate(config['site_dir'])
-
-        schema = [
-            ('site_dir', site_dir),
-            ('docs_dir', docs_dir),
-        ]
-        cfg = Config(schema, fname)
-        cfg.load_dict(config)
-        failed, warned = cfg.validate()
-
-        if failed:
-            raise config_options.ValidationError(failed)
-
-        return True
-
     def test_doc_dir_in_site_dir(self):
-
         j = os.path.join
         # The parent dir is not the same on every system, so use the actual dir name
         parent_dir = mkdocs.__file__.split(os.sep)[-3]
@@ -571,15 +824,17 @@ class SiteDirTest(unittest.TestCase):
             {'docs_dir': 'docs', 'site_dir': ''},
             {'docs_dir': '', 'site_dir': ''},
             {'docs_dir': j('..', parent_dir, 'docs'), 'site_dir': 'docs'},
-            {'docs_dir': 'docs', 'site_dir': '/'}
+            {'docs_dir': 'docs', 'site_dir': '/'},
         )
 
         for test_config in test_configs:
-            with self.assertRaises(config_options.ValidationError):
-                self.validate_config(test_config)
+            with self.subTest(test_config):
+                with self.expect_error(
+                    site_dir=re.compile(r"The 'docs_dir' should not be within the 'site_dir'.*")
+                ):
+                    self.get_config(self.Schema, test_config)
 
     def test_site_dir_in_docs_dir(self):
-
         j = os.path.join
 
         test_configs = (
@@ -590,11 +845,14 @@ class SiteDirTest(unittest.TestCase):
         )
 
         for test_config in test_configs:
-            with self.assertRaises(config_options.ValidationError):
-                self.validate_config(test_config)
+            with self.subTest(test_config):
+                with self.expect_error(
+                    site_dir=re.compile(r"The 'site_dir' should not be within the 'docs_dir'.*")
+                ):
+                    self.get_config(self.Schema, test_config)
 
     def test_common_prefix(self):
-        """ Legitimate settings with common prefixes should not fail validation. """
+        """Legitimate settings with common prefixes should not fail validation."""
 
         test_configs = (
             {'docs_dir': 'docs', 'site_dir': 'docs-site'},
@@ -602,442 +860,679 @@ class SiteDirTest(unittest.TestCase):
         )
 
         for test_config in test_configs:
-            assert self.validate_config(test_config)
+            with self.subTest(test_config):
+                self.get_config(self.Schema, test_config)
 
 
-class ThemeTest(unittest.TestCase):
-
+class ThemeTest(TestCase):
     def test_theme_as_string(self):
+        class Schema:
+            option = config_options.Theme()
 
-        option = config_options.Theme()
-        value = option.validate("mkdocs")
-        self.assertEqual({'name': 'mkdocs'}, value)
+        conf = self.get_config(Schema, {'option': "mkdocs"})
+        self.assertEqual(conf['option'].name, 'mkdocs')
 
     def test_uninstalled_theme_as_string(self):
+        class Schema:
+            option = config_options.Theme()
 
-        option = config_options.Theme()
-        with self.assertRaises(config_options.ValidationError):
-            option.validate("mkdocs2")
+        with self.expect_error(
+            option=re.compile(
+                r"Unrecognised theme name: 'mkdocs2'. The available installed themes are: .+"
+            )
+        ):
+            self.get_config(Schema, {'option': "mkdocs2"})
 
     def test_theme_default(self):
-        option = config_options.Theme(default='mkdocs')
-        value = option.validate(None)
-        self.assertEqual({'name': 'mkdocs'}, value)
+        class Schema:
+            option = config_options.Theme(default='mkdocs')
+
+        conf = self.get_config(Schema, {'option': None})
+        self.assertEqual(conf['option'].name, 'mkdocs')
 
     def test_theme_as_simple_config(self):
-
-        config = {
-            'name': 'mkdocs'
-        }
-        option = config_options.Theme()
-        value = option.validate(config)
-        self.assertEqual(config, value)
-
-    def test_theme_as_complex_config(self):
-
         config = {
             'name': 'mkdocs',
-            'custom_dir': 'custom',
-            'static_templates': ['sitemap.html'],
-            'show_sidebar': False
         }
-        option = config_options.Theme()
-        value = option.validate(config)
-        self.assertEqual(config, value)
 
-    def test_theme_name_is_none(self):
+        class Schema:
+            option = config_options.Theme()
 
-        config = {
-            'name': None
-        }
-        option = config_options.Theme()
-        value = option.validate(config)
-        self.assertEqual(config, value)
-
-    def test_theme_config_missing_name(self):
-
-        config = {
-            'custom_dir': 'custom',
-        }
-        option = config_options.Theme()
-        with self.assertRaises(config_options.ValidationError):
-            option.validate(config)
-
-    def test_uninstalled_theme_as_config(self):
-
-        config = {
-            'name': 'mkdocs2'
-        }
-        option = config_options.Theme()
-        with self.assertRaises(config_options.ValidationError):
-            option.validate(config)
-
-    def test_theme_invalid_type(self):
-
-        config = ['mkdocs2']
-        option = config_options.Theme()
-        with self.assertRaises(config_options.ValidationError):
-            option.validate(config)
-
-    def test_post_validation_none_theme_name_and_missing_custom_dir(self):
-
-        config = {
-            'theme': {
-                'name': None
-            }
-        }
-        option = config_options.Theme()
-        with self.assertRaises(config_options.ValidationError):
-            option.post_validation(config, 'theme')
+        conf = self.get_config(Schema, {'option': config})
+        self.assertEqual(conf['option'].name, 'mkdocs')
 
     @tempdir()
-    def test_post_validation_inexisting_custom_dir(self, abs_base_path):
+    def test_theme_as_complex_config(self, custom_dir):
+        config = {
+            'name': 'mkdocs',
+            'custom_dir': custom_dir,
+            'static_templates': ['sitemap.html'],
+            'show_sidebar': False,
+        }
 
+        class Schema:
+            option = config_options.Theme()
+
+        conf = self.get_config(Schema, {'option': config})
+        self.assertEqual(conf['option'].name, 'mkdocs')
+        self.assertIn(custom_dir, conf['option'].dirs)
+        self.assertEqual(
+            conf['option'].static_templates,
+            {'404.html', 'sitemap.xml', 'sitemap.html'},
+        )
+        self.assertEqual(conf['option']['show_sidebar'], False)
+
+    def test_theme_name_is_none(self):
+        config = {
+            'name': None,
+        }
+
+        class Schema:
+            option = config_options.Theme()
+
+        with self.expect_error(
+            option="At least one of 'option.name' or 'option.custom_dir' must be defined."
+        ):
+            self.get_config(Schema, {'option': config})
+
+    def test_theme_config_missing_name(self):
+        config = {
+            'custom_dir': 'custom',
+        }
+
+        class Schema:
+            option = config_options.Theme()
+
+        with self.expect_error(option="No theme name set."):
+            self.get_config(Schema, {'option': config})
+
+    def test_uninstalled_theme_as_config(self):
+        config = {
+            'name': 'mkdocs2',
+        }
+
+        class Schema:
+            option = config_options.Theme()
+
+        with self.expect_error(
+            option=re.compile(
+                r"Unrecognised theme name: 'mkdocs2'. The available installed themes are: .+"
+            )
+        ):
+            self.get_config(Schema, {'option': config})
+
+    def test_theme_invalid_type(self):
+        config = ['mkdocs2']
+
+        class Schema:
+            option = config_options.Theme()
+
+        with self.expect_error(
+            option="Invalid type <class 'list'>. Expected a string or key/value pairs."
+        ):
+            self.get_config(Schema, {'option': config})
+
+    def test_post_validation_none_theme_name_and_missing_custom_dir(self):
         config = {
             'theme': {
                 'name': None,
-                'custom_dir': abs_base_path + '/inexisting_custom_dir',
-            }
+            },
         }
-        option = config_options.Theme()
-        with self.assertRaises(config_options.ValidationError):
-            option.post_validation(config, 'theme')
+
+        class Schema:
+            theme = config_options.Theme()
+
+        with self.expect_error(
+            theme="At least one of 'theme.name' or 'theme.custom_dir' must be defined."
+        ):
+            self.get_config(Schema, config)
+
+    @tempdir()
+    def test_post_validation_inexisting_custom_dir(self, abs_base_path):
+        path = os.path.join(abs_base_path, 'inexisting_custom_dir')
+        config = {
+            'theme': {
+                'name': None,
+                'custom_dir': path,
+            },
+        }
+
+        class Schema:
+            theme = config_options.Theme()
+
+        with self.expect_error(
+            theme=f"The path set in theme.custom_dir ('{path}') does not exist."
+        ):
+            self.get_config(Schema, config)
 
     def test_post_validation_locale_none(self):
-
         config = {
             'theme': {
                 'name': 'mkdocs',
-                'locale': None
-            }
+                'locale': None,
+            },
         }
-        option = config_options.Theme()
-        with self.assertRaises(config_options.ValidationError):
-            option.post_validation(config, 'theme')
+
+        class Schema:
+            theme = config_options.Theme()
+
+        with self.expect_error(theme="'theme.locale' must be a string."):
+            self.get_config(Schema, config)
 
     def test_post_validation_locale_invalid_type(self):
-
         config = {
             'theme': {
                 'name': 'mkdocs',
-                'locale': 0
-            }
+                'locale': 0,
+            },
         }
-        option = config_options.Theme()
-        with self.assertRaises(config_options.ValidationError):
-            option.post_validation(config, 'theme')
+
+        class Schema:
+            theme = config_options.Theme()
+
+        with self.expect_error(theme="'theme.locale' must be a string."):
+            self.get_config(Schema, config)
 
     def test_post_validation_locale(self):
-
         config = {
             'theme': {
                 'name': 'mkdocs',
-                'locale': 'fr'
-            }
+                'locale': 'fr',
+            },
         }
-        option = config_options.Theme()
-        option.post_validation(config, 'theme')
-        self.assertEqual('fr', config['theme']['locale'].language)
+
+        class Schema:
+            theme = config_options.Theme()
+
+        conf = self.get_config(Schema, config)
+        self.assertEqual(conf['theme']['locale'].language, 'fr')
 
 
-class NavTest(unittest.TestCase):
+class NavTest(TestCase):
+    class Schema:
+        option = config_options.Nav()
 
     def test_old_format(self):
-        option = config_options.Nav()
-        with self.assertRaises(config_options.ValidationError) as cm:
-            option.validate([['index.md']])
-        self.assertEqual(str(cm.exception), "Expected nav item to be a string or dict, got a list: ['index.md']")
+        with self.expect_error(
+            option="Expected nav item to be a string or dict, got a list: ['index.md']"
+        ):
+            self.get_config(self.Schema, {'option': [['index.md']]})
 
     def test_provided_dict(self):
-        option = config_options.Nav()
-        value = option.validate([
-            'index.md',
-            {"Page": "page.md"}
-        ])
-        self.assertEqual(['index.md', {'Page': 'page.md'}], value)
-
-        option.post_validation({'extra_stuff': []}, 'extra_stuff')
-        self.assertEqual(option.warnings, [])
+        conf = self.get_config(self.Schema, {'option': ['index.md', {"Page": "page.md"}]})
+        self.assertEqual(conf['option'], ['index.md', {'Page': 'page.md'}])
 
     def test_provided_empty(self):
-        option = config_options.Nav()
-        value = option.validate([])
-        self.assertEqual(None, value)
-
-        option.post_validation({'extra_stuff': []}, 'extra_stuff')
-        self.assertEqual(option.warnings, [])
+        conf = self.get_config(self.Schema, {'option': []})
+        self.assertEqual(conf['option'], None)
 
     def test_normal_nav(self):
-        nav = yaml_load(textwrap.dedent('''\
-            - Home: index.md
-            - getting-started.md
-            - User Guide:
-                - Overview: user-guide/index.md
-                - Installation: user-guide/installation.md
-        ''').encode())
+        nav = yaml_load(
+            textwrap.dedent(
+                '''\
+                - Home: index.md
+                - getting-started.md
+                - User Guide:
+                    - Overview: user-guide/index.md
+                    - Installation: user-guide/installation.md
+                '''
+            ).encode()
+        )
 
-        option = config_options.Nav()
-        self.assertEqual(option.validate(nav), nav)
-        self.assertEqual(option.warnings, [])
+        conf = self.get_config(self.Schema, {'option': nav})
+        self.assertEqual(conf['option'], nav)
 
     def test_invalid_type_dict(self):
-        option = config_options.Nav()
-        with self.assertRaises(config_options.ValidationError) as cm:
-            option.validate({})
-        self.assertEqual(str(cm.exception), "Expected nav to be a list, got a dict: {}")
+        with self.expect_error(option="Expected nav to be a list, got a dict: {}"):
+            self.get_config(self.Schema, {'option': {}})
 
     def test_invalid_type_int(self):
-        option = config_options.Nav()
-        with self.assertRaises(config_options.ValidationError) as cm:
-            option.validate(5)
-        self.assertEqual(str(cm.exception), "Expected nav to be a list, got a int: 5")
+        with self.expect_error(option="Expected nav to be a list, got a int: 5"):
+            self.get_config(self.Schema, {'option': 5})
 
     def test_invalid_item_int(self):
-        option = config_options.Nav()
-        with self.assertRaises(config_options.ValidationError) as cm:
-            option.validate([1])
-        self.assertEqual(str(cm.exception), "Expected nav item to be a string or dict, got a int: 1")
+        with self.expect_error(option="Expected nav item to be a string or dict, got a int: 1"):
+            self.get_config(self.Schema, {'option': [1]})
 
     def test_invalid_item_none(self):
-        option = config_options.Nav()
-        with self.assertRaises(config_options.ValidationError) as cm:
-            option.validate([None])
-        self.assertEqual(str(cm.exception), "Expected nav item to be a string or dict, got None")
+        with self.expect_error(option="Expected nav item to be a string or dict, got None"):
+            self.get_config(self.Schema, {'option': [None]})
 
     def test_invalid_children_config_int(self):
-        option = config_options.Nav()
-        with self.assertRaises(config_options.ValidationError) as cm:
-            option.validate([{"foo.md": [{"bar.md": 1}]}])
-        self.assertEqual(str(cm.exception), "Expected nav to be a list, got a int: 1")
+        with self.expect_error(option="Expected nav to be a list, got a int: 1"):
+            self.get_config(self.Schema, {'option': [{"foo.md": [{"bar.md": 1}]}]})
 
     def test_invalid_children_config_none(self):
-        option = config_options.Nav()
-        with self.assertRaises(config_options.ValidationError) as cm:
-            option.validate([{"foo.md": None}])
-        self.assertEqual(str(cm.exception), "Expected nav to be a list, got None")
+        with self.expect_error(option="Expected nav to be a list, got None"):
+            self.get_config(self.Schema, {'option': [{"foo.md": None}]})
 
     def test_invalid_children_empty_dict(self):
-        option = config_options.Nav()
         nav = ['foo', {}]
-        with self.assertRaises(config_options.ValidationError) as cm:
-            option.validate(nav)
-        self.assertEqual(str(cm.exception), "Expected nav item to be a dict of size 1, got a dict: {}")
+        with self.expect_error(option="Expected nav item to be a dict of size 1, got a dict: {}"):
+            self.get_config(self.Schema, {'option': nav})
 
     def test_invalid_nested_list(self):
-        option = config_options.Nav()
         nav = [{'aaa': [[{"bbb": "user-guide/index.md"}]]}]
-        with self.assertRaises(config_options.ValidationError) as cm:
-            option.validate(nav)
-        msg = "Expected nav item to be a string or dict, got a list: [{'bbb': 'user-guide/index.md'}]"
-        self.assertEqual(str(cm.exception), msg)
+        with self.expect_error(
+            option="Expected nav item to be a string or dict, got a list: [{'bbb': 'user-guide/index.md'}]"
+        ):
+            self.get_config(self.Schema, {'option': nav})
 
     def test_invalid_children_oversized_dict(self):
-        option = config_options.Nav()
         nav = [{"aaa": [{"bbb": "user-guide/index.md", "ccc": "user-guide/installation.md"}]}]
-        with self.assertRaises(config_options.ValidationError) as cm:
-            option.validate(nav)
-        msg = "Expected nav item to be a dict of size 1, got dict with keys ('bbb', 'ccc')"
-        self.assertEqual(str(cm.exception), msg)
+        with self.expect_error(
+            option="Expected nav item to be a dict of size 1, got dict with keys ('bbb', 'ccc')"
+        ):
+            self.get_config(self.Schema, {'option': nav})
 
     def test_warns_for_dict(self):
-        option = config_options.Nav()
-        option.validate([{"a": {"b": "c.md", "d": "e.md"}}])
-        self.assertEqual(option.warnings, ["Expected nav to be a list, got dict with keys ('b', 'd')"])
+        self.get_config(
+            self.Schema,
+            {'option': [{"a": {"b": "c.md", "d": "e.md"}}]},
+            warnings=dict(option="Expected nav to be a list, got dict with keys ('b', 'd')"),
+        )
 
 
-class PrivateTest(unittest.TestCase):
-
+class PrivateTest(TestCase):
     def test_defined(self):
+        class Schema:
+            option = config_options.Private()
 
-        option = config_options.Private()
-        with self.assertRaises(config_options.ValidationError):
-            option.validate('somevalue')
+        with self.expect_error(option="For internal use only."):
+            self.get_config(Schema, {'option': 'somevalue'})
 
 
-class MarkdownExtensionsTest(unittest.TestCase):
+class SubConfigTest(TestCase):
+    def test_subconfig_wrong_type(self):
+        # Test that an error is raised if subconfig does not receive a dict
+        class Schema:
+            option = config_options.SubConfig()
 
+        for val in "not_a_dict", ("not_a_dict",), ["not_a_dict"]:
+            with self.subTest(val):
+                with self.expect_error(
+                    option=re.compile(
+                        r"The configuration is invalid. The expected type was a key value mapping "
+                        r"\(a python dict\) but we got an object of type: .+"
+                    )
+                ):
+                    self.get_config(Schema, {'option': val})
+
+    def test_subconfig_default(self):
+        """Default behaviour of subconfig: validation is ignored"""
+
+        # Nominal
+        class Schema:
+            option = config_options.SubConfig(('c', config_options.Choice(('foo', 'bar'))))
+
+        conf = self.get_config(Schema, {'option': {'c': 'foo'}})
+        self.assertEqual(conf, {'option': {'c': 'foo'}})
+
+        # Invalid option: No error
+        class Schema:
+            option = config_options.SubConfig(('c', config_options.Choice(('foo', 'bar'))))
+
+        conf = self.get_config(Schema, {'option': {'c': True}})
+        self.assertEqual(conf, {'option': {'c': True}})
+
+        # Missing option: Will be considered optional with default None
+        class Schema:
+            option = config_options.SubConfig(('c', config_options.Choice(('foo', 'bar'))))
+
+        conf = self.get_config(Schema, {'option': {}})
+        self.assertEqual(conf, {'option': {'c': None}})
+
+        # Unknown option: No warning
+        class Schema:
+            option = config_options.SubConfig(('c', config_options.Choice(('foo', 'bar'))))
+
+        conf = self.get_config(Schema, {'option': {'unknown_key_is_ok': 0}})
+        self.assertEqual(conf, {'option': {'c': None, 'unknown_key_is_ok': 0}})
+
+    def test_subconfig_strict(self):
+        """Strict validation mode for subconfigs."""
+
+        # Unknown option: warning
+        class Schema:
+            option = config_options.SubConfig(validate=True)
+
+        conf = self.get_config(
+            Schema,
+            {'option': {'unknown': 0}},
+            warnings=dict(option=('unknown', 'Unrecognised configuration name: unknown')),
+        )
+        self.assertEqual(conf, {'option': {"unknown": 0}})
+
+        # Invalid option: error
+        class Schema:
+            option = config_options.SubConfig(
+                ('c', config_options.Choice(('foo', 'bar'))),
+                validate=True,
+            )
+
+        with self.expect_error(
+            option="Sub-option 'c' configuration error: Expected one of: ('foo', 'bar') but received: True"
+        ):
+            self.get_config(Schema, {'option': {'c': True}})
+
+        # Nominal
+        conf = self.get_config(Schema, {'option': {'c': 'foo'}})
+        self.assertEqual(conf, {'option': {'c': 'foo'}})
+
+    def test_subconfig_with_multiple_items(self):
+        # This had a bug where subsequent items would get merged into the same dict.
+        class Schema:
+            items = mkdocs.config.config_options.ConfigItems(
+                ("value", mkdocs.config.config_options.Type(str)),
+            )
+
+        conf = self.get_config(
+            Schema,
+            {
+                'items': [
+                    {'value': 'a'},
+                    {'value': 'b'},
+                ]
+            },
+        )
+        self.assertEqual(conf['items'], [{'value': 'a'}, {'value': 'b'}])
+
+
+class ConfigItemsTest(TestCase):
+    def test_non_required(self):
+        class Schema:
+            sub = config_options.ConfigItems(
+                ('opt', config_options.Type(int)),
+                validate=True,
+            )
+
+        cfg = self.get_config(Schema, {})
+        self.assertEqual(cfg['sub'], [])
+
+        cfg = self.get_config(Schema, {'sub': None})
+        self.assertEqual(cfg['sub'], [])
+
+        cfg = self.get_config(Schema, {'sub': [{'opt': 1}, {}]})
+        self.assertEqual(cfg['sub'], [{'opt': 1}, {'opt': None}])
+
+    def test_required(self):
+        class Schema:
+            sub = config_options.ConfigItems(
+                ('opt', config_options.Type(str, required=True)),
+                validate=True,
+            )
+
+        cfg = self.get_config(Schema, {})
+        self.assertEqual(cfg['sub'], [])
+
+        cfg = self.get_config(Schema, {'sub': None})
+        self.assertEqual(cfg['sub'], [])
+
+        with self.expect_error(
+            sub="Sub-option 'opt' configuration error: Expected type: <class 'str'> but received: <class 'int'>"
+        ):
+            cfg = self.get_config(Schema, {'sub': [{'opt': 1}, {}]})
+
+    def test_common(self):
+        for required in False, True:
+            with self.subTest(required=required):
+
+                class Schema:
+                    sub = config_options.ConfigItems(
+                        ('opt', config_options.Type(int, required=required)),
+                        validate=True,
+                    )
+
+                cfg = self.get_config(Schema, {'sub': None})
+                self.assertEqual(cfg['sub'], [])
+
+                cfg = self.get_config(Schema, {'sub': []})
+
+                cfg = self.get_config(Schema, {'sub': [{'opt': 1}, {'opt': 2}]})
+                self.assertEqual(cfg['sub'], [{'opt': 1}, {'opt': 2}])
+
+                with self.expect_error(
+                    sub="Sub-option 'opt' configuration error: "
+                    "Expected type: <class 'int'> but received: <class 'str'>"
+                ):
+                    cfg = self.get_config(Schema, {'sub': [{'opt': 'z'}, {'opt': 2}]})
+
+                with self.expect_error(
+                    sub="The configuration is invalid. The expected type was a key value mapping "
+                    "(a python dict) but we got an object of type: <class 'int'>"
+                ):
+                    cfg = self.get_config(Schema, {'sub': [1, 2]})
+
+
+class MarkdownExtensionsTest(TestCase):
     @patch('markdown.Markdown')
     def test_simple_list(self, mockMd):
-        option = config_options.MarkdownExtensions()
+        class Schema:
+            markdown_extensions = config_options.MarkdownExtensions()
+
         config = {
-            'markdown_extensions': ['foo', 'bar']
-        }
-        config['markdown_extensions'] = option.validate(config['markdown_extensions'])
-        option.post_validation(config, 'markdown_extensions')
-        self.assertEqual({
             'markdown_extensions': ['foo', 'bar'],
-            'mdx_configs': {}
-        }, config)
+        }
+        conf = self.get_config(Schema, config)
+        self.assertEqual(conf['markdown_extensions'], ['foo', 'bar'])
+        self.assertEqual(conf['mdx_configs'], {})
 
     @patch('markdown.Markdown')
     def test_list_dicts(self, mockMd):
-        option = config_options.MarkdownExtensions()
+        class Schema:
+            markdown_extensions = config_options.MarkdownExtensions()
+
         config = {
             'markdown_extensions': [
                 {'foo': {'foo_option': 'foo value'}},
                 {'bar': {'bar_option': 'bar value'}},
-                {'baz': None}
+                {'baz': None},
             ]
         }
-        config['markdown_extensions'] = option.validate(config['markdown_extensions'])
-        option.post_validation(config, 'markdown_extensions')
-        self.assertEqual({
-            'markdown_extensions': ['foo', 'bar', 'baz'],
-            'mdx_configs': {
+        conf = self.get_config(Schema, config)
+        self.assertEqual(conf['markdown_extensions'], ['foo', 'bar', 'baz'])
+        self.assertEqual(
+            conf['mdx_configs'],
+            {
                 'foo': {'foo_option': 'foo value'},
-                'bar': {'bar_option': 'bar value'}
-            }
-        }, config)
+                'bar': {'bar_option': 'bar value'},
+            },
+        )
 
     @patch('markdown.Markdown')
     def test_mixed_list(self, mockMd):
-        option = config_options.MarkdownExtensions()
+        class Schema:
+            markdown_extensions = config_options.MarkdownExtensions()
+
         config = {
             'markdown_extensions': [
                 'foo',
-                {'bar': {'bar_option': 'bar value'}}
+                {'bar': {'bar_option': 'bar value'}},
             ]
         }
-        config['markdown_extensions'] = option.validate(config['markdown_extensions'])
-        option.post_validation(config, 'markdown_extensions')
-        self.assertEqual({
-            'markdown_extensions': ['foo', 'bar'],
-            'mdx_configs': {
-                'bar': {'bar_option': 'bar value'}
-            }
-        }, config)
+        conf = self.get_config(Schema, config)
+        self.assertEqual(conf['markdown_extensions'], ['foo', 'bar'])
+        self.assertEqual(
+            conf['mdx_configs'],
+            {
+                'bar': {'bar_option': 'bar value'},
+            },
+        )
 
     @patch('markdown.Markdown')
     def test_dict_of_dicts(self, mockMd):
-        option = config_options.MarkdownExtensions()
+        class Schema:
+            markdown_extensions = config_options.MarkdownExtensions()
+
         config = {
             'markdown_extensions': {
                 'foo': {'foo_option': 'foo value'},
                 'bar': {'bar_option': 'bar value'},
-                'baz': {}
+                'baz': {},
             }
         }
-        config['markdown_extensions'] = option.validate(config['markdown_extensions'])
-        option.post_validation(config, 'markdown_extensions')
-        self.assertEqual({
-            'markdown_extensions': ['foo', 'bar', 'baz'],
-            'mdx_configs': {
+        conf = self.get_config(Schema, config)
+        self.assertEqual(conf['markdown_extensions'], ['foo', 'bar', 'baz'])
+        self.assertEqual(
+            conf['mdx_configs'],
+            {
                 'foo': {'foo_option': 'foo value'},
-                'bar': {'bar_option': 'bar value'}
-            }
-        }, config)
+                'bar': {'bar_option': 'bar value'},
+            },
+        )
 
     @patch('markdown.Markdown')
     def test_builtins(self, mockMd):
-        option = config_options.MarkdownExtensions(builtins=['meta', 'toc'])
+        class Schema:
+            markdown_extensions = config_options.MarkdownExtensions(builtins=['meta', 'toc'])
+
         config = {
-            'markdown_extensions': ['foo', 'bar']
+            'markdown_extensions': ['foo', 'bar'],
         }
-        config['markdown_extensions'] = option.validate(config['markdown_extensions'])
-        option.post_validation(config, 'markdown_extensions')
-        self.assertEqual({
-            'markdown_extensions': ['meta', 'toc', 'foo', 'bar'],
-            'mdx_configs': {}
-        }, config)
+        conf = self.get_config(Schema, config)
+        self.assertEqual(conf['markdown_extensions'], ['meta', 'toc', 'foo', 'bar'])
+        self.assertEqual(conf['mdx_configs'], {})
 
     def test_duplicates(self):
-        option = config_options.MarkdownExtensions(builtins=['meta', 'toc'])
+        class Schema:
+            markdown_extensions = config_options.MarkdownExtensions(builtins=['meta', 'toc'])
+
         config = {
-            'markdown_extensions': ['meta', 'toc']
-        }
-        config['markdown_extensions'] = option.validate(config['markdown_extensions'])
-        option.post_validation(config, 'markdown_extensions')
-        self.assertEqual({
             'markdown_extensions': ['meta', 'toc'],
-            'mdx_configs': {}
-        }, config)
+        }
+        conf = self.get_config(Schema, config)
+        self.assertEqual(conf['markdown_extensions'], ['meta', 'toc'])
+        self.assertEqual(conf['mdx_configs'], {})
 
     def test_builtins_config(self):
-        option = config_options.MarkdownExtensions(builtins=['meta', 'toc'])
+        class Schema:
+            markdown_extensions = config_options.MarkdownExtensions(builtins=['meta', 'toc'])
+
         config = {
             'markdown_extensions': [
-                {'toc': {'permalink': True}}
-            ]
+                {'toc': {'permalink': True}},
+            ],
         }
-        config['markdown_extensions'] = option.validate(config['markdown_extensions'])
-        option.post_validation(config, 'markdown_extensions')
-        self.assertEqual({
-            'markdown_extensions': ['meta', 'toc'],
-            'mdx_configs': {'toc': {'permalink': True}}
-        }, config)
+        conf = self.get_config(Schema, config)
+        self.assertEqual(conf['markdown_extensions'], ['meta', 'toc'])
+        self.assertEqual(conf['mdx_configs'], {'toc': {'permalink': True}})
 
     @patch('markdown.Markdown')
     def test_configkey(self, mockMd):
-        option = config_options.MarkdownExtensions(configkey='bar')
+        class Schema:
+            markdown_extensions = config_options.MarkdownExtensions(configkey='bar')
+
         config = {
             'markdown_extensions': [
-                {'foo': {'foo_option': 'foo value'}}
+                {'foo': {'foo_option': 'foo value'}},
             ]
         }
-        config['markdown_extensions'] = option.validate(config['markdown_extensions'])
-        option.post_validation(config, 'markdown_extensions')
-        self.assertEqual({
-            'markdown_extensions': ['foo'],
-            'bar': {
-                'foo': {'foo_option': 'foo value'}
-            }
-        }, config)
+        conf = self.get_config(Schema, config)
+        self.assertEqual(conf['markdown_extensions'], ['foo'])
+        self.assertEqual(
+            conf['bar'],
+            {
+                'foo': {'foo_option': 'foo value'},
+            },
+        )
+
+    def test_missing_default(self):
+        class Schema:
+            markdown_extensions = config_options.MarkdownExtensions()
+
+        config = {}
+        conf = self.get_config(Schema, config)
+        self.assertEqual(conf['markdown_extensions'], [])
+        self.assertEqual(conf['mdx_configs'], {})
 
     def test_none(self):
-        option = config_options.MarkdownExtensions(default=[])
+        class Schema:
+            markdown_extensions = config_options.MarkdownExtensions(default=[])
+
         config = {
-            'markdown_extensions': None
+            'markdown_extensions': None,
         }
-        config['markdown_extensions'] = option.validate(config['markdown_extensions'])
-        option.post_validation(config, 'markdown_extensions')
-        self.assertEqual({
-            'markdown_extensions': [],
-            'mdx_configs': {}
-        }, config)
+        conf = self.get_config(Schema, config)
+        self.assertEqual(conf['markdown_extensions'], [])
+        self.assertEqual(conf['mdx_configs'], {})
 
     @patch('markdown.Markdown')
     def test_not_list(self, mockMd):
-        option = config_options.MarkdownExtensions()
-        with self.assertRaises(config_options.ValidationError):
-            option.validate('not a list')
+        class Schema:
+            option = config_options.MarkdownExtensions()
+
+        with self.expect_error(option="Invalid Markdown Extensions configuration"):
+            self.get_config(Schema, {'option': 'not a list'})
 
     @patch('markdown.Markdown')
     def test_invalid_config_option(self, mockMd):
-        option = config_options.MarkdownExtensions()
+        class Schema:
+            markdown_extensions = config_options.MarkdownExtensions()
+
         config = {
             'markdown_extensions': [
-                {'foo': 'not a dict'}
-            ]
+                {'foo': 'not a dict'},
+            ],
         }
-        with self.assertRaises(config_options.ValidationError):
-            option.validate(config['markdown_extensions'])
+        with self.expect_error(
+            markdown_extensions="Invalid config options for Markdown Extension 'foo'."
+        ):
+            self.get_config(Schema, config)
 
     @patch('markdown.Markdown')
     def test_invalid_config_item(self, mockMd):
-        option = config_options.MarkdownExtensions()
+        class Schema:
+            markdown_extensions = config_options.MarkdownExtensions()
+
         config = {
             'markdown_extensions': [
-                ['not a dict']
-            ]
+                ['not a dict'],
+            ],
         }
-        with self.assertRaises(config_options.ValidationError):
-            option.validate(config['markdown_extensions'])
+        with self.expect_error(markdown_extensions="Invalid Markdown Extensions configuration"):
+            self.get_config(Schema, config)
 
     @patch('markdown.Markdown')
     def test_invalid_dict_item(self, mockMd):
-        option = config_options.MarkdownExtensions()
+        class Schema:
+            markdown_extensions = config_options.MarkdownExtensions()
+
         config = {
             'markdown_extensions': [
-                {'key1': 'value', 'key2': 'too many keys'}
-            ]
+                {'key1': 'value', 'key2': 'too many keys'},
+            ],
         }
-        with self.assertRaises(config_options.ValidationError):
-            option.validate(config['markdown_extensions'])
+        with self.expect_error(markdown_extensions="Invalid Markdown Extensions configuration"):
+            self.get_config(Schema, config)
 
     def test_unknown_extension(self):
-        option = config_options.MarkdownExtensions()
+        class Schema:
+            markdown_extensions = config_options.MarkdownExtensions()
+
         config = {
-            'markdown_extensions': ['unknown']
+            'markdown_extensions': ['unknown'],
         }
-        with self.assertRaises(config_options.ValidationError):
-            option.validate(config['markdown_extensions'])
+        with self.expect_error(
+            markdown_extensions=re.compile(r"Failed to load extension 'unknown'.\n.+")
+        ):
+            self.get_config(Schema, config)
+
+    def test_multiple_markdown_config_instances(self):
+        # This had a bug where an extension config would persist to separate
+        # config instances that didn't specify extensions.
+        class Schema:
+            markdown_extensions = config_options.MarkdownExtensions()
+
+        conf = self.get_config(
+            Schema,
+            {
+                'markdown_extensions': [{'toc': {'permalink': '##'}}],
+            },
+        )
+        self.assertEqual(conf['mdx_configs'].get('toc'), {'permalink': '##'})
+
+        conf = self.get_config(
+            Schema,
+            {},
+        )
+        self.assertIsNone(conf['mdx_configs'].get('toc'))

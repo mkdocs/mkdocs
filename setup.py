@@ -13,7 +13,8 @@ with open('README.md') as f:
 
 def get_version(package):
     """Return package version as listed in `__version__` in `init.py`."""
-    init_py = open(os.path.join(package, '__init__.py')).read()
+    with open(os.path.join(package, '__init__.py')) as f:
+        init_py = f.read()
     return re.search("__version__ = ['\"]([^'\"]+)['\"]", init_py).group(1)
 
 
@@ -61,20 +62,22 @@ setup(
     author_email='tom@tomchristie.com',  # SEE NOTE BELOW (*)
     packages=get_packages("mkdocs"),
     include_package_data=True,
+    package_data={'mkdocs': ['py.typed']},
     install_requires=[
-        'click>=3.3',
-        'Jinja2>=2.10.2',
-        'Markdown>=3.2.1',
-        'PyYAML>=3.10',
+        'click>=7.0',
+        'Jinja2>=2.11.1',
+        'Markdown>=3.2.1,<3.4',
+        'PyYAML>=5.1',
         'watchdog>=2.0',
         'ghp-import>=1.0',
         'pyyaml_env_tag>=0.1',
-        'importlib_metadata>=4.3',
+        'importlib_metadata>=4.3; python_version < "3.10"',
+        'typing_extensions>=3.10; python_version < "3.8"',
         'packaging>=20.5',
         'mergedeep>=1.3.4'
     ],
     extras_require={"i18n": ['babel>=2.9.0']},
-    python_requires='>=3.6',
+    python_requires='>=3.7',
     entry_points={
         'console_scripts': [
             'mkdocs = mkdocs.__main__:cli',

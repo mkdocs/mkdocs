@@ -1,17 +1,19 @@
+from __future__ import annotations
+
 from distutils.errors import DistutilsOptionError
 from os import path
-from pkg_resources import EntryPoint
+
 from babel.messages import frontend as babel
+from pkg_resources import EntryPoint
 
-
-DEFAULT_MAPPING_FILE = path.normpath(path.join(
-    path.abspath(path.dirname(__file__)), '../themes/babel.cfg'
-))
+DEFAULT_MAPPING_FILE = path.normpath(
+    path.join(path.abspath(path.dirname(__file__)), '../themes/babel.cfg')
+)
 
 
 class ThemeMixin:
     def get_theme_dir(self):
-        ''' Validate theme option and return path to theme's root obtained from entry point. '''
+        """Validate theme option and return path to theme's root obtained from entry point."""
         entry_points = EntryPoint.parse_map(self.distribution.entry_points, self.distribution)
         if 'mkdocs.themes' not in entry_points:
             raise DistutilsOptionError("no mkdocs.themes are defined in entry_points")
@@ -54,7 +56,7 @@ class extract_messages(babel.extract_messages, ThemeMixin):
     def finalize_options(self):
         if not self.version:
             version = self.distribution.get_version()
-            self.version = ".".join([i for i in version.split(".") if "dev" not in i])
+            self.version = ".".join(i for i in version.split(".") if "dev" not in i)
         if not self.mapping_file:
             self.mapping_file = DEFAULT_MAPPING_FILE
         if not self.input_paths or not self.output_file:

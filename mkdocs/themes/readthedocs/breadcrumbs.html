@@ -9,19 +9,22 @@
           <li>{{ doc.title }} &raquo;</li>
         {%- endif %}
       {%- endfor %}
+      <li>{{ page.title }}</li>
     {%- endif %}
-    {%- if page %}<li>{{ page.title }}</li>{%- endif %}
     <li class="wy-breadcrumbs-aside">
       {%- block repo %}
       {%- if page and page.edit_url %}
-        <a href="{{ page.edit_url }}"
         {%- if config.repo_name|lower == 'github' %}
-          class="icon icon-github"
+          <a href="{{ page.edit_url }}" class="icon icon-github"> {% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}</a>
         {%- elif config.repo_name|lower == 'bitbucket' %}
-          class="icon icon-bitbucket"
+          <a href="{{ page.edit_url }}" class="icon icon-bitbucket"> {% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}</a>
         {%- elif config.repo_name|lower == 'gitlab' %}
-          class="icon icon-gitlab"
-        {%- endif %}> {% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}</a>
+          <a href="{{ page.edit_url }}" class="icon icon-gitlab"> {% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}</a>
+        {%- elif config.repo_name %}
+          <a href="{{ page.edit_url }}">{% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}</a>
+        {%- else %}
+          <a href="{{ page.edit_url }}">{% trans %}Edit{% endtrans %}</a>
+        {%- endif %}
       {%- endif %}
       {%- endblock %}
     </li>
@@ -39,4 +42,3 @@
   {%- endif %}
   <hr/>
 </div>
-

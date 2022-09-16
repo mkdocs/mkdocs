@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 
+import json
 import unittest
 from unittest import mock
-import json
 
+from mkdocs.config.config_options import ValidationError
+from mkdocs.contrib import search
+from mkdocs.contrib.search import search_index
 from mkdocs.structure.files import File
 from mkdocs.structure.pages import Page
 from mkdocs.structure.toc import get_toc
-from mkdocs.contrib import search
-from mkdocs.contrib.search import search_index
-from mkdocs.config.config_options import ValidationError
 from mkdocs.tests.base import dedent, get_markdown_toc, load_config
 
 
@@ -18,7 +18,6 @@ def strip_whitespace(string):
 
 
 class SearchConfigTests(unittest.TestCase):
-
     def test_lang_default(self):
         option = search.LangOption(default=['en'])
         value = option.validate(None)
@@ -76,14 +75,13 @@ class SearchConfigTests(unittest.TestCase):
 
 
 class SearchPluginTests(unittest.TestCase):
-
     def test_plugin_config_defaults(self):
         expected = {
             'lang': None,
             'separator': r'[\s\-]+',
             'min_search_length': 3,
             'prebuild_index': False,
-            'indexing': 'full'
+            'indexing': 'full',
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({})
@@ -97,7 +95,7 @@ class SearchPluginTests(unittest.TestCase):
             'separator': r'[\s\-]+',
             'min_search_length': 3,
             'prebuild_index': False,
-            'indexing': 'full'
+            'indexing': 'full',
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({'lang': 'es'})
@@ -111,7 +109,7 @@ class SearchPluginTests(unittest.TestCase):
             'separator': r'[\s\-\.]+',
             'min_search_length': 3,
             'prebuild_index': False,
-            'indexing': 'full'
+            'indexing': 'full',
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({'separator': r'[\s\-\.]+'})
@@ -125,7 +123,7 @@ class SearchPluginTests(unittest.TestCase):
             'separator': r'[\s\-]+',
             'min_search_length': 2,
             'prebuild_index': False,
-            'indexing': 'full'
+            'indexing': 'full',
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({'min_search_length': 2})
@@ -139,7 +137,7 @@ class SearchPluginTests(unittest.TestCase):
             'separator': r'[\s\-]+',
             'min_search_length': 3,
             'prebuild_index': True,
-            'indexing': 'full'
+            'indexing': 'full',
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({'prebuild_index': True})
@@ -153,7 +151,7 @@ class SearchPluginTests(unittest.TestCase):
             'separator': r'[\s\-]+',
             'min_search_length': 3,
             'prebuild_index': False,
-            'indexing': 'titles'
+            'indexing': 'titles',
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({'indexing': 'titles'})
@@ -186,7 +184,9 @@ class SearchPluginTests(unittest.TestCase):
     def test_event_on_config_theme_locale(self):
         plugin = search.SearchPlugin()
         plugin.load_config({})
-        result = plugin.on_config(load_config(theme={'name': 'mkdocs', 'locale': 'fr'}, extra_javascript=[]))
+        result = plugin.on_config(
+            load_config(theme={'name': 'mkdocs', 'locale': 'fr'}, extra_javascript=[])
+        )
         self.assertFalse(result['theme']['search_index_only'])
         self.assertFalse(result['theme']['include_search_page'])
         self.assertEqual(result['theme'].static_templates, {'404.html', 'sitemap.xml'})
@@ -197,18 +197,24 @@ class SearchPluginTests(unittest.TestCase):
     def test_event_on_config_include_search_page(self):
         plugin = search.SearchPlugin()
         plugin.load_config({})
-        config = load_config(theme={'name': 'mkdocs', 'include_search_page': True}, extra_javascript=[])
+        config = load_config(
+            theme={'name': 'mkdocs', 'include_search_page': True}, extra_javascript=[]
+        )
         result = plugin.on_config(config)
         self.assertFalse(result['theme']['search_index_only'])
         self.assertTrue(result['theme']['include_search_page'])
-        self.assertEqual(result['theme'].static_templates, {'404.html', 'sitemap.xml', 'search.html'})
+        self.assertEqual(
+            result['theme'].static_templates, {'404.html', 'sitemap.xml', 'search.html'}
+        )
         self.assertEqual(len(result['theme'].dirs), 3)
         self.assertEqual(result['extra_javascript'], ['search/main.js'])
 
     def test_event_on_config_search_index_only(self):
         plugin = search.SearchPlugin()
         plugin.load_config({})
-        config = load_config(theme={'name': 'mkdocs', 'search_index_only': True}, extra_javascript=[])
+        config = load_config(
+            theme={'name': 'mkdocs', 'search_index_only': True}, extra_javascript=[]
+        )
         result = plugin.on_config(config)
         self.assertTrue(result['theme']['search_index_only'])
         self.assertFalse(result['theme']['include_search_page'])
@@ -263,9 +269,7 @@ class SearchPluginTests(unittest.TestCase):
 
 
 class SearchIndexTests(unittest.TestCase):
-
     def test_html_stripping(self):
-
         stripper = search_index.ContentParser()
 
         stripper.feed("<h1>Testing</h1><p>Content</p>")
@@ -273,46 +277,36 @@ class SearchIndexTests(unittest.TestCase):
         self.assertEqual(stripper.stripped_html, "Testing\nContent")
 
     def test_content_parser(self):
-
         parser = search_index.ContentParser()
 
         parser.feed('<h1 id="title">Title</h1>TEST')
         parser.close()
 
-        self.assertEqual(parser.data, [search_index.ContentSection(
-            text=["TEST"],
-            id_="title",
-            title="Title"
-        )])
+        self.assertEqual(
+            parser.data, [search_index.ContentSection(text=["TEST"], id_="title", title="Title")]
+        )
 
     def test_content_parser_no_id(self):
-
         parser = search_index.ContentParser()
 
         parser.feed("<h1>Title</h1>TEST")
         parser.close()
 
-        self.assertEqual(parser.data, [search_index.ContentSection(
-            text=["TEST"],
-            id_=None,
-            title="Title"
-        )])
+        self.assertEqual(
+            parser.data, [search_index.ContentSection(text=["TEST"], id_=None, title="Title")]
+        )
 
     def test_content_parser_content_before_header(self):
-
         parser = search_index.ContentParser()
 
         parser.feed("Content Before H1 <h1>Title</h1>TEST")
         parser.close()
 
-        self.assertEqual(parser.data, [search_index.ContentSection(
-            text=["TEST"],
-            id_=None,
-            title="Title"
-        )])
+        self.assertEqual(
+            parser.data, [search_index.ContentSection(text=["TEST"], id_=None, title="Title")]
+        )
 
     def test_content_parser_no_sections(self):
-
         parser = search_index.ContentParser()
 
         parser.feed("No H1 or H2<span>Title</span>TEST")
@@ -323,14 +317,15 @@ class SearchIndexTests(unittest.TestCase):
         """
         Test finding the relevant TOC item by the tag ID.
         """
-
         index = search_index.SearchIndex()
 
-        md = dedent("""
-        # Heading 1
-        ## Heading 2
-        ### Heading 3
-        """)
+        md = dedent(
+            """
+            # Heading 1
+            ## Heading 2
+            ### Heading 3
+            """
+        )
         toc = get_toc(get_markdown_toc(md))
 
         toc_item = index._find_toc_by_id(toc, "heading-1")
@@ -346,7 +341,6 @@ class SearchIndexTests(unittest.TestCase):
         self.assertEqual(toc_item3.title, "Heading 3")
 
     def test_create_search_index(self):
-
         html_content = """
         <h1 id="heading-1">Heading 1</h1>
         <p>Content 1</p>
@@ -364,23 +358,29 @@ class SearchIndexTests(unittest.TestCase):
                     'index.md',
                     base_cfg['docs_dir'],
                     base_cfg['site_dir'],
-                    base_cfg['use_directory_urls']),
-                base_cfg),
+                    base_cfg['use_directory_urls'],
+                ),
+                base_cfg,
+            ),
             Page(
                 'About',
                 File(
                     'about.md',
                     base_cfg['docs_dir'],
                     base_cfg['site_dir'],
-                    base_cfg['use_directory_urls']),
-                base_cfg)
+                    base_cfg['use_directory_urls'],
+                ),
+                base_cfg,
+            ),
         ]
 
-        md = dedent("""
-        # Heading 1
-        ## Heading 2
-        ### Heading 3
-        """)
+        md = dedent(
+            """
+            # Heading 1
+            ## Heading 2
+            ### Heading 3
+            """
+        )
         toc = get_toc(get_markdown_toc(md))
 
         full_content = ''.join(f"Heading{i}Content{i}" for i in range(1, 4))
@@ -420,12 +420,12 @@ class SearchIndexTests(unittest.TestCase):
     def test_search_indexing_options(self):
         def test_page(title, filename, config):
             test_page = Page(
-                title, File(
-                    filename,
-                    config['docs_dir'],
-                    config['site_dir'],
-                    config['use_directory_urls']),
-                config)
+                title,
+                File(
+                    filename, config['docs_dir'], config['site_dir'], config['use_directory_urls']
+                ),
+                config,
+            )
             test_page.content = """
                 <h1 id="heading-1">Heading 1</h1>
                 <p>Content 1</p>
@@ -433,52 +433,64 @@ class SearchIndexTests(unittest.TestCase):
                 <p>Content 2</p>
                 <h3 id="heading-3">Heading 3</h1>
                 <p>Content 3</p>"""
-            test_page.markdown = dedent("""
+            test_page.markdown = dedent(
+                """
                 # Heading 1
                 ## Heading 2
-                ### Heading 3""")
+                ### Heading 3"""
+            )
             test_page.toc = get_toc(get_markdown_toc(test_page.markdown))
             return test_page
 
-        validate = {
-            'full': (lambda data:
-                     self.assertEqual(len(data[0]), 4) and
-                     self.assertTrue([x for x in data[0][0] if x['title'] and x['text']])),
-            'sections': (lambda data:
-                         # Sanity
-                         self.assertEqual(len(data[0]), 4) and
-                         # Page
-                         (self.assertEqual(data[0][0]['title'], data[1].title) and
-                             self.assertTrue(data[0][0]['text'])) and
-                         # Headings
-                         self.assertTrue([x for x in data[0][1:] if x['title'] and not x['text']])),
-            'titles': (lambda data:
-                       # Sanity
-                       self.assertEqual(len(data[0]), 1) and
-                       self.assertFalse([x for x in data[0] if x['text']]))
-        }
+        def validate_full(data, page):
+            self.assertEqual(len(data), 4)
+            for x in data:
+                self.assertTrue(x['title'])
+                self.assertTrue(x['text'])
 
-        for option in ['full', 'sections', 'titles']:
-            plugin = search.SearchPlugin()
+        def validate_sections(data, page):
+            # Sanity
+            self.assertEqual(len(data), 4)
+            # Page
+            self.assertEqual(data[0]['title'], page.title)
+            self.assertFalse(data[0]['text'])
+            # Headings
+            for x in data[1:]:
+                self.assertTrue(x['title'])
+                self.assertFalse(x['text'])
 
-            # Load plugin config, overriding indexing for test case
-            errors, warnings = plugin.load_config({'indexing': option})
-            self.assertEqual(errors, [])
-            self.assertEqual(warnings, [])
+        def validate_titles(data, page):
+            # Sanity
+            self.assertEqual(len(data), 1)
+            for x in data:
+                self.assertFalse(x['text'])
 
-            base_cfg = load_config()
-            base_cfg['plugins']['search'].config['indexing'] = option
+        for option, validate in {
+            'full': validate_full,
+            'sections': validate_sections,
+            'titles': validate_titles,
+        }.items():
+            with self.subTest(option):
+                plugin = search.SearchPlugin()
 
-            pages = [
-                test_page('Home', 'index.md', base_cfg),
-                test_page('About', 'about.md', base_cfg)
-            ]
+                # Load plugin config, overriding indexing for test case
+                errors, warnings = plugin.load_config({'indexing': option})
+                self.assertEqual(errors, [])
+                self.assertEqual(warnings, [])
 
-            for page in pages:
-                index = search_index.SearchIndex(**plugin.config)
-                index.add_entry_from_context(page)
-                data = index.generate_search_index()
-                validate[option]((json.loads(data)['docs'], page))
+                base_cfg = load_config()
+                base_cfg['plugins']['search'].config['indexing'] = option
+
+                pages = [
+                    test_page('Home', 'index.md', base_cfg),
+                    test_page('About', 'about.md', base_cfg),
+                ]
+
+                for page in pages:
+                    index = search_index.SearchIndex(**plugin.config)
+                    index.add_entry_from_context(page)
+                    data = index.generate_search_index()
+                    validate(json.loads(data)['docs'], page)
 
     @mock.patch('subprocess.Popen', autospec=True)
     def test_prebuild_index(self, mock_popen):
@@ -492,7 +504,7 @@ class SearchIndexTests(unittest.TestCase):
         expected = {
             'docs': [],
             'config': {'prebuild_index': True},
-            'index': {'mock': 'index'}
+            'index': {'mock': 'index'},
         }
         result = json.loads(index.generate_search_index())
         self.assertEqual(mock_popen.call_count, 1)
@@ -510,9 +522,15 @@ class SearchIndexTests(unittest.TestCase):
         index = search_index.SearchIndex(prebuild_index=True)
         expected = {
             'docs': [],
-            'config': {'prebuild_index': True}
+            'config': {'prebuild_index': True},
         }
-        result = json.loads(index.generate_search_index())
+        with self.assertLogs('mkdocs') as cm:
+            result = json.loads(index.generate_search_index())
+        self.assertEqual(
+            '\n'.join(cm.output),
+            'WARNING:mkdocs.contrib.search.search_index:Failed to pre-build search index. Error: Some Error',
+        )
+
         self.assertEqual(mock_popen.call_count, 1)
         self.assertEqual(mock_popen_obj.communicate.call_count, 1)
         self.assertEqual(result, expected)
@@ -528,9 +546,15 @@ class SearchIndexTests(unittest.TestCase):
         index = search_index.SearchIndex(prebuild_index=True)
         expected = {
             'docs': [],
-            'config': {'prebuild_index': True}
+            'config': {'prebuild_index': True},
         }
-        result = json.loads(index.generate_search_index())
+        with self.assertLogs('mkdocs') as cm:
+            result = json.loads(index.generate_search_index())
+        self.assertEqual(
+            '\n'.join(cm.output),
+            'WARNING:mkdocs.contrib.search.search_index:Failed to pre-build search index. Error: ',
+        )
+
         self.assertEqual(mock_popen.call_count, 1)
         self.assertEqual(mock_popen_obj.communicate.call_count, 1)
         self.assertEqual(result, expected)
@@ -540,15 +564,21 @@ class SearchIndexTests(unittest.TestCase):
         # See https://stackoverflow.com/a/36501078/866026
         mock_popen.return_value = mock.Mock()
         mock_popen_obj = mock_popen.return_value
-        mock_popen_obj.communicate.return_value = ('', '')
+        mock_popen_obj.communicate.return_value = ('foo', 'bar')
         mock_popen_obj.returncode = 0
 
         index = search_index.SearchIndex(prebuild_index=True)
         expected = {
             'docs': [],
-            'config': {'prebuild_index': True}
+            'config': {'prebuild_index': True},
         }
-        result = json.loads(index.generate_search_index())
+        with self.assertLogs('mkdocs') as cm:
+            result = json.loads(index.generate_search_index())
+        self.assertEqual(
+            '\n'.join(cm.output),
+            'WARNING:mkdocs.contrib.search.search_index:Failed to pre-build search index. Error: ',
+        )
+
         self.assertEqual(mock_popen.call_count, 1)
         self.assertEqual(mock_popen_obj.communicate.call_count, 0)
         self.assertEqual(result, expected)
@@ -564,7 +594,7 @@ class SearchIndexTests(unittest.TestCase):
         index = search_index.SearchIndex(prebuild_index=False)
         expected = {
             'docs': [],
-            'config': {'prebuild_index': False}
+            'config': {'prebuild_index': False},
         }
         result = json.loads(index.generate_search_index())
         self.assertEqual(mock_popen.call_count, 0)
@@ -579,7 +609,7 @@ class SearchIndexTests(unittest.TestCase):
         expected = {
             'docs': [],
             'config': {'prebuild_index': 'python', 'lang': 'en'},
-            'index': {'mock': 'index'}
+            'index': {'mock': 'index'},
         }
         result = json.loads(index.generate_search_index())
         self.assertEqual(mock_lunr.call_count, 1)
@@ -591,9 +621,10 @@ class SearchIndexTests(unittest.TestCase):
         index = search_index.SearchIndex(prebuild_index='python', lang='en')
         expected = {
             'docs': [],
-            'config': {'prebuild_index': 'python', 'lang': 'en'}
+            'config': {'prebuild_index': 'python', 'lang': 'en'},
         }
-        result = json.loads(index.generate_search_index())
+        with self.assertLogs('mkdocs', level='WARNING'):
+            result = json.loads(index.generate_search_index())
         self.assertEqual(result, expected)
 
     @mock.patch('subprocess.Popen', autospec=True)
@@ -608,7 +639,7 @@ class SearchIndexTests(unittest.TestCase):
         expected = {
             'docs': [],
             'config': {'prebuild_index': 'node'},
-            'index': {'mock': 'index'}
+            'index': {'mock': 'index'},
         }
         result = json.loads(index.generate_search_index())
         self.assertEqual(mock_popen.call_count, 1)

@@ -61,7 +61,7 @@ root of your MkDocs repository.
 
 It will attempt to run the tests against all of the Python versions we
 support. So don't be concerned if you are missing some and they fail. The rest
-will be verified by [Github Actions] when you submit a pull request.
+will be verified by [GitHub Actions] when you submit a pull request.
 
 ## Translating themes
 
@@ -98,16 +98,15 @@ The updated `pot` file will allow translation contributors to propose the
 translations needed for their preferred language. See the guide on [Translating
 Themes] for details.
 
-!!! Note
-
-    Contributors are not expected to provide translations with their changes to
-    a theme's templates. However, they are expected to include an updated `pot`
-    file so that everything is ready for translators to do their job.
+NOTE:
+Contributors are not expected to provide translations with their changes to
+a theme's templates. However, they are expected to include an updated `pot`
+file so that everything is ready for translators to do their job.
 
 [virtualenv]: https://virtualenv.pypa.io/en/latest/user_guide.html
 [pip]: https://pip.pypa.io/en/stable/
 [tox]: https://tox.readthedocs.io/en/latest/
-[Github Actions]: https://docs.github.com/actions
+[GitHub Actions]: https://docs.github.com/actions
 [PyPA Code of Conduct]: https://www.pypa.io/en/latest/code-of-conduct/
 [Translating Themes]: ../dev-guide/translations.md
 [Jinja's i18n extension]: https://jinja.palletsprojects.com/en/latest/extensions/#i18n-extension

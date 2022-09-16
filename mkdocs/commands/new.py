@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 import os
 
@@ -24,8 +26,7 @@ For full documentation visit [mkdocs.org](https://www.mkdocs.org).
 log = logging.getLogger(__name__)
 
 
-def new(output_dir):
-
+def new(output_dir: str) -> None:
     docs_dir = os.path.join(output_dir, 'docs')
     config_path = os.path.join(output_dir, 'mkdocs.yml')
     index_path = os.path.join(docs_dir, 'index.md')

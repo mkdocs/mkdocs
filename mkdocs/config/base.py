@@ -1,19 +1,79 @@
+from __future__ import annotations
+
+import functools
 import logging
 import os
 import sys
-from yaml import YAMLError
 from collections import UserDict
 from contextlib import contextmanager
+from typing import IO, Iterator, List, Optional, Sequence, Tuple, Union
 
-from mkdocs import exceptions
-from mkdocs import utils
+from yaml import YAMLError
 
+from mkdocs import exceptions, utils
 
 log = logging.getLogger('mkdocs.config')
 
 
+class BaseConfigOption:
+    def __init__(self) -> None:
+        self.warnings: List[str] = []
+        self.default = None
+
+    @property
+    def default(self):
+        try:
+            # ensure no mutable values are assigned
+            return self._default.copy()
+        except AttributeError:
+            return self._default
+
+    @default.setter
+    def default(self, value):
+        self._default = value
+
+    def validate(self, value):
+        return self.run_validation(value)
+
+    def reset_warnings(self) -> None:
+        self.warnings = []
+
+    def pre_validation(self, config: Config, key_name: str) -> None:
+        """
+        Before all options are validated, perform a pre-validation process.
+
+        The pre-validation process method should be implemented by subclasses.
+        """
+
+    def run_validation(self, value):
+        """
+        Perform validation for a value.
+
+        The run_validation method should be implemented by subclasses.
+        """
+        return value
+
+    def post_validation(self, config: Config, key_name: str) -> None:
+        """
+        After all options have passed validation, perform a post-validation
+        process to do any additional changes dependent on other config values.
+
+        The post-validation process method should be implemented by subclasses.
+        """
+
+
 class ValidationError(Exception):
     """Raised during the validation process of the config on errors."""
+
+    def __eq__(self, other):
+        return type(self) is type(other) and str(self) == str(other)
+
+
+PlainConfigSchemaItem = Tuple[str, BaseConfigOption]
+PlainConfigSchema = Sequence[PlainConfigSchemaItem]
+
+ConfigErrors = List[Tuple[str, Exception]]
+ConfigWarnings = List[Tuple[str, str]]
 
 
 class Config(UserDict):
@@ -24,11 +84,12 @@ class Config(UserDict):
     for running validation on the structure and contents.
     """
 
-    def __init__(self, schema, config_file_path=None):
+    def __init__(
+        self, schema: PlainConfigSchema, config_file_path: Optional[Union[str, bytes]] = None
+    ) -> None:
         """
         The schema is a Python dict which maps the config name to a validator.
         """
-
         self._schema = schema
         self._schema_keys = set(dict(schema).keys())
         # Ensure config_file_path is a Unicode string
@@ -41,68 +102,64 @@ class Config(UserDict):
         self.config_file_path = config_file_path
         self.data = {}
 
-        self.user_configs = []
+        self.user_configs: List[dict] = []
         self.set_defaults()
 
-    def set_defaults(self):
+    def set_defaults(self) -> None:
         """
         Set the base config by going through each validator and getting the
         default if it has one.
         """
-
         for key, config_option in self._schema:
             self[key] = config_option.default
 
-    def _validate(self):
-
-        failed, warnings = [], []
+    def _validate(self) -> Tuple[ConfigErrors, ConfigWarnings]:
+        failed: ConfigErrors = []
+        warnings: ConfigWarnings = []
 
         for key, config_option in self._schema:
             try:
                 value = self.get(key)
                 self[key] = config_option.validate(value)
-                warnings.extend([(key, w) for w in config_option.warnings])
+                warnings.extend((key, w) for w in config_option.warnings)
                 config_option.reset_warnings()
             except ValidationError as e:
                 failed.append((key, e))
 
-        for key in (set(self.keys()) - self._schema_keys):
-            warnings.append((
-                key, f"Unrecognised configuration name: {key}"
-            ))
+        for key in set(self.keys()) - self._schema_keys:
+            warnings.append((key, f"Unrecognised configuration name: {key}"))
 
         return failed, warnings
 
-    def _pre_validate(self):
-
-        failed, warnings = [], []
+    def _pre_validate(self) -> Tuple[ConfigErrors, ConfigWarnings]:
+        failed: ConfigErrors = []
+        warnings: ConfigWarnings = []
 
         for key, config_option in self._schema:
             try:
                 config_option.pre_validation(self, key_name=key)
-                warnings.extend([(key, w) for w in config_option.warnings])
+                warnings.extend((key, w) for w in config_option.warnings)
                 config_option.reset_warnings()
             except ValidationError as e:
                 failed.append((key, e))
 
         return failed, warnings
 
-    def _post_validate(self):
-
-        failed, warnings = [], []
+    def _post_validate(self) -> Tuple[ConfigErrors, ConfigWarnings]:
+        failed: ConfigErrors = []
+        warnings: ConfigWarnings = []
 
         for key, config_option in self._schema:
             try:
                 config_option.post_validation(self, key_name=key)
-                warnings.extend([(key, w) for w in config_option.warnings])
+                warnings.extend((key, w) for w in config_option.warnings)
                 config_option.reset_warnings()
             except ValidationError as e:
                 failed.append((key, e))
 
         return failed, warnings
 
-    def validate(self):
-
+    def validate(self) -> Tuple[ConfigErrors, ConfigWarnings]:
         failed, warnings = self._pre_validate()
 
         run_failed, run_warnings = self._validate()
@@ -119,20 +176,21 @@ class Config(UserDict):
 
         return failed, warnings
 
-    def load_dict(self, patch):
-        """ Load config options from a dictionary. """
+    def load_dict(self, patch: Optional[dict]) -> None:
+        """Load config options from a dictionary."""
 
         if not isinstance(patch, dict):
             raise exceptions.ConfigurationError(
                 "The configuration is invalid. The expected type was a key "
                 "value mapping (a python dict) but we got an object of type: "
-                f"{type(patch)}")
+                f"{type(patch)}"
+            )
 
         self.user_configs.append(patch)
         self.data.update(patch)
 
-    def load_file(self, config_file):
-        """ Load config options from the open file descriptor of a YAML file. """
+    def load_file(self, config_file: IO) -> None:
+        """Load config options from the open file descriptor of a YAML file."""
         try:
             return self.load_dict(utils.yaml_load(config_file))
         except YAMLError as e:
@@ -142,8 +200,18 @@ class Config(UserDict):
             )
 
 
+@functools.lru_cache(maxsize=None)
+def get_schema(cls: type) -> PlainConfigSchema:
+    """
+    Extract ConfigOptions defined in a class (used just as a container) and put them into a schema tuple.
+
+    See mkdocs/config/defaults.py for an example.
+    """
+    return tuple((k, v) for k, v in cls.__dict__.items() if isinstance(v, BaseConfigOption))
+
+
 @contextmanager
-def _open_config_file(config_file):
+def _open_config_file(config_file: Optional[Union[str, IO]]) -> Iterator[IO]:
     """
     A context manager which yields an open file descriptor ready to be read.
 
@@ -153,7 +221,6 @@ def _open_config_file(config_file):
 
     The file descriptor is automatically closed when the context manager block is existed.
     """
-
     # Default to the standard config filename.
     if config_file is None:
         paths_to_try = ['mkdocs.yml', 'mkdocs.yaml']
@@ -164,6 +231,7 @@ def _open_config_file(config_file):
     elif getattr(config_file, 'closed', False):
         paths_to_try = [config_file.name]
     else:
+        result_config_file = config_file
         paths_to_try = None
 
     if paths_to_try:
@@ -172,26 +240,25 @@ def _open_config_file(config_file):
             path = os.path.abspath(path)
             log.debug(f"Loading configuration file: {path}")
             try:
-                config_file = open(path, 'rb')
+                result_config_file = open(path, 'rb')
                 break
             except FileNotFoundError:
                 continue
         else:
-            raise exceptions.ConfigurationError(
-                f"Config file '{paths_to_try[0]}' does not exist.")
+            raise exceptions.ConfigurationError(f"Config file '{paths_to_try[0]}' does not exist.")
     else:
-        log.debug(f"Loading configuration file: {config_file}")
+        log.debug(f"Loading configuration file: {result_config_file}")
         # Ensure file descriptor is at beginning
-        config_file.seek(0)
+        result_config_file.seek(0)
 
     try:
-        yield config_file
+        yield result_config_file
     finally:
-        if hasattr(config_file, 'close'):
-            config_file.close()
+        if hasattr(result_config_file, 'close'):
+            result_config_file.close()
 
 
-def load_config(config_file=None, **kwargs):
+def load_config(config_file: Optional[Union[str, IO]] = None, **kwargs) -> Config:
     """
     Load the configuration for a given file object or name
 
@@ -213,8 +280,9 @@ def load_config(config_file=None, **kwargs):
         options['config_file_path'] = getattr(fd, 'name', '')
 
         # Initialize the config with the default schema.
-        from mkdocs.config.defaults import get_schema
-        cfg = Config(schema=get_schema(), config_file_path=options['config_file_path'])
+        from mkdocs.config import defaults
+
+        cfg = Config(schema=defaults.get_schema(), config_file_path=options['config_file_path'])
         # load the config file
         cfg.load_file(fd)
 
@@ -233,9 +301,7 @@ def load_config(config_file=None, **kwargs):
         log.debug(f"Config value: '{key}' = {value!r}")
 
     if len(errors) > 0:
-        raise exceptions.Abort(
-            f"Aborted with {len(errors)} Configuration Errors!"
-        )
+        raise exceptions.Abort(f"Aborted with {len(errors)} Configuration Errors!")
     elif cfg['strict'] and len(warnings) > 0:
         raise exceptions.Abort(
             f"Aborted with {len(warnings)} Configuration Warnings in 'strict' mode!"

@@ -4,11 +4,10 @@ A guide to creating and distributing custom themes.
 
 ---
 
-!!! Note
-
-    If you are looking for existing third party themes, they are listed in the
-    MkDocs [community wiki]. If you want to share a theme you create, you
-    should list it on the Wiki.
+NOTE:
+If you are looking for existing third party themes, they are listed in the
+MkDocs [community wiki]. If you want to share a theme you create, you
+should list it on the Wiki.
 
 When creating a new theme, you can either follow the steps in this guide to
 create one from scratch or you can download the `mkdocs-basic-theme` as a
@@ -47,30 +46,28 @@ theme:
     custom_dir: 'custom_theme/'
 ```
 
-!!! Note
-
-    Generally, when building your own custom theme, the theme.[name]
-    configuration setting would be set to `null`. However, if the
-    theme.[custom_dir] configuration value is used in combination with an
-    existing theme, the theme.[custom_dir] can be used to replace only specific
-    parts of a built-in theme. For example, with the above layout and if you set
-    `name: "mkdocs"` then the `main.html` file in the theme.[custom_dir] would
-    replace the file of the same name in the `mkdocs` theme but otherwise the
-    `mkdocs` theme would remain unchanged. This is useful if you want to make
-    small adjustments to an existing theme.
-
-    For more specific information, see [Customizing Your Theme].
-
-!!! Warning
-
-    A theme's [configuration] defined in a `mkdocs_theme.yml` file is not loaded
-    from `theme.custom_dir`. When an entire theme exists in `theme.custom_dir`
-    and `theme.name` is set to `null`, then the entire theme configuration must
-    be defined in the [theme] configuration option in the `mkdocs.yml` file.
-
-    However, when a theme is [packaged] up for distribution, and loaded using
-    the `theme.name` configuration option, then a `mkdocs_theme.yml` file
-    is required for the theme.
+> NOTE:
+> Generally, when building your own custom theme, the theme.[name]
+> configuration setting would be set to `null`. However, if the
+> theme.[custom_dir] configuration value is used in combination with an
+> existing theme, the theme.[custom_dir] can be used to replace only specific
+> parts of a built-in theme. For example, with the above layout and if you set
+> `name: "mkdocs"` then the `main.html` file in the theme.[custom_dir] would
+> replace the file of the same name in the `mkdocs` theme but otherwise the
+> `mkdocs` theme would remain unchanged. This is useful if you want to make
+> small adjustments to an existing theme.
+>
+> For more specific information, see [Customizing Your Theme].
+<!-- -->
+> WARNING:
+> A theme's [configuration] defined in a `mkdocs_theme.yml` file is not loaded
+> from `theme.custom_dir`. When an entire theme exists in `theme.custom_dir`
+> and `theme.name` is set to `null`, then the entire theme configuration must
+> be defined in the [theme] configuration option in the `mkdocs.yml` file.
+>
+> However, when a theme is [packaged] up for distribution, and loaded using
+> the `theme.name` configuration option, then a `mkdocs_theme.yml` file
+> is required for the theme.
 
 [Customizing Your Theme]: ../user-guide/customizing-your-theme.md#using-the-theme-custom_dir
 [custom_dir]: ../user-guide/configuration.md#custom_dir
@@ -103,21 +100,19 @@ generated and included automatically, through the `nav` and `toc` objects,
 respectively. If you wish to write your own theme, it is recommended to start
 with one of the [built-in themes] and modify it accordingly.
 
-!!! Note
-
-    As MkDocs uses [Jinja] as its template engine, you have access to all the
-    power of Jinja, including [template inheritance]. You may notice that the
-    themes included with MkDocs make extensive use of template inheritance and
-    blocks, allowing users to easily override small bits and pieces of the
-    templates from the theme [custom_dir]. Therefore, the built-in themes are
-    implemented in a `base.html` file, which `main.html` extends. Although not
-    required, third party template authors are encouraged to follow a similar
-    pattern and may want to define the same [blocks] as are used in the built-in
-    themes for consistency.
+NOTE:
+As MkDocs uses [Jinja] as its template engine, you have access to all the
+power of Jinja, including [template inheritance]. You may notice that the
+themes included with MkDocs make extensive use of template inheritance and
+blocks, allowing users to easily override small bits and pieces of the
+templates from the theme [custom_dir]. Therefore, the built-in themes are
+implemented in a `base.html` file, which `main.html` extends. Although not
+required, third party template authors are encouraged to follow a similar
+pattern and may want to define the same [blocks] as are used in the built-in
+themes for consistency.
 
 [Jinja]: http://jinja.pocoo.org/
 [template inheritance]: http://jinja.pocoo.org/docs/dev/templates/#template-inheritance
-[theme_dir]: ../user-guide/customizing-your-theme.md#using-the-theme_dir
 [blocks]: ../user-guide/customizing-your-theme.md#overriding-template-blocks
 
 ## Theme Files
@@ -184,8 +179,7 @@ used options include:
 * [config.site_url](../user-guide/configuration.md#site_url)
 * [config.site_author](../user-guide/configuration.md#site_author)
 * [config.site_description](../user-guide/configuration.md#site_description)
-* [config.theme.locale](../user-guide/configuration.md#locale) (See also
-  [Theme Configuration](#locale) below)
+* [config.theme.locale](../user-guide/configuration.md#locale) (See also [Theme Configuration](#locale) below)
 * [config.extra_javascript](../user-guide/configuration.md#extra_javascript)
 * [config.extra_css](../user-guide/configuration.md#extra_css)
 * [config.repo_url](../user-guide/configuration.md#repo_url)
@@ -201,17 +195,27 @@ defined by the [nav] configuration setting.
 
 [nav]: ../user-guide/configuration.md#nav
 
+::: mkdocs.structure.nav.Navigation
+    options:
+        show_root_heading: false
+        show_root_toc_entry: true
+        members: []
+        heading_level: 4
+
 In addition to the iterable of [navigation objects](#navigation-objects), the
 `nav` object contains the following attributes:
 
-##### nav.homepage
+::: mkdocs.structure.nav.Navigation.homepage
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-The [page](#page) object for the homepage of the site.
+::: mkdocs.structure.nav.Navigation.pages
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### nav.pages
-
-A flat list of all [page](#page) objects contained in the navigation. This list
-is not necessarily a complete list of all site pages as it does not contain
+This list is not necessarily a complete list of all site pages as it does not contain
 pages which are not included in the navigation. This list does match the list
 and order of pages used for all "next page" and "previous page" links. For a
 list of all pages, use the [pages](#pages) template variable.
@@ -229,14 +233,14 @@ navigation as a nested list.
             <li>{{ nav_item.title }}
                 <ul>
                 {% for nav_item in nav_item.children %}
-                    <li class="{% if nav_item.active%}current{% endif %}">
+                    <li class="{% if nav_item.active %}current{% endif %}">
                         <a href="{{ nav_item.url|url }}">{{ nav_item.title }}</a>
                     </li>
                 {% endfor %}
                 </ul>
             </li>
         {% else %}
-            <li class="{% if nav_item.active%}current{% endif %}">
+            <li class="{% if nav_item.active %}current{% endif %}">
                 <a href="{{ nav_item.url|url }}">{{ nav_item.title }}</a>
             </li>
         {% endif %}
@@ -277,25 +281,29 @@ the `page` variable contains a `page` object. The same `page` objects are used
 as `page` [navigation objects](#navigation-objects) in the global
 [navigation](#nav) and in the [pages](#pages) template variable.
 
+::: mkdocs.structure.pages.Page
+    options:
+        show_root_heading: false
+        show_root_toc_entry: true
+        members: []
+        heading_level: 4
+
 All `page` objects contain the following attributes:
 
-##### page.title
+::: mkdocs.structure.pages.Page.title
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-Contains the Title for the current page.
+::: mkdocs.structure.pages.Page.content
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### page.content
-
-The rendered Markdown as HTML, this is the contents of the documentation.
-
-##### page.toc
-
-An iterable object representing the Table of contents for a page. Each item in
-the `toc` is an `AnchorLink` which contains the following attributes:
-
-* `AnchorLink.title`: The text of the item.
-* `AnchorLink.url`: The hash fragment of a URL pointing to the item.
-* `AnchorLink.level`: The zero-based level of the item.
-* `AnchorLink.children`: An iterable of any child items.
+::: mkdocs.structure.pages.Page.toc
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
 The following example would display the top two levels of the Table of Contents
 for a page.
@@ -311,10 +319,12 @@ for a page.
 </ul>
 ```
 
-##### page.meta
+::: mkdocs.structure.pages.Page.meta
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-A mapping of the metadata included at the top of the markdown page. In this
-example we define a `source` property above the page title.
+In this example we define a `source` property above the page title:
 
 ```no-highlight
 source: generics.py
@@ -337,53 +347,49 @@ documentation page.
 {% endfor %}
 ```
 
-##### page.url
+::: mkdocs.structure.pages.Page.url
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-The URL of the page relative to the MkDocs `site_dir`. It is expected that this
-be used with the [url](#url) filter to ensure the URL is relative to the current
+It is expected that this be used with the [url](#url) filter to ensure the URL is relative to the current
 page.
 
 ```django
 <a href="{{ page.url|url }}">{{ page.title }}</a>
 ```
 
-[base_url]: #base_url
+::: mkdocs.structure.pages.Page.file
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### page.file
-
-The documentation `File` that the page is being rendered from.
-
-##### page.abs_url
-
-The absolute URL of the page from the server root as determined by the value
-assigned to the [site_url] configuration setting. The value includes any
-subdirectory included in the `site_url`, but not the domain. [base_url] should
-not be used with this variable.
+::: mkdocs.structure.pages.Page.abs_url
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
 For example, if `site_url: https://example.com/`, then the value of
 `page.abs_url` for the page `foo.md` would be `/foo/`. However, if
 `site_url: https://example.com/bar/`, then the value of `page.abs_url` for the
 page `foo.md` would be `/bar/foo/`.
 
-[site_url]: ../user-guide/configuration.md#site_url
+::: mkdocs.structure.pages.Page.canonical_url
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### page.canonical_url
+::: mkdocs.structure.pages.Page.edit_url
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-The full, canonical URL to the current page as determined by the value assigned
-to the [site_url] configuration setting. The value includes the domain and any
-subdirectory included in the `site_url`. [base_url] should not be used with this
-variable.
+::: mkdocs.structure.pages.Page.is_homepage
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### page.edit_url
-
-The full URL to the source page in the source repository. Typically used to
-provide a link to edit the source page. [base_url] should not be used with this
-variable.
-
-##### page.is_homepage
-
-Evaluates to `True` for the homepage of the site and `False` for all other
-pages. This can be used in conjunction with other attributes of the `page`
+This can be used in conjunction with other attributes of the `page`
 object to alter the behavior. For example, to display a different title
 on the homepage:
 
@@ -391,48 +397,53 @@ on the homepage:
 {% if not page.is_homepage %}{{ page.title }} - {% endif %}{{ site_name }}
 ```
 
-##### page.previous_page
+::: mkdocs.structure.pages.Page.previous_page
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-The page object for the previous page or `None`. The value will be `None` if the
-current page is the first item in the site navigation or if the current page is
-not included in the navigation at all. When the value is a page object, the
-usage is the same as for `page`.
+::: mkdocs.structure.pages.Page.next_page
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### page.next_page
+::: mkdocs.structure.pages.Page.parent
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-The page object for the next page or `None`. The value will be `None` if the
-current page is the last item in the site navigation or if the current page is
-not included in the navigation at all. When the value is a page object, the
-usage is the same as for `page`.
+::: mkdocs.structure.pages.Page.children
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### page.parent
+::: mkdocs.structure.pages.Page.active
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-The immediate parent of the page in the [site navigation](#nav). `None` if the
-page is at the top level.
+::: mkdocs.structure.pages.Page.is_section
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### page.children
+::: mkdocs.structure.pages.Page.is_page
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-Pages do not contain children and the attribute is always `None`.
+::: mkdocs.structure.pages.Page.is_link
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### page.active
+#### AnchorLink
 
-When `True`, indicates that this page is the currently viewed page. Defaults
-to `False`.
-
-##### page.is_section
-
-Indicates that the navigation object is a "section" object. Always `False` for
-page objects.
-
-##### page.is_page
-
-Indicates that the navigation object is a "page" object. Always `True` for
-page objects.
-
-##### page.is_link
-
-Indicates that the navigation object is a "link" object. Always `False` for
-page objects.
+::: mkdocs.structure.toc.AnchorLink
+    options:
+        show_root_heading: false
+        show_root_toc_entry: true
+        heading_level: 5
 
 ### Navigation Objects
 
@@ -453,83 +464,103 @@ URLs and are not links of any kind. However, by default, MkDocs sorts index
 pages to the top and the first child might be used as the URL for a section if a
 theme chooses to do so.
 
- The following attributes are available on `section` objects:
+::: mkdocs.structure.nav.Section
+    options:
+        show_root_heading: false
+        show_root_toc_entry: true
+        members: []
+        heading_level: 4
 
-##### section.title
+The following attributes are available on `section` objects:
 
-The title of the section.
+::: mkdocs.structure.nav.Section.title
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### section.parent
+::: mkdocs.structure.nav.Section.parent
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-The immediate parent of the section or `None` if the section is at the top
-level.
+::: mkdocs.structure.nav.Section.children
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### section.children
+::: mkdocs.structure.nav.Section.active
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-An iterable of all child navigation objects. Children may include nested
-sections, pages and links.
+::: mkdocs.structure.nav.Section.is_section
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### section.active
+::: mkdocs.structure.nav.Section.is_page
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-When `True`, indicates that a child page of this section is the current page and
-can be used to highlight the section as the currently viewed section. Defaults
-to `False`.
-
-##### section.is_section
-
-Indicates that the navigation object is a "section" object. Always `True` for
-section objects.
-
-##### section.is_page
-
-Indicates that the navigation object is a "page" object. Always `False` for
-section objects.
-
-##### section.is_link
-
-Indicates that the navigation object is a "link" object. Always `False` for
-section objects.
+::: mkdocs.structure.nav.Section.is_link
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
 #### Link
 
 A `link` navigation object contains a link which does not point to an internal
-MkDocs page. The following attributes are available on `link` objects:
+MkDocs page.
 
-##### link.title
+::: mkdocs.structure.nav.Link
+    options:
+        show_root_heading: false
+        show_root_toc_entry: true
+        members: []
+        heading_level: 4
 
-The title of the link. This would generally be used as the label of the link.
+The following attributes are available on `link` objects:
 
-##### link.url
+::: mkdocs.structure.nav.Link.title
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-The URL that the link points to. The URL should always be an absolute URLs and
-should not need to have `base_url` prepended.
+::: mkdocs.structure.nav.Link.url
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### link.parent
+::: mkdocs.structure.nav.Link.parent
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-The immediate parent of the link. `None` if the link is at the top level.
+::: mkdocs.structure.nav.Link.children
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### link.children
+::: mkdocs.structure.nav.Link.active
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-Links do not contain children and the attribute is always `None`.
+::: mkdocs.structure.nav.Link.is_section
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-##### link.active
+::: mkdocs.structure.nav.Link.is_page
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
-External links cannot be "active" and the attribute is always `False`.
-
-##### link.is_section
-
-Indicates that the navigation object is a "section" object. Always `False` for
-link objects.
-
-##### link.is_page
-
-Indicates that the navigation object is a "page" object. Always `False` for
-link objects.
-
-##### link.is_link
-
-Indicates that the navigation object is a "link" object. Always `True` for
-link objects.
+::: mkdocs.structure.nav.Link.is_link
+    options:
+        show_root_full_path: false
+        heading_level: 5
 
 ### Extra Context
 
@@ -713,15 +744,14 @@ To see an example of a package containing one theme, see the [MkDocs Bootstrap
 theme] and to see a package that contains many themes, see the [MkDocs
 Bootswatch theme].
 
-!!! Note
-
-    It is not strictly necessary to package a theme, as the entire theme
-    can be contained in the `custom_dir`. If you have created a "one-off theme,"
-    that should be sufficient. However, if you intend to distribute your theme
-    for others to use, packaging the theme has some advantages. By packaging
-    your theme, your users can more easily install it, they can rely on a default
-    [configuration] being defined, and they can then take advantage of the
-    [custom_dir] to make tweaks to your theme to better suit their needs.
+NOTE:
+It is not strictly necessary to package a theme, as the entire theme
+can be contained in the `custom_dir`. If you have created a "one-off theme,"
+that should be sufficient. However, if you intend to distribute your theme
+for others to use, packaging the theme has some advantages. By packaging
+your theme, your users can more easily install it, they can rely on a default
+[configuration] being defined, and they can then take advantage of the
+[custom_dir] to make tweaks to your theme to better suit their needs.
 
 [Python packaging]: https://packaging.python.org/en/latest/
 [MkDocs Bootstrap theme]: https://mkdocs.github.io/mkdocs-bootstrap/
@@ -837,52 +867,52 @@ theme:
 In addition to arbitrary options defined by the theme, MkDocs defines a few
 special options which alters its behavior:
 
-!!! block ""
-
-    #### locale
-
-    This option mirrors the [theme] config option of the same name. If this
-    value is not defined in the `mkdocs_theme.yml` file and the user does not
-    set it in `mkdocs.yml` then it will default to `en` (English). The value
-    is expected to match the language used in the text provided by the theme
-    (such a "next" and "previous" links) and should be used as the value of
-    the `<html>` tag's `lang` attribute. See [Supporting theme localization/
-    translation](#supporting-theme-localizationtranslation) for more
-    information.
-
-    Note that during configuration validation, the provided string is converted
-    to a `Locale` object. The object contains `Locale.language` and
-    `Locale.territory` attributes and will resolve as a string from within a
-    template. Therefore, the following will work fine:
-
-        <html lang="{ config.theme.locale }">
-
-    If the locale was set to `fr_CA` (Canadian French), then the above template
-    would render as:
-
-        <html lang="fr_CA">
-
-    If you did not want the territory attribute to be included, then reference
-    the `language` attribute directly:
-
-        <html lang="{ config.theme.locale.language }">
-
-    That would render as:
-
-        <html lang="fr">
-
-    #### static_templates
-
-    This option mirrors the [theme] config option of the same name and allows
-    some defaults to be set by the theme. Note that while the user can add
-    templates to this list, the user cannot remove templates included in the
-    theme's config.
-
-    #### extends
-
-    Defines a parent theme that this theme inherits from. The value should be
-    the string name of the parent theme. Normal [Jinja inheritance rules]
-    apply.
+> BLOCK:
+>
+> #### locale
+>
+> This option mirrors the [theme] config option of the same name. If this
+> value is not defined in the `mkdocs_theme.yml` file and the user does not
+> set it in `mkdocs.yml` then it will default to `en` (English). The value
+> is expected to match the language used in the text provided by the theme
+> (such a "next" and "previous" links) and should be used as the value of
+> the `<html>` tag's `lang` attribute. See [Supporting theme localization/
+> translation](#supporting-theme-localizationtranslation) for more
+> information.
+>
+> Note that during configuration validation, the provided string is converted
+> to a `Locale` object. The object contains `Locale.language` and
+> `Locale.territory` attributes and will resolve as a string from within a
+> template. Therefore, the following will work fine:
+>
+>     <html lang="{ config.theme.locale }">
+>
+> If the locale was set to `fr_CA` (Canadian French), then the above template
+> would render as:
+>
+>     <html lang="fr_CA">
+>
+> If you did not want the territory attribute to be included, then reference
+> the `language` attribute directly:
+>
+>     <html lang="{ config.theme.locale.language }">
+>
+> That would render as:
+>
+>     <html lang="fr">
+>
+> #### static_templates
+>
+> This option mirrors the [theme] config option of the same name and allows
+> some defaults to be set by the theme. Note that while the user can add
+> templates to this list, the user cannot remove templates included in the
+> theme's config.
+>
+> #### extends
+>
+> Defines a parent theme that this theme inherits from. The value should be
+> the string name of the parent theme. Normal [Jinja inheritance rules]
+> apply.
 
 Plugins may also define some options which allow the theme to inform a plugin
 about which set of plugin options it expects. See the documentation for any
@@ -907,7 +937,6 @@ For a much more detailed guide, see the official Python packaging
 documentation for [Packaging and Distributing Projects].
 
 [Packaging and Distributing Projects]: https://packaging.python.org/en/latest/distributing/
-[theme]: ../user-guide/configuration.md#theme
 [Jinja inheritance rules]: https://jinja.palletsprojects.com/en/latest/templates/#template-inheritance
 
 ## Supporting theme Localization/Translation
@@ -926,7 +955,6 @@ built-in themes, the sections below outline how to enable and make use of the
 same commands utilized by MkDocs.
 
 [localization/translation]: ../user-guide/localizing-your-theme.md
-[Theme Configuration]: #theme-configuration
 
 ### Enabling the Localization/Translation commands
 
@@ -946,12 +974,12 @@ setup(
 Note that `cmdclass=babel_cmdclass` was added an a parameter passed to
 the `setup` function.
 
-!!! warning
-    As **pybabel is not installed by default** and most users will not have
-    pybabel installed, theme developers and/or translators should make sure to
-    have installed the necessary dependencies
-    (using `pip install mkdocs[i18n]`) in order for the commands to be
-    available for use.
+WARNING:
+As **pybabel is not installed by default** and most users will not have
+pybabel installed, theme developers and/or translators should make sure to
+have installed the necessary dependencies
+(using `pip install mkdocs[i18n]`) in order for the commands to be
+available for use.
 
 [pybabel]: https://babel.pocoo.org/en/latest/setup.html
 
@@ -1067,15 +1095,13 @@ the `theme` option is ignored for that option.
 
 ### Example custom theme Localization/Translation workflow
 
-!!! note
-
-    If your theme inherits from an existing theme which already provides
-    translation catalogs, your theme's translations will be merged with the
-    parent theme's translations during a MkDocs build.
-
-    This means that you only need to concentrate on the added translations.
-    Yet, you will still benefit from the translations of the parent theme. At
-    the same time, you may override any of parent theme's translations!
+> NOTE: If your theme inherits from an existing theme which already provides
+> translation catalogs, your theme's translations will be merged with the
+> parent theme's translations during a MkDocs build.
+>
+> This means that you only need to concentrate on the added translations.
+> Yet, you will still benefit from the translations of the parent theme. At
+> the same time, you may override any of parent theme's translations!
 
 Let's suppose that you're working on your own fork of the
 [mkdocs-basic-theme][basic theme] and want to add translations to it.
@@ -1143,16 +1169,15 @@ command for each locale. MkDocs expects the binary `mo` files to be located at
 command automatically does for you. See [Testing theme translations] for
 details.
 
-!!! note
-
-    As outlined in our [Translation Guide], the MkDocs project has chosen to
-    include the `pot` and `po` files in our code repository, but not the
-    `mo` files. This requires us to always run `compile_catalog` before
-    packaging a new release regardless of whether any changes were made to a
-    translation or not. However, you may chose an alternate workflow for your
-    theme. At a minimum, you need to ensure that up-to-date `mo` files are
-    included at the correct location in each release. However, you may use a
-    different process for generating those `mo` files if you chose to do so.
+NOTE:
+As outlined in our [Translation Guide], the MkDocs project has chosen to
+include the `pot` and `po` files in our code repository, but not the
+`mo` files. This requires us to always run `compile_catalog` before
+packaging a new release regardless of whether any changes were made to a
+translation or not. However, you may chose an alternate workflow for your
+theme. At a minimum, you need to ensure that up-to-date `mo` files are
+included at the correct location in each release. However, you may use a
+different process for generating those `mo` files if you chose to do so.
 
 [packaging a theme]: #packaging-themes
 [Testing theme translations]: translations.md#testing-theme-translations

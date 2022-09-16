@@ -1,11 +1,14 @@
-import os
-import jinja2
-import logging
+from __future__ import annotations
 
-from mkdocs import utils
-from mkdocs.utils import filters
+import logging
+import os
+from typing import Any, Optional
+
+import jinja2
+
+from mkdocs import localization, utils
 from mkdocs.config.base import ValidationError
-from mkdocs import localization
+from mkdocs.utils import filters
 
 log = logging.getLogger(__name__)
 
@@ -26,7 +29,7 @@ class Theme:
 
     """
 
-    def __init__(self, name=None, **user_config):
+    def __init__(self, name: Optional[str] = None, **user_config) -> None:
         self.name = name
         self._vars = {'locale': 'en'}
 
@@ -41,7 +44,7 @@ class Theme:
         if 'custom_dir' in user_config:
             self.dirs.append(user_config.pop('custom_dir'))
 
-        if self.name:
+        if name:
             self._load_theme_config(name)
 
         # Include templates provided directly by MkDocs (outside any theme)
@@ -54,26 +57,29 @@ class Theme:
         # Validate locale and convert to Locale object
         self._vars['locale'] = localization.parse_locale(self._vars['locale'])
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "{}(name='{}', dirs={}, static_templates={}, {})".format(
-            self.__class__.__name__, self.name, self.dirs, list(self.static_templates),
-            ', '.join(f'{k}={v!r}' for k, v in self._vars.items())
+            self.__class__.__name__,
+            self.name,
+            self.dirs,
+            list(self.static_templates),
+            ', '.join(f'{k}={v!r}' for k, v in self._vars.items()),
         )
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> Any:
         return self._vars[key]
 
     def __setitem__(self, key, value):
         self._vars[key] = value
 
-    def __contains__(self, item):
+    def __contains__(self, item: str) -> bool:
         return item in self._vars
 
     def __iter__(self):
         return iter(self._vars)
 
-    def _load_theme_config(self, name):
-        """ Recursively load theme and any parent themes. """
+    def _load_theme_config(self, name: str) -> None:
+        """Recursively load theme and any parent themes."""
 
         theme_dir = utils.get_theme_dir(name)
         self.dirs.append(theme_dir)
@@ -106,8 +112,8 @@ class Theme:
         self.static_templates.update(theme_config.pop('static_templates', []))
         self._vars.update(theme_config)
 
-    def get_env(self):
-        """ Return a Jinja environment for the theme. """
+    def get_env(self) -> jinja2.Environment:
+        """Return a Jinja environment for the theme."""
 
         loader = jinja2.FileSystemLoader(self.dirs)
         # No autoreload because editing a template in the middle of a build is not useful.

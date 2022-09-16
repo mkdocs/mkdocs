@@ -35,11 +35,10 @@ to GitHub. Therefore, you may want to verify any changes you make to the docs
 beforehand by using the `build` or `serve` commands and reviewing the built
 files locally.
 
-!!! warning
-
-    You should never edit files in your pages repository by hand if you're using
-    the `gh-deploy` command because you will lose your work the next time you
-    run the command.
+WARNING:
+You should never edit files in your pages repository by hand if you're using
+the `gh-deploy` command because you will lose your work the next time you
+run the command.
 
 ### Organization and User Pages
 
@@ -111,12 +110,11 @@ create an account and point it at your publicly hosted repository. If properly
 configured, your documentation will update each time you push commits to your
 public repository.
 
-!!! note
-
-    To benefit from all of the [features] offered by Read the Docs, you will need
-    to use the [Read the Docs theme][theme] which ships with MkDocs. The various
-    themes which may be referenced in Read the Docs' documentation are Sphinx
-    specific themes and will not work with MkDocs.
+NOTE:
+To benefit from all of the [features] offered by Read the Docs, you will need
+to use the [Read the Docs theme][theme] which ships with MkDocs. The various
+themes which may be referenced in Read the Docs' documentation are Sphinx
+specific themes and will not work with MkDocs.
 
 [rtd]: https://readthedocs.org/
 [instructions]: https://docs.readthedocs.io/en/stable/intro/getting-started-with-mkdocs.html
@@ -168,21 +166,21 @@ Note that, due to the security settings of all modern browsers, some things
 will not work the same and some features may not work at all. In fact, a few
 settings will need to be customized in very specific ways.
 
-- [site_url]:
+-   [site_url]:
 
     The `site_url` must be set to an empty string, which instructs MkDocs to
     build your site so that it will work with the `file://` scheme.
 
         site_url: ""
 
-- [use_directory_urls]:
+-   [use_directory_urls]:
 
     Set `use_directory_urls` to `false`. Otherwise, internal links between
     pages will not work properly.
 
         use_directory_urls: false
 
-- [search]:
+-   [search]:
 
     You will need to either disable the search plugin, or use a third-party
     search plugin which is specifically designed to work with the `file://`

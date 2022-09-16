@@ -1,5 +1,7 @@
-from typing import NamedTuple
+from __future__ import annotations
+
 from string import ascii_letters
+from typing import NamedTuple
 
 
 class UnknownLocaleError(Exception):

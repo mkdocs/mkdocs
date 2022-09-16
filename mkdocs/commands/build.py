@@ -1,24 +1,31 @@
+from __future__ import annotations
+
+import gzip
 import logging
 import os
-import gzip
+import time
+from typing import Any, Dict, Optional, Sequence, Set, Union
 from urllib.parse import urlsplit
 
-from jinja2.exceptions import TemplateNotFound
 import jinja2
+from jinja2.exceptions import TemplateNotFound
 
-from mkdocs import utils
-from mkdocs.exceptions import BuildError, Abort
-from mkdocs.structure.files import Files, get_files
-from mkdocs.structure.nav import get_navigation
 import mkdocs
+from mkdocs import utils
+from mkdocs.config.base import Config
+from mkdocs.exceptions import Abort, BuildError
+from mkdocs.structure.files import File, Files, get_files
+from mkdocs.structure.nav import Navigation, get_navigation
+from mkdocs.structure.pages import Page
 
 
 class DuplicateFilter:
-    ''' Avoid logging duplicate messages. '''
-    def __init__(self):
-        self.msgs = set()
+    """Avoid logging duplicate messages."""
 
-    def filter(self, record):
+    def __init__(self) -> None:
+        self.msgs: Set[str] = set()
+
+    def __call__(self, record: logging.LogRecord) -> bool:
         rv = record.msg not in self.msgs
         self.msgs.add(record.msg)
         return rv
@@ -28,11 +35,16 @@ log = logging.getLogger(__name__)
 log.addFilter(DuplicateFilter())
 
 
-def get_context(nav, files, config, page=None, base_url=''):
+def get_context(
+    nav: Navigation,
+    files: Union[Sequence[File], Files],
+    config: Config,
+    page: Optional[Page] = None,
+    base_url: str = '',
+) -> Dict[str, Any]:
     """
     Return the template context for a given page or template.
     """
-
     if page is not None:
         base_url = utils.get_relative_url('.', page.url)
 
@@ -46,25 +58,22 @@ def get_context(nav, files, config, page=None, base_url=''):
     return {
         'nav': nav,
         'pages': files,
-
         'base_url': base_url,
-
         'extra_css': extra_css,
         'extra_javascript': extra_javascript,
-
         'mkdocs_version': mkdocs.__version__,
         'build_date_utc': utils.get_build_datetime(),
-
         'config': config,
         'page': page,
     }
 
 
-def _build_template(name, template, files, config, nav):
+def _build_template(
+    name: str, template: jinja2.Template, files: Files, config: Config, nav: Navigation
+) -> str:
     """
     Return rendered output for given template as a string.
     """
-
     # Run `pre_template` plugin events.
     template = config['plugins'].run_event(
         'pre_template', template, template_name=name, config=config
@@ -90,15 +99,15 @@ def _build_template(name, template, files, config, nav):
     output = template.render(context)
 
     # Run `post_template` plugin events.
-    output = config['plugins'].run_event(
-        'post_template', output, template_name=name, config=config
-    )
+    output = config['plugins'].run_event('post_template', output, template_name=name, config=config)
 
     return output
 
 
-def _build_theme_template(template_name, env, files, config, nav):
-    """ Build a template using the theme environment. """
+def _build_theme_template(
+    template_name: str, env: jinja2.Environment, files: Files, config: Config, nav: Navigation
+) -> None:
+    """Build a template using the theme environment."""
 
     log.debug(f"Building theme template: {template_name}")
 
@@ -119,14 +128,16 @@ def _build_theme_template(template_name, env, files, config, nav):
             gz_filename = f'{output_path}.gz'
             with open(gz_filename, 'wb') as f:
                 timestamp = utils.get_build_timestamp()
-                with gzip.GzipFile(fileobj=f, filename=gz_filename, mode='wb', mtime=timestamp) as gz_buf:
+                with gzip.GzipFile(
+                    fileobj=f, filename=gz_filename, mode='wb', mtime=timestamp
+                ) as gz_buf:
                     gz_buf.write(output.encode('utf-8'))
     else:
         log.info(f"Template skipped: '{template_name}' generated empty output.")
 
 
-def _build_extra_template(template_name, files, config, nav):
-    """ Build user templates which are not part of the theme. """
+def _build_extra_template(template_name: str, files: Files, config: Config, nav: Navigation):
+    """Build user templates which are not part of the theme."""
 
     log.debug(f"Building extra template: {template_name}")
 
@@ -150,8 +161,8 @@ def _build_extra_template(template_name, files, config, nav):
         log.info(f"Template skipped: '{template_name}' generated empty output.")
 
 
-def _populate_page(page, config, files, dirty=False):
-    """ Read page content from docs_dir and render Markdown. """
+def _populate_page(page: Page, config: Config, files: Files, dirty: bool = False) -> None:
+    """Read page content from docs_dir and render Markdown."""
 
     try:
         # When --dirty is used, only read the page if the file has been modified since the
@@ -160,9 +171,7 @@ def _populate_page(page, config, files, dirty=False):
             return
 
         # Run the `pre_page` plugin event
-        page = config['plugins'].run_event(
-            'pre_page', page, config=config, files=files
-        )
+        page = config['plugins'].run_event('pre_page', page, config=config, files=files)
 
         page.read_source(config)
 
@@ -178,7 +187,7 @@ def _populate_page(page, config, files, dirty=False):
             'page_content', page.content, page=page, config=config, files=files
         )
     except Exception as e:
-        message = f"Error reading page '{page.file.src_path}':"
+        message = f"Error reading page '{page.file.src_uri}':"
         # Prevent duplicated the error message because it will be printed immediately afterwards.
         if not isinstance(e, BuildError):
             message += f" {e}"
@@ -186,8 +195,15 @@ def _populate_page(page, config, files, dirty=False):
         raise
 
 
-def _build_page(page, config, doc_files, nav, env, dirty=False):
-    """ Pass a Page to theme template and write output to site_dir. """
+def _build_page(
+    page: Page,
+    config: Config,
+    doc_files: Sequence[File],
+    nav: Navigation,
+    env: jinja2.Environment,
+    dirty: bool = False,
+) -> None:
+    """Pass a Page to theme template and write output to site_dir."""
 
     try:
         # When --dirty is used, only build the page if the file has been modified since the
@@ -195,7 +211,7 @@ def _build_page(page, config, doc_files, nav, env, dirty=False):
         if dirty and not page.file.is_modified():
             return
 
-        log.debug(f"Building page {page.file.src_path}")
+        log.debug(f"Building page {page.file.src_uri}")
 
         # Activate page. Signals to theme that this is the current page.
         page.active = True
@@ -217,20 +233,20 @@ def _build_page(page, config, doc_files, nav, env, dirty=False):
         output = template.render(context)
 
         # Run `post_page` plugin events.
-        output = config['plugins'].run_event(
-            'post_page', output, page=page, config=config
-        )
+        output = config['plugins'].run_event('post_page', output, page=page, config=config)
 
         # Write the output file.
         if output.strip():
-            utils.write_file(output.encode('utf-8', errors='xmlcharrefreplace'), page.file.abs_dest_path)
+            utils.write_file(
+                output.encode('utf-8', errors='xmlcharrefreplace'), page.file.abs_dest_path
+            )
         else:
-            log.info(f"Page skipped: '{page.file.src_path}'. Generated empty output.")
+            log.info(f"Page skipped: '{page.file.src_uri}'. Generated empty output.")
 
         # Deactivate page
         page.active = False
     except Exception as e:
-        message = f"Error building page '{page.file.src_path}':"
+        message = f"Error building page '{page.file.src_uri}':"
         # Prevent duplicated the error message because it will be printed immediately afterwards.
         if not isinstance(e, BuildError):
             message += f" {e}"
@@ -238,8 +254,8 @@ def _build_page(page, config, doc_files, nav, env, dirty=False):
         raise
 
 
-def build(config, live_server=False, dirty=False):
-    """ Perform a full site build. """
+def build(config: Config, live_server: bool = False, dirty: bool = False) -> None:
+    """Perform a full site build."""
 
     logger = logging.getLogger('mkdocs')
 
@@ -250,8 +266,7 @@ def build(config, live_server=False, dirty=False):
         logging.getLogger('mkdocs').addHandler(warning_counter)
 
     try:
-        from time import time
-        start = time()
+        start = time.monotonic()
 
         # Run `config` plugin events.
         config = config['plugins'].run_event('config', config)
@@ -264,8 +279,10 @@ def build(config, live_server=False, dirty=False):
             utils.clean_directory(config['site_dir'])
         else:  # pragma: no cover
             # Warn user about problems that may occur with --dirty option
-            log.warning("A 'dirty' build is being performed, this will likely lead to inaccurate navigation and other"
-                        " links within your site. This option is designed for site development purposes only.")
+            log.warning(
+                "A 'dirty' build is being performed, this will likely lead to inaccurate navigation and other"
+                " links within your site. This option is designed for site development purposes only."
+            )
 
         if not live_server:  # pragma: no cover
             log.info(f"Building documentation to directory: {config['site_dir']}")
@@ -288,13 +305,12 @@ def build(config, live_server=False, dirty=False):
 
         log.debug("Reading markdown pages.")
         for file in files.documentation_pages():
-            log.debug(f"Reading: {file.src_path}")
+            log.debug(f"Reading: {file.src_uri}")
+            assert file.page is not None
             _populate_page(file.page, config, files, dirty)
 
         # Run `env` plugin events.
-        env = config['plugins'].run_event(
-            'env', env, config=config, files=files
-        )
+        env = config['plugins'].run_event('env', env, config=config, files=files)
 
         # Start writing files to site_dir now that all data is gathered. Note that order matters. Files
         # with lower precedence get written first so that files with higher precedence can overwrite them.
@@ -311,6 +327,7 @@ def build(config, live_server=False, dirty=False):
         log.debug("Building markdown pages.")
         doc_files = files.documentation_pages()
         for file in doc_files:
+            assert file.page is not None
             _build_page(file.page, config, doc_files, nav, env, dirty)
 
         # Run `post_build` plugin events.
@@ -318,10 +335,10 @@ def build(config, live_server=False, dirty=False):
 
         counts = warning_counter.get_counts()
         if counts:
-            msg = ', '.join([f'{v} {k.lower()}s' for k, v in counts])
+            msg = ', '.join(f'{v} {k.lower()}s' for k, v in counts)
             raise Abort(f'\nAborted with {msg} in strict mode!')
 
-        log.info('Documentation built in %.2f seconds', time() - start)
+        log.info('Documentation built in %.2f seconds', time.monotonic() - start)
 
     except Exception as e:
         # Run `build_error` plugin events.
@@ -335,7 +352,7 @@ def build(config, live_server=False, dirty=False):
         logger.removeHandler(warning_counter)
 
 
-def site_directory_contains_stale_files(site_directory):
-    """ Check if the site directory contains stale files from a previous build. """
+def site_directory_contains_stale_files(site_directory: str) -> bool:
+    """Check if the site directory contains stale files from a previous build."""
 
     return True if os.path.exists(site_directory) and os.listdir(site_directory) else False
