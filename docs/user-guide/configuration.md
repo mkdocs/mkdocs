@@ -480,6 +480,8 @@ creates links that point directly to the target *file* rather than the target
 Determines how warnings are handled. Set to `true` to halt processing when a
 warning is raised. Set to `false` to print a warning and continue processing.
 
+This is also available as a command line flag: `--strict`.
+
 **default**: `false`
 
 ### dev_addr
@@ -595,6 +597,21 @@ Then the file *my_hooks.py* can contain any [plugin event handlers](../dev-guide
 ```python
 def on_page_markdown(markdown, **kwargs):
     return markdown.replace('a', 'z')
+```
+
+Advanced example that produces warnings based on the Markdown content (and warnings are fatal in [strict](#strict) mode):
+
+```python
+import logging, re
+import mkdocs.plugins
+
+log = logging.getLogger('mkdocs')
+
+@mkdocs.plugins.event_priority(-50)
+def on_page_markdown(markdown, page, **kwargs):
+    path = page.file.src_uri
+    for m in re.finditer(r'\bhttp://[^) ]+', markdown):
+        log.warning(f"Documentation file '{path}' contains a non-HTTPS link: {m[0]}")
 ```
 
 This does not enable any new abilities compared to [plugins][], it only simplifies one-off usages, as these don't need to be *installed* like plugins do.
