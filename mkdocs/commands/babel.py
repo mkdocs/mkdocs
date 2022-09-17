@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 from distutils.errors import DistutilsOptionError
 from os import path
 
@@ -30,6 +31,12 @@ class compile_catalog(babel.compile_catalog, ThemeMixin):
     user_options = babel.compile_catalog.user_options + [
         ("theme=", "t", "theme name to work on"),
     ]
+
+    def run(self):
+        # Possible bug in Babel - produces unused return value:
+        # https://github.com/python-babel/babel/blob/v2.10.3/babel/messages/frontend.py#L194
+        if super().run():
+            sys.exit(1)
 
     def initialize_options(self):
         super().initialize_options()
