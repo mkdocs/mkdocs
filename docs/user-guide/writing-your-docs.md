@@ -251,9 +251,11 @@ can set in your `mkdocs.yml` configuration file to alter the default behavior:
     link text. When set to a string, the provided string is used as the link
     text. For example, to use the hash symbol (`#`) instead, do:
 
-        markdown_extensions:
-            - toc:
-                permalink: "#"
+    ```yaml
+    markdown_extensions:
+        - toc:
+            permalink: "#"
+    ```
 
 *   **`baselevel`**
 
@@ -264,9 +266,11 @@ can set in your `mkdocs.yml` configuration file to alter the default behavior:
     text for a page should not contain any headers higher than level 2 (`<h2>`),
     do:
 
-        markdown_extensions:
-            - toc:
-                baselevel: 2
+    ```yaml
+    markdown_extensions:
+        - toc:
+            baselevel: 2
+    ```
 
     Then any headers in your document would be increased by 1. For example, the
     header `# Header` would be rendered as a level 2 header (`<h2>`) in the HTML
@@ -279,9 +283,11 @@ can set in your `mkdocs.yml` configuration file to alter the default behavior:
     Character which replaces white-space in generated IDs. If you prefer
     underscores, then do:
 
-        markdown_extensions:
-            - toc:
-                separator: "_"
+    ```yaml
+    markdown_extensions:
+        - toc:
+            separator: "_"
+    ```
 
 Note that if you would like to define multiple of the above settings, you must
 do so under a single `toc` entry in the `markdown_extensions` configuration

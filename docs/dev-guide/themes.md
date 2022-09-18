@@ -885,21 +885,29 @@ special options which alters its behavior:
 > `Locale.territory` attributes and will resolve as a string from within a
 > template. Therefore, the following will work fine:
 >
->     <html lang="{ config.theme.locale }">
+> ```html
+> <html lang="{ config.theme.locale }">
+> ```
 >
 > If the locale was set to `fr_CA` (Canadian French), then the above template
 > would render as:
 >
->     <html lang="fr_CA">
+> ```html
+> <html lang="fr_CA">
+> ```
 >
 > If you did not want the territory attribute to be included, then reference
 > the `language` attribute directly:
 >
->     <html lang="{ config.theme.locale.language }">
+> ```html
+> <html lang="{ config.theme.locale.language }">
+> ```
 >
 > That would render as:
 >
->     <html lang="fr">
+> ```html
+> <html lang="fr">
+> ```
 >
 > #### static_templates
 >
@@ -927,7 +935,7 @@ the setup.py.
 Most Python packages, including MkDocs, are distributed on PyPI. To do this,
 you should run the following command.
 
-```no-highlight
+```bash
 python setup.py register
 ```
 

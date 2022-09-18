@@ -377,7 +377,9 @@ the root of your local file system.
 > keep the *source* files under version control. For example, if using `git`
 > you might add the following line to your `.gitignore` file:
 >
->     site/
+> ```text
+> site/
+> ```
 >
 > If you're using another source code control tool, you'll want to check its
 > documentation on how to ignore specific directories.

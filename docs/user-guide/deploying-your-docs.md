@@ -171,14 +171,18 @@ settings will need to be customized in very specific ways.
     The `site_url` must be set to an empty string, which instructs MkDocs to
     build your site so that it will work with the `file://` scheme.
 
-        site_url: ""
+    ```yaml
+    site_url: ""
+    ```
 
 -   [use_directory_urls]:
 
     Set `use_directory_urls` to `false`. Otherwise, internal links between
     pages will not work properly.
 
-        use_directory_urls: false
+    ```yaml
+    use_directory_urls: false
+    ```
 
 -   [search]:
 
@@ -186,7 +190,9 @@ settings will need to be customized in very specific ways.
     search plugin which is specifically designed to work with the `file://`
     scheme. To disable all plugins, set the `plugins` setting to an empty list.
 
-        plugins: []
+    ```yaml
+    plugins: []
+    ```
 
     If you have other plugins enabled, simply ensure that `search` is not
     included in the list.

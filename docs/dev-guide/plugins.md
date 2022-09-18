@@ -11,7 +11,9 @@ using a plugin which comes with MkDocs, then it was installed when you installed
 MkDocs. However, to install third party plugins, you need to determine the
 appropriate package name and install it using `pip`:
 
-    pip install mkdocs-foo-plugin
+```bash
+pip install mkdocs-foo-plugin
+```
 
 Once a plugin has been successfully installed, it is ready to use. It just needs
 to be [enabled](#using-plugins) in the configuration file. The [MkDocs Plugins]
@@ -75,12 +77,14 @@ All `BasePlugin` subclasses contain the following attributes:
 
     For example, the following `config_scheme` defines three configuration options: `foo`, which accepts a string; `bar`, which accepts an integer; and `baz`, which accepts a boolean value.
 
-        class MyPlugin(mkdocs.plugins.BasePlugin):
-            config_scheme = (
-                ('foo', mkdocs.config.config_options.Type(str, default='a default value')),
-                ('bar', mkdocs.config.config_options.Type(int, default=0)),
-                ('baz', mkdocs.config.config_options.Type(bool, default=True))
-            )
+    ```python
+    class MyPlugin(mkdocs.plugins.BasePlugin):
+        config_scheme = (
+            ('foo', mkdocs.config.config_options.Type(str, default='a default value')),
+            ('bar', mkdocs.config.config_options.Type(int, default=0)),
+            ('baz', mkdocs.config.config_options.Type(bool, default=True))
+        )
+    ```
 
     When the user's configuration is loaded, the above scheme will be used to
     validate the configuration and fill in any defaults for settings not
@@ -97,9 +101,11 @@ All `BasePlugin` subclasses contain the following attributes:
     the `load_config` method after configuration validation has completed. Use
     this attribute to access options provided by the user.
 
-        def on_pre_build(self, config, **kwargs):
-            if self.config['bool_option']:
-                # implement "bool_option" functionality here...
+    ```python
+    def on_pre_build(self, config, **kwargs):
+        if self.config['bool_option']:
+            # implement "bool_option" functionality here...
+    ```
 
 All `BasePlugin` subclasses contain the following method(s):
 
@@ -129,10 +135,12 @@ All `BasePlugin` subclasses contain the following method(s):
     For example, the following event would add an additional static_template to
     the theme config:
 
-        class MyPlugin(BasePlugin):
-            def on_config(self, config, **kwargs):
-                config['theme'].static_templates.add('my_template.html')
-                return config
+    ```python
+    class MyPlugin(BasePlugin):
+        def on_config(self, config, **kwargs):
+            config['theme'].static_templates.add('my_template.html')
+            return config
+    ```
 
 ### Events
 

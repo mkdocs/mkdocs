@@ -13,8 +13,8 @@
   // Set list indent level to 4 which Python-Markdown requires
   "MD007": { "indent": 4 },
 
-  // Exclude code block style
-  "MD046": false,
+  // Code block style
+  "MD046": { "style": "fenced" },
 
   // Allow inline HTML
   "MD033": false
