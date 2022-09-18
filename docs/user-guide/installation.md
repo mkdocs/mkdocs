@@ -11,7 +11,7 @@ manager, [pip], to be installed on your system.
 
 You can check if you already have these installed from the command line:
 
-```bash
+```console
 $ python --version
 Python 3.8.2
 $ pip --version
@@ -61,7 +61,7 @@ pip install mkdocs
 You should now have the `mkdocs` command installed on your system. Run `mkdocs
 --version` to check that everything worked okay.
 
-```bash
+```console
 $ mkdocs --version
 mkdocs, version 1.2.0 from /usr/local/lib/python3.8/site-packages/mkdocs (Python 3.8)
 ```

@@ -48,7 +48,7 @@ with the GitHub account name. Therefore, you need working copies of two
 repositories on our local system. For example, consider the following file
 structure:
 
-```no-highlight
+```text
 my-project/
     mkdocs.yml
     docs/

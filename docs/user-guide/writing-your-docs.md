@@ -14,7 +14,7 @@ the `mkdocs.yml` configuration file.
 
 The simplest project you can create will look something like this:
 
-```no-highlight
+```text
 mkdocs.yml
 docs/
     index.md
@@ -35,7 +35,7 @@ behavior.
 You can also create multi-page documentation, by creating several Markdown
 files:
 
-```no-highlight
+```text
 mkdocs.yml
 docs/
     index.md
@@ -46,7 +46,7 @@ docs/
 The file layout you use determines the URLs that are used for the generated
 pages. Given the above layout, pages would be generated for the following URLs:
 
-```no-highlight
+```text
 /
 /about/
 /license/
@@ -55,7 +55,7 @@ pages. Given the above layout, pages would be generated for the following URLs:
 You can also include your Markdown files in nested directories if that better
 suits your documentation layout.
 
-```no-highlight
+```text
 docs/
     index.md
     user-guide/getting-started.md
@@ -66,7 +66,7 @@ docs/
 Source files inside nested directories will cause pages to be generated with
 nested URLs, like so:
 
-```no-highlight
+```text
 /
 /user-guide/getting-started/
 /user-guide/configuration-options/
@@ -111,7 +111,7 @@ your navigation menu sorted differently.
 
 A minimal navigation configuration could look like this:
 
-```no-highlight
+```yaml
 nav:
     - 'index.md'
     - 'about.md'
@@ -127,7 +127,7 @@ level and with their titles inferred from the contents of the Markdown file or,
 if no title is defined within the file, of the file name. To override the title
 in the `nav` setting add a title right before the filename.
 
-```no-highlight
+```yaml
 nav:
     - Home: 'index.md'
     - About: 'about.md'
@@ -140,7 +140,7 @@ within the page itself.
 Navigation sub-sections can be created by listing related pages together under a
 section title. For example:
 
-```no-highlight
+```yaml
 nav:
     - Home: 'index.md'
     - 'User Guide':
@@ -206,7 +206,7 @@ When linking between pages in the documentation you can simply use the regular
 Markdown [linking][links] syntax, including the *relative path* to the Markdown
 document you wish to link to.
 
-```no-highlight
+```markdown
 Please see the [project license](license.md) for further details.
 ```
 
@@ -223,7 +223,7 @@ them to your production server.
 If the target documentation file is in another directory you'll need to make
 sure to include any relative directory path in the link.
 
-```no-highlight
+```markdown
 Please see the [project license](../about/license.md) for further details.
 ```
 
@@ -232,7 +232,7 @@ Markdown documents. You can use that ID to link to a section within a target
 document by using an anchor link. The generated HTML will correctly transform
 the path portion of the link, and leave the anchor portion intact.
 
-```no-highlight
+```markdown
 Please see the [project license](about.md#license) for further details.
 ```
 
@@ -313,7 +313,7 @@ For example, if your project documentation needed to include a [GitHub pages
 CNAME file] and a PNG formatted screenshot image then your file layout might
 look as follows:
 
-```no-highlight
+```text
 mkdocs.yml
 docs/
     CNAME
@@ -398,7 +398,7 @@ a document must be `---`. The meta-data ends at the first line containing an
 end deliminator (either `---` or `...`). The content between the delimiters is
 parsed as [YAML].
 
-```no-highlight
+```text
 ---
 title: My Document
 summary: A brief description of my document.
@@ -427,7 +427,7 @@ MultiMarkdown style meta-data uses a format first introduced by the
 [MultiMarkdown] project. The data consists of a series of keywords and values
 defined at the beginning of a Markdown document, like this:
 
-```no-highlight
+```text
 Title:   My Document
 Summary: A brief description of my document.
 Authors: Waylan Limberg
@@ -471,7 +471,7 @@ only useful for simple tabular data.
 
 A simple table looks like this:
 
-```no-highlight
+```markdown
 First Header | Second Header | Third Header
 ------------ | ------------- | ------------
 Content Cell | Content Cell  | Content Cell
@@ -480,7 +480,7 @@ Content Cell | Content Cell  | Content Cell
 
 If you wish, you can add a leading and tailing pipe to each line of the table:
 
-```no-highlight
+```markdown
 | First Header | Second Header | Third Header |
 | ------------ | ------------- | ------------ |
 | Content Cell | Content Cell  | Content Cell |
@@ -489,7 +489,7 @@ If you wish, you can add a leading and tailing pipe to each line of the table:
 
 Specify alignment for each column by adding colons to separator lines:
 
-```no-highlight
+```markdown
 First Header | Second Header | Third Header
 :----------- |:-------------:| -----------:
 Left         | Center        | Right
@@ -513,7 +513,7 @@ blocks without indentation.
 The first line should contain 3 or more backtick (`` ` ``) characters, and the
 last line should contain the same number of backtick characters (`` ` ``):
 
-````no-highlight
+````markdown
 ```
 Fenced code blocks are like Standard
 Markdown’s regular code blocks, except that
@@ -526,7 +526,7 @@ code block.
 With this approach, the language can optionally be specified on the first line
 after the backticks which informs any syntax highlighters of the language used:
 
-````no-highlight
+````markdown
 ```python
 def fn():
     pass

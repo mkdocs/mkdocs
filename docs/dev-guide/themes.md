@@ -27,7 +27,7 @@ option to the path of the directory containing `main.html`. The path should be
 relative to the configuration file. For example, given this example project
 layout:
 
-```no-highlight
+```text
 mkdocs.yml
 docs/
     index.md
@@ -326,7 +326,7 @@ for a page.
 
 In this example we define a `source` property above the page title:
 
-```no-highlight
+```text
 source: generics.py
         mixins.py
 
@@ -764,7 +764,7 @@ directory called `MANIFEST.in` and `setup.py` beside the theme directory which
 contains an empty `__init__.py` file, a theme configuration file
 (`mkdocs_theme.yml`), and your template and media files.
 
-```no-highlight
+```text
 .
 |-- MANIFEST.in
 |-- theme_name
@@ -778,7 +778,7 @@ contains an empty `__init__.py` file, a theme configuration file
 The `MANIFEST.in` file should contain the following contents but with
 theme_name updated and any extra file extensions added to the include.
 
-```no-highlight
+```text
 recursive-include theme_name *.ico *.js *.css *.png *.html *.eot *.svg *.ttf *.woff
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
@@ -1166,7 +1166,7 @@ translations, it only makes use of the binary `mo` files(s) for the specified
 locale. Therefore, when [packaging a theme], you would need to make the
 following addition to your `MANIFEST.in` file:
 
-``` no-highlight
+```text
 recursive-include theme_name *.mo
 ```
 
