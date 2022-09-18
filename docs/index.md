@@ -11,7 +11,7 @@ configuration file. Start by reading the [introductory tutorial], then check the
 [User Guide] for more information.
 
 [introductory tutorial]: getting-started.md
-[User Guide]: user-guide/index.md
+[User Guide]: user-guide/README.md
 
 <div class="text-center">
 <a href="getting-started/" class="btn btn-primary" role="button">Getting Started</a>

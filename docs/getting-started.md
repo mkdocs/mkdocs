@@ -218,4 +218,4 @@ To get help with MkDocs, please use the [GitHub discussions] or [GitHub issues].
 [site_name]: user-guide/configuration.md#site_name
 [site_url]: user-guide/configuration.md#site_url
 [theme]: user-guide/configuration.md#theme
-[User Guide]: user-guide/index.md
+[User Guide]: user-guide/README.md
