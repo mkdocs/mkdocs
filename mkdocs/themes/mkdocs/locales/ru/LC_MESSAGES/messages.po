@@ -1,4 +1,4 @@
-# German translations for MkDocs.
+# Russian translations for MkDocs.
 # Copyright (C) 2022 MkDocs
 # This file is distributed under the same license as the MkDocs project.
 #
