@@ -158,6 +158,30 @@ class BuildTests(unittest.TestCase):
 
                 self.assertTrue(started_building.wait(timeout=10))
 
+    @tempdir()
+    def test_unwatch(self, site_dir):
+        started_building = threading.Event()
+
+        with testing_server(site_dir, started_building.set) as server:
+            with self.assertRaises(KeyError):
+                server.unwatch(site_dir)
+
+            server.watch(site_dir)
+            server.watch(site_dir)
+            server.unwatch(site_dir)
+            time.sleep(0.01)
+
+            Path(site_dir, "foo").write_text("foo")
+            self.assertTrue(started_building.wait(timeout=10))
+            started_building.clear()
+
+            server.unwatch(site_dir)
+            Path(site_dir, "foo").write_text("bar")
+            self.assertFalse(started_building.wait(timeout=0.5))
+
+            with self.assertRaises(KeyError):
+                server.unwatch(site_dir)
+
     @tempdir({"foo.docs": "a"})
     @tempdir({"foo.site": "original"})
     def test_custom_action_warns(self, site_dir, docs_dir):

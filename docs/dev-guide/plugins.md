@@ -319,34 +319,19 @@ For each event type, corresponding methods of plugins are called in the order th
 
 Since MkDocs 1.4, plugins can choose to set a priority value for their events. Events with higher priority are called first. Events without a chosen priority get a default of 0. Events that have the same priority are ordered as they appear in the config.
 
-::: mkdocs.plugins.event_priority
-    options:
-      show_root_heading: true
+#### ::: mkdocs.plugins.event_priority
 
 ### Handling Errors
 
 MkDocs defines four error types:
 
-#### `mkdocs.exceptions.MkDocsException`
+#### ::: mkdocs.exceptions.MkDocsException
 
-*   The base class which all MkDocs exceptions inherit from. This should
-    not be raised directly. One of the subclasses should be raised instead.
+#### ::: mkdocs.exceptions.ConfigurationError
 
-#### `mkdocs.exceptions.ConfigurationError`
+#### ::: mkdocs.exceptions.BuildError
 
-*   This error is raised by configuration validation when a validation error
-    is encountered. This error should be raised by any configuration options
-    defined in a plugin's [config_scheme].
-
-#### `mkdocs.exceptions.BuildError`
-
-*   This error may be raised by MkDocs during the build process. Plugins should
-    not raise this error.
-
-#### `mkdocs.exceptions.PluginError`
-
-*   A subclass of `mkdocs.exceptions.BuildError` which can be raised by plugin
-    events.
+#### ::: mkdocs.exceptions.PluginError
 
 Unexpected and uncaught exceptions will interrupt the build process and produce
 typical Python tracebacks, which are useful for debugging your code. However,
@@ -428,4 +413,3 @@ tell MkDocs to use it via the config.
 [Template Events]: #template-events
 [MkDocs Plugins]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Plugins
 [on_build_error]: #on_build_error
-[config_scheme]: #config_scheme

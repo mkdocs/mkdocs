@@ -11,6 +11,8 @@ below, or use the *next* and *previous* buttons in the navigation bar at the
 top of the page to move through the documentation in order.
 
 - [Themes](themes.md)
+- [Translations](translations.md)
 - [Plugins](plugins.md)
+- [API Reference](api.md)
 
 [Contributing Guide]: ../about/contributing.md
