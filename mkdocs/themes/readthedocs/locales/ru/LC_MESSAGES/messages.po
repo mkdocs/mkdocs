@@ -101,7 +101,7 @@ msgstr "Поиск..."
 
 #: mkdocs/themes/readthedocs/searchbox.html:3
 msgid "Search docs"
-msgstr "Найденные документы"
+msgstr "Поиск в документации"
 
 #: mkdocs/themes/readthedocs/versions.html:1
 msgid "Versions"
