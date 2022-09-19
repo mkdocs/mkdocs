@@ -19,7 +19,7 @@ msgstr ""
 
 #: mkdocs/themes/mkdocs/404.html:8
 msgid "Page not found"
-msgstr "Страница не найдана"
+msgstr "Страница не найдена"
 
 #: mkdocs/themes/mkdocs/base.html:116
 #: mkdocs/themes/mkdocs/keyboard-modal.html:31
