@@ -109,6 +109,7 @@ supports the following options:
     * `fa`: Persian (Farsi)
     * `it`: Italian
     * `tr_TR`: Turkish (Turkey)
+    * `ru`: Russian
     * `uk`: Ukrainian
 
     See the guide on [localizing your theme] for more information.
@@ -191,6 +192,7 @@ theme supports the following options:
     * `fa`: Persian (Farsi)
     * `it`: Italian
     * `tr_TR`: Turkish (Turkey)
+    * `ru`: Russian
     * `uk`: Ukrainian
 
     See the guide on [localizing your theme] for more information.

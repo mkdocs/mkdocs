@@ -6,7 +6,18 @@ import os
 import posixpath
 import shutil
 from pathlib import PurePath
-from typing import TYPE_CHECKING, Dict, Iterable, Iterator, List, Optional, Sequence
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Dict,
+    Iterable,
+    Iterator,
+    List,
+    Mapping,
+    Optional,
+    Sequence,
+    Union,
+)
 from urllib.parse import quote as urlquote
 
 import jinja2.environment
@@ -267,7 +278,7 @@ class File:
         return self.src_uri.endswith('.css')
 
 
-def get_files(config: Config) -> Files:
+def get_files(config: Union[Config, Mapping[str, Any]]) -> Files:
     """Walk the `docs_dir` and return a Files collection."""
     files = []
     exclude = ['.*', '/templates']
