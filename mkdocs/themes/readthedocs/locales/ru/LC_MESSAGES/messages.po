@@ -75,7 +75,7 @@ msgid ""
 "Built with %(mkdocs_link)s using a %(sphinx_link)s provided by "
 "%(rtd_link)s."
 msgstr ""
-"Собрано в %(mkdocs_link) с использованием %(sphinx_link)"
+"Собрано в %(mkdocs_link)s с использованием %(sphinx_link)s от "
 "%(rtd_link)s."
 
 #: mkdocs/themes/readthedocs/search.html:5
