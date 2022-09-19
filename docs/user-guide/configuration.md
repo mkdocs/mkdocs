@@ -480,6 +480,8 @@ creates links that point directly to the target *file* rather than the target
 Determines how warnings are handled. Set to `true` to halt processing when a
 warning is raised. Set to `false` to print a warning and continue processing.
 
+This is also available as a command line flag: `--strict`.
+
 **default**: `false`
 
 ### dev_addr
@@ -576,6 +578,56 @@ This alternative syntax is required if you intend to override some options via
 > and available configuration options.
 
 **default**: `[]` (an empty list).
+
+### hooks
+
+NEW: **New in version 1.4.**
+
+A list of paths to Python scripts (relative to `mkdocs.yml`) that are loaded and used as [plugin](#plugins) instances.
+
+For example:
+
+```yaml
+hooks:
+    - my_hooks.py
+```
+
+Then the file *my_hooks.py* can contain any [plugin event handlers](../dev-guide/plugins.md#events) (without `self`), e.g.:
+
+```python
+def on_page_markdown(markdown, **kwargs):
+    return markdown.replace('a', 'z')
+```
+
+Advanced example that produces warnings based on the Markdown content (and warnings are fatal in [strict](#strict) mode):
+
+```python
+import logging, re
+import mkdocs.plugins
+
+log = logging.getLogger('mkdocs')
+
+@mkdocs.plugins.event_priority(-50)
+def on_page_markdown(markdown, page, **kwargs):
+    path = page.file.src_uri
+    for m in re.finditer(r'\bhttp://[^) ]+', markdown):
+        log.warning(f"Documentation file '{path}' contains a non-HTTPS link: {m[0]}")
+```
+
+This does not enable any new abilities compared to [plugins][], it only simplifies one-off usages, as these don't need to be *installed* like plugins do.
+
+Note that for `mkdocs serve` the hook module will *not* be reloaded on each build.
+
+You might have seen this feature in the [mkdocs-simple-hooks plugin](https://github.com/aklajnert/mkdocs-simple-hooks). If using standard method names, it can be directly replaced, e.g.:
+
+```diff
+-plugins:
+-  - mkdocs-simple-hooks:
+-      hooks:
+-        on_page_markdown: 'my_hooks:on_page_markdown'
++hooks:
++  - my_hooks.py
+```
 
 ### plugins
 

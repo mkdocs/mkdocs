@@ -442,12 +442,6 @@ class PluginCollection(OrderedDict):
         )
 
     def __setitem__(self, key: str, value: BasePlugin, **kwargs) -> None:
-        if not isinstance(value, BasePlugin):
-            raise TypeError(
-                f'{self.__module__}.{self.__name__} only accepts values which'
-                f' are instances of {BasePlugin.__module__}.{BasePlugin.__name__}'
-                ' subclasses'
-            )
         super().__setitem__(key, value, **kwargs)
         # Register all of the event methods defined for this Plugin.
         for event_name in (x for x in dir(value) if x.startswith('on_')):

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import ipaddress
 import os
 import string
@@ -798,10 +799,10 @@ class Plugins(OptionallyRequired):
     def run_validation(self, value):
         if not isinstance(value, (list, tuple, dict)):
             raise ValidationError('Invalid Plugins configuration. Expected a list or dict.')
-        plgins = plugins.PluginCollection()
+        self.plugins = plugins.PluginCollection()
         if isinstance(value, dict):
             for name, cfg in value.items():
-                plgins[name] = self.load_plugin(name, cfg)
+                self.plugins[name] = self.load_plugin(name, cfg)
         else:
             for item in value:
                 if isinstance(item, dict):
@@ -811,8 +812,8 @@ class Plugins(OptionallyRequired):
                     item = name
                 else:
                     cfg = {}
-                plgins[item] = self.load_plugin(item, cfg)
-        return plgins
+                self.plugins[item] = self.load_plugin(item, cfg)
+        return self.plugins
 
     def load_plugin(self, name, config):
         if not isinstance(name, str):
@@ -846,3 +847,34 @@ class Plugins(OptionallyRequired):
         if errors_message:
             raise ValidationError(errors_message)
         return plugin
+
+
+class Hooks(ListOfItems):
+    """A list of Python scripts to be treated as instances of plugins."""
+
+    def __init__(self, plugins_key: str):
+        super().__init__(File(exists=True), default=[])
+        self.plugins_key = plugins_key
+
+    def run_validation(self, value):
+        paths = super().run_validation(value)
+        hooks = {}
+        for name, path in zip(value, paths):
+            hooks[name] = self._load_hook(name, path)
+        return hooks
+
+    @functools.lru_cache(maxsize=None)
+    def _load_hook(self, name, path):
+        import importlib.util
+
+        spec = importlib.util.spec_from_file_location(name, path)
+        if spec is None:
+            raise ValidationError(f"Cannot import path '{path}' as a Python module")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+
+    def post_validation(self, config, key_name):
+        plugins = config[self.plugins_key]
+        for name, hook in config[key_name].items():
+            plugins[name] = hook

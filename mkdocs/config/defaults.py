@@ -119,5 +119,9 @@ class _MkDocsConfig:
     A key value pair should be the string name (as the key) and a dict of config
     options (as the value)."""
 
+    hooks = config_options.Hooks('plugins')
+    """A list of filenames that will be imported as Python modules and used as
+    an instance of a plugin each."""
+
     watch = config_options.ListOfPaths(default=[])
     """A list of extra paths to watch while running `mkdocs serve`."""
