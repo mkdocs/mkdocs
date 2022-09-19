@@ -164,38 +164,38 @@ And the conversion flag `!q` is available, to percent-encode the field:
 
 * `{path!q}`, e.g. `foo%2Fbar.md`
 
-Here are some suggested configurations that can be useful:
-
-GitHub Wiki:  
-(e.g. `https://github.com/project/repo/wiki/foo/bar/_edit`)
-
-```yaml
-repo_url: 'https://github.com/project/repo/wiki'
-edit_uri_template: '{path_noext}/_edit'
-```
-
-BitBucket editor:  
-(e.g. `https://bitbucket.org/project/repo/src/master/docs/foo/bar.md?mode=edit`)
-
-```yaml
-repo_url: 'https://bitbucket.org/project/repo/'
-edit_uri_template: 'src/master/docs/{path}?mode=edit'
-```
-
-GitLab Static Site Editor:  
-(e.g. `https://gitlab.com/project/repo/-/sse/master/docs%2Ffoo%2bar.md`)
-
-```yaml
-repo_url: 'https://gitlab.com/project/repo'
-edit_uri_template: '-/sse/master/docs%2F{path!q}'
-```
-
-GitLab Web IDE:  
-(e.g. `https://gitlab.com/-/ide/project/repo/edit/master/-/docs/foo/bar.md`)
-
-```yaml
-edit_uri_template: 'https://gitlab.com/-/ide/project/repo/edit/master/-/docs/{path}'
-```
+>? NOTE: **Suggested useful configurations:**
+>
+> *   GitHub Wiki:  
+>     (e.g. `https://github.com/project/repo/wiki/foo/bar/_edit`)
+>
+>     ```yaml
+>     repo_url: 'https://github.com/project/repo/wiki'
+>     edit_uri_template: '{path_noext}/_edit'
+>     ```
+>
+> *   BitBucket editor:  
+>     (e.g. `https://bitbucket.org/project/repo/src/master/docs/foo/bar.md?mode=edit`)
+>
+>     ```yaml
+>     repo_url: 'https://bitbucket.org/project/repo/'
+>     edit_uri_template: 'src/master/docs/{path}?mode=edit'
+>     ```
+>
+> *   GitLab Static Site Editor:  
+>     (e.g. `https://gitlab.com/project/repo/-/sse/master/docs%2Ffoo%2bar.md`)
+>
+>     ```yaml
+>     repo_url: 'https://gitlab.com/project/repo'
+>     edit_uri_template: '-/sse/master/docs%2F{path!q}'
+>     ```
+>
+> *   GitLab Web IDE:  
+>     (e.g. `https://gitlab.com/-/ide/project/repo/edit/master/-/docs/foo/bar.md`)
+>
+>     ```yaml
+>     edit_uri_template: 'https://gitlab.com/-/ide/project/repo/edit/master/-/docs/{path}'
+>     ```
 
 **default**: `null`
 
@@ -377,7 +377,9 @@ the root of your local file system.
 > keep the *source* files under version control. For example, if using `git`
 > you might add the following line to your `.gitignore` file:
 >
->     site/
+> ```text
+> site/
+> ```
 >
 > If you're using another source code control tool, you'll want to check its
 > documentation on how to ignore specific directories.
@@ -599,20 +601,22 @@ def on_page_markdown(markdown, **kwargs):
     return markdown.replace('a', 'z')
 ```
 
-Advanced example that produces warnings based on the Markdown content (and warnings are fatal in [strict](#strict) mode):
-
-```python
-import logging, re
-import mkdocs.plugins
-
-log = logging.getLogger('mkdocs')
-
-@mkdocs.plugins.event_priority(-50)
-def on_page_markdown(markdown, page, **kwargs):
-    path = page.file.src_uri
-    for m in re.finditer(r'\bhttp://[^) ]+', markdown):
-        log.warning(f"Documentation file '{path}' contains a non-HTTPS link: {m[0]}")
-```
+>? EXAMPLE: **Advanced example:**
+>
+> This produces warnings based on the Markdown content (and warnings are fatal in [strict](#strict) mode):
+>
+> ```python
+> import logging, re
+> import mkdocs.plugins
+>
+> log = logging.getLogger('mkdocs')
+>
+> @mkdocs.plugins.event_priority(-50)
+> def on_page_markdown(markdown, page, **kwargs):
+>     path = page.file.src_uri
+>     for m in re.finditer(r'\bhttp://[^) ]+', markdown):
+>         log.warning(f"Documentation file '{path}' contains a non-HTTPS link: {m[0]}")
+> ```
 
 This does not enable any new abilities compared to [plugins][], it only simplifies one-off usages, as these don't need to be *installed* like plugins do.
 

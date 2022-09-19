@@ -11,7 +11,7 @@ manager, [pip], to be installed on your system.
 
 You can check if you already have these installed from the command line:
 
-```bash
+```console
 $ python --version
 Python 3.8.2
 $ pip --version
@@ -61,7 +61,7 @@ pip install mkdocs
 You should now have the `mkdocs` command installed on your system. Run `mkdocs
 --version` to check that everything worked okay.
 
-```bash
+```console
 $ mkdocs --version
 mkdocs, version 1.2.0 from /usr/local/lib/python3.8/site-packages/mkdocs (Python 3.8)
 ```
@@ -70,8 +70,10 @@ mkdocs, version 1.2.0 from /usr/local/lib/python3.8/site-packages/mkdocs (Python
 > If you would like manpages installed for MkDocs, the [click-man] tool can
 > generate and install them for you. Simply run the following two commands:
 >
->     pip install click-man
->     click-man --target path/to/man/pages mkdocs
+> ```bash
+> pip install click-man
+> click-man --target path/to/man/pages mkdocs
+> ```
 >
 > See the [click-man documentation] for an explanation of why manpages are
 > not automatically generated and installed by pip.
@@ -83,8 +85,10 @@ mkdocs, version 1.2.0 from /usr/local/lib/python3.8/site-packages/mkdocs (Python
 > A quick solution may be to preface every Python command with `python -m`
 > like this:
 >
->     python -m pip install mkdocs
->     python -m mkdocs
+> ```bash
+> python -m pip install mkdocs
+> python -m mkdocs
+> ```
 >
 > For a more permanent solution, you may need to edit your `PATH` environment
 > variable to include the `Scripts` directory of your Python installation.

@@ -21,7 +21,7 @@ For example, to change the color of the headers in your documentation, create
 a file called `extra.css` and place it next to the documentation Markdown. In
 that file add the following CSS.
 
-```CSS
+```css
 h1 {
   color: red;
 }
@@ -32,7 +32,9 @@ h1 {
 > to explicitly list the CSS and JavaScript files you want to include in
 > your config. To do this, add the following to your mkdocs.yml.
 >
->     extra_css: [extra.css]
+> ```yaml
+> extra_css: [extra.css]
+> ```
 
 After making these changes, they should be visible when you run
 `mkdocs serve` - if you already had this running, you should see that the CSS

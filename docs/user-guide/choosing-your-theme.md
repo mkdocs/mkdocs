@@ -36,12 +36,14 @@ supports the following options:
 *   __`hljs_languages`__: By default, highlight.js only supports 23 common
     languages. List additional languages here to include support for them.
 
-        theme:
-            name: mkdocs
-            highlightjs: true
-            hljs_languages:
-                - yaml
-                - rust
+    ```yaml
+    theme:
+        name: mkdocs
+        highlightjs: true
+        hljs_languages:
+            - yaml
+            - rust
+    ```
 
 *   __`analytics`__: Defines configuration options for an analytics service.
     Currently, only Google Analytics v4 is supported via the `gtag` option.
@@ -51,23 +53,27 @@ supports the following options:
     [Set up Analytics for a website and/or app (GA4)][setup-GA4] or to
     [Upgrade to a Google Analytics 4 property][upgrade-GA4].
 
-            theme:
-                name: mkdocs
-                analytics:
-                    gtag: G-ABC123
+        ```yaml
+        theme:
+            name: mkdocs
+            analytics:
+                gtag: G-ABC123
+        ```
 
         When set to the default (`null`) Google Analytics is disabled for the
         site.
 
 *   __`shortcuts`__: Defines keyboard shortcut keys.
 
-        theme:
-            name: mkdocs
-            shortcuts:
-                help: 191    # ?
-                next: 78     # n
-                previous: 80 # p
-                search: 83   # s
+    ```yaml
+    theme:
+        name: mkdocs
+        shortcuts:
+            help: 191    # ?
+            next: 78     # n
+            previous: 80 # p
+            search: 83   # s
+    ```
 
     All values must be numeric key codes. It is best to use keys which are
     available on all keyboards. You may use <https://keycode.info/> to determine
@@ -89,9 +95,11 @@ supports the following options:
     default, this is set to `primary` (the default), but it can also be set to
     `dark` or `light`.
 
-        theme:
-            name: mkdocs
-            nav_style: dark
+    ```yaml
+    theme:
+        name: mkdocs
+        nav_style: dark
+    ```
 
 *   __`locale`__{ #mkdocs-locale }: The locale (language/location) used to
     build the theme. If your locale is not yet supported, it will fallback
@@ -131,12 +139,14 @@ theme supports the following options:
 *   __`hljs_languages`__: By default, highlight.js only supports 23 common
     languages. List additional languages here to include support for them.
 
-        theme:
-            name: readthedocs
-            highlightjs: true
-            hljs_languages:
-                - yaml
-                - rust
+    ```yaml
+    theme:
+        name: readthedocs
+        highlightjs: true
+        hljs_languages:
+            - yaml
+            - rust
+    ```
 
 *   __`analytics`__: Defines configuration options for an analytics service.
 
@@ -145,10 +155,12 @@ theme supports the following options:
     [Set up Analytics for a website and/or app (GA4)][setup-GA4] or to
     [Upgrade to a Google Analytics 4 property][upgrade-GA4].
 
-            theme:
-                name: readthedocs
-                analytics:
-                    gtag: G-ABC123
+        ```yaml
+        theme:
+            name: readthedocs
+            analytics:
+                gtag: G-ABC123
+        ```
 
         When set to the default (`null`) Google Analytics is disabled for the
 
