@@ -31,7 +31,7 @@ msgstr "Навигационное меню"
 
 #: mkdocs/themes/readthedocs/base.html:140
 msgid "Mobile navigation menu"
-msgstr "Мобильная версия"
+msgstr "Мобильная версия навигации"
 
 #: mkdocs/themes/readthedocs/breadcrumbs.html:3
 msgid "Docs"
