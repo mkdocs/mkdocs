@@ -18,8 +18,10 @@ class LangOption(config_options.OptionallyRequired):
     """Validate Language(s) provided in config are known languages."""
 
     def get_lunr_supported_lang(self, lang):
+        fallback = {'uk': 'ru'}
         for lang_part in lang.split("_"):
             lang_part = lang_part.lower()
+            lang_part = fallback.get(lang_part, lang_part)
             if os.path.isfile(os.path.join(base_path, 'lunr-language', f'lunr.{lang_part}.js')):
                 return lang_part
 
