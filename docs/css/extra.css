@@ -29,6 +29,17 @@ div.admonition.new {
     border-color: #bcf1e8;
 }
 
+.admonition.new, details.new {
+    color: #15654a;
+    background-color: #edfff9;
+    border-color: #bcf1e8;
+}
+.admonition.example, details.example {
+    color: #353579;
+    background-color: #f0f1ff;
+    border-color: #d8dcf0;
+}
+
 /* Definition List styles */
 
 dd {

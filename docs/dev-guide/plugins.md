@@ -140,7 +140,7 @@ There are three kinds of events: [Global Events], [Page Events] and
 [Template Events].
 
 <details class="card">
-  <summary class="card-header">
+  <summary>
     See a diagram with relations between all the plugin events
   </summary>
   <div class="card-body">
