@@ -5,7 +5,8 @@ import os
 from typing import Any, Dict
 
 from mkdocs import utils
-from mkdocs.config import base, config_options
+from mkdocs.config import base
+from mkdocs.config import config_options as c
 from mkdocs.config.base import Config
 from mkdocs.contrib.search.search_index import SearchIndex
 from mkdocs.plugins import BasePlugin
@@ -14,7 +15,7 @@ log = logging.getLogger(__name__)
 base_path = os.path.dirname(os.path.abspath(__file__))
 
 
-class LangOption(config_options.OptionallyRequired):
+class LangOption(c.OptionallyRequired):
     """Validate Language(s) provided in config are known languages."""
 
     def get_lunr_supported_lang(self, lang):
@@ -29,7 +30,7 @@ class LangOption(config_options.OptionallyRequired):
         if isinstance(value, str):
             value = [value]
         elif not isinstance(value, (list, tuple)):
-            raise config_options.ValidationError('Expected a list of language codes.')
+            raise c.ValidationError('Expected a list of language codes.')
         for lang in list(value):
             if lang != 'en':
                 lang_detected = self.get_lunr_supported_lang(lang)
@@ -47,10 +48,10 @@ class LangOption(config_options.OptionallyRequired):
 
 class _PluginConfig:
     lang = LangOption()
-    separator = config_options.Type(str, default=r'[\s\-]+')
-    min_search_length = config_options.Type(int, default=3)
-    prebuild_index = config_options.Choice((False, True, 'node', 'python'), default=False)
-    indexing = config_options.Choice(('full', 'sections', 'titles'), default='full')
+    separator = c.Type(str, default=r'[\s\-]+')
+    min_search_length = c.Type(int, default=3)
+    prebuild_index = c.Choice((False, True, 'node', 'python'), default=False)
+    indexing = c.Choice(('full', 'sections', 'titles'), default='full')
 
 
 class SearchPlugin(BasePlugin):

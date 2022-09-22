@@ -5,7 +5,8 @@ import unittest
 
 import mkdocs
 from mkdocs import config
-from mkdocs.config import config_options, defaults
+from mkdocs.config import config_options as c
+from mkdocs.config import defaults
 from mkdocs.config.base import ValidationError
 from mkdocs.exceptions import ConfigurationError
 from mkdocs.localization import parse_locale
@@ -20,9 +21,9 @@ class ConfigTests(unittest.TestCase):
             config.load_config(config_file='bad_filename.yaml')
 
     def test_missing_site_name(self):
-        c = config.Config(schema=DEFAULT_SCHEMA)
-        c.load_dict({})
-        errors, warnings = c.validate()
+        conf = config.Config(schema=DEFAULT_SCHEMA)
+        conf.load_dict({})
+        errors, warnings = conf.validate()
         self.assertEqual(
             errors, [('site_name', ValidationError("Required configuration not provided."))]
         )
@@ -205,14 +206,14 @@ class ConfigTests(unittest.TestCase):
 
         for config_contents, result in zip(configs, results):
             with self.subTest(config_contents):
-                c = config.Config(schema=(('theme', config_options.Theme(default='mkdocs')),))
-                c.load_dict(config_contents)
-                errors, warnings = c.validate()
+                conf = config.Config(schema=(('theme', c.Theme(default='mkdocs')),))
+                conf.load_dict(config_contents)
+                errors, warnings = conf.validate()
                 self.assertEqual(errors, [])
                 self.assertEqual(warnings, [])
-                self.assertEqual(c['theme'].dirs, result['dirs'])
-                self.assertEqual(c['theme'].static_templates, set(result['static_templates']))
-                self.assertEqual({k: c['theme'][k] for k in iter(c['theme'])}, result['vars'])
+                self.assertEqual(conf['theme'].dirs, result['dirs'])
+                self.assertEqual(conf['theme'].static_templates, set(result['static_templates']))
+                self.assertEqual({k: conf['theme'][k] for k in iter(conf['theme'])}, result['vars'])
 
     def test_empty_nav(self):
         conf = config.Config(schema=DEFAULT_SCHEMA)
@@ -250,26 +251,25 @@ class ConfigTests(unittest.TestCase):
             {'docs_dir': 'docs', 'site_dir': 'docs'},
         )
 
-        conf = {
+        cfg = {
             'config_file_path': j(os.path.abspath('..'), 'mkdocs.yml'),
         }
 
         for test_config in test_configs:
             with self.subTest(test_config):
-                patch = conf.copy()
-                patch.update(test_config)
+                patch = {**cfg, **test_config}
 
                 # Same as the default schema, but don't verify the docs_dir exists.
-                c = config.Config(
+                conf = config.Config(
                     schema=(
-                        ('docs_dir', config_options.Dir(default='docs')),
-                        ('site_dir', config_options.SiteDir(default='site')),
-                        ('config_file_path', config_options.Type(str)),
+                        ('docs_dir', c.Dir(default='docs')),
+                        ('site_dir', c.SiteDir(default='site')),
+                        ('config_file_path', c.Type(str)),
                     )
                 )
-                c.load_dict(patch)
+                conf.load_dict(patch)
 
-                errors, warnings = c.validate()
+                errors, warnings = conf.validate()
 
                 self.assertEqual(len(errors), 1)
                 self.assertEqual(warnings, [])
