@@ -1653,3 +1653,29 @@ class SchemaTest(TestCase):
         copy.deepcopy(self.get_config(EditURITest.Schema, {}))
         copy.deepcopy(EditURITest.Schema)
         copy.deepcopy(EditURITest.Schema())
+
+    def test_subclass(self) -> None:
+        class A(Config):
+            foo = c.Type(int)
+            bar = c.Optional(c.Type(str))
+
+        class B(A):
+            baz = c.ListOfItems(c.Type(str))
+
+        conf = self.get_config(B, {'foo': 1, 'baz': ['b']})
+        assert_type(conf.foo, int)
+        self.assertEqual(conf.foo, 1)
+        assert_type(conf.bar, Optional[str])
+        self.assertEqual(conf.bar, None)
+        assert_type(conf.baz, List[str])
+        self.assertEqual(conf.baz, ['b'])
+
+        with self.expect_error(baz="Required configuration not provided."):
+            self.get_config(B, {'foo': 1})
+        with self.expect_error(foo="Required configuration not provided."):
+            self.get_config(B, {'baz': ['b']})
+
+        bconf = self.get_config(A, {'foo': 2, 'bar': 'a'})
+        assert_type(bconf.foo, int)
+        self.assertEqual(bconf.foo, 2)
+        self.assertEqual(bconf.bar, 'a')
