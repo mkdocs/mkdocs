@@ -139,7 +139,7 @@ class ListOfItems(Generic[T], BaseConfigOption[List[T]]):
 
     required: Union[bool, None] = None  # Only for subclasses to set.
 
-    def __init__(self, option_type: BaseConfigOption[T], default: List[T] = []):
+    def __init__(self, option_type: BaseConfigOption[T], default=None):
         super().__init__()
         self.default = default
         self.option_type = option_type
@@ -153,11 +153,14 @@ class ListOfItems(Generic[T], BaseConfigOption[List[T]]):
         self._key_name = key_name
 
     def run_validation(self, value):
-        if value is None and not self.required:
-            return self.default
-
+        if value is None:
+            if self.required or self.default is None:
+                raise ValidationError("Required configuration not provided.")
+            value = self.default
         if not isinstance(value, list):
             raise ValidationError(f'Expected a list of items, but a {type(value)} was given.')
+        if not value:  # Optimization for empty list
+            return value
 
         fake_config = Config(())
         try:
@@ -198,7 +201,7 @@ class ConfigItems(ListOfItems[LegacyConfig]):
         ...
 
     def __init__(self, *config_options: PlainConfigSchemaItem, required=None):
-        super().__init__(SubConfig(*config_options))
+        super().__init__(SubConfig(*config_options), default=[])
         self._legacy_required = required
         self.required = bool(required)
 
