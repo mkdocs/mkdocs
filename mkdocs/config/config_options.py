@@ -429,6 +429,11 @@ class Optional(Generic[T], BaseConfigOption[Union[T, None]]):
     """
 
     def __init__(self, config_option: BaseConfigOption[T]):
+        if config_option.default is not None:
+            raise ValueError(
+                f"This option already has a default ({config_option.default!r}) "
+                f"and doesn't need to be wrapped into Optional"
+            )
         super().__init__()
         self.option = config_option
         self.warnings = config_option.warnings
@@ -443,7 +448,7 @@ class Optional(Generic[T], BaseConfigOption[Union[T, None]]):
 
     def run_validation(self, value):
         if value is None:
-            return self.default
+            return None
         return self.option.validate(value)
 
     def post_validation(self, config, key_name):
