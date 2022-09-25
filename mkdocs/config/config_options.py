@@ -138,16 +138,14 @@ class ListOfItems(BaseConfigOption):
 
 class ConfigItems(ListOfItems):
     """
-    Config Items Option
+    Deprecated: Use `ListOfItems(SubConfig(...))` instead of `ConfigItems(...)`.
 
     Validates a list of mappings that all must match the same set of
     options.
     """
 
-    def __init__(
-        self, *config_options: PlainConfigSchemaItem, required: bool = False, validate: bool = False
-    ):
-        super().__init__(SubConfig(*config_options, validate=validate))
+    def __init__(self, *config_options: PlainConfigSchemaItem, required: bool = False):
+        super().__init__(SubConfig(*config_options))
         self.required = required
 
 

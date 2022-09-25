@@ -7,16 +7,17 @@ from unittest import mock
 
 from mkdocs import config, plugins
 from mkdocs.commands import build
-from mkdocs.config import base, config_options
+from mkdocs.config import base
+from mkdocs.config import config_options as c
 from mkdocs.config.base import ValidationError
 from mkdocs.exceptions import Abort, BuildError, PluginError
 from mkdocs.tests.base import load_config
 
 
 class _DummyPluginConfig:
-    foo = config_options.Type(str, default='default foo')
-    bar = config_options.Type(int, default=0)
-    dir = config_options.Dir(exists=False)
+    foo = c.Type(str, default='default foo')
+    bar = c.Type(int, default=0)
+    dir = c.Dir(exists=False)
 
 
 class DummyPlugin(plugins.BasePlugin):
@@ -295,7 +296,7 @@ MockEntryPoint.configure_mock(**{'name': 'sample', 'load.return_value': DummyPlu
 class TestPluginConfig(unittest.TestCase):
     def test_plugin_config_without_options(self, mock_class):
         cfg = {'plugins': ['sample']}
-        option = config.config_options.Plugins()
+        option = c.Plugins()
         cfg['plugins'] = option.validate(cfg['plugins'])
 
         self.assertIsInstance(cfg['plugins'], plugins.PluginCollection)
@@ -319,7 +320,7 @@ class TestPluginConfig(unittest.TestCase):
                 }
             ],
         }
-        option = config.config_options.Plugins()
+        option = c.Plugins()
         cfg['plugins'] = option.validate(cfg['plugins'])
 
         self.assertIsInstance(cfg['plugins'], plugins.PluginCollection)
@@ -341,7 +342,7 @@ class TestPluginConfig(unittest.TestCase):
                 },
             },
         }
-        option = config.config_options.Plugins()
+        option = c.Plugins()
         cfg['plugins'] = option.validate(cfg['plugins'])
 
         self.assertIsInstance(cfg['plugins'], plugins.PluginCollection)
@@ -356,7 +357,7 @@ class TestPluginConfig(unittest.TestCase):
 
     def test_plugin_config_empty_list_with_empty_default(self, mock_class):
         cfg = {'plugins': []}
-        option = config.config_options.Plugins(default=[])
+        option = c.Plugins(default=[])
         cfg['plugins'] = option.validate(cfg['plugins'])
 
         self.assertIsInstance(cfg['plugins'], plugins.PluginCollection)
@@ -365,7 +366,7 @@ class TestPluginConfig(unittest.TestCase):
     def test_plugin_config_empty_list_with_default(self, mock_class):
         # Default is ignored
         cfg = {'plugins': []}
-        option = config.config_options.Plugins(default=['sample'])
+        option = c.Plugins(default=['sample'])
         cfg['plugins'] = option.validate(cfg['plugins'])
 
         self.assertIsInstance(cfg['plugins'], plugins.PluginCollection)
@@ -373,7 +374,7 @@ class TestPluginConfig(unittest.TestCase):
 
     def test_plugin_config_none_with_empty_default(self, mock_class):
         cfg = {'plugins': None}
-        option = config.config_options.Plugins(default=[])
+        option = c.Plugins(default=[])
         cfg['plugins'] = option.validate(cfg['plugins'])
 
         self.assertIsInstance(cfg['plugins'], plugins.PluginCollection)
@@ -382,7 +383,7 @@ class TestPluginConfig(unittest.TestCase):
     def test_plugin_config_none_with_default(self, mock_class):
         # Default is used.
         cfg = {'plugins': None}
-        option = config.config_options.Plugins(default=['sample'])
+        option = c.Plugins(default=['sample'])
         cfg['plugins'] = option.validate(cfg['plugins'])
 
         self.assertIsInstance(cfg['plugins'], plugins.PluginCollection)
@@ -397,13 +398,13 @@ class TestPluginConfig(unittest.TestCase):
 
     def test_plugin_config_uninstalled(self, mock_class):
         cfg = {'plugins': ['uninstalled']}
-        option = config.config_options.Plugins()
+        option = c.Plugins()
         with self.assertRaises(config.base.ValidationError):
             option.validate(cfg['plugins'])
 
     def test_plugin_config_not_list(self, mock_class):
         cfg = {'plugins': 'sample'}  # should be a list
-        option = config.config_options.Plugins()
+        option = c.Plugins()
         with self.assertRaises(config.base.ValidationError):
             option.validate(cfg['plugins'])
 
@@ -419,7 +420,7 @@ class TestPluginConfig(unittest.TestCase):
                 }
             ],
         }
-        option = config.config_options.Plugins()
+        option = c.Plugins()
         with self.assertRaises(config.base.ValidationError):
             option.validate(cfg['plugins'])
 
@@ -427,7 +428,7 @@ class TestPluginConfig(unittest.TestCase):
         cfg = {
             'plugins': [('not a string or dict',)],
         }
-        option = config.config_options.Plugins()
+        option = c.Plugins()
         with self.assertRaises(config.base.ValidationError):
             option.validate(cfg['plugins'])
 
@@ -439,6 +440,6 @@ class TestPluginConfig(unittest.TestCase):
                 }
             ],
         }
-        option = config.config_options.Plugins()
+        option = c.Plugins()
         with self.assertRaises(config.base.ValidationError):
             option.validate(cfg['plugins'])
