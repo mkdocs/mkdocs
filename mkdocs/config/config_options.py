@@ -93,6 +93,8 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
 
 class OptionallyRequired(Generic[T], BaseConfigOption[T]):
     """
+    Soft-deprecated, do not use.
+
     A subclass of BaseConfigOption that adds support for default values and
     required values. It is a base class for config options.
     """

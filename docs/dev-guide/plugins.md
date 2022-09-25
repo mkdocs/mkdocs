@@ -70,111 +70,177 @@ All `BasePlugin` subclasses contain the following attributes:
 
 #### config_scheme
 
-*   A tuple of configuration validation instances. Each item must consist of a
-    two item tuple in which the first item is the string name of the
-    configuration option and the second item is an instance of
-    `mkdocs.config.config_options.BaseConfigOption` or any of its subclasses.
+A tuple of configuration validation instances. Each item must consist of a
+two item tuple in which the first item is the string name of the
+configuration option and the second item is an instance of
+`mkdocs.config.config_options.BaseConfigOption` or any of its subclasses.
 
-    For example, the following `config_scheme` defines three configuration options: `foo`, which accepts a string; `bar`, which accepts an integer; and `baz`, which accepts a boolean value.
+For example, the following `config_scheme` defines three configuration options: `foo`, which accepts a string; `bar`, which accepts an integer; and `baz`, which accepts a boolean value.
 
-    ```python
-    class MyPlugin(mkdocs.plugins.BasePlugin):
-        config_scheme = (
-            ('foo', mkdocs.config.config_options.Type(str, default='a default value')),
-            ('bar', mkdocs.config.config_options.Type(int, default=0)),
-            ('baz', mkdocs.config.config_options.Type(bool, default=True))
-        )
-    ```
+```python
+class MyPlugin(mkdocs.plugins.BasePlugin):
+    config_scheme = (
+        ('foo', mkdocs.config.config_options.Type(str, default='a default value')),
+        ('bar', mkdocs.config.config_options.Type(int, default=0)),
+        ('baz', mkdocs.config.config_options.Type(bool, default=True))
+    )
+```
 
-    > NEW: **New in version 1.4.**
-    >
-    > To get type safety benefits, if you're targeting only MkDocs 1.4+, define the config schema as a class instead:
-    >
-    > ```python
-    > class MyPluginConfig(mkdocs.config.base.Config):
-    >     foo = mkdocs.config.config_options.Type(str, default='a default value')
-    >     bar = mkdocs.config.config_options.Type(int, default=0)
-    >     baz = mkdocs.config.config_options.Type(bool, default=True)
-    >
-    > class MyPlugin(mkdocs.plugins.BasePlugin[MyPluginConfig]):
-    >     ...
-    > ```
+> NEW: **New in version 1.4.**
+>
+> ##### Subclassing `Config` to specify the config schema
+>
+> To get type safety benefits, if you're targeting only MkDocs 1.4+, define the config schema as a class instead:
+>
+> ```python
+> class MyPluginConfig(mkdocs.config.base.Config):
+>     foo = mkdocs.config.config_options.Type(str, default='a default value')
+>     bar = mkdocs.config.config_options.Type(int, default=0)
+>     baz = mkdocs.config.config_options.Type(bool, default=True)
+>
+> class MyPlugin(mkdocs.plugins.BasePlugin[MyPluginConfig]):
+>     ...
+> ```
 
-    When the user's configuration is loaded, the above scheme will be used to
-    validate the configuration and fill in any defaults for settings not
-    provided by the user. The validation classes may be any of the classes
-    provided in `mkdocs.config.config_options` or a third party subclass defined
-    in the plugin.
+##### Examples of config definitions
 
-    Any settings provided by the user which fail validation or are not defined
-    in the `config_scheme` will raise a `mkdocs.config.base.ValidationError`.
+>! EXAMPLE:
+>
+> ```python
+> from mkdocs.config import base, config_options as c
+>
+> class _ValidationOptions(base.Config):
+>     enable = c.Type(bool, default=True)
+>     verbose = c.Type(bool, default=False)
+>     skip_checks = c.ListOfItems(c.Choice(('foo', 'bar', 'baz')), default=[])
+>
+> class MyPluginConfig(base.Config):
+>     definition_file = c.File(exists=True)  # required
+>     checksum_file = c.Optional(c.File(exists=True))  # can be None but must exist if specified
+>     validation = c.SubConfig(_ValidationOptions)
+> ```
+>
+> From the user's point of view `SubConfig` is similar to `Type(dict)`, it's just that it also retains full ability for validation: you define all valid keys and what each value should adhere to.
+>
+> And `ListOfItems` is similar to `Type(list)`, but again, we define the constraint that each value must adhere to.
+>
+> This accepts a config as follows:
+>
+> ```yaml
+> my_plugin:
+>   definition_file: configs/test.ini  # relative to mkdocs.yml
+>   validation:
+>     enable: !ENV [CI, false]
+>     verbose: true
+>     skip_checks:
+>       - foo
+>       - baz
+> ```
+<!-- -->
+>? EXAMPLE:
+>
+> ```python
+> import numbers
+> from mkdocs.config import base, config_options as c
+>
+> class _Rectangle(base.Config):
+>     width = c.Type(numbers.Real)  # required
+>     height = c.Type(numbers.Real)  # required
+>
+> class MyPluginConfig(base.Config):
+>     add_rectangles = c.ListOfItems(c.SubConfig(_Rectangle))  # required
+> ```
+>
+> In this example we define a list of complex items, and that's achieved by passing a concrete `SubConfig` to `ListOfItems`.
+>
+> This accepts a config as follows:
+>
+> ```yaml
+> my_plugin:
+>   add_rectangles:
+>     - width: 5
+>       height: 7
+>     - width: 12
+>       height: 2
+> ```
+
+When the user's configuration is loaded, the above scheme will be used to
+validate the configuration and fill in any defaults for settings not
+provided by the user. The validation classes may be any of the classes
+provided in `mkdocs.config.config_options` or a third party subclass defined
+in the plugin.
+
+Any settings provided by the user which fail validation or are not defined
+in the `config_scheme` will raise a `mkdocs.config.base.ValidationError`.
 
 #### config
 
-*   A dictionary of configuration options for the plugin, which is populated by
-    the `load_config` method after configuration validation has completed. Use
-    this attribute to access options provided by the user.
+A dictionary of configuration options for the plugin, which is populated by
+the `load_config` method after configuration validation has completed. Use
+this attribute to access options provided by the user.
 
-    ```python
-    def on_pre_build(self, config, **kwargs):
-        if self.config['baz']:
-            # implement "baz" functionality here...
-    ```
+```python
+def on_pre_build(self, config, **kwargs):
+    if self.config['baz']:
+        # implement "baz" functionality here...
+```
 
-    > NEW: **New in version 1.4.**
-    >
-    > To get type safety benefits, if you're targeting only MkDocs 1.4+, access options as attributes instead:
-    >
-    > ```python
-    > def on_pre_build(self, config, **kwargs):
-    >     if self.config.baz:
-    >         print(self.config.bar ** 2)
-    > ```
+> NEW: **New in version 1.4.**
+>
+> ##### Safe attribute-based access
+>
+> To get type safety benefits, if you're targeting only MkDocs 1.4+, access options as attributes instead:
+>
+> ```python
+> def on_pre_build(self, config, **kwargs):
+>     if self.config.baz:
+>         print(self.config.bar ** 2)  # OK, `int ** 2` is valid.
+> ```
 
 All `BasePlugin` subclasses contain the following method(s):
 
 #### load_config(options)
 
-*   Loads configuration from a dictionary of options. Returns a tuple of
-    `(errors, warnings)`. This method is called by MkDocs during configuration
-    validation and should not need to be called by the plugin.
+Loads configuration from a dictionary of options. Returns a tuple of
+`(errors, warnings)`. This method is called by MkDocs during configuration
+validation and should not need to be called by the plugin.
 
 #### on_&lt;event_name&gt;()
 
-*   Optional methods which define the behavior for specific [events]. The plugin
-    should define its behavior within these methods. Replace `<event_name>` with
-    the actual name of the event. For example, the `pre_build` event would be
-    defined in the `on_pre_build` method.
+Optional methods which define the behavior for specific [events]. The plugin
+should define its behavior within these methods. Replace `<event_name>` with
+the actual name of the event. For example, the `pre_build` event would be
+defined in the `on_pre_build` method.
 
-    Most events accept one positional argument and various keyword arguments. It
-    is generally expected that the positional argument would be modified (or
-    replaced) by the plugin and returned. If nothing is returned (the method
-    returns `None`), then the original, unmodified object is used. The keyword
-    arguments are simply provided to give context and/or supply data which may
-    be used to determine how the positional argument should be modified. It is
-    good practice to accept keyword arguments as `**kwargs`. In the event that
-    additional keywords are provided to an event in a future version of MkDocs,
-    there will be no need to alter your plugin.
+Most events accept one positional argument and various keyword arguments. It
+is generally expected that the positional argument would be modified (or
+replaced) by the plugin and returned. If nothing is returned (the method
+returns `None`), then the original, unmodified object is used. The keyword
+arguments are simply provided to give context and/or supply data which may
+be used to determine how the positional argument should be modified. It is
+good practice to accept keyword arguments as `**kwargs`. In the event that
+additional keywords are provided to an event in a future version of MkDocs,
+there will be no need to alter your plugin.
 
-    For example, the following event would add an additional static_template to
-    the theme config:
+For example, the following event would add an additional static_template to
+the theme config:
 
-    ```python
-    class MyPlugin(BasePlugin):
-        def on_config(self, config, **kwargs):
-            config['theme'].static_templates.add('my_template.html')
-            return config
-    ```
+```python
+class MyPlugin(BasePlugin):
+    def on_config(self, config, **kwargs):
+        config['theme'].static_templates.add('my_template.html')
+        return config
+```
 
-    > NEW: **New in version 1.4.**
-    >
-    > To get type safety benefits, if you're targeting only MkDocs 1.4+, access config options as attributes instead:
-    >
-    > ```python
-    > def on_config(self, config: MkDocsConfig):
-    >     config.theme.static_templates.add('my_template.html')
-    >         return config
-    > ```
+> NEW: **New in version 1.4.**
+>
+> To get type safety benefits, if you're targeting only MkDocs 1.4+, access config options as attributes instead:
+>
+> ```python
+> def on_config(self, config: MkDocsConfig):
+>     config.theme.static_templates.add('my_template.html')
+>         return config
+> ```
 
 ### Events
 
