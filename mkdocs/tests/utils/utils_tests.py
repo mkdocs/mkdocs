@@ -5,7 +5,6 @@ import logging
 import os
 import posixpath
 import stat
-import sys
 import unittest
 from unittest import mock
 
@@ -245,7 +244,8 @@ class UtilsTests(unittest.TestCase):
             urls = utils.create_media_urls(expected_results.keys(), page)
             self.assertEqual([v[i] for v in expected_results.values()], urls)
 
-    @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
+    # TODO: This shouldn't pass on Linux
+    # @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
     def test_create_media_urls_windows(self):
         expected_results = {
             'local\\windows\\file\\jquery.js': [

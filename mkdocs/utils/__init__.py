@@ -304,12 +304,12 @@ def normalize_url(path: str, page: Optional[Page] = None, base: str = '') -> str
 def _get_norm_url(path: str) -> Tuple[str, bool]:
     if not path:
         path = '.'
-    elif os.sep != '/' and os.sep in path:
+    elif '\\' in path:
         log.warning(
-            f"Path '{path}' uses OS-specific separator '{os.sep}', "
-            f"change it to '/' so it is recognized on other systems."
+            f"Path '{path}' uses OS-specific separator '\\'. "
+            f"That will be unsupported in a future release. Please change it to '/'."
         )
-        path = path.replace(os.sep, '/')
+        path = path.replace('\\', '/')
     # Allow links to be fully qualified URLs
     parsed = urlsplit(path)
     if parsed.scheme or parsed.netloc or path.startswith(('/', '#')):
