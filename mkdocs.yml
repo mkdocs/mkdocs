@@ -33,6 +33,7 @@ markdown_extensions:
         permalink: 
     - attr_list
     - def_list
+    - tables
     - pymdownx.highlight:
         use_pygments: false
     - pymdownx.snippets
