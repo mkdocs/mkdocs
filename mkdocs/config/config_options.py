@@ -394,14 +394,14 @@ class URL(OptionallyRequired[str]):
     """
 
     @overload
-    def __init__(self, default='', *, is_dir: bool = False):
+    def __init__(self, default=None, *, is_dir: bool = False):
         ...
 
     @overload
-    def __init__(self, default='', *, required: bool, is_dir: bool = False):
+    def __init__(self, default=None, *, required: bool, is_dir: bool = False):
         ...
 
-    def __init__(self, default='', required=None, is_dir: bool = False):
+    def __init__(self, default=None, required=None, is_dir: bool = False):
         self.is_dir = is_dir
         super().__init__(default, required=required)
 
