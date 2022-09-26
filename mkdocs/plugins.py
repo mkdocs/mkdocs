@@ -7,7 +7,19 @@ from __future__ import annotations
 import logging
 import sys
 from collections import OrderedDict
-from typing import Any, Callable, Dict, List, Optional, Tuple, TypeVar, overload
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Dict,
+    Generic,
+    List,
+    Optional,
+    Tuple,
+    Type,
+    TypeVar,
+    overload,
+)
 
 if sys.version_info >= (3, 10):
     from importlib.metadata import EntryPoint, entry_points
@@ -22,11 +34,15 @@ else:
 import jinja2.environment
 
 from mkdocs import utils
-from mkdocs.config.base import Config, ConfigErrors, ConfigWarnings, PlainConfigSchema
+from mkdocs.config.base import Config, ConfigErrors, ConfigWarnings, LegacyConfig, PlainConfigSchema
 from mkdocs.livereload import LiveReloadServer
 from mkdocs.structure.files import Files
 from mkdocs.structure.nav import Navigation
 from mkdocs.structure.pages import Page
+
+if TYPE_CHECKING:
+    from mkdocs.config.defaults import MkDocsConfig
+
 
 log = logging.getLogger('mkdocs.plugins')
 
@@ -47,22 +63,43 @@ def get_plugins() -> Dict[str, EntryPoint]:
     return pluginmap
 
 
-class BasePlugin:
+SomeConfig = TypeVar('SomeConfig', bound=Config)
+
+
+class BasePlugin(Generic[SomeConfig]):
     """
     Plugin base class.
 
     All plugins should subclass this class.
     """
 
+    config_class: Type[SomeConfig] = LegacyConfig  # type: ignore[assignment]
     config_scheme: PlainConfigSchema = ()
-    config: Config = {}  # type: ignore[assignment]
+    config: SomeConfig = {}  # type: ignore[assignment]
+
+    def __class_getitem__(cls, config_class: Type[Config]):
+        """Eliminates the need to write `config_class = FooConfig` when subclassing BasePlugin[FooConfig]"""
+        name = f'{cls.__name__}[{config_class.__name__}]'
+        return type(name, (cls,), dict(config_class=config_class))
+
+    def __init_subclass__(cls):
+        if not issubclass(cls.config_class, Config):
+            raise TypeError(
+                f"config_class {cls.config_class} must be a subclass of `mkdocs.config.base.Config`"
+            )
+        if cls.config_class is not LegacyConfig:
+            cls.config_scheme = cls.config_class._schema  # For compatibility.
 
     def load_config(
         self, options: Dict[str, Any], config_file_path: Optional[str] = None
     ) -> Tuple[ConfigErrors, ConfigWarnings]:
         """Load config from a dict of options. Returns a tuple of (errors, warnings)."""
 
-        self.config = Config(schema=self.config_scheme, config_file_path=config_file_path)
+        if self.config_class is LegacyConfig:
+            self.config = LegacyConfig(self.config_scheme, config_file_path=config_file_path)  # type: ignore
+        else:
+            self.config = self.config_class(config_file_path=config_file_path)
+
         self.config.load_dict(options)
 
         return self.config.validate()
@@ -104,7 +141,7 @@ class BasePlugin:
         """
 
     def on_serve(
-        self, server: LiveReloadServer, *, config: Config, builder: Callable
+        self, server: LiveReloadServer, *, config: MkDocsConfig, builder: Callable
     ) -> Optional[LiveReloadServer]:
         """
         The `serve` event is only called when the `serve` command is used during
@@ -125,7 +162,7 @@ class BasePlugin:
 
     # Global events
 
-    def on_config(self, config: Config) -> Optional[Config]:
+    def on_config(self, config: MkDocsConfig) -> Optional[Config]:
         """
         The `config` event is the first event called on build and is run immediately
         after the user configuration is loaded and validated. Any alterations to the
@@ -139,7 +176,7 @@ class BasePlugin:
         """
         return config
 
-    def on_pre_build(self, *, config: Config) -> None:
+    def on_pre_build(self, *, config: MkDocsConfig) -> None:
         """
         The `pre_build` event does not alter any variables. Use this event to call
         pre-build scripts.
@@ -148,7 +185,7 @@ class BasePlugin:
             config: global configuration object
         """
 
-    def on_files(self, files: Files, *, config: Config) -> Optional[Files]:
+    def on_files(self, files: Files, *, config: MkDocsConfig) -> Optional[Files]:
         """
         The `files` event is called after the files collection is populated from the
         `docs_dir`. Use this event to add, remove, or alter files in the
@@ -165,7 +202,9 @@ class BasePlugin:
         """
         return files
 
-    def on_nav(self, nav: Navigation, *, config: Config, files: Files) -> Optional[Navigation]:
+    def on_nav(
+        self, nav: Navigation, *, config: MkDocsConfig, files: Files
+    ) -> Optional[Navigation]:
         """
         The `nav` event is called after the site navigation is created and can
         be used to alter the site navigation.
@@ -181,7 +220,7 @@ class BasePlugin:
         return nav
 
     def on_env(
-        self, env: jinja2.Environment, *, config: Config, files: Files
+        self, env: jinja2.Environment, *, config: MkDocsConfig, files: Files
     ) -> Optional[jinja2.Environment]:
         """
         The `env` event is called after the Jinja template environment is created
@@ -198,7 +237,7 @@ class BasePlugin:
         """
         return env
 
-    def on_post_build(self, *, config: Config) -> None:
+    def on_post_build(self, *, config: MkDocsConfig) -> None:
         """
         The `post_build` event does not alter any variables. Use this event to call
         post-build scripts.
@@ -222,7 +261,7 @@ class BasePlugin:
     # Template events
 
     def on_pre_template(
-        self, template: jinja2.Template, *, template_name: str, config: Config
+        self, template: jinja2.Template, *, template_name: str, config: MkDocsConfig
     ) -> Optional[jinja2.Template]:
         """
         The `pre_template` event is called immediately after the subject template is
@@ -239,7 +278,7 @@ class BasePlugin:
         return template
 
     def on_template_context(
-        self, context: Dict[str, Any], *, template_name: str, config: Config
+        self, context: Dict[str, Any], *, template_name: str, config: MkDocsConfig
     ) -> Optional[Dict[str, Any]]:
         """
         The `template_context` event is called immediately after the context is created
@@ -257,7 +296,7 @@ class BasePlugin:
         return context
 
     def on_post_template(
-        self, output_content: str, *, template_name: str, config: Config
+        self, output_content: str, *, template_name: str, config: MkDocsConfig
     ) -> Optional[str]:
         """
         The `post_template` event is called after the template is rendered, but before
@@ -277,7 +316,7 @@ class BasePlugin:
 
     # Page events
 
-    def on_pre_page(self, page: Page, *, config: Config, files: Files) -> Optional[Page]:
+    def on_pre_page(self, page: Page, *, config: MkDocsConfig, files: Files) -> Optional[Page]:
         """
         The `pre_page` event is called before any actions are taken on the subject
         page and can be used to alter the `Page` instance.
@@ -292,7 +331,7 @@ class BasePlugin:
         """
         return page
 
-    def on_page_read_source(self, *, page: Page, config: Config) -> Optional[str]:
+    def on_page_read_source(self, *, page: Page, config: MkDocsConfig) -> Optional[str]:
         """
         The `on_page_read_source` event can replace the default mechanism to read
         the contents of a page's source from the filesystem.
@@ -308,7 +347,7 @@ class BasePlugin:
         return None
 
     def on_page_markdown(
-        self, markdown: str, *, page: Page, config: Config, files: Files
+        self, markdown: str, *, page: Page, config: MkDocsConfig, files: Files
     ) -> Optional[str]:
         """
         The `page_markdown` event is called after the page's markdown is loaded
@@ -327,7 +366,7 @@ class BasePlugin:
         return markdown
 
     def on_page_content(
-        self, html: str, *, page: Page, config: Config, files: Files
+        self, html: str, *, page: Page, config: MkDocsConfig, files: Files
     ) -> Optional[str]:
         """
         The `page_content` event is called after the Markdown text is rendered to
@@ -346,7 +385,7 @@ class BasePlugin:
         return html
 
     def on_page_context(
-        self, context: Dict[str, Any], *, page: Page, config: Config, nav: Navigation
+        self, context: Dict[str, Any], *, page: Page, config: MkDocsConfig, nav: Navigation
     ) -> Optional[Dict[str, Any]]:
         """
         The `page_context` event is called after the context for a page is created
@@ -363,7 +402,7 @@ class BasePlugin:
         """
         return context
 
-    def on_post_page(self, output: str, *, page: Page, config: Config) -> Optional[str]:
+    def on_post_page(self, output: str, *, page: Page, config: MkDocsConfig) -> Optional[str]:
         """
         The `post_page` event is called after the template is rendered, but
         before it is written to disc and can be used to alter the output of the

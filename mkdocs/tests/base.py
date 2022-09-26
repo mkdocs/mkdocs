@@ -6,8 +6,8 @@ from tempfile import TemporaryDirectory
 
 import markdown
 
-from mkdocs import config, utils
-from mkdocs.config import defaults as config_defaults
+from mkdocs import utils
+from mkdocs.config.defaults import MkDocsConfig
 
 
 def dedent(text):
@@ -21,7 +21,7 @@ def get_markdown_toc(markdown_source):
     return md.toc_tokens
 
 
-def load_config(**cfg):
+def load_config(**cfg) -> MkDocsConfig:
     """Helper to build a simple config for testing."""
     path_base = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'integration', 'minimal')
     cfg = cfg or {}
@@ -32,9 +32,7 @@ def load_config(**cfg):
     if 'docs_dir' not in cfg:
         # Point to an actual dir to avoid a 'does not exist' error on validation.
         cfg['docs_dir'] = os.path.join(path_base, 'docs')
-    conf = config.Config(
-        schema=config_defaults.get_schema(), config_file_path=cfg['config_file_path']
-    )
+    conf = MkDocsConfig(config_file_path=cfg['config_file_path'])
     conf.load_dict(cfg)
 
     errors_warnings = conf.validate()

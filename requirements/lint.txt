@@ -2,6 +2,7 @@ black
 isort
 flake8
 mypy
+typing-extensions
 types-setuptools
 types-PyYAML
 types-Markdown

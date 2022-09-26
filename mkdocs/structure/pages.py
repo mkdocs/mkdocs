@@ -13,21 +13,22 @@ from markdown.extensions import Extension
 from markdown.treeprocessors import Treeprocessor
 from markdown.util import AMP_SUBSTITUTE
 
-from mkdocs.config.base import Config
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.toc import get_toc
 from mkdocs.utils import get_build_date, get_markdown_title, meta
 
 if TYPE_CHECKING:
+    from mkdocs.config.defaults import MkDocsConfig
     from mkdocs.structure.nav import Section
     from mkdocs.structure.toc import TableOfContents
+
 
 log = logging.getLogger(__name__)
 
 
 class Page:
     def __init__(
-        self, title: Optional[str], file: File, config: Union[Config, Mapping[str, Any]]
+        self, title: Optional[str], file: File, config: Union[MkDocsConfig, Mapping[str, Any]]
     ) -> None:
         file.page = self
         self.file = file
@@ -208,7 +209,7 @@ class Page:
         else:
             self.edit_url = None
 
-    def read_source(self, config: Config) -> None:
+    def read_source(self, config: MkDocsConfig) -> None:
         source = config['plugins'].run_event('page_read_source', page=self, config=config)
         if source is None:
             try:
@@ -255,7 +256,7 @@ class Page:
 
         self.title = title
 
-    def render(self, config: Config, files: Files) -> None:
+    def render(self, config: MkDocsConfig, files: Files) -> None:
         """
         Convert the Markdown source file to HTML as per the config.
         """

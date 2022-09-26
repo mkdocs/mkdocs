@@ -9,20 +9,33 @@ import traceback
 import typing as t
 import warnings
 from collections import UserString
-from typing import Dict, NamedTuple
+from typing import Collection, Dict, Generic, List, NamedTuple, Tuple, TypeVar, Union, overload
 from urllib.parse import quote as urlquote
 from urllib.parse import urlsplit, urlunsplit
 
 import markdown
 
 from mkdocs import plugins, theme, utils
-from mkdocs.config.base import BaseConfigOption, Config, PlainConfigSchemaItem, ValidationError
+from mkdocs.config.base import (
+    BaseConfigOption,
+    Config,
+    LegacyConfig,
+    PlainConfigSchemaItem,
+    ValidationError,
+)
 from mkdocs.exceptions import ConfigurationError
 
+T = TypeVar('T')
+SomeConfig = TypeVar('SomeConfig', bound=Config)
 
-class SubConfig(BaseConfigOption):
+
+class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
     """
     Subconfig Config Option
+
+    New: If targeting MkDocs 1.4+, please pass a subclass of Config to the
+    constructor, instead of the old style of a sequence of ConfigOption instances.
+    Validation is then enabled by default.
 
     A set of `config_options` grouped under a single config option.
     By default, validation errors and warnings resulting from validating
@@ -30,14 +43,37 @@ class SubConfig(BaseConfigOption):
     enable validation with `validate=True`.
     """
 
-    def __init__(self, *config_options: PlainConfigSchemaItem, validate: bool = False):
+    @overload
+    def __init__(
+        self: SubConfig[SomeConfig], config_class: t.Type[SomeConfig], *, validate: bool = True
+    ):
+        """Create a sub-config in a type-safe way, using fields defined in a Config subclass."""
+
+    @overload
+    def __init__(
+        self: SubConfig[LegacyConfig],
+        *config_options: PlainConfigSchemaItem,
+        validate: bool = False,
+    ):
+        """Create an untyped sub-config, using directly passed fields."""
+
+    def __init__(self, *config_options, validate=None):
         super().__init__()
         self.default = {}
-        self.config_options = config_options
-        self._do_validation = validate
+        if (
+            len(config_options) == 1
+            and isinstance(config_options[0], type)
+            and issubclass(config_options[0], Config)
+        ):
+            if validate is None:
+                validate = True
+            (self._make_config,) = config_options
+        else:
+            self._make_config = functools.partial(LegacyConfig, config_options)
+        self._do_validation = bool(validate)
 
     def run_validation(self, value):
-        config = Config(self.config_options)
+        config = self._make_config()
         try:
             config.load_dict(value)
             failed, warnings = config.validate()
@@ -55,16 +91,27 @@ class SubConfig(BaseConfigOption):
         return config
 
 
-class OptionallyRequired(BaseConfigOption):
+class OptionallyRequired(Generic[T], BaseConfigOption[T]):
     """
+    Soft-deprecated, do not use.
+
     A subclass of BaseConfigOption that adds support for default values and
     required values. It is a base class for config options.
     """
 
-    def __init__(self, default=None, required: bool = False):
+    @overload
+    def __init__(self, default=None):
+        ...
+
+    @overload
+    def __init__(self, default=None, *, required: bool):
+        ...
+
+    def __init__(self, default=None, required=None):
         super().__init__()
         self.default = default
-        self.required = required
+        self._legacy_required = required
+        self.required = bool(required)
 
     def validate(self, value):
         """
@@ -85,16 +132,16 @@ class OptionallyRequired(BaseConfigOption):
         return self.run_validation(value)
 
 
-class ListOfItems(BaseConfigOption):
+class ListOfItems(Generic[T], BaseConfigOption[List[T]]):
     """
     Validates a homogeneous list of items.
 
     E.g. for `config_options.ListOfItems(config_options.Type(int))` a valid item is `[1, 2, 3]`.
     """
 
-    required = False
+    required: Union[bool, None] = None  # Only for subclasses to set.
 
-    def __init__(self, option_type: BaseConfigOption, default=[]):
+    def __init__(self, option_type: BaseConfigOption[T], default=None):
         super().__init__()
         self.default = default
         self.option_type = option_type
@@ -108,11 +155,14 @@ class ListOfItems(BaseConfigOption):
         self._key_name = key_name
 
     def run_validation(self, value):
-        if value is None and not self.required:
-            return self.default
-
+        if value is None:
+            if self.required or self.default is None:
+                raise ValidationError("Required configuration not provided.")
+            value = self.default
         if not isinstance(value, list):
             raise ValidationError(f'Expected a list of items, but a {type(value)} was given.')
+        if not value:  # Optimization for empty list
+            return value
 
         fake_config = Config(())
         try:
@@ -136,7 +186,7 @@ class ListOfItems(BaseConfigOption):
         return [fake_config[k] for k in fake_keys]
 
 
-class ConfigItems(ListOfItems):
+class ConfigItems(ListOfItems[LegacyConfig]):
     """
     Deprecated: Use `ListOfItems(SubConfig(...))` instead of `ConfigItems(...)`.
 
@@ -144,19 +194,36 @@ class ConfigItems(ListOfItems):
     options.
     """
 
-    def __init__(self, *config_options: PlainConfigSchemaItem, required: bool = False):
-        super().__init__(SubConfig(*config_options))
-        self.required = required
+    @overload
+    def __init__(self, *config_options: PlainConfigSchemaItem):
+        ...
+
+    @overload
+    def __init__(self, *config_options: PlainConfigSchemaItem, required: bool):
+        ...
+
+    def __init__(self, *config_options: PlainConfigSchemaItem, required=None):
+        super().__init__(SubConfig(*config_options), default=[])
+        self._legacy_required = required
+        self.required = bool(required)
 
 
-class Type(OptionallyRequired):
+class Type(Generic[T], OptionallyRequired[T]):
     """
     Type Config Option
 
     Validate the type of a config option against a given Python type.
     """
 
-    def __init__(self, type_, length: t.Optional[int] = None, **kwargs):
+    @overload
+    def __init__(self, type_: t.Type[T], length: t.Optional[int] = None, **kwargs):
+        ...
+
+    @overload
+    def __init__(self, type_: Tuple[t.Type[T], ...], length: t.Optional[int] = None, **kwargs):
+        ...
+
+    def __init__(self, type_, length=None, **kwargs):
         super().__init__(**kwargs)
         self._type = type_
         self.length = length
@@ -175,14 +242,14 @@ class Type(OptionallyRequired):
         raise ValidationError(msg)
 
 
-class Choice(OptionallyRequired):
+class Choice(Generic[T], OptionallyRequired[T]):
     """
     Choice Config Option
 
     Validate the config option against a strict set of values.
     """
 
-    def __init__(self, choices, default=None, **kwargs):
+    def __init__(self, choices: Collection[T], default: t.Optional[T] = None, **kwargs):
         super().__init__(default=default, **kwargs)
         try:
             length = len(choices)
@@ -281,7 +348,7 @@ class _IpAddressValue(NamedTuple):
         return f'{self.host}:{self.port}'
 
 
-class IpAddress(OptionallyRequired):
+class IpAddress(OptionallyRequired[_IpAddressValue]):
     """
     IpAddress Config Option
 
@@ -321,16 +388,24 @@ class IpAddress(OptionallyRequired):
             )
 
 
-class URL(OptionallyRequired):
+class URL(OptionallyRequired[str]):
     """
     URL Config Option
 
     Validate a URL by requiring a scheme is present.
     """
 
-    def __init__(self, default='', required: bool = False, is_dir: bool = False):
+    @overload
+    def __init__(self, default=None, *, is_dir: bool = False):
+        ...
+
+    @overload
+    def __init__(self, default=None, *, required: bool, is_dir: bool = False):
+        ...
+
+    def __init__(self, default=None, required=None, is_dir: bool = False):
         self.is_dir = is_dir
-        super().__init__(default, required)
+        super().__init__(default, required=required)
 
     def run_validation(self, value):
         if value == '':
@@ -347,6 +422,45 @@ class URL(OptionallyRequired):
             return urlunsplit(parsed_url)
 
         raise ValidationError("The URL isn't valid, it should include the http:// (scheme)")
+
+
+class Optional(Generic[T], BaseConfigOption[Union[T, None]]):
+    """Wraps a field and makes a None value possible for it when no value is set.
+
+    E.g. `my_field = config_options.Optional(config_options.Type(str))`
+    """
+
+    def __init__(self, config_option: BaseConfigOption[T]):
+        if config_option.default is not None:
+            raise ValueError(
+                f"This option already has a default ({config_option.default!r}) "
+                f"and doesn't need to be wrapped into Optional"
+            )
+        super().__init__()
+        self.option = config_option
+        self.warnings = config_option.warnings
+
+    def __getattr__(self, key):
+        if key in ('option', 'warnings'):
+            raise AttributeError
+        return getattr(self.option, key)
+
+    def pre_validation(self, config, key_name):
+        return self.option.pre_validation(config, key_name)
+
+    def run_validation(self, value):
+        if value is None:
+            return None
+        return self.option.validate(value)
+
+    def post_validation(self, config, key_name):
+        result = self.option.post_validation(config, key_name)
+        self.warnings = self.option.warnings
+        return result
+
+    def reset_warnings(self):
+        self.option.reset_warnings()
+        self.warnings = self.option.warnings
 
 
 class RepoURL(URL):
@@ -387,8 +501,8 @@ class RepoURL(URL):
         config['edit_uri'] = edit_uri
 
 
-class EditURI(Type):
-    def __init__(self, repo_url_key):
+class EditURI(Type[str]):
+    def __init__(self, repo_url_key: str):
         super().__init__(str)
         self.repo_url_key = repo_url_key
 
@@ -410,7 +524,7 @@ class EditURI(Type):
         config[key_name] = edit_uri
 
 
-class EditURITemplate(OptionallyRequired):
+class EditURITemplate(BaseConfigOption[str]):
     class Formatter(string.Formatter):
         def convert_field(self, value, conversion):
             if conversion == 'q':
@@ -446,8 +560,8 @@ class EditURITemplate(OptionallyRequired):
             )
 
 
-class RepoName(Type):
-    def __init__(self, repo_url_key):
+class RepoName(Type[str]):
+    def __init__(self, repo_url_key: str):
         super().__init__(str)
         self.repo_url_key = repo_url_key
 
@@ -469,7 +583,7 @@ class RepoName(Type):
             config[key_name] = repo_name
 
 
-class FilesystemObject(Type):
+class FilesystemObject(Type[str]):
     """
     Base class for options that point to filesystem objects.
     """
@@ -532,7 +646,7 @@ class File(FilesystemObject):
     name = 'file'
 
 
-class ListOfPaths(ListOfItems):
+class ListOfPaths(ListOfItems[str]):
     """
     List of Paths Config Option
 
@@ -543,7 +657,15 @@ class ListOfPaths(ListOfItems):
         config_options.ListOfItems(config_options.File(exists=True))
     """
 
-    def __init__(self, default=[], required: bool = False):
+    @overload
+    def __init__(self, default=[]):
+        ...
+
+    @overload
+    def __init__(self, default=[], *, required: bool):
+        ...
+
+    def __init__(self, default=[], required=None):
         super().__init__(FilesystemObject(exists=True), default)
         self.required = required
 
@@ -579,7 +701,7 @@ class SiteDir(Dir):
             )
 
 
-class Theme(BaseConfigOption):
+class Theme(BaseConfigOption[theme.Theme]):
     """
     Theme Config Option
 
@@ -688,7 +810,7 @@ class Nav(OptionallyRequired):
             return f"a {type(value).__name__}: {value!r}"
 
 
-class Private(OptionallyRequired):
+class Private(BaseConfigOption):
     """
     Private Config Option
 
@@ -696,10 +818,11 @@ class Private(OptionallyRequired):
     """
 
     def run_validation(self, value):
-        raise ValidationError('For internal use only.')
+        if value is not None:
+            raise ValidationError('For internal use only.')
 
 
-class MarkdownExtensions(OptionallyRequired):
+class MarkdownExtensions(OptionallyRequired[List[str]]):
     """
     Markdown Extensions Config Option
 
@@ -712,9 +835,9 @@ class MarkdownExtensions(OptionallyRequired):
 
     def __init__(
         self,
-        builtins: t.Optional[list] = None,
+        builtins: t.Optional[List[str]] = None,
         configkey: str = 'mdx_configs',
-        default=[],
+        default: List[str] = [],
         **kwargs,
     ):
         super().__init__(default=default, **kwargs)
@@ -777,7 +900,7 @@ class MarkdownExtensions(OptionallyRequired):
         config[self.configkey] = self.configdata
 
 
-class Plugins(OptionallyRequired):
+class Plugins(OptionallyRequired[plugins.PluginCollection]):
     """
     Plugins config option.
 

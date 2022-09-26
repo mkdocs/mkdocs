@@ -15,9 +15,7 @@ from mkdocs.utils import meta
 def build_page(title, path, config, md_src=''):
     """Helper which returns a Page object."""
 
-    files = Files(
-        [File(path, config['docs_dir'], config['site_dir'], config['use_directory_urls'])]
-    )
+    files = Files([File(path, config.docs_dir, config.site_dir, config.use_directory_urls)])
     page = Page(title, list(files)[0], config)
     # Fake page.read_source()
     page.markdown, page.meta = meta.get_data(md_src)
@@ -26,7 +24,7 @@ def build_page(title, path, config, md_src=''):
 
 class BuildTests(PathAssertionMixin, unittest.TestCase):
     def _get_env_with_null_translations(self, config):
-        env = config['theme'].get_env()
+        env = config.theme.get_env()
         env.add_extension('jinja2.ext.i18n')
         env.install_null_translations()
         return env

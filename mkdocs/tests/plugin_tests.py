@@ -14,18 +14,16 @@ from mkdocs.exceptions import Abort, BuildError, PluginError
 from mkdocs.tests.base import load_config
 
 
-class _DummyPluginConfig:
+class _DummyPluginConfig(base.Config):
     foo = c.Type(str, default='default foo')
     bar = c.Type(int, default=0)
-    dir = c.Dir(exists=False)
+    dir = c.Optional(c.Dir(exists=False))
 
 
-class DummyPlugin(plugins.BasePlugin):
-    config_scheme = base.get_schema(_DummyPluginConfig)
-
+class DummyPlugin(plugins.BasePlugin[_DummyPluginConfig]):
     def on_pre_page(self, content, **kwargs):
         """modify page content by prepending `foo` config value."""
-        return f'{self.config["foo"]} {content}'
+        return f'{self.config.foo} {content}'
 
     def on_nav(self, item, **kwargs):
         """do nothing (return None) to not modify item."""
@@ -33,7 +31,7 @@ class DummyPlugin(plugins.BasePlugin):
 
     def on_page_read_source(self, **kwargs):
         """create new source by prepending `foo` config value to 'source'."""
-        return f'{self.config["foo"]} source'
+        return f'{self.config.foo} source'
 
     def on_pre_build(self, **kwargs):
         """do nothing (return None)."""

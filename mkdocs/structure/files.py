@@ -23,10 +23,11 @@ from urllib.parse import quote as urlquote
 import jinja2.environment
 
 from mkdocs import utils
-from mkdocs.config.base import Config
 
 if TYPE_CHECKING:
+    from mkdocs.config.defaults import MkDocsConfig
     from mkdocs.structure.pages import Page
+
 
 log = logging.getLogger(__name__)
 
@@ -103,7 +104,7 @@ class Files:
         """Return iterable of all CSS file objects."""
         return [file for file in self if file.is_css()]
 
-    def add_files_from_theme(self, env: jinja2.Environment, config: Config) -> None:
+    def add_files_from_theme(self, env: jinja2.Environment, config: MkDocsConfig) -> None:
         """Retrieve static files from Jinja environment and add to collection."""
 
         def filter(name):
@@ -112,7 +113,7 @@ class Files:
             # Exclude translation files
             patterns.append("locales/*")
             patterns.extend(f'*{x}' for x in utils.markdown_extensions)
-            patterns.extend(config['theme'].static_templates)
+            patterns.extend(config.theme.static_templates)
             for pattern in patterns:
                 if fnmatch.fnmatch(name.lower(), pattern):
                     return False
@@ -122,12 +123,10 @@ class Files:
             # Theme files do not override docs_dir files
             path = PurePath(path).as_posix()
             if path not in self.src_uris:
-                for dir in config['theme'].dirs:
+                for dir in config.theme.dirs:
                     # Find the first theme dir which contains path
                     if os.path.isfile(os.path.join(dir, path)):
-                        self.append(
-                            File(path, dir, config['site_dir'], config['use_directory_urls'])
-                        )
+                        self.append(File(path, dir, config.site_dir, config.use_directory_urls))
                         break
 
 
@@ -278,7 +277,7 @@ class File:
         return self.src_uri.endswith('.css')
 
 
-def get_files(config: Union[Config, Mapping[str, Any]]) -> Files:
+def get_files(config: Union[MkDocsConfig, Mapping[str, Any]]) -> Files:
     """Walk the `docs_dir` and return a Files collection."""
     files = []
     exclude = ['.*', '/templates']
