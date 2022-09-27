@@ -13,6 +13,7 @@
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
 
         <script src="../../js/jquery-1.10.2.min.js" defer></script>
@@ -55,7 +56,7 @@
                                 <ul class="dropdown-menu">
                                     
 <li>
-    <a href="../../user-guide/" class="dropdown-item">Overview</a>
+    <a href="../../user-guide/" class="dropdown-item">User Guide</a>
 </li>
                                     
 <li>
@@ -92,7 +93,7 @@
                                 <ul class="dropdown-menu">
                                     
 <li>
-    <a href="../" class="dropdown-item">Overview</a>
+    <a href="../" class="dropdown-item">Developer Guide</a>
 </li>
                                     
 <li>
@@ -105,6 +106,10 @@
                                     
 <li>
     <a href="../plugins/" class="dropdown-item">Plugins</a>
+</li>
+                                    
+<li>
+    <a href="../api/" class="dropdown-item">API Reference</a>
 </li>
                                 </ul>
                             </li>
@@ -144,7 +149,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/mkdocs/mkdocs/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/dev-guide/themes.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -227,20 +232,18 @@ template</a> file which is placed in a directory that is <em>not</em> a child of
 option to the path of the directory containing <code>main.html</code>. The path should be
 relative to the configuration file. For example, given this example project
 layout:</p>
-<pre><code class="language-no-highlight">mkdocs.yml
+<pre class="highlight"><code class="language-text">mkdocs.yml
 docs/
     index.md
     about.md
 custom_theme/
     main.html
-    ...
-</code></pre>
+    ...</code></pre>
 <p>... you would include the following settings in <code>mkdocs.yml</code> to use the custom theme
 directory:</p>
-<pre><code class="language-yaml">theme:
+<pre class="highlight"><code class="language-yaml">theme:
     name: null
-    custom_dir: 'custom_theme/'
-</code></pre>
+    custom_dir: 'custom_theme/'</code></pre>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>
@@ -269,7 +272,7 @@ is required for the theme.</p>
 </div>
 <h2 id="basic-theme">Basic theme<a class="headerlink" href="#basic-theme" title="Permanent link"></a></h2>
 <p>The simplest <code>main.html</code> file is the following:</p>
-<pre><code class="language-django">&lt;!DOCTYPE html&gt;
+<pre class="highlight"><code class="language-django">&lt;!DOCTYPE html&gt;
 &lt;html&gt;
   &lt;head&gt;
     &lt;title&gt;{% if page.title %}{{ page.title }} - {% endif %}{{ config.site_name }}&lt;/title&gt;
@@ -277,8 +280,7 @@ is required for the theme.</p>
   &lt;body&gt;
     {{ page.content }}
   &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
+&lt;/html&gt;</code></pre>
 <p>The body content from each page specified in <code>mkdocs.yml</code> is inserted using the
 <code>{{ page.content }}</code> tag. Style-sheets and scripts can be brought into this
 theme as with a normal HTML file. Navbars and tables of contents can also be
@@ -316,11 +318,10 @@ the <code>mkdocs_theme.yml</code> configuration file and any Python files.</p>
 <h3 id="dot-files">Dot Files<a class="headerlink" href="#dot-files" title="Permanent link"></a></h3>
 <p>Theme authors can explicitly force MkDocs to ignore files by starting a file or
 directory name with a dot. Any of the following files would be ignored:</p>
-<pre><code class="language-text">.ignored.txt
+<pre class="highlight"><code class="language-text">.ignored.txt
 .ignored/file.txt
 foo/.ignored.txt
-foo/.ignored/file.txt
-</code></pre>
+foo/.ignored/file.txt</code></pre>
 <h3 id="documentation-files">Documentation Files<a class="headerlink" href="#documentation-files" title="Permanent link"></a></h3>
 <p>All documentation files are ignored. Specifically, any Markdown files (using any
 of the file extensions supported by MKDocs). Additionally, any README files
@@ -355,41 +356,107 @@ used options include:</p>
 <p>The <code>nav</code> variable is used to create the navigation for the documentation. The
 <code>nav</code> object is an iterable of <a href="#navigation-objects">navigation objects</a> as
 defined by the <a href="../../user-guide/configuration/#nav">nav</a> configuration setting.</p>
-<p>In addition to the iterable of <a href="#navigation-objects">navigation objects</a>, the
+
+
+<div class="doc doc-object doc-class">
+
+
+<a id="mkdocs.structure.nav.Navigation"></a>
+  <div class="doc doc-contents first">
+
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div><p>In addition to the iterable of <a href="#navigation-objects">navigation objects</a>, the
 <code>nav</code> object contains the following attributes:</p>
-<h5 id="navhomepage">nav.homepage<a class="headerlink" href="#navhomepage" title="Permanent link"></a></h5>
-<p>The <a href="#page">page</a> object for the homepage of the site.</p>
-<h5 id="navpages">nav.pages<a class="headerlink" href="#navpages" title="Permanent link"></a></h5>
-<p>A flat list of all <a href="#page">page</a> objects contained in the navigation. This list
-is not necessarily a complete list of all site pages as it does not contain
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.nav.Navigation.homepage" class="doc doc-heading">
+<code class="highlight language-python">homepage: Optional[Page]</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.nav.Navigation.homepage" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>The <a class="autorefs autorefs-internal" href="#mkdocs.structure.pages.Page">page</a> object for the homepage of the site.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.nav.Navigation.pages" class="doc doc-heading">
+<code class="highlight language-python">pages: List[Page]</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.nav.Navigation.pages" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>A flat list of all <a class="autorefs autorefs-internal" href="#mkdocs.structure.pages.Page">page</a> objects contained in the navigation.</p>
+  </div>
+
+</div><p>This list is not necessarily a complete list of all site pages as it does not contain
 pages which are not included in the navigation. This list does match the list
 and order of pages used for all "next page" and "previous page" links. For a
 list of all pages, use the <a href="#pages">pages</a> template variable.</p>
 <h5 id="nav-example">Nav Example<a class="headerlink" href="#nav-example" title="Permanent link"></a></h5>
 <p>Following is a basic usage example which outputs the first and second level
 navigation as a nested list.</p>
-<pre><code class="language-django">{% if nav|length&gt;1 %}
+<pre class="highlight"><code class="language-django">{% if nav|length&gt;1 %}
     &lt;ul&gt;
     {% for nav_item in nav %}
         {% if nav_item.children %}
             &lt;li&gt;{{ nav_item.title }}
                 &lt;ul&gt;
                 {% for nav_item in nav_item.children %}
-                    &lt;li class=&quot;{% if nav_item.active %}current{% endif %}&quot;&gt;
-                        &lt;a href=&quot;{{ nav_item.url|url }}&quot;&gt;{{ nav_item.title }}&lt;/a&gt;
+                    &lt;li class="{% if nav_item.active %}current{% endif %}"&gt;
+                        &lt;a href="{{ nav_item.url|url }}"&gt;{{ nav_item.title }}&lt;/a&gt;
                     &lt;/li&gt;
                 {% endfor %}
                 &lt;/ul&gt;
             &lt;/li&gt;
         {% else %}
-            &lt;li class=&quot;{% if nav_item.active %}current{% endif %}&quot;&gt;
-                &lt;a href=&quot;{{ nav_item.url|url }}&quot;&gt;{{ nav_item.title }}&lt;/a&gt;
+            &lt;li class="{% if nav_item.active %}current{% endif %}"&gt;
+                &lt;a href="{{ nav_item.url|url }}"&gt;{{ nav_item.title }}&lt;/a&gt;
             &lt;/li&gt;
         {% endif %}
     {% endfor %}
     &lt;/ul&gt;
-{% endif %}
-</code></pre>
+{% endif %}</code></pre>
 <h4 id="base_url">base_url<a class="headerlink" href="#base_url" title="Permanent link"></a></h4>
 <p>The <code>base_url</code> provides a relative path to the root of the MkDocs project. While
 this can be used directly by prepending it to a local relative URL, it is best
@@ -412,111 +479,586 @@ variable is <code>None</code>. In templates which are rendered from a Markdown s
 the <code>page</code> variable contains a <code>page</code> object. The same <code>page</code> objects are used
 as <code>page</code> <a href="#navigation-objects">navigation objects</a> in the global
 <a href="#nav">navigation</a> and in the <a href="#pages">pages</a> template variable.</p>
-<p>All <code>page</code> objects contain the following attributes:</p>
-<h5 id="pagetitle">page.title<a class="headerlink" href="#pagetitle" title="Permanent link"></a></h5>
-<p>Contains the Title for the current page.</p>
-<h5 id="pagecontent">page.content<a class="headerlink" href="#pagecontent" title="Permanent link"></a></h5>
-<p>The rendered Markdown as HTML, this is the contents of the documentation.</p>
-<h5 id="pagetoc">page.toc<a class="headerlink" href="#pagetoc" title="Permanent link"></a></h5>
-<p>An iterable object representing the Table of contents for a page. Each item in
-the <code>toc</code> is an <code>AnchorLink</code> which contains the following attributes:</p>
-<ul>
-<li><code>AnchorLink.title</code>: The text of the item.</li>
-<li><code>AnchorLink.url</code>: The hash fragment of a URL pointing to the item.</li>
-<li><code>AnchorLink.level</code>: The zero-based level of the item.</li>
-<li><code>AnchorLink.children</code>: An iterable of any child items.</li>
-</ul>
-<p>The following example would display the top two levels of the Table of Contents
+
+
+<div class="doc doc-object doc-class">
+
+
+<a id="mkdocs.structure.pages.Page"></a>
+  <div class="doc doc-contents first">
+
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div><p>All <code>page</code> objects contain the following attributes:</p>
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.pages.Page.title" class="doc doc-heading">
+<code class="highlight language-python">title: Optional[str]</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.pages.Page.title" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>Contains the Title for the current page.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.pages.Page.content" class="doc doc-heading">
+<code class="highlight language-python">content: Optional[str]</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.pages.Page.content" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>The rendered Markdown as HTML, this is the contents of the documentation.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.pages.Page.toc" class="doc doc-heading">
+<code class="highlight language-python">toc: TableOfContents</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.pages.Page.toc" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>An iterable object representing the Table of contents for a page. Each item in
+the <code>toc</code> is an <a class="autorefs autorefs-internal" href="#mkdocs.structure.toc.AnchorLink"><code>AnchorLink</code></a>.</p>
+  </div>
+
+</div><p>The following example would display the top two levels of the Table of Contents
 for a page.</p>
-<pre><code class="language-django">&lt;ul&gt;
+<pre class="highlight"><code class="language-django">&lt;ul&gt;
 {% for toc_item in page.toc %}
-    &lt;li&gt;&lt;a href=&quot;{{ toc_item.url }}&quot;&gt;{{ toc_item.title }}&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="{{ toc_item.url }}"&gt;{{ toc_item.title }}&lt;/a&gt;&lt;/li&gt;
     {% for toc_item in toc_item.children %}
-        &lt;li&gt;&lt;a href=&quot;{{ toc_item.url }}&quot;&gt;{{ toc_item.title }}&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="{{ toc_item.url }}"&gt;{{ toc_item.title }}&lt;/a&gt;&lt;/li&gt;
     {% endfor %}
 {% endfor %}
-&lt;/ul&gt;
-</code></pre>
-<h5 id="pagemeta">page.meta<a class="headerlink" href="#pagemeta" title="Permanent link"></a></h5>
-<p>A mapping of the metadata included at the top of the markdown page. In this
-example we define a <code>source</code> property above the page title.</p>
-<pre><code class="language-no-highlight">source: generics.py
+&lt;/ul&gt;</code></pre>
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.pages.Page.meta" class="doc doc-heading">
+<code class="highlight language-python">meta: MutableMapping[str, Any]</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.pages.Page.meta" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>A mapping of the metadata included at the top of the markdown page.</p>
+  </div>
+
+</div><p>In this example we define a <code>source</code> property above the page title:</p>
+<pre class="highlight"><code class="language-text">source: generics.py
         mixins.py
 
 # Page title
 
-Content...
-</code></pre>
+Content...</code></pre>
 <p>A template can access this metadata for the page with the <code>meta.source</code>
 variable. This could then be used to link to source files related to the
 documentation page.</p>
-<pre><code class="language-django">{% for filename in page.meta.source %}
-  &lt;a class=&quot;github&quot; href=&quot;https://github.com/.../{{ filename }}&quot;&gt;
-    &lt;span class=&quot;label label-info&quot;&gt;{{ filename }}&lt;/span&gt;
+<pre class="highlight"><code class="language-django">{% for filename in page.meta.source %}
+  &lt;a class="github" href="https://github.com/.../{{ filename }}"&gt;
+    &lt;span class="label label-info"&gt;{{ filename }}&lt;/span&gt;
   &lt;/a&gt;
-{% endfor %}
-</code></pre>
-<h5 id="pageurl">page.url<a class="headerlink" href="#pageurl" title="Permanent link"></a></h5>
-<p>The URL of the page relative to the MkDocs <code>site_dir</code>. It is expected that this
-be used with the <a href="#url">url</a> filter to ensure the URL is relative to the current
+{% endfor %}</code></pre>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h5 id="mkdocs.structure.pages.Page.url" class="doc doc-heading">
+<code class="highlight language-python">url() -&gt; str</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#mkdocs.structure.pages.Page.url" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>The URL of the page relative to the MkDocs <code>site_dir</code>.</p>
+
+  </div>
+
+</div><p>It is expected that this be used with the <a href="#url">url</a> filter to ensure the URL is relative to the current
 page.</p>
-<pre><code class="language-django">&lt;a href=&quot;{{ page.url|url }}&quot;&gt;{{ page.title }}&lt;/a&gt;
-</code></pre>
-<h5 id="pagefile">page.file<a class="headerlink" href="#pagefile" title="Permanent link"></a></h5>
-<p>The documentation <code>File</code> that the page is being rendered from.</p>
-<h5 id="pageabs_url">page.abs_url<a class="headerlink" href="#pageabs_url" title="Permanent link"></a></h5>
-<p>The absolute URL of the page from the server root as determined by the value
-assigned to the <a href="../../user-guide/configuration/#site_url">site_url</a> configuration setting. The value includes any
-subdirectory included in the <code>site_url</code>, but not the domain. <a href="#base_url">base_url</a> should
+<pre class="highlight"><code class="language-django">&lt;a href="{{ page.url|url }}"&gt;{{ page.title }}&lt;/a&gt;</code></pre>
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.pages.Page.file" class="doc doc-heading">
+<code class="highlight language-python">file: File</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.pages.Page.file" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>The documentation <a class="autorefs autorefs-internal" href="../api/#mkdocs.structure.files.File"><code>File</code></a> that the page is being rendered from.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.pages.Page.abs_url" class="doc doc-heading">
+<code class="highlight language-python">abs_url: Optional[str]</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.pages.Page.abs_url" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>The absolute URL of the page from the server root as determined by the value
+assigned to the <a class="autorefs autorefs-internal" href="../../user-guide/configuration/#site_url">site_url</a> configuration setting. The value includes any
+subdirectory included in the <code>site_url</code>, but not the domain. <a class="autorefs autorefs-internal" href="#base_url">base_url</a> should
 not be used with this variable.</p>
-<p>For example, if <code>site_url: https://example.com/</code>, then the value of
+  </div>
+
+</div><p>For example, if <code>site_url: https://example.com/</code>, then the value of
 <code>page.abs_url</code> for the page <code>foo.md</code> would be <code>/foo/</code>. However, if
 <code>site_url: https://example.com/bar/</code>, then the value of <code>page.abs_url</code> for the
 page <code>foo.md</code> would be <code>/bar/foo/</code>.</p>
-<h5 id="pagecanonical_url">page.canonical_url<a class="headerlink" href="#pagecanonical_url" title="Permanent link"></a></h5>
-<p>The full, canonical URL to the current page as determined by the value assigned
-to the <a href="../../user-guide/configuration/#site_url">site_url</a> configuration setting. The value includes the domain and any
-subdirectory included in the <code>site_url</code>. <a href="#base_url">base_url</a> should not be used with this
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.pages.Page.canonical_url" class="doc doc-heading">
+<code class="highlight language-python">canonical_url: Optional[str]</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.pages.Page.canonical_url" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>The full, canonical URL to the current page as determined by the value assigned
+to the <a class="autorefs autorefs-internal" href="../../user-guide/configuration/#site_url">site_url</a> configuration setting. The value includes the domain and any
+subdirectory included in the <code>site_url</code>. <a class="autorefs autorefs-internal" href="#base_url">base_url</a> should not be used with this
 variable.</p>
-<h5 id="pageedit_url">page.edit_url<a class="headerlink" href="#pageedit_url" title="Permanent link"></a></h5>
-<p>The full URL to the source page in the source repository. Typically used to
-provide a link to edit the source page. <a href="#base_url">base_url</a> should not be used with this
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.pages.Page.edit_url" class="doc doc-heading">
+<code class="highlight language-python">edit_url: Optional[str]</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.pages.Page.edit_url" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>The full URL to the source page in the source repository. Typically used to
+provide a link to edit the source page. <a class="autorefs autorefs-internal" href="#base_url">base_url</a> should not be used with this
 variable.</p>
-<h5 id="pageis_homepage">page.is_homepage<a class="headerlink" href="#pageis_homepage" title="Permanent link"></a></h5>
-<p>Evaluates to <code>True</code> for the homepage of the site and <code>False</code> for all other
-pages. This can be used in conjunction with other attributes of the <code>page</code>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h5 id="mkdocs.structure.pages.Page.is_homepage" class="doc doc-heading">
+<code class="highlight language-python">is_homepage() -&gt; bool</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#mkdocs.structure.pages.Page.is_homepage" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>Evaluates to <code>True</code> for the homepage of the site and <code>False</code> for all other pages.</p>
+
+  </div>
+
+</div><p>This can be used in conjunction with other attributes of the <code>page</code>
 object to alter the behavior. For example, to display a different title
 on the homepage:</p>
-<pre><code class="language-django">{% if not page.is_homepage %}{{ page.title }} - {% endif %}{{ site_name }}
-</code></pre>
-<h5 id="pageprevious_page">page.previous_page<a class="headerlink" href="#pageprevious_page" title="Permanent link"></a></h5>
-<p>The page object for the previous page or <code>None</code>. The value will be <code>None</code> if the
-current page is the first item in the site navigation or if the current page is
-not included in the navigation at all. When the value is a page object, the
-usage is the same as for <code>page</code>.</p>
-<h5 id="pagenext_page">page.next_page<a class="headerlink" href="#pagenext_page" title="Permanent link"></a></h5>
-<p>The page object for the next page or <code>None</code>. The value will be <code>None</code> if the
-current page is the last item in the site navigation or if the current page is
-not included in the navigation at all. When the value is a page object, the
-usage is the same as for <code>page</code>.</p>
-<h5 id="pageparent">page.parent<a class="headerlink" href="#pageparent" title="Permanent link"></a></h5>
-<p>The immediate parent of the page in the <a href="#nav">site navigation</a>. <code>None</code> if the
+<pre class="highlight"><code class="language-django">{% if not page.is_homepage %}{{ page.title }} - {% endif %}{{ site_name }}</code></pre>
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.pages.Page.previous_page" class="doc doc-heading">
+<code class="highlight language-python">previous_page: Optional[Page]</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.pages.Page.previous_page" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>The <a class="autorefs autorefs-internal" href="#mkdocs.structure.pages.Page">page</a> object for the previous page or <code>None</code>.
+The value will be <code>None</code> if the current page is the first item in the site navigation
+or if the current page is not included in the navigation at all.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.pages.Page.next_page" class="doc doc-heading">
+<code class="highlight language-python">next_page: Optional[Page]</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.pages.Page.next_page" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>The <a class="autorefs autorefs-internal" href="#mkdocs.structure.pages.Page">page</a> object for the next page or <code>None</code>.
+The value will be <code>None</code> if the current page is the last item in the site navigation
+or if the current page is not included in the navigation at all.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.pages.Page.parent" class="doc doc-heading">
+<code class="highlight language-python">parent: Optional[Section]</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.pages.Page.parent" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>The immediate parent of the page in the site navigation. <code>None</code> if the
 page is at the top level.</p>
-<h5 id="pagechildren">page.children<a class="headerlink" href="#pagechildren" title="Permanent link"></a></h5>
-<p>Pages do not contain children and the attribute is always <code>None</code>.</p>
-<h5 id="pageactive">page.active<a class="headerlink" href="#pageactive" title="Permanent link"></a></h5>
-<p>When <code>True</code>, indicates that this page is the currently viewed page. Defaults
-to <code>False</code>.</p>
-<h5 id="pageis_section">page.is_section<a class="headerlink" href="#pageis_section" title="Permanent link"></a></h5>
-<p>Indicates that the navigation object is a "section" object. Always <code>False</code> for
-page objects.</p>
-<h5 id="pageis_page">page.is_page<a class="headerlink" href="#pageis_page" title="Permanent link"></a></h5>
-<p>Indicates that the navigation object is a "page" object. Always <code>True</code> for
-page objects.</p>
-<h5 id="pageis_link">page.is_link<a class="headerlink" href="#pageis_link" title="Permanent link"></a></h5>
-<p>Indicates that the navigation object is a "link" object. Always <code>False</code> for
-page objects.</p>
-<h3 id="navigation-objects">Navigation Objects<a class="headerlink" href="#navigation-objects" title="Permanent link"></a></h3>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.pages.Page.children" class="doc doc-heading">
+<code class="highlight language-python">children: None = None</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.pages.Page.children" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>Pages do not contain children and the attribute is always <code>None</code>.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h5 id="mkdocs.structure.pages.Page.active" class="doc doc-heading">
+<code class="highlight language-python">active() -&gt; bool</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+      <small class="doc doc-label doc-label-writable"><code>writable</code></small>
+  </span>
+
+<a href="#mkdocs.structure.pages.Page.active" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>When <code>True</code>, indicates that this page is the currently viewed page. Defaults to <code>False</code>.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.pages.Page.is_section" class="doc doc-heading">
+<code class="highlight language-python">is_section: bool = False</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.pages.Page.is_section" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>Indicates that the navigation object is a "section" object. Always <code>False</code> for page objects.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.pages.Page.is_page" class="doc doc-heading">
+<code class="highlight language-python">is_page: bool = True</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.pages.Page.is_page" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>Indicates that the navigation object is a "page" object. Always <code>True</code> for page objects.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.pages.Page.is_link" class="doc doc-heading">
+<code class="highlight language-python">is_link: bool = False</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.pages.Page.is_link" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>Indicates that the navigation object is a "link" object. Always <code>False</code> for page objects.</p>
+  </div>
+
+</div><h4 id="anchorlink">AnchorLink<a class="headerlink" href="#anchorlink" title="Permanent link"></a></h4>
+
+
+<div class="doc doc-object doc-class">
+
+
+<a id="mkdocs.structure.toc.AnchorLink"></a>
+  <div class="doc doc-contents first">
+
+  
+      <p>A single entry in the table of contents.</p>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.toc.AnchorLink.title" class="doc doc-heading">
+<code class="highlight language-python">title: str</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.toc.AnchorLink.title" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The text of the item.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.toc.AnchorLink.level" class="doc doc-heading">
+<code class="highlight language-python">level: int</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.toc.AnchorLink.level" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The zero-based level of the item.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.toc.AnchorLink.children" class="doc doc-heading">
+<code class="highlight language-python">children: List[AnchorLink]</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.toc.AnchorLink.children" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>An iterable of any child items.</p>
+  </div>
+
+</div>
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h5 id="mkdocs.structure.toc.AnchorLink.url" class="doc doc-heading">
+<code class="highlight language-python">url() -&gt; str</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#mkdocs.structure.toc.AnchorLink.url" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The hash fragment of a URL pointing to the item.</p>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div><h3 id="navigation-objects">Navigation Objects<a class="headerlink" href="#navigation-objects" title="Permanent link"></a></h3>
 <p>Navigation objects contained in the <a href="#nav">nav</a> template variable may be one of
 <a href="#section">section</a> objects, <a href="#page">page</a> objects, and <a href="#link">link</a> objects.
 While section objects may contain nested navigation objects, pages and links do
@@ -530,67 +1072,404 @@ contains a list of child navigation objects. Note that sections do not contain
 URLs and are not links of any kind. However, by default, MkDocs sorts index
 pages to the top and the first child might be used as the URL for a section if a
 theme chooses to do so.</p>
-<p>The following attributes are available on <code>section</code> objects:</p>
-<h5 id="sectiontitle">section.title<a class="headerlink" href="#sectiontitle" title="Permanent link"></a></h5>
-<p>The title of the section.</p>
-<h5 id="sectionparent">section.parent<a class="headerlink" href="#sectionparent" title="Permanent link"></a></h5>
-<p>The immediate parent of the section or <code>None</code> if the section is at the top
-level.</p>
-<h5 id="sectionchildren">section.children<a class="headerlink" href="#sectionchildren" title="Permanent link"></a></h5>
-<p>An iterable of all child navigation objects. Children may include nested
-sections, pages and links.</p>
-<h5 id="sectionactive">section.active<a class="headerlink" href="#sectionactive" title="Permanent link"></a></h5>
-<p>When <code>True</code>, indicates that a child page of this section is the current page and
+
+
+<div class="doc doc-object doc-class">
+
+
+<a id="mkdocs.structure.nav.Section"></a>
+  <div class="doc doc-contents first">
+
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div><p>The following attributes are available on <code>section</code> objects:</p>
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.nav.Section.title" class="doc doc-heading">
+<code class="highlight language-python">title: str</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.nav.Section.title" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>The title of the section.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.nav.Section.parent" class="doc doc-heading">
+<code class="highlight language-python">parent: Optional[Section]</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.nav.Section.parent" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>The immediate parent of the section or <code>None</code> if the section is at the top level.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.nav.Section.children" class="doc doc-heading">
+<code class="highlight language-python">children: List[Union[Page, Section, Link]]</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.nav.Section.children" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>An iterable of all child navigation objects. Children may include nested sections, pages and links.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h5 id="mkdocs.structure.nav.Section.active" class="doc doc-heading">
+<code class="highlight language-python">active() -&gt; bool</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+      <small class="doc doc-label doc-label-writable"><code>writable</code></small>
+  </span>
+
+<a href="#mkdocs.structure.nav.Section.active" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>When <code>True</code>, indicates that a child page of this section is the current page and
 can be used to highlight the section as the currently viewed section. Defaults
 to <code>False</code>.</p>
-<h5 id="sectionis_section">section.is_section<a class="headerlink" href="#sectionis_section" title="Permanent link"></a></h5>
-<p>Indicates that the navigation object is a "section" object. Always <code>True</code> for
-section objects.</p>
-<h5 id="sectionis_page">section.is_page<a class="headerlink" href="#sectionis_page" title="Permanent link"></a></h5>
-<p>Indicates that the navigation object is a "page" object. Always <code>False</code> for
-section objects.</p>
-<h5 id="sectionis_link">section.is_link<a class="headerlink" href="#sectionis_link" title="Permanent link"></a></h5>
-<p>Indicates that the navigation object is a "link" object. Always <code>False</code> for
-section objects.</p>
-<h4 id="link">Link<a class="headerlink" href="#link" title="Permanent link"></a></h4>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.nav.Section.is_section" class="doc doc-heading">
+<code class="highlight language-python">is_section: bool = True</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.nav.Section.is_section" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>Indicates that the navigation object is a "section" object. Always <code>True</code> for section objects.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.nav.Section.is_page" class="doc doc-heading">
+<code class="highlight language-python">is_page: bool = False</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.nav.Section.is_page" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>Indicates that the navigation object is a "page" object. Always <code>False</code> for section objects.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.nav.Section.is_link" class="doc doc-heading">
+<code class="highlight language-python">is_link: bool = False</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.nav.Section.is_link" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>Indicates that the navigation object is a "link" object. Always <code>False</code> for section objects.</p>
+  </div>
+
+</div><h4 id="link">Link<a class="headerlink" href="#link" title="Permanent link"></a></h4>
 <p>A <code>link</code> navigation object contains a link which does not point to an internal
-MkDocs page. The following attributes are available on <code>link</code> objects:</p>
-<h5 id="linktitle">link.title<a class="headerlink" href="#linktitle" title="Permanent link"></a></h5>
-<p>The title of the link. This would generally be used as the label of the link.</p>
-<h5 id="linkurl">link.url<a class="headerlink" href="#linkurl" title="Permanent link"></a></h5>
-<p>The URL that the link points to. The URL should always be an absolute URLs and
+MkDocs page.</p>
+
+
+<div class="doc doc-object doc-class">
+
+
+<a id="mkdocs.structure.nav.Link"></a>
+  <div class="doc doc-contents first">
+
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div><p>The following attributes are available on <code>link</code> objects:</p>
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.nav.Link.title" class="doc doc-heading">
+<code class="highlight language-python">title: str</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.nav.Link.title" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>The title of the link. This would generally be used as the label of the link.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.nav.Link.url" class="doc doc-heading">
+<code class="highlight language-python">url: str</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.nav.Link.url" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>The URL that the link points to. The URL should always be an absolute URLs and
 should not need to have <code>base_url</code> prepended.</p>
-<h5 id="linkparent">link.parent<a class="headerlink" href="#linkparent" title="Permanent link"></a></h5>
-<p>The immediate parent of the link. <code>None</code> if the link is at the top level.</p>
-<h5 id="linkchildren">link.children<a class="headerlink" href="#linkchildren" title="Permanent link"></a></h5>
-<p>Links do not contain children and the attribute is always <code>None</code>.</p>
-<h5 id="linkactive">link.active<a class="headerlink" href="#linkactive" title="Permanent link"></a></h5>
-<p>External links cannot be "active" and the attribute is always <code>False</code>.</p>
-<h5 id="linkis_section">link.is_section<a class="headerlink" href="#linkis_section" title="Permanent link"></a></h5>
-<p>Indicates that the navigation object is a "section" object. Always <code>False</code> for
-link objects.</p>
-<h5 id="linkis_page">link.is_page<a class="headerlink" href="#linkis_page" title="Permanent link"></a></h5>
-<p>Indicates that the navigation object is a "page" object. Always <code>False</code> for
-link objects.</p>
-<h5 id="linkis_link">link.is_link<a class="headerlink" href="#linkis_link" title="Permanent link"></a></h5>
-<p>Indicates that the navigation object is a "link" object. Always <code>True</code> for
-link objects.</p>
-<h3 id="extra-context">Extra Context<a class="headerlink" href="#extra-context" title="Permanent link"></a></h3>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.nav.Link.parent" class="doc doc-heading">
+<code class="highlight language-python">parent: Optional[Section]</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.nav.Link.parent" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>The immediate parent of the link. <code>None</code> if the link is at the top level.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.nav.Link.children" class="doc doc-heading">
+<code class="highlight language-python">children: None = None</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.nav.Link.children" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>Links do not contain children and the attribute is always <code>None</code>.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.nav.Link.active" class="doc doc-heading">
+<code class="highlight language-python">active: bool = False</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.nav.Link.active" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>External links cannot be "active" and the attribute is always <code>False</code>.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.nav.Link.is_section" class="doc doc-heading">
+<code class="highlight language-python">is_section: bool = False</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.nav.Link.is_section" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>Indicates that the navigation object is a "section" object. Always <code>False</code> for link objects.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.nav.Link.is_page" class="doc doc-heading">
+<code class="highlight language-python">is_page: bool = False</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.nav.Link.is_page" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>Indicates that the navigation object is a "page" object. Always <code>False</code> for link objects.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h5 id="mkdocs.structure.nav.Link.is_link" class="doc doc-heading">
+<code class="highlight language-python">is_link: bool = True</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.nav.Link.is_link" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>Indicates that the navigation object is a "link" object. Always <code>True</code> for link objects.</p>
+  </div>
+
+</div><h3 id="extra-context">Extra Context<a class="headerlink" href="#extra-context" title="Permanent link"></a></h3>
 <p>Additional variables can be passed to the template with the
 <a href="../../user-guide/configuration/#extra"><code>extra</code></a> configuration option. This is a
 set of key value pairs that can make custom templates far more flexible.</p>
 <p>For example, this could be used to include the project version of all pages
 and a list of links related to the project. This can be achieved with the
 following <code>extra</code> configuration:</p>
-<pre><code class="language-yaml">extra:
+<pre class="highlight"><code class="language-yaml">extra:
     version: 0.13.0
     links:
         - https://github.com/mkdocs
         - https://docs.readthedocs.org/en/latest/builds.html#mkdocs
-        - https://www.mkdocs.org/
-</code></pre>
+        - https://www.mkdocs.org/</code></pre>
 <p>And then displayed with this HTML in the custom theme.</p>
-<pre><code class="language-django">{{ config.extra.version }}
+<pre class="highlight"><code class="language-django">{{ config.extra.version }}
 
 {% if config.extra.links %}
   &lt;ul&gt;
@@ -598,8 +1477,7 @@ following <code>extra</code> configuration:</p>
       &lt;li&gt;{{ link }}&lt;/li&gt;
   {% endfor %}
   &lt;/ul&gt;
-{% endif %}
-</code></pre>
+{% endif %}</code></pre>
 <h2 id="template-filters">Template Filters<a class="headerlink" href="#template-filters" title="Permanent link"></a></h2>
 <p>In addition to <a href="https://jinja.palletsprojects.com/en/latest/templates/#builtin-filters">Jinja's default filters</a>, the following custom filters are
 available to use in MkDocs templates:</p>
@@ -608,14 +1486,12 @@ available to use in MkDocs templates:</p>
 relative and the template context includes a page object, then the URL is
 returned relative to the page object. Otherwise, the URL is returned with
 <a href="#base_url">base_url</a> prepended.</p>
-<pre><code class="language-django">&lt;a href=&quot;{{ page.url|url }}&quot;&gt;{{ page.title }}&lt;/a&gt;
-</code></pre>
+<pre class="highlight"><code class="language-django">&lt;a href="{{ page.url|url }}"&gt;{{ page.title }}&lt;/a&gt;</code></pre>
 <h3 id="tojson">tojson<a class="headerlink" href="#tojson" title="Permanent link"></a></h3>
 <p>Safety convert a Python object to a value in a JavaScript script.</p>
-<pre><code class="language-django">&lt;script&gt;
+<pre class="highlight"><code class="language-django">&lt;script&gt;
     var mkdocs_page_name = {{ page.title|tojson|safe }};
-&lt;/script&gt;
-</code></pre>
+&lt;/script&gt;</code></pre>
 <h2 id="search-and-themes">Search and themes<a class="headerlink" href="#search-and-themes" title="Permanent link"></a></h2>
 <p>As of MkDocs version <em>0.17</em> client side search support has been added to MkDocs
 via the <code>search</code> plugin. A theme needs to provide a few things for the plugin to
@@ -623,10 +1499,9 @@ work with the theme.</p>
 <p>While the <code>search</code> plugin is activated by default, users can disable the plugin
 and themes should account for this. It is recommended that theme templates wrap
 search specific markup with a check for the plugin:</p>
-<pre><code class="language-django">{% if 'search' in config['plugins'] %}
+<pre class="highlight"><code class="language-django">{% if 'search' in config['plugins'] %}
     search stuff here...
-{% endif %}
-</code></pre>
+{% endif %}</code></pre>
 <p>At its most basic functionality, the search plugin will simply provide an index
 file which is no more than a JSON file containing the content of all pages.
 The theme would need to implement its own search functionality client-side.
@@ -635,20 +1510,18 @@ a complete functioning client-side search tool based on <a href="https://lunrjs.
 <p>The following HTML needs to be added to the theme so that the provided
 JavaScript is able to properly load the search scripts and make relative links
 to the search results from the current page.</p>
-<pre><code class="language-django">&lt;script&gt;var base_url = '{{ base_url }}';&lt;/script&gt;
-</code></pre>
+<pre class="highlight"><code class="language-django">&lt;script&gt;var base_url = '{{ base_url }}';&lt;/script&gt;</code></pre>
 <p>With properly configured settings, the following HTML in a template  will add a
 full search implementation to your theme.</p>
-<pre><code class="language-django">&lt;h1 id=&quot;search&quot;&gt;Search Results&lt;/h1&gt;
+<pre class="highlight"><code class="language-django">&lt;h1 id="search"&gt;Search Results&lt;/h1&gt;
 
-&lt;form action=&quot;search.html&quot;&gt;
-  &lt;input name=&quot;q&quot; id=&quot;mkdocs-search-query&quot; type=&quot;text&quot; &gt;
+&lt;form action="search.html"&gt;
+  &lt;input name="q" id="mkdocs-search-query" type="text" &gt;
 &lt;/form&gt;
 
-&lt;div id=&quot;mkdocs-search-results&quot;&gt;
+&lt;div id="mkdocs-search-results"&gt;
   Sorry, page not found.
-&lt;/div&gt;
-</code></pre>
+&lt;/div&gt;</code></pre>
 <p>The JavaScript in the plugin works by looking for the specific ID's used in the
 above HTML. The form input for the user to type the search query must be
 identified with <code>id="mkdocs-search-query"</code> and the div where the results will be
@@ -677,12 +1550,11 @@ provided index file is the responsibility of the theme.</p>
 <p>The search index is written to a JSON file at <code>search/search_index.json</code> in the
 <a href="../../user-guide/configuration/#site_dir">site_dir</a>. The JSON object contained within the file may contain up to three
 objects.</p>
-<pre><code class="language-json">{
+<pre class="highlight"><code class="language-json">{
     config: {...},
     docs: [...],
     index: {...}
-}
-</code></pre>
+}</code></pre>
 <p>If present, the <code>config</code> object contains the key/value pairs of config options
 defined for the plugin in the user's <code>mkdocs.yml</code> config file under
 <code>plugings.search</code>. The <code>config</code> object was new in MkDocs version <em>1.0</em>.</p>
@@ -716,29 +1588,27 @@ your theme, your users can more easily install it, they can rely on a default
 directory called <code>MANIFEST.in</code> and <code>setup.py</code> beside the theme directory which
 contains an empty <code>__init__.py</code> file, a theme configuration file
 (<code>mkdocs_theme.yml</code>), and your template and media files.</p>
-<pre><code class="language-no-highlight">.
+<pre class="highlight"><code class="language-text">.
 |-- MANIFEST.in
 |-- theme_name
 |   |-- __init__.py
 |   |-- mkdocs_theme.yml
 |   |-- main.html
 |   |-- styles.css
-`-- setup.py
-</code></pre>
+`-- setup.py</code></pre>
 <p>The <code>MANIFEST.in</code> file should contain the following contents but with
 theme_name updated and any extra file extensions added to the include.</p>
-<pre><code class="language-no-highlight">recursive-include theme_name *.ico *.js *.css *.png *.html *.eot *.svg *.ttf *.woff
+<pre class="highlight"><code class="language-text">recursive-include theme_name *.ico *.js *.css *.png *.html *.eot *.svg *.ttf *.woff
 recursive-exclude * __pycache__
-recursive-exclude * *.py[co]
-</code></pre>
+recursive-exclude * *.py[co]</code></pre>
 <p>The <code>setup.py</code> should include the following text with the modifications
 described below.</p>
-<pre><code class="language-python">from setuptools import setup, find_packages
+<pre class="highlight"><code class="language-python">from setuptools import setup, find_packages
 
 VERSION = '0.0.1'
 
 setup(
-    name=&quot;mkdocs-themename&quot;,
+    name="mkdocs-themename",
     version=VERSION,
     url='',
     license='',
@@ -753,8 +1623,7 @@ setup(
         ]
     },
     zip_safe=False
-)
-</code></pre>
+)</code></pre>
 <p>Fill in the URL, license, description, author and author email address.</p>
 <p>The name should follow the convention <code>mkdocs-themename</code> (like
 <code>mkdocs-bootstrap</code> and <code>mkdocs-bootswatch</code>), starting with MkDocs, using
@@ -780,19 +1649,16 @@ file as that file is not loaded from <code>theme.custom_dir</code>.</p>
 those options will be made available in the templates to control behavior.
 For example, a theme might want to make a sidebar optional and include the
 following in the <code>mkdocs_theme.yml</code> file:</p>
-<pre><code class="language-yaml">show_sidebar: true
-</code></pre>
+<pre class="highlight"><code class="language-yaml">show_sidebar: true</code></pre>
 <p>Then in a template, that config option could be referenced:</p>
-<pre><code class="language-django">{% if config.theme.show_sidebar %}
-&lt;div id=&quot;sidebar&quot;&gt;...&lt;/div&gt;
-{% endif %}
-</code></pre>
+<pre class="highlight"><code class="language-django">{% if config.theme.show_sidebar %}
+&lt;div id="sidebar"&gt;...&lt;/div&gt;
+{% endif %}</code></pre>
 <p>And the user could override the default in their project's <code>mkdocs.yml</code> config
 file:</p>
-<pre><code class="language-yaml">theme:
+<pre class="highlight"><code class="language-yaml">theme:
     name: themename
-    show_sidebar: false
-</code></pre>
+    show_sidebar: false</code></pre>
 <p>In addition to arbitrary options defined by the theme, MkDocs defines a few
 special options which alters its behavior:</p>
 <div class="admonition block">
@@ -811,19 +1677,15 @@ information.</p>
 to a <code>Locale</code> object. The object contains <code>Locale.language</code> and
 <code>Locale.territory</code> attributes and will resolve as a string from within a
 template. Therefore, the following will work fine:</p>
-<pre><code>&lt;html lang="{ config.theme.locale }"&gt;
-</code></pre>
+<pre class="highlight"><code class="language-html">&lt;html lang="{ config.theme.locale }"&gt;</code></pre>
 <p>If the locale was set to <code>fr_CA</code> (Canadian French), then the above template
 would render as:</p>
-<pre><code>&lt;html lang="fr_CA"&gt;
-</code></pre>
+<pre class="highlight"><code class="language-html">&lt;html lang="fr_CA"&gt;</code></pre>
 <p>If you did not want the territory attribute to be included, then reference
 the <code>language</code> attribute directly:</p>
-<pre><code>&lt;html lang="{ config.theme.locale.language }"&gt;
-</code></pre>
+<pre class="highlight"><code class="language-html">&lt;html lang="{ config.theme.locale.language }"&gt;</code></pre>
 <p>That would render as:</p>
-<pre><code>&lt;html lang="fr"&gt;
-</code></pre>
+<pre class="highlight"><code class="language-html">&lt;html lang="fr"&gt;</code></pre>
 <h4 id="static_templates">static_templates<a class="headerlink" href="#static_templates" title="Permanent link"></a></h4>
 <p>This option mirrors the <a href="../../user-guide/configuration/#theme">theme</a> config option of the same name and allows
 some defaults to be set by the theme. Note that while the user can add
@@ -843,8 +1705,7 @@ done with pip, using <code>pip install .</code> if you are still in the same dir
 the setup.py.</p>
 <p>Most Python packages, including MkDocs, are distributed on PyPI. To do this,
 you should run the following command.</p>
-<pre><code class="language-no-highlight">python setup.py register
-</code></pre>
+<pre class="highlight"><code class="language-bash">python setup.py register</code></pre>
 <p>If you don't have an account setup, you should be prompted to create one.</p>
 <p>For a much more detailed guide, see the official Python packaging
 documentation for <a href="https://packaging.python.org/en/latest/distributing/">Packaging and Distributing Projects</a>.</p>
@@ -864,13 +1725,12 @@ same commands utilized by MkDocs.</p>
 <p>MkDocs includes some helper commands which are light wrappers around <a href="https://babel.pocoo.org/en/latest/setup.html">pybabel's
 commands</a>. To use the commands on your own theme, add the following to
 your theme's <code>setup.py</code> script:</p>
-<pre><code class="language-python">from mkdocs.commands.setup import babel_cmdclass
+<pre class="highlight"><code class="language-python">from mkdocs.commands.setup import babel_cmdclass
 
 setup(
     ...
     cmdclass=babel_cmdclass
-)
-</code></pre>
+)</code></pre>
 <p>Note that <code>cmdclass=babel_cmdclass</code> was added an a parameter passed to
 the <code>setup</code> function.</p>
 <div class="admonition warning">
@@ -886,8 +1746,7 @@ available for use.</p>
 <p>Since the translation commands are embedded in the <code>setup.py</code> script of your
 custom theme they should be called from the root of your theme's working
 tree as follows:</p>
-<pre><code class="language-bash">python setup.py &lt;command_name&gt; [OPTIONS]
-</code></pre>
+<pre class="highlight"><code class="language-bash">python setup.py &lt;command_name&gt; [OPTIONS]</code></pre>
 <p>Each command provides a detailed list of options available with the <code>-h/--help</code>
 option.</p>
 <p>For an overview of the workflow used by MkDocs to translate the built-in
@@ -977,7 +1836,7 @@ the same time, you may override any of parent theme's translations!</p>
 <p>Let's suppose that you're working on your own fork of the
 <a href="https://github.com/mkdocs/mkdocs-basic-theme">mkdocs-basic-theme</a> and want to add translations to it.</p>
 <p>You would first modify the <code>setup.py</code> like this:</p>
-<pre><code class="language-diff">--- a/setup.py
+<pre class="highlight"><code class="language-diff">--- a/setup.py
 +++ b/setup.py
 @@ -1,4 +1,5 @@
  from setuptools import setup, find_packages
@@ -992,11 +1851,10 @@ the same time, you may override any of parent theme's translations!</p>
 -    zip_safe=False
 +    zip_safe=False,
 +    cmdclass=babel_cmdclass
- )
-</code></pre>
+ )</code></pre>
 <p>Next, you would edit the templates by wrapping text in your HTML sources with
 <code>{% trans %}</code> and <code>{% endtrans %}</code> as follows:</p>
-<pre><code class="language-diff">--- a/basic_theme/base.html
+<pre class="highlight"><code class="language-diff">--- a/basic_theme/base.html
 +++ b/basic_theme/base.html
 @@ -88,7 +88,7 @@
 
@@ -1006,8 +1864,7 @@ the same time, you may override any of parent theme's translations!</p>
 +  &lt;h1&gt;{% trans %}This is an example theme for MkDocs.{% endtrans %}&lt;/h1&gt;
 
    &lt;p&gt;
-     It is designed to be read by looking at the theme HTML which is heavily
-</code></pre>
+     It is designed to be read by looking at the theme HTML which is heavily</code></pre>
 <p>Then you would follow the <a href="../translations/">Translation Guide</a> as usual to get your translations
 running.</p>
 <h3 id="packaging-translations-with-your-theme">Packaging Translations with your theme<a class="headerlink" href="#packaging-translations-with-your-theme" title="Permanent link"></a></h3>
@@ -1019,8 +1876,7 @@ be included in a packaged release of a theme. When MkDocs builds a site with
 translations, it only makes use of the binary <code>mo</code> files(s) for the specified
 locale. Therefore, when <a href="#packaging-themes">packaging a theme</a>, you would need to make the
 following addition to your <code>MANIFEST.in</code> file:</p>
-<pre><code class="language-no-highlight">recursive-include theme_name *.mo
-</code></pre>
+<pre class="highlight"><code class="language-text">recursive-include theme_name *.mo</code></pre>
 <p>Then, before building your Python package, you will want to ensure that the
 binary <code>mo</code> file for each locale is up-to-date by running the <code>compile_catalog</code>
 command for each locale. MkDocs expects the binary <code>mo</code> files to be located at

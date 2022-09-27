@@ -7,12 +7,11 @@ import re
 
 from graphviz import Digraph
 
-
-g = Digraph("MkDocs", format="svg")
-g.attr(compound="true", bgcolor="transparent")
-g.graph_attr.update(fontname="inherit", tooltip=" ")
-g.node_attr.update(fontname="inherit", tooltip=" ", style="filled")
-g.edge_attr.update(fontname="inherit", tooltip=" ")
+graph = Digraph("MkDocs", format="svg")
+graph.attr(compound="true", bgcolor="transparent")
+graph.graph_attr.update(fontname="inherit", tooltip=" ")
+graph.node_attr.update(fontname="inherit", tooltip=" ", style="filled")
+graph.edge_attr.update(fontname="inherit", tooltip=" ")
 
 
 def strip_suffix(name):
@@ -61,7 +60,7 @@ def edge(g, a, b, dashed=False, **kwargs):
 
 
 def ensure_order(a, b):
-    edge(g, a, b, style="invis")
+    edge(graph, a, b, style="invis")
 
 
 @contextlib.contextmanager
@@ -80,7 +79,7 @@ def event(g, name, parameters):
         g, f"cluster_{name}", href=f"#{name}", bgcolor="#ffff3388", pencolor="#00000088"
     ) as c:
         label = "|".join(f"<{p}>{p}" for p in parameters.split())
-        node(c, name, shape="record", label=label, fillcolor="#ffffff55")
+        node(c, name, shape="record" if parameters else "point", label=label, fillcolor="#ffffff55")
 
 
 def placeholder_cluster(g, name):
@@ -88,72 +87,74 @@ def placeholder_cluster(g, name):
         node(c, f"placeholder_{name}", label="...", fillcolor="transparent", color="transparent")
 
 
-event(g, "on_config", "config")
-event(g, "on_pre_build", "config")
-event(g, "on_files", "files config")
-event(g, "on_nav", "nav config files")
+event(graph, "on_startup", "command dirty")
 
-edge(g, "load_config", "on_config:config")
-edge(g, "on_config:config", "on_pre_build:config")
-edge(g, "on_config:config", "get_files")
-edge(g, "get_files", "on_files:files")
-edge(g, "on_files:files", "get_nav")
-edge(g, "get_nav", "on_nav:nav")
-edge(g, "on_files:files", "on_nav:files")
+with cluster(graph, "cluster_build", bgcolor="#dddddd11") as g:
+    event(g, "on_config", "config")
+    event(g, "on_pre_build", "config")
+    event(g, "on_files", "files config")
+    event(g, "on_nav", "nav config files")
 
-with cluster(g, "cluster_populate_page") as c:
-    event(c, "on_pre_page", "page config files")
-    event(c, "on_read_source", "page config")
-    event(c, "on_page_markdown", "markdown page config files")
-    event(c, "on_page_content", "html page config files")
+    edge(g, "load_config", "on_config:config")
+    edge(g, "on_config:config", "on_pre_build:config")
+    edge(g, "on_config:config", "get_files")
+    edge(g, "get_files", "on_files:files")
+    edge(g, "on_files:files", "get_nav")
+    edge(g, "get_nav", "on_nav:nav")
+    edge(g, "on_files:files", "on_nav:files")
 
-    edge(c, "on_pre_page:page", "on_read_source:page", style="dashed")
-    edge(c, "cluster_on_read_source", "on_page_markdown:markdown", style="dashed")
-    edge(c, "on_page_markdown:markdown", "render_p", style="dashed")
-    edge(c, "render_p", "on_page_content:html", style="dashed")
+    with cluster(g, "cluster_populate_page") as c:
+        event(c, "on_pre_page", "page config files")
+        event(c, "on_page_read_source", "page config")
+        event(c, "on_page_markdown", "markdown page config files")
+        event(c, "on_page_content", "html page config files")
 
-edge(g, "on_nav:files", "pages_point_a", arrowhead="none")
-edge(g, "pages_point_a", "on_pre_page:page", style="dashed")
-edge(g, "pages_point_a", "cluster_populate_page")
+        edge(c, "on_pre_page:page", "on_page_read_source:page", style="dashed")
+        edge(c, "cluster_on_page_read_source", "on_page_markdown:markdown", style="dashed")
+        edge(c, "on_page_markdown:markdown", "render_p", style="dashed")
+        edge(c, "render_p", "on_page_content:html", style="dashed")
 
-for i in 2, 3:
-    placeholder_cluster(g, f"cluster_populate_page_{i}")
-    edge(g, "pages_point_a", f"cluster_populate_page_{i}", style="dashed")
-    edge(g, f"cluster_populate_page_{i}", "pages_point_b", style="dashed")
+    edge(g, "on_nav:files", "pages_point_a", arrowhead="none")
+    edge(g, "pages_point_a", "on_pre_page:page", style="dashed")
+    edge(g, "pages_point_a", "cluster_populate_page")
+
+    for i in 2, 3:
+        placeholder_cluster(g, f"cluster_populate_page_{i}")
+        edge(g, "pages_point_a", f"cluster_populate_page_{i}", style="dashed")
+        edge(g, f"cluster_populate_page_{i}", "pages_point_b", style="dashed")
+
+    event(g, "on_env", "env config files")
+
+    edge(g, "on_page_content:html", "pages_point_b", style="dashed")
+    edge(g, "pages_point_b", "on_env:files")
+
+    edge(g, "pages_point_b", "pages_point_c", arrowhead="none")
+    edge(g, "pages_point_c", "on_page_context:page", style="dashed")
+
+    with cluster(g, "cluster_build_page") as c:
+        event(c, "on_page_context", "context page config nav")
+        event(c, "on_post_page", "output page config")
+
+        edge(c, "get_context", "on_page_context:context")
+        edge(c, "on_page_context:context", "render")
+        edge(c, "get_template", "render")
+        edge(c, "render", "on_post_page:output")
+        edge(c, "on_post_page:output", "write_file")
+
+    edge(g, "on_nav:nav", "cluster_build_page")
+    edge(g, "on_env:env", "cluster_build_page")
+
+    for i in 2, 3:
+        placeholder_cluster(g, f"cluster_build_page_{i}")
+        edge(g, "pages_point_c", f"cluster_build_page_{i}", style="dashed")
+
+    event(g, "on_post_build", "config")
+
+event(graph, "on_serve", "server config")
+event(graph, "on_shutdown", "")
 
 
-event(g, "on_env", "env config files")
-
-edge(g, "on_page_content:html", "pages_point_b", style="dashed")
-edge(g, "pages_point_b", "on_env:files")
-
-
-edge(g, "pages_point_b", "pages_point_c", arrowhead="none")
-edge(g, "pages_point_c", "on_page_context:page", style="dashed")
-
-with cluster(g, "cluster_build_page") as c:
-    event(c, "on_page_context", "context page config nav")
-    event(c, "on_post_page", "output page config")
-
-    edge(c, "get_context", "on_page_context:context")
-    edge(c, "on_page_context:context", "render")
-    edge(c, "get_template", "render")
-    edge(c, "render", "on_post_page:output")
-    edge(c, "on_post_page:output", "write_file")
-
-
-edge(g, "on_nav:nav", "cluster_build_page")
-edge(g, "on_env:env", "cluster_build_page")
-
-for i in 2, 3:
-    placeholder_cluster(g, f"cluster_build_page_{i}")
-    edge(g, "pages_point_c", f"cluster_build_page_{i}", style="dashed")
-
-
-event(g, "on_post_build", "config")
-event(g, "on_serve", "server config")
-
-
+ensure_order("on_startup", "cluster_build")
 ensure_order("on_pre_build", "on_files")
 ensure_order("on_nav", "cluster_populate_page")
 ensure_order("cluster_populate_page_2", "cluster_populate_page_3")
@@ -162,8 +163,9 @@ ensure_order("pages_point_c", "cluster_build_page")
 ensure_order("cluster_build_page_2", "cluster_build_page_3")
 ensure_order("cluster_build_page", "on_post_build")
 ensure_order("on_post_build", "on_serve")
+ensure_order("on_serve", "on_shutdown")
 
 
-data = g.pipe()
+data = graph.pipe()
 data = data[data.index(b"<svg ") :]
 pathlib.Path(__file__).with_suffix(".svg").write_bytes(data)

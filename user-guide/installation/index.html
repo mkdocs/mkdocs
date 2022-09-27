@@ -13,6 +13,7 @@
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
 
         <script src="../../js/jquery-1.10.2.min.js" defer></script>
@@ -55,7 +56,7 @@
                                 <ul class="dropdown-menu">
                                     
 <li>
-    <a href="../" class="dropdown-item">Overview</a>
+    <a href="../" class="dropdown-item">User Guide</a>
 </li>
                                     
 <li>
@@ -92,7 +93,7 @@
                                 <ul class="dropdown-menu">
                                     
 <li>
-    <a href="../../dev-guide/" class="dropdown-item">Overview</a>
+    <a href="../../dev-guide/" class="dropdown-item">Developer Guide</a>
 </li>
                                     
 <li>
@@ -105,6 +106,10 @@
                                     
 <li>
     <a href="../../dev-guide/plugins/" class="dropdown-item">Plugins</a>
+</li>
+                                    
+<li>
+    <a href="../../dev-guide/api/" class="dropdown-item">API Reference</a>
 </li>
                                 </ul>
                             </li>
@@ -144,7 +149,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/mkdocs/mkdocs/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/user-guide/installation.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -188,11 +193,10 @@
 <p>MkDocs requires a recent version of <a href="https://www.python.org/">Python</a> and the Python package
 manager, <a href="https://pip.readthedocs.io/en/stable/installing/">pip</a>, to be installed on your system.</p>
 <p>You can check if you already have these installed from the command line:</p>
-<pre><code class="language-bash">$ python --version
+<pre class="highlight"><code class="language-console">$ python --version
 Python 3.8.2
 $ pip --version
-pip 20.0.2 from /usr/local/lib/python3.8/site-packages/pip (python 3.8)
-</code></pre>
+pip 20.0.2 from /usr/local/lib/python3.8/site-packages/pip (python 3.8)</code></pre>
 <p>If you already have those packages installed, you may skip down to <a href="#installing-mkdocs">Installing
 MkDocs</a>.</p>
 <h3 id="installing-python">Installing Python<a class="headerlink" href="#installing-python" title="Permanent link"></a></h3>
@@ -210,29 +214,24 @@ normally off by default).</p>
 <p>If you're using a recent version of Python, the Python package manager, <a href="https://pip.readthedocs.io/en/stable/installing/">pip</a>,
 is most likely installed by default. However, you may need to upgrade pip to the
 lasted version:</p>
-<pre><code class="language-bash">pip install --upgrade pip
-</code></pre>
+<pre class="highlight"><code class="language-bash">pip install --upgrade pip</code></pre>
 <p>If you need to install pip for the first time, download <a href="https://bootstrap.pypa.io/get-pip.py">get-pip.py</a>.
 Then run the following command to install it:</p>
-<pre><code class="language-bash">python get-pip.py
-</code></pre>
+<pre class="highlight"><code class="language-bash">python get-pip.py</code></pre>
 <h2 id="installing-mkdocs">Installing MkDocs<a class="headerlink" href="#installing-mkdocs" title="Permanent link"></a></h2>
 <p>Install the <code>mkdocs</code> package using pip:</p>
-<pre><code class="language-bash">pip install mkdocs
-</code></pre>
+<pre class="highlight"><code class="language-bash">pip install mkdocs</code></pre>
 <p>You should now have the <code>mkdocs</code> command installed on your system. Run <code>mkdocs
 --version</code> to check that everything worked okay.</p>
-<pre><code class="language-bash">$ mkdocs --version
-mkdocs, version 1.2.0 from /usr/local/lib/python3.8/site-packages/mkdocs (Python 3.8)
-</code></pre>
+<pre class="highlight"><code class="language-console">$ mkdocs --version
+mkdocs, version 1.2.0 from /usr/local/lib/python3.8/site-packages/mkdocs (Python 3.8)</code></pre>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>
 If you would like manpages installed for MkDocs, the <a href="https://github.com/click-contrib/click-man">click-man</a> tool can
 generate and install them for you. Simply run the following two commands:</p>
-<pre><code>pip install click-man
-click-man --target path/to/man/pages mkdocs
-</code></pre>
+<pre class="highlight"><code class="language-bash">pip install click-man
+click-man --target path/to/man/pages mkdocs</code></pre>
 <p>See the <a href="https://github.com/click-contrib/click-man#automatic-man-page-installation-with-setuptools-and-pip">click-man documentation</a> for an explanation of why manpages are
 not automatically generated and installed by pip.</p>
 </div>
@@ -244,9 +243,8 @@ If you are using Windows, some of the above commands may not work
 out-of-the-box.</p>
 <p>A quick solution may be to preface every Python command with <code>python -m</code>
 like this:</p>
-<pre><code>python -m pip install mkdocs
-python -m mkdocs
-</code></pre>
+<pre class="highlight"><code class="language-bash">python -m pip install mkdocs
+python -m mkdocs</code></pre>
 <p>For a more permanent solution, you may need to edit your <code>PATH</code> environment
 variable to include the <code>Scripts</code> directory of your Python installation.
 Recent versions of Python include a script to do this for you. Navigate to

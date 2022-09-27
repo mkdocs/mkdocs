@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="MkDocs Team">
+        <link rel="canonical" href="https://www.mkdocs.org/dev-guide/api/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>API Reference - MkDocs</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
+        <link href="../../css/extra.css" rel="stylesheet">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/django.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-274394082"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-274394082');
+        </script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">MkDocs</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../.." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../getting-started/" class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../user-guide/" class="dropdown-item">User Guide</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/installation/" class="dropdown-item">Installation</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/writing-your-docs/" class="dropdown-item">Writing Your Docs</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/choosing-your-theme/" class="dropdown-item">Choosing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/customizing-your-theme/" class="dropdown-item">Customizing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/localizing-your-theme/" class="dropdown-item">Localizing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/configuration/" class="dropdown-item">Configuration</a>
+</li>
+                                    
+<li>
+    <a href="../../user-guide/deploying-your-docs/" class="dropdown-item">Deploying Your Docs</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../" class="dropdown-item">Developer Guide</a>
+</li>
+                                    
+<li>
+    <a href="../themes/" class="dropdown-item">Themes</a>
+</li>
+                                    
+<li>
+    <a href="../translations/" class="dropdown-item">Translations</a>
+</li>
+                                    
+<li>
+    <a href="../plugins/" class="dropdown-item">Plugins</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active">API Reference</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../about/release-notes/" class="dropdown-item">Release Notes</a>
+</li>
+                                    
+<li>
+    <a href="../../about/contributing/" class="dropdown-item">Contributing</a>
+</li>
+                                    
+<li>
+    <a href="../../about/license/" class="dropdown-item">License</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../plugins/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../../about/release-notes/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/dev-guide/api.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#api-reference" class="nav-link">API reference</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#mkdocs.structure.files.Files" class="nav-link">Files</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mkdocs.structure.files.File" class="nav-link">File</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mkdocs.config.base.Config" class="nav-link">Config</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mkdocs.livereload.LiveReloadServer" class="nav-link">LiveReloadServer</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="api-reference">API reference<a class="headerlink" href="#api-reference" title="Permanent link"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The main entry point to the API is through <a href="../plugins/#events">Events</a> that are received by plugins. These events' descriptions link back to this page.</p>
+</div>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="mkdocs.structure.files.Files" class="doc doc-heading">
+        <code>mkdocs.structure.files.Files</code>
+
+
+<a href="#mkdocs.structure.files.Files" class="headerlink" title="Permanent link"></a></h2>
+
+
+  <div class="doc doc-contents first">
+
+  
+      <p>A collection of <a class="autorefs autorefs-internal" href="#mkdocs.structure.files.File">File</a> objects.</p>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.Files.__iter__" class="doc doc-heading">
+<code class="highlight language-python">__iter__() -&gt; Iterator[File]</code>
+
+<a href="#mkdocs.structure.files.Files.__iter__" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Iterate over the files within.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.Files.__len__" class="doc doc-heading">
+<code class="highlight language-python">__len__() -&gt; int</code>
+
+<a href="#mkdocs.structure.files.Files.__len__" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The number of files within.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.Files.__contains__" class="doc doc-heading">
+<code class="highlight language-python">__contains__(path: str) -&gt; bool</code>
+
+<a href="#mkdocs.structure.files.Files.__contains__" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Whether the file with this <code>src_uri</code> is in the collection.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.Files.src_paths" class="doc doc-heading">
+<code class="highlight language-python">src_paths() -&gt; Dict[str, File]</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#mkdocs.structure.files.Files.src_paths" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Soft-deprecated, prefer <code>src_uris</code>.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.Files.src_uris" class="doc doc-heading">
+<code class="highlight language-python">src_uris() -&gt; Dict[str, File]</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#mkdocs.structure.files.Files.src_uris" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>A mapping containing every file, with the keys being their
+<a class="autorefs autorefs-internal" href="#mkdocs.structure.files.File.src_uri"><code>src_uri</code></a>.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.Files.get_file_from_path" class="doc doc-heading">
+<code class="highlight language-python">get_file_from_path(path: str) -&gt; Optional[File]</code>
+
+<a href="#mkdocs.structure.files.Files.get_file_from_path" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Return a File instance with File.src_uri equal to path.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.Files.append" class="doc doc-heading">
+<code class="highlight language-python">append(file: File) -&gt; None</code>
+
+<a href="#mkdocs.structure.files.Files.append" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Append file to Files collection.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.Files.remove" class="doc doc-heading">
+<code class="highlight language-python">remove(file: File) -&gt; None</code>
+
+<a href="#mkdocs.structure.files.Files.remove" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Remove file from Files collection.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.Files.copy_static_files" class="doc doc-heading">
+<code class="highlight language-python">copy_static_files(dirty: bool = False) -&gt; None</code>
+
+<a href="#mkdocs.structure.files.Files.copy_static_files" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Copy static files from source to destination.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.Files.documentation_pages" class="doc doc-heading">
+<code class="highlight language-python">documentation_pages() -&gt; Sequence[File]</code>
+
+<a href="#mkdocs.structure.files.Files.documentation_pages" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Return iterable of all Markdown page file objects.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.Files.static_pages" class="doc doc-heading">
+<code class="highlight language-python">static_pages() -&gt; Sequence[File]</code>
+
+<a href="#mkdocs.structure.files.Files.static_pages" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Return iterable of all static page file objects.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.Files.media_files" class="doc doc-heading">
+<code class="highlight language-python">media_files() -&gt; Sequence[File]</code>
+
+<a href="#mkdocs.structure.files.Files.media_files" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Return iterable of all file objects which are not documentation or static pages.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.Files.javascript_files" class="doc doc-heading">
+<code class="highlight language-python">javascript_files() -&gt; Sequence[File]</code>
+
+<a href="#mkdocs.structure.files.Files.javascript_files" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Return iterable of all javascript file objects.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.Files.css_files" class="doc doc-heading">
+<code class="highlight language-python">css_files() -&gt; Sequence[File]</code>
+
+<a href="#mkdocs.structure.files.Files.css_files" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Return iterable of all CSS file objects.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.Files.add_files_from_theme" class="doc doc-heading">
+<code class="highlight language-python">add_files_from_theme(env: jinja2.Environment, config: MkDocsConfig) -&gt; None</code>
+
+<a href="#mkdocs.structure.files.Files.add_files_from_theme" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Retrieve static files from Jinja environment and add to collection.</p>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="mkdocs.structure.files.File" class="doc doc-heading">
+        <code>mkdocs.structure.files.File</code>
+
+
+<a href="#mkdocs.structure.files.File" class="headerlink" title="Permanent link"></a></h2>
+
+
+  <div class="doc doc-contents first">
+
+  
+      <p>A MkDocs File object.</p>
+<p>Points to the source and destination locations of a file.</p>
+<p>The <code>path</code> argument must be a path that exists relative to <code>src_dir</code>.</p>
+<p>The <code>src_dir</code> and <code>dest_dir</code> must be absolute paths on the local file system.</p>
+<p>The <code>use_directory_urls</code> argument controls how destination paths are generated. If <code>False</code>, a Markdown file is
+mapped to an HTML file of the same name (the file extension is changed to <code>.html</code>). If True, a Markdown file is
+mapped to an HTML index file (<code>index.html</code>) nested in a directory using the "name" of the file in <code>path</code>. The
+<code>use_directory_urls</code> argument has no effect on non-Markdown files.</p>
+<p>File objects have the following properties, which are Unicode strings:</p>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="mkdocs.structure.files.File.src_uri" class="doc doc-heading">
+<code class="highlight language-python">src_uri: str</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.files.File.src_uri" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The pure path (always '/'-separated) of the source file relative to the source directory.</p>
+  </div>
+
+</div>
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.File.dest_path" class="doc doc-heading">
+<code class="highlight language-python">dest_path() -&gt; str</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+      <small class="doc doc-label doc-label-writable"><code>writable</code></small>
+  </span>
+
+<a href="#mkdocs.structure.files.File.dest_path" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Same as <code>dest_uri</code> (and synchronized with it) but will use backslashes on Windows. Discouraged.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.File.url_relative_to" class="doc doc-heading">
+<code class="highlight language-python">url_relative_to(other: File) -&gt; str</code>
+
+<a href="#mkdocs.structure.files.File.url_relative_to" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Return url for file relative to other file.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.File.copy_file" class="doc doc-heading">
+<code class="highlight language-python">copy_file(dirty: bool = False) -&gt; None</code>
+
+<a href="#mkdocs.structure.files.File.copy_file" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Copy source file to destination, ensuring parent directories exist.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.File.is_documentation_page" class="doc doc-heading">
+<code class="highlight language-python">is_documentation_page() -&gt; bool</code>
+
+<a href="#mkdocs.structure.files.File.is_documentation_page" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Return True if file is a Markdown page.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.File.is_static_page" class="doc doc-heading">
+<code class="highlight language-python">is_static_page() -&gt; bool</code>
+
+<a href="#mkdocs.structure.files.File.is_static_page" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Return True if file is a static page (HTML, XML, JSON).</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.File.is_media_file" class="doc doc-heading">
+<code class="highlight language-python">is_media_file() -&gt; bool</code>
+
+<a href="#mkdocs.structure.files.File.is_media_file" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Return True if file is not a documentation or static page.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.File.is_javascript" class="doc doc-heading">
+<code class="highlight language-python">is_javascript() -&gt; bool</code>
+
+<a href="#mkdocs.structure.files.File.is_javascript" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Return True if file is a JavaScript file.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.structure.files.File.is_css" class="doc doc-heading">
+<code class="highlight language-python">is_css() -&gt; bool</code>
+
+<a href="#mkdocs.structure.files.File.is_css" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Return True if file is a CSS file.</p>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="mkdocs.config.base.Config" class="doc doc-heading">
+        <code>mkdocs.config.base.Config</code>
+
+
+<a href="#mkdocs.config.base.Config" class="headerlink" title="Permanent link"></a></h2>
+
+
+  <div class="doc doc-contents first">
+      <p class="doc doc-class-bases">
+        Bases: <code><span title="collections.UserDict">UserDict</span></code></p>
+
+  
+      <p>Base class for MkDocs configuration, plugin configuration (and sub-configuration) objects.</p>
+<p>It should be subclassed and have <code>ConfigOption</code>s defined as attributes.
+For examples, see mkdocs/contrib/search/<strong>init</strong>.py and mkdocs/config/defaults.py.</p>
+<p>Behavior as it was prior to MkDocs 1.4 is now handled by LegacyConfig.</p>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.config.base.Config.__new__" class="doc doc-heading">
+<code class="highlight language-python">__new__(*args, **kwargs) -&gt; Config</code>
+
+<a href="#mkdocs.config.base.Config.__new__" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Compatibility: allow referring to <code>LegacyConfig(...)</code> constructor as <code>Config(...)</code>.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.config.base.Config.set_defaults" class="doc doc-heading">
+<code class="highlight language-python">set_defaults() -&gt; None</code>
+
+<a href="#mkdocs.config.base.Config.set_defaults" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Set the base config by going through each validator and getting the
+default if it has one.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.config.base.Config.load_dict" class="doc doc-heading">
+<code class="highlight language-python">load_dict(patch: Optional[dict]) -&gt; None</code>
+
+<a href="#mkdocs.config.base.Config.load_dict" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Load config options from a dictionary.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.config.base.Config.load_file" class="doc doc-heading">
+<code class="highlight language-python">load_file(config_file: IO) -&gt; None</code>
+
+<a href="#mkdocs.config.base.Config.load_file" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Load config options from the open file descriptor of a YAML file.</p>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="mkdocs.livereload.LiveReloadServer" class="doc doc-heading">
+        <code>mkdocs.livereload.LiveReloadServer</code>
+
+
+<a href="#mkdocs.livereload.LiveReloadServer" class="headerlink" title="Permanent link"></a></h2>
+
+
+  <div class="doc doc-contents first">
+      <p class="doc doc-class-bases">
+        Bases: <code>socketserver.<span title="socketserver.ThreadingMixIn">ThreadingMixIn</span></code>, <code><span title="wsgiref.simple_server">wsgiref</span>.<span title="wsgiref.simple_server.simple_server">simple_server</span>.<span title="wsgiref.simple_server.WSGIServer">WSGIServer</span></code></p>
+
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.livereload.LiveReloadServer.watch" class="doc doc-heading">
+<code class="highlight language-python">watch(path: str, func: Optional[Callable] = None, recursive: bool = True) -&gt; None</code>
+
+<a href="#mkdocs.livereload.LiveReloadServer.watch" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Add the 'path' to watched paths, call the function and reload when any file changes under it.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mkdocs.livereload.LiveReloadServer.unwatch" class="doc doc-heading">
+<code class="highlight language-python">unwatch(path: str) -&gt; None</code>
+
+<a href="#mkdocs.livereload.LiveReloadServer.unwatch" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Stop watching file changes for path. Raises if there was no corresponding <code>watch</code> call.</p>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

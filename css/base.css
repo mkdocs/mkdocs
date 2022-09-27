@@ -215,7 +215,7 @@ h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink, h4:hover .head
 
 
 
-.admonition {
+.admonition, details {
     padding: 15px;
     margin-bottom: 20px;
     border: 1px solid transparent;
@@ -223,27 +223,31 @@ h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink, h4:hover .head
     text-align: left;
 }
 
-.admonition.note { /* csslint allow: adjoining-classes */
-    color: #3a87ad;
-    background-color: #d9edf7;
+.admonition.note, details.note { /* csslint allow: adjoining-classes */
+    color: #2e6b89;
+    background-color: #e2f0f7;
     border-color: #bce8f1;
 }
 
-.admonition.warning { /* csslint allow: adjoining-classes */
-    color: #c09853;
-    background-color: #fcf8e3;
+.admonition.warning, details.warning { /* csslint allow: adjoining-classes */
+    color: #7a6032;
+    background-color: #fffae5;
     border-color: #fbeed5;
 }
 
-.admonition.danger { /* csslint allow: adjoining-classes */
-    color: #b94a48;
-    background-color: #f2dede;
+.admonition.danger, details.danger { /* csslint allow: adjoining-classes */
+    color: #7f3130;
+    background-color: #fde3e3;
     border-color: #eed3d7;
 }
 
-.admonition-title {
+.admonition-title, summary {
     font-weight: bold;
     text-align: left;
+}
+
+.admonition>p:last-child, details>p:last-child {
+    margin-bottom: 0;
 }
 
 @media (max-width: 991.98px) {

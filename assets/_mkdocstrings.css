@@ -1,0 +1,12 @@
+
+.doc-contents {
+  padding-left: 20px;
+}
+
+.doc-contents dd>p {
+  margin-bottom: 0.5rem;
+}
+
+.doc-contents dl+dl {
+  margin-top: -0.5rem;
+}

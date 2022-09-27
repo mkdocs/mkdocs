@@ -13,6 +13,7 @@
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
 
         <script src="../../js/jquery-1.10.2.min.js" defer></script>
@@ -55,7 +56,7 @@
                                 <ul class="dropdown-menu">
                                     
 <li>
-    <a href="../" class="dropdown-item">Overview</a>
+    <a href="../" class="dropdown-item">User Guide</a>
 </li>
                                     
 <li>
@@ -92,7 +93,7 @@
                                 <ul class="dropdown-menu">
                                     
 <li>
-    <a href="../../dev-guide/" class="dropdown-item">Overview</a>
+    <a href="../../dev-guide/" class="dropdown-item">Developer Guide</a>
 </li>
                                     
 <li>
@@ -105,6 +106,10 @@
                                     
 <li>
     <a href="../../dev-guide/plugins/" class="dropdown-item">Plugins</a>
+</li>
+                                    
+<li>
+    <a href="../../dev-guide/api/" class="dropdown-item">API Reference</a>
 </li>
                                 </ul>
                             </li>
@@ -144,7 +149,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/mkdocs/mkdocs/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/user-guide/customizing-your-theme.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -197,18 +202,16 @@ directory</a>.</p>
 <p>For example, to change the color of the headers in your documentation, create
 a file called <code>extra.css</code> and place it next to the documentation Markdown. In
 that file add the following CSS.</p>
-<pre><code class="language-CSS">h1 {
+<pre class="highlight"><code class="language-css">h1 {
   color: red;
-}
-</code></pre>
+}</code></pre>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>
 If you are deploying your documentation with <a href="../deploying-your-docs/#readthedocs">ReadTheDocs</a>. You will need
 to explicitly list the CSS and JavaScript files you want to include in
 your config. To do this, add the following to your mkdocs.yml.</p>
-<pre><code>extra_css: [extra.css]
-</code></pre>
+<pre class="highlight"><code class="language-yaml">extra_css: [extra.css]</code></pre>
 </div>
 <p>After making these changes, they should be visible when you run
 <code>mkdocs serve</code> - if you already had this running, you should see that the CSS
@@ -242,7 +245,7 @@ Developer Guide</a> for more information.</p>
 </div>
 <p>For example, the <a href="../choosing-your-theme/#mkdocs">mkdocs</a> theme (<a href="https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes/mkdocs">browse source</a>), contains the following
 directory structure (in part):</p>
-<pre><code class="language-nohighlight">- css\
+<pre class="highlight"><code class="language-nohighlight">- css\
 - fonts\
 - img\
   - favicon.ico
@@ -253,17 +256,14 @@ directory structure (in part):</p>
 - content.html
 - nav-sub.html
 - nav.html
-- toc.html
-</code></pre>
+- toc.html</code></pre>
 <p>To override any of the files contained in that theme, create a new directory
 next to your <code>docs_dir</code>:</p>
-<pre><code class="language-bash">mkdir custom_theme
-</code></pre>
+<pre class="highlight"><code class="language-bash">mkdir custom_theme</code></pre>
 <p>And then point your <code>mkdocs.yml</code> configuration file at the new directory:</p>
-<pre><code class="language-yaml">theme:
+<pre class="highlight"><code class="language-yaml">theme:
     name: mkdocs
-    custom_dir: custom_theme/
-</code></pre>
+    custom_dir: custom_theme/</code></pre>
 <p>To override the 404 error page ("file not found"), add a new template file named
 <code>404.html</code> to the <code>custom_theme</code> directory. For information on what can be
 included in a template, review the <a href="../../dev-guide/themes/">Theme Developer Guide</a>.</p>
@@ -272,7 +272,7 @@ included in a template, review the <a href="../../dev-guide/themes/">Theme Devel
 <p>To include a JavaScript library, copy the library to the <code>custom_theme/js/</code>
 directory.</p>
 <p>Your directory structure should now look like this:</p>
-<pre><code class="language-nohighlight">- docs/
+<pre class="highlight"><code class="language-nohighlight">- docs/
   - index.html
 - custom_theme/
   - img/
@@ -280,8 +280,7 @@ directory.</p>
   - js/
     - somelib.js
   - 404.html
-- config.yml
-</code></pre>
+- config.yml</code></pre>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>
@@ -298,12 +297,11 @@ can be individually overridden in the <code>main.html</code> template. Simply cr
 within that file. Just make sure that the <code>main.html</code> extends <code>base.html</code>. For
 example, to alter the title of the MkDocs theme, your replacement <code>main.html</code>
 template would contain the following:</p>
-<pre><code class="language-django">{% extends &quot;base.html&quot; %}
+<pre class="highlight"><code class="language-django">{% extends "base.html" %}
 
 {% block htmltitle %}
 &lt;title&gt;Custom title goes here&lt;/title&gt;
-{% endblock %}
-</code></pre>
+{% endblock %}</code></pre>
 <p>In the above example, the <code>htmltitle</code> block defined in your custom <code>main.html</code> file
 will be used in place of the default <code>htmltitle</code> block defined in the parent theme.
 You may re-define as many blocks as you desire, as long as those blocks are
@@ -337,25 +335,23 @@ explanation of blocks, consult the <a href="http://jinja.pocoo.org/docs/dev/temp
 won't include it in the pages generated by MkDocs. Therefore, a link needs to
 be added to the library from the HTML.</p>
 <p>Starting the with directory structure above (truncated):</p>
-<pre><code class="language-nohighlight">- docs/
+<pre class="highlight"><code class="language-nohighlight">- docs/
 - custom_theme/
   - js/
     - somelib.js
-- config.yml
-</code></pre>
+- config.yml</code></pre>
 <p>A link to the <code>custom_theme/js/somelib.js</code> file needs to be added to the
 template. As <code>somelib.js</code> is a JavaScript library, it would logically go in the
 <code>libs</code> block. However, a new <code>libs</code> block that only includes the new script will
 replace the block defined in the parent template and any links to libraries in
 the parent template will be removed. To avoid breaking the template, a
 <a href="http://jinja.pocoo.org/docs/dev/templates/#super-blocks">super block</a> can be used with a call to <code>super</code> from within the block:</p>
-<pre><code class="language-django">{% extends &quot;base.html&quot; %}
+<pre class="highlight"><code class="language-django">{% extends "base.html" %}
 
 {% block libs %}
     {{ super() }}
-    &lt;script src=&quot;{{ base_url }}/js/somelib.js&quot;&gt;&lt;/script&gt;
-{% endblock %}
-</code></pre>
+    &lt;script src="{{ base_url }}/js/somelib.js"&gt;&lt;/script&gt;
+{% endblock %}</code></pre>
 <p>Note that the <a href="../../dev-guide/themes/#base_url">base_url</a> template variable was used to ensure that the link is
 always relative to the current page.</p>
 <p>Now the generated pages will include links to the template provided libraries as

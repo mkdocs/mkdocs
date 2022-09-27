@@ -13,6 +13,7 @@
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
 
         <script src="../../js/jquery-1.10.2.min.js" defer></script>
@@ -55,7 +56,7 @@
                                 <ul class="dropdown-menu">
                                     
 <li>
-    <a href="../" class="dropdown-item">Overview</a>
+    <a href="../" class="dropdown-item">User Guide</a>
 </li>
                                     
 <li>
@@ -92,7 +93,7 @@
                                 <ul class="dropdown-menu">
                                     
 <li>
-    <a href="../../dev-guide/" class="dropdown-item">Overview</a>
+    <a href="../../dev-guide/" class="dropdown-item">Developer Guide</a>
 </li>
                                     
 <li>
@@ -105,6 +106,10 @@
                                     
 <li>
     <a href="../../dev-guide/plugins/" class="dropdown-item">Plugins</a>
+</li>
+                                    
+<li>
+    <a href="../../dev-guide/api/" class="dropdown-item">API Reference</a>
 </li>
                                 </ul>
                             </li>
@@ -144,7 +149,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/mkdocs/mkdocs/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/user-guide/choosing-your-theme.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -193,9 +198,8 @@
 themes</a> are available to choose from as well.</p>
 <p>To choose a theme, set the <a href="../configuration/#theme">theme</a> configuration option in your <code>mkdocs.yml</code>
 config file.</p>
-<pre><code class="language-yaml">theme:
-    name: readthedocs
-</code></pre>
+<pre class="highlight"><code class="language-yaml">theme:
+    name: readthedocs</code></pre>
 <h2 id="mkdocs">mkdocs<a class="headerlink" href="#mkdocs" title="Permanent link"></a></h2>
 <p>The default theme, which was built as a custom <a href="https://getbootstrap.com/">Bootstrap</a> theme, supports most
 every feature of MkDocs.</p>
@@ -215,13 +219,12 @@ supports the following options:</p>
 <li>
 <p><strong><code>hljs_languages</code></strong>: By default, highlight.js only supports 23 common
     languages. List additional languages here to include support for them.</p>
-<pre><code>theme:
+<pre class="highlight"><code class="language-yaml">theme:
     name: mkdocs
     highlightjs: true
     hljs_languages:
         - yaml
-        - rust
-</code></pre>
+        - rust</code></pre>
 </li>
 <li>
 <p><strong><code>analytics</code></strong>: Defines configuration options for an analytics service.
@@ -232,11 +235,10 @@ supports the following options:</p>
 tracking ID, which uses the <code>G-</code> format. See Google's documentation to
 <a href="https://support.google.com/analytics/answer/9304153?hl=en&amp;ref_topic=9303319">Set up Analytics for a website and/or app (GA4)</a> or to
 <a href="https://support.google.com/analytics/answer/9744165?hl=en&amp;ref_topic=9303319">Upgrade to a Google Analytics 4 property</a>.</p>
-<pre><code>theme:
+<pre class="highlight"><code class="language-yaml">theme:
     name: mkdocs
     analytics:
-        gtag: G-ABC123
-</code></pre>
+        gtag: G-ABC123</code></pre>
 <p>When set to the default (<code>null</code>) Google Analytics is disabled for the
 site.</p>
 </li>
@@ -244,14 +246,13 @@ site.</p>
 </li>
 <li>
 <p><strong><code>shortcuts</code></strong>: Defines keyboard shortcut keys.</p>
-<pre><code>theme:
+<pre class="highlight"><code class="language-yaml">theme:
     name: mkdocs
     shortcuts:
         help: 191    # ?
         next: 78     # n
         previous: 80 # p
-        search: 83   # s
-</code></pre>
+        search: 83   # s</code></pre>
 <p>All values must be numeric key codes. It is best to use keys which are
 available on all keyboards. You may use <a href="https://keycode.info/">https://keycode.info/</a> to determine
 the key code for a given key.</p>
@@ -279,10 +280,9 @@ the key code for a given key.</p>
 <p><strong><code>nav_style</code></strong>: This adjusts the visual style for the top navigation bar; by
     default, this is set to <code>primary</code> (the default), but it can also be set to
     <code>dark</code> or <code>light</code>.</p>
-<pre><code>theme:
+<pre class="highlight"><code class="language-yaml">theme:
     name: mkdocs
-    nav_style: dark
-</code></pre>
+    nav_style: dark</code></pre>
 </li>
 <li>
 <p><strong id="mkdocs-locale"><code>locale</code></strong>: The locale (language/location) used to
@@ -299,6 +299,9 @@ the key code for a given key.</p>
 <li><code>de</code>: German</li>
 <li><code>fa</code>: Persian (Farsi)</li>
 <li><code>it</code>: Italian</li>
+<li><code>tr_TR</code>: Turkish (Turkey)</li>
+<li><code>ru</code>: Russian</li>
+<li><code>uk</code>: Ukrainian</li>
 </ul>
 <p>See the guide on <a href="../localizing-your-theme/">localizing your theme</a> for more information.</p>
 </li>
@@ -318,13 +321,12 @@ theme supports the following options:</p>
 <li>
 <p><strong><code>hljs_languages</code></strong>: By default, highlight.js only supports 23 common
     languages. List additional languages here to include support for them.</p>
-<pre><code>theme:
+<pre class="highlight"><code class="language-yaml">theme:
     name: readthedocs
     highlightjs: true
     hljs_languages:
         - yaml
-        - rust
-</code></pre>
+        - rust</code></pre>
 </li>
 <li>
 <p><strong><code>analytics</code></strong>: Defines configuration options for an analytics service.</p>
@@ -334,11 +336,10 @@ theme supports the following options:</p>
 tracking ID, which uses the <code>G-</code> format. See Google's documentation to
 <a href="https://support.google.com/analytics/answer/9304153?hl=en&amp;ref_topic=9303319">Set up Analytics for a website and/or app (GA4)</a> or to
 <a href="https://support.google.com/analytics/answer/9744165?hl=en&amp;ref_topic=9303319">Upgrade to a Google Analytics 4 property</a>.</p>
-<pre><code>theme:
+<pre class="highlight"><code class="language-yaml">theme:
     name: readthedocs
     analytics:
-        gtag: G-ABC123
-</code></pre>
+        gtag: G-ABC123</code></pre>
 <p>When set to the default (<code>null</code>) Google Analytics is disabled for the</p>
 </li>
 <li>
@@ -389,6 +390,9 @@ tracking ID, which uses the <code>G-</code> format. See Google's documentation t
 <li><code>de</code>: German</li>
 <li><code>fa</code>: Persian (Farsi)</li>
 <li><code>it</code>: Italian</li>
+<li><code>tr_TR</code>: Turkish (Turkey)</li>
+<li><code>ru</code>: Russian</li>
+<li><code>uk</code>: Ukrainian</li>
 </ul>
 <p>See the guide on <a href="../localizing-your-theme/">localizing your theme</a> for more information.</p>
 </li>

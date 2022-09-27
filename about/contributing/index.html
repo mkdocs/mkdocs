@@ -13,6 +13,7 @@
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
 
         <script src="../../js/jquery-1.10.2.min.js" defer></script>
@@ -55,7 +56,7 @@
                                 <ul class="dropdown-menu">
                                     
 <li>
-    <a href="../../user-guide/" class="dropdown-item">Overview</a>
+    <a href="../../user-guide/" class="dropdown-item">User Guide</a>
 </li>
                                     
 <li>
@@ -92,7 +93,7 @@
                                 <ul class="dropdown-menu">
                                     
 <li>
-    <a href="../../dev-guide/" class="dropdown-item">Overview</a>
+    <a href="../../dev-guide/" class="dropdown-item">Developer Guide</a>
 </li>
                                     
 <li>
@@ -105,6 +106,10 @@
                                     
 <li>
     <a href="../../dev-guide/plugins/" class="dropdown-item">Plugins</a>
+</li>
+                                    
+<li>
+    <a href="../../dev-guide/api/" class="dropdown-item">API Reference</a>
 </li>
                                 </ul>
                             </li>
@@ -144,7 +149,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/mkdocs/mkdocs/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/about/contributing.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -228,14 +233,12 @@ MkDocs you can do so with the following command. This can be useful if you
 want to provide feedback for a new feature or want to confirm if a bug you
 have encountered is fixed in the git master. It is <strong>strongly</strong> recommended
 that you do this within a <a href="https://virtualenv.pypa.io/en/latest/user_guide.html">virtualenv</a>.</p>
-<pre><code class="language-bash">pip install https://github.com/mkdocs/mkdocs/archive/master.tar.gz
-</code></pre>
+<pre class="highlight"><code class="language-bash">pip install https://github.com/mkdocs/mkdocs/archive/master.tar.gz</code></pre>
 <h2 id="installing-for-development">Installing for Development<a class="headerlink" href="#installing-for-development" title="Permanent link"></a></h2>
 <p>First you'll need to fork and clone the repository. Once you have a local
 copy, run the following command. It is <strong>strongly</strong> recommended that you do
 this within a <a href="https://virtualenv.pypa.io/en/latest/user_guide.html">virtualenv</a>.</p>
-<pre><code class="language-bash">pip install --editable .
-</code></pre>
+<pre class="highlight"><code class="language-bash">pip install --editable .</code></pre>
 <p>This will install MkDocs in development mode which binds the <code>mkdocs</code> command
 to the git repository.</p>
 <h2 id="running-the-tests">Running the tests<a class="headerlink" href="#running-the-tests" title="Permanent link"></a></h2>
@@ -264,8 +267,7 @@ with <code>{% trans %}</code> and <code>{% endtrans %}</code> tags.</p>
 theme template, the theme's Portable Object Template (<code>pot</code>) file needs to be
 updated by running the <code>extract_messages</code> command. For example, to update the
 <code>pot</code> file of the <code>mkdocs</code> theme, run the following command:</p>
-<pre><code class="language-bash">python setup.py extract_messages -t mkdocs
-</code></pre>
+<pre class="highlight"><code class="language-bash">python setup.py extract_messages -t mkdocs</code></pre>
 <p>The updated <code>pot</code> file should be included in a PR with the updated template.
 The updated <code>pot</code> file will allow translation contributors to propose the
 translations needed for their preferred language. See the guide on <a href="../../dev-guide/translations/">Translating

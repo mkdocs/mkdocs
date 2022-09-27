@@ -13,6 +13,7 @@
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
 
         <script src="../../js/jquery-1.10.2.min.js" defer></script>
@@ -55,7 +56,7 @@
                                 <ul class="dropdown-menu">
                                     
 <li>
-    <a href="../" class="dropdown-item">Overview</a>
+    <a href="../" class="dropdown-item">User Guide</a>
 </li>
                                     
 <li>
@@ -92,7 +93,7 @@
                                 <ul class="dropdown-menu">
                                     
 <li>
-    <a href="../../dev-guide/" class="dropdown-item">Overview</a>
+    <a href="../../dev-guide/" class="dropdown-item">Developer Guide</a>
 </li>
                                     
 <li>
@@ -105,6 +106,10 @@
                                     
 <li>
     <a href="../../dev-guide/plugins/" class="dropdown-item">Plugins</a>
+</li>
+                                    
+<li>
+    <a href="../../dev-guide/api/" class="dropdown-item">API Reference</a>
 </li>
                                 </ul>
                             </li>
@@ -144,7 +149,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/mkdocs/mkdocs/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/user-guide/deploying-your-docs.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -207,8 +212,7 @@ which require a different work flow when deploying.</p>
 within the project repository (<code>gh-pages</code> by default). After you <code>checkout</code> the
 primary working branch (usually <code>master</code>) of the git repository where you
 maintain the source documentation for your project, run the following command:</p>
-<pre><code class="language-sh">mkdocs gh-deploy
-</code></pre>
+<pre class="highlight"><code class="language-sh">mkdocs gh-deploy</code></pre>
 <p>That's it! Behind the scenes, MkDocs will build your docs and use the
 <a href="https://github.com/davisp/ghp-import">ghp-import</a> tool to commit them to the <code>gh-pages</code> branch and push the
 <code>gh-pages</code> branch to GitHub.</p>
@@ -231,17 +235,15 @@ site files are deployed to the <code>master</code> branch in a dedicated reposit
 with the GitHub account name. Therefore, you need working copies of two
 repositories on our local system. For example, consider the following file
 structure:</p>
-<pre><code class="language-no-highlight">my-project/
+<pre class="highlight"><code class="language-text">my-project/
     mkdocs.yml
     docs/
-orgname.github.io/
-</code></pre>
+orgname.github.io/</code></pre>
 <p>After making and verifying updates to your project you need to change
 directories to the <code>orgname.github.io</code> repository and call the
 <code>mkdocs gh-deploy</code> command from there:</p>
-<pre><code class="language-sh">cd ../orgname.github.io/
-mkdocs gh-deploy --config-file ../my-project/mkdocs.yml --remote-branch master
-</code></pre>
+<pre class="highlight"><code class="language-sh">cd ../orgname.github.io/
+mkdocs gh-deploy --config-file ../my-project/mkdocs.yml --remote-branch master</code></pre>
 <p>Note that you need to explicitly point to the <code>mkdocs.yml</code> configuration file as
 it is no longer in the current working directory. You also need to inform the
 deploy script to commit to the <code>master</code> branch. You may override the default
@@ -293,9 +295,8 @@ need to use a graphical or command line <a href="https://en.wikipedia.org/wiki/F
 the files.</p>
 <p>For example, a typical set of commands from the command line might look
 something like this:</p>
-<pre><code class="language-sh">mkdocs build
-scp -r ./site user@host:/path/to/server/root
-</code></pre>
+<pre class="highlight"><code class="language-sh">mkdocs build
+scp -r ./site user@host:/path/to/server/root</code></pre>
 <p>Of course, you will need to replace <code>user</code> with the username you have with your
 hosting provider and <code>host</code> with the appropriate domain name. Additionally, you
 will need to adjust the <code>/path/to/server/root</code> to match the configuration of
@@ -314,23 +315,20 @@ settings will need to be customized in very specific ways.</p>
 <p><a href="../configuration/#site_url">site_url</a>:</p>
 <p>The <code>site_url</code> must be set to an empty string, which instructs MkDocs to
 build your site so that it will work with the <code>file://</code> scheme.</p>
-<pre><code>site_url: ""
-</code></pre>
+<pre class="highlight"><code class="language-yaml">site_url: ""</code></pre>
 </li>
 <li>
 <p><a href="../configuration/#use_directory_urls">use_directory_urls</a>:</p>
 <p>Set <code>use_directory_urls</code> to <code>false</code>. Otherwise, internal links between
 pages will not work properly.</p>
-<pre><code>use_directory_urls: false
-</code></pre>
+<pre class="highlight"><code class="language-yaml">use_directory_urls: false</code></pre>
 </li>
 <li>
 <p><a href="../configuration/#search">search</a>:</p>
 <p>You will need to either disable the search plugin, or use a third-party
 search plugin which is specifically designed to work with the <code>file://</code>
 scheme. To disable all plugins, set the <code>plugins</code> setting to an empty list.</p>
-<pre><code>plugins: []
-</code></pre>
+<pre class="highlight"><code class="language-yaml">plugins: []</code></pre>
 <p>If you have other plugins enabled, simply ensure that <code>search</code> is not
 included in the list.</p>
 </li>

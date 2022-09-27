@@ -13,6 +13,7 @@
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
 
         <script src="../../js/jquery-1.10.2.min.js" defer></script>
@@ -55,7 +56,7 @@
                                 <ul class="dropdown-menu">
                                     
 <li>
-    <a href="../../user-guide/" class="dropdown-item">Overview</a>
+    <a href="../../user-guide/" class="dropdown-item">User Guide</a>
 </li>
                                     
 <li>
@@ -92,7 +93,7 @@
                                 <ul class="dropdown-menu">
                                     
 <li>
-    <a href="../" class="dropdown-item">Overview</a>
+    <a href="../" class="dropdown-item">Developer Guide</a>
 </li>
                                     
 <li>
@@ -105,6 +106,10 @@
                                     
 <li>
     <a href="../plugins/" class="dropdown-item">Plugins</a>
+</li>
+                                    
+<li>
+    <a href="../api/" class="dropdown-item">API Reference</a>
 </li>
                                 </ul>
                             </li>
@@ -144,7 +149,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/mkdocs/mkdocs/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/dev-guide/translations.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -223,8 +228,7 @@ git working tree on your local machine to make use of the helper scripts.</p>
 and <a href="../../about/contributing/#submitting-pull-requests">Submit a Pull Request</a>. The instructions in this document assume that you
 are working from a properly configured development environment.</p>
 <p>Make sure translation requirements are installed in your environment:</p>
-<pre><code class="language-bash">pip install mkdocs[i18n]
-</code></pre>
+<pre class="highlight"><code class="language-bash">pip install mkdocs[i18n]</code></pre>
 <h2 id="adding-language-translations-to-themes">Adding language translations to themes<a class="headerlink" href="#adding-language-translations-to-themes" title="Permanent link"></a></h2>
 <p>If your favorite language locale is not yet supported on one (or both) of the
 built-in themes (<code>mkdocs</code> and <code>readthedocs</code>), you can easily contribute a
@@ -256,14 +260,12 @@ directory structure for your desired language and prepare a Portable Object
 <p>Use the <code>init_catalog</code> command on each theme (<code>-t &lt;theme&gt;</code>) and provide the
 appropriate language code (<code>-l &lt;language&gt;</code>). For example, to add a translation
 for the Spanish <code>es</code> language to the <code>mkdocs</code> theme, run the following command:</p>
-<pre><code class="language-bash">python setup.py init_catalog -t mkdocs -l es
-</code></pre>
+<pre class="highlight"><code class="language-bash">python setup.py init_catalog -t mkdocs -l es</code></pre>
 <p>The above command will create the following file structure:</p>
-<pre><code class="language-text">mkdocs/themes/mkdocs/locales
+<pre class="highlight"><code class="language-text">mkdocs/themes/mkdocs/locales
 ├── es
 │   └── LC_MESSAGES
-│       └── messages.po
-</code></pre>
+│       └── messages.po</code></pre>
 <p>You can now move on to the next step and <a href="#translating-the-mkdocs-themes">add a
 translation</a> for every text placeholder in the
 localized catalog.</p>
@@ -282,16 +284,14 @@ below to update the theme's <code>messages.po</code> file:</p>
 for.</p>
 <p>To update the <code>fr</code> translation catalog of the <code>mkdocs</code> theme, use the following
 command:</p>
-<pre><code class="language-bash">python setup.py update_catalog -t mkdocs -l fr
-</code></pre>
+<pre class="highlight"><code class="language-bash">python setup.py update_catalog -t mkdocs -l fr</code></pre>
 <p>You can now move on to the next step and <a href="#translating-the-mkdocs-themes">add a translation</a> for every updated
 text placeholder in the localized catalog.</p>
 <h3 id="translating-the-mkdocs-themes">Translating the MkDocs themes<a class="headerlink" href="#translating-the-mkdocs-themes" title="Permanent link"></a></h3>
 <p>Now that your localized <code>messages.po</code> files are ready, all you need to do is
 add a translation in each <code>msgstr</code> item for each <code>msgid</code> item in the file.</p>
-<pre><code class="language-text">msgid &quot;Next&quot;
-msgstr &quot;Siguiente&quot;
-</code></pre>
+<pre class="highlight"><code class="language-text">msgid "Next"
+msgstr "Siguiente"</code></pre>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>
@@ -304,23 +304,20 @@ you'll want to <a href="#testing-theme-translations">test your localized theme</
 <p>To test a theme with translations, you need to first compile the <code>messages.po</code>
 files of your theme into <code>messages.mo</code> files. The following command will compile
 the <code>es</code> translation for the <code>mkdocs</code> theme.</p>
-<pre><code class="language-bash">python setup.py compile_catalog -t mkdocs -l es
-</code></pre>
+<pre class="highlight"><code class="language-bash">python setup.py compile_catalog -t mkdocs -l es</code></pre>
 <p>The above command results in the following file structure:</p>
-<pre><code class="language-text">mkdocs/themes/mkdocs/locales
+<pre class="highlight"><code class="language-text">mkdocs/themes/mkdocs/locales
 ├── es
 │   └── LC_MESSAGES
 │       ├── messages.mo
-│       └── messages.po
-</code></pre>
+│       └── messages.po</code></pre>
 <p>Note that the compiled <code>messages.mo</code> file was generated based on the
 <code>messages.po</code> file that you just edited.</p>
 <p>Then modify the <code>mkdocs.yml</code> file at the root of the project to test the new
 and/or updated locale:</p>
-<pre><code class="language-yaml">theme:
+<pre class="highlight"><code class="language-yaml">theme:
     name: mkdocs
-    locale: es
-</code></pre>
+    locale: es</code></pre>
 <p>Finally, run <code>mkdocs serve</code> to check out your new localized version of the theme.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
