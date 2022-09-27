@@ -27,7 +27,7 @@ The current and past members of the MkDocs team.
 * [@oprypin](https://github.com/oprypin/)
 * [@ultrabug](https://github.com/ultrabug/)
 
-## Version 1.4.0 (2022-09-??)
+## Version 1.4.0 (2022-09-27)
 
 ### Feature upgrades
 
@@ -62,7 +62,7 @@ See [**documentation**](../dev-guide/plugins.md#event-priorities).
 The new events are `on_startup` and `on_shutdown`. They run at the very beginning and very end of an `mkdocs` invocation.  
 `on_startup` also receives information on how `mkdocs` was invoked (e.g. `serve` `--dirtyreload`).
 
-See [**documentation**](../dev-guide/plugins.md#one-time-events).
+See [**documentation**](../dev-guide/plugins.md#events).
 
 #### Replace `File.src_path` to not deal with backslashes (#2930)
 
@@ -92,7 +92,7 @@ See [source code](https://github.com/mkdocs/mkdocs/blob/1.4.0/mkdocs/config/defa
 
 #### Rework ConfigOption schemas as class-based (#2962)
 
-When developing a plugin, one used to specify the settings that it accepts in the `config_scheme` variable on the plugin class.  
+When developing a plugin, the settings that it accepts used to be specified in the `config_scheme` variable on the plugin class.  
 This approach is now soft-deprecated, and instead you should specify the config in a sub-class of `base.Config`.
 
 Old example:
@@ -183,13 +183,13 @@ See [examples in **documentation**](../dev-guide/plugins.md#examples-of-config-d
 
 #### Other changes to config options
 
-`URL`'s default is now `None` instead of `''`. This can still be checked for truthiness in the same way - `if config.some_url:`
+`URL`'s default is now `None` instead of `''`. This can still be checked for truthiness in the same way - `if config.some_url:` (#2962)
 
 `FilesystemObject` is no longer abstract and can be used directly, standing for "file or directory" with optional existence checking (#2938)
 
 Bug fixes:
 
-* Fix `SubConfig`, `ConfigItems`, `MarkdownExtensions` to not accidentally leak values across different instances (#2916, #2290)
+* Fix `SubConfig`, `ConfigItems`, `MarkdownExtensions` to not leak values across different instances (#2916, #2290)
 * `SubConfig` raises the correct kind of validation error without a stack trace (#2938)
 * Fix dot-separated redirect in `config_options.Deprecated(moved_to)` (#2963)
 
@@ -229,9 +229,9 @@ Deprecated config option classes: `ConfigItems` (#2983), `OptionallyRequired` (#
 
 ### Miscellaneous
 
-*   Allow to unwatch files with `LiveReloadServer` (#2777)
+*   If a plugin adds paths to `watch` in `LiveReloadServer`, it can now `unwatch` them. (#2777)
 
-*   Bugfix (regression in 1.2): Support listening on an IPv6 address in `mkdocs serve` (#2951)
+*   Bugfix (regression in 1.2): Support listening on an IPv6 address in `mkdocs serve`. (#2951)
 
 Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.3.1...1.4.0).
 
