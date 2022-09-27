@@ -55,6 +55,9 @@ Plugins can now choose to set a priority value for their event handlers. This ca
 
 If this is set, events with higher priority are called first. Events without a chosen priority get a default of 0. Events that have the same priority are ordered as they appear in the config.
 
+Recommended priority values: `100` "first", `50` "early", `0` "default", `-50` "late", `-100` "last".  
+As different plugins discover more precise relations to each other, the values should be further tweaked.
+
 See [**documentation**](../dev-guide/plugins.md#event-priorities).
 
 #### New events that persist across builds in `mkdocs serve` (#2972)
