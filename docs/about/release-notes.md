@@ -27,6 +27,214 @@ The current and past members of the MkDocs team.
 * [@oprypin](https://github.com/oprypin/)
 * [@ultrabug](https://github.com/ultrabug/)
 
+## Version 1.4.0 (2022-09-27)
+
+### Feature upgrades
+
+#### Hooks (#2978)
+
+The new `hooks:` config allows you to add plugin-like event handlers from local Python files, without needing to set up and install an actual plugin.
+
+See [**documentation**](../user-guide/configuration.md#hooks).
+
+#### `edit_uri` flexibility (#2927)
+
+There is a new `edit_uri_template:` config.  
+It works like `edit_uri` but more generally covers ways to construct an edit URL.  
+See [**documentation**](../user-guide/configuration.md#edit_uri_template).
+
+Additionally, the `edit_uri` functionality will now fully work even if `repo_url` is omitted (#2928)
+
+### Upgrades for plugin developers
+
+NOTE: This release has big changes to the implementation of plugins and their configs. But, the intention is to have zero breaking changes in all reasonably common use cases. Or at the very least if a code fix is required, there should always be a way to stay compatible with older MkDocs versions. Please report if this release breaks something.
+
+#### Customize event order for plugin event handlers (#2973)
+
+Plugins can now choose to set a priority value for their event handlers. This can override the old behavior where for each event type, the handlers are called in the order that their plugins appear in the [`plugins` config](../user-guide/configuration.md#plugins).
+
+If this is set, events with higher priority are called first. Events without a chosen priority get a default of 0. Events that have the same priority are ordered as they appear in the config.
+
+See [**documentation**](../dev-guide/plugins.md#event-priorities).
+
+#### New events that persist across builds in `mkdocs serve` (#2972)
+
+The new events are `on_startup` and `on_shutdown`. They run at the very beginning and very end of an `mkdocs` invocation.  
+`on_startup` also receives information on how `mkdocs` was invoked (e.g. `serve` `--dirtyreload`).
+
+See [**documentation**](../dev-guide/plugins.md#events).
+
+#### Replace `File.src_path` to not deal with backslashes (#2930)
+
+The property `src_path` uses backslashes on Windows, which doesn't make sense as it's a virtual path.  
+To not make a breaking change, there's no change to how *this* property is used, but now you should:
+
+* Use **`File.src_uri`** instead of `File.src_path`
+* and **`File.dest_uri`** instead of `File.dest_path`.
+
+These consistently use forward slashes, and are now the definitive source that MkDocs itself uses.
+
+See [source code](https://github.com/mkdocs/mkdocs/blob/1.4.0/mkdocs/structure/files.py#L151).
+
+As a related tip: you should also stop using `os.path.*` or `pathlib.Path()` to deal with these paths, and instead use `posixpath.*` or `pathlib.PurePosixPath()`
+
+#### MkDocs is type-annotated, ready for use with [mypy](https://mypy.readthedocs.io/) (#2941, #2970)
+
+##### Type annotations for event handler methods (#2931)
+
+MkDocs' plugin event methods now have type annotations. You might have been adding annotations to events already, but now they will be validated to match the original.
+
+See [source code](https://github.com/mkdocs/mkdocs/blob/1.4.0/mkdocs/plugins.py#L165) and [documentation](../dev-guide/plugins.md#events).
+
+One big update is that now you should annotate method parameters more specifically as `config: defaults.MkDocsConfig` instead of `config: base.Config`. This not only makes it clear that it is the [main config of MkDocs itself](https://github.com/mkdocs/mkdocs/blob/1.4.0/mkdocs/config/defaults.py), but also provides type-safe access through attributes of the object (see next section).
+
+See [source code](https://github.com/mkdocs/mkdocs/blob/1.4.0/mkdocs/config/defaults.py) and [documentation](../dev-guide/plugins.md#on_event_name).
+
+#### Rework ConfigOption schemas as class-based (#2962)
+
+When developing a plugin, the settings that it accepts used to be specified in the `config_scheme` variable on the plugin class.  
+This approach is now soft-deprecated, and instead you should specify the config in a sub-class of `base.Config`.
+
+Old example:
+
+```python
+from mkdocs import plugins
+from mkdocs.config import base, config_options
+
+class MyPlugin(plugins.BasePlugin):
+    config_scheme = (
+        ('foo', config_options.Type(int)),
+        ('bar', config_options.Type(str, default='')),
+    )
+
+    def on_page_markdown(self, markdown: str, *, config: base.Config, **kwargs):
+        if self.config['foo'] < 5:
+            if config['site_url'].startswith('http:'):
+                return markdown + self.config['baz']
+```
+
+This code snippet actually has many mistakes but it will pass all type checks and silently run and even succeed in some cases.
+
+So, on to the new equivalent example, changed to new-style schema and attribute-based access:  
+(Complaints from "mypy" added inline)
+
+```python
+from mkdocs import plugins
+from mkdocs.config import base, config_options as c
+
+class MyPluginConfig(base.Config):
+    foo = c.Optional(c.Type(int))
+    bar = c.Type(str, default='')
+
+class MyPlugin(plugins.BasePlugin[MyPluginConfig]):
+    def on_page_markdown(self, markdown: str, *, config: base.MkDocsConfig, **kwargs):
+        if self.config.foo < 5:  # Error, `foo` might be `None`, need to check first.
+            if config.site_url.startswith('http:'):  # Error, MkDocs' `site_url` also might be `None`.
+                return markdown + self.config.baz  # Error, no such attribute `baz`!
+```
+
+This lets you notice the errors from a static type checker before running the code and fix them as such:
+
+```python
+class MyPlugin(plugins.BasePlugin[MyPluginConfig]):
+    def on_page_markdown(self, markdown: str, *, config: base.MkDocsConfig, **kwargs):
+        if self.config.foo is not None and self.config.foo < 5:  # OK, `int < int` is valid.
+            if (config.site_url or '').startswith('http:'):  # OK, `str.startswith(str)` is valid.
+                return markdown + self.config.bar  # OK, `str + str` is valid.
+```
+
+See [**documentation**](../dev-guide/plugins.md#config_scheme).
+
+Also notice that we had to explicitly mark the config attribute `foo` as `Optional`.  
+The new-style config has all attributes marked as required by default, and specifying `required=False` or `required=True` is not allowed!
+
+##### New: `config_options.Optional` (#2962)
+
+Wrapping something into `Optional` is conceptually similar to "I want the default to be `None`" -- and you *have* to express it like that, because writing `default=None` doesn't actually work.
+
+Breaking change: the method `BaseConfigOption.is_required()` was removed. Use `.required` instead. (#2938)  
+And even the `required` property should be mostly unused now.  
+For class-based configs, there's a new definition for whether an option is "required":
+
+* It has no default, and
+* It is not wrapped into `config_options.Optional`.
+
+##### New: `config_options.ListOfItems` (#2938)
+
+Defines a list of items that each must adhere to the same constraint. Kind of like a validated `Type(list)`
+
+Examples how to express a list of integers (with `from mkdocs.config import config_options as c`):
+
+Description | Code entry
+----------- | ----------
+Required to specify | `foo = c.ListOfItems(c.Type(int))`
+Optional, default is [] | `foo = c.ListOfItems(c.Type(int), default=[])`
+Optional, default is None | `foo = c.Optional(c.ListOfItems(c.Type(int)))`
+
+See more [examples in **documentation**](../dev-guide/plugins.md#examples-of-config-definitions).
+
+##### Updated: `config_options.SubConfig` (#2807)
+
+`SubConfig` used to silently ignore all validation of its config options. Now you should pass `validate=True` to it or just use new class-based configs where this became the default.
+
+So, it can be used to validate a nested sub-dict with all keys pre-defined and value types strictly validated.
+
+See [examples in **documentation**](../dev-guide/plugins.md#examples-of-config-definitions).
+
+#### Other changes to config options
+
+`URL`'s default is now `None` instead of `''`. This can still be checked for truthiness in the same way - `if config.some_url:` (#2962)
+
+`FilesystemObject` is no longer abstract and can be used directly, standing for "file or directory" with optional existence checking (#2938)
+
+Bug fixes:
+
+* Fix `SubConfig`, `ConfigItems`, `MarkdownExtensions` to not leak values across different instances (#2916, #2290)
+* `SubConfig` raises the correct kind of validation error without a stack trace (#2938)
+* Fix dot-separated redirect in `config_options.Deprecated(moved_to)` (#2963)
+
+Tweaked logic for handling `ConfigOption.default` (#2938)
+
+Deprecated config option classes: `ConfigItems` (#2983), `OptionallyRequired` (#2962), `RepoURL` (#2927)
+
+### Theme updates
+
+*   Styles of admonitions in "MkDocs" theme (#2981):
+    * Update colors to increase contrast
+    * Apply admonition styles also to `<details>` tag, to support Markdown extensions that provide it ([pymdownx.details](https://facelessuser.github.io/pymdown-extensions/extensions/details/), [callouts](https://oprypin.github.io/markdown-callouts/#collapsible-blocks))
+
+*   Built-in themes now also support these languages:
+    * Russian (#2976)
+    * Turkish (Turkey) (#2946)
+    * Ukrainian (#2980)
+
+### Future compatibility
+
+*   `extra_css:` and `extra_javascript:` warn if a backslash `\` is passed to them. (#2930, #2984)
+
+*   Show `DeprecationWarning`s as INFO messages. (#2907)
+
+    If any plugin or extension that you use relies on deprecated functionality of other libraries, it is at risk of breaking in the near future. Plugin developers should address these in a timely manner.
+
+*   Avoid a dependency on `importlib_metadata` starting from Python 3.10 (#2959)
+
+*   Drop support for Python 3.6 (#2948)
+
+#### Incompatible changes to public APIs
+
+*   `mkdocs.utils`:
+    * `create_media_urls` and `normalize_url` warn if a backslash `\` is passed to them. (#2930)
+    * `is_markdown_file` stops accepting case-insensitive variants such as `.MD`, which is how MkDocs build was already operating. (#2912)
+    * Hard-deprecated: `modified_time`, `reduce_list`, `get_html_path`, `get_url_path`, `is_html_file`, `is_template_file`. (#2912)
+
+### Miscellaneous
+
+*   If a plugin adds paths to `watch` in `LiveReloadServer`, it can now `unwatch` them. (#2777)
+
+*   Bugfix (regression in 1.2): Support listening on an IPv6 address in `mkdocs serve`. (#2951)
+
+Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.3.1...1.4.0).
+
 ## Version 1.3.1 (2022-07-19)
 
 *   Pin Python-Markdown version to &lt;3.4, thus excluding its latest release that breaks too many external extensions (#2893)

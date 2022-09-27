@@ -16,6 +16,9 @@
   // Code block style
   "MD046": { "style": "fenced" },
 
+  // Multiple headings with the same title
+  "MD024": { "siblings_only": true },
+
   // Allow inline HTML
   "MD033": false
 }
