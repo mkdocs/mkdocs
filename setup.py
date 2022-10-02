@@ -74,7 +74,8 @@ setup(
         'importlib_metadata>=4.3; python_version < "3.10"',
         'typing_extensions>=3.10; python_version < "3.8"',
         'packaging>=20.5',
-        'mergedeep>=1.3.4'
+        'mergedeep>=1.3.4',
+        'colorama>=0.4; platform_system == "Windows"',
     ],
     extras_require={"i18n": ['babel>=2.9.0']},
     python_requires='>=3.7',
