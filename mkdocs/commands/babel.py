@@ -1,11 +1,16 @@
 from __future__ import annotations
 
 import sys
+import warnings
 from distutils.errors import DistutilsOptionError
 from os import path
 
 from babel.messages import frontend as babel
 from pkg_resources import EntryPoint
+
+warnings.warn(
+    "mkdocs.commands.babel is never used in MkDocs and will be removed soon.", DeprecationWarning
+)
 
 DEFAULT_MAPPING_FILE = path.normpath(
     path.join(path.abspath(path.dirname(__file__)), '../themes/babel.cfg')

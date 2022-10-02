@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "mkdocs"
 description = "Project documentation with Markdown."
 readme = "README.md"
-# license = "BSD-2-Clause"
+license = "BSD-2-Clause"
 authors = [
     {name = "Tom Christie", email = "tom@tomchristie.com"},
 ]
@@ -30,7 +30,7 @@ classifiers = [
     "Topic :: Documentation",
     "Topic :: Text Processing",
 ]
-dynamic = ["version", "license"]
+dynamic = ["version"]
 requires-python = ">=3.7"
 dependencies = [
     "click >=7.0",

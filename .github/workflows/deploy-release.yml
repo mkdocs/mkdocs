@@ -20,8 +20,8 @@ jobs:
           python -m pip install -U wheel hatch babel
       - name: Compile localization message files
         run: |
-          python setup.py compile_catalog -t mkdocs
-          python setup.py compile_catalog -t readthedocs
+          pybabel compile --statistics --directory mkdocs/themes/mkdocs/locales
+          pybabel compile --statistics --directory mkdocs/themes/readthedocs/locales
       - name: Build
         run: |
           hatch build
