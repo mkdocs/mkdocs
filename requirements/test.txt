@@ -1,2 +1,0 @@
-coverage
-babel>=2.9.0
