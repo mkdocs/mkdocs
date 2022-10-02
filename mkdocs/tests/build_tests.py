@@ -227,8 +227,11 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @mock.patch('mkdocs.utils.write_file')
     @mock.patch('mkdocs.commands.build._build_template', return_value='some content')
     @mock.patch('gzip.GzipFile')
-    def test_build_sitemap_template(self, mock_gzip_gzipfile, mock_build_template, mock_write_file):
-        cfg = load_config()
+    @tempdir()
+    def test_build_sitemap_template(
+        self, site_dir, mock_gzip_gzipfile, mock_build_template, mock_write_file
+    ):
+        cfg = load_config(site_dir=site_dir)
         env = cfg['theme'].get_env()
         build._build_theme_template('sitemap.xml', env, mock.Mock(), cfg, mock.Mock())
         mock_write_file.assert_called_once()
@@ -265,9 +268,10 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
 
     # Test build._build_extra_template
 
+    @tempdir()
     @mock.patch('mkdocs.commands.build.open', mock.mock_open(read_data='template content'))
-    def test_build_extra_template(self):
-        cfg = load_config()
+    def test_build_extra_template(self, site_dir):
+        cfg = load_config(site_dir=site_dir)
         fs = [
             File('foo.html', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
         ]
