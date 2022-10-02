@@ -28,10 +28,8 @@ internationalization/localization plugin.
 ## Localization tooling prerequisites
 
 Theme localization makes use of the [babel][babel] project for generation and
-compilation of localization files. Custom commands are available from the
-MkDocs' `setup.py` script as described below to assist with the process of
-updating and contributing translations. You will need to be working from the
-git working tree on your local machine to make use of the helper scripts.
+compilation of localization files. You will need to be working from the
+git working tree on your local machine to make use of the translation commands.
 
 See the [Contributing Guide] for direction on how to [Install for Development]
 and [Submit a Pull Request]. The instructions in this document assume that you
@@ -81,12 +79,12 @@ Initializing a catalog consists of running a command which will create a
 directory structure for your desired language and prepare a Portable Object
 (`messages.po`) file derived from the `pot` file of the theme.
 
-Use the `init_catalog` command on each theme (`-t <theme>`) and provide the
+Use the `init_catalog` command on each theme's directory and provide the
 appropriate language code (`-l <language>`). For example, to add a translation
 for the Spanish `es` language to the `mkdocs` theme, run the following command:
 
 ```bash
-python setup.py init_catalog -t mkdocs -l es
+pybabel init --input-file mkdocs/themes/mkdocs/messages.pot --output-dir mkdocs/themes/mkdocs/locales --locale es
 ```
 
 The above command will create the following file structure:
@@ -123,7 +121,7 @@ To update the `fr` translation catalog of the `mkdocs` theme, use the following
 command:
 
 ```bash
-python setup.py update_catalog -t mkdocs -l fr
+pybabel update --ignore-obsolete --update-header-comment --input-file mkdocs/themes/mkdocs/messages.pot --output-dir mkdocs/themes/mkdocs/locales --locale fr
 ```
 
 You can now move on to the next step and [add a translation] for every updated
@@ -155,7 +153,7 @@ files of your theme into `messages.mo` files. The following command will compile
 the `es` translation for the `mkdocs` theme.
 
 ```bash
-python setup.py compile_catalog -t mkdocs -l es
+pybabel compile --statistics --directory mkdocs/themes/mkdocs/locales --locale es
 ```
 
 The above command results in the following file structure:

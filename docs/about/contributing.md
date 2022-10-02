@@ -90,7 +90,7 @@ updated by running the `extract_messages` command. For example, to update the
 `pot` file of the `mkdocs` theme, run the following command:
 
 ```bash
-python setup.py extract_messages -t mkdocs
+pybabel extract --project=MkDocs --copyright-holder=MkDocs --msgid-bugs-address='https://github.com/mkdocs/mkdocs/issues' --no-wrap --version="$(grep -Eo "\\b[123][^']+" mkdocs/__init__.py)" --mapping-file mkdocs/themes/babel.cfg --output-file mkdocs/themes/mkdocs/messages.pot mkdocs/themes/mkdocs
 ```
 
 The updated `pot` file should be included in a PR with the updated template.
