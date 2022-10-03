@@ -71,7 +71,7 @@ jobs:
           node-version: 16
       - name: Check with black + isort
         if: always()
-        run: hatch run style:check && git diff --exit-code
+        run: hatch run style:format && git diff --exit-code
       - name: Check with flake8
         if: always()
         run: hatch run style:lint
