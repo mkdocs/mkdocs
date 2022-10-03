@@ -103,7 +103,7 @@ jobs:
           python-version: 3.7
       - name: Install Python dependencies
         run: |
-          python -m pip install setuptools babel
+          python -m pip install babel
       - name: Compile localization message files
         run: |
           pybabel compile --statistics --directory mkdocs/themes/mkdocs/locales
