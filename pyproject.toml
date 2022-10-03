@@ -183,7 +183,6 @@ js = "npm exec --yes -- jshint mkdocs/"
 css = "npm exec --yes -- csslint --quiet mkdocs/"
 check = ["markdown", "js", "css", "spelling"]
 
-
 [tool.hatch.envs.docs]
 dependencies = [
     "Markdown >=3.3.3",
