@@ -5,7 +5,6 @@ import re
 import os
 import sys
 
-from mkdocs.commands.setup import babel_cmdclass
 
 with open('README.md') as f:
     long_description = f.read()
@@ -23,28 +22,6 @@ def get_packages(package):
     return [dirpath
             for dirpath, dirnames, filenames in os.walk(package)
             if os.path.exists(os.path.join(dirpath, '__init__.py'))]
-
-
-if sys.argv[-1] == 'publish':
-    if os.system("pip freeze | grep wheel"):
-        print("wheel not installed.\nUse `pip install wheel`.\nExiting.")
-        sys.exit()
-    if os.system("pip freeze | grep twine"):
-        print("twine not installed.\nUse `pip install twine`.\nExiting.")
-        sys.exit()
-    if os.system("pip freeze | grep Babel"):
-        print("babel not installed.\nUse `pip install babel`.\nExiting.")
-        sys.exit()
-    for locale in os.listdir("mkdocs/themes/mkdocs/locales"):
-        os.system(f"python setup.py compile_catalog -t mkdocs -l {locale}")
-        os.system(f"python setup.py compile_catalog -t readthedocs -l {locale}")
-    os.system("python setup.py sdist bdist_wheel")
-    os.system("twine upload dist/*")
-    print("You probably want to also tag the version now:")
-    version = get_version("mkdocs")
-    print(f"  git tag -a {version} -m 'version {version}'")
-    print("  git push --tags")
-    sys.exit()
 
 
 setup(
@@ -112,7 +89,6 @@ setup(
         'Topic :: Text Processing',
     ],
     zip_safe=False,
-    cmdclass=babel_cmdclass,
 )
 
 # (*) Please direct queries to the discussion group:

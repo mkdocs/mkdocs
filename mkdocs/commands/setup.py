@@ -1,3 +1,9 @@
+import warnings
+
+warnings.warn(
+    "mkdocs.commands.setup is never used in MkDocs and will be removed soon.", DeprecationWarning
+)
+
 try:
     from mkdocs.commands.babel import (
         compile_catalog,
