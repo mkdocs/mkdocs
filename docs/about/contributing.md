@@ -53,14 +53,14 @@ to the git repository.
 
 ## Running the tests
 
-To run the tests, it is recommended that you use [tox].
+To run the tests, it is recommended that you use [Hatch].
 
-Install Tox using [pip] by running the command `pip install tox`.
-Then the test suite can be run for MkDocs by running the command `tox` in the
+Install Hatch using [pip] by running the command `pip install hatch`.
+Then the test suite can be run for MkDocs by running the command `hatch run all` in the
 root of your MkDocs repository.
 
 It will attempt to run the tests against all of the Python versions we
-support. So don't be concerned if you are missing some and they fail. The rest
+support. So don't be concerned if you are missing some. The rest
 will be verified by [GitHub Actions] when you submit a pull request.
 
 ## Translating themes
@@ -105,7 +105,7 @@ file so that everything is ready for translators to do their job.
 
 [virtualenv]: https://virtualenv.pypa.io/en/latest/user_guide.html
 [pip]: https://pip.pypa.io/en/stable/
-[tox]: https://tox.readthedocs.io/en/latest/
+[Hatch]: https://hatch.pypa.io/
 [GitHub Actions]: https://docs.github.com/actions
 [PyPA Code of Conduct]: https://www.pypa.io/en/latest/code-of-conduct/
 [Translating Themes]: ../dev-guide/translations.md
