@@ -712,53 +712,49 @@ class Theme(BaseConfigOption[theme.Theme]):
         super().__init__()
         self.default = default
 
-    def run_validation(self, value):
-        if value is None and self.default is not None:
-            value = {'name': self.default}
+    def pre_validation(self, config, key_name):
+        self.config_file_path = config.config_file_path
 
-        if isinstance(value, str):
-            value = {'name': value}
+    def run_validation(self, value) -> theme.Theme:
+        if value is None and self.default is not None:
+            theme_config = {'name': self.default}
+        elif isinstance(value, str):
+            theme_config = {'name': value}
+        elif isinstance(value, dict):
+            if 'name' not in value:
+                raise ValidationError("No theme name set.")
+            theme_config = value
+        else:
+            raise ValidationError(
+                f'Invalid type {type(value)}. Expected a string or key/value pairs.'
+            )
 
         themes = utils.get_theme_names()
-
-        if isinstance(value, dict):
-            if 'name' in value:
-                if value['name'] is None or value['name'] in themes:
-                    return value
-
-                raise ValidationError(
-                    f"Unrecognised theme name: '{value['name']}'. "
-                    f"The available installed themes are: {', '.join(themes)}"
-                )
-
-            raise ValidationError("No theme name set.")
-
-        raise ValidationError(f'Invalid type {type(value)}. Expected a string or key/value pairs.')
-
-    def post_validation(self, config, key_name):
-        theme_config = config[key_name]
+        if theme_config['name'] is not None and theme_config['name'] not in themes:
+            raise ValidationError(
+                f"Unrecognised theme name: '{theme_config['name']}'. "
+                f"The available installed themes are: {', '.join(themes)}"
+            )
 
         if not theme_config['name'] and 'custom_dir' not in theme_config:
-            raise ValidationError(
-                f"At least one of '{key_name}.name' or '{key_name}.custom_dir' must be defined."
-            )
+            raise ValidationError("At least one of 'name' or 'custom_dir' must be defined.")
 
         # Ensure custom_dir is an absolute path
         if 'custom_dir' in theme_config and not os.path.isabs(theme_config['custom_dir']):
-            config_dir = os.path.dirname(config.config_file_path)
+            config_dir = os.path.dirname(self.config_file_path)
             theme_config['custom_dir'] = os.path.join(config_dir, theme_config['custom_dir'])
 
         if 'custom_dir' in theme_config and not os.path.isdir(theme_config['custom_dir']):
             raise ValidationError(
-                "The path set in {name}.custom_dir ('{path}') does not exist.".format(
-                    path=theme_config['custom_dir'], name=key_name
+                "The path set in custom_dir ('{path}') does not exist.".format(
+                    path=theme_config['custom_dir']
                 )
             )
 
         if 'locale' in theme_config and not isinstance(theme_config['locale'], str):
-            raise ValidationError(f"'{key_name}.locale' must be a string.")
+            raise ValidationError("'locale' must be a string.")
 
-        config[key_name] = theme.Theme(**theme_config)
+        return theme.Theme(**theme_config)
 
 
 class Nav(OptionallyRequired):

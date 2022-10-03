@@ -1011,9 +1011,7 @@ class ThemeTest(TestCase):
         class Schema(Config):
             option = c.Theme()
 
-        with self.expect_error(
-            option="At least one of 'option.name' or 'option.custom_dir' must be defined."
-        ):
+        with self.expect_error(option="At least one of 'name' or 'custom_dir' must be defined."):
             self.get_config(Schema, {'option': config})
 
     def test_theme_config_missing_name(self) -> None:
@@ -1063,9 +1061,7 @@ class ThemeTest(TestCase):
         class Schema(Config):
             theme = c.Theme()
 
-        with self.expect_error(
-            theme="At least one of 'theme.name' or 'theme.custom_dir' must be defined."
-        ):
+        with self.expect_error(theme="At least one of 'name' or 'custom_dir' must be defined."):
             self.get_config(Schema, config)
 
     @tempdir()
@@ -1081,9 +1077,7 @@ class ThemeTest(TestCase):
         class Schema(Config):
             theme = c.Theme()
 
-        with self.expect_error(
-            theme=f"The path set in theme.custom_dir ('{path}') does not exist."
-        ):
+        with self.expect_error(theme=f"The path set in custom_dir ('{path}') does not exist."):
             self.get_config(Schema, config)
 
     def test_post_validation_locale_none(self) -> None:
@@ -1097,7 +1091,7 @@ class ThemeTest(TestCase):
         class Schema(Config):
             theme = c.Theme()
 
-        with self.expect_error(theme="'theme.locale' must be a string."):
+        with self.expect_error(theme="'locale' must be a string."):
             self.get_config(Schema, config)
 
     def test_post_validation_locale_invalid_type(self) -> None:
@@ -1111,7 +1105,7 @@ class ThemeTest(TestCase):
         class Schema(Config):
             theme = c.Theme()
 
-        with self.expect_error(theme="'theme.locale' must be a string."):
+        with self.expect_error(theme="'locale' must be a string."):
             self.get_config(Schema, config)
 
     def test_post_validation_locale(self) -> None:
