@@ -67,15 +67,15 @@ readthedocs = "mkdocs.themes.readthedocs"
 [project.entry-points."mkdocs.plugins"]
 search = "mkdocs.contrib.search:SearchPlugin"
 
-[tool.hatch.build]
-include = ["/mkdocs"]
-artifacts = ["/mkdocs/**/*.mo"]
-
-[tool.hatch.build.targets.wheel]
-exclude = ["/mkdocs/tests/integration", "*.po", "*.pot", "babel.cfg"]
-
 [tool.hatch.version]
 path = "mkdocs/__init__.py"
+
+[tool.hatch.build]
+artifacts = ["/mkdocs/**/*.mo"]
+[tool.hatch.build.targets.sdist]
+include = ["/mkdocs", "/LICENSE", "/pyproject.toml", "/README.md"]
+[tool.hatch.build.targets.wheel]
+exclude = ["/mkdocs/tests/integration", "*.po", "*.pot", "babel.cfg"]
 
 [tool.black]
 line-length = 100
