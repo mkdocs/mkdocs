@@ -11,7 +11,7 @@ from mkdocs.config import base
 from mkdocs.config import config_options as c
 from mkdocs.config.base import ValidationError
 from mkdocs.exceptions import Abort, BuildError, PluginError
-from mkdocs.tests.base import load_config
+from mkdocs.tests.base import load_config, tempdir
 
 
 class _DummyPluginConfig(base.Config):
@@ -222,7 +222,8 @@ class TestPluginCollection(unittest.TestCase):
         with self.assertRaises(KeyError):
             collection.run_event('unknown', 'page content')
 
-    def test_run_build_error_event(self):
+    @tempdir()
+    def test_run_build_error_event(self, site_dir):
         build_errors = []
 
         class PluginRaisingError(plugins.BasePlugin):
@@ -251,27 +252,27 @@ class TestPluginCollection(unittest.TestCase):
             def on_build_error(self, error, **kwargs):
                 build_errors.append(error)
 
-        cfg = load_config()
+        cfg = load_config(site_dir=site_dir)
         cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='pre_page')
         with self.assertLogs('mkdocs', level='ERROR'):
             self.assertRaises(Abort, build.build, cfg)
 
-        cfg = load_config()
+        cfg = load_config(site_dir=site_dir)
         cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='page_markdown')
         with self.assertLogs('mkdocs', level='ERROR'):
             self.assertRaises(Abort, build.build, cfg)
 
-        cfg = load_config()
+        cfg = load_config(site_dir=site_dir)
         cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='page_content')
         with self.assertLogs('mkdocs', level='ERROR'):
             self.assertRaises(Abort, build.build, cfg)
 
-        cfg = load_config()
+        cfg = load_config(site_dir=site_dir)
         cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='post_page')
         with self.assertLogs('mkdocs', level='ERROR'):
             self.assertRaises(ValueError, build.build, cfg)
 
-        cfg = load_config()
+        cfg = load_config(site_dir=site_dir)
         cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='')
         build.build(cfg)
 
