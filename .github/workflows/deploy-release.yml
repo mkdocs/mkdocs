@@ -17,7 +17,7 @@ jobs:
           python-version: 3.9
       - name: Install dependencies
         run: |
-          python -m pip install -U wheel hatch babel
+          python -m pip install -U hatch babel
       - name: Compile localization message files
         run: |
           pybabel compile --statistics --directory mkdocs/themes/mkdocs/locales
