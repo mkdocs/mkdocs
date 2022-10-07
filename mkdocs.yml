@@ -42,6 +42,7 @@ markdown_extensions:
     - mdx_gh_links:
         user: mkdocs
         repo: mkdocs
+    - mkdocs-click
 
 copyright: Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.
 
