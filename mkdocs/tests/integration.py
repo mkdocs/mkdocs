@@ -18,16 +18,15 @@ TODOs
 import logging
 import os
 import subprocess
+import tempfile
 
 import click
-
-from mkdocs import utils
 
 log = logging.getLogger('mkdocs')
 
 DIR = os.path.dirname(__file__)
 MKDOCS_CONFIG = os.path.abspath(os.path.join(DIR, '../../mkdocs.yml'))
-MKDOCS_THEMES = utils.get_theme_names()
+MKDOCS_THEMES = ['mkdocs', 'readthedocs']
 TEST_PROJECTS = os.path.abspath(os.path.join(DIR, 'integration'))
 
 
@@ -36,9 +35,12 @@ TEST_PROJECTS = os.path.abspath(os.path.join(DIR, 'integration'))
     '--output',
     help="The output directory to use when building themes",
     type=click.Path(file_okay=False, writable=True),
-    required=True,
 )
 def main(output=None):
+    if output is None:
+        directory = tempfile.TemporaryDirectory(prefix='mkdocs_integration-')
+        output = directory.name
+
     log.propagate = False
     stream = logging.StreamHandler()
     formatter = logging.Formatter("\033[1m\033[1;32m *** %(message)s *** \033[0m")
@@ -46,7 +48,7 @@ def main(output=None):
     log.addHandler(stream)
     log.setLevel(logging.DEBUG)
 
-    base_cmd = ['mkdocs', 'build', '-s', '--site-dir']
+    base_cmd = ['mkdocs', 'build', '-q', '-s', '--site-dir']
 
     log.debug("Building installed themes.")
     for theme in sorted(MKDOCS_THEMES):

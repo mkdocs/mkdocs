@@ -11,15 +11,15 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         include:
           - python-version: 3.7
-            tox-env: py37
+            py: py37
           - python-version: 3.8
-            tox-env: py38
+            py: py38
           - python-version: 3.9
-            tox-env: py39
+            py: py39
           - python-version: '3.10'
-            tox-env: py310
+            py: py310
           - python-version: pypy-3.7-v7.x
-            tox-env: pypy3
+            py: pypy3
         # Just to slim down the test matrix:
         exclude:
           - python-version: 3.8
@@ -28,8 +28,6 @@ jobs:
             os: windows-latest
           - python-version: 3.9
             os: ubuntu-latest
-    env:
-      TOXENV: ${{ matrix.tox-env }}-{unittests,min-req,integration,integration-no-babel}
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -39,10 +37,13 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip tox
-      - name: Run tox
+          python -m pip install --upgrade hatch
+      - name: Run tests
         run: |
-          python -m tox --discover $(which python)
+          hatch run +py=${{ matrix.py }} +type= test:with-coverage
+      - name: Run integration tests
+        run: |
+          hatch run +py=${{ matrix.py }} +type= integration:test
         shell: bash
       - name: Upload Codecov Results
         if: success()
@@ -50,7 +51,7 @@ jobs:
         with:
           file: ./coverage.xml
           flags: unittests
-          name: ${{ matrix.os }}/${{ matrix.tox-env }}
+          name: ${{ matrix.os }}/${{ matrix.py }}
           fail_ci_if_error: false
 
   lint:
@@ -63,35 +64,32 @@ jobs:
           python-version: '3.10'
       - name: Install Python dependencies
         run: |
-          python -m pip install --upgrade pip tox
+          python -m pip install --upgrade hatch
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
           node-version: 16
-      - name: Check with isort
+      - name: Check with black + isort
         if: always()
-        run: python -m tox -e isort && git diff --exit-code
-      - name: Check with black
-        if: always()
-        run: python -m tox -e black && git diff --exit-code
+        run: hatch run style:format && git diff --exit-code
       - name: Check with flake8
         if: always()
-        run: python -m tox -e flake8
+        run: hatch run style:lint
       - name: Check with mypy
         if: always()
-        run: python -m tox -e mypy
-      - name: Check with markdown-lint
+        run: hatch run types:check
+      - name: Check Markdown style
         if: always()
-        run: python -m tox -e markdown-lint
-      - name: Check with jshint
+        run: hatch run lint:markdown
+      - name: Check JS style
         if: always()
-        run: python -m tox -e jshint
-      - name: Check with csslint
+        run: hatch run lint:js
+      - name: Check CSS style
         if: always()
-        run: python -m tox -e csslint
-      - name: Check with codespell
+        run: hatch run lint:css
+      - name: Check spelling
         if: always()
-        run: python -m tox -e codespell
+        run: hatch run lint:spelling
 
   package:
     runs-on: ubuntu-latest
