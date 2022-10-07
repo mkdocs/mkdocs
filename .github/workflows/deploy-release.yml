@@ -6,7 +6,6 @@ on:
     - '*'
 
 jobs:
-
   pypi:
     runs-on: ubuntu-latest
     steps:
@@ -15,14 +14,10 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
-      - name: Install dependencies
+      - name: Install Hatch
         run: |
-          python -m pip install -U hatch babel
-      - name: Compile localization message files
-        run: |
-          pybabel compile --statistics --directory mkdocs/themes/mkdocs/locales
-          pybabel compile --statistics --directory mkdocs/themes/readthedocs/locales
-      - name: Build
+          python -m pip install -U hatch
+      - name: Build package
         run: |
           hatch build
       - name: Publish
