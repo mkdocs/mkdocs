@@ -47,7 +47,7 @@ class TestCase(unittest.TestCase):
         self,
         config_class: Type[SomeConfig],
         cfg: Dict[str, Any],
-        warnings={},
+        warnings: Dict[str, str] = {},
         config_file_path=None,
     ) -> SomeConfig:
         config = config_class(config_file_path=config_file_path)
@@ -447,7 +447,7 @@ class URLTest(TestCase):
         class Schema(Config):
             option = c.URL()
 
-        with self.expect_error(option="Unable to parse the URL."):
+        with self.expect_error(option="Expected a string, got <class 'int'>"):
             self.get_config(Schema, {'option': 1})
 
 
@@ -1240,7 +1240,7 @@ class SubConfigTest(TestCase):
         conf = self.get_config(
             Schema,
             {'option': {'unknown': 0}},
-            warnings=dict(option=('unknown', 'Unrecognised configuration name: unknown')),
+            warnings=dict(option="Sub-option 'unknown': Unrecognised configuration name: unknown"),
         )
         self.assertEqual(conf.option, {"unknown": 0})
 
@@ -1819,7 +1819,7 @@ class PluginsTest(TestCase):
             self.get_config(Schema, cfg)
 
 
-class TestHooks(TestCase):
+class HooksTest(TestCase):
     class Schema(Config):
         plugins = c.Plugins(default=[])
         hooks = c.Hooks('plugins')
@@ -1848,6 +1848,13 @@ class TestHooks(TestCase):
         )
         self.assertEqual(hook.on_page_markdown('foo foo'), 'zoo zoo')  # type: ignore[call-arg]
         self.assertFalse(hasattr(hook, 'on_nav'))
+
+    def test_hooks_wrong_type(self) -> None:
+        with self.expect_error(hooks="Expected a list of items, but a <class 'int'> was given."):
+            self.get_config(self.Schema, {'hooks': 6})
+
+        with self.expect_error(hooks="Expected type: <class 'str'> but received: <class 'int'>"):
+            self.get_config(self.Schema, {'hooks': [7]})
 
 
 class SchemaTest(TestCase):

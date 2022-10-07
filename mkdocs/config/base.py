@@ -51,7 +51,7 @@ class BaseConfigOption(Generic[T]):
     def default(self, value):
         self._default = value
 
-    def validate(self, value) -> T:
+    def validate(self, value: object) -> T:
         return self.run_validation(value)
 
     def reset_warnings(self) -> None:
@@ -64,7 +64,7 @@ class BaseConfigOption(Generic[T]):
         The pre-validation process method should be implemented by subclasses.
         """
 
-    def run_validation(self, value):
+    def run_validation(self, value: object):
         """
         Perform validation for a value.
 
