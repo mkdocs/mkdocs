@@ -956,18 +956,17 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
         if not isinstance(config, dict):
             raise ValidationError(f"Invalid config options for the '{name}' plugin.")
 
-        try:
-            plugin = self.plugin_cache[name]
-        except KeyError:
-            Plugin = self.installed_plugins[name].load()
+        plugin = self.plugin_cache.get(name)
+        if plugin is None:
+            plugin_cls = self.installed_plugins[name].load()
 
-            if not issubclass(Plugin, plugins.BasePlugin):
+            if not issubclass(plugin_cls, plugins.BasePlugin):
                 raise ValidationError(
-                    f'{Plugin.__module__}.{Plugin.__name__} must be a subclass of'
+                    f'{plugin_cls.__module__}.{plugin_cls.__name__} must be a subclass of'
                     f' {plugins.BasePlugin.__module__}.{plugins.BasePlugin.__name__}'
                 )
 
-            plugin = Plugin()
+            plugin = plugin_cls()
 
             if hasattr(plugin, 'on_startup') or hasattr(plugin, 'on_shutdown'):
                 self.plugin_cache[name] = plugin
