@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="MkDocs Team">
+        <link rel="canonical" href="https://www.mkdocs.org/user-guide/cli/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Command Line Interface - MkDocs</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
+        <link href="../../css/extra.css" rel="stylesheet">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/django.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-274394082"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-274394082');
+        </script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">MkDocs</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../.." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../getting-started/" class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../" class="dropdown-item">User Guide</a>
+</li>
+                                    
+<li>
+    <a href="../installation/" class="dropdown-item">Installation</a>
+</li>
+                                    
+<li>
+    <a href="../writing-your-docs/" class="dropdown-item">Writing Your Docs</a>
+</li>
+                                    
+<li>
+    <a href="../choosing-your-theme/" class="dropdown-item">Choosing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../customizing-your-theme/" class="dropdown-item">Customizing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../localizing-your-theme/" class="dropdown-item">Localizing Your Theme</a>
+</li>
+                                    
+<li>
+    <a href="../configuration/" class="dropdown-item">Configuration</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active">Command Line Interface</a>
+</li>
+                                    
+<li>
+    <a href="../deploying-your-docs/" class="dropdown-item">Deploying Your Docs</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../dev-guide/" class="dropdown-item">Developer Guide</a>
+</li>
+                                    
+<li>
+    <a href="../../dev-guide/themes/" class="dropdown-item">Themes</a>
+</li>
+                                    
+<li>
+    <a href="../../dev-guide/translations/" class="dropdown-item">Translations</a>
+</li>
+                                    
+<li>
+    <a href="../../dev-guide/plugins/" class="dropdown-item">Plugins</a>
+</li>
+                                    
+<li>
+    <a href="../../dev-guide/api/" class="dropdown-item">API Reference</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../about/release-notes/" class="dropdown-item">Release Notes</a>
+</li>
+                                    
+<li>
+    <a href="../../about/contributing/" class="dropdown-item">Contributing</a>
+</li>
+                                    
+<li>
+    <a href="../../about/license/" class="dropdown-item">License</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../configuration/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../deploying-your-docs/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/user-guide/cli.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#command-line-interface" class="nav-link">Command Line Interface</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#mkdocs" class="nav-link">mkdocs</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#mkdocs-build" class="nav-link">build</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mkdocs-gh-deploy" class="nav-link">gh-deploy</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mkdocs-new" class="nav-link">new</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mkdocs-serve" class="nav-link">serve</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="command-line-interface">Command Line Interface<a class="headerlink" href="#command-line-interface" title="Permanent link"></a></h1>
+<h1 id="mkdocs">mkdocs<a class="headerlink" href="#mkdocs" title="Permanent link"></a></h1>
+<p>MkDocs - Project documentation with Markdown.</p>
+<p><strong>Usage:</strong></p>
+<pre class="highlight"><code>mkdocs [OPTIONS] COMMAND [ARGS]...</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-V</code>, <code>--version</code></td>
+<td>boolean</td>
+<td>Show the version and exit.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>-q</code>, <code>--quiet</code></td>
+<td>boolean</td>
+<td>Silence warnings</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>-v</code>, <code>--verbose</code></td>
+<td>boolean</td>
+<td>Enable verbose output</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Subcommands</strong></p>
+<ul>
+<li><em><a href="#mkdocs-build">build</a></em>: Build the MkDocs documentation</li>
+<li><em><a href="#mkdocs-gh-deploy">gh-deploy</a></em>: Deploy your documentation to GitHub Pages</li>
+<li><em><a href="#mkdocs-new">new</a></em>: Create a new MkDocs project</li>
+<li><em><a href="#mkdocs-serve">serve</a></em>: Run the builtin development server</li>
+</ul>
+<h2 id="mkdocs-build">mkdocs build<a class="headerlink" href="#mkdocs-build" title="Permanent link"></a></h2>
+<p>Build the MkDocs documentation</p>
+<p><strong>Usage:</strong></p>
+<pre class="highlight"><code>mkdocs build [OPTIONS]</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-c</code>, <code>--clean</code> / <code>--dirty</code></td>
+<td>boolean</td>
+<td>Remove old files from the site_dir before building (the default).</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>-f</code>, <code>--config-file</code></td>
+<td>filename</td>
+<td>Provide a specific MkDocs config</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>-s</code>, <code>--strict</code></td>
+<td>boolean</td>
+<td>Enable strict mode. This will cause MkDocs to abort the build on any warnings.</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>-t</code>, <code>--theme</code></td>
+<td>choice (<code>mkdocs</code> &#x7C; <code>readthedocs</code>)</td>
+<td>The theme to use when building your documentation.</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>--use-directory-urls</code> / <code>--no-directory-urls</code></td>
+<td>boolean</td>
+<td>Use directory URLs when building pages (the default).</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>-d</code>, <code>--site-dir</code></td>
+<td>path</td>
+<td>The directory to output the result of the documentation build.</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>-q</code>, <code>--quiet</code></td>
+<td>boolean</td>
+<td>Silence warnings</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>-v</code>, <code>--verbose</code></td>
+<td>boolean</td>
+<td>Enable verbose output</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="mkdocs-gh-deploy">mkdocs gh-deploy<a class="headerlink" href="#mkdocs-gh-deploy" title="Permanent link"></a></h2>
+<p>Deploy your documentation to GitHub Pages</p>
+<p><strong>Usage:</strong></p>
+<pre class="highlight"><code>mkdocs gh-deploy [OPTIONS]</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-c</code>, <code>--clean</code> / <code>--dirty</code></td>
+<td>boolean</td>
+<td>Remove old files from the site_dir before building (the default).</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>-m</code>, <code>--message</code></td>
+<td>text</td>
+<td>A commit message to use when committing to the GitHub Pages remote branch. Commit {sha} and MkDocs {version} are available as expansions</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>-b</code>, <code>--remote-branch</code></td>
+<td>text</td>
+<td>The remote branch to commit to for GitHub Pages. This overrides the value specified in config</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>-r</code>, <code>--remote-name</code></td>
+<td>text</td>
+<td>The remote name to commit to for GitHub Pages. This overrides the value specified in config</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>--force</code></td>
+<td>boolean</td>
+<td>Force the push to the repository.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--no-history</code></td>
+<td>boolean</td>
+<td>Replace the whole Git history with one new commit.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--ignore-version</code></td>
+<td>boolean</td>
+<td>Ignore check that build is not being deployed with an older version of MkDocs.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--shell</code></td>
+<td>boolean</td>
+<td>Use the shell when invoking Git.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>-f</code>, <code>--config-file</code></td>
+<td>filename</td>
+<td>Provide a specific MkDocs config</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>-s</code>, <code>--strict</code></td>
+<td>boolean</td>
+<td>Enable strict mode. This will cause MkDocs to abort the build on any warnings.</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>-t</code>, <code>--theme</code></td>
+<td>choice (<code>mkdocs</code> &#x7C; <code>readthedocs</code>)</td>
+<td>The theme to use when building your documentation.</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>--use-directory-urls</code> / <code>--no-directory-urls</code></td>
+<td>boolean</td>
+<td>Use directory URLs when building pages (the default).</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>-d</code>, <code>--site-dir</code></td>
+<td>path</td>
+<td>The directory to output the result of the documentation build.</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>-q</code>, <code>--quiet</code></td>
+<td>boolean</td>
+<td>Silence warnings</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>-v</code>, <code>--verbose</code></td>
+<td>boolean</td>
+<td>Enable verbose output</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="mkdocs-new">mkdocs new<a class="headerlink" href="#mkdocs-new" title="Permanent link"></a></h2>
+<p>Create a new MkDocs project</p>
+<p><strong>Usage:</strong></p>
+<pre class="highlight"><code>mkdocs new [OPTIONS] PROJECT_DIRECTORY</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-q</code>, <code>--quiet</code></td>
+<td>boolean</td>
+<td>Silence warnings</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>-v</code>, <code>--verbose</code></td>
+<td>boolean</td>
+<td>Enable verbose output</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="mkdocs-serve">mkdocs serve<a class="headerlink" href="#mkdocs-serve" title="Permanent link"></a></h2>
+<p>Run the builtin development server</p>
+<p><strong>Usage:</strong></p>
+<pre class="highlight"><code>mkdocs serve [OPTIONS]</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-a</code>, <code>--dev-addr</code></td>
+<td>text</td>
+<td>IP address and port to serve documentation locally (default: localhost:8000)</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>--livereload</code></td>
+<td>text</td>
+<td>Enable the live reloading in the development server (this is the default)</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--no-livereload</code></td>
+<td>text</td>
+<td>Disable the live reloading in the development server.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--dirtyreload</code></td>
+<td>text</td>
+<td>Enable the live reloading in the development server, but only re-build files that have changed</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--watch-theme</code></td>
+<td>boolean</td>
+<td>Include the theme in list of files to watch for live reloading. Ignored when live reload is not used.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>-w</code>, <code>--watch</code></td>
+<td>path</td>
+<td>A directory or file to watch for live reloading. Can be supplied multiple times.</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>-f</code>, <code>--config-file</code></td>
+<td>filename</td>
+<td>Provide a specific MkDocs config</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>-s</code>, <code>--strict</code></td>
+<td>boolean</td>
+<td>Enable strict mode. This will cause MkDocs to abort the build on any warnings.</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>-t</code>, <code>--theme</code></td>
+<td>choice (<code>mkdocs</code> &#x7C; <code>readthedocs</code>)</td>
+<td>The theme to use when building your documentation.</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>--use-directory-urls</code> / <code>--no-directory-urls</code></td>
+<td>boolean</td>
+<td>Use directory URLs when building pages (the default).</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>-q</code>, <code>--quiet</code></td>
+<td>boolean</td>
+<td>Silence warnings</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>-v</code>, <code>--verbose</code></td>
+<td>boolean</td>
+<td>Enable verbose output</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

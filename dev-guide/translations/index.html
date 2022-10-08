@@ -84,6 +84,10 @@
 </li>
                                     
 <li>
+    <a href="../../user-guide/cli/" class="dropdown-item">Command Line Interface</a>
+</li>
+                                    
+<li>
     <a href="../../user-guide/deploying-your-docs/" class="dropdown-item">Deploying Your Docs</a>
 </li>
                                 </ul>
@@ -220,10 +224,8 @@ internationalization/localization plugin.</p>
 </div>
 <h2 id="localization-tooling-prerequisites">Localization tooling prerequisites<a class="headerlink" href="#localization-tooling-prerequisites" title="Permanent link"></a></h2>
 <p>Theme localization makes use of the <a href="http://babel.pocoo.org/en/latest/cmdline.html">babel</a> project for generation and
-compilation of localization files. Custom commands are available from the
-MkDocs' <code>setup.py</code> script as described below to assist with the process of
-updating and contributing translations. You will need to be working from the
-git working tree on your local machine to make use of the helper scripts.</p>
+compilation of localization files. You will need to be working from the
+git working tree on your local machine to make use of the translation commands.</p>
 <p>See the <a href="../../about/contributing/">Contributing Guide</a> for direction on how to <a href="../../about/contributing/#installing-for-development">Install for Development</a>
 and <a href="../../about/contributing/#submitting-pull-requests">Submit a Pull Request</a>. The instructions in this document assume that you
 are working from a properly configured development environment.</p>
@@ -257,10 +259,10 @@ theme's folder.</p>
 <p>Initializing a catalog consists of running a command which will create a
 directory structure for your desired language and prepare a Portable Object
 (<code>messages.po</code>) file derived from the <code>pot</code> file of the theme.</p>
-<p>Use the <code>init_catalog</code> command on each theme (<code>-t &lt;theme&gt;</code>) and provide the
+<p>Use the <code>init_catalog</code> command on each theme's directory and provide the
 appropriate language code (<code>-l &lt;language&gt;</code>). For example, to add a translation
 for the Spanish <code>es</code> language to the <code>mkdocs</code> theme, run the following command:</p>
-<pre class="highlight"><code class="language-bash">python setup.py init_catalog -t mkdocs -l es</code></pre>
+<pre class="highlight"><code class="language-bash">pybabel init --input-file mkdocs/themes/mkdocs/messages.pot --output-dir mkdocs/themes/mkdocs/locales --locale es</code></pre>
 <p>The above command will create the following file structure:</p>
 <pre class="highlight"><code class="language-text">mkdocs/themes/mkdocs/locales
 ├── es
@@ -284,7 +286,7 @@ below to update the theme's <code>messages.po</code> file:</p>
 for.</p>
 <p>To update the <code>fr</code> translation catalog of the <code>mkdocs</code> theme, use the following
 command:</p>
-<pre class="highlight"><code class="language-bash">python setup.py update_catalog -t mkdocs -l fr</code></pre>
+<pre class="highlight"><code class="language-bash">pybabel update --ignore-obsolete --update-header-comment --input-file mkdocs/themes/mkdocs/messages.pot --output-dir mkdocs/themes/mkdocs/locales --locale fr</code></pre>
 <p>You can now move on to the next step and <a href="#translating-the-mkdocs-themes">add a translation</a> for every updated
 text placeholder in the localized catalog.</p>
 <h3 id="translating-the-mkdocs-themes">Translating the MkDocs themes<a class="headerlink" href="#translating-the-mkdocs-themes" title="Permanent link"></a></h3>
@@ -304,7 +306,7 @@ you'll want to <a href="#testing-theme-translations">test your localized theme</
 <p>To test a theme with translations, you need to first compile the <code>messages.po</code>
 files of your theme into <code>messages.mo</code> files. The following command will compile
 the <code>es</code> translation for the <code>mkdocs</code> theme.</p>
-<pre class="highlight"><code class="language-bash">python setup.py compile_catalog -t mkdocs -l es</code></pre>
+<pre class="highlight"><code class="language-bash">pybabel compile --statistics --directory mkdocs/themes/mkdocs/locales --locale es</code></pre>
 <p>The above command results in the following file structure:</p>
 <pre class="highlight"><code class="language-text">mkdocs/themes/mkdocs/locales
 ├── es

@@ -84,6 +84,10 @@
 </li>
                                     
 <li>
+    <a href="../../user-guide/cli/" class="dropdown-item">Command Line Interface</a>
+</li>
+                                    
+<li>
     <a href="../../user-guide/deploying-your-docs/" class="dropdown-item">Deploying Your Docs</a>
 </li>
                                 </ul>
@@ -242,12 +246,12 @@ this within a <a href="https://virtualenv.pypa.io/en/latest/user_guide.html">vir
 <p>This will install MkDocs in development mode which binds the <code>mkdocs</code> command
 to the git repository.</p>
 <h2 id="running-the-tests">Running the tests<a class="headerlink" href="#running-the-tests" title="Permanent link"></a></h2>
-<p>To run the tests, it is recommended that you use <a href="https://tox.readthedocs.io/en/latest/">tox</a>.</p>
-<p>Install Tox using <a href="https://pip.pypa.io/en/stable/">pip</a> by running the command <code>pip install tox</code>.
-Then the test suite can be run for MkDocs by running the command <code>tox</code> in the
+<p>To run the tests, it is recommended that you use <a href="https://hatch.pypa.io/">Hatch</a>.</p>
+<p>Install Hatch using <a href="https://pip.pypa.io/en/stable/">pip</a> by running the command <code>pip install hatch</code>.
+Then the test suite can be run for MkDocs by running the command <code>hatch run all</code> in the
 root of your MkDocs repository.</p>
 <p>It will attempt to run the tests against all of the Python versions we
-support. So don't be concerned if you are missing some and they fail. The rest
+support. So don't be concerned if you are missing some. The rest
 will be verified by <a href="https://docs.github.com/actions">GitHub Actions</a> when you submit a pull request.</p>
 <h2 id="translating-themes">Translating themes<a class="headerlink" href="#translating-themes" title="Permanent link"></a></h2>
 <p>To localize a theme to your favorite language, follow the guide on <a href="../../dev-guide/translations/">Translating
@@ -267,7 +271,7 @@ with <code>{% trans %}</code> and <code>{% endtrans %}</code> tags.</p>
 theme template, the theme's Portable Object Template (<code>pot</code>) file needs to be
 updated by running the <code>extract_messages</code> command. For example, to update the
 <code>pot</code> file of the <code>mkdocs</code> theme, run the following command:</p>
-<pre class="highlight"><code class="language-bash">python setup.py extract_messages -t mkdocs</code></pre>
+<pre class="highlight"><code class="language-bash">pybabel extract --project=MkDocs --copyright-holder=MkDocs --msgid-bugs-address='https://github.com/mkdocs/mkdocs/issues' --no-wrap --version="$(hatch version)" --mapping-file mkdocs/themes/babel.cfg --output-file mkdocs/themes/mkdocs/messages.pot mkdocs/themes/mkdocs</code></pre>
 <p>The updated <code>pot</code> file should be included in a PR with the updated template.
 The updated <code>pot</code> file will allow translation contributors to propose the
 translations needed for their preferred language. See the guide on <a href="../../dev-guide/translations/">Translating
