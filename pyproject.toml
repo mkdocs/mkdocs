@@ -191,6 +191,7 @@ dependencies = [
     "mkdocs-redirects >=1.0.1",
     "pymdown-extensions >=8.0.1",
     "mkdocstrings-python >=0.7.1",
+    "mkdocs-click >=0.8.0",
 ]
 
 [tool.black]
