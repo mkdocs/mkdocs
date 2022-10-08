@@ -1812,6 +1812,14 @@ class PluginsTest(TestCase):
         with self.expect_error(plugins="Invalid Plugins configuration"):
             self.get_config(Schema, cfg)
 
+        cfg = {
+            'plugins': [
+                {},
+            ],
+        }
+        with self.expect_error(plugins="Invalid Plugins configuration"):
+            self.get_config(Schema, cfg)
+
     def test_plugin_config_not_string_or_dict(self, mock_class) -> None:
         class Schema(Config):
             plugins = c.Plugins()

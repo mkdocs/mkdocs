@@ -946,7 +946,7 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
         else:
             for item in value:
                 if isinstance(item, dict):
-                    if len(item) > 1:
+                    if len(item) != 1:
                         raise ValidationError('Invalid Plugins configuration')
                     name, cfg = item.popitem()
                 else:
