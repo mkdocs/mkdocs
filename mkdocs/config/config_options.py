@@ -15,6 +15,7 @@ from typing import (
     Collection,
     Dict,
     Generic,
+    Iterator,
     List,
     Mapping,
     NamedTuple,
@@ -931,24 +932,31 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
         if not isinstance(value, (list, tuple, dict)):
             raise ValidationError('Invalid Plugins configuration. Expected a list or dict.')
         self.plugins = plugins.PluginCollection()
+        for name, cfg in self._parse_configs(value):
+            self.plugins[name] = self.load_plugin(name, cfg)
+        return self.plugins
+
+    @classmethod
+    def _parse_configs(cls, value: Union[list, tuple, dict]) -> Iterator[Tuple[str, dict]]:
         if isinstance(value, dict):
             for name, cfg in value.items():
-                self.plugins[name] = self.load_plugin(name, cfg)
+                if not isinstance(name, str):
+                    raise ValidationError(f"'{name}' is not a valid plugin name.")
+                yield name, cfg
         else:
             for item in value:
                 if isinstance(item, dict):
                     if len(item) > 1:
                         raise ValidationError('Invalid Plugins configuration')
                     name, cfg = item.popitem()
-                    item = name
                 else:
+                    name = item
                     cfg = {}
-                self.plugins[item] = self.load_plugin(item, cfg)
-        return self.plugins
+                if not isinstance(name, str):
+                    raise ValidationError(f"'{name}' is not a valid plugin name.")
+                yield name, cfg
 
     def load_plugin(self, name: str, config) -> plugins.BasePlugin:
-        if not isinstance(name, str):
-            raise ValidationError(f"'{name}' is not a valid plugin name.")
         if name not in self.installed_plugins:
             raise ValidationError(f'The "{name}" plugin is not installed')
 
