@@ -946,7 +946,7 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
                 self.plugins[item] = self.load_plugin(item, cfg)
         return self.plugins
 
-    def load_plugin(self, name, config):
+    def load_plugin(self, name: str, config) -> plugins.BasePlugin:
         if not isinstance(name, str):
             raise ValidationError(f"'{name}' is not a valid plugin name.")
         if name not in self.installed_plugins:
@@ -972,7 +972,7 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
                 self.plugin_cache[name] = plugin
 
         errors, warnings = plugin.load_config(config, self.config_file_path)
-        self.warnings.extend(warnings)
+        self.warnings.extend(f"Plugin '{name}' value: '{x}'. Warning: {y}" for x, y in warnings)
         errors_message = '\n'.join(f"Plugin '{name}' value: '{x}'. Error: {y}" for x, y in errors)
         if errors_message:
             raise ValidationError(errors_message)

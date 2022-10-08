@@ -1630,16 +1630,30 @@ class FakePlugin(BasePlugin[_FakePluginConfig]):
     pass
 
 
+class _FakePlugin2Config(_FakePluginConfig):
+    depr = c.Deprecated()
+
+
+class FakePlugin2(BasePlugin[_FakePlugin2Config]):
+    pass
+
+
 class FakeEntryPoint:
-    @property
-    def name(self):
-        return 'sample'
+    def __init__(self, name, cls):
+        self.name = name
+        self.cls = cls
 
     def load(self):
-        return FakePlugin
+        return self.cls
 
 
-@patch('mkdocs.plugins.entry_points', return_value=[FakeEntryPoint()])
+@patch(
+    'mkdocs.plugins.entry_points',
+    return_value=[
+        FakeEntryPoint('sample', FakePlugin),
+        FakeEntryPoint('sample2', FakePlugin2),
+    ],
+)
 class PluginsTest(TestCase):
     def test_plugin_config_without_options(self, mock_class) -> None:
         class Schema(Config):
@@ -1817,6 +1831,41 @@ class PluginsTest(TestCase):
         }
         with self.expect_error(plugins="Invalid config options for the 'sample' plugin."):
             self.get_config(Schema, cfg)
+
+    def test_plugin_config_sub_error(self, mock_class) -> None:
+        class Schema(Config):
+            plugins = c.Plugins(default=['sample'])
+
+        cfg = {
+            'plugins': {
+                'sample': {'bar': 'not an int'},
+            }
+        }
+        with self.expect_error(
+            plugins="Plugin 'sample' value: 'bar'. Error: Expected type: <class 'int'> but received: <class 'str'>"
+        ):
+            self.get_config(Schema, cfg)
+
+    def test_plugin_config_sub_warning(self, mock_class) -> None:
+        class Schema(Config):
+            plugins = c.Plugins()
+
+        cfg = {
+            'plugins': {
+                'sample2': {'depr': 'deprecated value'},
+            }
+        }
+        conf = self.get_config(
+            Schema,
+            cfg,
+            warnings=dict(
+                plugins="Plugin 'sample2' value: 'depr'. Warning: The configuration option "
+                "'depr' has been deprecated and will be removed in a future release of MkDocs."
+            ),
+        )
+
+        self.assertIsInstance(conf.plugins, PluginCollection)
+        self.assertIn('sample2', conf.plugins)
 
 
 class HooksTest(TestCase):
