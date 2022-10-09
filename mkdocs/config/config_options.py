@@ -959,16 +959,16 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
                 yield name, cfg
 
     def load_plugin_with_namespace(self, name: str, config) -> Tuple[str, plugins.BasePlugin]:
-        if ':' in name:  # It's already specified with a namespace.
+        if '/' in name:  # It's already specified with a namespace.
             # Special case: allow to explicitly skip namespaced loading:
-            if name.startswith(':'):
+            if name.startswith('/'):
                 name = name[1:]
         else:
             # Attempt to load with prepended namespace for the current theme.
             if self.theme_key and self._config:
                 current_theme = self._config[self.theme_key].name
                 if current_theme:
-                    expanded_name = f'{current_theme}:{name}'
+                    expanded_name = f'{current_theme}/{name}'
                     if expanded_name in self.installed_plugins:
                         name = expanded_name
         return (name, self.load_plugin(name, config))

@@ -1660,9 +1660,9 @@ class FakeEntryPoint:
     return_value=[
         FakeEntryPoint('sample', FakePlugin),
         FakeEntryPoint('sample2', FakePlugin2),
-        FakeEntryPoint('readthedocs:sub_plugin', ThemePlugin),
+        FakeEntryPoint('readthedocs/sub_plugin', ThemePlugin),
         FakeEntryPoint('overridden', FakePlugin2),
-        FakeEntryPoint('readthedocs:overridden', ThemePlugin2),
+        FakeEntryPoint('readthedocs/overridden', ThemePlugin2),
     ],
 )
 class PluginsTest(TestCase):
@@ -1745,17 +1745,17 @@ class PluginsTest(TestCase):
             theme = c.Theme(default='mkdocs')
             plugins = c.Plugins(theme_key='theme')
 
-        cfg = {'theme': 'readthedocs', 'plugins': ['readthedocs:sub_plugin']}
+        cfg = {'theme': 'readthedocs', 'plugins': ['readthedocs/sub_plugin']}
         conf = self.get_config(Schema, cfg)
 
-        self.assertEqual(set(conf.plugins), {'readthedocs:sub_plugin'})
-        self.assertIsInstance(conf.plugins['readthedocs:sub_plugin'], ThemePlugin)
+        self.assertEqual(set(conf.plugins), {'readthedocs/sub_plugin'})
+        self.assertIsInstance(conf.plugins['readthedocs/sub_plugin'], ThemePlugin)
 
-        cfg = {'plugins': ['readthedocs:sub_plugin']}
+        cfg = {'plugins': ['readthedocs/sub_plugin']}
         conf = self.get_config(Schema, cfg)
 
-        self.assertEqual(set(conf.plugins), {'readthedocs:sub_plugin'})
-        self.assertIsInstance(conf.plugins['readthedocs:sub_plugin'], ThemePlugin)
+        self.assertEqual(set(conf.plugins), {'readthedocs/sub_plugin'})
+        self.assertIsInstance(conf.plugins['readthedocs/sub_plugin'], ThemePlugin)
 
     def test_plugin_config_with_deduced_theme_namespace(self, mock_class) -> None:
         class Schema(Config):
@@ -1765,8 +1765,8 @@ class PluginsTest(TestCase):
         cfg = {'theme': 'readthedocs', 'plugins': ['sub_plugin']}
         conf = self.get_config(Schema, cfg)
 
-        self.assertEqual(set(conf.plugins), {'readthedocs:sub_plugin'})
-        self.assertIsInstance(conf.plugins['readthedocs:sub_plugin'], ThemePlugin)
+        self.assertEqual(set(conf.plugins), {'readthedocs/sub_plugin'})
+        self.assertIsInstance(conf.plugins['readthedocs/sub_plugin'], ThemePlugin)
 
         cfg = {'plugins': ['sub_plugin']}
         with self.expect_error(plugins='The "sub_plugin" plugin is not installed'):
@@ -1780,7 +1780,7 @@ class PluginsTest(TestCase):
         cfg = {'theme': 'readthedocs', 'plugins': ['overridden']}
         conf = self.get_config(Schema, cfg)
 
-        self.assertEqual(set(conf.plugins), {'readthedocs:overridden'})
+        self.assertEqual(set(conf.plugins), {'readthedocs/overridden'})
         self.assertIsInstance(next(iter(conf.plugins.values())), ThemePlugin2)
 
         cfg = {'plugins': ['overridden']}
@@ -1794,13 +1794,13 @@ class PluginsTest(TestCase):
             theme = c.Theme(default='mkdocs')
             plugins = c.Plugins(theme_key='theme')
 
-        cfg = {'theme': 'readthedocs', 'plugins': [':overridden']}
+        cfg = {'theme': 'readthedocs', 'plugins': ['/overridden']}
         conf = self.get_config(Schema, cfg)
 
         self.assertEqual(set(conf.plugins), {'overridden'})
         self.assertIsInstance(next(iter(conf.plugins.values())), FakePlugin2)
 
-        cfg = {'plugins': [':overridden']}
+        cfg = {'plugins': ['/overridden']}
         conf = self.get_config(Schema, cfg)
 
         self.assertEqual(set(conf.plugins), {'overridden'})
