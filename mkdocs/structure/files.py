@@ -23,6 +23,7 @@ from urllib.parse import quote as urlquote
 import jinja2.environment
 
 from mkdocs import utils
+from mkdocs.utils import weak_property
 
 if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
@@ -38,6 +39,7 @@ class Files:
     def __init__(self, files: List[File]) -> None:
         self._files = files
         self._src_uris: Optional[Dict[str, File]] = None
+        self._documentation_pages: Optional[Sequence[File]] = None
 
     def __iter__(self) -> Iterator[File]:
         """Iterate over the files within."""
@@ -70,12 +72,12 @@ class Files:
 
     def append(self, file: File) -> None:
         """Append file to Files collection."""
-        self._src_uris = None
+        self._src_uris = self._documentation_pages = None
         self._files.append(file)
 
     def remove(self, file: File) -> None:
         """Remove file from Files collection."""
-        self._src_uris = None
+        self._src_uris = self._documentation_pages = None
         self._files.remove(file)
 
     def copy_static_files(self, dirty: bool = False) -> None:
@@ -86,7 +88,9 @@ class Files:
 
     def documentation_pages(self) -> Sequence[File]:
         """Return iterable of all Markdown page file objects."""
-        return [file for file in self if file.is_documentation_page()]
+        if self._documentation_pages is None:
+            self._documentation_pages = [file for file in self if file.is_documentation_page()]
+        return self._documentation_pages
 
     def static_pages(self) -> Sequence[File]:
         """Return iterable of all static page file objects."""
@@ -151,17 +155,29 @@ class File:
     src_uri: str
     """The pure path (always '/'-separated) of the source file relative to the source directory."""
 
-    abs_src_path: str
-    """The absolute concrete path of the source file. Will use backslashes on Windows."""
+    @weak_property
+    def abs_src_path(self) -> str:
+        """The absolute concrete path of the source file. Will use backslashes on Windows."""
+        return os.path.normpath(os.path.join(self.src_dir, self.src_path))
 
-    dest_uri: str
-    """The pure path (always '/'-separated) of the destination file relative to the destination directory."""
+    @weak_property
+    def dest_uri(self) -> str:
+        """The pure path (always '/'-separated) of the destination file relative to the destination directory."""
+        return self._get_dest_path(self.use_directory_urls)
 
-    abs_dest_path: str
-    """The absolute concrete path of the destination file. Will use backslashes on Windows."""
+    @weak_property
+    def abs_dest_path(self) -> str:
+        """The absolute concrete path of the destination file. Will use backslashes on Windows."""
+        return os.path.normpath(os.path.join(self.dest_dir, self.dest_path))
 
-    url: str
-    """The URI of the destination file relative to the destination directory as a string."""
+    @weak_property
+    def url(self) -> str:
+        """The URI of the destination file relative to the destination directory as a string."""
+        return self._get_url(self.use_directory_urls)
+
+    @weak_property
+    def name(self) -> str:
+        return self._get_stem()
 
     @property
     def src_path(self) -> str:
@@ -186,11 +202,9 @@ class File:
     def __init__(self, path: str, src_dir: str, dest_dir: str, use_directory_urls: bool) -> None:
         self.page = None
         self.src_path = path
-        self.abs_src_path = os.path.normpath(os.path.join(src_dir, self.src_path))
-        self.name = self._get_stem()
-        self.dest_uri = self._get_dest_path(use_directory_urls)
-        self.abs_dest_path = os.path.normpath(os.path.join(dest_dir, self.dest_path))
-        self.url = self._get_url(use_directory_urls)
+        self.src_dir = src_dir
+        self.dest_dir = dest_dir
+        self.use_directory_urls = use_directory_urls
 
     def __eq__(self, other) -> bool:
         return (
