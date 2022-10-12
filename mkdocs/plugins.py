@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import logging
 import sys
-from collections import OrderedDict
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -14,6 +13,7 @@ from typing import (
     Dict,
     Generic,
     List,
+    MutableMapping,
     Optional,
     Tuple,
     Type,
@@ -461,7 +461,7 @@ def event_priority(priority: float) -> Callable[[T], T]:
     return decorator
 
 
-class PluginCollection(OrderedDict):
+class PluginCollection(dict, MutableMapping[str, BasePlugin]):
     """
     A collection of plugins.
 
@@ -480,8 +480,11 @@ class PluginCollection(OrderedDict):
             self.events[event_name], method, key=lambda m: -getattr(m, 'mkdocs_priority', 0)
         )
 
-    def __setitem__(self, key: str, value: BasePlugin, **kwargs) -> None:
-        super().__setitem__(key, value, **kwargs)
+    def __getitem__(self, key: str) -> BasePlugin:
+        return super().__getitem__(key)
+
+    def __setitem__(self, key: str, value: BasePlugin) -> None:
+        super().__setitem__(key, value)
         # Register all of the event methods defined for this Plugin.
         for event_name in (x for x in dir(value) if x.startswith('on_')):
             method = getattr(value, event_name, None)

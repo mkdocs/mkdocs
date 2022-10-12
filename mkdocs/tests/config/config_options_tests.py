@@ -20,6 +20,7 @@ else:
 import mkdocs
 from mkdocs.config import config_options as c
 from mkdocs.config.base import Config
+from mkdocs.plugins import BasePlugin, PluginCollection
 from mkdocs.tests.base import tempdir
 from mkdocs.theme import Theme
 from mkdocs.utils import write_file, yaml_load
@@ -46,7 +47,7 @@ class TestCase(unittest.TestCase):
         self,
         config_class: Type[SomeConfig],
         cfg: Dict[str, Any],
-        warnings={},
+        warnings: Dict[str, str] = {},
         config_file_path=None,
     ) -> SomeConfig:
         config = config_class(config_file_path=config_file_path)
@@ -446,7 +447,7 @@ class URLTest(TestCase):
         class Schema(Config):
             option = c.URL()
 
-        with self.expect_error(option="Unable to parse the URL."):
+        with self.expect_error(option="Expected a string, got <class 'int'>"):
             self.get_config(Schema, {'option': 1})
 
 
@@ -1011,9 +1012,7 @@ class ThemeTest(TestCase):
         class Schema(Config):
             option = c.Theme()
 
-        with self.expect_error(
-            option="At least one of 'option.name' or 'option.custom_dir' must be defined."
-        ):
+        with self.expect_error(option="At least one of 'name' or 'custom_dir' must be defined."):
             self.get_config(Schema, {'option': config})
 
     def test_theme_config_missing_name(self) -> None:
@@ -1063,9 +1062,7 @@ class ThemeTest(TestCase):
         class Schema(Config):
             theme = c.Theme()
 
-        with self.expect_error(
-            theme="At least one of 'theme.name' or 'theme.custom_dir' must be defined."
-        ):
+        with self.expect_error(theme="At least one of 'name' or 'custom_dir' must be defined."):
             self.get_config(Schema, config)
 
     @tempdir()
@@ -1081,9 +1078,7 @@ class ThemeTest(TestCase):
         class Schema(Config):
             theme = c.Theme()
 
-        with self.expect_error(
-            theme=f"The path set in theme.custom_dir ('{path}') does not exist."
-        ):
+        with self.expect_error(theme=f"The path set in custom_dir ('{path}') does not exist."):
             self.get_config(Schema, config)
 
     def test_post_validation_locale_none(self) -> None:
@@ -1097,7 +1092,7 @@ class ThemeTest(TestCase):
         class Schema(Config):
             theme = c.Theme()
 
-        with self.expect_error(theme="'theme.locale' must be a string."):
+        with self.expect_error(theme="'locale' must be a string."):
             self.get_config(Schema, config)
 
     def test_post_validation_locale_invalid_type(self) -> None:
@@ -1111,7 +1106,7 @@ class ThemeTest(TestCase):
         class Schema(Config):
             theme = c.Theme()
 
-        with self.expect_error(theme="'theme.locale' must be a string."):
+        with self.expect_error(theme="'locale' must be a string."):
             self.get_config(Schema, config)
 
     def test_post_validation_locale(self) -> None:
@@ -1245,7 +1240,7 @@ class SubConfigTest(TestCase):
         conf = self.get_config(
             Schema,
             {'option': {'unknown': 0}},
-            warnings=dict(option=('unknown', 'Unrecognised configuration name: unknown')),
+            warnings=dict(option="Sub-option 'unknown': Unrecognised configuration name: unknown"),
         )
         self.assertEqual(conf.option, {"unknown": 0})
 
@@ -1625,7 +1620,263 @@ class MarkdownExtensionsTest(TestCase):
         self.assertIsNone(conf.mdx_configs.get('toc'))
 
 
-class TestHooks(TestCase):
+class _FakePluginConfig(Config):
+    foo = c.Type(str, default='default foo')
+    bar = c.Type(int, default=0)
+    dir = c.Optional(c.Dir(exists=False))
+
+
+class FakePlugin(BasePlugin[_FakePluginConfig]):
+    pass
+
+
+class _FakePlugin2Config(_FakePluginConfig):
+    depr = c.Deprecated()
+
+
+class FakePlugin2(BasePlugin[_FakePlugin2Config]):
+    pass
+
+
+class FakeEntryPoint:
+    def __init__(self, name, cls):
+        self.name = name
+        self.cls = cls
+
+    def load(self):
+        return self.cls
+
+
+@patch(
+    'mkdocs.plugins.entry_points',
+    return_value=[
+        FakeEntryPoint('sample', FakePlugin),
+        FakeEntryPoint('sample2', FakePlugin2),
+    ],
+)
+class PluginsTest(TestCase):
+    def test_plugin_config_without_options(self, mock_class) -> None:
+        class Schema(Config):
+            plugins = c.Plugins()
+
+        cfg = {
+            'plugins': ['sample'],
+        }
+        conf = self.get_config(Schema, cfg)
+
+        assert_type(conf.plugins, PluginCollection)
+        self.assertIsInstance(conf.plugins, PluginCollection)
+        self.assertIn('sample', conf.plugins)
+
+        plugin = conf.plugins['sample']
+        assert_type(plugin, BasePlugin)
+        self.assertIsInstance(plugin, FakePlugin)
+        self.assertIsInstance(plugin.config, _FakePluginConfig)
+        expected = {
+            'foo': 'default foo',
+            'bar': 0,
+            'dir': None,
+        }
+        self.assertEqual(plugin.config, expected)
+
+    def test_plugin_config_with_options(self, mock_class) -> None:
+        class Schema(Config):
+            plugins = c.Plugins()
+
+        cfg = {
+            'plugins': [
+                {
+                    'sample': {
+                        'foo': 'foo value',
+                        'bar': 42,
+                    },
+                }
+            ],
+        }
+        conf = self.get_config(Schema, cfg)
+
+        self.assertIsInstance(conf.plugins, PluginCollection)
+        self.assertIn('sample', conf.plugins)
+        self.assertIsInstance(conf.plugins['sample'], BasePlugin)
+        expected = {
+            'foo': 'foo value',
+            'bar': 42,
+            'dir': None,
+        }
+        self.assertEqual(conf.plugins['sample'].config, expected)
+
+    def test_plugin_config_as_dict(self, mock_class) -> None:
+        class Schema(Config):
+            plugins = c.Plugins()
+
+        cfg = {
+            'plugins': {
+                'sample': {
+                    'foo': 'foo value',
+                    'bar': 42,
+                },
+            },
+        }
+        conf = self.get_config(Schema, cfg)
+
+        self.assertIsInstance(conf.plugins, PluginCollection)
+        self.assertIn('sample', conf.plugins)
+        self.assertIsInstance(conf.plugins['sample'], BasePlugin)
+        expected = {
+            'foo': 'foo value',
+            'bar': 42,
+            'dir': None,
+        }
+        self.assertEqual(conf.plugins['sample'].config, expected)
+
+    def test_plugin_config_empty_list_with_empty_default(self, mock_class) -> None:
+        class Schema(Config):
+            plugins = c.Plugins(default=[])
+
+        cfg: Dict[str, Any] = {'plugins': []}
+        conf = self.get_config(Schema, cfg)
+
+        self.assertIsInstance(conf.plugins, PluginCollection)
+        self.assertEqual(len(conf.plugins), 0)
+
+    def test_plugin_config_empty_list_with_default(self, mock_class) -> None:
+        class Schema(Config):
+            plugins = c.Plugins(default=['sample'])
+
+        # Default is ignored
+        cfg: Dict[str, Any] = {'plugins': []}
+        conf = self.get_config(Schema, cfg)
+
+        self.assertIsInstance(conf.plugins, PluginCollection)
+        self.assertEqual(len(conf.plugins), 0)
+
+    def test_plugin_config_none_with_empty_default(self, mock_class) -> None:
+        class Schema(Config):
+            plugins = c.Plugins(default=[])
+
+        cfg = {'plugins': None}
+        conf = self.get_config(Schema, cfg)
+
+        self.assertIsInstance(conf.plugins, PluginCollection)
+        self.assertEqual(len(conf.plugins), 0)
+
+    def test_plugin_config_none_with_default(self, mock_class) -> None:
+        class Schema(Config):
+            plugins = c.Plugins(default=['sample'])
+
+        # Default is used.
+        cfg = {'plugins': None}
+        conf = self.get_config(Schema, cfg)
+
+        self.assertIsInstance(conf.plugins, PluginCollection)
+        self.assertIn('sample', conf.plugins)
+        self.assertIsInstance(conf.plugins['sample'], BasePlugin)
+        expected = {
+            'foo': 'default foo',
+            'bar': 0,
+            'dir': None,
+        }
+        self.assertEqual(conf.plugins['sample'].config, expected)
+
+    def test_plugin_config_uninstalled(self, mock_class) -> None:
+        class Schema(Config):
+            plugins = c.Plugins()
+
+        cfg = {'plugins': ['uninstalled']}
+        with self.expect_error(plugins='The "uninstalled" plugin is not installed'):
+            self.get_config(Schema, cfg)
+
+    def test_plugin_config_not_list(self, mock_class) -> None:
+        class Schema(Config):
+            plugins = c.Plugins()
+
+        cfg = {'plugins': 'sample'}
+        with self.expect_error(plugins="Invalid Plugins configuration. Expected a list or dict."):
+            self.get_config(Schema, cfg)
+
+    def test_plugin_config_multivalue_dict(self, mock_class) -> None:
+        class Schema(Config):
+            plugins = c.Plugins()
+
+        cfg = {
+            'plugins': [
+                {
+                    'sample': {
+                        'foo': 'foo value',
+                        'bar': 42,
+                    },
+                    'extra_key': 'baz',
+                }
+            ],
+        }
+        with self.expect_error(plugins="Invalid Plugins configuration"):
+            self.get_config(Schema, cfg)
+
+        cfg = {
+            'plugins': [
+                {},
+            ],
+        }
+        with self.expect_error(plugins="Invalid Plugins configuration"):
+            self.get_config(Schema, cfg)
+
+    def test_plugin_config_not_string_or_dict(self, mock_class) -> None:
+        class Schema(Config):
+            plugins = c.Plugins()
+
+        cfg = {
+            'plugins': [('not a string or dict',)],
+        }
+        with self.expect_error(plugins="'('not a string or dict',)' is not a valid plugin name."):
+            self.get_config(Schema, cfg)
+
+    def test_plugin_config_options_not_dict(self, mock_class) -> None:
+        class Schema(Config):
+            plugins = c.Plugins()
+
+        cfg = {
+            'plugins': [{'sample': 'not a dict'}],
+        }
+        with self.expect_error(plugins="Invalid config options for the 'sample' plugin."):
+            self.get_config(Schema, cfg)
+
+    def test_plugin_config_sub_error(self, mock_class) -> None:
+        class Schema(Config):
+            plugins = c.Plugins(default=['sample'])
+
+        cfg = {
+            'plugins': {
+                'sample': {'bar': 'not an int'},
+            }
+        }
+        with self.expect_error(
+            plugins="Plugin 'sample' value: 'bar'. Error: Expected type: <class 'int'> but received: <class 'str'>"
+        ):
+            self.get_config(Schema, cfg)
+
+    def test_plugin_config_sub_warning(self, mock_class) -> None:
+        class Schema(Config):
+            plugins = c.Plugins()
+
+        cfg = {
+            'plugins': {
+                'sample2': {'depr': 'deprecated value'},
+            }
+        }
+        conf = self.get_config(
+            Schema,
+            cfg,
+            warnings=dict(
+                plugins="Plugin 'sample2' value: 'depr'. Warning: The configuration option "
+                "'depr' has been deprecated and will be removed in a future release of MkDocs."
+            ),
+        )
+
+        self.assertIsInstance(conf.plugins, PluginCollection)
+        self.assertIn('sample2', conf.plugins)
+
+
+class HooksTest(TestCase):
     class Schema(Config):
         plugins = c.Plugins(default=[])
         hooks = c.Hooks('plugins')
@@ -1652,8 +1903,15 @@ class TestHooks(TestCase):
             {**conf.plugins.events, 'page_markdown': [hook.on_page_markdown]},
             conf.plugins.events,
         )
-        self.assertEqual(hook.on_page_markdown('foo foo'), 'zoo zoo')
+        self.assertEqual(hook.on_page_markdown('foo foo'), 'zoo zoo')  # type: ignore[call-arg]
         self.assertFalse(hasattr(hook, 'on_nav'))
+
+    def test_hooks_wrong_type(self) -> None:
+        with self.expect_error(hooks="Expected a list of items, but a <class 'int'> was given."):
+            self.get_config(self.Schema, {'hooks': 6})
+
+        with self.expect_error(hooks="Expected type: <class 'str'> but received: <class 'int'>"):
+            self.get_config(self.Schema, {'hooks': [7]})
 
 
 class SchemaTest(TestCase):

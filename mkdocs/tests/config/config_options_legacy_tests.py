@@ -35,7 +35,7 @@ class TestCase(unittest.TestCase):
         self,
         schema: type,
         cfg: Dict[str, Any],
-        warnings={},
+        warnings: Dict[str, str] = {},
         config_file_path=None,
     ):
         config = base.LegacyConfig(base.get_schema(schema), config_file_path=config_file_path)
@@ -460,7 +460,7 @@ class URLTest(TestCase):
         class Schema:
             option = c.URL()
 
-        with self.expect_error(option="Unable to parse the URL."):
+        with self.expect_error(option="Expected a string, got <class 'int'>"):
             self.get_config(Schema, {'option': 1})
 
 
@@ -976,9 +976,7 @@ class ThemeTest(TestCase):
         class Schema:
             option = c.Theme()
 
-        with self.expect_error(
-            option="At least one of 'option.name' or 'option.custom_dir' must be defined."
-        ):
+        with self.expect_error(option="At least one of 'name' or 'custom_dir' must be defined."):
             self.get_config(Schema, {'option': config})
 
     def test_theme_config_missing_name(self):
@@ -1028,9 +1026,7 @@ class ThemeTest(TestCase):
         class Schema:
             theme = c.Theme()
 
-        with self.expect_error(
-            theme="At least one of 'theme.name' or 'theme.custom_dir' must be defined."
-        ):
+        with self.expect_error(theme="At least one of 'name' or 'custom_dir' must be defined."):
             self.get_config(Schema, config)
 
     @tempdir()
@@ -1046,9 +1042,7 @@ class ThemeTest(TestCase):
         class Schema:
             theme = c.Theme()
 
-        with self.expect_error(
-            theme=f"The path set in theme.custom_dir ('{path}') does not exist."
-        ):
+        with self.expect_error(theme=f"The path set in custom_dir ('{path}') does not exist."):
             self.get_config(Schema, config)
 
     def test_post_validation_locale_none(self):
@@ -1062,7 +1056,7 @@ class ThemeTest(TestCase):
         class Schema:
             theme = c.Theme()
 
-        with self.expect_error(theme="'theme.locale' must be a string."):
+        with self.expect_error(theme="'locale' must be a string."):
             self.get_config(Schema, config)
 
     def test_post_validation_locale_invalid_type(self):
@@ -1076,7 +1070,7 @@ class ThemeTest(TestCase):
         class Schema:
             theme = c.Theme()
 
-        with self.expect_error(theme="'theme.locale' must be a string."):
+        with self.expect_error(theme="'locale' must be a string."):
             self.get_config(Schema, config)
 
     def test_post_validation_locale(self):
@@ -1241,7 +1235,7 @@ class SubConfigTest(TestCase):
         conf = self.get_config(
             Schema,
             {'option': {'unknown': 0}},
-            warnings=dict(option=('unknown', 'Unrecognised configuration name: unknown')),
+            warnings=dict(option="Sub-option 'unknown': Unrecognised configuration name: unknown"),
         )
         self.assertEqual(conf['option'], {"unknown": 0})
 
@@ -1598,7 +1592,7 @@ class MarkdownExtensionsTest(TestCase):
         self.assertIsNone(conf['mdx_configs'].get('toc'))
 
 
-class TestHooks(TestCase):
+class HooksTest(TestCase):
     class Schema:
         plugins = c.Plugins(default=[])
         hooks = c.Hooks('plugins')

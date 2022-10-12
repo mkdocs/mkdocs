@@ -3,9 +3,17 @@
 
 import os
 import unittest
-from unittest import mock
+from typing import TYPE_CHECKING, Optional
 
-from mkdocs import config, plugins
+if TYPE_CHECKING:
+    from typing_extensions import assert_type
+else:
+
+    def assert_type(val, typ):
+        return None
+
+
+from mkdocs import plugins
 from mkdocs.commands import build
 from mkdocs.config import base
 from mkdocs.config import config_options as c
@@ -39,7 +47,7 @@ class DummyPlugin(plugins.BasePlugin[_DummyPluginConfig]):
 
 
 class TestPluginClass(unittest.TestCase):
-    def test_valid_plugin_options(self):
+    def test_valid_plugin_options(self) -> None:
         test_dir = 'test'
 
         options = {
@@ -51,19 +59,23 @@ class TestPluginClass(unittest.TestCase):
         cfg_fname = os.path.abspath(cfg_fname)
 
         cfg_dirname = os.path.dirname(cfg_fname)
-        expected = os.path.join(cfg_dirname, test_dir)
-
         expected = {
             'foo': 'some value',
             'bar': 0,
-            'dir': expected,
+            'dir': os.path.join(cfg_dirname, test_dir),
         }
 
         plugin = DummyPlugin()
         errors, warnings = plugin.load_config(options, config_file_path=cfg_fname)
-        self.assertEqual(plugin.config, expected)
         self.assertEqual(errors, [])
         self.assertEqual(warnings, [])
+
+        assert_type(plugin.config, _DummyPluginConfig)
+        self.assertEqual(plugin.config, expected)
+
+        assert_type(plugin.config.bar, int)
+        self.assertEqual(plugin.config.bar, 0)
+        assert_type(plugin.config.dir, Optional[str])
 
     def test_invalid_plugin_options(self):
         plugin = DummyPlugin()
@@ -285,160 +297,3 @@ class TestPluginCollection(unittest.TestCase):
         self.assertEqual(str(build_errors[2]), 'page content error')
         self.assertIs(build_errors[3].__class__, ValueError)
         self.assertEqual(str(build_errors[3]), 'post page error')
-
-
-MockEntryPoint = mock.Mock()
-MockEntryPoint.configure_mock(**{'name': 'sample', 'load.return_value': DummyPlugin})
-
-
-@mock.patch('mkdocs.plugins.entry_points', return_value=[MockEntryPoint])
-class TestPluginConfig(unittest.TestCase):
-    def test_plugin_config_without_options(self, mock_class):
-        cfg = {'plugins': ['sample']}
-        option = c.Plugins()
-        cfg['plugins'] = option.validate(cfg['plugins'])
-
-        self.assertIsInstance(cfg['plugins'], plugins.PluginCollection)
-        self.assertIn('sample', cfg['plugins'])
-        self.assertIsInstance(cfg['plugins']['sample'], plugins.BasePlugin)
-        expected = {
-            'foo': 'default foo',
-            'bar': 0,
-            'dir': None,
-        }
-        self.assertEqual(cfg['plugins']['sample'].config, expected)
-
-    def test_plugin_config_with_options(self, mock_class):
-        cfg = {
-            'plugins': [
-                {
-                    'sample': {
-                        'foo': 'foo value',
-                        'bar': 42,
-                    },
-                }
-            ],
-        }
-        option = c.Plugins()
-        cfg['plugins'] = option.validate(cfg['plugins'])
-
-        self.assertIsInstance(cfg['plugins'], plugins.PluginCollection)
-        self.assertIn('sample', cfg['plugins'])
-        self.assertIsInstance(cfg['plugins']['sample'], plugins.BasePlugin)
-        expected = {
-            'foo': 'foo value',
-            'bar': 42,
-            'dir': None,
-        }
-        self.assertEqual(cfg['plugins']['sample'].config, expected)
-
-    def test_plugin_config_as_dict(self, mock_class):
-        cfg = {
-            'plugins': {
-                'sample': {
-                    'foo': 'foo value',
-                    'bar': 42,
-                },
-            },
-        }
-        option = c.Plugins()
-        cfg['plugins'] = option.validate(cfg['plugins'])
-
-        self.assertIsInstance(cfg['plugins'], plugins.PluginCollection)
-        self.assertIn('sample', cfg['plugins'])
-        self.assertIsInstance(cfg['plugins']['sample'], plugins.BasePlugin)
-        expected = {
-            'foo': 'foo value',
-            'bar': 42,
-            'dir': None,
-        }
-        self.assertEqual(cfg['plugins']['sample'].config, expected)
-
-    def test_plugin_config_empty_list_with_empty_default(self, mock_class):
-        cfg = {'plugins': []}
-        option = c.Plugins(default=[])
-        cfg['plugins'] = option.validate(cfg['plugins'])
-
-        self.assertIsInstance(cfg['plugins'], plugins.PluginCollection)
-        self.assertEqual(len(cfg['plugins']), 0)
-
-    def test_plugin_config_empty_list_with_default(self, mock_class):
-        # Default is ignored
-        cfg = {'plugins': []}
-        option = c.Plugins(default=['sample'])
-        cfg['plugins'] = option.validate(cfg['plugins'])
-
-        self.assertIsInstance(cfg['plugins'], plugins.PluginCollection)
-        self.assertEqual(len(cfg['plugins']), 0)
-
-    def test_plugin_config_none_with_empty_default(self, mock_class):
-        cfg = {'plugins': None}
-        option = c.Plugins(default=[])
-        cfg['plugins'] = option.validate(cfg['plugins'])
-
-        self.assertIsInstance(cfg['plugins'], plugins.PluginCollection)
-        self.assertEqual(len(cfg['plugins']), 0)
-
-    def test_plugin_config_none_with_default(self, mock_class):
-        # Default is used.
-        cfg = {'plugins': None}
-        option = c.Plugins(default=['sample'])
-        cfg['plugins'] = option.validate(cfg['plugins'])
-
-        self.assertIsInstance(cfg['plugins'], plugins.PluginCollection)
-        self.assertIn('sample', cfg['plugins'])
-        self.assertIsInstance(cfg['plugins']['sample'], plugins.BasePlugin)
-        expected = {
-            'foo': 'default foo',
-            'bar': 0,
-            'dir': None,
-        }
-        self.assertEqual(cfg['plugins']['sample'].config, expected)
-
-    def test_plugin_config_uninstalled(self, mock_class):
-        cfg = {'plugins': ['uninstalled']}
-        option = c.Plugins()
-        with self.assertRaises(config.base.ValidationError):
-            option.validate(cfg['plugins'])
-
-    def test_plugin_config_not_list(self, mock_class):
-        cfg = {'plugins': 'sample'}  # should be a list
-        option = c.Plugins()
-        with self.assertRaises(config.base.ValidationError):
-            option.validate(cfg['plugins'])
-
-    def test_plugin_config_multivalue_dict(self, mock_class):
-        cfg = {
-            'plugins': [
-                {
-                    'sample': {
-                        'foo': 'foo value',
-                        'bar': 42,
-                    },
-                    'extra_key': 'baz',
-                }
-            ],
-        }
-        option = c.Plugins()
-        with self.assertRaises(config.base.ValidationError):
-            option.validate(cfg['plugins'])
-
-    def test_plugin_config_not_string_or_dict(self, mock_class):
-        cfg = {
-            'plugins': [('not a string or dict',)],
-        }
-        option = c.Plugins()
-        with self.assertRaises(config.base.ValidationError):
-            option.validate(cfg['plugins'])
-
-    def test_plugin_config_options_not_dict(self, mock_class):
-        cfg = {
-            'plugins': [
-                {
-                    'sample': 'not a dict',
-                }
-            ],
-        }
-        option = c.Plugins()
-        with self.assertRaises(config.base.ValidationError):
-            option.validate(cfg['plugins'])
