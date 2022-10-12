@@ -919,21 +919,23 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
     initializing the plugin class.
     """
 
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, theme_key: t.Optional[str] = None, **kwargs) -> None:
         super().__init__(**kwargs)
         self.installed_plugins = plugins.get_plugins()
-        self.config_file_path: t.Optional[str] = None
+        self.theme_key = theme_key
+        self._config: t.Optional[Config] = None
         self.plugin_cache: Dict[str, plugins.BasePlugin] = {}
 
-    def pre_validation(self, config: Config, key_name: str):
-        self.config_file_path = config.config_file_path
+    def pre_validation(self, config, key_name):
+        self._config = config
 
     def run_validation(self, value: object) -> plugins.PluginCollection:
         if not isinstance(value, (list, tuple, dict)):
             raise ValidationError('Invalid Plugins configuration. Expected a list or dict.')
         self.plugins = plugins.PluginCollection()
         for name, cfg in self._parse_configs(value):
-            self.plugins[name] = self.load_plugin(name, cfg)
+            name, plugin = self.load_plugin_with_namespace(name, cfg)
+            self.plugins[name] = plugin
         return self.plugins
 
     @classmethod
@@ -955,6 +957,21 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
                 if not isinstance(name, str):
                     raise ValidationError(f"'{name}' is not a valid plugin name.")
                 yield name, cfg
+
+    def load_plugin_with_namespace(self, name: str, config) -> Tuple[str, plugins.BasePlugin]:
+        if '/' in name:  # It's already specified with a namespace.
+            # Special case: allow to explicitly skip namespaced loading:
+            if name.startswith('/'):
+                name = name[1:]
+        else:
+            # Attempt to load with prepended namespace for the current theme.
+            if self.theme_key and self._config:
+                current_theme = self._config[self.theme_key].name
+                if current_theme:
+                    expanded_name = f'{current_theme}/{name}'
+                    if expanded_name in self.installed_plugins:
+                        name = expanded_name
+        return (name, self.load_plugin(name, config))
 
     def load_plugin(self, name: str, config) -> plugins.BasePlugin:
         if name not in self.installed_plugins:
@@ -979,7 +996,9 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
             if hasattr(plugin, 'on_startup') or hasattr(plugin, 'on_shutdown'):
                 self.plugin_cache[name] = plugin
 
-        errors, warnings = plugin.load_config(config, self.config_file_path)
+        errors, warnings = plugin.load_config(
+            config, self._config.config_file_path if self._config else None
+        )
         self.warnings.extend(f"Plugin '{name}' value: '{x}'. Warning: {y}" for x, y in warnings)
         errors_message = '\n'.join(f"Plugin '{name}' value: '{x}'. Error: {y}" for x, y in errors)
         if errors_message:
