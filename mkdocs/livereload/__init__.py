@@ -15,6 +15,7 @@ import socketserver
 import string
 import threading
 import time
+import urllib.parse
 import warnings
 import wsgiref.simple_server
 from typing import Any, Callable, Dict, Optional, Tuple
@@ -248,7 +249,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
             rel_file_path = posixpath.normpath("/" + rel_file_path).lstrip("/")
             file_path = os.path.join(self.root, rel_file_path)
         elif path == "/":
-            start_response("302 Found", [("Location", self.mount_path)])
+            start_response("302 Found", [("Location", urllib.parse.quote(self.mount_path))])
             return []
         else:
             return None  # Not found
@@ -262,7 +263,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
             file = open(file_path, "rb")
         except OSError:
             if not path.endswith("/") and os.path.isfile(os.path.join(file_path, "index.html")):
-                start_response("302 Found", [("Location", path + "/")])
+                start_response("302 Found", [("Location", urllib.parse.quote(path) + "/")])
                 return []
             return None  # Not found
 
