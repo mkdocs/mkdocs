@@ -332,13 +332,28 @@ class BuildTests(unittest.TestCase):
                 headers, _ = do_request(server, "GET /foo/index.html/")
             self.assertEqual(headers["_status"], "404 Not Found")
 
-    @tempdir({"foo/bar/index.html": "<body>aaa</body>"})
+    @tempdir(
+        {
+            "foo/bar/index.html": "<body>aaa</body>",
+            "foo/測試/index.html": "<body>bbb</body>",
+        }
+    )
     def test_redirects_to_directory(self, site_dir):
         with testing_server(site_dir, mount_path="/sub") as server:
             with self.assertLogs("mkdocs.livereload"):
                 headers, _ = do_request(server, "GET /sub/foo/bar")
             self.assertEqual(headers["_status"], "302 Found")
             self.assertEqual(headers.get("location"), "/sub/foo/bar/")
+
+            with self.assertLogs("mkdocs.livereload"):
+                headers, _ = do_request(server, "GET /sub/foo/測試")
+            self.assertEqual(headers["_status"], "302 Found")
+            self.assertEqual(headers.get("location"), "/sub/foo/%E6%B8%AC%E8%A9%A6/")
+
+            with self.assertLogs("mkdocs.livereload"):
+                headers, _ = do_request(server, "GET /sub/foo/%E6%B8%AC%E8%A9%A6")
+            self.assertEqual(headers["_status"], "302 Found")
+            self.assertEqual(headers.get("location"), "/sub/foo/%E6%B8%AC%E8%A9%A6/")
 
     @tempdir({"я.html": "<body>aaa</body>", "测试2/index.html": "<body>bbb</body>"})
     def test_serves_with_unicode_characters(self, site_dir):
@@ -471,6 +486,14 @@ class BuildTests(unittest.TestCase):
                 headers, _ = do_request(server, "GET /")
             self.assertEqual(headers["_status"], "302 Found")
             self.assertEqual(headers.get("location"), "/mount/path/")
+
+    @tempdir()
+    def test_redirects_to_unicode_mount_path(self, site_dir):
+        with testing_server(site_dir, mount_path="/mount/測試") as server:
+            with self.assertLogs("mkdocs.livereload"):
+                headers, _ = do_request(server, "GET /")
+            self.assertEqual(headers["_status"], "302 Found")
+            self.assertEqual(headers.get("location"), "/mount/%E6%B8%AC%E8%A9%A6/")
 
     @tempdir({"mkdocs.yml": "original", "mkdocs2.yml": "original"}, prefix="tmp_dir")
     @tempdir(prefix="origin_dir")
