@@ -29,6 +29,7 @@ class ThemeTests(unittest.TestCase):
         self.assertEqual(
             get_vars(theme),
             {
+                'name': 'mkdocs',
                 'locale': parse_locale('en'),
                 'include_search_page': False,
                 'search_index_only': False,
