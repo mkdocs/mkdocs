@@ -966,7 +966,7 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
         else:
             # Attempt to load with prepended namespace for the current theme.
             if self.theme_key and self._config:
-                current_theme = self._config[self.theme_key].name
+                current_theme = self._config[self.theme_key]['name']
                 if current_theme:
                     expanded_name = f'{current_theme}/{name}'
                     if expanded_name in self.installed_plugins:
