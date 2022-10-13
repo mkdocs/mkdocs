@@ -350,6 +350,11 @@ class BuildTests(unittest.TestCase):
             self.assertEqual(headers["_status"], "302 Found")
             self.assertEqual(headers.get("location"), "/sub/foo/%E6%B8%AC%E8%A9%A6/")
 
+            with self.assertLogs("mkdocs.livereload"):
+                headers, _ = do_request(server, "GET /sub/foo/%E6%B8%AC%E8%A9%A6")
+            self.assertEqual(headers["_status"], "302 Found")
+            self.assertEqual(headers.get("location"), "/sub/foo/%E6%B8%AC%E8%A9%A6/")
+
     @tempdir({"я.html": "<body>aaa</body>", "测试2/index.html": "<body>bbb</body>"})
     def test_serves_with_unicode_characters(self, site_dir):
         with testing_server(site_dir) as server:
