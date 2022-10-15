@@ -183,6 +183,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-level="2"><a href="#version-141-2022-10-15" class="nav-link">Version 1.4.1 (2022-10-15)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-level="2"><a href="#version-140-2022-09-27" class="nav-link">Version 1.4.0 (2022-09-27)</a>
               <ul class="nav flex-column">
               </ul>
@@ -371,6 +375,34 @@ mkdocs, version 1.0 from /path/to/mkdocs (Python 3.6)</code></pre>
 <li><a href="https://github.com/oprypin/">@oprypin</a></li>
 <li><a href="https://github.com/ultrabug/">@ultrabug</a></li>
 </ul>
+<h2 id="version-141-2022-10-15">Version 1.4.1 (2022-10-15)<a class="headerlink" href="#version-141-2022-10-15" title="Permanent link"></a></h2>
+<ul>
+<li>
+<p>Support theme-namespaced plugin loading (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2998" title="GitHub Issue mkdocs/mkdocs #2998">#2998</a>)</p>
+<p>Plugins' entry points can be named as 'sometheme/someplugin'. That will have the following outcome:</p>
+<ul>
+<li>If the current theme is 'sometheme', the plugin 'sometheme/someplugin' will always be preferred over 'someplugin'.</li>
+<li>If the current theme <em>isn't</em> 'sometheme', the only way to use this plugin is by specifying <code>plugins: [sometheme/someplugin]</code>.</li>
+</ul>
+<p>One can also specify <code>plugins: ['/someplugin']</code> instead of <code>plugins: ['someplugin']</code> to definitely avoid the theme-namespaced plugin.</p>
+</li>
+<li>
+<p>Bugfix: <code>mkdocs serve</code> will work correctly with non-ASCII paths and redirects (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3001" title="GitHub Issue mkdocs/mkdocs #3001">#3001</a>)</p>
+</li>
+<li>
+<p>Windows: 'colorama' is now a dependency of MkDocs, to ensure colorful log output (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2987" title="GitHub Issue mkdocs/mkdocs #2987">#2987</a>)</p>
+</li>
+<li>
+<p>Plugin-related config options have more reliable validation and error reporting (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2997" title="GitHub Issue mkdocs/mkdocs #2997">#2997</a>)</p>
+</li>
+<li>
+<p>Translation sub-commands of <code>setup.py</code> were completely dropped. See documentation <a href="../contributing/#submitting-changes-to-the-builtin-themes">[1]</a> <a href="../../dev-guide/translations/#updating-the-translation-catalogs">[2]</a> for their new replacements (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2990" title="GitHub Issue mkdocs/mkdocs #2990">#2990</a>)</p>
+</li>
+<li>
+<p>The <a href="https://pypi.org/project/mkdocs/#files">'mkdocs' package</a> (wheel and source) is now produced by Hatch build system and pyproject.toml instead of setup.py (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2988" title="GitHub Issue mkdocs/mkdocs #2988">#2988</a>)</p>
+</li>
+</ul>
+<p>Other small improvements; see <a href="https://github.com/mkdocs/mkdocs/compare/1.4.0...1.4.1">commit log</a>.</p>
 <h2 id="version-140-2022-09-27">Version 1.4.0 (2022-09-27)<a class="headerlink" href="#version-140-2022-09-27" title="Permanent link"></a></h2>
 <h3 id="feature-upgrades">Feature upgrades<a class="headerlink" href="#feature-upgrades" title="Permanent link"></a></h3>
 <h4 id="hooks-2978">Hooks (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2978" title="GitHub Issue mkdocs/mkdocs #2978">#2978</a>)<a class="headerlink" href="#hooks-2978" title="Permanent link"></a></h4>

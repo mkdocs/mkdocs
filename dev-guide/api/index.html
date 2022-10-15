@@ -294,7 +294,7 @@
 
 
 <h3 id="mkdocs.structure.files.Files.src_paths" class="doc doc-heading">
-<code class="highlight language-python">src_paths() -&gt; dict[str, File]</code>
+<code class="highlight language-python">src_paths() -&gt; Dict[str, File]</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
@@ -316,7 +316,7 @@
 
 
 <h3 id="mkdocs.structure.files.Files.src_uris" class="doc doc-heading">
-<code class="highlight language-python">src_uris() -&gt; dict[str, File]</code>
+<code class="highlight language-python">src_uris() -&gt; Dict[str, File]</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
@@ -339,7 +339,7 @@
 
 
 <h3 id="mkdocs.structure.files.Files.get_file_from_path" class="doc doc-heading">
-<code class="highlight language-python">get_file_from_path(path: str) -&gt; File | None</code>
+<code class="highlight language-python">get_file_from_path(path: str) -&gt; Optional[File]</code>
 
 <a href="#mkdocs.structure.files.Files.get_file_from_path" class="headerlink" title="Permanent link"></a></h3>
 
@@ -815,7 +815,7 @@ default if it has one.</p>
 
 
 <h3 id="mkdocs.config.base.Config.load_dict" class="doc doc-heading">
-<code class="highlight language-python">load_dict(patch: dict | None) -&gt; None</code>
+<code class="highlight language-python">load_dict(patch: Optional[dict]) -&gt; None</code>
 
 <a href="#mkdocs.config.base.Config.load_dict" class="headerlink" title="Permanent link"></a></h3>
 
@@ -889,7 +889,7 @@ default if it has one.</p>
 
 
 <h3 id="mkdocs.livereload.LiveReloadServer.watch" class="doc doc-heading">
-<code class="highlight language-python">watch(path: str, func: Callable | None = None, recursive: bool = True) -&gt; None</code>
+<code class="highlight language-python">watch(path: str, func: Optional[Callable] = None, recursive: bool = True) -&gt; None</code>
 
 <a href="#mkdocs.livereload.LiveReloadServer.watch" class="headerlink" title="Permanent link"></a></h3>
 

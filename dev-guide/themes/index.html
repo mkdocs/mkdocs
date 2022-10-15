@@ -398,7 +398,7 @@ defined by the <a href="../../user-guide/configuration/#nav">nav</a> configurati
 
 
 <h5 id="mkdocs.structure.nav.Navigation.homepage" class="doc doc-heading">
-<code class="highlight language-python">homepage: Page | None</code>
+<code class="highlight language-python">homepage: Optional[Page]</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -419,7 +419,7 @@ defined by the <a href="../../user-guide/configuration/#nav">nav</a> configurati
 
 
 <h5 id="mkdocs.structure.nav.Navigation.pages" class="doc doc-heading">
-<code class="highlight language-python">pages: list[Page]</code>
+<code class="highlight language-python">pages: List[Page]</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -520,7 +520,7 @@ as <code>page</code> <a href="#navigation-objects">navigation objects</a> in the
 
 
 <h5 id="mkdocs.structure.pages.Page.title" class="doc doc-heading">
-<code class="highlight language-python">title: str | None</code>
+<code class="highlight language-python">title: Optional[str]</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -541,7 +541,7 @@ as <code>page</code> <a href="#navigation-objects">navigation objects</a> in the
 
 
 <h5 id="mkdocs.structure.pages.Page.content" class="doc doc-heading">
-<code class="highlight language-python">content: str | None</code>
+<code class="highlight language-python">content: Optional[str]</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -676,7 +676,7 @@ page.</p>
 
 
 <h5 id="mkdocs.structure.pages.Page.abs_url" class="doc doc-heading">
-<code class="highlight language-python">abs_url: str | None</code>
+<code class="highlight language-python">abs_url: Optional[str]</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -704,7 +704,7 @@ page <code>foo.md</code> would be <code>/bar/foo/</code>.</p>
 
 
 <h5 id="mkdocs.structure.pages.Page.canonical_url" class="doc doc-heading">
-<code class="highlight language-python">canonical_url: str | None</code>
+<code class="highlight language-python">canonical_url: Optional[str]</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -728,7 +728,7 @@ variable.</p>
 
 
 <h5 id="mkdocs.structure.pages.Page.edit_url" class="doc doc-heading">
-<code class="highlight language-python">edit_url: str | None</code>
+<code class="highlight language-python">edit_url: Optional[str]</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -777,7 +777,7 @@ on the homepage:</p>
 
 
 <h5 id="mkdocs.structure.pages.Page.previous_page" class="doc doc-heading">
-<code class="highlight language-python">previous_page: Page | None</code>
+<code class="highlight language-python">previous_page: Optional[Page]</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -800,7 +800,7 @@ or if the current page is not included in the navigation at all.</p>
 
 
 <h5 id="mkdocs.structure.pages.Page.next_page" class="doc doc-heading">
-<code class="highlight language-python">next_page: Page | None</code>
+<code class="highlight language-python">next_page: Optional[Page]</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -823,7 +823,7 @@ or if the current page is not included in the navigation at all.</p>
 
 
 <h5 id="mkdocs.structure.pages.Page.parent" class="doc doc-heading">
-<code class="highlight language-python">parent: Section | None</code>
+<code class="highlight language-python">parent: Optional[Section]</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -1016,7 +1016,7 @@ page is at the top level.</p>
 
 
 <h5 id="mkdocs.structure.toc.AnchorLink.children" class="doc doc-heading">
-<code class="highlight language-python">children: list[AnchorLink]</code>
+<code class="highlight language-python">children: List[AnchorLink]</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -1134,7 +1134,7 @@ theme chooses to do so.</p>
 
 
 <h5 id="mkdocs.structure.nav.Section.parent" class="doc doc-heading">
-<code class="highlight language-python">parent: Section | None</code>
+<code class="highlight language-python">parent: Optional[Section]</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -1155,7 +1155,7 @@ theme chooses to do so.</p>
 
 
 <h5 id="mkdocs.structure.nav.Section.children" class="doc doc-heading">
-<code class="highlight language-python">children: list[Page | Section | Link]</code>
+<code class="highlight language-python">children: List[Union[Page, Section, Link]]</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -1340,7 +1340,7 @@ should not need to have <code>base_url</code> prepended.</p>
 
 
 <h5 id="mkdocs.structure.nav.Link.parent" class="doc doc-heading">
-<code class="highlight language-python">parent: Section | None</code>
+<code class="highlight language-python">parent: Optional[Section]</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>

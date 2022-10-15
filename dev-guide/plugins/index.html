@@ -1257,7 +1257,7 @@ to the list of "watched" files for auto-reloading.</p>
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><a class="autorefs autorefs-internal" title="mkdocs.livereload.LiveReloadServer" href="../api/#mkdocs.livereload.LiveReloadServer">LiveReloadServer</a> | None</code>
+            <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="mkdocs.livereload.LiveReloadServer" href="../api/#mkdocs.livereload.LiveReloadServer">LiveReloadServer</a>]</code>
         – <p><code>livereload.Server</code> instance</p>
       </li>
   </ul>
@@ -1293,7 +1293,7 @@ config should be made here.</p>
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><a class="autorefs autorefs-internal" title="mkdocs.config.base.Config" href="../api/#mkdocs.config.base.Config">Config</a> | None</code>
+            <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="mkdocs.config.base.Config" href="../api/#mkdocs.config.base.Config">Config</a>]</code>
         – <p>global configuration object</p>
       </li>
   </ul>
@@ -1355,7 +1355,7 @@ specific data.</p>
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a> | None</code>
+            <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a>]</code>
         – <p>global files collection</p>
       </li>
   </ul>
@@ -1396,7 +1396,7 @@ be used to alter the site navigation.</p>
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><a class="autorefs autorefs-internal" title="mkdocs.structure.nav.Navigation" href="../themes/#mkdocs.structure.nav.Navigation">Navigation</a> | None</code>
+            <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="mkdocs.structure.nav.Navigation" href="../themes/#mkdocs.structure.nav.Navigation">Navigation</a>]</code>
         – <p>global navigation object</p>
       </li>
   </ul>
@@ -1438,7 +1438,7 @@ and can be used to alter the
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><span title="jinja2.environment">jinja2</span>.<span title="jinja2.environment.Environment">Environment</span> | None</code>
+            <code><span title="typing.Optional">Optional</span>[<span title="jinja2.environment">jinja2</span>.<span title="jinja2.environment.Environment">Environment</span>]</code>
         – <p>global Jinja Environment</p>
       </li>
   </ul>
@@ -1533,7 +1533,7 @@ loaded and can be used to alter the template.</p>
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><span title="jinja2.environment">jinja2</span>.<span title="jinja2.environment.Template">Template</span> | None</code>
+            <code><span title="typing.Optional">Optional</span>[<span title="jinja2.environment">jinja2</span>.<span title="jinja2.environment.Template">Template</span>]</code>
         – <p>a Jinja2 <a href="https://jinja.palletsprojects.com/en/latest/api/#jinja2.Template">Template</a> object</p>
       </li>
   </ul>
@@ -1557,7 +1557,7 @@ template only.</p>
   <ul>
       <li class="field-body">
         <b>context</b>
-            (<code>dict[str, <span title="typing.Any">Any</span>]</code>)
+            (<code><span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]</code>)
         – <p>dict of template context variables</p>
       </li>
       <li class="field-body">
@@ -1575,7 +1575,7 @@ template only.</p>
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code>dict[str, <span title="typing.Any">Any</span>] | None</code>
+            <code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]]</code>
         – <p>dict of template context variables</p>
       </li>
   </ul>
@@ -1618,7 +1618,7 @@ written to disc.</p>
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code>str | None</code>
+            <code><span title="typing.Optional">Optional</span>[str]</code>
         – <p>output of rendered template as string</p>
       </li>
   </ul>
@@ -1663,7 +1663,7 @@ page and can be used to alter the <code>Page</code> instance.</p>
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a> | None</code>
+            <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a>]</code>
         – <p><code>mkdocs.nav.Page</code> instance</p>
       </li>
   </ul>
@@ -1699,7 +1699,7 @@ the contents of a page's source from the filesystem.</p>
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code>str | None</code>
+            <code><span title="typing.Optional">Optional</span>[str]</code>
         – <p>The raw source for a page as unicode string. If <code>None</code> is returned, the
 default loading from a file will be performed.</p>
       </li>
@@ -1747,7 +1747,7 @@ data has been stripped off and is available as <code>page.meta</code> at this po
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code>str | None</code>
+            <code><span title="typing.Optional">Optional</span>[str]</code>
         – <p>Markdown source text of page as string</p>
       </li>
   </ul>
@@ -1794,7 +1794,7 @@ HTML body of the page.</p>
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code>str | None</code>
+            <code><span title="typing.Optional">Optional</span>[str]</code>
         – <p>HTML rendered from Markdown source as string</p>
       </li>
   </ul>
@@ -1817,7 +1817,7 @@ and can be used to alter the context for that specific page only.</p>
   <ul>
       <li class="field-body">
         <b>context</b>
-            (<code>dict[str, <span title="typing.Any">Any</span>]</code>)
+            (<code><span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]</code>)
         – <p>dict of template context variables</p>
       </li>
       <li class="field-body">
@@ -1840,7 +1840,7 @@ and can be used to alter the context for that specific page only.</p>
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code>dict[str, <span title="typing.Any">Any</span>] | None</code>
+            <code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]]</code>
         – <p>dict of template context variables</p>
       </li>
   </ul>
@@ -1883,7 +1883,7 @@ written to disc.</p>
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code>str | None</code>
+            <code><span title="typing.Optional">Optional</span>[str]</code>
         – <p>output of rendered template as string</p>
       </li>
   </ul>
