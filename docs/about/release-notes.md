@@ -27,6 +27,27 @@ The current and past members of the MkDocs team.
 * [@oprypin](https://github.com/oprypin/)
 * [@ultrabug](https://github.com/ultrabug/)
 
+## Version 1.4.1 (2022-10-15)
+
+*   Support theme-namespaced plugin loading (#2998)
+
+    Plugins' entry points can be named as 'sometheme/someplugin'. That will have the following outcome:
+
+    * If the current theme is 'sometheme', the plugin 'sometheme/someplugin' will always be preferred over 'someplugin'.
+    * If the current theme *isn't* 'sometheme', the only way to use this plugin is by specifying `plugins: [sometheme/someplugin]`.
+
+    One can also specify `plugins: ['/someplugin']` instead of `plugins: ['someplugin']` to definitely avoid the theme-namespaced plugin.
+
+*   Windows: 'colorama' is now a dependency of MkDocs, to ensure colorful log output (#2987)
+
+*   Plugin-related config options have more reliable validation and error reporting (#2997)
+
+*   Translation sub-commands of `setup.py` were completely dropped. See documentation [[1]](../about/contributing.md#submitting-changes-to-the-builtin-themes) [[2]](../dev-guide/translations.md#updating-the-translation-catalogs) for their new replacements (#2990)
+
+*   The ['mkdocs' package](https://pypi.org/project/mkdocs/#files) (wheel and source) is now produced by Hatch build system and pyproject.toml instead of setup.py (#2988)
+
+Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.4.0...1.4.1).
+
 ## Version 1.4.0 (2022-09-27)
 
 ### Feature upgrades
