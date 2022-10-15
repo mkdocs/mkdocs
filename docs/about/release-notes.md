@@ -38,6 +38,8 @@ The current and past members of the MkDocs team.
 
     One can also specify `plugins: ['/someplugin']` instead of `plugins: ['someplugin']` to definitely avoid the theme-namespaced plugin.
 
+*   Bugfix: `mkdocs serve` will work correctly with non-ASCII paths and redirects (#3001)
+
 *   Windows: 'colorama' is now a dependency of MkDocs, to ensure colorful log output (#2987)
 
 *   Plugin-related config options have more reliable validation and error reporting (#2997)
