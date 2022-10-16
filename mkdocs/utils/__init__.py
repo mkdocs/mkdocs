@@ -459,7 +459,13 @@ class CountHandler(logging.NullHandler):
         return [(logging.getLevelName(k), v) for k, v in sorted(self.counts.items(), reverse=True)]
 
 
-# For backward compatibility as some plugins import it.
-# It is no longer necessary as all messages on the
-# `mkdocs` logger get counted automatically.
-warning_filter = logging.Filter()
+def __getattr__(name: str):
+    if name == 'warning_filter':
+        warnings.warn(
+            "warning_filter doesn't do anything since MkDocs 1.2 and will be removed soon. "
+            "All messages on the `mkdocs` logger get counted automatically.",
+            DeprecationWarning,
+        )
+        return logging.Filter()
+
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
