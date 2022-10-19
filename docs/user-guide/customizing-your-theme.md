@@ -224,6 +224,6 @@ any additional CSS files included in the `custom_dir`.
 [mkdocs]: ./choosing-your-theme.md#mkdocs
 [browse source]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes/mkdocs
 [Template Variables]: ../dev-guide/themes.md#template-variables
-[Jinja documentation]: http://jinja.pocoo.org/docs/dev/templates/#template-inheritance
+[Jinja documentation]: https://jinja.palletsprojects.com/en/3.1.x/templates/#template-inheritance
 [super block]: http://jinja.pocoo.org/docs/dev/templates/#super-blocks
 [base_url]: ../dev-guide/themes.md#base_url
