@@ -996,11 +996,19 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
             if hasattr(plugin, 'on_startup') or hasattr(plugin, 'on_shutdown'):
                 self.plugin_cache[name] = plugin
 
-        errors, warnings = plugin.load_config(
+        errors, warns = plugin.load_config(
             config, self._config.config_file_path if self._config else None
         )
-        self.warnings.extend(f"Plugin '{name}' value: '{x}'. Warning: {y}" for x, y in warnings)
-        errors_message = '\n'.join(f"Plugin '{name}' value: '{x}'. Error: {y}" for x, y in errors)
+        for warning in warns:
+            if isinstance(warning, str):
+                self.warnings.append(f"Plugin '{name}'. Warning: {warning}")
+            else:
+                key, msg = warning
+                self.warnings.append(f"Plugin '{name}' value: '{key}'. Warning: {msg}")
+
+        errors_message = '\n'.join(
+            f"Plugin '{name}' value: '{key}'. Error: {msg}" for key, msg in errors
+        )
         if errors_message:
             raise ValidationError(errors_message)
         return plugin
