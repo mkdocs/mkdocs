@@ -363,13 +363,13 @@ def load_config(config_file: Optional[Union[str, IO]] = None, **kwargs) -> MkDoc
     errors, warnings = cfg.validate()
 
     for config_name, warning in warnings:
-        log.warning(f"Config value: '{config_name}'. Warning: {warning}")
+        log.warning(f"Config value '{config_name}': {warning}")
 
     for config_name, error in errors:
-        log.error(f"Config value: '{config_name}'. Error: {error}")
+        log.error(f"Config value '{config_name}': {error}")
 
     for key, value in cfg.items():
-        log.debug(f"Config value: '{key}' = {value!r}")
+        log.debug(f"Config value '{key}' = {value!r}")
 
     if len(errors) > 0:
         raise exceptions.Abort(f"Aborted with {len(errors)} Configuration Errors!")

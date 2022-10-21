@@ -96,11 +96,11 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
 
         if self._do_validation:
             # Capture errors and warnings
-            self.warnings = [f'Sub-option {key!r}: {msg}' for key, msg in warnings]
+            self.warnings = [f"Sub-option '{key}': {msg}" for key, msg in warnings]
             if failed:
                 # Get the first failing one
                 key, err = failed[0]
-                raise ValidationError(f"Sub-option {key!r} configuration error: {err}")
+                raise ValidationError(f"Sub-option '{key}': {err}")
 
         return config
 
@@ -309,7 +309,7 @@ class Deprecated(BaseConfigOption):
             else:
                 message = (
                     "The configuration option '{}' has been deprecated and "
-                    "will be removed in a future release of MkDocs."
+                    "will be removed in a future release."
                 )
             if moved_to:
                 message += f" Use '{moved_to}' instead."
@@ -1001,14 +1001,12 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
         )
         for warning in warns:
             if isinstance(warning, str):
-                self.warnings.append(f"Plugin '{name}'. Warning: {warning}")
+                self.warnings.append(f"Plugin '{name}': {warning}")
             else:
                 key, msg = warning
-                self.warnings.append(f"Plugin '{name}' value: '{key}'. Warning: {msg}")
+                self.warnings.append(f"Plugin '{name}' option '{key}': {msg}")
 
-        errors_message = '\n'.join(
-            f"Plugin '{name}' value: '{key}'. Error: {msg}" for key, msg in errors
-        )
+        errors_message = '\n'.join(f"Plugin '{name}' option '{key}': {msg}" for key, msg in errors)
         if errors_message:
             raise ValidationError(errors_message)
         return plugin

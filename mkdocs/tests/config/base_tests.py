@@ -147,7 +147,7 @@ class ConfigBaseTests(unittest.TestCase):
                 base.load_config(config_file=config_file.name)
         self.assertEqual(
             '\n'.join(cm.output),
-            "ERROR:mkdocs.config:Config value: 'site_name'. Error: Required configuration not provided.",
+            "ERROR:mkdocs.config:Config value 'site_name': Required configuration not provided.",
         )
 
     def test_pre_validation_error(self):
