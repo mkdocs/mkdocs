@@ -217,13 +217,13 @@ def _data_to_navigation(data, files: Files, config: Union[MkDocsConfig, Mapping[
 T = TypeVar('T')
 
 
-def _get_by_type(nav, T: Type[T]) -> List[T]:
+def _get_by_type(nav, t: Type[T]) -> List[T]:
     ret = []
     for item in nav:
-        if isinstance(item, T):
+        if isinstance(item, t):
             ret.append(item)
         if item.children:
-            ret.extend(_get_by_type(item.children, T))
+            ret.extend(_get_by_type(item.children, t))
     return ret
 
 

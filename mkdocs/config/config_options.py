@@ -1042,6 +1042,8 @@ class Hooks(BaseConfigOption[List[types.ModuleType]]):
         if spec is None:
             raise ValidationError(f"Cannot import path '{path}' as a Python module")
         module = importlib.util.module_from_spec(spec)
+        if spec.loader is None:
+            raise ValidationError(f"Cannot import path '{path}' as a Python module")
         spec.loader.exec_module(module)
         return module
 
