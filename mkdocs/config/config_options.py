@@ -9,7 +9,7 @@ import traceback
 import types
 import typing as t
 import warnings
-from collections import UserString
+from collections import Counter, UserString
 from typing import (
     Any,
     Collection,
@@ -18,6 +18,7 @@ from typing import (
     Iterator,
     List,
     Mapping,
+    MutableMapping,
     NamedTuple,
     Tuple,
     TypeVar,
@@ -933,6 +934,7 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
         if not isinstance(value, (list, tuple, dict)):
             raise ValidationError('Invalid Plugins configuration. Expected a list or dict.')
         self.plugins = plugins.PluginCollection()
+        self._instance_counter: MutableMapping[str, int] = Counter()
         for name, cfg in self._parse_configs(value):
             name, plugin = self.load_plugin_with_namespace(name, cfg)
             self.plugins[name] = plugin
@@ -981,7 +983,11 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
         if not isinstance(config, dict):
             raise ValidationError(f"Invalid config options for the '{name}' plugin.")
 
-        plugin = self.plugin_cache.get(name)
+        inst_number = self._instance_counter[name]
+        inst_name = name + (f' #{inst_number + 1}' if inst_number else '')
+        self._instance_counter[name] += 1
+
+        plugin = self.plugin_cache.get(inst_name)
         if plugin is None:
             plugin_cls = self.installed_plugins[name].load()
 
@@ -994,17 +1000,17 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
             plugin = plugin_cls()
 
             if hasattr(plugin, 'on_startup') or hasattr(plugin, 'on_shutdown'):
-                self.plugin_cache[name] = plugin
+                self.plugin_cache[inst_name] = plugin
 
         errors, warns = plugin.load_config(
             config, self._config.config_file_path if self._config else None
         )
         for warning in warns:
             if isinstance(warning, str):
-                self.warnings.append(f"Plugin '{name}': {warning}")
+                self.warnings.append(f"Plugin '{inst_name}': {warning}")
             else:
                 key, msg = warning
-                self.warnings.append(f"Plugin '{name}' option '{key}': {msg}")
+                self.warnings.append(f"Plugin '{inst_name}' option '{key}': {msg}")
 
         errors_message = '\n'.join(f"Plugin '{name}' option '{key}': {msg}" for key, msg in errors)
         if errors_message:
