@@ -230,10 +230,7 @@ class File:
         url = self.dest_uri
         dirname, filename = posixpath.split(url)
         if use_directory_urls and filename == 'index.html':
-            if dirname == '':
-                url = '.'
-            else:
-                url = dirname + '/'
+            url = (dirname or '.') + '/'
         return urlquote(url)
 
     def url_relative_to(self, other: File) -> str:
