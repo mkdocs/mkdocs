@@ -1201,31 +1201,31 @@ class SubConfigTest(TestCase):
         """Default behaviour of subconfig: validation is ignored"""
 
         # Nominal
-        class Schema:
+        class Schema1:
             option = c.SubConfig(('cc', c.Choice(('foo', 'bar'))))
 
-        conf = self.get_config(Schema, {'option': {'cc': 'foo'}})
+        conf = self.get_config(Schema1, {'option': {'cc': 'foo'}})
         self.assertEqual(conf, {'option': {'cc': 'foo'}})
 
         # Invalid option: No error
-        class Schema:
+        class Schema2:
             option = c.SubConfig(('cc', c.Choice(('foo', 'bar'))))
 
-        conf = self.get_config(Schema, {'option': {'cc': True}})
+        conf = self.get_config(Schema2, {'option': {'cc': True}})
         self.assertEqual(conf, {'option': {'cc': True}})
 
         # Missing option: Will be considered optional with default None
-        class Schema:
+        class Schema3:
             option = c.SubConfig(('cc', c.Choice(('foo', 'bar'))))
 
-        conf = self.get_config(Schema, {'option': {}})
+        conf = self.get_config(Schema3, {'option': {}})
         self.assertEqual(conf, {'option': {'cc': None}})
 
         # Unknown option: No warning
-        class Schema:
+        class Schema4:
             option = c.SubConfig(('cc', c.Choice(('foo', 'bar'))))
 
-        conf = self.get_config(Schema, {'option': {'unknown_key_is_ok': 0}})
+        conf = self.get_config(Schema4, {'option': {'unknown_key_is_ok': 0}})
         self.assertEqual(conf, {'option': {'cc': None, 'unknown_key_is_ok': 0}})
 
     def test_subconfig_unknown_option(self):

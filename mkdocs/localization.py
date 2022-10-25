@@ -63,7 +63,7 @@ def install_translations(
 
 def _get_merged_translations(
     theme_dirs: Sequence[str], locales_dir: str, locale: Locale
-) -> Translations:
+) -> Optional[Translations]:
     merged_translations: Optional[Translations] = None
 
     log.debug(f"Looking for translations for locale '{locale}'")

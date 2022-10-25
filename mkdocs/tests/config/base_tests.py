@@ -206,7 +206,7 @@ class ConfigBaseTests(unittest.TestCase):
                 ('invalid_option', ValidationError('pre_validation error')),
                 ('invalid_option', ValidationError('run_validation error')),
             ],
-        ),
+        )
         self.assertEqual(warnings, [])
 
     def test_run_and_post_validation_errors(self):
