@@ -43,7 +43,7 @@ msgstr "Rediger på %(repo_name)s"
 
 #: mkdocs/themes/mkdocs/base.html:150
 msgid "Edit"
-msgstr "Endre"
+msgstr "Rediger"
 
 #: mkdocs/themes/mkdocs/base.html:190
 #, python-format
