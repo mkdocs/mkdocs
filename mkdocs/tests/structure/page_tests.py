@@ -659,7 +659,7 @@ class RelativePathExtensionTests(unittest.TestCase):
     def test_relative_html_link_index(self):
         self.assertEqual(
             self.get_rendered_result(['non-index.md', 'index.md']),
-            '<p><a href="..">link</a></p>',
+            '<p><a href="../">link</a></p>',
         )
 
     @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](sub2/index.md)'))
@@ -696,7 +696,7 @@ class RelativePathExtensionTests(unittest.TestCase):
     def test_relative_html_link_parent_index(self):
         self.assertEqual(
             self.get_rendered_result(['sub2/non-index.md', 'index.md']),
-            '<p><a href="../..">link</a></p>',
+            '<p><a href="../../">link</a></p>',
         )
 
     @mock.patch(

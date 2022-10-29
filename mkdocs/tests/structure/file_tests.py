@@ -168,7 +168,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/index.md')
         self.assertEqual(f.dest_uri, 'index.html')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/index.html')
-        self.assertEqual(f.url, '.')
+        self.assertEqual(f.url, './')
         self.assertEqual(f.name, 'index')
         self.assertTrue(f.is_documentation_page())
         self.assertFalse(f.is_static_page())
@@ -182,7 +182,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         self.assertPathsEqual(f.abs_src_path, '/path/to/docs/README.md')
         self.assertEqual(f.dest_uri, 'index.html')
         self.assertPathsEqual(f.abs_dest_path, '/path/to/site/index.html')
-        self.assertEqual(f.url, '.')
+        self.assertEqual(f.url, './')
         self.assertEqual(f.name, 'index')
         self.assertTrue(f.is_documentation_page())
         self.assertFalse(f.is_static_page())
@@ -446,7 +446,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         ]
 
         to_file_urls = [
-            '.',
+            './',
             'foo/',
             'foo/bar/',
             'foo/bar/baz/',
@@ -493,18 +493,18 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
         from_file = File('index.html', '/path/to/docs', '/path/to/site', use_directory_urls=True)
         expected = [
-            '.',  # . relative to .
-            '..',  # . relative to foo/
-            '../..',  # . relative to foo/bar/
-            '../../..',  # . relative to foo/bar/baz/
-            '..',  # . relative to foo
-            '../..',  # . relative to foo/bar
-            '../../..',  # . relative to foo/bar/baz
+            './',  # . relative to .
+            '../',  # . relative to foo/
+            '../../',  # . relative to foo/bar/
+            '../../../',  # . relative to foo/bar/baz/
+            '../',  # . relative to foo
+            '../../',  # . relative to foo/bar
+            '../../../',  # . relative to foo/bar/baz
         ]
 
         for i, filename in enumerate(to_files):
             file = File(filename, '/path/to/docs', '/path/to/site', use_directory_urls=True)
-            self.assertEqual(from_file.url, '.')
+            self.assertEqual(from_file.url, './')
             self.assertEqual(file.url, to_file_urls[i])
             self.assertEqual(from_file.url_relative_to(file.url), expected[i])
             self.assertEqual(from_file.url_relative_to(file), expected[i])
