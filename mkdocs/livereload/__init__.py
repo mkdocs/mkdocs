@@ -246,7 +246,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                         self._epoch_cond.wait_for(condition, timeout=self.poll_response_timeout)
                     return [b"%d" % self._visible_epoch]
 
-        if path.startswith(self.mount_path):
+        if (path + "/").startswith(self.mount_path):
             rel_file_path = path[len(self.mount_path) :]
 
             if path.endswith("/"):

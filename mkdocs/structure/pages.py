@@ -88,7 +88,7 @@ class Page:
     @property
     def url(self) -> str:
         """The URL of the page relative to the MkDocs `site_dir`."""
-        return '' if self.file.url == '.' else self.file.url
+        return '' if self.file.url in ('.', './') else self.file.url
 
     file: File
     """The documentation [`File`][mkdocs.structure.files.File] that the page is being rendered from."""
@@ -133,7 +133,7 @@ class Page:
     @property
     def is_homepage(self) -> bool:
         """Evaluates to `True` for the homepage of the site and `False` for all other pages."""
-        return self.is_top_level and self.is_index and self.file.url in ['.', 'index.html']
+        return self.is_top_level and self.is_index and self.file.url in ('.', './', 'index.html')
 
     previous_page: Optional[Page]
     """The [page][mkdocs.structure.pages.Page] object for the previous page or `None`.
