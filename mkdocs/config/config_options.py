@@ -983,9 +983,11 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
         if not isinstance(config, dict):
             raise ValidationError(f"Invalid config options for the '{name}' plugin.")
 
-        inst_number = self._instance_counter[name]
-        inst_name = name + (f' #{inst_number + 1}' if inst_number else '')
         self._instance_counter[name] += 1
+        inst_number = self._instance_counter[name]
+        inst_name = name
+        if inst_number > 1:
+            inst_name += f' #{inst_number}'
 
         plugin = self.plugin_cache.get(inst_name)
         if plugin is None:
@@ -1001,6 +1003,12 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
 
             if hasattr(plugin, 'on_startup') or hasattr(plugin, 'on_shutdown'):
                 self.plugin_cache[inst_name] = plugin
+
+        if inst_number > 1 and not getattr(plugin, 'supports_multiple_instances', False):
+            self.warnings.append(
+                f"Plugin '{name}' was specified multiple times - this is likely a mistake, "
+                "because the plugin doesn't declare `supports_multiple_instances`."
+            )
 
         errors, warns = plugin.load_config(
             config, self._config.config_file_path if self._config else None
