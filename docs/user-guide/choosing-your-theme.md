@@ -108,17 +108,19 @@ supports the following options:
     The following locales are supported by this theme:
 
     * `en`: English (default)
-    * `fr`: French
-    * `es`: Spanish
-    * `ja`: Japanese
-    * `pt_BR`: Portuguese (Brazil)
-    * `zh_CN`: Simplified Chinese
     * `de`: German
+    * `es`: Spanish
     * `fa`: Persian (Farsi)
+    * `fr`: French
     * `it`: Italian
-    * `tr_TR`: Turkish (Turkey)
+    * `ja`: Japanese
+    * `nb`: Norwegian Bokmål
+    * `nn`: Norwegian Nynorsk
+    * `pt_BR`: Portuguese (Brazil)
     * `ru`: Russian
+    * `tr_TR`: Turkish (Turkey)
     * `uk`: Ukrainian
+    * `zh_CN`: Simplified Chinese
 
     See the guide on [localizing your theme] for more information.
 
