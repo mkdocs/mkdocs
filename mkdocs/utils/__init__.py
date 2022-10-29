@@ -21,12 +21,14 @@ from typing import (
     IO,
     TYPE_CHECKING,
     Any,
+    Collection,
     Dict,
     Iterable,
     List,
     MutableSequence,
     Optional,
     Tuple,
+    Type,
     TypeVar,
 )
 from urllib.parse import urlsplit
@@ -74,7 +76,7 @@ def get_yaml_loader(loader=yaml.Loader):
     return Loader
 
 
-def yaml_load(source: IO, loader=None) -> Optional[Dict[str, Any]]:
+def yaml_load(source: IO, loader: Optional[Type[yaml.Loader]] = None) -> Optional[Dict[str, Any]]:
     """Return dict of source YAML file using loader, recursively deep merging inherited parent."""
     Loader = loader or get_yaml_loader()
     result = yaml.load(source, Loader=Loader)
@@ -366,7 +368,7 @@ def get_themes() -> Dict[str, EntryPoint]:
     return themes
 
 
-def get_theme_names():
+def get_theme_names() -> Collection[str]:
     """Return a list of all installed themes by name."""
 
     return get_themes().keys()

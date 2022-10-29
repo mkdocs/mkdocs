@@ -499,7 +499,7 @@ class PluginCollection(dict, MutableMapping[str, BasePlugin]):
     def run_event(self, name: str, item: T, **kwargs) -> T:
         ...
 
-    def run_event(self, name: str, item=None, **kwargs) -> Optional[T]:
+    def run_event(self, name: str, item=None, **kwargs):
         """
         Run all registered methods of an event.
 
