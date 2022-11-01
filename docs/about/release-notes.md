@@ -27,6 +27,32 @@ The current and past members of the MkDocs team.
 * [@oprypin](https://github.com/oprypin/)
 * [@ultrabug](https://github.com/ultrabug/)
 
+## Version 1.4.2 (2022-11-01)
+
+*   Officially support Python 3.11 (#3020)
+
+    NEW: **Tip:** Simply upgrading to Python 3.11 can cut off 10-15% of your site's build time.
+
+*   Support multiple instances of the same plugin (#3027)
+
+    If a plugin is specified multiple times in the list under the `plugins:` config, that will create 2 (or more) instances of the plugin with their own config each.
+
+    Previously this case was unforeseen and, as such, bugged.
+
+    Now even though this works, by default a warning will appear from MkDocs anyway, unless the plugin adds a class variable `supports_multiple_instances = True`.
+
+*   Bugfix (regression in 1.4.1): Don't error when a plugin puts a plain string into `warnings` (#3016)
+
+*   Bugfix: Relative links will always render with a trailing slash (#3022)
+
+    Previously under `use_directory_urls`, links *from* a sub-page *to* the main index page rendered as e.g. `<a href="../..">` even though in all other cases the links look like `<a href="../../">`. This caused unwanted behavior on some combinations of Web browsers and servers. Now this special-case bug was removed.
+
+*   Built-in "mkdocs" theme now also supports Norwegian language (#3024)
+
+*   Plugin-related warnings look more readable (#3016)
+
+Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.4.0...1.4.1).
+
 ## Version 1.4.1 (2022-10-15)
 
 *   Support theme-namespaced plugin loading (#2998)
