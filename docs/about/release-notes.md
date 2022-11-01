@@ -51,7 +51,7 @@ The current and past members of the MkDocs team.
 
 *   Plugin-related warnings look more readable (#3016)
 
-Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.4.0...1.4.1).
+See [commit log](https://github.com/mkdocs/mkdocs/compare/1.4.1...1.4.2).
 
 ## Version 1.4.1 (2022-10-15)
 
