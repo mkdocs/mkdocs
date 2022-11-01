@@ -1836,7 +1836,7 @@ class PluginsTest(TestCase):
             },
             {
                 'theme': 'readthedocs',
-                'plugins': ['sub_plugin', 'sample2', 'sub_plugin', 'sample2'],
+                'plugins': ['sub_plugin', 'sample2', 'sample2', 'sub_plugin'],
             },
         ]
 
