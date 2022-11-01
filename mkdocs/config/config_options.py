@@ -936,8 +936,7 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
         self.plugins = plugins.PluginCollection()
         self._instance_counter: MutableMapping[str, int] = Counter()
         for name, cfg in self._parse_configs(value):
-            name, plugin = self.load_plugin_with_namespace(name, cfg)
-            self.plugins[name] = plugin
+            self.load_plugin_with_namespace(name, cfg)
         return self.plugins
 
     @classmethod
@@ -1023,6 +1022,7 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
         errors_message = '\n'.join(f"Plugin '{name}' option '{key}': {msg}" for key, msg in errors)
         if errors_message:
             raise ValidationError(errors_message)
+        self.plugins[inst_name] = plugin
         return plugin
 
 

@@ -77,6 +77,9 @@ class BasePlugin(Generic[SomeConfig]):
     config_scheme: PlainConfigSchema = ()
     config: SomeConfig = {}  # type: ignore[assignment]
 
+    supports_multiple_instances: bool = False
+    """Set to true in subclasses to declare support for adding the same plugin multiple times."""
+
     def __class_getitem__(cls, config_class: Type[Config]):
         """Eliminates the need to write `config_class = FooConfig` when subclassing BasePlugin[FooConfig]"""
         name = f'{cls.__name__}[{config_class.__name__}]'
