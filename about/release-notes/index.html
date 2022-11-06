@@ -183,6 +183,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-level="2"><a href="#version-142-2022-11-01" class="nav-link">Version 1.4.2 (2022-11-01)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-level="2"><a href="#version-141-2022-10-15" class="nav-link">Version 1.4.1 (2022-10-15)</a>
               <ul class="nav flex-column">
               </ul>
@@ -375,6 +379,36 @@ mkdocs, version 1.0 from /path/to/mkdocs (Python 3.6)</code></pre>
 <li><a href="https://github.com/oprypin/">@oprypin</a></li>
 <li><a href="https://github.com/ultrabug/">@ultrabug</a></li>
 </ul>
+<h2 id="version-142-2022-11-01">Version 1.4.2 (2022-11-01)<a class="headerlink" href="#version-142-2022-11-01" title="Permanent link"></a></h2>
+<ul>
+<li>
+<p>Officially support Python 3.11 (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3020" title="GitHub Issue mkdocs/mkdocs #3020">#3020</a>)</p>
+<div class="admonition new">
+<p class="admonition-title">Tip:</p>
+<p> Simply upgrading to Python 3.11 can cut off 10-15% of your site's build time.</p>
+</div>
+</li>
+<li>
+<p>Support multiple instances of the same plugin (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3027" title="GitHub Issue mkdocs/mkdocs #3027">#3027</a>)</p>
+<p>If a plugin is specified multiple times in the list under the <code>plugins:</code> config, that will create 2 (or more) instances of the plugin with their own config each.</p>
+<p>Previously this case was unforeseen and, as such, bugged.</p>
+<p>Now even though this works, by default a warning will appear from MkDocs anyway, unless the plugin adds a class variable <code>supports_multiple_instances = True</code>.</p>
+</li>
+<li>
+<p>Bugfix (regression in 1.4.1): Don't error when a plugin puts a plain string into <code>warnings</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3016" title="GitHub Issue mkdocs/mkdocs #3016">#3016</a>)</p>
+</li>
+<li>
+<p>Bugfix: Relative links will always render with a trailing slash (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3022" title="GitHub Issue mkdocs/mkdocs #3022">#3022</a>)</p>
+<p>Previously under <code>use_directory_urls</code>, links <em>from</em> a sub-page <em>to</em> the main index page rendered as e.g. <code>&lt;a href="../.."&gt;</code> even though in all other cases the links look like <code>&lt;a href="../../"&gt;</code>. This caused unwanted behavior on some combinations of Web browsers and servers. Now this special-case bug was removed.</p>
+</li>
+<li>
+<p>Built-in "mkdocs" theme now also supports Norwegian language (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3024" title="GitHub Issue mkdocs/mkdocs #3024">#3024</a>)</p>
+</li>
+<li>
+<p>Plugin-related warnings look more readable (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3016" title="GitHub Issue mkdocs/mkdocs #3016">#3016</a>)</p>
+</li>
+</ul>
+<p>See <a href="https://github.com/mkdocs/mkdocs/compare/1.4.1...1.4.2">commit log</a>.</p>
 <h2 id="version-141-2022-10-15">Version 1.4.1 (2022-10-15)<a class="headerlink" href="#version-141-2022-10-15" title="Permanent link"></a></h2>
 <ul>
 <li>

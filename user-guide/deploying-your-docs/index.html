@@ -233,6 +233,12 @@ You should never edit files in your pages repository by hand if you're using
 the <code>gh-deploy</code> command because you will lose your work the next time you
 run the command.</p>
 </div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>
+If there are untracked files or uncommitted work in the local repository where
+<code>mkdocs gh-deploy</code> is run, these will be included in the pages that are deployed.</p>
+</div>
 <h3 id="organization-and-user-pages">Organization and User Pages<a class="headerlink" href="#organization-and-user-pages" title="Permanent link"></a></h3>
 <p>User and Organization Pages sites are not tied to a specific project, and the
 site files are deployed to the <code>master</code> branch in a dedicated repository named

@@ -589,8 +589,8 @@ mapped to an HTML index file (<code>index.html</code>) nested in a directory usi
 <code class="highlight language-python">dest_path() -&gt; str</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-writable"><code>writable</code></small>
       <small class="doc doc-label doc-label-property"><code>property</code></small>
+      <small class="doc doc-label doc-label-writable"><code>writable</code></small>
   </span>
 
 <a href="#mkdocs.structure.files.File.dest_path" class="headerlink" title="Permanent link"></a></h3>
@@ -867,7 +867,7 @@ default if it has one.</p>
 
   <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
-        Bases: <code>socketserver.<span title="socketserver.ThreadingMixIn">ThreadingMixIn</span></code>, <code><span title="wsgiref.simple_server">wsgiref</span>.<span title="wsgiref.simple_server.simple_server">simple_server</span>.<span title="wsgiref.simple_server.WSGIServer">WSGIServer</span></code></p>
+        Bases: <code>socketserver.<span title="socketserver.ThreadingMixIn">ThreadingMixIn</span></code>, <code><span title="wsgiref.util">wsgiref</span>.<span title="wsgiref.util.simple_server">simple_server</span>.<span title="wsgiref.simple_server.WSGIServer">WSGIServer</span></code></p>
 
 
 
@@ -889,7 +889,7 @@ default if it has one.</p>
 
 
 <h3 id="mkdocs.livereload.LiveReloadServer.watch" class="doc doc-heading">
-<code class="highlight language-python">watch(path: str, func: Optional[Callable] = None, recursive: bool = True) -&gt; None</code>
+<code class="highlight language-python">watch(path: str, func: Optional[Callable[[], None]] = None, recursive: bool = True) -&gt; None</code>
 
 <a href="#mkdocs.livereload.LiveReloadServer.watch" class="headerlink" title="Permanent link"></a></h3>
 
