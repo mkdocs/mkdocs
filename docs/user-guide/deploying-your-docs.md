@@ -40,6 +40,10 @@ You should never edit files in your pages repository by hand if you're using
 the `gh-deploy` command because you will lose your work the next time you
 run the command.
 
+WARNING:
+If there are untracked files or uncommitted work in the local repository where
+`mkdocs gh-deploy` is run, these will be included in the pages that are deployed.
+
 ### Organization and User Pages
 
 User and Organization Pages sites are not tied to a specific project, and the
