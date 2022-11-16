@@ -54,7 +54,7 @@ translation by following the steps below.
 
 Here is a quick summary of what you'll need to do:
 
-1. [Fork and clone the Mkdocs repository](/about/contributing/#installing-for-development) and then [install Mkdocs for development](/about/contributing/#installing-for-development) for adding and testing translations.
+1. [Fork and clone the MkDocs repository](#fork-and-clone-the-mkdocs-repository) and then [install MkDocs for development](/about/contributing/#installing-for-development) for adding and testing translations.
 2. [Initialize new localization catalogs](#initializing-the-localization-catalogs) for your language (if a translation for your locale already exists, follow the instructions for [updating theme localization files](/user-guide/custom-themes/#localizing-themes) instead).
 3. [Add a translation](#translating-the-mkdocs-themes) for every text placeholder in the localized catalogs.
 4. [Locally serve and test](#testing-theme-translations) the translated themes for your language.
