@@ -76,7 +76,7 @@ In the following steps you'll work with a fork of the MkDocs repository. Follow
 the instructions for [forking and cloning the MkDocs
 repository](/about/contributing/#installing-for-development).
 
-To test the translations you also need to [install Mkdocs for
+To test the translations you also need to [install MkDocs for
 development](/about/contributing/#installing-for-development) from your fork.
 
 ### Initializing the localization catalogs
