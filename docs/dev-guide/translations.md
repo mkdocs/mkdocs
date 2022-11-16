@@ -72,7 +72,7 @@ use of a term which differs from the general language translation.
 
 ### Fork and clone the Mkdocs repository
 
-In the following steps you'll work with a fork of the Mkdocs repository. Follow
+In the following steps you'll work with a fork of the MkDocs repository. Follow
 the instructions for [forking and cloning the Mkdocs
 repository](/about/contributing/#installing-for-development).
 
