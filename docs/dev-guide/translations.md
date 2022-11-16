@@ -70,7 +70,7 @@ use of a term which differs from the general language translation.
 
 [ISO-639-1]: https://en.wikipedia.org/wiki/ISO_639-1
 
-### Fork and clone the Mkdocs repository
+### Fork and clone the MkDocs repository
 
 In the following steps you'll work with a fork of the MkDocs repository. Follow
 the instructions for [forking and cloning the Mkdocs
