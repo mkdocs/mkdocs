@@ -85,7 +85,7 @@ class BasePlugin(Generic[SomeConfig]):
         name = f'{cls.__name__}[{config_class.__name__}]'
         return type(name, (cls,), dict(config_class=config_class))
 
-    def __init_subclass__(cls):
+    def __init_subclass__(cls) -> None:
         if not issubclass(cls.config_class, Config):
             raise TypeError(
                 f"config_class {cls.config_class} must be a subclass of `mkdocs.config.base.Config`"
