@@ -147,10 +147,12 @@ class Link:
 
 def get_navigation(files: Files, config: Union[MkDocsConfig, Mapping[str, Any]]) -> Navigation:
     """Build site navigation from config and files."""
-    nav_config = config['nav'] or nest_paths(f.src_uri for f in files.documentation_pages())
+    nav_config = config['nav'] or nest_paths(f.src_uri for f in files.nav_item_files())
     items = _data_to_navigation(nav_config, files, config)
     if not isinstance(items, list):
         items = [items]
+
+    log.info(f"nav config 1: {[str(x) if x is Page else str(x._indent_print()) for x in items]}")
 
     # Get only the pages from the navigation, ignoring any sections and links.
     pages = _get_by_type(items, Page)
@@ -189,6 +191,9 @@ def get_navigation(files: Files, config: Union[MkDocsConfig, Mapping[str, Any]])
                 "configuration, which is not found in the documentation files"
             )
             log.warning(msg)
+    # log.info(f"Nav configuration: {[str(x) for x in items]}")
+    log.info(f"nav config 2: {[str(x) if x is Page else str(x._indent_print()) for x in items]}")
+
     return Navigation(items, pages)
 
 
@@ -210,8 +215,15 @@ def _data_to_navigation(data, files: Files, config: Union[MkDocsConfig, Mapping[
     title, path = data if isinstance(data, tuple) else (None, data)
     file = files.get_file_from_path(path)
     if file:
-        return Page(title, file, config)
-    return Link(title, path)
+        if file.is_documentation_page():
+            return Page(title, file, config)
+        else: # file is a link
+            log.warning(f"Link object found - {str(file)}")
+            # Read the url file
+            # If the URL file contents match some regex pattern, use the regex groupings to pull out and assign to the link object.
+            # If the URL file contents do not work, then spit out some warning or error and don't include the link
+    else: # Adding this else because now we have a scenario where we may not want a link? Can think about this later
+        return Link(title, path) # This may be making some assumption about what will end up being a link
 
 
 T = TypeVar('T')

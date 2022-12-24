@@ -84,6 +84,10 @@ class Files:
             if not file.is_documentation_page():
                 file.copy_file(dirty)
 
+    def nav_item_files(self) -> Sequence[File]:
+        """Return iterable of all files eligible to become nav items."""
+        return [file for file in self if file.is_documentation_page() or file.is_link_file()]
+
     def documentation_pages(self) -> Sequence[File]:
         """Return iterable of all Markdown page file objects."""
         return [file for file in self if file.is_documentation_page()]
@@ -260,10 +264,14 @@ class File:
     def is_static_page(self) -> bool:
         """Return True if file is a static page (HTML, XML, JSON)."""
         return self.src_uri.endswith(('.html', '.htm', '.xml', '.json'))
+    
+    def is_link_file(self) -> bool:
+        """Return True if file is a link file (URL)."""
+        return self.src_uri.endswith('.url')
 
     def is_media_file(self) -> bool:
-        """Return True if file is not a documentation or static page."""
-        return not (self.is_documentation_page() or self.is_static_page())
+        """Return True if file is not a documentation or static page or link file."""
+        return not (self.is_documentation_page() or self.is_static_page() or self.is_link_file())
 
     def is_javascript(self) -> bool:
         """Return True if file is a JavaScript file."""
