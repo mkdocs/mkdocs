@@ -81,7 +81,7 @@ class Files:
     def copy_static_files(self, dirty: bool = False) -> None:
         """Copy static files from source to destination."""
         for file in self:
-            if not file.is_documentation_page():
+            if not (file.is_documentation_page() or file.is_link_file()):
                 file.copy_file(dirty)
 
     def nav_item_files(self) -> Sequence[File]:
@@ -264,7 +264,7 @@ class File:
     def is_static_page(self) -> bool:
         """Return True if file is a static page (HTML, XML, JSON)."""
         return self.src_uri.endswith(('.html', '.htm', '.xml', '.json'))
-    
+
     def is_link_file(self) -> bool:
         """Return True if file is a link file (URL)."""
         return self.src_uri.endswith('.url')
