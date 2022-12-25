@@ -153,8 +153,6 @@ def get_navigation(files: Files, config: Union[MkDocsConfig, Mapping[str, Any]])
     if not isinstance(items, list):
         items = [items]
 
-    log.info(f"nav config 1: {[str(x) if x is Page else str(x._indent_print()) for x in items]}")
-
     # Get only the pages from the navigation, ignoring any sections and links.
     pages = _get_by_type(items, Page)
 
@@ -192,9 +190,6 @@ def get_navigation(files: Files, config: Union[MkDocsConfig, Mapping[str, Any]])
                 "configuration, which is not found in the documentation files"
             )
             log.warning(msg)
-    # log.info(f"Nav configuration: {[str(x) for x in items]}")
-    log.info(f"nav config 2: {[str(x) if x is Page else str(x._indent_print()) for x in items]}")
-
     return Navigation(items, pages)
 
 
