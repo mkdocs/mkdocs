@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import re
 from typing import TYPE_CHECKING, Any, Iterator, List, Mapping, Optional, Type, TypeVar, Union
 from urllib.parse import urlsplit
 
@@ -217,13 +218,25 @@ def _data_to_navigation(data, files: Files, config: Union[MkDocsConfig, Mapping[
     if file:
         if file.is_documentation_page():
             return Page(title, file, config)
-        else: # file is a link
-            log.warning(f"Link object found - {str(file)}")
-            # Read the url file
-            # If the URL file contents match some regex pattern, use the regex groupings to pull out and assign to the link object.
-            # If the URL file contents do not work, then spit out some warning or error and don't include the link
-    else: # Adding this else because now we have a scenario where we may not want a link? Can think about this later
-        return Link(title, path) # This may be making some assumption about what will end up being a link
+        else: # file is a link, read the link info from the file
+            link_file_matcher = re.compile(r"(URL=(?P<url>https?://.+)|Title=(?P<title>.+))", flags=re.IGNORECASE)
+            with open(file.abs_src_path, encoding='utf-8-sig', errors='strict') as fd:
+                link_file_contents = fd.readlines()
+                for line in link_file_contents:
+                    link_info = link_file_matcher.match(line)
+                    if link_info:
+                        link_url = link_info.group('url')
+                        link_title = link_info.group('title')
+                        if link_url:
+                            path = link_url
+                        if link_title:
+                            title = link_title
+            if not title:
+                title = file.name.replace('-', ' ').replace('_', ' ')
+                if title.lower() == title:
+                    title = title.capitalize()
+    # If the URL file contents do not work, then spit out some warning or error and don't include the link
+    return Link(title, path)
 
 
 T = TypeVar('T')
