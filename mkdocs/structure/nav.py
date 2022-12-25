@@ -232,7 +232,8 @@ def _data_to_navigation(data, files: Files, config: Union[MkDocsConfig, Mapping[
                 title = file.name.replace('-', ' ').replace('_', ' ')
                 if title.lower() == title:
                     title = title.capitalize()
-    # If the URL file contents do not work, then spit out some warning or error and don't include the link
+            if path == file.src_uri:
+                log.warning(f"Link file loaded from path '{path}' does not have a valid configuration")
     return Link(title, path)
 
 
