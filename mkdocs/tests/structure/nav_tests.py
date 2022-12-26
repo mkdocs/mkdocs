@@ -106,21 +106,31 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual(len(site_navigation.items), 2)
         self.assertEqual(len(site_navigation.pages), 2)
 
-    def test_nav_external_links(self):
+    @tempdir(
+        files={
+            'External_2.url': 'Title=Example 2\nURL=http://example.com/external2.html',
+        }
+    )
+    def test_nav_external_links(self, tdir):
         nav_cfg = [
             {'Home': 'index.md'},
             {'Local': '/local.html'},
             {'External': 'http://example.com/external.html'},
+            {'External2': 'External_2.url'},
         ]
         expected = dedent(
             """
             Page(title='Home', url='/')
             Link(title='Local', url='/local.html')
             Link(title='External', url='http://example.com/external.html')
+            Link(title='External2', url='http://example.com/external2.html')
             """
         )
         cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
-        fs = [File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]
+        fs = [
+            File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+            File('External_2.url', tdir, cfg['site_dir'], cfg['use_directory_urls']),
+        ]
         files = Files(fs)
         with self.assertLogs('mkdocs', level='DEBUG') as cm:
             site_navigation = get_navigation(files, cfg)
@@ -131,10 +141,12 @@ class SiteNavigationTests(unittest.TestCase):
                 "'nav' configuration, which presumably points to an external resource.",
                 "DEBUG:mkdocs.structure.nav:An external link to 'http://example.com/external.html' "
                 "is included in the 'nav' configuration.",
+                "DEBUG:mkdocs.structure.nav:An external link to 'http://example.com/external2.html' "
+                "is included in the 'nav' configuration.",
             ],
         )
         self.assertEqual(str(site_navigation).strip(), expected)
-        self.assertEqual(len(site_navigation.items), 3)
+        self.assertEqual(len(site_navigation.items), 4)
         self.assertEqual(len(site_navigation.pages), 1)
 
     def test_nav_bad_links(self):
@@ -435,11 +447,11 @@ class SiteNavigationTests(unittest.TestCase):
             [
                 "WARNING:mkdocs.structure.nav:Unable to determine URL path from link file 'example3.url'",
                 "WARNING:mkdocs.structure.nav:"
-                + "A relative path to 'example3.url' is included in the 'nav' configuration, "
-                + "which is not found in the documentation files",
+                "A relative path to 'example3.url' is included in the 'nav' configuration, "
+                "which is not found in the documentation files",
                 "WARNING:mkdocs.structure.nav:"
-                + "A relative path to './documentation/relativeLink' is included in the 'nav' configuration, "
-                + "which is not found in the documentation files",
+                "A relative path to './documentation/relativeLink' is included in the 'nav' configuration, "
+                "which is not found in the documentation files",
             ],
         )
         self.assertEqual(str(site_navigation).strip(), expected)

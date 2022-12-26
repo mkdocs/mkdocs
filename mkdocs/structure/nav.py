@@ -226,7 +226,7 @@ def _data_to_navigation(data, files: Files, config: Union[MkDocsConfig, Mapping[
                         link_title = link_info.group('title')
                         if link_url:
                             path = link_url
-                        if link_title:
+                        if link_title and not title:
                             title = link_title
             if not title:
                 title = file.name.replace('-', ' ').replace('_', ' ')
