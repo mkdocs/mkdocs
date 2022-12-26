@@ -403,7 +403,7 @@ class SiteNavigationTests(unittest.TestCase):
             'Example1.url': 'URL=https://example.org/1',
             'Example2.url': 'Title=Example 2\nURL=https://example.org/2',
             'example3.url': 'invalid file',
-            'example4_with-Spaces.url': 'URL=https://example.org/4',
+            'example4_with-Spaces.url': 'URL=./documentation/relativeLink',
         }
     )
     def test_nav_from_files_with_links(self, tdir):
@@ -414,7 +414,7 @@ class SiteNavigationTests(unittest.TestCase):
             Link(title='Example1', url='https://example.org/1')
             Link(title='Example 2', url='https://example.org/2')
             Link(title='Example3', url='example3.url')
-            Link(title='example4 with Spaces', url='https://example.org/4')
+            Link(title='example4 with Spaces', url='./documentation/relativeLink')
             """
         )
         cfg = load_config(site_url='http://example.com/')
@@ -436,6 +436,9 @@ class SiteNavigationTests(unittest.TestCase):
                 "WARNING:mkdocs.structure.nav:Missing or invalid HTTP(S) URL path from link file 'example3.url'",
                 "WARNING:mkdocs.structure.nav:"
                 + "A relative path to 'example3.url' is included in the 'nav' configuration, "
+                + "which is not found in the documentation files",
+                "WARNING:mkdocs.structure.nav:"
+                + "A relative path to './documentation/relativeLink' is included in the 'nav' configuration, "
                 + "which is not found in the documentation files",
             ],
         )

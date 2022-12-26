@@ -215,7 +215,7 @@ def _data_to_navigation(data, files: Files, config: Union[MkDocsConfig, Mapping[
             return Page(title, file, config)
         else:  # file is a link, read the link info from the file
             link_file_matcher = re.compile(
-                r"(URL=(?P<url>https?://.+)|Title=(?P<title>.+))", flags=re.IGNORECASE
+                r"(URL=(?P<url>.+)|Title=(?P<title>.+))", flags=re.IGNORECASE
             )
             with open(file.abs_src_path, encoding='utf-8-sig', errors='strict') as fd:
                 link_file_contents = fd.readlines()
