@@ -6,7 +6,7 @@ import unittest
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.nav import Section, _get_by_type, get_navigation
 from mkdocs.structure.pages import Page
-from mkdocs.tests.base import dedent, load_config
+from mkdocs.tests.base import dedent, load_config, tempdir
 
 
 class SiteNavigationTests(unittest.TestCase):
@@ -396,6 +396,49 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.items), 3)
         self.assertEqual(len(site_navigation.pages), 7)
+        self.assertEqual(repr(site_navigation.homepage), "Page(title=[blank], url='/')")
+
+    @tempdir(
+        files={
+            'Example1.url': 'URL=https://example.org/1',
+            'Example2.url': 'Title=Example 2\nURL=https://example.org/2',
+            'example3.url': 'invalid file',
+        }
+    )
+    def test_nav_from_files_with_links(self, tdir):
+        expected = dedent(
+            """
+            Page(title=[blank], url='/')
+            Page(title=[blank], url='/about/')
+            Link(title='Example1', url='https://example.org/1')
+            Link(title='Example 2', url='https://example.org/2')
+            Link(title='Example3', url='example3.url')
+            """
+        )
+        cfg = load_config(site_url='http://example.com/')
+        fs = [
+            File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+            File('about.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+            File('Example1.url', tdir, cfg['site_dir'], cfg['use_directory_urls']),
+            File('Example2.url', tdir, cfg['site_dir'], cfg['use_directory_urls']),
+            File('example3.url', tdir, cfg['site_dir'], cfg['use_directory_urls']),
+        ]
+        files = Files(fs)
+
+        with self.assertLogs('mkdocs') as cm:
+            site_navigation = get_navigation(files, cfg)
+        self.assertEqual(
+            cm.output,
+            [
+                "WARNING:mkdocs.structure.nav:Unable to determine URL path from link file 'example3.url'",
+                "WARNING:mkdocs.structure.nav:"
+                + "A relative path to 'example3.url' is included in the 'nav' configuration, "
+                + "which is not found in the documentation files",
+            ],
+        )
+        self.assertEqual(str(site_navigation).strip(), expected)
+        self.assertEqual(len(site_navigation.items), 5)
+        self.assertEqual(len(site_navigation.pages), 2)
         self.assertEqual(repr(site_navigation.homepage), "Page(title=[blank], url='/')")
 
     def test_active(self):
