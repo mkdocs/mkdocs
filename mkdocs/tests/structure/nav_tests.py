@@ -433,7 +433,7 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual(
             cm.output,
             [
-                "WARNING:mkdocs.structure.nav:Unable to determine URL path from link file 'example3.url'",
+                "WARNING:mkdocs.structure.nav:Missing or invalid HTTP(S) URL path from link file 'example3.url'",
                 "WARNING:mkdocs.structure.nav:"
                 + "A relative path to 'example3.url' is included in the 'nav' configuration, "
                 + "which is not found in the documentation files",
