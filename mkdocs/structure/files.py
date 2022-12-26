@@ -84,10 +84,6 @@ class Files:
             if not (file.is_documentation_page() or file.is_link_file()):
                 file.copy_file(dirty)
 
-    def nav_item_files(self) -> Sequence[File]:
-        """Return iterable of all files eligible to become nav items."""
-        return [file for file in self if file.is_documentation_page() or file.is_link_file()]
-
     def documentation_pages(self) -> Sequence[File]:
         """Return iterable of all Markdown page file objects."""
         return [file for file in self if file.is_documentation_page()]
@@ -95,6 +91,10 @@ class Files:
     def static_pages(self) -> Sequence[File]:
         """Return iterable of all static page file objects."""
         return [file for file in self if file.is_static_page()]
+
+    def nav_item_files(self) -> Sequence[File]:
+        """Return iterable of all files eligible to become nav items."""
+        return [file for file in self if file.is_documentation_page() or file.is_link_file()]
 
     def media_files(self) -> Sequence[File]:
         """Return iterable of all file objects which are not documentation or static pages."""
