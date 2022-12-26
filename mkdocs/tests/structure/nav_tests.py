@@ -403,6 +403,7 @@ class SiteNavigationTests(unittest.TestCase):
             'Example1.url': 'URL=https://example.org/1',
             'Example2.url': 'Title=Example 2\nURL=https://example.org/2',
             'example3.url': 'invalid file',
+            'example4_with-Spaces.url': 'URL=https://example.org/4',
         }
     )
     def test_nav_from_files_with_links(self, tdir):
@@ -413,6 +414,7 @@ class SiteNavigationTests(unittest.TestCase):
             Link(title='Example1', url='https://example.org/1')
             Link(title='Example 2', url='https://example.org/2')
             Link(title='Example3', url='example3.url')
+            Link(title='example4 with Spaces', url='https://example.org/4')
             """
         )
         cfg = load_config(site_url='http://example.com/')
@@ -422,6 +424,7 @@ class SiteNavigationTests(unittest.TestCase):
             File('Example1.url', tdir, cfg['site_dir'], cfg['use_directory_urls']),
             File('Example2.url', tdir, cfg['site_dir'], cfg['use_directory_urls']),
             File('example3.url', tdir, cfg['site_dir'], cfg['use_directory_urls']),
+            File('example4_with-Spaces.url', tdir, cfg['site_dir'], cfg['use_directory_urls']),
         ]
         files = Files(fs)
 
@@ -437,7 +440,7 @@ class SiteNavigationTests(unittest.TestCase):
             ],
         )
         self.assertEqual(str(site_navigation).strip(), expected)
-        self.assertEqual(len(site_navigation.items), 5)
+        self.assertEqual(len(site_navigation.items), 6)
         self.assertEqual(len(site_navigation.pages), 2)
         self.assertEqual(repr(site_navigation.homepage), "Page(title=[blank], url='/')")
 
