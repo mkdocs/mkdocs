@@ -289,7 +289,7 @@ server root and effectively points to `https://example.com/bugs/`. Of course, th
 
 #### Default `nav` object
 
-If not configured, `nav` will contain an alphanumerically sorted, nested
+If not configured explicitly, `nav` will contain an alphanumerically sorted, nested
 list of all the Markdown files and External URL files found within the `docs_dir` and its
 sub-directories. Index files will always be listed first within a sub-section.
 
