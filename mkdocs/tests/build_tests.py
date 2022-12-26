@@ -523,6 +523,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             'empty.md': '',
             'img.jpg': '',
             'static.html': 'content',
+            'example.url': 'URL=https://example.org/',
             '.hidden': 'content',
             '.git/hidden': 'content',
         }
@@ -537,6 +538,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         self.assertPathIsFile(site_dir, 'img.jpg')
         self.assertPathIsFile(site_dir, 'static.html')
         self.assertPathNotExists(site_dir, 'empty.md')
+        self.assertPathNotExists(site_dir, 'example.url')
         self.assertPathNotExists(site_dir, '.hidden')
         self.assertPathNotExists(site_dir, '.git/hidden')
 
