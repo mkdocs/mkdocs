@@ -300,10 +300,12 @@ sub-directories. Index files will always be listed first within a sub-section.
 > Example file name: `Example.url`
 >
 > Contents:
-> ```
+>
+> ```text
 > Title=Example Title
 > URL=https://example.org
 > ```
+>
 > If no title is configured in the file (by omitting the first line), the file name is used as the link title.
 >
 > Windows generates internet shortcut files meeting these criteria, and can be used natively by copying a shortcut into your `docs_dir`.
