@@ -303,7 +303,7 @@ sub-directories. Index files will always be listed first within a sub-section.
 >
 > ```text
 > Title=Example Title
-> URL=https://example.org
+> URL=https://example.org/example.html
 > ```
 >
 > If no title is configured in the file (by omitting the first line), the file name is used as the link title.
