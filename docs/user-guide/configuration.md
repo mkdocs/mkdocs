@@ -287,9 +287,26 @@ link that steps up one level to the server root and effectively points to
 server root and effectively points to `https://example.com/bugs/`. Of course, the
 `User Guide` points to a local MkDocs page.
 
-**default**: By default `nav` will contain an alphanumerically sorted, nested
-list of all the Markdown files found within the `docs_dir` and its
+#### Default `nav` object
+
+If not configured, `nav` will contain an alphanumerically sorted, nested
+list of all the Markdown files and External URL files found within the `docs_dir` and its
 sub-directories. Index files will always be listed first within a sub-section.
+
+> **External URL files in default `nav`**
+>
+> An external URL may be added to `nav` by creating a file with the naming scheme `*.url`, which contains a relative or full URL and an optional title as shown below:
+>
+> Example file name: `Example.url`
+>
+> Contents:
+> ```
+> Title=Example Title
+> URL=https://example.org
+> ```
+> If no title is configured in the file (by omitting the first line), the file name is used as the link title.
+>
+> Windows generates internet shortcut files meeting these criteria, and can be used natively by copying a shortcut into your `docs_dir`.
 
 ## Build directories
 
