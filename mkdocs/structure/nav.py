@@ -233,7 +233,7 @@ def _data_to_navigation(data, files: Files, config: Union[MkDocsConfig, Mapping[
                 if title.lower() == title:
                     title = title.capitalize()
             if path == file.src_uri:
-                log.warning(f"Missing or invalid HTTP(S) URL path from link file '{path}'")
+                log.warning(f"Unable to determine URL path from link file '{path}'")
     return Link(title, path)
 
 
