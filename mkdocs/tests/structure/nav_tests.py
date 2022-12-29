@@ -414,8 +414,8 @@ class SiteNavigationTests(unittest.TestCase):
         files={
             'Example1.url': 'URL=https://example.org/1',
             'Example2.url': 'Title=Example 2\nURL=https://example.org/2',
-            'example3.url': 'invalid file',
-            'example4_with-Spaces.url': 'URL=./documentation/relativeLink',
+            'example3.url': 'notaURL=https://example.org/3',  # invalid config file
+            'example4_with-Spaces.url': 'url=./documentation/relativeLink',
         }
     )
     def test_nav_from_files_with_links(self, tdir):
