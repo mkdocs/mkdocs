@@ -301,7 +301,7 @@ sub-directories. Index files will always be listed first within a sub-section.
 >
 > Contents:
 >
-> ```text
+> ```url
 > Title=Example Title
 > URL=https://example.org/example.html
 > ```
