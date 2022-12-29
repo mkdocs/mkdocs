@@ -5,7 +5,7 @@ import re
 from typing import TYPE_CHECKING, Any, Iterator, List, Mapping, Optional, Type, TypeVar, Union
 from urllib.parse import urlsplit
 
-from mkdocs.structure.files import Files
+from mkdocs.structure.files import File, Files
 from mkdocs.structure.pages import Page
 from mkdocs.utils import nest_paths
 
@@ -213,27 +213,8 @@ def _data_to_navigation(data, files: Files, config: Union[MkDocsConfig, Mapping[
     if file:
         if file.is_documentation_page():
             return Page(title, file, config)
-        else:  # file is a link, read the link info from the file
-            link_file_matcher = re.compile(
-                r"(URL=(?P<url>.+)|Title=(?P<title>.+))", flags=re.IGNORECASE
-            )
-            with open(file.abs_src_path, encoding='utf-8-sig', errors='strict') as fd:
-                link_file_contents = fd.readlines()
-                for line in link_file_contents:
-                    link_info = link_file_matcher.match(line)
-                    if link_info:
-                        link_url = link_info.group('url')
-                        link_title = link_info.group('title')
-                        if link_url:
-                            path = link_url
-                        if link_title and not title:
-                            title = link_title
-            if not title:
-                title = file.name.replace('-', ' ').replace('_', ' ')
-                if title.lower() == title:
-                    title = title.capitalize()
-            if path == file.src_uri:
-                log.warning(f"Unable to determine URL path from link file '{path}'")
+        else:
+            return _read_link_info_from_url_file(file, title, path)
     return Link(title, path)
 
 
@@ -263,3 +244,25 @@ def _add_previous_and_next_links(pages: List[Page]) -> None:
     zipped = zip(bookended[:-2], pages, bookended[2:])
     for page0, page1, page2 in zipped:
         page1.previous_page, page1.next_page = page0, page2
+
+
+def _read_link_info_from_url_file(file: File, title: str, path: str) -> Link:
+    link_file_matcher = re.compile(r"(URL=(?P<url>.+)|Title=(?P<title>.+))", flags=re.IGNORECASE)
+    with open(file.abs_src_path, encoding='utf-8-sig', errors='strict') as fd:
+        link_file_contents = fd.readlines()
+        for line in link_file_contents:
+            link_info = link_file_matcher.match(line)
+            if link_info:
+                link_url = link_info.group('url')
+                link_title = link_info.group('title')
+                if link_url:
+                    path = link_url
+                if link_title and not title:
+                    title = link_title
+    if not title:
+        title = file.name.replace('-', ' ').replace('_', ' ')
+        if title.lower() == title:
+            title = title.capitalize()
+    if path == file.src_uri:
+        log.warning(f"Unable to determine URL path from link file '{path}'")
+    return Link(title, path)
