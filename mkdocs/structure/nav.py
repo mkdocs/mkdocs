@@ -183,6 +183,11 @@ def get_navigation(files: Files, config: Union[MkDocsConfig, Mapping[str, Any]])
                 f"An absolute path to '{link.url}' is included in the 'nav' "
                 "configuration, which presumably points to an external resource."
             )
+        elif link.url.startswith('!include '):
+            log.debug(
+                f"'{link.url}' is included in the 'nav' "
+                "configuration, which presumably points to another valid mkdocs nav YAML."
+            )
         else:
             msg = (
                 f"A relative path to '{link.url}' is included in the 'nav' "
