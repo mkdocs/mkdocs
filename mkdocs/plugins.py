@@ -325,12 +325,12 @@ class BasePlugin(Generic[SomeConfig]):
         page and can be used to alter the `Page` instance.
 
         Parameters:
-            page: `mkdocs.nav.Page` instance
+            page: `mkdocs.structure.pages.Page` instance
             config: global configuration object
             files: global files collection
 
         Returns:
-            `mkdocs.nav.Page` instance
+            `mkdocs.structure.pages.Page` instance
         """
         return page
 
@@ -340,7 +340,7 @@ class BasePlugin(Generic[SomeConfig]):
         the contents of a page's source from the filesystem.
 
         Parameters:
-            page: `mkdocs.nav.Page` instance
+            page: `mkdocs.structure.pages.Page` instance
             config: global configuration object
 
         Returns:
@@ -359,7 +359,7 @@ class BasePlugin(Generic[SomeConfig]):
 
         Parameters:
             markdown: Markdown source text of page as string
-            page: `mkdocs.nav.Page` instance
+            page: `mkdocs.structure.pages.Page` instance
             config: global configuration object
             files: global files collection
 
@@ -378,7 +378,7 @@ class BasePlugin(Generic[SomeConfig]):
 
         Parameters:
             html: HTML rendered from Markdown source as string
-            page: `mkdocs.nav.Page` instance
+            page: `mkdocs.structure.pages.Page` instance
             config: global configuration object
             files: global files collection
 
@@ -396,7 +396,7 @@ class BasePlugin(Generic[SomeConfig]):
 
         Parameters:
             context: dict of template context variables
-            page: `mkdocs.nav.Page` instance
+            page: `mkdocs.structure.pages.Page` instance
             config: global configuration object
             nav: global navigation object
 
@@ -414,7 +414,7 @@ class BasePlugin(Generic[SomeConfig]):
 
         Parameters:
             output: output of rendered template as string
-            page: `mkdocs.nav.Page` instance
+            page: `mkdocs.structure.pages.Page` instance
             config: global configuration object
 
         Returns:
