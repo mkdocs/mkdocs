@@ -60,13 +60,13 @@ msgstr "面包屑导航"
 #: mkdocs/themes/readthedocs/footer.html:7
 #: mkdocs/themes/readthedocs/versions.html:17
 msgid "Previous"
-msgstr "上一张"
+msgstr "上一章"
 
 #: mkdocs/themes/readthedocs/breadcrumbs.html:39
 #: mkdocs/themes/readthedocs/footer.html:10
 #: mkdocs/themes/readthedocs/versions.html:20
 msgid "Next"
-msgstr "下一张"
+msgstr "下一章"
 
 #: mkdocs/themes/readthedocs/footer.html:5
 msgid "Footer Navigation"
