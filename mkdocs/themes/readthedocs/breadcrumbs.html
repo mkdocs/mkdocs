@@ -1,6 +1,6 @@
 <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="{{ nav.homepage.url|url }}" class="icon icon-home" alt="{% trans %}Docs{% endtrans %}"></a> &raquo;</li>
+    <li><a href="{{ nav.homepage.url|url }}" class="icon icon-home" aria-label="{% trans %}Docs{% endtrans %}"></a> &raquo;</li>
     {%- if page %}
       {%- for doc in page.ancestors[::-1] %}
         {%- if doc.link %}
