@@ -393,7 +393,7 @@ def get_markdown_title(markdown_src: str) -> Optional[str]:
     non-whitespace content. If it is a title, return that, otherwise return
     None.
     """
-    lines = markdown_src.replace('\r\n', '\n').replace('\r', '\n').split('\n')
+    lines = markdown_src.splitlines()
     while lines:
         line = lines.pop(0).strip()
         if not line.strip():
