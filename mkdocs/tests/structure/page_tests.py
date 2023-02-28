@@ -16,6 +16,10 @@ class PageTests(unittest.TestCase):
         os.path.abspath(os.path.dirname(__file__)), '../integration/subpages/docs'
     )
 
+    SETEXT_DOCS_DIR = os.path.join(
+        os.path.abspath(os.path.dirname(__file__)), '../integration/setext/docs'
+    )
+
     def test_homepage(self):
         cfg = load_config(docs_dir=self.DOCS_DIR)
         fl = File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
@@ -277,7 +281,7 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.title, 'Page Title')
         self.assertEqual(pg.toc, [])
 
-    def test_page_title_from_markdown(self):
+    def test_page_title_from_atx_markdown(self):
         cfg = load_config()
         fl = File('testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
         pg = Page(None, fl, cfg)
@@ -294,6 +298,30 @@ class PageTests(unittest.TestCase):
         self.assertFalse(pg.is_section)
         self.assertTrue(pg.is_top_level)
         self.assertTrue(pg.markdown.startswith('# Welcome to MkDocs\n'))
+        self.assertEqual(pg.meta, {})
+        self.assertEqual(pg.next_page, None)
+        self.assertEqual(pg.parent, None)
+        self.assertEqual(pg.previous_page, None)
+        self.assertEqual(pg.title, 'Welcome to MkDocs')
+        self.assertEqual(pg.toc, [])
+
+    def test_page_title_from_setext_markdown(self):
+        cfg = load_config(docs_dir=self.SETEXT_DOCS_DIR)
+        fl = File('setext-headers.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        pg = Page(None, fl, cfg)
+        pg.read_source(cfg)
+        self.assertEqual(pg.url, 'setext-headers/')
+        self.assertEqual(pg.abs_url, None)
+        self.assertEqual(pg.canonical_url, None)
+        self.assertEqual(pg.edit_url, None)
+        self.assertEqual(pg.file, fl)
+        self.assertEqual(pg.content, None)
+        self.assertFalse(pg.is_homepage)
+        self.assertFalse(pg.is_index)
+        self.assertTrue(pg.is_page)
+        self.assertFalse(pg.is_section)
+        self.assertTrue(pg.is_top_level)
+        self.assertTrue(pg.markdown.startswith('Welcome to MkDocs\n=='))
         self.assertEqual(pg.meta, {})
         self.assertEqual(pg.next_page, None)
         self.assertEqual(pg.parent, None)

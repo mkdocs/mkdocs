@@ -1,0 +1,6 @@
+site_name: MyTest
+
+nav:
+    - 'setext-headers.md'
+
+site_author: "Tom Christie & Dougal Matthews"

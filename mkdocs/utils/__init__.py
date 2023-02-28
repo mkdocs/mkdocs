@@ -396,11 +396,22 @@ def get_markdown_title(markdown_src: str) -> Optional[str]:
     lines = markdown_src.splitlines()
     while lines:
         line = lines.pop(0).strip()
-        if not line.strip():
+        if not line:
             continue
-        if not line.startswith('# '):
+
+        if line.startswith('# '):
+            return line.lstrip('# ')
+
+        try:
+            next_line = lines.pop(0)
+        except IndexError:
+            # Was last line in the document
             return None
-        return line.lstrip('# ')
+
+        if next_line.startswith('='):
+            return line
+        else:
+            return None
     return None
 
 
