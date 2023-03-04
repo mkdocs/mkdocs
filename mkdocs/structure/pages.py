@@ -15,7 +15,7 @@ from markdown.util import AMP_SUBSTITUTE
 
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.toc import get_toc
-from mkdocs.utils import get_build_date, get_markdown_title, meta
+from mkdocs.utils import get_build_date, get_markdown_title, strip_title_attr_list, meta
 
 if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
@@ -223,9 +223,9 @@ class Page:
                 raise
 
         self.markdown, self.meta = meta.get_data(source)
-        self._set_title()
+        self._set_title(config)
 
-    def _set_title(self) -> None:
+    def _set_title(self, config: MkDocsConfig) -> None:
         """
         Set the title for a Markdown document.
 
@@ -253,6 +253,8 @@ class Page:
                 # Capitalize if the filename was all lowercase, otherwise leave it as-is.
                 if title.lower() == title:
                     title = title.capitalize()
+        elif 'attr_list' in config.markdown_extensions:
+            title = strip_title_attr_list(title)
 
         self.title = title
 

@@ -374,6 +374,20 @@ def get_theme_names() -> Collection[str]:
     return get_themes().keys()
 
 
+_ATTR_LIST_RE = re.compile(r'\s*?\{.*?\}\s*?$')
+
+
+def strip_title_attr_list(title: str) -> Optional[str]:
+    """
+    Strip the title of a attribute list { #sample }
+    attr_list markdown extension feature
+    """
+    if title is not None:
+        title = _ATTR_LIST_RE.sub("", title)
+
+    return title
+
+
 def dirname_to_title(dirname: str) -> str:
     """Return a page tile obtained from a directory name."""
     title = dirname
