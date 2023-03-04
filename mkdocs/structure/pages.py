@@ -15,7 +15,7 @@ from markdown.util import AMP_SUBSTITUTE
 
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.toc import get_toc
-from mkdocs.utils import get_build_date, get_markdown_title, strip_title_attr_list, meta
+from mkdocs.utils import get_build_date, get_markdown_title, meta, strip_title_attr_list
 
 if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig

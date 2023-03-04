@@ -304,7 +304,9 @@ class PageTests(unittest.TestCase):
     def test_page_title_from_markdown_stripped_attr_list(self):
         cfg = load_config()
         cfg.markdown_extensions.append('attr_list')
-        fl = File('testing_attr_list.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        fl = File(
+            'testing_attr_list.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']
+        )
         pg = Page(None, fl, cfg)
         pg.read_source(cfg)
         self.assertEqual(pg.url, 'testing_attr_list/')
@@ -328,7 +330,9 @@ class PageTests(unittest.TestCase):
 
     def test_page_title_from_markdown_preserved_attr_list(self):
         cfg = load_config()
-        fl = File('testing_attr_list.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        fl = File(
+            'testing_attr_list.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']
+        )
         pg = Page(None, fl, cfg)
         pg.read_source(cfg)
         self.assertEqual(pg.url, 'testing_attr_list/')
