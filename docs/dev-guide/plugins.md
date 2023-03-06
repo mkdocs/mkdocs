@@ -239,7 +239,7 @@ class MyPlugin(BasePlugin):
 > ```python
 > def on_config(self, config: MkDocsConfig):
 >     config.theme.static_templates.add('my_template.html')
->         return config
+>     return config
 > ```
 
 ### Events
