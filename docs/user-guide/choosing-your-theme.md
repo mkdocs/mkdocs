@@ -202,6 +202,7 @@ theme supports the following options:
     * `es`: Spanish
     * `fa`: Persian (Farsi)
     * `fr`: French
+    * `id`: Indonesian
     * `it`: Italian
     * `ja`: Japanese
     * `pt_BR`: Portuguese (Brazil)
