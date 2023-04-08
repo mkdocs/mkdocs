@@ -1,6 +1,6 @@
 # Configuration
 
-Guide to all available configuration settings.
+Temos que deixar tudo documentado neste site.
 
 ---
 
