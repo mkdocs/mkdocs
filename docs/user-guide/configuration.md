@@ -1,4 +1,4 @@
-# Configuration
+# Configuration ajorge
 
 Guide to all available configuration settings.
 
