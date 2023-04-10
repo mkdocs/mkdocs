@@ -35,7 +35,7 @@ T = TypeVar('T')
 
 
 class BaseConfigOption(Generic[T]):
-    def __init__(self):
+    def __init__(self) -> None:
         self.warnings: List[str] = []
         self.default = None
 
@@ -239,7 +239,7 @@ class Config(UserDict):
 
         return failed, warnings
 
-    def load_dict(self, patch: Optional[dict]) -> None:
+    def load_dict(self, patch: dict) -> None:
         """Load config options from a dictionary."""
 
         if not isinstance(patch, dict):

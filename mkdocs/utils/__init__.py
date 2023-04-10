@@ -30,6 +30,7 @@ from typing import (
     Tuple,
     Type,
     TypeVar,
+    Union,
 )
 from urllib.parse import urlsplit
 
@@ -76,11 +77,13 @@ def get_yaml_loader(loader=yaml.Loader):
     return Loader
 
 
-def yaml_load(source: IO, loader: Optional[Type[yaml.Loader]] = None) -> Optional[Dict[str, Any]]:
+def yaml_load(source: Union[IO, str], loader: Optional[Type[yaml.Loader]] = None) -> Dict[str, Any]:
     """Return dict of source YAML file using loader, recursively deep merging inherited parent."""
     Loader = loader or get_yaml_loader()
     result = yaml.load(source, Loader=Loader)
-    if result is not None and 'INHERIT' in result:
+    if result is None:
+        return {}
+    if 'INHERIT' in result and not isinstance(source, str):
         relpath = result.pop('INHERIT')
         abspath = os.path.normpath(os.path.join(os.path.dirname(source.name), relpath))
         if not os.path.exists(abspath):
@@ -142,7 +145,7 @@ def get_build_date() -> str:
     return get_build_datetime().strftime('%Y-%m-%d')
 
 
-def reduce_list(data_set: Iterable[str]) -> List[str]:
+def reduce_list(data_set: Iterable[T]) -> List[T]:
     """Reduce duplicate items in a list and preserve order"""
     return list(dict.fromkeys(data_set))
 
@@ -320,7 +323,7 @@ def _get_norm_url(path: str) -> Tuple[str, bool]:
 
 
 def create_media_urls(
-    path_list: List[str], page: Optional[Page] = None, base: str = ''
+    path_list: Iterable[str], page: Optional[Page] = None, base: str = ''
 ) -> List[str]:
     """
     Return a list of URLs relative to the given page or using the base.
