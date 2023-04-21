@@ -106,7 +106,7 @@ means that a page named 'foo/bar.md' will have its edit link lead to:
 `edit_uri` can actually be just an absolute URL, not necessarily relative to `repo_url`, so this can achieve the same result:
 
 ```yaml
-repo_url: https://example.com/project/repo/blob/main/docs/
+edit_uri: https://example.com/project/repo/blob/main/docs/
 ```
 
 For more flexibility, see [edit_uri_template](#edit_uri_template) below.
