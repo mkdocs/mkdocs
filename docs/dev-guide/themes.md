@@ -727,7 +727,7 @@ created if the user explicitly enables the [prebuild_index] config option.
 Themes should expect the index to not be present, but can choose to use the
 index when it is available. The `index` object was new in MkDocs version *1.0*.
 
-[Jinja2 template]: https://jinja.palletsprojects.com
+[Jinja2 template]: https://jinja.palletsprojects.com/
 [built-in themes]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes
 [theme's configuration file]: #theme-configuration
 [lunr.js]: https://lunrjs.com/

@@ -1525,7 +1525,7 @@ a small subset of the configuration options can be passed to the commands. To
 see in full commands and available arguments use `mkdocs --help` and
 `mkdocs build --help` to have them displayed.
 
-[Click]: http://click.pocoo.org/4/
+[Click]: https://click.palletsprojects.com/
 
 #### Support Extra HTML and XML files
 
