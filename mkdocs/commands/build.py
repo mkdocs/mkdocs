@@ -336,7 +336,7 @@ def build(config: MkDocsConfig, live_server: bool = False, dirty: bool = False) 
             msg = ', '.join(f'{v} {k.lower()}s' for k, v in counts)
             raise Abort(f'\nAborted with {msg} in strict mode!')
 
-        log.info('Documentation built in %.2f seconds', time.monotonic() - start)
+        log.info(f'Documentation built in {time.monotonic() - start:.2f} seconds')
 
     except Exception as e:
         # Run `build_error` plugin events.
