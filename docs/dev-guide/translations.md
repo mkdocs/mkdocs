@@ -54,11 +54,12 @@ translation by following the steps below.
 
 Here is a quick summary of what you'll need to do:
 
-1. [Initialize new localization catalogs](#initializing-the-localization-catalogs) for your language (if a translation for your locale already exists, follow the instructions for [updating theme localization files](/user-guide/custom-themes/#localizing-themes) instead).
-2. [Add a translation](#translating-the-mkdocs-themes) for every text placeholder in the localized catalogs.
-3. [Locally serve and test](#testing-theme-translations) the translated themes for your language.
-4. [Update the documentation](#updating-theme-documentation) about supported translations for each translated theme.
-5. [Contribute your translation](#contributing-translations) through a Pull Request.
+1. [Fork and clone the MkDocs repository](#fork-and-clone-the-mkdocs-repository) and then [install MkDocs for development](/about/contributing/#installing-for-development) for adding and testing translations.
+2. [Initialize new localization catalogs](#initializing-the-localization-catalogs) for your language (if a translation for your locale already exists, follow the instructions for [updating theme localization files](/user-guide/custom-themes/#localizing-themes) instead).
+3. [Add a translation](#translating-the-mkdocs-themes) for every text placeholder in the localized catalogs.
+4. [Locally serve and test](#testing-theme-translations) the translated themes for your language.
+5. [Update the documentation](#updating-theme-documentation) about supported translations for each translated theme.
+6. [Contribute your translation](#contributing-translations) through a Pull Request.
 
 NOTE:
 Translation locales are usually identified using the [ISO-639-1] (2-letter)
@@ -68,6 +69,15 @@ language translation has been completed and the regional dialect requires
 use of a term which differs from the general language translation.
 
 [ISO-639-1]: https://en.wikipedia.org/wiki/ISO_639-1
+
+### Fork and clone the MkDocs repository
+
+In the following steps you'll work with a fork of the MkDocs repository. Follow
+the instructions for [forking and cloning the MkDocs
+repository](/about/contributing/#installing-for-development).
+
+To test the translations you also need to [install MkDocs for
+development](/about/contributing/#installing-for-development) from your fork.
 
 ### Initializing the localization catalogs
 
