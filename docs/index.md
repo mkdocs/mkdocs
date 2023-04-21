@@ -79,7 +79,7 @@ configuration file. Start by reading the [introductory tutorial], then check the
         <h3 class="card-title">Host anywhere</h3>
         <p class="card-text">
             MkDocs builds completely static HTML sites that you can host on
-            GitHub pages, Amazon S3, or <a
+            GitHub Pages, Amazon S3, or <a
             href="user-guide/deploying-your-docs/">anywhere</a> else you
             choose.
         </p>
