@@ -389,13 +389,7 @@ def dirname_to_title(dirname: str) -> str:
 
 
 def get_markdown_title(markdown_src: str) -> Optional[str]:
-    """
-    Get the title of a Markdown document. The title in this case is considered
-    to be a H1 that occurs before any other content in the document.
-    The procedure is then to iterate through the lines, stopping at the first
-    non-whitespace content. If it is a title, return that, otherwise return
-    None.
-    """
+    """Soft-deprecated, do not use."""
     lines = markdown_src.replace('\r\n', '\n').replace('\r', '\n').split('\n')
     while lines:
         line = lines.pop(0).strip()
@@ -462,6 +456,19 @@ class CountHandler(logging.NullHandler):
 
     def get_counts(self) -> List[Tuple[str, int]]:
         return [(logging.getLevelName(k), v) for k, v in sorted(self.counts.items(), reverse=True)]
+
+
+class weak_property:
+    """Same as a read-only property, but allows overwriting the field for good."""
+
+    def __init__(self, func):
+        self.func = func
+        self.__doc__ = func.__doc__
+
+    def __get__(self, instance, owner=None):
+        if instance is None:
+            return self
+        return self.func(instance)
 
 
 # For backward compatibility as some plugins import it.

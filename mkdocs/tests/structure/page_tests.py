@@ -298,8 +298,9 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.next_page, None)
         self.assertEqual(pg.parent, None)
         self.assertEqual(pg.previous_page, None)
+        self.assertEqual(pg.title, 'Testing')
+        pg.render(cfg, fl)
         self.assertEqual(pg.title, 'Welcome to MkDocs')
-        self.assertEqual(pg.toc, [])
 
     def test_page_title_from_meta(self):
         cfg = load_config(docs_dir=self.DOCS_DIR)
@@ -324,6 +325,8 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.previous_page, None)
         self.assertEqual(pg.title, 'A Page Title')
         self.assertEqual(pg.toc, [])
+        pg.render(cfg, fl)
+        self.assertEqual(pg.title, 'A Page Title')
 
     def test_page_title_from_filename(self):
         cfg = load_config(docs_dir=self.DOCS_DIR)
@@ -347,7 +350,8 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.parent, None)
         self.assertEqual(pg.previous_page, None)
         self.assertEqual(pg.title, 'Page title')
-        self.assertEqual(pg.toc, [])
+        pg.render(cfg, fl)
+        self.assertEqual(pg.title, 'Page title')
 
     def test_page_title_from_capitalized_filename(self):
         cfg = load_config(docs_dir=self.DOCS_DIR)
@@ -371,7 +375,6 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.parent, None)
         self.assertEqual(pg.previous_page, None)
         self.assertEqual(pg.title, 'pageTitle')
-        self.assertEqual(pg.toc, [])
 
     def test_page_title_from_homepage_filename(self):
         cfg = load_config(docs_dir=self.DOCS_DIR)
