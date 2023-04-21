@@ -30,11 +30,11 @@ msgstr "搜索"
 
 #: mkdocs/themes/mkdocs/base.html:126
 msgid "Previous"
-msgstr "上一张"
+msgstr "上一章"
 
 #: mkdocs/themes/mkdocs/base.html:131
 msgid "Next"
-msgstr "下一张"
+msgstr "下一章"
 
 #: mkdocs/themes/mkdocs/base.html:142 mkdocs/themes/mkdocs/base.html:144
 #: mkdocs/themes/mkdocs/base.html:146 mkdocs/themes/mkdocs/base.html:148
