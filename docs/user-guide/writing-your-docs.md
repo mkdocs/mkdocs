@@ -380,10 +380,14 @@ specific page. The following keys are supported:
     MkDocs will attempt to determine the title of a document in the following
     ways, in order:
 
-    1. A title defined in the [nav] configuration setting for a document.
-    2. A title defined in the `title` meta-data key of a document.
-    3. A level 1 Markdown header on the first line of the document body. Please note that [Setext-style] headers are not supported.
-    4. The filename of a document.
+    1.  A title defined in the [nav] configuration setting for a document.
+
+    2.  A title defined in the `title` meta-data key of a document.
+
+    3.  A level 1 Markdown header on the first line of the document body.  
+        ([Setext-style] headers are supported *only since MkDocs 1.5*.)
+
+    4.  The filename of a document.
 
     Upon finding a title for a page, MkDoc does not continue checking any
     additional sources in the above list.
