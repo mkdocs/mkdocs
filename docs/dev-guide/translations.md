@@ -41,7 +41,7 @@ Make sure translation requirements are installed in your environment:
 pip install mkdocs[i18n]
 ```
 
-[babel]: http://babel.pocoo.org/en/latest/cmdline.html
+[babel]: https://babel.pocoo.org/en/latest/cmdline.html
 [Contributing Guide]: ../about/contributing.md
 [Install for Development]: ../about/contributing.md#installing-for-development
 [Submit a Pull Request]: ../about/contributing.md#submitting-pull-requests
