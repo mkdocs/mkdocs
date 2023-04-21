@@ -111,8 +111,8 @@ required, third party template authors are encouraged to follow a similar
 pattern and may want to define the same [blocks] as are used in the built-in
 themes for consistency.
 
-[Jinja]: http://jinja.pocoo.org/
-[template inheritance]: http://jinja.pocoo.org/docs/dev/templates/#template-inheritance
+[Jinja]: https://jinja.palletsprojects.com/
+[template inheritance]: https://jinja.palletsprojects.com/en/latest/templates/#template-inheritance
 [blocks]: ../user-guide/customizing-your-theme.md#overriding-template-blocks
 
 ## Theme Files
@@ -727,7 +727,7 @@ created if the user explicitly enables the [prebuild_index] config option.
 Themes should expect the index to not be present, but can choose to use the
 index when it is available. The `index` object was new in MkDocs version *1.0*.
 
-[Jinja2 template]: http://jinja.pocoo.org/docs/dev/
+[Jinja2 template]: https://jinja.palletsprojects.com/
 [built-in themes]: https://github.com/mkdocs/mkdocs/tree/master/mkdocs/themes
 [theme's configuration file]: #theme-configuration
 [lunr.js]: https://lunrjs.com/
