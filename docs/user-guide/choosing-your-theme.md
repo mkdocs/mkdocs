@@ -112,6 +112,7 @@ supports the following options:
     * `es`: Spanish
     * `fa`: Persian (Farsi)
     * `fr`: French
+    * `id`: Indonesian
     * `it`: Italian
     * `ja`: Japanese
     * `nb`: Norwegian Bokmål
@@ -197,17 +198,18 @@ theme supports the following options:
     The following locales are supported by this theme:
 
     * `en`: English (default)
-    * `fr`: French
+    * `de`: German
     * `es`: Spanish
+    * `fa`: Persian (Farsi)
+    * `fr`: French
+    * `id`: Indonesian
+    * `it`: Italian
     * `ja`: Japanese
     * `pt_BR`: Portuguese (Brazil)
-    * `zh_CN`: Simplified Chinese
-    * `de`: German
-    * `fa`: Persian (Farsi)
-    * `it`: Italian
-    * `tr_TR`: Turkish (Turkey)
     * `ru`: Russian
+    * `tr_TR`: Turkish (Turkey)
     * `uk`: Ukrainian
+    * `zh_CN`: Simplified Chinese
 
     See the guide on [localizing your theme] for more information.
 
