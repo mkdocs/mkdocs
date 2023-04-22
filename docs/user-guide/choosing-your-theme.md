@@ -102,7 +102,7 @@ supports the following options:
     ```
 
 *   __`locale`__{ #mkdocs-locale }: The locale (language/location) used to
-    build the theme. If your locale is not yet supported, it will fallback
+    build the theme. If your locale is not yet supported, it will fall back
     to the default.
 
     The following locales are supported by this theme:
@@ -119,7 +119,7 @@ supports the following options:
     * `nn`: Norwegian Nynorsk
     * `pt_BR`: Portuguese (Brazil)
     * `ru`: Russian
-    * `tr_TR`: Turkish (Turkey)
+    * `tr`: Turkish
     * `uk`: Ukrainian
     * `zh_CN`: Simplified Chinese
 
@@ -192,7 +192,7 @@ theme supports the following options:
     page content as you scroll the page. Default: `True`.
 
 *   __`locale`__{ #readthedocs-locale }: The locale (language/location) used to
-    build the theme. If your locale is not yet supported, it will fallback
+    build the theme. If your locale is not yet supported, it will fall back
     to the default.
 
     The following locales are supported by this theme:
@@ -207,7 +207,7 @@ theme supports the following options:
     * `ja`: Japanese
     * `pt_BR`: Portuguese (Brazil)
     * `ru`: Russian
-    * `tr_TR`: Turkish (Turkey)
+    * `tr`: Turkish
     * `uk`: Ukrainian
     * `zh_CN`: Simplified Chinese
 
