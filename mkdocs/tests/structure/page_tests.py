@@ -299,7 +299,7 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.next_page, None)
         self.assertEqual(pg.parent, None)
         self.assertEqual(pg.previous_page, None)
-        self.assertEqual(pg.title, 'Testing')
+        self.assertEqual(pg.title, 'Welcome to MkDocs')
         pg.render(cfg, fl)
         self.assertEqual(pg.title, 'Welcome to MkDocs')
 

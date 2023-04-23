@@ -17,7 +17,7 @@ from markdown.util import AMP_SUBSTITUTE
 
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.toc import get_toc
-from mkdocs.utils import get_build_date, meta, weak_property
+from mkdocs.utils import get_build_date, get_markdown_title, meta, weak_property
 
 if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
@@ -259,6 +259,10 @@ class Page:
 
         if self._title_from_render:
             return self._title_from_render
+        elif self.content is None:  # Preserve legacy behavior only for edge cases in plugins.
+            title_from_md = get_markdown_title(self.markdown)
+            if title_from_md is not None:
+                return title_from_md
 
         if self.is_homepage:
             return 'Home'
