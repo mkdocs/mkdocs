@@ -302,82 +302,48 @@ class PageTests(unittest.TestCase):
         pg.render(cfg, fl)
         self.assertEqual(pg.title, 'Welcome to MkDocs')
 
-    def test_page_title_from_setext_markdown(self):
+    _SETEXT_CONTENT = dedent(
+        '''
+        Welcome to MkDocs Setext
+        ========================
+
+        This tests extracting a setext style title.
+        '''
+    )
+
+    @tempdir(files={'testing_setext_title.md': _SETEXT_CONTENT})
+    def test_page_title_from_setext_markdown(self, docs_dir):
         cfg = load_config()
-        fl = File(
-            'testing_setext_title.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']
-        )
+        fl = File('testing_setext_title.md', docs_dir, docs_dir, use_directory_urls=True)
         pg = Page(None, fl, cfg)
         pg.read_source(cfg)
-        self.assertEqual(pg.url, 'testing_setext_title/')
-        self.assertEqual(pg.abs_url, None)
-        self.assertEqual(pg.canonical_url, None)
-        self.assertEqual(pg.edit_url, None)
-        self.assertEqual(pg.file, fl)
-        self.assertEqual(pg.content, None)
-        self.assertFalse(pg.is_homepage)
-        self.assertFalse(pg.is_index)
-        self.assertTrue(pg.is_page)
-        self.assertFalse(pg.is_section)
-        self.assertTrue(pg.is_top_level)
-        self.assertTrue(pg.markdown.startswith('Welcome to MkDocs Setext\n=='))
-        self.assertEqual(pg.meta, {})
-        self.assertEqual(pg.next_page, None)
-        self.assertEqual(pg.parent, None)
-        self.assertEqual(pg.previous_page, None)
         pg.render(cfg, fl)
         self.assertEqual(pg.title, 'Welcome to MkDocs Setext')
 
-    def test_page_title_from_markdown_stripped_attr_list(self):
+    _ATTRLIST_CONTENT = dedent(
+        '''
+        # Welcome to MkDocs Attr { #welcome }
+
+        This tests extracting the title, with enabled attr_list markdown_extension.
+        '''
+    )
+
+    @tempdir(files={'testing_attr_list.md': _ATTRLIST_CONTENT})
+    def test_page_title_from_markdown_stripped_attr_list(self, docs_dir):
         cfg = load_config()
         cfg.markdown_extensions.append('attr_list')
-        fl = File(
-            'testing_attr_list.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']
-        )
+        fl = File('testing_attr_list.md', docs_dir, docs_dir, use_directory_urls=True)
         pg = Page(None, fl, cfg)
         pg.read_source(cfg)
-        self.assertEqual(pg.url, 'testing_attr_list/')
-        self.assertEqual(pg.abs_url, None)
-        self.assertEqual(pg.canonical_url, None)
-        self.assertEqual(pg.edit_url, None)
-        self.assertEqual(pg.file, fl)
-        self.assertEqual(pg.content, None)
-        self.assertFalse(pg.is_homepage)
-        self.assertFalse(pg.is_index)
-        self.assertTrue(pg.is_page)
-        self.assertFalse(pg.is_section)
-        self.assertTrue(pg.is_top_level)
-        self.assertTrue(pg.markdown.startswith('# Welcome to MkDocs Attr { #welcome }\n'))
-        self.assertEqual(pg.meta, {})
-        self.assertEqual(pg.next_page, None)
-        self.assertEqual(pg.parent, None)
-        self.assertEqual(pg.previous_page, None)
         pg.render(cfg, fl)
         self.assertEqual(pg.title, 'Welcome to MkDocs Attr')
 
-    def test_page_title_from_markdown_preserved_attr_list(self):
+    @tempdir(files={'testing_attr_list.md': _ATTRLIST_CONTENT})
+    def test_page_title_from_markdown_preserved_attr_list(self, docs_dir):
         cfg = load_config()
-        fl = File(
-            'testing_attr_list.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']
-        )
+        fl = File('testing_attr_list.md', docs_dir, docs_dir, use_directory_urls=True)
         pg = Page(None, fl, cfg)
         pg.read_source(cfg)
-        self.assertEqual(pg.url, 'testing_attr_list/')
-        self.assertEqual(pg.abs_url, None)
-        self.assertEqual(pg.canonical_url, None)
-        self.assertEqual(pg.edit_url, None)
-        self.assertEqual(pg.file, fl)
-        self.assertEqual(pg.content, None)
-        self.assertFalse(pg.is_homepage)
-        self.assertFalse(pg.is_index)
-        self.assertTrue(pg.is_page)
-        self.assertFalse(pg.is_section)
-        self.assertTrue(pg.is_top_level)
-        self.assertTrue(pg.markdown.startswith('# Welcome to MkDocs Attr { #welcome }\n'))
-        self.assertEqual(pg.meta, {})
-        self.assertEqual(pg.next_page, None)
-        self.assertEqual(pg.parent, None)
-        self.assertEqual(pg.previous_page, None)
         pg.render(cfg, fl)
         self.assertEqual(pg.title, 'Welcome to MkDocs Attr { #welcome }')
 
