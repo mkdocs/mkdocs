@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+import copy
 import logging
 import os
 import posixpath
 from typing import TYPE_CHECKING, Any, Callable, Mapping, MutableMapping, Optional, Union
 from urllib.parse import unquote as urlunquote
 from urllib.parse import urljoin, urlsplit, urlunsplit
-from xml.etree.ElementTree import Element
+from xml.etree import ElementTree as etree
 
 import markdown
 import markdown.extensions
@@ -58,7 +59,6 @@ class Page:
 
         # Placeholders to be filled in later in the build process.
         self.markdown = None
-        self._title_allowed = False
         self._title_from_render: Optional[str] = None
         self.content = None
         self.toc = []  # type: ignore
@@ -230,11 +230,9 @@ class Page:
                 raise
 
         self.markdown, self.meta = meta.get_data(source)
-        self._title_allowed = True
 
     def _set_title(self) -> None:
         """Soft-deprecated, do not use."""
-        self._title_allowed = True
         self.render(
             {'markdown_extensions': (), 'mdx_configs': None},  # type: ignore
             Files([]),
@@ -253,7 +251,7 @@ class Page:
         - content of the first H1 in Markdown content
         - convert filename to title
         """
-        if not getattr(self, '_title_allowed', False):
+        if self.markdown is None:
             return None
 
         if 'title' in self.meta:
@@ -298,7 +296,7 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
         self.file = file
         self.files = files
 
-    def run(self, root: Element) -> Element:
+    def run(self, root: etree.Element) -> etree.Element:
         """
         Update urls on anchors and images to make them relative
 
@@ -385,9 +383,14 @@ class _ExtractTitleTreeprocessor(markdown.treeprocessors.Treeprocessor):
     def __init__(self, ext: _ExtractTitleExtension) -> None:
         self.ext = ext
 
-    def run(self, root: Element) -> Element:
+    def run(self, root: etree.Element) -> etree.Element:
         for el in root:
             if el.tag == 'h1':
+                # Drop anchorlink from the element, if present.
+                if len(el) > 0 and el[-1].tag == 'a' and not (el.tail or '').strip():
+                    el = copy.copy(el)
+                    del el[-1]
+                # Extract the text only, recursively.
                 self.ext.title = _unescape(''.join(el.itertext()))
             break
         return root
