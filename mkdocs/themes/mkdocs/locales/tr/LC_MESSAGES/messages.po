@@ -1,4 +1,4 @@
-# Turkish (Turkey) translations for MkDocs.
+# Turkish translations for MkDocs.
 # Copyright (C) 2022 MkDocs
 # This file is distributed under the same license as the MkDocs project.
 #
@@ -9,8 +9,8 @@ msgstr ""
 "POT-Creation-Date: 2022-08-15 17:05+0200\n"
 "PO-Revision-Date: 2022-08-21 18:58+0300\n"
 "Last-Translator: Mustafa Sami Salt <mss1451@gmail.com>\n"
-"Language: tr_TR\n"
-"Language-Team: tr_TR <LL@li.org>\n"
+"Language: tr\n"
+"Language-Team: tr <LL@li.org>\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -98,4 +98,3 @@ msgstr "Sonuç bulunamadı"
 #: mkdocs/themes/mkdocs/toc.html:3
 msgid "Table of Contents"
 msgstr "İçindekiler"
-

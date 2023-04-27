@@ -89,15 +89,26 @@ Initializing a catalog consists of running a command which will create a
 directory structure for your desired language and prepare a Portable Object
 (`messages.po`) file derived from the `pot` file of the theme.
 
-Use the `init_catalog` command on each theme's directory and provide the
-appropriate language code (`-l <language>`). For example, to add a translation
-for the Spanish `es` language to the `mkdocs` theme, run the following command:
+Use the `init_catalog` command on each theme's directory and provide the appropriate language code (`-l <language>`).
+
+The language code is almost always just two lowercase letters, such as `sv`, but in some cases it needs to be further disambiguated.
+
+See:
+
+* [Already translated languages for built-in themes](../user-guide/choosing-your-theme.md#mkdocs-locale)
+* [ISO 639 Language List](https://www.localeplanet.com/icu/iso639.html)
+* [Language subtag registry](https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry)
+
+In particular, the way to know that the `pt` language should be disambiguated as `pt_PT` and `pt_BR` is that the *Language subtag registry* page contains `pt-` if you search for it. Whereas `sv` should remain just `sv`, because that page does *not* contain `sv-`.
+
+So, if we pick `es` (Spanish) as our example language code, to add a translation for it to both built-in themes, run these commands:
 
 ```bash
-pybabel init --input-file mkdocs/themes/mkdocs/messages.pot --output-dir mkdocs/themes/mkdocs/locales --locale es
+pybabel init --input-file mkdocs/themes/mkdocs/messages.pot --output-dir mkdocs/themes/mkdocs/locales -l es
+pybabel init --input-file mkdocs/themes/readthedocs/messages.pot --output-dir mkdocs/themes/readthedocs/locales -l es
 ```
 
-The above command will create the following file structure:
+The above command will create a file structure as follows:
 
 ```text
 mkdocs/themes/mkdocs/locales
@@ -127,11 +138,11 @@ This step should be completed after a theme template have been [updated][update
 themes] for each language that you are comfortable contributing a translation
 for.
 
-To update the `fr` translation catalog of the `mkdocs` theme, use the following
-command:
+To update the `fr` translation catalog of both built-in themes, use the following commands:
 
 ```bash
-pybabel update --ignore-obsolete --update-header-comment --input-file mkdocs/themes/mkdocs/messages.pot --output-dir mkdocs/themes/mkdocs/locales --locale fr
+pybabel update --ignore-obsolete --update-header-comment --input-file mkdocs/themes/mkdocs/messages.pot --output-dir mkdocs/themes/mkdocs/locales -l fr
+pybabel update --ignore-obsolete --update-header-comment --input-file mkdocs/themes/readthedocs/messages.pot --output-dir mkdocs/themes/readthedocs/locales -l fr
 ```
 
 You can now move on to the next step and [add a translation] for every updated
@@ -159,11 +170,12 @@ you'll want to [test your localized theme](#testing-theme-translations).
 ### Testing theme translations
 
 To test a theme with translations, you need to first compile the `messages.po`
-files of your theme into `messages.mo` files. The following command will compile
-the `es` translation for the `mkdocs` theme.
+files of your theme into `messages.mo` files. The following commands will compile
+the `es` translation for both built-in themes:
 
 ```bash
-pybabel compile --statistics --directory mkdocs/themes/mkdocs/locales --locale es
+pybabel compile --statistics --directory mkdocs/themes/mkdocs/locales -l es
+pybabel compile --statistics --directory mkdocs/themes/readthedocs/locales -l es
 ```
 
 The above command results in the following file structure:
