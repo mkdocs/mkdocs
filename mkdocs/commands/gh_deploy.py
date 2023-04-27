@@ -147,7 +147,7 @@ def gh_deploy(
             cname_host = f.read().strip()
         log.info(
             f'Based on your CNAME file, your documentation should be '
-            f'available shortly at: https://{cname_host}'
+            f'available shortly at: http://{cname_host}'
         )
         log.info(
             'NOTE: Your DNS records must be configured appropriately for your CNAME URL to work.'
