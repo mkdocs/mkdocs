@@ -4,6 +4,7 @@ import copy
 import logging
 import os
 import posixpath
+import warnings
 from typing import TYPE_CHECKING, Any, Callable, Mapping, MutableMapping, Optional, Union
 from urllib.parse import unquote as urlunquote
 from urllib.parse import urljoin, urlsplit, urlunsplit
@@ -232,10 +233,8 @@ class Page:
         self.markdown, self.meta = meta.get_data(source)
 
     def _set_title(self) -> None:
-        """Soft-deprecated, do not use."""
-        self.render(
-            {'markdown_extensions': (), 'mdx_configs': None},  # type: ignore
-            Files([]),
+        warnings.warn(
+            "_set_title is no longer used in MkDocs and will be removed soon.", DeprecationWarning
         )
 
     @weak_property
