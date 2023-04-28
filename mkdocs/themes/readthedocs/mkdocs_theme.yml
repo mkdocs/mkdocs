@@ -10,6 +10,7 @@ search_index_only: false
 
 highlightjs: true
 hljs_languages: []
+hljs_style: github
 
 analytics:
   gtag: null
