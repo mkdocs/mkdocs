@@ -136,6 +136,9 @@ watch_theme_help = (
 )
 shell_help = "Use the shell when invoking Git."
 watch_help = "A directory or file to watch for live reloading. Can be supplied multiple times."
+projects_file_help = (
+    "URL or local path of the registry file that declares all known MkDocs-related projects."
+)
 
 
 def add_options(*opts):
@@ -201,7 +204,7 @@ PYTHON_VERSION = f"{sys.version_info.major}.{sys.version_info.minor}"
 PKG_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-@click.group(context_settings={'help_option_names': ['-h', '--help']})
+@click.group(context_settings=dict(help_option_names=['-h', '--help'], max_content_width=120))
 @click.version_option(
     __version__,
     '-V',
@@ -285,6 +288,30 @@ def gh_deploy_command(
         ignore_version=ignore_version,
         shell=shell,
     )
+
+
+@cli.command(name="get-deps")
+@verbose_option
+@click.option('-f', '--config-file', type=click.File('rb'), help=config_help)
+@click.option(
+    '-p',
+    '--projects-file',
+    default='https://raw.githubusercontent.com/mkdocs/best-of-mkdocs/main/projects.yaml',
+    help=projects_file_help,
+    show_default=True,
+)
+def get_deps_command(config_file, projects_file):
+    """Show required PyPI packages inferred from plugins in mkdocs.yml"""
+    from mkdocs.commands import get_deps
+
+    warning_counter = utils.CountHandler()
+    warning_counter.setLevel(logging.WARNING)
+    logging.getLogger('mkdocs').addHandler(warning_counter)
+
+    get_deps.get_deps(projects_file_url=projects_file, config_file_path=config_file)
+
+    if warning_counter.get_counts():
+        sys.exit(1)
 
 
 @cli.command(name="new")
