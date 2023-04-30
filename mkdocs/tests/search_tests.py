@@ -82,7 +82,7 @@ class SearchPluginTests(unittest.TestCase):
             'min_search_length': 3,
             'prebuild_index': False,
             'indexing': 'full',
-            'full_path_in_title': False
+            'full_path_in_title': False,
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({})
@@ -172,7 +172,7 @@ class SearchPluginTests(unittest.TestCase):
             'min_search_length': 3,
             'prebuild_index': False,
             'full_path_in_title': True,
-            'indexing': 'full'
+            'indexing': 'full',
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({'full_path_in_title': True})

@@ -59,7 +59,7 @@ class SearchIndex:
         the page itself and then one for each of its' heading
         tags.
         """
-        title_parts = [page.title]
+        title_parts = [page.title] if page.title else []
         if self.config['full_path_in_title']:
             for ancestor in page.ancestors:
                 title_parts.insert(0, ancestor.title)
@@ -79,11 +79,7 @@ class SearchIndex:
         # Create an entry for the full page.
         text = parser.stripped_html.rstrip('\n') if self.config['indexing'] == 'full' else ''
 
-        self._add_entry(
-            title=page_title,
-            text=text,
-            loc=url
-        )
+        self._add_entry(title=page_title, text=text, loc=url)
 
         if self.config['indexing'] in ['full', 'sections']:
             for i, section in enumerate(parser.data):
@@ -94,7 +90,11 @@ class SearchIndex:
                 self.create_entry_for_section(section, page.toc, url, section_title)
 
     def create_entry_for_section(
-        self, section: ContentSection, toc: TableOfContents, abs_url: str, title: Optional[str] = None
+        self,
+        section: ContentSection,
+        toc: TableOfContents,
+        abs_url: str,
+        title: Optional[str] = None,
     ) -> None:
         """
         Given a section on the page, the table of contents and
