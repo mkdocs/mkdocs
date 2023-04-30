@@ -114,8 +114,16 @@ class Theme:
         """Return a Jinja environment for the theme."""
 
         loader = jinja2.FileSystemLoader(self.dirs)
-        # No autoreload because editing a template in the middle of a build is not useful.
-        env = jinja2.Environment(loader=loader, auto_reload=False)
+        try:
+            bytecode_cache = jinja2.FileSystemBytecodeCache()
+        except Exception:
+            bytecode_cache = None
+        env = jinja2.Environment(
+            loader=loader,
+            # No autoreload because editing a template in the middle of a build is not useful.
+            auto_reload=False,
+            bytecode_cache=bytecode_cache,
+        )
         env.filters['url'] = filters.url_filter
         localization.install_translations(env, self._vars['locale'], self.dirs)
         return env
