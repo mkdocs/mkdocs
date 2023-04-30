@@ -31,6 +31,16 @@ plugins:
     - search
 ```
 
+If the plugins config setting is defined in the mkdocs.yml config file,
+then any defaults (such as search) are ignored and you need to explicitly
+re-enable the defaults if you would like to continue using them:
+
+```yaml
+plugins:
+    - search
+    - your_other_plugin
+```
+
 Some plugins may provide configuration options of their own. If you would like
 to set any configuration options, then you can nest a key/value mapping
 (`option_name: option value`) of any options that a given plugin supports. Note
