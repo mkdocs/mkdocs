@@ -22,6 +22,9 @@ if sys.platform.startswith("win"):
     else:
         colorama.init()
 
+# Hack: stop Click trying to find localization files for help messages.
+os.environ['LANGUAGE'] = 'C'
+
 log = logging.getLogger(__name__)
 
 
