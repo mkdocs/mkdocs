@@ -6,8 +6,8 @@ A guide to creating and distributing custom themes.
 
 NOTE:
 If you are looking for existing third party themes, they are listed in the
-MkDocs [community wiki]. If you want to share a theme you create, you
-should list it on the Wiki.
+[community wiki] page and [Best-of-MkDocs]. If you want to share a theme you create, you
+should list it there.
 
 When creating a new theme, you can either follow the steps in this guide to
 create one from scratch or you can download the `mkdocs-basic-theme` as a
@@ -16,6 +16,7 @@ this base theme on [GitHub][basic theme]**. It contains detailed comments in
 the code to describe the different features and their usage.
 
 [community wiki]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
+[Best-of-MkDocs]: https://github.com/mkdocs/best-of-mkdocs#-theming
 [basic theme]: https://github.com/mkdocs/mkdocs-basic-theme
 
 ## Creating a custom theme

@@ -218,8 +218,7 @@ theme supports the following options:
 
 ## Third Party Themes
 
-A list of third party themes can be found in the MkDocs [community wiki]. If you
-have created your own, please feel free to add it to the list.
+A list of third party themes can be found at the [community wiki] page and [Best-of-MkDocs]. If you have created your own, please add them there.
 
 [third party themes]: #third-party-themes
 [theme]: configuration.md#theme
@@ -230,4 +229,5 @@ have created your own, please feel free to add it to the list.
 [upgrade-GA4]: https://support.google.com/analytics/answer/9744165?hl=en&ref_topic=9303319
 [Read the Docs]: https://readthedocs.org/
 [community wiki]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
+[Best-of-MkDocs]: https://github.com/mkdocs/best-of-mkdocs#-theming
 [localizing your theme]: localizing-your-theme.md
