@@ -183,14 +183,24 @@ class File:
 
     page: Optional[Page]
 
-    def __init__(self, path: str, src_dir: str, dest_dir: str, use_directory_urls: bool) -> None:
+    def __init__(
+        self,
+        path: str,
+        src_dir: str,
+        dest_dir: str,
+        use_directory_urls: bool,
+        *,
+        dest_uri: Optional[str] = None,
+    ) -> None:
         self.page = None
         self.src_path = path
-        self.abs_src_path = os.path.normpath(os.path.join(src_dir, self.src_path))
         self.name = self._get_stem()
-        self.dest_uri = self._get_dest_path(use_directory_urls)
-        self.abs_dest_path = os.path.normpath(os.path.join(dest_dir, self.dest_path))
+        if dest_uri is None:
+            dest_uri = self._get_dest_path(use_directory_urls)
+        self.dest_uri = dest_uri
         self.url = self._get_url(use_directory_urls)
+        self.abs_src_path = os.path.normpath(os.path.join(src_dir, self.src_uri))
+        self.abs_dest_path = os.path.normpath(os.path.join(dest_dir, self.dest_uri))
 
     def __eq__(self, other) -> bool:
         return (
@@ -207,10 +217,10 @@ class File:
         )
 
     def _get_stem(self) -> str:
-        """Return the name of the file without it's extension."""
+        """Return the name of the file without its extension."""
         filename = posixpath.basename(self.src_uri)
         stem, ext = posixpath.splitext(filename)
-        return 'index' if stem in ('index', 'README') else stem
+        return 'index' if stem == 'README' else stem
 
     def _get_dest_path(self, use_directory_urls: bool) -> str:
         """Return destination path based on source path."""
