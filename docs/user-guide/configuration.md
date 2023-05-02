@@ -106,7 +106,7 @@ means that a page named 'foo/bar.md' will have its edit link lead to:
 `edit_uri` can actually be just an absolute URL, not necessarily relative to `repo_url`, so this can achieve the same result:
 
 ```yaml
-repo_url: https://example.com/project/repo/blob/main/docs/
+edit_uri: https://example.com/project/repo/blob/main/docs/
 ```
 
 For more flexibility, see [edit_uri_template](#edit_uri_template) below.
@@ -575,7 +575,7 @@ This alternative syntax is required if you intend to override some options via
 > which are available out-of-the-box. For a list of configuration options
 > available for a given extension, see the documentation for that extension.
 >
-> You may also install and use various [third party extensions][3rd]. Consult
+> You may also install and use various third party extensions ([Python-Markdown wiki], [Best-of-MkDocs]). Consult
 > the documentation provided by those extensions for installation instructions
 > and available configuration options.
 
@@ -963,7 +963,8 @@ path based options in the primary configuration file only.
 [pymkd]: https://python-markdown.github.io/
 [smarty]: https://python-markdown.github.io/extensions/smarty/
 [exts]: https://python-markdown.github.io/extensions/
-[3rd]: https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
+[Python-Markdown wiki]: https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
+[Best-of-MkDocs]: https://github.com/mkdocs/best-of-mkdocs
 [configuring pages and navigation]: writing-your-docs.md#configure-pages-and-navigation
 [theme_dir]: customizing-your-theme.md#using-the-theme_dir
 [choosing your theme]: choosing-your-theme.md

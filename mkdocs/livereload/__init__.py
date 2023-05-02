@@ -137,7 +137,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 self._rebuild_cond.notify_all()
 
         handler = watchdog.events.FileSystemEventHandler()
-        handler.on_any_event = callback
+        handler.on_any_event = callback  # type: ignore[method-assign]
         log.debug(f"Watching '{path}'")
         self._watch_refs[path] = self.observer.schedule(handler, path, recursive=recursive)
 

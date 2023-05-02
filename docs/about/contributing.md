@@ -86,11 +86,12 @@ with `{% trans %}` and `{% endtrans %}` tags.
 
 Each time a translatable text placeholder is added, removed or changed in a
 theme template, the theme's Portable Object Template (`pot`) file needs to be
-updated by running the `extract_messages` command. For example, to update the
-`pot` file of the `mkdocs` theme, run the following command:
+updated by running the `extract_messages` command. To update the
+`pot` file for both built-in themes, run these commands:
 
 ```bash
 pybabel extract --project=MkDocs --copyright-holder=MkDocs --msgid-bugs-address='https://github.com/mkdocs/mkdocs/issues' --no-wrap --version="$(hatch version)" --mapping-file mkdocs/themes/babel.cfg --output-file mkdocs/themes/mkdocs/messages.pot mkdocs/themes/mkdocs
+pybabel extract --project=MkDocs --copyright-holder=MkDocs --msgid-bugs-address='https://github.com/mkdocs/mkdocs/issues' --no-wrap --version="$(hatch version)" --mapping-file mkdocs/themes/babel.cfg --output-file mkdocs/themes/readthedocs/messages.pot mkdocs/themes/readthedocs
 ```
 
 The updated `pot` file should be included in a PR with the updated template.

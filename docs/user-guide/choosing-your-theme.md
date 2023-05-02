@@ -102,7 +102,7 @@ supports the following options:
     ```
 
 *   __`locale`__{ #mkdocs-locale }: The locale (language/location) used to
-    build the theme. If your locale is not yet supported, it will fallback
+    build the theme. If your locale is not yet supported, it will fall back
     to the default.
 
     The following locales are supported by this theme:
@@ -112,13 +112,14 @@ supports the following options:
     * `es`: Spanish
     * `fa`: Persian (Farsi)
     * `fr`: French
+    * `id`: Indonesian
     * `it`: Italian
     * `ja`: Japanese
     * `nb`: Norwegian Bokmål
     * `nn`: Norwegian Nynorsk
     * `pt_BR`: Portuguese (Brazil)
     * `ru`: Russian
-    * `tr_TR`: Turkish (Turkey)
+    * `tr`: Turkish
     * `uk`: Ukrainian
     * `zh_CN`: Simplified Chinese
 
@@ -191,23 +192,24 @@ theme supports the following options:
     page content as you scroll the page. Default: `True`.
 
 *   __`locale`__{ #readthedocs-locale }: The locale (language/location) used to
-    build the theme. If your locale is not yet supported, it will fallback
+    build the theme. If your locale is not yet supported, it will fall back
     to the default.
 
     The following locales are supported by this theme:
 
     * `en`: English (default)
-    * `fr`: French
+    * `de`: German
     * `es`: Spanish
+    * `fa`: Persian (Farsi)
+    * `fr`: French
+    * `id`: Indonesian
+    * `it`: Italian
     * `ja`: Japanese
     * `pt_BR`: Portuguese (Brazil)
-    * `zh_CN`: Simplified Chinese
-    * `de`: German
-    * `fa`: Persian (Farsi)
-    * `it`: Italian
-    * `tr_TR`: Turkish (Turkey)
     * `ru`: Russian
+    * `tr`: Turkish
     * `uk`: Ukrainian
+    * `zh_CN`: Simplified Chinese
 
     See the guide on [localizing your theme] for more information.
 
@@ -216,8 +218,7 @@ theme supports the following options:
 
 ## Third Party Themes
 
-A list of third party themes can be found in the MkDocs [community wiki]. If you
-have created your own, please feel free to add it to the list.
+A list of third party themes can be found at the [community wiki] page and [Best-of-MkDocs]. If you have created your own, please add them there.
 
 [third party themes]: #third-party-themes
 [theme]: configuration.md#theme
@@ -228,4 +229,5 @@ have created your own, please feel free to add it to the list.
 [upgrade-GA4]: https://support.google.com/analytics/answer/9744165?hl=en&ref_topic=9303319
 [Read the Docs]: https://readthedocs.org/
 [community wiki]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes
+[Best-of-MkDocs]: https://github.com/mkdocs/best-of-mkdocs#-theming
 [localizing your theme]: localizing-your-theme.md

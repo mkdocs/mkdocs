@@ -143,7 +143,7 @@ class SearchIndex:
 class ContentSection:
     """
     Used by the ContentParser class to capture the information we
-    need when it is parsing the HMTL.
+    need when it is parsing the HTML.
     """
 
     def __init__(

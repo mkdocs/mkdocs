@@ -12,6 +12,7 @@ import warnings
 from collections import Counter, UserString
 from typing import (
     Any,
+    Callable,
     Collection,
     Dict,
     Generic,
@@ -603,7 +604,7 @@ class FilesystemObject(Type[str]):
     Base class for options that point to filesystem objects.
     """
 
-    existence_test = staticmethod(os.path.exists)
+    existence_test: Callable[[str], bool] = staticmethod(os.path.exists)
     name = 'file or directory'
 
     def __init__(self, exists: bool = False, **kwargs) -> None:
@@ -1056,6 +1057,7 @@ class Hooks(BaseConfigOption[List[types.ModuleType]]):
         if spec is None:
             raise ValidationError(f"Cannot import path '{path}' as a Python module")
         module = importlib.util.module_from_spec(spec)
+        sys.modules[name] = module
         if spec.loader is None:
             raise ValidationError(f"Cannot import path '{path}' as a Python module")
         spec.loader.exec_module(module)
