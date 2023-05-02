@@ -380,13 +380,14 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         self.assertEqual(files.get_file_from_path('foo/bar.jpg'), fs[3])
         self.assertEqual(files.get_file_from_path('missing.jpg'), None)
         self.assertTrue(fs[2].src_uri in files.src_uris)
-        self.assertTrue(fs[2].src_uri in files.src_uris)
         extra_file = File('extra.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
         self.assertFalse(extra_file.src_uri in files.src_uris)
         files.append(extra_file)
         self.assertEqual(len(files), 7)
         self.assertTrue(extra_file.src_uri in files.src_uris)
         self.assertEqual(files.documentation_pages(), [fs[0], fs[1], extra_file])
+        files.remove(fs[1])
+        self.assertEqual(files.documentation_pages(), [fs[0], extra_file])
 
     @tempdir(
         files=[
