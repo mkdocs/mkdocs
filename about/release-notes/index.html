@@ -183,6 +183,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-level="2"><a href="#version-143-2023-05-02" class="nav-link">Version 1.4.3 (2023-05-02)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-level="2"><a href="#version-142-2022-11-01" class="nav-link">Version 1.4.2 (2022-11-01)</a>
               <ul class="nav flex-column">
               </ul>
@@ -379,6 +383,31 @@ mkdocs, version 1.0 from /path/to/mkdocs (Python 3.6)</code></pre>
 <li><a href="https://github.com/oprypin/">@oprypin</a></li>
 <li><a href="https://github.com/ultrabug/">@ultrabug</a></li>
 </ul>
+<h2 id="version-143-2023-05-02">Version 1.4.3 (2023-05-02)<a class="headerlink" href="#version-143-2023-05-02" title="Permanent link"></a></h2>
+<ul>
+<li>
+<p>Bugfix: for the <code>hooks</code> feature, modules no longer fail to load if using some advanced Python features like dataclasses (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3193" title="GitHub Issue mkdocs/mkdocs #3193">#3193</a>)</p>
+</li>
+<li>
+<p>Bugfix: Don't create <code>None</code> sitemap entries if the page has no populated URL - affects sites that exclude some files from navigation (<a href="https://github.com/mkdocs/mkdocs/commit/07a297b3b4de4a1b49469b1497ee34039b9f38fa"><code>07a297b</code></a>)</p>
+</li>
+<li>
+<p>"readthedocs" theme:</p>
+<ul>
+<li>Accessibility: add aria labels to Home logo (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3129" title="GitHub Issue mkdocs/mkdocs #3129">#3129</a>) and search inputs (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3046" title="GitHub Issue mkdocs/mkdocs #3046">#3046</a>)</li>
+<li>"readthedocs" theme now supports <code>hljs_style:</code> config, same as "mkdocs" theme (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3199" title="GitHub Issue mkdocs/mkdocs #3199">#3199</a>)</li>
+</ul>
+</li>
+<li>
+<p>Translations:</p>
+<ul>
+<li>Built-in themes now also support Indonesian language (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3154" title="GitHub Issue mkdocs/mkdocs #3154">#3154</a>)</li>
+<li>Fixed <code>zh_CN</code> translation (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3125" title="GitHub Issue mkdocs/mkdocs #3125">#3125</a>)</li>
+<li><code>tr_TR</code> translation becomes just <code>tr</code> - usage should remain unaffected (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3195" title="GitHub Issue mkdocs/mkdocs #3195">#3195</a>)</li>
+</ul>
+</li>
+</ul>
+<p>See <a href="https://github.com/mkdocs/mkdocs/compare/1.4.2...1.4.3">commit log</a>.</p>
 <h2 id="version-142-2022-11-01">Version 1.4.2 (2022-11-01)<a class="headerlink" href="#version-142-2022-11-01" title="Permanent link"></a></h2>
 <ul>
 <li>
@@ -1802,7 +1831,7 @@ JavaScript library <a href="https://lunrjs.com/">lunr.js</a>. It has been added 
 for adding it to your own themes.</p>
 <h4 id="new-command-line-interface">New Command Line Interface<a class="headerlink" href="#new-command-line-interface" title="Permanent link"></a></h4>
 <p>The command line interface for MkDocs has been re-written with the Python
-library <a href="http://click.pocoo.org/4/">Click</a>. This means that MkDocs now has an easier to use interface
+library <a href="https://click.palletsprojects.com/">Click</a>. This means that MkDocs now has an easier to use interface
 with better help output.</p>
 <p>This change is partially backwards incompatible as while undocumented it was
 possible to pass any configuration option to the different commands. Now only
@@ -1926,7 +1955,7 @@ documentation.</p>
 
         <footer class="col-md-12">
             <hr>
-                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
+                <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>

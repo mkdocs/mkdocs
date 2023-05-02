@@ -269,9 +269,10 @@ locales) if they respect <a href="https://jinja.palletsprojects.com/en/latest/ex
 with <code>{% trans %}</code> and <code>{% endtrans %}</code> tags.</p>
 <p>Each time a translatable text placeholder is added, removed or changed in a
 theme template, the theme's Portable Object Template (<code>pot</code>) file needs to be
-updated by running the <code>extract_messages</code> command. For example, to update the
-<code>pot</code> file of the <code>mkdocs</code> theme, run the following command:</p>
-<pre class="highlight"><code class="language-bash">pybabel extract --project=MkDocs --copyright-holder=MkDocs --msgid-bugs-address='https://github.com/mkdocs/mkdocs/issues' --no-wrap --version="$(hatch version)" --mapping-file mkdocs/themes/babel.cfg --output-file mkdocs/themes/mkdocs/messages.pot mkdocs/themes/mkdocs</code></pre>
+updated by running the <code>extract_messages</code> command. To update the
+<code>pot</code> file for both built-in themes, run these commands:</p>
+<pre class="highlight"><code class="language-bash">pybabel extract --project=MkDocs --copyright-holder=MkDocs --msgid-bugs-address='https://github.com/mkdocs/mkdocs/issues' --no-wrap --version="$(hatch version)" --mapping-file mkdocs/themes/babel.cfg --output-file mkdocs/themes/mkdocs/messages.pot mkdocs/themes/mkdocs
+pybabel extract --project=MkDocs --copyright-holder=MkDocs --msgid-bugs-address='https://github.com/mkdocs/mkdocs/issues' --no-wrap --version="$(hatch version)" --mapping-file mkdocs/themes/babel.cfg --output-file mkdocs/themes/readthedocs/messages.pot mkdocs/themes/readthedocs</code></pre>
 <p>The updated <code>pot</code> file should be included in a PR with the updated template.
 The updated <code>pot</code> file will allow translation contributors to propose the
 translations needed for their preferred language. See the guide on <a href="../../dev-guide/translations/">Translating
@@ -288,7 +289,7 @@ file so that everything is ready for translators to do their job.</p>
 
         <footer class="col-md-12">
             <hr>
-                <p>Copyright &copy; 2014 <a href="https://twitter.com/_tomchristie">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
+                <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
