@@ -28,7 +28,7 @@ h1 {
 ```
 
 > NOTE:
-> If you are deploying your documentation with [ReadTheDocs]. You will need
+> If you are deploying your documentation with [ReadTheDocs], you will need
 > to explicitly list the CSS and JavaScript files you want to include in
 > your config. To do this, add the following to your mkdocs.yml.
 >
