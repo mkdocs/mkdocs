@@ -190,7 +190,7 @@ class DeprecatedTest(TestCase):
             {'d': 'value'},
             warnings=dict(
                 d="The configuration option 'd' has been deprecated and will be removed in a "
-                "future release of MkDocs."
+                "future release."
             ),
         )
 
@@ -209,7 +209,7 @@ class DeprecatedTest(TestCase):
             {'d': 'value'},
             warnings=dict(
                 d="The configuration option 'd' has been deprecated and will be removed in a "
-                "future release of MkDocs."
+                "future release."
             ),
         )
 
@@ -223,7 +223,7 @@ class DeprecatedTest(TestCase):
                 {'d': 'value'},
                 warnings=dict(
                     d="The configuration option 'd' has been deprecated and will be removed in a "
-                    "future release of MkDocs."
+                    "future release."
                 ),
             )
 
@@ -252,7 +252,7 @@ class DeprecatedTest(TestCase):
             {'old': 'value'},
             warnings=dict(
                 old="The configuration option 'old' has been deprecated and will be removed in a "
-                "future release of MkDocs. Use 'new' instead."
+                "future release. Use 'new' instead."
             ),
         )
         self.assertEqual(conf, {'new': 'value', 'old': None})
@@ -267,7 +267,7 @@ class DeprecatedTest(TestCase):
             {'old': 'value'},
             warnings=dict(
                 old="The configuration option 'old' has been deprecated and will be removed in a "
-                "future release of MkDocs. Use 'foo.bar' instead."
+                "future release. Use 'foo.bar' instead."
             ),
         )
         self.assertEqual(conf, {'foo': {'bar': 'value'}, 'old': None})
@@ -282,7 +282,7 @@ class DeprecatedTest(TestCase):
             {'old': 'value', 'foo': {'existing': 'existing'}},
             warnings=dict(
                 old="The configuration option 'old' has been deprecated and will be removed in a "
-                "future release of MkDocs. Use 'foo.bar' instead."
+                "future release. Use 'foo.bar' instead."
             ),
         )
         self.assertEqual(conf, {'foo': {'existing': 'existing', 'bar': 'value'}, 'old': None})
@@ -298,7 +298,7 @@ class DeprecatedTest(TestCase):
                 {'old': 'value', 'foo': 'wrong type'},
                 warnings=dict(
                     old="The configuration option 'old' has been deprecated and will be removed in a "
-                    "future release of MkDocs. Use 'foo.bar' instead."
+                    "future release. Use 'foo.bar' instead."
                 ),
             )
 
@@ -1201,31 +1201,31 @@ class SubConfigTest(TestCase):
         """Default behaviour of subconfig: validation is ignored"""
 
         # Nominal
-        class Schema:
+        class Schema1:
             option = c.SubConfig(('cc', c.Choice(('foo', 'bar'))))
 
-        conf = self.get_config(Schema, {'option': {'cc': 'foo'}})
+        conf = self.get_config(Schema1, {'option': {'cc': 'foo'}})
         self.assertEqual(conf, {'option': {'cc': 'foo'}})
 
         # Invalid option: No error
-        class Schema:
+        class Schema2:
             option = c.SubConfig(('cc', c.Choice(('foo', 'bar'))))
 
-        conf = self.get_config(Schema, {'option': {'cc': True}})
+        conf = self.get_config(Schema2, {'option': {'cc': True}})
         self.assertEqual(conf, {'option': {'cc': True}})
 
         # Missing option: Will be considered optional with default None
-        class Schema:
+        class Schema3:
             option = c.SubConfig(('cc', c.Choice(('foo', 'bar'))))
 
-        conf = self.get_config(Schema, {'option': {}})
+        conf = self.get_config(Schema3, {'option': {}})
         self.assertEqual(conf, {'option': {'cc': None}})
 
         # Unknown option: No warning
-        class Schema:
+        class Schema4:
             option = c.SubConfig(('cc', c.Choice(('foo', 'bar'))))
 
-        conf = self.get_config(Schema, {'option': {'unknown_key_is_ok': 0}})
+        conf = self.get_config(Schema4, {'option': {'unknown_key_is_ok': 0}})
         self.assertEqual(conf, {'option': {'cc': None, 'unknown_key_is_ok': 0}})
 
     def test_subconfig_unknown_option(self):
@@ -1247,7 +1247,7 @@ class SubConfigTest(TestCase):
             )
 
         with self.expect_error(
-            option="Sub-option 'cc' configuration error: Expected one of: ('foo', 'bar') but received: True"
+            option="Sub-option 'cc': Expected one of: ('foo', 'bar') but received: True"
         ):
             self.get_config(Schema, {'option': {'cc': True}})
 
@@ -1320,7 +1320,7 @@ class ConfigItemsTest(TestCase):
             conf = self.get_config(Schema, {'sub': None})
 
         with self.expect_error(
-            sub="Sub-option 'opt' configuration error: Expected type: <class 'int'> but received: <class 'str'>"
+            sub="Sub-option 'opt': Expected type: <class 'int'> but received: <class 'str'>"
         ):
             conf = self.get_config(Schema, {'sub': [{'opt': 'asdf'}, {}]})
 
@@ -1330,14 +1330,12 @@ class ConfigItemsTest(TestCase):
         self.assertEqual(conf['sub'], [{'opt': 1}, {'opt': 2}])
 
         with self.expect_error(
-            sub="Sub-option 'opt' configuration error: Expected type: <class 'int'> but "
-            "received: <class 'str'>"
+            sub="Sub-option 'opt': Expected type: <class 'int'> but received: <class 'str'>"
         ):
             self.get_config(Schema, {'sub': [{'opt': 'z'}, {'opt': 2}]})
 
         with self.expect_error(
-            sub="Sub-option 'opt' configuration error: "
-            "Expected type: <class 'int'> but received: <class 'str'>"
+            sub="Sub-option 'opt': Expected type: <class 'int'> but received: <class 'str'>"
         ):
             conf = self.get_config(Schema, {'sub': [{'opt': 'z'}, {'opt': 2}]})
 

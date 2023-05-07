@@ -12,6 +12,7 @@ from mkdocs import exceptions, utils
 from mkdocs.structure.files import File
 from mkdocs.structure.pages import Page
 from mkdocs.tests.base import dedent, load_config, tempdir
+from mkdocs.utils import meta
 
 BASEYML = """
 INHERIT: parent.yml
@@ -423,7 +424,7 @@ class UtilsTests(unittest.TestCase):
             key2:
               - value
             '''
-        ).encode('utf-8')
+        )
 
         config = utils.yaml_load(yaml_src)
         self.assertTrue(isinstance(config['key'], str))
@@ -551,7 +552,7 @@ class UtilsTests(unittest.TestCase):
             """
         )
         self.assertEqual(
-            utils.meta.get_data(doc),
+            meta.get_data(doc),
             (
                 "Doc body",
                 {
@@ -565,7 +566,7 @@ class UtilsTests(unittest.TestCase):
 
     def test_mm_meta_data_blank_first_line(self):
         doc = '\nfoo: bar\nDoc body'
-        self.assertEqual(utils.meta.get_data(doc), (doc.lstrip(), {}))
+        self.assertEqual(meta.get_data(doc), (doc.lstrip(), {}))
 
     def test_yaml_meta_data(self):
         doc = dedent(
@@ -583,7 +584,7 @@ class UtilsTests(unittest.TestCase):
             """
         )
         self.assertEqual(
-            utils.meta.get_data(doc),
+            meta.get_data(doc),
             (
                 "Doc body",
                 {
@@ -604,7 +605,7 @@ class UtilsTests(unittest.TestCase):
             Doc body
             """
         )
-        self.assertEqual(utils.meta.get_data(doc), (doc, {}))
+        self.assertEqual(meta.get_data(doc), (doc, {}))
 
     def test_yaml_meta_data_invalid(self):
         doc = dedent(
@@ -615,7 +616,7 @@ class UtilsTests(unittest.TestCase):
             Doc body
             """
         )
-        self.assertEqual(utils.meta.get_data(doc), (doc, {}))
+        self.assertEqual(meta.get_data(doc), (doc, {}))
 
     def test_no_meta_data(self):
         doc = dedent(
@@ -623,7 +624,7 @@ class UtilsTests(unittest.TestCase):
             Doc body
             """
         )
-        self.assertEqual(utils.meta.get_data(doc), (doc, {}))
+        self.assertEqual(meta.get_data(doc), (doc, {}))
 
 
 class LogCounterTests(unittest.TestCase):

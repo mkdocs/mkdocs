@@ -9,15 +9,17 @@ import traceback
 import types
 import typing as t
 import warnings
-from collections import UserString
+from collections import Counter, UserString
 from typing import (
     Any,
+    Callable,
     Collection,
     Dict,
     Generic,
     Iterator,
     List,
     Mapping,
+    MutableMapping,
     NamedTuple,
     Tuple,
     TypeVar,
@@ -96,11 +98,11 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
 
         if self._do_validation:
             # Capture errors and warnings
-            self.warnings = [f'Sub-option {key!r}: {msg}' for key, msg in warnings]
+            self.warnings = [f"Sub-option '{key}': {msg}" for key, msg in warnings]
             if failed:
                 # Get the first failing one
                 key, err = failed[0]
-                raise ValidationError(f"Sub-option {key!r} configuration error: {err}")
+                raise ValidationError(f"Sub-option '{key}': {err}")
 
         return config
 
@@ -309,7 +311,7 @@ class Deprecated(BaseConfigOption):
             else:
                 message = (
                     "The configuration option '{}' has been deprecated and "
-                    "will be removed in a future release of MkDocs."
+                    "will be removed in a future release."
                 )
             if moved_to:
                 message += f" Use '{moved_to}' instead."
@@ -602,7 +604,7 @@ class FilesystemObject(Type[str]):
     Base class for options that point to filesystem objects.
     """
 
-    existence_test = staticmethod(os.path.exists)
+    existence_test: Callable[[str], bool] = staticmethod(os.path.exists)
     name = 'file or directory'
 
     def __init__(self, exists: bool = False, **kwargs) -> None:
@@ -933,9 +935,9 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
         if not isinstance(value, (list, tuple, dict)):
             raise ValidationError('Invalid Plugins configuration. Expected a list or dict.')
         self.plugins = plugins.PluginCollection()
+        self._instance_counter: MutableMapping[str, int] = Counter()
         for name, cfg in self._parse_configs(value):
-            name, plugin = self.load_plugin_with_namespace(name, cfg)
-            self.plugins[name] = plugin
+            self.load_plugin_with_namespace(name, cfg)
         return self.plugins
 
     @classmethod
@@ -981,7 +983,13 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
         if not isinstance(config, dict):
             raise ValidationError(f"Invalid config options for the '{name}' plugin.")
 
-        plugin = self.plugin_cache.get(name)
+        self._instance_counter[name] += 1
+        inst_number = self._instance_counter[name]
+        inst_name = name
+        if inst_number > 1:
+            inst_name += f' #{inst_number}'
+
+        plugin = self.plugin_cache.get(inst_name)
         if plugin is None:
             plugin_cls = self.installed_plugins[name].load()
 
@@ -994,15 +1002,28 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
             plugin = plugin_cls()
 
             if hasattr(plugin, 'on_startup') or hasattr(plugin, 'on_shutdown'):
-                self.plugin_cache[name] = plugin
+                self.plugin_cache[inst_name] = plugin
 
-        errors, warnings = plugin.load_config(
+        if inst_number > 1 and not getattr(plugin, 'supports_multiple_instances', False):
+            self.warnings.append(
+                f"Plugin '{name}' was specified multiple times - this is likely a mistake, "
+                "because the plugin doesn't declare `supports_multiple_instances`."
+            )
+
+        errors, warns = plugin.load_config(
             config, self._config.config_file_path if self._config else None
         )
-        self.warnings.extend(f"Plugin '{name}' value: '{x}'. Warning: {y}" for x, y in warnings)
-        errors_message = '\n'.join(f"Plugin '{name}' value: '{x}'. Error: {y}" for x, y in errors)
+        for warning in warns:
+            if isinstance(warning, str):
+                self.warnings.append(f"Plugin '{inst_name}': {warning}")
+            else:
+                key, msg = warning
+                self.warnings.append(f"Plugin '{inst_name}' option '{key}': {msg}")
+
+        errors_message = '\n'.join(f"Plugin '{name}' option '{key}': {msg}" for key, msg in errors)
         if errors_message:
             raise ValidationError(errors_message)
+        self.plugins[inst_name] = plugin
         return plugin
 
 
@@ -1036,6 +1057,9 @@ class Hooks(BaseConfigOption[List[types.ModuleType]]):
         if spec is None:
             raise ValidationError(f"Cannot import path '{path}' as a Python module")
         module = importlib.util.module_from_spec(spec)
+        sys.modules[name] = module
+        if spec.loader is None:
+            raise ValidationError(f"Cannot import path '{path}' as a Python module")
         spec.loader.exec_module(module)
         return module
 

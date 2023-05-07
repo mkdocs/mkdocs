@@ -26,10 +26,10 @@ class LangOption(c.OptionallyRequired[List[str]]):
             if os.path.isfile(os.path.join(base_path, 'lunr-language', f'lunr.{lang_part}.js')):
                 return lang_part
 
-    def run_validation(self, value):
+    def run_validation(self, value: object):
         if isinstance(value, str):
             value = [value]
-        elif not isinstance(value, (list, tuple)):
+        if not isinstance(value, list):
             raise c.ValidationError('Expected a list of language codes.')
         for lang in list(value):
             if lang != 'en':

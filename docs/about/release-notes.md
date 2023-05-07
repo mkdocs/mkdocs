@@ -27,6 +27,49 @@ The current and past members of the MkDocs team.
 * [@oprypin](https://github.com/oprypin/)
 * [@ultrabug](https://github.com/ultrabug/)
 
+## Version 1.4.3 (2023-05-02)
+
+*   Bugfix: for the `hooks` feature, modules no longer fail to load if using some advanced Python features like dataclasses (#3193)
+
+*   Bugfix: Don't create `None` sitemap entries if the page has no populated URL - affects sites that exclude some files from navigation ([`07a297b`](https://github.com/mkdocs/mkdocs/commit/07a297b3b4de4a1b49469b1497ee34039b9f38fa))
+
+*   "readthedocs" theme:
+    * Accessibility: add aria labels to Home logo (#3129) and search inputs (#3046)
+    * "readthedocs" theme now supports `hljs_style:` config, same as "mkdocs" theme (#3199)
+
+*   Translations:
+    * Built-in themes now also support Indonesian language (#3154)
+    * Fixed `zh_CN` translation (#3125)
+    * `tr_TR` translation becomes just `tr` - usage should remain unaffected (#3195)
+
+See [commit log](https://github.com/mkdocs/mkdocs/compare/1.4.2...1.4.3).
+
+## Version 1.4.2 (2022-11-01)
+
+*   Officially support Python 3.11 (#3020)
+
+    NEW: **Tip:** Simply upgrading to Python 3.11 can cut off 10-15% of your site's build time.
+
+*   Support multiple instances of the same plugin (#3027)
+
+    If a plugin is specified multiple times in the list under the `plugins:` config, that will create 2 (or more) instances of the plugin with their own config each.
+
+    Previously this case was unforeseen and, as such, bugged.
+
+    Now even though this works, by default a warning will appear from MkDocs anyway, unless the plugin adds a class variable `supports_multiple_instances = True`.
+
+*   Bugfix (regression in 1.4.1): Don't error when a plugin puts a plain string into `warnings` (#3016)
+
+*   Bugfix: Relative links will always render with a trailing slash (#3022)
+
+    Previously under `use_directory_urls`, links *from* a sub-page *to* the main index page rendered as e.g. `<a href="../..">` even though in all other cases the links look like `<a href="../../">`. This caused unwanted behavior on some combinations of Web browsers and servers. Now this special-case bug was removed.
+
+*   Built-in "mkdocs" theme now also supports Norwegian language (#3024)
+
+*   Plugin-related warnings look more readable (#3016)
+
+See [commit log](https://github.com/mkdocs/mkdocs/compare/1.4.1...1.4.2).
+
 ## Version 1.4.1 (2022-10-15)
 
 *   Support theme-namespaced plugin loading (#2998)
@@ -1499,7 +1542,7 @@ a small subset of the configuration options can be passed to the commands. To
 see in full commands and available arguments use `mkdocs --help` and
 `mkdocs build --help` to have them displayed.
 
-[Click]: http://click.pocoo.org/4/
+[Click]: https://click.palletsprojects.com/
 
 #### Support Extra HTML and XML files
 

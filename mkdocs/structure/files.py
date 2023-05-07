@@ -230,13 +230,10 @@ class File:
         url = self.dest_uri
         dirname, filename = posixpath.split(url)
         if use_directory_urls and filename == 'index.html':
-            if dirname == '':
-                url = '.'
-            else:
-                url = dirname + '/'
+            url = (dirname or '.') + '/'
         return urlquote(url)
 
-    def url_relative_to(self, other: File) -> str:
+    def url_relative_to(self, other: Union[File, str]) -> str:
         """Return url for file relative to other file."""
         return utils.get_relative_url(self.url, other.url if isinstance(other, File) else other)
 

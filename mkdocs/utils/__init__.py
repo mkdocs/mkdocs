@@ -21,13 +21,16 @@ from typing import (
     IO,
     TYPE_CHECKING,
     Any,
+    Collection,
     Dict,
     Iterable,
     List,
     MutableSequence,
     Optional,
     Tuple,
+    Type,
     TypeVar,
+    Union,
 )
 from urllib.parse import urlsplit
 
@@ -74,11 +77,13 @@ def get_yaml_loader(loader=yaml.Loader):
     return Loader
 
 
-def yaml_load(source: IO, loader=None) -> Optional[Dict[str, Any]]:
+def yaml_load(source: Union[IO, str], loader: Optional[Type[yaml.Loader]] = None) -> Dict[str, Any]:
     """Return dict of source YAML file using loader, recursively deep merging inherited parent."""
     Loader = loader or get_yaml_loader()
     result = yaml.load(source, Loader=Loader)
-    if result is not None and 'INHERIT' in result:
+    if result is None:
+        return {}
+    if 'INHERIT' in result and not isinstance(source, str):
         relpath = result.pop('INHERIT')
         abspath = os.path.normpath(os.path.join(os.path.dirname(source.name), relpath))
         if not os.path.exists(abspath):
@@ -140,7 +145,7 @@ def get_build_date() -> str:
     return get_build_datetime().strftime('%Y-%m-%d')
 
 
-def reduce_list(data_set: Iterable[str]) -> List[str]:
+def reduce_list(data_set: Iterable[T]) -> List[T]:
     """Reduce duplicate items in a list and preserve order"""
     return list(dict.fromkeys(data_set))
 
@@ -328,7 +333,7 @@ def _get_norm_url(path: str) -> Tuple[str, int]:
 
 
 def create_media_urls(
-    path_list: List[str], page: Optional[Page] = None, base: str = ''
+    path_list: Iterable[str], page: Optional[Page] = None, base: str = ''
 ) -> List[str]:
     """
     Return a list of URLs relative to the given page or using the base.
@@ -376,7 +381,7 @@ def get_themes() -> Dict[str, EntryPoint]:
     return themes
 
 
-def get_theme_names():
+def get_theme_names() -> Collection[str]:
     """Return a list of all installed themes by name."""
 
     return get_themes().keys()
@@ -469,7 +474,13 @@ class CountHandler(logging.NullHandler):
         return [(logging.getLevelName(k), v) for k, v in sorted(self.counts.items(), reverse=True)]
 
 
-# For backward compatibility as some plugins import it.
-# It is no longer necessary as all messages on the
-# `mkdocs` logger get counted automatically.
-warning_filter = logging.Filter()
+def __getattr__(name: str):
+    if name == 'warning_filter':
+        warnings.warn(
+            "warning_filter doesn't do anything since MkDocs 1.2 and will be removed soon. "
+            "All messages on the `mkdocs` logger get counted automatically.",
+            DeprecationWarning,
+        )
+        return logging.Filter()
+
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

@@ -309,7 +309,7 @@ As well as the Markdown source files, you can also include other file types in
 your documentation, which will be copied across when generating your
 documentation site. These might include images and other media.
 
-For example, if your project documentation needed to include a [GitHub pages
+For example, if your project documentation needed to include a [GitHub Pages
 CNAME file] and a PNG formatted screenshot image then your file layout might
 look as follows:
 
@@ -338,7 +338,7 @@ Cupcake indexer is a snazzy new project for indexing small cakes.
 Your image will now be embedded when you build the documentation, and should
 also be previewed if you're working on the documentation with a Markdown editor.
 
-[GitHub pages CNAME file]: https://help.github.com/articles/using-a-custom-domain-with-github-pages/
+[GitHub Pages CNAME file]: https://help.github.com/articles/using-a-custom-domain-with-github-pages/
 
 #### Linking from raw HTML
 
@@ -459,8 +459,8 @@ detected, but the content between the delimiters is not valid YAML
 meta-data, MkDocs does not attempt to parse the content as MultiMarkdown
 style meta-data.
 
-[YAML]: http://yaml.org
-[MultiMarkdown]: http://fletcherpenney.net/MultiMarkdown_Syntax_Guide#metadata
+[YAML]: https://yaml.org
+[MultiMarkdown]: https://fletcherpenney.net/MultiMarkdown_Syntax_Guide#metadata
 [nav]: configuration.md#nav
 
 ### Tables

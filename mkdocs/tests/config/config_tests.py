@@ -27,10 +27,6 @@ class ConfigTests(unittest.TestCase):
         )
         self.assertEqual(warnings, [])
 
-    def test_empty_config(self):
-        with self.assertRaises(ConfigurationError):
-            config.load_config(config_file='/dev/null')
-
     def test_nonexistant_config(self):
         with self.assertRaises(ConfigurationError):
             config.load_config(config_file='/path/that/is/not/real')
@@ -132,6 +128,7 @@ class ConfigTests(unittest.TestCase):
                     'analytics': {'anonymize_ip': False, 'gtag': None},
                     'highlightjs': True,
                     'hljs_languages': [],
+                    'hljs_style': 'github',
                     'include_homepage_in_sidebar': True,
                     'prev_next_buttons_location': 'bottom',
                     'navigation_depth': 4,
@@ -152,6 +149,7 @@ class ConfigTests(unittest.TestCase):
                     'analytics': {'anonymize_ip': False, 'gtag': None},
                     'highlightjs': True,
                     'hljs_languages': [],
+                    'hljs_style': 'github',
                     'include_homepage_in_sidebar': True,
                     'prev_next_buttons_location': 'bottom',
                     'navigation_depth': 4,
@@ -177,6 +175,7 @@ class ConfigTests(unittest.TestCase):
                     'analytics': {'anonymize_ip': False, 'gtag': None},
                     'highlightjs': True,
                     'hljs_languages': [],
+                    'hljs_style': 'github',
                     'include_homepage_in_sidebar': True,
                     'prev_next_buttons_location': 'bottom',
                     'navigation_depth': 4,

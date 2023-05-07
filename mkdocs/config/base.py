@@ -35,7 +35,7 @@ T = TypeVar('T')
 
 
 class BaseConfigOption(Generic[T]):
-    def __init__(self):
+    def __init__(self) -> None:
         self.warnings: List[str] = []
         self.default = None
 
@@ -239,7 +239,7 @@ class Config(UserDict):
 
         return failed, warnings
 
-    def load_dict(self, patch: Optional[dict]) -> None:
+    def load_dict(self, patch: dict) -> None:
         """Load config options from a dictionary."""
 
         if not isinstance(patch, dict):
@@ -363,13 +363,13 @@ def load_config(config_file: Optional[Union[str, IO]] = None, **kwargs) -> MkDoc
     errors, warnings = cfg.validate()
 
     for config_name, warning in warnings:
-        log.warning(f"Config value: '{config_name}'. Warning: {warning}")
+        log.warning(f"Config value '{config_name}': {warning}")
 
     for config_name, error in errors:
-        log.error(f"Config value: '{config_name}'. Error: {error}")
+        log.error(f"Config value '{config_name}': {error}")
 
     for key, value in cfg.items():
-        log.debug(f"Config value: '{key}' = {value!r}")
+        log.debug(f"Config value '{key}' = {value!r}")
 
     if len(errors) > 0:
         raise exceptions.Abort(f"Aborted with {len(errors)} Configuration Errors!")

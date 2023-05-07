@@ -171,7 +171,7 @@ class DeprecatedTest(TestCase):
             {'d': 'value'},
             warnings=dict(
                 d="The configuration option 'd' has been deprecated and will be removed in a "
-                "future release of MkDocs."
+                "future release."
             ),
         )
 
@@ -190,7 +190,7 @@ class DeprecatedTest(TestCase):
             {'d': 'value'},
             warnings=dict(
                 d="The configuration option 'd' has been deprecated and will be removed in a "
-                "future release of MkDocs."
+                "future release."
             ),
         )
 
@@ -204,7 +204,7 @@ class DeprecatedTest(TestCase):
                 {'d': 'value'},
                 warnings=dict(
                     d="The configuration option 'd' has been deprecated and will be removed in a "
-                    "future release of MkDocs."
+                    "future release."
                 ),
             )
 
@@ -233,7 +233,7 @@ class DeprecatedTest(TestCase):
             {'old': 'value'},
             warnings=dict(
                 old="The configuration option 'old' has been deprecated and will be removed in a "
-                "future release of MkDocs. Use 'new' instead."
+                "future release. Use 'new' instead."
             ),
         )
         self.assertEqual(conf, {'new': 'value', 'old': None})
@@ -248,7 +248,7 @@ class DeprecatedTest(TestCase):
             {'old': 'value'},
             warnings=dict(
                 old="The configuration option 'old' has been deprecated and will be removed in a "
-                "future release of MkDocs. Use 'foo.bar' instead."
+                "future release. Use 'foo.bar' instead."
             ),
         )
         self.assertEqual(conf, {'foo': {'bar': 'value'}, 'old': None})
@@ -263,7 +263,7 @@ class DeprecatedTest(TestCase):
             {'old': 'value', 'foo': {'existing': 'existing'}},
             warnings=dict(
                 old="The configuration option 'old' has been deprecated and will be removed in a "
-                "future release of MkDocs. Use 'foo.bar' instead."
+                "future release. Use 'foo.bar' instead."
             ),
         )
         self.assertEqual(conf, {'foo': {'existing': 'existing', 'bar': 'value'}, 'old': None})
@@ -279,7 +279,7 @@ class DeprecatedTest(TestCase):
                 {'old': 'value', 'foo': 'wrong type'},
                 warnings=dict(
                     old="The configuration option 'old' has been deprecated and will be removed in a "
-                    "future release of MkDocs. Use 'foo.bar' instead."
+                    "future release. Use 'foo.bar' instead."
                 ),
             )
 
@@ -1252,7 +1252,7 @@ class SubConfigTest(TestCase):
             option = c.SubConfig(Sub)
 
         with self.expect_error(
-            option="Sub-option 'cc' configuration error: Expected one of: ('foo', 'bar') but received: True"
+            option="Sub-option 'cc': Expected one of: ('foo', 'bar') but received: True"
         ):
             self.get_config(Schema, {'option': {'cc': True}})
 
@@ -1330,7 +1330,7 @@ class SubConfigTest(TestCase):
             conf = self.get_config(Schema, {'sub': None})
 
         with self.expect_error(
-            sub="Sub-option 'opt' configuration error: Expected type: <class 'int'> but received: <class 'str'>"
+            sub="Sub-option 'opt': Expected type: <class 'int'> but received: <class 'str'>"
         ):
             conf = self.get_config(Schema, {'sub': [{'opt': 'asdf'}, {}]})
 
@@ -1343,14 +1343,12 @@ class SubConfigTest(TestCase):
         self.assertEqual(conf.sub[0].opt, 1)
 
         with self.expect_error(
-            sub="Sub-option 'opt' configuration error: Expected type: <class 'int'> but "
-            "received: <class 'str'>"
+            sub="Sub-option 'opt': Expected type: <class 'int'> but received: <class 'str'>"
         ):
             self.get_config(Schema, {'sub': [{'opt': 'z'}, {'opt': 2}]})
 
         with self.expect_error(
-            sub="Sub-option 'opt' configuration error: "
-            "Expected type: <class 'int'> but received: <class 'str'>"
+            sub="Sub-option 'opt': Expected type: <class 'int'> but received: <class 'str'>"
         ):
             conf = self.get_config(Schema, {'sub': [{'opt': 'z'}, {'opt': 2}]})
 
@@ -1635,7 +1633,7 @@ class _FakePlugin2Config(_FakePluginConfig):
 
 
 class FakePlugin2(BasePlugin[_FakePlugin2Config]):
-    pass
+    supports_multiple_instances = True
 
 
 class ThemePlugin(BasePlugin[_FakePluginConfig]):
@@ -1806,6 +1804,57 @@ class PluginsTest(TestCase):
         self.assertEqual(set(conf.plugins), {'overridden'})
         self.assertIsInstance(conf.plugins['overridden'], FakePlugin2)
 
+    def test_plugin_config_with_multiple_instances(self, mock_class) -> None:
+        class Schema(Config):
+            theme = c.Theme(default='mkdocs')
+            plugins = c.Plugins(theme_key='theme')
+
+        cfg = {
+            'plugins': [
+                {'sample2': {'foo': 'foo value', 'bar': 42}},
+                {'sample2': {'foo': 'foo2 value'}},
+            ],
+        }
+        conf = self.get_config(Schema, cfg)
+
+        self.assertEqual(
+            set(conf.plugins),
+            {'sample2', 'sample2 #2'},
+        )
+        self.assertEqual(conf.plugins['sample2'].config['bar'], 42)
+        self.assertEqual(conf.plugins['sample2 #2'].config['bar'], 0)
+
+    def test_plugin_config_with_multiple_instances_and_warning(self, mock_class) -> None:
+        class Schema(Config):
+            theme = c.Theme(default='mkdocs')
+            plugins = c.Plugins(theme_key='theme')
+
+        test_cfgs: List[Dict[str, Any]] = [
+            {
+                'theme': 'readthedocs',
+                'plugins': [{'sub_plugin': {}}, {'sample2': {}}, {'sub_plugin': {}}, 'sample2'],
+            },
+            {
+                'theme': 'readthedocs',
+                'plugins': ['sub_plugin', 'sample2', 'sample2', 'sub_plugin'],
+            },
+        ]
+
+        for cfg in test_cfgs:
+            conf = self.get_config(
+                Schema,
+                cfg,
+                warnings=dict(
+                    plugins="Plugin 'readthedocs/sub_plugin' was specified multiple times - "
+                    "this is likely a mistake, because the plugin doesn't declare "
+                    "`supports_multiple_instances`."
+                ),
+            )
+            self.assertEqual(
+                set(conf.plugins),
+                {'readthedocs/sub_plugin', 'readthedocs/sub_plugin #2', 'sample2', 'sample2 #2'},
+            )
+
     def test_plugin_config_empty_list_with_empty_default(self, mock_class) -> None:
         class Schema(Config):
             plugins = c.Plugins(default=[])
@@ -1927,7 +1976,7 @@ class PluginsTest(TestCase):
             }
         }
         with self.expect_error(
-            plugins="Plugin 'sample' value: 'bar'. Error: Expected type: <class 'int'> but received: <class 'str'>"
+            plugins="Plugin 'sample' option 'bar': Expected type: <class 'int'> but received: <class 'str'>"
         ):
             self.get_config(Schema, cfg)
 
@@ -1944,8 +1993,8 @@ class PluginsTest(TestCase):
             Schema,
             cfg,
             warnings=dict(
-                plugins="Plugin 'sample2' value: 'depr'. Warning: The configuration option "
-                "'depr' has been deprecated and will be removed in a future release of MkDocs."
+                plugins="Plugin 'sample2' option 'depr': The configuration option "
+                "'depr' has been deprecated and will be removed in a future release."
             ),
         )
 
