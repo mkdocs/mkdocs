@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import dataclasses
 import datetime
 import logging
 import os
@@ -9,9 +10,7 @@ import unittest
 from unittest import mock
 
 from mkdocs import exceptions, utils
-from mkdocs.structure.files import File
-from mkdocs.structure.pages import Page
-from mkdocs.tests.base import dedent, load_config, tempdir
+from mkdocs.tests.base import dedent, tempdir
 from mkdocs.utils import meta
 
 BASEYML = """
@@ -111,174 +110,76 @@ class UtilsTests(unittest.TestCase):
         self.assertEqual(utils.get_relative_url('/', '.'), './')
         self.assertEqual(utils.get_relative_url('/', '/.'), './')
 
-    def test_create_media_urls(self):
-        expected_results = {
-            'https://media.cdn.org/jq.js': [
-                'https://media.cdn.org/jq.js',
-                'https://media.cdn.org/jq.js',
-                'https://media.cdn.org/jq.js',
-            ],
-            'http://media.cdn.org/jquery.js': [
-                'http://media.cdn.org/jquery.js',
-                'http://media.cdn.org/jquery.js',
-                'http://media.cdn.org/jquery.js',
-            ],
-            '//media.cdn.org/jquery.js': [
-                '//media.cdn.org/jquery.js',
-                '//media.cdn.org/jquery.js',
-                '//media.cdn.org/jquery.js',
-            ],
-            'media.cdn.org/jquery.js': [
-                'media.cdn.org/jquery.js',
-                'media.cdn.org/jquery.js',
-                '../media.cdn.org/jquery.js',
-            ],
-            'local/file/jquery.js': [
-                'local/file/jquery.js',
-                'local/file/jquery.js',
-                '../local/file/jquery.js',
-            ],
-            'image.png': [
-                'image.png',
-                'image.png',
-                '../image.png',
-            ],
-            'style.css?v=20180308c': [
-                'style.css?v=20180308c',
-                'style.css?v=20180308c',
-                '../style.css?v=20180308c',
-            ],
-            '#some_id': [
-                '#some_id',
-                '#some_id',
-                '#some_id',
-            ],
-        }
+    def test_normalize_url(self):
+        def test(path, base, expected):
+            self.assertEqual(utils.normalize_url(path, _Page(base)), expected)
 
-        cfg = load_config(use_directory_urls=False)
-        pages = [
-            Page(
-                'Home',
-                File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-                cfg,
-            ),
-            Page(
-                'About',
-                File('about.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-                cfg,
-            ),
-            Page(
-                'FooBar',
-                File('foo/bar.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-                cfg,
-            ),
-        ]
+        # Absolute paths and anchors are unaffected.
+        for base in 'about.html', 'foo/bar.html', 'index.html', '', 'about/', 'foo/bar/':
+            test('https://media.cdn.org/jq.js', base, 'https://media.cdn.org/jq.js')
+            test('http://media.cdn.org/jquery.js', base, 'http://media.cdn.org/jquery.js')
+            test('//media.cdn.org/jquery.js', base, '//media.cdn.org/jquery.js')
+            test('#some_id', base, '#some_id')
 
-        for i, page in enumerate(pages):
-            urls = utils.create_media_urls(expected_results.keys(), page)
-            self.assertEqual([v[i] for v in expected_results.values()], urls)
+        path = 'media.cdn.org/jquery.js'
+        test(path, '', 'media.cdn.org/jquery.js')
+        test(path, 'index.html', 'media.cdn.org/jquery.js')
+        test(path, 'about.html', 'media.cdn.org/jquery.js')
+        test(path, 'about/', '../media.cdn.org/jquery.js')
+        test(path, 'foo/bar.html', '../media.cdn.org/jquery.js')
+        test(path, 'foo/bar/', '../../media.cdn.org/jquery.js')
 
-    def test_create_media_urls_use_directory_urls(self):
-        expected_results = {
-            'https://media.cdn.org/jq.js': [
-                'https://media.cdn.org/jq.js',
-                'https://media.cdn.org/jq.js',
-                'https://media.cdn.org/jq.js',
-            ],
-            'http://media.cdn.org/jquery.js': [
-                'http://media.cdn.org/jquery.js',
-                'http://media.cdn.org/jquery.js',
-                'http://media.cdn.org/jquery.js',
-            ],
-            '//media.cdn.org/jquery.js': [
-                '//media.cdn.org/jquery.js',
-                '//media.cdn.org/jquery.js',
-                '//media.cdn.org/jquery.js',
-            ],
-            'media.cdn.org/jquery.js': [
-                'media.cdn.org/jquery.js',
-                '../media.cdn.org/jquery.js',
-                '../../media.cdn.org/jquery.js',
-            ],
-            'local/file/jquery.js': [
-                'local/file/jquery.js',
-                '../local/file/jquery.js',
-                '../../local/file/jquery.js',
-            ],
-            'image.png': [
-                'image.png',
-                '../image.png',
-                '../../image.png',
-            ],
-            'style.css?v=20180308c': [
-                'style.css?v=20180308c',
-                '../style.css?v=20180308c',
-                '../../style.css?v=20180308c',
-            ],
-            '#some_id': [
-                '#some_id',
-                '#some_id',
-                '#some_id',
-            ],
-        }
+        path = 'local/file/jquery.js'
+        test(path, '', 'local/file/jquery.js')
+        test(path, 'index.html', 'local/file/jquery.js')
+        test(path, 'about.html', 'local/file/jquery.js')
+        test(path, 'about/', '../local/file/jquery.js')
+        test(path, 'foo/bar.html', '../local/file/jquery.js')
+        test(path, 'foo/bar/', '../../local/file/jquery.js')
 
-        cfg = load_config(use_directory_urls=True)
-        pages = [
-            Page(
-                'Home',
-                File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-                cfg,
-            ),
-            Page(
-                'About',
-                File('about.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-                cfg,
-            ),
-            Page(
-                'FooBar',
-                File('foo/bar.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-                cfg,
-            ),
-        ]
+        path = '../../../../above/jquery.js'
+        test(path, '', '../../../../above/jquery.js')
+        test(path, 'index.html', '../../../../above/jquery.js')
+        test(path, 'about.html', '../../../../above/jquery.js')
+        test(path, 'about/', '../../../../../above/jquery.js')
+        test(path, 'foo/bar.html', '../../../../../above/jquery.js')
+        test(path, 'foo/bar/', '../../../../../../above/jquery.js')
 
-        for i, page in enumerate(pages):
-            urls = utils.create_media_urls(expected_results.keys(), page)
-            self.assertEqual([v[i] for v in expected_results.values()], urls)
+        path = '../some/dir/'
+        test(path, '', '../some/dir/')
+        test(path, 'index.html', '../some/dir/')
+        test(path, 'about.html', '../some/dir/')
+        test(path, 'about/', '../../some/dir/')
+        test(path, 'foo/bar.html', '../../some/dir/')
+        test(path, 'foo/bar/', '../../../some/dir/')
+
+        path = 'image.png'
+        test(path, '', 'image.png')
+        test(path, 'index.html', 'image.png')
+        test(path, 'about.html', 'image.png')
+        test(path, 'about/', '../image.png')
+        test(path, 'foo/bar.html', '../image.png')
+        test(path, 'foo/bar/', '../../image.png')
+
+        path = 'style.css?v=20180308c'
+        test(path, '', 'style.css?v=20180308c')
+        test(path, 'index.html', 'style.css?v=20180308c')
+        test(path, 'about.html', 'style.css?v=20180308c')
+        test(path, 'about/', '../style.css?v=20180308c')
+        test(path, 'foo/bar.html', '../style.css?v=20180308c')
+        test(path, 'foo/bar/', '../../style.css?v=20180308c')
 
     # TODO: This shouldn't pass on Linux
     # @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
-    def test_create_media_urls_windows(self):
-        expected_results = {
-            'local\\windows\\file\\jquery.js': [
-                'local/windows/file/jquery.js',
-                'local/windows/file/jquery.js',
-                '../local/windows/file/jquery.js',
-            ],
-        }
-
-        cfg = load_config(use_directory_urls=False)
-        pages = [
-            Page(
-                'Home',
-                File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-                cfg,
-            ),
-            Page(
-                'About',
-                File('about.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-                cfg,
-            ),
-            Page(
-                'FooBar',
-                File('foo/bar.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-                cfg,
-            ),
-        ]
+    def test_normalize_url_windows(self):
+        def test(path, base, expected):
+            self.assertEqual(utils.normalize_url(path, _Page(base)), expected)
 
         with self.assertLogs('mkdocs', level='WARNING'):
-            for i, page in enumerate(pages):
-                urls = utils.create_media_urls(expected_results.keys(), page)
-                self.assertEqual([v[i] for v in expected_results.values()], urls)
+            path = 'local\\windows\\file\\jquery.js'
+            test(path, '', 'local/windows/file/jquery.js')
+            test(path, 'about/', '../local/windows/file/jquery.js')
+            test(path, 'foo/bar/', '../../local/windows/file/jquery.js')
 
     def test_reduce_list(self):
         self.assertEqual(
@@ -689,3 +590,8 @@ class LogCounterTests(unittest.TestCase):
         self.log.warning('counted')
         self.log.info('not counted')
         self.assertEqual(self.counter.get_counts(), [('ERROR', 2), ('WARNING', 1)])
+
+
+@dataclasses.dataclass
+class _Page:
+    url: str
