@@ -339,6 +339,26 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         self.assertEqual(f.url, 'foo%20bar.html')
         self.assertEqual(f.name, 'foo bar')
 
+    def test_file_name_with_custom_dest_uri(self):
+        for use_directory_urls in True, False:
+            with self.subTest(use_directory_urls=use_directory_urls):
+                f = File(
+                    'stuff/foo.md',
+                    src_dir='/path/to/docs',
+                    dest_dir='/path/to/site',
+                    use_directory_urls=use_directory_urls,
+                    dest_uri='stuff/1-foo/index.html',
+                )
+                self.assertEqual(f.src_uri, 'stuff/foo.md')
+                self.assertPathsEqual(f.abs_src_path, '/path/to/docs/stuff/foo.md')
+                self.assertEqual(f.dest_uri, 'stuff/1-foo/index.html')
+                self.assertPathsEqual(f.abs_dest_path, '/path/to/site/stuff/1-foo/index.html')
+                if use_directory_urls:
+                    self.assertEqual(f.url, 'stuff/1-foo/')
+                else:
+                    self.assertEqual(f.url, 'stuff/1-foo/index.html')
+                self.assertEqual(f.name, 'foo')
+
     def test_files(self):
         fs = [
             File('index.md', '/path/to/docs', '/path/to/site', use_directory_urls=True),
@@ -360,13 +380,14 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         self.assertEqual(files.get_file_from_path('foo/bar.jpg'), fs[3])
         self.assertEqual(files.get_file_from_path('missing.jpg'), None)
         self.assertTrue(fs[2].src_uri in files.src_uris)
-        self.assertTrue(fs[2].src_uri in files.src_uris)
         extra_file = File('extra.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
         self.assertFalse(extra_file.src_uri in files.src_uris)
         files.append(extra_file)
         self.assertEqual(len(files), 7)
         self.assertTrue(extra_file.src_uri in files.src_uris)
         self.assertEqual(files.documentation_pages(), [fs[0], fs[1], extra_file])
+        files.remove(fs[1])
+        self.assertEqual(files.documentation_pages(), [fs[0], extra_file])
 
     @tempdir(
         files=[
