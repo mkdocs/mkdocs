@@ -88,7 +88,10 @@ class Page:
     @property
     def url(self) -> str:
         """The URL of the page relative to the MkDocs `site_dir`."""
-        return '' if self.file.url in ('.', './') else self.file.url
+        url = self.file.url
+        if url in ('.', './'):
+            return ''
+        return url
 
     file: File
     """The documentation [`File`][mkdocs.structure.files.File] that the page is being rendered from."""

@@ -297,16 +297,20 @@ def get_relative_url(url: str, other: str) -> str:
 
 def normalize_url(path: str, page: Optional[Page] = None, base: str = '') -> str:
     """Return a URL relative to the given page or using the base."""
-    path, is_abs = _get_norm_url(path)
-    if is_abs:
+    path, relative_level = _get_norm_url(path)
+    if relative_level == -1:
         return path
     if page is not None:
-        return get_relative_url(path, page.url)
+        result = get_relative_url(path, page.url)
+        if relative_level > 0:
+            result = '../' * relative_level + result
+        return result
+
     return posixpath.join(base, path)
 
 
 @functools.lru_cache(maxsize=None)
-def _get_norm_url(path: str) -> Tuple[str, bool]:
+def _get_norm_url(path: str) -> Tuple[str, int]:
     if not path:
         path = '.'
     elif '\\' in path:
@@ -318,8 +322,14 @@ def _get_norm_url(path: str) -> Tuple[str, bool]:
     # Allow links to be fully qualified URLs
     parsed = urlsplit(path)
     if parsed.scheme or parsed.netloc or path.startswith(('/', '#')):
-        return path, True
-    return path, False
+        return path, -1
+
+    # Relative path - preserve information about it
+    norm = posixpath.normpath(path) + '/'
+    relative_level = 0
+    while norm.startswith('../', relative_level * 3):
+        relative_level += 1
+    return path, relative_level
 
 
 def create_media_urls(
