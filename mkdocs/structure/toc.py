@@ -7,7 +7,7 @@ maintain compatibility with older versions of MkDocs.
 """
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import Any
 
 
 def get_toc(toc_tokens: list) -> TableOfContents:
@@ -56,7 +56,7 @@ class AnchorLink:
     level: int
     """The zero-based level of the item."""
 
-    children: List[AnchorLink]
+    children: list[AnchorLink]
     """An iterable of any child items."""
 
     def __str__(self):
@@ -70,7 +70,7 @@ class AnchorLink:
         return ret
 
 
-def _parse_toc_token(token: Dict[str, Any]) -> AnchorLink:
+def _parse_toc_token(token: dict[str, Any]) -> AnchorLink:
     anchor = AnchorLink(token['name'], token['id'], token['level'])
     for i in token['children']:
         anchor.children.append(_parse_toc_token(i))

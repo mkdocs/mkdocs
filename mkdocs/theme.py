@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import os
-from typing import Any, Optional
+from typing import Any
 
 import jinja2
 
@@ -29,7 +29,7 @@ class Theme:
 
     """
 
-    def __init__(self, name: Optional[str] = None, **user_config) -> None:
+    def __init__(self, name: str | None = None, **user_config) -> None:
         self.name = name
         self._vars = {'name': name, 'locale': 'en'}
 

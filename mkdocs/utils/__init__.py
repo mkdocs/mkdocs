@@ -17,21 +17,7 @@ import warnings
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import PurePath
-from typing import (
-    IO,
-    TYPE_CHECKING,
-    Any,
-    Collection,
-    Dict,
-    Iterable,
-    List,
-    MutableSequence,
-    Optional,
-    Tuple,
-    Type,
-    TypeVar,
-    Union,
-)
+from typing import IO, TYPE_CHECKING, Any, Collection, Iterable, MutableSequence, TypeVar
 from urllib.parse import urlsplit
 
 if sys.version_info >= (3, 10):
@@ -77,7 +63,7 @@ def get_yaml_loader(loader=yaml.Loader):
     return Loader
 
 
-def yaml_load(source: Union[IO, str], loader: Optional[Type[yaml.Loader]] = None) -> Dict[str, Any]:
+def yaml_load(source: IO | str, loader: type[yaml.Loader] | None = None) -> dict[str, Any]:
     """Return dict of source YAML file using loader, recursively deep merging inherited parent."""
     Loader = loader or get_yaml_loader()
     result = yaml.load(source, Loader=Loader)
@@ -145,7 +131,7 @@ def get_build_date() -> str:
     return get_build_datetime().strftime('%Y-%m-%d')
 
 
-def reduce_list(data_set: Iterable[T]) -> List[T]:
+def reduce_list(data_set: Iterable[T]) -> list[T]:
     """Reduce duplicate items in a list and preserve order"""
     return list(dict.fromkeys(data_set))
 
@@ -260,7 +246,7 @@ def is_error_template(path: str) -> bool:
 
 
 @functools.lru_cache(maxsize=None)
-def _norm_parts(path: str) -> List[str]:
+def _norm_parts(path: str) -> list[str]:
     if not path.startswith('/'):
         path = '/' + path
     path = posixpath.normpath(path)[1:]
@@ -295,7 +281,7 @@ def get_relative_url(url: str, other: str) -> str:
     return relurl + '/' if url.endswith('/') else relurl
 
 
-def normalize_url(path: str, page: Optional[Page] = None, base: str = '') -> str:
+def normalize_url(path: str, page: Page | None = None, base: str = '') -> str:
     """Return a URL relative to the given page or using the base."""
     path, relative_level = _get_norm_url(path)
     if relative_level == -1:
@@ -310,7 +296,7 @@ def normalize_url(path: str, page: Optional[Page] = None, base: str = '') -> str
 
 
 @functools.lru_cache(maxsize=None)
-def _get_norm_url(path: str) -> Tuple[str, int]:
+def _get_norm_url(path: str) -> tuple[str, int]:
     if not path:
         path = '.'
     elif '\\' in path:
@@ -333,8 +319,8 @@ def _get_norm_url(path: str) -> Tuple[str, int]:
 
 
 def create_media_urls(
-    path_list: Iterable[str], page: Optional[Page] = None, base: str = ''
-) -> List[str]:
+    path_list: Iterable[str], page: Page | None = None, base: str = ''
+) -> list[str]:
     """
     Return a list of URLs relative to the given page or using the base.
     """
@@ -353,11 +339,11 @@ def get_theme_dir(name: str) -> str:
     return os.path.dirname(os.path.abspath(theme.load().__file__))
 
 
-def get_themes() -> Dict[str, EntryPoint]:
+def get_themes() -> dict[str, EntryPoint]:
     """Return a dict of all installed themes as {name: EntryPoint}."""
 
-    themes: Dict[str, EntryPoint] = {}
-    eps: Dict[EntryPoint, None] = dict.fromkeys(entry_points(group='mkdocs.themes'))
+    themes: dict[str, EntryPoint] = {}
+    eps: dict[EntryPoint, None] = dict.fromkeys(entry_points(group='mkdocs.themes'))
     builtins = {ep.name for ep in eps if ep.dist is not None and ep.dist.name == 'mkdocs'}
 
     for theme in eps:
@@ -398,7 +384,7 @@ def dirname_to_title(dirname: str) -> str:
     return title
 
 
-def get_markdown_title(markdown_src: str) -> Optional[str]:
+def get_markdown_title(markdown_src: str) -> str | None:
     """
     Get the title of a Markdown document. The title in this case is considered
     to be a H1 that occurs before any other content in the document.
@@ -460,7 +446,7 @@ class CountHandler(logging.NullHandler):
     """Counts all logged messages >= level."""
 
     def __init__(self, **kwargs) -> None:
-        self.counts: Dict[int, int] = defaultdict(int)
+        self.counts: dict[int, int] = defaultdict(int)
         super().__init__(**kwargs)
 
     def handle(self, record):
@@ -470,7 +456,7 @@ class CountHandler(logging.NullHandler):
             self.counts[record.levelno] += 1
         return rv
 
-    def get_counts(self) -> List[Tuple[str, int]]:
+    def get_counts(self) -> list[tuple[str, int]]:
         return [(logging.getLevelName(k), v) for k, v in sorted(self.counts.items(), reverse=True)]
 
 

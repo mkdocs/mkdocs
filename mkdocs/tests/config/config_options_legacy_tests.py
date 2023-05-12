@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import contextlib
 import copy
 import io
@@ -6,7 +8,7 @@ import re
 import sys
 import textwrap
 import unittest
-from typing import Any, Dict
+from typing import Any
 from unittest.mock import patch
 
 import mkdocs
@@ -34,8 +36,8 @@ class TestCase(unittest.TestCase):
     def get_config(
         self,
         schema: type,
-        cfg: Dict[str, Any],
-        warnings: Dict[str, str] = {},
+        cfg: dict[str, Any],
+        warnings: dict[str, str] = {},
         config_file_path=None,
     ):
         config = base.LegacyConfig(base.get_schema(schema), config_file_path=config_file_path)
