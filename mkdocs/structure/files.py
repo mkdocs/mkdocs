@@ -6,18 +6,7 @@ import os
 import posixpath
 import shutil
 from pathlib import PurePath
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Dict,
-    Iterable,
-    Iterator,
-    List,
-    Mapping,
-    Optional,
-    Sequence,
-    Union,
-)
+from typing import TYPE_CHECKING, Any, Iterable, Iterator, Mapping, Sequence
 from urllib.parse import quote as urlquote
 
 import jinja2.environment
@@ -35,10 +24,10 @@ log = logging.getLogger(__name__)
 class Files:
     """A collection of [File][mkdocs.structure.files.File] objects."""
 
-    def __init__(self, files: List[File]) -> None:
+    def __init__(self, files: list[File]) -> None:
         self._files = files
-        self._src_uris: Optional[Dict[str, File]] = None
-        self._documentation_pages: Optional[Sequence[File]] = None
+        self._src_uris: dict[str, File] | None = None
+        self._documentation_pages: Sequence[File] | None = None
 
     def __iter__(self) -> Iterator[File]:
         """Iterate over the files within."""
@@ -53,19 +42,19 @@ class Files:
         return PurePath(path).as_posix() in self.src_uris
 
     @property
-    def src_paths(self) -> Dict[str, File]:
+    def src_paths(self) -> dict[str, File]:
         """Soft-deprecated, prefer `src_uris`."""
         return {file.src_path: file for file in self._files}
 
     @property
-    def src_uris(self) -> Dict[str, File]:
+    def src_uris(self) -> dict[str, File]:
         """A mapping containing every file, with the keys being their
         [`src_uri`][mkdocs.structure.files.File.src_uri]."""
         if self._src_uris is None:
             self._src_uris = {file.src_uri: file for file in self._files}
         return self._src_uris
 
-    def get_file_from_path(self, path: str) -> Optional[File]:
+    def get_file_from_path(self, path: str) -> File | None:
         """Return a File instance with File.src_uri equal to path."""
         return self.src_uris.get(PurePath(path).as_posix())
 
@@ -184,7 +173,7 @@ class File:
     def dest_path(self, value):
         self.dest_uri = PurePath(value).as_posix()
 
-    page: Optional[Page]
+    page: Page | None
 
     def __init__(
         self,
@@ -193,7 +182,7 @@ class File:
         dest_dir: str,
         use_directory_urls: bool,
         *,
-        dest_uri: Optional[str] = None,
+        dest_uri: str | None = None,
     ) -> None:
         self.page = None
         self.src_path = path
@@ -246,7 +235,7 @@ class File:
             url = (dirname or '.') + '/'
         return urlquote(url)
 
-    def url_relative_to(self, other: Union[File, str]) -> str:
+    def url_relative_to(self, other: File | str) -> str:
         """Return url for file relative to other file."""
         return utils.get_relative_url(self.url, other.url if isinstance(other, File) else other)
 
@@ -287,7 +276,7 @@ class File:
         return self.src_uri.endswith('.css')
 
 
-def get_files(config: Union[MkDocsConfig, Mapping[str, Any]]) -> Files:
+def get_files(config: MkDocsConfig | Mapping[str, Any]) -> Files:
     """Walk the `docs_dir` and return a Files collection."""
     files = []
     exclude = ['.*', '/templates']
@@ -320,7 +309,7 @@ def get_files(config: Union[MkDocsConfig, Mapping[str, Any]]) -> Files:
     return Files(files)
 
 
-def _sort_files(filenames: Iterable[str]) -> List[str]:
+def _sort_files(filenames: Iterable[str]) -> list[str]:
     """Always sort `index` or `README` as first filename in list."""
 
     def key(f):

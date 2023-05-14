@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import os
-from typing import Any, Dict, List
+from typing import Any, List
 
 from mkdocs import utils
 from mkdocs.config import base
@@ -83,7 +83,7 @@ class SearchPlugin(BasePlugin[_PluginConfig]):
         "Create search index instance for later use."
         self.search_index = SearchIndex(**self.config)
 
-    def on_page_context(self, context: Dict[str, Any], **kwargs) -> None:
+    def on_page_context(self, context: dict[str, Any], **kwargs) -> None:
         "Add page to search index."
         self.search_index.add_entry_from_context(context['page'])
 

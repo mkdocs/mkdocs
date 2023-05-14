@@ -6,7 +6,6 @@ import os
 import re
 import subprocess
 from html.parser import HTMLParser
-from typing import List, Optional, Tuple
 
 from mkdocs.structure.pages import Page
 from mkdocs.structure.toc import AnchorLink, TableOfContents
@@ -28,10 +27,10 @@ class SearchIndex:
     """
 
     def __init__(self, **config) -> None:
-        self._entries: List[dict] = []
+        self._entries: list[dict] = []
         self.config = config
 
-    def _find_toc_by_id(self, toc, id_: Optional[str]) -> Optional[AnchorLink]:
+    def _find_toc_by_id(self, toc, id_: str | None) -> AnchorLink | None:
         """
         Given a table of contents and HTML ID, iterate through
         and return the matched item in the TOC.
@@ -44,7 +43,7 @@ class SearchIndex:
                 return toc_item_r
         return None
 
-    def _add_entry(self, title: Optional[str], text: str, loc: str) -> None:
+    def _add_entry(self, title: str | None, text: str, loc: str) -> None:
         """
         A simple wrapper to add an entry, dropping bad characters.
         """
@@ -148,9 +147,9 @@ class ContentSection:
 
     def __init__(
         self,
-        text: Optional[List[str]] = None,
-        id_: Optional[str] = None,
-        title: Optional[str] = None,
+        text: list[str] | None = None,
+        id_: str | None = None,
+        title: str | None = None,
     ) -> None:
         self.text = text or []
         self.id = id_
@@ -173,12 +172,12 @@ class ContentParser(HTMLParser):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
-        self.data: List[ContentSection] = []
-        self.section: Optional[ContentSection] = None
+        self.data: list[ContentSection] = []
+        self.section: ContentSection | None = None
         self.is_header_tag = False
-        self._stripped_html: List[str] = []
+        self._stripped_html: list[str] = []
 
-    def handle_starttag(self, tag: str, attrs: List[Tuple[str, Optional[str]]]) -> None:
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         """Called at the start of every HTML tag."""
 
         # We only care about the opening tag for headings.

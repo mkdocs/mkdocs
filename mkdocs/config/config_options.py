@@ -14,14 +14,12 @@ from typing import (
     Any,
     Callable,
     Collection,
-    Dict,
     Generic,
     Iterator,
     List,
     Mapping,
     MutableMapping,
     NamedTuple,
-    Tuple,
     TypeVar,
     Union,
     overload,
@@ -61,7 +59,7 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
 
     @overload
     def __init__(
-        self: SubConfig[SomeConfig], config_class: t.Type[SomeConfig], *, validate: bool = True
+        self: SubConfig[SomeConfig], config_class: type[SomeConfig], *, validate: bool = True
     ):
         """Create a sub-config in a type-safe way, using fields defined in a Config subclass."""
 
@@ -155,7 +153,7 @@ class ListOfItems(Generic[T], BaseConfigOption[List[T]]):
     E.g. for `config_options.ListOfItems(config_options.Type(int))` a valid item is `[1, 2, 3]`.
     """
 
-    required: Union[bool, None] = None  # Only for subclasses to set.
+    required: bool | None = None  # Only for subclasses to set.
 
     def __init__(self, option_type: BaseConfigOption[T], default=None) -> None:
         super().__init__()
@@ -170,7 +168,7 @@ class ListOfItems(Generic[T], BaseConfigOption[List[T]]):
         self._config = config
         self._key_name = key_name
 
-    def run_validation(self, value: object) -> List[T]:
+    def run_validation(self, value: object) -> list[T]:
         if value is None:
             if self.required or self.default is None:
                 raise ValidationError("Required configuration not provided.")
@@ -232,11 +230,11 @@ class Type(Generic[T], OptionallyRequired[T]):
     """
 
     @overload
-    def __init__(self, type_: t.Type[T], length: t.Optional[int] = None, **kwargs):
+    def __init__(self, type_: type[T], length: int | None = None, **kwargs):
         ...
 
     @overload
-    def __init__(self, type_: Tuple[t.Type[T], ...], length: t.Optional[int] = None, **kwargs):
+    def __init__(self, type_: tuple[type[T], ...], length: int | None = None, **kwargs):
         ...
 
     def __init__(self, type_, length=None, **kwargs) -> None:
@@ -265,7 +263,7 @@ class Choice(Generic[T], OptionallyRequired[T]):
     Validate the config option against a strict set of values.
     """
 
-    def __init__(self, choices: Collection[T], default: t.Optional[T] = None, **kwargs) -> None:
+    def __init__(self, choices: Collection[T], default: T | None = None, **kwargs) -> None:
         super().__init__(default=default, **kwargs)
         try:
             length = len(choices)
@@ -297,10 +295,10 @@ class Deprecated(BaseConfigOption):
 
     def __init__(
         self,
-        moved_to: t.Optional[str] = None,
-        message: t.Optional[str] = None,
+        moved_to: str | None = None,
+        message: str | None = None,
         removed: bool = False,
-        option_type: t.Optional[BaseConfigOption] = None,
+        option_type: BaseConfigOption | None = None,
     ) -> None:
         super().__init__()
         self.default = None
@@ -464,7 +462,7 @@ class Optional(Generic[T], BaseConfigOption[Union[T, None]]):
     def pre_validation(self, config: Config, key_name: str):
         return self.option.pre_validation(config, key_name)
 
-    def run_validation(self, value: object) -> Union[T, None]:
+    def run_validation(self, value: object) -> T | None:
         if value is None:
             return None
         return self.option.validate(value)
@@ -559,7 +557,7 @@ class EditURITemplate(BaseConfigOption[str]):
         def format(self, path, path_noext):
             return self.formatter.format(self.data, path=path, path_noext=path_noext)
 
-    def __init__(self, edit_uri_key: t.Optional[str] = None) -> None:
+    def __init__(self, edit_uri_key: str | None = None) -> None:
         super().__init__()
         self.edit_uri_key = edit_uri_key
 
@@ -610,7 +608,7 @@ class FilesystemObject(Type[str]):
     def __init__(self, exists: bool = False, **kwargs) -> None:
         super().__init__(type_=str, **kwargs)
         self.exists = exists
-        self.config_dir: t.Optional[str] = None
+        self.config_dir: str | None = None
 
     def pre_validation(self, config: Config, key_name: str):
         self.config_dir = (
@@ -848,9 +846,9 @@ class MarkdownExtensions(OptionallyRequired[List[str]]):
 
     def __init__(
         self,
-        builtins: t.Optional[List[str]] = None,
+        builtins: list[str] | None = None,
         configkey: str = 'mdx_configs',
-        default: List[str] = [],
+        default: list[str] = [],
         **kwargs,
     ) -> None:
         super().__init__(default=default, **kwargs)
@@ -867,7 +865,7 @@ class MarkdownExtensions(OptionallyRequired[List[str]]):
         self.configdata[ext] = cfg
 
     def run_validation(self, value: object):
-        self.configdata: Dict[str, dict] = {}
+        self.configdata: dict[str, dict] = {}
         if not isinstance(value, (list, tuple, dict)):
             raise ValidationError('Invalid Markdown Extensions configuration')
         extensions = []
@@ -921,12 +919,12 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
     initializing the plugin class.
     """
 
-    def __init__(self, theme_key: t.Optional[str] = None, **kwargs) -> None:
+    def __init__(self, theme_key: str | None = None, **kwargs) -> None:
         super().__init__(**kwargs)
         self.installed_plugins = plugins.get_plugins()
         self.theme_key = theme_key
-        self._config: t.Optional[Config] = None
-        self.plugin_cache: Dict[str, plugins.BasePlugin] = {}
+        self._config: Config | None = None
+        self.plugin_cache: dict[str, plugins.BasePlugin] = {}
 
     def pre_validation(self, config, key_name):
         self._config = config
@@ -941,7 +939,7 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
         return self.plugins
 
     @classmethod
-    def _parse_configs(cls, value: Union[list, tuple, dict]) -> Iterator[Tuple[str, dict]]:
+    def _parse_configs(cls, value: list | tuple | dict) -> Iterator[tuple[str, dict]]:
         if isinstance(value, dict):
             for name, cfg in value.items():
                 if not isinstance(name, str):
@@ -960,7 +958,7 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
                     raise ValidationError(f"'{name}' is not a valid plugin name.")
                 yield name, cfg
 
-    def load_plugin_with_namespace(self, name: str, config) -> Tuple[str, plugins.BasePlugin]:
+    def load_plugin_with_namespace(self, name: str, config) -> tuple[str, plugins.BasePlugin]:
         if '/' in name:  # It's already specified with a namespace.
             # Special case: allow to explicitly skip namespaced loading:
             if name.startswith('/'):

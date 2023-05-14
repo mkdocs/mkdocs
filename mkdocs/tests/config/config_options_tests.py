@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import contextlib
 import copy
 import io
@@ -6,7 +8,7 @@ import re
 import sys
 import textwrap
 import unittest
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type, TypeVar
+from typing import TYPE_CHECKING, Any, List, Optional, TypeVar
 from unittest.mock import patch
 
 if TYPE_CHECKING:
@@ -45,9 +47,9 @@ class TestCase(unittest.TestCase):
 
     def get_config(
         self,
-        config_class: Type[SomeConfig],
-        cfg: Dict[str, Any],
-        warnings: Dict[str, str] = {},
+        config_class: type[SomeConfig],
+        cfg: dict[str, Any],
+        warnings: dict[str, str] = {},
         config_file_path=None,
     ) -> SomeConfig:
         config = config_class(config_file_path=config_file_path)
@@ -1829,7 +1831,7 @@ class PluginsTest(TestCase):
             theme = c.Theme(default='mkdocs')
             plugins = c.Plugins(theme_key='theme')
 
-        test_cfgs: List[Dict[str, Any]] = [
+        test_cfgs: list[dict[str, Any]] = [
             {
                 'theme': 'readthedocs',
                 'plugins': [{'sub_plugin': {}}, {'sample2': {}}, {'sub_plugin': {}}, 'sample2'],
@@ -1859,7 +1861,7 @@ class PluginsTest(TestCase):
         class Schema(Config):
             plugins = c.Plugins(default=[])
 
-        cfg: Dict[str, Any] = {'plugins': []}
+        cfg: dict[str, Any] = {'plugins': []}
         conf = self.get_config(Schema, cfg)
 
         self.assertIsInstance(conf.plugins, PluginCollection)
@@ -1870,7 +1872,7 @@ class PluginsTest(TestCase):
             plugins = c.Plugins(default=['sample'])
 
         # Default is ignored
-        cfg: Dict[str, Any] = {'plugins': []}
+        cfg: dict[str, Any] = {'plugins': []}
         conf = self.get_config(Schema, cfg)
 
         self.assertIsInstance(conf.plugins, PluginCollection)

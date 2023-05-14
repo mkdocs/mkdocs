@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import os
-from typing import Optional, Sequence
+from typing import Sequence
 
 import jinja2
 from jinja2.ext import Extension, InternationalizationExtension
@@ -63,8 +63,8 @@ def install_translations(
 
 def _get_merged_translations(
     theme_dirs: Sequence[str], locales_dir: str, locale: Locale
-) -> Optional[Translations]:
-    merged_translations: Optional[Translations] = None
+) -> Translations | None:
+    merged_translations: Translations | None = None
 
     log.debug(f"Looking for translations for locale '{locale}'")
     if locale.territory:
