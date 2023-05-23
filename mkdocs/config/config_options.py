@@ -833,7 +833,7 @@ class Private(BaseConfigOption):
             raise ValidationError('For internal use only.')
 
 
-class MarkdownExtensions(OptionallyRequired[List[str]]):
+class MarkdownExtensions(OptionallyRequired[list[str] | dict[str, Any], list[dict[str, Any]]]):
     """
     Markdown Extensions Config Option
 
