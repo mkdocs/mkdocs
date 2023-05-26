@@ -8,7 +8,7 @@ import re
 import sys
 import textwrap
 import unittest
-from typing import TYPE_CHECKING, Any, List, Optional, TypeVar
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, TypeVar
 from unittest.mock import patch
 
 if TYPE_CHECKING:
@@ -1213,7 +1213,7 @@ class NavTest(TestCase):
 class PrivateTest(TestCase):
     def test_defined(self) -> None:
         class Schema(Config):
-            option = c.Private()
+            option = c.Private[Any]()
 
         with self.expect_error(option="For internal use only."):
             self.get_config(Schema, {'option': 'somevalue'})
@@ -1380,13 +1380,14 @@ class MarkdownExtensionsTest(TestCase):
     def test_simple_list(self, mock_md) -> None:
         class Schema(Config):
             markdown_extensions = c.MarkdownExtensions()
-            mdx_configs = c.Private()
+            mdx_configs = c.Private[Dict[str, dict]]()
 
         config = {
             'markdown_extensions': ['foo', 'bar'],
         }
         conf = self.get_config(Schema, config)
         assert_type(conf.markdown_extensions, List[str])
+        assert_type(conf.mdx_configs, Dict[str, dict])
         self.assertEqual(conf.markdown_extensions, ['foo', 'bar'])
         self.assertEqual(conf.mdx_configs, {})
 
@@ -1394,7 +1395,7 @@ class MarkdownExtensionsTest(TestCase):
     def test_list_dicts(self, mock_md) -> None:
         class Schema(Config):
             markdown_extensions = c.MarkdownExtensions()
-            mdx_configs = c.Private()
+            mdx_configs = c.Private[Dict[str, dict]]()
 
         config = {
             'markdown_extensions': [
@@ -1417,7 +1418,7 @@ class MarkdownExtensionsTest(TestCase):
     def test_mixed_list(self, mock_md) -> None:
         class Schema(Config):
             markdown_extensions = c.MarkdownExtensions()
-            mdx_configs = c.Private()
+            mdx_configs = c.Private[Dict[str, dict]]()
 
         config = {
             'markdown_extensions': [
@@ -1438,7 +1439,7 @@ class MarkdownExtensionsTest(TestCase):
     def test_dict_of_dicts(self, mock_md) -> None:
         class Schema(Config):
             markdown_extensions = c.MarkdownExtensions()
-            mdx_configs = c.Private()
+            mdx_configs = c.Private[Dict[str, dict]]()
 
         config = {
             'markdown_extensions': {
@@ -1461,7 +1462,7 @@ class MarkdownExtensionsTest(TestCase):
     def test_builtins(self, mock_md) -> None:
         class Schema(Config):
             markdown_extensions = c.MarkdownExtensions(builtins=['meta', 'toc'])
-            mdx_configs = c.Private()
+            mdx_configs = c.Private[Dict[str, dict]]()
 
         config = {
             'markdown_extensions': ['foo', 'bar'],
@@ -1473,7 +1474,7 @@ class MarkdownExtensionsTest(TestCase):
     def test_duplicates(self) -> None:
         class Schema(Config):
             markdown_extensions = c.MarkdownExtensions(builtins=['meta', 'toc'])
-            mdx_configs = c.Private()
+            mdx_configs = c.Private[Dict[str, dict]]()
 
         config = {
             'markdown_extensions': ['meta', 'toc'],
@@ -1485,7 +1486,7 @@ class MarkdownExtensionsTest(TestCase):
     def test_builtins_config(self) -> None:
         class Schema(Config):
             markdown_extensions = c.MarkdownExtensions(builtins=['meta', 'toc'])
-            mdx_configs = c.Private()
+            mdx_configs = c.Private[Dict[str, dict]]()
 
         config = {
             'markdown_extensions': [
@@ -1500,7 +1501,7 @@ class MarkdownExtensionsTest(TestCase):
     def test_configkey(self, mock_md) -> None:
         class Schema(Config):
             markdown_extensions = c.MarkdownExtensions(configkey='bar')
-            bar = c.Private()
+            bar = c.Private[Dict[str, dict]]()
 
         config = {
             'markdown_extensions': [
@@ -1519,7 +1520,7 @@ class MarkdownExtensionsTest(TestCase):
     def test_missing_default(self) -> None:
         class Schema(Config):
             markdown_extensions = c.MarkdownExtensions()
-            mdx_configs = c.Private()
+            mdx_configs = c.Private[Dict[str, dict]]()
 
         conf = self.get_config(Schema, {})
         self.assertEqual(conf.markdown_extensions, [])
@@ -1528,7 +1529,7 @@ class MarkdownExtensionsTest(TestCase):
     def test_none(self) -> None:
         class Schema(Config):
             markdown_extensions = c.MarkdownExtensions(default=[])
-            mdx_configs = c.Private()
+            mdx_configs = c.Private[Dict[str, dict]]()
 
         config = {
             'markdown_extensions': None,
@@ -1603,7 +1604,7 @@ class MarkdownExtensionsTest(TestCase):
         # config instances that didn't specify extensions.
         class Schema(Config):
             markdown_extensions = c.MarkdownExtensions()
-            mdx_configs = c.Private()
+            mdx_configs = c.Private[Dict[str, dict]]()
 
         conf = self.get_config(
             Schema,

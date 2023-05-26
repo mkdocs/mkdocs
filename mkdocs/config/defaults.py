@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Dict
+
 from mkdocs.config import base
 from mkdocs.config import config_options as c
 
@@ -97,8 +99,8 @@ class MkDocsConfig(base.Config):
     )
     """PyMarkdown extension names."""
 
-    mdx_configs = c.Private()
-    """PyMarkdown Extension Configs. For internal use only."""
+    mdx_configs = c.Private[Dict[str, dict]]()
+    """PyMarkdown extension configs. Populated from `markdown_extensions`."""
 
     strict = c.Type(bool, default=False)
     """Enabling strict mode causes MkDocs to stop the build when a problem is
