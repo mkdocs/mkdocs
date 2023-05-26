@@ -110,7 +110,7 @@ class BasePlugin(Generic[SomeConfig]):
 
         Parameters:
             command: the command that MkDocs was invoked with, e.g. "serve" for `mkdocs serve`.
-            dirty: whether `--dirtyreload` or `--dirty` flags were passed.
+            dirty: whether `--dirty` flag was passed.
         """
 
     def on_shutdown(self) -> None:

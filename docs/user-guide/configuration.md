@@ -310,7 +310,7 @@ exclude_docs: |
 
 This follows the [.gitignore pattern format](https://git-scm.com/docs/gitignore#_pattern_format).
 
-Note that `mkdocs serve` does *not* follow this setting and instead displays excluded documents but with a "DRAFT" mark.
+Note that `mkdocs serve` does *not* follow this setting and instead displays excluded documents but with a "DRAFT" mark. To prevent this effect, you can run `mkdocs serve --clean`.
 
 The following defaults are always implicitly prepended - to exclude dot-files (and directories) as well as the top-level `templates` directory:
 

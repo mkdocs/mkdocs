@@ -25,6 +25,7 @@ def serve(
     theme=None,
     theme_dir=None,
     livereload='livereload',
+    build_type=None,
     watch_theme=False,
     watch=[],
     **kwargs,
@@ -55,8 +56,8 @@ def serve(
         **kwargs,
     )
 
-    live_server = livereload in ('dirty', 'livereload')
-    dirty = livereload == 'dirty'
+    is_clean = build_type == 'clean'
+    is_dirty = build_type == 'dirty'
 
     def builder(config: MkDocsConfig | None = None):
         log.info("Building documentation...")
@@ -72,10 +73,12 @@ def serve(
         # Override a few config settings after validation
         config.site_url = f'http://{config.dev_addr}{mount_path(config)}'
 
-        build(config, live_server=live_server, dirty=dirty)
+        build(config, live_server=not is_clean, dirty=is_dirty)
 
     config = get_config()
-    config['plugins'].run_event('startup', command='serve', dirty=dirty)
+    config['plugins'].run_event(
+        'startup', command=('build' if is_clean else 'serve'), dirty=is_dirty
+    )
 
     try:
         # Perform the initial build
@@ -96,7 +99,7 @@ def serve(
 
         server.error_handler = error_handler
 
-        if live_server:
+        if livereload:
             # Watch the documentation files, the config file and the theme files.
             server.watch(config.docs_dir)
             server.watch(config.config_file_path)
