@@ -310,6 +310,8 @@ exclude_docs: |
 
 This follows the [.gitignore pattern format](https://git-scm.com/docs/gitignore#_pattern_format).
 
+Note that `mkdocs serve` does *not* follow this setting and instead displays excluded documents but with a "DRAFT" mark.
+
 The following defaults are always implicitly prepended - to exclude dot-files (and directories) as well as the top-level `templates` directory:
 
 ```yaml
@@ -326,6 +328,31 @@ Otherwise you could for example opt only certain dot-files back into the site:
 exclude_docs: |
     !.assets  # Don't exclude '.assets' although all other '.*' are excluded
 ```
+
+### not_in_nav
+
+NEW: **New in version 1.5.**
+
+NOTE: This option does *not* actually exclude anything from the nav.
+
+If you want to include some docs into the site but intentionally exclude them from the nav, normally MkDocs warns about this.
+
+Adding such patterns of files (relative to [`docs_dir`](#docs_dir)) into the `not_in_nav` config will prevent such warnings.
+
+Example:
+
+```yaml
+nav:
+    - Foo: foo.md
+    - Bar: bar.md
+
+not_in_nav: |
+    /private.md
+```
+
+As the previous option, this follows the .gitignore pattern format.
+
+NOTE: Adding a given file to [`exclude_docs`](#exclude_docs) takes precedence over and implies `not_in_nav`.
 
 ## Build directories
 

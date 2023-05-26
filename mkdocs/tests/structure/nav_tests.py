@@ -159,9 +159,9 @@ class SiteNavigationTests(unittest.TestCase):
             cm.output,
             [
                 "WARNING:mkdocs.structure.nav:A relative path to 'missing.html' is included "
-                "in the 'nav' configuration, which is not found in the documentation files",
+                "in the 'nav' configuration, which is not found in the documentation files.",
                 "WARNING:mkdocs.structure.nav:A relative path to 'example.com' is included "
-                "in the 'nav' configuration, which is not found in the documentation files",
+                "in the 'nav' configuration, which is not found in the documentation files.",
             ],
         )
         self.assertEqual(str(site_navigation).strip(), expected)

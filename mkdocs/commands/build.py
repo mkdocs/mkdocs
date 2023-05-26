@@ -14,7 +14,7 @@ import mkdocs
 from mkdocs import utils
 from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.exceptions import Abort, BuildError
-from mkdocs.structure.files import File, Files, get_files
+from mkdocs.structure.files import File, Files, InclusionLevel, _set_exclusions, get_files
 from mkdocs.structure.nav import Navigation, get_navigation
 from mkdocs.structure.pages import Page
 
@@ -200,6 +200,7 @@ def _build_page(
     nav: Navigation,
     env: jinja2.Environment,
     dirty: bool = False,
+    excluded: bool = False,
 ) -> None:
     """Pass a Page to theme template and write output to site_dir."""
 
@@ -226,6 +227,13 @@ def _build_page(
         context = config.plugins.run_event(
             'page_context', context, page=page, config=config, nav=nav
         )
+
+        if excluded:
+            page.content = (
+                '<div class="mkdocs-draft-marker" title="This page will not be included into the built site.">'
+                'DRAFT'
+                '</div>' + (page.content or '')
+            )
 
         # Render the template.
         output = template.render(context)
@@ -263,6 +271,8 @@ def build(config: MkDocsConfig, live_server: bool = False, dirty: bool = False) 
     if config.strict:
         logging.getLogger('mkdocs').addHandler(warning_counter)
 
+    inclusion = InclusionLevel.all if live_server else InclusionLevel.is_included
+
     try:
         start = time.monotonic()
 
@@ -295,6 +305,8 @@ def build(config: MkDocsConfig, live_server: bool = False, dirty: bool = False) 
 
         # Run `files` plugin events.
         files = config.plugins.run_event('files', files, config=config)
+        # If plugins have added files but haven't set their inclusion level, calculate it again.
+        _set_exclusions(files._files, config)
 
         nav = get_navigation(files, config)
 
@@ -302,10 +314,20 @@ def build(config: MkDocsConfig, live_server: bool = False, dirty: bool = False) 
         nav = config.plugins.run_event('nav', nav, config=config, files=files)
 
         log.debug("Reading markdown pages.")
-        for file in files.documentation_pages():
+        excluded = []
+        for file in files.documentation_pages(inclusion=inclusion):
             log.debug(f"Reading: {file.src_uri}")
+            if file.page is None and file.inclusion.is_excluded():
+                excluded.append(file.src_path)
+                Page(None, file, config)
             assert file.page is not None
             _populate_page(file.page, config, files, dirty)
+        if excluded:
+            log.info(
+                "The following pages are being built only for the preview "
+                "but will be excluded from `mkdocs build` per `exclude_docs`:\n  - "
+                + "\n  - ".join(excluded)
+            )
 
         # Run `env` plugin events.
         env = config.plugins.run_event('env', env, config=config, files=files)
@@ -314,7 +336,7 @@ def build(config: MkDocsConfig, live_server: bool = False, dirty: bool = False) 
         # with lower precedence get written first so that files with higher precedence can overwrite them.
 
         log.debug("Copying static assets.")
-        files.copy_static_files(dirty=dirty)
+        files.copy_static_files(dirty=dirty, inclusion=inclusion)
 
         for template in config.theme.static_templates:
             _build_theme_template(template, env, files, config, nav)
@@ -323,10 +345,12 @@ def build(config: MkDocsConfig, live_server: bool = False, dirty: bool = False) 
             _build_extra_template(template, files, config, nav)
 
         log.debug("Building markdown pages.")
-        doc_files = files.documentation_pages()
+        doc_files = files.documentation_pages(inclusion=inclusion)
         for file in doc_files:
             assert file.page is not None
-            _build_page(file.page, config, doc_files, nav, env, dirty)
+            _build_page(
+                file.page, config, doc_files, nav, env, dirty, excluded=file.inclusion.is_excluded()
+            )
 
         # Run `post_build` plugin events.
         config.plugins.run_event('post_build', config=config)

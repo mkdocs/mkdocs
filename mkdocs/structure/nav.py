@@ -147,7 +147,8 @@ class Link:
 
 def get_navigation(files: Files, config: MkDocsConfig | Mapping[str, Any]) -> Navigation:
     """Build site navigation from config and files."""
-    nav_config = config['nav'] or nest_paths(f.src_uri for f in files.documentation_pages())
+    documentation_pages = files.documentation_pages()
+    nav_config = config['nav'] or nest_paths(f.src_uri for f in documentation_pages)
     items = _data_to_navigation(nav_config, files, config)
     if not isinstance(items, list):
         items = [items]
@@ -159,19 +160,20 @@ def get_navigation(files: Files, config: MkDocsConfig | Mapping[str, Any]) -> Na
     _add_previous_and_next_links(pages)
     _add_parent_links(items)
 
-    missing_from_config = [file for file in files.documentation_pages() if file.page is None]
+    missing_from_config = []
+    for file in documentation_pages:
+        if file.page is None:
+            # Any documentation files not found in the nav should still have an associated page, so we
+            # create them here. The Page object will automatically be assigned to `file.page` during
+            # its creation (and this is the only way in which these page objects are accessible).
+            Page(None, file, config)
+            if file.inclusion.is_in_nav():
+                missing_from_config.append(file.src_path)
     if missing_from_config:
         log.info(
             'The following pages exist in the docs directory, but are not '
-            'included in the "nav" configuration:\n  - {}'.format(
-                '\n  - '.join(file.src_path for file in missing_from_config)
-            )
+            'included in the "nav" configuration:\n  - ' + '\n  - '.join(missing_from_config)
         )
-        # Any documentation files not found in the nav should still have an associated page, so we
-        # create them here. The Page object will automatically be assigned to `file.page` during
-        # its creation (and this is the only way in which these page objects are accessible).
-        for file in missing_from_config:
-            Page(None, file, config)
 
     links = _get_by_type(items, Link)
     for link in links:
@@ -184,11 +186,10 @@ def get_navigation(files: Files, config: MkDocsConfig | Mapping[str, Any]) -> Na
                 "configuration, which presumably points to an external resource."
             )
         else:
-            msg = (
+            log.warning(
                 f"A relative path to '{link.url}' is included in the 'nav' "
-                "configuration, which is not found in the documentation files"
+                "configuration, which is not found in the documentation files."
             )
-            log.warning(msg)
     return Navigation(items, pages)
 
 
@@ -210,6 +211,11 @@ def _data_to_navigation(data, files: Files, config: MkDocsConfig | Mapping[str, 
     title, path = data if isinstance(data, tuple) else (None, data)
     file = files.get_file_from_path(path)
     if file:
+        if file.inclusion.is_excluded():
+            log.info(
+                f"A relative path to '{file.src_path}' is included in the 'nav' "
+                "configuration, but this file is excluded from the built site."
+            )
         return Page(title, file, config)
     return Link(title, path)
 

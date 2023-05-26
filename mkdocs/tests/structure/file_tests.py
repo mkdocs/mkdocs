@@ -60,7 +60,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
         self.assertEqual(
             _sort_files(['a.md', 'index.md', 'b.md', 'index.html']),
-            ['index.md', 'index.html', 'a.md', 'b.md'],
+            ['index.html', 'index.md', 'a.md', 'b.md'],
         )
 
         self.assertEqual(
@@ -631,9 +631,15 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
     def test_get_files(self, tdir):
         config = load_config(docs_dir=tdir, extra_css=['bar.css'], extra_javascript=['bar.js'])
         files = get_files(config)
-        expected = ['index.md', 'bar.css', 'bar.html', 'bar.jpg', 'bar.js', 'bar.md', 'readme.md']
         self.assertIsInstance(files, Files)
-        self.assertEqual([f.src_path for f in files], expected)
+        self.assertEqual(
+            [f.src_path for f in files if f.inclusion.is_included()],
+            ['index.md', 'bar.css', 'bar.html', 'bar.jpg', 'bar.js', 'bar.md', 'readme.md'],
+        )
+        self.assertEqual(
+            [f.src_path for f in files if f.inclusion.is_excluded()],
+            ['.dotfile', 'templates/foo.html'],
+        )
 
     @tempdir(
         files=[
@@ -644,9 +650,8 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
     def test_get_files_include_readme_without_index(self, tdir):
         config = load_config(docs_dir=tdir)
         files = get_files(config)
-        expected = ['README.md', 'foo.md']
         self.assertIsInstance(files, Files)
-        self.assertEqual([f.src_path for f in files], expected)
+        self.assertEqual([f.src_path for f in files], ['README.md', 'foo.md'])
 
     @tempdir(
         files=[
@@ -662,11 +667,10 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         self.assertRegex(
             '\n'.join(cm.output),
             r"^WARNING:mkdocs.structure.files:"
-            r"Excluding 'README.md' from the site because it conflicts with 'index.md' in the same directory.$",
+            r"Excluding 'README.md' from the site because it conflicts with 'index.md'.$",
         )
-        expected = ['index.md', 'foo.md']
         self.assertIsInstance(files, Files)
-        self.assertEqual([f.src_path for f in files], expected)
+        self.assertEqual([f.src_path for f in files], ['index.md', 'foo.md'])
 
     @tempdir()
     @tempdir(files={'test.txt': 'source content'})

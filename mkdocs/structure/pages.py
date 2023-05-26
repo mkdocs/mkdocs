@@ -330,6 +330,11 @@ class _RelativePathTreeprocessor(Treeprocessor):
                 f"'{target_uri}' which is not found in the documentation files."
             )
             return url
+        if target_file.inclusion.is_excluded():
+            log.info(
+                f"Documentation file '{self.file.src_uri}' contains a link to "
+                f"'{target_uri}' which is excluded from the built site."
+            )
         path = target_file.url_relative_to(self.file)
         components = (scheme, netloc, path, query, fragment)
         return urlunsplit(components)
