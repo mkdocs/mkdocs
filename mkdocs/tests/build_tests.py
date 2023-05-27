@@ -371,11 +371,13 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         mock_open.assert_called_once()
 
     @tempdir(files={'index.md': 'page content'})
-    @mock.patch(
-        'mkdocs.plugins.PluginCollection.run_event', side_effect=PluginError('Error message.')
-    )
-    def test_populate_page_read_plugin_error(self, docs_dir, mock_open):
+    def test_populate_page_read_plugin_error(self, docs_dir):
+        def on_page_markdown(*args, **kwargs):
+            raise PluginError('Error message.')
+
         cfg = load_config(docs_dir=docs_dir)
+        cfg.plugins.events['page_markdown'].append(on_page_markdown)
+
         file = File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
         page = Page('Foo', file, cfg)
         with self.assertLogs('mkdocs') as cm:
@@ -385,13 +387,12 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             '\n'.join(cm.output),
             "ERROR:mkdocs.commands.build:Error reading page 'index.md':",
         )
-        mock_open.assert_called_once()
 
     # Test build._build_page
 
     @tempdir()
     def test_build_page(self, site_dir):
-        cfg = load_config(site_dir=site_dir, nav=['index.md'], plugins=[])
+        cfg = load_config(site_dir=site_dir, nav=['index.md'])
         fs = [File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]
         files = Files(fs)
         nav = get_navigation(files, cfg)
@@ -406,7 +407,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @tempdir()
     @mock.patch('jinja2.environment.Template.render', return_value='')
     def test_build_page_empty(self, site_dir, render_mock):
-        cfg = load_config(site_dir=site_dir, nav=['index.md'], plugins=[])
+        cfg = load_config(site_dir=site_dir, nav=['index.md'])
         fs = [File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]
         files = Files(fs)
         nav = get_navigation(files, cfg)
@@ -418,14 +419,14 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             '\n'.join(cm.output),
             "INFO:mkdocs.commands.build:Page skipped: 'index.md'. Generated empty output.",
         )
-        self.assertPathNotFile(site_dir, 'index.html')
+        self.assertPathNotExists(site_dir, 'index.html')
         render_mock.assert_called_once()
 
     @tempdir(files={'index.md': 'page content'})
     @tempdir(files={'index.html': '<p>page content</p>'})
     @mock.patch('mkdocs.utils.write_file')
     def test_build_page_dirty_modified(self, site_dir, docs_dir, mock_write_file):
-        cfg = load_config(docs_dir=docs_dir, site_dir=site_dir, nav=['index.md'], plugins=[])
+        cfg = load_config(docs_dir=docs_dir, site_dir=site_dir, nav=['index.md'])
         fs = [File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]
         files = Files(fs)
         nav = get_navigation(files, cfg)
@@ -442,7 +443,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @tempdir(files={'testing.html': '<p>page content</p>'})
     @mock.patch('mkdocs.utils.write_file')
     def test_build_page_dirty_not_modified(self, site_dir, mock_write_file):
-        cfg = load_config(site_dir=site_dir, nav=['testing.md'], plugins=[])
+        cfg = load_config(site_dir=site_dir, nav=['testing.md'])
         fs = [File('testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]
         files = Files(fs)
         nav = get_navigation(files, cfg)
@@ -458,7 +459,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
 
     @tempdir()
     def test_build_page_custom_template(self, site_dir):
-        cfg = load_config(site_dir=site_dir, nav=['index.md'], plugins=[])
+        cfg = load_config(site_dir=site_dir, nav=['index.md'])
         fs = [File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]
         files = Files(fs)
         nav = get_navigation(files, cfg)
@@ -474,7 +475,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @tempdir()
     @mock.patch('mkdocs.utils.write_file', side_effect=OSError('Error message.'))
     def test_build_page_error(self, site_dir, mock_write_file):
-        cfg = load_config(site_dir=site_dir, nav=['index.md'], plugins=[])
+        cfg = load_config(site_dir=site_dir, nav=['index.md'])
         fs = [File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]
         files = Files(fs)
         nav = get_navigation(files, cfg)
@@ -493,11 +494,12 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         mock_write_file.assert_called_once()
 
     @tempdir()
-    @mock.patch(
-        'mkdocs.plugins.PluginCollection.run_event', side_effect=PluginError('Error message.')
-    )
-    def test_build_page_plugin_error(self, site_dir, mock_write_file):
-        cfg = load_config(site_dir=site_dir, nav=['index.md'], plugins=[])
+    def test_build_page_plugin_error(self, site_dir):
+        def on_page_context(*args, **kwargs):
+            raise PluginError('Error message.')
+
+        cfg = load_config(site_dir=site_dir, nav=['index.md'])
+        cfg.plugins.events['page_context'].append(on_page_context)
         fs = [File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]
         files = Files(fs)
         nav = get_navigation(files, cfg)
@@ -513,7 +515,6 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             '\n'.join(cm.output),
             "ERROR:mkdocs.commands.build:Error building page 'index.md':",
         )
-        mock_write_file.assert_called_once()
 
     # Test build.build
 

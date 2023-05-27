@@ -265,27 +265,27 @@ class TestPluginCollection(unittest.TestCase):
                 build_errors.append(error)
 
         cfg = load_config(site_dir=site_dir)
-        cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='pre_page')
+        cfg.plugins['errorplugin'] = PluginRaisingError(error_on='pre_page')
         with self.assertLogs('mkdocs', level='ERROR'):
             self.assertRaises(Abort, build.build, cfg)
 
         cfg = load_config(site_dir=site_dir)
-        cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='page_markdown')
+        cfg.plugins['errorplugin'] = PluginRaisingError(error_on='page_markdown')
         with self.assertLogs('mkdocs', level='ERROR'):
             self.assertRaises(Abort, build.build, cfg)
 
         cfg = load_config(site_dir=site_dir)
-        cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='page_content')
+        cfg.plugins['errorplugin'] = PluginRaisingError(error_on='page_content')
         with self.assertLogs('mkdocs', level='ERROR'):
             self.assertRaises(Abort, build.build, cfg)
 
         cfg = load_config(site_dir=site_dir)
-        cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='post_page')
+        cfg.plugins['errorplugin'] = PluginRaisingError(error_on='post_page')
         with self.assertLogs('mkdocs', level='ERROR'):
             self.assertRaises(ValueError, build.build, cfg)
 
         cfg = load_config(site_dir=site_dir)
-        cfg['plugins']['errorplugin'] = PluginRaisingError(error_on='')
+        cfg.plugins['errorplugin'] = PluginRaisingError(error_on='')
         build.build(cfg)
 
         self.assertEqual(len(build_errors), 4)
