@@ -5,11 +5,15 @@ import logging
 import os
 import posixpath
 import shutil
+import warnings
 from pathlib import PurePath
 from typing import TYPE_CHECKING, Any, Iterable, Iterator, Mapping, Sequence
 from urllib.parse import quote as urlquote
 
 import jinja2.environment
+import pathspec
+import pathspec.gitignore
+import pathspec.util
 
 from mkdocs import utils
 
@@ -273,52 +277,56 @@ class File:
         return self.src_uri.endswith('.css')
 
 
+_default_exclude = pathspec.gitignore.GitIgnoreSpec.from_lines(['.*', '/templates/'])
+
+
 def get_files(config: MkDocsConfig | Mapping[str, Any]) -> Files:
     """Walk the `docs_dir` and return a Files collection."""
+    exclude = config.get('exclude_docs')
+    exclude = _default_exclude + exclude if exclude else _default_exclude
     files = []
-    exclude = ['.*', '/templates']
-
     for source_dir, dirnames, filenames in os.walk(config['docs_dir'], followlinks=True):
         relative_dir = os.path.relpath(source_dir, config['docs_dir'])
-
-        for dirname in list(dirnames):
-            path = os.path.normpath(os.path.join(relative_dir, dirname))
-            # Skip any excluded directories
-            if _filter_paths(basename=dirname, path=path, is_dir=True, exclude=exclude):
-                dirnames.remove(dirname)
         dirnames.sort()
+        filenames.sort(key=_file_sort_key)
 
-        for filename in _sort_files(filenames):
-            path = os.path.normpath(os.path.join(relative_dir, filename))
+        for filename in filenames:
+            file = File(
+                os.path.join(relative_dir, filename),
+                config['docs_dir'],
+                config['site_dir'],
+                config['use_directory_urls'],
+            )
             # Skip any excluded files
-            if _filter_paths(basename=filename, path=path, is_dir=False, exclude=exclude):
+            if exclude.match_file(file.src_uri):
                 continue
             # Skip README.md if an index file also exists in dir
             if filename == 'README.md' and 'index.md' in filenames:
                 log.warning(
-                    f"Both index.md and README.md found. Skipping README.md from {source_dir}"
+                    f"Excluding '{file.src_uri}' from the site because "
+                    f"it conflicts with 'index.md' in the same directory."
                 )
                 continue
-            files.append(
-                File(path, config['docs_dir'], config['site_dir'], config['use_directory_urls'])
-            )
+            files.append(file)
 
     return Files(files)
 
 
-def _sort_files(filenames: Iterable[str]) -> list[str]:
+def _file_sort_key(f: str):
     """Always sort `index` or `README` as first filename in list."""
+    if os.path.splitext(f)[0] in ('index', 'README'):
+        return (0,)
+    return (1, f)
 
-    def key(f):
-        if os.path.splitext(f)[0] in ['index', 'README']:
-            return (0,)
-        return (1, f)
 
-    return sorted(filenames, key=key)
+def _sort_files(filenames: Iterable[str]) -> list[str]:
+    return sorted(filenames, key=_file_sort_key)
 
 
 def _filter_paths(basename: str, path: str, is_dir: bool, exclude: Iterable[str]) -> bool:
-    """.gitignore style file filtering."""
+    warnings.warn(
+        "_filter_paths is not used since MkDocs 1.5 and will be removed soon.", DeprecationWarning
+    )
     for item in exclude:
         # Items ending in '/' apply only to directories.
         if item.endswith('/') and not is_dir:

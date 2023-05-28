@@ -26,6 +26,9 @@ class MkDocsConfig(base.Config):
     """Defines the structure of the navigation."""
     pages = c.Deprecated(removed=True, moved_to='nav')
 
+    exclude_docs = c.Optional(c.PathSpec())
+    """Gitignore-like patterns of files (relative to docs dir) to exclude from the site."""
+
     site_url = c.Optional(c.URL(is_dir=True))
     """The full URL to where the documentation will be hosted."""
 

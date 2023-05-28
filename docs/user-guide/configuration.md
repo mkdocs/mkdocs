@@ -291,6 +291,42 @@ server root and effectively points to `https://example.com/bugs/`. Of course, th
 list of all the Markdown files found within the `docs_dir` and its
 sub-directories. Index files will always be listed first within a sub-section.
 
+### exclude_docs
+
+NEW: **New in version 1.5.**
+
+This config defines patterns of files (under [`docs_dir`](#docs_dir)) to not be picked up into the built site.
+
+Example:
+
+```yaml
+exclude_docs: |
+    api-config.json    # A file with this name anywhere.
+    drafts/            # A "drafts" directory anywhere.
+    /requirements.txt  # Top-level "docs/requirements.txt".
+    *.py               # Any file with this extension anywhere.
+    !/foo/example.py   # But keep this particular file.
+```
+
+This follows the [.gitignore pattern format](https://git-scm.com/docs/gitignore#_pattern_format).
+
+The following defaults are always implicitly prepended - to exclude dot-files (and directories) as well as the top-level `templates` directory:
+
+```yaml
+exclude_docs: |
+    .*
+    /templates/
+```
+
+So, in order to really start this config fresh, you'd need to specify a negated version of these entries first.
+
+Otherwise you could for example opt only certain dot-files back into the site:
+
+```yaml
+exclude_docs: |
+    !.assets  # Don't exclude '.assets' although all other '.*' are excluded
+```
+
 ## Build directories
 
 ### theme
