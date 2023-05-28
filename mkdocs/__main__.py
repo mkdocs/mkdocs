@@ -46,6 +46,10 @@ def _showwarning(message, category, filename, lineno, file=None, line=None):
 
 
 def _enable_warnings():
+    from mkdocs.commands import build
+
+    build.log.addFilter(utils.DuplicateFilter())
+
     warnings.simplefilter('module', DeprecationWarning)
     warnings.showwarning = _showwarning
 

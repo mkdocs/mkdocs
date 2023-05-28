@@ -17,22 +17,9 @@ from mkdocs.exceptions import Abort, BuildError
 from mkdocs.structure.files import File, Files, InclusionLevel, _set_exclusions, get_files
 from mkdocs.structure.nav import Navigation, get_navigation
 from mkdocs.structure.pages import Page
-
-
-class DuplicateFilter:
-    """Avoid logging duplicate messages."""
-
-    def __init__(self) -> None:
-        self.msgs: set[str] = set()
-
-    def __call__(self, record: logging.LogRecord) -> bool:
-        rv = record.msg not in self.msgs
-        self.msgs.add(record.msg)
-        return rv
-
+from mkdocs.utils import DuplicateFilter  # noqa - legacy re-export
 
 log = logging.getLogger(__name__)
-log.addFilter(DuplicateFilter())
 
 
 def get_context(
