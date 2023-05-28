@@ -1,9 +1,12 @@
 #!/usr/bin/env python
-
+import contextlib
+import textwrap
 import unittest
+from pathlib import Path
 from unittest import mock
 
 from mkdocs.commands import build
+from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.exceptions import PluginError
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.nav import get_navigation
@@ -560,6 +563,171 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         self.assertPathNotExists(site_dir, 'content.html')
         self.assertPathNotExists(site_dir, 'main.html')
         self.assertPathNotExists(site_dir, 'locales')
+
+    @contextlib.contextmanager
+    def _assert_build_logs(self, expected):
+        with self.assertLogs('mkdocs') as cm:
+            yield
+        msgs = [f'{r.levelname}:{r.message}' for r in cm.records]
+        if msgs and msgs[0].startswith('INFO:Cleaning site directory'):
+            del msgs[0]
+        if msgs and msgs[0].startswith('INFO:Building documentation to directory'):
+            del msgs[0]
+        if msgs and msgs[-1].startswith('INFO:Documentation built'):
+            del msgs[-1]
+        self.assertEqual('\n'.join(msgs), textwrap.dedent(expected).strip('\n'))
+
+    @tempdir(
+        files={
+            'test/foo.md': 'page1 content, [bar](bar.md)',
+            'test/bar.md': 'page2 content, [baz](baz.md)',
+            'test/baz.md': 'page3 content, [foo](foo.md)',
+            '.zoo.md': 'page4 content',
+        }
+    )
+    @tempdir()
+    def test_exclude_pages_with_invalid_links(self, site_dir, docs_dir):
+        cfg = load_config(
+            docs_dir=docs_dir,
+            site_dir=site_dir,
+            use_directory_urls=False,
+            exclude_docs='ba*.md',
+        )
+
+        with self.subTest(serve=False):
+            expected_logs = '''
+                INFO:Documentation file 'test/foo.md' contains a link to 'test/bar.md' which is excluded from the built site.
+            '''
+            with self._assert_build_logs(expected_logs):
+                build.build(cfg)
+            self.assertPathIsFile(site_dir, 'test', 'foo.html')
+            self.assertPathNotExists(site_dir, 'test', 'baz.html')
+            self.assertPathNotExists(site_dir, '.zoo.html')
+
+        with self.subTest(serve=True):
+            expected_logs = '''
+                INFO:Documentation file 'test/bar.md' contains a link to 'test/baz.md' which is excluded from the built site.
+                INFO:Documentation file 'test/foo.md' contains a link to 'test/bar.md' which is excluded from the built site.
+                INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `exclude_docs`:
+                  - .zoo.md
+                  - test/bar.md
+                  - test/baz.md
+            '''
+            with self._assert_build_logs(expected_logs):
+                build.build(cfg, live_server=True)
+
+            foo_path = Path(site_dir, 'test', 'foo.html')
+            self.assertTrue(foo_path.is_file())
+            self.assertNotIn('DRAFT', foo_path.read_text())
+
+            baz_path = Path(site_dir, 'test', 'baz.html')
+            self.assertPathIsFile(baz_path)
+            self.assertIn('DRAFT', baz_path.read_text())
+
+            self.assertPathIsFile(site_dir, '.zoo.html')
+
+    @tempdir(
+        files={
+            'foo/README.md': 'page1 content',
+            'foo/index.md': 'page2 content',
+        }
+    )
+    @tempdir()
+    def test_conflicting_readme_and_index(self, site_dir, docs_dir):
+        cfg = load_config(docs_dir=docs_dir, site_dir=site_dir, use_directory_urls=False)
+
+        for serve in False, True:
+            with self.subTest(serve=serve):
+                expected_logs = '''
+                    WARNING:Excluding 'foo/README.md' from the site because it conflicts with 'foo/index.md'.
+                '''
+                with self._assert_build_logs(expected_logs):
+                    build.build(cfg, live_server=serve)
+
+                index_path = Path(site_dir, 'foo', 'index.html')
+                self.assertPathIsFile(index_path)
+                self.assertRegex(index_path.read_text(), r'page2 content')
+
+    @tempdir(
+        files={
+            'foo/README.md': 'page1 content',
+            'foo/index.md': 'page2 content',
+        }
+    )
+    @tempdir()
+    def test_exclude_readme_and_index(self, site_dir, docs_dir):
+        cfg = load_config(
+            docs_dir=docs_dir, site_dir=site_dir, use_directory_urls=False, exclude_docs='index.md'
+        )
+
+        for serve in False, True:
+            with self.subTest(serve=serve):
+                with self._assert_build_logs(''):
+                    build.build(cfg, live_server=serve)
+
+                index_path = Path(site_dir, 'foo', 'index.html')
+                self.assertPathIsFile(index_path)
+                self.assertRegex(index_path.read_text(), r'page1 content')
+
+    @tempdir(
+        files={
+            'foo.md': 'page1 content',
+            'bar.md': 'page2 content',
+        }
+    )
+    @tempdir()
+    @tempdir()
+    def test_plugins_adding_files_and_interacting(self, tmp_dir, site_dir, docs_dir):
+        def on_files_1(files: Files, config: MkDocsConfig) -> Files:
+            # Plugin 1 generates a file.
+            Path(tmp_dir, 'SUMMARY.md').write_text('foo.md\nbar.md\n')
+            files.append(File('SUMMARY.md', tmp_dir, config.site_dir, config.use_directory_urls))
+            return files
+
+        def on_files_2(files: Files, config: MkDocsConfig) -> None:
+            # Plugin 2 reads that file and uses it to configure the nav.
+            f = files.get_file_from_path('SUMMARY.md')
+            assert f is not None
+            config.nav = Path(f.abs_src_path).read_text().splitlines()
+
+        for serve in False, True:
+            for exclude in 'full', 'nav', None:
+                with self.subTest(serve=serve, exclude=exclude):
+                    cfg = load_config(
+                        docs_dir=docs_dir,
+                        site_dir=site_dir,
+                        use_directory_urls=False,
+                        exclude_docs='SUMMARY.md' if exclude == 'full' else '',
+                        not_in_nav='SUMMARY.md' if exclude == 'nav' else '',
+                    )
+                    cfg.plugins.events['files'] += [on_files_1, on_files_2]
+
+                    expected_logs = ''
+                    if exclude is None:
+                        expected_logs = '''
+                            INFO:The following pages exist in the docs directory, but are not included in the "nav" configuration:
+                              - SUMMARY.md
+                        '''
+                    if exclude == 'full' and serve:
+                        expected_logs = '''
+                            INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `exclude_docs`:
+                              - SUMMARY.md
+                        '''
+                    with self._assert_build_logs(expected_logs):
+                        build.build(cfg, live_server=serve)
+
+                    foo_path = Path(site_dir, 'foo.html')
+                    self.assertPathIsFile(foo_path)
+                    self.assertRegex(
+                        foo_path.read_text(),
+                        r'href="foo.html"[\s\S]+href="bar.html"',  # Nav order is respected
+                    )
+
+                    summary_path = Path(site_dir, 'SUMMARY.html')
+                    if exclude == 'full' and not serve:
+                        self.assertPathNotExists(summary_path)
+                    else:
+                        self.assertPathExists(summary_path)
 
     # Test build.site_directory_contains_stale_files
 
