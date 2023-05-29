@@ -282,19 +282,19 @@ class Page:
         if self.markdown is None:
             raise RuntimeError("`markdown` field hasn't been set (via `read_source`)")
 
-        _relative_path_extension = _RelativePathExtension(self.file, files)
-        _extract_title_extension = _ExtractTitleExtension()
+        relative_path_extension = _RelativePathExtension(self.file, files)
+        extract_title_extension = _ExtractTitleExtension()
         md = markdown.Markdown(
             extensions=[
-                _relative_path_extension,
-                _extract_title_extension,
+                relative_path_extension,
+                extract_title_extension,
                 *config['markdown_extensions'],
             ],
             extension_configs=config['mdx_configs'] or {},
         )
         self.content = md.convert(self.markdown)
         self.toc = get_toc(getattr(md, 'toc_tokens', []))
-        self._title_from_render = _extract_title_extension.title
+        self._title_from_render = extract_title_extension.title
 
 
 class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
