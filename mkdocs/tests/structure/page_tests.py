@@ -4,6 +4,7 @@ import sys
 import unittest
 from unittest import mock
 
+from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.pages import Page
 from mkdocs.tests.base import dedent, load_config, tempdir
@@ -299,7 +300,84 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.parent, None)
         self.assertEqual(pg.previous_page, None)
         self.assertEqual(pg.title, 'Welcome to MkDocs')
-        self.assertEqual(pg.toc, [])
+        pg.render(cfg, fl)
+        self.assertEqual(pg.title, 'Welcome to MkDocs')
+
+    _SETEXT_CONTENT = dedent(
+        '''
+        Welcome to MkDocs Setext
+        ========================
+
+        This tests extracting a setext style title.
+        '''
+    )
+
+    @tempdir(files={'testing_setext_title.md': _SETEXT_CONTENT})
+    def test_page_title_from_setext_markdown(self, docs_dir):
+        cfg = load_config()
+        fl = File('testing_setext_title.md', docs_dir, docs_dir, use_directory_urls=True)
+        pg = Page(None, fl, cfg)
+        self.assertIsNone(pg.title)
+        pg.read_source(cfg)
+        self.assertEqual(pg.title, 'Testing setext title')
+        pg.render(cfg, fl)
+        self.assertEqual(pg.title, 'Welcome to MkDocs Setext')
+
+    @tempdir(files={'testing_setext_title.md': _SETEXT_CONTENT})
+    def test_page_title_from_markdown_stripped_anchorlinks(self, docs_dir):
+        cfg = MkDocsConfig()
+        cfg.site_name = 'example'
+        cfg.markdown_extensions = {'toc': {'permalink': '&'}}
+        self.assertEqual(cfg.validate(), ([], []))
+        fl = File('testing_setext_title.md', docs_dir, docs_dir, use_directory_urls=True)
+        pg = Page(None, fl, cfg)
+        pg.read_source(cfg)
+        pg.render(cfg, fl)
+        self.assertEqual(pg.title, 'Welcome to MkDocs Setext')
+
+    _FORMATTING_CONTENT = dedent(
+        '''
+        # Hello *beautiful* `world`
+
+        Hi.
+        '''
+    )
+
+    @tempdir(files={'testing_formatting.md': _FORMATTING_CONTENT})
+    def test_page_title_from_markdown_strip_formatting(self, docs_dir):
+        cfg = load_config()
+        fl = File('testing_formatting.md', docs_dir, docs_dir, use_directory_urls=True)
+        pg = Page(None, fl, cfg)
+        pg.read_source(cfg)
+        pg.render(cfg, fl)
+        self.assertEqual(pg.title, 'Hello beautiful world')
+
+    _ATTRLIST_CONTENT = dedent(
+        '''
+        # Welcome to MkDocs Attr { #welcome }
+
+        This tests extracting the title, with enabled attr_list markdown_extension.
+        '''
+    )
+
+    @tempdir(files={'testing_attr_list.md': _ATTRLIST_CONTENT})
+    def test_page_title_from_markdown_stripped_attr_list(self, docs_dir):
+        cfg = load_config()
+        cfg.markdown_extensions.append('attr_list')
+        fl = File('testing_attr_list.md', docs_dir, docs_dir, use_directory_urls=True)
+        pg = Page(None, fl, cfg)
+        pg.read_source(cfg)
+        pg.render(cfg, fl)
+        self.assertEqual(pg.title, 'Welcome to MkDocs Attr')
+
+    @tempdir(files={'testing_attr_list.md': _ATTRLIST_CONTENT})
+    def test_page_title_from_markdown_preserved_attr_list(self, docs_dir):
+        cfg = load_config()
+        fl = File('testing_attr_list.md', docs_dir, docs_dir, use_directory_urls=True)
+        pg = Page(None, fl, cfg)
+        pg.read_source(cfg)
+        pg.render(cfg, fl)
+        self.assertEqual(pg.title, 'Welcome to MkDocs Attr { #welcome }')
 
     def test_page_title_from_meta(self):
         cfg = load_config(docs_dir=self.DOCS_DIR)
@@ -324,6 +402,8 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.previous_page, None)
         self.assertEqual(pg.title, 'A Page Title')
         self.assertEqual(pg.toc, [])
+        pg.render(cfg, fl)
+        self.assertEqual(pg.title, 'A Page Title')
 
     def test_page_title_from_filename(self):
         cfg = load_config(docs_dir=self.DOCS_DIR)
@@ -347,7 +427,8 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.parent, None)
         self.assertEqual(pg.previous_page, None)
         self.assertEqual(pg.title, 'Page title')
-        self.assertEqual(pg.toc, [])
+        pg.render(cfg, fl)
+        self.assertEqual(pg.title, 'Page title')
 
     def test_page_title_from_capitalized_filename(self):
         cfg = load_config(docs_dir=self.DOCS_DIR)
@@ -371,7 +452,6 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.parent, None)
         self.assertEqual(pg.previous_page, None)
         self.assertEqual(pg.title, 'pageTitle')
-        self.assertEqual(pg.toc, [])
 
     def test_page_title_from_homepage_filename(self):
         cfg = load_config(docs_dir=self.DOCS_DIR)
