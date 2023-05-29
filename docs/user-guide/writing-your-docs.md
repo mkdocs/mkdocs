@@ -463,8 +463,8 @@ detected, but the content between the delimiters is not valid YAML
 meta-data, MkDocs does not attempt to parse the content as MultiMarkdown
 style meta-data.
 
-[YAML]: http://yaml.org
-[MultiMarkdown]: http://fletcherpenney.net/MultiMarkdown_Syntax_Guide#metadata
+[YAML]: https://yaml.org
+[MultiMarkdown]: https://fletcherpenney.net/MultiMarkdown_Syntax_Guide#metadata
 [nav]: configuration.md#nav
 
 ### Tables

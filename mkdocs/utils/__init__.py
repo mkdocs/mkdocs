@@ -17,21 +17,7 @@ import warnings
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import PurePath
-from typing import (
-    IO,
-    TYPE_CHECKING,
-    Any,
-    Collection,
-    Dict,
-    Iterable,
-    List,
-    MutableSequence,
-    Optional,
-    Tuple,
-    Type,
-    TypeVar,
-    Union,
-)
+from typing import IO, TYPE_CHECKING, Any, Collection, Iterable, MutableSequence, TypeVar
 from urllib.parse import urlsplit
 
 if sys.version_info >= (3, 10):
@@ -77,7 +63,7 @@ def get_yaml_loader(loader=yaml.Loader):
     return Loader
 
 
-def yaml_load(source: Union[IO, str], loader: Optional[Type[yaml.Loader]] = None) -> Dict[str, Any]:
+def yaml_load(source: IO | str, loader: type[yaml.Loader] | None = None) -> dict[str, Any]:
     """Return dict of source YAML file using loader, recursively deep merging inherited parent."""
     Loader = loader or get_yaml_loader()
     result = yaml.load(source, Loader=Loader)
@@ -145,7 +131,7 @@ def get_build_date() -> str:
     return get_build_datetime().strftime('%Y-%m-%d')
 
 
-def reduce_list(data_set: Iterable[T]) -> List[T]:
+def reduce_list(data_set: Iterable[T]) -> list[T]:
     """Reduce duplicate items in a list and preserve order"""
     return list(dict.fromkeys(data_set))
 
@@ -260,7 +246,7 @@ def is_error_template(path: str) -> bool:
 
 
 @functools.lru_cache(maxsize=None)
-def _norm_parts(path: str) -> List[str]:
+def _norm_parts(path: str) -> list[str]:
     if not path.startswith('/'):
         path = '/' + path
     path = posixpath.normpath(path)[1:]
@@ -295,18 +281,22 @@ def get_relative_url(url: str, other: str) -> str:
     return relurl + '/' if url.endswith('/') else relurl
 
 
-def normalize_url(path: str, page: Optional[Page] = None, base: str = '') -> str:
+def normalize_url(path: str, page: Page | None = None, base: str = '') -> str:
     """Return a URL relative to the given page or using the base."""
-    path, is_abs = _get_norm_url(path)
-    if is_abs:
+    path, relative_level = _get_norm_url(path)
+    if relative_level == -1:
         return path
     if page is not None:
-        return get_relative_url(path, page.url)
+        result = get_relative_url(path, page.url)
+        if relative_level > 0:
+            result = '../' * relative_level + result
+        return result
+
     return posixpath.join(base, path)
 
 
 @functools.lru_cache(maxsize=None)
-def _get_norm_url(path: str) -> Tuple[str, bool]:
+def _get_norm_url(path: str) -> tuple[str, int]:
     if not path:
         path = '.'
     elif '\\' in path:
@@ -318,13 +308,19 @@ def _get_norm_url(path: str) -> Tuple[str, bool]:
     # Allow links to be fully qualified URLs
     parsed = urlsplit(path)
     if parsed.scheme or parsed.netloc or path.startswith(('/', '#')):
-        return path, True
-    return path, False
+        return path, -1
+
+    # Relative path - preserve information about it
+    norm = posixpath.normpath(path) + '/'
+    relative_level = 0
+    while norm.startswith('../', relative_level * 3):
+        relative_level += 1
+    return path, relative_level
 
 
 def create_media_urls(
-    path_list: Iterable[str], page: Optional[Page] = None, base: str = ''
-) -> List[str]:
+    path_list: Iterable[str], page: Page | None = None, base: str = ''
+) -> list[str]:
     """
     Return a list of URLs relative to the given page or using the base.
     """
@@ -343,11 +339,11 @@ def get_theme_dir(name: str) -> str:
     return os.path.dirname(os.path.abspath(theme.load().__file__))
 
 
-def get_themes() -> Dict[str, EntryPoint]:
+def get_themes() -> dict[str, EntryPoint]:
     """Return a dict of all installed themes as {name: EntryPoint}."""
 
-    themes: Dict[str, EntryPoint] = {}
-    eps: Dict[EntryPoint, None] = dict.fromkeys(entry_points(group='mkdocs.themes'))
+    themes: dict[str, EntryPoint] = {}
+    eps: dict[EntryPoint, None] = dict.fromkeys(entry_points(group='mkdocs.themes'))
     builtins = {ep.name for ep in eps if ep.dist is not None and ep.dist.name == 'mkdocs'}
 
     for theme in eps:
@@ -388,7 +384,7 @@ def dirname_to_title(dirname: str) -> str:
     return title
 
 
-def get_markdown_title(markdown_src: str) -> Optional[str]:
+def get_markdown_title(markdown_src: str) -> str | None:
     """Soft-deprecated, do not use."""
     lines = markdown_src.replace('\r\n', '\n').replace('\r', '\n').split('\n')
     while lines:
@@ -444,7 +440,7 @@ class CountHandler(logging.NullHandler):
     """Counts all logged messages >= level."""
 
     def __init__(self, **kwargs) -> None:
-        self.counts: Dict[int, int] = defaultdict(int)
+        self.counts: dict[int, int] = defaultdict(int)
         super().__init__(**kwargs)
 
     def handle(self, record):
@@ -454,7 +450,7 @@ class CountHandler(logging.NullHandler):
             self.counts[record.levelno] += 1
         return rv
 
-    def get_counts(self) -> List[Tuple[str, int]]:
+    def get_counts(self) -> list[tuple[str, int]]:
         return [(logging.getLevelName(k), v) for k, v in sorted(self.counts.items(), reverse=True)]
 
 
@@ -471,7 +467,13 @@ class weak_property:
         return self.func(instance)
 
 
-# For backward compatibility as some plugins import it.
-# It is no longer necessary as all messages on the
-# `mkdocs` logger get counted automatically.
-warning_filter = logging.Filter()
+def __getattr__(name: str):
+    if name == 'warning_filter':
+        warnings.warn(
+            "warning_filter doesn't do anything since MkDocs 1.2 and will be removed soon. "
+            "All messages on the `mkdocs` logger get counted automatically.",
+            DeprecationWarning,
+        )
+        return logging.Filter()
+
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

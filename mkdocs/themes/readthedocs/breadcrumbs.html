@@ -1,15 +1,15 @@
 <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="{{ nav.homepage.url|url }}" class="icon icon-home" alt="{% trans %}Docs{% endtrans %}"></a> &raquo;</li>
+    <li><a href="{{ nav.homepage.url|url }}" class="icon icon-home" aria-label="{% trans %}Docs{% endtrans %}"></a> &raquo;</li>
     {%- if page %}
       {%- for doc in page.ancestors[::-1] %}
         {%- if doc.link %}
-          <li><a href="{{ doc.link|e }}">{{ doc.title }}</a> &raquo;</li>
+          <li class="breadcrumb-item"><a href="{{ doc.link|e }}">{{ doc.title }}</a></li>
         {%- else %}
           <li>{{ doc.title }} &raquo;</li>
         {%- endif %}
       {%- endfor %}
-      <li>{{ page.title }}</li>
+      <li class="breadcrumb-item active">{{ page.title }}</li>
     {%- endif %}
     <li class="wy-breadcrumbs-aside">
       {%- block repo %}

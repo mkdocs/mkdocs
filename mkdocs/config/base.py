@@ -6,19 +6,7 @@ import os
 import sys
 from collections import UserDict
 from contextlib import contextmanager
-from typing import (
-    IO,
-    TYPE_CHECKING,
-    Generic,
-    Iterator,
-    List,
-    Optional,
-    Sequence,
-    Tuple,
-    TypeVar,
-    Union,
-    overload,
-)
+from typing import IO, TYPE_CHECKING, Generic, Iterator, List, Sequence, Tuple, TypeVar, overload
 
 from yaml import YAMLError
 
@@ -36,7 +24,7 @@ T = TypeVar('T')
 
 class BaseConfigOption(Generic[T]):
     def __init__(self) -> None:
-        self.warnings: List[str] = []
+        self.warnings: list[str] = []
         self.default = None
 
     @property
@@ -129,7 +117,7 @@ class Config(UserDict):
     """
 
     _schema: PlainConfigSchema
-    config_file_path: Optional[str]
+    config_file_path: str | None
 
     def __init_subclass__(cls):
         schema = dict(getattr(cls, '_schema', ()))
@@ -153,9 +141,9 @@ class Config(UserDict):
             return LegacyConfig(*args, **kwargs)
         return super().__new__(cls)
 
-    def __init__(self, config_file_path: Optional[Union[str, bytes]] = None):
+    def __init__(self, config_file_path: str | bytes | None = None):
         super().__init__()
-        self.user_configs: List[dict] = []
+        self.user_configs: list[dict] = []
         self.set_defaults()
 
         self._schema_keys = {k for k, v in self._schema}
@@ -176,7 +164,7 @@ class Config(UserDict):
         for key, config_option in self._schema:
             self[key] = config_option.default
 
-    def _validate(self) -> Tuple[ConfigErrors, ConfigWarnings]:
+    def _validate(self) -> tuple[ConfigErrors, ConfigWarnings]:
         failed: ConfigErrors = []
         warnings: ConfigWarnings = []
 
@@ -194,7 +182,7 @@ class Config(UserDict):
 
         return failed, warnings
 
-    def _pre_validate(self) -> Tuple[ConfigErrors, ConfigWarnings]:
+    def _pre_validate(self) -> tuple[ConfigErrors, ConfigWarnings]:
         failed: ConfigErrors = []
         warnings: ConfigWarnings = []
 
@@ -208,7 +196,7 @@ class Config(UserDict):
 
         return failed, warnings
 
-    def _post_validate(self) -> Tuple[ConfigErrors, ConfigWarnings]:
+    def _post_validate(self) -> tuple[ConfigErrors, ConfigWarnings]:
         failed: ConfigErrors = []
         warnings: ConfigWarnings = []
 
@@ -222,7 +210,7 @@ class Config(UserDict):
 
         return failed, warnings
 
-    def validate(self) -> Tuple[ConfigErrors, ConfigWarnings]:
+    def validate(self) -> tuple[ConfigErrors, ConfigWarnings]:
         failed, warnings = self._pre_validate()
 
         run_failed, run_warnings = self._validate()
@@ -278,13 +266,13 @@ class LegacyConfig(Config):
     A configuration object for plugins, as just a dict without type-safe attribute access.
     """
 
-    def __init__(self, schema: PlainConfigSchema, config_file_path: Optional[str] = None):
+    def __init__(self, schema: PlainConfigSchema, config_file_path: str | None = None):
         self._schema = tuple((k, v) for k, v in schema)  # Re-create just for validation
         super().__init__(config_file_path)
 
 
 @contextmanager
-def _open_config_file(config_file: Optional[Union[str, IO]]) -> Iterator[IO]:
+def _open_config_file(config_file: str | IO | None) -> Iterator[IO]:
     """
     A context manager which yields an open file descriptor ready to be read.
 
@@ -331,7 +319,7 @@ def _open_config_file(config_file: Optional[Union[str, IO]]) -> Iterator[IO]:
             result_config_file.close()
 
 
-def load_config(config_file: Optional[Union[str, IO]] = None, **kwargs) -> MkDocsConfig:
+def load_config(config_file: str | IO | None = None, **kwargs) -> MkDocsConfig:
     """
     Load the configuration for a given file object or name
 

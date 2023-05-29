@@ -19,7 +19,7 @@ import urllib.parse
 import warnings
 import wsgiref.simple_server
 import wsgiref.util
-from typing import Any, BinaryIO, Callable, Dict, Iterable, Optional, Tuple
+from typing import Any, BinaryIO, Callable, Iterable
 
 import watchdog.events
 import watchdog.observers.polling
@@ -50,7 +50,7 @@ _SCRIPT_TEMPLATE = string.Template(_SCRIPT_TEMPLATE_STR)
 
 
 class _LoggerAdapter(logging.LoggerAdapter):
-    def process(self, msg: str, kwargs: dict) -> Tuple[str, dict]:  # type: ignore[override]
+    def process(self, msg: str, kwargs: dict) -> tuple[str, dict]:  # type: ignore[override]
         return time.strftime("[%H:%M:%S] ") + msg, kwargs
 
 
@@ -86,7 +86,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         self.build_delay = 0.1
         self.shutdown_delay = shutdown_delay
         # To allow custom error pages.
-        self.error_handler: Callable[[int], Optional[bytes]] = lambda code: None
+        self.error_handler: Callable[[int], bytes | None] = lambda code: None
 
         super().__init__((host, port), _Handler, **kwargs)
         self.set_app(self.serve_request)
@@ -95,7 +95,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         self._visible_epoch = self._wanted_epoch  # Latest fully built version of the site.
         self._epoch_cond = threading.Condition()  # Must be held when accessing _visible_epoch.
 
-        self._to_rebuild: Dict[
+        self._to_rebuild: dict[
             Callable[[], None], bool
         ] = {}  # Used as an ordered set of functions to call.
         self._rebuild_cond = threading.Condition()  # Must be held when accessing _to_rebuild.
@@ -104,11 +104,11 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         self.serve_thread = threading.Thread(target=lambda: self.serve_forever(shutdown_delay))
         self.observer = watchdog.observers.polling.PollingObserver(timeout=polling_interval)
 
-        self._watched_paths: Dict[str, int] = {}
-        self._watch_refs: Dict[str, Any] = {}
+        self._watched_paths: dict[str, int] = {}
+        self._watch_refs: dict[str, Any] = {}
 
     def watch(
-        self, path: str, func: Optional[Callable[[], None]] = None, recursive: bool = True
+        self, path: str, func: Callable[[], None] | None = None, recursive: bool = True
     ) -> None:
         """Add the 'path' to watched paths, call the function and reload when any file changes under it."""
         path = os.path.abspath(path)
@@ -224,7 +224,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         start_response(msg, [("Content-Type", "text/html")])
         return [error_content]
 
-    def _serve_request(self, environ, start_response) -> Optional[Iterable[bytes]]:
+    def _serve_request(self, environ, start_response) -> Iterable[bytes] | None:
         # https://bugs.python.org/issue16679
         # https://github.com/bottlepy/bottle/blob/f9b1849db4/bottle.py#L984
         path = environ["PATH_INFO"].encode("latin-1").decode("utf-8", "ignore")

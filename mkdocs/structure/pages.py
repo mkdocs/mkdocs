@@ -5,7 +5,7 @@ import logging
 import os
 import posixpath
 import warnings
-from typing import TYPE_CHECKING, Any, Callable, Mapping, MutableMapping, Optional, Union
+from typing import TYPE_CHECKING, Any, Callable, Mapping, MutableMapping
 from urllib.parse import unquote as urlunquote
 from urllib.parse import urljoin, urlsplit, urlunsplit
 from xml.etree import ElementTree as etree
@@ -37,7 +37,7 @@ log = logging.getLogger(__name__)
 
 class Page:
     def __init__(
-        self, title: Optional[str], file: File, config: Union[MkDocsConfig, Mapping[str, Any]]
+        self, title: str | None, file: File, config: MkDocsConfig | Mapping[str, Any]
     ) -> None:
         file.page = self
         self.file = file
@@ -60,7 +60,7 @@ class Page:
 
         # Placeholders to be filled in later in the build process.
         self.markdown = None
-        self._title_from_render: Optional[str] = None
+        self._title_from_render: str | None = None
         self.content = None
         self.toc = []  # type: ignore
         self.meta = {}
@@ -80,10 +80,10 @@ class Page:
     def _indent_print(self, depth=0):
         return '{}{}'.format('    ' * depth, repr(self))
 
-    markdown: Optional[str]
+    markdown: str | None
     """The original Markdown content from the file."""
 
-    content: Optional[str]
+    content: str | None
     """The rendered Markdown as HTML, this is the contents of the documentation."""
 
     toc: TableOfContents
@@ -96,18 +96,21 @@ class Page:
     @property
     def url(self) -> str:
         """The URL of the page relative to the MkDocs `site_dir`."""
-        return '' if self.file.url in ('.', './') else self.file.url
+        url = self.file.url
+        if url in ('.', './'):
+            return ''
+        return url
 
     file: File
     """The documentation [`File`][mkdocs.structure.files.File] that the page is being rendered from."""
 
-    abs_url: Optional[str]
+    abs_url: str | None
     """The absolute URL of the page from the server root as determined by the value
     assigned to the [site_url][] configuration setting. The value includes any
     subdirectory included in the `site_url`, but not the domain. [base_url][] should
     not be used with this variable."""
 
-    canonical_url: Optional[str]
+    canonical_url: str | None
     """The full, canonical URL to the current page as determined by the value assigned
     to the [site_url][] configuration setting. The value includes the domain and any
     subdirectory included in the `site_url`. [base_url][] should not be used with this
@@ -133,7 +136,7 @@ class Page:
     def is_top_level(self) -> bool:
         return self.parent is None
 
-    edit_url: Optional[str]
+    edit_url: str | None
     """The full URL to the source page in the source repository. Typically used to
     provide a link to edit the source page. [base_url][] should not be used with this
     variable."""
@@ -143,17 +146,17 @@ class Page:
         """Evaluates to `True` for the homepage of the site and `False` for all other pages."""
         return self.is_top_level and self.is_index and self.file.url in ('.', './', 'index.html')
 
-    previous_page: Optional[Page]
+    previous_page: Page | None
     """The [page][mkdocs.structure.pages.Page] object for the previous page or `None`.
     The value will be `None` if the current page is the first item in the site navigation
     or if the current page is not included in the navigation at all."""
 
-    next_page: Optional[Page]
+    next_page: Page | None
     """The [page][mkdocs.structure.pages.Page] object for the next page or `None`.
     The value will be `None` if the current page is the last item in the site navigation
     or if the current page is not included in the navigation at all."""
 
-    parent: Optional[Section]
+    parent: Section | None
     """The immediate parent of the page in the site navigation. `None` if the
     page is at the top level."""
 
@@ -175,7 +178,7 @@ class Page:
             return []
         return [self.parent] + self.parent.ancestors
 
-    def _set_canonical_url(self, base: Optional[str]) -> None:
+    def _set_canonical_url(self, base: str | None) -> None:
         if base:
             if not base.endswith('/'):
                 base += '/'
@@ -187,9 +190,9 @@ class Page:
 
     def _set_edit_url(
         self,
-        repo_url: Optional[str],
-        edit_uri: Optional[str] = None,
-        edit_uri_template: Optional[str] = None,
+        repo_url: str | None,
+        edit_uri: str | None = None,
+        edit_uri_template: str | None = None,
     ) -> None:
         if edit_uri or edit_uri_template:
             src_uri = self.file.src_uri
@@ -238,7 +241,7 @@ class Page:
         )
 
     @weak_property
-    def title(self) -> Optional[str]:
+    def title(self) -> str | None:
         """
         Returns the title for the current page.
 
@@ -372,7 +375,7 @@ class _RelativePathExtension(markdown.extensions.Extension):
 
 class _ExtractTitleExtension(markdown.extensions.Extension):
     def __init__(self) -> None:
-        self.title: Optional[str] = None
+        self.title: str | None = None
 
     def extendMarkdown(self, md: markdown.Markdown) -> None:
         md.treeprocessors.register(
