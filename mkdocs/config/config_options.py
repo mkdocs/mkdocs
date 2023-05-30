@@ -95,7 +95,7 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
 
         if self._do_validation:
             # Capture errors and warnings
-            self.warnings = [f"Sub-option '{key}': {msg}" for key, msg in warnings]
+            self.warnings.extend(f"Sub-option '{key}': {msg}" for key, msg in warnings)
             if failed:
                 # Get the first failing one
                 key, err = failed[0]
@@ -188,6 +188,7 @@ class ListOfItems(Generic[T], BaseConfigOption[List[T]]):
         fake_keys = [f'{parent_key_name}[{i}]' for i in range(len(value))]
         fake_config.data = dict(zip(fake_keys, value))
 
+        self.option_type.warnings = self.warnings
         for key_name in fake_config:
             self.option_type.pre_validation(fake_config, key_name)
         for key_name in fake_config:

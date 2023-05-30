@@ -678,6 +678,19 @@ class ListOfItemsTest(TestCase):
         with self.expect_error(option="'asdf' is not a valid port"):
             self.get_config(Schema, {'option': ["localhost:8000", "1.2.3.4:asdf"]})
 
+    def test_warning(self) -> None:
+        class Schema(Config):
+            option = c.ListOfItems(c.Deprecated())
+
+        self.get_config(
+            Schema,
+            {'option': ['a']},
+            warnings=dict(
+                option="The configuration option 'option[0]' has been "
+                "deprecated and will be removed in a future release."
+            ),
+        )
+
 
 class FilesystemObjectTest(TestCase):
     def test_valid_dir(self) -> None:
