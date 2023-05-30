@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="{{ 'css/theme.css'|url }}" />
     <link rel="stylesheet" href="{{ 'css/theme_extra.css'|url }}" />
     {%- if config.theme.highlightjs %}
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/{{ config.theme.hljs_style }}.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/{{ config.theme.hljs_style }}.min.css" />
     {%- endif %}
     {%- for path in extra_css %}
         <link href="{{ path }}" rel="stylesheet" />
@@ -44,11 +44,11 @@
       <script src="{{ 'js/html5shiv.min.js'|url }}"></script>
     <![endif]-->
     {%- if config.theme.highlightjs %}
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
       {%- for lang in config.theme.hljs_languages %}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/{{lang}}.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/{{lang}}.min.js"></script>
       {%- endfor %}
-      <script>hljs.initHighlightingOnLoad();</script>
+      <script>hljs.highlightAll();</script>
     {%- endif %}
   {%- endblock %}
 
