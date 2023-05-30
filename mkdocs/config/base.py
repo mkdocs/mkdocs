@@ -69,6 +69,8 @@ class BaseConfigOption(Generic[T]):
         """
 
     def __set_name__(self, owner, name):
+        if name.endswith('_') and not name.startswith('_'):
+            name = name[:-1]
         self._name = name
 
     @overload
@@ -123,7 +125,7 @@ class Config(UserDict):
         schema = dict(getattr(cls, '_schema', ()))
         for attr_name, attr in cls.__dict__.items():
             if isinstance(attr, BaseConfigOption):
-                schema[attr_name] = attr
+                schema[getattr(attr, '_name', attr_name)] = attr
         cls._schema = tuple(schema.items())
 
         for attr_name, attr in cls._schema:
