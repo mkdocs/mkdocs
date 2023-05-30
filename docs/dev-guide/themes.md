@@ -614,7 +614,7 @@ returned relative to the page object. Otherwise, the URL is returned with
 
 ### tojson
 
-Safety convert a Python object to a value in a JavaScript script.
+Safely convert a Python object to a value in a JavaScript script.
 
 ```django
 <script>
@@ -649,7 +649,7 @@ JavaScript is able to properly load the search scripts and make relative links
 to the search results from the current page.
 
 ```django
-<script>var base_url = '{{ base_url }}';</script>
+<script>var base_url = {{ base_url|tojson }};</script>
 ```
 
 With properly configured settings, the following HTML in a template  will add a
