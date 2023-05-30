@@ -172,7 +172,11 @@
     <script src="{{ 'js/theme_extra.js'|url }}" defer></script>
     <script src="{{ 'js/theme.js'|url }}" defer></script>
     {%- for path in extra_javascript %}
-      <script src="{{ path }}" defer></script>
+      {% if path.endswith(".mjs") %}
+        <script type="module" src="{{ path }}" defer></script>
+      {% else %}
+        <script src="{{ path }}" defer></script>
+      {% endif %}
     {%- endfor %}
     <script defer>
         window.onload = function () {

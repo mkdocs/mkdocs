@@ -269,7 +269,7 @@ class File:
 
     def is_javascript(self) -> bool:
         """Return True if file is a JavaScript file."""
-        return self.src_uri.endswith(('.js', '.javascript'))
+        return self.src_uri.endswith(('.js', '.javascript', '.mjs'))
 
     def is_css(self) -> bool:
         """Return True if file is a CSS file."""

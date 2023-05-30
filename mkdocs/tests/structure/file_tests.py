@@ -366,16 +366,17 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
             File('foo/bar.html', '/path/to/docs', '/path/to/site', use_directory_urls=True),
             File('foo/bar.jpg', '/path/to/docs', '/path/to/site', use_directory_urls=True),
             File('foo/bar.js', '/path/to/docs', '/path/to/site', use_directory_urls=True),
+            File('foo/bar.mjs', '/path/to/docs', '/path/to/site', use_directory_urls=True),
             File('foo/bar.css', '/path/to/docs', '/path/to/site', use_directory_urls=True),
         ]
         files = Files(fs)
         self.assertEqual([f for f in files], fs)
-        self.assertEqual(len(files), 6)
+        self.assertEqual(len(files), 7)
         self.assertEqual(files.documentation_pages(), [fs[0], fs[1]])
         self.assertEqual(files.static_pages(), [fs[2]])
-        self.assertEqual(files.media_files(), [fs[3], fs[4], fs[5]])
-        self.assertEqual(files.javascript_files(), [fs[4]])
-        self.assertEqual(files.css_files(), [fs[5]])
+        self.assertEqual(files.media_files(), [fs[3], fs[4], fs[5], fs[6]])
+        self.assertEqual(files.javascript_files(), [fs[4], fs[5]])
+        self.assertEqual(files.css_files(), [fs[6]])
         self.assertEqual(files.get_file_from_path('foo/bar.jpg'), fs[3])
         self.assertEqual(files.get_file_from_path('foo/bar.jpg'), fs[3])
         self.assertEqual(files.get_file_from_path('missing.jpg'), None)
@@ -383,7 +384,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         extra_file = File('extra.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
         self.assertFalse(extra_file.src_uri in files.src_uris)
         files.append(extra_file)
-        self.assertEqual(len(files), 7)
+        self.assertEqual(len(files), 8)
         self.assertTrue(extra_file.src_uri in files.src_uris)
         self.assertEqual(files.documentation_pages(), [fs[0], fs[1], extra_file])
         files.remove(fs[1])

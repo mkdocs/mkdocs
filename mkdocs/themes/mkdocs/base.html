@@ -198,7 +198,11 @@
         </script>
         <script src="{{ 'js/base.js'|url }}" defer></script>
         {%- for path in extra_javascript %}
-        <script src="{{ path }}" defer></script>
+          {% if path.endswith(".mjs") %}
+            <script type="module" src="{{ path }}" defer></script>
+          {% else %}
+            <script src="{{ path }}" defer></script>
+          {% endif %}
         {%- endfor %}
       {%- endblock %}
 
