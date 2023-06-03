@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import os
-from typing import TYPE_CHECKING, Any, List
+from typing import TYPE_CHECKING, List
 
 from mkdocs import utils
 from mkdocs.config import base
@@ -12,6 +12,7 @@ from mkdocs.plugins import BasePlugin
 
 if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
+    from mkdocs.util.templates import TemplateContext
 
 log = logging.getLogger(__name__)
 base_path = os.path.dirname(os.path.abspath(__file__))
@@ -85,7 +86,7 @@ class SearchPlugin(BasePlugin[_PluginConfig]):
         "Create search index instance for later use."
         self.search_index = SearchIndex(**self.config)
 
-    def on_page_context(self, context: dict[str, Any], **kwargs) -> None:
+    def on_page_context(self, context: TemplateContext, **kwargs) -> None:
         "Add page to search index."
         self.search_index.add_entry_from_context(context['page'])
 

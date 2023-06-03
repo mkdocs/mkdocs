@@ -14,6 +14,11 @@ NOTE: The main entry point to the API is through [Events](plugins.md#events) tha
     options:
       show_root_heading: true
 
+::: mkdocs.utils.templates.TemplateContext
+    options:
+      show_root_heading: true
+      show_if_no_docstring: true
+
 ::: mkdocs.livereload.LiveReloadServer
     options:
       show_root_heading: true

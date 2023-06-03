@@ -8,7 +8,7 @@ import jinja2
 
 from mkdocs import localization, utils
 from mkdocs.config.base import ValidationError
-from mkdocs.utils import filters
+from mkdocs.utils import templates
 
 log = logging.getLogger(__name__)
 
@@ -116,6 +116,6 @@ class Theme:
         loader = jinja2.FileSystemLoader(self.dirs)
         # No autoreload because editing a template in the middle of a build is not useful.
         env = jinja2.Environment(loader=loader, auto_reload=False)
-        env.filters['url'] = filters.url_filter
+        env.filters['url'] = templates.url_filter
         localization.install_translations(env, self._vars['locale'], self.dirs)
         return env
