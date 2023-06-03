@@ -29,9 +29,6 @@
       {%- endblock %}
 
       {%- block libs %}
-
-        <script src="{{ 'js/jquery-1.10.2.min.js'|url }}" defer></script>
-        <script src="{{ 'js/bootstrap.min.js'|url }}" defer></script>
         {%- if config.theme.highlightjs %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
         {%- for lang in config.theme.hljs_languages %}
@@ -192,13 +189,15 @@
         </footer>
 
       {%- block scripts %}
+        <script src="{{ 'js/jquery-1.10.2.min.js'|url }}"></script>
+        <script src="{{ 'js/bootstrap.min.js'|url }}"></script>
         <script>
             var base_url = {{ base_url|tojson }},
                 shortcuts = {{ config.theme.shortcuts|tojson }};
         </script>
-        <script src="{{ 'js/base.js'|url }}" defer></script>
+        <script src="{{ 'js/base.js'|url }}"></script>
         {%- for path in extra_javascript %}
-        <script src="{{ path }}" defer></script>
+        <script src="{{ path }}"></script>
         {%- endfor %}
       {%- endblock %}
 

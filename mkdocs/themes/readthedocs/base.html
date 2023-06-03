@@ -39,7 +39,6 @@
         var mkdocs_page_url = {{ page.abs_url|tojson }};
       </script>
     {% endif %}
-    <script src="{{ 'js/jquery-3.6.0.min.js'|url }}" defer></script>
     <!--[if lt IE 9]>
       <script src="{{ 'js/html5shiv.min.js'|url }}"></script>
     <![endif]-->
@@ -168,16 +167,17 @@
   {% include "versions.html" -%}
 
   {%- block scripts %}
+    <script src="{{ 'js/jquery-3.6.0.min.js'|url }}"></script>
     <script>var base_url = {{ base_url|tojson }};</script>
-    <script src="{{ 'js/theme_extra.js'|url }}" defer></script>
-    <script src="{{ 'js/theme.js'|url }}" defer></script>
+    <script src="{{ 'js/theme_extra.js'|url }}"></script>
+    <script src="{{ 'js/theme.js'|url }}"></script>
     {%- for path in extra_javascript %}
-      <script src="{{ path }}" defer></script>
+      <script src="{{ path }}"></script>
     {%- endfor %}
-    <script defer>
-        window.onload = function () {
+    <script>
+        jQuery(function () {
             SphinxRtdTheme.Navigation.enable({{ 'true' if config.theme.sticky_navigation else 'false' }});
-        };
+        });
     </script>
   {%- endblock %}
 
