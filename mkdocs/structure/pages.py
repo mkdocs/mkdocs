@@ -8,7 +8,6 @@ import warnings
 from typing import TYPE_CHECKING, Any, Callable, Mapping, MutableMapping
 from urllib.parse import unquote as urlunquote
 from urllib.parse import urljoin, urlsplit, urlunsplit
-from xml.etree import ElementTree as etree
 
 import markdown
 import markdown.extensions
@@ -16,12 +15,14 @@ import markdown.postprocessors
 import markdown.treeprocessors
 from markdown.util import AMP_SUBSTITUTE
 
-from mkdocs.structure.files import File, Files
 from mkdocs.structure.toc import get_toc
 from mkdocs.utils import get_build_date, get_markdown_title, meta, weak_property
 
 if TYPE_CHECKING:
+    from xml.etree import ElementTree as etree
+
     from mkdocs.config.defaults import MkDocsConfig
+    from mkdocs.structure.files import File, Files
     from mkdocs.structure.nav import Section
     from mkdocs.structure.toc import TableOfContents
 

@@ -6,9 +6,11 @@ import os
 import re
 import subprocess
 from html.parser import HTMLParser
+from typing import TYPE_CHECKING
 
-from mkdocs.structure.pages import Page
-from mkdocs.structure.toc import AnchorLink, TableOfContents
+if TYPE_CHECKING:
+    from mkdocs.structure.pages import Page
+    from mkdocs.structure.toc import AnchorLink, TableOfContents
 
 try:
     from lunr import lunr

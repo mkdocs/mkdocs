@@ -7,7 +7,6 @@ import string
 import sys
 import traceback
 import types
-import typing as t
 import warnings
 from collections import Counter, UserString
 from typing import (
@@ -1036,7 +1035,7 @@ class Hooks(BaseConfigOption[List[types.ModuleType]]):
     def run_validation(self, value: object) -> Mapping[str, Any]:
         paths = self._base_option.validate(value)
         self.warnings.extend(self._base_option.warnings)
-        value = t.cast(List[str], value)
+        assert isinstance(value, list)
 
         hooks = {}
         for name, path in zip(value, paths):

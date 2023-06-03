@@ -5,15 +5,18 @@ import logging
 import shutil
 import tempfile
 from os.path import isdir, isfile, join
+from typing import TYPE_CHECKING
 from urllib.parse import urlsplit
 
 import jinja2.exceptions
 
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
-from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.exceptions import Abort
 from mkdocs.livereload import LiveReloadServer
+
+if TYPE_CHECKING:
+    from mkdocs.config.defaults import MkDocsConfig
 
 log = logging.getLogger(__name__)
 

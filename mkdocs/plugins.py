@@ -13,22 +13,23 @@ if sys.version_info >= (3, 10):
 else:
     from importlib_metadata import EntryPoint, entry_points
 
-if sys.version_info >= (3, 8):
-    from typing import Literal
-else:
-    from typing_extensions import Literal
+if TYPE_CHECKING:
+    if sys.version_info >= (3, 8):
+        from typing import Literal
+    else:
+        from typing_extensions import Literal
 
 import jinja2.environment
 
 from mkdocs import utils
 from mkdocs.config.base import Config, ConfigErrors, ConfigWarnings, LegacyConfig, PlainConfigSchema
-from mkdocs.livereload import LiveReloadServer
-from mkdocs.structure.files import Files
-from mkdocs.structure.nav import Navigation
-from mkdocs.structure.pages import Page
 
 if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
+    from mkdocs.livereload import LiveReloadServer
+    from mkdocs.structure.files import Files
+    from mkdocs.structure.nav import Navigation
+    from mkdocs.structure.pages import Page
 
 
 log = logging.getLogger('mkdocs.plugins')

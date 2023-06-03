@@ -4,7 +4,7 @@ import gzip
 import logging
 import os
 import time
-from typing import Any, Sequence
+from typing import TYPE_CHECKING, Any, Sequence
 from urllib.parse import urlsplit
 
 import jinja2
@@ -12,11 +12,13 @@ from jinja2.exceptions import TemplateNotFound
 
 import mkdocs
 from mkdocs import utils
-from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.exceptions import Abort, BuildError
 from mkdocs.structure.files import File, Files, get_files
 from mkdocs.structure.nav import Navigation, get_navigation
-from mkdocs.structure.pages import Page
+
+if TYPE_CHECKING:
+    from mkdocs.config.defaults import MkDocsConfig
+    from mkdocs.structure.pages import Page
 
 
 class DuplicateFilter:
