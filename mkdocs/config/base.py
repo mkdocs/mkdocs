@@ -234,9 +234,8 @@ class Config(UserDict):
 
         if not isinstance(patch, dict):
             raise exceptions.ConfigurationError(
-                "The configuration is invalid. The expected type was a key "
-                "value mapping (a python dict) but we got an object of type: "
-                f"{type(patch)}"
+                "The configuration is invalid. Expected a key-"
+                f"value mapping (dict) but received: {type(patch)}"
             )
 
         self.user_configs.append(patch)
