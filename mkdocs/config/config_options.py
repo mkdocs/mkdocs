@@ -836,6 +836,33 @@ class Private(Generic[T], BaseConfigOption[T]):
             raise ValidationError('For internal use only.')
 
 
+class ExtraScriptValue(Config):
+    """An extra script to be added to the page. The `extra_javascript` config is a list of these."""
+
+    path = Type(str)
+    """The value of the `src` tag of the script."""
+    type = Type(str, default='')
+    """The value of the `type` tag of the script."""
+    defer = Type(bool, default=False)
+    """Whether to add the `defer` tag to the script."""
+    async_ = Type(bool, default=False)
+    """Whether to add the `async` tag to the script."""
+
+    def __init__(self, path: str = ''):
+        super().__init__()
+        self.path = path
+
+    def __str__(self):
+        return self.path
+
+
+class ExtraScript(SubConfig[ExtraScriptValue]):
+    def run_validation(self, value: object) -> ExtraScriptValue:
+        if isinstance(value, str):
+            value = {'path': value, 'type': 'module' if value.endswith('.mjs') else ''}
+        return super().run_validation(value)
+
+
 class MarkdownExtensions(OptionallyRequired[List[str]]):
     """
     Markdown Extensions Config Option

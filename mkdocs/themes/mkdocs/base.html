@@ -23,8 +23,8 @@
         {%- if config.theme.highlightjs %}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/{{ config.theme.hljs_style }}.min.css">
         {%- endif %}
-        {%- for path in extra_css %}
-        <link href="{{ path }}" rel="stylesheet">
+        {%- for path in config.extra_css %}
+        <link href="{{ path|url }}" rel="stylesheet">
         {%- endfor %}
       {%- endblock %}
 
@@ -196,8 +196,8 @@
                 shortcuts = {{ config.theme.shortcuts|tojson }};
         </script>
         <script src="{{ 'js/base.js'|url }}"></script>
-        {%- for path in extra_javascript %}
-        <script src="{{ path }}"></script>
+        {%- for script in config.extra_javascript %}
+        {{ script|script_tag }}
         {%- endfor %}
       {%- endblock %}
 

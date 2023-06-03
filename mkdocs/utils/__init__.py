@@ -321,9 +321,7 @@ def _get_norm_url(path: str) -> tuple[str, int]:
 def create_media_urls(
     path_list: Iterable[str], page: Page | None = None, base: str = ''
 ) -> list[str]:
-    """
-    Return a list of URLs relative to the given page or using the base.
-    """
+    """Soft-deprecated, do not use."""
     return [normalize_url(path, page, base) for path in path_list]
 
 

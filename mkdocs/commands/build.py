@@ -51,9 +51,10 @@ def get_context(
     if page is not None:
         base_url = utils.get_relative_url('.', page.url)
 
-    extra_javascript = utils.create_media_urls(config.extra_javascript, page, base_url)
-
-    extra_css = utils.create_media_urls(config.extra_css, page, base_url)
+    extra_javascript = [
+        utils.normalize_url(str(script), page, base_url) for script in config.extra_javascript
+    ]
+    extra_css = [utils.normalize_url(path, page, base_url) for path in config.extra_css]
 
     if isinstance(files, Files):
         files = files.documentation_pages()

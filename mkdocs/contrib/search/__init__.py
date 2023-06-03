@@ -68,7 +68,7 @@ class SearchPlugin(BasePlugin[_PluginConfig]):
             path = os.path.join(base_path, 'templates')
             config.theme.dirs.append(path)
             if 'search/main.js' not in config.extra_javascript:
-                config.extra_javascript.append('search/main.js')
+                config.extra_javascript.append('search/main.js')  # type: ignore
         if self.config.lang is None:
             # lang setting undefined. Set default based on theme locale
             validate = _PluginConfig.lang.run_validation

@@ -87,9 +87,16 @@ The simplest `main.html` file is the following:
 <html>
   <head>
     <title>{% if page.title %}{{ page.title }} - {% endif %}{{ config.site_name }}</title>
+    {%- for path in config.extra_css %}
+      <link href="{{ path | url }}" rel="stylesheet">
+    {%- endfor %}
   </head>
   <body>
     {{ page.content }}
+
+    {%- for script in config.extra_javascript %}
+      {{ script | script_tag }}
+    {%- endfor %}
   </body>
 </html>
 ```
@@ -115,6 +122,58 @@ themes for consistency.
 [Jinja]: https://jinja.palletsprojects.com/
 [template inheritance]: https://jinja.palletsprojects.com/en/latest/templates/#template-inheritance
 [blocks]: ../user-guide/customizing-your-theme.md#overriding-template-blocks
+
+### Picking up CSS and JavaScript from the config
+
+MkDocs defines the top-level [extra_css](../user-guide/configuration.md#extra_css) and [extra_javascript](../user-guide/configuration.md#extra_javascript) configs. These are lists of files.
+
+The theme must include the HTML that links the items from these configs, otherwise the configs will be non-functional. You can see the recommended way to render both of them in the [base example above](#basic-theme).
+
+> NEW: **Changed in version 1.5:**
+>
+> The items of the `config.extra_javascript` list used to be simple strings but now became objects that have these fields: `path`, `type`, `async`, `defer`.
+>
+> In that version, MkDocs also gained the [`script_tag` filter](#script_tag).
+>
+> >? EXAMPLE: **Obsolete style:**
+> >
+> > ```django
+> >   {%- for path in extra_javascript %}
+> >     <script src="{{ path }}"></script>
+> >   {%- endfor %}
+> > ```
+> >
+> > This old-style example even uses the obsolete top-level `extra_javascript` list. Please always use `config.extra_javascript` instead.
+> >
+> > So, a slightly more modern approach is the following, but it is still obsolete because it ignores the extra attributes of the script:
+> >
+> > ```django
+> >   {%- for path in config.extra_javascript %}
+> >     <script src="{{ path | url }}"></script>
+> >   {%- endfor %}
+> > ```
+> <!-- -->
+> >? EXAMPLE: **New style:**
+> >
+> > ```django
+> >   {%- for script in config.extra_javascript %}
+> >     {{ script | script_tag }}
+> >   {%- endfor %}
+> > ```
+>
+> If you wish to be able to pick up the new customizations while keeping your theme compatible with older versions of MkDocs, use this snippet:
+>
+> >! EXAMPLE: **Backwards-compatible style:**
+> >
+> > ```django
+> >   {%- for script in config.extra_javascript %}
+> >     {%- if script.path %}  {# Detected MkDocs 1.5+ which has `script.path` and `script_tag` #}
+> >       {{ script | script_tag }}
+> >     {%- else %}  {# Fallback - examine the file name directly #}
+> >       <script src="{{ script | url }}"{% if script.endswith(".mjs") %} type="module"{% endif %}></script>
+> >     {%- endif %}
+> >   {%- endfor %}
+> > ```
 
 ## Theme Files
 
@@ -227,7 +286,7 @@ Following is a basic usage example which outputs the first and second level
 navigation as a nested list.
 
 ```django
-{% if nav|length>1 %}
+{% if nav|length > 1 %}
     <ul>
     {% for nav_item in nav %}
         {% if nav_item.children %}
@@ -621,6 +680,14 @@ Safely convert a Python object to a value in a JavaScript script.
     var mkdocs_page_name = {{ page.title|tojson|safe }};
 </script>
 ```
+
+### script_tag
+
+NEW: **New in version 1.5.**
+
+Convert an item from `extra_javascript` to a `<script>` tag that takes into account all [customizations of this config](../user-guide/configuration.md#extra_javascript) and has the equivalent of [`|url`](#url) behavior built-in.
+
+See how to use it in the [base example above](#basic-theme)
 
 ## Search and themes
 

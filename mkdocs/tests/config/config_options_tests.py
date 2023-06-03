@@ -692,6 +692,65 @@ class ListOfItemsTest(TestCase):
         )
 
 
+class ExtraScriptsTest(TestCase):
+    def test_js_async(self) -> None:
+        class Schema(Config):
+            option = c.ListOfItems(c.ExtraScript(), default=[])
+
+        conf = self.get_config(Schema, {'option': ['foo.js', {'path': 'bar.js', 'async': True}]})
+        assert_type(conf.option, List[c.ExtraScriptValue])
+        self.assertEqual(len(conf.option), 2)
+        self.assertIsInstance(conf.option[0], c.ExtraScriptValue)
+        self.assertEqual(
+            [(x.path, x.type, x.defer, x.async_) for x in conf.option],
+            [
+                ('foo.js', '', False, False),
+                ('bar.js', '', False, True),
+            ],
+        )
+
+    def test_mjs(self) -> None:
+        class Schema(Config):
+            option = c.ListOfItems(c.ExtraScript(), default=[])
+
+        conf = self.get_config(
+            Schema, {'option': ['foo.mjs', {'path': 'bar.js', 'type': 'module'}]}
+        )
+        assert_type(conf.option, List[c.ExtraScriptValue])
+        self.assertEqual(len(conf.option), 2)
+        self.assertIsInstance(conf.option[0], c.ExtraScriptValue)
+        self.assertEqual(
+            [(x.path, x.type, x.defer, x.async_) for x in conf.option],
+            [
+                ('foo.mjs', 'module', False, False),
+                ('bar.js', 'module', False, False),
+            ],
+        )
+
+    def test_wrong_type(self) -> None:
+        class Schema(Config):
+            option = c.ListOfItems(c.ExtraScript(), default=[])
+
+        with self.expect_error(
+            option="The configuration is invalid. Expected a key-value mapping (dict) but received: <class 'int'>"
+        ):
+            self.get_config(Schema, {'option': [1]})
+
+    def test_unknown_key(self) -> None:
+        class Schema(Config):
+            option = c.ListOfItems(c.ExtraScript(), default=[])
+
+        conf = self.get_config(
+            Schema,
+            {'option': [{'path': 'foo.js', 'foo': 'bar'}]},
+            warnings=dict(option="Sub-option 'foo': Unrecognised configuration name: foo"),
+        )
+        self.assertEqual(
+            [(x.path, x.type, x.defer, x.async_) for x in conf.option],
+            [('foo.js', '', False, False)],
+        )
+
+
 class FilesystemObjectTest(TestCase):
     def test_valid_dir(self) -> None:
         for cls in c.Dir, c.FilesystemObject:
