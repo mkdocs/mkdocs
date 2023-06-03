@@ -2,14 +2,16 @@ from __future__ import annotations
 
 import logging
 import os
-from typing import Any, List
+from typing import TYPE_CHECKING, Any, List
 
 from mkdocs import utils
 from mkdocs.config import base
 from mkdocs.config import config_options as c
-from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.contrib.search.search_index import SearchIndex
 from mkdocs.plugins import BasePlugin
+
+if TYPE_CHECKING:
+    from mkdocs.config.defaults import MkDocsConfig
 
 log = logging.getLogger(__name__)
 base_path = os.path.dirname(os.path.abspath(__file__))
