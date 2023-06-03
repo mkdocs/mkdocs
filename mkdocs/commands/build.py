@@ -4,8 +4,8 @@ import gzip
 import logging
 import os
 import time
-from typing import Any, Sequence
-from urllib.parse import urlsplit
+from typing import TYPE_CHECKING, Any, Sequence
+from urllib.parse import urljoin, urlsplit
 
 import jinja2
 from jinja2.exceptions import TemplateNotFound
@@ -18,6 +18,9 @@ from mkdocs.structure.files import File, Files, InclusionLevel, _set_exclusions,
 from mkdocs.structure.nav import Navigation, get_navigation
 from mkdocs.structure.pages import Page
 from mkdocs.utils import DuplicateFilter  # noqa - legacy re-export
+
+if TYPE_CHECKING:
+    from mkdocs.livereload import LiveReloadServer
 
 log = logging.getLogger(__name__)
 
@@ -247,7 +250,9 @@ def _build_page(
         raise
 
 
-def build(config: MkDocsConfig, live_server: bool = False, dirty: bool = False) -> None:
+def build(
+    config: MkDocsConfig, live_server: LiveReloadServer | None = None, dirty: bool = False
+) -> None:
     """Perform a full site build."""
 
     logger = logging.getLogger('mkdocs')
@@ -305,7 +310,8 @@ def build(config: MkDocsConfig, live_server: bool = False, dirty: bool = False) 
         for file in files.documentation_pages(inclusion=inclusion):
             log.debug(f"Reading: {file.src_uri}")
             if file.page is None and file.inclusion.is_excluded():
-                excluded.append(file.src_path)
+                if live_server:
+                    excluded.append(urljoin(live_server.url, file.url))
                 Page(None, file, config)
             assert file.page is not None
             _populate_page(file.page, config, files, dirty)

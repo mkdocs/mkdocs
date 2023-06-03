@@ -38,7 +38,6 @@ def testing_server(root, builder=lambda: None, mount_path="/"):
             root=root,
             mount_path=mount_path,
             polling_interval=0.2,
-            bind_and_activate=False,
         )
         server.setup_environ()
     server.observer.start()

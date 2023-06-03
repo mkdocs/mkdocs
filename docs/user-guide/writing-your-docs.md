@@ -27,10 +27,7 @@ extensions may be used for your Markdown source files: `markdown`, `mdown`,
 directory will be rendered in the built site regardless of any settings.
 
 NOTE:
-Files and directories with names which begin with a dot (for example:
-`.foo.md` or `.bar/baz.md`) are ignored by MkDocs, which matches the
-behavior of most web servers. There is no option to override this
-behavior.
+Files and directories with names which begin with a dot (for example: `.foo.md` or `.bar/baz.md`) are ignored by MkDocs. This can be overridden with the [`exclude_docs` config](configuration.md#exclude_docs).
 
 You can also create multi-page documentation, by creating several Markdown
 files:

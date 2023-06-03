@@ -70,7 +70,6 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         mount_path: str = "/",
         polling_interval: float = 0.5,
         shutdown_delay: float = 0.25,
-        **kwargs,
     ) -> None:
         self.builder = builder
         self.server_name = host
@@ -88,7 +87,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         # To allow custom error pages.
         self.error_handler: Callable[[int], bytes | None] = lambda code: None
 
-        super().__init__((host, port), _Handler, **kwargs)
+        super().__init__((host, port), _Handler, bind_and_activate=False)
         self.set_app(self.serve_request)
 
         self._wanted_epoch = _timestamp()  # The version of the site that started building.
@@ -151,15 +150,21 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
             self.observer.unschedule(self._watch_refs.pop(path))
 
     def serve(self):
-        self.observer.start()
+        try:
+            self.server_bind()
+            self.server_activate()
 
-        paths_str = ", ".join(f"'{_try_relativize_path(path)}'" for path in self._watched_paths)
-        log.info(f"Watching paths for changes: {paths_str}")
+            self.observer.start()
 
-        log.info(f"Serving on {self.url}")
-        self.serve_thread.start()
+            paths_str = ", ".join(f"'{_try_relativize_path(path)}'" for path in self._watched_paths)
+            log.info(f"Watching paths for changes: {paths_str}")
 
-        self._build_loop()
+            log.info(f"Serving on {self.url}")
+            self.serve_thread.start()
+
+            self._build_loop()
+        finally:
+            self.server_close()
 
     def _build_loop(self):
         while True:

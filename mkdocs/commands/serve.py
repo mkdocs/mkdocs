@@ -59,6 +59,11 @@ def serve(
     is_clean = build_type == 'clean'
     is_dirty = build_type == 'dirty'
 
+    config = get_config()
+    config['plugins'].run_event(
+        'startup', command=('build' if is_clean else 'serve'), dirty=is_dirty
+    )
+
     def builder(config: MkDocsConfig | None = None):
         log.info("Building documentation...")
         if config is None:
@@ -73,31 +78,26 @@ def serve(
         # Override a few config settings after validation
         config.site_url = f'http://{config.dev_addr}{mount_path(config)}'
 
-        build(config, live_server=not is_clean, dirty=is_dirty)
+        build(config, live_server=None if is_clean else server, dirty=is_dirty)
 
-    config = get_config()
-    config['plugins'].run_event(
-        'startup', command=('build' if is_clean else 'serve'), dirty=is_dirty
+    host, port = config.dev_addr
+    server = LiveReloadServer(
+        builder=builder, host=host, port=port, root=site_dir, mount_path=mount_path(config)
     )
+
+    def error_handler(code) -> bytes | None:
+        if code in (404, 500):
+            error_page = join(site_dir, f'{code}.html')
+            if isfile(error_page):
+                with open(error_page, 'rb') as f:
+                    return f.read()
+        return None
+
+    server.error_handler = error_handler
 
     try:
         # Perform the initial build
         builder(config)
-
-        host, port = config.dev_addr
-        server = LiveReloadServer(
-            builder=builder, host=host, port=port, root=site_dir, mount_path=mount_path(config)
-        )
-
-        def error_handler(code) -> bytes | None:
-            if code in (404, 500):
-                error_page = join(site_dir, f'{code}.html')
-                if isfile(error_page):
-                    with open(error_page, 'rb') as f:
-                        return f.read()
-            return None
-
-        server.error_handler = error_handler
 
         if livereload:
             # Watch the documentation files, the config file and the theme files.
