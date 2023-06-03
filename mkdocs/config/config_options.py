@@ -56,6 +56,8 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
     enable validation with `validate=True`.
     """
 
+    config_class: Callable[[], SomeConfig]
+
     @overload
     def __init__(
         self: SubConfig[SomeConfig], config_class: type[SomeConfig], *, validate: bool = True
@@ -73,22 +75,27 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
     def __init__(self, *config_options, validate=None):
         super().__init__()
         self.default = {}
-        if (
-            len(config_options) == 1
-            and isinstance(config_options[0], type)
-            and issubclass(config_options[0], Config)
-        ):
-            if validate is None:
-                validate = True
-            (self._make_config,) = config_options
-        else:
-            self._make_config = functools.partial(LegacyConfig, config_options)
-        self._do_validation = bool(validate)
+        self._do_validation = True if validate is None else validate
+        if type(self) is SubConfig:
+            if (
+                len(config_options) == 1
+                and isinstance(config_options[0], type)
+                and issubclass(config_options[0], Config)
+            ):
+                (self.config_class,) = config_options
+            else:
+                self.config_class = functools.partial(LegacyConfig, config_options)
+                self._do_validation = False if validate is None else validate
+
+    def __class_getitem__(cls, config_class: type[Config]):
+        """Eliminates the need to write `config_class = FooConfig` when subclassing SubConfig[FooConfig]"""
+        name = f'{cls.__name__}[{config_class.__name__}]'
+        return type(name, (cls,), dict(config_class=config_class))
 
     def run_validation(self, value: object) -> SomeConfig:
-        config = self._make_config()
+        config = self.config_class()
         try:
-            config.load_dict(value)
+            config.load_dict(value)  # type: ignore
             failed, warnings = config.validate()
         except ConfigurationError as e:
             raise ValidationError(str(e))
