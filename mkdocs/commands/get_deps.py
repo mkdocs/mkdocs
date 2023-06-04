@@ -4,7 +4,7 @@ import dataclasses
 import datetime
 import functools
 import logging
-from typing import Iterator, Mapping, Optional
+from typing import Iterator, Mapping
 
 import yaml
 
@@ -47,7 +47,7 @@ class PluginKind:
         return self.projects_key.rpartition('_')[-1]
 
 
-def get_deps(projects_file_url: str, config_file_path: Optional[str] = None) -> None:
+def get_deps(projects_file_url: str, config_file_path: str | None = None) -> None:
     """
     Print PyPI package dependencies inferred from a mkdocs.yml file based on a reverse mapping of known projects.
 

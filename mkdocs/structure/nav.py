@@ -1,22 +1,22 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any, Iterator, List, Mapping, Optional, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Iterator, Mapping, TypeVar
 from urllib.parse import urlsplit
 
-from mkdocs.structure.files import Files
 from mkdocs.structure.pages import Page
 from mkdocs.utils import nest_paths
 
 if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
+    from mkdocs.structure.files import Files
 
 
 log = logging.getLogger(__name__)
 
 
 class Navigation:
-    def __init__(self, items: List[Union[Page, Section, Link]], pages: List[Page]) -> None:
+    def __init__(self, items: list[Page | Section | Link], pages: list[Page]) -> None:
         self.items = items  # Nested List with full navigation of Sections, Pages, and Links.
         self.pages = pages  # Flat List of subset of Pages in nav, in order.
 
@@ -26,16 +26,16 @@ class Navigation:
                 self.homepage = page
                 break
 
-    homepage: Optional[Page]
+    homepage: Page | None
     """The [page][mkdocs.structure.pages.Page] object for the homepage of the site."""
 
-    pages: List[Page]
+    pages: list[Page]
     """A flat list of all [page][mkdocs.structure.pages.Page] objects contained in the navigation."""
 
     def __repr__(self):
         return '\n'.join(item._indent_print() for item in self)
 
-    def __iter__(self) -> Iterator[Union[Page, Section, Link]]:
+    def __iter__(self) -> Iterator[Page | Section | Link]:
         return iter(self.items)
 
     def __len__(self) -> int:
@@ -43,7 +43,7 @@ class Navigation:
 
 
 class Section:
-    def __init__(self, title: str, children: List[Union[Page, Section, Link]]) -> None:
+    def __init__(self, title: str, children: list[Page | Section | Link]) -> None:
         self.title = title
         self.children = children
 
@@ -56,10 +56,10 @@ class Section:
     title: str
     """The title of the section."""
 
-    parent: Optional[Section]
+    parent: Section | None
     """The immediate parent of the section or `None` if the section is at the top level."""
 
-    children: List[Union[Page, Section, Link]]
+    children: list[Page | Section | Link]
     """An iterable of all child navigation objects. Children may include nested sections, pages and links."""
 
     @property
@@ -117,7 +117,7 @@ class Link:
     """The URL that the link points to. The URL should always be an absolute URLs and
     should not need to have `base_url` prepended."""
 
-    parent: Optional[Section]
+    parent: Section | None
     """The immediate parent of the link. `None` if the link is at the top level."""
 
     children: None = None
@@ -145,7 +145,7 @@ class Link:
         return '{}{}'.format('    ' * depth, repr(self))
 
 
-def get_navigation(files: Files, config: Union[MkDocsConfig, Mapping[str, Any]]) -> Navigation:
+def get_navigation(files: Files, config: MkDocsConfig | Mapping[str, Any]) -> Navigation:
     """Build site navigation from config and files."""
     nav_config = config['nav'] or nest_paths(f.src_uri for f in files.documentation_pages())
     items = _data_to_navigation(nav_config, files, config)
@@ -192,7 +192,7 @@ def get_navigation(files: Files, config: Union[MkDocsConfig, Mapping[str, Any]])
     return Navigation(items, pages)
 
 
-def _data_to_navigation(data, files: Files, config: Union[MkDocsConfig, Mapping[str, Any]]):
+def _data_to_navigation(data, files: Files, config: MkDocsConfig | Mapping[str, Any]):
     if isinstance(data, dict):
         return [
             _data_to_navigation((key, value), files, config)
@@ -217,7 +217,7 @@ def _data_to_navigation(data, files: Files, config: Union[MkDocsConfig, Mapping[
 T = TypeVar('T')
 
 
-def _get_by_type(nav, t: Type[T]) -> List[T]:
+def _get_by_type(nav, t: type[T]) -> list[T]:
     ret = []
     for item in nav:
         if isinstance(item, t):
@@ -235,7 +235,7 @@ def _add_parent_links(nav) -> None:
             _add_parent_links(item.children)
 
 
-def _add_previous_and_next_links(pages: List[Page]) -> None:
+def _add_previous_and_next_links(pages: list[Page]) -> None:
     bookended = [None, *pages, None]
     zipped = zip(bookended[:-2], pages, bookended[2:])
     for page0, page1, page2 in zipped:

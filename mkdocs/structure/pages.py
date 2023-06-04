@@ -1,26 +1,36 @@
 from __future__ import annotations
 
+import copy
 import logging
 import os
 import posixpath
-from typing import TYPE_CHECKING, Any, Mapping, MutableMapping, Optional, Union
+import warnings
+from typing import TYPE_CHECKING, Any, Callable, Mapping, MutableMapping
 from urllib.parse import unquote as urlunquote
 from urllib.parse import urljoin, urlsplit, urlunsplit
-from xml.etree.ElementTree import Element
 
 import markdown
-from markdown.extensions import Extension
-from markdown.treeprocessors import Treeprocessor
+import markdown.extensions
+import markdown.postprocessors
+import markdown.treeprocessors
 from markdown.util import AMP_SUBSTITUTE
 
-from mkdocs.structure.files import File, Files
 from mkdocs.structure.toc import get_toc
-from mkdocs.utils import get_build_date, get_markdown_title, meta
+from mkdocs.utils import get_build_date, get_markdown_title, meta, weak_property
 
 if TYPE_CHECKING:
+    from xml.etree import ElementTree as etree
+
     from mkdocs.config.defaults import MkDocsConfig
+    from mkdocs.structure.files import File, Files
     from mkdocs.structure.nav import Section
     from mkdocs.structure.toc import TableOfContents
+
+_unescape: Callable[[str], str]
+try:
+    _unescape = markdown.treeprocessors.UnescapeTreeprocessor().unescape  # type: ignore
+except AttributeError:
+    _unescape = markdown.postprocessors.UnescapePostprocessor().run
 
 
 log = logging.getLogger(__name__)
@@ -28,11 +38,12 @@ log = logging.getLogger(__name__)
 
 class Page:
     def __init__(
-        self, title: Optional[str], file: File, config: Union[MkDocsConfig, Mapping[str, Any]]
+        self, title: str | None, file: File, config: MkDocsConfig | Mapping[str, Any]
     ) -> None:
         file.page = self
         self.file = file
-        self.title = title
+        if title is not None:
+            self.title = title
 
         # Navigation attributes
         self.parent = None
@@ -50,6 +61,7 @@ class Page:
 
         # Placeholders to be filled in later in the build process.
         self.markdown = None
+        self._title_from_render: str | None = None
         self.content = None
         self.toc = []  # type: ignore
         self.meta = {}
@@ -69,13 +81,10 @@ class Page:
     def _indent_print(self, depth=0):
         return '{}{}'.format('    ' * depth, repr(self))
 
-    title: Optional[str]
-    """Contains the Title for the current page."""
-
-    markdown: Optional[str]
+    markdown: str | None
     """The original Markdown content from the file."""
 
-    content: Optional[str]
+    content: str | None
     """The rendered Markdown as HTML, this is the contents of the documentation."""
 
     toc: TableOfContents
@@ -88,18 +97,21 @@ class Page:
     @property
     def url(self) -> str:
         """The URL of the page relative to the MkDocs `site_dir`."""
-        return '' if self.file.url in ('.', './') else self.file.url
+        url = self.file.url
+        if url in ('.', './'):
+            return ''
+        return url
 
     file: File
     """The documentation [`File`][mkdocs.structure.files.File] that the page is being rendered from."""
 
-    abs_url: Optional[str]
+    abs_url: str | None
     """The absolute URL of the page from the server root as determined by the value
     assigned to the [site_url][] configuration setting. The value includes any
     subdirectory included in the `site_url`, but not the domain. [base_url][] should
     not be used with this variable."""
 
-    canonical_url: Optional[str]
+    canonical_url: str | None
     """The full, canonical URL to the current page as determined by the value assigned
     to the [site_url][] configuration setting. The value includes the domain and any
     subdirectory included in the `site_url`. [base_url][] should not be used with this
@@ -125,7 +137,7 @@ class Page:
     def is_top_level(self) -> bool:
         return self.parent is None
 
-    edit_url: Optional[str]
+    edit_url: str | None
     """The full URL to the source page in the source repository. Typically used to
     provide a link to edit the source page. [base_url][] should not be used with this
     variable."""
@@ -135,17 +147,17 @@ class Page:
         """Evaluates to `True` for the homepage of the site and `False` for all other pages."""
         return self.is_top_level and self.is_index and self.file.url in ('.', './', 'index.html')
 
-    previous_page: Optional[Page]
+    previous_page: Page | None
     """The [page][mkdocs.structure.pages.Page] object for the previous page or `None`.
     The value will be `None` if the current page is the first item in the site navigation
     or if the current page is not included in the navigation at all."""
 
-    next_page: Optional[Page]
+    next_page: Page | None
     """The [page][mkdocs.structure.pages.Page] object for the next page or `None`.
     The value will be `None` if the current page is the last item in the site navigation
     or if the current page is not included in the navigation at all."""
 
-    parent: Optional[Section]
+    parent: Section | None
     """The immediate parent of the page in the site navigation. `None` if the
     page is at the top level."""
 
@@ -167,7 +179,7 @@ class Page:
             return []
         return [self.parent] + self.parent.ancestors
 
-    def _set_canonical_url(self, base: Optional[str]) -> None:
+    def _set_canonical_url(self, base: str | None) -> None:
         if base:
             if not base.endswith('/'):
                 base += '/'
@@ -179,9 +191,9 @@ class Page:
 
     def _set_edit_url(
         self,
-        repo_url: Optional[str],
-        edit_uri: Optional[str] = None,
-        edit_uri_template: Optional[str] = None,
+        repo_url: str | None,
+        edit_uri: str | None = None,
+        edit_uri_template: str | None = None,
     ) -> None:
         if edit_uri or edit_uri_template:
             src_uri = self.file.src_uri
@@ -223,11 +235,18 @@ class Page:
                 raise
 
         self.markdown, self.meta = meta.get_data(source)
-        self._set_title()
 
     def _set_title(self) -> None:
+        warnings.warn(
+            "_set_title is no longer used in MkDocs and will be removed soon.", DeprecationWarning
+        )
+
+    @weak_property
+    def title(self) -> str | None:
         """
-        Set the title for a Markdown document.
+        Returns the title for the current page.
+
+        Before calling `read_source()`, this value is empty. It can also be updated by `render()`.
 
         Check these in order and use the first that returns a valid title:
         - value provided on init (passed in from config)
@@ -235,48 +254,56 @@ class Page:
         - content of the first H1 in Markdown content
         - convert filename to title
         """
-        if self.title is not None:
-            return
+        if self.markdown is None:
+            return None
 
         if 'title' in self.meta:
-            self.title = self.meta['title']
-            return
+            return self.meta['title']
 
-        assert self.markdown is not None
-        title = get_markdown_title(self.markdown)
+        if self._title_from_render:
+            return self._title_from_render
+        elif self.content is None:  # Preserve legacy behavior only for edge cases in plugins.
+            title_from_md = get_markdown_title(self.markdown)
+            if title_from_md is not None:
+                return title_from_md
 
-        if title is None:
-            if self.is_homepage:
-                title = 'Home'
-            else:
-                title = self.file.name.replace('-', ' ').replace('_', ' ')
-                # Capitalize if the filename was all lowercase, otherwise leave it as-is.
-                if title.lower() == title:
-                    title = title.capitalize()
+        if self.is_homepage:
+            return 'Home'
 
-        self.title = title
+        title = self.file.name.replace('-', ' ').replace('_', ' ')
+        # Capitalize if the filename was all lowercase, otherwise leave it as-is.
+        if title.lower() == title:
+            title = title.capitalize()
+        return title
 
     def render(self, config: MkDocsConfig, files: Files) -> None:
         """
         Convert the Markdown source file to HTML as per the config.
         """
-        extensions = [_RelativePathExtension(self.file, files), *config['markdown_extensions']]
+        if self.markdown is None:
+            raise RuntimeError("`markdown` field hasn't been set (via `read_source`)")
 
+        relative_path_extension = _RelativePathExtension(self.file, files)
+        extract_title_extension = _ExtractTitleExtension()
         md = markdown.Markdown(
-            extensions=extensions,
+            extensions=[
+                relative_path_extension,
+                extract_title_extension,
+                *config['markdown_extensions'],
+            ],
             extension_configs=config['mdx_configs'] or {},
         )
-        assert self.markdown is not None
         self.content = md.convert(self.markdown)
         self.toc = get_toc(getattr(md, 'toc_tokens', []))
+        self._title_from_render = extract_title_extension.title
 
 
-class _RelativePathTreeprocessor(Treeprocessor):
+class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
     def __init__(self, file: File, files: Files) -> None:
         self.file = file
         self.files = files
 
-    def run(self, root: Element) -> Element:
+    def run(self, root: etree.Element) -> etree.Element:
         """
         Update urls on anchors and images to make them relative
 
@@ -332,7 +359,7 @@ class _RelativePathTreeprocessor(Treeprocessor):
         return urlunsplit(components)
 
 
-class _RelativePathExtension(Extension):
+class _RelativePathExtension(markdown.extensions.Extension):
     """
     The Extension class is what we pass to markdown, it then
     registers the Treeprocessor.
@@ -345,3 +372,32 @@ class _RelativePathExtension(Extension):
     def extendMarkdown(self, md: markdown.Markdown) -> None:
         relpath = _RelativePathTreeprocessor(self.file, self.files)
         md.treeprocessors.register(relpath, "relpath", 0)
+
+
+class _ExtractTitleExtension(markdown.extensions.Extension):
+    def __init__(self) -> None:
+        self.title: str | None = None
+
+    def extendMarkdown(self, md: markdown.Markdown) -> None:
+        md.treeprocessors.register(
+            _ExtractTitleTreeprocessor(self),
+            "mkdocs_extract_title",
+            priority=1,  # Close to the end.
+        )
+
+
+class _ExtractTitleTreeprocessor(markdown.treeprocessors.Treeprocessor):
+    def __init__(self, ext: _ExtractTitleExtension) -> None:
+        self.ext = ext
+
+    def run(self, root: etree.Element) -> etree.Element:
+        for el in root:
+            if el.tag == 'h1':
+                # Drop anchorlink from the element, if present.
+                if len(el) > 0 and el[-1].tag == 'a' and not (el.tail or '').strip():
+                    el = copy.copy(el)
+                    del el[-1]
+                # Extract the text only, recursively.
+                self.ext.title = _unescape(''.join(el.itertext()))
+            break
+        return root

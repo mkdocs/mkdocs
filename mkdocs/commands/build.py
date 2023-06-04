@@ -4,7 +4,7 @@ import gzip
 import logging
 import os
 import time
-from typing import Any, Dict, Optional, Sequence, Set, Union
+from typing import TYPE_CHECKING, Any, Sequence
 from urllib.parse import urlsplit
 
 import jinja2
@@ -12,18 +12,20 @@ from jinja2.exceptions import TemplateNotFound
 
 import mkdocs
 from mkdocs import utils
-from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.exceptions import Abort, BuildError
 from mkdocs.structure.files import File, Files, get_files
 from mkdocs.structure.nav import Navigation, get_navigation
-from mkdocs.structure.pages import Page
+
+if TYPE_CHECKING:
+    from mkdocs.config.defaults import MkDocsConfig
+    from mkdocs.structure.pages import Page
 
 
 class DuplicateFilter:
     """Avoid logging duplicate messages."""
 
     def __init__(self) -> None:
-        self.msgs: Set[str] = set()
+        self.msgs: set[str] = set()
 
     def __call__(self, record: logging.LogRecord) -> bool:
         rv = record.msg not in self.msgs
@@ -37,11 +39,11 @@ log.addFilter(DuplicateFilter())
 
 def get_context(
     nav: Navigation,
-    files: Union[Sequence[File], Files],
+    files: Sequence[File] | Files,
     config: MkDocsConfig,
-    page: Optional[Page] = None,
+    page: Page | None = None,
     base_url: str = '',
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Return the template context for a given page or template.
     """

@@ -27,6 +27,23 @@ The current and past members of the MkDocs team.
 * [@oprypin](https://github.com/oprypin/)
 * [@ultrabug](https://github.com/ultrabug/)
 
+## Version 1.4.3 (2023-05-02)
+
+*   Bugfix: for the `hooks` feature, modules no longer fail to load if using some advanced Python features like dataclasses (#3193)
+
+*   Bugfix: Don't create `None` sitemap entries if the page has no populated URL - affects sites that exclude some files from navigation ([`07a297b`](https://github.com/mkdocs/mkdocs/commit/07a297b3b4de4a1b49469b1497ee34039b9f38fa))
+
+*   "readthedocs" theme:
+    * Accessibility: add aria labels to Home logo (#3129) and search inputs (#3046)
+    * "readthedocs" theme now supports `hljs_style:` config, same as "mkdocs" theme (#3199)
+
+*   Translations:
+    * Built-in themes now also support Indonesian language (#3154)
+    * Fixed `zh_CN` translation (#3125)
+    * `tr_TR` translation becomes just `tr` - usage should remain unaffected (#3195)
+
+See [commit log](https://github.com/mkdocs/mkdocs/compare/1.4.2...1.4.3).
+
 ## Version 1.4.2 (2022-11-01)
 
 *   Officially support Python 3.11 (#3020)

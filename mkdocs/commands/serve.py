@@ -5,16 +5,18 @@ import logging
 import shutil
 import tempfile
 from os.path import isdir, isfile, join
-from typing import Optional
+from typing import TYPE_CHECKING
 from urllib.parse import urlsplit
 
 import jinja2.exceptions
 
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
-from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.exceptions import Abort
 from mkdocs.livereload import LiveReloadServer
+
+if TYPE_CHECKING:
+    from mkdocs.config.defaults import MkDocsConfig
 
 log = logging.getLogger(__name__)
 
@@ -59,7 +61,7 @@ def serve(
     live_server = livereload in ('dirty', 'livereload')
     dirty = livereload == 'dirty'
 
-    def builder(config: Optional[MkDocsConfig] = None):
+    def builder(config: MkDocsConfig | None = None):
         log.info("Building documentation...")
         if config is None:
             config = get_config()
@@ -87,7 +89,7 @@ def serve(
             builder=builder, host=host, port=port, root=site_dir, mount_path=mount_path(config)
         )
 
-        def error_handler(code) -> Optional[bytes]:
+        def error_handler(code) -> bytes | None:
             if code in (404, 500):
                 error_page = join(site_dir, f'{code}.html')
                 if isfile(error_page):

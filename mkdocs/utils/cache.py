@@ -50,7 +50,7 @@ def download_and_cache_url(
                     if datetime.timedelta(seconds=(now - timestamp)) <= cache_duration:
                         log.debug(f"Using cached '{path}' for '{url}'")
                         return f.read()
-        except (IOError, ValueError) as e:
+        except (OSError, ValueError) as e:
             log.debug(f'{type(e).__name__}: {e}')
 
     # Download and cache the file
