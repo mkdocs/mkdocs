@@ -296,7 +296,7 @@ def gh_deploy_command(
 @click.option(
     '-p',
     '--projects-file',
-    default='https://raw.githubusercontent.com/mkdocs/best-of-mkdocs/main/projects.yaml',
+    default='https://raw.githubusercontent.com/mkdocs/catalog/main/projects.yaml',
     help=projects_file_help,
     show_default=True,
 )

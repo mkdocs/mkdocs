@@ -16,8 +16,8 @@ pip install mkdocs-foo-plugin
 ```
 
 Once a plugin has been successfully installed, it is ready to use. It just needs
-to be [enabled](#using-plugins) in the configuration file. The [Best-of-MkDocs]
-page has a large list of plugins that you can install and use.
+to be [enabled](#using-plugins) in the configuration file. The [Catalog]
+repository has a large ranked list of plugins that you can install and use.
 
 ## Using Plugins
 
@@ -507,6 +507,10 @@ entry_points={
 Note that registering a plugin does not activate it. The user still needs to
 tell MkDocs to use it via the config.
 
+### Publishing a Plugin
+
+You should publish a package on [PyPI], then add it to the [Catalog] for discoverability. Plugins are strongly recommended to have a unique plugin name (entry point name) according to the catalog.
+
 [BasePlugin]:#baseplugin
 [config]: ../user-guide/configuration.md#plugins
 [entry point]: #entry-point
@@ -519,5 +523,6 @@ tell MkDocs to use it via the config.
 [post_template]: #on_post_template
 [static_templates]: ../user-guide/configuration.md#static_templates
 [Template Events]: #template-events
-[Best-of-MkDocs]: https://github.com/mkdocs/best-of-mkdocs
+[catalog]: https://github.com/mkdocs/catalog
 [on_build_error]: #on_build_error
+[PyPI]: https://pypi.org/
