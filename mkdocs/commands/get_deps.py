@@ -4,7 +4,7 @@ import dataclasses
 import datetime
 import functools
 import logging
-from typing import Iterator, Mapping
+from typing import Mapping, Sequence
 
 import yaml
 
@@ -15,20 +15,39 @@ from mkdocs.utils.cache import download_and_cache_url
 
 log = logging.getLogger(__name__)
 
+# Note: do not rely on functions in this module, it is not public API.
 
-def _extract_names(cfg, key: str) -> Iterator[str]:
-    """Get names of plugins/extensions from the config - in either a list of dicts or a dict."""
+NotFound = ()
+
+
+def dig(cfg, keys: str):
+    """Receives a string such as 'foo.bar' and returns `cfg['foo']['bar']`, or `NotFound`.
+
+    A list of single-item dicts gets converted to a flat dict. This is intended for `plugins` config.
+    """
+    key, _, rest = keys.partition('.')
     try:
-        items = iter(cfg.get(key, ()))
-    except TypeError:
-        log.error(f"Invalid config entry '{key}'")
-    for item in items:
-        try:
-            if not isinstance(item, str):
-                [item] = item
-            yield item
-        except (ValueError, TypeError):
-            log.error(f"Invalid config entry '{key}': {item}")
+        cfg = cfg[key]
+    except (KeyError, TypeError):
+        return NotFound
+    if isinstance(cfg, list):
+        orig_cfg = cfg
+        cfg = {}
+        for item in reversed(orig_cfg):
+            if isinstance(item, dict) and len(item) == 1:
+                cfg.update(item)
+            elif isinstance(item, str):
+                cfg[item] = {}
+    if not rest:
+        return cfg
+    return dig(cfg, rest)
+
+
+def strings(obj) -> Sequence[str]:
+    if isinstance(obj, str):
+        return (obj,)
+    else:
+        return tuple(obj)
 
 
 @functools.lru_cache()
@@ -68,8 +87,8 @@ def get_deps(projects_file_url: str, config_file_path: str | None = None) -> Non
         theme = cfg.get('theme')
     themes = {theme} if theme else set()
 
-    plugins = set(_extract_names(cfg, 'plugins'))
-    extensions = set(_extract_names(cfg, 'markdown_extensions'))
+    plugins = set(strings(dig(cfg, 'plugins')))
+    extensions = set(strings(dig(cfg, 'markdown_extensions')))
 
     wanted_plugins = (
         (PluginKind('mkdocs_theme', 'mkdocs.themes'), themes - {'mkdocs', 'readthedocs'}),
@@ -85,9 +104,7 @@ def get_deps(projects_file_url: str, config_file_path: str | None = None) -> Non
     packages_to_install = set()
     for project in projects:
         for kind, wanted in wanted_plugins:
-            available = project.get(kind.projects_key, ())
-            if isinstance(available, str):
-                available = (available,)
+            available = strings(project.get(kind.projects_key, ()))
             for entry_name in available:
                 if entry_name in wanted or (
                     # Also check theme-namespaced plugin names against the current theme.
@@ -107,6 +124,10 @@ def get_deps(projects_file_url: str, config_file_path: str | None = None) -> Non
                         )
                         continue
                     packages_to_install.add(install_name)
+                    for extra_key, extra_pkgs in project.get('extra_dependencies', {}).items():
+                        if dig(cfg, extra_key) is not NotFound:
+                            packages_to_install.update(strings(extra_pkgs))
+
                     wanted.remove(entry_name)
 
     for kind, wanted in wanted_plugins:
