@@ -774,6 +774,15 @@ class DictOfItemsTest(TestCase):
                 Schema, {'option': {"ip_foo": "localhost:8000", "ip_bar": "1.2.3.4:asdf"}}
             )
 
+    def test_all_keys_are_strings(self) -> None:
+        class Schema(Config):
+            option = c.DictOfItems(c.Type(int))
+
+        with self.expect_error(option="Expected type: <class 'str'> for keys, but received: <class 'int'> (key=1)"):
+            self.get_config(
+                Schema, {'option': {1: 2}}
+            )
+
 
 class FilesystemObjectTest(TestCase):
     def test_valid_dir(self) -> None:
