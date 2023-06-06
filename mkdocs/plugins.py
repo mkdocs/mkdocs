@@ -512,10 +512,10 @@ class PluginCollection(dict, MutableMapping[str, BasePlugin]):
         return item
 
 
-class _PrefixLogger(logging.LoggerAdapter):
+class PrefixedLogger(logging.LoggerAdapter):
     """A logger adapter to prefix log messages."""
 
-    def __init__(self, prefix: str, logger: logging.Logger):
+    def __init__(self, prefix: str, logger: logging.Logger) -> None:
         """
         Initialize the logger adapter.
 
@@ -540,7 +540,7 @@ class _PrefixLogger(logging.LoggerAdapter):
         return f"{self.prefix}: {msg}", kwargs
 
 
-def get_plugin_logger(name: str) -> _PrefixLogger:
+def get_plugin_logger(name: str) -> PrefixedLogger:
     """Return a logger for plugins.
 
     Arguments:
@@ -550,10 +550,13 @@ def get_plugin_logger(name: str) -> _PrefixLogger:
         A logger configured to work well in MkDocs,
             prefixing each message with the plugin package name.
 
-    Examples:
-        >>> from mkdocs.plugins import get_plugin_logger
-        >>> logger = get_plugin_logger(__name__)
-        >>> logger.info("My plugin message")
+    Example:
+        ```python
+        from mkdocs.plugins import get_plugin_logger
+
+        logger = get_plugin_logger(__name__)
+        logger.info("My plugin message")
+        ```
     """
     logger = logging.getLogger(f"mkdocs.plugins.{name}")
-    return _PrefixLogger(name.split(".", 1)[0], logger)
+    return PrefixedLogger(name.split(".", 1)[0], logger)
