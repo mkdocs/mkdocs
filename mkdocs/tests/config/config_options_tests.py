@@ -778,7 +778,9 @@ class DictOfItemsTest(TestCase):
         class Schema(Config):
             option = c.DictOfItems(c.Type(int))
 
-        with self.expect_error(option="Expected type: <class 'str'> for keys, but received: <class 'int'> (key=2)"):
+        with self.expect_error(
+            option="Expected type: <class 'str'> for keys, but received: <class 'int'> (key=2)"
+        ):
             self.get_config(Schema, {'option': {"a": 1, 2: 3}})
 
 

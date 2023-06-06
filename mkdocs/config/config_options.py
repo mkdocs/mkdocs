@@ -245,7 +245,9 @@ class DictOfItems(Generic[T], BaseConfigOption[Dict[str, T]]):
             self.option_type.pre_validation(fake_config, key)
         for key in fake_config:
             if not isinstance(key, str):
-                raise ValidationError(f"Expected type: {str} for keys, but received: {type(key)} (key={key})")
+                raise ValidationError(
+                    f"Expected type: {str} for keys, but received: {type(key)} (key={key})"
+                )
         for key in fake_config:
             # Specifically not running `validate` to avoid the OptionallyRequired effect.
             fake_config[key] = self.option_type.run_validation(fake_config[key])
