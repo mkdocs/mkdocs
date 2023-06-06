@@ -1,0 +1,82 @@
+# DO NOT UPDATE THIS FILE, only for tests.
+# This is an intentionally small subset of https://github.com/mkdocs/catalog
+projects:
+- name: Material for MkDocs
+  mkdocs_theme: material
+  mkdocs_plugin: [material/info, material/offline, material/search, material/social, material/tags]
+  github_id: squidfunk/mkdocs-material
+  pypi_id: mkdocs-material
+- name: Bootstrap4
+  mkdocs_theme: bootstrap4
+  github_id: byrnereese/mkdocs-bootstrap4
+  pypi_id: mkdocs-bootstrap4
+- name: Bootstrap 4
+  mkdocs_theme: bootstrap4
+  shadowed: [mkdocs_theme]
+  github_id: LukeCarrier/mkdocs-theme-bootstrap4
+  pypi_id: mkdocs-theme-bootstrap4
+- name: Bootswatch
+  mkdocs_theme: [cerulean, cosmo, cyborg, darkly, flatly, journal, litera, lumen, lux, materia, minty, pulse, sandstone, simplex, slate, solar, spacelab, superhero, united, yeti]
+  github_id: mkdocs/mkdocs-bootswatch
+  pypi_id: mkdocs-bootswatch
+- name: mkdocstrings
+  mkdocs_plugin: mkdocstrings
+  extra_dependencies:
+    plugins.mkdocstrings.handlers.crystal: mkdocstrings-crystal
+    plugins.mkdocstrings.handlers.python: mkdocstrings-python
+  github_id: mkdocstrings/mkdocstrings
+  pypi_id: mkdocstrings
+- name: mkdocs-click
+  markdown_extension: mkdocs-click
+  github_id: DataDog/mkdocs-click
+  pypi_id: mkdocs-click
+- name: blog
+  mkdocs_plugin: blog
+  github_id: andyoakley/mkdocs-blog
+- name: Blogs for MkDocs
+  shadowed: [mkdocs_plugin]
+  mkdocs_plugin: blog
+  github_id: fmaida/mkdocs-blog-plugin
+- name: foo
+  homepage: foo
+  gitlab_id: bar/foo
+- name: Termage
+  mkdocs_plugin: termage
+  github_id: bczsalba/Termage
+- name: Github-Links
+  markdown_extension: mdx_gh_links
+  github_id: Python-Markdown/github-links
+  pypi_id: mdx-gh-links
+- name: autorefs
+  mkdocs_plugin: autorefs
+  github_id: mkdocstrings/autorefs
+  pypi_id: mkdocs-autorefs
+- name: mkdocs-redirects
+  mkdocs_plugin: redirects
+  github_id: mkdocs/mkdocs-redirects
+  pypi_id: mkdocs-redirects
+- name: markdown-callouts
+  markdown_extension: callouts
+  github_id: oprypin/markdown-callouts
+  pypi_id: markdown-callouts
+- name: PyMdown Extensions
+  markdown_extension: [pymdownx.arithmatex, pymdownx.b64, pymdownx.betterem, pymdownx.caret, pymdownx.critic, pymdownx.details, pymdownx.emoji, pymdownx.escapeall, pymdownx.extra, pymdownx.highlight, pymdownx.inlinehilite, pymdownx.keys, pymdownx.magiclink, pymdownx.mark, pymdownx.pathconverter, pymdownx.progressbar, pymdownx.saneheaders, pymdownx.smartsymbols, pymdownx.snippets, pymdownx.striphtml, pymdownx.superfences, pymdownx.tabbed, pymdownx.tasklist, pymdownx.tilde]
+  github_id: facelessuser/pymdown-extensions
+  pypi_id: pymdown-extensions
+- name: literate-nav
+  mkdocs_plugin: literate-nav
+  github_id: oprypin/mkdocs-literate-nav
+  pypi_id: mkdocs-literate-nav
+- name: mkdocs-code-validator
+  mkdocs_plugin: code-validator
+  github_id: oprypin/mkdocs-code-validator
+  pypi_id: mkdocs-code-validator
+- name: tags
+  mkdocs_plugin: tags
+  description: Processes tags in yaml metadata
+  github_id: jldiaz/mkdocs-plugin-tags
+  pypi_id: mkdocs-plugin-tags
+- name: tags
+  mkdocs_plugin: autotag
+  github_id: six-two/mkdocs-auto-tag-plugin
+  pypi_id: mkdocs-auto-tag-plugin

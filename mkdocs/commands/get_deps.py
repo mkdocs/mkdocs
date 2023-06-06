@@ -125,14 +125,16 @@ def get_deps(projects_file_url: str, config_file_path: str | None = None) -> Non
         for kind, wanted in wanted_plugins:
             available = strings(project.get(kind.projects_key, ()))
             for entry_name in available:
-                if entry_name in wanted or (
-                    # Also check theme-namespaced plugin names against the current theme.
+                if (  # Also check theme-namespaced plugin names against the current theme.
                     '/' in entry_name
                     and theme is not None
                     and kind.projects_key == 'mkdocs_plugin'
                     and entry_name.startswith(f'{theme}/')
                     and entry_name[len(theme) + 1 :] in wanted
+                    and entry_name not in wanted
                 ):
+                    entry_name = entry_name[len(theme) + 1 :]
+                if entry_name in wanted:
                     if 'pypi_id' in project:
                         install_name = project['pypi_id']
                     elif 'github_id' in project:
