@@ -207,7 +207,7 @@ class DictOfItems(Generic[T], BaseConfigOption[Dict[str, T]]):
     E.g. for `config_options.DictOfItems(config_options.Type(int))` a valid item is `{"a": 1, "b": 2}`.
     """
 
-    required: Union[bool, None] = None  # Only for subclasses to set.
+    required: bool | None = None  # Only for subclasses to set.
 
     def __init__(self, option_type: BaseConfigOption[T], default=None) -> None:
         super().__init__()
