@@ -474,6 +474,13 @@ class MyPlugin(BasePlugin):
         ...
 ```
 
+### Logging in plugins
+
+MkDocs provides a `get_plugin_logger` function which returns
+a logger that can be used to log messages.
+
+#### ::: mkdocs.plugins.get_plugin_logger
+
 ### Entry Point
 
 Plugins need to be packaged as Python libraries (distributed on PyPI separate
