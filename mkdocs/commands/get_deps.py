@@ -4,18 +4,37 @@ import dataclasses
 import datetime
 import functools
 import logging
+import sys
 from typing import Mapping, Sequence
+
+if sys.version_info >= (3, 10):
+    from importlib.metadata import EntryPoint, entry_points
+else:
+    from importlib_metadata import EntryPoint, entry_points
 
 import yaml
 
 from mkdocs import utils
 from mkdocs.config.base import _open_config_file
-from mkdocs.plugins import EntryPoint, entry_points
 from mkdocs.utils.cache import download_and_cache_url
 
 log = logging.getLogger(__name__)
 
 # Note: do not rely on functions in this module, it is not public API.
+
+
+class YamlLoader(yaml.SafeLoader):
+    pass
+
+
+# Prevent errors from trying to access external modules which may not be installed yet.
+YamlLoader.add_constructor("!ENV", lambda loader, node: None)  # type: ignore
+YamlLoader.add_multi_constructor(
+    "tag:yaml.org,2002:python/name:", lambda loader, suffix, node: None
+)
+YamlLoader.add_multi_constructor(
+    "tag:yaml.org,2002:python/object/apply:", lambda loader, suffix, node: None
+)
 
 NotFound = ()
 
@@ -76,7 +95,7 @@ def get_deps(projects_file_url: str, config_file_path: str | None = None) -> Non
         config_file_path: Non-default path to mkdocs.yml.
     """
     with _open_config_file(config_file_path) as f:
-        cfg = utils.yaml_load(f)
+        cfg = utils.yaml_load(f, loader=YamlLoader)  # type: ignore
 
     if all(c not in cfg for c in ('site_name', 'theme', 'plugins', 'markdown_extensions')):
         log.warning("The passed config file doesn't seem to be a mkdocs.yml config file")
