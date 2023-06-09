@@ -1104,6 +1104,7 @@ class ThemeTest(TestCase):
 
         conf = self.get_config(Schema, {'option': config})
         self.assertEqual(conf.option.name, 'mkdocs')
+        self.assertEqual(conf.option.custom_dir, custom_dir)
         self.assertIn(custom_dir, conf.option.dirs)
         self.assertEqual(
             conf.option.static_templates,
@@ -1228,7 +1229,7 @@ class ThemeTest(TestCase):
             theme = c.Theme()
 
         conf = self.get_config(Schema, config)
-        self.assertEqual(conf.theme['locale'].language, 'fr')
+        self.assertEqual(conf.theme.locale.language, 'fr')
 
 
 class NavTest(TestCase):
