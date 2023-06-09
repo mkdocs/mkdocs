@@ -63,7 +63,7 @@ def get_yaml_loader(loader=yaml.Loader):
     return Loader
 
 
-def yaml_load(source: IO | str, loader: type[yaml.Loader] | None = None) -> dict[str, Any]:
+def yaml_load(source: IO | str, loader: type[yaml.BaseLoader] | None = None) -> dict[str, Any]:
     """Return dict of source YAML file using loader, recursively deep merging inherited parent."""
     Loader = loader or get_yaml_loader()
     result = yaml.load(source, Loader=Loader)
