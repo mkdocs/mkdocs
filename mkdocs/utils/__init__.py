@@ -63,7 +63,7 @@ def get_yaml_loader(loader=yaml.Loader):
     return Loader
 
 
-def yaml_load(source: IO | str, loader: type[yaml.Loader] | None = None) -> dict[str, Any]:
+def yaml_load(source: IO | str, loader: type[yaml.BaseLoader] | None = None) -> dict[str, Any]:
     """Return dict of source YAML file using loader, recursively deep merging inherited parent."""
     Loader = loader or get_yaml_loader()
     result = yaml.load(source, Loader=Loader)
@@ -385,13 +385,7 @@ def dirname_to_title(dirname: str) -> str:
 
 
 def get_markdown_title(markdown_src: str) -> str | None:
-    """
-    Get the title of a Markdown document. The title in this case is considered
-    to be a H1 that occurs before any other content in the document.
-    The procedure is then to iterate through the lines, stopping at the first
-    non-whitespace content. If it is a title, return that, otherwise return
-    None.
-    """
+    """Soft-deprecated, do not use."""
     lines = markdown_src.replace('\r\n', '\n').replace('\r', '\n').split('\n')
     while lines:
         line = lines.pop(0).strip()
@@ -470,6 +464,19 @@ class CountHandler(logging.NullHandler):
 
     def get_counts(self) -> list[tuple[str, int]]:
         return [(logging.getLevelName(k), v) for k, v in sorted(self.counts.items(), reverse=True)]
+
+
+class weak_property:
+    """Same as a read-only property, but allows overwriting the field for good."""
+
+    def __init__(self, func):
+        self.func = func
+        self.__doc__ = func.__doc__
+
+    def __get__(self, instance, owner=None):
+        if instance is None:
+            return self
+        return self.func(instance)
 
 
 def __getattr__(name: str):

@@ -12,12 +12,14 @@ from jinja2.exceptions import TemplateNotFound
 
 import mkdocs
 from mkdocs import utils
-from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.exceptions import Abort, BuildError
 from mkdocs.structure.files import File, Files, InclusionLevel, _set_exclusions, get_files
 from mkdocs.structure.nav import Navigation, get_navigation
 from mkdocs.structure.pages import Page
 from mkdocs.utils import DuplicateFilter  # noqa - legacy re-export
+
+if TYPE_CHECKING:
+    from mkdocs.config.defaults import MkDocsConfig
 
 if TYPE_CHECKING:
     from mkdocs.livereload import LiveReloadServer

@@ -33,7 +33,7 @@ configuration file. Start by reading the [introductory tutorial], then check the
             <a href="user-guide/choosing-your-theme/#readthedocs">readthedocs</a>,
             select one of the third-party themes
             (on the <a href="https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes">MkDocs Themes</a> wiki page
-            as well as <a href="https://github.com/mkdocs/best-of-mkdocs#-theming">Best-of-MkDocs</a>),
+            as well as the <a href="https://github.com/mkdocs/catalog#-theming">MkDocs Catalog</a>),
             or <a href="dev-guide/themes/">build your own</a>.
         </p>
       </div>

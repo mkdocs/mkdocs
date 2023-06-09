@@ -4,12 +4,12 @@ import logging
 from typing import TYPE_CHECKING, Any, Iterator, Mapping, TypeVar
 from urllib.parse import urlsplit
 
-from mkdocs.structure.files import Files
 from mkdocs.structure.pages import Page
 from mkdocs.utils import nest_paths
 
 if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
+    from mkdocs.structure.files import Files
 
 
 log = logging.getLogger(__name__)

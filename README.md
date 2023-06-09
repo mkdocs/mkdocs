@@ -44,7 +44,7 @@ Make sure to stick around to answer some questions as well!
 
 - [Official Documentation][mkdocs]
 - [Latest Release Notes][release-notes]
-- [Best-of-MkDocs][best-of] (Third-party themes, recipes, plugins and more)
+- [Catalog of third-party plugins, themes and recipes][catalog]
 
 ## Contributing to MkDocs
 
@@ -72,7 +72,7 @@ discussion forums is expected to follow the [PyPA Code of Conduct].
 [release-notes]: https://www.mkdocs.org/about/release-notes/
 [Contributing Guide]: https://www.mkdocs.org/about/contributing/
 [PyPA Code of Conduct]: https://www.pypa.io/en/latest/code-of-conduct/
-[best-of]: https://github.com/mkdocs/best-of-mkdocs
+[catalog]: https://github.com/mkdocs/catalog
 
 ## License
 

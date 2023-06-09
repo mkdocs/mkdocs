@@ -63,6 +63,12 @@ It will attempt to run the tests against all of the Python versions we
 support. So don't be concerned if you are missing some. The rest
 will be verified by [GitHub Actions] when you submit a pull request.
 
+## Formatting the code
+
+Python code within MkDocs' code base is formatted using [Black] and [Isort].
+You can automatically format the code according to these tools
+with `hatch run style:format`.
+
 ## Translating themes
 
 To localize a theme to your favorite language, follow the guide on [Translating
@@ -111,3 +117,5 @@ file so that everything is ready for translators to do their job.
 [PyPA Code of Conduct]: https://www.pypa.io/en/latest/code-of-conduct/
 [Translating Themes]: ../dev-guide/translations.md
 [Jinja's i18n extension]: https://jinja.palletsprojects.com/en/latest/extensions/#i18n-extension
+[Black]: https://pypi.org/project/black/
+[Isort]: https://pypi.org/project/isort/

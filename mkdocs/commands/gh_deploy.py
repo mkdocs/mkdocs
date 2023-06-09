@@ -4,13 +4,16 @@ import logging
 import os
 import re
 import subprocess
+from typing import TYPE_CHECKING
 
 import ghp_import
 from packaging import version
 
 import mkdocs
-from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.exceptions import Abort
+
+if TYPE_CHECKING:
+    from mkdocs.config.defaults import MkDocsConfig
 
 log = logging.getLogger(__name__)
 

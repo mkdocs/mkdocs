@@ -1,12 +1,14 @@
 #!/usr/bin/env python
+from __future__ import annotations
+
 import contextlib
 import textwrap
 import unittest
 from pathlib import Path
+from typing import TYPE_CHECKING
 from unittest import mock
 
 from mkdocs.commands import build
-from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.exceptions import PluginError
 from mkdocs.livereload import LiveReloadServer
 from mkdocs.structure.files import File, Files
@@ -14,6 +16,9 @@ from mkdocs.structure.nav import get_navigation
 from mkdocs.structure.pages import Page
 from mkdocs.tests.base import PathAssertionMixin, load_config, tempdir
 from mkdocs.utils import meta
+
+if TYPE_CHECKING:
+    from mkdocs.config.defaults import MkDocsConfig
 
 
 def build_page(title, path, config, md_src=''):

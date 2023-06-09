@@ -76,7 +76,8 @@ body.homepage>div.container>div.row>div.col-md-9 {
     display: inline;
 }
 
-.doc-label-class-attribute {
+.doc-label-class-attribute,
+.doc-label-instance-attribute {
     display: none;
 }
 

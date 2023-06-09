@@ -638,7 +638,7 @@ This alternative syntax is required if you intend to override some options via
 > which are available out-of-the-box. For a list of configuration options
 > available for a given extension, see the documentation for that extension.
 >
-> You may also install and use various third party extensions ([Python-Markdown wiki], [Best-of-MkDocs]). Consult
+> You may also install and use various third party extensions ([Python-Markdown wiki], [MkDocs project catalog][catalog]). Consult
 > the documentation provided by those extensions for installation instructions
 > and available configuration options.
 
@@ -1027,7 +1027,7 @@ path based options in the primary configuration file only.
 [smarty]: https://python-markdown.github.io/extensions/smarty/
 [exts]: https://python-markdown.github.io/extensions/
 [Python-Markdown wiki]: https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
-[Best-of-MkDocs]: https://github.com/mkdocs/best-of-mkdocs
+[catalog]: https://github.com/mkdocs/catalog
 [configuring pages and navigation]: writing-your-docs.md#configure-pages-and-navigation
 [theme_dir]: customizing-your-theme.md#using-the-theme_dir
 [choosing your theme]: choosing-your-theme.md
