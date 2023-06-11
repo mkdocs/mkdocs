@@ -360,10 +360,10 @@ def load_config(config_file: str | IO | None = None, **kwargs) -> MkDocsConfig:
         log.debug(f"Config value '{key}' = {value!r}")
 
     if len(errors) > 0:
-        raise exceptions.Abort(f"Aborted with {len(errors)} Configuration Errors!")
-    elif cfg['strict'] and len(warnings) > 0:
+        raise exceptions.Abort(f"Aborted with {len(errors)} configuration errors!")
+    elif cfg.strict and len(warnings) > 0:
         raise exceptions.Abort(
-            f"Aborted with {len(warnings)} Configuration Warnings in 'strict' mode!"
+            f"Aborted with {len(warnings)} configuration warnings in 'strict' mode!"
         )
 
     return cfg

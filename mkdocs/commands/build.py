@@ -353,7 +353,7 @@ def build(
         counts = warning_counter.get_counts()
         if counts:
             msg = ', '.join(f'{v} {k.lower()}s' for k, v in counts)
-            raise Abort(f'\nAborted with {msg} in strict mode!')
+            raise Abort(f'Aborted with {msg} in strict mode!')
 
         log.info(f'Documentation built in {time.monotonic() - start:.2f} seconds')
 
@@ -362,7 +362,7 @@ def build(
         config.plugins.run_event('build_error', error=e)
         if isinstance(e, BuildError):
             log.error(str(e))
-            raise Abort('\nAborted with a BuildError!')
+            raise Abort('Aborted with a BuildError!')
         raise
 
     finally:

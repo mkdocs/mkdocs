@@ -8,11 +8,13 @@ class MkDocsException(ClickException):
     not be raised directly. One of the subclasses should be raised instead."""
 
 
-class Abort(MkDocsException):
+class Abort(MkDocsException, SystemExit):
     """Abort the build"""
 
+    code = 1
+
     def show(self, *args, **kwargs) -> None:
-        echo(self.format_message())
+        echo('\n' + self.format_message())
 
 
 class ConfigurationError(MkDocsException):
