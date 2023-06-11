@@ -28,6 +28,8 @@ from urllib.parse import quote as urlquote
 from urllib.parse import urlsplit, urlunsplit
 
 import markdown
+import pathspec
+import pathspec.gitignore
 
 from mkdocs import plugins, theme, utils
 from mkdocs.config.base import (
@@ -1118,3 +1120,15 @@ class Hooks(BaseConfigOption[List[types.ModuleType]]):
         plugins = config[self.plugins_key]
         for name, hook in config[key_name].items():
             plugins[name] = hook
+
+
+class PathSpec(BaseConfigOption[pathspec.gitignore.GitIgnoreSpec]):
+    """A path pattern based on gitignore-like syntax."""
+
+    def run_validation(self, value: object) -> pathspec.gitignore.GitIgnoreSpec:
+        if not isinstance(value, str):
+            raise ValidationError(f'Expected a multiline string, but a {type(value)} was given.')
+        try:
+            return pathspec.gitignore.GitIgnoreSpec.from_lines(lines=value.splitlines())
+        except ValueError as e:
+            raise ValidationError(str(e))

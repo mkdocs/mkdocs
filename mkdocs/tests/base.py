@@ -34,6 +34,8 @@ def load_config(**cfg) -> MkDocsConfig:
     if 'docs_dir' not in cfg:
         # Point to an actual dir to avoid a 'does not exist' error on validation.
         cfg['docs_dir'] = os.path.join(path_base, 'docs')
+    if 'plugins' not in cfg:
+        cfg['plugins'] = []
     conf = MkDocsConfig(config_file_path=cfg['config_file_path'])
     conf.load_dict(cfg)
 
@@ -123,20 +125,8 @@ class PathAssertionMixin:
             msg = self._formatMessage(None, f"The path '{path}' is not a file that exists")
             raise self.failureException(msg)
 
-    def assertPathNotFile(self, *parts):
-        path = os.path.join(*parts)
-        if os.path.isfile(path):
-            msg = self._formatMessage(None, f"The path '{path}' is a file that exists")
-            raise self.failureException(msg)
-
     def assertPathIsDir(self, *parts):
         path = os.path.join(*parts)
         if not os.path.isdir(path):
             msg = self._formatMessage(None, f"The path '{path}' is not a directory that exists")
-            raise self.failureException(msg)
-
-    def assertPathNotDir(self, *parts):
-        path = os.path.join(*parts)
-        if os.path.isfile(path):
-            msg = self._formatMessage(None, f"The path '{path}' is a directory that exists")
             raise self.failureException(msg)

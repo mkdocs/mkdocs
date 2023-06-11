@@ -436,6 +436,18 @@ def nest_paths(paths):
     return nested
 
 
+class DuplicateFilter:
+    """Avoid logging duplicate messages."""
+
+    def __init__(self) -> None:
+        self.msgs: set[str] = set()
+
+    def __call__(self, record: logging.LogRecord) -> bool:
+        rv = record.msg not in self.msgs
+        self.msgs.add(record.msg)
+        return rv
+
+
 class CountHandler(logging.NullHandler):
     """Counts all logged messages >= level."""
 

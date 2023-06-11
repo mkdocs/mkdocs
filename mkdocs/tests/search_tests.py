@@ -476,8 +476,8 @@ class SearchIndexTests(unittest.TestCase):
                 self.assertEqual(errors, [])
                 self.assertEqual(warnings, [])
 
-                base_cfg = load_config()
-                base_cfg['plugins']['search'].config.indexing = option
+                base_cfg = load_config(plugins=['search'])
+                base_cfg.plugins['search'].config.indexing = option
 
                 pages = [
                     test_page('Home', 'index.md', base_cfg),
