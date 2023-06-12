@@ -192,7 +192,7 @@ common_config_options = add_options(
     click.option('-f', '--config-file', type=click.File('rb'), help=config_help),
     # Don't override config value if user did not specify --strict flag
     # Conveniently, load_config drops None values
-    click.option('-s', '--strict', is_flag=True, default=None, help=strict_help),
+    click.option('-s', '--strict/--no-strict', is_flag=True, default=None, help=strict_help),
     click.option('-t', '--theme', type=click.Choice(theme_choices), help=theme_help),
     # As with --strict, set the default to None so that this doesn't incorrectly
     # override the config file
