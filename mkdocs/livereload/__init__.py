@@ -13,8 +13,10 @@ import re
 import socket
 import socketserver
 import string
+import sys
 import threading
 import time
+import traceback
 import urllib.parse
 import warnings
 import wsgiref.simple_server
@@ -185,8 +187,18 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 funcs = list(self._to_rebuild)
                 self._to_rebuild.clear()
 
-            for func in funcs:
-                func()
+            try:
+                for func in funcs:
+                    func()
+            except Exception as e:
+                if isinstance(e, SystemExit):
+                    print(e, file=sys.stderr)
+                else:
+                    traceback.print_exc()
+                log.error(
+                    "An error happened during the rebuild. The server will appear stuck until build errors are resolved."
+                )
+                continue
 
             with self._epoch_cond:
                 log.info("Reloading browsers")

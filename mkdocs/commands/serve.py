@@ -73,10 +73,7 @@ def serve(
             config = get_config()
 
         # combine CLI watch arguments with config file values
-        if config.watch is None:
-            config.watch = watch
-        else:
-            config.watch.extend(watch)
+        config.watch.extend(watch)
 
         # Override a few config settings after validation
         config.site_url = f'http://{config.dev_addr}{mount_path(config)}'
