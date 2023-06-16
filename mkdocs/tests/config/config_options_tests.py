@@ -1494,7 +1494,7 @@ class SubConfigTest(TestCase):
 
         assert_equal = self.assertEqual
         CONFIG_PATH = "foo/mkdocs.yaml"
-        conf = self.get_config(Schema, {"sub": [{"opt": "bar"}]}, config_file_path=CONFIG_PATH)
+        _ = self.get_config(Schema, {"sub": [{"opt": "bar"}]}, config_file_path=CONFIG_PATH)
 
 
 class MarkdownExtensionsTest(TestCase):
