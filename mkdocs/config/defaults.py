@@ -16,8 +16,8 @@ def get_schema() -> base.PlainConfigSchema:
 class MkDocsConfig(base.Config):
     """The configuration of MkDocs itself (the root object of mkdocs.yml)."""
 
-    config_file_path: str = c.Optional(c.Type(str))  # type: ignore[assignment]
-    """Reserved for internal use, stores the mkdocs.yml config file."""
+    config_file_path: str | None = c.Optional(c.Type(str))  # type: ignore[assignment]
+    """The path to the mkdocs.yml config file. Can't be populated from the config."""
 
     site_name = c.Type(str)
     """The title to use for the documentation."""
@@ -136,3 +136,8 @@ class MkDocsConfig(base.Config):
 
     watch = c.ListOfPaths(default=[])
     """A list of extra paths to watch while running `mkdocs serve`."""
+
+    def load_dict(self, patch: dict) -> None:
+        super().load_dict(patch)
+        if 'config_file_path' in patch:
+            raise base.ValidationError("Can't set config_file_path in config")

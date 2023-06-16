@@ -814,8 +814,7 @@ class Theme(BaseConfigOption[theme.Theme]):
 
         # Ensure custom_dir is an absolute path
         if 'custom_dir' in theme_config and not os.path.isabs(theme_config['custom_dir']):
-            assert self.config_file_path is not None
-            config_dir = os.path.dirname(self.config_file_path)
+            config_dir = os.path.dirname(self.config_file_path or '')
             theme_config['custom_dir'] = os.path.join(config_dir, theme_config['custom_dir'])
 
         if 'custom_dir' in theme_config and not os.path.isdir(theme_config['custom_dir']):

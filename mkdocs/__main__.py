@@ -106,7 +106,9 @@ class State:
 pass_state = click.make_pass_decorator(State, ensure=True)
 
 clean_help = "Remove old files from the site_dir before building (the default)."
-config_help = "Provide a specific MkDocs config"
+config_help = (
+    "Provide a specific MkDocs config. This can be a file name, or '-' to read from stdin."
+)
 dev_addr_help = "IP address and port to serve documentation locally (default: localhost:8000)"
 strict_help = "Enable strict mode. This will cause MkDocs to abort the build on any warnings."
 theme_help = "The theme to use when building your documentation."
