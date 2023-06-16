@@ -1262,6 +1262,20 @@ class SubConfigTest(TestCase):
         conf = self.get_config(Schema, {'option': {'cc': 'foo'}})
         self.assertEqual(conf['option'], {'cc': 'foo'})
 
+    def test_config_file_path_pass_through(self) -> None:
+        """Necessary to ensure FilesystemObject validates the correct path"""
+
+        class SubType(c.BaseConfigOption):
+            def pre_validation(self, config: c.Config, key_name: str) -> None:
+                assert_equal(config.config_file_path, CONFIG_PATH)
+
+        class Schema:
+            sub = c.SubConfig(('opt', SubType()))
+
+        assert_equal = self.assertEqual
+        CONFIG_PATH = "foo/mkdocs.yaml"
+        conf = self.get_config(Schema, {"sub": {"opt": "bar"}}, config_file_path=CONFIG_PATH)
+
 
 class ConfigItemsTest(TestCase):
     def test_subconfig_with_multiple_items(self):
