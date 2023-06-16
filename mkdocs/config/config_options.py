@@ -58,7 +58,7 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
     `config_options` are ignored (`validate=False`). Users should typically
     enable validation with `validate=True`.
     """
-    
+
     __config_file_path = None
 
     @overload
@@ -89,7 +89,6 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
         else:
             self._make_config = functools.partial(LegacyConfig, config_options)
         self._do_validation = bool(validate)
-
 
     def pre_validation(self, config: Config, key_name: str):
         self._config_file_path = config.config_file_path
