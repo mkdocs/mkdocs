@@ -153,7 +153,7 @@ class BasePlugin(Generic[SomeConfig]):
 
     # Global events
 
-    def on_config(self, config: MkDocsConfig) -> Config | None:
+    def on_config(self, config: MkDocsConfig) -> MkDocsConfig | None:
         """
         The `config` event is the first event called on build and is run immediately
         after the user configuration is loaded and validated. Any alterations to the

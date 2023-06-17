@@ -8,7 +8,7 @@ import posixpath
 import shutil
 import warnings
 from pathlib import PurePath
-from typing import TYPE_CHECKING, Any, Callable, Iterable, Iterator, Mapping, Sequence
+from typing import TYPE_CHECKING, Callable, Iterable, Iterator, Sequence
 from urllib.parse import quote as urlquote
 
 import jinja2.environment
@@ -319,7 +319,7 @@ class File:
 _default_exclude = pathspec.gitignore.GitIgnoreSpec.from_lines(['.*', '/templates/'])
 
 
-def _set_exclusions(files: Iterable[File], config: MkDocsConfig | Mapping[str, Any]) -> None:
+def _set_exclusions(files: Iterable[File], config: MkDocsConfig) -> None:
     """Re-calculate which files are excluded, based on the patterns in the config."""
     exclude: pathspec.gitignore.GitIgnoreSpec | None = config.get('exclude_docs')
     exclude = _default_exclude + exclude if exclude else _default_exclude
@@ -335,7 +335,7 @@ def _set_exclusions(files: Iterable[File], config: MkDocsConfig | Mapping[str, A
                 file.inclusion = InclusionLevel.Included
 
 
-def get_files(config: MkDocsConfig | Mapping[str, Any]) -> Files:
+def get_files(config: MkDocsConfig) -> Files:
     """Walk the `docs_dir` and return a Files collection."""
     files: list[File] = []
     conflicting_files: list[tuple[File, File]] = []
