@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import enum
 import fnmatch
+import hashlib
 import logging
 import os
 import posixpath
@@ -21,6 +22,7 @@ from mkdocs import utils
 if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
     from mkdocs.structure.pages import Page
+    from mkdocs.theme import Theme
 
 
 log = logging.getLogger(__name__)
@@ -50,6 +52,15 @@ class InclusionLevel(enum.Enum):
 
     def is_not_in_nav(self):
         return self.value <= self.NOT_IN_NAV.value
+
+
+class AssetVersioning(enum.Enum):
+    NONE = 'NONE'
+    """The asset file is copied as is."""
+    HASH_RENAME = 'HASH_RENAME'
+    """The file (such as 'main.js') gets renamed to e.g. 'main.e3b0c442.js'."""
+    HASH_SUFFIX = 'HASH_SUFFIX'
+    """The file (such as 'main.js') always gets a hash appended when linking to it, e.g. 'main.js?h=e3b0c442'."""
 
 
 class Files:
@@ -164,7 +175,15 @@ class Files:
                 for dir in config.theme.dirs:
                     # Find the first theme dir which contains path
                     if os.path.isfile(os.path.join(dir, path)):
-                        self.append(File(path, dir, config.site_dir, config.use_directory_urls))
+                        self.append(
+                            File(
+                                path,
+                                dir,
+                                config.site_dir,
+                                config.use_directory_urls,
+                                asset_versioning=_asset_versioning(path, config.theme),
+                            )
+                        )
                         break
 
 
@@ -233,15 +252,17 @@ class File:
         *,
         dest_uri: str | None = None,
         inclusion: InclusionLevel = InclusionLevel.UNDEFINED,
+        asset_versioning: AssetVersioning = AssetVersioning.NONE,
     ) -> None:
         self.page = None
         self.src_path = path
         self.name = self._get_stem()
+        self.abs_src_path = os.path.normpath(os.path.join(src_dir, self.src_uri))
+        self.asset_versioning = asset_versioning
         if dest_uri is None:
             dest_uri = self._get_dest_path(use_directory_urls)
         self.dest_uri = dest_uri
         self.url = self._get_url(use_directory_urls)
-        self.abs_src_path = os.path.normpath(os.path.join(src_dir, self.src_uri))
         self.abs_dest_path = os.path.normpath(os.path.join(dest_dir, self.dest_uri))
         self.inclusion = inclusion
 
@@ -250,7 +271,7 @@ class File:
             isinstance(other, self.__class__)
             and self.src_uri == other.src_uri
             and self.abs_src_path == other.abs_src_path
-            and self.url == other.url
+            and self.dest_uri == other.dest_uri
         )
 
     def __repr__(self):
@@ -276,15 +297,31 @@ class File:
             else:
                 # foo.md => foo/index.html
                 return posixpath.join(parent, self.name, 'index.html')
+
+        if self.asset_versioning is AssetVersioning.HASH_RENAME:
+            try:
+                suf = _hash_suffix(self.abs_src_path)
+            except FileNotFoundError:
+                pass
+            else:
+                name, ext = posixpath.splitext(self.src_uri)
+                return f'{name}.{suf}{ext}'
+
         return self.src_uri
 
     def _get_url(self, use_directory_urls: bool) -> str:
-        """Return url based in destination path."""
+        """Return url based on destination path."""
         url = self.dest_uri
-        dirname, filename = posixpath.split(url)
-        if use_directory_urls and filename == 'index.html':
-            url = (dirname or '.') + '/'
-        return urlquote(url)
+        if use_directory_urls:
+            if url == 'index.html' or url.endswith('/index.html'):
+                url = (posixpath.dirname(url) or '.') + '/'
+        url = urlquote(url)
+        if self.asset_versioning is AssetVersioning.HASH_SUFFIX:
+            try:
+                url += '?h=' + _hash_suffix(self.abs_src_path)
+            except FileNotFoundError:
+                pass
+        return url
 
     def url_relative_to(self, other: File | str) -> str:
         """Return url for file relative to other file."""
@@ -327,6 +364,30 @@ class File:
         return self.src_uri.endswith('.css')
 
 
+def _asset_versioning(
+    src_uri: str,
+    config: MkDocsConfig | Theme,
+) -> AssetVersioning:
+    hash_rename_assets = getattr(config, 'hash_rename_assets', None)
+    hash_append_assets = getattr(config, 'hash_append_assets', None)
+    if hash_rename_assets and hash_rename_assets.match_file(src_uri):
+        return AssetVersioning.HASH_RENAME
+    elif hash_append_assets and hash_append_assets.match_file(src_uri):
+        return AssetVersioning.HASH_SUFFIX
+    return AssetVersioning.NONE
+
+
+def _hash_suffix(abs_src_path: str) -> str:
+    digest = hashlib.sha256()
+    with open(abs_src_path, 'rb') as f:
+        while True:
+            data = f.read(65536)
+            if not data:
+                break
+            digest.update(data)
+    return digest.hexdigest()[:8]
+
+
 _default_exclude = pathspec.gitignore.GitIgnoreSpec.from_lines(['.*', '/templates/'])
 
 
@@ -346,22 +407,24 @@ def _set_exclusions(files: Iterable[File], config: MkDocsConfig | Mapping[str, A
                 file.inclusion = InclusionLevel.INCLUDED
 
 
-def get_files(config: MkDocsConfig | Mapping[str, Any]) -> Files:
+def get_files(config: MkDocsConfig) -> Files:
     """Walk the `docs_dir` and return a Files collection."""
     files: list[File] = []
     conflicting_files: list[tuple[File, File]] = []
     for source_dir, dirnames, filenames in os.walk(config['docs_dir'], followlinks=True):
-        relative_dir = os.path.relpath(source_dir, config['docs_dir'])
+        relative_dir = PurePath(os.path.relpath(source_dir, config['docs_dir'])).as_posix()
         dirnames.sort()
         filenames.sort(key=_file_sort_key)
 
         files_by_dest: dict[str, File] = {}
         for filename in filenames:
+            src_uri = posixpath.join(relative_dir, filename)
             file = File(
-                os.path.join(relative_dir, filename),
+                src_uri,
                 config['docs_dir'],
                 config['site_dir'],
                 config['use_directory_urls'],
+                asset_versioning=_asset_versioning(src_uri, config),
             )
             # Skip README.md if an index file also exists in dir (part 1)
             prev_file = files_by_dest.setdefault(file.dest_uri, file)

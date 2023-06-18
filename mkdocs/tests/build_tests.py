@@ -220,7 +220,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
 
     def test_context_extra_css_js_no_page(self):
         cfg = load_config(extra_css=['style.css'], extra_javascript=['script.js'])
-        context = build.get_context(mock.Mock(), mock.Mock(), cfg, base_url='..')
+        context = build.get_context(mock.Mock(), Files([]), cfg, base_url='..')
         self.assertEqual(context['extra_css'], ['../style.css'])
         self.assertEqual(context['extra_javascript'], ['../script.js'])
 

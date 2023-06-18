@@ -32,6 +32,7 @@ from yaml_env_tag import construct_env_tag
 from mkdocs import exceptions
 
 if TYPE_CHECKING:
+    from mkdocs.structure.files import Files
     from mkdocs.structure.pages import Page
 
 T = TypeVar('T')
@@ -281,11 +282,17 @@ def get_relative_url(url: str, other: str) -> str:
     return relurl + '/' if url.endswith('/') else relurl
 
 
-def normalize_url(path: str, page: Page | None = None, base: str = '') -> str:
+def normalize_url(
+    path: str, page: Page | None = None, base: str = '', files: Files | None = None
+) -> str:
     """Return a URL relative to the given page or using the base."""
     path, relative_level = _get_norm_url(path)
     if relative_level == -1:
         return path
+    if files is not None:
+        file = files.get_file_from_path(path)
+        if file is not None:
+            path = file.url
     if page is not None:
         result = get_relative_url(path, page.url)
         if relative_level > 0:

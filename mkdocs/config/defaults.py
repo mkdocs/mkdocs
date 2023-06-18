@@ -96,6 +96,11 @@ class MkDocsConfig(base.Config):
     """Specify which css or javascript files from the docs directory should be
     additionally included in the site."""
 
+    hash_rename_assets = c.Optional(c.PathSpec())
+    hash_append_assets = c.Optional(c.PathSpec())
+    """Specify which css or javascript files from the docs directory should be
+    renamed to contain a hash suffix, for cache busting."""
+
     extra_templates = c.Type(list, default=[])
     """Similar to the above, but each template (HTML or XML) will be build with
     Jinja2 and the global context."""

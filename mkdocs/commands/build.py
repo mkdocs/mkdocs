@@ -42,9 +42,10 @@ def get_context(
         base_url = utils.get_relative_url('.', page.url)
 
     extra_javascript = [
-        utils.normalize_url(str(script), page, base_url) for script in config.extra_javascript
+        utils.normalize_url(str(script), page, base_url, files)
+        for script in config.extra_javascript
     ]
-    extra_css = [utils.normalize_url(path, page, base_url) for path in config.extra_css]
+    extra_css = [utils.normalize_url(path, page, base_url, files) for path in config.extra_css]
 
     return templates.TemplateContext(
         nav=nav,
@@ -56,6 +57,7 @@ def get_context(
         build_date_utc=utils.get_build_datetime(),
         config=config,
         page=page,
+        _files=files,
     )
 
 

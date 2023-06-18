@@ -497,6 +497,50 @@ Only the plain string variant detects the `.mjs` extension and adds `type="modul
 
 NOTE: `*.js` and `*.css` files, just like any other type of file, are always copied from `docs_dir` into the site's deployed copy, regardless if they're linked to the pages via the above configs or not.
 
+### hash_rename_assets
+
+NEW: **New in version 1.5.**
+
+Set patterns of files to rename (on the fly, upon copying to the built site) by inserting a hash of the content. This is done for purposes of *cache busting*.
+
+It is recommended to use this setting whenever possible.
+
+The patterns follow the [.gitignore pattern format](https://git-scm.com/docs/gitignore#_pattern_format). But in this case these are positive matches, not "ignore" matches.
+
+For example:
+
+```yaml
+extra_javascript:
+    - js/foo.js
+    - vendored/jquery-1.2.3.js
+hash_rename_assets: |
+    *.css
+    *.js
+    !/vendored/*.js
+```
+
+Then the matched file is copied with a modified name and references to it are modified accordingly, e.g.:
+
+```html
+<script src="../js/foo.e3b0c442.js">
+```
+
+but one doesn't need to remember to update this hash, you can just keep modifying `foo.js` normally and referring to it normally.
+
+Note how in this example we chose not to hash the file that already has its own version. But we could rename it, too.
+
+### hash_append_assets
+
+NEW: **New in version 1.5.**
+
+Same as [hash_rename_assets](#hash_rename_assets) but the file doesn't get renamed, instead whenever it is referred to, a URL parameter is appended to it.
+
+E.g. a script might get linked to as:
+
+```html
+<script src="../js/foo.js?h=e3b0c442">
+```
+
 ### extra_templates
 
 Set a list of templates in your `docs_dir` to be built by MkDocs. To see more

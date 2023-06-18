@@ -23,7 +23,7 @@ from mkdocs.utils import normalize_url
 if TYPE_CHECKING:
     from mkdocs.config.config_options import ExtraScriptValue
     from mkdocs.config.defaults import MkDocsConfig
-    from mkdocs.structure.files import File
+    from mkdocs.structure.files import File, Files
     from mkdocs.structure.nav import Navigation
     from mkdocs.structure.pages import Page
 
@@ -38,12 +38,15 @@ class TemplateContext(TypedDict):
     build_date_utc: datetime.datetime
     config: MkDocsConfig
     page: Page | None
+    _files: Files
 
 
 @contextfilter
 def url_filter(context: TemplateContext, value: str) -> str:
     """A Template filter to normalize URLs."""
-    return normalize_url(str(value), page=context['page'], base=context['base_url'])
+    return normalize_url(
+        value, page=context['page'], base=context['base_url'], files=context.get('_files')
+    )
 
 
 @contextfilter

@@ -3,6 +3,10 @@
 static_templates:
     - 404.html
 
+hash_rename_assets: |
+    theme*.js
+    theme*.css
+
 locale: en
 
 include_search_page: true
