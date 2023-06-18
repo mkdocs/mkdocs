@@ -257,11 +257,11 @@ def build_command(clean, **kwargs):
 
     _enable_warnings()
     cfg = config.load_config(**kwargs)
-    cfg['plugins'].run_event('startup', command='build', dirty=not clean)
+    cfg.plugins.on_startup(command='build', dirty=not clean)
     try:
         build.build(cfg, dirty=not clean)
     finally:
-        cfg['plugins'].run_event('shutdown')
+        cfg.plugins.on_shutdown()
 
 
 @cli.command(name="gh-deploy")
@@ -284,11 +284,11 @@ def gh_deploy_command(
 
     _enable_warnings()
     cfg = config.load_config(remote_branch=remote_branch, remote_name=remote_name, **kwargs)
-    cfg['plugins'].run_event('startup', command='gh-deploy', dirty=not clean)
+    cfg.plugins.on_startup(command='gh-deploy', dirty=not clean)
     try:
         build.build(cfg, dirty=not clean)
     finally:
-        cfg['plugins'].run_event('shutdown')
+        cfg.plugins.on_shutdown()
     gh_deploy.gh_deploy(
         cfg,
         message=message,

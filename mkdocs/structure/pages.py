@@ -202,7 +202,7 @@ class Page(StructureItem):
             self.edit_url = None
 
     def read_source(self, config: MkDocsConfig) -> None:
-        source = config['plugins'].run_event('page_read_source', page=self, config=config)
+        source = config.plugins.on_page_read_source(page=self, config=config)
         if source is None:
             try:
                 with open(self.file.abs_src_path, encoding='utf-8-sig', errors='strict') as f:

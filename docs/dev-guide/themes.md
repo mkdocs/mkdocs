@@ -633,7 +633,7 @@ and themes should account for this. It is recommended that theme templates wrap
 search specific markup with a check for the plugin:
 
 ```django
-{% if 'search' in config['plugins'] %}
+{% if 'search' in config.plugins %}
     search stuff here...
 {% endif %}
 ```

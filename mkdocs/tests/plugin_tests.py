@@ -29,19 +29,19 @@ class _DummyPluginConfig(base.Config):
 
 
 class DummyPlugin(plugins.BasePlugin[_DummyPluginConfig]):
-    def on_pre_page(self, content, **kwargs):
+    def on_page_content(self, html, **kwargs) -> str:
         """modify page content by prepending `foo` config value."""
-        return f'{self.config.foo} {content}'
+        return f'{self.config.foo} {html}'
 
-    def on_nav(self, item, **kwargs):
+    def on_nav(self, nav, **kwargs) -> None:
         """do nothing (return None) to not modify item."""
         return None
 
-    def on_page_read_source(self, **kwargs):
+    def on_page_read_source(self, **kwargs) -> str:
         """create new source by prepending `foo` config value to 'source'."""
         return f'{self.config.foo} source'
 
-    def on_pre_build(self, **kwargs):
+    def on_pre_build(self, **kwargs) -> None:
         """do nothing (return None)."""
         return None
 
@@ -121,40 +121,40 @@ class TestPluginCollection(unittest.TestCase):
                 'pre_template': [],
                 'template_context': [],
                 'post_template': [],
-                'pre_page': [plugin.on_pre_page],
+                'pre_page': [],
                 'page_read_source': [plugin.on_page_read_source],
                 'page_markdown': [],
-                'page_content': [],
+                'page_content': [plugin.on_page_content],
                 'page_context': [],
                 'post_page': [],
             },
         )
 
-    def test_event_priorities(self):
+    def test_event_priorities(self) -> None:
         class PrioPlugin(plugins.BasePlugin):
             config_scheme = base.get_schema(_DummyPluginConfig)
 
             @plugins.event_priority(100)
-            def on_pre_page(self, content, **kwargs):
+            def on_page_content(self, html, **kwargs) -> None:
                 pass
 
             @plugins.event_priority(-100)
-            def on_nav(self, item, **kwargs):
+            def on_nav(self, nav, **kwargs) -> None:
                 pass
 
-            def on_page_read_source(self, **kwargs):
+            def on_page_read_source(self, **kwargs) -> None:
                 pass
 
             @plugins.event_priority(-50)
-            def on_post_build(self, **kwargs):
+            def on_post_build(self, **kwargs) -> None:
                 pass
 
         collection = plugins.PluginCollection()
         collection['dummy'] = dummy = DummyPlugin()
         collection['prio'] = prio = PrioPlugin()
         self.assertEqual(
-            collection.events['pre_page'],
-            [prio.on_pre_page, dummy.on_pre_page],
+            collection.events['page_content'],
+            [prio.on_page_content, dummy.on_page_content],
         )
         self.assertEqual(
             collection.events['nav'],
@@ -190,7 +190,10 @@ class TestPluginCollection(unittest.TestCase):
         plugin = DummyPlugin()
         plugin.load_config({'foo': 'new'})
         collection['foo'] = plugin
-        self.assertEqual(collection.run_event('pre_page', 'page content'), 'new page content')
+        self.assertEqual(
+            collection.on_page_content('page content', page=None, config={}, files=[]),
+            'new page content',
+        )
 
     def test_run_event_twice_on_collection(self):
         collection = plugins.PluginCollection()
@@ -201,7 +204,8 @@ class TestPluginCollection(unittest.TestCase):
         plugin2.load_config({'foo': 'second'})
         collection['bar'] = plugin2
         self.assertEqual(
-            collection.run_event('pre_page', 'page content'), 'second new page content'
+            collection.on_page_content('page content', page=None, config={}, files=[]),
+            'second new page content',
         )
 
     def test_event_returns_None(self):
@@ -209,25 +213,28 @@ class TestPluginCollection(unittest.TestCase):
         plugin = DummyPlugin()
         plugin.load_config({'foo': 'new'})
         collection['foo'] = plugin
-        self.assertEqual(collection.run_event('nav', 'nav item'), 'nav item')
+        self.assertEqual(collection.on_nav(['nav item'], config={}, files=[]), ['nav item'])
 
     def test_event_empty_item(self):
         collection = plugins.PluginCollection()
         plugin = DummyPlugin()
         plugin.load_config({'foo': 'new'})
         collection['foo'] = plugin
-        self.assertEqual(collection.run_event('page_read_source'), 'new source')
+        self.assertEqual(collection.on_page_read_source(page=None, config={}), 'new source')
 
     def test_event_empty_item_returns_None(self):
         collection = plugins.PluginCollection()
         plugin = DummyPlugin()
         plugin.load_config({'foo': 'new'})
         collection['foo'] = plugin
-        self.assertEqual(collection.run_event('pre_build'), None)
+        self.assertEqual(collection.on_pre_build(config={}), None)
 
     def test_run_undefined_event_on_collection(self):
         collection = plugins.PluginCollection()
-        self.assertEqual(collection.run_event('pre_page', 'page content'), 'page content')
+        self.assertEqual(
+            collection.on_page_markdown('page markdown', page=None, config={}, files=[]),
+            'page markdown',
+        )
 
     def test_run_unknown_event_on_collection(self):
         collection = plugins.PluginCollection()
