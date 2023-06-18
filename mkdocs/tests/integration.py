@@ -60,8 +60,10 @@ def main(output=None):
 
     log.debug("Building test projects.")
     for project in os.listdir(TEST_PROJECTS):
-        log.debug(f"Building test project: {project}")
         project_dir = os.path.join(TEST_PROJECTS, project)
+        if not os.path.isdir(project_dir):
+            continue
+        log.debug(f"Building test project: {project}")
         out = os.path.join(output, project)
         command = base_cmd + [out]
         subprocess.check_call(command, cwd=project_dir)

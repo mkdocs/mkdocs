@@ -46,6 +46,10 @@ def _showwarning(message, category, filename, lineno, file=None, line=None):
 
 
 def _enable_warnings():
+    from mkdocs.commands import build
+
+    build.log.addFilter(utils.DuplicateFilter())
+
     warnings.simplefilter('module', DeprecationWarning)
     warnings.showwarning = _showwarning
 
@@ -111,8 +115,9 @@ site_dir_help = "The directory to output the result of the documentation build."
 use_directory_urls_help = "Use directory URLs when building pages (the default)."
 reload_help = "Enable the live reloading in the development server (this is the default)"
 no_reload_help = "Disable the live reloading in the development server."
-dirty_reload_help = (
-    "Enable the live reloading in the development server, but only re-build files that have changed"
+serve_dirty_help = "Only re-build files that have changed."
+serve_clean_help = (
+    "Build the site without any effects of `mkdocs serve` - pure `mkdocs build`, then serve."
 )
 commit_message_help = (
     "A commit message to use when committing to the "
@@ -136,6 +141,9 @@ watch_theme_help = (
 )
 shell_help = "Use the shell when invoking Git."
 watch_help = "A directory or file to watch for live reloading. Can be supplied multiple times."
+projects_file_help = (
+    "URL or local path of the registry file that declares all known MkDocs-related projects."
+)
 
 
 def add_options(*opts):
@@ -184,7 +192,7 @@ common_config_options = add_options(
     click.option('-f', '--config-file', type=click.File('rb'), help=config_help),
     # Don't override config value if user did not specify --strict flag
     # Conveniently, load_config drops None values
-    click.option('-s', '--strict', is_flag=True, default=None, help=strict_help),
+    click.option('-s', '--strict/--no-strict', is_flag=True, default=None, help=strict_help),
     click.option('-t', '--theme', type=click.Choice(theme_choices), help=theme_help),
     # As with --strict, set the default to None so that this doesn't incorrectly
     # override the config file
@@ -201,7 +209,7 @@ PYTHON_VERSION = f"{sys.version_info.major}.{sys.version_info.minor}"
 PKG_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-@click.group(context_settings={'help_option_names': ['-h', '--help']})
+@click.group(context_settings=dict(help_option_names=['-h', '--help'], max_content_width=120))
 @click.version_option(
     __version__,
     '-V',
@@ -217,21 +225,23 @@ def cli():
 
 @cli.command(name="serve")
 @click.option('-a', '--dev-addr', help=dev_addr_help, metavar='<IP:PORT>')
-@click.option('--livereload', 'livereload', flag_value='livereload', help=reload_help, default=True)
+@click.option('--livereload', 'livereload', flag_value='livereload', default=True, hidden=True)
 @click.option('--no-livereload', 'livereload', flag_value='no-livereload', help=no_reload_help)
-@click.option('--dirtyreload', 'livereload', flag_value='dirty', help=dirty_reload_help)
+@click.option('--dirtyreload', 'build_type', flag_value='dirty', hidden=True)
+@click.option('--dirty', 'build_type', flag_value='dirty', help=serve_dirty_help)
+@click.option('-c', '--clean', 'build_type', flag_value='clean', help=serve_clean_help)
 @click.option('--watch-theme', help=watch_theme_help, is_flag=True)
 @click.option(
     '-w', '--watch', help=watch_help, type=click.Path(exists=True), multiple=True, default=[]
 )
 @common_config_options
 @common_options
-def serve_command(dev_addr, livereload, watch, **kwargs):
+def serve_command(**kwargs):
     """Run the builtin development server"""
     from mkdocs.commands import serve
 
     _enable_warnings()
-    serve.serve(dev_addr=dev_addr, livereload=livereload, watch=watch, **kwargs)
+    serve.serve(**kwargs)
 
 
 @cli.command(name="build")
@@ -285,6 +295,30 @@ def gh_deploy_command(
         ignore_version=ignore_version,
         shell=shell,
     )
+
+
+@cli.command(name="get-deps")
+@verbose_option
+@click.option('-f', '--config-file', type=click.File('rb'), help=config_help)
+@click.option(
+    '-p',
+    '--projects-file',
+    default='https://raw.githubusercontent.com/mkdocs/catalog/main/projects.yaml',
+    help=projects_file_help,
+    show_default=True,
+)
+def get_deps_command(config_file, projects_file):
+    """Show required PyPI packages inferred from plugins in mkdocs.yml"""
+    from mkdocs.commands import get_deps
+
+    warning_counter = utils.CountHandler()
+    warning_counter.setLevel(logging.WARNING)
+    logging.getLogger('mkdocs').addHandler(warning_counter)
+
+    get_deps.get_deps(projects_file_url=projects_file, config_file_path=config_file)
+
+    if warning_counter.get_counts():
+        sys.exit(1)
 
 
 @cli.command(name="new")

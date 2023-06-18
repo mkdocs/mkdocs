@@ -1,15 +1,20 @@
 from __future__ import annotations
 
+import enum
 import fnmatch
 import logging
 import os
 import posixpath
 import shutil
+import warnings
 from pathlib import PurePath
-from typing import TYPE_CHECKING, Any, Iterable, Iterator, Mapping, Sequence
+from typing import TYPE_CHECKING, Any, Callable, Iterable, Iterator, Mapping, Sequence
 from urllib.parse import quote as urlquote
 
 import jinja2.environment
+import pathspec
+import pathspec.gitignore
+import pathspec.util
 
 from mkdocs import utils
 
@@ -21,13 +26,38 @@ if TYPE_CHECKING:
 log = logging.getLogger(__name__)
 
 
+class InclusionLevel(enum.Enum):
+    Excluded = -2
+    """The file is excluded from the final site, but will still be populated during `mkdocs serve`."""
+    NotInNav = -1
+    """The file is part of the site, but doesn't produce nav warnings."""
+    Undefined = 0
+    """Still needs to be computed based on the config. If the config doesn't kick in, acts the same as `included`."""
+    Included = 1
+    """The file is part of the site. Documentation pages that are omitted from the nav will produce warnings."""
+
+    def all(self):
+        return True
+
+    def is_included(self):
+        return self.value > self.Excluded.value
+
+    def is_excluded(self):
+        return self.value <= self.Excluded.value
+
+    def is_in_nav(self):
+        return self.value > self.NotInNav.value
+
+    def is_not_in_nav(self):
+        return self.value <= self.NotInNav.value
+
+
 class Files:
     """A collection of [File][mkdocs.structure.files.File] objects."""
 
     def __init__(self, files: list[File]) -> None:
         self._files = files
         self._src_uris: dict[str, File] | None = None
-        self._documentation_pages: Sequence[File] | None = None
 
     def __iter__(self) -> Iterator[File]:
         """Iterate over the files within."""
@@ -60,25 +90,30 @@ class Files:
 
     def append(self, file: File) -> None:
         """Append file to Files collection."""
-        self._src_uris = self._documentation_pages = None
+        self._src_uris = None
         self._files.append(file)
 
     def remove(self, file: File) -> None:
         """Remove file from Files collection."""
-        self._src_uris = self._documentation_pages = None
+        self._src_uris = None
         self._files.remove(file)
 
-    def copy_static_files(self, dirty: bool = False) -> None:
+    def copy_static_files(
+        self,
+        dirty: bool = False,
+        *,
+        inclusion: Callable[[InclusionLevel], bool] = InclusionLevel.is_included,
+    ) -> None:
         """Copy static files from source to destination."""
         for file in self:
-            if not file.is_documentation_page():
+            if not file.is_documentation_page() and inclusion(file.inclusion):
                 file.copy_file(dirty)
 
-    def documentation_pages(self) -> Sequence[File]:
+    def documentation_pages(
+        self, *, inclusion: Callable[[InclusionLevel], bool] = InclusionLevel.is_included
+    ) -> Sequence[File]:
         """Return iterable of all Markdown page file objects."""
-        if self._documentation_pages is None:
-            self._documentation_pages = [file for file in self if file.is_documentation_page()]
-        return self._documentation_pages
+        return [file for file in self if file.is_documentation_page() and inclusion(file.inclusion)]
 
     def static_pages(self) -> Sequence[File]:
         """Return iterable of all static page file objects."""
@@ -155,6 +190,9 @@ class File:
     url: str
     """The URI of the destination file relative to the destination directory as a string."""
 
+    inclusion: InclusionLevel
+    """Whether the file will be excluded from the built site."""
+
     @property
     def src_path(self) -> str:
         """Same as `src_uri` (and synchronized with it) but will use backslashes on Windows. Discouraged."""
@@ -183,6 +221,7 @@ class File:
         use_directory_urls: bool,
         *,
         dest_uri: str | None = None,
+        inclusion: InclusionLevel = InclusionLevel.Undefined,
     ) -> None:
         self.page = None
         self.src_path = path
@@ -193,6 +232,7 @@ class File:
         self.url = self._get_url(use_directory_urls)
         self.abs_src_path = os.path.normpath(os.path.join(src_dir, self.src_uri))
         self.abs_dest_path = os.path.normpath(os.path.join(dest_dir, self.dest_uri))
+        self.inclusion = inclusion
 
     def __eq__(self, other) -> bool:
         return (
@@ -276,52 +316,77 @@ class File:
         return self.src_uri.endswith('.css')
 
 
+_default_exclude = pathspec.gitignore.GitIgnoreSpec.from_lines(['.*', '/templates/'])
+
+
+def _set_exclusions(files: Iterable[File], config: MkDocsConfig | Mapping[str, Any]) -> None:
+    """Re-calculate which files are excluded, based on the patterns in the config."""
+    exclude: pathspec.gitignore.GitIgnoreSpec | None = config.get('exclude_docs')
+    exclude = _default_exclude + exclude if exclude else _default_exclude
+    nav_exclude: pathspec.gitignore.GitIgnoreSpec | None = config.get('not_in_nav')
+
+    for file in files:
+        if file.inclusion == InclusionLevel.Undefined:
+            if exclude.match_file(file.src_uri):
+                file.inclusion = InclusionLevel.Excluded
+            elif nav_exclude and nav_exclude.match_file(file.src_uri):
+                file.inclusion = InclusionLevel.NotInNav
+            else:
+                file.inclusion = InclusionLevel.Included
+
+
 def get_files(config: MkDocsConfig | Mapping[str, Any]) -> Files:
     """Walk the `docs_dir` and return a Files collection."""
-    files = []
-    exclude = ['.*', '/templates']
-
+    files: list[File] = []
+    conflicting_files: list[tuple[File, File]] = []
     for source_dir, dirnames, filenames in os.walk(config['docs_dir'], followlinks=True):
         relative_dir = os.path.relpath(source_dir, config['docs_dir'])
-
-        for dirname in list(dirnames):
-            path = os.path.normpath(os.path.join(relative_dir, dirname))
-            # Skip any excluded directories
-            if _filter_paths(basename=dirname, path=path, is_dir=True, exclude=exclude):
-                dirnames.remove(dirname)
         dirnames.sort()
+        filenames.sort(key=_file_sort_key)
 
-        for filename in _sort_files(filenames):
-            path = os.path.normpath(os.path.join(relative_dir, filename))
-            # Skip any excluded files
-            if _filter_paths(basename=filename, path=path, is_dir=False, exclude=exclude):
-                continue
-            # Skip README.md if an index file also exists in dir
-            if filename == 'README.md' and 'index.md' in filenames:
-                log.warning(
-                    f"Both index.md and README.md found. Skipping README.md from {source_dir}"
-                )
-                continue
-            files.append(
-                File(path, config['docs_dir'], config['site_dir'], config['use_directory_urls'])
+        files_by_dest: dict[str, File] = {}
+        for filename in filenames:
+            file = File(
+                os.path.join(relative_dir, filename),
+                config['docs_dir'],
+                config['site_dir'],
+                config['use_directory_urls'],
             )
+            # Skip README.md if an index file also exists in dir (part 1)
+            prev_file = files_by_dest.setdefault(file.dest_uri, file)
+            if prev_file is not file:
+                conflicting_files.append((prev_file, file))
+            files.append(file)
+            prev_file = file
+
+    _set_exclusions(files, config)
+    # Skip README.md if an index file also exists in dir (part 2)
+    for a, b in conflicting_files:
+        if b.inclusion.is_included():
+            if a.inclusion.is_included():
+                log.warning(
+                    f"Excluding '{a.src_uri}' from the site because it conflicts with '{b.src_uri}'."
+                )
+            files.remove(a)
+        else:
+            files.remove(b)
 
     return Files(files)
 
 
-def _sort_files(filenames: Iterable[str]) -> list[str]:
+def _file_sort_key(f: str):
     """Always sort `index` or `README` as first filename in list."""
+    return (os.path.splitext(f)[0] not in ('index', 'README'), f)
 
-    def key(f):
-        if os.path.splitext(f)[0] in ['index', 'README']:
-            return (0,)
-        return (1, f)
 
-    return sorted(filenames, key=key)
+def _sort_files(filenames: Iterable[str]) -> list[str]:
+    return sorted(filenames, key=_file_sort_key)
 
 
 def _filter_paths(basename: str, path: str, is_dir: bool, exclude: Iterable[str]) -> bool:
-    """.gitignore style file filtering."""
+    warnings.warn(
+        "_filter_paths is not used since MkDocs 1.5 and will be removed soon.", DeprecationWarning
+    )
     for item in exclude:
         # Items ending in '/' apply only to directories.
         if item.endswith('/') and not is_dir:

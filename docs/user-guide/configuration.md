@@ -291,6 +291,69 @@ server root and effectively points to `https://example.com/bugs/`. Of course, th
 list of all the Markdown files found within the `docs_dir` and its
 sub-directories. Index files will always be listed first within a sub-section.
 
+### exclude_docs
+
+NEW: **New in version 1.5.**
+
+This config defines patterns of files (under [`docs_dir`](#docs_dir)) to not be picked up into the built site.
+
+Example:
+
+```yaml
+exclude_docs: |
+    api-config.json    # A file with this name anywhere.
+    drafts/            # A "drafts" directory anywhere.
+    /requirements.txt  # Top-level "docs/requirements.txt".
+    *.py               # Any file with this extension anywhere.
+    !/foo/example.py   # But keep this particular file.
+```
+
+This follows the [.gitignore pattern format](https://git-scm.com/docs/gitignore#_pattern_format).
+
+Note that `mkdocs serve` does *not* follow this setting and instead displays excluded documents but with a "DRAFT" mark. To prevent this effect, you can run `mkdocs serve --clean`.
+
+The following defaults are always implicitly prepended - to exclude dot-files (and directories) as well as the top-level `templates` directory:
+
+```yaml
+exclude_docs: |
+    .*
+    /templates/
+```
+
+So, in order to really start this config fresh, you'd need to specify a negated version of these entries first.
+
+Otherwise you could for example opt only certain dot-files back into the site:
+
+```yaml
+exclude_docs: |
+    !.assets  # Don't exclude '.assets' although all other '.*' are excluded
+```
+
+### not_in_nav
+
+NEW: **New in version 1.5.**
+
+NOTE: This option does *not* actually exclude anything from the nav.
+
+If you want to include some docs into the site but intentionally exclude them from the nav, normally MkDocs warns about this.
+
+Adding such patterns of files (relative to [`docs_dir`](#docs_dir)) into the `not_in_nav` config will prevent such warnings.
+
+Example:
+
+```yaml
+nav:
+    - Foo: foo.md
+    - Bar: bar.md
+
+not_in_nav: |
+    /private.md
+```
+
+As the previous option, this follows the .gitignore pattern format.
+
+NOTE: Adding a given file to [`exclude_docs`](#exclude_docs) takes precedence over and implies `not_in_nav`.
+
 ## Build directories
 
 ### theme
@@ -604,7 +667,7 @@ This alternative syntax is required if you intend to override some options via
 > which are available out-of-the-box. For a list of configuration options
 > available for a given extension, see the documentation for that extension.
 >
-> You may also install and use various third party extensions ([Python-Markdown wiki], [Best-of-MkDocs]). Consult
+> You may also install and use various third party extensions ([Python-Markdown wiki], [MkDocs project catalog][catalog]). Consult
 > the documentation provided by those extensions for installation instructions
 > and available configuration options.
 
@@ -993,7 +1056,7 @@ path based options in the primary configuration file only.
 [smarty]: https://python-markdown.github.io/extensions/smarty/
 [exts]: https://python-markdown.github.io/extensions/
 [Python-Markdown wiki]: https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
-[Best-of-MkDocs]: https://github.com/mkdocs/best-of-mkdocs
+[catalog]: https://github.com/mkdocs/catalog
 [configuring pages and navigation]: writing-your-docs.md#configure-pages-and-navigation
 [theme_dir]: customizing-your-theme.md#using-the-theme_dir
 [choosing your theme]: choosing-your-theme.md

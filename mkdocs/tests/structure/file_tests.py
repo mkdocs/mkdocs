@@ -3,7 +3,7 @@ import sys
 import unittest
 from unittest import mock
 
-from mkdocs.structure.files import File, Files, _filter_paths, _sort_files, get_files
+from mkdocs.structure.files import File, Files, _sort_files, get_files
 from mkdocs.tests.base import PathAssertionMixin, load_config, tempdir
 
 
@@ -60,7 +60,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
 
         self.assertEqual(
             _sort_files(['a.md', 'index.md', 'b.md', 'index.html']),
-            ['index.md', 'index.html', 'a.md', 'b.md'],
+            ['index.html', 'index.md', 'a.md', 'b.md'],
         )
 
         self.assertEqual(
@@ -427,34 +427,6 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
             os.path.normpath(os.path.join(ddir, 'favicon.ico')),
         )
 
-    def test_filter_paths(self):
-        # Root level file
-        self.assertFalse(_filter_paths('foo.md', 'foo.md', False, ['bar.md']))
-        self.assertTrue(_filter_paths('foo.md', 'foo.md', False, ['foo.md']))
-
-        # Nested file
-        self.assertFalse(_filter_paths('foo.md', 'baz/foo.md', False, ['bar.md']))
-        self.assertTrue(_filter_paths('foo.md', 'baz/foo.md', False, ['foo.md']))
-
-        # Wildcard
-        self.assertFalse(_filter_paths('foo.md', 'foo.md', False, ['*.txt']))
-        self.assertTrue(_filter_paths('foo.md', 'foo.md', False, ['*.md']))
-
-        # Root level dir
-        self.assertFalse(_filter_paths('bar', 'bar', True, ['/baz']))
-        self.assertFalse(_filter_paths('bar', 'bar', True, ['/baz/']))
-        self.assertTrue(_filter_paths('bar', 'bar', True, ['/bar']))
-        self.assertTrue(_filter_paths('bar', 'bar', True, ['/bar/']))
-
-        # Nested dir
-        self.assertFalse(_filter_paths('bar', 'foo/bar', True, ['/bar']))
-        self.assertFalse(_filter_paths('bar', 'foo/bar', True, ['/bar/']))
-        self.assertTrue(_filter_paths('bar', 'foo/bar', True, ['bar/']))
-
-        # Files that look like dirs (no extension). Note that `is_dir` is `False`.
-        self.assertFalse(_filter_paths('bar', 'bar', False, ['bar/']))
-        self.assertFalse(_filter_paths('bar', 'foo/bar', False, ['bar/']))
-
     def test_get_relative_url_use_directory_urls(self):
         to_files = [
             'index.md',
@@ -659,10 +631,15 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
     def test_get_files(self, tdir):
         config = load_config(docs_dir=tdir, extra_css=['bar.css'], extra_javascript=['bar.js'])
         files = get_files(config)
-        expected = ['index.md', 'bar.css', 'bar.html', 'bar.jpg', 'bar.js', 'bar.md', 'readme.md']
         self.assertIsInstance(files, Files)
-        self.assertEqual(len(files), len(expected))
-        self.assertEqual([f.src_path for f in files], expected)
+        self.assertEqual(
+            [f.src_path for f in files if f.inclusion.is_included()],
+            ['index.md', 'bar.css', 'bar.html', 'bar.jpg', 'bar.js', 'bar.md', 'readme.md'],
+        )
+        self.assertEqual(
+            [f.src_path for f in files if f.inclusion.is_excluded()],
+            ['.dotfile', 'templates/foo.html'],
+        )
 
     @tempdir(
         files=[
@@ -673,10 +650,8 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
     def test_get_files_include_readme_without_index(self, tdir):
         config = load_config(docs_dir=tdir)
         files = get_files(config)
-        expected = ['README.md', 'foo.md']
         self.assertIsInstance(files, Files)
-        self.assertEqual(len(files), len(expected))
-        self.assertEqual([f.src_path for f in files], expected)
+        self.assertEqual([f.src_path for f in files], ['README.md', 'foo.md'])
 
     @tempdir(
         files=[
@@ -691,12 +666,11 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
             files = get_files(config)
         self.assertRegex(
             '\n'.join(cm.output),
-            r"^WARNING:mkdocs.structure.files:Both index.md and README.md found. Skipping README.md .+$",
+            r"^WARNING:mkdocs.structure.files:"
+            r"Excluding 'README.md' from the site because it conflicts with 'index.md'.$",
         )
-        expected = ['index.md', 'foo.md']
         self.assertIsInstance(files, Files)
-        self.assertEqual(len(files), len(expected))
-        self.assertEqual([f.src_path for f in files], expected)
+        self.assertEqual([f.src_path for f in files], ['index.md', 'foo.md'])
 
     @tempdir()
     @tempdir(files={'test.txt': 'source content'})

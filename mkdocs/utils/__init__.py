@@ -63,7 +63,7 @@ def get_yaml_loader(loader=yaml.Loader):
     return Loader
 
 
-def yaml_load(source: IO | str, loader: type[yaml.Loader] | None = None) -> dict[str, Any]:
+def yaml_load(source: IO | str, loader: type[yaml.BaseLoader] | None = None) -> dict[str, Any]:
     """Return dict of source YAML file using loader, recursively deep merging inherited parent."""
     Loader = loader or get_yaml_loader()
     result = yaml.load(source, Loader=Loader)
@@ -432,6 +432,18 @@ def nest_paths(paths):
         branch.append(path)
 
     return nested
+
+
+class DuplicateFilter:
+    """Avoid logging duplicate messages."""
+
+    def __init__(self) -> None:
+        self.msgs: set[str] = set()
+
+    def __call__(self, record: logging.LogRecord) -> bool:
+        rv = record.msg not in self.msgs
+        self.msgs.add(record.msg)
+        return rv
 
 
 class CountHandler(logging.NullHandler):

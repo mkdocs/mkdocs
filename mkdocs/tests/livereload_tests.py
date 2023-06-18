@@ -38,7 +38,6 @@ def testing_server(root, builder=lambda: None, mount_path="/"):
             root=root,
             mount_path=mount_path,
             polling_interval=0.2,
-            bind_and_activate=False,
         )
         server.setup_environ()
     server.observer.start()
@@ -288,6 +287,44 @@ class BuildTests(unittest.TestCase):
             _, output = do_request(server, "GET /foo.site")
             self.assertEqual(output, "ccccc")
 
+    @tempdir({"foo.docs": "a"})
+    @tempdir({"foo.site": "original"})
+    def test_recovers_from_build_error(self, site_dir, docs_dir):
+        started_building = threading.Event()
+        build_count = 0
+
+        def rebuild():
+            started_building.set()
+            nonlocal build_count
+            build_count += 1
+            if build_count == 1:
+                raise ValueError("oh no")
+            else:
+                content = Path(docs_dir, "foo.docs").read_text()
+                Path(site_dir, "foo.site").write_text(content * 5)
+
+        with testing_server(site_dir, rebuild) as server:
+            server.watch(docs_dir)
+            time.sleep(0.01)
+
+            err = io.StringIO()
+            with contextlib.redirect_stderr(err), self.assertLogs("mkdocs.livereload") as cm:
+                Path(docs_dir, "foo.docs").write_text("b")
+                started_building.wait(timeout=10)
+
+                Path(docs_dir, "foo.docs").write_text("c")
+
+                _, output = do_request(server, "GET /foo.site")
+
+            self.assertIn("ValueError: oh no", err.getvalue())
+            self.assertRegex(
+                "\n".join(cm.output),
+                r".*Detected file changes\n"
+                r".*An error happened during the rebuild.*\n"
+                r".*Detected file changes\n",
+            )
+            self.assertEqual(output, "ccccc")
+
     @tempdir(
         {
             "normal.html": "<html><body>hello</body></html>",
@@ -427,7 +464,6 @@ class BuildTests(unittest.TestCase):
 
     @tempdir()
     def test_bad_error_handler(self, site_dir):
-        self.maxDiff = None
         with testing_server(site_dir) as server:
             server.error_handler = lambda code: 0 / 0
             with self.assertLogs("mkdocs.livereload") as cm:
