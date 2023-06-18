@@ -1,4 +1,7 @@
 import logging
+import unittest.util
+
+unittest.util._MAX_LENGTH = 100000
 
 
 class DisallowLogsHandler(logging.Handler):

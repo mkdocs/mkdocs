@@ -4,13 +4,27 @@ import functools
 import logging
 import os
 import sys
+import warnings
 from collections import UserDict
 from contextlib import contextmanager
-from typing import IO, TYPE_CHECKING, Generic, Iterator, List, Sequence, Tuple, TypeVar, overload
+from typing import (
+    IO,
+    TYPE_CHECKING,
+    Any,
+    Generic,
+    Iterator,
+    List,
+    Mapping,
+    Sequence,
+    Tuple,
+    TypeVar,
+    overload,
+)
 
 from yaml import YAMLError
 
 from mkdocs import exceptions, utils
+from mkdocs.utils import weak_property
 
 if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
@@ -143,7 +157,7 @@ class Config(UserDict):
 
     def __init__(self, config_file_path: str | bytes | None = None):
         super().__init__()
-        self.user_configs: list[dict] = []
+        self.__user_configs: list[dict] = []
         self.set_defaults()
 
         self._schema_keys = {k for k, v in self._schema}
@@ -237,7 +251,7 @@ class Config(UserDict):
                 f"{type(patch)}"
             )
 
-        self.user_configs.append(patch)
+        self.__user_configs.append(patch)
         self.update(patch)
 
     def load_file(self, config_file: IO) -> None:
@@ -249,6 +263,13 @@ class Config(UserDict):
             raise exceptions.ConfigurationError(
                 f"MkDocs encountered an error parsing the configuration file: {e}"
             )
+
+    @weak_property
+    def user_configs(self) -> Sequence[Mapping[str, Any]]:
+        warnings.warn(
+            "user_configs is never used in MkDocs and will be removed soon.", DeprecationWarning
+        )
+        return self.__user_configs
 
 
 @functools.lru_cache(maxsize=None)
