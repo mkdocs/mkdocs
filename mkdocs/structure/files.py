@@ -58,6 +58,7 @@ class Files:
     def __init__(self, files: list[File]) -> None:
         self._files = files
         self._src_uris: dict[str, File] | None = None
+        self._documentation_pages: Sequence[File] | None = None
 
     def __iter__(self) -> Iterator[File]:
         """Iterate over the files within."""
@@ -91,11 +92,13 @@ class Files:
     def append(self, file: File) -> None:
         """Append file to Files collection."""
         self._src_uris = None
+        self._documentation_pages = None
         self._files.append(file)
 
     def remove(self, file: File) -> None:
         """Remove file from Files collection."""
         self._src_uris = None
+        self._documentation_pages = None
         self._files.remove(file)
 
     def copy_static_files(
@@ -113,7 +116,15 @@ class Files:
         self, *, inclusion: Callable[[InclusionLevel], bool] = InclusionLevel.is_included
     ) -> Sequence[File]:
         """Return iterable of all Markdown page file objects."""
-        return [file for file in self if file.is_documentation_page() and inclusion(file.inclusion)]
+        cached = inclusion is InclusionLevel.is_included and self._documentation_pages
+        if cached:
+            return cached
+        result = [
+            file for file in self if file.is_documentation_page() and inclusion(file.inclusion)
+        ]
+        if cached is None:
+            self._documentation_pages = result
+        return result
 
     def static_pages(self) -> Sequence[File]:
         """Return iterable of all static page file objects."""

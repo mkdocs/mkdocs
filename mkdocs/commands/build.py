@@ -4,7 +4,7 @@ import gzip
 import logging
 import os
 import time
-from typing import TYPE_CHECKING, Sequence
+from typing import TYPE_CHECKING
 from urllib.parse import urljoin, urlsplit
 
 import jinja2
@@ -13,7 +13,7 @@ from jinja2.exceptions import TemplateNotFound
 import mkdocs
 from mkdocs import utils
 from mkdocs.exceptions import Abort, BuildError
-from mkdocs.structure.files import File, Files, InclusionLevel, _set_exclusions, get_files
+from mkdocs.structure.files import Files, InclusionLevel, _set_exclusions, get_files
 from mkdocs.structure.nav import Navigation, get_navigation
 from mkdocs.structure.pages import Page
 from mkdocs.utils import DuplicateFilter  # noqa - legacy re-export
@@ -30,7 +30,7 @@ log = logging.getLogger(__name__)
 
 def get_context(
     nav: Navigation,
-    files: Sequence[File] | Files,
+    files: Files,
     config: MkDocsConfig,
     page: Page | None = None,
     base_url: str = '',
@@ -46,12 +46,9 @@ def get_context(
     ]
     extra_css = [utils.normalize_url(path, page, base_url) for path in config.extra_css]
 
-    if isinstance(files, Files):
-        files = files.documentation_pages()
-
     return templates.TemplateContext(
         nav=nav,
-        pages=files,
+        pages=files.documentation_pages(),
         base_url=base_url,
         extra_css=extra_css,
         extra_javascript=extra_javascript,
@@ -190,7 +187,7 @@ def _populate_page(page: Page, config: MkDocsConfig, files: Files, dirty: bool =
 def _build_page(
     page: Page,
     config: MkDocsConfig,
-    doc_files: Sequence[File],
+    files: Files,
     nav: Navigation,
     env: jinja2.Environment,
     dirty: bool = False,
@@ -209,7 +206,7 @@ def _build_page(
         # Activate page. Signals to theme that this is the current page.
         page.active = True
 
-        context = get_context(nav, doc_files, config, page)
+        context = get_context(nav, files, config, page)
 
         # Allow 'template:' override in md source files.
         if 'template' in page.meta:
@@ -302,7 +299,8 @@ def build(
         # Run `files` plugin events.
         files = config.plugins.run_event('files', files, config=config)
         # If plugins have added files but haven't set their inclusion level, calculate it again.
-        _set_exclusions(files._files, config)
+        _set_exclusions(files, config)
+        files._documentation_pages = None  # Drop cache, if any.
 
         nav = get_navigation(files, config)
 
@@ -346,7 +344,7 @@ def build(
         for file in doc_files:
             assert file.page is not None
             _build_page(
-                file.page, config, doc_files, nav, env, dirty, excluded=file.inclusion.is_excluded()
+                file.page, config, files, nav, env, dirty, excluded=file.inclusion.is_excluded()
             )
 
         # Run `post_build` plugin events.
