@@ -550,8 +550,8 @@ class PluginCollection(dict, MutableMapping[str, BasePlugin]):
         return self.run_event('pre_template', template, template_name=template_name, config=config)
 
     def on_template_context(
-        self, context: dict[str, Any], *, template_name: str, config: MkDocsConfig
-    ) -> dict[str, Any]:
+        self, context: TemplateContext, *, template_name: str, config: MkDocsConfig
+    ) -> TemplateContext:
         return self.run_event(
             'template_context', context, template_name=template_name, config=config
         )
@@ -578,8 +578,8 @@ class PluginCollection(dict, MutableMapping[str, BasePlugin]):
         return self.run_event('page_content', html, page=page, config=config, files=files)
 
     def on_page_context(
-        self, context: dict[str, Any], *, page: Page, config: MkDocsConfig, nav: Navigation
-    ) -> dict[str, Any]:
+        self, context: TemplateContext, *, page: Page, config: MkDocsConfig, nav: Navigation
+    ) -> TemplateContext:
         return self.run_event('page_context', context, page=page, config=config, nav=nav)
 
     def on_post_page(self, output: str, *, page: Page, config: MkDocsConfig) -> str:
