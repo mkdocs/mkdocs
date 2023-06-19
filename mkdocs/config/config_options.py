@@ -59,7 +59,7 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
     enable validation with `validate=True`.
     """
 
-    __config_file_path = None
+    _config_file_path: str | None = None
     config_class: type[SomeConfig]
 
     @overload

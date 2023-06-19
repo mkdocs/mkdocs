@@ -1555,9 +1555,12 @@ class SubConfigTest(TestCase):
     def test_config_file_path_pass_through(self) -> None:
         """Necessary to ensure FilesystemObject validates the correct path"""
 
+        passed_config_path = None
+
         class SubType(c.BaseConfigOption):
             def pre_validation(self, config: Config, key_name: str) -> None:
-                assert_equal(config.config_file_path, CONFIG_PATH)
+                nonlocal passed_config_path
+                passed_config_path = config.config_file_path
 
         class Sub(Config):
             opt = SubType()
@@ -1565,9 +1568,9 @@ class SubConfigTest(TestCase):
         class Schema(Config):
             sub = c.ListOfItems(c.SubConfig(Sub), default=[])
 
-        assert_equal = self.assertEqual
-        CONFIG_PATH = "foo/mkdocs.yaml"
-        _ = self.get_config(Schema, {"sub": [{"opt": "bar"}]}, config_file_path=CONFIG_PATH)
+        config_path = "foo/mkdocs.yaml"
+        self.get_config(Schema, {"sub": [{"opt": "bar"}]}, config_file_path=config_path)
+        self.assertEqual(passed_config_path, config_path)
 
 
 class MarkdownExtensionsTest(TestCase):
