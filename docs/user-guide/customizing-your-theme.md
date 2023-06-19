@@ -18,7 +18,7 @@ need to include either CSS or JavaScript files within your [documentation
 directory].
 
 For example, to change the color of the headers in your documentation, create
-a file called `extra.css` and place it next to the documentation Markdown. In
+a file called (for example) `style.css` and place it next to the documentation Markdown. In
 that file add the following CSS.
 
 ```css
@@ -27,14 +27,12 @@ h1 {
 }
 ```
 
-> NOTE:
-> If you are deploying your documentation with [ReadTheDocs], you will need
-> to explicitly list the CSS and JavaScript files you want to include in
-> your config. To do this, add the following to your mkdocs.yml.
->
-> ```yaml
-> extra_css: [extra.css]
-> ```
+Then you need to add it to `mkdocs.yml`:
+
+```yaml
+extra_css:
+  - style.css
+```
 
 After making these changes, they should be visible when you run
 `mkdocs serve` - if you already had this running, you should see that the CSS
@@ -218,7 +216,6 @@ any additional CSS files included in the `custom_dir`.
 [extra_css]: ./configuration.md#extra_css
 [extra_javascript]: ./configuration.md#extra_javascript
 [documentation directory]: ./configuration.md#docs_dir
-[ReadTheDocs]: ./deploying-your-docs.md#readthedocs
 [custom_dir]: ./configuration.md#custom_dir
 [name]: ./configuration.md#name
 [mkdocs]: ./choosing-your-theme.md#mkdocs

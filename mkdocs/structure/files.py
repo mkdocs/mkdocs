@@ -27,29 +27,29 @@ log = logging.getLogger(__name__)
 
 
 class InclusionLevel(enum.Enum):
-    Excluded = -2
+    EXCLUDED = -2
     """The file is excluded from the final site, but will still be populated during `mkdocs serve`."""
-    NotInNav = -1
+    NOT_IN_NAV = -1
     """The file is part of the site, but doesn't produce nav warnings."""
-    Undefined = 0
+    UNDEFINED = 0
     """Still needs to be computed based on the config. If the config doesn't kick in, acts the same as `included`."""
-    Included = 1
+    INCLUDED = 1
     """The file is part of the site. Documentation pages that are omitted from the nav will produce warnings."""
 
     def all(self):
         return True
 
     def is_included(self):
-        return self.value > self.Excluded.value
+        return self.value > self.EXCLUDED.value
 
     def is_excluded(self):
-        return self.value <= self.Excluded.value
+        return self.value <= self.EXCLUDED.value
 
     def is_in_nav(self):
-        return self.value > self.NotInNav.value
+        return self.value > self.NOT_IN_NAV.value
 
     def is_not_in_nav(self):
-        return self.value <= self.NotInNav.value
+        return self.value <= self.NOT_IN_NAV.value
 
 
 class Files:
@@ -221,7 +221,7 @@ class File:
         use_directory_urls: bool,
         *,
         dest_uri: str | None = None,
-        inclusion: InclusionLevel = InclusionLevel.Undefined,
+        inclusion: InclusionLevel = InclusionLevel.UNDEFINED,
     ) -> None:
         self.page = None
         self.src_path = path
@@ -309,7 +309,7 @@ class File:
 
     def is_javascript(self) -> bool:
         """Return True if file is a JavaScript file."""
-        return self.src_uri.endswith(('.js', '.javascript'))
+        return self.src_uri.endswith(('.js', '.javascript', '.mjs'))
 
     def is_css(self) -> bool:
         """Return True if file is a CSS file."""
@@ -326,13 +326,13 @@ def _set_exclusions(files: Iterable[File], config: MkDocsConfig | Mapping[str, A
     nav_exclude: pathspec.gitignore.GitIgnoreSpec | None = config.get('not_in_nav')
 
     for file in files:
-        if file.inclusion == InclusionLevel.Undefined:
+        if file.inclusion == InclusionLevel.UNDEFINED:
             if exclude.match_file(file.src_uri):
-                file.inclusion = InclusionLevel.Excluded
+                file.inclusion = InclusionLevel.EXCLUDED
             elif nav_exclude and nav_exclude.match_file(file.src_uri):
-                file.inclusion = InclusionLevel.NotInNav
+                file.inclusion = InclusionLevel.NOT_IN_NAV
             else:
-                file.inclusion = InclusionLevel.Included
+                file.inclusion = InclusionLevel.INCLUDED
 
 
 def get_files(config: MkDocsConfig | Mapping[str, Any]) -> Files:

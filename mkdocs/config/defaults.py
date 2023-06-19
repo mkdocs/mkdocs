@@ -92,7 +92,7 @@ class MkDocsConfig(base.Config):
     is ignored."""
 
     extra_css = c.Type(list, default=[])
-    extra_javascript = c.Type(list, default=[])
+    extra_javascript = c.ListOfItems(c.ExtraScript(), default=[])
     """Specify which css or javascript files from the docs directory should be
     additionally included in the site."""
 

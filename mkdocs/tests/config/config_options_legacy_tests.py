@@ -1193,8 +1193,8 @@ class SubConfigTest(TestCase):
             with self.subTest(val):
                 with self.expect_error(
                     option=re.compile(
-                        r"The configuration is invalid. The expected type was a key value mapping "
-                        r"\(a python dict\) but we got an object of type: .+"
+                        r"The configuration is invalid. Expected a key-value mapping "
+                        r"\(dict\) but received: .+"
                     )
                 ):
                     self.get_config(Schema, {'option': val})
@@ -1342,8 +1342,8 @@ class ConfigItemsTest(TestCase):
             conf = self.get_config(Schema, {'sub': [{'opt': 'z'}, {'opt': 2}]})
 
         with self.expect_error(
-            sub="The configuration is invalid. The expected type was a key value mapping "
-            "(a python dict) but we got an object of type: <class 'int'>"
+            sub="The configuration is invalid. Expected a key-value mapping "
+            "(dict) but received: <class 'int'>"
         ):
             conf = self.get_config(Schema, {'sub': [1, 2]})
 

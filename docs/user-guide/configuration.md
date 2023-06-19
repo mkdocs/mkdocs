@@ -449,24 +449,53 @@ the root of your local file system.
 
 ### extra_css
 
-Set a list of CSS files in your `docs_dir` to be included by the theme. For
-example, the following example will include the extra.css file within the
-css subdirectory in your [docs_dir](#docs_dir).
+Set a list of CSS files (relative to `docs_dir`) to be included by the theme, typically as `<link>` tags.
+
+Example:
 
 ```yaml
 extra_css:
-    - css/extra.css
-    - css/second_extra.css
+  - css/extra.css
+  - css/second_extra.css
 ```
 
 **default**: `[]` (an empty list).
 
 ### extra_javascript
 
-Set a list of JavaScript files in your `docs_dir` to be included by the theme.
-See the example in [extra_css] for usage.
+Set a list of JavaScript files in your `docs_dir` to be included by the theme, as `<script>` tags.
+
+> NEW: **Changed in version 1.5:**
+>
+> Older versions of MkDocs supported only a plain list of strings, but now several additional config keys are available: `type`, `async`, `defer`.
+
+See the examples and what they produce:
+
+```yaml
+extra_javascript:
+  - some_plain_javascript.js       # <script src="some_plain_javascript.js"></script>
+        # New behavior in MkDocs 1.5:
+  - implicitly_as_module.mjs       # <script src="implicitly_as_module.mjs" type="module"></script>
+        # Config keys only supported since MkDocs 1.5:
+  - path: explicitly_as_module.mjs # <script src="explicitly_as_module.mjs" type="module"></script>
+    type: module
+  - path: deferred_plain.js        # <script src="deferred_plain.js" defer></script>
+    defer: true
+  - path: scripts/async_module.mjs # <script src="scripts/async_module.mjs" type="module" async></script>
+    type: module
+    async: true
+```
+
+So, each item can be either:
+
+* a plain string, or
+* a mapping that has the required `path` key and 3 optional keys `type` (string), `async` (boolean), `defer` (boolean).
+
+Only the plain string variant detects the `.mjs` extension and adds `type="module"`, otherwise `type: module` must be written out regardless of extension.
 
 **default**: `[]` (an empty list).
+
+NOTE: `*.js` and `*.css` files, just like any other type of file, are always copied from `docs_dir` into the site's deployed copy, regardless if they're linked to the pages via the above configs or not.
 
 ### extra_templates
 

@@ -30,6 +30,7 @@ if TYPE_CHECKING:
     from mkdocs.structure.files import Files
     from mkdocs.structure.nav import Navigation
     from mkdocs.structure.pages import Page
+    from mkdocs.utils.templates import TemplateContext
 
 
 log = logging.getLogger('mkdocs.plugins')
@@ -267,8 +268,8 @@ class BasePlugin(Generic[SomeConfig]):
         return template
 
     def on_template_context(
-        self, context: dict[str, Any], *, template_name: str, config: MkDocsConfig
-    ) -> dict[str, Any] | None:
+        self, context: TemplateContext, *, template_name: str, config: MkDocsConfig
+    ) -> TemplateContext | None:
         """
         The `template_context` event is called immediately after the context is created
         for the subject template and can be used to alter the context for that specific
@@ -374,8 +375,8 @@ class BasePlugin(Generic[SomeConfig]):
         return html
 
     def on_page_context(
-        self, context: dict[str, Any], *, page: Page, config: MkDocsConfig, nav: Navigation
-    ) -> dict[str, Any] | None:
+        self, context: TemplateContext, *, page: Page, config: MkDocsConfig, nav: Navigation
+    ) -> TemplateContext | None:
         """
         The `page_context` event is called after the context for a page is created
         and can be used to alter the context for that specific page only.

@@ -678,6 +678,78 @@ class ListOfItemsTest(TestCase):
         with self.expect_error(option="'asdf' is not a valid port"):
             self.get_config(Schema, {'option': ["localhost:8000", "1.2.3.4:asdf"]})
 
+    def test_warning(self) -> None:
+        class Schema(Config):
+            option = c.ListOfItems(c.Deprecated())
+
+        self.get_config(
+            Schema,
+            {'option': ['a']},
+            warnings=dict(
+                option="The configuration option 'option[0]' has been "
+                "deprecated and will be removed in a future release."
+            ),
+        )
+
+
+class ExtraScriptsTest(TestCase):
+    def test_js_async(self) -> None:
+        class Schema(Config):
+            option = c.ListOfItems(c.ExtraScript(), default=[])
+
+        conf = self.get_config(Schema, {'option': ['foo.js', {'path': 'bar.js', 'async': True}]})
+        assert_type(conf.option, List[c.ExtraScriptValue])
+        self.assertEqual(len(conf.option), 2)
+        self.assertIsInstance(conf.option[0], c.ExtraScriptValue)
+        self.assertEqual(
+            [(x.path, x.type, x.defer, x.async_) for x in conf.option],
+            [
+                ('foo.js', '', False, False),
+                ('bar.js', '', False, True),
+            ],
+        )
+
+    def test_mjs(self) -> None:
+        class Schema(Config):
+            option = c.ListOfItems(c.ExtraScript(), default=[])
+
+        conf = self.get_config(
+            Schema, {'option': ['foo.mjs', {'path': 'bar.js', 'type': 'module'}]}
+        )
+        assert_type(conf.option, List[c.ExtraScriptValue])
+        self.assertEqual(len(conf.option), 2)
+        self.assertIsInstance(conf.option[0], c.ExtraScriptValue)
+        self.assertEqual(
+            [(x.path, x.type, x.defer, x.async_) for x in conf.option],
+            [
+                ('foo.mjs', 'module', False, False),
+                ('bar.js', 'module', False, False),
+            ],
+        )
+
+    def test_wrong_type(self) -> None:
+        class Schema(Config):
+            option = c.ListOfItems(c.ExtraScript(), default=[])
+
+        with self.expect_error(
+            option="The configuration is invalid. Expected a key-value mapping (dict) but received: <class 'int'>"
+        ):
+            self.get_config(Schema, {'option': [1]})
+
+    def test_unknown_key(self) -> None:
+        class Schema(Config):
+            option = c.ListOfItems(c.ExtraScript(), default=[])
+
+        conf = self.get_config(
+            Schema,
+            {'option': [{'path': 'foo.js', 'foo': 'bar'}]},
+            warnings=dict(option="Sub-option 'foo': Unrecognised configuration name: foo"),
+        )
+        self.assertEqual(
+            [(x.path, x.type, x.defer, x.async_) for x in conf.option],
+            [('foo.js', '', False, False)],
+        )
+
 
 class DictOfItemsTest(TestCase):
     def test_int_type(self) -> None:
@@ -1335,8 +1407,8 @@ class SubConfigTest(TestCase):
             with self.subTest(val):
                 with self.expect_error(
                     option=re.compile(
-                        r"The configuration is invalid. The expected type was a key value mapping "
-                        r"\(a python dict\) but we got an object of type: .+"
+                        r"The configuration is invalid. Expected a key-value mapping "
+                        r"\(dict\) but received: .+"
                     )
                 ):
                     self.get_config(Schema, {'option': val})
@@ -1461,8 +1533,8 @@ class SubConfigTest(TestCase):
             conf = self.get_config(Schema, {'sub': [{'opt': 'z'}, {'opt': 2}]})
 
         with self.expect_error(
-            sub="The configuration is invalid. The expected type was a key value mapping "
-            "(a python dict) but we got an object of type: <class 'int'>"
+            sub="The configuration is invalid. Expected a key-value mapping "
+            "(dict) but received: <class 'int'>"
         ):
             conf = self.get_config(Schema, {'sub': [1, 2]})
 

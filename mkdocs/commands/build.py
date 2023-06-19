@@ -4,7 +4,7 @@ import gzip
 import logging
 import os
 import time
-from typing import TYPE_CHECKING, Any, Sequence
+from typing import TYPE_CHECKING, Sequence
 from urllib.parse import urljoin, urlsplit
 
 import jinja2
@@ -17,6 +17,7 @@ from mkdocs.structure.files import File, Files, InclusionLevel, _set_exclusions,
 from mkdocs.structure.nav import Navigation, get_navigation
 from mkdocs.structure.pages import Page
 from mkdocs.utils import DuplicateFilter  # noqa - legacy re-export
+from mkdocs.utils import templates
 
 if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
@@ -33,31 +34,32 @@ def get_context(
     config: MkDocsConfig,
     page: Page | None = None,
     base_url: str = '',
-) -> dict[str, Any]:
+) -> templates.TemplateContext:
     """
     Return the template context for a given page or template.
     """
     if page is not None:
         base_url = utils.get_relative_url('.', page.url)
 
-    extra_javascript = utils.create_media_urls(config.extra_javascript, page, base_url)
-
-    extra_css = utils.create_media_urls(config.extra_css, page, base_url)
+    extra_javascript = [
+        utils.normalize_url(str(script), page, base_url) for script in config.extra_javascript
+    ]
+    extra_css = [utils.normalize_url(path, page, base_url) for path in config.extra_css]
 
     if isinstance(files, Files):
         files = files.documentation_pages()
 
-    return {
-        'nav': nav,
-        'pages': files,
-        'base_url': base_url,
-        'extra_css': extra_css,
-        'extra_javascript': extra_javascript,
-        'mkdocs_version': mkdocs.__version__,
-        'build_date_utc': utils.get_build_datetime(),
-        'config': config,
-        'page': page,
-    }
+    return templates.TemplateContext(
+        nav=nav,
+        pages=files,
+        base_url=base_url,
+        extra_css=extra_css,
+        extra_javascript=extra_javascript,
+        mkdocs_version=mkdocs.__version__,
+        build_date_utc=utils.get_build_datetime(),
+        config=config,
+        page=page,
+    )
 
 
 def _build_template(
