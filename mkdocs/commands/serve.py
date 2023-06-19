@@ -63,9 +63,7 @@ def serve(
     is_dirty = build_type == 'dirty'
 
     config = get_config()
-    config['plugins'].run_event(
-        'startup', command=('build' if is_clean else 'serve'), dirty=is_dirty
-    )
+    config.plugins.on_startup(command=('build' if is_clean else 'serve'), dirty=is_dirty)
 
     def builder(config: MkDocsConfig | None = None):
         log.info("Building documentation...")
@@ -109,7 +107,7 @@ def serve(
                     server.watch(d)
 
             # Run `serve` plugin events.
-            server = config.plugins.run_event('serve', server, config=config, builder=builder)
+            server = config.plugins.on_serve(server, config=config, builder=builder)
 
             for item in config.watch:
                 server.watch(item)
@@ -127,6 +125,6 @@ def serve(
         # Avoid ugly, unhelpful traceback
         raise Abort(f'{type(e).__name__}: {e}')
     finally:
-        config['plugins'].run_event('shutdown')
+        config.plugins.on_shutdown()
         if isdir(site_dir):
             shutil.rmtree(site_dir)

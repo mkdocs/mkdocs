@@ -332,7 +332,10 @@ def _open_config_file(config_file: str | IO | None) -> Iterator[IO]:
     else:
         log.debug(f"Loading configuration file: {result_config_file}")
         # Ensure file descriptor is at beginning
-        result_config_file.seek(0)
+        try:
+            result_config_file.seek(0)
+        except OSError:
+            pass
 
     try:
         yield result_config_file

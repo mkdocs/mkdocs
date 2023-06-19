@@ -1050,6 +1050,12 @@ Therefore, defining paths in a parent file which is inherited by multiple
 different sites may not work as expected. It is generally best to define
 path based options in the primary configuration file only.
 
+The inheritance can also be used as a quick way to override keys on the command line - by using stdin as the config file. For example:
+
+```bash
+echo '{INHERIT: mkdocs.yml, site_name: "Renamed site"}' | mkdocs build -f -
+```
+
 [Theme Developer Guide]: ../dev-guide/themes.md
 [pymdk-extensions]: https://python-markdown.github.io/extensions/
 [pymkd]: https://python-markdown.github.io/

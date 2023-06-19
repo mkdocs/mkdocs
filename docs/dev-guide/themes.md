@@ -467,7 +467,7 @@ on the homepage:
         show_root_full_path: false
         heading_level: 5
 
-::: mkdocs.structure.pages.Page.parent
+::: mkdocs.structure.StructureItem.parent
     options:
         show_root_full_path: false
         heading_level: 5
@@ -538,7 +538,7 @@ The following attributes are available on `section` objects:
         show_root_full_path: false
         heading_level: 5
 
-::: mkdocs.structure.nav.Section.parent
+::: mkdocs.structure.StructureItem.parent
     options:
         show_root_full_path: false
         heading_level: 5
@@ -592,7 +592,7 @@ The following attributes are available on `link` objects:
         show_root_full_path: false
         heading_level: 5
 
-::: mkdocs.structure.nav.Link.parent
+::: mkdocs.structure.StructureItem.parent
     options:
         show_root_full_path: false
         heading_level: 5
@@ -700,7 +700,7 @@ and themes should account for this. It is recommended that theme templates wrap
 search specific markup with a check for the plugin:
 
 ```django
-{% if 'search' in config['plugins'] %}
+{% if 'search' in config.plugins %}
     search stuff here...
 {% endif %}
 ```
