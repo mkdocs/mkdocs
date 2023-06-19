@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        {% if page and page.is_homepage %}<meta name="description" content="{{ config['site_description'] }}">{% endif %}
+        {% if page and page.is_homepage %}<meta name="description" content="{{ config.site_description }}">{% endif %}
         {% if config.site_author %}<meta name="author" content="{{ config.site_author }}">{% endif %}
         {% if page and page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}">{% endif %}
         {% if config.site_favicon %}<link rel="shortcut icon" href="{{ config.site_favicon|url }}">
@@ -21,23 +21,20 @@
         <link href="{{ 'css/font-awesome.min.css'|url }}" rel="stylesheet">
         <link href="{{ 'css/base.css'|url }}" rel="stylesheet">
         {%- if config.theme.highlightjs %}
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/{{ config.theme.hljs_style }}.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/{{ config.theme.hljs_style }}.min.css">
         {%- endif %}
-        {%- for path in extra_css %}
-        <link href="{{ path }}" rel="stylesheet">
+        {%- for path in config.extra_css %}
+        <link href="{{ path|url }}" rel="stylesheet">
         {%- endfor %}
       {%- endblock %}
 
       {%- block libs %}
-
-        <script src="{{ 'js/jquery-1.10.2.min.js'|url }}" defer></script>
-        <script src="{{ 'js/bootstrap.min.js'|url }}" defer></script>
         {%- if config.theme.highlightjs %}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
         {%- for lang in config.theme.hljs_languages %}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/{{lang}}.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/{{lang}}.min.js"></script>
         {%- endfor %}
-        <script>hljs.initHighlightingOnLoad();</script>
+        <script>hljs.highlightAll();</script>
         {%- endif %}
       {%- endblock %}
 
@@ -49,7 +46,7 @@
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', '{{ config.theme.analytics.gtag }}');
+          gtag('config', {{ config.theme.analytics.gtag|tojson }});
         </script>
         {%- elif config.google_analytics %}
         <script>
@@ -58,7 +55,7 @@
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-            ga('create', '{{ config.google_analytics[0] }}', '{{ config.google_analytics[1] }}');
+            ga('create', {{ config.google_analytics[0]|tojson }}, {{ config.google_analytics[1]|tojson }});
             ga('send', 'pageview');
         </script>
         {%- endif %}
@@ -110,7 +107,7 @@
 
                     <ul class="nav navbar-nav ml-auto">
                       {%- block search_button %}
-                        {%- if 'search' in config['plugins'] %}
+                        {%- if 'search' in config.plugins %}
                         <li class="nav-item">
                             <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> {% trans %}Search{% endtrans %}
@@ -192,17 +189,19 @@
         </footer>
 
       {%- block scripts %}
+        <script src="{{ 'js/jquery-1.10.2.min.js'|url }}"></script>
+        <script src="{{ 'js/bootstrap.min.js'|url }}"></script>
         <script>
-            var base_url = {{ base_url | tojson }},
-                shortcuts = {{ config.theme.shortcuts | tojson }};
+            var base_url = {{ base_url|tojson }},
+                shortcuts = {{ config.theme.shortcuts|tojson }};
         </script>
-        <script src="{{ 'js/base.js'|url }}" defer></script>
-        {%- for path in extra_javascript %}
-        <script src="{{ path }}" defer></script>
+        <script src="{{ 'js/base.js'|url }}"></script>
+        {%- for script in config.extra_javascript %}
+        {{ script|script_tag }}
         {%- endfor %}
       {%- endblock %}
 
-        {% if 'search' in config['plugins'] %}{%- include "search-modal.html" %}{% endif %}
+        {% if 'search' in config.plugins %}{%- include "search-modal.html" %}{% endif %}
         {%- include "keyboard-modal.html" %}
 
     </body>

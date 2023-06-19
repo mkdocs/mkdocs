@@ -33,7 +33,7 @@ class NoBabelExtension(InternationalizationExtension):  # pragma: no cover
         )
 
 
-def parse_locale(locale) -> Locale:
+def parse_locale(locale: str) -> Locale:
     try:
         return Locale.parse(locale, sep='_')
     except (ValueError, UnknownLocaleError, TypeError) as e:

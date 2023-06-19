@@ -60,6 +60,7 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
     """
 
     __config_file_path = None
+    config_class: type[SomeConfig]
 
     @overload
     def __init__(
@@ -78,32 +79,37 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
     def __init__(self, *config_options, validate=None):
         super().__init__()
         self.default = {}
-        if (
-            len(config_options) == 1
-            and isinstance(config_options[0], type)
-            and issubclass(config_options[0], Config)
-        ):
-            if validate is None:
-                validate = True
-            (self._make_config,) = config_options
-        else:
-            self._make_config = functools.partial(LegacyConfig, config_options)
-        self._do_validation = bool(validate)
+        self._do_validation = True if validate is None else validate
+        if type(self) is SubConfig:
+            if (
+                len(config_options) == 1
+                and isinstance(config_options[0], type)
+                and issubclass(config_options[0], Config)
+            ):
+                (self.config_class,) = config_options
+            else:
+                self.config_class = functools.partial(LegacyConfig, config_options)
+                self._do_validation = False if validate is None else validate
+
+    def __class_getitem__(cls, config_class: type[Config]):
+        """Eliminates the need to write `config_class = FooConfig` when subclassing SubConfig[FooConfig]"""
+        name = f'{cls.__name__}[{config_class.__name__}]'
+        return type(name, (cls,), dict(config_class=config_class))
 
     def pre_validation(self, config: Config, key_name: str):
         self._config_file_path = config.config_file_path
 
     def run_validation(self, value: object) -> SomeConfig:
-        config = self._make_config(config_file_path=self._config_file_path)
+        config = self.config_class(config_file_path=self._config_file_path)
         try:
-            config.load_dict(value)
+            config.load_dict(value)  # type: ignore
             failed, warnings = config.validate()
         except ConfigurationError as e:
             raise ValidationError(str(e))
 
         if self._do_validation:
             # Capture errors and warnings
-            self.warnings = [f"Sub-option '{key}': {msg}" for key, msg in warnings]
+            self.warnings.extend(f"Sub-option '{key}': {msg}" for key, msg in warnings)
             if failed:
                 # Get the first failing one
                 key, err = failed[0]
@@ -196,6 +202,7 @@ class ListOfItems(Generic[T], BaseConfigOption[List[T]]):
         fake_keys = [f'{parent_key_name}[{i}]' for i in range(len(value))]
         fake_config.data = dict(zip(fake_keys, value))
 
+        self.option_type.warnings = self.warnings
         for key_name in fake_config:
             self.option_type.pre_validation(fake_config, key_name)
         for key_name in fake_config:
@@ -819,8 +826,7 @@ class Theme(BaseConfigOption[theme.Theme]):
 
         # Ensure custom_dir is an absolute path
         if 'custom_dir' in theme_config and not os.path.isabs(theme_config['custom_dir']):
-            assert self.config_file_path is not None
-            config_dir = os.path.dirname(self.config_file_path)
+            config_dir = os.path.dirname(self.config_file_path or '')
             theme_config['custom_dir'] = os.path.join(config_dir, theme_config['custom_dir'])
 
         if 'custom_dir' in theme_config and not os.path.isdir(theme_config['custom_dir']):
@@ -891,6 +897,33 @@ class Private(Generic[T], BaseConfigOption[T]):
     def run_validation(self, value: object) -> None:
         if value is not None:
             raise ValidationError('For internal use only.')
+
+
+class ExtraScriptValue(Config):
+    """An extra script to be added to the page. The `extra_javascript` config is a list of these."""
+
+    path = Type(str)
+    """The value of the `src` tag of the script."""
+    type = Type(str, default='')
+    """The value of the `type` tag of the script."""
+    defer = Type(bool, default=False)
+    """Whether to add the `defer` tag to the script."""
+    async_ = Type(bool, default=False)
+    """Whether to add the `async` tag to the script."""
+
+    def __init__(self, path: str = '', config_file_path=None):
+        super().__init__(config_file_path=config_file_path)
+        self.path = path
+
+    def __str__(self):
+        return self.path
+
+
+class ExtraScript(SubConfig[ExtraScriptValue]):
+    def run_validation(self, value: object) -> ExtraScriptValue:
+        if isinstance(value, str):
+            value = {'path': value, 'type': 'module' if value.endswith('.mjs') else ''}
+        return super().run_validation(value)
 
 
 class MarkdownExtensions(OptionallyRequired[List[str]]):

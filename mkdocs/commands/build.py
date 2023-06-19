@@ -4,7 +4,7 @@ import gzip
 import logging
 import os
 import time
-from typing import TYPE_CHECKING, Any, Sequence
+from typing import TYPE_CHECKING, Sequence
 from urllib.parse import urljoin, urlsplit
 
 import jinja2
@@ -17,6 +17,7 @@ from mkdocs.structure.files import File, Files, InclusionLevel, _set_exclusions,
 from mkdocs.structure.nav import Navigation, get_navigation
 from mkdocs.structure.pages import Page
 from mkdocs.utils import DuplicateFilter  # noqa - legacy re-export
+from mkdocs.utils import templates
 
 if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
@@ -33,31 +34,32 @@ def get_context(
     config: MkDocsConfig,
     page: Page | None = None,
     base_url: str = '',
-) -> dict[str, Any]:
+) -> templates.TemplateContext:
     """
     Return the template context for a given page or template.
     """
     if page is not None:
         base_url = utils.get_relative_url('.', page.url)
 
-    extra_javascript = utils.create_media_urls(config.extra_javascript, page, base_url)
-
-    extra_css = utils.create_media_urls(config.extra_css, page, base_url)
+    extra_javascript = [
+        utils.normalize_url(str(script), page, base_url) for script in config.extra_javascript
+    ]
+    extra_css = [utils.normalize_url(path, page, base_url) for path in config.extra_css]
 
     if isinstance(files, Files):
         files = files.documentation_pages()
 
-    return {
-        'nav': nav,
-        'pages': files,
-        'base_url': base_url,
-        'extra_css': extra_css,
-        'extra_javascript': extra_javascript,
-        'mkdocs_version': mkdocs.__version__,
-        'build_date_utc': utils.get_build_datetime(),
-        'config': config,
-        'page': page,
-    }
+    return templates.TemplateContext(
+        nav=nav,
+        pages=files,
+        base_url=base_url,
+        extra_css=extra_css,
+        extra_javascript=extra_javascript,
+        mkdocs_version=mkdocs.__version__,
+        build_date_utc=utils.get_build_datetime(),
+        config=config,
+        page=page,
+    )
 
 
 def _build_template(
@@ -67,7 +69,7 @@ def _build_template(
     Return rendered output for given template as a string.
     """
     # Run `pre_template` plugin events.
-    template = config.plugins.run_event('pre_template', template, template_name=name, config=config)
+    template = config.plugins.on_pre_template(template, template_name=name, config=config)
 
     if utils.is_error_template(name):
         # Force absolute URLs in the nav of error pages and account for the
@@ -82,14 +84,12 @@ def _build_template(
     context = get_context(nav, files, config, base_url=base_url)
 
     # Run `template_context` plugin events.
-    context = config.plugins.run_event(
-        'template_context', context, template_name=name, config=config
-    )
+    context = config.plugins.on_template_context(context, template_name=name, config=config)
 
     output = template.render(context)
 
     # Run `post_template` plugin events.
-    output = config.plugins.run_event('post_template', output, template_name=name, config=config)
+    output = config.plugins.on_post_template(output, template_name=name, config=config)
 
     return output
 
@@ -161,20 +161,22 @@ def _populate_page(page: Page, config: MkDocsConfig, files: Files, dirty: bool =
             return
 
         # Run the `pre_page` plugin event
-        page = config.plugins.run_event('pre_page', page, config=config, files=files)
+        page = config.plugins.on_pre_page(page, config=config, files=files)
 
         page.read_source(config)
+        assert page.markdown is not None
 
         # Run `page_markdown` plugin events.
-        page.markdown = config.plugins.run_event(
-            'page_markdown', page.markdown, page=page, config=config, files=files
+        page.markdown = config.plugins.on_page_markdown(
+            page.markdown, page=page, config=config, files=files
         )
 
         page.render(config, files)
+        assert page.content is not None
 
         # Run `page_content` plugin events.
-        page.content = config.plugins.run_event(
-            'page_content', page.content, page=page, config=config, files=files
+        page.content = config.plugins.on_page_content(
+            page.content, page=page, config=config, files=files
         )
     except Exception as e:
         message = f"Error reading page '{page.file.src_uri}':"
@@ -216,9 +218,7 @@ def _build_page(
             template = env.get_template('main.html')
 
         # Run `page_context` plugin events.
-        context = config.plugins.run_event(
-            'page_context', context, page=page, config=config, nav=nav
-        )
+        context = config.plugins.on_page_context(context, page=page, config=config, nav=nav)
 
         if excluded:
             page.content = (
@@ -231,7 +231,7 @@ def _build_page(
         output = template.render(context)
 
         # Run `post_page` plugin events.
-        output = config.plugins.run_event('post_page', output, page=page, config=config)
+        output = config.plugins.on_post_page(output, page=page, config=config)
 
         # Write the output file.
         if output.strip():
@@ -271,10 +271,10 @@ def build(
         start = time.monotonic()
 
         # Run `config` plugin events.
-        config = config.plugins.run_event('config', config)
+        config = config.plugins.on_config(config)
 
         # Run `pre_build` plugin events.
-        config.plugins.run_event('pre_build', config=config)
+        config.plugins.on_pre_build(config=config)
 
         if not dirty:
             log.info("Cleaning site directory")
@@ -298,14 +298,14 @@ def build(
         files.add_files_from_theme(env, config)
 
         # Run `files` plugin events.
-        files = config.plugins.run_event('files', files, config=config)
+        files = config.plugins.on_files(files, config=config)
         # If plugins have added files but haven't set their inclusion level, calculate it again.
         _set_exclusions(files._files, config)
 
         nav = get_navigation(files, config)
 
         # Run `nav` plugin events.
-        nav = config.plugins.run_event('nav', nav, config=config, files=files)
+        nav = config.plugins.on_nav(nav, config=config, files=files)
 
         log.debug("Reading markdown pages.")
         excluded = []
@@ -325,7 +325,7 @@ def build(
             )
 
         # Run `env` plugin events.
-        env = config.plugins.run_event('env', env, config=config, files=files)
+        env = config.plugins.on_env(env, config=config, files=files)
 
         # Start writing files to site_dir now that all data is gathered. Note that order matters. Files
         # with lower precedence get written first so that files with higher precedence can overwrite them.
@@ -348,7 +348,7 @@ def build(
             )
 
         # Run `post_build` plugin events.
-        config.plugins.run_event('post_build', config=config)
+        config.plugins.on_post_build(config=config)
 
         counts = warning_counter.get_counts()
         if counts:
@@ -359,7 +359,7 @@ def build(
 
     except Exception as e:
         # Run `build_error` plugin events.
-        config.plugins.run_event('build_error', error=e)
+        config.plugins.on_build_error(error=e)
         if isinstance(e, BuildError):
             log.error(str(e))
             raise Abort('Aborted with a BuildError!')

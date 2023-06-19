@@ -218,13 +218,10 @@ class ConfigTests(unittest.TestCase):
                 self.assertEqual({k: conf['theme'][k] for k in iter(conf['theme'])}, result['vars'])
 
     def test_empty_nav(self):
-        conf = defaults.MkDocsConfig()
-        conf.load_dict(
-            {
-                'site_name': 'Example',
-                'config_file_path': os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
-            }
+        conf = defaults.MkDocsConfig(
+            config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml')
         )
+        conf.load_dict({'site_name': 'Example'})
         conf.validate()
         self.assertEqual(conf['nav'], None)
 
@@ -242,10 +239,8 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(warnings, [])
 
     def test_doc_dir_in_site_dir(self):
-        j = os.path.join
-
         test_configs = (
-            {'docs_dir': j('site', 'docs'), 'site_dir': 'site'},
+            {'docs_dir': os.path.join('site', 'docs'), 'site_dir': 'site'},
             {'docs_dir': 'docs', 'site_dir': '.'},
             {'docs_dir': '.', 'site_dir': '.'},
             {'docs_dir': 'docs', 'site_dir': ''},
@@ -253,23 +248,17 @@ class ConfigTests(unittest.TestCase):
             {'docs_dir': 'docs', 'site_dir': 'docs'},
         )
 
-        cfg = {
-            'config_file_path': j(os.path.abspath('..'), 'mkdocs.yml'),
-        }
-
         for test_config in test_configs:
             with self.subTest(test_config):
-                patch = {**cfg, **test_config}
-
                 # Same as the default schema, but don't verify the docs_dir exists.
                 conf = config.Config(
                     schema=(
                         ('docs_dir', c.Dir(default='docs')),
                         ('site_dir', c.SiteDir(default='site')),
-                        ('config_file_path', c.Type(str)),
-                    )
+                    ),
+                    config_file_path=os.path.join(os.path.abspath('..'), 'mkdocs.yml'),
                 )
-                conf.load_dict(patch)
+                conf.load_dict(test_config)
 
                 errors, warnings = conf.validate()
 

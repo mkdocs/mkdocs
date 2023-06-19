@@ -328,7 +328,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
     def _guess_type(cls, path):
         # MkDocs only ensures a few common types (as seen in livereload_tests.py::test_mime_types).
         # Other uncommon types will not be accepted.
-        if path.endswith((".js", ".JS")):
+        if path.endswith((".js", ".JS", ".mjs")):
             return "application/javascript"
         if path.endswith(".gz"):
             return "application/gzip"

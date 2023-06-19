@@ -5,7 +5,7 @@ import logging
 import os
 import posixpath
 import warnings
-from typing import TYPE_CHECKING, Any, Callable, Mapping, MutableMapping
+from typing import TYPE_CHECKING, Any, Callable, MutableMapping
 from urllib.parse import unquote as urlunquote
 from urllib.parse import urljoin, urlsplit, urlunsplit
 
@@ -15,6 +15,7 @@ import markdown.postprocessors
 import markdown.treeprocessors
 from markdown.util import AMP_SUBSTITUTE
 
+from mkdocs.structure import StructureItem
 from mkdocs.structure.toc import get_toc
 from mkdocs.utils import get_build_date, get_markdown_title, meta, weak_property
 
@@ -23,7 +24,6 @@ if TYPE_CHECKING:
 
     from mkdocs.config.defaults import MkDocsConfig
     from mkdocs.structure.files import File, Files
-    from mkdocs.structure.nav import Section
     from mkdocs.structure.toc import TableOfContents
 
 _unescape: Callable[[str], str]
@@ -36,17 +36,14 @@ except AttributeError:
 log = logging.getLogger(__name__)
 
 
-class Page:
-    def __init__(
-        self, title: str | None, file: File, config: MkDocsConfig | Mapping[str, Any]
-    ) -> None:
+class Page(StructureItem):
+    def __init__(self, title: str | None, file: File, config: MkDocsConfig) -> None:
         file.page = self
         self.file = file
         if title is not None:
             self.title = title
 
         # Navigation attributes
-        self.parent = None
         self.children = None
         self.previous_page = None
         self.next_page = None
@@ -74,12 +71,9 @@ class Page:
         )
 
     def __repr__(self):
-        title = f"'{self.title}'" if (self.title is not None) else '[blank]'
+        title = f"{self.title!r}" if self.title is not None else '[blank]'
         url = self.abs_url or self.file.url
-        return f"Page(title={title}, url='{url}')"
-
-    def _indent_print(self, depth=0):
-        return '{}{}'.format('    ' * depth, repr(self))
+        return f"Page(title={title}, url={url!r})"
 
     markdown: str | None
     """The original Markdown content from the file."""
@@ -133,10 +127,6 @@ class Page:
     def is_index(self) -> bool:
         return self.file.name == 'index'
 
-    @property
-    def is_top_level(self) -> bool:
-        return self.parent is None
-
     edit_url: str | None
     """The full URL to the source page in the source repository. Typically used to
     provide a link to edit the source page. [base_url][] should not be used with this
@@ -157,10 +147,6 @@ class Page:
     The value will be `None` if the current page is the last item in the site navigation
     or if the current page is not included in the navigation at all."""
 
-    parent: Section | None
-    """The immediate parent of the page in the site navigation. `None` if the
-    page is at the top level."""
-
     children: None = None
     """Pages do not contain children and the attribute is always `None`."""
 
@@ -172,12 +158,6 @@ class Page:
 
     is_link: bool = False
     """Indicates that the navigation object is a "link" object. Always `False` for page objects."""
-
-    @property
-    def ancestors(self):
-        if self.parent is None:
-            return []
-        return [self.parent] + self.parent.ancestors
 
     def _set_canonical_url(self, base: str | None) -> None:
         if base:
@@ -222,7 +202,7 @@ class Page:
             self.edit_url = None
 
     def read_source(self, config: MkDocsConfig) -> None:
-        source = config['plugins'].run_event('page_read_source', page=self, config=config)
+        source = config.plugins.on_page_read_source(page=self, config=config)
         if source is None:
             try:
                 with open(self.file.abs_src_path, encoding='utf-8-sig', errors='strict') as f:
@@ -242,7 +222,7 @@ class Page:
         )
 
     @weak_property
-    def title(self) -> str | None:
+    def title(self) -> str | None:  # type: ignore[override]
         """
         Returns the title for the current page.
 

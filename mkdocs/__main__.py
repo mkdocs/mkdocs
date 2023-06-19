@@ -106,7 +106,9 @@ class State:
 pass_state = click.make_pass_decorator(State, ensure=True)
 
 clean_help = "Remove old files from the site_dir before building (the default)."
-config_help = "Provide a specific MkDocs config"
+config_help = (
+    "Provide a specific MkDocs config. This can be a file name, or '-' to read from stdin."
+)
 dev_addr_help = "IP address and port to serve documentation locally (default: localhost:8000)"
 strict_help = "Enable strict mode. This will cause MkDocs to abort the build on any warnings."
 theme_help = "The theme to use when building your documentation."
@@ -255,11 +257,11 @@ def build_command(clean, **kwargs):
 
     _enable_warnings()
     cfg = config.load_config(**kwargs)
-    cfg['plugins'].run_event('startup', command='build', dirty=not clean)
+    cfg.plugins.on_startup(command='build', dirty=not clean)
     try:
         build.build(cfg, dirty=not clean)
     finally:
-        cfg['plugins'].run_event('shutdown')
+        cfg.plugins.on_shutdown()
 
 
 @cli.command(name="gh-deploy")
@@ -282,11 +284,11 @@ def gh_deploy_command(
 
     _enable_warnings()
     cfg = config.load_config(remote_branch=remote_branch, remote_name=remote_name, **kwargs)
-    cfg['plugins'].run_event('startup', command='gh-deploy', dirty=not clean)
+    cfg.plugins.on_startup(command='gh-deploy', dirty=not clean)
     try:
         build.build(cfg, dirty=not clean)
     finally:
-        cfg['plugins'].run_event('shutdown')
+        cfg.plugins.on_shutdown()
     gh_deploy.gh_deploy(
         cfg,
         message=message,

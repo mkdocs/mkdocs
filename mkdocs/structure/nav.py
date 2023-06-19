@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any, Iterator, Mapping, TypeVar
+from typing import TYPE_CHECKING, Iterator, TypeVar
 from urllib.parse import urlsplit
 
+from mkdocs.structure import StructureItem
 from mkdocs.structure.pages import Page
 from mkdocs.utils import nest_paths
 
@@ -16,7 +17,7 @@ log = logging.getLogger(__name__)
 
 
 class Navigation:
-    def __init__(self, items: list[Page | Section | Link], pages: list[Page]) -> None:
+    def __init__(self, items: list, pages: list[Page]) -> None:
         self.items = items  # Nested List with full navigation of Sections, Pages, and Links.
         self.pages = pages  # Flat List of subset of Pages in nav, in order.
 
@@ -32,34 +33,30 @@ class Navigation:
     pages: list[Page]
     """A flat list of all [page][mkdocs.structure.pages.Page] objects contained in the navigation."""
 
-    def __repr__(self):
+    def __str__(self) -> str:
         return '\n'.join(item._indent_print() for item in self)
 
-    def __iter__(self) -> Iterator[Page | Section | Link]:
+    def __iter__(self) -> Iterator:
         return iter(self.items)
 
     def __len__(self) -> int:
         return len(self.items)
 
 
-class Section:
-    def __init__(self, title: str, children: list[Page | Section | Link]) -> None:
+class Section(StructureItem):
+    def __init__(self, title: str, children: list[StructureItem]) -> None:
         self.title = title
         self.children = children
 
-        self.parent = None
         self.active = False
 
     def __repr__(self):
-        return f"Section(title='{self.title}')"
+        return f"Section(title={self.title!r})"
 
     title: str
     """The title of the section."""
 
-    parent: Section | None
-    """The immediate parent of the section or `None` if the section is at the top level."""
-
-    children: list[Page | Section | Link]
+    children: list[StructureItem]
     """An iterable of all child navigation objects. Children may include nested sections, pages and links."""
 
     @property
@@ -87,28 +84,21 @@ class Section:
     is_link: bool = False
     """Indicates that the navigation object is a "link" object. Always `False` for section objects."""
 
-    @property
-    def ancestors(self):
-        if self.parent is None:
-            return []
-        return [self.parent] + self.parent.ancestors
-
-    def _indent_print(self, depth=0):
-        ret = ['{}{}'.format('    ' * depth, repr(self))]
+    def _indent_print(self, depth: int = 0):
+        ret = [super()._indent_print(depth)]
         for item in self.children:
             ret.append(item._indent_print(depth + 1))
         return '\n'.join(ret)
 
 
-class Link:
+class Link(StructureItem):
     def __init__(self, title: str, url: str):
         self.title = title
         self.url = url
-        self.parent = None
 
     def __repr__(self):
-        title = f"'{self.title}'" if (self.title is not None) else '[blank]'
-        return f"Link(title={title}, url='{self.url}')"
+        title = f"{self.title!r}" if self.title is not None else '[blank]'
+        return f"Link(title={title}, url={self.url!r})"
 
     title: str
     """The title of the link. This would generally be used as the label of the link."""
@@ -116,9 +106,6 @@ class Link:
     url: str
     """The URL that the link points to. The URL should always be an absolute URLs and
     should not need to have `base_url` prepended."""
-
-    parent: Section | None
-    """The immediate parent of the link. `None` if the link is at the top level."""
 
     children: None = None
     """Links do not contain children and the attribute is always `None`."""
@@ -135,17 +122,8 @@ class Link:
     is_link: bool = True
     """Indicates that the navigation object is a "link" object. Always `True` for link objects."""
 
-    @property
-    def ancestors(self):
-        if self.parent is None:
-            return []
-        return [self.parent] + self.parent.ancestors
 
-    def _indent_print(self, depth=0):
-        return '{}{}'.format('    ' * depth, repr(self))
-
-
-def get_navigation(files: Files, config: MkDocsConfig | Mapping[str, Any]) -> Navigation:
+def get_navigation(files: Files, config: MkDocsConfig) -> Navigation:
     """Build site navigation from config and files."""
     documentation_pages = files.documentation_pages()
     nav_config = config['nav'] or nest_paths(f.src_uri for f in documentation_pages)
@@ -193,7 +171,7 @@ def get_navigation(files: Files, config: MkDocsConfig | Mapping[str, Any]) -> Na
     return Navigation(items, pages)
 
 
-def _data_to_navigation(data, files: Files, config: MkDocsConfig | Mapping[str, Any]):
+def _data_to_navigation(data, files: Files, config: MkDocsConfig):
     if isinstance(data, dict):
         return [
             _data_to_navigation((key, value), files, config)

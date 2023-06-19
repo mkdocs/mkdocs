@@ -4,13 +4,27 @@ import functools
 import logging
 import os
 import sys
+import warnings
 from collections import UserDict
 from contextlib import contextmanager
-from typing import IO, TYPE_CHECKING, Generic, Iterator, List, Sequence, Tuple, TypeVar, overload
+from typing import (
+    IO,
+    TYPE_CHECKING,
+    Any,
+    Generic,
+    Iterator,
+    List,
+    Mapping,
+    Sequence,
+    Tuple,
+    TypeVar,
+    overload,
+)
 
 from yaml import YAMLError
 
 from mkdocs import exceptions, utils
+from mkdocs.utils import weak_property
 
 if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
@@ -69,6 +83,8 @@ class BaseConfigOption(Generic[T]):
         """
 
     def __set_name__(self, owner, name):
+        if name.endswith('_') and not name.startswith('_'):
+            name = name[:-1]
         self._name = name
 
     @overload
@@ -123,7 +139,7 @@ class Config(UserDict):
         schema = dict(getattr(cls, '_schema', ()))
         for attr_name, attr in cls.__dict__.items():
             if isinstance(attr, BaseConfigOption):
-                schema[attr_name] = attr
+                schema[getattr(attr, '_name', attr_name)] = attr
         cls._schema = tuple(schema.items())
 
         for attr_name, attr in cls._schema:
@@ -143,7 +159,7 @@ class Config(UserDict):
 
     def __init__(self, config_file_path: str | bytes | None = None):
         super().__init__()
-        self.user_configs: list[dict] = []
+        self.__user_configs: list[dict] = []
         self.set_defaults()
 
         self._schema_keys = {k for k, v in self._schema}
@@ -232,12 +248,11 @@ class Config(UserDict):
 
         if not isinstance(patch, dict):
             raise exceptions.ConfigurationError(
-                "The configuration is invalid. The expected type was a key "
-                "value mapping (a python dict) but we got an object of type: "
-                f"{type(patch)}"
+                "The configuration is invalid. Expected a key-"
+                f"value mapping (dict) but received: {type(patch)}"
             )
 
-        self.user_configs.append(patch)
+        self.__user_configs.append(patch)
         self.update(patch)
 
     def load_file(self, config_file: IO) -> None:
@@ -249,6 +264,13 @@ class Config(UserDict):
             raise exceptions.ConfigurationError(
                 f"MkDocs encountered an error parsing the configuration file: {e}"
             )
+
+    @weak_property
+    def user_configs(self) -> Sequence[Mapping[str, Any]]:
+        warnings.warn(
+            "user_configs is never used in MkDocs and will be removed soon.", DeprecationWarning
+        )
+        return self.__user_configs
 
 
 @functools.lru_cache(maxsize=None)
@@ -310,7 +332,10 @@ def _open_config_file(config_file: str | IO | None) -> Iterator[IO]:
     else:
         log.debug(f"Loading configuration file: {result_config_file}")
         # Ensure file descriptor is at beginning
-        result_config_file.seek(0)
+        try:
+            result_config_file.seek(0)
+        except OSError:
+            pass
 
     try:
         yield result_config_file

@@ -30,6 +30,7 @@ if TYPE_CHECKING:
     from mkdocs.structure.files import Files
     from mkdocs.structure.nav import Navigation
     from mkdocs.structure.pages import Page
+    from mkdocs.utils.templates import TemplateContext
 
 
 log = logging.getLogger('mkdocs.plugins')
@@ -153,7 +154,7 @@ class BasePlugin(Generic[SomeConfig]):
 
     # Global events
 
-    def on_config(self, config: MkDocsConfig) -> Config | None:
+    def on_config(self, config: MkDocsConfig) -> MkDocsConfig | None:
         """
         The `config` event is the first event called on build and is run immediately
         after the user configuration is loaded and validated. Any alterations to the
@@ -235,7 +236,7 @@ class BasePlugin(Generic[SomeConfig]):
             config: global configuration object
         """
 
-    def on_build_error(self, error: Exception) -> None:
+    def on_build_error(self, *, error: Exception) -> None:
         """
         The `build_error` event is called after an exception of any kind
         is caught by MkDocs during the build process.
@@ -267,8 +268,8 @@ class BasePlugin(Generic[SomeConfig]):
         return template
 
     def on_template_context(
-        self, context: dict[str, Any], *, template_name: str, config: MkDocsConfig
-    ) -> dict[str, Any] | None:
+        self, context: TemplateContext, *, template_name: str, config: MkDocsConfig
+    ) -> TemplateContext | None:
         """
         The `template_context` event is called immediately after the context is created
         for the subject template and can be used to alter the context for that specific
@@ -374,8 +375,8 @@ class BasePlugin(Generic[SomeConfig]):
         return html
 
     def on_page_context(
-        self, context: dict[str, Any], *, page: Page, config: MkDocsConfig, nav: Navigation
-    ) -> dict[str, Any] | None:
+        self, context: TemplateContext, *, page: Page, config: MkDocsConfig, nav: Navigation
+    ) -> TemplateContext | None:
         """
         The `page_context` event is called after the context for a page is created
         and can be used to alter the context for that specific page only.
@@ -481,7 +482,7 @@ class PluginCollection(dict, MutableMapping[str, BasePlugin]):
                 self._register_event(event_name[3:], method)
 
     @overload
-    def run_event(self, name: str, item: None = None, **kwargs) -> Any:
+    def run_event(self, name: str, **kwargs) -> Any:
         ...
 
     @overload
@@ -510,6 +511,79 @@ class PluginCollection(dict, MutableMapping[str, BasePlugin]):
             if result is not None:
                 item = result
         return item
+
+    def on_startup(self, *, command: Literal['build', 'gh-deploy', 'serve'], dirty: bool) -> None:
+        return self.run_event('startup', command=command, dirty=dirty)
+
+    def on_shutdown(self) -> None:
+        return self.run_event('shutdown')
+
+    def on_serve(
+        self, server: LiveReloadServer, *, config: MkDocsConfig, builder: Callable
+    ) -> LiveReloadServer:
+        return self.run_event('serve', server, config=config, builder=builder)
+
+    def on_config(self, config: MkDocsConfig) -> MkDocsConfig:
+        return self.run_event('config', config)
+
+    def on_pre_build(self, *, config: MkDocsConfig) -> None:
+        return self.run_event('pre_build', config=config)
+
+    def on_files(self, files: Files, *, config: MkDocsConfig) -> Files:
+        return self.run_event('files', files, config=config)
+
+    def on_nav(self, nav: Navigation, *, config: MkDocsConfig, files: Files) -> Navigation:
+        return self.run_event('nav', nav, config=config, files=files)
+
+    def on_env(self, env: jinja2.Environment, *, config: MkDocsConfig, files: Files):
+        return self.run_event('env', env, config=config, files=files)
+
+    def on_post_build(self, *, config: MkDocsConfig) -> None:
+        return self.run_event('post_build', config=config)
+
+    def on_build_error(self, *, error: Exception) -> None:
+        return self.run_event('build_error', error=error)
+
+    def on_pre_template(
+        self, template: jinja2.Template, *, template_name: str, config: MkDocsConfig
+    ) -> jinja2.Template:
+        return self.run_event('pre_template', template, template_name=template_name, config=config)
+
+    def on_template_context(
+        self, context: TemplateContext, *, template_name: str, config: MkDocsConfig
+    ) -> TemplateContext:
+        return self.run_event(
+            'template_context', context, template_name=template_name, config=config
+        )
+
+    def on_post_template(
+        self, output_content: str, *, template_name: str, config: MkDocsConfig
+    ) -> str:
+        return self.run_event(
+            'post_template', output_content, template_name=template_name, config=config
+        )
+
+    def on_pre_page(self, page: Page, *, config: MkDocsConfig, files: Files) -> Page:
+        return self.run_event('pre_page', page, config=config, files=files)
+
+    def on_page_read_source(self, *, page: Page, config: MkDocsConfig) -> str | None:
+        return self.run_event('page_read_source', page=page, config=config)
+
+    def on_page_markdown(
+        self, markdown: str, *, page: Page, config: MkDocsConfig, files: Files
+    ) -> str:
+        return self.run_event('page_markdown', markdown, page=page, config=config, files=files)
+
+    def on_page_content(self, html: str, *, page: Page, config: MkDocsConfig, files: Files) -> str:
+        return self.run_event('page_content', html, page=page, config=config, files=files)
+
+    def on_page_context(
+        self, context: TemplateContext, *, page: Page, config: MkDocsConfig, nav: Navigation
+    ) -> TemplateContext:
+        return self.run_event('page_context', context, page=page, config=config, nav=nav)
+
+    def on_post_page(self, output: str, *, page: Page, config: MkDocsConfig) -> str:
+        return self.run_event('post_page', output, page=page, config=config)
 
 
 class PrefixedLogger(logging.LoggerAdapter):
