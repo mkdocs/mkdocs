@@ -46,6 +46,9 @@ markdown_extensions:
 
 copyright: Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.
 
+hooks:
+    - docs/hooks.py
+
 plugins:
     - search
     - redirects:

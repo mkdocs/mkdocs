@@ -108,20 +108,7 @@ supports the following options:
     The following locales are supported by this theme:
 
     * `en`: English (default)
-    * `de`: German
-    * `es`: Spanish
-    * `fa`: Persian (Farsi)
-    * `fr`: French
-    * `id`: Indonesian
-    * `it`: Italian
-    * `ja`: Japanese
-    * `nb`: Norwegian Bokmål
-    * `nn`: Norwegian Nynorsk
-    * `pt_BR`: Portuguese (Brazil)
-    * `ru`: Russian
-    * `tr`: Turkish
-    * `uk`: Ukrainian
-    * `zh_CN`: Simplified Chinese
+    * (see the list of existing directories `mkdocs/themes/mkdocs/locales/*/`)
 
     See the guide on [localizing your theme] for more information.
 
@@ -198,18 +185,7 @@ theme supports the following options:
     The following locales are supported by this theme:
 
     * `en`: English (default)
-    * `de`: German
-    * `es`: Spanish
-    * `fa`: Persian (Farsi)
-    * `fr`: French
-    * `id`: Indonesian
-    * `it`: Italian
-    * `ja`: Japanese
-    * `pt_BR`: Portuguese (Brazil)
-    * `ru`: Russian
-    * `tr`: Turkish
-    * `uk`: Ukrainian
-    * `zh_CN`: Simplified Chinese
+    * (see the list of existing directories `mkdocs/themes/readthedocs/locales/*/`)
 
     See the guide on [localizing your theme] for more information.
 

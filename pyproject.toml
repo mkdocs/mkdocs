@@ -168,13 +168,13 @@ lint = [
     "flake8 mkdocs",
 ]
 check = [
-    "isort --check-only --diff mkdocs",
-    "black -q --check --diff mkdocs",
+    "isort --check-only --diff mkdocs docs",
+    "black -q --check --diff mkdocs docs",
     "lint",
 ]
 format = [
-    "isort -q mkdocs",
-    "black -q mkdocs",
+    "isort -q mkdocs docs",
+    "black -q mkdocs docs",
 ]
 
 [tool.hatch.envs.lint]
