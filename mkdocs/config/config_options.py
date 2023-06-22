@@ -59,7 +59,8 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
     enable validation with `validate=True`.
     """
 
-    config_class: Callable[[], SomeConfig]
+    _config_file_path: str | None = None
+    config_class: type[SomeConfig]
 
     @overload
     def __init__(
@@ -95,8 +96,11 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
         name = f'{cls.__name__}[{config_class.__name__}]'
         return type(name, (cls,), dict(config_class=config_class))
 
+    def pre_validation(self, config: Config, key_name: str):
+        self._config_file_path = config.config_file_path
+
     def run_validation(self, value: object) -> SomeConfig:
-        config = self.config_class()
+        config = self.config_class(config_file_path=self._config_file_path)
         try:
             config.load_dict(value)  # type: ignore
             failed, warnings = config.validate()
@@ -907,8 +911,8 @@ class ExtraScriptValue(Config):
     async_ = Type(bool, default=False)
     """Whether to add the `async` tag to the script."""
 
-    def __init__(self, path: str = ''):
-        super().__init__()
+    def __init__(self, path: str = '', config_file_path=None):
+        super().__init__(config_file_path=config_file_path)
         self.path = path
 
     def __str__(self):

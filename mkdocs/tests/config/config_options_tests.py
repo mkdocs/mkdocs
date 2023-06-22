@@ -1552,6 +1552,26 @@ class SubConfigTest(TestCase):
         with self.expect_error(sub="Required configuration not provided."):
             conf = self.get_config(Schema, {'sub': None})
 
+    def test_config_file_path_pass_through(self) -> None:
+        """Necessary to ensure FilesystemObject validates the correct path"""
+
+        passed_config_path = None
+
+        class SubType(c.BaseConfigOption):
+            def pre_validation(self, config: Config, key_name: str) -> None:
+                nonlocal passed_config_path
+                passed_config_path = config.config_file_path
+
+        class Sub(Config):
+            opt = SubType()
+
+        class Schema(Config):
+            sub = c.ListOfItems(c.SubConfig(Sub), default=[])
+
+        config_path = "foo/mkdocs.yaml"
+        self.get_config(Schema, {"sub": [{"opt": "bar"}]}, config_file_path=config_path)
+        self.assertEqual(passed_config_path, config_path)
+
 
 class MarkdownExtensionsTest(TestCase):
     @patch('markdown.Markdown')
