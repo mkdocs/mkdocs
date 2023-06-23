@@ -41,7 +41,7 @@ class TestGetDeps(unittest.TestCase):
         cfg = '''
             plugins: [search]
         '''
-        self._test_get_deps(cfg, [])
+        self._test_get_deps(cfg, ['mkdocs'])
 
     def test_mkdocs_config(self):
         cfg = '''
@@ -82,6 +82,7 @@ class TestGetDeps(unittest.TestCase):
             [
                 'markdown-callouts',
                 'mdx-gh-links',
+                'mkdocs',
                 'mkdocs-autorefs',
                 'mkdocs-click',
                 'mkdocs-literate-nav',
@@ -104,7 +105,9 @@ class TestGetDeps(unittest.TestCase):
                   emoji_index: !!python/name:materialx.emoji.twemoji
                   emoji_generator: !!python/name:materialx.emoji.to_svg
         '''
-        self._test_get_deps(cfg, ['mkdocs-code-validator', 'mkdocs-material', 'pymdown-extensions'])
+        self._test_get_deps(
+            cfg, ['mkdocs', 'mkdocs-code-validator', 'mkdocs-material', 'pymdown-extensions']
+        )
 
     def test_theme_precedence(self):
         cfg = '''
@@ -112,19 +115,19 @@ class TestGetDeps(unittest.TestCase):
               - tags
             theme: material
         '''
-        self._test_get_deps(cfg, ['mkdocs-material'])
+        self._test_get_deps(cfg, ['mkdocs', 'mkdocs-material'])
 
         cfg = '''
             plugins:
               - material/tags
         '''
-        self._test_get_deps(cfg, ['mkdocs-material'])
+        self._test_get_deps(cfg, ['mkdocs', 'mkdocs-material'])
 
         cfg = '''
             plugins:
               - tags
         '''
-        self._test_get_deps(cfg, ['mkdocs-plugin-tags'])
+        self._test_get_deps(cfg, ['mkdocs', 'mkdocs-plugin-tags'])
 
     def test_nonexistent(self):
         cfg = '''
@@ -143,7 +146,7 @@ class TestGetDeps(unittest.TestCase):
             WARNING:Extension 'saqdhyndpvpa' is not provided by any registered project
         """
         with self._assert_logs(expected_logs):
-            self._test_get_deps(cfg, ['mkdocs-redirects'])
+            self._test_get_deps(cfg, ['mkdocs', 'mkdocs-redirects'])
 
     def test_git_and_shadowed(self):
         cfg = '''
@@ -151,11 +154,19 @@ class TestGetDeps(unittest.TestCase):
             plugins: [blog]
         '''
         self._test_get_deps(
-            cfg, ['git+https://github.com/andyoakley/mkdocs-blog', 'mkdocs-bootstrap4']
+            cfg, ['git+https://github.com/andyoakley/mkdocs-blog', 'mkdocs', 'mkdocs-bootstrap4']
         )
 
     def test_multi_theme(self):
         cfg = '''
             theme: minty
         '''
-        self._test_get_deps(cfg, ['mkdocs-bootswatch'])
+        self._test_get_deps(cfg, ['mkdocs', 'mkdocs-bootswatch'])
+
+    def test_with_locale(self):
+        cfg = '''
+            theme:
+                name: mkdocs
+                locale: uk
+        '''
+        self._test_get_deps(cfg, ['mkdocs[i18n]'])

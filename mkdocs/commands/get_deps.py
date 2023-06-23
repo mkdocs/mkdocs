@@ -97,8 +97,15 @@ def get_deps(projects_file_url: str, config_file_path: str | None = None) -> Non
     with _open_config_file(config_file_path) as f:
         cfg = utils.yaml_load(f, loader=YamlLoader)  # type: ignore
 
+    packages_to_install = set()
+
     if all(c not in cfg for c in ('site_name', 'theme', 'plugins', 'markdown_extensions')):
         log.warning("The passed config file doesn't seem to be a mkdocs.yml config file")
+    else:
+        if dig(cfg, 'theme.locale') not in (NotFound, 'en'):
+            packages_to_install.add('mkdocs[i18n]')
+        else:
+            packages_to_install.add('mkdocs')
 
     try:
         theme = cfg['theme']['name']
@@ -120,7 +127,6 @@ def get_deps(projects_file_url: str, config_file_path: str | None = None) -> Non
     content = download_and_cache_url(projects_file_url, datetime.timedelta(days=7))
     projects = yaml.safe_load(content)['projects']
 
-    packages_to_install = set()
     for project in projects:
         for kind, wanted in wanted_plugins:
             available = strings(project.get(kind.projects_key, ()))
