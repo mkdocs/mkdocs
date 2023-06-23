@@ -888,7 +888,7 @@ corresponding configuration values (`config.extra_javascript` and
 `config.extra_css` respectively) should be used with the filter instead.
 
 ```django
-{% for path in config['extra_css'] %}
+{% for path in config.extra_css %}
     <link href="{{ path|url }}" rel="stylesheet">
 {% endfor %}
 ```

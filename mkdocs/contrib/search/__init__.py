@@ -12,6 +12,7 @@ from mkdocs.plugins import BasePlugin
 
 if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
+    from mkdocs.structure.pages import Page
     from mkdocs.util.templates import TemplateContext
 
 log = logging.getLogger(__name__)
@@ -62,9 +63,9 @@ class SearchPlugin(BasePlugin[_PluginConfig]):
 
     def on_config(self, config: MkDocsConfig, **kwargs) -> MkDocsConfig:
         "Add plugin templates and scripts to config."
-        if 'include_search_page' in config.theme and config.theme['include_search_page']:
+        if config.theme.get('include_search_page'):
             config.theme.static_templates.add('search.html')
-        if not ('search_index_only' in config.theme and config.theme['search_index_only']):
+        if not config.theme.get('search_index_only'):
             path = os.path.join(base_path, 'templates')
             config.theme.dirs.append(path)
             if 'search/main.js' not in config.extra_javascript:
@@ -72,7 +73,7 @@ class SearchPlugin(BasePlugin[_PluginConfig]):
         if self.config.lang is None:
             # lang setting undefined. Set default based on theme locale
             validate = _PluginConfig.lang.run_validation
-            self.config.lang = validate(config.theme['locale'].language)
+            self.config.lang = validate(config.theme.locale.language)
         # The `python` method of `prebuild_index` is pending deprecation as of version 1.2.
         # TODO: Raise a deprecation warning in a future release (1.3?).
         if self.config.prebuild_index == 'python':
@@ -86,9 +87,9 @@ class SearchPlugin(BasePlugin[_PluginConfig]):
         "Create search index instance for later use."
         self.search_index = SearchIndex(**self.config)
 
-    def on_page_context(self, context: TemplateContext, **kwargs) -> None:
+    def on_page_context(self, context: TemplateContext, page: Page, **kwargs) -> None:
         "Add page to search index."
-        self.search_index.add_entry_from_context(context['page'])
+        self.search_index.add_entry_from_context(page)
 
     def on_post_build(self, config: MkDocsConfig, **kwargs) -> None:
         "Build search index."
@@ -98,7 +99,7 @@ class SearchPlugin(BasePlugin[_PluginConfig]):
         utils.write_file(search_index.encode('utf-8'), json_output_path)
 
         assert self.config.lang is not None
-        if not ('search_index_only' in config.theme and config.theme['search_index_only']):
+        if not config.theme.get('search_index_only'):
             # Include language support files in output. Copy them directly
             # so that only the needed files are included.
             files = []

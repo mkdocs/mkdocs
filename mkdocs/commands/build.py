@@ -212,10 +212,7 @@ def _build_page(
         context = get_context(nav, doc_files, config, page)
 
         # Allow 'template:' override in md source files.
-        if 'template' in page.meta:
-            template = env.get_template(page.meta['template'])
-        else:
-            template = env.get_template('main.html')
+        template = env.get_template(page.meta.get('template', 'main.html'))
 
         # Run `page_context` plugin events.
         context = config.plugins.on_page_context(context, page=page, config=config, nav=nav)

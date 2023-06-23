@@ -84,7 +84,7 @@ class Section(StructureItem):
     is_link: bool = False
     """Indicates that the navigation object is a "link" object. Always `False` for section objects."""
 
-    def _indent_print(self, depth: int = 0):
+    def _indent_print(self, depth: int = 0) -> str:
         ret = [super()._indent_print(depth)]
         for item in self.children:
             ret.append(item._indent_print(depth + 1))

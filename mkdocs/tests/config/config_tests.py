@@ -215,7 +215,7 @@ class ConfigTests(unittest.TestCase):
                 self.assertEqual(warnings, [])
                 self.assertEqual(conf['theme'].dirs, result['dirs'])
                 self.assertEqual(conf['theme'].static_templates, set(result['static_templates']))
-                self.assertEqual({k: conf['theme'][k] for k in iter(conf['theme'])}, result['vars'])
+                self.assertEqual(dict(conf['theme']), result['vars'])
 
     def test_empty_nav(self):
         conf = defaults.MkDocsConfig(
