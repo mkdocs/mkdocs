@@ -213,9 +213,7 @@ Finally, run `mkdocs serve` to check out your new localized version of the theme
 
 ## Updating theme documentation
 
-Update the lists of supported translations for each translated theme located at
-[Choosing your theme](../user-guide/choosing-your-theme.md)
-(`docs/user-guide/choosing-your-theme.md`), in their __`locale`__ options.
+The page [Choosing your theme](../user-guide/choosing-your-theme.md) updates by itself with all available locale options.
 
 ## Contributing translations
 
