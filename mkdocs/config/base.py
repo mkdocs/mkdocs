@@ -133,7 +133,7 @@ class Config(UserDict):
     """
 
     _schema: PlainConfigSchema
-    config_file_path: str | None
+    config_file_path: str
 
     def __init_subclass__(cls):
         schema = dict(getattr(cls, '_schema', ()))
@@ -170,7 +170,7 @@ class Config(UserDict):
                 config_file_path = config_file_path.decode(encoding=sys.getfilesystemencoding())
             except UnicodeDecodeError:
                 raise ValidationError("config_file_path is not a Unicode string.")
-        self.config_file_path = config_file_path
+        self.config_file_path = config_file_path or ''
 
     def set_defaults(self) -> None:
         """
@@ -344,7 +344,9 @@ def _open_config_file(config_file: str | IO | None) -> Iterator[IO]:
             result_config_file.close()
 
 
-def load_config(config_file: str | IO | None = None, **kwargs) -> MkDocsConfig:
+def load_config(
+    config_file: str | IO | None = None, *, config_file_path: str | None = None, **kwargs
+) -> MkDocsConfig:
     """
     Load the configuration for a given file object or name
 
@@ -366,7 +368,10 @@ def load_config(config_file: str | IO | None = None, **kwargs) -> MkDocsConfig:
         # Initialize the config with the default schema.
         from mkdocs.config.defaults import MkDocsConfig
 
-        cfg = MkDocsConfig(config_file_path=getattr(fd, 'name', ''))
+        if config_file_path is None:
+            if fd is not sys.stdin.buffer:
+                config_file_path = getattr(fd, 'name', None)
+        cfg = MkDocsConfig(config_file_path=config_file_path)
         # load the config file
         cfg.load_file(fd)
 

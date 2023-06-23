@@ -16,7 +16,7 @@ def _get_language_of_translation_file(path: Path) -> str:
 
 def on_page_markdown(markdown: str, page: Page, config: MkDocsConfig, **kwargs):
     if page.file.src_uri == 'user-guide/choosing-your-theme.md':
-        here = Path(config.config_file_path or '').parent
+        here = Path(config.config_file_path).parent
 
         def replacement(m: re.Match) -> str:
             lines = []
