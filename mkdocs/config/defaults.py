@@ -1,9 +1,11 @@
 from __future__ import annotations
 
-from typing import Dict
+from typing import IO, Dict
 
+import mkdocs.structure.pages
 from mkdocs.config import base
 from mkdocs.config import config_options as c
+from mkdocs.utils.yaml import get_yaml_loader, yaml_load
 
 
 def get_schema() -> base.PlainConfigSchema:
@@ -137,7 +139,16 @@ class MkDocsConfig(base.Config):
     watch = c.ListOfPaths(default=[])
     """A list of extra paths to watch while running `mkdocs serve`."""
 
+    _current_page: mkdocs.structure.pages.Page | None = None
+    """The currently rendered page. Please do not access this and instead
+    rely on the `page` argument to event handlers."""
+
     def load_dict(self, patch: dict) -> None:
         super().load_dict(patch)
         if 'config_file_path' in patch:
             raise base.ValidationError("Can't set config_file_path in config")
+
+    def load_file(self, config_file: IO) -> None:
+        """Load config options from the open file descriptor of a YAML file."""
+        loader = get_yaml_loader(config=self)
+        self.load_dict(yaml_load(config_file, loader))

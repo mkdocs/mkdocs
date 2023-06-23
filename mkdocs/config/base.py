@@ -21,8 +21,6 @@ from typing import (
     overload,
 )
 
-from yaml import YAMLError
-
 from mkdocs import exceptions, utils
 from mkdocs.utils import weak_property
 
@@ -257,13 +255,12 @@ class Config(UserDict):
 
     def load_file(self, config_file: IO) -> None:
         """Load config options from the open file descriptor of a YAML file."""
-        try:
-            return self.load_dict(utils.yaml_load(config_file))
-        except YAMLError as e:
-            # MkDocs knows and understands ConfigurationErrors
-            raise exceptions.ConfigurationError(
-                f"MkDocs encountered an error parsing the configuration file: {e}"
-            )
+        warnings.warn(
+            "Config.load_file is not used since MkDocs 1.5 and will be removed soon. "
+            "Use MkDocsConfig.load_file instead",
+            DeprecationWarning,
+        )
+        return self.load_dict(utils.yaml_load(config_file))
 
     @weak_property
     def user_configs(self) -> Sequence[Mapping[str, Any]]:
