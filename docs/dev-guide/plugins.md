@@ -110,7 +110,7 @@ class MyPlugin(mkdocs.plugins.BasePlugin):
 > from mkdocs.config import base, config_options as c
 >
 > class _ValidationOptions(base.Config):
->     enable = c.Type(bool, default=True)
+>     enabled = c.Type(bool, default=True)
 >     verbose = c.Type(bool, default=False)
 >     skip_checks = c.ListOfItems(c.Choice(('foo', 'bar', 'baz')), default=[])
 >
@@ -130,7 +130,7 @@ class MyPlugin(mkdocs.plugins.BasePlugin):
 > my_plugin:
 >   definition_file: configs/test.ini  # relative to mkdocs.yml
 >   validation:
->     enable: !ENV [CI, false]
+>     enabled: !ENV [CI, false]
 >     verbose: true
 >     skip_checks:
 >       - foo

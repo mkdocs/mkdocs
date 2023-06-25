@@ -24,23 +24,19 @@ def _construct_dir_placeholder(
 ) -> _DirPlaceholder:
     loader.construct_scalar(node)
 
-    value = (node and node.value) or ''
-    prefix, _, subvalue = value.partition('/')
+    value: str = (node and node.value) or ''
+    prefix, _, suffix = value.partition('/')
     if prefix.startswith('$'):
         if prefix == '$config_dir':
-            return _ConfigDirPlaceholder(config, subvalue)
+            return ConfigDirPlaceholder(config, suffix)
         elif prefix == '$docs_dir':
-            return _DocsDirPlaceholder(config, subvalue)
+            return DocsDirPlaceholder(config, suffix)
         else:
             raise exceptions.ConfigurationError(
                 f"Unknown prefix {prefix!r} in {node.tag} {node.value!r}"
             )
     else:
-        if value:
-            raise exceptions.ConfigurationError(
-                f"{node.tag!r} tag does not expect any value; received {node.value!r}"
-            )
-        return _RelativeDirPlaceholder(config)
+        return RelativeDirPlaceholder(config, value)
 
 
 class _DirPlaceholder(os.PathLike):
@@ -52,23 +48,51 @@ class _DirPlaceholder(os.PathLike):
         raise NotImplementedError
 
     def __fspath__(self) -> str:
+        """Can be used as a path."""
         return os.path.join(self.value(), self.suffix)
 
     def __str__(self) -> str:
+        """Can be converted to a string to obtain the current class."""
         return self.__fspath__()
 
 
-class _ConfigDirPlaceholder(_DirPlaceholder):
+class ConfigDirPlaceholder(_DirPlaceholder):
+    """A placeholder object that gets resolved to the directory of the config file when used as a path.
+
+    The suffix can be an additional sub-path that is always appended to this path.
+
+    This is the implementation of the `!relative $config_dir/suffix` tag, but can also be passed programmatically.
+    """
+
     def value(self) -> str:
         return os.path.dirname(self.config.config_file_path)
 
 
-class _DocsDirPlaceholder(_DirPlaceholder):
+class DocsDirPlaceholder(_DirPlaceholder):
+    """A placeholder object that gets resolved to the docs dir when used as a path.
+
+    The suffix can be an additional sub-path that is always appended to this path.
+
+    This is the implementation of the `!relative $docs_dir/suffix` tag, but can also be passed programmatically.
+    """
+
     def value(self) -> str:
         return self.config.docs_dir
 
 
-class _RelativeDirPlaceholder(_DirPlaceholder):
+class RelativeDirPlaceholder(_DirPlaceholder):
+    """A placeholder object that gets resolved to the directory of the Markdown file currently being rendered.
+
+    This is the implementation of the `!relative` tag, but can also be passed programmatically.
+    """
+
+    def __init__(self, config: MkDocsConfig, suffix: str = ''):
+        if suffix:
+            raise exceptions.ConfigurationError(
+                f"'!relative' tag does not expect any value; received {suffix!r}"
+            )
+        super().__init__(config, suffix)
+
     def value(self) -> str:
         if self.config._current_page is None:
             raise exceptions.ConfigurationError(
