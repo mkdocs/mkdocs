@@ -628,8 +628,8 @@ def get_plugin_logger(name: str) -> PrefixedLogger:
         ```python
         from mkdocs.plugins import get_plugin_logger
 
-        logger = get_plugin_logger(__name__)
-        logger.info("My plugin message")
+        log = get_plugin_logger(__name__)
+        log.info("My plugin message")
         ```
     """
     logger = logging.getLogger(f"mkdocs.plugins.{name}")

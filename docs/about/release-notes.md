@@ -196,7 +196,7 @@ class MyPluginConfig(base.Config):
     bar = c.Type(str, default='')
 
 class MyPlugin(plugins.BasePlugin[MyPluginConfig]):
-    def on_page_markdown(self, markdown: str, *, config: base.MkDocsConfig, **kwargs):
+    def on_page_markdown(self, markdown: str, *, config: defaults.MkDocsConfig, **kwargs):
         if self.config.foo < 5:  # Error, `foo` might be `None`, need to check first.
             if config.site_url.startswith('http:'):  # Error, MkDocs' `site_url` also might be `None`.
                 return markdown + self.config.baz  # Error, no such attribute `baz`!
@@ -206,7 +206,7 @@ This lets you notice the errors from a static type checker before running the co
 
 ```python
 class MyPlugin(plugins.BasePlugin[MyPluginConfig]):
-    def on_page_markdown(self, markdown: str, *, config: base.MkDocsConfig, **kwargs):
+    def on_page_markdown(self, markdown: str, *, config: defaults.MkDocsConfig, **kwargs):
         if self.config.foo is not None and self.config.foo < 5:  # OK, `int < int` is valid.
             if (config.site_url or '').startswith('http:'):  # OK, `str.startswith(str)` is valid.
                 return markdown + self.config.bar  # OK, `str + str` is valid.
@@ -1271,7 +1271,7 @@ work for version 0.16, but may be removed in a future version. Use
 `config.var_name` instead, where `var_name` is the name of one of the
 [configuration] variables.
 
-[configuration]: /user-guide/configuration.md
+[configuration]: ../user-guide/configuration.md
 
 Below is a summary of all of the changes made to the global context:
 
