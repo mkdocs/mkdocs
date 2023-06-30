@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import copy
 import logging
-import os
 import posixpath
 import warnings
 from typing import TYPE_CHECKING, Any, Callable, MutableMapping
@@ -268,7 +267,7 @@ class Page(StructureItem):
             extension_configs=config['mdx_configs'] or {},
         )
 
-        relative_path_ext = _RelativePathTreeprocessor(self.file, files)
+        relative_path_ext = _RelativePathTreeprocessor(self.file, files, config)
         relative_path_ext._register(md)
 
         extract_title_ext = _ExtractTitleTreeprocessor()
@@ -280,9 +279,10 @@ class Page(StructureItem):
 
 
 class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
-    def __init__(self, file: File, files: Files) -> None:
+    def __init__(self, file: File, files: Files, config: MkDocsConfig) -> None:
         self.file = file
         self.files = files
+        self.config = config
 
     def run(self, root: etree.Element) -> etree.Element:
         """
@@ -309,18 +309,18 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
     def path_to_url(self, url: str) -> str:
         scheme, netloc, path, query, fragment = urlsplit(url)
 
-        if (
-            scheme
-            or netloc
-            or not path
-            or url.startswith('/')
-            or url.startswith('\\')
-            or AMP_SUBSTITUTE in url
-            or '.' not in os.path.split(path)[-1]
-        ):
-            # Ignore URLs unless they are a relative link to a source file.
-            # AMP_SUBSTITUTE is used internally by Markdown only for email.
-            # No '.' in the last part of a path indicates path does not point to a file.
+        # Ignore URLs unless they are a relative link to a source file.
+        if scheme or netloc:  # External link.
+            return url
+        elif url.startswith('/') or url.startswith('\\'):  # Absolute link.
+            log.log(
+                self.config.validation.links.absolute_links,
+                f"Doc file '{self.file.src_uri}' contains an absolute link '{url}', it was left as is.",
+            )
+            return url
+        elif AMP_SUBSTITUTE in url:  # AMP_SUBSTITUTE is used internally by Markdown only for email.
+            return url
+        elif not path:  # Self-link containing only query or fragment.
             return url
 
         # Determine the filepath of the target.
@@ -330,19 +330,29 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
         # Validate that the target exists in files collection.
         target_file = self.files.get_file_from_path(target_uri)
         if target_file is None:
-            log.warning(
-                f"Documentation file '{self.file.src_uri}' contains a link to "
-                f"'{target_uri}' which is not found in the documentation files."
-            )
+            if '.' not in posixpath.split(path)[-1]:
+                # No '.' in the last part of a path indicates path does not point to a file.
+                log.log(
+                    self.config.validation.links.unrecognized_links,
+                    f"Doc file '{self.file.src_uri}' contains an unrecognized relative link '{url}', "
+                    f"it was left as is.",
+                )
+            else:
+                target = f" '{target_uri}'" if target_uri != url else ""
+                log.log(
+                    self.config.validation.links.not_found,
+                    f"Doc file '{self.file.src_uri}' contains a relative link '{url}', "
+                    f"but the target{target} is not found among documentation files.",
+                )
             return url
         if target_file.inclusion.is_excluded():
-            log.info(
-                f"Documentation file '{self.file.src_uri}' contains a link to "
-                f"'{target_uri}' which is excluded from the built site."
+            log.log(
+                min(logging.INFO, self.config.validation.links.not_found),
+                f"Doc file '{self.file.src_uri}' contains a link to "
+                f"'{target_uri}' which is excluded from the built site.",
             )
         path = target_file.url_relative_to(self.file)
-        components = (scheme, netloc, path, query, fragment)
-        return urlunsplit(components)
+        return urlunsplit(('', '', path, query, fragment))
 
     def _register(self, md: markdown.Markdown) -> None:
         md.treeprocessors.register(self, "relpath", 0)

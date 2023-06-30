@@ -28,7 +28,11 @@ class MkDocsConfig(base.Config):
     """Gitignore-like patterns of files (relative to docs dir) to exclude from the site."""
 
     not_in_nav = c.Optional(c.PathSpec())
-    """Gitignore-like patterns of files (relative to docs dir) that are not intended to be in the nav."""
+    """Gitignore-like patterns of files (relative to docs dir) that are not intended to be in the nav.
+
+    This marks doc files that are expected not to be in the nav, otherwise they will cause a log message
+    (see also `validation.nav.omitted_files`).
+    """
 
     site_url = c.Optional(c.URL(is_dir=True))
     """The full URL to where the documentation will be hosted."""
@@ -134,6 +138,35 @@ class MkDocsConfig(base.Config):
 
     watch = c.ListOfPaths(default=[])
     """A list of extra paths to watch while running `mkdocs serve`."""
+
+    class Validation(base.Config):
+        class NavValidation(base.Config):
+            omitted_files = c._LogLevel(default='info')
+            """Warning level for when a doc file is never mentioned in the navigation.
+            For granular configuration, see `not_in_nav`."""
+
+            not_found = c._LogLevel(default='warn')
+            """Warning level for when the navigation links to a relative path that isn't an existing page on the site."""
+
+            absolute_links = c._LogLevel(default='info')
+            """Warning level for when the navigation links to an absolute path (starting with `/`)."""
+
+        nav = c.SubConfig(NavValidation)
+
+        class LinksValidation(base.Config):
+            not_found = c._LogLevel(default='warn')
+            """Warning level for when a Markdown doc links to a relative path that isn't an existing document on the site."""
+
+            absolute_links = c._LogLevel(default='info')
+            """Warning level for when a Markdown doc links to an absolute path (starting with `/`)."""
+
+            unrecognized_links = c._LogLevel(default='info')
+            """Warning level for when a Markdown doc links to a relative path that doesn't look like
+            it could be a valid internal link. For example, if the link ends with `/`."""
+
+        links = c.SubConfig(LinksValidation)
+
+    validation = c.SubConfig(Validation)
 
     _current_page: mkdocs.structure.pages.Page | None = None
     """The currently rendered page. Please do not access this and instead

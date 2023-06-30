@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import functools
 import os
 import sys
 import textwrap
@@ -10,11 +9,26 @@ from unittest import mock
 from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.pages import Page
-from mkdocs.tests.base import dedent, load_config, tempdir
+from mkdocs.tests.base import dedent, tempdir
 
-load_config = functools.lru_cache(maxsize=None)(load_config)
+DOCS_DIR = os.path.join(
+    os.path.abspath(os.path.dirname(__file__)), '..', 'integration', 'subpages', 'docs'
+)
 
-DOCS_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../integration/subpages/docs')
+
+def load_config(**cfg) -> MkDocsConfig:
+    cfg.setdefault('site_name', 'Example')
+    cfg.setdefault(
+        'docs_dir',
+        os.path.join(
+            os.path.abspath(os.path.dirname(__file__)), '..', 'integration', 'minimal', 'docs'
+        ),
+    )
+    conf = MkDocsConfig()
+    conf.load_dict(cfg)
+    errors_warnings = conf.validate()
+    assert errors_warnings == ([], []), errors_warnings
+    return conf
 
 
 class PageTests(unittest.TestCase):
@@ -748,6 +762,14 @@ class RelativePathExtensionTests(unittest.TestCase):
             ),
             '<a href="non-index/">link</a>',
         )
+        self.assertEqual(
+            self.get_rendered_result(
+                use_directory_urls=False,
+                content='[link](non-index.md)',
+                files=['index.md', 'non-index.md'],
+            ),
+            '<a href="non-index.html">link</a>',
+        )
 
     def test_relative_html_link_index(self):
         self.assertEqual(
@@ -755,6 +777,14 @@ class RelativePathExtensionTests(unittest.TestCase):
                 content='[link](index.md)', files=['non-index.md', 'index.md']
             ),
             '<a href="../">link</a>',
+        )
+        self.assertEqual(
+            self.get_rendered_result(
+                use_directory_urls=False,
+                content='[link](index.md)',
+                files=['non-index.md', 'index.md'],
+            ),
+            '<a href="index.html">link</a>',
         )
 
     def test_relative_html_link_sub_index(self):
@@ -764,6 +794,14 @@ class RelativePathExtensionTests(unittest.TestCase):
             ),
             '<a href="sub2/">link</a>',
         )
+        self.assertEqual(
+            self.get_rendered_result(
+                use_directory_urls=False,
+                content='[link](sub2/index.md)',
+                files=['index.md', 'sub2/index.md'],
+            ),
+            '<a href="sub2/index.html">link</a>',
+        )
 
     def test_relative_html_link_sub_page(self):
         self.assertEqual(
@@ -771,6 +809,14 @@ class RelativePathExtensionTests(unittest.TestCase):
                 content='[link](sub2/non-index.md)', files=['index.md', 'sub2/non-index.md']
             ),
             '<a href="sub2/non-index/">link</a>',
+        )
+        self.assertEqual(
+            self.get_rendered_result(
+                use_directory_urls=False,
+                content='[link](sub2/non-index.md)',
+                files=['index.md', 'sub2/non-index.md'],
+            ),
+            '<a href="sub2/non-index.html">link</a>',
         )
 
     def test_relative_html_link_with_encoded_space(self):
@@ -784,9 +830,11 @@ class RelativePathExtensionTests(unittest.TestCase):
     def test_relative_html_link_with_unencoded_space(self):
         self.assertEqual(
             self.get_rendered_result(
-                content='[link](file name.md)', files=['index.md', 'file name.md']
+                use_directory_urls=False,
+                content='[link](file name.md)',
+                files=['index.md', 'file name.md'],
             ),
-            '<a href="file%20name/">link</a>',
+            '<a href="file%20name.html">link</a>',
         )
 
     def test_relative_html_link_parent_index(self):
@@ -795,6 +843,14 @@ class RelativePathExtensionTests(unittest.TestCase):
                 content='[link](../index.md)', files=['sub2/non-index.md', 'index.md']
             ),
             '<a href="../../">link</a>',
+        )
+        self.assertEqual(
+            self.get_rendered_result(
+                use_directory_urls=False,
+                content='[link](../index.md)',
+                files=['sub2/non-index.md', 'index.md'],
+            ),
+            '<a href="../index.html">link</a>',
         )
 
     def test_relative_html_link_hash(self):
@@ -812,6 +868,14 @@ class RelativePathExtensionTests(unittest.TestCase):
             ),
             '<a href="sub2/#hash">link</a>',
         )
+        self.assertEqual(
+            self.get_rendered_result(
+                use_directory_urls=False,
+                content='[link](sub2/index.md#hash)',
+                files=['index.md', 'sub2/index.md'],
+            ),
+            '<a href="sub2/index.html#hash">link</a>',
+        )
 
     def test_relative_html_link_sub_page_hash(self):
         self.assertEqual(
@@ -822,18 +886,26 @@ class RelativePathExtensionTests(unittest.TestCase):
         )
 
     def test_relative_html_link_hash_only(self):
-        self.assertEqual(
-            self.get_rendered_result(content='[link](#hash)', files=['index.md']),
-            '<a href="#hash">link</a>',
-        )
+        for use_directory_urls in True, False:
+            self.assertEqual(
+                self.get_rendered_result(
+                    use_directory_urls=use_directory_urls,
+                    content='[link](#hash)',
+                    files=['index.md'],
+                ),
+                '<a href="#hash">link</a>',
+            )
 
     def test_relative_image_link_from_homepage(self):
-        self.assertEqual(
-            self.get_rendered_result(
-                content='![image](image.png)', files=['index.md', 'image.png']
-            ),
-            '<img alt="image" src="image.png" />',  # no opening ./
-        )
+        for use_directory_urls in True, False:
+            self.assertEqual(
+                self.get_rendered_result(
+                    use_directory_urls=use_directory_urls,
+                    content='![image](image.png)',
+                    files=['index.md', 'image.png'],
+                ),
+                '<img alt="image" src="image.png" />',  # no opening ./
+            )
 
     def test_relative_image_link_from_subpage(self):
         self.assertEqual(
@@ -850,6 +922,14 @@ class RelativePathExtensionTests(unittest.TestCase):
             ),
             '<img alt="image" src="../image.png" />',
         )
+        self.assertEqual(
+            self.get_rendered_result(
+                use_directory_urls=False,
+                content='![image](image.png)',
+                files=['non-index.md', 'image.png'],
+            ),
+            '<img alt="image" src="image.png" />',
+        )
 
     def test_no_links(self):
         self.assertEqual(
@@ -862,9 +942,18 @@ class RelativePathExtensionTests(unittest.TestCase):
             self.get_rendered_result(
                 content='[link](non-existent.md)',
                 files=['index.md'],
-                logs="WARNING:Documentation file 'index.md' contains a link to 'non-existent.md' which is not found in the documentation files.",
+                logs="WARNING:Doc file 'index.md' contains a relative link 'non-existent.md', but the target is not found among documentation files.",
             ),
             '<a href="non-existent.md">link</a>',
+        )
+        self.assertEqual(
+            self.get_rendered_result(
+                validation=dict(links=dict(not_found='info')),
+                content='[link](../non-existent.md)',
+                files=['sub/index.md'],
+                logs="INFO:Doc file 'sub/index.md' contains a relative link '../non-existent.md', but the target 'non-existent.md' is not found among documentation files.",
+            ),
+            '<a href="../non-existent.md">link</a>',
         )
 
     def test_external_link(self):
@@ -878,18 +967,33 @@ class RelativePathExtensionTests(unittest.TestCase):
     def test_absolute_link(self):
         self.assertEqual(
             self.get_rendered_result(
-                content='[absolute link](/path/to/file.md)', files=['index.md']
+                content='[absolute link](/path/to/file.md)',
+                files=['index.md'],
+                logs="INFO:Doc file 'index.md' contains an absolute link '/path/to/file.md', it was left as is.",
+            ),
+            '<a href="/path/to/file.md">absolute link</a>',
+        )
+        self.assertEqual(
+            self.get_rendered_result(
+                validation=dict(links=dict(absolute_links='warn')),
+                content='[absolute link](/path/to/file.md)',
+                files=['index.md'],
+                logs="WARNING:Doc file 'index.md' contains an absolute link '/path/to/file.md', it was left as is.",
             ),
             '<a href="/path/to/file.md">absolute link</a>',
         )
 
     def test_absolute_win_local_path(self):
-        self.assertEqual(
-            self.get_rendered_result(
-                content='[absolute local path](\\image.png)', files=['index.md']
-            ),
-            '<a href="\\image.png">absolute local path</a>',
-        )
+        for use_directory_urls in True, False:
+            self.assertEqual(
+                self.get_rendered_result(
+                    use_directory_urls=use_directory_urls,
+                    content='[absolute local path](\\image.png)',
+                    files=['index.md'],
+                    logs="INFO:Doc file 'index.md' contains an absolute link '\\image.png', it was left as is.",
+                ),
+                '<a href="\\image.png">absolute local path</a>',
+            )
 
     def test_email_link(self):
         self.assertEqual(
@@ -899,4 +1003,14 @@ class RelativePathExtensionTests(unittest.TestCase):
             '<a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#109;&#97;&#105;&#108;&#64;&#101;'
             '&#120;&#97;&#109;&#112;&#108;&#101;&#46;&#99;&#111;&#109;">&#109;&#97;&#105;&#108;&#64;'
             '&#101;&#120;&#97;&#109;&#112;&#108;&#101;&#46;&#99;&#111;&#109;</a>',
+        )
+
+    def test_invalid_email_link(self):
+        self.assertEqual(
+            self.get_rendered_result(
+                content='[contact](mail@example.com)',
+                files=['index.md'],
+                logs="WARNING:Doc file 'index.md' contains a relative link 'mail@example.com', but the target is not found among documentation files.",
+            ),
+            '<a href="mail@example.com">contact</a>',
         )

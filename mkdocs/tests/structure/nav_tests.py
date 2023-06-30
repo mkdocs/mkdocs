@@ -123,7 +123,7 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual(
             cm.output,
             [
-                "DEBUG:mkdocs.structure.nav:An absolute path to '/local.html' is included in the 'nav' configuration, which presumably points to an external resource.",
+                "INFO:mkdocs.structure.nav:An absolute path to '/local.html' is included in the 'nav' configuration, which presumably points to an external resource.",
                 "DEBUG:mkdocs.structure.nav:An external link to 'http://example.com/external.html' is included in the 'nav' configuration.",
             ],
         )
