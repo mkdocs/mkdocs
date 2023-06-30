@@ -8,10 +8,6 @@ from mkdocs.config import config_options as c
 from mkdocs.utils.yaml import get_yaml_loader, yaml_load
 
 
-def get_schema() -> base.PlainConfigSchema:
-    return MkDocsConfig._schema
-
-
 # NOTE: The order here is important. During validation some config options
 # depend on others. So, if config option A depends on B, then A should be
 # listed higher in the schema.
@@ -152,3 +148,8 @@ class MkDocsConfig(base.Config):
         """Load config options from the open file descriptor of a YAML file."""
         loader = get_yaml_loader(config=self)
         self.load_dict(yaml_load(config_file, loader))
+
+
+def get_schema() -> base.PlainConfigSchema:
+    """Soft-deprecated, do not use."""
+    return MkDocsConfig._schema
