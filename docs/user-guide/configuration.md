@@ -384,24 +384,20 @@ The defaults of some of the behaviors already differ from MkDocs 1.4 and below -
 >
 > ```yaml
 > validation:
->   nav:
->     absolute_links: ignore
->   links:
->     absolute_links: ignore
->     unrecognized_links: ignore
+>   absolute_links: ignore
+>   unrecognized_links: ignore
 > ```
 <!-- -->
 >! EXAMPLE: **Recommended settings for most sites (maximal strictness):**
 >
 > ```yaml
 > validation:
->   nav:
->     omitted_files: warn
->     absolute_links: warn
->   links:
->     absolute_links: warn
->     unrecognized_links: warn
+>   omitted_files: warn
+>   absolute_links: warn
+>   unrecognized_links: warn
 > ```
+
+Note how in the above examples we omitted the 'nav' and 'links' keys. Here `absolute_links:` means setting both `nav: absolute_links:` and `links: absolute_links:`.
 
 Full list of values and examples of log messages that they can hide or make more prominent:
 

@@ -3,6 +3,7 @@ from __future__ import annotations
 import contextlib
 import copy
 import io
+import logging
 import os
 import re
 import sys
@@ -21,6 +22,7 @@ else:
 
 import mkdocs
 from mkdocs.config import config_options as c
+from mkdocs.config import defaults
 from mkdocs.config.base import Config
 from mkdocs.plugins import BasePlugin, PluginCollection
 from mkdocs.tests.base import tempdir
@@ -1571,6 +1573,94 @@ class SubConfigTest(TestCase):
         config_path = "foo/mkdocs.yaml"
         self.get_config(Schema, {"sub": [{"opt": "bar"}]}, config_file_path=config_path)
         self.assertEqual(passed_config_path, config_path)
+
+
+class NestedSubConfigTest(TestCase):
+    def defaults(self):
+        return {
+            'nav': {
+                'omitted_files': logging.INFO,
+                'not_found': logging.WARNING,
+                'absolute_links': logging.INFO,
+            },
+            'links': {
+                'not_found': logging.WARNING,
+                'absolute_links': logging.INFO,
+                'unrecognized_links': logging.INFO,
+            },
+        }
+
+    class Schema(Config):
+        validation = c.PropagatingSubConfig[defaults.MkDocsConfig.Validation]()
+
+    def test_unspecified(self) -> None:
+        for cfg in {}, {'validation': {}}:
+            with self.subTest(cfg):
+                conf = self.get_config(
+                    self.Schema,
+                    {},
+                )
+                self.assertEqual(conf.validation, self.defaults())
+
+    def test_sets_nested_and_not_nested(self) -> None:
+        conf = self.get_config(
+            self.Schema,
+            {'validation': {'not_found': 'ignore', 'links': {'absolute_links': 'warn'}}},
+        )
+        expected = self.defaults()
+        expected['nav']['not_found'] = logging.DEBUG
+        expected['links']['not_found'] = logging.DEBUG
+        expected['links']['absolute_links'] = logging.WARNING
+        self.assertEqual(conf.validation, expected)
+
+    def test_sets_nested_different(self) -> None:
+        conf = self.get_config(
+            self.Schema,
+            {'validation': {'not_found': 'ignore', 'links': {'not_found': 'warn'}}},
+        )
+        expected = self.defaults()
+        expected['nav']['not_found'] = logging.DEBUG
+        expected['links']['not_found'] = logging.WARNING
+        self.assertEqual(conf.validation, expected)
+
+    def test_sets_only_one_nested(self) -> None:
+        conf = self.get_config(
+            self.Schema,
+            {'validation': {'omitted_files': 'ignore'}},
+        )
+        expected = self.defaults()
+        expected['nav']['omitted_files'] = logging.DEBUG
+        self.assertEqual(conf.validation, expected)
+
+    def test_sets_nested_not_dict(self) -> None:
+        with self.expect_error(
+            validation="Sub-option 'links': Sub-option 'unrecognized_links': Expected a string, but a <class 'list'> was given."
+        ):
+            self.get_config(
+                self.Schema,
+                {'validation': {'unrecognized_links': [], 'links': {'absolute_links': 'warn'}}},
+            )
+
+    def test_wrong_key_nested(self) -> None:
+        conf = self.get_config(
+            self.Schema,
+            {'validation': {'foo': 'warn', 'not_found': 'warn'}},
+            warnings=dict(validation="Sub-option 'foo': Unrecognised configuration name: foo"),
+        )
+        expected = self.defaults()
+        expected['nav']['not_found'] = logging.WARNING
+        expected['links']['not_found'] = logging.WARNING
+        expected['foo'] = 'warn'
+        self.assertEqual(conf.validation, expected)
+
+    def test_wrong_type_nested(self) -> None:
+        with self.expect_error(
+            validation="Sub-option 'nav': Sub-option 'omitted_files': Expected one of ['warn', 'info', 'ignore'], got 'hi'"
+        ):
+            self.get_config(
+                self.Schema,
+                {'validation': {'omitted_files': 'hi'}},
+            )
 
 
 class MarkdownExtensionsTest(TestCase):

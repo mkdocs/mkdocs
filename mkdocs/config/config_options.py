@@ -119,6 +119,28 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
         return config
 
 
+class PropagatingSubConfig(SubConfig[SomeConfig], Generic[SomeConfig]):
+    """A SubConfig that must consist of SubConfigs with defined schemas.
+
+    Any value set on the top config gets moved to sub-configs with matching keys.
+    """
+
+    def run_validation(self, value: object):
+        if isinstance(value, dict):
+            to_discard = set()
+            for k1, v1 in self.config_class._schema:
+                if isinstance(v1, SubConfig):
+                    for k2, _ in v1.config_class._schema:
+                        if k2 in value:
+                            subdict = value.setdefault(k1, {})
+                            if isinstance(subdict, dict):
+                                to_discard.add(k2)
+                                subdict.setdefault(k2, value[k2])
+            for k in to_discard:
+                del value[k]
+        return super().run_validation(value)
+
+
 class OptionallyRequired(Generic[T], BaseConfigOption[T]):
     """
     Soft-deprecated, do not use.

@@ -166,7 +166,7 @@ class MkDocsConfig(base.Config):
 
         links = c.SubConfig(LinksValidation)
 
-    validation = c.SubConfig(Validation)
+    validation = c.PropagatingSubConfig[Validation]()
 
     _current_page: mkdocs.structure.pages.Page | None = None
     """The currently rendered page. Please do not access this and instead
