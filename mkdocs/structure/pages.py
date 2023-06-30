@@ -263,19 +263,20 @@ class Page(StructureItem):
         if self.markdown is None:
             raise RuntimeError("`markdown` field hasn't been set (via `read_source`)")
 
-        relative_path_extension = _RelativePathExtension(self.file, files)
-        extract_title_extension = _ExtractTitleExtension()
         md = markdown.Markdown(
-            extensions=[
-                relative_path_extension,
-                extract_title_extension,
-                *config['markdown_extensions'],
-            ],
+            extensions=config['markdown_extensions'],
             extension_configs=config['mdx_configs'] or {},
         )
+
+        relative_path_ext = _RelativePathTreeprocessor(self.file, files)
+        relative_path_ext._register(md)
+
+        extract_title_ext = _ExtractTitleTreeprocessor()
+        extract_title_ext._register(md)
+
         self.content = md.convert(self.markdown)
         self.toc = get_toc(getattr(md, 'toc_tokens', []))
-        self._title_from_render = extract_title_extension.title
+        self._title_from_render = extract_title_ext.title
 
 
 class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
@@ -343,37 +344,12 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
         components = (scheme, netloc, path, query, fragment)
         return urlunsplit(components)
 
-
-class _RelativePathExtension(markdown.extensions.Extension):
-    """
-    The Extension class is what we pass to markdown, it then
-    registers the Treeprocessor.
-    """
-
-    def __init__(self, file: File, files: Files) -> None:
-        self.file = file
-        self.files = files
-
-    def extendMarkdown(self, md: markdown.Markdown) -> None:
-        relpath = _RelativePathTreeprocessor(self.file, self.files)
-        md.treeprocessors.register(relpath, "relpath", 0)
-
-
-class _ExtractTitleExtension(markdown.extensions.Extension):
-    def __init__(self) -> None:
-        self.title: str | None = None
-
-    def extendMarkdown(self, md: markdown.Markdown) -> None:
-        md.treeprocessors.register(
-            _ExtractTitleTreeprocessor(self),
-            "mkdocs_extract_title",
-            priority=1,  # Close to the end.
-        )
+    def _register(self, md: markdown.Markdown) -> None:
+        md.treeprocessors.register(self, "relpath", 0)
 
 
 class _ExtractTitleTreeprocessor(markdown.treeprocessors.Treeprocessor):
-    def __init__(self, ext: _ExtractTitleExtension) -> None:
-        self.ext = ext
+    title: str | None = None
 
     def run(self, root: etree.Element) -> etree.Element:
         for el in root:
@@ -383,6 +359,13 @@ class _ExtractTitleTreeprocessor(markdown.treeprocessors.Treeprocessor):
                     el = copy.copy(el)
                     del el[-1]
                 # Extract the text only, recursively.
-                self.ext.title = _unescape(''.join(el.itertext()))
+                self.title = _unescape(''.join(el.itertext()))
             break
         return root
+
+    def _register(self, md: markdown.Markdown) -> None:
+        md.treeprocessors.register(
+            self,
+            "mkdocs_extract_title",
+            priority=1,  # Close to the end.
+        )
