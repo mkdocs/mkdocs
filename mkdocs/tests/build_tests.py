@@ -58,9 +58,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             {'Home': 'index.md'},
         ]
         cfg = load_config(nav=nav_cfg, use_directory_urls=False)
-        fs = [
-            File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-        ]
+        fs = [File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
         nav = get_navigation(files, cfg)
         context = build.get_context(nav, files, cfg, nav.pages[0])
@@ -71,9 +69,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             {'Home': 'index.md'},
         ]
         cfg = load_config(nav=nav_cfg)
-        fs = [
-            File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-        ]
+        fs = [File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
         nav = get_navigation(files, cfg)
         context = build.get_context(nav, files, cfg, nav.pages[0])
@@ -86,8 +82,8 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         ]
         cfg = load_config(nav=nav_cfg, use_directory_urls=False)
         fs = [
-            File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-            File('foo/bar.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+            File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
+            File('foo/bar.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
         ]
         files = Files(fs)
         nav = get_navigation(files, cfg)
@@ -101,8 +97,8 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         ]
         cfg = load_config(nav=nav_cfg)
         fs = [
-            File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-            File('foo/bar.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+            File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
+            File('foo/bar.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
         ]
         files = Files(fs)
         nav = get_navigation(files, cfg)
@@ -149,9 +145,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             extra_javascript=['script.js'],
             use_directory_urls=False,
         )
-        fs = [
-            File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-        ]
+        fs = [File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
         nav = get_navigation(files, cfg)
         context = build.get_context(nav, files, cfg, nav.pages[0])
@@ -170,8 +164,8 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             use_directory_urls=False,
         )
         fs = [
-            File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-            File('foo/bar.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+            File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
+            File('foo/bar.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
         ]
         files = Files(fs)
         nav = get_navigation(files, cfg)
@@ -190,8 +184,8 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             extra_javascript=['script.js'],
         )
         fs = [
-            File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-            File('foo/bar.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+            File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
+            File('foo/bar.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
         ]
         files = Files(fs)
         nav = get_navigation(files, cfg)
@@ -210,9 +204,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             extra_css=['assets\\style.css'],
             use_directory_urls=False,
         )
-        fs = [
-            File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-        ]
+        fs = [File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
         nav = get_navigation(files, cfg)
         with self.assertLogs('mkdocs') as cm:
@@ -241,7 +233,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @mock.patch('mkdocs.commands.build._build_template', return_value='some content')
     def test_build_theme_template(self, mock_build_template, mock_write_file):
         cfg = load_config()
-        env = cfg['theme'].get_env()
+        env = cfg.theme.get_env()
         build._build_theme_template('main.html', env, mock.Mock(), cfg, mock.Mock())
         mock_write_file.assert_called_once()
         mock_build_template.assert_called_once()
@@ -254,7 +246,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         self, site_dir, mock_gzip_gzipfile, mock_build_template, mock_write_file
     ):
         cfg = load_config(site_dir=site_dir)
-        env = cfg['theme'].get_env()
+        env = cfg.theme.get_env()
         build._build_theme_template('sitemap.xml', env, mock.Mock(), cfg, mock.Mock())
         mock_write_file.assert_called_once()
         mock_build_template.assert_called_once()
@@ -264,7 +256,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @mock.patch('mkdocs.commands.build._build_template', return_value='')
     def test_skip_missing_theme_template(self, mock_build_template, mock_write_file):
         cfg = load_config()
-        env = cfg['theme'].get_env()
+        env = cfg.theme.get_env()
         with self.assertLogs('mkdocs') as cm:
             build._build_theme_template('missing.html', env, mock.Mock(), cfg, mock.Mock())
         self.assertEqual(
@@ -278,7 +270,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @mock.patch('mkdocs.commands.build._build_template', return_value='')
     def test_skip_theme_template_empty_output(self, mock_build_template, mock_write_file):
         cfg = load_config()
-        env = cfg['theme'].get_env()
+        env = cfg.theme.get_env()
         with self.assertLogs('mkdocs') as cm:
             build._build_theme_template('main.html', env, mock.Mock(), cfg, mock.Mock())
         self.assertEqual(
@@ -294,18 +286,14 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @mock.patch('mkdocs.commands.build.open', mock.mock_open(read_data='template content'))
     def test_build_extra_template(self, site_dir):
         cfg = load_config(site_dir=site_dir)
-        fs = [
-            File('foo.html', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-        ]
+        fs = [File('foo.html', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
         build._build_extra_template('foo.html', files, cfg, mock.Mock())
 
     @mock.patch('mkdocs.commands.build.open', mock.mock_open(read_data='template content'))
     def test_skip_missing_extra_template(self):
         cfg = load_config()
-        fs = [
-            File('foo.html', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-        ]
+        fs = [File('foo.html', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
         with self.assertLogs('mkdocs') as cm:
             build._build_extra_template('missing.html', files, cfg, mock.Mock())
@@ -317,9 +305,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @mock.patch('mkdocs.commands.build.open', side_effect=OSError('Error message.'))
     def test_skip_ioerror_extra_template(self, mock_open):
         cfg = load_config()
-        fs = [
-            File('foo.html', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-        ]
+        fs = [File('foo.html', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
         with self.assertLogs('mkdocs') as cm:
             build._build_extra_template('foo.html', files, cfg, mock.Mock())
@@ -331,9 +317,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @mock.patch('mkdocs.commands.build.open', mock.mock_open(read_data=''))
     def test_skip_extra_template_empty_output(self):
         cfg = load_config()
-        fs = [
-            File('foo.html', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-        ]
+        fs = [File('foo.html', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
         with self.assertLogs('mkdocs') as cm:
             build._build_extra_template('foo.html', files, cfg, mock.Mock())
@@ -347,7 +331,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @tempdir(files={'index.md': 'page content'})
     def test_populate_page(self, docs_dir):
         cfg = load_config(docs_dir=docs_dir)
-        file = File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        file = File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         page = Page('Foo', file, cfg)
         build._populate_page(page, cfg, Files([file]))
         self.assertEqual(page.content, '<p>page content</p>')
@@ -355,7 +339,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @tempdir(files={'testing.html': '<p>page content</p>'})
     def test_populate_page_dirty_modified(self, site_dir):
         cfg = load_config(site_dir=site_dir)
-        file = File('testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        file = File('testing.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         page = Page('Foo', file, cfg)
         build._populate_page(page, cfg, Files([file]), dirty=True)
         self.assertTrue(page.markdown.startswith('# Welcome to MkDocs'))
@@ -367,7 +351,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @tempdir(files={'index.html': '<p>page content</p>'})
     def test_populate_page_dirty_not_modified(self, site_dir, docs_dir):
         cfg = load_config(docs_dir=docs_dir, site_dir=site_dir)
-        file = File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        file = File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         page = Page('Foo', file, cfg)
         build._populate_page(page, cfg, Files([file]), dirty=True)
         # Content is empty as file read was skipped
@@ -378,7 +362,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @mock.patch('mkdocs.structure.pages.open', side_effect=OSError('Error message.'))
     def test_populate_page_read_error(self, docs_dir, mock_open):
         cfg = load_config(docs_dir=docs_dir)
-        file = File('missing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        file = File('missing.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         page = Page('Foo', file, cfg)
         with self.assertLogs('mkdocs') as cm:
             with self.assertRaises(OSError):
@@ -400,7 +384,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         cfg = load_config(docs_dir=docs_dir)
         cfg.plugins.events['page_markdown'].append(on_page_markdown)
 
-        file = File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        file = File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         page = Page('Foo', file, cfg)
         with self.assertLogs('mkdocs') as cm:
             with self.assertRaises(PluginError):
@@ -415,7 +399,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @tempdir()
     def test_build_page(self, site_dir):
         cfg = load_config(site_dir=site_dir, nav=['index.md'])
-        fs = [File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]
+        fs = [File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
         nav = get_navigation(files, cfg)
         page = files.documentation_pages()[0].page
@@ -430,12 +414,12 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @mock.patch('jinja2.environment.Template.render', return_value='')
     def test_build_page_empty(self, site_dir, render_mock):
         cfg = load_config(site_dir=site_dir, nav=['index.md'])
-        fs = [File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]
+        fs = [File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
         nav = get_navigation(files, cfg)
         with self.assertLogs('mkdocs') as cm:
             build._build_page(
-                files.documentation_pages()[0].page, cfg, files, nav, cfg['theme'].get_env()
+                files.documentation_pages()[0].page, cfg, files, nav, cfg.theme.get_env()
             )
         self.assertEqual(
             '\n'.join(cm.output),
@@ -449,7 +433,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @mock.patch('mkdocs.utils.write_file')
     def test_build_page_dirty_modified(self, site_dir, docs_dir, mock_write_file):
         cfg = load_config(docs_dir=docs_dir, site_dir=site_dir, nav=['index.md'])
-        fs = [File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]
+        fs = [File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
         nav = get_navigation(files, cfg)
         page = files.documentation_pages()[0].page
@@ -466,7 +450,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @mock.patch('mkdocs.utils.write_file')
     def test_build_page_dirty_not_modified(self, site_dir, mock_write_file):
         cfg = load_config(site_dir=site_dir, nav=['testing.md'])
-        fs = [File('testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]
+        fs = [File('testing.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
         nav = get_navigation(files, cfg)
         page = files.documentation_pages()[0].page
@@ -482,7 +466,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @tempdir()
     def test_build_page_custom_template(self, site_dir):
         cfg = load_config(site_dir=site_dir, nav=['index.md'])
-        fs = [File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]
+        fs = [File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
         nav = get_navigation(files, cfg)
         page = files.documentation_pages()[0].page
@@ -498,7 +482,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @mock.patch('mkdocs.utils.write_file', side_effect=OSError('Error message.'))
     def test_build_page_error(self, site_dir, mock_write_file):
         cfg = load_config(site_dir=site_dir, nav=['index.md'])
-        fs = [File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]
+        fs = [File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
         nav = get_navigation(files, cfg)
         page = files.documentation_pages()[0].page
@@ -522,7 +506,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
 
         cfg = load_config(site_dir=site_dir, nav=['index.md'])
         cfg.plugins.events['page_context'].append(on_page_context)
-        fs = [File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]
+        fs = [File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
         nav = get_navigation(files, cfg)
         page = files.documentation_pages()[0].page
@@ -532,7 +516,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         page.content = '<p>page content</p>'
         with self.assertLogs('mkdocs') as cm:
             with self.assertRaises(PluginError):
-                build._build_page(page, cfg, files, nav, cfg['theme'].get_env())
+                build._build_page(page, cfg, files, nav, cfg.theme.get_env())
         self.assertEqual(
             '\n'.join(cm.output),
             "ERROR:mkdocs.commands.build:Error building page 'index.md':",

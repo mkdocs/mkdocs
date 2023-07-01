@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import functools
 import os
 import sys
+import textwrap
 import unittest
 from unittest import mock
 
@@ -11,15 +14,13 @@ from mkdocs.tests.base import dedent, load_config, tempdir
 
 load_config = functools.lru_cache(maxsize=None)(load_config)
 
+DOCS_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../integration/subpages/docs')
+
 
 class PageTests(unittest.TestCase):
-    DOCS_DIR = os.path.join(
-        os.path.abspath(os.path.dirname(__file__)), '../integration/subpages/docs'
-    )
-
     def test_homepage(self):
-        cfg = load_config(docs_dir=self.DOCS_DIR)
-        fl = File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        cfg = load_config(docs_dir=DOCS_DIR)
+        fl = File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         self.assertIsNone(fl.page)
         pg = Page('Foo', fl, cfg)
         self.assertEqual(fl.page, pg)
@@ -43,8 +44,8 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.toc, [])
 
     def test_nested_index_page(self):
-        cfg = load_config(docs_dir=self.DOCS_DIR)
-        fl = File('sub1/index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        cfg = load_config(docs_dir=DOCS_DIR)
+        fl = File('sub1/index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page('Foo', fl, cfg)
         pg.parent = 'foo'
         self.assertEqual(pg.url, 'sub1/')
@@ -67,8 +68,8 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.toc, [])
 
     def test_nested_index_page_no_parent(self):
-        cfg = load_config(docs_dir=self.DOCS_DIR)
-        fl = File('sub1/index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        cfg = load_config(docs_dir=DOCS_DIR)
+        fl = File('sub1/index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page('Foo', fl, cfg)
         pg.parent = None  # non-homepage at nav root level; see #1919.
         self.assertEqual(pg.url, 'sub1/')
@@ -91,8 +92,8 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.toc, [])
 
     def test_nested_index_page_no_parent_no_directory_urls(self):
-        cfg = load_config(docs_dir=self.DOCS_DIR, use_directory_urls=False)
-        fl = File('sub1/index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        cfg = load_config(docs_dir=DOCS_DIR, use_directory_urls=False)
+        fl = File('sub1/index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page('Foo', fl, cfg)
         pg.parent = None  # non-homepage at nav root level; see #1919.
         self.assertEqual(pg.url, 'sub1/index.html')
@@ -115,8 +116,8 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.toc, [])
 
     def test_nested_nonindex_page(self):
-        cfg = load_config(docs_dir=self.DOCS_DIR)
-        fl = File('sub1/non-index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        cfg = load_config(docs_dir=DOCS_DIR)
+        fl = File('sub1/non-index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page('Foo', fl, cfg)
         pg.parent = 'foo'
         self.assertEqual(pg.url, 'sub1/non-index/')
@@ -140,7 +141,7 @@ class PageTests(unittest.TestCase):
 
     def test_page_defaults(self):
         cfg = load_config()
-        fl = File('testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        fl = File('testing.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page('Foo', fl, cfg)
         self.assertRegex(pg.update_date, r'\d{4}-\d{2}-\d{2}')
         self.assertEqual(pg.url, 'testing/')
@@ -164,7 +165,7 @@ class PageTests(unittest.TestCase):
 
     def test_page_no_directory_url(self):
         cfg = load_config(use_directory_urls=False)
-        fl = File('testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        fl = File('testing.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page('Foo', fl, cfg)
         self.assertEqual(pg.url, 'testing.html')
         self.assertEqual(pg.abs_url, None)
@@ -187,7 +188,7 @@ class PageTests(unittest.TestCase):
 
     def test_page_canonical_url(self):
         cfg = load_config(site_url='http://example.com')
-        fl = File('testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        fl = File('testing.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page('Foo', fl, cfg)
         self.assertEqual(pg.url, 'testing/')
         self.assertEqual(pg.abs_url, '/testing/')
@@ -210,7 +211,7 @@ class PageTests(unittest.TestCase):
 
     def test_page_canonical_url_nested(self):
         cfg = load_config(site_url='http://example.com/foo/')
-        fl = File('testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        fl = File('testing.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page('Foo', fl, cfg)
         self.assertEqual(pg.url, 'testing/')
         self.assertEqual(pg.abs_url, '/foo/testing/')
@@ -233,7 +234,7 @@ class PageTests(unittest.TestCase):
 
     def test_page_canonical_url_nested_no_slash(self):
         cfg = load_config(site_url='http://example.com/foo')
-        fl = File('testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        fl = File('testing.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page('Foo', fl, cfg)
         self.assertEqual(pg.url, 'testing/')
         self.assertEqual(pg.abs_url, '/foo/testing/')
@@ -256,7 +257,7 @@ class PageTests(unittest.TestCase):
 
     def test_predefined_page_title(self):
         cfg = load_config()
-        fl = File('testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        fl = File('testing.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page('Page Title', fl, cfg)
         pg.read_source(cfg)
         self.assertEqual(pg.url, 'testing/')
@@ -280,7 +281,7 @@ class PageTests(unittest.TestCase):
 
     def test_page_title_from_markdown(self):
         cfg = load_config()
-        fl = File('testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        fl = File('testing.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page(None, fl, cfg)
         pg.read_source(cfg)
         self.assertEqual(pg.url, 'testing/')
@@ -380,8 +381,8 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.title, 'Welcome to MkDocs Attr { #welcome }')
 
     def test_page_title_from_meta(self):
-        cfg = load_config(docs_dir=self.DOCS_DIR)
-        fl = File('metadata.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        cfg = load_config(docs_dir=DOCS_DIR)
+        fl = File('metadata.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page(None, fl, cfg)
         pg.read_source(cfg)
         self.assertEqual(pg.url, 'metadata/')
@@ -406,8 +407,8 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.title, 'A Page Title')
 
     def test_page_title_from_filename(self):
-        cfg = load_config(docs_dir=self.DOCS_DIR)
-        fl = File('page-title.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        cfg = load_config(docs_dir=DOCS_DIR)
+        fl = File('page-title.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page(None, fl, cfg)
         pg.read_source(cfg)
         self.assertEqual(pg.url, 'page-title/')
@@ -431,8 +432,8 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.title, 'Page title')
 
     def test_page_title_from_capitalized_filename(self):
-        cfg = load_config(docs_dir=self.DOCS_DIR)
-        fl = File('pageTitle.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        cfg = load_config(docs_dir=DOCS_DIR)
+        fl = File('pageTitle.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page(None, fl, cfg)
         pg.read_source(cfg)
         self.assertEqual(pg.url, 'pageTitle/')
@@ -454,8 +455,8 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.title, 'pageTitle')
 
     def test_page_title_from_homepage_filename(self):
-        cfg = load_config(docs_dir=self.DOCS_DIR)
-        fl = File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        cfg = load_config(docs_dir=DOCS_DIR)
+        fl = File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page(None, fl, cfg)
         pg.read_source(cfg)
         self.assertEqual(pg.url, '')
@@ -479,14 +480,14 @@ class PageTests(unittest.TestCase):
 
     def test_page_eq(self):
         cfg = load_config()
-        fl = File('testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        fl = File('testing.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page('Foo', fl, cfg)
         self.assertTrue(pg == Page('Foo', fl, cfg))
 
     def test_page_ne(self):
         cfg = load_config()
-        f1 = File('testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
-        f2 = File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        f1 = File('testing.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
+        f2 = File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page('Foo', f1, cfg)
         # Different Title
         self.assertTrue(pg != Page('Bar', f1, cfg))
@@ -497,7 +498,7 @@ class PageTests(unittest.TestCase):
     def test_BOM(self, docs_dir):
         md_src = '# An UTF-8 encoded file with a BOM'
         cfg = load_config(docs_dir=docs_dir)
-        fl = File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        fl = File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page(None, fl, cfg)
         # Create an UTF-8 Encoded file with BOM (as Microsoft editors do). See #1186
         with open(fl.abs_src_path, 'w', encoding='utf-8-sig') as f:
@@ -632,7 +633,7 @@ class PageTests(unittest.TestCase):
                 edit_url_key = f'edit_url{i}' if i > 1 else 'edit_url'
                 with self.subTest(case['config'], path=path):
                     cfg = load_config(**case['config'])
-                    fl = File(path, cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+                    fl = File(path, cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
                     pg = Page('Foo', fl, cfg)
                     self.assertEqual(pg.url, paths[path])
                     self.assertEqual(pg.edit_url, case[edit_url_key])
@@ -655,9 +656,7 @@ class PageTests(unittest.TestCase):
             with self.subTest(case['config']):
                 with self.assertLogs('mkdocs') as cm:
                     cfg = load_config(**case['config'])
-                    fl = File(
-                        'testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']
-                    )
+                    fl = File('testing.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
                     pg = Page('Foo', fl, cfg)
                 self.assertEqual(pg.url, 'testing/')
                 self.assertEqual(pg.edit_url, case['edit_url'])
@@ -665,7 +664,7 @@ class PageTests(unittest.TestCase):
 
     def test_page_render(self):
         cfg = load_config()
-        fl = File('testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        fl = File('testing.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page('Foo', fl, cfg)
         pg.read_source(cfg)
         self.assertEqual(pg.content, None)
@@ -687,7 +686,7 @@ class PageTests(unittest.TestCase):
 
     def test_missing_page(self):
         cfg = load_config()
-        fl = File('missing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        fl = File('missing.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page('Foo', fl, cfg)
         with self.assertLogs('mkdocs') as cm:
             with self.assertRaises(OSError):
@@ -704,7 +703,7 @@ class SourceDateEpochTests(unittest.TestCase):
 
     def test_source_date_epoch(self):
         cfg = load_config()
-        fl = File('testing.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
+        fl = File('testing.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
         pg = Page('Foo', fl, cfg)
         self.assertEqual(pg.update_date, '1970-01-01')
 
@@ -716,180 +715,188 @@ class SourceDateEpochTests(unittest.TestCase):
 
 
 class RelativePathExtensionTests(unittest.TestCase):
-    DOCS_DIR = os.path.join(
-        os.path.abspath(os.path.dirname(__file__)), '../integration/subpages/docs'
-    )
-
-    def get_rendered_result(self, files):
-        cfg = load_config(docs_dir=self.DOCS_DIR)
-        fs = [File(f, cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']) for f in files]
+    def get_rendered_result(
+        self, *, content: str, files: list[str], logs: str = '', **kwargs
+    ) -> str:
+        cfg = load_config(docs_dir=DOCS_DIR, **kwargs)
+        fs = [File(f, cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls) for f in files]
         pg = Page('Foo', fs[0], cfg)
-        pg.read_source(cfg)
-        pg.render(cfg, Files(fs))
-        return pg.content
 
-    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](non-index.md)'))
+        with mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data=content)):
+            pg.read_source(cfg)
+        if logs:
+            with self.assertLogs('mkdocs.structure.pages') as cm:
+                pg.render(cfg, Files(fs))
+            msgs = [f'{r.levelname}:{r.message}' for r in cm.records]
+            self.assertEqual('\n'.join(msgs), textwrap.dedent(logs).strip('\n'))
+        elif sys.version_info >= (3, 10):
+            with self.assertNoLogs('mkdocs.structure.pages'):
+                pg.render(cfg, Files(fs))
+        else:
+            pg.render(cfg, Files(fs))
+
+        assert pg.content is not None
+        content = pg.content
+        if content.startswith('<p>') and content.endswith('</p>'):
+            content = content[3:-4]
+        return content
+
     def test_relative_html_link(self):
         self.assertEqual(
-            self.get_rendered_result(['index.md', 'non-index.md']),
-            '<p><a href="non-index/">link</a></p>',  # No trailing /
+            self.get_rendered_result(
+                content='[link](non-index.md)', files=['index.md', 'non-index.md']
+            ),
+            '<a href="non-index/">link</a>',
         )
 
-    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](index.md)'))
     def test_relative_html_link_index(self):
         self.assertEqual(
-            self.get_rendered_result(['non-index.md', 'index.md']),
-            '<p><a href="../">link</a></p>',
+            self.get_rendered_result(
+                content='[link](index.md)', files=['non-index.md', 'index.md']
+            ),
+            '<a href="../">link</a>',
         )
 
-    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](sub2/index.md)'))
     def test_relative_html_link_sub_index(self):
         self.assertEqual(
-            self.get_rendered_result(['index.md', 'sub2/index.md']),
-            '<p><a href="sub2/">link</a></p>',  # No trailing /
+            self.get_rendered_result(
+                content='[link](sub2/index.md)', files=['index.md', 'sub2/index.md']
+            ),
+            '<a href="sub2/">link</a>',
         )
 
-    @mock.patch(
-        'mkdocs.structure.pages.open', mock.mock_open(read_data='[link](sub2/non-index.md)')
-    )
     def test_relative_html_link_sub_page(self):
         self.assertEqual(
-            self.get_rendered_result(['index.md', 'sub2/non-index.md']),
-            '<p><a href="sub2/non-index/">link</a></p>',  # No trailing /
+            self.get_rendered_result(
+                content='[link](sub2/non-index.md)', files=['index.md', 'sub2/non-index.md']
+            ),
+            '<a href="sub2/non-index/">link</a>',
         )
 
-    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](file%20name.md)'))
     def test_relative_html_link_with_encoded_space(self):
         self.assertEqual(
-            self.get_rendered_result(['index.md', 'file name.md']),
-            '<p><a href="file%20name/">link</a></p>',
+            self.get_rendered_result(
+                content='[link](file%20name.md)', files=['index.md', 'file name.md']
+            ),
+            '<a href="file%20name/">link</a>',
         )
 
-    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](file name.md)'))
     def test_relative_html_link_with_unencoded_space(self):
         self.assertEqual(
-            self.get_rendered_result(['index.md', 'file name.md']),
-            '<p><a href="file%20name/">link</a></p>',
+            self.get_rendered_result(
+                content='[link](file name.md)', files=['index.md', 'file name.md']
+            ),
+            '<a href="file%20name/">link</a>',
         )
 
-    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](../index.md)'))
     def test_relative_html_link_parent_index(self):
         self.assertEqual(
-            self.get_rendered_result(['sub2/non-index.md', 'index.md']),
-            '<p><a href="../../">link</a></p>',
+            self.get_rendered_result(
+                content='[link](../index.md)', files=['sub2/non-index.md', 'index.md']
+            ),
+            '<a href="../../">link</a>',
         )
 
-    @mock.patch(
-        'mkdocs.structure.pages.open', mock.mock_open(read_data='[link](non-index.md#hash)')
-    )
     def test_relative_html_link_hash(self):
         self.assertEqual(
-            self.get_rendered_result(['index.md', 'non-index.md']),
-            '<p><a href="non-index/#hash">link</a></p>',
+            self.get_rendered_result(
+                content='[link](non-index.md#hash)', files=['index.md', 'non-index.md']
+            ),
+            '<a href="non-index/#hash">link</a>',
         )
 
-    @mock.patch(
-        'mkdocs.structure.pages.open', mock.mock_open(read_data='[link](sub2/index.md#hash)')
-    )
     def test_relative_html_link_sub_index_hash(self):
         self.assertEqual(
-            self.get_rendered_result(['index.md', 'sub2/index.md']),
-            '<p><a href="sub2/#hash">link</a></p>',
+            self.get_rendered_result(
+                content='[link](sub2/index.md#hash)', files=['index.md', 'sub2/index.md']
+            ),
+            '<a href="sub2/#hash">link</a>',
         )
 
-    @mock.patch(
-        'mkdocs.structure.pages.open', mock.mock_open(read_data='[link](sub2/non-index.md#hash)')
-    )
     def test_relative_html_link_sub_page_hash(self):
         self.assertEqual(
-            self.get_rendered_result(['index.md', 'sub2/non-index.md']),
-            '<p><a href="sub2/non-index/#hash">link</a></p>',
+            self.get_rendered_result(
+                content='[link](sub2/non-index.md#hash)', files=['index.md', 'sub2/non-index.md']
+            ),
+            '<a href="sub2/non-index/#hash">link</a>',
         )
 
-    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](#hash)'))
     def test_relative_html_link_hash_only(self):
         self.assertEqual(
-            self.get_rendered_result(['index.md']),
-            '<p><a href="#hash">link</a></p>',
+            self.get_rendered_result(content='[link](#hash)', files=['index.md']),
+            '<a href="#hash">link</a>',
         )
 
-    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='![image](image.png)'))
     def test_relative_image_link_from_homepage(self):
         self.assertEqual(
-            self.get_rendered_result(['index.md', 'image.png']),
-            '<p><img alt="image" src="image.png" /></p>',  # no opening ./
+            self.get_rendered_result(
+                content='![image](image.png)', files=['index.md', 'image.png']
+            ),
+            '<img alt="image" src="image.png" />',  # no opening ./
         )
 
-    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='![image](../image.png)'))
     def test_relative_image_link_from_subpage(self):
         self.assertEqual(
-            self.get_rendered_result(['sub2/non-index.md', 'image.png']),
-            '<p><img alt="image" src="../../image.png" /></p>',
+            self.get_rendered_result(
+                content='![image](../image.png)', files=['sub2/non-index.md', 'image.png']
+            ),
+            '<img alt="image" src="../../image.png" />',
         )
 
-    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='![image](image.png)'))
     def test_relative_image_link_from_sibling(self):
         self.assertEqual(
-            self.get_rendered_result(['non-index.md', 'image.png']),
-            '<p><img alt="image" src="../image.png" /></p>',
+            self.get_rendered_result(
+                content='![image](image.png)', files=['non-index.md', 'image.png']
+            ),
+            '<img alt="image" src="../image.png" />',
         )
 
-    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='*__not__ a link*.'))
     def test_no_links(self):
         self.assertEqual(
-            self.get_rendered_result(['index.md']),
-            '<p><em><strong>not</strong> a link</em>.</p>',
+            self.get_rendered_result(content='*__not__ a link*.', files=['index.md']),
+            '<em><strong>not</strong> a link</em>.',
         )
 
-    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='[link](non-existent.md)'))
     def test_bad_relative_html_link(self):
-        with self.assertLogs('mkdocs') as cm:
-            self.assertEqual(
-                self.get_rendered_result(['index.md']),
-                '<p><a href="non-existent.md">link</a></p>',
-            )
         self.assertEqual(
-            '\n'.join(cm.output),
-            "WARNING:mkdocs.structure.pages:Documentation file 'index.md' contains a link "
-            "to 'non-existent.md' which is not found in the documentation files.",
+            self.get_rendered_result(
+                content='[link](non-existent.md)',
+                files=['index.md'],
+                logs="WARNING:Documentation file 'index.md' contains a link to 'non-existent.md' which is not found in the documentation files.",
+            ),
+            '<a href="non-existent.md">link</a>',
         )
 
-    @mock.patch(
-        'mkdocs.structure.pages.open',
-        mock.mock_open(read_data='[external](http://example.com/index.md)'),
-    )
     def test_external_link(self):
         self.assertEqual(
-            self.get_rendered_result(['index.md']),
-            '<p><a href="http://example.com/index.md">external</a></p>',
+            self.get_rendered_result(
+                content='[external](http://example.com/index.md)', files=['index.md']
+            ),
+            '<a href="http://example.com/index.md">external</a>',
         )
 
-    @mock.patch(
-        'mkdocs.structure.pages.open', mock.mock_open(read_data='[absolute link](/path/to/file.md)')
-    )
     def test_absolute_link(self):
         self.assertEqual(
-            self.get_rendered_result(['index.md']),
-            '<p><a href="/path/to/file.md">absolute link</a></p>',
+            self.get_rendered_result(
+                content='[absolute link](/path/to/file.md)', files=['index.md']
+            ),
+            '<a href="/path/to/file.md">absolute link</a>',
         )
 
-    @mock.patch(
-        'mkdocs.structure.pages.open',
-        mock.mock_open(read_data='[absolute local path](\\image.png)'),
-    )
     def test_absolute_win_local_path(self):
         self.assertEqual(
-            self.get_rendered_result(['index.md']),
-            '<p><a href="\\image.png">absolute local path</a></p>',
+            self.get_rendered_result(
+                content='[absolute local path](\\image.png)', files=['index.md']
+            ),
+            '<a href="\\image.png">absolute local path</a>',
         )
 
-    @mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data='<mail@example.com>'))
     def test_email_link(self):
         self.assertEqual(
-            self.get_rendered_result(['index.md']),
+            self.get_rendered_result(content='<mail@example.com>', files=['index.md']),
             # Markdown's default behavior is to obscure email addresses by entity-encoding them.
-            # The following is equivalent to: '<p><a href="mailto:mail@example.com">mail@example.com</a></p>'
-            '<p><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#109;&#97;&#105;&#108;&#64;&#101;'
+            # The following is equivalent to: '<a href="mailto:mail@example.com">mail@example.com</a>'
+            '<a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#109;&#97;&#105;&#108;&#64;&#101;'
             '&#120;&#97;&#109;&#112;&#108;&#101;&#46;&#99;&#111;&#109;">&#109;&#97;&#105;&#108;&#64;'
-            '&#101;&#120;&#97;&#109;&#112;&#108;&#101;&#46;&#99;&#111;&#109;</a></p>',
+            '&#101;&#120;&#97;&#109;&#112;&#108;&#101;&#46;&#99;&#111;&#109;</a>',
         )
