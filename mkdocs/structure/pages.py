@@ -4,7 +4,7 @@ import copy
 import logging
 import posixpath
 import warnings
-from typing import TYPE_CHECKING, Any, Callable, MutableMapping
+from typing import TYPE_CHECKING, Any, Callable, Iterator, MutableMapping
 from urllib.parse import unquote as urlunquote
 from urllib.parse import urljoin, urlsplit, urlunsplit
 
@@ -14,6 +14,7 @@ import markdown.postprocessors
 import markdown.treeprocessors
 from markdown.util import AMP_SUBSTITUTE
 
+from mkdocs import utils
 from mkdocs.structure import StructureItem
 from mkdocs.structure.toc import get_toc
 from mkdocs.utils import get_build_date, get_markdown_title, meta, weak_property
@@ -306,52 +307,109 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
 
         return root
 
+    @classmethod
+    def _target_uri(cls, src_path: str, dest_path: str):
+        return posixpath.normpath(posixpath.join(src_path, dest_path).lstrip('/'))
+
+    @classmethod
+    def _target_uris(cls, use_directory_urls: bool, file: File, path: str) -> Iterator[str]:
+        """First yields the resolved file uri for the link, then proceeds to yield guesses for possible mistakes."""
+        target_uri = cls._target_uri(posixpath.dirname(file.src_uri), path)
+        yield target_uri
+
+        tried = {target_uri}
+        prefixes = [target_uri]
+        if use_directory_urls and file.name != 'index':
+            # User might have added an extra '../' because that's how to make an invalid link work with use_directory_urls.
+            prefixes.insert(0, cls._target_uri(file.src_uri, path))
+        suffixes = ['/index.md', '/README.md']
+        if not target_uri.endswith('/') and '.' in posixpath.basename(path):
+            suffixes.insert(0, '')
+        if use_directory_urls and path and '.' not in posixpath.basename(path):
+            suffixes.insert(0, '.md')
+
+        for pref in prefixes:
+            for suf in suffixes:
+                if pref == '.' and not suf.startswith('/'):
+                    continue
+                guess = posixpath.normpath(pref + suf)
+                if guess not in tried:
+                    yield guess
+                    tried.add(guess)
+
     def path_to_url(self, url: str) -> str:
         scheme, netloc, path, query, fragment = urlsplit(url)
+
+        warning_level, warning = 0, ''
 
         # Ignore URLs unless they are a relative link to a source file.
         if scheme or netloc:  # External link.
             return url
         elif url.startswith('/') or url.startswith('\\'):  # Absolute link.
-            log.log(
-                self.config.validation.links.absolute_links,
-                f"Doc file '{self.file.src_uri}' contains an absolute link '{url}', it was left as is.",
-            )
-            return url
+            warning_level = self.config.validation.links.absolute_links
+            warning = f"Doc file '{self.file.src_uri}' contains an absolute link '{url}', it was left as is."
         elif AMP_SUBSTITUTE in url:  # AMP_SUBSTITUTE is used internally by Markdown only for email.
             return url
         elif not path:  # Self-link containing only query or fragment.
             return url
 
+        path = urlunquote(path)
         # Determine the filepath of the target.
-        target_uri = posixpath.join(posixpath.dirname(self.file.src_uri), urlunquote(path))
-        target_uri = posixpath.normpath(target_uri).lstrip('/')
+        possible_target_uris = self._target_uris(self.config.use_directory_urls, self.file, path)
 
-        # Validate that the target exists in files collection.
-        target_file = self.files.get_file_from_path(target_uri)
-        if target_file is None:
-            if '.' not in posixpath.split(path)[-1]:
+        if warning:
+            # For absolute path (already has a warning), the primary lookup path should be preserved as a tip option.
+            target_uri = url
+            target_file = None
+        else:
+            # Validate that the target exists in files collection.
+            target_uri = next(possible_target_uris)
+            target_file = self.files.get_file_from_path(target_uri)
+
+        if target_file is None and not warning:
+            # Primary lookup path had no match, definitely produce a warning, just choose which one.
+            if '.' not in posixpath.basename(path):
                 # No '.' in the last part of a path indicates path does not point to a file.
-                log.log(
-                    self.config.validation.links.unrecognized_links,
+                warning_level = self.config.validation.links.unrecognized_links
+                warning = (
                     f"Doc file '{self.file.src_uri}' contains an unrecognized relative link '{url}', "
-                    f"it was left as is.",
+                    f"it was left as is."
                 )
             else:
                 target = f" '{target_uri}'" if target_uri != url else ""
-                log.log(
-                    self.config.validation.links.not_found,
+                warning_level = self.config.validation.links.not_found
+                warning = (
                     f"Doc file '{self.file.src_uri}' contains a relative link '{url}', "
-                    f"but the target{target} is not found among documentation files.",
+                    f"but the target{target} is not found among documentation files."
                 )
+
+        if warning:
+            # There was no match, so try to guess what other file could've been intended.
+            if warning_level > logging.DEBUG:
+                suggest_url = ''
+                for path in possible_target_uris:
+                    if self.files.get_file_from_path(path) is not None:
+                        path = utils.get_relative_url(path, self.file.url)
+                        suggest_url = urlunsplit(('', '', path, query, fragment))
+                        break
+                else:
+                    if '@' in url and '.' in url and '/' not in url:
+                        suggest_url = f'mailto:{url}'
+                if suggest_url:
+                    warning += f" Did you mean '{suggest_url}'?"
+            log.log(warning_level, warning)
             return url
+
+        assert target_uri is not None
+        assert target_file is not None
         if target_file.inclusion.is_excluded():
-            log.log(
-                min(logging.INFO, self.config.validation.links.not_found),
+            warning_level = min(logging.INFO, self.config.validation.links.not_found)
+            warning = (
                 f"Doc file '{self.file.src_uri}' contains a link to "
-                f"'{target_uri}' which is excluded from the built site.",
+                f"'{target_uri}' which is excluded from the built site."
             )
-        path = target_file.url_relative_to(self.file)
+            log.log(warning_level, warning)
+        path = utils.get_relative_url(target_file.url, self.file.url)
         return urlunsplit(('', '', path, query, fragment))
 
     def _register(self, md: markdown.Markdown) -> None:

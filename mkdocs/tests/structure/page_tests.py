@@ -964,21 +964,48 @@ class RelativePathExtensionTests(unittest.TestCase):
             '<a href="http://example.com/index.md">external</a>',
         )
 
-    def test_absolute_link(self):
+    def test_absolute_link_with_suggestion(self):
         self.assertEqual(
             self.get_rendered_result(
                 content='[absolute link](/path/to/file.md)',
-                files=['index.md'],
-                logs="INFO:Doc file 'index.md' contains an absolute link '/path/to/file.md', it was left as is.",
+                files=['index.md', 'path/to/file.md'],
+                logs="INFO:Doc file 'index.md' contains an absolute link '/path/to/file.md', it was left as is. Did you mean 'path/to/file.md'?",
             ),
             '<a href="/path/to/file.md">absolute link</a>',
         )
+        self.assertEqual(
+            self.get_rendered_result(
+                use_directory_urls=False,
+                content='[absolute link](/path/to/file/)',
+                files=['path/index.md', 'path/to/file.md'],
+                logs="INFO:Doc file 'path/index.md' contains an absolute link '/path/to/file/', it was left as is.",
+            ),
+            '<a href="/path/to/file/">absolute link</a>',
+        )
+        self.assertEqual(
+            self.get_rendered_result(
+                content='[absolute link](/path/to/file)',
+                files=['path/index.md', 'path/to/file.md'],
+                logs="INFO:Doc file 'path/index.md' contains an absolute link '/path/to/file', it was left as is. Did you mean 'to/file.md'?",
+            ),
+            '<a href="/path/to/file">absolute link</a>',
+        )
+
+    def test_absolute_link(self):
         self.assertEqual(
             self.get_rendered_result(
                 validation=dict(links=dict(absolute_links='warn')),
                 content='[absolute link](/path/to/file.md)',
                 files=['index.md'],
                 logs="WARNING:Doc file 'index.md' contains an absolute link '/path/to/file.md', it was left as is.",
+            ),
+            '<a href="/path/to/file.md">absolute link</a>',
+        )
+        self.assertEqual(
+            self.get_rendered_result(
+                validation=dict(links=dict(absolute_links='ignore')),
+                content='[absolute link](/path/to/file.md)',
+                files=['index.md'],
             ),
             '<a href="/path/to/file.md">absolute link</a>',
         )
@@ -1010,7 +1037,7 @@ class RelativePathExtensionTests(unittest.TestCase):
             self.get_rendered_result(
                 content='[contact](mail@example.com)',
                 files=['index.md'],
-                logs="WARNING:Doc file 'index.md' contains a relative link 'mail@example.com', but the target is not found among documentation files.",
+                logs="WARNING:Doc file 'index.md' contains a relative link 'mail@example.com', but the target is not found among documentation files. Did you mean 'mailto:mail@example.com'?",
             ),
             '<a href="mail@example.com">contact</a>',
         )
