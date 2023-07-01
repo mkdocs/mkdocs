@@ -100,7 +100,8 @@ def serve(
         if livereload:
             # Watch the documentation files, the config file and the theme files.
             server.watch(config.docs_dir)
-            server.watch(config.config_file_path)
+            if config.config_file_path:
+                server.watch(config.config_file_path)
 
             if watch_theme:
                 for d in config.theme.dirs:

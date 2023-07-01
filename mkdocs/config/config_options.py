@@ -708,7 +708,7 @@ class Dir(FilesystemObject):
 
 class DocsDir(Dir):
     def post_validation(self, config: Config, key_name: str):
-        if config.config_file_path is None:
+        if not config.config_file_path:
             return
 
         # Validate that the dir is not the parent dir of the config file.
@@ -826,7 +826,7 @@ class Theme(BaseConfigOption[theme.Theme]):
 
         # Ensure custom_dir is an absolute path
         if 'custom_dir' in theme_config and not os.path.isabs(theme_config['custom_dir']):
-            config_dir = os.path.dirname(self.config_file_path or '')
+            config_dir = os.path.dirname(self.config_file_path)
             theme_config['custom_dir'] = os.path.join(config_dir, theme_config['custom_dir'])
 
         if 'custom_dir' in theme_config and not os.path.isdir(theme_config['custom_dir']):

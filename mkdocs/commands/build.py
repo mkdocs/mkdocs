@@ -154,6 +154,7 @@ def _build_extra_template(template_name: str, files: Files, config: MkDocsConfig
 def _populate_page(page: Page, config: MkDocsConfig, files: Files, dirty: bool = False) -> None:
     """Read page content from docs_dir and render Markdown."""
 
+    config._current_page = page
     try:
         # When --dirty is used, only read the page if the file has been modified since the
         # previous build of the output.
@@ -185,6 +186,8 @@ def _populate_page(page: Page, config: MkDocsConfig, files: Files, dirty: bool =
             message += f" {e}"
         log.error(message)
         raise
+    finally:
+        config._current_page = None
 
 
 def _build_page(
@@ -198,6 +201,7 @@ def _build_page(
 ) -> None:
     """Pass a Page to theme template and write output to site_dir."""
 
+    config._current_page = page
     try:
         # When --dirty is used, only build the page if the file has been modified since the
         # previous build of the output.
@@ -238,8 +242,6 @@ def _build_page(
         else:
             log.info(f"Page skipped: '{page.file.src_uri}'. Generated empty output.")
 
-        # Deactivate page
-        page.active = False
     except Exception as e:
         message = f"Error building page '{page.file.src_uri}':"
         # Prevent duplicated the error message because it will be printed immediately afterwards.
@@ -247,6 +249,10 @@ def _build_page(
             message += f" {e}"
         log.error(message)
         raise
+    finally:
+        # Deactivate page
+        page.active = False
+        config._current_page = None
 
 
 def build(

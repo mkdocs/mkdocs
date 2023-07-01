@@ -116,7 +116,7 @@ def gh_deploy(
 
     if message is None:
         message = default_message
-    sha = _get_current_sha(os.path.dirname(config.config_file_path or ''))
+    sha = _get_current_sha(os.path.dirname(config.config_file_path))
     message = message.format(version=mkdocs.__version__, sha=sha)
 
     log.info(

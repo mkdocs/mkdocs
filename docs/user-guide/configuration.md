@@ -618,7 +618,7 @@ For example, to enable permalinks in the (included) `toc` extension, use:
 ```yaml
 markdown_extensions:
     - toc:
-        permalink: True
+        permalink: true
 ```
 
 Note that a colon (`:`) must follow the extension name (`toc`) and then on a new
@@ -629,7 +629,7 @@ defined on a separate line:
 ```yaml
 markdown_extensions:
     - toc:
-        permalink: True
+        permalink: true
         separator: "_"
 ```
 
@@ -641,9 +641,13 @@ for that extension:
 markdown_extensions:
     - smarty
     - toc:
-        permalink: True
+        permalink: true
     - sane_lists
 ```
+
+> NOTE: **Dynamic config values.**
+>
+> To dynamically configure the extensions, you can get the config values from [environment variables](#environment-variables) or [obtain paths](#paths-relative-to-the-current-file-or-site) of the currently rendered Markdown file or the overall MkDocs site.
 
 In the above examples, each extension is a list item (starts with a `-`). As an
 alternative, key/value pairs can be used instead. However, in that case an empty
@@ -654,14 +658,14 @@ Therefore, the last example above could also be defined as follows:
 markdown_extensions:
     smarty: {}
     toc:
-        permalink: True
+        permalink: true
     sane_lists: {}
 ```
 
 This alternative syntax is required if you intend to override some options via
 [inheritance].
 
-> NOTE: **See Also:**
+> NOTE: **More extensions.**
 >
 > The Python-Markdown documentation provides a [list of extensions][exts]
 > which are available out-of-the-box. For a list of configuration options
@@ -896,7 +900,9 @@ plugins:
 
 **default**: `full`
 
-## Environment Variables
+## Special YAML tags
+
+### Environment variables
 
 In most cases, the value of a configuration option is set directly in the
 configuration file. However, as an option, the value of a configuration option
@@ -932,6 +938,41 @@ cannot be defined within a single environment variable.
 
 For more details, see the [pyyaml_env_tag](https://github.com/waylan/pyyaml-env-tag)
 project.
+
+### Paths relative to the current file or site
+
+NEW: **New in version 1.5.**
+
+Some Markdown extensions can benefit from knowing the path of the Markdown file that's currently being processed, or just the root path of the current site. For that, the special tag `!relative` can be used in most contexts within the config file, though the only known usecases are within [`markdown_extensions`](#markdown_extensions).
+
+Examples of the possible values are:
+
+```yaml
+- !relative  # Relative to the directory of the current Markdown file
+- !relative $docs_dir  # Path of the docs_dir
+- !relative $config_dir  # Path of the directory that contains the main mkdocs.yml
+- !relative $config_dir/some/child/dir  # Some subdirectory of the root config directory
+```
+
+(Here, `$docs_dir` and `$config_dir` are currently the *only* special prefixes that are recognized.)
+
+Example:
+
+```yaml
+markdown_extensions:
+  - pymdownx.snippets:
+      base_path: !relative  # Relative to the current Markdown file
+```
+
+This allows the [pymdownx.snippets] extension to include files relative to the current Markdown file, which without this tag it would have no way of knowing.
+
+> NOTE: Even for the default case, any extension's base path is technically the *current working directory* although the assumption is that it's the *directory of mkdocs.yml*. So even if you don't want the paths to be relative, to improve the default behavior, always prefer to use this idiom:
+>
+> ```yaml
+> markdown_extensions:
+>   - pymdownx.snippets:
+>       base_path: !relative $config_dir  # Relative to the root directory with mkdocs.yml
+> ```
 
 ## Configuration Inheritance
 
@@ -1077,3 +1118,4 @@ echo '{INHERIT: mkdocs.yml, site_name: "Renamed site"}' | mkdocs build -f -
 [markdown_extensions]: #markdown_extensions
 [nav]: #nav
 [inheritance]: #configuration-inheritance
+[pymdownx.snippets]: https://facelessuser.github.io/pymdown-extensions/extensions/snippets/

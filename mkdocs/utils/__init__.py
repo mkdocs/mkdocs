@@ -17,7 +17,7 @@ import warnings
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import PurePath
-from typing import IO, TYPE_CHECKING, Any, Collection, Iterable, MutableSequence, TypeVar
+from typing import TYPE_CHECKING, Collection, Iterable, MutableSequence, TypeVar
 from urllib.parse import urlsplit
 
 if sys.version_info >= (3, 10):
@@ -25,11 +25,8 @@ if sys.version_info >= (3, 10):
 else:
     from importlib_metadata import EntryPoint, entry_points
 
-import yaml
-from mergedeep import merge
-from yaml_env_tag import construct_env_tag
-
 from mkdocs import exceptions
+from mkdocs.utils.yaml import get_yaml_loader, yaml_load  # noqa - legacy re-export
 
 if TYPE_CHECKING:
     from mkdocs.structure.pages import Page
@@ -45,42 +42,6 @@ markdown_extensions = (
     '.mkd',
     '.md',
 )
-
-
-def get_yaml_loader(loader=yaml.Loader):
-    """Wrap PyYaml's loader so we can extend it to suit our needs."""
-
-    class Loader(loader):
-        """
-        Define a custom loader derived from the global loader to leave the
-        global loader unaltered.
-        """
-
-    # Attach Environment Variable constructor.
-    # See https://github.com/waylan/pyyaml-env-tag
-    Loader.add_constructor('!ENV', construct_env_tag)
-
-    return Loader
-
-
-def yaml_load(source: IO | str, loader: type[yaml.BaseLoader] | None = None) -> dict[str, Any]:
-    """Return dict of source YAML file using loader, recursively deep merging inherited parent."""
-    Loader = loader or get_yaml_loader()
-    result = yaml.load(source, Loader=Loader)
-    if result is None:
-        return {}
-    if 'INHERIT' in result and not isinstance(source, str):
-        relpath = result.pop('INHERIT')
-        abspath = os.path.normpath(os.path.join(os.path.dirname(source.name), relpath))
-        if not os.path.exists(abspath):
-            raise exceptions.ConfigurationError(
-                f"Inherited config file '{relpath}' does not exist at '{abspath}'."
-            )
-        log.debug(f"Loading inherited configuration file: {abspath}")
-        with open(abspath, 'rb') as fd:
-            parent = yaml_load(fd, Loader)
-        result = merge(parent, result)
-    return result
 
 
 def modified_time(file_path):

@@ -2,13 +2,19 @@
 from __future__ import annotations
 
 import contextlib
+import io
+import os.path
+import re
 import textwrap
 import unittest
 from pathlib import Path
 from typing import TYPE_CHECKING
 from unittest import mock
 
+import markdown.preprocessors
+
 from mkdocs.commands import build
+from mkdocs.config import base
 from mkdocs.exceptions import PluginError
 from mkdocs.livereload import LiveReloadServer
 from mkdocs.structure.files import File, Files
@@ -743,6 +749,61 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
                     else:
                         self.assertPathExists(summary_path)
 
+    @tempdir(
+        files={
+            'README.md': 'CONFIG_README\n',
+            'docs/foo.md': 'ROOT_FOO\n',
+            'docs/test/bar.md': 'TEST_BAR\n',
+            'docs/main/foo.md': 'MAIN_FOO\n',
+            'docs/main/main.md': (
+                '--8<-- "README.md"\n\n'
+                '--8<-- "foo.md"\n\n'
+                '--8<-- "test/bar.md"\n\n'
+                '--8<-- "../foo.md"\n\n'
+            ),
+        }
+    )
+    def test_markdown_extension_with_relative(self, config_dir):
+        for base_path, expected in {
+            '!relative': '''
+                <p>(Failed to read 'README.md')</p>
+                <p>MAIN_FOO</p>
+                <p>(Failed to read 'test/bar.md')</p>
+                <p>ROOT_FOO</p>''',
+            '!relative $docs_dir': '''
+                <p>(Failed to read 'README.md')</p>
+                <p>ROOT_FOO</p>
+                <p>TEST_BAR</p>
+                <p>(Failed to read '../foo.md')</p>''',
+            '!relative $config_dir/docs': '''
+                <p>(Failed to read 'README.md')</p>
+                <p>ROOT_FOO</p>
+                <p>TEST_BAR</p>
+                <p>(Failed to read '../foo.md')</p>''',
+            '!relative $config_dir': '''
+                <p>CONFIG_README</p>
+                <p>(Failed to read 'foo.md')</p>
+                <p>(Failed to read 'test/bar.md')</p>
+                <p>(Failed to read '../foo.md')</p>''',
+        }.items():
+            with self.subTest(base_path=base_path):
+                cfg = f'''
+                    site_name: test
+                    use_directory_urls: false
+                    markdown_extensions:
+                        - mkdocs.tests.build_tests:
+                            base_path: {base_path}
+                '''
+                config = base.load_config(
+                    io.StringIO(cfg), config_file_path=os.path.join(config_dir, 'mkdocs.yml')
+                )
+
+                with self._assert_build_logs(''):
+                    build.build(config)
+                main_path = Path(config_dir, 'site', 'main', 'main.html')
+                self.assertTrue(main_path.is_file())
+                self.assertIn(textwrap.dedent(expected), main_path.read_text())
+
     # Test build.site_directory_contains_stale_files
 
     @tempdir(files=['index.html'])
@@ -752,3 +813,29 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @tempdir()
     def test_not_site_dir_contains_stale_files(self, site_dir):
         self.assertFalse(build.site_directory_contains_stale_files(site_dir))
+
+
+class _TestPreprocessor(markdown.preprocessors.Preprocessor):
+    def __init__(self, base_path: str) -> None:
+        self.base_path = base_path
+
+    def run(self, lines: list[str]) -> list[str]:
+        for i, line in enumerate(lines):
+            m = re.search(r'^--8<-- "(.+)"$', line)
+            if m:
+                try:
+                    lines[i] = Path(self.base_path, m[1]).read_text()
+                except OSError:
+                    lines[i] = f"(Failed to read {m[1]!r})\n"
+        return lines
+
+
+class _TestExtension(markdown.extensions.Extension):
+    def __init__(self, base_path: str) -> None:
+        self.base_path = base_path
+
+    def extendMarkdown(self, md: markdown.Markdown) -> None:
+        md.preprocessors.register(_TestPreprocessor(self.base_path), "mkdocs_test", priority=32)
+
+
+makeExtension = _TestExtension
