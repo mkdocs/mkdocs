@@ -67,20 +67,20 @@ class ColorFormatter(logging.Formatter):
         replace_whitespace=False,
         break_long_words=False,
         break_on_hyphens=False,
-        initial_indent=' ' * 12,
-        subsequent_indent=' ' * 12,
+        initial_indent=' ' * 11,
+        subsequent_indent=' ' * 11,
     )
 
     def format(self, record):
         message = super().format(record)
-        prefix = f'{record.levelname:<8} -  '
+        prefix = f'{record.levelname:<8}-  '
         if record.levelname in self.colors:
             prefix = click.style(prefix, fg=self.colors[record.levelname])
         if self.text_wrapper.width:
             # Only wrap text if a terminal width was detected
             msg = '\n'.join(self.text_wrapper.fill(line) for line in message.splitlines())
             # Prepend prefix after wrapping so that color codes don't affect length
-            return prefix + msg[12:]
+            return prefix + msg[11:]
         return prefix + message
 
 
@@ -189,6 +189,29 @@ def quiet_option(f):
     )(f)
 
 
+def color_option(f):
+    def callback(ctx, param, value):
+        state = ctx.ensure_object(State)
+        if value is False or (
+            value is None
+            and (
+                not sys.stdout.isatty()
+                or os.environ.get('NO_COLOR')
+                or os.environ.get('TERM') == 'dumb'
+            )
+        ):
+            state.stream.setFormatter(logging.Formatter('%(levelname)-8s-  %(message)s'))
+
+    return click.option(
+        '--color/--no-color',
+        is_flag=True,
+        default=None,
+        expose_value=False,
+        help="Force enable or disable color and wrapping for the output. Default is auto-detect.",
+        callback=callback,
+    )(f)
+
+
 common_options = add_options(quiet_option, verbose_option)
 common_config_options = add_options(
     click.option('-f', '--config-file', type=click.File('rb'), help=config_help),
@@ -219,6 +242,7 @@ PKG_DIR = os.path.dirname(os.path.abspath(__file__))
     message=f'%(prog)s, version %(version)s from { PKG_DIR } (Python { PYTHON_VERSION })',
 )
 @common_options
+@color_option
 def cli():
     """
     MkDocs - Project documentation with Markdown.
