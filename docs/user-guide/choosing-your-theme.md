@@ -18,7 +18,7 @@ theme:
 
 ## mkdocs
 
-The default theme, which was built as a custom [Bootstrap] theme, supports most
+The default theme, which was built as a custom [Bootstrap] theme, supports almost
 every feature of MkDocs.
 
 ![mkdocs](../img/mkdocs.png)
@@ -75,11 +75,11 @@ supports the following options:
             search: 83   # s
     ```
 
-    All values must be numeric key codes. It is best to use keys which are
+    All values must be numeric key codes. It is best to use keys that are
     available on all keyboards. You may use <https://keycode.info/> to determine
     the key code for a given key.
 
-    *   __`help`__: Display a help modal which lists the keyboard shortcuts.
+    *   __`help`__: Display a help modal that lists the keyboard shortcuts.
         Default: `191` (&quest;)
 
     *   __`next`__: Navigate to the "next" page. Default: `78` (n)
@@ -115,7 +115,7 @@ supports the following options:
 ## readthedocs
 
 A clone of the default theme used by the [Read the Docs] service, which offers
-the same restricted feature-set as its parent theme. Like its parent theme, only
+the same restricted feature set as its parent theme. Like its parent theme, only
 two levels of navigation are supported.
 
 ![ReadTheDocs](../img/readthedocs.png)
