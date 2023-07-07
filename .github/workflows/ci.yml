@@ -10,16 +10,6 @@ jobs:
         python-version: [3.7, 3.8, 3.9, '3.10', '3.11', pypy-3.9-v7.x]
         os: [ubuntu-latest, windows-latest, macos-latest]
         include:
-          - python-version: 3.7
-            py: py37
-          - python-version: 3.8
-            py: py38
-          - python-version: 3.9
-            py: py39
-          - python-version: '3.10'
-            py: py310
-          - python-version: '3.11'
-            py: py311
           - python-version: pypy-3.9-v7.x
             py: pypy3
         # Just to slim down the test matrix:
@@ -46,10 +36,10 @@ jobs:
           python -m pip install --upgrade hatch
       - name: Run tests
         run: |
-          hatch run +py=${{ matrix.py }} +type= test:with-coverage
+          hatch run +py=${{ matrix.py || matrix.python-version }} test:with-coverage
       - name: Run integration tests
         run: |
-          hatch run +py=${{ matrix.py }} +type= integration:test
+          hatch run +py=${{ matrix.py || matrix.python-version }} integration:test
         shell: bash
       - name: Upload Codecov Results
         if: success()
@@ -57,7 +47,7 @@ jobs:
         with:
           file: ./coverage.xml
           flags: unittests
-          name: ${{ matrix.os }}/${{ matrix.py }}
+          name: ${{ matrix.os }}/${{ matrix.python-version }}
           fail_ci_if_error: false
 
   lint:

@@ -108,7 +108,7 @@ all = [
     "hatch run test:test",
     "hatch run style:check",
     "hatch run lint:check",
-    "hatch run +type=default +py= integration:test",
+    "hatch run +type=default integration:test",
 ]
 
 [tool.hatch.envs.test]
@@ -121,7 +121,7 @@ test = "coverage run --source=mkdocs --omit 'mkdocs/tests/*' -m unittest discove
 _coverage = ["test", "coverage xml", "coverage report --show-missing"]
 with-coverage = "test"
 [[tool.hatch.envs.test.matrix]]
-python = ["py37", "py38", "py39", "py310", "pypy3"]
+python = ["3.7", "3.8", "3.9", "3.10", "3.11", "pypy3"]
 type = ["default", "min-req"]
 [tool.hatch.envs.test.overrides]
 matrix.type.features = [
@@ -136,7 +136,7 @@ template = "docs"
 [tool.hatch.envs.integration.scripts]
 test = "python -m mkdocs.tests.integration"
 [[tool.hatch.envs.integration.matrix]]
-python = ["py37", "py38", "py39", "py310", "pypy3"]
+python = ["3.7", "3.8", "3.9", "3.10", "3.11", "pypy3"]
 type = ["default", "no-babel"]
 [tool.hatch.envs.integration.overrides]
 matrix.type.features = [
@@ -204,7 +204,7 @@ dependencies = [
 
 [tool.black]
 line-length = 100
-target-version = ["py37"]
+target-version = ["py37"]  # 3.7
 skip-string-normalization = true
 
 [tool.isort]
