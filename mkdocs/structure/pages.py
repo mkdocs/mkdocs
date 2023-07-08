@@ -17,7 +17,7 @@ from markdown.util import AMP_SUBSTITUTE
 from mkdocs import utils
 from mkdocs.structure import StructureItem
 from mkdocs.structure.toc import get_toc
-from mkdocs.utils import get_build_date, get_markdown_title, meta, weak_property
+from mkdocs.utils import _removesuffix, get_build_date, get_markdown_title, meta, weak_property
 
 if TYPE_CHECKING:
     from xml.etree import ElementTree as etree
@@ -309,31 +309,45 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
 
     @classmethod
     def _target_uri(cls, src_path: str, dest_path: str):
-        return posixpath.normpath(posixpath.join(src_path, dest_path).lstrip('/'))
+        return posixpath.normpath(
+            posixpath.join(posixpath.dirname(src_path), dest_path).lstrip('/')
+        )
 
     @classmethod
-    def _target_uris(cls, use_directory_urls: bool, file: File, path: str) -> Iterator[str]:
+    def _possible_target_uris(
+        cls, file: File, path: str, use_directory_urls: bool
+    ) -> Iterator[str]:
         """First yields the resolved file uri for the link, then proceeds to yield guesses for possible mistakes."""
-        target_uri = cls._target_uri(posixpath.dirname(file.src_uri), path)
+        target_uri = cls._target_uri(file.src_uri, path)
         yield target_uri
 
+        if posixpath.normpath(path) == '.':
+            # Explicitly link to current file.
+            yield file.src_uri
+            return
         tried = {target_uri}
-        prefixes = [target_uri]
-        if use_directory_urls and file.name != 'index':
-            # User might have added an extra '../' because that's how to make an invalid link work with use_directory_urls.
-            prefixes.insert(0, cls._target_uri(file.src_uri, path))
-        suffixes = ['/index.md', '/README.md']
-        if not target_uri.endswith('/') and '.' in posixpath.basename(path):
-            suffixes.insert(0, '')
-        if use_directory_urls and path and '.' not in posixpath.basename(path):
-            suffixes.insert(0, '.md')
+
+        prefixes = [target_uri, cls._target_uri(file.url, path)]
+        if prefixes[0] == prefixes[1]:
+            prefixes.pop()
+
+        suffixes: list[Callable[[str], str]] = []
+        if use_directory_urls:
+            suffixes.append(lambda p: p)
+        if not posixpath.splitext(target_uri)[-1]:
+            suffixes.append(lambda p: posixpath.join(p, 'index.md'))
+            suffixes.append(lambda p: posixpath.join(p, 'README.md'))
+        if (
+            not target_uri.endswith('.')
+            and not path.endswith('.md')
+            and (use_directory_urls or not path.endswith('/'))
+        ):
+            suffixes.append(lambda p: _removesuffix(p, '.html') + '.md')
 
         for pref in prefixes:
             for suf in suffixes:
-                if pref == '.' and not suf.startswith('/'):
-                    continue
-                guess = posixpath.normpath(pref + suf)
-                if guess not in tried:
+                guess = posixpath.normpath(suf(pref))
+                if guess not in tried and not guess.startswith('../'):
                     yield guess
                     tried.add(guess)
 
@@ -355,7 +369,9 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
 
         path = urlunquote(path)
         # Determine the filepath of the target.
-        possible_target_uris = self._target_uris(self.config.use_directory_urls, self.file, path)
+        possible_target_uris = self._possible_target_uris(
+            self.file, path, self.config.use_directory_urls
+        )
 
         if warning:
             # For absolute path (already has a warning), the primary lookup path should be preserved as a tip option.
@@ -368,7 +384,7 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
 
         if target_file is None and not warning:
             # Primary lookup path had no match, definitely produce a warning, just choose which one.
-            if '.' not in posixpath.basename(path):
+            if not posixpath.splitext(path)[-1]:
                 # No '.' in the last part of a path indicates path does not point to a file.
                 warning_level = self.config.validation.links.unrecognized_links
                 warning = (
@@ -389,7 +405,10 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
                 suggest_url = ''
                 for path in possible_target_uris:
                     if self.files.get_file_from_path(path) is not None:
-                        path = utils.get_relative_url(path, self.file.url)
+                        if fragment and path == self.file.src_uri:
+                            path = ''
+                        else:
+                            path = utils.get_relative_url(path, self.file.src_uri)
                         suggest_url = urlunsplit(('', '', path, query, fragment))
                         break
                 else:
