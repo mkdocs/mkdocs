@@ -98,8 +98,8 @@ setting:
 site_name: MkLorum
 site_url: https://example.com/
 nav:
-    - Home: index.md
-    - About: about.md
+  - Home: index.md
+  - About: about.md
 ```
 
 Save your changes and you'll now see a navigation bar with `Home` and `About`
@@ -126,8 +126,8 @@ changing the theme. Edit the `mkdocs.yml` file and add a [`theme`][theme] settin
 site_name: MkLorum
 site_url: https://example.com/
 nav:
-    - Home: index.md
-    - About: about.md
+  - Home: index.md
+  - About: about.md
 theme: readthedocs
 ```
 

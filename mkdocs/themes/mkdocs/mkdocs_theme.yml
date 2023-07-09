@@ -1,7 +1,7 @@
 # Config options for 'mkdocs' theme
 
 static_templates:
-    - 404.html
+  - 404.html
 
 locale: en
 
@@ -19,7 +19,7 @@ analytics:
   gtag: null
 
 shortcuts:
-    help: 191    # ?
-    next: 78     # n
-    previous: 80 # p
-    search: 83   # s
+  help: 191    # ?
+  next: 78     # n
+  previous: 80 # p
+  search: 83   # s

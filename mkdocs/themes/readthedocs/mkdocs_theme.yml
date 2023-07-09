@@ -1,7 +1,7 @@
 # Config options for 'readthedocs' theme
 
 static_templates:
-    - 404.html
+  - 404.html
 
 locale: en
 

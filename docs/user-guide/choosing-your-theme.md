@@ -13,7 +13,7 @@ config file.
 
 ```yaml
 theme:
-    name: readthedocs
+  name: readthedocs
 ```
 
 ## mkdocs
@@ -38,11 +38,11 @@ supports the following options:
 
     ```yaml
     theme:
-        name: mkdocs
-        highlightjs: true
-        hljs_languages:
-            - yaml
-            - rust
+      name: mkdocs
+      highlightjs: true
+      hljs_languages:
+        - yaml
+        - rust
     ```
 
 *   __`analytics`__: Defines configuration options for an analytics service.
@@ -55,9 +55,9 @@ supports the following options:
 
         ```yaml
         theme:
-            name: mkdocs
-            analytics:
-                gtag: G-ABC123
+          name: mkdocs
+          analytics:
+            gtag: G-ABC123
         ```
 
         When set to the default (`null`) Google Analytics is disabled for the
@@ -67,12 +67,12 @@ supports the following options:
 
     ```yaml
     theme:
-        name: mkdocs
-        shortcuts:
-            help: 191    # ?
-            next: 78     # n
-            previous: 80 # p
-            search: 83   # s
+      name: mkdocs
+      shortcuts:
+        help: 191    # ?
+        next: 78     # n
+        previous: 80 # p
+        search: 83   # s
     ```
 
     All values must be numeric key codes. It is best to use keys that are
@@ -97,8 +97,8 @@ supports the following options:
 
     ```yaml
     theme:
-        name: mkdocs
-        nav_style: dark
+      name: mkdocs
+      nav_style: dark
     ```
 
 *   __`locale`__{ #mkdocs-locale }: The locale (language/location) used to
@@ -131,11 +131,11 @@ theme supports the following options:
 
     ```yaml
     theme:
-        name: readthedocs
-        highlightjs: true
-        hljs_languages:
-            - yaml
-            - rust
+      name: readthedocs
+      highlightjs: true
+      hljs_languages:
+        - yaml
+        - rust
     ```
 
 *   __`analytics`__: Defines configuration options for an analytics service.
@@ -147,9 +147,9 @@ theme supports the following options:
 
         ```yaml
         theme:
-            name: readthedocs
-            analytics:
-                gtag: G-ABC123
+          name: readthedocs
+          analytics:
+            gtag: G-ABC123
         ```
 
         When set to the default (`null`) Google Analytics is disabled for the
