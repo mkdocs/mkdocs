@@ -148,9 +148,10 @@ def get_navigation(files: Files, config: MkDocsConfig) -> Navigation:
             if file.inclusion.is_in_nav():
                 missing_from_config.append(file.src_path)
     if missing_from_config:
-        log.info(
+        log.log(
+            config.validation.nav.omitted_files,
             'The following pages exist in the docs directory, but are not '
-            'included in the "nav" configuration:\n  - ' + '\n  - '.join(missing_from_config)
+            'included in the "nav" configuration:\n  - ' + '\n  - '.join(missing_from_config),
         )
 
     links = _get_by_type(items, Link)
@@ -159,14 +160,16 @@ def get_navigation(files: Files, config: MkDocsConfig) -> Navigation:
         if scheme or netloc:
             log.debug(f"An external link to '{link.url}' is included in the 'nav' configuration.")
         elif link.url.startswith('/'):
-            log.debug(
+            log.log(
+                config.validation.nav.absolute_links,
                 f"An absolute path to '{link.url}' is included in the 'nav' "
-                "configuration, which presumably points to an external resource."
+                "configuration, which presumably points to an external resource.",
             )
         else:
-            log.warning(
+            log.log(
+                config.validation.nav.not_found,
                 f"A relative path to '{link.url}' is included in the 'nav' "
-                "configuration, which is not found in the documentation files."
+                "configuration, which is not found in the documentation files.",
             )
     return Navigation(items, pages)
 
@@ -190,9 +193,10 @@ def _data_to_navigation(data, files: Files, config: MkDocsConfig):
     file = files.get_file_from_path(path)
     if file:
         if file.inclusion.is_excluded():
-            log.info(
-                f"A relative path to '{file.src_path}' is included in the 'nav' "
-                "configuration, but this file is excluded from the built site."
+            log.log(
+                min(logging.INFO, config.validation.nav.not_found),
+                f"A reference to '{file.src_path}' is included in the 'nav' "
+                "configuration, but this file is excluded from the built site.",
             )
         return Page(title, file, config)
     return Link(title, path)

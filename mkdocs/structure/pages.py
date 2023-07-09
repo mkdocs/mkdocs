@@ -2,10 +2,9 @@ from __future__ import annotations
 
 import copy
 import logging
-import os
 import posixpath
 import warnings
-from typing import TYPE_CHECKING, Any, Callable, MutableMapping
+from typing import TYPE_CHECKING, Any, Callable, Iterator, MutableMapping
 from urllib.parse import unquote as urlunquote
 from urllib.parse import urljoin, urlsplit, urlunsplit
 
@@ -15,9 +14,10 @@ import markdown.postprocessors
 import markdown.treeprocessors
 from markdown.util import AMP_SUBSTITUTE
 
+from mkdocs import utils
 from mkdocs.structure import StructureItem
 from mkdocs.structure.toc import get_toc
-from mkdocs.utils import get_build_date, get_markdown_title, meta, weak_property
+from mkdocs.utils import _removesuffix, get_build_date, get_markdown_title, meta, weak_property
 
 if TYPE_CHECKING:
     from xml.etree import ElementTree as etree
@@ -263,25 +263,27 @@ class Page(StructureItem):
         if self.markdown is None:
             raise RuntimeError("`markdown` field hasn't been set (via `read_source`)")
 
-        relative_path_extension = _RelativePathExtension(self.file, files)
-        extract_title_extension = _ExtractTitleExtension()
         md = markdown.Markdown(
-            extensions=[
-                relative_path_extension,
-                extract_title_extension,
-                *config['markdown_extensions'],
-            ],
+            extensions=config['markdown_extensions'],
             extension_configs=config['mdx_configs'] or {},
         )
+
+        relative_path_ext = _RelativePathTreeprocessor(self.file, files, config)
+        relative_path_ext._register(md)
+
+        extract_title_ext = _ExtractTitleTreeprocessor()
+        extract_title_ext._register(md)
+
         self.content = md.convert(self.markdown)
         self.toc = get_toc(getattr(md, 'toc_tokens', []))
-        self._title_from_render = extract_title_extension.title
+        self._title_from_render = extract_title_ext.title
 
 
 class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
-    def __init__(self, file: File, files: Files) -> None:
+    def __init__(self, file: File, files: Files, config: MkDocsConfig) -> None:
         self.file = file
         self.files = files
+        self.config = config
 
     def run(self, root: etree.Element) -> etree.Element:
         """
@@ -305,75 +307,136 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
 
         return root
 
+    @classmethod
+    def _target_uri(cls, src_path: str, dest_path: str):
+        return posixpath.normpath(
+            posixpath.join(posixpath.dirname(src_path), dest_path).lstrip('/')
+        )
+
+    @classmethod
+    def _possible_target_uris(
+        cls, file: File, path: str, use_directory_urls: bool
+    ) -> Iterator[str]:
+        """First yields the resolved file uri for the link, then proceeds to yield guesses for possible mistakes."""
+        target_uri = cls._target_uri(file.src_uri, path)
+        yield target_uri
+
+        if posixpath.normpath(path) == '.':
+            # Explicitly link to current file.
+            yield file.src_uri
+            return
+        tried = {target_uri}
+
+        prefixes = [target_uri, cls._target_uri(file.url, path)]
+        if prefixes[0] == prefixes[1]:
+            prefixes.pop()
+
+        suffixes: list[Callable[[str], str]] = []
+        if use_directory_urls:
+            suffixes.append(lambda p: p)
+        if not posixpath.splitext(target_uri)[-1]:
+            suffixes.append(lambda p: posixpath.join(p, 'index.md'))
+            suffixes.append(lambda p: posixpath.join(p, 'README.md'))
+        if (
+            not target_uri.endswith('.')
+            and not path.endswith('.md')
+            and (use_directory_urls or not path.endswith('/'))
+        ):
+            suffixes.append(lambda p: _removesuffix(p, '.html') + '.md')
+
+        for pref in prefixes:
+            for suf in suffixes:
+                guess = posixpath.normpath(suf(pref))
+                if guess not in tried and not guess.startswith('../'):
+                    yield guess
+                    tried.add(guess)
+
     def path_to_url(self, url: str) -> str:
         scheme, netloc, path, query, fragment = urlsplit(url)
 
-        if (
-            scheme
-            or netloc
-            or not path
-            or url.startswith('/')
-            or url.startswith('\\')
-            or AMP_SUBSTITUTE in url
-            or '.' not in os.path.split(path)[-1]
-        ):
-            # Ignore URLs unless they are a relative link to a source file.
-            # AMP_SUBSTITUTE is used internally by Markdown only for email.
-            # No '.' in the last part of a path indicates path does not point to a file.
+        warning_level, warning = 0, ''
+
+        # Ignore URLs unless they are a relative link to a source file.
+        if scheme or netloc:  # External link.
+            return url
+        elif url.startswith('/') or url.startswith('\\'):  # Absolute link.
+            warning_level = self.config.validation.links.absolute_links
+            warning = f"Doc file '{self.file.src_uri}' contains an absolute link '{url}', it was left as is."
+        elif AMP_SUBSTITUTE in url:  # AMP_SUBSTITUTE is used internally by Markdown only for email.
+            return url
+        elif not path:  # Self-link containing only query or fragment.
             return url
 
+        path = urlunquote(path)
         # Determine the filepath of the target.
-        target_uri = posixpath.join(posixpath.dirname(self.file.src_uri), urlunquote(path))
-        target_uri = posixpath.normpath(target_uri).lstrip('/')
+        possible_target_uris = self._possible_target_uris(
+            self.file, path, self.config.use_directory_urls
+        )
 
-        # Validate that the target exists in files collection.
-        target_file = self.files.get_file_from_path(target_uri)
-        if target_file is None:
-            log.warning(
-                f"Documentation file '{self.file.src_uri}' contains a link to "
-                f"'{target_uri}' which is not found in the documentation files."
-            )
+        if warning:
+            # For absolute path (already has a warning), the primary lookup path should be preserved as a tip option.
+            target_uri = url
+            target_file = None
+        else:
+            # Validate that the target exists in files collection.
+            target_uri = next(possible_target_uris)
+            target_file = self.files.get_file_from_path(target_uri)
+
+        if target_file is None and not warning:
+            # Primary lookup path had no match, definitely produce a warning, just choose which one.
+            if not posixpath.splitext(path)[-1]:
+                # No '.' in the last part of a path indicates path does not point to a file.
+                warning_level = self.config.validation.links.unrecognized_links
+                warning = (
+                    f"Doc file '{self.file.src_uri}' contains an unrecognized relative link '{url}', "
+                    f"it was left as is."
+                )
+            else:
+                target = f" '{target_uri}'" if target_uri != url else ""
+                warning_level = self.config.validation.links.not_found
+                warning = (
+                    f"Doc file '{self.file.src_uri}' contains a relative link '{url}', "
+                    f"but the target{target} is not found among documentation files."
+                )
+
+        if warning:
+            # There was no match, so try to guess what other file could've been intended.
+            if warning_level > logging.DEBUG:
+                suggest_url = ''
+                for path in possible_target_uris:
+                    if self.files.get_file_from_path(path) is not None:
+                        if fragment and path == self.file.src_uri:
+                            path = ''
+                        else:
+                            path = utils.get_relative_url(path, self.file.src_uri)
+                        suggest_url = urlunsplit(('', '', path, query, fragment))
+                        break
+                else:
+                    if '@' in url and '.' in url and '/' not in url:
+                        suggest_url = f'mailto:{url}'
+                if suggest_url:
+                    warning += f" Did you mean '{suggest_url}'?"
+            log.log(warning_level, warning)
             return url
+
+        assert target_uri is not None
+        assert target_file is not None
         if target_file.inclusion.is_excluded():
-            log.info(
-                f"Documentation file '{self.file.src_uri}' contains a link to "
+            warning_level = min(logging.INFO, self.config.validation.links.not_found)
+            warning = (
+                f"Doc file '{self.file.src_uri}' contains a link to "
                 f"'{target_uri}' which is excluded from the built site."
             )
-        path = target_file.url_relative_to(self.file)
-        components = (scheme, netloc, path, query, fragment)
-        return urlunsplit(components)
+            log.log(warning_level, warning)
+        path = utils.get_relative_url(target_file.url, self.file.url)
+        return urlunsplit(('', '', path, query, fragment))
 
-
-class _RelativePathExtension(markdown.extensions.Extension):
-    """
-    The Extension class is what we pass to markdown, it then
-    registers the Treeprocessor.
-    """
-
-    def __init__(self, file: File, files: Files) -> None:
-        self.file = file
-        self.files = files
-
-    def extendMarkdown(self, md: markdown.Markdown) -> None:
-        relpath = _RelativePathTreeprocessor(self.file, self.files)
-        md.treeprocessors.register(relpath, "relpath", 0)
-
-
-class _ExtractTitleExtension(markdown.extensions.Extension):
-    def __init__(self) -> None:
-        self.title: str | None = None
-
-    def extendMarkdown(self, md: markdown.Markdown) -> None:
-        md.treeprocessors.register(
-            _ExtractTitleTreeprocessor(self),
-            "mkdocs_extract_title",
-            priority=1,  # Close to the end.
-        )
+    def _register(self, md: markdown.Markdown) -> None:
+        md.treeprocessors.register(self, "relpath", 0)
 
 
 class _ExtractTitleTreeprocessor(markdown.treeprocessors.Treeprocessor):
-    def __init__(self, ext: _ExtractTitleExtension) -> None:
-        self.ext = ext
+    title: str | None = None
 
     def run(self, root: etree.Element) -> etree.Element:
         for el in root:
@@ -383,6 +446,13 @@ class _ExtractTitleTreeprocessor(markdown.treeprocessors.Treeprocessor):
                     el = copy.copy(el)
                     del el[-1]
                 # Extract the text only, recursively.
-                self.ext.title = _unescape(''.join(el.itertext()))
+                self.title = _unescape(''.join(el.itertext()))
             break
         return root
+
+    def _register(self, md: markdown.Markdown) -> None:
+        md.treeprocessors.register(
+            self,
+            "mkdocs_extract_title",
+            priority=1,  # Close to the end.
+        )

@@ -25,9 +25,7 @@ class SiteNavigationTests(unittest.TestCase):
         )
         cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
         fs = [
-            File(
-                list(item.values())[0], cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']
-            )
+            File(list(item.values())[0], cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
             for item in nav_cfg
         ]
         files = Files(fs)
@@ -50,9 +48,7 @@ class SiteNavigationTests(unittest.TestCase):
         )
         cfg = load_config(nav=nav_cfg, use_directory_urls=False, site_url='http://example.com/')
         fs = [
-            File(
-                list(item.values())[0], cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']
-            )
+            File(list(item.values())[0], cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
             for item in nav_cfg
         ]
         files = Files(fs)
@@ -73,8 +69,8 @@ class SiteNavigationTests(unittest.TestCase):
         )
         cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
         fs = [
-            File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-            File('page_not_in_nav.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+            File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
+            File('page_not_in_nav.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
         ]
         files = Files(fs)
         site_navigation = get_navigation(files, cfg)
@@ -97,8 +93,8 @@ class SiteNavigationTests(unittest.TestCase):
         )
         cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
         fs = [
-            File(nav_cfg[0], cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-            File(nav_cfg[1]['About'], cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+            File(nav_cfg[0], cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
+            File(nav_cfg[1]['About'], cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
         ]
         files = Files(fs)
         site_navigation = get_navigation(files, cfg)
@@ -120,17 +116,15 @@ class SiteNavigationTests(unittest.TestCase):
             """
         )
         cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
-        fs = [File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]
+        fs = [File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
         with self.assertLogs('mkdocs', level='DEBUG') as cm:
             site_navigation = get_navigation(files, cfg)
         self.assertEqual(
             cm.output,
             [
-                "DEBUG:mkdocs.structure.nav:An absolute path to '/local.html' is included in the "
-                "'nav' configuration, which presumably points to an external resource.",
-                "DEBUG:mkdocs.structure.nav:An external link to 'http://example.com/external.html' "
-                "is included in the 'nav' configuration.",
+                "INFO:mkdocs.structure.nav:An absolute path to '/local.html' is included in the 'nav' configuration, which presumably points to an external resource.",
+                "DEBUG:mkdocs.structure.nav:An external link to 'http://example.com/external.html' is included in the 'nav' configuration.",
             ],
         )
         self.assertEqual(str(site_navigation).strip(), expected)
@@ -151,17 +145,15 @@ class SiteNavigationTests(unittest.TestCase):
             """
         )
         cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
-        fs = [File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]
+        fs = [File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
         with self.assertLogs('mkdocs') as cm:
             site_navigation = get_navigation(files, cfg)
         self.assertEqual(
             cm.output,
             [
-                "WARNING:mkdocs.structure.nav:A relative path to 'missing.html' is included "
-                "in the 'nav' configuration, which is not found in the documentation files.",
-                "WARNING:mkdocs.structure.nav:A relative path to 'example.com' is included "
-                "in the 'nav' configuration, which is not found in the documentation files.",
+                "WARNING:mkdocs.structure.nav:A relative path to 'missing.html' is included in the 'nav' configuration, which is not found in the documentation files.",
+                "WARNING:mkdocs.structure.nav:A relative path to 'example.com' is included in the 'nav' configuration, which is not found in the documentation files.",
             ],
         )
         self.assertEqual(str(site_navigation).strip(), expected)
@@ -215,9 +207,7 @@ class SiteNavigationTests(unittest.TestCase):
             'api-guide/advanced/part-1.md',
             'about/release-notes.md',
         ]
-        files = Files(
-            [File(s, cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']) for s in fs]
-        )
+        files = Files([File(s, cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls) for s in fs])
         site_navigation = get_navigation(files, cfg)
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.items), 4)
@@ -282,9 +272,7 @@ class SiteNavigationTests(unittest.TestCase):
         )
         cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
         fs = [
-            File(
-                list(item.values())[0], cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']
-            )
+            File(list(item.values())[0], cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
             for item in nav_cfg
         ]
         files = Files(fs)
@@ -308,10 +296,7 @@ class SiteNavigationTests(unittest.TestCase):
         )
 
         cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
-        fs = [
-            File(item, cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
-            for item in nav_cfg
-        ]
+        fs = [File(item, cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls) for item in nav_cfg]
         files = Files(fs)
         site_navigation = get_navigation(files, cfg)
         self.assertEqual(str(site_navigation).strip(), expected)
@@ -335,10 +320,7 @@ class SiteNavigationTests(unittest.TestCase):
         )
 
         cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
-        fs = [
-            File(item, cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])
-            for item in nav_cfg
-        ]
+        fs = [File(item, cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls) for item in nav_cfg]
         files = Files(fs)
         site_navigation = get_navigation(files, cfg)
         self.assertEqual(str(site_navigation).strip(), expected)
@@ -354,8 +336,8 @@ class SiteNavigationTests(unittest.TestCase):
         )
         cfg = load_config(site_url='http://example.com/')
         fs = [
-            File('index.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
-            File('about.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']),
+            File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
+            File('about.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
         ]
         files = Files(fs)
         site_navigation = get_navigation(files, cfg)
@@ -389,9 +371,7 @@ class SiteNavigationTests(unittest.TestCase):
             'api-guide/testing.md',
             'api-guide/advanced/part-1.md',
         ]
-        files = Files(
-            [File(s, cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']) for s in fs]
-        )
+        files = Files([File(s, cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls) for s in fs])
         site_navigation = get_navigation(files, cfg)
         self.assertEqual(str(site_navigation).strip(), expected)
         self.assertEqual(len(site_navigation.items), 3)
@@ -430,9 +410,7 @@ class SiteNavigationTests(unittest.TestCase):
             'about/release-notes.md',
             'about/license.md',
         ]
-        files = Files(
-            [File(s, cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']) for s in fs]
-        )
+        files = Files([File(s, cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls) for s in fs])
         site_navigation = get_navigation(files, cfg)
         # Confirm nothing is active
         self.assertTrue(all(page.active is False for page in site_navigation.pages))
@@ -471,7 +449,7 @@ class SiteNavigationTests(unittest.TestCase):
             },
         ]
         cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
-        fs = [File('page.md', cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls'])]
+        fs = [File('page.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
         site_navigation = get_navigation(files, cfg)
         self.assertEqual(len(_get_by_type(site_navigation, Section)), 2)

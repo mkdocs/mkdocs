@@ -354,22 +354,12 @@ class SearchIndexTests(unittest.TestCase):
         pages = [
             Page(
                 'Home',
-                File(
-                    'index.md',
-                    base_cfg['docs_dir'],
-                    base_cfg['site_dir'],
-                    base_cfg['use_directory_urls'],
-                ),
+                File('index.md', base_cfg.docs_dir, base_cfg.site_dir, base_cfg.use_directory_urls),
                 base_cfg,
             ),
             Page(
                 'About',
-                File(
-                    'about.md',
-                    base_cfg['docs_dir'],
-                    base_cfg['site_dir'],
-                    base_cfg['use_directory_urls'],
-                ),
+                File('about.md', base_cfg.docs_dir, base_cfg.site_dir, base_cfg.use_directory_urls),
                 base_cfg,
             ),
         ]

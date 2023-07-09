@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import functools
 import ipaddress
+import logging
 import os
 import string
 import sys
@@ -116,6 +117,28 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
                 raise ValidationError(f"Sub-option '{key}': {err}")
 
         return config
+
+
+class PropagatingSubConfig(SubConfig[SomeConfig], Generic[SomeConfig]):
+    """A SubConfig that must consist of SubConfigs with defined schemas.
+
+    Any value set on the top config gets moved to sub-configs with matching keys.
+    """
+
+    def run_validation(self, value: object):
+        if isinstance(value, dict):
+            to_discard = set()
+            for k1, v1 in self.config_class._schema:
+                if isinstance(v1, SubConfig):
+                    for k2, _ in v1.config_class._schema:
+                        if k2 in value:
+                            subdict = value.setdefault(k1, {})
+                            if isinstance(subdict, dict):
+                                to_discard.add(k2)
+                                subdict.setdefault(k2, value[k2])
+            for k in to_discard:
+                del value[k]
+        return super().run_validation(value)
 
 
 class OptionallyRequired(Generic[T], BaseConfigOption[T]):
@@ -1170,3 +1193,19 @@ class PathSpec(BaseConfigOption[pathspec.gitignore.GitIgnoreSpec]):
             return pathspec.gitignore.GitIgnoreSpec.from_lines(lines=value.splitlines())
         except ValueError as e:
             raise ValidationError(str(e))
+
+
+class _LogLevel(OptionallyRequired[int]):
+    levels: Mapping[str, int] = {
+        "warn": logging.WARNING,
+        "info": logging.INFO,
+        "ignore": logging.DEBUG,
+    }
+
+    def run_validation(self, value: object) -> int:
+        if not isinstance(value, str):
+            raise ValidationError(f'Expected a string, but a {type(value)} was given.')
+        try:
+            return self.levels[value]
+        except KeyError:
+            raise ValidationError(f'Expected one of {list(self.levels)}, got {value!r}')

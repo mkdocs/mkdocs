@@ -8,10 +8,6 @@ from mkdocs.config import config_options as c
 from mkdocs.utils.yaml import get_yaml_loader, yaml_load
 
 
-def get_schema() -> base.PlainConfigSchema:
-    return MkDocsConfig._schema
-
-
 # NOTE: The order here is important. During validation some config options
 # depend on others. So, if config option A depends on B, then A should be
 # listed higher in the schema.
@@ -32,7 +28,11 @@ class MkDocsConfig(base.Config):
     """Gitignore-like patterns of files (relative to docs dir) to exclude from the site."""
 
     not_in_nav = c.Optional(c.PathSpec())
-    """Gitignore-like patterns of files (relative to docs dir) that are not intended to be in the nav."""
+    """Gitignore-like patterns of files (relative to docs dir) that are not intended to be in the nav.
+
+    This marks doc files that are expected not to be in the nav, otherwise they will cause a log message
+    (see also `validation.nav.omitted_files`).
+    """
 
     site_url = c.Optional(c.URL(is_dir=True))
     """The full URL to where the documentation will be hosted."""
@@ -139,6 +139,35 @@ class MkDocsConfig(base.Config):
     watch = c.ListOfPaths(default=[])
     """A list of extra paths to watch while running `mkdocs serve`."""
 
+    class Validation(base.Config):
+        class NavValidation(base.Config):
+            omitted_files = c._LogLevel(default='info')
+            """Warning level for when a doc file is never mentioned in the navigation.
+            For granular configuration, see `not_in_nav`."""
+
+            not_found = c._LogLevel(default='warn')
+            """Warning level for when the navigation links to a relative path that isn't an existing page on the site."""
+
+            absolute_links = c._LogLevel(default='info')
+            """Warning level for when the navigation links to an absolute path (starting with `/`)."""
+
+        nav = c.SubConfig(NavValidation)
+
+        class LinksValidation(base.Config):
+            not_found = c._LogLevel(default='warn')
+            """Warning level for when a Markdown doc links to a relative path that isn't an existing document on the site."""
+
+            absolute_links = c._LogLevel(default='info')
+            """Warning level for when a Markdown doc links to an absolute path (starting with `/`)."""
+
+            unrecognized_links = c._LogLevel(default='info')
+            """Warning level for when a Markdown doc links to a relative path that doesn't look like
+            it could be a valid internal link. For example, if the link ends with `/`."""
+
+        links = c.SubConfig(LinksValidation)
+
+    validation = c.PropagatingSubConfig[Validation]()
+
     _current_page: mkdocs.structure.pages.Page | None = None
     """The currently rendered page. Please do not access this and instead
     rely on the `page` argument to event handlers."""
@@ -152,3 +181,8 @@ class MkDocsConfig(base.Config):
         """Load config options from the open file descriptor of a YAML file."""
         loader = get_yaml_loader(config=self)
         self.load_dict(yaml_load(config_file, loader))
+
+
+def get_schema() -> base.PlainConfigSchema:
+    """Soft-deprecated, do not use."""
+    return MkDocsConfig._schema

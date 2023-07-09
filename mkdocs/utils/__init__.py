@@ -92,6 +92,16 @@ def get_build_date() -> str:
     return get_build_datetime().strftime('%Y-%m-%d')
 
 
+if sys.version_info >= (3, 9):
+    _removesuffix = str.removesuffix
+else:
+
+    def _removesuffix(s: str, suffix: str) -> str:
+        if suffix and s.endswith(suffix):
+            return s[: -len(suffix)]
+        return s
+
+
 def reduce_list(data_set: Iterable[T]) -> list[T]:
     """Reduce duplicate items in a list and preserve order"""
     return list(dict.fromkeys(data_set))

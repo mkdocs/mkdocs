@@ -52,7 +52,7 @@ class ConfigBaseTests(unittest.TestCase):
 
         cfg = base.load_config(config_file=config_file.name)
         self.assertTrue(isinstance(cfg, defaults.MkDocsConfig))
-        self.assertEqual(cfg['site_name'], 'MkDocs Test')
+        self.assertEqual(cfg.site_name, 'MkDocs Test')
 
     @tempdir()
     def test_load_default_file(self, temp_dir):
@@ -65,7 +65,7 @@ class ConfigBaseTests(unittest.TestCase):
         with change_dir(temp_dir):
             cfg = base.load_config(config_file=None)
             self.assertTrue(isinstance(cfg, defaults.MkDocsConfig))
-            self.assertEqual(cfg['site_name'], 'MkDocs Test')
+            self.assertEqual(cfg.site_name, 'MkDocs Test')
 
     @tempdir
     def test_load_default_file_with_yaml(self, temp_dir):
@@ -78,7 +78,7 @@ class ConfigBaseTests(unittest.TestCase):
         with change_dir(temp_dir):
             cfg = base.load_config(config_file=None)
             self.assertTrue(isinstance(cfg, defaults.MkDocsConfig))
-            self.assertEqual(cfg['site_name'], 'MkDocs Test')
+            self.assertEqual(cfg.site_name, 'MkDocs Test')
 
     @tempdir()
     def test_load_default_file_prefer_yml(self, temp_dir):
@@ -94,7 +94,7 @@ class ConfigBaseTests(unittest.TestCase):
         with change_dir(temp_dir):
             cfg = base.load_config(config_file=None)
             self.assertTrue(isinstance(cfg, defaults.MkDocsConfig))
-            self.assertEqual(cfg['site_name'], 'MkDocs Test1')
+            self.assertEqual(cfg.site_name, 'MkDocs Test1')
 
     def test_load_from_missing_file(self):
         with self.assertRaisesRegex(
@@ -115,7 +115,7 @@ class ConfigBaseTests(unittest.TestCase):
 
         cfg = base.load_config(config_file=config_file)
         self.assertTrue(isinstance(cfg, defaults.MkDocsConfig))
-        self.assertEqual(cfg['site_name'], 'MkDocs Test')
+        self.assertEqual(cfg.site_name, 'MkDocs Test')
         # load_config will always close the file
         self.assertTrue(config_file.closed)
 
@@ -131,7 +131,7 @@ class ConfigBaseTests(unittest.TestCase):
 
         cfg = base.load_config(config_file=config_file)
         self.assertTrue(isinstance(cfg, defaults.MkDocsConfig))
-        self.assertEqual(cfg['site_name'], 'MkDocs Test')
+        self.assertEqual(cfg.site_name, 'MkDocs Test')
 
     @tempdir
     def test_load_missing_required(self, temp_dir):
@@ -265,8 +265,8 @@ class ConfigBaseTests(unittest.TestCase):
 
         cfg = base.load_config(config_file=config_file)
         self.assertTrue(isinstance(cfg, defaults.MkDocsConfig))
-        self.assertEqual(cfg['site_name'], 'MkDocs Test')
-        self.assertEqual(cfg['docs_dir'], docs_dir)
+        self.assertEqual(cfg.site_name, 'MkDocs Test')
+        self.assertEqual(cfg.docs_dir, docs_dir)
         self.assertEqual(cfg.config_file_path, config_fname)
         self.assertIsInstance(cfg.config_file_path, str)
 
