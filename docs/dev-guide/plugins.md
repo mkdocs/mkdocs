@@ -28,7 +28,7 @@ plugin listed here must already be [installed](#installing-plugins).
 
 ```yaml
 plugins:
-    - search
+  - search
 ```
 
 Some plugins may provide configuration options of their own. If you would like
@@ -41,9 +41,9 @@ separate line.
 
 ```yaml
 plugins:
-    - search:
-        lang: en
-        foo: bar
+  - search:
+      lang: en
+      foo: bar
 ```
 
 For information regarding the configuration options available for a given plugin,

@@ -47,35 +47,35 @@ class TestGetDeps(unittest.TestCase):
         cfg = '''
             site_name: MkDocs
             theme:
-                name: mkdocs
-                locale: en
+              name: mkdocs
+              locale: en
             markdown_extensions:
-                - toc:
-                    permalink: 
-                - attr_list
-                - def_list
-                - tables
-                - pymdownx.highlight:
-                    use_pygments: false
-                - pymdownx.snippets
-                - pymdownx.superfences
-                - callouts
-                - mdx_gh_links:
-                    user: mkdocs
-                    repo: mkdocs
-                - mkdocs-click
+              - toc:
+                  permalink: 
+              - attr_list
+              - def_list
+              - tables
+              - pymdownx.highlight:
+                  use_pygments: false
+              - pymdownx.snippets
+              - pymdownx.superfences
+              - callouts
+              - mdx_gh_links:
+                  user: mkdocs
+                  repo: mkdocs
+              - mkdocs-click
             plugins:
-                - search
-                - redirects:
-                - autorefs
-                - literate-nav:
-                    nav_file: README.md
-                    implicit_index: true
-                - mkdocstrings:
-                    handlers:
-                        python:
-                            options:
-                                docstring_section_style: list
+              - search
+              - redirects:
+              - autorefs
+              - literate-nav:
+                  nav_file: README.md
+                  implicit_index: true
+              - mkdocstrings:
+                  handlers:
+                      python:
+                          options:
+                              docstring_section_style: list
         '''
         self._test_get_deps(
             cfg,
@@ -96,14 +96,14 @@ class TestGetDeps(unittest.TestCase):
     def test_dict_keys_and_ignores_env(self):
         cfg = '''
             theme:
-                name: material
+              name: material
             plugins:
-                code-validator:
-                  enabled: !ENV [LINT, false]
+              code-validator:
+                enabled: !ENV [LINT, false]
             markdown_extensions:
-                pymdownx.emoji:
-                  emoji_index: !!python/name:materialx.emoji.twemoji
-                  emoji_generator: !!python/name:materialx.emoji.to_svg
+              pymdownx.emoji:
+                emoji_index: !!python/name:materialx.emoji.twemoji
+                emoji_generator: !!python/name:materialx.emoji.to_svg
         '''
         self._test_get_deps(
             cfg, ['mkdocs', 'mkdocs-code-validator', 'mkdocs-material', 'pymdown-extensions']

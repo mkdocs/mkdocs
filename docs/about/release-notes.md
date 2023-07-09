@@ -841,16 +841,16 @@ configuration looked like this:
 
 ```yaml
 pages:
-    - Home: index.md
-    - User Guide: user-guide.md
+  - Home: index.md
+  - User Guide: user-guide.md
 ```
 
 Simply edit the configuration as follows:
 
 ```yaml
 nav:
-    - Home: index.md
-    - User Guide: user-guide.md
+  - Home: index.md
+  - User Guide: user-guide.md
 ```
 
 In the current release, any configuration which includes a `pages` setting, but
@@ -1087,8 +1087,8 @@ Then the configuration should be adjusted as follows:
 
 ```yaml
 theme:
-    name: mkdocs
-    custom_dir: custom
+  name: mkdocs
+  custom_dir: custom
 ```
 
 See the [theme] configuration option documentation for details.

@@ -1328,8 +1328,8 @@ class NavTest(TestCase):
             - Home: index.md
             - getting-started.md
             - User Guide:
-                - Overview: user-guide/index.md
-                - Installation: user-guide/installation.md
+              - Overview: user-guide/index.md
+              - Installation: user-guide/installation.md
             '''
         )
         nav = yaml_load(io.StringIO(nav_yaml))

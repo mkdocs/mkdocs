@@ -47,9 +47,9 @@ For example, to build the `mkdocs` theme in French you would use the following
 in your `mkdocs.yml` configuration file:
 
 ```yaml
- theme:
-     name: mkdocs
-     locale: fr
+theme:
+  name: mkdocs
+  locale: fr
 ```
 
 ## Contributing theme translations

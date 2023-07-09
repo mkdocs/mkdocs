@@ -110,8 +110,8 @@ A minimal navigation configuration could look like this:
 
 ```yaml
 nav:
-    - 'index.md'
-    - 'about.md'
+  - 'index.md'
+  - 'about.md'
 ```
 
 All paths in the navigation configuration must be relative to the `docs_dir`
@@ -126,8 +126,8 @@ in the `nav` setting add a title right before the filename.
 
 ```yaml
 nav:
-    - Home: 'index.md'
-    - About: 'about.md'
+  - Home: 'index.md'
+  - About: 'about.md'
 ```
 
 Note that if a title is defined for a page in the navigation, that title will be
@@ -139,13 +139,13 @@ section title. For example:
 
 ```yaml
 nav:
-    - Home: 'index.md'
-    - 'User Guide':
-        - 'Writing your docs': 'writing-your-docs.md'
-        - 'Styling your docs': 'styling-your-docs.md'
-    - About:
-        - 'License': 'license.md'
-        - 'Release Notes': 'release-notes.md'
+  - Home: 'index.md'
+  - 'User Guide':
+    - 'Writing your docs': 'writing-your-docs.md'
+    - 'Styling your docs': 'styling-your-docs.md'
+  - About:
+    - 'License': 'license.md'
+    - 'Release Notes': 'release-notes.md'
 ```
 
 With the above configuration we have three top level items: "Home", "User Guide"
@@ -250,8 +250,8 @@ can set in your `mkdocs.yml` configuration file to alter the default behavior:
 
     ```yaml
     markdown_extensions:
-        - toc:
-            permalink: "#"
+      - toc:
+          permalink: "#"
     ```
 
 *   **`baselevel`**
@@ -265,8 +265,8 @@ can set in your `mkdocs.yml` configuration file to alter the default behavior:
 
     ```yaml
     markdown_extensions:
-        - toc:
-            baselevel: 2
+      - toc:
+          baselevel: 2
     ```
 
     Then any headers in your document would be increased by 1. For example, the
@@ -282,8 +282,8 @@ can set in your `mkdocs.yml` configuration file to alter the default behavior:
 
     ```yaml
     markdown_extensions:
-        - toc:
-            separator: "_"
+      - toc:
+          separator: "_"
     ```
 
 Note that if you would like to define multiple of the above settings, you must
@@ -292,10 +292,10 @@ option.
 
 ```yml
 markdown_extensions:
-    - toc:
-        permalink: "#"
-        baselevel: 2
-        separator: "_"
+  - toc:
+      permalink: "#"
+      baselevel: 2
+      separator: "_"
 ```
 
 [toc]: https://python-markdown.github.io/extensions/toc/

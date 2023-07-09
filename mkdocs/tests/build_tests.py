@@ -791,8 +791,8 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
                     site_name: test
                     use_directory_urls: false
                     markdown_extensions:
-                        - mkdocs.tests.build_tests:
-                            base_path: {base_path}
+                      - mkdocs.tests.build_tests:
+                          base_path: {base_path}
                 '''
                 config = base.load_config(
                     io.StringIO(cfg), config_file_path=os.path.join(config_dir, 'mkdocs.yml')

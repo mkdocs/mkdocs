@@ -43,8 +43,8 @@ directory:
 
 ```yaml
 theme:
-    name: null
-    custom_dir: 'custom_theme/'
+  name: null
+  custom_dir: 'custom_theme/'
 ```
 
 > NOTE:
@@ -634,11 +634,11 @@ following `extra` configuration:
 
 ```yaml
 extra:
-    version: 0.13.0
-    links:
-        - https://github.com/mkdocs
-        - https://docs.readthedocs.org/en/latest/builds.html#mkdocs
-        - https://www.mkdocs.org/
+  version: 0.13.0
+  links:
+    - https://github.com/mkdocs
+    - https://docs.readthedocs.org/en/latest/builds.html#mkdocs
+    - https://www.mkdocs.org/
 ```
 
 And then displayed with this HTML in the custom theme.
@@ -928,8 +928,8 @@ file:
 
 ```yaml
 theme:
-    name: themename
-    show_sidebar: false
+  name: themename
+  show_sidebar: false
 ```
 
 In addition to arbitrary options defined by the theme, MkDocs defines a few
