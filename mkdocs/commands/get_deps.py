@@ -29,6 +29,7 @@ class YamlLoader(yaml.SafeLoader):
 
 # Prevent errors from trying to access external modules which may not be installed yet.
 YamlLoader.add_constructor("!ENV", lambda loader, node: None)  # type: ignore
+YamlLoader.add_constructor("!relative", lambda loader, node: None)  # type: ignore
 YamlLoader.add_multi_constructor(
     "tag:yaml.org,2002:python/name:", lambda loader, suffix, node: None
 )
