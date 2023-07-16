@@ -213,7 +213,10 @@ h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink, h4:hover .head
     display:inline-block;
 }
 
-
+blockquote {
+    padding-left: 10px;
+    border-left: 4px solid #e6e6e6;
+}
 
 .admonition, details {
     padding: 15px;
