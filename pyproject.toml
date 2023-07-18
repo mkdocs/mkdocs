@@ -151,7 +151,6 @@ dependencies = [
     "types-PyYAML",
     "types-setuptools",
     "typing-extensions",
-    "click <8.1.4",
 ]
 [tool.hatch.envs.types.scripts]
 check = "mypy mkdocs"
