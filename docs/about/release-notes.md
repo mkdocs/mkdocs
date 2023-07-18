@@ -277,6 +277,8 @@ The command to use this is `mkdocs build -f -`. In previous versions doing this 
 
 *   Accessing the `user_configs` attribute of a `Config` is deprecated. Note: instead of `config.user_configs[*]['theme']['custom_dir']`, please use the new attribute `config.theme.custom_dir`.
 
+Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.4.3...1.5.0).
+
 ## Version 1.4.3 (2023-05-02)
 
 *   Bugfix: for the `hooks` feature, modules no longer fail to load if using some advanced Python features like dataclasses (#3193)
