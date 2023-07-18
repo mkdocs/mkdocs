@@ -820,6 +820,23 @@ class RelativePathExtensionTests(unittest.TestCase):
             '<a href="sub2/non-index.html">link</a>',
         )
 
+    def test_relative_doc_link_without_extension(self):
+        self.assertEqual(
+            self.get_rendered_result(
+                use_directory_urls=False,
+                content='[link](bar/Dockerfile)',
+                files=['foo/bar.md', 'foo/bar/Dockerfile'],
+            ),
+            '<a href="bar/Dockerfile">link</a>',
+        )
+        self.assertEqual(
+            self.get_rendered_result(
+                content='[link](bar/Dockerfile)',
+                files=['foo/bar.md', 'foo/bar/Dockerfile'],
+            ),
+            '<a href="Dockerfile">link</a>',
+        )
+
     def test_relative_html_link_with_encoded_space(self):
         self.assertEqual(
             self.get_rendered_result(
