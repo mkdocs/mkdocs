@@ -190,7 +190,7 @@ class File:
     url: str
     """The URI of the destination file relative to the destination directory as a string."""
 
-    inclusion: InclusionLevel
+    inclusion: InclusionLevel = InclusionLevel.UNDEFINED
     """Whether the file will be excluded from the built site."""
 
     @property
