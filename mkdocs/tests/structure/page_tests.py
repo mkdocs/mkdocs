@@ -352,7 +352,7 @@ class PageTests(unittest.TestCase):
 
     _FORMATTING_CONTENT = dedent(
         '''
-        # Hello *beautiful* `world`
+        # \\*Hello --- *beautiful* `world`
 
         Hi.
         '''
@@ -361,11 +361,12 @@ class PageTests(unittest.TestCase):
     @tempdir(files={'testing_formatting.md': _FORMATTING_CONTENT})
     def test_page_title_from_markdown_strip_formatting(self, docs_dir):
         cfg = load_config()
+        cfg.markdown_extensions.append('smarty')
         fl = File('testing_formatting.md', docs_dir, docs_dir, use_directory_urls=True)
         pg = Page(None, fl, cfg)
         pg.read_source(cfg)
         pg.render(cfg, fl)
-        self.assertEqual(pg.title, 'Hello beautiful world')
+        self.assertEqual(pg.title, '*Hello &mdash; beautiful world')
 
     _ATTRLIST_CONTENT = dedent(
         '''
@@ -817,6 +818,23 @@ class RelativePathExtensionTests(unittest.TestCase):
                 files=['index.md', 'sub2/non-index.md'],
             ),
             '<a href="sub2/non-index.html">link</a>',
+        )
+
+    def test_relative_doc_link_without_extension(self):
+        self.assertEqual(
+            self.get_rendered_result(
+                use_directory_urls=False,
+                content='[link](bar/Dockerfile)',
+                files=['foo/bar.md', 'foo/bar/Dockerfile'],
+            ),
+            '<a href="bar/Dockerfile">link</a>',
+        )
+        self.assertEqual(
+            self.get_rendered_result(
+                content='[link](bar/Dockerfile)',
+                files=['foo/bar.md', 'foo/bar/Dockerfile'],
+            ),
+            '<a href="Dockerfile">link</a>',
         )
 
     def test_relative_html_link_with_encoded_space(self):
