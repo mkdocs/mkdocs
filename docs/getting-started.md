@@ -42,12 +42,12 @@ command:
 $ mkdocs serve
 INFO    -  Building documentation...
 INFO    -  Cleaning site directory
-[I 160402 15:50:43 server:271] Serving on http://127.0.0.1:8000
-[I 160402 15:50:43 handlers:58] Start watching changes
-[I 160402 15:50:43 handlers:60] Start detecting changes
+INFO    -  Documentation built in 0.22 seconds
+INFO    -  [15:50:43] Watching paths for changes: 'docs', 'mkdocs.yml'
+INFO    -  [15:50:43] Serving on http://127.0.0.1:8000/
 ```
 
-Open up `http://127.0.0.1:8000/` in your browser, and you'll see the default
+Open up <http://127.0.0.1:8000/> in your browser, and you'll see the default
 home page being displayed:
 
 ![The MkDocs live server](img/screenshot.png)
