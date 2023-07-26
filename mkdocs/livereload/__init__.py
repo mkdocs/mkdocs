@@ -152,21 +152,18 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
             self.observer.unschedule(self._watch_refs.pop(path))
 
     def serve(self):
-        try:
-            self.server_bind()
-            self.server_activate()
+        self.server_bind()
+        self.server_activate()
 
-            self.observer.start()
+        self.observer.start()
 
-            paths_str = ", ".join(f"'{_try_relativize_path(path)}'" for path in self._watched_paths)
-            log.info(f"Watching paths for changes: {paths_str}")
+        paths_str = ", ".join(f"'{_try_relativize_path(path)}'" for path in self._watched_paths)
+        log.info(f"Watching paths for changes: {paths_str}")
 
-            log.info(f"Serving on {self.url}")
-            self.serve_thread.start()
+        log.info(f"Serving on {self.url}")
+        self.serve_thread.start()
 
-            self._build_loop()
-        finally:
-            self.server_close()
+        self._build_loop()
 
     def _build_loop(self):
         while True:
@@ -213,6 +210,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
 
         if self.serve_thread.is_alive():
             super().shutdown()
+        self.server_close()
         if wait:
             self.serve_thread.join()
             self.observer.join()
