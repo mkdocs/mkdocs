@@ -27,7 +27,7 @@ The current and past members of the MkDocs team.
 * [@oprypin](https://github.com/oprypin/)
 * [@ultrabug](https://github.com/ultrabug/)
 
-## Version 1.5.0 (2023-07-19)
+## Version 1.5.0 (2023-07-26)
 
 ### New command `mkdocs get-deps`
 
