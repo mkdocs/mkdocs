@@ -12,23 +12,20 @@
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
-
-        <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/yaml.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/django.min.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/django.min.js"></script>
+        <script>hljs.highlightAll();</script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-274394082"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', 'G-274394082');
+          gtag('config', "G-274394082");
         </script> 
     </head>
 
@@ -180,6 +177,10 @@
               </ul>
             </li>
             <li class="nav-item" data-level="2"><a href="#maintenance-team" class="nav-link">Maintenance team</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-150-2023-07-26" class="nav-link">Version 1.5.0 (2023-07-26)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -373,7 +374,7 @@
 <pre class="highlight"><code class="language-bash">pip install -U mkdocs</code></pre>
 <p>You can determine your currently installed version using <code>mkdocs --version</code>:</p>
 <pre class="highlight"><code class="language-console">$ mkdocs --version
-mkdocs, version 1.0 from /path/to/mkdocs (Python 3.6)</code></pre>
+mkdocs, version 1.5.0 from /path/to/mkdocs (Python 3.10)</code></pre>
 <h2 id="maintenance-team">Maintenance team<a class="headerlink" href="#maintenance-team" title="Permanent link"></a></h2>
 <p>The current and past members of the MkDocs team.</p>
 <ul>
@@ -383,6 +384,183 @@ mkdocs, version 1.0 from /path/to/mkdocs (Python 3.6)</code></pre>
 <li><a href="https://github.com/oprypin/">@oprypin</a></li>
 <li><a href="https://github.com/ultrabug/">@ultrabug</a></li>
 </ul>
+<h2 id="version-150-2023-07-26">Version 1.5.0 (2023-07-26)<a class="headerlink" href="#version-150-2023-07-26" title="Permanent link"></a></h2>
+<h3 id="new-command-mkdocs-get-deps">New command <code>mkdocs get-deps</code><a class="headerlink" href="#new-command-mkdocs-get-deps" title="Permanent link"></a></h3>
+<p>This command guesses the Python dependencies that a MkDocs site requires in order to build. It simply prints the PyPI packages that need to be installed. In the terminal it can be combined directly with an installation command as follows:</p>
+<pre class="highlight"><code class="language-bash">pip install $(mkdocs get-deps)</code></pre>
+<p>The idea is that right after running this command, you can directly follow it up with <code>mkdocs build</code> and it will almost always "just work", without needing to think which dependencies to install.</p>
+<p>The way it works is by scanning <code>mkdocs.yml</code> for <code>themes:</code>, <code>plugins:</code>, <code>markdown_extensions:</code> items and doing a reverse lookup based on a large list of known projects (catalog, see below).</p>
+<p>Of course, you're welcome to use a "virtualenv" with such a command. Also note that for environments that require stability (for example CI) directly installing deps in this way is not a very reliable approach as it precludes dependency pinning.</p>
+<p>The command allows overriding which config file is used (instead of <code>mkdocs.yml</code> in the current directory) as well as which catalog of projects is used (instead of downloading it from the default location). See <a href="../../user-guide/cli/#mkdocs-get-deps"><code>mkdocs get-deps --help</code></a>.</p>
+<p>Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3205" title="GitHub Issue mkdocs/mkdocs #3205">#3205</a></p>
+<h3 id="mkdocs-has-an-official-catalog-of-plugins">MkDocs has an official catalog of plugins<a class="headerlink" href="#mkdocs-has-an-official-catalog-of-plugins" title="Permanent link"></a></h3>
+<p>Check out <a href="https://github.com/mkdocs/catalog">https://github.com/mkdocs/catalog</a> and add all your general-purpose plugins, themes and extensions there, so that they can be looked up through <code>mkdocs get-deps</code>.</p>
+<p>This was renamed from "best-of-mkdocs" and received significant updates. In addition to <code>pip</code> installation commands, the page now shows the config boilerplate needed to add a plugin.</p>
+<h3 id="expanded-validation-of-links">Expanded validation of links<a class="headerlink" href="#expanded-validation-of-links" title="Permanent link"></a></h3>
+<h4 id="validated-links-in-markdown">Validated links in Markdown<a class="headerlink" href="#validated-links-in-markdown" title="Permanent link"></a></h4>
+<blockquote>
+<p>As you may know, within Markdown, MkDocs really only recognizes <strong>relative</strong> links that lead to another physical <code>*.md</code> document (or media file). This is a good convention to follow because then the source pages are also freely browsable without MkDocs, for example on GitHub. MkDocs knows that in the output it should turn those <code>*.md</code> links into <code>*.html</code> as appropriate, and it would also always tell you if such a link doesn't actually lead to an existing file.</p>
+</blockquote>
+<p>However, the checks for links were really loose and had many concessions. For example, links that started with <code>/</code> ("absolute") and links that <em>ended</em> with <code>/</code> were left as is and no warning was shown, which allowed such very fragile links to sneak into site sources: links that happen to work right now but get no validation and links that confusingly need an extra level of <code>..</code> with <code>use_directory_urls</code> enabled.</p>
+<p>Now, in addition to validating relative links, MkDocs will print <code>INFO</code> messages for unrecognized types of links (including absolute links). They look like this:</p>
+<pre class="highlight"><code class="language-text">INFO - Doc file 'example.md' contains an absolute link '/foo/bar/', it was left as is. Did you mean 'foo/bar.md'?</code></pre>
+<p>If you don't want any changes, not even the <code>INFO</code> messages, and wish to revert to the silence from MkDocs 1.4, add the following configs to <code>mkdocs.yml</code> (<strong>not</strong> recommended):</p>
+<pre class="highlight"><code class="language-yaml">validation:
+  absolute_links: ignore
+  unrecognized_links: ignore</code></pre>
+<p>If, on the opposite end, you want these to print <code>WARNING</code> messages and cause <code>mkdocs build --strict</code> to fail, you are recommended to configure these to <code>warn</code> instead.</p>
+<p>See <a href="../../user-guide/configuration/#validation"><strong>documentation</strong></a> for actual recommended settings and more details. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3283" title="GitHub Issue mkdocs/mkdocs #3283">#3283</a></p>
+<h4 id="validated-links-in-the-nav">Validated links in the nav<a class="headerlink" href="#validated-links-in-the-nav" title="Permanent link"></a></h4>
+<p>Links to documents in the <a href="../../user-guide/configuration/#nav"><code>nav</code> configuration</a> now also have configurable validation, though with no changes to the defaults.</p>
+<p>You are welcomed to turn on validation for files that were forgotten and excluded from the nav. Example:</p>
+<pre class="highlight"><code class="language-yaml">validation:
+  nav:
+    omitted_files: warn
+    absolute_links: warn</code></pre>
+<p>This can make the following message appear with the <code>WARNING</code> level (as opposed to <code>INFO</code> as the only option previously), thus being caught by <code>mkdocs --strict</code>:</p>
+<pre class="highlight"><code class="language-text">INFO - The following pages exist in the docs directory, but are not included in the "nav" configuration: ...</code></pre>
+<p>See <a href="../../user-guide/configuration/#validation"><strong>documentation</strong></a>. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3283" title="GitHub Issue mkdocs/mkdocs #3283">#3283</a>, <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1755" title="GitHub Issue mkdocs/mkdocs #1755">#1755</a></p>
+<h4 id="mark-docs-as-intentionally-not-in-nav">Mark docs as intentionally "not in nav"<a class="headerlink" href="#mark-docs-as-intentionally-not-in-nav" title="Permanent link"></a></h4>
+<p>There is a new config <code>not_in_nav</code>. With it, you can mark particular patterns of files as exempt from the above <code>omitted_files</code> warning type; no messages will be printed for them anymore. (As a corollary, setting this config to <code>*</code> is the same as ignoring <code>omitted_files</code> altogether.)</p>
+<p>This is useful if you generally like these warnings about files that were forgotten from the nav, but still have some pages that you knowingly excluded from the nav and just want to build and copy them.</p>
+<p>The <code>not_in_nav</code> config is a set of gitignore-like patterns. See the next section for an explanation of another such config.</p>
+<p>See <a href="../../user-guide/configuration/#not_in_nav"><strong>documentation</strong></a>. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3224" title="GitHub Issue mkdocs/mkdocs #3224">#3224</a>, <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1888" title="GitHub Issue mkdocs/mkdocs #1888">#1888</a></p>
+<h3 id="excluded-doc-files">Excluded doc files<a class="headerlink" href="#excluded-doc-files" title="Permanent link"></a></h3>
+<p>There is a new config <code>exclude_docs</code> that tells MkDocs to ignore certain files under <code>docs_dir</code> and <em>not</em> copy them to the built <code>site</code> as part of the build.</p>
+<p>Historically MkDocs would always ignore file names starting with a dot, and that's all. Now this is all configurable: you can un-ignore these and/or ignore more patterns of files.</p>
+<p>The <code>exclude_docs</code> config follows the <a href="https://git-scm.com/docs/gitignore#_pattern_format">.gitignore pattern format</a> and is specified as a multiline YAML string. For example:</p>
+<pre class="highlight"><code class="language-yaml">exclude_docs: |
+  *.py               # Excludes e.g. docs/hooks/foo.py
+  /drafts            # Excludes e.g. docs/drafts/hello.md
+  /requirements.txt  # Excludes docs/requirements.txt</code></pre>
+<p>Validation of links (described above) is also affected by <code>exclude_docs</code>. During <code>mkdocs serve</code> the messages explain the interaction, whereas during <code>mkdocs build</code> excluded files are as good as nonexistent.</p>
+<p>As an additional related change, if you have a need to have both <code>README.md</code> and <code>index.md</code> files in a directory but publish only one of them, you can now use this feature to explicitly ignore one of them and avoid warnings.</p>
+<p>See <a href="../../user-guide/configuration/#exclude_docs"><strong>documentation</strong></a>. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3224" title="GitHub Issue mkdocs/mkdocs #3224">#3224</a></p>
+<h4 id="drafts">Drafts<a class="headerlink" href="#drafts" title="Permanent link"></a></h4>
+<p>The <code>exclude_docs</code> config has another behavior: all excluded Markdown pages will still be previewable in <code>mkdocs serve</code> only, just with a "DRAFT" marker on top. Then they will of course be excluded from <code>mkdocs build</code> or <code>gh-deploy</code>.</p>
+<p>If you don't want <code>mkdocs serve</code> to have any special behaviors and instead want it to perform completely normal builds, use the new flag <code>mkdocs serve --clean</code>.</p>
+<p>See <a href="../../user-guide/configuration/#exclude_docs"><strong>documentation</strong></a>. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3224" title="GitHub Issue mkdocs/mkdocs #3224">#3224</a></p>
+<h3 id="mkdocs-serve-no-longer-exits-after-build-errors"><code>mkdocs serve</code> no longer exits after build errors<a class="headerlink" href="#mkdocs-serve-no-longer-exits-after-build-errors" title="Permanent link"></a></h3>
+<p>If there was an error (from the config or a plugin) during a site re-build, <code>mkdocs serve</code> used to exit after printing a stack trace. Now it will simply freeze the server until the author edits the files to fix the problem, and then will keep reloading.</p>
+<p>But errors on the <em>first</em> build still cause <code>mkdocs serve</code> to exit, as before.</p>
+<p>Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3255" title="GitHub Issue mkdocs/mkdocs #3255">#3255</a></p>
+<h3 id="page-titles-will-be-deduced-from-any-style-of-heading">Page titles will be deduced from any style of heading<a class="headerlink" href="#page-titles-will-be-deduced-from-any-style-of-heading" title="Permanent link"></a></h3>
+<p>MkDocs always had the ability to infer the title of a page (if it's not specified in the <code>nav</code>) based on the first line of the document, if it had a <code>&lt;h1&gt;</code> heading that had to written starting with the exact character <code>#</code>. Now any style of Markdown heading is understood (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1886" title="GitHub Issue mkdocs/mkdocs #1886">#1886</a>). Due to the previous simplistic parsing, it was also impossible to use <code>attr_list</code> attributes in that first heading (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3136" title="GitHub Issue mkdocs/mkdocs #3136">#3136</a>). Now that is also fixed.</p>
+<h3 id="markdown-extensions-can-use-paths-relative-to-the-current-document">Markdown extensions can use paths relative to the current document<a class="headerlink" href="#markdown-extensions-can-use-paths-relative-to-the-current-document" title="Permanent link"></a></h3>
+<p>This is aimed at extensions such as <code>pymdownx.snippets</code> or <code>markdown_include.include</code>: you can now specify their include paths to be relative to the currently rendered Markdown document, or relative to the <code>docs_dir</code>. Any other extension can of course also make use of the new <code>!relative</code> YAML tag.</p>
+<pre class="highlight"><code class="language-yaml">markdown_extensions:
+  - pymdownx.snippets:
+      base_path: !relative</code></pre>
+<p>See <a href="../../user-guide/configuration/#paths-relative-to-the-current-file-or-site"><strong>documentation</strong></a>. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2154" title="GitHub Issue mkdocs/mkdocs #2154">#2154</a>, <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3258" title="GitHub Issue mkdocs/mkdocs #3258">#3258</a></p>
+<h3 id="script-tags-can-specify-typemodule-and-other-attributes"><code>&lt;script&gt;</code> tags can specify <code>type="module"</code> and other attributes<a class="headerlink" href="#script-tags-can-specify-typemodule-and-other-attributes" title="Permanent link"></a></h3>
+<p>In <code>extra_javascript</code>, if you use the <code>.mjs</code> file extension or explicitly specify a <code>type: module</code> key, the script will be added with the <code>type="module"</code> attribute. <code>defer: true</code> and <code>async: true</code> keys are also available.</p>
+<p>See <a href="../../user-guide/configuration/#extra_javascript">updated <strong>documentation</strong> for <code>extra_javascript</code></a>.</p>
+<p><strong>At first this is only supported in built-in themes, other themes need to follow up, see below.</strong></p>
+<p>Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3237" title="GitHub Issue mkdocs/mkdocs #3237">#3237</a></p>
+<h3 id="changes-for-theme-developers-action-required">Changes for theme developers (action required!)<a class="headerlink" href="#changes-for-theme-developers-action-required" title="Permanent link"></a></h3>
+<p>Using the construct <code>{% for script in extra_javascript %}</code> is now fully obsolete because it cannot allow customizing the attributes of the <code>&lt;script&gt;</code> tag. It will keep working but blocks some of MkDocs' features.</p>
+<p>Instead, you now need to use <code>config.extra_javascript</code> (which was already the case for a while) and couple it with the new <code>script_tag</code> filter:</p>
+<pre class="highlight"><code class="language-django">    {%- for script in config.extra_javascript %}
+      {{ script | script_tag }}
+    {%- endfor %}</code></pre>
+<p>See <a href="../../dev-guide/themes/#picking-up-css-and-javascript-from-the-config"><strong>documentation</strong></a>.</p>
+<h3 id="upgrades-for-plugin-developers">Upgrades for plugin developers<a class="headerlink" href="#upgrades-for-plugin-developers" title="Permanent link"></a></h3>
+<ul>
+<li>
+<p>Breaking change: <code>config.extra_javascript</code> is no longer a plain list of strings, but instead a list of <code>ExtraScriptValue</code> items. So you can no longer treat the list values as strings. If you want to keep compatibility with old versions, just always reference the items as <code>str(item)</code> instead. And you can still append plain strings to the list if you wish. See information about <code>&lt;script&gt;</code> tags above. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3237" title="GitHub Issue mkdocs/mkdocs #3237">#3237</a></p>
+</li>
+<li>
+<p><code>File</code> has a new attribute <code>inclusion</code>. Its value is calculated from both the <code>exclude_docs</code> and <code>not_in_nav</code> configs, and implements their behavior. Plugins can read this value or write to it. New <code>File</code> instances by default follow whatever the configs say, but plugins can choose to make this decision explicitly, per file.</p>
+</li>
+<li>
+<p>When creating a <code>File</code>, one can now set a <code>dest_uri</code> directly, rather than having to update it (and other dependent attributes) after creation. <a href="https://github.com/mkdocs/mkdocs/commit/d5af6426c52421f1113f6dcc591de1e01bea48bd">Context</a></p>
+</li>
+<li>
+<p>A new config option was added - <code>DictOfItems</code>. Similarly to <code>ListOfItems</code>, it validates a mapping of config options that all have the same type. Keys are arbitrary but always strings. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3242" title="GitHub Issue mkdocs/mkdocs #3242">#3242</a></p>
+</li>
+<li>
+<p>A new function <code>get_plugin_logger</code> was added. In order to opt into a standardized way for plugins to log messages, please use the idiom:</p>
+<pre class="highlight"><code class="language-python">log = mkdocs.plugins.get_plugin_logger(__name__)
+...
+log.info("Hello, world")</code></pre>
+<p>Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3245" title="GitHub Issue mkdocs/mkdocs #3245">#3245</a></p>
+</li>
+<li>
+<p><code>SubConfig</code> config option can be conveniently subclassed with a particular type of config specified. For example, <code>class ExtraScript(SubConfig[ExtraScriptValue]):</code>. To see how this is useful, search for this class in code. <a href="https://github.com/mkdocs/mkdocs/commit/73e503990e3e3504bfe1cb627d41a7e97970687e">Context</a></p>
+</li>
+<li>
+<p>Bugfix: <code>SubConfig</code> had a bug where paths (from <code>FilesystemObject</code> options) were not made relative to the main config file as intended, because <code>config_file_path</code> was not properly inherited to it. This is now fixed. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3265" title="GitHub Issue mkdocs/mkdocs #3265">#3265</a></p>
+</li>
+<li>
+<p><code>Config</code> members now have a way to avoid clashing with Python's reserved words. This is achieved by stripping a trailing underscore from each member's name.</p>
+<p>Example of adding an <code>async</code> boolean option that can be set by the user as <code>async: true</code> and read programmatically as <code>config.async_</code>:</p>
+<pre class="highlight"><code class="language-python">class ExampleConfig(Config):
+    async_ = Type(bool, default=False)</code></pre>
+<p>Previously making a config key with a reserved name was impossible with new-style schemas. <a href="https://github.com/mkdocs/mkdocs/commit/1db8e884fa7135a49adf7740add5d875a16a18bc">Context</a></p>
+</li>
+<li>
+<p><code>Theme</code> has its attributes properly declared and gained new attributes <code>theme.locale</code>, <code>theme.custom_dir</code>.</p>
+</li>
+<li>
+<p>Some type annotations were made more precise. For example:</p>
+<ul>
+<li>The <code>context</code> parameter has gained the type <code>TemplateContext</code> (<code>TypedDict</code>). <a href="https://github.com/mkdocs/mkdocs/commit/0f793b9984c7e6a1d53ce874e7d17b6d27ebf4b2">Context</a></li>
+<li>The classes <code>Page</code>, <code>Section</code>, <code>Link</code> now have a common base class <code>StructureItem</code>. <a href="https://github.com/mkdocs/mkdocs/commit/01be507e30b05db0a4c44ef05ba62b2098010653">Context</a></li>
+<li>Some methods stopped accepting <code>Config</code> and only accept <code>MkDocsConfig</code> as was originally intended. <a href="https://github.com/mkdocs/mkdocs/commit/c459cd24fc0320333f51525e9cf681d4a8370f50">Context</a></li>
+<li><code>config.mdx_configs</code> got a proper type. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3229" title="GitHub Issue mkdocs/mkdocs #3229">#3229</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="theme-updates">Theme updates<a class="headerlink" href="#theme-updates" title="Permanent link"></a></h3>
+<ul>
+<li>
+<p>Built-in themes mostly stopped relying on <code>&lt;script defer&gt;</code>. This may affect some usages of <code>extra_javascript</code>, mainly remove the need for custom handling of "has the page fully loaded yet". Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3237" title="GitHub Issue mkdocs/mkdocs #3237">#3237</a></p>
+</li>
+<li>
+<p>"mkdocs" theme now has a styling for <code>&gt;</code> blockquotes, previously they were not distinguished at all. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3291" title="GitHub Issue mkdocs/mkdocs #3291">#3291</a></p>
+</li>
+<li>
+<p>"readthedocs" theme was updated to v1.2.0 according to upstream, with improved styles for <code>&lt;kbd&gt;</code> and breadcrumb navigation. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3058" title="GitHub Issue mkdocs/mkdocs #3058">#3058</a></p>
+</li>
+<li>
+<p>Both built-in themes had their version of highlight.js updated to 11.8.0, and jQuery updated to 3.6.0.</p>
+</li>
+</ul>
+<h3 id="bug-fixes">Bug fixes<a class="headerlink" href="#bug-fixes" title="Permanent link"></a></h3>
+<h4 id="relative-paths-in-the-nav-can-traverse-above-the-root">Relative paths in the nav can traverse above the root<a class="headerlink" href="#relative-paths-in-the-nav-can-traverse-above-the-root" title="Permanent link"></a></h4>
+<p>Regression in 1.2 - relative paths in the nav could no longer traverse above the site's root and were truncated to the root. Although such traversal is discouraged and produces a warning, this was a documented behavior. The behavior is now restored.</p>
+<p>Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2752" title="GitHub Issue mkdocs/mkdocs #2752">#2752</a>, <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3010" title="GitHub Issue mkdocs/mkdocs #3010">#3010</a></p>
+<h4 id="mkdocs-can-accept-the-config-from-stdin">MkDocs can accept the config from stdin<a class="headerlink" href="#mkdocs-can-accept-the-config-from-stdin" title="Permanent link"></a></h4>
+<p>This can be used for config overrides on the fly. See updated section at the bottom of <a href="../../user-guide/configuration/#configuration-inheritance">Configuration Inheritance</a>.</p>
+<p>The command to use this is <code>mkdocs build -f -</code>. In previous versions doing this led to an error.</p>
+<p><a href="https://github.com/mkdocs/mkdocs/commit/d5bb15fa108da86a8e53fb7d84109d8f8d9d6453">Context</a></p>
+<h3 id="new-command-line-flags">New command line flags<a class="headerlink" href="#new-command-line-flags" title="Permanent link"></a></h3>
+<ul>
+<li><code>mkdocs --no-color build</code> disables color output and line wrapping. This option is also available through an environment variable <code>NO_COLOR=true</code>. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3282" title="GitHub Issue mkdocs/mkdocs #3282">#3282</a></li>
+<li><code>mkdocs build --no-strict</code> overrides the <code>strict</code> config to <code>false</code>. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3254" title="GitHub Issue mkdocs/mkdocs #3254">#3254</a></li>
+<li><code>mkdocs build -f -</code> (described directly above).</li>
+<li><code>mkdocs serve --clean</code> (described above).</li>
+<li><code>mkdocs serve --dirty</code> is the new name of <code>mkdocs serve --dirtyreload</code>.</li>
+</ul>
+<h3 id="deprecations">Deprecations<a class="headerlink" href="#deprecations" title="Permanent link"></a></h3>
+<ul>
+<li>
+<p><code>extra_javascript</code> underwent a change that can break plugins in rare cases, and it requires attention from theme developers. See respective entries above.</p>
+</li>
+<li>
+<p>Python-Markdown was unpinned from <code>&lt;3.4</code>. That version is known to remove functionality. If you are affected by those removals, you can still choose to pin the version for yourself: <code>Markdown &lt;3.4</code>. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3222" title="GitHub Issue mkdocs/mkdocs #3222">#3222</a>, <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2892" title="GitHub Issue mkdocs/mkdocs #2892">#2892</a></p>
+</li>
+<li>
+<p><code>mkdocs.utils.warning_filter</code> now shows a warning about being deprecated. It does nothing since MkDocs 1.2. Consider <code>get_plugin_logger</code> or just logging under <code>mkdocs.plugins.*</code> instead. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3008" title="GitHub Issue mkdocs/mkdocs #3008">#3008</a></p>
+</li>
+<li>
+<p>Accessing the <code>_vars</code> attribute of a <code>Theme</code> is deprecated - just access the keys directly.</p>
+</li>
+<li>
+<p>Accessing the <code>user_configs</code> attribute of a <code>Config</code> is deprecated. Note: instead of <code>config.user_configs[*]['theme']['custom_dir']</code>, please use the new attribute <code>config.theme.custom_dir</code>.</p>
+</li>
+</ul>
+<p>Other small improvements; see <a href="https://github.com/mkdocs/mkdocs/compare/1.4.3...1.5.0">commit log</a>.</p>
 <h2 id="version-143-2023-05-02">Version 1.4.3 (2023-05-02)<a class="headerlink" href="#version-143-2023-05-02" title="Permanent link"></a></h2>
 <ul>
 <li>
@@ -476,7 +654,7 @@ mkdocs, version 1.0 from /path/to/mkdocs (Python 3.6)</code></pre>
 It works like <code>edit_uri</code> but more generally covers ways to construct an edit URL.<br />
 See <a href="../../user-guide/configuration/#edit_uri_template"><strong>documentation</strong></a>.</p>
 <p>Additionally, the <code>edit_uri</code> functionality will now fully work even if <code>repo_url</code> is omitted (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2928" title="GitHub Issue mkdocs/mkdocs #2928">#2928</a>)</p>
-<h3 id="upgrades-for-plugin-developers">Upgrades for plugin developers<a class="headerlink" href="#upgrades-for-plugin-developers" title="Permanent link"></a></h3>
+<h3 id="upgrades-for-plugin-developers_1">Upgrades for plugin developers<a class="headerlink" href="#upgrades-for-plugin-developers_1" title="Permanent link"></a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This release has big changes to the implementation of plugins and their configs. But, the intention is to have zero breaking changes in all reasonably common use cases. Or at the very least if a code fix is required, there should always be a way to stay compatible with older MkDocs versions. Please report if this release breaks something.</p>
@@ -535,13 +713,13 @@ class MyPluginConfig(base.Config):
     bar = c.Type(str, default='')
 
 class MyPlugin(plugins.BasePlugin[MyPluginConfig]):
-    def on_page_markdown(self, markdown: str, *, config: base.MkDocsConfig, **kwargs):
+    def on_page_markdown(self, markdown: str, *, config: defaults.MkDocsConfig, **kwargs):
         if self.config.foo &lt; 5:  # Error, `foo` might be `None`, need to check first.
             if config.site_url.startswith('http:'):  # Error, MkDocs' `site_url` also might be `None`.
                 return markdown + self.config.baz  # Error, no such attribute `baz`!</code></pre>
 <p>This lets you notice the errors from a static type checker before running the code and fix them as such:</p>
 <pre class="highlight"><code class="language-python">class MyPlugin(plugins.BasePlugin[MyPluginConfig]):
-    def on_page_markdown(self, markdown: str, *, config: base.MkDocsConfig, **kwargs):
+    def on_page_markdown(self, markdown: str, *, config: defaults.MkDocsConfig, **kwargs):
         if self.config.foo is not None and self.config.foo &lt; 5:  # OK, `int &lt; int` is valid.
             if (config.site_url or '').startswith('http:'):  # OK, `str.startswith(str)` is valid.
                 return markdown + self.config.bar  # OK, `str + str` is valid.</code></pre>
@@ -598,7 +776,7 @@ For class-based configs, there's a new definition for whether an option is "requ
 </ul>
 <p>Tweaked logic for handling <code>ConfigOption.default</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2938" title="GitHub Issue mkdocs/mkdocs #2938">#2938</a>)</p>
 <p>Deprecated config option classes: <code>ConfigItems</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2983" title="GitHub Issue mkdocs/mkdocs #2983">#2983</a>), <code>OptionallyRequired</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2962" title="GitHub Issue mkdocs/mkdocs #2962">#2962</a>), <code>RepoURL</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2927" title="GitHub Issue mkdocs/mkdocs #2927">#2927</a>)</p>
-<h3 id="theme-updates">Theme updates<a class="headerlink" href="#theme-updates" title="Permanent link"></a></h3>
+<h3 id="theme-updates_1">Theme updates<a class="headerlink" href="#theme-updates_1" title="Permanent link"></a></h3>
 <ul>
 <li>
 <p>Styles of admonitions in "MkDocs" theme (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2981" title="GitHub Issue mkdocs/mkdocs #2981">#2981</a>):</p>
@@ -704,7 +882,7 @@ For class-based configs, there's a new definition for whether an option is "requ
 <p>Allows to discard the history of commits when deploying, and instead replace it with one root commit</p>
 </li>
 </ul>
-<h3 id="bug-fixes">Bug fixes<a class="headerlink" href="#bug-fixes" title="Permanent link"></a></h3>
+<h3 id="bug-fixes_1">Bug fixes<a class="headerlink" href="#bug-fixes_1" title="Permanent link"></a></h3>
 <ul>
 <li>
 <p>An XSS vulnerability when using the search function in built-in themes was fixed (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2791" title="GitHub Issue mkdocs/mkdocs #2791">#2791</a>)</p>
@@ -1158,12 +1336,12 @@ in the configuration file. The setting has been renamed <code>nav</code>. To upd
 configuration, simply rename the setting to <code>nav</code>. In other words, if your
 configuration looked like this:</p>
 <pre class="highlight"><code class="language-yaml">pages:
-    - Home: index.md
-    - User Guide: user-guide.md</code></pre>
+  - Home: index.md
+  - User Guide: user-guide.md</code></pre>
 <p>Simply edit the configuration as follows:</p>
 <pre class="highlight"><code class="language-yaml">nav:
-    - Home: index.md
-    - User Guide: user-guide.md</code></pre>
+  - Home: index.md
+  - User Guide: user-guide.md</code></pre>
 <p>In the current release, any configuration which includes a <code>pages</code> setting, but
 no <code>nav</code> setting, the <code>pages</code> configuration will be copied to <code>nav</code> and a
 warning will be issued. However, in a future release, that may no longer happen.
@@ -1186,7 +1364,7 @@ should be used:</p>
 (without the <code>url</code> template filter), but they have been deprecated and the
 corresponding configuration values (<code>config.extra_javascript</code> and
 <code>config.extra_css</code> respectively) should be used with the filter instead.</p>
-<pre class="highlight"><code class="language-django">{% for path in config['extra_css'] %}
+<pre class="highlight"><code class="language-django">{% for path in config.extra_css %}
     &lt;link href="{{ path|url }}" rel="stylesheet"&gt;
 {% endfor %}</code></pre>
 <p>Note that navigation can now include links to external sites. Obviously, the
@@ -1338,8 +1516,8 @@ warning will be issued, with an error expected in a future release.</p>
 theme_dir: custom</code></pre>
 <p>Then the configuration should be adjusted as follows:</p>
 <pre class="highlight"><code class="language-yaml">theme:
-    name: mkdocs
-    custom_dir: custom</code></pre>
+  name: mkdocs
+  custom_dir: custom</code></pre>
 <p>See the <a href="../../user-guide/configuration/#theme">theme</a> configuration option documentation for details.</p>
 <h4 id="previously-deprecated-template-variables-removed-1168">Previously deprecated Template variables removed. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1168" title="GitHub Issue mkdocs/mkdocs #1168">#1168</a>)<a class="headerlink" href="#previously-deprecated-template-variables-removed-1168" title="Permanent link"></a></h4>
 <h5 id="page-template">Page Template<a class="headerlink" href="#page-template" title="Permanent link"></a></h5>
@@ -1589,7 +1767,7 @@ template instead. Users can simply save a copy of their custom favicon icon to
 Those variables are being deprecated and will issue a warning but continue to
 work for version 0.16, but may be removed in a future version. Use
 <code>config.var_name</code> instead, where <code>var_name</code> is the name of one of the
-<a href="/user-guide/configuration.md">configuration</a> variables.</p>
+<a href="../../user-guide/configuration/">configuration</a> variables.</p>
 <p>Below is a summary of all of the changes made to the global context:</p>
 <table>
 <thead>
@@ -1958,12 +2136,14 @@ documentation.</p>
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
+        <script src="../../js/jquery-3.6.0.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
         <script>
             var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="../../js/base.js" defer></script>
-        <script src="../../search/main.js" defer></script>
+        <script src="../../js/base.js"></script>
+        <script src="../../search/main.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">

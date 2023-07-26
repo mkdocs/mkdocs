@@ -12,23 +12,20 @@
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
-
-        <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/yaml.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/django.min.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/django.min.js"></script>
+        <script>hljs.highlightAll();</script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-274394082"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', 'G-274394082');
+          gtag('config', "G-274394082");
         </script> 
     </head>
 
@@ -203,7 +200,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#environment-variables" class="nav-link">Environment Variables</a>
+            <li class="nav-item" data-level="2"><a href="#special-yaml-tags" class="nav-link">Special YAML tags</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -379,8 +376,8 @@ This option can be overridden by a command line option in <code>gh-deploy</code>
 <p>This setting is used to determine the format and layout of the global navigation
 for the site. A minimal navigation configuration could look like this:</p>
 <pre class="highlight"><code class="language-yaml">nav:
-    - 'index.md'
-    - 'about.md'</code></pre>
+  - 'index.md'
+  - 'about.md'</code></pre>
 <p>All paths in the navigation configuration must be relative to the
 <a href="#docs_dir"><code>docs_dir</code></a> configuration option. See the section on <a href="../writing-your-docs/#configure-pages-and-navigation">configuring
 pages and navigation</a> for a more detailed breakdown, including how to create
@@ -391,9 +388,9 @@ link may be a full URL or a relative URL. Any path which is not found in the
 files is assumed to be an external link. See the section about [Meta-Data] on
 how MkDocs determines the page title of a document.</p>
 <pre class="highlight"><code class="language-yaml">nav:
-    - Introduction: 'index.md'
-    - 'about.md'
-    - 'Issue Tracker': 'https://example.com/'</code></pre>
+  - Introduction: 'index.md'
+  - 'about.md'
+  - 'Issue Tracker': 'https://example.com/'</code></pre>
 <p>In the above example, the first two items point to local files while the third
 points to an external site.</p>
 <p>However, sometimes the MkDocs site is hosted in a subdirectory of a project's
@@ -402,9 +399,9 @@ the full domain. In that case, you may use an appropriate relative URL.</p>
 <pre class="highlight"><code class="language-yaml">site_url: https://example.com/foo/
 
 nav:
-    - Home: '../'
-    - 'User Guide': 'user-guide.md'
-    - 'Bug Tracker': '/bugs/'</code></pre>
+  - Home: '../'
+  - 'User Guide': 'user-guide.md'
+  - 'Bug Tracker': '/bugs/'</code></pre>
 <p>In the above example, two different styles of external links are used. First,
 note that the <code>site_url</code> indicates that the MkDocs site is hosted in the <code>/foo/</code>
 subdirectory of the domain. Therefore, the <code>Home</code> navigation item is a relative
@@ -415,6 +412,118 @@ server root and effectively points to <code>https://example.com/bugs/</code>. Of
 <p><strong>default</strong>: By default <code>nav</code> will contain an alphanumerically sorted, nested
 list of all the Markdown files found within the <code>docs_dir</code> and its
 sub-directories. Index files will always be listed first within a sub-section.</p>
+<h3 id="exclude_docs">exclude_docs<a class="headerlink" href="#exclude_docs" title="Permanent link"></a></h3>
+<div class="admonition new">
+<p class="admonition-title">New in version 1.5</p>
+</div>
+<p>This config defines patterns of files (under <a href="#docs_dir"><code>docs_dir</code></a>) to not be picked up into the built site.</p>
+<p>Example:</p>
+<pre class="highlight"><code class="language-yaml">exclude_docs: |
+  api-config.json    # A file with this name anywhere.
+  drafts/            # A "drafts" directory anywhere.
+  /requirements.txt  # Top-level "docs/requirements.txt".
+  *.py               # Any file with this extension anywhere.
+  !/foo/example.py   # But keep this particular file.</code></pre>
+<p>This follows the <a href="https://git-scm.com/docs/gitignore#_pattern_format">.gitignore pattern format</a>.</p>
+<p>Note that <code>mkdocs serve</code> does <em>not</em> follow this setting and instead displays excluded documents but with a "DRAFT" mark. To prevent this effect, you can run <code>mkdocs serve --clean</code>.</p>
+<p>The following defaults are always implicitly prepended - to exclude dot-files (and directories) as well as the top-level <code>templates</code> directory:</p>
+<pre class="highlight"><code class="language-yaml">exclude_docs: |
+  .*
+  /templates/</code></pre>
+<p>So, in order to really start this config fresh, you'd need to specify a negated version of these entries first.</p>
+<p>Otherwise you could for example opt only certain dot-files back into the site:</p>
+<pre class="highlight"><code class="language-yaml">exclude_docs: |
+  !.assets  # Don't exclude '.assets' although all other '.*' are excluded</code></pre>
+<h3 id="not_in_nav">not_in_nav<a class="headerlink" href="#not_in_nav" title="Permanent link"></a></h3>
+<div class="admonition new">
+<p class="admonition-title">New in version 1.5</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This option does <em>not</em> actually exclude anything from the nav.</p>
+</div>
+<p>If you want to include some docs into the site but intentionally exclude them from the nav, normally MkDocs warns about this.</p>
+<p>Adding such patterns of files (relative to <a href="#docs_dir"><code>docs_dir</code></a>) into the <code>not_in_nav</code> config will prevent such warnings.</p>
+<p>Example:</p>
+<pre class="highlight"><code class="language-yaml">nav:
+  - Foo: foo.md
+  - Bar: bar.md
+
+not_in_nav: |
+  /private.md</code></pre>
+<p>As the previous option, this follows the .gitignore pattern format.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Adding a given file to <a href="#exclude_docs"><code>exclude_docs</code></a> takes precedence over and implies <code>not_in_nav</code>.</p>
+</div>
+<h3 id="validation">validation<a class="headerlink" href="#validation" title="Permanent link"></a></h3>
+<div class="admonition new">
+<p class="admonition-title">New in version 1.5</p>
+</div>
+<p>Configure the strictness of MkDocs' diagnostic messages when validating links to documents.</p>
+<p>This is a tree of configs, and for each one the value can be one of the three: <code>warn</code>, <code>info</code>, <code>ignore</code>. Which cause a logging message of the corresponding severity to be produced. The <code>warn</code> level is, of course, intended for use with <code>mkdocs build --strict</code> (where it becomes an error), which you can employ in continuous testing.</p>
+<div class="admonition example">
+<p class="admonition-title">Defaults of this config as of MkDocs 1.5:</p>
+<pre class="highlight"><code class="language-yaml">validation:
+  nav:
+    omitted_files: info
+    not_found: warn
+    absolute_links: info
+  links:
+    not_found: warn
+    absolute_links: info
+    unrecognized_links: info</code></pre>
+<p>(Note: you shouldn't copy this whole example, because it only duplicates the defaults. Only individual items that differ should be set.)</p>
+</div>
+<p>The defaults of some of the behaviors already differ from MkDocs 1.4 and below - they were ignored before.</p>
+<details class="example">
+<summary>Configure MkDocs 1.5 to behave like MkDocs 1.4 and below (reduce strictness):</summary>
+<pre class="highlight"><code class="language-yaml">validation:
+  absolute_links: ignore
+  unrecognized_links: ignore</code></pre>
+</details>
+<!-- -->
+<details class="example" open="open">
+<summary>Recommended settings for most sites (maximal strictness):</summary>
+<pre class="highlight"><code class="language-yaml">validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn</code></pre>
+</details>
+<p>Note how in the above examples we omitted the 'nav' and 'links' keys. Here <code>absolute_links:</code> means setting both <code>nav: absolute_links:</code> and <code>links: absolute_links:</code>.</p>
+<p>Full list of values and examples of log messages that they can hide or make more prominent:</p>
+<ul>
+<li><code>validation.nav.omitted_files</code>  <ul>
+<li>"The following pages exist in the docs directory, but are not included in the "nav" configuration: ..."</li>
+</ul>
+</li>
+<li><code>validation.nav.not_found</code>  <ul>
+<li>"A relative path to 'foo/bar.md' is included in the 'nav' configuration, which is not found in the documentation files."</li>
+<li>"A reference to 'foo/bar.md' is included in the 'nav' configuration, but this file is excluded from the built site."</li>
+</ul>
+</li>
+<li><code>validation.nav.absolute_links</code>  <ul>
+<li>"An absolute path to '/foo/bar.html' is included in the 'nav' configuration, which presumably points to an external resource."</li>
+</ul>
+</li>
+</ul>
+<!-- -->
+<ul>
+<li><code>validation.links.not_found</code>  <ul>
+<li>"Doc file 'example.md' contains a relative link '../foo/bar.md', but the target is not found among documentation files."</li>
+<li>"Doc file 'example.md' contains a link to 'foo/bar.md' which is excluded from the built site."</li>
+</ul>
+</li>
+<li><code>validation.links.absolute_links</code><ul>
+<li>"Doc file 'example.md' contains an absolute link '/foo/bar.html', it was left as is. Did you mean 'foo/bar.md'?"</li>
+</ul>
+</li>
+<li><code>validation.links.unrecognized_links</code><ul>
+<li>"Doc file 'example.md' contains an unrecognized relative link '../foo/bar/', it was left as is. Did you mean 'foo/bar.md'?"</li>
+<li>"Doc file 'example.md' contains an unrecognized relative link 'mail@example.com', it was left as is. Did you mean 'mailto:mail@example.com'?"</li>
+</ul>
+</li>
+</ul>
 <h2 id="build-directories">Build directories<a class="headerlink" href="#build-directories" title="Permanent link"></a></h2>
 <h3 id="theme">theme<a class="headerlink" href="#theme" title="Permanent link"></a></h3>
 <p>Sets the theme and theme specific configuration of your documentation site.
@@ -423,12 +532,12 @@ May be either a string or a set of key/value pairs.</p>
 of available themes visit <a href="../choosing-your-theme/">Choosing Your Theme</a>.</p>
 <p>An example set of key/value pairs might look something like this:</p>
 <pre class="highlight"><code class="language-yaml">theme:
-    name: mkdocs
-    locale: en
-    custom_dir: my_theme_customizations/
-    static_templates:
-        - sitemap.html
-    include_sidebar: false</code></pre>
+  name: mkdocs
+  locale: en
+  custom_dir: my_theme_customizations/
+  static_templates:
+    - sitemap.html
+  include_sidebar: false</code></pre>
 <p>If a set of key/value pairs, the following nested keys can be defined:</p>
 <div class="admonition block">
 <p class="admonition-title">Block</p>
@@ -481,17 +590,42 @@ you might add the following line to your <code>.gitignore</code> file:</p>
 documentation on how to ignore specific directories.</p>
 </div>
 <h3 id="extra_css">extra_css<a class="headerlink" href="#extra_css" title="Permanent link"></a></h3>
-<p>Set a list of CSS files in your <code>docs_dir</code> to be included by the theme. For
-example, the following example will include the extra.css file within the
-css subdirectory in your <a href="#docs_dir">docs_dir</a>.</p>
+<p>Set a list of CSS files (relative to <code>docs_dir</code>) to be included by the theme, typically as <code>&lt;link&gt;</code> tags.</p>
+<p>Example:</p>
 <pre class="highlight"><code class="language-yaml">extra_css:
-    - css/extra.css
-    - css/second_extra.css</code></pre>
+  - css/extra.css
+  - css/second_extra.css</code></pre>
 <p><strong>default</strong>: <code>[]</code> (an empty list).</p>
 <h3 id="extra_javascript">extra_javascript<a class="headerlink" href="#extra_javascript" title="Permanent link"></a></h3>
-<p>Set a list of JavaScript files in your <code>docs_dir</code> to be included by the theme.
-See the example in <a href="#extra_css">extra_css</a> for usage.</p>
+<p>Set a list of JavaScript files in your <code>docs_dir</code> to be included by the theme, as <code>&lt;script&gt;</code> tags.</p>
+<div class="admonition new">
+<p class="admonition-title">Changed in version 1.5:</p>
+<p>Older versions of MkDocs supported only a plain list of strings, but now several additional config keys are available: <code>type</code>, <code>async</code>, <code>defer</code>.</p>
+</div>
+<p>See the examples and what they produce:</p>
+<pre class="highlight"><code class="language-yaml">extra_javascript:
+  - some_plain_javascript.js       # &lt;script src="some_plain_javascript.js"&gt;&lt;/script&gt;
+        # New behavior in MkDocs 1.5:
+  - implicitly_as_module.mjs       # &lt;script src="implicitly_as_module.mjs" type="module"&gt;&lt;/script&gt;
+        # Config keys only supported since MkDocs 1.5:
+  - path: explicitly_as_module.mjs # &lt;script src="explicitly_as_module.mjs" type="module"&gt;&lt;/script&gt;
+    type: module
+  - path: deferred_plain.js        # &lt;script src="deferred_plain.js" defer&gt;&lt;/script&gt;
+    defer: true
+  - path: scripts/async_module.mjs # &lt;script src="scripts/async_module.mjs" type="module" async&gt;&lt;/script&gt;
+    type: module
+    async: true</code></pre>
+<p>So, each item can be either:</p>
+<ul>
+<li>a plain string, or</li>
+<li>a mapping that has the required <code>path</code> key and 3 optional keys <code>type</code> (string), <code>async</code> (boolean), <code>defer</code> (boolean).</li>
+</ul>
+<p>Only the plain string variant detects the <code>.mjs</code> extension and adds <code>type="module"</code>, otherwise <code>type: module</code> must be written out regardless of extension.</p>
 <p><strong>default</strong>: <code>[]</code> (an empty list).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>*.js</code> and <code>*.css</code> files, just like any other type of file, are always copied from <code>docs_dir</code> into the site's deployed copy, regardless if they're linked to the pages via the above configs or not.</p>
+</div>
 <h3 id="extra_templates">extra_templates<a class="headerlink" href="#extra_templates" title="Permanent link"></a></h3>
 <p>Set a list of templates in your <code>docs_dir</code> to be built by MkDocs. To see more
 about writing templates for MkDocs read the documentation about [custom themes]
@@ -505,7 +639,7 @@ custom themes.</p>
 <p>For example, if you are using a theme that supports displaying the project
 version, you can pass it to the theme like this:</p>
 <pre class="highlight"><code class="language-yaml">extra:
-    version: 1.0</code></pre>
+  version: 1.0</code></pre>
 <p><strong>default</strong>: By default <code>extra</code> will be an empty key-value mapping.</p>
 <h2 id="preview-controls">Preview controls<a class="headerlink" href="#preview-controls" title="Permanent link"></a></h2>
 <h2 id="live-reloading">Live Reloading<a class="headerlink" href="#live-reloading" title="Permanent link"></a></h2>
@@ -513,8 +647,8 @@ version, you can pass it to the theme like this:</p>
 <p>Determines additional directories to watch when running <code>mkdocs serve</code>.
 Configuration is a YAML list.</p>
 <pre class="highlight"><code class="language-yaml">watch:
-- directory_a
-- directory_b</code></pre>
+  - directory_a
+  - directory_b</code></pre>
 <p>Allows a custom default to be set without the need to pass it through the <code>-w</code>/<code>--watch</code>
 option every time the <code>mkdocs serve</code> command is called.</p>
 <div class="admonition note">
@@ -582,7 +716,7 @@ extensions beyond the ones that MkDocs uses by default (<code>meta</code>, <code
 and <code>fenced_code</code>).</p>
 <p>For example, to enable the <a href="https://python-markdown.github.io/extensions/smarty/">SmartyPants typography extension</a>, use:</p>
 <pre class="highlight"><code class="language-yaml">markdown_extensions:
-    - smarty</code></pre>
+  - smarty</code></pre>
 <p>Some extensions provide configuration options of their own. If you would like to
 set any configuration options, then you can nest a key/value mapping
 (<code>option_name: option value</code>) of any options that a given extension supports.
@@ -590,41 +724,45 @@ See the documentation for the extension you are using to determine what options
 they support.</p>
 <p>For example, to enable permalinks in the (included) <code>toc</code> extension, use:</p>
 <pre class="highlight"><code class="language-yaml">markdown_extensions:
-    - toc:
-        permalink: True</code></pre>
+  - toc:
+      permalink: true</code></pre>
 <p>Note that a colon (<code>:</code>) must follow the extension name (<code>toc</code>) and then on a new
 line the option name and value must be indented and separated by a colon. If you
 would like to define multiple options for a single extension, each option must be
 defined on a separate line:</p>
 <pre class="highlight"><code class="language-yaml">markdown_extensions:
-    - toc:
-        permalink: True
-        separator: "_"</code></pre>
+  - toc:
+      permalink: true
+      separator: "_"</code></pre>
 <p>Add an additional item to the list for each extension. If you have no
 configuration options to set for a specific extension, then simply omit options
 for that extension:</p>
 <pre class="highlight"><code class="language-yaml">markdown_extensions:
-    - smarty
-    - toc:
-        permalink: True
-    - sane_lists</code></pre>
+  - smarty
+  - toc:
+      permalink: true
+  - sane_lists</code></pre>
+<div class="admonition note">
+<p class="admonition-title">Dynamic config values</p>
+<p>To dynamically configure the extensions, you can get the config values from <a href="#environment-variables">environment variables</a> or <a href="#paths-relative-to-the-current-file-or-site">obtain paths</a> of the currently rendered Markdown file or the overall MkDocs site.</p>
+</div>
 <p>In the above examples, each extension is a list item (starts with a <code>-</code>). As an
 alternative, key/value pairs can be used instead. However, in that case an empty
 value must be provided for extensions for which no options are defined.
 Therefore, the last example above could also be defined as follows:</p>
 <pre class="highlight"><code class="language-yaml">markdown_extensions:
-    smarty: {}
-    toc:
-        permalink: True
-    sane_lists: {}</code></pre>
+  smarty: {}
+  toc:
+    permalink: true
+  sane_lists: {}</code></pre>
 <p>This alternative syntax is required if you intend to override some options via
 <a href="#configuration-inheritance">inheritance</a>.</p>
 <div class="admonition note">
-<p class="admonition-title">See Also:</p>
+<p class="admonition-title">More extensions</p>
 <p>The Python-Markdown documentation provides a <a href="https://python-markdown.github.io/extensions/">list of extensions</a>
 which are available out-of-the-box. For a list of configuration options
 available for a given extension, see the documentation for that extension.</p>
-<p>You may also install and use various third party extensions (<a href="https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions">Python-Markdown wiki</a>, <a href="https://github.com/mkdocs/best-of-mkdocs">Best-of-MkDocs</a>). Consult
+<p>You may also install and use various third party extensions (<a href="https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions">Python-Markdown wiki</a>, <a href="https://github.com/mkdocs/catalog">MkDocs project catalog</a>). Consult
 the documentation provided by those extensions for installation instructions
 and available configuration options.</p>
 </div>
@@ -636,7 +774,7 @@ and available configuration options.</p>
 <p>A list of paths to Python scripts (relative to <code>mkdocs.yml</code>) that are loaded and used as <a href="#plugins">plugin</a> instances.</p>
 <p>For example:</p>
 <pre class="highlight"><code class="language-yaml">hooks:
-    - my_hooks.py</code></pre>
+  - my_hooks.py</code></pre>
 <p>Then the file <em>my_hooks.py</em> can contain any <a href="../../dev-guide/plugins/#events">plugin event handlers</a> (without <code>self</code>), e.g.:</p>
 <pre class="highlight"><code class="language-python">def on_page_markdown(markdown, **kwargs):
     return markdown.replace('a', 'z')</code></pre>
@@ -670,23 +808,23 @@ the site. See the <a href="../../dev-guide/plugins/">Plugins</a> documentation f
 any defaults (such as <code>search</code>) are ignored and you need to explicitly re-enable
 the defaults if you would like to continue using them:</p>
 <pre class="highlight"><code class="language-yaml">plugins:
-    - search
-    - your_other_plugin</code></pre>
+  - search
+  - your_other_plugin</code></pre>
 <p>To define options for a given plugin, use a nested set of key/value pairs:</p>
 <pre class="highlight"><code class="language-yaml">plugins:
-    - search
-    - your_other_plugin:
-        option1: value
-        option2: other value</code></pre>
+  - search
+  - your_other_plugin:
+      option1: value
+      option2: other value</code></pre>
 <p>In the above examples, each plugin is a list item (starts with a <code>-</code>). As an
 alternative, key/value pairs can be used instead. However, in that case an empty
 value must be provided for plugins for which no options are defined. Therefore,
 the last example above could also be defined as follows:</p>
 <pre class="highlight"><code class="language-yaml">plugins:
-    search: {}
-    your_other_plugin:
-        option1: value
-        option2: other value</code></pre>
+  search: {}
+  your_other_plugin:
+    option1: value
+    option2: other value</code></pre>
 <p>This alternative syntax is required if you intend to override some options via
 <a href="#configuration-inheritance">inheritance</a>.</p>
 <p>To completely disable all plugins, including any defaults, set the <code>plugins</code>
@@ -702,8 +840,8 @@ of the search plugin:</p>
 building the index. By default whitespace and the hyphen (<code>-</code>) are used. To add
 the dot (<code>.</code>) as a word separator you might do this:</p>
 <pre class="highlight"><code class="language-yaml">plugins:
-    - search:
-        separator: '[\s\-\.]+'</code></pre>
+  - search:
+      separator: '[\s\-\.]+'</code></pre>
 <p><strong>default</strong>: <code>'[\s\-]+'</code></p>
 <h5 id="min_search_length"><strong>min_search_length</strong><a class="headerlink" href="#min_search_length" title="Permanent link"></a></h5>
 <p>An integer value that defines the minimum length for a search query. By default
@@ -712,8 +850,8 @@ short search terms are poor. However, for some use cases (such as documentation
 about Message Queues which might generate searches for 'MQ') it may be preferable
 to set a shorter limit.</p>
 <pre class="highlight"><code class="language-yaml">plugins:
-    - search:
-        min_search_length: 2</code></pre>
+  - search:
+      min_search_length: 2</code></pre>
 <p><strong>default</strong>: 3</p>
 <h5 id="lang"><strong>lang</strong><a class="headerlink" href="#lang" title="Permanent link"></a></h5>
 <p>A list of languages to use when building the search index as identified by their
@@ -785,8 +923,8 @@ significant improvement in search performance.</p>
 for your pages. This property is particularly useful if your project is large
 in scale, and the index takes up an enormous amount of disk space.</p>
 <pre class="highlight"><code class="language-yaml">plugins:
-    - search:
-        indexing: 'full'</code></pre>
+  - search:
+      indexing: 'full'</code></pre>
 <h6 id="options">Options<a class="headerlink" href="#options" title="Permanent link"></a></h6>
 <table>
 <thead>
@@ -811,7 +949,8 @@ in scale, and the index takes up an enormous amount of disk space.</p>
 </tbody>
 </table>
 <p><strong>default</strong>: <code>full</code></p>
-<h2 id="environment-variables">Environment Variables<a class="headerlink" href="#environment-variables" title="Permanent link"></a></h2>
+<h2 id="special-yaml-tags">Special YAML tags<a class="headerlink" href="#special-yaml-tags" title="Permanent link"></a></h2>
+<h3 id="environment-variables">Environment variables<a class="headerlink" href="#environment-variables" title="Permanent link"></a></h3>
 <p>In most cases, the value of a configuration option is set directly in the
 configuration file. However, as an option, the value of a configuration option
 may be set to the value of an environment variable using the <code>!ENV</code> tag. For
@@ -833,6 +972,29 @@ appropriate type. However, complex types such as lists and key/value pairs
 cannot be defined within a single environment variable.</p>
 <p>For more details, see the <a href="https://github.com/waylan/pyyaml-env-tag">pyyaml_env_tag</a>
 project.</p>
+<h3 id="paths-relative-to-the-current-file-or-site">Paths relative to the current file or site<a class="headerlink" href="#paths-relative-to-the-current-file-or-site" title="Permanent link"></a></h3>
+<div class="admonition new">
+<p class="admonition-title">New in version 1.5</p>
+</div>
+<p>Some Markdown extensions can benefit from knowing the path of the Markdown file that's currently being processed, or just the root path of the current site. For that, the special tag <code>!relative</code> can be used in most contexts within the config file, though the only known usecases are within <a href="#markdown_extensions"><code>markdown_extensions</code></a>.</p>
+<p>Examples of the possible values are:</p>
+<pre class="highlight"><code class="language-yaml">- !relative  # Relative to the directory of the current Markdown file
+- !relative $docs_dir  # Path of the docs_dir
+- !relative $config_dir  # Path of the directory that contains the main mkdocs.yml
+- !relative $config_dir/some/child/dir  # Some subdirectory of the root config directory</code></pre>
+<p>(Here, <code>$docs_dir</code> and <code>$config_dir</code> are currently the <em>only</em> special prefixes that are recognized.)</p>
+<p>Example:</p>
+<pre class="highlight"><code class="language-yaml">markdown_extensions:
+  - pymdownx.snippets:
+      base_path: !relative  # Relative to the current Markdown file</code></pre>
+<p>This allows the <a href="https://facelessuser.github.io/pymdown-extensions/extensions/snippets/">pymdownx.snippets</a> extension to include files relative to the current Markdown file, which without this tag it would have no way of knowing.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Even for the default case, any extension's base path is technically the <em>current working directory</em> although the assumption is that it's the <em>directory of mkdocs.yml</em>. So even if you don't want the paths to be relative, to improve the default behavior, always prefer to use this idiom:</p>
+<pre class="highlight"><code class="language-yaml">markdown_extensions:
+  - pymdownx.snippets:
+      base_path: !relative $config_dir  # Relative to the root directory with mkdocs.yml</code></pre>
+</div>
 <h2 id="configuration-inheritance">Configuration Inheritance<a class="headerlink" href="#configuration-inheritance" title="Permanent link"></a></h2>
 <p>Generally, a single file would hold the entire configuration for a site.
 However, some organizations may maintain multiple sites which all share a common
@@ -848,14 +1010,14 @@ options must be defined as key/value pairs. Specifically, the
 which does not use list items (lines which start with  <code>-</code>).</p>
 <p>For example, suppose the common (parent) configuration is defined in <code>base.yml</code>:</p>
 <pre class="highlight"><code class="language-yaml">theme:
-    name: mkdocs
-    locale: en
-    highlightjs: true
+  name: mkdocs
+  locale: en
+  highlightjs: true
 
 markdown_extensions:
-    toc:
-        permalink: true
-    admonition: {}</code></pre>
+  toc:
+    permalink: true
+  admonition: {}</code></pre>
 <p>Then, for the "foo" site, the primary configuration file would be defined at
 <code>foo/mkdocs.yml</code>:</p>
 <pre class="highlight"><code class="language-yml">INHERIT: ../base.yml
@@ -869,14 +1031,14 @@ receiving the following merged configuration:</p>
 site_url: https://example.com/foo
 
 theme:
-    name: mkdocs
-    locale: en
-    highlightjs: true
+  name: mkdocs
+  locale: en
+  highlightjs: true
 
 markdown_extensions:
-    toc:
-        permalink: true
-    admonition: {}</code></pre>
+  toc:
+    permalink: true
+  admonition: {}</code></pre>
 <p>Deep merging allows you to add and/or override various values in your primary
 configuration file. For example, suppose for one site you wanted to add support
 for definition lists, use a different symbol for permalinks, and define a
@@ -886,26 +1048,26 @@ site_name: Bar Project
 site_url: https://example.com/bar
 
 markdown_extensions:
-    def_list: {}
-    toc:
-        permalink: 
-        separator: "_"</code></pre>
+  def_list: {}
+  toc:
+    permalink: 
+    separator: "_"</code></pre>
 <p>In that case, the above configuration would be deep merged with <code>base.yml</code> and
 result in the following configuration:</p>
 <pre class="highlight"><code class="language-yaml">site_name: Bar Project
 site_url: https://example.com/bar
 
 theme:
-    name: mkdocs
-    locale: en
-    highlightjs: true
+  name: mkdocs
+  locale: en
+  highlightjs: true
 
 markdown_extensions:
-    def_list: {}
-    toc:
-        permalink: 
-        separator: "_"
-    admonition: {}</code></pre>
+  def_list: {}
+  toc:
+    permalink: 
+    separator: "_"
+  admonition: {}</code></pre>
 <p>Notice that the <code>admonition</code> extension was retained from the parent
 configuration, the <code>def_list</code> extension was added, the value of
 <code>toc.permalink</code> was replaced, and the value of <code>toc.separator</code> was added.</p>
@@ -924,7 +1086,9 @@ primary configuration file and MkDocs does not alter the paths when merging.
 Therefore, defining paths in a parent file which is inherited by multiple
 different sites may not work as expected. It is generally best to define
 path based options in the primary configuration file only.</p>
-</div></div>
+</div>
+<p>The inheritance can also be used as a quick way to override keys on the command line - by using stdin as the config file. For example:</p>
+<pre class="highlight"><code class="language-bash">echo '{INHERIT: mkdocs.yml, site_name: "Renamed site"}' | mkdocs build -f -</code></pre></div>
             </div>
         </div>
 
@@ -933,12 +1097,14 @@ path based options in the primary configuration file only.</p>
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
+        <script src="../../js/jquery-3.6.0.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
         <script>
             var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="../../js/base.js" defer></script>
-        <script src="../../search/main.js" defer></script>
+        <script src="../../js/base.js"></script>
+        <script src="../../search/main.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">

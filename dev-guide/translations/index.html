@@ -12,23 +12,20 @@
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
-
-        <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/yaml.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/django.min.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/django.min.js"></script>
+        <script>hljs.highlightAll();</script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-274394082"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', 'G-274394082');
+          gtag('config', "G-274394082");
         </script> 
     </head>
 
@@ -237,8 +234,8 @@ built-in themes (<code>mkdocs</code> and <code>readthedocs</code>), you can easi
 translation by following the steps below.</p>
 <p>Here is a quick summary of what you'll need to do:</p>
 <ol>
-<li><a href="#fork-and-clone-the-mkdocs-repository">Fork and clone the MkDocs repository</a> and then <a href="/about/contributing/#installing-for-development">install MkDocs for development</a> for adding and testing translations.</li>
-<li><a href="#initializing-the-localization-catalogs">Initialize new localization catalogs</a> for your language (if a translation for your locale already exists, follow the instructions for <a href="/user-guide/custom-themes/#localizing-themes">updating theme localization files</a> instead).</li>
+<li><a href="#fork-and-clone-the-mkdocs-repository">Fork and clone the MkDocs repository</a> and then <a href="../../about/contributing/#installing-for-development">install MkDocs for development</a> for adding and testing translations.</li>
+<li><a href="#initializing-the-localization-catalogs">Initialize new localization catalogs</a> for your language (if a translation for your locale already exists, follow the instructions for <a href="#updating-the-translation-catalogs">updating theme localization files</a> instead).</li>
 <li><a href="#translating-the-mkdocs-themes">Add a translation</a> for every text placeholder in the localized catalogs.</li>
 <li><a href="#testing-theme-translations">Locally serve and test</a> the translated themes for your language.</li>
 <li><a href="#updating-theme-documentation">Update the documentation</a> about supported translations for each translated theme.</li>
@@ -255,9 +252,9 @@ use of a term which differs from the general language translation.</p>
 </div>
 <h3 id="fork-and-clone-the-mkdocs-repository">Fork and clone the MkDocs repository<a class="headerlink" href="#fork-and-clone-the-mkdocs-repository" title="Permanent link"></a></h3>
 <p>In the following steps you'll work with a fork of the MkDocs repository. Follow
-the instructions for <a href="/about/contributing/#installing-for-development">forking and cloning the MkDocs
+the instructions for <a href="../../about/contributing/#installing-for-development">forking and cloning the MkDocs
 repository</a>.</p>
-<p>To test the translations you also need to <a href="/about/contributing/#installing-for-development">install MkDocs for
+<p>To test the translations you also need to <a href="../../about/contributing/#installing-for-development">install MkDocs for
 development</a> from your fork.</p>
 <h3 id="initializing-the-localization-catalogs">Initializing the localization catalogs<a class="headerlink" href="#initializing-the-localization-catalogs" title="Permanent link"></a></h3>
 <p>The templates for each theme contain text placeholders that have been extracted
@@ -334,8 +331,8 @@ pybabel compile --statistics --directory mkdocs/themes/readthedocs/locales -l es
 <p>Then modify the <code>mkdocs.yml</code> file at the root of the project to test the new
 and/or updated locale:</p>
 <pre class="highlight"><code class="language-yaml">theme:
-    name: mkdocs
-    locale: es</code></pre>
+  name: mkdocs
+  locale: es</code></pre>
 <p>Finally, run <code>mkdocs serve</code> to check out your new localized version of the theme.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -348,9 +345,7 @@ the <code>locale</code> setting in the <code>mkdocs.yml</code> file before submi
 changes.</p>
 </div>
 <h2 id="updating-theme-documentation">Updating theme documentation<a class="headerlink" href="#updating-theme-documentation" title="Permanent link"></a></h2>
-<p>Update the lists of supported translations for each translated theme located at
-<a href="../../user-guide/choosing-your-theme/">Choosing your theme</a>
-(<code>docs/user-guide/choosing-your-theme.md</code>), in their <strong><code>locale</code></strong> options.</p>
+<p>The page <a href="../../user-guide/choosing-your-theme/">Choosing your theme</a> updates by itself with all available locale options.</p>
 <h2 id="contributing-translations">Contributing translations<a class="headerlink" href="#contributing-translations" title="Permanent link"></a></h2>
 <p>It is now time for you to <a href="../../about/contributing/">contribute</a> your nice work
 to the project. Thank you!</p></div>
@@ -362,12 +357,14 @@ to the project. Thank you!</p></div>
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
+        <script src="../../js/jquery-3.6.0.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
         <script>
             var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="../../js/base.js" defer></script>
-        <script src="../../search/main.js" defer></script>
+        <script src="../../js/base.js"></script>
+        <script src="../../search/main.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">

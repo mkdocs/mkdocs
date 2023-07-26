@@ -12,23 +12,20 @@
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
-
-        <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/yaml.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/django.min.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/django.min.js"></script>
+        <script>hljs.highlightAll();</script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-274394082"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', 'G-274394082');
+          gtag('config', "G-274394082");
         </script> 
     </head>
 
@@ -204,15 +201,15 @@ MkDocs. However, to install third party plugins, you need to determine the
 appropriate package name and install it using <code>pip</code>:</p>
 <pre class="highlight"><code class="language-bash">pip install mkdocs-foo-plugin</code></pre>
 <p>Once a plugin has been successfully installed, it is ready to use. It just needs
-to be <a href="#using-plugins">enabled</a> in the configuration file. The <a href="https://github.com/mkdocs/best-of-mkdocs">Best-of-MkDocs</a>
-page has a large list of plugins that you can install and use.</p>
+to be <a href="#using-plugins">enabled</a> in the configuration file. The <a href="https://github.com/mkdocs/catalog">Catalog</a>
+repository has a large ranked list of plugins that you can install and use.</p>
 <h2 id="using-plugins">Using Plugins<a class="headerlink" href="#using-plugins" title="Permanent link"></a></h2>
 <p>The <a href="../../user-guide/configuration/#plugins"><code>plugins</code></a> configuration option should contain a list of plugins to
 use when building the site. Each "plugin" must be a string name assigned to the
 plugin (see the documentation for a given plugin to determine its "name"). A
 plugin listed here must already be <a href="#installing-plugins">installed</a>.</p>
 <pre class="highlight"><code class="language-yaml">plugins:
-    - search</code></pre>
+  - search</code></pre>
 <p>Some plugins may provide configuration options of their own. If you would like
 to set any configuration options, then you can nest a key/value mapping
 (<code>option_name: option value</code>) of any options that a given plugin supports. Note
@@ -221,9 +218,9 @@ name and value must be indented and separated by a colon. If you would like to
 define multiple options for a single plugin, each option must be defined on a
 separate line.</p>
 <pre class="highlight"><code class="language-yaml">plugins:
-    - search:
-        lang: en
-        foo: bar</code></pre>
+  - search:
+      lang: en
+      foo: bar</code></pre>
 <p>For information regarding the configuration options available for a given plugin,
 see that plugin's documentation.</p>
 <p>For a list of default plugins and how to override them, see the
@@ -270,7 +267,7 @@ class MyPlugin(mkdocs.plugins.BasePlugin[MyPluginConfig]):
 <pre class="highlight"><code class="language-python">from mkdocs.config import base, config_options as c
 
 class _ValidationOptions(base.Config):
-    enable = c.Type(bool, default=True)
+    enabled = c.Type(bool, default=True)
     verbose = c.Type(bool, default=False)
     skip_checks = c.ListOfItems(c.Choice(('foo', 'bar', 'baz')), default=[])
 
@@ -284,7 +281,7 @@ class MyPluginConfig(base.Config):
 <pre class="highlight"><code class="language-yaml">my_plugin:
   definition_file: configs/test.ini  # relative to mkdocs.yml
   validation:
-    enable: !ENV [CI, false]
+    enabled: !ENV [CI, false]
     verbose: true
     skip_checks:
       - foo
@@ -1188,12 +1185,18 @@ For initializing per-build variables (and whenever in doubt), use the <code>on_c
       <li class="field-body">
         <b>command</b>
             (<code><span title="typing_extensions.Literal">Literal</span>[&#39;build&#39;, &#39;gh-deploy&#39;, &#39;serve&#39;]</code>)
-        – <p>the command that MkDocs was invoked with, e.g. "serve" for <code>mkdocs serve</code>.</p>
+        –
+        <div class="doc-md-description">
+          <p>the command that MkDocs was invoked with, e.g. "serve" for <code>mkdocs serve</code>.</p>
+        </div>
       </li>
       <li class="field-body">
         <b>dirty</b>
             (<code>bool</code>)
-        – <p>whether <code>--dirtyreload</code> or <code>--dirty</code> flags were passed.</p>
+        –
+        <div class="doc-md-description">
+          <p>whether <code>--dirty</code> flag was passed.</p>
+        </div>
       </li>
   </ul>
 
@@ -1240,25 +1243,37 @@ to the list of "watched" files for auto-reloading.</p>
       <li class="field-body">
         <b>server</b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.livereload.LiveReloadServer" href="../api/#mkdocs.livereload.LiveReloadServer">LiveReloadServer</a></code>)
-        – <p><code>livereload.Server</code> instance</p>
+        –
+        <div class="doc-md-description">
+          <p><code>livereload.Server</code> instance</p>
+        </div>
       </li>
       <li class="field-body">
         <b>config</b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
-        – <p>global configuration object</p>
+        –
+        <div class="doc-md-description">
+          <p>global configuration object</p>
+        </div>
       </li>
       <li class="field-body">
         <b>builder</b>
             (<code><span title="typing.Callable">Callable</span></code>)
-        – <p>a callable which gets passed to each call to <code>server.watch</code></p>
+        –
+        <div class="doc-md-description">
+          <p>a callable which gets passed to each call to <code>server.watch</code></p>
+        </div>
       </li>
   </ul>
 
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="mkdocs.livereload.LiveReloadServer" href="../api/#mkdocs.livereload.LiveReloadServer">LiveReloadServer</a>]</code>
-        – <p><code>livereload.Server</code> instance</p>
+            <code><a class="autorefs autorefs-internal" title="mkdocs.livereload.LiveReloadServer" href="../api/#mkdocs.livereload.LiveReloadServer">LiveReloadServer</a> | None</code>
+        –
+        <div class="doc-md-description">
+          <p><code>livereload.Server</code> instance</p>
+      </div>
       </li>
   </ul>
 
@@ -1286,15 +1301,21 @@ config should be made here.</p>
       <li class="field-body">
         <b>config</b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
-        – <p>global configuration object</p>
+        –
+        <div class="doc-md-description">
+          <p>global configuration object</p>
+        </div>
       </li>
   </ul>
 
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="mkdocs.config.base.Config" href="../api/#mkdocs.config.base.Config">Config</a>]</code>
-        – <p>global configuration object</p>
+            <code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span> | None</code>
+        –
+        <div class="doc-md-description">
+          <p>global configuration object</p>
+      </div>
       </li>
   </ul>
 
@@ -1317,7 +1338,10 @@ pre-build scripts.</p>
       <li class="field-body">
         <b>config</b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
-        – <p>global configuration object</p>
+        –
+        <div class="doc-md-description">
+          <p>global configuration object</p>
+        </div>
       </li>
   </ul>
 
@@ -1343,20 +1367,29 @@ specific data.</p>
       <li class="field-body">
         <b>files</b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
-        – <p>global files collection</p>
+        –
+        <div class="doc-md-description">
+          <p>global files collection</p>
+        </div>
       </li>
       <li class="field-body">
         <b>config</b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
-        – <p>global configuration object</p>
+        –
+        <div class="doc-md-description">
+          <p>global configuration object</p>
+        </div>
       </li>
   </ul>
 
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a>]</code>
-        – <p>global files collection</p>
+            <code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a> | None</code>
+        –
+        <div class="doc-md-description">
+          <p>global files collection</p>
+      </div>
       </li>
   </ul>
 
@@ -1379,25 +1412,37 @@ be used to alter the site navigation.</p>
       <li class="field-body">
         <b>nav</b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.nav.Navigation" href="../themes/#mkdocs.structure.nav.Navigation">Navigation</a></code>)
-        – <p>global navigation object</p>
+        –
+        <div class="doc-md-description">
+          <p>global navigation object</p>
+        </div>
       </li>
       <li class="field-body">
         <b>config</b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
-        – <p>global configuration object</p>
+        –
+        <div class="doc-md-description">
+          <p>global configuration object</p>
+        </div>
       </li>
       <li class="field-body">
         <b>files</b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
-        – <p>global files collection</p>
+        –
+        <div class="doc-md-description">
+          <p>global files collection</p>
+        </div>
       </li>
   </ul>
 
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="mkdocs.structure.nav.Navigation" href="../themes/#mkdocs.structure.nav.Navigation">Navigation</a>]</code>
-        – <p>global navigation object</p>
+            <code><a class="autorefs autorefs-internal" title="mkdocs.structure.nav.Navigation" href="../themes/#mkdocs.structure.nav.Navigation">Navigation</a> | None</code>
+        –
+        <div class="doc-md-description">
+          <p>global navigation object</p>
+      </div>
       </li>
   </ul>
 
@@ -1420,26 +1465,38 @@ and can be used to alter the
   <ul>
       <li class="field-body">
         <b>env</b>
-            (<code><span title="jinja2.environment">jinja2</span>.<span title="jinja2.environment.Environment">Environment</span></code>)
-        – <p>global Jinja environment</p>
+            (<code>jinja2.<span title="jinja2.Environment">Environment</span></code>)
+        –
+        <div class="doc-md-description">
+          <p>global Jinja environment</p>
+        </div>
       </li>
       <li class="field-body">
         <b>config</b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
-        – <p>global configuration object</p>
+        –
+        <div class="doc-md-description">
+          <p>global configuration object</p>
+        </div>
       </li>
       <li class="field-body">
         <b>files</b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
-        – <p>global files collection</p>
+        –
+        <div class="doc-md-description">
+          <p>global files collection</p>
+        </div>
       </li>
   </ul>
 
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><span title="typing.Optional">Optional</span>[<span title="jinja2.environment">jinja2</span>.<span title="jinja2.environment.Environment">Environment</span>]</code>
-        – <p>global Jinja Environment</p>
+            <code>jinja2.<span title="jinja2.Environment">Environment</span> | None</code>
+        –
+        <div class="doc-md-description">
+          <p>global Jinja Environment</p>
+      </div>
       </li>
   </ul>
 
@@ -1462,7 +1519,10 @@ post-build scripts.</p>
       <li class="field-body">
         <b>config</b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
-        – <p>global configuration object</p>
+        –
+        <div class="doc-md-description">
+          <p>global configuration object</p>
+        </div>
       </li>
   </ul>
 
@@ -1488,7 +1548,10 @@ events which were scheduled to run after the error will have been skipped. See
       <li class="field-body">
         <b>error</b>
             (<code>Exception</code>)
-        – <p>exception raised</p>
+        –
+        <div class="doc-md-description">
+          <p>exception raised</p>
+        </div>
       </li>
   </ul>
 
@@ -1515,26 +1578,38 @@ loaded and can be used to alter the template.</p>
   <ul>
       <li class="field-body">
         <b>template</b>
-            (<code><span title="jinja2.environment">jinja2</span>.<span title="jinja2.environment.Template">Template</span></code>)
-        – <p>a Jinja2 <a href="https://jinja.palletsprojects.com/en/latest/api/#jinja2.Template">Template</a> object</p>
+            (<code>jinja2.<span title="jinja2.Template">Template</span></code>)
+        –
+        <div class="doc-md-description">
+          <p>a Jinja2 <a href="https://jinja.palletsprojects.com/en/latest/api/#jinja2.Template">Template</a> object</p>
+        </div>
       </li>
       <li class="field-body">
         <b>template_name</b>
             (<code>str</code>)
-        – <p>string filename of template</p>
+        –
+        <div class="doc-md-description">
+          <p>string filename of template</p>
+        </div>
       </li>
       <li class="field-body">
         <b>config</b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
-        – <p>global configuration object</p>
+        –
+        <div class="doc-md-description">
+          <p>global configuration object</p>
+        </div>
       </li>
   </ul>
 
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><span title="typing.Optional">Optional</span>[<span title="jinja2.environment">jinja2</span>.<span title="jinja2.environment.Template">Template</span>]</code>
-        – <p>a Jinja2 <a href="https://jinja.palletsprojects.com/en/latest/api/#jinja2.Template">Template</a> object</p>
+            <code>jinja2.<span title="jinja2.Template">Template</span> | None</code>
+        –
+        <div class="doc-md-description">
+          <p>a Jinja2 <a href="https://jinja.palletsprojects.com/en/latest/api/#jinja2.Template">Template</a> object</p>
+      </div>
       </li>
   </ul>
 
@@ -1557,26 +1632,38 @@ template only.</p>
   <ul>
       <li class="field-body">
         <b>context</b>
-            (<code><span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]</code>)
-        – <p>dict of template context variables</p>
+            (<code><a class="autorefs autorefs-internal" title="mkdocs.utils.templates.TemplateContext" href="../api/#mkdocs.utils.templates.TemplateContext">TemplateContext</a></code>)
+        –
+        <div class="doc-md-description">
+          <p>dict of template context variables</p>
+        </div>
       </li>
       <li class="field-body">
         <b>template_name</b>
             (<code>str</code>)
-        – <p>string filename of template</p>
+        –
+        <div class="doc-md-description">
+          <p>string filename of template</p>
+        </div>
       </li>
       <li class="field-body">
         <b>config</b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
-        – <p>global configuration object</p>
+        –
+        <div class="doc-md-description">
+          <p>global configuration object</p>
+        </div>
       </li>
   </ul>
 
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]]</code>
-        – <p>dict of template context variables</p>
+            <code><a class="autorefs autorefs-internal" title="mkdocs.utils.templates.TemplateContext" href="../api/#mkdocs.utils.templates.TemplateContext">TemplateContext</a> | None</code>
+        –
+        <div class="doc-md-description">
+          <p>dict of template context variables</p>
+      </div>
       </li>
   </ul>
 
@@ -1601,25 +1688,37 @@ written to disc.</p>
       <li class="field-body">
         <b>output_content</b>
             (<code>str</code>)
-        – <p>output of rendered template as string</p>
+        –
+        <div class="doc-md-description">
+          <p>output of rendered template as string</p>
+        </div>
       </li>
       <li class="field-body">
         <b>template_name</b>
             (<code>str</code>)
-        – <p>string filename of template</p>
+        –
+        <div class="doc-md-description">
+          <p>string filename of template</p>
+        </div>
       </li>
       <li class="field-body">
         <b>config</b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
-        – <p>global configuration object</p>
+        –
+        <div class="doc-md-description">
+          <p>global configuration object</p>
+        </div>
       </li>
   </ul>
 
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><span title="typing.Optional">Optional</span>[str]</code>
-        – <p>output of rendered template as string</p>
+            <code>str | None</code>
+        –
+        <div class="doc-md-description">
+          <p>output of rendered template as string</p>
+      </div>
       </li>
   </ul>
 
@@ -1646,25 +1745,37 @@ page and can be used to alter the <code>Page</code> instance.</p>
       <li class="field-body">
         <b>page</b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
-        – <p><code>mkdocs.structure.pages.Page</code> instance</p>
+        –
+        <div class="doc-md-description">
+          <p><code>mkdocs.structure.pages.Page</code> instance</p>
+        </div>
       </li>
       <li class="field-body">
         <b>config</b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
-        – <p>global configuration object</p>
+        –
+        <div class="doc-md-description">
+          <p>global configuration object</p>
+        </div>
       </li>
       <li class="field-body">
         <b>files</b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
-        – <p>global files collection</p>
+        –
+        <div class="doc-md-description">
+          <p>global files collection</p>
+        </div>
       </li>
   </ul>
 
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a>]</code>
-        – <p><code>mkdocs.structure.pages.Page</code> instance</p>
+            <code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a> | None</code>
+        –
+        <div class="doc-md-description">
+          <p><code>mkdocs.structure.pages.Page</code> instance</p>
+      </div>
       </li>
   </ul>
 
@@ -1687,21 +1798,30 @@ the contents of a page's source from the filesystem.</p>
       <li class="field-body">
         <b>page</b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
-        – <p><code>mkdocs.structure.pages.Page</code> instance</p>
+        –
+        <div class="doc-md-description">
+          <p><code>mkdocs.structure.pages.Page</code> instance</p>
+        </div>
       </li>
       <li class="field-body">
         <b>config</b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
-        – <p>global configuration object</p>
+        –
+        <div class="doc-md-description">
+          <p>global configuration object</p>
+        </div>
       </li>
   </ul>
 
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><span title="typing.Optional">Optional</span>[str]</code>
-        – <p>The raw source for a page as unicode string. If <code>None</code> is returned, the
+            <code>str | None</code>
+        –
+        <div class="doc-md-description">
+          <p>The raw source for a page as unicode string. If <code>None</code> is returned, the
 default loading from a file will be performed.</p>
+      </div>
       </li>
   </ul>
 
@@ -1725,30 +1845,45 @@ data has been stripped off and is available as <code>page.meta</code> at this po
       <li class="field-body">
         <b>markdown</b>
             (<code>str</code>)
-        – <p>Markdown source text of page as string</p>
+        –
+        <div class="doc-md-description">
+          <p>Markdown source text of page as string</p>
+        </div>
       </li>
       <li class="field-body">
         <b>page</b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
-        – <p><code>mkdocs.structure.pages.Page</code> instance</p>
+        –
+        <div class="doc-md-description">
+          <p><code>mkdocs.structure.pages.Page</code> instance</p>
+        </div>
       </li>
       <li class="field-body">
         <b>config</b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
-        – <p>global configuration object</p>
+        –
+        <div class="doc-md-description">
+          <p>global configuration object</p>
+        </div>
       </li>
       <li class="field-body">
         <b>files</b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
-        – <p>global files collection</p>
+        –
+        <div class="doc-md-description">
+          <p>global files collection</p>
+        </div>
       </li>
   </ul>
 
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><span title="typing.Optional">Optional</span>[str]</code>
-        – <p>Markdown source text of page as string</p>
+            <code>str | None</code>
+        –
+        <div class="doc-md-description">
+          <p>Markdown source text of page as string</p>
+      </div>
       </li>
   </ul>
 
@@ -1772,30 +1907,45 @@ HTML body of the page.</p>
       <li class="field-body">
         <b>html</b>
             (<code>str</code>)
-        – <p>HTML rendered from Markdown source as string</p>
+        –
+        <div class="doc-md-description">
+          <p>HTML rendered from Markdown source as string</p>
+        </div>
       </li>
       <li class="field-body">
         <b>page</b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
-        – <p><code>mkdocs.structure.pages.Page</code> instance</p>
+        –
+        <div class="doc-md-description">
+          <p><code>mkdocs.structure.pages.Page</code> instance</p>
+        </div>
       </li>
       <li class="field-body">
         <b>config</b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
-        – <p>global configuration object</p>
+        –
+        <div class="doc-md-description">
+          <p>global configuration object</p>
+        </div>
       </li>
       <li class="field-body">
         <b>files</b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
-        – <p>global files collection</p>
+        –
+        <div class="doc-md-description">
+          <p>global files collection</p>
+        </div>
       </li>
   </ul>
 
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><span title="typing.Optional">Optional</span>[str]</code>
-        – <p>HTML rendered from Markdown source as string</p>
+            <code>str | None</code>
+        –
+        <div class="doc-md-description">
+          <p>HTML rendered from Markdown source as string</p>
+      </div>
       </li>
   </ul>
 
@@ -1817,31 +1967,46 @@ and can be used to alter the context for that specific page only.</p>
   <ul>
       <li class="field-body">
         <b>context</b>
-            (<code><span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]</code>)
-        – <p>dict of template context variables</p>
+            (<code><a class="autorefs autorefs-internal" title="mkdocs.utils.templates.TemplateContext" href="../api/#mkdocs.utils.templates.TemplateContext">TemplateContext</a></code>)
+        –
+        <div class="doc-md-description">
+          <p>dict of template context variables</p>
+        </div>
       </li>
       <li class="field-body">
         <b>page</b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
-        – <p><code>mkdocs.structure.pages.Page</code> instance</p>
+        –
+        <div class="doc-md-description">
+          <p><code>mkdocs.structure.pages.Page</code> instance</p>
+        </div>
       </li>
       <li class="field-body">
         <b>config</b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
-        – <p>global configuration object</p>
+        –
+        <div class="doc-md-description">
+          <p>global configuration object</p>
+        </div>
       </li>
       <li class="field-body">
         <b>nav</b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.nav.Navigation" href="../themes/#mkdocs.structure.nav.Navigation">Navigation</a></code>)
-        – <p>global navigation object</p>
+        –
+        <div class="doc-md-description">
+          <p>global navigation object</p>
+        </div>
       </li>
   </ul>
 
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]]</code>
-        – <p>dict of template context variables</p>
+            <code><a class="autorefs autorefs-internal" title="mkdocs.utils.templates.TemplateContext" href="../api/#mkdocs.utils.templates.TemplateContext">TemplateContext</a> | None</code>
+        –
+        <div class="doc-md-description">
+          <p>dict of template context variables</p>
+      </div>
       </li>
   </ul>
 
@@ -1866,25 +2031,37 @@ written to disc.</p>
       <li class="field-body">
         <b>output</b>
             (<code>str</code>)
-        – <p>output of rendered template as string</p>
+        –
+        <div class="doc-md-description">
+          <p>output of rendered template as string</p>
+        </div>
       </li>
       <li class="field-body">
         <b>page</b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
-        – <p><code>mkdocs.structure.pages.Page</code> instance</p>
+        –
+        <div class="doc-md-description">
+          <p><code>mkdocs.structure.pages.Page</code> instance</p>
+        </div>
       </li>
       <li class="field-body">
         <b>config</b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
-        – <p>global configuration object</p>
+        –
+        <div class="doc-md-description">
+          <p>global configuration object</p>
+        </div>
       </li>
   </ul>
 
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code><span title="typing.Optional">Optional</span>[str]</code>
-        – <p>output of rendered template as string</p>
+            <code>str | None</code>
+        –
+        <div class="doc-md-description">
+          <p>output of rendered template as string</p>
+      </div>
       </li>
   </ul>
 
@@ -2052,7 +2229,59 @@ class MyPlugin(BasePlugin):
     def on_build_error(self, error, **kwargs):
         # some code to clean things up
         ...</code></pre>
-<h3 id="entry-point">Entry Point<a class="headerlink" href="#entry-point" title="Permanent link"></a></h3>
+<h3 id="logging-in-plugins">Logging in plugins<a class="headerlink" href="#logging-in-plugins" title="Permanent link"></a></h3>
+<p>MkDocs provides a <code>get_plugin_logger</code> function which returns
+a logger that can be used to log messages.</p>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="mkdocs.plugins.get_plugin_logger" class="doc doc-heading">
+<code class="highlight language-python">mkdocs.plugins.get_plugin_logger(name: str) -&gt; PrefixedLogger</code>
+
+<a href="#mkdocs.plugins.get_plugin_logger" class="headerlink" title="Permanent link"></a></h4>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>Return a logger for plugins.</p>
+
+  <p>Parameters:</p>
+  <ul>
+      <li class="field-body">
+        <b>name</b>
+            (<code>str</code>)
+        –
+        <div class="doc-md-description">
+          <p>The name to use with <code>logging.getLogger</code>.</p>
+        </div>
+      </li>
+  </ul>
+
+  <p>Returns:</p>
+  <ul>
+      <li class="field-body">
+            <code><span title="mkdocs.plugins.PrefixedLogger">PrefixedLogger</span></code>
+        –
+        <div class="doc-md-description">
+          <p>A logger configured to work well in MkDocs,
+prefixing each message with the plugin package name.</p>
+      </div>
+      </li>
+  </ul>
+
+<details class="example" open>
+  <summary>Example</summary>
+  <pre class="highlight"><code class="language-python">from mkdocs.plugins import get_plugin_logger
+
+log = get_plugin_logger(__name__)
+log.info("My plugin message")</code></pre>
+</details>
+  </div>
+
+</div><h3 id="entry-point">Entry Point<a class="headerlink" href="#entry-point" title="Permanent link"></a></h3>
 <p>Plugins need to be packaged as Python libraries (distributed on PyPI separate
 from MkDocs) and each must register as a Plugin via a setuptools <code>entry_points</code>.
 Add the following to your <code>setup.py</code> script:</p>
@@ -2074,7 +2303,9 @@ entry point.</p>
     ]
 }</code></pre>
 <p>Note that registering a plugin does not activate it. The user still needs to
-tell MkDocs to use it via the config.</p></div>
+tell MkDocs to use it via the config.</p>
+<h3 id="publishing-a-plugin">Publishing a Plugin<a class="headerlink" href="#publishing-a-plugin" title="Permanent link"></a></h3>
+<p>You should publish a package on <a href="https://pypi.org/">PyPI</a>, then add it to the <a href="https://github.com/mkdocs/catalog">Catalog</a> for discoverability. Plugins are strongly recommended to have a unique plugin name (entry point name) according to the catalog.</p></div>
             </div>
         </div>
 
@@ -2083,12 +2314,14 @@ tell MkDocs to use it via the config.</p></div>
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
+        <script src="../../js/jquery-3.6.0.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
         <script>
             var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="../../js/base.js" defer></script>
-        <script src="../../search/main.js" defer></script>
+        <script src="../../js/base.js"></script>
+        <script src="../../search/main.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">

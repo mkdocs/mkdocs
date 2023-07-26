@@ -12,23 +12,20 @@
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
-
-        <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/yaml.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/django.min.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/django.min.js"></script>
+        <script>hljs.highlightAll();</script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-274394082"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', 'G-274394082');
+          gtag('config', "G-274394082");
         </script> 
     </head>
 
@@ -203,9 +200,9 @@ themes</a> are available to choose from as well.</p>
 <p>To choose a theme, set the <a href="../configuration/#theme">theme</a> configuration option in your <code>mkdocs.yml</code>
 config file.</p>
 <pre class="highlight"><code class="language-yaml">theme:
-    name: readthedocs</code></pre>
+  name: readthedocs</code></pre>
 <h2 id="mkdocs">mkdocs<a class="headerlink" href="#mkdocs" title="Permanent link"></a></h2>
-<p>The default theme, which was built as a custom <a href="https://getbootstrap.com/">Bootstrap</a> theme, supports most
+<p>The default theme, which was built as a custom <a href="https://getbootstrap.com/">Bootstrap</a> theme, supports almost
 every feature of MkDocs.</p>
 <p><img alt="mkdocs" src="../../img/mkdocs.png" /></p>
 <p>In addition to the default <a href="../configuration/#theme">theme configuration options</a>, the <code>mkdocs</code> theme
@@ -224,11 +221,11 @@ supports the following options:</p>
 <p><strong><code>hljs_languages</code></strong>: By default, highlight.js only supports 23 common
     languages. List additional languages here to include support for them.</p>
 <pre class="highlight"><code class="language-yaml">theme:
-    name: mkdocs
-    highlightjs: true
-    hljs_languages:
-        - yaml
-        - rust</code></pre>
+  name: mkdocs
+  highlightjs: true
+  hljs_languages:
+    - yaml
+    - rust</code></pre>
 </li>
 <li>
 <p><strong><code>analytics</code></strong>: Defines configuration options for an analytics service.
@@ -240,9 +237,9 @@ tracking ID, which uses the <code>G-</code> format. See Google's documentation t
 <a href="https://support.google.com/analytics/answer/9304153?hl=en&amp;ref_topic=9303319">Set up Analytics for a website and/or app (GA4)</a> or to
 <a href="https://support.google.com/analytics/answer/9744165?hl=en&amp;ref_topic=9303319">Upgrade to a Google Analytics 4 property</a>.</p>
 <pre class="highlight"><code class="language-yaml">theme:
-    name: mkdocs
-    analytics:
-        gtag: G-ABC123</code></pre>
+  name: mkdocs
+  analytics:
+    gtag: G-ABC123</code></pre>
 <p>When set to the default (<code>null</code>) Google Analytics is disabled for the
 site.</p>
 </li>
@@ -251,18 +248,18 @@ site.</p>
 <li>
 <p><strong><code>shortcuts</code></strong>: Defines keyboard shortcut keys.</p>
 <pre class="highlight"><code class="language-yaml">theme:
-    name: mkdocs
-    shortcuts:
-        help: 191    # ?
-        next: 78     # n
-        previous: 80 # p
-        search: 83   # s</code></pre>
-<p>All values must be numeric key codes. It is best to use keys which are
+  name: mkdocs
+  shortcuts:
+    help: 191    # ?
+    next: 78     # n
+    previous: 80 # p
+    search: 83   # s</code></pre>
+<p>All values must be numeric key codes. It is best to use keys that are
 available on all keyboards. You may use <a href="https://keycode.info/">https://keycode.info/</a> to determine
 the key code for a given key.</p>
 <ul>
 <li>
-<p><strong><code>help</code></strong>: Display a help modal which lists the keyboard shortcuts.
+<p><strong><code>help</code></strong>: Display a help modal that lists the keyboard shortcuts.
     Default: <code>191</code> (&quest;)</p>
 </li>
 <li>
@@ -285,8 +282,8 @@ the key code for a given key.</p>
     default, this is set to <code>primary</code> (the default), but it can also be set to
     <code>dark</code> or <code>light</code>.</p>
 <pre class="highlight"><code class="language-yaml">theme:
-    name: mkdocs
-    nav_style: dark</code></pre>
+  name: mkdocs
+  nav_style: dark</code></pre>
 </li>
 <li>
 <p><strong id="mkdocs-locale"><code>locale</code></strong>: The locale (language/location) used to
@@ -297,7 +294,7 @@ the key code for a given key.</p>
 <li><code>en</code>: English (default)</li>
 <li><code>de</code>: German</li>
 <li><code>es</code>: Spanish</li>
-<li><code>fa</code>: Persian (Farsi)</li>
+<li><code>fa</code>: Persian</li>
 <li><code>fr</code>: French</li>
 <li><code>id</code>: Indonesian</li>
 <li><code>it</code>: Italian</li>
@@ -308,14 +305,14 @@ the key code for a given key.</p>
 <li><code>ru</code>: Russian</li>
 <li><code>tr</code>: Turkish</li>
 <li><code>uk</code>: Ukrainian</li>
-<li><code>zh_CN</code>: Simplified Chinese</li>
+<li><code>zh_CN</code>: Chinese (Simplified, China)</li>
 </ul>
 <p>See the guide on <a href="../localizing-your-theme/">localizing your theme</a> for more information.</p>
 </li>
 </ul>
 <h2 id="readthedocs">readthedocs<a class="headerlink" href="#readthedocs" title="Permanent link"></a></h2>
 <p>A clone of the default theme used by the <a href="https://readthedocs.org/">Read the Docs</a> service, which offers
-the same restricted feature-set as its parent theme. Like its parent theme, only
+the same restricted feature set as its parent theme. Like its parent theme, only
 two levels of navigation are supported.</p>
 <p><img alt="ReadTheDocs" src="../../img/readthedocs.png" /></p>
 <p>In addition to the default <a href="../configuration/#theme">theme configuration options</a>, the <code>readthedocs</code>
@@ -329,11 +326,11 @@ theme supports the following options:</p>
 <p><strong><code>hljs_languages</code></strong>: By default, highlight.js only supports 23 common
     languages. List additional languages here to include support for them.</p>
 <pre class="highlight"><code class="language-yaml">theme:
-    name: readthedocs
-    highlightjs: true
-    hljs_languages:
-        - yaml
-        - rust</code></pre>
+  name: readthedocs
+  highlightjs: true
+  hljs_languages:
+    - yaml
+    - rust</code></pre>
 </li>
 <li>
 <p><strong><code>analytics</code></strong>: Defines configuration options for an analytics service.</p>
@@ -344,9 +341,9 @@ tracking ID, which uses the <code>G-</code> format. See Google's documentation t
 <a href="https://support.google.com/analytics/answer/9304153?hl=en&amp;ref_topic=9303319">Set up Analytics for a website and/or app (GA4)</a> or to
 <a href="https://support.google.com/analytics/answer/9744165?hl=en&amp;ref_topic=9303319">Upgrade to a Google Analytics 4 property</a>.</p>
 <pre class="highlight"><code class="language-yaml">theme:
-    name: readthedocs
-    analytics:
-        gtag: G-ABC123</code></pre>
+  name: readthedocs
+  analytics:
+    gtag: G-ABC123</code></pre>
 <p>When set to the default (<code>null</code>) Google Analytics is disabled for the</p>
 </li>
 <li>
@@ -391,7 +388,7 @@ tracking ID, which uses the <code>G-</code> format. See Google's documentation t
 <li><code>en</code>: English (default)</li>
 <li><code>de</code>: German</li>
 <li><code>es</code>: Spanish</li>
-<li><code>fa</code>: Persian (Farsi)</li>
+<li><code>fa</code>: Persian</li>
 <li><code>fr</code>: French</li>
 <li><code>id</code>: Indonesian</li>
 <li><code>it</code>: Italian</li>
@@ -400,7 +397,7 @@ tracking ID, which uses the <code>G-</code> format. See Google's documentation t
 <li><code>ru</code>: Russian</li>
 <li><code>tr</code>: Turkish</li>
 <li><code>uk</code>: Ukrainian</li>
-<li><code>zh_CN</code>: Simplified Chinese</li>
+<li><code>zh_CN</code>: Chinese (Simplified, China)</li>
 </ul>
 <p>See the guide on <a href="../localizing-your-theme/">localizing your theme</a> for more information.</p>
 </li>
@@ -410,7 +407,7 @@ tracking ID, which uses the <code>G-</code> format. See Google's documentation t
 </li>
 </ul>
 <h2 id="third-party-themes">Third Party Themes<a class="headerlink" href="#third-party-themes" title="Permanent link"></a></h2>
-<p>A list of third party themes can be found at the <a href="https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes">community wiki</a> page and <a href="https://github.com/mkdocs/best-of-mkdocs#-theming">Best-of-MkDocs</a>. If you have created your own, please add them there.</p></div>
+<p>A list of third party themes can be found at the <a href="https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes">community wiki</a> page and <a href="https://github.com/mkdocs/catalog#-theming">the ranked catalog</a>. If you have created your own, please add them there.</p></div>
             </div>
         </div>
 
@@ -419,12 +416,14 @@ tracking ID, which uses the <code>G-</code> format. See Google's documentation t
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
+        <script src="../../js/jquery-3.6.0.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
         <script>
             var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="../../js/base.js" defer></script>
-        <script src="../../search/main.js" defer></script>
+        <script src="../../js/base.js"></script>
+        <script src="../../search/main.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">

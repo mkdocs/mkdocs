@@ -12,23 +12,20 @@
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
-
-        <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/yaml.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/django.min.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/django.min.js"></script>
+        <script>hljs.highlightAll();</script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-274394082"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', 'G-274394082');
+          gtag('config', "G-274394082");
         </script> 
     </head>
 
@@ -221,8 +218,8 @@
 <p class="admonition-title">Note</p>
 <p>
 If you are looking for existing third party themes, they are listed in the
-<a href="https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes">community wiki</a> page and <a href="https://github.com/mkdocs/best-of-mkdocs#-theming">Best-of-MkDocs</a>. If you want to share a theme you create, you
-should list it there.</p>
+<a href="https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes">community wiki</a> page and the <a href="https://github.com/mkdocs/catalog#-theming">MkDocs project catalog</a>. If you want to
+share a theme you create, you should list it there.</p>
 </div>
 <p>When creating a new theme, you can either follow the steps in this guide to
 create one from scratch or you can download the <code>mkdocs-basic-theme</code> as a
@@ -246,8 +243,8 @@ custom_theme/
 <p>... you would include the following settings in <code>mkdocs.yml</code> to use the custom theme
 directory:</p>
 <pre class="highlight"><code class="language-yaml">theme:
-    name: null
-    custom_dir: 'custom_theme/'</code></pre>
+  name: null
+  custom_dir: 'custom_theme/'</code></pre>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>
@@ -280,9 +277,16 @@ is required for the theme.</p>
 &lt;html&gt;
   &lt;head&gt;
     &lt;title&gt;{% if page.title %}{{ page.title }} - {% endif %}{{ config.site_name }}&lt;/title&gt;
+    {%- for path in config.extra_css %}
+      &lt;link href="{{ path | url }}" rel="stylesheet"&gt;
+    {%- endfor %}
   &lt;/head&gt;
   &lt;body&gt;
     {{ page.content }}
+
+    {%- for script in config.extra_javascript %}
+      {{ script | script_tag }}
+    {%- endfor %}
   &lt;/body&gt;
 &lt;/html&gt;</code></pre>
 <p>The body content from each page specified in <code>mkdocs.yml</code> is inserted using the
@@ -303,6 +307,41 @@ implemented in a <code>base.html</code> file, which <code>main.html</code> exten
 required, third party template authors are encouraged to follow a similar
 pattern and may want to define the same <a href="../../user-guide/customizing-your-theme/#overriding-template-blocks">blocks</a> as are used in the built-in
 themes for consistency.</p>
+</div>
+<h3 id="picking-up-css-and-javascript-from-the-config">Picking up CSS and JavaScript from the config<a class="headerlink" href="#picking-up-css-and-javascript-from-the-config" title="Permanent link"></a></h3>
+<p>MkDocs defines the top-level <a href="../../user-guide/configuration/#extra_css">extra_css</a> and <a href="../../user-guide/configuration/#extra_javascript">extra_javascript</a> configs. These are lists of files.</p>
+<p>The theme must include the HTML that links the items from these configs, otherwise the configs will be non-functional. You can see the recommended way to render both of them in the <a href="#basic-theme">base example above</a>.</p>
+<div class="admonition new">
+<p class="admonition-title">Changed in version 1.5:</p>
+<p>The items of the <code>config.extra_javascript</code> list used to be simple strings but now became objects that have these fields: <code>path</code>, <code>type</code>, <code>async</code>, <code>defer</code>.</p>
+<p>In that version, MkDocs also gained the <a href="#script_tag"><code>script_tag</code> filter</a>.</p>
+<details class="example">
+<summary>Obsolete style:</summary>
+<pre class="highlight"><code class="language-django">  {%- for path in extra_javascript %}
+    &lt;script src="{{ path }}"&gt;&lt;/script&gt;
+  {%- endfor %}</code></pre>
+<p>This old-style example even uses the obsolete top-level <code>extra_javascript</code> list. Please always use <code>config.extra_javascript</code> instead.</p>
+<p>So, a slightly more modern approach is the following, but it is still obsolete because it ignores the extra attributes of the script:</p>
+<p><pre class="highlight"><code class="language-django">  {%- for path in config.extra_javascript %}
+    &lt;script src="{{ path | url }}"&gt;&lt;/script&gt;
+  {%- endfor %}</code></pre>
+<!-- -->
+? EXAMPLE: <strong>New style:</strong></p>
+<pre class="highlight"><code class="language-django">  {%- for script in config.extra_javascript %}
+    {{ script | script_tag }}
+  {%- endfor %}</code></pre>
+</details>
+<p>If you wish to be able to pick up the new customizations while keeping your theme compatible with older versions of MkDocs, use this snippet:</p>
+<details class="example" open="open">
+<summary>Backwards-compatible style:</summary>
+<pre class="highlight"><code class="language-django">  {%- for script in config.extra_javascript %}
+    {%- if script.path %}  {# Detected MkDocs 1.5+ which has `script.path` and `script_tag` #}
+      {{ script | script_tag }}
+    {%- else %}  {# Fallback - examine the file name directly #}
+      &lt;script src="{{ script | url }}"{% if script.endswith(".mjs") %} type="module"{% endif %}&gt;&lt;/script&gt;
+    {%- endif %}
+  {%- endfor %}</code></pre>
+</details>
 </div>
 <h2 id="theme-files">Theme Files<a class="headerlink" href="#theme-files" title="Permanent link"></a></h2>
 <p>There are various files which a theme treats special in some way. Any other
@@ -398,10 +437,10 @@ defined by the <a href="../../user-guide/configuration/#nav">nav</a> configurati
 
 
 <h5 id="mkdocs.structure.nav.Navigation.homepage" class="doc doc-heading">
-<code class="highlight language-python">homepage: Optional[Page]</code>
+<code class="highlight language-python">homepage: Page | None</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.nav.Navigation.homepage" class="headerlink" title="Permanent link"></a></h5>
@@ -419,10 +458,10 @@ defined by the <a href="../../user-guide/configuration/#nav">nav</a> configurati
 
 
 <h5 id="mkdocs.structure.nav.Navigation.pages" class="doc doc-heading">
-<code class="highlight language-python">pages: List[Page]</code>
+<code class="highlight language-python">pages: list[Page]</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.nav.Navigation.pages" class="headerlink" title="Permanent link"></a></h5>
@@ -440,7 +479,7 @@ list of all pages, use the <a href="#pages">pages</a> template variable.</p>
 <h5 id="nav-example">Nav Example<a class="headerlink" href="#nav-example" title="Permanent link"></a></h5>
 <p>Following is a basic usage example which outputs the first and second level
 navigation as a nested list.</p>
-<pre class="highlight"><code class="language-django">{% if nav|length&gt;1 %}
+<pre class="highlight"><code class="language-django">{% if nav|length &gt; 1 %}
     &lt;ul&gt;
     {% for nav_item in nav %}
         {% if nav_item.children %}
@@ -490,6 +529,8 @@ as <code>page</code> <a href="#navigation-objects">navigation objects</a> in the
 
 <a id="mkdocs.structure.pages.Page"></a>
   <div class="doc doc-contents first">
+      <p class="doc doc-class-bases">
+        Bases: <code><span title="mkdocs.structure.StructureItem">StructureItem</span></code></p>
 
 
 
@@ -515,23 +556,26 @@ as <code>page</code> <a href="#navigation-objects">navigation objects</a> in the
 </div><p>All <code>page</code> objects contain the following attributes:</p>
 
 
-<div class="doc doc-object doc-attribute">
+<div class="doc doc-object doc-function">
 
 
 
 <h5 id="mkdocs.structure.pages.Page.title" class="doc doc-heading">
-<code class="highlight language-python">title: Optional[str]</code>
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
-  </span>
+<code class="highlight language-python">title() -&gt; str | None</code>
 
 <a href="#mkdocs.structure.pages.Page.title" class="headerlink" title="Permanent link"></a></h5>
 
 
   <div class="doc doc-contents first">
   
-      <p>Contains the Title for the current page.</p>
+      <p>Returns the title for the current page.</p>
+<p>Before calling <code>read_source()</code>, this value is empty. It can also be updated by <code>render()</code>.</p>
+<p>Check these in order and use the first that returns a valid title:
+- value provided on init (passed in from config)
+- value of metadata 'title'
+- content of the first H1 in Markdown content
+- convert filename to title</p>
+
   </div>
 
 </div>
@@ -541,10 +585,10 @@ as <code>page</code> <a href="#navigation-objects">navigation objects</a> in the
 
 
 <h5 id="mkdocs.structure.pages.Page.content" class="doc doc-heading">
-<code class="highlight language-python">content: Optional[str]</code>
+<code class="highlight language-python">content: str | None</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.pages.Page.content" class="headerlink" title="Permanent link"></a></h5>
@@ -565,7 +609,7 @@ as <code>page</code> <a href="#navigation-objects">navigation objects</a> in the
 <code class="highlight language-python">toc: TableOfContents</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.pages.Page.toc" class="headerlink" title="Permanent link"></a></h5>
@@ -597,7 +641,7 @@ for a page.</p>
 <code class="highlight language-python">meta: MutableMapping[str, Any]</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.pages.Page.meta" class="headerlink" title="Permanent link"></a></h5>
@@ -625,12 +669,12 @@ documentation page.</p>
 {% endfor %}</code></pre>
 
 
-<div class="doc doc-object doc-function">
+<div class="doc doc-object doc-attribute">
 
 
 
 <h5 id="mkdocs.structure.pages.Page.url" class="doc doc-heading">
-<code class="highlight language-python">url() -&gt; str</code>
+<code class="highlight language-python">url: str</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
@@ -642,7 +686,6 @@ documentation page.</p>
   <div class="doc doc-contents first">
   
       <p>The URL of the page relative to the MkDocs <code>site_dir</code>.</p>
-
   </div>
 
 </div><p>It is expected that this be used with the <a href="#url">url</a> filter to ensure the URL is relative to the current
@@ -658,7 +701,7 @@ page.</p>
 <code class="highlight language-python">file: File</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.pages.Page.file" class="headerlink" title="Permanent link"></a></h5>
@@ -676,10 +719,10 @@ page.</p>
 
 
 <h5 id="mkdocs.structure.pages.Page.abs_url" class="doc doc-heading">
-<code class="highlight language-python">abs_url: Optional[str]</code>
+<code class="highlight language-python">abs_url: str | None</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.pages.Page.abs_url" class="headerlink" title="Permanent link"></a></h5>
@@ -704,10 +747,10 @@ page <code>foo.md</code> would be <code>/bar/foo/</code>.</p>
 
 
 <h5 id="mkdocs.structure.pages.Page.canonical_url" class="doc doc-heading">
-<code class="highlight language-python">canonical_url: Optional[str]</code>
+<code class="highlight language-python">canonical_url: str | None</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.pages.Page.canonical_url" class="headerlink" title="Permanent link"></a></h5>
@@ -728,10 +771,10 @@ variable.</p>
 
 
 <h5 id="mkdocs.structure.pages.Page.edit_url" class="doc doc-heading">
-<code class="highlight language-python">edit_url: Optional[str]</code>
+<code class="highlight language-python">edit_url: str | None</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.pages.Page.edit_url" class="headerlink" title="Permanent link"></a></h5>
@@ -746,12 +789,12 @@ variable.</p>
 
 </div>
 
-<div class="doc doc-object doc-function">
+<div class="doc doc-object doc-attribute">
 
 
 
 <h5 id="mkdocs.structure.pages.Page.is_homepage" class="doc doc-heading">
-<code class="highlight language-python">is_homepage() -&gt; bool</code>
+<code class="highlight language-python">is_homepage: bool</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
@@ -763,7 +806,6 @@ variable.</p>
   <div class="doc doc-contents first">
   
       <p>Evaluates to <code>True</code> for the homepage of the site and <code>False</code> for all other pages.</p>
-
   </div>
 
 </div><p>This can be used in conjunction with other attributes of the <code>page</code>
@@ -777,10 +819,10 @@ on the homepage:</p>
 
 
 <h5 id="mkdocs.structure.pages.Page.previous_page" class="doc doc-heading">
-<code class="highlight language-python">previous_page: Optional[Page]</code>
+<code class="highlight language-python">previous_page: Page | None</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.pages.Page.previous_page" class="headerlink" title="Permanent link"></a></h5>
@@ -800,10 +842,10 @@ or if the current page is not included in the navigation at all.</p>
 
 
 <h5 id="mkdocs.structure.pages.Page.next_page" class="doc doc-heading">
-<code class="highlight language-python">next_page: Optional[Page]</code>
+<code class="highlight language-python">next_page: Page | None</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.pages.Page.next_page" class="headerlink" title="Permanent link"></a></h5>
@@ -822,20 +864,20 @@ or if the current page is not included in the navigation at all.</p>
 
 
 
-<h5 id="mkdocs.structure.pages.Page.parent" class="doc doc-heading">
-<code class="highlight language-python">parent: Optional[Section]</code>
+<h5 id="mkdocs.structure.StructureItem.parent" class="doc doc-heading">
+<code class="highlight language-python">parent: Section | None = None</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
-<a href="#mkdocs.structure.pages.Page.parent" class="headerlink" title="Permanent link"></a></h5>
+<a href="#mkdocs.structure.StructureItem.parent" class="headerlink" title="Permanent link"></a></h5>
 
 
   <div class="doc doc-contents first">
   
-      <p>The immediate parent of the page in the site navigation. <code>None</code> if the
-page is at the top level.</p>
+      <p>The immediate parent of the item in the site navigation. <code>None</code> if it's at the top level.</p>
   </div>
 
 </div>
@@ -849,6 +891,7 @@ page is at the top level.</p>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.pages.Page.children" class="headerlink" title="Permanent link"></a></h5>
@@ -861,16 +904,16 @@ page is at the top level.</p>
 
 </div>
 
-<div class="doc doc-object doc-function">
+<div class="doc doc-object doc-attribute">
 
 
 
 <h5 id="mkdocs.structure.pages.Page.active" class="doc doc-heading">
-<code class="highlight language-python">active() -&gt; bool</code>
+<code class="highlight language-python">active: bool</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-writable"><code>writable</code></small>
       <small class="doc doc-label doc-label-property"><code>property</code></small>
+      <small class="doc doc-label doc-label-writable"><code>writable</code></small>
   </span>
 
 <a href="#mkdocs.structure.pages.Page.active" class="headerlink" title="Permanent link"></a></h5>
@@ -879,7 +922,6 @@ page is at the top level.</p>
   <div class="doc doc-contents first">
   
       <p>When <code>True</code>, indicates that this page is the currently viewed page. Defaults to <code>False</code>.</p>
-
   </div>
 
 </div>
@@ -893,6 +935,7 @@ page is at the top level.</p>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.pages.Page.is_section" class="headerlink" title="Permanent link"></a></h5>
@@ -914,6 +957,7 @@ page is at the top level.</p>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.pages.Page.is_page" class="headerlink" title="Permanent link"></a></h5>
@@ -935,6 +979,7 @@ page is at the top level.</p>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.pages.Page.is_link" class="headerlink" title="Permanent link"></a></h5>
@@ -977,7 +1022,7 @@ page is at the top level.</p>
 <code class="highlight language-python">title: str</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.toc.AnchorLink.title" class="headerlink" title="Permanent link"></a></h5>
@@ -994,11 +1039,32 @@ page is at the top level.</p>
 
 
 
+<h5 id="mkdocs.structure.toc.AnchorLink.url" class="doc doc-heading">
+<code class="highlight language-python">url: str</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#mkdocs.structure.toc.AnchorLink.url" class="headerlink" title="Permanent link"></a></h5>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The hash fragment of a URL pointing to the item.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
 <h5 id="mkdocs.structure.toc.AnchorLink.level" class="doc doc-heading">
 <code class="highlight language-python">level: int</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.toc.AnchorLink.level" class="headerlink" title="Permanent link"></a></h5>
@@ -1016,10 +1082,10 @@ page is at the top level.</p>
 
 
 <h5 id="mkdocs.structure.toc.AnchorLink.children" class="doc doc-heading">
-<code class="highlight language-python">children: List[AnchorLink]</code>
+<code class="highlight language-python">children: list[AnchorLink]</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.toc.AnchorLink.children" class="headerlink" title="Permanent link"></a></h5>
@@ -1033,28 +1099,6 @@ page is at the top level.</p>
 </div>
 
 
-
-<div class="doc doc-object doc-function">
-
-
-
-<h5 id="mkdocs.structure.toc.AnchorLink.url" class="doc doc-heading">
-<code class="highlight language-python">url() -&gt; str</code>
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-property"><code>property</code></small>
-  </span>
-
-<a href="#mkdocs.structure.toc.AnchorLink.url" class="headerlink" title="Permanent link"></a></h5>
-
-
-  <div class="doc doc-contents ">
-  
-      <p>The hash fragment of a URL pointing to the item.</p>
-
-  </div>
-
-</div>
 
 
 
@@ -1083,6 +1127,8 @@ theme chooses to do so.</p>
 
 <a id="mkdocs.structure.nav.Section"></a>
   <div class="doc doc-contents first">
+      <p class="doc doc-class-bases">
+        Bases: <code><span title="mkdocs.structure.StructureItem">StructureItem</span></code></p>
 
 
 
@@ -1116,7 +1162,7 @@ theme chooses to do so.</p>
 <code class="highlight language-python">title: str</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.nav.Section.title" class="headerlink" title="Permanent link"></a></h5>
@@ -1133,19 +1179,20 @@ theme chooses to do so.</p>
 
 
 
-<h5 id="mkdocs.structure.nav.Section.parent" class="doc doc-heading">
-<code class="highlight language-python">parent: Optional[Section]</code>
+<h5 id="mkdocs.structure.StructureItem.parent" class="doc doc-heading">
+<code class="highlight language-python">parent: Section | None = None</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
-<a href="#mkdocs.structure.nav.Section.parent" class="headerlink" title="Permanent link"></a></h5>
+<a href="#mkdocs.structure.StructureItem.parent" class="headerlink" title="Permanent link"></a></h5>
 
 
   <div class="doc doc-contents first">
   
-      <p>The immediate parent of the section or <code>None</code> if the section is at the top level.</p>
+      <p>The immediate parent of the item in the site navigation. <code>None</code> if it's at the top level.</p>
   </div>
 
 </div>
@@ -1155,10 +1202,10 @@ theme chooses to do so.</p>
 
 
 <h5 id="mkdocs.structure.nav.Section.children" class="doc doc-heading">
-<code class="highlight language-python">children: List[Union[Page, Section, Link]]</code>
+<code class="highlight language-python">children: list[StructureItem]</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.nav.Section.children" class="headerlink" title="Permanent link"></a></h5>
@@ -1171,16 +1218,16 @@ theme chooses to do so.</p>
 
 </div>
 
-<div class="doc doc-object doc-function">
+<div class="doc doc-object doc-attribute">
 
 
 
 <h5 id="mkdocs.structure.nav.Section.active" class="doc doc-heading">
-<code class="highlight language-python">active() -&gt; bool</code>
+<code class="highlight language-python">active: bool</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-writable"><code>writable</code></small>
       <small class="doc doc-label doc-label-property"><code>property</code></small>
+      <small class="doc doc-label doc-label-writable"><code>writable</code></small>
   </span>
 
 <a href="#mkdocs.structure.nav.Section.active" class="headerlink" title="Permanent link"></a></h5>
@@ -1191,7 +1238,6 @@ theme chooses to do so.</p>
       <p>When <code>True</code>, indicates that a child page of this section is the current page and
 can be used to highlight the section as the currently viewed section. Defaults
 to <code>False</code>.</p>
-
   </div>
 
 </div>
@@ -1205,6 +1251,7 @@ to <code>False</code>.</p>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.nav.Section.is_section" class="headerlink" title="Permanent link"></a></h5>
@@ -1226,6 +1273,7 @@ to <code>False</code>.</p>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.nav.Section.is_page" class="headerlink" title="Permanent link"></a></h5>
@@ -1247,6 +1295,7 @@ to <code>False</code>.</p>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.nav.Section.is_link" class="headerlink" title="Permanent link"></a></h5>
@@ -1267,6 +1316,8 @@ MkDocs page.</p>
 
 <a id="mkdocs.structure.nav.Link"></a>
   <div class="doc doc-contents first">
+      <p class="doc doc-class-bases">
+        Bases: <code><span title="mkdocs.structure.StructureItem">StructureItem</span></code></p>
 
 
 
@@ -1300,7 +1351,7 @@ MkDocs page.</p>
 <code class="highlight language-python">title: str</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.nav.Link.title" class="headerlink" title="Permanent link"></a></h5>
@@ -1321,7 +1372,7 @@ MkDocs page.</p>
 <code class="highlight language-python">url: str</code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.nav.Link.url" class="headerlink" title="Permanent link"></a></h5>
@@ -1339,19 +1390,20 @@ should not need to have <code>base_url</code> prepended.</p>
 
 
 
-<h5 id="mkdocs.structure.nav.Link.parent" class="doc doc-heading">
-<code class="highlight language-python">parent: Optional[Section]</code>
+<h5 id="mkdocs.structure.StructureItem.parent" class="doc doc-heading">
+<code class="highlight language-python">parent: Section | None = None</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
-<a href="#mkdocs.structure.nav.Link.parent" class="headerlink" title="Permanent link"></a></h5>
+<a href="#mkdocs.structure.StructureItem.parent" class="headerlink" title="Permanent link"></a></h5>
 
 
   <div class="doc doc-contents first">
   
-      <p>The immediate parent of the link. <code>None</code> if the link is at the top level.</p>
+      <p>The immediate parent of the item in the site navigation. <code>None</code> if it's at the top level.</p>
   </div>
 
 </div>
@@ -1365,6 +1417,7 @@ should not need to have <code>base_url</code> prepended.</p>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.nav.Link.children" class="headerlink" title="Permanent link"></a></h5>
@@ -1386,6 +1439,7 @@ should not need to have <code>base_url</code> prepended.</p>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.nav.Link.active" class="headerlink" title="Permanent link"></a></h5>
@@ -1407,6 +1461,7 @@ should not need to have <code>base_url</code> prepended.</p>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.nav.Link.is_section" class="headerlink" title="Permanent link"></a></h5>
@@ -1428,6 +1483,7 @@ should not need to have <code>base_url</code> prepended.</p>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.nav.Link.is_page" class="headerlink" title="Permanent link"></a></h5>
@@ -1449,6 +1505,7 @@ should not need to have <code>base_url</code> prepended.</p>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#mkdocs.structure.nav.Link.is_link" class="headerlink" title="Permanent link"></a></h5>
@@ -1467,11 +1524,11 @@ set of key value pairs that can make custom templates far more flexible.</p>
 and a list of links related to the project. This can be achieved with the
 following <code>extra</code> configuration:</p>
 <pre class="highlight"><code class="language-yaml">extra:
-    version: 0.13.0
-    links:
-        - https://github.com/mkdocs
-        - https://docs.readthedocs.org/en/latest/builds.html#mkdocs
-        - https://www.mkdocs.org/</code></pre>
+  version: 0.13.0
+  links:
+    - https://github.com/mkdocs
+    - https://docs.readthedocs.org/en/latest/builds.html#mkdocs
+    - https://www.mkdocs.org/</code></pre>
 <p>And then displayed with this HTML in the custom theme.</p>
 <pre class="highlight"><code class="language-django">{{ config.extra.version }}
 
@@ -1492,10 +1549,16 @@ returned relative to the page object. Otherwise, the URL is returned with
 <a href="#base_url">base_url</a> prepended.</p>
 <pre class="highlight"><code class="language-django">&lt;a href="{{ page.url|url }}"&gt;{{ page.title }}&lt;/a&gt;</code></pre>
 <h3 id="tojson">tojson<a class="headerlink" href="#tojson" title="Permanent link"></a></h3>
-<p>Safety convert a Python object to a value in a JavaScript script.</p>
+<p>Safely convert a Python object to a value in a JavaScript script.</p>
 <pre class="highlight"><code class="language-django">&lt;script&gt;
     var mkdocs_page_name = {{ page.title|tojson|safe }};
 &lt;/script&gt;</code></pre>
+<h3 id="script_tag">script_tag<a class="headerlink" href="#script_tag" title="Permanent link"></a></h3>
+<div class="admonition new">
+<p class="admonition-title">New in version 1.5</p>
+</div>
+<p>Convert an item from <code>extra_javascript</code> to a <code>&lt;script&gt;</code> tag that takes into account all <a href="../../user-guide/configuration/#extra_javascript">customizations of this config</a> and has the equivalent of <a href="#url"><code>|url</code></a> behavior built-in.</p>
+<p>See how to use it in the <a href="#basic-theme">base example above</a></p>
 <h2 id="search-and-themes">Search and themes<a class="headerlink" href="#search-and-themes" title="Permanent link"></a></h2>
 <p>As of MkDocs version <em>0.17</em> client side search support has been added to MkDocs
 via the <code>search</code> plugin. A theme needs to provide a few things for the plugin to
@@ -1503,7 +1566,7 @@ work with the theme.</p>
 <p>While the <code>search</code> plugin is activated by default, users can disable the plugin
 and themes should account for this. It is recommended that theme templates wrap
 search specific markup with a check for the plugin:</p>
-<pre class="highlight"><code class="language-django">{% if 'search' in config['plugins'] %}
+<pre class="highlight"><code class="language-django">{% if 'search' in config.plugins %}
     search stuff here...
 {% endif %}</code></pre>
 <p>At its most basic functionality, the search plugin will simply provide an index
@@ -1514,7 +1577,7 @@ a complete functioning client-side search tool based on <a href="https://lunrjs.
 <p>The following HTML needs to be added to the theme so that the provided
 JavaScript is able to properly load the search scripts and make relative links
 to the search results from the current page.</p>
-<pre class="highlight"><code class="language-django">&lt;script&gt;var base_url = '{{ base_url }}';&lt;/script&gt;</code></pre>
+<pre class="highlight"><code class="language-django">&lt;script&gt;var base_url = {{ base_url|tojson }};&lt;/script&gt;</code></pre>
 <p>With properly configured settings, the following HTML in a template  will add a
 full search implementation to your theme.</p>
 <pre class="highlight"><code class="language-django">&lt;h1 id="search"&gt;Search Results&lt;/h1&gt;
@@ -1661,8 +1724,8 @@ following in the <code>mkdocs_theme.yml</code> file:</p>
 <p>And the user could override the default in their project's <code>mkdocs.yml</code> config
 file:</p>
 <pre class="highlight"><code class="language-yaml">theme:
-    name: themename
-    show_sidebar: false</code></pre>
+  name: themename
+  show_sidebar: false</code></pre>
 <p>In addition to arbitrary options defined by the theme, MkDocs defines a few
 special options which alters its behavior:</p>
 <div class="admonition block">
@@ -1801,12 +1864,14 @@ different process for generating those <code>mo</code> files if you chose to do 
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
+        <script src="../../js/jquery-3.6.0.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
         <script>
             var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="../../js/base.js" defer></script>
-        <script src="../../search/main.js" defer></script>
+        <script src="../../js/base.js"></script>
+        <script src="../../search/main.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">

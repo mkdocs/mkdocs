@@ -12,23 +12,20 @@
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
-
-        <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/yaml.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/django.min.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/django.min.js"></script>
+        <script>hljs.highlightAll();</script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-274394082"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', 'G-274394082');
+          gtag('config', "G-274394082");
         </script> 
     </head>
 
@@ -211,10 +208,7 @@ directory will be rendered in the built site regardless of any settings.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>
-Files and directories with names which begin with a dot (for example:
-<code>.foo.md</code> or <code>.bar/baz.md</code>) are ignored by MkDocs, which matches the
-behavior of most web servers. There is no option to override this
-behavior.</p>
+Files and directories with names which begin with a dot (for example: <code>.foo.md</code> or <code>.bar/baz.md</code>) are ignored by MkDocs. This can be overridden with the <a href="../configuration/#exclude_docs"><code>exclude_docs</code> config</a>.</p>
 </div>
 <p>You can also create multi-page documentation, by creating several Markdown
 files:</p>
@@ -272,8 +266,8 @@ will need to manually define your navigation configuration if you would like
 your navigation menu sorted differently.</p>
 <p>A minimal navigation configuration could look like this:</p>
 <pre class="highlight"><code class="language-yaml">nav:
-    - 'index.md'
-    - 'about.md'</code></pre>
+  - 'index.md'
+  - 'about.md'</code></pre>
 <p>All paths in the navigation configuration must be relative to the <code>docs_dir</code>
 configuration option. If that option is set to the default value, <code>docs</code>, the
 source files for the above configuration would be located at <code>docs/index.md</code> and
@@ -283,21 +277,21 @@ level and with their titles inferred from the contents of the Markdown file or,
 if no title is defined within the file, of the file name. To override the title
 in the <code>nav</code> setting add a title right before the filename.</p>
 <pre class="highlight"><code class="language-yaml">nav:
-    - Home: 'index.md'
-    - About: 'about.md'</code></pre>
+  - Home: 'index.md'
+  - About: 'about.md'</code></pre>
 <p>Note that if a title is defined for a page in the navigation, that title will be
 used throughout the site for that page and will override any title defined
 within the page itself.</p>
 <p>Navigation sub-sections can be created by listing related pages together under a
 section title. For example:</p>
 <pre class="highlight"><code class="language-yaml">nav:
-    - Home: 'index.md'
-    - 'User Guide':
-        - 'Writing your docs': 'writing-your-docs.md'
-        - 'Styling your docs': 'styling-your-docs.md'
-    - About:
-        - 'License': 'license.md'
-        - 'Release Notes': 'release-notes.md'</code></pre>
+  - Home: 'index.md'
+  - 'User Guide':
+    - 'Writing your docs': 'writing-your-docs.md'
+    - 'Styling your docs': 'styling-your-docs.md'
+  - About:
+    - 'License': 'license.md'
+    - 'Release Notes': 'release-notes.md'</code></pre>
 <p>With the above configuration we have three top level items: "Home", "User Guide"
 and "About." "Home" is a link to the homepage for the site. Under the "User
 Guide" section two pages are listed: "Writing your docs" and "Styling your
@@ -365,8 +359,8 @@ can set in your <code>mkdocs.yml</code> configuration file to alter the default 
 link text. When set to a string, the provided string is used as the link
 text. For example, to use the hash symbol (<code>#</code>) instead, do:</p>
 <pre class="highlight"><code class="language-yaml">markdown_extensions:
-    - toc:
-        permalink: "#"</code></pre>
+  - toc:
+      permalink: "#"</code></pre>
 </li>
 <li>
 <p><strong><code>baselevel</code></strong></p>
@@ -376,8 +370,8 @@ within the hierarchy of your HTML templates. For example, if the Markdown
 text for a page should not contain any headers higher than level 2 (<code>&lt;h2&gt;</code>),
 do:</p>
 <pre class="highlight"><code class="language-yaml">markdown_extensions:
-    - toc:
-        baselevel: 2</code></pre>
+  - toc:
+      baselevel: 2</code></pre>
 <p>Then any headers in your document would be increased by 1. For example, the
 header <code># Header</code> would be rendered as a level 2 header (<code>&lt;h2&gt;</code>) in the HTML
 output.</p>
@@ -388,18 +382,18 @@ output.</p>
 <p>Character which replaces white-space in generated IDs. If you prefer
 underscores, then do:</p>
 <pre class="highlight"><code class="language-yaml">markdown_extensions:
-    - toc:
-        separator: "_"</code></pre>
+  - toc:
+      separator: "_"</code></pre>
 </li>
 </ul>
 <p>Note that if you would like to define multiple of the above settings, you must
 do so under a single <code>toc</code> entry in the <code>markdown_extensions</code> configuration
 option.</p>
 <pre class="highlight"><code class="language-yml">markdown_extensions:
-    - toc:
-        permalink: "#"
-        baselevel: 2
-        separator: "_"</code></pre>
+  - toc:
+      permalink: "#"
+      baselevel: 2
+      separator: "_"</code></pre>
 <h4 id="linking-to-images-and-media">Linking to images and media<a class="headerlink" href="#linking-to-images-and-media" title="Permanent link"></a></h4>
 <p>As well as the Markdown source files, you can also include other file types in
 your documentation, which will be copied across when generating your
@@ -458,10 +452,19 @@ available on the path(s) defined in the theme's environment.</p>
 <p>MkDocs will attempt to determine the title of a document in the following
 ways, in order:</p>
 <ol>
-<li>A title defined in the <a href="../configuration/#nav">nav</a> configuration setting for a document.</li>
-<li>A title defined in the <code>title</code> meta-data key of a document.</li>
-<li>A level 1 Markdown header on the first line of the document body. Please note that <a href="https://daringfireball.net/projects/markdown/syntax#header">Setext-style</a> headers are not supported.</li>
-<li>The filename of a document.</li>
+<li>
+<p>A title defined in the <a href="../configuration/#nav">nav</a> configuration setting for a document.</p>
+</li>
+<li>
+<p>A title defined in the <code>title</code> meta-data key of a document.</p>
+</li>
+<li>
+<p>A level 1 Markdown header on the first line of the document body.<br />
+    (<a href="https://daringfireball.net/projects/markdown/syntax#header">Setext-style</a> headers are supported <em>only since MkDocs 1.5</em>.)</p>
+</li>
+<li>
+<p>The filename of a document.</p>
+</li>
 </ol>
 <p>Upon finding a title for a page, MkDoc does not continue checking any
 additional sources in the above list.</p>
@@ -576,12 +579,14 @@ nested inside list items, blockquotes, etc.</p></div>
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
+        <script src="../../js/jquery-3.6.0.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
         <script>
             var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="../../js/base.js" defer></script>
-        <script src="../../search/main.js" defer></script>
+        <script src="../../js/base.js"></script>
+        <script src="../../search/main.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">

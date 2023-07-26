@@ -12,23 +12,20 @@
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
-
-        <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/yaml.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/django.min.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/django.min.js"></script>
+        <script>hljs.highlightAll();</script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-274394082"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', 'G-274394082');
+          gtag('config', "G-274394082");
         </script> 
     </head>
 
@@ -184,6 +181,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-level="2"><a href="#mkdocs-get-deps" class="nav-link">get-deps</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-level="2"><a href="#mkdocs-gh-deploy" class="nav-link">gh-deploy</a>
               <ul class="nav flex-column">
               </ul>
@@ -238,6 +239,12 @@
 <td><code>False</code></td>
 </tr>
 <tr>
+<td><code>--color</code> / <code>--no-color</code></td>
+<td>boolean</td>
+<td>Force enable or disable color and wrapping for the output. Default is auto-detect.</td>
+<td>None</td>
+</tr>
+<tr>
 <td><code>--help</code></td>
 <td>boolean</td>
 <td>Show this message and exit.</td>
@@ -248,6 +255,7 @@
 <p><strong>Subcommands</strong></p>
 <ul>
 <li><em><a href="#mkdocs-build">build</a></em>: Build the MkDocs documentation</li>
+<li><em><a href="#mkdocs-get-deps">get-deps</a></em>: Show required PyPI packages inferred from plugins in mkdocs.yml</li>
 <li><em><a href="#mkdocs-gh-deploy">gh-deploy</a></em>: Deploy your documentation to GitHub Pages</li>
 <li><em><a href="#mkdocs-new">new</a></em>: Create a new MkDocs project</li>
 <li><em><a href="#mkdocs-serve">serve</a></em>: Run the builtin development server</li>
@@ -276,18 +284,18 @@
 <tr>
 <td><code>-f</code>, <code>--config-file</code></td>
 <td>filename</td>
-<td>Provide a specific MkDocs config</td>
+<td>Provide a specific MkDocs config. This can be a file name, or '-' to read from stdin.</td>
 <td>None</td>
 </tr>
 <tr>
-<td><code>-s</code>, <code>--strict</code></td>
+<td><code>-s</code>, <code>--strict</code> / <code>--no-strict</code></td>
 <td>boolean</td>
 <td>Enable strict mode. This will cause MkDocs to abort the build on any warnings.</td>
 <td>None</td>
 </tr>
 <tr>
 <td><code>-t</code>, <code>--theme</code></td>
-<td>choice (<code>material</code> &#x7C; <code>mkdocs</code> &#x7C; <code>readthedocs</code>)</td>
+<td>choice (<code>mkdocs</code> &#x7C; <code>readthedocs</code>)</td>
 <td>The theme to use when building your documentation.</td>
 <td>None</td>
 </tr>
@@ -314,6 +322,47 @@
 <td>boolean</td>
 <td>Enable verbose output</td>
 <td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="mkdocs-get-deps">mkdocs get-deps<a class="headerlink" href="#mkdocs-get-deps" title="Permanent link"></a></h2>
+<p>Show required PyPI packages inferred from plugins in mkdocs.yml</p>
+<p><strong>Usage:</strong></p>
+<pre class="highlight"><code>mkdocs get-deps [OPTIONS]</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-v</code>, <code>--verbose</code></td>
+<td>boolean</td>
+<td>Enable verbose output</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>-f</code>, <code>--config-file</code></td>
+<td>filename</td>
+<td>Provide a specific MkDocs config. This can be a file name, or '-' to read from stdin.</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>-p</code>, <code>--projects-file</code></td>
+<td>text</td>
+<td>URL or local path of the registry file that declares all known MkDocs-related projects.</td>
+<td><code>https://raw.githubusercontent.com/mkdocs/catalog/main/projects.yaml</code></td>
 </tr>
 <tr>
 <td><code>--help</code></td>
@@ -389,18 +438,18 @@
 <tr>
 <td><code>-f</code>, <code>--config-file</code></td>
 <td>filename</td>
-<td>Provide a specific MkDocs config</td>
+<td>Provide a specific MkDocs config. This can be a file name, or '-' to read from stdin.</td>
 <td>None</td>
 </tr>
 <tr>
-<td><code>-s</code>, <code>--strict</code></td>
+<td><code>-s</code>, <code>--strict</code> / <code>--no-strict</code></td>
 <td>boolean</td>
 <td>Enable strict mode. This will cause MkDocs to abort the build on any warnings.</td>
 <td>None</td>
 </tr>
 <tr>
 <td><code>-t</code>, <code>--theme</code></td>
-<td>choice (<code>material</code> &#x7C; <code>mkdocs</code> &#x7C; <code>readthedocs</code>)</td>
+<td>choice (<code>mkdocs</code> &#x7C; <code>readthedocs</code>)</td>
 <td>The theme to use when building your documentation.</td>
 <td>None</td>
 </tr>
@@ -493,21 +542,21 @@
 <td>None</td>
 </tr>
 <tr>
-<td><code>--livereload</code></td>
-<td>text</td>
-<td>Enable the live reloading in the development server (this is the default)</td>
-<td><code>True</code></td>
-</tr>
-<tr>
 <td><code>--no-livereload</code></td>
 <td>text</td>
 <td>Disable the live reloading in the development server.</td>
 <td><code>False</code></td>
 </tr>
 <tr>
-<td><code>--dirtyreload</code></td>
+<td><code>--dirty</code></td>
 <td>text</td>
-<td>Enable the live reloading in the development server, but only re-build files that have changed</td>
+<td>Only re-build files that have changed.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>-c</code>, <code>--clean</code></td>
+<td>text</td>
+<td>Build the site without any effects of <code>mkdocs serve</code> - pure <code>mkdocs build</code>, then serve.</td>
 <td><code>False</code></td>
 </tr>
 <tr>
@@ -525,18 +574,18 @@
 <tr>
 <td><code>-f</code>, <code>--config-file</code></td>
 <td>filename</td>
-<td>Provide a specific MkDocs config</td>
+<td>Provide a specific MkDocs config. This can be a file name, or '-' to read from stdin.</td>
 <td>None</td>
 </tr>
 <tr>
-<td><code>-s</code>, <code>--strict</code></td>
+<td><code>-s</code>, <code>--strict</code> / <code>--no-strict</code></td>
 <td>boolean</td>
 <td>Enable strict mode. This will cause MkDocs to abort the build on any warnings.</td>
 <td>None</td>
 </tr>
 <tr>
 <td><code>-t</code>, <code>--theme</code></td>
-<td>choice (<code>material</code> &#x7C; <code>mkdocs</code> &#x7C; <code>readthedocs</code>)</td>
+<td>choice (<code>mkdocs</code> &#x7C; <code>readthedocs</code>)</td>
 <td>The theme to use when building your documentation.</td>
 <td>None</td>
 </tr>
@@ -574,12 +623,14 @@
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
+        <script src="../../js/jquery-3.6.0.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
         <script>
             var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="../../js/base.js" defer></script>
-        <script src="../../search/main.js" defer></script>
+        <script src="../../js/base.js"></script>
+        <script src="../../search/main.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">

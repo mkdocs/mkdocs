@@ -12,23 +12,20 @@
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
-
-        <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/yaml.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/django.min.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/django.min.js"></script>
+        <script>hljs.highlightAll();</script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-274394082"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', 'G-274394082');
+          gtag('config', "G-274394082");
         </script> 
     </head>
 
@@ -204,19 +201,14 @@ make tweaks and customizations to existing themes. To use these, you simply
 need to include either CSS or JavaScript files within your <a href="../configuration/#docs_dir">documentation
 directory</a>.</p>
 <p>For example, to change the color of the headers in your documentation, create
-a file called <code>extra.css</code> and place it next to the documentation Markdown. In
+a file called (for example) <code>style.css</code> and place it next to the documentation Markdown. In
 that file add the following CSS.</p>
 <pre class="highlight"><code class="language-css">h1 {
   color: red;
 }</code></pre>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>
-If you are deploying your documentation with <a href="../deploying-your-docs/#readthedocs">ReadTheDocs</a>. You will need
-to explicitly list the CSS and JavaScript files you want to include in
-your config. To do this, add the following to your mkdocs.yml.</p>
-<pre class="highlight"><code class="language-yaml">extra_css: [extra.css]</code></pre>
-</div>
+<p>Then you need to add it to <code>mkdocs.yml</code>:</p>
+<pre class="highlight"><code class="language-yaml">extra_css:
+  - style.css</code></pre>
 <p>After making these changes, they should be visible when you run
 <code>mkdocs serve</code> - if you already had this running, you should see that the CSS
 changes were automatically picked up and the documentation will be updated.</p>
@@ -266,8 +258,8 @@ next to your <code>docs_dir</code>:</p>
 <pre class="highlight"><code class="language-bash">mkdir custom_theme</code></pre>
 <p>And then point your <code>mkdocs.yml</code> configuration file at the new directory:</p>
 <pre class="highlight"><code class="language-yaml">theme:
-    name: mkdocs
-    custom_dir: custom_theme/</code></pre>
+  name: mkdocs
+  custom_dir: custom_theme/</code></pre>
 <p>To override the 404 error page ("file not found"), add a new template file named
 <code>404.html</code> to the <code>custom_theme</code> directory. For information on what can be
 included in a template, review the <a href="../../dev-guide/themes/">Theme Developer Guide</a>.</p>
@@ -369,12 +361,14 @@ any additional CSS files included in the <code>custom_dir</code>.</p></div>
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
+        <script src="../../js/jquery-3.6.0.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
         <script>
             var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="../../js/base.js" defer></script>
-        <script src="../../search/main.js" defer></script>
+        <script src="../../js/base.js"></script>
+        <script src="../../search/main.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">

@@ -12,23 +12,20 @@
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/font-awesome.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
         <link href="../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../css/extra.css" rel="stylesheet">
-
-        <script src="../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../js/bootstrap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/yaml.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/django.min.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/django.min.js"></script>
+        <script>hljs.highlightAll();</script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-274394082"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', 'G-274394082');
+          gtag('config', "G-274394082");
         </script> 
     </head>
 
@@ -243,10 +240,10 @@ command:</p>
 <pre class="highlight"><code class="language-console">$ mkdocs serve
 INFO    -  Building documentation...
 INFO    -  Cleaning site directory
-[I 160402 15:50:43 server:271] Serving on http://127.0.0.1:8000
-[I 160402 15:50:43 handlers:58] Start watching changes
-[I 160402 15:50:43 handlers:60] Start detecting changes</code></pre>
-<p>Open up <code>http://127.0.0.1:8000/</code> in your browser, and you'll see the default
+INFO    -  Documentation built in 0.22 seconds
+INFO    -  [15:50:43] Watching paths for changes: 'docs', 'mkdocs.yml'
+INFO    -  [15:50:43] Serving on http://127.0.0.1:8000/</code></pre>
+<p>Open up <a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a> in your browser, and you'll see the default
 home page being displayed:</p>
 <p><img alt="The MkDocs live server" src="../img/screenshot.png" /></p>
 <p>The dev-server also supports auto-reloading, and will rebuild your documentation
@@ -282,8 +279,8 @@ setting:</p>
 <pre class="highlight"><code class="language-yaml">site_name: MkLorum
 site_url: https://example.com/
 nav:
-    - Home: index.md
-    - About: about.md</code></pre>
+  - Home: index.md
+  - About: about.md</code></pre>
 <p>Save your changes and you'll now see a navigation bar with <code>Home</code> and <code>About</code>
 items on the left as well as <code>Search</code>, <code>Previous</code>, and <code>Next</code> items on the
 right.</p>
@@ -301,8 +298,8 @@ changing the theme. Edit the <code>mkdocs.yml</code> file and add a <a href="../
 <pre class="highlight"><code class="language-yaml">site_name: MkLorum
 site_url: https://example.com/
 nav:
-    - Home: index.md
-    - About: about.md
+  - Home: index.md
+  - About: about.md
 theme: readthedocs</code></pre>
 <p>Save your changes, and you'll see the ReadTheDocs theme being used.</p>
 <p><img alt="Screenshot" src="../img/readthedocs.png" /></p>
@@ -355,12 +352,14 @@ you're done. For specific instructions on a number of common hosts, see the
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
+        <script src="../js/jquery-3.6.0.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
         <script>
             var base_url = "..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="../js/base.js" defer></script>
-        <script src="../search/main.js" defer></script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
