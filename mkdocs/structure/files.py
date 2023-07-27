@@ -367,9 +367,15 @@ def get_files(config: MkDocsConfig) -> Files:
                 log.warning(
                     f"Excluding '{a.src_uri}' from the site because it conflicts with '{b.src_uri}'."
                 )
-            files.remove(a)
+            try:
+                files.remove(a)
+            except ValueError:
+                pass  # Catching this to avoid errors if attempting to remove the same file twice.
         else:
-            files.remove(b)
+            try:
+                files.remove(b)
+            except ValueError:
+                pass
 
     return Files(files)
 
