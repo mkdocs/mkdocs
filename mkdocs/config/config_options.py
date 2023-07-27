@@ -941,6 +941,9 @@ class ExtraScriptValue(Config):
     def __str__(self):
         return self.path
 
+    def __fspath__(self):
+        return self.path
+
 
 class ExtraScript(SubConfig[ExtraScriptValue]):
     def run_validation(self, value: object) -> ExtraScriptValue:
