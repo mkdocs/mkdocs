@@ -27,6 +27,14 @@ The current and past members of the MkDocs team.
 * [@oprypin](https://github.com/oprypin/)
 * [@ultrabug](https://github.com/ultrabug/)
 
+## Version 1.5.1 (2023-07-28)
+
+*   Bugfix (regression in 1.5.0): Make it possible to treat `ExtraScriptValue` as a path. This lets some plugins still work despite the breaking change.
+
+*   Bugfix (regression in 1.5.0): Prevent errors for special setups that have 3 conflicting files, such as `index.html`, `index.md` *and* `README.md` (#3314)
+
+See [commit log](https://github.com/mkdocs/mkdocs/compare/1.5.0...1.5.1).
+
 ## Version 1.5.0 (2023-07-26)
 
 ### New command `mkdocs get-deps`
