@@ -21,7 +21,7 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         mock_serve.assert_called_once_with(
             dev_addr=None,
-            livereload='livereload',
+            livereload=True,
             build_type=None,
             config_file=None,
             strict=None,
@@ -53,7 +53,7 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         mock_serve.assert_called_once_with(
             dev_addr='0.0.0.0:80',
-            livereload='livereload',
+            livereload=True,
             build_type=None,
             config_file=None,
             strict=None,
@@ -70,7 +70,7 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         mock_serve.assert_called_once_with(
             dev_addr=None,
-            livereload='livereload',
+            livereload=True,
             build_type=None,
             config_file=None,
             strict=True,
@@ -89,7 +89,7 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         mock_serve.assert_called_once_with(
             dev_addr=None,
-            livereload='livereload',
+            livereload=True,
             build_type=None,
             config_file=None,
             strict=None,
@@ -108,7 +108,7 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         mock_serve.assert_called_once_with(
             dev_addr=None,
-            livereload='livereload',
+            livereload=True,
             build_type=None,
             config_file=None,
             strict=None,
@@ -127,7 +127,7 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         mock_serve.assert_called_once_with(
             dev_addr=None,
-            livereload='livereload',
+            livereload=True,
             build_type=None,
             config_file=None,
             strict=None,
@@ -144,7 +144,7 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         mock_serve.assert_called_once_with(
             dev_addr=None,
-            livereload='livereload',
+            livereload=True,
             build_type=None,
             config_file=None,
             strict=None,
@@ -161,7 +161,7 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         mock_serve.assert_called_once_with(
             dev_addr=None,
-            livereload='no-livereload',
+            livereload=False,
             build_type=None,
             config_file=None,
             strict=None,
@@ -178,7 +178,7 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         mock_serve.assert_called_once_with(
             dev_addr=None,
-            livereload='livereload',
+            livereload=True,
             build_type='dirty',
             config_file=None,
             strict=None,
@@ -195,7 +195,7 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         mock_serve.assert_called_once_with(
             dev_addr=None,
-            livereload='livereload',
+            livereload=True,
             build_type=None,
             config_file=None,
             strict=None,
