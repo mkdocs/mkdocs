@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import functools
 import logging
 import shutil
 import tempfile
@@ -22,17 +21,13 @@ log = logging.getLogger(__name__)
 
 
 def serve(
-    config_file=None,
-    dev_addr=None,
-    strict=None,
-    theme=None,
-    theme_dir=None,
-    livereload='livereload',
-    build_type=None,
-    watch_theme=False,
-    watch=[],
+    config_file: str | None = None,
+    livereload: bool = True,
+    build_type: str | None = None,
+    watch_theme: bool = False,
+    watch: list[str] = [],
     **kwargs,
-):
+) -> None:
     """
     Start the MkDocs development server
 
@@ -48,16 +43,15 @@ def serve(
     def mount_path(config: MkDocsConfig):
         return urlsplit(config.site_url or '/').path
 
-    get_config = functools.partial(
-        load_config,
-        config_file=config_file,
-        dev_addr=dev_addr,
-        strict=strict,
-        theme=theme,
-        theme_dir=theme_dir,
-        site_dir=site_dir,
-        **kwargs,
-    )
+    def get_config():
+        config = load_config(
+            config_file=config_file,
+            site_dir=site_dir,
+            **kwargs,
+        )
+        config.watch.extend(watch)
+        config.site_url = f'http://{config.dev_addr}{mount_path(config)}'
+        return config
 
     is_clean = build_type == 'clean'
     is_dirty = build_type == 'dirty'
@@ -69,12 +63,6 @@ def serve(
         log.info("Building documentation...")
         if config is None:
             config = get_config()
-
-        # combine CLI watch arguments with config file values
-        config.watch.extend(watch)
-
-        # Override a few config settings after validation
-        config.site_url = f'http://{config.dev_addr}{mount_path(config)}'
 
         build(config, live_server=None if is_clean else server, dirty=is_dirty)
 

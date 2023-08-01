@@ -155,10 +155,11 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         self.server_bind()
         self.server_activate()
 
-        self.observer.start()
+        if self._watched_paths:
+            self.observer.start()
 
-        paths_str = ", ".join(f"'{_try_relativize_path(path)}'" for path in self._watched_paths)
-        log.info(f"Watching paths for changes: {paths_str}")
+            paths_str = ", ".join(f"'{_try_relativize_path(path)}'" for path in self._watched_paths)
+            log.info(f"Watching paths for changes: {paths_str}")
 
         log.info(f"Serving on {self.url}")
         self.serve_thread.start()

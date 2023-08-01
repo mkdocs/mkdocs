@@ -251,8 +251,8 @@ def cli():
 
 @cli.command(name="serve")
 @click.option('-a', '--dev-addr', help=dev_addr_help, metavar='<IP:PORT>')
-@click.option('--livereload', 'livereload', flag_value='livereload', default=True, hidden=True)
-@click.option('--no-livereload', 'livereload', flag_value='no-livereload', help=no_reload_help)
+@click.option('--no-livereload', 'livereload', flag_value=False, help=no_reload_help)
+@click.option('--livereload', 'livereload', flag_value=True, default=True, hidden=True)
 @click.option('--dirtyreload', 'build_type', flag_value='dirty', hidden=True)
 @click.option('--dirty', 'build_type', flag_value='dirty', help=serve_dirty_help)
 @click.option('-c', '--clean', 'build_type', flag_value='clean', help=serve_clean_help)
