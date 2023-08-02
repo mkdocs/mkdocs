@@ -9,7 +9,7 @@ import re
 import sys
 import textwrap
 import unittest
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, TypeVar
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, TypeVar, Union
 from unittest.mock import patch
 
 if TYPE_CHECKING:
@@ -700,14 +700,14 @@ class ExtraScriptsTest(TestCase):
             option = c.ListOfItems(c.ExtraScript(), default=[])
 
         conf = self.get_config(Schema, {'option': ['foo.js', {'path': 'bar.js', 'async': True}]})
-        assert_type(conf.option, List[c.ExtraScriptValue])
+        assert_type(conf.option, List[Union[c.ExtraScriptValue, str]])
         self.assertEqual(len(conf.option), 2)
-        self.assertIsInstance(conf.option[0], c.ExtraScriptValue)
+        self.assertIsInstance(conf.option[1], c.ExtraScriptValue)
         self.assertEqual(
-            [(x.path, x.type, x.defer, x.async_) for x in conf.option],
+            conf.option,
             [
-                ('foo.js', '', False, False),
-                ('bar.js', '', False, True),
+                'foo.js',
+                {'path': 'bar.js', 'type': '', 'defer': False, 'async': True},
             ],
         )
 
@@ -718,14 +718,14 @@ class ExtraScriptsTest(TestCase):
         conf = self.get_config(
             Schema, {'option': ['foo.mjs', {'path': 'bar.js', 'type': 'module'}]}
         )
-        assert_type(conf.option, List[c.ExtraScriptValue])
+        assert_type(conf.option, List[Union[c.ExtraScriptValue, str]])
         self.assertEqual(len(conf.option), 2)
         self.assertIsInstance(conf.option[0], c.ExtraScriptValue)
         self.assertEqual(
-            [(x.path, x.type, x.defer, x.async_) for x in conf.option],
+            conf.option,
             [
-                ('foo.mjs', 'module', False, False),
-                ('bar.js', 'module', False, False),
+                {'path': 'foo.mjs', 'type': 'module', 'defer': False, 'async': False},
+                {'path': 'bar.js', 'type': 'module', 'defer': False, 'async': False},
             ],
         )
 
@@ -748,8 +748,8 @@ class ExtraScriptsTest(TestCase):
             warnings=dict(option="Sub-option 'foo': Unrecognised configuration name: foo"),
         )
         self.assertEqual(
-            [(x.path, x.type, x.defer, x.async_) for x in conf.option],
-            [('foo.js', '', False, False)],
+            conf.option,
+            [{'path': 'foo.js', 'type': '', 'defer': False, 'async': False, 'foo': 'bar'}],
         )
 
 

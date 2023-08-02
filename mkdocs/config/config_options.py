@@ -945,11 +945,18 @@ class ExtraScriptValue(Config):
         return self.path
 
 
-class ExtraScript(SubConfig[ExtraScriptValue]):
-    def run_validation(self, value: object) -> ExtraScriptValue:
+class ExtraScript(BaseConfigOption[Union[ExtraScriptValue, str]]):
+    def __init__(self):
+        super().__init__()
+        self.option_type = SubConfig[ExtraScriptValue]()
+
+    def run_validation(self, value: object) -> ExtraScriptValue | str:
+        self.option_type.warnings = self.warnings
         if isinstance(value, str):
-            value = {'path': value, 'type': 'module' if value.endswith('.mjs') else ''}
-        return super().run_validation(value)
+            if value.endswith('.mjs'):
+                return self.option_type.run_validation({'path': value, 'type': 'module'})
+            return value
+        return self.option_type.run_validation(value)
 
 
 class MarkdownExtensions(OptionallyRequired[List[str]]):
