@@ -437,7 +437,7 @@ class _ExtractTitleTreeprocessor(markdown.treeprocessors.Treeprocessor):
         for el in root:
             if el.tag == 'h1':
                 # Drop anchorlink from the element, if present.
-                if len(el) > 0 and el[-1].tag == 'a' and not (el.tail or '').strip():
+                if len(el) > 0 and el[-1].tag == 'a' and not (el[-1].tail or '').strip():
                     el = copy.copy(el)
                     del el[-1]
                 # Extract the text only, recursively.
