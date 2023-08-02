@@ -180,6 +180,14 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-level="2"><a href="#version-152-2023-08-02" class="nav-link">Version 1.5.2 (2023-08-02)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-151-2023-07-28" class="nav-link">Version 1.5.1 (2023-07-28)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-level="2"><a href="#version-150-2023-07-26" class="nav-link">Version 1.5.0 (2023-07-26)</a>
               <ul class="nav flex-column">
               </ul>
@@ -384,6 +392,30 @@ mkdocs, version 1.5.0 from /path/to/mkdocs (Python 3.10)</code></pre>
 <li><a href="https://github.com/oprypin/">@oprypin</a></li>
 <li><a href="https://github.com/ultrabug/">@ultrabug</a></li>
 </ul>
+<h2 id="version-152-2023-08-02">Version 1.5.2 (2023-08-02)<a class="headerlink" href="#version-152-2023-08-02" title="Permanent link"></a></h2>
+<ul>
+<li>
+<p>Bugfix (regression in 1.5.0): Restore functionality of <code>--no-livereload</code>. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3320" title="GitHub Issue mkdocs/mkdocs #3320">#3320</a>)</p>
+</li>
+<li>
+<p>Bugfix (regression in 1.5.0): The new page title detection would sometimes be unable to drop anchorlinks - fix that. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3325" title="GitHub Issue mkdocs/mkdocs #3325">#3325</a>)</p>
+</li>
+<li>
+<p>Partly bring back pre-1.5 API: <code>extra_javascript</code> items will once again be mostly strings, and only sometimes <code>ExtraStringValue</code> (when the extra <code>script</code> functionality is used).</p>
+<p>Plugins should be free to append strings to <code>config.extra_javascript</code>, but when reading the values, they must still make sure to read it as <code>str(value)</code> in case it is an <code>ExtraScriptValue</code> item. For querying the attributes such as <code>.type</code> you need to check <code>isinstance</code> first. Static type checking will guide you in that. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3324" title="GitHub Issue mkdocs/mkdocs #3324">#3324</a>)</p>
+</li>
+</ul>
+<p>See <a href="https://github.com/mkdocs/mkdocs/compare/1.5.1...1.5.2">commit log</a>.</p>
+<h2 id="version-151-2023-07-28">Version 1.5.1 (2023-07-28)<a class="headerlink" href="#version-151-2023-07-28" title="Permanent link"></a></h2>
+<ul>
+<li>
+<p>Bugfix (regression in 1.5.0): Make it possible to treat <code>ExtraScriptValue</code> as a path. This lets some plugins still work despite the breaking change.</p>
+</li>
+<li>
+<p>Bugfix (regression in 1.5.0): Prevent errors for special setups that have 3 conflicting files, such as <code>index.html</code>, <code>index.md</code> <em>and</em> <code>README.md</code> (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3314" title="GitHub Issue mkdocs/mkdocs #3314">#3314</a>)</p>
+</li>
+</ul>
+<p>See <a href="https://github.com/mkdocs/mkdocs/compare/1.5.0...1.5.1">commit log</a>.</p>
 <h2 id="version-150-2023-07-26">Version 1.5.0 (2023-07-26)<a class="headerlink" href="#version-150-2023-07-26" title="Permanent link"></a></h2>
 <h3 id="new-command-mkdocs-get-deps">New command <code>mkdocs get-deps</code><a class="headerlink" href="#new-command-mkdocs-get-deps" title="Permanent link"></a></h3>
 <p>This command guesses the Python dependencies that a MkDocs site requires in order to build. It simply prints the PyPI packages that need to be installed. In the terminal it can be combined directly with an installation command as follows:</p>
