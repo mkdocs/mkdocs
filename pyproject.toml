@@ -160,12 +160,11 @@ detached = true
 dependencies = [
     "black",
     "isort",
-    "flake8",
-    "flake8-type-checking",
+    "ruff",
 ]
 [tool.hatch.envs.style.scripts]
 lint = [
-    "flake8 mkdocs",
+    "ruff mkdocs",
 ]
 check = [
     "isort --check-only --diff mkdocs docs",
@@ -215,3 +214,7 @@ ignore_missing_imports = true
 warn_unreachable = true
 no_implicit_optional = true
 show_error_codes = true
+
+[tool.ruff]
+line-length = 100
+ignore = ["E501"]
