@@ -70,7 +70,7 @@ class SearchConfigTests(unittest.TestCase):
 
     def test_lang_missing_and_with_territory(self):
         option = search.LangOption()
-        value = option.validate(['zh_CN', 'pt_BR', 'fr'])
+        value = option.validate(['cs_CZ', 'pt_BR', 'fr'])
         self.assertEqual(['fr', 'en', 'pt'], value)
 
 
