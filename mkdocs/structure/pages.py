@@ -65,9 +65,10 @@ class Page(StructureItem):
         )
 
     def __repr__(self):
+        name = self.__class__.__name__
         title = f"{self.title!r}" if self.title is not None else '[blank]'
         url = self.abs_url or self.file.url
-        return f"Page(title={title}, url={url!r})"
+        return f"{name}(title={title}, url={url!r})"
 
     markdown: str | None
     """The original Markdown content from the file."""
