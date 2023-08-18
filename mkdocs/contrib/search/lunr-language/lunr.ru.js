@@ -249,9 +249,9 @@
                     if (!sbp.eq_s_b(1, "\u044F"))
                       return false;
                   }
-                case 2:
-                  sbp.slice_del();
-                  break;
+                  case 2:
+                    sbp.slice_del();
+                    break;
               }
               return true;
             }

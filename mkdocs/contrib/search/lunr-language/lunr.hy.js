@@ -1,8 +1,8 @@
 /*!
- * Lunr languages, `Thai` language
- * https://github.com/MihaiValentin/lunr-languages
+ * Lunr languages, `Armenian` language
+ * https://github.com/turbobit/lunr-languages
  *
- * Copyright 2017, Keerati Thiwanruk
+ * Copyright 2021, Manikandan Venkatasubban
  * http://www.mozilla.org/MPL/
  */
 /*!
@@ -52,48 +52,47 @@
       throw new Error('Lunr stemmer support is not present. Please include / require Lunr stemmer support before this script.');
     }
 
-    /*
-    Thai tokenization is the same to Japanense, which does not take into account spaces.
-    So, it uses the same logic to assign tokenization function due to different Lunr versions.
-    */
-    var isLunr2 = lunr.version[0] == "2";
-
     /* register specific locale function */
-    lunr.th = function() {
+    lunr.hy = function() {
       this.pipeline.reset();
       this.pipeline.add(
-        /*lunr.th.stopWordFilter,*/
-        lunr.th.trimmer
+        lunr.hy.trimmer,
+        lunr.hy.stopWordFilter
       );
-
-      if (isLunr2) { // for lunr version 2.0.0
-        this.tokenizer = lunr.th.tokenizer;
-      } else {
-        if (lunr.tokenizer) { // for lunr version 0.6.0
-          lunr.tokenizer = lunr.th.tokenizer;
-        }
-        if (this.tokenizerFn) { // for lunr version 0.7.0 -> 1.0.0
-          this.tokenizerFn = lunr.th.tokenizer;
-        }
-      }
     };
 
     /* lunr trimmer function */
-    lunr.th.wordCharacters = "[\u0e00-\u0e7f]";
-    lunr.th.trimmer = lunr.trimmerSupport.generateTrimmer(lunr.th.wordCharacters);
-    lunr.Pipeline.registerFunction(lunr.th.trimmer, 'trimmer-th');
+    // http://www.unicode.org/charts/
+    lunr.hy.wordCharacters = "[" +
+      "A-Za-z" +
+      "\u0530-\u058F" + // armenian alphabet
+      "\uFB00-\uFB4F" + // armenian ligatures
+      "]";
+    lunr.hy.trimmer = lunr.trimmerSupport.generateTrimmer(lunr.hy.wordCharacters);
 
-    var segmenter = lunr.wordcut;
-    segmenter.init();
-    lunr.th.tokenizer = function(obj) {
-      //console.log(obj);
-      if (!arguments.length || obj == null || obj == undefined) return []
-      if (Array.isArray(obj)) return obj.map(function(t) {
-        return isLunr2 ? new lunr.Token(t) : t
-      })
+    lunr.Pipeline.registerFunction(lunr.hy.trimmer, 'trimmer-hy');
 
-      var str = obj.toString().replace(/^\s+/, '');
-      return segmenter.cut(str).split('|');
-    }
+
+    /* lunr stop word filter */
+    // https://www.ranks.nl/stopwords/armenian
+    lunr.hy.stopWordFilter = lunr.generateStopWordFilter('դու և եք էիր էիք հետո նաև նրանք որը վրա է որ պիտի են այս մեջ ն իր ու ի այդ որոնք այն կամ էր մի ես համար այլ իսկ էին ենք հետ ին թ էինք մենք նրա նա դուք եմ էի ըստ որպես ում'.split(' '));
+    lunr.Pipeline.registerFunction(lunr.hy.stopWordFilter, 'stopWordFilter-hy');
+
+    /* lunr stemmer function */
+    lunr.hy.stemmer = (function() {
+
+      return function(word) {
+        // for lunr version 2
+        if (typeof word.update === "function") {
+          return word.update(function(word) {
+            return word;
+          })
+        } else { // for lunr version <= 1
+          return word;
+        }
+
+      }
+    })();
+    lunr.Pipeline.registerFunction(lunr.hy.stemmer, 'stemmer-hy');
   };
 }))
