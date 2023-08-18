@@ -51,7 +51,8 @@ class Section(StructureItem):
         self.active = False
 
     def __repr__(self):
-        return f"Section(title={self.title!r})"
+        name = self.__class__.__name__
+        return f"{name}(title={self.title!r})"
 
     title: str
     """The title of the section."""
@@ -97,8 +98,9 @@ class Link(StructureItem):
         self.url = url
 
     def __repr__(self):
+        name = self.__class__.__name__
         title = f"{self.title!r}" if self.title is not None else '[blank]'
-        return f"Link(title={title}, url={self.url!r})"
+        return f"{name}(title={title}, url={self.url!r})"
 
     title: str
     """The title of the link. This would generally be used as the label of the link."""
