@@ -1,97 +1,115 @@
-from __future__ import unicode_literals
+from __future__ import annotations
+
 import logging
-import subprocess
 import os
 import re
-from pkg_resources import parse_version
+import subprocess
+from typing import TYPE_CHECKING
+
+import ghp_import
+from packaging import version
 
 import mkdocs
-from mkdocs.utils import ghp_import
+from mkdocs.exceptions import Abort
+
+if TYPE_CHECKING:
+    from mkdocs.config.defaults import MkDocsConfig
 
 log = logging.getLogger(__name__)
 
 default_message = """Deployed {sha} with MkDocs version: {version}"""
 
 
-def _is_cwd_git_repo():
+def _is_cwd_git_repo() -> bool:
     try:
         proc = subprocess.Popen(
             ['git', 'rev-parse', '--is-inside-work-tree'],
             stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
+            stderr=subprocess.PIPE,
         )
     except FileNotFoundError:
         log.error("Could not find git - is it installed and on your path?")
-        raise SystemExit(1)
+        raise Abort('Deployment Aborted!')
     proc.communicate()
     return proc.wait() == 0
 
 
-def _get_current_sha(repo_path):
-
-    proc = subprocess.Popen(['git', 'rev-parse', '--short', 'HEAD'], cwd=repo_path,
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+def _get_current_sha(repo_path) -> str:
+    proc = subprocess.Popen(
+        ['git', 'rev-parse', '--short', 'HEAD'],
+        cwd=repo_path or None,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
 
     stdout, _ = proc.communicate()
     sha = stdout.decode('utf-8').strip()
     return sha
 
 
-def _get_remote_url(remote_name):
-
+def _get_remote_url(remote_name: str) -> tuple[str, str] | tuple[None, None]:
     # No CNAME found.  We will use the origin URL to determine the GitHub
-    # pages location.
-    remote = "remote.%s.url" % remote_name
-    proc = subprocess.Popen(["git", "config", "--get", remote],
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # Pages location.
+    remote = f"remote.{remote_name}.url"
+    proc = subprocess.Popen(
+        ["git", "config", "--get", remote],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
 
     stdout, _ = proc.communicate()
     url = stdout.decode('utf-8').strip()
 
-    host = None
-    path = None
     if 'github.com/' in url:
         host, path = url.split('github.com/', 1)
     elif 'github.com:' in url:
         host, path = url.split('github.com:', 1)
-
+    else:
+        return None, None
     return host, path
 
 
-def _check_version(branch):
-
-    proc = subprocess.Popen(['git', 'show', '-s', '--format=%s', 'refs/heads/{}'.format(branch)],
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+def _check_version(branch: str) -> None:
+    proc = subprocess.Popen(
+        ['git', 'show', '-s', '--format=%s', f'refs/heads/{branch}'],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
 
     stdout, _ = proc.communicate()
     msg = stdout.decode('utf-8').strip()
     m = re.search(r'\d+(\.\d+)+((a|b|rc)\d+)?(\.post\d+)?(\.dev\d+)?', msg, re.X | re.I)
-    previousv = parse_version(m.group()) if m else None
-    currentv = parse_version(mkdocs.__version__)
+    previousv = version.parse(m.group()) if m else None
+    currentv = version.parse(mkdocs.__version__)
     if not previousv:
-        log.warn('Version check skipped: No version specified in previous deployment.')
+        log.warning('Version check skipped: No version specified in previous deployment.')
     elif currentv > previousv:
         log.info(
-            'Previous deployment was done with MkDocs version {}; '
-            'you are deploying with a newer version ({})'.format(previousv, currentv)
+            f'Previous deployment was done with MkDocs version {previousv}; '
+            f'you are deploying with a newer version ({currentv})'
         )
     elif currentv < previousv:
         log.error(
-            'Deployment terminated: Previous deployment was made with MkDocs version {}; '
-            'you are attempting to deploy with an older version ({}). Use --ignore-version '
-            'to deploy anyway.'.format(previousv, currentv)
+            f'Deployment terminated: Previous deployment was made with MkDocs version {previousv}; '
+            f'you are attempting to deploy with an older version ({currentv}). Use --ignore-version '
+            'to deploy anyway.'
         )
-        raise SystemExit(1)
+        raise Abort('Deployment Aborted!')
 
 
-def gh_deploy(config, message=None, force=False, ignore_version=False):
-
+def gh_deploy(
+    config: MkDocsConfig,
+    message: str | None = None,
+    force=False,
+    no_history=False,
+    ignore_version=False,
+    shell=False,
+) -> None:
     if not _is_cwd_git_repo():
-        log.error('Cannot deploy - this directory does not appear to be a git '
-                  'repository')
+        log.error('Cannot deploy - this directory does not appear to be a git repository')
 
-    remote_branch = config['remote_branch']
-    remote_name = config['remote_name']
+    remote_branch = config.remote_branch
+    remote_name = config.remote_name
 
     if not ignore_version:
         _check_version(remote_branch)
@@ -101,35 +119,51 @@ def gh_deploy(config, message=None, force=False, ignore_version=False):
     sha = _get_current_sha(os.path.dirname(config.config_file_path))
     message = message.format(version=mkdocs.__version__, sha=sha)
 
-    log.info("Copying '%s' to '%s' branch and pushing to GitHub.",
-             config['site_dir'], config['remote_branch'])
+    log.info(
+        "Copying '%s' to '%s' branch and pushing to GitHub.",
+        config.site_dir,
+        config.remote_branch,
+    )
 
-    result, error = ghp_import.ghp_import(config['site_dir'], message, remote_name,
-                                          remote_branch, force)
-    if not result:
-        log.error("Failed to deploy to GitHub with error: \n%s", error)
-        raise SystemExit(1)
+    try:
+        ghp_import.ghp_import(
+            config.site_dir,
+            mesg=message,
+            remote=remote_name,
+            branch=remote_branch,
+            push=True,
+            force=force,
+            use_shell=shell,
+            no_history=no_history,
+            nojekyll=True,
+        )
+    except ghp_import.GhpError as e:
+        log.error(f"Failed to deploy to GitHub with error: \n{e.message}")
+        raise Abort('Deployment Aborted!')
+
+    cname_file = os.path.join(config.site_dir, 'CNAME')
+    # Does this repository have a CNAME set for GitHub Pages?
+    if os.path.isfile(cname_file):
+        # This GitHub Pages repository has a CNAME configured.
+        with open(cname_file) as f:
+            cname_host = f.read().strip()
+        log.info(
+            f'Based on your CNAME file, your documentation should be '
+            f'available shortly at: http://{cname_host}'
+        )
+        log.info(
+            'NOTE: Your DNS records must be configured appropriately for your CNAME URL to work.'
+        )
+        return
+
+    host, path = _get_remote_url(remote_name)
+
+    if host is None or path is None:
+        # This could be a GitHub Enterprise deployment.
+        log.info('Your documentation should be available shortly.')
     else:
-        cname_file = os.path.join(config['site_dir'], 'CNAME')
-        # Does this repository have a CNAME set for GitHub pages?
-        if os.path.isfile(cname_file):
-            # This GitHub pages repository has a CNAME configured.
-            with(open(cname_file, 'r')) as f:
-                cname_host = f.read().strip()
-            log.info('Based on your CNAME file, your documentation should be '
-                     'available shortly at: http://%s', cname_host)
-            log.info('NOTE: Your DNS records must be configured appropriately for '
-                     'your CNAME URL to work.')
-            return
-
-        host, path = _get_remote_url(remote_name)
-
-        if host is None:
-            # This could be a GitHub Enterprise deployment.
-            log.info('Your documentation should be available shortly.')
-        else:
-            username, repo = path.split('/', 1)
-            if repo.endswith('.git'):
-                repo = repo[:-len('.git')]
-            url = 'https://%s.github.io/%s/' % (username, repo)
-            log.info('Your documentation should shortly be available at: ' + url)
+        username, repo = path.split('/', 1)
+        if repo.endswith('.git'):
+            repo = repo[: -len('.git')]
+        url = f'https://{username}.github.io/{repo}/'
+        log.info(f"Your documentation should shortly be available at: {url}")

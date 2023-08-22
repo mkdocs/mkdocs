@@ -1,0 +1,110 @@
+# Chinese (Simplified, China) translations for MkDocs.
+# Copyright (C) 2022 MkDocs
+# This file is distributed under the same license as the MkDocs project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MkDocs 1.2\n"
+"Report-Msgid-Bugs-To: \"https://github.com/mkdocs/mkdocs/issues"
+"\"\n"
+"POT-Creation-Date: 2022-08-15 17:05+0200\n"
+"PO-Revision-Date: 2022-08-23 04:29+0800\n"
+"Last-Translator: xingkong0113 <dingpengyu06@gmail.com>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_Hans_CN <dingpengyu06@gmail.com>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+"X-Generator: Poedit 2.4.3\n"
+
+#: mkdocs/themes/readthedocs/404.html:7
+msgid "Page not found"
+msgstr "找不到页面"
+
+#: mkdocs/themes/readthedocs/base.html:97
+msgid "Logo"
+msgstr "Logo"
+
+#: mkdocs/themes/readthedocs/base.html:111
+msgid "Navigation menu"
+msgstr "导航栏"
+
+#: mkdocs/themes/readthedocs/base.html:140
+msgid "Mobile navigation menu"
+msgstr "移动导航栏"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:3
+msgid "Docs"
+msgstr "文档"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:18
+#: mkdocs/themes/readthedocs/breadcrumbs.html:20
+#: mkdocs/themes/readthedocs/breadcrumbs.html:22
+#: mkdocs/themes/readthedocs/breadcrumbs.html:24
+#, python-format
+msgid "Edit on %(repo_name)s"
+msgstr "在%(repo_name)s上编辑"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:26
+msgid "Edit"
+msgstr "编辑"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:34
+msgid "Breadcrumb Navigation"
+msgstr "面包屑导航"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:36
+#: mkdocs/themes/readthedocs/footer.html:7
+#: mkdocs/themes/readthedocs/versions.html:17
+msgid "Previous"
+msgstr "上一章"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:39
+#: mkdocs/themes/readthedocs/footer.html:10
+#: mkdocs/themes/readthedocs/versions.html:20
+msgid "Next"
+msgstr "下一章"
+
+#: mkdocs/themes/readthedocs/footer.html:5
+msgid "Footer Navigation"
+msgstr "页脚导航"
+
+#: mkdocs/themes/readthedocs/footer.html:25
+#, python-format
+msgid ""
+"Built with %(mkdocs_link)s using a %(sphinx_link)s provided by "
+"%(rtd_link)s."
+msgstr ""
+"用%(mkdocs_link)s构建，使用%(rtd_link)s提供的%(sphinx_link)s。"
+
+#: mkdocs/themes/readthedocs/search.html:5
+msgid "Search Results"
+msgstr "搜索结果"
+
+#: mkdocs/themes/readthedocs/search.html:9
+msgid "Search the Docs"
+msgstr "搜索文档"
+
+#: mkdocs/themes/readthedocs/search.html:9
+#: mkdocs/themes/readthedocs/searchbox.html:3
+msgid "Type search term here"
+msgstr "在此输入需要搜索的内容"
+
+#: mkdocs/themes/readthedocs/search.html:12
+msgid "No results found"
+msgstr "没有搜到结果"
+
+#: mkdocs/themes/readthedocs/search.html:13
+msgid "Searching..."
+msgstr "搜索中..."
+
+#: mkdocs/themes/readthedocs/searchbox.html:3
+msgid "Search docs"
+msgstr "搜索文档"
+
+#: mkdocs/themes/readthedocs/versions.html:1
+msgid "Versions"
+msgstr "版本"

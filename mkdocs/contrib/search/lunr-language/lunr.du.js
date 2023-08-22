@@ -52,6 +52,8 @@
       throw new Error('Lunr stemmer support is not present. Please include / require Lunr stemmer support before this script.');
     }
 
+    console.warn("[Lunr Languages] Please use the \"nl\" instead of the \"du\". The \"nl\" code is the standard code for Dutch language, and \"du\" will be removed in the next major versions.");
+
     /* register specific locale function */
     lunr.du = function() {
       this.pipeline.reset();

@@ -17,9 +17,11 @@ eggs/
 .eggs/
 lib/
 lib64/
+node_modules/
 parts/
 sdist/
 var/
+package*.json
 *.egg-info/
 .installed.cfg
 *.egg
@@ -47,7 +49,6 @@ coverage.xml
 
 # Translations
 *.mo
-*.pot
 
 # Scrapy stuff:
 .scrapy
@@ -66,4 +67,4 @@ venv/
 ENV/
 
 # MkDocs documentation
-site/
+site*/

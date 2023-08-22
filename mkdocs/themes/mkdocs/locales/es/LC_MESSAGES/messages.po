@@ -1,0 +1,103 @@
+# Spanish translations for MkDocs.
+# Copyright (C) 2022 MkDocs
+# This file is distributed under the same license as the MkDocs project.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MkDocs 1.2\n"
+"Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
+"POT-Creation-Date: 2022-08-15 17:05+0200\n"
+"PO-Revision-Date: 2021-05-07 12:06+0200\n"
+"Last-Translator: Álvaro Mondéjar Rubio <mondejar1994@gmail.com>\n"
+"Language: es\n"
+"Language-Team: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: mkdocs/themes/mkdocs/404.html:8
+msgid "Page not found"
+msgstr "Página no encontrada"
+
+#: mkdocs/themes/mkdocs/base.html:116
+#: mkdocs/themes/mkdocs/keyboard-modal.html:31
+#: mkdocs/themes/mkdocs/search-modal.html:5
+msgid "Search"
+msgstr "Buscar"
+
+#: mkdocs/themes/mkdocs/base.html:126
+msgid "Previous"
+msgstr "Anterior"
+
+#: mkdocs/themes/mkdocs/base.html:131
+msgid "Next"
+msgstr "Siguiente"
+
+#: mkdocs/themes/mkdocs/base.html:142 mkdocs/themes/mkdocs/base.html:144
+#: mkdocs/themes/mkdocs/base.html:146 mkdocs/themes/mkdocs/base.html:148
+#, python-format
+msgid "Edit on %(repo_name)s"
+msgstr "Editar en %(repo_name)s"
+
+#: mkdocs/themes/mkdocs/base.html:150
+msgid "Edit"
+msgstr "Editar"
+
+#: mkdocs/themes/mkdocs/base.html:190
+#, python-format
+msgid "Documentation built with %(mkdocs_link)s."
+msgstr "Documentación construida con %(mkdocs_link)s."
+
+#: mkdocs/themes/mkdocs/keyboard-modal.html:5
+msgid "Keyboard Shortcuts"
+msgstr "Atajos de teclado"
+
+#: mkdocs/themes/mkdocs/keyboard-modal.html:6
+#: mkdocs/themes/mkdocs/search-modal.html:6
+msgid "Close"
+msgstr "Cerrar"
+
+#: mkdocs/themes/mkdocs/keyboard-modal.html:12
+msgid "Keys"
+msgstr "Teclas"
+
+#: mkdocs/themes/mkdocs/keyboard-modal.html:13
+msgid "Action"
+msgstr "Acción"
+
+#: mkdocs/themes/mkdocs/keyboard-modal.html:19
+msgid "Open this help"
+msgstr "Abrir esta ayuda"
+
+#: mkdocs/themes/mkdocs/keyboard-modal.html:23
+msgid "Next page"
+msgstr "Página siguiente"
+
+#: mkdocs/themes/mkdocs/keyboard-modal.html:27
+msgid "Previous page"
+msgstr "Página anterior"
+
+#: mkdocs/themes/mkdocs/search-modal.html:9
+msgid "From here you can search these documents. Enter your search terms below."
+msgstr ""
+"Desde aquí puede buscar estos documentos. Ingrese sus términos de "
+"búsqueda a continuación."
+
+#: mkdocs/themes/mkdocs/search-modal.html:12
+msgid "Search..."
+msgstr "Buscando..."
+
+#: mkdocs/themes/mkdocs/search-modal.html:12
+msgid "Type search term here"
+msgstr "Escriba el término de búsqueda aquí"
+
+#: mkdocs/themes/mkdocs/search-modal.html:15
+msgid "No results found"
+msgstr "No se encontraron resultados"
+
+#: mkdocs/themes/mkdocs/toc.html:3
+msgid "Table of Contents"
+msgstr "Tabla de contenidos"
+

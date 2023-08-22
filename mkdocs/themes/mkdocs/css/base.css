@@ -1,5 +1,9 @@
-body {
-    padding-top: 70px;
+html {
+    /* csslint ignore:start */
+    /* The nav header is 3.5rem high, plus 20px for the margin-top of the
+       main container. */
+    scroll-padding-top: calc(3.5rem + 20px);
+    /* csslint ignore:end */
 }
 
 /* Replacement for `body { background-attachment: fixed; }`, which has
@@ -18,11 +22,15 @@ body::before {
 }
 
 body > .container {
+    margin-top: 20px;
     min-height: 400px;
 }
 
-ul.nav .main {
-    font-weight: bold;
+.navbar.fixed-top { /* csslint allow: adjoining-classes */
+    /* csslint ignore:start */
+    position: -webkit-sticky;
+    position: sticky;
+    /* csslint ignore:end */
 }
 
 .source-links {
@@ -38,19 +46,6 @@ ul.nav .main {
     border: 1px solid #ddd;
     border-radius: 4px;
     margin: 20px auto 30px auto;
-}
-
-/*
- * The code below adds some padding to the top of the current anchor target so
- * that, when navigating to it, the header isn't hidden by the navbar at the
- * top.
- */
-:target::before {
-    content: "";
-    display: block;
-    margin-top: -75px;
-    height: 75px;
-    pointer-events: none;
 }
 
 h1 {
@@ -140,7 +135,9 @@ footer {
     position: -webkit-sticky;
     position: sticky;
     /* csslint ignore:end */
-    top: 80px;
+    /* The nav header is 3.5rem high, plus 20px for the margin-top of the
+       main container. */
+    top: calc(3.5rem + 20px);
 }
 
 .bs-sidebar.card { /* csslint allow: adjoining-classes */
@@ -167,7 +164,7 @@ footer {
 }
 
 /* First level of nav */
-.bs-sidenav {
+.bs-sidebar > .navbar-collapse > .nav {
     padding-top:    10px;
     padding-bottom: 10px;
     border-radius: 5px;
@@ -193,16 +190,16 @@ footer {
     border-right: 1px solid;
 }
 
-/* Nav: second level (shown on .active) */
-.bs-sidebar .nav .nav {
-    display: none; /* Hide by default, but at >768px, show it */
-    margin-bottom: 8px;
+.bs-sidebar .nav .nav .nav {
+    margin-left: 1em;
 }
+
+.bs-sidebar .nav > li > a {
+    font-weight: bold;
+}
+
 .bs-sidebar .nav .nav > li > a {
-    padding-top:    3px;
-    padding-bottom: 3px;
-    padding-left: 30px;
-    font-size: 90%;
+    font-weight: normal;
 }
 
 .headerlink {
@@ -212,13 +209,16 @@ footer {
     padding-left: .5em;
 }
 
-h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink, h4:hover .headerlink, h5:hover .headerlink, h6:hover .headerlink{
+h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink, h4:hover .headerlink, h5:hover .headerlink, h6:hover .headerlink {
     display:inline-block;
 }
 
+blockquote {
+    padding-left: 10px;
+    border-left: 4px solid #e6e6e6;
+}
 
-
-.admonition {
+.admonition, details {
     padding: 15px;
     margin-bottom: 20px;
     border: 1px solid transparent;
@@ -226,49 +226,52 @@ h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink, h4:hover .head
     text-align: left;
 }
 
-.admonition.note { /* csslint allow: adjoining-classes */
-    color: #3a87ad;
-    background-color: #d9edf7;
+.admonition.note, details.note { /* csslint allow: adjoining-classes */
+    color: #2e6b89;
+    background-color: #e2f0f7;
     border-color: #bce8f1;
 }
 
-.admonition.warning { /* csslint allow: adjoining-classes */
-    color: #c09853;
-    background-color: #fcf8e3;
+.admonition.warning, details.warning { /* csslint allow: adjoining-classes */
+    color: #7a6032;
+    background-color: #fffae5;
     border-color: #fbeed5;
 }
 
-.admonition.danger { /* csslint allow: adjoining-classes */
-    color: #b94a48;
-    background-color: #f2dede;
+.admonition.danger, details.danger { /* csslint allow: adjoining-classes */
+    color: #7f3130;
+    background-color: #fde3e3;
     border-color: #eed3d7;
 }
 
-.admonition-title {
+.admonition-title, summary {
     font-weight: bold;
     text-align: left;
 }
 
-
-.dropdown-submenu {
-    position: relative;
+.admonition>p:last-child, details>p:last-child {
+    margin-bottom: 0;
 }
 
-.dropdown-submenu>.dropdown-menu {
-    top: 0;
-    left: 100%;
-    margin-top: -6px;
-    margin-left: -1px;
-    -webkit-border-radius: 0 6px 6px 6px;
-    -moz-border-radius: 0 6px 6px;
-    border-radius: 0 6px 6px 6px;
+@media (max-width: 991.98px) {
+    .navbar-collapse.show { /* csslint allow: adjoining-classes */
+        overflow-y: auto;
+        max-height: calc(100vh - 3.5rem);
+    }
 }
 
-.dropdown-submenu:hover>.dropdown-menu {
-    display: block;
+.dropdown-item.open { /* csslint allow: adjoining-classes */
+    color: #fff;
+    background-color: #2FA4E7;
 }
 
-.dropdown-submenu>a:after {
+.dropdown-submenu > .dropdown-menu {
+    margin: 0 0 0 1.5rem;
+    padding: 0;
+    border-width: 0;
+}
+
+.dropdown-submenu > a::after {
     display: block;
     content: " ";
     float: right;
@@ -282,18 +285,41 @@ h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink, h4:hover .head
     margin-right: -10px;
 }
 
-.dropdown-submenu:hover>a:after {
+.dropdown-submenu:hover > a::after {
     border-left-color: #fff;
 }
 
-.dropdown-submenu.pull-left { /* csslint allow: adjoining-classes */
-    float: none;
+@media (min-width: 992px) {
+    .dropdown-menu {
+        overflow-y: auto;
+        max-height: calc(100vh - 3.5rem);
+    }
+
+    .dropdown-submenu {
+        position: relative;
+    }
+
+    .dropdown-submenu > .dropdown-menu {
+        /* csslint ignore:start */
+        position: fixed !important;
+        /* csslint ignore:end */
+        margin-top: -9px;
+        margin-left: -2px;
+        border-width: 1px;
+        padding: 0.5rem 0;
+    }
+
+    .dropdown-submenu.pull-left { /* csslint allow: adjoining-classes */
+        float: none;
+    }
+
+    .dropdown-submenu.pull-left > .dropdown-menu { /* csslint allow: adjoining-classes */
+        left: -100%;
+        margin-left: 10px;
+    }
 }
 
-.dropdown-submenu.pull-left>.dropdown-menu { /* csslint allow: adjoining-classes */
-    left: -100%;
-    margin-left: 10px;
-    -webkit-border-radius: 6px 0 6px 6px;
-    -moz-border-radius: 6px 0 6px 6px;
-    border-radius: 6px 0 6px 6px;
+@media print {
+    /* Remove sidebar when print */
+    .col-md-3 { display: none; }
 }

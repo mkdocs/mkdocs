@@ -1,22 +1,12 @@
-{%- macro nav_item(item) -%}
-    {%- if item.children -%}
-        {%- for child in item.children -%}
-            {{ nav_item(child) }}
-        {%- endfor -%}
-    {%- else %}
-	{%- if not item.is_link -%}
-    <url>
-     <loc>{% if item.canonical_url %}{{ item.canonical_url|e }}{% else %}{{ item.abs_url|e }}{% endif %}</loc>
-     {% if item.update_date %}<lastmod>{{item.update_date}}</lastmod>{% endif %}
-     <changefreq>daily</changefreq>
-    </url>
-        {%- endif -%}
-    {%- endif -%}
-{%- endmacro -%}
-
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-{%- for item in nav -%}
-    {{ nav_item(item) }}
-{%- endfor %}
+{%- for file in pages -%}
+    {% if not file.page.is_link and (file.page.abs_url or file.page.canonical_url) %}
+    <url>
+         <loc>{% if file.page.canonical_url %}{{ file.page.canonical_url|e }}{% else %}{{ file.page.abs_url|e }}{% endif %}</loc>
+         {% if file.page.update_date %}<lastmod>{{file.page.update_date}}</lastmod>{% endif %}
+         <changefreq>daily</changefreq>
+    </url>
+    {%- endif -%}
+{% endfor %}
 </urlset>

@@ -1,107 +1,230 @@
-from __future__ import unicode_literals
+from __future__ import annotations
+
+import functools
 import logging
 import os
 import sys
-from yaml import YAMLError
+import warnings
+from collections import UserDict
+from contextlib import contextmanager
+from typing import (
+    IO,
+    TYPE_CHECKING,
+    Any,
+    Generic,
+    Iterator,
+    List,
+    Mapping,
+    Sequence,
+    Tuple,
+    TypeVar,
+    overload,
+)
 
-from mkdocs import exceptions
-from mkdocs import utils
+from mkdocs import exceptions, utils
+from mkdocs.utils import weak_property
+
+if TYPE_CHECKING:
+    from mkdocs.config.defaults import MkDocsConfig
 
 
 log = logging.getLogger('mkdocs.config')
 
 
+T = TypeVar('T')
+
+
+class BaseConfigOption(Generic[T]):
+    def __init__(self) -> None:
+        self.warnings: list[str] = []
+        self.default = None
+
+    @property
+    def default(self):
+        try:
+            # ensure no mutable values are assigned
+            return self._default.copy()
+        except AttributeError:
+            return self._default
+
+    @default.setter
+    def default(self, value):
+        self._default = value
+
+    def validate(self, value: object) -> T:
+        return self.run_validation(value)
+
+    def reset_warnings(self) -> None:
+        self.warnings = []
+
+    def pre_validation(self, config: Config, key_name: str) -> None:
+        """
+        Before all options are validated, perform a pre-validation process.
+
+        The pre-validation process method should be implemented by subclasses.
+        """
+
+    def run_validation(self, value: object):
+        """
+        Perform validation for a value.
+
+        The run_validation method should be implemented by subclasses.
+        """
+        return value
+
+    def post_validation(self, config: Config, key_name: str) -> None:
+        """
+        After all options have passed validation, perform a post-validation
+        process to do any additional changes dependent on other config values.
+
+        The post-validation process method should be implemented by subclasses.
+        """
+
+    def __set_name__(self, owner, name):
+        if name.endswith('_') and not name.startswith('_'):
+            name = name[:-1]
+        self._name = name
+
+    @overload
+    def __get__(self, obj: Config, type=None) -> T:
+        ...
+
+    @overload
+    def __get__(self, obj, type=None) -> BaseConfigOption:
+        ...
+
+    def __get__(self, obj, type=None):
+        if not isinstance(obj, Config):
+            return self
+        return obj[self._name]
+
+    def __set__(self, obj, value: T):
+        if not isinstance(obj, Config):
+            raise AttributeError(
+                f"can't set attribute ({self._name}) because the parent is a {type(obj)} not a {Config}"
+            )
+        obj[self._name] = value
+
+
 class ValidationError(Exception):
     """Raised during the validation process of the config on errors."""
 
+    def __eq__(self, other):
+        return type(self) is type(other) and str(self) == str(other)
 
-class Config(utils.UserDict):
+
+PlainConfigSchemaItem = Tuple[str, BaseConfigOption]
+PlainConfigSchema = Sequence[PlainConfigSchemaItem]
+
+ConfigErrors = List[Tuple[str, Exception]]
+ConfigWarnings = List[Tuple[str, str]]
+
+
+class Config(UserDict):
     """
-    MkDocs Configuration dict
+    Base class for MkDocs configuration, plugin configuration (and sub-configuration) objects.
 
-    This is a fairly simple extension of a standard dictionary. It adds methods
-    for running validation on the structure and contents.
+    It should be subclassed and have `ConfigOption`s defined as attributes.
+    For examples, see mkdocs/contrib/search/__init__.py and mkdocs/config/defaults.py.
+
+    Behavior as it was prior to MkDocs 1.4 is now handled by LegacyConfig.
     """
 
-    def __init__(self, schema, config_file_path=None):
-        """
-        The schema is a Python dict which maps the config name to a validator.
-        """
+    _schema: PlainConfigSchema
+    config_file_path: str
 
-        self._schema = schema
-        self._schema_keys = set(dict(schema).keys())
+    def __init_subclass__(cls):
+        schema = dict(getattr(cls, '_schema', ()))
+        for attr_name, attr in cls.__dict__.items():
+            if isinstance(attr, BaseConfigOption):
+                schema[getattr(attr, '_name', attr_name)] = attr
+        cls._schema = tuple(schema.items())
+
+        for attr_name, attr in cls._schema:
+            attr.required = True
+            if getattr(attr, '_legacy_required', None) is not None:
+                raise TypeError(
+                    f"{cls.__name__}.{attr_name}: "
+                    "Setting 'required' is unsupported in class-based configs. "
+                    "All values are required, or can be wrapped into config_options.Optional"
+                )
+
+    def __new__(cls, *args, **kwargs) -> Config:
+        """Compatibility: allow referring to `LegacyConfig(...)` constructor as `Config(...)`."""
+        if cls is Config:
+            return LegacyConfig(*args, **kwargs)
+        return super().__new__(cls)
+
+    def __init__(self, config_file_path: str | bytes | None = None):
+        super().__init__()
+        self.__user_configs: list[dict] = []
+        self.set_defaults()
+
+        self._schema_keys = {k for k, v in self._schema}
         # Ensure config_file_path is a Unicode string
-        if config_file_path is not None and not isinstance(config_file_path, utils.text_type):
+        if config_file_path is not None and not isinstance(config_file_path, str):
             try:
                 # Assume config_file_path is encoded with the file system encoding.
                 config_file_path = config_file_path.decode(encoding=sys.getfilesystemencoding())
             except UnicodeDecodeError:
                 raise ValidationError("config_file_path is not a Unicode string.")
-        self.config_file_path = config_file_path
-        self.data = {}
+        self.config_file_path = config_file_path or ''
 
-        self.user_configs = []
-        self.set_defaults()
-
-    def set_defaults(self):
+    def set_defaults(self) -> None:
         """
         Set the base config by going through each validator and getting the
         default if it has one.
         """
-
         for key, config_option in self._schema:
             self[key] = config_option.default
 
-    def _validate(self):
-
-        failed, warnings = [], []
+    def _validate(self) -> tuple[ConfigErrors, ConfigWarnings]:
+        failed: ConfigErrors = []
+        warnings: ConfigWarnings = []
 
         for key, config_option in self._schema:
             try:
                 value = self.get(key)
                 self[key] = config_option.validate(value)
-                warnings.extend([(key, w) for w in config_option.warnings])
+                warnings.extend((key, w) for w in config_option.warnings)
                 config_option.reset_warnings()
             except ValidationError as e:
                 failed.append((key, e))
 
-        for key in (set(self.keys()) - self._schema_keys):
-            warnings.append((
-                key, "Unrecognised configuration name: {0}".format(key)
-            ))
+        for key in set(self.keys()) - self._schema_keys:
+            warnings.append((key, f"Unrecognised configuration name: {key}"))
 
         return failed, warnings
 
-    def _pre_validate(self):
-
-        failed, warnings = [], []
+    def _pre_validate(self) -> tuple[ConfigErrors, ConfigWarnings]:
+        failed: ConfigErrors = []
+        warnings: ConfigWarnings = []
 
         for key, config_option in self._schema:
             try:
                 config_option.pre_validation(self, key_name=key)
-                warnings.extend([(key, w) for w in config_option.warnings])
+                warnings.extend((key, w) for w in config_option.warnings)
                 config_option.reset_warnings()
             except ValidationError as e:
                 failed.append((key, e))
 
         return failed, warnings
 
-    def _post_validate(self):
-
-        failed, warnings = [], []
+    def _post_validate(self) -> tuple[ConfigErrors, ConfigWarnings]:
+        failed: ConfigErrors = []
+        warnings: ConfigWarnings = []
 
         for key, config_option in self._schema:
             try:
                 config_option.post_validation(self, key_name=key)
-                warnings.extend([(key, w) for w in config_option.warnings])
+                warnings.extend((key, w) for w in config_option.warnings)
                 config_option.reset_warnings()
             except ValidationError as e:
                 failed.append((key, e))
 
         return failed, warnings
 
-    def validate(self):
-
+    def validate(self) -> tuple[ConfigErrors, ConfigWarnings]:
         failed, warnings = self._pre_validate()
 
         run_failed, run_warnings = self._validate()
@@ -118,54 +241,109 @@ class Config(utils.UserDict):
 
         return failed, warnings
 
-    def load_dict(self, patch):
+    def load_dict(self, patch: dict) -> None:
+        """Load config options from a dictionary."""
 
         if not isinstance(patch, dict):
             raise exceptions.ConfigurationError(
-                "The configuration is invalid. The expected type was a key "
-                "value mapping (a python dict) but we got an object of type: "
-                "{0}".format(type(patch)))
-
-        self.user_configs.append(patch)
-        self.data.update(patch)
-
-    def load_file(self, config_file):
-        try:
-            return self.load_dict(utils.yaml_load(config_file))
-        except YAMLError as e:
-            # MkDocs knows and understands ConfigurationErrors
-            raise exceptions.ConfigurationError(
-                "MkDocs encountered as error parsing the configuration file: {}".format(e)
+                "The configuration is invalid. Expected a key-"
+                f"value mapping (dict) but received: {type(patch)}"
             )
 
+        self.__user_configs.append(patch)
+        self.update(patch)
 
-def _open_config_file(config_file):
+    def load_file(self, config_file: IO) -> None:
+        """Load config options from the open file descriptor of a YAML file."""
+        warnings.warn(
+            "Config.load_file is not used since MkDocs 1.5 and will be removed soon. "
+            "Use MkDocsConfig.load_file instead",
+            DeprecationWarning,
+        )
+        return self.load_dict(utils.yaml_load(config_file))
 
+    @weak_property
+    def user_configs(self) -> Sequence[Mapping[str, Any]]:
+        warnings.warn(
+            "user_configs is never used in MkDocs and will be removed soon.", DeprecationWarning
+        )
+        return self.__user_configs
+
+
+@functools.lru_cache(maxsize=None)
+def get_schema(cls: type) -> PlainConfigSchema:
+    """
+    Extract ConfigOptions defined in a class (used just as a container) and put them into a schema tuple.
+    """
+    if issubclass(cls, Config):
+        return cls._schema
+    return tuple((k, v) for k, v in cls.__dict__.items() if isinstance(v, BaseConfigOption))
+
+
+class LegacyConfig(Config):
+    """
+    A configuration object for plugins, as just a dict without type-safe attribute access.
+    """
+
+    def __init__(self, schema: PlainConfigSchema, config_file_path: str | None = None):
+        self._schema = tuple((k, v) for k, v in schema)  # Re-create just for validation
+        super().__init__(config_file_path)
+
+
+@contextmanager
+def _open_config_file(config_file: str | IO | None) -> Iterator[IO]:
+    """
+    A context manager which yields an open file descriptor ready to be read.
+
+    Accepts a filename as a string, an open or closed file descriptor, or None.
+    When None, it defaults to `mkdocs.yml` in the CWD. If a closed file descriptor
+    is received, a new file descriptor is opened for the same file.
+
+    The file descriptor is automatically closed when the context manager block is existed.
+    """
     # Default to the standard config filename.
     if config_file is None:
-        config_file = os.path.abspath('mkdocs.yml')
-
-    # If closed file descriptor, get file path to reopen later.
-    if hasattr(config_file, 'closed') and config_file.closed:
-        config_file = config_file.name
-
-    log.debug("Loading configuration file: {0}".format(config_file))
-
+        paths_to_try = ['mkdocs.yml', 'mkdocs.yaml']
     # If it is a string, we can assume it is a path and attempt to open it.
-    if isinstance(config_file, utils.string_types):
-        if os.path.exists(config_file):
-            config_file = open(config_file, 'rb')
+    elif isinstance(config_file, str):
+        paths_to_try = [config_file]
+    # If closed file descriptor, get file path to reopen later.
+    elif getattr(config_file, 'closed', False):
+        paths_to_try = [config_file.name]
+    else:
+        result_config_file = config_file
+        paths_to_try = None
+
+    if paths_to_try:
+        # config_file is not a file descriptor, so open it as a path.
+        for path in paths_to_try:
+            path = os.path.abspath(path)
+            log.debug(f"Loading configuration file: {path}")
+            try:
+                result_config_file = open(path, 'rb')
+                break
+            except FileNotFoundError:
+                continue
         else:
-            raise exceptions.ConfigurationError(
-                "Config file '{0}' does not exist.".format(config_file))
+            raise exceptions.ConfigurationError(f"Config file '{paths_to_try[0]}' does not exist.")
+    else:
+        log.debug(f"Loading configuration file: {result_config_file}")
+        # Ensure file descriptor is at beginning
+        try:
+            result_config_file.seek(0)
+        except OSError:
+            pass
 
-    # Ensure file descriptor is at begining
-    config_file.seek(0)
+    try:
+        yield result_config_file
+    finally:
+        if hasattr(result_config_file, 'close'):
+            result_config_file.close()
 
-    return config_file
 
-
-def load_config(config_file=None, **kwargs):
+def load_config(
+    config_file: str | IO | None = None, *, config_file_path: str | None = None, **kwargs
+) -> MkDocsConfig:
     """
     Load the configuration for a given file object or name
 
@@ -183,35 +361,36 @@ def load_config(config_file=None, **kwargs):
         if value is None:
             options.pop(key)
 
-    config_file = _open_config_file(config_file)
-    options['config_file_path'] = getattr(config_file, 'name', '')
+    with _open_config_file(config_file) as fd:
+        # Initialize the config with the default schema.
+        from mkdocs.config.defaults import MkDocsConfig
 
-    # Initialise the config with the default schema .
-    from mkdocs import config
-    cfg = Config(schema=config.DEFAULT_SCHEMA, config_file_path=options['config_file_path'])
-    # First load the config file
-    cfg.load_file(config_file)
+        if config_file_path is None:
+            if fd is not sys.stdin.buffer:
+                config_file_path = getattr(fd, 'name', None)
+        cfg = MkDocsConfig(config_file_path=config_file_path)
+        # load the config file
+        cfg.load_file(fd)
+
     # Then load the options to overwrite anything in the config.
     cfg.load_dict(options)
 
     errors, warnings = cfg.validate()
 
     for config_name, warning in warnings:
-        log.warning("Config value: '%s'. Warning: %s", config_name, warning)
+        log.warning(f"Config value '{config_name}': {warning}")
 
     for config_name, error in errors:
-        log.error("Config value: '%s'. Error: %s", config_name, error)
+        log.error(f"Config value '{config_name}': {error}")
 
     for key, value in cfg.items():
-        log.debug("Config value: '%s' = %r", key, value)
+        log.debug(f"Config value '{key}' = {value!r}")
 
     if len(errors) > 0:
-        raise exceptions.ConfigurationError(
-            "Aborted with {0} Configuration Errors!".format(len(errors))
-        )
-    elif cfg['strict'] and len(warnings) > 0:
-        raise exceptions.ConfigurationError(
-            "Aborted with {0} Configuration Warnings in 'strict' mode!".format(len(warnings))
+        raise exceptions.Abort(f"Aborted with {len(errors)} configuration errors!")
+    elif cfg.strict and len(warnings) > 0:
+        raise exceptions.Abort(
+            f"Aborted with {len(warnings)} configuration warnings in 'strict' mode!"
         )
 
     return cfg

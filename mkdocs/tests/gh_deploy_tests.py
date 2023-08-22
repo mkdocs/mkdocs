@@ -1,64 +1,58 @@
-from __future__ import unicode_literals
-
 import unittest
-import mock
+from unittest import mock
 
-from mkdocs.tests.base import load_config, LogTestCase
-from mkdocs.commands import gh_deploy
+from ghp_import import GhpError
+
 from mkdocs import __version__
+from mkdocs.commands import gh_deploy
+from mkdocs.exceptions import Abort
+from mkdocs.tests.base import load_config
 
 
 class TestGitHubDeploy(unittest.TestCase):
-
     @mock.patch('subprocess.Popen')
     def test_is_cwd_git_repo(self, mock_popeno):
-
         mock_popeno().wait.return_value = 0
 
         self.assertTrue(gh_deploy._is_cwd_git_repo())
 
     @mock.patch('subprocess.Popen')
     def test_is_cwd_not_git_repo(self, mock_popeno):
-
         mock_popeno().wait.return_value = 1
 
         self.assertFalse(gh_deploy._is_cwd_git_repo())
 
     @mock.patch('subprocess.Popen')
     def test_get_current_sha(self, mock_popeno):
-
         mock_popeno().communicate.return_value = (b'6d98394\n', b'')
 
-        self.assertEqual(gh_deploy._get_current_sha('.'), u'6d98394')
+        self.assertEqual(gh_deploy._get_current_sha('.'), '6d98394')
 
     @mock.patch('subprocess.Popen')
     def test_get_remote_url_ssh(self, mock_popeno):
-
         mock_popeno().communicate.return_value = (
             b'git@github.com:mkdocs/mkdocs.git\n',
-            b''
+            b'',
         )
 
-        expected = (u'git@', u'mkdocs/mkdocs.git')
+        expected = ('git@', 'mkdocs/mkdocs.git')
         self.assertEqual(expected, gh_deploy._get_remote_url('origin'))
 
     @mock.patch('subprocess.Popen')
     def test_get_remote_url_http(self, mock_popeno):
-
         mock_popeno().communicate.return_value = (
             b'https://github.com/mkdocs/mkdocs.git\n',
-            b''
+            b'',
         )
 
-        expected = (u'https://', u'mkdocs/mkdocs.git')
+        expected = ('https://', 'mkdocs/mkdocs.git')
         self.assertEqual(expected, gh_deploy._get_remote_url('origin'))
 
     @mock.patch('subprocess.Popen')
     def test_get_remote_url_enterprise(self, mock_popeno):
-
         mock_popeno().communicate.return_value = (
             b'https://notgh.com/mkdocs/mkdocs.git\n',
-            b''
+            b'',
         )
 
         expected = (None, None)
@@ -68,9 +62,8 @@ class TestGitHubDeploy(unittest.TestCase):
     @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
     @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(None, None))
     @mock.patch('mkdocs.commands.gh_deploy._check_version')
-    @mock.patch('mkdocs.commands.gh_deploy.ghp_import.ghp_import', return_value=(True, ''))
+    @mock.patch('ghp_import.ghp_import')
     def test_deploy(self, mock_import, check_version, get_remote, get_sha, is_repo):
-
         config = load_config(
             remote_branch='test',
         )
@@ -80,11 +73,11 @@ class TestGitHubDeploy(unittest.TestCase):
     @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
     @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(None, None))
     @mock.patch('mkdocs.commands.gh_deploy._check_version')
-    @mock.patch('mkdocs.commands.gh_deploy.ghp_import.ghp_import', return_value=(True, ''))
+    @mock.patch('ghp_import.ghp_import')
     @mock.patch('os.path.isfile', return_value=False)
-    def test_deploy_no_cname(self, mock_isfile, mock_import, check_version, get_remote,
-                             get_sha, is_repo):
-
+    def test_deploy_no_cname(
+        self, mock_isfile, mock_import, check_version, get_remote, get_sha, is_repo
+    ):
         config = load_config(
             remote_branch='test',
         )
@@ -92,12 +85,12 @@ class TestGitHubDeploy(unittest.TestCase):
 
     @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
     @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
-    @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(
-        u'git@', u'mkdocs/mkdocs.git'))
+    @mock.patch(
+        'mkdocs.commands.gh_deploy._get_remote_url', return_value=('git@', 'mkdocs/mkdocs.git')
+    )
     @mock.patch('mkdocs.commands.gh_deploy._check_version')
-    @mock.patch('mkdocs.commands.gh_deploy.ghp_import.ghp_import', return_value=(True, ''))
+    @mock.patch('ghp_import.ghp_import')
     def test_deploy_hostname(self, mock_import, check_version, get_remote, get_sha, is_repo):
-
         config = load_config(
             remote_branch='test',
         )
@@ -107,9 +100,10 @@ class TestGitHubDeploy(unittest.TestCase):
     @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
     @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(None, None))
     @mock.patch('mkdocs.commands.gh_deploy._check_version')
-    @mock.patch('mkdocs.commands.gh_deploy.ghp_import.ghp_import', return_value=(True, ''))
-    def test_deploy_ignore_version_default(self, mock_import, check_version, get_remote, get_sha, is_repo):
-
+    @mock.patch('ghp_import.ghp_import')
+    def test_deploy_ignore_version_default(
+        self, mock_import, check_version, get_remote, get_sha, is_repo
+    ):
         config = load_config(
             remote_branch='test',
         )
@@ -120,9 +114,8 @@ class TestGitHubDeploy(unittest.TestCase):
     @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
     @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(None, None))
     @mock.patch('mkdocs.commands.gh_deploy._check_version')
-    @mock.patch('mkdocs.commands.gh_deploy.ghp_import.ghp_import', return_value=(True, ''))
+    @mock.patch('ghp_import.ghp_import')
     def test_deploy_ignore_version(self, mock_import, check_version, get_remote, get_sha, is_repo):
-
         config = load_config(
             remote_branch='test',
         )
@@ -132,56 +125,66 @@ class TestGitHubDeploy(unittest.TestCase):
     @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
     @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
     @mock.patch('mkdocs.commands.gh_deploy._check_version')
-    @mock.patch('mkdocs.utils.ghp_import.ghp_import')
-    @mock.patch('mkdocs.commands.gh_deploy.log')
-    def test_deploy_error(self, mock_log, mock_import, check_version, get_sha, is_repo):
-        error_string = 'TestError123'
-        mock_import.return_value = (False, error_string)
+    @mock.patch('ghp_import.ghp_import')
+    def test_deploy_error(self, mock_import, check_version, get_sha, is_repo):
+        mock_import.side_effect = GhpError('TestError123')
 
         config = load_config(
             remote_branch='test',
         )
 
-        self.assertRaises(SystemExit, gh_deploy.gh_deploy, config)
-        mock_log.error.assert_called_once_with('Failed to deploy to GitHub with error: \n%s',
-                                               error_string)
+        with self.assertLogs('mkdocs', level='ERROR') as cm:
+            with self.assertRaises(Abort):
+                gh_deploy.gh_deploy(config)
+        self.assertEqual(
+            cm.output,
+            [
+                'ERROR:mkdocs.commands.gh_deploy:Failed to deploy to GitHub with error: \n'
+                'TestError123'
+            ],
+        )
 
 
-class TestGitHubDeployLogs(LogTestCase):
-
+class TestGitHubDeployLogs(unittest.TestCase):
     @mock.patch('subprocess.Popen')
     def test_mkdocs_newer(self, mock_popeno):
+        mock_popeno().communicate.return_value = (
+            b'Deployed 12345678 with MkDocs version: 0.1.2\n',
+            b'',
+        )
 
-        mock_popeno().communicate.return_value = (b'Deployed 12345678 with MkDocs version: 0.1.2\n', b'')
-
-        with self.assertLogs('mkdocs', level='INFO') as cm:
+        with self.assertLogs('mkdocs') as cm:
             gh_deploy._check_version('gh-pages')
         self.assertEqual(
-            cm.output, ['INFO:mkdocs.commands.gh_deploy:Previous deployment was done with MkDocs '
-                        'version 0.1.2; you are deploying with a newer version ({})'.format(__version__)]
+            '\n'.join(cm.output),
+            f'INFO:mkdocs.commands.gh_deploy:Previous deployment was done with MkDocs '
+            f'version 0.1.2; you are deploying with a newer version ({__version__})',
         )
 
     @mock.patch('subprocess.Popen')
     def test_mkdocs_older(self, mock_popeno):
-
-        mock_popeno().communicate.return_value = (b'Deployed 12345678 with MkDocs version: 10.1.2\n', b'')
+        mock_popeno().communicate.return_value = (
+            b'Deployed 12345678 with MkDocs version: 10.1.2\n',
+            b'',
+        )
 
         with self.assertLogs('mkdocs', level='ERROR') as cm:
-            self.assertRaises(SystemExit, gh_deploy._check_version, 'gh-pages')
+            with self.assertRaises(Abort):
+                gh_deploy._check_version('gh-pages')
         self.assertEqual(
-            cm.output, ['ERROR:mkdocs.commands.gh_deploy:Deployment terminated: Previous deployment was made with '
-                        'MkDocs version 10.1.2; you are attempting to deploy with an older version ({}). Use '
-                        '--ignore-version to deploy anyway.'.format(__version__)]
+            '\n'.join(cm.output),
+            f'ERROR:mkdocs.commands.gh_deploy:Deployment terminated: Previous deployment was made with '
+            f'MkDocs version 10.1.2; you are attempting to deploy with an older version ({__version__}).'
+            f' Use --ignore-version to deploy anyway.',
         )
 
     @mock.patch('subprocess.Popen')
     def test_version_unknown(self, mock_popeno):
-
         mock_popeno().communicate.return_value = (b'No version specified\n', b'')
 
-        with self.assertLogs('mkdocs', level='WARNING') as cm:
+        with self.assertLogs('mkdocs') as cm:
             gh_deploy._check_version('gh-pages')
         self.assertEqual(
-            cm.output,
-            ['WARNING:mkdocs.commands.gh_deploy:Version check skipped: No version specified in previous deployment.']
+            '\n'.join(cm.output),
+            'WARNING:mkdocs.commands.gh_deploy:Version check skipped: No version specified in previous deployment.',
         )

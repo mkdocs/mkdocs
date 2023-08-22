@@ -14,29 +14,25 @@ the `mkdocs.yml` configuration file.
 
 The simplest project you can create will look something like this:
 
-```no-highlight
+```text
 mkdocs.yml
 docs/
     index.md
 ```
 
 By convention your project homepage should be named `index.md` (see [Index
-pages](#index_pages) below for details). Any of the following file
+pages](#index-pages) below for details). Any of the following file
 extensions may be used for your Markdown source files: `markdown`, `mdown`,
 `mkdn`, `mkd`, `md`. All Markdown files included in your documentation
 directory will be rendered in the built site regardless of any settings.
 
-!!! note:
-
-    Files and directories with names which begin with a dot (for example:
-    `.foo.md` or `.bar/baz.md`) are ignored by MkDocs, which matches the
-    behavior of most web servers. There is no option to override this
-    behavior.
+NOTE:
+Files and directories with names which begin with a dot (for example: `.foo.md` or `.bar/baz.md`) are ignored by MkDocs. This can be overridden with the [`exclude_docs` config](configuration.md#exclude_docs).
 
 You can also create multi-page documentation, by creating several Markdown
 files:
 
-```no-highlight
+```text
 mkdocs.yml
 docs/
     index.md
@@ -47,7 +43,7 @@ docs/
 The file layout you use determines the URLs that are used for the generated
 pages. Given the above layout, pages would be generated for the following URLs:
 
-```no-highlight
+```text
 /
 /about/
 /license/
@@ -56,7 +52,7 @@ pages. Given the above layout, pages would be generated for the following URLs:
 You can also include your Markdown files in nested directories if that better
 suits your documentation layout.
 
-```no-highlight
+```text
 docs/
     index.md
     user-guide/getting-started.md
@@ -67,7 +63,7 @@ docs/
 Source files inside nested directories will cause pages to be generated with
 nested URLs, like so:
 
-```no-highlight
+```text
 /
 /user-guide/getting-started/
 /user-guide/configuration-options/
@@ -76,8 +72,8 @@ nested URLs, like so:
 
 Any files which are not identified as Markdown files (by their file extension)
 within the [documentation directory](configuration.md#docs_dir) are copied by
-MkDocs to the built site unaltered. See [how to link to images and media]
-(#linking_to_images_and_media) below for details.
+MkDocs to the built site unaltered. See
+[how to link to images and media](#linking-to-images-and-media) below for details.
 
 ### Index pages
 
@@ -112,10 +108,10 @@ your navigation menu sorted differently.
 
 A minimal navigation configuration could look like this:
 
-```no-highlight
+```yaml
 nav:
-    - 'index.md'
-    - 'about.md'
+  - 'index.md'
+  - 'about.md'
 ```
 
 All paths in the navigation configuration must be relative to the `docs_dir`
@@ -128,10 +124,10 @@ level and with their titles inferred from the contents of the Markdown file or,
 if no title is defined within the file, of the file name. To override the title
 in the `nav` setting add a title right before the filename.
 
-```no-highlight
+```yaml
 nav:
-    - Home: 'index.md'
-    - About: 'about.md'
+  - Home: 'index.md'
+  - About: 'about.md'
 ```
 
 Note that if a title is defined for a page in the navigation, that title will be
@@ -141,15 +137,15 @@ within the page itself.
 Navigation sub-sections can be created by listing related pages together under a
 section title. For example:
 
-```no-highlight
+```yaml
 nav:
-    - Home: 'index.md'
-    - 'User Guide':
-        - 'Writing your docs': 'writing-your-docs.md'
-        - 'Styling your docs': 'styling-your-docs.md'
-    - About:
-        - 'License': 'license.md'
-        - 'Release Notes': 'release-notes.md'
+  - Home: 'index.md'
+  - 'User Guide':
+    - 'Writing your docs': 'writing-your-docs.md'
+    - 'Styling your docs': 'styling-your-docs.md'
+  - About:
+    - 'License': 'license.md'
+    - 'Release Notes': 'release-notes.md'
 ```
 
 With the above configuration we have three top level items: "Home", "User Guide"
@@ -207,24 +203,24 @@ When linking between pages in the documentation you can simply use the regular
 Markdown [linking][links] syntax, including the *relative path* to the Markdown
 document you wish to link to.
 
-```no-highlight
+```markdown
 Please see the [project license](license.md) for further details.
 ```
 
 When the MkDocs build runs, these Markdown links will automatically be
 transformed into an HTML hyperlink to the appropriate HTML page.
 
-!!! warning
-    Using absolute paths with links is not officially supported. Relative paths
-    are adjusted by MkDocs to ensure they are always relative to the page. Absolute
-    paths are not modified at all. This means that your links using absolute paths
-    might work fine in your local environment but they might break once you deploy
-    them to your production server.
+WARNING:
+Using absolute paths with links is not officially supported. Relative paths
+are adjusted by MkDocs to ensure they are always relative to the page. Absolute
+paths are not modified at all. This means that your links using absolute paths
+might work fine in your local environment but they might break once you deploy
+them to your production server.
 
 If the target documentation file is in another directory you'll need to make
 sure to include any relative directory path in the link.
 
-```no-highlight
+```markdown
 Please see the [project license](../about/license.md) for further details.
 ```
 
@@ -233,7 +229,7 @@ Markdown documents. You can use that ID to link to a section within a target
 document by using an anchor link. The generated HTML will correctly transform
 the path portion of the link, and leave the anchor portion intact.
 
-```no-highlight
+```markdown
 Please see the [project license](about.md#license) for further details.
 ```
 
@@ -244,45 +240,51 @@ dashes. Consecutive dashes are then reduced to a single dash.
 There are a few configuration settings provided by the toc extension which you
 can set in your `mkdocs.yml` configuration file to alter the default behavior:
 
-`permalink`:
+*   **`permalink`**
 
-: Generate permanent links at the end of each header. Default: `False`.
+    Generate permanent links at the end of each header. Default: `False`.
 
     When set to True the paragraph symbol (&para; or `&para;`) is used as the
     link text. When set to a string, the provided string is used as the link
     text. For example, to use the hash symbol (`#`) instead, do:
 
-        markdown_extensions:
-            - toc:
-                permalink: "#"
+    ```yaml
+    markdown_extensions:
+      - toc:
+          permalink: "#"
+    ```
 
-`baselevel`:
+*   **`baselevel`**
 
-: Base level for headers. Default: `1`.
+    Base level for headers. Default: `1`.
 
     This setting allows the header levels to be automatically adjusted to fit
     within the hierarchy of your HTML templates. For example, if the Markdown
     text for a page should not contain any headers higher than level 2 (`<h2>`),
     do:
 
-        markdown_extensions:
-            - toc:
-                baselevel: 2
+    ```yaml
+    markdown_extensions:
+      - toc:
+          baselevel: 2
+    ```
 
     Then any headers in your document would be increased by 1. For example, the
     header `# Header` would be rendered as a level 2 header (`<h2>`) in the HTML
     output.
 
-`separator`:
+*   **`separator`**
 
-: Word separator. Default: `-`.
+    Word separator. Default: `-`.
 
     Character which replaces white-space in generated IDs. If you prefer
     underscores, then do:
 
-        markdown_extensions:
-            - toc:
-                separator: "_"
+    ```yaml
+    markdown_extensions:
+      - toc:
+          separator: "_"
+    ```
 
 Note that if you would like to define multiple of the above settings, you must
 do so under a single `toc` entry in the `markdown_extensions` configuration
@@ -290,10 +292,10 @@ option.
 
 ```yml
 markdown_extensions:
-    - toc:
-        permalink: "#"
-        baselevel: 2
-        separator: "_"
+  - toc:
+      permalink: "#"
+      baselevel: 2
+      separator: "_"
 ```
 
 [toc]: https://python-markdown.github.io/extensions/toc/
@@ -304,11 +306,11 @@ As well as the Markdown source files, you can also include other file types in
 your documentation, which will be copied across when generating your
 documentation site. These might include images and other media.
 
-For example, if your project documentation needed to include a [GitHub pages
+For example, if your project documentation needed to include a [GitHub Pages
 CNAME file] and a PNG formatted screenshot image then your file layout might
 look as follows:
 
-```no-highlight
+```text
 mkdocs.yml
 docs/
     CNAME
@@ -333,7 +335,7 @@ Cupcake indexer is a snazzy new project for indexing small cakes.
 Your image will now be embedded when you build the documentation, and should
 also be previewed if you're working on the documentation with a Markdown editor.
 
-[GitHub pages CNAME file]: https://help.github.com/articles/using-a-custom-domain-with-github-pages/
+[GitHub Pages CNAME file]: https://help.github.com/articles/using-a-custom-domain-with-github-pages/
 
 #### Linking from raw HTML
 
@@ -359,27 +361,30 @@ In addition to displaying information in a template, MkDocs includes support for
 a few predefined meta-data keys which can alter the behavior of MkDocs for that
 specific page. The following keys are supported:
 
-`template`:
+*   **`template`**
 
-: The template to use with the current page.
+    The template to use with the current page.
 
     By default, MkDocs uses the `main.html` template of a theme to render
     Markdown pages. You can use the `template` meta-data key to define a
     different template file for that specific page. The template file must be
     available on the path(s) defined in the theme's environment.
 
-`title`:
+*   **`title`**
 
-: The "title" to use for the document.
+    The "title" to use for the document.
 
     MkDocs will attempt to determine the title of a document in the following
     ways, in order:
 
-    1. A title defined in the [nav] configuration setting for a document.
-    2. A title defined in the `title` meta-data key of a document.
-    3. A level 1 Markdown header on the first line of the document body.
-       Please note that [Setext-style] headers are not supported.
-    4. The filename of a document.
+    1.  A title defined in the [nav] configuration setting for a document.
+
+    2.  A title defined in the `title` meta-data key of a document.
+
+    3.  A level 1 Markdown header on the first line of the document body.  
+        ([Setext-style] headers are supported *only since MkDocs 1.5*.)
+
+    4.  The filename of a document.
 
     Upon finding a title for a page, MkDoc does not continue checking any
     additional sources in the above list.
@@ -389,12 +394,12 @@ specific page. The following keys are supported:
 #### YAML Style Meta-Data
 
 YAML style meta-data consists of [YAML] key/value pairs wrapped in YAML style
-deliminators to mark the start and/or end of the meta-data. The first line of
+delimiters to mark the start and/or end of the meta-data. The first line of
 a document must be `---`. The meta-data ends at the first line containing an
-end deliminator (either `---` or `...`). The content between the deliminators is
+end deliminator (either `---` or `...`). The content between the delimiters is
 parsed as [YAML].
 
-```no-highlight
+```text
 ---
 title: My Document
 summary: A brief description of my document.
@@ -423,7 +428,7 @@ MultiMarkdown style meta-data uses a format first introduced by the
 [MultiMarkdown] project. The data consists of a series of keywords and values
 defined at the beginning of a Markdown document, like this:
 
-```no-highlight
+```text
 Title:   My Document
 Summary: A brief description of my document.
 Authors: Waylan Limberg
@@ -446,18 +451,17 @@ many lines as desired. All lines are joined into a single string.
 The first blank line ends all meta-data for the document. Therefore, the first
 line of a document must not be blank.
 
-!!! note
+NOTE:
+MkDocs does not support YAML style delimiters (`---` or `...`) for
+MultiMarkdown style meta-data. In fact, MkDocs relies on the the presence or
+absence of the delimiters to determine whether YAML style meta-data or
+MultiMarkdown style meta-data is being used. If the delimiters are
+detected, but the content between the delimiters is not valid YAML
+meta-data, MkDocs does not attempt to parse the content as MultiMarkdown
+style meta-data.
 
-    MkDocs does not support YAML style deliminators (`---` or `...`) for
-    MultiMarkdown style meta-data. In fact, MkDocs relies on the the presence or
-    absence of the deliminators to determine whether YAML style meta-data or
-    MultiMarkdown style meta-data is being used. If the deliminators are
-    detected, but the content between the deliminators is not valid YAML
-    meta-data, MkDocs does not attempt to parse the content as MultiMarkdown
-    style meta-data.
-
-[YAML]: http://yaml.org
-[MultiMarkdown]: http://fletcherpenney.net/MultiMarkdown_Syntax_Guide#metadata
+[YAML]: https://yaml.org
+[MultiMarkdown]: https://fletcherpenney.net/MultiMarkdown_Syntax_Guide#metadata
 [nav]: configuration.md#nav
 
 ### Tables
@@ -468,7 +472,7 @@ only useful for simple tabular data.
 
 A simple table looks like this:
 
-```no-highlight
+```markdown
 First Header | Second Header | Third Header
 ------------ | ------------- | ------------
 Content Cell | Content Cell  | Content Cell
@@ -477,7 +481,7 @@ Content Cell | Content Cell  | Content Cell
 
 If you wish, you can add a leading and tailing pipe to each line of the table:
 
-```no-highlight
+```markdown
 | First Header | Second Header | Third Header |
 | ------------ | ------------- | ------------ |
 | Content Cell | Content Cell  | Content Cell |
@@ -486,7 +490,7 @@ If you wish, you can add a leading and tailing pipe to each line of the table:
 
 Specify alignment for each column by adding colons to separator lines:
 
-```no-highlight
+```markdown
 First Header | Second Header | Third Header
 :----------- |:-------------:| -----------:
 Left         | Center        | Right
@@ -510,7 +514,7 @@ blocks without indentation.
 The first line should contain 3 or more backtick (`` ` ``) characters, and the
 last line should contain the same number of backtick characters (`` ` ``):
 
-~~~no-highlight
+````markdown
 ```
 Fenced code blocks are like Standard
 Markdown’s regular code blocks, except that
@@ -518,17 +522,17 @@ they’re not indented and instead rely on
 start and end fence lines to delimit the
 code block.
 ```
-~~~
+````
 
 With this approach, the language can optionally be specified on the first line
 after the backticks which informs any syntax highlighters of the language used:
 
-~~~no-highlight
+````markdown
 ```python
 def fn():
     pass
 ```
-~~~
+````
 
 Note that fenced code blocks can not be indented. Therefore, they cannot be
 nested inside list items, blockquotes, etc.

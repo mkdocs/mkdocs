@@ -60,22 +60,22 @@
 
     /* register specific locale function */
     lunr.th = function() {
-        this.pipeline.reset();
-        this.pipeline.add(
-            /*lunr.th.stopWordFilter,*/
-            lunr.th.trimmer
-        );
+      this.pipeline.reset();
+      this.pipeline.add(
+        /*lunr.th.stopWordFilter,*/
+        lunr.th.trimmer
+      );
 
-        if (isLunr2) { // for lunr version 2.0.0
-            this.tokenizer = lunr.th.tokenizer;
-        } else {
-            if (lunr.tokenizer) { // for lunr version 0.6.0
-                lunr.tokenizer = lunr.th.tokenizer;
-            }
-            if (this.tokenizerFn) { // for lunr version 0.7.0 -> 1.0.0
-                this.tokenizerFn = lunr.th.tokenizer;
-            }
+      if (isLunr2) { // for lunr version 2.0.0
+        this.tokenizer = lunr.th.tokenizer;
+      } else {
+        if (lunr.tokenizer) { // for lunr version 0.6.0
+          lunr.tokenizer = lunr.th.tokenizer;
         }
+        if (this.tokenizerFn) { // for lunr version 0.7.0 -> 1.0.0
+          this.tokenizerFn = lunr.th.tokenizer;
+        }
+      }
     };
 
     /* lunr trimmer function */
@@ -85,10 +85,12 @@
 
     var segmenter = lunr.wordcut;
     segmenter.init();
-    lunr.th.tokenizer = function (obj) {
+    lunr.th.tokenizer = function(obj) {
       //console.log(obj);
       if (!arguments.length || obj == null || obj == undefined) return []
-      if (Array.isArray(obj)) return obj.map(function (t) { return isLunr2 ? new lunr.Token(t) : t })
+      if (Array.isArray(obj)) return obj.map(function(t) {
+        return isLunr2 ? new lunr.Token(t) : t
+      })
 
       var str = obj.toString().replace(/^\s+/, '');
       return segmenter.cut(str).split('|');

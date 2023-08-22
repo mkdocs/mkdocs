@@ -16,12 +16,84 @@ div.col-md-9 h1:first-of-type .headerlink {
     display: none;
 }
 
-code.no-highlight {
-    color: black;
+div.admonition.block>.admonition-title {
+    display: none;
+}
+
+.admonition.new, details.new {
+    color: #15654a;
+    background-color: #edfff9;
+    border-color: #bcf1e8;
+}
+.admonition.example, details.example {
+    color: #353579;
+    background-color: #f0f1ff;
+    border-color: #d8dcf0;
 }
 
 /* Definition List styles */
 
 dd {
     padding-left: 20px;
+}
+
+.card-body svg {
+    width: 100%;
+    padding: 0 50px;
+    height: auto;
+}
+
+/* Homepage */
+
+body.homepage div.jumbotron {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    padding-bottom: 0;
+}
+
+body.homepage div.jumbotron div.card {
+    margin-bottom: 2rem;
+}
+
+body.homepage>div.container>div.row>div.col-md-3 {
+    display: none;
+}
+
+body.homepage>div.container>div.row>div.col-md-9 {
+    margin-left: 0;
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+/* mkdocstrings */
+
+.doc-object {
+    padding-left: 10px;
+    border-left: 4px solid rgba(230, 230, 230);
+}
+
+.doc-contents .field-body p:first-of-type {
+    display: inline;
+}
+
+.doc-label-class-attribute,
+.doc-label-instance-attribute {
+    display: none;
+}
+
+h2.doc-heading {
+    font-size: 1.5rem;
+}
+h3.doc-heading {
+    font-size: 1.4rem;
+}
+h4.doc-heading {
+    font-size: 1.3rem;
+}
+h5.doc-heading {
+    font-size: 1.2rem;
+}
+
+.doc-contents {
+    padding-left: 0;
 }

@@ -1,0 +1,101 @@
+# Japanese translations for MkDocs.
+# Copyright (C) 2022 MkDocs
+# This file is distributed under the same license as the MkDocs project.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MkDocs 1.2\n"
+"Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
+"POT-Creation-Date: 2022-08-15 17:05+0200\n"
+"PO-Revision-Date: 2021-07-31 12:06+0900\n"
+"Last-Translator: Goto Hayato <habita.gh@gmail.com>\n"
+"Language: ja\n"
+"Language-Team: ja <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: mkdocs/themes/mkdocs/404.html:8
+msgid "Page not found"
+msgstr "ページが見つかりません"
+
+#: mkdocs/themes/mkdocs/base.html:116
+#: mkdocs/themes/mkdocs/keyboard-modal.html:31
+#: mkdocs/themes/mkdocs/search-modal.html:5
+msgid "Search"
+msgstr "検索"
+
+#: mkdocs/themes/mkdocs/base.html:126
+msgid "Previous"
+msgstr "前へ"
+
+#: mkdocs/themes/mkdocs/base.html:131
+msgid "Next"
+msgstr "次へ"
+
+#: mkdocs/themes/mkdocs/base.html:142 mkdocs/themes/mkdocs/base.html:144
+#: mkdocs/themes/mkdocs/base.html:146 mkdocs/themes/mkdocs/base.html:148
+#, python-format
+msgid "Edit on %(repo_name)s"
+msgstr "%(repo_name)s で編集"
+
+#: mkdocs/themes/mkdocs/base.html:150
+msgid "Edit"
+msgstr ""
+
+#: mkdocs/themes/mkdocs/base.html:190
+#, python-format
+msgid "Documentation built with %(mkdocs_link)s."
+msgstr "%(mkdocs_link)s でビルドされたドキュメンテーション"
+
+#: mkdocs/themes/mkdocs/keyboard-modal.html:5
+msgid "Keyboard Shortcuts"
+msgstr "キーボードショートカット"
+
+#: mkdocs/themes/mkdocs/keyboard-modal.html:6
+#: mkdocs/themes/mkdocs/search-modal.html:6
+msgid "Close"
+msgstr "閉じる"
+
+#: mkdocs/themes/mkdocs/keyboard-modal.html:12
+msgid "Keys"
+msgstr "キー"
+
+#: mkdocs/themes/mkdocs/keyboard-modal.html:13
+msgid "Action"
+msgstr "アクション"
+
+#: mkdocs/themes/mkdocs/keyboard-modal.html:19
+msgid "Open this help"
+msgstr "このヘルプを開く"
+
+#: mkdocs/themes/mkdocs/keyboard-modal.html:23
+msgid "Next page"
+msgstr "次のページ"
+
+#: mkdocs/themes/mkdocs/keyboard-modal.html:27
+msgid "Previous page"
+msgstr "前のページ"
+
+#: mkdocs/themes/mkdocs/search-modal.html:9
+msgid "From here you can search these documents. Enter your search terms below."
+msgstr "これらのドキュメントをこちらから検索できます。検索語句を以下に入力してください。"
+
+#: mkdocs/themes/mkdocs/search-modal.html:12
+msgid "Search..."
+msgstr "検索..."
+
+#: mkdocs/themes/mkdocs/search-modal.html:12
+msgid "Type search term here"
+msgstr "検索語句を入力してください"
+
+#: mkdocs/themes/mkdocs/search-modal.html:15
+msgid "No results found"
+msgstr "結果がありません"
+
+#: mkdocs/themes/mkdocs/toc.html:3
+msgid "Table of Contents"
+msgstr "目次"
+

@@ -1,37 +1,44 @@
-# coding: utf-8
+from __future__ import annotations
 
-from __future__ import unicode_literals
-import os
-import jinja2
 import logging
+import os
+from typing import Any, Collection, MutableMapping
 
-from mkdocs import utils
-from mkdocs.utils import filters
+import jinja2
+
+from mkdocs import localization, utils
 from mkdocs.config.base import ValidationError
+from mkdocs.utils import templates
 
 log = logging.getLogger(__name__)
-log.addFilter(utils.warning_filter)
 
 
-class Theme(object):
+class Theme(MutableMapping[str, Any]):
     """
     A Theme object.
 
-    Keywords:
-
+    Parameters:
         name: The name of the theme as defined by its entrypoint.
-
         custom_dir: User defined directory for custom templates.
-
         static_templates: A list of templates to render as static pages.
 
     All other keywords are passed as-is and made available as a key/value mapping.
-
     """
 
-    def __init__(self, name=None, **user_config):
+    def __init__(
+        self,
+        name: str | None = None,
+        *,
+        custom_dir: str | None = None,
+        static_templates: Collection[str] = (),
+        locale: str | None = None,
+        **user_config,
+    ) -> None:
         self.name = name
-        self._vars = {}
+        self._custom_dir = custom_dir
+        _vars: dict[str, Any] = {'name': name, 'locale': 'en'}
+        # _vars is soft-deprecated, intentionally hide it from mypy.
+        setattr(self, '_vars', _vars)
 
         # MkDocs provided static templates are always included
         package_dir = os.path.abspath(os.path.dirname(__file__))
@@ -41,39 +48,67 @@ class Theme(object):
         # Build self.dirs from various sources in order of precedence
         self.dirs = []
 
-        if 'custom_dir' in user_config:
-            self.dirs.append(user_config.pop('custom_dir'))
+        if custom_dir is not None:
+            self.dirs.append(custom_dir)
 
-        if self.name:
+        if name:
             self._load_theme_config(name)
 
         # Include templates provided directly by MkDocs (outside any theme)
         self.dirs.append(mkdocs_templates)
 
         # Handle remaining user configs. Override theme configs (if set)
-        self.static_templates.update(user_config.pop('static_templates', []))
-        self._vars.update(user_config)
+        self.static_templates.update(static_templates)
+        _vars.update(user_config)
 
-    def __repr__(self):
-        return "{0}(name='{1}', dirs={2}, static_templates={3}, {4})".format(
-            self.__class__.__name__, self.name, self.dirs, list(self.static_templates),
-            ', '.join('{0}={1}'.format(k, repr(v)) for k, v in self._vars.items())
+        # Validate locale and convert to Locale object
+        _vars['locale'] = localization.parse_locale(
+            locale if locale is not None else _vars['locale']
         )
 
-    def __getitem__(self, key):
-        return self._vars[key]
+    name: str | None
 
-    def __setitem__(self, key, value):
-        self._vars[key] = value
+    @property
+    def locale(self) -> localization.Locale:
+        return self['locale']
 
-    def __contains__(self, item):
-        return item in self._vars
+    @property
+    def custom_dir(self) -> str | None:
+        return self._custom_dir
+
+    dirs: list[str]
+
+    static_templates: set[str]
+
+    def __repr__(self) -> str:
+        return "{}(name={!r}, dirs={!r}, static_templates={!r}, {})".format(
+            self.__class__.__name__,
+            self.name,
+            self.dirs,
+            self.static_templates,
+            ', '.join(f'{k}={v!r}' for k, v in self.items()),
+        )
+
+    def __getitem__(self, key: str) -> Any:
+        return self._vars[key]  # type: ignore[attr-defined]
+
+    def __setitem__(self, key: str, value):
+        self._vars[key] = value  # type: ignore[attr-defined]
+
+    def __delitem__(self, key: str):
+        del self._vars[key]  # type: ignore[attr-defined]
+
+    def __contains__(self, item: object) -> bool:
+        return item in self._vars  # type: ignore[attr-defined]
+
+    def __len__(self):
+        return len(self._vars)  # type: ignore[attr-defined]
 
     def __iter__(self):
-        return iter(self._vars)
+        return iter(self._vars)  # type: ignore[attr-defined]
 
-    def _load_theme_config(self, name):
-        """ Recursively load theme and any parent themes. """
+    def _load_theme_config(self, name: str) -> None:
+        """Recursively load theme and any parent themes."""
 
         theme_dir = utils.get_theme_dir(name)
         self.dirs.append(theme_dir)
@@ -82,35 +117,35 @@ class Theme(object):
             file_path = os.path.join(theme_dir, 'mkdocs_theme.yml')
             with open(file_path, 'rb') as f:
                 theme_config = utils.yaml_load(f)
-                if theme_config is None:
-                    theme_config = {}
-        except IOError as e:
+        except OSError as e:
             log.debug(e)
             raise ValidationError(
-                "The theme '{0}' does not appear to have a configuration file. "
-                "Please upgrade to a current version of the theme.".format(name)
+                f"The theme '{name}' does not appear to have a configuration file. "
+                f"Please upgrade to a current version of the theme."
             )
 
-        log.debug("Loaded theme configuration for '%s' from '%s': %s", name, file_path, theme_config)
+        log.debug(f"Loaded theme configuration for '{name}' from '{file_path}': {theme_config}")
 
         parent_theme = theme_config.pop('extends', None)
         if parent_theme:
             themes = utils.get_theme_names()
             if parent_theme not in themes:
                 raise ValidationError(
-                    "The theme '{0}' inherits from '{1}', which does not appear to be installed. "
-                    "The available installed themes are: {2}".format(name, parent_theme, ', '.join(themes))
+                    f"The theme '{name}' inherits from '{parent_theme}', which does not appear to be installed. "
+                    f"The available installed themes are: {', '.join(themes)}"
                 )
             self._load_theme_config(parent_theme)
 
         self.static_templates.update(theme_config.pop('static_templates', []))
-        self._vars.update(theme_config)
+        self._vars.update(theme_config)  # type: ignore[attr-defined]
 
-    def get_env(self):
-        """ Return a Jinja environment for the theme. """
+    def get_env(self) -> jinja2.Environment:
+        """Return a Jinja environment for the theme."""
 
         loader = jinja2.FileSystemLoader(self.dirs)
-        env = jinja2.Environment(loader=loader)
-        env.filters['tojson'] = filters.tojson
-        env.filters['url'] = filters.url_filter
+        # No autoreload because editing a template in the middle of a build is not useful.
+        env = jinja2.Environment(loader=loader, auto_reload=False)
+        env.filters['url'] = templates.url_filter
+        env.filters['script_tag'] = templates.script_tag_filter
+        localization.install_translations(env, self.locale, self.dirs)
         return env
