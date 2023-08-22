@@ -225,7 +225,7 @@ class File:
         *,
         dest_uri: str | None = None,
         inclusion: InclusionLevel = InclusionLevel.UNDEFINED,
-        generated_by: str = "mkdocs"
+        generated_by: str = "mkdocs",
     ) -> None:
         self.page = None
         self.src_path = path
