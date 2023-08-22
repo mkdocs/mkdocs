@@ -193,6 +193,9 @@ class File:
     inclusion: InclusionLevel = InclusionLevel.UNDEFINED
     """Whether the file will be excluded from the built site."""
 
+    generated_by: str = "mkdocs"
+    """Indicator to track which system created the File."""
+
     @property
     def src_path(self) -> str:
         """Same as `src_uri` (and synchronized with it) but will use backslashes on Windows. Discouraged."""
@@ -222,6 +225,7 @@ class File:
         *,
         dest_uri: str | None = None,
         inclusion: InclusionLevel = InclusionLevel.UNDEFINED,
+        generated_by: str = "mkdocs"
     ) -> None:
         self.page = None
         self.src_path = path
@@ -233,6 +237,7 @@ class File:
         self.abs_src_path = os.path.normpath(os.path.join(src_dir, self.src_uri))
         self.abs_dest_path = os.path.normpath(os.path.join(dest_dir, self.dest_uri))
         self.inclusion = inclusion
+        self.generated_by = generated_by
 
     def __eq__(self, other) -> bool:
         return (
