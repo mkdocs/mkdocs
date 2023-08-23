@@ -4,6 +4,7 @@ Implements the plugin API for MkDocs.
 """
 from __future__ import annotations
 
+import inspect
 import logging
 import sys
 from typing import TYPE_CHECKING, Any, Callable, Generic, MutableMapping, TypeVar, overload
@@ -504,12 +505,22 @@ class PluginCollection(dict, MutableMapping[str, BasePlugin]):
             log.debug(f'Running {len(events)} `{name}` events')
         for method in events:
             if pass_item:
+                if name == "files":
+                    before_on_files_src_uris = set(item.src_uris)
                 result = method(item, **kwargs)
             else:
                 result = method(**kwargs)
             # keep item if method returned `None`
             if result is not None:
                 item = result
+                if name == "files":
+                    after_on_files_src_uris = set(result.src_uris)
+                    files_added_by_plugin = after_on_files_src_uris.difference(before_on_files_src_uris)
+                    log.warning(f"{files_added_by_plugin=}")
+                    for src_uri in files_added_by_plugin:
+                        item._src_uris[src_uri].generated_by = inspect.getmodule(method).__name__
+                        log.warning(item._src_uris[src_uri])
+
         return item
 
     def on_startup(self, *, command: Literal['build', 'gh-deploy', 'serve'], dirty: bool) -> None:

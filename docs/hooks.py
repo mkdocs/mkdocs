@@ -3,6 +3,7 @@ import re
 from pathlib import Path
 
 from mkdocs.config.defaults import MkDocsConfig
+from mkdocs.structure.files import File
 from mkdocs.structure.nav import Page
 
 
@@ -31,3 +32,16 @@ def on_page_markdown(markdown: str, page: Page, config: MkDocsConfig, **kwargs):
             markdown,
             flags=re.MULTILINE,
         )
+
+
+def on_files(files, config):
+    new_file = open("/tmp/this_file_was_generated.md", "wb").write(b"# Test file")
+    files.append(
+        File(
+            "this_file_was_generated.md",
+            "/tmp",
+            config.site_dir,
+            config.use_directory_urls
+        )
+    )
+    return files

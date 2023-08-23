@@ -213,6 +213,9 @@ class File:
 
     page: Page | None
 
+    generated_by: str | None = None
+    """The name of the plugin which have generated the file or None if the file is part of docs_dir."""
+
     def __init__(
         self,
         path: str,
@@ -243,9 +246,10 @@ class File:
         )
 
     def __repr__(self):
+        generated_by = f", generated_by='{self.generated_by}'" if self.generated_by else ""
         return (
             f"File(src_uri='{self.src_uri}', dest_uri='{self.dest_uri}',"
-            f" name='{self.name}', url='{self.url}')"
+            f" name='{self.name}', url='{self.url}'{generated_by})"
         )
 
     def _get_stem(self) -> str:
