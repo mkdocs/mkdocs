@@ -1137,14 +1137,15 @@ class ThemeTest(TestCase):
 
     def test_uninstalled_theme_as_string(self) -> None:
         class Schema(Config):
-            option = c.Theme()
+            theme = c.Theme()
+            plugins = c.Plugins(theme_key='theme')
 
         with self.expect_error(
-            option=re.compile(
+            theme=re.compile(
                 r"Unrecognised theme name: 'mkdocs2'. The available installed themes are: .+"
             )
         ):
-            self.get_config(Schema, {'option': "mkdocs2"})
+            self.get_config(Schema, {'theme': "mkdocs2", 'plugins': "search"})
 
     def test_theme_default(self) -> None:
         class Schema(Config):
