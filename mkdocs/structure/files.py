@@ -8,7 +8,7 @@ import posixpath
 import shutil
 import warnings
 from pathlib import PurePath
-from typing import TYPE_CHECKING, Callable, Iterable, Iterator, Sequence
+from typing import TYPE_CHECKING, Callable, Iterable, Iterator, Sequence, Optional
 from urllib.parse import quote as urlquote
 
 import jinja2.environment
@@ -193,8 +193,8 @@ class File:
     inclusion: InclusionLevel = InclusionLevel.UNDEFINED
     """Whether the file will be excluded from the built site."""
 
-    generated_by: str = "mkdocs"
-    """Indicator to track which system created the File."""
+    generated_by: Optional[str] = None
+    """Indicator for plugin developers to track which system created the File."""
 
     @property
     def src_path(self) -> str:
@@ -225,7 +225,7 @@ class File:
         *,
         dest_uri: str | None = None,
         inclusion: InclusionLevel = InclusionLevel.UNDEFINED,
-        generated_by: str = "mkdocs",
+        generated_by: Optional[str] = None,
     ) -> None:
         self.page = None
         self.src_path = path
