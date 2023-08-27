@@ -56,6 +56,14 @@ class Section(StructureItem):
         return f"{name}(title={self.title!r})"
 
     @property
+    def index_page(self) -> Page | None:
+        """The index page of the section."""
+        for child in self.children:
+            if isinstance(child, Page) and child.is_index:
+                return child
+        return None
+
+    @property
     def title(self) -> str | None:
         """The title of the section.
 
@@ -63,18 +71,13 @@ class Section(StructureItem):
         but there is an index page in the section, the title
         of the index page is returned.
         """
-        if self.config['nav'] is None:
-            for child in self.children:
-                if isinstance(child, Page):
-                    if child.is_index:
-                        child.read_source(self.config)
+        if self.config['nav'] is not None:
+            return self._title
 
-                        # prefer meta title if we use the
-                        # index child title as section title
-                        if child.meta and 'title' in child.meta:
-                            return child.meta['title']
-                        return child.title
-        return self._title
+        ip = self.index_page
+        if not ip:
+            return self._title
+        return ip.meta.get('title', ip.title) if ip.meta else ip.title
 
     @title.setter
     def title(self, title):
