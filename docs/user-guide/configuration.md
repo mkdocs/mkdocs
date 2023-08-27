@@ -290,6 +290,10 @@ server root and effectively points to `https://example.com/bugs/`. Of course, th
 **default**: By default `nav` will contain an alphanumerically sorted, nested
 list of all the Markdown files found within the `docs_dir` and its
 sub-directories. Index files will always be listed first within a sub-section.
+If a sub-directory contains an index file, the title of the section for the
+sub-directory is set to the title of the index page. Hereby, the title from
+the meta-data of the index page is prefered to the page title from the
+markdown content.
 
 ### exclude_docs
 

@@ -44,9 +44,10 @@ class Navigation:
 
 
 class Section(StructureItem):
-    def __init__(self, title: str, children: list[StructureItem]) -> None:
-        self.title = title
+    def __init__(self, title: str, children: list[StructureItem], config: MkDocsConfig) -> None:
+        self._title = title
         self.children = children
+        self.config = config
 
         self.active = False
 
@@ -54,8 +55,29 @@ class Section(StructureItem):
         name = self.__class__.__name__
         return f"{name}(title={self.title!r})"
 
-    title: str
-    """The title of the section."""
+    @property
+    def title(self) -> str:
+        """The title of the section.
+
+            If no navigation is configured in the mkdocs configuration,
+            but there is an index page in the section, the title
+            of the index page is returned.
+        """
+        if self.config['nav'] is None:
+            for child in self.children:
+                if child.is_page and child.is_index:
+                    child.read_source(self.config)
+
+                    # prefer meta title if we use the
+                    # index page title as section title
+                    if child.meta and 'title' in child.meta:
+                        return child.meta['title']
+                    return child.title
+        return self._title
+
+    @title.setter
+    def title(self, title):
+        self._title = title
 
     children: list[StructureItem]
     """An iterable of all child navigation objects. Children may include nested sections, pages and links."""
@@ -181,7 +203,7 @@ def _data_to_navigation(data, files: Files, config: MkDocsConfig):
         return [
             _data_to_navigation((key, value), files, config)
             if isinstance(value, str)
-            else Section(title=key, children=_data_to_navigation(value, files, config))
+            else Section(title=key, children=_data_to_navigation(value, files, config), config=config)
             for key, value in data.items()
         ]
     elif isinstance(data, list):
