@@ -11,7 +11,7 @@ configuration file. Start by reading the [introductory tutorial], then check the
 [User Guide] for more information.
 
 [introductory tutorial]: getting-started.md
-[User Guide]: user-guide/index.md
+[User Guide]: user-guide/README.md
 
 <div class="text-center">
 <a href="getting-started/" class="btn btn-primary" role="button">Getting Started</a>
@@ -27,15 +27,14 @@ configuration file. Start by reading the [introductory tutorial], then check the
       <div class="card-body">
         <h3 class="card-title">Great themes available</h3>
         <p class="card-text">
-            There's a stack of good looking <a
-            href="user-guide/choosing-your-theme">themes</a> available for
-            MkDocs. Choose between the built in themes: <a
-            href="user-guide/choosing-your-theme/#mkdocs">mkdocs</a> and <a
-            href="user-guide/choosing-your-theme/#readthedocs">readthedocs</a>,
-            select one of the third-party themes listed on the <a
-            href="https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes">MkDocs
-            Themes</a> wiki page, or <a href="dev-guide/themes/">build your
-            own</a>.
+            There's a stack of good looking <a href="user-guide/choosing-your-theme">themes</a> available for MkDocs.
+            Choose between the built in themes:
+            <a href="user-guide/choosing-your-theme/#mkdocs">mkdocs</a> and
+            <a href="user-guide/choosing-your-theme/#readthedocs">readthedocs</a>,
+            select one of the third-party themes
+            (on the <a href="https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes">MkDocs Themes</a> wiki page
+            as well as the <a href="https://github.com/mkdocs/catalog#-theming">MkDocs Catalog</a>),
+            or <a href="dev-guide/themes/">build your own</a>.
         </p>
       </div>
     </div>
@@ -79,7 +78,7 @@ configuration file. Start by reading the [introductory tutorial], then check the
         <h3 class="card-title">Host anywhere</h3>
         <p class="card-text">
             MkDocs builds completely static HTML sites that you can host on
-            GitHub pages, Amazon S3, or <a
+            GitHub Pages, Amazon S3, or <a
             href="user-guide/deploying-your-docs/">anywhere</a> else you
             choose.
         </p>

@@ -1,24 +1,24 @@
 site_name: My Docs
 
 nav:
-    - Home: index.md
-    - User Guide:
-        - Writing your docs: index.md
-    - About:
-        - License: index.md
-        - Release Notes:
-            - Version 1: index.md
-            - Version 2: index.md
-            - Version 3: index.md
+  - Home: index.md
+  - User Guide:
+    - Writing your docs: index.md
+  - About:
+    - License: index.md
+    - Release Notes:
+      - Version 1: index.md
+      - Version 2: index.md
+      - Version 3: index.md
 
 site_url: http://www.mkdocs.org/
 docs_dir: documentation
 site_dir: output
 
 theme:
-    name: mkdocs
-    custom_dir: theme_tweaks
-    analytics: {gtag: 'G-ABC123'}
+  name: mkdocs
+  custom_dir: theme_tweaks
+  analytics: {gtag: 'G-ABC123'}
 
 copyright: "Dougal Matthews"
 dev_addr: ::1:8000
@@ -34,13 +34,13 @@ extra_templates: ["custom.html"]
 
 
 markdown_extensions:
-    - toc:
-        permalink: 
-    - admonition:
+  - toc:
+      permalink: 
+  - admonition:
 
 strict: true
 
 remote_branch: none
 remote_name: upstream
 extra:
-    some value: 1
+  some value: 1

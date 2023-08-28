@@ -53,15 +53,21 @@ to the git repository.
 
 ## Running the tests
 
-To run the tests, it is recommended that you use [tox].
+To run the tests, it is recommended that you use [Hatch].
 
-Install Tox using [pip] by running the command `pip install tox`.
-Then the test suite can be run for MkDocs by running the command `tox` in the
+Install Hatch using [pip] by running the command `pip install hatch`.
+Then the test suite can be run for MkDocs by running the command `hatch run all` in the
 root of your MkDocs repository.
 
 It will attempt to run the tests against all of the Python versions we
-support. So don't be concerned if you are missing some and they fail. The rest
-will be verified by [Github Actions] when you submit a pull request.
+support. So don't be concerned if you are missing some. The rest
+will be verified by [GitHub Actions] when you submit a pull request.
+
+## Formatting the code
+
+Python code within MkDocs' code base is formatted using [Black] and [Isort].
+You can automatically format the code according to these tools
+with `hatch run style:format`.
 
 ## Translating themes
 
@@ -86,11 +92,12 @@ with `{% trans %}` and `{% endtrans %}` tags.
 
 Each time a translatable text placeholder is added, removed or changed in a
 theme template, the theme's Portable Object Template (`pot`) file needs to be
-updated by running the `extract_messages` command. For example, to update the
-`pot` file of the `mkdocs` theme, run the following command:
+updated by running the `extract_messages` command. To update the
+`pot` file for both built-in themes, run these commands:
 
 ```bash
-python setup.py extract_messages -t mkdocs
+pybabel extract --project=MkDocs --copyright-holder=MkDocs --msgid-bugs-address='https://github.com/mkdocs/mkdocs/issues' --no-wrap --version="$(hatch version)" --mapping-file mkdocs/themes/babel.cfg --output-file mkdocs/themes/mkdocs/messages.pot mkdocs/themes/mkdocs
+pybabel extract --project=MkDocs --copyright-holder=MkDocs --msgid-bugs-address='https://github.com/mkdocs/mkdocs/issues' --no-wrap --version="$(hatch version)" --mapping-file mkdocs/themes/babel.cfg --output-file mkdocs/themes/readthedocs/messages.pot mkdocs/themes/readthedocs
 ```
 
 The updated `pot` file should be included in a PR with the updated template.
@@ -98,16 +105,17 @@ The updated `pot` file will allow translation contributors to propose the
 translations needed for their preferred language. See the guide on [Translating
 Themes] for details.
 
-!!! Note
-
-    Contributors are not expected to provide translations with their changes to
-    a theme's templates. However, they are expected to include an updated `pot`
-    file so that everything is ready for translators to do their job.
+NOTE:
+Contributors are not expected to provide translations with their changes to
+a theme's templates. However, they are expected to include an updated `pot`
+file so that everything is ready for translators to do their job.
 
 [virtualenv]: https://virtualenv.pypa.io/en/latest/user_guide.html
 [pip]: https://pip.pypa.io/en/stable/
-[tox]: https://tox.readthedocs.io/en/latest/
-[Github Actions]: https://docs.github.com/actions
+[Hatch]: https://hatch.pypa.io/
+[GitHub Actions]: https://docs.github.com/actions
 [PyPA Code of Conduct]: https://www.pypa.io/en/latest/code-of-conduct/
 [Translating Themes]: ../dev-guide/translations.md
 [Jinja's i18n extension]: https://jinja.palletsprojects.com/en/latest/extensions/#i18n-extension
+[Black]: https://pypi.org/project/black/
+[Isort]: https://pypi.org/project/isort/

@@ -490,9 +490,9 @@
                       if (!sbp.eq_s_b(1, "u"))
                         break;
                     }
-                  case 2:
-                    sbp.slice_del();
-                    break;
+                    case 2:
+                      sbp.slice_del();
+                      break;
                 }
               }
               sbp.limit_backward = v_1;

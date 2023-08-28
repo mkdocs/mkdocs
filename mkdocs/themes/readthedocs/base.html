@@ -23,10 +23,10 @@
     <link rel="stylesheet" href="{{ 'css/theme.css'|url }}" />
     <link rel="stylesheet" href="{{ 'css/theme_extra.css'|url }}" />
     {%- if config.theme.highlightjs %}
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/{{ config.theme.hljs_style }}.min.css" />
     {%- endif %}
-    {%- for path in extra_css %}
-        <link href="{{ path }}" rel="stylesheet" />
+    {%- for path in config.extra_css %}
+        <link href="{{ path|url }}" rel="stylesheet" />
     {%- endfor %}
   {%- endblock %}
 
@@ -39,16 +39,15 @@
         var mkdocs_page_url = {{ page.abs_url|tojson }};
       </script>
     {% endif %}
-    <script src="{{ 'js/jquery-3.6.0.min.js'|url }}" defer></script>
     <!--[if lt IE 9]>
       <script src="{{ 'js/html5shiv.min.js'|url }}"></script>
     <![endif]-->
     {%- if config.theme.highlightjs %}
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
       {%- for lang in config.theme.hljs_languages %}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/{{lang}}.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/{{lang}}.min.js"></script>
       {%- endfor %}
-      <script>hljs.initHighlightingOnLoad();</script>
+      <script>hljs.highlightAll();</script>
     {%- endif %}
   {%- endblock %}
 
@@ -62,7 +61,7 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
-        gtag('config', '{{ config.theme.analytics.gtag }}'{%- if config.theme.analytics.anonymize_ip %}, {'anonymize_ip': true}{%- endif %});
+        gtag('config', {{ config.theme.analytics.gtag|tojson }}{%- if config.theme.analytics.anonymize_ip %}, {'anonymize_ip': true}{%- endif %});
       </script>
     {%- elif config.google_analytics %}
       <script>
@@ -71,7 +70,7 @@
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-        ga('create', '{{ config.google_analytics[0] }}', '{{ config.google_analytics[1] }}');
+        ga('create', {{ config.google_analytics[0]|tojson }}, {{ config.google_analytics[1]|tojson }});
         {%- if config.theme.analytics.anonymize_ip %}ga('set', 'anonymizeIp', true);{%- endif %}
         ga('send', 'pageview');
       </script>
@@ -103,9 +102,9 @@
           {{ config.extra.version }}
         </div>
       {%- endif %}
-   	  {%- block search_button %}
-        {%- if 'search' in config['plugins'] %}{%- include "searchbox.html" %}{%- endif %}
-   	  {%- endblock %}
+      {%- block search_button %}
+        {%- if 'search' in config.plugins %}{%- include "searchbox.html" %}{%- endif %}
+      {%- endblock %}
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="{% trans %}Navigation menu{% endtrans %}">
@@ -168,16 +167,17 @@
   {% include "versions.html" -%}
 
   {%- block scripts %}
-    <script>var base_url = '{{ base_url }}';</script>
-    <script src="{{ 'js/theme_extra.js'|url }}" defer></script>
-    <script src="{{ 'js/theme.js'|url }}" defer></script>
-    {%- for path in extra_javascript %}
-      <script src="{{ path }}" defer></script>
+    <script src="{{ 'js/jquery-3.6.0.min.js'|url }}"></script>
+    <script>var base_url = {{ base_url|tojson }};</script>
+    <script src="{{ 'js/theme_extra.js'|url }}"></script>
+    <script src="{{ 'js/theme.js'|url }}"></script>
+    {%- for script in config.extra_javascript %}
+      {{ script|script_tag }}
     {%- endfor %}
-    <script defer>
-        window.onload = function () {
+    <script>
+        jQuery(function () {
             SphinxRtdTheme.Navigation.enable({{ 'true' if config.theme.sticky_navigation else 'false' }});
-        };
+        });
     </script>
   {%- endblock %}
 

@@ -1,7 +1,7 @@
 # Config options for 'readthedocs' theme
 
 static_templates:
-    - 404.html
+  - 404.html
 
 locale: en
 
@@ -10,6 +10,7 @@ search_index_only: false
 
 highlightjs: true
 hljs_languages: []
+hljs_style: github
 
 analytics:
   gtag: null

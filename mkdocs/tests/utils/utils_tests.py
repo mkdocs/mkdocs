@@ -1,19 +1,17 @@
 #!/usr/bin/env python
 
-
-from unittest import mock
-import os
-import unittest
-import tempfile
-import shutil
-import stat
+import dataclasses
 import datetime
 import logging
+import os
+import posixpath
+import stat
+import unittest
+from unittest import mock
 
-from mkdocs import utils, exceptions
-from mkdocs.structure.files import File
-from mkdocs.structure.pages import Page
-from mkdocs.tests.base import dedent, load_config, tempdir
+from mkdocs import exceptions, utils
+from mkdocs.tests.base import dedent, tempdir
+from mkdocs.utils import meta
 
 BASEYML = """
 INHERIT: parent.yml
@@ -39,244 +37,179 @@ deep1:
 
 
 class UtilsTests(unittest.TestCase):
-    def test_html_path(self):
-        expected_results = {
-            'index.md': 'index.html',
-            'api-guide.md': 'api-guide/index.html',
-            'api-guide/index.md': 'api-guide/index.html',
-            'api-guide/testing.md': 'api-guide/testing/index.html',
-        }
-        for file_path, expected_html_path in expected_results.items():
-            html_path = utils.get_html_path(file_path)
-            self.assertEqual(html_path, expected_html_path)
-
-    def test_url_path(self):
-        expected_results = {
-            'index.md': '/',
-            'api-guide.md': '/api-guide/',
-            'api-guide/index.md': '/api-guide/',
-            'api-guide/testing.md': '/api-guide/testing/',
-        }
-        for file_path, expected_html_path in expected_results.items():
-            html_path = utils.get_url_path(file_path)
-            self.assertEqual(html_path, expected_html_path)
-
     def test_is_markdown_file(self):
         expected_results = {
             'index.md': True,
-            'index.MARKDOWN': True,
+            'index.markdown': True,
+            'index.MARKDOWN': False,
             'index.txt': False,
-            'indexmd': False
+            'indexmd': False,
         }
         for path, expected_result in expected_results.items():
-            is_markdown = utils.is_markdown_file(path)
-            self.assertEqual(is_markdown, expected_result)
-
-    def test_is_html_file(self):
-        expected_results = {
-            'index.htm': True,
-            'index.HTML': True,
-            'index.txt': False,
-            'indexhtml': False
-        }
-        for path, expected_result in expected_results.items():
-            is_html = utils.is_html_file(path)
-            self.assertEqual(is_html, expected_result)
+            with self.subTest(path):
+                is_markdown = utils.is_markdown_file(path)
+                self.assertEqual(is_markdown, expected_result)
 
     def test_get_relative_url(self):
-        expected_results = {
-            ('foo/bar', 'foo'): 'bar',
-            ('foo/bar.txt', 'foo'): 'bar.txt',
-            ('foo', 'foo/bar'): '..',
-            ('foo', 'foo/bar.txt'): '.',
-            ('foo/../../bar', '.'): 'bar',
-            ('foo/../../bar', 'foo'): '../bar',
-            ('foo//./bar/baz', 'foo/bar/baz'): '.',
-            ('a/b/.././../c', '.'): 'c',
-            ('a/b/c/d/ee', 'a/b/c/d/e'): '../ee',
-            ('a/b/c/d/ee', 'a/b/z/d/e'): '../../../c/d/ee',
-            ('foo', 'bar.'): 'foo',
-            ('foo', 'bar./'): '../foo',
-            ('foo', 'foo/bar./'): '..',
-            ('foo', 'foo/bar./.'): '..',
-            ('foo', 'foo/bar././'): '..',
-            ('foo/', 'foo/bar././'): '../',
-            ('foo', 'foo'): '.',
-            ('.foo', '.foo'): '.foo',
-            ('.foo/', '.foo'): '.foo/',
-            ('.foo', '.foo/'): '.',
-            ('.foo/', '.foo/'): './',
-            ('///', ''): './',
-            ('a///', ''): 'a/',
-            ('a///', 'a'): './',
-            ('.', 'here'): '..',
-            ('..', 'here'): '..',
-            ('../..', 'here'): '..',
-            ('../../a', 'here'): '../a',
-            ('..', 'here.txt'): '.',
-            ('a', ''): 'a',
-            ('a', '..'): 'a',
-            ('a', 'b'): '../a',
-            ('a', 'b/..'): '../a',  # The dots are considered a file. Documenting a long-standing bug.
-            ('a', 'b/../..'): 'a',
-            ('a/..../b', 'a/../b'): '../a/..../b',
-            ('a/я/b', 'a/я/c'): '../b',
-            ('a/я/b', 'a/яя/c'): '../../я/b',
-        }
-        for (url, other), expected_result in expected_results.items():
-            # Leading slash intentionally ignored
-            self.assertEqual(utils.get_relative_url(url, other), expected_result)
-            self.assertEqual(utils.get_relative_url('/' + url, other), expected_result)
-            self.assertEqual(utils.get_relative_url(url, '/' + other), expected_result)
-            self.assertEqual(utils.get_relative_url('/' + url, '/' + other), expected_result)
+        for case in [
+            dict(url='foo/bar', other='foo', expected='bar'),
+            dict(url='foo/bar.txt', other='foo', expected='bar.txt'),
+            dict(url='foo', other='foo/bar', expected='..'),
+            dict(url='foo', other='foo/bar.txt', expected='.'),
+            dict(url='foo/../../bar', other='.', expected='bar'),
+            dict(url='foo/../../bar', other='foo', expected='../bar'),
+            dict(url='foo//./bar/baz', other='foo/bar/baz', expected='.'),
+            dict(url='a/b/.././../c', other='.', expected='c'),
+            dict(url='a/b/c/d/ee', other='a/b/c/d/e', expected='../ee'),
+            dict(url='a/b/c/d/ee', other='a/b/z/d/e', expected='../../../c/d/ee'),
+            dict(url='foo', other='bar.', expected='foo'),
+            dict(url='foo', other='bar./', expected='../foo'),
+            dict(url='foo', other='foo/bar./', expected='..'),
+            dict(url='foo', other='foo/bar./.', expected='..'),
+            dict(url='foo', other='foo/bar././', expected='..'),
+            dict(url='foo/', other='foo/bar././', expected='../'),
+            dict(url='foo', other='foo', expected='.'),
+            dict(url='.foo', other='.foo', expected='.foo'),
+            dict(url='.foo/', other='.foo', expected='.foo/'),
+            dict(url='.foo', other='.foo/', expected='.'),
+            dict(url='.foo/', other='.foo/', expected='./'),
+            dict(url='///', other='', expected='./'),
+            dict(url='a///', other='', expected='a/'),
+            dict(url='a///', other='a', expected='./'),
+            dict(url='.', other='here', expected='..'),
+            dict(url='..', other='here', expected='..'),
+            dict(url='../..', other='here', expected='..'),
+            dict(url='../../a', other='here', expected='../a'),
+            dict(url='..', other='here.txt', expected='.'),
+            dict(url='a', other='', expected='a'),
+            dict(url='a', other='..', expected='a'),
+            dict(url='a', other='b', expected='../a'),
+            # The dots are considered a file. Documenting a long-standing bug:
+            dict(url='a', other='b/..', expected='../a'),
+            dict(url='a', other='b/../..', expected='a'),
+            dict(url='a/..../b', other='a/../b', expected='../a/..../b'),
+            dict(url='a/я/b', other='a/я/c', expected='../b'),
+            dict(url='a/я/b', other='a/яя/c', expected='../../я/b'),
+        ]:
+            url, other, expected = case['url'], case['other'], case['expected']
+            with self.subTest(url=url, other=other):
+                # Leading slash intentionally ignored
+                self.assertEqual(utils.get_relative_url(url, other), expected)
+                self.assertEqual(utils.get_relative_url('/' + url, other), expected)
+                self.assertEqual(utils.get_relative_url(url, '/' + other), expected)
+                self.assertEqual(utils.get_relative_url('/' + url, '/' + other), expected)
 
     def test_get_relative_url_empty(self):
         for url in ['', '.', '/.']:
             for other in ['', '.', '/', '/.']:
-                self.assertEqual(utils.get_relative_url(url, other), '.')
+                with self.subTest(url=url, other=other):
+                    self.assertEqual(utils.get_relative_url(url, other), '.')
 
         self.assertEqual(utils.get_relative_url('/', ''), './')
         self.assertEqual(utils.get_relative_url('/', '/'), './')
         self.assertEqual(utils.get_relative_url('/', '.'), './')
         self.assertEqual(utils.get_relative_url('/', '/.'), './')
 
-    def test_create_media_urls(self):
+    def test_normalize_url(self):
+        def test(path, base, expected):
+            self.assertEqual(utils.normalize_url(path, _Page(base)), expected)
 
-        expected_results = {
-            'https://media.cdn.org/jq.js': [
-                'https://media.cdn.org/jq.js',
-                'https://media.cdn.org/jq.js',
-                'https://media.cdn.org/jq.js'
-            ],
-            'http://media.cdn.org/jquery.js': [
-                'http://media.cdn.org/jquery.js',
-                'http://media.cdn.org/jquery.js',
-                'http://media.cdn.org/jquery.js'
-            ],
-            '//media.cdn.org/jquery.js': [
-                '//media.cdn.org/jquery.js',
-                '//media.cdn.org/jquery.js',
-                '//media.cdn.org/jquery.js'
-            ],
-            'media.cdn.org/jquery.js': [
-                'media.cdn.org/jquery.js',
-                'media.cdn.org/jquery.js',
-                '../media.cdn.org/jquery.js'
-            ],
-            'local/file/jquery.js': [
-                'local/file/jquery.js',
-                'local/file/jquery.js',
-                '../local/file/jquery.js'
-            ],
-            'local\\windows\\file\\jquery.js': [
-                'local/windows/file/jquery.js',
-                'local/windows/file/jquery.js',
-                '../local/windows/file/jquery.js'
-            ],
-            'image.png': [
-                'image.png',
-                'image.png',
-                '../image.png'
-            ],
-            'style.css?v=20180308c': [
-                'style.css?v=20180308c',
-                'style.css?v=20180308c',
-                '../style.css?v=20180308c'
-            ],
-            '#some_id': [
-                '#some_id',
-                '#some_id',
-                '#some_id'
-            ]
-        }
+        # Absolute paths and anchors are unaffected.
+        for base in 'about.html', 'foo/bar.html', 'index.html', '', 'about/', 'foo/bar/':
+            test('https://media.cdn.org/jq.js', base, 'https://media.cdn.org/jq.js')
+            test('http://media.cdn.org/jquery.js', base, 'http://media.cdn.org/jquery.js')
+            test('//media.cdn.org/jquery.js', base, '//media.cdn.org/jquery.js')
+            test('#some_id', base, '#some_id')
 
-        cfg = load_config(use_directory_urls=False)
-        pages = [
-            Page('Home', File('index.md',  cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']), cfg),
-            Page('About', File('about.md',  cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']), cfg),
-            Page('FooBar', File('foo/bar.md',  cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']), cfg)
-        ]
+        path = 'media.cdn.org/jquery.js'
+        test(path, '', 'media.cdn.org/jquery.js')
+        test(path, 'index.html', 'media.cdn.org/jquery.js')
+        test(path, 'about.html', 'media.cdn.org/jquery.js')
+        test(path, 'about/', '../media.cdn.org/jquery.js')
+        test(path, 'foo/bar.html', '../media.cdn.org/jquery.js')
+        test(path, 'foo/bar/', '../../media.cdn.org/jquery.js')
 
-        for i, page in enumerate(pages):
-            urls = utils.create_media_urls(expected_results.keys(), page)
-            self.assertEqual([v[i] for v in expected_results.values()], urls)
+        path = 'local/file/jquery.js'
+        test(path, '', 'local/file/jquery.js')
+        test(path, 'index.html', 'local/file/jquery.js')
+        test(path, 'about.html', 'local/file/jquery.js')
+        test(path, 'about/', '../local/file/jquery.js')
+        test(path, 'foo/bar.html', '../local/file/jquery.js')
+        test(path, 'foo/bar/', '../../local/file/jquery.js')
 
-    def test_create_media_urls_use_directory_urls(self):
+        path = '../../../../above/jquery.js'
+        test(path, '', '../../../../above/jquery.js')
+        test(path, 'index.html', '../../../../above/jquery.js')
+        test(path, 'about.html', '../../../../above/jquery.js')
+        test(path, 'about/', '../../../../../above/jquery.js')
+        test(path, 'foo/bar.html', '../../../../../above/jquery.js')
+        test(path, 'foo/bar/', '../../../../../../above/jquery.js')
 
-        expected_results = {
-            'https://media.cdn.org/jq.js': [
-                'https://media.cdn.org/jq.js',
-                'https://media.cdn.org/jq.js',
-                'https://media.cdn.org/jq.js'
-            ],
-            'http://media.cdn.org/jquery.js': [
-                'http://media.cdn.org/jquery.js',
-                'http://media.cdn.org/jquery.js',
-                'http://media.cdn.org/jquery.js'
-            ],
-            '//media.cdn.org/jquery.js': [
-                '//media.cdn.org/jquery.js',
-                '//media.cdn.org/jquery.js',
-                '//media.cdn.org/jquery.js'
-            ],
-            'media.cdn.org/jquery.js': [
-                'media.cdn.org/jquery.js',
-                '../media.cdn.org/jquery.js',
-                '../../media.cdn.org/jquery.js'
-            ],
-            'local/file/jquery.js': [
-                'local/file/jquery.js',
-                '../local/file/jquery.js',
-                '../../local/file/jquery.js'
-            ],
-            'local\\windows\\file\\jquery.js': [
-                'local/windows/file/jquery.js',
-                '../local/windows/file/jquery.js',
-                '../../local/windows/file/jquery.js'
-            ],
-            'image.png': [
-                'image.png',
-                '../image.png',
-                '../../image.png'
-            ],
-            'style.css?v=20180308c': [
-                'style.css?v=20180308c',
-                '../style.css?v=20180308c',
-                '../../style.css?v=20180308c'
-            ],
-            '#some_id': [
-                '#some_id',
-                '#some_id',
-                '#some_id'
-            ]
-        }
+        path = '../some/dir/'
+        test(path, '', '../some/dir/')
+        test(path, 'index.html', '../some/dir/')
+        test(path, 'about.html', '../some/dir/')
+        test(path, 'about/', '../../some/dir/')
+        test(path, 'foo/bar.html', '../../some/dir/')
+        test(path, 'foo/bar/', '../../../some/dir/')
 
-        cfg = load_config(use_directory_urls=True)
-        pages = [
-            Page('Home', File('index.md',  cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']), cfg),
-            Page('About', File('about.md',  cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']), cfg),
-            Page('FooBar', File('foo/bar.md',  cfg['docs_dir'], cfg['site_dir'], cfg['use_directory_urls']), cfg)
-        ]
+        path = 'image.png'
+        test(path, '', 'image.png')
+        test(path, 'index.html', 'image.png')
+        test(path, 'about.html', 'image.png')
+        test(path, 'about/', '../image.png')
+        test(path, 'foo/bar.html', '../image.png')
+        test(path, 'foo/bar/', '../../image.png')
 
-        for i, page in enumerate(pages):
-            urls = utils.create_media_urls(expected_results.keys(), page)
-            self.assertEqual([v[i] for v in expected_results.values()], urls)
+        path = 'style.css?v=20180308c'
+        test(path, '', 'style.css?v=20180308c')
+        test(path, 'index.html', 'style.css?v=20180308c')
+        test(path, 'about.html', 'style.css?v=20180308c')
+        test(path, 'about/', '../style.css?v=20180308c')
+        test(path, 'foo/bar.html', '../style.css?v=20180308c')
+        test(path, 'foo/bar/', '../../style.css?v=20180308c')
+
+    # TODO: This shouldn't pass on Linux
+    # @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
+    def test_normalize_url_windows(self):
+        def test(path, base, expected):
+            self.assertEqual(utils.normalize_url(path, _Page(base)), expected)
+
+        with self.assertLogs('mkdocs', level='WARNING'):
+            path = 'local\\windows\\file\\jquery.js'
+            test(path, '', 'local/windows/file/jquery.js')
+            test(path, 'about/', '../local/windows/file/jquery.js')
+            test(path, 'foo/bar/', '../../local/windows/file/jquery.js')
 
     def test_reduce_list(self):
         self.assertEqual(
             utils.reduce_list([1, 2, 3, 4, 5, 5, 2, 4, 6, 7, 8]),
-            [1, 2, 3, 4, 5, 6, 7, 8]
+            [1, 2, 3, 4, 5, 6, 7, 8],
         )
 
+    def test_insort(self):
+        a = [1, 2, 3]
+        utils.insort(a, 5)
+        self.assertEqual(a, [1, 2, 3, 5])
+        utils.insort(a, -1)
+        self.assertEqual(a, [-1, 1, 2, 3, 5])
+        utils.insort(a, 2)
+        self.assertEqual(a, [-1, 1, 2, 2, 3, 5])
+        utils.insort(a, 4)
+        self.assertEqual(a, [-1, 1, 2, 2, 3, 4, 5])
+
+    def test_insort_key(self):
+        a = [(1, 'a'), (1, 'b'), (2, 'c')]
+        utils.insort(a, (1, 'a'), key=lambda v: v[0])
+        self.assertEqual(a, [(1, 'a'), (1, 'b'), (1, 'a'), (2, 'c')])
+
     def test_get_themes(self):
+        themes = utils.get_theme_names()
+        self.assertIn('mkdocs', themes)
+        self.assertIn('readthedocs', themes)
 
-        self.assertEqual(
-            sorted(utils.get_theme_names()),
-            ['mkdocs', 'readthedocs'])
-
-    @mock.patch('importlib_metadata.entry_points', autospec=True)
+    @mock.patch('mkdocs.utils.entry_points', autospec=True)
     def test_get_theme_dir(self, mock_iter):
-
         path = 'some/path'
 
         theme = mock.Mock()
@@ -289,13 +222,11 @@ class UtilsTests(unittest.TestCase):
         self.assertEqual(utils.get_theme_dir(theme.name), os.path.abspath(path))
 
     def test_get_theme_dir_keyerror(self):
-
         with self.assertRaises(KeyError):
             utils.get_theme_dir('nonexistanttheme')
 
-    @mock.patch('importlib_metadata.entry_points', autospec=True)
+    @mock.patch('mkdocs.utils.entry_points', autospec=True)
     def test_get_theme_dir_importerror(self, mock_iter):
-
         theme = mock.Mock()
         theme.name = 'mkdocs2'
         theme.dist.name = 'mkdocs2'
@@ -306,9 +237,8 @@ class UtilsTests(unittest.TestCase):
         with self.assertRaises(ImportError):
             utils.get_theme_dir(theme.name)
 
-    @mock.patch('importlib_metadata.entry_points', autospec=True)
+    @mock.patch('mkdocs.utils.entry_points', autospec=True)
     def test_get_themes_warning(self, mock_iter):
-
         theme1 = mock.Mock()
         theme1.name = 'mkdocs2'
         theme1.dist.name = 'mkdocs2'
@@ -321,13 +251,17 @@ class UtilsTests(unittest.TestCase):
 
         mock_iter.return_value = [theme1, theme2]
 
+        with self.assertLogs('mkdocs') as cm:
+            theme_names = utils.get_theme_names()
         self.assertEqual(
-            sorted(utils.get_theme_names()),
-            sorted(['mkdocs2', ]))
+            '\n'.join(cm.output),
+            "WARNING:mkdocs.utils:A theme named 'mkdocs2' is provided by the Python "
+            "packages 'mkdocs3' and 'mkdocs2'. The one in 'mkdocs3' will be used.",
+        )
+        self.assertCountEqual(theme_names, ['mkdocs2'])
 
-    @mock.patch('importlib_metadata.entry_points', autospec=True)
+    @mock.patch('mkdocs.utils.entry_points', autospec=True)
     def test_get_themes_error(self, mock_iter):
-
         theme1 = mock.Mock()
         theme1.name = 'mkdocs'
         theme1.dist.name = 'mkdocs'
@@ -340,47 +274,58 @@ class UtilsTests(unittest.TestCase):
 
         mock_iter.return_value = [theme1, theme2]
 
-        with self.assertRaises(exceptions.ConfigurationError):
+        with self.assertRaisesRegex(
+            exceptions.ConfigurationError,
+            "The theme 'mkdocs' is a builtin theme but the package 'mkdocs2' "
+            "attempts to provide a theme with the same name.",
+        ):
             utils.get_theme_names()
 
-    def test_nest_paths(self):
-
-        j = os.path.join
-
-        result = utils.nest_paths([
-            'index.md',
-            j('user-guide', 'configuration.md'),
-            j('user-guide', 'styling-your-docs.md'),
-            j('user-guide', 'writing-your-docs.md'),
-            j('about', 'contributing.md'),
-            j('about', 'license.md'),
-            j('about', 'release-notes.md'),
-        ])
+    def test_nest_paths(self, j=posixpath.join):
+        result = utils.nest_paths(
+            [
+                'index.md',
+                j('user-guide', 'configuration.md'),
+                j('user-guide', 'styling-your-docs.md'),
+                j('user-guide', 'writing-your-docs.md'),
+                j('about', 'contributing.md'),
+                j('about', 'license.md'),
+                j('about', 'release-notes.md'),
+            ]
+        )
 
         self.assertEqual(
             result,
             [
                 'index.md',
-                {'User guide': [
-                    j('user-guide', 'configuration.md'),
-                    j('user-guide', 'styling-your-docs.md'),
-                    j('user-guide', 'writing-your-docs.md')]},
-                {'About': [
-                    j('about', 'contributing.md'),
-                    j('about', 'license.md'),
-                    j('about', 'release-notes.md')]}
-            ]
+                {
+                    'User guide': [
+                        j('user-guide', 'configuration.md'),
+                        j('user-guide', 'styling-your-docs.md'),
+                        j('user-guide', 'writing-your-docs.md'),
+                    ]
+                },
+                {
+                    'About': [
+                        j('about', 'contributing.md'),
+                        j('about', 'license.md'),
+                        j('about', 'release-notes.md'),
+                    ]
+                },
+            ],
         )
 
-    def test_unicode_yaml(self):
+    def test_nest_paths_native(self):
+        self.test_nest_paths(os.path.join)
 
+    def test_unicode_yaml(self):
         yaml_src = dedent(
             '''
             key: value
             key2:
               - value
             '''
-        ).encode('utf-8')
+        )
 
         config = utils.yaml_load(yaml_src)
         self.assertTrue(isinstance(config['key'], str))
@@ -388,7 +333,6 @@ class UtilsTests(unittest.TestCase):
 
     @mock.patch.dict(os.environ, {'VARNAME': 'Hello, World!', 'BOOLVAR': 'false'})
     def test_env_var_in_yaml(self):
-
         yaml_src = dedent(
             '''
             key1: !ENV VARNAME
@@ -399,12 +343,9 @@ class UtilsTests(unittest.TestCase):
             '''
         )
         config = utils.yaml_load(yaml_src)
-        self.assertIsInstance(config['key1'], str)
         self.assertEqual(config['key1'], 'Hello, World!')
         self.assertIsNone(config['key2'])
-        self.assertIsInstance(config['key3'], str)
         self.assertEqual(config['key3'], 'default')
-        self.assertIsInstance(config['key4'], str)
         self.assertEqual(config['key4'], 'Hello, World!')
         self.assertIs(config['key5'], False)
 
@@ -415,15 +356,15 @@ class UtilsTests(unittest.TestCase):
             'baz': {
                 'sub1': 'replaced',
                 'sub2': 2,
-                'sub3': 'new'
+                'sub3': 'new',
             },
             'deep1': {
                 'deep2-1': {
                     'deep3-1': 'replaced',
-                    'deep3-2': 'bar'
+                    'deep3-2': 'bar',
                 },
-                'deep2-2': 'baz'
-            }
+                'deep2-2': 'baz',
+            },
         }
         with open(os.path.join(tdir, 'base.yml')) as fd:
             result = utils.yaml_load(fd)
@@ -435,73 +376,68 @@ class UtilsTests(unittest.TestCase):
             with self.assertRaises(exceptions.ConfigurationError):
                 utils.yaml_load(fd)
 
-    def test_copy_files(self):
-        src_paths = [
-            'foo.txt',
-            'bar.txt',
-            'baz.txt',
-        ]
-        dst_paths = [
-            'foo.txt',
-            'foo/',             # ensure src filename is appended
-            'foo/bar/baz.txt'   # ensure missing dirs are created
-        ]
-        expected = [
-            'foo.txt',
-            'foo/bar.txt',
-            'foo/bar/baz.txt',
+    @tempdir()
+    @tempdir()
+    def test_copy_files(self, src_dir, dst_dir):
+        cases = [
+            dict(
+                src_path='foo.txt',
+                dst_path='foo.txt',
+                expected='foo.txt',
+            ),
+            dict(
+                src_path='bar.txt',
+                dst_path='foo/',  # ensure src filename is appended
+                expected='foo/bar.txt',
+            ),
+            dict(
+                src_path='baz.txt',
+                dst_path='foo/bar/baz.txt',  # ensure missing dirs are created
+                expected='foo/bar/baz.txt',
+            ),
         ]
 
-        src_dir = tempfile.mkdtemp()
-        dst_dir = tempfile.mkdtemp()
-
-        try:
-            for i, src in enumerate(src_paths):
+        for case in cases:
+            src, dst, expected = case['src_path'], case['dst_path'], case['expected']
+            with self.subTest(src):
                 src = os.path.join(src_dir, src)
                 with open(src, 'w') as f:
                     f.write('content')
-                dst = os.path.join(dst_dir, dst_paths[i])
+                dst = os.path.join(dst_dir, dst)
                 utils.copy_file(src, dst)
-                self.assertTrue(os.path.isfile(os.path.join(dst_dir, expected[i])))
-        finally:
-            shutil.rmtree(src_dir)
-            shutil.rmtree(dst_dir)
+                self.assertTrue(os.path.isfile(os.path.join(dst_dir, expected)))
 
-    def test_copy_files_without_permissions(self):
-        src_paths = [
-            'foo.txt',
-            'bar.txt',
-            'baz.txt',
+    @tempdir()
+    @tempdir()
+    def test_copy_files_without_permissions(self, src_dir, dst_dir):
+        cases = [
+            dict(src_path='foo.txt', expected='foo.txt'),
+            dict(src_path='bar.txt', expected='bar.txt'),
+            dict(src_path='baz.txt', expected='baz.txt'),
         ]
-        expected = [
-            'foo.txt',
-            'bar.txt',
-            'baz.txt',
-        ]
-
-        src_dir = tempfile.mkdtemp()
-        dst_dir = tempfile.mkdtemp()
 
         try:
-            for i, src in enumerate(src_paths):
-                src = os.path.join(src_dir, src)
-                with open(src, 'w') as f:
-                    f.write('content')
-                # Set src file to read-only
-                os.chmod(src, stat.S_IRUSR)
-                utils.copy_file(src, dst_dir)
-                self.assertTrue(os.path.isfile(os.path.join(dst_dir, expected[i])))
-                self.assertNotEqual(os.stat(src).st_mode, os.stat(os.path.join(dst_dir, expected[i])).st_mode)
-                # While src was read-only, dst must remain writable
-                self.assertTrue(os.access(os.path.join(dst_dir, expected[i]), os.W_OK))
+            for case in cases:
+                src, expected = case['src_path'], case['expected']
+                with self.subTest(src):
+                    src = os.path.join(src_dir, src)
+                    with open(src, 'w') as f:
+                        f.write('content')
+                    # Set src file to read-only
+                    os.chmod(src, stat.S_IRUSR)
+                    utils.copy_file(src, dst_dir)
+                    self.assertTrue(os.path.isfile(os.path.join(dst_dir, expected)))
+                    self.assertNotEqual(
+                        os.stat(src).st_mode, os.stat(os.path.join(dst_dir, expected)).st_mode
+                    )
+                    # While src was read-only, dst must remain writable
+                    self.assertTrue(os.access(os.path.join(dst_dir, expected), os.W_OK))
         finally:
-            for src in src_paths:
+            for case in cases:
                 # Undo read-only so we can delete temp files
-                src = os.path.join(src_dir, src)
+                src = os.path.join(src_dir, case['src_path'])
                 if os.path.exists(src):
                     os.chmod(src, stat.S_IRUSR | stat.S_IWUSR)
-            shutil.rmtree(src_dir)
-            shutil.rmtree(dst_dir)
 
     def test_mm_meta_data(self):
         doc = dedent(
@@ -517,21 +453,21 @@ class UtilsTests(unittest.TestCase):
             """
         )
         self.assertEqual(
-            utils.meta.get_data(doc),
+            meta.get_data(doc),
             (
                 "Doc body",
                 {
                     'title': 'Foo Bar',
                     'date': '2018-07-10',
                     'summary': 'Line one Line two',
-                    'tags': 'foo bar'
-                }
-            )
+                    'tags': 'foo bar',
+                },
+            ),
         )
 
     def test_mm_meta_data_blank_first_line(self):
         doc = '\nfoo: bar\nDoc body'
-        self.assertEqual(utils.meta.get_data(doc), (doc.lstrip(), {}))
+        self.assertEqual(meta.get_data(doc), (doc.lstrip(), {}))
 
     def test_yaml_meta_data(self):
         doc = dedent(
@@ -549,16 +485,16 @@ class UtilsTests(unittest.TestCase):
             """
         )
         self.assertEqual(
-            utils.meta.get_data(doc),
+            meta.get_data(doc),
             (
                 "Doc body",
                 {
                     'Title': 'Foo Bar',
                     'Date': datetime.date(2018, 7, 10),
                     'Summary': 'Line one Line two',
-                    'Tags': ['foo', 'bar']
-                }
-            )
+                    'Tags': ['foo', 'bar'],
+                },
+            ),
         )
 
     def test_yaml_meta_data_not_dict(self):
@@ -570,7 +506,7 @@ class UtilsTests(unittest.TestCase):
             Doc body
             """
         )
-        self.assertEqual(utils.meta.get_data(doc), (doc, {}))
+        self.assertEqual(meta.get_data(doc), (doc, {}))
 
     def test_yaml_meta_data_invalid(self):
         doc = dedent(
@@ -581,7 +517,7 @@ class UtilsTests(unittest.TestCase):
             Doc body
             """
         )
-        self.assertEqual(utils.meta.get_data(doc), (doc, {}))
+        self.assertEqual(meta.get_data(doc), (doc, {}))
 
     def test_no_meta_data(self):
         doc = dedent(
@@ -589,7 +525,7 @@ class UtilsTests(unittest.TestCase):
             Doc body
             """
         )
-        self.assertEqual(utils.meta.get_data(doc), (doc, {}))
+        self.assertEqual(meta.get_data(doc), (doc, {}))
 
 
 class LogCounterTests(unittest.TestCase):
@@ -654,3 +590,8 @@ class LogCounterTests(unittest.TestCase):
         self.log.warning('counted')
         self.log.info('not counted')
         self.assertEqual(self.counter.get_counts(), [('ERROR', 2), ('WARNING', 1)])
+
+
+@dataclasses.dataclass
+class _Page:
+    url: str

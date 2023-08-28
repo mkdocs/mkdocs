@@ -1,0 +1,217 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mkdocs"
+description = "Project documentation with Markdown."
+readme = "README.md"
+license = "BSD-2-Clause"
+authors = [
+    {name = "Tom Christie", email = "tom@tomchristie.com"},
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Topic :: Documentation",
+    "Topic :: Text Processing",
+]
+dynamic = ["version"]
+requires-python = ">=3.7"
+dependencies = [
+    "click >=7.0",
+    "Jinja2 >=2.11.1",
+    "markupsafe >=2.0.1",
+    "Markdown >=3.2.1",
+    "PyYAML >=5.1",
+    "watchdog >=2.0",
+    "ghp-import >=1.0",
+    "pyyaml_env_tag >=0.1",
+    "importlib-metadata >=4.3; python_version < '3.10'",
+    "typing-extensions >=3.10; python_version < '3.8'",
+    "packaging >=20.5",
+    "mergedeep >=1.3.4",
+    "pathspec >=0.11.1",
+    "platformdirs >=2.2.0",
+    "colorama >=0.4; platform_system == 'Windows'",
+]
+[project.optional-dependencies]
+i18n = [
+    "babel >=2.9.0",
+]
+min-versions = [
+    "click ==7.0",
+    "Jinja2 ==2.11.1",
+    "markupsafe ==2.0.1",
+    "Markdown ==3.2.1",
+    "PyYAML ==5.1",
+    "watchdog ==2.0",
+    "ghp-import ==1.0",
+    "pyyaml_env_tag ==0.1",
+    "importlib-metadata ==4.3; python_version < '3.10'",
+    "typing-extensions ==3.10; python_version < '3.8'",
+    "packaging ==20.5",
+    "mergedeep ==1.3.4",
+    "pathspec ==0.11.1",
+    "platformdirs ==2.2.0",
+    "colorama ==0.4; platform_system == 'Windows'",
+    "babel ==2.9.0",
+]
+
+[project.urls]
+Documentation = "https://www.mkdocs.org/"
+Source = "https://github.com/mkdocs/mkdocs"
+Issues = "https://github.com/mkdocs/mkdocs/issues"
+History = "https://www.mkdocs.org/about/release-notes/"
+
+[project.scripts]
+mkdocs = "mkdocs.__main__:cli"
+
+[project.entry-points."mkdocs.themes"]
+mkdocs = "mkdocs.themes.mkdocs"
+readthedocs = "mkdocs.themes.readthedocs"
+
+[project.entry-points."mkdocs.plugins"]
+search = "mkdocs.contrib.search:SearchPlugin"
+
+[tool.hatch.version]
+path = "mkdocs/__init__.py"
+
+[tool.hatch.build]
+artifacts = ["/mkdocs/**/*.mo"]
+[tool.hatch.build.targets.sdist]
+include = ["/mkdocs"]
+[tool.hatch.build.targets.wheel]
+exclude = ["/mkdocs/tests/integration", "*.po", "*.pot", "babel.cfg"]
+[tool.hatch.build.hooks.custom]
+dependencies = [
+    "babel",
+]
+
+[tool.hatch.envs.default.scripts]
+all = [
+    "hatch run types:check",
+    "hatch run test:test",
+    "hatch run style:check",
+    "hatch run lint:check",
+    "hatch run +type=default integration:test",
+]
+
+[tool.hatch.envs.test]
+features = ["i18n"]
+dependencies = [
+    "coverage",
+]
+[tool.hatch.envs.test.scripts]
+test = "coverage run --source=mkdocs --omit 'mkdocs/tests/*' -m unittest discover -p '*tests.py' mkdocs --top-level-directory ."
+_coverage = ["test", "coverage xml", "coverage report --show-missing"]
+with-coverage = "test"
+[[tool.hatch.envs.test.matrix]]
+python = ["3.7", "3.8", "3.9", "3.10", "3.11", "pypy3"]
+type = ["default", "min-req"]
+[tool.hatch.envs.test.overrides]
+matrix.type.features = [
+    { value = "min-versions", if = ["min-req"] },
+]
+matrix.type.scripts = [
+    { key = "with-coverage", value = "_coverage", if = ["default"] },
+]
+
+[tool.hatch.envs.integration]
+template = "docs"
+[tool.hatch.envs.integration.scripts]
+test = "python -m mkdocs.tests.integration"
+[[tool.hatch.envs.integration.matrix]]
+python = ["3.7", "3.8", "3.9", "3.10", "3.11", "pypy3"]
+type = ["default", "no-babel"]
+[tool.hatch.envs.integration.overrides]
+matrix.type.features = [
+    { value = "i18n", if = ["default"] },
+]
+
+[tool.hatch.envs.types]
+dependencies = [
+    "mypy",
+    "types-Jinja2",
+    "types-Markdown",
+    "types-PyYAML",
+    "types-setuptools",
+    "typing-extensions",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy mkdocs"
+
+[tool.hatch.envs.style]
+detached = true
+dependencies = [
+    "black",
+    "isort",
+    "flake8",
+    "flake8-type-checking",
+]
+[tool.hatch.envs.style.scripts]
+lint = [
+    "flake8 mkdocs",
+]
+check = [
+    "isort --check-only --diff mkdocs docs",
+    "black -q --check --diff mkdocs docs",
+    "lint",
+]
+format = [
+    "isort -q mkdocs docs",
+    "black -q mkdocs docs",
+]
+
+[tool.hatch.envs.lint]
+detached = true
+dependencies = [
+    "codespell",
+]
+[tool.hatch.envs.lint.scripts]
+spelling = "codespell mkdocs docs *.* -S LC_MESSAGES -S '*.min.js' -S 'lunr*.js' -S fontawesome-webfont.svg -S tinyseg.js"
+markdown = "npm exec --yes -- markdownlint-cli README.md CONTRIBUTING.md docs/ --ignore docs/CNAME"
+js = "npm exec --yes -- jshint mkdocs/"
+css = "npm exec --yes -- csslint --quiet mkdocs/"
+check = ["markdown", "js", "css", "spelling"]
+
+[tool.hatch.envs.docs]
+dependencies = [
+    "Markdown >=3.3.3",
+    "mdx_gh_links >=0.2",
+    "markdown-callouts >=0.3.0",
+    "mkdocs-literate-nav >=0.5.0",
+    "mkdocs-redirects >=1.0.1",
+    "pymdown-extensions >=8.0.1",
+    "mkdocstrings-python >=0.7.1",
+    "mkdocs-click >=0.8.0",
+]
+
+[tool.black]
+line-length = 100
+target-version = ["py37"]  # 3.7
+skip-string-normalization = true
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+ignore_missing_imports = true
+warn_unreachable = true
+no_implicit_optional = true
+show_error_codes = true

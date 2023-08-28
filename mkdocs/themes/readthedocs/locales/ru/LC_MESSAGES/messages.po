@@ -1,0 +1,110 @@
+# Russian translations for MkDocs.
+# Copyright (C) 2022 MkDocs
+# This file is distributed under the same license as the MkDocs project.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MkDocs 1.2\n"
+"Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
+"POT-Creation-Date: 2022-09-13 23:23+0300\n"
+"PO-Revision-Date: 2022-09-13 23:23+0300\n"
+"Last-Translator: Alexander Krasnikov <alexander@krasnikov.net>\n"
+"Language: ru\n"
+"Language-Team: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: mkdocs/themes/readthedocs/404.html:7
+msgid "Page not found"
+msgstr "Страница не найдена"
+
+#: mkdocs/themes/readthedocs/base.html:97
+msgid "Logo"
+msgstr "Логотип"
+
+#: mkdocs/themes/readthedocs/base.html:111
+msgid "Navigation menu"
+msgstr "Навигационное меню"
+
+#: mkdocs/themes/readthedocs/base.html:140
+msgid "Mobile navigation menu"
+msgstr "Мобильная версия навигации"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:3
+msgid "Docs"
+msgstr "Документация"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:18
+#: mkdocs/themes/readthedocs/breadcrumbs.html:20
+#: mkdocs/themes/readthedocs/breadcrumbs.html:22
+#: mkdocs/themes/readthedocs/breadcrumbs.html:24
+#, python-format
+msgid "Edit on %(repo_name)s"
+msgstr "Редактировать в %(repo_name)s"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:26
+msgid "Edit"
+msgstr "Редактировать"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:34
+msgid "Breadcrumb Navigation"
+msgstr "Навигационная цепочка"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:36
+#: mkdocs/themes/readthedocs/footer.html:7
+#: mkdocs/themes/readthedocs/versions.html:17
+msgid "Previous"
+msgstr "Назад"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:39
+#: mkdocs/themes/readthedocs/footer.html:10
+#: mkdocs/themes/readthedocs/versions.html:20
+msgid "Next"
+msgstr "Вперед"
+
+#: mkdocs/themes/readthedocs/footer.html:5
+msgid "Footer Navigation"
+msgstr "Навигация по странице"
+
+#: mkdocs/themes/readthedocs/footer.html:25
+#, python-format
+msgid ""
+"Built with %(mkdocs_link)s using a %(sphinx_link)s provided by "
+"%(rtd_link)s."
+msgstr ""
+"Собрано в %(mkdocs_link)s с использованием %(sphinx_link)s от "
+"%(rtd_link)s."
+
+#: mkdocs/themes/readthedocs/search.html:5
+msgid "Search Results"
+msgstr "Результаты поиска"
+
+#: mkdocs/themes/readthedocs/search.html:9
+msgid "Search the Docs"
+msgstr "Поиск в документах"
+
+#: mkdocs/themes/readthedocs/search.html:9
+#: mkdocs/themes/readthedocs/searchbox.html:3
+msgid "Type search term here"
+msgstr "Введите поисковый запрос"
+
+#: mkdocs/themes/readthedocs/search.html:12
+msgid "No results found"
+msgstr "Ничего не найдено"
+
+#: mkdocs/themes/readthedocs/search.html:13
+msgid "Searching..."
+msgstr "Поиск..."
+
+#: mkdocs/themes/readthedocs/searchbox.html:3
+msgid "Search docs"
+msgstr "Поиск в документации"
+
+#: mkdocs/themes/readthedocs/versions.html:1
+msgid "Versions"
+msgstr "Версии"
+

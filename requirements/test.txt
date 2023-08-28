@@ -1,2 +1,0 @@
-coverage
-flake8

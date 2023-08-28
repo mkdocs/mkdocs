@@ -1,47 +1,52 @@
 # Chinese (Simplified, China) translations for MkDocs.
-# Copyright (C) 2021 MkDocs
+# Copyright (C) 2022 MkDocs
 # This file is distributed under the same license as the MkDocs project.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: MkDocs 1.2\n"
 "Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
-"POT-Creation-Date: 2021-04-08 22:44+0200\n"
-"PO-Revision-Date: 2021-07-14 06:00+0800\n"
+"POT-Creation-Date: 2022-08-15 17:05+0200\n"
+"PO-Revision-Date: 2022-08-23 04:28+0800\n"
 "Last-Translator: xingkong0113 <dingpengyu06@gmail.com>\n"
 "Language: zh_CN\n"
 "Language-Team: zh_Hans_CN <dingpengyu06@gmail.com>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.10.3\n"
+"X-Generator: Poedit 2.4.3\n"
 
 #: mkdocs/themes/mkdocs/404.html:8
 msgid "Page not found"
 msgstr "找不到页面"
 
-#: mkdocs/themes/mkdocs/base.html:107
+#: mkdocs/themes/mkdocs/base.html:116
 #: mkdocs/themes/mkdocs/keyboard-modal.html:31
 #: mkdocs/themes/mkdocs/search-modal.html:5
 msgid "Search"
 msgstr "搜索"
 
-#: mkdocs/themes/mkdocs/base.html:117
+#: mkdocs/themes/mkdocs/base.html:126
 msgid "Previous"
-msgstr "上一张"
+msgstr "上一章"
 
-#: mkdocs/themes/mkdocs/base.html:122
+#: mkdocs/themes/mkdocs/base.html:131
 msgid "Next"
-msgstr "下一张"
+msgstr "下一章"
 
-#: mkdocs/themes/mkdocs/base.html:133 mkdocs/themes/mkdocs/base.html:135
-#: mkdocs/themes/mkdocs/base.html:137 mkdocs/themes/mkdocs/base.html:139
+#: mkdocs/themes/mkdocs/base.html:142 mkdocs/themes/mkdocs/base.html:144
+#: mkdocs/themes/mkdocs/base.html:146 mkdocs/themes/mkdocs/base.html:148
 #, python-format
 msgid "Edit on %(repo_name)s"
 msgstr "在%(repo_name)s上编辑"
 
-#: mkdocs/themes/mkdocs/base.html:179
+#: mkdocs/themes/mkdocs/base.html:150
+msgid "Edit"
+msgstr "编辑"
+
+#: mkdocs/themes/mkdocs/base.html:190
 #, python-format
 msgid "Documentation built with %(mkdocs_link)s."
 msgstr "用%(mkdocs_link)s建立的文档。"
@@ -94,4 +99,3 @@ msgstr "没有搜索到结果"
 #: mkdocs/themes/mkdocs/toc.html:3
 msgid "Table of Contents"
 msgstr "目录"
-

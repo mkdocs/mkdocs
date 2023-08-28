@@ -11,11 +11,13 @@ using a plugin which comes with MkDocs, then it was installed when you installed
 MkDocs. However, to install third party plugins, you need to determine the
 appropriate package name and install it using `pip`:
 
-    pip install mkdocs-foo-plugin
+```bash
+pip install mkdocs-foo-plugin
+```
 
 Once a plugin has been successfully installed, it is ready to use. It just needs
-to be [enabled](#using-plugins) in the configuration file. The [MkDocs Plugins]
-wiki page has a growing list of plugins that you can install and use.
+to be [enabled](#using-plugins) in the configuration file. The [Catalog]
+repository has a large ranked list of plugins that you can install and use.
 
 ## Using Plugins
 
@@ -26,7 +28,7 @@ plugin listed here must already be [installed](#installing-plugins).
 
 ```yaml
 plugins:
-    - search
+  - search
 ```
 
 Some plugins may provide configuration options of their own. If you would like
@@ -39,9 +41,9 @@ separate line.
 
 ```yaml
 plugins:
-    - search:
-        lang: en
-        foo: bar
+  - search:
+      lang: en
+      foo: bar
 ```
 
 For information regarding the configuration options available for a given plugin,
@@ -68,76 +70,225 @@ All `BasePlugin` subclasses contain the following attributes:
 
 #### config_scheme
 
-:   A tuple of configuration validation instances. Each item must consist of a
-    two item tuple in which the first item is the string name of the
-    configuration option and the second item is an instance of
-    `mkdocs.config.config_options.BaseConfigOption` or any of its subclasses.
+A tuple of configuration validation instances. Each item must consist of a
+two item tuple in which the first item is the string name of the
+configuration option and the second item is an instance of
+`mkdocs.config.config_options.BaseConfigOption` or any of its subclasses.
 
-    For example, the following `config_scheme` defines three configuration options: `foo`, which accepts a string; `bar`, which accepts an integer; and `baz`, which accepts a boolean value.
+For example, the following `config_scheme` defines three configuration options: `foo`, which accepts a string; `bar`, which accepts an integer; and `baz`, which accepts a boolean value.
 
-        class MyPlugin(mkdocs.plugins.BasePlugin):
-            config_scheme = (
-                ('foo', mkdocs.config.config_options.Type(str, default='a default value')),
-                ('bar', mkdocs.config.config_options.Type(int, default=0)),
-                ('baz', mkdocs.config.config_options.Type(bool, default=True))
-            )
+```python
+class MyPlugin(mkdocs.plugins.BasePlugin):
+    config_scheme = (
+        ('foo', mkdocs.config.config_options.Type(str, default='a default value')),
+        ('bar', mkdocs.config.config_options.Type(int, default=0)),
+        ('baz', mkdocs.config.config_options.Type(bool, default=True))
+    )
+```
 
-    When the user's configuration is loaded, the above scheme will be used to
-    validate the configuration and fill in any defaults for settings not
-    provided by the user. The validation classes may be any of the classes
-    provided in `mkdocs.config.config_options` or a third party subclass defined
-    in the plugin.
+> NEW: **New in version 1.4.**
+>
+> ##### Subclassing `Config` to specify the config schema
+>
+> To get type safety benefits, if you're targeting only MkDocs 1.4+, define the config schema as a class instead:
+>
+> ```python
+> class MyPluginConfig(mkdocs.config.base.Config):
+>     foo = mkdocs.config.config_options.Type(str, default='a default value')
+>     bar = mkdocs.config.config_options.Type(int, default=0)
+>     baz = mkdocs.config.config_options.Type(bool, default=True)
+>
+> class MyPlugin(mkdocs.plugins.BasePlugin[MyPluginConfig]):
+>     ...
+> ```
 
-    Any settings provided by the user which fail validation or are not defined
-    in the `config_scheme` will raise a `mkdocs.config.base.ValidationError`.
+##### Examples of config definitions
+
+>! EXAMPLE:
+>
+> ```python
+> from mkdocs.config import base, config_options as c
+>
+> class _ValidationOptions(base.Config):
+>     enabled = c.Type(bool, default=True)
+>     verbose = c.Type(bool, default=False)
+>     skip_checks = c.ListOfItems(c.Choice(('foo', 'bar', 'baz')), default=[])
+>
+> class MyPluginConfig(base.Config):
+>     definition_file = c.File(exists=True)  # required
+>     checksum_file = c.Optional(c.File(exists=True))  # can be None but must exist if specified
+>     validation = c.SubConfig(_ValidationOptions)
+> ```
+>
+> From the user's point of view `SubConfig` is similar to `Type(dict)`, it's just that it also retains full ability for validation: you define all valid keys and what each value should adhere to.
+>
+> And `ListOfItems` is similar to `Type(list)`, but again, we define the constraint that each value must adhere to.
+>
+> This accepts a config as follows:
+>
+> ```yaml
+> my_plugin:
+>   definition_file: configs/test.ini  # relative to mkdocs.yml
+>   validation:
+>     enabled: !ENV [CI, false]
+>     verbose: true
+>     skip_checks:
+>       - foo
+>       - baz
+> ```
+<!-- -->
+>? EXAMPLE:
+>
+> ```python
+> import numbers
+> from mkdocs.config import base, config_options as c
+>
+> class _Rectangle(base.Config):
+>     width = c.Type(numbers.Real)  # required
+>     height = c.Type(numbers.Real)  # required
+>
+> class MyPluginConfig(base.Config):
+>     add_rectangles = c.ListOfItems(c.SubConfig(_Rectangle))  # required
+> ```
+>
+> In this example we define a list of complex items, and that's achieved by passing a concrete `SubConfig` to `ListOfItems`.
+>
+> This accepts a config as follows:
+>
+> ```yaml
+> my_plugin:
+>   add_rectangles:
+>     - width: 5
+>       height: 7
+>     - width: 12
+>       height: 2
+> ```
+
+When the user's configuration is loaded, the above scheme will be used to
+validate the configuration and fill in any defaults for settings not
+provided by the user. The validation classes may be any of the classes
+provided in `mkdocs.config.config_options` or a third party subclass defined
+in the plugin.
+
+Any settings provided by the user which fail validation or are not defined
+in the `config_scheme` will raise a `mkdocs.config.base.ValidationError`.
 
 #### config
 
-:   A dictionary of configuration options for the plugin, which is populated by
-    the `load_config` method after configuration validation has completed. Use
-    this attribute to access options provided by the user.
+A dictionary of configuration options for the plugin, which is populated by
+the `load_config` method after configuration validation has completed. Use
+this attribute to access options provided by the user.
 
-        def on_pre_build(self, config):
-            if self.config['bool_option']:
-                # implement "bool_option" functionality here...
+```python
+def on_pre_build(self, config, **kwargs):
+    if self.config['baz']:
+        # implement "baz" functionality here...
+```
+
+> NEW: **New in version 1.4.**
+>
+> ##### Safe attribute-based access
+>
+> To get type safety benefits, if you're targeting only MkDocs 1.4+, access options as attributes instead:
+>
+> ```python
+> def on_pre_build(self, config, **kwargs):
+>     if self.config.baz:
+>         print(self.config.bar ** 2)  # OK, `int ** 2` is valid.
+> ```
 
 All `BasePlugin` subclasses contain the following method(s):
 
 #### load_config(options)
 
-:   Loads configuration from a dictionary of options. Returns a tuple of
-    `(errors, warnings)`. This method is called by MkDocs during configuration
-    validation and should not need to be called by the plugin.
+Loads configuration from a dictionary of options. Returns a tuple of
+`(errors, warnings)`. This method is called by MkDocs during configuration
+validation and should not need to be called by the plugin.
 
 #### on_&lt;event_name&gt;()
 
-:   Optional methods which define the behavior for specific [events]. The plugin
-    should define its behavior within these methods. Replace `<event_name>` with
-    the actual name of the event. For example, the `pre_build` event would be
-    defined in the `on_pre_build` method.
+Optional methods which define the behavior for specific [events]. The plugin
+should define its behavior within these methods. Replace `<event_name>` with
+the actual name of the event. For example, the `pre_build` event would be
+defined in the `on_pre_build` method.
 
-    Most events accept one positional argument and various keyword arguments. It
-    is generally expected that the positional argument would be modified (or
-    replaced) by the plugin and returned. If nothing is returned (the method
-    returns `None`), then the original, unmodified object is used. The keyword
-    arguments are simply provided to give context and/or supply data which may
-    be used to determine how the positional argument should be modified. It is
-    good practice to accept keyword arguments as `**kwargs`. In the event that
-    additional keywords are provided to an event in a future version of MkDocs,
-    there will be no need to alter your plugin.
+Most events accept one positional argument and various keyword arguments. It
+is generally expected that the positional argument would be modified (or
+replaced) by the plugin and returned. If nothing is returned (the method
+returns `None`), then the original, unmodified object is used. The keyword
+arguments are simply provided to give context and/or supply data which may
+be used to determine how the positional argument should be modified. It is
+good practice to accept keyword arguments as `**kwargs`. In the event that
+additional keywords are provided to an event in a future version of MkDocs,
+there will be no need to alter your plugin.
 
-    For example, the following event would add an additional static_template to
-    the theme config:
+For example, the following event would add an additional static_template to
+the theme config:
 
-        class MyPlugin(BasePlugin):
-            def on_config(self, config, **kwargs):
-                config['theme'].static_templates.add('my_template.html')
-                return config
+```python
+class MyPlugin(BasePlugin):
+    def on_config(self, config, **kwargs):
+        config['theme'].static_templates.add('my_template.html')
+        return config
+```
+
+> NEW: **New in version 1.4.**
+>
+> To get type safety benefits, if you're targeting only MkDocs 1.4+, access config options as attributes instead:
+>
+> ```python
+> def on_config(self, config: MkDocsConfig):
+>     config.theme.static_templates.add('my_template.html')
+>     return config
+> ```
 
 ### Events
 
 There are three kinds of events: [Global Events], [Page Events] and
 [Template Events].
+
+<details class="card">
+  <summary>
+    See a diagram with relations between all the plugin events
+  </summary>
+  <div class="card-body">
+    <ul>
+      <li>The events themselves are shown in yellow, with their parameters.
+      <li>Arrows show the flow of arguments and outputs of each event.
+          Sometimes they're omitted.
+      <li>The events are chronologically ordered from top to bottom.
+      <li>Dotted lines appear at splits from global events to per-page events.
+      <li>Click the events' titles to jump to their description.
+    </ul>
+--8<-- "docs/img/plugin-events.svg"
+  </div>
+</details>
+<br>
+
+#### One-time Events
+
+One-time events run once per `mkdocs` invocation. The only case where these tangibly differ from [global events](#global-events) is for `mkdocs serve`: global events, unlike these, will run multiple times -- once per *build*.
+
+##### on_startup
+
+::: mkdocs.plugins.BasePlugin.on_startup
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
+
+##### on_shutdown
+
+::: mkdocs.plugins.BasePlugin.on_shutdown
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
+
+##### on_serve
+
+::: mkdocs.plugins.BasePlugin.on_serve
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
 
 #### Global Events
 
@@ -145,100 +296,54 @@ Global events are called once per build at either the beginning or end of the
 build process. Any changes made in these events will have a global effect on the
 entire site.
 
-##### on_serve
-
-:   The `serve` event is only called when the `serve` command is used during
-    development. It is passed the `Server` instance which can be modified before
-    it is activated. For example, additional files or directories could be added
-    to the list of "watched" files for auto-reloading.
-
-    Parameters:
-    : __server:__ `livereload.Server` instance
-    : __config:__ global configuration object
-    : __builder:__ a callable which gets passed to each call to `server.watch`
-
-    Returns:
-    : `livereload.Server` instance
-
 ##### on_config
 
-:   The `config` event is the first event called on build and is run immediately
-    after the user configuration is loaded and validated. Any alterations to the
-    config should be made here.
-
-    Parameters:
-    : __config:__ global configuration object
-
-    Returns:
-    : global configuration object
+::: mkdocs.plugins.BasePlugin.on_config
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
 
 ##### on_pre_build
 
-:   The `pre_build` event does not alter any variables. Use this event to call
-    pre-build scripts.
-
-    Parameters:
-    : __config:__ global configuration object
+::: mkdocs.plugins.BasePlugin.on_pre_build
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
 
 ##### on_files
 
-:   The `files` event is called after the files collection is populated from the
-    `docs_dir`. Use this event to add, remove, or alter files in the
-    collection. Note that Page objects have not yet been associated with the
-    file objects in the collection. Use [Page Events] to manipulate page
-    specific data.
-
-    Parameters:
-    : __files:__ global files collection
-    : __config:__ global configuration object
-
-    Returns:
-    : global files collection
+::: mkdocs.plugins.BasePlugin.on_files
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
 
 ##### on_nav
 
-:   The `nav` event is called after the site navigation is created and can
-    be used to alter the site navigation.
-
-    Parameters:
-    : __nav:__ global navigation object
-    : __config:__ global configuration object
-    : __files:__ global files collection
-
-    Returns:
-    : global navigation object
+::: mkdocs.plugins.BasePlugin.on_nav
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
 
 ##### on_env
 
-:   The `env` event is called after the Jinja template environment is created
-    and can be used to alter the [Jinja environment](https://jinja.palletsprojects.com/en/latest/api/#jinja2.Environment).
-
-    Parameters:
-    : __env:__ global Jinja environment
-    : __config:__ global configuration object
-    : __files:__ global files collection
-
-    Returns:
-    : global Jinja Environment
+::: mkdocs.plugins.BasePlugin.on_env
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
 
 ##### on_post_build
 
-:   The `post_build` event does not alter any variables. Use this event to call
-    post-build scripts.
-
-    Parameters:
-    : __config:__ global configuration object
+::: mkdocs.plugins.BasePlugin.on_post_build
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
 
 ##### on_build_error
 
-:   The `build_error` event is called after an exception of any kind
-    is caught by MkDocs during the build process.
-    Use this event to clean things up before MkDocs terminates. Note that any other
-    events which were scheduled to run after the error will have been skipped. See
-    [Handling Errors] for more details.
-
-    Parameters:
-    : __error:__ exception raised
+::: mkdocs.plugins.BasePlugin.on_build_error
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
 
 #### Template Events
 
@@ -249,45 +354,24 @@ called after the [env] event and before any [page events].
 
 ##### on_pre_template
 
-:   The `pre_template` event is called immediately after the subject template is
-    loaded and can be used to alter the template.
-
-    Parameters:
-    : __template__: a Jinja2 [Template] object
-    : __template_name__: string filename of template
-    : __config:__ global configuration object
-
-    Returns:
-    : a Jinja2 [Template] object
+::: mkdocs.plugins.BasePlugin.on_pre_template
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
 
 ##### on_template_context
 
-:   The `template_context` event is called immediately after the context is created
-    for the subject template and can be used to alter the context for that specific
-    template only.
-
-    Parameters:
-    : __context__: dict of template context variables
-    : __template_name__: string filename of template
-    : __config:__ global configuration object
-
-    Returns:
-    : dict of template context variables
+::: mkdocs.plugins.BasePlugin.on_template_context
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
 
 ##### on_post_template
 
-:   The `post_template` event is called after the template is rendered, but before
-    it is written to disc and can be used to alter the output of the template.
-    If an empty string is returned, the template is skipped and nothing is is
-    written to disc.
-
-    Parameters:
-    : __output_content__: output of rendered template as string
-    : __template_name__: string filename of template
-    : __config:__ global configuration object
-
-    Returns:
-    : output of rendered template as string
+::: mkdocs.plugins.BasePlugin.on_post_template
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
 
 #### Page Events
 
@@ -297,113 +381,65 @@ page events are called after the [post_template] event and before the
 
 ##### on_pre_page
 
-:   The `pre_page` event is called before any actions are taken on the subject
-    page and can be used to alter the `Page` instance.
-
-    Parameters:
-    : __page:__ `mkdocs.nav.Page` instance
-    : __config:__ global configuration object
-    : __files:__ global files collection
-
-    Returns:
-    : `mkdocs.nav.Page` instance
+::: mkdocs.plugins.BasePlugin.on_pre_page
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
 
 ##### on_page_read_source
 
-:   The `on_page_read_source` event can replace the default mechanism to read
-    the contents of a page's source from the filesystem.
-
-    Parameters:
-    : __page:__ `mkdocs.nav.Page` instance
-    : __config:__ global configuration object
-
-    Returns:
-    : The raw source for a page as unicode string. If `None` is returned, the
-      default loading from a file will be performed.
+::: mkdocs.plugins.BasePlugin.on_page_read_source
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
 
 ##### on_page_markdown
 
-:   The `page_markdown` event is called after the page's markdown is loaded
-    from file and can be used to alter the Markdown source text. The meta-
-    data has been stripped off and is available as `page.meta` at this point.
-
-    Parameters:
-    : __markdown:__ Markdown source text of page as string
-    : __page:__ `mkdocs.nav.Page` instance
-    : __config:__ global configuration object
-    : __files:__ global files collection
-
-    Returns:
-    : Markdown source text of page as string
+::: mkdocs.plugins.BasePlugin.on_page_markdown
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
 
 ##### on_page_content
 
-:   The `page_content` event is called after the Markdown text is rendered to
-    HTML (but before being passed to a template) and can be used to alter the
-    HTML body of the page.
-
-    Parameters:
-    : __html:__ HTML rendered from Markdown source as string
-    : __page:__ `mkdocs.nav.Page` instance
-    : __config:__ global configuration object
-    : __files:__ global files collection
-
-    Returns:
-    : HTML rendered from Markdown source as string
+::: mkdocs.plugins.BasePlugin.on_page_content
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
 
 ##### on_page_context
 
-:   The `page_context` event is called after the context for a page is created
-    and can be used to alter the context for that specific page only.
-
-    Parameters:
-    : __context__: dict of template context variables
-    : __page:__ `mkdocs.nav.Page` instance
-    : __config:__ global configuration object
-    : __nav:__ global navigation object
-
-    Returns:
-    : dict of template context variables
+::: mkdocs.plugins.BasePlugin.on_page_context
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
 
 ##### on_post_page
 
-:   The `post_page` event is called after the template is rendered, but
-    before it is written to disc and can be used to alter the output of the
-    page. If an empty string is returned, the page is skipped and nothing is
-    written to disc.
+::: mkdocs.plugins.BasePlugin.on_post_page
+    options:
+        show_root_heading: false
+        show_root_toc_entry: false
 
-    Parameters:
-    : __output:__ output of rendered template as string
-    : __page:__ `mkdocs.nav.Page` instance
-    : __config:__ global configuration object
+### Event Priorities
 
-    Returns:
-    : output of rendered template as string
+For each event type, corresponding methods of plugins are called in the order that the plugins appear in the `plugins` [config][].
+
+Since MkDocs 1.4, plugins can choose to set a priority value for their events. Events with higher priority are called first. Events without a chosen priority get a default of 0. Events that have the same priority are ordered as they appear in the config.
+
+#### ::: mkdocs.plugins.event_priority
 
 ### Handling Errors
 
 MkDocs defines four error types:
 
-#### `mkdocs.exceptions.MkDocsException`
+#### ::: mkdocs.exceptions.MkDocsException
 
-:   The base class which all MkDocs exceptions inherit from. This should
-    not be raised directly. One of the subclasses should be raised instead.
+#### ::: mkdocs.exceptions.ConfigurationError
 
-#### `mkdocs.exceptions.ConfigurationError`
+#### ::: mkdocs.exceptions.BuildError
 
-:   This error is raised by configuration validation when a validation error
-    is encountered. This error should be raised by any configuration options
-    defined in a plugin's [config_scheme].
-
-#### `mkdocs.exceptions.BuildError`
-
-:   This error may be raised by MkDocs during the build process. Plugins should
-    not raise this error.
-
-#### `mkdocs.exceptions.PluginError`
-
-:   A subclass of `mkdocs.exceptions.BuildError` which can be raised by plugin
-    events.
+#### ::: mkdocs.exceptions.PluginError
 
 Unexpected and uncaught exceptions will interrupt the build process and produce
 typical Python tracebacks, which are useful for debugging your code. However,
@@ -433,10 +469,17 @@ class MyPlugin(BasePlugin):
         except KeyError as error:
             raise PluginError(str(error))
 
-    def on_build_error(self, error):
+    def on_build_error(self, error, **kwargs):
         # some code to clean things up
         ...
 ```
+
+### Logging in plugins
+
+MkDocs provides a `get_plugin_logger` function which returns
+a logger that can be used to log messages.
+
+#### ::: mkdocs.plugins.get_plugin_logger
 
 ### Entry Point
 
@@ -471,6 +514,10 @@ entry_points={
 Note that registering a plugin does not activate it. The user still needs to
 tell MkDocs to use it via the config.
 
+### Publishing a Plugin
+
+You should publish a package on [PyPI], then add it to the [Catalog] for discoverability. Plugins are strongly recommended to have a unique plugin name (entry point name) according to the catalog.
+
 [BasePlugin]:#baseplugin
 [config]: ../user-guide/configuration.md#plugins
 [entry point]: #entry-point
@@ -483,8 +530,6 @@ tell MkDocs to use it via the config.
 [post_template]: #on_post_template
 [static_templates]: ../user-guide/configuration.md#static_templates
 [Template Events]: #template-events
-[MkDocs Plugins]: https://github.com/mkdocs/mkdocs/wiki/MkDocs-Plugins
+[catalog]: https://github.com/mkdocs/catalog
 [on_build_error]: #on_build_error
-[Handling Errors]: #handling-errors
-[config_scheme]: #config_scheme
-[Template]: http://code.nabla.net/doc/jinja2/api/jinja2/environment/jinja2.environment.Template.html
+[PyPI]: https://pypi.org/
