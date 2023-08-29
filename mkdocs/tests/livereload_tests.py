@@ -362,7 +362,7 @@ class BuildTests(unittest.TestCase):
             self.assertEqual(headers.get("content-length"), str(len(output)))
 
             for path in "/foo/", "/foo/index.html":
-                _, output = do_request(server, "GET /foo/")
+                _, output = do_request(server, f"GET {path}")
                 self.assertRegex(output, r"^<body>bbb</body>$")
 
             with self.assertLogs("mkdocs.livereload"):

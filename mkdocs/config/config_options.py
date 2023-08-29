@@ -259,7 +259,7 @@ class DictOfItems(Generic[T], BaseConfigOption[Dict[str, T]]):
         self._config = config
         self._key_name = key_name
 
-    def run_validation(self, value: object) -> Dict[str, T]:
+    def run_validation(self, value: object) -> dict[str, T]:
         if value is None:
             if self.required or self.default is None:
                 raise ValidationError("Required configuration not provided.")

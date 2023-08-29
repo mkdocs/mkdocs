@@ -9,6 +9,7 @@ from urllib.parse import unquote as urlunquote
 from urllib.parse import urljoin, urlsplit, urlunsplit
 
 import markdown
+import markdown.postprocessors
 import markdown.treeprocessors
 from markdown.util import AMP_SUBSTITUTE
 
@@ -19,8 +20,6 @@ from mkdocs.utils import _removesuffix, get_build_date, get_markdown_title, meta
 
 if TYPE_CHECKING:
     from xml.etree import ElementTree as etree
-
-    import markdown.postprocessors
 
     from mkdocs.config.defaults import MkDocsConfig
     from mkdocs.structure.files import File, Files
@@ -354,7 +353,7 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
         # Ignore URLs unless they are a relative link to a source file.
         if scheme or netloc:  # External link.
             return url
-        elif url.startswith('/') or url.startswith('\\'):  # Absolute link.
+        elif url.startswith(('/', '\\')):  # Absolute link.
             warning_level = self.config.validation.links.absolute_links
             warning = f"Doc file '{self.file.src_uri}' contains an absolute link '{url}', it was left as is."
         elif AMP_SUBSTITUTE in url:  # AMP_SUBSTITUTE is used internally by Markdown only for email.

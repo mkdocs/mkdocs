@@ -77,7 +77,7 @@ class ConfigTests(unittest.TestCase):
     @tempdir()
     def test_theme(self, mytheme, custom):
         configs = [
-            dict(),  # default theme
+            {},  # default theme
             {"theme": "readthedocs"},  # builtin theme
             {"theme": {'name': 'readthedocs'}},  # builtin as complex
             {"theme": {'name': None, 'custom_dir': mytheme}},  # custom only as complex

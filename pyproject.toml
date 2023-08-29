@@ -104,9 +104,9 @@ dependencies = [
 
 [tool.hatch.envs.default.scripts]
 all = [
+    "hatch run style:check",
     "hatch run types:check",
     "hatch run test:test",
-    "hatch run style:check",
     "hatch run lint:check",
     "hatch run +type=default integration:test",
 ]
@@ -163,13 +163,17 @@ dependencies = [
     "ruff",
 ]
 [tool.hatch.envs.style.scripts]
-lint = [
-    "ruff mkdocs",
-]
 check = [
     "isort --check-only --diff mkdocs docs",
     "black -q --check --diff mkdocs docs",
     "lint",
+]
+lint = [
+    "ruff check mkdocs docs"
+]
+fix = [
+    "ruff check --fix mkdocs docs",
+    "format",
 ]
 format = [
     "isort -q mkdocs docs",
@@ -209,12 +213,24 @@ skip-string-normalization = true
 profile = "black"
 line_length = 100
 
+[tool.ruff]
+select = [
+    "F", "W", "E", "UP", "YTT", "C4", "FA", "PIE", "T20", "RSE", "TCH", "DTZ",
+    "B002", "B003", "B005", "B007", "B009", "B012", "B013", "B014", "B015", "B018", "B020", "B021", "B023", "B026", "B033", "B034", "B905",
+    "COM818",
+    "PERF101",
+    "PGH002", "PGH004", "PGH005",
+    "PLE", "PLW0120", "PLW0127",
+    "RUF001", "RUF007", "RUF010", "RUF100", "RUF200",
+    "SIM101", "SIM107", "SIM201", "SIM202", "SIM208", "SIM210", "SIM211", "SIM300", "SIM401", "SIM910",
+]
+ignore = ["E501", "E731"]
+
+[tool.ruff.flake8-comprehensions]
+allow-dict-calls-with-keyword-arguments = true
+
 [tool.mypy]
 ignore_missing_imports = true
 warn_unreachable = true
 no_implicit_optional = true
 show_error_codes = true
-
-[tool.ruff]
-line-length = 100
-ignore = ["E501"]
