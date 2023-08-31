@@ -381,6 +381,7 @@ class SiteNavigationTests(unittest.TestCase):
     def test_nav_page_subclass(self):
         class PageSubclass(Page):
             pass
+
         nav_cfg = [
             {'Home': 'index.md'},
             {'About': 'about.md'},
