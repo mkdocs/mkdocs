@@ -378,6 +378,33 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual(len(site_navigation.pages), 7)
         self.assertEqual(repr(site_navigation.homepage), "Page(title=[blank], url='/')")
 
+    def test_nav_page_subclass(self):
+        class PageSubclass(Page):
+            pass
+        nav_cfg = [
+            {'Home': 'index.md'},
+            {'About': 'about.md'},
+        ]
+        expected = dedent(
+            """
+            PageSubclass(title=[blank], url='/')
+            PageSubclass(title=[blank], url='/about/')
+            """
+        )
+        cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
+        fs = [
+            File(list(item.values())[0], cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
+            for item in nav_cfg
+        ]
+        files = Files(fs)
+        for file in files:
+            PageSubclass(None, file, cfg)
+        site_navigation = get_navigation(files, cfg)
+        self.assertEqual(str(site_navigation).strip(), expected)
+        self.assertEqual(len(site_navigation.items), 2)
+        self.assertEqual(len(site_navigation.pages), 2)
+        self.assertEqual(repr(site_navigation.homepage), "PageSubclass(title=[blank], url='/')")
+
     def test_active(self):
         nav_cfg = [
             {'Home': 'index.md'},
