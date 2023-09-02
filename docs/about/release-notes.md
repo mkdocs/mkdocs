@@ -27,6 +27,18 @@ The current and past members of the MkDocs team.
 * [@oprypin](https://github.com/oprypin/)
 * [@ultrabug](https://github.com/ultrabug/)
 
+## Version 1.5.2 (2023-08-02)
+
+*   Bugfix (regression in 1.5.0): Restore functionality of `--no-livereload`. (#3320)
+
+*   Bugfix (regression in 1.5.0): The new page title detection would sometimes be unable to drop anchorlinks - fix that. (#3325)
+
+*   Partly bring back pre-1.5 API: `extra_javascript` items will once again be mostly strings, and only sometimes `ExtraStringValue` (when the extra `script` functionality is used).
+
+    Plugins should be free to append strings to `config.extra_javascript`, but when reading the values, they must still make sure to read it as `str(value)` in case it is an `ExtraScriptValue` item. For querying the attributes such as `.type` you need to check `isinstance` first. Static type checking will guide you in that. (#3324)
+
+See [commit log](https://github.com/mkdocs/mkdocs/compare/1.5.1...1.5.2).
+
 ## Version 1.5.1 (2023-07-28)
 
 *   Bugfix (regression in 1.5.0): Make it possible to treat `ExtraScriptValue` as a path. This lets some plugins still work despite the breaking change.

@@ -945,11 +945,18 @@ class ExtraScriptValue(Config):
         return self.path
 
 
-class ExtraScript(SubConfig[ExtraScriptValue]):
-    def run_validation(self, value: object) -> ExtraScriptValue:
+class ExtraScript(BaseConfigOption[Union[ExtraScriptValue, str]]):
+    def __init__(self):
+        super().__init__()
+        self.option_type = SubConfig[ExtraScriptValue]()
+
+    def run_validation(self, value: object) -> ExtraScriptValue | str:
+        self.option_type.warnings = self.warnings
         if isinstance(value, str):
-            value = {'path': value, 'type': 'module' if value.endswith('.mjs') else ''}
-        return super().run_validation(value)
+            if value.endswith('.mjs'):
+                return self.option_type.run_validation({'path': value, 'type': 'module'})
+            return value
+        return self.option_type.run_validation(value)
 
 
 class MarkdownExtensions(OptionallyRequired[List[str]]):
@@ -1085,7 +1092,9 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
         else:
             # Attempt to load with prepended namespace for the current theme.
             if self.theme_key and self._config:
-                current_theme = self._config[self.theme_key]['name']
+                current_theme = self._config[self.theme_key]
+                if not isinstance(current_theme, str):
+                    current_theme = current_theme['name']
                 if current_theme:
                     expanded_name = f'{current_theme}/{name}'
                     if expanded_name in self.installed_plugins:
