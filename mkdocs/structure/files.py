@@ -11,7 +11,6 @@ from pathlib import PurePath
 from typing import TYPE_CHECKING, Callable, Iterable, Iterator, Sequence
 from urllib.parse import quote as urlquote
 
-import jinja2.environment
 import pathspec
 import pathspec.gitignore
 import pathspec.util
@@ -19,6 +18,8 @@ import pathspec.util
 from mkdocs import utils
 
 if TYPE_CHECKING:
+    import jinja2.environment
+
     from mkdocs.config.defaults import MkDocsConfig
     from mkdocs.structure.pages import Page
 

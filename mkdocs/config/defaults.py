@@ -1,11 +1,13 @@
 from __future__ import annotations
 
-from typing import IO, Dict
+from typing import IO, TYPE_CHECKING, Dict
 
-import mkdocs.structure.pages
 from mkdocs.config import base
 from mkdocs.config import config_options as c
 from mkdocs.utils.yaml import get_yaml_loader, yaml_load
+
+if TYPE_CHECKING:
+    import mkdocs.structure.pages
 
 
 # NOTE: The order here is important. During validation some config options

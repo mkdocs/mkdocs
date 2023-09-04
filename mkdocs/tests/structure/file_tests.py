@@ -369,7 +369,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
             File('foo/bar.css', '/path/to/docs', '/path/to/site', use_directory_urls=True),
         ]
         files = Files(fs)
-        self.assertEqual([f for f in files], fs)
+        self.assertEqual(list(files), fs)
         self.assertEqual(len(files), 6)
         self.assertEqual(files.documentation_pages(), [fs[0], fs[1]])
         self.assertEqual(files.static_pages(), [fs[2]])
