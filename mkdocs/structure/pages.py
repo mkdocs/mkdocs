@@ -415,7 +415,7 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
 
         assert target_uri is not None
         assert target_file is not None
-        if target_file.inclusion.is_excluded():
+        if self.file.inclusion.is_included() and target_file.inclusion.is_excluded():
             warning_level = min(logging.INFO, self.config.validation.links.not_found)
             warning = (
                 f"Doc file '{self.file.src_uri}' contains a link to "
