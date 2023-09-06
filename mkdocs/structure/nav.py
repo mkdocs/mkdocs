@@ -200,7 +200,9 @@ def _data_to_navigation(data, files: Files, config: MkDocsConfig):
                 f"A reference to '{file.src_path}' is included in the 'nav' "
                 "configuration, but this file is excluded from the built site.",
             )
-        return file.page if isinstance(file.page, Page) else Page(title, file, config)
+        if file.page is not None:
+            return file.page
+        return Page(title, file, config)
     return Link(title, path)
 
 
