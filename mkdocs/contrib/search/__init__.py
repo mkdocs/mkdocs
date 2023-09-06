@@ -35,7 +35,7 @@ class LangOption(c.OptionallyRequired[List[str]]):
             value = [value]
         if not isinstance(value, list):
             raise c.ValidationError('Expected a list of language codes.')
-        for lang in list(value):
+        for lang in value[:]:
             if lang != 'en':
                 lang_detected = self.get_lunr_supported_lang(lang)
                 if not lang_detected:

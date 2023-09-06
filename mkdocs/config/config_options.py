@@ -259,7 +259,7 @@ class DictOfItems(Generic[T], BaseConfigOption[Dict[str, T]]):
         self._config = config
         self._key_name = key_name
 
-    def run_validation(self, value: object) -> Dict[str, T]:
+    def run_validation(self, value: object) -> dict[str, T]:
         if value is None:
             if self.required or self.default is None:
                 raise ValidationError("Required configuration not provided.")
@@ -1092,7 +1092,9 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
         else:
             # Attempt to load with prepended namespace for the current theme.
             if self.theme_key and self._config:
-                current_theme = self._config[self.theme_key]['name']
+                current_theme = self._config[self.theme_key]
+                if not isinstance(current_theme, str):
+                    current_theme = current_theme['name']
                 if current_theme:
                     expanded_name = f'{current_theme}/{name}'
                     if expanded_name in self.installed_plugins:

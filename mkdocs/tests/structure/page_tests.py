@@ -1110,7 +1110,7 @@ class RelativePathExtensionTests(unittest.TestCase):
     def test_possible_target_uris(self):
         def test(paths, expected='', exp_true=None, exp_false=None):
             """Test that `possible_target_uris` yields expected values, for use_directory_urls = true and false"""
-            for use_directory_urls, expected in (
+            for use_directory_urls, expected_paths in (
                 (True, exp_true or expected),
                 (False, exp_false or expected),
             ):
@@ -1120,7 +1120,7 @@ class RelativePathExtensionTests(unittest.TestCase):
                     actual = _RelativePathTreeprocessor._possible_target_uris(
                         f, dest_path, use_directory_urls
                     )
-                    self.assertEqual(list(actual), expected.split(', '))
+                    self.assertEqual(list(actual), expected_paths.split(', '))
 
         test(('index.md', 'index.md'), expected='index.md')
         test(('index.md', 'foo/bar.md'), expected='foo/bar.md')

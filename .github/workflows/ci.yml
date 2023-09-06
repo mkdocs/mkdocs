@@ -65,12 +65,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+      - name: Check with ruff
+        if: always()
+        run: hatch run style:lint
       - name: Check with black + isort
         if: always()
         run: hatch run style:format && git diff --exit-code
-      - name: Check with flake8
-        if: always()
-        run: hatch run style:lint
       - name: Check with mypy
         if: always()
         run: hatch run types:check

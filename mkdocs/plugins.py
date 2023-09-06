@@ -14,12 +14,12 @@ else:
     from importlib_metadata import EntryPoint, entry_points
 
 if TYPE_CHECKING:
+    import jinja2.environment
+
     if sys.version_info >= (3, 8):
         from typing import Literal
     else:
         from typing_extensions import Literal
-
-import jinja2.environment
 
 from mkdocs import utils
 from mkdocs.config.base import Config, ConfigErrors, ConfigWarnings, LegacyConfig, PlainConfigSchema
