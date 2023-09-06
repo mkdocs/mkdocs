@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import warnings
 from typing import TYPE_CHECKING, Iterator, TypeVar
 from urllib.parse import urlsplit
 
@@ -201,6 +202,10 @@ def _data_to_navigation(data, files: Files, config: MkDocsConfig):
                 "configuration, but this file is excluded from the built site.",
             )
         if file.page is not None:
+            if not isinstance(file.page, Page):
+                warnings.warn(
+                    "File.page should not be set to any type other than Page", DeprecationWarning
+                )
             return file.page
         return Page(title, file, config)
     return Link(title, path)
