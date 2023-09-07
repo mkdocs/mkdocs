@@ -203,7 +203,7 @@ def _data_to_navigation(data, files: Files, config: MkDocsConfig):
             )
         if file.page is not None:
             if not isinstance(file.page, Page):
-                warnings.warn(
+                warnings.warn(  # type: ignore[unreachable]
                     "File.page should not be set to any type other than Page", DeprecationWarning
                 )
             return file.page
