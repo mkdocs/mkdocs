@@ -294,12 +294,13 @@ def build(
             if dirty and site_directory_contains_stale_files(config.site_dir):
                 log.info("The directory contains stale files. Use --clean to remove them.")
 
+        files = get_files(config)
+
         env = config.theme.get_env()
         # Run `env` plugin events.
         env = config.plugins.on_env(env, config=config, files=files)
 
         # First gather all data from all files/pages to ensure all data is consistent across all pages.
-        files = get_files(config)
         files.add_files_from_theme(env, config)
 
         # Run `files` plugin events.
