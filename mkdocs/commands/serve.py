@@ -59,14 +59,17 @@ def serve(
     config = get_config()
     config.plugins.on_startup(command=('build' if is_clean else 'serve'), dirty=is_dirty)
 
+    host, port = config.dev_addr
+    suffix = mount_path(config).lstrip("/").rstrip("/")
+    live_server_url = f"http://{host}:{port}/{suffix}/"
+
     def builder(config: MkDocsConfig | None = None):
         log.info("Building documentation...")
         if config is None:
             config = get_config()
 
-        build(config, live_server=None if is_clean else server, dirty=is_dirty)
+        build(config, live_server_url=None if is_clean else live_server_url, dirty=is_dirty)
 
-    host, port = config.dev_addr
     server = LiveReloadServer(
         builder=builder, host=host, port=port, root=site_dir, mount_path=mount_path(config)
     )

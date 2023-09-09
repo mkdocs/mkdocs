@@ -22,8 +22,6 @@ from mkdocs.utils import templates
 if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
 
-if TYPE_CHECKING:
-    from mkdocs.livereload import LiveReloadServer
 
 log = logging.getLogger(__name__)
 
@@ -256,7 +254,9 @@ def _build_page(
 
 
 def build(
-    config: MkDocsConfig, live_server: LiveReloadServer | None = None, dirty: bool = False
+    config: MkDocsConfig,
+    live_server_url: str | None = None,
+    dirty: bool = False,
 ) -> None:
     """Perform a full site build."""
 
@@ -268,7 +268,7 @@ def build(
     if config.strict:
         logging.getLogger('mkdocs').addHandler(warning_counter)
 
-    inclusion = InclusionLevel.all if live_server else InclusionLevel.is_included
+    inclusion = InclusionLevel.all if live_server_url else InclusionLevel.is_included
 
     try:
         start = time.monotonic()
@@ -289,7 +289,7 @@ def build(
                 " links within your site. This option is designed for site development purposes only."
             )
 
-        if not live_server:  # pragma: no cover
+        if not live_server_url:  # pragma: no cover
             log.info(f"Building documentation to directory: {config.site_dir}")
             if dirty and site_directory_contains_stale_files(config.site_dir):
                 log.info("The directory contains stale files. Use --clean to remove them.")
@@ -315,8 +315,8 @@ def build(
         for file in files.documentation_pages(inclusion=inclusion):
             log.debug(f"Reading: {file.src_uri}")
             if file.page is None and file.inclusion.is_excluded():
-                if live_server:
-                    excluded.append(urljoin(live_server.url, file.url))
+                if live_server_url:
+                    excluded.append(urljoin(live_server_url, file.url))
                 Page(None, file, config)
             assert file.page is not None
             _populate_page(file.page, config, files, dirty)

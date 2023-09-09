@@ -618,7 +618,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
                   - http://localhost:123/documentation/test/baz.html
             '''
             with self._assert_build_logs(expected_logs):
-                build.build(cfg, live_server=server)
+                build.build(cfg, live_server_url=server.url)
 
             foo_path = Path(site_dir, 'test', 'foo.html')
             self.assertTrue(foo_path.is_file())
@@ -646,7 +646,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
                     WARNING:Excluding 'foo/README.md' from the site because it conflicts with 'foo/index.md'.
                 '''
                 with self._assert_build_logs(expected_logs):
-                    build.build(cfg, live_server=server)
+                    build.build(cfg, live_server_url=server.url if server else None)
 
                 index_path = Path(site_dir, 'foo', 'index.html')
                 self.assertPathIsFile(index_path)
@@ -667,7 +667,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         for server in None, testing_server(site_dir):
             with self.subTest(live_server=server):
                 with self._assert_build_logs(''):
-                    build.build(cfg, live_server=server)
+                    build.build(cfg, live_server_url=server.url if server else None)
 
                 index_path = Path(site_dir, 'foo', 'index.html')
                 self.assertPathIsFile(index_path)
@@ -718,7 +718,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
                               - http://localhost:123/SUMMARY.html
                         '''
                     with self._assert_build_logs(expected_logs):
-                        build.build(cfg, live_server=server)
+                        build.build(cfg, live_server_url=server.url if server else None)
 
                     foo_path = Path(site_dir, 'foo.html')
                     self.assertPathIsFile(foo_path)
