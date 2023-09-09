@@ -294,10 +294,12 @@ def build(
             if dirty and site_directory_contains_stale_files(config.site_dir):
                 log.info("The directory contains stale files. Use --clean to remove them.")
 
-        # First gather all data from all files/pages to ensure all data is consistent across all pages.
-
-        files = get_files(config)
         env = config.theme.get_env()
+        # Run `env` plugin events.
+        env = config.plugins.on_env(env, config=config, files=files)
+
+        # First gather all data from all files/pages to ensure all data is consistent across all pages.
+        files = get_files(config)
         files.add_files_from_theme(env, config)
 
         # Run `files` plugin events.
@@ -326,9 +328,6 @@ def build(
                 "but will be excluded from `mkdocs build` per `exclude_docs`:\n  - "
                 + "\n  - ".join(excluded)
             )
-
-        # Run `env` plugin events.
-        env = config.plugins.on_env(env, config=config, files=files)
 
         # Start writing files to site_dir now that all data is gathered. Note that order matters. Files
         # with lower precedence get written first so that files with higher precedence can overwrite them.
