@@ -67,10 +67,10 @@ jobs:
           node-version: 16
       - name: Check with ruff
         if: always()
-        run: hatch run style:lint
+        run: hatch run style:fix
       - name: Check with black + isort
         if: always()
-        run: hatch run style:format && git diff --exit-code
+        run: hatch run style:format && git diff --color --exit-code
       - name: Check with mypy
         if: always()
         run: hatch run types:check

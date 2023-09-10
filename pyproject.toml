@@ -104,7 +104,7 @@ dependencies = [
 
 [tool.hatch.envs.default.scripts]
 all = [
-    "hatch run style:check",
+    "hatch run style:fix",
     "hatch run types:check",
     "hatch run test:test",
     "hatch run lint:check",
