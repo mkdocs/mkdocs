@@ -201,12 +201,22 @@ def _data_to_navigation(data, files: Files, config: MkDocsConfig):
                 f"A reference to '{file.src_path}' is included in the 'nav' "
                 "configuration, but this file is excluded from the built site.",
             )
-        if file.page is not None:
-            if not isinstance(file.page, Page):
-                warnings.warn(  # type: ignore[unreachable]
-                    "File.page should not be set to any type other than Page", DeprecationWarning
+        page = file.page
+        if page is not None:
+            if isinstance(page, Page):
+                if type(page) is not Page:  # Strict subclass
+                    return page
+                warnings.warn(
+                    "A plugin has set File.page to an instance of Page and it got overwritten. "
+                    "The behavior of this will change in MkDocs 1.6.",
+                    DeprecationWarning,
                 )
-            return file.page
+            else:
+                warnings.warn(  # type: ignore[unreachable]
+                    "A plugin has set File.page to a type other than Page. "
+                    "This will be an error in MkDocs 1.6.",
+                    DeprecationWarning,
+                )
         return Page(title, file, config)
     return Link(title, path)
 
