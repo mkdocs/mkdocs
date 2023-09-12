@@ -1,5 +1,5 @@
 """
-# MkDocs Integration tests
+# MkDocs Integration tests.
 
 This is a simple integration test that builds the MkDocs
 documentation against all of the builtin themes.

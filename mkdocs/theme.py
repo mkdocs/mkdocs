@@ -18,7 +18,7 @@ class Theme(MutableMapping[str, Any]):
     """
     A Theme object.
 
-    Parameters:
+    Args:
         name: The name of the theme as defined by its entrypoint.
         custom_dir: User defined directory for custom templates.
         static_templates: A list of templates to render as static pages.
@@ -117,7 +117,6 @@ class Theme(MutableMapping[str, Any]):
 
     def _load_theme_config(self, name: str) -> None:
         """Recursively load theme and any parent themes."""
-
         theme_dir = utils.get_theme_dir(name)
         self.dirs.append(theme_dir)
 
@@ -149,7 +148,6 @@ class Theme(MutableMapping[str, Any]):
 
     def get_env(self) -> jinja2.Environment:
         """Return a Jinja environment for the theme."""
-
         loader = jinja2.FileSystemLoader(self.dirs)
         # No autoreload because editing a template in the middle of a build is not useful.
         env = jinja2.Environment(loader=loader, auto_reload=False)

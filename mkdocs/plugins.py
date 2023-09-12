@@ -1,7 +1,4 @@
-"""
-Implements the plugin API for MkDocs.
-
-"""
+"""Implements the plugin API for MkDocs."""
 from __future__ import annotations
 
 import logging
@@ -38,7 +35,6 @@ log = logging.getLogger('mkdocs.plugins')
 
 def get_plugins() -> dict[str, EntryPoint]:
     """Return a dict of all installed Plugins as {name: EntryPoint}."""
-
     plugins = entry_points(group='mkdocs.plugins')
 
     # Allow third-party plugins to override core plugins
@@ -70,7 +66,7 @@ class BasePlugin(Generic[SomeConfig]):
     """Set to true in subclasses to declare support for adding the same plugin multiple times."""
 
     def __class_getitem__(cls, config_class: type[Config]):
-        """Eliminates the need to write `config_class = FooConfig` when subclassing BasePlugin[FooConfig]"""
+        """Eliminates the need to write `config_class = FooConfig` when subclassing BasePlugin[FooConfig]."""
         name = f'{cls.__name__}[{config_class.__name__}]'
         return type(name, (cls,), dict(config_class=config_class))
 
@@ -86,7 +82,6 @@ class BasePlugin(Generic[SomeConfig]):
         self, options: dict[str, Any], config_file_path: str | None = None
     ) -> tuple[ConfigErrors, ConfigWarnings]:
         """Load config from a dict of options. Returns a tuple of (errors, warnings)."""
-
         if self.config_class is LegacyConfig:
             self.config = LegacyConfig(self.config_scheme, config_file_path=config_file_path)  # type: ignore
         else:
@@ -110,7 +105,7 @@ class BasePlugin(Generic[SomeConfig]):
         Note that for initializing variables, the `__init__` method is still preferred.
         For initializing per-build variables (and whenever in doubt), use the `on_config` event.
 
-        Parameters:
+        Args:
             command: the command that MkDocs was invoked with, e.g. "serve" for `mkdocs serve`.
             dirty: whether `--dirty` flag was passed.
         """
@@ -142,7 +137,7 @@ class BasePlugin(Generic[SomeConfig]):
         it is activated. For example, additional files or directories could be added
         to the list of "watched" files for auto-reloading.
 
-        Parameters:
+        Args:
             server: `livereload.Server` instance
             config: global configuration object
             builder: a callable which gets passed to each call to `server.watch`
@@ -160,7 +155,7 @@ class BasePlugin(Generic[SomeConfig]):
         after the user configuration is loaded and validated. Any alterations to the
         config should be made here.
 
-        Parameters:
+        Args:
             config: global configuration object
 
         Returns:
@@ -173,7 +168,7 @@ class BasePlugin(Generic[SomeConfig]):
         The `pre_build` event does not alter any variables. Use this event to call
         pre-build scripts.
 
-        Parameters:
+        Args:
             config: global configuration object
         """
 
@@ -185,7 +180,7 @@ class BasePlugin(Generic[SomeConfig]):
         file objects in the collection. Use [Page Events](plugins.md#page-events) to manipulate page
         specific data.
 
-        Parameters:
+        Args:
             files: global files collection
             config: global configuration object
 
@@ -199,7 +194,7 @@ class BasePlugin(Generic[SomeConfig]):
         The `nav` event is called after the site navigation is created and can
         be used to alter the site navigation.
 
-        Parameters:
+        Args:
             nav: global navigation object
             config: global configuration object
             files: global files collection
@@ -217,7 +212,7 @@ class BasePlugin(Generic[SomeConfig]):
         and can be used to alter the
         [Jinja environment](https://jinja.palletsprojects.com/en/latest/api/#jinja2.Environment).
 
-        Parameters:
+        Args:
             env: global Jinja environment
             config: global configuration object
             files: global files collection
@@ -232,7 +227,7 @@ class BasePlugin(Generic[SomeConfig]):
         The `post_build` event does not alter any variables. Use this event to call
         post-build scripts.
 
-        Parameters:
+        Args:
             config: global configuration object
         """
 
@@ -244,7 +239,7 @@ class BasePlugin(Generic[SomeConfig]):
         events which were scheduled to run after the error will have been skipped. See
         [Handling Errors](plugins.md#handling-errors) for more details.
 
-        Parameters:
+        Args:
             error: exception raised
         """
 
@@ -257,7 +252,7 @@ class BasePlugin(Generic[SomeConfig]):
         The `pre_template` event is called immediately after the subject template is
         loaded and can be used to alter the template.
 
-        Parameters:
+        Args:
             template: a Jinja2 [Template](https://jinja.palletsprojects.com/en/latest/api/#jinja2.Template) object
             template_name: string filename of template
             config: global configuration object
@@ -275,7 +270,7 @@ class BasePlugin(Generic[SomeConfig]):
         for the subject template and can be used to alter the context for that specific
         template only.
 
-        Parameters:
+        Args:
             context: dict of template context variables
             template_name: string filename of template
             config: global configuration object
@@ -294,7 +289,7 @@ class BasePlugin(Generic[SomeConfig]):
         If an empty string is returned, the template is skipped and nothing is is
         written to disc.
 
-        Parameters:
+        Args:
             output_content: output of rendered template as string
             template_name: string filename of template
             config: global configuration object
@@ -311,7 +306,7 @@ class BasePlugin(Generic[SomeConfig]):
         The `pre_page` event is called before any actions are taken on the subject
         page and can be used to alter the `Page` instance.
 
-        Parameters:
+        Args:
             page: `mkdocs.structure.pages.Page` instance
             config: global configuration object
             files: global files collection
@@ -326,7 +321,7 @@ class BasePlugin(Generic[SomeConfig]):
         The `on_page_read_source` event can replace the default mechanism to read
         the contents of a page's source from the filesystem.
 
-        Parameters:
+        Args:
             page: `mkdocs.structure.pages.Page` instance
             config: global configuration object
 
@@ -344,7 +339,7 @@ class BasePlugin(Generic[SomeConfig]):
         from file and can be used to alter the Markdown source text. The meta-
         data has been stripped off and is available as `page.meta` at this point.
 
-        Parameters:
+        Args:
             markdown: Markdown source text of page as string
             page: `mkdocs.structure.pages.Page` instance
             config: global configuration object
@@ -363,7 +358,7 @@ class BasePlugin(Generic[SomeConfig]):
         HTML (but before being passed to a template) and can be used to alter the
         HTML body of the page.
 
-        Parameters:
+        Args:
             html: HTML rendered from Markdown source as string
             page: `mkdocs.structure.pages.Page` instance
             config: global configuration object
@@ -381,7 +376,7 @@ class BasePlugin(Generic[SomeConfig]):
         The `page_context` event is called after the context for a page is created
         and can be used to alter the context for that specific page only.
 
-        Parameters:
+        Args:
             context: dict of template context variables
             page: `mkdocs.structure.pages.Page` instance
             config: global configuration object
@@ -399,7 +394,7 @@ class BasePlugin(Generic[SomeConfig]):
         page. If an empty string is returned, the page is skipped and nothing is
         written to disc.
 
-        Parameters:
+        Args:
             output: output of rendered template as string
             page: `mkdocs.structure.pages.Page` instance
             config: global configuration object
@@ -421,7 +416,8 @@ T = TypeVar('T')
 
 
 def event_priority(priority: float) -> Callable[[T], T]:
-    """A decorator to set an event priority for an event handler method.
+    """
+    A decorator to set an event priority for an event handler method.
 
     Recommended priority values:
     `100` "first", `50` "early", `0` "default", `-50` "late", `-100` "last".
@@ -615,7 +611,8 @@ class PrefixedLogger(logging.LoggerAdapter):
 
 
 def get_plugin_logger(name: str) -> PrefixedLogger:
-    """Return a logger for plugins.
+    """
+    Return a logger for plugins.
 
     Arguments:
         name: The name to use with `logging.getLogger`.

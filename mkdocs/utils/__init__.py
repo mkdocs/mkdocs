@@ -93,7 +93,7 @@ else:
 
 
 def reduce_list(data_set: Iterable[T]) -> list[T]:
-    """Reduce duplicate items in a list and preserve order"""
+    """Reduce duplicate items in a list and preserve order."""
     return list(dict.fromkeys(data_set))
 
 
@@ -123,9 +123,7 @@ def copy_file(source_path: str, output_path: str) -> None:
 
 
 def write_file(content: bytes, output_path: str) -> None:
-    """
-    Write content to output_path, making sure any parent directories exist.
-    """
+    """Write content to output_path, making sure any parent directories exist."""
     output_dir = os.path.dirname(output_path)
     os.makedirs(output_dir, exist_ok=True)
     with open(output_path, 'wb') as f:
@@ -133,9 +131,7 @@ def write_file(content: bytes, output_path: str) -> None:
 
 
 def clean_directory(directory: str) -> None:
-    """
-    Remove the content of a directory recursively but not the directory itself.
-    """
+    """Remove the content of a directory recursively but not the directory itself."""
     if not os.path.exists(directory):
         return
 
@@ -165,9 +161,7 @@ _ERROR_TEMPLATE_RE = re.compile(r'^\d{3}\.html?$')
 
 
 def is_error_template(path: str) -> bool:
-    """
-    Return True if the given file path is an HTTP error template.
-    """
+    """Return True if the given file path is an HTTP error template."""
     return bool(_ERROR_TEMPLATE_RE.match(path))
 
 
@@ -260,14 +254,12 @@ def path_to_url(path):
 
 def get_theme_dir(name: str) -> str:
     """Return the directory of an installed theme by name."""
-
     theme = get_themes()[name]
     return os.path.dirname(os.path.abspath(theme.load().__file__))
 
 
 def get_themes() -> dict[str, EntryPoint]:
     """Return a dict of all installed themes as {name: EntryPoint}."""
-
     themes: dict[str, EntryPoint] = {}
     eps: dict[EntryPoint, None] = dict.fromkeys(entry_points(group='mkdocs.themes'))
     builtins = {ep.name for ep in eps if ep.dist is not None and ep.dist.name == 'mkdocs'}
@@ -295,7 +287,6 @@ def get_themes() -> dict[str, EntryPoint]:
 
 def get_theme_names() -> Collection[str]:
     """Return a list of all installed themes by name."""
-
     return get_themes().keys()
 
 

@@ -1114,7 +1114,6 @@ class SiteDirTest(TestCase):
 
     def test_common_prefix(self) -> None:
         """Legitimate settings with common prefixes should not fail validation."""
-
         test_configs = (
             {'docs_dir': 'docs', 'site_dir': 'docs-site'},
             {'docs_dir': 'site-docs', 'site_dir': 'site'},
@@ -1556,8 +1555,7 @@ class SubConfigTest(TestCase):
             conf = self.get_config(Schema, {'sub': None})
 
     def test_config_file_path_pass_through(self) -> None:
-        """Necessary to ensure FilesystemObject validates the correct path"""
-
+        """Necessary to ensure FilesystemObject validates the correct path."""
         passed_config_path = None
 
         class SubType(c.BaseConfigOption):
