@@ -44,21 +44,28 @@ var livereload = function(epoch, requestId) {
     }
 
     var stop = function() {
-        if (req)     req.abort()
-        if (timeout) clearTimeout(timeout)
-        req = timeout = undefined
-    }
+        if (req) {
+            req.abort();
+        }
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+        req = timeout = undefined;
+    };
 
     window.addEventListener("load", function() {
-        if (document.visibilityState === "visible")
-            poll()
-    })
-    window.addEventListener("beforeunload", stop)
+        if (document.visibilityState === "visible") {
+            poll();
+        }
+    });
     window.addEventListener("visibilitychange", function() {
-        var visible = document.visibilityState === "visible"
-        if (visible) poll()
-        else         stop()
-    })
+        if (document.visibilityState === "visible") {
+            poll();
+        } else {
+            stop();
+        }
+    });
+    window.addEventListener("beforeunload", stop);
 
     console.log('Enabled live reload');
 }
