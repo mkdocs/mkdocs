@@ -49,7 +49,7 @@ var livereload = function(epoch, requestId) {
         req = timeout = undefined
     }
 
-    window.addEventListener("load", function () {
+    window.addEventListener("load", function() {
         if (document.visibilityState === "visible")
             poll()
     })
