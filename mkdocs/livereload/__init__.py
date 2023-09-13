@@ -42,8 +42,8 @@ var livereload = function(epoch, requestId) {
             setTimeout(launchNext, 3000);
         }
     };
-    var abort = req.abort.bind(req)
-    window.addEventListener("beforeunload", abort)
+    var abort = req.abort.bind(req);
+    window.addEventListener("beforeunload", abort);
     req.open("GET", "/livereload/" + epoch + "/" + requestId);
     req.send();
 
