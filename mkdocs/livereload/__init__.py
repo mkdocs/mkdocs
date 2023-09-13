@@ -28,21 +28,37 @@ import watchdog.observers.polling
 
 _SCRIPT_TEMPLATE_STR = """
 var livereload = function(epoch, requestId) {
-    var req = new XMLHttpRequest();
-    req.onloadend = function() {
-        if (parseFloat(this.responseText) > epoch) {
-            location.reload();
-            return;
-        }
-        var launchNext = livereload.bind(this, epoch, requestId);
-        if (this.status === 200) {
-            launchNext();
-        } else {
-            setTimeout(launchNext, 3000);
-        }
-    };
-    req.open("GET", "/livereload/" + epoch + "/" + requestId);
-    req.send();
+    var req, timeout;
+
+    var poll = function() {
+        req = new XMLHttpRequest();
+        req.onloadend = function() {
+            if (parseFloat(this.responseText) > epoch) {
+                location.reload();
+            } else {
+                timeout = setTimeout(poll, this.status === 200 ? 0 : 3000);
+            }
+        };
+        req.open("GET", "/livereload/" + epoch + "/" + requestId);
+        req.send();
+    }
+
+    var stop = function() {
+        if (req)     req.abort()
+        if (timeout) clearTimeout(timeout)
+        req = timeout = undefined
+    }
+
+    window.addEventListener("load", function () {
+        if (document.visibilityState === "visible")
+            poll()
+    })
+    window.addEventListener("beforeunload", stop)
+    window.addEventListener("visibilitychange", function() {
+        var visible = document.visibilityState === "visible"
+        if (visible) poll()
+        else         stop()
+    })
 
     console.log('Enabled live reload');
 }
