@@ -30,7 +30,7 @@ _SCRIPT_TEMPLATE_STR = """
 var livereload = function(epoch, requestId) {
     var req = new XMLHttpRequest();
     req.onloadend = function() {
-        window.removeEventListener("beforeunload", abort)
+        window.removeEventListener("beforeunload", abort);
         if (parseFloat(this.responseText) > epoch) {
             location.reload();
             return;
