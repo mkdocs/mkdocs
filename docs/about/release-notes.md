@@ -27,6 +27,22 @@ The current and past members of the MkDocs team.
 * [@oprypin](https://github.com/oprypin/)
 * [@ultrabug](https://github.com/ultrabug/)
 
+## Version 1.5.3 (2023-09-14)
+
+*   Fix `mkdocs serve` sometimes locking up all browser tabs when navigating quickly (#3390)
+
+*   Add many new supported languages for "search" plugin - update lunr-languages to 1.12.0 (#3334)
+
+*   Bugfix (regression in 1.5.0): In "readthedocs" theme the styling of "breadcrumb navigation" was broken for nested pages (#3383)
+
+*   Built-in themes now also support Chinese (Traditional, Taiwan) language (#3154)
+
+*   Plugins can now set `File.page` to their own subclass of `Page`. There is also now a warning if `File.page` is set to anything other than a strict subclass of `Page`. (#3367, #3381)
+
+    Note that just instantiating a `Page` [sets the file automatically](https://github.com/mkdocs/mkdocs/blob/f94ab3f62d0416d484d81a0c695c8ca86ab3b975/mkdocs/structure/pages.py#L34), so care needs to be taken not to create an unneeded `Page`.
+
+Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.5.2...1.5.3).
+
 ## Version 1.5.2 (2023-08-02)
 
 *   Bugfix (regression in 1.5.0): Restore functionality of `--no-livereload`. (#3320)
