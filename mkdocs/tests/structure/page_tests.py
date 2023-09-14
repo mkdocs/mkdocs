@@ -366,7 +366,7 @@ class PageTests(unittest.TestCase):
         pg = Page(None, fl, cfg)
         pg.read_source(cfg)
         pg.render(cfg, fl)
-        self.assertEqual(pg.title, '*Hello &mdash; beautiful world')
+        self.assertEqual(pg.title, '\\*Hello --- *beautiful* `world`')
 
     _ATTRLIST_CONTENT = dedent(
         '''
