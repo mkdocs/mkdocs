@@ -454,5 +454,5 @@ class _ExtractTitleTreeprocessor(markdown.treeprocessors.Treeprocessor):
         md.treeprocessors.register(
             self,
             "mkdocs_extract_title",
-            priority=-1,  # After the end.
+            priority=40,  # First, or at least much earlier than `inline`.
         )
