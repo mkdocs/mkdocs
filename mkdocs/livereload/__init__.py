@@ -30,6 +30,7 @@ _SCRIPT_TEMPLATE_STR = """
 var livereload = function(epoch, requestId) {
     var req = new XMLHttpRequest();
     req.onloadend = function() {
+        window.removeEventListener("beforeunload", abort);
         if (parseFloat(this.responseText) > epoch) {
             location.reload();
             return;
@@ -41,6 +42,8 @@ var livereload = function(epoch, requestId) {
             setTimeout(launchNext, 3000);
         }
     };
+    var abort = req.abort.bind(req);
+    window.addEventListener("beforeunload", abort);
     req.open("GET", "/livereload/" + epoch + "/" + requestId);
     req.send();
 
