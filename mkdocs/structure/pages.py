@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import copy
 import logging
 import posixpath
 import warnings
@@ -431,28 +430,30 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
 
 class _ExtractTitleTreeprocessor(markdown.treeprocessors.Treeprocessor):
     title: str | None = None
-    postprocessors: Sequence[markdown.postprocessors.Postprocessor] = ()
+    _postprocessors: Sequence[markdown.postprocessors.Postprocessor] = ()
 
     def run(self, root: etree.Element) -> etree.Element:
         for el in root:
             if el.tag == 'h1':
-                # Drop anchorlink from the element, if present.
-                if len(el) > 0 and el[-1].tag == 'a' and not (el[-1].tail or '').strip():
-                    el = copy.copy(el)
-                    del el[-1]
                 # Extract the text only, recursively.
                 title = ''.join(el.itertext())
+                # Manually apply "attr_list" because it kicks in later otherwise.
+                if self._attr_list is not None:
+                    title = self._attr_list.HEADER_RE.sub('', title)
                 # Unescape per Markdown implementation details.
-                for pp in self.postprocessors:
+                for pp in self._postprocessors:
                     title = pp.run(title)
                 self.title = title
             break
         return root
 
     def _register(self, md: markdown.Markdown) -> None:
-        self.postprocessors = tuple(md.postprocessors)
+        self._postprocessors = tuple(md.postprocessors)
+        self._attr_list = (
+            md.treeprocessors['attr_list'] if 'attr_list' in md.treeprocessors else None
+        )
         md.treeprocessors.register(
             self,
             "mkdocs_extract_title",
-            priority=40,  # First, or at least much earlier than `inline`.
+            priority=70,  # First, or at least much earlier than `inline`.
         )
