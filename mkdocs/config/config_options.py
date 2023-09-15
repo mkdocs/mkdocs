@@ -1141,7 +1141,7 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
         # Only if the plugin doesn't have its own "enabled" config, apply a generic one.
         if not any(pair[0] == 'enabled' for pair in plugin.config_scheme):
             if not config.get('enabled', True):
-                log.info(f"Plugin '{inst_name}' is disabled in the config, skipping.")
+                log.debug(f"Plugin '{inst_name}' is disabled in the config, skipping.")
                 return plugin
 
         errors, warns = plugin.load_config(
