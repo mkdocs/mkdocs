@@ -1167,7 +1167,9 @@ the theme config:</p>
 <h5 id="on_startup">on_startup<a class="headerlink" href="#on_startup" title="Permanent link"></a></h5>
 
 
+
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1180,10 +1182,12 @@ system where the plugin object is kept across builds within one <code>mkdocs ser
 <p>Note that for initializing variables, the <code>__init__</code> method is still preferred.
 For initializing per-build variables (and whenever in doubt), use the <code>on_config</code> event.</p>
 
+
+
   <p>Parameters:</p>
   <ul>
       <li class="field-body">
-        <b>command</b>
+        <b><code>command</code></b>
             (<code><span title="typing_extensions.Literal">Literal</span>[&#39;build&#39;, &#39;gh-deploy&#39;, &#39;serve&#39;]</code>)
         –
         <div class="doc-md-description">
@@ -1191,7 +1195,7 @@ For initializing per-build variables (and whenever in doubt), use the <code>on_c
         </div>
       </li>
       <li class="field-body">
-        <b>dirty</b>
+        <b><code>dirty</code></b>
             (<code>bool</code>)
         –
         <div class="doc-md-description">
@@ -1205,7 +1209,9 @@ For initializing per-build variables (and whenever in doubt), use the <code>on_c
 </div><h5 id="on_shutdown">on_shutdown<a class="headerlink" href="#on_shutdown" title="Permanent link"></a></h5>
 
 
+
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1226,7 +1232,9 @@ relies on detecting a graceful shutdown of MkDocs.</p>
 </div><h5 id="on_serve">on_serve<a class="headerlink" href="#on_serve" title="Permanent link"></a></h5>
 
 
+
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1238,10 +1246,12 @@ It is passed the <code>Server</code> instance which can be modified before
 it is activated. For example, additional files or directories could be added
 to the list of "watched" files for auto-reloading.</p>
 
+
+
   <p>Parameters:</p>
   <ul>
       <li class="field-body">
-        <b>server</b>
+        <b><code>server</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.livereload.LiveReloadServer" href="../api/#mkdocs.livereload.LiveReloadServer">LiveReloadServer</a></code>)
         –
         <div class="doc-md-description">
@@ -1249,7 +1259,7 @@ to the list of "watched" files for auto-reloading.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>config</b>
+        <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
         <div class="doc-md-description">
@@ -1257,7 +1267,7 @@ to the list of "watched" files for auto-reloading.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>builder</b>
+        <b><code>builder</code></b>
             (<code><span title="typing.Callable">Callable</span></code>)
         –
         <div class="doc-md-description">
@@ -1265,6 +1275,8 @@ to the list of "watched" files for auto-reloading.</p>
         </div>
       </li>
   </ul>
+
+
 
   <p>Returns:</p>
   <ul>
@@ -1286,7 +1298,9 @@ entire site.</p>
 <h5 id="on_config">on_config<a class="headerlink" href="#on_config" title="Permanent link"></a></h5>
 
 
+
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1296,10 +1310,12 @@ entire site.</p>
 after the user configuration is loaded and validated. Any alterations to the
 config should be made here.</p>
 
+
+
   <p>Parameters:</p>
   <ul>
       <li class="field-body">
-        <b>config</b>
+        <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
         <div class="doc-md-description">
@@ -1307,6 +1323,8 @@ config should be made here.</p>
         </div>
       </li>
   </ul>
+
+
 
   <p>Returns:</p>
   <ul>
@@ -1324,7 +1342,9 @@ config should be made here.</p>
 </div><h5 id="on_pre_build">on_pre_build<a class="headerlink" href="#on_pre_build" title="Permanent link"></a></h5>
 
 
+
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1333,10 +1353,12 @@ config should be made here.</p>
       <p>The <code>pre_build</code> event does not alter any variables. Use this event to call
 pre-build scripts.</p>
 
+
+
   <p>Parameters:</p>
   <ul>
       <li class="field-body">
-        <b>config</b>
+        <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
         <div class="doc-md-description">
@@ -1350,7 +1372,9 @@ pre-build scripts.</p>
 </div><h5 id="on_files">on_files<a class="headerlink" href="#on_files" title="Permanent link"></a></h5>
 
 
+
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1362,10 +1386,12 @@ collection. Note that Page objects have not yet been associated with the
 file objects in the collection. Use <a href="./#page-events">Page Events</a> to manipulate page
 specific data.</p>
 
+
+
   <p>Parameters:</p>
   <ul>
       <li class="field-body">
-        <b>files</b>
+        <b><code>files</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
         –
         <div class="doc-md-description">
@@ -1373,7 +1399,7 @@ specific data.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>config</b>
+        <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
         <div class="doc-md-description">
@@ -1381,6 +1407,8 @@ specific data.</p>
         </div>
       </li>
   </ul>
+
+
 
   <p>Returns:</p>
   <ul>
@@ -1398,7 +1426,9 @@ specific data.</p>
 </div><h5 id="on_nav">on_nav<a class="headerlink" href="#on_nav" title="Permanent link"></a></h5>
 
 
+
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1407,10 +1437,12 @@ specific data.</p>
       <p>The <code>nav</code> event is called after the site navigation is created and can
 be used to alter the site navigation.</p>
 
+
+
   <p>Parameters:</p>
   <ul>
       <li class="field-body">
-        <b>nav</b>
+        <b><code>nav</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.nav.Navigation" href="../themes/#mkdocs.structure.nav.Navigation">Navigation</a></code>)
         –
         <div class="doc-md-description">
@@ -1418,7 +1450,7 @@ be used to alter the site navigation.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>config</b>
+        <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
         <div class="doc-md-description">
@@ -1426,7 +1458,7 @@ be used to alter the site navigation.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>files</b>
+        <b><code>files</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
         –
         <div class="doc-md-description">
@@ -1434,6 +1466,8 @@ be used to alter the site navigation.</p>
         </div>
       </li>
   </ul>
+
+
 
   <p>Returns:</p>
   <ul>
@@ -1451,7 +1485,9 @@ be used to alter the site navigation.</p>
 </div><h5 id="on_env">on_env<a class="headerlink" href="#on_env" title="Permanent link"></a></h5>
 
 
+
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1461,18 +1497,20 @@ be used to alter the site navigation.</p>
 and can be used to alter the
 <a href="https://jinja.palletsprojects.com/en/latest/api/#jinja2.Environment">Jinja environment</a>.</p>
 
+
+
   <p>Parameters:</p>
   <ul>
       <li class="field-body">
-        <b>env</b>
-            (<code>jinja2.<span title="jinja2.Environment">Environment</span></code>)
+        <b><code>env</code></b>
+            (<code><span title="jinja2.Environment">Environment</span></code>)
         –
         <div class="doc-md-description">
           <p>global Jinja environment</p>
         </div>
       </li>
       <li class="field-body">
-        <b>config</b>
+        <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
         <div class="doc-md-description">
@@ -1480,7 +1518,7 @@ and can be used to alter the
         </div>
       </li>
       <li class="field-body">
-        <b>files</b>
+        <b><code>files</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
         –
         <div class="doc-md-description">
@@ -1489,10 +1527,12 @@ and can be used to alter the
       </li>
   </ul>
 
+
+
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code>jinja2.<span title="jinja2.Environment">Environment</span> | None</code>
+            <code><span title="jinja2.Environment">Environment</span> | None</code>
         –
         <div class="doc-md-description">
           <p>global Jinja Environment</p>
@@ -1505,7 +1545,9 @@ and can be used to alter the
 </div><h5 id="on_post_build">on_post_build<a class="headerlink" href="#on_post_build" title="Permanent link"></a></h5>
 
 
+
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1514,10 +1556,12 @@ and can be used to alter the
       <p>The <code>post_build</code> event does not alter any variables. Use this event to call
 post-build scripts.</p>
 
+
+
   <p>Parameters:</p>
   <ul>
       <li class="field-body">
-        <b>config</b>
+        <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
         <div class="doc-md-description">
@@ -1531,7 +1575,9 @@ post-build scripts.</p>
 </div><h5 id="on_build_error">on_build_error<a class="headerlink" href="#on_build_error" title="Permanent link"></a></h5>
 
 
+
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1543,10 +1589,12 @@ Use this event to clean things up before MkDocs terminates. Note that any other
 events which were scheduled to run after the error will have been skipped. See
 <a href="./#handling-errors">Handling Errors</a> for more details.</p>
 
+
+
   <p>Parameters:</p>
   <ul>
       <li class="field-body">
-        <b>error</b>
+        <b><code>error</code></b>
             (<code>Exception</code>)
         –
         <div class="doc-md-description">
@@ -1565,7 +1613,9 @@ called after the <a href="#on_env">env</a> event and before any <a href="#page-e
 <h5 id="on_pre_template">on_pre_template<a class="headerlink" href="#on_pre_template" title="Permanent link"></a></h5>
 
 
+
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1574,18 +1624,20 @@ called after the <a href="#on_env">env</a> event and before any <a href="#page-e
       <p>The <code>pre_template</code> event is called immediately after the subject template is
 loaded and can be used to alter the template.</p>
 
+
+
   <p>Parameters:</p>
   <ul>
       <li class="field-body">
-        <b>template</b>
-            (<code>jinja2.<span title="jinja2.Template">Template</span></code>)
+        <b><code>template</code></b>
+            (<code><span title="jinja2.Template">Template</span></code>)
         –
         <div class="doc-md-description">
           <p>a Jinja2 <a href="https://jinja.palletsprojects.com/en/latest/api/#jinja2.Template">Template</a> object</p>
         </div>
       </li>
       <li class="field-body">
-        <b>template_name</b>
+        <b><code>template_name</code></b>
             (<code>str</code>)
         –
         <div class="doc-md-description">
@@ -1593,7 +1645,7 @@ loaded and can be used to alter the template.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>config</b>
+        <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
         <div class="doc-md-description">
@@ -1602,10 +1654,12 @@ loaded and can be used to alter the template.</p>
       </li>
   </ul>
 
+
+
   <p>Returns:</p>
   <ul>
       <li class="field-body">
-            <code>jinja2.<span title="jinja2.Template">Template</span> | None</code>
+            <code><span title="jinja2.Template">Template</span> | None</code>
         –
         <div class="doc-md-description">
           <p>a Jinja2 <a href="https://jinja.palletsprojects.com/en/latest/api/#jinja2.Template">Template</a> object</p>
@@ -1618,7 +1672,9 @@ loaded and can be used to alter the template.</p>
 </div><h5 id="on_template_context">on_template_context<a class="headerlink" href="#on_template_context" title="Permanent link"></a></h5>
 
 
+
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1628,10 +1684,12 @@ loaded and can be used to alter the template.</p>
 for the subject template and can be used to alter the context for that specific
 template only.</p>
 
+
+
   <p>Parameters:</p>
   <ul>
       <li class="field-body">
-        <b>context</b>
+        <b><code>context</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.utils.templates.TemplateContext" href="../api/#mkdocs.utils.templates.TemplateContext">TemplateContext</a></code>)
         –
         <div class="doc-md-description">
@@ -1639,7 +1697,7 @@ template only.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>template_name</b>
+        <b><code>template_name</code></b>
             (<code>str</code>)
         –
         <div class="doc-md-description">
@@ -1647,7 +1705,7 @@ template only.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>config</b>
+        <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
         <div class="doc-md-description">
@@ -1655,6 +1713,8 @@ template only.</p>
         </div>
       </li>
   </ul>
+
+
 
   <p>Returns:</p>
   <ul>
@@ -1672,7 +1732,9 @@ template only.</p>
 </div><h5 id="on_post_template">on_post_template<a class="headerlink" href="#on_post_template" title="Permanent link"></a></h5>
 
 
+
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1683,10 +1745,12 @@ it is written to disc and can be used to alter the output of the template.
 If an empty string is returned, the template is skipped and nothing is is
 written to disc.</p>
 
+
+
   <p>Parameters:</p>
   <ul>
       <li class="field-body">
-        <b>output_content</b>
+        <b><code>output_content</code></b>
             (<code>str</code>)
         –
         <div class="doc-md-description">
@@ -1694,7 +1758,7 @@ written to disc.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>template_name</b>
+        <b><code>template_name</code></b>
             (<code>str</code>)
         –
         <div class="doc-md-description">
@@ -1702,7 +1766,7 @@ written to disc.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>config</b>
+        <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
         <div class="doc-md-description">
@@ -1710,6 +1774,8 @@ written to disc.</p>
         </div>
       </li>
   </ul>
+
+
 
   <p>Returns:</p>
   <ul>
@@ -1731,7 +1797,9 @@ page events are called after the <a href="#on_post_template">post_template</a> e
 <h5 id="on_pre_page">on_pre_page<a class="headerlink" href="#on_pre_page" title="Permanent link"></a></h5>
 
 
+
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1740,10 +1808,12 @@ page events are called after the <a href="#on_post_template">post_template</a> e
       <p>The <code>pre_page</code> event is called before any actions are taken on the subject
 page and can be used to alter the <code>Page</code> instance.</p>
 
+
+
   <p>Parameters:</p>
   <ul>
       <li class="field-body">
-        <b>page</b>
+        <b><code>page</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
         –
         <div class="doc-md-description">
@@ -1751,7 +1821,7 @@ page and can be used to alter the <code>Page</code> instance.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>config</b>
+        <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
         <div class="doc-md-description">
@@ -1759,7 +1829,7 @@ page and can be used to alter the <code>Page</code> instance.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>files</b>
+        <b><code>files</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
         –
         <div class="doc-md-description">
@@ -1767,6 +1837,8 @@ page and can be used to alter the <code>Page</code> instance.</p>
         </div>
       </li>
   </ul>
+
+
 
   <p>Returns:</p>
   <ul>
@@ -1784,7 +1856,9 @@ page and can be used to alter the <code>Page</code> instance.</p>
 </div><h5 id="on_page_read_source">on_page_read_source<a class="headerlink" href="#on_page_read_source" title="Permanent link"></a></h5>
 
 
+
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1793,10 +1867,12 @@ page and can be used to alter the <code>Page</code> instance.</p>
       <p>The <code>on_page_read_source</code> event can replace the default mechanism to read
 the contents of a page's source from the filesystem.</p>
 
+
+
   <p>Parameters:</p>
   <ul>
       <li class="field-body">
-        <b>page</b>
+        <b><code>page</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
         –
         <div class="doc-md-description">
@@ -1804,7 +1880,7 @@ the contents of a page's source from the filesystem.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>config</b>
+        <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
         <div class="doc-md-description">
@@ -1812,6 +1888,8 @@ the contents of a page's source from the filesystem.</p>
         </div>
       </li>
   </ul>
+
+
 
   <p>Returns:</p>
   <ul>
@@ -1830,7 +1908,9 @@ default loading from a file will be performed.</p>
 </div><h5 id="on_page_markdown">on_page_markdown<a class="headerlink" href="#on_page_markdown" title="Permanent link"></a></h5>
 
 
+
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1840,10 +1920,12 @@ default loading from a file will be performed.</p>
 from file and can be used to alter the Markdown source text. The meta-
 data has been stripped off and is available as <code>page.meta</code> at this point.</p>
 
+
+
   <p>Parameters:</p>
   <ul>
       <li class="field-body">
-        <b>markdown</b>
+        <b><code>markdown</code></b>
             (<code>str</code>)
         –
         <div class="doc-md-description">
@@ -1851,7 +1933,7 @@ data has been stripped off and is available as <code>page.meta</code> at this po
         </div>
       </li>
       <li class="field-body">
-        <b>page</b>
+        <b><code>page</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
         –
         <div class="doc-md-description">
@@ -1859,7 +1941,7 @@ data has been stripped off and is available as <code>page.meta</code> at this po
         </div>
       </li>
       <li class="field-body">
-        <b>config</b>
+        <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
         <div class="doc-md-description">
@@ -1867,7 +1949,7 @@ data has been stripped off and is available as <code>page.meta</code> at this po
         </div>
       </li>
       <li class="field-body">
-        <b>files</b>
+        <b><code>files</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
         –
         <div class="doc-md-description">
@@ -1875,6 +1957,8 @@ data has been stripped off and is available as <code>page.meta</code> at this po
         </div>
       </li>
   </ul>
+
+
 
   <p>Returns:</p>
   <ul>
@@ -1892,7 +1976,9 @@ data has been stripped off and is available as <code>page.meta</code> at this po
 </div><h5 id="on_page_content">on_page_content<a class="headerlink" href="#on_page_content" title="Permanent link"></a></h5>
 
 
+
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1902,10 +1988,12 @@ data has been stripped off and is available as <code>page.meta</code> at this po
 HTML (but before being passed to a template) and can be used to alter the
 HTML body of the page.</p>
 
+
+
   <p>Parameters:</p>
   <ul>
       <li class="field-body">
-        <b>html</b>
+        <b><code>html</code></b>
             (<code>str</code>)
         –
         <div class="doc-md-description">
@@ -1913,7 +2001,7 @@ HTML body of the page.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>page</b>
+        <b><code>page</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
         –
         <div class="doc-md-description">
@@ -1921,7 +2009,7 @@ HTML body of the page.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>config</b>
+        <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
         <div class="doc-md-description">
@@ -1929,7 +2017,7 @@ HTML body of the page.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>files</b>
+        <b><code>files</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
         –
         <div class="doc-md-description">
@@ -1937,6 +2025,8 @@ HTML body of the page.</p>
         </div>
       </li>
   </ul>
+
+
 
   <p>Returns:</p>
   <ul>
@@ -1954,7 +2044,9 @@ HTML body of the page.</p>
 </div><h5 id="on_page_context">on_page_context<a class="headerlink" href="#on_page_context" title="Permanent link"></a></h5>
 
 
+
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1963,10 +2055,12 @@ HTML body of the page.</p>
       <p>The <code>page_context</code> event is called after the context for a page is created
 and can be used to alter the context for that specific page only.</p>
 
+
+
   <p>Parameters:</p>
   <ul>
       <li class="field-body">
-        <b>context</b>
+        <b><code>context</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.utils.templates.TemplateContext" href="../api/#mkdocs.utils.templates.TemplateContext">TemplateContext</a></code>)
         –
         <div class="doc-md-description">
@@ -1974,7 +2068,7 @@ and can be used to alter the context for that specific page only.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>page</b>
+        <b><code>page</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
         –
         <div class="doc-md-description">
@@ -1982,7 +2076,7 @@ and can be used to alter the context for that specific page only.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>config</b>
+        <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
         <div class="doc-md-description">
@@ -1990,7 +2084,7 @@ and can be used to alter the context for that specific page only.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>nav</b>
+        <b><code>nav</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.nav.Navigation" href="../themes/#mkdocs.structure.nav.Navigation">Navigation</a></code>)
         –
         <div class="doc-md-description">
@@ -1998,6 +2092,8 @@ and can be used to alter the context for that specific page only.</p>
         </div>
       </li>
   </ul>
+
+
 
   <p>Returns:</p>
   <ul>
@@ -2015,7 +2111,9 @@ and can be used to alter the context for that specific page only.</p>
 </div><h5 id="on_post_page">on_post_page<a class="headerlink" href="#on_post_page" title="Permanent link"></a></h5>
 
 
+
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -2026,10 +2124,12 @@ before it is written to disc and can be used to alter the output of the
 page. If an empty string is returned, the page is skipped and nothing is
 written to disc.</p>
 
+
+
   <p>Parameters:</p>
   <ul>
       <li class="field-body">
-        <b>output</b>
+        <b><code>output</code></b>
             (<code>str</code>)
         –
         <div class="doc-md-description">
@@ -2037,7 +2137,7 @@ written to disc.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>page</b>
+        <b><code>page</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
         –
         <div class="doc-md-description">
@@ -2045,7 +2145,7 @@ written to disc.</p>
         </div>
       </li>
       <li class="field-body">
-        <b>config</b>
+        <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
         <div class="doc-md-description">
@@ -2053,6 +2153,8 @@ written to disc.</p>
         </div>
       </li>
   </ul>
+
+
 
   <p>Returns:</p>
   <ul>
@@ -2072,12 +2174,14 @@ written to disc.</p>
 <p>Since MkDocs 1.4, plugins can choose to set a priority value for their events. Events with higher priority are called first. Events without a chosen priority get a default of 0. Events that have the same priority are ordered as they appear in the config.</p>
 
 
+
 <div class="doc doc-object doc-function">
 
 
 
+
 <h4 id="mkdocs.plugins.event_priority" class="doc doc-heading">
-<code class="highlight language-python">mkdocs.plugins.event_priority(priority: float) -&gt; Callable[[T], T]</code>
+          <code class="highlight language-python">mkdocs.plugins.event_priority(priority: float) -&gt; Callable[[T], T]</code>
 
 <a href="#mkdocs.plugins.event_priority" class="headerlink" title="Permanent link"></a></h4>
 
@@ -2108,21 +2212,21 @@ except ImportError:
 
 
 
+
 <h4 id="mkdocs.exceptions.MkDocsException" class="doc doc-heading">
-        <code>mkdocs.exceptions.MkDocsException</code>
+          <code>mkdocs.exceptions.MkDocsException</code>
 
 
 <a href="#mkdocs.exceptions.MkDocsException" class="headerlink" title="Permanent link"></a></h4>
 
 
   <div class="doc doc-contents first">
-      <p class="doc doc-class-bases">
-        Bases: <code><span title="click.ClickException">ClickException</span></code></p>
+          <p class="doc doc-class-bases">
+            Bases: <code><span title="click.ClickException">ClickException</span></code></p>
 
   
       <p>The base class which all MkDocs exceptions inherit from. This should
 not be raised directly. One of the subclasses should be raised instead.</p>
-
 
 
   </div>
@@ -2133,16 +2237,17 @@ not be raised directly. One of the subclasses should be raised instead.</p>
 
 
 
+
 <h4 id="mkdocs.exceptions.ConfigurationError" class="doc doc-heading">
-        <code>mkdocs.exceptions.ConfigurationError</code>
+          <code>mkdocs.exceptions.ConfigurationError</code>
 
 
 <a href="#mkdocs.exceptions.ConfigurationError" class="headerlink" title="Permanent link"></a></h4>
 
 
   <div class="doc doc-contents first">
-      <p class="doc doc-class-bases">
-        Bases: <code><a class="autorefs autorefs-internal" title="mkdocs.exceptions.MkDocsException" href="#mkdocs.exceptions.MkDocsException">MkDocsException</a></code></p>
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="mkdocs.exceptions.MkDocsException" href="#mkdocs.exceptions.MkDocsException">MkDocsException</a></code></p>
 
   
       <p>This error is raised by configuration validation when a validation error
@@ -2150,7 +2255,6 @@ is encountered. This error should be raised by any configuration options
 defined in a plugin's <a class="autorefs autorefs-internal" href="#config_scheme">config_scheme</a>.</p>
 
 
-
   </div>
 
 </div>
@@ -2159,21 +2263,21 @@ defined in a plugin's <a class="autorefs autorefs-internal" href="#config_scheme
 
 
 
+
 <h4 id="mkdocs.exceptions.BuildError" class="doc doc-heading">
-        <code>mkdocs.exceptions.BuildError</code>
+          <code>mkdocs.exceptions.BuildError</code>
 
 
 <a href="#mkdocs.exceptions.BuildError" class="headerlink" title="Permanent link"></a></h4>
 
 
   <div class="doc doc-contents first">
-      <p class="doc doc-class-bases">
-        Bases: <code><a class="autorefs autorefs-internal" title="mkdocs.exceptions.MkDocsException" href="#mkdocs.exceptions.MkDocsException">MkDocsException</a></code></p>
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="mkdocs.exceptions.MkDocsException" href="#mkdocs.exceptions.MkDocsException">MkDocsException</a></code></p>
 
   
       <p>This error may be raised by MkDocs during the build process. Plugins should
 not raise this error.</p>
-
 
 
   </div>
@@ -2184,21 +2288,21 @@ not raise this error.</p>
 
 
 
+
 <h4 id="mkdocs.exceptions.PluginError" class="doc doc-heading">
-        <code>mkdocs.exceptions.PluginError</code>
+          <code>mkdocs.exceptions.PluginError</code>
 
 
 <a href="#mkdocs.exceptions.PluginError" class="headerlink" title="Permanent link"></a></h4>
 
 
   <div class="doc doc-contents first">
-      <p class="doc doc-class-bases">
-        Bases: <code><a class="autorefs autorefs-internal" title="mkdocs.exceptions.BuildError" href="#mkdocs.exceptions.BuildError">BuildError</a></code></p>
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="mkdocs.exceptions.BuildError" href="#mkdocs.exceptions.BuildError">BuildError</a></code></p>
 
   
       <p>A subclass of <a class="autorefs autorefs-internal" href="#mkdocs.exceptions.BuildError"><code>mkdocs.exceptions.BuildError</code></a> which can be raised by plugin
 events.</p>
-
 
 
   </div>
@@ -2234,12 +2338,14 @@ class MyPlugin(BasePlugin):
 a logger that can be used to log messages.</p>
 
 
+
 <div class="doc doc-object doc-function">
 
 
 
+
 <h4 id="mkdocs.plugins.get_plugin_logger" class="doc doc-heading">
-<code class="highlight language-python">mkdocs.plugins.get_plugin_logger(name: str) -&gt; PrefixedLogger</code>
+          <code class="highlight language-python">mkdocs.plugins.get_plugin_logger(name: str) -&gt; PrefixedLogger</code>
 
 <a href="#mkdocs.plugins.get_plugin_logger" class="headerlink" title="Permanent link"></a></h4>
 
@@ -2248,10 +2354,12 @@ a logger that can be used to log messages.</p>
   
       <p>Return a logger for plugins.</p>
 
+
+
   <p>Parameters:</p>
   <ul>
       <li class="field-body">
-        <b>name</b>
+        <b><code>name</code></b>
             (<code>str</code>)
         –
         <div class="doc-md-description">
@@ -2259,6 +2367,8 @@ a logger that can be used to log messages.</p>
         </div>
       </li>
   </ul>
+
+
 
   <p>Returns:</p>
   <ul>

@@ -180,6 +180,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-level="2"><a href="#version-153-2023-09-18" class="nav-link">Version 1.5.3 (2023-09-18)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-level="2"><a href="#version-152-2023-08-02" class="nav-link">Version 1.5.2 (2023-08-02)</a>
               <ul class="nav flex-column">
               </ul>
@@ -392,6 +396,26 @@ mkdocs, version 1.5.0 from /path/to/mkdocs (Python 3.10)</code></pre>
 <li><a href="https://github.com/oprypin/">@oprypin</a></li>
 <li><a href="https://github.com/ultrabug/">@ultrabug</a></li>
 </ul>
+<h2 id="version-153-2023-09-18">Version 1.5.3 (2023-09-18)<a class="headerlink" href="#version-153-2023-09-18" title="Permanent link"></a></h2>
+<ul>
+<li>
+<p>Fix <code>mkdocs serve</code> sometimes locking up all browser tabs when navigating quickly (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3390" title="GitHub Issue mkdocs/mkdocs #3390">#3390</a>)</p>
+</li>
+<li>
+<p>Add many new supported languages for "search" plugin - update lunr-languages to 1.12.0 (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3334" title="GitHub Issue mkdocs/mkdocs #3334">#3334</a>)</p>
+</li>
+<li>
+<p>Bugfix (regression in 1.5.0): In "readthedocs" theme the styling of "breadcrumb navigation" was broken for nested pages (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3383" title="GitHub Issue mkdocs/mkdocs #3383">#3383</a>)</p>
+</li>
+<li>
+<p>Built-in themes now also support Chinese (Traditional, Taiwan) language (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3370" title="GitHub Issue mkdocs/mkdocs #3370">#3370</a>)</p>
+</li>
+<li>
+<p>Plugins can now set <code>File.page</code> to their own subclass of <code>Page</code>. There is also now a warning if <code>File.page</code> is set to anything other than a strict subclass of <code>Page</code>. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3367" title="GitHub Issue mkdocs/mkdocs #3367">#3367</a>, <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3381" title="GitHub Issue mkdocs/mkdocs #3381">#3381</a>)</p>
+<p>Note that just instantiating a <code>Page</code> <a href="https://github.com/mkdocs/mkdocs/blob/f94ab3f62d0416d484d81a0c695c8ca86ab3b975/mkdocs/structure/pages.py#L34">sets the file automatically</a>, so care needs to be taken not to create an unneeded <code>Page</code>.</p>
+</li>
+</ul>
+<p>Other small improvements; see <a href="https://github.com/mkdocs/mkdocs/compare/1.5.2...1.5.3">commit log</a>.</p>
 <h2 id="version-152-2023-08-02">Version 1.5.2 (2023-08-02)<a class="headerlink" href="#version-152-2023-08-02" title="Permanent link"></a></h2>
 <ul>
 <li>
@@ -401,7 +425,7 @@ mkdocs, version 1.5.0 from /path/to/mkdocs (Python 3.10)</code></pre>
 <p>Bugfix (regression in 1.5.0): The new page title detection would sometimes be unable to drop anchorlinks - fix that. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3325" title="GitHub Issue mkdocs/mkdocs #3325">#3325</a>)</p>
 </li>
 <li>
-<p>Partly bring back pre-1.5 API: <code>extra_javascript</code> items will once again be mostly strings, and only sometimes <code>ExtraStringValue</code> (when the extra <code>script</code> functionality is used).</p>
+<p>Partly bring back pre-1.5 API: <code>extra_javascript</code> items will once again be mostly strings, and only sometimes <code>ExtraScriptValue</code> (when the extra <code>script</code> functionality is used).</p>
 <p>Plugins should be free to append strings to <code>config.extra_javascript</code>, but when reading the values, they must still make sure to read it as <code>str(value)</code> in case it is an <code>ExtraScriptValue</code> item. For querying the attributes such as <code>.type</code> you need to check <code>isinstance</code> first. Static type checking will guide you in that. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3324" title="GitHub Issue mkdocs/mkdocs #3324">#3324</a>)</p>
 </li>
 </ul>
