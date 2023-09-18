@@ -27,7 +27,7 @@ The current and past members of the MkDocs team.
 * [@oprypin](https://github.com/oprypin/)
 * [@ultrabug](https://github.com/ultrabug/)
 
-## Version 1.5.3 (2023-09-14)
+## Version 1.5.3 (2023-09-18)
 
 *   Fix `mkdocs serve` sometimes locking up all browser tabs when navigating quickly (#3390)
 
