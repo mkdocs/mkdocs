@@ -16,7 +16,7 @@ from mkdocs.exceptions import Abort, BuildError
 from mkdocs.structure.files import File, Files, InclusionLevel, _set_exclusions, get_files
 from mkdocs.structure.nav import Navigation, get_navigation
 from mkdocs.structure.pages import Page
-from mkdocs.utils import DuplicateFilter  # noqa - legacy re-export
+from mkdocs.utils import DuplicateFilter  # noqa: F401 - legacy re-export
 from mkdocs.utils import templates
 
 if TYPE_CHECKING:
@@ -375,4 +375,4 @@ def build(
 def site_directory_contains_stale_files(site_directory: str) -> bool:
     """Check if the site directory contains stale files from a previous build."""
 
-    return True if os.path.exists(site_directory) and os.listdir(site_directory) else False
+    return bool(os.path.exists(site_directory) and os.listdir(site_directory))

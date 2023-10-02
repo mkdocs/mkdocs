@@ -173,7 +173,7 @@ class TestPluginCollection(unittest.TestCase):
         collection = plugins.PluginCollection()
         plugin = DummyPlugin()
         collection['foo'] = plugin
-        self.assertEqual([(k, v) for k, v in collection.items()], [('foo', plugin)])
+        self.assertEqual(list(collection.items()), [('foo', plugin)])
 
     def test_set_multiple_plugins_on_collection(self):
         collection = plugins.PluginCollection()
@@ -181,9 +181,7 @@ class TestPluginCollection(unittest.TestCase):
         collection['foo'] = plugin1
         plugin2 = DummyPlugin()
         collection['bar'] = plugin2
-        self.assertEqual(
-            [(k, v) for k, v in collection.items()], [('foo', plugin1), ('bar', plugin2)]
-        )
+        self.assertEqual(list(collection.items()), [('foo', plugin1), ('bar', plugin2)])
 
     def test_run_event_on_collection(self):
         collection = plugins.PluginCollection()

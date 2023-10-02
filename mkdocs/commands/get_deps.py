@@ -175,4 +175,4 @@ def get_deps(projects_file_url: str, config_file_path: str | None = None) -> Non
                     log.warning(warning)
 
     for pkg in sorted(packages_to_install):
-        print(pkg)
+        print(pkg)  # noqa: T201

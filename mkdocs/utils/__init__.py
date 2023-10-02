@@ -26,7 +26,7 @@ else:
     from importlib_metadata import EntryPoint, entry_points
 
 from mkdocs import exceptions
-from mkdocs.utils.yaml import get_yaml_loader, yaml_load  # noqa - legacy re-export
+from mkdocs.utils.yaml import get_yaml_loader, yaml_load  # noqa: F401 - legacy re-export
 
 if TYPE_CHECKING:
     from mkdocs.structure.pages import Page

@@ -213,7 +213,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                     func()
             except Exception as e:
                 if isinstance(e, SystemExit):
-                    print(e, file=sys.stderr)
+                    print(e, file=sys.stderr)  # noqa: T201
                 else:
                     traceback.print_exc()
                 log.error(
