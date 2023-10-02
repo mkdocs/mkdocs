@@ -353,8 +353,7 @@ def build(
         # Run `post_build` plugin events.
         config.plugins.on_post_build(config=config)
 
-        counts = warning_counter.get_counts()
-        if counts:
+        if counts := warning_counter.get_counts():
             msg = ', '.join(f'{v} {k.lower()}s' for k, v in counts)
             raise Abort(f'Aborted with {msg} in strict mode!')
 

@@ -254,8 +254,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         path = environ["PATH_INFO"].encode("latin-1").decode("utf-8", "ignore")
 
         if path.startswith("/livereload/"):
-            m = re.fullmatch(r"/livereload/([0-9]+)/[0-9]+", path)
-            if m:
+            if m := re.fullmatch(r"/livereload/([0-9]+)/[0-9]+", path):
                 epoch = int(m[1])
                 start_response("200 OK", [("Content-Type", "text/plain")])
 
