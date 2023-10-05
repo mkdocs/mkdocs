@@ -4,7 +4,7 @@ A detailed guide.
 
 ---
 
-## Requirements
+## All the Requirements
 
 MkDocs requires a recent version of [Python] and the Python package
 manager, [pip], to be installed on your system.
