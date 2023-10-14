@@ -70,7 +70,7 @@ def strings(obj) -> Sequence[str]:
         return tuple(obj)
 
 
-@functools.lru_cache()
+@functools.lru_cache
 def _entry_points(group: str) -> Mapping[str, EntryPoint]:
     eps = {ep.name: ep for ep in entry_points(group=group)}
     log.debug(f"Available '{group}' entry points: {sorted(eps)}")

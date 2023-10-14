@@ -327,7 +327,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         )
 
     @classmethod
-    @functools.lru_cache()  # "Cache" to not repeat the same message for the same browser tab.
+    @functools.lru_cache  # "Cache" to not repeat the same message for the same browser tab.
     def _log_poll_request(cls, url, request_id):
         log.info(f"Browser connected: {url}")
 
