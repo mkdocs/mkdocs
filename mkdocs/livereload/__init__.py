@@ -28,24 +28,44 @@ import watchdog.observers.polling
 
 _SCRIPT_TEMPLATE_STR = """
 var livereload = function(epoch, requestId) {
-    var req = new XMLHttpRequest();
-    req.onloadend = function() {
-        window.removeEventListener("beforeunload", abort);
-        if (parseFloat(this.responseText) > epoch) {
-            location.reload();
-            return;
+    var req, timeout;
+
+    var poll = function() {
+        req = new XMLHttpRequest();
+        req.onloadend = function() {
+            if (parseFloat(this.responseText) > epoch) {
+                location.reload();
+            } else {
+                timeout = setTimeout(poll, this.status === 200 ? 0 : 3000);
+            }
+        };
+        req.open("GET", "/livereload/" + epoch + "/" + requestId);
+        req.send();
+    }
+
+    var stop = function() {
+        if (req) {
+            req.abort();
         }
-        var launchNext = livereload.bind(this, epoch, requestId);
-        if (this.status === 200) {
-            launchNext();
-        } else {
-            setTimeout(launchNext, 3000);
+        if (timeout) {
+            clearTimeout(timeout);
         }
+        req = timeout = undefined;
     };
-    var abort = req.abort.bind(req);
-    window.addEventListener("beforeunload", abort);
-    req.open("GET", "/livereload/" + epoch + "/" + requestId);
-    req.send();
+
+    window.addEventListener("load", function() {
+        if (document.visibilityState === "visible") {
+            poll();
+        }
+    });
+    window.addEventListener("visibilitychange", function() {
+        if (document.visibilityState === "visible") {
+            poll();
+        } else {
+            stop();
+        }
+    });
+    window.addEventListener("beforeunload", stop);
 
     console.log('Enabled live reload');
 }
