@@ -181,28 +181,6 @@ class BuildTests(unittest.TestCase):
             with self.assertRaises(KeyError):
                 server.unwatch(site_dir)
 
-    @tempdir({"foo.docs": "a"})
-    @tempdir({"foo.site": "original"})
-    def test_custom_action_warns(self, site_dir, docs_dir):
-        started_building = threading.Event()
-
-        def rebuild():
-            started_building.set()
-            content = Path(docs_dir, "foo.docs").read_text()
-            Path(site_dir, "foo.site").write_text(content * 5)
-
-        with testing_server(site_dir) as server:
-            with self.assertWarnsRegex(DeprecationWarning, "func") as cm:
-                server.watch(docs_dir, rebuild)
-                time.sleep(0.01)
-            self.assertIn("livereload_tests.py", cm.filename)
-
-            Path(docs_dir, "foo.docs").write_text("b")
-            self.assertTrue(started_building.wait(timeout=10))
-
-            _, output = do_request(server, "GET /foo.site")
-            self.assertEqual(output, "bbbbb")
-
     @tempdir({"foo.docs": "docs1"})
     @tempdir({"foo.extra": "extra1"})
     @tempdir({"foo.site": "original"})

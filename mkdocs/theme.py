@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import os
+import warnings
 from typing import Any, Collection, MutableMapping
 
 import jinja2
@@ -37,8 +38,7 @@ class Theme(MutableMapping[str, Any]):
         self.name = name
         self._custom_dir = custom_dir
         _vars: dict[str, Any] = {'name': name, 'locale': 'en'}
-        # _vars is soft-deprecated, intentionally hide it from mypy.
-        setattr(self, '_vars', _vars)
+        self.__vars = _vars
 
         # MkDocs provided static templates are always included
         package_dir = os.path.abspath(os.path.dirname(__file__))
@@ -62,9 +62,9 @@ class Theme(MutableMapping[str, Any]):
         _vars.update(user_config)
 
         # Validate locale and convert to Locale object
-        _vars['locale'] = localization.parse_locale(
-            locale if locale is not None else _vars['locale']
-        )
+        if locale is None:
+            locale = _vars['locale']
+        _vars['locale'] = localization.parse_locale(locale)
 
     name: str | None
 
@@ -75,6 +75,14 @@ class Theme(MutableMapping[str, Any]):
     @property
     def custom_dir(self) -> str | None:
         return self._custom_dir
+
+    @property
+    def _vars(self) -> dict[str, Any]:
+        warnings.warn(
+            "Do not access Theme._vars, instead access the keys of Theme directly.",
+            DeprecationWarning,
+        )
+        return self.__vars
 
     dirs: list[str]
 
@@ -90,22 +98,22 @@ class Theme(MutableMapping[str, Any]):
         )
 
     def __getitem__(self, key: str) -> Any:
-        return self._vars[key]  # type: ignore[attr-defined]
+        return self.__vars[key]
 
     def __setitem__(self, key: str, value):
-        self._vars[key] = value  # type: ignore[attr-defined]
+        self.__vars[key] = value
 
     def __delitem__(self, key: str):
-        del self._vars[key]  # type: ignore[attr-defined]
+        del self.__vars[key]
 
     def __contains__(self, item: object) -> bool:
-        return item in self._vars  # type: ignore[attr-defined]
+        return item in self.__vars
 
     def __len__(self):
-        return len(self._vars)  # type: ignore[attr-defined]
+        return len(self.__vars)
 
     def __iter__(self):
-        return iter(self._vars)  # type: ignore[attr-defined]
+        return iter(self.__vars)
 
     def _load_theme_config(self, name: str) -> None:
         """Recursively load theme and any parent themes."""
@@ -137,7 +145,7 @@ class Theme(MutableMapping[str, Any]):
             self._load_theme_config(parent_theme)
 
         self.static_templates.update(theme_config.pop('static_templates', []))
-        self._vars.update(theme_config)  # type: ignore[attr-defined]
+        self.__vars.update(theme_config)
 
     def get_env(self) -> jinja2.Environment:
         """Return a Jinja environment for the theme."""
