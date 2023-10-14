@@ -72,8 +72,8 @@ class MkDocsConfig(base.Config):
     """The address on which to serve the live reloading docs server."""
 
     use_directory_urls = c.Type(bool, default=True)
-    """If `True`, use `<page_name>/index.hmtl` style files with hyperlinks to
-    the directory.If `False`, use `<page_name>.html style file with
+    """If `True`, use `<page_name>/index.html` style files with hyperlinks to
+    the directory. If `False`, use `<page_name>.html style file with
     hyperlinks to the file.
     True generates nicer URLs, but False is useful if browsing the output on
     a filesystem."""
