@@ -251,6 +251,13 @@ def create_media_urls(
     return [normalize_url(path, page, base) for path in path_list]
 
 
+def path_to_url(path):
+    warnings.warn(
+        "path_to_url is never used in MkDocs and will be removed soon.", DeprecationWarning
+    )
+    return path.replace('\\', '/')
+
+
 def get_theme_dir(name: str) -> str:
     """Return the directory of an installed theme by name."""
 
