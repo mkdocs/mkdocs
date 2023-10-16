@@ -117,8 +117,12 @@ dependencies = [
     "coverage",
 ]
 [tool.hatch.envs.test.scripts]
-test = "coverage run --source=mkdocs --omit 'mkdocs/tests/*' -m unittest discover -p '*tests.py' mkdocs --top-level-directory ."
-_coverage = ["test", "coverage xml", "coverage report --show-missing"]
+test = 'python -m unittest discover -s mkdocs -p "*tests.py"'
+_coverage = [
+    'coverage run --source=mkdocs --omit "mkdocs/tests/*" -m unittest discover -s mkdocs -p "*tests.py"',
+    "coverage xml",
+    "coverage report --show-missing"
+]
 with-coverage = "test"
 [[tool.hatch.envs.test.matrix]]
 python = ["3.7", "3.8", "3.9", "3.10", "3.11", "pypy3"]
@@ -186,7 +190,7 @@ dependencies = [
     "codespell",
 ]
 [tool.hatch.envs.lint.scripts]
-spelling = "codespell mkdocs docs *.* -S LC_MESSAGES -S '*.min.js' -S 'lunr*.js' -S fontawesome-webfont.svg -S tinyseg.js"
+spelling = 'codespell mkdocs docs *.* -S LC_MESSAGES -S "*.min.js" -S "lunr*.js" -S fontawesome-webfont.svg -S tinyseg.js'
 markdown = "npm exec --yes -- markdownlint-cli README.md CONTRIBUTING.md docs/ --ignore docs/CNAME"
 js = "npm exec --yes -- jshint mkdocs/"
 css = "npm exec --yes -- csslint --quiet mkdocs/"
