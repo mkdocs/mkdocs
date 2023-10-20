@@ -19,11 +19,11 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
@@ -31,7 +31,7 @@ classifiers = [
     "Topic :: Text Processing",
 ]
 dynamic = ["version"]
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 dependencies = [
     "click >=7.0",
     "Jinja2 >=2.11.1",
@@ -42,7 +42,6 @@ dependencies = [
     "ghp-import >=1.0",
     "pyyaml_env_tag >=0.1",
     "importlib-metadata >=4.3; python_version < '3.10'",
-    "typing-extensions >=3.10; python_version < '3.8'",
     "packaging >=20.5",
     "mergedeep >=1.3.4",
     "pathspec >=0.11.1",
@@ -52,6 +51,7 @@ dependencies = [
 [project.optional-dependencies]
 i18n = [
     "babel >=2.9.0",
+    "setuptools; python_version >= '3.12'" # Workaround: babel doesn't declare its dependency
 ]
 min-versions = [
     "click ==7.0",
@@ -63,7 +63,6 @@ min-versions = [
     "ghp-import ==1.0",
     "pyyaml_env_tag ==0.1",
     "importlib-metadata ==4.3; python_version < '3.10'",
-    "typing-extensions ==3.10; python_version < '3.8'",
     "packaging ==20.5",
     "mergedeep ==1.3.4",
     "pathspec ==0.11.1",
@@ -100,6 +99,7 @@ exclude = ["/mkdocs/tests/integration", "*.po", "*.pot", "babel.cfg"]
 [tool.hatch.build.hooks.custom]
 dependencies = [
     "babel",
+    "setuptools; python_version >= '3.12'" # Workaround: babel doesn't declare its dependency
 ]
 
 [tool.hatch.envs.default.scripts]
@@ -125,7 +125,7 @@ _coverage = [
 ]
 with-coverage = "test"
 [[tool.hatch.envs.test.matrix]]
-python = ["3.7", "3.8", "3.9", "3.10", "3.11", "pypy3"]
+python = ["3.8", "3.9", "3.10", "3.11", "3.12", "pypy3"]
 type = ["default", "min-req"]
 [tool.hatch.envs.test.overrides]
 matrix.type.features = [
@@ -140,7 +140,7 @@ template = "docs"
 [tool.hatch.envs.integration.scripts]
 test = "python -m mkdocs.tests.integration"
 [[tool.hatch.envs.integration.matrix]]
-python = ["3.7", "3.8", "3.9", "3.10", "3.11", "pypy3"]
+python = ["3.8", "3.9", "3.10", "3.11", "3.12", "pypy3"]
 type = ["default", "no-babel"]
 [tool.hatch.envs.integration.overrides]
 matrix.type.features = [
@@ -210,7 +210,6 @@ dependencies = [
 
 [tool.black]
 line-length = 100
-target-version = ["py37"]  # 3.7
 skip-string-normalization = true
 
 [tool.isort]

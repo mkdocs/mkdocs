@@ -7,13 +7,7 @@ maintain compatibility with older versions of MkDocs.
 """
 from __future__ import annotations
 
-import sys
-from typing import Iterable, Iterator
-
-if sys.version_info >= (3, 8):
-    from typing import TypedDict
-else:
-    from typing_extensions import TypedDict
+from typing import Iterable, Iterator, TypedDict
 
 
 class _TocToken(TypedDict):

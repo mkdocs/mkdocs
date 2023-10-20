@@ -65,7 +65,7 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
 
     @overload
     def __init__(
-        self: SubConfig[SomeConfig], config_class: type[SomeConfig], *, validate: bool = True
+        self: SubConfig[SomeConfig], config_class: type[SomeConfig], /, *, validate: bool = True
     ):
         """Create a sub-config in a type-safe way, using fields defined in a Config subclass."""
 
@@ -324,14 +324,14 @@ class Type(Generic[T], OptionallyRequired[T]):
     """
 
     @overload
-    def __init__(self, type_: type[T], length: int | None = None, **kwargs):
+    def __init__(self, type_: type[T], /, length: int | None = None, **kwargs):
         ...
 
     @overload
-    def __init__(self, type_: tuple[type[T], ...], length: int | None = None, **kwargs):
+    def __init__(self, type_: tuple[type[T], ...], /, length: int | None = None, **kwargs):
         ...
 
-    def __init__(self, type_, length=None, **kwargs) -> None:
+    def __init__(self, type_, /, length=None, **kwargs) -> None:
         super().__init__(**kwargs)
         self._type = type_
         self.length = length
@@ -700,7 +700,7 @@ class FilesystemObject(Type[str]):
     name = 'file or directory'
 
     def __init__(self, exists: bool = False, **kwargs) -> None:
-        super().__init__(type_=str, **kwargs)
+        super().__init__(str, **kwargs)
         self.exists = exists
         self.config_dir: str | None = None
 

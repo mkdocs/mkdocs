@@ -134,8 +134,7 @@ class Theme(MutableMapping[str, Any]):
 
         log.debug(f"Loaded theme configuration for '{name}' from '{file_path}': {theme_config}")
 
-        parent_theme = theme_config.pop('extends', None)
-        if parent_theme:
+        if parent_theme := theme_config.pop('extends', None):
             themes = utils.get_theme_names()
             if parent_theme not in themes:
                 raise ValidationError(

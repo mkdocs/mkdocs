@@ -62,8 +62,7 @@ def get_data(doc: str) -> tuple[str, dict[str, Any]]:
     data = {}
 
     # First try YAML
-    m = YAML_RE.match(doc)
-    if m:
+    if m := YAML_RE.match(doc):
         try:
             data = yaml.load(m.group(1), SafeLoader)
             if isinstance(data, dict):
@@ -83,8 +82,7 @@ def get_data(doc: str) -> tuple[str, dict[str, Any]]:
 
         if line.strip() == '':
             break  # blank line - done
-        m1 = META_RE.match(line)
-        if m1:
+        if m1 := META_RE.match(line):
             key = m1.group('key').lower().strip()
             value = m1.group('value').strip()
             if key in data:

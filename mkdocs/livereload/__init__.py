@@ -254,8 +254,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         path = environ["PATH_INFO"].encode("latin-1").decode("utf-8", "ignore")
 
         if path.startswith("/livereload/"):
-            m = re.fullmatch(r"/livereload/([0-9]+)/[0-9]+", path)
-            if m:
+            if m := re.fullmatch(r"/livereload/([0-9]+)/[0-9]+", path):
                 epoch = int(m[1])
                 start_response("200 OK", [("Content-Type", "text/plain")])
 
@@ -327,7 +326,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         )
 
     @classmethod
-    @functools.lru_cache()  # "Cache" to not repeat the same message for the same browser tab.
+    @functools.lru_cache  # "Cache" to not repeat the same message for the same browser tab.
     def _log_poll_request(cls, url, request_id):
         log.info(f"Browser connected: {url}")
 
