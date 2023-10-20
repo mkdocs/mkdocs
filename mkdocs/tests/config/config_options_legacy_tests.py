@@ -901,7 +901,6 @@ class SiteDirTest(TestCase):
 
     def test_common_prefix(self):
         """Legitimate settings with common prefixes should not fail validation."""
-
         test_configs = (
             {'docs_dir': 'docs', 'site_dir': 'docs-site'},
             {'docs_dir': 'site-docs', 'site_dir': 'site'},
@@ -1200,7 +1199,7 @@ class SubConfigTest(TestCase):
                     self.get_config(Schema, {'option': val})
 
     def test_subconfig_ignored(self):
-        """Default behaviour of subconfig: validation is ignored"""
+        """Default behaviour of subconfig: validation is ignored."""
 
         # Nominal
         class Schema1:
@@ -1263,8 +1262,7 @@ class SubConfigTest(TestCase):
         self.assertEqual(conf['option'], {'cc': 'foo'})
 
     def test_config_file_path_pass_through(self):
-        """Necessary to ensure FilesystemObject validates the correct path"""
-
+        """Necessary to ensure FilesystemObject validates the correct path."""
         passed_config_path = None
 
         class SubType(c.BaseConfigOption):

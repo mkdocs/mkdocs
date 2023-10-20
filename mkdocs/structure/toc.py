@@ -26,9 +26,7 @@ def get_toc(toc_tokens: list[_TocToken]) -> TableOfContents:
 
 
 class AnchorLink:
-    """
-    A single entry in the table of contents.
-    """
+    """A single entry in the table of contents."""
 
     def __init__(self, title: str, id: str, level: int) -> None:
         self.title, self.id, self.level = title, id, level
@@ -60,9 +58,7 @@ class AnchorLink:
 
 
 class TableOfContents(Iterable[AnchorLink]):
-    """
-    Represents the table of contents for a given page.
-    """
+    """Represents the table of contents for a given page."""
 
     def __init__(self, items: list[AnchorLink]) -> None:
         self.items = items

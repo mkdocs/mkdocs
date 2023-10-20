@@ -57,7 +57,8 @@ class _DirPlaceholder(os.PathLike):
 
 
 class ConfigDirPlaceholder(_DirPlaceholder):
-    """A placeholder object that gets resolved to the directory of the config file when used as a path.
+    """
+    A placeholder object that gets resolved to the directory of the config file when used as a path.
 
     The suffix can be an additional sub-path that is always appended to this path.
 
@@ -69,7 +70,8 @@ class ConfigDirPlaceholder(_DirPlaceholder):
 
 
 class DocsDirPlaceholder(_DirPlaceholder):
-    """A placeholder object that gets resolved to the docs dir when used as a path.
+    """
+    A placeholder object that gets resolved to the docs dir when used as a path.
 
     The suffix can be an additional sub-path that is always appended to this path.
 
@@ -81,7 +83,8 @@ class DocsDirPlaceholder(_DirPlaceholder):
 
 
 class RelativeDirPlaceholder(_DirPlaceholder):
-    """A placeholder object that gets resolved to the directory of the Markdown file currently being rendered.
+    """
+    A placeholder object that gets resolved to the directory of the Markdown file currently being rendered.
 
     This is the implementation of the `!relative` tag, but can also be passed programmatically.
     """

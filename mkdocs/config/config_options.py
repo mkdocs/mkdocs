@@ -48,7 +48,7 @@ SomeConfig = TypeVar('SomeConfig', bound=Config)
 
 class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
     """
-    Subconfig Config Option
+    Subconfig Config Option.
 
     New: If targeting MkDocs 1.4+, please pass a subclass of Config to the
     constructor, instead of the old style of a sequence of ConfigOption instances.
@@ -93,7 +93,7 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
                 self._do_validation = False if validate is None else validate
 
     def __class_getitem__(cls, config_class: type[Config]):
-        """Eliminates the need to write `config_class = FooConfig` when subclassing SubConfig[FooConfig]"""
+        """Eliminates the need to write `config_class = FooConfig` when subclassing SubConfig[FooConfig]."""
         name = f'{cls.__name__}[{config_class.__name__}]'
         return type(name, (cls,), dict(config_class=config_class))
 
@@ -120,7 +120,8 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
 
 
 class PropagatingSubConfig(SubConfig[SomeConfig], Generic[SomeConfig]):
-    """A SubConfig that must consist of SubConfigs with defined schemas.
+    """
+    A SubConfig that must consist of SubConfigs with defined schemas.
 
     Any value set on the top config gets moved to sub-configs with matching keys.
     """
@@ -318,7 +319,7 @@ class ConfigItems(ListOfItems[LegacyConfig]):
 
 class Type(Generic[T], OptionallyRequired[T]):
     """
-    Type Config Option
+    Type Config Option.
 
     Validate the type of a config option against a given Python type.
     """
@@ -352,7 +353,7 @@ class Type(Generic[T], OptionallyRequired[T]):
 
 class Choice(Generic[T], OptionallyRequired[T]):
     """
-    Choice Config Option
+    Choice Config Option.
 
     Validate the config option against a strict set of values.
     """
@@ -379,7 +380,7 @@ class Choice(Generic[T], OptionallyRequired[T]):
 
 class Deprecated(BaseConfigOption):
     """
-    Deprecated Config Option
+    Deprecated Config Option.
 
     Raises a warning as the option is deprecated. Uses `message` for the
     warning. If `move_to` is set to the name of a new config option, the value
@@ -458,7 +459,7 @@ class _IpAddressValue(NamedTuple):
 
 class IpAddress(OptionallyRequired[_IpAddressValue]):
     """
-    IpAddress Config Option
+    IpAddress Config Option.
 
     Validate that an IP address is in an appropriate format
     """
@@ -497,7 +498,7 @@ class IpAddress(OptionallyRequired[_IpAddressValue]):
 
 class URL(OptionallyRequired[str]):
     """
-    URL Config Option
+    URL Config Option.
 
     Validate a URL by requiring a scheme is present.
     """
@@ -533,7 +534,8 @@ class URL(OptionallyRequired[str]):
 
 
 class Optional(Generic[T], BaseConfigOption[Union[T, None]]):
-    """Wraps a field and makes a None value possible for it when no value is set.
+    """
+    Wraps a field and makes a None value possible for it when no value is set.
 
     E.g. `my_field = config_options.Optional(config_options.Type(str))`
     """
@@ -692,9 +694,7 @@ class RepoName(Type[str]):
 
 
 class FilesystemObject(Type[str]):
-    """
-    Base class for options that point to filesystem objects.
-    """
+    """Base class for options that point to filesystem objects."""
 
     existence_test: Callable[[str], bool] = staticmethod(os.path.exists)
     name = 'file or directory'
@@ -720,7 +720,7 @@ class FilesystemObject(Type[str]):
 
 class Dir(FilesystemObject):
     """
-    Dir Config Option
+    Dir Config Option.
 
     Validate a path to a directory, optionally verifying that it exists.
     """
@@ -745,7 +745,7 @@ class DocsDir(Dir):
 
 class File(FilesystemObject):
     """
-    File Config Option
+    File Config Option.
 
     Validate a path to a file, optionally verifying that it exists.
     """
@@ -756,7 +756,7 @@ class File(FilesystemObject):
 
 class ListOfPaths(ListOfItems[str]):
     """
-    List of Paths Config Option
+    List of Paths Config Option.
 
     A list of file system paths. Raises an error if one of the paths does not exist.
 
@@ -780,7 +780,7 @@ class ListOfPaths(ListOfItems[str]):
 
 class SiteDir(Dir):
     """
-    SiteDir Config Option
+    SiteDir Config Option.
 
     Validates the site_dir and docs_dir directories do not contain each other.
     """
@@ -811,7 +811,7 @@ class SiteDir(Dir):
 
 class Theme(BaseConfigOption[theme.Theme]):
     """
-    Theme Config Option
+    Theme Config Option.
 
     Validate that the theme exists and build Theme instance.
     """
@@ -867,7 +867,7 @@ class Theme(BaseConfigOption[theme.Theme]):
 
 class Nav(OptionallyRequired):
     """
-    Nav Config Option
+    Nav Config Option.
 
     Validate the Nav config.
     """
@@ -961,14 +961,15 @@ class ExtraScript(BaseConfigOption[Union[ExtraScriptValue, str]]):
 
 class MarkdownExtensions(OptionallyRequired[List[str]]):
     """
-    Markdown Extensions Config Option
+    Markdown Extensions Config Option.
 
     A list or dict of extensions. Each list item may contain either a string or a one item dict.
     A string must be a valid Markdown extension name with no config options defined. The key of
     a dict item must be a valid Markdown extension name and the value must be a dict of config
     options for that extension. Extension configs are set on the private setting passed to
     `configkey`. The `builtins` keyword accepts a list of extensions which cannot be overridden by
-    the user. However, builtins can be duplicated to define config options for them if desired."""
+    the user. However, builtins can be duplicated to define config options for them if desired.
+    """
 
     def __init__(
         self,

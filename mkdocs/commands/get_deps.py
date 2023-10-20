@@ -41,7 +41,8 @@ NotFound = ()
 
 
 def dig(cfg, keys: str):
-    """Receives a string such as 'foo.bar' and returns `cfg['foo']['bar']`, or `NotFound`.
+    """
+    Receives a string such as 'foo.bar' and returns `cfg['foo']['bar']`, or `NotFound`.
 
     A list of single-item dicts gets converted to a flat dict. This is intended for `plugins` config.
     """
@@ -90,7 +91,7 @@ def get_deps(projects_file_url: str, config_file_path: str | None = None) -> Non
     """
     Print PyPI package dependencies inferred from a mkdocs.yml file based on a reverse mapping of known projects.
 
-    Parameters:
+    Args:
         projects_file_url: URL or local path of the registry file that declares all known MkDocs-related projects.
             The file is in YAML format and contains `projects: [{mkdocs_theme:, mkdocs_plugin:, markdown_extension:}]
         config_file_path: Non-default path to mkdocs.yml.

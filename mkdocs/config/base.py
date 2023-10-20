@@ -243,7 +243,6 @@ class Config(UserDict):
 
     def load_dict(self, patch: dict) -> None:
         """Load config options from a dictionary."""
-
         if not isinstance(patch, dict):
             raise exceptions.ConfigurationError(
                 "The configuration is invalid. Expected a key-"
@@ -272,18 +271,14 @@ class Config(UserDict):
 
 @functools.lru_cache(maxsize=None)
 def get_schema(cls: type) -> PlainConfigSchema:
-    """
-    Extract ConfigOptions defined in a class (used just as a container) and put them into a schema tuple.
-    """
+    """Extract ConfigOptions defined in a class (used just as a container) and put them into a schema tuple."""
     if issubclass(cls, Config):
         return cls._schema
     return tuple((k, v) for k, v in cls.__dict__.items() if isinstance(v, BaseConfigOption))
 
 
 class LegacyConfig(Config):
-    """
-    A configuration object for plugins, as just a dict without type-safe attribute access.
-    """
+    """A configuration object for plugins, as just a dict without type-safe attribute access."""
 
     def __init__(self, schema: PlainConfigSchema, config_file_path: str | None = None):
         self._schema = tuple((k, v) for k, v in schema)  # Re-create just for validation
@@ -345,7 +340,7 @@ def load_config(
     config_file: str | IO | None = None, *, config_file_path: str | None = None, **kwargs
 ) -> MkDocsConfig:
     """
-    Load the configuration for a given file object or name
+    Load the configuration for a given file object or name.
 
     The config_file can either be a file object, string or None. If it is None
     the default `mkdocs.yml` filename will loaded.
