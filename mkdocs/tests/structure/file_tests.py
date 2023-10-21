@@ -249,6 +249,32 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
                     self.assertEqual(f.url, 'stuff/1-foo/index.html')
                 self.assertEqual(f.name, 'foo')
 
+    def test_file_overwrite_attrs(self):
+        f = File('foo.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
+        self.assertEqual(f.src_uri, 'foo.md')
+
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo.md')
+        f.abs_src_path = '/tmp/foo.md'
+        self.assertPathsEqual(f.abs_src_path, '/tmp/foo.md')
+        del f.abs_src_path
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo.md')
+
+        f.dest_uri = 'a.html'
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/a.html')
+        self.assertEqual(f.url, 'a.html')
+        f.abs_dest_path = '/path/to/site/b.html'
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/b.html')
+        self.assertEqual(f.url, 'a.html')
+        del f.url
+        del f.dest_uri
+        del f.abs_dest_path
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo.html')
+
+        self.assertTrue(f.is_documentation_page())
+        f.src_uri = 'foo.html'
+        del f.name
+        self.assertFalse(f.is_documentation_page())
+
     def test_files(self):
         fs = [
             File('index.md', '/path/to/docs', '/path/to/site', use_directory_urls=True),

@@ -7,6 +7,7 @@ import os
 import posixpath
 import shutil
 import warnings
+from functools import cached_property
 from pathlib import PurePath
 from typing import TYPE_CHECKING, Callable, Iterable, Iterator, Sequence
 from urllib.parse import quote as urlquote
@@ -186,17 +187,14 @@ class File:
     src_uri: str
     """The pure path (always '/'-separated) of the source file relative to the source directory."""
 
-    abs_src_path: str
-    """The absolute concrete path of the source file. Will use backslashes on Windows."""
+    use_directory_urls: bool
+    """Whether directory URLs ('foo/') should be used or not ('foo.html')."""
 
-    dest_uri: str
-    """The pure path (always '/'-separated) of the destination file relative to the destination directory."""
+    src_dir: str
+    """The OS path of the source directory (top-level docs_dir) that the source file originates from."""
 
-    abs_dest_path: str
-    """The absolute concrete path of the destination file. Will use backslashes on Windows."""
-
-    url: str
-    """The URI of the destination file relative to the destination directory as a string."""
+    dest_dir: str
+    """The OS path of the destination directory (top-level site_dir) that the file should be copied to."""
 
     inclusion: InclusionLevel = InclusionLevel.UNDEFINED
     """Whether the file will be excluded from the built site."""
@@ -219,7 +217,7 @@ class File:
     def dest_path(self, value):
         self.dest_uri = PurePath(value).as_posix()
 
-    page: Page | None
+    page: Page | None = None
 
     def __init__(
         self,
@@ -231,33 +229,36 @@ class File:
         dest_uri: str | None = None,
         inclusion: InclusionLevel = InclusionLevel.UNDEFINED,
     ) -> None:
-        self.page = None
         self.src_path = path
-        self.name = self._get_stem()
-        if dest_uri is None:
-            dest_uri = self._get_dest_path(use_directory_urls)
-        self.dest_uri = dest_uri
-        self.url = self._get_url(use_directory_urls)
-        self.abs_src_path = os.path.normpath(os.path.join(src_dir, self.src_uri))
-        self.abs_dest_path = os.path.normpath(os.path.join(dest_dir, self.dest_uri))
+        self.src_dir = src_dir
+        self.dest_dir = dest_dir
+        self.use_directory_urls = use_directory_urls
+        if dest_uri is not None:
+            self.dest_uri = dest_uri
         self.inclusion = inclusion
 
     def __repr__(self):
         return (
-            f"File(src_uri='{self.src_uri}', dest_uri='{self.dest_uri}',"
-            f" name='{self.name}', url='{self.url}')"
+            f"{type(self).__name__}({self.src_uri!r}, src_dir={self.src_dir!r}, "
+            f"dest_dir={self.dest_dir!r}, use_directory_urls={self.use_directory_urls!r}, "
+            f"dest_uri={self.dest_uri!r}, inclusion={self.inclusion})"
         )
 
     def _get_stem(self) -> str:
-        """Return the name of the file without its extension."""
+        """Soft-deprecated, do not use."""
         filename = posixpath.basename(self.src_uri)
         stem, ext = posixpath.splitext(filename)
         return 'index' if stem == 'README' else stem
 
-    def _get_dest_path(self, use_directory_urls: bool) -> str:
-        """Return destination path based on source path."""
+    name = cached_property(_get_stem)
+    """Return the name of the file without its extension."""
+
+    def _get_dest_path(self, use_directory_urls: bool | None = None) -> str:
+        """Soft-deprecated, do not use."""
         if self.is_documentation_page():
             parent, filename = posixpath.split(self.src_uri)
+            if use_directory_urls is None:
+                use_directory_urls = self.use_directory_urls
             if not use_directory_urls or self.name == 'index':
                 # index.md or README.md => index.html
                 # foo.md => foo.html
@@ -267,13 +268,31 @@ class File:
                 return posixpath.join(parent, self.name, 'index.html')
         return self.src_uri
 
-    def _get_url(self, use_directory_urls: bool) -> str:
-        """Return url based in destination path."""
+    dest_uri = cached_property(_get_dest_path)
+    """The pure path (always '/'-separated) of the destination file relative to the destination directory."""
+
+    def _get_url(self, use_directory_urls: bool | None = None) -> str:
+        """Soft-deprecated, do not use."""
         url = self.dest_uri
         dirname, filename = posixpath.split(url)
+        if use_directory_urls is None:
+            use_directory_urls = self.use_directory_urls
         if use_directory_urls and filename == 'index.html':
             url = (dirname or '.') + '/'
         return urlquote(url)
+
+    url = cached_property(_get_url)
+    """The URI of the destination file relative to the destination directory as a string."""
+
+    @cached_property
+    def abs_src_path(self) -> str:
+        """The absolute concrete path of the source file. Will use backslashes on Windows."""
+        return os.path.normpath(os.path.join(self.src_dir, self.src_uri))
+
+    @cached_property
+    def abs_dest_path(self) -> str:
+        """The absolute concrete path of the destination file. Will use backslashes on Windows."""
+        return os.path.normpath(os.path.join(self.dest_dir, self.dest_uri))
 
     def url_relative_to(self, other: File | str) -> str:
         """Return url for file relative to other file."""
