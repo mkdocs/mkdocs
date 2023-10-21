@@ -6,6 +6,7 @@ import warnings
 from typing import Any, Collection, MutableMapping
 
 import jinja2
+import pathspec.gitignore
 
 from mkdocs import localization, utils
 from mkdocs.config.base import ValidationError
@@ -66,6 +67,15 @@ class Theme(MutableMapping[str, Any]):
             locale = _vars['locale']
         _vars['locale'] = localization.parse_locale(locale)
 
+        if 'hash_rename_assets' in _vars:
+            self.hash_rename_assets = pathspec.gitignore.GitIgnoreSpec.from_lines(
+                _vars.pop('hash_rename_assets').splitlines()
+            )
+        if 'hash_append_assets' in _vars:
+            self.hash_append_assets = pathspec.gitignore.GitIgnoreSpec.from_lines(
+                _vars.pop('hash_append_assets').splitlines()
+            )
+
     name: str | None
 
     @property
@@ -88,13 +98,16 @@ class Theme(MutableMapping[str, Any]):
 
     static_templates: set[str]
 
+    hash_rename_assets: pathspec.gitignore.GitIgnoreSpec | None = None
+    hash_append_assets: pathspec.gitignore.GitIgnoreSpec | None = None
+
     def __repr__(self) -> str:
-        return "{}(name={!r}, dirs={!r}, static_templates={!r}, {})".format(
-            self.__class__.__name__,
-            self.name,
-            self.dirs,
-            self.static_templates,
-            ', '.join(f'{k}={v!r}' for k, v in self.items()),
+        return (
+            f'{self.__class__.__name__}('
+            f'name={self.name!r}, dirs={self.dirs!r}, static_templates={self.static_templates!r}, '
+            f'hash_rename_assets={self.hash_rename_assets!r}, hash_append_assets={self.hash_append_assets!r}, '
+            + ', '.join(f'{k}={v!r}' for k, v in self.items())
+            + ')'
         )
 
     def __getitem__(self, key: str) -> Any:

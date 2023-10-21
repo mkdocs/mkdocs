@@ -3,6 +3,12 @@
 static_templates:
   - 404.html
 
+hash_rename_assets: |
+    *.js
+    *.css
+    !*-*
+    !*worker*
+
 locale: en
 
 include_search_page: false
