@@ -199,6 +199,9 @@ class File:
     inclusion: InclusionLevel = InclusionLevel.UNDEFINED
     """Whether the file will be excluded from the built site."""
 
+    generated_by: str | None = None
+    """If not None, indicates that a plugin generated this file on the fly."""
+
     @property
     def src_path(self) -> str:
         """Same as `src_uri` (and synchronized with it) but will use backslashes on Windows. Discouraged."""
