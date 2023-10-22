@@ -720,3 +720,17 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         self.assertEqual(len(files), 6)
         self.assertEqual(len(files.src_uris), 6)
         self.assertFalse(extra_file.src_uri in files.src_uris)
+
+    def test_files_move_to_end(self):
+        fs = [
+            File('a.md', '/path/to/docs', '/path/to/site', use_directory_urls=True),
+            File('b.jpg', '/path/to/docs', '/path/to/site', use_directory_urls=True),
+        ]
+        files = Files(fs)
+        self.assertEqual(len(files), 2)
+        self.assertEqual(list(files)[0].src_uri, 'a.md')
+        with self.assertWarns(DeprecationWarning):
+            files.append(fs[0])
+        self.assertEqual(len(files), 2)
+        self.assertEqual(list(files)[0].src_uri, 'b.jpg')
+        self.assertEqual(list(files)[1].src_uri, 'a.md')

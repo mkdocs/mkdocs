@@ -9,7 +9,7 @@ import shutil
 import warnings
 from functools import cached_property
 from pathlib import PurePath
-from typing import TYPE_CHECKING, Callable, Iterable, Iterator, Sequence, overload
+from typing import TYPE_CHECKING, Callable, Iterable, Iterator, Mapping, Sequence, overload
 from urllib.parse import quote as urlquote
 
 import pathspec
@@ -62,50 +62,53 @@ class InclusionLevel(enum.Enum):
 class Files:
     """A collection of [File][mkdocs.structure.files.File] objects."""
 
-    def __init__(self, files: list[File]) -> None:
-        self._files = files
-        self._src_uris: dict[str, File] | None = None
+    def __init__(self, files: Iterable[File]) -> None:
+        self._src_uris = {f.src_uri: f for f in files}
 
     def __iter__(self) -> Iterator[File]:
         """Iterate over the files within."""
-        return iter(self._files)
+        return iter(self._src_uris.values())
 
     def __len__(self) -> int:
         """The number of files within."""
-        return len(self._files)
+        return len(self._src_uris)
 
     def __contains__(self, path: str) -> bool:
-        """Whether the file with this `src_uri` is in the collection."""
-        return PurePath(path).as_posix() in self.src_uris
+        """Soft-deprecated, prefer `get_file_from_path(path) is not None`."""
+        return PurePath(path).as_posix() in self._src_uris
 
     @property
     def src_paths(self) -> dict[str, File]:
         """Soft-deprecated, prefer `src_uris`."""
-        return {file.src_path: file for file in self._files}
+        return {file.src_path: file for file in self}
 
     @property
-    def src_uris(self) -> dict[str, File]:
+    def src_uris(self) -> Mapping[str, File]:
         """
         A mapping containing every file, with the keys being their
         [`src_uri`][mkdocs.structure.files.File.src_uri].
         """
-        if self._src_uris is None:
-            self._src_uris = {file.src_uri: file for file in self._files}
         return self._src_uris
 
     def get_file_from_path(self, path: str) -> File | None:
         """Return a File instance with File.src_uri equal to path."""
-        return self.src_uris.get(PurePath(path).as_posix())
+        return self._src_uris.get(PurePath(path).as_posix())
 
     def append(self, file: File) -> None:
-        """Append file to Files collection."""
-        self._src_uris = None
-        self._files.append(file)
+        """Add file to the Files collection."""
+        if file.src_uri in self._src_uris:
+            warnings.warn(
+                "To replace an existing file, call `remove` before `append`.", DeprecationWarning
+            )
+            del self._src_uris[file.src_uri]
+        self._src_uris[file.src_uri] = file
 
     def remove(self, file: File) -> None:
         """Remove file from Files collection."""
-        self._src_uris = None
-        self._files.remove(file)
+        try:
+            del self._src_uris[file.src_uri]
+        except KeyError:
+            raise ValueError(f'{file.src_uri!r} not in collection')
 
     def copy_static_files(
         self,
@@ -157,13 +160,22 @@ class Files:
 
         for path in env.list_templates(filter_func=filter):
             # Theme files do not override docs_dir files
-            path = PurePath(path).as_posix()
-            if path not in self.src_uris:
+            if self.get_file_from_path(path) is None:
                 for dir in config.theme.dirs:
                     # Find the first theme dir which contains path
                     if os.path.isfile(os.path.join(dir, path)):
                         self.append(File(path, dir, config.site_dir, config.use_directory_urls))
                         break
+
+    @property
+    def _files(self) -> Iterable[File]:
+        warnings.warn("Do not access Files._files.", DeprecationWarning)
+        return self
+
+    @_files.setter
+    def _files(self, value: Iterable[File]):
+        warnings.warn("Do not access Files._files.", DeprecationWarning)
+        self._src_uris = {f.src_uri: f for f in value}
 
 
 class File:
@@ -240,7 +252,7 @@ class File:
         return os.path.normpath(self.src_uri)
 
     @src_path.setter
-    def src_path(self, value):
+    def src_path(self, value: str):
         self.src_uri = PurePath(value).as_posix()
 
     @property
@@ -249,7 +261,7 @@ class File:
         return os.path.normpath(self.dest_uri)
 
     @dest_path.setter
-    def dest_path(self, value):
+    def dest_path(self, value: str):
         self.dest_uri = PurePath(value).as_posix()
 
     page: Page | None = None

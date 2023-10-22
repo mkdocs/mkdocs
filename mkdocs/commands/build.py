@@ -291,7 +291,7 @@ def build(config: MkDocsConfig, *, serve_url: str | None = None, dirty: bool = F
         # Run `files` plugin events.
         files = config.plugins.on_files(files, config=config)
         # If plugins have added files but haven't set their inclusion level, calculate it again.
-        set_exclusions(files._files, config)
+        set_exclusions(files, config)
 
         nav = get_navigation(files, config)
 
