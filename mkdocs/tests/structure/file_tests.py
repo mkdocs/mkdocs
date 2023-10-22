@@ -3,7 +3,7 @@ import sys
 import unittest
 from unittest import mock
 
-from mkdocs.structure.files import File, Files, _sort_files, get_files
+from mkdocs.structure.files import File, Files, _sort_files, file_sort_key, get_files
 from mkdocs.tests.base import PathAssertionMixin, load_config, tempdir
 
 
@@ -56,6 +56,16 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
             _sort_files(['A.md', 'B.md', 'README.md']),
             ['README.md', 'A.md', 'B.md'],
         )
+
+    def test_file_sort_key(self):
+        for case in [
+            ["a/b.md", "b/index.md", "b/a.md"],
+            ["SUMMARY.md", "foo/z.md", "foo/bar/README.md", "foo/bar/index.md", "foo/bar/a.md"],
+        ]:
+            with self.subTest(case):
+                files = [File(f, "", "", use_directory_urls=True) for f in case]
+                for a, b in zip(files, files[1:]):
+                    self.assertLess(file_sort_key(a), file_sort_key(b))
 
     def test_md_file(self):
         for use_directory_urls in True, False:

@@ -8,7 +8,7 @@ import posixpath
 import shutil
 import warnings
 from functools import cached_property
-from pathlib import PurePath
+from pathlib import PurePath, PurePosixPath
 from typing import TYPE_CHECKING, Callable, Iterable, Iterator, Mapping, Sequence, overload
 from urllib.parse import quote as urlquote
 
@@ -582,12 +582,25 @@ def get_files(config: MkDocsConfig) -> Files:
     return Files(files)
 
 
+def file_sort_key(f: File, /):
+    """
+    Replicates the sort order how `get_files` produces it - index first, directories last.
+
+    To sort a list of `File`, pass as the `key` argument to `sort`.
+    """
+    parts = PurePosixPath(f.src_uri).parts
+    if not parts:
+        return ()
+    return (parts[:-1], f.name != "index", parts[-1])
+
+
 def _file_sort_key(f: str):
-    """Always sort `index` or `README` as first filename in list."""
+    """Always sort `index` or `README` as first filename in list. This works only on basenames of files."""
     return (os.path.splitext(f)[0] not in ('index', 'README'), f)
 
 
 def _sort_files(filenames: Iterable[str]) -> list[str]:
+    """Soft-deprecated, do not use."""
     return sorted(filenames, key=_file_sort_key)
 
 
