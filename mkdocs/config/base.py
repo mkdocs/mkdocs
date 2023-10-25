@@ -190,6 +190,7 @@ class Config(UserDict):
                 config_option.reset_warnings()
             except ValidationError as e:
                 failed.append((key, e))
+                break
 
         for key in set(self.keys()) - self._schema_keys:
             warnings.append((key, f"Unrecognised configuration name: {key}"))
@@ -382,7 +383,7 @@ def load_config(
         log.debug(f"Config value '{key}' = {value!r}")
 
     if len(errors) > 0:
-        raise exceptions.Abort(f"Aborted with {len(errors)} configuration errors!")
+        raise exceptions.Abort("Aborted with a configuration error!")
     elif cfg.strict and len(warnings) > 0:
         raise exceptions.Abort(
             f"Aborted with {len(warnings)} configuration warnings in 'strict' mode!"
