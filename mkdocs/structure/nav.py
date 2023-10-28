@@ -129,7 +129,9 @@ class Link(StructureItem):
 def get_navigation(files: Files, config: MkDocsConfig) -> Navigation:
     """Build site navigation from config and files."""
     documentation_pages = files.documentation_pages()
-    nav_config = config['nav'] or nest_paths(f.src_uri for f in documentation_pages)
+    nav_config = config['nav'] or nest_paths(
+        f.src_uri for f in documentation_pages if f.inclusion.is_in_nav()
+    )
     items = _data_to_navigation(nav_config, files, config)
     if not isinstance(items, list):
         items = [items]
