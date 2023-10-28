@@ -247,6 +247,10 @@ class File:
             f"dest_uri={self.dest_uri!r}, inclusion={self.inclusion})"
         )
 
+    @utils.weak_property
+    def edit_uri(self) -> str | None:
+        return self.src_uri if self.generated_by is None else None
+
     def _get_stem(self) -> str:
         """Soft-deprecated, do not use."""
         filename = posixpath.basename(self.src_uri)
