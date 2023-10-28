@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import logging
-import warnings
 from typing import TYPE_CHECKING, Iterator, TypeVar
 from urllib.parse import urlsplit
 
+from mkdocs.exceptions import BuildError
 from mkdocs.structure import StructureItem
 from mkdocs.structure.pages import Page
 from mkdocs.utils import nest_paths
@@ -202,20 +202,9 @@ def _data_to_navigation(data, files: Files, config: MkDocsConfig):
             )
         page = file.page
         if page is not None:
-            if isinstance(page, Page):
-                if type(page) is not Page:  # Strict subclass
-                    return page
-                warnings.warn(
-                    "A plugin has set File.page to an instance of Page and it got overwritten. "
-                    "The behavior of this will change in MkDocs 1.6.",
-                    DeprecationWarning,
-                )
-            else:
-                warnings.warn(  # type: ignore[unreachable]
-                    "A plugin has set File.page to a type other than Page. "
-                    "This will be an error in MkDocs 1.6.",
-                    DeprecationWarning,
-                )
+            if not isinstance(page, Page):
+                raise BuildError("A plugin has set File.page to a type other than Page.")
+            return page
         return Page(title, file, config)
     return Link(title, path)
 
