@@ -609,7 +609,6 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         server = testing_server(site_dir, mount_path='/documentation/')
         with self.subTest(live_server=server):
             expected_logs = '''
-                INFO:Doc file 'test/bar.md' contains a link to 'test/baz.md' which is excluded from the built site.
                 INFO:Doc file 'test/foo.md' contains a link to 'test/bar.md' which is excluded from the built site.
                 INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `exclude_docs`:
                   - http://localhost:123/documentation/.zoo.html
