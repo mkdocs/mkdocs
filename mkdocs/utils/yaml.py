@@ -6,10 +6,10 @@ import os
 import os.path
 from typing import IO, TYPE_CHECKING, Any
 
-import mergedeep
+import mergedeep  # type: ignore
 import yaml
 import yaml.constructor
-import yaml_env_tag
+import yaml_env_tag  # type: ignore
 
 from mkdocs import exceptions
 

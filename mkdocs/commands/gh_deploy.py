@@ -6,7 +6,7 @@ import re
 import subprocess
 from typing import TYPE_CHECKING
 
-import ghp_import
+import ghp_import  # type: ignore
 from packaging import version
 
 import mkdocs

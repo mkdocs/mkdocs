@@ -1,7 +1,7 @@
 import unittest
 from unittest import mock
 
-from ghp_import import GhpError
+from ghp_import import GhpError  # type: ignore
 
 from mkdocs import __version__
 from mkdocs.commands import gh_deploy

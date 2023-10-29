@@ -13,7 +13,8 @@ from mkdocs.plugins import BasePlugin
 if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
     from mkdocs.structure.pages import Page
-    from mkdocs.util.templates import TemplateContext
+    from mkdocs.utils.templates import TemplateContext
+
 
 log = logging.getLogger(__name__)
 base_path = os.path.dirname(os.path.abspath(__file__))

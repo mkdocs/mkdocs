@@ -150,6 +150,7 @@ matrix.type.features = [
 [tool.hatch.envs.types]
 dependencies = [
     "mypy",
+    "types-babel",
     "types-Jinja2",
     "types-Markdown",
     "types-PyYAML",
@@ -235,7 +236,6 @@ ignore = ["E501", "E731"]
 allow-dict-calls-with-keyword-arguments = true
 
 [tool.mypy]
-ignore_missing_imports = true
 warn_unreachable = true
 no_implicit_optional = true
 show_error_codes = true
