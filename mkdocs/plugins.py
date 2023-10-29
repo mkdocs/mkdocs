@@ -466,7 +466,7 @@ class PluginCollection(dict, MutableMapping[str, BasePlugin]):
         if plugin_name:
             try:
                 self._event_origins[method] = plugin_name
-            except TypeError:
+            except TypeError:  # If the method is somehow not hashable.
                 pass
 
     def __getitem__(self, key: str) -> BasePlugin:
