@@ -12,6 +12,10 @@
         <span>
           <a href="{{ config.repo_url }}" class="icon icon-gitlab" style="color: #fcfcfc"> GitLab</a>
         </span>
+    {% elif config.repo_name %}
+        <span>
+          <a href="{{ config.repo_url }}" class="fa fa-code-fork" style="color: #fcfcfc"> {{ config.repo_name }}</a>
+        </span>
     {% endif %}
     {% if page.previous_page %}
       <span><a href="{{ page.previous_page.url|url }}" style="color: #fcfcfc">&laquo; {% trans %}Previous{% endtrans %}</a></span>

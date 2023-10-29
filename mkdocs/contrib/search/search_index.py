@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from mkdocs.structure.toc import AnchorLink, TableOfContents
 
 try:
-    from lunr import lunr
+    from lunr import lunr  # type: ignore
 
     haslunrpy = True
 except ImportError:
@@ -46,9 +46,7 @@ class SearchIndex:
         return None
 
     def _add_entry(self, title: str | None, text: str, loc: str) -> None:
-        """
-        A simple wrapper to add an entry, dropping bad characters.
-        """
+        """A simple wrapper to add an entry, dropping bad characters."""
         text = text.replace('\u00a0', ' ')
         text = re.sub(r'[ \t\n\r\f\v]+', ' ', text.strip())
 
@@ -86,7 +84,7 @@ class SearchIndex:
         """
         Given a section on the page, the table of contents and
         the absolute url for the page create an entry in the
-        index
+        index.
         """
         toc_item = self._find_toc_by_id(toc, section.id)
 
@@ -95,7 +93,7 @@ class SearchIndex:
             self._add_entry(title=toc_item.title, text=text, loc=abs_url + toc_item.url)
 
     def generate_search_index(self) -> str:
-        """python to json conversion"""
+        """Python to json conversion."""
         page_dicts = {'docs': self._entries, 'config': self.config}
         data = json.dumps(page_dicts, sort_keys=True, separators=(',', ':'), default=str)
 
@@ -181,7 +179,6 @@ class ContentParser(HTMLParser):
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         """Called at the start of every HTML tag."""
-
         # We only care about the opening tag for headings.
         if tag not in _HEADER_TAGS:
             return
@@ -198,7 +195,6 @@ class ContentParser(HTMLParser):
 
     def handle_endtag(self, tag: str) -> None:
         """Called at the end of every HTML tag."""
-
         # We only care about the opening tag for headings.
         if tag not in _HEADER_TAGS:
             return
@@ -206,9 +202,7 @@ class ContentParser(HTMLParser):
         self.is_header_tag = False
 
     def handle_data(self, data: str) -> None:
-        """
-        Called for the text contents of each tag.
-        """
+        """Called for the text contents of each tag."""
         self._stripped_html.append(data)
 
         if self.section is None:

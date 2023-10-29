@@ -251,9 +251,7 @@ class Page(StructureItem):
         return title
 
     def render(self, config: MkDocsConfig, files: Files) -> None:
-        """
-        Convert the Markdown source file to HTML as per the config.
-        """
+        """Convert the Markdown source file to HTML as per the config."""
         if self.markdown is None:
             raise RuntimeError("`markdown` field hasn't been set (via `read_source`)")
 
@@ -281,7 +279,7 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
 
     def run(self, root: etree.Element) -> etree.Element:
         """
-        Update urls on anchors and images to make them relative
+        Update urls on anchors and images to make them relative.
 
         Iterates through the full document tree looking for specific
         tags and then makes them relative based on the site navigation

@@ -79,8 +79,10 @@ class Files:
 
     @property
     def src_uris(self) -> dict[str, File]:
-        """A mapping containing every file, with the keys being their
-        [`src_uri`][mkdocs.structure.files.File.src_uri]."""
+        """
+        A mapping containing every file, with the keys being their
+        [`src_uri`][mkdocs.structure.files.File.src_uri].
+        """
         if self._src_uris is None:
             self._src_uris = {file.src_uri: file for file in self._files}
         return self._src_uris

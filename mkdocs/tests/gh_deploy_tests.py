@@ -1,7 +1,7 @@
 import unittest
 from unittest import mock
 
-from ghp_import import GhpError
+from ghp_import import GhpError  # type: ignore
 
 from mkdocs import __version__
 from mkdocs.commands import gh_deploy
@@ -58,77 +58,72 @@ class TestGitHubDeploy(unittest.TestCase):
         expected = (None, None)
         self.assertEqual(expected, gh_deploy._get_remote_url('origin'))
 
-    @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
-    @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
-    @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(None, None))
-    @mock.patch('mkdocs.commands.gh_deploy._check_version')
-    @mock.patch('ghp_import.ghp_import')
-    def test_deploy(self, mock_import, check_version, get_remote, get_sha, is_repo):
+    @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', mock.Mock(return_value=True))
+    @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', mock.Mock(return_value='shashas'))
+    @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', mock.Mock(return_value=(None, None)))
+    @mock.patch('mkdocs.commands.gh_deploy._check_version', mock.Mock())
+    @mock.patch('ghp_import.ghp_import', mock.Mock())
+    def test_deploy(self):
         config = load_config(
             remote_branch='test',
         )
         gh_deploy.gh_deploy(config)
 
-    @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
-    @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
-    @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(None, None))
-    @mock.patch('mkdocs.commands.gh_deploy._check_version')
-    @mock.patch('ghp_import.ghp_import')
-    @mock.patch('os.path.isfile', return_value=False)
-    def test_deploy_no_cname(
-        self, mock_isfile, mock_import, check_version, get_remote, get_sha, is_repo
-    ):
+    @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', mock.Mock(return_value=True))
+    @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', mock.Mock(return_value='shashas'))
+    @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', mock.Mock(return_value=(None, None)))
+    @mock.patch('mkdocs.commands.gh_deploy._check_version', mock.Mock())
+    @mock.patch('ghp_import.ghp_import', mock.Mock())
+    @mock.patch('os.path.isfile', mock.Mock(return_value=False))
+    def test_deploy_no_cname(self):
         config = load_config(
             remote_branch='test',
         )
         gh_deploy.gh_deploy(config)
 
-    @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
-    @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
+    @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', mock.Mock(return_value=True))
+    @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', mock.Mock(return_value='shashas'))
     @mock.patch(
-        'mkdocs.commands.gh_deploy._get_remote_url', return_value=('git@', 'mkdocs/mkdocs.git')
+        'mkdocs.commands.gh_deploy._get_remote_url',
+        mock.Mock(return_value=('git@', 'mkdocs/mkdocs.git')),
     )
-    @mock.patch('mkdocs.commands.gh_deploy._check_version')
-    @mock.patch('ghp_import.ghp_import')
-    def test_deploy_hostname(self, mock_import, check_version, get_remote, get_sha, is_repo):
+    @mock.patch('mkdocs.commands.gh_deploy._check_version', mock.Mock())
+    @mock.patch('ghp_import.ghp_import', mock.Mock())
+    def test_deploy_hostname(self):
         config = load_config(
             remote_branch='test',
         )
         gh_deploy.gh_deploy(config)
 
-    @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
-    @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
-    @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(None, None))
+    @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', mock.Mock(return_value=True))
+    @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', mock.Mock(return_value='shashas'))
+    @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', mock.Mock(return_value=(None, None)))
     @mock.patch('mkdocs.commands.gh_deploy._check_version')
-    @mock.patch('ghp_import.ghp_import')
-    def test_deploy_ignore_version_default(
-        self, mock_import, check_version, get_remote, get_sha, is_repo
-    ):
+    @mock.patch('ghp_import.ghp_import', mock.Mock())
+    def test_deploy_ignore_version_default(self, check_version):
         config = load_config(
             remote_branch='test',
         )
         gh_deploy.gh_deploy(config)
         check_version.assert_called_once()
 
-    @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
-    @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
-    @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', return_value=(None, None))
+    @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', mock.Mock(return_value=True))
+    @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', mock.Mock(return_value='shashas'))
+    @mock.patch('mkdocs.commands.gh_deploy._get_remote_url', mock.Mock(return_value=(None, None)))
     @mock.patch('mkdocs.commands.gh_deploy._check_version')
-    @mock.patch('ghp_import.ghp_import')
-    def test_deploy_ignore_version(self, mock_import, check_version, get_remote, get_sha, is_repo):
+    @mock.patch('ghp_import.ghp_import', mock.Mock())
+    def test_deploy_ignore_version(self, check_version):
         config = load_config(
             remote_branch='test',
         )
         gh_deploy.gh_deploy(config, ignore_version=True)
         check_version.assert_not_called()
 
-    @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', return_value=True)
-    @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', return_value='shashas')
-    @mock.patch('mkdocs.commands.gh_deploy._check_version')
-    @mock.patch('ghp_import.ghp_import')
-    def test_deploy_error(self, mock_import, check_version, get_sha, is_repo):
-        mock_import.side_effect = GhpError('TestError123')
-
+    @mock.patch('mkdocs.commands.gh_deploy._is_cwd_git_repo', mock.Mock(return_value=True))
+    @mock.patch('mkdocs.commands.gh_deploy._get_current_sha', mock.Mock(return_value='shashas'))
+    @mock.patch('mkdocs.commands.gh_deploy._check_version', mock.Mock())
+    @mock.patch('ghp_import.ghp_import', mock.Mock(side_effect=GhpError('TestError123')))
+    def test_deploy_error(self):
         config = load_config(
             remote_branch='test',
         )

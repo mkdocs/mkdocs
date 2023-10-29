@@ -314,9 +314,7 @@ class SearchIndexTests(unittest.TestCase):
         self.assertEqual(parser.data, [])
 
     def test_find_toc_by_id(self):
-        """
-        Test finding the relevant TOC item by the tag ID.
-        """
+        """Test finding the relevant TOC item by the tag ID."""
         index = search_index.SearchIndex()
 
         md = dedent(

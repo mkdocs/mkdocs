@@ -1,5 +1,5 @@
 """
-# MkDocs Integration tests
+# MkDocs Integration tests.
 
 This is a simple integration test that builds the MkDocs
 documentation against all of the builtin themes.
@@ -55,7 +55,7 @@ def main(output=None):
         log.debug(f"Building theme: {theme}")
         project_dir = os.path.dirname(MKDOCS_CONFIG)
         out = os.path.join(output, theme)
-        command = base_cmd + [out, '--theme', theme]
+        command = [*base_cmd, out, '--theme', theme]
         subprocess.check_call(command, cwd=project_dir)
 
     log.debug("Building test projects.")
@@ -65,7 +65,7 @@ def main(output=None):
             continue
         log.debug(f"Building test project: {project}")
         out = os.path.join(output, project)
-        command = base_cmd + [out]
+        command = [*base_cmd, out]
         subprocess.check_call(command, cwd=project_dir)
 
     log.debug(f"Theme and integration builds are in {output}")

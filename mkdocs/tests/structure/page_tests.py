@@ -1109,7 +1109,7 @@ class RelativePathExtensionTests(unittest.TestCase):
 
     def test_possible_target_uris(self):
         def test(paths, expected='', exp_true=None, exp_false=None):
-            """Test that `possible_target_uris` yields expected values, for use_directory_urls = true and false"""
+            """Test that `possible_target_uris` yields expected values, for use_directory_urls = true and false."""
             for use_directory_urls, expected_paths in (
                 (True, exp_true or expected),
                 (False, exp_false or expected),

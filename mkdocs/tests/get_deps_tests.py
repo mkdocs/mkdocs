@@ -25,7 +25,7 @@ class TestGetDeps(unittest.TestCase):
         if yml:
             yml = 'site_name: Test\n' + textwrap.dedent(yml)
         projects_path = os.path.join(tempdir, 'projects.yaml')
-        with open(projects_path, 'w') as f:
+        with open(projects_path, 'w', encoding='utf-8') as f:
             f.write(yml)
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):

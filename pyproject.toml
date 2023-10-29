@@ -19,11 +19,11 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
@@ -31,7 +31,7 @@ classifiers = [
     "Topic :: Text Processing",
 ]
 dynamic = ["version"]
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 dependencies = [
     "click >=7.0",
     "Jinja2 >=2.11.1",
@@ -42,7 +42,6 @@ dependencies = [
     "ghp-import >=1.0",
     "pyyaml_env_tag >=0.1",
     "importlib-metadata >=4.3; python_version < '3.10'",
-    "typing-extensions >=3.10; python_version < '3.8'",
     "packaging >=20.5",
     "mergedeep >=1.3.4",
     "pathspec >=0.11.1",
@@ -52,6 +51,7 @@ dependencies = [
 [project.optional-dependencies]
 i18n = [
     "babel >=2.9.0",
+    "setuptools; python_version >= '3.12'" # Workaround: babel doesn't declare its dependency
 ]
 min-versions = [
     "click ==7.0",
@@ -63,7 +63,6 @@ min-versions = [
     "ghp-import ==1.0",
     "pyyaml_env_tag ==0.1",
     "importlib-metadata ==4.3; python_version < '3.10'",
-    "typing-extensions ==3.10; python_version < '3.8'",
     "packaging ==20.5",
     "mergedeep ==1.3.4",
     "pathspec ==0.11.1",
@@ -100,6 +99,7 @@ exclude = ["/mkdocs/tests/integration", "*.po", "*.pot", "babel.cfg"]
 [tool.hatch.build.hooks.custom]
 dependencies = [
     "babel",
+    "setuptools; python_version >= '3.12'" # Workaround: babel doesn't declare its dependency
 ]
 
 [tool.hatch.envs.default.scripts]
@@ -117,11 +117,15 @@ dependencies = [
     "coverage",
 ]
 [tool.hatch.envs.test.scripts]
-test = "coverage run --source=mkdocs --omit 'mkdocs/tests/*' -m unittest discover -p '*tests.py' mkdocs --top-level-directory ."
-_coverage = ["test", "coverage xml", "coverage report --show-missing"]
+test = 'python -m unittest discover -s mkdocs -p "*tests.py"'
+_coverage = [
+    'coverage run --source=mkdocs --omit "mkdocs/tests/*" -m unittest discover -s mkdocs -p "*tests.py"',
+    "coverage xml",
+    "coverage report --show-missing"
+]
 with-coverage = "test"
 [[tool.hatch.envs.test.matrix]]
-python = ["3.7", "3.8", "3.9", "3.10", "3.11", "pypy3"]
+python = ["3.8", "3.9", "3.10", "3.11", "3.12", "pypy3"]
 type = ["default", "min-req"]
 [tool.hatch.envs.test.overrides]
 matrix.type.features = [
@@ -136,7 +140,7 @@ template = "docs"
 [tool.hatch.envs.integration.scripts]
 test = "python -m mkdocs.tests.integration"
 [[tool.hatch.envs.integration.matrix]]
-python = ["3.7", "3.8", "3.9", "3.10", "3.11", "pypy3"]
+python = ["3.8", "3.9", "3.10", "3.11", "3.12", "pypy3"]
 type = ["default", "no-babel"]
 [tool.hatch.envs.integration.overrides]
 matrix.type.features = [
@@ -146,6 +150,7 @@ matrix.type.features = [
 [tool.hatch.envs.types]
 dependencies = [
     "mypy",
+    "types-babel",
     "types-Jinja2",
     "types-Markdown",
     "types-PyYAML",
@@ -186,7 +191,7 @@ dependencies = [
     "codespell",
 ]
 [tool.hatch.envs.lint.scripts]
-spelling = "codespell mkdocs docs *.* -S LC_MESSAGES -S '*.min.js' -S 'lunr*.js' -S fontawesome-webfont.svg -S tinyseg.js"
+spelling = 'codespell mkdocs docs *.* -S LC_MESSAGES -S "*.min.js" -S "lunr*.js" -S fontawesome-webfont.svg -S tinyseg.js'
 markdown = "npm exec --yes -- markdownlint-cli README.md CONTRIBUTING.md docs/ --ignore docs/CNAME"
 js = "npm exec --yes -- jshint mkdocs/"
 css = "npm exec --yes -- csslint --quiet mkdocs/"
@@ -206,7 +211,6 @@ dependencies = [
 
 [tool.black]
 line-length = 100
-target-version = ["py37"]  # 3.7
 skip-string-normalization = true
 
 [tool.isort]
@@ -215,13 +219,15 @@ line_length = 100
 
 [tool.ruff]
 select = [
-    "F", "W", "E", "UP", "YTT", "C4", "FA", "PIE", "T20", "RSE", "TCH", "DTZ",
+    "F", "W", "E", "UP", "YTT", "C4", "DTZ", "FA", "ISC", "PIE", "T20", "RSE", "TCH",
     "B002", "B003", "B005", "B007", "B009", "B012", "B013", "B014", "B015", "B018", "B020", "B021", "B023", "B026", "B033", "B034", "B905",
     "COM818",
+    "D200", "D201", "D202", "D204", "D207", "D208", "D209", "D210", "D211", "D213", "D214", "D300", "D301", "D400", "D402", "D403", "D405", "D412", "D414", "D415", "D416", "D417", "D419",
     "PERF101",
     "PGH002", "PGH004", "PGH005",
-    "PLE", "PLW0120", "PLW0127",
-    "RUF001", "RUF007", "RUF010", "RUF100", "RUF200",
+    "FLY002",
+    "PLC", "PLE", "PLR0124", "PLR0133", "PLR0206", "PLR0402", "PLR1701", "PLR1722", "PLW0120", "PLW0127", "PLW0129", "PLW0131", "PLW0406", "PLW0602", "PLW0603", "PLW0711",
+    "RUF001", "RUF005", "RUF007", "RUF010", "RUF013", "RUF100", "RUF200",
     "SIM101", "SIM107", "SIM201", "SIM202", "SIM208", "SIM210", "SIM211", "SIM300", "SIM401", "SIM910",
 ]
 ignore = ["E501", "E731"]
@@ -230,7 +236,6 @@ ignore = ["E501", "E731"]
 allow-dict-calls-with-keyword-arguments = true
 
 [tool.mypy]
-ignore_missing_imports = true
 warn_unreachable = true
 no_implicit_optional = true
 show_error_codes = true

@@ -193,8 +193,7 @@ def _data_to_navigation(data, files: Files, config: MkDocsConfig):
             for item in data
         ]
     title, path = data if isinstance(data, tuple) else (None, data)
-    file = files.get_file_from_path(path)
-    if file:
+    if file := files.get_file_from_path(path):
         if file.inclusion.is_excluded():
             log.log(
                 min(logging.INFO, config.validation.nav.not_found),
