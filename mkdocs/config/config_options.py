@@ -1140,8 +1140,13 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
             )
 
         # Only if the plugin doesn't have its own "enabled" config, apply a generic one.
-        if not any(pair[0] == 'enabled' for pair in plugin.config_scheme):
-            if not config.get('enabled', True):
+        if 'enabled' in config and not any(pair[0] == 'enabled' for pair in plugin.config_scheme):
+            enabled = config.pop('enabled')
+            if not isinstance(enabled, bool):
+                raise ValidationError(
+                    f"Plugin '{name}' option 'enabled': Expected boolean but received: {type(enabled)}"
+                )
+            if not enabled:
                 log.debug(f"Plugin '{inst_name}' is disabled in the config, skipping.")
                 return plugin
 
