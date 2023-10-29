@@ -582,7 +582,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @tempdir(
         files={
             'test/foo.md': 'page1 content, [bar](bar.md)',
-            'test/bar.md': 'page2 content, [baz](baz.md)',
+            'test/bar.md': 'page2 content, [baz](baz.md), [nonexistent](nonexistent.md)',
             'test/baz.md': 'page3 content, [foo](foo.md)',
             '.zoo.md': 'page4 content',
         }
@@ -609,6 +609,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         server = testing_server(site_dir, mount_path='/documentation/')
         with self.subTest(live_server=server):
             expected_logs = '''
+                INFO:Doc file 'test/bar.md' contains a relative link 'nonexistent.md', but the target 'test/nonexistent.md' is not found among documentation files.
                 INFO:Doc file 'test/foo.md' contains a link to 'test/bar.md' which is excluded from the built site.
                 INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `exclude_docs`:
                   - http://localhost:123/documentation/.zoo.html
