@@ -1,12 +1,6 @@
 from __future__ import annotations
 
-import sys
-from typing import TYPE_CHECKING, Sequence
-
-if sys.version_info >= (3, 8):
-    from typing import TypedDict
-else:
-    from typing_extensions import TypedDict
+from typing import TYPE_CHECKING, Sequence, TypedDict
 
 if TYPE_CHECKING:
     import datetime

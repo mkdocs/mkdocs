@@ -23,12 +23,11 @@ def download_and_cache_url(
 
     For tracking the age of the content, a prefix is inserted into the stored file, rather than relying on mtime.
 
-    Parameters:
+    Args:
         url: URL or local path of the file to use.
         cache_duration: how long to consider the URL content cached.
         comment: The appropriate comment prefix for this file format.
     """
-
     if urllib.parse.urlsplit(url).scheme not in ('http', 'https'):
         with open(url, 'rb') as f:
             return f.read()

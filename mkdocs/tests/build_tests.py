@@ -29,7 +29,6 @@ if TYPE_CHECKING:
 
 def build_page(title, path, config, md_src=''):
     """Helper which returns a Page object."""
-
     files = Files([File(path, config.docs_dir, config.site_dir, config.use_directory_urls)])
     page = Page(title, list(files)[0], config)
     # Fake page.read_source()
@@ -302,8 +301,8 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             "WARNING:mkdocs.commands.build:Template skipped: 'missing.html' not found in docs_dir.",
         )
 
-    @mock.patch('mkdocs.commands.build.open', side_effect=OSError('Error message.'))
-    def test_skip_ioerror_extra_template(self, mock_open):
+    @mock.patch('mkdocs.commands.build.open', mock.Mock(side_effect=OSError('Error message.')))
+    def test_skip_ioerror_extra_template(self):
         cfg = load_config()
         fs = [File('foo.html', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
@@ -805,8 +804,7 @@ class _TestPreprocessor(markdown.preprocessors.Preprocessor):
 
     def run(self, lines: list[str]) -> list[str]:
         for i, line in enumerate(lines):
-            m = re.search(r'^--8<-- "(.+)"$', line)
-            if m:
+            if m := re.search(r'^--8<-- "(.+)"$', line):
                 try:
                     lines[i] = Path(self.base_path, m[1]).read_text()
                 except OSError:

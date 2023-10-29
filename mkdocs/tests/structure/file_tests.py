@@ -413,12 +413,12 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         env = config.theme.get_env()
         files = get_files(config)
         self.assertEqual(
-            [file.src_path for file in files],
+            [file.src_uri for file in files],
             ['index.md', 'favicon.ico'],
         )
         files.add_files_from_theme(env, config)
         self.assertEqual(
-            [file.src_path for file in files],
+            [file.src_uri for file in files],
             ['index.md', 'favicon.ico', 'style.css'],
         )
         # Ensure theme file does not override docs_dir file
@@ -633,11 +633,11 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         files = get_files(config)
         self.assertIsInstance(files, Files)
         self.assertEqual(
-            [f.src_path for f in files if f.inclusion.is_included()],
+            [f.src_uri for f in files if f.inclusion.is_included()],
             ['index.md', 'bar.css', 'bar.html', 'bar.jpg', 'bar.js', 'bar.md', 'readme.md'],
         )
         self.assertEqual(
-            [f.src_path for f in files if f.inclusion.is_excluded()],
+            [f.src_uri for f in files if f.inclusion.is_excluded()],
             ['.dotfile', 'templates/foo.html'],
         )
 
@@ -651,7 +651,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         config = load_config(docs_dir=tdir)
         files = get_files(config)
         self.assertIsInstance(files, Files)
-        self.assertEqual([f.src_path for f in files], ['README.md', 'foo.md'])
+        self.assertEqual([f.src_uri for f in files], ['README.md', 'foo.md'])
 
     @tempdir(
         files=[
@@ -670,7 +670,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
             r"Excluding 'README.md' from the site because it conflicts with 'index.md'.$",
         )
         self.assertIsInstance(files, Files)
-        self.assertEqual([f.src_path for f in files], ['index.md', 'foo.md'])
+        self.assertEqual([f.src_uri for f in files], ['index.md', 'foo.md'])
 
     @tempdir()
     @tempdir(files={'test.txt': 'source content'})
