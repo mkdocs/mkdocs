@@ -2111,13 +2111,14 @@ class PluginsTest(TestCase):
             theme = c.Theme(default='mkdocs')
             plugins = c.Plugins(theme_key='theme')
 
-        cfg = {'theme': 'readthedocs', 'plugins': {'sample': {'enabled': False}}}
+        cfg = {'theme': 'readthedocs', 'plugins': {'sample': {'enabled': False, 'bar': 3}}}
         conf = self.get_config(Schema, cfg)
         self.assertEqual(set(conf.plugins), set())
 
-        cfg = {'theme': 'readthedocs', 'plugins': {'sample': {'enabled': True}}}
+        cfg = {'theme': 'readthedocs', 'plugins': {'sample': {'enabled': True, 'bar': 3}}}
         conf = self.get_config(Schema, cfg)
         self.assertEqual(set(conf.plugins), {'sample'})
+        self.assertEqual(conf.plugins['sample'].config.bar, 3)
 
         cfg = {'theme': 'readthedocs', 'plugins': {'sample': {'enabled': 5}}}
         with self.expect_error(
@@ -2130,15 +2131,17 @@ class PluginsTest(TestCase):
             theme = c.Theme(default='mkdocs')
             plugins = c.Plugins(theme_key='theme')
 
-        cfg = {'theme': 'readthedocs', 'plugins': {'sample-e': {'enabled': False}}}
+        cfg = {'theme': 'readthedocs', 'plugins': {'sample-e': {'enabled': False, 'bar': 3}}}
         conf = self.get_config(Schema, cfg)
         self.assertEqual(set(conf.plugins), {'sample-e'})
         self.assertEqual(conf.plugins['sample-e'].config.enabled, False)
+        self.assertEqual(conf.plugins['sample-e'].config.bar, 3)
 
-        cfg = {'theme': 'readthedocs', 'plugins': {'sample-e': {'enabled': True}}}
+        cfg = {'theme': 'readthedocs', 'plugins': {'sample-e': {'enabled': True, 'bar': 3}}}
         conf = self.get_config(Schema, cfg)
         self.assertEqual(set(conf.plugins), {'sample-e'})
         self.assertEqual(conf.plugins['sample-e'].config.enabled, True)
+        self.assertEqual(conf.plugins['sample-e'].config.bar, 3)
 
         cfg = {'theme': 'readthedocs', 'plugins': {'sample-e': {'enabled': 5}}}
         with self.expect_error(
