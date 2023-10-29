@@ -322,7 +322,7 @@ class File:
 _default_exclude = pathspec.gitignore.GitIgnoreSpec.from_lines(['.*', '/templates/'])
 
 
-def _set_exclusions(files: Iterable[File], config: MkDocsConfig) -> None:
+def set_exclusions(files: Iterable[File], config: MkDocsConfig) -> None:
     """Re-calculate which files are excluded, based on the patterns in the config."""
     exclude: pathspec.gitignore.GitIgnoreSpec | None = config.get('exclude_docs')
     exclude = _default_exclude + exclude if exclude else _default_exclude
@@ -362,7 +362,7 @@ def get_files(config: MkDocsConfig) -> Files:
             files.append(file)
             prev_file = file
 
-    _set_exclusions(files, config)
+    set_exclusions(files, config)
     # Skip README.md if an index file also exists in dir (part 2)
     for a, b in conflicting_files:
         if b.inclusion.is_included():

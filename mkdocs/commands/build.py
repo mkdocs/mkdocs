@@ -13,7 +13,7 @@ from jinja2.exceptions import TemplateNotFound
 import mkdocs
 from mkdocs import utils
 from mkdocs.exceptions import Abort, BuildError
-from mkdocs.structure.files import File, Files, InclusionLevel, _set_exclusions, get_files
+from mkdocs.structure.files import File, Files, InclusionLevel, get_files, set_exclusions
 from mkdocs.structure.nav import Navigation, get_navigation
 from mkdocs.structure.pages import Page
 from mkdocs.utils import DuplicateFilter  # noqa: F401 - legacy re-export
@@ -294,7 +294,7 @@ def build(
         # Run `files` plugin events.
         files = config.plugins.on_files(files, config=config)
         # If plugins have added files but haven't set their inclusion level, calculate it again.
-        _set_exclusions(files._files, config)
+        set_exclusions(files._files, config)
 
         nav = get_navigation(files, config)
 
@@ -305,8 +305,8 @@ def build(
         excluded = []
         for file in files.documentation_pages(inclusion=inclusion):
             log.debug(f"Reading: {file.src_uri}")
-            if file.page is None and file.inclusion.is_excluded():
-                if live_server:
+            if file.page is None and file.inclusion.is_not_in_nav():
+                if live_server and file.inclusion.is_excluded():
                     excluded.append(urljoin(live_server.url, file.url))
                 Page(None, file, config)
             assert file.page is not None

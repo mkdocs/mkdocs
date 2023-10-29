@@ -333,7 +333,9 @@ exclude_docs: |
 
 NEW: **New in version 1.5.**
 
-NOTE: This option does *not* actually exclude anything from the nav.
+> NEW: **New in version 1.6:**
+>
+> If the [`nav`](#nav) config is not specified at all, pages specified in this config will now be excluded from the inferred navigation.
 
 If you want to include some docs into the site but intentionally exclude them from the nav, normally MkDocs warns about this.
 
