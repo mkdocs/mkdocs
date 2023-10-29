@@ -737,14 +737,6 @@ class DocsDir(Dir):
         if not config.config_file_path:
             return
 
-        # Validate that the dir is not the parent dir of the config file.
-        if os.path.dirname(config.config_file_path) == config[key_name]:
-            raise ValidationError(
-                f"The '{key_name}' should not be the parent directory of the"
-                f" config file. Use a child directory instead so that the"
-                f" '{key_name}' is a sibling of the config file."
-            )
-
 
 class File(FilesystemObject):
     """
@@ -801,13 +793,6 @@ class SiteDir(Dir):
                 f"The 'docs_dir' should not be within the 'site_dir' as this "
                 f"can mean the source files are overwritten by the output or "
                 f"it will be deleted if --clean is passed to mkdocs build. "
-                f"(site_dir: '{site_dir}', docs_dir: '{docs_dir}')"
-            )
-        elif (site_dir + os.sep).startswith(docs_dir.rstrip(os.sep) + os.sep):
-            raise ValidationError(
-                f"The 'site_dir' should not be within the 'docs_dir' as this "
-                f"leads to the build directory being copied into itself and "
-                f"duplicate nested files in the 'site_dir'. "
                 f"(site_dir: '{site_dir}', docs_dir: '{docs_dir}')"
             )
 

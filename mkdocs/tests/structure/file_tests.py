@@ -3,7 +3,7 @@ import sys
 import unittest
 from unittest import mock
 
-from mkdocs.structure.files import File, Files, _sort_files, get_files
+from mkdocs.structure.files import File, Files, InclusionLevel, _sort_files, get_files
 from mkdocs.tests.base import PathAssertionMixin, load_config, tempdir
 
 
@@ -582,6 +582,23 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         )
         self.assertIsInstance(files, Files)
         self.assertEqual([f.src_uri for f in files], ['index.md', 'foo.md'])
+
+    @tempdir(
+        files=[
+            'index.md',
+            'site/foo.md',
+        ]
+    )
+    def test_get_files_exclude_site_dir(self, tdir):
+        config = load_config(docs_dir=tdir, site_dir=os.path.join(tdir, "site"))
+        files = get_files(config)
+        self.assertIsInstance(files, Files)
+        self.assertEqual([f.src_uri for f in files], ['index.md', 'site/foo.md'])
+        for f in files:
+            if f.src_uri == 'site/foo.md':
+                self.assertEqual(f.inclusion, InclusionLevel.EXCLUDED)
+            else:
+                self.assertEqual(f.inclusion, InclusionLevel.INCLUDED)
 
     @tempdir()
     @tempdir(files={'test.txt': 'source content'})

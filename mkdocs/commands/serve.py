@@ -3,9 +3,12 @@ from __future__ import annotations
 import logging
 import shutil
 import tempfile
-from os.path import isdir, isfile, join
+from os.path import isdir, isfile, join, relpath
 from typing import TYPE_CHECKING
 from urllib.parse import urlsplit
+
+import pathspec
+import pathspec.gitignore
 
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
@@ -42,9 +45,17 @@ def serve(
     def get_config():
         config = load_config(
             config_file=config_file,
-            site_dir=site_dir,
             **kwargs,
         )
+        # Exclude the original site directory in case it is within the docs directory
+        exclude_site_dir = pathspec.gitignore.GitIgnoreSpec.from_lines(
+            [relpath(config.site_dir, config.docs_dir)]
+        )
+        config.exclude_docs = (
+            config.exclude_docs + exclude_site_dir if config.exclude_docs else exclude_site_dir
+        )
+        # Set the site directory to the temporary build directory
+        config.site_dir = site_dir
         config.watch.extend(watch)
         return config
 
