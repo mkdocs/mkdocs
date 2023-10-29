@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from mkdocs.structure.toc import AnchorLink, TableOfContents
 
 try:
-    from lunr import lunr
+    from lunr import lunr  # type: ignore
 
     haslunrpy = True
 except ImportError:

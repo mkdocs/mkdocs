@@ -17,7 +17,7 @@ try:
 
     has_babel = True
 except ImportError:  # pragma: no cover
-    from mkdocs.utils.babel_stub import Locale, UnknownLocaleError
+    from mkdocs.utils.babel_stub import Locale, UnknownLocaleError  # type: ignore
 
     has_babel = False
 

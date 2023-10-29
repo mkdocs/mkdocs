@@ -301,8 +301,8 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             "WARNING:mkdocs.commands.build:Template skipped: 'missing.html' not found in docs_dir.",
         )
 
-    @mock.patch('mkdocs.commands.build.open', side_effect=OSError('Error message.'))
-    def test_skip_ioerror_extra_template(self, mock_open):
+    @mock.patch('mkdocs.commands.build.open', mock.Mock(side_effect=OSError('Error message.')))
+    def test_skip_ioerror_extra_template(self):
         cfg = load_config()
         fs = [File('foo.html', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
