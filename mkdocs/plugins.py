@@ -454,12 +454,20 @@ class PluginCollection(dict, MutableMapping[str, BasePlugin]):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.events: dict[str, list[Callable]] = {k: [] for k in EVENTS}
+        self._event_origins: dict[Callable, str] = {}
 
-    def _register_event(self, event_name: str, method: Callable) -> None:
+    def _register_event(
+        self, event_name: str, method: Callable, plugin_name: str | None = None
+    ) -> None:
         """Register a method for an event."""
         utils.insort(
             self.events[event_name], method, key=lambda m: -getattr(m, 'mkdocs_priority', 0)
         )
+        if plugin_name:
+            try:
+                self._event_origins[method] = plugin_name
+            except TypeError:  # If the method is somehow not hashable.
+                pass
 
     def __getitem__(self, key: str) -> BasePlugin:
         return super().__getitem__(key)
@@ -470,7 +478,7 @@ class PluginCollection(dict, MutableMapping[str, BasePlugin]):
         for event_name in (x for x in dir(value) if x.startswith('on_')):
             method = getattr(value, event_name, None)
             if callable(method):
-                self._register_event(event_name[3:], method)
+                self._register_event(event_name[3:], method, plugin_name=key)
 
     @overload
     def run_event(self, name: str, **kwargs) -> Any:
@@ -490,10 +498,10 @@ class PluginCollection(dict, MutableMapping[str, BasePlugin]):
         be modified by the event method.
         """
         pass_item = item is not None
-        events = self.events[name]
-        if events:
-            log.debug(f'Running {len(events)} `{name}` events')
-        for method in events:
+        for method in self.events[name]:
+            if log.getEffectiveLevel() <= logging.DEBUG:
+                plugin_name = self._event_origins.get(method, '<unknown>')
+                log.debug(f"Running `{name}` event from plugin '{plugin_name}'")
             if pass_item:
                 result = method(item, **kwargs)
             else:
