@@ -392,6 +392,9 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
                 )
 
         if warning:
+            if self.file.inclusion.is_excluded():
+                warning_level = min(logging.INFO, warning_level)
+
             # There was no match, so try to guess what other file could've been intended.
             if warning_level > logging.DEBUG:
                 suggest_url = ''
@@ -414,7 +417,10 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
         assert target_uri is not None
         assert target_file is not None
         if target_file.inclusion.is_excluded():
-            warning_level = min(logging.INFO, self.config.validation.links.not_found)
+            if self.file.inclusion.is_excluded():
+                warning_level = logging.DEBUG
+            else:
+                warning_level = min(logging.INFO, self.config.validation.links.not_found)
             warning = (
                 f"Doc file '{self.file.src_uri}' contains a link to "
                 f"'{target_uri}' which is excluded from the built site."
