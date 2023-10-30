@@ -45,6 +45,8 @@ from mkdocs.exceptions import ConfigurationError
 T = TypeVar('T')
 SomeConfig = TypeVar('SomeConfig', bound=Config)
 
+log = logging.getLogger(__name__)
+
 
 class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
     """
@@ -1136,6 +1138,17 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
                 f"Plugin '{name}' was specified multiple times - this is likely a mistake, "
                 "because the plugin doesn't declare `supports_multiple_instances`."
             )
+
+        # Only if the plugin doesn't have its own "enabled" config, apply a generic one.
+        if 'enabled' in config and not any(pair[0] == 'enabled' for pair in plugin.config_scheme):
+            enabled = config.pop('enabled')
+            if not isinstance(enabled, bool):
+                raise ValidationError(
+                    f"Plugin '{name}' option 'enabled': Expected boolean but received: {type(enabled)}"
+                )
+            if not enabled:
+                log.debug(f"Plugin '{inst_name}' is disabled in the config, skipping.")
+                return plugin
 
         errors, warns = plugin.load_config(
             config, self._config.config_file_path if self._config else None

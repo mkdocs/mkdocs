@@ -1926,6 +1926,15 @@ class FakePlugin2(BasePlugin[_FakePlugin2Config]):
     supports_multiple_instances = True
 
 
+class _EnabledPluginConfig(Config):
+    enabled = c.Type(bool, default=True)
+    bar = c.Type(int, default=0)
+
+
+class EnabledPlugin(BasePlugin[_EnabledPluginConfig]):
+    pass
+
+
 class ThemePlugin(BasePlugin[_FakePluginConfig]):
     pass
 
@@ -1949,6 +1958,7 @@ class FakeEntryPoint:
         return_value=[
             FakeEntryPoint('sample', FakePlugin),
             FakeEntryPoint('sample2', FakePlugin2),
+            FakeEntryPoint('sample-e', EnabledPlugin),
             FakeEntryPoint('readthedocs/sub_plugin', ThemePlugin),
             FakeEntryPoint('overridden', FakePlugin2),
             FakeEntryPoint('readthedocs/overridden', ThemePlugin2),
@@ -2095,6 +2105,49 @@ class PluginsTest(TestCase):
 
         self.assertEqual(set(conf.plugins), {'overridden'})
         self.assertIsInstance(conf.plugins['overridden'], FakePlugin2)
+
+    def test_plugin_config_enabled_for_any_plugin(self) -> None:
+        class Schema(Config):
+            theme = c.Theme(default='mkdocs')
+            plugins = c.Plugins(theme_key='theme')
+
+        cfg = {'theme': 'readthedocs', 'plugins': {'sample': {'enabled': False, 'bar': 3}}}
+        conf = self.get_config(Schema, cfg)
+        self.assertEqual(set(conf.plugins), set())
+
+        cfg = {'theme': 'readthedocs', 'plugins': {'sample': {'enabled': True, 'bar': 3}}}
+        conf = self.get_config(Schema, cfg)
+        self.assertEqual(set(conf.plugins), {'sample'})
+        self.assertEqual(conf.plugins['sample'].config.bar, 3)
+
+        cfg = {'theme': 'readthedocs', 'plugins': {'sample': {'enabled': 5}}}
+        with self.expect_error(
+            plugins="Plugin 'sample' option 'enabled': Expected boolean but received: <class 'int'>"
+        ):
+            self.get_config(Schema, cfg)
+
+    def test_plugin_config_enabled_for_plugin_with_setting(self) -> None:
+        class Schema(Config):
+            theme = c.Theme(default='mkdocs')
+            plugins = c.Plugins(theme_key='theme')
+
+        cfg = {'theme': 'readthedocs', 'plugins': {'sample-e': {'enabled': False, 'bar': 3}}}
+        conf = self.get_config(Schema, cfg)
+        self.assertEqual(set(conf.plugins), {'sample-e'})
+        self.assertEqual(conf.plugins['sample-e'].config.enabled, False)
+        self.assertEqual(conf.plugins['sample-e'].config.bar, 3)
+
+        cfg = {'theme': 'readthedocs', 'plugins': {'sample-e': {'enabled': True, 'bar': 3}}}
+        conf = self.get_config(Schema, cfg)
+        self.assertEqual(set(conf.plugins), {'sample-e'})
+        self.assertEqual(conf.plugins['sample-e'].config.enabled, True)
+        self.assertEqual(conf.plugins['sample-e'].config.bar, 3)
+
+        cfg = {'theme': 'readthedocs', 'plugins': {'sample-e': {'enabled': 5}}}
+        with self.expect_error(
+            plugins="Plugin 'sample-e' option 'enabled': Expected type: <class 'bool'> but received: <class 'int'>"
+        ):
+            self.get_config(Schema, cfg)
 
     def test_plugin_config_with_multiple_instances(self) -> None:
         class Schema(Config):
