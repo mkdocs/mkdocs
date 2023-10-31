@@ -7,11 +7,8 @@ from os.path import isdir, isfile, join
 from typing import TYPE_CHECKING
 from urllib.parse import urlsplit
 
-import jinja2.exceptions
-
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
-from mkdocs.exceptions import Abort
 from mkdocs.livereload import LiveReloadServer
 
 if TYPE_CHECKING:
@@ -107,12 +104,6 @@ def serve(
             log.info("Shutting down...")
         finally:
             server.shutdown()
-    except jinja2.exceptions.TemplateError:
-        # This is a subclass of OSError, but shouldn't be suppressed.
-        raise
-    except OSError as e:  # pragma: no cover
-        # Avoid ugly, unhelpful traceback
-        raise Abort(f'{type(e).__name__}: {e}')
     finally:
         config.plugins.on_shutdown()
         if isdir(site_dir):
