@@ -85,7 +85,7 @@ most likely need to have tests and documentation if it is a new feature.
 
 ### Submitting changes to the builtin themes
 
-When installed with `i18n` support (`pip install mkdocs[i18n]`), MkDocs allows
+When installed with `i18n` support (`pip install 'mkdocs[i18n]'`), MkDocs allows
 themes to support being translated into various languages (referred to as
 locales) if they respect [Jinja's i18n extension] by wrapping text placeholders
 with `{% trans %}` and `{% endtrans %}` tags.
