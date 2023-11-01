@@ -150,9 +150,9 @@ matrix.type.features = [
 [tool.hatch.envs.types]
 dependencies = [
     "mypy",
-    "types-babel",
-    "types-Jinja2",
+    "babel",
     "types-Markdown",
+    "types-pytz",
     "types-PyYAML",
     "types-setuptools",
     "typing-extensions",
