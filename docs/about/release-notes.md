@@ -733,7 +733,7 @@ happen by default. Users must first install the necessary dependencies with
 the following command:
 
 ```bash
-pip install mkdocs[i18n]
+pip install 'mkdocs[i18n]'
 ```
 
 Translation contributions are welcome and detailed in the [Translation
