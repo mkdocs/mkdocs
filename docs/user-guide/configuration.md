@@ -1188,7 +1188,7 @@ echo '{INHERIT: mkdocs.yml, site_name: "Renamed site"}' | mkdocs build -f -
 [Python-Markdown wiki]: https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
 [catalog]: https://github.com/mkdocs/catalog
 [configuring pages and navigation]: writing-your-docs.md#configure-pages-and-navigation
-[theme_dir]: customizing-your-theme.md#using-the-theme_dir
+[theme_dir]: customizing-your-theme.md#using-the-theme-custom_dir
 [choosing your theme]: choosing-your-theme.md
 [Localizing your theme]: localizing-your-theme.md
 [extra_css]: #extra_css

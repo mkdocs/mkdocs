@@ -1262,7 +1262,7 @@ Users can review the [configuration options][search config] available and theme
 authors should review how [search and themes] interact.
 
 [search config]: ../user-guide/configuration.md#search
-[search and themes]: ../dev-guide/themes.md#search_and_themes
+[search and themes]: ../dev-guide/themes.md#search-and-themes
 
 #### `theme_dir` Configuration Option fully Deprecated
 
@@ -1406,25 +1406,18 @@ version 1.0.
 Any of the following old page variables should be updated to the new ones in
 user created and third-party templates:
 
-| Old Variable Name | New Variable Name   |
-| ----------------- | ------------------- |
-| current_page      | [page]              |
-| page_title        | [page.title]        |
-| content           | [page.content]      |
-| toc               | [page.toc]          |
-| meta              | [page.meta]         |
-| canonical_url     | [page.canonical_url]|
-| previous_page     | [page.previous_page]|
-| next_page         | [page.next_page]    |
+| Old Variable Name | New Variable Name |
+| ----------------- | ----------------- |
+| current_page      | page              |
+| page_title        | page.title        |
+| content           | page.content      |
+| toc               | page.toc          |
+| meta              | page.meta         |
+| canonical_url     | page.canonical_url|
+| previous_page     | page.previous_page|
+| next_page         | page.next_page    |
 
 [page]: ../dev-guide/themes.md#page
-[page.title]: ../dev-guide/themes.md#pagetitle
-[page.content]: ../dev-guide/themes.md#pagecontent
-[page.toc]: ../dev-guide/themes.md#pagetoc
-[page.meta]: ../dev-guide/themes.md#pagemeta
-[page.canonical_url]: ../dev-guide/themes.md#pagecanonical_url
-[page.previous_page]: ../dev-guide/themes.md#pageprevious_page
-[page.next_page]: ../dev-guide/themes.md#pagenext_page
 
 Additionally, a number of global variables have been altered and/or removed
 and user created and third-party templates should be updated as outlined below:
@@ -1793,12 +1786,11 @@ no configuration is needed to enable it.
 
 #### Change the pages configuration
 
-Provide a [new way] to define pages, and specifically [nested pages], in the
+Provide a [new way] to define pages, and specifically nested pages, in the
 mkdocs.yml file and deprecate the existing approach, support will be removed
 with MkDocs 1.0.
 
 [new way]: ../user-guide/writing-your-docs.md#configure-pages-and-navigation
-[nested pages]: ../user-guide/writing-your-docs.md#multilevel-documentation
 
 #### Warn users about the removal of builtin themes
 
