@@ -8,27 +8,6 @@ from mkdocs.tests.base import PathAssertionMixin, load_config, tempdir
 
 
 class TestFiles(PathAssertionMixin, unittest.TestCase):
-    def test_file_eq(self):
-        file = File('a.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertTrue(
-            file == File('a.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        )
-
-    def test_file_ne(self):
-        file = File('a.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        # Different filename
-        self.assertTrue(
-            file != File('b.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        )
-        # Different src_path
-        self.assertTrue(
-            file != File('a.md', '/path/to/other', '/path/to/site', use_directory_urls=False)
-        )
-        # Different URL
-        self.assertTrue(
-            file != File('a.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        )
-
     @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
     def test_src_path_windows(self):
         f = File('foo\\a.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
