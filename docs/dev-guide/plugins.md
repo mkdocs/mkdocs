@@ -429,6 +429,12 @@ Since MkDocs 1.4, plugins can choose to set a priority value for their events. E
 
 #### ::: mkdocs.plugins.event_priority
 
+There may also arise a need to register a handler for the same event at multiple different priorities.
+
+`CombinedEvent` makes this possible since MkDocs 1.6.
+
+#### ::: mkdocs.plugins.CombinedEvent
+
 ### Handling Errors
 
 MkDocs defines four error types:

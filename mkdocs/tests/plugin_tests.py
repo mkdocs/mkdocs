@@ -7,6 +7,8 @@ from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from typing_extensions import assert_type
+
+    from mkdocs.structure.nav import Navigation
 else:
 
     def assert_type(val, typ):
@@ -138,9 +140,15 @@ class TestPluginCollection(unittest.TestCase):
             def on_page_content(self, html, **kwargs) -> None:
                 pass
 
-            @plugins.event_priority(-100)
-            def on_nav(self, nav, **kwargs) -> None:
+            @plugins.event_priority(50)
+            def _on_nav_1(self, nav: Navigation, **kwargs) -> None:
                 pass
+
+            @plugins.event_priority(-100)
+            def _on_nav_2(self, nav, **kwargs) -> None:
+                pass
+
+            on_nav = plugins.CombinedEvent(_on_nav_1, _on_nav_2)
 
             def on_page_read_source(self, **kwargs) -> None:
                 pass
@@ -158,7 +166,7 @@ class TestPluginCollection(unittest.TestCase):
         )
         self.assertEqual(
             collection.events['nav'],
-            [dummy.on_nav, prio.on_nav],
+            [prio._on_nav_1, dummy.on_nav, prio._on_nav_2],
         )
         self.assertEqual(
             collection.events['page_read_source'],

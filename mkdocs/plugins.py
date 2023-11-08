@@ -24,6 +24,14 @@ if TYPE_CHECKING:
     from mkdocs.structure.pages import Page
     from mkdocs.utils.templates import TemplateContext
 
+if TYPE_CHECKING:
+    from typing_extensions import Concatenate, ParamSpec
+else:
+    ParamSpec = TypeVar
+
+P = ParamSpec('P')
+T = TypeVar('T')
+
 
 log = logging.getLogger('mkdocs.plugins')
 
@@ -123,7 +131,7 @@ class BasePlugin(Generic[SomeConfig]):
         """
 
     def on_serve(
-        self, server: LiveReloadServer, *, config: MkDocsConfig, builder: Callable
+        self, server: LiveReloadServer, /, *, config: MkDocsConfig, builder: Callable
     ) -> LiveReloadServer | None:
         """
         The `serve` event is only called when the `serve` command is used during
@@ -167,7 +175,7 @@ class BasePlugin(Generic[SomeConfig]):
             config: global configuration object
         """
 
-    def on_files(self, files: Files, *, config: MkDocsConfig) -> Files | None:
+    def on_files(self, files: Files, /, *, config: MkDocsConfig) -> Files | None:
         """
         The `files` event is called after the files collection is populated from the
         `docs_dir`. Use this event to add, remove, or alter files in the
@@ -184,7 +192,9 @@ class BasePlugin(Generic[SomeConfig]):
         """
         return files
 
-    def on_nav(self, nav: Navigation, *, config: MkDocsConfig, files: Files) -> Navigation | None:
+    def on_nav(
+        self, nav: Navigation, /, *, config: MkDocsConfig, files: Files
+    ) -> Navigation | None:
         """
         The `nav` event is called after the site navigation is created and can
         be used to alter the site navigation.
@@ -200,7 +210,7 @@ class BasePlugin(Generic[SomeConfig]):
         return nav
 
     def on_env(
-        self, env: jinja2.Environment, *, config: MkDocsConfig, files: Files
+        self, env: jinja2.Environment, /, *, config: MkDocsConfig, files: Files
     ) -> jinja2.Environment | None:
         """
         The `env` event is called after the Jinja template environment is created
@@ -241,7 +251,7 @@ class BasePlugin(Generic[SomeConfig]):
     # Template events
 
     def on_pre_template(
-        self, template: jinja2.Template, *, template_name: str, config: MkDocsConfig
+        self, template: jinja2.Template, /, *, template_name: str, config: MkDocsConfig
     ) -> jinja2.Template | None:
         """
         The `pre_template` event is called immediately after the subject template is
@@ -258,7 +268,7 @@ class BasePlugin(Generic[SomeConfig]):
         return template
 
     def on_template_context(
-        self, context: TemplateContext, *, template_name: str, config: MkDocsConfig
+        self, context: TemplateContext, /, *, template_name: str, config: MkDocsConfig
     ) -> TemplateContext | None:
         """
         The `template_context` event is called immediately after the context is created
@@ -276,7 +286,7 @@ class BasePlugin(Generic[SomeConfig]):
         return context
 
     def on_post_template(
-        self, output_content: str, *, template_name: str, config: MkDocsConfig
+        self, output_content: str, /, *, template_name: str, config: MkDocsConfig
     ) -> str | None:
         """
         The `post_template` event is called after the template is rendered, but before
@@ -296,7 +306,7 @@ class BasePlugin(Generic[SomeConfig]):
 
     # Page events
 
-    def on_pre_page(self, page: Page, *, config: MkDocsConfig, files: Files) -> Page | None:
+    def on_pre_page(self, page: Page, /, *, config: MkDocsConfig, files: Files) -> Page | None:
         """
         The `pre_page` event is called before any actions are taken on the subject
         page and can be used to alter the `Page` instance.
@@ -311,7 +321,7 @@ class BasePlugin(Generic[SomeConfig]):
         """
         return page
 
-    def on_page_read_source(self, *, page: Page, config: MkDocsConfig) -> str | None:
+    def on_page_read_source(self, /, *, page: Page, config: MkDocsConfig) -> str | None:
         """
         The `on_page_read_source` event can replace the default mechanism to read
         the contents of a page's source from the filesystem.
@@ -327,7 +337,7 @@ class BasePlugin(Generic[SomeConfig]):
         return None
 
     def on_page_markdown(
-        self, markdown: str, *, page: Page, config: MkDocsConfig, files: Files
+        self, markdown: str, /, *, page: Page, config: MkDocsConfig, files: Files
     ) -> str | None:
         """
         The `page_markdown` event is called after the page's markdown is loaded
@@ -346,7 +356,7 @@ class BasePlugin(Generic[SomeConfig]):
         return markdown
 
     def on_page_content(
-        self, html: str, *, page: Page, config: MkDocsConfig, files: Files
+        self, html: str, /, *, page: Page, config: MkDocsConfig, files: Files
     ) -> str | None:
         """
         The `page_content` event is called after the Markdown text is rendered to
@@ -365,7 +375,7 @@ class BasePlugin(Generic[SomeConfig]):
         return html
 
     def on_page_context(
-        self, context: TemplateContext, *, page: Page, config: MkDocsConfig, nav: Navigation
+        self, context: TemplateContext, /, *, page: Page, config: MkDocsConfig, nav: Navigation
     ) -> TemplateContext | None:
         """
         The `page_context` event is called after the context for a page is created
@@ -382,7 +392,7 @@ class BasePlugin(Generic[SomeConfig]):
         """
         return context
 
-    def on_post_page(self, output: str, *, page: Page, config: MkDocsConfig) -> str | None:
+    def on_post_page(self, output: str, /, *, page: Page, config: MkDocsConfig) -> str | None:
         """
         The `post_page` event is called after the template is rendered, but
         before it is written to disc and can be used to alter the output of the
@@ -407,9 +417,6 @@ for k in EVENTS:
     delattr(BasePlugin, 'on_' + k)
 
 
-T = TypeVar('T')
-
-
 def event_priority(priority: float) -> Callable[[T], T]:
     """
     A decorator to set an event priority for an event handler method.
@@ -417,6 +424,8 @@ def event_priority(priority: float) -> Callable[[T], T]:
     Recommended priority values:
     `100` "first", `50` "early", `0` "default", `-50` "late", `-100` "last".
     As different plugins discover more precise relations to each other, the values should be further tweaked.
+
+    Usage example:
 
     ```python
     @plugins.event_priority(-100)  # Wishing to run this after all other plugins' `on_files` events.
@@ -442,6 +451,39 @@ def event_priority(priority: float) -> Callable[[T], T]:
     return decorator
 
 
+class CombinedEvent(Generic[P, T]):
+    """
+    A descriptor that allows defining multiple event handlers and declaring them under one event's name.
+
+    Usage example:
+
+    ```python
+    @plugins.event_priority(100)
+    def _on_page_markdown_1(self, markdown: str, **kwargs):
+        ...
+
+    @plugins.event_priority(-50)
+    def _on_page_markdown_2(self, markdown: str, **kwargs):
+        ...
+
+    on_page_markdown = plugins.CombinedEvent(_on_page_markdown_1, _on_page_markdown_2)
+    ```
+
+    NOTE: The names of the sub-methods **can't** start with `on_`;
+    instead they can start with `_on_` like in the the above example, or anything else.
+    """
+
+    def __init__(self, *methods: Callable[Concatenate[Any, P], T]):
+        self.methods = methods
+
+    # This is only for mypy, so CombinedEvent can be a valid override of the methods in BasePlugin
+    def __call__(self, instance: BasePlugin, *args: P.args, **kwargs: P.kwargs) -> T:
+        raise TypeError(f"{type(self).__name__!r} object is not callable")
+
+    def __get__(self, instance, owner=None):
+        return CombinedEvent(*(f.__get__(instance, owner) for f in self.methods))
+
+
 class PluginCollection(dict, MutableMapping[str, BasePlugin]):
     """
     A collection of plugins.
@@ -457,17 +499,21 @@ class PluginCollection(dict, MutableMapping[str, BasePlugin]):
         self._event_origins: dict[Callable, str] = {}
 
     def _register_event(
-        self, event_name: str, method: Callable, plugin_name: str | None = None
+        self, event_name: str, method: CombinedEvent | Callable, plugin_name: str | None = None
     ) -> None:
         """Register a method for an event."""
-        utils.insort(
-            self.events[event_name], method, key=lambda m: -getattr(m, 'mkdocs_priority', 0)
-        )
-        if plugin_name:
-            try:
-                self._event_origins[method] = plugin_name
-            except TypeError:  # If the method is somehow not hashable.
-                pass
+        if isinstance(method, CombinedEvent):
+            for sub in method.methods:
+                self._register_event(event_name, sub, plugin_name=plugin_name)
+        else:
+            utils.insort(
+                self.events[event_name], method, key=lambda m: -getattr(m, 'mkdocs_priority', 0)
+            )
+            if plugin_name:
+                try:
+                    self._event_origins[method] = plugin_name
+                except TypeError:  # If the method is somehow not hashable.
+                    pass
 
     def __getitem__(self, key: str) -> BasePlugin:
         return super().__getitem__(key)
