@@ -48,11 +48,7 @@ _REPRODUCIBLE_TIMESTAMP = 1580601600
 
 def get_build_timestamp() -> int:
     """Soft-deprecated, do not use."""
-    source_date_epoch = os.environ.get('SOURCE_DATE_EPOCH')
-    if source_date_epoch is None:
-        return int(datetime.now(timezone.utc).timestamp())
-
-    return int(source_date_epoch)
+    return int(get_build_datetime().timestamp())
 
 
 def get_build_datetime() -> datetime:
