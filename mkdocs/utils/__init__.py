@@ -43,14 +43,11 @@ markdown_extensions = (
     '.md',
 )
 
+_REPRODUCIBLE_TIMESTAMP = 1580601600
+
 
 def get_build_timestamp() -> int:
-    """
-    Returns the number of seconds since the epoch.
-
-    Support SOURCE_DATE_EPOCH environment variable for reproducible builds.
-    See https://reproducible-builds.org/specs/source-date-epoch/
-    """
+    """Soft-deprecated, do not use."""
     source_date_epoch = os.environ.get('SOURCE_DATE_EPOCH')
     if source_date_epoch is None:
         return int(datetime.now(timezone.utc).timestamp())
