@@ -119,6 +119,7 @@ class Theme(MutableMapping[str, Any]):
     def _load_theme_config(self, name: str) -> None:
         """Recursively load theme and any parent themes."""
         theme_dir = utils.get_theme_dir(name)
+        utils.get_themes.cache_clear()
         self.dirs.append(theme_dir)
 
         try:

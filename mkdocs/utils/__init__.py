@@ -258,6 +258,7 @@ def get_theme_dir(name: str) -> str:
     return os.path.dirname(os.path.abspath(theme.load().__file__))
 
 
+@functools.lru_cache(maxsize=None)
 def get_themes() -> dict[str, EntryPoint]:
     """Return a dict of all installed themes as {name: EntryPoint}."""
     themes: dict[str, EntryPoint] = {}
