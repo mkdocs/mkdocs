@@ -341,6 +341,11 @@ def build(
                 file.page, config, doc_files, nav, env, dirty, excluded=file.inclusion.is_excluded()
             )
 
+        log_level = config.validation.links.anchors
+        for file in doc_files:
+            assert file.page is not None
+            file.page.validate_anchor_links(files=files, log_level=log_level)
+
         # Run `post_build` plugin events.
         config.plugins.on_post_build(config=config)
 

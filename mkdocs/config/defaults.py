@@ -166,6 +166,9 @@ class MkDocsConfig(base.Config):
             """Warning level for when a Markdown doc links to a relative path that doesn't look like
             it could be a valid internal link. For example, if the link ends with `/`."""
 
+            anchors = c._LogLevel(default='ignore')
+            """Warning level for when a Markdown doc links to an anchor that's not present on the target page."""
+
         links = c.SubConfig(LinksValidation)
 
     validation = c.PropagatingSubConfig[Validation]()

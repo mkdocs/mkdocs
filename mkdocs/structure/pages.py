@@ -73,7 +73,9 @@ class Page(StructureItem):
     """The original Markdown content from the file."""
 
     content: str | None
-    """The rendered Markdown as HTML, this is the contents of the documentation."""
+    """The rendered Markdown as HTML, this is the contents of the documentation.
+
+    Populated after `.render()`."""
 
     toc: TableOfContents
     """An iterable object representing the Table of contents for a page. Each item in
@@ -269,6 +271,42 @@ class Page(StructureItem):
         self.content = md.convert(self.markdown)
         self.toc = get_toc(getattr(md, 'toc_tokens', []))
         self._title_from_render = extract_title_ext.title
+        self.present_anchor_ids = relative_path_ext.present_anchor_ids
+        if log.getEffectiveLevel() > logging.DEBUG:
+            self.links_to_anchors = relative_path_ext.links_to_anchors
+
+    present_anchor_ids: set[str] | None = None
+    """Anchor IDs that this page contains (can be linked to in this page)."""
+
+    links_to_anchors: dict[File, dict[str, str]] | None = None
+    """Links to anchors in other files that this page contains.
+
+    The structure is: `{file_that_is_linked_to: {'anchor': 'original_link/to/some_file.md#anchor'}}`.
+    Populated after `.render()`. Populated only if `validation: {anchors: info}` (or greater) is set"""
+
+    def validate_anchor_links(self, *, files: Files, log_level: int) -> None:
+        if not self.links_to_anchors:
+            return
+        for to_file, links in self.links_to_anchors.items():
+            for anchor, original_link in links.items():
+                page = to_file.page
+                if page is None:
+                    continue
+                if page.present_anchor_ids is None:  # Page was somehow not rendered.
+                    continue
+                if anchor in page.present_anchor_ids:
+                    continue
+                context = ""
+                if to_file == self.file:
+                    problem = "there is no such anchor on this page"
+                    if anchor.startswith('fnref:'):
+                        context = " This seems to be a footnote that is never referenced."
+                else:
+                    problem = f"the doc '{to_file.src_uri}' does not contain an anchor '#{anchor}'"
+                log.log(
+                    log_level,
+                    f"Doc file '{self.file.src_uri}' contains a link '{original_link}', but {problem}.{context}",
+                )
 
 
 class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
@@ -276,6 +314,8 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
         self.file = file
         self.files = files
         self.config = config
+        self.links_to_anchors: dict[File, dict[str, str]] = {}
+        self.present_anchor_ids: set[str] = set()
 
     def run(self, root: etree.Element) -> etree.Element:
         """
@@ -285,6 +325,8 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
         tags and then makes them relative based on the site navigation
         """
         for element in root.iter():
+            if anchor := element.get('id'):
+                self.present_anchor_ids.add(anchor)
             if element.tag == 'a':
                 key = 'href'
             elif element.tag == 'img':
@@ -300,7 +342,7 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
         return root
 
     @classmethod
-    def _target_uri(cls, src_path: str, dest_path: str):
+    def _target_uri(cls, src_path: str, dest_path: str) -> str:
         return posixpath.normpath(
             posixpath.join(posixpath.dirname(src_path), dest_path).lstrip('/')
         )
@@ -344,7 +386,7 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
                     tried.add(guess)
 
     def path_to_url(self, url: str) -> str:
-        scheme, netloc, path, query, fragment = urlsplit(url)
+        scheme, netloc, path, query, anchor = urlsplit(url)
 
         warning_level, warning = 0, ''
 
@@ -356,7 +398,10 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
             warning = f"Doc file '{self.file.src_uri}' contains an absolute link '{url}', it was left as is."
         elif AMP_SUBSTITUTE in url:  # AMP_SUBSTITUTE is used internally by Markdown only for email.
             return url
-        elif not path:  # Self-link containing only query or fragment.
+        elif not path:  # Self-link containing only query or anchor.
+            if anchor:
+                # Register that the page links to itself with an anchor.
+                self.links_to_anchors.setdefault(self.file, {}).setdefault(anchor, url)
             return url
 
         path = urlunquote(path)
@@ -387,7 +432,7 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
                 target = f" '{target_uri}'" if target_uri != url else ""
                 warning_level = self.config.validation.links.not_found
                 warning = (
-                    f"Doc file '{self.file.src_uri}' contains a relative link '{url}', "
+                    f"Doc file '{self.file.src_uri}' contains a link '{url}', "
                     f"but the target{target} is not found among documentation files."
                 )
 
@@ -400,11 +445,11 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
                 suggest_url = ''
                 for path in possible_target_uris:
                     if self.files.get_file_from_path(path) is not None:
-                        if fragment and path == self.file.src_uri:
+                        if anchor and path == self.file.src_uri:
                             path = ''
                         else:
                             path = utils.get_relative_url(path, self.file.src_uri)
-                        suggest_url = urlunsplit(('', '', path, query, fragment))
+                        suggest_url = urlunsplit(('', '', path, query, anchor))
                         break
                 else:
                     if '@' in url and '.' in url and '/' not in url:
@@ -416,6 +461,11 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
 
         assert target_uri is not None
         assert target_file is not None
+
+        if anchor:
+            # Register that this page links to the target file with an anchor.
+            self.links_to_anchors.setdefault(target_file, {}).setdefault(anchor, url)
+
         if target_file.inclusion.is_excluded():
             if self.file.inclusion.is_excluded():
                 warning_level = logging.DEBUG
@@ -427,7 +477,7 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
             )
             log.log(warning_level, warning)
         path = utils.get_relative_url(target_file.url, self.file.url)
-        return urlunsplit(('', '', path, query, fragment))
+        return urlunsplit(('', '', path, query, anchor))
 
     def _register(self, md: markdown.Markdown) -> None:
         md.treeprocessors.register(self, "relpath", 0)
