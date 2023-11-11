@@ -221,7 +221,7 @@ class UtilsTests(unittest.TestCase):
 
         self.assertEqual(utils.get_theme_dir(theme.name), os.path.abspath(path))
 
-    def test_get_theme_dir_keyerror(self):
+    def test_get_theme_dir_error(self):
         with self.assertRaises(KeyError):
             utils.get_theme_dir('nonexistanttheme')
 
