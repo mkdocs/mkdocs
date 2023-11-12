@@ -374,7 +374,7 @@ This is a tree of configs, and for each one the value can be one of the three: `
 >     absolute_links: info
 >   links:
 >     not_found: warn
->     anchors: ignore
+>     anchors: info
 >     absolute_links: info
 >     unrecognized_links: info
 > ```
@@ -389,6 +389,7 @@ The defaults of some of the behaviors already differ from MkDocs 1.4 and below -
 > validation:
 >   absolute_links: ignore
 >   unrecognized_links: ignore
+>   anchors: ignore
 > ```
 <!-- -->
 >! EXAMPLE: **Recommended settings for most sites (maximal strictness):**

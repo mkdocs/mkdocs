@@ -700,7 +700,6 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         cfg = load_config(docs_dir=docs_dir, site_dir=site_dir, validation={'anchors': 'warn'})
         build.build(cfg)
 
-    @unittest.skip("The implementation is not good enough to understand this yet.")  # TODO
     @tempdir(
         files={
             'test/foo.md': '[bar](bar.md#heading2)',

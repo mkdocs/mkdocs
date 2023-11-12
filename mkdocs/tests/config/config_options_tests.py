@@ -1586,7 +1586,7 @@ class NestedSubConfigTest(TestCase):
                 'not_found': logging.WARNING,
                 'absolute_links': logging.INFO,
                 'unrecognized_links': logging.INFO,
-                'anchors': logging.DEBUG,
+                'anchors': logging.INFO,
             },
         }
 
