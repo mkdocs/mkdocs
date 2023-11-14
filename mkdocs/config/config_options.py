@@ -10,6 +10,7 @@ import traceback
 import types
 import warnings
 from collections import Counter, UserString
+from types import SimpleNamespace
 from typing import (
     Any,
     Callable,
@@ -993,6 +994,12 @@ class MarkdownExtensions(OptionallyRequired[List[str]]):
             raise ValidationError(f"Invalid config options for Markdown Extension '{ext}'.")
         self.configdata[ext] = cfg
 
+    def pre_validation(self, config, key_name):
+        # To appease validation in case it involves the `!relative` tag.
+        config._current_page = current_page = SimpleNamespace()  # type: ignore[attr-defined]
+        current_page.file = SimpleNamespace()
+        current_page.file.src_path = ''
+
     def run_validation(self, value: object) -> list[str]:
         self.configdata: dict[str, dict] = {}
         if not isinstance(value, (list, tuple, dict)):
@@ -1037,6 +1044,7 @@ class MarkdownExtensions(OptionallyRequired[List[str]]):
         return extensions
 
     def post_validation(self, config: Config, key_name: str):
+        config._current_page = None  # type: ignore[attr-defined]
         config[self.configkey] = self.configdata
 
 

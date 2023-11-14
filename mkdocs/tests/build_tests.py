@@ -814,7 +814,7 @@ class _TestPreprocessor(markdown.preprocessors.Preprocessor):
 
 class _TestExtension(markdown.extensions.Extension):
     def __init__(self, base_path: str) -> None:
-        self.base_path = base_path
+        self.base_path = str(base_path)
 
     def extendMarkdown(self, md: markdown.Markdown) -> None:
         md.preprocessors.register(_TestPreprocessor(self.base_path), "mkdocs_test", priority=32)
