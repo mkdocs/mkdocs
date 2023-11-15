@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import gzip
+import hashlib
 import logging
 import os
 import time
+from pathlib import PurePath
 from typing import TYPE_CHECKING, Sequence
 from urllib.parse import urljoin, urlsplit
 
@@ -91,7 +93,7 @@ def _build_template(
 
 
 def _build_theme_template(
-    template_name: str, env: jinja2.Environment, files: Files, config: MkDocsConfig, nav: Navigation
+    template_name: str, env: jinja2.Environment, files: Files, config: MkDocsConfig, nav: Navigation, sitemap_sha1: str, sitemap_mtime: int
 ) -> None:
     """Build a template using the theme environment."""
     log.debug(f"Building theme template: {template_name}")
@@ -109,10 +111,15 @@ def _build_theme_template(
         utils.write_file(output.encode('utf-8'), output_path)
 
         if template_name == 'sitemap.xml':
+            timestamp = utils.get_build_timestamp()
+            # preserve previous sitemap gzip mtime if the sitemap content
+            # is the same for reproducible builds
+            if sitemap_sha1 and sitemap_mtime:
+                if hashlib.sha1(output.encode('utf-8')).hexdigest() == sitemap_sha1:
+                    timestamp = sitemap_mtime
             log.debug(f"Gzipping template: {template_name}")
             gz_filename = f'{output_path}.gz'
             with open(gz_filename, 'wb') as f:
-                timestamp = utils.get_build_timestamp()
                 with gzip.GzipFile(
                     fileobj=f, filename=gz_filename, mode='wb', mtime=timestamp
                 ) as gz_buf:
@@ -271,6 +278,10 @@ def build(
         config.plugins.on_pre_build(config=config)
 
         if not dirty:
+            # preserve any existing sitemap.xml.gz mtime if the file does not change
+            sitemap_sha1, sitemap_mtime = None, None
+            if os.path.exists(PurePath(config.site_dir) / PurePath("sitemap.xml.gz")):
+                sitemap_sha1, sitemap_mtime = utils.get_gzip_sha1_and_timestamp(PurePath(config.site_dir) / PurePath("sitemap.xml.gz"))
             log.info("Cleaning site directory")
             utils.clean_directory(config.site_dir)
         else:  # pragma: no cover
@@ -328,7 +339,7 @@ def build(
         files.copy_static_files(dirty=dirty, inclusion=inclusion)
 
         for template in config.theme.static_templates:
-            _build_theme_template(template, env, files, config, nav)
+            _build_theme_template(template, env, files, config, nav, sitemap_sha1, sitemap_mtime)
 
         for template in config.extra_templates:
             _build_extra_template(template, files, config, nav)

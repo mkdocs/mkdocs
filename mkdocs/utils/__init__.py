@@ -7,6 +7,8 @@ and structure of the site and pages in the site.
 from __future__ import annotations
 
 import functools
+import gzip
+import hashlib
 import logging
 import os
 import posixpath
@@ -57,6 +59,14 @@ def get_build_timestamp() -> int:
 
     return int(source_date_epoch)
 
+
+def get_gzip_sha1_and_timestamp(path: PurePath) -> (str, int):
+    """
+    Returns the SHA1 checksum and GZIP mtime of the given file path.
+    """
+    with gzip.open(path, "rb") as gz:
+        sha1 = hashlib.sha1(gz.read()).hexdigest()
+        return sha1, gz.mtime
 
 def get_build_datetime() -> datetime:
     """
