@@ -327,19 +327,26 @@ def gh_deploy_command(
 @click.option(
     '-p',
     '--projects-file',
-    default='https://raw.githubusercontent.com/mkdocs/catalog/main/projects.yaml',
+    default=None,
     help=projects_file_help,
     show_default=True,
 )
 def get_deps_command(config_file, projects_file):
     """Show required PyPI packages inferred from plugins in mkdocs.yml."""
-    from mkdocs.commands import get_deps
+    from mkdocs_get_deps import get_deps, get_projects_file
+
+    from mkdocs.config.base import _open_config_file
 
     warning_counter = utils.CountHandler()
     warning_counter.setLevel(logging.WARNING)
     logging.getLogger('mkdocs').addHandler(warning_counter)
 
-    get_deps.get_deps(projects_file_url=projects_file, config_file_path=config_file)
+    with get_projects_file(projects_file) as p:
+        with _open_config_file(config_file) as f:
+            deps = get_deps(config_file=f, projects_file=p)
+
+    for dep in deps:
+        print(dep)  # noqa: T201
 
     if warning_counter.get_counts():
         sys.exit(1)
