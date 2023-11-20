@@ -588,12 +588,12 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         }
     )
     @tempdir()
-    def test_exclude_pages_with_invalid_links(self, site_dir, docs_dir):
+    def test_draft_pages_with_invalid_links(self, site_dir, docs_dir):
         cfg = load_config(
             docs_dir=docs_dir,
             site_dir=site_dir,
             use_directory_urls=False,
-            exclude_docs='ba*.md',
+            drafts='ba*.md',
         )
 
         with self.subTest(live_server=None):
@@ -611,8 +611,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             expected_logs = '''
                 INFO:Doc file 'test/bar.md' contains a relative link 'nonexistent.md', but the target 'test/nonexistent.md' is not found among documentation files.
                 INFO:Doc file 'test/foo.md' contains a link to 'test/bar.md' which is excluded from the built site.
-                INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `exclude_docs`:
-                  - http://localhost:123/documentation/.zoo.html
+                INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `drafts` config:
                   - http://localhost:123/documentation/test/bar.html
                   - http://localhost:123/documentation/test/baz.html
             '''
@@ -627,7 +626,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             self.assertPathIsFile(baz_path)
             self.assertIn('DRAFT', baz_path.read_text())
 
-            self.assertPathIsFile(site_dir, '.zoo.html')
+            self.assertPathNotExists(site_dir, '.zoo.html')
 
     @tempdir(
         files={
@@ -694,13 +693,14 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             config.nav = Path(f.abs_src_path).read_text().splitlines()
 
         for server in None, testing_server(site_dir):
-            for exclude in 'full', 'nav', None:
+            for exclude in 'full', 'drafts', 'nav', None:
                 with self.subTest(live_server=server, exclude=exclude):
                     cfg = load_config(
                         docs_dir=docs_dir,
                         site_dir=site_dir,
                         use_directory_urls=False,
                         exclude_docs='SUMMARY.md' if exclude == 'full' else '',
+                        drafts='SUMMARY.md' if exclude == 'drafts' else '',
                         not_in_nav='SUMMARY.md' if exclude == 'nav' else '',
                     )
                     cfg.plugins.events['files'] += [on_files_1, on_files_2]
@@ -711,9 +711,9 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
                             INFO:The following pages exist in the docs directory, but are not included in the "nav" configuration:
                               - SUMMARY.md
                         '''
-                    if exclude == 'full' and server:
+                    if exclude == 'drafts' and server:
                         expected_logs = '''
-                            INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `exclude_docs`:
+                            INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `drafts` config:
                               - http://localhost:123/SUMMARY.html
                         '''
                     with self._assert_build_logs(expected_logs):
@@ -727,7 +727,9 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
                     )
 
                     summary_path = Path(site_dir, 'SUMMARY.html')
-                    if exclude == 'full' and not server:
+                    if exclude == 'full':
+                        self.assertPathNotExists(summary_path)
+                    elif exclude == 'drafts' and not server:
                         self.assertPathNotExists(summary_path)
                     else:
                         self.assertPathExists(summary_path)

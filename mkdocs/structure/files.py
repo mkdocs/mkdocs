@@ -28,7 +28,9 @@ log = logging.getLogger(__name__)
 
 
 class InclusionLevel(enum.Enum):
-    EXCLUDED = -2
+    EXCLUDED = -3
+    """The file is excluded and will not be processed."""
+    DRAFT = -2
     """The file is excluded from the final site, but will still be populated during `mkdocs serve`."""
     NOT_IN_NAV = -1
     """The file is part of the site, but doesn't produce nav warnings."""
@@ -41,10 +43,13 @@ class InclusionLevel(enum.Enum):
         return True
 
     def is_included(self):
-        return self.value > self.EXCLUDED.value
+        return self.value > self.DRAFT.value
 
     def is_excluded(self):
-        return self.value <= self.EXCLUDED.value
+        return self.value <= self.DRAFT.value
+
+    def is_in_serve(self):
+        return self.value >= self.DRAFT.value
 
     def is_in_nav(self):
         return self.value > self.NOT_IN_NAV.value
@@ -319,19 +324,22 @@ class File:
         return self.src_uri.endswith('.css')
 
 
-_default_exclude = pathspec.gitignore.GitIgnoreSpec.from_lines(['.*', '/templates/'])
+_default_exclude = pathspec.gitignore.GitIgnoreSpec.from_lines(['.*', '/templates/', '__pycache__'])
 
 
 def set_exclusions(files: Iterable[File], config: MkDocsConfig) -> None:
     """Re-calculate which files are excluded, based on the patterns in the config."""
     exclude: pathspec.gitignore.GitIgnoreSpec | None = config.get('exclude_docs')
     exclude = _default_exclude + exclude if exclude else _default_exclude
+    drafts: pathspec.gitignore.GitIgnoreSpec | None = config.get('drafts')
     nav_exclude: pathspec.gitignore.GitIgnoreSpec | None = config.get('not_in_nav')
 
     for file in files:
         if file.inclusion == InclusionLevel.UNDEFINED:
             if exclude.match_file(file.src_uri):
                 file.inclusion = InclusionLevel.EXCLUDED
+            elif drafts and drafts.match_file(file.src_uri):
+                file.inclusion = InclusionLevel.DRAFT
             elif nav_exclude and nav_exclude.match_file(file.src_uri):
                 file.inclusion = InclusionLevel.NOT_IN_NAV
             else:

@@ -259,7 +259,7 @@ def build(
     if config.strict:
         logging.getLogger('mkdocs').addHandler(warning_counter)
 
-    inclusion = InclusionLevel.all if live_server else InclusionLevel.is_included
+    inclusion = InclusionLevel.is_in_serve if live_server else InclusionLevel.is_included
 
     try:
         start = time.monotonic()
@@ -314,7 +314,7 @@ def build(
         if excluded:
             log.info(
                 "The following pages are being built only for the preview "
-                "but will be excluded from `mkdocs build` per `exclude_docs`:\n  - "
+                "but will be excluded from `mkdocs build` per `drafts` config:\n  - "
                 + "\n  - ".join(excluded)
             )
 

@@ -29,6 +29,9 @@ class MkDocsConfig(base.Config):
     exclude_docs = c.Optional(c.PathSpec())
     """Gitignore-like patterns of files (relative to docs dir) to exclude from the site."""
 
+    drafts = c.Optional(c.PathSpec())
+    """Gitignore-like patterns of files (relative to docs dir) to mark as draft."""
+
     not_in_nav = c.Optional(c.PathSpec())
     """Gitignore-like patterns of files (relative to docs dir) that are not intended to be in the nav.
 

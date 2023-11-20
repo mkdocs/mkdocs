@@ -297,20 +297,21 @@ NEW: **New in version 1.5.**
 
 This config defines patterns of files (under [`docs_dir`](#docs_dir)) to not be picked up into the built site.
 
+UPDATED: **Updated in version 1.6**.
+
+This config parameter will apply both to `build` and to `serve`.  For documents you want available in `serve` and not `build`, use the [drafts](#drafts) config option.
+
 Example:
 
 ```yaml
 exclude_docs: |
   api-config.json    # A file with this name anywhere.
-  drafts/            # A "drafts" directory anywhere.
   /requirements.txt  # Top-level "docs/requirements.txt".
   *.py               # Any file with this extension anywhere.
   !/foo/example.py   # But keep this particular file.
 ```
 
 This follows the [.gitignore pattern format](https://git-scm.com/docs/gitignore#_pattern_format).
-
-Note that `mkdocs serve` does *not* follow this setting and instead displays excluded documents but with a "DRAFT" mark. To prevent this effect, you can run `mkdocs serve --clean`.
 
 The following defaults are always implicitly prepended - to exclude dot-files (and directories) as well as the top-level `templates` directory:
 
@@ -328,6 +329,23 @@ Otherwise you could for example opt only certain dot-files back into the site:
 exclude_docs: |
   !.assets  # Don't exclude '.assets' although all other '.*' are excluded
 ```
+
+### drafts
+
+NEW: **New in version 1.6.**
+
+This config defines patterns of files (under [`docs_dir`](#docs_dir)) to be treated as a draft.  Draft files are available during `mkdocs serve` and include a "DRAFT" mark but will not be included in the build.  To prevent this effect, you can run `mkdocs serve --clean`.
+
+Example:
+
+```yaml
+drafts: |
+  drafts/                 # A "drafts" directory anywhere.
+  _unpublished.md         # A md file ending in _unpublished.md
+  !/foo_unpublished.jpg   # But keep this particular file.
+```
+
+This follows the [.gitignore pattern format](https://git-scm.com/docs/gitignore#_pattern_format).
 
 ### not_in_nav
 
