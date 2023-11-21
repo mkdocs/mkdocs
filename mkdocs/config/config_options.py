@@ -1227,19 +1227,3 @@ class PathSpec(BaseConfigOption[pathspec.gitignore.GitIgnoreSpec]):
             return pathspec.gitignore.GitIgnoreSpec.from_lines(lines=value.splitlines())
         except ValueError as e:
             raise ValidationError(str(e))
-
-
-class _LogLevel(OptionallyRequired[int]):
-    levels: Mapping[str, int] = {
-        "warn": logging.WARNING,
-        "info": logging.INFO,
-        "ignore": logging.DEBUG,
-    }
-
-    def run_validation(self, value: object) -> int:
-        if not isinstance(value, str):
-            raise ValidationError(f'Expected a string, but a {type(value)} was given.')
-        try:
-            return self.levels[value]
-        except KeyError:
-            raise ValidationError(f'Expected one of {list(self.levels)}, got {value!r}')

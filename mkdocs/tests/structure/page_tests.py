@@ -1003,6 +1003,48 @@ class RelativePathExtensionTests(unittest.TestCase):
             '<a href="./#test">link</a>',
         )
 
+    def test_absolute_self_anchor_link_with_suggestion(self):
+        self.assertEqual(
+            self.get_rendered_result(
+                content='[link](/index#test)',
+                files=['index.md'],
+                logs="INFO:Doc file 'index.md' contains an absolute link '/index#test', it was left as is. Did you mean '#test'?",
+            ),
+            '<a href="/index#test">link</a>',
+        )
+
+    def test_absolute_self_anchor_link_with_validation_and_suggestion(self):
+        self.assertEqual(
+            self.get_rendered_result(
+                validation=dict(links=dict(absolute_links='relative_to_docs')),
+                content='[link](/index#test)',
+                files=['index.md'],
+                logs="WARNING:Doc file 'index.md' contains a link '/index#test', but the target 'index' is not found among documentation files. Did you mean '#test'?",
+            ),
+            '<a href="/index#test">link</a>',
+        )
+
+    def test_absolute_anchor_link_with_validation(self):
+        self.assertEqual(
+            self.get_rendered_result(
+                validation=dict(links=dict(absolute_links='relative_to_docs')),
+                content='[link](/foo/bar.md#test)',
+                files=['index.md', 'foo/bar.md'],
+            ),
+            '<a href="foo/bar/#test">link</a>',
+        )
+
+    def test_absolute_anchor_link_with_validation_and_suggestion(self):
+        self.assertEqual(
+            self.get_rendered_result(
+                validation=dict(links=dict(absolute_links='relative_to_docs')),
+                content='[link](/foo/bar#test)',
+                files=['zoo/index.md', 'foo/bar.md'],
+                logs="WARNING:Doc file 'zoo/index.md' contains a link '/foo/bar#test', but the target 'foo/bar' is not found among documentation files. Did you mean '/foo/bar.md#test'?",
+            ),
+            '<a href="/foo/bar#test">link</a>',
+        )
+
     def test_external_link(self):
         self.assertEqual(
             self.get_rendered_result(
@@ -1038,7 +1080,58 @@ class RelativePathExtensionTests(unittest.TestCase):
             '<a href="/path/to/file">absolute link</a>',
         )
 
-    def test_absolute_link(self):
+    def test_absolute_link_with_validation(self):
+        self.assertEqual(
+            self.get_rendered_result(
+                validation=dict(links=dict(absolute_links='relative_to_docs')),
+                content='[absolute link](/path/to/file.md)',
+                files=['index.md', 'path/to/file.md'],
+            ),
+            '<a href="path/to/file/">absolute link</a>',
+        )
+        self.assertEqual(
+            self.get_rendered_result(
+                validation=dict(links=dict(absolute_links='relative_to_docs')),
+                use_directory_urls=False,
+                content='[absolute link](/path/to/file.md)',
+                files=['path/index.md', 'path/to/file.md'],
+            ),
+            '<a href="to/file.html">absolute link</a>',
+        )
+
+    def test_absolute_link_with_validation_and_suggestion(self):
+        self.assertEqual(
+            self.get_rendered_result(
+                validation=dict(links=dict(absolute_links='relative_to_docs')),
+                use_directory_urls=False,
+                content='[absolute link](/path/to/file/)',
+                files=['path/index.md', 'path/to/file.md'],
+                logs="WARNING:Doc file 'path/index.md' contains a link '/path/to/file/', but the target 'path/to/file' is not found among documentation files.",
+            ),
+            '<a href="/path/to/file/">absolute link</a>',
+        )
+        self.assertEqual(
+            self.get_rendered_result(
+                validation=dict(links=dict(absolute_links='relative_to_docs')),
+                content='[absolute link](/path/to/file)',
+                files=['path/index.md', 'path/to/file.md'],
+                logs="WARNING:Doc file 'path/index.md' contains a link '/path/to/file', but the target is not found among documentation files. Did you mean '/path/to/file.md'?",
+            ),
+            '<a href="/path/to/file">absolute link</a>',
+        )
+
+    def test_absolute_link_with_validation_just_slash(self):
+        self.assertEqual(
+            self.get_rendered_result(
+                validation=dict(links=dict(absolute_links='relative_to_docs')),
+                content='[absolute link](/)',
+                files=['path/to/file.md', 'index.md'],
+                logs="WARNING:Doc file 'path/to/file.md' contains a link '/', but the target '.' is not found among documentation files. Did you mean '/index.md'?",
+            ),
+            '<a href="/">absolute link</a>',
+        )
+
+    def test_absolute_link_preserved_and_warned(self):
         self.assertEqual(
             self.get_rendered_result(
                 validation=dict(links=dict(absolute_links='warn')),

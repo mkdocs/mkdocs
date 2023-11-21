@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import enum
 import logging
 import posixpath
 import warnings
@@ -358,7 +359,7 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
 
     @classmethod
     def _possible_target_uris(
-        cls, file: File, path: str, use_directory_urls: bool
+        cls, file: File, path: str, use_directory_urls: bool, suggest_absolute: bool = False
     ) -> Iterator[str]:
         """First yields the resolved file uri for the link, then proceeds to yield guesses for possible mistakes."""
         target_uri = cls._target_uri(file.src_uri, path)
@@ -397,14 +398,17 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
     def path_to_url(self, url: str) -> str:
         scheme, netloc, path, query, anchor = urlsplit(url)
 
+        absolute_link = None
         warning_level, warning = 0, ''
 
         # Ignore URLs unless they are a relative link to a source file.
         if scheme or netloc:  # External link.
             return url
         elif url.startswith(('/', '\\')):  # Absolute link.
-            warning_level = self.config.validation.links.absolute_links
-            warning = f"Doc file '{self.file.src_uri}' contains an absolute link '{url}', it was left as is."
+            absolute_link = self.config.validation.links.absolute_links
+            if absolute_link is not _AbsoluteLinksValidationValue.RELATIVE_TO_DOCS:
+                warning_level = absolute_link
+                warning = f"Doc file '{self.file.src_uri}' contains an absolute link '{url}', it was left as is."
         elif AMP_SUBSTITUTE in url:  # AMP_SUBSTITUTE is used internally by Markdown only for email.
             return url
         elif not path:  # Self-link containing only query or anchor.
@@ -430,7 +434,7 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
 
         if target_file is None and not warning:
             # Primary lookup path had no match, definitely produce a warning, just choose which one.
-            if not posixpath.splitext(path)[-1]:
+            if not posixpath.splitext(path)[-1] and absolute_link is None:
                 # No '.' in the last part of a path indicates path does not point to a file.
                 warning_level = self.config.validation.links.unrecognized_links
                 warning = (
@@ -438,7 +442,7 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
                     f"it was left as is."
                 )
             else:
-                target = f" '{target_uri}'" if target_uri != url else ""
+                target = f" '{target_uri}'" if target_uri != url.lstrip('/') else ""
                 warning_level = self.config.validation.links.not_found
                 warning = (
                     f"Doc file '{self.file.src_uri}' contains a link '{url}', "
@@ -456,6 +460,8 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
                     if self.files.get_file_from_path(path) is not None:
                         if anchor and path == self.file.src_uri:
                             path = ''
+                        elif absolute_link is _AbsoluteLinksValidationValue.RELATIVE_TO_DOCS:
+                            path = '/' + path
                         else:
                             path = utils.get_relative_url(path, self.file.src_uri)
                         suggest_url = urlunsplit(('', '', path, query, anchor))
@@ -545,3 +551,7 @@ class _ExtractTitleTreeprocessor(markdown.treeprocessors.Treeprocessor):
     def _register(self, md: markdown.Markdown) -> None:
         self.postprocessors = tuple(md.postprocessors)
         md.treeprocessors.register(self, "mkdocs_extract_title", priority=-1)  # After the end.
+
+
+class _AbsoluteLinksValidationValue(enum.IntEnum):
+    RELATIVE_TO_DOCS = -1
