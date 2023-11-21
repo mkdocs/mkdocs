@@ -76,7 +76,7 @@ class ThemeTests(unittest.TestCase):
         self.assertTrue('new' in theme)
         self.assertEqual(theme['new'], 42)
 
-    @mock.patch('mkdocs.utils.yaml_load', return_value={})
+    @mock.patch('yaml.load', return_value={})
     def test_no_theme_config(self, m):
         theme = Theme(name='mkdocs')
         self.assertEqual(m.call_count, 1)
@@ -89,7 +89,7 @@ class ThemeTests(unittest.TestCase):
                 {'static_templates': ['parent.html']},
             ]
         )
-        with mock.patch('mkdocs.utils.yaml_load', m) as m:
+        with mock.patch('yaml.load', m) as m:
             theme = Theme(name='mkdocs')
             self.assertEqual(m.call_count, 2)
             self.assertEqual(
