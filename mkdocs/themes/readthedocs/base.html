@@ -112,7 +112,15 @@
           {%- set navlevel = 1 %}
           {%- for nav_item in nav %}
             {%- if nav_item.is_section %}
+              {%- if nav_item.is_page %}
+                <ul><li{% if nav_item == page %} class="current-section"{% endif %}>
+                    <a href="{% if nav_item == page %}#{% else %}{{ nav_item.url|url }}{% endif %}" style="padding: 0; font-size: inherit; line-height: inherit">
+              {%- endif %}
               <p class="caption"><span class="caption-text">{{ nav_item.title }}</span></p>
+              {%- if nav_item.is_page %}
+                    </a>
+                </li></ul>
+              {%- endif %}
               <ul{% if nav_item.active %} class="current"{% endif %}>
                 {%- for nav_item in nav_item.children %}
                   <li class="toctree-l{{ navlevel }}{% if nav_item.active %} current{% endif %}">
