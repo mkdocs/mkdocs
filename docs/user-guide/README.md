@@ -16,6 +16,7 @@ bar at the top of the page to move through the documentation in order.
 - [Localizing Your Theme](localizing-your-theme.md)
 - [Configuration](configuration.md)
 - [Command Line Interface](cli.md)
+- [Managing Dependencies](managing-dependencies.md)
 - [Deploying Your Docs](deploying-your-docs.md)
 
 [Getting Started]: ../getting-started.md

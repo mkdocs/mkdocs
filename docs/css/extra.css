@@ -101,3 +101,46 @@ h5.doc-heading {
 .doc-contents {
     padding-left: 0;
 }
+
+/* configurator */
+
+.configurator .hljs-bullet {
+    margin-top: 0.4em !important;
+    display: inline-block;
+}
+.configurator .hljs-attr + .hljs-bullet {
+    display: inline;
+}
+.configurator pre {
+    line-height: 1.5 !important;
+}
+
+.configurator hr {
+    margin: 0.5em 0 !important;
+}
+
+input + label {
+    cursor: pointer;
+}
+
+.configurator input:not(:checked) + label {
+    opacity: 0.85;
+}
+.configurator label {
+    text-decoration: underline;
+}
+.configurator input:not(:checked) + label {
+    text-decoration: none;
+}
+
+.configurator > input:nth-of-type(1):checked ~ div:not(.c1), .configurator > input:nth-of-type(1):not(:checked) ~ div.c1,
+.configurator > input:nth-of-type(2):checked ~ div:not(.c2), .configurator > input:nth-of-type(2):not(:checked) ~ div.c2,
+.configurator > input:nth-of-type(3):checked ~ div:not(.c3), .configurator > input:nth-of-type(3):not(:checked) ~ div.c3,
+.configurator > input:nth-of-type(4):checked ~ div:not(.c4), .configurator > input:nth-of-type(4):not(:checked) ~ div.c4,
+.configurator > input:nth-of-type(5):checked ~ div:not(.c5), .configurator > input:nth-of-type(5):not(:checked) ~ div.c5,
+.configurator > input:nth-of-type(6):checked ~ div:not(.c6), .configurator > input:nth-of-type(6):not(:checked) ~ div.c6,
+.configurator > input:nth-of-type(7):checked ~ div:not(.c7), .configurator > input:nth-of-type(7):not(:checked) ~ div.c7,
+.configurator > input:nth-of-type(8):checked ~ div:not(.c8), .configurator > input:nth-of-type(8):not(:checked) ~ div.c8,
+.configurator > input:nth-of-type(9):checked ~ div:not(.c9), .configurator > input:nth-of-type(9):not(:checked) ~ div.c9 {
+    display: none;
+}

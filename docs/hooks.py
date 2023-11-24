@@ -1,6 +1,8 @@
 import re
 from pathlib import Path
 
+import jinja2
+
 from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.structure.nav import Page
 
@@ -30,3 +32,6 @@ def on_page_markdown(markdown: str, page: Page, config: MkDocsConfig, **kwargs):
             markdown,
             flags=re.MULTILINE,
         )
+
+    if page.file.src_uri == 'user-guide/managing-dependencies.md':
+        return jinja2.Template(markdown).render()
