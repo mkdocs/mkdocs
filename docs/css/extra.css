@@ -31,6 +31,10 @@ div.admonition.block>.admonition-title {
     border-color: #d8dcf0;
 }
 
+.hljs-meta.prompt_ {
+    user-select: none;
+}
+
 /* Definition List styles */
 
 dd {

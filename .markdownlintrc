@@ -5,6 +5,9 @@
   // Disable line length check
   "MD013": false,
 
+  // Allow prompt-only console blocks
+  "MD014": false,
+
   // Set Ordered list item prefix to "ordered" (use 1. 2. 3. not 1. 1. 1.)
   "MD029": { "style": "ordered" },
 

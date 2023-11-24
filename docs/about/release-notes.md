@@ -6,8 +6,8 @@
 
 To upgrade MkDocs to the latest version, use pip:
 
-```bash
-pip install -U mkdocs
+```console
+$ pip install -U mkdocs
 ```
 
 You can determine your currently installed version using `mkdocs --version`:

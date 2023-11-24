@@ -11,8 +11,8 @@ using a plugin which comes with MkDocs, then it was installed when you installed
 MkDocs. However, to install third party plugins, you need to determine the
 appropriate package name and install it using `pip`:
 
-```bash
-pip install mkdocs-foo-plugin
+```console
+$ pip install mkdocs-foo-plugin
 ```
 
 WARNING: Installing an MkDocs plugin means installing a Python package and executing any code that the author has put in there. So, exercise the usual caution; there's no attempt at sandboxing.

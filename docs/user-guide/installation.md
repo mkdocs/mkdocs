@@ -39,23 +39,23 @@ If you're using a recent version of Python, the Python package manager, [pip],
 is most likely installed by default. However, you may need to upgrade pip to the
 lasted version:
 
-```bash
-pip install --upgrade pip
+```console
+$ pip install --upgrade pip
 ```
 
 If you need to install pip for the first time, download [get-pip.py].
 Then run the following command to install it:
 
-```bash
-python get-pip.py
+```console
+$ python get-pip.py
 ```
 
 ## Installing MkDocs
 
 Install the `mkdocs` package using pip:
 
-```bash
-pip install mkdocs
+```console
+$ pip install mkdocs
 ```
 
 You should now have the `mkdocs` command installed on your system. Run `mkdocs

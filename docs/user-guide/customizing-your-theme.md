@@ -84,8 +84,8 @@ directory structure (in part):
 To override any of the files contained in that theme, create a new directory
 next to your `docs_dir`:
 
-```bash
-mkdir custom_theme
+```console
+$ mkdir custom_theme
 ```
 
 And then point your `mkdocs.yml` configuration file at the new directory:

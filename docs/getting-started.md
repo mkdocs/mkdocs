@@ -8,8 +8,8 @@ An introductory tutorial!
 
 To install MkDocs, run the following command from the command line:
 
-```bash
-pip install mkdocs
+```console
+$ pip install mkdocs
 ```
 
 For more details, see the [Installation Guide].
@@ -19,9 +19,9 @@ For more details, see the [Installation Guide].
 Getting started is super easy. To create a new project, run the following
 command from the command line:
 
-```bash
-mkdocs new my-project
-cd my-project
+```console
+$ mkdocs new my-project
+$ cd my-project
 ```
 
 Take a moment to review the initial project that has been created for you.
@@ -85,8 +85,8 @@ Just be sure to edit it before you deploy your site to a production server.
 
 Now add a second page to your documentation:
 
-```bash
-curl 'https://jaspervdj.be/lorem-markdownum/markdown.txt' > docs/about.md
+```console
+$ curl 'https://jaspervdj.be/lorem-markdownum/markdown.txt' > docs/about.md
 ```
 
 As our documentation site will include some navigation headers, you may want to
@@ -149,8 +149,8 @@ favicon icon.
 That's looking good. You're ready to deploy the first pass of your `MkLorum`
 documentation. First build the documentation:
 
-```bash
-mkdocs build
+```console
+$ mkdocs build
 ```
 
 This will create a new directory, named `site`. Take a look inside the
@@ -171,8 +171,8 @@ If you're using source code control such as `git` you probably don't want to
 check your documentation builds into the repository. Add a line containing
 `site/` to your `.gitignore` file.
 
-```bash
-echo "site/" >> .gitignore
+```console
+$ echo "site/" >> .gitignore
 ```
 
 If you're using another source code control tool you'll want to check its
@@ -183,16 +183,16 @@ documentation on how to ignore specific directories.
 There are various other commands and options available. For a complete list of
 commands, use the `--help` flag:
 
-```bash
-mkdocs --help
+```console
+$ mkdocs --help
 ```
 
 To view a list of options available on a given command, use the `--help` flag
 with that command. For example, to get a list of all options available for the
 `build` command run the following:
 
-```bash
-mkdocs build --help
+```console
+$ mkdocs build --help
 ```
 
 ## Deploying
