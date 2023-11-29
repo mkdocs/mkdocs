@@ -81,19 +81,6 @@ $(document).ready(function() {
 
     $('table').addClass('table table-striped table-hover');
 
-    // Improve the scrollspy behaviour when users click on a TOC item.
-    $(".bs-sidenav a").on("click", function() {
-        var clicked = this;
-        setTimeout(function() {
-            var active = $('.nav li.active a');
-            active = active[active.length - 1];
-            if (clicked !== active) {
-                $(active).parent().removeClass("active");
-                $(clicked).parent().addClass("active");
-            }
-        }, 50);
-    });
-
     function showInnerDropdown(item) {
         var popup = $(item).next('.dropdown-menu');
         popup.addClass('show');
@@ -156,9 +143,8 @@ $(document).ready(function() {
 
 $(window).on('resize', applyTopPadding);
 
-$('body').scrollspy({
-    target: '.bs-sidebar',
-    offset: 100
+var scrollSpy = new bootstrap.ScrollSpy(document.body, {
+  target: '.bs-sidebar'
 });
 
 /* Prevent disabled links from causing a page reload */
