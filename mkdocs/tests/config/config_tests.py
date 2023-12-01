@@ -105,6 +105,8 @@ class ConfigTests(unittest.TestCase):
                 'static_templates': ['404.html', 'sitemap.xml'],
                 'vars': {
                     'name': 'mkdocs',
+                    'color_mode': 'light',
+                    'user_color_mode_toggle': False,
                     'locale': parse_locale('en'),
                     'include_search_page': False,
                     'search_index_only': False,
@@ -112,6 +114,7 @@ class ConfigTests(unittest.TestCase):
                     'highlightjs': True,
                     'hljs_style': 'github',
                     'hljs_languages': [],
+                    'hljs_style_dark': 'github-dark',
                     'navigation_depth': 2,
                     'nav_style': 'primary',
                     'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83},
@@ -190,6 +193,8 @@ class ConfigTests(unittest.TestCase):
                 'static_templates': ['404.html', 'sitemap.xml', 'foo.html'],
                 'vars': {
                     'name': 'mkdocs',
+                    'color_mode': 'light',
+                    'user_color_mode_toggle': False,
                     'locale': parse_locale('fr'),
                     'show_sidebar': False,
                     'some_var': 'bar',
@@ -199,6 +204,7 @@ class ConfigTests(unittest.TestCase):
                     'highlightjs': True,
                     'hljs_style': 'github',
                     'hljs_languages': [],
+                    'hljs_style_dark': 'github-dark',
                     'navigation_depth': 2,
                     'nav_style': 'primary',
                     'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83},
