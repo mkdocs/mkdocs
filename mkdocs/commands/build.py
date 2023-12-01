@@ -112,8 +112,11 @@ def _build_theme_template(
             log.debug(f"Gzipping template: {template_name}")
             gz_filename = f'{output_path}.gz'
             with open(gz_filename, 'wb') as f:
+                timestamp = utils.get_build_timestamp(
+                    pages=[f.page for f in files.documentation_pages() if f.page is not None]
+                )
                 with gzip.GzipFile(
-                    fileobj=f, filename=gz_filename, mode='wb', mtime=utils._REPRODUCIBLE_TIMESTAMP
+                    fileobj=f, filename=gz_filename, mode='wb', mtime=timestamp
                 ) as gz_buf:
                     gz_buf.write(output.encode('utf-8'))
     else:

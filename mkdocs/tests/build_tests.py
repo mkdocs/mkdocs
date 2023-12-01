@@ -233,7 +233,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     def test_build_theme_template(self, mock_build_template, mock_write_file):
         cfg = load_config()
         env = cfg.theme.get_env()
-        build._build_theme_template('main.html', env, mock.Mock(), cfg, mock.Mock())
+        build._build_theme_template('main.html', env, Files([]), cfg, mock.Mock())
         mock_write_file.assert_called_once()
         mock_build_template.assert_called_once()
 
@@ -246,7 +246,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     ):
         cfg = load_config(site_dir=site_dir)
         env = cfg.theme.get_env()
-        build._build_theme_template('sitemap.xml', env, mock.Mock(), cfg, mock.Mock())
+        build._build_theme_template('sitemap.xml', env, Files([]), cfg, mock.Mock())
         mock_write_file.assert_called_once()
         mock_build_template.assert_called_once()
         mock_gzip_gzipfile.assert_called_once()
@@ -257,7 +257,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         cfg = load_config()
         env = cfg.theme.get_env()
         with self.assertLogs('mkdocs') as cm:
-            build._build_theme_template('missing.html', env, mock.Mock(), cfg, mock.Mock())
+            build._build_theme_template('missing.html', env, Files([]), cfg, mock.Mock())
         self.assertEqual(
             '\n'.join(cm.output),
             "WARNING:mkdocs.commands.build:Template skipped: 'missing.html' not found in theme directories.",
@@ -271,7 +271,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         cfg = load_config()
         env = cfg.theme.get_env()
         with self.assertLogs('mkdocs') as cm:
-            build._build_theme_template('main.html', env, mock.Mock(), cfg, mock.Mock())
+            build._build_theme_template('main.html', env, Files([]), cfg, mock.Mock())
         self.assertEqual(
             '\n'.join(cm.output),
             "INFO:mkdocs.commands.build:Template skipped: 'main.html' generated empty output.",

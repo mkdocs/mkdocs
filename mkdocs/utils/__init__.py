@@ -43,12 +43,20 @@ markdown_extensions = (
     '.md',
 )
 
-_REPRODUCIBLE_TIMESTAMP = 1580601600
 
+def get_build_timestamp(*, pages: Collection[Page] | None = None) -> int:
+    """
+    Returns the number of seconds since the epoch for the latest updated page.
 
-def get_build_timestamp() -> int:
-    """Soft-deprecated, do not use."""
-    return int(get_build_datetime().timestamp())
+    In reality this is just today's date because that's how pages' update time is populated.
+    """
+    if pages:
+        # Lexicographic comparison is OK for ISO date.
+        date_string = max(p.update_date for p in pages)
+        dt = datetime.fromisoformat(date_string)
+    else:
+        dt = get_build_datetime()
+    return int(dt.timestamp())
 
 
 def get_build_datetime() -> datetime:
