@@ -59,7 +59,8 @@ def serve(
     host = config.dev_addr.host
     if port is None:
         port = config.dev_addr.port
-    if port is None:
+    port_unspecified = port is None
+    if port_unspecified:
         port = get_random_port(config)
 
     mount_path = urlsplit(config.site_url or '/').path
@@ -108,7 +109,10 @@ def serve(
                 server.watch(item)
 
         try:
-            server.serve(open_in_browser=open_in_browser)
+            server.serve(
+                try_extra_ports=3 if port_unspecified else 0,
+                open_in_browser=open_in_browser,
+            )
         except KeyboardInterrupt:
             log.info("Shutting down...")
         finally:

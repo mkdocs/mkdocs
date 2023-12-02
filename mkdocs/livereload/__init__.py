@@ -106,6 +106,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         shutdown_delay: float = 0.25,
     ) -> None:
         self.builder = builder
+        self._host = host
         try:
             if isinstance(ipaddress.ip_address(host), ipaddress.IPv6Address):
                 self.address_family = socket.AF_INET6
@@ -113,7 +114,6 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
             pass
         self.root = os.path.abspath(root)
         self.mount_path = _normalize_mount_path(mount_path)
-        self.url = _serve_url(host, port, mount_path)
         self.build_delay = 0.1
         self.shutdown_delay = shutdown_delay
         # To allow custom error pages.
@@ -135,6 +135,10 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
 
         self._watched_paths: dict[str, int] = {}
         self._watch_refs: dict[str, Any] = {}
+
+    @property
+    def url(self) -> str:
+        return _serve_url(self._host, self.server_address[1], self.mount_path)
 
     def watch(self, path: str, func: None = None, *, recursive: bool = True) -> None:
         """Add the 'path' to watched paths, call the function and reload when any file changes under it."""
@@ -169,8 +173,17 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
             self._watched_paths.pop(path)
             self.observer.unschedule(self._watch_refs.pop(path))
 
-    def serve(self, *, open_in_browser=False):
-        self.server_bind()
+    def serve(self, *, try_extra_ports: int = 0, open_in_browser=False):
+        for remaining_attempts in reversed(range(try_extra_ports + 1)):
+            try:
+                self.server_bind()
+                break
+            except OSError:
+                if remaining_attempts == 0:
+                    raise
+                host, port = self.server_address
+                log.warning(f"Could not listen on port {port}, trying next port")
+                self.server_address = (host, port + 1)
         self.server_activate()
 
         if self._watched_paths:
