@@ -16,6 +16,8 @@ if TYPE_CHECKING:
 
 log = logging.getLogger(__name__)
 
+DEFAULT_PORT = 8000
+
 
 def serve(
     config_file: str | None = None,
@@ -24,6 +26,7 @@ def serve(
     watch_theme: bool = False,
     watch: list[str] = [],
     *,
+    port: int | None = None,
     open_in_browser: bool = False,
     **kwargs,
 ) -> None:
@@ -55,6 +58,9 @@ def serve(
     config.plugins.on_startup(command=('build' if is_clean else 'serve'), dirty=is_dirty)
 
     host, port = config.dev_addr
+    if port is None:
+        port = DEFAULT_PORT
+
     mount_path = urlsplit(config.site_url or '/').path
     config.site_url = serve_url = _serve_url(host, port, mount_path)
 
