@@ -3,6 +3,7 @@ from __future__ import annotations
 import functools
 import io
 import ipaddress
+import json
 import logging
 import mimetypes
 import os
@@ -21,7 +22,7 @@ import urllib.parse
 import webbrowser
 import wsgiref.simple_server
 import wsgiref.util
-from typing import Any, BinaryIO, Callable, Iterable
+from typing import Any, BinaryIO, Callable, Iterable, Mapping
 
 import watchdog.events
 import watchdog.observers.polling
@@ -104,8 +105,11 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         mount_path: str = "/",
         polling_interval: float = 0.5,
         shutdown_delay: float = 0.25,
+        *,
+        origin_info: Mapping[str, Any] | None = None,
     ) -> None:
         self.builder = builder
+        self._host = host
         try:
             if isinstance(ipaddress.ip_address(host), ipaddress.IPv6Address):
                 self.address_family = socket.AF_INET6
@@ -116,6 +120,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         self.url = _serve_url(host, port, mount_path)
         self.build_delay = 0.1
         self.shutdown_delay = shutdown_delay
+        self._origin_info = origin_info
         # To allow custom error pages.
         self.error_handler: Callable[[int], bytes | None] = lambda code: None
 
@@ -170,7 +175,10 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
             self.observer.unschedule(self._watch_refs.pop(path))
 
     def serve(self, *, open_in_browser=False):
-        self.server_bind()
+        try:
+            self.server_bind()
+        except OSError as e:
+            raise ServerBindError(str(e)) from e
         self.server_activate()
 
         if self._watched_paths:
@@ -282,6 +290,11 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                         self._epoch_cond.wait_for(condition, timeout=self.poll_response_timeout)
                     return [b"%d" % self._visible_epoch]
 
+            elif path == "/livereload/.info.json":
+                start_response("200 OK", [("Content-Type", "application/json")])
+                info = dict(origin_info=self._origin_info, url=self.url)
+                return [json.dumps(info).encode()]
+
         if (path + "/").startswith(self.mount_path):
             rel_file_path = path[len(self.mount_path) :]
 
@@ -365,6 +378,10 @@ class _Handler(wsgiref.simple_server.WSGIRequestHandler):
 
     def log_message(self, format, *args):
         log.debug(format, *args)
+
+
+class ServerBindError(OSError):
+    pass
 
 
 def _timestamp() -> int:
