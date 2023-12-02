@@ -23,6 +23,8 @@ def serve(
     build_type: str | None = None,
     watch_theme: bool = False,
     watch: list[str] = [],
+    *,
+    open_in_browser: bool = False,
     **kwargs,
 ) -> None:
     """
@@ -99,7 +101,7 @@ def serve(
                 server.watch(item)
 
         try:
-            server.serve()
+            server.serve(open_in_browser=open_in_browser)
         except KeyboardInterrupt:
             log.info("Shutting down...")
         finally:

@@ -18,6 +18,7 @@ import threading
 import time
 import traceback
 import urllib.parse
+import webbrowser
 import wsgiref.simple_server
 import wsgiref.util
 from typing import Any, BinaryIO, Callable, Iterable
@@ -161,7 +162,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
             self._watched_paths.pop(path)
             self.observer.unschedule(self._watch_refs.pop(path))
 
-    def serve(self):
+    def serve(self, *, open_in_browser=False):
         self.server_bind()
         self.server_activate()
 
@@ -171,8 +172,13 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
             paths_str = ", ".join(f"'{_try_relativize_path(path)}'" for path in self._watched_paths)
             log.info(f"Watching paths for changes: {paths_str}")
 
-        log.info(f"Serving on {self.url}")
+        if open_in_browser:
+            log.info(f"Serving on {self.url} and opening it in a browser")
+        else:
+            log.info(f"Serving on {self.url}")
         self.serve_thread.start()
+        if open_in_browser:
+            webbrowser.open(self.url)
 
         self._build_loop()
 
