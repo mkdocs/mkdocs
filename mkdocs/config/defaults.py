@@ -68,7 +68,7 @@ class MkDocsConfig(base.Config):
     """set of values for Google analytics containing the account IO and domain
     this should look like, ['UA-27795084-5', 'mkdocs.org']"""
 
-    dev_addr = c.IpAddress(default='127.0.0.1:8000')
+    dev_addr = c.IpAddress(default='127.0.0.1')
     """The address on which to serve the live reloading docs server."""
 
     use_directory_urls = c.Type(bool, default=True)

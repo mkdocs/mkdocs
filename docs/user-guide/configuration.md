@@ -646,13 +646,12 @@ This is also available as a command line flag: `--strict`.
 
 ### dev_addr
 
-Determines the address used when running `mkdocs serve`. Must be of the format
-`IP:PORT`.
+Determines the address used when running `mkdocs serve`. Can be just the IP address, or `IP:PORT`.
 
 Allows a custom default to be set without the need to pass it through the
-`--dev-addr` option every time the `mkdocs serve` command is called.
+`--dev-addr` or `--port` option every time the `mkdocs serve` command is called.
 
-**default**: `'127.0.0.1:8000'`
+**default**: `'127.0.0.1'`, with an arbitrary port number between 8001 and 8099, based on a hash of the `site_name` and `site_url`.
 
 See also: [site_url](#site_url).
 

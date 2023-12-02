@@ -4,6 +4,7 @@ import functools
 import ipaddress
 import logging
 import os
+import re
 import string
 import sys
 import traceback
@@ -454,9 +455,11 @@ class Deprecated(BaseConfigOption):
 
 class _IpAddressValue(NamedTuple):
     host: str
-    port: int
+    port: int | None = None
 
     def __str__(self) -> str:
+        if self.port is None:
+            return self.host
         return f'{self.host}:{self.port}'
 
 
@@ -468,9 +471,16 @@ class IpAddress(OptionallyRequired[_IpAddressValue]):
     """
 
     def run_validation(self, value: object) -> _IpAddressValue:
-        if not isinstance(value, str) or ':' not in value:
-            raise ValidationError("Must be a string of format 'IP:PORT'")
-        host, port_str = value.rsplit(':', 1)
+        if not isinstance(value, str):
+            raise ValidationError("Must be a string")
+        host = value
+        port: int | None = None
+        if m := re.fullmatch(r'(.+):(\w+)', value):
+            try:
+                port = int(m[2])
+            except Exception:
+                raise ValidationError(f"'{m[2]}' is not a valid port")
+            host = m[1]
 
         if host != 'localhost':
             if host.startswith('[') and host.endswith(']'):
@@ -480,11 +490,6 @@ class IpAddress(OptionallyRequired[_IpAddressValue]):
                 host = str(ipaddress.ip_address(host))
             except ValueError as e:
                 raise ValidationError(e)
-
-        try:
-            port = int(port_str)
-        except Exception:
-            raise ValidationError(f"'{port_str}' is not a valid port")
 
         return _IpAddressValue(host, port)
 

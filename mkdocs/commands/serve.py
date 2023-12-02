@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import logging
 import shutil
 import tempfile
@@ -24,6 +25,7 @@ def serve(
     watch_theme: bool = False,
     watch: list[str] = [],
     *,
+    port: int | None = None,
     open_in_browser: bool = False,
     **kwargs,
 ) -> None:
@@ -54,7 +56,12 @@ def serve(
     config = get_config()
     config.plugins.on_startup(command=('build' if is_clean else 'serve'), dirty=is_dirty)
 
-    host, port = config.dev_addr
+    host = config.dev_addr.host
+    if port is None:
+        port = config.dev_addr.port
+    if port is None:
+        port = get_random_port(config)
+
     mount_path = urlsplit(config.site_url or '/').path
     config.site_url = serve_url = _serve_url(host, port, mount_path)
 
@@ -110,3 +117,12 @@ def serve(
         config.plugins.on_shutdown()
         if isdir(site_dir):
             shutil.rmtree(site_dir)
+
+
+def get_random_port(config: MkDocsConfig) -> int:
+    """Produce a "random" port number in range 8000-8096 that is reproducible for the current site."""
+    hasher = hashlib.sha256(config.site_name.encode())
+    if config.site_url:
+        hasher.update(b'\0' + config.site_url.encode())
+    random_number = int.from_bytes(hasher.digest()[:3])
+    return 8000 + random_number % 97
