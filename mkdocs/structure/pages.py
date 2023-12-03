@@ -9,6 +9,7 @@ from urllib.parse import unquote as urlunquote
 from urllib.parse import urljoin, urlsplit, urlunsplit
 
 import markdown
+import markdown.htmlparser
 import markdown.postprocessors
 import markdown.treeprocessors
 from markdown.util import AMP_SUBSTITUTE
