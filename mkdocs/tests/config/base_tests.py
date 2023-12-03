@@ -65,7 +65,7 @@ class ConfigBaseTests(unittest.TestCase):
             self.assertTrue(isinstance(cfg, defaults.MkDocsConfig))
             self.assertEqual(cfg.site_name, 'MkDocs Test')
 
-    @tempdir
+    @tempdir()
     def test_load_default_file_with_yaml(self, temp_dir):
         """Test that `mkdocs.yml` will be loaded when '--config' is not set."""
         with open(os.path.join(temp_dir, 'mkdocs.yaml'), 'w') as config_file:
@@ -125,7 +125,7 @@ class ConfigBaseTests(unittest.TestCase):
         self.assertTrue(isinstance(cfg, defaults.MkDocsConfig))
         self.assertEqual(cfg.site_name, 'MkDocs Test')
 
-    @tempdir
+    @tempdir()
     def test_load_missing_required(self, temp_dir):
         """`site_name` is a required setting."""
         with open(os.path.join(temp_dir, 'mkdocs.yml'), 'w') as config_file:

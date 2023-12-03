@@ -44,7 +44,7 @@ class LocalizationTests(unittest.TestCase):
         )
         self.env.install_null_translations.assert_called_once()
 
-    @tempdir
+    @tempdir()
     def test_translations_found(self, tdir):
         translations = mock.Mock()
 
