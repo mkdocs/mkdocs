@@ -16,7 +16,6 @@ import markdown.preprocessors
 from mkdocs.commands import build
 from mkdocs.config import base
 from mkdocs.exceptions import PluginError
-from mkdocs.livereload import LiveReloadServer
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.nav import get_navigation
 from mkdocs.structure.pages import Page
@@ -34,13 +33,6 @@ def build_page(title, path, config, md_src=''):
     # Fake page.read_source()
     page.markdown, page.meta = meta.get_data(md_src)
     return page, files
-
-
-def testing_server(root, builder=lambda: None, mount_path="/"):
-    with mock.patch("socket.socket"):
-        return LiveReloadServer(
-            builder, host="localhost", port=123, root=root, mount_path=mount_path
-        )
 
 
 class BuildTests(PathAssertionMixin, unittest.TestCase):
@@ -596,7 +588,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             exclude_docs='ba*.md',
         )
 
-        with self.subTest(live_server=None):
+        with self.subTest(serve_url=None):
             expected_logs = '''
                 INFO:Doc file 'test/foo.md' contains a link to 'test/bar.md' which is excluded from the built site.
             '''
@@ -606,8 +598,8 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             self.assertPathNotExists(site_dir, 'test', 'baz.html')
             self.assertPathNotExists(site_dir, '.zoo.html')
 
-        server = testing_server(site_dir, mount_path='/documentation/')
-        with self.subTest(live_server=server):
+        serve_url = 'http://localhost:123/documentation/'
+        with self.subTest(serve_url=serve_url):
             expected_logs = '''
                 INFO:Doc file 'test/bar.md' contains a relative link 'nonexistent.md', but the target 'test/nonexistent.md' is not found among documentation files.
                 INFO:Doc file 'test/foo.md' contains a link to 'test/bar.md' which is excluded from the built site.
@@ -617,7 +609,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
                   - http://localhost:123/documentation/test/baz.html
             '''
             with self._assert_build_logs(expected_logs):
-                build.build(cfg, live_server=server)
+                build.build(cfg, serve_url=serve_url)
 
             foo_path = Path(site_dir, 'test', 'foo.html')
             self.assertTrue(foo_path.is_file())
@@ -639,13 +631,13 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     def test_conflicting_readme_and_index(self, site_dir, docs_dir):
         cfg = load_config(docs_dir=docs_dir, site_dir=site_dir, use_directory_urls=False)
 
-        for server in None, testing_server(site_dir):
-            with self.subTest(live_server=server):
+        for serve_url in None, 'http://localhost:123/':
+            with self.subTest(serve_url=serve_url):
                 expected_logs = '''
                     WARNING:Excluding 'foo/README.md' from the site because it conflicts with 'foo/index.md'.
                 '''
                 with self._assert_build_logs(expected_logs):
-                    build.build(cfg, live_server=server)
+                    build.build(cfg, serve_url=serve_url)
 
                 index_path = Path(site_dir, 'foo', 'index.html')
                 self.assertPathIsFile(index_path)
@@ -663,10 +655,10 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             docs_dir=docs_dir, site_dir=site_dir, use_directory_urls=False, exclude_docs='index.md'
         )
 
-        for server in None, testing_server(site_dir):
-            with self.subTest(live_server=server):
+        for serve_url in None, 'http://localhost:123/':
+            with self.subTest(serve_url=serve_url):
                 with self._assert_build_logs(''):
-                    build.build(cfg, live_server=server)
+                    build.build(cfg, serve_url=serve_url)
 
                 index_path = Path(site_dir, 'foo', 'index.html')
                 self.assertPathIsFile(index_path)
@@ -693,9 +685,9 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             assert f is not None
             config.nav = Path(f.abs_src_path).read_text().splitlines()
 
-        for server in None, testing_server(site_dir):
+        for serve_url in None, 'http://localhost:123/':
             for exclude in 'full', 'nav', None:
-                with self.subTest(live_server=server, exclude=exclude):
+                with self.subTest(serve_url=serve_url, exclude=exclude):
                     cfg = load_config(
                         docs_dir=docs_dir,
                         site_dir=site_dir,
@@ -711,13 +703,13 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
                             INFO:The following pages exist in the docs directory, but are not included in the "nav" configuration:
                               - SUMMARY.md
                         '''
-                    if exclude == 'full' and server:
+                    if exclude == 'full' and serve_url:
                         expected_logs = '''
                             INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `exclude_docs`:
                               - http://localhost:123/SUMMARY.html
                         '''
                     with self._assert_build_logs(expected_logs):
-                        build.build(cfg, live_server=server)
+                        build.build(cfg, serve_url=serve_url)
 
                     foo_path = Path(site_dir, 'foo.html')
                     self.assertPathIsFile(foo_path)
@@ -727,7 +719,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
                     )
 
                     summary_path = Path(site_dir, 'SUMMARY.html')
-                    if exclude == 'full' and not server:
+                    if exclude == 'full' and not serve_url:
                         self.assertPathNotExists(summary_path)
                     else:
                         self.assertPathExists(summary_path)

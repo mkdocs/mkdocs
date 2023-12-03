@@ -9,7 +9,7 @@ from urllib.parse import urlsplit
 
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
-from mkdocs.livereload import LiveReloadServer
+from mkdocs.livereload import LiveReloadServer, _serve_url
 
 if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
@@ -37,9 +37,6 @@ def serve(
     # string is returned. And it makes MkDocs temp dirs easier to identify.
     site_dir = tempfile.mkdtemp(prefix='mkdocs_')
 
-    def mount_path(config: MkDocsConfig):
-        return urlsplit(config.site_url or '/').path
-
     def get_config():
         config = load_config(
             config_file=config_file,
@@ -47,7 +44,6 @@ def serve(
             **kwargs,
         )
         config.watch.extend(watch)
-        config.site_url = f'http://{config.dev_addr}{mount_path(config)}'
         return config
 
     is_clean = build_type == 'clean'
@@ -56,16 +52,20 @@ def serve(
     config = get_config()
     config.plugins.on_startup(command=('build' if is_clean else 'serve'), dirty=is_dirty)
 
+    host, port = config.dev_addr
+    mount_path = urlsplit(config.site_url or '/').path
+    config.site_url = serve_url = _serve_url(host, port, mount_path)
+
     def builder(config: MkDocsConfig | None = None):
         log.info("Building documentation...")
         if config is None:
             config = get_config()
+            config.site_url = serve_url
 
-        build(config, live_server=None if is_clean else server, dirty=is_dirty)
+        build(config, serve_url=None if is_clean else serve_url, dirty=is_dirty)
 
-    host, port = config.dev_addr
     server = LiveReloadServer(
-        builder=builder, host=host, port=port, root=site_dir, mount_path=mount_path(config)
+        builder=builder, host=host, port=port, root=site_dir, mount_path=mount_path
     )
 
     def error_handler(code) -> bytes | None:

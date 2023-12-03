@@ -39,6 +39,8 @@ def testing_server(root, builder=lambda: None, mount_path="/"):
             mount_path=mount_path,
             polling_interval=0.2,
         )
+        server.server_name = "localhost"
+        server.server_port = 0
         server.setup_environ()
     server.observer.start()
     thread = threading.Thread(target=server._build_loop, daemon=True)
