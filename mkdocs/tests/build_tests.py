@@ -29,7 +29,6 @@ if TYPE_CHECKING:
 
 def build_page(title, path, config, md_src=''):
     """Helper which returns a Page object."""
-
     files = Files([File(path, config.docs_dir, config.site_dir, config.use_directory_urls)])
     page = Page(title, list(files)[0], config)
     # Fake page.read_source()
@@ -302,8 +301,8 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             "WARNING:mkdocs.commands.build:Template skipped: 'missing.html' not found in docs_dir.",
         )
 
-    @mock.patch('mkdocs.commands.build.open', side_effect=OSError('Error message.'))
-    def test_skip_ioerror_extra_template(self, mock_open):
+    @mock.patch('mkdocs.commands.build.open', mock.Mock(side_effect=OSError('Error message.')))
+    def test_skip_ioerror_extra_template(self):
         cfg = load_config()
         fs = [File('foo.html', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)]
         files = Files(fs)
@@ -583,7 +582,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     @tempdir(
         files={
             'test/foo.md': 'page1 content, [bar](bar.md)',
-            'test/bar.md': 'page2 content, [baz](baz.md)',
+            'test/bar.md': 'page2 content, [baz](baz.md), [nonexistent](nonexistent.md)',
             'test/baz.md': 'page3 content, [foo](foo.md)',
             '.zoo.md': 'page4 content',
         }
@@ -610,7 +609,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         server = testing_server(site_dir, mount_path='/documentation/')
         with self.subTest(live_server=server):
             expected_logs = '''
-                INFO:Doc file 'test/bar.md' contains a link to 'test/baz.md' which is excluded from the built site.
+                INFO:Doc file 'test/bar.md' contains a relative link 'nonexistent.md', but the target 'test/nonexistent.md' is not found among documentation files.
                 INFO:Doc file 'test/foo.md' contains a link to 'test/bar.md' which is excluded from the built site.
                 INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `exclude_docs`:
                   - http://localhost:123/documentation/.zoo.html
@@ -805,8 +804,7 @@ class _TestPreprocessor(markdown.preprocessors.Preprocessor):
 
     def run(self, lines: list[str]) -> list[str]:
         for i, line in enumerate(lines):
-            m = re.search(r'^--8<-- "(.+)"$', line)
-            if m:
+            if m := re.search(r'^--8<-- "(.+)"$', line):
                 try:
                     lines[i] = Path(self.base_path, m[1]).read_text()
                 except OSError:
@@ -816,7 +814,7 @@ class _TestPreprocessor(markdown.preprocessors.Preprocessor):
 
 class _TestExtension(markdown.extensions.Extension):
     def __init__(self, base_path: str) -> None:
-        self.base_path = base_path
+        self.base_path = str(base_path)
 
     def extendMarkdown(self, md: markdown.Markdown) -> None:
         md.preprocessors.register(_TestPreprocessor(self.base_path), "mkdocs_test", priority=32)

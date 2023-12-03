@@ -4,6 +4,7 @@ import logging
 from typing import TYPE_CHECKING, Iterator, TypeVar
 from urllib.parse import urlsplit
 
+from mkdocs.exceptions import BuildError
 from mkdocs.structure import StructureItem
 from mkdocs.structure.pages import Page
 from mkdocs.utils import nest_paths
@@ -128,7 +129,9 @@ class Link(StructureItem):
 def get_navigation(files: Files, config: MkDocsConfig) -> Navigation:
     """Build site navigation from config and files."""
     documentation_pages = files.documentation_pages()
-    nav_config = config['nav'] or nest_paths(f.src_uri for f in documentation_pages)
+    nav_config = config['nav'] or nest_paths(
+        f.src_uri for f in documentation_pages if f.inclusion.is_in_nav()
+    )
     items = _data_to_navigation(nav_config, files, config)
     if not isinstance(items, list):
         items = [items]
@@ -192,14 +195,18 @@ def _data_to_navigation(data, files: Files, config: MkDocsConfig):
             for item in data
         ]
     title, path = data if isinstance(data, tuple) else (None, data)
-    file = files.get_file_from_path(path)
-    if file:
+    if file := files.get_file_from_path(path):
         if file.inclusion.is_excluded():
             log.log(
                 min(logging.INFO, config.validation.nav.not_found),
                 f"A reference to '{file.src_path}' is included in the 'nav' "
                 "configuration, but this file is excluded from the built site.",
             )
+        page = file.page
+        if page is not None:
+            if not isinstance(page, Page):
+                raise BuildError("A plugin has set File.page to a type other than Page.")
+            return page
         return Page(title, file, config)
     return Link(title, path)
 

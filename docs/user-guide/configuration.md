@@ -333,7 +333,9 @@ exclude_docs: |
 
 NEW: **New in version 1.5.**
 
-NOTE: This option does *not* actually exclude anything from the nav.
+> NEW: **New in version 1.6:**
+>
+> If the [`nav`](#nav) config is not specified at all, pages specified in this config will now be excluded from the inferred navigation.
 
 If you want to include some docs into the site but intentionally exclude them from the nav, normally MkDocs warns about this.
 
@@ -798,6 +800,8 @@ You might have seen this feature in the [mkdocs-simple-hooks plugin](https://git
 A list of plugins (with optional configuration settings) to use when building
 the site. See the [Plugins] documentation for full details.
 
+**default**: `['search']` (the "search" plugin included with MkDocs).
+
 If the `plugins` config setting is defined in the `mkdocs.yml` config file, then
 any defaults (such as `search`) are ignored and you need to explicitly re-enable
 the defaults if you would like to continue using them:
@@ -818,6 +822,30 @@ plugins:
       option2: other value
 ```
 
+To completely disable all plugins, including any defaults, set the `plugins`
+setting to an empty list:
+
+```yaml
+plugins: []
+```
+
+#### `enabled` option
+
+> NEW: **New in MkDocs 1.6.**
+>
+> Each plugin has its own options keys. However MkDocs also ensures that each plugin has the `enabled` boolean option. This can be used to conditionally enable a particular plugin, as in the following example:
+>
+> ```yaml
+> plugins:
+>   - search
+>   - code-validator:
+>       enabled: !ENV [LINT, false]
+> ```
+>
+> See: [Environment variables](#environment-variables)
+
+#### Alternate syntax
+
 In the above examples, each plugin is a list item (starts with a `-`). As an
 alternative, key/value pairs can be used instead. However, in that case an empty
 value must be provided for plugins for which no options are defined. Therefore,
@@ -833,15 +861,6 @@ plugins:
 
 This alternative syntax is required if you intend to override some options via
 [inheritance].
-
-To completely disable all plugins, including any defaults, set the `plugins`
-setting to an empty list:
-
-```yaml
-plugins: []
-```
-
-**default**: `['search']` (the "search" plugin included with MkDocs).
 
 #### Search
 

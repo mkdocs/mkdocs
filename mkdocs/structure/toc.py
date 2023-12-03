@@ -7,13 +7,7 @@ maintain compatibility with older versions of MkDocs.
 """
 from __future__ import annotations
 
-import sys
-from typing import Iterable, Iterator
-
-if sys.version_info >= (3, 8):
-    from typing import TypedDict
-else:
-    from typing_extensions import TypedDict
+from typing import Iterable, Iterator, TypedDict
 
 
 class _TocToken(TypedDict):
@@ -32,9 +26,7 @@ def get_toc(toc_tokens: list[_TocToken]) -> TableOfContents:
 
 
 class AnchorLink:
-    """
-    A single entry in the table of contents.
-    """
+    """A single entry in the table of contents."""
 
     def __init__(self, title: str, id: str, level: int) -> None:
         self.title, self.id, self.level = title, id, level
@@ -66,9 +58,7 @@ class AnchorLink:
 
 
 class TableOfContents(Iterable[AnchorLink]):
-    """
-    Represents the table of contents for a given page.
-    """
+    """Represents the table of contents for a given page."""
 
     def __init__(self, items: list[AnchorLink]) -> None:
         self.items = items

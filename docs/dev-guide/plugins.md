@@ -15,6 +15,8 @@ appropriate package name and install it using `pip`:
 pip install mkdocs-foo-plugin
 ```
 
+WARNING: Installing an MkDocs plugin means installing a Python package and executing any code that the author has put in there. So, exercise the usual caution; there's no attempt at sandboxing.
+
 Once a plugin has been successfully installed, it is ready to use. It just needs
 to be [enabled](#using-plugins) in the configuration file. The [Catalog]
 repository has a large ranked list of plugins that you can install and use.
@@ -428,6 +430,12 @@ For each event type, corresponding methods of plugins are called in the order th
 Since MkDocs 1.4, plugins can choose to set a priority value for their events. Events with higher priority are called first. Events without a chosen priority get a default of 0. Events that have the same priority are ordered as they appear in the config.
 
 #### ::: mkdocs.plugins.event_priority
+
+There may also arise a need to register a handler for the same event at multiple different priorities.
+
+`CombinedEvent` makes this possible since MkDocs 1.6.
+
+#### ::: mkdocs.plugins.CombinedEvent
 
 ### Handling Errors
 

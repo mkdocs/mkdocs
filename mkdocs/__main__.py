@@ -244,9 +244,7 @@ PKG_DIR = os.path.dirname(os.path.abspath(__file__))
 @common_options
 @color_option
 def cli():
-    """
-    MkDocs - Project documentation with Markdown.
-    """
+    """MkDocs - Project documentation with Markdown."""
 
 
 @cli.command(name="serve")
@@ -263,7 +261,7 @@ def cli():
 @common_config_options
 @common_options
 def serve_command(**kwargs):
-    """Run the builtin development server"""
+    """Run the builtin development server."""
     from mkdocs.commands import serve
 
     _enable_warnings()
@@ -276,7 +274,7 @@ def serve_command(**kwargs):
 @click.option('-d', '--site-dir', type=click.Path(), help=site_dir_help)
 @common_options
 def build_command(clean, **kwargs):
-    """Build the MkDocs documentation"""
+    """Build the MkDocs documentation."""
     from mkdocs.commands import build
 
     _enable_warnings()
@@ -303,7 +301,7 @@ def build_command(clean, **kwargs):
 def gh_deploy_command(
     clean, message, remote_branch, remote_name, force, no_history, ignore_version, shell, **kwargs
 ):
-    """Deploy your documentation to GitHub Pages"""
+    """Deploy your documentation to GitHub Pages."""
     from mkdocs.commands import build, gh_deploy
 
     _enable_warnings()
@@ -329,19 +327,26 @@ def gh_deploy_command(
 @click.option(
     '-p',
     '--projects-file',
-    default='https://raw.githubusercontent.com/mkdocs/catalog/main/projects.yaml',
+    default=None,
     help=projects_file_help,
     show_default=True,
 )
 def get_deps_command(config_file, projects_file):
-    """Show required PyPI packages inferred from plugins in mkdocs.yml"""
-    from mkdocs.commands import get_deps
+    """Show required PyPI packages inferred from plugins in mkdocs.yml."""
+    from mkdocs_get_deps import get_deps, get_projects_file
+
+    from mkdocs.config.base import _open_config_file
 
     warning_counter = utils.CountHandler()
     warning_counter.setLevel(logging.WARNING)
     logging.getLogger('mkdocs').addHandler(warning_counter)
 
-    get_deps.get_deps(projects_file_url=projects_file, config_file_path=config_file)
+    with get_projects_file(projects_file) as p:
+        with _open_config_file(config_file) as f:
+            deps = get_deps(config_file=f, projects_file=p)
+
+    for dep in deps:
+        print(dep)  # noqa: T201
 
     if warning_counter.get_counts():
         sys.exit(1)
@@ -351,7 +356,7 @@ def get_deps_command(config_file, projects_file):
 @click.argument("project_directory")
 @common_options
 def new_command(project_directory):
-    """Create a new MkDocs project"""
+    """Create a new MkDocs project."""
     from mkdocs.commands import new
 
     new.new(project_directory)

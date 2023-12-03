@@ -13,7 +13,7 @@ from jinja2.exceptions import TemplateNotFound
 import mkdocs
 from mkdocs import utils
 from mkdocs.exceptions import Abort, BuildError
-from mkdocs.structure.files import File, Files, InclusionLevel, _set_exclusions, get_files
+from mkdocs.structure.files import File, Files, InclusionLevel, get_files, set_exclusions
 from mkdocs.structure.nav import Navigation, get_navigation
 from mkdocs.structure.pages import Page
 from mkdocs.utils import DuplicateFilter  # noqa: F401 - legacy re-export
@@ -33,9 +33,7 @@ def get_context(
     page: Page | None = None,
     base_url: str = '',
 ) -> templates.TemplateContext:
-    """
-    Return the template context for a given page or template.
-    """
+    """Return the template context for a given page or template."""
     if page is not None:
         base_url = utils.get_relative_url('.', page.url)
 
@@ -63,9 +61,7 @@ def get_context(
 def _build_template(
     name: str, template: jinja2.Template, files: Files, config: MkDocsConfig, nav: Navigation
 ) -> str:
-    """
-    Return rendered output for given template as a string.
-    """
+    """Return rendered output for given template as a string."""
     # Run `pre_template` plugin events.
     template = config.plugins.on_pre_template(template, template_name=name, config=config)
 
@@ -96,7 +92,6 @@ def _build_theme_template(
     template_name: str, env: jinja2.Environment, files: Files, config: MkDocsConfig, nav: Navigation
 ) -> None:
     """Build a template using the theme environment."""
-
     log.debug(f"Building theme template: {template_name}")
 
     try:
@@ -126,7 +121,6 @@ def _build_theme_template(
 
 def _build_extra_template(template_name: str, files: Files, config: MkDocsConfig, nav: Navigation):
     """Build user templates which are not part of the theme."""
-
     log.debug(f"Building extra template: {template_name}")
 
     file = files.get_file_from_path(template_name)
@@ -151,7 +145,6 @@ def _build_extra_template(template_name: str, files: Files, config: MkDocsConfig
 
 def _populate_page(page: Page, config: MkDocsConfig, files: Files, dirty: bool = False) -> None:
     """Read page content from docs_dir and render Markdown."""
-
     config._current_page = page
     try:
         # When --dirty is used, only read the page if the file has been modified since the
@@ -198,7 +191,6 @@ def _build_page(
     excluded: bool = False,
 ) -> None:
     """Pass a Page to theme template and write output to site_dir."""
-
     config._current_page = page
     try:
         # When --dirty is used, only build the page if the file has been modified since the
@@ -259,7 +251,6 @@ def build(
     dirty: bool = False,
 ) -> None:
     """Perform a full site build."""
-
     logger = logging.getLogger('mkdocs')
 
     # Add CountHandler for strict mode
@@ -303,7 +294,7 @@ def build(
         # Run `files` plugin events.
         files = config.plugins.on_files(files, config=config)
         # If plugins have added files but haven't set their inclusion level, calculate it again.
-        _set_exclusions(files._files, config)
+        set_exclusions(files._files, config)
 
         nav = get_navigation(files, config)
 
@@ -314,8 +305,8 @@ def build(
         excluded = []
         for file in files.documentation_pages(inclusion=inclusion):
             log.debug(f"Reading: {file.src_uri}")
-            if file.page is None and file.inclusion.is_excluded():
-                if live_server_url:
+            if file.page is None and file.inclusion.is_not_in_nav():
+                if live_server_url and file.inclusion.is_excluded():
                     excluded.append(urljoin(live_server_url, file.url))
                 Page(None, file, config)
             assert file.page is not None
@@ -353,8 +344,7 @@ def build(
         # Run `post_build` plugin events.
         config.plugins.on_post_build(config=config)
 
-        counts = warning_counter.get_counts()
-        if counts:
+        if counts := warning_counter.get_counts():
             msg = ', '.join(f'{v} {k.lower()}s' for k, v in counts)
             raise Abort(f'Aborted with {msg} in strict mode!')
 
@@ -374,5 +364,4 @@ def build(
 
 def site_directory_contains_stale_files(site_directory: str) -> bool:
     """Check if the site directory contains stale files from a previous build."""
-
     return bool(os.path.exists(site_directory) and os.listdir(site_directory))

@@ -7,6 +7,8 @@ from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from typing_extensions import assert_type
+
+    from mkdocs.structure.nav import Navigation
 else:
 
     def assert_type(val, typ):
@@ -30,19 +32,19 @@ class _DummyPluginConfig(base.Config):
 
 class DummyPlugin(plugins.BasePlugin[_DummyPluginConfig]):
     def on_page_content(self, html, **kwargs) -> str:
-        """modify page content by prepending `foo` config value."""
+        """Modify page content by prepending `foo` config value."""
         return f'{self.config.foo} {html}'
 
     def on_nav(self, nav, **kwargs) -> None:
-        """do nothing (return None) to not modify item."""
+        """Do nothing (return None) to not modify item."""
         return None
 
     def on_page_read_source(self, **kwargs) -> str:
-        """create new source by prepending `foo` config value to 'source'."""
+        """Create new source by prepending `foo` config value to 'source'."""
         return f'{self.config.foo} source'
 
     def on_pre_build(self, **kwargs) -> None:
-        """do nothing (return None)."""
+        """Do nothing (return None)."""
         return None
 
 
@@ -138,9 +140,15 @@ class TestPluginCollection(unittest.TestCase):
             def on_page_content(self, html, **kwargs) -> None:
                 pass
 
-            @plugins.event_priority(-100)
-            def on_nav(self, nav, **kwargs) -> None:
+            @plugins.event_priority(50)
+            def _on_nav_1(self, nav: Navigation, **kwargs) -> None:
                 pass
+
+            @plugins.event_priority(-100)
+            def _on_nav_2(self, nav, **kwargs) -> None:
+                pass
+
+            on_nav = plugins.CombinedEvent(_on_nav_1, _on_nav_2)
 
             def on_page_read_source(self, **kwargs) -> None:
                 pass
@@ -158,7 +166,7 @@ class TestPluginCollection(unittest.TestCase):
         )
         self.assertEqual(
             collection.events['nav'],
-            [dummy.on_nav, prio.on_nav],
+            [prio._on_nav_1, dummy.on_nav, prio._on_nav_2],
         )
         self.assertEqual(
             collection.events['page_read_source'],
@@ -173,7 +181,7 @@ class TestPluginCollection(unittest.TestCase):
         collection = plugins.PluginCollection()
         plugin = DummyPlugin()
         collection['foo'] = plugin
-        self.assertEqual([(k, v) for k, v in collection.items()], [('foo', plugin)])
+        self.assertEqual(list(collection.items()), [('foo', plugin)])
 
     def test_set_multiple_plugins_on_collection(self):
         collection = plugins.PluginCollection()
@@ -181,9 +189,7 @@ class TestPluginCollection(unittest.TestCase):
         collection['foo'] = plugin1
         plugin2 = DummyPlugin()
         collection['bar'] = plugin2
-        self.assertEqual(
-            [(k, v) for k, v in collection.items()], [('foo', plugin1), ('bar', plugin2)]
-        )
+        self.assertEqual(list(collection.items()), [('foo', plugin1), ('bar', plugin2)])
 
     def test_run_event_on_collection(self):
         collection = plugins.PluginCollection()
