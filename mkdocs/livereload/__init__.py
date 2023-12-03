@@ -81,6 +81,15 @@ class _LoggerAdapter(logging.LoggerAdapter):
 log = _LoggerAdapter(logging.getLogger(__name__), {})
 
 
+def _normalize_mount_path(mount_path: str) -> str:
+    """Ensure the mount path starts and ends with a slash."""
+    return ("/" + mount_path.lstrip("/")).rstrip("/") + "/"
+
+
+def _serve_url(host: str, port: int, path: str) -> str:
+    return f"http://{host}:{port}{_normalize_mount_path(path)}"
+
+
 class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGIServer):
     daemon_threads = True
     poll_response_timeout = 60
@@ -96,16 +105,14 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         shutdown_delay: float = 0.25,
     ) -> None:
         self.builder = builder
-        self.server_name = host
-        self.server_port = port
         try:
             if isinstance(ipaddress.ip_address(host), ipaddress.IPv6Address):
                 self.address_family = socket.AF_INET6
         except Exception:
             pass
         self.root = os.path.abspath(root)
-        self.mount_path = ("/" + mount_path.lstrip("/")).rstrip("/") + "/"
-        self.url = f"http://{self.server_name}:{self.server_port}{self.mount_path}"
+        self.mount_path = _normalize_mount_path(mount_path)
+        self.url = _serve_url(host, port, mount_path)
         self.build_delay = 0.1
         self.shutdown_delay = shutdown_delay
         # To allow custom error pages.
