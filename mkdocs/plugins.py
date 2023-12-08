@@ -506,9 +506,15 @@ class PluginCollection(dict, MutableMapping[str, BasePlugin]):
             for sub in method.methods:
                 self._register_event(event_name, sub, plugin_name=plugin_name)
         else:
-            utils.insort(
-                self.events[event_name], method, key=lambda m: -getattr(m, 'mkdocs_priority', 0)
-            )
+            events = self.events[event_name]
+            if event_name == 'page_read_source' and len(events) == 1:
+                plugin1 = self._event_origins.get(next(iter(events)), '<unknown>')
+                plugin2 = plugin_name or '<unknown>'
+                log.warning(
+                    "Multiple 'on_page_read_source' handlers can't work "
+                    f"(both plugins '{plugin1}' and '{plugin2}' registered one)."
+                )
+            utils.insort(events, method, key=lambda m: -getattr(m, 'mkdocs_priority', 0))
             if plugin_name:
                 try:
                     self._event_origins[method] = plugin_name
