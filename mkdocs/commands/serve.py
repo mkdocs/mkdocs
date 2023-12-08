@@ -55,6 +55,14 @@ def serve(
     config.plugins.on_startup(command=('build' if is_clean else 'serve'), dirty=is_dirty)
 
     host, port = config.dev_addr
+    if host in ('0.0.0.0', '::'):
+        log.warning(
+            "Config value 'dev_addr': "
+            f"The use of the IP address '{host}' suggests a production environment "
+            "or the use of a proxy to connect to the MkDocs server. However, "
+            "the MkDocs' server is intended for local development purposes only. "
+            "Please use a third party production-ready server instead."
+        )
     mount_path = urlsplit(config.site_url or '/').path
     config.site_url = serve_url = _serve_url(host, port, mount_path)
 
