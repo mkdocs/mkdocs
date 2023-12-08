@@ -42,7 +42,7 @@ class Page(StructureItem):
         self.next_page = None
         self.active = False
 
-        self.update_date = get_build_date()
+        self.update_date: str = get_build_date()
 
         self._set_canonical_url(config.get('site_url', None))
         self._set_edit_url(

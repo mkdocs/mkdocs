@@ -44,18 +44,19 @@ markdown_extensions = (
 )
 
 
-def get_build_timestamp() -> int:
+def get_build_timestamp(*, pages: Collection[Page] | None = None) -> int:
     """
-    Returns the number of seconds since the epoch.
+    Returns the number of seconds since the epoch for the latest updated page.
 
-    Support SOURCE_DATE_EPOCH environment variable for reproducible builds.
-    See https://reproducible-builds.org/specs/source-date-epoch/
+    In reality this is just today's date because that's how pages' update time is populated.
     """
-    source_date_epoch = os.environ.get('SOURCE_DATE_EPOCH')
-    if source_date_epoch is None:
-        return int(datetime.now(timezone.utc).timestamp())
-
-    return int(source_date_epoch)
+    if pages:
+        # Lexicographic comparison is OK for ISO date.
+        date_string = max(p.update_date for p in pages)
+        dt = datetime.fromisoformat(date_string)
+    else:
+        dt = get_build_datetime()
+    return int(dt.timestamp())
 
 
 def get_build_datetime() -> datetime:
