@@ -6,7 +6,7 @@ from urllib.parse import urlsplit
 
 from mkdocs.exceptions import BuildError
 from mkdocs.structure import StructureItem
-from mkdocs.structure.pages import Page
+from mkdocs.structure.pages import Page, _AbsoluteLinksValidationValue
 from mkdocs.utils import nest_paths
 
 if TYPE_CHECKING:
@@ -164,7 +164,11 @@ def get_navigation(files: Files, config: MkDocsConfig) -> Navigation:
         scheme, netloc, path, query, fragment = urlsplit(link.url)
         if scheme or netloc:
             log.debug(f"An external link to '{link.url}' is included in the 'nav' configuration.")
-        elif link.url.startswith('/'):
+        elif (
+            link.url.startswith('/')
+            and config.validation.nav.absolute_links
+            is not _AbsoluteLinksValidationValue.RELATIVE_TO_DOCS
+        ):
             log.log(
                 config.validation.nav.absolute_links,
                 f"An absolute path to '{link.url}' is included in the 'nav' "
@@ -173,7 +177,7 @@ def get_navigation(files: Files, config: MkDocsConfig) -> Navigation:
         else:
             log.log(
                 config.validation.nav.not_found,
-                f"A relative path to '{link.url}' is included in the 'nav' "
+                f"A reference to '{link.url}' is included in the 'nav' "
                 "configuration, which is not found in the documentation files.",
             )
     return Navigation(items, pages)
@@ -195,7 +199,13 @@ def _data_to_navigation(data, files: Files, config: MkDocsConfig):
             for item in data
         ]
     title, path = data if isinstance(data, tuple) else (None, data)
-    if file := files.get_file_from_path(path):
+    lookup_path = path
+    if (
+        lookup_path.startswith('/')
+        and config.validation.nav.absolute_links is _AbsoluteLinksValidationValue.RELATIVE_TO_DOCS
+    ):
+        lookup_path = lookup_path.lstrip('/')
+    if file := files.get_file_from_path(lookup_path):
         if file.inclusion.is_excluded():
             log.log(
                 min(logging.INFO, config.validation.nav.not_found),

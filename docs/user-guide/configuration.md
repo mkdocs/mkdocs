@@ -417,7 +417,7 @@ The defaults of some of the behaviors already differ from MkDocs 1.4 and below -
 > ```yaml
 > validation:
 >   omitted_files: warn
->   absolute_links: warn
+>   absolute_links: warn  # Or 'relative_to_docs' - new in MkDocs 1.6
 >   unrecognized_links: warn
 >   anchors: warn  # New in MkDocs 1.6
 > ```
@@ -429,7 +429,7 @@ Full list of values and examples of log messages that they can hide or make more
 *   `validation.nav.omitted_files`
     * > The following pages exist in the docs directory, but are not included in the "nav" configuration: ...
 *   `validation.nav.not_found`
-    * > A relative path to 'foo/bar.md' is included in the 'nav' configuration, which is not found in the documentation files.
+    * > A reference to 'foo/bar.md' is included in the 'nav' configuration, which is not found in the documentation files.
     * > A reference to 'foo/bar.md' is included in the 'nav' configuration, but this file is excluded from the built site.
 *   `validation.nav.absolute_links`
     * > An absolute path to '/foo/bar.html' is included in the 'nav' configuration, which presumably points to an external resource.

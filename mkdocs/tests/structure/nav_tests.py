@@ -131,6 +131,44 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual(len(site_navigation.items), 3)
         self.assertEqual(len(site_navigation.pages), 1)
 
+    def test_nav_absolute_links_with_validation(self):
+        nav_cfg = [
+            {'Home': 'index.md'},
+            {'Local page': '/foo/bar.md'},
+            {'Local link': '/local.md'},
+            {'External': 'http://example.com/external.html'},
+        ]
+        expected = dedent(
+            """
+            Page(title='Home', url='/')
+            Page(title='Local page', url='/foo/bar/')
+            Link(title='Local link', url='/local.md')
+            Link(title='External', url='http://example.com/external.html')
+            """
+        )
+        cfg = load_config(
+            nav=nav_cfg,
+            site_url='http://example.com/',
+            validation=dict(nav=dict(absolute_links='relative_to_docs')),
+        )
+        fs = [
+            File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
+            File('foo/bar.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
+        ]
+        files = Files(fs)
+        with self.assertLogs('mkdocs', level='DEBUG') as cm:
+            site_navigation = get_navigation(files, cfg)
+        self.assertEqual(
+            cm.output,
+            [
+                "WARNING:mkdocs.structure.nav:A reference to '/local.md' is included in the 'nav' configuration, which is not found in the documentation files.",
+                "DEBUG:mkdocs.structure.nav:An external link to 'http://example.com/external.html' is included in the 'nav' configuration.",
+            ],
+        )
+        self.assertEqual(str(site_navigation).strip(), expected)
+        self.assertEqual(len(site_navigation.items), 4)
+        self.assertEqual(len(site_navigation.pages), 2)
+
     def test_nav_bad_links(self):
         nav_cfg = [
             {'Home': 'index.md'},
@@ -152,8 +190,8 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual(
             cm.output,
             [
-                "WARNING:mkdocs.structure.nav:A relative path to 'missing.html' is included in the 'nav' configuration, which is not found in the documentation files.",
-                "WARNING:mkdocs.structure.nav:A relative path to 'example.com' is included in the 'nav' configuration, which is not found in the documentation files.",
+                "WARNING:mkdocs.structure.nav:A reference to 'missing.html' is included in the 'nav' configuration, which is not found in the documentation files.",
+                "WARNING:mkdocs.structure.nav:A reference to 'example.com' is included in the 'nav' configuration, which is not found in the documentation files.",
             ],
         )
         self.assertEqual(str(site_navigation).strip(), expected)

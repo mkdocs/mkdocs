@@ -175,7 +175,7 @@ class MkDocsConfig(base.Config):
             not_found = _LogLevel(default='warn')
             """Warning level for when the navigation links to a relative path that isn't an existing page on the site."""
 
-            absolute_links = _LogLevel(default='info')
+            absolute_links = _AbsoluteLinksValidation(default='info')
             """Warning level for when the navigation links to an absolute path (starting with `/`)."""
 
         nav = c.SubConfig(NavValidation)
