@@ -295,11 +295,11 @@ sub-directories. Index files will always be listed first within a sub-section.
 
 NEW: **New in version 1.5.**
 
+> DANGER: **Changed in version 1.6:**
+>
+> This config no longer applies the "drafts" functionality for `mkdocs serve`. If you have draft documents that you want available in "serve" and not "build", replace `exclude_docs` with the new [`drafts`](#drafts) config option.
+
 This config defines patterns of files (under [`docs_dir`](#docs_dir)) to not be picked up into the built site.
-
-UPDATED: **Updated in version 1.6**.
-
-This config parameter will apply both to `build` and to `serve`.  For documents you want available in `serve` and not `build`, use the [drafts](#drafts) config option.
 
 Example:
 
@@ -334,15 +334,15 @@ exclude_docs: |
 
 NEW: **New in version 1.6.**
 
-This config defines patterns of files (under [`docs_dir`](#docs_dir)) to be treated as a draft.  Draft files are available during `mkdocs serve` and include a "DRAFT" mark but will not be included in the build.  To prevent this effect, you can run `mkdocs serve --clean`.
+This config defines patterns of files (under [`docs_dir`](#docs_dir)) to be treated as a draft.  Draft files are available during `mkdocs serve` and include a "DRAFT" mark but will not be included in the build. To prevent this effect and make "serve" behave the same as "build", you can run `mkdocs serve --clean`.
 
 Example:
 
 ```yaml
 drafts: |
-  drafts/                 # A "drafts" directory anywhere.
-  _unpublished.md         # A md file ending in _unpublished.md
-  !/foo_unpublished.jpg   # But keep this particular file.
+  drafts/               # A "drafts" directory anywhere.
+  _unpublished.md       # A md file ending in _unpublished.md
+  !/foo_unpublished.md  # But keep this particular file.
 ```
 
 This follows the [.gitignore pattern format](https://git-scm.com/docs/gitignore#_pattern_format).
