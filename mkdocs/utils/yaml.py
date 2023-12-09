@@ -97,12 +97,13 @@ class RelativeDirPlaceholder(_DirPlaceholder):
         super().__init__(config, suffix)
 
     def value(self) -> str:
-        if self.config._current_page is None:
+        current_page = self.config._current_page
+        if current_page is None:
             raise exceptions.ConfigurationError(
                 "The current file is not set for the '!relative' tag. "
                 "It cannot be used in this context; the intended usage is within `markdown_extensions`."
             )
-        return os.path.dirname(self.config._current_page.file.abs_src_path)
+        return os.path.dirname(os.path.join(self.config.docs_dir, current_page.file.src_path))
 
 
 def get_yaml_loader(loader=yaml.Loader, config: MkDocsConfig | None = None):

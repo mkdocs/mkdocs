@@ -6,6 +6,12 @@ import warnings
 from typing import Any, Collection, MutableMapping
 
 import jinja2
+import yaml
+
+try:
+    from yaml import CSafeLoader as SafeLoader
+except ImportError:  # pragma: no cover
+    from yaml import SafeLoader  # type: ignore
 
 from mkdocs import localization, utils
 from mkdocs.config.base import ValidationError
@@ -118,12 +124,13 @@ class Theme(MutableMapping[str, Any]):
     def _load_theme_config(self, name: str) -> None:
         """Recursively load theme and any parent themes."""
         theme_dir = utils.get_theme_dir(name)
+        utils.get_themes.cache_clear()
         self.dirs.append(theme_dir)
 
         try:
             file_path = os.path.join(theme_dir, 'mkdocs_theme.yml')
             with open(file_path, 'rb') as f:
-                theme_config = utils.yaml_load(f)
+                theme_config = yaml.load(f, SafeLoader)
         except OSError as e:
             log.debug(e)
             raise ValidationError(

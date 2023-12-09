@@ -196,6 +196,8 @@ theme supports the following options:
 
 A list of third party themes can be found at the [community wiki] page and [the ranked catalog][catalog]. If you have created your own, please add them there.
 
+WARNING: Installing an MkDocs theme means installing a Python package and executing any code that the author has put in there. So, exercise the usual caution; there's no attempt at sandboxing.
+
 [third party themes]: #third-party-themes
 [theme]: configuration.md#theme
 [Bootstrap]: https://getbootstrap.com/

@@ -15,6 +15,8 @@ appropriate package name and install it using `pip`:
 pip install mkdocs-foo-plugin
 ```
 
+WARNING: Installing an MkDocs plugin means installing a Python package and executing any code that the author has put in there. So, exercise the usual caution; there's no attempt at sandboxing.
+
 Once a plugin has been successfully installed, it is ready to use. It just needs
 to be [enabled](#using-plugins) in the configuration file. The [Catalog]
 repository has a large ranked list of plugins that you can install and use.
