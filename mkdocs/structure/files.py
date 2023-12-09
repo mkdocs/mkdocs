@@ -324,7 +324,7 @@ class File:
         return self.src_uri.endswith('.css')
 
 
-_default_exclude = pathspec.gitignore.GitIgnoreSpec.from_lines(['.*', '/templates/', '__pycache__'])
+_default_exclude = pathspec.gitignore.GitIgnoreSpec.from_lines(['.*', '/templates/'])
 
 
 def set_exclusions(files: Iterable[File], config: MkDocsConfig) -> None:
