@@ -22,8 +22,6 @@ from mkdocs.utils import templates
 if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
 
-if TYPE_CHECKING:
-    from mkdocs.livereload import LiveReloadServer
 
 log = logging.getLogger(__name__)
 
@@ -112,7 +110,9 @@ def _build_theme_template(
             log.debug(f"Gzipping template: {template_name}")
             gz_filename = f'{output_path}.gz'
             with open(gz_filename, 'wb') as f:
-                timestamp = utils.get_build_timestamp()
+                timestamp = utils.get_build_timestamp(
+                    pages=[f.page for f in files.documentation_pages() if f.page is not None]
+                )
                 with gzip.GzipFile(
                     fileobj=f, filename=gz_filename, mode='wb', mtime=timestamp
                 ) as gz_buf:
@@ -247,9 +247,7 @@ def _build_page(
         config._current_page = None
 
 
-def build(
-    config: MkDocsConfig, live_server: LiveReloadServer | None = None, dirty: bool = False
-) -> None:
+def build(config: MkDocsConfig, *, serve_url: str | None = None, dirty: bool = False) -> None:
     """Perform a full site build."""
     logger = logging.getLogger('mkdocs')
 
@@ -259,7 +257,7 @@ def build(
     if config.strict:
         logging.getLogger('mkdocs').addHandler(warning_counter)
 
-    inclusion = InclusionLevel.is_in_serve if live_server else InclusionLevel.is_included
+    inclusion = InclusionLevel.is_in_serve if serve_url else InclusionLevel.is_included
 
     try:
         start = time.monotonic()
@@ -280,7 +278,7 @@ def build(
                 " links within your site. This option is designed for site development purposes only."
             )
 
-        if not live_server:  # pragma: no cover
+        if not serve_url:  # pragma: no cover
             log.info(f"Building documentation to directory: {config.site_dir}")
             if dirty and site_directory_contains_stale_files(config.site_dir):
                 log.info("The directory contains stale files. Use --clean to remove them.")
@@ -306,8 +304,8 @@ def build(
         for file in files.documentation_pages(inclusion=inclusion):
             log.debug(f"Reading: {file.src_uri}")
             if file.page is None and file.inclusion.is_not_in_nav():
-                if live_server and file.inclusion.is_excluded():
-                    excluded.append(urljoin(live_server.url, file.url))
+                if serve_url and file.inclusion.is_excluded():
+                    excluded.append(urljoin(serve_url, file.url))
                 Page(None, file, config)
             assert file.page is not None
             _populate_page(file.page, config, files, dirty)

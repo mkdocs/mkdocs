@@ -159,7 +159,13 @@ class TestPluginCollection(unittest.TestCase):
 
         collection = plugins.PluginCollection()
         collection['dummy'] = dummy = DummyPlugin()
-        collection['prio'] = prio = PrioPlugin()
+        with self.assertLogs('mkdocs', level='WARNING') as cm:
+            collection['prio'] = prio = PrioPlugin()
+        self.assertEqual(
+            '\n'.join(cm.output),
+            "WARNING:mkdocs.plugins:Multiple 'on_page_read_source' handlers can't work (both plugins 'dummy' and 'prio' registered one).",
+        )
+
         self.assertEqual(
             collection.events['page_content'],
             [prio.on_page_content, dummy.on_page_content],
@@ -188,7 +194,12 @@ class TestPluginCollection(unittest.TestCase):
         plugin1 = DummyPlugin()
         collection['foo'] = plugin1
         plugin2 = DummyPlugin()
-        collection['bar'] = plugin2
+        with self.assertLogs('mkdocs', level='WARNING') as cm:
+            collection['bar'] = plugin2
+        self.assertEqual(
+            '\n'.join(cm.output),
+            "WARNING:mkdocs.plugins:Multiple 'on_page_read_source' handlers can't work (both plugins 'foo' and 'bar' registered one).",
+        )
         self.assertEqual(list(collection.items()), [('foo', plugin1), ('bar', plugin2)])
 
     def test_run_event_on_collection(self):
@@ -208,7 +219,12 @@ class TestPluginCollection(unittest.TestCase):
         collection['foo'] = plugin1
         plugin2 = DummyPlugin()
         plugin2.load_config({'foo': 'second'})
-        collection['bar'] = plugin2
+        with self.assertLogs('mkdocs', level='WARNING') as cm:
+            collection['bar'] = plugin2
+        self.assertEqual(
+            '\n'.join(cm.output),
+            "WARNING:mkdocs.plugins:Multiple 'on_page_read_source' handlers can't work (both plugins 'foo' and 'bar' registered one).",
+        )
         self.assertEqual(
             collection.on_page_content('page content', page=None, config={}, files=[]),
             'second new page content',
