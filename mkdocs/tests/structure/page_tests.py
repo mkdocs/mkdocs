@@ -960,7 +960,7 @@ class RelativePathExtensionTests(unittest.TestCase):
             self.get_rendered_result(
                 content='[link](non-existent.md)',
                 files=['index.md'],
-                logs="WARNING:Doc file 'index.md' contains a relative link 'non-existent.md', but the target is not found among documentation files.",
+                logs="WARNING:Doc file 'index.md' contains a link 'non-existent.md', but the target is not found among documentation files.",
             ),
             '<a href="non-existent.md">link</a>',
         )
@@ -969,7 +969,7 @@ class RelativePathExtensionTests(unittest.TestCase):
                 validation=dict(links=dict(not_found='info')),
                 content='[link](../non-existent.md)',
                 files=['sub/index.md'],
-                logs="INFO:Doc file 'sub/index.md' contains a relative link '../non-existent.md', but the target 'non-existent.md' is not found among documentation files.",
+                logs="INFO:Doc file 'sub/index.md' contains a link '../non-existent.md', but the target 'non-existent.md' is not found among documentation files.",
             ),
             '<a href="../non-existent.md">link</a>',
         )
@@ -1062,7 +1062,7 @@ class RelativePathExtensionTests(unittest.TestCase):
             self.get_rendered_result(
                 content='![image](../image.png)',
                 files=['foo/bar.md', 'foo/image.png'],
-                logs="WARNING:Doc file 'foo/bar.md' contains a relative link '../image.png', but the target 'image.png' is not found among documentation files. Did you mean 'image.png'?",
+                logs="WARNING:Doc file 'foo/bar.md' contains a link '../image.png', but the target 'image.png' is not found among documentation files. Did you mean 'image.png'?",
             ),
             '<img alt="image" src="../image.png" />',
         )
@@ -1102,7 +1102,7 @@ class RelativePathExtensionTests(unittest.TestCase):
             self.get_rendered_result(
                 content='[contact](mail@example.com)',
                 files=['index.md'],
-                logs="WARNING:Doc file 'index.md' contains a relative link 'mail@example.com', but the target is not found among documentation files. Did you mean 'mailto:mail@example.com'?",
+                logs="WARNING:Doc file 'index.md' contains a link 'mail@example.com', but the target is not found among documentation files. Did you mean 'mailto:mail@example.com'?",
             ),
             '<a href="mail@example.com">contact</a>',
         )

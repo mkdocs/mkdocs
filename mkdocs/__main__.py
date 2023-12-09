@@ -89,13 +89,11 @@ class State:
 
     def __init__(self, log_name='mkdocs', level=logging.INFO):
         self.logger = logging.getLogger(log_name)
-        # Don't restrict level on logger; use handler
-        self.logger.setLevel(1)
+        self.logger.setLevel(level)
         self.logger.propagate = False
 
         self.stream = logging.StreamHandler()
         self.stream.setFormatter(ColorFormatter())
-        self.stream.setLevel(level)
         self.stream.name = 'MkDocsStreamHandler'
         self.logger.addHandler(self.stream)
 
@@ -162,7 +160,7 @@ def verbose_option(f):
     def callback(ctx, param, value):
         state = ctx.ensure_object(State)
         if value:
-            state.stream.setLevel(logging.DEBUG)
+            state.logger.setLevel(logging.DEBUG)
 
     return click.option(
         '-v',
@@ -178,7 +176,7 @@ def quiet_option(f):
     def callback(ctx, param, value):
         state = ctx.ensure_object(State)
         if value:
-            state.stream.setLevel(logging.ERROR)
+            state.logger.setLevel(logging.ERROR)
 
     return click.option(
         '-q',

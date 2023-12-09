@@ -601,7 +601,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         serve_url = 'http://localhost:123/documentation/'
         with self.subTest(serve_url=serve_url):
             expected_logs = '''
-                INFO:Doc file 'test/bar.md' contains a relative link 'nonexistent.md', but the target 'test/nonexistent.md' is not found among documentation files.
+                INFO:Doc file 'test/bar.md' contains a link 'nonexistent.md', but the target 'test/nonexistent.md' is not found among documentation files.
                 INFO:Doc file 'test/foo.md' contains a link to 'test/bar.md' which is excluded from the built site.
                 INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `exclude_docs`:
                   - http://localhost:123/documentation/.zoo.html
@@ -663,6 +663,88 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
                 index_path = Path(site_dir, 'foo', 'index.html')
                 self.assertPathIsFile(index_path)
                 self.assertRegex(index_path.read_text(), r'page1 content')
+
+    @tempdir(
+        files={
+            'test/foo.md': '## page1 heading\n\n[bar](bar.md#page1-heading)',
+            'test/bar.md': '## page2 heading\n\n[aaa](#a)',
+        }
+    )
+    @tempdir()
+    def test_anchor_warning(self, site_dir, docs_dir):
+        cfg = load_config(docs_dir=docs_dir, site_dir=site_dir, validation={'anchors': 'warn'})
+
+        expected_logs = '''
+            WARNING:Doc file 'test/bar.md' contains a link '#a', but there is no such anchor on this page.
+            WARNING:Doc file 'test/foo.md' contains a link 'bar.md#page1-heading', but the doc 'test/bar.md' does not contain an anchor '#page1-heading'.
+        '''
+        with self._assert_build_logs(expected_logs):
+            build.build(cfg)
+
+    @tempdir(
+        files={
+            'test/foo.md': '[bar](bar.md#heading1)',
+            'test/bar.md': '## heading1',
+        }
+    )
+    @tempdir()
+    def test_anchor_no_warning(self, site_dir, docs_dir):
+        cfg = load_config(docs_dir=docs_dir, site_dir=site_dir, validation={'anchors': 'warn'})
+        build.build(cfg)
+
+    @unittest.skip("The implementation is not good enough to understand this yet.")  # TODO
+    @tempdir(
+        files={
+            'test/foo.md': '[bar](bar.md#heading2)',
+            'test/bar.md': '## heading1\n\n<a id="heading2">hi</a>',
+        }
+    )
+    @tempdir()
+    def test_anchor_no_warning_with_html(self, site_dir, docs_dir):
+        cfg = load_config(
+            docs_dir=docs_dir,
+            site_dir=site_dir,
+            validation={'anchors': 'warn'},
+            markdown_extensions=['md_in_html'],
+        )
+        build.build(cfg)
+
+    @tempdir(
+        files={
+            'test/foo.md': '[bar1](bar.md?test#heading1), [bar2](bar.md?test#headingno), [bar3](bar.md?test), [self4](?test), [self5](?test#hi)',
+            'test/bar.md': '## heading1',
+        }
+    )
+    @tempdir()
+    def test_anchor_warning_and_query(self, site_dir, docs_dir):
+        cfg = load_config(docs_dir=docs_dir, site_dir=site_dir, validation={'anchors': 'info'})
+
+        expected_logs = '''
+            INFO:Doc file 'test/foo.md' contains a link 'bar.md?test#headingno', but the doc 'test/bar.md' does not contain an anchor '#headingno'.
+            INFO:Doc file 'test/foo.md' contains a link '?test#hi', but there is no such anchor on this page.
+        '''
+        with self._assert_build_logs(expected_logs):
+            build.build(cfg)
+
+    @tempdir(
+        files={
+            'test/foo.md': 'test[^1]\n\n[^1]: footnote1\n[^2]: footnote2',
+        }
+    )
+    @tempdir()
+    def test_anchor_warning_for_footnote(self, site_dir, docs_dir):
+        cfg = load_config(
+            docs_dir=docs_dir,
+            site_dir=site_dir,
+            validation={'anchors': 'info'},
+            markdown_extensions=['footnotes'],
+        )
+
+        expected_logs = '''
+            INFO:Doc file 'test/foo.md' contains a link '#fnref:2', but there is no such anchor on this page. This seems to be a footnote that is never referenced.
+        '''
+        with self._assert_build_logs(expected_logs):
+            build.build(cfg)
 
     @tempdir(
         files={
