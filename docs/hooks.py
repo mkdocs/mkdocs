@@ -1,8 +1,20 @@
+from __future__ import annotations
+
 import re
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-from mkdocs.config.defaults import MkDocsConfig
-from mkdocs.structure.nav import Page
+from mkdocs.structure.files import File, Files
+
+if TYPE_CHECKING:
+    from mkdocs.config.defaults import MkDocsConfig
+    from mkdocs.structure.nav import Page
+
+
+def on_files(files: Files, config: MkDocsConfig) -> None:
+    f = File('about/contributing.md', config.docs_dir, config.site_dir, config.use_directory_urls)
+    f.abs_src_path = str(Path(config.config_file_path).parent.joinpath('CONTRIBUTING.md'))
+    files.append(f)
 
 
 def _get_language_of_translation_file(path: Path) -> str:
@@ -13,7 +25,7 @@ def _get_language_of_translation_file(path: Path) -> str:
     return m[1]
 
 
-def on_page_markdown(markdown: str, page: Page, config: MkDocsConfig, **kwargs):
+def on_page_markdown(markdown: str, page: Page, config: MkDocsConfig, **kwargs) -> str | None:
     if page.file.src_uri == 'user-guide/choosing-your-theme.md':
         here = Path(config.config_file_path).parent
 

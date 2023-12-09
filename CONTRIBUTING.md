@@ -115,7 +115,7 @@ file so that everything is ready for translators to do their job.
 [Hatch]: https://hatch.pypa.io/
 [GitHub Actions]: https://docs.github.com/actions
 [PyPA Code of Conduct]: https://www.pypa.io/en/latest/code-of-conduct/
-[Translating Themes]: ../dev-guide/translations.md
+[Translating Themes]: https://www.mkdocs.org/dev-guide/translations/
 [Jinja's i18n extension]: https://jinja.palletsprojects.com/en/latest/extensions/#i18n-extension
 [Black]: https://pypi.org/project/black/
 [Isort]: https://pypi.org/project/isort/
