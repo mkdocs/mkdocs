@@ -331,7 +331,7 @@ def set_exclusions(files: Iterable[File], config: MkDocsConfig) -> None:
     """Re-calculate which files are excluded, based on the patterns in the config."""
     exclude: pathspec.gitignore.GitIgnoreSpec | None = config.get('exclude_docs')
     exclude = _default_exclude + exclude if exclude else _default_exclude
-    drafts: pathspec.gitignore.GitIgnoreSpec | None = config.get('drafts')
+    drafts: pathspec.gitignore.GitIgnoreSpec | None = config.get('draft_docs')
     nav_exclude: pathspec.gitignore.GitIgnoreSpec | None = config.get('not_in_nav')
 
     for file in files:

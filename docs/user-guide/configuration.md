@@ -297,7 +297,7 @@ NEW: **New in version 1.5.**
 
 > DANGER: **Changed in version 1.6:**
 >
-> This config no longer applies the "drafts" functionality for `mkdocs serve`. If you have draft documents that you want available in "serve" and not "build", replace `exclude_docs` with the new [`drafts`](#drafts) config option.
+> This config no longer applies the "drafts" functionality for `mkdocs serve`. If you have draft documents that you want available in "serve" and not "build", replace `exclude_docs` with the new [`draft_docs`](#draft_docs) config option.
 
 This config defines patterns of files (under [`docs_dir`](#docs_dir)) to not be picked up into the built site.
 
@@ -330,7 +330,7 @@ exclude_docs: |
   !.assets  # Don't exclude '.assets' although all other '.*' are excluded
 ```
 
-### drafts
+### draft_docs
 
 NEW: **New in version 1.6.**
 
@@ -339,7 +339,7 @@ This config defines patterns of files (under [`docs_dir`](#docs_dir)) to be trea
 Example:
 
 ```yaml
-drafts: |
+draft_docs: |
   drafts/               # A "drafts" directory anywhere.
   _unpublished.md       # A md file ending in _unpublished.md
   !/foo_unpublished.md  # But keep this particular file.

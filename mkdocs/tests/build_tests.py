@@ -585,7 +585,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             docs_dir=docs_dir,
             site_dir=site_dir,
             use_directory_urls=False,
-            drafts='ba*.md',
+            draft_docs='ba*.md',
         )
 
         with self.subTest(serve_url=None):
@@ -603,7 +603,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             expected_logs = '''
                 INFO:Doc file 'test/bar.md' contains a relative link 'nonexistent.md', but the target 'test/nonexistent.md' is not found among documentation files.
                 INFO:Doc file 'test/foo.md' contains a link to 'test/bar.md' which is excluded from the built site.
-                INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `drafts` config:
+                INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `draft_docs` config:
                   - http://localhost:123/documentation/test/bar.html
                   - http://localhost:123/documentation/test/baz.html
             '''
@@ -692,7 +692,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
                         site_dir=site_dir,
                         use_directory_urls=False,
                         exclude_docs='SUMMARY.md' if exclude == 'full' else '',
-                        drafts='SUMMARY.md' if exclude == 'drafts' else '',
+                        draft_docs='SUMMARY.md' if exclude == 'drafts' else '',
                         not_in_nav='SUMMARY.md' if exclude == 'nav' else '',
                     )
                     cfg.plugins.events['files'] += [on_files_1, on_files_2]
@@ -705,7 +705,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
                         '''
                     if exclude == 'drafts' and serve_url:
                         expected_logs = '''
-                            INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `drafts` config:
+                            INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `draft_docs` config:
                               - http://localhost:123/SUMMARY.html
                         '''
                     with self._assert_build_logs(expected_logs):

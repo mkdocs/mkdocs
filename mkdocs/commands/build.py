@@ -312,7 +312,7 @@ def build(config: MkDocsConfig, *, serve_url: str | None = None, dirty: bool = F
         if excluded:
             log.info(
                 "The following pages are being built only for the preview "
-                "but will be excluded from `mkdocs build` per `drafts` config:\n  - "
+                "but will be excluded from `mkdocs build` per `draft_docs` config:\n  - "
                 + "\n  - ".join(excluded)
             )
 
