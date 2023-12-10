@@ -226,7 +226,7 @@ blockquote {
     text-align: left;
 }
 
-.admonition.note, details.note { /* csslint allow: adjoining-classes */
+.admonition.note, details.note, .admonition.info, details.info { /* csslint allow: adjoining-classes */
     color: #2e6b89;
     background-color: #e2f0f7;
     border-color: #bce8f1;
