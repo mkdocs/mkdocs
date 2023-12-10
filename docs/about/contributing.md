@@ -96,8 +96,8 @@ updated by running the `extract_messages` command. To update the
 `pot` file for both built-in themes, run these commands:
 
 ```bash
-pybabel extract --project=MkDocs --copyright-holder=MkDocs --msgid-bugs-address='https://github.com/mkdocs/mkdocs/issues' --no-wrap --version="$(hatch version)" --mapping-file mkdocs/themes/babel.cfg --output-file mkdocs/themes/mkdocs/messages.pot mkdocs/themes/mkdocs
-pybabel extract --project=MkDocs --copyright-holder=MkDocs --msgid-bugs-address='https://github.com/mkdocs/mkdocs/issues' --no-wrap --version="$(hatch version)" --mapping-file mkdocs/themes/babel.cfg --output-file mkdocs/themes/readthedocs/messages.pot mkdocs/themes/readthedocs
+hatch run babel.mkdocs:extract
+hatch run babel.readthedocs:extract
 ```
 
 The updated `pot` file should be included in a PR with the updated template.

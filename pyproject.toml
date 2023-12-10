@@ -206,6 +206,23 @@ path = "mkdocs.yml"
 type = "pip-compile"
 pip-compile-hashes = false
 
+[tool.hatch.envs.babel]
+detached = true
+type = "pip-compile"
+lock-filename = "requirements/requirements-babel.txt"
+dependencies = [
+    "babel >=2.9.0",
+    "Jinja2 >=2.11.1",
+]
+[[tool.hatch.envs.babel.matrix]]
+theme = ["mkdocs", "readthedocs"]
+[tool.hatch.envs.babel.scripts]
+init = 'pybabel init --input-file mkdocs/themes/{matrix:theme}/messages.pot --output-dir mkdocs/themes/{matrix:theme}/locales {args}'
+extract = 'pybabel extract --header-comment="# Translations template for MkDocs." --project=MkDocs --msgid-bugs-address="https://github.com/mkdocs/mkdocs/issues" --no-wrap --mapping-file mkdocs/themes/babel.cfg --output-file mkdocs/themes/{matrix:theme}/messages.pot mkdocs/themes/{matrix:theme} {args}'
+update = 'pybabel update --ignore-obsolete --update-header-comment --input-file mkdocs/themes/{matrix:theme}/messages.pot --output-dir mkdocs/themes/{matrix:theme}/locales {args}'
+compile = 'pybabel compile --statistics --directory mkdocs/themes/{matrix:theme}/locales {args}'
+all = ['extract', 'update', 'compile']
+
 [tool.black]
 line-length = 100
 skip-string-normalization = true
