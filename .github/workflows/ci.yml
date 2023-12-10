@@ -88,6 +88,11 @@ jobs:
       - name: Check spelling
         if: always()
         run: hatch run lint:spelling
+      - name: Check that translations files are up to date
+        run: |
+          hatch run babel:extract
+          hatch run babel:update
+          git diff --color --exit-code --ignore-matching-lines '^"(POT-Creation-Date|Generated-By):'
 
   package:
     runs-on: ubuntu-latest

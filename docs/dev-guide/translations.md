@@ -101,11 +101,11 @@ See:
 
 In particular, the way to know that the `pt` language should be disambiguated as `pt_PT` and `pt_BR` is that the *Language subtag registry* page contains `pt-` if you search for it. Whereas `sv` should remain just `sv`, because that page does *not* contain `sv-`.
 
-So, if we pick `es` (Spanish) as our example language code, to add a translation for it to both built-in themes, run these commands:
+So, if we pick `es` (Spanish) as our example language code, to add a translation for it to both built-in themes, run these commands ([via Hatch]):
 
 ```bash
-pybabel init --input-file mkdocs/themes/mkdocs/messages.pot --output-dir mkdocs/themes/mkdocs/locales -l es
-pybabel init --input-file mkdocs/themes/readthedocs/messages.pot --output-dir mkdocs/themes/readthedocs/locales -l es
+hatch run babel.mkdocs:init -l es
+hatch run babel.readthedocs:init -l es
 ```
 
 The above command will create a file structure as follows:
@@ -138,11 +138,10 @@ This step should be completed after a theme template have been [updated][update
 themes] for each language that you are comfortable contributing a translation
 for.
 
-To update the `fr` translation catalog of both built-in themes, use the following commands:
+To update the `fr` translation catalog of both built-in themes, use the following commands ([via Hatch]):
 
 ```bash
-pybabel update --ignore-obsolete --update-header-comment --input-file mkdocs/themes/mkdocs/messages.pot --output-dir mkdocs/themes/mkdocs/locales -l fr
-pybabel update --ignore-obsolete --update-header-comment --input-file mkdocs/themes/readthedocs/messages.pot --output-dir mkdocs/themes/readthedocs/locales -l fr
+hatch run babel:update -l fr
 ```
 
 You can now move on to the next step and [add a translation] for every updated
@@ -170,12 +169,11 @@ you'll want to [test your localized theme](#testing-theme-translations).
 ### Testing theme translations
 
 To test a theme with translations, you need to first compile the `messages.po`
-files of your theme into `messages.mo` files. The following commands will compile
-the `es` translation for both built-in themes:
+files of your theme into `messages.mo` files. The following command ([via Hatch]) will compile
+all translation files for both built-in themes:
 
 ```bash
-pybabel compile --statistics --directory mkdocs/themes/mkdocs/locales -l es
-pybabel compile --statistics --directory mkdocs/themes/readthedocs/locales -l es
+hatch run babel:compile
 ```
 
 The above command results in the following file structure:
@@ -219,3 +217,5 @@ The page [Choosing your theme](../user-guide/choosing-your-theme.md) updates by 
 
 It is now time for you to [contribute](../about/contributing.md) your nice work
 to the project. Thank you!
+
+[via Hatch]: ../about/contributing.md#installing-hatch
