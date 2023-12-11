@@ -9,6 +9,7 @@ from urllib.parse import unquote as urlunquote
 from urllib.parse import urljoin, urlsplit, urlunsplit
 
 import markdown
+import markdown.htmlparser  # type: ignore
 import markdown.postprocessors
 import markdown.treeprocessors
 from markdown.util import AMP_SUBSTITUTE
@@ -262,6 +263,9 @@ class Page(StructureItem):
             extension_configs=config['mdx_configs'] or {},
         )
 
+        raw_html_ext = _RawHTMLPreprocessor()
+        raw_html_ext._register(md)
+
         relative_path_ext = _RelativePathTreeprocessor(self.file, files, config)
         relative_path_ext._register(md)
 
@@ -271,7 +275,9 @@ class Page(StructureItem):
         self.content = md.convert(self.markdown)
         self.toc = get_toc(getattr(md, 'toc_tokens', []))
         self._title_from_render = extract_title_ext.title
-        self.present_anchor_ids = relative_path_ext.present_anchor_ids
+        self.present_anchor_ids = (
+            relative_path_ext.present_anchor_ids | raw_html_ext.present_anchor_ids
+        )
         if log.getEffectiveLevel() > logging.DEBUG:
             self.links_to_anchors = relative_path_ext.links_to_anchors
 
@@ -282,7 +288,8 @@ class Page(StructureItem):
     """Links to anchors in other files that this page contains.
 
     The structure is: `{file_that_is_linked_to: {'anchor': 'original_link/to/some_file.md#anchor'}}`.
-    Populated after `.render()`. Populated only if `validation: {anchors: info}` (or greater) is set"""
+    Populated after `.render()`. Populated only if `validation: {anchors: info}` (or greater) is set.
+    """
 
     def validate_anchor_links(self, *, files: Files, log_level: int) -> None:
         if not self.links_to_anchors:
@@ -328,6 +335,8 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
             if anchor := element.get('id'):
                 self.present_anchor_ids.add(anchor)
             if element.tag == 'a':
+                if anchor := element.get('name'):
+                    self.present_anchor_ids.add(anchor)
                 key = 'href'
             elif element.tag == 'img':
                 key = 'src'
@@ -483,6 +492,36 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
         md.treeprocessors.register(self, "relpath", 0)
 
 
+class _RawHTMLPreprocessor(markdown.preprocessors.Preprocessor):
+    def __init__(self) -> None:
+        super().__init__()
+        self.present_anchor_ids: set[str] = set()
+
+    def run(self, lines: list[str]) -> list[str]:
+        parser = _HTMLHandler()
+        parser.feed('\n'.join(lines))
+        parser.close()
+        self.present_anchor_ids = parser.present_anchor_ids
+        return lines
+
+    def _register(self, md: markdown.Markdown) -> None:
+        md.preprocessors.register(
+            self, "mkdocs_raw_html", priority=21  # Right before 'html_block'.
+        )
+
+
+class _HTMLHandler(markdown.htmlparser.htmlparser.HTMLParser):  # type: ignore[name-defined]
+    def __init__(self) -> None:
+        super().__init__()
+        self.present_anchor_ids: set[str] = set()
+
+    def handle_starttag(self, tag: str, attrs: Sequence[tuple[str, str]]) -> None:
+        for k, v in attrs:
+            if k == 'id' or (k == 'name' and tag == 'a'):
+                self.present_anchor_ids.add(v)
+        return super().handle_starttag(tag, attrs)
+
+
 class _ExtractTitleTreeprocessor(markdown.treeprocessors.Treeprocessor):
     title: str | None = None
     postprocessors: Sequence[markdown.postprocessors.Postprocessor] = ()
@@ -505,8 +544,4 @@ class _ExtractTitleTreeprocessor(markdown.treeprocessors.Treeprocessor):
 
     def _register(self, md: markdown.Markdown) -> None:
         self.postprocessors = tuple(md.postprocessors)
-        md.treeprocessors.register(
-            self,
-            "mkdocs_extract_title",
-            priority=-1,  # After the end.
-        )
+        md.treeprocessors.register(self, "mkdocs_extract_title", priority=-1)  # After the end.
