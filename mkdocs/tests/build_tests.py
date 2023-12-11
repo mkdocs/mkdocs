@@ -580,12 +580,12 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         }
     )
     @tempdir()
-    def test_exclude_pages_with_invalid_links(self, site_dir, docs_dir):
+    def test_draft_pages_with_invalid_links(self, site_dir, docs_dir):
         cfg = load_config(
             docs_dir=docs_dir,
             site_dir=site_dir,
             use_directory_urls=False,
-            exclude_docs='ba*.md',
+            draft_docs='ba*.md',
         )
 
         with self.subTest(serve_url=None):
@@ -603,8 +603,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             expected_logs = '''
                 INFO:Doc file 'test/bar.md' contains a link 'nonexistent.md', but the target 'test/nonexistent.md' is not found among documentation files.
                 INFO:Doc file 'test/foo.md' contains a link to 'test/bar.md' which is excluded from the built site.
-                INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `exclude_docs`:
-                  - http://localhost:123/documentation/.zoo.html
+                INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `draft_docs` config:
                   - http://localhost:123/documentation/test/bar.html
                   - http://localhost:123/documentation/test/baz.html
             '''
@@ -619,7 +618,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             self.assertPathIsFile(baz_path)
             self.assertIn('DRAFT', baz_path.read_text())
 
-            self.assertPathIsFile(site_dir, '.zoo.html')
+            self.assertPathNotExists(site_dir, '.zoo.html')
 
     @tempdir(
         files={
@@ -768,13 +767,14 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             config.nav = Path(f.abs_src_path).read_text().splitlines()
 
         for serve_url in None, 'http://localhost:123/':
-            for exclude in 'full', 'nav', None:
+            for exclude in 'full', 'drafts', 'nav', None:
                 with self.subTest(serve_url=serve_url, exclude=exclude):
                     cfg = load_config(
                         docs_dir=docs_dir,
                         site_dir=site_dir,
                         use_directory_urls=False,
                         exclude_docs='SUMMARY.md' if exclude == 'full' else '',
+                        draft_docs='SUMMARY.md' if exclude == 'drafts' else '',
                         not_in_nav='SUMMARY.md' if exclude == 'nav' else '',
                     )
                     cfg.plugins.events['files'] += [on_files_1, on_files_2]
@@ -785,9 +785,9 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
                             INFO:The following pages exist in the docs directory, but are not included in the "nav" configuration:
                               - SUMMARY.md
                         '''
-                    if exclude == 'full' and serve_url:
+                    if exclude == 'drafts' and serve_url:
                         expected_logs = '''
-                            INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `exclude_docs`:
+                            INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `draft_docs` config:
                               - http://localhost:123/SUMMARY.html
                         '''
                     with self._assert_build_logs(expected_logs):
@@ -801,7 +801,9 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
                     )
 
                     summary_path = Path(site_dir, 'SUMMARY.html')
-                    if exclude == 'full' and not serve_url:
+                    if exclude == 'full':
+                        self.assertPathNotExists(summary_path)
+                    elif exclude == 'drafts' and not serve_url:
                         self.assertPathNotExists(summary_path)
                     else:
                         self.assertPathExists(summary_path)

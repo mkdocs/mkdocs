@@ -157,7 +157,6 @@ The `exclude_docs` config follows the [.gitignore pattern format](https://git-sc
 ```yaml
 exclude_docs: |
   *.py               # Excludes e.g. docs/hooks/foo.py
-  /drafts            # Excludes e.g. docs/drafts/hello.md
   /requirements.txt  # Excludes docs/requirements.txt
 ```
 
@@ -168,6 +167,10 @@ As an additional related change, if you have a need to have both `README.md` and
 See [**documentation**](../user-guide/configuration.md#exclude_docs). Context: #3224
 
 #### Drafts
+
+> DANGER: **Dropped from version 1.6:**
+>
+> The `exclude_docs` config no longer applies the "drafts" functionality for `mkdocs serve`. This was renamed to [`draft_docs`](../user-guide/configuration.md#draft_docs).
 
 The `exclude_docs` config has another behavior: all excluded Markdown pages will still be previewable in `mkdocs serve` only, just with a "DRAFT" marker on top. Then they will of course be excluded from `mkdocs build` or `gh-deploy`.
 

@@ -295,6 +295,10 @@ sub-directories. Index files will always be listed first within a sub-section.
 
 NEW: **New in version 1.5.**
 
+> DANGER: **Changed in version 1.6:**
+>
+> This config no longer applies the "drafts" functionality for `mkdocs serve`. If you have draft documents that you want available in "serve" and not "build", replace `exclude_docs` with the new [`draft_docs`](#draft_docs) config option.
+
 This config defines patterns of files (under [`docs_dir`](#docs_dir)) to not be picked up into the built site.
 
 Example:
@@ -302,15 +306,12 @@ Example:
 ```yaml
 exclude_docs: |
   api-config.json    # A file with this name anywhere.
-  drafts/            # A "drafts" directory anywhere.
   /requirements.txt  # Top-level "docs/requirements.txt".
   *.py               # Any file with this extension anywhere.
   !/foo/example.py   # But keep this particular file.
 ```
 
 This follows the [.gitignore pattern format](https://git-scm.com/docs/gitignore#_pattern_format).
-
-Note that `mkdocs serve` does *not* follow this setting and instead displays excluded documents but with a "DRAFT" mark. To prevent this effect, you can run `mkdocs serve --clean`.
 
 The following defaults are always implicitly prepended - to exclude dot-files (and directories) as well as the top-level `templates` directory:
 
@@ -328,6 +329,23 @@ Otherwise you could for example opt only certain dot-files back into the site:
 exclude_docs: |
   !.assets  # Don't exclude '.assets' although all other '.*' are excluded
 ```
+
+### draft_docs
+
+NEW: **New in version 1.6.**
+
+This config defines patterns of files (under [`docs_dir`](#docs_dir)) to be treated as a draft.  Draft files are available during `mkdocs serve` and include a "DRAFT" mark but will not be included in the build. To prevent this effect and make "serve" behave the same as "build", you can run `mkdocs serve --clean`.
+
+Example:
+
+```yaml
+draft_docs: |
+  drafts/               # A "drafts" directory anywhere.
+  _unpublished.md       # A md file ending in _unpublished.md
+  !/foo_unpublished.md  # But keep this particular file.
+```
+
+This follows the [.gitignore pattern format](https://git-scm.com/docs/gitignore#_pattern_format).
 
 ### not_in_nav
 
