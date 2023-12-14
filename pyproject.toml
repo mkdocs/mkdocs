@@ -140,6 +140,8 @@ matrix.type.scripts = [
 
 [tool.hatch.env.collectors.mkdocs.integration]
 path = "mkdocs.yml"
+[tool.hatch.envs.integration]
+detached = false
 [tool.hatch.envs.integration.scripts]
 test = "python -m mkdocs.tests.integration"
 [[tool.hatch.envs.integration.matrix]]
@@ -204,7 +206,7 @@ check = ["markdown", "js", "css", "spelling"]
 path = "mkdocs.yml"
 [tool.hatch.envs.docs]
 type = "pip-compile"
-pip-compile-hashes = false
+detached = false
 
 [tool.black]
 line-length = 100
