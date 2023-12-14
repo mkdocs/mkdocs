@@ -245,7 +245,6 @@ used options include:
 * [config.repo_url](../user-guide/configuration.md#repo_url)
 * [config.repo_name](../user-guide/configuration.md#repo_name)
 * [config.copyright](../user-guide/configuration.md#copyright)
-* [config.google_analytics](../user-guide/configuration.md#google_analytics)
 
 #### nav
 

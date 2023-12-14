@@ -243,14 +243,6 @@ class File:
         self.abs_dest_path = os.path.normpath(os.path.join(dest_dir, self.dest_uri))
         self.inclusion = inclusion
 
-    def __eq__(self, other) -> bool:
-        return (
-            isinstance(other, self.__class__)
-            and self.src_uri == other.src_uri
-            and self.abs_src_path == other.abs_src_path
-            and self.url == other.url
-        )
-
     def __repr__(self):
         return (
             f"File(src_uri='{self.src_uri}', dest_uri='{self.dest_uri}',"

@@ -20,5 +20,11 @@
   "MD024": { "siblings_only": true },
 
   // Allow inline HTML
-  "MD033": false
+  "MD033": false,
+
+  // First line heading
+  "MD041": false,
+
+  // Disable named references validation
+  "MD052": false
 }

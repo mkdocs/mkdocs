@@ -64,9 +64,9 @@ jobs:
         run: |
           python -m pip install --upgrade hatch
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
       - name: Check with ruff
         if: always()
         run: hatch run style:fix

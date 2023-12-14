@@ -382,7 +382,7 @@ Configure the strictness of MkDocs' diagnostic messages when validating links to
 
 This is a tree of configs, and for each one the value can be one of the three: `warn`, `info`, `ignore`. Which cause a logging message of the corresponding severity to be produced. The `warn` level is, of course, intended for use with `mkdocs build --strict` (where it becomes an error), which you can employ in continuous testing.
 
-> EXAMPLE: **Defaults of this config as of MkDocs 1.5:**
+> EXAMPLE: **Defaults of this config as of MkDocs 1.6:**
 >
 > ```yaml
 > validation:
@@ -392,6 +392,7 @@ This is a tree of configs, and for each one the value can be one of the three: `
 >     absolute_links: info
 >   links:
 >     not_found: warn
+>     anchors: info
 >     absolute_links: info
 >     unrecognized_links: info
 > ```
@@ -400,12 +401,13 @@ This is a tree of configs, and for each one the value can be one of the three: `
 
 The defaults of some of the behaviors already differ from MkDocs 1.4 and below - they were ignored before.
 
->? EXAMPLE: **Configure MkDocs 1.5 to behave like MkDocs 1.4 and below (reduce strictness):**
+>? EXAMPLE: **Configure MkDocs 1.6 to behave like MkDocs 1.4 and below (reduce strictness):**
 >
 > ```yaml
 > validation:
 >   absolute_links: ignore
 >   unrecognized_links: ignore
+>   anchors: ignore
 > ```
 <!-- -->
 >! EXAMPLE: **Recommended settings for most sites (maximal strictness):**
@@ -415,23 +417,27 @@ The defaults of some of the behaviors already differ from MkDocs 1.4 and below -
 >   omitted_files: warn
 >   absolute_links: warn
 >   unrecognized_links: warn
+>   anchors: warn  # New in MkDocs 1.6
 > ```
 
 Note how in the above examples we omitted the 'nav' and 'links' keys. Here `absolute_links:` means setting both `nav: absolute_links:` and `links: absolute_links:`.
 
 Full list of values and examples of log messages that they can hide or make more prominent:
 
-*   `validation.nav.omitted_files`  
+*   `validation.nav.omitted_files`
     * "The following pages exist in the docs directory, but are not included in the "nav" configuration: ..."
-*   `validation.nav.not_found`  
+*   `validation.nav.not_found`
     * "A relative path to 'foo/bar.md' is included in the 'nav' configuration, which is not found in the documentation files."
     * "A reference to 'foo/bar.md' is included in the 'nav' configuration, but this file is excluded from the built site."
-*   `validation.nav.absolute_links`  
+*   `validation.nav.absolute_links`
     * "An absolute path to '/foo/bar.html' is included in the 'nav' configuration, which presumably points to an external resource."
 <!-- -->
-*   `validation.links.not_found`  
-    * "Doc file 'example.md' contains a relative link '../foo/bar.md', but the target is not found among documentation files."
+*   `validation.links.not_found`
+    * "Doc file 'example.md' contains a link '../foo/bar.md', but the target is not found among documentation files."
     * "Doc file 'example.md' contains a link to 'foo/bar.md' which is excluded from the built site."
+*   `validation.links.anchors`
+    * "Doc file 'example.md' contains a link '../foo/bar.md#some-heading', but the doc 'foo/bar.md' does not contain an anchor '#some-heading'."
+    * "Doc file 'example.md' contains a link '#some-heading', but there is no such anchor on this page."
 *   `validation.links.absolute_links`
     * "Doc file 'example.md' contains an absolute link '/foo/bar.html', it was left as is. Did you mean 'foo/bar.md'?"
 *   `validation.links.unrecognized_links`
@@ -1206,7 +1212,7 @@ echo '{INHERIT: mkdocs.yml, site_name: "Renamed site"}' | mkdocs build -f -
 [Python-Markdown wiki]: https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
 [catalog]: https://github.com/mkdocs/catalog
 [configuring pages and navigation]: writing-your-docs.md#configure-pages-and-navigation
-[theme_dir]: customizing-your-theme.md#using-the-theme_dir
+[theme_dir]: customizing-your-theme.md#using-the-theme-custom_dir
 [choosing your theme]: choosing-your-theme.md
 [Localizing your theme]: localizing-your-theme.md
 [extra_css]: #extra_css
