@@ -44,7 +44,7 @@ that you do this within a [virtualenv].
 pip install git+https://github.com/mkdocs/mkdocs.git
 ```
 
-## Installing MkDocs for Development
+## Installing for Development
 
 Note that for development you can just use [Hatch] directly as described below. If you wish to install a local clone of MkDocs anyway, you can run `pip install --editable .`. It is **strongly** recommended that you do this within a [virtualenv].
 
