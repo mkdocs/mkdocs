@@ -1571,7 +1571,7 @@ class SubConfigTest(TestCase):
 
         config_path = "foo/mkdocs.yaml"
         self.get_config(Schema, {"sub": [{"opt": "bar"}]}, config_file_path=config_path)
-        self.assertEqual(passed_config_path, config_path)
+        self.assertEqual(passed_config_path, os.path.abspath(config_path))
 
 
 class NestedSubConfigTest(TestCase):
