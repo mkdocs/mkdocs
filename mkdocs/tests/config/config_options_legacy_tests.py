@@ -863,7 +863,7 @@ class SiteDirTest(TestCase):
         site_dir = c.SiteDir()
         docs_dir = c.Dir()
 
-    def test_doc_dir_in_site_dir(self):
+    def test_doc_dir_in_site_dir_fails(self):
         j = os.path.join
         # The parent dir is not the same on every system, so use the actual dir name
         parent_dir = mkdocs.__file__.split(os.sep)[-3]
@@ -881,24 +881,27 @@ class SiteDirTest(TestCase):
         for test_config in test_configs:
             with self.subTest(test_config):
                 with self.expect_error(
-                    site_dir=re.compile(r"The 'docs_dir' should not be within the 'site_dir'.*")
+                    site_dir="The docs_dir should not be inside the site_dir as this can mean the source files are overwritten by the output or deleted entirely."
                 ):
                     self.get_config(self.Schema, test_config)
 
-    def test_site_dir_in_docs_dir(self):
+    def test_site_dir_in_docs_dir_fails(self):
         j = os.path.join
 
         test_configs = (
             {'docs_dir': 'docs', 'site_dir': j('docs', 'site')},
             {'docs_dir': '.', 'site_dir': 'site'},
             {'docs_dir': '', 'site_dir': 'site'},
-            {'docs_dir': '/', 'site_dir': 'site'},
         )
 
         for test_config in test_configs:
             with self.subTest(test_config):
                 with self.expect_error(
-                    site_dir=re.compile(r"The 'site_dir' should not be within the 'docs_dir'.*")
+                    site_dir="""The site_dir should not be inside the docs_dir as this leads to the build directory being copied into itself.
+To allow this arrangement, please exclude the directory (and other files as applicable) by adding the following configuration:
+
+exclude_docs: |
+  /site"""
                 ):
                     self.get_config(self.Schema, test_config)
 

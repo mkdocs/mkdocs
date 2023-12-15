@@ -804,17 +804,19 @@ class SiteDir(Dir):
         # and eventually make a deep nested mess.
         if _relative_path(docs_dir, to=site_dir):
             raise ValidationError(
-                f"The 'docs_dir' should not be within the 'site_dir' as this "
-                f"can mean the source files are overwritten by the output or "
-                f"it will be deleted if --clean is passed to mkdocs build. "
-                f"(site_dir: '{site_dir}', docs_dir: '{docs_dir}')"
+                "The docs_dir should not be inside the site_dir as this "
+                "can mean the source files are overwritten by the output or "
+                "deleted entirely."
             )
-        if _relative_path(site_dir, to=docs_dir):
+        if site_rel_path := _relative_path(site_dir, to=docs_dir):
+            exclude_docs: pathspec.gitignore.GitIgnoreSpec | None = config.get('exclude_docs')
+            if exclude_docs and exclude_docs.match_file(site_rel_path):
+                return  # Good, the appropriate config is present.
             raise ValidationError(
-                f"The 'site_dir' should not be within the 'docs_dir' as this "
-                f"leads to the build directory being copied into itself and "
-                f"duplicate nested files in the 'site_dir'. "
-                f"(site_dir: '{site_dir}', docs_dir: '{docs_dir}')"
+                f"The site_dir should not be inside the docs_dir as this "
+                f"leads to the build directory being copied into itself.\n"
+                f"To allow this arrangement, please exclude the directory (and other files as applicable) by adding the following configuration:\n\n"
+                f"exclude_docs: |\n  /{site_rel_path.as_posix()}"
             )
 
 
