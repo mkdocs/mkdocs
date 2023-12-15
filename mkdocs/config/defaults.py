@@ -1,13 +1,35 @@
 from __future__ import annotations
 
-from typing import IO, TYPE_CHECKING, Dict
+import logging
+from typing import IO, Dict, Mapping
 
 from mkdocs.config import base
 from mkdocs.config import config_options as c
+from mkdocs.structure.pages import Page, _AbsoluteLinksValidationValue
 from mkdocs.utils.yaml import get_yaml_loader, yaml_load
 
-if TYPE_CHECKING:
-    import mkdocs.structure.pages
+
+class _LogLevel(c.OptionallyRequired[int]):
+    levels: Mapping[str, int] = {
+        "warn": logging.WARNING,
+        "info": logging.INFO,
+        "ignore": logging.DEBUG,
+    }
+
+    def run_validation(self, value: object) -> int:
+        if not isinstance(value, str):
+            raise base.ValidationError(f"Expected a string, but a {type(value)} was given.")
+        try:
+            return self.levels[value]
+        except KeyError:
+            raise base.ValidationError(f"Expected one of {list(self.levels)}, got {value!r}")
+
+
+class _AbsoluteLinksValidation(_LogLevel):
+    levels: Mapping[str, int] = {
+        **_LogLevel.levels,
+        "relative_to_docs": _AbsoluteLinksValidationValue.RELATIVE_TO_DOCS,
+    }
 
 
 # NOTE: The order here is important. During validation some config options
@@ -146,37 +168,37 @@ class MkDocsConfig(base.Config):
 
     class Validation(base.Config):
         class NavValidation(base.Config):
-            omitted_files = c._LogLevel(default='info')
+            omitted_files = _LogLevel(default='info')
             """Warning level for when a doc file is never mentioned in the navigation.
             For granular configuration, see `not_in_nav`."""
 
-            not_found = c._LogLevel(default='warn')
+            not_found = _LogLevel(default='warn')
             """Warning level for when the navigation links to a relative path that isn't an existing page on the site."""
 
-            absolute_links = c._LogLevel(default='info')
+            absolute_links = _AbsoluteLinksValidation(default='info')
             """Warning level for when the navigation links to an absolute path (starting with `/`)."""
 
         nav = c.SubConfig(NavValidation)
 
         class LinksValidation(base.Config):
-            not_found = c._LogLevel(default='warn')
+            not_found = _LogLevel(default='warn')
             """Warning level for when a Markdown doc links to a relative path that isn't an existing document on the site."""
 
-            absolute_links = c._LogLevel(default='info')
+            absolute_links = _AbsoluteLinksValidation(default='info')
             """Warning level for when a Markdown doc links to an absolute path (starting with `/`)."""
 
-            unrecognized_links = c._LogLevel(default='info')
+            unrecognized_links = _LogLevel(default='info')
             """Warning level for when a Markdown doc links to a relative path that doesn't look like
             it could be a valid internal link. For example, if the link ends with `/`."""
 
-            anchors = c._LogLevel(default='info')
+            anchors = _LogLevel(default='info')
             """Warning level for when a Markdown doc links to an anchor that's not present on the target page."""
 
         links = c.SubConfig(LinksValidation)
 
     validation = c.PropagatingSubConfig[Validation]()
 
-    _current_page: mkdocs.structure.pages.Page | None = None
+    _current_page: Page | None = None
     """The currently rendered page. Please do not access this and instead
     rely on the `page` argument to event handlers."""
 

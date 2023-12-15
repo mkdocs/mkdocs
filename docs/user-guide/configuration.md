@@ -382,7 +382,9 @@ Configure the strictness of MkDocs' diagnostic messages when validating links to
 
 This is a tree of configs, and for each one the value can be one of the three: `warn`, `info`, `ignore`. Which cause a logging message of the corresponding severity to be produced. The `warn` level is, of course, intended for use with `mkdocs build --strict` (where it becomes an error), which you can employ in continuous testing.
 
-> EXAMPLE: **Defaults of this config as of MkDocs 1.6:**
+The config `validation.links.absolute_links` additionally has a special value `relative_to_docs`, for [validation of absolute links](#validation-of-absolute-links).
+
+>? EXAMPLE: **Defaults of this config as of MkDocs 1.6:**
 >
 > ```yaml
 > validation:
@@ -415,7 +417,7 @@ The defaults of some of the behaviors already differ from MkDocs 1.4 and below -
 > ```yaml
 > validation:
 >   omitted_files: warn
->   absolute_links: warn
+>   absolute_links: warn  # Or 'relative_to_docs' - new in MkDocs 1.6
 >   unrecognized_links: warn
 >   anchors: warn  # New in MkDocs 1.6
 > ```
@@ -425,24 +427,46 @@ Note how in the above examples we omitted the 'nav' and 'links' keys. Here `abso
 Full list of values and examples of log messages that they can hide or make more prominent:
 
 *   `validation.nav.omitted_files`
-    * "The following pages exist in the docs directory, but are not included in the "nav" configuration: ..."
+    * > The following pages exist in the docs directory, but are not included in the "nav" configuration: ...
 *   `validation.nav.not_found`
-    * "A relative path to 'foo/bar.md' is included in the 'nav' configuration, which is not found in the documentation files."
-    * "A reference to 'foo/bar.md' is included in the 'nav' configuration, but this file is excluded from the built site."
+    * > A reference to 'foo/bar.md' is included in the 'nav' configuration, which is not found in the documentation files.
+    * > A reference to 'foo/bar.md' is included in the 'nav' configuration, but this file is excluded from the built site.
 *   `validation.nav.absolute_links`
-    * "An absolute path to '/foo/bar.html' is included in the 'nav' configuration, which presumably points to an external resource."
+    * > An absolute path to '/foo/bar.html' is included in the 'nav' configuration, which presumably points to an external resource.
 <!-- -->
 *   `validation.links.not_found`
-    * "Doc file 'example.md' contains a link '../foo/bar.md', but the target is not found among documentation files."
-    * "Doc file 'example.md' contains a link to 'foo/bar.md' which is excluded from the built site."
+    * > Doc file 'example.md' contains a link '../foo/bar.md', but the target is not found among documentation files.
+    * > Doc file 'example.md' contains a link to 'foo/bar.md' which is excluded from the built site.
 *   `validation.links.anchors`
-    * "Doc file 'example.md' contains a link '../foo/bar.md#some-heading', but the doc 'foo/bar.md' does not contain an anchor '#some-heading'."
-    * "Doc file 'example.md' contains a link '#some-heading', but there is no such anchor on this page."
+    * > Doc file 'example.md' contains a link '../foo/bar.md#some-heading', but the doc 'foo/bar.md' does not contain an anchor '#some-heading'.
+    * > Doc file 'example.md' contains a link '#some-heading', but there is no such anchor on this page.
 *   `validation.links.absolute_links`
-    * "Doc file 'example.md' contains an absolute link '/foo/bar.html', it was left as is. Did you mean 'foo/bar.md'?"
+    * > Doc file 'example.md' contains an absolute link '/foo/bar.html', it was left as is. Did you mean 'foo/bar.md'?
 *   `validation.links.unrecognized_links`
-    * "Doc file 'example.md' contains an unrecognized relative link '../foo/bar/', it was left as is. Did you mean 'foo/bar.md'?"
-    * "Doc file 'example.md' contains an unrecognized relative link 'mail\@example.com', it was left as is. Did you mean 'mailto:mail\@example.com'?"
+    * > Doc file 'example.md' contains an unrecognized relative link '../foo/bar/', it was left as is. Did you mean 'foo/bar.md'?
+    * > Doc file 'example.md' contains an unrecognized relative link 'mail\@example.com', it was left as is. Did you mean 'mailto:mail\@example.com'?
+
+#### Validation of absolute links
+
+NEW: **New in version 1.6.**
+
+> Historically, within Markdown, MkDocs only recognized **relative** links that lead to another physical `*.md` document (or media file). This is a good convention to follow because then the source pages are also freely browsable without MkDocs, for example on GitHub. Whereas absolute links were left unmodified (making them often not work as expected) or, more recently, warned against. If you dislike having to always use relative links, now you can opt into absolute links and have them work correctly.
+
+If you set the setting `validation.links.absolute_links` to the new value `relative_to_docs`, all Markdown links starting with `/` will be understood as being relative to the `docs_dir` root. The links will then be validated for correctness according to all the other rules that were already working for relative links in prior versions of MkDocs. For the HTML output, these links will still be turned relative so that the site still works reliably.
+
+So, now any document (e.g. "dir1/foo.md") can link to the document "dir2/bar.md" as `[link](/dir2/bar.md)`, in addition to the previously only correct way `[link](../dir2/bar.md)`.
+
+You have to enable the setting, though. The default is still to just skip the link.
+
+> EXAMPLE: **Settings to recognize absolute links and validate them:**
+>
+> ```yaml
+> validation:
+>   links:
+>     absolute_links: relative_to_docs
+>     anchors: warn
+>     unrecognized_links: warn
+> ```
 
 ## Build directories
 
