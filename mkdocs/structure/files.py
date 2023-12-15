@@ -170,28 +170,52 @@ class File:
     """
     A MkDocs File object.
 
-    Points to the source and destination locations of a file.
+    It represents how the contents of one file should be populated in the destination site.
 
-    The `path` argument must be a path that exists relative to `src_dir`.
+    A file always has its `abs_dest_path` (obtained by joining `dest_dir` and `dest_path`),
+    where the `dest_dir` is understood to be the *site* directory.
 
-    The `src_dir` and `dest_dir` must be absolute paths on the local file system.
+    `content_bytes`/`content_string` (new in MkDocs 1.6) can always be used to obtain the file's
+    content. But it may be backed by one of the two sources:
 
-    The `use_directory_urls` argument controls how destination paths are generated. If `False`, a Markdown file is
-    mapped to an HTML file of the same name (the file extension is changed to `.html`). If True, a Markdown file is
-    mapped to an HTML index file (`index.html`) nested in a directory using the "name" of the file in `path`. The
-    `use_directory_urls` argument has no effect on non-Markdown files.
+    *   A physical source file at `abs_src_path` (by default obtained by joining `src_dir` and
+        `src_uri`). `src_dir` is understood to be the *docs* directory.
 
-    File objects have the following properties, which are Unicode strings:
+        Then `content_bytes`/`content_string` will read the file at `abs_src_path`.
+
+        `src_dir` *should* be populated for real files and should be `None` for generated files.
+
+    *   Since MkDocs 1.6 a file may alternatively be stored in memory - `content_string`/`content_bytes`.
+
+        Then `src_dir` and `abs_src_path` will remain `None`. `content_bytes`/`content_string` need
+        to be written to, or populated through the `content` argument in the constructor.
+
+        But `src_uri` is still populated for such files as well! The virtual file pretends as if it
+        originated from that path in the `docs` directory, and other values are derived.
+
+    For static files the file is just copied to the destination, and `dest_uri` equals `src_uri`.
+
+    For Markdown files (determined by the file extension in `src_uri`) the destination content
+    will be the rendered content, and `dest_uri` will have the `.html` extension and some
+    additional transformations to the path, based on `use_directory_urls`.
     """
 
     src_uri: str
     """The pure path (always '/'-separated) of the source file relative to the source directory."""
 
     use_directory_urls: bool
-    """Whether directory URLs ('foo/') should be used or not ('foo.html')."""
+    """Whether directory URLs ('foo/') should be used or not ('foo.html').
 
-    src_dir: str
-    """The OS path of the source directory (top-level docs_dir) that the source file originates from."""
+    If `False`, a Markdown file is mapped to an HTML file of the same name (the file extension is
+    changed to `.html`). If True, a Markdown file is mapped to an HTML index file (`index.html`)
+    nested in a directory using the "name" of the file in `path`. Non-Markdown files retain their
+    original path.
+    """
+
+    src_dir: str | None
+    """The OS path of the top-level directory that the source file originates from.
+
+    Assumed to be the *docs_dir*; not populated for generated files."""
 
     dest_dir: str
     """The OS path of the destination directory (top-level site_dir) that the file should be copied to."""
@@ -201,6 +225,12 @@ class File:
 
     generated_by: str | None = None
     """If not None, indicates that a plugin generated this file on the fly."""
+
+    _content: str | bytes | None = None
+    """If set, the file's content will be read from here.
+
+    This logic is handled by `content_bytes`/`content_string`, which should be used instead of
+    accessing this attribute."""
 
     @property
     def src_path(self) -> str:
@@ -225,7 +255,7 @@ class File:
     def __init__(
         self,
         path: str,
-        src_dir: str,
+        src_dir: str | None,
         dest_dir: str,
         use_directory_urls: bool,
         *,
@@ -292,8 +322,14 @@ class File:
     """The URI of the destination file relative to the destination directory as a string."""
 
     @cached_property
-    def abs_src_path(self) -> str:
-        """The absolute concrete path of the source file. Will use backslashes on Windows."""
+    def abs_src_path(self) -> str | None:
+        """
+        The absolute concrete path of the source file. Will use backslashes on Windows.
+
+        Note: do not use this path to read the file, prefer `content_bytes`/`content_string`.
+        """
+        if self.src_dir is None:
+            return None
         return os.path.normpath(os.path.join(self.src_dir, self.src_uri))
 
     @cached_property
@@ -305,18 +341,80 @@ class File:
         """Return url for file relative to other file."""
         return utils.get_relative_url(self.url, other.url if isinstance(other, File) else other)
 
+    @property
+    def content_bytes(self) -> bytes:
+        """
+        Get the content of this file as a bytestring.
+
+        May raise if backed by a real file (`abs_src_path`) if it cannot be read.
+
+        If used as a setter, it defines the content of the file, and `abs_src_path` becomes unset.
+        """
+        content = self._content
+        if content is None:
+            assert self.abs_src_path is not None
+            with open(self.abs_src_path, 'rb') as f:
+                return f.read()
+        if not isinstance(content, bytes):
+            content = content.encode()
+        return content
+
+    @content_bytes.setter
+    def content_bytes(self, value: bytes):
+        assert isinstance(value, bytes)
+        self._content = value
+        self.abs_src_path = None
+
+    @property
+    def content_string(self) -> str:
+        """
+        Get the content of this file as a string. Assumes UTF-8 encoding, may raise.
+
+        May also raise if backed by a real file (`abs_src_path`) if it cannot be read.
+
+        If used as a setter, it defines the content of the file, and `abs_src_path` becomes unset.
+        """
+        content = self._content
+        if content is None:
+            assert self.abs_src_path is not None
+            with open(self.abs_src_path, encoding='utf-8-sig', errors='strict') as f:
+                return f.read()
+        if not isinstance(content, str):
+            content = content.decode('utf-8-sig', errors='strict')
+        return content
+
+    @content_string.setter
+    def content_string(self, value: str):
+        assert isinstance(value, str)
+        self._content = value
+        self.abs_src_path = None
+
     def copy_file(self, dirty: bool = False) -> None:
         """Copy source file to destination, ensuring parent directories exist."""
         if dirty and not self.is_modified():
             log.debug(f"Skip copying unmodified file: '{self.src_uri}'")
-        else:
-            log.debug(f"Copying media file: '{self.src_uri}'")
+            return
+        log.debug(f"Copying media file: '{self.src_uri}'")
+        output_path = self.abs_dest_path
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        content = self._content
+        if content is None:
+            assert self.abs_src_path is not None
             try:
-                utils.copy_file(self.abs_src_path, self.abs_dest_path)
+                utils.copy_file(self.abs_src_path, output_path)
             except shutil.SameFileError:
                 pass  # Let plugins write directly into site_dir.
+        elif isinstance(content, str):
+            with open(output_path, 'w', encoding='utf-8') as output_file:
+                output_file.write(content)
+        else:
+            with open(output_path, 'wb') as output_file:
+                output_file.write(content)
 
     def is_modified(self) -> bool:
+        if self._content is not None:
+            return True
+        assert self.abs_src_path is not None
         if os.path.isfile(self.abs_dest_path):
             return os.path.getmtime(self.abs_dest_path) < os.path.getmtime(self.abs_src_path)
         return True

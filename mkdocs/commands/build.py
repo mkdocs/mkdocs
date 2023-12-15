@@ -131,8 +131,7 @@ def _build_extra_template(template_name: str, files: Files, config: MkDocsConfig
         return
 
     try:
-        with open(file.abs_src_path, encoding='utf-8', errors='strict') as f:
-            template = jinja2.Template(f.read())
+        template = jinja2.Template(file.content_string)
     except Exception as e:
         log.warning(f"Error reading template '{template_name}': {e}")
         return

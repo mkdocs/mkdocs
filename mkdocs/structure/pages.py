@@ -208,8 +208,7 @@ class Page(StructureItem):
         source = config.plugins.on_page_read_source(page=self, config=config)
         if source is None:
             try:
-                with open(self.file.abs_src_path, encoding='utf-8-sig', errors='strict') as f:
-                    source = f.read()
+                source = self.file.content_string
             except OSError:
                 log.error(f'File not found: {self.file.src_path}')
                 raise

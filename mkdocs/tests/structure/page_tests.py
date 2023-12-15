@@ -757,7 +757,7 @@ class RelativePathExtensionTests(unittest.TestCase):
         fs = [File(f, cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls) for f in files]
         pg = Page('Foo', fs[0], cfg)
 
-        with mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data=content)):
+        with mock.patch('mkdocs.structure.files.open', mock.mock_open(read_data=content)):
             pg.read_source(cfg)
         if logs:
             with self.assertLogs('mkdocs.structure.pages') as cm:

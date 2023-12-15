@@ -323,6 +323,8 @@ class BasePlugin(Generic[SomeConfig]):
 
     def on_page_read_source(self, /, *, page: Page, config: MkDocsConfig) -> str | None:
         """
+        Deprecated: Since MkDocs 1.6, instead set `content_bytes`/`content_string` of a `File`.
+
         The `on_page_read_source` event can replace the default mechanism to read
         the contents of a page's source from the filesystem.
 
