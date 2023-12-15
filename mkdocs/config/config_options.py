@@ -739,12 +739,17 @@ class DocsDir(Dir):
             return
 
         # Validate that the docs dir does not contain the config file.
-        if _relative_path(config.config_file_path, to=config[key_name]):
-            raise ValidationError(
-                f"The '{key_name}' should not be the parent directory of the"
-                f" config file. Use a child directory instead so that the"
-                f" '{key_name}' is a sibling of the config file."
-            )
+        config_rel_path = _relative_path(config.config_file_path, to=config[key_name])
+        if config_rel_path is None:
+            return  # Good, it's not inside the docs_dir.
+        exclude_docs: pathspec.gitignore.GitIgnoreSpec | None = config.get('exclude_docs')
+        if exclude_docs and exclude_docs.match_file(config_rel_path):
+            return  # Good, the appropriate config is present.
+        raise ValidationError(
+            f"The '{config_rel_path.name}' config file should not be inside the {key_name}.\n"
+            f"To allow this arrangement, please exclude the file (and other files as applicable) by adding the following configuration:\n\n"
+            f"exclude_docs: |\n  /{config_rel_path.as_posix()}"
+        )
 
 
 class File(FilesystemObject):

@@ -768,17 +768,20 @@ class FilesystemObjectTest(TestCase):
                 )
                 self.assertEqual(conf['dir'], os.path.join(base_path, 'foo'))
 
-    def test_site_dir_is_config_dir_fails(self):
+    def test_docs_dir_is_config_dir_fails(self):
         class Schema:
-            dir = c.DocsDir()
+            docs_dir = c.DocsDir()
 
         with self.expect_error(
-            dir="The 'dir' should not be the parent directory of the config file. "
-            "Use a child directory instead so that the 'dir' is a sibling of the config file."
+            docs_dir="""The 'mkdocs.yml' config file should not be inside the docs_dir.
+To allow this arrangement, please exclude the file (and other files as applicable) by adding the following configuration:
+
+exclude_docs: |
+  /mkdocs.yml"""
         ):
             self.get_config(
                 Schema,
-                {'dir': '.'},
+                {'docs_dir': '.'},
                 config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
             )
 
