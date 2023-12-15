@@ -495,6 +495,8 @@ class PluginCollection(dict, MutableMapping[str, BasePlugin]):
     by calling `run_event`.
     """
 
+    _current_plugin: str | None
+
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.events: dict[str, list[Callable]] = {k: [] for k in EVENTS}
@@ -553,9 +555,9 @@ class PluginCollection(dict, MutableMapping[str, BasePlugin]):
         """
         pass_item = item is not None
         for method in self.events[name]:
+            self._current_plugin = self._event_origins.get(method, '<unknown>')
             if log.getEffectiveLevel() <= logging.DEBUG:
-                plugin_name = self._event_origins.get(method, '<unknown>')
-                log.debug(f"Running `{name}` event from plugin '{plugin_name}'")
+                log.debug(f"Running `{name}` event from plugin '{self._current_plugin}'")
             if pass_item:
                 result = method(item, **kwargs)
             else:
@@ -563,6 +565,7 @@ class PluginCollection(dict, MutableMapping[str, BasePlugin]):
             # keep item if method returned `None`
             if result is not None:
                 item = result
+        self._current_plugin = None
         return item
 
     def on_startup(self, *, command: Literal['build', 'gh-deploy', 'serve'], dirty: bool) -> None:

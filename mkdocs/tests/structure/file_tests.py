@@ -293,6 +293,23 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         self.assertEqual(f.content_string, 'вміст')
         self.assertEqual(f.edit_uri, None)
 
+    @tempdir(files={'x.md': 'вміст'})
+    def test_generated_file_constructor(self, tdir) -> None:
+        config = load_config(site_dir='/path/to/site', use_directory_urls=False)
+        config.plugins._current_plugin = 'foo'
+        for f in [
+            File.generated(config, 'foo/bar.md', content='вміст'),
+            File.generated(config, 'foo/bar.md', content='вміст'.encode()),
+            File.generated(config, 'foo/bar.md', abs_src_path=os.path.join(tdir, 'x.md')),
+        ]:
+            self.assertEqual(f.src_uri, 'foo/bar.md')
+            self.assertIsNone(f.src_dir)
+            self.assertEqual(f.dest_uri, 'foo/bar.html')
+            self.assertPathsEqual(f.abs_dest_path, os.path.abspath('/path/to/site/foo/bar.html'))
+            self.assertEqual(f.content_string, 'вміст')
+            self.assertEqual(f.content_bytes, 'вміст'.encode())
+            self.assertEqual(f.edit_uri, None)
+
     def test_files(self):
         fs = [
             File('index.md', '/path/to/docs', '/path/to/site', use_directory_urls=True),

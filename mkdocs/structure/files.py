@@ -9,7 +9,7 @@ import shutil
 import warnings
 from functools import cached_property
 from pathlib import PurePath
-from typing import TYPE_CHECKING, Callable, Iterable, Iterator, Sequence
+from typing import TYPE_CHECKING, Callable, Iterable, Iterator, Sequence, overload
 from urllib.parse import quote as urlquote
 
 import pathspec
@@ -224,7 +224,9 @@ class File:
     """Whether the file will be excluded from the built site."""
 
     generated_by: str | None = None
-    """If not None, indicates that a plugin generated this file on the fly."""
+    """If not None, indicates that a plugin generated this file on the fly.
+
+    The value is the plugin's entrypoint name and can be used to find the plugin by key in the PluginCollection."""
 
     _content: str | bytes | None = None
     """If set, the file's content will be read from here.
@@ -251,6 +253,67 @@ class File:
         self.dest_uri = PurePath(value).as_posix()
 
     page: Page | None = None
+
+    @overload
+    @classmethod
+    def generated(
+        cls,
+        config: MkDocsConfig,
+        src_uri: str,
+        *,
+        content: str | bytes,
+        inclusion: InclusionLevel = InclusionLevel.UNDEFINED,
+    ) -> File:
+        """
+        Create a virtual file backed by in-memory content.
+
+        It will pretend to be a file in the docs dir at `src_uri`.
+        """
+
+    @overload
+    @classmethod
+    def generated(
+        cls,
+        config: MkDocsConfig,
+        src_uri: str,
+        *,
+        abs_src_path: str,
+        inclusion: InclusionLevel = InclusionLevel.UNDEFINED,
+    ) -> File:
+        """
+        Create a virtual file backed by a physical temporary file at `abs_src_path`.
+
+        It will pretend to be a file in the docs dir at `src_uri`.
+        """
+
+    @classmethod
+    def generated(
+        cls,
+        config: MkDocsConfig,
+        src_uri: str,
+        *,
+        content: str | bytes | None = None,
+        abs_src_path: str | None = None,
+        inclusion: InclusionLevel = InclusionLevel.UNDEFINED,
+    ) -> File:
+        """
+        Create a virtual file, backed either by in-memory `content` or by a file at `abs_src_path`.
+
+        It will pretend to be a file in the docs dir at `src_uri`.
+        """
+        if (content is None) == (abs_src_path is None):
+            raise TypeError("File must have exactly one of 'content' or 'abs_src_path'")
+        f = cls(
+            src_uri,
+            src_dir=None,
+            dest_dir=config.site_dir,
+            use_directory_urls=config.use_directory_urls,
+            inclusion=inclusion,
+        )
+        f.generated_by = config.plugins._current_plugin or '<unknown>'
+        f.abs_src_path = abs_src_path
+        f._content = content
+        return f
 
     def __init__(
         self,
