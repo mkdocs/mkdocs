@@ -1411,7 +1411,7 @@ user created and third-party templates:
 
 | Old Variable Name | New Variable Name |
 | ----------------- | ----------------- |
-| current_page      | page              |
+| current_page      | [page]            |
 | page_title        | page.title        |
 | content           | page.content      |
 | toc               | page.toc          |
@@ -1506,16 +1506,16 @@ but may be removed in a future version.
 Any of the following old page variables should be updated to the new ones in
 user created and third-party templates:
 
-| Old Variable Name | New Variable Name   |
-| ----------------- | ------------------- |
-| current_page      | [page]              |
-| page_title        | [page.title]        |
-| content           | [page.content]      |
-| toc               | [page.toc]          |
-| meta              | [page.meta]         |
-| canonical_url     | [page.canonical_url]|
-| previous_page     | [page.previous_page]|
-| next_page         | [page.next_page]    |
+| Old Variable Name | New Variable Name  |
+| ----------------- | ------------------ |
+| current_page      | [page]             |
+| page_title        | page.title         |
+| content           | page.content       |
+| toc               | page.toc           |
+| meta              | page.meta          |
+| canonical_url     | page.canonical_url |
+| previous_page     | page.previous_page |
+| next_page         | page.next_page     |
 
 ##### Global Context
 

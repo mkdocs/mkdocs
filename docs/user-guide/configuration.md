@@ -1229,6 +1229,8 @@ echo '{INHERIT: mkdocs.yml, site_name: "Renamed site"}' | mkdocs build -f -
 ```
 
 [Theme Developer Guide]: ../dev-guide/themes.md
+[custom themes]: ../dev-guide/themes.md
+[available variables]: ../dev-guide/themes.md#template-variables
 [pymdk-extensions]: https://python-markdown.github.io/extensions/
 [pymkd]: https://python-markdown.github.io/
 [smarty]: https://python-markdown.github.io/extensions/smarty/
@@ -1236,6 +1238,7 @@ echo '{INHERIT: mkdocs.yml, site_name: "Renamed site"}' | mkdocs build -f -
 [Python-Markdown wiki]: https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
 [catalog]: https://github.com/mkdocs/catalog
 [configuring pages and navigation]: writing-your-docs.md#configure-pages-and-navigation
+[Meta-Data]: writing-your-docs.md#meta-data
 [theme_dir]: customizing-your-theme.md#using-the-theme-custom_dir
 [choosing your theme]: choosing-your-theme.md
 [Localizing your theme]: localizing-your-theme.md
