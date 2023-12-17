@@ -267,6 +267,9 @@ class Page(StructureItem):
         raw_html_ext = _RawHTMLPreprocessor()
         raw_html_ext._register(md)
 
+        extract_anchors_ext = _ExtractAnchorsTreeprocessor(self.file, files, config)
+        extract_anchors_ext._register(md)
+
         relative_path_ext = _RelativePathTreeprocessor(self.file, files, config)
         relative_path_ext._register(md)
 
@@ -277,7 +280,7 @@ class Page(StructureItem):
         self.toc = get_toc(getattr(md, 'toc_tokens', []))
         self._title_from_render = extract_title_ext.title
         self.present_anchor_ids = (
-            relative_path_ext.present_anchor_ids | raw_html_ext.present_anchor_ids
+            extract_anchors_ext.present_anchor_ids | raw_html_ext.present_anchor_ids
         )
         if log.getEffectiveLevel() > logging.DEBUG:
             self.links_to_anchors = relative_path_ext.links_to_anchors
@@ -317,13 +320,29 @@ class Page(StructureItem):
                 )
 
 
+class _ExtractAnchorsTreeprocessor(markdown.treeprocessors.Treeprocessor):
+    def __init__(self, file: File, files: Files, config: MkDocsConfig) -> None:
+        self.present_anchor_ids: set[str] = set()
+
+    def run(self, root: etree.Element) -> None:
+        add = self.present_anchor_ids.add
+        for element in root.iter():
+            if anchor := element.get('id'):
+                add(anchor)
+            if element.tag == 'a':
+                if anchor := element.get('name'):
+                    add(anchor)
+
+    def _register(self, md: markdown.Markdown) -> None:
+        md.treeprocessors.register(self, "mkdocs_extract_anchors", priority=5)  # Same as 'toc'.
+
+
 class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
     def __init__(self, file: File, files: Files, config: MkDocsConfig) -> None:
         self.file = file
         self.files = files
         self.config = config
         self.links_to_anchors: dict[File, dict[str, str]] = {}
-        self.present_anchor_ids: set[str] = set()
 
     def run(self, root: etree.Element) -> etree.Element:
         """
@@ -333,11 +352,7 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
         tags and then makes them relative based on the site navigation
         """
         for element in root.iter():
-            if anchor := element.get('id'):
-                self.present_anchor_ids.add(anchor)
             if element.tag == 'a':
-                if anchor := element.get('name'):
-                    self.present_anchor_ids.add(anchor)
                 key = 'href'
             elif element.tag == 'img':
                 key = 'src'
