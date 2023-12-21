@@ -634,7 +634,7 @@ class BuildTests(unittest.TestCase):
         docs_dir = Path(origin_dir, "docs")
 
         started_building = threading.Event()
-        exclude_docs = pathspec.gitignore.GitIgnoreSpec.from_lines(["exclude.docs"])
+        exclude_docs = pathspec.gitignore.GitIgnoreSpec.from_lines(["exclude.docs", r"\mkdocs.yml"])
 
         def rebuild():
             started_building.set()
@@ -650,3 +650,10 @@ class BuildTests(unittest.TestCase):
             Path(docs_dir, "exclude.docs").write_text("docs2")
             self.assertFalse(started_building.wait(timeout=0.5))
             started_building.clear()
+
+            Path(origin_dir, "mkdocs.yml").write_text("yml2")
+            self.assertTrue(started_building.wait(timeout=10))
+            started_building.clear()
+
+            _, output = do_request(server, "GET /foo.site")
+            self.assertEqual(output, "docs1yml2")
