@@ -161,7 +161,15 @@ class Files:
                 for dir in config.theme.dirs:
                     # Find the first theme dir which contains path
                     if os.path.isfile(os.path.join(dir, path)):
-                        self.append(File(path, dir, config.site_dir, config.use_directory_urls))
+                        self.append(
+                            File(
+                                path,
+                                dir,
+                                config.site_dir,
+                                config.use_directory_urls,
+                                inclusion=InclusionLevel.INCLUDED,
+                            )
+                        )
                         break
 
 
