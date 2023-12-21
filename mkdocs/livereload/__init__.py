@@ -104,6 +104,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         mount_path: str = "/",
         polling_interval: float = 0.5,
         shutdown_delay: float = 0.25,
+        exclude_docs=None,
     ) -> None:
         self.builder = builder
         try:
@@ -136,6 +137,8 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         self._watched_paths: dict[str, int] = {}
         self._watch_refs: dict[str, Any] = {}
 
+        self._exclude_docs = exclude_docs
+
     def watch(self, path: str, func: None = None, *, recursive: bool = True) -> None:
         """Add the 'path' to watched paths, call the function and reload when any file changes under it."""
         path = os.path.abspath(path)
@@ -150,6 +153,11 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         def callback(event):
             if event.is_directory:
                 return
+            if self._exclude_docs and self._exclude_docs.match_file(
+                _try_relativize_path(event.src_path)
+            ):
+                log.debug("File matches config option `exclude_docs`.  Ignoring rebuild.")
+                return  # skip files that match exclude_docs
             log.debug(str(event))
             with self._rebuild_cond:
                 self._want_rebuild = True

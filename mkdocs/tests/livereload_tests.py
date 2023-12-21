@@ -10,6 +10,8 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
+import pathspec
+
 from mkdocs.livereload import LiveReloadServer
 from mkdocs.tests.base import change_dir, tempdir
 
@@ -28,7 +30,7 @@ class FakeRequest:
 
 
 @contextlib.contextmanager
-def testing_server(root, builder=lambda: None, mount_path="/"):
+def testing_server(root, builder=lambda: None, mount_path="/", exclude_docs=None):
     """Create the server and start most of its parts, but don't listen on a socket."""
     with mock.patch("socket.socket"):
         server = LiveReloadServer(
@@ -38,6 +40,7 @@ def testing_server(root, builder=lambda: None, mount_path="/"):
             root=root,
             mount_path=mount_path,
             polling_interval=0.2,
+            exclude_docs=exclude_docs,
         )
         server.server_name = "localhost"
         server.server_port = 0
@@ -624,3 +627,26 @@ class BuildTests(unittest.TestCase):
 
             Path(docs_dir, "subdir", "test").write_text("test")
             self.assertTrue(started_building.wait(timeout=10))
+
+    @tempdir({"docs/foo.docs": "docs1", "mkdocs.yml": "yml1"})
+    @tempdir({"foo.site": "original"})
+    def test_with_exclude_docs(self, site_dir, origin_dir):
+        docs_dir = Path(origin_dir, "docs")
+
+        started_building = threading.Event()
+        exclude_docs = pathspec.gitignore.GitIgnoreSpec.from_lines(["exclude.docs"])
+
+        def rebuild():
+            started_building.set()
+            Path(site_dir, "foo.site").write_text(
+                Path(docs_dir, "foo.docs").read_text() + Path(origin_dir, "mkdocs.yml").read_text()
+            )
+
+        with testing_server(site_dir, rebuild, exclude_docs=exclude_docs) as server:
+            server.watch(docs_dir, rebuild)
+            server.watch(Path(origin_dir, "mkdocs.yml"), rebuild)
+            time.sleep(0.01)
+
+            Path(docs_dir, "exclude.docs").write_text("docs2")
+            self.assertFalse(started_building.wait(timeout=0.5))
+            started_building.clear()
