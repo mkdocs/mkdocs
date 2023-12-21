@@ -18,7 +18,10 @@
 
       {%- block styles %}
         <link href="{{ 'css/bootstrap.min.css'|url }}" rel="stylesheet">
-        <link href="{{ 'css/font-awesome.min.css'|url }}" rel="stylesheet">
+        <link href="{{ 'css/fontawesome.min.css'|url }}" rel="stylesheet">
+        <link href="{{ 'css/brands.min.css'|url }}" rel="stylesheet">
+        <link href="{{ 'css/solid.min.css'|url }}" rel="stylesheet">
+        <link href="{{ 'css/v4-font-face.min.css'|url }}" rel="stylesheet">
         <link href="{{ 'css/base.css'|url }}" rel="stylesheet">
         {%- if config.theme.highlightjs %}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/{{ config.theme.hljs_style }}.min.css">
@@ -136,11 +139,11 @@
                             <li class="nav-item">
                                 <a href="{{ page.edit_url }}" class="nav-link">
                                     {%- if config.repo_name == 'GitHub' -%}
-                                        <i class="fa fa-github"></i> {% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}
+                                        <i class="fa-brands fa-github"></i> {% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}
                                     {%- elif config.repo_name == 'Bitbucket' -%}
-                                        <i class="fa fa-bitbucket"></i> {% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}
+                                        <i class="fa-brands fa-bitbucket"></i> {% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}
                                     {%- elif config.repo_name == 'GitLab' -%}
-                                        <i class="fa fa-gitlab"></i> {% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}
+                                        <i class="fa-brands fa-gitlab"></i> {% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}
                                     {%- elif config.repo_name -%}
                                         {% trans repo_name=config.repo_name%}Edit on {{ repo_name }}{% endtrans %}
                                     {% else %}
