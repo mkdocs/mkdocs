@@ -117,7 +117,7 @@ Now change the configuration file to alter how the documentation is displayed by
 changing the theme. Edit the `mkdocs.yml` file and add a [`theme`][theme] setting:
 
 ```yaml
-site_name: MkLorum
+: MkLorum
 nav:
   - Home: index.md
   - About: about.md
@@ -209,6 +209,5 @@ To get help with MkDocs, please use the [GitHub discussions] or [GitHub issues].
 [GitHub discussions]: https://github.com/mkdocs/mkdocs/discussions
 [GitHub issues]: https://github.com/mkdocs/mkdocs/issues
 [site_name]: user-guide/configuration.md#site_name
-[site_url]: user-guide/configuration.md#site_url
 [theme]: user-guide/configuration.md#theme
 [User Guide]: user-guide/README.md
