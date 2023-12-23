@@ -7,6 +7,7 @@ import os
 import posixpath
 import shutil
 import warnings
+from os.path import relpath
 from pathlib import PurePath
 from typing import TYPE_CHECKING, Callable, Iterable, Iterator, Sequence
 from urllib.parse import quote as urlquote
@@ -321,8 +322,15 @@ _default_exclude = pathspec.gitignore.GitIgnoreSpec.from_lines(['.*', '/template
 
 def set_exclusions(files: Iterable[File], config: MkDocsConfig) -> None:
     """Re-calculate which files are excluded, based on the patterns in the config."""
+    # exclude the site directory
+    try:
+        site_rel_path = relpath(config.site_dir, config.docs_dir)
+        site_exclude = pathspec.gitignore.GitIgnoreSpec.from_lines([site_rel_path])
+    except ValueError:
+        site_exclude = None
+    default_exclude = _default_exclude + site_exclude if site_exclude else _default_exclude
     exclude: pathspec.gitignore.GitIgnoreSpec | None = config.get('exclude_docs')
-    exclude = _default_exclude + exclude if exclude else _default_exclude
+    exclude = default_exclude + exclude if exclude else default_exclude
     drafts: pathspec.gitignore.GitIgnoreSpec | None = config.get('draft_docs')
     nav_exclude: pathspec.gitignore.GitIgnoreSpec | None = config.get('not_in_nav')
 
