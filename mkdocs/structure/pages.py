@@ -52,9 +52,6 @@ class Page(StructureItem):
         )
 
         # Placeholders to be filled in later in the build process.
-        self.markdown = None
-        self._title_from_render: str | None = None
-        self.content = None
         self.toc = []  # type: ignore
         self.meta = {}
 
@@ -71,13 +68,18 @@ class Page(StructureItem):
         url = self.abs_url or self.file.url
         return f"{name}(title={title}, url={url!r})"
 
-    markdown: str | None
+    markdown: str | None = None
     """The original Markdown content from the file."""
 
-    content: str | None
+    content: str | None = None
     """The rendered Markdown as HTML, this is the contents of the documentation.
 
     Populated after `.render()`."""
+
+    content_title: str | None = None
+    """The title extracted from the first heading of the content.
+
+    This is only a component of `title` and may be omitted. Populated after `.render()`."""
 
     toc: TableOfContents
     """An iterable object representing the Table of contents for a page. Each item in
@@ -238,8 +240,8 @@ class Page(StructureItem):
         if 'title' in self.meta:
             return self.meta['title']
 
-        if self._title_from_render:
-            return self._title_from_render
+        if self.content_title:
+            return self.content_title
         elif self.content is None:  # Preserve legacy behavior only for edge cases in plugins.
             title_from_md = get_markdown_title(self.markdown)
             if title_from_md is not None:
@@ -278,7 +280,7 @@ class Page(StructureItem):
 
         self.content = md.convert(self.markdown)
         self.toc = get_toc(getattr(md, 'toc_tokens', []))
-        self._title_from_render = extract_title_ext.title
+        self.content_title = extract_title_ext.title
         self.present_anchor_ids = (
             extract_anchors_ext.present_anchor_ids | raw_html_ext.present_anchor_ids
         )

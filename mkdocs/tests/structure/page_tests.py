@@ -314,8 +314,10 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.next_page, None)
         self.assertEqual(pg.parent, None)
         self.assertEqual(pg.previous_page, None)
+        self.assertIsNone(pg.content_title)
         self.assertEqual(pg.title, 'Welcome to MkDocs')
         pg.render(cfg, fl)
+        self.assertEqual(pg.content_title, 'Welcome to MkDocs')
         self.assertEqual(pg.title, 'Welcome to MkDocs')
 
     _SETEXT_CONTENT = dedent(
@@ -332,10 +334,13 @@ class PageTests(unittest.TestCase):
         cfg = load_config()
         fl = File('testing_setext_title.md', docs_dir, docs_dir, use_directory_urls=True)
         pg = Page(None, fl, cfg)
+        self.assertIsNone(pg.content_title)
         self.assertIsNone(pg.title)
         pg.read_source(cfg)
+        self.assertIsNone(pg.content_title)
         self.assertEqual(pg.title, 'Testing setext title')
         pg.render(cfg, fl)
+        self.assertEqual(pg.content_title, 'Welcome to MkDocs Setext')
         self.assertEqual(pg.title, 'Welcome to MkDocs Setext')
 
     @tempdir(files={'testing_setext_title.md': _SETEXT_CONTENT})
@@ -348,6 +353,7 @@ class PageTests(unittest.TestCase):
         pg = Page(None, fl, cfg)
         pg.read_source(cfg)
         pg.render(cfg, fl)
+        self.assertEqual(pg.content_title, 'Welcome to MkDocs Setext')
         self.assertEqual(pg.title, 'Welcome to MkDocs Setext')
 
     _FORMATTING_CONTENT = dedent(
@@ -366,6 +372,7 @@ class PageTests(unittest.TestCase):
         pg = Page(None, fl, cfg)
         pg.read_source(cfg)
         pg.render(cfg, fl)
+        self.assertEqual(pg.content_title, '*Hello &mdash; beautiful world')
         self.assertEqual(pg.title, '*Hello &mdash; beautiful world')
 
     _ATTRLIST_CONTENT = dedent(
@@ -416,9 +423,11 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.next_page, None)
         self.assertEqual(pg.parent, None)
         self.assertEqual(pg.previous_page, None)
+        self.assertIsNone(pg.content_title)
         self.assertEqual(pg.title, 'A Page Title')
         self.assertEqual(pg.toc, [])
         pg.render(cfg, fl)
+        self.assertEqual(pg.content_title, 'Welcome to MkDocs')
         self.assertEqual(pg.title, 'A Page Title')
 
     def test_page_title_from_filename(self):
@@ -442,8 +451,10 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.next_page, None)
         self.assertEqual(pg.parent, None)
         self.assertEqual(pg.previous_page, None)
+        self.assertIsNone(pg.content_title)
         self.assertEqual(pg.title, 'Page title')
         pg.render(cfg, fl)
+        self.assertIsNone(pg.content_title)
         self.assertEqual(pg.title, 'Page title')
 
     def test_page_title_from_capitalized_filename(self):
