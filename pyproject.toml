@@ -199,7 +199,6 @@ dependencies = [
 spelling = 'codespell mkdocs docs *.* -S LC_MESSAGES -S "*.min.js" -S "lunr*.js" -S fontawesome-webfont.svg -S tinyseg.js'
 markdown = "npm exec --yes -- markdownlint-cli README.md CONTRIBUTING.md docs/ --ignore docs/CNAME"
 js = "npm exec --yes -- jshint mkdocs/"
-css = "npm exec --yes -- csslint --quiet mkdocs/"
 check = ["markdown", "js", "css", "spelling"]
 
 [tool.hatch.env.collectors.mkdocs.docs]

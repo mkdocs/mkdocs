@@ -1,9 +1,7 @@
 html {
-    /* csslint ignore:start */
     /* The nav header is 3.5rem high, plus 20px for the margin-top of the
        main container. */
     scroll-padding-top: calc(3.5rem + 20px);
-    /* csslint ignore:end */
 }
 
 /* Replacement for `body { background-attachment: fixed; }`, which has
@@ -26,11 +24,9 @@ body > .container {
     min-height: 400px;
 }
 
-.navbar.fixed-top { /* csslint allow: adjoining-classes */
-    /* csslint ignore:start */
+.navbar.fixed-top {
     position: -webkit-sticky;
     position: sticky;
-    /* csslint ignore:end */
 }
 
 .source-links {
@@ -130,17 +126,15 @@ footer {
  * sections of docs content.
  */
 
-.bs-sidebar.affix { /* csslint allow: adjoining-classes */
-    /* csslint ignore:start */
+.bs-sidebar.affix {
     position: -webkit-sticky;
     position: sticky;
-    /* csslint ignore:end */
     /* The nav header is 3.5rem high, plus 20px for the margin-top of the
        main container. */
     top: calc(3.5rem + 20px);
 }
 
-.bs-sidebar.card { /* csslint allow: adjoining-classes */
+.bs-sidebar.card {
     padding: 0;
     max-height: 90%;
     overflow-y: auto;
@@ -155,7 +149,7 @@ footer {
     transform: scale(1, -1);
 }
 
-.bs-sidebar .navbar-toggler.collapsed span { /* csslint allow: adjoining-classes */
+.bs-sidebar .navbar-toggler.collapsed span {
     -moz-transform: scale(1, 1);
     -webkit-transform: scale(1, 1);
     -o-transform: scale(1, 1);
@@ -226,19 +220,19 @@ blockquote {
     text-align: left;
 }
 
-.admonition.note, details.note, .admonition.info, details.info { /* csslint allow: adjoining-classes */
+.admonition.note, details.note, .admonition.info, details.info {
     color: #2e6b89;
     background-color: #e2f0f7;
     border-color: #bce8f1;
 }
 
-.admonition.warning, details.warning { /* csslint allow: adjoining-classes */
+.admonition.warning, details.warning {
     color: #7a6032;
     background-color: #fffae5;
     border-color: #fbeed5;
 }
 
-.admonition.danger, details.danger { /* csslint allow: adjoining-classes */
+.admonition.danger, details.danger {
     color: #7f3130;
     background-color: #fde3e3;
     border-color: #eed3d7;
@@ -254,13 +248,13 @@ blockquote {
 }
 
 @media (max-width: 991.98px) {
-    .navbar-collapse.show { /* csslint allow: adjoining-classes */
+    .navbar-collapse.show {
         overflow-y: auto;
         max-height: calc(100vh - 3.5rem);
     }
 }
 
-.dropdown-item.open { /* csslint allow: adjoining-classes */
+.dropdown-item.open {
     color: #fff;
     background-color: #2FA4E7;
 }
@@ -300,20 +294,18 @@ blockquote {
     }
 
     .dropdown-submenu > .dropdown-menu {
-        /* csslint ignore:start */
         position: fixed !important;
-        /* csslint ignore:end */
         margin-top: -9px;
         margin-left: -2px;
         border-width: 1px;
         padding: 0.5rem 0;
     }
 
-    .dropdown-submenu.pull-left { /* csslint allow: adjoining-classes */
+    .dropdown-submenu.pull-left {
         float: none;
     }
 
-    .dropdown-submenu.pull-left > .dropdown-menu { /* csslint allow: adjoining-classes */
+    .dropdown-submenu.pull-left > .dropdown-menu {
         left: -100%;
         margin-left: 10px;
     }
