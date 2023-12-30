@@ -97,7 +97,7 @@ hatch run types:check
 
 ### Other style checks
 
-There are several other checks, such as spelling and CSS style. To run all of them, use this command:
+There are several other checks, such as spelling and JS style. To run all of them, use this command:
 
 ```bash
 hatch run lint:check
