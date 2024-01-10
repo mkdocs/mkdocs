@@ -8,6 +8,7 @@ import warnings
 from typing import TYPE_CHECKING, Any, Callable, Iterator, MutableMapping, Sequence
 from urllib.parse import unquote as urlunquote
 from urllib.parse import urljoin, urlsplit, urlunsplit
+from markupsafe import Markup
 
 import markdown
 import markdown.htmlparser  # type: ignore
@@ -559,7 +560,7 @@ class _ExtractTitleTreeprocessor(markdown.treeprocessors.Treeprocessor):
                 # Unescape per Markdown implementation details.
                 for pp in self.postprocessors:
                     title = pp.run(title)
-                self.title = title
+                self.title = Markup(title).striptags()
             break
         return root
 

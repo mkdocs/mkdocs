@@ -366,7 +366,24 @@ class PageTests(unittest.TestCase):
         pg = Page(None, fl, cfg)
         pg.read_source(cfg)
         pg.render(cfg, fl)
-        self.assertEqual(pg.title, '*Hello &mdash; beautiful world')
+        self.assertEqual(pg.title, '*Hello — beautiful world')
+
+    _RAW_CONTENT = dedent(
+        '''
+        # Hello <span>world</span>
+
+        Hi.
+        '''
+    )
+
+    @tempdir(files={'testing_raw_content.md': _RAW_CONTENT})
+    def test_page_title_from_markdown_strip_raw_tags(self, docs_dir):
+        cfg = load_config()
+        fl = File('testing_raw_content.md', docs_dir, docs_dir, use_directory_urls=True)
+        pg = Page(None, fl, cfg)
+        pg.read_source(cfg)
+        pg.render(cfg, fl)
+        self.assertEqual(pg.title, 'Hello world')
 
     _ATTRLIST_CONTENT = dedent(
         '''
