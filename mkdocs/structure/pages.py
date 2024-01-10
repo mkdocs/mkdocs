@@ -8,13 +8,13 @@ import warnings
 from typing import TYPE_CHECKING, Any, Callable, Iterator, MutableMapping, Sequence
 from urllib.parse import unquote as urlunquote
 from urllib.parse import urljoin, urlsplit, urlunsplit
-from markupsafe import Markup
 
 import markdown
 import markdown.htmlparser  # type: ignore
 import markdown.postprocessors
 import markdown.treeprocessors
 from markdown.util import AMP_SUBSTITUTE
+from markupsafe import Markup
 
 from mkdocs import utils
 from mkdocs.structure import StructureItem
