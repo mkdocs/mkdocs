@@ -23,6 +23,16 @@ deep1:
     deep2-1:
         deep3-1: replaced
 """
+BASEHTTPYML = """
+INHERIT: http://localhost:8181/parent.yml
+foo: bar
+baz:
+    sub1: replaced
+    sub3: new
+deep1:
+    deep2-1:
+        deep3-1: replaced
+"""
 PARENTYML = """
 foo: foo
 baz:
@@ -290,6 +300,32 @@ class UtilsTests(unittest.TestCase):
         }
         with open(os.path.join(tdir, 'base.yml')) as fd:
             result = utils.yaml_load(fd)
+        self.assertEqual(result, expected)
+
+    @tempdir(files={'basehttp.yml': BASEHTTPYML})
+    @mock.patch(
+        'mkdocs.utils.yaml.urlopen',
+        return_value=mock.Mock(status=200, read=mock.Mock(return_value=PARENTYML.encode())),
+    )
+    def test_yaml_inheritance_http(self, tdir, mock_urlopen):
+        expected = {
+            'foo': 'bar',
+            'baz': {
+                'sub1': 'replaced',
+                'sub2': 2,
+                'sub3': 'new',
+            },
+            'deep1': {
+                'deep2-1': {
+                    'deep3-1': 'replaced',
+                    'deep3-2': 'bar',
+                },
+                'deep2-2': 'baz',
+            },
+        }
+        with open(os.path.join(tdir, 'basehttp.yml')) as fd:
+            result = utils.yaml_load(fd)
+        mock_urlopen.assert_called_once()
         self.assertEqual(result, expected)
 
     @tempdir(files={'base.yml': BASEYML})

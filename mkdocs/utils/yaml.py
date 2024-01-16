@@ -5,6 +5,8 @@ import logging
 import os
 import os.path
 from typing import IO, TYPE_CHECKING, Any
+from urllib.parse import urlparse, urlunparse
+from urllib.request import urlopen
 
 import mergedeep  # type: ignore
 import yaml
@@ -14,6 +16,8 @@ import yaml_env_tag  # type: ignore
 from mkdocs import exceptions
 
 if TYPE_CHECKING:
+    from http.client import HTTPResponse
+
     from mkdocs.config.defaults import MkDocsConfig
 
 log = logging.getLogger(__name__)
@@ -137,14 +141,27 @@ def yaml_load(source: IO | str, loader: type[yaml.BaseLoader] | None = None) -> 
     if result is None:
         return {}
     if 'INHERIT' in result and not isinstance(source, str):
-        relpath = result.pop('INHERIT')
-        abspath = os.path.normpath(os.path.join(os.path.dirname(source.name), relpath))
-        if not os.path.exists(abspath):
+        inherit = urlparse(result.pop('INHERIT'))
+        if inherit.scheme in ["", "file"]:
+            abspath = os.path.normpath(os.path.join(os.path.dirname(source.name), inherit.path))
+            if not os.path.exists(abspath):
+                raise exceptions.ConfigurationError(
+                    f"Inherited config file '{inherit.path}' does not exist at '{abspath}'."
+                )
+            log.debug(f"Loading inherited configuration file: {abspath}")
+            with open(abspath, 'rb') as fd:
+                parent = yaml_load(fd, loader)
+        elif inherit.scheme in ["http", "https"]:
+            log.debug(f"Retrieving inherited configuration from: {inherit}")
+            response: HTTPResponse = urlopen(inherit)
+            if not response.status == 200:
+                raise exceptions.BuildError(
+                    f"Request failed when fetching parent configuration from {urlunparse(inherit)}, got {response}"
+                )
+            parent = yaml_load(response.read().decode())
+        else:
             raise exceptions.ConfigurationError(
-                f"Inherited config file '{relpath}' does not exist at '{abspath}'."
+                f"Inherited config has unsupported scheme: {inherit.scheme}"
             )
-        log.debug(f"Loading inherited configuration file: {abspath}")
-        with open(abspath, 'rb') as fd:
-            parent = yaml_load(fd, loader)
         result = mergedeep.merge(parent, result)
     return result
