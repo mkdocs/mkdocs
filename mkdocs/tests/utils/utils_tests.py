@@ -11,7 +11,7 @@ from unittest import mock
 
 from mkdocs import exceptions, utils
 from mkdocs.tests.base import dedent, tempdir
-from mkdocs.utils import meta
+from mkdocs.utils import meta, misc
 
 BASEYML = """
 INHERIT: parent.yml
@@ -595,6 +595,25 @@ class LogCounterTests(unittest.TestCase):
         self.log.warning('counted')
         self.log.info('not counted')
         self.assertEqual(self.counter.get_counts(), [('ERROR', 2), ('WARNING', 1)])
+
+    def test_dict_merge_inplace(self):
+        dict1 = {"existing_root_key": {"existing_leaf1": 123, "existing_leaf2": "https"}}
+        dict2 = {
+            "existing_root_key": {"existing_leaf1": 567, "new_leaf1": datetime.datetime.min},
+            "new_root_key": {"new_leaf2": -123456},
+        }
+        misc.dict_merge_inplace(dict1, dict2)
+        self.assertEqual(
+            dict1,
+            {
+                "existing_root_key": {
+                    "existing_leaf1": 123,
+                    "existing_leaf2": "https",
+                    "new_leaf1": datetime.datetime.min,
+                },
+                "new_root_key": {"new_leaf2": -123456},
+            },
+        )
 
 
 @dataclasses.dataclass
