@@ -140,6 +140,9 @@ class ContentSection:
     def __eq__(self, other):
         return self.text == other.text and self.id == other.id and self.title == other.title
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}(text={self.text}, id='{self.id}', title='{self.title}')"
+
 
 _HEADER_TAGS = tuple(f"h{x}" for x in range(1, 7))
 
