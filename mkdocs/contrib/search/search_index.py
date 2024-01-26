@@ -177,12 +177,7 @@ class ContentParser(HTMLParser):
         """Called at the start of every HTML tag."""
         atts = dict(attrs)
         # Check for permalink in header
-        if (
-            self.is_header_tag
-            and tag == 'a'
-            and 'class' in atts
-            and 'headerlink' in atts['class']
-        ):
+        if self.is_header_tag and tag == 'a' and 'headerlink' in (atts.get('class') or ''):
             self.is_permalink = True
             return
 
@@ -194,8 +189,8 @@ class ContentParser(HTMLParser):
         # for it and assign the ID if it has one.
         self.is_header_tag = True
         self.section = ContentSection()
-        self.section.id = atts.get('id', None)
-        self.section.keywords = atts.get('data-search-keywords', '')
+        self.section.id = atts.get('id')
+        self.section.keywords = atts.get('data-search-keywords') or ''
         self.data.append(self.section)
 
     def handle_endtag(self, tag: str) -> None:
