@@ -195,7 +195,7 @@ class ContentParser(HTMLParser):
         self.is_header_tag = True
         self.section = ContentSection()
         self.section.id = atts.get('id', None)
-        self.section.keywords = atts.get('data-search-keywords', None)
+        self.section.keywords = atts.get('data-search-keywords', '')
         self.data.append(self.section)
 
     def handle_endtag(self, tag: str) -> None:
