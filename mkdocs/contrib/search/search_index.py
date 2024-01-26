@@ -175,13 +175,13 @@ class ContentParser(HTMLParser):
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         """Called at the start of every HTML tag."""
-        attrs = dict(attrs)
+        atts = dict(attrs)
         # Check for permalink in header
         if (
             self.is_header_tag
             and tag == 'a'
-            and 'class' in attrs
-            and 'headerlink' in attrs['class']
+            and 'class' in atts
+            and 'headerlink' in atts['class']
         ):
             self.is_permalink = True
             return
@@ -194,15 +194,12 @@ class ContentParser(HTMLParser):
         # for it and assign the ID if it has one.
         self.is_header_tag = True
         self.section = ContentSection()
-        self.section.id = attrs.get('id', None)
-        if 'data-search-keywords' in attrs:
-            # Override title with user defined search keywords
-            self.section.keywords = attrs['data-search-keywords']
+        self.section.id = atts.get('id', None)
+        self.section.keywords = atts.get('data-search-keywords', None)
         self.data.append(self.section)
 
     def handle_endtag(self, tag: str) -> None:
         """Called at the end of every HTML tag."""
-
         # Check for permalinks
         if self.is_permalink and tag == 'a':
             self.is_permalink = False
@@ -216,7 +213,6 @@ class ContentParser(HTMLParser):
 
     def handle_data(self, data: str) -> None:
         """Called for the text contents of each tag."""
-
         # Do not retain permalink text.
         if self.is_permalink:
             return
