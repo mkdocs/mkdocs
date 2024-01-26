@@ -677,6 +677,26 @@ class PageTests(unittest.TestCase):
                 self.assertEqual(pg.edit_url, case['edit_url'])
                 self.assertEqual(cm.output, [case['warning']])
 
+    def test_page_edit_url_custom_from_file(self):
+        for case in [
+            dict(
+                edit_uri='hooks.py',
+                expected_edit_url='https://github.com/mkdocs/mkdocs/edit/master/docs/hooks.py',
+            ),
+            dict(
+                edit_uri='../scripts/hooks.py',
+                expected_edit_url='https://github.com/mkdocs/mkdocs/edit/master/scripts/hooks.py',
+            ),
+            dict(edit_uri=None, expected_edit_url=None),
+        ]:
+            with self.subTest(case['edit_uri']):
+                cfg = load_config(repo_url='https://github.com/mkdocs/mkdocs')
+                fl = File('testing.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
+                fl.edit_uri = case['edit_uri']
+                pg = Page('Foo', fl, cfg)
+                self.assertEqual(pg.url, 'testing/')
+                self.assertEqual(pg.edit_url, case['expected_edit_url'])
+
     def test_page_render(self):
         cfg = load_config()
         fl = File('testing.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
@@ -737,7 +757,7 @@ class RelativePathExtensionTests(unittest.TestCase):
         fs = [File(f, cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls) for f in files]
         pg = Page('Foo', fs[0], cfg)
 
-        with mock.patch('mkdocs.structure.pages.open', mock.mock_open(read_data=content)):
+        with mock.patch('mkdocs.structure.files.open', mock.mock_open(read_data=content)):
             pg.read_source(cfg)
         if logs:
             with self.assertLogs('mkdocs.structure.pages') as cm:

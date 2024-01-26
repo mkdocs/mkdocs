@@ -166,6 +166,7 @@ dependencies = [
 check = "mypy mkdocs"
 
 [tool.hatch.envs.style]
+type = "pip-compile"
 detached = true
 dependencies = [
     "black",

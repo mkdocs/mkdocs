@@ -6,6 +6,7 @@ from urllib.parse import urlsplit
 
 from mkdocs.exceptions import BuildError
 from mkdocs.structure import StructureItem
+from mkdocs.structure.files import file_sort_key
 from mkdocs.structure.pages import Page, _AbsoluteLinksValidationValue
 from mkdocs.utils import nest_paths
 
@@ -129,9 +130,10 @@ class Link(StructureItem):
 def get_navigation(files: Files, config: MkDocsConfig) -> Navigation:
     """Build site navigation from config and files."""
     documentation_pages = files.documentation_pages()
-    nav_config = config['nav'] or nest_paths(
-        f.src_uri for f in documentation_pages if f.inclusion.is_in_nav()
-    )
+    nav_config = config['nav']
+    if nav_config is None:
+        documentation_pages = sorted(documentation_pages, key=file_sort_key)
+        nav_config = nest_paths(f.src_uri for f in documentation_pages if f.inclusion.is_in_nav())
     items = _data_to_navigation(nav_config, files, config)
     if not isinstance(items, list):
         items = [items]
