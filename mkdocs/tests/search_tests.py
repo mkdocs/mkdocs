@@ -282,7 +282,7 @@ class SearchIndexTests(unittest.TestCase):
         parser.close()
 
         self.assertEqual(
-            parser.data, [search_index.ContentSection(text=["TEST"], id_="title", title="Title")]
+            parser.data, [search_index.ContentSection(text=["TEST"], id_="title", title="Title", keywords='')]
         )
 
     def test_content_parser_header_has_child(self):
@@ -292,7 +292,9 @@ class SearchIndexTests(unittest.TestCase):
         parser.close()
 
         self.assertEqual(
-            parser.data, [search_index.ContentSection(text=["TEST"], id_="title", title="Title title TITLE")]
+            parser.data, [search_index.ContentSection(
+                text=["TEST"], id_="title", title="Title title TITLE", keywords=''
+            )]
         )
 
     def test_content_parser_no_id(self):
@@ -302,7 +304,7 @@ class SearchIndexTests(unittest.TestCase):
         parser.close()
 
         self.assertEqual(
-            parser.data, [search_index.ContentSection(text=["TEST"], id_=None, title="Title")]
+            parser.data, [search_index.ContentSection(text=["TEST"], id_=None, title="Title", keywords='')]
         )
 
     def test_content_parser_content_before_header(self):
@@ -312,7 +314,7 @@ class SearchIndexTests(unittest.TestCase):
         parser.close()
 
         self.assertEqual(
-            parser.data, [search_index.ContentSection(text=["TEST"], id_=None, title="Title")]
+            parser.data, [search_index.ContentSection(text=["TEST"], id_=None, title="Title", keywords='')]
         )
 
     def test_content_parser_no_sections(self):
@@ -329,7 +331,9 @@ class SearchIndexTests(unittest.TestCase):
         parser.close()
 
         self.assertEqual(
-            parser.data, [search_index.ContentSection(text=["Title", "TEST"], id_="title", title="search keywords")]
+            parser.data, [search_index.ContentSection(
+                text=["TEST"], id_="title", title="Title", keywords="search keywords"
+            )]
         )
 
     def test_create_search_index(self):

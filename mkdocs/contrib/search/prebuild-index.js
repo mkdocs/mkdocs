@@ -43,8 +43,9 @@ stdin.on('end', function () {
     } else if (lang.length > 1) {
       this.use(lunr.multiLanguage.apply(null, lang));
     }
-    this.field('title', {'boost': 10});
+    this.field('title');
     this.field('text');
+    this.field('keywords', {'boost': 10});
     this.ref('location');
 
     data.docs.forEach(function (doc) {
