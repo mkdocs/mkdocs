@@ -64,15 +64,15 @@ class SearchIndex:
             for section in parser.data:
                 self.create_entry_for_section(section, url)
 
-    def create_entry_for_section(
-        self, section: ContentSection, abs_url: str
-    ) -> None:
+    def create_entry_for_section(self, section: ContentSection, abs_url: str) -> None:
         """
         Given a section of a page and the absolute url for the page
         create an entry in the index.
         """
         text = ' '.join(section.text) if self.config['indexing'] == 'full' else ''
-        self._add_entry(title=section.title, text=text, keywords=section.keywords, loc=f'{abs_url}#{section.id}')
+        self._add_entry(
+            title=section.title, text=text, keywords=section.keywords, loc=f'{abs_url}#{section.id}'
+        )
 
     def generate_search_index(self) -> str:
         """Python to json conversion."""
@@ -132,7 +132,7 @@ class ContentSection:
         text: list[str] | None = None,
         id_: str | None = None,
         title: str | None = None,
-        keywords: str | None = None
+        keywords: str | None = None,
     ) -> None:
         self.text = text or []
         self.id = id_
@@ -141,10 +141,10 @@ class ContentSection:
 
     def __eq__(self, other):
         return (
-            self.text == other.text and
-            self.id == other.id and
-            self.title == other.title and
-            self.keywords == other.keywords
+            self.text == other.text
+            and self.id == other.id
+            and self.title == other.title
+            and self.keywords == other.keywords
         )
 
     def __repr__(self):
@@ -177,7 +177,12 @@ class ContentParser(HTMLParser):
         """Called at the start of every HTML tag."""
         attrs = dict(attrs)
         # Check for permalink in header
-        if self.is_header_tag and tag == 'a' and 'class' in attrs and 'headerlink' in attrs['class']:
+        if (
+            self.is_header_tag
+            and tag == 'a'
+            and 'class' in attrs
+            and 'headerlink' in attrs['class']
+        ):
             self.is_permalink = True
             return
 
