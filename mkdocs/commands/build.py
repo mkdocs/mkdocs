@@ -131,8 +131,7 @@ def _build_extra_template(template_name: str, files: Files, config: MkDocsConfig
         return
 
     try:
-        with open(file.abs_src_path, encoding='utf-8', errors='strict') as f:
-            template = jinja2.Template(f.read())
+        template = jinja2.Template(file.content_string)
     except Exception as e:
         log.warning(f"Error reading template '{template_name}': {e}")
         return
@@ -292,7 +291,7 @@ def build(config: MkDocsConfig, *, serve_url: str | None = None, dirty: bool = F
         # Run `files` plugin events.
         files = config.plugins.on_files(files, config=config)
         # If plugins have added files but haven't set their inclusion level, calculate it again.
-        set_exclusions(files._files, config)
+        set_exclusions(files, config)
 
         nav = get_navigation(files, config)
 
