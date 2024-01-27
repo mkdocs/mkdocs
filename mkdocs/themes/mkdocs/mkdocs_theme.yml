@@ -11,9 +11,12 @@ search_index_only: false
 highlightjs: true
 hljs_languages: []
 hljs_style: github
+hljs_style_dark: github-dark
 
 navigation_depth: 2
 nav_style: primary
+color_mode: light
+user_color_mode_toggle: false
 
 analytics:
   gtag: null

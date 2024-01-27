@@ -18,12 +18,12 @@ configuration file. Start by reading the [introductory tutorial], then check the
 <a href="user-guide/" class="btn btn-primary" role="button">User Guide</a>
 </div>
 
-<div class="jumbotron">
+<div class="pt-2 pb-4 px-4 my-4 bg-body-tertiary rounded-3">
 <h2 class="display-4 text-center">Features</h2>
 
 <div class="row">
   <div class="col-sm-6">
-    <div class="card">
+    <div class="card mb-4">
       <div class="card-body">
         <h3 class="card-title">Great themes available</h3>
         <p class="card-text">
@@ -40,7 +40,7 @@ configuration file. Start by reading the [introductory tutorial], then check the
     </div>
   </div>
   <div class="col-sm-6">
-    <div class="card">
+    <div class="card mb-4">
       <div class="card-body">
         <h3 class="card-title">Easy to customize</h3>
         <p class="card-text">

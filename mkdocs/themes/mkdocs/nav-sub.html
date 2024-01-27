@@ -1,6 +1,6 @@
 {%- if not nav_item.children %}
 <li>
-    <a href="{{ nav_item.url|url }}" class="dropdown-item{% if nav_item.active %} active{% endif %}">{{ nav_item.title }}</a>
+    <a href="{{ nav_item.url|url }}" class="dropdown-item{% if nav_item.active %} active" aria-current="page{% endif %}">{{ nav_item.title }}</a>
 </li>
 {%- else %}
   <li class="dropdown-submenu">

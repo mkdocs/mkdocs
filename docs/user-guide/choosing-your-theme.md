@@ -21,17 +21,45 @@ theme:
 The default theme, which was built as a custom [Bootstrap] theme, supports almost
 every feature of MkDocs.
 
-![mkdocs](../img/mkdocs.png)
+<div id="mkdocs-theme-images" class="carousel slide carousel-fade" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="../../img/mkdocs_theme_light_mode.png" class="d-block w-100" alt="MkDocs theme in light mode">
+    </div>
+    <div class="carousel-item">
+      <img src="../../img/mkdocs_theme_dark_mode.png" class="d-block w-100" alt="MkDocs theme in dark mode">
+    </div>
+  </div>
+</div>
 
 In addition to the default [theme configuration options][theme], the `mkdocs` theme
 supports the following options:
 
+*   __`color_mode`__: Set the default color mode for the theme to one of `light`,
+    `dark`, or `auto`. The `auto` mode will switch to `light` or `dark` based on
+    the system configuration of the user's device. Default: `light`.
+
+*   __`user_color_mode_toggle`__: Enable a toggle menu in the navigation bar
+    which allows users to select their preferred `color_mode` (light, dark, auto)
+    from within the browser and save their preference for future page loads. The
+    default selection of the toggle menu on first page load is the value set to
+    `color_mode`. Default: `false`.
+
+    ![color mode toggle menu](../img/color_mode_toggle_menu.png)
+
+*   __`nav_style`__: Adjust the visual style of the top navigation bar. Set to
+    one of `primary`, `dark` or `light`. Default: `primary`. This option is
+    independent of the `color_mode` option and must be defined separately.
+
 *   __`highlightjs`__: Enables highlighting of source code in code blocks using
     the [highlight.js] JavaScript library. Default: `True`.
 
-*   __`hljs_style`__: The highlight.js library provides 79 different [styles]
+*   __`hljs_style`__: The highlight.js library provides many different [styles]
     (color variations) for highlighting source code in code blocks. Set this to
-    the name of the desired style. Default: `github`.
+    the name of the desired style when in `light` mode. Default: `github`.
+
+*   __`hljs_style_dark`__: Set this to the name of the desired highlight.js
+    style when in `dark` mode. Default: `github_dark`.
 
 *   __`hljs_languages`__: By default, highlight.js only supports 23 common
     languages. List additional languages here to include support for them.
@@ -90,16 +118,6 @@ supports the following options:
 
 *   __`navigation_depth`__: The maximum depth of the navigation tree in the
     sidebar. Default: `2`.
-
-*   __`nav_style`__: This adjusts the visual style for the top navigation bar; by
-    default, this is set to `primary` (the default), but it can also be set to
-    `dark` or `light`.
-
-    ```yaml
-    theme:
-      name: mkdocs
-      nav_style: dark
-    ```
 
 *   __`locale`__{ #mkdocs-locale }: The locale (language/location) used to
     build the theme. If your locale is not yet supported, it will fall back

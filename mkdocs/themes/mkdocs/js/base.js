@@ -18,7 +18,71 @@ function applyTopPadding() {
     $('.bs-sidebar.affix').css('top', offset.top + 'px');
 }
 
+function setColorMode(mode) {
+    // Switch between light/dark theme. `mode` is a string value of either 'dark' or 'light'.
+    var hljs_light = document.getElementById('hljs-light'),
+        hljs_dark = document.getElementById('hljs-dark');
+    document.documentElement.setAttribute('data-bs-theme', mode);
+    if (mode == 'dark') {
+        hljs_light.disabled = true;
+        hljs_dark.disabled = false;
+    } else {
+        hljs_dark.disabled = true;
+        hljs_light.disabled = false;
+    }
+}
+
+function updateModeToggle(mode) {
+    // Update icon and toggle checkmarks of color mode selector.
+    var menu = document.getElementById('theme-menu');
+    document.querySelectorAll('[data-bs-theme-value]')
+       .forEach(function(toggle) {
+            if (mode == toggle.getAttribute('data-bs-theme-value')) {
+                toggle.lastElementChild.classList.remove('d-none');
+                menu.firstElementChild.setAttribute('class', toggle.firstElementChild.getAttribute('class'));
+            } else {
+                toggle.lastElementChild.classList.add('d-none');
+            }
+        });
+}
+
+function onSystemColorSchemeChange(event) {
+    // Update site color mode to match system color mode.
+    setColorMode(event.matches ? 'dark' : 'light');
+}
+
 $(document).ready(function() {
+
+    var mql = window.matchMedia('(prefers-color-scheme: dark)'),
+        defaultMode = document.documentElement.getAttribute('data-bs-theme'),
+        storedMode = localStorage.getItem('colormode');
+    if (storedMode && storedMode != 'auto') {
+        setColorMode(storedMode);
+        updateModeToggle(storedMode);
+    } else if (storedMode == 'auto' || defaultMode == 'auto') {
+        setColorMode(mql.matches ? 'dark' : 'light');
+        updateModeToggle('auto');
+        mql.addEventListener('change', onSystemColorSchemeChange);
+    } else {
+        setColorMode(defaultMode);
+        updateModeToggle(defaultMode);
+    }
+
+    document.querySelectorAll('[data-bs-theme-value]')
+       .forEach(function(toggle) {
+            toggle.addEventListener('click', function (e) {
+                var mode = e.target.getAttribute('data-bs-theme-value');
+                localStorage.setItem('colormode', mode);
+                if (mode == 'auto') {
+                    setColorMode(mql.matches ? 'dark' : 'light');
+                    mql.addEventListener('change', onSystemColorSchemeChange);
+                } else {
+                    setColorMode(mode);
+                    mql.removeEventListener('change', onSystemColorSchemeChange);
+                }
+                updateModeToggle(mode);
+            });
+        });
 
     applyTopPadding();
 
@@ -80,19 +144,6 @@ $(document).ready(function() {
     });
 
     $('table').addClass('table table-striped table-hover');
-
-    // Improve the scrollspy behaviour when users click on a TOC item.
-    $(".bs-sidenav a").on("click", function() {
-        var clicked = this;
-        setTimeout(function() {
-            var active = $('.nav li.active a');
-            active = active[active.length - 1];
-            if (clicked !== active) {
-                $(active).parent().removeClass("active");
-                $(clicked).parent().addClass("active");
-            }
-        }, 50);
-    });
 
     function showInnerDropdown(item) {
         var popup = $(item).next('.dropdown-menu');
@@ -156,9 +207,8 @@ $(document).ready(function() {
 
 $(window).on('resize', applyTopPadding);
 
-$('body').scrollspy({
-    target: '.bs-sidebar',
-    offset: 100
+var scrollSpy = new bootstrap.ScrollSpy(document.body, {
+  target: '.bs-sidebar'
 });
 
 /* Prevent disabled links from causing a page reload */

@@ -550,7 +550,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         self.assertPathIsDir(site_dir, 'js')
         self.assertPathIsDir(site_dir, 'css')
         self.assertPathIsDir(site_dir, 'img')
-        self.assertPathIsDir(site_dir, 'fonts')
+        self.assertPathIsDir(site_dir, 'webfonts')
         self.assertPathNotExists(site_dir, '__init__.py')
         self.assertPathNotExists(site_dir, '__init__.pyc')
         self.assertPathNotExists(site_dir, 'base.html')

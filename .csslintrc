@@ -1,5 +1,8 @@
 --exclude-list = mkdocs/themes/mkdocs/css/bootstrap.min.css,
-                 mkdocs/themes/mkdocs/css/font-awesome.min.css,
+                 mkdocs/themes/mkdocs/css/fontawesome.min.css,
+                 mkdocs/themes/mkdocs/css/brands.min.css,
+                 mkdocs/themes/mkdocs/css/solid.min.css,
+                 mkdocs/themes/mkdocs/css/v4-font-face.min.css,
                  mkdocs/themes/mkdocs/css/highlight.css,
                  mkdocs/themes/readthedocs/css/theme.css
 --errors = known-properties,

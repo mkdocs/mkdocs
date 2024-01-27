@@ -15,7 +15,9 @@ body::before {
     height: 100%;
     top: 0;
     left: 0;
-    background-color: #f8f8f8;
+    /* csslint ignore:start */
+    background-color: var(--bs-body-bg);
+    /* csslint ignore:end */
     background: url(../img/grid.png) repeat-x;
     will-change: transform;
     z-index: -1;
@@ -42,32 +44,41 @@ body > .container {
     display: inline-block;
     padding: 4px;
     line-height: 1.428571429;
-    background-color: #fff;
-    border: 1px solid #ddd;
+    /* csslint ignore:start */
+    background-color: var(--bs-secondary-bg-subtle);
+    border: 1px solid var(--bs-secondary-border-subtle);
+    /* csslint ignore:end */
     border-radius: 4px;
     margin: 20px auto 30px auto;
 }
 
 h1 {
-    color: #444;
+    /* csslint ignore:start */
+    color: var(--bs-secondary-text-emphasis);
+    /* csslint ignore:end */
     font-weight: 400;
     font-size: 42px;
 }
 
 h2, h3, h4, h5, h6 {
-    color: #444;
+    /* csslint ignore:start */
+    color: var(--bs-secondary-text-emphasis);
+    /* csslint ignore:end */
     font-weight: 300;
 }
 
 hr {
     border-top: 1px solid #aaa;
+    opacity: 1;
 }
 
 pre, .rst-content tt {
     max-width: 100%;
-    background: #fff;
-    border: solid 1px #e1e4e5;
-    color: #333;
+    /* csslint ignore:start */
+    background: var(--bs-secondary-bg-subtle);
+    border: solid 1px var(--bs-secondary-border-subtle);
+    color: var(--bs-secondary-text-emphasis);
+    /* csslint ignore:end */
     overflow-x: auto;
 }
 
@@ -77,16 +88,17 @@ code.code-large, .rst-content tt.code-large {
 
 code {
     padding: 2px 5px;
-    background: #fff;
-    border: solid 1px #e1e4e5;
-    color: #333;
+    /* csslint ignore:start */
+    background-color: var(--bs-secondary-bg-subtle);
+    border: solid 1px var(--bs-secondary-border-subtle);
+    color: var(--bs-secondary-text-emphasis);
+    /* csslint ignore:end */
     white-space: pre-wrap;
     word-wrap: break-word;
 }
 
 pre code {
     display: block;
-    background: transparent;
     border: none;
     white-space: pre;
     word-wrap: normal;
@@ -97,19 +109,21 @@ pre code {
 kbd {
     padding: 2px 4px;
     font-size: 90%;
-    color: #fff;
-    background-color: #333;
+    /* csslint ignore:start */
+    color: var(--bs-secondary-text-emphasis);
+    background-color: var(--bs-secondary-bg-subtle);
+    /* csslint ignore:end */
     border-radius: 3px;
     -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
     box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
 }
 
 a code {
-    color: #2FA4E7;
+    color: inherit;
 }
 
 a:hover code, a:focus code {
-    color: #157AB5;
+    color: inherit;
 }
 
 footer {
@@ -226,23 +240,109 @@ blockquote {
     text-align: left;
 }
 
-.admonition.note, details.note, .admonition.info, details.info { /* csslint allow: adjoining-classes */
-    color: #2e6b89;
-    background-color: #e2f0f7;
-    border-color: #bce8f1;
+/* csslint ignore:start */
+.admonition.note, details.note {
+    color: var(--bs-primary-text-emphasis);
+    background-color: var(--bs-primary-bg-subtle);
+    border-color: var(--bs-primary-border-subtle);
 }
 
-.admonition.warning, details.warning { /* csslint allow: adjoining-classes */
-    color: #7a6032;
-    background-color: #fffae5;
-    border-color: #fbeed5;
+.admonition.note h1, .admonition.note h2, .admonition.note h3,
+.admonition.note h4, .admonition.note h5, .admonition.note h6,
+details.note h1, details.note h2, details.note h3,
+details.note h4, details.note h5, details.note h6 {
+    color: var(--bs-primary-text-emphasis);
 }
 
-.admonition.danger, details.danger { /* csslint allow: adjoining-classes */
-    color: #7f3130;
-    background-color: #fde3e3;
-    border-color: #eed3d7;
+.admonition.note a, details.note a {
+    color: var(--bs-primary-text-emphasis);
 }
+
+.admonition.info, details.info {
+    color: var(--bs-info-text-emphasis);
+    background-color: var(--bs-info-bg-subtle);
+    border-color: var(--bs-info-border-subtle);
+}
+
+.admonition.info h1, .admonition.info h2, .admonition.info h3,
+.admonition.info h4, .admonition.info h5, .admonition.info h6,
+details.info h1, details.info h2, details.info h3,
+details.info h4, details.info h5, details.info h6 {
+    color: var(--bs-info-text-emphasis);
+}
+
+.admonition.info a, details.info a {
+    color: var(--bs-info-text-emphasis);
+}
+
+.admonition.warning, details.warning {
+    color: var(--bs-warning-text-emphasis);
+    background-color: var(--bs-warning-bg-subtle);
+    border-color: var(--bs-warning-border-subtle);
+}
+
+.admonition.warning h1, .admonition.warning h2, .admonition.warning h3,
+.admonition.warning h4, .admonition.warning h5, .admonition.warning h6,
+details.warning h1, details.warning h2, details.warning h3,
+details.warning h4, details.warning h5, details.warning h6 {
+    color: var(--bs-warning-text-emphasis);
+}
+
+.admonition.warning a, details.warning a {
+    color: var(--bs-warning-text-emphasis);
+}
+
+.admonition.danger, details.danger {
+    color: var(--bs-danger-text-emphasis);
+    background-color: var(--bs-danger-bg-subtle);
+    border-color: var(--bs-danger-border-subtle);
+}
+
+.admonition.danger h1, .admonition.danger h2, .admonition.danger h3,
+.admonition.danger h4, .admonition.danger h5, .admonition.danger h6,
+details.danger h1, details.danger h2, details.danger h3,
+details.danger h4, details.danger h5, details.danger h6 {
+    color: var(--bs-danger-text-emphasis);
+}
+
+.admonition.danger a, details.danger a {
+    color: var(--bs-danger-text-emphasis);
+}
+
+.admonition.new, details.new {
+    color: var(--bs-success-text-emphasis);
+    background-color: var(--bs-success-bg-subtle);
+    border-color: var(--bs-success-border-subtle);
+}
+
+.admonition.new h1, .admonition.new h2, .admonition.new h3,
+.admonition.new h4, .admonition.new h5, .admonition.new h6,
+details.new h1, details.new h2, details.new h3,
+details.new h4, details.new h5, details.new h6 {
+    color: var(--bs-success-text-emphasis);
+}
+
+.admonition.new a, details.new a {
+    color: var(--bs-success-text-emphasis);
+}
+
+.admonition.example, details.example {
+    color: var(--bs-light-text-emphasis);
+    background-color: var(--bs-light-bg-subtle);
+    border-color: var(--bs-light-border-subtle);
+}
+
+.admonition.example h1, .admonition.example h2, .admonition.example h3,
+.admonition.example h4, .admonition.example h5, .admonition.example h6,
+details.example h1, details.example h2, details.example h3,
+details.example h4, details.example h5, details.example h6 {
+    color: var(--bs-light-text-emphasis);
+}
+
+.admonition.example a, details.example a {
+    color: var(--bs-light-text-emphasis);
+}
+/* csslint ignore:end */
 
 .admonition-title, summary {
     font-weight: bold;
@@ -260,10 +360,12 @@ blockquote {
     }
 }
 
-.dropdown-item.open { /* csslint allow: adjoining-classes */
-    color: #fff;
-    background-color: #2FA4E7;
+/* csslint ignore:start */
+.dropdown-item.open {
+    color: var(--bs-dropdown-link-active-color);
+    background-color: var(--bs-dropdown-link-active-bg);
 }
+/* csslint ignore:end */
 
 .dropdown-submenu > .dropdown-menu {
     margin: 0 0 0 1.5rem;
@@ -280,13 +382,17 @@ blockquote {
     border-color: transparent;
     border-style: solid;
     border-width: 5px 0 5px 5px;
-    border-left-color: #ccc;
+    /* csslint ignore:start */
+    border-left-color: var(--bs-dropdown-link-active-color);
+    /* csslint ignore:end */
     margin-top: 5px;
     margin-right: -10px;
 }
 
 .dropdown-submenu:hover > a::after {
-    border-left-color: #fff;
+    /* csslint ignore:start */
+    border-left-color: var(--bs-dropdown-link-active-color);
+    /* csslint ignore:end */
 }
 
 @media (min-width: 992px) {

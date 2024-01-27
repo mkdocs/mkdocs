@@ -66,7 +66,7 @@ Developer Guide][custom theme] for more information.
 For example, the [mkdocs] theme ([browse source]), contains the following
 directory structure (in part):
 
-```nohighlight
+```text
 - css\
 - fonts\
 - img\
@@ -108,7 +108,7 @@ directory.
 
 Your directory structure should now look like this:
 
-```nohighlight
+```text
 - docs/
   - index.html
 - custom_theme/
@@ -181,7 +181,7 @@ be added to the library from the HTML.
 
 Starting the with directory structure above (truncated):
 
-```nohighlight
+```text
 - docs/
 - custom_theme/
   - js/
