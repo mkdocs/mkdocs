@@ -149,8 +149,8 @@ class ContentSection:
 
     def __repr__(self):
         return (
-            f"{self.__class__.__name__}("
-            f"text={self.text}, id='{self.id}', title='{self.title}', keywords='{self.keywords}')"
+            f"{type(self).__name__}("
+            f"text={self.text!r}, id={self.id!r}, title={self.title!r}, keywords={self.keywords!r})"
         )
 
 
