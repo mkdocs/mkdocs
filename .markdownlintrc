@@ -26,5 +26,8 @@
   "MD041": false,
 
   // Disable named references validation
-  "MD052": false
+  "MD052": false,
+
+  // Table pipe style
+  "MD055": { "style": "no_leading_or_trailing" }
 }
