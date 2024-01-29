@@ -175,10 +175,11 @@ class ContentParser(HTMLParser):
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         """Called at the start of every HTML tag."""
-        atts = dict(attrs)
         # Check for permalink in header
-        if self.is_header_tag and tag == 'a' and 'headerlink' in (atts.get('class') or '').split():
-            self.is_permalink = True
+        if self.is_header_tag and tag == 'a':
+            atts = dict(attrs)
+            if 'headerlink' in (atts.get('class') or '').split():
+                self.is_permalink = True
             return
 
         # We only care about the opening tag for headings.
@@ -187,6 +188,7 @@ class ContentParser(HTMLParser):
 
         # We are dealing with a new header, create a new section
         # for it and assign the ID if it has one.
+        atts = dict(attrs)
         self.is_header_tag = True
         self.section = ContentSection()
         self.section.id = atts.get('id')
