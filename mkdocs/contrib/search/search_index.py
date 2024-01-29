@@ -177,7 +177,7 @@ class ContentParser(HTMLParser):
         """Called at the start of every HTML tag."""
         atts = dict(attrs)
         # Check for permalink in header
-        if self.is_header_tag and tag == 'a' and 'headerlink' in (atts.get('class') or ''):
+        if self.is_header_tag and tag == 'a' and 'headerlink' in (atts.get('class') or '').split():
             self.is_permalink = True
             return
 

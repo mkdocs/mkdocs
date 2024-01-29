@@ -330,6 +330,35 @@ class SearchIndexTests(unittest.TestCase):
 
         self.assertEqual(parser.data, [])
 
+    def test_content_parser_with_permalink(self):
+        parser = search_index.ContentParser()
+
+        parser.feed(
+            '<h1 id="title">Title<a class="headerlink" href="#title" title="Permanent link">&para;</a></h1>TEST'
+        )
+        parser.close()
+
+        self.assertEqual(
+            parser.data,
+            [search_index.ContentSection(text=["TEST"], id_="title", title="Title", keywords='')],
+        )
+
+    def test_content_parser_with_nonpermalink(self):
+        parser = search_index.ContentParser()
+
+        # Ensure only the whole class name is being matched.
+        parser.feed('<h1 id="title">Title <a class="fooheaderlink" href="#">title</a></h1>TEST')
+        parser.close()
+
+        self.assertEqual(
+            parser.data,
+            [
+                search_index.ContentSection(
+                    text=["TEST"], id_="title", title="Title title", keywords=''
+                )
+            ],
+        )
+
     def test_data_search_keywords(self):
         parser = search_index.ContentParser()
 
