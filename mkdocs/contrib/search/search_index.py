@@ -176,7 +176,7 @@ class ContentParser(HTMLParser):
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         """Called at the start of every HTML tag."""
         # Check for permalink in header
-        if self.is_header_tag and tag == 'a':
+        if self.is_header_tag and tag == 'a' and len(attrs):
             atts = dict(attrs)
             if 'headerlink' in (atts.get('class') or '').split():
                 self.is_permalink = True
@@ -223,12 +223,13 @@ class ContentParser(HTMLParser):
             # overall page entry in the search. So just skip it.
             return
 
-        # If this is a header, then the data is the title.
-        # Otherwise it is content of something under that header
-        # section.
         if self.is_header_tag:
-            self.section.title = self.section.title + data
+            # Write text data to title, being sure not to overwrite
+            # text from previous children of heading. Text data
+            # retains its whitespace and so none is added here.
+            self.section.title += data
         else:
+            # Write text data for elements under a heading section.
             self.section.text.append(data.rstrip('\n'))
 
     @property
