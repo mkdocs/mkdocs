@@ -79,7 +79,7 @@ class MkDocsConfig(base.Config):
     site_dir = c.SiteDir(default='site')
     """The directory where the site will be built to"""
 
-    copyright = c.Optional(c.Type(str))
+    copyright = c.Optional(c.HTMLString())
     """A copyright notice to add to the footer of documentation."""
 
     google_analytics = c.Deprecated(

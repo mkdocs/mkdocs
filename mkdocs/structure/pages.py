@@ -15,6 +15,7 @@ import markdown.htmlparser  # type: ignore
 import markdown.postprocessors
 import markdown.treeprocessors
 from markdown.util import AMP_SUBSTITUTE
+from markupsafe import Markup
 
 from mkdocs import utils
 from mkdocs.structure import StructureItem
@@ -33,11 +34,11 @@ log = logging.getLogger(__name__)
 
 
 class Page(StructureItem):
-    def __init__(self, title: str | None, file: File, config: MkDocsConfig) -> None:
+    def __init__(self, title: Markup | None, file: File, config: MkDocsConfig) -> None:
         file.page = self
         self.file = file
         if title is not None:
-            self.title = title
+            self.title = Markup(title)
 
         # Navigation attributes
         self.children = None
@@ -68,7 +69,7 @@ class Page(StructureItem):
 
     def __repr__(self):
         name = self.__class__.__name__
-        title = f"{self.title!r}" if self.title is not None else '[blank]'
+        title = f"{str(self.title)!r}" if self.title is not None else '[blank]'
         url = self.abs_url or self.file.url
         return f"{name}(title={title}, url={url!r})"
 
@@ -281,7 +282,7 @@ class Page(StructureItem):
         extract_title_ext = _ExtractTitleTreeprocessor()
         extract_title_ext._register(md)
 
-        self.content = md.convert(self.markdown)
+        self.content = Markup(md.convert(self.markdown))
         self.toc = get_toc(getattr(md, 'toc_tokens', []))
         self._title_from_render = extract_title_ext.title
         self.present_anchor_ids = (

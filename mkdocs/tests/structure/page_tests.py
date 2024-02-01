@@ -7,6 +7,7 @@ import unittest
 from unittest import mock
 
 import markdown
+from markupsafe import Markup
 
 from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.structure.files import File, Files
@@ -749,7 +750,7 @@ class RelativePathExtensionTests(unittest.TestCase):
     ) -> str:
         cfg = load_config(docs_dir=DOCS_DIR, **kwargs)
         fs = [File(f, cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls) for f in files]
-        pg = Page('Foo', fs[0], cfg)
+        pg = Page(Markup('Foo'), fs[0], cfg)
 
         with mock.patch('mkdocs.structure.files.open', mock.mock_open(read_data=content)):
             pg.read_source(cfg)

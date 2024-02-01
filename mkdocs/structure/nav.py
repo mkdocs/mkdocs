@@ -4,6 +4,8 @@ import logging
 from typing import TYPE_CHECKING, Iterator, TypeVar
 from urllib.parse import urlsplit
 
+from markupsafe import Markup
+
 from mkdocs.exceptions import BuildError
 from mkdocs.structure import StructureItem
 from mkdocs.structure.files import file_sort_key
@@ -46,17 +48,17 @@ class Navigation:
 
 
 class Section(StructureItem):
-    def __init__(self, title: str, children: list[StructureItem]) -> None:
-        self.title = title
+    def __init__(self, title: Markup, children: list[StructureItem]) -> None:
+        self.title = Markup(title)
         self.children = children
 
         self.active = False
 
     def __repr__(self):
         name = self.__class__.__name__
-        return f"{name}(title={self.title!r})"
+        return f"{name}(title={str(self.title)!r})"
 
-    title: str
+    title: Markup
     """The title of the section."""
 
     children: list[StructureItem]
@@ -95,16 +97,16 @@ class Section(StructureItem):
 
 
 class Link(StructureItem):
-    def __init__(self, title: str, url: str):
-        self.title = title
+    def __init__(self, title: Markup, url: str):
+        self.title = Markup(title)
         self.url = url
 
     def __repr__(self):
         name = self.__class__.__name__
-        title = f"{self.title!r}" if self.title is not None else '[blank]'
+        title = f"{str(self.title)!r}" if self.title is not None else '[blank]'
         return f"{name}(title={title}, url={self.url!r})"
 
-    title: str
+    title: Markup
     """The title of the link. This would generally be used as the label of the link."""
 
     url: str

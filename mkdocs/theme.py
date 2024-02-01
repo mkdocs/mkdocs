@@ -156,7 +156,7 @@ class Theme(MutableMapping[str, Any]):
         """Return a Jinja environment for the theme."""
         loader = jinja2.FileSystemLoader(self.dirs)
         # No autoreload because editing a template in the middle of a build is not useful.
-        env = jinja2.Environment(loader=loader, auto_reload=False)
+        env = jinja2.Environment(loader=loader, auto_reload=False, autoescape=True)
         env.filters['url'] = templates.url_filter
         env.filters['script_tag'] = templates.script_tag_filter
         localization.install_translations(env, self.locale, self.dirs)

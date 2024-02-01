@@ -5,15 +5,18 @@ For the sake of simplicity we use the Python-Markdown `toc` extension to
 generate a list of dicts for each toc item, and then store it as AnchorLinks to
 maintain compatibility with older versions of MkDocs.
 """
+
 from __future__ import annotations
 
 from typing import Iterable, Iterator, TypedDict
+
+from markupsafe import Markup
 
 
 class _TocToken(TypedDict):
     level: int
     id: str
-    name: str
+    name: Markup
     children: list[_TocToken]
 
 
@@ -28,11 +31,11 @@ def get_toc(toc_tokens: list[_TocToken]) -> TableOfContents:
 class AnchorLink:
     """A single entry in the table of contents."""
 
-    def __init__(self, title: str, id: str, level: int) -> None:
-        self.title, self.id, self.level = title, id, level
+    def __init__(self, title: Markup, id: str, level: int) -> None:
+        self.title, self.id, self.level = Markup(title), id, level
         self.children = []
 
-    title: str
+    title: Markup
     """The text of the item, as HTML."""
 
     @property

@@ -32,6 +32,7 @@ from urllib.parse import urlsplit, urlunsplit
 import markdown
 import pathspec
 import pathspec.gitignore
+from markupsafe import Markup
 
 from mkdocs import plugins, theme, utils
 from mkdocs.config.base import (
@@ -534,6 +535,15 @@ class URL(OptionallyRequired[str]):
             return urlunsplit(parsed_url)
 
         raise ValidationError("The URL isn't valid, it should include the http:// (scheme)")
+
+
+class HTMLString(BaseConfigOption[Markup]):
+    """A string of HTML that should not be further escaped when pasting it into other HTML content."""
+
+    def run_validation(self, value: object) -> Markup:
+        if not isinstance(value, str):
+            raise ValidationError(f"Expected a string but received: {type(value)}")
+        return Markup(value)
 
 
 class Optional(Generic[T], BaseConfigOption[Union[T, None]]):

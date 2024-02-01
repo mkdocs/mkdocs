@@ -4,6 +4,8 @@ import abc
 from typing import TYPE_CHECKING, Iterable
 
 if TYPE_CHECKING:
+    from markupsafe import Markup
+
     from mkdocs.structure.nav import Section
 
 
@@ -21,7 +23,7 @@ class StructureItem(metaclass=abc.ABCMeta):
     def is_top_level(self) -> bool:
         return self.parent is None
 
-    title: str | None
+    title: Markup | None
     is_section: bool = False
     is_page: bool = False
     is_link: bool = False

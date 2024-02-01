@@ -9,6 +9,7 @@ from urllib.parse import urljoin, urlsplit
 
 import jinja2
 from jinja2.exceptions import TemplateNotFound
+from markupsafe import Markup
 
 import mkdocs
 from mkdocs import utils
@@ -212,11 +213,15 @@ def _build_page(
         # Run `page_context` plugin events.
         context = config.plugins.on_page_context(context, page=page, config=config, nav=nav)
 
+        page.content = Markup(page.content or '')
         if excluded:
             page.content = (
-                '<div class="mkdocs-draft-marker" title="This page will not be included into the built site.">'
-                'DRAFT'
-                '</div>' + (page.content or '')
+                Markup(
+                    '<div class="mkdocs-draft-marker" title="This page will not be included into the built site.">'
+                    'DRAFT'
+                    '</div>'
+                )
+                + page.content
             )
 
         # Render the template.
