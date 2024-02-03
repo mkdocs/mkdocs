@@ -1111,11 +1111,11 @@ effect most users. However, if you have `use_directory_urls` set to `False`
 for a MkDocs site hosted on a web server, most of your URLs will now be broken.
 As you can see below, the new URLs are much more sensible.
 
-| Markdown file   | Old URL              | New URL        |
-| --------------- | -------------------- | -------------- |
-| `index.md`      | `index.html`         | `index.html`   |
-| `foo.md`        | `foo/index.html`     | `foo.html`     |
-| `foo/bar.md`    | `foo/bar/index.html` | `foo/bar.html` |
+Markdown file   | Old URL              | New URL
+--------------- | -------------------- | --------------
+`index.md`      | `index.html`         | `index.html`
+`foo.md`        | `foo/index.html`     | `foo.html`
+`foo/bar.md`    | `foo/bar/index.html` | `foo/bar.html`
 
 Note that there has been no change to URLs or file paths when
 `use_directory_urls` is set to `True` (the default), except that MkDocs more
@@ -1409,37 +1409,37 @@ version 1.0.
 Any of the following old page variables should be updated to the new ones in
 user created and third-party templates:
 
-| Old Variable Name | New Variable Name |
-| ----------------- | ----------------- |
-| current_page      | [page]            |
-| page_title        | page.title        |
-| content           | page.content      |
-| toc               | page.toc          |
-| meta              | page.meta         |
-| canonical_url     | page.canonical_url|
-| previous_page     | page.previous_page|
-| next_page         | page.next_page    |
+Old Variable Name | New Variable Name
+----------------- | -----------------
+current_page      | [page]
+page_title        | page.title
+content           | page.content
+toc               | page.toc
+meta              | page.meta
+canonical_url     | page.canonical_url
+previous_page     | page.previous_page
+next_page         | page.next_page
 
 [page]: ../dev-guide/themes.md#page
 
 Additionally, a number of global variables have been altered and/or removed
 and user created and third-party templates should be updated as outlined below:
 
-| Old Variable Name | New Variable Name or Expression        |
-| ----------------- | -------------------------------------- |
-| current_page      | page                                   |
-| include_nav       | nav&#124;length&gt;1                   |
-| include_next_prev | (page.next_page or page.previous_page) |
-| site_name         | config.site_name                       |
-| site_author       | config.site_author                     |
-| page_description  | config.site_description                |
-| repo_url          | config.repo_url                        |
-| repo_name         | config.repo_name                       |
-| site_url          | config.site_url                        |
-| copyright         | config.copyright                       |
-| google_analytics  | config.google_analytics                |
-| homepage_url      | nav.homepage.url                       |
-| favicon           | {{ base_url }}/img/favicon.ico         |
+Old Variable Name | New Variable Name or Expression
+----------------- | --------------------------------------
+current_page      | page
+include_nav       | nav&#124;length&gt;1
+include_next_prev | (page.next_page or page.previous_page)
+site_name         | config.site_name
+site_author       | config.site_author
+page_description  | config.site_description
+repo_url          | config.repo_url
+repo_name         | config.repo_name
+site_url          | config.site_url
+copyright         | config.copyright
+google_analytics  | config.google_analytics
+homepage_url      | nav.homepage.url
+favicon           | {{ base_url }}/img/favicon.ico
 
 #### Auto-Populated extra_css and extra_javascript Fully Deprecated. (#986)
 
@@ -1506,16 +1506,16 @@ but may be removed in a future version.
 Any of the following old page variables should be updated to the new ones in
 user created and third-party templates:
 
-| Old Variable Name | New Variable Name  |
-| ----------------- | ------------------ |
-| current_page      | [page]             |
-| page_title        | page.title         |
-| content           | page.content       |
-| toc               | page.toc           |
-| meta              | page.meta          |
-| canonical_url     | page.canonical_url |
-| previous_page     | page.previous_page |
-| next_page         | page.next_page     |
+Old Variable Name | New Variable Name
+----------------- | ------------------
+current_page      | [page]
+page_title        | page.title
+content           | page.content
+toc               | page.toc
+meta              | page.meta
+canonical_url     | page.canonical_url
+previous_page     | page.previous_page
+next_page         | page.next_page
 
 ##### Global Context
 
@@ -1559,21 +1559,21 @@ work for version 0.16, but may be removed in a future version. Use
 
 Below is a summary of all of the changes made to the global context:
 
-| Old Variable Name | New Variable Name or Expression        |
-| ----------------- | -------------------------------------- |
-| current_page      | page                                   |
-| include_nav       | nav&#124;length&gt;1                   |
-| include_next_prev | (page.next_page or page.previous_page) |
-| site_name         | config.site_name                       |
-| site_author       | config.site_author                     |
-| page_description  | config.site_description                |
-| repo_url          | config.repo_url                        |
-| repo_name         | config.repo_name                       |
-| site_url          | config.site_url                        |
-| copyright         | config.copyright                       |
-| google_analytics  | config.google_analytics                |
-| homepage_url      | nav.homepage.url                       |
-| favicon           | {{ base_url }}/img/favicon.ico         |
+Old Variable Name | New Variable Name or Expression
+----------------- | --------------------------------------
+current_page      | page
+include_nav       | nav&#124;length&gt;1
+include_next_prev | (page.next_page or page.previous_page)
+site_name         | config.site_name
+site_author       | config.site_author
+page_description  | config.site_description
+repo_url          | config.repo_url
+repo_name         | config.repo_name
+site_url          | config.site_url
+copyright         | config.copyright
+google_analytics  | config.google_analytics
+homepage_url      | nav.homepage.url
+favicon           | {{ base_url }}/img/favicon.ico
 
 #### Increased Template Customization. (#607)
 

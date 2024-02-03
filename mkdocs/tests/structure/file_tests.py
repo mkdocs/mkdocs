@@ -3,7 +3,7 @@ import sys
 import unittest
 from unittest import mock
 
-from mkdocs.structure.files import File, Files, _sort_files, get_files
+from mkdocs.structure.files import File, Files, _sort_files, file_sort_key, get_files
 from mkdocs.tests.base import PathAssertionMixin, load_config, tempdir
 
 
@@ -56,6 +56,16 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
             _sort_files(['A.md', 'B.md', 'README.md']),
             ['README.md', 'A.md', 'B.md'],
         )
+
+    def test_file_sort_key(self):
+        for case in [
+            ["a/b.md", "b/index.md", "b/a.md"],
+            ["SUMMARY.md", "foo/z.md", "foo/bar/README.md", "foo/bar/index.md", "foo/bar/a.md"],
+        ]:
+            with self.subTest(case):
+                files = [File(f, "", "", use_directory_urls=True) for f in case]
+                for a, b in zip(files, files[1:]):
+                    self.assertLess(file_sort_key(a), file_sort_key(b))
 
     def test_md_file(self):
         for use_directory_urls in True, False:
@@ -248,6 +258,67 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
                 else:
                     self.assertEqual(f.url, 'stuff/1-foo/index.html')
                 self.assertEqual(f.name, 'foo')
+
+    def test_file_overwrite_attrs(self):
+        f = File('foo.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
+        self.assertEqual(f.src_uri, 'foo.md')
+
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo.md')
+        f.abs_src_path = '/tmp/foo.md'
+        self.assertPathsEqual(f.abs_src_path, '/tmp/foo.md')
+        del f.abs_src_path
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo.md')
+
+        f.dest_uri = 'a.html'
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/a.html')
+        self.assertEqual(f.url, 'a.html')
+        f.abs_dest_path = '/path/to/site/b.html'
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/b.html')
+        self.assertEqual(f.url, 'a.html')
+        del f.url
+        del f.dest_uri
+        del f.abs_dest_path
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo.html')
+
+        self.assertTrue(f.is_documentation_page())
+        f.src_uri = 'foo.html'
+        del f.name
+        self.assertFalse(f.is_documentation_page())
+
+    def test_generated_file(self):
+        f = File(
+            'foo/bar.md',
+            src_dir=None,
+            dest_dir='/path/to/site',
+            use_directory_urls=False,
+        )
+        f.content_string = 'вміст'
+        f.generated_by = 'some-plugin'
+        self.assertEqual(f.generated_by, 'some-plugin')
+        self.assertEqual(f.src_uri, 'foo/bar.md')
+        self.assertIsNone(f.abs_src_path)
+        self.assertIsNone(f.src_dir)
+        self.assertEqual(f.dest_uri, 'foo/bar.html')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.html')
+        self.assertEqual(f.content_string, 'вміст')
+        self.assertEqual(f.edit_uri, None)
+
+    @tempdir(files={'x.md': 'вміст'})
+    def test_generated_file_constructor(self, tdir) -> None:
+        config = load_config(site_dir='/path/to/site', use_directory_urls=False)
+        config.plugins._current_plugin = 'foo'
+        for f in [
+            File.generated(config, 'foo/bar.md', content='вміст'),
+            File.generated(config, 'foo/bar.md', content='вміст'.encode()),
+            File.generated(config, 'foo/bar.md', abs_src_path=os.path.join(tdir, 'x.md')),
+        ]:
+            self.assertEqual(f.src_uri, 'foo/bar.md')
+            self.assertIsNone(f.src_dir)
+            self.assertEqual(f.dest_uri, 'foo/bar.html')
+            self.assertPathsEqual(f.abs_dest_path, os.path.abspath('/path/to/site/foo/bar.html'))
+            self.assertEqual(f.content_string, 'вміст')
+            self.assertEqual(f.content_bytes, 'вміст'.encode())
+            self.assertEqual(f.edit_uri, None)
 
     def test_files(self):
         fs = [
@@ -584,6 +655,8 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
     @tempdir(files={'test.txt': 'source content'})
     def test_copy_file_clean_modified(self, src_dir, dest_dir):
         file = File('test.txt', src_dir, dest_dir, use_directory_urls=False)
+        self.assertEqual(file.content_string, 'source content')
+        self.assertEqual(file.content_bytes, b'source content')
         file.is_modified = mock.Mock(return_value=True)
         dest_path = os.path.join(dest_dir, 'test.txt')
         file.copy_file(dirty=False)
@@ -613,6 +686,28 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         with open(dest_path, encoding='utf-8') as f:
             self.assertEqual(f.read(), 'destination content')
 
+    @tempdir()
+    def test_copy_file_from_content(self, dest_dir):
+        file = File('test.txt', src_dir='unused', dest_dir=dest_dir, use_directory_urls=False)
+        file.content_string = 'ö'
+        self.assertIsNone(file.abs_src_path)
+        dest_path = os.path.join(dest_dir, 'test.txt')
+
+        file.copy_file()
+        self.assertPathIsFile(dest_path)
+        with open(dest_path, encoding='utf-8') as f:
+            self.assertEqual(f.read(), 'ö')
+
+        file.content_bytes = b'\x01\x02\x03'
+        file.copy_file()
+        with open(dest_path, 'rb') as f:
+            self.assertEqual(f.read(), b'\x01\x02\x03')
+
+        file.content_bytes = b'\xc3\xb6'
+        file.copy_file()
+        with open(dest_path, encoding='utf-8') as f:
+            self.assertEqual(f.read(), 'ö')
+
     def test_files_append_remove_src_paths(self):
         fs = [
             File('index.md', '/path/to/docs', '/path/to/site', use_directory_urls=True),
@@ -635,3 +730,17 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         self.assertEqual(len(files), 6)
         self.assertEqual(len(files.src_uris), 6)
         self.assertFalse(extra_file.src_uri in files.src_uris)
+
+    def test_files_move_to_end(self):
+        fs = [
+            File('a.md', '/path/to/docs', '/path/to/site', use_directory_urls=True),
+            File('b.jpg', '/path/to/docs', '/path/to/site', use_directory_urls=True),
+        ]
+        files = Files(fs)
+        self.assertEqual(len(files), 2)
+        self.assertEqual(list(files)[0].src_uri, 'a.md')
+        with self.assertWarns(DeprecationWarning):
+            files.append(fs[0])
+        self.assertEqual(len(files), 2)
+        self.assertEqual(list(files)[0].src_uri, 'b.jpg')
+        self.assertEqual(list(files)[1].src_uri, 'a.md')

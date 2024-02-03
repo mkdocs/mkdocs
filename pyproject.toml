@@ -166,6 +166,7 @@ dependencies = [
 check = "mypy mkdocs"
 
 [tool.hatch.envs.style]
+type = "pip-compile"
 detached = true
 dependencies = [
     "black",
@@ -179,10 +180,10 @@ check = [
     "lint",
 ]
 lint = [
-    "ruff check mkdocs docs"
+    "ruff check mkdocs docs {args}"
 ]
 fix = [
-    "ruff check --fix mkdocs docs",
+    "lint --fix",
     "format",
 ]
 format = [

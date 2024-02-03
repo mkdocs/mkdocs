@@ -1023,11 +1023,11 @@ plugins:
 
 ###### Options
 
-|Option|Description|
-|------|-----------|
-|`full`|Indexes the title, section headings, and full text of each page.|
-|`sections`|Indexes the title and section headings of each page.|
-|`titles`|Indexes only the title of each page.|
+Option | Description
+------ | -----------
+`full` | Indexes the title, section headings, and full text of each page.
+`sections` | Indexes the title and section headings of each page.
+`titles` | Indexes only the title of each page.
 
 **default**: `full`
 

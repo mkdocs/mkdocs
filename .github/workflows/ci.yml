@@ -30,7 +30,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -57,7 +57,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       - name: Install Python dependencies
@@ -69,10 +69,7 @@ jobs:
           node-version: 20
       - name: Check with ruff
         if: always()
-        run: hatch run style:fix
-      - name: Check with black + isort
-        if: always()
-        run: hatch run style:format && git diff --color --exit-code
+        run: hatch run style:lint
       - name: Check with mypy
         if: always()
         run: hatch run types:check
@@ -94,7 +91,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       - name: Install dependencies
