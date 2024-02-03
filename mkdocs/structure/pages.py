@@ -76,10 +76,7 @@ class Page(StructureItem):
 
     Populated after `.render()`."""
 
-    content_title: str | None = None
-    """The title extracted from the first heading of the content.
-
-    This is only a component of `title` and may be omitted. Populated after `.render()`."""
+    _title_from_render: str | None = None
 
     toc: TableOfContents
     """An iterable object representing the Table of contents for a page. Each item in
@@ -244,16 +241,40 @@ class Page(StructureItem):
         if 'title' in self.meta:
             return self.meta['title']
 
-        if self.content_title:
-            return self.content_title
+        if self._title_from_render:
+            return self._title_from_render
         elif self.content is None:  # Preserve legacy behavior only for edge cases in plugins.
             title_from_md = get_markdown_title(self.markdown)
             if title_from_md is not None:
                 return title_from_md
 
+        return self._title_from_filename()
+
+    @property
+    def content_title(self) -> str:
+        """
+        Similar to `title` but prioritizes the title from the document itself over the title
+        specified in the `nav` config.
+
+        Raises if called before `render()` was called.
+
+        Check these in order and use the first that returns a valid title:
+        - value of metadata 'title'
+        - content of the first H1 in Markdown content
+        - value provided on init (passed in from config)
+        - convert filename to title
+        """
+        if self.content is None:
+            raise RuntimeError("`content` field hasn't been set (via `render`)")
+        if 'title' in self.meta:
+            return self.meta['title']
+        if self._title_from_render:
+            return self._title_from_render
+        return self._title_from_filename()
+
+    def _title_from_filename(self) -> str:
         if self.is_homepage:
             return 'Home'
-
         title = self.file.name.replace('-', ' ').replace('_', ' ')
         # Capitalize if the filename was all lowercase, otherwise leave it as-is.
         if title.lower() == title:
@@ -284,7 +305,7 @@ class Page(StructureItem):
 
         self.content = md.convert(self.markdown)
         self.toc = get_toc(getattr(md, 'toc_tokens', []))
-        self.content_title = extract_title_ext.title
+        self._title_from_render = extract_title_ext.title
         self.present_anchor_ids = (
             extract_anchors_ext.present_anchor_ids | raw_html_ext.present_anchor_ids
         )
