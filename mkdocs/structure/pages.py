@@ -249,7 +249,13 @@ class Page(StructureItem):
             if title_from_md is not None:
                 return title_from_md
 
-        return self._title_from_filename()
+        if self.is_homepage:
+            return 'Home'
+        title = self.file.name.replace('-', ' ').replace('_', ' ')
+        # Capitalize if the filename was all lowercase, otherwise leave it as-is.
+        if title.lower() == title:
+            title = title.capitalize()
+        return title
 
     @property
     def content_title(self) -> str:
@@ -282,16 +288,7 @@ class Page(StructureItem):
             return self.meta['title']
         if self._title_from_render:
             return self._title_from_render
-        return self._title_from_filename()
-
-    def _title_from_filename(self) -> str:
-        if self.is_homepage:
-            return 'Home'
-        title = self.file.name.replace('-', ' ').replace('_', ' ')
-        # Capitalize if the filename was all lowercase, otherwise leave it as-is.
-        if title.lower() == title:
-            title = title.capitalize()
-        return title
+        return self.title
 
     def render(self, config: MkDocsConfig, files: Files) -> None:
         """Convert the Markdown source file to HTML as per the config."""
