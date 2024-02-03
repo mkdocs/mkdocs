@@ -225,14 +225,15 @@ class Page(StructureItem):
     @weak_property
     def title(self) -> str | None:  # type: ignore[override]
         """
-        Returns the title for the current page.
+        Returns the title for the page, in the context of the nav.
 
         Before calling `read_source()`, this value is empty. It can also be updated by `render()`.
 
-        Check these in order and use the first that returns a valid title:
-        - value provided on init (passed in from config)
+        Checks these in order and uses the first that returns a valid title:
+
+        - value specified in the `nav` config in mkdocs.yml (or the value that was passed when creating the `Page` programmatically)
         - value of metadata 'title'
-        - content of the first H1 in Markdown content
+        - content of the first H1 heading in Markdown content
         - convert filename to title
         """
         if self.markdown is None:
@@ -253,16 +254,27 @@ class Page(StructureItem):
     @property
     def content_title(self) -> str:
         """
+        Returns the title for the page, in the context of the current page's content.
+
+        NEW: **New in MkDocs 1.6.**
+
         Similar to `title` but prioritizes the title from the document itself over the title
         specified in the `nav` config.
 
-        Raises if called before `render()` was called.
+        For themes, this should be preferred within the `<title>` tag. To apply the preferred behavior but keep compatibility with older versions, you can use:
 
-        Check these in order and use the first that returns a valid title:
+        ```jinja
+        <title>{{ page.content_title or page.title }}</title>
+        ```
+
+        Checks these in order and uses the first that returns a valid title:
+
         - value of metadata 'title'
-        - content of the first H1 in Markdown content
-        - value provided on init (passed in from config)
+        - content of the first H1 heading in Markdown content
+        - value specified in the `nav` config in mkdocs.yml (or the value that was passed when creating the `Page` programmatically)
         - convert filename to title
+
+        When using this property outside of themes, do not access it before `render()` was called on the content, or it will raise.
         """
         if self.content is None:
             raise RuntimeError("`content` field hasn't been set (via `render`)")
