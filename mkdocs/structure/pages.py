@@ -10,6 +10,7 @@ from urllib.parse import unquote as urlunquote
 from urllib.parse import urljoin, urlsplit, urlunsplit
 
 import markdown
+import markdown.extensions.toc
 import markdown.htmlparser  # type: ignore
 import markdown.postprocessors
 import markdown.treeprocessors
@@ -549,7 +550,7 @@ class _HTMLHandler(markdown.htmlparser.htmlparser.HTMLParser):  # type: ignore[n
 
 class _ExtractTitleTreeprocessor(markdown.treeprocessors.Treeprocessor):
     title: str | None = None
-    postprocessors: Sequence[markdown.postprocessors.Postprocessor] = ()
+    md: markdown.Markdown
 
     def run(self, root: etree.Element) -> etree.Element:
         for el in root:
@@ -561,14 +562,15 @@ class _ExtractTitleTreeprocessor(markdown.treeprocessors.Treeprocessor):
                 # Extract the text only, recursively.
                 title = ''.join(el.itertext())
                 # Unescape per Markdown implementation details.
-                for pp in self.postprocessors:
-                    title = pp.run(title)
-                self.title = title
+                title = markdown.extensions.toc.stashedHTML2text(
+                    title, self.md, strip_entities=False
+                )
+                self.title = title.strip()
             break
         return root
 
     def _register(self, md: markdown.Markdown) -> None:
-        self.postprocessors = tuple(md.postprocessors)
+        self.md = md
         md.treeprocessors.register(self, "mkdocs_extract_title", priority=-1)  # After the end.
 
 
