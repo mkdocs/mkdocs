@@ -20,6 +20,7 @@ from mkdocs import utils
 from mkdocs.structure import StructureItem
 from mkdocs.structure.toc import get_toc
 from mkdocs.utils import _removesuffix, get_build_date, get_markdown_title, meta, weak_property
+from mkdocs.utils.misc import dict_merge_inplace
 
 if TYPE_CHECKING:
     from xml.etree import ElementTree as etree
@@ -217,7 +218,8 @@ class Page(StructureItem):
                 log.error(f'Encoding error reading file: {self.file.src_path}')
                 raise
 
-        self.markdown, self.meta = meta.get_data(source)
+        self.markdown, metadata = meta.get_data(source)
+        dict_merge_inplace(self.meta, metadata)
 
     def _set_title(self) -> None:
         warnings.warn(
