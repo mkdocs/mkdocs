@@ -101,6 +101,8 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         host: str,
         port: int,
         root: str,
+        *,
+        file_hook: Callable[[str], str | None] = lambda path: None,
         mount_path: str = "/",
         polling_interval: float = 0.5,
         shutdown_delay: float = 0.25,
@@ -112,6 +114,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         except Exception:
             pass
         self.root = os.path.abspath(root)
+        self.file_hook = file_hook
         self.mount_path = _normalize_mount_path(mount_path)
         self.url = _serve_url(host, port, mount_path)
         self.build_delay = 0.1
@@ -289,7 +292,6 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 rel_file_path += "index.html"
             # Prevent directory traversal - normalize the path.
             rel_file_path = posixpath.normpath("/" + rel_file_path).lstrip("/")
-            file_path = os.path.join(self.root, rel_file_path)
         elif path == "/":
             start_response("302 Found", [("Location", urllib.parse.quote(self.mount_path))])
             return []
@@ -298,13 +300,20 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
 
         # Wait until the ongoing rebuild (if any) finishes, so we're not serving a half-built site.
         with self._epoch_cond:
-            self._epoch_cond.wait_for(lambda: self._visible_epoch == self._wanted_epoch)
+            file_path = self.file_hook(rel_file_path)
+            if file_path is None:
+                file_path = os.path.join(self.root, rel_file_path)
+
+                self._epoch_cond.wait_for(lambda: self._visible_epoch == self._wanted_epoch)
             epoch = self._visible_epoch
 
         try:
             file: BinaryIO = open(file_path, "rb")
         except OSError:
-            if not path.endswith("/") and os.path.isfile(os.path.join(file_path, "index.html")):
+            if not path.endswith("/") and (
+                self.file_hook(rel_file_path) is not None
+                or os.path.isfile(os.path.join(file_path, "index.html"))
+            ):
                 start_response("302 Found", [("Location", urllib.parse.quote(path) + "/")])
                 return []
             return None  # Not found
