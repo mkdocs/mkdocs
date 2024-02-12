@@ -180,7 +180,9 @@ def create_symbolic_dir(source_path: Path, output_path: Path) -> None:
                 _winapi.CreateJunction(str(source_path), str(output_path))
                 log.info(f'Created junction to binary directory {source_path!s} at {output_path!s}')
             else:
-                log.error(f'Can\'t create junction to binary directory {source_path!s}, as it doesn\'t exist')
+                log.error(
+                    f'Can\'t create junction to binary directory {source_path!s}, as it doesn\'t exist'
+                )
 
         except OSError:
             log.error(f'Can\'t create junction to binary directory {output_path!s}')
@@ -190,7 +192,9 @@ def create_symbolic_dir(source_path: Path, output_path: Path) -> None:
                 os.symlink(str(source_path), str(output_path))
                 log.info(f'Created symlink to binary directory {source_path!s} at {output_path!s}')
             else:
-                log.error(f'Can\'t create symbolic link to binary directory {source_path!s}, as it doesn\'t exist')
+                log.error(
+                    f'Can\'t create symbolic link to binary directory {source_path!s}, as it doesn\'t exist'
+                )
         except OSError:
             log.error(f'Can\'t create symbolic link to binary directory {output_path!s}')
 

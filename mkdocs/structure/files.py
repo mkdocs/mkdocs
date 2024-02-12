@@ -172,7 +172,9 @@ class Files:
 
                                     binary_dir_file_obj.copy_file([], docs_dir, dirty, is_serve)
                         else:
-                            log.error(f'Can\'t copy files from binary directory {dir_source!s}, as it doesn\'t exist')
+                            log.error(
+                                f'Can\'t copy files from binary directory {dir_source!s}, as it doesn\'t exist'
+                            )
 
     def documentation_pages(
         self, *, inclusion: Callable[[InclusionLevel], bool] = InclusionLevel.is_included
