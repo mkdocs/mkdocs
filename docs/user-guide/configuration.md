@@ -100,10 +100,11 @@ repo_url: https://example.com/project/repo
 edit_uri: blob/main/docs/
 ```
 
-means that a page named 'foo/bar.md' will have its edit link lead to:  
+means that a page named 'foo/bar.md' will have its edit link lead to:
 <https://example.com/project/repo/blob/main/docs/foo/bar.md>
 
-`edit_uri` can actually be just an absolute URL, not necessarily relative to `repo_url`, so this can achieve the same result:
+`edit_uri` can actually be just an absolute URL, not necessarily relative to
+`repo_url`, so this can achieve the same result:
 
 ```yaml
 edit_uri: https://example.com/project/repo/blob/main/docs/
@@ -153,9 +154,11 @@ edit_uri_template: 'blob/main/docs/{path}'
 
 (they are also mutually exclusive -- don't specify both).
 
-Starting from here, you can change the positioning or formatting of the path, in case the default behavior of appending the path isn't enough.
+Starting from here, you can change the positioning or formatting of the path, in
+case the default behavior of appending the path isn't enough.
 
-The contents of `edit_uri_template` are normal [Python format strings](https://docs.python.org/3/library/string.html#formatstrings), with only these fields available:
+The contents of `edit_uri_template` are normal [Python format strings](https://docs.python.org/3/library/string.html#formatstrings),
+with only these fields available:
 
 * `{path}`, e.g. `foo/bar.md`
 * `{path_noext}`, e.g. `foo/bar`
@@ -166,7 +169,7 @@ And the conversion flag `!q` is available, to percent-encode the field:
 
 >? NOTE: **Suggested useful configurations:**
 >
-> *   GitHub Wiki:  
+> *   GitHub Wiki:
 >     (e.g. `https://github.com/project/repo/wiki/foo/bar/_edit`)
 >
 >     ```yaml
@@ -174,7 +177,7 @@ And the conversion flag `!q` is available, to percent-encode the field:
 >     edit_uri_template: '{path_noext}/_edit'
 >     ```
 >
-> *   BitBucket editor:  
+> *   BitBucket editor:
 >     (e.g. `https://bitbucket.org/project/repo/src/master/docs/foo/bar.md?mode=edit`)
 >
 >     ```yaml
@@ -182,7 +185,7 @@ And the conversion flag `!q` is available, to percent-encode the field:
 >     edit_uri_template: 'src/master/docs/{path}?mode=edit'
 >     ```
 >
-> *   GitLab Static Site Editor:  
+> *   GitLab Static Site Editor:
 >     (e.g. `https://gitlab.com/project/repo/-/sse/master/docs%2Ffoo%2bar.md`)
 >
 >     ```yaml
@@ -190,7 +193,7 @@ And the conversion flag `!q` is available, to percent-encode the field:
 >     edit_uri_template: '-/sse/master/docs%2F{path!q}'
 >     ```
 >
-> *   GitLab Web IDE:  
+> *   GitLab Web IDE:
 >     (e.g. `https://gitlab.com/-/ide/project/repo/edit/master/-/docs/foo/bar.md`)
 >
 >     ```yaml
@@ -297,9 +300,13 @@ NEW: **New in version 1.5.**
 
 > DANGER: **Changed in version 1.6:**
 >
-> This config no longer applies the "drafts" functionality for `mkdocs serve`. If you have draft documents that you want available in "serve" and not "build", replace `exclude_docs` with the new [`draft_docs`](#draft_docs) config option.
+> This config no longer applies the "drafts" functionality for `mkdocs serve`.
+> If you have draft documents that you want available in "serve" and not
+> "build", replace `exclude_docs` with the new [`draft_docs`](#draft_docs)
+> config option.
 
-This config defines patterns of files (under [`docs_dir`](#docs_dir)) to not be picked up into the built site.
+This config defines patterns of files (under [`docs_dir`](#docs_dir)) to not be
+picked up into the built site.
 
 Example:
 
@@ -313,7 +320,8 @@ exclude_docs: |
 
 This follows the [.gitignore pattern format](https://git-scm.com/docs/gitignore#_pattern_format).
 
-The following defaults are always implicitly prepended - to exclude dot-files (and directories) as well as the top-level `templates` directory:
+The following defaults are always implicitly prepended - to exclude dot-files
+(and directories) as well as the top-level `templates` directory:
 
 ```yaml
 exclude_docs: |
@@ -321,7 +329,8 @@ exclude_docs: |
   /templates/
 ```
 
-So, in order to really start this config fresh, you'd need to specify a negated version of these entries first.
+So, in order to really start this config fresh, you'd need to specify a negated
+version of these entries first.
 
 Otherwise you could for example opt only certain dot-files back into the site:
 
@@ -334,7 +343,10 @@ exclude_docs: |
 
 NEW: **New in version 1.6.**
 
-This config defines patterns of files (under [`docs_dir`](#docs_dir)) to be treated as a draft.  Draft files are available during `mkdocs serve` and include a "DRAFT" mark but will not be included in the build. To prevent this effect and make "serve" behave the same as "build", you can run `mkdocs serve --clean`.
+This config defines patterns of files (under [`docs_dir`](#docs_dir)) to be
+treated as a draft.  Draft files are available during `mkdocs serve` and include
+a "DRAFT" mark but will not be included in the build. To prevent this effect and
+make "serve" behave the same as "build", you can run `mkdocs serve --clean`.
 
 Example:
 
@@ -353,11 +365,14 @@ NEW: **New in version 1.5.**
 
 > NEW: **New in version 1.6:**
 >
-> If the [`nav`](#nav) config is not specified at all, pages specified in this config will now be excluded from the inferred navigation.
+> If the [`nav`](#nav) config is not specified at all, pages specified in this
+> config will now be excluded from the inferred navigation.
 
-If you want to include some docs into the site but intentionally exclude them from the nav, normally MkDocs warns about this.
+If you want to include some docs into the site but intentionally exclude them
+from the nav, normally MkDocs warns about this.
 
-Adding such patterns of files (relative to [`docs_dir`](#docs_dir)) into the `not_in_nav` config will prevent such warnings.
+Adding such patterns of files (relative to [`docs_dir`](#docs_dir)) into the
+`not_in_nav` config will prevent such warnings.
 
 Example:
 
@@ -372,17 +387,24 @@ not_in_nav: |
 
 As the previous option, this follows the .gitignore pattern format.
 
-NOTE: Adding a given file to [`exclude_docs`](#exclude_docs) takes precedence over and implies `not_in_nav`.
+NOTE: Adding a given file to [`exclude_docs`](#exclude_docs) takes precedence
+over and implies `not_in_nav`.
 
 ### validation
 
 NEW: **New in version 1.5.**
 
-Configure the strictness of MkDocs' diagnostic messages when validating links to documents.
+Configure the strictness of MkDocs' diagnostic messages when validating links to
+documents.
 
-This is a tree of configs, and for each one the value can be one of the three: `warn`, `info`, `ignore`. Which cause a logging message of the corresponding severity to be produced. The `warn` level is, of course, intended for use with `mkdocs build --strict` (where it becomes an error), which you can employ in continuous testing.
+This is a tree of configs, and for each one the value can be one of the three:
+`warn`, `info`, `ignore`. Which cause a logging message of the corresponding
+severity to be produced. The `warn` level is, of course, intended for use with
+`mkdocs build --strict` (where it becomes an error), which you can employ in
+continuous testing.
 
-The config `validation.links.absolute_links` additionally has a special value `relative_to_docs`, for [validation of absolute links](#validation-of-absolute-links).
+The config `validation.links.absolute_links` additionally has a special value
+`relative_to_docs`, for [validation of absolute links](#validation-of-absolute-links).
 
 >? EXAMPLE: **Defaults of this config as of MkDocs 1.6:**
 >
@@ -399,9 +421,11 @@ The config `validation.links.absolute_links` additionally has a special value `r
 >     unrecognized_links: info
 > ```
 >
-> (Note: you shouldn't copy this whole example, because it only duplicates the defaults. Only individual items that differ should be set.)
+> (Note: you shouldn't copy this whole example, because it only duplicates the
+> defaults. Only individual items that differ should be set.)
 
-The defaults of some of the behaviors already differ from MkDocs 1.4 and below - they were ignored before.
+The defaults of some of the behaviors already differ from MkDocs 1.4 and below -
+they were ignored before.
 
 >? EXAMPLE: **Configure MkDocs 1.6 to behave like MkDocs 1.4 and below (reduce strictness):**
 >
@@ -422,41 +446,70 @@ The defaults of some of the behaviors already differ from MkDocs 1.4 and below -
 >   anchors: warn  # New in MkDocs 1.6
 > ```
 
-Note how in the above examples we omitted the 'nav' and 'links' keys. Here `absolute_links:` means setting both `nav: absolute_links:` and `links: absolute_links:`.
+Note how in the above examples we omitted the 'nav' and 'links' keys. Here
+`absolute_links:` means setting both `nav: absolute_links:` and `links:
+absolute_links:`.
 
-Full list of values and examples of log messages that they can hide or make more prominent:
+Full list of values and examples of log messages that they can hide or make more
+prominent:
 
 *   `validation.nav.omitted_files`
-    * > The following pages exist in the docs directory, but are not included in the "nav" configuration: ...
+    *   > The following pages exist in the docs directory, but are not included in
+        > the "nav" configuration: ...
 *   `validation.nav.not_found`
-    * > A reference to 'foo/bar.md' is included in the 'nav' configuration, which is not found in the documentation files.
-    * > A reference to 'foo/bar.md' is included in the 'nav' configuration, but this file is excluded from the built site.
+    *   > A reference to 'foo/bar.md' is included in the 'nav' configuration,
+        > which is not found in the documentation files.
+    *   > A reference to 'foo/bar.md' is included in the 'nav' configuration, but
+        > this file is excluded from the built site.
 *   `validation.nav.absolute_links`
-    * > An absolute path to '/foo/bar.html' is included in the 'nav' configuration, which presumably points to an external resource.
-<!-- -->
+    *   > An absolute path to '/foo/bar.html' is included in the 'nav'
+        > configuration, which presumably points to an external resource.
+
 *   `validation.links.not_found`
-    * > Doc file 'example.md' contains a link '../foo/bar.md', but the target is not found among documentation files.
-    * > Doc file 'example.md' contains a link to 'foo/bar.md' which is excluded from the built site.
+    *   > Doc file 'example.md' contains a link '../foo/bar.md', but the target is
+        > not found among documentation files.
+    *   > Doc file 'example.md' contains a link to 'foo/bar.md' which is excluded
+        > from the built site.
 *   `validation.links.anchors`
-    * > Doc file 'example.md' contains a link '../foo/bar.md#some-heading', but the doc 'foo/bar.md' does not contain an anchor '#some-heading'.
-    * > Doc file 'example.md' contains a link '#some-heading', but there is no such anchor on this page.
+    *   > Doc file 'example.md' contains a link '../foo/bar.md#some-heading', but
+        > the doc 'foo/bar.md' does not contain an anchor '#some-heading'.
+    *   > Doc file 'example.md' contains a link '#some-heading', but there is no
+        > such anchor on this page.
 *   `validation.links.absolute_links`
-    * > Doc file 'example.md' contains an absolute link '/foo/bar.html', it was left as is. Did you mean 'foo/bar.md'?
+    *   > Doc file 'example.md' contains an absolute link '/foo/bar.html', it was
+        > left as is. Did you mean 'foo/bar.md'?
 *   `validation.links.unrecognized_links`
-    * > Doc file 'example.md' contains an unrecognized relative link '../foo/bar/', it was left as is. Did you mean 'foo/bar.md'?
-    * > Doc file 'example.md' contains an unrecognized relative link 'mail\@example.com', it was left as is. Did you mean 'mailto:mail\@example.com'?
+    *   > Doc file 'example.md' contains an unrecognized relative link
+        > '../foo/bar/', it was left as is. Did you mean 'foo/bar.md'?
+    *   > Doc file 'example.md' contains an unrecognized relative link
+        > 'mail\@example.com', it was left as is. Did you mean
+        > 'mailto:mail\@example.com'?
 
 #### Validation of absolute links
 
 NEW: **New in version 1.6.**
 
-> Historically, within Markdown, MkDocs only recognized **relative** links that lead to another physical `*.md` document (or media file). This is a good convention to follow because then the source pages are also freely browsable without MkDocs, for example on GitHub. Whereas absolute links were left unmodified (making them often not work as expected) or, more recently, warned against. If you dislike having to always use relative links, now you can opt into absolute links and have them work correctly.
+> Historically, within Markdown, MkDocs only recognized **relative** links that
+> lead to another physical `*.md` document (or media file). This is a good
+> convention to follow because then the source pages are also freely browsable
+> without MkDocs, for example on GitHub. Whereas absolute links were left
+> unmodified (making them often not work as expected) or, more recently, warned
+> against. If you dislike having to always use relative links, now you can opt
+> into absolute links and have them work correctly.
 
-If you set the setting `validation.links.absolute_links` to the new value `relative_to_docs`, all Markdown links starting with `/` will be understood as being relative to the `docs_dir` root. The links will then be validated for correctness according to all the other rules that were already working for relative links in prior versions of MkDocs. For the HTML output, these links will still be turned relative so that the site still works reliably.
+If you set the setting `validation.links.absolute_links` to the new value
+`relative_to_docs`, all Markdown links starting with `/` will be understood as
+being relative to the `docs_dir` root. The links will then be validated for
+correctness according to all the other rules that were already working for
+relative links in prior versions of MkDocs. For the HTML output, these links
+will still be turned relative so that the site still works reliably.
 
-So, now any document (e.g. "dir1/foo.md") can link to the document "dir2/bar.md" as `[link](/dir2/bar.md)`, in addition to the previously only correct way `[link](../dir2/bar.md)`.
+So, now any document (e.g. "dir1/foo.md") can link to the document "dir2/bar.md"
+as `[link](/dir2/bar.md)`, in addition to the previously only correct way
+`[link](../dir2/bar.md)`.
 
-You have to enable the setting, though. The default is still to just skip the link.
+You have to enable the setting, though. The default is still to just skip the
+link.
 
 > EXAMPLE: **Settings to recognize absolute links and validate them:**
 >
@@ -511,8 +564,8 @@ If a set of key/value pairs, the following nested keys can be defined:
 > your configuration file or it can be an absolute directory path from the
 > root of your local file system.
 >
-> See [Customizing Your Theme][theme_dir] for details if you would like to tweak an
-> existing theme.
+> See [Customizing Your Theme][theme_dir] for details if you would like to tweak
+> an existing theme.
 >
 > See the [Theme Developer Guide] if you would like to build your own theme
 > from the ground up.
@@ -561,9 +614,85 @@ the root of your local file system.
 > If you're using another source code control tool, you'll want to check its
 > documentation on how to ignore specific directories.
 
+### binary_dirs
+
+When you run `mkdocs serve`, static files are copied from the `docs_dir` to a
+subdirectory inside your system's default temporary directory. This path is
+used for serving the website preview.
+
+For large binaries such as videos this can take up a lot of disk space and can
+take a long time to copy, slowing down the load and reload times of the preview
+server. Likewise, thousands of small binaries such as PDFs can greatly slow down
+preview server load and reload times.
+
+While binaries are often better hosted off-site by dedicated services, if you
+choose to host them locally you can save space and improve preview server
+performance by adding your binary directories to `binary_dirs`. This creates
+symbolic links or junctions to these directories in the preview server's
+temporary directory instead of copying their file contents across.
+
+#### Store binaries with your docs
+
+You can use paths relative to `docs_dir` with `binary_dirs` if you have binaries
+located alongside your MKDocs content. For example, if you have the following
+paths:
+
+*   `docs_dir/audio`
+
+*   `docs_dir/files`
+
+*   `docs_dir/video`
+
+You can add them to `binary_dirs` as follows:
+
+```yaml
+binary_dirs:
+  - 'audio'
+  - 'files'
+  - 'video'
+```
+
+#### Store binaries in another folder or drive
+
+You can store your binaries in another folder or drive if you use absolute paths
+with `binary_dirs`:
+
+```yaml
+binary_dirs:
+  - '/home/username/Desktop/videos'
+```
+
+In the previous code sample, `/home/username/Desktop/videos` is symbolically
+linked to `/videos` in the preview server. This means you can use `/videos` as a
+valid path in your Markdown or HTML.
+
+The following absolute paths are supported:
+
+*   Linux user paths:
+
+    ```yaml
+    binary_dirs:
+      - '~/Desktop/videos'
+    ```
+
+*   Linux absolute paths:
+
+    ```yaml
+    binary_dirs:
+      - '/home/username/Desktop/videos'
+    ```
+
+*   Windows absolute paths, replacing `\` with `/`:
+
+    ```yaml
+    binary_dirs:
+      - 'C:/videos'
+    ```
+
 ### extra_css
 
-Set a list of CSS files (relative to `docs_dir`) to be included by the theme, typically as `<link>` tags.
+Set a list of CSS files (relative to `docs_dir`) to be included by the theme,
+typically as `<link>` tags.
 
 Example:
 
@@ -577,11 +706,13 @@ extra_css:
 
 ### extra_javascript
 
-Set a list of JavaScript files in your `docs_dir` to be included by the theme, as `<script>` tags.
+Set a list of JavaScript files in your `docs_dir` to be included by the theme,
+as `<script>` tags.
 
 > NEW: **Changed in version 1.5:**
 >
-> Older versions of MkDocs supported only a plain list of strings, but now several additional config keys are available: `type`, `async`, `defer`.
+> Older versions of MkDocs supported only a plain list of strings, but now
+> several additional config keys are available: `type`, `async`, `defer`.
 
 See the examples and what they produce:
 
@@ -602,14 +733,19 @@ extra_javascript:
 
 So, each item can be either:
 
-* a plain string, or
-* a mapping that has the required `path` key and 3 optional keys `type` (string), `async` (boolean), `defer` (boolean).
+*   a plain string, or
+*   a mapping that has the required `path` key and 3 optional keys `type`
+  (string), `async` (boolean), `defer` (boolean).
 
-Only the plain string variant detects the `.mjs` extension and adds `type="module"`, otherwise `type: module` must be written out regardless of extension.
+Only the plain string variant detects the `.mjs` extension and adds
+`type="module"`, otherwise `type: module` must be written out regardless of
+extension.
 
 **default**: `[]` (an empty list).
 
-NOTE: `*.js` and `*.css` files, just like any other type of file, are always copied from `docs_dir` into the site's deployed copy, regardless if they're linked to the pages via the above configs or not.
+NOTE: `*.js` and `*.css` files, just like any other type of file, are always
+copied from `docs_dir` into the site's deployed copy, regardless if they're
+linked to the pages via the above configs or not.
 
 ### extra_templates
 
@@ -651,11 +787,11 @@ watch:
   - directory_b
 ```
 
-Allows a custom default to be set without the need to pass it through the `-w`/`--watch`
-option every time the `mkdocs serve` command is called.
+Allows a custom default to be set without the need to pass it through the
+`-w`/`--watch` option every time the `mkdocs serve` command is called.
 
-> NOTE:
-> The paths provided via the configuration file are relative to the configuration file.
+> NOTE: The paths provided via the configuration file are relative to the
+> configuration file.
 >
 > The paths provided via the `-w`/`--watch` CLI parameters are not.
 
@@ -761,7 +897,9 @@ markdown_extensions:
 
 > NOTE: **Dynamic config values.**
 >
-> To dynamically configure the extensions, you can get the config values from [environment variables](#environment-variables) or [obtain paths](#paths-relative-to-the-current-file-or-site) of the currently rendered Markdown file or the overall MkDocs site.
+> To dynamically configure the extensions, you can get the config values from
+> [environment variables](#environment-variables) or [obtain paths](#paths-relative-to-the-current-file-or-site)
+> of the currently rendered Markdown file or the overall MkDocs site.
 
 In the above examples, each extension is a list item (starts with a `-`). As an
 alternative, key/value pairs can be used instead. However, in that case an empty
@@ -785,9 +923,10 @@ This alternative syntax is required if you intend to override some options via
 > which are available out-of-the-box. For a list of configuration options
 > available for a given extension, see the documentation for that extension.
 >
-> You may also install and use various third party extensions ([Python-Markdown wiki], [MkDocs project catalog][catalog]). Consult
-> the documentation provided by those extensions for installation instructions
-> and available configuration options.
+> You may also install and use various third party extensions
+> ([Python-Markdown wiki], [MkDocs project catalog][catalog]). Consult the
+> documentation provided by those extensions for installation instructions and
+> available configuration options.
 
 **default**: `[]` (an empty list).
 
@@ -795,7 +934,8 @@ This alternative syntax is required if you intend to override some options via
 
 NEW: **New in version 1.4.**
 
-A list of paths to Python scripts (relative to `mkdocs.yml`) that are loaded and used as [plugin](#plugins) instances.
+A list of paths to Python scripts (relative to `mkdocs.yml`) that are loaded and
+used as [plugin](#plugins) instances.
 
 For example:
 
@@ -804,7 +944,8 @@ hooks:
   - my_hooks.py
 ```
 
-Then the file *my_hooks.py* can contain any [plugin event handlers](../dev-guide/plugins.md#events) (without `self`), e.g.:
+Then the file *my_hooks.py* can contain any [plugin event handlers](../dev-guide/plugins.md#events)
+(without `self`), e.g.:
 
 ```python
 def on_page_markdown(markdown, **kwargs):
@@ -813,7 +954,8 @@ def on_page_markdown(markdown, **kwargs):
 
 >? EXAMPLE: **Advanced example:**
 >
-> This produces warnings based on the Markdown content (and warnings are fatal in [strict](#strict) mode):
+> This produces warnings based on the Markdown content (and warnings are fatal
+> in [strict](#strict) mode):
 >
 > ```python
 > import logging, re
@@ -828,11 +970,15 @@ def on_page_markdown(markdown, **kwargs):
 >         log.warning(f"Documentation file '{path}' contains a non-HTTPS link: {m[0]}")
 > ```
 
-This does not enable any new abilities compared to [plugins][], it only simplifies one-off usages, as these don't need to be *installed* like plugins do.
+This does not enable any new abilities compared to [plugins][], it only
+simplifies one-off usages, as these don't need to be *installed* like plugins
+do.
 
-Note that for `mkdocs serve` the hook module will *not* be reloaded on each build.
+Note that for `mkdocs serve` the hook module will *not* be reloaded on each
+build.
 
-You might have seen this feature in the [mkdocs-simple-hooks plugin](https://github.com/aklajnert/mkdocs-simple-hooks). If using standard method names, it can be directly replaced, e.g.:
+You might have seen this feature in the [mkdocs-simple-hooks plugin](https://github.com/aklajnert/mkdocs-simple-hooks).
+If using standard method names, it can be directly replaced, e.g.:
 
 ```diff
 -plugins:
@@ -881,7 +1027,9 @@ plugins: []
 
 > NEW: **New in MkDocs 1.6.**
 >
-> Each plugin has its own options keys. However MkDocs also ensures that each plugin has the `enabled` boolean option. This can be used to conditionally enable a particular plugin, as in the following example:
+> Each plugin has its own options keys. However MkDocs also ensures that each
+> plugin has the `enabled` boolean option. This can be used to conditionally
+> enable a particular plugin, as in the following example:
 >
 > ```yaml
 > plugins:
@@ -933,10 +1081,10 @@ plugins:
 ##### **min_search_length**
 
 An integer value that defines the minimum length for a search query. By default
-searches shorter than 3 chars in length are ignored as search result quality with
-short search terms are poor. However, for some use cases (such as documentation
-about Message Queues which might generate searches for 'MQ') it may be preferable
-to set a shorter limit.
+searches shorter than 3 chars in length are ignored as search result quality
+with short search terms are poor. However, for some use cases (such as
+documentation about Message Queues which might generate searches for 'MQ') it
+may be preferable to set a shorter limit.
 
 ```yaml
 plugins:
@@ -1074,7 +1222,10 @@ project.
 
 NEW: **New in version 1.5.**
 
-Some Markdown extensions can benefit from knowing the path of the Markdown file that's currently being processed, or just the root path of the current site. For that, the special tag `!relative` can be used in most contexts within the config file, though the only known usecases are within [`markdown_extensions`](#markdown_extensions).
+Some Markdown extensions can benefit from knowing the path of the Markdown file
+that's currently being processed, or just the root path of the current site. For
+that, the special tag `!relative` can be used in most contexts within the config
+file, though the only known usecases are within [`markdown_extensions`](#markdown_extensions).
 
 Examples of the possible values are:
 
@@ -1085,7 +1236,8 @@ Examples of the possible values are:
 - !relative $config_dir/some/child/dir  # Some subdirectory of the root config directory
 ```
 
-(Here, `$docs_dir` and `$config_dir` are currently the *only* special prefixes that are recognized.)
+(Here, `$docs_dir` and `$config_dir` are currently the *only* special prefixes
+that are recognized.)
 
 Example:
 
@@ -1095,9 +1247,13 @@ markdown_extensions:
       base_path: !relative  # Relative to the current Markdown file
 ```
 
-This allows the [pymdownx.snippets] extension to include files relative to the current Markdown file, which without this tag it would have no way of knowing.
+This allows the [pymdownx.snippets] extension to include files relative to the
+current Markdown file, which without this tag it would have no way of knowing.
 
-> NOTE: Even for the default case, any extension's base path is technically the *current working directory* although the assumption is that it's the *directory of mkdocs.yml*. So even if you don't want the paths to be relative, to improve the default behavior, always prefer to use this idiom:
+> NOTE: Even for the default case, any extension's base path is technically the
+> *current working directory* although the assumption is that it's the
+> *directory of mkdocs.yml*. So even if you don't want the paths to be relative,
+> to improve the default behavior, always prefer to use this idiom:
 >
 > ```yaml
 > markdown_extensions:
@@ -1119,8 +1275,8 @@ primary file.
 
 For configuration options to be merged with a parent configuration, those
 options must be defined as key/value pairs. Specifically, the
-[markdown_extensions] and [plugins](#plugins) options must use the alternative syntax
-which does not use list items (lines which start with  `-`).
+[markdown_extensions] and [plugins](#plugins) options must use the alternative
+syntax which does not use list items (lines which start with  `-`).
 
 For example, suppose the common (parent) configuration is defined in `base.yml`:
 
@@ -1222,7 +1378,8 @@ Therefore, defining paths in a parent file which is inherited by multiple
 different sites may not work as expected. It is generally best to define
 path based options in the primary configuration file only.
 
-The inheritance can also be used as a quick way to override keys on the command line - by using stdin as the config file. For example:
+The inheritance can also be used as a quick way to override keys on the command
+line - by using stdin as the config file. For example:
 
 ```bash
 echo '{INHERIT: mkdocs.yml, site_name: "Renamed site"}' | mkdocs build -f -

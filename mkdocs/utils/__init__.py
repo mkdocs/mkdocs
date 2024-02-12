@@ -16,7 +16,7 @@ import sys
 import warnings
 from collections import defaultdict
 from datetime import datetime, timezone
-from pathlib import PurePath
+from pathlib import Path, PurePath
 from typing import TYPE_CHECKING, Collection, Iterable, MutableSequence, TypeVar
 from urllib.parse import urlsplit
 
@@ -110,17 +110,89 @@ else:
         a.insert(i, x)
 
 
-def copy_file(source_path: str, output_path: str) -> None:
+def copy_file(
+    source_path: str,
+    output_path: str,
+    binary_dirs: list[str] | None = [],
+    docs_dir: str = '',
+    is_serve: bool = False,
+) -> None:
     """
     Copy source_path to output_path, making sure any parent directories exist.
 
     The output_path may be a directory.
     """
     output_dir = os.path.dirname(output_path)
-    os.makedirs(output_dir, exist_ok=True)
-    if os.path.isdir(output_path):
-        output_path = os.path.join(output_path, os.path.basename(source_path))
-    shutil.copyfile(source_path, output_path)
+    copy_files_fallback = False
+
+    # If the source_path contains a dir specified in the binary_dirs key, create symlinks instead
+    if binary_dirs and is_serve:
+        source_file_parent_posix = Path(source_path).parent.as_posix()
+        docs_dir_posix = Path(docs_dir).as_posix()
+
+        match = [
+            re.search(f'{docs_dir_posix}/{x.strip("/")}($|/)?', source_file_parent_posix)
+            for x in binary_dirs
+        ]
+
+        if any(match):
+            if not Path(output_dir).exists():
+                found_dir = (
+                    [x for x in match if x is not None][0]
+                    .group()
+                    .replace(docs_dir_posix, '')
+                    .strip('/')
+                )
+
+                # Find the first instance of the large binaries dir in the source path and set the source and
+                # destination accordingly
+                if found_dir in Path(source_path).parts:
+                    symlink_source = Path(
+                        *Path(source_path).parts[0 : Path(source_path).parts.index(found_dir) + 1]
+                    )
+                    symlink_dest = Path(
+                        *Path(output_path).parts[0 : Path(output_path).parts.index(found_dir) + 1]
+                    )
+
+                create_symbolic_dir(symlink_source, symlink_dest)
+        else:
+            copy_files_fallback = True
+    else:
+        copy_files_fallback = True
+
+    if copy_files_fallback:
+        os.makedirs(output_dir, exist_ok=True)
+
+        if os.path.isdir(output_path):
+            output_path = os.path.join(output_path, os.path.basename(source_path))
+
+        shutil.copyfile(source_path, output_path)
+
+
+def create_symbolic_dir(source_path: Path, output_path: Path) -> None:
+    """Create a symbolic directory in an output path."""
+    # Create a junction instead of a symlink in Windows, as junctions don't need elevated permissions
+    if os.name == 'nt':
+        import _winapi
+
+        try:
+            if Path(source_path).is_dir():
+                _winapi.CreateJunction(str(source_path), str(output_path))
+                log.info(f'Created junction to binary directory {source_path!s} at {output_path!s}')
+            else:
+                log.error(f'Can\'t create junction to binary directory {source_path!s}, as it doesn\'t exist')
+
+        except OSError:
+            log.error(f'Can\'t create junction to binary directory {output_path!s}')
+    elif os.name == 'posix':
+        try:
+            if Path(source_path).is_dir():
+                os.symlink(str(source_path), str(output_path))
+                log.info(f'Created symlink to binary directory {source_path!s} at {output_path!s}')
+            else:
+                log.error(f'Can\'t create symbolic link to binary directory {source_path!s}, as it doesn\'t exist')
+        except OSError:
+            log.error(f'Can\'t create symbolic link to binary directory {output_path!s}')
 
 
 def write_file(content: bytes, output_path: str) -> None:

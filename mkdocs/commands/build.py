@@ -246,7 +246,13 @@ def _build_page(
         config._current_page = None
 
 
-def build(config: MkDocsConfig, *, serve_url: str | None = None, dirty: bool = False) -> None:
+def build(
+    config: MkDocsConfig,
+    *,
+    serve_url: str | None = None,
+    dirty: bool = False,
+    is_serve: bool = False,
+) -> None:
     """Perform a full site build."""
     logger = logging.getLogger('mkdocs')
 
@@ -322,7 +328,15 @@ def build(config: MkDocsConfig, *, serve_url: str | None = None, dirty: bool = F
         # with lower precedence get written first so that files with higher precedence can overwrite them.
 
         log.debug("Copying static assets.")
-        files.copy_static_files(dirty=dirty, inclusion=inclusion)
+        files.copy_static_files(
+            binary_dirs=config.binary_dirs,
+            site_dir=config.site_dir,
+            docs_dir=config.docs_dir,
+            use_directory_urls=config.use_directory_urls,
+            dirty=dirty,
+            inclusion=inclusion,
+            is_serve=is_serve,
+        )
 
         for template in config.theme.static_templates:
             _build_theme_template(template, env, files, config, nav)

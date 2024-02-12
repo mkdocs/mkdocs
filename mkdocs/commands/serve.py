@@ -64,7 +64,7 @@ def serve(
             config = get_config()
             config.site_url = serve_url
 
-        build(config, serve_url=None if is_clean else serve_url, dirty=is_dirty)
+        build(config, serve_url=None if is_clean else serve_url, dirty=is_dirty, is_serve=True)
 
     server = LiveReloadServer(
         builder=builder, host=host, port=port, root=site_dir, mount_path=mount_path

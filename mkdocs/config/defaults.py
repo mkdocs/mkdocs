@@ -79,6 +79,9 @@ class MkDocsConfig(base.Config):
     site_dir = c.SiteDir(default='site')
     """The directory where the site will be built to"""
 
+    binary_dirs = c.Optional(c.Type(list))
+    """The paths that store large binaries that should be symlinked instead of copied when running a server"""
+
     copyright = c.Optional(c.Type(str))
     """A copyright notice to add to the footer of documentation."""
 

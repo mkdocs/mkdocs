@@ -117,4 +117,4 @@ class SearchPlugin(BasePlugin[_PluginConfig]):
             for filename in files:
                 from_path = os.path.join(base_path, 'lunr-language', filename)
                 to_path = os.path.join(output_base_path, filename)
-                utils.copy_file(from_path, to_path)
+                utils.copy_file(from_path, to_path, config.binary_dirs, config.docs_dir)
