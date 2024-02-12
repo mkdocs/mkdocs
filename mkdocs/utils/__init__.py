@@ -177,7 +177,7 @@ def create_symbolic_dir(source_path: Path, output_path: Path) -> None:
 
         try:
             if Path(source_path).is_dir():
-                _winapi.CreateJunction(str(source_path), str(output_path)) # type: ignore
+                _winapi.CreateJunction(str(source_path), str(output_path))  # type: ignore
                 log.info(f'Created junction to binary directory {source_path!s} at {output_path!s}')
             else:
                 log.error(
