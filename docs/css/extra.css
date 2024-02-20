@@ -97,3 +97,11 @@ h5.doc-heading {
 .doc-contents {
     padding-left: 0;
 }
+
+footer, footer p {
+    margin: 0;
+    padding: 0;
+    & div[role="contentinfo"] p {
+    font-size: smaller;
+    }
+}

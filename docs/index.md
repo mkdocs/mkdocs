@@ -1,8 +1,8 @@
-# MkDocs
-
-Project documentation with&nbsp;Markdown.
+# NSI-Aventure : documentation
 
 ---
+
+<!-- 
 
 MkDocs is a **fast**, **simple** and **downright gorgeous** static site
 generator that's geared towards building project documentation. Documentation
@@ -87,3 +87,4 @@ configuration file. Start by reading the [introductory tutorial], then check the
   </div>
 </div>
 </div>
+-->

@@ -1,29 +1,25 @@
-site_name: MkDocs
-site_url: https://www.mkdocs.org/
-site_description: Project documentation with Markdown.
-site_author: MkDocs Team
+site_name: NSI-Aventure
+site_url: https://nsi-mayotte.github.io/nsi-aventure-docs/
+site_description: Documentation en Markdown pour NSI-Aventure.
+site_author: NSI-Aventure Team
 
-repo_url: https://github.com/mkdocs/mkdocs/
-edit_uri: blob/master/docs/
+repo_url: https://github.com/nsi-mayotte/nsi-aventure-docs/
+#edit_uri: blob/master/docs/
 
 theme:
-  name: mkdocs
-  locale: en
-  analytics: {gtag: 'G-274394082'}
+  name: readthedocs
+  locale: fr
+  #analytics: {gtag: 'G-274394082'}
   highlightjs: true
   hljs_languages:
     - yaml
     - django
 
 nav:
-  - Home: index.md
-  - Getting Started: getting-started.md
-  - User Guide: user-guide/
-  - Developer Guide: dev-guide/
-  - About:
-    - Release Notes: about/release-notes.md
-    - Contributing: about/contributing.md
-    - License: about/license.md
+  - Guide Orga: guide-orga/
+  - Guide Dev: guide-dev/
+
+home: guide-orga/content.md
 
 extra_css:
   - css/extra.css
@@ -54,14 +50,14 @@ hooks:
 
 plugins:
   - search
-  - redirects:
-      redirect_maps:
-        user-guide/plugins.md: dev-guide/plugins.md
-        user-guide/custom-themes.md: dev-guide/themes.md
-        user-guide/styling-your-docs.md: user-guide/choosing-your-theme.md
+  #- redirects:
+      #redirect_maps:
+        #user-guide/plugins.md: dev-guide/plugins.md
+        #user-guide/custom-themes.md: dev-guide/themes.md
+        #user-guide/styling-your-docs.md: user-guide/choosing-your-theme.md
   - autorefs
   - literate-nav:
-      nav_file: README.md
+      nav_file: content.md
       implicit_index: true
   - mkdocstrings:
       handlers:
