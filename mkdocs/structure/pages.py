@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import copy
 import enum
 import logging
 import posixpath
@@ -20,6 +19,7 @@ from mkdocs import utils
 from mkdocs.structure import StructureItem
 from mkdocs.structure.toc import get_toc
 from mkdocs.utils import _removesuffix, get_build_date, get_markdown_title, meta, weak_property
+from mkdocs.utils.rendering import get_heading_text
 
 if TYPE_CHECKING:
     from xml.etree import ElementTree as etree
@@ -555,23 +555,13 @@ class _ExtractTitleTreeprocessor(markdown.treeprocessors.Treeprocessor):
     def run(self, root: etree.Element) -> etree.Element:
         for el in root:
             if el.tag == 'h1':
-                # Drop anchorlink from the element, if present.
-                if len(el) > 0 and el[-1].tag == 'a' and not (el[-1].tail or '').strip():
-                    el = copy.copy(el)
-                    del el[-1]
-                # Extract the text only, recursively.
-                title = ''.join(el.itertext())
-                # Unescape per Markdown implementation details.
-                title = markdown.extensions.toc.stashedHTML2text(
-                    title, self.md, strip_entities=False
-                )
-                self.title = title.strip()
+                self.title = get_heading_text(el, self.md)
             break
         return root
 
     def _register(self, md: markdown.Markdown) -> None:
         self.md = md
-        md.treeprocessors.register(self, "mkdocs_extract_title", priority=-1)  # After the end.
+        md.treeprocessors.register(self, "mkdocs_extract_title", priority=1)  # Close to the end.
 
 
 class _AbsoluteLinksValidationValue(enum.IntEnum):
