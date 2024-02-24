@@ -391,10 +391,8 @@ class PageTests(unittest.TestCase):
         self._test_extract_title('''# foo <!-- comment with <em> --> bar''', expected='foo bar')
 
     def test_page_title_from_markdown_strip_image(self):
-        self._test_extract_title(
-            '''# Hi ![😄](hah.png)''',
-            expected='Hi',  # TODO: Should the alt text of the image be extracted?
-        )
+        self._test_extract_title('''# Hi ![😄](hah.png)''', expected='Hi 😄')
+        self._test_extract_title('''# Hi *-![😄](hah.png)-*''', expected='Hi -😄-')
 
     _ATTRLIST_CONTENT = dedent(
         '''
