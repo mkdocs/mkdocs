@@ -342,11 +342,35 @@ class PageTests(unittest.TestCase):
             expected='Welcome to MkDocs Setext',
         )
 
+    def test_page_title_from_markdown_with_email(self):
+        self._test_extract_title(
+            '''# <foo@example.org>''',
+            expected='&#102;&#111;&#111;&#64;&#101;&#120;&#97;&#109;&#112;&#108;&#101;&#46;&#111;&#114;&#103;',
+        )
+
     def test_page_title_from_markdown_stripped_anchorlinks(self):
         self._test_extract_title(
             self._SETEXT_CONTENT,
             extensions={'toc': {'permalink': '&'}},
             expected='Welcome to MkDocs Setext',
+        )
+
+    def test_page_title_from_markdown_strip_footnoteref(self):
+        foootnotes = '''\n\n[^1]: foo\n[^2]: bar'''
+        self._test_extract_title(
+            '''# Header[^1] foo[^2] bar''' + foootnotes,
+            extensions={'footnotes': {}},
+            expected='Header foo bar',
+        )
+        self._test_extract_title(
+            '''# *Header[^1]* *foo*[^2]''' + foootnotes,
+            extensions={'footnotes': {}},
+            expected='Header foo',
+        )
+        self._test_extract_title(
+            '''# *Header[^1][^2]s''' + foootnotes,
+            extensions={'footnotes': {}},
+            expected='*Headers',
         )
 
     def test_page_title_from_markdown_strip_formatting(self):
@@ -356,17 +380,19 @@ class PageTests(unittest.TestCase):
             expected='*Hello &mdash; beautiful wor&lt;dl&gt;',
         )
 
+    def test_page_title_from_markdown_html_entity(self):
+        self._test_extract_title('''# Foo &lt; &amp; bar''', expected='Foo &lt; &amp; bar')
+        self._test_extract_title('''# Foo > & bar''', expected='Foo &gt; &amp; bar')
+
     def test_page_title_from_markdown_strip_raw_html(self):
-        self._test_extract_title(
-            '''# Hello <b>world</b>''',
-            expected='Hello world',
-        )
+        self._test_extract_title('''# Hello <b>world</b>''', expected='Hello world')
+
+    def test_page_title_from_markdown_strip_comments(self):
+        self._test_extract_title('''# foo <!-- comment with <em> --> bar''', expected='foo bar')
 
     def test_page_title_from_markdown_strip_image(self):
-        self._test_extract_title(
-            '''# Hi ![😄](hah.png)''',
-            expected='Hi',  # TODO: Should the alt text of the image be extracted?
-        )
+        self._test_extract_title('''# Hi ![😄](hah.png)''', expected='Hi 😄')
+        self._test_extract_title('''# Hi *-![😄](hah.png)-*''', expected='Hi -😄-')
 
     _ATTRLIST_CONTENT = dedent(
         '''
