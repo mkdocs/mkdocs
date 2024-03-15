@@ -12,7 +12,7 @@
         <span>
           <a href="{{ config.repo_url }}" class="icon icon-gitlab" style="color: #fcfcfc"> GitLab</a>
         </span>
-    {% elif config.repo_name %}
+    {% elif config.repo_name is string %}
         <span>
           <a href="{{ config.repo_url }}" class="fa fa-code-fork" style="color: #fcfcfc"> {{ config.repo_name }}</a>
         </span>
