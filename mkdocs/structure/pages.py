@@ -252,6 +252,7 @@ class Page(StructureItem):
 
         if self.is_homepage:
             return 'Home'
+
         title = self.file.name.replace('-', ' ').replace('_', ' ')
         # Capitalize if the filename was all lowercase, otherwise leave it as-is.
         if title.lower() == title:
