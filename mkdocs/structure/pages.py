@@ -53,9 +53,6 @@ class Page(StructureItem):
         )
 
         # Placeholders to be filled in later in the build process.
-        self.markdown = None
-        self._title_from_render: str | None = None
-        self.content = None
         self.toc = []  # type: ignore
         self.meta = {}
 
@@ -72,13 +69,15 @@ class Page(StructureItem):
         url = self.abs_url or self.file.url
         return f"{name}(title={title}, url={url!r})"
 
-    markdown: str | None
+    markdown: str | None = None
     """The original Markdown content from the file."""
 
-    content: str | None
+    content: str | None = None
     """The rendered Markdown as HTML, this is the contents of the documentation.
 
     Populated after `.render()`."""
+
+    _title_from_render: str | None = None
 
     toc: TableOfContents
     """An iterable object representing the Table of contents for a page. Each item in
@@ -227,14 +226,15 @@ class Page(StructureItem):
     @weak_property
     def title(self) -> str | None:  # type: ignore[override]
         """
-        Returns the title for the current page.
+        Returns the title for the page, in the context of the nav.
 
         Before calling `read_source()`, this value is empty. It can also be updated by `render()`.
 
-        Check these in order and use the first that returns a valid title:
-        - value provided on init (passed in from config)
+        Checks these in order and uses the first that returns a valid title:
+
+        - value specified in the `nav` config in mkdocs.yml (or the value that was passed when creating the `Page` programmatically)
         - value of metadata 'title'
-        - content of the first H1 in Markdown content
+        - content of the first H1 heading in Markdown content
         - convert filename to title
         """
         if self.markdown is None:
@@ -258,6 +258,39 @@ class Page(StructureItem):
         if title.lower() == title:
             title = title.capitalize()
         return title
+
+    @property
+    def content_title(self) -> str:
+        """
+        Returns the title for the page, in the context of the current page's content.
+
+        NEW: **New in MkDocs 1.6.**
+
+        Similar to `title` but prioritizes the title from the document itself over the title
+        specified in the `nav` config.
+
+        For themes, this should be preferred within the `<title>` tag. To apply the preferred behavior but keep compatibility with older versions, you can use:
+
+        ```jinja
+        <title>{{ page.content_title or page.title }}</title>
+        ```
+
+        Checks these in order and uses the first that returns a valid title:
+
+        - value of metadata 'title'
+        - content of the first H1 heading in Markdown content
+        - value specified in the `nav` config in mkdocs.yml (or the value that was passed when creating the `Page` programmatically)
+        - convert filename to title
+
+        When using this property outside of themes, do not access it before `render()` was called on the content, or it will raise.
+        """
+        if self.content is None:
+            raise RuntimeError("`content` field hasn't been set (via `render`)")
+        if 'title' in self.meta:
+            return self.meta['title']
+        if self._title_from_render:
+            return self._title_from_render
+        return self.title
 
     def render(self, config: MkDocsConfig, files: Files) -> None:
         """Convert the Markdown source file to HTML as per the config."""

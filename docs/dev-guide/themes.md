@@ -354,6 +354,11 @@ All `page` objects contain the following attributes:
         show_root_full_path: false
         heading_level: 5
 
+::: mkdocs.structure.pages.Page.content_title
+    options:
+        show_root_full_path: false
+        heading_level: 5
+
 ::: mkdocs.structure.pages.Page.content
     options:
         show_root_full_path: false
@@ -453,7 +458,7 @@ object to alter the behavior. For example, to display a different title
 on the homepage:
 
 ```django
-{% if not page.is_homepage %}{{ page.title }} - {% endif %}{{ site_name }}
+<title>{% if not page.is_homepage %}{{ page.title }} - {% endif %}{{ site_name }}</title>
 ```
 
 ::: mkdocs.structure.pages.Page.previous_page
