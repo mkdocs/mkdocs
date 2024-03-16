@@ -4,6 +4,7 @@ import functools
 import ipaddress
 import logging
 import os
+import pathlib
 import string
 import sys
 import traceback
@@ -737,13 +738,18 @@ class DocsDir(Dir):
         if not config.config_file_path:
             return
 
-        # Validate that the dir is not the parent dir of the config file.
-        if os.path.dirname(config.config_file_path) == config[key_name]:
-            raise ValidationError(
-                f"The '{key_name}' should not be the parent directory of the"
-                f" config file. Use a child directory instead so that the"
-                f" '{key_name}' is a sibling of the config file."
-            )
+        # Validate that the docs dir does not contain the config file.
+        config_rel_path = _relative_path(config.config_file_path, to=config[key_name])
+        if config_rel_path is None:
+            return  # Good, it's not inside the docs_dir.
+        exclude_docs: pathspec.gitignore.GitIgnoreSpec | None = config.get('exclude_docs')
+        if exclude_docs and exclude_docs.match_file(config_rel_path):
+            return  # Good, the appropriate config is present.
+        raise ValidationError(
+            f"The '{config_rel_path.name}' config file should not be inside the {key_name}.\n"
+            f"To allow this arrangement, please exclude the file (and other files as applicable) by adding the following configuration:\n\n"
+            f"exclude_docs: |\n  /{config_rel_path.as_posix()}"
+        )
 
 
 class File(FilesystemObject):
@@ -796,19 +802,21 @@ class SiteDir(Dir):
         # Validate that the docs_dir and site_dir don't contain the
         # other as this will lead to copying back and forth on each
         # and eventually make a deep nested mess.
-        if (docs_dir + os.sep).startswith(site_dir.rstrip(os.sep) + os.sep):
+        if _relative_path(docs_dir, to=site_dir):
             raise ValidationError(
-                f"The 'docs_dir' should not be within the 'site_dir' as this "
-                f"can mean the source files are overwritten by the output or "
-                f"it will be deleted if --clean is passed to mkdocs build. "
-                f"(site_dir: '{site_dir}', docs_dir: '{docs_dir}')"
+                "The docs_dir should not be inside the site_dir as this "
+                "can mean the source files are overwritten by the output or "
+                "deleted entirely."
             )
-        elif (site_dir + os.sep).startswith(docs_dir.rstrip(os.sep) + os.sep):
+        if site_rel_path := _relative_path(site_dir, to=docs_dir):
+            exclude_docs: pathspec.gitignore.GitIgnoreSpec | None = config.get('exclude_docs')
+            if exclude_docs and exclude_docs.match_file(site_rel_path):
+                return  # Good, the appropriate config is present.
             raise ValidationError(
-                f"The 'site_dir' should not be within the 'docs_dir' as this "
-                f"leads to the build directory being copied into itself and "
-                f"duplicate nested files in the 'site_dir'. "
-                f"(site_dir: '{site_dir}', docs_dir: '{docs_dir}')"
+                f"The site_dir should not be inside the docs_dir as this "
+                f"leads to the build directory being copied into itself.\n"
+                f"To allow this arrangement, please exclude the directory (and other files as applicable) by adding the following configuration:\n\n"
+                f"exclude_docs: |\n  /{site_rel_path.as_posix()}"
             )
 
 
@@ -1234,3 +1242,10 @@ class PathSpec(BaseConfigOption[pathspec.gitignore.GitIgnoreSpec]):
             return pathspec.gitignore.GitIgnoreSpec.from_lines(lines=value.splitlines())
         except ValueError as e:
             raise ValidationError(str(e))
+
+
+def _relative_path(main: str | os.PathLike, to: str | os.PathLike) -> pathlib.Path | None:
+    try:
+        return pathlib.Path(main).relative_to(to)
+    except ValueError:
+        return None

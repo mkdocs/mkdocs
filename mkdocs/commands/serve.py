@@ -40,11 +40,8 @@ def serve(
     site_dir = tempfile.mkdtemp(prefix='mkdocs_')
 
     def get_config():
-        config = load_config(
-            config_file=config_file,
-            site_dir=site_dir,
-            **kwargs,
-        )
+        config = load_config(config_file=config_file, **kwargs)
+        config.site_dir = site_dir  # Overwrite it afterwards, so normal validation still kicks in.
         config.watch.extend(watch)
         return config
 
