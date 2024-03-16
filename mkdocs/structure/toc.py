@@ -33,7 +33,7 @@ class AnchorLink:
         self.children = []
 
     title: str
-    """The text of the item."""
+    """The text of the item, as HTML."""
 
     @property
     def url(self) -> str:
