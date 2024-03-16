@@ -538,16 +538,3 @@ Note that fenced code blocks can not be indented. Therefore, they cannot be
 nested inside list items, blockquotes, etc.
 
 [fenced code blocks]: https://python-markdown.github.io/extensions/fenced_code_blocks/
-
-### Search Keywords
-
-The [search plugin][] supports defining keywords for individual sections of a page. When search terms match the defined keywords, it ensures that the relevant section will be included in the search results. To use the feature, [enable][markdown_extensions] the [attr_list][] extension to Markdown.
-
-To define keywords for a section, assign a string of space separated words to the `data-search-keywords` attribute of any heading. Specifically, define an attribute list at the end of a heading which contains the attribute.
-
-```markdown
-# Section Title {data-search-keywords='space separated list of words'}
-```
-
-[search plugin]: configuration.md#search
-[attr_list]: https://python-markdown.github.io/extensions/attr_list/

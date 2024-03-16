@@ -283,7 +283,7 @@ class SearchIndexTests(unittest.TestCase):
 
         self.assertEqual(
             parser.data,
-            [search_index.ContentSection(text=["TEST"], id_="title", title="Title", keywords='')],
+            [search_index.ContentSection(text=["TEST"], id_="title", title="Title")],
         )
 
     def test_content_parser_header_has_child(self):
@@ -294,11 +294,7 @@ class SearchIndexTests(unittest.TestCase):
 
         self.assertEqual(
             parser.data,
-            [
-                search_index.ContentSection(
-                    text=["TEST"], id_="title", title="Title title TITLE", keywords=''
-                )
-            ],
+            [search_index.ContentSection(text=["TEST"], id_="title", title="Title title TITLE")],
         )
 
     def test_content_parser_no_id(self):
@@ -309,7 +305,7 @@ class SearchIndexTests(unittest.TestCase):
 
         self.assertEqual(
             parser.data,
-            [search_index.ContentSection(text=["TEST"], id_=None, title="Title", keywords='')],
+            [search_index.ContentSection(text=["TEST"], id_=None, title="Title")],
         )
 
     def test_content_parser_content_before_header(self):
@@ -320,7 +316,7 @@ class SearchIndexTests(unittest.TestCase):
 
         self.assertEqual(
             parser.data,
-            [search_index.ContentSection(text=["TEST"], id_=None, title="Title", keywords='')],
+            [search_index.ContentSection(text=["TEST"], id_=None, title="Title")],
         )
 
     def test_content_parser_no_sections(self):
@@ -340,7 +336,7 @@ class SearchIndexTests(unittest.TestCase):
 
         self.assertEqual(
             parser.data,
-            [search_index.ContentSection(text=["TEST"], id_="title", title="Title", keywords='')],
+            [search_index.ContentSection(text=["TEST"], id_="title", title="Title")],
         )
 
     def test_content_parser_with_nonpermalink(self):
@@ -352,26 +348,7 @@ class SearchIndexTests(unittest.TestCase):
 
         self.assertEqual(
             parser.data,
-            [
-                search_index.ContentSection(
-                    text=["TEST"], id_="title", title="Title title", keywords=''
-                )
-            ],
-        )
-
-    def test_data_search_keywords(self):
-        parser = search_index.ContentParser()
-
-        parser.feed('<h1 id="title" data-search-keywords="search keywords">Title</h1>TEST')
-        parser.close()
-
-        self.assertEqual(
-            parser.data,
-            [
-                search_index.ContentSection(
-                    text=["TEST"], id_="title", title="Title", keywords="search keywords"
-                )
-            ],
+            [search_index.ContentSection(text=["TEST"], id_="title", title="Title title")],
         )
 
     def test_create_search_index(self):

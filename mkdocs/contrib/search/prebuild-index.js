@@ -45,7 +45,6 @@ stdin.on('end', function () {
     }
     this.field('title');
     this.field('text');
-    this.field('keywords', {'boost': 10});
     this.ref('location');
 
     data.docs.forEach(function (doc) {

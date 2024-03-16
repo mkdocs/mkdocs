@@ -77,7 +77,6 @@ function onScriptsLoaded () {
       }
       this.field('title');
       this.field('text');
-      this.field('keywords', {'boost': 10});
       this.ref('location');
 
       for (var i=0; i < data.docs.length; i++) {

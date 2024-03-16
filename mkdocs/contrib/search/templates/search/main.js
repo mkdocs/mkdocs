@@ -28,7 +28,7 @@ function escapeHtml (value) {
     .replace(/>/g, '&gt;');
 }
 
-function formatResult (location, title, summary, keywords) {
+function formatResult (location, title, summary) {
   return '<article><h3><a href="' + joinUrl(base_url, location) + '">'+ escapeHtml(title) + '</a></h3><p>' + escapeHtml(summary) +'</p></article>';
 }
 
@@ -40,7 +40,7 @@ function displayResults (results) {
   if (results.length > 0){
     for (var i=0; i < results.length; i++){
       var result = results[i];
-      var html = formatResult(result.location, result.title, result.summary, result.keywords);
+      var html = formatResult(result.location, result.title, result.summary);
       search_results.insertAdjacentHTML('beforeend', html);
     }
   } else {

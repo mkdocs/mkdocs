@@ -31,12 +31,12 @@ class SearchIndex:
         self._entries: list[dict] = []
         self.config = config
 
-    def _add_entry(self, title: str | None, text: str, keywords: str | None, loc: str) -> None:
+    def _add_entry(self, title: str | None, text: str, loc: str) -> None:
         """A simple wrapper to add an entry, dropping bad characters."""
         text = text.replace('\u00a0', ' ')
         text = re.sub(r'[ \t\n\r\f\v]+', ' ', text.strip())
 
-        self._entries.append({'title': title, 'text': text, 'keywords': keywords, 'location': loc})
+        self._entries.append({'title': title, 'text': text, 'location': loc})
 
     def add_entry_from_context(self, page: Page) -> None:
         """
@@ -58,7 +58,7 @@ class SearchIndex:
 
         # Create an entry for the full page.
         text = parser.stripped_html.rstrip('\n') if self.config['indexing'] == 'full' else ''
-        self._add_entry(title=page.title, text=text, keywords='', loc=url)
+        self._add_entry(title=page.title, text=text, loc=url)
 
         if self.config['indexing'] in ['full', 'sections']:
             for section in parser.data:
@@ -70,9 +70,7 @@ class SearchIndex:
         create an entry in the index.
         """
         text = ' '.join(section.text) if self.config['indexing'] == 'full' else ''
-        self._add_entry(
-            title=section.title, text=text, keywords=section.keywords, loc=f'{abs_url}#{section.id}'
-        )
+        self._add_entry(title=section.title, text=text, loc=f'{abs_url}#{section.id}')
 
     def generate_search_index(self) -> str:
         """Python to json conversion."""
@@ -104,7 +102,7 @@ class SearchIndex:
             if haslunrpy:
                 lunr_idx = lunr(
                     ref='location',
-                    fields=('title', 'text', dict(field_name='keywords', boost=10)),
+                    fields=('title', 'text'),
                     documents=self._entries,
                     languages=self.config['lang'],
                 )
@@ -132,26 +130,16 @@ class ContentSection:
         text: list[str] | None = None,
         id_: str | None = None,
         title: str | None = None,
-        keywords: str | None = None,
     ) -> None:
         self.text = text or []
         self.id = id_
         self.title = title or ''
-        self.keywords = keywords or ''
 
     def __eq__(self, other):
-        return (
-            self.text == other.text
-            and self.id == other.id
-            and self.title == other.title
-            and self.keywords == other.keywords
-        )
+        return self.text == other.text and self.id == other.id and self.title == other.title
 
     def __repr__(self):
-        return (
-            f"{type(self).__name__}("
-            f"text={self.text!r}, id={self.id!r}, title={self.title!r}, keywords={self.keywords!r})"
-        )
+        return f"{type(self).__name__}(text={self.text!r}, id={self.id!r}, title={self.title!r}"
 
 
 _HEADER_TAGS = tuple(f"h{x}" for x in range(1, 7))
@@ -192,7 +180,6 @@ class ContentParser(HTMLParser):
         self.is_header_tag = True
         self.section = ContentSection()
         self.section.id = atts.get('id')
-        self.section.keywords = atts.get('data-search-keywords') or ''
         self.data.append(self.section)
 
     def handle_endtag(self, tag: str) -> None:
