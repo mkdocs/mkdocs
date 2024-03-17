@@ -171,6 +171,9 @@ def _populate_page(page: Page, config: MkDocsConfig, files: Files, dirty: bool =
         page.content = config.plugins.on_page_content(
             page.content, page=page, config=config, files=files
         )
+        
+        del page.markdown
+        
     except Exception as e:
         message = f"Error reading page '{page.file.src_uri}':"
         # Prevent duplicated the error message because it will be printed immediately afterwards.
