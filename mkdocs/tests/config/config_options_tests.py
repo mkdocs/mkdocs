@@ -1184,7 +1184,7 @@ class ThemeTest(TestCase):
             conf.option.static_templates,
             {'404.html', 'sitemap.xml', 'sitemap.html'},
         )
-        self.assertEqual(conf.option['show_sidebar'], False)
+        self.assertFalse(conf.option['show_sidebar'])
 
     def test_theme_name_is_none(self) -> None:
         config = {

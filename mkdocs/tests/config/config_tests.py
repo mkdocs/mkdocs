@@ -70,8 +70,7 @@ class ConfigTests(unittest.TestCase):
         os.mkdir(os.path.join(temp_path, 'docs'))
 
         result = config.load_config(config_file=config_file.name)
-        self.assertEqual(result['site_name'], expected_result['site_name'])
-        self.assertEqual(result['nav'], expected_result['nav'])
+        self.assertTrue(expected_result.items() <= result.items())
 
     @tempdir()
     @tempdir()
