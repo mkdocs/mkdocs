@@ -107,7 +107,10 @@ clean_help = "Remove old files from the site_dir before building (the default)."
 config_help = (
     "Provide a specific MkDocs config. This can be a file name, or '-' to read from stdin."
 )
-dev_addr_help = "IP address and port to serve documentation locally (default: localhost:8000)"
+dev_addr_help = "IP address to serve documentation locally (default: localhost)."
+serve_port_help = (
+    "Port to serve documentation locally (default: 8000). Overrides the port from dev_addr."
+)
 serve_open_help = "Open the website in a Web browser after the initial build finishes."
 strict_help = "Enable strict mode. This will cause MkDocs to abort the build on any warnings."
 theme_help = "The theme to use when building your documentation."
@@ -247,8 +250,9 @@ def cli():
 
 
 @cli.command(name="serve")
-@click.option('-a', '--dev-addr', help=dev_addr_help, metavar='<IP:PORT>')
+@click.option('-a', '--dev-addr', help=dev_addr_help, metavar='IP:PORT')
 @click.option('-o', '--open', 'open_in_browser', help=serve_open_help, is_flag=True)
+@click.option('-p', '--port', type=int, help=serve_port_help)
 @click.option('--no-livereload', 'livereload', flag_value=False, help=no_reload_help)
 @click.option('--livereload', 'livereload', flag_value=True, default=True, hidden=True)
 @click.option('--dirtyreload', 'build_type', flag_value='dirty', hidden=True)

@@ -692,15 +692,22 @@ This is also available as a command line flag: `--strict`.
 
 **default**: `false`
 
+### serve_port
+
+Determines the port used when running `mkdocs serve`.
+
+This lets you permanently change the port instead of passing it through the `--port`/`-p` option every time the `mkdocs serve` command is called.
+
+**default**: `8000`
+
 ### dev_addr
 
-Determines the address used when running `mkdocs serve`. Must be of the format
-`IP:PORT`.
+Determines the address used when running `mkdocs serve`. Can be just the IP address, or `IP:PORT` (thus covering also [`serve_port`](#serve_port)).
 
 Allows a custom default to be set without the need to pass it through the
 `--dev-addr` option every time the `mkdocs serve` command is called.
 
-**default**: `'127.0.0.1:8000'`
+**default**: `'127.0.0.1'`
 
 See also: [site_url](#site_url).
 
