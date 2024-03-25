@@ -362,7 +362,7 @@ def load_config(
         from mkdocs.config.defaults import MkDocsConfig
 
         if config_file_path is None:
-            if fd is not sys.stdin.buffer:
+            if sys.stdin and fd is not sys.stdin.buffer:
                 config_file_path = getattr(fd, 'name', None)
         cfg = MkDocsConfig(config_file_path=config_file_path)
         # load the config file
