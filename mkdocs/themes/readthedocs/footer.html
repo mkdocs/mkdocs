@@ -22,5 +22,5 @@
     {%- endif %}
   </div>
 
-  {% trans mkdocs_link='<a href="https://www.mkdocs.org/">MkDocs</a>', sphinx_link='<a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>', rtd_link='<a href="https://readthedocs.org">Read the Docs</a>' %}Built with %(mkdocs_link)s using a %(sphinx_link)s provided by %(rtd_link)s.{% endtrans %}
+  {% trans mkdocs_link='<a href="https://www.mkdocs.org/">MkDocs</a>', sphinx_link='<a href="https://github.com/readthedocs/sphinx_rtd_theme">{}</a>'.format(gettext('theme')), rtd_link='<a href="https://readthedocs.org">Read the Docs</a>' %}Built with %(mkdocs_link)s using a %(sphinx_link)s provided by %(rtd_link)s.{% endtrans %}
 </footer>
