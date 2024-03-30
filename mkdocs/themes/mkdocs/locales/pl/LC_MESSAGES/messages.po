@@ -20,7 +20,7 @@ msgstr ""
 
 #: mkdocs/themes/mkdocs/404.html:8
 msgid "Page not found"
-msgstr "Strony nie znaleziono"
+msgstr "Nie znaleziono strony"
 
 #: mkdocs/themes/mkdocs/base.html:116
 #: mkdocs/themes/mkdocs/keyboard-modal.html:31
@@ -49,7 +49,7 @@ msgstr "Edytuj"
 #: mkdocs/themes/mkdocs/base.html:190
 #, python-format
 msgid "Documentation built with %(mkdocs_link)s."
-msgstr "Dokumentacja zbudowana przy użyciu %(mkdocs_link)s."
+msgstr "Dokumentacja zbudowana przy użyciu pakietu %(mkdocs_link)s."
 
 #: mkdocs/themes/mkdocs/keyboard-modal.html:5
 msgid "Keyboard Shortcuts"
@@ -82,7 +82,7 @@ msgstr "Poprzednia strona"
 
 #: mkdocs/themes/mkdocs/search-modal.html:9
 msgid "From here you can search these documents. Enter your search terms below."
-msgstr "W tym miejscu możesz przeszukiwać dokumenty. Wpisz swoje kryteria wyszukiwania poniżej."
+msgstr "W tym miejscu możesz przeszukiwać dokumenty. Wpisz swoją frazę do wyszukania poniżej."
 
 #: mkdocs/themes/mkdocs/search-modal.html:12
 msgid "Search..."
@@ -90,11 +90,11 @@ msgstr "Szukaj..."
 
 #: mkdocs/themes/mkdocs/search-modal.html:12
 msgid "Type search term here"
-msgstr "Wpisz tutaj kryteria wyszukiwania"
+msgstr "Wpisz tutaj frazę do wyszukiwania"
 
 #: mkdocs/themes/mkdocs/search-modal.html:15
 msgid "No results found"
-msgstr "Nie znaleziono żadnych wyników"
+msgstr "Nie znaleziono wyników"
 
 #: mkdocs/themes/mkdocs/toc.html:3
 msgid "Table of Contents"

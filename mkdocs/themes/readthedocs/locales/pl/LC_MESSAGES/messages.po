@@ -1,13 +1,13 @@
 # Polish translations for MkDocs.
-# Copyright (C) 2022 MkDocs
+# Copyright (C) 2024 MkDocs
 # This file is distributed under the same license as the MkDocs project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: MkDocs 1.3.1\n"
 "Report-Msgid-Bugs-To: \"https://github.com/mkdocs/mkdocs/issues\"\n"
-"POT-Creation-Date: 2022-08-15 17:05+0200\n"
+"POT-Creation-Date: 2024-03-30 23:45+0100\n"
 "PO-Revision-Date: 2024-03-21 17:46+0100\n"
 "Last-Translator: Szymon Rakowski <szymon.rakowski@ac.com.pl>\n"
 "Language: pl\n"
@@ -21,17 +21,17 @@ msgstr ""
 
 #: mkdocs/themes/readthedocs/404.html:7
 msgid "Page not found"
-msgstr "Strony nie znaleziono"
+msgstr "Nie znaleziono strony"
 
-#: mkdocs/themes/readthedocs/base.html:97
+#: mkdocs/themes/readthedocs/base.html:96
 msgid "Logo"
 msgstr "Logo"
 
-#: mkdocs/themes/readthedocs/base.html:111
+#: mkdocs/themes/readthedocs/base.html:110
 msgid "Navigation menu"
 msgstr "Menu nawigacji"
 
-#: mkdocs/themes/readthedocs/base.html:140
+#: mkdocs/themes/readthedocs/base.html:147
 msgid "Mobile navigation menu"
 msgstr "Mobilne menu nawigacji"
 
@@ -57,13 +57,13 @@ msgstr "Nawigacja typu Breadcrumb"
 
 #: mkdocs/themes/readthedocs/breadcrumbs.html:36
 #: mkdocs/themes/readthedocs/footer.html:7
-#: mkdocs/themes/readthedocs/versions.html:17
+#: mkdocs/themes/readthedocs/versions.html:21
 msgid "Previous"
 msgstr "Wstecz"
 
 #: mkdocs/themes/readthedocs/breadcrumbs.html:39
 #: mkdocs/themes/readthedocs/footer.html:10
-#: mkdocs/themes/readthedocs/versions.html:20
+#: mkdocs/themes/readthedocs/versions.html:24
 msgid "Next"
 msgstr "Dalej"
 
@@ -76,7 +76,13 @@ msgstr "Nawigacja w stopce"
 msgid ""
 "Built with %(mkdocs_link)s using a %(sphinx_link)s provided by "
 "%(rtd_link)s."
-msgstr "Zbudowano przy użyciu %(mkdocs_link)s z pomocą %(sphinx_link)s dostarczonego przez %(rtd_link)s."
+msgstr ""
+"Zbudowano przy użyciu pakietu %(mkdocs_link)s oraz %(sphinx_link)s "
+"dostarczonego przez %(rtd_link)s."
+
+#: mkdocs/themes/readthedocs/footer.html:25
+msgid "theme"
+msgstr "motywu"
 
 #: mkdocs/themes/readthedocs/search.html:5
 msgid "Search Results"
@@ -89,11 +95,11 @@ msgstr "Przeszukaj dokumentację"
 #: mkdocs/themes/readthedocs/search.html:9
 #: mkdocs/themes/readthedocs/searchbox.html:3
 msgid "Type search term here"
-msgstr "Wpisz tutaj kryteria wyszukiwania"
+msgstr "Wpisz tutaj frazę do wyszukania"
 
 #: mkdocs/themes/readthedocs/search.html:12
 msgid "No results found"
-msgstr "Nie znaleziono żadnych wyników"
+msgstr "Nie znaleziono wyników"
 
 #: mkdocs/themes/readthedocs/search.html:13
 msgid "Searching..."
