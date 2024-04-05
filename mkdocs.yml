@@ -30,6 +30,7 @@ extra_css:
 
 exclude_docs: |
   *.py
+  !.github/
 
 markdown_extensions:
   - toc:
