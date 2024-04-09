@@ -75,12 +75,12 @@ msgid ""
 "Built with %(mkdocs_link)s using a %(sphinx_link)s provided by "
 "%(rtd_link)s."
 msgstr ""
-"Construído com %(mkdocs_link)s usando %(sphinx_link)s provido por "
+"Construído com %(mkdocs_link)s usando um %(sphinx_link)s provido por "
 "%(rtd_link)s."
 
 #: mkdocs/themes/readthedocs/footer.html:25
 msgid "theme"
-msgstr ""
+msgstr "tema"
 
 #: mkdocs/themes/readthedocs/search.html:5
 msgid "Search Results"

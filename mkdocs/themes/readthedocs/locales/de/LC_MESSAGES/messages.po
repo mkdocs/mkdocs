@@ -78,7 +78,7 @@ msgstr "Erzeugt mit %(mkdocs_link)s mit einem %(sphinx_link)s von %(rtd_link)s."
 
 #: mkdocs/themes/readthedocs/footer.html:25
 msgid "theme"
-msgstr ""
+msgstr "Thema"
 
 #: mkdocs/themes/readthedocs/search.html:5
 msgid "Search Results"

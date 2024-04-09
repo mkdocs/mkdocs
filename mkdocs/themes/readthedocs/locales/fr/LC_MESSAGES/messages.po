@@ -80,7 +80,7 @@ msgstr ""
 
 #: mkdocs/themes/readthedocs/footer.html:25
 msgid "theme"
-msgstr ""
+msgstr "thème"
 
 #: mkdocs/themes/readthedocs/search.html:5
 msgid "Search Results"
