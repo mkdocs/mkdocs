@@ -98,6 +98,7 @@ exclude = ["/mkdocs/tests", "*.po", "*.pot", "babel.cfg"]
 [tool.hatch.build.hooks.custom]
 dependencies = [
     "babel",
+    "setuptools; python_version >= '3.12'",
 ]
 
 [tool.hatch.env]
