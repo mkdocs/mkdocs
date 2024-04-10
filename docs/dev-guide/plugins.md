@@ -431,11 +431,13 @@ Since MkDocs 1.4, plugins can choose to set a priority value for their events. E
 
 #### ::: mkdocs.plugins.event_priority
 
-There may also arise a need to register a handler for the same event at multiple different priorities.
-
-`CombinedEvent` makes this possible since MkDocs 1.6.
-
-#### ::: mkdocs.plugins.CombinedEvent
+> NEW: **New in version 1.6**
+>
+> There may also arise a need to register a handler for the same event at multiple different priorities.
+>
+> `CombinedEvent` makes this possible.
+>
+> #### ::: mkdocs.plugins.CombinedEvent
 
 ### Handling Errors
 
@@ -504,7 +506,7 @@ To ensure that your plugins' log messages adhere with MkDocs' formatting and `--
 `log.error()` is another logging level that is differentiated by its look, but in all other ways it functions the same as `warning`, so it's strange to use it. If your plugin encounters an actual error, it is best to just interrupt the build by raising [`mkdocs.exceptions.PluginError`][] (which will also log an ERROR message).
 
 <!-- -->
-> NEW: New in MkDocs 1.5
+> NEW: **New in version 1.5**
 >
 > MkDocs now provides a `get_plugin_logger()` convenience function that returns a logger like the above that is also prefixed with the plugin's name.
 >
