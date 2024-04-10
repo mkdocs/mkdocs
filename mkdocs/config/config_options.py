@@ -1208,7 +1208,14 @@ class Hooks(BaseConfigOption[List[types.ModuleType]]):
         sys.modules[name] = module
         if spec.loader is None:
             raise ValidationError(f"Cannot import path '{path}' as a Python module")
-        spec.loader.exec_module(module)
+
+        old_sys_path = sys.path.copy()
+        sys.path.insert(0, os.path.dirname(path))
+        try:
+            spec.loader.exec_module(module)
+        finally:
+            sys.path[:] = old_sys_path
+
         return module
 
     def post_validation(self, config: Config, key_name: str):

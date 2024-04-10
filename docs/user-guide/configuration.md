@@ -804,7 +804,7 @@ hooks:
   - my_hooks.py
 ```
 
-Then the file *my_hooks.py* can contain any [plugin event handlers](../dev-guide/plugins.md#events) (without `self`), e.g.:
+Then the file `my_hooks.py` can contain any [plugin event handlers](../dev-guide/plugins.md#events) (without `self`), e.g.:
 
 ```python
 def on_page_markdown(markdown, **kwargs):
@@ -842,6 +842,12 @@ You might have seen this feature in the [mkdocs-simple-hooks plugin](https://git
 +hooks:
 +  - my_hooks.py
 ```
+
+> NEW: **New in MkDocs 1.6.**
+>
+> If a hook file has a file `foo.py` adjacent to it, it can use the normal Python syntax `import foo` to access its functions.
+>
+> In older versions of MkDocs, a workaround was necessary to make this work - adding the path to `sys.path`.
 
 ### plugins
 
