@@ -70,7 +70,8 @@ class SearchIndex:
         create an entry in the index.
         """
         text = ' '.join(section.text) if self.config['indexing'] == 'full' else ''
-        self._add_entry(title=section.title, text=text, loc=f'{abs_url}#{section.id}')
+        if section.id is not None:
+            self._add_entry(title=section.title, text=text, loc=f'{abs_url}#{section.id}')
 
     def generate_search_index(self) -> str:
         """Python to json conversion."""
