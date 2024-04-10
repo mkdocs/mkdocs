@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MkDocs 1.3.1\n"
 "Report-Msgid-Bugs-To: \"https://github.com/mkdocs/mkdocs/issues\"\n"
-"POT-Creation-Date: 2022-08-15 17:05+0200\n"
+"POT-Creation-Date: 2024-04-09 16:13+0200\n"
 "PO-Revision-Date: 2024-03-21 17:46+0100\n"
 "Last-Translator: Szymon Rakowski <szymon.rakowski@ac.com.pl>\n"
 "Language: pl\n"
@@ -22,31 +22,31 @@ msgstr ""
 msgid "Page not found"
 msgstr "Nie znaleziono strony"
 
-#: mkdocs/themes/mkdocs/base.html:116
+#: mkdocs/themes/mkdocs/base.html:113
 #: mkdocs/themes/mkdocs/keyboard-modal.html:31
 #: mkdocs/themes/mkdocs/search-modal.html:5
 msgid "Search"
 msgstr "Szukaj"
 
-#: mkdocs/themes/mkdocs/base.html:126
+#: mkdocs/themes/mkdocs/base.html:123
 msgid "Previous"
 msgstr "Wstecz"
 
-#: mkdocs/themes/mkdocs/base.html:131
+#: mkdocs/themes/mkdocs/base.html:128
 msgid "Next"
 msgstr "Dalej"
 
-#: mkdocs/themes/mkdocs/base.html:142 mkdocs/themes/mkdocs/base.html:144
-#: mkdocs/themes/mkdocs/base.html:146 mkdocs/themes/mkdocs/base.html:148
+#: mkdocs/themes/mkdocs/base.html:139 mkdocs/themes/mkdocs/base.html:141
+#: mkdocs/themes/mkdocs/base.html:143 mkdocs/themes/mkdocs/base.html:145
 #, python-format
 msgid "Edit on %(repo_name)s"
 msgstr "Edytuj w %(repo_name)s"
 
-#: mkdocs/themes/mkdocs/base.html:150
+#: mkdocs/themes/mkdocs/base.html:147
 msgid "Edit"
 msgstr "Edytuj"
 
-#: mkdocs/themes/mkdocs/base.html:190
+#: mkdocs/themes/mkdocs/base.html:187
 #, python-format
 msgid "Documentation built with %(mkdocs_link)s."
 msgstr "Dokumentacja zbudowana przy użyciu pakietu %(mkdocs_link)s."
@@ -82,7 +82,9 @@ msgstr "Poprzednia strona"
 
 #: mkdocs/themes/mkdocs/search-modal.html:9
 msgid "From here you can search these documents. Enter your search terms below."
-msgstr "W tym miejscu możesz przeszukiwać dokumenty. Wpisz swoją frazę do wyszukania poniżej."
+msgstr ""
+"W tym miejscu możesz przeszukiwać dokumenty. Wpisz swoją frazę do "
+"wyszukania poniżej."
 
 #: mkdocs/themes/mkdocs/search-modal.html:12
 msgid "Search..."

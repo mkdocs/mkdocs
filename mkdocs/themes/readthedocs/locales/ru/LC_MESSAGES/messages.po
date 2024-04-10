@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MkDocs 1.2\n"
 "Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
-"POT-Creation-Date: 2022-09-13 23:23+0300\n"
+"POT-Creation-Date: 2024-04-09 16:13+0200\n"
 "PO-Revision-Date: 2022-09-13 23:23+0300\n"
 "Last-Translator: Alexander Krasnikov <alexander@krasnikov.net>\n"
 "Language: ru\n"
@@ -16,21 +16,21 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.14.0\n"
 
 #: mkdocs/themes/readthedocs/404.html:7
 msgid "Page not found"
 msgstr "Страница не найдена"
 
-#: mkdocs/themes/readthedocs/base.html:97
+#: mkdocs/themes/readthedocs/base.html:96
 msgid "Logo"
 msgstr "Логотип"
 
-#: mkdocs/themes/readthedocs/base.html:111
+#: mkdocs/themes/readthedocs/base.html:110
 msgid "Navigation menu"
 msgstr "Навигационное меню"
 
-#: mkdocs/themes/readthedocs/base.html:140
+#: mkdocs/themes/readthedocs/base.html:147
 msgid "Mobile navigation menu"
 msgstr "Мобильная версия навигации"
 
@@ -56,13 +56,13 @@ msgstr "Навигационная цепочка"
 
 #: mkdocs/themes/readthedocs/breadcrumbs.html:36
 #: mkdocs/themes/readthedocs/footer.html:7
-#: mkdocs/themes/readthedocs/versions.html:17
+#: mkdocs/themes/readthedocs/versions.html:21
 msgid "Previous"
 msgstr "Назад"
 
 #: mkdocs/themes/readthedocs/breadcrumbs.html:39
 #: mkdocs/themes/readthedocs/footer.html:10
-#: mkdocs/themes/readthedocs/versions.html:20
+#: mkdocs/themes/readthedocs/versions.html:24
 msgid "Next"
 msgstr "Вперед"
 
@@ -78,6 +78,10 @@ msgid ""
 msgstr ""
 "Собрано в %(mkdocs_link)s с использованием %(sphinx_link)s от "
 "%(rtd_link)s."
+
+#: mkdocs/themes/readthedocs/footer.html:25
+msgid "theme"
+msgstr "темы"
 
 #: mkdocs/themes/readthedocs/search.html:5
 msgid "Search Results"
