@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MkDocs 1.3.1\n"
 "Report-Msgid-Bugs-To: \"https://github.com/mkdocs/mkdocs/issues\"\n"
-"POT-Creation-Date: 2024-04-09 16:13+0200\n"
+"POT-Creation-Date: 2024-04-12 21:40+0200\n"
 "PO-Revision-Date: 2023-09-06 02:13+0800\n"
 "Last-Translator: Peter Dave Hello <hsu@peterdavehello.org>\n"
 "Language: zh_Hant_TW\n"
@@ -21,31 +21,31 @@ msgstr ""
 msgid "Page not found"
 msgstr "找不到頁面"
 
-#: mkdocs/themes/mkdocs/base.html:113
+#: mkdocs/themes/mkdocs/base.html:117
 #: mkdocs/themes/mkdocs/keyboard-modal.html:31
 #: mkdocs/themes/mkdocs/search-modal.html:5
 msgid "Search"
 msgstr "搜尋"
 
-#: mkdocs/themes/mkdocs/base.html:123
+#: mkdocs/themes/mkdocs/base.html:127
 msgid "Previous"
 msgstr "上一頁"
 
-#: mkdocs/themes/mkdocs/base.html:128
+#: mkdocs/themes/mkdocs/base.html:132
 msgid "Next"
 msgstr "下一頁"
 
-#: mkdocs/themes/mkdocs/base.html:139 mkdocs/themes/mkdocs/base.html:141
 #: mkdocs/themes/mkdocs/base.html:143 mkdocs/themes/mkdocs/base.html:145
+#: mkdocs/themes/mkdocs/base.html:147 mkdocs/themes/mkdocs/base.html:149
 #, python-format
 msgid "Edit on %(repo_name)s"
 msgstr "在 %(repo_name)s 上編輯"
 
-#: mkdocs/themes/mkdocs/base.html:147
+#: mkdocs/themes/mkdocs/base.html:151
 msgid "Edit"
 msgstr "編輯"
 
-#: mkdocs/themes/mkdocs/base.html:187
+#: mkdocs/themes/mkdocs/base.html:222
 #, python-format
 msgid "Documentation built with %(mkdocs_link)s."
 msgstr "使用 %(mkdocs_link)s 建立的文件"
