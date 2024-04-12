@@ -19,6 +19,7 @@ except ImportError:
     haslunrpy = False
 
 log = logging.getLogger(__name__)
+WHITESPACE_RE = re.compile(r'\s+')
 
 
 class SearchIndex:
@@ -69,9 +70,10 @@ class SearchIndex:
         Given a section of a page and the absolute url for the page
         create an entry in the index.
         """
-        text = ' '.join(section.text) if self.config['indexing'] == 'full' else ''
         if section.id is not None:
-            self._add_entry(title=section.title, text=text, loc=f'{abs_url}#{section.id}')
+            text = ' '.join(section.text) if self.config['indexing'] == 'full' else ''
+            title = WHITESPACE_RE.sub(' ', section.title).strip()
+            self._add_entry(title=title, text=text, loc=f'{abs_url}#{section.id}')
 
     def generate_search_index(self) -> str:
         """Python to json conversion."""
