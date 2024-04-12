@@ -141,8 +141,8 @@ for.
 To update the `fr` translation catalog of both built-in themes, use the following commands:
 
 ```bash
-pybabel update --ignore-obsolete --update-header-comment --input-file mkdocs/themes/mkdocs/messages.pot --output-dir mkdocs/themes/mkdocs/locales -l fr
-pybabel update --ignore-obsolete --update-header-comment --input-file mkdocs/themes/readthedocs/messages.pot --output-dir mkdocs/themes/readthedocs/locales -l fr
+pybabel update --ignore-obsolete --input-file mkdocs/themes/mkdocs/messages.pot --output-dir mkdocs/themes/mkdocs/locales -l fr
+pybabel update --ignore-obsolete --input-file mkdocs/themes/readthedocs/messages.pot --output-dir mkdocs/themes/readthedocs/locales -l fr
 ```
 
 You can now move on to the next step and [add a translation] for every updated

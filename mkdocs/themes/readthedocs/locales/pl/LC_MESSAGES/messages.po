@@ -1,13 +1,12 @@
 # Polish translations for MkDocs.
 # Copyright (C) 2024 MkDocs
 # This file is distributed under the same license as the MkDocs project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: MkDocs 1.3.1\n"
 "Report-Msgid-Bugs-To: \"https://github.com/mkdocs/mkdocs/issues\"\n"
-"POT-Creation-Date: 2024-03-30 23:45+0100\n"
+"POT-Creation-Date: 2024-04-09 16:13+0200\n"
 "PO-Revision-Date: 2024-03-21 17:46+0100\n"
 "Last-Translator: Szymon Rakowski <szymon.rakowski@ac.com.pl>\n"
 "Language: pl\n"
