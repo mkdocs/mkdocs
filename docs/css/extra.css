@@ -21,14 +21,14 @@ div.admonition.block>.admonition-title {
 }
 
 .admonition.new, details.new {
-    color: #15654a;
-    background-color: #edfff9;
-    border-color: #bcf1e8;
+    color: var(--bs-success-text-emphasis);
+    background-color: var(--bs-success-bg-subtle);
+    border-color: var(--bs-success-border-subtle);
 }
 .admonition.example, details.example {
-    color: #353579;
-    background-color: #f0f1ff;
-    border-color: #d8dcf0;
+    color: var(--bs-info-text-emphasis);
+    background-color: var(--bs-info-bg-subtle);
+    border-color: var(--bs-info-border-subtle);
 }
 
 /* Definition List styles */
@@ -45,16 +45,6 @@ dd {
 
 /* Homepage */
 
-body.homepage div.jumbotron {
-    margin-top: 1.5rem;
-    padding-top: 1rem;
-    padding-bottom: 0;
-}
-
-body.homepage div.jumbotron div.card {
-    margin-bottom: 2rem;
-}
-
 body.homepage>div.container>div.row>div.col-md-3 {
     display: none;
 }
@@ -69,7 +59,7 @@ body.homepage>div.container>div.row>div.col-md-9 {
 
 .doc-object {
     padding-left: 10px;
-    border-left: 4px solid rgba(230, 230, 230);
+    border-left: 4px solid var(--bs-light-border-subtle);
 }
 
 .doc-contents .field-body p:first-of-type {
