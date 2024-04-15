@@ -1,0 +1,10 @@
+- id: mkdocs-build
+  name: mkdocs build
+  description: tests if your documentation builds successfully.
+  language: python
+  entry: mkdocs build
+  require_serial: true
+  pass_filenames: false
+  types_or: [markdown, yaml]
+  files: ((^|/)mkdocs\.ya?ml$)|(^docs/)
+  minimum_pre_commit_version: 2.9.0
