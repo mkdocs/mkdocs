@@ -317,8 +317,10 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.parent, None)
         self.assertEqual(pg.previous_page, None)
         self.assertEqual(pg.title, 'Welcome to MkDocs')
+        self.assertRaises(RuntimeError, lambda: pg.content_title)
         pg.render(cfg, Files([fl]))
         self.assertEqual(pg.title, 'Welcome to MkDocs')
+        self.assertEqual(pg.content_title, 'Welcome to MkDocs')
 
     def _test_extract_title(self, content, expected, extensions={}):
         md = markdown.Markdown(extensions=list(extensions.keys()), extension_configs=extensions)
@@ -436,10 +438,16 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.next_page, None)
         self.assertEqual(pg.parent, None)
         self.assertEqual(pg.previous_page, None)
+        self.assertRaises(RuntimeError, lambda: pg.content_title)
         self.assertEqual(pg.title, 'A Page Title')
         self.assertEqual(pg.toc, [])
         pg.render(cfg, Files([fl]))
         self.assertEqual(pg.title, 'A Page Title')
+        self.assertEqual(pg.content_title, 'A Page Title')
+        # Test setting the title directly (e.g. through a plugin):
+        pg.title = 'New title'
+        self.assertEqual(pg.title, 'New title')
+        self.assertEqual(pg.content_title, 'A Page Title')
 
     def test_page_title_from_filename(self):
         cfg = load_config(docs_dir=DOCS_DIR)
@@ -462,9 +470,16 @@ class PageTests(unittest.TestCase):
         self.assertEqual(pg.next_page, None)
         self.assertEqual(pg.parent, None)
         self.assertEqual(pg.previous_page, None)
+        self.assertRaises(RuntimeError, lambda: pg.content_title)
         self.assertEqual(pg.title, 'Page title')
         pg.render(cfg, Files([fl]))
         self.assertEqual(pg.title, 'Page title')
+        self.assertEqual(pg.content_title, 'Page title')
+        # Test setting the title directly (e.g. through a plugin):
+        pg.title = 'New title'
+        self.assertEqual(pg.title, 'New title')
+        # Content title is missing, title still takes precedence.
+        self.assertEqual(pg.content_title, 'New title')
 
     def test_page_title_from_capitalized_filename(self):
         cfg = load_config(docs_dir=DOCS_DIR)
