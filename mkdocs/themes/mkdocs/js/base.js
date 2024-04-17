@@ -23,8 +23,8 @@ function applyTopPadding() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    var search_term = getSearchTerm()
-    var search_modal = new bootstrap.Modal(document.getElementById('mkdocs_search_modal'))
+    var search_term = getSearchTerm();
+    var search_modal = new bootstrap.Modal(document.getElementById('mkdocs_search_modal'));
     var keyboard_modal = new bootstrap.Modal(document.getElementById('mkdocs_keyboard_modal'));
 
     if (search_term) {
@@ -155,10 +155,10 @@ var scrollSpy = new bootstrap.ScrollSpy(document.body, {
 });
 
 /* Prevent disabled links from causing a page reload */
-document.querySelectorAll("li.disabled a").forEach(item => {
-    item.addEventListener("click", ev => {
-        ev.preventDefault()
-    })
+document.querySelectorAll("li.disabled a").forEach(function(item) {
+    item.addEventListener("click", function(event) {
+        event.preventDefault();
+    });
 });
 
 // See https://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
