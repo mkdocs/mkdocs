@@ -231,7 +231,8 @@ class Page(StructureItem):
 
         Before calling `read_source()`, this value is empty. It can also be updated by `render()`.
 
-        Check these in order and use the first that returns a valid title:
+        Checks these in order and uses the first that returns a valid title:
+
         - value provided on init (passed in from config)
         - value of metadata 'title'
         - content of the first H1 in Markdown content
