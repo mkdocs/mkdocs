@@ -79,11 +79,21 @@ Context: #3578
 
 The "mkdocs" theme got a big update to a newer version of Bootstrap, meaning a slight overhaul of styles. Colors (most notably of admonitions) have much better contrast.
 
-The "mkdocs" theme now has support for dark mode - both automatic (based on the OS/browser setting) and with a manual toggle. Both of these options are **not** enabled by default and need to be configured explicitly.
-
+The "mkdocs" theme now has support for dark mode - both automatic (based on the OS/browser setting) and with a manual toggle. Both of these options are **not** enabled by default and need to be configured explicitly.  
 See `color_mode`, `user_color_mode_toggle` in [**documentation**](../user-guide/choosing-your-theme.md#mkdocs).
 
-Context: #3493
+> WARNING: **Possible breaking change.**
+>
+> jQuery is no longer included into the "mkdocs" theme. If you were relying on it in your scripts, you will need to separately add it first (into mkdocs.yml) as an extra script:
+>
+> ```yaml
+> extra_javascript:
+>   - https://code.jquery.com/jquery-3.7.1.min.js
+> ```
+>
+> Or even better if the script file is copied and included from your docs dir.
+
+Context: #3493, #3649
 
 ### Configuration
 
