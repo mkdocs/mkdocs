@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MkDocs 1.2\n"
 "Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
-"POT-Creation-Date: 2024-04-12 21:40+0200\n"
+"POT-Creation-Date: 2024-04-18 21:03+0200\n"
 "PO-Revision-Date: 2021-10-24 00:09+0200\n"
 "Last-Translator: Marc Dietz <marc@projectleviathan.de>\n"
 "Language: de\n"
@@ -45,7 +45,7 @@ msgstr "Bearbeiten auf %(repo_name)s"
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: mkdocs/themes/mkdocs/base.html:222
+#: mkdocs/themes/mkdocs/base.html:225
 #, python-format
 msgid "Documentation built with %(mkdocs_link)s."
 msgstr "Diese Dokumentation wurde erstellt mit %(mkdocs_link)s."

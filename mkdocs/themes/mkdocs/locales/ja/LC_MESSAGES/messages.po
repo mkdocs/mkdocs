@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MkDocs 1.2\n"
 "Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
-"POT-Creation-Date: 2024-04-12 21:40+0200\n"
+"POT-Creation-Date: 2024-04-18 21:03+0200\n"
 "PO-Revision-Date: 2021-07-31 12:06+0900\n"
 "Last-Translator: Goto Hayato <habita.gh@gmail.com>\n"
 "Language: ja\n"
@@ -45,7 +45,7 @@ msgstr "%(repo_name)s で編集"
 msgid "Edit"
 msgstr ""
 
-#: mkdocs/themes/mkdocs/base.html:222
+#: mkdocs/themes/mkdocs/base.html:225
 #, python-format
 msgid "Documentation built with %(mkdocs_link)s."
 msgstr "%(mkdocs_link)s でビルドされたドキュメンテーション"

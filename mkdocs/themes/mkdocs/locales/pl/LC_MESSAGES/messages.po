@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MkDocs 1.3.1\n"
 "Report-Msgid-Bugs-To: \"https://github.com/mkdocs/mkdocs/issues\"\n"
-"POT-Creation-Date: 2024-04-12 21:40+0200\n"
+"POT-Creation-Date: 2024-04-18 21:03+0200\n"
 "PO-Revision-Date: 2024-03-21 17:46+0100\n"
 "Last-Translator: Szymon Rakowski <szymon.rakowski@ac.com.pl>\n"
 "Language: pl\n"
@@ -46,7 +46,7 @@ msgstr "Edytuj w %(repo_name)s"
 msgid "Edit"
 msgstr "Edytuj"
 
-#: mkdocs/themes/mkdocs/base.html:222
+#: mkdocs/themes/mkdocs/base.html:225
 #, python-format
 msgid "Documentation built with %(mkdocs_link)s."
 msgstr "Dokumentacja zbudowana przy użyciu pakietu %(mkdocs_link)s."
