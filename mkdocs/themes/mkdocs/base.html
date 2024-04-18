@@ -203,6 +203,9 @@
                 </div>
             </div>
         </div>
+        {%- if config.theme.color_mode != "light" or config.theme.user_color_mode_toggle %}
+        <script src="{{ 'js/darkmode.js'|url }}"></script>
+        {%- endif %}
 
         <div class="container">
             <div class="row">
