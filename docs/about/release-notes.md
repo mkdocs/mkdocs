@@ -27,7 +27,7 @@ The current and past members of the MkDocs team.
 * [@oprypin](https://github.com/oprypin/)
 * [@ultrabug](https://github.com/ultrabug/)
 
-## Version 1.6.0 (2024-04-18)
+## Version 1.6.0 (2024-04-20)
 
 ### Local preview
 
@@ -61,7 +61,7 @@ Now tags are always fully sanitized from the title. Though it still remains the 
 
 Images (notably, emojis in some extensions) get preserved in the title only through their `alt` attribute's value.
 
-Context: #3578
+Context: #3564, #3578
 
 ### Themes
 
