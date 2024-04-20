@@ -80,7 +80,11 @@ class Section(StructureItem):
         ip = self.index_page
         if not ip:
             return self._title
-        return ip.meta.get('title', ip.title) if ip.meta else ip.title
+        if 'title' in ip.meta:
+            return ip.meta['title']
+        if ip.title == "Index":
+            return self._title
+        return ip.title
 
     @title.setter
     def title(self, title):
