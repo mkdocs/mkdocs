@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MkDocs 1.2\n"
 "Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
-"POT-Creation-Date: 2024-04-09 16:13+0200\n"
+"POT-Creation-Date: 2024-04-18 21:03+0200\n"
 "PO-Revision-Date: 2022-09-13 23:23+0300\n"
 "Last-Translator: Alexander Krasnikov <alexander@krasnikov.net>\n"
 "Language: ru\n"
@@ -22,31 +22,31 @@ msgstr ""
 msgid "Page not found"
 msgstr "Страница не найдена"
 
-#: mkdocs/themes/mkdocs/base.html:113
+#: mkdocs/themes/mkdocs/base.html:117
 #: mkdocs/themes/mkdocs/keyboard-modal.html:31
 #: mkdocs/themes/mkdocs/search-modal.html:5
 msgid "Search"
 msgstr "Поиск"
 
-#: mkdocs/themes/mkdocs/base.html:123
+#: mkdocs/themes/mkdocs/base.html:127
 msgid "Previous"
 msgstr "Назад"
 
-#: mkdocs/themes/mkdocs/base.html:128
+#: mkdocs/themes/mkdocs/base.html:132
 msgid "Next"
 msgstr "Вперед"
 
-#: mkdocs/themes/mkdocs/base.html:139 mkdocs/themes/mkdocs/base.html:141
 #: mkdocs/themes/mkdocs/base.html:143 mkdocs/themes/mkdocs/base.html:145
+#: mkdocs/themes/mkdocs/base.html:147 mkdocs/themes/mkdocs/base.html:149
 #, python-format
 msgid "Edit on %(repo_name)s"
 msgstr "Редактировать в %(repo_name)s"
 
-#: mkdocs/themes/mkdocs/base.html:147
+#: mkdocs/themes/mkdocs/base.html:151
 msgid "Edit"
 msgstr "Редактировать"
 
-#: mkdocs/themes/mkdocs/base.html:187
+#: mkdocs/themes/mkdocs/base.html:225
 #, python-format
 msgid "Documentation built with %(mkdocs_link)s."
 msgstr "Документация создана с помощью %(mkdocs_link)s."

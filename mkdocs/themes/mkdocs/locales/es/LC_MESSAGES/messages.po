@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MkDocs 1.2\n"
 "Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
-"POT-Creation-Date: 2024-04-09 16:13+0200\n"
+"POT-Creation-Date: 2024-04-18 21:03+0200\n"
 "PO-Revision-Date: 2021-05-07 12:06+0200\n"
 "Last-Translator: Álvaro Mondéjar Rubio <mondejar1994@gmail.com>\n"
 "Language: es\n"
@@ -21,31 +21,31 @@ msgstr ""
 msgid "Page not found"
 msgstr "Página no encontrada"
 
-#: mkdocs/themes/mkdocs/base.html:113
+#: mkdocs/themes/mkdocs/base.html:117
 #: mkdocs/themes/mkdocs/keyboard-modal.html:31
 #: mkdocs/themes/mkdocs/search-modal.html:5
 msgid "Search"
 msgstr "Buscar"
 
-#: mkdocs/themes/mkdocs/base.html:123
+#: mkdocs/themes/mkdocs/base.html:127
 msgid "Previous"
 msgstr "Anterior"
 
-#: mkdocs/themes/mkdocs/base.html:128
+#: mkdocs/themes/mkdocs/base.html:132
 msgid "Next"
 msgstr "Siguiente"
 
-#: mkdocs/themes/mkdocs/base.html:139 mkdocs/themes/mkdocs/base.html:141
 #: mkdocs/themes/mkdocs/base.html:143 mkdocs/themes/mkdocs/base.html:145
+#: mkdocs/themes/mkdocs/base.html:147 mkdocs/themes/mkdocs/base.html:149
 #, python-format
 msgid "Edit on %(repo_name)s"
 msgstr "Editar en %(repo_name)s"
 
-#: mkdocs/themes/mkdocs/base.html:147
+#: mkdocs/themes/mkdocs/base.html:151
 msgid "Edit"
 msgstr "Editar"
 
-#: mkdocs/themes/mkdocs/base.html:187
+#: mkdocs/themes/mkdocs/base.html:225
 #, python-format
 msgid "Documentation built with %(mkdocs_link)s."
 msgstr "Documentación construida con %(mkdocs_link)s."
