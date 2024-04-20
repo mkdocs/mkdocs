@@ -1,51 +1,51 @@
 # Translations template for MkDocs.
-# Copyright (C) 2022 MkDocs
+# Copyright (C) 2024 MkDocs
 # This file is distributed under the same license as the MkDocs project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: MkDocs 1.3.1\n"
-"Report-Msgid-Bugs-To: \"https://github.com/mkdocs/mkdocs/issues\"\n"
-"POT-Creation-Date: 2022-08-15 17:05+0200\n"
+"Project-Id-Version: MkDocs 1.5.3\n"
+"Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
+"POT-Creation-Date: 2024-04-18 21:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <@nickname or @email>\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.14.0\n"
 
 #: mkdocs/themes/mkdocs/404.html:8
 msgid "Page not found"
 msgstr ""
 
-#: mkdocs/themes/mkdocs/base.html:116
+#: mkdocs/themes/mkdocs/base.html:117
 #: mkdocs/themes/mkdocs/keyboard-modal.html:31
 #: mkdocs/themes/mkdocs/search-modal.html:5
 msgid "Search"
 msgstr ""
 
-#: mkdocs/themes/mkdocs/base.html:126
+#: mkdocs/themes/mkdocs/base.html:127
 msgid "Previous"
 msgstr ""
 
-#: mkdocs/themes/mkdocs/base.html:131
+#: mkdocs/themes/mkdocs/base.html:132
 msgid "Next"
 msgstr ""
 
-#: mkdocs/themes/mkdocs/base.html:142
-#: mkdocs/themes/mkdocs/base.html:144
-#: mkdocs/themes/mkdocs/base.html:146
-#: mkdocs/themes/mkdocs/base.html:148
+#: mkdocs/themes/mkdocs/base.html:143 mkdocs/themes/mkdocs/base.html:145
+#: mkdocs/themes/mkdocs/base.html:147 mkdocs/themes/mkdocs/base.html:149
 #, python-format
 msgid "Edit on %(repo_name)s"
 msgstr ""
 
-#: mkdocs/themes/mkdocs/base.html:150
+#: mkdocs/themes/mkdocs/base.html:151
 msgid "Edit"
 msgstr ""
 
-#: mkdocs/themes/mkdocs/base.html:190
+#: mkdocs/themes/mkdocs/base.html:225
 #, python-format
 msgid "Documentation built with %(mkdocs_link)s."
 msgstr ""
@@ -98,3 +98,4 @@ msgstr ""
 #: mkdocs/themes/mkdocs/toc.html:3
 msgid "Table of Contents"
 msgstr ""
+

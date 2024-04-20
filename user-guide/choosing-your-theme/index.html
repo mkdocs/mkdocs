@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="auto">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,9 +10,13 @@
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Choosing Your Theme - MkDocs</title>
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../../css/brands.min.css" rel="stylesheet">
+        <link href="../../css/solid.min.css" rel="stylesheet">
+        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" disabled>
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -34,7 +38,7 @@
             <div class="container">
                 <a class="navbar-brand" href="../..">MkDocs</a>
                 <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -42,14 +46,14 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="../.." class="nav-link">Home</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="../../getting-started/" class="nav-link">Getting Started</a>
                             </li>
-                            <li class="dropdown active">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">User Guide</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -65,7 +69,7 @@
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active">Choosing Your Theme</a>
+    <a href="./" class="dropdown-item active" aria-current="page">Choosing Your Theme</a>
 </li>
                                     
 <li>
@@ -89,8 +93,8 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Developer Guide</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -114,8 +118,8 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">About</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -133,9 +137,9 @@
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav ml-auto">
+                    <ul class="nav navbar-nav ms-md-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
@@ -150,37 +154,67 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/user-guide/choosing-your-theme.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/user-guide/choosing-your-theme.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                              <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
+                                <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                <span class="d-lg-none ms-2">Toggle theme</span>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                                    <i class="fa-solid fa-sun fa-fw"></i>
+                                    <span class="ms-2">Light</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+                                    <i class="fa-solid fa-moon fa-fw"></i>
+                                    <span class="ms-2">Dark</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="true">
+                                    <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                    <span class="ms-2">Auto</span>
+                                    <i class="fa-solid fa-check ms-auto"></i>
+                                  </button>
+                                </li>
+                              </ul>
                             </li>
                     </ul>
                 </div>
             </div>
         </div>
+        <script src="../../js/darkmode.js"></script>
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="1"><a href="#choosing-your-theme" class="nav-link">Choosing your Theme</a>
+            <li class="nav-item" data-bs-level="1"><a href="#choosing-your-theme" class="nav-link">Choosing your Theme</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-level="2"><a href="#mkdocs" class="nav-link">mkdocs</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#readthedocs" class="nav-link">readthedocs</a>
+            <li class="nav-item" data-bs-level="2"><a href="#mkdocs" class="nav-link">mkdocs</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#third-party-themes" class="nav-link">Third Party Themes</a>
+            <li class="nav-item" data-bs-level="2"><a href="#readthedocs" class="nav-link">readthedocs</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#third-party-themes" class="nav-link">Third Party Themes</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -204,18 +238,50 @@ config file.</p>
 <h2 id="mkdocs">mkdocs<a class="headerlink" href="#mkdocs" title="Permanent link"></a></h2>
 <p>The default theme, which was built as a custom <a href="https://getbootstrap.com/">Bootstrap</a> theme, supports almost
 every feature of MkDocs.</p>
-<p><img alt="mkdocs" src="../../img/mkdocs.png" /></p>
+<div id="mkdocs-theme-images" class="carousel slide carousel-fade" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="../../img/mkdocs_theme_light_mode.png" class="d-block w-100" alt="MkDocs theme in light mode">
+    </div>
+    <div class="carousel-item">
+      <img src="../../img/mkdocs_theme_dark_mode.png" class="d-block w-100" alt="MkDocs theme in dark mode">
+    </div>
+  </div>
+</div>
+
 <p>In addition to the default <a href="../configuration/#theme">theme configuration options</a>, the <code>mkdocs</code> theme
 supports the following options:</p>
 <ul>
+<li>
+<p><strong><code>color_mode</code></strong>: Set the default color mode for the theme to one of <code>light</code>,
+    <code>dark</code>, or <code>auto</code>. The <code>auto</code> mode will switch to <code>light</code> or <code>dark</code> based on
+    the system configuration of the user's device. Default: <code>light</code>.</p>
+</li>
+<li>
+<p><strong><code>user_color_mode_toggle</code></strong>: Enable a toggle menu in the navigation bar
+    which allows users to select their preferred <code>color_mode</code> (light, dark, auto)
+    from within the browser and save their preference for future page loads. The
+    default selection of the toggle menu on first page load is the value set to
+    <code>color_mode</code>. Default: <code>false</code>.</p>
+<p><img alt="color mode toggle menu" src="../../img/color_mode_toggle_menu.png" /></p>
+</li>
+<li>
+<p><strong><code>nav_style</code></strong>: Adjust the visual style of the top navigation bar. Set to
+    one of <code>primary</code>, <code>dark</code> or <code>light</code>. Default: <code>primary</code>. This option is
+    independent of the <code>color_mode</code> option and must be defined separately.</p>
+</li>
 <li>
 <p><strong><code>highlightjs</code></strong>: Enables highlighting of source code in code blocks using
     the <a href="https://highlightjs.org/">highlight.js</a> JavaScript library. Default: <code>True</code>.</p>
 </li>
 <li>
-<p><strong><code>hljs_style</code></strong>: The highlight.js library provides 79 different <a href="https://highlightjs.org/static/demo/">styles</a>
+<p><strong><code>hljs_style</code></strong>: The highlight.js library provides many different <a href="https://highlightjs.org/static/demo/">styles</a>
     (color variations) for highlighting source code in code blocks. Set this to
-    the name of the desired style. Default: <code>github</code>.</p>
+    the name of the desired style when in <code>light</code> mode. Default: <code>github</code>.</p>
+</li>
+<li>
+<p><strong><code>hljs_style_dark</code></strong>: Set this to the name of the desired highlight.js
+    style when in <code>dark</code> mode. Default: <code>github_dark</code>.</p>
 </li>
 <li>
 <p><strong><code>hljs_languages</code></strong>: By default, highlight.js only supports 23 common
@@ -278,14 +344,6 @@ the key code for a given key.</p>
     sidebar. Default: <code>2</code>.</p>
 </li>
 <li>
-<p><strong><code>nav_style</code></strong>: This adjusts the visual style for the top navigation bar; by
-    default, this is set to <code>primary</code> (the default), but it can also be set to
-    <code>dark</code> or <code>light</code>.</p>
-<pre class="highlight"><code class="language-yaml">theme:
-  name: mkdocs
-  nav_style: dark</code></pre>
-</li>
-<li>
 <p><strong id="mkdocs-locale"><code>locale</code></strong>: The locale (language/location) used to
     build the theme. If your locale is not yet supported, it will fall back
     to the default.</p>
@@ -301,6 +359,7 @@ the key code for a given key.</p>
 <li><code>ja</code>: Japanese</li>
 <li><code>nb</code>: Norwegian Bokmål</li>
 <li><code>nn</code>: Norwegian Nynorsk</li>
+<li><code>pl</code>: Polish</li>
 <li><code>pt_BR</code>: Portuguese (Brazil)</li>
 <li><code>ru</code>: Russian</li>
 <li><code>tr</code>: Turkish</li>
@@ -394,6 +453,7 @@ tracking ID, which uses the <code>G-</code> format. See Google's documentation t
 <li><code>id</code>: Indonesian</li>
 <li><code>it</code>: Italian</li>
 <li><code>ja</code>: Japanese</li>
+<li><code>pl</code>: Polish</li>
 <li><code>pt_BR</code>: Portuguese (Brazil)</li>
 <li><code>ru</code>: Russian</li>
 <li><code>tr</code>: Turkish</li>
@@ -409,7 +469,11 @@ tracking ID, which uses the <code>G-</code> format. See Google's documentation t
 </li>
 </ul>
 <h2 id="third-party-themes">Third Party Themes<a class="headerlink" href="#third-party-themes" title="Permanent link"></a></h2>
-<p>A list of third party themes can be found at the <a href="https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes">community wiki</a> page and <a href="https://github.com/mkdocs/catalog#-theming">the ranked catalog</a>. If you have created your own, please add them there.</p></div>
+<p>A list of third party themes can be found at the <a href="https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes">community wiki</a> page and <a href="https://github.com/mkdocs/catalog#-theming">the ranked catalog</a>. If you have created your own, please add them there.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Installing an MkDocs theme means installing a Python package and executing any code that the author has put in there. So, exercise the usual caution; there's no attempt at sandboxing.</p>
+</div></div>
             </div>
         </div>
 
@@ -418,8 +482,7 @@ tracking ID, which uses the <code>G-</code> format. See Google's documentation t
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="../../js/jquery-3.6.0.min.js"></script>
-        <script src="../../js/bootstrap.min.js"></script>
+        <script src="../../js/bootstrap.bundle.min.js"></script>
         <script>
             var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
@@ -432,7 +495,7 @@ tracking ID, which uses the <code>G-</code> format. See Google's documentation t
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>From here you can search these documents. Enter your search terms below.</p>
@@ -452,7 +515,7 @@ tracking ID, which uses the <code>G-</code> format. See Google's documentation t
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <table class="table">

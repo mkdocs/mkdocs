@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="auto">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,9 +10,13 @@
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Plugins - MkDocs</title>
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../../css/brands.min.css" rel="stylesheet">
+        <link href="../../css/solid.min.css" rel="stylesheet">
+        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" disabled>
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -34,7 +38,7 @@
             <div class="container">
                 <a class="navbar-brand" href="../..">MkDocs</a>
                 <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -42,14 +46,14 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="../.." class="nav-link">Home</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="../../getting-started/" class="nav-link">Getting Started</a>
                             </li>
-                            <li class="dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">User Guide</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -89,8 +93,8 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="dropdown active">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Developer Guide</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -106,7 +110,7 @@
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active">Plugins</a>
+    <a href="./" class="dropdown-item active" aria-current="page">Plugins</a>
 </li>
                                     
 <li>
@@ -114,8 +118,8 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">About</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -133,9 +137,9 @@
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav ml-auto">
+                    <ul class="nav navbar-nav ms-md-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
@@ -150,37 +154,67 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/dev-guide/plugins.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/dev-guide/plugins.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                              <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
+                                <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                <span class="d-lg-none ms-2">Toggle theme</span>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                                    <i class="fa-solid fa-sun fa-fw"></i>
+                                    <span class="ms-2">Light</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+                                    <i class="fa-solid fa-moon fa-fw"></i>
+                                    <span class="ms-2">Dark</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="true">
+                                    <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                    <span class="ms-2">Auto</span>
+                                    <i class="fa-solid fa-check ms-auto"></i>
+                                  </button>
+                                </li>
+                              </ul>
                             </li>
                     </ul>
                 </div>
             </div>
         </div>
+        <script src="../../js/darkmode.js"></script>
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="1"><a href="#mkdocs-plugins" class="nav-link">MkDocs Plugins</a>
+            <li class="nav-item" data-bs-level="1"><a href="#mkdocs-plugins" class="nav-link">MkDocs Plugins</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-level="2"><a href="#installing-plugins" class="nav-link">Installing Plugins</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#using-plugins" class="nav-link">Using Plugins</a>
+            <li class="nav-item" data-bs-level="2"><a href="#installing-plugins" class="nav-link">Installing Plugins</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#developing-plugins" class="nav-link">Developing Plugins</a>
+            <li class="nav-item" data-bs-level="2"><a href="#using-plugins" class="nav-link">Using Plugins</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#developing-plugins" class="nav-link">Developing Plugins</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -200,6 +234,10 @@ using a plugin which comes with MkDocs, then it was installed when you installed
 MkDocs. However, to install third party plugins, you need to determine the
 appropriate package name and install it using <code>pip</code>:</p>
 <pre class="highlight"><code class="language-bash">pip install mkdocs-foo-plugin</code></pre>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Installing an MkDocs plugin means installing a Python package and executing any code that the author has put in there. So, exercise the usual caution; there's no attempt at sandboxing.</p>
+</div>
 <p>Once a plugin has been successfully installed, it is ready to use. It just needs
 to be <a href="#using-plugins">enabled</a> in the configuration file. The <a href="https://github.com/mkdocs/catalog">Catalog</a>
 repository has a large ranked list of plugins that you can install and use.</p>
@@ -261,9 +299,8 @@ class MyPlugin(mkdocs.plugins.BasePlugin[MyPluginConfig]):
     ...</code></pre>
 </div>
 <h5 id="examples-of-config-definitions">Examples of config definitions<a class="headerlink" href="#examples-of-config-definitions" title="Permanent link"></a></h5>
-<details class="example" open="open">
-<summary>Example</summary>
-<p>
+<blockquote>
+<p>! EXAMPLE:</p>
 <pre class="highlight"><code class="language-python">from mkdocs.config import base, config_options as c
 
 class _ValidationOptions(base.Config):
@@ -274,7 +311,7 @@ class _ValidationOptions(base.Config):
 class MyPluginConfig(base.Config):
     definition_file = c.File(exists=True)  # required
     checksum_file = c.Optional(c.File(exists=True))  # can be None but must exist if specified
-    validation = c.SubConfig(_ValidationOptions)</code></pre></p>
+    validation = c.SubConfig(_ValidationOptions)</code></pre>
 <p>From the user's point of view <code>SubConfig</code> is similar to <code>Type(dict)</code>, it's just that it also retains full ability for validation: you define all valid keys and what each value should adhere to.</p>
 <p>And <code>ListOfItems</code> is similar to <code>Type(list)</code>, but again, we define the constraint that each value must adhere to.</p>
 <p>This accepts a config as follows:</p>
@@ -286,11 +323,10 @@ class MyPluginConfig(base.Config):
     skip_checks:
       - foo
       - baz</code></pre>
-</details>
+</blockquote>
 <!-- -->
-<details class="example">
-<summary>Example</summary>
-<p>
+<blockquote>
+<p>? EXAMPLE:</p>
 <pre class="highlight"><code class="language-python">import numbers
 from mkdocs.config import base, config_options as c
 
@@ -299,7 +335,7 @@ class _Rectangle(base.Config):
     height = c.Type(numbers.Real)  # required
 
 class MyPluginConfig(base.Config):
-    add_rectangles = c.ListOfItems(c.SubConfig(_Rectangle))  # required</code></pre></p>
+    add_rectangles = c.ListOfItems(c.SubConfig(_Rectangle))  # required</code></pre>
 <p>In this example we define a list of complex items, and that's achieved by passing a concrete <code>SubConfig</code> to <code>ListOfItems</code>.</p>
 <p>This accepts a config as follows:</p>
 <pre class="highlight"><code class="language-yaml">my_plugin:
@@ -308,7 +344,7 @@ class MyPluginConfig(base.Config):
       height: 7
     - width: 12
       height: 2</code></pre>
-</details>
+</blockquote>
 <p>When the user's configuration is loaded, the above scheme will be used to
 validate the configuration and fill in any defaults for settings not
 provided by the user. The validation classes may be any of the classes
@@ -1188,7 +1224,7 @@ For initializing per-build variables (and whenever in doubt), use the <code>on_c
   <ul>
       <li class="field-body">
         <b><code>command</code></b>
-            (<code><span title="typing_extensions.Literal">Literal</span>[&#39;build&#39;, &#39;gh-deploy&#39;, &#39;serve&#39;]</code>)
+            (<code><span title="typing.Literal">Literal</span>[&#39;build&#39;, &#39;gh-deploy&#39;, &#39;serve&#39;]</code>)
         –
         <div class="doc-md-description">
           <p>the command that MkDocs was invoked with, e.g. "serve" for <code>mkdocs serve</code>.</p>
@@ -1864,7 +1900,15 @@ page and can be used to alter the <code>Page</code> instance.</p>
 
   <div class="doc doc-contents first">
   
-      <p>The <code>on_page_read_source</code> event can replace the default mechanism to read
+      <div class="admonition deprecated">
+<p class="admonition-title">Deprecated</p>
+<p>Instead of this event, prefer one of these alternatives:</p>
+<ul>
+<li>Since MkDocs 1.6, instead set <code>content_bytes</code>/<code>content_string</code> of a <code>File</code> inside <a class="autorefs autorefs-internal" href="#on_files"><code>on_files</code></a>.</li>
+<li>Usually (although it's not an exact alternative), <code>on_page_markdown</code> can serve the same purpose.</li>
+</ul>
+</div>
+<p>The <code>on_page_read_source</code> event can replace the default mechanism to read
 the contents of a page's source from the filesystem.</p>
 
 
@@ -2192,6 +2236,7 @@ written to disc.</p>
 <p>Recommended priority values:
 <code>100</code> "first", <code>50</code> "early", <code>0</code> "default", <code>-50</code> "late", <code>-100</code> "last".
 As different plugins discover more precise relations to each other, the values should be further tweaked.</p>
+<p>Usage example:</p>
 <pre class="highlight"><code class="language-python">@plugins.event_priority(-100)  # Wishing to run this after all other plugins' `on_files` events.
 def on_files(self, files, config, **kwargs):
     ...</code></pre>
@@ -2204,7 +2249,67 @@ except ImportError:
 
   </div>
 
-</div><h3 id="handling-errors">Handling Errors<a class="headerlink" href="#handling-errors" title="Permanent link"></a></h3>
+</div><div class="admonition new">
+<p class="admonition-title">New in version 1.6</p>
+<p>There may also arise a need to register a handler for the same event at multiple different priorities.</p>
+<p><code>CombinedEvent</code> makes this possible.</p>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h4 id="mkdocs.plugins.CombinedEvent" class="doc doc-heading">
+          <code>mkdocs.plugins.CombinedEvent</code>
+
+
+<a href="#mkdocs.plugins.CombinedEvent" class="headerlink" title="Permanent link"></a></h4>
+
+
+  <div class="doc doc-contents first">
+          <p class="doc doc-class-bases">
+            Bases: <code><span title="typing.Generic">Generic</span>[<span title="mkdocs.plugins.P">P</span>, <span title="mkdocs.plugins.T">T</span>]</code></p>
+
+  
+      <p>A descriptor that allows defining multiple event handlers and declaring them under one event's name.</p>
+<p>Usage example:</p>
+<pre class="highlight"><code class="language-python">@plugins.event_priority(100)
+def _on_page_markdown_1(self, markdown: str, **kwargs):
+    ...
+
+@plugins.event_priority(-50)
+def _on_page_markdown_2(self, markdown: str, **kwargs):
+    ...
+
+on_page_markdown = plugins.CombinedEvent(_on_page_markdown_1, _on_page_markdown_2)</code></pre>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The names of the sub-methods <strong>can't</strong> start with <code>on_</code>;
+instead they can start with <code>_on_</code> like in the the above example, or anything else.</p>
+</div>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div></div>
+<h3 id="handling-errors">Handling Errors<a class="headerlink" href="#handling-errors" title="Permanent link"></a></h3>
 <p>MkDocs defines four error types:</p>
 
 
@@ -2328,14 +2433,32 @@ class MyPlugin(BasePlugin):
             # some code that could throw a KeyError
             ...
         except KeyError as error:
-            raise PluginError(str(error))
+            raise PluginError(f"Failed to find the item by key: '{error}'")
 
     def on_build_error(self, error, **kwargs):
         # some code to clean things up
         ...</code></pre>
 <h3 id="logging-in-plugins">Logging in plugins<a class="headerlink" href="#logging-in-plugins" title="Permanent link"></a></h3>
-<p>MkDocs provides a <code>get_plugin_logger</code> function which returns
-a logger that can be used to log messages.</p>
+<p>To ensure that your plugins' log messages adhere with MkDocs' formatting and <code>--verbose</code>/<code>--debug</code> flags, please write the logs to a logger under the <code>mkdocs.plugins.</code> namespace.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>
+<pre class="highlight"><code class="language-python">import logging
+
+log = logging.getLogger(f"mkdocs.plugins.{__name__}")
+
+log.warning("File '%s' not found. Breaks the build if --strict is passed", my_file_name)
+log.info("Shown normally")
+log.debug("Shown only with `--verbose`")
+
+if log.getEffectiveLevel() &lt;= logging.DEBUG:
+    log.debug("Very expensive calculation only for debugging: %s", get_my_diagnostics())</code></pre></p>
+</div>
+<p><code>log.error()</code> is another logging level that is differentiated by its look, but in all other ways it functions the same as <code>warning</code>, so it's strange to use it. If your plugin encounters an actual error, it is best to just interrupt the build by raising <a class="autorefs autorefs-internal" href="#mkdocs.exceptions.PluginError"><code>mkdocs.exceptions.PluginError</code></a> (which will also log an ERROR message).</p>
+<!-- -->
+<div class="admonition new">
+<p class="admonition-title">New in version 1.5</p>
+<p>MkDocs now provides a <code>get_plugin_logger()</code> convenience function that returns a logger like the above that is also prefixed with the plugin's name.</p>
 
 
 
@@ -2391,7 +2514,8 @@ log.info("My plugin message")</code></pre>
 </details>
   </div>
 
-</div><h3 id="entry-point">Entry Point<a class="headerlink" href="#entry-point" title="Permanent link"></a></h3>
+</div></div>
+<h3 id="entry-point">Entry Point<a class="headerlink" href="#entry-point" title="Permanent link"></a></h3>
 <p>Plugins need to be packaged as Python libraries (distributed on PyPI separate
 from MkDocs) and each must register as a Plugin via a setuptools <code>entry_points</code>.
 Add the following to your <code>setup.py</code> script:</p>
@@ -2424,8 +2548,7 @@ tell MkDocs to use it via the config.</p>
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="../../js/jquery-3.6.0.min.js"></script>
-        <script src="../../js/bootstrap.min.js"></script>
+        <script src="../../js/bootstrap.bundle.min.js"></script>
         <script>
             var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
@@ -2438,7 +2561,7 @@ tell MkDocs to use it via the config.</p>
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>From here you can search these documents. Enter your search terms below.</p>
@@ -2458,7 +2581,7 @@ tell MkDocs to use it via the config.</p>
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <table class="table">

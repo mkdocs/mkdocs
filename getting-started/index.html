@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="auto">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,9 +10,13 @@
         <link rel="shortcut icon" href="../img/favicon.ico">
         <title>Getting Started - MkDocs</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" disabled>
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
         <link href="../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../css/extra.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -34,7 +38,7 @@
             <div class="container">
                 <a class="navbar-brand" href="..">MkDocs</a>
                 <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -42,14 +46,14 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href=".." class="nav-link">Home</a>
                             </li>
-                            <li class="navitem active">
-                                <a href="./" class="nav-link">Getting Started</a>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Getting Started</a>
                             </li>
-                            <li class="dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">User Guide</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -89,8 +93,8 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Developer Guide</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -114,8 +118,8 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">About</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -133,9 +137,9 @@
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav ml-auto">
+                    <ul class="nav navbar-nav ms-md-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
@@ -150,61 +154,91 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/getting-started.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/getting-started.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                              <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
+                                <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                <span class="d-lg-none ms-2">Toggle theme</span>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                                    <i class="fa-solid fa-sun fa-fw"></i>
+                                    <span class="ms-2">Light</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+                                    <i class="fa-solid fa-moon fa-fw"></i>
+                                    <span class="ms-2">Dark</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="true">
+                                    <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                    <span class="ms-2">Auto</span>
+                                    <i class="fa-solid fa-check ms-auto"></i>
+                                  </button>
+                                </li>
+                              </ul>
                             </li>
                     </ul>
                 </div>
             </div>
         </div>
+        <script src="../js/darkmode.js"></script>
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="1"><a href="#getting-started-with-mkdocs" class="nav-link">Getting Started with MkDocs</a>
+            <li class="nav-item" data-bs-level="1"><a href="#getting-started-with-mkdocs" class="nav-link">Getting Started with MkDocs</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-level="2"><a href="#installation" class="nav-link">Installation</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#creating-a-new-project" class="nav-link">Creating a new project</a>
+            <li class="nav-item" data-bs-level="2"><a href="#installation" class="nav-link">Installation</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#adding-pages" class="nav-link">Adding pages</a>
+            <li class="nav-item" data-bs-level="2"><a href="#creating-a-new-project" class="nav-link">Creating a new project</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#theming-our-documentation" class="nav-link">Theming our documentation</a>
+            <li class="nav-item" data-bs-level="2"><a href="#adding-pages" class="nav-link">Adding pages</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#changing-the-favicon-icon" class="nav-link">Changing the Favicon Icon</a>
+            <li class="nav-item" data-bs-level="2"><a href="#theming-our-documentation" class="nav-link">Theming our documentation</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#building-the-site" class="nav-link">Building the site</a>
+            <li class="nav-item" data-bs-level="2"><a href="#changing-the-favicon-icon" class="nav-link">Changing the Favicon Icon</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#other-commands-and-options" class="nav-link">Other Commands and Options</a>
+            <li class="nav-item" data-bs-level="2"><a href="#building-the-site" class="nav-link">Building the site</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#deploying" class="nav-link">Deploying</a>
+            <li class="nav-item" data-bs-level="2"><a href="#other-commands-and-options" class="nav-link">Other Commands and Options</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#getting-help" class="nav-link">Getting help</a>
+            <li class="nav-item" data-bs-level="2"><a href="#deploying" class="nav-link">Deploying</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#getting-help" class="nav-link">Getting help</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -254,20 +288,15 @@ initial heading to <code>MkLorum</code>, and save your changes. Your browser wil
 auto-reload and you should see your updated documentation immediately.</p>
 <p>Now try editing the configuration file: <code>mkdocs.yml</code>. Change the
 <a href="../user-guide/configuration/#site_name"><code>site_name</code></a> setting to <code>MkLorum</code> and save the file.</p>
-<pre class="highlight"><code class="language-yaml">site_name: MkLorum
-site_url: https://example.com/</code></pre>
+<pre class="highlight"><code class="language-yaml">site_name: MkLorum</code></pre>
 <p>Your browser should immediately reload, and you'll see your new site name take
 effect.</p>
 <p><img alt="The site_name setting" src="../img/site-name.png" /></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>
-The <a href="../user-guide/configuration/#site_name"><code>site_name</code></a> and <a href="../user-guide/configuration/#site_url"><code>site_url</code></a> configuration
-options are the only two required options in your configuration file. When
-you create a new project, the <code>site_url</code> option is assigned the placeholder
-value: <code>https://example.com</code>. If the final location is known, you can change
-the setting now to point to it. Or you may choose to leave it alone for now.
-Just be sure to edit it before you deploy your site to a production server.</p>
+The <a href="../user-guide/configuration/#site_name"><code>site_name</code></a> configuration
+option is the only required option in your configuration file.</p>
 </div>
 <h2 id="adding-pages">Adding pages<a class="headerlink" href="#adding-pages" title="Permanent link"></a></h2>
 <p>Now add a second page to your documentation:</p>
@@ -277,7 +306,6 @@ edit the configuration file and add some information about the order, title, and
 nesting of each page in the navigation header by adding a <a href="../user-guide/configuration/#nav"><code>nav</code></a>
 setting:</p>
 <pre class="highlight"><code class="language-yaml">site_name: MkLorum
-site_url: https://example.com/
 nav:
   - Home: index.md
   - About: about.md</code></pre>
@@ -296,7 +324,6 @@ part!</p>
 <p>Now change the configuration file to alter how the documentation is displayed by
 changing the theme. Edit the <code>mkdocs.yml</code> file and add a <a href="../user-guide/configuration/#theme"><code>theme</code></a> setting:</p>
 <pre class="highlight"><code class="language-yaml">site_name: MkLorum
-site_url: https://example.com/
 nav:
   - Home: index.md
   - About: about.md
@@ -352,8 +379,7 @@ you're done. For specific instructions on a number of common hosts, see the
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="../js/jquery-3.6.0.min.js"></script>
-        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/bootstrap.bundle.min.js"></script>
         <script>
             var base_url = "..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
@@ -366,7 +392,7 @@ you're done. For specific instructions on a number of common hosts, see the
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>From here you can search these documents. Enter your search terms below.</p>
@@ -386,7 +412,7 @@ you're done. For specific instructions on a number of common hosts, see the
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <table class="table">
