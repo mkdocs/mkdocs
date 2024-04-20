@@ -354,6 +354,12 @@ class File:
 
     @utils.weak_property
     def edit_uri(self) -> str | None:
+        """
+        A path relative to the source repository to use for the "edit" button.
+
+        Defaults to `src_uri` and can be overwritten.
+        For generated files this should be set to `None`.
+        """
         return self.src_uri if self.generated_by is None else None
 
     def _get_stem(self) -> str:
