@@ -74,7 +74,7 @@ class Section(StructureItem):
         but there is an index page in the section, the title
         of the index page is returned.
         """
-        if self.config['nav'] is not None:
+        if not self.config['smart_section_titles'] or self.config['nav'] is not None:
             return self._title
 
         ip = self.index_page
