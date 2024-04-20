@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="auto">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,9 +10,13 @@
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Contributing - MkDocs</title>
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../../css/brands.min.css" rel="stylesheet">
+        <link href="../../css/solid.min.css" rel="stylesheet">
+        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" disabled>
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -34,7 +38,7 @@
             <div class="container">
                 <a class="navbar-brand" href="../..">MkDocs</a>
                 <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -42,14 +46,14 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="../.." class="nav-link">Home</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="../../getting-started/" class="nav-link">Getting Started</a>
                             </li>
-                            <li class="dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">User Guide</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -89,8 +93,8 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Developer Guide</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -114,8 +118,8 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="dropdown active">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">About</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -123,7 +127,7 @@
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active">Contributing</a>
+    <a href="./" class="dropdown-item active" aria-current="page">Contributing</a>
 </li>
                                     
 <li>
@@ -133,9 +137,9 @@
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav ml-auto">
+                    <ul class="nav navbar-nav ms-md-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
@@ -150,57 +154,87 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/about/contributing.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/about/contributing.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                              <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
+                                <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                <span class="d-lg-none ms-2">Toggle theme</span>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                                    <i class="fa-solid fa-sun fa-fw"></i>
+                                    <span class="ms-2">Light</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+                                    <i class="fa-solid fa-moon fa-fw"></i>
+                                    <span class="ms-2">Dark</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="true">
+                                    <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                    <span class="ms-2">Auto</span>
+                                    <i class="fa-solid fa-check ms-auto"></i>
+                                  </button>
+                                </li>
+                              </ul>
                             </li>
                     </ul>
                 </div>
             </div>
         </div>
+        <script src="../../js/darkmode.js"></script>
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="1"><a href="#contributing-to-mkdocs" class="nav-link">Contributing to MkDocs</a>
+            <li class="nav-item" data-bs-level="1"><a href="#contributing-to-mkdocs" class="nav-link">Contributing to MkDocs</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-level="2"><a href="#code-of-conduct" class="nav-link">Code of Conduct</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#reporting-an-issue" class="nav-link">Reporting an Issue</a>
+            <li class="nav-item" data-bs-level="2"><a href="#reporting-an-issue" class="nav-link">Reporting an Issue</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#testing-the-development-version" class="nav-link">Testing the Development Version</a>
+            <li class="nav-item" data-bs-level="2"><a href="#trying-out-the-development-version" class="nav-link">Trying out the Development Version</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#installing-for-development" class="nav-link">Installing for Development</a>
+            <li class="nav-item" data-bs-level="2"><a href="#installing-for-development" class="nav-link">Installing for Development</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#running-the-tests" class="nav-link">Running the tests</a>
+            <li class="nav-item" data-bs-level="2"><a href="#installing-hatch" class="nav-link">Installing Hatch</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#formatting-the-code" class="nav-link">Formatting the code</a>
+            <li class="nav-item" data-bs-level="2"><a href="#running-all-checks" class="nav-link">Running all checks</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#translating-themes" class="nav-link">Translating themes</a>
+            <li class="nav-item" data-bs-level="2"><a href="#translating-themes" class="nav-link">Translating themes</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#submitting-pull-requests" class="nav-link">Submitting Pull Requests</a>
+            <li class="nav-item" data-bs-level="2"><a href="#submitting-pull-requests" class="nav-link">Submitting Pull Requests</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#code-of-conduct" class="nav-link">Code of Conduct</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -213,7 +247,7 @@
 
 <h1 id="contributing-to-mkdocs">Contributing to MkDocs<a class="headerlink" href="#contributing-to-mkdocs" title="Permanent link"></a></h1>
 <p>An introduction to contributing to the MkDocs project.</p>
-<p>The MkDocs project welcomes, and depends, on contributions from developers and
+<p>The MkDocs project welcomes contributions from developers and
 users in the open source community. Contributions can be made in a number of
 ways, a few examples are:</p>
 <ul>
@@ -222,53 +256,88 @@ ways, a few examples are:</p>
 <li>Bug reports and patch reviews</li>
 </ul>
 <p>For information about available communication channels please refer to the
-<a href="https://github.com/mkdocs/mkdocs/blob/master/README.md">README</a> file in our
+<a href="https://github.com/mkdocs/mkdocs#readme">README</a> file in our
 GitHub repository.</p>
-<h2 id="code-of-conduct">Code of Conduct<a class="headerlink" href="#code-of-conduct" title="Permanent link"></a></h2>
-<p>Everyone interacting in the MkDocs project's codebases, issue trackers, chat
-rooms, and mailing lists is expected to follow the <a href="https://www.pypa.io/en/latest/code-of-conduct/">PyPA Code of Conduct</a>.</p>
 <h2 id="reporting-an-issue">Reporting an Issue<a class="headerlink" href="#reporting-an-issue" title="Permanent link"></a></h2>
 <p>Please include as much detail as you can. Let us know your platform and MkDocs
-version. If the problem is visual (for example a theme or design issue) please
-add a screenshot and if you get an error please include the full error and
+version. If the problem is visual (for example a theme or design issue), please
+add a screenshot. If you get an error, please include the full error message and
 traceback.</p>
-<h2 id="testing-the-development-version">Testing the Development Version<a class="headerlink" href="#testing-the-development-version" title="Permanent link"></a></h2>
+<p>It is particularly helpful if an issue report touches on all of these aspects:</p>
+<ol>
+<li>
+<p>What are you trying to achieve?</p>
+</li>
+<li>
+<p>What is your <code>mkdocs.yml</code> configuration (+ other relevant files)? Preferably reduced to the minimal reproducible example.</p>
+</li>
+<li>
+<p>What did you expect to happen when applying this setup?</p>
+</li>
+<li>
+<p>What happened instead and how didn't it match your expectation?</p>
+</li>
+</ol>
+<h2 id="trying-out-the-development-version">Trying out the Development Version<a class="headerlink" href="#trying-out-the-development-version" title="Permanent link"></a></h2>
 <p>If you want to just install and try out the latest development version of
-MkDocs you can do so with the following command. This can be useful if you
+MkDocs (in case it already contains a fix for your issue),
+you can do so with the following command. This can be useful if you
 want to provide feedback for a new feature or want to confirm if a bug you
 have encountered is fixed in the git master. It is <strong>strongly</strong> recommended
 that you do this within a <a href="https://virtualenv.pypa.io/en/latest/user_guide.html">virtualenv</a>.</p>
-<pre class="highlight"><code class="language-bash">pip install https://github.com/mkdocs/mkdocs/archive/master.tar.gz</code></pre>
+<pre class="highlight"><code class="language-bash">pip install git+https://github.com/mkdocs/mkdocs.git</code></pre>
 <h2 id="installing-for-development">Installing for Development<a class="headerlink" href="#installing-for-development" title="Permanent link"></a></h2>
-<p>First you'll need to fork and clone the repository. Once you have a local
-copy, run the following command. It is <strong>strongly</strong> recommended that you do
-this within a <a href="https://virtualenv.pypa.io/en/latest/user_guide.html">virtualenv</a>.</p>
-<pre class="highlight"><code class="language-bash">pip install --editable .</code></pre>
-<p>This will install MkDocs in development mode which binds the <code>mkdocs</code> command
-to the git repository.</p>
-<h2 id="running-the-tests">Running the tests<a class="headerlink" href="#running-the-tests" title="Permanent link"></a></h2>
-<p>To run the tests, it is recommended that you use <a href="https://hatch.pypa.io/">Hatch</a>.</p>
-<p>Install Hatch using <a href="https://pip.pypa.io/en/stable/">pip</a> by running the command <code>pip install hatch</code>.
-Then the test suite can be run for MkDocs by running the command <code>hatch run all</code> in the
-root of your MkDocs repository.</p>
+<p>Note that for development you can just use <a href="https://hatch.pypa.io/">Hatch</a> directly as described below. If you wish to install a local clone of MkDocs anyway, you can run <code>pip install --editable .</code>. It is <strong>strongly</strong> recommended that you do this within a <a href="https://virtualenv.pypa.io/en/latest/user_guide.html">virtualenv</a>.</p>
+<h2 id="installing-hatch">Installing Hatch<a class="headerlink" href="#installing-hatch" title="Permanent link"></a></h2>
+<p>The main tool that is used for development is <a href="https://hatch.pypa.io/">Hatch</a>. It manages dependencies (in a virtualenv that is created on the fly) and is also the command runner.</p>
+<p>So first, <a href="https://hatch.pypa.io/latest/install/#pip">install it</a>. Ideally in an isolated way with <strong><code>pipx install hatch</code></strong> (after [installing <code>pipx</code>]), or just <code>pip install hatch</code> as a more well-known way.</p>
+<h2 id="running-all-checks">Running all checks<a class="headerlink" href="#running-all-checks" title="Permanent link"></a></h2>
+<p>To run <strong>all</strong> checks that are required for MkDocs, just run the following command in the cloned MkDocs repository:</p>
+<pre class="highlight"><code class="language-bash">hatch run all</code></pre>
+<p><strong>This will encompass all of the checks mentioned below.</strong></p>
+<p>All checks need to pass.</p>
+<h3 id="running-tests">Running tests<a class="headerlink" href="#running-tests" title="Permanent link"></a></h3>
+<p>To run the test suite for MkDocs, run the following commands:</p>
+<pre class="highlight"><code class="language-bash">hatch run test:test
+hatch run integration:test</code></pre>
 <p>It will attempt to run the tests against all of the Python versions we
 support. So don't be concerned if you are missing some. The rest
 will be verified by <a href="https://docs.github.com/actions">GitHub Actions</a> when you submit a pull request.</p>
-<h2 id="formatting-the-code">Formatting the code<a class="headerlink" href="#formatting-the-code" title="Permanent link"></a></h2>
-<p>Python code within MkDocs' code base is formatted using <a href="https://pypi.org/project/black/">Black</a> and <a href="https://pypi.org/project/isort/">Isort</a>.
-You can automatically format the code according to these tools
-with <code>hatch run style:format</code>.</p>
+<h3 id="python-code-style">Python code style<a class="headerlink" href="#python-code-style" title="Permanent link"></a></h3>
+<p>Python code within MkDocs' code base is formatted using <a href="https://black.readthedocs.io/">Black</a> and <a href="https://pycqa.github.io/isort/">Isort</a> and lint-checked using <a href="https://docs.astral.sh/ruff/">Ruff</a>, all of which are configured in <code>pyproject.toml</code>.</p>
+<p>You can automatically check and format the code according to these tools with the following command:</p>
+<pre class="highlight"><code class="language-bash">hatch run style:fix</code></pre>
+<p>The code is also type-checked using <a href="https://mypy-lang.org/">mypy</a> - also configured in <code>pyproject.toml</code>, it can be run like this:</p>
+<pre class="highlight"><code class="language-bash">hatch run types:check</code></pre>
+<h3 id="other-style-checks">Other style checks<a class="headerlink" href="#other-style-checks" title="Permanent link"></a></h3>
+<p>There are several other checks, such as spelling and JS style. To run all of them, use this command:</p>
+<pre class="highlight"><code class="language-bash">hatch run lint:check</code></pre>
+<h3 id="documentation-of-mkdocs-itself">Documentation of MkDocs itself<a class="headerlink" href="#documentation-of-mkdocs-itself" title="Permanent link"></a></h3>
+<p>After making edits to files under the <code>docs/</code> dir, you can preview the site locally using the following command:</p>
+<pre class="highlight"><code class="language-bash">hatch run docs:serve</code></pre>
+<p>Note that any 'WARNING' should be resolved before submitting a contribution.</p>
+<p>Documentation files are also checked by markdownlint, so you should run this as well:</p>
+<pre class="highlight"><code class="language-bash">hatch run lint:check</code></pre>
+<p>If you add a new plugin to mkdocs.yml, you don't need to add it to any "requirements" file, because that is managed automatically.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>If you don't want to use Hatch, for documentation you can install requirements into a virtualenv, in one of these ways (with <code>.venv</code> being the virtualenv directory):</p>
+<pre class="highlight"><code class="language-bash">.venv/bin/pip install -r requirements/requirements-docs.txt  # Exact versions of dependencies.
+.venv/bin/pip install -r $(mkdocs get-deps)  # Latest versions of all dependencies.</code></pre>
+</div>
 <h2 id="translating-themes">Translating themes<a class="headerlink" href="#translating-themes" title="Permanent link"></a></h2>
-<p>To localize a theme to your favorite language, follow the guide on <a href="../../dev-guide/translations/">Translating
-Themes</a>. We welcome translation Pull Requests!</p>
+<p>To localize a theme to your favorite language, follow the guide on <a href="https://www.mkdocs.org/dev-guide/translations/">Translating Themes</a>. We welcome translation pull requests!</p>
 <h2 id="submitting-pull-requests">Submitting Pull Requests<a class="headerlink" href="#submitting-pull-requests" title="Permanent link"></a></h2>
 <p>If you're considering a large code contribution to MkDocs, please prefer to
 open an issue first to get early feedback on the idea.</p>
 <p>Once you think the code is ready to be reviewed, push
 it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.</p>
+<p>When working with a pull request branch:<br />
+Unless otherwise agreed, prefer <code>commit</code> over <code>amend</code>, and <code>merge</code> over <code>rebase</code>. Avoid force-pushes, otherwise review history is much harder to navigate. For the end result, the "unclean" history is fine because most pull requests are squash-merged on GitHub.</p>
+<p>Do <em>not</em> add to <em>release-notes.md</em>, this will be written later.</p>
 <h3 id="submitting-changes-to-the-builtin-themes">Submitting changes to the builtin themes<a class="headerlink" href="#submitting-changes-to-the-builtin-themes" title="Permanent link"></a></h3>
-<p>When installed with <code>i18n</code> support (<code>pip install mkdocs[i18n]</code>), MkDocs allows
+<p>When installed with <code>i18n</code> support (<code>pip install 'mkdocs[i18n]'</code>), MkDocs allows
 themes to support being translated into various languages (referred to as
 locales) if they respect <a href="https://jinja.palletsprojects.com/en/latest/extensions/#i18n-extension">Jinja's i18n extension</a> by wrapping text placeholders
 with <code>{% trans %}</code> and <code>{% endtrans %}</code> tags.</p>
@@ -280,7 +349,7 @@ updated by running the <code>extract_messages</code> command. To update the
 pybabel extract --project=MkDocs --copyright-holder=MkDocs --msgid-bugs-address='https://github.com/mkdocs/mkdocs/issues' --no-wrap --version="$(hatch version)" --mapping-file mkdocs/themes/babel.cfg --output-file mkdocs/themes/readthedocs/messages.pot mkdocs/themes/readthedocs</code></pre>
 <p>The updated <code>pot</code> file should be included in a PR with the updated template.
 The updated <code>pot</code> file will allow translation contributors to propose the
-translations needed for their preferred language. See the guide on <a href="../../dev-guide/translations/">Translating
+translations needed for their preferred language. See the guide on <a href="https://www.mkdocs.org/dev-guide/translations/">Translating
 Themes</a> for details.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -288,7 +357,10 @@ Themes</a> for details.</p>
 Contributors are not expected to provide translations with their changes to
 a theme's templates. However, they are expected to include an updated <code>pot</code>
 file so that everything is ready for translators to do their job.</p>
-</div></div>
+</div>
+<h2 id="code-of-conduct">Code of Conduct<a class="headerlink" href="#code-of-conduct" title="Permanent link"></a></h2>
+<p>Everyone interacting in the MkDocs project's codebases, issue trackers, chat
+rooms, and mailing lists is expected to follow the <a href="https://www.pypa.io/en/latest/code-of-conduct/">PyPA Code of Conduct</a>.</p></div>
             </div>
         </div>
 
@@ -297,8 +369,7 @@ file so that everything is ready for translators to do their job.</p>
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="../../js/jquery-3.6.0.min.js"></script>
-        <script src="../../js/bootstrap.min.js"></script>
+        <script src="../../js/bootstrap.bundle.min.js"></script>
         <script>
             var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
@@ -311,7 +382,7 @@ file so that everything is ready for translators to do their job.</p>
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>From here you can search these documents. Enter your search terms below.</p>
@@ -331,7 +402,7 @@ file so that everything is ready for translators to do their job.</p>
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <table class="table">

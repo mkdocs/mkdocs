@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="auto">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,9 +10,13 @@
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Release Notes - MkDocs</title>
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../../css/brands.min.css" rel="stylesheet">
+        <link href="../../css/solid.min.css" rel="stylesheet">
+        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" disabled>
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -34,7 +38,7 @@
             <div class="container">
                 <a class="navbar-brand" href="../..">MkDocs</a>
                 <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -42,14 +46,14 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="../.." class="nav-link">Home</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="../../getting-started/" class="nav-link">Getting Started</a>
                             </li>
-                            <li class="dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">User Guide</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -89,8 +93,8 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Developer Guide</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -114,12 +118,12 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="dropdown active">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">About</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
-    <a href="./" class="dropdown-item active">Release Notes</a>
+    <a href="./" class="dropdown-item active" aria-current="page">Release Notes</a>
 </li>
                                     
 <li>
@@ -133,9 +137,9 @@
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav ml-auto">
+                    <ul class="nav navbar-nav ms-md-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
@@ -150,225 +154,259 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/about/release-notes.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/about/release-notes.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                              <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
+                                <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                <span class="d-lg-none ms-2">Toggle theme</span>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                                    <i class="fa-solid fa-sun fa-fw"></i>
+                                    <span class="ms-2">Light</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+                                    <i class="fa-solid fa-moon fa-fw"></i>
+                                    <span class="ms-2">Dark</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="true">
+                                    <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                    <span class="ms-2">Auto</span>
+                                    <i class="fa-solid fa-check ms-auto"></i>
+                                  </button>
+                                </li>
+                              </ul>
                             </li>
                     </ul>
                 </div>
             </div>
         </div>
+        <script src="../../js/darkmode.js"></script>
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="1"><a href="#release-notes" class="nav-link">Release Notes</a>
+            <li class="nav-item" data-bs-level="1"><a href="#release-notes" class="nav-link">Release Notes</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-level="2"><a href="#upgrading" class="nav-link">Upgrading</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#maintenance-team" class="nav-link">Maintenance team</a>
+            <li class="nav-item" data-bs-level="2"><a href="#upgrading" class="nav-link">Upgrading</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-153-2023-09-18" class="nav-link">Version 1.5.3 (2023-09-18)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#maintenance-team" class="nav-link">Maintenance team</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-152-2023-08-02" class="nav-link">Version 1.5.2 (2023-08-02)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-160-2024-04-20" class="nav-link">Version 1.6.0 (2024-04-20)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-151-2023-07-28" class="nav-link">Version 1.5.1 (2023-07-28)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-153-2023-09-18" class="nav-link">Version 1.5.3 (2023-09-18)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-150-2023-07-26" class="nav-link">Version 1.5.0 (2023-07-26)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-152-2023-08-02" class="nav-link">Version 1.5.2 (2023-08-02)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-143-2023-05-02" class="nav-link">Version 1.4.3 (2023-05-02)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-151-2023-07-28" class="nav-link">Version 1.5.1 (2023-07-28)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-142-2022-11-01" class="nav-link">Version 1.4.2 (2022-11-01)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-150-2023-07-26" class="nav-link">Version 1.5.0 (2023-07-26)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-141-2022-10-15" class="nav-link">Version 1.4.1 (2022-10-15)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-143-2023-05-02" class="nav-link">Version 1.4.3 (2023-05-02)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-140-2022-09-27" class="nav-link">Version 1.4.0 (2022-09-27)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-142-2022-11-01" class="nav-link">Version 1.4.2 (2022-11-01)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-131-2022-07-19" class="nav-link">Version 1.3.1 (2022-07-19)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-141-2022-10-15" class="nav-link">Version 1.4.1 (2022-10-15)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-130-2022-03-26" class="nav-link">Version 1.3.0 (2022-03-26)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-140-2022-09-27" class="nav-link">Version 1.4.0 (2022-09-27)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-124-2022-03-26" class="nav-link">Version 1.2.4 (2022-03-26)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-131-2022-07-19" class="nav-link">Version 1.3.1 (2022-07-19)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-123-2021-10-12" class="nav-link">Version 1.2.3 (2021-10-12)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-130-2022-03-26" class="nav-link">Version 1.3.0 (2022-03-26)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-122-2021-07-18" class="nav-link">Version 1.2.2 (2021-07-18)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-124-2022-03-26" class="nav-link">Version 1.2.4 (2022-03-26)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-121-2021-06-09" class="nav-link">Version 1.2.1 (2021-06-09)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-123-2021-10-12" class="nav-link">Version 1.2.3 (2021-10-12)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-12-2021-06-04" class="nav-link">Version 1.2 (2021-06-04)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-122-2021-07-18" class="nav-link">Version 1.2.2 (2021-07-18)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-112-2020-05-14" class="nav-link">Version 1.1.2 (2020-05-14)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-121-2021-06-09" class="nav-link">Version 1.2.1 (2021-06-09)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-111-2020-05-12" class="nav-link">Version 1.1.1 (2020-05-12)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-12-2021-06-04" class="nav-link">Version 1.2 (2021-06-04)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-11-2020-02-22" class="nav-link">Version 1.1 (2020-02-22)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-112-2020-05-14" class="nav-link">Version 1.1.2 (2020-05-14)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-104-2018-09-07" class="nav-link">Version 1.0.4 (2018-09-07)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-111-2020-05-12" class="nav-link">Version 1.1.1 (2020-05-12)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-103-2018-08-29" class="nav-link">Version 1.0.3 (2018-08-29)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-11-2020-02-22" class="nav-link">Version 1.1 (2020-02-22)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-102-2018-08-22" class="nav-link">Version 1.0.2 (2018-08-22)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-104-2018-09-07" class="nav-link">Version 1.0.4 (2018-09-07)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-101-2018-08-13" class="nav-link">Version 1.0.1 (2018-08-13)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-103-2018-08-29" class="nav-link">Version 1.0.3 (2018-08-29)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-10-2018-08-03" class="nav-link">Version 1.0 (2018-08-03)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-102-2018-08-22" class="nav-link">Version 1.0.2 (2018-08-22)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0175-2018-07-06" class="nav-link">Version 0.17.5 (2018-07-06)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-101-2018-08-13" class="nav-link">Version 1.0.1 (2018-08-13)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0174-2018-06-08" class="nav-link">Version 0.17.4 (2018-06-08)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-10-2018-08-03" class="nav-link">Version 1.0 (2018-08-03)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0173-2018-03-07" class="nav-link">Version 0.17.3 (2018-03-07)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0175-2018-07-06" class="nav-link">Version 0.17.5 (2018-07-06)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0172-2017-11-15" class="nav-link">Version 0.17.2 (2017-11-15)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0174-2018-06-08" class="nav-link">Version 0.17.4 (2018-06-08)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0171-2017-10-30" class="nav-link">Version 0.17.1 (2017-10-30)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0173-2018-03-07" class="nav-link">Version 0.17.3 (2018-03-07)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0170-2017-10-19" class="nav-link">Version 0.17.0 (2017-10-19)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0172-2017-11-15" class="nav-link">Version 0.17.2 (2017-11-15)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0163-2017-04-04" class="nav-link">Version 0.16.3 (2017-04-04)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0171-2017-10-30" class="nav-link">Version 0.17.1 (2017-10-30)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0162-2017-03-13" class="nav-link">Version 0.16.2 (2017-03-13)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0170-2017-10-19" class="nav-link">Version 0.17.0 (2017-10-19)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0161-2016-12-22" class="nav-link">Version 0.16.1 (2016-12-22)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0163-2017-04-04" class="nav-link">Version 0.16.3 (2017-04-04)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-016-2016-11-04" class="nav-link">Version 0.16 (2016-11-04)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0162-2017-03-13" class="nav-link">Version 0.16.2 (2017-03-13)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0153-2016-02-18" class="nav-link">Version 0.15.3 (2016-02-18)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0161-2016-12-22" class="nav-link">Version 0.16.1 (2016-12-22)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0152-2016-02-08" class="nav-link">Version 0.15.2 (2016-02-08)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-016-2016-11-04" class="nav-link">Version 0.16 (2016-11-04)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0151-2016-01-30" class="nav-link">Version 0.15.1 (2016-01-30)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0153-2016-02-18" class="nav-link">Version 0.15.3 (2016-02-18)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0150-2016-01-21" class="nav-link">Version 0.15.0 (2016-01-21)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0152-2016-02-08" class="nav-link">Version 0.15.2 (2016-02-08)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0140-2015-06-09" class="nav-link">Version 0.14.0 (2015-06-09)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0151-2016-01-30" class="nav-link">Version 0.15.1 (2016-01-30)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0133-2015-06-02" class="nav-link">Version 0.13.3 (2015-06-02)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0150-2016-01-21" class="nav-link">Version 0.15.0 (2016-01-21)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0132-2015-05-30" class="nav-link">Version 0.13.2 (2015-05-30)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0140-2015-06-09" class="nav-link">Version 0.14.0 (2015-06-09)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0131-2015-05-27" class="nav-link">Version 0.13.1 (2015-05-27)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0133-2015-06-02" class="nav-link">Version 0.13.3 (2015-06-02)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0130-2015-05-26" class="nav-link">Version 0.13.0 (2015-05-26)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0132-2015-05-30" class="nav-link">Version 0.13.2 (2015-05-30)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0122-2015-04-22" class="nav-link">Version 0.12.2 (2015-04-22)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0131-2015-05-27" class="nav-link">Version 0.13.1 (2015-05-27)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0121-2015-04-14" class="nav-link">Version 0.12.1 (2015-04-14)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0130-2015-05-26" class="nav-link">Version 0.13.0 (2015-05-26)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0120-2015-04-14" class="nav-link">Version 0.12.0 (2015-04-14)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0122-2015-04-22" class="nav-link">Version 0.12.2 (2015-04-22)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0111-2014-11-20" class="nav-link">Version 0.11.1 (2014-11-20)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0121-2015-04-14" class="nav-link">Version 0.12.1 (2015-04-14)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0110-2014-11-18" class="nav-link">Version 0.11.0 (2014-11-18)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0120-2015-04-14" class="nav-link">Version 0.12.0 (2015-04-14)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#version-0100-2014-10-29" class="nav-link">Version 0.10.0 (2014-10-29)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0111-2014-11-20" class="nav-link">Version 0.11.1 (2014-11-20)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0110-2014-11-18" class="nav-link">Version 0.11.0 (2014-11-18)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#version-0100-2014-10-29" class="nav-link">Version 0.10.0 (2014-10-29)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -396,6 +434,208 @@ mkdocs, version 1.5.0 from /path/to/mkdocs (Python 3.10)</code></pre>
 <li><a href="https://github.com/oprypin/">@oprypin</a></li>
 <li><a href="https://github.com/ultrabug/">@ultrabug</a></li>
 </ul>
+<h2 id="version-160-2024-04-20">Version 1.6.0 (2024-04-20)<a class="headerlink" href="#version-160-2024-04-20" title="Permanent link"></a></h2>
+<h3 id="local-preview">Local preview<a class="headerlink" href="#local-preview" title="Permanent link"></a></h3>
+<ul>
+<li>
+<p><code>mkdocs serve</code> no longer locks up the browser when more than 5 tabs are open. This is achieved by closing the polling connection whenever a tab becomes inactive. Background tabs will no longer auto-reload either - that will instead happen as soon the tab is opened again. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3391" title="GitHub Issue mkdocs/mkdocs #3391">#3391</a></p>
+</li>
+<li>
+<p>New flag <code>serve --open</code> to open the site in a browser.<br />
+    After the first build is finished, this flag will cause the default OS Web browser to be opened at the home page of the local site.<br />
+    Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3500" title="GitHub Issue mkdocs/mkdocs #3500">#3500</a></p>
+</li>
+</ul>
+<h4 id="drafts">Drafts<a class="headerlink" href="#drafts" title="Permanent link"></a></h4>
+<div class="admonition danger">
+<p class="admonition-title">Changed from version 1.5</p>
+</div>
+<p><strong>The <code>exclude_docs</code> config was split up into two separate concepts.</strong></p>
+<p>The <code>exclude_docs</code> config no longer has any special behavior for <code>mkdocs serve</code> - it now always completely excludes the listed documents from the site.</p>
+<p>If you wish to use the "drafts" functionality like the <code>exclude_docs</code> key used to do in MkDocs 1.5, please switch to the <strong>new config key <code>draft_docs</code></strong>.</p>
+<p>See <a href="../../user-guide/configuration/#exclude_docs">documentation</a>.</p>
+<p>Other changes:</p>
+<ul>
+<li>Reduce warning levels when a "draft" page has a link to a non-existent file. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3449" title="GitHub Issue mkdocs/mkdocs #3449">#3449</a></li>
+</ul>
+<h3 id="update-to-deduction-of-page-titles">Update to deduction of page titles<a class="headerlink" href="#update-to-deduction-of-page-titles" title="Permanent link"></a></h3>
+<p>MkDocs 1.5 had a change in behavior in deducing the page titles from the first heading. Unfortunately this could cause unescaped HTML tags or entities to appear in edge cases.</p>
+<p>Now tags are always fully sanitized from the title. Though it still remains the case that <a class="autorefs autorefs-internal" href="../../dev-guide/themes/#mkdocs.structure.pages.Page.title"><code>Page.title</code></a> is expected to contain HTML entities and is passed directly to the themes.</p>
+<p>Images (notably, emojis in some extensions) get preserved in the title only through their <code>alt</code> attribute's value.</p>
+<p>Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3564" title="GitHub Issue mkdocs/mkdocs #3564">#3564</a>, <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3578" title="GitHub Issue mkdocs/mkdocs #3578">#3578</a></p>
+<h3 id="themes">Themes<a class="headerlink" href="#themes" title="Permanent link"></a></h3>
+<ul>
+<li>Built-in themes now also support Polish language (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3613" title="GitHub Issue mkdocs/mkdocs #3613">#3613</a>)</li>
+</ul>
+<h4 id="readthedocs-theme">"readthedocs" theme<a class="headerlink" href="#readthedocs-theme" title="Permanent link"></a></h4>
+<ul>
+<li>
+<p>Fix: "readthedocs" theme can now correctly handle deeply nested nav configurations (over 2 levels deep), without confusedly expanding all sections and jumping around vertically. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3464" title="GitHub Issue mkdocs/mkdocs #3464">#3464</a>)</p>
+</li>
+<li>
+<p>Fix: "readthedocs" theme now shows a link to the repository (with a generic logo) even when isn't one of the 3 known hosters. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3435" title="GitHub Issue mkdocs/mkdocs #3435">#3435</a>)</p>
+</li>
+<li>
+<p>"readthedocs" theme now also has translation for the word "theme" in the footer that mistakenly always remained in English. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3613" title="GitHub Issue mkdocs/mkdocs #3613">#3613</a>, <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3625" title="GitHub Issue mkdocs/mkdocs #3625">#3625</a>)</p>
+</li>
+</ul>
+<h4 id="mkdocs-theme">"mkdocs" theme<a class="headerlink" href="#mkdocs-theme" title="Permanent link"></a></h4>
+<p>The "mkdocs" theme got a big update to a newer version of Bootstrap, meaning a slight overhaul of styles. Colors (most notably of admonitions) have much better contrast.</p>
+<p>The "mkdocs" theme now has support for dark mode - both automatic (based on the OS/browser setting) and with a manual toggle. Both of these options are <strong>not</strong> enabled by default and need to be configured explicitly.<br />
+See <code>color_mode</code>, <code>user_color_mode_toggle</code> in <a href="../../user-guide/choosing-your-theme/#mkdocs"><strong>documentation</strong></a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Possible breaking change</p>
+<p>jQuery is no longer included into the "mkdocs" theme. If you were relying on it in your scripts, you will need to separately add it first (into mkdocs.yml) as an extra script:</p>
+<pre class="highlight"><code class="language-yaml">extra_javascript:
+  - https://code.jquery.com/jquery-3.7.1.min.js</code></pre>
+<p>Or even better if the script file is copied and included from your docs dir.</p>
+</div>
+<p>Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3493" title="GitHub Issue mkdocs/mkdocs #3493">#3493</a>, <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3649" title="GitHub Issue mkdocs/mkdocs #3649">#3649</a></p>
+<h3 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link"></a></h3>
+<h4 id="new-enabled-setting-for-all-plugins">New "<code>enabled</code>" setting for all plugins<a class="headerlink" href="#new-enabled-setting-for-all-plugins" title="Permanent link"></a></h4>
+<p>You may have seen some plugins take up the convention of having a setting <code>enabled: false</code> (or usually controlled through an environment variable) to make the plugin do nothing.</p>
+<p>Now <em>every</em> plugin has this setting. Plugins can still <em>choose</em> to implement this config themselves and decide how it behaves (and unless they drop older versions of MkDocs, they still should for now), but now there's always a fallback for every plugin.</p>
+<p>See <a href="../../user-guide/configuration/#enabled-option"><strong>documentation</strong></a>. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3395" title="GitHub Issue mkdocs/mkdocs #3395">#3395</a></p>
+<h3 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link"></a></h3>
+<h4 id="validation-of-hyperlinks-between-pages">Validation of hyperlinks between pages<a class="headerlink" href="#validation-of-hyperlinks-between-pages" title="Permanent link"></a></h4>
+<h5 id="absolute-links">Absolute links<a class="headerlink" href="#absolute-links" title="Permanent link"></a></h5>
+<blockquote>
+<p>Historically, within Markdown, MkDocs only recognized <strong>relative</strong> links that lead to another physical <code>*.md</code> document (or media file). This is a good convention to follow because then the source pages are also freely browsable without MkDocs, for example on GitHub. Whereas absolute links were left unmodified (making them often not work as expected or, more recently, warned against).</p>
+</blockquote>
+<p>If you dislike having to always use relative links, now you can opt into absolute links and have them work correctly.</p>
+<p>If you set the setting <code>validation.links.absolute_links</code> to the new value <code>relative_to_docs</code>, all Markdown links starting with <code>/</code> will be understood as being relative to the <code>docs_dir</code> root. The links will then be validated for correctness according to all the other rules that were already working for relative links in prior versions of MkDocs. For the HTML output, these links will still be turned relative so that the site still works reliably.</p>
+<p>So, now any document (e.g. "dir1/foo.md") can link to the document "dir2/bar.md" as <code>[link](/dir2/bar.md)</code>, in addition to the previously only correct way <code>[link](../dir2/bar.md)</code>.</p>
+<p>You have to enable the setting, though. The default is still to just skip any processing of such links.</p>
+<p>See <a href="../../user-guide/configuration/#validation-of-absolute-links"><strong>documentation</strong></a>. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3485" title="GitHub Issue mkdocs/mkdocs #3485">#3485</a></p>
+<h6 id="absolute-links-within-nav">Absolute links within nav<a class="headerlink" href="#absolute-links-within-nav" title="Permanent link"></a></h6>
+<p>Absolute links within the <code>nav:</code> config were also always skipped. It is now possible to also validate them in the same way with <code>validation.nav.absolute_links</code>. Though it makes a bit less sense because then the syntax is simply redundant with the syntax that comes without the leading slash.</p>
+<h5 id="anchors">Anchors<a class="headerlink" href="#anchors" title="Permanent link"></a></h5>
+<p>There is a new config setting that is recommended to enable warnings for:</p>
+<pre class="highlight"><code class="language-yaml">validation:
+  anchors: warn</code></pre>
+<p>Example of a warning that this can produce:</p>
+<pre class="highlight"><code class="language-text">WARNING -  Doc file 'foo/example.md' contains a link '../bar.md#some-heading', but the doc 'foo/bar.md' does not contain an anchor '#some-heading'.</code></pre>
+<p>Any of the below methods of declaring an anchor will be detected by MkDocs:</p>
+<pre class="highlight"><code class="language-markdown">## Heading producing an anchor
+
+## Another heading {#custom-anchor-for-heading-using-attr-list}
+
+&lt;a id="raw-anchor"&gt;&lt;/a&gt;
+
+[](){#markdown-anchor-using-attr-list}</code></pre>
+<p>Plugins and extensions that insert anchors, in order to be compatible with this, need to be developed as treeprocessors that insert <code>etree</code> elements as their mode of operation, rather than raw HTML which is undetectable for this purpose.</p>
+<p>If you as a user are dealing with falsely reported missing anchors and there's no way to resolve this, you can choose to disable these messages by setting this option to <code>ignore</code> (and they are at INFO level by default anyway).</p>
+<p>See <a href="../../user-guide/configuration/#validation"><strong>documentation</strong></a>. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3463" title="GitHub Issue mkdocs/mkdocs #3463">#3463</a></p>
+<p>Other changes:</p>
+<ul>
+<li>
+<p>When the <code>nav</code> config is not specified at all, the <code>not_in_nav</code> setting (originally added in 1.5.0) gains an additional behavior: documents covered by <code>not_in_nav</code> will not be part of the automatically deduced navigation. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3443" title="GitHub Issue mkdocs/mkdocs #3443">#3443</a></p>
+</li>
+<li>
+<p>Fix: the <code>!relative</code> YAML tag for <code>markdown_extensions</code> (originally added in 1.5.0) - it was broken in many typical use cases.</p>
+<p>See <a href="../../user-guide/configuration/#paths-relative-to-the-current-file-or-site"><strong>documentation</strong></a>. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3466" title="GitHub Issue mkdocs/mkdocs #3466">#3466</a></p>
+</li>
+<li>
+<p>Config validation now exits on first error, to avoid showing bizarre secondary errors. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3437" title="GitHub Issue mkdocs/mkdocs #3437">#3437</a></p>
+</li>
+<li>
+<p>MkDocs used to shorten error messages for unexpected errors such as "file not found", but that is no longer the case, the full error message and stack trace will be possible to see (unless the error has a proper handler, of course). Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3445" title="GitHub Issue mkdocs/mkdocs #3445">#3445</a></p>
+</li>
+</ul>
+<h3 id="upgrades-for-plugin-developers">Upgrades for plugin developers<a class="headerlink" href="#upgrades-for-plugin-developers" title="Permanent link"></a></h3>
+<h4 id="plugins-can-add-multiple-handlers-for-the-same-event-type-at-multiple-priorities">Plugins can add multiple handlers for the same event type, at multiple priorities<a class="headerlink" href="#plugins-can-add-multiple-handlers-for-the-same-event-type-at-multiple-priorities" title="Permanent link"></a></h4>
+<p>See <a class="autorefs autorefs-internal" href="../../dev-guide/plugins/#mkdocs.plugins.CombinedEvent"><code>mkdocs.plugins.CombinedEvent</code></a> in <a href="../../dev-guide/plugins/#event-priorities"><strong>documentation</strong></a>. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3448" title="GitHub Issue mkdocs/mkdocs #3448">#3448</a></p>
+<h4 id="enabling-true-generated-files-and-expanding-the-file-api">Enabling true generated files and expanding the <a class="autorefs autorefs-internal" href="../../dev-guide/api/#mkdocs.structure.files.File"><code>File</code></a> API<a class="headerlink" href="#enabling-true-generated-files-and-expanding-the-file-api" title="Permanent link"></a></h4>
+<p>See <a class="autorefs autorefs-internal" href="../../dev-guide/api/#mkdocs.structure.files.File"><strong>documentation</strong></a>.</p>
+<ul>
+<li>
+<p>There is a new pair of attributes <a class="autorefs autorefs-internal" href="../../dev-guide/api/#mkdocs.structure.files.File.content_string"><code>File.content_string</code></a>/<a class="autorefs autorefs-internal" href="../../dev-guide/api/#mkdocs.structure.files.File.content_bytes"><code>content_bytes</code></a> that becomes the official API for obtaining the content of a file and is used by MkDocs itself.</p>
+<p>This replaces the old approach where one had to manually read the file located at <a class="autorefs autorefs-internal" href="../../dev-guide/api/#mkdocs.structure.files.File.abs_src_path"><code>File.abs_src_path</code></a>, although that is still the primary action that these new attributes do under the hood.</p>
+</li>
+<li>
+<p>The content of a <code>File</code> can be backed by a string and no longer has to be a real existing file at <code>abs_src_path</code>.</p>
+<p>It is possible to <strong>set</strong> the attribute <code>File.content_string</code> or <code>File.content_bytes</code> and it will take precedence over <code>abs_src_path</code>.</p>
+<p>Further, <code>abs_src_path</code> is no longer guaranteed to be present and can be <code>None</code> instead. MkDocs itself still uses physical files in all cases, but eventually plugins will appear that don't populate this attribute.</p>
+</li>
+<li>
+<p>There is a new constructor <a class="autorefs autorefs-internal" href="../../dev-guide/api/#mkdocs.structure.files.File.generated"><code>File.generated()</code></a> that should be used by plugins instead of the <code>File()</code> constructor. It is much more convenient because one doesn't need to manually look up the values such as <code>docs_dir</code> and <code>use_directory_urls</code>. Its signature is one of:</p>
+<pre class="highlight"><code class="language-python">f = File.generated(config: MkDocsConfig, src_uri: str, content: str | bytes)
+f = File.generated(config: MkDocsConfig, src_uri: str, abs_src_path: str)</code></pre>
+<p>This way, it is now extremely easy to add a virtual file even from a hook:</p>
+<pre class="highlight"><code class="language-python">def on_files(files: Files, config: MkDocsConfig):
+    files.append(File.generated(config, 'fake/path.md', content="Hello, world!"))</code></pre>
+<p>For large content it is still best to use physical files, but one no longer needs to manipulate the path by providing a fake unused <code>docs_dir</code>.</p>
+</li>
+<li>
+<p>There is a new attribute <a class="autorefs autorefs-internal" href="../../dev-guide/api/#mkdocs.structure.files.File.generated_by"><code>File.generated_by</code></a> that arose by convention - for generated files it should be set to the name of the plugin (the key in the <code>plugins:</code> collection) that produced this file. This attribute is populated automatically when using the <code>File.generated()</code> constructor.</p>
+</li>
+<li>
+<p>It is possible to set the <a class="autorefs autorefs-internal" href="../../dev-guide/api/#mkdocs.structure.files.File.edit_uri"><code>edit_uri</code></a> attribute of a <code>File</code>, for example from a plugin or hook, to make it different from the default (equal to <code>src_uri</code>), and this will be reflected in the edit link of the document. This can be useful because some pages aren't backed by a real file and are instead created dynamically from some other source file or script. So a hook could set the <code>edit_uri</code> to that source file or script accordingly.</p>
+</li>
+<li>
+<p>The <code>File</code> object now stores its original <code>src_dir</code>, <code>dest_dir</code>, <code>use_directory_urls</code> values as attributes.</p>
+</li>
+<li>
+<p>Fields of <code>File</code> are computed on demand but cached. Only the three above attributes are primary ones, and partly also <a class="autorefs autorefs-internal" href="../../dev-guide/api/#mkdocs.structure.files.File.dest_uri"><code>dest_uri</code></a>. This way, it is possible to, for example, overwrite <code>dest_uri</code> of a <code>File</code>, and <code>abs_dest_path</code> will be calculated based on it. However you need to clear the attribute first using <code>del f.abs_dest_path</code>, because the values are cached.</p>
+</li>
+<li>
+<p><code>File</code> instances are now hashable (can be used as keys of a <code>dict</code>). Two files can no longer be considered "equal" unless it's the exact same instance of <code>File</code>.</p>
+</li>
+</ul>
+<p>Other changes:</p>
+<ul>
+<li>
+<p>The internal storage of <code>File</code> objects inside a <code>Files</code> object has been reworked, so any plugins that choose to access <code>Files._files</code> will get a deprecation warning.</p>
+</li>
+<li>
+<p>The order of <code>File</code> objects inside a <code>Files</code> collection is no longer significant when automatically inferring the <code>nav</code>. They get forcibly sorted according to the default alphabetic order.</p>
+</li>
+</ul>
+<p>Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3451" title="GitHub Issue mkdocs/mkdocs #3451">#3451</a>, <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3463" title="GitHub Issue mkdocs/mkdocs #3463">#3463</a></p>
+<h3 id="hooks-and-debugging">Hooks and debugging<a class="headerlink" href="#hooks-and-debugging" title="Permanent link"></a></h3>
+<ul>
+<li>
+<p>Hook files can now import adjacent *.py files using the <code>import</code> statement. Previously this was possible to achieve only through a <code>sys.path</code> workaround. See the new mention in <a href="../../user-guide/configuration/#hooks">documentation</a>. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3568" title="GitHub Issue mkdocs/mkdocs #3568">#3568</a></p>
+</li>
+<li>
+<p>Verbose <code>-v</code> log shows the sequence of plugin events in more detail - shows each invoked plugin one by one, not only the event type. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3444" title="GitHub Issue mkdocs/mkdocs #3444">#3444</a></p>
+</li>
+</ul>
+<h3 id="deprecations">Deprecations<a class="headerlink" href="#deprecations" title="Permanent link"></a></h3>
+<ul>
+<li>
+<p>Python 3.7 is no longer supported, Python 3.12 is officially supported. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3429" title="GitHub Issue mkdocs/mkdocs #3429">#3429</a></p>
+</li>
+<li>
+<p>The theme config file <code>mkdocs_theme.yml</code> no longer executes YAML tags. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3465" title="GitHub Issue mkdocs/mkdocs #3465">#3465</a></p>
+</li>
+<li>
+<p>The plugin event <code>on_page_read_source</code> is soft-deprecated because there is always a better alternative to it (see the new <code>File</code> API or just <code>on_page_markdown</code>, depending on the desired interaction).</p>
+<p>When multiple plugins/hooks apply this event handler, they trample over each other, so now there is a warning in that case.</p>
+<p>See <a href="../../dev-guide/plugins/#on_page_read_source"><strong>documentation</strong></a>. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3503" title="GitHub Issue mkdocs/mkdocs #3503">#3503</a></p>
+</li>
+</ul>
+<h4 id="api-deprecations">API deprecations<a class="headerlink" href="#api-deprecations" title="Permanent link"></a></h4>
+<ul>
+<li>
+<p>It is no longer allowed to set <code>File.page</code> to a type other than <code>Page</code> or a subclass thereof. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3443" title="GitHub Issue mkdocs/mkdocs #3443">#3443</a> - following the deprecation in version 1.5.3 and <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3381" title="GitHub Issue mkdocs/mkdocs #3381">#3381</a>.</p>
+</li>
+<li>
+<p><code>Theme._vars</code> is deprecated - use <code>theme['foo']</code> instead of <code>theme._vars['foo']</code></p>
+</li>
+<li>
+<p><code>utils</code>: <code>modified_time()</code>, <code>get_html_path()</code>, <code>get_url_path()</code>, <code>is_html_file()</code>, <code>is_template_file()</code> are removed. <code>path_to_url()</code> is deprecated.</p>
+</li>
+<li>
+<p><code>LiveReloadServer.watch()</code> no longer accepts a custom callback.</p>
+</li>
+</ul>
+<p>Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3429" title="GitHub Issue mkdocs/mkdocs #3429">#3429</a></p>
+<h3 id="misc">Misc<a class="headerlink" href="#misc" title="Permanent link"></a></h3>
+<ul>
+<li>The <code>sitemap.xml.gz</code> file is slightly more reproducible and no longer changes on every build, but instead only once per day (upon a date change). Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3460" title="GitHub Issue mkdocs/mkdocs #3460">#3460</a></li>
+</ul>
+<p>Other small improvements; see <a href="https://github.com/mkdocs/mkdocs/compare/1.5.3...1.6.0">commit log</a>.</p>
 <h2 id="version-153-2023-09-18">Version 1.5.3 (2023-09-18)<a class="headerlink" href="#version-153-2023-09-18" title="Permanent link"></a></h2>
 <ul>
 <li>
@@ -408,7 +648,7 @@ mkdocs, version 1.5.0 from /path/to/mkdocs (Python 3.10)</code></pre>
 <p>Bugfix (regression in 1.5.0): In "readthedocs" theme the styling of "breadcrumb navigation" was broken for nested pages (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3383" title="GitHub Issue mkdocs/mkdocs #3383">#3383</a>)</p>
 </li>
 <li>
-<p>Built-in themes now also support Chinese (Traditional, Taiwan) language (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3370" title="GitHub Issue mkdocs/mkdocs #3370">#3370</a>)</p>
+<p>Built-in themes now also support Chinese (Traditional, Taiwan) language (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3154" title="GitHub Issue mkdocs/mkdocs #3154">#3154</a>)</p>
 </li>
 <li>
 <p>Plugins can now set <code>File.page</code> to their own subclass of <code>Page</code>. There is also now a warning if <code>File.page</code> is set to anything other than a strict subclass of <code>Page</code>. (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3367" title="GitHub Issue mkdocs/mkdocs #3367">#3367</a>, <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3381" title="GitHub Issue mkdocs/mkdocs #3381">#3381</a>)</p>
@@ -487,12 +727,15 @@ mkdocs, version 1.5.0 from /path/to/mkdocs (Python 3.10)</code></pre>
 <p>The <code>exclude_docs</code> config follows the <a href="https://git-scm.com/docs/gitignore#_pattern_format">.gitignore pattern format</a> and is specified as a multiline YAML string. For example:</p>
 <pre class="highlight"><code class="language-yaml">exclude_docs: |
   *.py               # Excludes e.g. docs/hooks/foo.py
-  /drafts            # Excludes e.g. docs/drafts/hello.md
   /requirements.txt  # Excludes docs/requirements.txt</code></pre>
 <p>Validation of links (described above) is also affected by <code>exclude_docs</code>. During <code>mkdocs serve</code> the messages explain the interaction, whereas during <code>mkdocs build</code> excluded files are as good as nonexistent.</p>
 <p>As an additional related change, if you have a need to have both <code>README.md</code> and <code>index.md</code> files in a directory but publish only one of them, you can now use this feature to explicitly ignore one of them and avoid warnings.</p>
 <p>See <a href="../../user-guide/configuration/#exclude_docs"><strong>documentation</strong></a>. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3224" title="GitHub Issue mkdocs/mkdocs #3224">#3224</a></p>
-<h4 id="drafts">Drafts<a class="headerlink" href="#drafts" title="Permanent link"></a></h4>
+<h4 id="drafts_1">Drafts<a class="headerlink" href="#drafts_1" title="Permanent link"></a></h4>
+<div class="admonition danger">
+<p class="admonition-title">Dropped from version 1.6:</p>
+<p>The <code>exclude_docs</code> config no longer applies the "drafts" functionality for <code>mkdocs serve</code>. This was renamed to <a href="../../user-guide/configuration/#draft_docs"><code>draft_docs</code></a>.</p>
+</div>
 <p>The <code>exclude_docs</code> config has another behavior: all excluded Markdown pages will still be previewable in <code>mkdocs serve</code> only, just with a "DRAFT" marker on top. Then they will of course be excluded from <code>mkdocs build</code> or <code>gh-deploy</code>.</p>
 <p>If you don't want <code>mkdocs serve</code> to have any special behaviors and instead want it to perform completely normal builds, use the new flag <code>mkdocs serve --clean</code>.</p>
 <p>See <a href="../../user-guide/configuration/#exclude_docs"><strong>documentation</strong></a>. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3224" title="GitHub Issue mkdocs/mkdocs #3224">#3224</a></p>
@@ -520,7 +763,7 @@ mkdocs, version 1.5.0 from /path/to/mkdocs (Python 3.10)</code></pre>
       {{ script | script_tag }}
     {%- endfor %}</code></pre>
 <p>See <a href="../../dev-guide/themes/#picking-up-css-and-javascript-from-the-config"><strong>documentation</strong></a>.</p>
-<h3 id="upgrades-for-plugin-developers">Upgrades for plugin developers<a class="headerlink" href="#upgrades-for-plugin-developers" title="Permanent link"></a></h3>
+<h3 id="upgrades-for-plugin-developers_1">Upgrades for plugin developers<a class="headerlink" href="#upgrades-for-plugin-developers_1" title="Permanent link"></a></h3>
 <ul>
 <li>
 <p>Breaking change: <code>config.extra_javascript</code> is no longer a plain list of strings, but instead a list of <code>ExtraScriptValue</code> items. So you can no longer treat the list values as strings. If you want to keep compatibility with old versions, just always reference the items as <code>str(item)</code> instead. And you can still append plain strings to the list if you wish. See information about <code>&lt;script&gt;</code> tags above. Context: <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3237" title="GitHub Issue mkdocs/mkdocs #3237">#3237</a></p>
@@ -598,7 +841,7 @@ log.info("Hello, world")</code></pre>
 <li><code>mkdocs serve --clean</code> (described above).</li>
 <li><code>mkdocs serve --dirty</code> is the new name of <code>mkdocs serve --dirtyreload</code>.</li>
 </ul>
-<h3 id="deprecations">Deprecations<a class="headerlink" href="#deprecations" title="Permanent link"></a></h3>
+<h3 id="deprecations_1">Deprecations<a class="headerlink" href="#deprecations_1" title="Permanent link"></a></h3>
 <ul>
 <li>
 <p><code>extra_javascript</code> underwent a change that can break plugins in rare cases, and it requires attention from theme developers. See respective entries above.</p>
@@ -710,7 +953,7 @@ log.info("Hello, world")</code></pre>
 It works like <code>edit_uri</code> but more generally covers ways to construct an edit URL.<br />
 See <a href="../../user-guide/configuration/#edit_uri_template"><strong>documentation</strong></a>.</p>
 <p>Additionally, the <code>edit_uri</code> functionality will now fully work even if <code>repo_url</code> is omitted (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/2928" title="GitHub Issue mkdocs/mkdocs #2928">#2928</a>)</p>
-<h3 id="upgrades-for-plugin-developers_1">Upgrades for plugin developers<a class="headerlink" href="#upgrades-for-plugin-developers_1" title="Permanent link"></a></h3>
+<h3 id="upgrades-for-plugin-developers_2">Upgrades for plugin developers<a class="headerlink" href="#upgrades-for-plugin-developers_2" title="Permanent link"></a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This release has big changes to the implementation of plugins and their configs. But, the intention is to have zero breaking changes in all reasonably common use cases. Or at the very least if a code fix is required, there should always be a way to stay compatible with older MkDocs versions. Please report if this release breaks something.</p>
@@ -1049,7 +1292,7 @@ details on using the provided translations, see the <a href="../../user-guide/lo
 guide</a>. Note that translation will not
 happen by default. Users must first install the necessary dependencies with
 the following command:</p>
-<pre class="highlight"><code class="language-bash">pip install mkdocs[i18n]</code></pre>
+<pre class="highlight"><code class="language-bash">pip install 'mkdocs[i18n]'</code></pre>
 <p>Translation contributions are welcome and detailed in the <a href="../../dev-guide/translations/">Translation
 Guide</a>.</p>
 <p>Developers of third party themes may want to review the relevant section of
@@ -1479,7 +1722,7 @@ following features:</p>
 <li>Compress the search index (<a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/1128" title="GitHub Issue mkdocs/mkdocs #1128">#1128</a>).</li>
 </ul>
 <p>Users can review the <a href="../../user-guide/configuration/#search">configuration options</a> available and theme
-authors should review how <a href="../../dev-guide/themes/#search_and_themes">search and themes</a> interact.</p>
+authors should review how <a href="../../dev-guide/themes/#search-and-themes">search and themes</a> interact.</p>
 <h4 id="theme_dir-configuration-option-fully-deprecated"><code>theme_dir</code> Configuration Option fully Deprecated<a class="headerlink" href="#theme_dir-configuration-option-fully-deprecated" title="Permanent link"></a></h4>
 <p>As of version 0.17, the <a href="../../user-guide/configuration/#custom_dir">custom_dir</a> option replaced the deprecated <code>theme_dir</code>
 option. If users had set the <code>theme_dir</code> option, MkDocs version 0.17 copied the
@@ -1604,31 +1847,31 @@ user created and third-party templates:</p>
 </tr>
 <tr>
 <td>page_title</td>
-<td><a href="../../dev-guide/themes/#pagetitle">page.title</a></td>
+<td>page.title</td>
 </tr>
 <tr>
 <td>content</td>
-<td><a href="../../dev-guide/themes/#pagecontent">page.content</a></td>
+<td>page.content</td>
 </tr>
 <tr>
 <td>toc</td>
-<td><a href="../../dev-guide/themes/#pagetoc">page.toc</a></td>
+<td>page.toc</td>
 </tr>
 <tr>
 <td>meta</td>
-<td><a href="../../dev-guide/themes/#pagemeta">page.meta</a></td>
+<td>page.meta</td>
 </tr>
 <tr>
 <td>canonical_url</td>
-<td><a href="../../dev-guide/themes/#pagecanonical_url">page.canonical_url</a></td>
+<td>page.canonical_url</td>
 </tr>
 <tr>
 <td>previous_page</td>
-<td><a href="../../dev-guide/themes/#pageprevious_page">page.previous_page</a></td>
+<td>page.previous_page</td>
 </tr>
 <tr>
 <td>next_page</td>
-<td><a href="../../dev-guide/themes/#pagenext_page">page.next_page</a></td>
+<td>page.next_page</td>
 </tr>
 </tbody>
 </table>
@@ -1766,31 +2009,31 @@ user created and third-party templates:</p>
 </tr>
 <tr>
 <td>page_title</td>
-<td><a href="../../dev-guide/themes/#pagetitle">page.title</a></td>
+<td>page.title</td>
 </tr>
 <tr>
 <td>content</td>
-<td><a href="../../dev-guide/themes/#pagecontent">page.content</a></td>
+<td>page.content</td>
 </tr>
 <tr>
 <td>toc</td>
-<td><a href="../../dev-guide/themes/#pagetoc">page.toc</a></td>
+<td>page.toc</td>
 </tr>
 <tr>
 <td>meta</td>
-<td><a href="../../dev-guide/themes/#pagemeta">page.meta</a></td>
+<td>page.meta</td>
 </tr>
 <tr>
 <td>canonical_url</td>
-<td><a href="../../dev-guide/themes/#pagecanonical_url">page.canonical_url</a></td>
+<td>page.canonical_url</td>
 </tr>
 <tr>
 <td>previous_page</td>
-<td><a href="../../dev-guide/themes/#pageprevious_page">page.previous_page</a></td>
+<td>page.previous_page</td>
 </tr>
 <tr>
 <td>next_page</td>
-<td><a href="../../dev-guide/themes/#pagenext_page">page.next_page</a></td>
+<td>page.next_page</td>
 </tr>
 </tbody>
 </table>
@@ -2050,7 +2293,7 @@ duplicated.</p>
 <p>This new file is created on every MkDocs build (with <code>mkdocs build</code>) and
 no configuration is needed to enable it.</p>
 <h4 id="change-the-pages-configuration">Change the pages configuration<a class="headerlink" href="#change-the-pages-configuration" title="Permanent link"></a></h4>
-<p>Provide a <a href="../../user-guide/writing-your-docs/#configure-pages-and-navigation">new way</a> to define pages, and specifically <a href="../../user-guide/writing-your-docs/#multilevel-documentation">nested pages</a>, in the
+<p>Provide a <a href="../../user-guide/writing-your-docs/#configure-pages-and-navigation">new way</a> to define pages, and specifically nested pages, in the
 mkdocs.yml file and deprecate the existing approach, support will be removed
 with MkDocs 1.0.</p>
 <h4 id="warn-users-about-the-removal-of-builtin-themes">Warn users about the removal of builtin themes<a class="headerlink" href="#warn-users-about-the-removal-of-builtin-themes" title="Permanent link"></a></h4>
@@ -2192,8 +2435,7 @@ documentation.</p>
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="../../js/jquery-3.6.0.min.js"></script>
-        <script src="../../js/bootstrap.min.js"></script>
+        <script src="../../js/bootstrap.bundle.min.js"></script>
         <script>
             var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
@@ -2206,7 +2448,7 @@ documentation.</p>
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>From here you can search these documents. Enter your search terms below.</p>
@@ -2226,7 +2468,7 @@ documentation.</p>
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <table class="table">

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="auto">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,9 +10,13 @@
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Configuration - MkDocs</title>
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../../css/brands.min.css" rel="stylesheet">
+        <link href="../../css/solid.min.css" rel="stylesheet">
+        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" disabled>
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -34,7 +38,7 @@
             <div class="container">
                 <a class="navbar-brand" href="../..">MkDocs</a>
                 <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -42,14 +46,14 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="../.." class="nav-link">Home</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="../../getting-started/" class="nav-link">Getting Started</a>
                             </li>
-                            <li class="dropdown active">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">User Guide</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -77,7 +81,7 @@
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active">Configuration</a>
+    <a href="./" class="dropdown-item active" aria-current="page">Configuration</a>
 </li>
                                     
 <li>
@@ -89,8 +93,8 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Developer Guide</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -114,8 +118,8 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">About</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -133,9 +137,9 @@
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav ml-auto">
+                    <ul class="nav navbar-nav ms-md-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
@@ -150,61 +154,91 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/user-guide/configuration.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/user-guide/configuration.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                              <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
+                                <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                <span class="d-lg-none ms-2">Toggle theme</span>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                                    <i class="fa-solid fa-sun fa-fw"></i>
+                                    <span class="ms-2">Light</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+                                    <i class="fa-solid fa-moon fa-fw"></i>
+                                    <span class="ms-2">Dark</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="true">
+                                    <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                    <span class="ms-2">Auto</span>
+                                    <i class="fa-solid fa-check ms-auto"></i>
+                                  </button>
+                                </li>
+                              </ul>
                             </li>
                     </ul>
                 </div>
             </div>
         </div>
+        <script src="../../js/darkmode.js"></script>
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="1"><a href="#configuration" class="nav-link">Configuration</a>
+            <li class="nav-item" data-bs-level="1"><a href="#configuration" class="nav-link">Configuration</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-level="2"><a href="#introduction" class="nav-link">Introduction</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#project-information" class="nav-link">Project information</a>
+            <li class="nav-item" data-bs-level="2"><a href="#introduction" class="nav-link">Introduction</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#documentation-layout" class="nav-link">Documentation layout</a>
+            <li class="nav-item" data-bs-level="2"><a href="#project-information" class="nav-link">Project information</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#build-directories" class="nav-link">Build directories</a>
+            <li class="nav-item" data-bs-level="2"><a href="#documentation-layout" class="nav-link">Documentation layout</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#preview-controls" class="nav-link">Preview controls</a>
+            <li class="nav-item" data-bs-level="2"><a href="#build-directories" class="nav-link">Build directories</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#live-reloading" class="nav-link">Live Reloading</a>
+            <li class="nav-item" data-bs-level="2"><a href="#preview-controls" class="nav-link">Preview controls</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#formatting-options" class="nav-link">Formatting options</a>
+            <li class="nav-item" data-bs-level="2"><a href="#live-reloading" class="nav-link">Live Reloading</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#special-yaml-tags" class="nav-link">Special YAML tags</a>
+            <li class="nav-item" data-bs-level="2"><a href="#formatting-options" class="nav-link">Formatting options</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#configuration-inheritance" class="nav-link">Configuration Inheritance</a>
+            <li class="nav-item" data-bs-level="2"><a href="#special-yaml-tags" class="nav-link">Special YAML tags</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#configuration-inheritance" class="nav-link">Configuration Inheritance</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -324,8 +358,8 @@ edit_uri_template: 'blob/main/docs/{path}'</code></pre>
 <ul>
 <li><code>{path!q}</code>, e.g. <code>foo%2Fbar.md</code></li>
 </ul>
-<details class="note">
-<summary>Suggested useful configurations:</summary>
+<blockquote>
+<p>? NOTE: <strong>Suggested useful configurations:</strong></p>
 <ul>
 <li>
 <p>GitHub Wiki:<br />
@@ -351,7 +385,7 @@ edit_uri_template: '-/sse/master/docs%2F{path!q}'</code></pre>
 <pre class="highlight"><code class="language-yaml">edit_uri_template: 'https://gitlab.com/-/ide/project/repo/edit/master/-/docs/{path}'</code></pre>
 </li>
 </ul>
-</details>
+</blockquote>
 <p><strong>default</strong>: <code>null</code></p>
 <h3 id="site_description">site_description<a class="headerlink" href="#site_description" title="Permanent link"></a></h3>
 <p>Set the site description. This will add a meta tag to the generated HTML header.</p>
@@ -385,7 +419,7 @@ sub-sections.</p>
 <p>Navigation items may also include links to external sites. While titles are
 optional for internal links, they are required for external links. An external
 link may be a full URL or a relative URL. Any path which is not found in the
-files is assumed to be an external link. See the section about [Meta-Data] on
+files is assumed to be an external link. See the section about <a href="../writing-your-docs/#meta-data">Meta-Data</a> on
 how MkDocs determines the page title of a document.</p>
 <pre class="highlight"><code class="language-yaml">nav:
   - Introduction: 'index.md'
@@ -416,16 +450,18 @@ sub-directories. Index files will always be listed first within a sub-section.</
 <div class="admonition new">
 <p class="admonition-title">New in version 1.5</p>
 </div>
+<div class="admonition danger">
+<p class="admonition-title">Changed in version 1.6:</p>
+<p>This config no longer applies the "drafts" functionality for <code>mkdocs serve</code>. If you have draft documents that you want available in "serve" and not "build", replace <code>exclude_docs</code> with the new <a href="#draft_docs"><code>draft_docs</code></a> config option.</p>
+</div>
 <p>This config defines patterns of files (under <a href="#docs_dir"><code>docs_dir</code></a>) to not be picked up into the built site.</p>
 <p>Example:</p>
 <pre class="highlight"><code class="language-yaml">exclude_docs: |
   api-config.json    # A file with this name anywhere.
-  drafts/            # A "drafts" directory anywhere.
   /requirements.txt  # Top-level "docs/requirements.txt".
   *.py               # Any file with this extension anywhere.
   !/foo/example.py   # But keep this particular file.</code></pre>
 <p>This follows the <a href="https://git-scm.com/docs/gitignore#_pattern_format">.gitignore pattern format</a>.</p>
-<p>Note that <code>mkdocs serve</code> does <em>not</em> follow this setting and instead displays excluded documents but with a "DRAFT" mark. To prevent this effect, you can run <code>mkdocs serve --clean</code>.</p>
 <p>The following defaults are always implicitly prepended - to exclude dot-files (and directories) as well as the top-level <code>templates</code> directory:</p>
 <pre class="highlight"><code class="language-yaml">exclude_docs: |
   .*
@@ -434,13 +470,24 @@ sub-directories. Index files will always be listed first within a sub-section.</
 <p>Otherwise you could for example opt only certain dot-files back into the site:</p>
 <pre class="highlight"><code class="language-yaml">exclude_docs: |
   !.assets  # Don't exclude '.assets' although all other '.*' are excluded</code></pre>
+<h3 id="draft_docs">draft_docs<a class="headerlink" href="#draft_docs" title="Permanent link"></a></h3>
+<div class="admonition new">
+<p class="admonition-title">New in version 1.6</p>
+</div>
+<p>This config defines patterns of files (under <a href="#docs_dir"><code>docs_dir</code></a>) to be treated as a draft.  Draft files are available during <code>mkdocs serve</code> and include a "DRAFT" mark but will not be included in the build. To prevent this effect and make "serve" behave the same as "build", you can run <code>mkdocs serve --clean</code>.</p>
+<p>Example:</p>
+<pre class="highlight"><code class="language-yaml">draft_docs: |
+  drafts/               # A "drafts" directory anywhere.
+  _unpublished.md       # A md file ending in _unpublished.md
+  !/foo_unpublished.md  # But keep this particular file.</code></pre>
+<p>This follows the <a href="https://git-scm.com/docs/gitignore#_pattern_format">.gitignore pattern format</a>.</p>
 <h3 id="not_in_nav">not_in_nav<a class="headerlink" href="#not_in_nav" title="Permanent link"></a></h3>
 <div class="admonition new">
 <p class="admonition-title">New in version 1.5</p>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This option does <em>not</em> actually exclude anything from the nav.</p>
+<div class="admonition new">
+<p class="admonition-title">New in version 1.6:</p>
+<p>If the <a href="#nav"><code>nav</code></a> config is not specified at all, pages specified in this config will now be excluded from the inferred navigation.</p>
 </div>
 <p>If you want to include some docs into the site but intentionally exclude them from the nav, normally MkDocs warns about this.</p>
 <p>Adding such patterns of files (relative to <a href="#docs_dir"><code>docs_dir</code></a>) into the <code>not_in_nav</code> config will prevent such warnings.</p>
@@ -462,8 +509,9 @@ not_in_nav: |
 </div>
 <p>Configure the strictness of MkDocs' diagnostic messages when validating links to documents.</p>
 <p>This is a tree of configs, and for each one the value can be one of the three: <code>warn</code>, <code>info</code>, <code>ignore</code>. Which cause a logging message of the corresponding severity to be produced. The <code>warn</code> level is, of course, intended for use with <code>mkdocs build --strict</code> (where it becomes an error), which you can employ in continuous testing.</p>
-<div class="admonition example">
-<p class="admonition-title">Defaults of this config as of MkDocs 1.5:</p>
+<p>The config <code>validation.links.absolute_links</code> additionally has a special value <code>relative_to_docs</code>, for <a href="#validation-of-absolute-links">validation of absolute links</a>.</p>
+<blockquote>
+<p>? EXAMPLE: <strong>Defaults of this config as of MkDocs 1.6:</strong></p>
 <pre class="highlight"><code class="language-yaml">validation:
   nav:
     omitted_files: info
@@ -471,59 +519,129 @@ not_in_nav: |
     absolute_links: info
   links:
     not_found: warn
+    anchors: info
     absolute_links: info
     unrecognized_links: info</code></pre>
 <p>(Note: you shouldn't copy this whole example, because it only duplicates the defaults. Only individual items that differ should be set.)</p>
-</div>
+</blockquote>
 <p>The defaults of some of the behaviors already differ from MkDocs 1.4 and below - they were ignored before.</p>
-<details class="example">
-<summary>Configure MkDocs 1.5 to behave like MkDocs 1.4 and below (reduce strictness):</summary>
+<blockquote>
+<p>? EXAMPLE: <strong>Configure MkDocs 1.6 to behave like MkDocs 1.4 and below (reduce strictness):</strong></p>
 <pre class="highlight"><code class="language-yaml">validation:
   absolute_links: ignore
-  unrecognized_links: ignore</code></pre>
-</details>
+  unrecognized_links: ignore
+  anchors: ignore</code></pre>
+</blockquote>
 <!-- -->
-<details class="example" open="open">
-<summary>Recommended settings for most sites (maximal strictness):</summary>
+<blockquote>
+<p>! EXAMPLE: <strong>Recommended settings for most sites (maximal strictness):</strong></p>
 <pre class="highlight"><code class="language-yaml">validation:
   omitted_files: warn
-  absolute_links: warn
-  unrecognized_links: warn</code></pre>
-</details>
+  absolute_links: warn  # Or 'relative_to_docs' - new in MkDocs 1.6
+  unrecognized_links: warn
+  anchors: warn  # New in MkDocs 1.6</code></pre>
+</blockquote>
 <p>Note how in the above examples we omitted the 'nav' and 'links' keys. Here <code>absolute_links:</code> means setting both <code>nav: absolute_links:</code> and <code>links: absolute_links:</code>.</p>
 <p>Full list of values and examples of log messages that they can hide or make more prominent:</p>
 <ul>
-<li><code>validation.nav.omitted_files</code>  <ul>
-<li>"The following pages exist in the docs directory, but are not included in the "nav" configuration: ..."</li>
+<li><code>validation.nav.omitted_files</code><ul>
+<li>
+<blockquote>
+<p>The following pages exist in the docs directory, but are not included in the "nav" configuration: ...</p>
+</blockquote>
+</li>
 </ul>
 </li>
-<li><code>validation.nav.not_found</code>  <ul>
-<li>"A relative path to 'foo/bar.md' is included in the 'nav' configuration, which is not found in the documentation files."</li>
-<li>"A reference to 'foo/bar.md' is included in the 'nav' configuration, but this file is excluded from the built site."</li>
+<li><code>validation.nav.not_found</code><ul>
+<li>
+<blockquote>
+<p>A reference to 'foo/bar.md' is included in the 'nav' configuration, which is not found in the documentation files.</p>
+</blockquote>
+</li>
+<li>
+<blockquote>
+<p>A reference to 'foo/bar.md' is included in the 'nav' configuration, but this file is excluded from the built site.</p>
+</blockquote>
+</li>
 </ul>
 </li>
-<li><code>validation.nav.absolute_links</code>  <ul>
-<li>"An absolute path to '/foo/bar.html' is included in the 'nav' configuration, which presumably points to an external resource."</li>
+<li><code>validation.nav.absolute_links</code><ul>
+<li>
+<blockquote>
+<p>An absolute path to '/foo/bar.html' is included in the 'nav' configuration, which presumably points to an external resource.</p>
+</blockquote>
+</li>
 </ul>
 </li>
 </ul>
 <!-- -->
 <ul>
-<li><code>validation.links.not_found</code>  <ul>
-<li>"Doc file 'example.md' contains a relative link '../foo/bar.md', but the target is not found among documentation files."</li>
-<li>"Doc file 'example.md' contains a link to 'foo/bar.md' which is excluded from the built site."</li>
+<li><code>validation.links.not_found</code><ul>
+<li>
+<blockquote>
+<p>Doc file 'example.md' contains a link '../foo/bar.md', but the target is not found among documentation files.</p>
+</blockquote>
+</li>
+<li>
+<blockquote>
+<p>Doc file 'example.md' contains a link to 'foo/bar.md' which is excluded from the built site.</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><code>validation.links.anchors</code><ul>
+<li>
+<blockquote>
+<p>Doc file 'example.md' contains a link '../foo/bar.md#some-heading', but the doc 'foo/bar.md' does not contain an anchor '#some-heading'.</p>
+</blockquote>
+</li>
+<li>
+<blockquote>
+<p>Doc file 'example.md' contains a link '#some-heading', but there is no such anchor on this page.</p>
+</blockquote>
+</li>
 </ul>
 </li>
 <li><code>validation.links.absolute_links</code><ul>
-<li>"Doc file 'example.md' contains an absolute link '/foo/bar.html', it was left as is. Did you mean 'foo/bar.md'?"</li>
+<li>
+<blockquote>
+<p>Doc file 'example.md' contains an absolute link '/foo/bar.html', it was left as is. Did you mean 'foo/bar.md'?</p>
+</blockquote>
+</li>
 </ul>
 </li>
 <li><code>validation.links.unrecognized_links</code><ul>
-<li>"Doc file 'example.md' contains an unrecognized relative link '../foo/bar/', it was left as is. Did you mean 'foo/bar.md'?"</li>
-<li>"Doc file 'example.md' contains an unrecognized relative link 'mail@example.com', it was left as is. Did you mean 'mailto:mail@example.com'?"</li>
+<li>
+<blockquote>
+<p>Doc file 'example.md' contains an unrecognized relative link '../foo/bar/', it was left as is. Did you mean 'foo/bar.md'?</p>
+</blockquote>
+</li>
+<li>
+<blockquote>
+<p>Doc file 'example.md' contains an unrecognized relative link 'mail@example.com', it was left as is. Did you mean 'mailto:mail@example.com'?</p>
+</blockquote>
+</li>
 </ul>
 </li>
 </ul>
+<h4 id="validation-of-absolute-links">Validation of absolute links<a class="headerlink" href="#validation-of-absolute-links" title="Permanent link"></a></h4>
+<div class="admonition new">
+<p class="admonition-title">New in version 1.6</p>
+</div>
+<blockquote>
+<p>Historically, within Markdown, MkDocs only recognized <strong>relative</strong> links that lead to another physical <code>*.md</code> document (or media file). This is a good convention to follow because then the source pages are also freely browsable without MkDocs, for example on GitHub. Whereas absolute links were left unmodified (making them often not work as expected) or, more recently, warned against. If you dislike having to always use relative links, now you can opt into absolute links and have them work correctly.</p>
+</blockquote>
+<p>If you set the setting <code>validation.links.absolute_links</code> to the new value <code>relative_to_docs</code>, all Markdown links starting with <code>/</code> will be understood as being relative to the <code>docs_dir</code> root. The links will then be validated for correctness according to all the other rules that were already working for relative links in prior versions of MkDocs. For the HTML output, these links will still be turned relative so that the site still works reliably.</p>
+<p>So, now any document (e.g. "dir1/foo.md") can link to the document "dir2/bar.md" as <code>[link](/dir2/bar.md)</code>, in addition to the previously only correct way <code>[link](../dir2/bar.md)</code>.</p>
+<p>You have to enable the setting, though. The default is still to just skip the link.</p>
+<div class="admonition example">
+<p class="admonition-title">Settings to recognize absolute links and validate them:</p>
+<pre class="highlight"><code class="language-yaml">validation:
+  links:
+    absolute_links: relative_to_docs
+    anchors: warn
+    unrecognized_links: warn</code></pre>
+</div>
 <h2 id="build-directories">Build directories<a class="headerlink" href="#build-directories" title="Permanent link"></a></h2>
 <h3 id="theme">theme<a class="headerlink" href="#theme" title="Permanent link"></a></h3>
 <p>Sets the theme and theme specific configuration of your documentation site.
@@ -553,7 +671,7 @@ for details.</p>
 directory, in which case it is resolved relative to the directory containing
 your configuration file or it can be an absolute directory path from the
 root of your local file system.</p>
-<p>See <a href="../customizing-your-theme/#using-the-theme_dir">Customizing Your Theme</a> for details if you would like to tweak an
+<p>See <a href="../customizing-your-theme/#using-the-theme-custom_dir">Customizing Your Theme</a> for details if you would like to tweak an
 existing theme.</p>
 <p>See the <a href="../../dev-guide/themes/">Theme Developer Guide</a> if you would like to build your own theme
 from the ground up.</p>
@@ -628,8 +746,8 @@ documentation on how to ignore specific directories.</p>
 </div>
 <h3 id="extra_templates">extra_templates<a class="headerlink" href="#extra_templates" title="Permanent link"></a></h3>
 <p>Set a list of templates in your <code>docs_dir</code> to be built by MkDocs. To see more
-about writing templates for MkDocs read the documentation about [custom themes]
-and specifically the section about the [available variables] to
+about writing templates for MkDocs read the documentation about <a href="../../dev-guide/themes/">custom themes</a>
+and specifically the section about the <a href="../../dev-guide/themes/#template-variables">available variables</a> to
 templates. See the example in <a href="#extra_css">extra_css</a> for usage.</p>
 <p><strong>default</strong>: <code>[]</code> (an empty list).</p>
 <h3 id="extra">extra<a class="headerlink" href="#extra" title="Permanent link"></a></h3>
@@ -775,11 +893,11 @@ and available configuration options.</p>
 <p>For example:</p>
 <pre class="highlight"><code class="language-yaml">hooks:
   - my_hooks.py</code></pre>
-<p>Then the file <em>my_hooks.py</em> can contain any <a href="../../dev-guide/plugins/#events">plugin event handlers</a> (without <code>self</code>), e.g.:</p>
+<p>Then the file <code>my_hooks.py</code> can contain any <a href="../../dev-guide/plugins/#events">plugin event handlers</a> (without <code>self</code>), e.g.:</p>
 <pre class="highlight"><code class="language-python">def on_page_markdown(markdown, **kwargs):
     return markdown.replace('a', 'z')</code></pre>
-<details class="example">
-<summary>Advanced example:</summary>
+<blockquote>
+<p>? EXAMPLE: <strong>Advanced example:</strong></p>
 <p>This produces warnings based on the Markdown content (and warnings are fatal in <a href="#strict">strict</a> mode):</p>
 <pre class="highlight"><code class="language-python">import logging, re
 import mkdocs.plugins
@@ -791,7 +909,7 @@ def on_page_markdown(markdown, page, **kwargs):
     path = page.file.src_uri
     for m in re.finditer(r'\bhttp://[^) ]+', markdown):
         log.warning(f"Documentation file '{path}' contains a non-HTTPS link: {m[0]}")</code></pre>
-</details>
+</blockquote>
 <p>This does not enable any new abilities compared to <a href="../../dev-guide/plugins/">plugins</a>, it only simplifies one-off usages, as these don't need to be <em>installed</em> like plugins do.</p>
 <p>Note that for <code>mkdocs serve</code> the hook module will <em>not</em> be reloaded on each build.</p>
 <p>You might have seen this feature in the <a href="https://github.com/aklajnert/mkdocs-simple-hooks">mkdocs-simple-hooks plugin</a>. If using standard method names, it can be directly replaced, e.g.:</p>
@@ -801,9 +919,15 @@ def on_page_markdown(markdown, page, **kwargs):
 -        on_page_markdown: 'my_hooks:on_page_markdown'
 +hooks:
 +  - my_hooks.py</code></pre>
+<div class="admonition new">
+<p class="admonition-title">New in MkDocs 1.6</p>
+<p>If a hook file has a file <code>foo.py</code> adjacent to it, it can use the normal Python syntax <code>import foo</code> to access its functions.</p>
+<p>In older versions of MkDocs, a workaround was necessary to make this work - adding the path to <code>sys.path</code>.</p>
+</div>
 <h3 id="plugins">plugins<a class="headerlink" href="#plugins" title="Permanent link"></a></h3>
 <p>A list of plugins (with optional configuration settings) to use when building
 the site. See the <a href="../../dev-guide/plugins/">Plugins</a> documentation for full details.</p>
+<p><strong>default</strong>: <code>['search']</code> (the "search" plugin included with MkDocs).</p>
 <p>If the <code>plugins</code> config setting is defined in the <code>mkdocs.yml</code> config file, then
 any defaults (such as <code>search</code>) are ignored and you need to explicitly re-enable
 the defaults if you would like to continue using them:</p>
@@ -816,6 +940,20 @@ the defaults if you would like to continue using them:</p>
   - your_other_plugin:
       option1: value
       option2: other value</code></pre>
+<p>To completely disable all plugins, including any defaults, set the <code>plugins</code>
+setting to an empty list:</p>
+<pre class="highlight"><code class="language-yaml">plugins: []</code></pre>
+<h4 id="enabled-option"><code>enabled</code> option<a class="headerlink" href="#enabled-option" title="Permanent link"></a></h4>
+<div class="admonition new">
+<p class="admonition-title">New in MkDocs 1.6</p>
+<p>Each plugin has its own options keys. However MkDocs also ensures that each plugin has the <code>enabled</code> boolean option. This can be used to conditionally enable a particular plugin, as in the following example:</p>
+<pre class="highlight"><code class="language-yaml">plugins:
+  - search
+  - code-validator:
+      enabled: !ENV [LINT, false]</code></pre>
+<p>See: <a href="#environment-variables">Environment variables</a></p>
+</div>
+<h4 id="alternate-syntax">Alternate syntax<a class="headerlink" href="#alternate-syntax" title="Permanent link"></a></h4>
 <p>In the above examples, each plugin is a list item (starts with a <code>-</code>). As an
 alternative, key/value pairs can be used instead. However, in that case an empty
 value must be provided for plugins for which no options are defined. Therefore,
@@ -827,10 +965,6 @@ the last example above could also be defined as follows:</p>
     option2: other value</code></pre>
 <p>This alternative syntax is required if you intend to override some options via
 <a href="#configuration-inheritance">inheritance</a>.</p>
-<p>To completely disable all plugins, including any defaults, set the <code>plugins</code>
-setting to an empty list:</p>
-<pre class="highlight"><code class="language-yaml">plugins: []</code></pre>
-<p><strong>default</strong>: <code>['search']</code> (the "search" plugin included with MkDocs).</p>
 <h4 id="search">Search<a class="headerlink" href="#search" title="Permanent link"></a></h4>
 <p>A search plugin is provided by default with MkDocs which uses <a href="https://lunrjs.com/">lunr.js</a> as a
 search engine. The following config options are available to alter the behavior
@@ -1097,8 +1231,7 @@ path based options in the primary configuration file only.</p>
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="../../js/jquery-3.6.0.min.js"></script>
-        <script src="../../js/bootstrap.min.js"></script>
+        <script src="../../js/bootstrap.bundle.min.js"></script>
         <script>
             var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
@@ -1111,7 +1244,7 @@ path based options in the primary configuration file only.</p>
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>From here you can search these documents. Enter your search terms below.</p>
@@ -1131,7 +1264,7 @@ path based options in the primary configuration file only.</p>
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <table class="table">

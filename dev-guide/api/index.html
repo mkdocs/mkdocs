@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="auto">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,9 +10,13 @@
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>API Reference - MkDocs</title>
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../../css/brands.min.css" rel="stylesheet">
+        <link href="../../css/solid.min.css" rel="stylesheet">
+        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" disabled>
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -34,7 +38,7 @@
             <div class="container">
                 <a class="navbar-brand" href="../..">MkDocs</a>
                 <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -42,14 +46,14 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="../.." class="nav-link">Home</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="../../getting-started/" class="nav-link">Getting Started</a>
                             </li>
-                            <li class="dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">User Guide</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -89,8 +93,8 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="dropdown active">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Developer Guide</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -110,12 +114,12 @@
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active">API Reference</a>
+    <a href="./" class="dropdown-item active" aria-current="page">API Reference</a>
 </li>
                                 </ul>
                             </li>
-                            <li class="dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">About</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -133,9 +137,9 @@
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav ml-auto">
+                    <ul class="nav navbar-nav ms-md-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
@@ -150,45 +154,75 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/dev-guide/api.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/dev-guide/api.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                              <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
+                                <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                <span class="d-lg-none ms-2">Toggle theme</span>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                                    <i class="fa-solid fa-sun fa-fw"></i>
+                                    <span class="ms-2">Light</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+                                    <i class="fa-solid fa-moon fa-fw"></i>
+                                    <span class="ms-2">Dark</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="true">
+                                    <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                    <span class="ms-2">Auto</span>
+                                    <i class="fa-solid fa-check ms-auto"></i>
+                                  </button>
+                                </li>
+                              </ul>
                             </li>
                     </ul>
                 </div>
             </div>
         </div>
+        <script src="../../js/darkmode.js"></script>
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="1"><a href="#api-reference" class="nav-link">API reference</a>
+            <li class="nav-item" data-bs-level="1"><a href="#api-reference" class="nav-link">API reference</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-level="2"><a href="#mkdocs.structure.files.Files" class="nav-link">Files</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#mkdocs.structure.files.File" class="nav-link">File</a>
+            <li class="nav-item" data-bs-level="2"><a href="#mkdocs.structure.files.Files" class="nav-link">Files</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#mkdocs.config.base.Config" class="nav-link">Config</a>
+            <li class="nav-item" data-bs-level="2"><a href="#mkdocs.structure.files.File" class="nav-link">File</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#mkdocs.utils.templates.TemplateContext" class="nav-link">TemplateContext</a>
+            <li class="nav-item" data-bs-level="2"><a href="#mkdocs.config.base.Config" class="nav-link">Config</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#mkdocs.livereload.LiveReloadServer" class="nav-link">LiveReloadServer</a>
+            <li class="nav-item" data-bs-level="2"><a href="#mkdocs.utils.templates.TemplateContext" class="nav-link">TemplateContext</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#mkdocs.livereload.LiveReloadServer" class="nav-link">LiveReloadServer</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -262,7 +296,7 @@
 
 
 <h3 id="mkdocs.structure.files.Files.src_uris" class="doc doc-heading">
-          <code class="highlight language-python">src_uris: dict[str, File]</code>
+          <code class="highlight language-python">src_uris: Mapping[str, File]</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
@@ -335,7 +369,7 @@
 
   <div class="doc doc-contents ">
   
-      <p>Whether the file with this <code>src_uri</code> is in the collection.</p>
+      <p>Soft-deprecated, prefer <code>get_file_from_path(path) is not None</code>.</p>
 
   </div>
 
@@ -375,7 +409,7 @@
 
   <div class="doc doc-contents ">
   
-      <p>Append file to Files collection.</p>
+      <p>Add file to the Files collection.</p>
 
   </div>
 
@@ -565,14 +599,30 @@
 
   
       <p>A MkDocs File object.</p>
-<p>Points to the source and destination locations of a file.</p>
-<p>The <code>path</code> argument must be a path that exists relative to <code>src_dir</code>.</p>
-<p>The <code>src_dir</code> and <code>dest_dir</code> must be absolute paths on the local file system.</p>
-<p>The <code>use_directory_urls</code> argument controls how destination paths are generated. If <code>False</code>, a Markdown file is
-mapped to an HTML file of the same name (the file extension is changed to <code>.html</code>). If True, a Markdown file is
-mapped to an HTML index file (<code>index.html</code>) nested in a directory using the "name" of the file in <code>path</code>. The
-<code>use_directory_urls</code> argument has no effect on non-Markdown files.</p>
-<p>File objects have the following properties, which are Unicode strings:</p>
+<p>It represents how the contents of one file should be populated in the destination site.</p>
+<p>A file always has its <code>abs_dest_path</code> (obtained by joining <code>dest_dir</code> and <code>dest_path</code>),
+where the <code>dest_dir</code> is understood to be the <em>site</em> directory.</p>
+<p><code>content_bytes</code>/<code>content_string</code> (new in MkDocs 1.6) can always be used to obtain the file's
+content. But it may be backed by one of the two sources:</p>
+<ul>
+<li>
+<p>A physical source file at <code>abs_src_path</code> (by default obtained by joining <code>src_dir</code> and
+    <code>src_uri</code>). <code>src_dir</code> is understood to be the <em>docs</em> directory.</p>
+<p>Then <code>content_bytes</code>/<code>content_string</code> will read the file at <code>abs_src_path</code>.</p>
+<p><code>src_dir</code> <em>should</em> be populated for real files and should be <code>None</code> for generated files.</p>
+</li>
+<li>
+<p>Since MkDocs 1.6 a file may alternatively be stored in memory - <code>content_string</code>/<code>content_bytes</code>.</p>
+<p>Then <code>src_dir</code> and <code>abs_src_path</code> will remain <code>None</code>. <code>content_bytes</code>/<code>content_string</code> need
+to be written to, or populated through the <code>content</code> argument in the constructor.</p>
+<p>But <code>src_uri</code> is still populated for such files as well! The virtual file pretends as if it
+originated from that path in the <code>docs</code> directory, and other values are derived.</p>
+</li>
+</ul>
+<p>For static files the file is just copied to the destination, and <code>dest_uri</code> equals <code>src_uri</code>.</p>
+<p>For Markdown files (determined by the file extension in <code>src_uri</code>) the destination content
+will be the rendered content, and <code>dest_uri</code> will have the <code>.html</code> extension and some
+additional transformations to the path, based on <code>use_directory_urls</code>.</p>
 
 
   
@@ -603,6 +653,30 @@ mapped to an HTML index file (<code>index.html</code>) nested in a directory usi
   <div class="doc doc-contents ">
   
       <p>The pure path (always '/'-separated) of the source file relative to the source directory.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h3 id="mkdocs.structure.files.File.generated_by" class="doc doc-heading">
+          <code class="highlight language-python">generated_by: str | None = None</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.files.File.generated_by" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>If not None, indicates that a plugin generated this file on the fly.</p>
+<p>The value is the plugin's entrypoint name and can be used to find the plugin by key in the PluginCollection.</p>
   </div>
 
 </div>
@@ -659,19 +733,20 @@ mapped to an HTML index file (<code>index.html</code>) nested in a directory usi
 
 
 
-<h3 id="mkdocs.structure.files.File.dest_uri" class="doc doc-heading">
-          <code class="highlight language-python">dest_uri: str = dest_uri</code>
+<h3 id="mkdocs.structure.files.File.src_dir" class="doc doc-heading">
+          <code class="highlight language-python">src_dir: str | None = src_dir</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
-<a href="#mkdocs.structure.files.File.dest_uri" class="headerlink" title="Permanent link"></a></h3>
+<a href="#mkdocs.structure.files.File.src_dir" class="headerlink" title="Permanent link"></a></h3>
 
 
   <div class="doc doc-contents ">
   
-      <p>The pure path (always '/'-separated) of the destination file relative to the destination directory.</p>
+      <p>The OS path of the top-level directory that the source file originates from.</p>
+<p>Assumed to be the <em>docs_dir</em>; not populated for generated files.</p>
   </div>
 
 </div>
@@ -681,19 +756,19 @@ mapped to an HTML index file (<code>index.html</code>) nested in a directory usi
 
 
 
-<h3 id="mkdocs.structure.files.File.url" class="doc doc-heading">
-          <code class="highlight language-python">url: str = self._get_url(use_directory_urls)</code>
+<h3 id="mkdocs.structure.files.File.dest_dir" class="doc doc-heading">
+          <code class="highlight language-python">dest_dir: str = dest_dir</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
-<a href="#mkdocs.structure.files.File.url" class="headerlink" title="Permanent link"></a></h3>
+<a href="#mkdocs.structure.files.File.dest_dir" class="headerlink" title="Permanent link"></a></h3>
 
 
   <div class="doc doc-contents ">
   
-      <p>The URI of the destination file relative to the destination directory as a string.</p>
+      <p>The OS path of the destination directory (top-level site_dir) that the file should be copied to.</p>
   </div>
 
 </div>
@@ -703,41 +778,23 @@ mapped to an HTML index file (<code>index.html</code>) nested in a directory usi
 
 
 
-<h3 id="mkdocs.structure.files.File.abs_src_path" class="doc doc-heading">
-          <code class="highlight language-python">abs_src_path: str = os.path.normpath(os.path.join(src_dir, self.src_uri))</code>
+<h3 id="mkdocs.structure.files.File.use_directory_urls" class="doc doc-heading">
+          <code class="highlight language-python">use_directory_urls: bool = use_directory_urls</code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
-<a href="#mkdocs.structure.files.File.abs_src_path" class="headerlink" title="Permanent link"></a></h3>
+<a href="#mkdocs.structure.files.File.use_directory_urls" class="headerlink" title="Permanent link"></a></h3>
 
 
   <div class="doc doc-contents ">
   
-      <p>The absolute concrete path of the source file. Will use backslashes on Windows.</p>
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
-
-<h3 id="mkdocs.structure.files.File.abs_dest_path" class="doc doc-heading">
-          <code class="highlight language-python">abs_dest_path: str = os.path.normpath(os.path.join(dest_dir, self.dest_uri))</code>
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
-  </span>
-
-<a href="#mkdocs.structure.files.File.abs_dest_path" class="headerlink" title="Permanent link"></a></h3>
-
-
-  <div class="doc doc-contents ">
-  
-      <p>The absolute concrete path of the destination file. Will use backslashes on Windows.</p>
+      <p>Whether directory URLs ('foo/') should be used or not ('foo.html').</p>
+<p>If <code>False</code>, a Markdown file is mapped to an HTML file of the same name (the file extension is
+changed to <code>.html</code>). If True, a Markdown file is mapped to an HTML index file (<code>index.html</code>)
+nested in a directory using the "name" of the file in <code>path</code>. Non-Markdown files retain their
+original path.</p>
   </div>
 
 </div>
@@ -765,7 +822,220 @@ mapped to an HTML index file (<code>index.html</code>) nested in a directory usi
 
 </div>
 
+<div class="doc doc-object doc-attribute">
 
+
+
+
+<h3 id="mkdocs.structure.files.File.name" class="doc doc-heading">
+          <code class="highlight language-python">name = cached_property(_get_stem)</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.files.File.name" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Return the name of the file without its extension.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h3 id="mkdocs.structure.files.File.dest_uri" class="doc doc-heading">
+          <code class="highlight language-python">dest_uri = cached_property(_get_dest_path)</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.files.File.dest_uri" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The pure path (always '/'-separated) of the destination file relative to the destination directory.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h3 id="mkdocs.structure.files.File.url" class="doc doc-heading">
+          <code class="highlight language-python">url = cached_property(_get_url)</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#mkdocs.structure.files.File.url" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The URI of the destination file relative to the destination directory as a string.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h3 id="mkdocs.structure.files.File.abs_src_path" class="doc doc-heading">
+          <code class="highlight language-python">abs_src_path: str | None</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-cached"><code>cached</code></small>
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#mkdocs.structure.files.File.abs_src_path" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The absolute concrete path of the source file. Will use backslashes on Windows.</p>
+<p>Note: do not use this path to read the file, prefer <code>content_bytes</code>/<code>content_string</code>.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h3 id="mkdocs.structure.files.File.abs_dest_path" class="doc doc-heading">
+          <code class="highlight language-python">abs_dest_path: str</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-cached"><code>cached</code></small>
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#mkdocs.structure.files.File.abs_dest_path" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The absolute concrete path of the destination file. Will use backslashes on Windows.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h3 id="mkdocs.structure.files.File.content_bytes" class="doc doc-heading">
+          <code class="highlight language-python">content_bytes: bytes</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+      <small class="doc doc-label doc-label-writable"><code>writable</code></small>
+  </span>
+
+<a href="#mkdocs.structure.files.File.content_bytes" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Get the content of this file as a bytestring.</p>
+<p>May raise if backed by a real file (<code>abs_src_path</code>) if it cannot be read.</p>
+<p>If used as a setter, it defines the content of the file, and <code>abs_src_path</code> becomes unset.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h3 id="mkdocs.structure.files.File.content_string" class="doc doc-heading">
+          <code class="highlight language-python">content_string: str</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+      <small class="doc doc-label doc-label-writable"><code>writable</code></small>
+  </span>
+
+<a href="#mkdocs.structure.files.File.content_string" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Get the content of this file as a string. Assumes UTF-8 encoding, may raise.</p>
+<p>May also raise if backed by a real file (<code>abs_src_path</code>) if it cannot be read.</p>
+<p>If used as a setter, it defines the content of the file, and <code>abs_src_path</code> becomes unset.</p>
+  </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h3 id="mkdocs.structure.files.File.generated" class="doc doc-heading">
+          <code class="highlight language-python">generated(config: MkDocsConfig, src_uri: str, *, content: str | bytes | None = None, abs_src_path: str | None = None, inclusion: InclusionLevel = InclusionLevel.UNDEFINED) -&gt; File</code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+<a href="#mkdocs.structure.files.File.generated" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Create a virtual file, backed either by in-memory <code>content</code> or by a file at <code>abs_src_path</code>.</p>
+<p>It will pretend to be a file in the docs dir at <code>src_uri</code>.</p>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h3 id="mkdocs.structure.files.File.edit_uri" class="doc doc-heading">
+          <code class="highlight language-python">edit_uri() -&gt; str | None</code>
+
+<a href="#mkdocs.structure.files.File.edit_uri" class="headerlink" title="Permanent link"></a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>A path relative to the source repository to use for the "edit" button.</p>
+<p>Defaults to <code>src_uri</code> and can be overwritten.
+For generated files this should be set to <code>None</code>.</p>
+
+  </div>
+
+</div>
 
 
 <div class="doc doc-object doc-function">
@@ -1053,7 +1323,7 @@ default if it has one.</p>
 
   <div class="doc doc-contents first">
           <p class="doc doc-class-bases">
-            Bases: <code><span title="typing_extensions.TypedDict">TypedDict</span></code></p>
+            Bases: <code><span title="typing.TypedDict">TypedDict</span></code></p>
 
 
 
@@ -1294,7 +1564,7 @@ default if it has one.</p>
 
 
 <h3 id="mkdocs.livereload.LiveReloadServer.watch" class="doc doc-heading">
-          <code class="highlight language-python">watch(path: str, func: Callable[[], None] | None = None, recursive: bool = True) -&gt; None</code>
+          <code class="highlight language-python">watch(path: str, func: None = None, *, recursive: bool = True) -&gt; None</code>
 
 <a href="#mkdocs.livereload.LiveReloadServer.watch" class="headerlink" title="Permanent link"></a></h3>
 
@@ -1342,8 +1612,7 @@ default if it has one.</p>
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="../../js/jquery-3.6.0.min.js"></script>
-        <script src="../../js/bootstrap.min.js"></script>
+        <script src="../../js/bootstrap.bundle.min.js"></script>
         <script>
             var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
@@ -1356,7 +1625,7 @@ default if it has one.</p>
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>From here you can search these documents. Enter your search terms below.</p>
@@ -1376,7 +1645,7 @@ default if it has one.</p>
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <table class="table">
