@@ -156,11 +156,11 @@
                             <li class="nav-item">
                                 <a href="{{ config.repo_url }}" class="nav-link">
                                     {%- if config.repo_name == 'GitHub' -%}
-                                        <i class="fa fa-github"></i> {{ config.repo_name }}
+                                        <i class="fa-brands fa-github"></i> {{ config.repo_name }}
                                     {%- elif config.repo_name == 'Bitbucket' -%}
-                                        <i class="fa fa-bitbucket"></i> {{ config.repo_name }}
+                                        <i class="fa-brands fa-bitbucket"></i> {{ config.repo_name }}
                                     {%- elif config.repo_name == 'GitLab' -%}
-                                        <i class="fa fa-gitlab"></i> {{ config.repo_name }}
+                                        <i class="fa-brands fa-gitlab"></i> {{ config.repo_name }}
                                     {%- else -%}
                                     {{ config.repo_name }}
                                     {%- endif -%}
