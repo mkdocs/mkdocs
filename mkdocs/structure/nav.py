@@ -67,7 +67,8 @@ class Section(StructureItem):
 
     @property
     def title(self) -> str | None:
-        """The title of the section.
+        """
+        The title of the section.
 
         If no navigation is configured in the mkdocs configuration,
         but there is an index page in the section, the title
