@@ -2,12 +2,14 @@ from __future__ import annotations
 
 import logging
 import os
-from typing import Sequence
+from typing import TYPE_CHECKING, Sequence
 
-import jinja2
 from jinja2.ext import Extension, InternationalizationExtension
 
 from mkdocs.config.base import ValidationError
+
+if TYPE_CHECKING:
+    import jinja2
 
 try:
     from babel.core import Locale, UnknownLocaleError
@@ -15,7 +17,7 @@ try:
 
     has_babel = True
 except ImportError:  # pragma: no cover
-    from mkdocs.utils.babel_stub import Locale, UnknownLocaleError
+    from mkdocs.utils.babel_stub import Locale, UnknownLocaleError  # type: ignore
 
     has_babel = False
 
@@ -37,7 +39,7 @@ def parse_locale(locale: str) -> Locale:
     try:
         return Locale.parse(locale, sep='_')
     except (ValueError, UnknownLocaleError, TypeError) as e:
-        raise ValidationError(f'Invalid value for locale: {str(e)}')
+        raise ValidationError(f'Invalid value for locale: {e}')
 
 
 def install_translations(
@@ -47,9 +49,9 @@ def install_translations(
         env.add_extension('jinja2.ext.i18n')
         translations = _get_merged_translations(theme_dirs, 'locales', locale)
         if translations is not None:
-            env.install_gettext_translations(translations)
+            env.install_gettext_translations(translations)  # type: ignore[attr-defined]
         else:
-            env.install_null_translations()
+            env.install_null_translations()  # type: ignore[attr-defined]
             if locale.language != 'en':
                 log.warning(
                     f"No translations could be found for the locale '{locale}'. "
@@ -58,7 +60,7 @@ def install_translations(
     else:  # pragma: no cover
         # no babel installed, add dummy support for trans/endtrans blocks
         env.add_extension(NoBabelExtension)
-        env.install_null_translations()
+        env.install_null_translations()  # type: ignore[attr-defined]
 
 
 def _get_merged_translations(
@@ -78,6 +80,8 @@ def _get_merged_translations(
         if type(translations) is NullTranslations:
             log.debug(f"No translations found here: '{dirname}'")
             continue
+        if TYPE_CHECKING:
+            assert isinstance(translations, Translations)
 
         log.debug(f"Translations found here: '{dirname}'")
         if merged_translations is None:

@@ -1,1 +1,1 @@
-from .templates import url_filter  # noqa - legacy re-export
+from .templates import url_filter  # noqa: F401 - legacy re-export

@@ -245,7 +245,6 @@ used options include:
 * [config.repo_url](../user-guide/configuration.md#repo_url)
 * [config.repo_name](../user-guide/configuration.md#repo_name)
 * [config.copyright](../user-guide/configuration.md#copyright)
-* [config.google_analytics](../user-guide/configuration.md#google_analytics)
 
 #### nav
 
@@ -1038,7 +1037,7 @@ WARNING:
 As **[pybabel] is not installed by default** and most users will not have
 pybabel installed, theme developers and/or translators should make sure to
 have installed the necessary dependencies
-(using `pip install mkdocs[i18n]`) in order for the commands to be
+(using `pip install 'mkdocs[i18n]'`) in order for the commands to be
 available for use.
 
 The translation commands should be called from the root of your theme's working tree.

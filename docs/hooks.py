@@ -1,9 +1,12 @@
-import os.path
+from __future__ import annotations
+
 import re
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-from mkdocs.config.defaults import MkDocsConfig
-from mkdocs.structure.nav import Page
+if TYPE_CHECKING:
+    from mkdocs.config.defaults import MkDocsConfig
+    from mkdocs.structure.nav import Page
 
 
 def _get_language_of_translation_file(path: Path) -> str:
@@ -14,7 +17,7 @@ def _get_language_of_translation_file(path: Path) -> str:
     return m[1]
 
 
-def on_page_markdown(markdown: str, page: Page, config: MkDocsConfig, **kwargs):
+def on_page_markdown(markdown: str, page: Page, config: MkDocsConfig, **kwargs) -> str | None:
     if page.file.src_uri == 'user-guide/choosing-your-theme.md':
         here = Path(config.config_file_path).parent
 

@@ -21,19 +21,47 @@ theme:
 The default theme, which was built as a custom [Bootstrap] theme, supports almost
 every feature of MkDocs.
 
-![mkdocs](../img/mkdocs.png)
+<div id="mkdocs-theme-images" class="carousel slide carousel-fade" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="../../img/mkdocs_theme_light_mode.png" class="d-block w-100" alt="MkDocs theme in light mode">
+    </div>
+    <div class="carousel-item">
+      <img src="../../img/mkdocs_theme_dark_mode.png" class="d-block w-100" alt="MkDocs theme in dark mode">
+    </div>
+  </div>
+</div>
 
 In addition to the default [theme configuration options][theme], the `mkdocs` theme
 supports the following options:
 
-*   __`highlightjs`__: Enables highlighting of source code in code blocks using
+*   **`color_mode`**: Set the default color mode for the theme to one of `light`,
+    `dark`, or `auto`. The `auto` mode will switch to `light` or `dark` based on
+    the system configuration of the user's device. Default: `light`.
+
+*   **`user_color_mode_toggle`**: Enable a toggle menu in the navigation bar
+    which allows users to select their preferred `color_mode` (light, dark, auto)
+    from within the browser and save their preference for future page loads. The
+    default selection of the toggle menu on first page load is the value set to
+    `color_mode`. Default: `false`.
+
+    ![color mode toggle menu](../img/color_mode_toggle_menu.png)
+
+*   **`nav_style`**: Adjust the visual style of the top navigation bar. Set to
+    one of `primary`, `dark` or `light`. Default: `primary`. This option is
+    independent of the `color_mode` option and must be defined separately.
+
+*   **`highlightjs`**: Enables highlighting of source code in code blocks using
     the [highlight.js] JavaScript library. Default: `True`.
 
-*   __`hljs_style`__: The highlight.js library provides 79 different [styles]
+*   **`hljs_style`**: The highlight.js library provides many different [styles]
     (color variations) for highlighting source code in code blocks. Set this to
-    the name of the desired style. Default: `github`.
+    the name of the desired style when in `light` mode. Default: `github`.
 
-*   __`hljs_languages`__: By default, highlight.js only supports 23 common
+*   **`hljs_style_dark`**: Set this to the name of the desired highlight.js
+    style when in `dark` mode. Default: `github_dark`.
+
+*   **`hljs_languages`**: By default, highlight.js only supports 23 common
     languages. List additional languages here to include support for them.
 
     ```yaml
@@ -45,10 +73,10 @@ supports the following options:
         - rust
     ```
 
-*   __`analytics`__: Defines configuration options for an analytics service.
+*   **`analytics`**: Defines configuration options for an analytics service.
     Currently, only Google Analytics v4 is supported via the `gtag` option.
 
-    *   __`gtag`__: To enable Google Analytics, set to a Google Analytics v4
+    *   **`gtag`**: To enable Google Analytics, set to a Google Analytics v4
     tracking ID, which uses the `G-` format. See Google's documentation to
     [Set up Analytics for a website and/or app (GA4)][setup-GA4] or to
     [Upgrade to a Google Analytics 4 property][upgrade-GA4].
@@ -63,7 +91,7 @@ supports the following options:
         When set to the default (`null`) Google Analytics is disabled for the
         site.
 
-*   __`shortcuts`__: Defines keyboard shortcut keys.
+*   **`shortcuts`**: Defines keyboard shortcut keys.
 
     ```yaml
     theme:
@@ -79,29 +107,19 @@ supports the following options:
     available on all keyboards. You may use <https://keycode.info/> to determine
     the key code for a given key.
 
-    *   __`help`__: Display a help modal that lists the keyboard shortcuts.
+    *   **`help`**: Display a help modal that lists the keyboard shortcuts.
         Default: `191` (&quest;)
 
-    *   __`next`__: Navigate to the "next" page. Default: `78` (n)
+    *   **`next`**: Navigate to the "next" page. Default: `78` (n)
 
-    *   __`previous`__: Navigate to the "previous" page. Default: `80` (p)
+    *   **`previous`**: Navigate to the "previous" page. Default: `80` (p)
 
-    *   __`search`__: Display the search modal. Default: `83` (s)
+    *   **`search`**: Display the search modal. Default: `83` (s)
 
-*   __`navigation_depth`__: The maximum depth of the navigation tree in the
+*   **`navigation_depth`**: The maximum depth of the navigation tree in the
     sidebar. Default: `2`.
 
-*   __`nav_style`__: This adjusts the visual style for the top navigation bar; by
-    default, this is set to `primary` (the default), but it can also be set to
-    `dark` or `light`.
-
-    ```yaml
-    theme:
-      name: mkdocs
-      nav_style: dark
-    ```
-
-*   __`locale`__{ #mkdocs-locale }: The locale (language/location) used to
+*   **`locale`**{ #mkdocs-locale }: The locale (language/location) used to
     build the theme. If your locale is not yet supported, it will fall back
     to the default.
 
@@ -123,10 +141,10 @@ two levels of navigation are supported.
 In addition to the default [theme configuration options][theme], the `readthedocs`
 theme supports the following options:
 
-*   __`highlightjs`__: Enables highlighting of source code in code blocks using
+*   **`highlightjs`**: Enables highlighting of source code in code blocks using
     the [highlight.js] JavaScript library. Default: `True`.
 
-*   __`hljs_languages`__: By default, highlight.js only supports 23 common
+*   **`hljs_languages`**: By default, highlight.js only supports 23 common
     languages. List additional languages here to include support for them.
 
     ```yaml
@@ -138,9 +156,9 @@ theme supports the following options:
         - rust
     ```
 
-*   __`analytics`__: Defines configuration options for an analytics service.
+*   **`analytics`**: Defines configuration options for an analytics service.
 
-    *   __`gtag`__: To enable Google Analytics, set to a Google Analytics v4
+    *   **`gtag`**: To enable Google Analytics, set to a Google Analytics v4
     tracking ID, which uses the `G-` format. See Google's documentation to
     [Set up Analytics for a website and/or app (GA4)][setup-GA4] or to
     [Upgrade to a Google Analytics 4 property][upgrade-GA4].
@@ -154,31 +172,31 @@ theme supports the following options:
 
         When set to the default (`null`) Google Analytics is disabled for the
 
-    *   __`anonymize_ip`__: To enable anonymous IP address for Google Analytics,
+    *   **`anonymize_ip`**: To enable anonymous IP address for Google Analytics,
         set this to `True`. Default: `False`.
 
-*   __`include_homepage_in_sidebar`__: Lists the homepage in the sidebar menu. As
+*   **`include_homepage_in_sidebar`**: Lists the homepage in the sidebar menu. As
     MkDocs requires that the homepage be listed in the `nav` configuration
     option, this setting allows the homepage to be included or excluded from
     the sidebar. Note that the site name/logo always links to the homepage.
     Default: `True`.
 
-*   __`prev_next_buttons_location`__: One of `bottom`, `top`, `both` , or `none`.
+*   **`prev_next_buttons_location`**: One of `bottom`, `top`, `both` , or `none`.
     Displays the “Next” and “Previous” buttons accordingly. Default: `bottom`.
 
-*   __`navigation_depth`__: The maximum depth of the navigation tree in the
+*   **`navigation_depth`**: The maximum depth of the navigation tree in the
     sidebar. Default: `4`.
 
-*   __`collapse_navigation`__: Only include the page section headers in the
+*   **`collapse_navigation`**: Only include the page section headers in the
     sidebar for the current page. Default: `True`.
 
-*   __`titles_only`__: Only include page titles in the sidebar, excluding all
+*   **`titles_only`**: Only include page titles in the sidebar, excluding all
     section headers for all pages. Default: `False`.
 
-*   __`sticky_navigation`__: If True, causes the sidebar to scroll with the main
+*   **`sticky_navigation`**: If True, causes the sidebar to scroll with the main
     page content as you scroll the page. Default: `True`.
 
-*   __`locale`__{ #readthedocs-locale }: The locale (language/location) used to
+*   **`locale`**{ #readthedocs-locale }: The locale (language/location) used to
     build the theme. If your locale is not yet supported, it will fall back
     to the default.
 
@@ -189,12 +207,14 @@ theme supports the following options:
 
     See the guide on [localizing your theme] for more information.
 
-*   __`logo`__: To set a logo on your project instead of the plain text
+*   **`logo`**: To set a logo on your project instead of the plain text
     `site_name`, set this variable to be the location of your image. Default: `null`.
 
 ## Third Party Themes
 
 A list of third party themes can be found at the [community wiki] page and [the ranked catalog][catalog]. If you have created your own, please add them there.
+
+WARNING: Installing an MkDocs theme means installing a Python package and executing any code that the author has put in there. So, exercise the usual caution; there's no attempt at sandboxing.
 
 [third party themes]: #third-party-themes
 [theme]: configuration.md#theme

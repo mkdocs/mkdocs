@@ -3,7 +3,7 @@
 import sys
 import unittest
 
-from mkdocs.structure.files import File, Files
+from mkdocs.structure.files import File, Files, set_exclusions
 from mkdocs.structure.nav import Section, _get_by_type, get_navigation
 from mkdocs.structure.pages import Page
 from mkdocs.tests.base import dedent, load_config
@@ -131,6 +131,44 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual(len(site_navigation.items), 3)
         self.assertEqual(len(site_navigation.pages), 1)
 
+    def test_nav_absolute_links_with_validation(self):
+        nav_cfg = [
+            {'Home': 'index.md'},
+            {'Local page': '/foo/bar.md'},
+            {'Local link': '/local.md'},
+            {'External': 'http://example.com/external.html'},
+        ]
+        expected = dedent(
+            """
+            Page(title='Home', url='/')
+            Page(title='Local page', url='/foo/bar/')
+            Link(title='Local link', url='/local.md')
+            Link(title='External', url='http://example.com/external.html')
+            """
+        )
+        cfg = load_config(
+            nav=nav_cfg,
+            site_url='http://example.com/',
+            validation=dict(nav=dict(absolute_links='relative_to_docs')),
+        )
+        fs = [
+            File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
+            File('foo/bar.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
+        ]
+        files = Files(fs)
+        with self.assertLogs('mkdocs', level='DEBUG') as cm:
+            site_navigation = get_navigation(files, cfg)
+        self.assertEqual(
+            cm.output,
+            [
+                "WARNING:mkdocs.structure.nav:A reference to '/local.md' is included in the 'nav' configuration, which is not found in the documentation files.",
+                "DEBUG:mkdocs.structure.nav:An external link to 'http://example.com/external.html' is included in the 'nav' configuration.",
+            ],
+        )
+        self.assertEqual(str(site_navigation).strip(), expected)
+        self.assertEqual(len(site_navigation.items), 4)
+        self.assertEqual(len(site_navigation.pages), 2)
+
     def test_nav_bad_links(self):
         nav_cfg = [
             {'Home': 'index.md'},
@@ -152,8 +190,8 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual(
             cm.output,
             [
-                "WARNING:mkdocs.structure.nav:A relative path to 'missing.html' is included in the 'nav' configuration, which is not found in the documentation files.",
-                "WARNING:mkdocs.structure.nav:A relative path to 'example.com' is included in the 'nav' configuration, which is not found in the documentation files.",
+                "WARNING:mkdocs.structure.nav:A reference to 'missing.html' is included in the 'nav' configuration, which is not found in the documentation files.",
+                "WARNING:mkdocs.structure.nav:A reference to 'example.com' is included in the 'nav' configuration, which is not found in the documentation files.",
             ],
         )
         self.assertEqual(str(site_navigation).strip(), expected)
@@ -377,6 +415,63 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual(len(site_navigation.items), 3)
         self.assertEqual(len(site_navigation.pages), 7)
         self.assertEqual(repr(site_navigation.homepage), "Page(title=[blank], url='/')")
+
+    def test_nav_with_exclusion(self):
+        expected = dedent(
+            """
+            Page(title=[blank], url='index.html')
+            Section(title='About')
+                Page(title=[blank], url='about/license.html')
+                Page(title=[blank], url='about/release-notes.html')
+            Section(title='Api guide')
+                Page(title=[blank], url='api-guide/running.html')
+                Page(title=[blank], url='api-guide/testing.html')
+            """
+        )
+        cfg = load_config(use_directory_urls=False, not_in_nav='*ging.md\n/foo.md\n')
+        fs = [
+            'index.md',
+            'foo.md',
+            'about/license.md',
+            'about/release-notes.md',
+            'api-guide/debugging.md',
+            'api-guide/running.md',
+            'api-guide/testing.md',
+        ]
+        files = Files([File(s, cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls) for s in fs])
+        set_exclusions(files, cfg)
+        site_navigation = get_navigation(files, cfg)
+        self.assertEqual(str(site_navigation).strip(), expected)
+        self.assertEqual(len(site_navigation.items), 3)
+        self.assertEqual(len(site_navigation.pages), 5)
+
+    def test_nav_page_subclass(self):
+        class PageSubclass(Page):
+            pass
+
+        nav_cfg = [
+            {'Home': 'index.md'},
+            {'About': 'about.md'},
+        ]
+        expected = dedent(
+            """
+            PageSubclass(title=[blank], url='/')
+            PageSubclass(title=[blank], url='/about/')
+            """
+        )
+        cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
+        fs = [
+            File(list(item.values())[0], cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
+            for item in nav_cfg
+        ]
+        files = Files(fs)
+        for file in files:
+            PageSubclass(None, file, cfg)
+        site_navigation = get_navigation(files, cfg)
+        self.assertEqual(str(site_navigation).strip(), expected)
+        self.assertEqual(len(site_navigation.items), 2)
+        self.assertEqual(len(site_navigation.pages), 2)
+        self.assertEqual(repr(site_navigation.homepage), "PageSubclass(title=[blank], url='/')")
 
     def test_active(self):
         nav_cfg = [

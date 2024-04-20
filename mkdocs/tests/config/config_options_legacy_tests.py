@@ -9,7 +9,7 @@ import sys
 import textwrap
 import unittest
 from typing import Any
-from unittest.mock import patch
+from unittest import mock
 
 import mkdocs
 from mkdocs.config import base
@@ -901,7 +901,6 @@ class SiteDirTest(TestCase):
 
     def test_common_prefix(self):
         """Legitimate settings with common prefixes should not fail validation."""
-
         test_configs = (
             {'docs_dir': 'docs', 'site_dir': 'docs-site'},
             {'docs_dir': 'site-docs', 'site_dir': 'site'},
@@ -1200,7 +1199,7 @@ class SubConfigTest(TestCase):
                     self.get_config(Schema, {'option': val})
 
     def test_subconfig_ignored(self):
-        """Default behaviour of subconfig: validation is ignored"""
+        """Default behaviour of subconfig: validation is ignored."""
 
         # Nominal
         class Schema1:
@@ -1263,8 +1262,7 @@ class SubConfigTest(TestCase):
         self.assertEqual(conf['option'], {'cc': 'foo'})
 
     def test_config_file_path_pass_through(self):
-        """Necessary to ensure FilesystemObject validates the correct path"""
-
+        """Necessary to ensure FilesystemObject validates the correct path."""
         passed_config_path = None
 
         class SubType(c.BaseConfigOption):
@@ -1366,8 +1364,8 @@ class ConfigItemsTest(TestCase):
 
 
 class MarkdownExtensionsTest(TestCase):
-    @patch('markdown.Markdown')
-    def test_simple_list(self, mock_md):
+    @mock.patch('markdown.Markdown', mock.Mock())
+    def test_simple_list(self):
         class Schema:
             markdown_extensions = c.MarkdownExtensions()
             mdx_configs = c.Private()
@@ -1379,8 +1377,8 @@ class MarkdownExtensionsTest(TestCase):
         self.assertEqual(conf['markdown_extensions'], ['foo', 'bar'])
         self.assertEqual(conf['mdx_configs'], {})
 
-    @patch('markdown.Markdown')
-    def test_list_dicts(self, mock_md):
+    @mock.patch('markdown.Markdown', mock.Mock())
+    def test_list_dicts(self):
         class Schema:
             markdown_extensions = c.MarkdownExtensions()
             mdx_configs = c.Private()
@@ -1402,8 +1400,8 @@ class MarkdownExtensionsTest(TestCase):
             },
         )
 
-    @patch('markdown.Markdown')
-    def test_mixed_list(self, mock_md):
+    @mock.patch('markdown.Markdown', mock.Mock())
+    def test_mixed_list(self):
         class Schema:
             markdown_extensions = c.MarkdownExtensions()
             mdx_configs = c.Private()
@@ -1423,8 +1421,8 @@ class MarkdownExtensionsTest(TestCase):
             },
         )
 
-    @patch('markdown.Markdown')
-    def test_dict_of_dicts(self, mock_md):
+    @mock.patch('markdown.Markdown', mock.Mock())
+    def test_dict_of_dicts(self):
         class Schema:
             markdown_extensions = c.MarkdownExtensions()
             mdx_configs = c.Private()
@@ -1446,8 +1444,8 @@ class MarkdownExtensionsTest(TestCase):
             },
         )
 
-    @patch('markdown.Markdown')
-    def test_builtins(self, mock_md):
+    @mock.patch('markdown.Markdown', mock.Mock())
+    def test_builtins(self):
         class Schema:
             markdown_extensions = c.MarkdownExtensions(builtins=['meta', 'toc'])
             mdx_configs = c.Private()
@@ -1485,8 +1483,8 @@ class MarkdownExtensionsTest(TestCase):
         self.assertEqual(conf['markdown_extensions'], ['meta', 'toc'])
         self.assertEqual(conf['mdx_configs'], {'toc': {'permalink': True}})
 
-    @patch('markdown.Markdown')
-    def test_configkey(self, mock_md):
+    @mock.patch('markdown.Markdown', mock.Mock())
+    def test_configkey(self):
         class Schema:
             markdown_extensions = c.MarkdownExtensions(configkey='bar')
             bar = c.Private()
@@ -1526,16 +1524,16 @@ class MarkdownExtensionsTest(TestCase):
         self.assertEqual(conf['markdown_extensions'], [])
         self.assertEqual(conf['mdx_configs'], {})
 
-    @patch('markdown.Markdown')
-    def test_not_list(self, mock_md):
+    @mock.patch('markdown.Markdown', mock.Mock())
+    def test_not_list(self):
         class Schema:
             option = c.MarkdownExtensions()
 
         with self.expect_error(option="Invalid Markdown Extensions configuration"):
             self.get_config(Schema, {'option': 'not a list'})
 
-    @patch('markdown.Markdown')
-    def test_invalid_config_option(self, mock_md):
+    @mock.patch('markdown.Markdown', mock.Mock())
+    def test_invalid_config_option(self):
         class Schema:
             markdown_extensions = c.MarkdownExtensions()
 
@@ -1549,8 +1547,8 @@ class MarkdownExtensionsTest(TestCase):
         ):
             self.get_config(Schema, config)
 
-    @patch('markdown.Markdown')
-    def test_invalid_config_item(self, mock_md):
+    @mock.patch('markdown.Markdown', mock.Mock())
+    def test_invalid_config_item(self):
         class Schema:
             markdown_extensions = c.MarkdownExtensions()
 
@@ -1562,8 +1560,8 @@ class MarkdownExtensionsTest(TestCase):
         with self.expect_error(markdown_extensions="Invalid Markdown Extensions configuration"):
             self.get_config(Schema, config)
 
-    @patch('markdown.Markdown')
-    def test_invalid_dict_item(self, mock_md):
+    @mock.patch('markdown.Markdown', mock.Mock())
+    def test_invalid_dict_item(self):
         class Schema:
             markdown_extensions = c.MarkdownExtensions()
 

@@ -4,8 +4,10 @@ import logging
 from typing import TYPE_CHECKING, Iterator, TypeVar
 from urllib.parse import urlsplit
 
+from mkdocs.exceptions import BuildError
 from mkdocs.structure import StructureItem
-from mkdocs.structure.pages import Page
+from mkdocs.structure.files import file_sort_key
+from mkdocs.structure.pages import Page, _AbsoluteLinksValidationValue
 from mkdocs.utils import nest_paths
 
 if TYPE_CHECKING:
@@ -154,7 +156,10 @@ class Link(StructureItem):
 def get_navigation(files: Files, config: MkDocsConfig) -> Navigation:
     """Build site navigation from config and files."""
     documentation_pages = files.documentation_pages()
-    nav_config = config['nav'] or nest_paths(f.src_uri for f in documentation_pages)
+    nav_config = config['nav']
+    if nav_config is None:
+        documentation_pages = sorted(documentation_pages, key=file_sort_key)
+        nav_config = nest_paths(f.src_uri for f in documentation_pages if f.inclusion.is_in_nav())
     items = _data_to_navigation(nav_config, files, config)
     if not isinstance(items, list):
         items = [items]
@@ -187,7 +192,11 @@ def get_navigation(files: Files, config: MkDocsConfig) -> Navigation:
         scheme, netloc, path, query, fragment = urlsplit(link.url)
         if scheme or netloc:
             log.debug(f"An external link to '{link.url}' is included in the 'nav' configuration.")
-        elif link.url.startswith('/'):
+        elif (
+            link.url.startswith('/')
+            and config.validation.nav.absolute_links
+            is not _AbsoluteLinksValidationValue.RELATIVE_TO_DOCS
+        ):
             log.log(
                 config.validation.nav.absolute_links,
                 f"An absolute path to '{link.url}' is included in the 'nav' "
@@ -196,7 +205,7 @@ def get_navigation(files: Files, config: MkDocsConfig) -> Navigation:
         else:
             log.log(
                 config.validation.nav.not_found,
-                f"A relative path to '{link.url}' is included in the 'nav' "
+                f"A reference to '{link.url}' is included in the 'nav' "
                 "configuration, which is not found in the documentation files.",
             )
     return Navigation(items, pages)
@@ -220,14 +229,24 @@ def _data_to_navigation(data, files: Files, config: MkDocsConfig):
             for item in data
         ]
     title, path = data if isinstance(data, tuple) else (None, data)
-    file = files.get_file_from_path(path)
-    if file:
+    lookup_path = path
+    if (
+        lookup_path.startswith('/')
+        and config.validation.nav.absolute_links is _AbsoluteLinksValidationValue.RELATIVE_TO_DOCS
+    ):
+        lookup_path = lookup_path.lstrip('/')
+    if file := files.get_file_from_path(lookup_path):
         if file.inclusion.is_excluded():
             log.log(
                 min(logging.INFO, config.validation.nav.not_found),
                 f"A reference to '{file.src_path}' is included in the 'nav' "
                 "configuration, but this file is excluded from the built site.",
             )
+        page = file.page
+        if page is not None:
+            if not isinstance(page, Page):
+                raise BuildError("A plugin has set File.page to a type other than Page.")
+            return page
         return Page(title, file, config)
     return Link(title, path)
 

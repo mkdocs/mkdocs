@@ -18,7 +18,7 @@ import threading
 import time
 import traceback
 import urllib.parse
-import warnings
+import webbrowser
 import wsgiref.simple_server
 import wsgiref.util
 from typing import Any, BinaryIO, Callable, Iterable
@@ -28,21 +28,44 @@ import watchdog.observers.polling
 
 _SCRIPT_TEMPLATE_STR = """
 var livereload = function(epoch, requestId) {
-    var req = new XMLHttpRequest();
-    req.onloadend = function() {
-        if (parseFloat(this.responseText) > epoch) {
-            location.reload();
-            return;
+    var req, timeout;
+
+    var poll = function() {
+        req = new XMLHttpRequest();
+        req.onloadend = function() {
+            if (parseFloat(this.responseText) > epoch) {
+                location.reload();
+            } else {
+                timeout = setTimeout(poll, this.status === 200 ? 0 : 3000);
+            }
+        };
+        req.open("GET", "/livereload/" + epoch + "/" + requestId);
+        req.send();
+    }
+
+    var stop = function() {
+        if (req) {
+            req.abort();
         }
-        var launchNext = livereload.bind(this, epoch, requestId);
-        if (this.status === 200) {
-            launchNext();
-        } else {
-            setTimeout(launchNext, 3000);
+        if (timeout) {
+            clearTimeout(timeout);
         }
+        req = timeout = undefined;
     };
-    req.open("GET", "/livereload/" + epoch + "/" + requestId);
-    req.send();
+
+    window.addEventListener("load", function() {
+        if (document.visibilityState === "visible") {
+            poll();
+        }
+    });
+    window.addEventListener("visibilitychange", function() {
+        if (document.visibilityState === "visible") {
+            poll();
+        } else {
+            stop();
+        }
+    });
+    window.addEventListener("beforeunload", stop);
 
     console.log('Enabled live reload');
 }
@@ -57,6 +80,15 @@ class _LoggerAdapter(logging.LoggerAdapter):
 
 
 log = _LoggerAdapter(logging.getLogger(__name__), {})
+
+
+def _normalize_mount_path(mount_path: str) -> str:
+    """Ensure the mount path starts and ends with a slash."""
+    return ("/" + mount_path.lstrip("/")).rstrip("/") + "/"
+
+
+def _serve_url(host: str, port: int, path: str) -> str:
+    return f"http://{host}:{port}{_normalize_mount_path(path)}"
 
 
 class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGIServer):
@@ -74,16 +106,14 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         shutdown_delay: float = 0.25,
     ) -> None:
         self.builder = builder
-        self.server_name = host
-        self.server_port = port
         try:
             if isinstance(ipaddress.ip_address(host), ipaddress.IPv6Address):
                 self.address_family = socket.AF_INET6
         except Exception:
             pass
         self.root = os.path.abspath(root)
-        self.mount_path = ("/" + mount_path.lstrip("/")).rstrip("/") + "/"
-        self.url = f"http://{self.server_name}:{self.server_port}{self.mount_path}"
+        self.mount_path = _normalize_mount_path(mount_path)
+        self.url = _serve_url(host, port, mount_path)
         self.build_delay = 0.1
         self.shutdown_delay = shutdown_delay
         # To allow custom error pages.
@@ -96,10 +126,8 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         self._visible_epoch = self._wanted_epoch  # Latest fully built version of the site.
         self._epoch_cond = threading.Condition()  # Must be held when accessing _visible_epoch.
 
-        self._to_rebuild: dict[
-            Callable[[], None], bool
-        ] = {}  # Used as an ordered set of functions to call.
-        self._rebuild_cond = threading.Condition()  # Must be held when accessing _to_rebuild.
+        self._want_rebuild: bool = False
+        self._rebuild_cond = threading.Condition()  # Must be held when accessing _want_rebuild.
 
         self._shutdown = False
         self.serve_thread = threading.Thread(target=lambda: self.serve_forever(shutdown_delay))
@@ -108,21 +136,11 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         self._watched_paths: dict[str, int] = {}
         self._watch_refs: dict[str, Any] = {}
 
-    def watch(
-        self, path: str, func: Callable[[], None] | None = None, recursive: bool = True
-    ) -> None:
+    def watch(self, path: str, func: None = None, *, recursive: bool = True) -> None:
         """Add the 'path' to watched paths, call the function and reload when any file changes under it."""
         path = os.path.abspath(path)
-        if func is None or func is self.builder:
-            funct = self.builder
-        else:
-            funct = func
-            warnings.warn(
-                "Plugins should not pass the 'func' parameter of watch(). "
-                "The ability to execute custom callbacks will be removed soon.",
-                DeprecationWarning,
-                stacklevel=2,
-            )
+        if not (func is None or func is self.builder):  # type: ignore[unreachable]
+            raise TypeError("Plugins can no longer pass a 'func' parameter to watch().")
 
         if path in self._watched_paths:
             self._watched_paths[path] += 1
@@ -134,7 +152,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 return
             log.debug(str(event))
             with self._rebuild_cond:
-                self._to_rebuild[funct] = True
+                self._want_rebuild = True
                 self._rebuild_cond.notify_all()
 
         handler = watchdog.events.FileSystemEventHandler()
@@ -151,7 +169,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
             self._watched_paths.pop(path)
             self.observer.unschedule(self._watch_refs.pop(path))
 
-    def serve(self):
+    def serve(self, *, open_in_browser=False):
         self.server_bind()
         self.server_activate()
 
@@ -161,8 +179,13 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
             paths_str = ", ".join(f"'{_try_relativize_path(path)}'" for path in self._watched_paths)
             log.info(f"Watching paths for changes: {paths_str}")
 
-        log.info(f"Serving on {self.url}")
+        if open_in_browser:
+            log.info(f"Serving on {self.url} and opening it in a browser")
+        else:
+            log.info(f"Serving on {self.url}")
         self.serve_thread.start()
+        if open_in_browser:
+            webbrowser.open(self.url)
 
         self._build_loop()
 
@@ -170,7 +193,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         while True:
             with self._rebuild_cond:
                 while not self._rebuild_cond.wait_for(
-                    lambda: self._to_rebuild or self._shutdown, timeout=self.shutdown_delay
+                    lambda: self._want_rebuild or self._shutdown, timeout=self.shutdown_delay
                 ):
                     # We could have used just one wait instead of a loop + timeout, but we need
                     # occasional breaks, otherwise on Windows we can't receive KeyboardInterrupt.
@@ -182,15 +205,13 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                     log.debug("Waiting for file changes to stop happening")
 
                 self._wanted_epoch = _timestamp()
-                funcs = list(self._to_rebuild)
-                self._to_rebuild.clear()
+                self._want_rebuild = False
 
             try:
-                for func in funcs:
-                    func()
+                self.builder()
             except Exception as e:
                 if isinstance(e, SystemExit):
-                    print(e, file=sys.stderr)
+                    print(e, file=sys.stderr)  # noqa: T201
                 else:
                     traceback.print_exc()
                 log.error(
@@ -246,8 +267,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         path = environ["PATH_INFO"].encode("latin-1").decode("utf-8", "ignore")
 
         if path.startswith("/livereload/"):
-            m = re.fullmatch(r"/livereload/([0-9]+)/[0-9]+", path)
-            if m:
+            if m := re.fullmatch(r"/livereload/([0-9]+)/[0-9]+", path):
                 epoch = int(m[1])
                 start_response("200 OK", [("Content-Type", "text/plain")])
 
@@ -319,7 +339,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         )
 
     @classmethod
-    @functools.lru_cache()  # "Cache" to not repeat the same message for the same browser tab.
+    @functools.lru_cache  # "Cache" to not repeat the same message for the same browser tab.
     def _log_poll_request(cls, url, request_id):
         log.info(f"Browser connected: {url}")
 

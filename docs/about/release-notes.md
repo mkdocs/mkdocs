@@ -27,13 +27,29 @@ The current and past members of the MkDocs team.
 * [@oprypin](https://github.com/oprypin/)
 * [@ultrabug](https://github.com/ultrabug/)
 
+## Version 1.5.3 (2023-09-18)
+
+*   Fix `mkdocs serve` sometimes locking up all browser tabs when navigating quickly (#3390)
+
+*   Add many new supported languages for "search" plugin - update lunr-languages to 1.12.0 (#3334)
+
+*   Bugfix (regression in 1.5.0): In "readthedocs" theme the styling of "breadcrumb navigation" was broken for nested pages (#3383)
+
+*   Built-in themes now also support Chinese (Traditional, Taiwan) language (#3154)
+
+*   Plugins can now set `File.page` to their own subclass of `Page`. There is also now a warning if `File.page` is set to anything other than a strict subclass of `Page`. (#3367, #3381)
+
+    Note that just instantiating a `Page` [sets the file automatically](https://github.com/mkdocs/mkdocs/blob/f94ab3f62d0416d484d81a0c695c8ca86ab3b975/mkdocs/structure/pages.py#L34), so care needs to be taken not to create an unneeded `Page`.
+
+Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.5.2...1.5.3).
+
 ## Version 1.5.2 (2023-08-02)
 
 *   Bugfix (regression in 1.5.0): Restore functionality of `--no-livereload`. (#3320)
 
 *   Bugfix (regression in 1.5.0): The new page title detection would sometimes be unable to drop anchorlinks - fix that. (#3325)
 
-*   Partly bring back pre-1.5 API: `extra_javascript` items will once again be mostly strings, and only sometimes `ExtraStringValue` (when the extra `script` functionality is used).
+*   Partly bring back pre-1.5 API: `extra_javascript` items will once again be mostly strings, and only sometimes `ExtraScriptValue` (when the extra `script` functionality is used).
 
     Plugins should be free to append strings to `config.extra_javascript`, but when reading the values, they must still make sure to read it as `str(value)` in case it is an `ExtraScriptValue` item. For querying the attributes such as `.type` you need to check `isinstance` first. Static type checking will guide you in that. (#3324)
 
@@ -141,7 +157,6 @@ The `exclude_docs` config follows the [.gitignore pattern format](https://git-sc
 ```yaml
 exclude_docs: |
   *.py               # Excludes e.g. docs/hooks/foo.py
-  /drafts            # Excludes e.g. docs/drafts/hello.md
   /requirements.txt  # Excludes docs/requirements.txt
 ```
 
@@ -152,6 +167,10 @@ As an additional related change, if you have a need to have both `README.md` and
 See [**documentation**](../user-guide/configuration.md#exclude_docs). Context: #3224
 
 #### Drafts
+
+> DANGER: **Dropped from version 1.6:**
+>
+> The `exclude_docs` config no longer applies the "drafts" functionality for `mkdocs serve`. This was renamed to [`draft_docs`](../user-guide/configuration.md#draft_docs).
 
 The `exclude_docs` config has another behavior: all excluded Markdown pages will still be previewable in `mkdocs serve` only, just with a "DRAFT" marker on top. Then they will of course be excluded from `mkdocs build` or `gh-deploy`.
 
@@ -717,7 +736,7 @@ happen by default. Users must first install the necessary dependencies with
 the following command:
 
 ```bash
-pip install mkdocs[i18n]
+pip install 'mkdocs[i18n]'
 ```
 
 Translation contributions are welcome and detailed in the [Translation
@@ -1092,11 +1111,11 @@ effect most users. However, if you have `use_directory_urls` set to `False`
 for a MkDocs site hosted on a web server, most of your URLs will now be broken.
 As you can see below, the new URLs are much more sensible.
 
-| Markdown file   | Old URL              | New URL        |
-| --------------- | -------------------- | -------------- |
-| `index.md`      | `index.html`         | `index.html`   |
-| `foo.md`        | `foo/index.html`     | `foo.html`     |
-| `foo/bar.md`    | `foo/bar/index.html` | `foo/bar.html` |
+Markdown file   | Old URL              | New URL
+--------------- | -------------------- | --------------
+`index.md`      | `index.html`         | `index.html`
+`foo.md`        | `foo/index.html`     | `foo.html`
+`foo/bar.md`    | `foo/bar/index.html` | `foo/bar.html`
 
 Note that there has been no change to URLs or file paths when
 `use_directory_urls` is set to `True` (the default), except that MkDocs more
@@ -1246,7 +1265,7 @@ Users can review the [configuration options][search config] available and theme
 authors should review how [search and themes] interact.
 
 [search config]: ../user-guide/configuration.md#search
-[search and themes]: ../dev-guide/themes.md#search_and_themes
+[search and themes]: ../dev-guide/themes.md#search-and-themes
 
 #### `theme_dir` Configuration Option fully Deprecated
 
@@ -1390,44 +1409,37 @@ version 1.0.
 Any of the following old page variables should be updated to the new ones in
 user created and third-party templates:
 
-| Old Variable Name | New Variable Name   |
-| ----------------- | ------------------- |
-| current_page      | [page]              |
-| page_title        | [page.title]        |
-| content           | [page.content]      |
-| toc               | [page.toc]          |
-| meta              | [page.meta]         |
-| canonical_url     | [page.canonical_url]|
-| previous_page     | [page.previous_page]|
-| next_page         | [page.next_page]    |
+Old Variable Name | New Variable Name
+----------------- | -----------------
+current_page      | [page]
+page_title        | page.title
+content           | page.content
+toc               | page.toc
+meta              | page.meta
+canonical_url     | page.canonical_url
+previous_page     | page.previous_page
+next_page         | page.next_page
 
 [page]: ../dev-guide/themes.md#page
-[page.title]: ../dev-guide/themes.md#pagetitle
-[page.content]: ../dev-guide/themes.md#pagecontent
-[page.toc]: ../dev-guide/themes.md#pagetoc
-[page.meta]: ../dev-guide/themes.md#pagemeta
-[page.canonical_url]: ../dev-guide/themes.md#pagecanonical_url
-[page.previous_page]: ../dev-guide/themes.md#pageprevious_page
-[page.next_page]: ../dev-guide/themes.md#pagenext_page
 
 Additionally, a number of global variables have been altered and/or removed
 and user created and third-party templates should be updated as outlined below:
 
-| Old Variable Name | New Variable Name or Expression        |
-| ----------------- | -------------------------------------- |
-| current_page      | page                                   |
-| include_nav       | nav&#124;length&gt;1                   |
-| include_next_prev | (page.next_page or page.previous_page) |
-| site_name         | config.site_name                       |
-| site_author       | config.site_author                     |
-| page_description  | config.site_description                |
-| repo_url          | config.repo_url                        |
-| repo_name         | config.repo_name                       |
-| site_url          | config.site_url                        |
-| copyright         | config.copyright                       |
-| google_analytics  | config.google_analytics                |
-| homepage_url      | nav.homepage.url                       |
-| favicon           | {{ base_url }}/img/favicon.ico         |
+Old Variable Name | New Variable Name or Expression
+----------------- | --------------------------------------
+current_page      | page
+include_nav       | nav&#124;length&gt;1
+include_next_prev | (page.next_page or page.previous_page)
+site_name         | config.site_name
+site_author       | config.site_author
+page_description  | config.site_description
+repo_url          | config.repo_url
+repo_name         | config.repo_name
+site_url          | config.site_url
+copyright         | config.copyright
+google_analytics  | config.google_analytics
+homepage_url      | nav.homepage.url
+favicon           | {{ base_url }}/img/favicon.ico
 
 #### Auto-Populated extra_css and extra_javascript Fully Deprecated. (#986)
 
@@ -1494,16 +1506,16 @@ but may be removed in a future version.
 Any of the following old page variables should be updated to the new ones in
 user created and third-party templates:
 
-| Old Variable Name | New Variable Name   |
-| ----------------- | ------------------- |
-| current_page      | [page]              |
-| page_title        | [page.title]        |
-| content           | [page.content]      |
-| toc               | [page.toc]          |
-| meta              | [page.meta]         |
-| canonical_url     | [page.canonical_url]|
-| previous_page     | [page.previous_page]|
-| next_page         | [page.next_page]    |
+Old Variable Name | New Variable Name
+----------------- | ------------------
+current_page      | [page]
+page_title        | page.title
+content           | page.content
+toc               | page.toc
+meta              | page.meta
+canonical_url     | page.canonical_url
+previous_page     | page.previous_page
+next_page         | page.next_page
 
 ##### Global Context
 
@@ -1547,21 +1559,21 @@ work for version 0.16, but may be removed in a future version. Use
 
 Below is a summary of all of the changes made to the global context:
 
-| Old Variable Name | New Variable Name or Expression        |
-| ----------------- | -------------------------------------- |
-| current_page      | page                                   |
-| include_nav       | nav&#124;length&gt;1                   |
-| include_next_prev | (page.next_page or page.previous_page) |
-| site_name         | config.site_name                       |
-| site_author       | config.site_author                     |
-| page_description  | config.site_description                |
-| repo_url          | config.repo_url                        |
-| repo_name         | config.repo_name                       |
-| site_url          | config.site_url                        |
-| copyright         | config.copyright                       |
-| google_analytics  | config.google_analytics                |
-| homepage_url      | nav.homepage.url                       |
-| favicon           | {{ base_url }}/img/favicon.ico         |
+Old Variable Name | New Variable Name or Expression
+----------------- | --------------------------------------
+current_page      | page
+include_nav       | nav&#124;length&gt;1
+include_next_prev | (page.next_page or page.previous_page)
+site_name         | config.site_name
+site_author       | config.site_author
+page_description  | config.site_description
+repo_url          | config.repo_url
+repo_name         | config.repo_name
+site_url          | config.site_url
+copyright         | config.copyright
+google_analytics  | config.google_analytics
+homepage_url      | nav.homepage.url
+favicon           | {{ base_url }}/img/favicon.ico
 
 #### Increased Template Customization. (#607)
 
@@ -1777,12 +1789,11 @@ no configuration is needed to enable it.
 
 #### Change the pages configuration
 
-Provide a [new way] to define pages, and specifically [nested pages], in the
+Provide a [new way] to define pages, and specifically nested pages, in the
 mkdocs.yml file and deprecate the existing approach, support will be removed
 with MkDocs 1.0.
 
 [new way]: ../user-guide/writing-your-docs.md#configure-pages-and-navigation
-[nested pages]: ../user-guide/writing-your-docs.md#multilevel-documentation
 
 #### Warn users about the removal of builtin themes
 

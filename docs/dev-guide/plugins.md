@@ -15,6 +15,8 @@ appropriate package name and install it using `pip`:
 pip install mkdocs-foo-plugin
 ```
 
+WARNING: Installing an MkDocs plugin means installing a Python package and executing any code that the author has put in there. So, exercise the usual caution; there's no attempt at sandboxing.
+
 Once a plugin has been successfully installed, it is ready to use. It just needs
 to be [enabled](#using-plugins) in the configuration file. The [Catalog]
 repository has a large ranked list of plugins that you can install and use.
@@ -429,6 +431,12 @@ Since MkDocs 1.4, plugins can choose to set a priority value for their events. E
 
 #### ::: mkdocs.plugins.event_priority
 
+There may also arise a need to register a handler for the same event at multiple different priorities.
+
+`CombinedEvent` makes this possible since MkDocs 1.6.
+
+#### ::: mkdocs.plugins.CombinedEvent
+
 ### Handling Errors
 
 MkDocs defines four error types:
@@ -467,7 +475,7 @@ class MyPlugin(BasePlugin):
             # some code that could throw a KeyError
             ...
         except KeyError as error:
-            raise PluginError(str(error))
+            raise PluginError(f"Failed to find the item by key: '{error}'")
 
     def on_build_error(self, error, **kwargs):
         # some code to clean things up
@@ -476,10 +484,31 @@ class MyPlugin(BasePlugin):
 
 ### Logging in plugins
 
-MkDocs provides a `get_plugin_logger` function which returns
-a logger that can be used to log messages.
+To ensure that your plugins' log messages adhere with MkDocs' formatting and `--verbose`/`--debug` flags, please write the logs to a logger under the `mkdocs.plugins.` namespace.
 
-#### ::: mkdocs.plugins.get_plugin_logger
+> EXAMPLE:
+>
+> ```python
+> import logging
+>
+> log = logging.getLogger(f"mkdocs.plugins.{__name__}")
+>
+> log.warning("File '%s' not found. Breaks the build if --strict is passed", my_file_name)
+> log.info("Shown normally")
+> log.debug("Shown only with `--verbose`")
+>
+> if log.getEffectiveLevel() <= logging.DEBUG:
+>     log.debug("Very expensive calculation only for debugging: %s", get_my_diagnostics())
+> ```
+
+`log.error()` is another logging level that is differentiated by its look, but in all other ways it functions the same as `warning`, so it's strange to use it. If your plugin encounters an actual error, it is best to just interrupt the build by raising [`mkdocs.exceptions.PluginError`][] (which will also log an ERROR message).
+
+<!-- -->
+> NEW: New in MkDocs 1.5
+>
+> MkDocs now provides a `get_plugin_logger()` convenience function that returns a logger like the above that is also prefixed with the plugin's name.
+>
+> #### ::: mkdocs.plugins.get_plugin_logger
 
 ### Entry Point
 

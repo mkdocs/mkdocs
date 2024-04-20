@@ -25,12 +25,15 @@ class ThemeTests(unittest.TestCase):
             dict(theme),
             {
                 'name': 'mkdocs',
+                'color_mode': 'light',
+                'user_color_mode_toggle': False,
                 'locale': parse_locale('en'),
                 'include_search_page': False,
                 'search_index_only': False,
                 'analytics': {'gtag': None},
                 'highlightjs': True,
                 'hljs_style': 'github',
+                'hljs_style_dark': 'github-dark',
                 'hljs_languages': [],
                 'navigation_depth': 2,
                 'nav_style': 'primary',
@@ -76,7 +79,7 @@ class ThemeTests(unittest.TestCase):
         self.assertTrue('new' in theme)
         self.assertEqual(theme['new'], 42)
 
-    @mock.patch('mkdocs.utils.yaml_load', return_value={})
+    @mock.patch('yaml.load', return_value={})
     def test_no_theme_config(self, m):
         theme = Theme(name='mkdocs')
         self.assertEqual(m.call_count, 1)
@@ -89,7 +92,7 @@ class ThemeTests(unittest.TestCase):
                 {'static_templates': ['parent.html']},
             ]
         )
-        with mock.patch('mkdocs.utils.yaml_load', m) as m:
+        with mock.patch('yaml.load', m) as m:
             theme = Theme(name='mkdocs')
             self.assertEqual(m.call_count, 2)
             self.assertEqual(

@@ -1,12 +1,9 @@
-"""
-Implements the plugin API for MkDocs.
-
-"""
+"""Implements the plugin API for MkDocs."""
 from __future__ import annotations
 
 import logging
 import sys
-from typing import TYPE_CHECKING, Any, Callable, Generic, MutableMapping, TypeVar, overload
+from typing import TYPE_CHECKING, Any, Callable, Generic, Literal, MutableMapping, TypeVar, overload
 
 if sys.version_info >= (3, 10):
     from importlib.metadata import EntryPoint, entry_points
@@ -14,12 +11,7 @@ else:
     from importlib_metadata import EntryPoint, entry_points
 
 if TYPE_CHECKING:
-    if sys.version_info >= (3, 8):
-        from typing import Literal
-    else:
-        from typing_extensions import Literal
-
-import jinja2.environment
+    import jinja2.environment
 
 from mkdocs import utils
 from mkdocs.config.base import Config, ConfigErrors, ConfigWarnings, LegacyConfig, PlainConfigSchema
@@ -32,13 +24,20 @@ if TYPE_CHECKING:
     from mkdocs.structure.pages import Page
     from mkdocs.utils.templates import TemplateContext
 
+if TYPE_CHECKING:
+    from typing_extensions import Concatenate, ParamSpec
+else:
+    ParamSpec = TypeVar
+
+P = ParamSpec('P')
+T = TypeVar('T')
+
 
 log = logging.getLogger('mkdocs.plugins')
 
 
 def get_plugins() -> dict[str, EntryPoint]:
     """Return a dict of all installed Plugins as {name: EntryPoint}."""
-
     plugins = entry_points(group='mkdocs.plugins')
 
     # Allow third-party plugins to override core plugins
@@ -70,7 +69,7 @@ class BasePlugin(Generic[SomeConfig]):
     """Set to true in subclasses to declare support for adding the same plugin multiple times."""
 
     def __class_getitem__(cls, config_class: type[Config]):
-        """Eliminates the need to write `config_class = FooConfig` when subclassing BasePlugin[FooConfig]"""
+        """Eliminates the need to write `config_class = FooConfig` when subclassing BasePlugin[FooConfig]."""
         name = f'{cls.__name__}[{config_class.__name__}]'
         return type(name, (cls,), dict(config_class=config_class))
 
@@ -86,7 +85,6 @@ class BasePlugin(Generic[SomeConfig]):
         self, options: dict[str, Any], config_file_path: str | None = None
     ) -> tuple[ConfigErrors, ConfigWarnings]:
         """Load config from a dict of options. Returns a tuple of (errors, warnings)."""
-
         if self.config_class is LegacyConfig:
             self.config = LegacyConfig(self.config_scheme, config_file_path=config_file_path)  # type: ignore
         else:
@@ -110,7 +108,7 @@ class BasePlugin(Generic[SomeConfig]):
         Note that for initializing variables, the `__init__` method is still preferred.
         For initializing per-build variables (and whenever in doubt), use the `on_config` event.
 
-        Parameters:
+        Args:
             command: the command that MkDocs was invoked with, e.g. "serve" for `mkdocs serve`.
             dirty: whether `--dirty` flag was passed.
         """
@@ -133,7 +131,7 @@ class BasePlugin(Generic[SomeConfig]):
         """
 
     def on_serve(
-        self, server: LiveReloadServer, *, config: MkDocsConfig, builder: Callable
+        self, server: LiveReloadServer, /, *, config: MkDocsConfig, builder: Callable
     ) -> LiveReloadServer | None:
         """
         The `serve` event is only called when the `serve` command is used during
@@ -142,7 +140,7 @@ class BasePlugin(Generic[SomeConfig]):
         it is activated. For example, additional files or directories could be added
         to the list of "watched" files for auto-reloading.
 
-        Parameters:
+        Args:
             server: `livereload.Server` instance
             config: global configuration object
             builder: a callable which gets passed to each call to `server.watch`
@@ -160,7 +158,7 @@ class BasePlugin(Generic[SomeConfig]):
         after the user configuration is loaded and validated. Any alterations to the
         config should be made here.
 
-        Parameters:
+        Args:
             config: global configuration object
 
         Returns:
@@ -173,11 +171,11 @@ class BasePlugin(Generic[SomeConfig]):
         The `pre_build` event does not alter any variables. Use this event to call
         pre-build scripts.
 
-        Parameters:
+        Args:
             config: global configuration object
         """
 
-    def on_files(self, files: Files, *, config: MkDocsConfig) -> Files | None:
+    def on_files(self, files: Files, /, *, config: MkDocsConfig) -> Files | None:
         """
         The `files` event is called after the files collection is populated from the
         `docs_dir`. Use this event to add, remove, or alter files in the
@@ -185,7 +183,7 @@ class BasePlugin(Generic[SomeConfig]):
         file objects in the collection. Use [Page Events](plugins.md#page-events) to manipulate page
         specific data.
 
-        Parameters:
+        Args:
             files: global files collection
             config: global configuration object
 
@@ -194,12 +192,14 @@ class BasePlugin(Generic[SomeConfig]):
         """
         return files
 
-    def on_nav(self, nav: Navigation, *, config: MkDocsConfig, files: Files) -> Navigation | None:
+    def on_nav(
+        self, nav: Navigation, /, *, config: MkDocsConfig, files: Files
+    ) -> Navigation | None:
         """
         The `nav` event is called after the site navigation is created and can
         be used to alter the site navigation.
 
-        Parameters:
+        Args:
             nav: global navigation object
             config: global configuration object
             files: global files collection
@@ -210,14 +210,14 @@ class BasePlugin(Generic[SomeConfig]):
         return nav
 
     def on_env(
-        self, env: jinja2.Environment, *, config: MkDocsConfig, files: Files
+        self, env: jinja2.Environment, /, *, config: MkDocsConfig, files: Files
     ) -> jinja2.Environment | None:
         """
         The `env` event is called after the Jinja template environment is created
         and can be used to alter the
         [Jinja environment](https://jinja.palletsprojects.com/en/latest/api/#jinja2.Environment).
 
-        Parameters:
+        Args:
             env: global Jinja environment
             config: global configuration object
             files: global files collection
@@ -232,7 +232,7 @@ class BasePlugin(Generic[SomeConfig]):
         The `post_build` event does not alter any variables. Use this event to call
         post-build scripts.
 
-        Parameters:
+        Args:
             config: global configuration object
         """
 
@@ -244,20 +244,20 @@ class BasePlugin(Generic[SomeConfig]):
         events which were scheduled to run after the error will have been skipped. See
         [Handling Errors](plugins.md#handling-errors) for more details.
 
-        Parameters:
+        Args:
             error: exception raised
         """
 
     # Template events
 
     def on_pre_template(
-        self, template: jinja2.Template, *, template_name: str, config: MkDocsConfig
+        self, template: jinja2.Template, /, *, template_name: str, config: MkDocsConfig
     ) -> jinja2.Template | None:
         """
         The `pre_template` event is called immediately after the subject template is
         loaded and can be used to alter the template.
 
-        Parameters:
+        Args:
             template: a Jinja2 [Template](https://jinja.palletsprojects.com/en/latest/api/#jinja2.Template) object
             template_name: string filename of template
             config: global configuration object
@@ -268,14 +268,14 @@ class BasePlugin(Generic[SomeConfig]):
         return template
 
     def on_template_context(
-        self, context: TemplateContext, *, template_name: str, config: MkDocsConfig
+        self, context: TemplateContext, /, *, template_name: str, config: MkDocsConfig
     ) -> TemplateContext | None:
         """
         The `template_context` event is called immediately after the context is created
         for the subject template and can be used to alter the context for that specific
         template only.
 
-        Parameters:
+        Args:
             context: dict of template context variables
             template_name: string filename of template
             config: global configuration object
@@ -286,7 +286,7 @@ class BasePlugin(Generic[SomeConfig]):
         return context
 
     def on_post_template(
-        self, output_content: str, *, template_name: str, config: MkDocsConfig
+        self, output_content: str, /, *, template_name: str, config: MkDocsConfig
     ) -> str | None:
         """
         The `post_template` event is called after the template is rendered, but before
@@ -294,7 +294,7 @@ class BasePlugin(Generic[SomeConfig]):
         If an empty string is returned, the template is skipped and nothing is is
         written to disc.
 
-        Parameters:
+        Args:
             output_content: output of rendered template as string
             template_name: string filename of template
             config: global configuration object
@@ -306,12 +306,12 @@ class BasePlugin(Generic[SomeConfig]):
 
     # Page events
 
-    def on_pre_page(self, page: Page, *, config: MkDocsConfig, files: Files) -> Page | None:
+    def on_pre_page(self, page: Page, /, *, config: MkDocsConfig, files: Files) -> Page | None:
         """
         The `pre_page` event is called before any actions are taken on the subject
         page and can be used to alter the `Page` instance.
 
-        Parameters:
+        Args:
             page: `mkdocs.structure.pages.Page` instance
             config: global configuration object
             files: global files collection
@@ -321,12 +321,14 @@ class BasePlugin(Generic[SomeConfig]):
         """
         return page
 
-    def on_page_read_source(self, *, page: Page, config: MkDocsConfig) -> str | None:
+    def on_page_read_source(self, /, *, page: Page, config: MkDocsConfig) -> str | None:
         """
+        Deprecated: Since MkDocs 1.6, instead set `content_bytes`/`content_string` of a `File`.
+
         The `on_page_read_source` event can replace the default mechanism to read
         the contents of a page's source from the filesystem.
 
-        Parameters:
+        Args:
             page: `mkdocs.structure.pages.Page` instance
             config: global configuration object
 
@@ -337,14 +339,14 @@ class BasePlugin(Generic[SomeConfig]):
         return None
 
     def on_page_markdown(
-        self, markdown: str, *, page: Page, config: MkDocsConfig, files: Files
+        self, markdown: str, /, *, page: Page, config: MkDocsConfig, files: Files
     ) -> str | None:
         """
         The `page_markdown` event is called after the page's markdown is loaded
         from file and can be used to alter the Markdown source text. The meta-
         data has been stripped off and is available as `page.meta` at this point.
 
-        Parameters:
+        Args:
             markdown: Markdown source text of page as string
             page: `mkdocs.structure.pages.Page` instance
             config: global configuration object
@@ -356,14 +358,14 @@ class BasePlugin(Generic[SomeConfig]):
         return markdown
 
     def on_page_content(
-        self, html: str, *, page: Page, config: MkDocsConfig, files: Files
+        self, html: str, /, *, page: Page, config: MkDocsConfig, files: Files
     ) -> str | None:
         """
         The `page_content` event is called after the Markdown text is rendered to
         HTML (but before being passed to a template) and can be used to alter the
         HTML body of the page.
 
-        Parameters:
+        Args:
             html: HTML rendered from Markdown source as string
             page: `mkdocs.structure.pages.Page` instance
             config: global configuration object
@@ -375,13 +377,13 @@ class BasePlugin(Generic[SomeConfig]):
         return html
 
     def on_page_context(
-        self, context: TemplateContext, *, page: Page, config: MkDocsConfig, nav: Navigation
+        self, context: TemplateContext, /, *, page: Page, config: MkDocsConfig, nav: Navigation
     ) -> TemplateContext | None:
         """
         The `page_context` event is called after the context for a page is created
         and can be used to alter the context for that specific page only.
 
-        Parameters:
+        Args:
             context: dict of template context variables
             page: `mkdocs.structure.pages.Page` instance
             config: global configuration object
@@ -392,14 +394,14 @@ class BasePlugin(Generic[SomeConfig]):
         """
         return context
 
-    def on_post_page(self, output: str, *, page: Page, config: MkDocsConfig) -> str | None:
+    def on_post_page(self, output: str, /, *, page: Page, config: MkDocsConfig) -> str | None:
         """
         The `post_page` event is called after the template is rendered, but
         before it is written to disc and can be used to alter the output of the
         page. If an empty string is returned, the page is skipped and nothing is
         written to disc.
 
-        Parameters:
+        Args:
             output: output of rendered template as string
             page: `mkdocs.structure.pages.Page` instance
             config: global configuration object
@@ -417,15 +419,15 @@ for k in EVENTS:
     delattr(BasePlugin, 'on_' + k)
 
 
-T = TypeVar('T')
-
-
 def event_priority(priority: float) -> Callable[[T], T]:
-    """A decorator to set an event priority for an event handler method.
+    """
+    A decorator to set an event priority for an event handler method.
 
     Recommended priority values:
     `100` "first", `50` "early", `0` "default", `-50` "late", `-100` "last".
     As different plugins discover more precise relations to each other, the values should be further tweaked.
+
+    Usage example:
 
     ```python
     @plugins.event_priority(-100)  # Wishing to run this after all other plugins' `on_files` events.
@@ -451,6 +453,39 @@ def event_priority(priority: float) -> Callable[[T], T]:
     return decorator
 
 
+class CombinedEvent(Generic[P, T]):
+    """
+    A descriptor that allows defining multiple event handlers and declaring them under one event's name.
+
+    Usage example:
+
+    ```python
+    @plugins.event_priority(100)
+    def _on_page_markdown_1(self, markdown: str, **kwargs):
+        ...
+
+    @plugins.event_priority(-50)
+    def _on_page_markdown_2(self, markdown: str, **kwargs):
+        ...
+
+    on_page_markdown = plugins.CombinedEvent(_on_page_markdown_1, _on_page_markdown_2)
+    ```
+
+    NOTE: The names of the sub-methods **can't** start with `on_`;
+    instead they can start with `_on_` like in the the above example, or anything else.
+    """
+
+    def __init__(self, *methods: Callable[Concatenate[Any, P], T]):
+        self.methods = methods
+
+    # This is only for mypy, so CombinedEvent can be a valid override of the methods in BasePlugin
+    def __call__(self, instance: BasePlugin, *args: P.args, **kwargs: P.kwargs) -> T:
+        raise TypeError(f"{type(self).__name__!r} object is not callable")
+
+    def __get__(self, instance, owner=None):
+        return CombinedEvent(*(f.__get__(instance, owner) for f in self.methods))
+
+
 class PluginCollection(dict, MutableMapping[str, BasePlugin]):
     """
     A collection of plugins.
@@ -460,15 +495,35 @@ class PluginCollection(dict, MutableMapping[str, BasePlugin]):
     by calling `run_event`.
     """
 
+    _current_plugin: str | None
+
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.events: dict[str, list[Callable]] = {k: [] for k in EVENTS}
+        self._event_origins: dict[Callable, str] = {}
 
-    def _register_event(self, event_name: str, method: Callable) -> None:
+    def _register_event(
+        self, event_name: str, method: CombinedEvent | Callable, plugin_name: str | None = None
+    ) -> None:
         """Register a method for an event."""
-        utils.insort(
-            self.events[event_name], method, key=lambda m: -getattr(m, 'mkdocs_priority', 0)
-        )
+        if isinstance(method, CombinedEvent):
+            for sub in method.methods:
+                self._register_event(event_name, sub, plugin_name=plugin_name)
+        else:
+            events = self.events[event_name]
+            if event_name == 'page_read_source' and len(events) == 1:
+                plugin1 = self._event_origins.get(next(iter(events)), '<unknown>')
+                plugin2 = plugin_name or '<unknown>'
+                log.warning(
+                    "Multiple 'on_page_read_source' handlers can't work "
+                    f"(both plugins '{plugin1}' and '{plugin2}' registered one)."
+                )
+            utils.insort(events, method, key=lambda m: -getattr(m, 'mkdocs_priority', 0))
+            if plugin_name:
+                try:
+                    self._event_origins[method] = plugin_name
+                except TypeError:  # If the method is somehow not hashable.
+                    pass
 
     def __getitem__(self, key: str) -> BasePlugin:
         return super().__getitem__(key)
@@ -479,7 +534,7 @@ class PluginCollection(dict, MutableMapping[str, BasePlugin]):
         for event_name in (x for x in dir(value) if x.startswith('on_')):
             method = getattr(value, event_name, None)
             if callable(method):
-                self._register_event(event_name[3:], method)
+                self._register_event(event_name[3:], method, plugin_name=key)
 
     @overload
     def run_event(self, name: str, **kwargs) -> Any:
@@ -499,10 +554,10 @@ class PluginCollection(dict, MutableMapping[str, BasePlugin]):
         be modified by the event method.
         """
         pass_item = item is not None
-        events = self.events[name]
-        if events:
-            log.debug(f'Running {len(events)} `{name}` events')
-        for method in events:
+        for method in self.events[name]:
+            self._current_plugin = self._event_origins.get(method, '<unknown>')
+            if log.getEffectiveLevel() <= logging.DEBUG:
+                log.debug(f"Running `{name}` event from plugin '{self._current_plugin}'")
             if pass_item:
                 result = method(item, **kwargs)
             else:
@@ -510,6 +565,7 @@ class PluginCollection(dict, MutableMapping[str, BasePlugin]):
             # keep item if method returned `None`
             if result is not None:
                 item = result
+        self._current_plugin = None
         return item
 
     def on_startup(self, *, command: Literal['build', 'gh-deploy', 'serve'], dirty: bool) -> None:
@@ -615,7 +671,8 @@ class PrefixedLogger(logging.LoggerAdapter):
 
 
 def get_plugin_logger(name: str) -> PrefixedLogger:
-    """Return a logger for plugins.
+    """
+    Return a logger for plugins.
 
     Arguments:
         name: The name to use with `logging.getLogger`.

@@ -10,6 +10,7 @@ import traceback
 import types
 import warnings
 from collections import Counter, UserString
+from types import SimpleNamespace
 from typing import (
     Any,
     Callable,
@@ -45,10 +46,12 @@ from mkdocs.exceptions import ConfigurationError
 T = TypeVar('T')
 SomeConfig = TypeVar('SomeConfig', bound=Config)
 
+log = logging.getLogger(__name__)
+
 
 class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
     """
-    Subconfig Config Option
+    Subconfig Config Option.
 
     New: If targeting MkDocs 1.4+, please pass a subclass of Config to the
     constructor, instead of the old style of a sequence of ConfigOption instances.
@@ -65,7 +68,7 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
 
     @overload
     def __init__(
-        self: SubConfig[SomeConfig], config_class: type[SomeConfig], *, validate: bool = True
+        self: SubConfig[SomeConfig], config_class: type[SomeConfig], /, *, validate: bool = True
     ):
         """Create a sub-config in a type-safe way, using fields defined in a Config subclass."""
 
@@ -93,7 +96,7 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
                 self._do_validation = False if validate is None else validate
 
     def __class_getitem__(cls, config_class: type[Config]):
-        """Eliminates the need to write `config_class = FooConfig` when subclassing SubConfig[FooConfig]"""
+        """Eliminates the need to write `config_class = FooConfig` when subclassing SubConfig[FooConfig]."""
         name = f'{cls.__name__}[{config_class.__name__}]'
         return type(name, (cls,), dict(config_class=config_class))
 
@@ -120,7 +123,8 @@ class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
 
 
 class PropagatingSubConfig(SubConfig[SomeConfig], Generic[SomeConfig]):
-    """A SubConfig that must consist of SubConfigs with defined schemas.
+    """
+    A SubConfig that must consist of SubConfigs with defined schemas.
 
     Any value set on the top config gets moved to sub-configs with matching keys.
     """
@@ -259,7 +263,7 @@ class DictOfItems(Generic[T], BaseConfigOption[Dict[str, T]]):
         self._config = config
         self._key_name = key_name
 
-    def run_validation(self, value: object) -> Dict[str, T]:
+    def run_validation(self, value: object) -> dict[str, T]:
         if value is None:
             if self.required or self.default is None:
                 raise ValidationError("Required configuration not provided.")
@@ -318,20 +322,20 @@ class ConfigItems(ListOfItems[LegacyConfig]):
 
 class Type(Generic[T], OptionallyRequired[T]):
     """
-    Type Config Option
+    Type Config Option.
 
     Validate the type of a config option against a given Python type.
     """
 
     @overload
-    def __init__(self, type_: type[T], length: int | None = None, **kwargs):
+    def __init__(self, type_: type[T], /, length: int | None = None, **kwargs):
         ...
 
     @overload
-    def __init__(self, type_: tuple[type[T], ...], length: int | None = None, **kwargs):
+    def __init__(self, type_: tuple[type[T], ...], /, length: int | None = None, **kwargs):
         ...
 
-    def __init__(self, type_, length=None, **kwargs) -> None:
+    def __init__(self, type_, /, length=None, **kwargs) -> None:
         super().__init__(**kwargs)
         self._type = type_
         self.length = length
@@ -352,7 +356,7 @@ class Type(Generic[T], OptionallyRequired[T]):
 
 class Choice(Generic[T], OptionallyRequired[T]):
     """
-    Choice Config Option
+    Choice Config Option.
 
     Validate the config option against a strict set of values.
     """
@@ -379,7 +383,7 @@ class Choice(Generic[T], OptionallyRequired[T]):
 
 class Deprecated(BaseConfigOption):
     """
-    Deprecated Config Option
+    Deprecated Config Option.
 
     Raises a warning as the option is deprecated. Uses `message` for the
     warning. If `move_to` is set to the name of a new config option, the value
@@ -458,7 +462,7 @@ class _IpAddressValue(NamedTuple):
 
 class IpAddress(OptionallyRequired[_IpAddressValue]):
     """
-    IpAddress Config Option
+    IpAddress Config Option.
 
     Validate that an IP address is in an appropriate format
     """
@@ -497,7 +501,7 @@ class IpAddress(OptionallyRequired[_IpAddressValue]):
 
 class URL(OptionallyRequired[str]):
     """
-    URL Config Option
+    URL Config Option.
 
     Validate a URL by requiring a scheme is present.
     """
@@ -533,7 +537,8 @@ class URL(OptionallyRequired[str]):
 
 
 class Optional(Generic[T], BaseConfigOption[Union[T, None]]):
-    """Wraps a field and makes a None value possible for it when no value is set.
+    """
+    Wraps a field and makes a None value possible for it when no value is set.
 
     E.g. `my_field = config_options.Optional(config_options.Type(str))`
     """
@@ -692,15 +697,13 @@ class RepoName(Type[str]):
 
 
 class FilesystemObject(Type[str]):
-    """
-    Base class for options that point to filesystem objects.
-    """
+    """Base class for options that point to filesystem objects."""
 
     existence_test: Callable[[str], bool] = staticmethod(os.path.exists)
     name = 'file or directory'
 
     def __init__(self, exists: bool = False, **kwargs) -> None:
-        super().__init__(type_=str, **kwargs)
+        super().__init__(str, **kwargs)
         self.exists = exists
         self.config_dir: str | None = None
 
@@ -720,7 +723,7 @@ class FilesystemObject(Type[str]):
 
 class Dir(FilesystemObject):
     """
-    Dir Config Option
+    Dir Config Option.
 
     Validate a path to a directory, optionally verifying that it exists.
     """
@@ -745,7 +748,7 @@ class DocsDir(Dir):
 
 class File(FilesystemObject):
     """
-    File Config Option
+    File Config Option.
 
     Validate a path to a file, optionally verifying that it exists.
     """
@@ -756,7 +759,7 @@ class File(FilesystemObject):
 
 class ListOfPaths(ListOfItems[str]):
     """
-    List of Paths Config Option
+    List of Paths Config Option.
 
     A list of file system paths. Raises an error if one of the paths does not exist.
 
@@ -780,7 +783,7 @@ class ListOfPaths(ListOfItems[str]):
 
 class SiteDir(Dir):
     """
-    SiteDir Config Option
+    SiteDir Config Option.
 
     Validates the site_dir and docs_dir directories do not contain each other.
     """
@@ -811,7 +814,7 @@ class SiteDir(Dir):
 
 class Theme(BaseConfigOption[theme.Theme]):
     """
-    Theme Config Option
+    Theme Config Option.
 
     Validate that the theme exists and build Theme instance.
     """
@@ -867,7 +870,7 @@ class Theme(BaseConfigOption[theme.Theme]):
 
 class Nav(OptionallyRequired):
     """
-    Nav Config Option
+    Nav Config Option.
 
     Validate the Nav config.
     """
@@ -961,14 +964,15 @@ class ExtraScript(BaseConfigOption[Union[ExtraScriptValue, str]]):
 
 class MarkdownExtensions(OptionallyRequired[List[str]]):
     """
-    Markdown Extensions Config Option
+    Markdown Extensions Config Option.
 
     A list or dict of extensions. Each list item may contain either a string or a one item dict.
     A string must be a valid Markdown extension name with no config options defined. The key of
     a dict item must be a valid Markdown extension name and the value must be a dict of config
     options for that extension. Extension configs are set on the private setting passed to
     `configkey`. The `builtins` keyword accepts a list of extensions which cannot be overridden by
-    the user. However, builtins can be duplicated to define config options for them if desired."""
+    the user. However, builtins can be duplicated to define config options for them if desired.
+    """
 
     def __init__(
         self,
@@ -989,6 +993,12 @@ class MarkdownExtensions(OptionallyRequired[List[str]]):
         if not isinstance(cfg, dict):
             raise ValidationError(f"Invalid config options for Markdown Extension '{ext}'.")
         self.configdata[ext] = cfg
+
+    def pre_validation(self, config, key_name):
+        # To appease validation in case it involves the `!relative` tag.
+        config._current_page = current_page = SimpleNamespace()  # type: ignore[attr-defined]
+        current_page.file = SimpleNamespace()
+        current_page.file.src_path = ''
 
     def run_validation(self, value: object) -> list[str]:
         self.configdata: dict[str, dict] = {}
@@ -1034,6 +1044,7 @@ class MarkdownExtensions(OptionallyRequired[List[str]]):
         return extensions
 
     def post_validation(self, config: Config, key_name: str):
+        config._current_page = None  # type: ignore[attr-defined]
         config[self.configkey] = self.configdata
 
 
@@ -1136,6 +1147,17 @@ class Plugins(OptionallyRequired[plugins.PluginCollection]):
                 "because the plugin doesn't declare `supports_multiple_instances`."
             )
 
+        # Only if the plugin doesn't have its own "enabled" config, apply a generic one.
+        if 'enabled' in config and not any(pair[0] == 'enabled' for pair in plugin.config_scheme):
+            enabled = config.pop('enabled')
+            if not isinstance(enabled, bool):
+                raise ValidationError(
+                    f"Plugin '{name}' option 'enabled': Expected boolean but received: {type(enabled)}"
+                )
+            if not enabled:
+                log.debug(f"Plugin '{inst_name}' is disabled in the config, skipping.")
+                return plugin
+
         errors, warns = plugin.load_config(
             config, self._config.config_file_path if self._config else None
         )
@@ -1186,7 +1208,14 @@ class Hooks(BaseConfigOption[List[types.ModuleType]]):
         sys.modules[name] = module
         if spec.loader is None:
             raise ValidationError(f"Cannot import path '{path}' as a Python module")
-        spec.loader.exec_module(module)
+
+        old_sys_path = sys.path.copy()
+        sys.path.insert(0, os.path.dirname(path))
+        try:
+            spec.loader.exec_module(module)
+        finally:
+            sys.path[:] = old_sys_path
+
         return module
 
     def post_validation(self, config: Config, key_name: str):
@@ -1205,19 +1234,3 @@ class PathSpec(BaseConfigOption[pathspec.gitignore.GitIgnoreSpec]):
             return pathspec.gitignore.GitIgnoreSpec.from_lines(lines=value.splitlines())
         except ValueError as e:
             raise ValidationError(str(e))
-
-
-class _LogLevel(OptionallyRequired[int]):
-    levels: Mapping[str, int] = {
-        "warn": logging.WARNING,
-        "info": logging.INFO,
-        "ignore": logging.DEBUG,
-    }
-
-    def run_validation(self, value: object) -> int:
-        if not isinstance(value, str):
-            raise ValidationError(f'Expected a string, but a {type(value)} was given.')
-        try:
-            return self.levels[value]
-        except KeyError:
-            raise ValidationError(f'Expected one of {list(self.levels)}, got {value!r}')

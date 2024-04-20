@@ -1,11 +1,35 @@
 from __future__ import annotations
 
-from typing import IO, Dict
+import logging
+from typing import IO, Dict, Mapping
 
-import mkdocs.structure.pages
 from mkdocs.config import base
 from mkdocs.config import config_options as c
+from mkdocs.structure.pages import Page, _AbsoluteLinksValidationValue
 from mkdocs.utils.yaml import get_yaml_loader, yaml_load
+
+
+class _LogLevel(c.OptionallyRequired[int]):
+    levels: Mapping[str, int] = {
+        "warn": logging.WARNING,
+        "info": logging.INFO,
+        "ignore": logging.DEBUG,
+    }
+
+    def run_validation(self, value: object) -> int:
+        if not isinstance(value, str):
+            raise base.ValidationError(f"Expected a string, but a {type(value)} was given.")
+        try:
+            return self.levels[value]
+        except KeyError:
+            raise base.ValidationError(f"Expected one of {list(self.levels)}, got {value!r}")
+
+
+class _AbsoluteLinksValidation(_LogLevel):
+    levels: Mapping[str, int] = {
+        **_LogLevel.levels,
+        "relative_to_docs": _AbsoluteLinksValidationValue.RELATIVE_TO_DOCS,
+    }
 
 
 # NOTE: The order here is important. During validation some config options
@@ -26,6 +50,9 @@ class MkDocsConfig(base.Config):
 
     exclude_docs = c.Optional(c.PathSpec())
     """Gitignore-like patterns of files (relative to docs dir) to exclude from the site."""
+
+    draft_docs = c.Optional(c.PathSpec())
+    """Gitignore-like patterns of files (relative to docs dir) to mark as draft."""
 
     not_in_nav = c.Optional(c.PathSpec())
     """Gitignore-like patterns of files (relative to docs dir) that are not intended to be in the nav.
@@ -70,8 +97,8 @@ class MkDocsConfig(base.Config):
     """The address on which to serve the live reloading docs server."""
 
     use_directory_urls = c.Type(bool, default=True)
-    """If `True`, use `<page_name>/index.hmtl` style files with hyperlinks to
-    the directory.If `False`, use `<page_name>.html style file with
+    """If `True`, use `<page_name>/index.html` style files with hyperlinks to
+    the directory. If `False`, use `<page_name>.html style file with
     hyperlinks to the file.
     True generates nicer URLs, but False is useful if browsing the output on
     a filesystem."""
@@ -141,34 +168,37 @@ class MkDocsConfig(base.Config):
 
     class Validation(base.Config):
         class NavValidation(base.Config):
-            omitted_files = c._LogLevel(default='info')
+            omitted_files = _LogLevel(default='info')
             """Warning level for when a doc file is never mentioned in the navigation.
             For granular configuration, see `not_in_nav`."""
 
-            not_found = c._LogLevel(default='warn')
+            not_found = _LogLevel(default='warn')
             """Warning level for when the navigation links to a relative path that isn't an existing page on the site."""
 
-            absolute_links = c._LogLevel(default='info')
+            absolute_links = _AbsoluteLinksValidation(default='info')
             """Warning level for when the navigation links to an absolute path (starting with `/`)."""
 
         nav = c.SubConfig(NavValidation)
 
         class LinksValidation(base.Config):
-            not_found = c._LogLevel(default='warn')
+            not_found = _LogLevel(default='warn')
             """Warning level for when a Markdown doc links to a relative path that isn't an existing document on the site."""
 
-            absolute_links = c._LogLevel(default='info')
+            absolute_links = _AbsoluteLinksValidation(default='info')
             """Warning level for when a Markdown doc links to an absolute path (starting with `/`)."""
 
-            unrecognized_links = c._LogLevel(default='info')
+            unrecognized_links = _LogLevel(default='info')
             """Warning level for when a Markdown doc links to a relative path that doesn't look like
             it could be a valid internal link. For example, if the link ends with `/`."""
+
+            anchors = _LogLevel(default='info')
+            """Warning level for when a Markdown doc links to an anchor that's not present on the target page."""
 
         links = c.SubConfig(LinksValidation)
 
     validation = c.PropagatingSubConfig[Validation]()
 
-    _current_page: mkdocs.structure.pages.Page | None = None
+    _current_page: Page | None = None
     """The currently rendered page. Please do not access this and instead
     rely on the `page` argument to event handlers."""
 

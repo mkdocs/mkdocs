@@ -1,6 +1,6 @@
 mkdocs/themes/**/js/jquery-**.min.js
 mkdocs/themes/mkdocs/js/highlight.pack.js
-mkdocs/themes/mkdocs/js/bootstrap.min.js
+mkdocs/themes/mkdocs/js/bootstrap.bundle.min.js
 mkdocs/themes/mkdocs/js/modernizr-**.min.js
 mkdocs/themes/readthedocs/js/theme.js
 mkdocs/themes/readthedocs/js/html5shiv.min.js

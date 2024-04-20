@@ -1,0 +1,20 @@
+name: Docs
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 6 * * 6'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download source
+        uses: actions/checkout@v4
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install --no-deps -r requirements/requirements-docs.txt
+      - name: Build site
+        run: mkdocs build --strict

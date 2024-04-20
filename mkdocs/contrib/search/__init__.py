@@ -13,7 +13,8 @@ from mkdocs.plugins import BasePlugin
 if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
     from mkdocs.structure.pages import Page
-    from mkdocs.util.templates import TemplateContext
+    from mkdocs.utils.templates import TemplateContext
+
 
 log = logging.getLogger(__name__)
 base_path = os.path.dirname(os.path.abspath(__file__))
@@ -35,7 +36,7 @@ class LangOption(c.OptionallyRequired[List[str]]):
             value = [value]
         if not isinstance(value, list):
             raise c.ValidationError('Expected a list of language codes.')
-        for lang in list(value):
+        for lang in value[:]:
             if lang != 'en':
                 lang_detected = self.get_lunr_supported_lang(lang)
                 if not lang_detected:
@@ -62,7 +63,7 @@ class SearchPlugin(BasePlugin[_PluginConfig]):
     """Add a search feature to MkDocs."""
 
     def on_config(self, config: MkDocsConfig, **kwargs) -> MkDocsConfig:
-        "Add plugin templates and scripts to config."
+        """Add plugin templates and scripts to config."""
         if config.theme.get('include_search_page'):
             config.theme.static_templates.add('search.html')
         if not config.theme.get('search_index_only'):
@@ -84,15 +85,15 @@ class SearchPlugin(BasePlugin[_PluginConfig]):
         return config
 
     def on_pre_build(self, config: MkDocsConfig, **kwargs) -> None:
-        "Create search index instance for later use."
+        """Create search index instance for later use."""
         self.search_index = SearchIndex(**self.config)
 
     def on_page_context(self, context: TemplateContext, page: Page, **kwargs) -> None:
-        "Add page to search index."
+        """Add page to search index."""
         self.search_index.add_entry_from_context(page)
 
     def on_post_build(self, config: MkDocsConfig, **kwargs) -> None:
-        "Build search index."
+        """Build search index."""
         output_base_path = os.path.join(config.site_dir, 'search')
         search_index = self.search_index.generate_search_index()
         json_output_path = os.path.join(output_base_path, 'search_index.json')

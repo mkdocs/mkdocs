@@ -3,32 +3,11 @@ import sys
 import unittest
 from unittest import mock
 
-from mkdocs.structure.files import File, Files, _sort_files, get_files
+from mkdocs.structure.files import File, Files, _sort_files, file_sort_key, get_files
 from mkdocs.tests.base import PathAssertionMixin, load_config, tempdir
 
 
 class TestFiles(PathAssertionMixin, unittest.TestCase):
-    def test_file_eq(self):
-        file = File('a.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertTrue(
-            file == File('a.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        )
-
-    def test_file_ne(self):
-        file = File('a.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        # Different filename
-        self.assertTrue(
-            file != File('b.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        )
-        # Different src_path
-        self.assertTrue(
-            file != File('a.md', '/path/to/other', '/path/to/site', use_directory_urls=False)
-        )
-        # Different URL
-        self.assertTrue(
-            file != File('a.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        )
-
     @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
     def test_src_path_windows(self):
         f = File('foo\\a.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
@@ -78,257 +57,178 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
             ['README.md', 'A.md', 'B.md'],
         )
 
-    def test_md_file(self):
-        f = File('foo.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertEqual(f.src_uri, 'foo.md')
-        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo.md')
-        self.assertEqual(f.dest_uri, 'foo.html')
-        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo.html')
-        self.assertEqual(f.url, 'foo.html')
-        self.assertEqual(f.name, 'foo')
-        self.assertTrue(f.is_documentation_page())
-        self.assertFalse(f.is_static_page())
-        self.assertFalse(f.is_media_file())
-        self.assertFalse(f.is_javascript())
-        self.assertFalse(f.is_css())
+    def test_file_sort_key(self):
+        for case in [
+            ["a/b.md", "b/index.md", "b/a.md"],
+            ["SUMMARY.md", "foo/z.md", "foo/bar/README.md", "foo/bar/index.md", "foo/bar/a.md"],
+        ]:
+            with self.subTest(case):
+                files = [File(f, "", "", use_directory_urls=True) for f in case]
+                for a, b in zip(files, files[1:]):
+                    self.assertLess(file_sort_key(a), file_sort_key(b))
 
-    def test_md_file_use_directory_urls(self):
-        f = File('foo.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertEqual(f.src_uri, 'foo.md')
-        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo.md')
-        self.assertEqual(f.dest_uri, 'foo/index.html')
-        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/index.html')
-        self.assertEqual(f.url, 'foo/')
-        self.assertEqual(f.name, 'foo')
-        self.assertTrue(f.is_documentation_page())
-        self.assertFalse(f.is_static_page())
-        self.assertFalse(f.is_media_file())
-        self.assertFalse(f.is_javascript())
-        self.assertFalse(f.is_css())
+    def test_md_file(self):
+        for use_directory_urls in True, False:
+            with self.subTest(use_directory_urls=use_directory_urls):
+                f = File('foo.md', '/path/to/docs', '/path/to/site', use_directory_urls)
+                self.assertEqual(f.src_uri, 'foo.md')
+                self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo.md')
+                if use_directory_urls:
+                    self.assertEqual(f.dest_uri, 'foo/index.html')
+                    self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/index.html')
+                    self.assertEqual(f.url, 'foo/')
+                else:
+                    self.assertEqual(f.dest_uri, 'foo.html')
+                    self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo.html')
+                    self.assertEqual(f.url, 'foo.html')
+                self.assertEqual(f.name, 'foo')
+                self.assertTrue(f.is_documentation_page())
+                self.assertFalse(f.is_static_page())
+                self.assertFalse(f.is_media_file())
+                self.assertFalse(f.is_javascript())
+                self.assertFalse(f.is_css())
 
     def test_md_file_nested(self):
-        f = File('foo/bar.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertEqual(f.src_uri, 'foo/bar.md')
-        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.md')
-        self.assertEqual(f.dest_uri, 'foo/bar.html')
-        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.html')
-        self.assertEqual(f.url, 'foo/bar.html')
-        self.assertEqual(f.name, 'bar')
-        self.assertTrue(f.is_documentation_page())
-        self.assertFalse(f.is_static_page())
-        self.assertFalse(f.is_media_file())
-        self.assertFalse(f.is_javascript())
-        self.assertFalse(f.is_css())
-
-    def test_md_file_nested_use_directory_urls(self):
-        f = File('foo/bar.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertEqual(f.src_uri, 'foo/bar.md')
-        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.md')
-        self.assertEqual(f.dest_uri, 'foo/bar/index.html')
-        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar/index.html')
-        self.assertEqual(f.url, 'foo/bar/')
-        self.assertEqual(f.name, 'bar')
-        self.assertTrue(f.is_documentation_page())
-        self.assertFalse(f.is_static_page())
-        self.assertFalse(f.is_media_file())
-        self.assertFalse(f.is_javascript())
-        self.assertFalse(f.is_css())
+        for use_directory_urls in True, False:
+            with self.subTest(use_directory_urls=use_directory_urls):
+                f = File('foo/bar.md', '/path/to/docs', '/path/to/site', use_directory_urls)
+                self.assertEqual(f.src_uri, 'foo/bar.md')
+                self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.md')
+                if use_directory_urls:
+                    self.assertEqual(f.dest_uri, 'foo/bar/index.html')
+                    self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar/index.html')
+                    self.assertEqual(f.url, 'foo/bar/')
+                else:
+                    self.assertEqual(f.dest_uri, 'foo/bar.html')
+                    self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.html')
+                    self.assertEqual(f.url, 'foo/bar.html')
+                self.assertEqual(f.name, 'bar')
+                self.assertTrue(f.is_documentation_page())
+                self.assertFalse(f.is_static_page())
+                self.assertFalse(f.is_media_file())
+                self.assertFalse(f.is_javascript())
+                self.assertFalse(f.is_css())
 
     def test_md_index_file(self):
-        f = File('index.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertEqual(f.src_uri, 'index.md')
-        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/index.md')
-        self.assertEqual(f.dest_uri, 'index.html')
-        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/index.html')
-        self.assertEqual(f.url, 'index.html')
-        self.assertEqual(f.name, 'index')
-        self.assertTrue(f.is_documentation_page())
-        self.assertFalse(f.is_static_page())
-        self.assertFalse(f.is_media_file())
-        self.assertFalse(f.is_javascript())
-        self.assertFalse(f.is_css())
+        for use_directory_urls in True, False:
+            with self.subTest(use_directory_urls=use_directory_urls):
+                f = File('index.md', '/path/to/docs', '/path/to/site', use_directory_urls)
+                self.assertEqual(f.src_uri, 'index.md')
+                self.assertPathsEqual(f.abs_src_path, '/path/to/docs/index.md')
+                self.assertEqual(f.dest_uri, 'index.html')
+                self.assertPathsEqual(f.abs_dest_path, '/path/to/site/index.html')
+                if use_directory_urls:
+                    self.assertEqual(f.url, './')
+                else:
+                    self.assertEqual(f.url, 'index.html')
+                self.assertEqual(f.name, 'index')
+                self.assertTrue(f.is_documentation_page())
+                self.assertFalse(f.is_static_page())
+                self.assertFalse(f.is_media_file())
+                self.assertFalse(f.is_javascript())
+                self.assertFalse(f.is_css())
 
     def test_md_readme_index_file(self):
-        f = File('README.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertEqual(f.src_uri, 'README.md')
-        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/README.md')
-        self.assertEqual(f.dest_uri, 'index.html')
-        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/index.html')
-        self.assertEqual(f.url, 'index.html')
-        self.assertEqual(f.name, 'index')
-        self.assertTrue(f.is_documentation_page())
-        self.assertFalse(f.is_static_page())
-        self.assertFalse(f.is_media_file())
-        self.assertFalse(f.is_javascript())
-        self.assertFalse(f.is_css())
-
-    def test_md_index_file_use_directory_urls(self):
-        f = File('index.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertEqual(f.src_uri, 'index.md')
-        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/index.md')
-        self.assertEqual(f.dest_uri, 'index.html')
-        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/index.html')
-        self.assertEqual(f.url, './')
-        self.assertEqual(f.name, 'index')
-        self.assertTrue(f.is_documentation_page())
-        self.assertFalse(f.is_static_page())
-        self.assertFalse(f.is_media_file())
-        self.assertFalse(f.is_javascript())
-        self.assertFalse(f.is_css())
-
-    def test_md_readme_index_file_use_directory_urls(self):
-        f = File('README.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertEqual(f.src_uri, 'README.md')
-        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/README.md')
-        self.assertEqual(f.dest_uri, 'index.html')
-        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/index.html')
-        self.assertEqual(f.url, './')
-        self.assertEqual(f.name, 'index')
-        self.assertTrue(f.is_documentation_page())
-        self.assertFalse(f.is_static_page())
-        self.assertFalse(f.is_media_file())
-        self.assertFalse(f.is_javascript())
-        self.assertFalse(f.is_css())
+        for use_directory_urls in True, False:
+            with self.subTest(use_directory_urls=use_directory_urls):
+                f = File('README.md', '/path/to/docs', '/path/to/site', use_directory_urls)
+                self.assertEqual(f.src_uri, 'README.md')
+                self.assertPathsEqual(f.abs_src_path, '/path/to/docs/README.md')
+                self.assertEqual(f.dest_uri, 'index.html')
+                self.assertPathsEqual(f.abs_dest_path, '/path/to/site/index.html')
+                if use_directory_urls:
+                    self.assertEqual(f.url, './')
+                else:
+                    self.assertEqual(f.url, 'index.html')
+                self.assertEqual(f.name, 'index')
+                self.assertTrue(f.is_documentation_page())
+                self.assertFalse(f.is_static_page())
+                self.assertFalse(f.is_media_file())
+                self.assertFalse(f.is_javascript())
+                self.assertFalse(f.is_css())
 
     def test_md_index_file_nested(self):
-        f = File('foo/index.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertEqual(f.src_uri, 'foo/index.md')
-        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/index.md')
-        self.assertEqual(f.dest_uri, 'foo/index.html')
-        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/index.html')
-        self.assertEqual(f.url, 'foo/index.html')
-        self.assertEqual(f.name, 'index')
-        self.assertTrue(f.is_documentation_page())
-        self.assertFalse(f.is_static_page())
-        self.assertFalse(f.is_media_file())
-        self.assertFalse(f.is_javascript())
-        self.assertFalse(f.is_css())
-
-    def test_md_index_file_nested_use_directory_urls(self):
-        f = File('foo/index.md', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertEqual(f.src_uri, 'foo/index.md')
-        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/index.md')
-        self.assertEqual(f.dest_uri, 'foo/index.html')
-        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/index.html')
-        self.assertEqual(f.url, 'foo/')
-        self.assertEqual(f.name, 'index')
-        self.assertTrue(f.is_documentation_page())
-        self.assertFalse(f.is_static_page())
-        self.assertFalse(f.is_media_file())
-        self.assertFalse(f.is_javascript())
-        self.assertFalse(f.is_css())
+        for use_directory_urls in True, False:
+            with self.subTest(use_directory_urls=use_directory_urls):
+                f = File('foo/index.md', '/path/to/docs', '/path/to/site', use_directory_urls)
+                self.assertEqual(f.src_uri, 'foo/index.md')
+                self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/index.md')
+                self.assertEqual(f.dest_uri, 'foo/index.html')
+                self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/index.html')
+                if use_directory_urls:
+                    self.assertEqual(f.url, 'foo/')
+                else:
+                    self.assertEqual(f.url, 'foo/index.html')
+                self.assertEqual(f.name, 'index')
+                self.assertTrue(f.is_documentation_page())
+                self.assertFalse(f.is_static_page())
+                self.assertFalse(f.is_media_file())
+                self.assertFalse(f.is_javascript())
+                self.assertFalse(f.is_css())
 
     def test_static_file(self):
-        f = File('foo/bar.html', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertEqual(f.src_uri, 'foo/bar.html')
-        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.html')
-        self.assertEqual(f.dest_uri, 'foo/bar.html')
-        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.html')
-        self.assertEqual(f.url, 'foo/bar.html')
-        self.assertEqual(f.name, 'bar')
-        self.assertFalse(f.is_documentation_page())
-        self.assertTrue(f.is_static_page())
-        self.assertFalse(f.is_media_file())
-        self.assertFalse(f.is_javascript())
-        self.assertFalse(f.is_css())
-
-    def test_static_file_use_directory_urls(self):
-        f = File('foo/bar.html', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertEqual(f.src_uri, 'foo/bar.html')
-        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.html')
-        self.assertEqual(f.dest_uri, 'foo/bar.html')
-        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.html')
-        self.assertEqual(f.url, 'foo/bar.html')
-        self.assertEqual(f.name, 'bar')
-        self.assertFalse(f.is_documentation_page())
-        self.assertTrue(f.is_static_page())
-        self.assertFalse(f.is_media_file())
-        self.assertFalse(f.is_javascript())
-        self.assertFalse(f.is_css())
+        for use_directory_urls in True, False:
+            with self.subTest(use_directory_urls=use_directory_urls):
+                f = File('foo/bar.html', '/path/to/docs', '/path/to/site', use_directory_urls)
+                self.assertEqual(f.src_uri, 'foo/bar.html')
+                self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.html')
+                self.assertEqual(f.dest_uri, 'foo/bar.html')
+                self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.html')
+                self.assertEqual(f.url, 'foo/bar.html')
+                self.assertEqual(f.name, 'bar')
+                self.assertFalse(f.is_documentation_page())
+                self.assertTrue(f.is_static_page())
+                self.assertFalse(f.is_media_file())
+                self.assertFalse(f.is_javascript())
+                self.assertFalse(f.is_css())
 
     def test_media_file(self):
-        f = File('foo/bar.jpg', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertEqual(f.src_uri, 'foo/bar.jpg')
-        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.jpg')
-        self.assertEqual(f.dest_uri, 'foo/bar.jpg')
-        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.jpg')
-        self.assertEqual(f.url, 'foo/bar.jpg')
-        self.assertEqual(f.name, 'bar')
-        self.assertFalse(f.is_documentation_page())
-        self.assertFalse(f.is_static_page())
-        self.assertTrue(f.is_media_file())
-        self.assertFalse(f.is_javascript())
-        self.assertFalse(f.is_css())
-
-    def test_media_file_use_directory_urls(self):
-        f = File('foo/bar.jpg', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertEqual(f.src_uri, 'foo/bar.jpg')
-        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.jpg')
-        self.assertEqual(f.dest_uri, 'foo/bar.jpg')
-        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.jpg')
-        self.assertEqual(f.url, 'foo/bar.jpg')
-        self.assertEqual(f.name, 'bar')
-        self.assertFalse(f.is_documentation_page())
-        self.assertFalse(f.is_static_page())
-        self.assertTrue(f.is_media_file())
-        self.assertFalse(f.is_javascript())
-        self.assertFalse(f.is_css())
+        for use_directory_urls in True, False:
+            with self.subTest(use_directory_urls=use_directory_urls):
+                f = File('foo/bar.jpg', '/path/to/docs', '/path/to/site', use_directory_urls)
+                self.assertEqual(f.src_uri, 'foo/bar.jpg')
+                self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.jpg')
+                self.assertEqual(f.dest_uri, 'foo/bar.jpg')
+                self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.jpg')
+                self.assertEqual(f.url, 'foo/bar.jpg')
+                self.assertEqual(f.name, 'bar')
+                self.assertFalse(f.is_documentation_page())
+                self.assertFalse(f.is_static_page())
+                self.assertTrue(f.is_media_file())
+                self.assertFalse(f.is_javascript())
+                self.assertFalse(f.is_css())
 
     def test_javascript_file(self):
-        f = File('foo/bar.js', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertEqual(f.src_uri, 'foo/bar.js')
-        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.js')
-        self.assertEqual(f.dest_uri, 'foo/bar.js')
-        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.js')
-        self.assertEqual(f.url, 'foo/bar.js')
-        self.assertEqual(f.name, 'bar')
-        self.assertFalse(f.is_documentation_page())
-        self.assertFalse(f.is_static_page())
-        self.assertTrue(f.is_media_file())
-        self.assertTrue(f.is_javascript())
-        self.assertFalse(f.is_css())
-
-    def test_javascript_file_use_directory_urls(self):
-        f = File('foo/bar.js', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertEqual(f.src_uri, 'foo/bar.js')
-        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.js')
-        self.assertEqual(f.dest_uri, 'foo/bar.js')
-        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.js')
-        self.assertEqual(f.url, 'foo/bar.js')
-        self.assertEqual(f.name, 'bar')
-        self.assertFalse(f.is_documentation_page())
-        self.assertFalse(f.is_static_page())
-        self.assertTrue(f.is_media_file())
-        self.assertTrue(f.is_javascript())
-        self.assertFalse(f.is_css())
+        for use_directory_urls in True, False:
+            with self.subTest(use_directory_urls=use_directory_urls):
+                f = File('foo/bar.js', '/path/to/docs', '/path/to/site', use_directory_urls)
+                self.assertEqual(f.src_uri, 'foo/bar.js')
+                self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.js')
+                self.assertEqual(f.dest_uri, 'foo/bar.js')
+                self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.js')
+                self.assertEqual(f.url, 'foo/bar.js')
+                self.assertEqual(f.name, 'bar')
+                self.assertFalse(f.is_documentation_page())
+                self.assertFalse(f.is_static_page())
+                self.assertTrue(f.is_media_file())
+                self.assertTrue(f.is_javascript())
+                self.assertFalse(f.is_css())
 
     def test_css_file(self):
-        f = File('foo/bar.css', '/path/to/docs', '/path/to/site', use_directory_urls=False)
-        self.assertEqual(f.src_uri, 'foo/bar.css')
-        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.css')
-        self.assertEqual(f.dest_uri, 'foo/bar.css')
-        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.css')
-        self.assertEqual(f.url, 'foo/bar.css')
-        self.assertEqual(f.name, 'bar')
-        self.assertFalse(f.is_documentation_page())
-        self.assertFalse(f.is_static_page())
-        self.assertTrue(f.is_media_file())
-        self.assertFalse(f.is_javascript())
-        self.assertTrue(f.is_css())
-
-    def test_css_file_use_directory_urls(self):
-        f = File('foo/bar.css', '/path/to/docs', '/path/to/site', use_directory_urls=True)
-        self.assertEqual(f.src_uri, 'foo/bar.css')
-        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.css')
-        self.assertEqual(f.dest_uri, 'foo/bar.css')
-        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.css')
-        self.assertEqual(f.url, 'foo/bar.css')
-        self.assertEqual(f.name, 'bar')
-        self.assertFalse(f.is_documentation_page())
-        self.assertFalse(f.is_static_page())
-        self.assertTrue(f.is_media_file())
-        self.assertFalse(f.is_javascript())
-        self.assertTrue(f.is_css())
+        for use_directory_urls in True, False:
+            with self.subTest(use_directory_urls=use_directory_urls):
+                f = File('foo/bar.css', '/path/to/docs', '/path/to/site', use_directory_urls)
+                self.assertEqual(f.src_uri, 'foo/bar.css')
+                self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo/bar.css')
+                self.assertEqual(f.dest_uri, 'foo/bar.css')
+                self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.css')
+                self.assertEqual(f.url, 'foo/bar.css')
+                self.assertEqual(f.name, 'bar')
+                self.assertFalse(f.is_documentation_page())
+                self.assertFalse(f.is_static_page())
+                self.assertTrue(f.is_media_file())
+                self.assertFalse(f.is_javascript())
+                self.assertTrue(f.is_css())
 
     def test_file_name_with_space(self):
         f = File('foo bar.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
@@ -359,6 +259,67 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
                     self.assertEqual(f.url, 'stuff/1-foo/index.html')
                 self.assertEqual(f.name, 'foo')
 
+    def test_file_overwrite_attrs(self):
+        f = File('foo.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
+        self.assertEqual(f.src_uri, 'foo.md')
+
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo.md')
+        f.abs_src_path = '/tmp/foo.md'
+        self.assertPathsEqual(f.abs_src_path, '/tmp/foo.md')
+        del f.abs_src_path
+        self.assertPathsEqual(f.abs_src_path, '/path/to/docs/foo.md')
+
+        f.dest_uri = 'a.html'
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/a.html')
+        self.assertEqual(f.url, 'a.html')
+        f.abs_dest_path = '/path/to/site/b.html'
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/b.html')
+        self.assertEqual(f.url, 'a.html')
+        del f.url
+        del f.dest_uri
+        del f.abs_dest_path
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo.html')
+
+        self.assertTrue(f.is_documentation_page())
+        f.src_uri = 'foo.html'
+        del f.name
+        self.assertFalse(f.is_documentation_page())
+
+    def test_generated_file(self):
+        f = File(
+            'foo/bar.md',
+            src_dir=None,
+            dest_dir='/path/to/site',
+            use_directory_urls=False,
+        )
+        f.content_string = 'вміст'
+        f.generated_by = 'some-plugin'
+        self.assertEqual(f.generated_by, 'some-plugin')
+        self.assertEqual(f.src_uri, 'foo/bar.md')
+        self.assertIsNone(f.abs_src_path)
+        self.assertIsNone(f.src_dir)
+        self.assertEqual(f.dest_uri, 'foo/bar.html')
+        self.assertPathsEqual(f.abs_dest_path, '/path/to/site/foo/bar.html')
+        self.assertEqual(f.content_string, 'вміст')
+        self.assertEqual(f.edit_uri, None)
+
+    @tempdir(files={'x.md': 'вміст'})
+    def test_generated_file_constructor(self, tdir) -> None:
+        config = load_config(site_dir='/path/to/site', use_directory_urls=False)
+        config.plugins._current_plugin = 'foo'
+        for f in [
+            File.generated(config, 'foo/bar.md', content='вміст'),
+            File.generated(config, 'foo/bar.md', content='вміст'.encode()),
+            File.generated(config, 'foo/bar.md', abs_src_path=os.path.join(tdir, 'x.md')),
+        ]:
+            self.assertEqual(f.src_uri, 'foo/bar.md')
+            self.assertIsNone(f.src_dir)
+            self.assertEqual(f.dest_uri, 'foo/bar.html')
+            self.assertPathsEqual(f.abs_dest_path, os.path.abspath('/path/to/site/foo/bar.html'))
+            self.assertEqual(f.content_string, 'вміст')
+            self.assertEqual(f.content_bytes, 'вміст'.encode())
+            self.assertEqual(f.edit_uri, None)
+
     def test_files(self):
         fs = [
             File('index.md', '/path/to/docs', '/path/to/site', use_directory_urls=True),
@@ -369,7 +330,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
             File('foo/bar.css', '/path/to/docs', '/path/to/site', use_directory_urls=True),
         ]
         files = Files(fs)
-        self.assertEqual([f for f in files], fs)
+        self.assertEqual(list(files), fs)
         self.assertEqual(len(files), 6)
         self.assertEqual(files.documentation_pages(), [fs[0], fs[1]])
         self.assertEqual(files.static_pages(), [fs[2]])
@@ -413,12 +374,12 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         env = config.theme.get_env()
         files = get_files(config)
         self.assertEqual(
-            [file.src_path for file in files],
+            [file.src_uri for file in files],
             ['index.md', 'favicon.ico'],
         )
         files.add_files_from_theme(env, config)
         self.assertEqual(
-            [file.src_path for file in files],
+            [file.src_uri for file in files],
             ['index.md', 'favicon.ico', 'style.css'],
         )
         # Ensure theme file does not override docs_dir file
@@ -633,11 +594,11 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         files = get_files(config)
         self.assertIsInstance(files, Files)
         self.assertEqual(
-            [f.src_path for f in files if f.inclusion.is_included()],
+            [f.src_uri for f in files if f.inclusion.is_included()],
             ['index.md', 'bar.css', 'bar.html', 'bar.jpg', 'bar.js', 'bar.md', 'readme.md'],
         )
         self.assertEqual(
-            [f.src_path for f in files if f.inclusion.is_excluded()],
+            [f.src_uri for f in files if f.inclusion.is_excluded()],
             ['.dotfile', 'templates/foo.html'],
         )
 
@@ -651,7 +612,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         config = load_config(docs_dir=tdir)
         files = get_files(config)
         self.assertIsInstance(files, Files)
-        self.assertEqual([f.src_path for f in files], ['README.md', 'foo.md'])
+        self.assertEqual([f.src_uri for f in files], ['README.md', 'foo.md'])
 
     @tempdir(
         files=[
@@ -670,7 +631,7 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
             r"Excluding 'README.md' from the site because it conflicts with 'index.md'.$",
         )
         self.assertIsInstance(files, Files)
-        self.assertEqual([f.src_path for f in files], ['index.md', 'foo.md'])
+        self.assertEqual([f.src_uri for f in files], ['index.md', 'foo.md'])
 
     @tempdir()
     @tempdir(files={'test.txt': 'source content'})
@@ -694,6 +655,8 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
     @tempdir(files={'test.txt': 'source content'})
     def test_copy_file_clean_modified(self, src_dir, dest_dir):
         file = File('test.txt', src_dir, dest_dir, use_directory_urls=False)
+        self.assertEqual(file.content_string, 'source content')
+        self.assertEqual(file.content_bytes, b'source content')
         file.is_modified = mock.Mock(return_value=True)
         dest_path = os.path.join(dest_dir, 'test.txt')
         file.copy_file(dirty=False)
@@ -723,6 +686,28 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         with open(dest_path, encoding='utf-8') as f:
             self.assertEqual(f.read(), 'destination content')
 
+    @tempdir()
+    def test_copy_file_from_content(self, dest_dir):
+        file = File('test.txt', src_dir='unused', dest_dir=dest_dir, use_directory_urls=False)
+        file.content_string = 'ö'
+        self.assertIsNone(file.abs_src_path)
+        dest_path = os.path.join(dest_dir, 'test.txt')
+
+        file.copy_file()
+        self.assertPathIsFile(dest_path)
+        with open(dest_path, encoding='utf-8') as f:
+            self.assertEqual(f.read(), 'ö')
+
+        file.content_bytes = b'\x01\x02\x03'
+        file.copy_file()
+        with open(dest_path, 'rb') as f:
+            self.assertEqual(f.read(), b'\x01\x02\x03')
+
+        file.content_bytes = b'\xc3\xb6'
+        file.copy_file()
+        with open(dest_path, encoding='utf-8') as f:
+            self.assertEqual(f.read(), 'ö')
+
     def test_files_append_remove_src_paths(self):
         fs = [
             File('index.md', '/path/to/docs', '/path/to/site', use_directory_urls=True),
@@ -745,3 +730,17 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         self.assertEqual(len(files), 6)
         self.assertEqual(len(files.src_uris), 6)
         self.assertFalse(extra_file.src_uri in files.src_uris)
+
+    def test_files_move_to_end(self):
+        fs = [
+            File('a.md', '/path/to/docs', '/path/to/site', use_directory_urls=True),
+            File('b.jpg', '/path/to/docs', '/path/to/site', use_directory_urls=True),
+        ]
+        files = Files(fs)
+        self.assertEqual(len(files), 2)
+        self.assertEqual(list(files)[0].src_uri, 'a.md')
+        with self.assertWarns(DeprecationWarning):
+            files.append(fs[0])
+        self.assertEqual(len(files), 2)
+        self.assertEqual(list(files)[0].src_uri, 'b.jpg')
+        self.assertEqual(list(files)[1].src_uri, 'a.md')
