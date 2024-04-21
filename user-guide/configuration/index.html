@@ -358,8 +358,8 @@ edit_uri_template: 'blob/main/docs/{path}'</code></pre>
 <ul>
 <li><code>{path!q}</code>, e.g. <code>foo%2Fbar.md</code></li>
 </ul>
-<blockquote>
-<p>? NOTE: <strong>Suggested useful configurations:</strong></p>
+<details class="note">
+<summary>Suggested useful configurations:</summary>
 <ul>
 <li>
 <p>GitHub Wiki:<br />
@@ -385,7 +385,7 @@ edit_uri_template: '-/sse/master/docs%2F{path!q}'</code></pre>
 <pre class="highlight"><code class="language-yaml">edit_uri_template: 'https://gitlab.com/-/ide/project/repo/edit/master/-/docs/{path}'</code></pre>
 </li>
 </ul>
-</blockquote>
+</details>
 <p><strong>default</strong>: <code>null</code></p>
 <h3 id="site_description">site_description<a class="headerlink" href="#site_description" title="Permanent link"></a></h3>
 <p>Set the site description. This will add a meta tag to the generated HTML header.</p>
@@ -510,8 +510,8 @@ not_in_nav: |
 <p>Configure the strictness of MkDocs' diagnostic messages when validating links to documents.</p>
 <p>This is a tree of configs, and for each one the value can be one of the three: <code>warn</code>, <code>info</code>, <code>ignore</code>. Which cause a logging message of the corresponding severity to be produced. The <code>warn</code> level is, of course, intended for use with <code>mkdocs build --strict</code> (where it becomes an error), which you can employ in continuous testing.</p>
 <p>The config <code>validation.links.absolute_links</code> additionally has a special value <code>relative_to_docs</code>, for <a href="#validation-of-absolute-links">validation of absolute links</a>.</p>
-<blockquote>
-<p>? EXAMPLE: <strong>Defaults of this config as of MkDocs 1.6:</strong></p>
+<details class="example">
+<summary>Defaults of this config as of MkDocs 1.6:</summary>
 <pre class="highlight"><code class="language-yaml">validation:
   nav:
     omitted_files: info
@@ -523,24 +523,24 @@ not_in_nav: |
     absolute_links: info
     unrecognized_links: info</code></pre>
 <p>(Note: you shouldn't copy this whole example, because it only duplicates the defaults. Only individual items that differ should be set.)</p>
-</blockquote>
+</details>
 <p>The defaults of some of the behaviors already differ from MkDocs 1.4 and below - they were ignored before.</p>
-<blockquote>
-<p>? EXAMPLE: <strong>Configure MkDocs 1.6 to behave like MkDocs 1.4 and below (reduce strictness):</strong></p>
+<details class="example">
+<summary>Configure MkDocs 1.6 to behave like MkDocs 1.4 and below (reduce strictness):</summary>
 <pre class="highlight"><code class="language-yaml">validation:
   absolute_links: ignore
   unrecognized_links: ignore
   anchors: ignore</code></pre>
-</blockquote>
+</details>
 <!-- -->
-<blockquote>
-<p>! EXAMPLE: <strong>Recommended settings for most sites (maximal strictness):</strong></p>
+<details class="example" open="open">
+<summary>Recommended settings for most sites (maximal strictness):</summary>
 <pre class="highlight"><code class="language-yaml">validation:
   omitted_files: warn
   absolute_links: warn  # Or 'relative_to_docs' - new in MkDocs 1.6
   unrecognized_links: warn
   anchors: warn  # New in MkDocs 1.6</code></pre>
-</blockquote>
+</details>
 <p>Note how in the above examples we omitted the 'nav' and 'links' keys. Here <code>absolute_links:</code> means setting both <code>nav: absolute_links:</code> and <code>links: absolute_links:</code>.</p>
 <p>Full list of values and examples of log messages that they can hide or make more prominent:</p>
 <ul>
@@ -896,8 +896,8 @@ and available configuration options.</p>
 <p>Then the file <code>my_hooks.py</code> can contain any <a href="../../dev-guide/plugins/#events">plugin event handlers</a> (without <code>self</code>), e.g.:</p>
 <pre class="highlight"><code class="language-python">def on_page_markdown(markdown, **kwargs):
     return markdown.replace('a', 'z')</code></pre>
-<blockquote>
-<p>? EXAMPLE: <strong>Advanced example:</strong></p>
+<details class="example">
+<summary>Advanced example:</summary>
 <p>This produces warnings based on the Markdown content (and warnings are fatal in <a href="#strict">strict</a> mode):</p>
 <pre class="highlight"><code class="language-python">import logging, re
 import mkdocs.plugins
@@ -909,7 +909,7 @@ def on_page_markdown(markdown, page, **kwargs):
     path = page.file.src_uri
     for m in re.finditer(r'\bhttp://[^) ]+', markdown):
         log.warning(f"Documentation file '{path}' contains a non-HTTPS link: {m[0]}")</code></pre>
-</blockquote>
+</details>
 <p>This does not enable any new abilities compared to <a href="../../dev-guide/plugins/">plugins</a>, it only simplifies one-off usages, as these don't need to be <em>installed</em> like plugins do.</p>
 <p>Note that for <code>mkdocs serve</code> the hook module will <em>not</em> be reloaded on each build.</p>
 <p>You might have seen this feature in the <a href="https://github.com/aklajnert/mkdocs-simple-hooks">mkdocs-simple-hooks plugin</a>. If using standard method names, it can be directly replaced, e.g.:</p>

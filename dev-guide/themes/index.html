@@ -349,8 +349,8 @@ themes for consistency.</p>
 <p class="admonition-title">Changed in version 1.5:</p>
 <p>The items of the <code>config.extra_javascript</code> list used to be simple strings but now became objects that have these fields: <code>path</code>, <code>type</code>, <code>async</code>, <code>defer</code>.</p>
 <p>In that version, MkDocs also gained the <a href="#script_tag"><code>script_tag</code> filter</a>.</p>
-<blockquote>
-<p>? EXAMPLE: <strong>Obsolete style:</strong></p>
+<details class="example">
+<summary>Obsolete style:</summary>
 <pre class="highlight"><code class="language-django">  {%- for path in extra_javascript %}
     &lt;script src="{{ path }}"&gt;&lt;/script&gt;
   {%- endfor %}</code></pre>
@@ -364,10 +364,10 @@ themes for consistency.</p>
 <pre class="highlight"><code class="language-django">  {%- for script in config.extra_javascript %}
     {{ script | script_tag }}
   {%- endfor %}</code></pre>
-</blockquote>
+</details>
 <p>If you wish to be able to pick up the new customizations while keeping your theme compatible with older versions of MkDocs, use this snippet:</p>
-<blockquote>
-<p>! EXAMPLE: <strong>Backwards-compatible style:</strong></p>
+<details class="example" open="open">
+<summary>Backwards-compatible style:</summary>
 <pre class="highlight"><code class="language-django">  {%- for script in config.extra_javascript %}
     {%- if script.path %}  {# Detected MkDocs 1.5+ which has `script.path` and `script_tag` #}
       {{ script | script_tag }}
@@ -375,7 +375,7 @@ themes for consistency.</p>
       &lt;script src="{{ script | url }}"{% if script.endswith(".mjs") %} type="module"{% endif %}&gt;&lt;/script&gt;
     {%- endif %}
   {%- endfor %}</code></pre>
-</blockquote>
+</details>
 </div>
 <h2 id="theme-files">Theme Files<a class="headerlink" href="#theme-files" title="Permanent link"></a></h2>
 <p>There are various files which a theme treats special in some way. Any other
@@ -461,12 +461,12 @@ defined by the <a href="../../user-guide/configuration/#nav">nav</a> configurati
 
   </div>
 
+
 </div><p>In addition to the iterable of <a href="#navigation-objects">navigation objects</a>, the
 <code>nav</code> object contains the following attributes:</p>
 
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -488,7 +488,6 @@ defined by the <a href="../../user-guide/configuration/#nav">nav</a> configurati
 </div>
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -588,12 +587,12 @@ as <code>page</code> <a href="#navigation-objects">navigation objects</a> in the
 
   </div>
 
+
 </div><p>All <code>page</code> objects contain the following attributes:</p>
 
 
 
 <div class="doc doc-object doc-function">
-
 
 
 
@@ -623,7 +622,6 @@ as <code>page</code> <a href="#navigation-objects">navigation objects</a> in the
 
 
 
-
 <h5 id="mkdocs.structure.pages.Page.content" class="doc doc-heading">
           <code class="highlight language-python">content: str | None</code>
   
@@ -643,7 +641,6 @@ as <code>page</code> <a href="#navigation-objects">navigation objects</a> in the
 </div>
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -676,7 +673,6 @@ for a page.</p>
 
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -716,7 +712,6 @@ documentation page.</p>
 
 
 
-
 <h5 id="mkdocs.structure.pages.Page.url" class="doc doc-heading">
           <code class="highlight language-python">url: str</code>
   
@@ -741,7 +736,6 @@ page.</p>
 
 
 
-
 <h5 id="mkdocs.structure.pages.Page.file" class="doc doc-heading">
           <code class="highlight language-python">file: File</code>
   
@@ -760,7 +754,6 @@ page.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -792,7 +785,6 @@ page <code>foo.md</code> would be <code>/bar/foo/</code>.</p>
 
 
 
-
 <h5 id="mkdocs.structure.pages.Page.canonical_url" class="doc doc-heading">
           <code class="highlight language-python">canonical_url: str | None</code>
   
@@ -817,7 +809,6 @@ variable.</p>
 
 
 
-
 <h5 id="mkdocs.structure.pages.Page.edit_url" class="doc doc-heading">
           <code class="highlight language-python">edit_url: str | None</code>
   
@@ -838,7 +829,6 @@ variable.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -867,7 +857,6 @@ on the homepage:</p>
 
 
 
-
 <h5 id="mkdocs.structure.pages.Page.previous_page" class="doc doc-heading">
           <code class="highlight language-python">previous_page: Page | None</code>
   
@@ -888,7 +877,6 @@ or if the current page is not included in the navigation at all.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -915,7 +903,6 @@ or if the current page is not included in the navigation at all.</p>
 
 
 
-
 <h5 id="mkdocs.structure.StructureItem.parent" class="doc doc-heading">
           <code class="highlight language-python">parent: Section | None = None</code>
   
@@ -935,7 +922,6 @@ or if the current page is not included in the navigation at all.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -961,7 +947,6 @@ or if the current page is not included in the navigation at all.</p>
 
 
 
-
 <h5 id="mkdocs.structure.pages.Page.active" class="doc doc-heading">
           <code class="highlight language-python">active: bool</code>
   
@@ -981,7 +966,6 @@ or if the current page is not included in the navigation at all.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -1007,7 +991,6 @@ or if the current page is not included in the navigation at all.</p>
 
 
 
-
 <h5 id="mkdocs.structure.pages.Page.is_page" class="doc doc-heading">
           <code class="highlight language-python">is_page: bool = True</code>
   
@@ -1027,7 +1010,6 @@ or if the current page is not included in the navigation at all.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -1075,7 +1057,6 @@ or if the current page is not included in the navigation at all.</p>
 
 
 
-
 <h5 id="mkdocs.structure.toc.AnchorLink.title" class="doc doc-heading">
           <code class="highlight language-python">title: str</code>
   
@@ -1094,7 +1075,6 @@ or if the current page is not included in the navigation at all.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -1119,7 +1099,6 @@ or if the current page is not included in the navigation at all.</p>
 
 
 
-
 <h5 id="mkdocs.structure.toc.AnchorLink.level" class="doc doc-heading">
           <code class="highlight language-python">level: int</code>
   
@@ -1138,7 +1117,6 @@ or if the current page is not included in the navigation at all.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -1166,6 +1144,7 @@ or if the current page is not included in the navigation at all.</p>
   </div>
 
   </div>
+
 
 </div><h3 id="navigation-objects">Navigation Objects<a class="headerlink" href="#navigation-objects" title="Permanent link"></a></h3>
 <p>Navigation objects contained in the <a href="#nav">nav</a> template variable may be one of
@@ -1212,11 +1191,11 @@ theme chooses to do so.</p>
 
   </div>
 
+
 </div><p>The following attributes are available on <code>section</code> objects:</p>
 
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -1238,7 +1217,6 @@ theme chooses to do so.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -1264,7 +1242,6 @@ theme chooses to do so.</p>
 
 
 
-
 <h5 id="mkdocs.structure.nav.Section.children" class="doc doc-heading">
           <code class="highlight language-python">children: list[StructureItem]</code>
   
@@ -1283,7 +1260,6 @@ theme chooses to do so.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -1311,7 +1287,6 @@ to <code>False</code>.</p>
 
 
 
-
 <h5 id="mkdocs.structure.nav.Section.is_section" class="doc doc-heading">
           <code class="highlight language-python">is_section: bool = True</code>
   
@@ -1334,7 +1309,6 @@ to <code>False</code>.</p>
 
 
 
-
 <h5 id="mkdocs.structure.nav.Section.is_page" class="doc doc-heading">
           <code class="highlight language-python">is_page: bool = False</code>
   
@@ -1354,7 +1328,6 @@ to <code>False</code>.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -1408,11 +1381,11 @@ MkDocs page.</p>
 
   </div>
 
+
 </div><p>The following attributes are available on <code>link</code> objects:</p>
 
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -1434,7 +1407,6 @@ MkDocs page.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -1460,7 +1432,6 @@ should not need to have <code>base_url</code> prepended.</p>
 
 
 
-
 <h5 id="mkdocs.structure.StructureItem.parent" class="doc doc-heading">
           <code class="highlight language-python">parent: Section | None = None</code>
   
@@ -1480,7 +1451,6 @@ should not need to have <code>base_url</code> prepended.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -1506,7 +1476,6 @@ should not need to have <code>base_url</code> prepended.</p>
 
 
 
-
 <h5 id="mkdocs.structure.nav.Link.active" class="doc doc-heading">
           <code class="highlight language-python">active: bool = False</code>
   
@@ -1526,7 +1495,6 @@ should not need to have <code>base_url</code> prepended.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -1552,7 +1520,6 @@ should not need to have <code>base_url</code> prepended.</p>
 
 
 
-
 <h5 id="mkdocs.structure.nav.Link.is_page" class="doc doc-heading">
           <code class="highlight language-python">is_page: bool = False</code>
   
@@ -1572,7 +1539,6 @@ should not need to have <code>base_url</code> prepended.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
-
 
 
 

@@ -299,8 +299,9 @@ class MyPlugin(mkdocs.plugins.BasePlugin[MyPluginConfig]):
     ...</code></pre>
 </div>
 <h5 id="examples-of-config-definitions">Examples of config definitions<a class="headerlink" href="#examples-of-config-definitions" title="Permanent link"></a></h5>
-<blockquote>
-<p>! EXAMPLE:</p>
+<details class="example" open="open">
+<summary>Example</summary>
+<p>
 <pre class="highlight"><code class="language-python">from mkdocs.config import base, config_options as c
 
 class _ValidationOptions(base.Config):
@@ -311,7 +312,7 @@ class _ValidationOptions(base.Config):
 class MyPluginConfig(base.Config):
     definition_file = c.File(exists=True)  # required
     checksum_file = c.Optional(c.File(exists=True))  # can be None but must exist if specified
-    validation = c.SubConfig(_ValidationOptions)</code></pre>
+    validation = c.SubConfig(_ValidationOptions)</code></pre></p>
 <p>From the user's point of view <code>SubConfig</code> is similar to <code>Type(dict)</code>, it's just that it also retains full ability for validation: you define all valid keys and what each value should adhere to.</p>
 <p>And <code>ListOfItems</code> is similar to <code>Type(list)</code>, but again, we define the constraint that each value must adhere to.</p>
 <p>This accepts a config as follows:</p>
@@ -323,10 +324,11 @@ class MyPluginConfig(base.Config):
     skip_checks:
       - foo
       - baz</code></pre>
-</blockquote>
+</details>
 <!-- -->
-<blockquote>
-<p>? EXAMPLE:</p>
+<details class="example">
+<summary>Example</summary>
+<p>
 <pre class="highlight"><code class="language-python">import numbers
 from mkdocs.config import base, config_options as c
 
@@ -335,7 +337,7 @@ class _Rectangle(base.Config):
     height = c.Type(numbers.Real)  # required
 
 class MyPluginConfig(base.Config):
-    add_rectangles = c.ListOfItems(c.SubConfig(_Rectangle))  # required</code></pre>
+    add_rectangles = c.ListOfItems(c.SubConfig(_Rectangle))  # required</code></pre></p>
 <p>In this example we define a list of complex items, and that's achieved by passing a concrete <code>SubConfig</code> to <code>ListOfItems</code>.</p>
 <p>This accepts a config as follows:</p>
 <pre class="highlight"><code class="language-yaml">my_plugin:
@@ -344,7 +346,7 @@ class MyPluginConfig(base.Config):
       height: 7
     - width: 12
       height: 2</code></pre>
-</blockquote>
+</details>
 <p>When the user's configuration is loaded, the above scheme will be used to
 validate the configuration and fill in any defaults for settings not
 provided by the user. The validation classes may be any of the classes
@@ -1209,6 +1211,7 @@ the theme config:</p>
 
 
 
+
   <div class="doc doc-contents first">
   
       <p>The <code>startup</code> event runs once at the very beginning of an <code>mkdocs</code> invocation.</p>
@@ -1220,9 +1223,9 @@ For initializing per-build variables (and whenever in doubt), use the <code>on_c
 
 
 
-  <p>Parameters:</p>
+  <p><span class="doc-section-title">Parameters:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>command</code></b>
             (<code><span title="typing.Literal">Literal</span>[&#39;build&#39;, &#39;gh-deploy&#39;, &#39;serve&#39;]</code>)
         –
@@ -1230,7 +1233,7 @@ For initializing per-build variables (and whenever in doubt), use the <code>on_c
           <p>the command that MkDocs was invoked with, e.g. "serve" for <code>mkdocs serve</code>.</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>dirty</code></b>
             (<code>bool</code>)
         –
@@ -1247,6 +1250,7 @@ For initializing per-build variables (and whenever in doubt), use the <code>on_c
 
 
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1274,6 +1278,7 @@ relies on detecting a graceful shutdown of MkDocs.</p>
 
 
 
+
   <div class="doc doc-contents first">
   
       <p>The <code>serve</code> event is only called when the <code>serve</code> command is used during
@@ -1284,9 +1289,9 @@ to the list of "watched" files for auto-reloading.</p>
 
 
 
-  <p>Parameters:</p>
+  <p><span class="doc-section-title">Parameters:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>server</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.livereload.LiveReloadServer" href="../api/#mkdocs.livereload.LiveReloadServer">LiveReloadServer</a></code>)
         –
@@ -1294,7 +1299,7 @@ to the list of "watched" files for auto-reloading.</p>
           <p><code>livereload.Server</code> instance</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1302,7 +1307,7 @@ to the list of "watched" files for auto-reloading.</p>
           <p>global configuration object</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>builder</code></b>
             (<code><span title="typing.Callable">Callable</span></code>)
         –
@@ -1314,9 +1319,9 @@ to the list of "watched" files for auto-reloading.</p>
 
 
 
-  <p>Returns:</p>
+  <p><span class="doc-section-title">Returns:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
             <code><a class="autorefs autorefs-internal" title="mkdocs.livereload.LiveReloadServer" href="../api/#mkdocs.livereload.LiveReloadServer">LiveReloadServer</a> | None</code>
         –
         <div class="doc-md-description">
@@ -1340,6 +1345,7 @@ entire site.</p>
 
 
 
+
   <div class="doc doc-contents first">
   
       <p>The <code>config</code> event is the first event called on build and is run immediately
@@ -1348,9 +1354,9 @@ config should be made here.</p>
 
 
 
-  <p>Parameters:</p>
+  <p><span class="doc-section-title">Parameters:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1362,9 +1368,9 @@ config should be made here.</p>
 
 
 
-  <p>Returns:</p>
+  <p><span class="doc-section-title">Returns:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
             <code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span> | None</code>
         –
         <div class="doc-md-description">
@@ -1384,6 +1390,7 @@ config should be made here.</p>
 
 
 
+
   <div class="doc doc-contents first">
   
       <p>The <code>pre_build</code> event does not alter any variables. Use this event to call
@@ -1391,9 +1398,9 @@ pre-build scripts.</p>
 
 
 
-  <p>Parameters:</p>
+  <p><span class="doc-section-title">Parameters:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1414,6 +1421,7 @@ pre-build scripts.</p>
 
 
 
+
   <div class="doc doc-contents first">
   
       <p>The <code>files</code> event is called after the files collection is populated from the
@@ -1424,9 +1432,9 @@ specific data.</p>
 
 
 
-  <p>Parameters:</p>
+  <p><span class="doc-section-title">Parameters:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>files</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
         –
@@ -1434,7 +1442,7 @@ specific data.</p>
           <p>global files collection</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1446,9 +1454,9 @@ specific data.</p>
 
 
 
-  <p>Returns:</p>
+  <p><span class="doc-section-title">Returns:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
             <code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a> | None</code>
         –
         <div class="doc-md-description">
@@ -1468,6 +1476,7 @@ specific data.</p>
 
 
 
+
   <div class="doc doc-contents first">
   
       <p>The <code>nav</code> event is called after the site navigation is created and can
@@ -1475,9 +1484,9 @@ be used to alter the site navigation.</p>
 
 
 
-  <p>Parameters:</p>
+  <p><span class="doc-section-title">Parameters:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>nav</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.nav.Navigation" href="../themes/#mkdocs.structure.nav.Navigation">Navigation</a></code>)
         –
@@ -1485,7 +1494,7 @@ be used to alter the site navigation.</p>
           <p>global navigation object</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1493,7 +1502,7 @@ be used to alter the site navigation.</p>
           <p>global configuration object</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>files</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
         –
@@ -1505,9 +1514,9 @@ be used to alter the site navigation.</p>
 
 
 
-  <p>Returns:</p>
+  <p><span class="doc-section-title">Returns:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
             <code><a class="autorefs autorefs-internal" title="mkdocs.structure.nav.Navigation" href="../themes/#mkdocs.structure.nav.Navigation">Navigation</a> | None</code>
         –
         <div class="doc-md-description">
@@ -1527,6 +1536,7 @@ be used to alter the site navigation.</p>
 
 
 
+
   <div class="doc doc-contents first">
   
       <p>The <code>env</code> event is called after the Jinja template environment is created
@@ -1535,9 +1545,9 @@ and can be used to alter the
 
 
 
-  <p>Parameters:</p>
+  <p><span class="doc-section-title">Parameters:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>env</code></b>
             (<code><span title="jinja2.Environment">Environment</span></code>)
         –
@@ -1545,7 +1555,7 @@ and can be used to alter the
           <p>global Jinja environment</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1553,7 +1563,7 @@ and can be used to alter the
           <p>global configuration object</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>files</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
         –
@@ -1565,9 +1575,9 @@ and can be used to alter the
 
 
 
-  <p>Returns:</p>
+  <p><span class="doc-section-title">Returns:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
             <code><span title="jinja2.Environment">Environment</span> | None</code>
         –
         <div class="doc-md-description">
@@ -1587,6 +1597,7 @@ and can be used to alter the
 
 
 
+
   <div class="doc doc-contents first">
   
       <p>The <code>post_build</code> event does not alter any variables. Use this event to call
@@ -1594,9 +1605,9 @@ post-build scripts.</p>
 
 
 
-  <p>Parameters:</p>
+  <p><span class="doc-section-title">Parameters:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1617,6 +1628,7 @@ post-build scripts.</p>
 
 
 
+
   <div class="doc doc-contents first">
   
       <p>The <code>build_error</code> event is called after an exception of any kind
@@ -1627,9 +1639,9 @@ events which were scheduled to run after the error will have been skipped. See
 
 
 
-  <p>Parameters:</p>
+  <p><span class="doc-section-title">Parameters:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>error</code></b>
             (<code>Exception</code>)
         –
@@ -1655,6 +1667,7 @@ called after the <a href="#on_env">env</a> event and before any <a href="#page-e
 
 
 
+
   <div class="doc doc-contents first">
   
       <p>The <code>pre_template</code> event is called immediately after the subject template is
@@ -1662,9 +1675,9 @@ loaded and can be used to alter the template.</p>
 
 
 
-  <p>Parameters:</p>
+  <p><span class="doc-section-title">Parameters:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>template</code></b>
             (<code><span title="jinja2.Template">Template</span></code>)
         –
@@ -1672,7 +1685,7 @@ loaded and can be used to alter the template.</p>
           <p>a Jinja2 <a href="https://jinja.palletsprojects.com/en/latest/api/#jinja2.Template">Template</a> object</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>template_name</code></b>
             (<code>str</code>)
         –
@@ -1680,7 +1693,7 @@ loaded and can be used to alter the template.</p>
           <p>string filename of template</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1692,9 +1705,9 @@ loaded and can be used to alter the template.</p>
 
 
 
-  <p>Returns:</p>
+  <p><span class="doc-section-title">Returns:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
             <code><span title="jinja2.Template">Template</span> | None</code>
         –
         <div class="doc-md-description">
@@ -1714,6 +1727,7 @@ loaded and can be used to alter the template.</p>
 
 
 
+
   <div class="doc doc-contents first">
   
       <p>The <code>template_context</code> event is called immediately after the context is created
@@ -1722,9 +1736,9 @@ template only.</p>
 
 
 
-  <p>Parameters:</p>
+  <p><span class="doc-section-title">Parameters:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>context</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.utils.templates.TemplateContext" href="../api/#mkdocs.utils.templates.TemplateContext">TemplateContext</a></code>)
         –
@@ -1732,7 +1746,7 @@ template only.</p>
           <p>dict of template context variables</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>template_name</code></b>
             (<code>str</code>)
         –
@@ -1740,7 +1754,7 @@ template only.</p>
           <p>string filename of template</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1752,9 +1766,9 @@ template only.</p>
 
 
 
-  <p>Returns:</p>
+  <p><span class="doc-section-title">Returns:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
             <code><a class="autorefs autorefs-internal" title="mkdocs.utils.templates.TemplateContext" href="../api/#mkdocs.utils.templates.TemplateContext">TemplateContext</a> | None</code>
         –
         <div class="doc-md-description">
@@ -1774,6 +1788,7 @@ template only.</p>
 
 
 
+
   <div class="doc doc-contents first">
   
       <p>The <code>post_template</code> event is called after the template is rendered, but before
@@ -1783,9 +1798,9 @@ written to disc.</p>
 
 
 
-  <p>Parameters:</p>
+  <p><span class="doc-section-title">Parameters:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>output_content</code></b>
             (<code>str</code>)
         –
@@ -1793,7 +1808,7 @@ written to disc.</p>
           <p>output of rendered template as string</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>template_name</code></b>
             (<code>str</code>)
         –
@@ -1801,7 +1816,7 @@ written to disc.</p>
           <p>string filename of template</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1813,9 +1828,9 @@ written to disc.</p>
 
 
 
-  <p>Returns:</p>
+  <p><span class="doc-section-title">Returns:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
             <code>str | None</code>
         –
         <div class="doc-md-description">
@@ -1839,6 +1854,7 @@ page events are called after the <a href="#on_post_template">post_template</a> e
 
 
 
+
   <div class="doc doc-contents first">
   
       <p>The <code>pre_page</code> event is called before any actions are taken on the subject
@@ -1846,9 +1862,9 @@ page and can be used to alter the <code>Page</code> instance.</p>
 
 
 
-  <p>Parameters:</p>
+  <p><span class="doc-section-title">Parameters:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>page</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
         –
@@ -1856,7 +1872,7 @@ page and can be used to alter the <code>Page</code> instance.</p>
           <p><code>mkdocs.structure.pages.Page</code> instance</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1864,7 +1880,7 @@ page and can be used to alter the <code>Page</code> instance.</p>
           <p>global configuration object</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>files</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
         –
@@ -1876,9 +1892,9 @@ page and can be used to alter the <code>Page</code> instance.</p>
 
 
 
-  <p>Returns:</p>
+  <p><span class="doc-section-title">Returns:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
             <code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a> | None</code>
         –
         <div class="doc-md-description">
@@ -1898,6 +1914,7 @@ page and can be used to alter the <code>Page</code> instance.</p>
 
 
 
+
   <div class="doc doc-contents first">
   
       <div class="admonition deprecated">
@@ -1913,9 +1930,9 @@ the contents of a page's source from the filesystem.</p>
 
 
 
-  <p>Parameters:</p>
+  <p><span class="doc-section-title">Parameters:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>page</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
         –
@@ -1923,7 +1940,7 @@ the contents of a page's source from the filesystem.</p>
           <p><code>mkdocs.structure.pages.Page</code> instance</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1935,9 +1952,9 @@ the contents of a page's source from the filesystem.</p>
 
 
 
-  <p>Returns:</p>
+  <p><span class="doc-section-title">Returns:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
             <code>str | None</code>
         –
         <div class="doc-md-description">
@@ -1958,6 +1975,7 @@ default loading from a file will be performed.</p>
 
 
 
+
   <div class="doc doc-contents first">
   
       <p>The <code>page_markdown</code> event is called after the page's markdown is loaded
@@ -1966,9 +1984,9 @@ data has been stripped off and is available as <code>page.meta</code> at this po
 
 
 
-  <p>Parameters:</p>
+  <p><span class="doc-section-title">Parameters:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>markdown</code></b>
             (<code>str</code>)
         –
@@ -1976,7 +1994,7 @@ data has been stripped off and is available as <code>page.meta</code> at this po
           <p>Markdown source text of page as string</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>page</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
         –
@@ -1984,7 +2002,7 @@ data has been stripped off and is available as <code>page.meta</code> at this po
           <p><code>mkdocs.structure.pages.Page</code> instance</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1992,7 +2010,7 @@ data has been stripped off and is available as <code>page.meta</code> at this po
           <p>global configuration object</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>files</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
         –
@@ -2004,9 +2022,9 @@ data has been stripped off and is available as <code>page.meta</code> at this po
 
 
 
-  <p>Returns:</p>
+  <p><span class="doc-section-title">Returns:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
             <code>str | None</code>
         –
         <div class="doc-md-description">
@@ -2026,6 +2044,7 @@ data has been stripped off and is available as <code>page.meta</code> at this po
 
 
 
+
   <div class="doc doc-contents first">
   
       <p>The <code>page_content</code> event is called after the Markdown text is rendered to
@@ -2034,9 +2053,9 @@ HTML body of the page.</p>
 
 
 
-  <p>Parameters:</p>
+  <p><span class="doc-section-title">Parameters:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>html</code></b>
             (<code>str</code>)
         –
@@ -2044,7 +2063,7 @@ HTML body of the page.</p>
           <p>HTML rendered from Markdown source as string</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>page</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
         –
@@ -2052,7 +2071,7 @@ HTML body of the page.</p>
           <p><code>mkdocs.structure.pages.Page</code> instance</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -2060,7 +2079,7 @@ HTML body of the page.</p>
           <p>global configuration object</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>files</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
         –
@@ -2072,9 +2091,9 @@ HTML body of the page.</p>
 
 
 
-  <p>Returns:</p>
+  <p><span class="doc-section-title">Returns:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
             <code>str | None</code>
         –
         <div class="doc-md-description">
@@ -2094,6 +2113,7 @@ HTML body of the page.</p>
 
 
 
+
   <div class="doc doc-contents first">
   
       <p>The <code>page_context</code> event is called after the context for a page is created
@@ -2101,9 +2121,9 @@ and can be used to alter the context for that specific page only.</p>
 
 
 
-  <p>Parameters:</p>
+  <p><span class="doc-section-title">Parameters:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>context</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.utils.templates.TemplateContext" href="../api/#mkdocs.utils.templates.TemplateContext">TemplateContext</a></code>)
         –
@@ -2111,7 +2131,7 @@ and can be used to alter the context for that specific page only.</p>
           <p>dict of template context variables</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>page</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
         –
@@ -2119,7 +2139,7 @@ and can be used to alter the context for that specific page only.</p>
           <p><code>mkdocs.structure.pages.Page</code> instance</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -2127,7 +2147,7 @@ and can be used to alter the context for that specific page only.</p>
           <p>global configuration object</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>nav</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.nav.Navigation" href="../themes/#mkdocs.structure.nav.Navigation">Navigation</a></code>)
         –
@@ -2139,9 +2159,9 @@ and can be used to alter the context for that specific page only.</p>
 
 
 
-  <p>Returns:</p>
+  <p><span class="doc-section-title">Returns:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
             <code><a class="autorefs autorefs-internal" title="mkdocs.utils.templates.TemplateContext" href="../api/#mkdocs.utils.templates.TemplateContext">TemplateContext</a> | None</code>
         –
         <div class="doc-md-description">
@@ -2161,6 +2181,7 @@ and can be used to alter the context for that specific page only.</p>
 
 
 
+
   <div class="doc doc-contents first">
   
       <p>The <code>post_page</code> event is called after the template is rendered, but
@@ -2170,9 +2191,9 @@ written to disc.</p>
 
 
 
-  <p>Parameters:</p>
+  <p><span class="doc-section-title">Parameters:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>output</code></b>
             (<code>str</code>)
         –
@@ -2180,7 +2201,7 @@ written to disc.</p>
           <p>output of rendered template as string</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>page</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
         –
@@ -2188,7 +2209,7 @@ written to disc.</p>
           <p><code>mkdocs.structure.pages.Page</code> instance</p>
         </div>
       </li>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -2200,9 +2221,9 @@ written to disc.</p>
 
 
 
-  <p>Returns:</p>
+  <p><span class="doc-section-title">Returns:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
             <code>str | None</code>
         –
         <div class="doc-md-description">
@@ -2220,7 +2241,6 @@ written to disc.</p>
 
 
 <div class="doc doc-object doc-function">
-
 
 
 
@@ -2256,7 +2276,6 @@ except ImportError:
 
 
 <div class="doc doc-object doc-class">
-
 
 
 
@@ -2308,13 +2327,13 @@ instead they can start with <code>_on_</code> like in the the above example, or 
 
   </div>
 
+
 </div></div>
 <h3 id="handling-errors">Handling Errors<a class="headerlink" href="#handling-errors" title="Permanent link"></a></h3>
 <p>MkDocs defines four error types:</p>
 
 
 <div class="doc doc-object doc-class">
-
 
 
 
@@ -2336,10 +2355,10 @@ not be raised directly. One of the subclasses should be raised instead.</p>
 
   </div>
 
+
 </div>
 
 <div class="doc doc-object doc-class">
-
 
 
 
@@ -2362,10 +2381,10 @@ defined in a plugin's <a class="autorefs autorefs-internal" href="#config_scheme
 
   </div>
 
+
 </div>
 
 <div class="doc doc-object doc-class">
-
 
 
 
@@ -2387,10 +2406,10 @@ not raise this error.</p>
 
   </div>
 
+
 </div>
 
 <div class="doc doc-object doc-class">
-
 
 
 
@@ -2411,6 +2430,7 @@ events.</p>
 
 
   </div>
+
 
 </div><p>Unexpected and uncaught exceptions will interrupt the build process and produce
 typical Python tracebacks, which are useful for debugging your code. However,
@@ -2466,7 +2486,6 @@ if log.getEffectiveLevel() &lt;= logging.DEBUG:
 
 
 
-
 <h4 id="mkdocs.plugins.get_plugin_logger" class="doc doc-heading">
           <code class="highlight language-python">mkdocs.plugins.get_plugin_logger(name: str) -&gt; PrefixedLogger</code>
 
@@ -2479,9 +2498,9 @@ if log.getEffectiveLevel() &lt;= logging.DEBUG:
 
 
 
-  <p>Parameters:</p>
+  <p><span class="doc-section-title">Parameters:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
         <b><code>name</code></b>
             (<code>str</code>)
         –
@@ -2493,9 +2512,9 @@ if log.getEffectiveLevel() &lt;= logging.DEBUG:
 
 
 
-  <p>Returns:</p>
+  <p><span class="doc-section-title">Returns:</span></p>
   <ul>
-      <li class="field-body">
+      <li class="doc-section-item field-body">
             <code><span title="mkdocs.plugins.PrefixedLogger">PrefixedLogger</span></code>
         –
         <div class="doc-md-description">
