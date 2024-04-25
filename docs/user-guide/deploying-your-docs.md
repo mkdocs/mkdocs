@@ -107,7 +107,7 @@ documentation on [Troubleshooting custom domains].
 ## Read the Docs
 
 [Read the Docs][rtd] offers free documentation hosting. You can import your docs
-using Gitversion control system. Read the Docs supports MkDocs out-of-the-box.
+using the Git version control system. Read the Docs supports MkDocs out-of-the-box.
 Follow the [instructions] on their site to arrange the files in your repository properly,
 create an account and point it at your publicly hosted repository. If properly
 configured, your documentation will update each time you push commits to your
