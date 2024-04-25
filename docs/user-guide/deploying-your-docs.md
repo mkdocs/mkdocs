@@ -107,23 +107,14 @@ documentation on [Troubleshooting custom domains].
 ## Read the Docs
 
 [Read the Docs][rtd] offers free documentation hosting. You can import your docs
-using any major version control system, including Mercurial, Git, Subversion,
-and Bazaar. Read the Docs supports MkDocs out-of-the-box. Follow the
-[instructions] on their site to arrange the files in your repository properly,
+using Gitversion control system. Read the Docs supports MkDocs out-of-the-box.
+Follow the [instructions] on their site to arrange the files in your repository properly,
 create an account and point it at your publicly hosted repository. If properly
 configured, your documentation will update each time you push commits to your
 public repository.
 
-NOTE:
-To benefit from all of the [features] offered by Read the Docs, you will need
-to use the [Read the Docs theme][theme] which ships with MkDocs. The various
-themes which may be referenced in Read the Docs' documentation are Sphinx
-specific themes and will not work with MkDocs.
-
 [rtd]: https://readthedocs.org/
 [instructions]: https://docs.readthedocs.io/en/stable/intro/getting-started-with-mkdocs.html
-[features]: https://docs.readthedocs.io/en/latest/features.html
-[theme]: ./choosing-your-theme.md#readthedocs
 
 ## Other Providers
 
