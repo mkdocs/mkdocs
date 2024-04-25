@@ -1594,7 +1594,8 @@ class NestedSubConfigTest(TestCase):
         validation = c.PropagatingSubConfig[defaults.MkDocsConfig.Validation]()
 
     def test_unspecified(self) -> None:
-        for cfg in {}, {'validation': {}}:
+        cfgs: list[dict] = [{}, {'validation': {}}]
+        for cfg in cfgs:
             with self.subTest(cfg):
                 conf = self.get_config(
                     self.Schema,
