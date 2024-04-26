@@ -129,9 +129,9 @@
                                     {%- if config.repo_name == 'GitHub' -%}
                                         <i class="fa-brands fa-github"></i><span class="d-lg-none ms-2">{% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}</span>
                                     {%- elif config.repo_name == 'Bitbucket' -%}
-                                        <i class="fa-brands fa-bitbucket"></i><span class="d-lg-none ms-2"></span>{% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}</span>
+                                        <i class="fa-brands fa-bitbucket"></i><span class="d-lg-none ms-2">{% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}</span>
                                     {%- elif config.repo_name == 'GitLab' -%}
-                                        <i class="fa-brands fa-gitlab"></i><span class="d-lg-none ms-2"></span>{% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}</span>
+                                        <i class="fa-brands fa-gitlab"></i><span class="d-lg-none ms-2">{% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}</span>
                                     {%- elif config.repo_name -%}
                                         {% trans repo_name=config.repo_name%}Edit on {{ repo_name }}{% endtrans %}
                                     {% else %}
