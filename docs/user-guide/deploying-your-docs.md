@@ -30,27 +30,29 @@ That's it! Behind the scenes, MkDocs will build your docs and use the
 Use `mkdocs gh-deploy --help` to get a full list of options available for the
 `gh-deploy` command.
 
-Be aware that you will not be able to review the built site before it is pushed
-to GitHub. Therefore, you may want to verify any changes you make to the docs
-beforehand by using the `build` or `serve` commands and reviewing the built
-files locally.
+Please note that you will not be able to review the built site before it is
+deployed to GitHub. Instead, you may want to verify any changes you made by
+using the `build` or `serve` commands and reviewing the built files locally
+before running `gh-deploy`.
 
 WARNING:
-You should never edit files in your pages repository by hand if you're using
-the `gh-deploy` command because you will lose your work the next time you
-run the command.
+The site files in the `gh-pages` branch are **automatically generated** and
+updated when using the `gh-deploy` script.  
+As such, you should never make any changes to the site files of your GitHub
+Pages site by hand. Doing so will cause you to lose these changes the next time
+the `gh-deploy` script or command is called.
 
 WARNING:
 If there are untracked files or uncommitted work in the local repository where
-`mkdocs gh-deploy` is run, these will be included in the pages that are deployed.
+`mkdocs gh-deploy` is run, these will be included in the deployed Pages site.
 
-### Organization and User Pages
+### User and Organisation Pages
 
-User and Organization Pages sites are not tied to a specific project, and the
-site files are deployed to the `master` branch in a dedicated repository named
-with the GitHub account name. Therefore, you need working copies of two
-repositories on our local system. For example, consider the following file
-structure:
+User and Organization GitHub Pages sites are not tied to a specific project,
+and the site files are deployed to the `master` branch in a dedicated
+repository named with the GitHub account name. Therefore, you will need working
+copies of two repositories on your local system. For example, consider the
+following file structure:
 
 ```text
 my-project/
@@ -59,21 +61,33 @@ my-project/
 orgname.github.io/
 ```
 
-After making and verifying updates to your project you need to change
-directories to the `orgname.github.io` repository and call the
-`mkdocs gh-deploy` command from there:
+After making and verifying updates to the `my-project` repository, change
+directories to the `orgname.github.io` repository and call the `mkdocs
+gh-deploy` command from there:
 
 ```sh
 cd ../orgname.github.io/
-mkdocs gh-deploy --config-file ../my-project/mkdocs.yml --remote-branch master
+mkdocs gh-deploy --config-file ../my-project/mkdocs.yml --remote-branch main
 ```
 
-Note that you need to explicitly point to the `mkdocs.yml` configuration file as
-it is no longer in the current working directory. You also need to inform the
-deploy script to commit to the `master` branch. You may override the default
-with the [remote_branch] configuration setting, but if you forget to change
-directories before running the deploy script, it will commit to the `master`
-branch of your project, which you probably don't want.
+Please note that you need to explicitly point to the `mkdocs.yml` configuration
+file in the `my-project` folder, as it is now no longer located in your current
+working directory.  
+You will also need to specify the `main` branch as the branch the deploy
+script should to commit to.
+
+NOTE:
+You may override the default branch with the [remote_branch] setting in the
+mkdocs.yml configuration file, but forgetting to change directories before
+running the deploy script will commit to the `main` branch of `my-project`,
+likely overwriting the contents of your precious project.
+
+WARNING:
+The site files in the `main` branch are **automatically generated** and updated
+when using the `gh-deploy` script.  
+As such, you should never make any changes to the site files of your GitHub
+Pages site by hand. Doing so will cause you to lose these changes the next time
+the `gh-deploy` script or command is called.
 
 ### Custom Domains
 
