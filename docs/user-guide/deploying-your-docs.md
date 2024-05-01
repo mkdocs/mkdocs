@@ -16,7 +16,7 @@ which require a different work flow when deploying.
 
 Project Pages sites are simpler as the site files get deployed to a branch
 within the project repository (`gh-pages` by default). After you `checkout` the
-primary working branch (usually `master`) of the git repository where you
+primary working branch (usually `main`) of the git repository where you
 maintain the source documentation for your project, run the following command:
 
 ```sh
@@ -49,7 +49,7 @@ If there are untracked files or uncommitted work in the local repository where
 ### User and Organisation Pages
 
 User and Organization GitHub Pages sites are not tied to a specific project,
-and the site files are deployed to the `master` branch in a dedicated
+and the site files are deployed to the `main` branch in a dedicated
 repository named with the GitHub account name. Therefore, you will need working
 copies of two repositories on your local system. For example, consider the
 following file structure:
