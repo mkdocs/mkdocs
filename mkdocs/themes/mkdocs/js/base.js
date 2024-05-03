@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // First, close any sibling dropdowns.
       var container = item.parentElement.parentElement;
-      container.querySelectorAll('> .dropdown-submenu > a').forEach(function(el) {
+      container.querySelectorAll(':scope > .dropdown-submenu > a').forEach(function(el) {
           if (el !== item) {
               hideInnerDropdown(el);
           }
