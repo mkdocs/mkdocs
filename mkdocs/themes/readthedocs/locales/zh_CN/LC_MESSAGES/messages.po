@@ -5,17 +5,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MkDocs 1.2\n"
-"Report-Msgid-Bugs-To: \"https://github.com/mkdocs/mkdocs/issues\"\n"
+"Report-Msgid-Bugs-To: \"https://github.com/mkdocs/mkdocs/"
+"issues\"\n"
 "POT-Creation-Date: 2024-04-09 16:13+0200\n"
-"PO-Revision-Date: 2022-08-23 04:29+0800\n"
+"PO-Revision-Date: 2024-04-26 06:39+0800\n"
 "Last-Translator: xingkong0113 <dingpengyu06@gmail.com>\n"
-"Language: zh_CN\n"
 "Language-Team: zh_Hans_CN <dingpengyu06@gmail.com>\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "Generated-By: Babel 2.14.0\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: mkdocs/themes/readthedocs/404.html:7
 msgid "Page not found"
@@ -74,11 +76,12 @@ msgstr "页脚导航"
 msgid ""
 "Built with %(mkdocs_link)s using a %(sphinx_link)s provided by "
 "%(rtd_link)s."
-msgstr "用%(mkdocs_link)s构建，使用%(rtd_link)s提供的%(sphinx_link)s。"
+msgstr ""
+"用%(mkdocs_link)s构建，使用%(rtd_link)s提供的%(sphinx_link)s。"
 
 #: mkdocs/themes/readthedocs/footer.html:25
 msgid "theme"
-msgstr ""
+msgstr "主题"
 
 #: mkdocs/themes/readthedocs/search.html:5
 msgid "Search Results"
@@ -108,4 +111,3 @@ msgstr "搜索文档"
 #: mkdocs/themes/readthedocs/versions.html:1
 msgid "Versions"
 msgstr "版本"
-

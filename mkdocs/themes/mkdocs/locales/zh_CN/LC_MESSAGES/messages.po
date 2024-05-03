@@ -7,15 +7,16 @@ msgstr ""
 "Project-Id-Version: MkDocs 1.2\n"
 "Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
 "POT-Creation-Date: 2024-04-18 21:03+0200\n"
-"PO-Revision-Date: 2022-08-23 04:28+0800\n"
+"PO-Revision-Date: 2024-04-26 06:34+0800\n"
 "Last-Translator: xingkong0113 <dingpengyu06@gmail.com>\n"
-"Language: zh_CN\n"
 "Language-Team: zh_Hans_CN <dingpengyu06@gmail.com>\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "Generated-By: Babel 2.14.0\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: mkdocs/themes/mkdocs/404.html:8
 msgid "Page not found"
@@ -81,7 +82,7 @@ msgstr "上一页面"
 
 #: mkdocs/themes/mkdocs/search-modal.html:9
 msgid "From here you can search these documents. Enter your search terms below."
-msgstr "从这里你可以搜索这些文件。在下面输入您的搜索内容。"
+msgstr "从这里您可以搜索这些文档。在下面输入您需要搜索的内容。"
 
 #: mkdocs/themes/mkdocs/search-modal.html:12
 msgid "Search..."
@@ -98,4 +99,3 @@ msgstr "没有搜索到结果"
 #: mkdocs/themes/mkdocs/toc.html:3
 msgid "Table of Contents"
 msgstr "目录"
-
