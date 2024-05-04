@@ -74,11 +74,11 @@ Please note that you need to explicitly point to the `mkdocs.yml` configuration
 file in the `my-project` folder, as it is now no longer located in your current
 working directory.  
 You will also need to specify the `main` branch as the branch the deploy
-script should to commit to.
+script should commit to.
 
 NOTE:
 You may override the default branch with the [remote_branch] setting in the
-mkdocs.yml configuration file, but forgetting to change directories before
+`mkdocs.yml` configuration file, but forgetting to change directories before
 running the deploy script will commit to the `main` branch of `my-project`,
 likely overwriting the contents of your precious project.
 
