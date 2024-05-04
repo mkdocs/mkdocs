@@ -46,9 +46,9 @@ WARNING:
 If there are untracked files or uncommitted work in the local repository where
 `mkdocs gh-deploy` is run, these will be included in the deployed Pages site.
 
-### User and Organization Pages
+### Organization and User Pages
 
-User and Organization GitHub Pages sites are not tied to a specific project,
+Organization and User GitHub Pages sites are not tied to a specific project,
 and the site files are deployed to the `main` branch in a dedicated
 repository named with the GitHub account name. Therefore, you will need working
 copies of two repositories on your local system. For example, consider the
