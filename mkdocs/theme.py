@@ -138,6 +138,9 @@ class Theme(MutableMapping[str, Any]):
                 f"Please upgrade to a current version of the theme."
             )
 
+        if theme_config is None:
+            theme_config = {}
+
         log.debug(f"Loaded theme configuration for '{name}' from '{file_path}': {theme_config}")
 
         if parent_theme := theme_config.pop('extends', None):
