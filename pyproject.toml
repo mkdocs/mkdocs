@@ -193,7 +193,7 @@ format = [
 [tool.hatch.envs.lint]
 detached = true
 dependencies = [
-    "codespell",
+    "codespell==2.2.6",
 ]
 [tool.hatch.envs.lint.scripts]
 spelling = 'codespell mkdocs docs *.* -S LC_MESSAGES -S "*.min.js" -S "lunr*.js" -S fontawesome-webfont.svg -S tinyseg.js -S "*.map"'
