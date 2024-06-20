@@ -139,8 +139,9 @@ document.addEventListener("DOMContentLoaded", function () {
         menu.parentElement.addEventListener('hide.bs.dropdown', function() {
             menu.scrollTop = 0;
             var dropdown = menu.querySelector('.dropdown-submenu > a');
-            if (dropdown)
-              dropdown.classList.remove('open');
+            if (dropdown) {
+                dropdown.classList.remove('open');
+            }
             menu.querySelectorAll('.dropdown-menu .dropdown-menu').forEach(function(submenu) {
                 submenu.classList.remove('show');
             });
