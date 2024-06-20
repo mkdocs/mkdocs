@@ -57,10 +57,10 @@ document.addEventListener("DOMContentLoaded", function () {
       var page;
       switch (key) {
           case shortcuts.next:
-              page = document.querySelector('.navbar a[rel="next"]:first').getAttribute('href');
+              page = document.querySelector('.navbar a[rel="next"]').getAttribute('href');
               break;
           case shortcuts.previous:
-              page = document.querySelector('.navbar a[rel="prev"]:first').getAttribute('href');
+              page = document.querySelector('.navbar a[rel="prev"]').getAttribute('href');
               break;
           case shortcuts.search:
               e.preventDefault();
