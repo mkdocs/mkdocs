@@ -168,7 +168,10 @@ class Config(UserDict):
                 config_file_path = config_file_path.decode(encoding=sys.getfilesystemencoding())
             except UnicodeDecodeError:
                 raise ValidationError("config_file_path is not a Unicode string.")
-        self.config_file_path = config_file_path or ''
+        if config_file_path:
+            self.config_file_path = os.path.abspath(config_file_path)
+        else:
+            self.config_file_path = ''
 
     def set_defaults(self) -> None:
         """

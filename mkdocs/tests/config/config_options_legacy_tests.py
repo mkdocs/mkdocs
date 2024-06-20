@@ -768,17 +768,20 @@ class FilesystemObjectTest(TestCase):
                 )
                 self.assertEqual(conf['dir'], os.path.join(base_path, 'foo'))
 
-    def test_site_dir_is_config_dir_fails(self):
+    def test_docs_dir_is_config_dir_fails(self):
         class Schema:
-            dir = c.DocsDir()
+            docs_dir = c.DocsDir()
 
         with self.expect_error(
-            dir="The 'dir' should not be the parent directory of the config file. "
-            "Use a child directory instead so that the 'dir' is a sibling of the config file."
+            docs_dir="""The 'mkdocs.yml' config file should not be inside the docs_dir.
+To allow this arrangement, please exclude the file (and other files as applicable) by adding the following configuration:
+
+exclude_docs: |
+  /mkdocs.yml"""
         ):
             self.get_config(
                 Schema,
-                {'dir': '.'},
+                {'docs_dir': '.'},
                 config_file_path=os.path.join(os.path.abspath('.'), 'mkdocs.yml'),
             )
 
@@ -860,7 +863,7 @@ class SiteDirTest(TestCase):
         site_dir = c.SiteDir()
         docs_dir = c.Dir()
 
-    def test_doc_dir_in_site_dir(self):
+    def test_doc_dir_in_site_dir_fails(self):
         j = os.path.join
         # The parent dir is not the same on every system, so use the actual dir name
         parent_dir = mkdocs.__file__.split(os.sep)[-3]
@@ -878,24 +881,27 @@ class SiteDirTest(TestCase):
         for test_config in test_configs:
             with self.subTest(test_config):
                 with self.expect_error(
-                    site_dir=re.compile(r"The 'docs_dir' should not be within the 'site_dir'.*")
+                    site_dir="The docs_dir should not be inside the site_dir as this can mean the source files are overwritten by the output or deleted entirely."
                 ):
                     self.get_config(self.Schema, test_config)
 
-    def test_site_dir_in_docs_dir(self):
+    def test_site_dir_in_docs_dir_fails(self):
         j = os.path.join
 
         test_configs = (
             {'docs_dir': 'docs', 'site_dir': j('docs', 'site')},
             {'docs_dir': '.', 'site_dir': 'site'},
             {'docs_dir': '', 'site_dir': 'site'},
-            {'docs_dir': '/', 'site_dir': 'site'},
         )
 
         for test_config in test_configs:
             with self.subTest(test_config):
                 with self.expect_error(
-                    site_dir=re.compile(r"The 'site_dir' should not be within the 'docs_dir'.*")
+                    site_dir="""The site_dir should not be inside the docs_dir as this leads to the build directory being copied into itself.
+To allow this arrangement, please exclude the directory (and other files as applicable) by adding the following configuration:
+
+exclude_docs: |
+  /site"""
                 ):
                     self.get_config(self.Schema, test_config)
 
@@ -1275,7 +1281,7 @@ class SubConfigTest(TestCase):
 
         config_path = "foo/mkdocs.yaml"
         self.get_config(Schema, {"sub": {"opt": "bar"}}, config_file_path=config_path)
-        self.assertEqual(passed_config_path, config_path)
+        self.assertEqual(passed_config_path, os.path.abspath(config_path))
 
 
 class ConfigItemsTest(TestCase):
