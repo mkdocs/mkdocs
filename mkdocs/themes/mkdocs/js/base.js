@@ -138,7 +138,10 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('.dropdown-menu').forEach(function(menu) {
         menu.parentElement.addEventListener('hide.bs.dropdown', function() {
             menu.scrollTop = 0;
-            menu.querySelector('.dropdown-submenu > a').classList.remove('open');
+            var dropdown = menu.querySelector('.dropdown-submenu > a');
+            if (dropdown) {
+                dropdown.classList.remove('open');
+            }
             menu.querySelectorAll('.dropdown-menu .dropdown-menu').forEach(function(submenu) {
                 submenu.classList.remove('show');
             });
