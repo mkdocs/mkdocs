@@ -246,7 +246,7 @@ def _build_page(
         config._current_page = None
 
 
-def build(config: MkDocsConfig, *, serve_url: str | None = None, dirty: bool = False) -> None:
+def build(config: MkDocsConfig, *, serve_url: str | None = None, dirty: bool = False) -> Files:
     """Perform a full site build."""
     logger = logging.getLogger('mkdocs')
 
@@ -322,7 +322,12 @@ def build(config: MkDocsConfig, *, serve_url: str | None = None, dirty: bool = F
         # with lower precedence get written first so that files with higher precedence can overwrite them.
 
         log.debug("Copying static assets.")
-        files.copy_static_files(dirty=dirty, inclusion=inclusion)
+        for file in files:
+            if not file.is_documentation_page() and inclusion(file.inclusion):
+                if serve_url and file.is_copyless_static_file:
+                    log.debug(f"Skip copying static file: '{file.src_uri}'")
+                    continue
+                file.copy_file(dirty)
 
         for template in config.theme.static_templates:
             _build_theme_template(template, env, files, config, nav)
@@ -351,6 +356,7 @@ def build(config: MkDocsConfig, *, serve_url: str | None = None, dirty: bool = F
             raise Abort(f'Aborted with {msg} in strict mode!')
 
         log.info(f'Documentation built in {time.monotonic() - start:.2f} seconds')
+        return files
 
     except Exception as e:
         # Run `build_error` plugin events.
