@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import re
+import jieba
 import subprocess
 from html.parser import HTMLParser
 from typing import TYPE_CHECKING
@@ -30,6 +31,15 @@ class SearchIndex:
 
     def __init__(self, **config) -> None:
         self._entries: list[dict] = []
+        self.cn = False
+
+        if config['lang'] and 'cn' in config['lang']:
+            config['lang'].remove('cn')
+            if 'en' not in config['lang']:
+                config['lang'].append('en')
+            if 'ja' not in config['lang']:
+                config['lang'].append('ja')
+            self.cn = True
         self.config = config
 
     def _find_toc_by_id(self, toc, id_: str | None) -> AnchorLink | None:
@@ -47,10 +57,28 @@ class SearchIndex:
 
     def _add_entry(self, title: str | None, text: str, loc: str) -> None:
         """A simple wrapper to add an entry, dropping bad characters."""
+
+        text = text.replace('\u3000', ' ')  # Replace Chinese full space
         text = text.replace('\u00a0', ' ')
         text = re.sub(r'[ \t\n\r\f\v]+', ' ', text.strip())
 
-        self._entries.append({'title': title, 'text': text, 'location': loc})
+        if self.cn:
+            # Split text into words
+            text_seg_list = jieba.cut_for_search(text)
+            text = " ".join(text_seg_list)
+
+            # Split title into words
+            title = str(title)
+            title_seg_list = jieba.cut(title, cut_all=False)
+            title = " ".join(title_seg_list)
+
+            self._entries.append({
+                'title': title,
+                'text': str(text.encode('utf-8'), encoding='utf-8'),
+                'location': loc
+            })
+        else:
+            self._entries.append({'title': title, 'text': text, 'location': loc})
 
     def add_entry_from_context(self, page: Page) -> None:
         """
