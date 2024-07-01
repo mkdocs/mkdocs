@@ -423,10 +423,12 @@ class SearchIndexTests(unittest.TestCase):
         full_content = ''.join(f"标题{i}内容{i}" for i in range(1, 4))
 
         plugin = search.SearchPlugin()
-        errors, warnings = plugin.load_config({
-            'lang': 'cn',
-            # 'indexing': 'title'
-        })
+        errors, warnings = plugin.load_config(
+            {
+                'lang': 'cn',
+                # 'indexing': 'title'
+            }
+        )
 
         index = search_index.SearchIndex(**plugin.config)
         for page in pages:
