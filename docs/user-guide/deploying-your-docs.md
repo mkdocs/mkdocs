@@ -8,8 +8,8 @@ A basic guide to deploying your docs to various hosting providers
 
 If you host the source code for a project on [GitHub], you can easily use
 [GitHub Pages] to host the documentation for your project. There are two basic
-types of GitHub Pages sites: [Project Pages] sites, and [User and Organization
-Pages] sites. They are nearly identical but have some important differences,
+[types of GitHub Pages sites]: Project Pages sites, and User and Organization
+Pages sites. They are nearly identical but have some important differences,
 which require a different work flow when deploying.
 
 ### Project Pages
@@ -95,8 +95,7 @@ documentation on [Troubleshooting custom domains].
 
 [GitHub]: https://github.com/
 [GitHub Pages]: https://pages.github.com/
-[Project Pages]: https://help.github.com/articles/user-organization-and-project-pages/#project-pages-sites
-[User and Organization Pages]: https://help.github.com/articles/user-organization-and-project-pages/#user-and-organization-pages-sites
+[types of GitHub Pages sites]: https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages#types-of-github-pages-sites
 [ghp-import]: https://github.com/davisp/ghp-import
 [remote_branch]: ./configuration.md#remote_branch
 [Custom Domain]: https://help.github.com/articles/adding-or-removing-a-custom-domain-for-your-github-pages-site
