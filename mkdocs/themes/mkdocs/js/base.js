@@ -118,8 +118,14 @@ document.addEventListener("DOMContentLoaded", function () {
         item.classList.remove('open');
 
         popup.scrollTop = 0;
-        popup.querySelector('.dropdown-menu').scrollTop = 0;
-        popup.querySelector('.dropdown-submenu > a').classList.remove('open');
+        var menu = popup.querySelector('.dropdown-menu');
+        if (menu) {
+            menu.scrollTop = 0;
+        }
+        var dropdown = popup.querySelector('.dropdown-submenu > a');
+        if (dropdown) {
+            dropdown.classList.remove('open');
+        }
     }
 
     document.querySelectorAll('.dropdown-submenu > a').forEach(function(item) {
