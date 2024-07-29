@@ -214,7 +214,9 @@ def _build_page(
         context = config.plugins.on_page_context(context, page=page, config=config, nav=nav)
 
         # Run `page_template`
-        template = config.plugins.on_page_template(template, template_file=template_file, page=page, config=config, nav=nav)
+        template = config.plugins.on_page_template(
+            template, template_file=template_file, page=page, config=config, nav=nav
+        )
 
         if excluded:
             page.content = (
