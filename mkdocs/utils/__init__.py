@@ -56,7 +56,7 @@ def get_build_timestamp(*, pages: Collection[Page] | None = None) -> int:
         dt = datetime.fromisoformat(date_string)
     else:
         dt = get_build_datetime()
-    return int(dt.timestamp())
+    return max(int(dt.timestamp()), 0)
 
 
 def get_build_datetime() -> datetime:
