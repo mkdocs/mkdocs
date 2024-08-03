@@ -661,25 +661,41 @@ option every time the `mkdocs serve` command is called.
 
 ### use_directory_urls
 
-This setting controls the style used for linking to pages within the
-documentation.
+This setting controls the directory structure of the generated documentation, and thereby the URL format used for linking to pages.
 
-The following table demonstrates how the URLs used on the site differ when
+The following tables demonstrate how the directory structure and URLs used on the site differ when
 setting `use_directory_urls` to `true` or `false`.
 
-Source file      | use_directory_urls: true  | use_directory_urls: false
----------------- | ------------------------- | -------------------------
-index.md         | /                         | /index.html
-api-guide.md     | /api-guide/               | /api-guide.html
-about/license.md | /about/license/           | /about/license.html
+`use_directory_urls: false`
+
+This setting is needed when the documentation is hosted on systems that can't 
+access the file `X\index.html` when given the URL `X`. When set to `false`, 
+no additional `X` directory is created, and the file is simply stored as `X.html`. 
+Links are created that point directly to the target *file* rather than a target
+*directory*.
+
+
+| Source file      | Generated File     | URL Format          |
+| ---------------- | ------------------ | ------------------- |
+| index.md         | index.html         | /index.html         |
+| api-guide.md     | api-guide.html     | /api-guide.html     |
+| about/license.md | about/license.html | /about/license.html |
+
+For example, this needs to be set to `false` when:
+
+- opening pages directly from the file system
+- publishing the documentation to a static S3 website.
+
+`use_directory_urls: true`
 
 The default style of `use_directory_urls: true` creates more user friendly URLs,
 and is usually what you'll want to use.
 
-The alternate style can be useful if you want your documentation to remain
-properly linked when opening pages directly from the file system, because it
-creates links that point directly to the target *file* rather than the target
-*directory*.
+| Source file      | Generated File            | URL Format     |
+| ---------------- | ------------------------- | -------------- |
+| index.md         | /index.html               | /              |
+| api-guide.md     | /api-guide/index.html     | /api-guide/    |
+| about/license.md | /about/license/index.html | /about/license |
 
 **default**: `true`
 
