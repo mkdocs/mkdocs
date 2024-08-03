@@ -668,34 +668,33 @@ setting `use_directory_urls` to `true` or `false`.
 
 `use_directory_urls: false`
 
-This setting is needed when the documentation is hosted on systems that can't 
-access the file `X\index.html` when given the URL `X`. When set to `false`, 
-no additional `X` directory is created, and the file is simply stored as `X.html`. 
+This setting is needed when the documentation is hosted on systems that can't
+access the file `X\index.html` when given the URL `X`. When set to `false`,
+no additional `X` directory is created, and the file is simply stored as `X.html`.
 Links are created that point directly to the target *file* rather than a target
 *directory*.
 
-
-| Source file      | Generated File     | URL Format          |
-| ---------------- | ------------------ | ------------------- |
-| index.md         | index.html         | /index.html         |
-| api-guide.md     | api-guide.html     | /api-guide.html     |
-| about/license.md | about/license.html | /about/license.html |
+Source file      | Generated File     | URL Format
+---------------- | ------------------ | -------------------
+index.md         | index.html         | /index.html
+api-guide.md     | api-guide.html     | /api-guide.html
+about/license.md | about/license.html | /about/license.html
 
 For example, this needs to be set to `false` when:
 
-- opening pages directly from the file system
-- publishing the documentation to a static S3 website.
+* opening pages directly from the file system
+* publishing the documentation to a static S3 website.
 
 `use_directory_urls: true`
 
 The default style of `use_directory_urls: true` creates more user friendly URLs,
 and is usually what you'll want to use.
 
-| Source file      | Generated File            | URL Format     |
-| ---------------- | ------------------------- | -------------- |
-| index.md         | /index.html               | /              |
-| api-guide.md     | /api-guide/index.html     | /api-guide/    |
-| about/license.md | /about/license/index.html | /about/license |
+Source file      | Generated File            | URL Format
+---------------- | ------------------------- | --------------
+index.md         | /index.html               | /
+api-guide.md     | /api-guide/index.html     | /api-guide/
+about/license.md | /about/license/index.html | /about/license
 
 **default**: `true`
 
