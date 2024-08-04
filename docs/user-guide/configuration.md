@@ -669,7 +669,7 @@ setting `use_directory_urls` to `true` or `false`.
 `use_directory_urls: false`
 
 This setting is needed when the documentation is hosted on systems that can't
-access the file `X\index.html` when given the URL `X`. When set to `false`,
+access the file `X/index.html` when given the URL `X`. When set to `false`,
 no additional `X` directory is created, and the file is simply stored as `X.html`.
 Links are created that point directly to the target *file* rather than a target
 *directory*.
