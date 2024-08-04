@@ -666,7 +666,7 @@ This setting controls the directory structure of the generated documentation, an
 The following tables demonstrate how the directory structure and URLs used on the site differ when
 setting `use_directory_urls` to `true` or `false`.
 
-`use_directory_urls: false`
+**`use_directory_urls: false`**
 
 This setting is needed when the documentation is hosted on systems that can't
 access the file `X/index.html` when given the URL `X`. When set to `false`,
