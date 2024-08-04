@@ -685,7 +685,7 @@ For example, this needs to be set to `false` when:
 * opening pages directly from the file system
 * publishing the documentation to a static S3 website.
 
-`use_directory_urls: true`
+**`use_directory_urls: true`**
 
 The default style of `use_directory_urls: true` creates more user friendly URLs,
 and is usually what you'll want to use.
