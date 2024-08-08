@@ -414,7 +414,7 @@ class BuildTests(unittest.TestCase):
 
             _, output = do_request(server, f"GET /livereload/{initial_epoch}/0")
 
-            self.assertNotEqual(server._visible_epoch, initial_epoch)
+            self.assertGreater(server._visible_epoch, initial_epoch)
             self.assertEqual(output, str(server._visible_epoch))
 
     @tempdir()
@@ -425,7 +425,7 @@ class BuildTests(unittest.TestCase):
 
             start_time = time.monotonic()
             _, output = do_request(server, f"GET /livereload/{initial_epoch}/0")
-            self.assertGreaterEqual(time.monotonic(), start_time + 0.2)
+            self.assertGreaterEqual(time.monotonic(), start_time + server.poll_response_timeout)
             self.assertEqual(output, str(initial_epoch))
 
     @tempdir()

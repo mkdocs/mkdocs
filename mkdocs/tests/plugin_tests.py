@@ -249,7 +249,7 @@ class TestPluginCollection(unittest.TestCase):
         plugin = DummyPlugin()
         plugin.load_config({'foo': 'new'})
         collection['foo'] = plugin
-        self.assertEqual(collection.on_pre_build(config={}), None)
+        self.assertIsNone(collection.on_pre_build(config={}))
 
     def test_run_undefined_event_on_collection(self):
         collection = plugins.PluginCollection()
