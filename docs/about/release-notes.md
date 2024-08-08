@@ -27,6 +27,10 @@ The current and past members of the MkDocs team.
 * [@oprypin](https://github.com/oprypin/)
 * [@ultrabug](https://github.com/ultrabug/)
 
+## Version 1.6.1 (2024-07-??)
+
+* Fix copy failure due to broken symlinks. Provide warning if symlink is not available, but continue copy instead of exception.
+
 ## Version 1.6.0 (2024-04-20)
 
 ### Local preview
