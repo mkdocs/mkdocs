@@ -366,20 +366,24 @@ class IpAddressTest(TestCase):
             self.get_config(self.Schema, {'option': '277.0.0.1:8000'})
 
     def test_invalid_address_format(self):
-        with self.expect_error(option="Must be a string of format 'IP:PORT'"):
+        with self.expect_error(
+            option="'127.0.0.18000' does not appear to be an IPv4 or IPv6 address"
+        ):
             self.get_config(self.Schema, {'option': '127.0.0.18000'})
 
     def test_invalid_address_type(self):
-        with self.expect_error(option="Must be a string of format 'IP:PORT'"):
+        with self.expect_error(option="Must be a string"):
             self.get_config(self.Schema, {'option': 123})
 
     def test_invalid_address_port(self):
         with self.expect_error(option="'foo' is not a valid port"):
             self.get_config(self.Schema, {'option': '127.0.0.1:foo'})
 
-    def test_invalid_address_missing_port(self):
-        with self.expect_error(option="Must be a string of format 'IP:PORT'"):
-            self.get_config(self.Schema, {'option': '127.0.0.1'})
+    def test_address_without_port(self) -> None:
+        conf = self.get_config(self.Schema, {'option': '127.0.0.1'})
+        self.assertEqual(str(conf['option']), '127.0.0.1')
+        self.assertEqual(conf['option'].host, '127.0.0.1')
+        self.assertEqual(conf['option'].port, None)
 
     def test_unsupported_address(self):
         class Schema:
