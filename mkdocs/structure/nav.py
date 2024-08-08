@@ -46,9 +46,10 @@ class Navigation:
 
 
 class Section(StructureItem):
-    def __init__(self, title: str, children: list[StructureItem]) -> None:
-        self.title = title
+    def __init__(self, title: str, children: list[StructureItem], config: MkDocsConfig) -> None:
+        self._title = title
         self.children = children
+        self.config = config
 
         self.active = False
 
@@ -56,8 +57,38 @@ class Section(StructureItem):
         name = self.__class__.__name__
         return f"{name}(title={self.title!r})"
 
-    title: str
-    """The title of the section."""
+    @property
+    def index_page(self) -> Page | None:
+        """The index page of the section."""
+        for child in self.children:
+            if isinstance(child, Page) and child.is_index:
+                return child
+        return None
+
+    @property
+    def title(self) -> str | None:
+        """
+        The title of the section.
+
+        If no navigation is configured in the mkdocs configuration,
+        but there is an index page in the section, the title
+        of the index page is returned.
+        """
+        if not self.config['smart_section_titles'] or self.config['nav'] is not None:
+            return self._title
+
+        ip = self.index_page
+        if not ip:
+            return self._title
+        if 'title' in ip.meta:
+            return ip.meta['title']
+        if ip.title == "Index":
+            return self._title
+        return ip.title
+
+    @title.setter
+    def title(self, title):
+        self._title = title
 
     children: list[StructureItem]
     """An iterable of all child navigation objects. Children may include nested sections, pages and links."""
@@ -190,7 +221,9 @@ def _data_to_navigation(data, files: Files, config: MkDocsConfig):
         return [
             _data_to_navigation((key, value), files, config)
             if isinstance(value, str)
-            else Section(title=key, children=_data_to_navigation(value, files, config))
+            else Section(
+                title=key, children=_data_to_navigation(value, files, config), config=config
+            )
             for key, value in data.items()
         ]
     elif isinstance(data, list):

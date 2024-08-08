@@ -70,6 +70,9 @@ class MkDocsConfig(base.Config):
     site_author = c.Optional(c.Type(str))
     """The name of the author to add to the HTML meta tags."""
 
+    smart_section_titles = c.Type(bool, default=False)
+    """Activate / deactivate smart section titles"""
+
     theme = c.Theme(default='mkdocs')
     """The MkDocs theme for the documentation."""
 
