@@ -57,10 +57,10 @@ document.addEventListener("DOMContentLoaded", function () {
       var page;
       switch (key) {
           case shortcuts.next:
-              page = document.querySelector('.navbar a[rel="next"]:first').getAttribute('href');
+              page = document.querySelector('.navbar a[rel="next"]');
               break;
           case shortcuts.previous:
-              page = document.querySelector('.navbar a[rel="prev"]:first').getAttribute('href');
+              page = document.querySelector('.navbar a[rel="prev"]');
               break;
           case shortcuts.search:
               e.preventDefault();
@@ -74,9 +74,9 @@ document.addEventListener("DOMContentLoaded", function () {
               break;
           default: break;
       }
-      if (page) {
+      if (page && page.hasAttribute('href')) {
           keyboard_modal.hide();
-          window.location.href = page;
+          window.location.href = page.getAttribute('href');
       }
     });
 
