@@ -1,0 +1,114 @@
+# Dutch translations for MkDocs.
+# Copyright (C) 2024 MkDocs
+# This file is distributed under the same license as the MkDocs project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MkDocs 1.5.3\n"
+"Report-Msgid-Bugs-To: https://github.com/mkdocs/mkdocs/issues\n"
+"POT-Creation-Date: 2024-04-09 16:13+0200\n"
+"PO-Revision-Date: 2024-08-12 11:34+0200\n"
+"Last-Translator: Jeroen van de Nieuwenhof <jeroen@tolkie.nl>\n"
+"Language: nl\n"
+"Language-Team: nl <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.16.0\n"
+
+#: mkdocs/themes/readthedocs/404.html:7
+msgid "Page not found"
+msgstr "Pagina niet gevonden"
+
+#: mkdocs/themes/readthedocs/base.html:96
+msgid "Logo"
+msgstr "Logo"
+
+#: mkdocs/themes/readthedocs/base.html:110
+msgid "Navigation menu"
+msgstr "Navigatiemenu"
+
+#: mkdocs/themes/readthedocs/base.html:147
+msgid "Mobile navigation menu"
+msgstr "Mobiel navigatiemenu"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:3
+msgid "Docs"
+msgstr "Documentatie"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:18
+#: mkdocs/themes/readthedocs/breadcrumbs.html:20
+#: mkdocs/themes/readthedocs/breadcrumbs.html:22
+#: mkdocs/themes/readthedocs/breadcrumbs.html:24
+#, python-format
+msgid "Edit on %(repo_name)s"
+msgstr "Bewerk op %(repo_name)s"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:26
+msgid "Edit"
+msgstr "Bewerk"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:34
+msgid "Breadcrumb Navigation"
+msgstr "Kruimelpadnavigatie"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:36
+#: mkdocs/themes/readthedocs/footer.html:7
+#: mkdocs/themes/readthedocs/versions.html:21
+msgid "Previous"
+msgstr "Vorige"
+
+#: mkdocs/themes/readthedocs/breadcrumbs.html:39
+#: mkdocs/themes/readthedocs/footer.html:10
+#: mkdocs/themes/readthedocs/versions.html:24
+msgid "Next"
+msgstr "Volgende"
+
+#: mkdocs/themes/readthedocs/footer.html:5
+msgid "Footer Navigation"
+msgstr "Footernavigatie"
+
+#: mkdocs/themes/readthedocs/footer.html:25
+#, python-format
+msgid ""
+"Built with %(mkdocs_link)s using a %(sphinx_link)s provided by "
+"%(rtd_link)s."
+msgstr ""
+"Gemaakt met %(mkdocs_link)s met behulp van een %(sphinx_link)s geleverd door "
+"%(rtd_link)s."
+
+#: mkdocs/themes/readthedocs/footer.html:25
+msgid "theme"
+msgstr "Thema"
+
+#: mkdocs/themes/readthedocs/search.html:5
+msgid "Search Results"
+msgstr "Zoekresultaten"
+
+#: mkdocs/themes/readthedocs/search.html:9
+msgid "Search the Docs"
+msgstr "Doorzoek de documentatie"
+
+#: mkdocs/themes/readthedocs/search.html:9
+#: mkdocs/themes/readthedocs/searchbox.html:3
+msgid "Type search term here"
+msgstr "Typ hier uw zoekterm"
+
+#: mkdocs/themes/readthedocs/search.html:12
+msgid "No results found"
+msgstr "Geen resultaten gevonden"
+
+#: mkdocs/themes/readthedocs/search.html:13
+msgid "Searching..."
+msgstr "Zoeken..."
+
+#: mkdocs/themes/readthedocs/searchbox.html:3
+msgid "Search docs"
+msgstr "Doorzoek documentatie"
+
+#: mkdocs/themes/readthedocs/versions.html:1
+msgid "Versions"
+msgstr "Versies"
+
