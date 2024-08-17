@@ -81,7 +81,7 @@ option is the only required option in your configuration file.
 Now add a second page to your documentation:
 
 ```bash
-curl 'https://jaspervdj.be/lorem-markdownum/markdown.txt' > docs/about.md
+curl 'https://jaspervdj.be/lorem-markdownum/markdown.txt?no-external-links=on' > docs/about.md
 ```
 
 As our documentation site will include some navigation headers, you may want to
