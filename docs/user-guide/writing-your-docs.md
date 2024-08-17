@@ -145,7 +145,7 @@ nav:
     - Styling your docs: styling-your-docs.md
   - About:
     - License: license.md
-    - Release Notes': release-notes.md
+    - Release Notes: release-notes.md
 ```
 
 With the above configuration we have three top level items: "Home", "User Guide"
