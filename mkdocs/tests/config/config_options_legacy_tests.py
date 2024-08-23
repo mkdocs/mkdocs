@@ -351,6 +351,28 @@ class IpAddressTest(TestCase):
         self.assertEqual(conf['option'].host, '127.0.0.1')
         self.assertEqual(conf['option'].port, 8000)
 
+    def test_bind_all_IPv4_address(self):
+        addr = '0.0.0.0:8000'
+
+        class Schema:
+            option = c.IpAddress(default=addr)
+
+        conf = self.get_config(Schema, {'option': None})
+        self.assertEqual(str(conf['option']), addr)
+        self.assertEqual(conf['option'].host, '0.0.0.0')
+        self.assertEqual(conf['option'].port, 8000)
+
+    def test_bind_all_IPv6_address(self):
+        addr = ':::8000'
+
+        class Schema:
+            option = c.IpAddress(default=addr)
+
+        conf = self.get_config(Schema, {'option': None})
+        self.assertEqual(str(conf['option']), addr)
+        self.assertEqual(conf['option'].host, '::')
+        self.assertEqual(conf['option'].port, 8000)
+
     @unittest.skipIf(
         sys.version_info < (3, 9, 5),
         "Leading zeros allowed in IP addresses before Python3.9.5",
@@ -380,37 +402,6 @@ class IpAddressTest(TestCase):
     def test_invalid_address_missing_port(self):
         with self.expect_error(option="Must be a string of format 'IP:PORT'"):
             self.get_config(self.Schema, {'option': '127.0.0.1'})
-
-    def test_unsupported_address(self):
-        class Schema:
-            dev_addr = c.IpAddress()
-
-        self.get_config(
-            Schema,
-            {'dev_addr': '0.0.0.0:8000'},
-            warnings=dict(
-                dev_addr="The use of the IP address '0.0.0.0' suggests a production "
-                "environment or the use of a proxy to connect to the MkDocs "
-                "server. However, the MkDocs' server is intended for local "
-                "development purposes only. Please use a third party "
-                "production-ready server instead."
-            ),
-        )
-
-    def test_unsupported_IPv6_address(self):
-        class Schema:
-            dev_addr = c.IpAddress()
-
-        self.get_config(
-            Schema,
-            {'dev_addr': ':::8000'},
-            warnings=dict(
-                dev_addr="The use of the IP address '::' suggests a production environment "
-                "or the use of a proxy to connect to the MkDocs server. However, "
-                "the MkDocs' server is intended for local development purposes "
-                "only. Please use a third party production-ready server instead."
-            ),
-        )
 
 
 class URLTest(TestCase):
