@@ -46,12 +46,16 @@ def _showwarning(message, category, filename, lineno, file=None, line=None):
 
 
 def _enable_warnings():
-    from mkdocs.commands import build
+    # When `python -W...` or `PYTHONWARNINGS` are used, `sys.warnoptions` is set.
+    # In that case, we skip warnings configuration since
+    # we don't want to overwrite the user configuration.
+    if not sys.warnoptions:
+        from mkdocs.commands import build
 
-    build.log.addFilter(utils.DuplicateFilter())
+        build.log.addFilter(utils.DuplicateFilter())
 
-    warnings.simplefilter('module', DeprecationWarning)
-    warnings.showwarning = _showwarning
+        warnings.simplefilter('module', DeprecationWarning)
+        warnings.showwarning = _showwarning
 
 
 class ColorFormatter(logging.Formatter):
