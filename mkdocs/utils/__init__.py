@@ -122,7 +122,7 @@ def copy_file(source_path: str, output_path: str) -> None:
         output_path = os.path.join(output_path, os.path.basename(source_path))
     if os.path.islink(source_path):
         if not os.path.exists(os.readlink(source_path)):
-            log.warning("Symlink broken, not copy file: %s" % source_path)
+            log.warning("Symlink broken, could not copy file: %s" % source_path)
             return
     shutil.copyfile(source_path, output_path)
 
