@@ -110,8 +110,8 @@ A minimal navigation configuration could look like this:
 
 ```yaml
 nav:
-  - 'index.md'
-  - 'about.md'
+  - index.md
+  - about.md
 ```
 
 All paths in the navigation configuration must be relative to the `docs_dir`
@@ -126,8 +126,8 @@ in the `nav` setting add a title right before the filename.
 
 ```yaml
 nav:
-  - Home: 'index.md'
-  - About: 'about.md'
+  - Home: index.md
+  - About: about.md
 ```
 
 Note that if a title is defined for a page in the navigation, that title will be
@@ -139,13 +139,13 @@ section title. For example:
 
 ```yaml
 nav:
-  - Home: 'index.md'
-  - 'User Guide':
-    - 'Writing your docs': 'writing-your-docs.md'
-    - 'Styling your docs': 'styling-your-docs.md'
+  - Home: index.md
+  - User Guide:
+    - Writing your docs: writing-your-docs.md
+    - Styling your docs: styling-your-docs.md
   - About:
-    - 'License': 'license.md'
-    - 'Release Notes': 'release-notes.md'
+    - License: license.md
+    - Release Notes: release-notes.md
 ```
 
 With the above configuration we have three top level items: "Home", "User Guide"
