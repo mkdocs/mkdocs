@@ -29,7 +29,21 @@ The current and past members of the MkDocs team.
 
 ## Version 1.6.1 (2024-08-30)
 
-...
+### Fixed
+
+* Fix build error when environment variable `SOURCE_DATE_EPOCH=0` is set. #3795
+* Fix build error when `mkdocs_theme.yml` config is empty. #3700
+* Support `python -W` and `PYTHONWARNINGS` instead of overriding the configuration. #3809
+* Support running with Docker under strict mode, by removing `0.0.0.0` dev server warning. #3784
+* Drop unnecessary `changefreq` from `sitemap.xml`. #3629
+* Fix JavaScript console error when closing menu dropdown. #3774
+* Fix JavaScript console error that occur on repeated clicks. #3730
+* Fix JavaScript console error that can occur on dropdown selections. #3694
+
+### Added
+
+* Added translations for Dutch. #3804
+* Added and updated translations for Chinese (Simplified). #3684
 
 ## Version 1.6.0 (2024-04-20)
 
