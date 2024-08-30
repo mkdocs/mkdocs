@@ -57,6 +57,7 @@ class _PluginConfig(base.Config):
     min_search_length = c.Type(int, default=3)
     prebuild_index = c.Choice((False, True, 'node', 'python'), default=False)
     indexing = c.Choice(('full', 'sections', 'titles'), default='full')
+    full_path_in_title = c.Choice((False, True), default=False)
 
 
 class SearchPlugin(BasePlugin[_PluginConfig]):
