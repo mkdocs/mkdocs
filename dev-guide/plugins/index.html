@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="auto">
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,13 +10,9 @@
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Plugins - MkDocs</title>
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../../css/fontawesome.min.css" rel="stylesheet">
-        <link href="../../css/brands.min.css" rel="stylesheet">
-        <link href="../../css/solid.min.css" rel="stylesheet">
-        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" disabled>
-        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -38,7 +34,7 @@
             <div class="container">
                 <a class="navbar-brand" href="../..">MkDocs</a>
                 <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -46,14 +42,14 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="nav-item">
+                            <li class="navitem">
                                 <a href="../.." class="nav-link">Home</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="navitem">
                                 <a href="../../getting-started/" class="nav-link">Getting Started</a>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">User Guide</a>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -93,8 +89,8 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Developer Guide</a>
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -110,7 +106,7 @@
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active" aria-current="page">Plugins</a>
+    <a href="./" class="dropdown-item active">Plugins</a>
 </li>
                                     
 <li>
@@ -118,8 +114,8 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">About</a>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -137,9 +133,9 @@
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav ms-md-auto">
+                    <ul class="nav navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
@@ -154,67 +150,37 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/dev-guide/plugins.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                              <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
-                                <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
-                                <span class="d-lg-none ms-2">Toggle theme</span>
-                              </button>
-                              <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
-                                    <i class="fa-solid fa-sun fa-fw"></i>
-                                    <span class="ms-2">Light</span>
-                                    <i class="fa-solid fa-check ms-auto d-none"></i>
-                                  </button>
-                                </li>
-                                <li>
-                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
-                                    <i class="fa-solid fa-moon fa-fw"></i>
-                                    <span class="ms-2">Dark</span>
-                                    <i class="fa-solid fa-check ms-auto d-none"></i>
-                                  </button>
-                                </li>
-                                <li>
-                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="true">
-                                    <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
-                                    <span class="ms-2">Auto</span>
-                                    <i class="fa-solid fa-check ms-auto"></i>
-                                  </button>
-                                </li>
-                              </ul>
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/dev-guide/plugins.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
             </div>
         </div>
-        <script src="../../js/darkmode.js"></script>
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#mkdocs-plugins" class="nav-link">MkDocs Plugins</a>
+            <li class="nav-item" data-level="1"><a href="#mkdocs-plugins" class="nav-link">MkDocs Plugins</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="2"><a href="#installing-plugins" class="nav-link">Installing Plugins</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-bs-level="2"><a href="#using-plugins" class="nav-link">Using Plugins</a>
+            <li class="nav-item" data-level="2"><a href="#installing-plugins" class="nav-link">Installing Plugins</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#developing-plugins" class="nav-link">Developing Plugins</a>
+            <li class="nav-item" data-level="2"><a href="#using-plugins" class="nav-link">Using Plugins</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#developing-plugins" class="nav-link">Developing Plugins</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -1211,7 +1177,6 @@ the theme config:</p>
 
 
 
-
   <div class="doc doc-contents first">
   
       <p>The <code>startup</code> event runs once at the very beginning of an <code>mkdocs</code> invocation.</p>
@@ -1223,9 +1188,9 @@ For initializing per-build variables (and whenever in doubt), use the <code>on_c
 
 
 
-  <p><span class="doc-section-title">Parameters:</span></p>
+  <p>Parameters:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>command</code></b>
             (<code><span title="typing.Literal">Literal</span>[&#39;build&#39;, &#39;gh-deploy&#39;, &#39;serve&#39;]</code>)
         –
@@ -1233,7 +1198,7 @@ For initializing per-build variables (and whenever in doubt), use the <code>on_c
           <p>the command that MkDocs was invoked with, e.g. "serve" for <code>mkdocs serve</code>.</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>dirty</code></b>
             (<code>bool</code>)
         –
@@ -1250,7 +1215,6 @@ For initializing per-build variables (and whenever in doubt), use the <code>on_c
 
 
 <div class="doc doc-object doc-function">
-
 
 
 
@@ -1278,7 +1242,6 @@ relies on detecting a graceful shutdown of MkDocs.</p>
 
 
 
-
   <div class="doc doc-contents first">
   
       <p>The <code>serve</code> event is only called when the <code>serve</code> command is used during
@@ -1289,9 +1252,9 @@ to the list of "watched" files for auto-reloading.</p>
 
 
 
-  <p><span class="doc-section-title">Parameters:</span></p>
+  <p>Parameters:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>server</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.livereload.LiveReloadServer" href="../api/#mkdocs.livereload.LiveReloadServer">LiveReloadServer</a></code>)
         –
@@ -1299,7 +1262,7 @@ to the list of "watched" files for auto-reloading.</p>
           <p><code>livereload.Server</code> instance</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1307,7 +1270,7 @@ to the list of "watched" files for auto-reloading.</p>
           <p>global configuration object</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>builder</code></b>
             (<code><span title="typing.Callable">Callable</span></code>)
         –
@@ -1319,9 +1282,9 @@ to the list of "watched" files for auto-reloading.</p>
 
 
 
-  <p><span class="doc-section-title">Returns:</span></p>
+  <p>Returns:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
             <code><a class="autorefs autorefs-internal" title="mkdocs.livereload.LiveReloadServer" href="../api/#mkdocs.livereload.LiveReloadServer">LiveReloadServer</a> | None</code>
         –
         <div class="doc-md-description">
@@ -1345,7 +1308,6 @@ entire site.</p>
 
 
 
-
   <div class="doc doc-contents first">
   
       <p>The <code>config</code> event is the first event called on build and is run immediately
@@ -1354,9 +1316,9 @@ config should be made here.</p>
 
 
 
-  <p><span class="doc-section-title">Parameters:</span></p>
+  <p>Parameters:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1368,9 +1330,9 @@ config should be made here.</p>
 
 
 
-  <p><span class="doc-section-title">Returns:</span></p>
+  <p>Returns:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
             <code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span> | None</code>
         –
         <div class="doc-md-description">
@@ -1390,7 +1352,6 @@ config should be made here.</p>
 
 
 
-
   <div class="doc doc-contents first">
   
       <p>The <code>pre_build</code> event does not alter any variables. Use this event to call
@@ -1398,9 +1359,9 @@ pre-build scripts.</p>
 
 
 
-  <p><span class="doc-section-title">Parameters:</span></p>
+  <p>Parameters:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1421,7 +1382,6 @@ pre-build scripts.</p>
 
 
 
-
   <div class="doc doc-contents first">
   
       <p>The <code>files</code> event is called after the files collection is populated from the
@@ -1432,9 +1392,9 @@ specific data.</p>
 
 
 
-  <p><span class="doc-section-title">Parameters:</span></p>
+  <p>Parameters:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>files</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
         –
@@ -1442,7 +1402,7 @@ specific data.</p>
           <p>global files collection</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1454,9 +1414,9 @@ specific data.</p>
 
 
 
-  <p><span class="doc-section-title">Returns:</span></p>
+  <p>Returns:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
             <code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a> | None</code>
         –
         <div class="doc-md-description">
@@ -1476,7 +1436,6 @@ specific data.</p>
 
 
 
-
   <div class="doc doc-contents first">
   
       <p>The <code>nav</code> event is called after the site navigation is created and can
@@ -1484,9 +1443,9 @@ be used to alter the site navigation.</p>
 
 
 
-  <p><span class="doc-section-title">Parameters:</span></p>
+  <p>Parameters:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>nav</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.nav.Navigation" href="../themes/#mkdocs.structure.nav.Navigation">Navigation</a></code>)
         –
@@ -1494,7 +1453,7 @@ be used to alter the site navigation.</p>
           <p>global navigation object</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1502,7 +1461,7 @@ be used to alter the site navigation.</p>
           <p>global configuration object</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>files</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
         –
@@ -1514,9 +1473,9 @@ be used to alter the site navigation.</p>
 
 
 
-  <p><span class="doc-section-title">Returns:</span></p>
+  <p>Returns:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
             <code><a class="autorefs autorefs-internal" title="mkdocs.structure.nav.Navigation" href="../themes/#mkdocs.structure.nav.Navigation">Navigation</a> | None</code>
         –
         <div class="doc-md-description">
@@ -1536,7 +1495,6 @@ be used to alter the site navigation.</p>
 
 
 
-
   <div class="doc doc-contents first">
   
       <p>The <code>env</code> event is called after the Jinja template environment is created
@@ -1545,9 +1503,9 @@ and can be used to alter the
 
 
 
-  <p><span class="doc-section-title">Parameters:</span></p>
+  <p>Parameters:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>env</code></b>
             (<code><span title="jinja2.Environment">Environment</span></code>)
         –
@@ -1555,7 +1513,7 @@ and can be used to alter the
           <p>global Jinja environment</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1563,7 +1521,7 @@ and can be used to alter the
           <p>global configuration object</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>files</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
         –
@@ -1575,9 +1533,9 @@ and can be used to alter the
 
 
 
-  <p><span class="doc-section-title">Returns:</span></p>
+  <p>Returns:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
             <code><span title="jinja2.Environment">Environment</span> | None</code>
         –
         <div class="doc-md-description">
@@ -1597,7 +1555,6 @@ and can be used to alter the
 
 
 
-
   <div class="doc doc-contents first">
   
       <p>The <code>post_build</code> event does not alter any variables. Use this event to call
@@ -1605,9 +1562,9 @@ post-build scripts.</p>
 
 
 
-  <p><span class="doc-section-title">Parameters:</span></p>
+  <p>Parameters:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1628,7 +1585,6 @@ post-build scripts.</p>
 
 
 
-
   <div class="doc doc-contents first">
   
       <p>The <code>build_error</code> event is called after an exception of any kind
@@ -1639,9 +1595,9 @@ events which were scheduled to run after the error will have been skipped. See
 
 
 
-  <p><span class="doc-section-title">Parameters:</span></p>
+  <p>Parameters:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>error</code></b>
             (<code>Exception</code>)
         –
@@ -1667,7 +1623,6 @@ called after the <a href="#on_env">env</a> event and before any <a href="#page-e
 
 
 
-
   <div class="doc doc-contents first">
   
       <p>The <code>pre_template</code> event is called immediately after the subject template is
@@ -1675,9 +1630,9 @@ loaded and can be used to alter the template.</p>
 
 
 
-  <p><span class="doc-section-title">Parameters:</span></p>
+  <p>Parameters:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>template</code></b>
             (<code><span title="jinja2.Template">Template</span></code>)
         –
@@ -1685,7 +1640,7 @@ loaded and can be used to alter the template.</p>
           <p>a Jinja2 <a href="https://jinja.palletsprojects.com/en/latest/api/#jinja2.Template">Template</a> object</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>template_name</code></b>
             (<code>str</code>)
         –
@@ -1693,7 +1648,7 @@ loaded and can be used to alter the template.</p>
           <p>string filename of template</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1705,9 +1660,9 @@ loaded and can be used to alter the template.</p>
 
 
 
-  <p><span class="doc-section-title">Returns:</span></p>
+  <p>Returns:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
             <code><span title="jinja2.Template">Template</span> | None</code>
         –
         <div class="doc-md-description">
@@ -1727,7 +1682,6 @@ loaded and can be used to alter the template.</p>
 
 
 
-
   <div class="doc doc-contents first">
   
       <p>The <code>template_context</code> event is called immediately after the context is created
@@ -1736,9 +1690,9 @@ template only.</p>
 
 
 
-  <p><span class="doc-section-title">Parameters:</span></p>
+  <p>Parameters:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>context</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.utils.templates.TemplateContext" href="../api/#mkdocs.utils.templates.TemplateContext">TemplateContext</a></code>)
         –
@@ -1746,7 +1700,7 @@ template only.</p>
           <p>dict of template context variables</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>template_name</code></b>
             (<code>str</code>)
         –
@@ -1754,7 +1708,7 @@ template only.</p>
           <p>string filename of template</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1766,9 +1720,9 @@ template only.</p>
 
 
 
-  <p><span class="doc-section-title">Returns:</span></p>
+  <p>Returns:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
             <code><a class="autorefs autorefs-internal" title="mkdocs.utils.templates.TemplateContext" href="../api/#mkdocs.utils.templates.TemplateContext">TemplateContext</a> | None</code>
         –
         <div class="doc-md-description">
@@ -1788,7 +1742,6 @@ template only.</p>
 
 
 
-
   <div class="doc doc-contents first">
   
       <p>The <code>post_template</code> event is called after the template is rendered, but before
@@ -1798,9 +1751,9 @@ written to disc.</p>
 
 
 
-  <p><span class="doc-section-title">Parameters:</span></p>
+  <p>Parameters:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>output_content</code></b>
             (<code>str</code>)
         –
@@ -1808,7 +1761,7 @@ written to disc.</p>
           <p>output of rendered template as string</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>template_name</code></b>
             (<code>str</code>)
         –
@@ -1816,7 +1769,7 @@ written to disc.</p>
           <p>string filename of template</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1828,9 +1781,9 @@ written to disc.</p>
 
 
 
-  <p><span class="doc-section-title">Returns:</span></p>
+  <p>Returns:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
             <code>str | None</code>
         –
         <div class="doc-md-description">
@@ -1854,7 +1807,6 @@ page events are called after the <a href="#on_post_template">post_template</a> e
 
 
 
-
   <div class="doc doc-contents first">
   
       <p>The <code>pre_page</code> event is called before any actions are taken on the subject
@@ -1862,9 +1814,9 @@ page and can be used to alter the <code>Page</code> instance.</p>
 
 
 
-  <p><span class="doc-section-title">Parameters:</span></p>
+  <p>Parameters:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>page</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
         –
@@ -1872,7 +1824,7 @@ page and can be used to alter the <code>Page</code> instance.</p>
           <p><code>mkdocs.structure.pages.Page</code> instance</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1880,7 +1832,7 @@ page and can be used to alter the <code>Page</code> instance.</p>
           <p>global configuration object</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>files</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
         –
@@ -1892,9 +1844,9 @@ page and can be used to alter the <code>Page</code> instance.</p>
 
 
 
-  <p><span class="doc-section-title">Returns:</span></p>
+  <p>Returns:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
             <code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a> | None</code>
         –
         <div class="doc-md-description">
@@ -1914,7 +1866,6 @@ page and can be used to alter the <code>Page</code> instance.</p>
 
 
 
-
   <div class="doc doc-contents first">
   
       <div class="admonition deprecated">
@@ -1930,9 +1881,9 @@ the contents of a page's source from the filesystem.</p>
 
 
 
-  <p><span class="doc-section-title">Parameters:</span></p>
+  <p>Parameters:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>page</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
         –
@@ -1940,7 +1891,7 @@ the contents of a page's source from the filesystem.</p>
           <p><code>mkdocs.structure.pages.Page</code> instance</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -1952,9 +1903,9 @@ the contents of a page's source from the filesystem.</p>
 
 
 
-  <p><span class="doc-section-title">Returns:</span></p>
+  <p>Returns:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
             <code>str | None</code>
         –
         <div class="doc-md-description">
@@ -1975,7 +1926,6 @@ default loading from a file will be performed.</p>
 
 
 
-
   <div class="doc doc-contents first">
   
       <p>The <code>page_markdown</code> event is called after the page's markdown is loaded
@@ -1984,9 +1934,9 @@ data has been stripped off and is available as <code>page.meta</code> at this po
 
 
 
-  <p><span class="doc-section-title">Parameters:</span></p>
+  <p>Parameters:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>markdown</code></b>
             (<code>str</code>)
         –
@@ -1994,7 +1944,7 @@ data has been stripped off and is available as <code>page.meta</code> at this po
           <p>Markdown source text of page as string</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>page</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
         –
@@ -2002,7 +1952,7 @@ data has been stripped off and is available as <code>page.meta</code> at this po
           <p><code>mkdocs.structure.pages.Page</code> instance</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -2010,7 +1960,7 @@ data has been stripped off and is available as <code>page.meta</code> at this po
           <p>global configuration object</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>files</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
         –
@@ -2022,9 +1972,9 @@ data has been stripped off and is available as <code>page.meta</code> at this po
 
 
 
-  <p><span class="doc-section-title">Returns:</span></p>
+  <p>Returns:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
             <code>str | None</code>
         –
         <div class="doc-md-description">
@@ -2044,7 +1994,6 @@ data has been stripped off and is available as <code>page.meta</code> at this po
 
 
 
-
   <div class="doc doc-contents first">
   
       <p>The <code>page_content</code> event is called after the Markdown text is rendered to
@@ -2053,9 +2002,9 @@ HTML body of the page.</p>
 
 
 
-  <p><span class="doc-section-title">Parameters:</span></p>
+  <p>Parameters:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>html</code></b>
             (<code>str</code>)
         –
@@ -2063,7 +2012,7 @@ HTML body of the page.</p>
           <p>HTML rendered from Markdown source as string</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>page</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
         –
@@ -2071,7 +2020,7 @@ HTML body of the page.</p>
           <p><code>mkdocs.structure.pages.Page</code> instance</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -2079,7 +2028,7 @@ HTML body of the page.</p>
           <p>global configuration object</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>files</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.files.Files" href="../api/#mkdocs.structure.files.Files">Files</a></code>)
         –
@@ -2091,9 +2040,9 @@ HTML body of the page.</p>
 
 
 
-  <p><span class="doc-section-title">Returns:</span></p>
+  <p>Returns:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
             <code>str | None</code>
         –
         <div class="doc-md-description">
@@ -2113,7 +2062,6 @@ HTML body of the page.</p>
 
 
 
-
   <div class="doc doc-contents first">
   
       <p>The <code>page_context</code> event is called after the context for a page is created
@@ -2121,9 +2069,9 @@ and can be used to alter the context for that specific page only.</p>
 
 
 
-  <p><span class="doc-section-title">Parameters:</span></p>
+  <p>Parameters:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>context</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.utils.templates.TemplateContext" href="../api/#mkdocs.utils.templates.TemplateContext">TemplateContext</a></code>)
         –
@@ -2131,7 +2079,7 @@ and can be used to alter the context for that specific page only.</p>
           <p>dict of template context variables</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>page</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
         –
@@ -2139,7 +2087,7 @@ and can be used to alter the context for that specific page only.</p>
           <p><code>mkdocs.structure.pages.Page</code> instance</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -2147,7 +2095,7 @@ and can be used to alter the context for that specific page only.</p>
           <p>global configuration object</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>nav</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.nav.Navigation" href="../themes/#mkdocs.structure.nav.Navigation">Navigation</a></code>)
         –
@@ -2159,9 +2107,9 @@ and can be used to alter the context for that specific page only.</p>
 
 
 
-  <p><span class="doc-section-title">Returns:</span></p>
+  <p>Returns:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
             <code><a class="autorefs autorefs-internal" title="mkdocs.utils.templates.TemplateContext" href="../api/#mkdocs.utils.templates.TemplateContext">TemplateContext</a> | None</code>
         –
         <div class="doc-md-description">
@@ -2181,7 +2129,6 @@ and can be used to alter the context for that specific page only.</p>
 
 
 
-
   <div class="doc doc-contents first">
   
       <p>The <code>post_page</code> event is called after the template is rendered, but
@@ -2191,9 +2138,9 @@ written to disc.</p>
 
 
 
-  <p><span class="doc-section-title">Parameters:</span></p>
+  <p>Parameters:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>output</code></b>
             (<code>str</code>)
         –
@@ -2201,7 +2148,7 @@ written to disc.</p>
           <p>output of rendered template as string</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>page</code></b>
             (<code><a class="autorefs autorefs-internal" title="mkdocs.structure.pages.Page" href="../themes/#mkdocs.structure.pages.Page">Page</a></code>)
         –
@@ -2209,7 +2156,7 @@ written to disc.</p>
           <p><code>mkdocs.structure.pages.Page</code> instance</p>
         </div>
       </li>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>config</code></b>
             (<code><span title="mkdocs.config.defaults.MkDocsConfig">MkDocsConfig</span></code>)
         –
@@ -2221,9 +2168,9 @@ written to disc.</p>
 
 
 
-  <p><span class="doc-section-title">Returns:</span></p>
+  <p>Returns:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
             <code>str | None</code>
         –
         <div class="doc-md-description">
@@ -2241,6 +2188,7 @@ written to disc.</p>
 
 
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -2276,6 +2224,7 @@ except ImportError:
 
 
 <div class="doc doc-object doc-class">
+
 
 
 
@@ -2327,13 +2276,13 @@ instead they can start with <code>_on_</code> like in the the above example, or 
 
   </div>
 
-
 </div></div>
 <h3 id="handling-errors">Handling Errors<a class="headerlink" href="#handling-errors" title="Permanent link"></a></h3>
 <p>MkDocs defines four error types:</p>
 
 
 <div class="doc doc-object doc-class">
+
 
 
 
@@ -2355,10 +2304,10 @@ not be raised directly. One of the subclasses should be raised instead.</p>
 
   </div>
 
-
 </div>
 
 <div class="doc doc-object doc-class">
+
 
 
 
@@ -2381,10 +2330,10 @@ defined in a plugin's <a class="autorefs autorefs-internal" href="#config_scheme
 
   </div>
 
-
 </div>
 
 <div class="doc doc-object doc-class">
+
 
 
 
@@ -2406,10 +2355,10 @@ not raise this error.</p>
 
   </div>
 
-
 </div>
 
 <div class="doc doc-object doc-class">
+
 
 
 
@@ -2430,7 +2379,6 @@ events.</p>
 
 
   </div>
-
 
 </div><p>Unexpected and uncaught exceptions will interrupt the build process and produce
 typical Python tracebacks, which are useful for debugging your code. However,
@@ -2486,6 +2434,7 @@ if log.getEffectiveLevel() &lt;= logging.DEBUG:
 
 
 
+
 <h4 id="mkdocs.plugins.get_plugin_logger" class="doc doc-heading">
           <code class="highlight language-python">mkdocs.plugins.get_plugin_logger(name: str) -&gt; PrefixedLogger</code>
 
@@ -2498,9 +2447,9 @@ if log.getEffectiveLevel() &lt;= logging.DEBUG:
 
 
 
-  <p><span class="doc-section-title">Parameters:</span></p>
+  <p>Parameters:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
         <b><code>name</code></b>
             (<code>str</code>)
         –
@@ -2512,9 +2461,9 @@ if log.getEffectiveLevel() &lt;= logging.DEBUG:
 
 
 
-  <p><span class="doc-section-title">Returns:</span></p>
+  <p>Returns:</p>
   <ul>
-      <li class="doc-section-item field-body">
+      <li class="field-body">
             <code><span title="mkdocs.plugins.PrefixedLogger">PrefixedLogger</span></code>
         –
         <div class="doc-md-description">
@@ -2567,7 +2516,8 @@ tell MkDocs to use it via the config.</p>
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="../../js/bootstrap.bundle.min.js"></script>
+        <script src="../../js/jquery-3.6.0.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
         <script>
             var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
@@ -2580,7 +2530,7 @@ tell MkDocs to use it via the config.</p>
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body">
                 <p>From here you can search these documents. Enter your search terms below.</p>
@@ -2600,7 +2550,7 @@ tell MkDocs to use it via the config.</p>
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body">
               <table class="table">

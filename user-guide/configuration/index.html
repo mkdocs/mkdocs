@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="auto">
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,13 +10,9 @@
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Configuration - MkDocs</title>
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../../css/fontawesome.min.css" rel="stylesheet">
-        <link href="../../css/brands.min.css" rel="stylesheet">
-        <link href="../../css/solid.min.css" rel="stylesheet">
-        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" disabled>
-        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -38,7 +34,7 @@
             <div class="container">
                 <a class="navbar-brand" href="../..">MkDocs</a>
                 <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -46,14 +42,14 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="nav-item">
+                            <li class="navitem">
                                 <a href="../.." class="nav-link">Home</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="navitem">
                                 <a href="../../getting-started/" class="nav-link">Getting Started</a>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">User Guide</a>
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -81,7 +77,7 @@
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active" aria-current="page">Configuration</a>
+    <a href="./" class="dropdown-item active">Configuration</a>
 </li>
                                     
 <li>
@@ -93,8 +89,8 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Developer Guide</a>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -118,8 +114,8 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">About</a>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -137,9 +133,9 @@
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav ms-md-auto">
+                    <ul class="nav navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
@@ -154,91 +150,61 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/user-guide/configuration.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                              <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
-                                <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
-                                <span class="d-lg-none ms-2">Toggle theme</span>
-                              </button>
-                              <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
-                                    <i class="fa-solid fa-sun fa-fw"></i>
-                                    <span class="ms-2">Light</span>
-                                    <i class="fa-solid fa-check ms-auto d-none"></i>
-                                  </button>
-                                </li>
-                                <li>
-                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
-                                    <i class="fa-solid fa-moon fa-fw"></i>
-                                    <span class="ms-2">Dark</span>
-                                    <i class="fa-solid fa-check ms-auto d-none"></i>
-                                  </button>
-                                </li>
-                                <li>
-                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="true">
-                                    <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
-                                    <span class="ms-2">Auto</span>
-                                    <i class="fa-solid fa-check ms-auto"></i>
-                                  </button>
-                                </li>
-                              </ul>
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/user-guide/configuration.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
             </div>
         </div>
-        <script src="../../js/darkmode.js"></script>
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#configuration" class="nav-link">Configuration</a>
+            <li class="nav-item" data-level="1"><a href="#configuration" class="nav-link">Configuration</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="2"><a href="#introduction" class="nav-link">Introduction</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-bs-level="2"><a href="#project-information" class="nav-link">Project information</a>
+            <li class="nav-item" data-level="2"><a href="#introduction" class="nav-link">Introduction</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#documentation-layout" class="nav-link">Documentation layout</a>
+            <li class="nav-item" data-level="2"><a href="#project-information" class="nav-link">Project information</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#build-directories" class="nav-link">Build directories</a>
+            <li class="nav-item" data-level="2"><a href="#documentation-layout" class="nav-link">Documentation layout</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#preview-controls" class="nav-link">Preview controls</a>
+            <li class="nav-item" data-level="2"><a href="#build-directories" class="nav-link">Build directories</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#live-reloading" class="nav-link">Live Reloading</a>
+            <li class="nav-item" data-level="2"><a href="#preview-controls" class="nav-link">Preview controls</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#formatting-options" class="nav-link">Formatting options</a>
+            <li class="nav-item" data-level="2"><a href="#live-reloading" class="nav-link">Live Reloading</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#special-yaml-tags" class="nav-link">Special YAML tags</a>
+            <li class="nav-item" data-level="2"><a href="#formatting-options" class="nav-link">Formatting options</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#configuration-inheritance" class="nav-link">Configuration Inheritance</a>
+            <li class="nav-item" data-level="2"><a href="#special-yaml-tags" class="nav-link">Special YAML tags</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#configuration-inheritance" class="nav-link">Configuration Inheritance</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -256,7 +222,7 @@
 <p>Project settings are configured by default using a YAML configuration file in
 the project directory named <code>mkdocs.yml</code>. You can specify another path for it
 by using the <code>-f</code>/<code>--config-file</code> option (see <code>mkdocs build --help</code>).</p>
-<p>As a minimum, this configuration file must contain the <code>site_name</code>. All other settings are optional.</p>
+<p>At a minimum, this configuration file must contain the <code>site_name</code>. All other settings are optional.</p>
 <h2 id="project-information">Project information<a class="headerlink" href="#project-information" title="Permanent link"></a></h2>
 <h3 id="site_name">site_name<a class="headerlink" href="#site_name" title="Permanent link"></a></h3>
 <p>This is a <strong>required setting</strong>, and should be a string that is used as the main
@@ -776,42 +742,75 @@ The paths provided via the configuration file are relative to the configuration 
 <p>The paths provided via the <code>-w</code>/<code>--watch</code> CLI parameters are not.</p>
 </div>
 <h3 id="use_directory_urls">use_directory_urls<a class="headerlink" href="#use_directory_urls" title="Permanent link"></a></h3>
-<p>This setting controls the style used for linking to pages within the
-documentation.</p>
-<p>The following table demonstrates how the URLs used on the site differ when
+<p>This setting controls the directory structure of the generated documentation, and thereby the URL format used for linking to pages.</p>
+<p>The following tables demonstrate how the directory structure and URLs used on the site differ when
 setting <code>use_directory_urls</code> to <code>true</code> or <code>false</code>.</p>
+<p><strong><code>use_directory_urls: false</code></strong></p>
+<p>This setting is needed when the documentation is hosted on systems that can't
+access the file <code>X/index.html</code> when given the URL <code>X</code>. When set to <code>false</code>,
+no additional <code>X</code> directory is created, and the file is simply stored as <code>X.html</code>.
+Links are created that point directly to the target <em>file</em> rather than a target
+<em>directory</em>.</p>
 <table>
 <thead>
 <tr>
 <th>Source file</th>
-<th>use_directory_urls: true</th>
-<th>use_directory_urls: false</th>
+<th>Generated File</th>
+<th>URL Format</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>index.md</td>
-<td>/</td>
+<td>index.html</td>
 <td>/index.html</td>
 </tr>
 <tr>
 <td>api-guide.md</td>
-<td>/api-guide/</td>
+<td>api-guide.html</td>
 <td>/api-guide.html</td>
 </tr>
 <tr>
 <td>about/license.md</td>
-<td>/about/license/</td>
+<td>about/license.html</td>
 <td>/about/license.html</td>
 </tr>
 </tbody>
 </table>
+<p>For example, this needs to be set to <code>false</code> when:</p>
+<ul>
+<li>opening pages directly from the file system</li>
+<li>publishing the documentation to a static S3 website.</li>
+</ul>
+<p><strong><code>use_directory_urls: true</code></strong></p>
 <p>The default style of <code>use_directory_urls: true</code> creates more user friendly URLs,
 and is usually what you'll want to use.</p>
-<p>The alternate style can be useful if you want your documentation to remain
-properly linked when opening pages directly from the file system, because it
-creates links that point directly to the target <em>file</em> rather than the target
-<em>directory</em>.</p>
+<table>
+<thead>
+<tr>
+<th>Source file</th>
+<th>Generated File</th>
+<th>URL Format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>index.md</td>
+<td>/index.html</td>
+<td>/</td>
+</tr>
+<tr>
+<td>api-guide.md</td>
+<td>/api-guide/index.html</td>
+<td>/api-guide/</td>
+</tr>
+<tr>
+<td>about/license.md</td>
+<td>/about/license/index.html</td>
+<td>/about/license</td>
+</tr>
+</tbody>
+</table>
 <p><strong>default</strong>: <code>true</code></p>
 <h3 id="strict">strict<a class="headerlink" href="#strict" title="Permanent link"></a></h3>
 <p>Determines how warnings are handled. Set to <code>true</code> to halt processing when a
@@ -1231,7 +1230,8 @@ path based options in the primary configuration file only.</p>
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="../../js/bootstrap.bundle.min.js"></script>
+        <script src="../../js/jquery-3.6.0.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
         <script>
             var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
@@ -1244,7 +1244,7 @@ path based options in the primary configuration file only.</p>
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body">
                 <p>From here you can search these documents. Enter your search terms below.</p>
@@ -1264,7 +1264,7 @@ path based options in the primary configuration file only.</p>
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body">
               <table class="table">

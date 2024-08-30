@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="auto">
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,13 +10,9 @@
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Themes - MkDocs</title>
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../../css/fontawesome.min.css" rel="stylesheet">
-        <link href="../../css/brands.min.css" rel="stylesheet">
-        <link href="../../css/solid.min.css" rel="stylesheet">
-        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" disabled>
-        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -38,7 +34,7 @@
             <div class="container">
                 <a class="navbar-brand" href="../..">MkDocs</a>
                 <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -46,14 +42,14 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="nav-item">
+                            <li class="navitem">
                                 <a href="../.." class="nav-link">Home</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="navitem">
                                 <a href="../../getting-started/" class="nav-link">Getting Started</a>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">User Guide</a>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -93,8 +89,8 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Developer Guide</a>
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -102,7 +98,7 @@
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active" aria-current="page">Themes</a>
+    <a href="./" class="dropdown-item active">Themes</a>
 </li>
                                     
 <li>
@@ -118,8 +114,8 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">About</a>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -137,9 +133,9 @@
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav ms-md-auto">
+                    <ul class="nav navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
@@ -154,87 +150,57 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/dev-guide/themes.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                              <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
-                                <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
-                                <span class="d-lg-none ms-2">Toggle theme</span>
-                              </button>
-                              <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
-                                    <i class="fa-solid fa-sun fa-fw"></i>
-                                    <span class="ms-2">Light</span>
-                                    <i class="fa-solid fa-check ms-auto d-none"></i>
-                                  </button>
-                                </li>
-                                <li>
-                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
-                                    <i class="fa-solid fa-moon fa-fw"></i>
-                                    <span class="ms-2">Dark</span>
-                                    <i class="fa-solid fa-check ms-auto d-none"></i>
-                                  </button>
-                                </li>
-                                <li>
-                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="true">
-                                    <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
-                                    <span class="ms-2">Auto</span>
-                                    <i class="fa-solid fa-check ms-auto"></i>
-                                  </button>
-                                </li>
-                              </ul>
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/dev-guide/themes.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
             </div>
         </div>
-        <script src="../../js/darkmode.js"></script>
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#developing-themes" class="nav-link">Developing Themes</a>
+            <li class="nav-item" data-level="1"><a href="#developing-themes" class="nav-link">Developing Themes</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="2"><a href="#creating-a-custom-theme" class="nav-link">Creating a custom theme</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-bs-level="2"><a href="#basic-theme" class="nav-link">Basic theme</a>
+            <li class="nav-item" data-level="2"><a href="#creating-a-custom-theme" class="nav-link">Creating a custom theme</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#theme-files" class="nav-link">Theme Files</a>
+            <li class="nav-item" data-level="2"><a href="#basic-theme" class="nav-link">Basic theme</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#template-variables" class="nav-link">Template Variables</a>
+            <li class="nav-item" data-level="2"><a href="#theme-files" class="nav-link">Theme Files</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#template-filters" class="nav-link">Template Filters</a>
+            <li class="nav-item" data-level="2"><a href="#template-variables" class="nav-link">Template Variables</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#search-and-themes" class="nav-link">Search and themes</a>
+            <li class="nav-item" data-level="2"><a href="#template-filters" class="nav-link">Template Filters</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#packaging-themes" class="nav-link">Packaging Themes</a>
+            <li class="nav-item" data-level="2"><a href="#search-and-themes" class="nav-link">Search and themes</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#supporting-theme-localizationtranslation" class="nav-link">Supporting theme Localization/Translation</a>
+            <li class="nav-item" data-level="2"><a href="#packaging-themes" class="nav-link">Packaging Themes</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#supporting-theme-localizationtranslation" class="nav-link">Supporting theme Localization/Translation</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -461,12 +427,12 @@ defined by the <a href="../../user-guide/configuration/#nav">nav</a> configurati
 
   </div>
 
-
 </div><p>In addition to the iterable of <a href="#navigation-objects">navigation objects</a>, the
 <code>nav</code> object contains the following attributes:</p>
 
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -488,6 +454,7 @@ defined by the <a href="../../user-guide/configuration/#nav">nav</a> configurati
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -587,12 +554,12 @@ as <code>page</code> <a href="#navigation-objects">navigation objects</a> in the
 
   </div>
 
-
 </div><p>All <code>page</code> objects contain the following attributes:</p>
 
 
 
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -622,6 +589,7 @@ as <code>page</code> <a href="#navigation-objects">navigation objects</a> in the
 
 
 
+
 <h5 id="mkdocs.structure.pages.Page.content" class="doc doc-heading">
           <code class="highlight language-python">content: str | None</code>
   
@@ -641,6 +609,7 @@ as <code>page</code> <a href="#navigation-objects">navigation objects</a> in the
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -673,6 +642,7 @@ for a page.</p>
 
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -712,6 +682,7 @@ documentation page.</p>
 
 
 
+
 <h5 id="mkdocs.structure.pages.Page.url" class="doc doc-heading">
           <code class="highlight language-python">url: str</code>
   
@@ -736,6 +707,7 @@ page.</p>
 
 
 
+
 <h5 id="mkdocs.structure.pages.Page.file" class="doc doc-heading">
           <code class="highlight language-python">file: File</code>
   
@@ -754,6 +726,7 @@ page.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -785,6 +758,7 @@ page <code>foo.md</code> would be <code>/bar/foo/</code>.</p>
 
 
 
+
 <h5 id="mkdocs.structure.pages.Page.canonical_url" class="doc doc-heading">
           <code class="highlight language-python">canonical_url: str | None</code>
   
@@ -809,6 +783,7 @@ variable.</p>
 
 
 
+
 <h5 id="mkdocs.structure.pages.Page.edit_url" class="doc doc-heading">
           <code class="highlight language-python">edit_url: str | None</code>
   
@@ -829,6 +804,7 @@ variable.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -857,6 +833,7 @@ on the homepage:</p>
 
 
 
+
 <h5 id="mkdocs.structure.pages.Page.previous_page" class="doc doc-heading">
           <code class="highlight language-python">previous_page: Page | None</code>
   
@@ -877,6 +854,7 @@ or if the current page is not included in the navigation at all.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -903,6 +881,7 @@ or if the current page is not included in the navigation at all.</p>
 
 
 
+
 <h5 id="mkdocs.structure.StructureItem.parent" class="doc doc-heading">
           <code class="highlight language-python">parent: Section | None = None</code>
   
@@ -922,6 +901,7 @@ or if the current page is not included in the navigation at all.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -947,6 +927,7 @@ or if the current page is not included in the navigation at all.</p>
 
 
 
+
 <h5 id="mkdocs.structure.pages.Page.active" class="doc doc-heading">
           <code class="highlight language-python">active: bool</code>
   
@@ -966,6 +947,7 @@ or if the current page is not included in the navigation at all.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -991,6 +973,7 @@ or if the current page is not included in the navigation at all.</p>
 
 
 
+
 <h5 id="mkdocs.structure.pages.Page.is_page" class="doc doc-heading">
           <code class="highlight language-python">is_page: bool = True</code>
   
@@ -1010,6 +993,7 @@ or if the current page is not included in the navigation at all.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -1057,6 +1041,7 @@ or if the current page is not included in the navigation at all.</p>
 
 
 
+
 <h5 id="mkdocs.structure.toc.AnchorLink.title" class="doc doc-heading">
           <code class="highlight language-python">title: str</code>
   
@@ -1075,6 +1060,7 @@ or if the current page is not included in the navigation at all.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -1099,6 +1085,7 @@ or if the current page is not included in the navigation at all.</p>
 
 
 
+
 <h5 id="mkdocs.structure.toc.AnchorLink.level" class="doc doc-heading">
           <code class="highlight language-python">level: int</code>
   
@@ -1117,6 +1104,7 @@ or if the current page is not included in the navigation at all.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -1144,7 +1132,6 @@ or if the current page is not included in the navigation at all.</p>
   </div>
 
   </div>
-
 
 </div><h3 id="navigation-objects">Navigation Objects<a class="headerlink" href="#navigation-objects" title="Permanent link"></a></h3>
 <p>Navigation objects contained in the <a href="#nav">nav</a> template variable may be one of
@@ -1191,11 +1178,11 @@ theme chooses to do so.</p>
 
   </div>
 
-
 </div><p>The following attributes are available on <code>section</code> objects:</p>
 
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -1217,6 +1204,7 @@ theme chooses to do so.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -1242,6 +1230,7 @@ theme chooses to do so.</p>
 
 
 
+
 <h5 id="mkdocs.structure.nav.Section.children" class="doc doc-heading">
           <code class="highlight language-python">children: list[StructureItem]</code>
   
@@ -1260,6 +1249,7 @@ theme chooses to do so.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -1287,6 +1277,7 @@ to <code>False</code>.</p>
 
 
 
+
 <h5 id="mkdocs.structure.nav.Section.is_section" class="doc doc-heading">
           <code class="highlight language-python">is_section: bool = True</code>
   
@@ -1309,6 +1300,7 @@ to <code>False</code>.</p>
 
 
 
+
 <h5 id="mkdocs.structure.nav.Section.is_page" class="doc doc-heading">
           <code class="highlight language-python">is_page: bool = False</code>
   
@@ -1328,6 +1320,7 @@ to <code>False</code>.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -1381,11 +1374,11 @@ MkDocs page.</p>
 
   </div>
 
-
 </div><p>The following attributes are available on <code>link</code> objects:</p>
 
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -1407,6 +1400,7 @@ MkDocs page.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -1432,6 +1426,7 @@ should not need to have <code>base_url</code> prepended.</p>
 
 
 
+
 <h5 id="mkdocs.structure.StructureItem.parent" class="doc doc-heading">
           <code class="highlight language-python">parent: Section | None = None</code>
   
@@ -1451,6 +1446,7 @@ should not need to have <code>base_url</code> prepended.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -1476,6 +1472,7 @@ should not need to have <code>base_url</code> prepended.</p>
 
 
 
+
 <h5 id="mkdocs.structure.nav.Link.active" class="doc doc-heading">
           <code class="highlight language-python">active: bool = False</code>
   
@@ -1495,6 +1492,7 @@ should not need to have <code>base_url</code> prepended.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -1520,6 +1518,7 @@ should not need to have <code>base_url</code> prepended.</p>
 
 
 
+
 <h5 id="mkdocs.structure.nav.Link.is_page" class="doc doc-heading">
           <code class="highlight language-python">is_page: bool = False</code>
   
@@ -1539,6 +1538,7 @@ should not need to have <code>base_url</code> prepended.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -1906,7 +1906,8 @@ different process for generating those <code>mo</code> files if you chose to do 
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="../../js/bootstrap.bundle.min.js"></script>
+        <script src="../../js/jquery-3.6.0.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
         <script>
             var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
@@ -1919,7 +1920,7 @@ different process for generating those <code>mo</code> files if you chose to do 
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body">
                 <p>From here you can search these documents. Enter your search terms below.</p>
@@ -1939,7 +1940,7 @@ different process for generating those <code>mo</code> files if you chose to do 
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body">
               <table class="table">

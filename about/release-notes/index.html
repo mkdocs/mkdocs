@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="auto">
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,13 +10,9 @@
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Release Notes - MkDocs</title>
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../../css/fontawesome.min.css" rel="stylesheet">
-        <link href="../../css/brands.min.css" rel="stylesheet">
-        <link href="../../css/solid.min.css" rel="stylesheet">
-        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" disabled>
-        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -38,7 +34,7 @@
             <div class="container">
                 <a class="navbar-brand" href="../..">MkDocs</a>
                 <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -46,14 +42,14 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="nav-item">
+                            <li class="navitem">
                                 <a href="../.." class="nav-link">Home</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="navitem">
                                 <a href="../../getting-started/" class="nav-link">Getting Started</a>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">User Guide</a>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -93,8 +89,8 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Developer Guide</a>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -118,12 +114,12 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">About</a>
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li>
-    <a href="./" class="dropdown-item active" aria-current="page">Release Notes</a>
+    <a href="./" class="dropdown-item active">Release Notes</a>
 </li>
                                     
 <li>
@@ -137,9 +133,9 @@
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav ms-md-auto">
+                    <ul class="nav navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
@@ -154,259 +150,233 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/about/release-notes.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                              <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
-                                <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
-                                <span class="d-lg-none ms-2">Toggle theme</span>
-                              </button>
-                              <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
-                                    <i class="fa-solid fa-sun fa-fw"></i>
-                                    <span class="ms-2">Light</span>
-                                    <i class="fa-solid fa-check ms-auto d-none"></i>
-                                  </button>
-                                </li>
-                                <li>
-                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
-                                    <i class="fa-solid fa-moon fa-fw"></i>
-                                    <span class="ms-2">Dark</span>
-                                    <i class="fa-solid fa-check ms-auto d-none"></i>
-                                  </button>
-                                </li>
-                                <li>
-                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="true">
-                                    <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
-                                    <span class="ms-2">Auto</span>
-                                    <i class="fa-solid fa-check ms-auto"></i>
-                                  </button>
-                                </li>
-                              </ul>
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/about/release-notes.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
             </div>
         </div>
-        <script src="../../js/darkmode.js"></script>
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#release-notes" class="nav-link">Release Notes</a>
+            <li class="nav-item" data-level="1"><a href="#release-notes" class="nav-link">Release Notes</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="2"><a href="#upgrading" class="nav-link">Upgrading</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-bs-level="2"><a href="#maintenance-team" class="nav-link">Maintenance team</a>
+            <li class="nav-item" data-level="2"><a href="#upgrading" class="nav-link">Upgrading</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-160-2024-04-20" class="nav-link">Version 1.6.0 (2024-04-20)</a>
+            <li class="nav-item" data-level="2"><a href="#maintenance-team" class="nav-link">Maintenance team</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-153-2023-09-18" class="nav-link">Version 1.5.3 (2023-09-18)</a>
+            <li class="nav-item" data-level="2"><a href="#version-161-2024-08-30" class="nav-link">Version 1.6.1 (2024-08-30)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-152-2023-08-02" class="nav-link">Version 1.5.2 (2023-08-02)</a>
+            <li class="nav-item" data-level="2"><a href="#version-160-2024-04-20" class="nav-link">Version 1.6.0 (2024-04-20)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-151-2023-07-28" class="nav-link">Version 1.5.1 (2023-07-28)</a>
+            <li class="nav-item" data-level="2"><a href="#version-153-2023-09-18" class="nav-link">Version 1.5.3 (2023-09-18)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-150-2023-07-26" class="nav-link">Version 1.5.0 (2023-07-26)</a>
+            <li class="nav-item" data-level="2"><a href="#version-152-2023-08-02" class="nav-link">Version 1.5.2 (2023-08-02)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-143-2023-05-02" class="nav-link">Version 1.4.3 (2023-05-02)</a>
+            <li class="nav-item" data-level="2"><a href="#version-151-2023-07-28" class="nav-link">Version 1.5.1 (2023-07-28)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-142-2022-11-01" class="nav-link">Version 1.4.2 (2022-11-01)</a>
+            <li class="nav-item" data-level="2"><a href="#version-150-2023-07-26" class="nav-link">Version 1.5.0 (2023-07-26)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-141-2022-10-15" class="nav-link">Version 1.4.1 (2022-10-15)</a>
+            <li class="nav-item" data-level="2"><a href="#version-143-2023-05-02" class="nav-link">Version 1.4.3 (2023-05-02)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-140-2022-09-27" class="nav-link">Version 1.4.0 (2022-09-27)</a>
+            <li class="nav-item" data-level="2"><a href="#version-142-2022-11-01" class="nav-link">Version 1.4.2 (2022-11-01)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-131-2022-07-19" class="nav-link">Version 1.3.1 (2022-07-19)</a>
+            <li class="nav-item" data-level="2"><a href="#version-141-2022-10-15" class="nav-link">Version 1.4.1 (2022-10-15)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-130-2022-03-26" class="nav-link">Version 1.3.0 (2022-03-26)</a>
+            <li class="nav-item" data-level="2"><a href="#version-140-2022-09-27" class="nav-link">Version 1.4.0 (2022-09-27)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-124-2022-03-26" class="nav-link">Version 1.2.4 (2022-03-26)</a>
+            <li class="nav-item" data-level="2"><a href="#version-131-2022-07-19" class="nav-link">Version 1.3.1 (2022-07-19)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-123-2021-10-12" class="nav-link">Version 1.2.3 (2021-10-12)</a>
+            <li class="nav-item" data-level="2"><a href="#version-130-2022-03-26" class="nav-link">Version 1.3.0 (2022-03-26)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-122-2021-07-18" class="nav-link">Version 1.2.2 (2021-07-18)</a>
+            <li class="nav-item" data-level="2"><a href="#version-124-2022-03-26" class="nav-link">Version 1.2.4 (2022-03-26)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-121-2021-06-09" class="nav-link">Version 1.2.1 (2021-06-09)</a>
+            <li class="nav-item" data-level="2"><a href="#version-123-2021-10-12" class="nav-link">Version 1.2.3 (2021-10-12)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-12-2021-06-04" class="nav-link">Version 1.2 (2021-06-04)</a>
+            <li class="nav-item" data-level="2"><a href="#version-122-2021-07-18" class="nav-link">Version 1.2.2 (2021-07-18)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-112-2020-05-14" class="nav-link">Version 1.1.2 (2020-05-14)</a>
+            <li class="nav-item" data-level="2"><a href="#version-121-2021-06-09" class="nav-link">Version 1.2.1 (2021-06-09)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-111-2020-05-12" class="nav-link">Version 1.1.1 (2020-05-12)</a>
+            <li class="nav-item" data-level="2"><a href="#version-12-2021-06-04" class="nav-link">Version 1.2 (2021-06-04)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-11-2020-02-22" class="nav-link">Version 1.1 (2020-02-22)</a>
+            <li class="nav-item" data-level="2"><a href="#version-112-2020-05-14" class="nav-link">Version 1.1.2 (2020-05-14)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-104-2018-09-07" class="nav-link">Version 1.0.4 (2018-09-07)</a>
+            <li class="nav-item" data-level="2"><a href="#version-111-2020-05-12" class="nav-link">Version 1.1.1 (2020-05-12)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-103-2018-08-29" class="nav-link">Version 1.0.3 (2018-08-29)</a>
+            <li class="nav-item" data-level="2"><a href="#version-11-2020-02-22" class="nav-link">Version 1.1 (2020-02-22)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-102-2018-08-22" class="nav-link">Version 1.0.2 (2018-08-22)</a>
+            <li class="nav-item" data-level="2"><a href="#version-104-2018-09-07" class="nav-link">Version 1.0.4 (2018-09-07)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-101-2018-08-13" class="nav-link">Version 1.0.1 (2018-08-13)</a>
+            <li class="nav-item" data-level="2"><a href="#version-103-2018-08-29" class="nav-link">Version 1.0.3 (2018-08-29)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-10-2018-08-03" class="nav-link">Version 1.0 (2018-08-03)</a>
+            <li class="nav-item" data-level="2"><a href="#version-102-2018-08-22" class="nav-link">Version 1.0.2 (2018-08-22)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0175-2018-07-06" class="nav-link">Version 0.17.5 (2018-07-06)</a>
+            <li class="nav-item" data-level="2"><a href="#version-101-2018-08-13" class="nav-link">Version 1.0.1 (2018-08-13)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0174-2018-06-08" class="nav-link">Version 0.17.4 (2018-06-08)</a>
+            <li class="nav-item" data-level="2"><a href="#version-10-2018-08-03" class="nav-link">Version 1.0 (2018-08-03)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0173-2018-03-07" class="nav-link">Version 0.17.3 (2018-03-07)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0175-2018-07-06" class="nav-link">Version 0.17.5 (2018-07-06)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0172-2017-11-15" class="nav-link">Version 0.17.2 (2017-11-15)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0174-2018-06-08" class="nav-link">Version 0.17.4 (2018-06-08)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0171-2017-10-30" class="nav-link">Version 0.17.1 (2017-10-30)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0173-2018-03-07" class="nav-link">Version 0.17.3 (2018-03-07)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0170-2017-10-19" class="nav-link">Version 0.17.0 (2017-10-19)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0172-2017-11-15" class="nav-link">Version 0.17.2 (2017-11-15)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0163-2017-04-04" class="nav-link">Version 0.16.3 (2017-04-04)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0171-2017-10-30" class="nav-link">Version 0.17.1 (2017-10-30)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0162-2017-03-13" class="nav-link">Version 0.16.2 (2017-03-13)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0170-2017-10-19" class="nav-link">Version 0.17.0 (2017-10-19)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0161-2016-12-22" class="nav-link">Version 0.16.1 (2016-12-22)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0163-2017-04-04" class="nav-link">Version 0.16.3 (2017-04-04)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-016-2016-11-04" class="nav-link">Version 0.16 (2016-11-04)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0162-2017-03-13" class="nav-link">Version 0.16.2 (2017-03-13)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0153-2016-02-18" class="nav-link">Version 0.15.3 (2016-02-18)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0161-2016-12-22" class="nav-link">Version 0.16.1 (2016-12-22)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0152-2016-02-08" class="nav-link">Version 0.15.2 (2016-02-08)</a>
+            <li class="nav-item" data-level="2"><a href="#version-016-2016-11-04" class="nav-link">Version 0.16 (2016-11-04)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0151-2016-01-30" class="nav-link">Version 0.15.1 (2016-01-30)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0153-2016-02-18" class="nav-link">Version 0.15.3 (2016-02-18)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0150-2016-01-21" class="nav-link">Version 0.15.0 (2016-01-21)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0152-2016-02-08" class="nav-link">Version 0.15.2 (2016-02-08)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0140-2015-06-09" class="nav-link">Version 0.14.0 (2015-06-09)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0151-2016-01-30" class="nav-link">Version 0.15.1 (2016-01-30)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0133-2015-06-02" class="nav-link">Version 0.13.3 (2015-06-02)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0150-2016-01-21" class="nav-link">Version 0.15.0 (2016-01-21)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0132-2015-05-30" class="nav-link">Version 0.13.2 (2015-05-30)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0140-2015-06-09" class="nav-link">Version 0.14.0 (2015-06-09)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0131-2015-05-27" class="nav-link">Version 0.13.1 (2015-05-27)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0133-2015-06-02" class="nav-link">Version 0.13.3 (2015-06-02)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0130-2015-05-26" class="nav-link">Version 0.13.0 (2015-05-26)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0132-2015-05-30" class="nav-link">Version 0.13.2 (2015-05-30)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0122-2015-04-22" class="nav-link">Version 0.12.2 (2015-04-22)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0131-2015-05-27" class="nav-link">Version 0.13.1 (2015-05-27)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0121-2015-04-14" class="nav-link">Version 0.12.1 (2015-04-14)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0130-2015-05-26" class="nav-link">Version 0.13.0 (2015-05-26)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0120-2015-04-14" class="nav-link">Version 0.12.0 (2015-04-14)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0122-2015-04-22" class="nav-link">Version 0.12.2 (2015-04-22)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0111-2014-11-20" class="nav-link">Version 0.11.1 (2014-11-20)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0121-2015-04-14" class="nav-link">Version 0.12.1 (2015-04-14)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0110-2014-11-18" class="nav-link">Version 0.11.0 (2014-11-18)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0120-2015-04-14" class="nav-link">Version 0.12.0 (2015-04-14)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-0100-2014-10-29" class="nav-link">Version 0.10.0 (2014-10-29)</a>
+            <li class="nav-item" data-level="2"><a href="#version-0111-2014-11-20" class="nav-link">Version 0.11.1 (2014-11-20)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0110-2014-11-18" class="nav-link">Version 0.11.0 (2014-11-18)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#version-0100-2014-10-29" class="nav-link">Version 0.10.0 (2014-10-29)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -433,6 +403,23 @@ mkdocs, version 1.5.0 from /path/to/mkdocs (Python 3.10)</code></pre>
 <li><a href="https://github.com/waylan/">@waylan</a></li>
 <li><a href="https://github.com/oprypin/">@oprypin</a></li>
 <li><a href="https://github.com/ultrabug/">@ultrabug</a></li>
+</ul>
+<h2 id="version-161-2024-08-30">Version 1.6.1 (2024-08-30)<a class="headerlink" href="#version-161-2024-08-30" title="Permanent link"></a></h2>
+<h3 id="fixed">Fixed<a class="headerlink" href="#fixed" title="Permanent link"></a></h3>
+<ul>
+<li>Fix build error when environment variable <code>SOURCE_DATE_EPOCH=0</code> is set. <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3795" title="GitHub Issue mkdocs/mkdocs #3795">#3795</a></li>
+<li>Fix build error when <code>mkdocs_theme.yml</code> config is empty. <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3700" title="GitHub Issue mkdocs/mkdocs #3700">#3700</a></li>
+<li>Support <code>python -W</code> and <code>PYTHONWARNINGS</code> instead of overriding the configuration. <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3809" title="GitHub Issue mkdocs/mkdocs #3809">#3809</a></li>
+<li>Support running with Docker under strict mode, by removing <code>0.0.0.0</code> dev server warning. <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3784" title="GitHub Issue mkdocs/mkdocs #3784">#3784</a></li>
+<li>Drop unnecessary <code>changefreq</code> from <code>sitemap.xml</code>. <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3629" title="GitHub Issue mkdocs/mkdocs #3629">#3629</a></li>
+<li>Fix JavaScript console error when closing menu dropdown. <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3774" title="GitHub Issue mkdocs/mkdocs #3774">#3774</a></li>
+<li>Fix JavaScript console error that occur on repeated clicks. <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3730" title="GitHub Issue mkdocs/mkdocs #3730">#3730</a></li>
+<li>Fix JavaScript console error that can occur on dropdown selections. <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3694" title="GitHub Issue mkdocs/mkdocs #3694">#3694</a></li>
+</ul>
+<h3 id="added">Added<a class="headerlink" href="#added" title="Permanent link"></a></h3>
+<ul>
+<li>Added translations for Dutch. <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3804" title="GitHub Issue mkdocs/mkdocs #3804">#3804</a></li>
+<li>Added and updated translations for Chinese (Simplified). <a class="gh-link gh-issue" href="https://github.com/mkdocs/mkdocs/issues/3684" title="GitHub Issue mkdocs/mkdocs #3684">#3684</a></li>
 </ul>
 <h2 id="version-160-2024-04-20">Version 1.6.0 (2024-04-20)<a class="headerlink" href="#version-160-2024-04-20" title="Permanent link"></a></h2>
 <h3 id="local-preview">Local preview<a class="headerlink" href="#local-preview" title="Permanent link"></a></h3>
@@ -2435,7 +2422,8 @@ documentation.</p>
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="../../js/bootstrap.bundle.min.js"></script>
+        <script src="../../js/jquery-3.6.0.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
         <script>
             var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
@@ -2448,7 +2436,7 @@ documentation.</p>
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body">
                 <p>From here you can search these documents. Enter your search terms below.</p>
@@ -2468,7 +2456,7 @@ documentation.</p>
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body">
               <table class="table">

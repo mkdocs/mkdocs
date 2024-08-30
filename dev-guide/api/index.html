@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="auto">
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,13 +10,9 @@
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>API Reference - MkDocs</title>
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../../css/fontawesome.min.css" rel="stylesheet">
-        <link href="../../css/brands.min.css" rel="stylesheet">
-        <link href="../../css/solid.min.css" rel="stylesheet">
-        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
-        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" disabled>
-        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
         <link href="../../css/extra.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -38,7 +34,7 @@
             <div class="container">
                 <a class="navbar-brand" href="../..">MkDocs</a>
                 <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -46,14 +42,14 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="nav-item">
+                            <li class="navitem">
                                 <a href="../.." class="nav-link">Home</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="navitem">
                                 <a href="../../getting-started/" class="nav-link">Getting Started</a>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">User Guide</a>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -93,8 +89,8 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Developer Guide</a>
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -114,12 +110,12 @@
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active" aria-current="page">API Reference</a>
+    <a href="./" class="dropdown-item active">API Reference</a>
 </li>
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">About</a>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -137,9 +133,9 @@
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav ms-md-auto">
+                    <ul class="nav navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
@@ -154,75 +150,45 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/dev-guide/api.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                              <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
-                                <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
-                                <span class="d-lg-none ms-2">Toggle theme</span>
-                              </button>
-                              <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
-                                    <i class="fa-solid fa-sun fa-fw"></i>
-                                    <span class="ms-2">Light</span>
-                                    <i class="fa-solid fa-check ms-auto d-none"></i>
-                                  </button>
-                                </li>
-                                <li>
-                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
-                                    <i class="fa-solid fa-moon fa-fw"></i>
-                                    <span class="ms-2">Dark</span>
-                                    <i class="fa-solid fa-check ms-auto d-none"></i>
-                                  </button>
-                                </li>
-                                <li>
-                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="true">
-                                    <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
-                                    <span class="ms-2">Auto</span>
-                                    <i class="fa-solid fa-check ms-auto"></i>
-                                  </button>
-                                </li>
-                              </ul>
+                                <a href="https://github.com/mkdocs/mkdocs/blob/master/docs/dev-guide/api.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
             </div>
         </div>
-        <script src="../../js/darkmode.js"></script>
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#api-reference" class="nav-link">API reference</a>
+            <li class="nav-item" data-level="1"><a href="#api-reference" class="nav-link">API reference</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="2"><a href="#mkdocs.structure.files.Files" class="nav-link">Files</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-bs-level="2"><a href="#mkdocs.structure.files.File" class="nav-link">File</a>
+            <li class="nav-item" data-level="2"><a href="#mkdocs.structure.files.Files" class="nav-link">Files</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#mkdocs.config.base.Config" class="nav-link">Config</a>
+            <li class="nav-item" data-level="2"><a href="#mkdocs.structure.files.File" class="nav-link">File</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#mkdocs.utils.templates.TemplateContext" class="nav-link">TemplateContext</a>
+            <li class="nav-item" data-level="2"><a href="#mkdocs.config.base.Config" class="nav-link">Config</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#mkdocs.livereload.LiveReloadServer" class="nav-link">LiveReloadServer</a>
+            <li class="nav-item" data-level="2"><a href="#mkdocs.utils.templates.TemplateContext" class="nav-link">TemplateContext</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mkdocs.livereload.LiveReloadServer" class="nav-link">LiveReloadServer</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -241,6 +207,7 @@
 
 
 <div class="doc doc-object doc-class">
+
 
 
 
@@ -271,6 +238,7 @@
 
 
 
+
 <h3 id="mkdocs.structure.files.Files.src_paths" class="doc doc-heading">
           <code class="highlight language-python">src_paths: dict[str, File]</code>
   
@@ -289,6 +257,7 @@
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -317,6 +286,7 @@
 
 
 
+
 <h3 id="mkdocs.structure.files.Files.__iter__" class="doc doc-heading">
           <code class="highlight language-python">__iter__() -&gt; Iterator[File]</code>
 
@@ -333,6 +303,7 @@
 
 
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -355,6 +326,7 @@
 
 
 
+
 <h3 id="mkdocs.structure.files.Files.__contains__" class="doc doc-heading">
           <code class="highlight language-python">__contains__(path: str) -&gt; bool</code>
 
@@ -371,6 +343,7 @@
 
 
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -393,6 +366,7 @@
 
 
 
+
 <h3 id="mkdocs.structure.files.Files.append" class="doc doc-heading">
           <code class="highlight language-python">append(file: File) -&gt; None</code>
 
@@ -409,6 +383,7 @@
 
 
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -431,6 +406,7 @@
 
 
 
+
 <h3 id="mkdocs.structure.files.Files.copy_static_files" class="doc doc-heading">
           <code class="highlight language-python">copy_static_files(dirty: bool = False, *, inclusion: Callable[[InclusionLevel], bool] = InclusionLevel.is_included) -&gt; None</code>
 
@@ -447,6 +423,7 @@
 
 
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -469,6 +446,7 @@
 
 
 
+
 <h3 id="mkdocs.structure.files.Files.static_pages" class="doc doc-heading">
           <code class="highlight language-python">static_pages() -&gt; Sequence[File]</code>
 
@@ -485,6 +463,7 @@
 
 
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -507,6 +486,7 @@
 
 
 
+
 <h3 id="mkdocs.structure.files.Files.javascript_files" class="doc doc-heading">
           <code class="highlight language-python">javascript_files() -&gt; Sequence[File]</code>
 
@@ -526,6 +506,7 @@
 
 
 
+
 <h3 id="mkdocs.structure.files.Files.css_files" class="doc doc-heading">
           <code class="highlight language-python">css_files() -&gt; Sequence[File]</code>
 
@@ -542,6 +523,7 @@
 
 
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -565,10 +547,10 @@
 
   </div>
 
-
 </div>
 
 <div class="doc doc-object doc-class">
+
 
 
 
@@ -623,6 +605,7 @@ additional transformations to the path, based on <code>use_directory_urls</code>
 
 
 
+
 <h3 id="mkdocs.structure.files.File.src_uri" class="doc doc-heading">
           <code class="highlight language-python">src_uri: str</code>
   
@@ -641,6 +624,7 @@ additional transformations to the path, based on <code>use_directory_urls</code>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -667,6 +651,7 @@ additional transformations to the path, based on <code>use_directory_urls</code>
 
 
 
+
 <h3 id="mkdocs.structure.files.File.dest_path" class="doc doc-heading">
           <code class="highlight language-python">dest_path: str</code>
   
@@ -686,6 +671,7 @@ additional transformations to the path, based on <code>use_directory_urls</code>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -712,6 +698,7 @@ additional transformations to the path, based on <code>use_directory_urls</code>
 
 
 
+
 <h3 id="mkdocs.structure.files.File.src_dir" class="doc doc-heading">
           <code class="highlight language-python">src_dir: str | None = src_dir</code>
   
@@ -734,6 +721,7 @@ additional transformations to the path, based on <code>use_directory_urls</code>
 
 
 
+
 <h3 id="mkdocs.structure.files.File.dest_dir" class="doc doc-heading">
           <code class="highlight language-python">dest_dir: str = dest_dir</code>
   
@@ -752,6 +740,7 @@ additional transformations to the path, based on <code>use_directory_urls</code>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -780,6 +769,7 @@ original path.</p>
 
 
 
+
 <h3 id="mkdocs.structure.files.File.inclusion" class="doc doc-heading">
           <code class="highlight language-python">inclusion: InclusionLevel = inclusion</code>
   
@@ -799,6 +789,7 @@ original path.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -824,6 +815,7 @@ original path.</p>
 
 
 
+
 <h3 id="mkdocs.structure.files.File.dest_uri" class="doc doc-heading">
           <code class="highlight language-python">dest_uri = cached_property(_get_dest_path)</code>
   
@@ -846,6 +838,7 @@ original path.</p>
 
 
 
+
 <h3 id="mkdocs.structure.files.File.url" class="doc doc-heading">
           <code class="highlight language-python">url = cached_property(_get_url)</code>
   
@@ -865,6 +858,7 @@ original path.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -891,6 +885,7 @@ original path.</p>
 
 
 
+
 <h3 id="mkdocs.structure.files.File.abs_dest_path" class="doc doc-heading">
           <code class="highlight language-python">abs_dest_path: str</code>
   
@@ -910,6 +905,7 @@ original path.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -934,6 +930,7 @@ original path.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -964,6 +961,7 @@ original path.</p>
 
 
 
+
 <h3 id="mkdocs.structure.files.File.generated" class="doc doc-heading">
           <code class="highlight language-python">generated(config: MkDocsConfig, src_uri: str, *, content: str | bytes | None = None, abs_src_path: str | None = None, inclusion: InclusionLevel = InclusionLevel.UNDEFINED) -&gt; File</code>
   
@@ -988,6 +986,7 @@ original path.</p>
 
 
 
+
 <h3 id="mkdocs.structure.files.File.edit_uri" class="doc doc-heading">
           <code class="highlight language-python">edit_uri() -&gt; str | None</code>
 
@@ -1006,6 +1005,7 @@ For generated files this should be set to <code>None</code>.</p>
 
 
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1028,6 +1028,7 @@ For generated files this should be set to <code>None</code>.</p>
 
 
 
+
 <h3 id="mkdocs.structure.files.File.copy_file" class="doc doc-heading">
           <code class="highlight language-python">copy_file(dirty: bool = False) -&gt; None</code>
 
@@ -1044,6 +1045,7 @@ For generated files this should be set to <code>None</code>.</p>
 
 
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1066,6 +1068,7 @@ For generated files this should be set to <code>None</code>.</p>
 
 
 
+
 <h3 id="mkdocs.structure.files.File.is_static_page" class="doc doc-heading">
           <code class="highlight language-python">is_static_page() -&gt; bool</code>
 
@@ -1082,6 +1085,7 @@ For generated files this should be set to <code>None</code>.</p>
 
 
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1104,6 +1108,7 @@ For generated files this should be set to <code>None</code>.</p>
 
 
 
+
 <h3 id="mkdocs.structure.files.File.is_javascript" class="doc doc-heading">
           <code class="highlight language-python">is_javascript() -&gt; bool</code>
 
@@ -1120,6 +1125,7 @@ For generated files this should be set to <code>None</code>.</p>
 
 
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1143,10 +1149,10 @@ For generated files this should be set to <code>None</code>.</p>
 
   </div>
 
-
 </div>
 
 <div class="doc doc-object doc-class">
+
 
 
 
@@ -1185,6 +1191,7 @@ For examples, see mkdocs/contrib/search/<strong>init</strong>.py and mkdocs/conf
 
 
 
+
 <h3 id="mkdocs.config.base.Config.__new__" class="doc doc-heading">
           <code class="highlight language-python">__new__(*args, **kwargs) -&gt; Config</code>
 
@@ -1201,6 +1208,7 @@ For examples, see mkdocs/contrib/search/<strong>init</strong>.py and mkdocs/conf
 
 
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1224,6 +1232,7 @@ default if it has one.</p>
 
 
 
+
 <h3 id="mkdocs.config.base.Config.load_dict" class="doc doc-heading">
           <code class="highlight language-python">load_dict(patch: dict) -&gt; None</code>
 
@@ -1240,6 +1249,7 @@ default if it has one.</p>
 
 
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1263,10 +1273,10 @@ default if it has one.</p>
 
   </div>
 
-
 </div>
 
 <div class="doc doc-object doc-class">
+
 
 
 
@@ -1297,6 +1307,7 @@ default if it has one.</p>
 
 
 
+
 <h3 id="mkdocs.utils.templates.TemplateContext.nav" class="doc doc-heading">
           <code class="highlight language-python">nav: Navigation</code>
   
@@ -1313,6 +1324,7 @@ default if it has one.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -1335,6 +1347,7 @@ default if it has one.</p>
 
 
 
+
 <h3 id="mkdocs.utils.templates.TemplateContext.base_url" class="doc doc-heading">
           <code class="highlight language-python">base_url: str</code>
   
@@ -1351,6 +1364,7 @@ default if it has one.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -1373,6 +1387,7 @@ default if it has one.</p>
 
 
 
+
 <h3 id="mkdocs.utils.templates.TemplateContext.extra_javascript" class="doc doc-heading">
           <code class="highlight language-python">extra_javascript: Sequence[str]</code>
   
@@ -1389,6 +1404,7 @@ default if it has one.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -1411,6 +1427,7 @@ default if it has one.</p>
 
 
 
+
 <h3 id="mkdocs.utils.templates.TemplateContext.build_date_utc" class="doc doc-heading">
           <code class="highlight language-python">build_date_utc: datetime.datetime</code>
   
@@ -1430,6 +1447,7 @@ default if it has one.</p>
 
 
 
+
 <h3 id="mkdocs.utils.templates.TemplateContext.config" class="doc doc-heading">
           <code class="highlight language-python">config: MkDocsConfig</code>
   
@@ -1446,6 +1464,7 @@ default if it has one.</p>
 </div>
 
 <div class="doc doc-object doc-attribute">
+
 
 
 
@@ -1472,10 +1491,10 @@ default if it has one.</p>
 
   </div>
 
-
 </div>
 
 <div class="doc doc-object doc-class">
+
 
 
 
@@ -1509,6 +1528,7 @@ default if it has one.</p>
 
 
 
+
 <h3 id="mkdocs.livereload.LiveReloadServer.watch" class="doc doc-heading">
           <code class="highlight language-python">watch(path: str, func: None = None, *, recursive: bool = True) -&gt; None</code>
 
@@ -1525,6 +1545,7 @@ default if it has one.</p>
 
 
 <div class="doc doc-object doc-function">
+
 
 
 
@@ -1548,7 +1569,6 @@ default if it has one.</p>
 
   </div>
 
-
 </div></div>
             </div>
         </div>
@@ -1558,7 +1578,8 @@ default if it has one.</p>
                 <p>Copyright &copy; 2014 <a href="https://twitter.com/starletdreaming">Tom Christie</a>, Maintained by the <a href="/about/release-notes/#maintenance-team">MkDocs Team</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="../../js/bootstrap.bundle.min.js"></script>
+        <script src="../../js/jquery-3.6.0.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
         <script>
             var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
@@ -1571,7 +1592,7 @@ default if it has one.</p>
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body">
                 <p>From here you can search these documents. Enter your search terms below.</p>
@@ -1591,7 +1612,7 @@ default if it has one.</p>
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body">
               <table class="table">
