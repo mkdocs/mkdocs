@@ -67,7 +67,12 @@ def serve(
         build(config, serve_url=None if is_clean else serve_url, dirty=is_dirty)
 
     server = LiveReloadServer(
-        builder=builder, host=host, port=port, root=site_dir, mount_path=mount_path
+        builder=builder,
+        host=host,
+        port=port,
+        root=site_dir,
+        mount_path=mount_path,
+        headers=config.headers,
     )
 
     def error_handler(code) -> bytes | None:

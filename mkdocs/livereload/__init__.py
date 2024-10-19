@@ -104,6 +104,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         mount_path: str = "/",
         polling_interval: float = 0.5,
         shutdown_delay: float = 0.25,
+        headers: dict[str, str] | None = None,
     ) -> None:
         self.builder = builder
         try:
@@ -135,6 +136,8 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
 
         self._watched_paths: dict[str, int] = {}
         self._watch_refs: dict[str, Any] = {}
+
+        self._headers: dict[str, str] = headers or {}
 
     def watch(self, path: str, func: None = None, *, recursive: bool = True) -> None:
         """Add the 'path' to watched paths, call the function and reload when any file changes under it."""
@@ -320,7 +323,12 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
 
         content_type = self._guess_type(file_path)
         start_response(
-            "200 OK", [("Content-Type", content_type), ("Content-Length", str(content_length))]
+            "200 OK",
+            [
+                ("Content-Type", content_type),
+                ("Content-Length", str(content_length)),
+                *self._headers.items(),
+            ],
         )
         return wsgiref.util.FileWrapper(file)
 
