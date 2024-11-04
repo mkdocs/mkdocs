@@ -573,6 +573,66 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
 
     @tempdir(
         files={
+            'foo_unpublished.md': 'unpublished content to include anyway',
+            'other_unpublished.md': 'unpublished content',
+            'normal_file.md': 'should not be affected',
+            'test/other_unpublished.md': 'more unpublished content',
+            'test/normal_file.md': 'should not be affected',
+        }
+    )
+    @tempdir()
+    def test_draft_docs_with_comments_from_user_guide(self, site_dir, docs_dir):
+        cfg = load_config(
+            docs_dir=docs_dir,
+            site_dir=site_dir,
+            use_directory_urls=False,
+            draft_docs='''
+                # A "drafts" directory anywhere.
+                drafts/
+
+                # A Markdown file ending in _unpublished.md anywhere.
+                *_unpublished.md
+
+                # But keep this particular file.
+                !/foo_unpublished.md
+            ''',
+        )
+
+        with self.subTest(serve_url=None):
+            build.build(cfg)
+            self.assertPathIsFile(site_dir, 'foo_unpublished.html')
+            self.assertPathIsFile(site_dir, 'normal_file.html')
+            self.assertPathIsFile(site_dir, 'test', 'normal_file.html')
+            self.assertPathNotExists(site_dir, 'other_unpublished.html')
+            self.assertPathNotExists(site_dir, 'test', 'other_unpublished.html')
+
+        serve_url = 'http://localhost:123/documentation/'
+        with self.subTest(serve_url=serve_url):
+            expected_logs = '''
+                INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `draft_docs` config:
+                  - http://localhost:123/documentation/other_unpublished.html
+                  - http://localhost:123/documentation/test/other_unpublished.html
+            '''
+            with self._assert_build_logs(expected_logs):
+                build.build(cfg, serve_url=serve_url)
+
+            top_other_path = Path(site_dir, 'other_unpublished.html')
+            self.assertTrue(top_other_path.is_file())
+            self.assertIn('DRAFT', top_other_path.read_text())
+
+            sub_other_path = Path(site_dir, 'test', 'other_unpublished.html')
+            self.assertPathIsFile(sub_other_path)
+            self.assertIn('DRAFT', sub_other_path.read_text())
+
+            self.assertPathIsFile(site_dir, 'foo_unpublished.html')
+            self.assertPathIsFile(site_dir, 'normal_file.html')
+
+            good_path = Path(site_dir, 'test', 'normal_file.html')
+            self.assertPathIsFile(good_path)
+            self.assertNotIn('DRAFT', good_path.read_text())
+
+    @tempdir(
+        files={
             'test/foo.md': 'page1 content, [bar](bar.md)',
             'test/bar.md': 'page2 content, [baz](baz.md), [nonexistent](nonexistent.md)',
             'test/baz.md': 'page3 content, [foo](foo.md)',

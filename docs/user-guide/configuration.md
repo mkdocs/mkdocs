@@ -305,10 +305,17 @@ Example:
 
 ```yaml
 exclude_docs: |
-  api-config.json    # A file with this name anywhere.
-  /requirements.txt  # Top-level "docs/requirements.txt".
-  *.py               # Any file with this extension anywhere.
-  !/foo/example.py   # But keep this particular file.
+  # A file with this name anywhere.
+  api-config.json
+
+  # Top-level "docs/requirements.txt".
+  /requirements.txt
+
+  # Any file with this extension anywhere.
+  *.py
+
+  # But keep this particular file.
+  !/foo/example.py
 ```
 
 This follows the [.gitignore pattern format](https://git-scm.com/docs/gitignore#_pattern_format).
@@ -327,7 +334,8 @@ Otherwise you could for example opt only certain dot-files back into the site:
 
 ```yaml
 exclude_docs: |
-  !.assets  # Don't exclude '.assets' although all other '.*' are excluded
+  # Don't exclude '.assets' although all other '.*' are excluded
+  !.assets
 ```
 
 ### draft_docs
@@ -340,9 +348,14 @@ Example:
 
 ```yaml
 draft_docs: |
-  drafts/               # A "drafts" directory anywhere.
-  _unpublished.md       # A md file ending in _unpublished.md
-  !/foo_unpublished.md  # But keep this particular file.
+  # A "drafts" directory anywhere.
+  drafts/
+
+  # A Markdown file ending in _unpublished.md anywhere.
+  *_unpublished.md
+
+  # But keep this particular file.
+  !/foo_unpublished.md
 ```
 
 This follows the [.gitignore pattern format](https://git-scm.com/docs/gitignore#_pattern_format).
