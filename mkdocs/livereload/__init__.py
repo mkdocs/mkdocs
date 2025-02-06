@@ -21,7 +21,6 @@ import urllib.parse
 import webbrowser
 import wsgiref.simple_server
 import wsgiref.util
-from os import getpid
 from typing import Any, BinaryIO, Callable, Iterable
 
 import watchdog.events
