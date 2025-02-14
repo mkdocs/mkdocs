@@ -5,7 +5,7 @@ import shutil
 import sys
 import tempfile
 from os.path import isdir, isfile, join
-from signal import SIGINT, SIGTERM, signal
+from signal import SIGINT, SIGTERM, signal, strsignal
 from typing import TYPE_CHECKING
 from urllib.parse import urlsplit
 
@@ -81,8 +81,6 @@ def serve(
         return None
 
     def handle_signal(signum, frame) -> None:
-        from signal import strsignal
-
         signal_name = strsignal(signum)
         log.info(f"Received signal '{signal_name}'")
 
