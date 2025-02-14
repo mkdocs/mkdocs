@@ -525,10 +525,14 @@ class _RawHTMLPreprocessor(markdown.preprocessors.Preprocessor):
         self.present_anchor_ids: set[str] = set()
 
     def run(self, lines: list[str]) -> list[str]:
-        parser = _HTMLHandler()
-        parser.feed('\n'.join(lines))
-        parser.close()
-        self.present_anchor_ids = parser.present_anchor_ids
+        try:
+            parser = _HTMLHandler()
+            parser.feed('\n'.join(lines))
+            parser.close()
+            self.present_anchor_ids = parser.present_anchor_ids
+        except:
+            # just continue on without erroring out
+            pass
         return lines
 
     def _register(self, md: markdown.Markdown) -> None:
@@ -547,7 +551,9 @@ class _HTMLHandler(markdown.htmlparser.htmlparser.HTMLParser):  # type: ignore[n
             if k == 'id' or (k == 'name' and tag == 'a'):
                 self.present_anchor_ids.add(v)
         return super().handle_starttag(tag, attrs)
-
+    
+    def error(self, message):
+        log.error(message)
 
 class _ExtractTitleTreeprocessor(markdown.treeprocessors.Treeprocessor):
     title: str | None = None
