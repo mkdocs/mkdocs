@@ -62,8 +62,8 @@ discussion forums is expected to follow the [PyPA Code of Conduct].
 [codecov-link]: https://codecov.io/github/mkdocs/mkdocs?branch=master
 [pypi-v-image]: https://img.shields.io/pypi/v/mkdocs.svg
 [pypi-v-link]: https://pypi.org/project/mkdocs/
-[GHAction-image]: https://github.com/mkdocs/mkdocs/workflows/CI/badge.svg?branch=master&event=push
-[GHAction-link]: https://github.com/mkdocs/mkdocs/actions?query=event%3Apush+branch%3Amaster
+[GHAction-image]: https://github.com/mkdocs/mkdocs/actions/workflows/ci.yml/badge.svg
+[GHAction-link]: https://github.com/mkdocs/mkdocs/actions/workflows/ci.yml
 <!-- Links -->
 [mkdocs]: https://www.mkdocs.org
 [Issue]: https://github.com/mkdocs/mkdocs/issues
