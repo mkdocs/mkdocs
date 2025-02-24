@@ -166,6 +166,9 @@ class MkDocsConfig(base.Config):
     watch = c.ListOfPaths(default=[])
     """A list of extra paths to watch while running `mkdocs serve`."""
 
+    headers = c.Type(dict, default={})
+    """A dict of custom HTTP headers used when running `mkdocs serve`."""
+
     class Validation(base.Config):
         class NavValidation(base.Config):
             omitted_files = _LogLevel(default='info')
