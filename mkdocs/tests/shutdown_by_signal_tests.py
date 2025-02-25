@@ -53,6 +53,7 @@ class shutdown_by_signal_tests(unittest.TestCase):
     def _execute_mkdocs_as_liveserver(self, site_dir: str) -> Popen:
         from os import chdir, getcwd
         from sys import platform
+        from subprocess import DEVNULL
 
         current_working_dir = getcwd()
         chdir(site_dir)
@@ -60,8 +61,7 @@ class shutdown_by_signal_tests(unittest.TestCase):
         if platform == "linux":
             from errno import EADDRINUSE
             from socket import AF_INET, SOCK_STREAM, socket
-            from subprocess import DEVNULL
-
+           
             port_testing = socket(AF_INET, SOCK_STREAM)
 
             try:
