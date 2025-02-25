@@ -15,10 +15,13 @@ class Sample_Repository:
     signature: str
 
     def __del__(self):
-        self.handler.cleanup()
+        from sys import platform
+
+        if platform == "linux":
+            self.handler.cleanup()
 
 
-class shutdown_by_signal_tests(unittest.TestCase):
+class Shutdown_by_signal_tests(unittest.TestCase):
     SLEEPING_TIME_WAITING_FOR_START = 2
     SLEEPING_TIME_WAITING_FOR_SHUTDOWN = 2
     SLEEPING_TIME_WAITING_FOR_PROCESS = 6
@@ -52,8 +55,8 @@ class shutdown_by_signal_tests(unittest.TestCase):
 
     def _execute_mkdocs_as_liveserver(self, site_dir: str) -> Popen:
         from os import chdir, getcwd
-        from sys import platform
         from subprocess import DEVNULL
+        from sys import platform
 
         current_working_dir = getcwd()
         chdir(site_dir)
@@ -61,7 +64,7 @@ class shutdown_by_signal_tests(unittest.TestCase):
         if platform == "linux":
             from errno import EADDRINUSE
             from socket import AF_INET, SOCK_STREAM, socket
-           
+
             port_testing = socket(AF_INET, SOCK_STREAM)
 
             try:
@@ -180,4 +183,4 @@ class shutdown_by_signal_tests(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    shutdown_by_signal_tests()
+    Shutdown_by_signal_tests()
