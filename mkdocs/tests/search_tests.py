@@ -82,6 +82,7 @@ class SearchPluginTests(unittest.TestCase):
             'min_search_length': 3,
             'prebuild_index': False,
             'indexing': 'full',
+            'full_path_in_title': False,
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({})
@@ -96,6 +97,7 @@ class SearchPluginTests(unittest.TestCase):
             'min_search_length': 3,
             'prebuild_index': False,
             'indexing': 'full',
+            'full_path_in_title': False,
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({'lang': 'es'})
@@ -110,6 +112,7 @@ class SearchPluginTests(unittest.TestCase):
             'min_search_length': 3,
             'prebuild_index': False,
             'indexing': 'full',
+            'full_path_in_title': False,
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({'separator': r'[\s\-\.]+'})
@@ -124,6 +127,7 @@ class SearchPluginTests(unittest.TestCase):
             'min_search_length': 2,
             'prebuild_index': False,
             'indexing': 'full',
+            'full_path_in_title': False,
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({'min_search_length': 2})
@@ -138,6 +142,7 @@ class SearchPluginTests(unittest.TestCase):
             'min_search_length': 3,
             'prebuild_index': True,
             'indexing': 'full',
+            'full_path_in_title': False,
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({'prebuild_index': True})
@@ -152,9 +157,25 @@ class SearchPluginTests(unittest.TestCase):
             'min_search_length': 3,
             'prebuild_index': False,
             'indexing': 'titles',
+            'full_path_in_title': False,
         }
         plugin = search.SearchPlugin()
         errors, warnings = plugin.load_config({'indexing': 'titles'})
+        self.assertEqual(plugin.config, expected)
+        self.assertEqual(errors, [])
+        self.assertEqual(warnings, [])
+
+    def test_plugin_config_full_path_in_title(self):
+        expected = {
+            'lang': None,
+            'separator': r'[\s\-]+',
+            'min_search_length': 3,
+            'prebuild_index': False,
+            'full_path_in_title': True,
+            'indexing': 'full',
+        }
+        plugin = search.SearchPlugin()
+        errors, warnings = plugin.load_config({'full_path_in_title': True})
         self.assertEqual(plugin.config, expected)
         self.assertEqual(errors, [])
         self.assertEqual(warnings, [])
