@@ -163,7 +163,7 @@ following blocks:
 * `site_name`: Contains the site name in the navigation bar.
 * `site_nav`: Contains the site navigation in the navigation bar.
 * `search_button`: Contains the search box in the navigation bar.
-* `next_prev`: Contains the next and previous buttons in the navigation bar.
+* `next_prev`: Placeholder which can be overridden to include next and previous buttons in the navigation bar.
 * `repo`: Contains the repository link in the navigation bar.
 * `content`: Contains the page content and table of contents for the page.
 * `footer`: Contains the page footer.
