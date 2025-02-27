@@ -116,7 +116,7 @@ class Files:
         *,
         inclusion: Callable[[InclusionLevel], bool] = InclusionLevel.is_included,
     ) -> None:
-        """Copy static files from source to destination."""
+        """Soft-deprecated, do not use."""
         for file in self:
             if not file.is_documentation_page() and inclusion(file.inclusion):
                 file.copy_file(dirty)
@@ -469,6 +469,10 @@ class File:
         assert isinstance(value, str)
         self._content = value
         self.abs_src_path = None
+
+    @utils.weak_property
+    def is_copyless_static_file(self) -> bool:
+        return self.abs_src_path is not None and self.dest_uri == self.src_uri
 
     def copy_file(self, dirty: bool = False) -> None:
         """Copy source file to destination, ensuring parent directories exist."""
