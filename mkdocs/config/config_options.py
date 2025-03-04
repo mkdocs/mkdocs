@@ -4,6 +4,7 @@ import functools
 import ipaddress
 import logging
 import os
+import re
 import string
 import sys
 import traceback
@@ -454,9 +455,11 @@ class Deprecated(BaseConfigOption):
 
 class _IpAddressValue(NamedTuple):
     host: str
-    port: int
+    port: int | None = None
 
     def __str__(self) -> str:
+        if self.port is None:
+            return self.host
         return f'{self.host}:{self.port}'
 
 
@@ -467,10 +470,28 @@ class IpAddress(OptionallyRequired[_IpAddressValue]):
     Validate that an IP address is in an appropriate format
     """
 
+    def __init__(self, default: str | None = None, *, port_key: str | None = None) -> None:
+        super().__init__(default=default)
+        self.port_key = port_key
+
+    def pre_validation(self, config: Config, key_name: str):
+        self._port: int | None = config[self.port_key] if self.port_key else None
+
     def run_validation(self, value: object) -> _IpAddressValue:
-        if not isinstance(value, str) or ':' not in value:
-            raise ValidationError("Must be a string of format 'IP:PORT'")
-        host, port_str = value.rsplit(':', 1)
+        if not isinstance(value, str):
+            raise ValidationError("Must be a string")
+        port: int | None
+        if m := re.fullmatch(r'(.+):(\w+)', value):
+            if self._port is not None:
+                raise ValidationError(f"The port is already specified through '{self.port_key}'")
+            try:
+                port = int(m[2])
+            except Exception:
+                raise ValidationError(f"'{m[2]}' is not a valid port")
+            host = m[1]
+        else:
+            port = self._port
+            host = value
 
         if host != 'localhost':
             if host.startswith('[') and host.endswith(']'):
@@ -480,11 +501,6 @@ class IpAddress(OptionallyRequired[_IpAddressValue]):
                 host = str(ipaddress.ip_address(host))
             except ValueError as e:
                 raise ValidationError(e)
-
-        try:
-            port = int(port_str)
-        except Exception:
-            raise ValidationError(f"'{port_str}' is not a valid port")
 
         return _IpAddressValue(host, port)
 
