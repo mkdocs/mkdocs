@@ -557,7 +557,7 @@ class _ExtractTitleTreeprocessor(markdown.treeprocessors.Treeprocessor):
         for el in root:
             if el.tag == 'h1':
                 self.title = get_heading_text(el, self.md)
-            break
+                break
         return root
 
     def _register(self, md: markdown.Markdown) -> None:

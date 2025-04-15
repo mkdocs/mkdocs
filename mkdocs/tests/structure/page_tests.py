@@ -342,6 +342,35 @@ class PageTests(unittest.TestCase):
             expected='Welcome to MkDocs Setext',
         )
 
+    _COMMENT_CONTENT = dedent(
+        '''
+        <!--
+        Comment
+        -->
+
+        # Hello
+        '''
+    )
+
+    def test_page_title_from_markdown_after_comment(self):
+        self._test_extract_title(self._COMMENT_CONTENT, expected='Hello')
+
+    _FRONTMATTER_CONTENT = dedent(
+        '''
+        <!--
+        Comment
+        -->
+        ---
+        title: test
+        ---
+
+        # Hello
+        '''
+    )
+
+    def test_page_title_from_markdown_with_frontmatter(self):
+        self._test_extract_title(self._FRONTMATTER_CONTENT, expected='Hello')
+
     def test_page_title_from_markdown_with_email(self):
         self._test_extract_title(
             '''# <foo@example.org>''',
