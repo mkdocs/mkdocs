@@ -13,7 +13,7 @@ import markdown.extensions.toc
 import markdown.htmlparser  # type: ignore
 import markdown.postprocessors
 import markdown.treeprocessors
-from markdown.util import AMP_SUBSTITUTE
+from markdown.util import AMP_SUBSTITUTE, HTML_PLACEHOLDER
 
 from mkdocs import utils
 from mkdocs.structure import StructureItem
@@ -554,10 +554,15 @@ class _ExtractTitleTreeprocessor(markdown.treeprocessors.Treeprocessor):
     md: markdown.Markdown
 
     def run(self, root: etree.Element) -> etree.Element:
+        # Comments are converted to HTML placeholders
+        # Ignore the first placeholder if there is one before the expected h1 tag
+        first_placeholder = HTML_PLACEHOLDER % 0
         for el in root:
+            if el.text == first_placeholder:
+                continue
             if el.tag == 'h1':
                 self.title = get_heading_text(el, self.md)
-                break
+            break
         return root
 
     def _register(self, md: markdown.Markdown) -> None:

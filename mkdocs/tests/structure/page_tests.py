@@ -355,21 +355,16 @@ class PageTests(unittest.TestCase):
     def test_page_title_from_markdown_after_comment(self):
         self._test_extract_title(self._COMMENT_CONTENT, expected='Hello')
 
-    _FRONTMATTER_CONTENT = dedent(
+    _TEXT_BEFORE_HEADING_CONTENT = dedent(
         '''
-        <!--
-        Comment
-        -->
-        ---
-        title: test
-        ---
+        Some text
 
-        # Hello
+        # Headline
         '''
     )
 
-    def test_page_title_from_markdown_with_frontmatter(self):
-        self._test_extract_title(self._FRONTMATTER_CONTENT, expected='Hello')
+    def test_page_title_from_markdown_first_heading_first(self):
+        self._test_extract_title(self._TEXT_BEFORE_HEADING_CONTENT, expected=None)
 
     def test_page_title_from_markdown_with_email(self):
         self._test_extract_title(
