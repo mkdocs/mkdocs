@@ -27,7 +27,7 @@ The current and past members of the MkDocs team.
 * [@oprypin](https://github.com/oprypin/)
 * [@ultrabug](https://github.com/ultrabug/)
 
-## Version 1.6.1 (2024-08-30)
+## [Version 1.6.1] (2024-08-30)
 
 ### Fixed
 
@@ -45,7 +45,7 @@ The current and past members of the MkDocs team.
 * Added translations for Dutch. #3804
 * Added and updated translations for Chinese (Simplified). #3684
 
-## Version 1.6.0 (2024-04-20)
+## [Version 1.6.0] (2024-04-20)
 
 ### Local preview
 
@@ -280,7 +280,7 @@ Context: #3429
 
 Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.5.3...1.6.0).
 
-## Version 1.5.3 (2023-09-18)
+## [Version 1.5.3] (2023-09-18)
 
 *   Fix `mkdocs serve` sometimes locking up all browser tabs when navigating quickly (#3390)
 
@@ -296,7 +296,7 @@ Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/comp
 
 Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.5.2...1.5.3).
 
-## Version 1.5.2 (2023-08-02)
+## [Version 1.5.2] (2023-08-02)
 
 *   Bugfix (regression in 1.5.0): Restore functionality of `--no-livereload`. (#3320)
 
@@ -308,7 +308,7 @@ Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/comp
 
 See [commit log](https://github.com/mkdocs/mkdocs/compare/1.5.1...1.5.2).
 
-## Version 1.5.1 (2023-07-28)
+## [Version 1.5.1] (2023-07-28)
 
 *   Bugfix (regression in 1.5.0): Make it possible to treat `ExtraScriptValue` as a path. This lets some plugins still work despite the breaking change.
 
@@ -316,7 +316,7 @@ See [commit log](https://github.com/mkdocs/mkdocs/compare/1.5.1...1.5.2).
 
 See [commit log](https://github.com/mkdocs/mkdocs/compare/1.5.0...1.5.1).
 
-## Version 1.5.0 (2023-07-26)
+## [Version 1.5.0] (2023-07-26)
 
 ### New command `mkdocs get-deps`
 
@@ -571,7 +571,7 @@ The command to use this is `mkdocs build -f -`. In previous versions doing this 
 
 Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.4.3...1.5.0).
 
-## Version 1.4.3 (2023-05-02)
+## [Version 1.4.3] (2023-05-02)
 
 *   Bugfix: for the `hooks` feature, modules no longer fail to load if using some advanced Python features like dataclasses (#3193)
 
@@ -588,7 +588,7 @@ Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/comp
 
 See [commit log](https://github.com/mkdocs/mkdocs/compare/1.4.2...1.4.3).
 
-## Version 1.4.2 (2022-11-01)
+## [Version 1.4.2] (2022-11-01)
 
 *   Officially support Python 3.11 (#3020)
 
@@ -614,7 +614,7 @@ See [commit log](https://github.com/mkdocs/mkdocs/compare/1.4.2...1.4.3).
 
 See [commit log](https://github.com/mkdocs/mkdocs/compare/1.4.1...1.4.2).
 
-## Version 1.4.1 (2022-10-15)
+## [Version 1.4.1] (2022-10-15)
 
 *   Support theme-namespaced plugin loading (#2998)
 
@@ -637,7 +637,7 @@ See [commit log](https://github.com/mkdocs/mkdocs/compare/1.4.1...1.4.2).
 
 Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.4.0...1.4.1).
 
-## Version 1.4.0 (2022-09-27)
+## [Version 1.4.0] (2022-09-27)
 
 ### Feature upgrades
 
@@ -848,7 +848,7 @@ Deprecated config option classes: `ConfigItems` (#2983), `OptionallyRequired` (#
 
 Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.3.1...1.4.0).
 
-## Version 1.3.1 (2022-07-19)
+## [Version 1.3.1] (2022-07-19)
 
 *   Pin Python-Markdown version to &lt;3.4, thus excluding its latest release that breaks too many external extensions (#2893)
 
@@ -863,7 +863,7 @@ Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/comp
 
 Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.3.0...1.3.1).
 
-## Version 1.3.0 (2022-03-26)
+## [Version 1.3.0] (2022-03-26)
 
 ### Feature upgrades
 
@@ -915,14 +915,14 @@ Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/comp
 
 Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.2.3...1.3.0).
 
-## Version 1.2.4 (2022-03-26)
+## [Version 1.2.4] (2022-03-26)
 
 *   Compatibility with Jinja2 3.1.0 (#2800)
 
     Due to a breaking change in Jinja2, MkDocs would crash with the message
     `AttributeError: module 'jinja2' has no attribute 'contextfilter'`
 
-## Version 1.2.3 (2021-10-12)
+## [Version 1.2.3] (2021-10-12)
 
 *   Built-in themes now also support these languages:
     * Simplified Chinese (#2497)
@@ -944,7 +944,7 @@ Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/comp
 
 Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/compare/1.2.2...1.2.3).
 
-## Version 1.2.2 (2021-07-18)
+## [Version 1.2.2] (2021-07-18)
 
 *   Bugfix (regression in 1.2): Fix serving files/paths with Unicode characters (#2464)
 
@@ -970,11 +970,11 @@ Other small improvements; see [commit log](https://github.com/mkdocs/mkdocs/comp
 
 *   Improve build performance for sites with many pages (partly already done in 1.2) (#2407)
 
-## Version 1.2.1 (2021-06-09)
+## [Version 1.2.1] (2021-06-09)
 
 * Bugfix (regression in 1.2): Ensure 'gh-deploy' always pushes.
 
-## Version 1.2 (2021-06-04)
+## [Version 1.2] (2021-06-04)
 
 ### Major Additions to Version 1.2
 
@@ -1193,11 +1193,11 @@ configuration documentation for details.
 * Color is now used in log messages to identify errors, warnings and debug messages.
 * Bugfix: Identify homepage when `use_directory_urls` is `False` (#2362).
 
-## Version 1.1.2 (2020-05-14)
+## [Version 1.1.2] (2020-05-14)
 
 * Bugfix: Normalize IP addresses and change unsupported address error to a warning (#2108).
 
-## Version 1.1.1 (2020-05-12)
+## [Version 1.1.1] (2020-05-12)
 
 * Bugfix: Allow compressed sitemap to be deterministic by supporting the `SOURCE_DATE_EPOCH` environment variable (#2100).
 * Bugfix: Use `README.md` as `index.html` even if `use_directory_urls` is false (#2081).
@@ -1209,7 +1209,7 @@ configuration documentation for details.
 * Add support for `min_search_length` parameter for search plugin (#2014).
 * Bugfix: `readthedocs` theme `code` colors (#2027).
 
-## Version 1.1 (2020-02-22)
+## [Version 1.1] (2020-02-22)
 
 ### Major Additions to Version 1.1
 
@@ -1292,27 +1292,27 @@ may be removed in a future version of MkDocs.
 * Add support for `navigation_depth` theme option for the `mkdocs` theme (#1970).
 * `level` attribute in `page.toc` items is now 1-indexed to match the level in `<hN>` tags (#1970).
 
-## Version 1.0.4 (2018-09-07)
+## [Version 1.0.4] (2018-09-07)
 
 * Bugfix: Ignore absolute links in Markdown (#1621).
 
-## Version 1.0.3 (2018-08-29)
+## [Version 1.0.3] (2018-08-29)
 
 * Bugfix: Warn on relative paths in navigation (#1604).
 * Bugfix: Handle empty `theme_config.yml` files correctly (#1602).
 
-## Version 1.0.2 (2018-08-22)
+## [Version 1.0.2] (2018-08-22)
 
 * Bugfix: Provide absolute `base_url` to error templates (#1598).
 
-## Version 1.0.1 (2018-08-13)
+## [Version 1.0.1] (2018-08-13)
 
 * Bugfix: Prevent page reload when [Enter] is pressed in search box (#1589).
 * Bugfix: Avoid calling `search` until all assets are ready (#1584).
 * Bugfix: Exclude `README.md` if `index.md` is present (#1580).
 * Bugfix: Fix `readthedocs` theme navigation bug with homepage (#1576).
 
-## Version 1.0 (2018-08-03)
+## [Version 1.0] (2018-08-03)
 
 ### Major Additions to Version 1.0
 
@@ -1559,30 +1559,30 @@ value to the `theme.custom_dir` option and a warning was issued. As of version
 * Update links to Python-Markdown library (#1360).
 * Document how to generate manpages for MkDocs commands (#686).
 
-## Version 0.17.5 (2018-07-06)
+## [Version 0.17.5] (2018-07-06)
 
 * Bugfix: Fix Python 3.7 and PEP 479 incompatibility (#1518).
 
-## Version 0.17.4 (2018-06-08)
+## [Version 0.17.4] (2018-06-08)
 
 * Bugfix: Add multi-level nesting support to sitemap.xml (#1482).
 
-## Version 0.17.3 (2018-03-07)
+## [Version 0.17.3] (2018-03-07)
 
 * Bugfix: Set dependency `tornado>=4.1,<5.0` due to changes in 5.0 (#1428).
 
-## Version 0.17.2 (2017-11-15)
+## [Version 0.17.2] (2017-11-15)
 
 * Bugfix: Correct `extra_*` config setting regressions (#1335 & #1336).
 
-## Version 0.17.1 (2017-10-30)
+## [Version 0.17.1] (2017-10-30)
 
 * Bugfix: Support `repo_url` with missing ending slash. (#1321).
 * Bugfix: Add length support to `mkdocs.toc.TableOfContext` (#1325).
 * Bugfix: Add some theme specific settings to the search plugin for third party themes (#1316).
 * Bugfix: Override `site_url` with `dev_addr` on local server (#1317).
 
-## Version 0.17.0 (2017-10-19)
+## [Version 0.17.0] (2017-10-19)
 
 ### Major Additions to Version 0.17.0
 
@@ -1724,13 +1724,13 @@ the `extra_css` or `extra_javascript` config settings going forward.
 * File permissions are no longer copied during build (#1292)
 * Support query and fragment strings in `edit_uri` (#1224 & #1273)
 
-## Version 0.16.3 (2017-04-04)
+## [Version 0.16.3] (2017-04-04)
 
 * Fix error raised by autoscrolling in the readthedocs theme (#1177)
 * Fix a few documentation typos (#1181 & #1185)
 * Fix a regression to livereload server introduced in 0.16.2 (#1174)
 
-## Version 0.16.2 (2017-03-13)
+## [Version 0.16.2] (2017-03-13)
 
 * System root (`/`) is not a valid path for site_dir or docs_dir (#1161)
 * Refactor readthedocs theme navigation (#1155 & #1156)
@@ -1738,12 +1738,12 @@ the `extra_css` or `extra_javascript` config settings going forward.
 * Ensure nav.homepage.url is not blank on error pages (#1131)
 * Increase livereload dependency to 2.5.1 (#1106)
 
-## Version 0.16.1 (2016-12-22)
+## [Version 0.16.1] (2016-12-22)
 
 * Ensure scrollspy behavior does not affect nav bar (#1094)
 * Only "load" a theme when it is explicitly requested by the user (#1105)
 
-## Version 0.16 (2016-11-04)
+## [Version 0.16] (2016-11-04)
 
 ### Major Additions to Version 0.16.0
 
@@ -1929,20 +1929,20 @@ better conform with the documented [layout].
 * Account for wide tables and consistently wrap inline code spans (#834).
 * Bugfix: Use absolute URLs in nav & media links from error templates (#77).
 
-## Version 0.15.3 (2016-02-18)
+## [Version 0.15.3] (2016-02-18)
 
 * Improve the error message the given theme can't be found.
 * Fix an issue with relative symlinks (#639)
 
-## Version 0.15.2 (2016-02-08)
+## [Version 0.15.2] (2016-02-08)
 
 * Fix an incorrect warning that states external themes [will be removed from MkDocs](#add-support-for-installable-themes).
 
-## Version 0.15.1 (2016-01-30)
+## [Version 0.15.1] (2016-01-30)
 
 * Lower the minimum supported Click version to 3.3 for package maintainers. (#763)
 
-## Version 0.15.0 (2016-01-21)
+## [Version 0.15.0] (2016-01-21)
 
 ### Major Additions to Version 0.15.0
 
@@ -1990,7 +1990,7 @@ themes
 [site_author]: ../user-guide/configuration.md#site_author
 [ReadTheDocs]: ../user-guide/choosing-your-theme.md#readthedocs
 
-## Version 0.14.0 (2015-06-09)
+## [Version 0.14.0] (2015-06-09)
 
 * Improve Unicode handling by ensuring that all config strings are loaded as Unicode. (#592)
 * Remove dependency on the six library. (#583)
@@ -2004,20 +2004,20 @@ themes
 * Bugfix: Handle (pass-through instead of dropping) HTML entities while parsing TOC. (#612)
 * Bugfix: Default extra_templates to an empty list, don't automatically discover them. (#616)
 
-## Version 0.13.3 (2015-06-02)
+## [Version 0.13.3] (2015-06-02)
 
 * Bugfix: Reduce validation error to a warning if the site_dir is within the docs_dir as this shouldn't cause any problems with building but will inconvenience users building multiple times. (#580)
 
-## Version 0.13.2 (2015-05-30)
+## [Version 0.13.2] (2015-05-30)
 
 * Bugfix: Ensure all errors and warnings are logged before exiting. (#536)
 * Bugfix: Fix compatibility issues with ReadTheDocs. (#554)
 
-## Version 0.13.1 (2015-05-27)
+## [Version 0.13.1] (2015-05-27)
 
 * Bugfix: Fix a problem with minimal configurations which only contain a list of paths in the pages config. (#562)
 
-## Version 0.13.0 (2015-05-26)
+## [Version 0.13.0] (2015-05-26)
 
 ### Deprecations to Version 0.13.0
 
@@ -2115,15 +2115,15 @@ documentation.
 [Markdown extension configuration options]: ../user-guide/configuration.md#markdown_extensions
 [wheels]: https://pythonwheels.com/
 
-## Version 0.12.2 (2015-04-22)
+## [Version 0.12.2] (2015-04-22)
 
 * Bugfix: Fix a regression where there would be an error if some child titles were missing but others were provided in the pages config. (#464)
 
-## Version 0.12.1 (2015-04-14)
+## [Version 0.12.1] (2015-04-14)
 
 * Bugfix: Fixed a CSS bug in the table of contents on some browsers where the bottom item was not clickable.
 
-## Version 0.12.0 (2015-04-14)
+## [Version 0.12.0] (2015-04-14)
 
 * Display the current MkDocs version in the CLI output. (#258)
 * Check for CNAME file when using gh-deploy. (#285)
@@ -2169,11 +2169,11 @@ documentation.
 * Bugfix: Don't block newer versions of Python-markdown on Python >= 2.7. (#376)
 * Bugfix: Fix encoding issues when opening files across platforms. (#428)
 
-## Version 0.11.1 (2014-11-20)
+## [Version 0.11.1] (2014-11-20)
 
 * Bugfix: Fix a CSS wrapping issue with code highlighting in the ReadTheDocs theme. (#233)
 
-## Version 0.11.0 (2014-11-18)
+## [Version 0.11.0] (2014-11-18)
 
 * Render 404.html files if they exist for the current theme. (#194)
 * Bugfix: Fix long nav bars, table rendering and code highlighting in MkDocs and ReadTheDocs themes. (#225)
@@ -2185,7 +2185,7 @@ documentation.
 * Bugfix: Use the polling observer in watchdog so rebuilding works on filesystems without inotify. (#184)
 * Bugfix: Improve error output for common configuration related errors. (#176)
 
-## Version 0.10.0 (2014-10-29)
+## [Version 0.10.0] (2014-10-29)
 
 * Added support for Python 3.3 and 3.4. (#103)
 * Configurable Python-Markdown extensions with the config setting `markdown_extensions`. (#74)
@@ -2204,3 +2204,56 @@ documentation.
 * Bugfix: Fix the mkdocs command creation under Windows. (#122)
 * Bugfix: Correctly handle external `extra_javascript` and `extra_css`. (#92)
 * Bugfix: Fixed favicon support. (#87)
+
+
+
+[Version 1.6.1]: https://github.com/mkdocs/mkdocs/releases/tag/1.6.1
+[Version 1.6.0]: https://github.com/mkdocs/mkdocs/releases/tag/1.6.0
+[Version 1.5.3]: https://github.com/mkdocs/mkdocs/releases/tag/1.5.3
+[Version 1.5.2]: https://github.com/mkdocs/mkdocs/releases/tag/1.5.2
+[Version 1.5.1]: https://github.com/mkdocs/mkdocs/releases/tag/1.5.1
+[Version 1.5.0]: https://github.com/mkdocs/mkdocs/releases/tag/1.5.0
+[Version 1.4.3]: https://github.com/mkdocs/mkdocs/releases/tag/1.4.3
+[Version 1.4.2]: https://github.com/mkdocs/mkdocs/releases/tag/1.4.2
+[Version 1.4.1]: https://github.com/mkdocs/mkdocs/releases/tag/1.4.1
+[Version 1.4.0]: https://github.com/mkdocs/mkdocs/releases/tag/1.4.0
+[Version 1.3.1]: https://github.com/mkdocs/mkdocs/releases/tag/1.3.1
+[Version 1.3.0]: https://github.com/mkdocs/mkdocs/releases/tag/1.3.0
+[Version 1.2.4]: https://github.com/mkdocs/mkdocs/releases/tag/1.2.4
+[Version 1.2.3]: https://github.com/mkdocs/mkdocs/releases/tag/1.2.3
+[Version 1.2.2]: https://github.com/mkdocs/mkdocs/releases/tag/1.2.2
+[Version 1.2.1]: https://github.com/mkdocs/mkdocs/releases/tag/1.2.1
+[Version 1.2]: https://github.com/mkdocs/mkdocs/releases/tag/1.2
+[Version 1.1.2]: https://github.com/mkdocs/mkdocs/releases/tag/1.1.2
+[Version 1.1.1]: https://github.com/mkdocs/mkdocs/releases/tag/1.1.1
+[Version 1.1]: https://github.com/mkdocs/mkdocs/releases/tag/1.1
+[Version 1.0.4]: https://github.com/mkdocs/mkdocs/releases/tag/1.0.4
+[Version 1.0.3]: https://github.com/mkdocs/mkdocs/releases/tag/1.0.3
+[Version 1.0.2]: https://github.com/mkdocs/mkdocs/releases/tag/1.0.2
+[Version 1.0.1]: https://github.com/mkdocs/mkdocs/releases/tag/1.0.1
+[Version 1.0]: https://github.com/mkdocs/mkdocs/releases/tag/1.0
+[Version 0.17.5]: https://github.com/mkdocs/mkdocs/releases/tag/0.17.5
+[Version 0.17.4]: https://github.com/mkdocs/mkdocs/releases/tag/0.17.4
+[Version 0.17.3]: https://github.com/mkdocs/mkdocs/releases/tag/0.17.3
+[Version 0.17.2]: https://github.com/mkdocs/mkdocs/releases/tag/0.17.2
+[Version 0.17.1]: https://github.com/mkdocs/mkdocs/releases/tag/0.17.1
+[Version 0.17.0]: https://github.com/mkdocs/mkdocs/releases/tag/0.17.0
+[Version 0.16.3]: https://github.com/mkdocs/mkdocs/releases/tag/0.16.3
+[Version 0.16.2]: https://github.com/mkdocs/mkdocs/releases/tag/0.16.2
+[Version 0.16.1]: https://github.com/mkdocs/mkdocs/releases/tag/0.16.1
+[Version 0.16]: https://github.com/mkdocs/mkdocs/releases/tag/0.16
+[Version 0.15.3]: https://github.com/mkdocs/mkdocs/releases/tag/0.15.3
+[Version 0.15.2]: https://github.com/mkdocs/mkdocs/releases/tag/0.15.2
+[Version 0.15.1]: https://github.com/mkdocs/mkdocs/releases/tag/0.15.1
+[Version 0.15.0]: https://github.com/mkdocs/mkdocs/releases/tag/0.15.0
+[Version 0.14.0]: https://github.com/mkdocs/mkdocs/releases/tag/0.14.0
+[Version 0.13.3]: https://github.com/mkdocs/mkdocs/releases/tag/0.13.3
+[Version 0.13.2]: https://github.com/mkdocs/mkdocs/releases/tag/0.13.2
+[Version 0.13.1]: https://github.com/mkdocs/mkdocs/releases/tag/0.13.1
+[Version 0.13.0]: https://github.com/mkdocs/mkdocs/releases/tag/0.13.0
+[Version 0.12.2]: https://github.com/mkdocs/mkdocs/releases/tag/0.12.2
+[Version 0.12.1]: https://github.com/mkdocs/mkdocs/releases/tag/0.12.1
+[Version 0.12.0]: https://github.com/mkdocs/mkdocs/releases/tag/0.12.0
+[Version 0.11.1]: https://github.com/mkdocs/mkdocs/releases/tag/0.11.1
+[Version 0.11.0]: https://github.com/mkdocs/mkdocs/releases/tag/0.11.0
+[Version 0.10.0]: https://github.com/mkdocs/mkdocs/releases/tag/0.10.0
