@@ -2205,8 +2205,6 @@ documentation.
 * Bugfix: Correctly handle external `extra_javascript` and `extra_css`. (#92)
 * Bugfix: Fixed favicon support. (#87)
 
-
-
 [Version 1.6.1]: https://github.com/mkdocs/mkdocs/releases/tag/1.6.1
 [Version 1.6.0]: https://github.com/mkdocs/mkdocs/releases/tag/1.6.0
 [Version 1.5.3]: https://github.com/mkdocs/mkdocs/releases/tag/1.5.3
