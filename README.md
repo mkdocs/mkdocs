@@ -6,10 +6,9 @@
 [![Build Status][GHAction-image]][GHAction-link]
 [![Coverage Status][codecov-image]][codecov-link]
 
-MkDocs is a **fast**, **simple** and **downright gorgeous** static site
+t**, **simple** and **downright gorgeous** static site
 generator that's geared towards building project documentation. Documentation
-source files are written in Markdown, and configured with a single YAML
-configuration file. It is designed to be easy to use and can be extended with
+
 third-party themes, plugins, and Markdown extensions.
 
 Please see the [Documentation][mkdocs] for an introductory tutorial and a full
