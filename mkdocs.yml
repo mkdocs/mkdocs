@@ -22,6 +22,7 @@ nav:
   - Getting Started: getting-started.md
   - User Guide: user-guide/
   - Developer Guide: dev-guide/
+  - Select Theme: select-theme.md
   - About:
     - Release Notes: about/release-notes.md
     - Contributing: about/contributing.md

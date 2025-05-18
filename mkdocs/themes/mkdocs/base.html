@@ -110,6 +110,15 @@
                   {%- endblock %}
 
                     <ul class="nav navbar-nav ms-md-auto">
+                      <li class="nav-item dropdown">
+                          <button id="theme-switcher" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                              Theme
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="theme-switcher">
+                              <li><a class="dropdown-item" href="#" onclick="switchTheme('material')">Material</a></li>
+                              <li><a class="dropdown-item" href="#" onclick="switchTheme('readthedocs')">ReadTheDocs</a></li>
+                          </ul>
+                      </li>
                       {%- block search_button %}
                         {%- if 'search' in config.plugins %}
                         <li class="nav-item">
@@ -217,6 +226,20 @@
         <script>
             var base_url = {{ base_url|tojson }},
                 shortcuts = {{ config.theme.shortcuts|tojson }};
+                // 添加主题切换函数
+            function switchTheme(themeName) {
+                var currentUrl = window.location.href;
+                var baseUrl = "{{ base_url }}";
+                var newUrl = baseUrl + '/' + themeName + '/';
+
+                // 替换当前 URL 中的主题部分
+                if (currentUrl.includes(baseUrl)) {
+                    newUrl = currentUrl.replace(baseUrl, newUrl);
+                }
+
+                // 重新加载页面以应用新主题
+                window.location.reload(true);
+            }
         </script>
         <script src="{{ 'js/base.js'|url }}"></script>
         {%- for script in config.extra_javascript %}

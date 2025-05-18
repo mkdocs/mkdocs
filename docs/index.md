@@ -16,6 +16,7 @@ configuration file. Start by reading the [introductory tutorial], then check the
 <div class="text-center">
 <a href="getting-started/" class="btn btn-primary" role="button">Getting Started</a>
 <a href="user-guide/" class="btn btn-primary" role="button">User Guide</a>
+<a href="select-theme/" class="btn btn-primary" role="button">Select Theme</a>
 </div>
 
 <div class="pt-2 pb-4 px-4 my-4 bg-body-tertiary rounded-3">
