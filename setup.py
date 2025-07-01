@@ -8,6 +8,7 @@ from setuptools import setup
 sys.exit(__doc__)
 
 # Fake reference so GitHub still considers it a real package for statistics purposes.
+# {comments}
 setup(
     name="mkdocs",
 )
