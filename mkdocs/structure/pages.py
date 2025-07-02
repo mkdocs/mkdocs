@@ -544,8 +544,8 @@ class _HTMLHandler(markdown.htmlparser.htmlparser.HTMLParser):  # type: ignore[n
 
     def parse_starttag(self, i: int) -> int:
         # Treat `</>` as normal data as it is not a real tag.
-        if self.rawdata[i:i + 3] == '</>':
-            self.handle_data(self.rawdata[i:i + 3])
+        if self.rawdata[i : i + 3] == '</>':
+            self.handle_data(self.rawdata[i : i + 3])
             return i + 3
         return super().parse_starttag(i)
 
