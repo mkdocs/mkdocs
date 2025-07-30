@@ -35,8 +35,6 @@ def serve(
     whenever a file is edited.
     """
     # Create a temporary build directory, and set some options to serve it
-    # PY2 returns a byte string by default. The Unicode prefix ensures a Unicode
-    # string is returned. And it makes MkDocs temp dirs easier to identify.
     site_dir = tempfile.mkdtemp(prefix='mkdocs_')
 
     def get_config():
