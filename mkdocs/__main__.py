@@ -215,21 +215,87 @@ def color_option(f):
     )(f)
 
 
+def use_directory_urls_option(f):
+    def callback(ctx, param, value):
+        # Only set the value if the parameter was actually specified by the user.
+        # This works around a Click 8.2.2 behavioral change where boolean flags with default=None
+        # return False instead of None when not specified.
+        if hasattr(ctx, 'get_parameter_source'):
+            if ctx.get_parameter_source(param.name) == click.core.ParameterSource.DEFAULT:
+                return None
+        return value
+
+    return click.option(
+        '--use-directory-urls/--no-directory-urls',
+        is_flag=True,
+        default=None,
+        help=use_directory_urls_help,
+        callback=callback,
+    )(f)
+
+
+def strict_option(f):
+    def callback(ctx, param, value):
+        # Only set the value if the parameter was actually specified by the user.
+        # This works around a Click 8.2.2 behavioral change where boolean flags with default=None
+        # return False instead of None when not specified.
+        if hasattr(ctx, 'get_parameter_source'):
+            if ctx.get_parameter_source(param.name) == click.core.ParameterSource.DEFAULT:
+                return None
+        return value
+
+    return click.option(
+        '-s',
+        '--strict/--no-strict',
+        is_flag=True,
+        default=None,
+        help=strict_help,
+        callback=callback,
+    )(f)
+
+
+def build_type_option(f):
+    def callback(ctx, param, value):
+        # Only set the value if the parameter was actually specified by the user.
+        # This works around a Click 8.2.2 behavioral change where flag_value options return 'False'
+        # instead of None when none of the flags are specified.
+
+        if hasattr(ctx, 'get_parameter_source'):
+            if ctx.get_parameter_source(param.name) == click.core.ParameterSource.DEFAULT:
+                return None
+        else:
+            if value == 'False':
+                return None
+        return value
+
+    f = click.option(
+        '--dirtyreload', 'build_type', flag_value='dirty', hidden=True, callback=callback
+    )(f)
+    f = click.option(
+        '--dirty', 'build_type', flag_value='dirty', help=serve_dirty_help, callback=callback
+    )(f)
+    f = click.option(
+        '-c',
+        '--clean',
+        'build_type',
+        flag_value='clean',
+        default=None,
+        help=serve_clean_help,
+        callback=callback,
+    )(f)
+    return f
+
+
 common_options = add_options(quiet_option, verbose_option)
 common_config_options = add_options(
     click.option('-f', '--config-file', type=click.File('rb'), help=config_help),
     # Don't override config value if user did not specify --strict flag
     # Conveniently, load_config drops None values
-    click.option('-s', '--strict/--no-strict', is_flag=True, default=None, help=strict_help),
+    strict_option,
     click.option('-t', '--theme', type=click.Choice(theme_choices), help=theme_help),
     # As with --strict, set the default to None so that this doesn't incorrectly
     # override the config file
-    click.option(
-        '--use-directory-urls/--no-directory-urls',
-        is_flag=True,
-        default=None,
-        help=use_directory_urls_help,
-    ),
+    use_directory_urls_option,
 )
 
 PYTHON_VERSION = f"{sys.version_info.major}.{sys.version_info.minor}"
@@ -255,9 +321,7 @@ def cli():
 @click.option('-o', '--open', 'open_in_browser', help=serve_open_help, is_flag=True)
 @click.option('--no-livereload', 'livereload', flag_value=False, help=no_reload_help)
 @click.option('--livereload', 'livereload', flag_value=True, default=True, hidden=True)
-@click.option('--dirtyreload', 'build_type', flag_value='dirty', hidden=True)
-@click.option('--dirty', 'build_type', flag_value='dirty', help=serve_dirty_help)
-@click.option('-c', '--clean', 'build_type', flag_value='clean', help=serve_clean_help)
+@build_type_option
 @click.option('--watch-theme', help=watch_theme_help, is_flag=True)
 @click.option(
     '-w', '--watch', help=watch_help, type=click.Path(exists=True), multiple=True, default=[]
