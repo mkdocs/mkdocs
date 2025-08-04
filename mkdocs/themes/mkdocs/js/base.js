@@ -159,9 +159,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 window.addEventListener('resize', applyTopPadding);
 
-var scrollSpy = new bootstrap.ScrollSpy(document.body, {
-    target: '.bs-sidebar'
-});
+try {
+    var scrollSpy = new bootstrap.ScrollSpy(document.body, {
+        target: '.bs-sidebar'
+    });
+} catch (error) {
+    console.warn('Error initialising scrollspy.', error);
+}
 
 /* Prevent disabled links from causing a page reload */
 document.querySelectorAll("li.disabled a").forEach(function(item) {
