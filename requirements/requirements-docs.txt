@@ -25,7 +25,7 @@
 # - pyyaml-env-tag>=0.1
 # - pyyaml>=5.1
 # - watchdog>=2.0
-#
+# - jieba>=0.42.1
 
 click==8.1.7
     # via
@@ -131,4 +131,7 @@ six==1.16.0
 watchdog==3.0.0
     # via
     #   hatch.envs.docs
+    #   mkdocs
+jieba>=0.42.1
+    # via
     #   mkdocs
