@@ -8,8 +8,8 @@
 
 ## Project Overview
 
-Project: MkDocs - Project documentation with Markdown  
-Language: Python  
+**Project**: MkDocs - Project documentation with Markdown  
+**Language**: Python  
 
 MkDocs is a fast and simple static site generator specifically designed for building project documentation. It transforms Markdown source files into HTML documentation sites using a single YAML configuration file. The project has gained wide use in the open-source community due to its simplicity and focus on documentation workflows.
 
@@ -26,10 +26,10 @@ MkDocs serves as a documentation build tool that:
 
 ### Why We Chose MkDocs
 
-- Simple & Accessible: MkDocs uses Python and Markdown, making it easy for our team to start quickly.
-- Active Community: Regular updates and strong support ensure reliability and growth.
-- Team-Friendly Workflow: GitHub integration and one-command deployment simplify collaboration.
-- Focused Purpose: Its clear scope as a documentation generator makes it ideal for a manageable team project.
+- **Simple & Accessible**: MkDocs uses Python and Markdown, making it easy for our team to start quickly.
+- **Active Community**: Regular updates and strong support ensure reliability and growth.
+- **Team-Friendly Workflow**: GitHub integration and one-command deployment simplify collaboration.
+- **Focused Purpose**: Its clear scope as a documentation generator makes it ideal for a manageable team project.
 
 ## Key Quality Attributes
 
