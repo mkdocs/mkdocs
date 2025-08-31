@@ -49,6 +49,46 @@ Plugin system and theme architecture allow customization
 
 Well-structured Python codebase with established patterns
 
+## Testing Plans
+
+### Overview
+Testing is essential to ensure that MkDocs meets the quality attributes listed above.
+
+### Existing Tests
+
+#### Current Testing Framework
+Currently, MkDocs uses the [unittest](https://docs.python.org/3/library/unittest.html) framework. The tests currently include both integration and unit tests, which cover the following components:
+* config
+* utils
+* build
+* plugin
+* search
+* cli
+* localization
+* livereload
+* integration
+* GitHub deployment
+* theme
+
+### Test Coverage
+MkDocs currently has code coverage of 91% and is managed by [Codecov](https://app.codecov.io/github/mkdocs/mkdocs?branch=master).
+
+### Team Project Testing Goals:
+- [ ] Understand the existing test cases and identify gaps and edge cases
+- [ ] Add at least 5 unit tests for uncovered or edge-case logic
+- [ ] Identify components that can benefit from mocking/stubbing
+- [ ] Implement unit tests using mocks/stubs
+- [ ] Implement and run mutation testing
+- [ ] Implement static analysis to identify code smells and potential bugs, and implement at least 2 fixes
+- [ ] Implement integration tests for at least 2 modules
+- [ ] Create black-box system test cases covering the main flows
+- [ ] Scan the codebase with security tools and fix the issues or report the findings
+- [ ] Perform performance tests and document the results
+
+
+
+
+
 ---
 
 ## Reference
