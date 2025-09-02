@@ -4,6 +4,12 @@ import sys
 from typing import Iterator
 
 
+"""Python source code metrics scanner.
+
+Counts total, code, comment, and blank lines in Python files.
+"""
+
+
 @dataclass
 class CodeMetrics:
     total_lines: int = 0
@@ -13,6 +19,7 @@ class CodeMetrics:
 
 
 def scan_python_file(file_path: Path) -> CodeMetrics:
+    """Scan a single Python file and return its CodeMetrics."""
     metrics = CodeMetrics()
     in_multiline_string = False
     multiline_delimiter = None
@@ -20,6 +27,7 @@ def scan_python_file(file_path: Path) -> CodeMetrics:
     try:
         with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
             for line in f:
+                # show progress for debugging TODO: remove before submission
                 print("line #" + str(metrics.total_lines + 1) + ": " + line.strip())
                 metrics.total_lines += 1
                 stripped = line.strip()
@@ -32,7 +40,7 @@ def scan_python_file(file_path: Path) -> CodeMetrics:
                     metrics.comment_lines += 1
                     if multiline_delimiter is not None and multiline_delimiter in stripped:
                         delimiter_count = stripped.count(multiline_delimiter)
-                        if delimiter_count % 2 == 1:  # Odd count means it closes
+                        if delimiter_count % 2 == 1:
                             in_multiline_string = False
                             multiline_delimiter = None
                     continue
@@ -45,29 +53,30 @@ def scan_python_file(file_path: Path) -> CodeMetrics:
                         delimiter = "'''"
 
                     delimiter_count = stripped.count(delimiter)
-                    if delimiter_count == 1:  # Opening but not closing on same line
+                    if delimiter_count == 1:
                         in_multiline_string = True
                         multiline_delimiter = delimiter
-                    # If count is 2, it's a single-line docstring, already counted
                     continue
 
-                # Single-line comments
                 if stripped.startswith('#'):
                     metrics.comment_lines += 1
                 else:
                     metrics.code_lines += 1
 
     except Exception as e:
+        # report I/O errors
         print(f"Error reading {file_path}: {e}")
 
     return metrics
 
 
 def find_python_files(root_dir: Path) -> Iterator[Path]:
+    """Recursively find all Python files using rglob."""
     return root_dir.rglob("*.py")
 
 
 def scan_codebase(mkdocs_path: str = ".") -> CodeMetrics:
+    """Scan a codebase directory and aggregate metrics for all Python files."""
     root = Path(mkdocs_path)
     total_metrics = CodeMetrics()
     file_count = 0
