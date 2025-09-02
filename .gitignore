@@ -68,3 +68,4 @@ ENV/
 
 # MkDocs documentation
 site*/
+courseProjectDocs/mkdocs_metrics.md
