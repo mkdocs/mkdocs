@@ -170,6 +170,6 @@ if __name__ == "__main__":
 
     # Write markdown report
     report = render_markdown_report(metrics, scanned_path=path, file_count=file_count)
-    output_file = Path("courseProjectDocs") / "mkdocs_metrics.md"
+    output_file = Path("courseProjectCode/Metrics") / "mkdocs_metrics.md"
     write_markdown_report(output_file, report)
     print(f"Markdown report: {output_file.absolute()}")
