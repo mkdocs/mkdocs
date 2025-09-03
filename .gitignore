@@ -68,4 +68,6 @@ ENV/
 
 # MkDocs documentation
 site*/
-courseProjectDocs/mkdocs_metrics.md
+courseProjectCode/Metrics/mkdocs_metrics.md
+
+courseProjectCode/Metrics/metrics.yaml
