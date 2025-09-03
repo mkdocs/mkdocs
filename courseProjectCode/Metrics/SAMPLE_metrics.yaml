@@ -1,0 +1,7 @@
+token: <token>
+exclude_paths:
+  - .git
+  - __pycache__
+  - .pytest_cache
+  - build
+  - dist
