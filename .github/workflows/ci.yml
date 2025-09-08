@@ -28,6 +28,8 @@ jobs:
             os: macos-latest
           - python-version: '3.11'
             os: windows-latest
+          - python-version: 'pypy-3.9-v7.x'
+            os: windows-latest
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
