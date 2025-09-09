@@ -62,7 +62,8 @@ Requirement ID | Requirement Description | Test Oracle (Expected Behavior)
 - Users may extend the system’s plugins to allow extra customization functionalities without modifying the core plugin code.
 
 #### Hooks
-- Users may create their own hooks to allow one-off custom actions at specific points in the build process as a simpler alternative to plugins. 
+
+- Users may create their own hooks to allow one-off custom actions at specific points in the build process as a simpler alternative to plugins.
 - MkDocs treats a file containing hook functions as a plugin, and they eliminate the need to develop or install a full plugin for simple tasks.
 
 ### Usability
@@ -93,6 +94,6 @@ Requirement ID | Requirement Description | Test Oracle (Expected Behavior)
 ### Scalability
 
 #### Configuration Inheritance
-- MkDocs allows organizations that manage multiple sites to define a single base configuration file that contains common settings shared across all projects via configuration inheritance. Each project can then have its own `mkdocs.yml` file that inherits from the base configuration and overrides or extends specific settings as needed. This approach reduces redundancy and simplifies management as the number of projects increases.
-    - In order to take advantage of configuration inheritance, the markdown files must all use key/value syntax for defining configuration options.
 
+-   MkDocs allows organizations that manage multiple sites to define a single base configuration file that contains common settings shared across all projects via configuration inheritance. Each project can then have its own `mkdocs.yml` file that inherits from the base configuration and overrides or extends specific settings as needed. This approach reduces redundancy and simplifies management as the number of projects increases.
+    - In order to take advantage of configuration inheritance, the markdown files must all use key/value syntax for defining configuration options.
