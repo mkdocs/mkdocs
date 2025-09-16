@@ -1,10 +1,6 @@
-# Baseline Build & Test
+# How to Reproduce Test Results and Coverage
 
-## Overview
-
-This document outlines the steps necessary to build the project as well as provides a summary of the test suite, baseline coverage metrics, and observations.
-
-## Building the Project
+## Prerequisites
 
 1.  Clone the project:
 
@@ -13,77 +9,64 @@ This document outlines the steps necessary to build the project as well as provi
     ```
 
 2.  Change directory into the project folder and create a virtual environment.  
-In this example, we will create a virtual environment called mkdocVenv:
+    In this example, create a virtual environment called mkdocVenv:
 
     ```bash
     cd mkdocs-AJ_Connor_Kemoy && python3 -m venv mkdocVenv
     ```
 
 3.  Activate the mkdocVenv environment.  
-    **This will highly depend on your operating system:**
+**The command depends on your operating system:**
 
     - Linux & MacOS
 
     ```bash
-      source mkdocVenv/bin/activate
+    source mkdocVenv/bin/activate
     ```
 
     - Windows
 
     ```bash
-      source mkdocVenv/Scripts/activate
+    source mkdocVenv/Scripts/activate
     ```
 
-4.  The main tool used to coordinate development and run tests in MkDocs is Hatch (<https://hatch.pypa.io/>). Install it:
+4.  Install Hatch (the main testing tool):
 
-    ```bash
-    pip install hatch
-    ```
+   ```bash
+   pip install hatch
+   ```
 
-5.  Ensure that all requirements and dependencies are installed by running the check.  
-This command installs the project’s dependencies, runs style and lint checks, and executes the unit and integration tests against all supported Python versions. This may take some time:
+## Reproducing testResults
 
-```bash
-hatch run all
-```
-
-## Running the Tests
-
-### Unit Tests
-
-Run the unit tests with:
+To get the same test results as in the `testResults` file, run:
 
 ```bash
 hatch run test:test
 ```
 
-#### Sample Output
+This runs the unit tests across Python versions 3.8-3.12 and gives you the same output as `testResults`.
 
-![python3.8 - python3.9 sample unit test screenshot](./images/tests/unit_test_sample.png)
+### Sample Output
 
-#### Observations
+![python3.8 - python3.9 sample unit test screenshot](../images/tests/unit_test_sample.png)
 
-During the unit test runs across Python versions 3.8–3.12, all versions passed a total of 725 tests:
+### Expected Output
 
-**Test Results Summary:**
-- **Python 3.8:** 721 passed, 0 failed, 4 skipped
-- **Python 3.9:** 719 passed, 0 failed, 6 skipped  
-- **Python 3.10:** 721 passed, 0 failed, 4 skipped
-- **Python 3.11:** 719 passed, 0 failed, 6 skipped
-- **Python 3.12:** 721 passed, 0 failed, 4 skipped
-- **Overall Status:** ✅ All tests passed, 0 failures  
+- **Total Tests**: 725 tests per Python version
+- **Typical Results**: 719-721 passed, 4-6 skipped per version
+- **Runtime**: ~10-18 seconds per Python version
 
-Additionally, at the end of the unit tests we observed the following results:
+### Capturing Output to File
+
+To save the test output just like `testResults`:
 
 ```bash
-Skipped 2 incompatible environments:
-test.pypy3-default -> cannot locate Python: pypy3
-test.pypy3-min-req -> cannot locate Python: pypy3
+hatch run test:test 2>&1 > testResults
 ```
 
 ### Integration Tests
 
-Run the integration tests with:
+Integration tests are also available. To run them:
 
 ```bash
 hatch run integration:test
@@ -91,166 +74,62 @@ hatch run integration:test
 
 #### Sample Output
 
-![python3.8 - python3.9 sample integration test screenshot](./images/tests/integration_test_sample.png)
+![python3.8 - python3.9 sample integration test screenshot](../images/tests/integration_test_sample.png)
 
 #### Observations
 
-As with the unit tests, the integration tests ran across Python versions 3.8–3.12.  
-It was observed that the following checks were included in the integration tests:
+Like the unit tests, integration tests run across Python versions 3.8–3.12.
+The integration tests include:
 
-- Building installed themes  
-- Building theme: mkdocs  
-- Building theme: readthedocs  
-- Building test projects  
-- Building test project: complicated_config  
-- Building test project: unicode  
-- Building test project: subpages  
-- Building test project: minimal  
+- Building installed themes
+- Building theme: mkdocs
+- Building theme: readthedocs
+- Building test projects
+- Building test project: complicated_config
+- Building test project: unicode
+- Building test project: subpages
+- Building test project: minimal
 
 Theme and integration builds are placed in a temporary directory:
 /tmp/mkdocs_integration-<8 unique characters>
 
-Additionally, at the end of the integration tests we observed the following results:
-Skipped 2 incompatible environments:
+At the end of both unit and integration tests, you might see:
 
 ```bash
+Skipped 2 incompatible environments:
 test.pypy3-default -> cannot locate Python: pypy3
 test.pypy3-min-req -> cannot locate Python: pypy3
 ```
 
-## Baseline coverage metrics and observations
+## Reproducing testCoverage
 
-### Code Coverage Summary
+The coverage data in `testCoverage` is sourced from CodeCov. To view similar coverage information:
 
-#### Version Tests
+1.  **View online coverage report**:
+   Visit: <https://app.codecov.io/github/mkdocs/mkdocs/tree/master>
 
-- [x] Python 3.8
-- [x] Python 3.9
-- [x] Python 3.10
-- [x] Python 3.11
-- [x] Python 3.12
+2.  **Alternative - Run complete test suite** (includes coverage):
 
-#### Total Coverages
+   ```bash
+   hatch run all
+   ```
 
-According to [CodeCov report](https://app.codecov.io/github/mkdocs/mkdocs/tree/master?displayType=list), mkdocs boost a codecoverage of 90.31%
-![Codecov overview](./images/tests/code_coverage_overview.png)
+### Expected Coverage Metrics
 
-#### Coverage Table - High Level
+- **Overall Coverage**: 90.31%
+- **Total Lines**: 3,747
+- **Lines Covered**: 3,384
+- **Lines Missed**: 363
 
-![high level breakdown of codecov files](./images/tests/codecov_files.png)
+## Additional Test Commands
 
-### Metrics breakdowns
+- **Integration tests**: `hatch run integration:test`
+- **Complete test suite**: `hatch run all` (includes style, lint, unit, integration)
+- **Style fixes**: `hatch run style:fix`
 
-The breakdown of the metrics was perform using custom scanner script that we build in [courseProjectCode/Metrics/](../courseProjectCode/Metrics/). The scripts obtains the metrics by scanning the codebase as well as fetch the coverage report from Codecov via the API.
+## Notes
 
-#### Code Summary
-
-- Python files scanned: **66**
-- Total lines: **19617**
-- Code lines: **13585**
-- Comment lines: **2653**
-- Blank lines: **3379**
-
-#### Ratios
-
-- Code: **13585** (69.3%)
-- Comments: **2653** (13.5%)
-- Blank: **3379** (17.2%)
-- Comment density: **0.195** (19.5%)
-
-#### Testability - Code Coverage Report
-
-#### mkdocs
-
--**Total Lines:** 3747 | **Coverage:** 90.31% | **Lines test:** 3384 | **Misses:** 363
-
-  **Files:**
-
-```python
-  - __init__.py (1 lines, 100.00%, 1 lines test, 0 misses)
-  - __main__.py (185 lines, 83.78%, 155 lines test, 30 misses)
-  - exceptions.py (10 lines, 90.00%, 9 lines test, 1 misses)
-  - localization.py (47 lines, 95.74%, 45 lines test, 2 misses)
-  - plugins.py (196 lines, 80.10%, 157 lines test, 39 misses)
-  - theme.py (88 lines, 90.91%, 80 lines test, 8 misses)
-```
-
-##### commands
-
--**Total Lines:** 350 | **Coverage:** 81.14% | **Lines test:** 284 | **Misses:** 66
-
-  **Files:**
-
-```python
-  - build.py (179 lines, 97.21%, 174 lines test, 5 misses)
-  - gh_deploy.py (84 lines, 88.10%, 74 lines test, 10 misses)
-  - new.py (26 lines, 88.46%, 23 lines test, 3 misses)
-  - serve.py (61 lines, 21.31%, 13 lines test, 48 misses)
-```
-
-##### config
-
--**Total Lines:** 1055 | **Coverage:** 92.80% | **Lines test:** 979 | **Misses:** 76
-
-  **Files:**
-
-```python
-  - __init__.py (2 lines, 100.00%, 2 lines test, 0 misses)
-  - base.py (214 lines, 91.12%, 195 lines test, 19 misses)
-  - config_options.py (726 lines, 92.42%, 671 lines test, 55 misses)
-  - defaults.py (113 lines, 98.23%, 111 lines test, 2 misses)
-```
-
-##### contrib/search
-
--**Total Lines:** 196 | **Coverage:** 93.88% | **Lines test:** 184 | **Misses:** 12
-
-  **Files:**
-
-```python
-  - __init__.py (87 lines, 94.25%, 82 lines test, 5 misses)
-  - search_index.py (109 lines, 93.58%, 102 lines test, 7 misses)
-```
-
-##### livereload
-
--**Total Lines:** 236 | **Coverage:** 86.44% | **Lines test:** 204 | **Misses:** 32
-
-  **Files:**
-
-```python
-  - __init__.py (236 lines, 86.44%, 204 lines test, 32 misses)
-```
-
-##### structure
-
--**Total Lines:** 916 | **Coverage:** 94.21% | **Lines test:** 863 | **Misses:** 53
-
-  **Files:**
-
-```python
-  - __init__.py (25 lines, 92.00%, 23 lines test, 2 misses)
-  - files.py (330 lines, 90.61%, 299 lines test, 31 misses)
-  - nav.py (153 lines, 96.73%, 148 lines test, 5 misses)
-  - pages.py (361 lines, 95.84%, 346 lines test, 15 misses)
-  - toc.py (47 lines, 100.00%, 47 lines test, 0 misses)
-```
-
-##### utils
-
--**Total Lines:** 467 | **Coverage:** 90.58% | **Lines test:** 423 | **Misses:** 44
-
-  **Files:**
-
-```python
-  - __init__.py (216 lines, 95.37%, 206 lines test, 10 misses)
-  - babel_stub.py (22 lines, 100.00%, 22 lines test, 0 misses)
-  - cache.py (11 lines, 0.00%, 0 lines test, 11 misses)
-  - filters.py (1 lines, 0.00%, 0 lines test, 1 misses)
-  - meta.py (38 lines, 100.00%, 38 lines test, 0 misses)
-  - rendering.py (63 lines, 90.48%, 57 lines test, 6 misses)
-  - templates.py (41 lines, 80.49%, 33 lines test, 8 misses)
-  - yaml.py (75 lines, 89.33%, 67 lines test, 8 misses)
-```
-
-### Additional Observation
+- Tests run across Python versions 3.8-3.12
+- Some tests may be skipped on certain platforms (PyPy)
+- The project uses pytest as the underlying test framework
+- Hatch manages virtual environments and dependencies automatically
