@@ -63,7 +63,15 @@ hatch run test:test
 
 #### Observations
 
-During the unit test runs across Python versions 3.8–3.12, all versions passed a total of 725 tests, with some versions skipping 4–6 tests.  
+During the unit test runs across Python versions 3.8–3.12, all versions passed a total of 725 tests:
+
+**Test Results Summary:**
+- **Python 3.8:** 721 passed, 0 failed, 4 skipped
+- **Python 3.9:** 719 passed, 0 failed, 6 skipped  
+- **Python 3.10:** 721 passed, 0 failed, 4 skipped
+- **Python 3.11:** 719 passed, 0 failed, 6 skipped
+- **Python 3.12:** 721 passed, 0 failed, 4 skipped
+- **Overall Status:** ✅ All tests passed, 0 failures  
 
 Additionally, at the end of the unit tests we observed the following results:
 

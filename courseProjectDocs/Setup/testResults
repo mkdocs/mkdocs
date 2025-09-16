@@ -1,0 +1,143 @@
+────────────────────────────── test.py3.8-default ──────────────────────────────
+.............................................................................................................................................................s...................................................................................................................................................s......................................................................................................................................................................................................................s..................................................s................s...............s........................................................................................................................
+----------------------------------------------------------------------
+Ran 725 tests in 16.177s
+
+OK (skipped=6)
+────────────────────────────── test.py3.8-min-req ──────────────────────────────
+.............................................................................................................................................................s...................................................................................................................................................s......................................................................................................................................................................................................................s..................................................s................s...............s........................................................................................................................
+----------------------------------------------------------------------
+Ran 725 tests in 16.866s
+
+OK (skipped=6)
+────────────────────────────── test.py3.9-default ──────────────────────────────
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................s..................................................s................s...............s........................................................................................................................
+----------------------------------------------------------------------
+Ran 725 tests in 17.944s
+
+OK (skipped=4)
+────────────────────────────── test.py3.9-min-req ──────────────────────────────
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................s..................................................s................s...............s........................................................................................................................
+----------------------------------------------------------------------
+Ran 725 tests in 18.142s
+
+OK (skipped=4)
+───────────────────────────── test.py3.10-default ──────────────────────────────
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................s..................................................s................s...............s........................................................................................................................
+----------------------------------------------------------------------
+Ran 725 tests in 16.334s
+
+OK (skipped=4)
+───────────────────────────── test.py3.10-min-req ──────────────────────────────
+Checking dependencies
+Syncing dependencies
+  error: subprocess-exited-with-error
+  
+  × Building wheel for watchdog (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [97 lines of output]
+      /private/var/folders/2b/l4sm2pld37zdk0yvnh65k2h40000gn/T/pip-build-env-7n284b27/overlay/lib/python3.10/site-packages/setuptools/dist.py:759: SetuptoolsDeprecationWarning: License classifiers are deprecated.
+      !!
+      
+              ********************************************************************************
+              Please consider removing the following classifiers in favor of a SPDX license expression:
+      
+              License :: OSI Approved :: Apache Software License
+      
+              See https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license for details.
+              ********************************************************************************
+      
+      !!
+        self._finalize_license_expression()
+      running bdist_wheel
+      running build
+      running build_py
+      creating build/lib.macosx-10.9-x86_64-cpython-310/watchdog
+      copying src/watchdog/watchmedo.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog
+      copying src/watchdog/version.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog
+      copying src/watchdog/events.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog
+      copying src/watchdog/__init__.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog
+      creating build/lib.macosx-10.9-x86_64-cpython-310/watchdog/utils
+      copying src/watchdog/utils/patterns.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog/utils
+      copying src/watchdog/utils/__init__.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog/utils
+      copying src/watchdog/utils/dirsnapshot.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog/utils
+      copying src/watchdog/utils/delayed_queue.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog/utils
+      copying src/watchdog/utils/platform.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog/utils
+      copying src/watchdog/utils/bricks.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog/utils
+      copying src/watchdog/utils/echo.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog/utils
+      creating build/lib.macosx-10.9-x86_64-cpython-310/watchdog/observers
+      copying src/watchdog/observers/fsevents.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog/observers
+      copying src/watchdog/observers/inotify.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog/observers
+      copying src/watchdog/observers/__init__.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog/observers
+      copying src/watchdog/observers/api.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog/observers
+      copying src/watchdog/observers/inotify_buffer.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog/observers
+      copying src/watchdog/observers/winapi.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog/observers
+      copying src/watchdog/observers/read_directory_changes.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog/observers
+      copying src/watchdog/observers/kqueue.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog/observers
+      copying src/watchdog/observers/inotify_c.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog/observers
+      copying src/watchdog/observers/polling.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog/observers
+      copying src/watchdog/observers/fsevents2.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog/observers
+      creating build/lib.macosx-10.9-x86_64-cpython-310/watchdog/tricks
+      copying src/watchdog/tricks/__init__.py -> build/lib.macosx-10.9-x86_64-cpython-310/watchdog/tricks
+      running egg_info
+      writing src/watchdog.egg-info/PKG-INFO
+      writing dependency_links to src/watchdog.egg-info/dependency_links.txt
+      writing entry points to src/watchdog.egg-info/entry_points.txt
+      writing requirements to src/watchdog.egg-info/requires.txt
+      writing top-level names to src/watchdog.egg-info/top_level.txt
+      reading manifest file 'src/watchdog.egg-info/SOURCES.txt'
+      reading manifest template 'MANIFEST.in'
+      warning: no files found matching '*.h' under directory 'src'
+      adding license file 'LICENSE'
+      adding license file 'COPYING'
+      adding license file 'AUTHORS'
+      writing manifest file 'src/watchdog.egg-info/SOURCES.txt'
+      running build_ext
+      building '_watchdog_fsevents' extension
+      creating build/temp.macosx-10.9-x86_64-cpython-310/src
+      clang -Wno-unused-result -Wsign-compare -Wunreachable-code -DNDEBUG -g -fwrapv -O3 -Wall -arch x86_64 -mmacosx-version-min=10.9 -Wno-nullability-completeness -Wno-expansion-to-defined -Wno-undef-prefix -fPIC -Werror=unguarded-availability-new -DWATCHDOG_VERSION_STRING=\"2.0.0\" -DWATCHDOG_VERSION_MAJOR=2 -DWATCHDOG_VERSION_MINOR=0 -DWATCHDOG_VERSION_BUILD=0 "-I/Users/ajbarea/Library/Application Support/hatch/env/virtual/mkdocs/ymExenB9/test.py3.10-min-req/include" "-I/Users/ajbarea/Library/Application Support/hatch/env/virtual/.pythons/3.10/python/include/python3.10" -c src/watchdog_fsevents.c -o build/temp.macosx-10.9-x86_64-cpython-310/src/watchdog_fsevents.o -std=c99 -pedantic -Wall -Wextra -fPIC -Wno-nullability-completeness -Wno-nullability-extension -Wno-newline-eof -Wno-error=unused-command-line-argument
+      src/watchdog_fsevents.c:191:25: error: 'kFSEventStreamEventFlagItemCloned' is only available on macOS 10.13 or newer [-Werror,-Wunguarded-availability-new]
+        191 | FLAG_PROPERTY(IsCloned, kFSEventStreamEventFlagItemCloned)
+            |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      src/watchdog_fsevents.c:163:27: note: expanded from macro 'FLAG_PROPERTY'
+        163 |         if (self->flags & flag) { \
+            |                           ^~~~
+      /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/CoreServices.framework/Frameworks/FSEvents.framework/Headers/FSEvents.h:560:3: note: 'kFSEventStreamEventFlagItemCloned' has been marked as being introduced in macOS 10.13 here, but the deployment target is macOS 10.9.0
+        560 |   kFSEventStreamEventFlagItemCloned __OSX_AVAILABLE_STARTING(__MAC_10_13, __IPHONE_11_0) = 0x00400000
+            |   ^
+      src/watchdog_fsevents.c:191:25: note: enclose 'kFSEventStreamEventFlagItemCloned' in a __builtin_available check to silence this warning
+        191 | FLAG_PROPERTY(IsCloned, kFSEventStreamEventFlagItemCloned)
+            |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      src/watchdog_fsevents.c:163:27: note: expanded from macro 'FLAG_PROPERTY'
+        163 |         if (self->flags & flag) { \
+            |                           ^~~~
+      src/watchdog_fsevents.c:585:40: error: 'kFSEventStreamCreateFlagUseExtendedData' is only available on macOS 10.13 or newer [-Werror,-Wunguarded-availability-new]
+        585 |                                      | kFSEventStreamCreateFlagUseExtendedData
+            |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/CoreServices.framework/Frameworks/FSEvents.framework/Headers/FSEvents.h:295:3: note: 'kFSEventStreamCreateFlagUseExtendedData' has been marked as being introduced in macOS 10.13 here, but the deployment target is macOS 10.9.0
+        295 |   kFSEventStreamCreateFlagUseExtendedData __OSX_AVAILABLE_STARTING(__MAC_10_13, __IPHONE_11_0) = 0x00000040,
+            |   ^
+      src/watchdog_fsevents.c:585:40: note: enclose 'kFSEventStreamCreateFlagUseExtendedData' in a __builtin_available check to silence this warning
+        576 |     stream_ref = FSEventStreamCreate(kCFAllocatorDefault,
+        577 |                                      callback,
+        578 |                                      &stream_context,
+        579 |                                      paths,
+        580 |                                      kFSEventStreamEventIdSinceNow,
+        581 |                                      stream_latency,
+        582 |                                      kFSEventStreamCreateFlagNoDefer
+        583 |                                      | kFSEventStreamCreateFlagFileEvents
+        584 |                                      | kFSEventStreamCreateFlagWatchRoot
+        585 |                                      | kFSEventStreamCreateFlagUseExtendedData
+            |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        586 |                                      | kFSEventStreamCreateFlagUseCFTypes);
+            |
+      2 errors generated.
+      error: command '/usr/bin/clang' failed with exit code 1
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+  ERROR: Failed building wheel for watchdog
+error: failed-wheel-build-for-install
+
+× Failed to build installable wheels for some pyproject.toml based projects
+╰─> watchdog
