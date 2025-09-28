@@ -1,0 +1,104 @@
+# MkDocs Test Coverage Report
+
+## Overall Coverage Summary
+- **Total Coverage:** 90.31%
+- **Total Lines:** 3,747
+- **Lines Covered:** 3,384  
+- **Lines Missed:** 363
+- **Source:** CodeCov (https://app.codecov.io/github/mkdocs/mkdocs/tree/master)
+
+## Coverage by Module
+
+### mkdocs/ (Core Module)
+- **Coverage:** 90.31%
+- **Total Lines:** 3,747
+- **Covered:** 3,384
+- **Missed:** 363
+
+**Files:**
+- `__init__.py`: 100.00% (1/1 lines)
+- `__main__.py`: 83.78% (155/185 lines) 
+- `exceptions.py`: 90.00% (9/10 lines)
+- `localization.py`: 95.74% (45/47 lines)
+- `plugins.py`: 80.10% (157/196 lines)
+- `theme.py`: 90.91% (80/88 lines)
+
+### commands/
+- **Coverage:** 81.14%
+- **Total Lines:** 350
+- **Covered:** 284
+- **Missed:** 66
+
+**Files:**
+- `build.py`: 97.21% (174/179 lines)
+- `gh_deploy.py`: 88.10% (74/84 lines)  
+- `new.py`: 88.46% (23/26 lines)
+- `serve.py`: 21.31% (13/61 lines) ⚠️ Low coverage
+
+### config/
+- **Coverage:** 92.80%
+- **Total Lines:** 1,055
+- **Covered:** 979
+- **Missed:** 76
+
+**Files:**
+- `__init__.py`: 100.00% (2/2 lines)
+- `base.py`: 91.12% (195/214 lines)
+- `config_options.py`: 92.42% (671/726 lines)
+- `defaults.py`: 98.23% (111/113 lines)
+
+### contrib/search/
+- **Coverage:** 93.88%
+- **Total Lines:** 196
+- **Covered:** 184
+- **Missed:** 12
+
+**Files:**
+- `__init__.py`: 94.25% (82/87 lines)
+- `search_index.py`: 93.58% (102/109 lines)
+
+### livereload/
+- **Coverage:** 86.44%
+- **Total Lines:** 236
+- **Covered:** 204
+- **Missed:** 32
+
+**Files:**
+- `__init__.py`: 86.44% (204/236 lines)
+
+### structure/
+- **Coverage:** 94.21%
+- **Total Lines:** 916
+- **Covered:** 863
+- **Missed:** 53
+
+**Files:**
+- `__init__.py`: 92.00% (23/25 lines)
+- `files.py`: 90.61% (299/330 lines)
+- `nav.py`: 96.73% (148/153 lines)
+- `pages.py`: 95.84% (346/361 lines)
+- `toc.py`: 100.00% (47/47 lines)
+
+### utils/
+- **Coverage:** 90.58%
+- **Total Lines:** 467
+- **Covered:** 423
+- **Missed:** 44
+
+**Files:**
+- `__init__.py`: 95.37% (206/216 lines)
+- `babel_stub.py`: 100.00% (22/22 lines)
+- `cache.py`: 0.00% (0/11 lines) ⚠️ No coverage
+- `filters.py`: 0.00% (0/1 lines) ⚠️ No coverage  
+- `meta.py`: 100.00% (38/38 lines)
+- `rendering.py`: 90.48% (57/63 lines)
+- `templates.py`: 80.49% (33/41 lines)
+- `yaml.py`: 89.33% (67/75 lines)
+
+## Areas for Improvement
+1. **commands/serve.py** - Only 21.31% coverage
+2. **utils/cache.py** - 0% coverage (11 lines not tested)
+3. **utils/filters.py** - 0% coverage (1 line not tested)
+
+## Coverage Type: Statement Coverage
+Note: This report shows statement coverage. Branch coverage data not available from current test framework.
