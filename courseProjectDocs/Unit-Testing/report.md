@@ -146,10 +146,10 @@ Added 6 unit tests targeting edge cases in:
 These tests provide branch coverage for previously untested code paths, focusing on error handling and boundary conditions that improve software robustness.
 
 ## Compare New Test vs Additional Tests
-After the new test cases were added, we obtained a total of 731 tests compared to the previously reported [725](../setup.md#sample-output).  
+After the new test cases were added, we obtained a total of 731 tests compared to the previously reported [725](../Setup/report.md#expected-test-count).  
 ![731 tests](../images/tests/731_test.png)
 
-In addition, the previous baseline reported total code coverage as [90.31%](../setup.md#total-coverages). We now achieve 95% coverage.  
+In addition, the previous baseline reported total code coverage as [90.31%](../Setup/report.md#overall-coverage). We now achieve 95% coverage.  
 ![95% coverage](../images/tests/95_percent_coverage.png)
 
 ## Running the new tests
