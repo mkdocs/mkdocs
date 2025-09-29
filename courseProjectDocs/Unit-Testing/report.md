@@ -4,12 +4,16 @@
 
 This document focuses on extending MkDocs test coverage by adding unit tests for uncovered or edge-case logic. The goal is to improve code coverage and identify potential bugs in boundary conditions.
 
+Since MkDocs is already using the unittest framework, we will continue using it rather than introducing a different testing framework.
+
 ## Baseline Analysis
 
 ### Initial Coverage Assessment
 
-**Baseline Coverage**: 14% (initial run of config tests)
-**Target Areas**: Configuration handling, utility functions, error conditions
+**Baseline Coverage**:
+The initial test analysis shows that configuration coverage is only 14% from the initial run of configuration tests.
+
+![14% gaps](../images/tests/initial_coverage_gap.png)
 
 **Coverage Gaps**:
 
@@ -19,7 +23,21 @@ This document focuses on extending MkDocs test coverage by adding unit tests for
 - Error conditions in YAML processing
 - Environment variable handling for reproducible builds
 
-## New Test Cases
+**Finding the gaps using python coverage**
+```bash
+python -m coverage run --source=mkdocs -m unittest mkdocs.tests.config.config_tests
+python -m coverage report --show-missing
+```
+
+## New Test Cases  
+**Rationales & Areas of Focus**  
+The following test cases are designed to close the aforementioned [coverage gaps](#initial-coverage-assessment).  
+The tests validate configuration option handling and build reproducibility to ensure robustness and correctness in edge cases that could otherwise lead to silent failures or inconsistent behavior.  
+
+We target the following functionalities:  
+- Mutable vs. Immutable Defaults  
+- Reproducible Defaults – validate `SOURCE_DATE_EPOCH` environment variable for deterministic builds  
+- Error Handling in Config Option Assignment – raise clear errors when misused
 
 ### Test File: `courseProjectCode/test_edge_cases.py`
 
@@ -95,6 +113,11 @@ def test_config_option_set_on_non_config_object(self):
 
 **Edge Case**: Attempting to use config options on non-Config objects should raise clear AttributeError with helpful message.
 
+### Running the new test
+```bash
+python -m unittest courseProjectCode.Unit-Testing.test_edge_cases -v
+```
+
 ### Test Output
 
 ```bash
@@ -111,7 +134,7 @@ Ran 6 tests in 0.004s
 OK
 ```
 
-![Unit Test Edge Cases Screenshot](images/tests/aj_unit_test_edgecase.png)
+![Unit Test Edge Cases Screenshot](../images/tests/aj_unit_test_edgecase.png)
 
 ## Impact
 
@@ -122,20 +145,22 @@ Added 6 unit tests targeting edge cases in:
 
 These tests provide branch coverage for previously untested code paths, focusing on error handling and boundary conditions that improve software robustness.
 
-## Commands
+## Compare New Test vs Additional Tests
+After the new test cases were added, we obtained a total of 731 tests compared to the previously reported [725](../Setup/report.md#expected-test-count).  
+![731 tests](../images/tests/731_test.png)
 
+In addition, the previous baseline reported total code coverage as [90.31%](../Setup/report.md#overall-coverage). We now achieve 95% coverage.  
+![95% coverage](../images/tests/95_percent_coverage.png)
+
+## Running the new tests
+### unit tests
 ```bash
-# Setup
-pip install -e .
-
-# Find gaps
-python -m coverage run --source=mkdocs -m unittest mkdocs.tests.config.config_tests
-python -m coverage report --show-missing
-
-# Test new cases
-python -m unittest courseProjectCode.test_edge_cases -v
-
-# Check improvement
-python -m coverage run --source=mkdocs -m unittest courseProjectCode.test_edge_cases
-python -m coverage report
+hatch run test:test
 ```
+
+### Coverage report
+```bash
+python -m coverage run --source=mkdocs -m unittest discover -s mkdocs/tests -p "*_tests.py" && python -m coverage html
+```
+
+
