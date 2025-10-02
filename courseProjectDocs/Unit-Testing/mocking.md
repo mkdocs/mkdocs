@@ -3,18 +3,6 @@
 ## Overview
 This document focuses on improving existing tests and test coverage by mocking/stubbing certain dependencies. The current mkdocs tests exhibit extensive use of mocks and stubs. This document outlines the rationale behind the mocking strategy, identifies areas of focus for new test cases, and provides a structured approach to implementing these tests.
 
-get-deps command
-increases coverage of existing tests by mocking out get_deps dependency
-Coverage of __main__.py increased from 82% to 89%
-
-clean_directory()
-    Mocking the os file system 
-    extends branch coverage of existing tests and does it without touching the real file system
-
-_load_hook()
-    Mocking the importlib module
-    extends branch coverage of existing tests and does it without touching the real file/import system
-
 ## Coverage Gaps
 The coverage report indicated several areas where coverage could be improved. Specifically, the following files and functions were identified as having gaps:
 - `mkdocs/utils/__init__.py`: Missing testing that `clean_directory` ignores hidden files and directories
