@@ -95,6 +95,8 @@ python -m coverage report
 - **Coverage Improvement**: +4.69%
 - **Additional Tests**: 6 new edge case tests
 
+![Coverage Report 95%](image.png)
+
 To generate an HTML coverage report:
 
 ```bash
@@ -108,3 +110,65 @@ The HTML report will be generated in the `htmlcov/` directory.
 - The new tests target edge cases in `mkdocs/config/base.py` and `mkdocs/utils/__init__.py`
 - Tests focus on mutable/immutable default handling, SOURCE_DATE_EPOCH environment variable, and error handling
 - All tests use the unittest framework to maintain consistency with the existing MkDocs test suite
+
+---
+
+## Running the Mocking & Stubbing Tests
+
+To run only the newly added mocking and stubbing tests in `courseProjectCode/Unit-Testing/test_mocks_stubs.py`:
+
+**Important**: Ensure all project dependencies are installed before running these tests:
+
+```bash
+pip install -e .
+```
+
+Then run the mocking tests:
+
+```bash
+python -m unittest courseProjectCode.Unit-Testing.test_mocks_stubs -v
+```
+
+### Expected Output
+
+- **Total Tests**: 9 tests
+- **Expected Results**: 9 passed, 0 failed
+- **Runtime**: ~0.1-0.2 seconds
+
+### Sample Output
+
+```bash
+test__is_cwd_git_repo_no_git ... ok
+test__load_hook_fail_module_from_spec ... ok
+test__load_hook_fail_spec_from_file ... ok
+test_clean_directory_with_hidden_files ... ok
+test_get_deps_command ... ok
+test_get_deps_command_exit_if_warnings ... ok
+test_load_invalid_plugin ... ok
+test_serve_function ... ok
+test_serve_function_with_livereload ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.123s
+
+OK
+```
+
+![Mocking Tests Output](image2.png)
+
+### Coverage Improvements from Mocking Tests
+
+The mocking and stubbing tests improved coverage in the following modules:
+
+- **mkdocs/utils/**init**.py**: 88% → 91%
+- **mkdocs/**main**.py**: 82% → 89%
+- **mkdocs/config/config_options.py**: 93% → 94%
+- **mkdocs/command/gh_deploy.py**: 89% → 94%
+- **mkdocs/commands/serve.py**: 20% → 83%
+- **Overall Coverage**: 91% → 93%
+
+### Notes on Mocking Tests
+
+- Tests use `unittest.mock` to isolate components and avoid external dependencies
+- Focus areas: CLI commands, error handling, file system operations, plugin loading, and server functionality
+- All tests prevent actual file system modifications, network operations, or subprocess execution
