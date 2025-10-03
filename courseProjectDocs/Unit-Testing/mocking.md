@@ -20,7 +20,7 @@ The coverage report indicated several areas where coverage could be improved. Sp
     - **Initial coverage:** 20%
 
 The image below shows the coverage report before adding the new tests.
-![Coverage Report Before Mocks & Stubs](../images/mocking/InitialCodeCoverage.png)
+![Coverage Report Before Mocks & Stubs](../images/tests/95_percent_coverage.png)
 
 ## New Test Cases
 **Rationales & Areas of Focus**  
@@ -134,7 +134,7 @@ python -m unittest courseProjectCode.Unit-Testing.test_mocks_stubs -v
 
 ## Coverage Improvements
 The new test cases have improved the overall code coverage of the mkdocs project. Specifically, the following improvements were observed:
-- Overall code coverage increased from 91% to 93%
+- Overall code coverage increased from 95% to 96%
 - The code coverage of `mkdocs/utils/__init__.py` increased from 88% to 91%
 - The code coverage of `mkdocs/__main__.py` increased from 82% to 89%
 - The code coverage of `mkdocs/config/config_options.py` increased from 93% to 94%
@@ -171,5 +171,6 @@ OR
 
 2. Run the following command:
 ```bash
-python -m coverage run --source=mkdocs -m unittest discover -s mkdocs -p "*tests.py" && python -m coverage html
+python -m coverage run --source=mkdocs -m unittest discover -s mkdocs -p "*tests.py"
+python -m coverage html
 ```
