@@ -704,10 +704,10 @@ The default style of `use_directory_urls: true` creates more user friendly URLs,
 and is usually what you'll want to use.
 
 Source file      | Generated File            | URL Format
----------------- | ------------------------- | --------------
+---------------- | ------------------------- | ---------------
 index.md         | /index.html               | /
 api-guide.md     | /api-guide/index.html     | /api-guide/
-about/license.md | /about/license/index.html | /about/license
+about/license.md | /about/license/index.html | /about/license/
 
 **default**: `true`
 
