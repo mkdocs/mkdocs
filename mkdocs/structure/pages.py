@@ -542,6 +542,13 @@ class _HTMLHandler(markdown.htmlparser.htmlparser.HTMLParser):  # type: ignore[n
         super().__init__()
         self.present_anchor_ids: set[str] = set()
 
+    def parse_starttag(self, i: int) -> int:
+        # Treat `</>` as normal data as it is not a real tag.
+        if self.rawdata[i : i + 3] == '</>':
+            self.handle_data(self.rawdata[i : i + 3])
+            return i + 3
+        return super().parse_starttag(i)
+
     def handle_starttag(self, tag: str, attrs: Sequence[tuple[str, str]]) -> None:
         for k, v in attrs:
             if k == 'id' or (k == 'name' and tag == 'a'):
