@@ -124,6 +124,7 @@ class Page(StructureItem):
 
     @property
     def is_index(self) -> bool:
+        """When `True`, indicates that this page is an index page, in the sense that it gets sorted to the beginning of the list of its siblings because its filename was `index.md` or something similar."""
         return self.file.name == 'index'
 
     edit_url: str | None

@@ -456,6 +456,15 @@ on the homepage:
 {% if not page.is_homepage %}{{ page.title }} - {% endif %}{{ site_name }}
 ```
 
+::: mkdocs.structure.pages.Page.is_index
+    options:
+        show_root_full_path: false
+        heading_level: 5
+
+Though it's rare for a theme to treat index pages specially, it does
+occasionally come up, for example to alter the behavior of breadcrumb
+navigation.
+
 ::: mkdocs.structure.pages.Page.previous_page
     options:
         show_root_full_path: false
