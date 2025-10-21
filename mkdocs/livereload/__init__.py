@@ -111,6 +111,8 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 self.address_family = socket.AF_INET6
         except Exception:
             pass
+
+        self._is_active = False
         self.root = os.path.abspath(root)
         self.mount_path = _normalize_mount_path(mount_path)
         self.url = _serve_url(host, port, mount_path)
@@ -170,6 +172,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
             self.observer.unschedule(self._watch_refs.pop(path))
 
     def serve(self, *, open_in_browser=False):
+        self._is_active = True
         self.server_bind()
         self.server_activate()
 
@@ -225,6 +228,7 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
                 self._epoch_cond.notify_all()
 
     def shutdown(self, wait=False) -> None:
+        self._is_active = False
         self.observer.stop()
         with self._rebuild_cond:
             self._shutdown = True
@@ -260,6 +264,10 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
 
         start_response(msg, [("Content-Type", "text/html")])
         return [error_content]
+
+    @property
+    def is_active(self) -> bool:
+        return self._is_active
 
     def _serve_request(self, environ, start_response) -> Iterable[bytes] | None:
         # https://bugs.python.org/issue16679

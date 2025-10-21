@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import logging
 import shutil
+import sys
 import tempfile
 from os.path import isdir, isfile, join
+from signal import SIGINT, SIGTERM, signal, strsignal
 from typing import TYPE_CHECKING
 from urllib.parse import urlsplit
 
@@ -76,7 +78,42 @@ def serve(
                     return f.read()
         return None
 
+    def handle_signal(signum, frame) -> None:
+        signal_name = strsignal(signum)
+        log.info(f"Received signal '{signal_name}'")
+
+        shutdown()
+
+    def shutdown() -> None:
+        if not server.is_active:
+            return
+
+        log.info("Shutting down...")
+
+        try:
+            server.shutdown()
+        finally:
+            config.plugins.on_shutdown()
+
+        if isdir(site_dir):
+            shutil.rmtree(site_dir)
+
     server.error_handler = error_handler
+
+    signal(SIGTERM, handle_signal)
+    signal(SIGINT, handle_signal)
+
+    if sys.platform == "linux":
+        from signal import SIGHUP
+
+        signal(SIGHUP, handle_signal)
+
+    elif sys.platform == "win32":
+        from signal import CTRL_BREAK_EVENT, CTRL_C_EVENT, SIGBREAK
+
+        signal(SIGBREAK, handle_signal)
+        signal(CTRL_C_EVENT, handle_signal)
+        signal(CTRL_BREAK_EVENT, handle_signal)
 
     try:
         # Perform the initial build
@@ -98,13 +135,7 @@ def serve(
             for item in config.watch:
                 server.watch(item)
 
-        try:
-            server.serve(open_in_browser=open_in_browser)
-        except KeyboardInterrupt:
-            log.info("Shutting down...")
-        finally:
-            server.shutdown()
+        server.serve(open_in_browser=open_in_browser)
+
     finally:
-        config.plugins.on_shutdown()
-        if isdir(site_dir):
-            shutil.rmtree(site_dir)
+        shutdown()
