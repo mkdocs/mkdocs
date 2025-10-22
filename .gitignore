@@ -69,5 +69,7 @@ ENV/
 # MkDocs documentation
 site*/
 courseProjectCode/Metrics/mkdocs_metrics.md
-
 courseProjectCode/Metrics/metrics.yaml
+
+# Mutation Testing
+mutants/
