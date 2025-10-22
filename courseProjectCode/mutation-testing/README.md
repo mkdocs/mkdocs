@@ -1,12 +1,10 @@
 # 🧬 Mutation Testing
 
-## AJ - Mutation Testing Overview
-
 **Target Module:** `mkdocs/utils/__init__.py`  
 **Test File:** `tests/test_utils_mutations.py`  
 **Configuration:** Defined in `pyproject.toml` under [tool.mutmut]  
 
-### 🔧 Workflow (Windows WSL)
+## 🔧 Workflow (Windows WSL)
 
 1.  **Set WSL default to Ubuntu**
 
