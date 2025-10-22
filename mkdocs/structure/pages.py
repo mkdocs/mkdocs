@@ -340,7 +340,9 @@ class _ExtractAnchorsTreeprocessor(markdown.treeprocessors.Treeprocessor):
                     add(anchor)
 
     def _register(self, md: markdown.Markdown) -> None:
-        md.treeprocessors.register(self, "mkdocs_extract_anchors", priority=5)  # Same as 'toc'.
+        # Priority 3.9 to run *after* PyMDown Extensions' `tab` (4), which runs after `toc` (5),
+        # see https://github.com/mkdocs/mkdocs/issues/3690.
+        md.treeprocessors.register(self, "mkdocs_extract_anchors", priority=3.9)
 
 
 class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
