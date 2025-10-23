@@ -405,6 +405,45 @@ class SearchIndexTests(unittest.TestCase):
             self.assertEqual(strip_whitespace(index._entries[3]['text']), "Content3")
             self.assertEqual(index._entries[3]['location'], f"{loc}#heading-3")
 
+    def test_create_chinese_search_index(self):
+        base_cfg = load_config()
+        pages = [
+            Page(
+                '简单的首页',
+                File('index.md', base_cfg.docs_dir, base_cfg.site_dir, base_cfg.use_directory_urls),
+                base_cfg,
+            ),
+            Page(
+                '其他页面',
+                File('etc.md', base_cfg.docs_dir, base_cfg.site_dir, base_cfg.use_directory_urls),
+                base_cfg,
+            ),
+        ]
+
+        full_content = ''.join(f"标题{i}内容{i}" for i in range(1, 4))
+
+        plugin = search.SearchPlugin()
+        errors, warnings = plugin.load_config(
+            {
+                'lang': 'cn',
+                # 'indexing': 'title'
+            }
+        )
+
+        index = search_index.SearchIndex(**plugin.config)
+        for page in pages:
+            page.content = "<p>人生苦短，我用python</p>"
+            index.add_entry_from_context(page)
+
+        self.assertEqual(len(index._entries), 2)
+        self.assertEqual(index._entries[0]['title'], '简单 的 首页')
+        self.assertEqual(index._entries[0]['text'], "人生 苦短 ， 我用 python")
+        self.assertEqual(index._entries[0]['location'], '')
+
+        self.assertEqual(index._entries[1]['title'], '其他 页面')
+        self.assertEqual(index._entries[1]['text'], "人生 苦短 ， 我用 python")
+        self.assertEqual(index._entries[1]['location'], 'etc/')
+
     def test_search_indexing_options(self):
         def test_page(title, filename, config):
             test_page = Page(
