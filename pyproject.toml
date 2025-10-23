@@ -240,6 +240,6 @@ show_error_codes = true
 
 [tool.mutmut]
 paths_to_mutate = ["mkdocs/utils/__init__.py"]
-tests_dir = ["tests"]
-also_copy = ["mkdocs/__init__.py", "mkdocs/exceptions.py", "mkdocs/utils/yaml.py", "mkdocs/utils/meta.py"]
+tests_dir = ["courseProjectCode/mutation-testing"]
+also_copy = ["mkdocs/__init__.py", "mkdocs/exceptions.py", "mkdocs/utils/yaml.py", "mkdocs/utils/meta.py", "courseProjectCode/mutation-testing"]
 debug = false
