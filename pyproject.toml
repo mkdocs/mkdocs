@@ -245,7 +245,6 @@ paths_to_mutate = [
     "mkdocs/exceptions.py",
     "mkdocs/localization.py",
     "mkdocs/theme.py",
-    "config/defaults.py"
 ]
 also_copy = [
     "mkdocs/tests/",
