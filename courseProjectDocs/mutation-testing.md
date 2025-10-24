@@ -21,15 +21,14 @@ This document reports on mutation testing performed on the MkDocs project using 
 ![Before Mutation Testing](images/mutation_testing/1-mutmut-before.png)
 
 ```bash
-Total Mutants: 254
-Killed 🎉: 22 (8.7%)
-No tests 🫥: 218 (85.8%)
-Survived 🙁: 14 (5.5%)
+Total Mutants: 3610
+Killed 🎉: 2141 (59.3%)
+No tests 🫥: 1093 (30.3%)
+Survived 🙁: 376 (10.4%)
 Timeout ⏰: 0 (0%)
 Suspicious 🤔: 0 (0%)
-
-Mutation Score (tested code): 61.1% (22 of 36 tested mutants)
-Speed: 13.65 mutations/second
+Mutation Score (tested code): 85.1% (2141 of 2517 tested mutants)
+Speed: 16.77 mutations/second
 ```
 
 **Analysis:** Only 36 mutants had test coverage (254 - 218 = 36). Of those tested, 14 survived, indicating gaps in test assertions.

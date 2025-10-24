@@ -240,7 +240,6 @@ paths_to_mutate = [
     "mkdocs/livereload/",
     "mkdocs/structure/",
     "mkdocs/templates/",
-    "mkdocs/themes/",
     "mkdocs/utils/",
     "mkdocs/__main__.py",
     "mkdocs/exceptions.py",
@@ -253,8 +252,10 @@ also_copy = [
     "mkdocs/config",
     "mkdocs/plugins.py",
     "mkdocs.yml",
+    "mkdocs/themes/",
     "docs",
-    "mutmut_pytest.ini"
+    "mutmut_pytest.ini",
+    "courseProjectCode/mutation-testing/",
 ]
 tests_dir = ["mkdocs/tests/"]
 do_not_mutate = [
