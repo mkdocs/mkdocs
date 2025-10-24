@@ -65,6 +65,7 @@ target/
 # virtualenv
 venv/
 ENV/
+mkdocVenv/
 
 # MkDocs documentation
 site*/
@@ -73,3 +74,5 @@ courseProjectCode/Metrics/metrics.yaml
 
 # Mutation Testing
 mutants/
+
+.DS_Store

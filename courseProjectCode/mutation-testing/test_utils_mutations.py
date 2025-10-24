@@ -1,5 +1,5 @@
 """
-Mutation tests for mkdocs/utils/__init__.py
+Mutation tests for mkdocs/utils/__init__.py.
 
 I couldn't get this to work from here so I put it in a root tests/ directory.
 """

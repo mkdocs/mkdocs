@@ -233,6 +233,20 @@ ignore = ["E501", "E731"]
 [tool.ruff.flake8-comprehensions]
 allow-dict-calls-with-keyword-arguments = true
 
+[tool.hatch.envs.mutmut]
+features = ["i18n"]
+dependencies = [
+    "mutmut",
+    "pytest",
+]
+
+[tool.hatch.envs.mutmut.scripts]
+run = "PYTEST_ADDOPTS=\"-c mutmut_pytest.ini\" mutmut run"
+browse = "mutmut browse"
+
+[[tool.hatch.envs.mutmut.matrix]]
+python = ["3.12"]
+
 [tool.mutmut]
 paths_to_mutate = [
     "mkdocs/commands/",
@@ -240,12 +254,11 @@ paths_to_mutate = [
     "mkdocs/livereload/",
     "mkdocs/structure/",
     "mkdocs/templates/",
-    "mkdocs/themes/",
     "mkdocs/utils/",
     "mkdocs/__main__.py",
     "mkdocs/exceptions.py",
     "mkdocs/localization.py",
-    "mkdocs/theme.py"
+    "mkdocs/theme.py",
 ]
 also_copy = [
     "mkdocs/tests/",
@@ -253,10 +266,11 @@ also_copy = [
     "mkdocs/config",
     "mkdocs/plugins.py",
     "mkdocs.yml",
+    "mkdocs/themes/",
     "docs",
-    "mutmut_pytest.ini"
+    "mutmut_pytest.ini",
+    "courseProjectCode/mutation-testing/",
 ]
-tests_dir = ["mkdocs/tests/"]
 do_not_mutate = [
     "mkdocs/config/",
     "mkdocs/plugins.py",

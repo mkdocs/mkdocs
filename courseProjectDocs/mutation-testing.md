@@ -21,18 +21,19 @@ This document reports on mutation testing performed on the MkDocs project using 
 ![Before Mutation Testing](images/mutation_testing/1-mutmut-before.png)
 
 ```bash
-Total Mutants: 254
-Killed 🎉: 22 (8.7%)
-No tests 🫥: 218 (85.8%)
-Survived 🙁: 14 (5.5%)
+Total Mutants: 3610
+Killed 🎉: 2706 (74.9%)
+No tests 🫥: 694 (19.2%)
+Survived 🙁: 210 (5.8%)
 Timeout ⏰: 0 (0%)
 Suspicious 🤔: 0 (0%)
-
-Mutation Score (tested code): 61.1% (22 of 36 tested mutants)
-Speed: 13.65 mutations/second
+Mutation Score (tested code): 92.7% (2706 of 2916 tested mutants)
+Speed: 20.03 mutations/second
 ```
 
-**Analysis:** Only 36 mutants had test coverage (254 - 218 = 36). Of those tested, 14 survived, indicating gaps in test assertions.
+**Analysis:** Only 2,916 mutants had test coverage (3610 - 694 = 2916). Of those tested, 210 survived, indicating gaps in test assertions.
+
+*Note: Some tests had to be ignored for mutmut to run successfully, which may skew the results. See `mutmut_pytest.ini` for details. mutmut is incompatible with generics and abstract classes.*
 
 ### Mutmut Browser Analysis
 
@@ -48,28 +49,29 @@ Targeted testing that was added to improve these mutation testing results can be
 ![After Mutation Testing](images/mutation_testing/3-mutmut-after.png)
 
 ```bash
-Total Mutants: 254
-Killed 🎉: 28 (11.0%)
-No tests 🫥: 218 (85.8%)
-Survived 🙁: 8 (3.1%)
+Total Mutants: 3610
+Killed 🎉: 2708 (74.9%)
+No tests 🫥: 597 (16.3%)
+Survived 🙁: 305 (8.8%)
 Timeout ⏰: 0 (0%)
 Suspicious 🤔: 0 (0%)
-
-Mutation Score (tested code): 77.8% (28 of 36 tested mutants)
-Speed: 13.49 mutations/second
+Mutation Score (tested code): 89.9% (2708 of 3013 tested mutants)
+Speed: 22.76 mutations/second
 ```
 
-**Improvement:** Added targeted tests killed 6 additional mutants, reducing survivors from 14 to 8.
+**Improvement:** Added targeted tests killed 3 additional mutants, reducing survivors from 308 to 305.
 
 ### Comparison
 
  Metric | Before | After | Change
 --------|--------|-------|--------
- Killed Mutants | 22 | 28 | +6 (+27.3%)
- Survived Mutants | 14 | 8 | -6 (-42.9%)
- Mutation Score (tested) | 61.1% | 77.8% | +16.7%
+ Killed Mutants | 2706 | 2708 | +2 (+0.07%)
+ Survived Mutants | 210 | 305 | +95 (+45.2%)
+ Mutation Score (tested) | 92.7% | 89.9% | -2.8%
  Test Count | ~5 | ~9 | +4 tests
 
+### Comments
+- The mutation score and survivor count worsened slightly due to some weirdness with the way mutmut was counting mutants. Even though we killed more mutants, mutmut believed that some mutants that it previously thought were untested were now being tested, thus increasing the total number of tested mutants and survivors. After investigation, it is unclear why mumut is exhibiting this behavior as none of the new tests target or call anything in the particular file where this change occurred.
 ---
 
 ## Lessons Learned
@@ -95,6 +97,12 @@ Speed: 13.49 mutations/second
 
       - Adding 4 simple tests improved mutation score by 16.7%
       - Should focus on killing survivors rather than achieving 100% coverage moving forward
+
+5. **Tool Limitations**
+
+      - mutmut has issues with generics and abstract classes, and it requires a fully functional test suite and completely correct code to run.
+      - mkdocs uses unittest framework, while mutmut relies on pytest; This lead to some incompatibilities.
+      - Some tests had to be ignored or skipped to run mutmut successfully
 
 ---
 
