@@ -65,11 +65,13 @@ Speed: 22.76 mutations/second
 
  Metric | Before | After | Change
 --------|--------|-------|--------
- Killed Mutants | 22 | 28 | +6 (+27.3%)
- Survived Mutants | 14 | 8 | -6 (-42.9%)
- Mutation Score (tested) | 61.1% | 77.8% | +16.7%
+ Killed Mutants | 2706 | 2708 | +2 (+0.07%)
+ Survived Mutants | 210 | 305 | +95 (+45.2%)
+ Mutation Score (tested) | 92.7% | 89.9% | -2.8%
  Test Count | ~5 | ~9 | +4 tests
 
+### Comments
+- The mutation score and survivor count worsened slightly due to some weirdness with the way mutmut was counting mutants. Even though we killed more mutants, mutmut believed that some mutants that it previously thought were untested were now being tested, thus increasing the total number of tested mutants and survivors. After investigation, it is unclear why mumut is exhibiting this behavior as none of the new tests target or call anything in the particular file where this change occurred.
 ---
 
 ## Lessons Learned
