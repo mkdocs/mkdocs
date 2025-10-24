@@ -22,12 +22,12 @@ This document reports on mutation testing performed on the MkDocs project using 
 
 ```bash
 Total Mutants: 3610
-Killed 🎉: 2698 (74.7%)
-No tests 🫥: 598 (16.6%)
-Survived 🙁: 314 (8.7%)
+Killed 🎉: 2705 (74.9%)
+No tests 🫥: 588 (16.3%)
+Survived 🙁: 317 (8.8%)
 Timeout ⏰: 0 (0%)
 Suspicious 🤔: 0 (0%)
-Mutation Score (tested code): 89.6% (2698 of 3012 tested mutants)
+Mutation Score (tested code): 89.5% (2705 of 3022 tested mutants)
 Speed: 19.44 mutations/second
 ```
 
