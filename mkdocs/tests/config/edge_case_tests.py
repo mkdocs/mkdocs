@@ -66,7 +66,7 @@ class EdgeCaseTests(unittest.TestCase):
         Normal build without reproducible build environment.
         """
         # Ensure SOURCE_DATE_EPOCH is not set
-        with patch.dict(os.environ, {}, clear=True):
+        with patch.dict(os.environ, {"MUTANT_UNDER_TEST": ""}, clear=True):
             with patch('mkdocs.utils.datetime') as mock_datetime:
                 mock_now = MagicMock()
                 mock_datetime.now.return_value = mock_now

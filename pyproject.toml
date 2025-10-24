@@ -233,13 +233,32 @@ ignore = ["E501", "E731"]
 [tool.ruff.flake8-comprehensions]
 allow-dict-calls-with-keyword-arguments = true
 
-[tool.mypy]
-warn_unreachable = true
-no_implicit_optional = true
-show_error_codes = true
-
 [tool.mutmut]
-paths_to_mutate = ["mkdocs/utils/__init__.py"]
-tests_dir = ["courseProjectCode/mutation-testing"]
-also_copy = ["mkdocs/__init__.py", "mkdocs/exceptions.py", "mkdocs/utils/yaml.py", "mkdocs/utils/meta.py", "courseProjectCode/mutation-testing"]
+paths_to_mutate = [
+    "mkdocs/commands/",
+    "mkdocs/contrib/",
+    "mkdocs/livereload/",
+    "mkdocs/structure/",
+    "mkdocs/templates/",
+    "mkdocs/themes/",
+    "mkdocs/utils/",
+    "mkdocs/__main__.py",
+    "mkdocs/exceptions.py",
+    "mkdocs/localization.py",
+    "mkdocs/theme.py"
+]
+also_copy = [
+    "mkdocs/tests/",
+    "mkdocs/__init__.py",
+    "mkdocs/config",
+    "mkdocs/plugins.py",
+    "mkdocs.yml",
+    "docs",
+    "mutmut_pytest.ini"
+]
+tests_dir = ["mkdocs/tests/"]
+do_not_mutate = [
+    "mkdocs/config/",
+    "mkdocs/plugins.py",
+]
 debug = false
