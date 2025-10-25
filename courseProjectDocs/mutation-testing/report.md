@@ -4,7 +4,7 @@ This document reports on mutation testing performed on the MkDocs project using 
 
 ## Overview
 
-**Target Module:** `mkdocs/utils/__init__.py`  
+**Target Modules:** `mkdocs/utils/__init__.py` ,`mkdocs/utils/contrib/search/search_index.py`
 **Tool:** mutmut v3.3.1  
 **Test Framework:** pytest + unittest
 
