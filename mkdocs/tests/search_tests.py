@@ -9,8 +9,7 @@ from mkdocs.contrib import search
 from mkdocs.contrib.search import search_index
 from mkdocs.structure.files import File
 from mkdocs.structure.pages import Page
-from mkdocs.structure.toc import get_toc
-from mkdocs.tests.base import dedent, get_markdown_toc, load_config
+from mkdocs.tests.base import dedent, load_config
 
 
 def strip_whitespace(string):
@@ -283,7 +282,19 @@ class SearchIndexTests(unittest.TestCase):
         parser.close()
 
         self.assertEqual(
-            parser.data, [search_index.ContentSection(text=["TEST"], id_="title", title="Title")]
+            parser.data,
+            [search_index.ContentSection(text=["TEST"], id_="title", title="Title")],
+        )
+
+    def test_content_parser_header_has_child(self):
+        parser = search_index.ContentParser()
+
+        parser.feed('<h1 id="title">Title <span>title</span> TITLE</h1>TEST')
+        parser.close()
+
+        self.assertEqual(
+            parser.data,
+            [search_index.ContentSection(text=["TEST"], id_="title", title="Title title TITLE")],
         )
 
     def test_content_parser_no_id(self):
@@ -293,7 +304,8 @@ class SearchIndexTests(unittest.TestCase):
         parser.close()
 
         self.assertEqual(
-            parser.data, [search_index.ContentSection(text=["TEST"], id_=None, title="Title")]
+            parser.data,
+            [search_index.ContentSection(text=["TEST"], id_=None, title="Title")],
         )
 
     def test_content_parser_content_before_header(self):
@@ -303,7 +315,8 @@ class SearchIndexTests(unittest.TestCase):
         parser.close()
 
         self.assertEqual(
-            parser.data, [search_index.ContentSection(text=["TEST"], id_=None, title="Title")]
+            parser.data,
+            [search_index.ContentSection(text=["TEST"], id_=None, title="Title")],
         )
 
     def test_content_parser_no_sections(self):
@@ -313,30 +326,30 @@ class SearchIndexTests(unittest.TestCase):
 
         self.assertEqual(parser.data, [])
 
-    def test_find_toc_by_id(self):
-        """Test finding the relevant TOC item by the tag ID."""
-        index = search_index.SearchIndex()
+    def test_content_parser_with_permalink(self):
+        parser = search_index.ContentParser()
 
-        md = dedent(
-            """
-            # Heading 1
-            ## Heading 2
-            ### Heading 3
-            """
+        parser.feed(
+            '<h1 id="title">Title<a class="headerlink" href="#title" title="Permanent link">&para;</a></h1>TEST'
         )
-        toc = get_toc(get_markdown_toc(md))
+        parser.close()
 
-        toc_item = index._find_toc_by_id(toc, "heading-1")
-        self.assertEqual(toc_item.url, "#heading-1")
-        self.assertEqual(toc_item.title, "Heading 1")
+        self.assertEqual(
+            parser.data,
+            [search_index.ContentSection(text=["TEST"], id_="title", title="Title")],
+        )
 
-        toc_item2 = index._find_toc_by_id(toc, "heading-2")
-        self.assertEqual(toc_item2.url, "#heading-2")
-        self.assertEqual(toc_item2.title, "Heading 2")
+    def test_content_parser_with_nonpermalink(self):
+        parser = search_index.ContentParser()
 
-        toc_item3 = index._find_toc_by_id(toc, "heading-3")
-        self.assertEqual(toc_item3.url, "#heading-3")
-        self.assertEqual(toc_item3.title, "Heading 3")
+        # Ensure only the whole class name is being matched.
+        parser.feed('<h1 id="title">Title <a class="fooheaderlink" href="#">title</a></h1>TEST')
+        parser.close()
+
+        self.assertEqual(
+            parser.data,
+            [search_index.ContentSection(text=["TEST"], id_="title", title="Title title")],
+        )
 
     def test_create_search_index(self):
         html_content = """
@@ -369,7 +382,6 @@ class SearchIndexTests(unittest.TestCase):
             ### Heading 3
             """
         )
-        toc = get_toc(get_markdown_toc(md))
 
         full_content = ''.join(f"Heading{i}Content{i}" for i in range(1, 4))
 
@@ -379,7 +391,6 @@ class SearchIndexTests(unittest.TestCase):
         for page in pages:
             # Fake page.read_source() and page.render()
             page.markdown = md
-            page.toc = toc
             page.content = html_content
 
             index = search_index.SearchIndex(**plugin.config)
@@ -425,7 +436,6 @@ class SearchIndexTests(unittest.TestCase):
                 ## Heading 2
                 ### Heading 3"""
             )
-            test_page.toc = get_toc(get_markdown_toc(test_page.markdown))
             return test_page
 
         def validate_full(data, page):

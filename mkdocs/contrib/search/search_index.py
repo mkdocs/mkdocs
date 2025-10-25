@@ -10,7 +10,6 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mkdocs.structure.pages import Page
-    from mkdocs.structure.toc import AnchorLink, TableOfContents
 
 try:
     from lunr import lunr  # type: ignore
@@ -20,6 +19,7 @@ except ImportError:
     haslunrpy = False
 
 log = logging.getLogger(__name__)
+WHITESPACE_RE = re.compile(r'\s+')
 
 
 class SearchIndex:
@@ -31,19 +31,6 @@ class SearchIndex:
     def __init__(self, **config) -> None:
         self._entries: list[dict] = []
         self.config = config
-
-    def _find_toc_by_id(self, toc, id_: str | None) -> AnchorLink | None:
-        """
-        Given a table of contents and HTML ID, iterate through
-        and return the matched item in the TOC.
-        """
-        for toc_item in toc:
-            if toc_item.id == id_:
-                return toc_item
-            toc_item_r = self._find_toc_by_id(toc_item.children, id_)
-            if toc_item_r is not None:
-                return toc_item_r
-        return None
 
     def _add_entry(self, title: str | None, text: str, loc: str) -> None:
         """A simple wrapper to add an entry, dropping bad characters."""
@@ -76,21 +63,17 @@ class SearchIndex:
 
         if self.config['indexing'] in ['full', 'sections']:
             for section in parser.data:
-                self.create_entry_for_section(section, page.toc, url)
+                self.create_entry_for_section(section, url)
 
-    def create_entry_for_section(
-        self, section: ContentSection, toc: TableOfContents, abs_url: str
-    ) -> None:
+    def create_entry_for_section(self, section: ContentSection, abs_url: str) -> None:
         """
-        Given a section on the page, the table of contents and
-        the absolute url for the page create an entry in the
-        index.
+        Given a section of a page and the absolute url for the page
+        create an entry in the index.
         """
-        toc_item = self._find_toc_by_id(toc, section.id)
-
-        text = ' '.join(section.text) if self.config['indexing'] == 'full' else ''
-        if toc_item is not None:
-            self._add_entry(title=toc_item.title, text=text, loc=abs_url + toc_item.url)
+        if section.id is not None:
+            text = ' '.join(section.text) if self.config['indexing'] == 'full' else ''
+            title = WHITESPACE_RE.sub(' ', section.title).strip()
+            self._add_entry(title=title, text=text, loc=f'{abs_url}#{section.id}')
 
     def generate_search_index(self) -> str:
         """Python to json conversion."""
@@ -153,10 +136,13 @@ class ContentSection:
     ) -> None:
         self.text = text or []
         self.id = id_
-        self.title = title
+        self.title = title or ''
 
     def __eq__(self, other):
         return self.text == other.text and self.id == other.id and self.title == other.title
+
+    def __repr__(self):
+        return f"{type(self).__name__}(text={self.text!r}, id={self.id!r}, title={self.title!r}"
 
 
 _HEADER_TAGS = tuple(f"h{x}" for x in range(1, 7))
@@ -175,26 +161,37 @@ class ContentParser(HTMLParser):
         self.data: list[ContentSection] = []
         self.section: ContentSection | None = None
         self.is_header_tag = False
+        self.is_permalink = False
         self._stripped_html: list[str] = []
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         """Called at the start of every HTML tag."""
+        # Check for permalink in header
+        if self.is_header_tag and tag == 'a' and len(attrs):
+            atts = dict(attrs)
+            if 'headerlink' in (atts.get('class') or '').split():
+                self.is_permalink = True
+            return
+
         # We only care about the opening tag for headings.
         if tag not in _HEADER_TAGS:
             return
 
         # We are dealing with a new header, create a new section
         # for it and assign the ID if it has one.
+        atts = dict(attrs)
         self.is_header_tag = True
         self.section = ContentSection()
+        self.section.id = atts.get('id')
         self.data.append(self.section)
-
-        for attr in attrs:
-            if attr[0] == "id":
-                self.section.id = attr[1]
 
     def handle_endtag(self, tag: str) -> None:
         """Called at the end of every HTML tag."""
+        # Check for permalinks
+        if self.is_permalink and tag == 'a':
+            self.is_permalink = False
+            return
+
         # We only care about the opening tag for headings.
         if tag not in _HEADER_TAGS:
             return
@@ -203,6 +200,10 @@ class ContentParser(HTMLParser):
 
     def handle_data(self, data: str) -> None:
         """Called for the text contents of each tag."""
+        # Do not retain permalink text.
+        if self.is_permalink:
+            return
+
         self._stripped_html.append(data)
 
         if self.section is None:
@@ -212,12 +213,13 @@ class ContentParser(HTMLParser):
             # overall page entry in the search. So just skip it.
             return
 
-        # If this is a header, then the data is the title.
-        # Otherwise it is content of something under that header
-        # section.
         if self.is_header_tag:
-            self.section.title = data
+            # Write text data to title, being sure not to overwrite
+            # text from previous children of heading. Text data
+            # retains its whitespace and so none is added here.
+            self.section.title += data
         else:
+            # Write text data for elements under a heading section.
             self.section.text.append(data.rstrip('\n'))
 
     @property
