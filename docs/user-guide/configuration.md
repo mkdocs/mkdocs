@@ -290,6 +290,22 @@ server root and effectively points to `https://example.com/bugs/`. Of course, th
 **default**: By default `nav` will contain an alphanumerically sorted, nested
 list of all the Markdown files found within the `docs_dir` and its
 sub-directories. Index files will always be listed first within a sub-section.
+If a sub-directory contains an index file, the title of the section for the
+sub-directory is set to the title of the index page. Hereby, the title from
+the meta-data of the index page is preferred to the page title from the
+markdown content.
+
+### smart_section_titles
+
+In case `nav` is not configured, mkdocs will name the sections based on the directory
+name of the sub-directories. By setting `smart_section_titles` to `true`, the name of
+the section title is determined by the following logic:
+
+1.  If no index page is found inside the sub-directory, use the directory name
+2.  If an index page is found inside the sub-directory and it's metadata contains
+    a title information, use the title from the metadata
+3.  If an index page is found but the title is not set in the metadata or no metadata
+    is supplied, use the title of the index page
 
 ### exclude_docs
 
