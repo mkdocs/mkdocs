@@ -6,7 +6,7 @@ This document reports on mutation testing performed on the MkDocs project using 
 
 **Target Module:** `mkdocs/utils/__init__.py`  
 **Tool:** mutmut v3.3.1  
-**Test Framework:** unittest  
+**Test Framework:** pytest + unittest
 
 > **Setup Instructions:** For detailed setup and execution instructions, see [`mutation-testing/README.md`](../courseProjectCode/mutation-testing/README.md)
 
