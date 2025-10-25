@@ -1,7 +1,7 @@
 # 🧬 Mutation Testing
 
-**Target Module:** `mkdocs/utils/__init__.py`  
-**Test File:** `tests/test_utils_mutations.py`  
+**Target Modules:** `mkdocs/utils/__init__.py`, `mkdocs/utils/contrib/search/search_index.py`  
+**Test Files:** `courseProjectCode/mutation-testing/test_utils_mutations.py` , `courseProjectCode/mutation-testing/test_utils_mutations.py`,`courseProjectCode/mutation-testing/test_content_section_eq.py`
 **Configuration:** Defined in `pyproject.toml` under [tool.mutmut]  
 
 ## Workflow

@@ -4,9 +4,9 @@ This document reports on mutation testing performed on the MkDocs project using 
 
 ## Overview
 
-**Target Module:** `mkdocs/utils/__init__.py`  
+**Target Modules:** `mkdocs/utils/__init__.py` ,`mkdocs/utils/contrib/search/search_index.py`
 **Tool:** mutmut v3.3.1  
-**Test Framework:** unittest  
+**Test Framework:** pytest + unittest
 
 > **Setup Instructions:** For detailed setup and execution instructions, see [`mutation-testing/README.md`](../courseProjectCode/mutation-testing/README.md)
 
@@ -111,8 +111,8 @@ Speed: 22.76 mutations/second
  Member | Task/Contribution | Notes  
 --------|------------------  
  AJ Barea | Mutation testing setup, pyproject.toml configuration, test implementation, and documentation | Killed 6 mutants  
- Connor | - |
- Kemoy | - |
+ Connor | |
+| Kemoy | configured the `pyproject.toml` to target individual tests as not all can run under mutmut due to compatibilities<br>added `mutmut_pytest.ini` to override the pytest configuration and troubleshoot compatibility-breaking tests<br>communicated with team members and documented findings regarding mutmut behaviors and issues<br>wrote `test_utils_get_build_time_mutations.py` to kill surviving mutant tests<br>fixed `mkdocs/tests/edge_case_tests.py` breaking/failing test caused by mutmut modifying `os.environ` but not resetting it<br>discovered Generic/ABC issues with mutmut | Improved mutmut compatibility, documented configuration issues, created mutation tests to kill surviving mutants, resolved environment-related test failures, and identified framework-level compatibility problems |
 
 ---
 
@@ -122,5 +122,5 @@ Speed: 22.76 mutations/second
 - **Setup Guide:** [`courseProjectCode/mutation-testing/README.md`](../courseProjectCode/mutation-testing/README.md)
 - **Mutmut GitHub:** <https://github.com/boxed/mutmut/>
 - **Mutmut Documentation:** <https://mutmut.readthedocs.io/>
-- **What is Mutation Testing?** <https://en.wikipedia.org/wiki/Mutation_testing>
+- **What is Mutation Testing?** <https://en.wikipedia.org/wiki/Mutation_testing> <https://kodare.net/2016/12/01/mutmut-a-python-mutation-testing-system.html>
 - **Mutation Testing Best Practices** <https://medium.com/hackernoon/mutmut-a-python-mutation-testing-system-9b9639356c78>
