@@ -207,10 +207,16 @@ def _build_page(
         context = get_context(nav, doc_files, config, page)
 
         # Allow 'template:' override in md source files.
-        template = env.get_template(page.meta.get('template', 'main.html'))
+        template_file = page.meta.get('template', 'main.html')
+        template = env.get_template(template_file)
 
         # Run `page_context` plugin events.
         context = config.plugins.on_page_context(context, page=page, config=config, nav=nav)
+
+        # Run `page_template`
+        template = config.plugins.on_page_template(
+            template, template_file=template_file, page=page, config=config, nav=nav
+        )
 
         if excluded:
             page.content = (
