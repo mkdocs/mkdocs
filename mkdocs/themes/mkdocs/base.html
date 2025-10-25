@@ -114,37 +114,24 @@
                         {%- if 'search' in config.plugins %}
                         <li class="nav-item">
                             <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
-                                <i class="fa fa-search"></i> {% trans %}Search{% endtrans %}
+                                <i class="fa fa-search"></i><span class="d-lg-none ms-2">Search</span>
                             </a>
                         </li>
                         {%- endif %}
                       {%- endblock %}
 
-                      {%- block next_prev %}
-                        {%- if page and (page.next_page or page.previous_page) %}
-                            <li class="nav-item">
-                                <a rel="prev" {% if page.previous_page %}href="{{ page.previous_page.url|url }}" class="nav-link"{% else %}class="nav-link disabled"{% endif %}>
-                                    <i class="fa fa-arrow-left"></i> {% trans %}Previous{% endtrans %}
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a rel="next" {% if page.next_page %}href="{{ page.next_page.url|url }}" class="nav-link"{% else %}class="nav-link disabled"{% endif %}>
-                                    {% trans %}Next{% endtrans %} <i class="fa fa-arrow-right"></i>
-                                </a>
-                            </li>
-                        {%- endif %}
-                      {%- endblock %}
+                      {%- block next_prev %}{%- endblock %}
 
                       {%- block repo %}
                         {%- if page and page.edit_url %}
                             <li class="nav-item">
                                 <a href="{{ page.edit_url }}" class="nav-link">
                                     {%- if config.repo_name == 'GitHub' -%}
-                                        <i class="fa-brands fa-github"></i> {% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}
+                                        <i class="fa-brands fa-github"></i><span class="d-lg-none ms-2">{% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}</span>
                                     {%- elif config.repo_name == 'Bitbucket' -%}
-                                        <i class="fa-brands fa-bitbucket"></i> {% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}
+                                        <i class="fa-brands fa-bitbucket"></i><span class="d-lg-none ms-2">{% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}</span>
                                     {%- elif config.repo_name == 'GitLab' -%}
-                                        <i class="fa-brands fa-gitlab"></i> {% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}
+                                        <i class="fa-brands fa-gitlab"></i><span class="d-lg-none ms-2">{% trans repo_name=config.repo_name %}Edit on {{ repo_name }}{% endtrans %}</span>
                                     {%- elif config.repo_name -%}
                                         {% trans repo_name=config.repo_name%}Edit on {{ repo_name }}{% endtrans %}
                                     {% else %}
@@ -171,8 +158,7 @@
                       {%- if config.theme.user_color_mode_toggle %}
                             <li class="nav-item dropdown">
                               <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
-                                <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
-                                <span class="d-lg-none ms-2">Toggle theme</span>
+                                <i class="fa-solid fa-circle-half-stroke fa-fw"></i><span class="d-lg-none ms-2">Toggle theme</span>
                               </button>
                               <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
