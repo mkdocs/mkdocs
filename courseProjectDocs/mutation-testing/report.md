@@ -109,9 +109,9 @@ Speed: 22.76 mutations/second
 ## Team Contributions
 
  Member | Task/Contribution | Notes  
---------|------------------  
+--------|------------------|-------- 
  AJ Barea | Mutation testing setup, pyproject.toml configuration, test implementation, and documentation | Killed 6 mutants  
- Connor | |
+ Connor | Increased the number of tests that mutmut would run, wrote tests to kill 2 mutants, got mutmut running with hatch, and updated documentation | Ran into a weird issue with mutmut counting mutants differently after adding tests. Not sure why this happened. Researched but couldn't find a cause or solution.
 | Kemoy | configured the `pyproject.toml` to target individual tests as not all can run under mutmut due to compatibilities<br>added `mutmut_pytest.ini` to override the pytest configuration and troubleshoot compatibility-breaking tests<br>communicated with team members and documented findings regarding mutmut behaviors and issues<br>wrote `test_utils_get_build_time_mutations.py` to kill surviving mutant tests<br>fixed `mkdocs/tests/edge_case_tests.py` breaking/failing test caused by mutmut modifying `os.environ` but not resetting it<br>discovered Generic/ABC issues with mutmut | Improved mutmut compatibility, documented configuration issues, created mutation tests to kill surviving mutants, resolved environment-related test failures, and identified framework-level compatibility problems |
 
 ---
