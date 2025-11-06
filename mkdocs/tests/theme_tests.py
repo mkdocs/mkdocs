@@ -71,7 +71,7 @@ class ThemeTests(unittest.TestCase):
     def test_vars(self):
         theme = Theme(name='mkdocs', foo='bar', baz=True)
         self.assertEqual(theme['foo'], 'bar')
-        self.assertEqual(theme['baz'], True)
+        self.assertTrue(theme['baz'])
         self.assertTrue('new' not in theme)
         with self.assertRaises(KeyError):
             theme['new']
