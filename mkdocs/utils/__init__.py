@@ -4,6 +4,7 @@ Standalone file utils.
 Nothing in this module should have an knowledge of config or the layout
 and structure of the site and pages in the site.
 """
+
 from __future__ import annotations
 
 import functools
@@ -375,6 +376,13 @@ class CountHandler(logging.NullHandler):
         super().__init__(**kwargs)
 
     def handle(self, record):
+        # Only count messages originating from the mkdocs package. The
+        # CountHandler is attached to the root logger so it sees all
+        # messages; restrict counting to avoid unrelated external warnings
+        # affecting strict mode behavior.
+        if not record.name.startswith('mkdocs'):
+            return False
+
         rv = self.filter(record)
         if rv:
             # Use levelno for keys so they can be sorted later

@@ -248,13 +248,17 @@ def _build_page(
 
 def build(config: MkDocsConfig, *, serve_url: str | None = None, dirty: bool = False) -> None:
     """Perform a full site build."""
-    logger = logging.getLogger('mkdocs')
+    # Use the root logger for the warning counter so it sees messages even when
+    # command-line options (like -v) change the configuration of the package
+    # logger (which may affect propagation/handlers). The counter is only used
+    # for strict mode checks below.
+    root_logger = logging.getLogger()
 
     # Add CountHandler for strict mode
     warning_counter = utils.CountHandler()
     warning_counter.setLevel(logging.WARNING)
     if config.strict:
-        logging.getLogger('mkdocs').addHandler(warning_counter)
+        root_logger.addHandler(warning_counter)
 
     inclusion = InclusionLevel.is_in_serve if serve_url else InclusionLevel.is_included
 
@@ -361,7 +365,7 @@ def build(config: MkDocsConfig, *, serve_url: str | None = None, dirty: bool = F
         raise
 
     finally:
-        logger.removeHandler(warning_counter)
+        root_logger.removeHandler(warning_counter)
 
 
 def site_directory_contains_stale_files(site_directory: str) -> bool:
