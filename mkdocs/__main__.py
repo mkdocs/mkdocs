@@ -343,7 +343,9 @@ def get_deps_command(config_file, projects_file):
 
     warning_counter = utils.CountHandler()
     warning_counter.setLevel(logging.WARNING)
-    logging.getLogger('mkdocs').addHandler(warning_counter)
+    # Attach to the root logger so the counter sees all messages regardless
+    # of package logger configuration done by CLI options (e.g. -v/-q).
+    logging.getLogger().addHandler(warning_counter)
 
     with get_projects_file(projects_file) as p:
         with _open_config_file(config_file) as f:
