@@ -94,7 +94,7 @@ class State:
     def __init__(self, log_name='mkdocs', level=logging.INFO):
         self.logger = logging.getLogger(log_name)
         self.logger.setLevel(level)
-        self.logger.propagate = False
+        # self.logger.propagate = False
 
         self.stream = logging.StreamHandler()
         self.stream.setFormatter(ColorFormatter())
