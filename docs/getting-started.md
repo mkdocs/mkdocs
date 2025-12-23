@@ -54,7 +54,12 @@ home page being displayed:
 
 The dev-server also supports auto-reloading, and will rebuild your documentation
 whenever anything in the configuration file, documentation directory, or theme
-directory changes.
+directory changes. 
+
+If auto-reloading not works out of the box try to run dev server with --livereload option:
+```
+mkdocs serve --livereload
+```
 
 Open the `docs/index.md` document in your text editor of choice, change the
 initial heading to `MkLorum`, and save your changes. Your browser will
