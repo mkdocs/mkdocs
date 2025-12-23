@@ -52,6 +52,9 @@ home page being displayed:
 
 ![The MkDocs live server](img/screenshot.png)
 
+To use a different port (e.g. 8001), run:
+`mkdocs serve -a 127.0.0.1:8001`
+
 The dev-server also supports auto-reloading, and will rebuild your documentation
 whenever anything in the configuration file, documentation directory, or theme
 directory changes.
