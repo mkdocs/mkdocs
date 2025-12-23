@@ -146,5 +146,5 @@ def yaml_load(source: IO | str, loader: type[yaml.BaseLoader] | None = None) -> 
         log.debug(f"Loading inherited configuration file: {abspath}")
         with open(abspath, 'rb') as fd:
             parent = yaml_load(fd, loader)
-        result = mergedeep.merge(parent, result)
+        result = mergedeep.merge(parent, result, strategy=mergedeep.Strategy.ADDITIVE)
     return result
