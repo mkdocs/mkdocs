@@ -1,6 +1,7 @@
 # MkDocs
 
 > *Project documentation with Markdown*
+<!-- Documentation consistency note -->
 
 [![PyPI Version][pypi-v-image]][pypi-v-link]
 [![Build Status][GHAction-image]][GHAction-link]
