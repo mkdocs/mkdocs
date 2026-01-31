@@ -36,7 +36,7 @@ class ConfigBaseTests(unittest.TestCase):
         errors, warnings = conf.validate()
 
         self.assertEqual(
-            errors, [('site_name', ValidationError('Required configuration not provided.'))]
+            errors, [('site_name', ValidationError('Required configuration not provided. Missing key: site_name. Example: site_name: Example. See https://www.mkdocs.org/user-guide/configuration/#site_name'))]
         )
         self.assertEqual(warnings, [])
 
@@ -137,7 +137,7 @@ class ConfigBaseTests(unittest.TestCase):
                 base.load_config(config_file=config_file.name)
         self.assertEqual(
             '\n'.join(cm.output),
-            "ERROR:mkdocs.config:Config value 'site_name': Required configuration not provided.",
+            "ERROR:mkdocs.config:Config value 'site_name': Required configuration not provided. Missing key: site_name. Example: site_name: Example. See https://www.mkdocs.org/user-guide/configuration/#site_name",
         )
 
     def test_pre_validation_error(self):

@@ -8,11 +8,18 @@ from unittest import mock
 from click.testing import CliRunner
 
 from mkdocs import __main__ as cli
+from mkdocs import __version__
 
 
 class CLITests(unittest.TestCase):
     def setUp(self):
         self.runner = CliRunner()
+
+    def test_version(self):
+        result = self.runner.invoke(cli.cli, ["--version"], catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.output.strip(), __version__)
 
     @mock.patch('mkdocs.commands.serve.serve', autospec=True)
     def test_serve_default(self, mock_serve):
