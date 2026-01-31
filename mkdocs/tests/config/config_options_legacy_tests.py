@@ -63,7 +63,7 @@ class OptionallyRequiredTest(TestCase):
         class Schema:
             option = c.OptionallyRequired(required=True)
 
-        with self.expect_error(option="Required configuration not provided."):
+        with self.expect_error(option="Required configuration not provided. Missing key: option. Example: option: Example. See https://www.mkdocs.org/user-guide/configuration/#option"):
             self.get_config(Schema, {'option': None})
 
         self.assertEqual(Schema.option.required, True)
@@ -439,7 +439,7 @@ class URLTest(TestCase):
         class Schema:
             option = c.URL(required=True)
 
-        with self.expect_error(option="Required configuration not provided."):
+        with self.expect_error(option="Required configuration not provided. Missing key: option. Example: option: Example. See https://www.mkdocs.org/user-guide/configuration/#option"):
             self.get_config(Schema, {'option': None})
 
         for url in "www.mkdocs.org", "//mkdocs.org/test", "http:/mkdocs.org/", "/hello/":
@@ -624,10 +624,10 @@ class ListOfItemsTest(TestCase):
         class Schema:
             option = c.ListOfItems(c.Type(str))
 
-        with self.expect_error(option="Required configuration not provided."):
+        with self.expect_error(option="Required configuration not provided. Missing key: option. Example: option: Example. See https://www.mkdocs.org/user-guide/configuration/#option"):
             conf = self.get_config(Schema, {})
 
-        with self.expect_error(option="Required configuration not provided."):
+        with self.expect_error(option="Required configuration not provided. Missing key: option. Example: option: Example. See https://www.mkdocs.org/user-guide/configuration/#option"):
             conf = self.get_config(Schema, {'option': None})
 
         conf = self.get_config(Schema, {'option': ['foo']})
@@ -1321,10 +1321,10 @@ class ConfigItemsTest(TestCase):
                 )
             )
 
-        with self.expect_error(sub="Required configuration not provided."):
+        with self.expect_error(sub="Required configuration not provided. Missing key: sub. Example: sub: Example. See https://www.mkdocs.org/user-guide/configuration/#sub"):
             conf = self.get_config(Schema, {})
 
-        with self.expect_error(sub="Required configuration not provided."):
+        with self.expect_error(sub="Required configuration not provided. Missing key: sub. Example: sub: Example. See https://www.mkdocs.org/user-guide/configuration/#sub"):
             conf = self.get_config(Schema, {'sub': None})
 
         with self.expect_error(

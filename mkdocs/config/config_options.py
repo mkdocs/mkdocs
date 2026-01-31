@@ -49,6 +49,26 @@ SomeConfig = TypeVar('SomeConfig', bound=Config)
 log = logging.getLogger(__name__)
 
 
+def _required_config_error_message(option, key_fallback="value"):
+    missing_key = (
+        getattr(option, "_name", None)
+        or getattr(option, "_key_name", None)
+        or key_fallback
+    )
+    example = f"{missing_key}: Example"
+    docs_url = (
+        "https://www.mkdocs.org/user-guide/configuration/#"
+        f"{missing_key}"
+    )
+    return (
+        "Required configuration not provided. "
+        f"Missing key: {missing_key}. "
+        f"Example: {example}. "
+        f"See {docs_url}"
+    )
+
+
+
 class SubConfig(Generic[SomeConfig], BaseConfigOption[SomeConfig]):
     """
     Subconfig Config Option.
@@ -181,7 +201,7 @@ class OptionallyRequired(Generic[T], BaseConfigOption[T]):
             elif not self.required:
                 return None
             elif self.required:
-                raise ValidationError("Required configuration not provided.")
+                raise ValidationError(_required_config_error_message(self))
 
         return self.run_validation(value)
 
@@ -211,7 +231,7 @@ class ListOfItems(Generic[T], BaseConfigOption[List[T]]):
     def run_validation(self, value: object) -> list[T]:
         if value is None:
             if self.required or self.default is None:
-                raise ValidationError("Required configuration not provided.")
+                raise ValidationError(_required_config_error_message(self))
             value = self.default
         if not isinstance(value, list):
             raise ValidationError(f'Expected a list of items, but a {type(value)} was given.')
@@ -266,7 +286,7 @@ class DictOfItems(Generic[T], BaseConfigOption[Dict[str, T]]):
     def run_validation(self, value: object) -> dict[str, T]:
         if value is None:
             if self.required or self.default is None:
-                raise ValidationError("Required configuration not provided.")
+                raise ValidationError(_required_config_error_message(self))
             value = self.default
         if not isinstance(value, dict):
             raise ValidationError(f"Expected a dict of items, but a {type(value)} was given.")

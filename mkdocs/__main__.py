@@ -232,9 +232,7 @@ common_config_options = add_options(
     ),
 )
 
-PYTHON_VERSION = f"{sys.version_info.major}.{sys.version_info.minor}"
 
-PKG_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 @click.group(context_settings=dict(help_option_names=['-h', '--help'], max_content_width=120))
@@ -242,7 +240,7 @@ PKG_DIR = os.path.dirname(os.path.abspath(__file__))
     __version__,
     '-V',
     '--version',
-    message=f'%(prog)s, version %(version)s from { PKG_DIR } (Python { PYTHON_VERSION })',
+    message='%(version)s',
 )
 @common_options
 @color_option

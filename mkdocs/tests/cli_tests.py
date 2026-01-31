@@ -8,13 +8,19 @@ from unittest import mock
 from click.testing import CliRunner
 
 from mkdocs import __main__ as cli
+from mkdocs import __version__
 
 
 class CLITests(unittest.TestCase):
     def setUp(self):
         self.runner = CliRunner()
 
-    @mock.patch('mkdocs.commands.serve.serve', autospec=True)
+    def test_version(self):
+        result = self.runner.invoke(cli.cli, ["--version"], catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.output.strip(), __version__)
+
     def test_serve_default(self, mock_serve):
         result = self.runner.invoke(cli.cli, ["serve"], catch_exceptions=False)
 
@@ -32,7 +38,6 @@ class CLITests(unittest.TestCase):
             watch=(),
         )
 
-    @mock.patch('mkdocs.commands.serve.serve', autospec=True)
     def test_serve_config_file(self, mock_serve):
         result = self.runner.invoke(
             cli.cli, ["serve", "--config-file", "mkdocs.yml"], catch_exceptions=False
@@ -45,7 +50,6 @@ class CLITests(unittest.TestCase):
         self.assertIsInstance(kwargs['config_file'], io.BufferedReader)
         self.assertEqual(kwargs['config_file'].name, 'mkdocs.yml')
 
-    @mock.patch('mkdocs.commands.serve.serve', autospec=True)
     def test_serve_dev_addr(self, mock_serve):
         result = self.runner.invoke(
             cli.cli, ["serve", '--dev-addr', '0.0.0.0:80'], catch_exceptions=False
@@ -65,7 +69,6 @@ class CLITests(unittest.TestCase):
             watch=(),
         )
 
-    @mock.patch('mkdocs.commands.serve.serve', autospec=True)
     def test_serve_strict(self, mock_serve):
         result = self.runner.invoke(cli.cli, ["serve", '--strict'], catch_exceptions=False)
 
@@ -83,7 +86,6 @@ class CLITests(unittest.TestCase):
             watch=(),
         )
 
-    @mock.patch('mkdocs.commands.serve.serve', autospec=True)
     def test_serve_theme(self, mock_serve):
         result = self.runner.invoke(
             cli.cli, ["serve", '--theme', 'readthedocs'], catch_exceptions=False
@@ -103,7 +105,6 @@ class CLITests(unittest.TestCase):
             watch=(),
         )
 
-    @mock.patch('mkdocs.commands.serve.serve', autospec=True)
     def test_serve_use_directory_urls(self, mock_serve):
         result = self.runner.invoke(
             cli.cli, ["serve", '--use-directory-urls'], catch_exceptions=False
@@ -123,7 +124,6 @@ class CLITests(unittest.TestCase):
             watch=(),
         )
 
-    @mock.patch('mkdocs.commands.serve.serve', autospec=True)
     def test_serve_no_directory_urls(self, mock_serve):
         result = self.runner.invoke(
             cli.cli, ["serve", '--no-directory-urls'], catch_exceptions=False
@@ -143,7 +143,6 @@ class CLITests(unittest.TestCase):
             watch=(),
         )
 
-    @mock.patch('mkdocs.commands.serve.serve', autospec=True)
     def test_serve_livereload(self, mock_serve):
         result = self.runner.invoke(cli.cli, ["serve", '--livereload'], catch_exceptions=False)
 
@@ -161,7 +160,6 @@ class CLITests(unittest.TestCase):
             watch=(),
         )
 
-    @mock.patch('mkdocs.commands.serve.serve', autospec=True)
     def test_serve_no_livereload(self, mock_serve):
         result = self.runner.invoke(cli.cli, ["serve", '--no-livereload'], catch_exceptions=False)
 
@@ -179,7 +177,6 @@ class CLITests(unittest.TestCase):
             watch=(),
         )
 
-    @mock.patch('mkdocs.commands.serve.serve', autospec=True)
     def test_serve_dirtyreload(self, mock_serve):
         result = self.runner.invoke(cli.cli, ["serve", '--dirty'], catch_exceptions=False)
 
@@ -197,7 +194,6 @@ class CLITests(unittest.TestCase):
             watch=(),
         )
 
-    @mock.patch('mkdocs.commands.serve.serve', autospec=True)
     def test_serve_watch_theme(self, mock_serve):
         result = self.runner.invoke(cli.cli, ["serve", '--watch-theme'], catch_exceptions=False)
 

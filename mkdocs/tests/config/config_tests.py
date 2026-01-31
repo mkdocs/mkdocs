@@ -23,7 +23,7 @@ class ConfigTests(unittest.TestCase):
         conf.load_dict({})
         errors, warnings = conf.validate()
         self.assertEqual(
-            errors, [('site_name', ValidationError("Required configuration not provided."))]
+            errors, [('site_name', ValidationError("Required configuration not provided. Missing key: site_name. Example: site_name: Example. See https://www.mkdocs.org/user-guide/configuration/#site_name"))]
         )
         self.assertEqual(warnings, [])
 
