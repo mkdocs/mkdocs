@@ -288,8 +288,7 @@ class Page(StructureItem):
         self.present_anchor_ids = (
             extract_anchors_ext.present_anchor_ids | raw_html_ext.present_anchor_ids
         )
-        if log.getEffectiveLevel() > logging.DEBUG:
-            self.links_to_anchors = relative_path_ext.links_to_anchors
+        self.links_to_anchors = relative_path_ext.links_to_anchors
 
     present_anchor_ids: set[str] | None = None
     """Anchor IDs that this page contains (can be linked to in this page)."""
