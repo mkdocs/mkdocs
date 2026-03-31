@@ -33,6 +33,14 @@ def serve(
     By default it will serve the documentation on http://localhost:8000/ and
     it will rebuild the documentation and refresh the page automatically
     whenever a file is edited.
+
+    Common errors when invoking `mkdocs serve` include port binding failures,
+    typically reported as an “address already in use” message. Resolve those by
+    supplying a different port via `--dev-addr`, for example
+    `mkdocs serve --dev-addr 127.0.0.1:8001`. You may also encounter firewall
+    rules that block the server; confirm the chosen port is open by using tools
+    such as `netstat`, `ss`, or `lsof`, and adjust the firewall configuration if
+    needed.
     """
     # Create a temporary build directory, and set some options to serve it
     site_dir = tempfile.mkdtemp(prefix='mkdocs_')
