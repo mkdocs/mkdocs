@@ -107,7 +107,7 @@ def serve(
                 server.watch(item)
 
         try:
-            server.serve(open_in_browser=open_in_browser)
+            server.serve(open_in_browser=open_in_browser, dev_addr=config.dev_addr)
         except KeyboardInterrupt:
             log.info("Shutting down...")
         finally:
