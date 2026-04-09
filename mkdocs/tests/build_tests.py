@@ -385,6 +385,26 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             "ERROR:mkdocs.commands.build:Error reading page 'index.md':",
         )
 
+    @tempdir(files={'index.md': '[click here](http://[::1)\n'})
+    @tempdir()
+    def test_build_warns_and_continues_on_invalid_link_url(self, site_dir, docs_dir):
+        # Regression for mkdocs/mkdocs#3939: a single markdown link with a
+        # malformed URL (e.g. an unterminated IPv6 literal) used to crash
+        # the entire build with `ValueError: Invalid IPv6 URL`. Per the
+        # maintainer's direction on the issue, mkdocs should now log a
+        # warning that names the file and the offending URL and keep
+        # building.
+        cfg = load_config(docs_dir=docs_dir, site_dir=site_dir, nav=['index.md'])
+        with self.assertLogs('mkdocs', level='WARNING') as cm:
+            build.build(cfg)
+        warning_messages = [r.getMessage() for r in cm.records if r.levelname == 'WARNING']
+        self.assertTrue(
+            any("'index.md'" in m and 'http://[::1' in m for m in warning_messages),
+            f"Expected a warning naming index.md and the bad URL, got: {warning_messages}",
+        )
+        # The page was still produced.
+        self.assertPathIsFile(site_dir, 'index.html')
+
     # Test build._build_page
 
     @tempdir()
