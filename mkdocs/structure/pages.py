@@ -417,7 +417,20 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
                     tried.add(guess)
 
     def path_to_url(self, url: str) -> str:
-        scheme, netloc, path, query, anchor = urlsplit(url)
+        try:
+            scheme, netloc, path, query, anchor = urlsplit(url)
+        except ValueError as e:
+            # The URL parser raised on a malformed link target — for example
+            # `[click here](http://[::1)`. Per mkdocs#3939, a single bad
+            # link should not crash the entire build. Log a warning that
+            # mentions the file and the offending URL, then leave the link
+            # text untouched in the rendered HTML so the rest of the page
+            # still builds.
+            log.warning(
+                f"Doc file '{self.file.src_uri}' contains an invalid URL '{url}': {e}. "
+                "The link is being left unchanged."
+            )
+            return url
 
         absolute_link = None
         warning_level, warning = 0, ''
