@@ -323,7 +323,7 @@ details h4, details h5, details h6 {
     border-color: transparent;
     border-style: solid;
     border-width: 5px 0 5px 5px;
-    border-left-color: var(--bs-dropdown-link-active-color);
+    border-left-color: var(--bs-dropdown-link-color);
     margin-top: 5px;
     margin-right: -10px;
 }
