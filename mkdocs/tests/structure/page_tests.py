@@ -9,7 +9,7 @@ from unittest import mock
 import markdown
 
 from mkdocs.config.defaults import MkDocsConfig
-from mkdocs.structure.files import File, Files
+from mkdocs.structure.files import File, Files, InclusionLevel
 from mkdocs.structure.pages import Page, _ExtractTitleTreeprocessor, _RelativePathTreeprocessor
 from mkdocs.tests.base import dedent, tempdir
 
@@ -1239,6 +1239,31 @@ class RelativePathExtensionTests(unittest.TestCase):
             ),
             '<a href="mail@example.com">contact</a>',
         )
+
+    def test_link_to_excluded_page_respects_not_found_level(self):
+        # Included page linking to an excluded page must use the configured
+        # not_found level; it should NOT be silently capped to INFO.
+        for level, expected_levelname in [('warn', 'WARNING'), ('info', 'INFO')]:
+            with self.subTest(level=level):
+                cfg = load_config(validation=dict(links=dict(not_found=level)))
+                fs = [
+                    File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
+                    File('excluded.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
+                ]
+                fs[1].inclusion = InclusionLevel.EXCLUDED
+                pg = Page('Foo', fs[0], cfg)
+                with mock.patch(
+                    'mkdocs.structure.files.open', mock.mock_open(read_data='[link](excluded.md)')
+                ):
+                    pg.read_source(cfg)
+                with self.assertLogs('mkdocs.structure.pages') as cm:
+                    pg.render(cfg, Files(fs))
+                msgs = [f'{r.levelname}:{r.message}' for r in cm.records]
+                self.assertEqual(
+                    '\n'.join(msgs),
+                    f"{expected_levelname}:Doc file 'index.md' contains a link to"
+                    " 'excluded.md' which is excluded from the built site.",
+                )
 
     def test_possible_target_uris(self):
         def test(paths, expected='', exp_true=None, exp_false=None):
