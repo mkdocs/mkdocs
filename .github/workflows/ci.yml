@@ -9,10 +9,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12', 'pypy-3.9-v7.x']
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12', 'pypy3.11']
         os: [ubuntu-latest, windows-latest, macos-latest]
         include:
-          - python-version: pypy-3.9-v7.x
+          - python-version: pypy3.11
             py: pypy3
         # Just to slim down the test matrix:
         exclude:
@@ -35,7 +35,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade hatch
+          python -m pip install --upgrade "hatch<1.10"
       - name: Run tests
         run: |
           hatch run +py=${{ matrix.py || matrix.python-version }} test:with-coverage

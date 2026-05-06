@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import contextlib
 import io
+import logging
 import os.path
 import re
 import textwrap
@@ -15,7 +16,7 @@ import markdown.preprocessors
 
 from mkdocs.commands import build
 from mkdocs.config import base
-from mkdocs.exceptions import PluginError
+from mkdocs.exceptions import Abort, PluginError
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.nav import get_navigation
 from mkdocs.structure.pages import Page
@@ -739,6 +740,29 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         '''
         with self._assert_build_logs(expected_logs):
             build.build(cfg)
+
+    @tempdir(
+        files={
+            'test/foo.md': '[bar](bar.md#missing)',
+            'test/bar.md': '## heading',
+        }
+    )
+    @tempdir()
+    def test_anchor_strict_warning_with_verbose_logging(self, site_dir, docs_dir):
+        cfg = load_config(
+            docs_dir=docs_dir,
+            site_dir=site_dir,
+            strict=True,
+            validation={'anchors': 'warn'},
+        )
+        mkdocs_logger = logging.getLogger('mkdocs')
+        old_level = mkdocs_logger.level
+        mkdocs_logger.setLevel(logging.DEBUG)
+        try:
+            with self.assertRaisesRegex(Abort, 'Aborted with 1 warnings in strict mode!'):
+                build.build(cfg)
+        finally:
+            mkdocs_logger.setLevel(old_level)
 
     @tempdir(
         files={
