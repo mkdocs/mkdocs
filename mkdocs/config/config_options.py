@@ -759,15 +759,15 @@ class ListOfPaths(ListOfItems[str]):
     """
 
     @overload
-    def __init__(self, default=[]):
+    def __init__(self, default: list | None = None):
         ...
 
     @overload
-    def __init__(self, default=[], *, required: bool):
+    def __init__(self, default: list | None = None, *, required: bool):
         ...
 
-    def __init__(self, default=[], required=None) -> None:
-        super().__init__(FilesystemObject(exists=True), default)
+    def __init__(self, default: list | None = None, required=None) -> None:
+        super().__init__(FilesystemObject(exists=True), default if default is not None else [])
         self.required = required
 
 
