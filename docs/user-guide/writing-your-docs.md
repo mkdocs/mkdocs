@@ -453,7 +453,7 @@ line of a document must not be blank.
 
 NOTE:
 MkDocs does not support YAML style delimiters (`---` or `...`) for
-MultiMarkdown style meta-data. In fact, MkDocs relies on the the presence or
+MultiMarkdown style meta-data. In fact, MkDocs relies on the presence or
 absence of the delimiters to determine whether YAML style meta-data or
 MultiMarkdown style meta-data is being used. If the delimiters are
 detected, but the content between the delimiters is not valid YAML
