@@ -7,11 +7,13 @@ var data;
 
 function getScript(script, callback) {
   console.log('Loading script: ' + script);
-  $.getScript(base_path + script).done(function () {
-    callback();
-  }).fail(function (jqxhr, settings, exception) {
-    console.log('Error: ' + exception);
-  });
+  var scriptElement = document.createElement('script');
+  scriptElement.src = base_path + script;
+  scriptElement.onload = callback;
+  scriptElement.onerror = function () {
+    console.log('Error loading script: ' + script);
+  };
+  (document.head || document.getElementsByTagName('head')[0]).appendChild(scriptElement);
 }
 
 function getScriptsInOrder(scripts, callback) {

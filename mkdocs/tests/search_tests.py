@@ -276,6 +276,8 @@ class SearchTemplateTests(unittest.TestCase):
         main_js = (SEARCH_TEMPLATES_DIR / 'main.js').read_text(encoding='utf-8')
 
         self.assertNotIn('window.postMessage =', main_js)
+        self.assertNotIn('$.getScript', main_js)
+        self.assertIn("document.createElement('script')", main_js)
 
     def test_search_worker_routes_fallback_messages_without_post_message(self):
         worker_js = (SEARCH_TEMPLATES_DIR / 'worker.js').read_text(encoding='utf-8')
@@ -285,6 +287,7 @@ class SearchTemplateTests(unittest.TestCase):
         self.assertIn('onWorkerMessage({data: message});', worker_js)
         self.assertNotIn('postMessage({config:', worker_js)
         self.assertNotIn('postMessage({allowSearch:', worker_js)
+        self.assertNotIn('$.getScript', worker_js)
 
 
 class SearchIndexTests(unittest.TestCase):
