@@ -33,6 +33,14 @@ function loadScripts(urls, callback) {
   }
 }
 
+function sendMessage (message) {
+  if( 'function' === typeof importScripts ) {
+    postMessage(message);
+  } else {
+    onWorkerMessage({data: message});
+  }
+}
+
 function onJSONLoaded () {
   data = JSON.parse(this.responseText);
   var scriptsToLoad = ['lunr.js'];
@@ -88,8 +96,8 @@ function onScriptsLoaded () {
     console.log('Lunr index built, search ready');
   }
   allowSearch = true;
-  postMessage({config: data.config});
-  postMessage({allowSearch: allowSearch});
+  sendMessage({config: data.config});
+  sendMessage({allowSearch: allowSearch});
 }
 
 function init () {
@@ -125,7 +133,7 @@ if( 'function' === typeof importScripts ) {
     if (e.data.init) {
       init();
     } else if (e.data.query) {
-      postMessage({ results: search(e.data.query) });
+      sendMessage({ results: search(e.data.query) });
     } else {
       console.error("Worker - Unrecognized message: " + e);
     }

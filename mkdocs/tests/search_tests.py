@@ -2,6 +2,7 @@
 
 import json
 import unittest
+from pathlib import Path
 from unittest import mock
 
 from mkdocs.config.config_options import ValidationError
@@ -11,6 +12,8 @@ from mkdocs.structure.files import File
 from mkdocs.structure.pages import Page
 from mkdocs.structure.toc import get_toc
 from mkdocs.tests.base import dedent, get_markdown_toc, load_config
+
+SEARCH_TEMPLATES_DIR = Path(search.__file__).parent / 'templates' / 'search'
 
 
 def strip_whitespace(string):
@@ -266,6 +269,22 @@ class SearchPluginTests(unittest.TestCase):
         plugin.on_post_build(config)
         self.assertEqual(mock_copy_file.call_count, 0)
         self.assertEqual(mock_write_file.call_count, 1)
+
+
+class SearchTemplateTests(unittest.TestCase):
+    def test_no_worker_fallback_does_not_replace_window_post_message(self):
+        main_js = (SEARCH_TEMPLATES_DIR / 'main.js').read_text(encoding='utf-8')
+
+        self.assertNotIn('window.postMessage =', main_js)
+
+    def test_search_worker_routes_fallback_messages_without_post_message(self):
+        worker_js = (SEARCH_TEMPLATES_DIR / 'worker.js').read_text(encoding='utf-8')
+
+        self.assertIn('function sendMessage (message)', worker_js)
+        self.assertIn("if( 'function' === typeof importScripts )", worker_js)
+        self.assertIn('onWorkerMessage({data: message});', worker_js)
+        self.assertNotIn('postMessage({config:', worker_js)
+        self.assertNotIn('postMessage({allowSearch:', worker_js)
 
 
 class SearchIndexTests(unittest.TestCase):

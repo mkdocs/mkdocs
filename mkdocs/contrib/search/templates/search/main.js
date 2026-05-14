@@ -95,9 +95,6 @@ if (!window.Worker) {
   $.getScript(joinUrl(base_url, "search/worker.js")).done(function () {
     console.log('Loaded worker');
     init();
-    window.postMessage = function (msg) {
-      onWorkerMessage({data: msg});
-    };
   }).fail(function (jqxhr, settings, exception) {
     console.error('Could not load worker.js');
   });
