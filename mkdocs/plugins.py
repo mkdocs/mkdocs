@@ -292,7 +292,7 @@ class BasePlugin(Generic[SomeConfig]):
         """
         The `post_template` event is called after the template is rendered, but before
         it is written to disc and can be used to alter the output of the template.
-        If an empty string is returned, the template is skipped and nothing is is
+        If an empty string is returned, the template is skipped and nothing is
         written to disc.
 
         Args:
@@ -476,7 +476,7 @@ class CombinedEvent(Generic[P, T]):
     ```
 
     NOTE: The names of the sub-methods **can't** start with `on_`;
-    instead they can start with `_on_` like in the the above example, or anything else.
+    instead they can start with `_on_` like in the above example, or anything else.
     """
 
     def __init__(self, *methods: Callable[Concatenate[Any, P], T]):

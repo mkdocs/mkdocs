@@ -1475,7 +1475,7 @@ As previously, if no file is specified, MkDocs looks for a file named
 
 Previously, MkDocs only supported MultiMarkdown style meta-data, which does not
 recognize different data types and is rather limited. MkDocs now also supports
-YAML style meta-data in Markdown documents. MkDocs relies on the the presence or
+YAML style meta-data in Markdown documents. MkDocs relies on the presence or
 absence of the deliminators (`---` or `...`) to determine whether YAML style
 meta-data or MultiMarkdown style meta-data is being used.
 
