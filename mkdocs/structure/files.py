@@ -472,9 +472,13 @@ class File:
 
     def copy_file(self, dirty: bool = False) -> None:
         """Copy source file to destination, ensuring parent directories exist."""
-        if dirty and not self.is_modified():
-            log.debug(f"Skip copying unmodified file: '{self.src_uri}'")
-            return
+        if dirty:
+            try:
+                if not self.is_modified():
+                    log.debug(f"Skip copying unmodified file: '{self.src_uri}'")
+                    return
+            except FileNotFoundError:
+                pass
         log.debug(f"Copying media file: '{self.src_uri}'")
         output_path = self.abs_dest_path
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -483,6 +487,8 @@ class File:
             assert self.abs_src_path is not None
             try:
                 utils.copy_file(self.abs_src_path, output_path)
+            except FileNotFoundError:
+                log.warning(f"File skipped: '{self.src_uri}' does not exist.")
             except shutil.SameFileError:
                 pass  # Let plugins write directly into site_dir.
         elif isinstance(content, str):
