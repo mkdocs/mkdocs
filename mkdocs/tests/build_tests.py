@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import contextlib
 import io
+import logging
 import os.path
 import re
 import textwrap
@@ -586,7 +587,8 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             docs_dir=docs_dir,
             site_dir=site_dir,
             use_directory_urls=False,
-            draft_docs='''
+            draft_docs=textwrap.dedent(
+                '''
                 # A "drafts" directory anywhere.
                 drafts/
 
@@ -595,7 +597,8 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
 
                 # But keep this particular file.
                 !/foo_unpublished.md
-            ''',
+            '''
+            ),
         )
 
         with self.subTest(serve_url=None):
@@ -739,6 +742,28 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         '''
         with self._assert_build_logs(expected_logs):
             build.build(cfg)
+
+    @tempdir(
+        files={
+            'test/foo.md': '[bar](bar.md#missing-anchor)',
+            'test/bar.md': '## page heading',
+        }
+    )
+    @tempdir()
+    def test_anchor_warning_with_debug_logging(self, site_dir, docs_dir):
+        cfg = load_config(docs_dir=docs_dir, site_dir=site_dir, validation={'anchors': 'warn'})
+        pages_log = logging.getLogger('mkdocs.structure.pages')
+        old_level = pages_log.level
+        pages_log.setLevel(logging.DEBUG)
+
+        expected_logs = '''
+            WARNING:Doc file 'test/foo.md' contains a link 'bar.md#missing-anchor', but the doc 'test/bar.md' does not contain an anchor '#missing-anchor'.
+        '''
+        try:
+            with self._assert_build_logs(expected_logs):
+                build.build(cfg)
+        finally:
+            pages_log.setLevel(old_level)
 
     @tempdir(
         files={
