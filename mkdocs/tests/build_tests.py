@@ -586,7 +586,8 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             docs_dir=docs_dir,
             site_dir=site_dir,
             use_directory_urls=False,
-            draft_docs='''
+            draft_docs=textwrap.dedent(
+                '''
                 # A "drafts" directory anywhere.
                 drafts/
 
@@ -595,7 +596,8 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
 
                 # But keep this particular file.
                 !/foo_unpublished.md
-            ''',
+            '''
+            ),
         )
 
         with self.subTest(serve_url=None):
