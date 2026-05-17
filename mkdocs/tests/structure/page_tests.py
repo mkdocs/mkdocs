@@ -9,7 +9,7 @@ from unittest import mock
 import markdown
 
 from mkdocs.config.defaults import MkDocsConfig
-from mkdocs.structure.files import File, Files
+from mkdocs.structure.files import File, Files, InclusionLevel
 from mkdocs.structure.pages import Page, _ExtractTitleTreeprocessor, _RelativePathTreeprocessor
 from mkdocs.tests.base import dedent, tempdir
 
@@ -1013,6 +1013,39 @@ class RelativePathExtensionTests(unittest.TestCase):
             ),
             '<a href="../non-existent.md">link</a>',
         )
+
+    def test_included_page_link_to_excluded_doc_uses_configured_warning_level(self):
+        cfg = load_config(
+            docs_dir=DOCS_DIR,
+            validation=dict(links=dict(not_found='warn')),
+        )
+        fs = [
+            File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
+            File(
+                'excluded.md',
+                cfg.docs_dir,
+                cfg.site_dir,
+                cfg.use_directory_urls,
+                inclusion=InclusionLevel.EXCLUDED,
+            ),
+        ]
+        pg = Page('Foo', fs[0], cfg)
+
+        with mock.patch(
+            'mkdocs.structure.files.open', mock.mock_open(read_data='[link](excluded.md)')
+        ):
+            pg.read_source(cfg)
+
+        with self.assertLogs('mkdocs.structure.pages') as cm:
+            pg.render(cfg, Files(fs))
+
+        msgs = [f'{r.levelname}:{r.message}' for r in cm.records]
+        self.assertEqual(
+            '\n'.join(msgs),
+            "WARNING:Doc file 'index.md' contains a link to "
+            "'excluded.md' which is excluded from the built site.",
+        )
+        self.assertIn('<a href="excluded/">link</a>', pg.content)
 
     def test_relative_slash_link_with_suggestion(self):
         self.assertEqual(
