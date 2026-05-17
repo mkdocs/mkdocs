@@ -642,6 +642,19 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         file.copy_file()
         self.assertPathIsFile(dest_path)
 
+    @tempdir()
+    @tempdir()
+    def test_copy_file_missing_source(self, src_dir, dest_dir):
+        file = File('missing.txt', src_dir, dest_dir, use_directory_urls=False)
+        dest_path = os.path.join(dest_dir, 'missing.txt')
+        with self.assertLogs('mkdocs.structure.files', level='WARNING') as cm:
+            file.copy_file()
+        self.assertEqual(
+            cm.output,
+            ["WARNING:mkdocs.structure.files:File skipped: 'missing.txt' does not exist."],
+        )
+        self.assertPathNotExists(dest_path)
+
     @tempdir(files={'test.txt': 'source content'})
     def test_copy_file_same_file(self, dest_dir):
         file = File('test.txt', dest_dir, dest_dir, use_directory_urls=False)
@@ -682,6 +695,21 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         file.is_modified = mock.Mock(return_value=False)
         dest_path = os.path.join(dest_dir, 'test.txt')
         file.copy_file(dirty=True)
+        self.assertPathIsFile(dest_path)
+        with open(dest_path, encoding='utf-8') as f:
+            self.assertEqual(f.read(), 'destination content')
+
+    @tempdir(files={'test.txt': 'destination content'})
+    @tempdir()
+    def test_copy_file_dirty_missing_source(self, src_dir, dest_dir):
+        file = File('test.txt', src_dir, dest_dir, use_directory_urls=False)
+        dest_path = os.path.join(dest_dir, 'test.txt')
+        with self.assertLogs('mkdocs.structure.files', level='WARNING') as cm:
+            file.copy_file(dirty=True)
+        self.assertEqual(
+            cm.output,
+            ["WARNING:mkdocs.structure.files:File skipped: 'test.txt' does not exist."],
+        )
         self.assertPathIsFile(dest_path)
         with open(dest_path, encoding='utf-8') as f:
             self.assertEqual(f.read(), 'destination content')
