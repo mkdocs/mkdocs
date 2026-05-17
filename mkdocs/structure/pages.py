@@ -288,8 +288,7 @@ class Page(StructureItem):
         self.present_anchor_ids = (
             extract_anchors_ext.present_anchor_ids | raw_html_ext.present_anchor_ids
         )
-        if log.getEffectiveLevel() > logging.DEBUG:
-            self.links_to_anchors = relative_path_ext.links_to_anchors
+        self.links_to_anchors = relative_path_ext.links_to_anchors
 
     present_anchor_ids: set[str] | None = None
     """Anchor IDs that this page contains (can be linked to in this page)."""
@@ -298,7 +297,7 @@ class Page(StructureItem):
     """Links to anchors in other files that this page contains.
 
     The structure is: `{file_that_is_linked_to: {'anchor': 'original_link/to/some_file.md#anchor'}}`.
-    Populated after `.render()`. Populated only if `validation: {anchors: info}` (or greater) is set.
+    Populated after `.render()`.
     """
 
     def validate_anchor_links(self, *, files: Files, log_level: int) -> None:
