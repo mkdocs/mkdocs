@@ -111,6 +111,12 @@ After making edits to files under the `docs/` dir, you can preview the site loca
 hatch run docs:serve
 ```
 
+This creates and populates the Hatch docs environment automatically, so you don't need to install documentation dependencies separately when using Hatch. To inspect the dependencies for the docs environment, run:
+
+```bash
+hatch env show docs
+```
+
 Note that any 'WARNING' should be resolved before submitting a contribution.
 
 Documentation files are also checked by markdownlint, so you should run this as well:
