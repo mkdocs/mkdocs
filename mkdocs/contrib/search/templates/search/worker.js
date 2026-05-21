@@ -7,11 +7,13 @@ var data;
 
 function getScript(script, callback) {
   console.log('Loading script: ' + script);
-  $.getScript(base_path + script).done(function () {
-    callback();
-  }).fail(function (jqxhr, settings, exception) {
-    console.log('Error: ' + exception);
-  });
+  var scriptElement = document.createElement('script');
+  scriptElement.src = base_path + script;
+  scriptElement.onload = callback;
+  scriptElement.onerror = function () {
+    console.log('Error loading script: ' + script);
+  };
+  (document.head || document.getElementsByTagName('head')[0]).appendChild(scriptElement);
 }
 
 function getScriptsInOrder(scripts, callback) {
@@ -30,6 +32,14 @@ function loadScripts(urls, callback) {
     callback();
   } else {
     getScriptsInOrder(urls, callback);
+  }
+}
+
+function sendMessage (message) {
+  if( 'function' === typeof importScripts ) {
+    postMessage(message);
+  } else {
+    onWorkerMessage({data: message});
   }
 }
 
@@ -88,8 +98,8 @@ function onScriptsLoaded () {
     console.log('Lunr index built, search ready');
   }
   allowSearch = true;
-  postMessage({config: data.config});
-  postMessage({allowSearch: allowSearch});
+  sendMessage({config: data.config});
+  sendMessage({allowSearch: allowSearch});
 }
 
 function init () {
@@ -125,7 +135,7 @@ if( 'function' === typeof importScripts ) {
     if (e.data.init) {
       init();
     } else if (e.data.query) {
-      postMessage({ results: search(e.data.query) });
+      sendMessage({ results: search(e.data.query) });
     } else {
       console.error("Worker - Unrecognized message: " + e);
     }

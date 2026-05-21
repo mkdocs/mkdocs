@@ -21,6 +21,14 @@ function joinUrl (base, path) {
   return base + "/" + path;
 }
 
+function loadScript (url, callback, errorCallback) {
+  var script = document.createElement('script');
+  script.src = url;
+  script.onload = callback;
+  script.onerror = errorCallback;
+  (document.head || document.getElementsByTagName('head')[0]).appendChild(script);
+}
+
 function escapeHtml (value) {
   return value.replace(/&/g, '&amp;')
     .replace(/"/g, '&quot;')
@@ -92,13 +100,10 @@ function onWorkerMessage (e) {
 if (!window.Worker) {
   console.log('Web Worker API not supported');
   // load index in main thread
-  $.getScript(joinUrl(base_url, "search/worker.js")).done(function () {
+  loadScript(joinUrl(base_url, "search/worker.js"), function () {
     console.log('Loaded worker');
     init();
-    window.postMessage = function (msg) {
-      onWorkerMessage({data: msg});
-    };
-  }).fail(function (jqxhr, settings, exception) {
+  }, function () {
     console.error('Could not load worker.js');
   });
 } else {
