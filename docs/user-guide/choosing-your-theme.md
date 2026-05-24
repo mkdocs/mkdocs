@@ -220,7 +220,7 @@ WARNING: Installing an MkDocs theme means installing a Python package and execut
 [theme]: configuration.md#theme
 [Bootstrap]: https://getbootstrap.com/
 [highlight.js]: https://highlightjs.org/
-[styles]: https://highlightjs.org/static/demo/
+[styles]: https://highlightjs.org/examples
 [setup-GA4]: https://support.google.com/analytics/answer/9304153?hl=en&ref_topic=9303319
 [upgrade-GA4]: https://support.google.com/analytics/answer/9744165?hl=en&ref_topic=9303319
 [Read the Docs]: https://readthedocs.org/
