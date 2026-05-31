@@ -387,6 +387,16 @@ class IpAddressTest(TestCase):
         with self.expect_error(option="'foo' is not a valid port"):
             self.get_config(self.Schema, {'option': '127.0.0.1:foo'})
 
+    def test_invalid_address_port_range(self) -> None:
+        for port in ('-1', '65536'):
+            with self.subTest(port=port):
+                with self.expect_error(option=f"'{port}' is not a valid port"):
+                    self.get_config(self.Schema, {'option': f'127.0.0.1:{port}'})
+
+    def test_valid_address_max_port(self) -> None:
+        conf = self.get_config(self.Schema, {'option': '127.0.0.1:65535'})
+        self.assertEqual(conf.option.port, 65535)
+
     def test_invalid_address_missing_port(self) -> None:
         with self.expect_error(option="Must be a string of format 'IP:PORT'"):
             self.get_config(self.Schema, {'option': '127.0.0.1'})
