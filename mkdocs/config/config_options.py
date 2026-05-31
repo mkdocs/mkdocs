@@ -485,6 +485,8 @@ class IpAddress(OptionallyRequired[_IpAddressValue]):
             port = int(port_str)
         except Exception:
             raise ValidationError(f"'{port_str}' is not a valid port")
+        if not 0 <= port <= 65535:
+            raise ValidationError(f"'{port_str}' is not a valid port")
 
         return _IpAddressValue(host, port)
 
