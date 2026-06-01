@@ -15,7 +15,7 @@ import markdown.preprocessors
 
 from mkdocs.commands import build
 from mkdocs.config import base
-from mkdocs.exceptions import PluginError
+from mkdocs.exceptions import Abort, PluginError
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.nav import get_navigation
 from mkdocs.structure.pages import Page
@@ -650,7 +650,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
 
         with self.subTest(serve_url=None):
             expected_logs = '''
-                INFO:Doc file 'test/foo.md' contains a link to 'test/bar.md' which is excluded from the built site.
+                WARNING:Doc file 'test/foo.md' contains a link to 'test/bar.md' which is excluded from the built site.
             '''
             with self._assert_build_logs(expected_logs):
                 build.build(cfg)
@@ -662,7 +662,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         with self.subTest(serve_url=serve_url):
             expected_logs = '''
                 INFO:Doc file 'test/bar.md' contains a link 'nonexistent.md', but the target 'test/nonexistent.md' is not found among documentation files.
-                INFO:Doc file 'test/foo.md' contains a link to 'test/bar.md' which is excluded from the built site.
+                WARNING:Doc file 'test/foo.md' contains a link to 'test/bar.md' which is excluded from the built site.
                 INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `draft_docs` config:
                   - http://localhost:123/documentation/test/bar.html
                   - http://localhost:123/documentation/test/baz.html
@@ -677,8 +677,21 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
             baz_path = Path(site_dir, 'test', 'baz.html')
             self.assertPathIsFile(baz_path)
             self.assertIn('DRAFT', baz_path.read_text())
-
             self.assertPathNotExists(site_dir, '.zoo.html')
+
+    @tempdir(files={'index.md': '[asdf](./asdf.md)', 'asdf.md': 'excluded content'})
+    @tempdir()
+    def test_excluded_link_respects_not_found_validation_level(self, site_dir, docs_dir):
+        cfg = load_config(
+            docs_dir=docs_dir,
+            site_dir=site_dir,
+            strict=True,
+            exclude_docs='/asdf.md',
+            validation={'links': {'not_found': 'warn'}},
+        )
+
+        with self.assertRaisesRegex(Abort, 'Aborted with 1 warnings in strict mode!'):
+            build.build(cfg)
 
     @tempdir(
         files={
