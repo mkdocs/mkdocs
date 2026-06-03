@@ -1115,6 +1115,29 @@ class SiteDirTest(TestCase):
                 self.get_config(self.Schema, test_config)
 
 
+class PathSpecTest(TestCase):
+    def test_dedent_multiline_patterns(self) -> None:
+        class Schema(Config):
+            option = c.PathSpec()
+
+        conf = self.get_config(
+            Schema,
+            {
+                'option': '''
+                    # Markdown files ending in _unpublished.md anywhere.
+                    *_unpublished.md
+
+                    # But keep this particular file.
+                    !/foo_unpublished.md
+                ''',
+            },
+        )
+
+        self.assertFalse(conf.option.match_file('foo_unpublished.md'))
+        self.assertTrue(conf.option.match_file('other_unpublished.md'))
+        self.assertTrue(conf.option.match_file('test/other_unpublished.md'))
+
+
 class ThemeTest(TestCase):
     def test_theme_as_string(self) -> None:
         class Schema(Config):

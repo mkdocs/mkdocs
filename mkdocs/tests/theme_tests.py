@@ -1,4 +1,5 @@
 import os
+import re
 import unittest
 from unittest import mock
 
@@ -39,6 +40,29 @@ class ThemeTests(unittest.TestCase):
                 'nav_style': 'primary',
                 'shortcuts': {'help': 191, 'next': 78, 'previous': 80, 'search': 83},
             },
+        )
+
+    def test_mkdocs_theme_submenu_marker_uses_visible_default_color(self):
+        with open(
+            os.path.join(theme_dir, 'mkdocs', 'css', 'base.css'), encoding='utf-8'
+        ) as css_file:
+            css = css_file.read()
+
+        self.assertRegex(
+            css,
+            re.compile(
+                r'\.dropdown-submenu > a::after \{[^}]*'
+                r'border-left-color: var\(--bs-dropdown-link-color\);',
+                re.DOTALL,
+            ),
+        )
+        self.assertRegex(
+            css,
+            re.compile(
+                r'\.dropdown-submenu:hover > a::after \{[^}]*'
+                r'border-left-color: var\(--bs-dropdown-link-active-color\);',
+                re.DOTALL,
+            ),
         )
 
     @tempdir()
