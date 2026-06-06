@@ -1,4 +1,7 @@
+import json
 import os
+import shutil
+import subprocess
 import unittest
 from unittest import mock
 
@@ -123,3 +126,65 @@ class ThemeTests(unittest.TestCase):
                     'locale': parse_locale('en'),
                 },
             )
+
+    def test_mkdocs_theme_darkmode_without_highlightjs_links(self):
+        node = shutil.which('node')
+        if node is None:
+            self.skipTest('Node.js is required to run the darkmode JavaScript smoke test.')
+
+        darkmode_js = os.path.join(theme_dir, 'mkdocs', 'js', 'darkmode.js')
+        script = f"""
+            const fs = require('fs');
+            const vm = require('vm');
+            const source = fs.readFileSync({json.dumps(darkmode_js)}, 'utf8');
+
+            function createContext(links) {{
+                const documentElement = {{
+                    theme: 'light',
+                    getAttribute: function(name) {{ return this.theme; }},
+                    setAttribute: function(name, value) {{ this.theme = value; }},
+                }};
+                return {{
+                    document: {{
+                        documentElement: documentElement,
+                        getElementById: function(id) {{ return links[id] || null; }},
+                        querySelectorAll: function() {{ return []; }},
+                    }},
+                    window: {{
+                        matchMedia: function() {{
+                            return {{
+                                matches: false,
+                                addEventListener: function() {{}},
+                                removeEventListener: function() {{}},
+                            }};
+                        }},
+                    }},
+                    localStorage: {{
+                        getItem: function() {{ return null; }},
+                        setItem: function() {{}},
+                    }},
+                }};
+            }}
+
+            function runDarkmode(links) {{
+                const context = createContext(links);
+                vm.runInNewContext(source + "\\nsetColorMode('dark');", context);
+                return context;
+            }}
+
+            const noHighlightContext = runDarkmode({{}});
+            if (noHighlightContext.document.documentElement.theme !== 'dark') {{
+                throw new Error('Dark mode was not applied without highlight.js links.');
+            }}
+
+            const links = {{
+                'hljs-light': {{ disabled: false }},
+                'hljs-dark': {{ disabled: true }},
+            }};
+            runDarkmode(links);
+            if (!links['hljs-light'].disabled || links['hljs-dark'].disabled) {{
+                throw new Error('highlight.js stylesheets were not toggled for dark mode.');
+            }}
+            """
+        result = subprocess.run([node, '-e', script], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
