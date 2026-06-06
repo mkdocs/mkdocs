@@ -582,20 +582,21 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
     )
     @tempdir()
     def test_draft_docs_with_comments_from_user_guide(self, site_dir, docs_dir):
+        draft_docs = (
+            '# A "drafts" directory anywhere.\n'
+            'drafts/\n'
+            '\n'
+            '# A Markdown file ending in _unpublished.md anywhere.\n'
+            '*_unpublished.md\n'
+            '\n'
+            '# But keep this particular file.\n'
+            '!/foo_unpublished.md\n'
+        )
         cfg = load_config(
             docs_dir=docs_dir,
             site_dir=site_dir,
             use_directory_urls=False,
-            draft_docs='''
-                # A "drafts" directory anywhere.
-                drafts/
-
-                # A Markdown file ending in _unpublished.md anywhere.
-                *_unpublished.md
-
-                # But keep this particular file.
-                !/foo_unpublished.md
-            ''',
+            draft_docs=draft_docs,
         )
 
         with self.subTest(serve_url=None):
