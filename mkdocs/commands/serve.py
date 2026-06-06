@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import io
 import logging
 import shutil
 import tempfile
@@ -15,6 +16,26 @@ if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
 
 log = logging.getLogger(__name__)
+
+
+def _config_file_factory(config_file):
+    if config_file is None or isinstance(config_file, str):
+        return lambda: config_file
+
+    config_file_name = getattr(config_file, 'name', None)
+    if config_file_name and config_file_name not in {'<stdin>', '-'}:
+        return lambda: config_file
+
+    try:
+        config_file.seek(0)
+    except OSError:
+        pass
+    config_file_contents = config_file.read()
+
+    if isinstance(config_file_contents, str):
+        return lambda: io.StringIO(config_file_contents)
+
+    return lambda: io.BytesIO(config_file_contents)
 
 
 def serve(
@@ -36,10 +57,11 @@ def serve(
     """
     # Create a temporary build directory, and set some options to serve it
     site_dir = tempfile.mkdtemp(prefix='mkdocs_')
+    open_config_file = _config_file_factory(config_file)
 
     def get_config():
         config = load_config(
-            config_file=config_file,
+            config_file=open_config_file(),
             site_dir=site_dir,
             **kwargs,
         )
