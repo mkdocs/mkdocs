@@ -506,7 +506,7 @@ class _RelativePathTreeprocessor(markdown.treeprocessors.Treeprocessor):
             if self.file.inclusion.is_excluded():
                 warning_level = logging.DEBUG
             else:
-                warning_level = min(logging.INFO, self.config.validation.links.not_found)
+                warning_level = self.config.validation.links.not_found
             warning = (
                 f"Doc file '{self.file.src_uri}' contains a link to "
                 f"'{target_uri}' which is excluded from the built site."
