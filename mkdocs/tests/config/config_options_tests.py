@@ -2370,6 +2370,38 @@ class HooksTest(TestCase):
         self.assertEqual(hook.on_page_markdown('foo foo'), 'zoo zoo')  # type: ignore[call-arg]
         self.assertFalse(hasattr(hook, 'on_nav'))
 
+    @tempdir()
+    def test_hooks_reload_when_file_changes(self, src_dir) -> None:
+        hook_path = os.path.join(src_dir, 'hooks', 'my_hook.py')
+        config_file_path = os.path.join(src_dir, 'mkdocs.yml')
+        write_file(
+            b'def on_page_markdown(markdown, **kwargs): return "old"',
+            hook_path,
+        )
+
+        conf = self.get_config(
+            self.Schema,
+            {'hooks': ['hooks/my_hook.py']},
+            config_file_path=config_file_path,
+        )
+        hook = conf.plugins['hooks/my_hook.py']
+        self.assertEqual(hook.on_page_markdown(''), 'old')  # type: ignore[call-arg]
+        old_stat = os.stat(hook_path)
+
+        write_file(
+            b'def on_page_markdown(markdown, **kwargs): return "new"',
+            hook_path,
+        )
+        os.utime(hook_path, ns=(old_stat.st_atime_ns, old_stat.st_mtime_ns))
+
+        conf = self.get_config(
+            self.Schema,
+            {'hooks': ['hooks/my_hook.py']},
+            config_file_path=config_file_path,
+        )
+        hook = conf.plugins['hooks/my_hook.py']
+        self.assertEqual(hook.on_page_markdown(''), 'new')  # type: ignore[call-arg]
+
     def test_hooks_wrong_type(self) -> None:
         with self.expect_error(hooks="Expected a list of items, but a <class 'int'> was given."):
             self.get_config(self.Schema, {'hooks': 6})
