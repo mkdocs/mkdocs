@@ -1,5 +1,6 @@
 import os
 import unittest
+from unittest import mock
 
 from mkdocs import exceptions
 from mkdocs.config import base
@@ -89,6 +90,37 @@ class ConfigBaseTests(unittest.TestCase):
             cfg = base.load_config(config_file=None)
             self.assertTrue(isinstance(cfg, defaults.MkDocsConfig))
             self.assertEqual(cfg.site_name, 'MkDocs Test1')
+
+    @tempdir()
+    def test_load_config_file_from_env(self, temp_dir):
+        """Test that MKDOCS_CONFIG_FILE is used when '--config' is not set."""
+        config_path = os.path.join(temp_dir, 'docs', 'mkdocs.yml')
+        os.mkdir(os.path.join(temp_dir, 'docs'))
+        with open(config_path, 'w') as config_file:
+            config_file.write("site_name: MkDocs Test\n")
+
+        with change_dir(temp_dir):
+            with mock.patch.dict(os.environ, {'MKDOCS_CONFIG_FILE': config_path}):
+                with base._open_config_file(config_file=None) as config_file:
+                    self.assertEqual(config_file.name, config_path)
+                    self.assertEqual(config_file.read(), b"site_name: MkDocs Test\n")
+
+    @tempdir()
+    def test_config_file_precedes_env(self, temp_dir):
+        """Test that '--config' takes precedence over MKDOCS_CONFIG_FILE."""
+        env_config_path = os.path.join(temp_dir, 'env.yml')
+        cli_config_path = os.path.join(temp_dir, 'cli.yml')
+
+        with open(env_config_path, 'w') as config_file:
+            config_file.write("site_name: Env Config\n")
+        with open(cli_config_path, 'w') as config_file:
+            config_file.write("site_name: CLI Config\n")
+
+        os.mkdir(os.path.join(temp_dir, 'docs'))
+        with mock.patch.dict(os.environ, {'MKDOCS_CONFIG_FILE': env_config_path}):
+            with base._open_config_file(config_file=cli_config_path) as config_file:
+                self.assertEqual(config_file.name, cli_config_path)
+                self.assertEqual(config_file.read(), b"site_name: CLI Config\n")
 
     def test_load_from_missing_file(self):
         with self.assertRaisesRegex(
