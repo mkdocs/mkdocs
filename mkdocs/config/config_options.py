@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import functools
+import importlib.util
 import ipaddress
 import logging
 import os
@@ -1187,10 +1188,7 @@ class Hooks(BaseConfigOption[List[types.ModuleType]]):
             hooks[name] = self._load_hook(name, path)
         return hooks
 
-    @functools.lru_cache(maxsize=None)
     def _load_hook(self, name, path):
-        import importlib.util
-
         spec = importlib.util.spec_from_file_location(name, path)
         if spec is None:
             raise ValidationError(f"Cannot import path '{path}' as a Python module")
@@ -1202,7 +1200,9 @@ class Hooks(BaseConfigOption[List[types.ModuleType]]):
         old_sys_path = sys.path.copy()
         sys.path.insert(0, os.path.dirname(path))
         try:
-            spec.loader.exec_module(module)
+            with open(path, 'rb') as f:
+                code = compile(f.read(), path, 'exec')
+            exec(code, module.__dict__)
         finally:
             sys.path[:] = old_sys_path
 
