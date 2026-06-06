@@ -299,7 +299,8 @@ def _open_config_file(config_file: str | IO | None) -> Iterator[IO]:
     """
     # Default to the standard config filename.
     if config_file is None:
-        paths_to_try = ['mkdocs.yml', 'mkdocs.yaml']
+        env_config_file = os.environ.get('MKDOCS_CONFIG_FILE')
+        paths_to_try = [env_config_file] if env_config_file else ['mkdocs.yml', 'mkdocs.yaml']
     # If it is a string, we can assume it is a path and attempt to open it.
     elif isinstance(config_file, str):
         paths_to_try = [config_file]
