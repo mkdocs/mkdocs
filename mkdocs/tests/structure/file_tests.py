@@ -8,6 +8,19 @@ from mkdocs.tests.base import PathAssertionMixin, load_config, tempdir
 
 
 class TestFiles(PathAssertionMixin, unittest.TestCase):
+    def assertMissingSourceSkipped(self, file, dest_path):
+        with self.assertLogs('mkdocs.structure.files', level='WARNING') as cm:
+            file.copy_file()
+
+        self.assertEqual(
+            cm.output,
+            [
+                "WARNING:mkdocs.structure.files:"
+                f"Skipped copying media file: '{file.src_uri}'. The source file does not exist."
+            ],
+        )
+        self.assertPathNotExists(dest_path)
+
     @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
     def test_src_path_windows(self):
         f = File('foo\\a.md', '/path/to/docs', '/path/to/site', use_directory_urls=False)
@@ -640,6 +653,49 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         dest_path = os.path.join(dest_dir, 'test.txt')
         self.assertPathNotExists(dest_path)
         file.copy_file()
+        self.assertPathIsFile(dest_path)
+
+    @tempdir()
+    @tempdir()
+    def test_copy_file_dangling_symlink(self, src_dir, dest_dir):
+        link_path = os.path.join(src_dir, 'missing.jpg')
+        try:
+            os.symlink(os.path.join(src_dir, 'target.jpg'), link_path)
+        except (OSError, NotImplementedError) as e:
+            self.skipTest(f"cannot create symlinks: {e}")
+
+        file = File('missing.jpg', src_dir, dest_dir, use_directory_urls=False)
+        dest_path = os.path.join(dest_dir, 'missing.jpg')
+        self.assertPathNotExists(dest_path)
+
+        self.assertMissingSourceSkipped(file, dest_path)
+
+    @tempdir()
+    @tempdir()
+    def test_copy_file_missing_source(self, src_dir, dest_dir):
+        file = File('missing.jpg', src_dir, dest_dir, use_directory_urls=False)
+        dest_path = os.path.join(dest_dir, 'missing.jpg')
+        self.assertPathNotExists(dest_path)
+
+        self.assertMissingSourceSkipped(file, dest_path)
+
+    @tempdir(files={'missing.jpg': 'old content'})
+    @tempdir()
+    def test_copy_file_missing_source_dirty(self, src_dir, dest_dir):
+        file = File('missing.jpg', src_dir, dest_dir, use_directory_urls=False)
+        dest_path = os.path.join(dest_dir, 'missing.jpg')
+        self.assertPathIsFile(dest_path)
+
+        with self.assertLogs('mkdocs.structure.files', level='WARNING') as cm:
+            file.copy_file(dirty=True)
+
+        self.assertEqual(
+            cm.output,
+            [
+                "WARNING:mkdocs.structure.files:"
+                "Skipped copying media file: 'missing.jpg'. The source file does not exist."
+            ],
+        )
         self.assertPathIsFile(dest_path)
 
     @tempdir(files={'test.txt': 'source content'})
