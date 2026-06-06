@@ -483,6 +483,10 @@ class File:
             assert self.abs_src_path is not None
             try:
                 utils.copy_file(self.abs_src_path, output_path)
+            except FileNotFoundError:
+                log.warning(
+                    f"Skipped copying media file: '{self.src_uri}'. The source file does not exist."
+                )
             except shutil.SameFileError:
                 pass  # Let plugins write directly into site_dir.
         elif isinstance(content, str):
@@ -496,8 +500,11 @@ class File:
         if self._content is not None:
             return True
         assert self.abs_src_path is not None
-        if os.path.isfile(self.abs_dest_path):
-            return os.path.getmtime(self.abs_dest_path) < os.path.getmtime(self.abs_src_path)
+        try:
+            if os.path.isfile(self.abs_dest_path):
+                return os.path.getmtime(self.abs_dest_path) < os.path.getmtime(self.abs_src_path)
+        except FileNotFoundError:
+            return True
         return True
 
     def is_documentation_page(self) -> bool:
