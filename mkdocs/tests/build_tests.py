@@ -650,7 +650,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
 
         with self.subTest(serve_url=None):
             expected_logs = '''
-                INFO:Doc file 'test/foo.md' contains a link to 'test/bar.md' which is excluded from the built site.
+                WARNING:Doc file 'test/foo.md' contains a link to 'test/bar.md' which is excluded from the built site.
             '''
             with self._assert_build_logs(expected_logs):
                 build.build(cfg)
@@ -662,7 +662,7 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         with self.subTest(serve_url=serve_url):
             expected_logs = '''
                 INFO:Doc file 'test/bar.md' contains a link 'nonexistent.md', but the target 'test/nonexistent.md' is not found among documentation files.
-                INFO:Doc file 'test/foo.md' contains a link to 'test/bar.md' which is excluded from the built site.
+                WARNING:Doc file 'test/foo.md' contains a link to 'test/bar.md' which is excluded from the built site.
                 INFO:The following pages are being built only for the preview but will be excluded from `mkdocs build` per `draft_docs` config:
                   - http://localhost:123/documentation/test/bar.html
                   - http://localhost:123/documentation/test/baz.html
