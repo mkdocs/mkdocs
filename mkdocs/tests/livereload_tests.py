@@ -159,6 +159,34 @@ class BuildTests(unittest.TestCase):
 
                 self.assertTrue(started_building.wait(timeout=10))
 
+    @tempdir(files={".foo.md.swp": "a", "foo.docs": "a"})
+    @tempdir()
+    def test_ignored_watch_events_do_not_rebuild(self, site_dir, docs_dir):
+        started_building = threading.Event()
+
+        with testing_server(site_dir, started_building.set) as server:
+            server.watch(docs_dir, ignore=lambda path: Path(path).name.startswith("."))
+            time.sleep(0.01)
+
+            Path(docs_dir, ".foo.md.swp").write_text("b")
+            self.assertFalse(started_building.wait(timeout=0.5))
+
+            Path(docs_dir, "foo.docs").write_text("b")
+            self.assertTrue(started_building.wait(timeout=10))
+
+    @tempdir(files={".foo.md.swp": "a"})
+    @tempdir()
+    def test_unfiltered_duplicate_watch_rebuilds_ignored_events(self, site_dir, docs_dir):
+        started_building = threading.Event()
+
+        with testing_server(site_dir, started_building.set) as server:
+            server.watch(docs_dir, ignore=lambda path: Path(path).name.startswith("."))
+            server.watch(docs_dir)
+            time.sleep(0.01)
+
+            Path(docs_dir, ".foo.md.swp").write_text("b")
+            self.assertTrue(started_building.wait(timeout=10))
+
     @tempdir()
     def test_unwatch(self, site_dir):
         started_building = threading.Event()

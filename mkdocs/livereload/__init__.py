@@ -133,23 +133,40 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         self.serve_thread = threading.Thread(target=lambda: self.serve_forever(shutdown_delay))
         self.observer = watchdog.observers.polling.PollingObserver(timeout=polling_interval)
 
-        self._watched_paths: dict[str, int] = {}
+        self._watched_paths: dict[str, list[Callable[[str], bool] | None]] = {}
         self._watch_refs: dict[str, Any] = {}
 
-    def watch(self, path: str, func: None = None, *, recursive: bool = True) -> None:
+    def watch(
+        self,
+        path: str,
+        func: None = None,
+        *,
+        recursive: bool = True,
+        ignore: Callable[[str], bool] | None = None,
+    ) -> None:
         """Add the 'path' to watched paths, call the function and reload when any file changes under it."""
         path = os.path.abspath(path)
         if not (func is None or func is self.builder):  # type: ignore[unreachable]
             raise TypeError("Plugins can no longer pass a 'func' parameter to watch().")
 
         if path in self._watched_paths:
-            self._watched_paths[path] += 1
+            self._watched_paths[path].append(ignore)
             return
-        self._watched_paths[path] = 1
+        self._watched_paths[path] = [ignore]
 
         def callback(event):
             if event.is_directory:
                 return
+            ignore_filters = self._watched_paths.get(path, [])
+            if ignore_filters:
+                event_paths = [event.src_path]
+                if dest_path := getattr(event, 'dest_path', None):
+                    event_paths.append(dest_path)
+                if all(
+                    ignore is not None and all(ignore(event_path) for event_path in event_paths)
+                    for ignore in ignore_filters
+                ):
+                    return
             log.debug(str(event))
             with self._rebuild_cond:
                 self._want_rebuild = True
@@ -164,8 +181,8 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         """Stop watching file changes for path. Raises if there was no corresponding `watch` call."""
         path = os.path.abspath(path)
 
-        self._watched_paths[path] -= 1
-        if self._watched_paths[path] <= 0:
+        self._watched_paths[path].pop()
+        if not self._watched_paths[path]:
             self._watched_paths.pop(path)
             self.observer.unschedule(self._watch_refs.pop(path))
 

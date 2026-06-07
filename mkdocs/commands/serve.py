@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import shutil
 import tempfile
 from os.path import isdir, isfile, join
@@ -10,11 +11,38 @@ from urllib.parse import urlsplit
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
 from mkdocs.livereload import LiveReloadServer, _serve_url
+from mkdocs.structure.files import File, InclusionLevel, set_exclusions
 
 if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
 
 log = logging.getLogger(__name__)
+
+
+def _make_docs_file_ignored(config: MkDocsConfig, *, include_drafts: bool):
+    docs_dir = os.path.abspath(config.docs_dir)
+    extra_templates = {
+        File(path, docs_dir, config.site_dir, config.use_directory_urls).src_uri
+        for path in config.extra_templates
+    }
+    inclusion = InclusionLevel.is_in_serve if include_drafts else InclusionLevel.is_included
+
+    def is_ignored(path: str) -> bool:
+        path = os.path.abspath(path)
+        try:
+            rel_path = os.path.relpath(path, docs_dir)
+        except ValueError:
+            return False
+        if rel_path in (os.curdir, os.pardir) or rel_path.startswith(os.pardir + os.sep):
+            return False
+
+        file = File(rel_path, docs_dir, config.site_dir, config.use_directory_urls)
+        if file.src_uri in extra_templates:
+            return False
+        set_exclusions([file], config)
+        return not inclusion(file.inclusion)
+
+    return is_ignored
 
 
 def serve(
@@ -84,7 +112,9 @@ def serve(
 
         if livereload:
             # Watch the documentation files, the config file and the theme files.
-            server.watch(config.docs_dir)
+            server.watch(
+                config.docs_dir, ignore=_make_docs_file_ignored(config, include_drafts=not is_clean)
+            )
             if config.config_file_path:
                 server.watch(config.config_file_path)
 
