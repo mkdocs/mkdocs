@@ -118,8 +118,7 @@ theme_help = "The theme to use when building your documentation."
 theme_choices = sorted(utils.get_theme_names())
 site_dir_help = "The directory to output the result of the documentation build."
 use_directory_urls_help = "Use directory URLs when building pages (the default)."
-reload_help = "Enable the live reloading in the development server (this is the default)"
-no_reload_help = "Disable the live reloading in the development server."
+reload_help = "Enable or disable live reloading in the development server (enabled by default)."
 serve_dirty_help = "Only re-build files that have changed."
 serve_clean_help = (
     "Build the site without any effects of `mkdocs serve` - pure `mkdocs build`, then serve."
@@ -253,8 +252,7 @@ def cli():
 @cli.command(name="serve")
 @click.option('-a', '--dev-addr', help=dev_addr_help, metavar='<IP:PORT>')
 @click.option('-o', '--open', 'open_in_browser', help=serve_open_help, is_flag=True)
-@click.option('--no-livereload', 'livereload', flag_value=False, help=no_reload_help)
-@click.option('--livereload', 'livereload', flag_value=True, default=True, hidden=True)
+@click.option('--livereload/--no-livereload', default=True, help=reload_help)
 @click.option('--dirtyreload', 'build_type', flag_value='dirty', hidden=True)
 @click.option('--dirty', 'build_type', flag_value='dirty', help=serve_dirty_help)
 @click.option('-c', '--clean', 'build_type', flag_value='clean', help=serve_clean_help)
