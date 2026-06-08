@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.util
 import os
 import sys
 import textwrap
@@ -738,6 +739,17 @@ class PageTests(unittest.TestCase):
                 """
             ),
         )
+
+    @unittest.skipUnless(importlib.util.find_spec('pygments'), 'Pygments is not installed')
+    def test_page_render_with_codehilite_null_filename(self):
+        cfg = load_config(markdown_extensions=[{'codehilite': {'filename': None}}])
+        fl = File('testing.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls)
+        pg = Page('Foo', fl, cfg)
+        pg.markdown = '```python\nprint("MkDocs")\n```'
+        pg.render(cfg, Files([fl]))
+        assert pg.content is not None
+        self.assertIn('<div class="codehilite">', pg.content)
+        self.assertIn('MkDocs', pg.content)
 
     def test_missing_page(self):
         cfg = load_config()

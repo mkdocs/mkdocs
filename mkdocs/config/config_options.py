@@ -982,6 +982,13 @@ class MarkdownExtensions(OptionallyRequired[List[str]]):
             return
         if not isinstance(cfg, dict):
             raise ValidationError(f"Invalid config options for Markdown Extension '{ext}'.")
+        if (
+            ext in {'codehilite', 'markdown.extensions.codehilite'}
+            and 'filename' in cfg
+            and cfg['filename'] is None
+        ):
+            # Pygments 2.20+ expects this HtmlFormatter option to be a string.
+            cfg = {**cfg, 'filename': ''}
         self.configdata[ext] = cfg
 
     def pre_validation(self, config, key_name):
