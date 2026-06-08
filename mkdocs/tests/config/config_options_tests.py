@@ -1900,6 +1900,30 @@ class MarkdownExtensionsTest(TestCase):
         )
         self.assertIsNone(conf.mdx_configs.get('toc'))
 
+    def test_codehilite_filename_null(self) -> None:
+        class Schema(Config):
+            markdown_extensions = c.MarkdownExtensions()
+            mdx_configs = c.Private[Dict[str, dict]]()
+
+        for ext in ['codehilite', 'markdown.extensions.codehilite']:
+            config = {
+                'markdown_extensions': [{ext: {'filename': None}}],
+            }
+            with self.subTest(ext=ext):
+                conf = self.get_config(Schema, config)
+                self.assertEqual(conf.mdx_configs, {ext: {'filename': ''}})
+
+    def test_codehilite_other_null_options(self) -> None:
+        class Schema(Config):
+            markdown_extensions = c.MarkdownExtensions()
+            mdx_configs = c.Private[Dict[str, dict]]()
+
+        config = {
+            'markdown_extensions': [{'codehilite': {'linenums': None}}],
+        }
+        conf = self.get_config(Schema, config)
+        self.assertEqual(conf.mdx_configs, {'codehilite': {'linenums': None}})
+
 
 class _FakePluginConfig(Config):
     foo = c.Type(str, default='default foo')
