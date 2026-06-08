@@ -54,13 +54,16 @@ def serve(
 
     host, port = config.dev_addr
     mount_path = urlsplit(config.site_url or '/').path
-    config.site_url = serve_url = _serve_url(host, port, mount_path)
+    serve_url = _serve_url(host, port, mount_path)
+    if config.site_url is None:
+        config.site_url = serve_url
 
     def builder(config: MkDocsConfig | None = None):
         log.info("Building documentation...")
         if config is None:
             config = get_config()
-            config.site_url = serve_url
+            if config.site_url is None:
+                config.site_url = serve_url
 
         build(config, serve_url=None if is_clean else serve_url, dirty=is_dirty)
 
