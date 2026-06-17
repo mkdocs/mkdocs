@@ -449,6 +449,16 @@ class UtilsTests(unittest.TestCase):
         )
         self.assertEqual(meta.get_data(doc), (doc, {}))
 
+    def test_yaml_meta_data_no_trailing_newline(self):
+        """YAML front matter is parsed even when the file ends without a trailing newline."""
+        doc = "---\ntitle: Foo Bar\n---"
+        self.assertEqual(meta.get_data(doc), ("", {'title': 'Foo Bar'}))
+
+    def test_yaml_meta_data_dots_terminator_no_trailing_newline(self):
+        """YAML front matter with '...' terminator is parsed even when the file ends without a trailing newline."""
+        doc = "---\ntitle: Baz\n..."
+        self.assertEqual(meta.get_data(doc), ("", {'title': 'Baz'}))
+
 
 class ThemeUtilsTests(unittest.TestCase):
     def setUp(self):
