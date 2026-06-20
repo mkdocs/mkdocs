@@ -38,6 +38,10 @@ path taken from the path component of the URL, e.g. `some/page.md` will be
 served from `http://127.0.0.1:8000/foo/some/page/` to mimic the expected remote
 layout.
 
+If `site_url` is not set, some features that need an absolute canonical URL can
+behave unexpectedly when building the site, such as generating empty sitemap
+`<loc>` entries.
+
 **default**: `null`
 
 ### repo_url
