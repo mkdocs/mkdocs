@@ -357,7 +357,7 @@ def get_deps_command(config_file, projects_file):
 
 
 @cli.command(name="new")
-@click.argument("project_directory")
+@click.argument("project_directory", default=".")
 @common_options
 def new_command(project_directory):
     """Create a new MkDocs project."""

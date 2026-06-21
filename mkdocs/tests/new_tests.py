@@ -22,3 +22,17 @@ class NewTests(unittest.TestCase):
 
             for expected_path in expected_paths:
                 self.assertTrue(os.path.exists(expected_path))
+
+    @tempdir()
+    def test_new_current_dir(self, temp_dir):
+        with change_dir(temp_dir):
+            new.new(".")
+
+            expected_paths = [
+                os.path.join(temp_dir, "mkdocs.yml"),
+                os.path.join(temp_dir, "docs"),
+                os.path.join(temp_dir, "docs", "index.md"),
+            ]
+
+            for expected_path in expected_paths:
+                self.assertTrue(os.path.exists(expected_path))
