@@ -250,6 +250,11 @@ All paths in the navigation configuration must be relative to the
 pages and navigation] for a more detailed breakdown, including how to create
 sub-sections.
 
+When linking to a documentation page, include the Markdown filename, such as
+`reference/index.md`, rather than only the containing directory. A path that
+starts with `/` is treated as an absolute URL path from the server root, not as a
+path under `docs_dir`.
+
 Navigation items may also include links to external sites. While titles are
 optional for internal links, they are required for external links. An external
 link may be a full URL or a relative URL. Any path which is not found in the
