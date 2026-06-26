@@ -2,6 +2,7 @@
 
 import io
 import logging
+import os
 import unittest
 from unittest import mock
 
@@ -373,7 +374,27 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(mock_build.call_count, 1)
         for log_name in 'mkdocs', 'mkdocs.structure.pages', 'mkdocs.plugins.foo':
-            self.assertEqual(logging.getLogger(log_name).getEffectiveLevel(), logging.ERROR)
+            self.assertEqual(logging.getLogger(log_name).getEffectiveLevel(), logging.INFO)
+        stream_handler = next(
+            handler
+            for handler in logging.getLogger('mkdocs').handlers
+            if handler.name == 'MkDocsStreamHandler'
+        )
+        self.assertEqual(stream_handler.level, logging.ERROR)
+
+    def test_build_quiet_strict_counts_warnings(self):
+        with self.runner.isolated_filesystem():
+            os.mkdir('docs')
+            with open('mkdocs.yml', 'w') as f:
+                f.write('site_name: test\n')
+            with open(os.path.join('docs', 'index.md'), 'w') as f:
+                f.write('[missing](missing.md)\n')
+
+            result = self.runner.invoke(cli.cli, ['build', '--quiet', '--strict'])
+
+        self.assertEqual(result.exit_code, 1)
+        self.assertNotIn("contains a link 'missing.md'", result.output)
+        self.assertIn('Aborted with 1 warnings in strict mode!', result.output)
 
     @mock.patch('mkdocs.commands.new.new', autospec=True)
     def test_new(self, mock_new):

@@ -180,7 +180,7 @@ def quiet_option(f):
     def callback(ctx, param, value):
         state = ctx.ensure_object(State)
         if value:
-            state.logger.setLevel(logging.ERROR)
+            state.stream.setLevel(logging.ERROR)
 
     return click.option(
         '-q',
