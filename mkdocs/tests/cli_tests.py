@@ -369,6 +369,8 @@ class CLITests(unittest.TestCase):
     @mock.patch('mkdocs.config.load_config', autospec=True)
     @mock.patch('mkdocs.commands.build.build', autospec=True)
     def test_build_quiet(self, mock_build, mock_load_config):
+        previous_handlers = set(logging.getLogger('mkdocs').handlers)
+
         result = self.runner.invoke(cli.cli, ['build', '--quiet'], catch_exceptions=False)
 
         self.assertEqual(result.exit_code, 0)
@@ -378,7 +380,7 @@ class CLITests(unittest.TestCase):
         stream_handler = next(
             handler
             for handler in logging.getLogger('mkdocs').handlers
-            if handler.name == 'MkDocsStreamHandler'
+            if handler.name == 'MkDocsStreamHandler' and handler not in previous_handlers
         )
         self.assertEqual(stream_handler.level, logging.ERROR)
 
