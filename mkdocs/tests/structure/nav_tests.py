@@ -198,6 +198,29 @@ class SiteNavigationTests(unittest.TestCase):
         self.assertEqual(len(site_navigation.items), 3)
         self.assertEqual(len(site_navigation.pages), 1)
 
+    def test_nav_anchor_link_to_existing_page(self):
+        nav_cfg = [
+            {'Home': 'index.md'},
+            {'Heading': 'guide/#heading'},
+        ]
+        expected = dedent(
+            """
+            Page(title='Home', url='/')
+            Link(title='Heading', url='guide/#heading')
+            """
+        )
+        cfg = load_config(nav=nav_cfg, site_url='http://example.com/')
+        fs = [
+            File('index.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
+            File('guide.md', cfg.docs_dir, cfg.site_dir, cfg.use_directory_urls),
+        ]
+        files = Files(fs)
+        with self.assertNoLogs('mkdocs', level='WARNING'):
+            site_navigation = get_navigation(files, cfg)
+        self.assertEqual(str(site_navigation).strip(), expected)
+        self.assertEqual(len(site_navigation.items), 2)
+        self.assertEqual(len(site_navigation.pages), 1)
+
     def test_indented_nav(self):
         nav_cfg = [
             {'Home': 'index.md'},

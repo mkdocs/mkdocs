@@ -177,12 +177,33 @@ def get_navigation(files: Files, config: MkDocsConfig) -> Navigation:
                 "configuration, which presumably points to an external resource.",
             )
         else:
-            log.log(
-                config.validation.nav.not_found,
-                f"A reference to '{link.url}' is included in the 'nav' "
-                "configuration, which is not found in the documentation files.",
-            )
+            if not _link_path_matches_documentation_page(path, files, config):
+                log.log(
+                    config.validation.nav.not_found,
+                    f"A reference to '{link.url}' is included in the 'nav' "
+                    "configuration, which is not found in the documentation files.",
+                )
     return Navigation(items, pages)
+
+
+def _link_path_matches_documentation_page(path: str, files: Files, config: MkDocsConfig) -> bool:
+    """Return whether a nav link path points at a known documentation page."""
+    if not path:
+        return False
+    if (
+        path.startswith('/')
+        and config.validation.nav.absolute_links is _AbsoluteLinksValidationValue.RELATIVE_TO_DOCS
+    ):
+        path = path.lstrip('/')
+
+    if files.get_file_from_path(path):
+        return True
+
+    normalized_path = path.rstrip('/')
+    return any(
+        normalized_path in (file.url.rstrip('/'), file.dest_uri.rstrip('/'))
+        for file in files.documentation_pages()
+    )
 
 
 def _data_to_navigation(data, files: Files, config: MkDocsConfig):
