@@ -978,6 +978,28 @@ class FilesystemObjectTest(TestCase):
             )
 
 
+class PathSpecTest(TestCase):
+    def test_indented_multiline_patterns(self) -> None:
+        class Schema(Config):
+            option = c.PathSpec()
+
+        conf = self.get_config(
+            Schema,
+            {
+                'option': '''
+                    # Exclude unpublished pages.
+                    *_unpublished.md
+
+                    # But keep this one.
+                    !/foo_unpublished.md
+                '''
+            },
+        )
+
+        self.assertFalse(conf.option.match_file('foo_unpublished.md'))
+        self.assertTrue(conf.option.match_file('other_unpublished.md'))
+
+
 class ListOfPathsTest(TestCase):
     def test_valid_path(self) -> None:
         paths = [os.path.dirname(__file__)]
