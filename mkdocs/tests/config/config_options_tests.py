@@ -2340,6 +2340,28 @@ class PluginsTest(TestCase):
         self.assertIn('sample2', conf.plugins)
 
 
+class PathSpecTest(TestCase):
+    def test_indented_multiline_string(self) -> None:
+        class Schema(Config):
+            option = c.PathSpec()
+
+        conf = self.get_config(
+            Schema,
+            {
+                'option': '''
+                    # Ignore unpublished Markdown files.
+                    *_unpublished.md
+
+                    # Keep this unpublished file.
+                    !/index_unpublished.md
+                '''
+            },
+        )
+
+        self.assertTrue(conf.option.match_file('other_unpublished.md'))
+        self.assertFalse(conf.option.match_file('index_unpublished.md'))
+
+
 class HooksTest(TestCase):
     class Schema(Config):
         plugins = c.Plugins(default=[])
