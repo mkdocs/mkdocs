@@ -1093,6 +1093,19 @@ class RelativePathExtensionTests(unittest.TestCase):
             '<a href="http://example.com/index.md">external</a>',
         )
 
+    def test_invalid_url_is_preserved_and_warned(self):
+        self.assertEqual(
+            self.get_rendered_result(
+                content='[invalid](http://[example.com)',
+                files=['index.md'],
+                logs=(
+                    "WARNING:Doc file 'index.md' contains an invalid URL "
+                    "'http://[example.com', it was left as is: Invalid IPv6 URL"
+                ),
+            ),
+            '<a href="http://[example.com">invalid</a>',
+        )
+
     def test_absolute_link_with_suggestion(self):
         self.assertEqual(
             self.get_rendered_result(
