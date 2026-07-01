@@ -51,6 +51,7 @@ except ImportError:  # pragma: no cover
 YAML_RE = re.compile(r'^-{3}[ \t]*\n(.*?\n)(?:\.{3}|-{3})[ \t]*\n', re.UNICODE | re.DOTALL)
 META_RE = re.compile(r'^[ ]{0,3}(?P<key>[A-Za-z0-9_-]+):\s*(?P<value>.*)')
 META_MORE_RE = re.compile(r'^([ ]{4}|\t)(\s*)(?P<value>.*)')
+SETEXT_HEADING_RE = re.compile(r'^[ ]{0,3}(=+|-+)[ \t]*$')
 
 
 def get_data(doc: str) -> tuple[str, dict[str, Any]]:
@@ -83,6 +84,9 @@ def get_data(doc: str) -> tuple[str, dict[str, Any]]:
         if line.strip() == '':
             break  # blank line - done
         if m1 := META_RE.match(line):
+            if lines and SETEXT_HEADING_RE.match(lines[0]):
+                lines.insert(0, line)
+                break  # setext heading, not meta data
             key = m1.group('key').lower().strip()
             value = m1.group('value').strip()
             if key in data:

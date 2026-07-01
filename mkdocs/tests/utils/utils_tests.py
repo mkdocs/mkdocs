@@ -391,6 +391,10 @@ class UtilsTests(unittest.TestCase):
         doc = '\nfoo: bar\nDoc body'
         self.assertEqual(meta.get_data(doc), (doc.lstrip(), {}))
 
+    def test_mm_meta_data_ignores_setext_heading(self):
+        doc = 'Foo: Bar\n===\n\nDoc body'
+        self.assertEqual(meta.get_data(doc), (doc, {}))
+
     def test_yaml_meta_data(self):
         doc = dedent(
             """
