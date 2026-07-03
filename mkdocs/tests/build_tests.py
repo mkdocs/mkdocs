@@ -742,6 +742,38 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
 
     @tempdir(
         files={
+            'test/foo.md': '## page1 heading\n\n[bar](bar.md#page1-heading)',
+            'test/bar.md': '## page2 heading\n\n[aaa](#a)',
+        }
+    )
+    @tempdir()
+    def test_anchor_warning_not_suppressed_in_verbose_mode(self, site_dir, docs_dir):
+        """Anchor warnings must fire even when the logger is set to DEBUG (--verbose).
+
+        Regression test for https://github.com/mkdocs/mkdocs/issues/3991.
+        Previously, `render()` gated anchor-link collection on
+        `log.getEffectiveLevel() > logging.DEBUG`, so enabling verbose mode
+        (which sets the logger to DEBUG) silently disabled anchor validation.
+        """
+        import logging
+
+        cfg = load_config(docs_dir=docs_dir, site_dir=site_dir, validation={'anchors': 'warn'})
+
+        expected_logs = '''
+            WARNING:Doc file 'test/bar.md' contains a link '#a', but there is no such anchor on this page.
+            WARNING:Doc file 'test/foo.md' contains a link 'bar.md#page1-heading', but the doc 'test/bar.md' does not contain an anchor '#page1-heading'.
+        '''
+        mkdocs_log = logging.getLogger('mkdocs')
+        original_level = mkdocs_log.level
+        try:
+            mkdocs_log.setLevel(logging.DEBUG)
+            with self._assert_build_logs(expected_logs):
+                build.build(cfg)
+        finally:
+            mkdocs_log.setLevel(original_level)
+
+    @tempdir(
+        files={
             'test/foo.md': '[bar](bar.md#heading1)',
             'test/bar.md': '## heading1',
         }
