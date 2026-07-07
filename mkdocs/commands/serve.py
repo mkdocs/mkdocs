@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import signal
 import shutil
 import tempfile
 from os.path import isdir, isfile, join
@@ -98,11 +99,17 @@ def serve(
             for item in config.watch:
                 server.watch(item)
 
+        def _sigterm_handler(signum, frame):
+            raise KeyboardInterrupt()
+
+        signal.signal(signal.SIGTERM, _sigterm_handler)
+
         try:
             server.serve(open_in_browser=open_in_browser)
         except KeyboardInterrupt:
             log.info("Shutting down...")
         finally:
+            signal.signal(signal.SIGTERM, signal.SIG_DFL)
             server.shutdown()
     finally:
         config.plugins.on_shutdown()
