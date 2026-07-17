@@ -19,7 +19,7 @@ user guide.
 
 - Build static HTML files from Markdown files.
 - Use Plugins and Markdown Extensions to enhance MkDocs.
-- Use the built-in themes, third party themes or create your own.
+- Use the built-in themes, third-party themes, or create your own.
 - Publish your documentation anywhere that static files can be served.
 - Much more!
 
@@ -33,10 +33,10 @@ If you need help with MkDocs, do not hesitate to get in contact with us!
 -   To report a bug or make a feature request, open an **[Issue]** on GitHub.
 
 Please note that we may only provide
-support for problems/questions regarding core features of MkDocs. Any
+support for problems or questions regarding core features of MkDocs. Any
 questions or bug reports about features of third-party themes, plugins,
 extensions or similar should be made to their respective projects.  
-But, such questions are *not* banned from the [chat room].
+But such questions are *not* banned from the [chat room].
 
 Make sure to stick around to answer some questions as well!
 
