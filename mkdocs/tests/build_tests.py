@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import contextlib
 import io
+import logging
 import os.path
 import re
 import textwrap
@@ -739,6 +740,30 @@ class BuildTests(PathAssertionMixin, unittest.TestCase):
         '''
         with self._assert_build_logs(expected_logs):
             build.build(cfg)
+
+    @tempdir(
+        files={
+            'test/foo.md': '## page1 heading\n\n[bar](bar.md#page1-heading)',
+            'test/bar.md': '## page2 heading\n\n[aaa](#a)',
+        }
+    )
+    @tempdir()
+    def test_anchor_warning_in_debug_mode(self, site_dir, docs_dir):
+        """Anchor validation must still run when root logger is DEBUG (#3927)."""
+        cfg = load_config(docs_dir=docs_dir, site_dir=site_dir, validation={'anchors': 'warn'})
+
+        expected_logs = '''
+            WARNING:Doc file 'test/bar.md' contains a link '#a', but there is no such anchor on this page.
+            WARNING:Doc file 'test/foo.md' contains a link 'bar.md#page1-heading', but the doc 'test/bar.md' does not contain an anchor '#page1-heading'.
+        '''
+        root = logging.getLogger()
+        previous = root.level
+        root.setLevel(logging.DEBUG)
+        try:
+            with self._assert_build_logs(expected_logs):
+                build.build(cfg)
+        finally:
+            root.setLevel(previous)
 
     @tempdir(
         files={
