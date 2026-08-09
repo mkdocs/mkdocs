@@ -27,6 +27,11 @@ jobs:
           - python-version: '3.11'
             os: windows-latest
     runs-on: ${{ matrix.os }}
+    # pypy-3.9 on ubuntu/windows can't install hatch: cryptography's PyO3 bindings require
+    # PyPy>=3.11, and zstandard's sdist build needs the removed distutils.msvc9compiler.
+    # Both are hatch's own transitive deps, unrelated to mkdocs; keep running so it self-heals
+    # once fixed upstream, but don't let it block merges in the meantime.
+    continue-on-error: ${{ matrix.python-version == 'pypy-3.9-v7.x' && matrix.os != 'macos-latest' }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup Python ${{ matrix.python-version }}
