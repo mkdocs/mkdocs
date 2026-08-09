@@ -27,11 +27,6 @@ jobs:
           - python-version: '3.11'
             os: windows-latest
     runs-on: ${{ matrix.os }}
-    # pypy-3.9 on ubuntu/windows can't install hatch: cryptography's PyO3 bindings require
-    # PyPy>=3.11, and zstandard's sdist build needs the removed distutils.msvc9compiler.
-    # Both are hatch's own transitive deps, unrelated to mkdocs; keep running so it self-heals
-    # once fixed upstream, but don't let it block merges in the meantime.
-    continue-on-error: ${{ matrix.python-version == 'pypy-3.9-v7.x' && matrix.os != 'macos-latest' }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup Python ${{ matrix.python-version }}
@@ -39,17 +34,27 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
+        id: install
+        # pypy-3.9 on ubuntu/windows can't install hatch: cryptography's PyO3 bindings
+        # require PyPy>=3.11, and zstandard's sdist build needs the removed
+        # distutils.msvc9compiler. Both are hatch's own transitive deps, unrelated to
+        # mkdocs, and reproduce on unmodified master. continue-on-error plus the
+        # steps.install.outcome guards below let this keep running (so it self-heals
+        # once fixed upstream) without failing the job in the meantime.
+        continue-on-error: ${{ matrix.python-version == 'pypy-3.9-v7.x' && matrix.os != 'macos-latest' }}
         run: |
           python -m pip install --upgrade hatch
       - name: Run tests
+        if: steps.install.outcome == 'success'
         run: |
           hatch run +py=${{ matrix.py || matrix.python-version }} test:with-coverage
       - name: Run integration tests
+        if: steps.install.outcome == 'success'
         run: |
           hatch run +py=${{ matrix.py || matrix.python-version }} integration:test
         shell: bash
       - name: Upload Codecov Results
-        if: success()
+        if: success() && steps.install.outcome == 'success'
         uses: codecov/codecov-action@v3
         with:
           file: ./coverage.xml
