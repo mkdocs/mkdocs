@@ -6,6 +6,7 @@ import logging
 import os
 import string
 import sys
+import textwrap
 import traceback
 import types
 import warnings
@@ -1221,6 +1222,12 @@ class PathSpec(BaseConfigOption[pathspec.gitignore.GitIgnoreSpec]):
         if not isinstance(value, str):
             raise ValidationError(f'Expected a multiline string, but a {type(value)} was given.')
         try:
-            return pathspec.gitignore.GitIgnoreSpec.from_lines(lines=value.splitlines())
+            # Dedent so a value that's indented in mkdocs.yml (e.g. a YAML block
+            # scalar written with extra indentation for readability) isn't
+            # interpreted as literal leading whitespace in each pattern - pathspec
+            # treats leading whitespace as significant, per the gitignore format.
+            return pathspec.gitignore.GitIgnoreSpec.from_lines(
+                lines=textwrap.dedent(value).splitlines()
+            )
         except ValueError as e:
             raise ValidationError(str(e))
