@@ -223,9 +223,7 @@ class CLITests(unittest.TestCase):
         # (e.g. WinError 10013 on Windows, or "Address already in use" on other
         # platforms) used to propagate as a raw, unhandled traceback instead of
         # a clean CLI error.
-        minimal = os.path.join(
-            os.path.dirname(__file__), 'integration', 'minimal', 'mkdocs.yml'
-        )
+        minimal = os.path.join(os.path.dirname(__file__), 'integration', 'minimal', 'mkdocs.yml')
         with mock.patch('mkdocs.commands.serve.LiveReloadServer', autospec=True) as MockServer:
             MockServer.return_value.serve.side_effect = OSError(
                 "[WinError 10013] An attempt was made to access a socket in a way "
