@@ -849,6 +849,44 @@ class DictOfItemsTest(TestCase):
             self.get_config(Schema, {'option': {"a": 1, 2: 3}})
 
 
+class PathSpecTest(TestCase):
+    def test_dedents_indented_patterns(self) -> None:
+        # A value with common leading indentation on every line (natural when
+        # writing a multi-line string in mkdocs.yml with extra indentation
+        # for readability) must be dedented before being handed to pathspec.
+        # pathspec treats leading whitespace as significant, so without
+        # dedenting, indented patterns silently match nothing.
+        class Schema(Config):
+            option = c.PathSpec()
+
+        conf = self.get_config(
+            Schema,
+            {
+                'option': '''
+                    drafts/
+                    *_unpublished.md
+                    !/foo_unpublished.md
+                '''
+            },
+        )
+
+        self.assertTrue(conf.option.match_file('drafts/index.md'))
+        self.assertTrue(conf.option.match_file('other_unpublished.md'))
+        self.assertTrue(conf.option.match_file('nested/other_unpublished.md'))
+        self.assertFalse(conf.option.match_file('foo_unpublished.md'))
+        self.assertFalse(conf.option.match_file('normal_file.md'))
+
+    def test_still_works_without_indentation(self) -> None:
+        class Schema(Config):
+            option = c.PathSpec()
+
+        conf = self.get_config(Schema, {'option': 'drafts/\n*_unpublished.md'})
+
+        self.assertTrue(conf.option.match_file('drafts/index.md'))
+        self.assertTrue(conf.option.match_file('other_unpublished.md'))
+        self.assertFalse(conf.option.match_file('normal_file.md'))
+
+
 class FilesystemObjectTest(TestCase):
     def test_valid_dir(self) -> None:
         for cls in c.Dir, c.FilesystemObject:
