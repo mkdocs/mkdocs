@@ -9,6 +9,7 @@ from urllib.parse import urlsplit
 
 from mkdocs.commands.build import build
 from mkdocs.config import load_config
+from mkdocs.exceptions import Abort
 from mkdocs.livereload import LiveReloadServer, _serve_url
 
 if TYPE_CHECKING:
@@ -102,6 +103,14 @@ def serve(
             server.serve(open_in_browser=open_in_browser)
         except KeyboardInterrupt:
             log.info("Shutting down...")
+        except OSError as e:
+            log.error(
+                f"Cannot bind to address {host}:{port} - {e}. "
+                "This usually means the address is already in use, or your OS is denying "
+                "access to it (for example, Windows may reserve some ports for its own use). "
+                "Try serving on a different address with the '--dev-addr' option."
+            )
+            raise Abort('Aborted!')
         finally:
             server.shutdown()
     finally:

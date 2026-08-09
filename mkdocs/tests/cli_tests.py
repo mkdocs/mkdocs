@@ -2,12 +2,15 @@
 
 import io
 import logging
+import os
 import unittest
 from unittest import mock
 
 from click.testing import CliRunner
 
 from mkdocs import __main__ as cli
+from mkdocs.commands import serve as serve_command
+from mkdocs.exceptions import Abort
 
 
 class CLITests(unittest.TestCase):
@@ -214,6 +217,26 @@ class CLITests(unittest.TestCase):
             watch_theme=True,
             watch=(),
         )
+
+    def test_serve_bind_error_aborts_cleanly(self):
+        # Regression test for #4131: a failure to bind the dev server's socket
+        # (e.g. WinError 10013 on Windows, or "Address already in use" on other
+        # platforms) used to propagate as a raw, unhandled traceback instead of
+        # a clean CLI error.
+        minimal = os.path.join(os.path.dirname(__file__), 'integration', 'minimal', 'mkdocs.yml')
+        with mock.patch('mkdocs.commands.serve.build', autospec=True):
+            with mock.patch('mkdocs.commands.serve.LiveReloadServer', autospec=True) as MockServer:
+                MockServer.return_value.serve.side_effect = OSError(
+                    "[WinError 10013] An attempt was made to access a socket in a way "
+                    "forbidden by its access permissions"
+                )
+                with self.assertLogs('mkdocs', level='ERROR') as cm:
+                    with self.assertRaises(Abort):
+                        serve_command.serve(config_file=minimal, livereload=False)
+                self.assertIn('Cannot bind to address', '\n'.join(cm.output))
+
+                # The server must still be told to clean up even though bind failed.
+                MockServer.return_value.shutdown.assert_called_once()
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
     @mock.patch('mkdocs.commands.build.build', autospec=True)
