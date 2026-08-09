@@ -224,18 +224,19 @@ class CLITests(unittest.TestCase):
         # platforms) used to propagate as a raw, unhandled traceback instead of
         # a clean CLI error.
         minimal = os.path.join(os.path.dirname(__file__), 'integration', 'minimal', 'mkdocs.yml')
-        with mock.patch('mkdocs.commands.serve.LiveReloadServer', autospec=True) as MockServer:
-            MockServer.return_value.serve.side_effect = OSError(
-                "[WinError 10013] An attempt was made to access a socket in a way "
-                "forbidden by its access permissions"
-            )
-            with self.assertLogs('mkdocs') as cm:
-                with self.assertRaises(Abort):
-                    serve_command.serve(config_file=minimal, livereload=False)
-            self.assertIn('Cannot bind to address', '\n'.join(cm.output))
+        with mock.patch('mkdocs.commands.serve.build', autospec=True):
+            with mock.patch('mkdocs.commands.serve.LiveReloadServer', autospec=True) as MockServer:
+                MockServer.return_value.serve.side_effect = OSError(
+                    "[WinError 10013] An attempt was made to access a socket in a way "
+                    "forbidden by its access permissions"
+                )
+                with self.assertLogs('mkdocs', level='ERROR') as cm:
+                    with self.assertRaises(Abort):
+                        serve_command.serve(config_file=minimal, livereload=False)
+                self.assertIn('Cannot bind to address', '\n'.join(cm.output))
 
-            # The server must still be told to clean up even though bind failed.
-            MockServer.return_value.shutdown.assert_called_once()
+                # The server must still be told to clean up even though bind failed.
+                MockServer.return_value.shutdown.assert_called_once()
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
     @mock.patch('mkdocs.commands.build.build', autospec=True)
