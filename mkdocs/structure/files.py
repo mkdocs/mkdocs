@@ -485,6 +485,12 @@ class File:
                 utils.copy_file(self.abs_src_path, output_path)
             except shutil.SameFileError:
                 pass  # Let plugins write directly into site_dir.
+            except FileNotFoundError:
+                # Dangling symlink or a file that vanished after discovery.
+                log.warning(
+                    f"Skipped copying file '{self.src_uri}'. "
+                    f"The source '{self.abs_src_path}' does not exist."
+                )
         elif isinstance(content, str):
             with open(output_path, 'w', encoding='utf-8') as output_file:
                 output_file.write(content)
@@ -496,8 +502,14 @@ class File:
         if self._content is not None:
             return True
         assert self.abs_src_path is not None
+        try:
+            src_mtime = os.path.getmtime(self.abs_src_path)
+        except OSError:
+            # Missing source or dangling symlink: treat as modified so copy_file
+            # can emit a warning instead of crashing in dirty/serve rebuilds.
+            return True
         if os.path.isfile(self.abs_dest_path):
-            return os.path.getmtime(self.abs_dest_path) < os.path.getmtime(self.abs_src_path)
+            return os.path.getmtime(self.abs_dest_path) < src_mtime
         return True
 
     def is_documentation_page(self) -> bool:

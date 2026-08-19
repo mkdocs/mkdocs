@@ -708,6 +708,50 @@ class TestFiles(PathAssertionMixin, unittest.TestCase):
         with open(dest_path, encoding='utf-8') as f:
             self.assertEqual(f.read(), 'ö')
 
+    @tempdir()
+    @tempdir()
+    def test_copy_file_dangling_symlink(self, src_dir, dest_dir):
+        link_path = os.path.join(src_dir, 'broken.jpg')
+        try:
+            os.symlink(os.path.join(src_dir, 'missing-target.jpg'), link_path)
+        except OSError:
+            self.skipTest("Creating symlinks not supported")
+        file = File('broken.jpg', src_dir, dest_dir, use_directory_urls=False)
+        dest_path = os.path.join(dest_dir, 'broken.jpg')
+        with self.assertLogs('mkdocs', level='WARNING') as cm:
+            file.copy_file()
+        self.assertPathNotExists(dest_path)
+        self.assertTrue(any('broken.jpg' in msg for msg in cm.output))
+
+    @tempdir()
+    @tempdir(files={'gone.txt': 'source content'})
+    def test_copy_file_missing_source(self, src_dir, dest_dir):
+        file = File('gone.txt', src_dir, dest_dir, use_directory_urls=False)
+        os.remove(os.path.join(src_dir, 'gone.txt'))
+        dest_path = os.path.join(dest_dir, 'gone.txt')
+        with self.assertLogs('mkdocs', level='WARNING') as cm:
+            file.copy_file()
+        self.assertPathNotExists(dest_path)
+        self.assertTrue(any('gone.txt' in msg for msg in cm.output))
+
+    @tempdir(files={'stale.txt': 'old destination'})
+    @tempdir()
+    def test_copy_file_dangling_symlink_dirty(self, src_dir, dest_dir):
+        link_path = os.path.join(src_dir, 'stale.txt')
+        try:
+            os.symlink(os.path.join(src_dir, 'missing-target.txt'), link_path)
+        except OSError:
+            self.skipTest("Creating symlinks not supported")
+        file = File('stale.txt', src_dir, dest_dir, use_directory_urls=False)
+        dest_path = os.path.join(dest_dir, 'stale.txt')
+        self.assertTrue(file.is_modified())
+        with self.assertLogs('mkdocs', level='WARNING') as cm:
+            file.copy_file(dirty=True)
+        self.assertPathIsFile(dest_path)
+        with open(dest_path, encoding='utf-8') as f:
+            self.assertEqual(f.read(), 'old destination')
+        self.assertTrue(any('stale.txt' in msg for msg in cm.output))
+
     def test_files_append_remove_src_paths(self):
         fs = [
             File('index.md', '/path/to/docs', '/path/to/site', use_directory_urls=True),
