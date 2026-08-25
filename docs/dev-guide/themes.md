@@ -826,20 +826,22 @@ your theme, your users can more easily install it, they can rely on a default
 
 ### Package Layout
 
-The following layout is recommended for themes. Two files at the top level
-directory called `MANIFEST.in` and `setup.py` beside the theme directory which
-contains an empty `__init__.py` file, a theme configuration file
-(`mkdocs_theme.yml`), and your template and media files.
+The following layout is recommended for themes. The top-level `pyproject.toml`
+contains the package metadata and build configuration. `MANIFEST.in` lists the
+theme assets that should be included in source distributions and wheels. The
+theme directory contains an empty `__init__.py` file, a theme configuration
+file (`mkdocs_theme.yml`), and your template and media files.
 
 ```text
 .
 |-- MANIFEST.in
+|-- README.md
+|-- pyproject.toml
 |-- theme_name
 |   |-- __init__.py
 |   |-- mkdocs_theme.yml
 |   |-- main.html
-|   |-- styles.css
-`-- setup.py
+|   `-- styles.css
 ```
 
 The `MANIFEST.in` file should contain the following contents but with
@@ -851,44 +853,50 @@ recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
 ```
 
-The `setup.py` should include the following text with the modifications
+The `pyproject.toml` should include the following text with the modifications
 described below.
 
-```python
-from setuptools import setup, find_packages
+```toml
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
 
-VERSION = '0.0.1'
+[project]
+name = "mkdocs-themename"
+version = "0.0.1"
+description = "A short description of the theme"
+readme = "README.md"
+license = "MIT"
+authors = [
+  { name = "Your name", email = "you@example.com" },
+]
+dependencies = ["mkdocs>=1.6"]
 
-setup(
-    name="mkdocs-themename",
-    version=VERSION,
-    url='',
-    license='',
-    description='',
-    author='',
-    author_email='',
-    packages=find_packages(),
-    include_package_data=True,
-    entry_points={
-        'mkdocs.themes': [
-            'themename = theme_name',
-        ]
-    },
-    zip_safe=False
-)
+[project.urls]
+Homepage = "https://example.com/mkdocs-themename"
+
+[project.entry-points."mkdocs.themes"]
+themename = "theme_name"
+
+[tool.setuptools]
+include-package-data = true
+zip-safe = false
+
+[tool.setuptools.packages.find]
+include = ["theme_name*"]
 ```
 
-Fill in the URL, license, description, author and author email address.
+Fill in the URL, license, description, author and author email address. Set the
+MkDocs dependency to the versions supported by your theme.
 
 The name should follow the convention `mkdocs-themename` (like
 `mkdocs-bootstrap` and `mkdocs-bootswatch`), starting with MkDocs, using
 hyphens to separate words and including the name of your theme.
 
-Most of the rest of the file can be left unedited. The last section we need to
-change is the entry_points. This is how MkDocs finds the theme(s) you are
-including in the package. The name on the left is the one that users will use
-in their mkdocs.yml and the one on the right is the directory containing your
-theme files.
+The `[project.entry-points."mkdocs.themes"]` table is how MkDocs finds the
+theme(s) included in the package. The name on the left is the one that users
+will use in their `mkdocs.yml` and the value on the right is the directory
+containing the theme files.
 
 The directory you created at the start of this section with the main.html file
 should contain all of the other theme files. The minimum requirement is that
@@ -996,22 +1004,32 @@ plugins you may wish to support in your theme.
 ### Distributing Themes
 
 With the above changes, your theme should now be ready to install. This can be
-done with pip, using `pip install .` if you are still in the same directory as
-the setup.py.
+done with pip, using `pip install .` from the directory containing
+`pyproject.toml`.
 
-Most Python packages, including MkDocs, are distributed on PyPI. To do this,
-you should run the following command.
+Most Python packages, including MkDocs, are distributed on PyPI. Install the
+build and upload tools, build both a source distribution and a wheel, and check
+the resulting package metadata:
 
 ```bash
-python setup.py register
+python -m pip install --upgrade build twine
+python -m build
+python -m twine check dist/*
 ```
 
-If you don't have an account setup, you should be prompted to create one.
+You can then upload the files using a [PyPI account] or configure a
+[Trusted Publisher]:
+
+```bash
+python -m twine upload dist/*
+```
 
 For a much more detailed guide, see the official Python packaging
-documentation for [Packaging and Distributing Projects].
+documentation for [Packaging Python Projects].
 
-[Packaging and Distributing Projects]: https://packaging.python.org/en/latest/distributing/
+[Packaging Python Projects]: https://packaging.python.org/en/latest/tutorials/packaging-projects/
+[PyPI account]: https://pypi.org/account/register/
+[Trusted Publisher]: https://docs.pypi.org/trusted-publishers/
 [Jinja inheritance rules]: https://jinja.palletsprojects.com/en/latest/templates/#template-inheritance
 
 ## Supporting theme Localization/Translation
