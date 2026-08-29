@@ -17,7 +17,7 @@ def _get_language_of_translation_file(path: Path) -> str:
     return m[1]
 
 
-def on_page_markdown(markdown: str, page: Page, config: MkDocsConfig, **kwargs) -> str | None:
+def run(markdown: str, page: Page, config: MkDocsConfig, **kwargs) -> str | None:
     if page.file.src_uri == 'user-guide/choosing-your-theme.md':
         here = Path(config.config_file_path).parent
 
