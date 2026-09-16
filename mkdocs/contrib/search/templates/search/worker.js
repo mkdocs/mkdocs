@@ -75,6 +75,14 @@ function onScriptsLoaded () {
       } else if (lang.length > 1) {
         this.use(lunr.multiLanguage.apply(null, lang));  // spread operator not supported in all browsers: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator#Browser_compatibility
       }
+      // Remove the stop-word filter so that common English words used as
+      // programming-language keywords — "for", "if", "in", "is", "from",
+      // "while", "not", etc. — are indexed and searchable.
+      // See https://github.com/mkdocs/mkdocs/issues/4167
+      if (lunr.stopWordFilter) {
+        this.pipeline.remove(lunr.stopWordFilter);
+        this.searchPipeline.remove(lunr.stopWordFilter);
+      }
       this.field('title');
       this.field('text');
       this.ref('location');
