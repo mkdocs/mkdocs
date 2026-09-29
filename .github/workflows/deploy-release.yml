@@ -15,8 +15,10 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install dependencies
-        run: pip install -U build
+        run: pip install -U build twine
       - name: Build package
         run: python -m build
+      - name: Check package metadata
+        run: python -m twine check dist/*
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1

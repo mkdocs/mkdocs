@@ -92,9 +92,11 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install dependencies
-        run: pip install -U build
+        run: pip install -U build twine
       - name: Build package
         run: python -m build
+      - name: Check package metadata
+        run: python -m twine check dist/*
       - name: Check packaged files
         shell: bash -e -x {0}
         run: |
